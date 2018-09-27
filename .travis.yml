@@ -19,3 +19,5 @@ deploy:
   token: $FIREBASE_TOKEN
   message: "Firebase deploy success"
   project: "precious-plastics-v4-dev"
+  on:
+    branch: dev

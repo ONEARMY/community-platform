@@ -1,4 +1,4 @@
-import { IProject, IUser } from "../models/models";
+import { IUser } from "../models/models";
 
 export const MOCK_USER: IUser = {
   altName: "example",

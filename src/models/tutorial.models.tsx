@@ -1,4 +1,4 @@
-export interface IDocument {
+export interface ITutorial {
   workspace_name: string;
   cover_picture_url: string;
   title: string;

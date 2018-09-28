@@ -1,6 +1,6 @@
-import { IDocument } from "../models/documents.model";
+import { ITutorial } from "../models/tutorial.models";
 
-export const DOCUMENT_MOCK: IDocument[] = [
+export const TUTORIALS_MOCK: ITutorial[] = [
   {
     cover_picture_url: "myurl.com/myimage.jpeg",
     description: "this is a great description",

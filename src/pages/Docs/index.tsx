@@ -1,9 +1,9 @@
 import * as React from "react";
-// import "./Doc.css";
+import "./Doc.css";
 
 import logo from "../../logo.svg";
 
-class Doc extends React.Component {
+class Docs extends React.Component {
   public render() {
     return (
       <div className="App">
@@ -20,4 +20,4 @@ class Doc extends React.Component {
   }
 }
 
-export default Doc;
+export default Docs;

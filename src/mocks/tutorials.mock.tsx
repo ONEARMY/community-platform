@@ -12,13 +12,13 @@ export const TUTORIALS_MOCK: ITutorial[] = [
     steps: [
       {
         images: ["myurl.com/myimage.jpeg", "myurl.com/myimage.jpeg"],
-        title: "My super step title",
-        text: "this text is wonderful oh my god"
+        text: "this text is wonderful oh my god",
+        title: "My super step title"
       },
       {
         images: ["myurl.com/myimage.jpeg", "myurl.com/myimage.jpeg"],
-        title: "My super step title",
-        text: "this text is wonderful oh my god"
+        text: "this text is wonderful oh my god",
+        title: "My super step title"
       }
     ],
     title: "Tutorial 1",
@@ -37,13 +37,13 @@ export const TUTORIALS_MOCK: ITutorial[] = [
     steps: [
       {
         images: ["myurl.com/myimage.jpeg", "myurl.com/myimage.jpeg"],
-        title: "My super step title",
-        text: "this text is wonderful oh my god"
+        text: "this text is wonderful oh my god",
+        title: "My super step title"
       },
       {
         images: ["myurl.com/myimage.jpeg", "myurl.com/myimage.jpeg"],
-        title: "My super step title",
-        text: "this text is wonderful oh my god"
+        text: "this text is wonderful oh my god",
+        title: "My super step title"
       }
     ],
     title: "Tutorial 2",
@@ -62,13 +62,13 @@ export const TUTORIALS_MOCK: ITutorial[] = [
     steps: [
       {
         images: ["myurl.com/myimage.jpeg", "myurl.com/myimage.jpeg"],
-        title: "My super step title",
-        text: "this text is wonderful oh my god"
+        text: "this text is wonderful oh my god",
+        title: "My super step title"
       },
       {
         images: ["myurl.com/myimage.jpeg", "myurl.com/myimage.jpeg"],
-        title: "My super step title",
-        text: "this text is wonderful oh my god"
+        text: "this text is wonderful oh my god",
+        title: "My super step title"
       }
     ],
     title: "Tutorial 3",

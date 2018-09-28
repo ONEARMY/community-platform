@@ -2,7 +2,7 @@ import * as React from "react";
 import { Route, Switch } from "react-router-dom";
 
 // import Home from "../components/app/App";
-import Doc from "../components/doc/Doc";
+import Doc from "./Docs/index";
 
 class Routes extends React.Component {
   public shouldComponentUpdate() {

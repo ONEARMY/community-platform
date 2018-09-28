@@ -9,7 +9,6 @@
   },
   "rules": {
     "ordered-imports": false,
-    "import-sources-order": "any",
-    "named-imports-order": "any"
+    "object-literal-sort-keys": false
   }
 }

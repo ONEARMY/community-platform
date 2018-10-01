@@ -30,16 +30,14 @@ const settings = {
 };
 
 class Tutorial extends React.Component {
-  public renderSliderContent() {
+  public renderSliderContent(step: any) {
     return (
       <Slider {...settings}>
-        {currentTutorial[0].steps.map(step =>
-          step.images.map((imageUrl: any, index: any) => (
-            <div key={index}>
-              <img src={imageUrl} />
-            </div>
-          ))
-        )}
+        {step.images.map((imageUrl: any, index: any) => (
+          <div key={index}>
+            <img src={imageUrl} />
+          </div>
+        ))}
       </Slider>
     );
   }
@@ -72,7 +70,7 @@ class Tutorial extends React.Component {
             <h3>{step.title}</h3>
             <p>{step.text}</p>
             {step.images.length > 1
-              ? this.renderSliderContent()
+              ? this.renderSliderContent(step)
               : this.renderUniqueImage(step.images[0])}
           </div>
         ))}

@@ -1,4 +1,5 @@
 import * as React from "react";
+import Slider from "react-slick";
 import "./Tutorial.css";
 
 import { TUTORIALS_MOCK } from "../../../../mocks/tutorials.mock";
@@ -11,6 +12,24 @@ class Tutorial extends React.Component {
     const currentTutorial = TUTORIALS_MOCK.filter(
       tutorial => tutorial.slug === currentSlug
     );
+    const settings = {
+      centerMode: false,
+      arrows: true,
+      dots: true,
+      infinite: true,
+      speed: 500,
+      customPaging: (i: any) => (
+        <div
+          style={{
+            width: "30px",
+            color: "blue",
+            border: "1px blue solid"
+          }}
+        >
+          {i + 1}
+        </div>
+      )
+    };
     return (
       <div>
         <h2>{currentTutorial[0].title}</h2>
@@ -30,6 +49,20 @@ class Tutorial extends React.Component {
           <div key={index}>
             <h3>{step.title}</h3>
             <p>{step.text}</p>
+            <Slider {...settings}>
+              <div>
+                <img src="http://placekitten.com/g/400/200" />
+              </div>
+              <div>
+                <img src="http://placekitten.com/g/400/200" />
+              </div>
+              <div>
+                <img src="http://placekitten.com/g/400/200" />
+              </div>
+              <div>
+                <img src="http://placekitten.com/g/400/200" />
+              </div>
+            </Slider>
           </div>
         ))}
       </div>

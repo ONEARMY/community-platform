@@ -4,21 +4,23 @@ export const TUTORIALS_MOCK: ITutorial[] = [
   {
     cover_picture_url: "myurl.com/myimage.jpeg",
     description: "this is a great description 1",
-    details: {
-      cost: 20,
-      difficulty_levels: "difficult",
-      time: 30
-    },
+    details: [
+      {
+        cost: 20,
+        difficulty_level: "difficult",
+        time: 30
+      }
+    ],
     steps: [
       {
         images: ["myurl.com/myimage.jpeg", "myurl.com/myimage.jpeg"],
         text: "this text is wonderful oh my god",
-        title: "My super step title"
+        title: "My super step1 title"
       },
       {
         images: ["myurl.com/myimage.jpeg", "myurl.com/myimage.jpeg"],
         text: "this text is wonderful oh my god",
-        title: "My super step title"
+        title: "My super step2 title"
       }
     ],
     title: "Tutorial 1",
@@ -29,21 +31,23 @@ export const TUTORIALS_MOCK: ITutorial[] = [
   {
     cover_picture_url: "myurl.com/myimage.jpeg",
     description: "this is a great description 2",
-    details: {
-      cost: 20,
-      difficulty_levels: "difficult",
-      time: 30
-    },
+    details: [
+      {
+        cost: 20,
+        difficulty_level: "difficult",
+        time: 30
+      }
+    ],
     steps: [
       {
         images: ["myurl.com/myimage.jpeg", "myurl.com/myimage.jpeg"],
         text: "this text is wonderful oh my god",
-        title: "My super step title"
+        title: "My super step1 title"
       },
       {
         images: ["myurl.com/myimage.jpeg", "myurl.com/myimage.jpeg"],
         text: "this text is wonderful oh my god",
-        title: "My super step title"
+        title: "My super step2 title"
       }
     ],
     title: "Tutorial 2",
@@ -54,21 +58,23 @@ export const TUTORIALS_MOCK: ITutorial[] = [
   {
     cover_picture_url: "myurl.com/myimage.jpeg",
     description: "this is a great description 3",
-    details: {
-      cost: 20,
-      difficulty_levels: "difficult",
-      time: 30
-    },
+    details: [
+      {
+        cost: 20,
+        difficulty_level: "difficult",
+        time: 30
+      }
+    ],
     steps: [
       {
         images: ["myurl.com/myimage.jpeg", "myurl.com/myimage.jpeg"],
         text: "this text is wonderful oh my god",
-        title: "My super step title"
+        title: "My super step1 title"
       },
       {
         images: ["myurl.com/myimage.jpeg", "myurl.com/myimage.jpeg"],
         text: "this text is wonderful oh my god",
-        title: "My super step title"
+        title: "My super step2 title"
       }
     ],
     title: "Tutorial 3",

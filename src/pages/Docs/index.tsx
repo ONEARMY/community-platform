@@ -1,6 +1,6 @@
 import * as React from "react";
 import "./Doc.css";
-import TutorialList from "./TutorialList/index";
+import Content from "./Content";
 
 import logo from "../../assets/images/logo.png";
 
@@ -11,9 +11,9 @@ class Docs extends React.Component {
         <header className="App-header">
           {" "}
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">DOC</h1>{" "}
+          <h1 className="App-title">DOCUMENTATION</h1>{" "}
         </header>{" "}
-        <TutorialList />
+        <Content />
       </div>
     );
   }

@@ -1,7 +1,8 @@
 import * as React from "react";
 import "./TutorialList.css";
+import { Link } from "react-router-dom";
 
-import { TUTORIALS_MOCK } from "../../../mocks/tutorials.mock";
+import { TUTORIALS_MOCK } from "../../../../mocks/tutorials.mock";
 
 class TutorialList extends React.Component {
   public render() {
@@ -9,7 +10,7 @@ class TutorialList extends React.Component {
       <div>
         {TUTORIALS_MOCK.map(tutorial => (
           <React.Fragment key={tutorial.id}>
-            <p>{tutorial.title}</p>
+            <Link to={`/docs/${tutorial.slug}`}>{tutorial.title}</Link>
             <dd>{tutorial.description}</dd>
           </React.Fragment>
         ))}

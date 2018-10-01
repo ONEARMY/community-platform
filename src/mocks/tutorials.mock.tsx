@@ -3,7 +3,7 @@ import { ITutorial } from "../models/tutorial.models";
 export const TUTORIALS_MOCK: ITutorial[] = [
   {
     cover_picture_url: "myurl.com/myimage.jpeg",
-    description: "this is a great description",
+    description: "this is a great description 1",
     details: {
       cost: 20,
       difficulty_levels: "difficult",
@@ -28,7 +28,7 @@ export const TUTORIALS_MOCK: ITutorial[] = [
   },
   {
     cover_picture_url: "myurl.com/myimage.jpeg",
-    description: "this is a great description",
+    description: "this is a great description 2",
     details: {
       cost: 20,
       difficulty_levels: "difficult",
@@ -53,7 +53,7 @@ export const TUTORIALS_MOCK: ITutorial[] = [
   },
   {
     cover_picture_url: "myurl.com/myimage.jpeg",
-    description: "this is a great description",
+    description: "this is a great description 3",
     details: {
       cost: 20,
       difficulty_levels: "difficult",

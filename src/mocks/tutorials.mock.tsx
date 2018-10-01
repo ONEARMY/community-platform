@@ -13,12 +13,15 @@ export const TUTORIALS_MOCK: ITutorial[] = [
     ],
     steps: [
       {
-        images: ["myurl.com/myimage.jpeg", "myurl.com/myimage.jpeg"],
+        images: ["http://placekitten.com/g/400/250"],
         text: "this text is wonderful oh my god",
         title: "My super step1 title"
       },
       {
-        images: ["myurl.com/myimage.jpeg", "myurl.com/myimage.jpeg"],
+        images: [
+          "http://placekitten.com/g/400/250",
+          "http://placekitten.com/400/250"
+        ],
         text: "this text is wonderful oh my god",
         title: "My super step2 title"
       }
@@ -40,12 +43,18 @@ export const TUTORIALS_MOCK: ITutorial[] = [
     ],
     steps: [
       {
-        images: ["myurl.com/myimage.jpeg", "myurl.com/myimage.jpeg"],
+        images: [
+          "http://placekitten.com/400/250",
+          "http://placekitten.com/g/400/250"
+        ],
         text: "this text is wonderful oh my god",
         title: "My super step1 title"
       },
       {
-        images: ["myurl.com/myimage.jpeg", "myurl.com/myimage.jpeg"],
+        images: [
+          "http://placekitten.com/g/400/250",
+          "http://placekitten.com/400/250"
+        ],
         text: "this text is wonderful oh my god",
         title: "My super step2 title"
       }
@@ -67,12 +76,18 @@ export const TUTORIALS_MOCK: ITutorial[] = [
     ],
     steps: [
       {
-        images: ["myurl.com/myimage.jpeg", "myurl.com/myimage.jpeg"],
+        images: [
+          "http://placekitten.com/400/250",
+          "http://placekitten.com/g/400/250"
+        ],
         text: "this text is wonderful oh my god",
         title: "My super step1 title"
       },
       {
-        images: ["myurl.com/myimage.jpeg", "myurl.com/myimage.jpeg"],
+        images: [
+          "http://placekitten.com/g/400/250",
+          "http://placekitten.com/400/250"
+        ],
         text: "this text is wonderful oh my god",
         title: "My super step2 title"
       }

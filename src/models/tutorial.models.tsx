@@ -16,7 +16,7 @@ interface Idetails {
 }
 
 interface Istep {
-  images?: string[];
+  images: string[];
   title: string;
   text: string;
 }

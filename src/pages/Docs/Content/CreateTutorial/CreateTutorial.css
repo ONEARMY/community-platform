@@ -1,11 +1,5 @@
-@import "../../../../../node_modules/slick-carousel/slick/slick.css";
-@import "../../../../../node_modules/slick-carousel/slick/slick-theme.css";
-
-.slick-slider {
-    width: 400px;
+.tutorial-form {
+    width: 75%;
+    position: relative;
     margin: 0 auto;
-}
-
-.slick-dots {
-    bottom: -20px;
 }

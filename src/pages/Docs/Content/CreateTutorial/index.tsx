@@ -1,9 +1,7 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
 import { Form, Field } from "react-final-form";
-// import Slider from "react-slick";
 import "./CreateTutorial.css";
-// import { ITutor  ial } from "../../../../models/models";
 
 export interface IState {
   stepNb: number;
@@ -57,9 +55,6 @@ class CreateTutorial extends React.PureComponent<
     await this.sleep(300);
     window.alert(JSON.stringify(values));
   }
-  public validate = () => {
-    console.log("validate");
-  };
 
   public render() {
     const steps: any = [];
@@ -70,8 +65,8 @@ class CreateTutorial extends React.PureComponent<
       <Form
         onSubmit={this.onSubmit}
         render={({ handleSubmit, pristine, values, invalid }) => (
-          <form onSubmit={handleSubmit}>
-            <h2>Create documentation</h2>
+          <form className="tutorial-form" onSubmit={handleSubmit}>
+            <h2>Create tutorial</h2>
             <Field
               name="workspaceName"
               validate={required}
@@ -119,34 +114,35 @@ class CreateTutorial extends React.PureComponent<
             <div>
               <label>Difficulty</label>
               <Field name="difficulty" component="select">
-                <option />
                 <option value="easy">easy</option>
                 <option value="medium">medium</option>
                 <option value="difficult">difficult</option>
               </Field>
             </div>
-            <div>
-              <label>Time</label>
-              <Field
-                name="tutorial_time"
-                component="input"
-                placeholder="How much time does it take ?"
-              />
-            </div>
-            <div>
-              <label>Cost</label>
-              <Field
-                name="cost"
-                component="input"
-                placeholder="The cost ? in $"
-              />
-            </div>
+            <Field name="tutorial_time" validate={required}>
+              {({ input, meta }) => (
+                <div>
+                  <label>Time</label>
+                  <input {...input} type="text" placeholder="Time needed" />
+                  {meta.error && meta.touched && <span>{meta.error}</span>}
+                </div>
+              )}
+            </Field>
+            <Field name="cost" validate={required}>
+              {({ input, meta }) => (
+                <div>
+                  <label>Cost</label>
+                  <input {...input} type="text" placeholder="The cost ? in $" />
+                  {meta.error && meta.touched && <span>{meta.error}</span>}
+                </div>
+              )}
+            </Field>
 
             <div>
               {steps.map((step: any, index: any) => {
                 return (
                   <div key={index}>
-                    <h3>step title</h3>
+                    <h3>step {index + 1}</h3>
                     <p>step text</p>
                     <p>Image(s)</p>
                   </div>

@@ -66,13 +66,9 @@ class Tutorial extends React.PureComponent<RouteComponentProps<any>, IState> {
           {this.state.tutorial[0].workspace_name}
         </span>
         <span>{this.state.tutorial[0].cover_picture_url}</span>
-        {this.state.tutorial[0].details.map((detail: any, index: number) => (
-          <div key={index}>
-            <p>cost : {detail.cost}</p>
-            <p>difficulty : {detail.difficulty_level}</p>
-            <p>time : {detail.time}</p>
-          </div>
-        ))}
+        <p>cost : {this.state.tutorial[0].cost}</p>
+        <p>difficulty : {this.state.tutorial[0].difficulty_level}</p>
+        <p>time : {this.state.tutorial[0].time}</p>
         {this.state.tutorial[0].steps.map((step: any, index: number) => (
           <div key={index}>
             <h3>{step.title}</h3>

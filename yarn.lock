@@ -3249,6 +3249,11 @@ fill-range@^4.0.0:
     repeat-string "^1.6.1"
     to-regex-range "^2.1.0"
 
+final-form@^4.10.0:
+  version "4.10.0"
+  resolved "https://registry.yarnpkg.com/final-form/-/final-form-4.10.0.tgz#6179bca7676925202510e9877eb1ad2ad1cd3460"
+  integrity sha512-pq/LKcynfI7CWJUX/YlMKwL6Xf5s6SxfjwFT6Saz4Qnwce5flShPQW7IOpxauy/PzD9LMwH/0qI5fXnNaBlOJg==
+
 finalhandler@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/finalhandler/-/finalhandler-1.1.1.tgz#eebf4ed840079c83f4249038c9d703008301b105"
@@ -6773,6 +6778,11 @@ react-error-overlay@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-4.0.1.tgz#417addb0814a90f3a7082eacba7cee588d00da89"
   integrity sha512-xXUbDAZkU08aAkjtUvldqbvI04ogv+a1XdHxvYuHPYKIVk/42BIOD0zSKTHAWV4+gDy3yGm283z2072rA2gdtw==
+
+react-final-form@^3.6.6:
+  version "3.6.6"
+  resolved "https://registry.yarnpkg.com/react-final-form/-/react-final-form-3.6.6.tgz#a2aa5c36d3bc4bfcbf79d80ab62a9370bb9512c0"
+  integrity sha512-aIZr92koql2WME29/cuXitzqDnIGhbIqfeyNzd4H0wfKAenghDVD5nuD02YjetCGAnGj9sjCfxW4SeRSO3q42A==
 
 react-router-dom@^4.3.1:
   version "4.3.1"

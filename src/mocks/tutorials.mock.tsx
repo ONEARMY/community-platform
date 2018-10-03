@@ -8,13 +8,9 @@ export const TUTORIALS_MOCK: ITutorial[] = [
     id: "fakeid1",
     slug: "tutorial-1",
     description: "this is a great description 1",
-    details: [
-      {
-        cost: 20,
-        difficulty_level: "difficult",
-        time: 30
-      }
-    ],
+    cost: 20,
+    difficulty_level: "difficult",
+    time: 30,
     steps: [
       {
         images: ["http://placekitten.com/g/400/250"],
@@ -38,13 +34,9 @@ export const TUTORIALS_MOCK: ITutorial[] = [
     id: "fakeid2",
     slug: "tutorial-2",
     description: "this is a great description 2",
-    details: [
-      {
-        cost: 20,
-        difficulty_level: "difficult",
-        time: 30
-      }
-    ],
+    cost: 20,
+    difficulty_level: "difficult",
+    time: 30,
     steps: [
       {
         images: [
@@ -71,13 +63,9 @@ export const TUTORIALS_MOCK: ITutorial[] = [
     id: "fakeid3",
     slug: "tutorial-3",
     description: "this is a great description 3",
-    details: [
-      {
-        cost: 20,
-        difficulty_level: "difficult",
-        time: 30
-      }
-    ],
+    cost: 20,
+    difficulty_level: "difficult",
+    time: 30,
     steps: [
       {
         images: [

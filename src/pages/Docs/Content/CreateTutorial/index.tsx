@@ -3,6 +3,10 @@ import { RouteComponentProps } from "react-router";
 import { Form, Field } from "react-final-form";
 import "./CreateTutorial.css";
 
+import { storage } from "../../../../utils/firebase";
+// The ts linter error from FileUploader import is ignored by utils/react-firebase-file-uploader.d.ts
+import FileUploader from "react-firebase-file-uploader";
+
 export interface IState {
   stepNb: number;
   cost: number;
@@ -15,6 +19,9 @@ export interface IState {
   time: number;
   title: string;
   workspace_name: string;
+  isUploading: boolean;
+  coverImgProgress: number;
+  coverImgUrl: string;
 }
 
 const required = (value: any) => (value ? undefined : "Required");
@@ -36,7 +43,10 @@ class CreateTutorial extends React.PureComponent<
       steps: [],
       time: 0,
       title: "",
-      workspace_name: ""
+      workspace_name: "",
+      isUploading: false,
+      coverImgProgress: 0,
+      coverImgUrl: ""
     };
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -55,6 +65,29 @@ class CreateTutorial extends React.PureComponent<
     await this.sleep(300);
     window.alert(JSON.stringify(values));
   }
+
+  public handleUploadStart = () => {
+    this.setState({ isUploading: true, coverImgProgress: 0 });
+  };
+  public handleProgress = (coverImgProgress: any) => {
+    console.log("handleProgress");
+    this.setState({ coverImgProgress });
+  };
+  public handleUploadError = (error: any) => {
+    this.setState({ isUploading: false });
+    console.error(error);
+  };
+  public handleUploadSuccess = (filename: any) => {
+    this.setState({ coverImgProgress: 100, isUploading: false });
+    storage
+      .ref("uploads")
+      .child(filename)
+      .getDownloadURL()
+      .then(url => {
+        this.setState({ coverImgUrl: url });
+        console.log(this.state.coverImgUrl);
+      });
+  };
 
   public render() {
     const steps: any = [];
@@ -93,6 +126,20 @@ class CreateTutorial extends React.PureComponent<
                 </div>
               )}
             </Field>
+            <label>Tutorial cover:</label>
+            {this.state.isUploading && (
+              <p>Progress: {this.state.coverImgProgress}</p>
+            )}
+            {this.state.coverImgUrl && <img src={this.state.coverImgUrl} />}
+            <FileUploader
+              accept="image/*"
+              name="avatar"
+              storageRef={storage.ref("uploads")}
+              onUploadStart={this.handleUploadStart}
+              onUploadError={this.handleUploadError}
+              onUploadSuccess={this.handleUploadSuccess}
+              onProgress={this.handleProgress}
+            />
             <Field
               name="tutorialDescription"
               validate={required}
@@ -142,7 +189,7 @@ class CreateTutorial extends React.PureComponent<
               {steps.map((step: any, index: any) => {
                 return (
                   <div key={index}>
-                    <h3>step {index + 1}</h3>
+                    <h3>Step {index + 1}</h3>
                     <p>step text</p>
                     <p>Image(s)</p>
                   </div>

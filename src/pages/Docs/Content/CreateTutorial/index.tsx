@@ -16,12 +16,15 @@ export interface IState {
   id: string;
   slug: string;
   steps: [];
+  stepsImgUrl: [];
   time: number;
   title: string;
   workspace_name: string;
   isUploading: boolean;
-  coverImgProgress: number;
+  imgUploadProgress: number;
   coverImgUrl: string;
+  coverImgFilename: string;
+  uploadPath: string;
 }
 
 const required = (value: any) => (value ? undefined : "Required");
@@ -33,7 +36,7 @@ class CreateTutorial extends React.PureComponent<
   constructor(props: any) {
     super(props);
     this.state = {
-      stepNb: 1,
+      stepNb: 3,
       cost: 0,
       cover_picture_url: "",
       description: "",
@@ -41,15 +44,19 @@ class CreateTutorial extends React.PureComponent<
       id: "",
       slug: "",
       steps: [],
+      stepsImgUrl: [],
       time: 0,
       title: "",
       workspace_name: "",
       isUploading: false,
-      coverImgProgress: 0,
-      coverImgUrl: ""
+      imgUploadProgress: 0,
+      coverImgUrl: "",
+      coverImgFilename: "",
+      uploadPath: ""
     };
 
     this.onSubmit = this.onSubmit.bind(this);
+    this.preparePayload = this.preparePayload.bind(this);
   }
 
   public addStep = () => {
@@ -60,33 +67,84 @@ class CreateTutorial extends React.PureComponent<
 
   public sleep = (ms: any) => new Promise(resolve => setTimeout(resolve, ms));
 
+  public preparePayload = (values: any) => {
+    console.log("values", values);
+  };
   public async onSubmit(values: any) {
-    console.log("submit");
+    // this.preparePayload(values);
     await this.sleep(300);
     window.alert(JSON.stringify(values));
   }
 
   public handleUploadStart = () => {
-    this.setState({ isUploading: true, coverImgProgress: 0 });
+    this.setState({ isUploading: true, imgUploadProgress: 0 });
   };
-  public handleProgress = (coverImgProgress: any) => {
-    console.log("handleProgress");
-    this.setState({ coverImgProgress });
+  public handleProgress = (imgUploadProgress: any) => {
+    this.setState({ imgUploadProgress });
   };
   public handleUploadError = (error: any) => {
     this.setState({ isUploading: false });
     console.error(error);
   };
-  public handleUploadSuccess = (filename: any) => {
-    this.setState({ coverImgProgress: 100, isUploading: false });
+  public handleUploadCoverSuccess = (filename: any) => {
+    this.setState({
+      imgUploadProgress: 100,
+      coverImgFilename: filename,
+      isUploading: false
+    });
     storage
-      .ref("uploads")
+      .ref(this.state.uploadPath)
       .child(filename)
       .getDownloadURL()
       .then(url => {
         this.setState({ coverImgUrl: url });
-        console.log(this.state.coverImgUrl);
       });
+  };
+  public handleUploadStepImgSuccess = (filename: any) => {
+    this.setState({
+      imgUploadProgress: 100,
+      isUploading: false
+    });
+    storage
+      .ref(this.state.uploadPath)
+      .child(filename)
+      .getDownloadURL()
+      .then(url => {
+        // const stepImgArray: any = this.state.stepsImgUrl[this.state.stepsImgUrl.length - 1]
+        this.setState({ coverImgUrl: url });
+      });
+  };
+
+  public onChangeHandlerStepImg = (event: any) => {
+    const {
+      target: { files }
+    } = event;
+    const filesToStore: any = [];
+    console.log("files :", files);
+    for (const f of files) {
+      console.log("f :", f);
+      filesToStore.push(f);
+    }
+    this.setState({ stepsImgUrl: filesToStore });
+  };
+
+  public onTitleChange = (event: any) => {
+    // TODO the event.target.value needs to be formated as the article slug
+    this.setState({ uploadPath: "uploads/" + event.target.value });
+  };
+
+  public displayStepImgUpload = (stepIndex: any) => {
+    return (
+      <FileUploader
+        accept="image/*"
+        name={"step" + stepIndex + "_image"}
+        storageRef={storage.ref(this.state.uploadPath)}
+        onUploadStart={this.handleUploadStart}
+        onUploadError={this.handleUploadError}
+        onUploadSuccess={this.handleUploadStepImgSuccess}
+        onProgress={this.handleProgress}
+      />
+    );
   };
 
   public render() {
@@ -101,7 +159,7 @@ class CreateTutorial extends React.PureComponent<
           <form className="tutorial-form" onSubmit={handleSubmit}>
             <h2>Create tutorial</h2>
             <Field
-              name="workspaceName"
+              name="workspace_name"
               validate={required}
               placeholder="Workspace Name"
             >
@@ -113,35 +171,42 @@ class CreateTutorial extends React.PureComponent<
                 </div>
               )}
             </Field>
-            <Field
-              name="tutorialTitle"
-              validate={required}
-              placeholder="Tutorial title"
-            >
+            <Field name="tutorial_title" validate={required}>
               {({ input, meta }) => (
                 <div>
                   <label>Tutorial title</label>
-                  <input {...input} type="text" placeholder="Tutorial title" />
+                  <input
+                    {...input}
+                    type="text"
+                    onBlur={this.onTitleChange}
+                    placeholder="Tutorial title"
+                  />
                   {meta.error && meta.touched && <span>{meta.error}</span>}
                 </div>
               )}
             </Field>
             <label>Tutorial cover:</label>
             {this.state.isUploading && (
-              <p>Progress: {this.state.coverImgProgress}</p>
+              <p>Progress: {this.state.imgUploadProgress}</p>
             )}
-            {this.state.coverImgUrl && <img src={this.state.coverImgUrl} />}
+            {this.state.coverImgUrl && (
+              <img
+                className="cover-img"
+                src={this.state.coverImgUrl}
+                alt={"cover image - " + this.state.title}
+              />
+            )}
             <FileUploader
-              accept="image/*"
-              name="avatar"
-              storageRef={storage.ref("uploads")}
+              accept="image/png, image/jpeg"
+              name="coverImg"
+              storageRef={storage.ref(this.state.uploadPath)}
               onUploadStart={this.handleUploadStart}
               onUploadError={this.handleUploadError}
-              onUploadSuccess={this.handleUploadSuccess}
+              onUploadSuccess={this.handleUploadCoverSuccess}
               onProgress={this.handleProgress}
             />
             <Field
-              name="tutorialDescription"
+              name="tutorial_description"
               validate={required}
               placeholder="Quick tutorial description"
             >
@@ -185,19 +250,64 @@ class CreateTutorial extends React.PureComponent<
               )}
             </Field>
 
+            <p>File(s)</p>
+            <FileUploader
+              multiple={true}
+              name="files"
+              storageRef={storage.ref(this.state.uploadPath)}
+              onUploadStart={this.handleUploadStart}
+              onUploadError={this.handleUploadError}
+              onUploadSuccess={this.handleUploadCoverSuccess}
+              onProgress={this.handleProgress}
+            />
+
             <div>
               {steps.map((step: any, index: any) => {
+                const stepIndex: any = index + 1;
                 return (
                   <div key={index}>
-                    <h3>Step {index + 1}</h3>
-                    <p>step text</p>
-                    <p>Image(s)</p>
+                    <h3>Step {stepIndex}</h3>
+                    <Field
+                      name={"step_" + stepIndex + "_title"}
+                      validate={required}
+                    >
+                      {({ input, meta }) => (
+                        <div>
+                          <label>Title : </label>
+                          <input
+                            {...input}
+                            type="text"
+                            placeholder="Step title"
+                          />
+                          {meta.error &&
+                            meta.touched && <span>{meta.error}</span>}
+                        </div>
+                      )}
+                    </Field>
+                    <Field
+                      name={"step_" + stepIndex + "_text"}
+                      validate={required}
+                    >
+                      {({ input, meta }) => (
+                        <div>
+                          <label>Content : </label>
+                          <input
+                            {...input}
+                            type="text"
+                            placeholder="Step content"
+                          />
+                          {meta.error &&
+                            meta.touched && <span>{meta.error}</span>}
+                        </div>
+                      )}
+                    </Field>
+                    <p>Upload picture(s) about this particular step</p>
+                    {this.displayStepImgUpload(stepIndex)}
                   </div>
                 );
               })}
             </div>
             <button onClick={this.addStep}>ADD STEP</button>
-
             <button type="submit" disabled={pristine || invalid}>
               Submit
             </button>

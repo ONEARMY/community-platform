@@ -3,3 +3,8 @@
     position: relative;
     margin: 0 auto;
 }
+
+.cover-img {
+    width: 300px;
+    display: block;
+}

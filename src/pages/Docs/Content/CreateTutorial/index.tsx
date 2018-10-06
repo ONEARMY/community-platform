@@ -69,12 +69,36 @@ class CreateTutorial extends React.PureComponent<
 
   public preparePayload = (values: any) => {
     console.log("values", values);
+    // console.log("values length", Object.keys(values).length);
+    // console.log("preparePayload");
+    // const valuesArray = Object.keys(values).map(key => {
+    //   return [String(key), values[key]];
+    // });
+    // console.log("valuesArray : ", valuesArray);
+    // const payload: any = [];
+    // const allSteps: any = [];
+    // valuesArray.map((value: any, index: any) => {
+    //   console.log("value : ", value);
+    //   // const stepIndex: any = "step_" + (index + 1);
+    //   console.log("valuesArray[index] :", valuesArray[index]);
+    //   // for (let j = 0; j <= valuesArray.length; j++) {
+    //   if (value.includes(valuesArray[index])) {
+    //     console.log("inside if");
+    //     allSteps.push(value);
+    //   } else {
+    //     console.log("inside else");
+    //     payload.push(value);
+    //   }
+    //   // }
+    // });
+    // payload.push(allSteps);
+    // console.log("payload : ", payload);
   };
-  public async onSubmit(values: any) {
-    // this.preparePayload(values);
-    await this.sleep(300);
-    window.alert(JSON.stringify(values));
-  }
+  public onSubmit = (values: any) => {
+    this.preparePayload(values);
+    // await this.sleep(300);
+    // window.alert(JSON.stringify(values));
+  };
 
   public handleUploadStart = () => {
     this.setState({ isUploading: true, imgUploadProgress: 0 });

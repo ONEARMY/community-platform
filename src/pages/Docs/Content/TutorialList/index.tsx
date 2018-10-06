@@ -14,6 +14,9 @@ class TutorialList extends React.Component {
             <dd>{tutorial.description}</dd>
           </React.Fragment>
         ))}
+        <Link className="create-btn" to={`/docs/create`}>
+          Create new
+        </Link>
       </div>
     );
   }

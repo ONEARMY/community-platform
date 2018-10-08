@@ -1,4 +1,6 @@
 import * as React from "react";
+import { Lock } from "@material-ui/icons";
+import { IconButton } from "@material-ui/core";
 import "./Home.scss";
 
 export class HomePage extends React.Component {
@@ -6,8 +8,10 @@ export class HomePage extends React.Component {
     return (
       <div id="HomePage">
         <div className="bgimg-1">
-          <div className="caption">
-            <span className="border">STATUS:COMING TO EARTH </span>
+          <div className="unlock">
+            <IconButton color="primary">
+              <Lock />
+            </IconButton>
           </div>
         </div>
       </div>

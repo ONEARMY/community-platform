@@ -1,9 +1,10 @@
 import * as React from "react";
-
+import { Switch, Route } from "react-router-dom";
+import { MuiThemeProvider } from "@material-ui/core";
+import { theme } from "../themes/app.theme";
 import Docs from "./Docs/index";
 import { HomePage } from "./Home/Home";
 import { NotFoundPage } from "./NotFound/NotFound";
-import { Switch, Route } from "react-router-dom";
 
 export class Routes extends React.Component {
   public shouldComponentUpdate() {
@@ -14,11 +15,13 @@ export class Routes extends React.Component {
 
   public render() {
     return (
-      <Switch>
-        <Route path="/docs" component={Docs} />
-        <Route exact path="/" component={HomePage} />
-        <Route component={NotFoundPage} />
-      </Switch>
+      <MuiThemeProvider theme={theme}>
+        <Switch>
+          <Route path="/docs" component={Docs} />
+          <Route exact path="/" component={HomePage} />
+          <Route component={NotFoundPage} />
+        </Switch>
+      </MuiThemeProvider>
     );
   }
   // more examples of router config and behaviours can be found at:

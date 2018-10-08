@@ -1,8 +1,8 @@
 import * as React from "react";
 
 import Docs from "./Docs/index";
-import { HomePage } from "./Home";
-import { NotFoundPage } from "./NotFound";
+import { HomePage } from "./Home/Home";
+import { NotFoundPage } from "./NotFound/NotFound";
 import { Switch, Route } from "react-router-dom";
 
 export class Routes extends React.Component {
@@ -17,7 +17,6 @@ export class Routes extends React.Component {
       <Switch>
         <Route path="/docs" component={Docs} />
         <Route exact path="/" component={HomePage} />
-        {/* TODO add notFound page */}
         <Route component={NotFoundPage} />
       </Switch>
     );

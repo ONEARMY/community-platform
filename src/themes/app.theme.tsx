@@ -6,6 +6,9 @@ import { blue, green, red } from "@material-ui/core/colors";
 // and here: https://material-ui.com/customization/themes/
 
 export const theme = createMuiTheme({
+  typography: {
+    useNextVariants: true
+  },
   palette: {
     primary: {
       light: red[300],

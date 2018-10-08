@@ -19,6 +19,7 @@ interface IState {
   email: string;
   password: string;
   error?: string;
+  submitDisabled: boolean;
 }
 
 const styles: any = {
@@ -52,11 +53,13 @@ const styles: any = {
 export class LoginComponent extends React.Component {
   public state: IState = {
     email: "",
-    password: ""
+    password: "",
+    submitDisabled: false
   };
 
   public loginSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
+    this.setState({ submitDisabled: true });
     this.processLogin();
   };
 
@@ -70,7 +73,7 @@ export class LoginComponent extends React.Component {
       this.setState({ error: "Signed in succesfully" });
       console.log("signed in successfully", status);
     } catch (error) {
-      this.setState({ error: error.message });
+      this.setState({ error: error.message, submitDisabled: false });
     }
   }
 
@@ -121,6 +124,7 @@ export class LoginComponent extends React.Component {
                 variant="contained"
                 color="primary"
                 style={styles.submit}
+                disabled={this.state.submitDisabled}
               >
                 Sign in
               </Button>

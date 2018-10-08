@@ -9,6 +9,7 @@ firestore.settings({ timestampsInSnapshots: true });
 // export firestore db to be accessed as 'db' and firebase auth as 'auth'
 export const db = firestore;
 export const auth = firebase.auth();
+export const storage = firebase.storage();
 
 /* Firestore use examples
    See full docs at: https://firebase.google.com/docs/firestore/

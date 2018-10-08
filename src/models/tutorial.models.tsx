@@ -3,20 +3,16 @@ export interface ITutorial {
   cover_picture_url: string;
   title: string;
   description: string;
-  details: Idetails;
+  difficulty_level: "easy" | "medium" | "difficult";
+  time: number;
+  cost: number;
   steps: Istep[];
   id: string;
   slug: string;
 }
 
-interface Idetails {
-  difficulty_levels: "easy" | "medium" | "difficult";
-  time: number;
-  cost: number;
-}
-
 interface Istep {
-  images?: string[];
+  images: string[];
   title: string;
   text: string;
 }

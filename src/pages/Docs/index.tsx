@@ -1,7 +1,8 @@
 import * as React from "react";
 import "./Doc.css";
+import Content from "./Content";
 
-import logo from "../../logo.svg";
+import logo from "../../assets/images/logo.png";
 
 class Docs extends React.Component {
   public render() {
@@ -10,11 +11,9 @@ class Docs extends React.Component {
         <header className="App-header">
           {" "}
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">DOC</h1>{" "}
+          <h1 className="App-title">DOCUMENTATION</h1>{" "}
         </header>{" "}
-        <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> and save to reload.
-        </p>
+        <Content />
       </div>
     );
   }

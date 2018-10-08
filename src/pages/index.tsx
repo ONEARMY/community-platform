@@ -1,8 +1,7 @@
 import * as React from "react";
-import { Route, Switch } from "react-router-dom";
 
-// import Home from "../components/app/App";
-import Doc from "./Docs/index";
+import Docs from "./Docs/index";
+import { Switch, Route } from "react-router-dom";
 
 class Routes extends React.Component {
   public shouldComponentUpdate() {
@@ -14,7 +13,10 @@ class Routes extends React.Component {
   public render() {
     return (
       <Switch>
-        <Route path="/doc" component={Doc} />
+        <Route path="/docs" component={Docs} />
+
+        {/* TODO add notFound page */}
+        {/* <Route component={NotFound} /> */}
       </Switch>
     );
   }

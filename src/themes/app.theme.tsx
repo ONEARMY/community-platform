@@ -11,14 +11,22 @@ export const theme = createMuiTheme({
   },
   palette: {
     primary: {
-      light: red[300],
-      main: red[500],
-      dark: red[700]
+      light: blue[300],
+      main: blue[500],
+      dark: blue[700]
     },
     secondary: {
       light: green[300],
       main: green[500],
       dark: green[700]
+    },
+    error: {
+      light: red[300],
+      main: red[500],
+      dark: red[700]
     }
+  },
+  typography: {
+    useNextVariants: true
   }
 });

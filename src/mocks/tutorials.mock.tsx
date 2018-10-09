@@ -2,7 +2,7 @@ import { ITutorial } from "../models/tutorial.models";
 
 export const TUTORIALS_MOCK: ITutorial[] = [
   {
-    cover_picture_url: "myurl.com/myimage.jpeg",
+    cover_picture_url: "http://placekitten.com/g/400/250",
     title: "Tutorial 1",
     workspace_name: "Eindhoven Mate",
     id: "fakeid1",
@@ -28,7 +28,7 @@ export const TUTORIALS_MOCK: ITutorial[] = [
     ]
   },
   {
-    cover_picture_url: "myurl.com/myimage.jpeg",
+    cover_picture_url: "http://placekitten.com/g/400/250",
     title: "Tutorial 2",
     workspace_name: "Eindhoven Mate",
     id: "fakeid2",
@@ -57,7 +57,7 @@ export const TUTORIALS_MOCK: ITutorial[] = [
     ]
   },
   {
-    cover_picture_url: "myurl.com/myimage.jpeg",
+    cover_picture_url: "http://placekitten.com/g/400/250",
     title: "Tutorial 3",
     workspace_name: "Eindhoven Mate",
     id: "fakeid3",

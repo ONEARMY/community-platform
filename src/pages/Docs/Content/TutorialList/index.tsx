@@ -15,35 +15,19 @@ import { theme } from "../../../../themes/app.theme";
 import { TUTORIALS_MOCK } from "../../../../mocks/tutorials.mock";
 
 const styles: any = {
-  appBar: {
-    position: "relative"
-  },
-  icon: {
-    marginRight: theme.spacing.unit * 2
-  },
-  heroUnit: {
-    backgroundColor: theme.palette.background.paper
-  },
-  heroContent: {
-    maxWidth: 600,
-    margin: "0 auto",
-    padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 6}px`
-  },
-  heroButtons: {
-    marginTop: theme.spacing.unit * 4
-  },
   layout: {
     width: "auto",
     marginLeft: theme.spacing.unit * 3,
     marginRight: theme.spacing.unit * 3,
+    padding: `${theme.spacing.unit * 4}px 0`,
     [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
       width: 1100,
       marginLeft: "auto",
       marginRight: "auto"
     }
   },
-  cardGrid: {
-    padding: `${theme.spacing.unit * 8}px 0`
+  link: {
+    textDecoration: "none"
   },
   card: {
     height: "100%",
@@ -55,10 +39,6 @@ const styles: any = {
   },
   cardContent: {
     flexGrow: 1
-  },
-  footer: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing.unit * 6
   }
 };
 
@@ -69,37 +49,39 @@ class TutorialList extends React.Component {
   public render() {
     return (
       <React.Fragment>
-        <Grid container spacing={40}>
-          {TUTORIALS_MOCK.map((card: any, index: number) => (
-            <Grid item key={index} sm={6} md={4} lg={3}>
-              <Link to={`/docs/${card.slug}`}>
-                <Card style={styles.card}>
-                  <CardMedia
-                    style={styles.cardMedia}
-                    image={card.cover_picture_url} // eslint-disable-line max-len
-                    title="Image title"
-                  />
-                  <CardContent style={styles.cardContent}>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      {card.title}
-                    </Typography>
-                    <Typography>{card.description}</Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button size="small" color="primary">
-                      View
-                    </Button>
-                    <Button size="small" color="primary">
-                      Edit
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Link>
-            </Grid>
-          ))}
-        </Grid>
-        <Link to={`/docs/create`}>
-          <Button size="medium" color="primary">
+        <div style={styles.layout}>
+          <Grid container spacing={40}>
+            {TUTORIALS_MOCK.map((card: any, index: number) => (
+              <Grid item key={index} sm={6} md={4} lg={3}>
+                <Link to={`/docs/${card.slug}`} style={styles.link}>
+                  <Card style={styles.card}>
+                    <CardMedia
+                      style={styles.cardMedia}
+                      image={card.cover_picture_url} // eslint-disable-line max-len
+                      title="Image title"
+                    />
+                    <CardContent style={styles.cardContent}>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {card.title}
+                      </Typography>
+                      <Typography>{card.description}</Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button size="small" color="primary">
+                        View
+                      </Button>
+                      <Button size="small" color="primary">
+                        Edit
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Link>
+              </Grid>
+            ))}
+          </Grid>
+        </div>
+        <Link to={`/docs/create`} style={styles.link}>
+          <Button variant="outlined" color="primary">
             Create tutorial
           </Button>
         </Link>

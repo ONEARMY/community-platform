@@ -6,12 +6,12 @@ export interface ITutorial {
   difficulty_level: "easy" | "medium" | "difficult";
   time: number;
   cost: number;
-  steps: Istep[];
+  steps: ITutorialStep[];
   id: string;
   slug: string;
 }
 
-interface Istep {
+export interface ITutorialStep {
   images: string[];
   title: string;
   text: string;

@@ -1,10 +1,14 @@
 .tutorial-form {
-    width: 75%;
-    position: relative;
-    margin: 0 auto;
+  width: 75%;
+  position: relative;
+  margin: 0 auto;
+}
+
+.tutorial-form label {
+  margin-top: 1em;
 }
 
 .cover-img {
-    width: 300px;
-    display: block;
+  width: 300px;
+  display: block;
 }

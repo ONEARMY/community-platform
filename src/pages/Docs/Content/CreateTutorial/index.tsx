@@ -1,7 +1,10 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
 import { Form, Field } from "react-final-form";
+import { FieldArray } from "react-final-form-arrays";
+import arrayMutators from "final-form-arrays";
 import "./CreateTutorial.css";
+import { ITutorialStep } from "../../../../models/tutorial.models";
 
 import { storage } from "../../../../utils/firebase";
 import FileUploader from "react-firebase-file-uploader";
@@ -14,7 +17,7 @@ export interface IState {
   difficulty_level: string;
   id: string;
   slug: string;
-  steps: [];
+  steps: ITutorialStep[];
   stepsImgUrl: [];
   time: number;
   title: string;
@@ -35,7 +38,7 @@ class CreateTutorial extends React.PureComponent<
   constructor(props: any) {
     super(props);
     this.state = {
-      stepNb: 3,
+      stepNb: 1,
       cost: 0,
       cover_picture_url: "",
       description: "",
@@ -93,8 +96,10 @@ class CreateTutorial extends React.PureComponent<
     // payload.push(allSteps);
     // console.log("payload : ", payload);
   };
-  public onSubmit = (values: any) => {
-    this.preparePayload(values);
+
+  public onSubmit = async (values: any) => {
+    console.log("submitting", values);
+    // this.preparePayload(values);
     // await this.sleep(300);
     // window.alert(JSON.stringify(values));
   };
@@ -178,164 +183,179 @@ class CreateTutorial extends React.PureComponent<
     return (
       <Form
         onSubmit={this.onSubmit}
-        render={({ handleSubmit, pristine, values, invalid }) => (
-          <form className="tutorial-form" onSubmit={handleSubmit}>
-            <h2>Create tutorial</h2>
-            <Field
-              name="workspace_name"
-              validate={required}
-              placeholder="Workspace Name"
-            >
-              {({ input, meta }) => (
-                <div>
-                  <label>Workspace name</label>
-                  <input {...input} type="text" placeholder="Last Name" />
-                  {meta.error && meta.touched && <span>{meta.error}</span>}
-                </div>
-              )}
-            </Field>
-            <Field name="tutorial_title" validate={required}>
-              {({ input, meta }) => (
-                <div>
-                  <label>Tutorial title</label>
-                  <input
-                    {...input}
-                    type="text"
-                    onBlur={this.onTitleChange}
-                    placeholder="Tutorial title"
-                  />
-                  {meta.error && meta.touched && <span>{meta.error}</span>}
-                </div>
-              )}
-            </Field>
-            <label>Tutorial cover:</label>
-            {this.state.isUploading && (
-              <p>Progress: {this.state.imgUploadProgress}</p>
-            )}
-            {this.state.coverImgUrl && (
-              <img
-                className="cover-img"
-                src={this.state.coverImgUrl}
-                alt={"cover image - " + this.state.title}
-              />
-            )}
-            <FileUploader
-              accept="image/png, image/jpeg"
-              name="coverImg"
-              storageRef={storage.ref(this.state.uploadPath)}
-              onUploadStart={this.handleUploadStart}
-              onUploadError={this.handleUploadError}
-              onUploadSuccess={this.handleUploadCoverSuccess}
-              onProgress={this.handleProgress}
-            />
-            <Field
-              name="tutorial_description"
-              validate={required}
-              placeholder="Quick tutorial description"
-            >
-              {({ input, meta }) => (
-                <div>
-                  <label>Tutorial description</label>
-                  <input
-                    {...input}
-                    type="text"
-                    placeholder="Tutorial description"
-                  />
-                  {meta.error && meta.touched && <span>{meta.error}</span>}
-                </div>
-              )}
-            </Field>
+        mutators={{
+          ...arrayMutators
+        }}
+        render={({
+          handleSubmit,
+          mutators: { push, pop }, // injected from final-form-arrays above
+          pristine,
+          reset,
+          submitting,
+          values
+        }) => {
+          return (
+            <form className="tutorial-form" onSubmit={handleSubmit}>
+              <h2>Create Tutorial</h2>
+              <div>
+                <label>Workspace Name</label>
+                <Field
+                  name="workspace_name"
+                  validate={required}
+                  placeholder="Workspace Name"
+                  component="input"
+                />
+              </div>
+              <div className="buttons">
+                <button type="button" onClick={() => push("steps", undefined)}>
+                  Add Step
+                </button>
+                <button type="button" onClick={() => pop("steps")}>
+                  Remove Step
+                </button>
+              </div>
+              <FieldArray name="steps">
+                {({ fields }) =>
+                  fields.map((name, index) => (
+                    <div key={name}>
+                      <label>Step {index + 1}</label>
+                      <Field
+                        name={`${name}.title`}
+                        component="input"
+                        placeholder="Step title"
+                        validate={required}
+                      />
+                      <Field
+                        name={`${name}.text`}
+                        component="input"
+                        placeholder="Description"
+                        validate={required}
+                      />
+                      <span
+                        onClick={() => fields.remove(index)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        ❌
+                      </span>
+                    </div>
+                  ))
+                }
+              </FieldArray>
 
-            <div>
-              <label>Difficulty</label>
-              <Field name="difficulty" component="select">
-                <option value="easy">easy</option>
-                <option value="medium">medium</option>
-                <option value="difficult">difficult</option>
-              </Field>
-            </div>
-            <Field name="tutorial_time" validate={required}>
-              {({ input, meta }) => (
-                <div>
-                  <label>Time</label>
-                  <input {...input} type="text" placeholder="Time needed" />
-                  {meta.error && meta.touched && <span>{meta.error}</span>}
-                </div>
-              )}
-            </Field>
-            <Field name="cost" validate={required}>
-              {({ input, meta }) => (
-                <div>
-                  <label>Cost</label>
-                  <input {...input} type="text" placeholder="The cost ? in $" />
-                  {meta.error && meta.touched && <span>{meta.error}</span>}
-                </div>
-              )}
-            </Field>
+              <div className="buttons">
+                <button type="submit" disabled={submitting || pristine}>
+                  Submit
+                </button>
+              </div>
+              {/* <pre>{JSON.stringify(values, 0, 2)}</pre> */}
+            </form>
+            // <Field>
+            //             <label>Workspace name</label>
+            //             <input {...input} type="text" placeholder="Last Name" />
+            //             {meta.error && meta.touched && <span>{meta.error}</span>}
+            //           </div>
+            //         )}
+            //       </Field>
+            //       <Field name="tutorial_title" validate={required}>
+            //         {({ input, meta }) => (
+            //           <div>
+            //             <label>Tutorial title</label>
+            //             <input
+            //               {...input}
+            //               type="text"
+            //               onBlur={this.onTitleChange}
+            //               placeholder="Tutorial title"
+            //             />
+            //             {meta.error && meta.touched && <span>{meta.error}</span>}
+            //           </div>
+            //         )}
+            //       </Field>
+            //       <label>Tutorial cover:</label>
+            //       {this.state.isUploading && (
+            //         <p>Progress: {this.state.imgUploadProgress}</p>
+            //       )}
+            //       {this.state.coverImgUrl && (
+            //         <img
+            //           className="cover-img"
+            //           src={this.state.coverImgUrl}
+            //           alt={"cover image - " + this.state.title}
+            //         />
+            //       )}
+            //       <FileUploader
+            //         accept="image/png, image/jpeg"
+            //         name="coverImg"
+            //         storageRef={storage.ref(this.state.uploadPath)}
+            //         onUploadStart={this.handleUploadStart}
+            //         onUploadError={this.handleUploadError}
+            //         onUploadSuccess={this.handleUploadCoverSuccess}
+            //         onProgress={this.handleProgress}
+            //       />
+            //       <Field
+            //         name="tutorial_description"
+            //         validate={required}
+            //         placeholder="Quick tutorial description"
+            //       >
+            //         {({ input, meta }) => (
+            //           <div>
+            //             <label>Tutorial description</label>
+            //             <input
+            //               {...input}
+            //               type="text"
+            //               placeholder="Tutorial description"
+            //             />
+            //             {meta.error && meta.touched && <span>{meta.error}</span>}
+            //           </div>
+            //         )}
+            //       </Field>
 
-            <p>File(s)</p>
-            <FileUploader
-              multiple={true}
-              name="files"
-              storageRef={storage.ref(this.state.uploadPath)}
-              onUploadStart={this.handleUploadStart}
-              onUploadError={this.handleUploadError}
-              onUploadSuccess={this.handleUploadCoverSuccess}
-              onProgress={this.handleProgress}
-            />
+            //       <div>
+            //         <label>Difficulty</label>
+            //         <Field name="difficulty" component="select">
+            //           <option value="easy">easy</option>
+            //           <option value="medium">medium</option>
+            //           <option value="difficult">difficult</option>
+            //         </Field>
+            //       </div>
+            //       <Field name="tutorial_time" validate={required}>
+            //         {({ input, meta }) => (
+            //           <div>
+            //             <label>Time</label>
+            //             <input {...input} type="text" placeholder="Time needed" />
+            //             {meta.error && meta.touched && <span>{meta.error}</span>}
+            //           </div>
+            //         )}
+            //       </Field>
+            //       <Field name="cost" validate={required}>
+            //         {({ input, meta }) => (
+            //           <div>
+            //             <label>Cost</label>
+            //             <input {...input} type="text" placeholder="The cost ? in $" />
+            //             {meta.error && meta.touched && <span>{meta.error}</span>}
+            //           </div>
+            //         )}
+            //       </Field>
 
-            <div>
-              {steps.map((step: any, index: any) => {
-                const stepIndex: any = index + 1;
-                return (
-                  <div key={index}>
-                    <h3>Step {stepIndex}</h3>
-                    <Field
-                      name={"step_" + stepIndex + "_title"}
-                      validate={required}
-                    >
-                      {({ input, meta }) => (
-                        <div>
-                          <label>Title : </label>
-                          <input
-                            {...input}
-                            type="text"
-                            placeholder="Step title"
-                          />
-                          {meta.error &&
-                            meta.touched && <span>{meta.error}</span>}
-                        </div>
-                      )}
-                    </Field>
-                    <Field
-                      name={"step_" + stepIndex + "_text"}
-                      validate={required}
-                    >
-                      {({ input, meta }) => (
-                        <div>
-                          <label>Content : </label>
-                          <input
-                            {...input}
-                            type="text"
-                            placeholder="Step content"
-                          />
-                          {meta.error &&
-                            meta.touched && <span>{meta.error}</span>}
-                        </div>
-                      )}
-                    </Field>
-                    <p>Upload picture(s) about this particular step</p>
-                    {this.displayStepImgUpload(stepIndex)}
-                  </div>
-                );
-              })}
-            </div>
-            <button onClick={this.addStep}>ADD STEP</button>
-            <button type="submit" disabled={pristine || invalid}>
-              Submit
-            </button>
-          </form>
-        )}
+            //       <p>File(s)</p>
+            //       <FileUploader
+            //         multiple={true}
+            //         name="files"
+            //         storageRef={storage.ref(this.state.uploadPath)}
+            //         onUploadStart={this.handleUploadStart}
+            //         onUploadError={this.handleUploadError}
+            //         onUploadSuccess={this.handleUploadCoverSuccess}
+            //         onProgress={this.handleProgress}
+            //       />
+
+            //       <div>
+            //
+            //       </div>
+            //       <button onClick={this.addStep}>ADD STEP</button>
+            //       <button type="submit" disabled={pristine || invalid}>
+            //         Submit
+            //       </button>
+            //     </form>
+          );
+        }}
       />
     );
   }

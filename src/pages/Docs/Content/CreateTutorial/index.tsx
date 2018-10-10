@@ -128,11 +128,12 @@ class CreateTutorial extends React.PureComponent<
       .ref(this.state._uploadPath)
       .child(filename)
       .getDownloadURL();
-    currentSteps[this.state._currentStepIndex].images = {
-      // use the spread operator to merge the existing images with the new url
-      // it should create a new array if one doesn't already exist
-      url: [...currentSteps[this.state._currentStepIndex].images, url]
-    };
+    // use the spread operator to merge the existing images with the new url
+    // it should create a new array if one doesn't already exist
+    currentSteps[this.state._currentStepIndex].images = [
+      ...currentSteps[this.state._currentStepIndex].images,
+      url
+    ];
     // u
     this.setState({
       // additional meta fields if desired
@@ -334,6 +335,16 @@ class CreateTutorial extends React.PureComponent<
                       >
                         ❌
                       </span>
+                      {this.state.formValues.steps[index].images &&
+                        this.state.formValues.steps[index].images.map(
+                          (stepImg, stepImgindex) => (
+                            <img
+                              key={stepImgindex}
+                              className="step-img"
+                              src={stepImg}
+                            />
+                          )
+                        )}
                       <FileUploader
                         name="stepImages"
                         storageRef={storage.ref(this.state._uploadPath)}

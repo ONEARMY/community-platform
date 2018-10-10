@@ -12,7 +12,7 @@ export interface ITutorial {
 }
 
 export interface ITutorialStep {
-  images?: string[];
+  images: string[];
   title: string;
   text: string;
 }

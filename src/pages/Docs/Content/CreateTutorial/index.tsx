@@ -4,7 +4,6 @@ import { Form, Field } from "react-final-form";
 import "./CreateTutorial.css";
 
 import { storage } from "../../../../utils/firebase";
-// The ts linter error from FileUploader import is ignored by utils/react-firebase-file-uploader.d.ts
 import FileUploader from "react-firebase-file-uploader";
 
 export interface IState {

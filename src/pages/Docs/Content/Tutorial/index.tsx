@@ -65,7 +65,6 @@ class Tutorial extends React.PureComponent<RouteComponentProps<any>, IState> {
           <b>workspace : </b>
           {this.state.tutorial[0].workspace_name}
         </span>
-        <span>{this.state.tutorial[0].cover_picture_url}</span>
         <p>cost : {this.state.tutorial[0].cost}</p>
         <p>difficulty : {this.state.tutorial[0].difficulty_level}</p>
         <p>time : {this.state.tutorial[0].time}</p>

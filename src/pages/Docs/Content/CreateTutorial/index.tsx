@@ -14,20 +14,21 @@ export interface IState {
   _isUploading: boolean;
   _imgUploadProgress: number;
   _uploadPath: string;
+  _currentStepIndex: number;
 }
 interface IFormValues {
-  cost: number;
-  cover_picture_url: string;
-  description: string;
+  workspace_name: string;
+  tutorial_title: string;
+  tutorial_description: string;
+  tutorial_time: number;
+  tutorial_cost: number;
   difficulty_level: string;
   id: string;
   slug: string;
   steps: ITutorialStep[];
-  time: number;
-  title: string;
-  workspace_name: string;
-  coverImgUrl: string;
-  coverImgFilename: string;
+  cover_image_url: string;
+  cover_image_filename: string;
+  tutorial_files_url: string;
 }
 
 const required = (value: any) => (value ? undefined : "Required");
@@ -40,35 +41,39 @@ class CreateTutorial extends React.PureComponent<
     super(props);
     this.state = {
       formValues: {
-        cost: 0,
-        cover_picture_url: "",
-        description: "",
+        tutorial_description: "this is test description",
+        tutorial_title: "my tutorial yolo title",
+        tutorial_time: 20,
+        tutorial_cost: 50,
         difficulty_level: "easy",
+        cover_image_url: "",
+        tutorial_files_url: "",
         id: "",
         slug: "",
         steps: [
           {
-            title: "",
-            text: ""
+            title: "step 1",
+            text: "step 1 description",
+            images: []
           },
           {
-            title: "",
-            text: ""
+            title: "step 2",
+            text: "step 2 description",
+            images: []
           },
           {
-            title: "",
-            text: ""
+            title: "step 3",
+            text: "step 3 description",
+            images: []
           }
         ],
-        time: 0,
-        title: "",
         workspace_name: "test",
-        coverImgUrl: "",
-        coverImgFilename: ""
+        cover_image_filename: ""
       },
       _isUploading: false,
       _imgUploadProgress: 0,
-      _uploadPath: ""
+      _uploadPath: "uploads/test",
+      _currentStepIndex: 0
     };
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -77,37 +82,10 @@ class CreateTutorial extends React.PureComponent<
 
   public preparePayload = (values: any) => {
     console.log("values", values);
-    // console.log("values length", Object.keys(values).length);
-    // console.log("preparePayload");
-    // const valuesArray = Object.keys(values).map(key => {
-    //   return [String(key), values[key]];
-    // });
-    // console.log("valuesArray : ", valuesArray);
-    // const payload: any = [];
-    // const allSteps: any = [];
-    // valuesArray.map((value: any, index: any) => {
-    //   console.log("value : ", value);
-    //   // const stepIndex: any = "step_" + (index + 1);
-    //   console.log("valuesArray[index] :", valuesArray[index]);
-    //   // for (let j = 0; j <= valuesArray.length; j++) {
-    //   if (value.includes(valuesArray[index])) {
-    //     console.log("inside if");
-    //     allSteps.push(value);
-    //   } else {
-    //     console.log("inside else");
-    //     payload.push(value);
-    //   }
-    //   // }
-    // });
-    // payload.push(allSteps);
-    // console.log("payload : ", payload);
   };
 
   public onSubmit = async (values: any) => {
     console.log("submitting", values);
-    // this.preparePayload(values);
-    // await this.sleep(300);
-    // window.alert(JSON.stringify(values));
   };
 
   public handleUploadStart = () => {
@@ -123,7 +101,6 @@ class CreateTutorial extends React.PureComponent<
   public handleUploadCoverSuccess = (filename: string) => {
     this.setState({
       _imgUploadProgress: 100,
-      formValues: { ...this.state.formValues, coverImgFilename: filename },
       _isUploading: false
     });
     storage
@@ -132,7 +109,7 @@ class CreateTutorial extends React.PureComponent<
       .getDownloadURL()
       .then(url => {
         this.setState({
-          formValues: { ...this.state.formValues, coverImgUrl: url }
+          formValues: { ...this.state.formValues, cover_image_url: url }
         });
       });
   };
@@ -141,25 +118,44 @@ class CreateTutorial extends React.PureComponent<
     When you have the url of the image you want to merge it with the existing step images
     Then merge the updated step with all steps and update the state
   */
-  public handleUploadStepImgSuccess = async (filename: any, index: number) => {
+  public handleUploadStepImgSuccess = async (filename: any) => {
+    console.log("index", this.state._currentStepIndex);
+
     // untested code for reference - get the current steps
-    const steps: any = this.state.formValues.steps;
+    const currentSteps: any = this.state.formValues.steps;
     // get the step at the index where the new image will go
     const url = await storage
       .ref(this.state._uploadPath)
       .child(filename)
       .getDownloadURL();
-    steps[index] = {
+    currentSteps[this.state._currentStepIndex].images = {
       // use the spread operator to merge the existing images with the new url
       // it should create a new array if one doesn't already exist
-      images: [...steps[index].images, url]
+      url: [...currentSteps[this.state._currentStepIndex].images, url]
     };
     // u
     this.setState({
       // additional meta fields if desired
+      formValues: { ...this.state.formValues, steps: currentSteps },
       _imgUploadProgress: 100,
       _isUploading: false
     });
+    console.log("this.state.formValues", this.state.formValues);
+  };
+  public handleUploadFilesSuccess = (filename: string) => {
+    this.setState({
+      _imgUploadProgress: 100,
+      _isUploading: false
+    });
+    storage
+      .ref(this.state._uploadPath)
+      .child(filename)
+      .getDownloadURL()
+      .then(url => {
+        this.setState({
+          formValues: { ...this.state.formValues, tutorial_files_url: url }
+        });
+      });
   };
 
   public onChangeHandlerStepImg = (event: any) => {
@@ -198,7 +194,7 @@ class CreateTutorial extends React.PureComponent<
     return (
       <Form
         onSubmit={this.onSubmit}
-        initialValues={this.state}
+        initialValues={this.state.formValues}
         mutators={{
           ...arrayMutators
         }}
@@ -222,14 +218,99 @@ class CreateTutorial extends React.PureComponent<
                   component="input"
                 />
               </div>
-              <div className="buttons">
-                <button type="button" onClick={() => push("steps", undefined)}>
-                  Add Step
-                </button>
-                <button type="button" onClick={() => pop("steps")}>
-                  Remove Step
-                </button>
+              <Field name="tutorial_title" validate={required}>
+                {({ input, meta }) => (
+                  <div>
+                    <label>Tutorial title</label>
+                    <input
+                      {...input}
+                      type="text"
+                      onBlur={this.onTitleChange}
+                      placeholder="Tutorial title"
+                    />
+                    {meta.error && meta.touched && <span>{meta.error}</span>}
+                  </div>
+                )}
+              </Field>
+              <label>Tutorial cover:</label>
+              {this.state._isUploading && (
+                <p>Progress: {this.state._imgUploadProgress}</p>
+              )}
+              {this.state.formValues.cover_image_url && (
+                <img
+                  className="cover-img"
+                  src={this.state.formValues.cover_image_url}
+                  alt={"cover image - " + this.state.formValues.tutorial_title}
+                />
+              )}
+              <FileUploader
+                accept="image/png, image/jpeg"
+                name="coverImg"
+                storageRef={storage.ref(this.state._uploadPath)}
+                onUploadStart={this.handleUploadStart}
+                onUploadError={this.handleUploadError}
+                onUploadSuccess={this.handleUploadCoverSuccess}
+                onProgress={this.handleProgress}
+              />
+              <Field
+                name="tutorial_description"
+                validate={required}
+                placeholder="Quick tutorial description"
+              >
+                {({ input, meta }) => (
+                  <div>
+                    <label>Tutorial description</label>
+                    <input
+                      {...input}
+                      type="text"
+                      placeholder="Tutorial description"
+                    />
+                    {meta.error && meta.touched && <span>{meta.error}</span>}
+                  </div>
+                )}
+              </Field>
+
+              <div>
+                <label>Difficulty</label>
+                <Field name="difficulty" component="select">
+                  <option value="easy">easy</option>
+                  <option value="medium">medium</option>
+                  <option value="difficult">difficult</option>
+                </Field>
               </div>
+              <Field name="tutorial_time" validate={required}>
+                {({ input, meta }) => (
+                  <div>
+                    <label>Time</label>
+                    <input {...input} type="text" placeholder="Time needed" />
+                    {meta.error && meta.touched && <span>{meta.error}</span>}
+                  </div>
+                )}
+              </Field>
+              <Field name="tutorial_cost" validate={required}>
+                {({ input, meta }) => (
+                  <div>
+                    <label>Cost</label>
+                    <input
+                      {...input}
+                      type="text"
+                      placeholder="The cost ? in $"
+                    />
+                    {meta.error && meta.touched && <span>{meta.error}</span>}
+                  </div>
+                )}
+              </Field>
+
+              <p>File(s)</p>
+              <FileUploader
+                multiple={true}
+                name="files"
+                storageRef={storage.ref(this.state._uploadPath)}
+                onUploadStart={this.handleUploadStart}
+                onUploadError={this.handleUploadError}
+                onUploadSuccess={this.handleUploadFilesSuccess}
+                onProgress={this.handleProgress}
+              />
               <FieldArray name="steps">
                 {({ fields }) =>
                   fields.map((name, index) => (
@@ -253,17 +334,35 @@ class CreateTutorial extends React.PureComponent<
                       >
                         ❌
                       </span>
+                      <FileUploader
+                        name="stepImages"
+                        storageRef={storage.ref(this.state._uploadPath)}
+                        onUploadStart={this.handleUploadStart}
+                        onUploadError={this.handleUploadError}
+                        onUploadSuccess={this.handleUploadStepImgSuccess}
+                        onProgress={this.handleProgress}
+                        onClick={() => {
+                          this.setState({ _currentStepIndex: index });
+                        }}
+                      />
                     </div>
                   ))
                 }
               </FieldArray>
+              <div className="buttons">
+                <button type="button" onClick={() => push("steps", undefined)}>
+                  Add Step
+                </button>
+                <button type="button" onClick={() => pop("steps")}>
+                  Remove Step
+                </button>
+              </div>
 
               <div className="buttons">
                 <button type="submit" disabled={submitting || pristine}>
                   Submit
                 </button>
               </div>
-              {/* <pre>{JSON.stringify(values, 0, 2)}</pre> */}
             </form>
             // <Field>
             //             <label>Workspace name</label>
@@ -272,95 +371,6 @@ class CreateTutorial extends React.PureComponent<
             //           </div>
             //         )}
             //       </Field>
-            //       <Field name="tutorial_title" validate={required}>
-            //         {({ input, meta }) => (
-            //           <div>
-            //             <label>Tutorial title</label>
-            //             <input
-            //               {...input}
-            //               type="text"
-            //               onBlur={this.onTitleChange}
-            //               placeholder="Tutorial title"
-            //             />
-            //             {meta.error && meta.touched && <span>{meta.error}</span>}
-            //           </div>
-            //         )}
-            //       </Field>
-            //       <label>Tutorial cover:</label>
-            //       {this.state.isUploading && (
-            //         <p>Progress: {this.state.imgUploadProgress}</p>
-            //       )}
-            //       {this.state.coverImgUrl && (
-            //         <img
-            //           className="cover-img"
-            //           src={this.state.coverImgUrl}
-            //           alt={"cover image - " + this.state.title}
-            //         />
-            //       )}
-            //       <FileUploader
-            //         accept="image/png, image/jpeg"
-            //         name="coverImg"
-            //         storageRef={storage.ref(this.state.uploadPath)}
-            //         onUploadStart={this.handleUploadStart}
-            //         onUploadError={this.handleUploadError}
-            //         onUploadSuccess={(e)=>this.handleUploadCoverSuccess(e,index)}
-            //         onProgress={this.handleProgress}
-            //       />
-            //       <Field
-            //         name="tutorial_description"
-            //         validate={required}
-            //         placeholder="Quick tutorial description"
-            //       >
-            //         {({ input, meta }) => (
-            //           <div>
-            //             <label>Tutorial description</label>
-            //             <input
-            //               {...input}
-            //               type="text"
-            //               placeholder="Tutorial description"
-            //             />
-            //             {meta.error && meta.touched && <span>{meta.error}</span>}
-            //           </div>
-            //         )}
-            //       </Field>
-
-            //       <div>
-            //         <label>Difficulty</label>
-            //         <Field name="difficulty" component="select">
-            //           <option value="easy">easy</option>
-            //           <option value="medium">medium</option>
-            //           <option value="difficult">difficult</option>
-            //         </Field>
-            //       </div>
-            //       <Field name="tutorial_time" validate={required}>
-            //         {({ input, meta }) => (
-            //           <div>
-            //             <label>Time</label>
-            //             <input {...input} type="text" placeholder="Time needed" />
-            //             {meta.error && meta.touched && <span>{meta.error}</span>}
-            //           </div>
-            //         )}
-            //       </Field>
-            //       <Field name="cost" validate={required}>
-            //         {({ input, meta }) => (
-            //           <div>
-            //             <label>Cost</label>
-            //             <input {...input} type="text" placeholder="The cost ? in $" />
-            //             {meta.error && meta.touched && <span>{meta.error}</span>}
-            //           </div>
-            //         )}
-            //       </Field>
-
-            //       <p>File(s)</p>
-            //       <FileUploader
-            //         multiple={true}
-            //         name="files"
-            //         storageRef={storage.ref(this.state.uploadPath)}
-            //         onUploadStart={this.handleUploadStart}
-            //         onUploadError={this.handleUploadError}
-            //         onUploadSuccess={this.handleUploadCoverSuccess}
-            //         onProgress={this.handleProgress}
-            //       />
 
             //       <div>
             //

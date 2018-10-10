@@ -10,7 +10,12 @@ import { storage } from "../../../../utils/firebase";
 import FileUploader from "react-firebase-file-uploader";
 
 export interface IState {
-  stepNb: number;
+  formValues: IFormValues;
+  _isUploading: boolean;
+  _imgUploadProgress: number;
+  _uploadPath: string;
+}
+interface IFormValues {
   cost: number;
   cover_picture_url: string;
   description: string;
@@ -18,15 +23,11 @@ export interface IState {
   id: string;
   slug: string;
   steps: ITutorialStep[];
-  stepsImgUrl: [];
   time: number;
   title: string;
   workspace_name: string;
-  isUploading: boolean;
-  imgUploadProgress: number;
   coverImgUrl: string;
   coverImgFilename: string;
-  uploadPath: string;
 }
 
 const required = (value: any) => (value ? undefined : "Required");
@@ -38,49 +39,41 @@ class CreateTutorial extends React.PureComponent<
   constructor(props: any) {
     super(props);
     this.state = {
-      stepNb: 1,
-      cost: 0,
-      cover_picture_url: "",
-      description: "",
-      difficulty_level: "easy",
-      id: "",
-      slug: "",
-      steps: [
-        {
-          title: "",
-          text: ""
-        },
-        {
-          title: "",
-          text: ""
-        },
-        {
-          title: "",
-          text: ""
-        }
-      ],
-      stepsImgUrl: [],
-      time: 0,
-      title: "",
-      workspace_name: "test",
-      isUploading: false,
-      imgUploadProgress: 0,
-      coverImgUrl: "",
-      coverImgFilename: "",
-      uploadPath: ""
+      formValues: {
+        cost: 0,
+        cover_picture_url: "",
+        description: "",
+        difficulty_level: "easy",
+        id: "",
+        slug: "",
+        steps: [
+          {
+            title: "",
+            text: ""
+          },
+          {
+            title: "",
+            text: ""
+          },
+          {
+            title: "",
+            text: ""
+          }
+        ],
+        time: 0,
+        title: "",
+        workspace_name: "test",
+        coverImgUrl: "",
+        coverImgFilename: ""
+      },
+      _isUploading: false,
+      _imgUploadProgress: 0,
+      _uploadPath: ""
     };
 
     this.onSubmit = this.onSubmit.bind(this);
     this.preparePayload = this.preparePayload.bind(this);
   }
-
-  public addStep = () => {
-    this.setState({
-      stepNb: this.state.stepNb + 1
-    });
-  };
-
-  public sleep = (ms: any) => new Promise(resolve => setTimeout(resolve, ms));
 
   public preparePayload = (values: any) => {
     console.log("values", values);
@@ -118,42 +111,55 @@ class CreateTutorial extends React.PureComponent<
   };
 
   public handleUploadStart = () => {
-    this.setState({ isUploading: true, imgUploadProgress: 0 });
+    this.setState({ _isUploading: true, _imgUploadProgress: 0 });
   };
   public handleProgress = (imgUploadProgress: any) => {
-    this.setState({ imgUploadProgress });
+    this.setState({ _imgUploadProgress: imgUploadProgress });
   };
   public handleUploadError = (error: any) => {
-    this.setState({ isUploading: false });
+    this.setState({ _isUploading: false });
     console.error(error);
   };
-  public handleUploadCoverSuccess = (filename: any) => {
+  public handleUploadCoverSuccess = (filename: string) => {
     this.setState({
-      imgUploadProgress: 100,
-      coverImgFilename: filename,
-      isUploading: false
+      _imgUploadProgress: 100,
+      formValues: { ...this.state.formValues, coverImgFilename: filename },
+      _isUploading: false
     });
     storage
-      .ref(this.state.uploadPath)
+      .ref(this.state._uploadPath)
       .child(filename)
       .getDownloadURL()
       .then(url => {
-        this.setState({ coverImgUrl: url });
+        this.setState({
+          formValues: { ...this.state.formValues, coverImgUrl: url }
+        });
       });
   };
-  public handleUploadStepImgSuccess = (filename: any) => {
-    this.setState({
-      imgUploadProgress: 100,
-      isUploading: false
-    });
-    storage
-      .ref(this.state.uploadPath)
+  /* EXAMPLE
+    You want to pass the step index to the handle upload step image success function
+    When you have the url of the image you want to merge it with the existing step images
+    Then merge the updated step with all steps and update the state
+  */
+  public handleUploadStepImgSuccess = async (filename: any, index: number) => {
+    // untested code for reference - get the current steps
+    const steps: any = this.state.formValues.steps;
+    // get the step at the index where the new image will go
+    const url = await storage
+      .ref(this.state._uploadPath)
       .child(filename)
-      .getDownloadURL()
-      .then(url => {
-        // const stepImgArray: any = this.state.stepsImgUrl[this.state.stepsImgUrl.length - 1]
-        this.setState({ coverImgUrl: url });
-      });
+      .getDownloadURL();
+    steps[index] = {
+      // use the spread operator to merge the existing images with the new url
+      // it should create a new array if one doesn't already exist
+      images: [...steps[index].images, url]
+    };
+    // u
+    this.setState({
+      // additional meta fields if desired
+      _imgUploadProgress: 100,
+      _isUploading: false
+    });
   };
 
   public onChangeHandlerStepImg = (event: any) => {
@@ -166,12 +172,12 @@ class CreateTutorial extends React.PureComponent<
       console.log("f :", f);
       filesToStore.push(f);
     }
-    this.setState({ stepsImgUrl: filesToStore });
+    // this.setState({ _stepsImgUrl: filesToStore });
   };
 
   public onTitleChange = (event: any) => {
-    // TODO the event.target.value needs to be formated as the article slug
-    this.setState({ uploadPath: "uploads/" + event.target.value });
+    // *** TODO the event.target.value needs to be formated as the article id
+    this.setState({ _uploadPath: "uploads/" + event.target.value });
   };
 
   public displayStepImgUpload = (stepIndex: any) => {
@@ -179,7 +185,7 @@ class CreateTutorial extends React.PureComponent<
       <FileUploader
         accept="image/*"
         name={"step" + stepIndex + "_image"}
-        storageRef={storage.ref(this.state.uploadPath)}
+        storageRef={storage.ref(this.state._uploadPath)}
         onUploadStart={this.handleUploadStart}
         onUploadError={this.handleUploadError}
         onUploadSuccess={this.handleUploadStepImgSuccess}
@@ -189,10 +195,6 @@ class CreateTutorial extends React.PureComponent<
   };
 
   public render() {
-    const steps: any = [];
-    for (let i = 1; i <= this.state.stepNb; i++) {
-      steps.push(i);
-    }
     return (
       <Form
         onSubmit={this.onSubmit}
@@ -301,7 +303,7 @@ class CreateTutorial extends React.PureComponent<
             //         storageRef={storage.ref(this.state.uploadPath)}
             //         onUploadStart={this.handleUploadStart}
             //         onUploadError={this.handleUploadError}
-            //         onUploadSuccess={this.handleUploadCoverSuccess}
+            //         onUploadSuccess={(e)=>this.handleUploadCoverSuccess(e,index)}
             //         onProgress={this.handleProgress}
             //       />
             //       <Field

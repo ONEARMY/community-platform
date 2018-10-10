@@ -6,6 +6,8 @@ import arrayMutators from "final-form-arrays";
 import "./CreateTutorial.css";
 import { ITutorialStep } from "../../../../models/tutorial.models";
 
+import { db } from "../../../../utils/firebase";
+
 import { storage } from "../../../../utils/firebase";
 import FileUploader from "react-firebase-file-uploader";
 
@@ -86,6 +88,14 @@ class CreateTutorial extends React.PureComponent<
 
   public onSubmit = async (values: any) => {
     console.log("submitting", values);
+    try {
+      await db.doc("tutorials/testdocbenj").set({
+        values
+      });
+      console.log("doc set successfully");
+    } catch (error) {
+      console.log("error hile saving the tutorial");
+    }
   };
 
   public handleUploadStart = () => {
@@ -375,22 +385,6 @@ class CreateTutorial extends React.PureComponent<
                 </button>
               </div>
             </form>
-            // <Field>
-            //             <label>Workspace name</label>
-            //             <input {...input} type="text" placeholder="Last Name" />
-            //             {meta.error && meta.touched && <span>{meta.error}</span>}
-            //           </div>
-            //         )}
-            //       </Field>
-
-            //       <div>
-            //
-            //       </div>
-            //       <button onClick={this.addStep}>ADD STEP</button>
-            //       <button type="submit" disabled={pristine || invalid}>
-            //         Submit
-            //       </button>
-            //     </form>
           );
         }}
       />

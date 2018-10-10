@@ -45,11 +45,24 @@ class CreateTutorial extends React.PureComponent<
       difficulty_level: "easy",
       id: "",
       slug: "",
-      steps: [],
+      steps: [
+        {
+          title: "",
+          text: ""
+        },
+        {
+          title: "",
+          text: ""
+        },
+        {
+          title: "",
+          text: ""
+        }
+      ],
       stepsImgUrl: [],
       time: 0,
       title: "",
-      workspace_name: "",
+      workspace_name: "test",
       isUploading: false,
       imgUploadProgress: 0,
       coverImgUrl: "",
@@ -183,6 +196,7 @@ class CreateTutorial extends React.PureComponent<
     return (
       <Form
         onSubmit={this.onSubmit}
+        initialValues={this.state}
         mutators={{
           ...arrayMutators
         }}

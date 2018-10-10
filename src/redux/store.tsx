@@ -12,7 +12,6 @@ export const store = createStore<IStoreState, any, any, any>(
   rootReducer,
   InitialState,
   composeWithDevTools()
-  // applyMiddleware(...middleware)
   // other store enhancers if any
 );
 

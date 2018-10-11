@@ -1,7 +1,6 @@
 import { IProject } from "./models";
 
 export interface IUserState {
-  loggedIn: boolean;
   user?: IUser;
 }
 export interface IUser {

@@ -12,8 +12,8 @@ import {
   Input
 } from "@material-ui/core";
 import Lock from "@material-ui/icons/Lock";
-import { auth } from "../utils/firebase";
-import { theme } from "../themes/app.theme";
+import { auth } from "../../utils/firebase";
+import { theme } from "../../themes/app.theme";
 
 interface IState {
   email: string;
@@ -50,7 +50,7 @@ const styles: any = {
   }
 };
 
-export class LoginComponent extends React.Component {
+export class LoginFormComponent extends React.Component {
   public state: IState = {
     email: "",
     password: "",
@@ -63,6 +63,7 @@ export class LoginComponent extends React.Component {
     this.processLogin();
   };
 
+  // on login submit try call firebase auth sign in method
   public async processLogin() {
     console.log("attempting login");
     try {
@@ -77,6 +78,7 @@ export class LoginComponent extends React.Component {
     }
   }
 
+  // generic function to handle form input changes
   public handleChange = (e: React.FormEvent<any>) => {
     this.setState({
       [e.currentTarget.id]: e.currentTarget.value

@@ -1,19 +1,22 @@
-import * as actions from "../actions/user.actions";
+import { UserActionTypes, UserAction } from "../actions/user.actions";
 import { Action } from "redux";
 import { IUserState } from "../../models/user.models";
 
-const initialState: IUserState = {
-  loggedIn: false
-};
+const initialState: IUserState = {};
 
 export const UserReducer = (state = initialState, action: Action) => {
   switch (action.type) {
-    case actions.updateUser: {
-      const updateAction = action as actions.UserAction;
-      return {
-        ...state,
-        user: updateAction.payload
-      };
+    case UserActionTypes.UPDATE_USER: {
+      const updateAction = action as UserAction;
+      console.log("payload", updateAction.payload);
+      if (!updateAction.payload) {
+        return initialState;
+      } else {
+        return {
+          ...state,
+          ...updateAction.payload
+        };
+      }
     }
 
     default:

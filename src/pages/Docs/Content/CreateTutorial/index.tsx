@@ -10,6 +10,7 @@ import { db } from "../../../../utils/firebase";
 
 import { storage } from "../../../../utils/firebase";
 import FileUploader from "react-firebase-file-uploader";
+import { NavLink } from "react-router-dom";
 
 export interface IState {
   formValues: IFormValues;
@@ -89,12 +90,12 @@ class CreateTutorial extends React.PureComponent<
   public onSubmit = async (values: any) => {
     console.log("submitting", values);
     try {
-      await db.doc("tutorials/testdocbenj").set({
+      await db.doc("tutorials/testdocdave").set({
         values
       });
       console.log("doc set successfully");
     } catch (error) {
-      console.log("error hile saving the tutorial");
+      console.log("error while saving the tutorial");
     }
   };
 
@@ -144,7 +145,6 @@ class CreateTutorial extends React.PureComponent<
       ...currentSteps[this.state._currentStepIndex].images,
       url
     ];
-    // u
     this.setState({
       // additional meta fields if desired
       formValues: { ...this.state.formValues, steps: currentSteps },
@@ -324,28 +324,36 @@ class CreateTutorial extends React.PureComponent<
               />
               <FieldArray name="steps">
                 {({ fields }) =>
-                  fields.map((name, index) => (
-                    <div key={name}>
-                      <label>Step {index + 1}</label>
-                      <Field
-                        name={`${name}.title`}
-                        component="input"
-                        placeholder="Step title"
-                        validate={required}
-                      />
-                      <Field
-                        name={`${name}.text`}
-                        component="input"
-                        placeholder="Description"
-                        validate={required}
-                      />
+                  fields.map((step, index) => (
+                    <div key={step}>
+                      {this.state.formValues.steps[index] && (
+                        <div>
+                          <label>
+                            {this.state.formValues.steps[index].title}
+                          </label>
+                          <Field
+                            name={"step_" + index + 1 + "_title"}
+                            component="input"
+                            placeholder="Step title"
+                            validate={required}
+                          />
+                          <Field
+                            name={"step_" + index + 1 + "_description"}
+                            component="input"
+                            placeholder="Description"
+                            validate={required}
+                          />
+                        </div>
+                      )}
                       <span
                         onClick={() => fields.remove(index)}
                         style={{ cursor: "pointer" }}
                       >
                         ❌
                       </span>
-                      {this.state.formValues.steps[index].images &&
+
+                      {this.state.formValues.steps[index] &&
+                        this.state.formValues.steps[index].images.length >= 1 &&
                         this.state.formValues.steps[index].images.map(
                           (stepImg, stepImgindex) => (
                             <img
@@ -371,7 +379,21 @@ class CreateTutorial extends React.PureComponent<
                 }
               </FieldArray>
               <div className="buttons">
-                <button type="button" onClick={() => push("steps", undefined)}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    // const emptyStep: any = {
+                    //   ...this.state.formValues.steps,
+                    //   title: "",
+                    //   text: "",
+                    //   images: []
+                    // };
+                    // this.setState({
+                    //   formValues: { ...this.state.formValues, steps: emptyStep }
+                    // });
+                    push("steps", undefined);
+                  }}
+                >
                   Add Step
                 </button>
                 <button type="button" onClick={() => pop("steps")}>

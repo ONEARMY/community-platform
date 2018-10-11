@@ -1,4 +1,4 @@
-import { createMuiTheme } from "@material-ui/core/styles";
+import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import { blue, green, red } from "@material-ui/core/colors";
 
 // A theme with custom primary and secondary color.

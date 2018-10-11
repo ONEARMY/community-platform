@@ -4,8 +4,10 @@ It is also functions as a container, linked to the global state
 *******************************************************************************/
 
 import * as React from "react";
-import { Lock, LockOpen } from "@material-ui/icons";
-import { IconButton, Modal } from "@material-ui/core";
+import Modal from "@material-ui/core/Modal";
+import IconButton from "@material-ui/core/IconButton";
+import Lock from "@material-ui/icons/Lock";
+import LockOpen from "@material-ui/icons/LockOpen";
 import "./Home.scss";
 import { LoginComponent } from "../../components/login";
 import { IStoreState } from "../../redux/store";

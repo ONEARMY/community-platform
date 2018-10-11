@@ -11,7 +11,7 @@ import {
   Checkbox,
   Input
 } from "@material-ui/core";
-import { Lock } from "@material-ui/icons";
+import Lock from "@material-ui/icons/Lock";
 import { auth } from "../utils/firebase";
 import { theme } from "../themes/app.theme";
 

@@ -40,36 +40,40 @@ class HomePage extends React.Component<IProps, IInternalState> {
       showLoginModal: false
     };
   }
-
-  public handleOpen = () => {
+  public logout = () => {
+    console.log("logging out");
+  };
+  public openLogin = () => {
     this.setState({ showLoginModal: true });
   };
-
-  public handleClose = () => {
+  public closeLogin = () => {
     this.setState({ showLoginModal: false });
   };
   public render() {
     return (
       <div id="HomePage">
         <div className="bgimg-1">
-          <div className="unlock">
-            <IconButton color="primary" onClick={this.handleOpen}>
-              <Lock />
-            </IconButton>
-            {/* <IconButton color="primary" onClick={this.handleOpen}>
-              <LockOpen />
-            </IconButton> */}
+          <div className="login-icon">
+            {this.props.loggedIn ? (
+              <IconButton color="primary" onClick={this.logout}>
+                <Lock />
+                Log out
+              </IconButton>
+            ) : (
+              <IconButton color="primary" onClick={this.openLogin}>
+                <LockOpen />
+                Log in
+              </IconButton>
+            )}
           </div>
-          {/* <div>Logged in?: {!this.state.loggedIn}</div> */}
         </div>
         <Modal
           aria-labelledby="user-login-modal"
           aria-describedby="click to show user login"
           open={this.state.showLoginModal}
-          onClose={this.handleClose}
+          onClose={this.closeLogin}
         >
           <div className="login-modal">
-            Modal text?
             <LoginComponent />
           </div>
         </Modal>

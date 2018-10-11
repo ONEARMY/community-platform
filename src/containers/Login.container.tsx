@@ -17,6 +17,7 @@ interface IInternalState {
 // own properties - we want to copy the user property from global to state so it can be passed to child components
 interface IOwnProps {
   user: IUser;
+  notifyUserUpdate: any;
 }
 // global state properties
 interface IStateProps {
@@ -43,7 +44,6 @@ class LoginContainer extends React.Component<IProps, IInternalState> {
   public authListener: any = () => null;
   public componentDidMount() {
     this.authListener = auth.onAuthStateChanged(authUser => {
-      console.log("auth state changed", authUser);
       this.userSignedIn(authUser);
     });
     //
@@ -58,6 +58,7 @@ class LoginContainer extends React.Component<IProps, IInternalState> {
       userMeta = await this.getUserProfile(user.email);
     }
     this.props.updateUser(userMeta);
+    this.props.notifyUserUpdate(userMeta);
   }
 
   public async getUserProfile(userEmail: string) {

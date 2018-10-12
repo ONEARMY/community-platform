@@ -3,7 +3,13 @@ import { RouteComponentProps } from "react-router";
 import { Form, Field } from "react-final-form";
 import { FieldArray } from "react-final-form-arrays";
 import arrayMutators from "final-form-arrays";
-import "./CreateTutorial.css";
+import "./CreateTutorial.scss";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import SaveIcon from "@material-ui/icons/Save";
 import { ITutorialStep } from "../../../../models/tutorial.models";
 
 import { db } from "../../../../utils/firebase";
@@ -33,6 +39,32 @@ interface IFormValues {
   cover_image_filename: string;
   tutorial_files_url: string;
 }
+
+const styles = {
+  card: {
+    minWidth: 275,
+    maxWidth: 600,
+    margin: "20px auto"
+  },
+  bullet: {
+    display: "inline-block",
+    margin: "0 2px",
+    transform: "scale(0.8)"
+  },
+  title: {
+    fontSize: 14
+  },
+  pos: {
+    marginBottom: 12
+  },
+  uploadBtn: {
+    backgroundColor: "steelblue",
+    color: "white",
+    padding: 10,
+    borderRadius: 4,
+    cursor: "pointer"
+  }
+};
 
 const required = (value: any) => (value ? undefined : "Required");
 
@@ -89,14 +121,14 @@ class CreateTutorial extends React.PureComponent<
 
   public onSubmit = async (values: any) => {
     console.log("submitting", values);
-    try {
-      await db.doc("tutorials/testdocdave").set({
-        values
-      });
-      console.log("doc set successfully");
-    } catch (error) {
-      console.log("error while saving the tutorial");
-    }
+    // try {
+    //   await db.doc("tutorials/testdocdave").set({
+    //     values
+    //   });
+    //   console.log("doc set successfully");
+    // } catch (error) {
+    //   console.log("error while saving the tutorial");
+    // }
   };
 
   public handleUploadStart = () => {
@@ -219,166 +251,234 @@ class CreateTutorial extends React.PureComponent<
         }) => {
           return (
             <form className="tutorial-form" onSubmit={handleSubmit}>
-              <h2>Create Tutorial</h2>
+              <Typography variant="h4" component="h4">
+                Create documentation
+              </Typography>
               <div>
-                <label>Workspace Name</label>
-                <Field
-                  name="workspace_name"
-                  validate={required}
-                  placeholder="Workspace Name"
-                  component="input"
-                />
-              </div>
-              <Field name="tutorial_title" validate={required}>
-                {({ input, meta }) => (
-                  <div>
-                    <label>Tutorial title</label>
-                    <input
-                      {...input}
-                      type="text"
-                      onBlur={this.onTitleChange}
-                      placeholder="Tutorial title"
+                <Card style={styles.card}>
+                  <CardContent>
+                    <Typography variant="h5" component="h2">
+                      Covers details
+                    </Typography>
+                    <Typography component="label">
+                      What is your davehakkens.nl account ?
+                    </Typography>
+                    <Field
+                      name="workspace_name"
+                      validate={required}
+                      placeholder="Workspace Name"
+                      component="input"
                     />
-                    {meta.error && meta.touched && <span>{meta.error}</span>}
-                  </div>
-                )}
-              </Field>
-              <label>Tutorial cover:</label>
-              {this.state._isUploading && (
-                <p>Progress: {this.state._imgUploadProgress}</p>
-              )}
-              {this.state.formValues.cover_image_url && (
-                <img
-                  className="cover-img"
-                  src={this.state.formValues.cover_image_url}
-                  alt={"cover image - " + this.state.formValues.tutorial_title}
-                />
-              )}
-              <FileUploader
-                accept="image/png, image/jpeg"
-                name="coverImg"
-                storageRef={storage.ref(this.state._uploadPath)}
-                onUploadStart={this.handleUploadStart}
-                onUploadError={this.handleUploadError}
-                onUploadSuccess={this.handleUploadCoverSuccess}
-                onProgress={this.handleProgress}
-              />
-              <Field
-                name="tutorial_description"
-                validate={required}
-                placeholder="Quick tutorial description"
-              >
-                {({ input, meta }) => (
-                  <div>
-                    <label>Tutorial description</label>
-                    <input
-                      {...input}
-                      type="text"
-                      placeholder="Tutorial description"
-                    />
-                    {meta.error && meta.touched && <span>{meta.error}</span>}
-                  </div>
-                )}
-              </Field>
-
-              <div>
-                <label>Difficulty</label>
-                <Field name="difficulty" component="select">
-                  <option value="easy">easy</option>
-                  <option value="medium">medium</option>
-                  <option value="difficult">difficult</option>
-                </Field>
-              </div>
-              <Field name="tutorial_time" validate={required}>
-                {({ input, meta }) => (
-                  <div>
-                    <label>Time</label>
-                    <input {...input} type="text" placeholder="Time needed" />
-                    {meta.error && meta.touched && <span>{meta.error}</span>}
-                  </div>
-                )}
-              </Field>
-              <Field name="tutorial_cost" validate={required}>
-                {({ input, meta }) => (
-                  <div>
-                    <label>Cost</label>
-                    <input
-                      {...input}
-                      type="text"
-                      placeholder="The cost ? in $"
-                    />
-                    {meta.error && meta.touched && <span>{meta.error}</span>}
-                  </div>
-                )}
-              </Field>
-
-              <p>File(s)</p>
-              <FileUploader
-                multiple={true}
-                name="files"
-                storageRef={storage.ref(this.state._uploadPath)}
-                onUploadStart={this.handleUploadStart}
-                onUploadError={this.handleUploadError}
-                onUploadSuccess={this.handleUploadFilesSuccess}
-                onProgress={this.handleProgress}
-              />
-              <FieldArray name="steps">
-                {({ fields }) =>
-                  fields.map((step, index) => (
-                    <div key={step}>
-                      {this.state.formValues.steps[index] && (
+                    <Typography component="label">
+                      What is the title of your documentation ?
+                    </Typography>
+                    <Field name="tutorial_title" validate={required}>
+                      {({ input, meta }) => (
                         <div>
-                          <label>
-                            {this.state.formValues.steps[index].title}
-                          </label>
-                          <Field
-                            name={"step_" + index + 1 + "_title"}
-                            component="input"
-                            placeholder="Step title"
-                            validate={required}
+                          <input
+                            {...input}
+                            type="text"
+                            onBlur={this.onTitleChange}
+                            placeholder="Tutorial title"
                           />
-                          <Field
-                            name={"step_" + index + 1 + "_description"}
-                            component="input"
-                            placeholder="Description"
-                            validate={required}
-                          />
+                          {meta.error &&
+                            meta.touched && <span>{meta.error}</span>}
                         </div>
                       )}
-                      <span
-                        onClick={() => fields.remove(index)}
-                        style={{ cursor: "pointer" }}
-                      >
-                        ❌
-                      </span>
-
-                      {this.state.formValues.steps[index] &&
-                        this.state.formValues.steps[index].images.length >= 1 &&
-                        this.state.formValues.steps[index].images.map(
-                          (stepImg, stepImgindex) => (
-                            <img
-                              key={stepImgindex}
-                              className="step-img"
-                              src={stepImg}
-                            />
-                          )
-                        )}
+                    </Field>
+                    <Typography component="label">
+                      Upload a cover image
+                    </Typography>
+                    {this.state._isUploading && (
+                      <p>Progress: {this.state._imgUploadProgress}</p>
+                    )}
+                    {this.state.formValues.cover_image_url && (
+                      <img
+                        className="cover-img"
+                        src={this.state.formValues.cover_image_url}
+                        alt={
+                          "cover image - " +
+                          this.state.formValues.tutorial_title
+                        }
+                      />
+                    )}
+                    <label style={styles.uploadBtn}>
                       <FileUploader
-                        name="stepImages"
+                        hidden
+                        accept="image/png, image/jpeg"
+                        name="coverImg"
                         storageRef={storage.ref(this.state._uploadPath)}
                         onUploadStart={this.handleUploadStart}
                         onUploadError={this.handleUploadError}
-                        onUploadSuccess={this.handleUploadStepImgSuccess}
+                        onUploadSuccess={this.handleUploadCoverSuccess}
                         onProgress={this.handleProgress}
-                        onClick={() => {
-                          this.setState({ _currentStepIndex: index });
-                        }}
                       />
-                    </div>
+                      Upload
+                      <span className="iconSeparator">
+                        <CloudUploadIcon />
+                      </span>
+                    </label>
+                    <Field
+                      name="tutorial_description"
+                      validate={required}
+                      placeholder="Quick tutorial description"
+                    >
+                      {({ input, meta }) => (
+                        <div>
+                          <Typography component="label">
+                            Write a short description for the documentation
+                          </Typography>
+                          <textarea
+                            {...input}
+                            placeholder="Tutorial description"
+                          />
+                          {meta.error &&
+                            meta.touched && <span>{meta.error}</span>}
+                        </div>
+                      )}
+                    </Field>
+                    <Field name="tutorial_time" validate={required}>
+                      {({ input, meta }) => (
+                        <div>
+                          <Typography component="label">
+                            How much time does it take ?
+                          </Typography>
+                          <input
+                            {...input}
+                            type="text"
+                            placeholder="Time needed"
+                          />
+                          {meta.error &&
+                            meta.touched && <span>{meta.error}</span>}
+                        </div>
+                      )}
+                    </Field>
+                    <Field name="tutorial_cost" validate={required}>
+                      {({ input, meta }) => (
+                        <div>
+                          <Typography component="label">
+                            How much does it take ?
+                          </Typography>
+                          <input
+                            {...input}
+                            type="text"
+                            placeholder="The cost ? in $"
+                          />
+                          {meta.error &&
+                            meta.touched && <span>{meta.error}</span>}
+                        </div>
+                      )}
+                    </Field>
+                    <Typography component="label">
+                      How difficult to replicate is your documentation ?
+                    </Typography>
+                    <Field name="difficulty" component="select">
+                      <option value="easy">easy</option>
+                      <option value="medium">medium</option>
+                      <option value="difficult">difficult</option>
+                    </Field>
+                    <Typography component="label">
+                      Are there any file(s) to support your documentation ?
+                    </Typography>
+                    <label style={styles.uploadBtn}>
+                      <FileUploader
+                        hidden
+                        multiple={true}
+                        name="files"
+                        storageRef={storage.ref(this.state._uploadPath)}
+                        onUploadStart={this.handleUploadStart}
+                        onUploadError={this.handleUploadError}
+                        onUploadSuccess={this.handleUploadFilesSuccess}
+                        onProgress={this.handleProgress}
+                      />
+                      Upload
+                      <span className="iconSeparator">
+                        <CloudUploadIcon />
+                      </span>
+                    </label>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <div />
+
+              <FieldArray name="steps">
+                {({ fields }) =>
+                  fields.map((step, index) => (
+                    <Card key={step} style={styles.card}>
+                      <CardContent>
+                        {this.state.formValues.steps[index] && (
+                          <div>
+                            <Typography variant="h5" component="h2">
+                              Step {index + 1} -{" "}
+                              {this.state.formValues.steps[index].title}
+                            </Typography>
+                            <Typography component="label">
+                              Pick a title for this step
+                            </Typography>
+                            <Field
+                              name={"step_" + index + 1 + "_title"}
+                              component="input"
+                              placeholder="Step title"
+                              validate={required}
+                            />
+                            <Typography component="label">
+                              Describe this step
+                            </Typography>
+                            <Field
+                              name={"step_" + index + 1 + "_description"}
+                              component="textarea"
+                              placeholder="Description"
+                              validate={required}
+                            />
+                          </div>
+                        )}
+                        <span
+                          onClick={() => fields.remove(index)}
+                          style={{ cursor: "pointer" }}
+                        >
+                          ❌
+                        </span>
+
+                        {this.state.formValues.steps[index] &&
+                          this.state.formValues.steps[index].images.length >=
+                            1 &&
+                          this.state.formValues.steps[index].images.map(
+                            (stepImg, stepImgindex) => (
+                              <img
+                                key={stepImgindex}
+                                className="step-img"
+                                src={stepImg}
+                              />
+                            )
+                          )}
+                        <Typography component="label">
+                          Upload picture(s) about this specific step
+                        </Typography>
+                        <label style={styles.uploadBtn}>
+                          <FileUploader
+                            hidden
+                            name="stepImages"
+                            storageRef={storage.ref(this.state._uploadPath)}
+                            onUploadStart={this.handleUploadStart}
+                            onUploadError={this.handleUploadError}
+                            onUploadSuccess={this.handleUploadStepImgSuccess}
+                            onProgress={this.handleProgress}
+                            onClick={() => {
+                              this.setState({ _currentStepIndex: index });
+                            }}
+                          />
+                          Upload
+                          <span className="iconSeparator">
+                            <CloudUploadIcon />
+                          </span>
+                        </label>
+                      </CardContent>
+                    </Card>
                   ))
                 }
               </FieldArray>
-              <div className="buttons">
+              {/* <div className="buttons">
                 <button
                   type="button"
                   onClick={() => {
@@ -396,16 +496,48 @@ class CreateTutorial extends React.PureComponent<
                 >
                   Add Step
                 </button>
-                <button type="button" onClick={() => pop("steps")}>
-                  Remove Step
-                </button>
-              </div>
+                
+              </div> */}
 
-              <div className="buttons">
+              <Card style={styles.card}>
+                <CardContent>
+                  <Button
+                    color="primary"
+                    onClick={() => {
+                      // const emptyStep: any = {
+                      //   ...this.state.formValues.steps,
+                      //   title: "",
+                      //   text: "",
+                      //   images: []
+                      // };
+                      // this.setState({
+                      //   formValues: { ...this.state.formValues, steps: emptyStep }
+                      // });
+                      push("steps", undefined);
+                    }}
+                    variant="outlined"
+                  >
+                    Add step
+                  </Button>
+                  <Button type="button" onClick={() => pop("steps")}>
+                    Remove Step
+                  </Button>
+                </CardContent>
+              </Card>
+              <Button
+                color="primary"
+                variant="outlined"
+                type="submit"
+                disabled={submitting || pristine}
+              >
+                Save
+                <SaveIcon />
+              </Button>
+              {/* <div className="buttons">
                 <button type="submit" disabled={submitting || pristine}>
                   Submit
                 </button>
-              </div>
+              </div> */}
             </form>
           );
         }}

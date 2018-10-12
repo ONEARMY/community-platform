@@ -17,3 +17,12 @@
   width: 300px;
   display: block;
 }
+
+.iconSeparator {
+  margin-left: 8px;
+
+  svg {
+    vertical-align: bottom;
+    margin-top: 10px;
+  }
+}

@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Route, Switch, withRouter, Redirect } from "react-router-dom";
-import Tutorial from "./Tutorial/index";
-import CreateTutorial from "./CreateTutorial/index";
-import TutorialList from "./TutorialList/index";
+import Tutorial from "./Tutorial/Tutorial";
+import CreateTutorial from "./CreateTutorial/CreateTutorial";
+import TutorialList from "./TutorialList/TutorialList";
 
 const Content = () => (
   <Switch>

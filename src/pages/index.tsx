@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Switch, Route, BrowserRouter } from "react-router-dom";
-import Docs from "./Docs/index";
+import Docs from "./Docs/Docs";
 import { HomePage } from "./Home/Home";
 import { NotFoundPage } from "./NotFound/NotFound";
 

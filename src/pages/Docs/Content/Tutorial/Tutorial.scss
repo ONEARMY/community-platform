@@ -1,0 +1,49 @@
+@import "../../../../../node_modules/slick-carousel/slick/slick.css";
+@import "../../../../../node_modules/slick-carousel/slick/slick-theme.css";
+
+
+.tutorial-infos-container {
+    height: 50vh;
+    max-height: 400px;
+    width: 100%;
+    margin: 30px 0;
+
+    .tutorial-infos-left {
+        width: 50%;
+        // background-color: grey;
+        float: left;
+        display: block;
+        position: relative;
+        height: 100%;
+
+        .content {
+            padding: 15px 30px;
+
+            p {
+                margin: 10px 0;
+            }
+        }
+    }
+
+    .tutorial-infos-right {
+        width: 50%;
+        // background-color: rgb(120, 153, 245);
+        float: right;
+        height: 100%;
+        text-align: center;
+
+        img {
+            height: 85%;
+        }
+    }
+
+}
+
+.slick-slider {
+    width: 400px;
+    margin: 0 auto;
+}
+
+.slick-dots {
+    bottom: -20px;
+}

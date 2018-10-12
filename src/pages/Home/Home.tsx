@@ -1,99 +1,31 @@
 /******************************************************************************  
 This is the Home Page main component, rendering content seen at '/'
-It is also functions as a container, linked to the global state     
 *******************************************************************************/
 
 import * as React from "react";
-import Modal from "@material-ui/core/Modal";
-import IconButton from "@material-ui/core/IconButton";
-import Lock from "@material-ui/icons/Lock";
-import LockOpen from "@material-ui/icons/LockOpen";
 import "./Home.scss";
-import { LoginComponent } from "../../components/login";
-import { IStoreState } from "../../redux/store";
-import { connect } from "react-redux";
+import { LoginContainer } from "../../containers/Login.container";
+import { IUser } from "../../models/models";
 
-// internal state properties
-interface IInternalState {
-  showLoginModal: boolean;
-  loggedIn?: boolean;
+interface IState {
+  isLoggedIn: boolean;
 }
-// props from parent - we don't have any being passed so just for demonstration
-interface IOwnProps {
-  propFromParent: number;
-}
-// global state properties
-interface IStateProps {
-  loggedIn: boolean;
-}
-
-// dispatch events
-interface IDispatchProps {
-  onSomeEvent: () => void;
-}
-
-// overall component props are a combination of state, dispatch and own props
-type IProps = IStateProps & IDispatchProps & IOwnProps;
-
-class HomePage extends React.Component<IProps, IInternalState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      showLoginModal: false
-    };
-  }
-
-  public handleOpen = () => {
-    this.setState({ showLoginModal: true });
-  };
-
-  public handleClose = () => {
-    this.setState({ showLoginModal: false });
+export class HomePage extends React.Component<any, any> {
+  // userUpdated is a callback function passed back up from the login container to track if the user has logged in
+  // we could also use the global state for this, but for now sufficient
+  public userUpdated = (user: IUser) => {
+    this.setState({ isLoggedIn: user ? true : false });
   };
   public render() {
     return (
       <div id="HomePage">
-        <div className="bgimg-1">
-          <div className="unlock">
-            <IconButton color="primary" onClick={this.handleOpen}>
-              <Lock />
-            </IconButton>
-            {/* <IconButton color="primary" onClick={this.handleOpen}>
-              <LockOpen />
-            </IconButton> */}
-          </div>
-          {/* <div>Logged in?: {!this.state.loggedIn}</div> */}
-        </div>
-        <Modal
-          aria-labelledby="user-login-modal"
-          aria-describedby="click to show user login"
-          open={this.state.showLoginModal}
-          onClose={this.handleClose}
-        >
-          <div className="login-modal">
-            Modal text?
-            <LoginComponent />
-          </div>
-        </Modal>
+        <LoginContainer notifyUserUpdate={this.userUpdated} />
+        {this.state && this.state.isLoggedIn ? (
+          <div>User Logged in page</div>
+        ) : (
+          <div className="bgimg-1" />
+        )}
       </div>
     );
   }
 }
-
-// required functions and bindings for the home page to pick global state variables
-// and propagate to component. This could be extracted to a higher layer container
-const mapStateToProps = (state: IStoreState, ownProps: IProps) => ({
-  loggedIn: state.user.loggedIn
-});
-
-const mapDispatchToProps = (state: IStoreState) => ({
-  //
-});
-
-export default connect(
-  mapStateToProps,
-  null
-)(HomePage);
-
-const connectedHomePage = connect(mapStateToProps)(HomePage);
-export { connectedHomePage as HomePage };

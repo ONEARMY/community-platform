@@ -1,15 +1,21 @@
-import * as firebase from "firebase";
+import * as firebase from "firebase/app";
+import "firebase/firestore";
+import "firebase/auth";
+import "firebase/storage";
 import { FirebaseConfig } from "../../src/config/config";
 
 // initialise with config settings, additional firestore config to support future changes
 firebase.initializeApp(FirebaseConfig);
-const firestore = firebase.firestore();
-firestore.settings({ timestampsInSnapshots: true });
+firebase.firestore().settings({ timestampsInSnapshots: true });
 
-// export firestore db to be accessed as 'db' and firebase auth as 'auth'
-export const db = firestore;
-export const auth = firebase.auth();
+// export firebase endpoints to be accessed by other functions
+export const db = firebase.firestore();
 export const storage = firebase.storage();
+export const auth = firebase.auth();
+
+// want to also expose the default firebase user
+/* tslint:disable: no-empty-interface*/
+export interface IFirebaseUser extends firebase.User {}
 
 /* Firestore use examples
    See full docs at: https://firebase.google.com/docs/firestore/

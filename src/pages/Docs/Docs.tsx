@@ -11,7 +11,7 @@ class Docs extends React.Component {
         <header className="App-header">
           {" "}
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="page-title">DOCUMENTATION</h1>{" "}
+          {/* <h1 className="page-title">One army</h1>{" "} */}
         </header>{" "}
         <Content />
       </div>

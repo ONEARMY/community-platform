@@ -35,7 +35,7 @@ const sliderSettings = {
 const styles = {
   card: {
     minWidth: 275,
-    maxWidth: 600,
+    maxWidth: 900,
     margin: "20px auto"
   },
   bullet: {
@@ -90,20 +90,24 @@ class Tutorial extends React.PureComponent<RouteComponentProps<any>, IState> {
                 {this.state.tutorial[0].title}
               </Typography>
               <Typography component="p">
-                <b>workspace : </b>
+                <b>Workspace : </b>
                 {this.state.tutorial[0].workspace_name}
               </Typography>
 
               <Typography component="p">
-                <b>cost : </b>
+                <b>Steps : </b>
+                {this.state.tutorial[0].steps.length}
+              </Typography>
+              <Typography component="p">
+                <b>Cost : </b>
                 {this.state.tutorial[0].cost}
               </Typography>
               <Typography component="p">
-                <b>difficulty : </b>
+                <b>Difficulty : </b>
                 {this.state.tutorial[0].difficulty_level}
               </Typography>
               <Typography component="p">
-                <b>time : </b>
+                <b>Time : </b>
                 {this.state.tutorial[0].time}
               </Typography>
               <Button color="primary" variant="outlined">

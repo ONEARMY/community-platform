@@ -16,7 +16,7 @@ import { db } from "../../../../utils/firebase";
 
 import { storage } from "../../../../utils/firebase";
 import FileUploader from "react-firebase-file-uploader";
-import { NavLink } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 export interface IState {
   formValues: IFormValues;
@@ -25,6 +25,7 @@ export interface IState {
   _uploadImgPath: string;
   _uploadTutorialPath: string;
   _currentStepIndex: number;
+  _toDocsList: boolean;
 }
 interface IFormValues {
   workspace_name: string;
@@ -108,10 +109,12 @@ class CreateTutorial extends React.PureComponent<
       _imgUploadProgress: 0,
       _uploadImgPath: "uploads/test",
       _currentStepIndex: 0,
-      _uploadTutorialPath: "tutorials/test"
+      _uploadTutorialPath: "tutorials/test",
+      _toDocsList: false
     };
 
     this.onSubmit = this.onSubmit.bind(this);
+    this.onInputChange = this.onInputChange.bind(this);
   }
 
   public onSubmit = async (values: any) => {
@@ -121,6 +124,7 @@ class CreateTutorial extends React.PureComponent<
         values
       });
       console.log("doc set successfully");
+      this.props.history.push("/docs/list");
     } catch (error) {
       console.log("error while saving the tutorial");
     }
@@ -195,12 +199,66 @@ class CreateTutorial extends React.PureComponent<
       });
   };
 
-  public onTitleChange = (event: any) => {
+  public onInputChange = (event: any, inputType: string) => {
+    console.log(event.target.value);
+    console.log(inputType);
+
     // *** TODO the event.target.value needs to be formated as the article id
-    this.setState({
-      _uploadImgPath: "uploads/" + event.target.value,
-      _uploadTutorialPath: "tutorials/" + event.target.value
-    });
+    switch (inputType) {
+      case "tutorial_title":
+        this.setState({
+          formValues: {
+            ...this.state.formValues,
+            tutorial_title: event.target.value
+          },
+          _uploadImgPath: "uploads/" + event.target.value,
+          _uploadTutorialPath: "tutorials/" + event.target.value
+        });
+        break;
+      case "workspace_name":
+        this.setState({
+          formValues: {
+            ...this.state.formValues,
+            workspace_name: event.target.value
+          }
+        });
+        break;
+      case "tutorial_description":
+        this.setState({
+          formValues: {
+            ...this.state.formValues,
+            tutorial_description: event.target.value
+          }
+        });
+        break;
+      case "tutorial_time":
+        this.setState({
+          formValues: {
+            ...this.state.formValues,
+            tutorial_time: event.target.value
+          }
+        });
+        break;
+      case "tutorial_cost":
+        this.setState({
+          formValues: {
+            ...this.state.formValues,
+            tutorial_cost: event.target.value
+          }
+        });
+        break;
+      case "difficulty_level":
+        this.setState({
+          formValues: {
+            ...this.state.formValues,
+            difficulty_level: event.target.value
+          }
+        });
+        break;
+
+      default:
+        break;
+    }
   };
 
   public render() {
@@ -236,6 +294,9 @@ class CreateTutorial extends React.PureComponent<
                         validate={required}
                         placeholder="Workspace Name"
                         component="input"
+                        onBlur={(event: any) => {
+                          this.onInputChange(event, "workspace_name");
+                        }}
                       />
                       <Typography component="label">
                         What is the title of your documentation ?
@@ -246,7 +307,9 @@ class CreateTutorial extends React.PureComponent<
                             <input
                               {...input}
                               type="text"
-                              onBlur={this.onTitleChange}
+                              onBlur={(event: any) => {
+                                this.onInputChange(event, "tutorial_title");
+                              }}
                               placeholder="Tutorial title"
                             />
                             {meta.error &&
@@ -286,19 +349,21 @@ class CreateTutorial extends React.PureComponent<
                           <CloudUploadIcon />
                         </span>
                       </label>
-                      <Field
-                        name="tutorial_description"
-                        validate={required}
-                        placeholder="Quick tutorial description"
-                      >
+                      <Typography component="label">
+                        Write a short description for the documentation
+                      </Typography>
+                      <Field name="tutorial_description" validate={required}>
                         {({ input, meta }) => (
                           <div>
-                            <Typography component="label">
-                              Write a short description for the documentation
-                            </Typography>
                             <textarea
                               {...input}
                               placeholder="Tutorial description"
+                              onBlur={(event: any) => {
+                                this.onInputChange(
+                                  event,
+                                  "tutorial_description"
+                                );
+                              }}
                               style={{ width: "400px", height: "150px" }}
                             />
                             {meta.error &&
@@ -316,6 +381,9 @@ class CreateTutorial extends React.PureComponent<
                               {...input}
                               type="text"
                               placeholder="Time needed"
+                              onBlur={(event: any) => {
+                                this.onInputChange(event, "tutorial_time");
+                              }}
                             />
                             {meta.error &&
                               meta.touched && <span>{meta.error}</span>}
@@ -331,6 +399,9 @@ class CreateTutorial extends React.PureComponent<
                             <input
                               {...input}
                               type="text"
+                              onBlur={(event: any) => {
+                                this.onInputChange(event, "tutorial_cost");
+                              }}
                               placeholder="The cost ? in $"
                             />
                             {meta.error &&
@@ -341,7 +412,13 @@ class CreateTutorial extends React.PureComponent<
                       <Typography component="label">
                         How difficult to replicate is your documentation ?
                       </Typography>
-                      <Field name="difficulty" component="select">
+                      <Field
+                        name="difficulty_level"
+                        onBlur={(event: any) => {
+                          this.onInputChange(event, "difficulty_level");
+                        }}
+                        component="select"
+                      >
                         <option value="easy">easy</option>
                         <option value="medium">medium</option>
                         <option value="difficult">difficult</option>

@@ -10,7 +10,7 @@ import { IUser } from "../../models/models";
 interface IState {
   isLoggedIn: boolean;
 }
-export class HomePage extends React.Component<any, any> {
+export class HomePage extends React.Component<IState, any> {
   // userUpdated is a callback function passed back up from the login container to track if the user has logged in
   // we could also use the global state for this, but for now sufficient
   public userUpdated = (user: IUser) => {

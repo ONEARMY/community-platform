@@ -1,11 +1,11 @@
 export interface ITutorial {
   workspace_name: string;
-  cover_picture_url: string;
-  title: string;
-  description: string;
+  cover_image_url: string;
+  tutorial_title: string;
+  tutorial_description: string;
   difficulty_level: "easy" | "medium" | "difficult";
-  time: number;
-  cost: number;
+  tutorial_time: string;
+  tutorial_cost: number;
   steps: ITutorialStep[];
   id: string;
   slug: string;

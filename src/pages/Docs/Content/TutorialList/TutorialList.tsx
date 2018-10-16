@@ -16,8 +16,6 @@ import CommentIcon from "@material-ui/icons/Comment";
 import TurnedInIcon from "@material-ui/icons/TurnedIn";
 import { theme } from "../../../../themes/app.theme";
 
-import { TUTORIALS_MOCK } from "../../../../mocks/tutorials.mock";
-
 const styles: any = {
   layout: {
     width: "auto",
@@ -46,11 +44,14 @@ const styles: any = {
   }
 };
 
-class TutorialList extends React.Component {
+class TutorialList extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
   }
+
   public render() {
+    const { allTutorials } = this.props;
+
     return (
       <div>
         <Typography
@@ -60,25 +61,26 @@ class TutorialList extends React.Component {
         >
           Documentation
         </Typography>
-
         <React.Fragment>
           <div style={styles.layout}>
             <Grid container spacing={40}>
-              {TUTORIALS_MOCK.map((card: any, index: number) => (
+              {allTutorials.map((card: any, index: number) => (
                 <Grid item key={index} xs={4}>
-                  <Link to={`/docs/${card.slug}`} style={styles.link}>
+                  <Link to={`/docs/${card.values.slug}`} style={styles.link}>
                     <Card style={styles.card}>
                       <CardMedia
                         style={styles.cardMedia}
-                        image={card.cover_picture_url} // eslint-disable-line max-len
+                        image={card.values.cover_image_url} // eslint-disable-line max-len
                         title="Image title"
                       />
                       <CardContent style={styles.cardContent}>
                         <Typography gutterBottom variant="h5" component="h2">
-                          {card.title}
+                          {card.values.tutorial_title}
                         </Typography>
-                        <Typography>{card.description}</Typography>
-                        <Typography>by {card.workspace_name}</Typography>
+                        <Typography>
+                          {card.values.tutorial_description}
+                        </Typography>
+                        <Typography>by {card.values.workspace_name}</Typography>
                       </CardContent>
                       <CardActions>
                         <Typography>PRECIOUS PLASTIC</Typography>

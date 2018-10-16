@@ -4,14 +4,28 @@ import Tutorial from "./Tutorial/Tutorial";
 import CreateTutorial from "./CreateTutorial/CreateTutorial";
 import TutorialList from "./TutorialList/TutorialList";
 
-const Content = () => (
-  <Switch>
-    <Route path="/docs/list" component={TutorialList} />
-    <Route path="/docs/create" component={CreateTutorial} />
-    <Route path="/docs/:slug" component={Tutorial} />
+class Content extends React.Component<any, any> {
+  constructor(props: any) {
+    super(props);
+  }
+  public render() {
+    const { allTutorials } = this.props;
 
-    <Redirect to="/docs/list" />
-  </Switch>
-);
+    return (
+      <Switch>
+        <Route
+          path="/docs/list"
+          render={props => (
+            <TutorialList {...props} allTutorials={allTutorials} />
+          )}
+        />
+        <Route path="/docs/create" component={CreateTutorial} />
+        <Route path="/docs/:slug" component={Tutorial} />
+
+        <Redirect to="/docs/list" />
+      </Switch>
+    );
+  }
+}
 
 export default withRouter(Content);

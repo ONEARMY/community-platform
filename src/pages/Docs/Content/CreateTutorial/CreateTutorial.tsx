@@ -200,16 +200,18 @@ class CreateTutorial extends React.PureComponent<
   };
 
   public onInputChange = (event: any, inputType: string) => {
-    console.log(event.target.value);
-    console.log(inputType);
-
     // *** TODO the event.target.value needs to be formated as the article id
     switch (inputType) {
       case "tutorial_title":
+        const clearUrl = event.target.value
+          .replace(/[`~!@#$%^&*()_|+\-=÷¿?;:'",.<>\{\}\[\]\\\/]/gi, "")
+          .split(" ")
+          .join("-");
         this.setState({
           formValues: {
             ...this.state.formValues,
-            tutorial_title: event.target.value
+            tutorial_title: event.target.value,
+            slug: encodeURIComponent(clearUrl)
           },
           _uploadImgPath: "uploads/" + event.target.value,
           _uploadTutorialPath: "tutorials/" + event.target.value

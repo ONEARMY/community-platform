@@ -7,12 +7,6 @@ import Typography from "@material-ui/core/Typography";
 import Slider from "react-slick";
 import "./Tutorial.scss";
 
-import { TUTORIALS_MOCK } from "../../../../mocks/tutorials.mock";
-
-export interface IState {
-  tutorial: {};
-}
-
 const sliderSettings = {
   centerMode: false,
   arrows: true,
@@ -51,14 +45,9 @@ const styles = {
   }
 };
 
-class Tutorial extends React.PureComponent<RouteComponentProps<any>, IState> {
+class Tutorial extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
-    this.state = {
-      tutorial: TUTORIALS_MOCK.filter(
-        tutorial => tutorial.slug === this.props.match.params.slug
-      )
-    };
   }
 
   public renderSliderContent(step: any) {
@@ -81,34 +70,40 @@ class Tutorial extends React.PureComponent<RouteComponentProps<any>, IState> {
     );
   }
   public render() {
+    const { allTutorials } = this.props;
+    const tutorial: any = allTutorials.filter(
+      (currentTutorial: any) =>
+        currentTutorial.values.slug === this.props.match.params.slug
+    );
+
     return (
       <div>
         <div className="tutorial-infos-container">
           <div className="tutorial-infos-left">
             <div className="content">
               <Typography variant="h5" component="h2">
-                {this.state.tutorial[0].title}
+                {tutorial[0].values.tutorial_title}
               </Typography>
               <Typography component="p">
                 <b>Workspace : </b>
-                {this.state.tutorial[0].workspace_name}
+                {tutorial[0].values.workspace_name}
               </Typography>
 
               <Typography component="p">
                 <b>Steps : </b>
-                {this.state.tutorial[0].steps.length}
+                {tutorial[0].values.steps.length}
               </Typography>
               <Typography component="p">
                 <b>Cost : </b>
-                {this.state.tutorial[0].cost}
+                {tutorial[0].values.tutorial_cost}
               </Typography>
               <Typography component="p">
                 <b>Difficulty : </b>
-                {this.state.tutorial[0].difficulty_level}
+                {tutorial[0].values.difficulty_level}
               </Typography>
               <Typography component="p">
                 <b>Time : </b>
-                {this.state.tutorial[0].time}
+                {tutorial[0].values.tutorial_time}
               </Typography>
               <Button color="primary" variant="outlined">
                 Download files
@@ -116,9 +111,12 @@ class Tutorial extends React.PureComponent<RouteComponentProps<any>, IState> {
             </div>
           </div>
           <div className="tutorial-infos-right">
-            <img src="http://placekitten.com/400/250" alt="tutorial cover" />
+            <img
+              src={tutorial[0].values.cover_image_url}
+              alt="tutorial cover"
+            />
           </div>
-          {this.state.tutorial[0].steps.map((step: any, index: number) => (
+          {tutorial[0].values.steps.map((step: any, index: number) => (
             <div key={index}>
               <Card style={styles.card}>
                 <CardContent>

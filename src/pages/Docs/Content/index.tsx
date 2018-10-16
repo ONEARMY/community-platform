@@ -4,6 +4,10 @@ import Tutorial from "./Tutorial/Tutorial";
 import CreateTutorial from "./CreateTutorial/CreateTutorial";
 import TutorialList from "./TutorialList/TutorialList";
 
+// export interface IProps {
+//   allTutorials: [];
+// }
+
 class Content extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
@@ -20,7 +24,10 @@ class Content extends React.Component<any, any> {
           )}
         />
         <Route path="/docs/create" component={CreateTutorial} />
-        <Route path="/docs/:slug" component={Tutorial} />
+        <Route
+          path="/docs/:slug"
+          render={props => <Tutorial {...props} allTutorials={allTutorials} />}
+        />
 
         <Redirect to="/docs/list" />
       </Switch>

@@ -81,7 +81,7 @@ class Tutorial extends React.Component<any, any> {
         <div className="tutorial-infos-container">
           <div className="tutorial-infos-left">
             <div className="content">
-              <Typography variant="h5" component="h2">
+              <Typography variant="h4" component="h4">
                 {tutorial[0].values.tutorial_title}
               </Typography>
               <Typography component="p">

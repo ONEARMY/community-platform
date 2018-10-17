@@ -32,7 +32,7 @@ interface IFormValues {
   tutorial_title: string;
   tutorial_description: string;
   tutorial_time: string;
-  tutorial_cost: number;
+  tutorial_cost: string;
   difficulty_level: string;
   id: string;
   slug: string;
@@ -77,33 +77,34 @@ class CreateTutorial extends React.PureComponent<
     super(props);
     this.state = {
       formValues: {
-        tutorial_description: "this is test description",
+        tutorial_description: "",
         tutorial_title: "",
-        tutorial_time: "20 hours",
-        tutorial_cost: 50,
+        tutorial_time: "",
+        tutorial_cost: "",
         difficulty_level: "easy",
         cover_image_url: "",
+        // "https://firebasestorage.googleapis.com/v0/b/precious-plastics-v4-dev.appspot.com/o/uploads%2Ftest%2FCapture%20d%E2%80%99e%CC%81cran%202018-10-16%20a%CC%80%2019.00.35.png?alt=media&token=f0e87108-f652-47fc-a507-53b1e91e5b77",
         tutorial_files_url: "",
         id: "",
         slug: "",
         steps: [
           {
-            title: "step 1",
-            text: "step 1 description",
+            title: "",
+            text: "",
             images: []
           },
           {
-            title: "step 2",
-            text: "step 2 description",
+            title: "",
+            text: "",
             images: []
           },
           {
-            title: "step 3",
-            text: "step 3 description",
+            title: "",
+            text: "",
             images: []
           }
         ],
-        workspace_name: "test"
+        workspace_name: ""
       },
       _isUploading: false,
       _imgUploadProgress: 0,
@@ -118,15 +119,19 @@ class CreateTutorial extends React.PureComponent<
   }
 
   public onSubmit = async (values: any) => {
-    console.log("submitting", values);
-    try {
-      await db.doc(this.state._uploadTutorialPath).set({
-        values
-      });
-      console.log("doc set successfully");
-      this.props.history.push("/docs/list");
-    } catch (error) {
-      console.log("error while saving the tutorial");
+    if (this.state.formValues.cover_image_url === "") {
+      alert("Please provide a cover image before saving your tutorial");
+    } else {
+      console.log("submitting", values);
+      try {
+        await db.doc(this.state._uploadTutorialPath).set({
+          values
+        });
+        console.log("doc set successfully");
+        this.props.history.push("/docs/list");
+      } catch (error) {
+        console.log("error while saving the tutorial");
+      }
     }
   };
 
@@ -279,7 +284,14 @@ class CreateTutorial extends React.PureComponent<
           mutators={{
             ...arrayMutators
           }}
-          render={({ handleSubmit, pristine, submitting, values, form }) => {
+          render={({
+            handleSubmit,
+            pristine,
+            submitting,
+            values,
+            form,
+            invalid
+          }) => {
             return (
               <form className="tutorial-form" onSubmit={handleSubmit}>
                 <div>
@@ -294,7 +306,7 @@ class CreateTutorial extends React.PureComponent<
                       <Field
                         name="workspace_name"
                         validate={required}
-                        placeholder="Workspace Name"
+                        placeholder="@janedoe"
                         component="input"
                         onBlur={(event: any) => {
                           this.onInputChange(event, "workspace_name");
@@ -308,11 +320,12 @@ class CreateTutorial extends React.PureComponent<
                           <div>
                             <input
                               {...input}
+                              style={{ width: "400px" }}
                               type="text"
                               onBlur={(event: any) => {
                                 this.onInputChange(event, "tutorial_title");
                               }}
-                              placeholder="Tutorial title"
+                              placeholder="How to make XXX using YYY"
                             />
                             {meta.error &&
                               meta.touched && <span>{meta.error}</span>}
@@ -382,7 +395,7 @@ class CreateTutorial extends React.PureComponent<
                             <input
                               {...input}
                               type="text"
-                              placeholder="Time needed"
+                              placeholder="2 hours"
                               onBlur={(event: any) => {
                                 this.onInputChange(event, "tutorial_time");
                               }}
@@ -404,7 +417,7 @@ class CreateTutorial extends React.PureComponent<
                               onBlur={(event: any) => {
                                 this.onInputChange(event, "tutorial_cost");
                               }}
-                              placeholder="The cost ? in $"
+                              placeholder="10$"
                             />
                             {meta.error &&
                               meta.touched && <span>{meta.error}</span>}
@@ -471,6 +484,7 @@ class CreateTutorial extends React.PureComponent<
                             <Field
                               name={`${step}.title`}
                               component="input"
+                              style={{ width: "400px" }}
                               placeholder="Step title"
                               validate={required}
                             />
@@ -482,6 +496,18 @@ class CreateTutorial extends React.PureComponent<
                               component="textarea"
                               placeholder="Description"
                               validate={required}
+                              onBlur={() => {
+                                // update the state with the new values
+                                const stepValuesInput: any = form.getFieldState(
+                                  "steps"
+                                )!.value;
+                                this.setState({
+                                  formValues: {
+                                    ...this.state.formValues,
+                                    steps: stepValuesInput
+                                  }
+                                });
+                              }}
                               style={{ width: "400px", height: "150px" }}
                             />
                           </div>
@@ -563,7 +589,7 @@ class CreateTutorial extends React.PureComponent<
                     position: "relative",
                     display: "flex"
                   }}
-                  disabled={submitting || pristine}
+                  disabled={submitting || invalid}
                 >
                   Save documentation
                   <SaveIcon />

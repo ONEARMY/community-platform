@@ -66,7 +66,10 @@ class TutorialList extends React.Component<any, any> {
             <Grid container spacing={40}>
               {allTutorials.map((card: any, index: number) => (
                 <Grid item key={index} xs={4}>
-                  <Link to={`/docs/${card.values.slug}`} style={styles.link}>
+                  <Link
+                    to={`/docs/${encodeURIComponent(card.values.slug)}`}
+                    style={styles.link}
+                  >
                     <Card style={styles.card}>
                       <CardMedia
                         style={styles.cardMedia}

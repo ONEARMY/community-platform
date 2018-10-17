@@ -85,6 +85,10 @@ class Tutorial extends React.Component<any, any> {
                 {tutorial[0].values.tutorial_title}
               </Typography>
               <Typography component="p">
+                <b>Description : </b>
+                {tutorial[0].values.tutorial_description}
+              </Typography>
+              <Typography component="p">
                 <b>Workspace : </b>
                 {tutorial[0].values.workspace_name}
               </Typography>

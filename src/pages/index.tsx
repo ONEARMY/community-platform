@@ -3,6 +3,7 @@ import { Switch, Route, BrowserRouter } from "react-router-dom";
 import Docs from "./Docs/Docs";
 import { HomePage } from "./Home/Home";
 import { NotFoundPage } from "./NotFound/NotFound";
+import ScrollToTop from "./../components/ScrollToTop/ScrollToTop";
 
 export class Routes extends React.Component {
   public shouldComponentUpdate() {
@@ -14,11 +15,13 @@ export class Routes extends React.Component {
   public render() {
     return (
       <BrowserRouter>
-        <Switch>
-          <Route path="/docs" component={Docs} />
-          <Route exact path="/" component={HomePage} />
-          <Route component={NotFoundPage} />
-        </Switch>
+        <ScrollToTop>
+          <Switch>
+            <Route path="/docs" component={Docs} />
+            <Route exact path="/" component={HomePage} />
+            <Route component={NotFoundPage} />
+          </Switch>
+        </ScrollToTop>
       </BrowserRouter>
     );
   }

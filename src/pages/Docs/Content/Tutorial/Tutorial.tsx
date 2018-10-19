@@ -5,6 +5,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Slider from "react-slick";
+import ImageGallery from "react-image-gallery";
 import "./Tutorial.scss";
 
 const sliderSettings = {
@@ -51,15 +52,16 @@ class Tutorial extends React.Component<any, any> {
   }
 
   public renderSliderContent(step: any) {
-    return (
-      <Slider {...sliderSettings}>
-        {step.images.map((imageUrl: any, index: any) => (
-          <div key={index}>
-            <img src={imageUrl} />
-          </div>
-        ))}
-      </Slider>
-    );
+    const preloadedImagesForSlider = [];
+    for (const image of step.images) {
+      const imageObj = new Image();
+      imageObj.src = image;
+      preloadedImagesForSlider.push({
+        original: imageObj.src,
+        thumbnail: imageObj.src
+      });
+    }
+    return <ImageGallery items={preloadedImagesForSlider} />;
   }
 
   public renderUniqueImage(url: string) {

@@ -1,6 +1,6 @@
 @import "../../../../../node_modules/slick-carousel/slick/slick.css";
 @import "../../../../../node_modules/slick-carousel/slick/slick-theme.css";
-
+@import "../../../../../node_modules/react-image-gallery/styles/scss/image-gallery.scss";
 
 .tutorial-infos-container {
     height: 50vh;
@@ -37,6 +37,25 @@
         }
     }
 
+    .image-gallery-slides {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .image-gallery-slide {
+        background: grey;
+    }
+
+    .image-gallery-slide img {
+        width: auto;
+        height: 300px;
+    }
+
+    .image-gallery-content.fullscreen {
+        .image-gallery-slide img {
+            height: auto;
+        }
+    }
 }
 
 .slick-slider {

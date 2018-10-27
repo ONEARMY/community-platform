@@ -2,30 +2,37 @@
 @import "../../../../../node_modules/slick-carousel/slick/slick-theme.css";
 @import "../../../../../node_modules/react-image-gallery/styles/scss/image-gallery.scss";
 
-.tutorial-infos-container {
-    height: 50vh;
-    max-height: 400px;
+.tutorial-infos__container {
+    max-width: 1200px;
+    display: inline-block;
+    background-color: rgb(240, 239, 239);
     width: 100%;
-    margin: 30px 0;
+    margin: 30px auto;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 40px 50px;
 
-    .tutorial-infos-left {
+    .tutorial-infos__left {
         width: 50%;
-        // background-color: grey;
         float: left;
         display: block;
         position: relative;
         height: 100%;
 
-        .content {
-            padding: 15px 50px;
-
-            p {
-                margin: 10px 0;
-            }
+        .download-btn {
+            width: 200px;
+            height: 50px;
+            text-transform: uppercase;
+            background-color: rgba(4, 139, 180, 0.685);
+            border: none;
+            cursor: pointer;
+            font-size: 0.9em;
         }
+
     }
 
-    .tutorial-infos-right {
+    .tutorial-infos__right {
         width: 50%;
         // background-color: rgb(120, 153, 245);
         float: right;
@@ -33,7 +40,26 @@
         text-align: center;
 
         img {
-            height: 85%;
+            height: 360px;
+        }
+    }
+
+    .tutorial-infos__content {
+        padding: 0 50px 15px;
+
+        p {
+            margin: 10px 0;
+        }
+
+        .download-btn {
+            .icon-separator {
+                margin-right: 5px;
+            }
+
+            svg {
+                vertical-align: bottom;
+                margin-top: -6px;
+            }
         }
     }
 
@@ -56,6 +82,35 @@
             height: auto;
         }
     }
+}
+
+.step__container {
+    text-align: center;
+
+    .step__card {
+
+        border-radius: 0;
+
+        .step__header {
+            background-color: rgba(255, 208, 0, 0.89);
+            height: 50px;
+
+            .step__number {
+                padding: 10px;
+                font-weight: bold;
+                color: black;
+
+            }
+        }
+
+        .step__title {
+            color: black;
+            text-transform: uppercase;
+
+        }
+    }
+
+
 }
 
 .slick-slider {

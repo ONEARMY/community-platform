@@ -1,11 +1,11 @@
 import * as React from "react";
-import "./Doc.scss";
+import "./Docs.scss";
 import Content from "./Content";
 
 import logo from "../../assets/images/logo.png";
 import { db } from "../../utils/firebase";
 
-class Docs extends React.Component<any, any> {
+class DocsPage extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -41,4 +41,4 @@ class Docs extends React.Component<any, any> {
   }
 }
 
-export default Docs;
+export default DocsPage;

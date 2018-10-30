@@ -61,6 +61,10 @@ As this is a large project spread across many developers it is important that no
 
 We also expect code to follow standard good practice, such as sensible variable naming, informative comments and avoiding files large than a couple hundred lines of code (emphasis on usability and reusability).
 
+## Css style guide
+
+We use BEM naming convention for css, refer to [this example](https://medium.freecodecamp.org/css-naming-conventions-that-will-save-you-hours-of-debugging-35cea737d849) if your are not familiar with it.
+
 ## Visual style guide
 
 (More details coming soon)

@@ -3,8 +3,9 @@ import { RouteComponentProps } from "react-router";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
+import CloudDownloadIcon from "@material-ui/icons/CloudDownload";
 import Typography from "@material-ui/core/Typography";
-import Slider from "react-slick";
+import ImageGallery from "react-image-gallery";
 import "./Tutorial.scss";
 
 const sliderSettings = {
@@ -51,15 +52,16 @@ class Tutorial extends React.Component<any, any> {
   }
 
   public renderSliderContent(step: any) {
-    return (
-      <Slider {...sliderSettings}>
-        {step.images.map((imageUrl: any, index: any) => (
-          <div key={index}>
-            <img src={imageUrl} />
-          </div>
-        ))}
-      </Slider>
-    );
+    const preloadedImagesForSlider = [];
+    for (const image of step.images) {
+      const imageObj = new Image();
+      imageObj.src = image;
+      preloadedImagesForSlider.push({
+        original: imageObj.src,
+        thumbnail: imageObj.src
+      });
+    }
+    return <ImageGallery items={preloadedImagesForSlider} />;
   }
 
   public renderUniqueImage(url: string) {
@@ -78,67 +80,65 @@ class Tutorial extends React.Component<any, any> {
 
     return (
       <div>
-        <div className="tutorial-infos-container">
-          <div className="tutorial-infos-left">
-            <div className="content">
+        <div className="tutorial-infos__container">
+          <div className="tutorial-infos__left">
+            <div className="tutorial-infos__content">
               <Typography variant="h4" component="h4">
                 {tutorial[0].values.tutorial_title}
               </Typography>
               <Typography component="p">
-                <b>Workspace : </b>
-                {tutorial[0].values.workspace_name}
-              </Typography>
-
-              <Typography component="p">
-                <b>Steps : </b>
-                {tutorial[0].values.steps.length}
+                {tutorial[0].values.tutorial_description}
               </Typography>
               <Typography component="p">
-                <b>Cost : </b>
-                {tutorial[0].values.tutorial_cost}
+                <b>Workspace : {tutorial[0].values.workspace_name}</b>
               </Typography>
               <Typography component="p">
-                <b>Difficulty : </b>
-                {tutorial[0].values.difficulty_level}
+                <b>{tutorial[0].values.steps.length} Steps</b>
               </Typography>
               <Typography component="p">
-                <b>Time : </b>
-                {tutorial[0].values.tutorial_time}
+                <b>Cost : {tutorial[0].values.tutorial_cost}</b>
               </Typography>
-              <Button color="primary" variant="outlined">
+              <Typography component="p">
+                <b>Difficulty : {tutorial[0].values.difficulty_level}</b>
+              </Typography>
+              <Typography component="p">
+                <b>Time : {tutorial[0].values.tutorial_time}</b>
+              </Typography>
+              <button className="download-btn">
+                <span className="icon-separator">
+                  <CloudDownloadIcon />
+                </span>
                 Download files
-              </Button>
+              </button>
             </div>
           </div>
-          <div className="tutorial-infos-right">
+          <div className="tutorial-infos__right">
             <img
               src={tutorial[0].values.cover_image_url}
               alt="tutorial cover"
             />
           </div>
-          {tutorial[0].values.steps.map((step: any, index: number) => (
-            <div key={index}>
-              <Card style={styles.card}>
-                <CardContent>
-                  <Typography
-                    style={styles.title}
-                    color="textSecondary"
-                    gutterBottom
-                  >
-                    Step {index + 1}
-                  </Typography>
-                  <Typography variant="h5" component="h2">
-                    {step.title}
-                  </Typography>
-                  <Typography component="p">{step.text}</Typography>
-                  {step.images.length > 1
-                    ? this.renderSliderContent(step)
-                    : this.renderUniqueImage(step.images[0])}
-                </CardContent>
-              </Card>
-            </div>
-          ))}
         </div>
+        {tutorial[0].values.steps.map((step: any, index: number) => (
+          <div className="step__container" key={index}>
+            <Card style={styles.card} className="step__card">
+              <div className="step__header">
+                <Typography className="step__number" variant="h5">
+                  Step {index + 1}
+                </Typography>
+              </div>
+              <CardContent>
+                <Typography className="step__title" variant="h5" component="h2">
+                  {step.title}
+                </Typography>
+                <Typography component="p">{step.text}</Typography>
+                {step.images.length > 1
+                  ? this.renderSliderContent(step)
+                  : this.renderUniqueImage(step.images[0])}
+              </CardContent>
+            </Card>
+          </div>
+        ))}
       </div>
     );
   }

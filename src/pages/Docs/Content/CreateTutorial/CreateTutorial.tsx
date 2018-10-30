@@ -9,6 +9,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import DeleteIcon from "@material-ui/icons/Delete";
 import SaveIcon from "@material-ui/icons/Save";
 import { ITutorialStep } from "../../../../models/tutorial.models";
 
@@ -284,14 +285,7 @@ class CreateTutorial extends React.PureComponent<
           mutators={{
             ...arrayMutators
           }}
-          render={({
-            handleSubmit,
-            pristine,
-            submitting,
-            values,
-            form,
-            invalid
-          }) => {
+          render={({ handleSubmit, submitting, values, form, invalid }) => {
             return (
               <form className="tutorial-form" onSubmit={handleSubmit}>
                 <div>
@@ -469,12 +463,6 @@ class CreateTutorial extends React.PureComponent<
                       <Card key={step} style={styles.card}>
                         <CardContent>
                           <div>
-                            <span
-                              onClick={() => fields.remove(index)}
-                              style={{ cursor: "pointer", float: "right" }}
-                            >
-                              ❌
-                            </span>
                             <Typography variant="h5" component="h2">
                               Step {index + 1}
                             </Typography>
@@ -547,6 +535,14 @@ class CreateTutorial extends React.PureComponent<
                               <CloudUploadIcon />
                             </span>
                           </label>
+                          {index >= 1 && (
+                            <span
+                              onClick={() => fields.remove(index)}
+                              style={{ cursor: "pointer", float: "right" }}
+                            >
+                              <DeleteIcon />
+                            </span>
+                          )}
                         </CardContent>
                       </Card>
                     ))

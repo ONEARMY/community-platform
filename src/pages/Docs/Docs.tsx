@@ -1,8 +1,6 @@
 import * as React from "react";
-import "./Docs.scss";
 import Content from "./Content";
 
-import logo from "../../assets/images/logo.png";
 import { db } from "../../utils/firebase";
 
 class DocsPage extends React.Component<any, any> {
@@ -29,16 +27,8 @@ class DocsPage extends React.Component<any, any> {
   };
 
   public render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          {" "}
-          <img src={logo} className="App-logo" alt="logo" />
-          {/* <h1 className="page-title">One army</h1>{" "} */}
-        </header>{" "}
-        {this.state.isLoaded && <Content allTutorials={this.state.tutorials} />}
-      </div>
-    );
+    if (this.state.isLoaded) { return (<Content allTutorials={this.state.tutorials} />); }
+    return null;
   }
 }
 

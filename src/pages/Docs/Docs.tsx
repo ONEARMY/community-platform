@@ -1,6 +1,8 @@
 import * as React from "react";
 import Content from "./Content";
 
+import MainLayout from '../common/MainLayout/'
+
 import { db } from "../../utils/firebase";
 
 class DocsPage extends React.Component<any, any> {
@@ -27,8 +29,11 @@ class DocsPage extends React.Component<any, any> {
   };
 
   public render() {
-    if (this.state.isLoaded) { return (<Content allTutorials={this.state.tutorials} />); }
-    return null;
+    return (
+      <MainLayout>
+        {this.state.isLoaded ? <Content allTutorials={this.state.tutorials} /> : null }
+      </MainLayout>
+    )
   }
 }
 

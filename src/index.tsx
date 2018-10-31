@@ -1,10 +1,10 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { Provider } from "react-redux";
+import { Provider } from "mobx-react"
 import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider";
 
 import { Routes } from "./pages";
-import { store } from "./redux/store";
+import { stores } from "./stores";
 import { theme } from "./themes/app.theme";
 
 import "./index.css";
@@ -12,7 +12,7 @@ import "./index.css";
 import registerServiceWorker from "./registerServiceWorker";
 
 ReactDOM.render(
-  <Provider store={store}>
+  <Provider {...stores}>
     <MuiThemeProvider theme={theme}>
       <Routes />
     </MuiThemeProvider>

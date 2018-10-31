@@ -1,37 +1,25 @@
 import * as React from "react";
-import Content from "./Content";
+import { inject, observer } from 'mobx-react';
 
 import MainLayout from '../common/MainLayout/'
+import Content from "./Content";
 
-import { db } from "../../utils/firebase";
-
+@inject("doc")
+@observer
 class DocsPage extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
-    this.state = {
-      isLoaded: false,
-      tutorials: []
-    };
   }
 
   public componentDidMount() {
-    this.getAllTutorials();
+    this.props.doc.getDocList();
   }
 
-  public getAllTutorials = async () => {
-    const ref = await db.collection("tutorials").get();
-    const docs: any[] = ref.docs.map(doc => doc.data());
-    this.setState({
-      isLoaded: true,
-      tutorials: docs
-    });
-    return docs;
-  };
-
   public render() {
+    const { docs } = this.props.doc;
     return (
       <MainLayout>
-        {this.state.isLoaded ? <Content allTutorials={this.state.tutorials} /> : null }
+        {docs ? <Content allTutorials={docs} /> : null }
       </MainLayout>
     )
   }

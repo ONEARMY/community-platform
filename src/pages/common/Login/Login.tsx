@@ -4,8 +4,8 @@ import Modal from "@material-ui/core/Modal";
 import Lock from "@material-ui/icons/Lock";
 import LockOpen from "@material-ui/icons/LockOpen";
 import { LoginFormComponent } from "./LoginForm";
-import { auth } from "../../utils/firebase";
-import { IUser } from "../../models/models";
+import { auth } from "../../../utils/firebase";
+import { IUser } from "../../../models/models";
 
 const styles: any = {
   container: {

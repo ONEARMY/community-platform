@@ -12,8 +12,8 @@ import {
   Input
 } from "@material-ui/core";
 import Lock from "@material-ui/icons/Lock";
-import { auth } from "../../utils/firebase";
-import { theme } from "../../themes/app.theme";
+import { auth } from "../../../utils/firebase";
+import { theme } from "../../../themes/app.theme";
 
 interface IState {
   email: string;

@@ -4,11 +4,11 @@ and user properties to LoginButton and LoginModal components
 *******************************************************************************/
 
 import * as React from "react";
-import { auth, IFirebaseUser, db } from "../utils/firebase";
-import { LoginComponent } from "../components/Login/Login";
+import { auth, IFirebaseUser, db } from "../../../utils/firebase";
+import { LoginComponent } from "./Login";
 import { connect } from "react-redux";
-import { updateUser } from "../redux/actions/user.actions";
-import { IUser } from "../models/models";
+import { updateUser } from "../../../redux/actions/user.actions";
+import { IUser } from "../../../models/models";
 
 // internal state properties
 interface IInternalState {

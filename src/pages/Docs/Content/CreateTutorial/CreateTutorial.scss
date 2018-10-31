@@ -1,7 +1,64 @@
-.tutorial-form {
+.create-tutorial-form {
   width: 75%;
   position: relative;
   margin: 0 auto;
+
+  .create-tutorial-infos__container {
+    max-width: 1200px;
+    display: inline-block;
+    background-color: #EDEDED;
+    width: 100%;
+    margin: 30px auto;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 40px 50px;
+    text-align: center;
+
+    .create-tutorial-infos__label {
+      color: #656565;
+      font-size: 1.1em;
+      margin: 10px 0;
+    }
+
+    .create-tutorial-infos__input {
+      height: 40px;
+      border: none;
+
+      &.input--selector {
+        width: 127px;
+      }
+    }
+
+    .create-tutorial-infos__input::placeholder {
+      text-align: center;
+      font-size: 1.1em;
+      padding-left: 5px;
+    }
+
+    .upload-btn {
+      height: 50px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-size: 0.9em;
+      display: block;
+      margin: 20px auto;
+
+      &--cover {
+        width: 300px;
+        background-color: #B6D8E6;
+        border: none;
+
+      }
+
+      &--files {
+        border: solid 1px black;
+        // background-color: inherit
+        width: 239px;
+
+      }
+    }
+  }
 }
 
 .tutorial-form label {
@@ -11,6 +68,7 @@
 .cover-img {
   width: 300px;
   display: block;
+  margin: 20px auto;
 }
 
 .step-img {
@@ -18,11 +76,13 @@
   display: block;
 }
 
-.iconSeparator {
+.icon-separator {
   margin-left: 8px;
 
-  svg {
+  img {
     vertical-align: bottom;
-    margin-top: 10px;
+    margin-top: 14px;
+    margin-right: 10px;
+    width: 20px;
   }
 }

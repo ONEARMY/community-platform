@@ -27,6 +27,7 @@ class DocsPage extends React.Component<any, any> {
     });
     return docs;
   };
+
   public render() {
     return (
       <div className="App">

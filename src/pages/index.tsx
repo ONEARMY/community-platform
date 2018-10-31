@@ -1,5 +1,8 @@
 import * as React from "react";
 import { Switch, Route, BrowserRouter } from "react-router-dom";
+
+import MainLayout from './common/MainLayout/'
+
 import Docs from "./Docs/Docs";
 import { HomePage } from "./Home/Home";
 import { NotFoundPage } from "./NotFound/NotFound";
@@ -16,11 +19,13 @@ export class Routes extends React.Component {
     return (
       <BrowserRouter>
         <ScrollToTop>
-          <Switch>
-            <Route path="/docs" component={Docs} />
-            <Route exact path="/" component={HomePage} />
-            <Route component={NotFoundPage} />
-          </Switch>
+          <MainLayout>
+            <Switch>
+              <Route path="/docs" component={Docs} />
+              <Route exact path="/" component={HomePage} />
+              <Route component={NotFoundPage} />
+            </Switch>
+          </MainLayout>
         </ScrollToTop>
       </BrowserRouter>
     );

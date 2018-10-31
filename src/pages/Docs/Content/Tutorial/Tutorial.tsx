@@ -66,7 +66,7 @@ class Tutorial extends React.Component<any, any> {
 
   public renderUniqueImage(url: string) {
     return (
-      <div>
+      <div className="step__image">
         <img src={url} />
       </div>
     );
@@ -131,7 +131,9 @@ class Tutorial extends React.Component<any, any> {
                 <Typography className="step__title" variant="h5" component="h2">
                   {step.title}
                 </Typography>
-                <Typography component="p">{step.text}</Typography>
+                <Typography className="step__description" component="p">
+                  {step.text}
+                </Typography>
                 {step.images.length > 1
                   ? this.renderSliderContent(step)
                   : this.renderUniqueImage(step.images[0])}

@@ -106,7 +106,18 @@
         .step__title {
             color: black;
             text-transform: uppercase;
+            margin-top: 10px;
 
+        }
+
+        .step__description {
+            margin: 20px 25px 30px;
+        }
+
+        .step__image {
+            img {
+                max-width: 600px;
+            }
         }
     }
 

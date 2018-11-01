@@ -5,10 +5,11 @@ import "firebase/storage";
 import { FirebaseDevConfig } from "../../src/config/config.dev";
 import { FirebaseProdConfig } from "../../src/config/config.prod";
 
+// switch firebase config depending on dev or production environment
 const FirebaseConfig =
   process.env.NODE_ENV === "production"
     ? FirebaseProdConfig
-    : FirebaseProdConfig;
+    : FirebaseDevConfig;
 console.log("env?", process.env.NODE_ENV);
 console.log("config", FirebaseConfig);
 // initialise with config settings, additional firestore config to support future changes

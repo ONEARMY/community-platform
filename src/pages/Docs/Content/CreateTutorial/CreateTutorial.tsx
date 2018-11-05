@@ -8,12 +8,12 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-// import CloudUploadIcon from "@material-ui/icons/CloudUpload";
-import DeleteIcon from "@material-ui/icons/Delete";
-import SaveIcon from "@material-ui/icons/Save";
 import { ITutorialStep } from "../../../../models/tutorial.models";
 
 import CloudUploadIcon from "../../../../assets/icons/upload.svg";
+import DeleteIcon from "../../../../assets/icons/bin.svg";
+import AddIcon from "../../../../assets/icons/add.svg";
+import SaveIcon from "../../../../assets/icons/save.svg";
 
 import { db } from "../../../../utils/firebase";
 
@@ -305,7 +305,7 @@ class CreateTutorial extends React.PureComponent<
                 <div className="create-tutorial-infos__container">
                   <Typography
                     component="label"
-                    className="create-tutorial-infos__label"
+                    className="create-tutorial__label"
                   >
                     What is your davehakkens.nl account ?
                   </Typography>
@@ -313,7 +313,7 @@ class CreateTutorial extends React.PureComponent<
                     name="workspace_name"
                     validate={required}
                     placeholder="@janedoe"
-                    className="create-tutorial-infos__input"
+                    className="create-tutorial__input"
                     component="input"
                     onBlur={(event: any) => {
                       this.onInputChange(event, "workspace_name");
@@ -321,7 +321,7 @@ class CreateTutorial extends React.PureComponent<
                   />
                   <Typography
                     component="label"
-                    className="create-tutorial-infos__label"
+                    className="create-tutorial__label"
                   >
                     What is the title of your documentation ?
                   </Typography>
@@ -331,7 +331,7 @@ class CreateTutorial extends React.PureComponent<
                         <input
                           {...input}
                           style={{ width: "400px" }}
-                          className="create-tutorial-infos__input"
+                          className="create-tutorial__input"
                           type="text"
                           onBlur={(event: any) => {
                             this.onInputChange(event, "tutorial_title");
@@ -357,7 +357,6 @@ class CreateTutorial extends React.PureComponent<
                   )}
                   <label className="upload-btn upload-btn--cover">
                     <span className="icon-separator">
-                      {/* <CloudUploadIcon /> */}
                       <img src={CloudUploadIcon} alt="" />
                     </span>
                     <FileUploader
@@ -374,7 +373,7 @@ class CreateTutorial extends React.PureComponent<
                   </label>
                   <Typography
                     component="label"
-                    className="create-tutorial-infos__label"
+                    className="create-tutorial__label"
                   >
                     Write a short description for the documentation
                   </Typography>
@@ -388,7 +387,7 @@ class CreateTutorial extends React.PureComponent<
                             this.onInputChange(event, "tutorial_description");
                           }}
                           style={{ width: "400px", height: "150px" }}
-                          className="create-tutorial-infos__input"
+                          className="create-tutorial__input"
                         />
                         {meta.error &&
                           meta.touched && <span>{meta.error}</span>}
@@ -400,14 +399,14 @@ class CreateTutorial extends React.PureComponent<
                       <div>
                         <Typography
                           component="label"
-                          className="create-tutorial-infos__label"
+                          className="create-tutorial__label"
                         >
                           How much time does it take ? (hours/week)
                         </Typography>
                         <input
                           {...input}
                           type="text"
-                          className="create-tutorial-infos__input"
+                          className="create-tutorial__input"
                           placeholder="2 hours"
                           onBlur={(event: any) => {
                             this.onInputChange(event, "tutorial_time");
@@ -423,14 +422,14 @@ class CreateTutorial extends React.PureComponent<
                       <div>
                         <Typography
                           component="label"
-                          className="create-tutorial-infos__label"
+                          className="create-tutorial__label"
                         >
                           How much does it cost ?
                         </Typography>
                         <input
                           {...input}
                           type="text"
-                          className="create-tutorial-infos__input"
+                          className="create-tutorial__input"
                           onBlur={(event: any) => {
                             this.onInputChange(event, "tutorial_cost");
                           }}
@@ -443,7 +442,7 @@ class CreateTutorial extends React.PureComponent<
                   </Field>
                   <Typography
                     component="label"
-                    className="create-tutorial-infos__label"
+                    className="create-tutorial__label"
                   >
                     How difficult to replicate is your documentation ?
                   </Typography>
@@ -453,7 +452,7 @@ class CreateTutorial extends React.PureComponent<
                       this.onInputChange(event, "difficulty_level");
                     }}
                     component="select"
-                    className="create-tutorial-infos__input input--selector"
+                    className="create-tutorial__input input--selector"
                   >
                     <option value="easy">easy</option>
                     <option value="medium">medium</option>
@@ -461,13 +460,12 @@ class CreateTutorial extends React.PureComponent<
                   </Field>
                   <Typography
                     component="label"
-                    className="create-tutorial-infos__label"
+                    className="create-tutorial__label"
                   >
                     File to support your documentation ? (20mb max)
                   </Typography>
                   <label className="upload-btn upload-btn--files">
                     <span className="icon-separator">
-                      {/* <CloudUploadIcon /> */}
                       <img src={CloudUploadIcon} alt="" />
                     </span>
                     <FileUploader
@@ -487,7 +485,7 @@ class CreateTutorial extends React.PureComponent<
                       <div>
                         <Typography
                           component="label"
-                          className="create-tutorial-infos__label"
+                          className="create-tutorial__label"
                         >
                           Or a link
                         </Typography>
@@ -495,7 +493,7 @@ class CreateTutorial extends React.PureComponent<
                           {...input}
                           type="text"
                           style={{ width: "400px" }}
-                          className="create-tutorial-infos__input"
+                          className="create-tutorial__input"
                           placeholder="https://drive.google.com/drive/u/2/folders/..."
                           onBlur={(event: any) => {
                             this.onInputChange(
@@ -516,136 +514,145 @@ class CreateTutorial extends React.PureComponent<
                 <FieldArray name="steps">
                   {({ fields }) =>
                     fields.map((step, index) => (
-                      <Card key={step} style={styles.card}>
-                        <CardContent>
-                          <div>
-                            <Typography variant="h5" component="h2">
+                      <div className="step__container" key={index}>
+                        <Card
+                          key={step}
+                          style={styles.card}
+                          className="step__card"
+                        >
+                          <div className="step__header">
+                            <Typography
+                              variant="h5"
+                              component="h2"
+                              className="step-number"
+                            >
                               Step {index + 1}
                             </Typography>
-                            <Typography component="label">
-                              Pick a title for this step
-                            </Typography>
-                            <Field
-                              name={`${step}.title`}
-                              component="input"
-                              style={{ width: "400px" }}
-                              placeholder="Step title"
-                              validate={required}
-                            />
-                            <Typography component="label">
-                              Describe this step
-                            </Typography>
-                            <Field
-                              name={`${step}.text`}
-                              component="textarea"
-                              placeholder="Description"
-                              validate={required}
-                              onBlur={() => {
-                                // update the state with the new values
-                                const stepValuesInput: any = form.getFieldState(
-                                  "steps"
-                                )!.value;
-                                this.setState({
-                                  formValues: {
-                                    ...this.state.formValues,
-                                    steps: stepValuesInput
-                                  }
-                                });
-                              }}
-                              style={{ width: "400px", height: "150px" }}
-                            />
                           </div>
+                          <CardContent>
+                            <div>
+                              <Typography
+                                component="label"
+                                className="create-tutorial__label"
+                              >
+                                Pick a title for this step
+                              </Typography>
+                              <Field
+                                name={`${step}.title`}
+                                component="input"
+                                style={{ width: "400px" }}
+                                placeholder="Step title"
+                                validate={required}
+                                className="create-tutorial__input"
+                              />
+                              <Typography
+                                component="label"
+                                className="create-tutorial__label"
+                              >
+                                Describe this step
+                              </Typography>
+                              <Field
+                                name={`${step}.text`}
+                                component="textarea"
+                                placeholder="Description"
+                                validate={required}
+                                className="create-tutorial__input"
+                                onBlur={() => {
+                                  // update the state with the new values
+                                  const stepValuesInput: any = form.getFieldState(
+                                    "steps"
+                                  )!.value;
+                                  this.setState({
+                                    formValues: {
+                                      ...this.state.formValues,
+                                      steps: stepValuesInput
+                                    }
+                                  });
+                                }}
+                                style={{ width: "400px", height: "150px" }}
+                              />
+                            </div>
 
-                          {this.state.formValues.steps[index] &&
-                            this.state.formValues.steps[index].images.length >=
-                              1 &&
-                            this.state.formValues.steps[index].images.map(
-                              (stepImg, stepImgindex) => (
-                                <img
-                                  key={stepImgindex}
-                                  className="step-img"
-                                  src={stepImg}
-                                />
-                              )
-                            )}
-                          <Typography component="label">
-                            Upload picture(s) about this specific step
-                          </Typography>
-                          <label style={styles.uploadBtn}>
-                            <FileUploader
-                              hidden
-                              name={`${step}.images`}
-                              storageRef={storage.ref(
-                                this.state._uploadImgPath
+                            {this.state.formValues.steps[index] &&
+                              this.state.formValues.steps[index].images
+                                .length >= 1 &&
+                              this.state.formValues.steps[index].images.map(
+                                (stepImg, stepImgindex) => (
+                                  <img
+                                    key={stepImgindex}
+                                    className="step-img"
+                                    src={stepImg}
+                                  />
+                                )
                               )}
-                              onUploadStart={this.handleUploadStart}
-                              onUploadError={this.handleUploadError}
-                              onUploadSuccess={this.handleUploadStepImgSuccess}
-                              onProgress={this.handleProgress}
-                              onClick={() => {
-                                this.setState({ _currentStepIndex: index });
-                              }}
-                            />
-                            Upload
-                            <span className="iconSeparator">
-                              {/* <CloudUploadIcon /> */}
-                            </span>
-                          </label>
+                            <label className="upload-btn upload-btn--images">
+                              <span className="icon-separator">
+                                <img src={CloudUploadIcon} alt="" />
+                              </span>
+                              <FileUploader
+                                hidden
+                                name={`${step}.images`}
+                                storageRef={storage.ref(
+                                  this.state._uploadImgPath
+                                )}
+                                onUploadStart={this.handleUploadStart}
+                                onUploadError={this.handleUploadError}
+                                onUploadSuccess={
+                                  this.handleUploadStepImgSuccess
+                                }
+                                onProgress={this.handleProgress}
+                                onClick={() => {
+                                  this.setState({ _currentStepIndex: index });
+                                }}
+                              />
+                              Upload picture(s)
+                            </label>
+                          </CardContent>
                           {index >= 1 && (
-                            <span
+                            <div
                               onClick={() => fields.remove(index)}
-                              style={{ cursor: "pointer", float: "right" }}
+                              className="step-delete--button"
                             >
-                              <DeleteIcon />
-                            </span>
+                              <img src={DeleteIcon} alt="" />
+                              <span>delete this step</span>
+                            </div>
                           )}
-                        </CardContent>
-                      </Card>
+                        </Card>
+                      </div>
                     ))
                   }
                 </FieldArray>
-                <Card style={styles.card}>
-                  <CardContent>
-                    <Button
-                      color="primary"
-                      variant="outlined"
-                      onClick={() => {
-                        // create a empty step in the steps form value
-                        form.mutators.push("steps", {
-                          title: "",
-                          text: "",
-                          images: []
-                        });
-                        // update the state with the empty new step
-                        const stepValuesInput: any = form.getFieldState(
-                          "steps"
-                        )!.value;
-                        this.setState({
-                          formValues: {
-                            ...this.state.formValues,
-                            steps: stepValuesInput
-                          }
-                        });
-                      }}
-                    >
-                      Add step
-                    </Button>
-                  </CardContent>
-                </Card>
-                <Button
-                  type="submit"
-                  color="primary"
-                  variant="outlined"
-                  style={{
-                    margin: "40px auto",
-                    position: "relative",
-                    display: "flex"
+                <button
+                  className="add-step--button"
+                  onClick={() => {
+                    // create a empty step in the steps form value
+                    form.mutators.push("steps", {
+                      title: "",
+                      text: "",
+                      images: []
+                    });
+                    // update the state with the empty new step
+                    const stepValuesInput: any = form.getFieldState("steps")!
+                      .value;
+                    this.setState({
+                      formValues: {
+                        ...this.state.formValues,
+                        steps: stepValuesInput
+                      }
+                    });
                   }}
+                >
+                  <img src={AddIcon} alt="" />
+                  <span>Add step</span>
+                </button>
+                <button
+                  type="submit"
+                  className="validate-form--button"
                   disabled={submitting || invalid}
                 >
-                  Save documentation
-                  <SaveIcon />
-                </Button>
+                  <img src={SaveIcon} alt="" />
+                  <span>Save</span>
+                </button>
               </form>
             );
           }}

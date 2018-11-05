@@ -3,6 +3,55 @@
   position: relative;
   margin: 0 auto;
 
+  .create-tutorial__label {
+    color: #656565;
+    font-size: 1.1em;
+    margin: 10px 0;
+  }
+
+  .create-tutorial__input {
+    height: 40px;
+    border: 1px solid #DDDDDD;
+
+
+    &.input--selector {
+      width: 127px;
+    }
+  }
+
+  .create-tutorial__input::placeholder {
+    text-align: center;
+    font-size: 1.2em;
+    padding-left: 5px;
+  }
+
+  .upload-btn {
+    height: 50px;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-size: 0.9em;
+    display: block;
+    margin: 20px auto;
+    border: none;
+
+    &--cover {
+      width: 300px;
+      background-color: #B6D8E6;
+    }
+
+    &--files {
+      border: solid 1px black;
+      // background-color: inherit
+      width: 239px;
+
+    }
+
+    &--images {
+      width: 200px;
+      background-color: #B6D8E6;
+    }
+  }
+
   .create-tutorial-infos__container {
     max-width: 1200px;
     display: inline-block;
@@ -14,51 +63,130 @@
     transform: translateX(-50%);
     padding: 40px 50px;
     text-align: center;
+  }
 
-    .create-tutorial-infos__label {
-      color: #656565;
-      font-size: 1.1em;
-      margin: 10px 0;
-    }
+  .step__container {
+    text-align: center;
 
-    .create-tutorial-infos__input {
-      height: 40px;
-      border: none;
+    .step__card {
+      box-shadow: inherit;
+      border: 1px solid #DDDDDD;
+      border-radius: 0;
 
-      &.input--selector {
-        width: 127px;
+      .step__header {
+        background-color: #FFE495;
+        height: 70px;
+
+        .step-number {
+          padding: 20px;
+          font-weight: bold;
+          color: black;
+
+        }
+      }
+
+      .step__title {
+        color: black;
+        text-transform: uppercase;
+        margin-top: 10px;
+
+      }
+
+      .step__description {
+        margin: 20px 25px 30px;
+      }
+
+      .step__image {
+        img {
+          max-width: 600px;
+        }
       }
     }
 
-    .create-tutorial-infos__input::placeholder {
-      text-align: center;
-      font-size: 1.1em;
-      padding-left: 5px;
-    }
-
-    .upload-btn {
-      height: 50px;
-      text-transform: uppercase;
+    .step-delete--button {
       cursor: pointer;
-      font-size: 0.9em;
-      display: block;
-      margin: 20px auto;
+      height: 50px;
+      width: 100%;
+      border-top: 1px solid #DDDDDD;
 
-      &--cover {
-        width: 300px;
-        background-color: #B6D8E6;
-        border: none;
+      img {
+        vertical-align: text-top;
+      }
+
+      span {
+        text-transform: uppercase;
+        font-size: 0.8em;
+        line-height: 50px;
+        color: #9B9B9B;
+        margin-left: 10px;
 
       }
 
-      &--files {
-        border: solid 1px black;
-        // background-color: inherit
-        width: 239px;
-
+      &:hover {
+        opacity: 0.8;
       }
+    }
+
+
+  }
+
+  .add-step--button {
+    cursor: pointer;
+    width: 300px;
+    height: 90px;
+    margin: 0 auto;
+    background-color: #FFE495;
+    border: none;
+    display: block;
+
+    img {
+      vertical-align: text-top;
+      margin-top: -7px;
+    }
+
+    span {
+      text-transform: uppercase;
+      font-size: 1.3em;
+      line-height: 90px;
+      color: black;
+      margin-left: 10px;
+
+    }
+
+    &:hover {
+      opacity: 0.8;
     }
   }
+
+  .validate-form--button {
+    width: 600px;
+    height: 120px;
+    background-color: #88E3C7;
+    border: none;
+    display: block;
+    text-align: center;
+    margin: 60px auto 40px;
+    cursor: pointer;
+
+    img {
+      vertical-align: text-top;
+      margin-top: -7px;
+    }
+
+    span {
+      font-size: 1.4em;
+      line-height: 120px;
+      text-transform: uppercase;
+      color: white;
+      margin-left: 10px;
+    }
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+
 }
 
 .tutorial-form label {

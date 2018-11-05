@@ -92,8 +92,12 @@
         border-radius: 0;
 
         .step__header {
-            background-color: rgba(255, 208, 0, 0.89);
+            background-color: #FFE495;
             height: 50px;
+
+            h2 {
+                padding: 10px;
+            }
 
             .step__number {
                 padding: 10px;

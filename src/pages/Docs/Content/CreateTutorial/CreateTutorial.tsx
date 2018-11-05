@@ -611,7 +611,7 @@ class CreateTutorial extends React.PureComponent<
                           {index >= 1 && (
                             <div
                               onClick={() => fields.remove(index)}
-                              className="step-delete--button"
+                              className="step-delete__button"
                             >
                               <img src={DeleteIcon} alt="" />
                               <span>delete this step</span>
@@ -623,7 +623,7 @@ class CreateTutorial extends React.PureComponent<
                   }
                 </FieldArray>
                 <button
-                  className="add-step--button"
+                  className="add-step__button"
                   onClick={() => {
                     // create a empty step in the steps form value
                     form.mutators.push("steps", {
@@ -647,7 +647,7 @@ class CreateTutorial extends React.PureComponent<
                 </button>
                 <button
                   type="submit"
-                  className="validate-form--button"
+                  className="validate-form__button"
                   disabled={submitting || invalid}
                 >
                   <img src={SaveIcon} alt="" />

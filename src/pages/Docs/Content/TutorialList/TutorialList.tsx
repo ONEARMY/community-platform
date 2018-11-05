@@ -1,5 +1,5 @@
 import * as React from "react";
-import "./TutorialList.css";
+import "./TutorialList.scss";
 import { Link } from "react-router-dom";
 import {
   Button,
@@ -15,6 +15,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import CommentIcon from "@material-ui/icons/Comment";
 import TurnedInIcon from "@material-ui/icons/TurnedIn";
 import { theme } from "../../../../themes/app.theme";
+import AddIcon from "../../../../assets/icons/add.svg";
 
 const styles: any = {
   layout: {
@@ -30,11 +31,6 @@ const styles: any = {
   },
   link: {
     textDecoration: "none"
-  },
-  card: {
-    height: "100%",
-    display: "flex",
-    flexDirection: "column"
   },
   cardMedia: {
     paddingTop: "56.25%" // 16:9
@@ -61,6 +57,10 @@ class TutorialList extends React.Component<any, any> {
         >
           Documentation
         </Typography>
+        <Link to={`/docs/create`} className="create-tutorial__button">
+          <img src={AddIcon} alt="" />
+          <span>create tutorial</span>
+        </Link>
         <React.Fragment>
           <div style={styles.layout}>
             <Grid container spacing={40}>
@@ -70,7 +70,7 @@ class TutorialList extends React.Component<any, any> {
                     to={`/docs/${encodeURIComponent(card.values.slug)}`}
                     style={styles.link}
                   >
-                    <Card style={styles.card}>
+                    <Card className="tutorial-list__card">
                       <CardMedia
                         style={styles.cardMedia}
                         image={card.values.cover_image_url} // eslint-disable-line max-len
@@ -115,18 +115,9 @@ class TutorialList extends React.Component<any, any> {
               ))}
             </Grid>
           </div>
-          <Link to={`/docs/create`} style={styles.link}>
-            <Button
-              variant="outlined"
-              style={{
-                margin: "40px auto",
-                position: "relative",
-                display: "flex"
-              }}
-              color="primary"
-            >
-              Create tutorial
-            </Button>
+          <Link to={`/docs/create`} className="create-tutorial__button">
+            <img src={AddIcon} alt="" />
+            <span>create tutorial</span>
           </Link>
         </React.Fragment>
       </div>

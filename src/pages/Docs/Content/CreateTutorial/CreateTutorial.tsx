@@ -8,7 +8,10 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { ITutorialStep } from "../../../../models/tutorial.models";
+import {
+  ITutorialStep,
+  ITutorialTag
+} from "../../../../models/tutorial.models";
 
 import CloudUploadIcon from "../../../../assets/icons/upload.svg";
 import DeleteIcon from "../../../../assets/icons/bin.svg";
@@ -20,6 +23,7 @@ import { db } from "../../../../utils/firebase";
 import { storage } from "../../../../utils/firebase";
 import FileUploader from "react-firebase-file-uploader";
 import { Redirect } from "react-router-dom";
+import { Checkbox } from "@material-ui/core";
 
 export interface IState {
   formValues: IFormValues;
@@ -40,6 +44,7 @@ interface IFormValues {
   id: string;
   slug: string;
   steps: ITutorialStep[];
+  tags: ITutorialTag[];
   cover_image_url: string;
   tutorial_extern_file_url: string;
   tutorial_files_url: string;
@@ -107,6 +112,32 @@ class CreateTutorial extends React.PureComponent<
             title: "",
             text: "",
             images: []
+          }
+        ],
+        tags: [
+          {
+            value: "extrusion",
+            isSelected: false
+          },
+          {
+            value: "shredder",
+            isSelected: false
+          },
+          {
+            value: "injection",
+            isSelected: false
+          },
+          {
+            value: "compression",
+            isSelected: false
+          },
+          {
+            value: "sorting",
+            isSelected: false
+          },
+          {
+            value: "melting",
+            isSelected: false
           }
         ],
         workspace_name: ""
@@ -343,6 +374,43 @@ class CreateTutorial extends React.PureComponent<
                       </div>
                     )}
                   </Field>
+                  <Typography
+                    component="label"
+                    className="create-tutorial__label"
+                  >
+                    Add tags
+                  </Typography>
+                  <div className="create-tutorial__tags--container">
+                    <FieldArray name="tags">
+                      {({ fields, meta }) =>
+                        fields.map((tag, index) => (
+                          <div key={index} className="create-tutorial__tag">
+                            <input
+                              type="checkbox"
+                              name={this.state.formValues.tags[index].value}
+                              value={this.state.formValues.tags[index].value}
+                              id={this.state.formValues.tags[index].value}
+                              className="create-tutorial__checkbox"
+                              onChange={(e: any) => {
+                                console.log(e.target.checked);
+                                if (e.target.checked) {
+                                  // push the tag in the value array
+                                } else {
+                                  // remove from the array of tags
+                                }
+                              }}
+                            />
+                            <label
+                              htmlFor={this.state.formValues.tags[index].value}
+                            >
+                              {this.state.formValues.tags[index].value}
+                            </label>
+                          </div>
+                        ))
+                      }
+                    </FieldArray>
+                  </div>
+
                   {this.state._isUploading && (
                     <p>Progress: {this.state._imgUploadProgress}</p>
                   )}

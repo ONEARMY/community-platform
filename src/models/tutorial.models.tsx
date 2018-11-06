@@ -16,3 +16,8 @@ export interface ITutorialStep {
   title: string;
   text: string;
 }
+
+export interface ITutorialTag {
+  value: string;
+  isSelected: boolean;
+}

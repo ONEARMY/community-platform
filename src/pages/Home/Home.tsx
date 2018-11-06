@@ -4,7 +4,7 @@ This is the Home Page main component, rendering content seen at '/'
 
 import * as React from "react";
 import "./Home.scss";
-import { LoginContainer } from "../../containers/Login.container";
+import { LoginContainer } from "../common/Login/Login.container";
 import { IUser } from "../../models/models";
 
 interface IState {

@@ -90,17 +90,15 @@
     .step__card {
 
         border-radius: 0;
+        border: 1px solid #DDDDDD;
+        box-shadow: inherit;
 
         .step__header {
             background-color: #FFE495;
-            height: 50px;
-
-            h2 {
-                padding: 10px;
-            }
+            height: 70px;
 
             .step__number {
-                padding: 10px;
+                padding: 20px;
                 font-weight: bold;
                 color: black;
 

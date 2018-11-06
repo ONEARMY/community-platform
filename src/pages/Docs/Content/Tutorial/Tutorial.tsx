@@ -52,16 +52,19 @@ class Tutorial extends React.Component<any, any> {
   }
 
   public renderSliderContent(step: any) {
-    const preloadedImagesForSlider = [];
+    const preloadedImages = [];
     for (const image of step.images) {
       const imageObj = new Image();
       imageObj.src = image;
-      preloadedImagesForSlider.push({
-        original: imageObj.src,
-        thumbnail: imageObj.src
+      preloadedImages.push({
+        src: imageObj.src
       });
     }
-    return <ImageGallery items={preloadedImagesForSlider} />;
+    return preloadedImages.map((image: any, index: number) => (
+      <div className="step__image">
+        <img src={image.src} />
+      </div>
+    ));
   }
 
   public renderUniqueImage(url: string) {

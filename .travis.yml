@@ -12,6 +12,10 @@ before_script:
   - npm install -g firebase-tools
 script:
   - npm run build
+before_deploy:
+  - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH"
+  - env REACT_APP_BRANCH=$TRAVIS_BRANCH
+  - echo REACT_APP_BRANCH=$REACT_APP_BRANCH
 deploy:
   - provider: firebase
     skip_cleanup: true
@@ -20,6 +24,8 @@ deploy:
     project: precious-plastics-v4-dev
     script:
       - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH"
+      - env REACT_APP_BRANCH="STAGING"
+      - echo REACT_APP_BRANCH=$REACT_APP_BRANCH
     on:
       branch: dev
   - provider: firebase
@@ -29,5 +35,3 @@ deploy:
     project: onearmyworld
     on:
       branch: master
-env:
-  - REACT_APP_BRANCH = $TRAVIS_BRANCH

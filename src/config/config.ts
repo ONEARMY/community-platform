@@ -7,7 +7,10 @@ console.log(`environment: ${process.env.NODE_ENV}`)
 For our use case the production config is stored in environment variables passed from
 Travis-CI. You can replace this with your own config or use the same pattern to keep
 api keys secret. Note, create-react-app only passes environment variables prefixed with
-'REACT_APP'. The required info has been encrypted and stored in travis
+'REACT_APP'. The required info has been encrypted and stored in travis.
+
+Additionally we have 2 repository branches deployed (dev and master), with configs
+that are identified through an additional environment variable defined in .travis.yml
 
 Dev config is hardcoded - it is recommended if changing for production to hide the 
 details via gitignore. You can find more information about potential security risk here:
@@ -16,7 +19,10 @@ https://javebratt.com/hide-firebase-api/
 
 if (env === 'production') {
   console.log('production environment', process.env)
-  config = JSON.parse(process.env.REACT_APP_FIREBASE_PROD_CONFIG as string)
+  const branch = process.env.REACT_APP_BRANCH
+  config = JSON.parse(process.env[
+    `REACT_APP_FIREBASE_${branch}_CONFIG`
+  ] as string)
 } else {
   config = {
     apiKey: 'AIzaSyChVNSMiYxCkbGd9C95aChr9GxRJtW6NRA',

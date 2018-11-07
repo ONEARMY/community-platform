@@ -18,7 +18,6 @@ deploy:
     token: '$FIREBASE_STAGING_TOKEN'
     message: Firebase staging deploy success
     project: precious-plastics-v4-dev
-    script: env REACT_APP_FIREBASE_PROD_CONFIG='{"apiKey":"AIzaSyChVNSMiYxCkbGd9C95aChr9GxRJtW6NRA","authDomain":"precious-plastics-v4-dev.firebaseapp.com","databaseURL":"https://precious-plastics-v4-dev.firebaseio.com","messagingSenderId":"174193431763","projectId":"precious-plastics-v4-dev","storageBucket":"precious-plastics-v4-dev.appspot.com"}'
     on:
       branch: dev
   - provider: firebase
@@ -28,3 +27,5 @@ deploy:
     project: onearmyworld
     on:
       branch: master
+env:
+  - REACT_APP_BRANCH = '$TRAVIS_BRANCH'

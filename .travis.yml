@@ -14,7 +14,7 @@ script:
   - npm run build
 before_deploy:
   - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH"
-  - export REACT_APP_BRANCH=(if [ "$TRAVIS_BRANCH" == "master" ]; then echo "PRODUCTION"; else echo "STAGING"; fi)
+  - export REACT_APP_BRANCH=$(if [ "$TRAVIS_BRANCH" == "master" ]; then echo "PRODUCTION"; else echo "STAGING"; fi)
   - echo "REACT_APP_BRANCH=$REACT_APP_BRANCH"
 deploy:
   - provider: firebase
@@ -22,6 +22,10 @@ deploy:
     token: '$FIREBASE_STAGING_TOKEN'
     message: Firebase staging deploy success
     project: precious-plastics-v4-dev
+    script:
+      - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH"
+      - env REACT_APP_BRANCH="STAGING"
+      - echo REACT_APP_BRANCH=$REACT_APP_BRANCH
     on:
       branch: dev
   - provider: firebase

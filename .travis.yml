@@ -14,8 +14,8 @@ script:
   - npm run build
 before_deploy:
   - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH"
-  - env REACT_APP_BRANCH=$TRAVIS_BRANCH
-  - echo REACT_APP_BRANCH=$REACT_APP_BRANCH
+  - env REACT_APP_BRANCH='$TRAVIS_BRANCH'
+  - echo "REACT_APP_BRANCH=$REACT_APP_BRANCH"
 deploy:
   - provider: firebase
     skip_cleanup: true

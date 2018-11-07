@@ -188,7 +188,7 @@ class CreateTutorial extends React.PureComponent<
   public handleUploadStepImgSuccess = async (filename: any) => {
     console.log('index', this.state._currentStepIndex)
 
-    // untested code for reference - get the current steps
+    // get the current steps
     const currentSteps: any = this.state.formValues.steps
     // get the step at the index where the new image will go
     const url = await storage
@@ -201,7 +201,6 @@ class CreateTutorial extends React.PureComponent<
       url,
     ]
     this.setState({
-      // additional meta fields if desired
       formValues: { ...this.state.formValues, steps: currentSteps },
       _imgUploadProgress: 100,
       _isUploading: false,
@@ -218,6 +217,7 @@ class CreateTutorial extends React.PureComponent<
       .child(filename)
       .getDownloadURL()
       .then(url => {
+        console.log('upload success : ', url)
         this.setState({
           formValues: { ...this.state.formValues, tutorial_files_url: url },
         })
@@ -384,6 +384,7 @@ class CreateTutorial extends React.PureComponent<
                                 (item: any) => item !== e.target.value,
                               )
                             }
+                            // set state with updated tags list
                             this.setState({
                               formValues: {
                                 ...this.state.formValues,
@@ -524,16 +525,33 @@ class CreateTutorial extends React.PureComponent<
                     </span>
                     <FileUploader
                       hidden
-                      multiple={true}
                       name="files"
                       storageRef={storage.ref(this.state._uploadImgPath)}
                       onUploadStart={this.handleUploadStart}
                       onUploadError={this.handleUploadError}
                       onUploadSuccess={this.handleUploadFilesSuccess}
                       onProgress={this.handleProgress}
+                      onChange={(e: any) => {
+                        // if there is no file and size is bigger than 20mb
+                        if (
+                          e.target.files[0] !== undefined &&
+                          e.target.files[0].size > 20971520
+                        ) {
+                          alert(
+                            'Your file is too big, maximum allowed size is 20mb',
+                          )
+                          e.target.value = ''
+                        } else {
+                          const el = document.getElementsByClassName(
+                            'uploaded-file-name',
+                          )[0]
+                          el.innerHTML = e.target.files[0].name
+                        }
+                      }}
                     />
                     Upload a file
                   </label>
+                  <span className="uploaded-file-name" />
                   <Field name="tutorial_extern_file_url">
                     {({ input, meta }) => (
                       <div>

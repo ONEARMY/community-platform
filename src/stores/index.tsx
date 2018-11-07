@@ -1,9 +1,8 @@
-import Doc from './Doc';
+import { DocStore } from './Docs/docs.store'
+import { UserStore } from './User/user.store'
 
-const stores = {
-  doc: new Doc()
-}
-
-export {
-  stores
+// the following stores are passed into a top level app provider and can be accessed through @inject
+export const stores = {
+  docStore: new DocStore(),
+  userStore: new UserStore(),
 }

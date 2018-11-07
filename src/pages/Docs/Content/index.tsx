@@ -1,22 +1,21 @@
-import * as React from "react";
-import { Route, Switch, withRouter, Redirect } from "react-router-dom";
-import { inject, observer } from 'mobx-react';
-import Tutorial from "./Tutorial/Tutorial";
-import CreateTutorial from "./CreateTutorial/CreateTutorial";
-import TutorialList from "./TutorialList/TutorialList";
+import * as React from 'react'
+import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
+import Tutorial from './Tutorial/Tutorial'
+import CreateTutorial from './CreateTutorial/CreateTutorial'
+import TutorialList from './TutorialList/TutorialList'
+import { ITutorial } from 'src/models/models'
 
-// export interface IProps {
-//   allTutorials: [];
-// }
-@inject("doc")
-@observer
-class Content extends React.Component<any, any> {
+// declare interface so we know what shape the data in the rest of the component will look like
+interface IProps {
+  allTutorials: ITutorial[]
+}
+
+class Content extends React.Component<IProps, any> {
   constructor(props: any) {
-    super(props);
+    super(props)
   }
   public render() {
-    const { allTutorials } = this.props;
-
+    const allTutorials = this.props.allTutorials
     return (
       <Switch>
         <Route
@@ -33,8 +32,8 @@ class Content extends React.Component<any, any> {
 
         <Redirect to="/docs/list" />
       </Switch>
-    );
+    )
   }
 }
 
-export default withRouter(Content);
+export default withRouter(Content)

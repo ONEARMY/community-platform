@@ -14,7 +14,13 @@ The platform is built in **React** (+ Redux + Typescript), with backend microser
   short example todo app using react, redux and typescript
 
 * https://github.com/piotrwitek/react-redux-typescript-guide
-  react-redux-typescript guide
+  react-redux-typescript guide (no longer using redux but still a good guide)
+
+* https://medium.com/teachable/getting-started-with-react-typescript-mobx-and-webpack-4-8c680517c030
+  react-mobx-typescript example
+
+* https://mobx.js.org/index.html
+  full documentation for mobx
 
 * https://www.robinwieruch.de/complete-firebase-authentication-react-tutorial/
   Example using firebase auth with react and linking redux state

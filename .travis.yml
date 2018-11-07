@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - "8"
+  - '8'
 dist: trusty
 sudo: false
 cache:
@@ -11,13 +11,12 @@ addons:
 before_script:
   - npm install -g firebase-tools
 script:
-  - firebase use default
   - npm run build
 deploy:
   skip_cleanup: true
   provider: firebase
   token: $FIREBASE_TOKEN
-  message: "Firebase deploy success"
-  project: "precious-plastics-v4-dev"
+  message: 'Firebase deploy success'
+  project: 'precious-plastics-v4-dev'
   on:
     branch: dev

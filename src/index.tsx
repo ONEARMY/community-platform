@@ -1,6 +1,7 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { Provider } from 'mobx-react'
+
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 
 import { Routes } from './pages'

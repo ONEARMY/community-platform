@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { Switch, Route, BrowserRouter } from 'react-router-dom'
+import DevTools from 'mobx-react-devtools'
 
 import Docs from './Docs/Docs'
 import { HomePage } from './Home/Home'
@@ -9,16 +10,19 @@ import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 export class Routes extends React.Component {
   public render() {
     return (
-      <BrowserRouter>
-        {/* on page change scroll to top */}
-        <ScrollToTop>
-          <Switch>
-            <Route path="/docs" component={Docs} />
-            <Route exact path="/" component={HomePage} />
-            <Route component={NotFoundPage} />
-          </Switch>
-        </ScrollToTop>
-      </BrowserRouter>
+      <div>
+        <DevTools />
+        <BrowserRouter>
+          {/* on page change scroll to top */}
+          <ScrollToTop>
+            <Switch>
+              <Route path="/docs" component={Docs} />
+              <Route exact path="/" component={HomePage} />
+              <Route component={NotFoundPage} />
+            </Switch>
+          </ScrollToTop>
+        </BrowserRouter>
+      </div>
     )
   }
 }

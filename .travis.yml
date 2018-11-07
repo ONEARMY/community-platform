@@ -13,18 +13,19 @@ before_script:
 script:
   - npm run build
 deploy:
-  skip_cleanup: true
   - provider: firebase
-    token: "$FIREBASE_STAGING_TOKEN"
+    skip_cleanup: true
+    token: '$FIREBASE_STAGING_TOKEN'
     message: Firebase staging deploy success
     project: precious-plastics-v4-dev
     on:
       branch: dev
   - provider: firebase
-    token: "$FIREBASE_PRODUCTION_TOKEN"
+    skip_cleanup: true
+    token: '$FIREBASE_PRODUCTION_TOKEN'
     message: Firebase production deploy success
     project: onearmyworld
     on:
-      branch: master    
+      branch: master
 env:
   secure: S515hP+ll4UDLy9/Ahp4KLilzv5apGr2OWBUW3FXnPTeQCtdRJNzajD7WWur2VXG6Cn8a/huVikoVBF7IOWYucZ2blkcaAbyWPrq45dnSFJd/o9r+xo2Asje48lMDszxMvy4D3evA7uNp3caYxUoI/f/FmEChwdjSVDUM9CLOrhXdjlBsACp1akw/5Z16IDW7h8wxsy7S7I3OQ3plkGoXn7P7Gj4LMCWo+0VLkSgLd/6qnSbRHi60WcJ7XzEhawqIEsAAMUIHHhj6iAlzd4JJ9GcJH86nX6USNCQjsXuPTKYR/pAg3KmONBdYf+P7xjUy5mq9rs7IgiJd0ThNSoGEK/zH3XzXXwQuZIEjXObGeQwBlmGXHQV4DykGwUh/yCxXlGqaUkmBbG4swcorHlrxGJVdTF1hoX+pSF2+hINZ9R2ySj3goOk+d+kSC/VTN7lZ/ryOXoBGUQ8JEKwapjNpRWzQLkVNbBbfryTs28t2Wpm54IvTywkB06+3ISn89PYfcgtRSHuRs5XXtIdiW0qU5Dja1Blvrtj/j4A4D6fWQeUKgwFs0Ozytt/mvEqARy3fct1iBT3lv254P7Xo2ktSI2sHk2ahGXomZiKHa4faxK7FGVDeTEIkXlehoxg7qhMa3pn7m2WpPvsByD/UnNynnlcK069d8qw7XYwPKveyjE=

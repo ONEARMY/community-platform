@@ -5,7 +5,7 @@ import MainLayout from '../common/MainLayout/'
 import Content from './Content'
 import { DocStore } from 'src/stores/Docs/docs.store'
 
-interface IDocsPageProps {
+interface IProps {
   docStore: DocStore
 }
 
@@ -14,13 +14,14 @@ interface IDocsPageProps {
 @inject('docStore')
 // Then we can use the observer component decorator to automatically tracks observables and re-renders on change
 @observer
-class DocsPage extends React.Component<IDocsPageProps, any> {
+class DocsPage extends React.Component<IProps, any> {
   constructor(props: any) {
     super(props)
   }
 
   public componentDidMount() {
     // call getDocList to trigger update of database doc data when the page is loaded
+    // this will be reflected in the props.docstore.docs object
     this.props.docStore.getDocList()
   }
 

@@ -8,6 +8,7 @@ import { inject, observer } from 'mobx-react'
 import { TemplateStore } from 'src/stores/_Template/template.store'
 import { IStores } from 'src/stores'
 import { ExampleNumberDisplay } from './Content/ExampleNumberDisplay/ExampleNumberDisplay'
+import MainLayout from '../common/MainLayout'
 
 // define the page properties with typing information for fields
 // properties are things that will have been passed down from parent component
@@ -55,12 +56,17 @@ export class TemplatePage extends React.Component<IProps, IState> {
   }
 
   // here is where the main render method goes. store props can be bound here
+  // page content is wrapped in the MainLayout to apply consistent header/navbar
   public render() {
     return (
-      <div id="TemplatePage">
-        <div>This is a template page</div>
-        <ExampleNumberDisplay number={this.props.templateStore.randomNumber} />
-      </div>
+      <MainLayout>
+        <div id="TemplatePage">
+          <div>This is a template page</div>
+          <ExampleNumberDisplay
+            number={this.props.templateStore.randomNumber}
+          />
+        </div>
+      </MainLayout>
     )
   }
 }

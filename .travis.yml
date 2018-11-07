@@ -18,6 +18,8 @@ deploy:
     token: '$FIREBASE_STAGING_TOKEN'
     message: Firebase staging deploy success
     project: precious-plastics-v4-dev
+    script:
+      - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH"
     on:
       branch: dev
   - provider: firebase
@@ -28,4 +30,4 @@ deploy:
     on:
       branch: master
 env:
-  - REACT_APP_BRANCH = '$TRAVIS_BRANCH'
+  - REACT_APP_BRANCH = $TRAVIS_BRANCH

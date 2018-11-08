@@ -26,7 +26,7 @@ export class HomePage extends React.Component<IState, any> {
   public render() {
     return (
       <div id="HomePage">
-        <LoginContainer userStore={this.props.userStore} />
+        <LoginContainer />
         {this.state && this.state.isLoggedIn ? (
           <div>User Logged in page</div>
         ) : (

@@ -15,7 +15,7 @@ const styles: any = {
 }
 
 interface IProps {
-  user?: IUser
+  user?: IUser | null
 }
 
 interface IState {
@@ -30,7 +30,7 @@ export class LoginComponent extends React.Component<IProps, IState> {
     }
   }
   public componentWillReceiveProps(newProps: IProps) {
-    if (this.props.user) {
+    if (newProps.user) {
       this.closeLogin()
     }
   }
@@ -54,7 +54,7 @@ export class LoginComponent extends React.Component<IProps, IState> {
       <div>
         <div style={styles.container}>
           <div className="login-icon">
-            {this.props.user && this.props.user.email ? (
+            {this.props.user ? (
               <IconButton color="primary" onClick={this.logout}>
                 <LockOpen />
                 Log out

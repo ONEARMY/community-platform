@@ -26,12 +26,15 @@ export class ExampleNumberDisplay extends React.Component<IProps, IState> {
   }
 
   public render() {
+    // destructuring statement to allow shorthand of isLucky to represent this.state.isLucky
+    // this also would work if there were multiple state properties {prop1, prop2} = this.state
+    const { isLucky } = this.state
     return (
       <div>
         <span>The magic number is </span>
         <Chip
           label={this.props.number}
-          color={this.state.isLucky ? 'primary' : 'secondary'}
+          color={isLucky ? 'primary' : 'secondary'}
         />
       </div>
     )

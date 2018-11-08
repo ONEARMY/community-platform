@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - "8"
+  - '8'
 dist: trusty
 sudo: false
 cache:
@@ -11,13 +11,25 @@ addons:
 before_script:
   - npm install -g firebase-tools
 script:
-  - firebase use default
   - npm run build
+before_deploy:
+  - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH"
+  - export REACT_APP_BRANCH=$(if [ "$TRAVIS_BRANCH" == "master" ]; then echo "PRODUCTION"; else echo "STAGING"; fi)
+  - echo "REACT_APP_BRANCH=$REACT_APP_BRANCH"
 deploy:
-  skip_cleanup: true
-  provider: firebase
-  token: $FIREBASE_TOKEN
-  message: "Firebase deploy success"
-  project: "precious-plastics-v4-dev"
-  on:
-    branch: dev
+  - provider: firebase
+    skip_cleanup: true
+    token: '$FIREBASE_STAGING_TOKEN'
+    message: Firebase staging deploy success
+    project: precious-plastics-v4-dev
+    on:
+      branch: dev
+  - provider: firebase
+    skip_cleanup: true
+    token: '$FIREBASE_PRODUCTION_TOKEN'
+    message: Firebase production deploy success
+    project: onearmyworld
+    on:
+      branch: master
+after_deploy:
+  - echo "REACT_APP_BRANCH=$REACT_APP_BRANCH"

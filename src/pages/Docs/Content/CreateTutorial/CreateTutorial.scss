@@ -1,0 +1,247 @@
+.create-tutorial-form {
+  width: 75%;
+  position: relative;
+  margin: 0 auto;
+
+  .create-tutorial__label {
+    color: #656565;
+    font-size: 1.1em;
+    margin: 10px 0;
+  }
+
+  .create-tutorial__input {
+    height: 40px;
+    border: 1px solid #DDDDDD;
+
+
+    &.input--selector {
+      width: 127px;
+    }
+  }
+
+  .create-tutorial__input::placeholder {
+    text-align: center;
+    font-size: 1.2em;
+    padding-left: 5px;
+  }
+
+  .upload-btn {
+    height: 50px;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-size: 0.9em;
+    display: block;
+    margin: 20px auto;
+    border: none;
+
+    &--cover {
+      width: 300px;
+      background-color: #B6D8E6;
+    }
+
+    &--files {
+      border: solid 1px black;
+      // background-color: inherit
+      width: 239px;
+
+    }
+
+    &--images {
+      width: 200px;
+      background-color: #B6D8E6;
+    }
+  }
+
+  .create-tutorial-infos__container {
+    max-width: 1200px;
+    display: inline-block;
+    background-color: #EDEDED;
+    width: 100%;
+    margin: 30px auto;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 40px 50px;
+    text-align: center;
+
+    .create-tutorial__tags--container {
+      display: inline-block;
+      width: 460px;
+      margin: 0 auto;
+
+      .create-tutorial__tag {
+        display: inline-block;
+      }
+
+      .create-tutorial__tag input[type=checkbox] {
+        display: none;
+      }
+
+      .create-tutorial__tag input[type=checkbox]+label {
+        width: 140px;
+        height: 40px;
+        border: 1px solid #DDDDDD;
+        color: #DDDDDD;
+        display: block;
+        line-height: 40px;
+        cursor: pointer;
+        margin: 5px;
+      }
+
+      .create-tutorial__tag input[type=checkbox]:checked+label {
+        background-color: #4A4A4A;
+        color: white;
+      }
+    }
+
+  }
+
+  .step__container {
+    text-align: center;
+
+    .step__card {
+      box-shadow: inherit;
+      border: 1px solid #DDDDDD;
+      border-radius: 0;
+
+      .step__header {
+        background-color: #FFE495;
+        height: 70px;
+
+        .step-number {
+          padding: 20px;
+          font-weight: bold;
+          color: black;
+
+        }
+      }
+
+      .step__title {
+        color: black;
+        text-transform: uppercase;
+        margin-top: 10px;
+
+      }
+
+      .step__description {
+        margin: 20px 25px 30px;
+      }
+
+      .step__image {
+        img {
+          max-width: 600px;
+        }
+      }
+    }
+
+    .step-delete__button {
+      cursor: pointer;
+      height: 50px;
+      width: 100%;
+      border-top: 1px solid #DDDDDD;
+
+      img {
+        vertical-align: text-top;
+      }
+
+      span {
+        text-transform: uppercase;
+        font-size: 0.8em;
+        line-height: 50px;
+        color: #9B9B9B;
+        margin-left: 10px;
+
+      }
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+
+
+  }
+
+  .add-step__button {
+    cursor: pointer;
+    width: 300px;
+    height: 90px;
+    margin: 0 auto;
+    background-color: #FFE495;
+    border: none;
+    display: block;
+
+    img {
+      vertical-align: text-top;
+      margin-top: -7px;
+    }
+
+    span {
+      text-transform: uppercase;
+      font-size: 1.3em;
+      line-height: 90px;
+      color: black;
+      margin-left: 10px;
+
+    }
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  .validate-form__button {
+    width: 600px;
+    height: 120px;
+    background-color: #88E3C7;
+    border: none;
+    display: block;
+    text-align: center;
+    margin: 60px auto 40px;
+    cursor: pointer;
+
+    img {
+      vertical-align: text-top;
+      margin-top: -7px;
+    }
+
+    span {
+      font-size: 1.4em;
+      line-height: 120px;
+      text-transform: uppercase;
+      color: white;
+      margin-left: 10px;
+    }
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+
+}
+
+.tutorial-form label {
+  margin-top: 1em;
+}
+
+.cover-img {
+  width: 300px;
+  display: block;
+  margin: 20px auto;
+}
+
+.step-img {
+  width: 300px;
+  display: block;
+}
+
+.icon-separator {
+  margin-left: 8px;
+
+  img {
+    vertical-align: bottom;
+    margin-top: 14px;
+    margin-right: 10px;
+    width: 20px;
+  }
+}

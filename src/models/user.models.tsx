@@ -1,5 +1,8 @@
 import { IProject } from "./models";
 
+export interface IUserState {
+  user?: IUser;
+}
 export interface IUser {
   id: string;
   firstName: string;

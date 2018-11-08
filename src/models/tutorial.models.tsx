@@ -1,22 +1,23 @@
 export interface ITutorial {
   workspace_name: string;
-  cover_picture_url: string;
-  title: string;
-  description: string;
-  details: Idetails;
-  steps: Istep[];
+  cover_image_url: string;
+  tutorial_title: string;
+  tutorial_description: string;
+  difficulty_level: "easy" | "medium" | "difficult";
+  tutorial_time: string;
+  tutorial_cost: number;
+  steps: ITutorialStep[];
   id: string;
   slug: string;
 }
 
-interface Idetails {
-  difficulty_levels: "easy" | "medium" | "difficult";
-  time: number;
-  cost: number;
-}
-
-interface Istep {
-  images?: string[];
+export interface ITutorialStep {
+  images: string[];
   title: string;
   text: string;
+}
+
+export interface ITutorialTag {
+  value: string;
+  isSelected: boolean;
 }

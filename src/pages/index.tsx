@@ -1,23 +1,30 @@
-import * as React from "react";
-import { Route, Switch } from "react-router-dom";
+import * as React from 'react'
+import { Switch, Route, BrowserRouter } from 'react-router-dom'
+import DevTools from 'mobx-react-devtools'
 
-// import Home from "../components/app/App";
-import Doc from "./Docs/index";
+import Docs from './Docs/Docs'
+import { HomePage } from './Home/Home'
+import { NotFoundPage } from './NotFound/NotFound'
+import { TemplatePage } from './_Template/Template'
+import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 
-class Routes extends React.Component {
-  public shouldComponentUpdate() {
-    // Without this the app won't update on route changes, we've tried using
-    // `withRouter`, but it caused the app to remount on every route change.
-    return true;
-  }
-
+export class Routes extends React.Component {
   public render() {
     return (
-      <Switch>
-        <Route path="/doc" component={Doc} />
-      </Switch>
-    );
+      <div>
+        <DevTools />
+        <BrowserRouter>
+          {/* on page change scroll to top */}
+          <ScrollToTop>
+            <Switch>
+              <Route path="/docs" component={Docs} />
+              <Route path="/template" component={TemplatePage} />
+              <Route exact path="/" component={HomePage} />
+              <Route component={NotFoundPage} />
+            </Switch>
+          </ScrollToTop>
+        </BrowserRouter>
+      </div>
+    )
   }
 }
-
-export default Routes;

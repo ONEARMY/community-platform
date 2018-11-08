@@ -6,10 +6,17 @@ import * as React from 'react'
 import './Home.scss'
 import { LoginContainer } from '../common/Login/Login.container'
 import { IUser } from '../../models/models'
+import { UserStore } from 'src/stores/User/user.store'
+import { IStores } from 'src/stores'
+import { inject } from 'mobx-react'
 
 interface IState {
   isLoggedIn: boolean
+  userStore: UserStore
 }
+@inject((allStores: IStores) => ({
+  userStore: allStores.userStore,
+}))
 export class HomePage extends React.Component<IState, any> {
   // userUpdated is a callback function passed back up from the login container to track if the user has logged in
   // we could also use the global state for this, but for now sufficient
@@ -19,12 +26,12 @@ export class HomePage extends React.Component<IState, any> {
   public render() {
     return (
       <div id="HomePage">
-        {/* <LoginContainer notifyUserUpdate={this.userUpdated} />
+        <LoginContainer userStore={this.props.userStore} />
         {this.state && this.state.isLoggedIn ? (
           <div>User Logged in page</div>
         ) : (
           <div className="bgimg-1" />
-        )} */}
+        )}
       </div>
     )
   }

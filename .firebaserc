@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "precious-plastics-v4-dev"
+    "default": "precious-plastics-v4-dev",
+    "production":"onearmyworld"
   }
 }

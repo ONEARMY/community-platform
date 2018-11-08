@@ -2,31 +2,30 @@
 
 Welcome to One Army! We’re excited to hear that you’re interested in supporting the development of our project. If you happened to just stumble across this, we are building a new platform to help unite people to support social causes, such as [Precious Plastic](https://preciousplastic.com) (which is where this all began).
 
-The platform is built in **React** (+ Redux + Typescript), with backend microservices in Node. If you are unfamiliar with these technologies we suggest you first spend some time understanding how these frameworks function before getting in touch (as much as we’d love to be your teachers, we just don’t have the capacity to do that and build everything else). Here are a few links that might be of help on your journey:
+The platform is built in **React** (+ Mobx + Typescript), with backend microservices in Node. If you are unfamiliar with these technologies we suggest you first spend some time understanding how these frameworks function before getting in touch (as much as we’d love to be your teachers, we just don’t have the capacity to do that and build everything else). Here are a few links that might be of help on your journey:
 
 - https://www.udemy.com/react-redux/
-  paid online course to cover most of the basics of React)
+  paid online course to cover most of the basics of React - it uses redux where we use mobx but rest is still very good
 
 * https://levelup.gitconnected.com/typescript-and-react-using-create-react-app-a-step-by-step-guide-to-setting-up-your-first-app-6deda70843a4
-  short intro app for typescript and react)
-
-- https://medium.com/@nem121/todo-app-with-typescript-redux-e6a4c2f02079
-  short example todo app using react, redux and typescript
-
-* https://github.com/piotrwitek/react-redux-typescript-guide
-  react-redux-typescript guide (no longer using redux but still a good guide)
+  short intro app for typescript and react
 
 * https://medium.com/teachable/getting-started-with-react-typescript-mobx-and-webpack-4-8c680517c030
   react-mobx-typescript example
 
+* https://medium.com/get-it-working/get-googles-firestore-working-with-react-c78f198d2364 react-firestore example
+
 * https://mobx.js.org/index.html
   full documentation for mobx
 
+* https://www.typescriptlang.org/docs/handbook/basic-types.html full documentation for typescript
+
 * https://www.robinwieruch.de/complete-firebase-authentication-react-tutorial/
   Example using firebase auth with react and linking redux state
-  Joining the community
 
-Once you are confident with the basics of React, Redux and Typescript we would love to welcome you to the team. Just [send a quick email](mailto:hello@preciousplastic.com?subject=Developers%20Call%20To%20Arms) , introducing yourself and outline:
+## Joining the community
+
+Once you are confident with the basics of React, Mobx and Typescript we would love to welcome you to the team. Just [send a quick email](mailto:hello@preciousplastic.com?subject=Developers%20Call%20To%20Arms) , introducing yourself and outline:
 
 1. What you think you could contribute to the project
 

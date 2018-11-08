@@ -23,9 +23,12 @@ let config = {
 // different production site config pulled from environment variable
 const productionSites = ['onearmy.world', 'onearmyworld.firebaseapp.com']
 if (productionSites.indexOf(window.location.host) > -1) {
-  console.log('production site')
-  config = JSON.parse(process.env[
-    `REACT_APP_FIREBASE_PRODUCTION_CONFIG`
-  ] as string)
+  try {
+    config = JSON.parse(process.env[
+      `REACT_APP_FIREBASE_PRODUCTION_CONFIG`
+    ] as string)
+  } catch (error) {
+    console.log('could not pass prod env', process.env)
+  }
 }
 export const FIREBASE_CONFIG = config

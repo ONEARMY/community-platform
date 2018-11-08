@@ -1,324 +1,308 @@
-import * as React from "react";
-import { RouteComponentProps } from "react-router";
-import { Form, Field } from "react-final-form";
-import { FieldArray } from "react-final-form-arrays";
-import arrayMutators from "final-form-arrays";
-import "./CreateTutorial.scss";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import {
-  ITutorialStep,
-  ITutorialTag
-} from "../../../../models/tutorial.models";
+import * as React from 'react'
+import { RouteComponentProps } from 'react-router'
+import { Form, Field } from 'react-final-form'
+import { FieldArray } from 'react-final-form-arrays'
+import arrayMutators from 'final-form-arrays'
+import './CreateTutorial.scss'
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
+import Button from '@material-ui/core/Button'
+import Typography from '@material-ui/core/Typography'
+import { ITutorialStep } from '../../../../models/tutorial.models'
 
-import CloudUploadIcon from "../../../../assets/icons/upload.svg";
-import DeleteIcon from "../../../../assets/icons/bin.svg";
-import AddIcon from "../../../../assets/icons/add.svg";
-import SaveIcon from "../../../../assets/icons/save.svg";
+import CloudUploadIcon from '../../../../assets/icons/upload.svg'
+import DeleteIcon from '../../../../assets/icons/bin.svg'
+import AddIcon from '../../../../assets/icons/add.svg'
+import SaveIcon from '../../../../assets/icons/save.svg'
 
-import { db } from "../../../../utils/firebase";
+import { db } from '../../../../utils/firebase'
 
-import { storage } from "../../../../utils/firebase";
-import FileUploader from "react-firebase-file-uploader";
-import { Redirect } from "react-router-dom";
-import { Checkbox } from "@material-ui/core";
+import { storage } from '../../../../utils/firebase'
+import FileUploader from 'react-firebase-file-uploader'
+import { Redirect } from 'react-router-dom'
+import { Checkbox } from '@material-ui/core'
 
 export interface IState {
-  formValues: IFormValues;
-  _isUploading: boolean;
-  _imgUploadProgress: number;
-  _uploadImgPath: string;
-  _uploadTutorialPath: string;
-  _currentStepIndex: number;
-  _toDocsList: boolean;
+  formValues: IFormValues
+  _isUploading: boolean
+  _imgUploadProgress: number
+  _uploadImgPath: string
+  _uploadTutorialPath: string
+  _currentStepIndex: number
+  _toDocsList: boolean
 }
 interface IFormValues {
-  workspace_name: string;
-  tutorial_title: string;
-  tutorial_description: string;
-  tutorial_time: string;
-  tutorial_cost: string;
-  difficulty_level: string;
-  id: string;
-  slug: string;
-  steps: ITutorialStep[];
-  tags: ITutorialTag[];
-  cover_image_url: string;
-  tutorial_extern_file_url: string;
-  tutorial_files_url: string;
+  workspace_name: string
+  tutorial_title: string
+  tutorial_description: string
+  tutorial_time: string
+  tutorial_cost: string
+  difficulty_level: string
+  id: string
+  slug: string
+  steps: ITutorialStep[]
+  tags: []
+  cover_image_url: string
+  tutorial_extern_file_url: string
+  tutorial_files_url: string
 }
 
 const styles = {
   card: {
     minWidth: 275,
     maxWidth: 600,
-    margin: "20px auto"
+    margin: '20px auto',
   },
   bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)"
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)',
   },
   title: {
-    fontSize: 14
+    fontSize: 14,
   },
   pos: {
-    marginBottom: 12
+    marginBottom: 12,
   },
   uploadBtn: {
-    backgroundColor: "steelblue",
-    color: "white",
+    backgroundColor: 'steelblue',
+    color: 'white',
     padding: 10,
     borderRadius: 4,
-    cursor: "pointer"
-  }
-};
+    cursor: 'pointer',
+  },
+}
 
-const required = (value: any) => (value ? undefined : "Required");
+// For now tags are raw in this variable, next we'll need to get them from our server
+const tags = [
+  'extrusion',
+  'shredder',
+  'injection',
+  'compression',
+  'sorting',
+  'melting',
+]
+
+let selectedTags: any = []
+
+const required = (value: any) => (value ? undefined : 'Required')
 
 class CreateTutorial extends React.PureComponent<
   RouteComponentProps<any>,
   IState
 > {
   constructor(props: any) {
-    super(props);
+    super(props)
     this.state = {
       formValues: {
-        tutorial_description: "",
-        tutorial_title: "",
-        tutorial_time: "",
-        tutorial_cost: "",
-        difficulty_level: "easy",
-        cover_image_url: "",
-        tutorial_extern_file_url: "",
+        tutorial_description: '',
+        tutorial_title: '',
+        tutorial_time: '',
+        tutorial_cost: '',
+        difficulty_level: 'easy',
+        cover_image_url: '',
+        tutorial_extern_file_url: '',
         // "https://firebasestorage.googleapis.com/v0/b/precious-plastics-v4-dev.appspot.com/o/uploads%2Ftest%2FCapture%20d%E2%80%99e%CC%81cran%202018-10-16%20a%CC%80%2019.00.35.png?alt=media&token=f0e87108-f652-47fc-a507-53b1e91e5b77",
-        tutorial_files_url: "",
-        id: "",
-        slug: "",
+        tutorial_files_url: '',
+        id: '',
+        slug: '',
         steps: [
           {
-            title: "",
-            text: "",
-            images: []
+            title: '',
+            text: '',
+            images: [],
           },
           {
-            title: "",
-            text: "",
-            images: []
+            title: '',
+            text: '',
+            images: [],
           },
           {
-            title: "",
-            text: "",
-            images: []
-          }
+            title: '',
+            text: '',
+            images: [],
+          },
         ],
-        tags: [
-          {
-            value: "extrusion",
-            isSelected: false
-          },
-          {
-            value: "shredder",
-            isSelected: false
-          },
-          {
-            value: "injection",
-            isSelected: false
-          },
-          {
-            value: "compression",
-            isSelected: false
-          },
-          {
-            value: "sorting",
-            isSelected: false
-          },
-          {
-            value: "melting",
-            isSelected: false
-          }
-        ],
-        workspace_name: ""
+        tags: [],
+        workspace_name: '',
       },
       _isUploading: false,
       _imgUploadProgress: 0,
-      _uploadImgPath: "uploads/test",
+      _uploadImgPath: 'uploads/test',
       _currentStepIndex: 0,
-      _uploadTutorialPath: "tutorials/test",
-      _toDocsList: false
-    };
+      _uploadTutorialPath: 'tutorials/test',
+      _toDocsList: false,
+    }
 
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onInputChange = this.onInputChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this)
+    this.onInputChange = this.onInputChange.bind(this)
   }
 
   public onSubmit = async (values: any) => {
-    if (this.state.formValues.cover_image_url === "") {
-      alert("Please provide a cover image before saving your tutorial");
+    if (this.state.formValues.cover_image_url === '') {
+      alert('Please provide a cover image before saving your tutorial')
     } else {
-      console.log("submitting", values);
+      console.log('submitting', values)
       try {
         await db.doc(this.state._uploadTutorialPath).set({
-          values
-        });
-        console.log("doc set successfully");
-        this.props.history.push("/docs/list");
+          values,
+        })
+        console.log('doc set successfully')
+        this.props.history.push('/docs/list')
       } catch (error) {
-        console.log("error while saving the tutorial");
+        console.log('error while saving the tutorial')
       }
     }
-  };
+  }
 
   public handleUploadStart = () => {
-    this.setState({ _isUploading: true, _imgUploadProgress: 0 });
-  };
+    this.setState({ _isUploading: true, _imgUploadProgress: 0 })
+  }
   public handleProgress = (imgUploadProgress: any) => {
-    this.setState({ _imgUploadProgress: imgUploadProgress });
-  };
+    this.setState({ _imgUploadProgress: imgUploadProgress })
+  }
   public handleUploadError = (error: any) => {
-    this.setState({ _isUploading: false });
-    console.error(error);
-  };
+    this.setState({ _isUploading: false })
+    console.error(error)
+  }
   public handleUploadCoverSuccess = (filename: string) => {
     this.setState({
       _imgUploadProgress: 100,
-      _isUploading: false
-    });
+      _isUploading: false,
+    })
     storage
       .ref(this.state._uploadImgPath)
       .child(filename)
       .getDownloadURL()
       .then(url => {
         this.setState({
-          formValues: { ...this.state.formValues, cover_image_url: url }
-        });
-      });
-  };
+          formValues: { ...this.state.formValues, cover_image_url: url },
+        })
+      })
+  }
   /* EXAMPLE
     You want to pass the step index to the handle upload step image success function
     When you have the url of the image you want to merge it with the existing step images
     Then merge the updated step with all steps and update the state
   */
   public handleUploadStepImgSuccess = async (filename: any) => {
-    console.log("index", this.state._currentStepIndex);
+    console.log('index', this.state._currentStepIndex)
 
-    // untested code for reference - get the current steps
-    const currentSteps: any = this.state.formValues.steps;
+    // get the current steps
+    const currentSteps: any = this.state.formValues.steps
     // get the step at the index where the new image will go
     const url = await storage
       .ref(this.state._uploadImgPath)
       .child(filename)
-      .getDownloadURL();
+      .getDownloadURL()
     // use the spread operator to merge the existing images with the new url
     currentSteps[this.state._currentStepIndex].images = [
       ...currentSteps[this.state._currentStepIndex].images,
-      url
-    ];
+      url,
+    ]
     this.setState({
-      // additional meta fields if desired
       formValues: { ...this.state.formValues, steps: currentSteps },
       _imgUploadProgress: 100,
-      _isUploading: false
-    });
-    console.log("this.state.formValues", this.state.formValues);
-  };
+      _isUploading: false,
+    })
+    console.log('this.state.formValues', this.state.formValues)
+  }
   public handleUploadFilesSuccess = (filename: string) => {
     this.setState({
       _imgUploadProgress: 100,
-      _isUploading: false
-    });
+      _isUploading: false,
+    })
     storage
       .ref(this.state._uploadImgPath)
       .child(filename)
       .getDownloadURL()
       .then(url => {
+        console.log('upload success : ', url)
         this.setState({
-          formValues: { ...this.state.formValues, tutorial_files_url: url }
-        });
-      });
-  };
+          formValues: { ...this.state.formValues, tutorial_files_url: url },
+        })
+      })
+  }
 
   public onInputChange = (event: any, inputType: string) => {
     // *** TODO the event.target.value needs to be formated as the article id
     switch (inputType) {
-      case "tutorial_title":
+      case 'tutorial_title':
         const clearUrl = event.target.value
-          .replace(/[`~!@#$%^&*()_|+\-=÷¿?;:'",.<>\{\}\[\]\\\/]/gi, "")
-          .split(" ")
-          .join("-");
+          .replace(/[`~!@#$%^&*()_|+\-=÷¿?;:'",.<>\{\}\[\]\\\/]/gi, '')
+          .split(' ')
+          .join('-')
         this.setState({
           formValues: {
             ...this.state.formValues,
             tutorial_title: event.target.value,
-            slug: encodeURIComponent(clearUrl)
+            slug: encodeURIComponent(clearUrl),
           },
-          _uploadImgPath: "uploads/" + event.target.value,
-          _uploadTutorialPath: "tutorials/" + event.target.value
-        });
-        break;
-      case "workspace_name":
+          _uploadImgPath: 'uploads/' + event.target.value,
+          _uploadTutorialPath: 'tutorials/' + event.target.value,
+        })
+        break
+      case 'workspace_name':
         this.setState({
           formValues: {
             ...this.state.formValues,
-            workspace_name: event.target.value
-          }
-        });
-        break;
-      case "tutorial_description":
+            workspace_name: event.target.value,
+          },
+        })
+        break
+      case 'tutorial_description':
         this.setState({
           formValues: {
             ...this.state.formValues,
-            tutorial_description: event.target.value
-          }
-        });
-        break;
-      case "tutorial_time":
+            tutorial_description: event.target.value,
+          },
+        })
+        break
+      case 'tutorial_time':
         this.setState({
           formValues: {
             ...this.state.formValues,
-            tutorial_time: event.target.value
-          }
-        });
-        break;
-      case "tutorial_cost":
+            tutorial_time: event.target.value,
+          },
+        })
+        break
+      case 'tutorial_cost':
         this.setState({
           formValues: {
             ...this.state.formValues,
-            tutorial_cost: event.target.value
-          }
-        });
-        break;
-      case "difficulty_level":
+            tutorial_cost: event.target.value,
+          },
+        })
+        break
+      case 'difficulty_level':
         this.setState({
           formValues: {
             ...this.state.formValues,
-            difficulty_level: event.target.value
-          }
-        });
-        break;
-      case "tutorial_extern_file_url":
+            difficulty_level: event.target.value,
+          },
+        })
+        break
+      case 'tutorial_extern_file_url':
         // TODO check is proper url
         this.setState({
           formValues: {
             ...this.state.formValues,
-            tutorial_extern_file_url: event.target.value
-          }
-        });
+            tutorial_extern_file_url: event.target.value,
+          },
+        })
 
-        break;
+        break
 
       default:
-        break;
+        break
     }
-  };
+  }
 
   public render() {
     return (
       <div>
         <Typography
-          style={{ margin: "30px auto", display: "table" }}
+          style={{ margin: '30px auto', display: 'table' }}
           variant="h4"
           component="h4"
         >
@@ -328,7 +312,7 @@ class CreateTutorial extends React.PureComponent<
           onSubmit={this.onSubmit}
           initialValues={this.state.formValues}
           mutators={{
-            ...arrayMutators
+            ...arrayMutators,
           }}
           render={({ handleSubmit, submitting, values, form, invalid }) => {
             return (
@@ -347,7 +331,7 @@ class CreateTutorial extends React.PureComponent<
                     className="create-tutorial__input"
                     component="input"
                     onBlur={(event: any) => {
-                      this.onInputChange(event, "workspace_name");
+                      this.onInputChange(event, 'workspace_name')
                     }}
                   />
                   <Typography
@@ -361,11 +345,11 @@ class CreateTutorial extends React.PureComponent<
                       <div>
                         <input
                           {...input}
-                          style={{ width: "400px" }}
+                          style={{ width: '400px' }}
                           className="create-tutorial__input"
                           type="text"
                           onBlur={(event: any) => {
-                            this.onInputChange(event, "tutorial_title");
+                            this.onInputChange(event, 'tutorial_title')
                           }}
                           placeholder="How to make XXX using YYY"
                         />
@@ -381,34 +365,37 @@ class CreateTutorial extends React.PureComponent<
                     Add tags
                   </Typography>
                   <div className="create-tutorial__tags--container">
-                    <FieldArray name="tags">
-                      {({ fields, meta }) =>
-                        fields.map((tag, index) => (
-                          <div key={index} className="create-tutorial__tag">
-                            <input
-                              type="checkbox"
-                              name={this.state.formValues.tags[index].value}
-                              value={this.state.formValues.tags[index].value}
-                              id={this.state.formValues.tags[index].value}
-                              className="create-tutorial__checkbox"
-                              onChange={(e: any) => {
-                                console.log(e.target.checked);
-                                if (e.target.checked) {
-                                  // push the tag in the value array
-                                } else {
-                                  // remove from the array of tags
-                                }
-                              }}
-                            />
-                            <label
-                              htmlFor={this.state.formValues.tags[index].value}
-                            >
-                              {this.state.formValues.tags[index].value}
-                            </label>
-                          </div>
-                        ))
-                      }
-                    </FieldArray>
+                    {tags.map((tag, index) => (
+                      <div key={index} className="create-tutorial__tag">
+                        <input
+                          type="checkbox"
+                          name={tags[index]}
+                          value={tags[index]}
+                          id={tags[index]}
+                          className="create-tutorial__checkbox"
+                          onChange={(e: any) => {
+                            console.log(e.target.checked)
+                            if (e.target.checked) {
+                              // push the tag in the value array
+                              selectedTags.push(e.target.value)
+                            } else {
+                              // remove from the array of tags
+                              selectedTags = selectedTags.filter(
+                                (item: any) => item !== e.target.value,
+                              )
+                            }
+                            // set state with updated tags list
+                            this.setState({
+                              formValues: {
+                                ...this.state.formValues,
+                                tags: selectedTags,
+                              },
+                            })
+                          }}
+                        />
+                        <label htmlFor={tags[index]}>{tags[index]}</label>
+                      </div>
+                    ))}
                   </div>
 
                   {this.state._isUploading && (
@@ -419,7 +406,7 @@ class CreateTutorial extends React.PureComponent<
                       className="cover-img"
                       src={this.state.formValues.cover_image_url}
                       alt={
-                        "cover image - " + this.state.formValues.tutorial_title
+                        'cover image - ' + this.state.formValues.tutorial_title
                       }
                     />
                   )}
@@ -452,9 +439,9 @@ class CreateTutorial extends React.PureComponent<
                           {...input}
                           placeholder="This is what we will do"
                           onBlur={(event: any) => {
-                            this.onInputChange(event, "tutorial_description");
+                            this.onInputChange(event, 'tutorial_description')
                           }}
-                          style={{ width: "400px", height: "150px" }}
+                          style={{ width: '400px', height: '150px' }}
                           className="create-tutorial__input"
                         />
                         {meta.error &&
@@ -477,7 +464,7 @@ class CreateTutorial extends React.PureComponent<
                           className="create-tutorial__input"
                           placeholder="2 hours"
                           onBlur={(event: any) => {
-                            this.onInputChange(event, "tutorial_time");
+                            this.onInputChange(event, 'tutorial_time')
                           }}
                         />
                         {meta.error &&
@@ -499,7 +486,7 @@ class CreateTutorial extends React.PureComponent<
                           type="text"
                           className="create-tutorial__input"
                           onBlur={(event: any) => {
-                            this.onInputChange(event, "tutorial_cost");
+                            this.onInputChange(event, 'tutorial_cost')
                           }}
                           placeholder="10$"
                         />
@@ -517,7 +504,7 @@ class CreateTutorial extends React.PureComponent<
                   <Field
                     name="difficulty_level"
                     onBlur={(event: any) => {
-                      this.onInputChange(event, "difficulty_level");
+                      this.onInputChange(event, 'difficulty_level')
                     }}
                     component="select"
                     className="create-tutorial__input input--selector"
@@ -538,17 +525,34 @@ class CreateTutorial extends React.PureComponent<
                     </span>
                     <FileUploader
                       hidden
-                      multiple={true}
                       name="files"
                       storageRef={storage.ref(this.state._uploadImgPath)}
                       onUploadStart={this.handleUploadStart}
                       onUploadError={this.handleUploadError}
                       onUploadSuccess={this.handleUploadFilesSuccess}
                       onProgress={this.handleProgress}
+                      onChange={(e: any) => {
+                        // if there is no file and size is bigger than 20mb
+                        if (
+                          e.target.files[0] !== undefined &&
+                          e.target.files[0].size > 20971520
+                        ) {
+                          alert(
+                            'Your file is too big, maximum allowed size is 20mb',
+                          )
+                          e.target.value = ''
+                        } else {
+                          const el = document.getElementsByClassName(
+                            'uploaded-file-name',
+                          )[0]
+                          el.innerHTML = e.target.files[0].name
+                        }
+                      }}
                     />
                     Upload a file
                   </label>
-                  <Field name="tutorial_extern_file_url" validate={required}>
+                  <span className="uploaded-file-name" />
+                  <Field name="tutorial_extern_file_url">
                     {({ input, meta }) => (
                       <div>
                         <Typography
@@ -560,14 +564,14 @@ class CreateTutorial extends React.PureComponent<
                         <input
                           {...input}
                           type="text"
-                          style={{ width: "400px" }}
+                          style={{ width: '400px' }}
                           className="create-tutorial__input"
                           placeholder="https://drive.google.com/drive/u/2/folders/..."
                           onBlur={(event: any) => {
                             this.onInputChange(
                               event,
-                              "tutorial_extern_file_url"
-                            );
+                              'tutorial_extern_file_url',
+                            )
                           }}
                         />
                         {meta.error &&
@@ -608,7 +612,7 @@ class CreateTutorial extends React.PureComponent<
                               <Field
                                 name={`${step}.title`}
                                 component="input"
-                                style={{ width: "400px" }}
+                                style={{ width: '400px' }}
                                 placeholder="Step title"
                                 validate={required}
                                 className="create-tutorial__input"
@@ -628,16 +632,16 @@ class CreateTutorial extends React.PureComponent<
                                 onBlur={() => {
                                   // update the state with the new values
                                   const stepValuesInput: any = form.getFieldState(
-                                    "steps"
-                                  )!.value;
+                                    'steps',
+                                  )!.value
                                   this.setState({
                                     formValues: {
                                       ...this.state.formValues,
-                                      steps: stepValuesInput
-                                    }
-                                  });
+                                      steps: stepValuesInput,
+                                    },
+                                  })
                                 }}
-                                style={{ width: "400px", height: "150px" }}
+                                style={{ width: '400px', height: '150px' }}
                               />
                             </div>
 
@@ -651,7 +655,7 @@ class CreateTutorial extends React.PureComponent<
                                     className="step-img"
                                     src={stepImg}
                                   />
-                                )
+                                ),
                               )}
                             <label className="upload-btn upload-btn--images">
                               <span className="icon-separator">
@@ -661,7 +665,7 @@ class CreateTutorial extends React.PureComponent<
                                 hidden
                                 name={`${step}.images`}
                                 storageRef={storage.ref(
-                                  this.state._uploadImgPath
+                                  this.state._uploadImgPath,
                                 )}
                                 onUploadStart={this.handleUploadStart}
                                 onUploadError={this.handleUploadError}
@@ -670,7 +674,7 @@ class CreateTutorial extends React.PureComponent<
                                 }
                                 onProgress={this.handleProgress}
                                 onClick={() => {
-                                  this.setState({ _currentStepIndex: index });
+                                  this.setState({ _currentStepIndex: index })
                                 }}
                               />
                               Upload picture(s)
@@ -694,20 +698,20 @@ class CreateTutorial extends React.PureComponent<
                   className="add-step__button"
                   onClick={() => {
                     // create a empty step in the steps form value
-                    form.mutators.push("steps", {
-                      title: "",
-                      text: "",
-                      images: []
-                    });
+                    form.mutators.push('steps', {
+                      title: '',
+                      text: '',
+                      images: [],
+                    })
                     // update the state with the empty new step
-                    const stepValuesInput: any = form.getFieldState("steps")!
-                      .value;
+                    const stepValuesInput: any = form.getFieldState('steps')!
+                      .value
                     this.setState({
                       formValues: {
                         ...this.state.formValues,
-                        steps: stepValuesInput
-                      }
-                    });
+                        steps: stepValuesInput,
+                      },
+                    })
                   }}
                 >
                   <img src={AddIcon} alt="" />
@@ -722,12 +726,12 @@ class CreateTutorial extends React.PureComponent<
                   <span>Save</span>
                 </button>
               </form>
-            );
+            )
           }}
         />
       </div>
-    );
+    )
   }
 }
 
-export default CreateTutorial;
+export default CreateTutorial

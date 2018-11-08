@@ -94,6 +94,11 @@
       }
     }
 
+    .uploaded-file-name {
+      color: #656565;
+      font-size: 0.9em;
+    }
+
   }
 
   .step__container {
@@ -233,6 +238,7 @@
 .step-img {
   width: 300px;
   display: block;
+  margin: 10px auto;
 }
 
 .icon-separator {

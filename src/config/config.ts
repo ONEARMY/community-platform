@@ -24,7 +24,7 @@ const devConfig = {
 const productionSites = [
   'onearmy.world',
   'onearmyworld.firebaseapp.com',
-  'preciousplastic.com',
+  'documentation.preciousplastic.com',
 ]
 if (productionSites.indexOf(window.location.host) > -1) {
   const e = process.env

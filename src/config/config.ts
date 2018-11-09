@@ -28,7 +28,6 @@ const productionSites = [
 ]
 if (productionSites.indexOf(window.location.host) > -1) {
   const e = process.env
-  console.log('production environment', e)
   config = {
     apiKey: e.REACT_APP_FIREBASE_API_KEY,
     authDomain: e.REACT_APP_FIREBASE_AUTH_DOMAIN,

@@ -5,7 +5,7 @@ import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
 import Typography from '@material-ui/core/Typography'
-import ImageGallery from 'react-image-gallery'
+import { NotFoundPage } from '../../..//NotFound/NotFound'
 import './Tutorial.scss'
 
 const sliderSettings = {
@@ -81,77 +81,86 @@ class Tutorial extends React.Component<any, any> {
         currentTutorial.values.slug === this.props.match.params.slug,
     )
 
-    return (
-      <div>
-        <div className="tutorial-infos__container">
-          <div className="tutorial-infos__left">
-            <div className="tutorial-infos__content">
-              <Typography variant="h4" component="h4">
-                {tutorial[0].values.tutorial_title}
-              </Typography>
-              <Typography component="p">
-                {tutorial[0].values.tutorial_description}
-              </Typography>
-              <Typography component="p">
-                <b>Workspace : {tutorial[0].values.workspace_name}</b>
-              </Typography>
-              <Typography component="p">
-                <b>{tutorial[0].values.steps.length} Steps</b>
-              </Typography>
-              <Typography component="p">
-                <b>Cost : {tutorial[0].values.tutorial_cost}</b>
-              </Typography>
-              <Typography component="p">
-                <b>Difficulty : {tutorial[0].values.difficulty_level}</b>
-              </Typography>
-              <Typography component="p">
-                <b>Time : {tutorial[0].values.tutorial_time}</b>
-              </Typography>
-              {tutorial[0].values.tutorial_files_url && (
-                <a
-                  className="download-btn"
-                  target="_blank"
-                  href={tutorial[0].values.tutorial_files_url}
-                >
-                  <span className="icon-separator">
-                    <CloudDownloadIcon />
-                  </span>
-                  Download files
-                </a>
-              )}
+    if (tutorial[0] !== undefined) {
+      return (
+        <div>
+          <div className="tutorial-infos__container">
+            <div className="tutorial-infos__left">
+              <div className="tutorial-infos__content">
+                <Typography variant="h4" component="h4">
+                  {tutorial[0].values.tutorial_title}
+                </Typography>
+                <Typography component="p">
+                  {tutorial[0].values.tutorial_description}
+                </Typography>
+                <Typography component="p">
+                  <b>Workspace : {tutorial[0].values.workspace_name}</b>
+                </Typography>
+                <Typography component="p">
+                  <b>{tutorial[0].values.steps.length} Steps</b>
+                </Typography>
+                <Typography component="p">
+                  <b>Cost : {tutorial[0].values.tutorial_cost}</b>
+                </Typography>
+                <Typography component="p">
+                  <b>Difficulty : {tutorial[0].values.difficulty_level}</b>
+                </Typography>
+                <Typography component="p">
+                  <b>Time : {tutorial[0].values.tutorial_time}</b>
+                </Typography>
+                {tutorial[0].values.tutorial_files_url && (
+                  <a
+                    className="download-btn"
+                    target="_blank"
+                    href={tutorial[0].values.tutorial_files_url}
+                  >
+                    <span className="icon-separator">
+                      <CloudDownloadIcon />
+                    </span>
+                    Download files
+                  </a>
+                )}
+              </div>
+            </div>
+            <div className="tutorial-infos__right">
+              <img
+                src={tutorial[0].values.cover_image_url}
+                alt="tutorial cover"
+              />
             </div>
           </div>
-          <div className="tutorial-infos__right">
-            <img
-              src={tutorial[0].values.cover_image_url}
-              alt="tutorial cover"
-            />
-          </div>
+          {tutorial[0].values.steps.map((step: any, index: number) => (
+            <div className="step__container" key={index}>
+              <Card style={styles.card} className="step__card">
+                <div className="step__header">
+                  <Typography className="step__number" variant="h5">
+                    Step {index + 1}
+                  </Typography>
+                </div>
+                <CardContent>
+                  <Typography
+                    className="step__title"
+                    variant="h5"
+                    component="h2"
+                  >
+                    {step.title}
+                  </Typography>
+                  <Typography className="step__description" component="p">
+                    {step.text}
+                  </Typography>
+                  {step.images.length > 1
+                    ? this.renderSliderContent(step)
+                    : this.renderUniqueImage(step.images[0])}
+                </CardContent>
+              </Card>
+            </div>
+          ))}
+          )}
         </div>
-        {tutorial[0].values.steps.map((step: any, index: number) => (
-          <div className="step__container" key={index}>
-            <Card style={styles.card} className="step__card">
-              <div className="step__header">
-                <Typography className="step__number" variant="h5">
-                  Step {index + 1}
-                </Typography>
-              </div>
-              <CardContent>
-                <Typography className="step__title" variant="h5" component="h2">
-                  {step.title}
-                </Typography>
-                <Typography className="step__description" component="p">
-                  {step.text}
-                </Typography>
-                {step.images.length > 1
-                  ? this.renderSliderContent(step)
-                  : this.renderUniqueImage(step.images[0])}
-              </CardContent>
-            </Card>
-          </div>
-        ))}
-      </div>
-    )
+      )
+    } else {
+      return <div>Documentation not found</div>
+    }
   }
 }
 

@@ -28,6 +28,6 @@ export const TUTORIAL_TEMPLATE_DATA: ITutorial = {
       images: [],
     },
   ],
-  tags: [],
+  tags: {},
   workspace_name: '',
 }

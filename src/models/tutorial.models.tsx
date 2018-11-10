@@ -1,4 +1,4 @@
-import { ITag } from './tags.model'
+import { ISelectedTags } from './tags.model'
 
 export interface ITutorial {
   workspace_name: string
@@ -13,7 +13,7 @@ export interface ITutorial {
   steps: ITutorialStep[]
   id: string
   slug: string
-  tags: ITag[]
+  tags: ISelectedTags
 }
 
 export interface ITutorialStep {

@@ -19,6 +19,8 @@ import { db } from '../../../../utils/firebase'
 import { storage } from '../../../../utils/firebase'
 import FileUploader from 'react-firebase-file-uploader'
 import { TUTORIAL_TEMPLATE_DATA } from './TutorialTemplate'
+import { ITag } from 'src/models/models'
+import { TAGS_MOCK } from 'src/mocks/tags.mock'
 
 export interface IState {
   formValues: ITutorial
@@ -58,14 +60,7 @@ const styles = {
 }
 
 // For now tags are raw in this variable, next we'll need to get them from our server
-const tags = [
-  'extrusion',
-  'shredder',
-  'injection',
-  'compression',
-  'sorting',
-  'melting',
-]
+const tags: ITag[] = TAGS_MOCK
 
 let selectedTags: any = []
 
@@ -323,9 +318,9 @@ class CreateTutorial extends React.PureComponent<
                       <div key={index} className="create-tutorial__tag">
                         <input
                           type="checkbox"
-                          name={tags[index]}
-                          value={tags[index]}
-                          id={tags[index]}
+                          name={tags[index].label}
+                          value={tags[index]._key}
+                          id={tags[index]._key}
                           className="create-tutorial__checkbox"
                           onChange={(e: any) => {
                             console.log(e.target.checked)
@@ -347,7 +342,9 @@ class CreateTutorial extends React.PureComponent<
                             })
                           }}
                         />
-                        <label htmlFor={tags[index]}>{tags[index]}</label>
+                        <label htmlFor={tags[index].label}>
+                          {tags[index].label}
+                        </label>
                       </div>
                     ))}
                   </div>

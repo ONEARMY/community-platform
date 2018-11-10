@@ -6,9 +6,8 @@ import arrayMutators from 'final-form-arrays'
 import './CreateTutorial.scss'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
-import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
-import { ITutorialStep } from '../../../../models/tutorial.models'
+import { ITutorial } from '../../../../models/tutorial.models'
 
 import CloudUploadIcon from '../../../../assets/icons/upload.svg'
 import DeleteIcon from '../../../../assets/icons/bin.svg'
@@ -19,11 +18,10 @@ import { db } from '../../../../utils/firebase'
 
 import { storage } from '../../../../utils/firebase'
 import FileUploader from 'react-firebase-file-uploader'
-import { Redirect } from 'react-router-dom'
-import { Checkbox } from '@material-ui/core'
+import { TUTORIAL_TEMPLATE_DATA } from './TutorialTemplate'
 
 export interface IState {
-  formValues: IFormValues
+  formValues: ITutorial
   _isUploading: boolean
   _imgUploadProgress: number
   _uploadImgPath: string
@@ -31,21 +29,6 @@ export interface IState {
   _uploadTutorialPath: string
   _currentStepIndex: number
   _toDocsList: boolean
-}
-interface IFormValues {
-  workspace_name: string
-  tutorial_title: string
-  tutorial_description: string
-  tutorial_time: string
-  tutorial_cost: string
-  difficulty_level: string
-  id: string
-  slug: string
-  steps: ITutorialStep[]
-  tags: []
-  cover_image_url: string
-  tutorial_extern_file_url: string
-  tutorial_files_url: string
 }
 
 const styles = {
@@ -95,38 +78,7 @@ class CreateTutorial extends React.PureComponent<
   constructor(props: any) {
     super(props)
     this.state = {
-      formValues: {
-        tutorial_description: '',
-        tutorial_title: '',
-        tutorial_time: '',
-        tutorial_cost: '',
-        difficulty_level: 'easy',
-        cover_image_url: '',
-        tutorial_extern_file_url: '',
-        // "https://firebasestorage.googleapis.com/v0/b/precious-plastics-v4-dev.appspot.com/o/uploads%2Ftest%2FCapture%20d%E2%80%99e%CC%81cran%202018-10-16%20a%CC%80%2019.00.35.png?alt=media&token=f0e87108-f652-47fc-a507-53b1e91e5b77",
-        tutorial_files_url: '',
-        id: '',
-        slug: '',
-        steps: [
-          {
-            title: '',
-            text: '',
-            images: [],
-          },
-          {
-            title: '',
-            text: '',
-            images: [],
-          },
-          {
-            title: '',
-            text: '',
-            images: [],
-          },
-        ],
-        tags: [],
-        workspace_name: '',
-      },
+      formValues: TUTORIAL_TEMPLATE_DATA,
       _isUploading: false,
       _imgUploadProgress: 0,
       _uploadImgPath: 'uploads/test',
@@ -135,7 +87,6 @@ class CreateTutorial extends React.PureComponent<
       _uploadTutorialPath: 'tutorials/test',
       _toDocsList: false,
     }
-
     this.onSubmit = this.onSubmit.bind(this)
     this.onInputChange = this.onInputChange.bind(this)
   }
@@ -355,8 +306,9 @@ class CreateTutorial extends React.PureComponent<
                           }}
                           placeholder="How to make XXX using YYY"
                         />
-                        {meta.error &&
-                          meta.touched && <span>{meta.error}</span>}
+                        {meta.error && meta.touched && (
+                          <span>{meta.error}</span>
+                        )}
                       </div>
                     )}
                   </Field>
@@ -446,8 +398,9 @@ class CreateTutorial extends React.PureComponent<
                           style={{ width: '400px', height: '150px' }}
                           className="create-tutorial__input"
                         />
-                        {meta.error &&
-                          meta.touched && <span>{meta.error}</span>}
+                        {meta.error && meta.touched && (
+                          <span>{meta.error}</span>
+                        )}
                       </div>
                     )}
                   </Field>
@@ -469,8 +422,9 @@ class CreateTutorial extends React.PureComponent<
                             this.onInputChange(event, 'tutorial_time')
                           }}
                         />
-                        {meta.error &&
-                          meta.touched && <span>{meta.error}</span>}
+                        {meta.error && meta.touched && (
+                          <span>{meta.error}</span>
+                        )}
                       </div>
                     )}
                   </Field>
@@ -492,8 +446,9 @@ class CreateTutorial extends React.PureComponent<
                           }}
                           placeholder="10$"
                         />
-                        {meta.error &&
-                          meta.touched && <span>{meta.error}</span>}
+                        {meta.error && meta.touched && (
+                          <span>{meta.error}</span>
+                        )}
                       </div>
                     )}
                   </Field>
@@ -582,8 +537,9 @@ class CreateTutorial extends React.PureComponent<
                             )
                           }}
                         />
-                        {meta.error &&
-                          meta.touched && <span>{meta.error}</span>}
+                        {meta.error && meta.touched && (
+                          <span>{meta.error}</span>
+                        )}
                       </div>
                     )}
                   </Field>

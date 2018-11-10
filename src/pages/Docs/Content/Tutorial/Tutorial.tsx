@@ -1,12 +1,12 @@
-import * as React from "react";
-import { RouteComponentProps } from "react-router";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
-import CloudDownloadIcon from "@material-ui/icons/CloudDownload";
-import Typography from "@material-ui/core/Typography";
-import ImageGallery from "react-image-gallery";
-import "./Tutorial.scss";
+import * as React from 'react'
+import { RouteComponentProps } from 'react-router'
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
+import Button from '@material-ui/core/Button'
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
+import Typography from '@material-ui/core/Typography'
+import ImageGallery from 'react-image-gallery'
+import './Tutorial.scss'
 
 const sliderSettings = {
   centerMode: false,
@@ -17,54 +17,54 @@ const sliderSettings = {
   customPaging: (i: any) => (
     <div
       style={{
-        width: "30px",
-        color: "black",
-        border: "1px black solid"
+        width: '30px',
+        color: 'black',
+        border: '1px black solid',
       }}
     >
       {i + 1}
     </div>
-  )
-};
+  ),
+}
 
 const styles = {
   card: {
     minWidth: 275,
     maxWidth: 900,
-    margin: "20px auto"
+    margin: '20px auto',
   },
   bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)"
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)',
   },
   title: {
-    fontSize: 14
+    fontSize: 14,
   },
   pos: {
-    marginBottom: 12
-  }
-};
+    marginBottom: 12,
+  },
+}
 
 class Tutorial extends React.Component<any, any> {
   constructor(props: any) {
-    super(props);
+    super(props)
   }
 
   public renderSliderContent(step: any) {
-    const preloadedImages = [];
+    const preloadedImages = []
     for (const image of step.images) {
-      const imageObj = new Image();
-      imageObj.src = image;
+      const imageObj = new Image()
+      imageObj.src = image
       preloadedImages.push({
-        src: imageObj.src
-      });
+        src: imageObj.src,
+      })
     }
     return preloadedImages.map((image: any, index: number) => (
       <div className="step__image">
         <img src={image.src} />
       </div>
-    ));
+    ))
   }
 
   public renderUniqueImage(url: string) {
@@ -72,14 +72,14 @@ class Tutorial extends React.Component<any, any> {
       <div className="step__image">
         <img src={url} />
       </div>
-    );
+    )
   }
   public render() {
-    const { allTutorials } = this.props;
+    const { allTutorials } = this.props
     const tutorial: any = allTutorials.filter(
       (currentTutorial: any) =>
-        currentTutorial.values.slug === this.props.match.params.slug
-    );
+        currentTutorial.values.slug === this.props.match.params.slug,
+    )
 
     return (
       <div>
@@ -107,12 +107,18 @@ class Tutorial extends React.Component<any, any> {
               <Typography component="p">
                 <b>Time : {tutorial[0].values.tutorial_time}</b>
               </Typography>
-              <button className="download-btn">
-                <span className="icon-separator">
-                  <CloudDownloadIcon />
-                </span>
-                Download files
-              </button>
+              {tutorial[0].values.tutorial_files_url && (
+                <a
+                  className="download-btn"
+                  target="_blank"
+                  href={tutorial[0].values.tutorial_files_url}
+                >
+                  <span className="icon-separator">
+                    <CloudDownloadIcon />
+                  </span>
+                  Download files
+                </a>
+              )}
             </div>
           </div>
           <div className="tutorial-infos__right">
@@ -145,8 +151,8 @@ class Tutorial extends React.Component<any, any> {
           </div>
         ))}
       </div>
-    );
+    )
   }
 }
 
-export default Tutorial;
+export default Tutorial

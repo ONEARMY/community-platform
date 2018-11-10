@@ -27,6 +27,7 @@ export interface IState {
   _isUploading: boolean
   _imgUploadProgress: number
   _uploadImgPath: string
+  _uploadFilesPath: string
   _uploadTutorialPath: string
   _currentStepIndex: number
   _toDocsList: boolean
@@ -129,6 +130,7 @@ class CreateTutorial extends React.PureComponent<
       _isUploading: false,
       _imgUploadProgress: 0,
       _uploadImgPath: 'uploads/test',
+      _uploadFilesPath: 'uploads/test',
       _currentStepIndex: 0,
       _uploadTutorialPath: 'tutorials/test',
       _toDocsList: false,
@@ -213,11 +215,10 @@ class CreateTutorial extends React.PureComponent<
       _isUploading: false,
     })
     storage
-      .ref(this.state._uploadImgPath)
+      .ref(this.state._uploadFilesPath)
       .child(filename)
       .getDownloadURL()
       .then(url => {
-        console.log('upload success : ', url)
         this.setState({
           formValues: { ...this.state.formValues, tutorial_files_url: url },
         })
@@ -228,7 +229,7 @@ class CreateTutorial extends React.PureComponent<
     // *** TODO the event.target.value needs to be formated as the article id
     switch (inputType) {
       case 'tutorial_title':
-        const clearUrl = event.target.value
+        const clearUrlSlug = event.target.value
           .replace(/[`~!@#$%^&*()_|+\-=÷¿?;:'",.<>\{\}\[\]\\\/]/gi, '')
           .split(' ')
           .join('-')
@@ -236,10 +237,11 @@ class CreateTutorial extends React.PureComponent<
           formValues: {
             ...this.state.formValues,
             tutorial_title: event.target.value,
-            slug: encodeURIComponent(clearUrl),
+            slug: encodeURIComponent(clearUrlSlug),
           },
-          _uploadImgPath: 'uploads/' + event.target.value,
-          _uploadTutorialPath: 'tutorials/' + event.target.value,
+          _uploadImgPath: 'uploads/' + encodeURIComponent(clearUrlSlug),
+          _uploadFilesPath: 'uploads/' + encodeURIComponent(clearUrlSlug),
+          _uploadTutorialPath: 'tutorials/' + encodeURIComponent(clearUrlSlug),
         })
         break
       case 'workspace_name':
@@ -525,12 +527,17 @@ class CreateTutorial extends React.PureComponent<
                     </span>
                     <FileUploader
                       hidden
+                      accept="*"
                       name="files"
                       storageRef={storage.ref(this.state._uploadImgPath)}
                       onUploadStart={this.handleUploadStart}
                       onUploadError={this.handleUploadError}
                       onUploadSuccess={this.handleUploadFilesSuccess}
                       onProgress={this.handleProgress}
+                      // TODO For now using the onChange method stop the upload
+                      // Need to start upload manually, to be able to check file size
+                      // see this issue https://github.com/fris-fruitig/react-firebase-file-uploader/issues/4#issuecomment-277352083
+                      /*
                       onChange={(e: any) => {
                         // if there is no file and size is bigger than 20mb
                         if (
@@ -542,12 +549,13 @@ class CreateTutorial extends React.PureComponent<
                           )
                           e.target.value = ''
                         } else {
+                          // display file name
                           const el = document.getElementsByClassName(
                             'uploaded-file-name',
                           )[0]
                           el.innerHTML = e.target.files[0].name
                         }
-                      }}
+                      }}*/
                     />
                     Upload a file
                   </label>

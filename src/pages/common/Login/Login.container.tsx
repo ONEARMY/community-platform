@@ -3,91 +3,89 @@ The login container binds to the global user state to pass down logged in
 and user properties to LoginButton and LoginModal components   
 *******************************************************************************/
 
-import * as React from "react";
-import { auth, IFirebaseUser, db } from "../../../utils/firebase";
-import { LoginComponent } from "./Login";
-import { connect } from "react-redux";
-import { updateUser } from "../../../redux/actions/user.actions";
-import { IUser } from "../../../models/models";
+import * as React from 'react'
+import { auth, IFirebaseUser, db } from '../../../utils/firebase'
+import { LoginComponent } from './Login'
+import { IUser } from '../../../models/models'
+import { UserStore } from 'src/stores/User/user.store'
+import { inject, observer } from 'mobx-react'
 
 // internal state properties
 interface IInternalState {
-  showLoginModal: boolean;
+  showLoginModal: boolean
 }
 // own properties - we want to copy the user property from global to state so it can be passed to child components
-interface IOwnProps {
-  user: IUser;
-  notifyUserUpdate: any;
+// we don't actually have any but want to keep for reference of how to merge with injected store
+interface IProps {
+  exampleProp?: null
 }
-// global state properties
-interface IStateProps {
-  user: IUser;
-}
-
-// dispatch events - these are called to trigger redux actions
-interface IDispatchProps {
-  updateUser: (user: IUser | null) => void;
+// injected properties - defining separately as login container might sit inside a parent component unable to
+// pass down the store. See https://medium.com/@prashaantt/strongly-typing-injected-react-props-635a6828acaf
+// we later force typescript to accept props as having access to the store despite not being passed from parent
+// (it is injected, which causes problems for typescript)
+interface InjectedProps extends IProps {
+  userStore: UserStore
 }
 
-// overall component props are a combination of state, dispatch and own props
-type IProps = IStateProps & IDispatchProps & IOwnProps;
-
-class LoginContainer extends React.Component<IProps, IInternalState> {
+@inject('userStore')
+@observer
+export class LoginContainer extends React.Component<IProps, IInternalState> {
   constructor(props: IProps) {
-    super(props);
+    super(props)
     this.state = {
-      showLoginModal: false
-    };
+      showLoginModal: false,
+    }
   }
+  // workaround used later so that userStore can be called in render method when not existing on
+  get injected() {
+    return this.props as InjectedProps
+  }
+
   // setup listener for user auth events (unsubscribe when component destroyed)
   // if planning to also listen elsewhere then should be moved to higher level app component
-  public authListener: any = () => null;
+  public authListener: any = () => null
   public componentDidMount() {
     this.authListener = auth.onAuthStateChanged(authUser => {
-      this.userSignedIn(authUser);
-    });
-    //
+      console.log('auth user changed', authUser)
+      if (authUser) {
+        this.userSignedIn(authUser)
+      } else {
+        this.injected.userStore.updateUser()
+      }
+    })
   }
   public componentWillUnmount() {
-    this.authListener = null;
+    this.authListener = null
   }
   // handle user sign in, when firebase authenticates wnat to also fetch user document from the database
   public async userSignedIn(user: IFirebaseUser | null) {
-    let userMeta: IUser | null = null;
+    console.log('user signed in, getting meta', user)
+    let userMeta: IUser | null = null
     if (user && user.email) {
-      userMeta = await this.getUserProfile(user.email);
+      userMeta = await this.getUserProfile(user.email)
     }
-    this.props.updateUser(userMeta);
-    this.props.notifyUserUpdate(userMeta);
+    if (userMeta) {
+      console.log('user meta retrieved', userMeta)
+      this.injected.userStore.updateUser(userMeta)
+    } else {
+      console.log('no user meta retrieved')
+      // *** handle user has no profile - shouldn't happen as registration populates before creating user?
+      // *** should also handle timeout/no connection potential issue when fetching?
+    }
   }
 
   public async getUserProfile(userEmail: string) {
-    const ref = await db.doc(`usermeta/${userEmail}`).get();
-    const user: IUser = ref.data() as IUser;
-    return user;
+    const ref = await db.doc(`usermeta/${userEmail}`).get()
+    const user: IUser = ref.data() as IUser
+    return user
   }
 
   public render() {
+    const { userStore } = this.injected
     return (
       <div>
-        <LoginComponent user={this.props.user} />
+        <LoginComponent user={userStore.user} />
       </div>
-    );
+    )
   }
 }
-
-// required functions and bindings for the home page to pick global state variables
-// and propagate to component.
-const mapStateToProps = (state: any, ownProps: any) => ({
-  user: state.user
-});
-
-const mapDispatchToProps = (dispatch: any) => ({
-  updateUser: (user: IUser | null) => dispatch(updateUser(user))
-});
-
-const connectedLoginContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LoginContainer);
-export { connectedLoginContainer as LoginContainer };

@@ -1,14 +1,16 @@
 import { observable, action } from 'mobx'
-import { db } from '../../utils/firebase'
 import { IUser } from 'src/models/models'
 
 export class UserStore {
   @observable
-  public user: IUser
+  public user: IUser | undefined
 
   @action
-  public async getUser() {
-    // const ref = await db.collection('tutorials').get()
-    // this.docs = ref.docs.map(doc => doc.data())
+  public updateUser(user?: IUser) {
+    if (user) {
+      this.user = user
+    } else {
+      this.user = undefined
+    }
   }
 }

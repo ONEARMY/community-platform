@@ -6198,6 +6198,10 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-clamp-lines@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-clamp-lines/-/react-clamp-lines-1.1.0.tgz#81a2ac556aac098479ce7ac031e30b88310cdaa7"
+
 react-dev-utils@5.0.1:
   version "5.0.1"
   resolved "http://registry.npmjs.org/react-dev-utils/-/react-dev-utils-5.0.1.tgz#1f396e161fe44b595db1b186a40067289bf06613"

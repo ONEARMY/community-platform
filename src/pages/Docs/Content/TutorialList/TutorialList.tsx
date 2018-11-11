@@ -1,6 +1,7 @@
-import * as React from "react";
-import "./TutorialList.scss";
-import { Link } from "react-router-dom";
+import * as React from 'react'
+import './TutorialList.scss'
+import { Link } from 'react-router-dom'
+import { ClampLines } from '../../../../components/ClampLines/ClampLines'
 import {
   Button,
   Card,
@@ -9,49 +10,53 @@ import {
   CardContent,
   Grid,
   Typography,
-  IconButton
-} from "@material-ui/core";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import CommentIcon from "@material-ui/icons/Comment";
-import TurnedInIcon from "@material-ui/icons/TurnedIn";
-import { theme } from "../../../../themes/app.theme";
-import AddIcon from "../../../../assets/icons/add.svg";
+  IconButton,
+} from '@material-ui/core'
+import MoreVertIcon from '@material-ui/icons/MoreVert'
+import CommentIcon from '@material-ui/icons/Comment'
+import TurnedInIcon from '@material-ui/icons/TurnedIn'
+import { theme } from '../../../../themes/app.theme'
+import AddIcon from '../../../../assets/icons/add.svg'
+import { ITutorial } from 'src/models/models'
 
 const styles: any = {
   layout: {
-    width: "auto",
+    width: 'auto',
     marginLeft: theme.spacing.unit * 3,
     marginRight: theme.spacing.unit * 3,
     padding: `${theme.spacing.unit * 4}px 0`,
     [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
       width: 1100,
-      marginLeft: "auto",
-      marginRight: "auto"
-    }
+      marginLeft: 'auto',
+      marginRight: 'auto',
+    },
   },
   link: {
-    textDecoration: "none"
+    textDecoration: 'none',
   },
   cardMedia: {
-    paddingTop: "56.25%" // 16:9
+    paddingTop: '56.25%', // 16:9
   },
   cardContent: {
-    flexGrow: 1
-  }
-};
+    flexGrow: 1,
+  },
+}
 
-class TutorialList extends React.Component<any, any> {
+interface IProps {
+  allTutorials: ITutorial[]
+}
+class TutorialList extends React.Component<IProps, any> {
   constructor(props: any) {
-    super(props);
+    super(props)
   }
 
   public render() {
-    const { allTutorials } = this.props;
+    const { allTutorials } = this.props
 
     return (
       <div>
         <Typography
-          style={{ margin: "30px auto", display: "table" }}
+          style={{ margin: '30px auto', display: 'table' }}
           variant="h4"
           component="h4"
         >
@@ -80,27 +85,32 @@ class TutorialList extends React.Component<any, any> {
                         <Typography gutterBottom variant="h5" component="h2">
                           {card.values.tutorial_title}
                         </Typography>
-                        <Typography>
-                          {card.values.tutorial_description}
-                        </Typography>
+                        <div className="tutorial-list__card-description">
+                          <ClampLines
+                            text={card.values.tutorial_description}
+                            lines="4"
+                            ellipsis="..."
+                            className="custom-class"
+                          />
+                        </div>
                         <Typography>by {card.values.workspace_name}</Typography>
                       </CardContent>
                       <CardActions>
                         <Typography>PRECIOUS PLASTIC</Typography>
                         <div
                           style={{
-                            marginLeft: "auto"
+                            marginLeft: 'auto',
                           }}
                         >
                           <IconButton>
-                            <Typography style={{ marginRight: "5px" }}>
-                              {Math.trunc(Math.random() * (60 - 4) + 4) + " "}
+                            <Typography style={{ marginRight: '5px' }}>
+                              {Math.trunc(Math.random() * (60 - 4) + 4) + ' '}
                             </Typography>
                             <TurnedInIcon />
                           </IconButton>
                           <IconButton>
-                            <Typography style={{ marginRight: "5px" }}>
-                              {Math.trunc(Math.random() * (60 - 4) + 4) + " "}
+                            <Typography style={{ marginRight: '5px' }}>
+                              {Math.trunc(Math.random() * (60 - 4) + 4) + ' '}
                             </Typography>
                             <CommentIcon />
                           </IconButton>
@@ -121,8 +131,8 @@ class TutorialList extends React.Component<any, any> {
           </Link>
         </React.Fragment>
       </div>
-    );
+    )
   }
 }
 
-export default TutorialList;
+export default TutorialList

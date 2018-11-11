@@ -11,7 +11,6 @@ export class DocStore {
   @action
   public async getDocList() {
     const ref = await db.collection('tutorials').get()
-    console.log('doc list updated', ref.docs)
     this.docs = ref.docs.map(doc => doc.data() as ITutorial)
   }
 }

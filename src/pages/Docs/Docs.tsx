@@ -14,7 +14,7 @@ interface IProps {
 @inject('docStore')
 // Then we can use the observer component decorator to automatically tracks observables and re-renders on change
 @observer
-class DocsPage extends React.Component<IProps, any> {
+export class DocsPage extends React.Component<IProps, any> {
   constructor(props: any) {
     super(props)
   }
@@ -35,5 +35,3 @@ class DocsPage extends React.Component<IProps, any> {
     )
   }
 }
-
-export default DocsPage

@@ -5,6 +5,7 @@ import LinearProgress from '@material-ui/core/LinearProgress'
 import Button from '@material-ui/core/Button'
 import UploadIconImage from '../../../assets/icons/upload.svg'
 import './FirebaseFileUploader.scss'
+import { FullMetadata } from '@firebase/storage-types'
 /*
 This component takes a folder storage path and uploads files to firebase storage
 onUploadSucess allows URLs of completed uploads to be passed back to parent component
@@ -12,7 +13,7 @@ additional optional fields are a subset of https://www.npmjs.com/package/react-f
 */
 interface IProps {
   storagePath: string
-  onUploadSuccess: (url: string) => void
+  onUploadSuccess: (fileInfo: IFirebaseUploadInfo) => void
   buttonText?: string
   accept?: string
   name?: string
@@ -21,6 +22,15 @@ interface IProps {
 interface IState {
   isUploading: boolean
   uploadProgress: number
+}
+export interface IFirebaseUploadInfo {
+  downloadUrl: string
+  contentType?: string | null
+  fullPath: string
+  name: string
+  size: number
+  timeCreated: string
+  updated: string
 }
 
 const styles = {
@@ -64,11 +74,24 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
   }
   // on success update progress and pass back complete url to parent component
   public handleUploadSuccess = async (filename: string) => {
+    const meta: FullMetadata = await storage
+      .ref(this.props.storagePath)
+      .child(filename)
+      .getMetadata()
     const url = await storage
       .ref(this.props.storagePath)
       .child(filename)
       .getDownloadURL()
-    return this.props.onUploadSuccess(url)
+    const fileInfo: IFirebaseUploadInfo = {
+      downloadUrl: url,
+      contentType: meta.contentType,
+      fullPath: meta.fullPath,
+      name: meta.name,
+      size: meta.size,
+      timeCreated: meta.timeCreated,
+      updated: meta.updated,
+    }
+    return this.props.onUploadSuccess(fileInfo)
   }
 
   // the first styled button in our template intercepts all click events so we have a manual method

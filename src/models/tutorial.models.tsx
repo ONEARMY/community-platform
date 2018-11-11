@@ -1,4 +1,5 @@
 import { ISelectedTags } from './tags.model'
+import { IFirebaseUploadInfo } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
 
 // By default all tutorial form input fields come as strings
 // The ITutorial interface imposes the correct formats on fields
@@ -24,7 +25,7 @@ export interface ITutorialFormInput {
   tutorial_time: string
   tutorial_cost: number | string
   tutorial_extern_file_url: string
-  tutorial_files_url: string
+  tutorial_files: IFirebaseUploadInfo[]
   steps: ITutorialStep[]
   id: string
   slug: string

@@ -8,7 +8,7 @@ export const TUTORIAL_TEMPLATE_DATA: ITutorialFormInput = {
   difficulty_level: 'easy',
   cover_image_url: '',
   tutorial_extern_file_url: '',
-  tutorial_files_url: '',
+  tutorial_files: [],
   id: '',
   slug: '',
   steps: [

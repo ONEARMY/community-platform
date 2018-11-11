@@ -23,7 +23,10 @@ import { db } from '../../../../utils/firebase'
 import { TUTORIAL_TEMPLATE_DATA } from './TutorialTemplate'
 import { ITag } from 'src/models/models'
 import { TAGS_MOCK } from 'src/mocks/tags.mock'
-import { FirebaseFileUploader } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
+import {
+  FirebaseFileUploader,
+  IFirebaseUploadInfo,
+} from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
 
 export interface IState {
   formValues: ITutorialFormInput
@@ -87,7 +90,7 @@ export class CreateTutorial extends React.PureComponent<
     return formattedValues
   }
 
-  public handleUploadStepImgSuccess = (url: string) => {
+  public handleUploadStepImgSuccess = (fileInfo: IFirebaseUploadInfo) => {
     console.log('index', this.state._currentStepIndex)
     // get the current steps
     const currentSteps: any = this.state.formValues.steps
@@ -95,14 +98,16 @@ export class CreateTutorial extends React.PureComponent<
     // use the spread operator to merge the existing images with the new url
     currentSteps[this.state._currentStepIndex].images = [
       ...currentSteps[this.state._currentStepIndex].images,
-      url,
+      fileInfo.downloadUrl,
     ]
     console.log('this.state.formValues', this.state.formValues)
   }
-  public handleUploadFilesSuccess = (url: string) => {
-    console.log('files uploaded successfully', url)
+  public handleUploadFilesSuccess = (fileInfo: IFirebaseUploadInfo) => {
+    const files = this.state.formValues.tutorial_files
+    files.push(fileInfo)
+    console.log('files', files)
     this.setState({
-      formValues: { ...this.state.formValues, tutorial_files_url: url },
+      formValues: { ...this.state.formValues, tutorial_files: files },
     })
   }
 
@@ -111,9 +116,12 @@ export class CreateTutorial extends React.PureComponent<
     When you have the url of the image you want to merge it with the existing step images
     Then merge the updated step with all steps and update the state
   */
-  public handleUploadCoverSuccess = (url: string) => {
+  public handleUploadCoverSuccess = (fileInfo: IFirebaseUploadInfo) => {
     this.setState({
-      formValues: { ...this.state.formValues, cover_image_url: url },
+      formValues: {
+        ...this.state.formValues,
+        cover_image_url: fileInfo.downloadUrl,
+      },
     })
   }
 

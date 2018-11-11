@@ -5,7 +5,11 @@ import LinearProgress from '@material-ui/core/LinearProgress'
 import Button from '@material-ui/core/Button'
 import UploadIconImage from '../../../assets/icons/upload.svg'
 import './FirebaseFileUploader.scss'
-
+/*
+This component takes a folder storage path and uploads files to firebase storage
+onUploadSucess allows URLs of completed uploads to be passed back to parent component
+additional optional fields are a subset of https://www.npmjs.com/package/react-firebase-file-uploader
+*/
 interface IProps {
   storagePath: string
   onUploadSuccess: (url: string) => void
@@ -35,10 +39,6 @@ const styles = {
     height: 5,
     MarginTop: 5,
   },
-  progressBar_Uploading: {},
-  progressBar_Complete: {
-    color: 'green',
-  },
 }
 export class FirebaseFileUploader extends React.Component<IProps, IState> {
   public static defaultProps: any
@@ -56,7 +56,6 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
     this.setState({ isUploading: true, uploadProgress: 0 })
   }
   public handleProgress = (progress: any) => {
-    console.log('upload progress', progress)
     this.setState({ uploadProgress: progress })
   }
   public handleUploadError = (error: any) => {
@@ -82,7 +81,6 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
 
   public renderProgressBar() {
     if (this.state.isUploading) {
-      console.log('state uploading rendering bar', this.state.uploadProgress)
       if (this.state.uploadProgress > 0) {
         return (
           <LinearProgress
@@ -98,13 +96,11 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
       }
       return <LinearProgress />
     } else {
-      console.log('state is not uploading')
       return null
     }
   }
 
   public render() {
-    //
     return (
       <div style={styles.container}>
         <Button

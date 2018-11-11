@@ -29,7 +29,6 @@ export interface IState {
   formValues: ITutorialFormInput
   _uploadImgPath: string
   _uploadFilesPath: string
-  _uploadTutorialPath: string
   _currentStepIndex: number
   _toDocsList: boolean
 }
@@ -50,7 +49,6 @@ export class CreateTutorial extends React.PureComponent<
       _uploadImgPath: 'uploads/test',
       _uploadFilesPath: 'uploads/test',
       _currentStepIndex: 0,
-      _uploadTutorialPath: 'tutorials/test',
       _toDocsList: false,
     }
   }
@@ -60,12 +58,16 @@ export class CreateTutorial extends React.PureComponent<
     if (this.state.formValues.cover_image_url === '') {
       alert('Please provide a cover image before saving your tutorial')
     } else {
-      const values: ITutorial = this.castFormValuesToCorrectTypes(formValues)
+      const timestamp = new Date()
+      // convert data to correct types and populate metadata
+      const values: ITutorial = {
+        ...this.castFormValuesToCorrectTypes(formValues),
+        _created: timestamp,
+        _modified: timestamp,
+      }
       console.log('submitting', values)
       try {
-        await db.doc(this.state._uploadTutorialPath).set({
-          values,
-        })
+        await db.collection('documentation').add(values)
         console.log('doc set successfully')
         this.props.history.push('/docs/list')
       } catch (error) {
@@ -98,6 +100,7 @@ export class CreateTutorial extends React.PureComponent<
     console.log('this.state.formValues', this.state.formValues)
   }
   public handleUploadFilesSuccess = (url: string) => {
+    console.log('files uploaded successfully', url)
     this.setState({
       formValues: { ...this.state.formValues, tutorial_files_url: url },
     })
@@ -130,7 +133,6 @@ export class CreateTutorial extends React.PureComponent<
           },
           _uploadImgPath: 'uploads/' + encodeURIComponent(clearUrlSlug),
           _uploadFilesPath: 'uploads/' + encodeURIComponent(clearUrlSlug),
-          _uploadTutorialPath: 'tutorials/' + encodeURIComponent(clearUrlSlug),
         })
         break
       case 'tutorial_extern_file_url':
@@ -220,6 +222,17 @@ export class CreateTutorial extends React.PureComponent<
                         </div>
                       )}
                     </Field>
+                    <div
+                      className={
+                        this.state.formValues.slug === ''
+                          ? 'create-tutorial-form__title__note--clear'
+                          : 'create-tutorial-form__title__note--filled'
+                      }
+                    >
+                      {window.location.host +
+                        '/docs/' +
+                        this.state.formValues.slug}
+                    </div>
                     <Typography
                       component="label"
                       className="create-tutorial__label"

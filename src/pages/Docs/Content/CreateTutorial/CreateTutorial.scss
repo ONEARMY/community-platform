@@ -53,6 +53,16 @@
     }
   }
 
+  .create-tutorial-form__title__note--filled {
+    color: #656565;
+    font-size: 0.8em;
+    margin-top: 5px;
+  }
+  .create-tutorial-form__title__note--clear {
+    opacity: 0;
+    margin-top: 5px;
+  }
+
   .upload-btn {
     height: 50px;
     text-transform: uppercase;

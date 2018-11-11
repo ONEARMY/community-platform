@@ -29,6 +29,8 @@ export const TUTORIALS_MOCK: ITutorial[] = [
     tags: {},
     tutorial_extern_file_url: '',
     tutorial_files_url: '',
+    _created: new Date(),
+    _modified: new Date(),
   },
   {
     cover_image_url: 'http://placekitten.com/g/400/250',
@@ -61,6 +63,8 @@ export const TUTORIALS_MOCK: ITutorial[] = [
     tags: {},
     tutorial_extern_file_url: '',
     tutorial_files_url: '',
+    _created: new Date(),
+    _modified: new Date(),
   },
   {
     cover_image_url: 'http://placekitten.com/g/400/250',
@@ -93,5 +97,7 @@ export const TUTORIALS_MOCK: ITutorial[] = [
     tags: {},
     tutorial_extern_file_url: '',
     tutorial_files_url: '',
+    _created: new Date(),
+    _modified: new Date(),
   },
 ]

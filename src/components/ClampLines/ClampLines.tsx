@@ -1,5 +1,8 @@
 /* tslint:disable:one-variable-per-declaration */
-// code modified from react-clamp-lines
+/* 
+This component forces text to occupy a maximum given number of lines, with optional 'expand'
+button. Code modified from react-clamp-lines
+*/
 
 import React from 'react'
 

@@ -173,7 +173,7 @@ export class ClampLines extends React.PureComponent<IProps, any> {
         >
           {this.state.text}
         </div>
-        {/* {this.getButton()} */}
+        {this.getButton()}
       </div>
     )
   }
@@ -181,7 +181,7 @@ export class ClampLines extends React.PureComponent<IProps, any> {
 
 ClampLines.defaultProps = {
   text: '',
-  buttons: true,
+  buttons: false,
   lines: 3,
   delay: 300,
   ellipsis: '...',

@@ -88,7 +88,7 @@ class TutorialList extends React.Component<IProps, any> {
                         <div className="tutorial-list__card-description">
                           <ClampLines
                             text={card.values.tutorial_description}
-                            lines="4"
+                            lines={4}
                             ellipsis="..."
                             className="custom-class"
                           />

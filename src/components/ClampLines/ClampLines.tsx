@@ -1,10 +1,21 @@
+/* tslint:disable:one-variable-per-declaration */
+// code modified from react-clamp-lines
+
 import React from 'react'
 
-// code modified from react-clamp-lines
-/* tslint:disable:one-variable-per-declaration */
-export class ClampLines extends React.PureComponent<any, any> {
+interface IProps {
+  text: string
+  buttons?: boolean
+  lines: number
+  delay?: number
+  ellipsis?: string
+  moreText?: string
+  lessText?: string
+  className?: string
+}
+export class ClampLines extends React.PureComponent<IProps, any> {
   // defaultProps static so can be assigned at end
-  public static defaultProps: any
+  public static defaultProps: IProps
   public element: any = null
   public original: string
   public watch = true
@@ -120,7 +131,7 @@ export class ClampLines extends React.PureComponent<any, any> {
   }
 
   public getClassName() {
-    const className = this.props.className || ''
+    const className = this.props.className ? this.props.className : ''
 
     return `clamp-lines ${className}`
   }
@@ -169,6 +180,7 @@ export class ClampLines extends React.PureComponent<any, any> {
 }
 
 ClampLines.defaultProps = {
+  text: '',
   buttons: true,
   lines: 3,
   delay: 300,

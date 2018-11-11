@@ -3,8 +3,8 @@ import { storage } from '../../../utils/firebase'
 import FileUploader from 'react-firebase-file-uploader'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import Button from '@material-ui/core/Button'
-import CloudUploadIcon from '@material-ui/icons/CloudUpload'
 import UploadIconImage from '../../../assets/icons/upload.svg'
+import './FirebaseFileUploader.scss'
 
 interface IProps {
   storagePath: string
@@ -31,6 +31,14 @@ const styles = {
   button: {
     width: '100%',
   },
+  progressContainer: {
+    height: 5,
+    MarginTop: 5,
+  },
+  progressBar_Uploading: {},
+  progressBar_Complete: {
+    color: 'green',
+  },
 }
 export class FirebaseFileUploader extends React.Component<IProps, IState> {
   public static defaultProps: any
@@ -47,8 +55,9 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
   public handleUploadStart = () => {
     this.setState({ isUploading: true, uploadProgress: 0 })
   }
-  public handleProgress = (imgUploadProgress: any) => {
-    this.setState({ uploadProgress: imgUploadProgress })
+  public handleProgress = (progress: any) => {
+    console.log('upload progress', progress)
+    this.setState({ uploadProgress: progress })
   }
   public handleUploadError = (error: any) => {
     this.setState({ isUploading: false })
@@ -56,11 +65,6 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
   }
   // on success update progress and pass back complete url to parent component
   public handleUploadSuccess = async (filename: string) => {
-    console.log('upload success')
-    this.setState({
-      uploadProgress: 100,
-      isUploading: false,
-    })
     const url = await storage
       .ref(this.props.storagePath)
       .child(filename)
@@ -76,6 +80,29 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
     inputRef.click()
   }
 
+  public renderProgressBar() {
+    if (this.state.isUploading) {
+      console.log('state uploading rendering bar', this.state.uploadProgress)
+      if (this.state.uploadProgress > 0) {
+        return (
+          <LinearProgress
+            variant="determinate"
+            value={this.state.uploadProgress}
+            className={
+              this.state.uploadProgress === 100
+                ? 'progress-bar--complete'
+                : 'progress-bar--uploading'
+            }
+          />
+        )
+      }
+      return <LinearProgress />
+    } else {
+      console.log('state is not uploading')
+      return null
+    }
+  }
+
   public render() {
     //
     return (
@@ -86,9 +113,16 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
           style={styles.button}
           onClick={() => this.triggerFileUploaderClick()}
         >
-          {this.props.buttonText}
-          {/* <CloudUploadIcon style={styles.icon} /> */}
-          <img src={UploadIconImage} alt="" style={styles.icon} />
+          <div>
+            <div>
+              {this.props.buttonText}
+              <img src={UploadIconImage} alt="" style={styles.icon} />
+            </div>
+            <div style={styles.progressContainer}>
+              {this.renderProgressBar()}
+            </div>
+          </div>
+
           <div ref={(input: any) => (this.fileInputRef = input)}>
             <FileUploader
               hidden
@@ -101,15 +135,6 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
               onProgress={this.handleProgress}
             />
           </div>
-
-          {this.state.isUploading && this.state.uploadProgress === 0 ? (
-            <LinearProgress />
-          ) : (
-            <LinearProgress
-              variant="determinate"
-              value={this.state.uploadProgress}
-            />
-          )}
         </Button>
       </div>
     )

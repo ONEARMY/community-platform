@@ -9,7 +9,10 @@ import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import Input from '@material-ui/core/Input'
 import InputAdornment from '@material-ui/core/InputAdornment'
-import { ITutorial } from '../../../../models/tutorial.models'
+import {
+  ITutorial,
+  ITutorialFormInput,
+} from '../../../../models/tutorial.models'
 
 import DeleteIcon from '../../../../assets/icons/bin.svg'
 import AddIcon from '../../../../assets/icons/add.svg'
@@ -23,7 +26,7 @@ import { TAGS_MOCK } from 'src/mocks/tags.mock'
 import { FirebaseFileUploader } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
 
 export interface IState {
-  formValues: ITutorial
+  formValues: ITutorialFormInput
   _uploadImgPath: string
   _uploadFilesPath: string
   _uploadTutorialPath: string
@@ -31,35 +34,12 @@ export interface IState {
   _toDocsList: boolean
 }
 
-const styles = {
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
-  uploadBtn: {
-    backgroundColor: 'steelblue',
-    color: 'white',
-    padding: 10,
-    borderRadius: 4,
-    cursor: 'pointer',
-  },
-}
-
 // For now tags are raw in this variable, next we'll need to get them from our server
 const tags: ITag[] = TAGS_MOCK
-
 let selectedTags: any = []
-
 const required = (value: any) => (value ? undefined : 'Required')
 
-class CreateTutorial extends React.PureComponent<
+export class CreateTutorial extends React.PureComponent<
   RouteComponentProps<any>,
   IState
 > {
@@ -73,14 +53,14 @@ class CreateTutorial extends React.PureComponent<
       _uploadTutorialPath: 'tutorials/test',
       _toDocsList: false,
     }
-    this.onSubmit = this.onSubmit.bind(this)
-    this.onInputChange = this.onInputChange.bind(this)
   }
 
-  public onSubmit = async (values: any) => {
+  public onSubmit = async (formValues: ITutorialFormInput) => {
+    console.log('on submit', formValues)
     if (this.state.formValues.cover_image_url === '') {
       alert('Please provide a cover image before saving your tutorial')
     } else {
+      const values: ITutorial = this.castFormValuesToCorrectTypes(formValues)
       console.log('submitting', values)
       try {
         await db.doc(this.state._uploadTutorialPath).set({
@@ -92,6 +72,17 @@ class CreateTutorial extends React.PureComponent<
         console.log('error while saving the tutorial')
       }
     }
+  }
+
+  // By default all tutorial form input fields come as strings. We want to cast to the
+  // correct data types if this ever becomes more complex could use
+  // https://medium.freecodecamp.org/how-to-write-powerful-schemas-in-javascript-490da6233d37
+  public castFormValuesToCorrectTypes(values: ITutorialFormInput) {
+    const formattedValues = {
+      ...values,
+      tutorial_cost: Number(values.tutorial_cost),
+    }
+    return formattedValues
   }
 
   public handleUploadStepImgSuccess = (url: string) => {
@@ -563,5 +554,3 @@ class CreateTutorial extends React.PureComponent<
     )
   }
 }
-
-export default CreateTutorial

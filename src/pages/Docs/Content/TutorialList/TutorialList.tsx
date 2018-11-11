@@ -33,6 +33,7 @@ const styles: any = {
   },
   link: {
     textDecoration: 'none',
+    color: 'black',
   },
   cardMedia: {
     paddingTop: '56.25%', // 16:9

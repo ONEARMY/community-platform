@@ -8,6 +8,8 @@ import Typography from '@material-ui/core/Typography'
 import './Tutorial.scss'
 import { ITutorial } from 'src/models/models'
 import { db } from 'src/utils/firebase'
+import { inject } from 'mobx-react'
+import { DocStore } from 'src/stores/Docs/docs.store'
 
 const sliderSettings = {
   centerMode: false,
@@ -47,33 +49,39 @@ const styles = {
   },
 }
 
-// The parent container injects router props along with a custom slug parameter. No extra props are manually supplied
-// so the full typing is just the implementation of the RouteComponentProps with IRouterCustomParams
-// If we had additional props we could define IProps as an extension of what is below.
-// You can read more about this system in the parent container
+// The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
+// We also have injected the doc store to access its methods to get doc by slug.
+// We can't directly provide the store as a prop though, and later user a get method to define it
 interface IRouterCustomParams {
   slug: string
+}
+interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
+  docStore: DocStore
 }
 interface IState {
   tutorial?: ITutorial
   isLoading: boolean
 }
-
+@inject('docStore')
 export class Tutorial extends React.Component<
   RouteComponentProps<IRouterCustomParams>,
   IState
 > {
-  constructor(props: RouteComponentProps<IRouterCustomParams>) {
+  constructor(props: any) {
     super(props)
     this.state = {
       tutorial: undefined,
       isLoading: true,
     }
   }
+  // workaround used later so that userStore can be called in render method when not existing on
+  get injected() {
+    return this.props as InjectedProps
+  }
 
   public async componentWillMount() {
     const slug = this.props.match.params.slug
-    const doc = await this.getTutorialBySlug(slug)
+    const doc = await this.injected.docStore.getDocBySlug(slug)
     this.setState({
       tutorial: doc,
       isLoading: false,

@@ -26,5 +26,6 @@ export class DocStore {
       collection.docs.length > 0
         ? (collection.docs[0].data() as ITutorial)
         : undefined
+    return this.activeTutorial
   }
 }

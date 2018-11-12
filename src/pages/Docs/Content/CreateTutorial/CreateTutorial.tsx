@@ -27,6 +27,7 @@ import {
   FirebaseFileUploader,
   IFirebaseUploadInfo,
 } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
+import helpers from 'src/utils/helpers'
 
 export interface IState {
   formValues: ITutorialFormInput
@@ -127,17 +128,15 @@ export class CreateTutorial extends React.PureComponent<
 
   public onInputChange = (event: any, inputType: string) => {
     // *** TODO the event.target.value needs to be formated as the article id
+    const value = event.target.value
     switch (inputType) {
       case 'tutorial_title':
-        const clearUrlSlug = event.target.value
-          .replace(/[`~!@#$%^&*()_|+\-=÷¿?;:'",.<>\{\}\[\]\\\/]/gi, '')
-          .split(' ')
-          .join('-')
+        const clearUrlSlug = helpers.stripSpecialCharacters(value)
         this.setState({
           formValues: {
             ...this.state.formValues,
             tutorial_title: event.target.value,
-            slug: encodeURIComponent(clearUrlSlug),
+            slug: clearUrlSlug,
           },
           _uploadImgPath: 'uploads/' + encodeURIComponent(clearUrlSlug),
           _uploadFilesPath: 'uploads/' + encodeURIComponent(clearUrlSlug),

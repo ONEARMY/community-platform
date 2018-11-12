@@ -2,11 +2,12 @@ import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
-import Button from '@material-ui/core/Button'
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
+import LinearProgress from '@material-ui/core/LinearProgress'
 import Typography from '@material-ui/core/Typography'
-import { NotFoundPage } from '../../..//NotFound/NotFound'
 import './Tutorial.scss'
+import { ITutorial } from 'src/models/models'
+import { db } from 'src/utils/firebase'
 
 const sliderSettings = {
   centerMode: false,
@@ -46,9 +47,48 @@ const styles = {
   },
 }
 
-class Tutorial extends React.Component<any, any> {
-  constructor(props: any) {
+// The parent container injects router props along with a custom slug parameter. No extra props are manually supplied
+// so the full typing is just the implementation of the RouteComponentProps with IRouterCustomParams
+// If we had additional props we could define IProps as an extension of what is below.
+// You can read more about this system in the parent container
+interface IRouterCustomParams {
+  slug: string
+}
+interface IState {
+  tutorial?: ITutorial
+  isLoading: boolean
+}
+
+export class Tutorial extends React.Component<
+  RouteComponentProps<IRouterCustomParams>,
+  IState
+> {
+  constructor(props: RouteComponentProps<IRouterCustomParams>) {
     super(props)
+    this.state = {
+      tutorial: undefined,
+      isLoading: true,
+    }
+  }
+
+  public async componentWillMount() {
+    const slug = this.props.match.params.slug
+    const doc = await this.getTutorialBySlug(slug)
+    this.setState({
+      tutorial: doc,
+      isLoading: false,
+    })
+  }
+  // use firebase to query tutorials and return doc that matches the given slug
+  public async getTutorialBySlug(slug: string) {
+    const ref = db
+      .collection('documentation')
+      .where('slug', '==', slug)
+      .limit(1)
+    const collection = await ref.get()
+    return collection.docs.length > 0
+      ? (collection.docs[0].data() as ITutorial)
+      : undefined
   }
 
   public renderSliderContent(step: any) {
@@ -75,61 +115,53 @@ class Tutorial extends React.Component<any, any> {
     )
   }
   public render() {
-    const { allTutorials } = this.props
-    const tutorial: any = allTutorials.filter(
-      (currentTutorial: any) =>
-        currentTutorial.values.slug === this.props.match.params.slug,
-    )
-
-    if (tutorial[0] !== undefined) {
+    const { tutorial, isLoading } = this.state
+    if (tutorial) {
       return (
         <div>
           <div className="tutorial-infos__container">
             <div className="tutorial-infos__left">
               <div className="tutorial-infos__content">
                 <Typography variant="h4" component="h4">
-                  {tutorial[0].values.tutorial_title}
+                  {tutorial.tutorial_title}
                 </Typography>
                 <Typography component="p">
-                  {tutorial[0].values.tutorial_description}
+                  {tutorial.tutorial_description}
                 </Typography>
                 <Typography component="p">
-                  <b>Workspace : {tutorial[0].values.workspace_name}</b>
+                  <b>Workspace : {tutorial.workspace_name}</b>
                 </Typography>
                 <Typography component="p">
-                  <b>{tutorial[0].values.steps.length} Steps</b>
+                  <b>{tutorial.steps.length} Steps</b>
                 </Typography>
                 <Typography component="p">
-                  <b>Cost : {tutorial[0].values.tutorial_cost}</b>
+                  <b>Cost : {tutorial.tutorial_cost}</b>
                 </Typography>
                 <Typography component="p">
-                  <b>Difficulty : {tutorial[0].values.difficulty_level}</b>
+                  <b>Difficulty : {tutorial.difficulty_level}</b>
                 </Typography>
                 <Typography component="p">
-                  <b>Time : {tutorial[0].values.tutorial_time}</b>
+                  <b>Time : {tutorial.tutorial_time}</b>
                 </Typography>
-                {tutorial[0].values.tutorial_files_url && (
+                {/* {tutorial.tutorial_files.length > 0 && (
                   <a
                     className="download-btn"
                     target="_blank"
-                    href={tutorial[0].values.tutorial_files_url}
+                    href={tutorial.tutorial_files_url}
                   >
                     <span className="icon-separator">
                       <CloudDownloadIcon />
                     </span>
                     Download files
                   </a>
-                )}
+                )} */}
               </div>
             </div>
             <div className="tutorial-infos__right">
-              <img
-                src={tutorial[0].values.cover_image_url}
-                alt="tutorial cover"
-              />
+              <img src={tutorial.cover_image_url} alt="tutorial cover" />
             </div>
           </div>
-          {tutorial[0].values.steps.map((step: any, index: number) => (
+          {tutorial.steps.map((step: any, index: number) => (
             <div className="step__container" key={index}>
               <Card style={styles.card} className="step__card">
                 <div className="step__header">
@@ -159,9 +191,7 @@ class Tutorial extends React.Component<any, any> {
         </div>
       )
     } else {
-      return <div>Documentation not found</div>
+      return isLoading ? <LinearProgress /> : <div>Documentation not found</div>
     }
   }
 }
-
-export default Tutorial

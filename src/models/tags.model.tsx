@@ -16,6 +16,6 @@ export interface ITag {
   category: string
   label: string
   image: string
-  created: Date
-  modifided: Date
+  _created: Date
+  _modified: Date
 }

@@ -2,7 +2,7 @@ import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 
 import MainLayout from '../common/MainLayout/'
-import Content from './Content'
+import TutorialContainer from './Content/Tutorial.Container'
 import { DocStore } from 'src/stores/Docs/docs.store'
 
 interface IProps {
@@ -29,7 +29,7 @@ export class DocsPage extends React.Component<IProps, any> {
     return (
       <MainLayout>
         {this.props.docStore.docs ? (
-          <Content allTutorials={this.props.docStore.docs} />
+          <TutorialContainer allTutorials={this.props.docStore.docs} />
         ) : null}
       </MainLayout>
     )

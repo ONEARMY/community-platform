@@ -100,6 +100,7 @@ export class CreateTutorial extends React.PureComponent<
       ...currentSteps[stepIndex].images,
       fileInfo.downloadUrl,
     ]
+    this.forceUpdate()
     console.log('this.state.formValues', this.state.formValues)
   }
   public handleUploadFilesSuccess = (fileInfo: IFirebaseUploadInfo) => {

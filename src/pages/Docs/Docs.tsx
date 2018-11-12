@@ -2,7 +2,7 @@ import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 
 import MainLayout from '../common/MainLayout/'
-import TutorialContainer from './Content/Tutorial.Container'
+import TutorialContent from './Content/Tutorial.content'
 import { DocStore } from 'src/stores/Docs/docs.store'
 
 interface IProps {
@@ -19,18 +19,23 @@ export class DocsPage extends React.Component<IProps, any> {
     super(props)
   }
 
-  public componentDidMount() {
+  public async componentDidMount() {
     // call getDocList to trigger update of database doc data when the page is loaded
     // this will be reflected in the props.docstore.docs object
-    this.props.docStore.getDocList()
+    // it should automatically update components however for some reason failing to
+    // so call force update after first update
+    await this.props.docStore.getDocList()
+    this.forceUpdate()
   }
 
   public render() {
+    const { activeTutorial, allTutorials } = this.props.docStore
     return (
       <MainLayout>
-        {this.props.docStore.docs ? (
-          <TutorialContainer allTutorials={this.props.docStore.docs} />
-        ) : null}
+        <TutorialContent
+          allTutorials={this.props.docStore.allTutorials}
+          activeTutorial={this.props.docStore.activeTutorial}
+        />
       </MainLayout>
     )
   }

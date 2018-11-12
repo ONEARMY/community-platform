@@ -7,6 +7,10 @@ import { FIREBASE_CONFIG } from '../../src/config/config'
 // initialise with config settings, additional firestore config to support future changes
 firebase.initializeApp(FIREBASE_CONFIG)
 firebase.firestore().settings({ timestampsInSnapshots: true })
+firebase
+  .firestore()
+  .enablePersistence({ experimentalTabSynchronization: true })
+  .catch(err => console.error('could not persist firestore', err))
 
 // export firebase endpoints to be accessed by other functions
 export const db = firebase.firestore()

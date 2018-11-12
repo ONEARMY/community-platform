@@ -2,8 +2,9 @@ import * as React from 'react'
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
 import { Tutorial } from './Tutorial/Tutorial'
 import { CreateTutorial } from './CreateTutorial/CreateTutorial'
-import TutorialList from './TutorialList/TutorialList'
+import { TutorialList } from './TutorialList/TutorialList'
 import { ITutorial } from 'src/models/models'
+import { observer } from 'mobx-react'
 /*
   This component handles routing for tutorial sub-pages and components. More info on the router can be found here:
   https://reacttraining.com/react-router/web/guides/basic-components
@@ -22,15 +23,17 @@ import { ITutorial } from 'src/models/models'
   }
 */
 
-interface IContainerProps {
+interface IContentProps {
   allTutorials: ITutorial[]
+  activeTutorial?: ITutorial
 }
 
 // if using the @withRouter decorator for a named export you might have to force typescript
 // to register the render output 'as React.ReactNode' as seen below
 @withRouter
-export default class TutorialContainer extends React.Component<any, any> {
-  constructor(props: IContainerProps) {
+@observer
+export default class TutorialContent extends React.Component<any, any> {
+  constructor(props: IContentProps) {
     super(props)
   }
   public render = () => {

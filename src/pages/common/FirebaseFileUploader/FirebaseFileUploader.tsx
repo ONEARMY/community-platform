@@ -13,7 +13,8 @@ additional optional fields are a subset of https://www.npmjs.com/package/react-f
 */
 interface IProps {
   storagePath: string
-  onUploadSuccess: (fileInfo: IFirebaseUploadInfo) => void
+  onUploadSuccess: (fileInfo: IFirebaseUploadInfo, callBackData?: any) => void
+  callbackData?: any
   buttonText?: string
   accept?: string
   name?: string
@@ -91,7 +92,7 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
       timeCreated: meta.timeCreated,
       updated: meta.updated,
     }
-    return this.props.onUploadSuccess(fileInfo)
+    return this.props.onUploadSuccess(fileInfo, this.props.callbackData)
   }
 
   // the first styled button in our template intercepts all click events so we have a manual method

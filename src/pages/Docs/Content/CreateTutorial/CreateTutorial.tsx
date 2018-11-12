@@ -33,7 +33,6 @@ export interface IState {
   formValues: ITutorialFormInput
   _uploadImgPath: string
   _uploadFilesPath: string
-  _currentStepIndex: number
   _toDocsList: boolean
 }
 
@@ -52,7 +51,6 @@ export class CreateTutorial extends React.PureComponent<
       formValues: TUTORIAL_TEMPLATE_DATA,
       _uploadImgPath: 'uploads/test',
       _uploadFilesPath: 'uploads/test',
-      _currentStepIndex: 0,
       _toDocsList: false,
     }
   }
@@ -91,14 +89,15 @@ export class CreateTutorial extends React.PureComponent<
     return formattedValues
   }
 
-  public handleUploadStepImgSuccess = (fileInfo: IFirebaseUploadInfo) => {
-    console.log('index', this.state._currentStepIndex)
-    // get the current steps
+  public handleUploadStepImgSuccess = (
+    fileInfo: IFirebaseUploadInfo,
+    stepIndex: number,
+  ) => {
     const currentSteps: any = this.state.formValues.steps
     // get the step at the index where the new image will go
     // use the spread operator to merge the existing images with the new url
-    currentSteps[this.state._currentStepIndex].images = [
-      ...currentSteps[this.state._currentStepIndex].images,
+    currentSteps[stepIndex].images = [
+      ...currentSteps[stepIndex].images,
       fileInfo.downloadUrl,
     ]
     console.log('this.state.formValues', this.state.formValues)
@@ -508,14 +507,10 @@ export class CreateTutorial extends React.PureComponent<
                                   buttonText="Upload picture(s)"
                                   name={`${step}.images`}
                                   storagePath={this.state._uploadImgPath}
+                                  callbackData={index}
                                   onUploadSuccess={
                                     this.handleUploadStepImgSuccess
                                   }
-                                  onClick={() => {
-                                    this.setState({
-                                      _currentStepIndex: index,
-                                    })
-                                  }}
                                 />
                               </CardContent>
                               {index >= 1 && (

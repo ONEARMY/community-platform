@@ -99,7 +99,7 @@ export class Tutorial extends React.Component<
       : undefined
   }
 
-  public renderSliderContent(step: any) {
+  public renderMultipleImages(step: any) {
     const preloadedImages = []
     for (const image of step.images) {
       const imageObj = new Image()
@@ -189,7 +189,7 @@ export class Tutorial extends React.Component<
                     {step.text}
                   </Typography>
                   {step.images.length > 1
-                    ? this.renderSliderContent(step)
+                    ? this.renderMultipleImages(step)
                     : this.renderUniqueImage(step.images[0])}
                 </CardContent>
               </Card>

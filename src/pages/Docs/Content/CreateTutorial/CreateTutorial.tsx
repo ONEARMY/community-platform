@@ -198,9 +198,8 @@ export class CreateTutorial extends React.PureComponent<
                               this.onInputChange(event, 'workspace_name')
                             }}
                           />
-                          {meta.error && meta.touched && (
-                            <span>{meta.error}</span>
-                          )}
+                          {meta.error &&
+                            meta.touched && <span>{meta.error}</span>}
                         </div>
                       )}
                     </Field>
@@ -222,9 +221,8 @@ export class CreateTutorial extends React.PureComponent<
                             }}
                             placeholder="How to make XXX using YYY"
                           />
-                          {meta.error && meta.touched && (
-                            <span>{meta.error}</span>
-                          )}
+                          {meta.error &&
+                            meta.touched && <span>{meta.error}</span>}
                         </div>
                       )}
                     </Field>
@@ -310,9 +308,8 @@ export class CreateTutorial extends React.PureComponent<
                             }}
                             className="create-tutorial__input"
                           />
-                          {meta.error && meta.touched && (
-                            <span>{meta.error}</span>
-                          )}
+                          {meta.error &&
+                            meta.touched && <span>{meta.error}</span>}
                         </div>
                       )}
                     </Field>
@@ -334,9 +331,8 @@ export class CreateTutorial extends React.PureComponent<
                               this.onInputChange(event, 'tutorial_time')
                             }}
                           />
-                          {meta.error && meta.touched && (
-                            <span>{meta.error}</span>
-                          )}
+                          {meta.error &&
+                            meta.touched && <span>{meta.error}</span>}
                         </div>
                       )}
                     </Field>
@@ -366,9 +362,8 @@ export class CreateTutorial extends React.PureComponent<
                               </InputAdornment>
                             }
                           />
-                          {meta.error && meta.touched && (
-                            <span>{meta.error}</span>
-                          )}
+                          {meta.error &&
+                            meta.touched && <span>{meta.error}</span>}
                         </div>
                       )}
                     </Field>
@@ -426,9 +421,8 @@ export class CreateTutorial extends React.PureComponent<
                               )
                             }}
                           />
-                          {meta.error && meta.touched && (
-                            <span>{meta.error}</span>
-                          )}
+                          {meta.error &&
+                            meta.touched && <span>{meta.error}</span>}
                         </div>
                       )}
                     </Field>
@@ -529,6 +523,7 @@ export class CreateTutorial extends React.PureComponent<
                     </FieldArray>
                     <button
                       className="add-step__button"
+                      type="button"
                       onClick={() => {
                         // create a empty step in the steps form value
                         form.mutators.push('steps', {

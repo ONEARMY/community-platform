@@ -18,4 +18,5 @@ export interface ITag {
   image: string
   _created: Date
   _modified: Date
+  _selected?: boolean
 }

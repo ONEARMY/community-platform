@@ -84,7 +84,7 @@ export class LoginContainer extends React.Component<IProps, IInternalState> {
     const { userStore } = this.injected
     return (
       <div>
-        <LoginComponent user={userStore.user} />
+        <LoginComponent user={userStore.user ? userStore.user : null} />
       </div>
     )
   }

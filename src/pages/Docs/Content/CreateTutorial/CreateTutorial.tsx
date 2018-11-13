@@ -427,135 +427,133 @@ export class CreateTutorial extends React.PureComponent<
                         </div>
                       )}
                     </Field>
-                    <div />
-                    <FieldArray name="steps">
-                      {({ fields }) =>
-                        fields.map((step, index) => (
-                          <div className="step__container" key={index}>
-                            <Card key={step} className="step__card">
-                              <div className="step__header">
-                                <Typography
-                                  variant="h5"
-                                  component="h2"
-                                  className="step-number"
-                                >
-                                  Step {index + 1}
-                                </Typography>
-                              </div>
-                              <CardContent>
-                                <div>
-                                  <Typography
-                                    component="label"
-                                    className="create-tutorial__label"
-                                  >
-                                    Pick a title for this step
-                                  </Typography>
-                                  <Field
-                                    name={`${step}.title`}
-                                    component="input"
-                                    placeholder="Step title"
-                                    validate={required}
-                                    className="create-tutorial__input"
-                                  />
-                                  <Typography
-                                    component="label"
-                                    className="create-tutorial__label"
-                                  >
-                                    Describe this step
-                                  </Typography>
-                                  <Field
-                                    name={`${step}.text`}
-                                    component="textarea"
-                                    placeholder="Description"
-                                    validate={required}
-                                    className="create-tutorial__input"
-                                    onBlur={() => {
-                                      // update the state with the new values
-                                      const stepValuesInput: any = form.getFieldState(
-                                        'steps',
-                                      )!.value
-                                      this.setState({
-                                        formValues: {
-                                          ...this.state.formValues,
-                                          steps: stepValuesInput,
-                                        },
-                                      })
-                                    }}
-                                  />
-                                </div>
-
-                                {this.state.formValues.steps[index] &&
-                                  this.state.formValues.steps[index].images
-                                    .length >= 1 &&
-                                  this.state.formValues.steps[index].images.map(
-                                    (stepImg, stepImgindex) => (
-                                      <img
-                                        key={stepImgindex}
-                                        className="step-img"
-                                        src={stepImg}
-                                      />
-                                    ),
-                                  )}
-
-                                <FirebaseFileUploader
-                                  hidden
-                                  buttonText="Upload picture(s)"
-                                  name={`${step}.images`}
-                                  storagePath={this.state._uploadImgPath}
-                                  callbackData={index}
-                                  onUploadSuccess={
-                                    this.handleUploadStepImgSuccess
-                                  }
-                                />
-                              </CardContent>
-                              {index >= 1 && (
-                                <div
-                                  onClick={() => fields.remove(index)}
-                                  className="step-delete__button"
-                                >
-                                  <img src={DeleteIcon} alt="" />
-                                  <span>delete this step</span>
-                                </div>
-                              )}
-                            </Card>
-                          </div>
-                        ))
-                      }
-                    </FieldArray>
-                    <button
-                      className="add-step__button"
-                      type="button"
-                      onClick={() => {
-                        // create a empty step in the steps form value
-                        form.mutators.push('steps', {
-                          title: '',
-                          text: '',
-                          images: [],
-                        })
-                        // update the state with the empty new step
-                        const stepValuesInput: any = form.getFieldState(
-                          'steps',
-                        )!.value
-                        this.setState({
-                          formValues: {
-                            ...this.state.formValues,
-                            steps: stepValuesInput,
-                          },
-                        })
-                      }}
-                    >
-                      <img src={AddIcon} alt="" />
-                      <span>Add step</span>
-                    </button>
-                    <button
-                      type="submit"
-                      className="validate-form__button"
-                      disabled={submitting || invalid}
-                    >
-                      <img src={SaveIcon} alt="" />
-                      <span>Save</span>
-                    </button>
                   </div>
+                  <FieldArray name="steps">
+                    {({ fields }) =>
+                      fields.map((step, index) => (
+                        <div className="step__container" key={index}>
+                          <Card key={step} className="step__card">
+                            <div className="step__header">
+                              <Typography
+                                variant="h5"
+                                component="h2"
+                                className="step-number"
+                              >
+                                Step {index + 1}
+                              </Typography>
+                            </div>
+                            <CardContent>
+                              <div>
+                                <Typography
+                                  component="label"
+                                  className="create-tutorial__label"
+                                >
+                                  Pick a title for this step
+                                </Typography>
+                                <Field
+                                  name={`${step}.title`}
+                                  component="input"
+                                  placeholder="Step title"
+                                  validate={required}
+                                  className="create-tutorial__input"
+                                />
+                                <Typography
+                                  component="label"
+                                  className="create-tutorial__label"
+                                >
+                                  Describe this step
+                                </Typography>
+                                <Field
+                                  name={`${step}.text`}
+                                  component="textarea"
+                                  placeholder="Description"
+                                  validate={required}
+                                  className="create-tutorial__input"
+                                  onBlur={() => {
+                                    // update the state with the new values
+                                    const stepValuesInput: any = form.getFieldState(
+                                      'steps',
+                                    )!.value
+                                    this.setState({
+                                      formValues: {
+                                        ...this.state.formValues,
+                                        steps: stepValuesInput,
+                                      },
+                                    })
+                                  }}
+                                />
+                              </div>
+
+                              {this.state.formValues.steps[index] &&
+                                this.state.formValues.steps[index].images
+                                  .length >= 1 &&
+                                this.state.formValues.steps[index].images.map(
+                                  (stepImg, stepImgindex) => (
+                                    <img
+                                      key={stepImgindex}
+                                      className="step-img"
+                                      src={stepImg}
+                                    />
+                                  ),
+                                )}
+
+                              <FirebaseFileUploader
+                                hidden
+                                buttonText="Upload picture(s)"
+                                name={`${step}.images`}
+                                storagePath={this.state._uploadImgPath}
+                                callbackData={index}
+                                onUploadSuccess={
+                                  this.handleUploadStepImgSuccess
+                                }
+                              />
+                            </CardContent>
+                            {index >= 1 && (
+                              <div
+                                onClick={() => fields.remove(index)}
+                                className="step-delete__button"
+                              >
+                                <img src={DeleteIcon} alt="" />
+                                <span>delete this step</span>
+                              </div>
+                            )}
+                          </Card>
+                        </div>
+                      ))
+                    }
+                  </FieldArray>
+                  <button
+                    className="add-step__button"
+                    type="button"
+                    onClick={() => {
+                      // create a empty step in the steps form value
+                      form.mutators.push('steps', {
+                        title: '',
+                        text: '',
+                        images: [],
+                      })
+                      // update the state with the empty new step
+                      const stepValuesInput: any = form.getFieldState('steps')!
+                        .value
+                      this.setState({
+                        formValues: {
+                          ...this.state.formValues,
+                          steps: stepValuesInput,
+                        },
+                      })
+                    }}
+                  >
+                    <img src={AddIcon} alt="" />
+                    <span>Add step</span>
+                  </button>
+                  <button
+                    type="submit"
+                    className="validate-form__button"
+                    disabled={submitting || invalid}
+                  >
+                    <img src={SaveIcon} alt="" />
+                    <span>Save</span>
+                  </button>
                 </form>
               </div>
             )

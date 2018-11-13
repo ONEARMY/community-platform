@@ -4,10 +4,11 @@ import { inject, observer } from 'mobx-react'
 import { TagsStore } from 'src/stores/Tags/tags.store'
 import { Button } from '@material-ui/core'
 import './TagsSelect.scss'
+import { ISelectedTags } from 'src/models/tags.model'
 
 interface IProps {
-  value?: string[]
-  onChange: (val: string[]) => void
+  value?: ISelectedTags
+  onChange: (val: ISelectedTags) => void
 }
 interface IState {
   selectedTags: string[]
@@ -28,10 +29,13 @@ export class TagsSelect extends React.Component<IProps, IState> {
     return this.props as InjectedProps
   }
 
-  // if we pass a value to the component we want to update the state to reflect the selected tags
-  public componentWillReceiveProps(nextProps: IProps) {
-    this.setState({ selectedTags: nextProps.value ? nextProps.value : [] })
-    console.log('props updated', this.state)
+  // if we initialise with a value we want to update the state to reflect the selected tags
+  public componentWillMount() {
+    if (this.props.value) {
+      this.setState({
+        selectedTags: this._selectedJsonToTagsArray(this.props.value),
+      })
+    }
   }
 
   public onTagClick(tagKey: string) {
@@ -41,7 +45,8 @@ export class TagsSelect extends React.Component<IProps, IState> {
       ? selected.splice(isSelectedIndex, 1)
       : selected.push(tagKey)
     this.setState({ selectedTags: selected })
-    console.log('selected tags', this.state.selectedTags)
+    // trigger onChange callback to update parent
+    this.props.onChange(this._tagsArrayToSelectedJson(selected))
   }
 
   public render() {
@@ -68,13 +73,26 @@ export class TagsSelect extends React.Component<IProps, IState> {
       </div>
     )
   }
+
+  // whilst we deal with arrays of selected tag ids in the component we want to store as a json map
+  // to make it easier for querying. The next 2 functions handle conversion between formats
+  // i.e [tag1,tag2,tag3] <-> {tag1:true, tag2:true, tag3:true}
+  private _tagsArrayToSelectedJson(arr: string[]) {
+    const selectedJson = {}
+    arr.forEach(el => (selectedJson[el] = true))
+    return selectedJson
+  }
+  private _selectedJsonToTagsArray(json: ISelectedTags) {
+    return Object.keys(json)
+  }
 }
 
+// default function will be called if no onChange method supplied
 TagsSelect.defaultProps = {
   onChange: val => {
-    console.log('default change function')
     return
   },
+  value: {},
 }
 
 // public sortTagsIntoCategories(tags: ITag[]) {

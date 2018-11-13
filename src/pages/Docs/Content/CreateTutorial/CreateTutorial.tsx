@@ -29,6 +29,7 @@ import {
 } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
 import helpers from 'src/utils/helpers'
 import { TagsSelect } from 'src/pages/common/TagsSelect/TagsSelect'
+import { ISelectedTags } from 'src/models/tags.model'
 
 export interface IState {
   formValues: ITutorialFormInput
@@ -161,6 +162,15 @@ export class CreateTutorial extends React.PureComponent<
     }
   }
 
+  public onSelectedTagsChanged(selectedTags: ISelectedTags) {
+    this.setState({
+      formValues: {
+        ...this.state.formValues,
+        tags: selectedTags,
+      },
+    })
+  }
+
   public render() {
     return (
       <div>
@@ -248,50 +258,8 @@ export class CreateTutorial extends React.PureComponent<
                     </Typography>
                     <TagsSelect
                       value={this.state.formValues.tags}
-                      onChange={selectedTags => {
-                        this.setState({
-                          formValues: {
-                            ...this.state.formValues,
-                            tags: selectedTags,
-                          },
-                        })
-                      }}
+                      onChange={tags => this.onSelectedTagsChanged(tags)}
                     />
-                    {/* <div className="create-tutorial__tags--container">
-                      {tags.map((tag, index) => (
-                        <div key={index} className="create-tutorial__tag">
-                          <Input
-                            type="checkbox"
-                            name={tags[index].label}
-                            value={tags[index]._key}
-                            id={tags[index]._key}
-                            className="create-tutorial__checkbox"
-                            onChange={(e: any) => {
-                              console.log(e.target.checked)
-                              if (e.target.checked) {
-                                // push the tag in the value array
-                                selectedTags.push(e.target.value)
-                              } else {
-                                // remove from the array of tags
-                                selectedTags = selectedTags.filter(
-                                  (item: any) => item !== e.target.value,
-                                )
-                              }
-                              // set state with updated tags list
-                              this.setState({
-                                formValues: {
-                                  ...this.state.formValues,
-                                  tags: selectedTags,
-                                },
-                              })
-                            }}
-                          />
-                          <label htmlFor={tags[index].label}>
-                            {tags[index].label}
-                          </label>
-                        </div>
-                      ))}
-                    </div> */}
                     {this.state.formValues.cover_image_url && (
                       <img
                         className="cover-img"

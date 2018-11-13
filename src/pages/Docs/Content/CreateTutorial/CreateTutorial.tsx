@@ -28,6 +28,8 @@ import {
   IFirebaseUploadInfo,
 } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
 import helpers from 'src/utils/helpers'
+import { TagsSelect } from 'src/pages/common/TagsSelect/TagsSelect'
+import { ISelectedTags } from 'src/models/tags.model'
 
 export interface IState {
   formValues: ITutorialFormInput
@@ -37,8 +39,8 @@ export interface IState {
 }
 
 // For now tags are raw in this variable, next we'll need to get them from our server
-const tags: ITag[] = TAGS_MOCK
-let selectedTags: any = []
+// const tags: ITag[] = TAGS_MOCK
+// let selectedTags: any = []
 const required = (value: any) => (value ? undefined : 'Required')
 
 export class CreateTutorial extends React.PureComponent<
@@ -160,6 +162,15 @@ export class CreateTutorial extends React.PureComponent<
     }
   }
 
+  public onSelectedTagsChanged(selectedTags: ISelectedTags) {
+    this.setState({
+      formValues: {
+        ...this.state.formValues,
+        tags: selectedTags,
+      },
+    })
+  }
+
   public render() {
     return (
       <div>
@@ -198,8 +209,9 @@ export class CreateTutorial extends React.PureComponent<
                               this.onInputChange(event, 'workspace_name')
                             }}
                           />
-                          {meta.error &&
-                            meta.touched && <span>{meta.error}</span>}
+                          {meta.error && meta.touched && (
+                            <span>{meta.error}</span>
+                          )}
                         </div>
                       )}
                     </Field>
@@ -221,8 +233,9 @@ export class CreateTutorial extends React.PureComponent<
                             }}
                             placeholder="How to make XXX using YYY"
                           />
-                          {meta.error &&
-                            meta.touched && <span>{meta.error}</span>}
+                          {meta.error && meta.touched && (
+                            <span>{meta.error}</span>
+                          )}
                         </div>
                       )}
                     </Field>
@@ -243,41 +256,10 @@ export class CreateTutorial extends React.PureComponent<
                     >
                       Add tags
                     </Typography>
-                    <div className="create-tutorial__tags--container">
-                      {tags.map((tag, index) => (
-                        <div key={index} className="create-tutorial__tag">
-                          <Input
-                            type="checkbox"
-                            name={tags[index].label}
-                            value={tags[index]._key}
-                            id={tags[index]._key}
-                            className="create-tutorial__checkbox"
-                            onChange={(e: any) => {
-                              console.log(e.target.checked)
-                              if (e.target.checked) {
-                                // push the tag in the value array
-                                selectedTags.push(e.target.value)
-                              } else {
-                                // remove from the array of tags
-                                selectedTags = selectedTags.filter(
-                                  (item: any) => item !== e.target.value,
-                                )
-                              }
-                              // set state with updated tags list
-                              this.setState({
-                                formValues: {
-                                  ...this.state.formValues,
-                                  tags: selectedTags,
-                                },
-                              })
-                            }}
-                          />
-                          <label htmlFor={tags[index].label}>
-                            {tags[index].label}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
+                    <TagsSelect
+                      value={this.state.formValues.tags}
+                      onChange={tags => this.onSelectedTagsChanged(tags)}
+                    />
                     {this.state.formValues.cover_image_url && (
                       <img
                         className="cover-img"
@@ -308,8 +290,9 @@ export class CreateTutorial extends React.PureComponent<
                             }}
                             className="create-tutorial__input"
                           />
-                          {meta.error &&
-                            meta.touched && <span>{meta.error}</span>}
+                          {meta.error && meta.touched && (
+                            <span>{meta.error}</span>
+                          )}
                         </div>
                       )}
                     </Field>
@@ -331,8 +314,9 @@ export class CreateTutorial extends React.PureComponent<
                               this.onInputChange(event, 'tutorial_time')
                             }}
                           />
-                          {meta.error &&
-                            meta.touched && <span>{meta.error}</span>}
+                          {meta.error && meta.touched && (
+                            <span>{meta.error}</span>
+                          )}
                         </div>
                       )}
                     </Field>
@@ -362,8 +346,9 @@ export class CreateTutorial extends React.PureComponent<
                               </InputAdornment>
                             }
                           />
-                          {meta.error &&
-                            meta.touched && <span>{meta.error}</span>}
+                          {meta.error && meta.touched && (
+                            <span>{meta.error}</span>
+                          )}
                         </div>
                       )}
                     </Field>
@@ -421,8 +406,9 @@ export class CreateTutorial extends React.PureComponent<
                               )
                             }}
                           />
-                          {meta.error &&
-                            meta.touched && <span>{meta.error}</span>}
+                          {meta.error && meta.touched && (
+                            <span>{meta.error}</span>
+                          )}
                         </div>
                       )}
                     </Field>

@@ -157,19 +157,24 @@ export class Tutorial extends React.Component<
                     <TagDisplay tagKey={k} key={k} />
                   ))}
                 </div>
-
-                {/* {tutorial.tutorial_files.length > 0 && (
+                {tutorial.tutorial_files.length > 0 ? (
                   <a
-                    className="download-btn"
                     target="_blank"
-                    href={tutorial.tutorial_files_url}
+                    download
+                    href={
+                      tutorial.tutorial_files[
+                        tutorial.tutorial_files.length - 1
+                      ].downloadUrl
+                    }
                   >
-                    <span className="icon-separator">
-                      <CloudDownloadIcon />
-                    </span>
-                    Download files
+                    <button className="download-btn">
+                      <span className="icon-separator">
+                        <CloudDownloadIcon />
+                      </span>
+                      Download files
+                    </button>
                   </a>
-                )} */}
+                ) : null}
               </div>
             </div>
             <div className="tutorial-infos__right">

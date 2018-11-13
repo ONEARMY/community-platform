@@ -28,7 +28,7 @@ import {
   IFirebaseUploadInfo,
 } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
 import helpers from 'src/utils/helpers'
-import { TagsSelect } from 'src/pages/common/TagsSelect/TagsSelect'
+import { TagsSelect } from 'src/pages/common/Tags'
 import { ISelectedTags } from 'src/models/tags.model'
 
 export interface IState {

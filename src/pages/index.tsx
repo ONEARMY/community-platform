@@ -69,7 +69,7 @@ export class Routes extends React.Component<any, IState> {
 
   // once we know we are only rendering a single page, identify the page component to render depending on subdomain
   // *** NOTE - if you want to add more subdomains to render specific components also include in src/config.ts
-  // *** to ensure production site is rendered and not development
+  // to ensure production site is rendered and not development
   private getSubdomainComponent(subdomain: string) {
     switch (subdomain) {
       case 'documentation':

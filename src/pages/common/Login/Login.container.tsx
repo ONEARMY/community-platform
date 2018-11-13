@@ -69,8 +69,8 @@ export class LoginContainer extends React.Component<IProps, IInternalState> {
       this.injected.userStore.updateUser(userMeta)
     } else {
       console.log('no user meta retrieved')
-      // *** handle user has no profile - shouldn't happen as registration populates before creating user?
-      // *** should also handle timeout/no connection potential issue when fetching?
+      // *** TODO handle user has no profile - shouldn't happen as registration populates before creating user?
+      // *** TODO should also handle timeout/no connection potential issue when fetching?
     }
   }
 

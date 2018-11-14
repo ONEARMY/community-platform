@@ -9,6 +9,7 @@ import { IUser } from '../../models/models'
 import { UserStore } from 'src/stores/User/user.store'
 import { IStores } from 'src/stores'
 import { inject } from 'mobx-react'
+import { VersionNumber } from 'src/components/VersionNumber'
 
 interface IState {
   isLoggedIn: boolean
@@ -24,6 +25,7 @@ export class HomePage extends React.Component<IState, any> {
     this.setState({ isLoggedIn: user ? true : false })
   }
   public render() {
+    console.log('env', process.env)
     return (
       <div id="HomePage">
         <LoginContainer />
@@ -32,6 +34,7 @@ export class HomePage extends React.Component<IState, any> {
         ) : (
           <div className="bgimg-1" />
         )}
+        <VersionNumber />
       </div>
     )
   }

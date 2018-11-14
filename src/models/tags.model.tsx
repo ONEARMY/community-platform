@@ -11,11 +11,18 @@ such as machines. It is also intended image will contain a binary string of the 
 This should be kept small (max db size for an entry is around 1MB, but this should only be a few kb)
 when building tag uploader it should enforce reasonable max size image (say 500px x 500px)
 */
-export interface ITag {
+
+// when we query tag from the database it does not have a _key field. This can be populated after
+// to produce what we want for the Tag interface
+export interface ITag extends ITagQuery {
   _key: string
+}
+
+export interface ITagQuery {
   category: string
   label: string
   image: string
   _created: Date
   _modified: Date
+  _selected?: boolean
 }

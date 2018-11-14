@@ -10,6 +10,7 @@ import { ITutorial } from 'src/models/models'
 import { db } from 'src/utils/firebase'
 import { inject } from 'mobx-react'
 import { DocStore } from 'src/stores/Docs/docs.store'
+import { TagDisplay } from 'src/pages/common/Tags'
 
 const sliderSettings = {
   centerMode: false,
@@ -151,6 +152,12 @@ export class Tutorial extends React.Component<
                 <Typography component="p">
                   <b>Time : {tutorial.tutorial_time}</b>
                 </Typography>
+                <div>
+                  {Object.keys(tutorial.tags).map(k => (
+                    <TagDisplay tagKey={k} key={k} />
+                  ))}
+                </div>
+
                 {/* {tutorial.tutorial_files.length > 0 && (
                   <a
                     className="download-btn"

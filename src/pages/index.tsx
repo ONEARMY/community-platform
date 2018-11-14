@@ -3,7 +3,7 @@ import * as React from 'react'
 import { Switch, Route, BrowserRouter } from 'react-router-dom'
 import DevTools from 'mobx-react-devtools'
 
-import Docs from './Docs/Docs'
+import { DocsPage } from './Docs/Docs'
 import { HomePage } from './Home/Home'
 import { NotFoundPage } from './NotFound/NotFound'
 import { TemplatePage } from './_Template/Template'
@@ -31,11 +31,10 @@ export class Routes extends React.Component<any, IState> {
           {/* on page change scroll to top */}
           <ScrollToTop>
             <Switch>
-              <Route path="/docs" component={Docs} />
+              <Route path="/docs" component={DocsPage} />
               <Route path="/template" component={TemplatePage} />
               <Route exact path="/" component={HomePage} />
               <Route component={NotFoundPage} />
-              <Route component={Docs} />
             </Switch>
           </ScrollToTop>
         </BrowserRouter>
@@ -73,7 +72,7 @@ export class Routes extends React.Component<any, IState> {
   private getSubdomainComponent(subdomain: string) {
     switch (subdomain) {
       case 'documentation':
-        return Docs
+        return DocsPage
       default:
         return NotFoundPage
     }

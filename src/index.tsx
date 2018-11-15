@@ -12,6 +12,11 @@ import './index.css'
 
 import registerServiceWorker from './registerServiceWorker'
 
+const onUpdate = () => {
+  console.log('sw updated receive in index')
+  stores.platformStore.setServiceWorkerStatus('updated')
+}
+
 ReactDOM.render(
   // provider makes all stores available through the app via @inject
   <Provider {...stores}>
@@ -21,4 +26,5 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root') as HTMLElement,
 )
-registerServiceWorker()
+
+registerServiceWorker(onUpdate)

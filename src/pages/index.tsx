@@ -3,7 +3,7 @@ import * as React from 'react'
 import { Switch, Route, BrowserRouter } from 'react-router-dom'
 import DevTools from 'mobx-react-devtools'
 
-import Docs from './Docs/Docs'
+import { DocsPage } from './Docs/Docs'
 import { HomePage } from './Home/Home'
 import { NotFoundPage } from './NotFound/NotFound'
 import { TemplatePage } from './_Template/Template'
@@ -31,11 +31,10 @@ export class Routes extends React.Component<any, IState> {
           {/* on page change scroll to top */}
           <ScrollToTop>
             <Switch>
-              <Route path="/docs" component={Docs} />
+              <Route path="/docs" component={DocsPage} />
               <Route path="/template" component={TemplatePage} />
               <Route exact path="/" component={HomePage} />
               <Route component={NotFoundPage} />
-              <Route component={Docs} />
             </Switch>
           </ScrollToTop>
         </BrowserRouter>
@@ -69,11 +68,11 @@ export class Routes extends React.Component<any, IState> {
 
   // once we know we are only rendering a single page, identify the page component to render depending on subdomain
   // *** NOTE - if you want to add more subdomains to render specific components also include in src/config.ts
-  // *** to ensure production site is rendered and not development
+  // to ensure production site is rendered and not development
   private getSubdomainComponent(subdomain: string) {
     switch (subdomain) {
       case 'documentation':
-        return Docs
+        return DocsPage
       default:
         return NotFoundPage
     }

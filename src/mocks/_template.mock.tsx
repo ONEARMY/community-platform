@@ -11,11 +11,17 @@ export const TemplateMock: ITemplateData[] = [
       id: '_demo_001',
       lastName: 'Clarke',
       verified: true,
+      _created: new Date(),
+      _modified: new Date(),
     },
+    _created: new Date(),
+    _modified: new Date(),
   },
   {
     id: 2,
     message: { message: 'ahoyhoy', read: false, type: 'short' },
+    _created: new Date(),
+    _modified: new Date(),
   },
 ]
 

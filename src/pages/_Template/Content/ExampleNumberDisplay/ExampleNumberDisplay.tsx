@@ -55,7 +55,7 @@ Local state should contain things which aren't necessarily passed between compon
 but influence the visual design of the current component
 
 Q. How do I apply styles
-(*** to be specified ***)
+(*** TODO - neees specifying ***)
 
 Q. Are there any reusable components I can include in this template?
 Yes, the material-ui library is imported and provides lots of components

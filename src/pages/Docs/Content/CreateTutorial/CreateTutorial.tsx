@@ -14,7 +14,6 @@ import {
   ITutorialFormInput,
 } from '../../../../models/tutorial.models'
 
-import DeleteIcon from '../../../../assets/icons/bin.svg'
 import AddIcon from '../../../../assets/icons/add.svg'
 import SaveIcon from '../../../../assets/icons/save.svg'
 
@@ -501,10 +500,12 @@ export class CreateTutorial extends React.PureComponent<
                               </CardContent>
                               {index >= 1 && (
                                 <div
-                                  onClick={() => fields.remove(index)}
+                                  onClick={() => {
+                                    fields.remove(index)
+                                  }}
                                   className="step-delete__button"
                                 >
-                                  <img src={DeleteIcon} alt="" />
+                                  <span className="trash-icon" />
                                   <span>delete this step</span>
                                 </div>
                               )}

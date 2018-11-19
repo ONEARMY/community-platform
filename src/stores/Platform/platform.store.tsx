@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx'
 
-type ISWStatus = 'updated'
+type ISWStatus = 'updated' | null
 
 export class PlatformStore {
   @observable
@@ -8,7 +8,7 @@ export class PlatformStore {
 
   @action
   public setServiceWorkerStatus(status: ISWStatus) {
-    console.log('sw update received to store')
+    console.log('sw update received to store', status)
     this.serviceWorkerStatus = status
   }
 }

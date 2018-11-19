@@ -11,20 +11,23 @@ import { theme } from './themes/app.theme'
 import './index.css'
 
 import registerServiceWorker from './registerServiceWorker'
-
-const onUpdate = () => {
-  console.log('sw updated receive in index')
-  stores.platformStore.setServiceWorkerStatus('updated')
-}
+import { SWUpdateNotification } from './pages/common/SWUpdateNotification/SWUpdateNotification'
 
 ReactDOM.render(
   // provider makes all stores available through the app via @inject
   <Provider {...stores}>
     <MuiThemeProvider theme={theme}>
       <Routes />
+      <SWUpdateNotification />
     </MuiThemeProvider>
   </Provider>,
   document.getElementById('root') as HTMLElement,
 )
+
+// callback function updates global store when service worker registered
+const onUpdate = () => {
+  console.log('sw updated receive in index')
+  stores.platformStore.setServiceWorkerStatus('updated')
+}
 
 registerServiceWorker(onUpdate)

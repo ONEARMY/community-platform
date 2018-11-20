@@ -19,6 +19,8 @@ before_deploy:
 deploy:
   - provider: script
     script:
+      - firebase use default
+      - echo "Deploying to dev server"
       - firebase deploy --token $FIREBASE_STAGING_TOKEN --only hosting:dev
     skip_cleanup: true
     on:

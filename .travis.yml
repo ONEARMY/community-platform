@@ -17,14 +17,16 @@ before_deploy:
   - export REACT_APP_BRANCH=$(if [ "$TRAVIS_BRANCH" == "master" ]; then echo "PRODUCTION"; else echo "STAGING"; fi)
   - echo "REACT_APP_BRANCH=$REACT_APP_BRANCH"
 deploy:
-  - provider: firebase
+  - provider: script
+    script:
+      - firebase deploy --token $FIREBASE_STAGING_TOKEN --only hosting
     skip_cleanup: true
     token: '$FIREBASE_STAGING_TOKEN'
     message: --only hosting
     project: precious-plastics-v4-dev
     on:
       branch: dev
-  - provider: firebase
+  - provider: script
     skip_cleanup: true
     token: '$FIREBASE_PRODUCTION_TOKEN'
     message: --only hosting

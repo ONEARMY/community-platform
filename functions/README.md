@@ -2,7 +2,7 @@
 
 ## What are they?
 
-Firebase functions are backend functions, triggered either via https requests or specific Firebase events (e.g. database writes). They have full ability to interact with the firebase platform and run within a nodejs environment.
+Firebase functions are backend functions, triggered either via https requests, cloud pub/sub or other specific Firebase events (e.g. database writes). They run within a nodejs environment and have full ability to interact with the firebase platform.
 https://firebase.google.com/docs/functions/
 
 ## How are they used at One Army?

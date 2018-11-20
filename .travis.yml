@@ -16,7 +16,7 @@ before_deploy:
   - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH"
   - export REACT_APP_BRANCH=$(if [ "$TRAVIS_BRANCH" == "master" ]; then echo "PRODUCTION"; else echo "STAGING"; fi)
   - echo "REACT_APP_BRANCH=$REACT_APP_BRANCH"
-  - export FIREBASE_TOKEN = $(if [ "$TRAVIS_BRANCH" == "master" ]; then echo "$FIREBASE_PRODUCTION_TOKEN"; else echo "$FIREBASE_PRODUCTION_TOKEN"; fi)
+  - export FIREBASE_TOKEN=$(if [ "$TRAVIS_BRANCH" == "master" ]; then echo "$FIREBASE_PRODUCTION_TOKEN"; else echo "$FIREBASE_PRODUCTION_TOKEN"; fi)
   - echo "FIREBASE TOKEN = $FIREBASE_TOKEN"
 deploy:
   - provider: script
@@ -32,3 +32,11 @@ deploy:
       branch: master
 after_deploy:
   - echo "REACT_APP_BRANCH=$REACT_APP_BRANCH"
+# Deployment notes
+
+# There is a native firebase deploy provider for travis, however it does not have
+# required customisation for things like deploying only hosting. Alternatively there
+# is a npm package 'firebase-ci' which could be used
+
+# Firebase requires auth, so can either pass --token to all commands with ci token,
+# or store $FIREBASE_TOKEN environment variable which will automatically be detected

@@ -18,7 +18,7 @@ before_deploy:
   - echo "REACT_APP_BRANCH=$REACT_APP_BRANCH"
 deploy:
   - provider: script
-    script: firebase use default && echo "deploying to dev" && firebase deploy --token $FIREBASE_STAGING_TOKEN --only hosting:dev
+    script: echo "deploying to dev" && firebase deploy --token $FIREBASE_STAGING_TOKEN --only hosting:dev
     skip_cleanup: true
     on:
       branch: dev

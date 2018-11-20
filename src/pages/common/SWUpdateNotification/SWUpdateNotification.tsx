@@ -38,7 +38,6 @@ export class SWUpdateNotification extends React.Component<IProps, IState> {
   }
 
   public render() {
-    console.log('sw status', this.injected.platformStore.serviceWorkerStatus)
     return (
       <Snackbar
         action={[

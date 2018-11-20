@@ -19,18 +19,16 @@ before_deploy:
 deploy:
   - provider: script
     script:
+      - firebase use default
       - firebase deploy --token $FIREBASE_STAGING_TOKEN --only hosting
     skip_cleanup: true
-    token: '$FIREBASE_STAGING_TOKEN'
-    message: --only hosting
-    project: precious-plastics-v4-dev
     on:
       branch: dev
   - provider: script
+    script:
+      - firebase use production
+      - firebase deploy --token $FIREBASE_PRODUCTION_TOKEN --only hosting
     skip_cleanup: true
-    token: '$FIREBASE_PRODUCTION_TOKEN'
-    message: --only hosting
-    project: onearmyworld
     on:
       branch: master
 after_deploy:

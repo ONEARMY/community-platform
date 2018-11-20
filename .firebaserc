@@ -2,5 +2,17 @@
   "projects": {
     "default": "precious-plastics-v4-dev",
     "production": "onearmyworld"
+  },
+  "targets": {
+    "precious-plastics-v4-dev": {
+      "hosting": {
+        "dev": [
+          "precious-plastics-v4-dev"
+        ],
+        "prod": [
+          "onearmyworld"
+        ]
+      }
+    }
   }
 }

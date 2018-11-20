@@ -19,15 +19,13 @@ before_deploy:
 deploy:
   - provider: script
     script:
-      - firebase use default
-      - firebase deploy --token $FIREBASE_STAGING_TOKEN --only hosting
+      - firebase deploy --token $FIREBASE_STAGING_TOKEN --only hosting:dev
     skip_cleanup: true
     on:
       branch: dev
   - provider: script
     script:
-      - firebase use production
-      - firebase deploy --token $FIREBASE_PRODUCTION_TOKEN --only hosting
+      - firebase deploy --token $FIREBASE_PRODUCTION_TOKEN --only hosting:prod
     skip_cleanup: true
     on:
       branch: master

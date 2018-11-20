@@ -16,9 +16,11 @@ before_deploy:
   - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH"
   - export REACT_APP_BRANCH=$(if [ "$TRAVIS_BRANCH" == "master" ]; then echo "PRODUCTION"; else echo "STAGING"; fi)
   - echo "REACT_APP_BRANCH=$REACT_APP_BRANCH"
+  - export FIREBASE_TOKEN = $(if [ "$TRAVIS_BRANCH" == "master" ]; then echo "$FIREBASE_PRODUCTION_TOKEN"; else echo "$FIREBASE_PRODUCTION_TOKEN"; fi)
+  - echo "FIREBASE TOKEN = $FIREBASE_TOKEN"
 deploy:
   - provider: script
-    script: echo "deploying to dev" && firebase deploy --token $FIREBASE_STAGING_TOKEN --only hosting:dev
+    script: firebase use default --token $FIREBASE_STAGING_TOKEN && firebase deploy --token $FIREBASE_STAGING_TOKEN --only hosting
     skip_cleanup: true
     on:
       branch: dev

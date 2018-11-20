@@ -20,14 +20,14 @@ deploy:
   - provider: firebase
     skip_cleanup: true
     token: '$FIREBASE_STAGING_TOKEN'
-    message: Firebase staging deploy success
+    message: --only hosting
     project: precious-plastics-v4-dev
     on:
       branch: dev
   - provider: firebase
     skip_cleanup: true
     token: '$FIREBASE_PRODUCTION_TOKEN'
-    message: Firebase production deploy success
+    message: --only hosting
     project: onearmyworld
     on:
       branch: master

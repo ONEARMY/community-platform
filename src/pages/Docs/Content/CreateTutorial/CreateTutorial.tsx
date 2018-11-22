@@ -72,7 +72,8 @@ export class CreateTutorial extends React.PureComponent<
       try {
         await db.collection('documentation').add(values)
         console.log('doc set successfully')
-        this.props.history.push('/docs/list')
+        this.props.history.push('/docs/' + this.state.formValues.slug)
+        this.forceUpdate()
       } catch (error) {
         console.log('error while saving the tutorial')
       }

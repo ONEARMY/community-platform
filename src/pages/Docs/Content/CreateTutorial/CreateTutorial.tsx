@@ -249,16 +249,6 @@ export class CreateTutorial extends React.PureComponent<
                           '/docs/' +
                           this.state.formValues.slug}
                       </div>
-                      <Typography
-                        component="label"
-                        className="create-tutorial__label"
-                      >
-                        Add tags
-                      </Typography>
-                      <TagsSelect
-                        value={this.state.formValues.tags}
-                        onChange={tags => this.onSelectedTagsChanged(tags)}
-                      />
                       {this.state.formValues.cover_image_url && (
                         <img
                           className="cover-img"
@@ -302,6 +292,16 @@ export class CreateTutorial extends React.PureComponent<
                           </div>
                         )}
                       </Field>
+                      <Typography
+                        component="label"
+                        className="create-tutorial__label label__margin"
+                      >
+                        Add tags
+                      </Typography>
+                      <TagsSelect
+                        value={this.state.formValues.tags}
+                        onChange={tags => this.onSelectedTagsChanged(tags)}
+                      />
                       <Field name="tutorial_time" validate={required}>
                         {({ input, meta }) => (
                           <div>
@@ -332,7 +332,7 @@ export class CreateTutorial extends React.PureComponent<
                               component="label"
                               className="create-tutorial__label label__margin"
                             >
-                              How much does it cost (roughly in USD)?
+                              How much does it cost (roughly in €)?
                             </Typography>
                             <Input
                               {...input}
@@ -347,7 +347,7 @@ export class CreateTutorial extends React.PureComponent<
                                   position="start"
                                   className="input__prefix--dollar"
                                 >
-                                  $
+                                  €
                                 </InputAdornment>
                               }
                             />

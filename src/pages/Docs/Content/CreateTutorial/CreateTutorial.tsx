@@ -9,6 +9,11 @@ import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import Input from '@material-ui/core/Input'
 import InputAdornment from '@material-ui/core/InputAdornment'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogContentText from '@material-ui/core/DialogContentText'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import {
   ITutorial,
   ITutorialFormInput,
@@ -35,6 +40,7 @@ export interface IState {
   _uploadImgPath: string
   _uploadFilesPath: string
   _toDocsList: boolean
+  _isModaleStepDeleteOpen: boolean
 }
 
 // For now tags are raw in this variable, next we'll need to get them from our server
@@ -53,6 +59,7 @@ export class CreateTutorial extends React.PureComponent<
       _uploadImgPath: 'uploads/test',
       _uploadFilesPath: 'uploads/test',
       _toDocsList: false,
+      _isModaleStepDeleteOpen: false,
     }
   }
 
@@ -169,6 +176,17 @@ export class CreateTutorial extends React.PureComponent<
         ...this.state.formValues,
         tags: selectedTags,
       },
+    })
+  }
+
+  public handleModaleDeleteStepOpen() {
+    this.setState({
+      _isModaleStepDeleteOpen: true,
+    })
+  }
+  public handleModaleDeleteStepClose() {
+    this.setState({
+      _isModaleStepDeleteOpen: false,
     })
   }
 
@@ -502,7 +520,7 @@ export class CreateTutorial extends React.PureComponent<
                               {index >= 1 && (
                                 <div
                                   onClick={() => {
-                                    fields.remove(index)
+                                    this.handleModaleDeleteStepOpen()
                                   }}
                                   className="step-delete__button"
                                 >
@@ -511,6 +529,42 @@ export class CreateTutorial extends React.PureComponent<
                                 </div>
                               )}
                             </Card>
+                            <Dialog
+                              open={this.state._isModaleStepDeleteOpen}
+                              onClose={() => {
+                                this.setState({
+                                  _isModaleStepDeleteOpen: false,
+                                })
+                              }}
+                              aria-labelledby="alert-dialog-title"
+                              aria-describedby="alert-dialog-description"
+                            >
+                              <DialogTitle
+                                id="alert-dialog-title"
+                                className="dialog-container"
+                              >
+                                {'Are you sure to delete this step ?'}
+                              </DialogTitle>
+                              <DialogActions className="dialog-buttons-container">
+                                <button
+                                  className="dialog-button__cancel"
+                                  onClick={() => {
+                                    this.handleModaleDeleteStepClose()
+                                  }}
+                                >
+                                  Cancel
+                                </button>
+                                <button
+                                  className="dialog-button__validate"
+                                  onClick={() => {
+                                    fields.remove(index)
+                                    this.handleModaleDeleteStepClose()
+                                  }}
+                                >
+                                  Yes
+                                </button>
+                              </DialogActions>
+                            </Dialog>
                           </div>
                         ))
                       }

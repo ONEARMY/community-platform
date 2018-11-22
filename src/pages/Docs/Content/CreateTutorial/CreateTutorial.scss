@@ -289,3 +289,31 @@
     }
   }
 }
+
+.dialog-container {
+  width: 403px;
+  height: 72px;
+}
+
+.dialog-button__cancel {
+  width: 112px;
+  height: 60px;
+  background-color: white !important;
+  color: black;
+  text-transform: uppercase;
+  font-size: 1em;
+}
+
+.dialog-button__validate {
+  width: 112px;
+  height: 60px;
+  background-color: #B6D8E6;
+  color: black;
+  text-transform: uppercase;
+  border: none;
+  font-size: 1em;
+}
+
+.dialog-buttons-container {
+  justify-content: center !important;
+}

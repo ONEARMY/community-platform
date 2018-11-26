@@ -12,24 +12,31 @@ before_script:
   - npm install -g firebase-tools
 script:
   - npm run build
+# populate environment variables to be used in app (prefixed REACT_APP) and deployment (FIREBASE_TOKEN)
 before_deploy:
   - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH"
   - export REACT_APP_BRANCH=$(if [ "$TRAVIS_BRANCH" == "master" ]; then echo "PRODUCTION"; else echo "STAGING"; fi)
   - echo "REACT_APP_BRANCH=$REACT_APP_BRANCH"
+  - export FIREBASE_TOKEN=$(if [ "$TRAVIS_BRANCH" == "master" ]; then echo "$FIREBASE_PRODUCTION_TOKEN"; else echo "$FIREBASE_PRODUCTION_TOKEN"; fi)
+  - echo "FIREBASE TOKEN = $FIREBASE_TOKEN"
 deploy:
-  - provider: firebase
+  - provider: script
+    script: firebase use default && firebase deploy --only hosting
     skip_cleanup: true
-    token: '$FIREBASE_STAGING_TOKEN'
-    message: Firebase staging deploy success
-    project: precious-plastics-v4-dev
     on:
       branch: dev
-  - provider: firebase
+  - provider: script
+    script: firebase use production && firebase deploy --only hosting
     skip_cleanup: true
-    token: '$FIREBASE_PRODUCTION_TOKEN'
-    message: Firebase production deploy success
-    project: onearmyworld
     on:
       branch: master
 after_deploy:
   - echo "REACT_APP_BRANCH=$REACT_APP_BRANCH"
+# Deployment notes
+
+# There is a native firebase deploy provider for travis, however it does not have
+# required customisation for things like deploying only hosting. Alternatively there
+# is a npm package 'firebase-ci' which could be used
+
+# Firebase requires auth, so can either pass --token to all commands with ci token,
+# or store $FIREBASE_TOKEN environment variable which will automatically be detected

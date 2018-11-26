@@ -31,6 +31,8 @@
     "jest",
     "src/setupTests.ts",
     "config/*.js",
-    "config/jest/*.js"
+    "config/jest/*.js",
+    "functions-cron",
+    "functions"
   ]
 }

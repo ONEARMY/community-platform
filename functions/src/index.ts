@@ -8,6 +8,7 @@ admin.initializeApp()
 
 // custom module imports
 import * as DB from './databaseBackup'
+import * as ImageConverter from './imageConverter'
 
 // update on change logging purposes
 const buildNumber = 1.03
@@ -67,6 +68,10 @@ exports.backupFirestore = functions.pubsub
     console.log('backup:', backup)
     return true
   })
+
+exports.imageResize = functions.storage.object().onFinalize(async (object) => {
+  return ImageConverter.resizeImage(object);
+})
 
 // add export so can be used by test
 export default app

@@ -12,24 +12,11 @@ import { inject } from 'mobx-react'
 import { DocStore } from 'src/stores/Docs/docs.store'
 import { TagDisplay } from 'src/pages/common/Tags'
 
-const sliderSettings = {
-  centerMode: false,
-  arrows: true,
-  dots: true,
-  infinite: true,
-  speed: 500,
-  customPaging: (i: any) => (
-    <div
-      style={{
-        width: '30px',
-        color: 'black',
-        border: '1px black solid',
-      }}
-    >
-      {i + 1}
-    </div>
-  ),
-}
+import {
+  TutorialInfosContainer,
+  ContainerLeft,
+  InfosContentPadding,
+} from './elements'
 
 const styles = {
   card: {
@@ -128,9 +115,9 @@ export class Tutorial extends React.Component<
     if (tutorial) {
       return (
         <div>
-          <div className="tutorial-infos__container">
-            <div className="tutorial-infos__left">
-              <div className="tutorial-infos__content">
+          <TutorialInfosContainer>
+            <ContainerLeft>
+              <InfosContentPadding>
                 <Typography variant="h4" component="h4">
                   {tutorial.tutorial_title}
                 </Typography>
@@ -175,12 +162,12 @@ export class Tutorial extends React.Component<
                     </button>
                   </a>
                 ) : null}
-              </div>
-            </div>
+              </InfosContentPadding>
+            </ContainerLeft>
             <div className="tutorial-infos__right">
               <img src={tutorial.cover_image_url} alt="tutorial cover" />
             </div>
-          </div>
+          </TutorialInfosContainer>
           {tutorial.steps.map((step: any, index: number) => (
             <div className="step__container" key={index}>
               <Card style={styles.card} className="step__card">

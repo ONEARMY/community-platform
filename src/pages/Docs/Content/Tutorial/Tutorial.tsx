@@ -2,7 +2,7 @@ import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
-import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
+
 import LinearProgress from '@material-ui/core/LinearProgress'
 import Typography from '@material-ui/core/Typography'
 import './Tutorial.scss'
@@ -10,13 +10,8 @@ import { ITutorial } from 'src/models/models'
 import { db } from 'src/utils/firebase'
 import { inject } from 'mobx-react'
 import { DocStore } from 'src/stores/Docs/docs.store'
-import { TagDisplay } from 'src/pages/common/Tags'
 
-import {
-  TutorialInfosContainer,
-  ContainerLeft,
-  InfosContentPadding,
-} from './elements'
+import TutorialDescription from './TutorialDescription/TutorialDescription'
 
 const styles = {
   card: {
@@ -115,59 +110,7 @@ export class Tutorial extends React.Component<
     if (tutorial) {
       return (
         <div>
-          <TutorialInfosContainer>
-            <ContainerLeft>
-              <InfosContentPadding>
-                <Typography variant="h4" component="h4">
-                  {tutorial.tutorial_title}
-                </Typography>
-                <Typography component="p">
-                  {tutorial.tutorial_description}
-                </Typography>
-                <Typography component="p">
-                  <b>Workspace : {tutorial.workspace_name}</b>
-                </Typography>
-                <Typography component="p">
-                  <b>{tutorial.steps.length} Steps</b>
-                </Typography>
-                <Typography component="p">
-                  <b>Cost : {tutorial.tutorial_cost}</b>
-                </Typography>
-                <Typography component="p">
-                  <b>Difficulty : {tutorial.difficulty_level}</b>
-                </Typography>
-                <Typography component="p">
-                  <b>Time : {tutorial.tutorial_time}</b>
-                </Typography>
-                <div>
-                  {Object.keys(tutorial.tags).map(k => (
-                    <TagDisplay tagKey={k} key={k} />
-                  ))}
-                </div>
-                {tutorial.tutorial_files.length > 0 ? (
-                  <a
-                    target="_blank"
-                    download
-                    href={
-                      tutorial.tutorial_files[
-                        tutorial.tutorial_files.length - 1
-                      ].downloadUrl
-                    }
-                  >
-                    <button className="download-btn">
-                      <span className="icon-separator">
-                        <CloudDownloadIcon />
-                      </span>
-                      Download files
-                    </button>
-                  </a>
-                ) : null}
-              </InfosContentPadding>
-            </ContainerLeft>
-            <div className="tutorial-infos__right">
-              <img src={tutorial.cover_image_url} alt="tutorial cover" />
-            </div>
-          </TutorialInfosContainer>
+          <TutorialDescription tutorial={tutorial} />
           {tutorial.steps.map((step: any, index: number) => (
             <div className="step__container" key={index}>
               <Card style={styles.card} className="step__card">

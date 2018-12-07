@@ -7,14 +7,10 @@ import {
   DownloadIcon,
   InnerButtonText,
   Container,
+  AddIcon,
 } from './elements'
 
 function ButtonComponent({ ...props }) {
-  // Link
-  if (props.to) {
-    return <LinkButton {...props} />
-  }
-
   if (props.href && props.download) {
     return (
       <DownloadButton {...props}>
@@ -23,6 +19,16 @@ function ButtonComponent({ ...props }) {
           <InnerButtonText>{props.text}</InnerButtonText>
         </Container>
       </DownloadButton>
+    )
+  }
+  if (props.to && props.addtutorial) {
+    return (
+      <LinkButton {...props}>
+        <Container>
+          <AddIcon />
+          <InnerButtonText>{props.text}</InnerButtonText>
+        </Container>
+      </LinkButton>
     )
   }
 

@@ -3,8 +3,11 @@ import styled, {
 } from 'styled-components';
 import Link from 'react-router-dom/Link';
 import {
-    MdFileDownload
+    MdFileDownload,
+    MdAdd
 } from 'react-icons/md'
+
+import colors from 'src/themes/colors'
 
 const styles = css `
     width: ${props => props.width};
@@ -12,7 +15,7 @@ const styles = css `
     height: ${props => props.height};
     text-transform: uppercase;
     text-align: center;
-    background-color: rgba(4, 139, 180, 0.685);
+    background-color: ${colors.blue};
     border: none;
     text-decoration: none;
     cursor: pointer;
@@ -45,6 +48,12 @@ export const Container = styled.div `
     transform: translateY(-50%);
 `;
 export const DownloadIcon = styled(MdFileDownload)
+`
+    width: 25px;
+    height: 25px;
+    color: black;
+`;
+export const AddIcon = styled(MdAdd)
 `
     width: 25px;
     height: 25px;

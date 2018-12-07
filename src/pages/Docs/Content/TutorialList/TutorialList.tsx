@@ -17,6 +17,8 @@ import { theme } from '../../../../themes/app.theme'
 import AddIcon from '../../../../assets/icons/add.svg'
 import { ITutorial } from 'src/models/models'
 
+import Button from 'src/pages/common/Button/Button'
+
 const styles: any = {
   layout: {
     width: 'auto',
@@ -60,10 +62,14 @@ export class TutorialList extends React.Component<IProps, any> {
         >
           Documentation
         </Typography>
-        <Link to={`/docs/create`} className="create-tutorial__button">
-          <img src={AddIcon} alt="" />
-          <span>create tutorial</span>
-        </Link>
+        <Button
+          to={`/docs/create`}
+          width={'300px'}
+          height={'50px'}
+          text={'create tutorial'}
+          addtutorial={true}
+          style={{ margin: '50px auto' }}
+        />
         <React.Fragment>
           <div style={styles.layout}>
             {allTutorials.length === 0 ? (

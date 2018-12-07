@@ -21,18 +21,5 @@
     "typeRoots": ["./types", "./node_modules/@types"],
     "resolveJsonModule": true
   },
-  "exclude": [
-    "node_modules",
-    "types",
-    "build",
-    "scripts",
-    "acceptance-tests",
-    "webpack",
-    "jest",
-    "src/setupTests.ts",
-    "config/*.js",
-    "config/jest/*.js",
-    "functions-cron",
-    "functions"
-  ]
+  "exclude": ["node_modules", "data"]
 }

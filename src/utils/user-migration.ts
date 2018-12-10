@@ -1,9 +1,9 @@
 // This file handles most of the logic involved with user migration
 import { auth, db } from './firebase'
-// import { LEGACY_USERS } from 'src/mocks/user.mock'
+import { LEGACY_USERS } from 'src/mocks/user.mock'
 import { ILegacyUser, IUser } from 'src/models/user.models'
 import * as phpassHasher from 'wordpress-hash-node'
-import * as LEGACY_USERS from './UserMigration/src/data/subset_0.json'
+// import * as LEGACY_USERS from './UserMigration/src/data/subset_0.json'
 import md5 from 'md5'
 
 interface IMigrationResponse {

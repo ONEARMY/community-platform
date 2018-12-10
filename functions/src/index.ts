@@ -58,14 +58,16 @@ Use pubsub to automatically subscribe to messages sent from cron.
 Add/change schedule from `./functions-cron/appengine/cron.yaml`
 ************************************************************************************/
 
-exports.backupFirestore = functions.pubsub
-  .topic('firebase-backup')
+exports.weeklyTasks = functions.pubsub
+  .topic('weekly-tick')
   .onPublish(async (message, context) => {
-    console.log('initiating backup')
-    // run our daily db backup task
     const backup = await DB.BackupDatabase()
-    console.log('backup:', backup)
-    return true
+  })
+
+exports.dailyTasks = functions.pubsub
+  .topic('daily-tick')
+  .onPublish(async (message, context) => {
+    // we don't have daily tasks currently
   })
 
 // add export so can be used by test

@@ -20,11 +20,21 @@ Future
 The functions are not integrated into the existing CI pipeline for automated deployment as they require
 a specific config file which is not shared in the public git repository.
 
-As such to deploy you must first populate the src/config file (available from repo admin), and then run scripts
-from the main repo
+As such you will need to be authenticated as a firebase project admin (available from repo admin)
+and populate the src/config files (available from repo admin)
 
-Select either development or production site (always use development site first)
-`npm use [default/prod]`
+To deploy functions use the following scripts
 
-Deploy
-`Firebase deploy --only functions`
+`$cd functions`
+
+dev:
+`$npm run deploy-functions-dev`
+
+prod:
+`$npm run deploy-functions-prod`
+
+## Adding cron tasks
+
+Both production and live have small app-engine instances that run cron tasks, schedules can be seen in ../functions-cron.
+
+If changing either of these remember to deploy both to production and development servers

@@ -1,7 +1,7 @@
 // import { pubsub } from 'firebase-functions'
 import { JWT } from 'google-auth-library'
 // import * as rp from 'request-promise'
-import * as config from './config/dev-service-account-key.json'
+import * as config from './config/config.json'
 import Axios from 'axios'
 
 /*  Cloud function to automatically backup the firebase database adapted from: 

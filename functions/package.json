@@ -6,7 +6,8 @@
     "serve": "npm run build && firebase serve --only functions",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
-    "deploy": "firebase deploy --only functions",
+    "deploy-functions-prod": "cp src/config/config.prod.json src/config/config.json && firebase use production && firebase deploy --only functions",
+    "deploy-functions-dev": "cp src/config/config.dev.json src/config/config.json && firebase use default && firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
   "main": "lib/index.js",

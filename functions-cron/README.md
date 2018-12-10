@@ -58,7 +58,7 @@ Leave the default cron.yaml as is for now to run through the sample.
 $ gcloud config set project <your-project-id>
 ```
 
-2. Change directory to `appengine/`
+2. ** NOT REQUIRED ** Change directory to `appengine/`
 
 ```
 $ cd appengine/
@@ -70,7 +70,7 @@ $ cd appengine/
 $ npm install
 ```
 
-4. Create an App Engine App
+4. ** NOT REQUIRED ** Create an App Engine App
 
 ```
 $ gcloud app create

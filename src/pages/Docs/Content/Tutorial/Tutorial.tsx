@@ -1,8 +1,6 @@
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 import LinearProgress from '@material-ui/core/LinearProgress'
-import Typography from '@material-ui/core/Typography'
-import './Tutorial.scss'
 import { ITutorial } from 'src/models/models'
 import { db } from 'src/utils/firebase'
 import { inject } from 'mobx-react'

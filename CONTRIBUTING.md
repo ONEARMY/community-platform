@@ -1,6 +1,6 @@
 # Introduction (for first timers)
 
-Welcome to One Army! We’re excited to hear that you’re interested in supporting the development of our project. If you happened to just stumble across this, we are building a new platform to help unite people to support social causes, such as [Precious Plastic](https://preciousplastic.com) (which is where this all began).
+Welcome to One Army! We’re excited to hear that you’re interested in supporting the development of our project. If you happened to just stumble across this, we are building a new platform to help unite people to support social causes, such as [Precious Plastic](https://preciousplastic.com) (which is where this all began) or [ProjectKamp](https://projectkamp.com/). A platform to connect, educate and empower a global community to solve society's greatest challenges. 
 
 The platform is built in **React** (+ Mobx + Typescript), with backend microservices in Node. If you are unfamiliar with these technologies we suggest you first spend some time understanding how these frameworks function before getting in touch (as much as we’d love to be your teachers, we just don’t have the capacity to do that and build everything else). Here are a few links that might be of help on your journey:
 

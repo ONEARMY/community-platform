@@ -9,12 +9,16 @@ import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import Input from '@material-ui/core/Input'
 import InputAdornment from '@material-ui/core/InputAdornment'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogContentText from '@material-ui/core/DialogContentText'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import {
   ITutorial,
   ITutorialFormInput,
 } from '../../../../models/tutorial.models'
 
-import DeleteIcon from '../../../../assets/icons/bin.svg'
 import AddIcon from '../../../../assets/icons/add.svg'
 import SaveIcon from '../../../../assets/icons/save.svg'
 
@@ -36,6 +40,7 @@ export interface IState {
   _uploadImgPath: string
   _uploadFilesPath: string
   _toDocsList: boolean
+  _isModaleStepDeleteOpen: boolean
 }
 
 // For now tags are raw in this variable, next we'll need to get them from our server
@@ -54,6 +59,7 @@ export class CreateTutorial extends React.PureComponent<
       _uploadImgPath: 'uploads/test',
       _uploadFilesPath: 'uploads/test',
       _toDocsList: false,
+      _isModaleStepDeleteOpen: false,
     }
   }
 
@@ -73,7 +79,8 @@ export class CreateTutorial extends React.PureComponent<
       try {
         await db.collection('documentation').add(values)
         console.log('doc set successfully')
-        this.props.history.push('/docs/list')
+        this.props.history.push('/docs/' + this.state.formValues.slug)
+        this.forceUpdate()
       } catch (error) {
         console.log('error while saving the tutorial')
       }
@@ -172,6 +179,17 @@ export class CreateTutorial extends React.PureComponent<
     })
   }
 
+  public handleModaleDeleteStepOpen() {
+    this.setState({
+      _isModaleStepDeleteOpen: true,
+    })
+  }
+  public handleModaleDeleteStepClose() {
+    this.setState({
+      _isModaleStepDeleteOpen: false,
+    })
+  }
+
   public render() {
     return (
       <div>
@@ -250,16 +268,6 @@ export class CreateTutorial extends React.PureComponent<
                           '/docs/' +
                           this.state.formValues.slug}
                       </div>
-                      <Typography
-                        component="label"
-                        className="create-tutorial__label"
-                      >
-                        Add tags
-                      </Typography>
-                      <TagsSelect
-                        value={this.state.formValues.tags}
-                        onChange={tags => this.onSelectedTagsChanged(tags)}
-                      />
                       {this.state.formValues.cover_image_url && (
                         <img
                           className="cover-img"
@@ -303,6 +311,16 @@ export class CreateTutorial extends React.PureComponent<
                           </div>
                         )}
                       </Field>
+                      <Typography
+                        component="label"
+                        className="create-tutorial__label label__margin"
+                      >
+                        Add tags
+                      </Typography>
+                      <TagsSelect
+                        value={this.state.formValues.tags}
+                        onChange={tags => this.onSelectedTagsChanged(tags)}
+                      />
                       <Field name="tutorial_time" validate={required}>
                         {({ input, meta }) => (
                           <div>
@@ -333,7 +351,7 @@ export class CreateTutorial extends React.PureComponent<
                               component="label"
                               className="create-tutorial__label label__margin"
                             >
-                              How much does it cost (roughly in USD)?
+                              How much does it cost (roughly in €)?
                             </Typography>
                             <Input
                               {...input}
@@ -348,7 +366,7 @@ export class CreateTutorial extends React.PureComponent<
                                   position="start"
                                   className="input__prefix--dollar"
                                 >
-                                  $
+                                  €
                                 </InputAdornment>
                               }
                             />
@@ -501,14 +519,52 @@ export class CreateTutorial extends React.PureComponent<
                               </CardContent>
                               {index >= 1 && (
                                 <div
-                                  onClick={() => fields.remove(index)}
+                                  onClick={() => {
+                                    this.handleModaleDeleteStepOpen()
+                                  }}
                                   className="step-delete__button"
                                 >
-                                  <img src={DeleteIcon} alt="" />
+                                  <span className="trash-icon" />
                                   <span>delete this step</span>
                                 </div>
                               )}
                             </Card>
+                            <Dialog
+                              open={this.state._isModaleStepDeleteOpen}
+                              onClose={() => {
+                                this.setState({
+                                  _isModaleStepDeleteOpen: false,
+                                })
+                              }}
+                              aria-labelledby="alert-dialog-title"
+                              aria-describedby="alert-dialog-description"
+                            >
+                              <DialogTitle
+                                id="alert-dialog-title"
+                                className="dialog-container"
+                              >
+                                {'Are you sure to delete this step ?'}
+                              </DialogTitle>
+                              <DialogActions className="dialog-buttons-container">
+                                <button
+                                  className="dialog-button__cancel"
+                                  onClick={() => {
+                                    this.handleModaleDeleteStepClose()
+                                  }}
+                                >
+                                  Cancel
+                                </button>
+                                <button
+                                  className="dialog-button__validate"
+                                  onClick={() => {
+                                    fields.remove(index)
+                                    this.handleModaleDeleteStepClose()
+                                  }}
+                                >
+                                  Yes
+                                </button>
+                              </DialogActions>
+                            </Dialog>
                           </div>
                         ))
                       }

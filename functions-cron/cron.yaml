@@ -1,0 +1,16 @@
+cron:
+  - description: Push a "tick" onto pubsub every hour
+    url: /publish/hourly-tick
+    schedule: every 1 hours
+
+  - description: Push a "tick" onto pubsub every day
+    url: /publish/daily-tick
+    schedule: every 24 hours
+
+  - description: Push a "tick" onto pubsub every week
+    url: /publish/weekly-tick
+    schedule: every saturday 00:00
+
+  - description: make a backup for firestore everyday at 00:00
+    url: /publish/firebase-backup
+    schedule: every 24 hours

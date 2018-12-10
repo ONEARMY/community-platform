@@ -1,8 +1,5 @@
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
-import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/CardContent'
-
 import LinearProgress from '@material-ui/core/LinearProgress'
 import Typography from '@material-ui/core/Typography'
 import './Tutorial.scss'
@@ -12,25 +9,7 @@ import { inject } from 'mobx-react'
 import { DocStore } from 'src/stores/Docs/docs.store'
 
 import TutorialDescription from './TutorialDescription/TutorialDescription'
-
-const styles = {
-  card: {
-    minWidth: 275,
-    maxWidth: 900,
-    margin: '20px auto',
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
-}
+import Step from './Step/Step'
 
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
@@ -82,29 +61,6 @@ export class Tutorial extends React.Component<
       : undefined
   }
 
-  public renderMultipleImages(step: any) {
-    const preloadedImages = []
-    for (const image of step.images) {
-      const imageObj = new Image()
-      imageObj.src = image
-      preloadedImages.push({
-        src: imageObj.src,
-      })
-    }
-    return preloadedImages.map((image: any, index: number) => (
-      <div className="step__image">
-        <img src={image.src} />
-      </div>
-    ))
-  }
-
-  public renderUniqueImage(url: string) {
-    return (
-      <div className="step__image">
-        <img src={url} />
-      </div>
-    )
-  }
   public render() {
     const { tutorial, isLoading } = this.state
     if (tutorial) {
@@ -112,32 +68,8 @@ export class Tutorial extends React.Component<
         <div>
           <TutorialDescription tutorial={tutorial} />
           {tutorial.steps.map((step: any, index: number) => (
-            <div className="step__container" key={index}>
-              <Card style={styles.card} className="step__card">
-                <div className="step__header">
-                  <Typography className="step__number" variant="h5">
-                    Step {index + 1}
-                  </Typography>
-                </div>
-                <CardContent>
-                  <Typography
-                    className="step__title"
-                    variant="h5"
-                    component="h2"
-                  >
-                    {step.title}
-                  </Typography>
-                  <Typography className="step__description" component="p">
-                    {step.text}
-                  </Typography>
-                  {step.images.length > 1
-                    ? this.renderMultipleImages(step)
-                    : this.renderUniqueImage(step.images[0])}
-                </CardContent>
-              </Card>
-            </div>
+            <Step step={step} key={index} stepindex={index} />
           ))}
-          )}
         </div>
       )
     } else {

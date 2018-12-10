@@ -1,10 +1,16 @@
 import React from 'react'
 
-import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
 import Typography from '@material-ui/core/Typography'
 import { TagDisplay } from 'src/pages/common/Tags/TagDisplay/TagDisplay'
 
-import { Container, ContainerLeft, Padding } from './elements'
+import {
+  Container,
+  ContainerLeft,
+  Padding,
+  ContainerRight,
+  CoverImg,
+  TutorialInfo,
+} from './elements'
 import Button from 'src/pages/common/Button/Button'
 
 export default class TutorialDescription extends React.PureComponent<any, any> {
@@ -20,24 +26,24 @@ export default class TutorialDescription extends React.PureComponent<any, any> {
             <Typography variant="h4" component="h4">
               {tutorial.tutorial_title}
             </Typography>
-            <Typography component="p">
+            <TutorialInfo component="p">
               {tutorial.tutorial_description}
-            </Typography>
-            <Typography component="p">
+            </TutorialInfo>
+            <TutorialInfo component="p">
               <b>Workspace : {tutorial.workspace_name}</b>
-            </Typography>
-            <Typography component="p">
+            </TutorialInfo>
+            <TutorialInfo component="p">
               <b>{tutorial.steps.length} Steps</b>
-            </Typography>
-            <Typography component="p">
+            </TutorialInfo>
+            <TutorialInfo component="p">
               <b>Cost : {tutorial.tutorial_cost}</b>
-            </Typography>
-            <Typography component="p">
+            </TutorialInfo>
+            <TutorialInfo component="p">
               <b>Difficulty : {tutorial.difficulty_level}</b>
-            </Typography>
-            <Typography component="p">
+            </TutorialInfo>
+            <TutorialInfo component="p">
               <b>Time : {tutorial.tutorial_time}</b>
-            </Typography>
+            </TutorialInfo>
             <div>
               {Object.keys(tutorial.tags).map(k => (
                 <TagDisplay tagKey={k} key={k} />
@@ -54,13 +60,14 @@ export default class TutorialDescription extends React.PureComponent<any, any> {
                 }
                 width={'200px'}
                 height={'50px'}
+                style={{ marginTop: '20px' }}
               />
             ) : null}
           </Padding>
         </ContainerLeft>
-        <div className="tutorial-infos__right">
-          <img src={tutorial.cover_image_url} alt="tutorial cover" />
-        </div>
+        <ContainerRight>
+          <CoverImg src={tutorial.cover_image_url} alt="tutorial cover" />
+        </ContainerRight>
       </Container>
     )
   }

@@ -8,6 +8,7 @@ admin.initializeApp()
 
 // custom module imports
 import * as DB from './databaseBackup'
+import * as ImageConverter from './imageConverter'
 
 // update on change logging purposes
 const buildNumber = 1.03
@@ -69,6 +70,10 @@ exports.dailyTasks = functions.pubsub
   .onPublish(async (message, context) => {
     // we don't have daily tasks currently
   })
+
+exports.imageResize = functions.storage.object().onFinalize(async (object) => {
+  return ImageConverter.resizeImage(object);
+})
 
 // add export so can be used by test
 export default app

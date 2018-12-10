@@ -71,8 +71,12 @@ exports.dailyTasks = functions.pubsub
     // we don't have daily tasks currently
   })
 
-exports.imageResize = functions.storage.object().onFinalize(async (object) => {
-  return ImageConverter.resizeImage(object);
+/************ Storage Triggers ******************************************************
+Functions called in response to changes to firebase storage objects
+************************************************************************************/
+
+exports.imageResize = functions.storage.object().onFinalize(async object => {
+  return ImageConverter.resizeImage(object)
 })
 
 // add export so can be used by test

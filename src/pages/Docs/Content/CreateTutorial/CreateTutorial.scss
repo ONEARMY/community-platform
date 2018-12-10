@@ -1,5 +1,4 @@
 .create-tutorial-form__container {
-  width: 75%;
   position: relative;
   margin: 0 auto;
 
@@ -105,10 +104,12 @@
 
   .create-tutorial-infos__container-background {
     max-width: 1200px;
+    width: 75%;
     display: block;
     background-color: #ededed;
     position: relative;
     padding: 40px 50px;
+    margin: auto;
 
     .create-tutorial-infos__container {
       position: relative;
@@ -127,7 +128,7 @@
 
   .steps__container-background {
     margin: 40px auto;
-    max-width: 500px;
+    max-width: 600px;
   }
 
   .step__container {

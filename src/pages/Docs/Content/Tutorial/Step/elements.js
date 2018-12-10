@@ -8,7 +8,7 @@ export const Container = styled.div `
 
 export const StepCard = styled.div `
     min-width: 275px;
-    max-width: 900px;
+    max-width: 600px;
     margin: 20px auto;
     border-radius: 0;
     border: 1px solid #dddddd;
@@ -39,5 +39,5 @@ export const StepDescription = styled(Typography)
 `;
 
 export const StepImage = styled.img `
-    max-width: 600px;
+    max-width: 500px;
 `;

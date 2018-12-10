@@ -1,5 +1,4 @@
 import * as React from 'react'
-import './TutorialList.scss'
 import { Link } from 'react-router-dom'
 import { ClampLines } from '../../../../components/ClampLines/ClampLines'
 import CardActions from '@material-ui/core/CardActions'
@@ -14,7 +13,6 @@ import MoreVertIcon from '@material-ui/icons/MoreVert'
 import CommentIcon from '@material-ui/icons/Comment'
 import TurnedInIcon from '@material-ui/icons/TurnedIn'
 import { theme } from '../../../../themes/app.theme'
-import AddIcon from '../../../../assets/icons/add.svg'
 import { ITutorial } from 'src/models/models'
 
 import Button from 'src/pages/common/Button/Button'
@@ -67,7 +65,7 @@ export class TutorialList extends React.Component<IProps, any> {
           width={'300px'}
           height={'50px'}
           text={'create tutorial'}
-          addtutorial={true}
+          btnfn={'addtutorial'}
           style={{ margin: '50px auto' }}
         />
         <React.Fragment>
@@ -82,7 +80,15 @@ export class TutorialList extends React.Component<IProps, any> {
                       to={`/docs/${encodeURIComponent(tutorial.slug)}`}
                       style={styles.link}
                     >
-                      <Card className="tutorial-list__card">
+                      <Card
+                        className="tutorial-list__card"
+                        style={{
+                          borderRadius: '0px',
+                          height: '100%',
+                          display: 'flex',
+                          flexDirection: 'column',
+                        }}
+                      >
                         <CardMedia
                           style={styles.cardMedia}
                           image={tutorial.cover_image_url} // eslint-disable-line max-len
@@ -133,11 +139,15 @@ export class TutorialList extends React.Component<IProps, any> {
               </Grid>
             )}
           </div>
-          {allTutorials.length > 20 ? (
-            <Link to={`/docs/create`} className="create-tutorial__button">
-              <img src={AddIcon} alt="" />
-              <span>create tutorial</span>
-            </Link>
+          {allTutorials.length > 15 ? (
+            <Button
+              to={`/docs/create`}
+              width={'300px'}
+              height={'50px'}
+              text={'create tutorial'}
+              btnfn={'addtutorial'}
+              style={{ margin: '50px auto' }}
+            />
           ) : null}
         </React.Fragment>
       </div>

@@ -21,7 +21,7 @@ function ButtonComponent({ ...props }) {
       </DownloadButton>
     )
   }
-  if (props.to && props.addtutorial) {
+  if (props.to && props.btnfn === 'addtutorial') {
     return (
       <LinkButton {...props}>
         <Container>

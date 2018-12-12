@@ -590,7 +590,7 @@ export class CreateTutorial extends React.PureComponent<
                           },
                         })
                       }}
-                      style={{ margin: '60px auto' }}
+                      style={{ margin: '60px auto', display: 'block' }}
                     />
                     <Button
                       type="submit"

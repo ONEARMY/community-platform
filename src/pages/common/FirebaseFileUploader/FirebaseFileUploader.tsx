@@ -1,11 +1,10 @@
 import * as React from 'react'
 import { storage } from '../../../utils/firebase'
 import FileUploader from 'react-firebase-file-uploader'
-import LinearProgress from '@material-ui/core/LinearProgress'
 import Button from 'src/components/Button/Button'
-import UploadIconImage from '../../../assets/icons/upload.svg'
-import './FirebaseFileUploader.scss'
 import { FullMetadata } from '@firebase/storage-types'
+
+import { Container, ProgressContainer, ProgressBar } from './elements'
 /*
 This component takes a folder storage path and uploads files to firebase storage
 onUploadSucess allows URLs of completed uploads to be passed back to parent component
@@ -34,20 +33,6 @@ export interface IFirebaseUploadInfo {
   updated: string
 }
 
-const styles = {
-  icon: {
-    marginLeft: '8px',
-    height: '1.5em',
-  },
-  container: {
-    display: 'inline-block',
-    margin: '1em 0',
-  },
-  progressContainer: {
-    height: 5,
-    marginTop: '10px',
-  },
-}
 export class FirebaseFileUploader extends React.Component<IProps, IState> {
   public static defaultProps: any
   public fileInputRef: any
@@ -105,18 +90,14 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
     if (this.state.isUploading) {
       if (this.state.uploadProgress > 0) {
         return (
-          <LinearProgress
+          <ProgressBar
             variant="determinate"
             value={this.state.uploadProgress}
-            className={
-              this.state.uploadProgress === 100
-                ? 'progress-bar--complete'
-                : 'progress-bar--uploading'
-            }
+            progress={this.state.uploadProgress}
           />
         )
       }
-      return <LinearProgress />
+      return <ProgressBar />
     } else {
       return null
     }
@@ -124,10 +105,10 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
 
   public render() {
     return (
-      <div style={styles.container}>
+      <Container>
         <Button
           upload
-          text={'upload picture(s)'}
+          text={this.props.buttonText}
           onClick={() => this.triggerFileUploaderClick()}
         >
           <div ref={(input: any) => (this.fileInputRef = input)}>
@@ -143,8 +124,8 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
             />
           </div>
         </Button>
-        <div style={styles.progressContainer}>{this.renderProgressBar()}</div>
-      </div>
+        <ProgressContainer>{this.renderProgressBar()}</ProgressContainer>
+      </Container>
     )
   }
 }

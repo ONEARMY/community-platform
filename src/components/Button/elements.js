@@ -16,7 +16,6 @@ const getBorder = ({
 import colors from 'src/themes/colors'
 
 const styles = css `
-    display: block;
     text-transform: uppercase;
     text-align: center;
     ${props => getBorder(props)};

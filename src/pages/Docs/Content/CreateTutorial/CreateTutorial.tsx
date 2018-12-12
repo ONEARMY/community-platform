@@ -4,14 +4,9 @@ import { Form, Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
 import './CreateTutorial.scss'
-import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import Input from '@material-ui/core/Input'
 import InputAdornment from '@material-ui/core/InputAdornment'
-import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogTitle from '@material-ui/core/DialogTitle'
 import {
   ITutorial,
   ITutorialFormInput,
@@ -20,32 +15,45 @@ import {
 import { db } from '../../../../utils/firebase'
 
 import { TUTORIAL_TEMPLATE_DATA } from './TutorialTemplate'
-import {
-  FirebaseFileUploader,
-  IFirebaseUploadInfo,
-} from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
-import helpers from 'src/utils/helpers'
 import { TagsSelect } from 'src/pages/common/Tags'
 import { ISelectedTags } from 'src/models/tags.model'
+import { FirebaseFileUploaderField } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploaderField.jsx'
+import helpers from 'src/utils/helpers'
 import Button from 'src/components/Button/Button'
+
+import { Step } from './Step/Step.jsx'
 
 export interface IState {
   formValues: ITutorialFormInput
   _uploadImgPath: string
   _uploadFilesPath: string
   _toDocsList: boolean
-  _isModaleStepDeleteOpen: boolean
 }
 
+const InputField = ({ input, meta, label, headerClassName, ...rest }: any) => (
+  <>
+    <Typography
+      component="label"
+      className={`create-tutorial__label ${headerClassName}`}
+    >
+      {label}
+    </Typography>
+    <Input
+      {...input}
+      {...rest}
+      className="create-tutorial__input"
+    />
+    {meta.error && meta.touched && <span>{meta.error}</span>}
+  </>
+);
+
+
 // For now tags are raw in this variable, next we'll need to get them from our server
-// const tags: ITag[] = TAGS_MOCK
 // let selectedTags: any = []
 const required = (value: any) => (value ? undefined : 'Required')
 
-export class CreateTutorial extends React.PureComponent<
-  RouteComponentProps<any>,
-  IState
-> {
+export class CreateTutorial extends React.PureComponent<RouteComponentProps<any>, IState> {
+
   constructor(props: any) {
     super(props)
     this.state = {
@@ -53,32 +61,34 @@ export class CreateTutorial extends React.PureComponent<
       _uploadImgPath: 'uploads/test',
       _uploadFilesPath: 'uploads/test',
       _toDocsList: false,
-      _isModaleStepDeleteOpen: false,
     }
   }
 
-  public onSubmit = async (formValues: ITutorialFormInput) => {
-    console.log('on submit', formValues)
-    if (this.state.formValues.cover_image_url === '') {
-      alert('Please provide a cover image before saving your tutorial')
-    } else {
-      const timestamp = new Date()
-      // convert data to correct types and populate metadata
-      const values: ITutorial = {
-        ...this.castFormValuesToCorrectTypes(formValues),
-        _created: timestamp,
-        _modified: timestamp,
-      }
-      console.log('submitting', values)
-      try {
-        await db.collection('documentation').add(values)
-        console.log('doc set successfully')
-        this.props.history.push('/docs/' + this.state.formValues.slug)
-        this.forceUpdate()
-      } catch (error) {
-        console.log('error while saving the tutorial')
-      }
+  public submit = async (formValues: ITutorialFormInput) => {
+    const timestamp = new Date()
+    const slug = helpers.stripSpecialCharacters(formValues.tutorial_title);
+    const values: ITutorial = {
+      ...this.castFormValuesToCorrectTypes(formValues),
+      slug,
+      _created: timestamp,
+      _modified: timestamp,
     }
+    console.log('submitting', values)
+    try {
+      await db.collection('documentation').add(values)
+      console.log('doc set successfully')
+      this.props.history.push('/docs/' + slug)
+      this.forceUpdate()
+    } catch (error) {
+      console.log('error while saving the tutorial')
+    }
+  }
+  
+  public validate = async (formValues: ITutorialFormInput) => {
+    // TODO: validate cover image exists
+    // if (this.state.formValues.cover_image_url === '') {
+      // alert('Please provide a cover image before saving your tutorial')
+    return Promise.resolve({}); 
   }
 
   // By default all tutorial form input fields come as strings. We want to cast to the
@@ -92,96 +102,14 @@ export class CreateTutorial extends React.PureComponent<
     return formattedValues
   }
 
-  public handleUploadStepImgSuccess = (
-    fileInfo: IFirebaseUploadInfo,
-    stepIndex: number,
-  ) => {
-    const currentSteps: any = this.state.formValues.steps
-    // get the step at the index where the new image will go
-    // use the spread operator to merge the existing images with the new url
-    currentSteps[stepIndex].images = [
-      ...currentSteps[stepIndex].images,
-      fileInfo.downloadUrl,
-    ]
-    this.forceUpdate()
-    console.log('this.state.formValues', this.state.formValues)
-  }
-  public handleUploadFilesSuccess = (fileInfo: IFirebaseUploadInfo) => {
-    const files = this.state.formValues.tutorial_files
-    files.push(fileInfo)
-    console.log('files', files)
-    this.setState({
-      formValues: { ...this.state.formValues, tutorial_files: files },
-    })
-  }
-
-  /* EXAMPLE
-    You want to pass the step index to the handle upload step image success function
-    When you have the url of the image you want to merge it with the existing step images
-    Then merge the updated step with all steps and update the state
-  */
-  public handleUploadCoverSuccess = (fileInfo: IFirebaseUploadInfo) => {
-    this.setState({
-      formValues: {
-        ...this.state.formValues,
-        cover_image_url: fileInfo.downloadUrl,
-      },
-    })
-  }
-
-  public onInputChange = (event: any, inputType: string) => {
-    // *** TODO the event.target.value needs to be formated as the article id
-    const value = event.target.value
-    switch (inputType) {
-      case 'tutorial_title':
-        const clearUrlSlug = helpers.stripSpecialCharacters(value)
-        this.setState({
-          formValues: {
-            ...this.state.formValues,
-            tutorial_title: event.target.value,
-            slug: clearUrlSlug,
-          },
-          _uploadImgPath: 'uploads/' + encodeURIComponent(clearUrlSlug),
-          _uploadFilesPath: 'uploads/' + encodeURIComponent(clearUrlSlug),
-        })
-        break
-      case 'tutorial_extern_file_url':
-        // TODO check is proper url
-        this.setState({
-          formValues: {
-            ...this.state.formValues,
-            tutorial_extern_file_url: event.target.value,
-          },
-        })
-      default:
-        this.setState({
-          formValues: {
-            ...this.state.formValues,
-            [inputType]: event.target.value,
-          },
-        })
-        break
-    }
-  }
-
   public onSelectedTagsChanged(selectedTags: ISelectedTags) {
-    this.setState({
+    // TODO: make tags save to form values instead
+    /*this.setState({
       formValues: {
         ...this.state.formValues,
         tags: selectedTags,
       },
-    })
-  }
-
-  public handleModaleDeleteStepOpen() {
-    this.setState({
-      _isModaleStepDeleteOpen: true,
-    })
-  }
-  public handleModaleDeleteStepClose() {
-    this.setState({
-      _isModaleStepDeleteOpen: false,
-    })
+    })*/
   }
 
   public render() {
@@ -195,7 +123,8 @@ export class CreateTutorial extends React.PureComponent<
           Create a documentation
         </Typography>
         <Form
-          onSubmit={this.onSubmit}
+          onSubmit={this.submit}
+          validate={this.validate}
           initialValues={this.state.formValues}
           mutators={{
             ...arrayMutators,
@@ -206,53 +135,21 @@ export class CreateTutorial extends React.PureComponent<
                 <form className="create-tutorial-form" onSubmit={handleSubmit}>
                   <div className="create-tutorial-infos__container-background">
                     <div className="create-tutorial-infos__container">
-                      <Typography
-                        component="label"
-                        className="create-tutorial__label"
-                      >
-                        What is your davehakkens.nl account ?
-                      </Typography>
-                      <Field name="workspace_name" validate={required}>
-                        {({ input, meta }) => (
-                          <div>
-                            <Input
-                              {...input}
-                              placeholder="@janedoe"
-                              className="create-tutorial__input"
-                              onBlur={(event: any) => {
-                                this.onInputChange(event, 'workspace_name')
-                              }}
-                            />
-                            {meta.error && meta.touched && (
-                              <span>{meta.error}</span>
-                            )}
-                          </div>
-                        )}
-                      </Field>
-                      <Typography
-                        component="label"
-                        className="create-tutorial__label label__margin"
-                      >
-                        What is the title of your documentation ?
-                      </Typography>
-                      <Field name="tutorial_title" validate={required}>
-                        {({ input, meta }) => (
-                          <div>
-                            <Input
-                              {...input}
-                              className="create-tutorial__input"
-                              type="text"
-                              onBlur={(event: any) => {
-                                this.onInputChange(event, 'tutorial_title')
-                              }}
-                              placeholder="How to make XXX using YYY"
-                            />
-                            {meta.error && meta.touched && (
-                              <span>{meta.error}</span>
-                            )}
-                          </div>
-                        )}
-                      </Field>
+                      <Field
+                        name="workspace_name"
+                        validate={required}
+                        component={InputField}
+                        label="What is your davehakkens.nl account ?"
+                        placeholder="@janedoe"
+                      />
+                      <Field
+                        name="tutorial_title"
+                        validate={required}
+                        component={InputField}
+                        label="What is the title of your documentation ?"
+                        placeholder="How to make XXX using YYY"
+                        headerClassName="label__margin"
+                      />
                       <div
                         className={
                           this.state.formValues.slug === ''
@@ -264,24 +161,26 @@ export class CreateTutorial extends React.PureComponent<
                           '/docs/' +
                           this.state.formValues.slug}
                       </div>
-                      {this.state.formValues.cover_image_url && (
+
+                      {values.cover_image_url && (
                         <img
                           className="cover-img"
-                          src={this.state.formValues.cover_image_url}
+                          src={values.cover_image_url}
                           alt={
                             'cover image - ' +
                             this.state.formValues.tutorial_title
                           }
                         />
                       )}
-                      <FirebaseFileUploader
+                      <Field
+                        name="cover_image_url"
+                        component={FirebaseFileUploaderField}
                         storagePath={this.state._uploadImgPath}
                         hidden={true}
                         accept="image/png, image/jpeg"
-                        name="coverImg"
-                        onUploadSuccess={this.handleUploadCoverSuccess}
                         buttonText="Upload a cover image"
                       />
+                        
                       <Typography
                         component="label"
                         className="create-tutorial__label label__margin"
@@ -294,12 +193,6 @@ export class CreateTutorial extends React.PureComponent<
                             <textarea
                               {...input}
                               placeholder="This is what we will do"
-                              onBlur={(event: any) => {
-                                this.onInputChange(
-                                  event,
-                                  'tutorial_description',
-                                )
-                              }}
                               className="create-tutorial__input create-tutorial__input--margin"
                             />
                             {meta.error && meta.touched && (
@@ -332,9 +225,6 @@ export class CreateTutorial extends React.PureComponent<
                               type="text"
                               className="create-tutorial__input"
                               placeholder="2 hours"
-                              onBlur={(event: any) => {
-                                this.onInputChange(event, 'tutorial_time')
-                              }}
                             />
                             {meta.error && meta.touched && (
                               <span>{meta.error}</span>
@@ -355,9 +245,6 @@ export class CreateTutorial extends React.PureComponent<
                               {...input}
                               type="number"
                               className="create-tutorial__input"
-                              onBlur={(event: any) => {
-                                this.onInputChange(event, 'tutorial_cost')
-                              }}
                               placeholder="10"
                               startAdornment={
                                 <InputAdornment
@@ -382,9 +269,6 @@ export class CreateTutorial extends React.PureComponent<
                       </Typography>
                       <Field
                         name="difficulty_level"
-                        onBlur={(event: any) => {
-                          this.onInputChange(event, 'difficulty_level')
-                        }}
                         component="select"
                         className="create-tutorial__input input--selector"
                       >
@@ -398,15 +282,16 @@ export class CreateTutorial extends React.PureComponent<
                       >
                         File to support your documentation ? (20mb max)
                       </Typography>
-                      <FirebaseFileUploader
-                        hidden
-                        accept="*"
+                      <Field
                         name="files"
-                        buttonText="Upload a file"
+                        component={FirebaseFileUploaderField}
                         storagePath={this.state._uploadImgPath}
-                        onUploadSuccess={this.handleUploadFilesSuccess}
+                        hidden={true}
+                        accept="*"
+                        buttonText="Upload a file"
                       />
                       <span className="uploaded-file-name" />
+
                       <Field name="tutorial_extern_file_url">
                         {({ input, meta }) => (
                           <div>
@@ -421,12 +306,6 @@ export class CreateTutorial extends React.PureComponent<
                               type="text"
                               className="create-tutorial__input"
                               placeholder="https://drive.google.com/drive/u/2/folders/..."
-                              onBlur={(event: any) => {
-                                this.onInputChange(
-                                  event,
-                                  'tutorial_extern_file_url',
-                                )
-                              }}
                             />
                             {meta.error && meta.touched && (
                               <span>{meta.error}</span>
@@ -438,160 +317,32 @@ export class CreateTutorial extends React.PureComponent<
                   </div>
                   <div className="steps__container-background">
                     <FieldArray name="steps">
-                      {({ fields }) =>
-                        fields.map((step, index) => (
-                          <div className="step__container" key={index}>
-                            <Card key={step} className="step__card">
-                              <div className="step__header">
-                                <Typography
-                                  variant="h5"
-                                  component="h2"
-                                  className="step-number"
-                                >
-                                  Step {index + 1}
-                                </Typography>
-                              </div>
-                              <CardContent>
-                                <div>
-                                  <Typography
-                                    component="label"
-                                    className="create-tutorial__label"
-                                  >
-                                    Pick a title for this step
-                                  </Typography>
-                                  <Field
-                                    name={`${step}.title`}
-                                    component="input"
-                                    placeholder="Step title"
-                                    validate={required}
-                                    className="create-tutorial__input"
-                                  />
-                                  <Typography
-                                    component="label"
-                                    className="create-tutorial__label"
-                                  >
-                                    Describe this step
-                                  </Typography>
-                                  <Field
-                                    name={`${step}.text`}
-                                    component="textarea"
-                                    placeholder="Description"
-                                    validate={required}
-                                    className="create-tutorial__input create-tutorial__input--margin"
-                                    onBlur={() => {
-                                      // update the state with the new values
-                                      const stepValuesInput: any = form.getFieldState(
-                                        'steps',
-                                      )!.value
-                                      this.setState({
-                                        formValues: {
-                                          ...this.state.formValues,
-                                          steps: stepValuesInput,
-                                        },
-                                      })
-                                    }}
-                                  />
-                                </div>
-
-                                {this.state.formValues.steps[index] &&
-                                  this.state.formValues.steps[index].images
-                                    .length >= 1 &&
-                                  this.state.formValues.steps[index].images.map(
-                                    (stepImg, stepImgindex) => (
-                                      <img
-                                        key={stepImgindex}
-                                        className="step-img"
-                                        src={stepImg}
-                                      />
-                                    ),
-                                  )}
-
-                                <FirebaseFileUploader
-                                  hidden
-                                  buttonText="Upload picture(s)"
-                                  name={`${step}.images`}
-                                  storagePath={this.state._uploadImgPath}
-                                  callbackData={index}
-                                  onUploadSuccess={
-                                    this.handleUploadStepImgSuccess
-                                  }
-                                />
-                              </CardContent>
-                              {index >= 1 && (
-                                <div
-                                  onClick={() => {
-                                    this.handleModaleDeleteStepOpen()
-                                  }}
-                                  className="step-delete__button"
-                                >
-                                  <span className="trash-icon" />
-                                  <span>delete this step</span>
-                                </div>
-                              )}
-                            </Card>
-                            <Dialog
-                              open={this.state._isModaleStepDeleteOpen}
-                              onClose={() => {
-                                this.setState({
-                                  _isModaleStepDeleteOpen: false,
-                                })
-                              }}
-                              aria-labelledby="alert-dialog-title"
-                              aria-describedby="alert-dialog-description"
-                            >
-                              <DialogTitle
-                                id="alert-dialog-title"
-                                className="dialog-container"
-                              >
-                                {'Are you sure to delete this step ?'}
-                              </DialogTitle>
-                              <DialogActions className="dialog-buttons-container">
-                                <button
-                                  className="dialog-button__cancel"
-                                  onClick={() => {
-                                    this.handleModaleDeleteStepClose()
-                                  }}
-                                >
-                                  Cancel
-                                </button>
-                                <button
-                                  className="dialog-button__validate"
-                                  onClick={() => {
-                                    fields.remove(index)
-                                    this.handleModaleDeleteStepClose()
-                                  }}
-                                >
-                                  Yes
-                                </button>
-                              </DialogActions>
-                            </Dialog>
-                          </div>
-                        ))
-                      }
+                      {({ fields }) => (
+                        <div>
+                        {fields.map((step, index: any) => (
+                          <Step
+                            step={step}
+                            index={index}
+                            key={index}
+                            onDelete={(fieldIndex: any) => { fields.remove(fieldIndex); } }
+                            values={values}
+                          />
+                        ))}
+                        <Button
+                          text={'Add step'}
+                          addstep
+                          style={{ margin: '60px auto' }}
+                          onClick={() => {
+                            fields.push({
+                              title: '',
+                              text: '',
+                              images: []
+                            });
+                          }}
+                        />
+                      </div>
+                      )}
                     </FieldArray>
-                    <Button
-                      text={'Add step'}
-                      addstep
-                      onClick={() => {
-                        // create a empty step in the steps form value
-                        form.mutators.push('steps', {
-                          title: '',
-                          text: '',
-                          images: [],
-                        })
-                        // update the state with the empty new step
-                        const stepValuesInput: any = form.getFieldState(
-                          'steps',
-                        )!.value
-                        this.setState({
-                          formValues: {
-                            ...this.state.formValues,
-                            steps: stepValuesInput,
-                          },
-                        })
-                      }}
-                      style={{ margin: '60px auto' }}
-                    />
                     <Button
                       type="submit"
                       text={'Save'}

@@ -1,10 +1,10 @@
 import React from 'react'
-import { MdFileDownload, MdAdd, MdCheck } from 'react-icons/md'
+import { MdFileDownload, MdAdd, MdCheck, MdFileUpload } from 'react-icons/md'
 import {
   AddTutBtn,
   AddStepBtn,
   SaveTutBtn,
-  DownloadButton,
+  LoadButton,
   Button,
   InnerButtonText,
   Container,
@@ -18,12 +18,12 @@ const iconStyle = {
 function ButtonComponent({ ...props }) {
   if (props.href && props.download) {
     return (
-      <DownloadButton {...props}>
+      <LoadButton {...props}>
         <Container>
           <MdFileDownload style={iconStyle} />
           <InnerButtonText>{props.text}</InnerButtonText>
         </Container>
-      </DownloadButton>
+      </LoadButton>
     )
   }
 
@@ -53,6 +53,16 @@ function ButtonComponent({ ...props }) {
         <MdCheck style={iconStyle} />
         <InnerButtonText>{props.text}</InnerButtonText>
       </SaveTutBtn>
+    )
+  }
+
+  if (props.upload) {
+    return (
+      <LoadButton {...props}>
+        <MdFileUpload style={iconStyle} />
+        <InnerButtonText>{props.text}</InnerButtonText>
+        {props.children}
+      </LoadButton>
     )
   }
 

@@ -2,7 +2,7 @@ import * as React from 'react'
 import { storage } from '../../../utils/firebase'
 import FileUploader from 'react-firebase-file-uploader'
 import LinearProgress from '@material-ui/core/LinearProgress'
-import Button from '@material-ui/core/Button'
+import Button from 'src/components/Button/Button'
 import UploadIconImage from '../../../assets/icons/upload.svg'
 import './FirebaseFileUploader.scss'
 import { FullMetadata } from '@firebase/storage-types'
@@ -40,15 +40,12 @@ const styles = {
     height: '1.5em',
   },
   container: {
-    width: '100%',
+    display: 'inline-block',
     margin: '1em 0',
-  },
-  button: {
-    width: '100%',
   },
   progressContainer: {
     height: 5,
-    MarginTop: 5,
+    marginTop: '10px',
   },
 }
 export class FirebaseFileUploader extends React.Component<IProps, IState> {
@@ -99,6 +96,7 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
   // to trigger the second click
   public triggerFileUploaderClick() {
     const divRef: HTMLElement = this.fileInputRef
+
     const inputRef = divRef.querySelector('input') as HTMLInputElement
     inputRef.click()
   }
@@ -128,21 +126,10 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
     return (
       <div style={styles.container}>
         <Button
-          variant="outlined"
-          color="default"
-          style={styles.button}
+          upload
+          text={'upload picture(s)'}
           onClick={() => this.triggerFileUploaderClick()}
         >
-          <div>
-            <div>
-              {this.props.buttonText}
-              <img src={UploadIconImage} alt="" style={styles.icon} />
-            </div>
-            <div style={styles.progressContainer}>
-              {this.renderProgressBar()}
-            </div>
-          </div>
-
           <div ref={(input: any) => (this.fileInputRef = input)}>
             <FileUploader
               hidden
@@ -156,6 +143,7 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
             />
           </div>
         </Button>
+        <div style={styles.progressContainer}>{this.renderProgressBar()}</div>
       </div>
     )
   }

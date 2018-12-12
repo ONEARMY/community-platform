@@ -17,14 +17,9 @@ import {
   ITutorialFormInput,
 } from '../../../../models/tutorial.models'
 
-import AddIcon from '../../../../assets/icons/add.svg'
-import SaveIcon from '../../../../assets/icons/save.svg'
-
 import { db } from '../../../../utils/firebase'
 
 import { TUTORIAL_TEMPLATE_DATA } from './TutorialTemplate'
-import { ITag } from 'src/models/models'
-import { TAGS_MOCK } from 'src/mocks/tags.mock'
 import {
   FirebaseFileUploader,
   IFirebaseUploadInfo,

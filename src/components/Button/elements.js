@@ -53,7 +53,7 @@ export const AButton = styled.a `
 export const Button = styled.button `
   ${styles};
 `;
-export const DownloadButton = styled.a `
+export const LoadButton = styled.button `
   ${styles};
   background-color: ${colors.blue};
   width: 200px;

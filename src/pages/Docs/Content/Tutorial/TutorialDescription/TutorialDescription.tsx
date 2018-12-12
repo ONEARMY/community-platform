@@ -11,7 +11,7 @@ import {
   CoverImg,
   TutorialInfo,
 } from './elements'
-import Button from 'src/pages/common/Button/Button'
+import Button from 'src/components/Button/Button'
 
 export default class TutorialDescription extends React.PureComponent<any, any> {
   constructor(props: any) {

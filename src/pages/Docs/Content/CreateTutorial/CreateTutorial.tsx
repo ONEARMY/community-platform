@@ -32,7 +32,7 @@ import {
 import helpers from 'src/utils/helpers'
 import { TagsSelect } from 'src/pages/common/Tags'
 import { ISelectedTags } from 'src/models/tags.model'
-import Button from 'src/pages/common/Button/Button'
+import Button from 'src/components/Button/Button'
 
 export interface IState {
   formValues: ITutorialFormInput

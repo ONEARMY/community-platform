@@ -15,7 +15,7 @@ import TurnedInIcon from '@material-ui/icons/TurnedIn'
 import { theme } from '../../../../themes/app.theme'
 import { ITutorial } from 'src/models/models'
 
-import Button from 'src/pages/common/Button/Button'
+import Button from 'src/components/Button/Button'
 
 const styles: any = {
   layout: {

@@ -62,10 +62,8 @@ export class TutorialList extends React.Component<IProps, any> {
         </Typography>
         <Button
           to={`/docs/create`}
-          width={'300px'}
-          height={'50px'}
           text={'create tutorial'}
-          btnfn={'addtutorial'}
+          addtutorial="true"
           style={{ margin: '50px auto' }}
         />
         <React.Fragment>

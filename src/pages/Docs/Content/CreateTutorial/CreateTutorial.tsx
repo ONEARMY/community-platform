@@ -11,8 +11,6 @@ import Input from '@material-ui/core/Input'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import {
   ITutorial,
@@ -34,6 +32,7 @@ import {
 import helpers from 'src/utils/helpers'
 import { TagsSelect } from 'src/pages/common/Tags'
 import { ISelectedTags } from 'src/models/tags.model'
+import Button from 'src/pages/common/Button/Button'
 
 export interface IState {
   formValues: ITutorialFormInput
@@ -229,8 +228,9 @@ export class CreateTutorial extends React.PureComponent<
                                 this.onInputChange(event, 'workspace_name')
                               }}
                             />
-                            {meta.error &&
-                              meta.touched && <span>{meta.error}</span>}
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
                           </div>
                         )}
                       </Field>
@@ -252,8 +252,9 @@ export class CreateTutorial extends React.PureComponent<
                               }}
                               placeholder="How to make XXX using YYY"
                             />
-                            {meta.error &&
-                              meta.touched && <span>{meta.error}</span>}
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
                           </div>
                         )}
                       </Field>
@@ -306,8 +307,9 @@ export class CreateTutorial extends React.PureComponent<
                               }}
                               className="create-tutorial__input create-tutorial__input--margin"
                             />
-                            {meta.error &&
-                              meta.touched && <span>{meta.error}</span>}
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
                           </div>
                         )}
                       </Field>
@@ -339,8 +341,9 @@ export class CreateTutorial extends React.PureComponent<
                                 this.onInputChange(event, 'tutorial_time')
                               }}
                             />
-                            {meta.error &&
-                              meta.touched && <span>{meta.error}</span>}
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
                           </div>
                         )}
                       </Field>
@@ -370,8 +373,9 @@ export class CreateTutorial extends React.PureComponent<
                                 </InputAdornment>
                               }
                             />
-                            {meta.error &&
-                              meta.touched && <span>{meta.error}</span>}
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
                           </div>
                         )}
                       </Field>
@@ -429,8 +433,9 @@ export class CreateTutorial extends React.PureComponent<
                                 )
                               }}
                             />
-                            {meta.error &&
-                              meta.touched && <span>{meta.error}</span>}
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
                           </div>
                         )}
                       </Field>
@@ -569,9 +574,9 @@ export class CreateTutorial extends React.PureComponent<
                         ))
                       }
                     </FieldArray>
-                    <button
-                      className="add-step__button"
-                      type="button"
+                    <Button
+                      text={'Add step'}
+                      addstep
                       onClick={() => {
                         // create a empty step in the steps form value
                         form.mutators.push('steps', {
@@ -590,18 +595,14 @@ export class CreateTutorial extends React.PureComponent<
                           },
                         })
                       }}
-                    >
-                      <img src={AddIcon} alt="" />
-                      <span>Add step</span>
-                    </button>
-                    <button
+                      style={{ margin: '60px auto' }}
+                    />
+                    <Button
                       type="submit"
-                      className="validate-form__button"
+                      text={'Save'}
+                      saveTut
                       disabled={submitting || invalid}
-                    >
-                      <img src={SaveIcon} alt="" />
-                      <span>Save</span>
-                    </button>
+                    />
                   </div>
                 </form>
               </div>

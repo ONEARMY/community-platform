@@ -58,8 +58,6 @@ export default class TutorialDescription extends React.PureComponent<any, any> {
                   tutorial.tutorial_files[tutorial.tutorial_files.length - 1]
                     .downloadUrl
                 }
-                width={'200px'}
-                height={'50px'}
                 style={{ marginTop: '20px' }}
               />
             ) : null}

@@ -76,6 +76,7 @@ class Step extends Component {
                 component="textarea"
                 placeholder="Description"
                 validate={required}
+                style={{ height: '150px' }}
               />
             </div>
             <FieldArray name={`${step}.images`}>
@@ -87,7 +88,6 @@ class Step extends Component {
                       values.steps[index].images[imgIndex] && (
                         <StepImage
                           key={image}
-                          className="step-img"
                           src={values.steps[index].images[imgIndex]}
                         />
                       )
@@ -129,7 +129,7 @@ class Step extends Component {
           <DialogText id="alert-dialog-title">
             {'Are you sure to delete this step ?'}
           </DialogText>
-          <DialogButtons className="dialog-buttons-container">
+          <DialogButtons>
             <Button
               text={'cancel'}
               modalcancel

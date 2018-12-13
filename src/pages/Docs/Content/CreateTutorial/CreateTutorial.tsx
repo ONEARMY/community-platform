@@ -3,9 +3,6 @@ import { RouteComponentProps } from 'react-router'
 import { Form, Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
-import './CreateTutorial.scss'
-import Typography from '@material-ui/core/Typography'
-import Input from '@material-ui/core/Input'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import {
   ITutorial,
@@ -30,6 +27,10 @@ import {
   Background,
   DescriptionContainer,
   StepBackground,
+  Label,
+  Input,
+  TextArea,
+  CoverImage,
 } from './elements'
 
 export interface IState {
@@ -39,15 +40,10 @@ export interface IState {
   _toDocsList: boolean
 }
 
-const InputField = ({ input, meta, label, headerClassName, ...rest }: any) => (
+const InputField = ({ input, meta, label, ...rest }: any) => (
   <>
-    <Typography
-      component="label"
-      className={`create-tutorial__label ${headerClassName}`}
-    >
-      {label}
-    </Typography>
-    <Input {...input} {...rest} className="create-tutorial__input" />
+    <Label component="label">{label}</Label>
+    <Input {...input} {...rest} />
     {meta.error && meta.touched && <span>{meta.error}</span>}
   </>
 )
@@ -185,11 +181,9 @@ export class CreateTutorial extends React.PureComponent<
                         component={InputField}
                         label="What is the title of your documentation ?"
                         placeholder="How to make XXX using YYY"
-                        headerClassName="label__margin"
                       />
                       {values.cover_image_url && (
-                        <img
-                          className="cover-img"
+                        <CoverImage
                           src={values.cover_image_url}
                           alt={'cover image'}
                         />
@@ -203,19 +197,18 @@ export class CreateTutorial extends React.PureComponent<
                         buttonText="Upload a cover image"
                       />
 
-                      <Typography
+                      <Label
                         component="label"
-                        className="create-tutorial__label label__margin"
+                        style={{ margin: '50px 0 10px' }}
                       >
                         Write a short description for the documentation
-                      </Typography>
+                      </Label>
                       <Field name="tutorial_description" validate={required}>
                         {({ input, meta }) => (
                           <div>
-                            <textarea
+                            <TextArea
                               {...input}
                               placeholder="This is what we will do"
-                              className="create-tutorial__input create-tutorial__input--margin"
                             />
                             {meta.error && meta.touched && (
                               <span>{meta.error}</span>
@@ -223,12 +216,12 @@ export class CreateTutorial extends React.PureComponent<
                           </div>
                         )}
                       </Field>
-                      <Typography
+                      <Label
                         component="label"
-                        className="create-tutorial__label label__margin"
+                        style={{ margin: '50px 0 10px' }}
                       >
                         Add tags
-                      </Typography>
+                      </Label>
                       <TagsSelect
                         value={this.state.formValues.tags}
                         onChange={tags => this.onSelectedTagsChanged(tags)}
@@ -236,16 +229,15 @@ export class CreateTutorial extends React.PureComponent<
                       <Field name="tutorial_time" validate={required}>
                         {({ input, meta }) => (
                           <div>
-                            <Typography
+                            <Label
                               component="label"
-                              className="create-tutorial__label label__margin"
+                              style={{ margin: '50px 0 10px' }}
                             >
                               How much time does it take ? (hours/week)
-                            </Typography>
+                            </Label>
                             <Input
                               {...input}
                               type="text"
-                              className="create-tutorial__input"
                               placeholder="2 hours"
                             />
                             {meta.error && meta.touched && (
@@ -257,21 +249,20 @@ export class CreateTutorial extends React.PureComponent<
                       <Field name="tutorial_cost" validate={required}>
                         {({ input, meta }) => (
                           <div>
-                            <Typography
+                            <Label
                               component="label"
-                              className="create-tutorial__label label__margin"
+                              style={{ margin: '50px 0 10px' }}
                             >
                               How much does it cost (roughly in €)?
-                            </Typography>
+                            </Label>
                             <Input
                               {...input}
                               type="number"
-                              className="create-tutorial__input"
                               placeholder="10"
                               startAdornment={
                                 <InputAdornment
                                   position="start"
-                                  className="input__prefix--dollar"
+                                  style={{ margin: '0 0 0 5px;' }}
                                 >
                                   €
                                 </InputAdornment>
@@ -283,27 +274,23 @@ export class CreateTutorial extends React.PureComponent<
                           </div>
                         )}
                       </Field>
-                      <Typography
+                      <Label
                         component="label"
-                        className="create-tutorial__label label__margin"
+                        style={{ margin: '50px 0 10px' }}
                       >
                         How difficult to replicate is your documentation ?
-                      </Typography>
-                      <Field
-                        name="difficulty_level"
-                        component="select"
-                        className="create-tutorial__input input--selector"
-                      >
+                      </Label>
+                      <Field name="difficulty_level" component="select">
                         <option value="easy">easy</option>
                         <option value="medium">medium</option>
                         <option value="difficult">difficult</option>
                       </Field>
-                      <Typography
+                      <Label
                         component="label"
-                        className="create-tutorial__label label__margin"
+                        style={{ margin: '50px 0 10px' }}
                       >
                         File to support your documentation ? (20mb max)
-                      </Typography>
+                      </Label>
                       <Field
                         name="files"
                         component={FirebaseFileUploaderField}
@@ -312,21 +299,19 @@ export class CreateTutorial extends React.PureComponent<
                         accept="*"
                         buttonText="Upload a file"
                       />
-                      <span className="uploaded-file-name" />
 
                       <Field name="tutorial_extern_file_url">
                         {({ input, meta }) => (
                           <div>
-                            <Typography
+                            <Label
                               component="label"
-                              className="create-tutorial__label label__margin"
+                              style={{ margin: '50px 0 10px' }}
                             >
                               Or a link
-                            </Typography>
+                            </Label>
                             <Input
                               {...input}
                               type="text"
-                              className="create-tutorial__input"
                               placeholder="https://drive.google.com/drive/u/2/folders/..."
                             />
                             {meta.error && meta.touched && (
@@ -355,7 +340,7 @@ export class CreateTutorial extends React.PureComponent<
                           <Button
                             text={'Add step'}
                             addstep
-                            style={{ margin: '60px auto' }}
+                            style={{ margin: '60px auto', display: 'block' }}
                             onClick={() => {
                               fields.push({
                                 title: '',

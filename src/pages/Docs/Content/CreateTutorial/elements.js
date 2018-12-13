@@ -1,5 +1,8 @@
 import styled from 'styled-components'
 import Typography from '@material-ui/core/Typography'
+import InputAdornment from '@material-ui/core/InputAdornment'
+
+import colors from 'src/themes/colors'
 
 export const FormContainer = styled.div `
     position: relative;
@@ -40,4 +43,40 @@ export const DescriptionContainer = styled.div `
 export const StepBackground = styled.div `
     margin: 40px auto;
     max-width: 600px;
+`;
+
+export const Label = styled(Typography)
+`
+    color: ${colors.grey3} !important;
+    font-size: 1.3em !important;
+    margin: 10px 0 !important;
+`;
+
+export const TextArea = styled.textarea `
+    width: 100%;
+    background: white;
+    height: 150px;
+    font-size: 1.1em;
+    border: 1px solid ${colors.grey};
+    &::placeholder {
+        text-align: center;
+        padding-top: 10px;
+    }
+`;
+
+export const Input = styled.input `
+    border: 1px solid ${colors.grey};
+    font-size: 1.1em;
+    background: white;
+    width: 100%;
+    height: 45px;
+    &::placeholder {
+        padding-left: 5px;
+    }
+`;
+
+export const CoverImage = styled.img `
+    width: 300px;
+    display: block;
+    margin: 20px auto;
 `;

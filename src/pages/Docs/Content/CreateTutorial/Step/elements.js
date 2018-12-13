@@ -40,6 +40,10 @@ export const InputField = styled(Field)
     font-size: 1.1em;
     background: white;
     width: 100%;
+    height: 45px;
+    &::placeholder {
+        text-align: center;
+    }
 `;
 
 export const Container = styled.div `

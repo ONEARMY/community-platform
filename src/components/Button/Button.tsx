@@ -8,6 +8,8 @@ import {
   Button,
   InnerButtonText,
   Container,
+  ModalValidation,
+  ModalCancel,
 } from './elements'
 
 const iconStyle = {
@@ -63,6 +65,23 @@ function ButtonComponent({ ...props }) {
         <InnerButtonText>{props.text}</InnerButtonText>
         {props.children}
       </LoadButton>
+    )
+  }
+
+  if (props.modalvalidation) {
+    return (
+      <ModalValidation {...props}>
+        <MdCheck style={iconStyle} />
+        <InnerButtonText>{props.text}</InnerButtonText>
+      </ModalValidation>
+    )
+  }
+
+  if (props.modalcancel) {
+    return (
+      <ModalCancel {...props}>
+        <InnerButtonText>{props.text}</InnerButtonText>
+      </ModalCancel>
     )
   }
 

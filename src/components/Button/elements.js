@@ -1,16 +1,16 @@
 import styled, {
-    css
+  css
 } from 'styled-components';
 import Link from 'react-router-dom/Link';
 
 const getBorder = ({
-    basic
+  basic
 }) => {
-    if (basic) {
-        return `borner: 1px solid black;`;
-    }
+  if (basic) {
+    return `borner: 1px solid black;`;
+  }
 
-    return `border: none;`;
+  return `border: none;`;
 };
 
 import colors from 'src/themes/colors'
@@ -45,6 +45,9 @@ export const SaveTutBtn = styled.button `
   height: 90px;
   color: white;
   font-size: 1.1em;
+  &:disabled {
+    cursor: not-allowed;
+  }
 `;
 export const AButton = styled.a `
   ${styles};
@@ -58,6 +61,23 @@ export const LoadButton = styled.button `
   width: 200px;
   height: 50px;
 `;
+
+export const ModalValidation = styled.button `
+  ${styles};
+  background-color: ${colors.blue};
+  width: 112px;
+  height: 60px;
+  `;
+
+export const ModalCancel = styled.button `
+  ${styles};
+  background-color: white;
+  width: 112px;
+  height: 60px;
+  border: 2px solid black;
+`;
+
+
 export const InnerButtonText = styled.div `
     margin-left: 5px;
     vertical-align: top;

@@ -170,38 +170,7 @@
       }
     }
 
-    .step-delete__button {
-      cursor: pointer;
-      height: 50px;
-      width: 100%;
-      border-top: 1px solid #dddddd;
 
-      .trash-icon {
-        vertical-align: text-top;
-        background-image: url('../../../../assets/icons/bin-grey.svg');
-        width: 18px;
-        display: inline-block;
-        height: 19px;
-      }
-
-      span {
-        text-transform: uppercase;
-        font-size: 0.8em;
-        line-height: 50px;
-        color: #9b9b9b;
-        margin-left: 10px;
-      }
-
-      &:hover span {
-        // opacity: 0.8;
-        color: black;
-      }
-
-      &:hover .trash-icon {
-        // opacity: 0.8;
-        background-image: url('../../../../assets/icons/bin-black.svg')
-      }
-    }
   }
 
   .add-step__button {
@@ -292,8 +261,8 @@
 }
 
 .dialog-container {
-  width: 403px;
-  height: 72px;
+  // width: 403px;
+  // height: 72px;
 }
 
 .dialog-button__cancel {

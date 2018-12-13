@@ -23,6 +23,15 @@ import Button from 'src/components/Button/Button'
 
 import { Step } from './Step/Step.jsx'
 
+import {
+  FormContainer,
+  Title,
+  TutorialForm,
+  Background,
+  DescriptionContainer,
+  StepBackground,
+} from './elements'
+
 export interface IState {
   formValues: ITutorialFormInput
   _uploadImgPath: string
@@ -99,6 +108,41 @@ export class CreateTutorial extends React.PureComponent<
     return formattedValues
   }
 
+  public onInputChange = (event: any, inputType: string) => {
+    // *** TODO the event.target.value needs to be formated as the article id
+    const value = event.target.value
+    switch (inputType) {
+      case 'tutorial_title':
+        const clearUrlSlug = helpers.stripSpecialCharacters(value)
+        this.setState({
+          formValues: {
+            ...this.state.formValues,
+            tutorial_title: event.target.value,
+            slug: clearUrlSlug,
+          },
+          _uploadImgPath: 'uploads/' + encodeURIComponent(clearUrlSlug),
+          _uploadFilesPath: 'uploads/' + encodeURIComponent(clearUrlSlug),
+        })
+        break
+      case 'tutorial_extern_file_url':
+        // TODO check is proper url
+        this.setState({
+          formValues: {
+            ...this.state.formValues,
+            tutorial_extern_file_url: event.target.value,
+          },
+        })
+      default:
+        this.setState({
+          formValues: {
+            ...this.state.formValues,
+            [inputType]: event.target.value,
+          },
+        })
+        break
+    }
+  }
+
   public onSelectedTagsChanged(selectedTags: ISelectedTags) {
     // TODO: make tags save to form values instead
     /*this.setState({
@@ -112,13 +156,9 @@ export class CreateTutorial extends React.PureComponent<
   public render() {
     return (
       <div>
-        <Typography
-          style={{ margin: '30px auto', display: 'table' }}
-          variant="h4"
-          component="h4"
-        >
+        <Title variant="h4" component="h4">
           Create a documentation
-        </Typography>
+        </Title>
         <Form
           onSubmit={this.submit}
           validate={this.validate}
@@ -128,10 +168,10 @@ export class CreateTutorial extends React.PureComponent<
           }}
           render={({ handleSubmit, submitting, values, form, invalid }) => {
             return (
-              <div className="create-tutorial-form__container">
-                <form className="create-tutorial-form" onSubmit={handleSubmit}>
-                  <div className="create-tutorial-infos__container-background">
-                    <div className="create-tutorial-infos__container">
+              <FormContainer>
+                <TutorialForm onSubmit={handleSubmit}>
+                  <Background>
+                    <DescriptionContainer>
                       <Field
                         name="workspace_name"
                         validate={required}
@@ -147,26 +187,11 @@ export class CreateTutorial extends React.PureComponent<
                         placeholder="How to make XXX using YYY"
                         headerClassName="label__margin"
                       />
-                      <div
-                        className={
-                          this.state.formValues.slug === ''
-                            ? 'create-tutorial-form__title__note--clear'
-                            : 'create-tutorial-form__title__note--filled'
-                        }
-                      >
-                        {window.location.host +
-                          '/docs/' +
-                          this.state.formValues.slug}
-                      </div>
-
                       {values.cover_image_url && (
                         <img
                           className="cover-img"
                           src={values.cover_image_url}
-                          alt={
-                            'cover image - ' +
-                            this.state.formValues.tutorial_title
-                          }
+                          alt={'cover image'}
                         />
                       )}
                       <Field
@@ -310,9 +335,9 @@ export class CreateTutorial extends React.PureComponent<
                           </div>
                         )}
                       </Field>
-                    </div>
-                  </div>
-                  <div className="steps__container-background">
+                    </DescriptionContainer>
+                  </Background>
+                  <StepBackground>
                     <FieldArray name="steps">
                       {({ fields }) => (
                         <div>
@@ -348,9 +373,9 @@ export class CreateTutorial extends React.PureComponent<
                       saveTut
                       disabled={submitting || invalid}
                     />
-                  </div>
-                </form>
-              </div>
+                  </StepBackground>
+                </TutorialForm>
+              </FormContainer>
             )
           }}
         />

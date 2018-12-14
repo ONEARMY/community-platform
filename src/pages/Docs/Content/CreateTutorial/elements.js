@@ -52,7 +52,7 @@ export const Label = styled(Typography)
 `
     color: ${colors.grey3} !important;
     font-size: 1.3em !important;
-    margin: 10px 0 !important;
+    margin: 25px 0 !important;
 `;
 
 export const TextArea = styled.textarea `

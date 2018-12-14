@@ -15,7 +15,7 @@ const getColor = ({
 
 export const Container = styled.div `
     text-align: center;
-    margin: 1em auto;
+    margin: 2em auto;
 `;
 
 export const ProgressContainer = styled.div `

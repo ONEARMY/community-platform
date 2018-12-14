@@ -182,6 +182,9 @@ export class CreateTutorial extends React.PureComponent<
                         component={InputField}
                         label="What is the title of your documentation ?"
                         placeholder="How to make XXX using YYY"
+                        onBlur={(event: any) => {
+                          this.onInputChange(event, 'tutorial_title')
+                        }}
                       />
                       {values.cover_image_url && (
                         <CoverImage
@@ -227,54 +230,20 @@ export class CreateTutorial extends React.PureComponent<
                         value={this.state.formValues.tags}
                         onChange={tags => this.onSelectedTagsChanged(tags)}
                       />
-                      <Field name="tutorial_time" validate={required}>
-                        {({ input, meta }) => (
-                          <div>
-                            <Label
-                              component="label"
-                              style={{ margin: '50px 0 10px' }}
-                            >
-                              How much time does it take ? (hours/week)
-                            </Label>
-                            <Input
-                              {...input}
-                              type="text"
-                              placeholder="2 hours"
-                            />
-                            {meta.error && meta.touched && (
-                              <span>{meta.error}</span>
-                            )}
-                          </div>
-                        )}
-                      </Field>
-                      <Field name="tutorial_cost" validate={required}>
-                        {({ input, meta }) => (
-                          <div>
-                            <Label
-                              component="label"
-                              style={{ margin: '50px 0 10px' }}
-                            >
-                              How much does it cost (roughly in €)?
-                            </Label>
-                            <Input
-                              {...input}
-                              type="number"
-                              placeholder="10"
-                              startAdornment={
-                                <InputAdornment
-                                  position="start"
-                                  style={{ margin: '0 0 0 5px;' }}
-                                >
-                                  €
-                                </InputAdornment>
-                              }
-                            />
-                            {meta.error && meta.touched && (
-                              <span>{meta.error}</span>
-                            )}
-                          </div>
-                        )}
-                      </Field>
+                      <Field
+                        name="tutorial_time"
+                        validate={required}
+                        component={InputField}
+                        label="How much time does it take ? (hours/week)"
+                        placeholder="2 hours"
+                      />
+                      <Field
+                        name="tutorial_cost"
+                        validate={required}
+                        component={InputField}
+                        label="How much does it cost (roughly in €)?"
+                        placeholder="10"
+                      />
                       <Label
                         component="label"
                         style={{ margin: '50px 0 10px' }}
@@ -300,27 +269,12 @@ export class CreateTutorial extends React.PureComponent<
                         accept="*"
                         buttonText="Upload a file"
                       />
-
-                      <Field name="tutorial_extern_file_url">
-                        {({ input, meta }) => (
-                          <div>
-                            <Label
-                              component="label"
-                              style={{ margin: '50px 0 10px' }}
-                            >
-                              Or a link
-                            </Label>
-                            <Input
-                              {...input}
-                              type="text"
-                              placeholder="https://drive.google.com/drive/u/2/folders/..."
-                            />
-                            {meta.error && meta.touched && (
-                              <span>{meta.error}</span>
-                            )}
-                          </div>
-                        )}
-                      </Field>
+                      <Field
+                        name="tutorial_extern_file_url"
+                        component={InputField}
+                        label="Or a link"
+                        placeholder="https://drive.google.com/drive/u/2/folders/..."
+                      />
                     </DescriptionContainer>
                   </Background>
                   <StepBackground>

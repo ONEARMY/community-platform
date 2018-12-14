@@ -1,14 +1,14 @@
-import * as React from 'react';
+import * as React from 'react'
 
-import logo from "../../../assets/images/logo.png";
-import './Header.scss';
+import logo from '../../../assets/images/logo.png'
+import { Container, Img } from './elements'
 
 const Header: React.StatelessComponent<{}> = () => {
   return (
-    <header className="header">
-      <img src={logo} className="logo" alt="logo" />
-    </header>
-  );
+    <Container>
+      <Img src={logo} alt="logo" />
+    </Container>
+  )
 }
 
-export default Header;
+export default Header

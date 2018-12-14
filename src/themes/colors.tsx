@@ -5,6 +5,7 @@ const colors = {
   grey: '#dddddd',
   grey2: '#9b9b9b',
   grey3: '#656565',
+  greyTag: '#4a4a4a',
 }
 
 export default colors

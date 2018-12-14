@@ -64,7 +64,7 @@ export class TutorialList extends React.Component<IProps, any> {
           to={`/docs/create`}
           text={'create tutorial'}
           addtutorial="true"
-          style={{ margin: '50px auto' }}
+          style={{ margin: '50px auto', display: 'block' }}
         />
         <React.Fragment>
           <div style={styles.layout}>
@@ -140,11 +140,9 @@ export class TutorialList extends React.Component<IProps, any> {
           {allTutorials.length > 15 ? (
             <Button
               to={`/docs/create`}
-              width={'300px'}
-              height={'50px'}
               text={'create tutorial'}
-              btnfn={'addtutorial'}
-              style={{ margin: '50px auto' }}
+              addtutorial="true"
+              style={{ margin: '50px auto', display: 'block' }}
             />
           ) : null}
         </React.Fragment>

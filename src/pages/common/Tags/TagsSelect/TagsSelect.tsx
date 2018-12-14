@@ -2,7 +2,6 @@ import * as React from 'react'
 import { ITag } from 'src/models/models'
 import { inject, observer } from 'mobx-react'
 import { TagsStore } from 'src/stores/Tags/tags.store'
-import './TagsSelect.scss'
 import { Container, TagContainer, Tag, SelectedTag } from './elements'
 import { ISelectedTags } from 'src/models/tags.model'
 

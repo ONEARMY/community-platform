@@ -10,9 +10,6 @@ import {
 } from 'react-icons/md'
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {
-    SIGABRT
-} from 'constants';
-import {
     DialogActions
 } from '@material-ui/core';
 
@@ -105,4 +102,5 @@ export const DialogText = styled(DialogTitle)
 export const DialogButtons = styled(DialogActions)
 `
     padding: 10px;
+    justify-content: center !important;
 `;

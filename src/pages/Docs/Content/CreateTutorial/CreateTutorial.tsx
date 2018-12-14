@@ -31,6 +31,7 @@ import {
   Input,
   TextArea,
   CoverImage,
+  Select,
 } from './elements'
 
 export interface IState {
@@ -280,11 +281,11 @@ export class CreateTutorial extends React.PureComponent<
                       >
                         How difficult to replicate is your documentation ?
                       </Label>
-                      <Field name="difficulty_level" component="select">
+                      <Select name="difficulty_level" component="select">
                         <option value="easy">easy</option>
                         <option value="medium">medium</option>
                         <option value="difficult">difficult</option>
-                      </Field>
+                      </Select>
                       <Label
                         component="label"
                         style={{ margin: '50px 0 10px' }}

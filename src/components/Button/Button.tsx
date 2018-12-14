@@ -42,7 +42,7 @@ function ButtonComponent({ ...props }) {
 
   if (props.addstep) {
     return (
-      <AddStepBtn {...props}>
+      <AddStepBtn {...props} type="button">
         <MdAdd style={iconStyle} />
         <InnerButtonText>{props.text}</InnerButtonText>
       </AddStepBtn>
@@ -60,10 +60,10 @@ function ButtonComponent({ ...props }) {
 
   if (props.upload) {
     return (
-      <LoadButton {...props}>
+      <LoadButton {...props} type="button">
+        {props.children}
         <MdFileUpload style={iconStyle} />
         <InnerButtonText>{props.text}</InnerButtonText>
-        {props.children}
       </LoadButton>
     )
   }

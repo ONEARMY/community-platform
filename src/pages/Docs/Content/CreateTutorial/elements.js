@@ -1,6 +1,9 @@
 import styled from 'styled-components'
 import Typography from '@material-ui/core/Typography'
 import InputAdornment from '@material-ui/core/InputAdornment'
+import {
+    Field
+} from 'react-final-form'
 
 import colors from 'src/themes/colors'
 
@@ -79,4 +82,15 @@ export const CoverImage = styled.img `
     width: 300px;
     display: block;
     margin: 20px auto;
+`;
+
+export const Select = styled(Field)
+`
+    border: 1px solid ${colors.grey};
+    margin: 0 auto;
+    display: block;
+    font-size: 1.1em;
+    background: white;
+    width: 40%;
+    height: 45px;
 `;

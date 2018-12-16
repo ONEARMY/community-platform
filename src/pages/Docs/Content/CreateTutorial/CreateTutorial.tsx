@@ -3,7 +3,6 @@ import { RouteComponentProps } from 'react-router'
 import { Form, Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
-import InputAdornment from '@material-ui/core/InputAdornment'
 import {
   ITutorial,
   ITutorialFormInput,
@@ -17,6 +16,7 @@ import { ISelectedTags } from 'src/models/tags.model'
 import { FirebaseFileUploaderField } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploaderField.jsx'
 import helpers from 'src/utils/helpers'
 import Button from 'src/components/Button/Button'
+import { InputField, Label } from 'src/components/Form/Fields'
 
 import { Step } from './Step/Step.jsx'
 
@@ -27,8 +27,6 @@ import {
   Background,
   DescriptionContainer,
   StepBackground,
-  Label,
-  Input,
   TextArea,
   CoverImage,
   Select,
@@ -40,14 +38,6 @@ export interface IState {
   _uploadFilesPath: string
   _toDocsList: boolean
 }
-
-const InputField = ({ input, meta, label, ...rest }: any) => (
-  <>
-    <Label component="label">{label}</Label>
-    <Input {...input} {...rest} />
-    {meta.error && meta.touched && <span>{meta.error}</span>}
-  </>
-)
 
 // For now tags are raw in this variable, next we'll need to get them from our server
 // let selectedTags: any = []
@@ -200,13 +190,10 @@ export class CreateTutorial extends React.PureComponent<
                         accept="image/png, image/jpeg"
                         buttonText="Upload a cover image"
                       />
-
                       <Label
-                        component="label"
+                        text={'Write a short description for the documentation'}
                         style={{ margin: '50px 0 10px' }}
-                      >
-                        Write a short description for the documentation
-                      </Label>
+                      />
                       <Field name="tutorial_description" validate={required}>
                         {({ input, meta }) => (
                           <div>
@@ -221,11 +208,9 @@ export class CreateTutorial extends React.PureComponent<
                         )}
                       </Field>
                       <Label
-                        component="label"
+                        text={'Add Tags'}
                         style={{ margin: '50px 0 10px' }}
-                      >
-                        Add tags
-                      </Label>
+                      />
                       <TagsSelect
                         value={this.state.formValues.tags}
                         onChange={tags => this.onSelectedTagsChanged(tags)}
@@ -245,22 +230,20 @@ export class CreateTutorial extends React.PureComponent<
                         placeholder="10"
                       />
                       <Label
-                        component="label"
+                        text={
+                          'How difficult to replicate is your documentation ?'
+                        }
                         style={{ margin: '50px 0 10px' }}
-                      >
-                        How difficult to replicate is your documentation ?
-                      </Label>
+                      />
                       <Select name="difficulty_level" component="select">
                         <option value="easy">easy</option>
                         <option value="medium">medium</option>
                         <option value="difficult">difficult</option>
                       </Select>
                       <Label
-                        component="label"
+                        text={'File to support your documentation ? (20mb max)'}
                         style={{ margin: '50px 0 10px' }}
-                      >
-                        File to support your documentation ? (20mb max)
-                      </Label>
+                      />
                       <Field
                         name="files"
                         component={FirebaseFileUploaderField}

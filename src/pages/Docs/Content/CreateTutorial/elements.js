@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import Typography from '@material-ui/core/Typography'
-import InputAdornment from '@material-ui/core/InputAdornment'
 import {
     Field
 } from 'react-final-form'
@@ -48,13 +47,6 @@ export const StepBackground = styled.div `
     max-width: 600px;
 `;
 
-export const Label = styled(Typography)
-`
-    color: ${colors.grey3} !important;
-    font-size: 1.3em !important;
-    margin: 25px 0 !important;
-`;
-
 export const TextArea = styled.textarea `
     width: 100%;
     background: white;
@@ -64,17 +56,6 @@ export const TextArea = styled.textarea `
     &::placeholder {
         text-align: center;
         padding-top: 10px;
-    }
-`;
-
-export const Input = styled.input `
-    border: 1px solid ${colors.grey};
-    font-size: 1.1em;
-    background: white;
-    width: 100%;
-    height: 45px;
-    &::placeholder {
-        padding-left: 5px;
     }
 `;
 

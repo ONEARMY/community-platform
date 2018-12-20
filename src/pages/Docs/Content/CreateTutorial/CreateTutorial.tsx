@@ -16,7 +16,7 @@ import { ISelectedTags } from 'src/models/tags.model'
 import { FirebaseFileUploaderField } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploaderField.jsx'
 import helpers from 'src/utils/helpers'
 import Button from 'src/components/Button/Button'
-import { InputField, Label } from 'src/components/Form/Fields'
+import { InputField, Label, TextArea } from 'src/components/Form/Fields'
 
 import { Step } from './Step/Step.jsx'
 
@@ -27,7 +27,6 @@ import {
   Background,
   DescriptionContainer,
   StepBackground,
-  TextArea,
   CoverImage,
   Select,
 } from './elements'
@@ -172,6 +171,7 @@ export class CreateTutorial extends React.PureComponent<
                         component={InputField}
                         label="What is the title of your documentation ?"
                         placeholder="How to make XXX using YYY"
+                        customEvent
                         onBlur={(event: any) => {
                           this.onInputChange(event, 'tutorial_title')
                         }}
@@ -194,19 +194,12 @@ export class CreateTutorial extends React.PureComponent<
                         text={'Write a short description for the documentation'}
                         style={{ margin: '50px 0 10px' }}
                       />
-                      <Field name="tutorial_description" validate={required}>
-                        {({ input, meta }) => (
-                          <div>
-                            <TextArea
-                              {...input}
-                              placeholder="This is what we will do"
-                            />
-                            {meta.error && meta.touched && (
-                              <span>{meta.error}</span>
-                            )}
-                          </div>
-                        )}
-                      </Field>
+                      <Field
+                        name="tutorial_description"
+                        validate={required}
+                        component={TextArea}
+                        placeholder="This is what we will do"
+                      />
                       <Label
                         text={'Add Tags'}
                         style={{ margin: '50px 0 10px' }}

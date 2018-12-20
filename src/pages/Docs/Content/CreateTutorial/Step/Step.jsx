@@ -1,17 +1,15 @@
 import React, { Component } from 'react'
-import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogTitle from '@material-ui/core/DialogTitle'
 import { FieldArray } from 'react-final-form-arrays'
+import { Field } from 'react-final-form'
 import Button from 'src/components/Button/Button'
+import { TextArea, InputField } from 'src/components/Form/Fields'
 
 import {
   StepHeader,
   StepTitle,
   Label,
-  InputField,
   Container,
   StepCard,
   DeleteStepBtn,
@@ -63,20 +61,19 @@ class Step extends Component {
           <Header {...this.props} />
           <CardContent>
             <div>
-              <Label component="label">Pick a title for this step</Label>
-              <InputField
+              <Field
                 name={`${step}.title`}
-                component="input"
+                component={InputField}
+                label="Pick a title for this step"
                 placeholder="Step title"
                 validate={required}
               />
-              <Label component="label">Describe this step</Label>
-              <InputField
+              <Field
                 name={`${step}.text`}
-                component="textarea"
+                label="Describe this step"
+                component={TextArea}
                 placeholder="Description"
                 validate={required}
-                style={{ height: '150px' }}
               />
             </div>
             <FieldArray name={`${step}.images`}>

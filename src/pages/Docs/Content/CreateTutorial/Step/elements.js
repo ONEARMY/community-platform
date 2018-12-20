@@ -1,9 +1,6 @@
 import styled from 'styled-components'
 import colors from 'src/themes/colors'
 import Typography from '@material-ui/core/Typography';
-import {
-    Field
-} from 'react-final-form'
 import Card from '@material-ui/core/Card';
 import {
     MdDelete
@@ -29,18 +26,6 @@ export const Label = styled(Typography)
 `
     font-size: 1.3em !important;
     margin: 10px 0 !important;
-`;
-
-export const InputField = styled(Field)
-`
-    border: 1px solid #dddddd;
-    font-size: 1.1em;
-    background: white;
-    width: 100%;
-    height: 45px;
-    &::placeholder {
-        text-align: center;
-    }
 `;
 
 export const Container = styled.div `

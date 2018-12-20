@@ -47,18 +47,6 @@ export const StepBackground = styled.div `
     max-width: 600px;
 `;
 
-export const TextArea = styled.textarea `
-    width: 100%;
-    background: white;
-    height: 150px;
-    font-size: 1.1em;
-    border: 1px solid ${colors.grey};
-    &::placeholder {
-        text-align: center;
-        padding-top: 10px;
-    }
-`;
-
 export const CoverImage = styled.img `
     width: 300px;
     display: block;

@@ -1,16 +1,28 @@
-import styled from 'styled-components'
+import styled, {
+    css
+} from 'styled-components'
 import Typography from '@material-ui/core/Typography'
 import colors from 'src/themes/colors'
 
+const inputStyles = css `
+border: 1px solid ${colors.grey};
+font-size: 1.1em;
+background: white;
+width: 100%;
+`
+
 export const Input = styled.input `
-    border: 1px solid ${colors.grey};
-    font-size: 1.1em;
-    background: white;
-    width: 100%;
+    ${inputStyles};
     height: 45px;
-    &::placeholder {
-        padding-left: 5px;
-    }
+    padding-left: 5px;
+`;
+
+export const TextAreaStyled = styled.textarea `
+    ${inputStyles};
+    height: 150px;
+    font-family: inherit;
+    text-align: center;
+    padding-top: 10px;
 `;
 
 export const LabelStyled = styled(Typography)

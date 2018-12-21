@@ -1,6 +1,6 @@
 import csvtojson from 'csvtojson'
 import { writeFile } from 'fs'
-import LEGACY_USERS from './data/subset_0.json'
+import LEGACY_USERS from './data/subset_1.json'
 import SERVICE_ACCOUNT from './config/config'
 import 'log-update'
 import * as admin from 'firebase-admin'
@@ -68,7 +68,7 @@ const populateLegacyData = async () => {
       i = i + chunk.length
       logUpdate(`${i}/${LEGACY_USERS.length} users uploaded`)
     } catch (error) {
-      throw new error(JSON.stringify(error))
+      throw new Error(JSON.stringify(error))
     }
   }
 }
@@ -76,8 +76,10 @@ const populateLegacyData = async () => {
 const writeUserBatch = async (users: any[]) => {
   const batch = db.batch()
   users.forEach(async user => {
-    const ref = db.collection('_legacyUsers').doc(user.email)
-    batch.set(ref, user)
+    if (user.email) {
+      const ref = db.collection('_legacyUsers').doc(user.email)
+      batch.set(ref, user)
+    }
   })
   return batch.commit()
 }

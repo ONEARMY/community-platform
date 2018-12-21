@@ -1,9 +1,8 @@
 // This file handles most of the logic involved with user migration
 import { auth, db } from './firebase'
-import { LEGACY_USERS } from 'src/mocks/user.mock'
 import { ILegacyUser, IUser } from 'src/models/user.models'
 import * as phpassHasher from 'wordpress-hash-node'
-// import * as LEGACY_USERS from './UserMigration/src/data/subset_0.json'
+
 import md5 from 'md5'
 
 interface IMigrationResponse {
@@ -13,7 +12,6 @@ interface IMigrationResponse {
 }
 
 export const loginFormSubmit = async (email: string, pw: string) => {
-  populateLegacyData()
   const response: any = await attemptLogin(email, pw)
   return response
 }
@@ -134,34 +132,6 @@ const buildResponse = (
     message,
     complete,
   }
-}
-
-// This function is only required for initial writing of legacy profile to the database
-// files can be written in chunks of max 500 and cost $0.18 per 100k
-const populateLegacyData = async () => {
-  const users: ILegacyUser[] = LEGACY_USERS as ILegacyUser[]
-  console.log('users', users)
-  const chunks = createUserFileChunks(users)
-  console.log('chunks', chunks)
-  // for(let i=0; i<=chunks;i++){
-  //   const chunk = [...users.]
-  // }
-  // users.forEach(user => {
-  //   db.doc(`_legacyUsers/${user.email}`).set(user)
-  // })
-}
-
-const createUserFileChunks = (users: any[]) => {
-  console.log('creating file chunks')
-  const chunkSize = 500
-  const chunks = Math.floor(users.length / chunkSize)
-  const chunksArr = []
-  for (let i = 0; i <= chunks; i++) {
-    const chunkEnd = Math.min(users.length, chunkSize * (i + 1))
-    const subset = [...users.slice(chunkSize * i, chunkEnd)]
-    chunksArr.push(subset)
-  }
-  return chunksArr
 }
 
 /* General Notes

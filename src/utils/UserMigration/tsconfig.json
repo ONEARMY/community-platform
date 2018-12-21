@@ -3,7 +3,7 @@
     "baseUrl": ".",
     "outDir": "build/dist",
     "module": "commonjs",
-    "target": "es6",
+    "target": "es5",
     "lib": ["es6", "dom"],
     "sourceMap": true,
     "allowJs": true,
@@ -21,5 +21,6 @@
     "typeRoots": ["./types", "./node_modules/@types"],
     "resolveJsonModule": true
   },
-  "exclude": ["node_modules", "data"]
+  "exclude": ["node_modules"],
+  "typeRoots": ["./node_modules/@types", "./types"]
 }

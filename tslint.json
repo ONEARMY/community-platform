@@ -16,7 +16,7 @@
     "jsx-no-lambda": false,
     "jsx-boolean-value": false,
     "no-empty": true,
-    "no-any": true,
+    "no-any": false,
     "prefer-const": true
   },
   "defaultSeverity": "warning"

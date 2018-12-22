@@ -17,7 +17,8 @@
     "jsx-boolean-value": false,
     "no-empty": true,
     "no-any": false,
-    "prefer-const": true
+    "prefer-const": true,
+    "member-access": false
   },
   "defaultSeverity": "warning"
 }

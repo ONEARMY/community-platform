@@ -13,7 +13,6 @@ interface IState {
   singlePageMode: boolean
   displayPageComponent?: any
 }
-
 export class Routes extends React.Component<any, IState> {
   constructor(props: any) {
     super(props)

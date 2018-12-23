@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button'
 import UploadIconImage from '../../../assets/icons/upload.svg'
 import './FirebaseFileUploader.scss'
 import { FullMetadata } from '@firebase/storage-types'
+import { async } from '@firebase/util'
 /*
 This component takes a folder storage path and uploads files to firebase storage
 onUploadSucess allows URLs of completed uploads to be passed back to parent component
@@ -93,6 +94,10 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
       updated: meta.updated,
     }
     return this.props.onUploadSuccess(fileInfo, this.props.callbackData)
+  }
+
+  public deleteUploads = async (fileInfo?: any) => {
+    // WiP
   }
 
   // the first styled button in our template intercepts all click events so we have a manual method

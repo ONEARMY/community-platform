@@ -11,6 +11,7 @@ import { db } from 'src/utils/firebase'
 import { inject } from 'mobx-react'
 import { DocStore } from 'src/stores/Docs/docs.store'
 import { TagDisplay } from 'src/pages/common/Tags'
+import { ITutorialStep } from 'src/models/tutorial.models'
 
 const sliderSettings = {
   centerMode: false,
@@ -100,11 +101,11 @@ export class Tutorial extends React.Component<
       : undefined
   }
 
-  public renderMultipleImages(step: any) {
-    const preloadedImages = []
+  public renderMultipleImages(step: ITutorialStep) {
+    const preloadedImages: any[] = []
     for (const image of step.images) {
       const imageObj = new Image()
-      imageObj.src = image
+      imageObj.src = image.downloadUrl
       preloadedImages.push({
         src: imageObj.src,
       })
@@ -178,7 +179,10 @@ export class Tutorial extends React.Component<
               </div>
             </div>
             <div className="tutorial-infos__right">
-              <img src={tutorial.cover_image_url} alt="tutorial cover" />
+              <img
+                src={tutorial.cover_image.downloadUrl}
+                alt="tutorial cover"
+              />
             </div>
           </div>
           {tutorial.steps.map((step: any, index: number) => (

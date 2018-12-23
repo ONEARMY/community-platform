@@ -79,7 +79,11 @@ export class TutorialList extends React.Component<IProps, any> {
                       <Card className="tutorial-list__card">
                         <CardMedia
                           style={styles.cardMedia}
-                          image={tutorial.cover_image_url} // eslint-disable-line max-len
+                          image={
+                            tutorial.cover_image
+                              ? tutorial.cover_image.downloadUrl
+                              : tutorial.cover_image_url
+                          } // eslint-disable-line max-len
                           title="Image title"
                         />
                         <CardContent style={styles.cardContent}>

@@ -11,14 +11,17 @@ export interface ITutorial extends ITutorialFormInput {
 }
 
 export interface ITutorialStep {
-  images: string[]
+  // *** NOTE legacy format only tracked urls - this will be removed once data upgraded
+  images: IFirebaseUploadInfo[]
   title: string
   text: string
 }
 
 export interface ITutorialFormInput {
   workspace_name: string
-  cover_image_url: string
+  cover_image: IFirebaseUploadInfo
+  // *** NOTE legacy format only tracked urls - this will be removed once data upgraded
+  cover_image_url?: string
   tutorial_title: string
   tutorial_description: string
   difficulty_level: 'easy' | 'medium' | 'difficult'

@@ -198,7 +198,7 @@
 
       &:hover .trash-icon {
         // opacity: 0.8;
-        background-image: url('../../../../assets/icons/bin-black.svg')
+        background-image: url('../../../../assets/icons/bin-black.svg');
       }
     }
   }
@@ -267,9 +267,19 @@
   }
 
   .cover-img {
-    width: 300px;
+    max-height: 150px;
+    max-width: 300px;
     display: block;
     margin: 20px auto;
+  }
+  .cover-img__delete {
+    right: 0;
+    top: 0;
+    position: absolute;
+  }
+  .cover-img__container {
+    position: relative;
+    height: 150px;
   }
 
   .step-img {
@@ -307,7 +317,7 @@
 .dialog-button__validate {
   width: 112px;
   height: 60px;
-  background-color: #B6D8E6;
+  background-color: #b6d8e6;
   color: black;
   text-transform: uppercase;
   border: none;

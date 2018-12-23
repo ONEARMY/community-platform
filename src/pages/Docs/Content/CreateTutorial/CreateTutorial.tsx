@@ -4,6 +4,7 @@ import { Form, Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
 import './CreateTutorial.scss'
+import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
@@ -11,9 +12,8 @@ import Input from '@material-ui/core/Input'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import DeleteIcon from '@material-ui/icons/Delete'
 import {
   ITutorial,
   ITutorialFormInput,
@@ -22,11 +22,9 @@ import {
 import AddIcon from '../../../../assets/icons/add.svg'
 import SaveIcon from '../../../../assets/icons/save.svg'
 
-import { db } from '../../../../utils/firebase'
+import { db, storage } from '../../../../utils/firebase'
 
 import { TUTORIAL_TEMPLATE_DATA } from './TutorialTemplate'
-import { ITag } from 'src/models/models'
-import { TAGS_MOCK } from 'src/mocks/tags.mock'
 import {
   FirebaseFileUploader,
   IFirebaseUploadInfo,
@@ -37,8 +35,10 @@ import { ISelectedTags } from 'src/models/tags.model'
 
 export interface IState {
   formValues: ITutorialFormInput
-  _uploadImgPath: string
-  _uploadFilesPath: string
+  formSaved: boolean
+  _docID: string
+  _uploadPath: string
+  _uploadedFiles: IFirebaseUploadInfo[]
   _toDocsList: boolean
   _isModaleStepDeleteOpen: boolean
 }
@@ -54,18 +54,59 @@ export class CreateTutorial extends React.PureComponent<
 > {
   constructor(props: any) {
     super(props)
+    const databaseRef = db.collection('documentation').doc()
+    const docID = databaseRef.id
+    console.log('doc id', docID)
     this.state = {
       formValues: TUTORIAL_TEMPLATE_DATA,
-      _uploadImgPath: 'uploads/test',
-      _uploadFilesPath: 'uploads/test',
+      formSaved: false,
+      _docID: docID,
+      _uploadPath: `uploads/documentation/${docID}`,
+      _uploadedFiles: [],
       _toDocsList: false,
       _isModaleStepDeleteOpen: false,
     }
   }
 
+  componentWillUnmount() {
+    console.log('component will unmount')
+    if (!this.state.formSaved) {
+      // remove any uploaded images
+      this.purgeUploads()
+    }
+  }
+
+  // remove any uploaded images or files (user decided not to save doc)
+  purgeUploads() {
+    console.log('purging uploads', this.state._uploadedFiles)
+    this.state._uploadedFiles.forEach(file =>
+      this.deleteStorageFile(file.fullPath),
+    )
+  }
+
+  addToUploads(file: IFirebaseUploadInfo) {
+    this.setState({
+      _uploadedFiles: [...this.state._uploadedFiles, file],
+    })
+    console.log('all uploaded files', this.state._uploadedFiles)
+  }
+
+  deleteCoverImage() {
+    this.deleteStorageFile(this.state.formValues.cover_image.fullPath)
+    const update = { ...this.state.formValues }
+    // use 0 size to mark lack of image
+    update.cover_image.size = 0
+    this.setState({ formValues: update })
+  }
+
+  deleteStorageFile(filePath: string) {
+    const ref = storage.ref(filePath)
+    ref.delete().catch(err => null)
+    // should be on the file uploader element (?)
+  }
+
   public onSubmit = async (formValues: ITutorialFormInput) => {
-    console.log('on submit', formValues)
-    if (this.state.formValues.cover_image_url === '') {
+    if (!this.state.formValues.cover_image) {
       alert('Please provide a cover image before saving your tutorial')
     } else {
       const timestamp = new Date()
@@ -75,10 +116,9 @@ export class CreateTutorial extends React.PureComponent<
         _created: timestamp,
         _modified: timestamp,
       }
-      console.log('submitting', values)
       try {
         await db.collection('documentation').add(values)
-        console.log('doc set successfully')
+        this.setState({ formSaved: true })
         this.props.history.push('/docs/' + this.state.formValues.slug)
         this.forceUpdate()
       } catch (error) {
@@ -107,8 +147,9 @@ export class CreateTutorial extends React.PureComponent<
     // use the spread operator to merge the existing images with the new url
     currentSteps[stepIndex].images = [
       ...currentSteps[stepIndex].images,
-      fileInfo.downloadUrl,
+      fileInfo,
     ]
+    this.addToUploads(fileInfo)
     this.forceUpdate()
     console.log('this.state.formValues', this.state.formValues)
   }
@@ -116,6 +157,7 @@ export class CreateTutorial extends React.PureComponent<
     const files = this.state.formValues.tutorial_files
     files.push(fileInfo)
     console.log('files', files)
+    this.addToUploads(fileInfo)
     this.setState({
       formValues: { ...this.state.formValues, tutorial_files: files },
     })
@@ -127,10 +169,11 @@ export class CreateTutorial extends React.PureComponent<
     Then merge the updated step with all steps and update the state
   */
   public handleUploadCoverSuccess = (fileInfo: IFirebaseUploadInfo) => {
+    this.addToUploads(fileInfo)
     this.setState({
       formValues: {
         ...this.state.formValues,
-        cover_image_url: fileInfo.downloadUrl,
+        cover_image: fileInfo,
       },
     })
   }
@@ -147,8 +190,6 @@ export class CreateTutorial extends React.PureComponent<
             tutorial_title: event.target.value,
             slug: clearUrlSlug,
           },
-          _uploadImgPath: 'uploads/' + encodeURIComponent(clearUrlSlug),
-          _uploadFilesPath: 'uploads/' + encodeURIComponent(clearUrlSlug),
         })
         break
       case 'tutorial_extern_file_url':
@@ -229,8 +270,9 @@ export class CreateTutorial extends React.PureComponent<
                                 this.onInputChange(event, 'workspace_name')
                               }}
                             />
-                            {meta.error &&
-                              meta.touched && <span>{meta.error}</span>}
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
                           </div>
                         )}
                       </Field>
@@ -252,8 +294,9 @@ export class CreateTutorial extends React.PureComponent<
                               }}
                               placeholder="How to make XXX using YYY"
                             />
-                            {meta.error &&
-                              meta.touched && <span>{meta.error}</span>}
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
                           </div>
                         )}
                       </Field>
@@ -268,18 +311,28 @@ export class CreateTutorial extends React.PureComponent<
                           '/docs/' +
                           this.state.formValues.slug}
                       </div>
-                      {this.state.formValues.cover_image_url && (
-                        <img
-                          className="cover-img"
-                          src={this.state.formValues.cover_image_url}
-                          alt={
-                            'cover image - ' +
-                            this.state.formValues.tutorial_title
-                          }
-                        />
-                      )}
+                      {this.state.formValues.cover_image.size > 0 ? (
+                        <div className="cover-img__container">
+                          <img
+                            className="cover-img"
+                            src={this.state.formValues.cover_image.downloadUrl}
+                            alt={
+                              'cover image - ' +
+                              this.state.formValues.tutorial_title
+                            }
+                          />
+                          <Button
+                            className="cover-img__delete"
+                            onClick={() => {
+                              this.deleteCoverImage()
+                            }}
+                          >
+                            <DeleteIcon />
+                          </Button>
+                        </div>
+                      ) : null}
                       <FirebaseFileUploader
-                        storagePath={this.state._uploadImgPath}
+                        storagePath={this.state._uploadPath}
                         hidden={true}
                         accept="image/png, image/jpeg"
                         name="coverImg"
@@ -306,8 +359,9 @@ export class CreateTutorial extends React.PureComponent<
                               }}
                               className="create-tutorial__input create-tutorial__input--margin"
                             />
-                            {meta.error &&
-                              meta.touched && <span>{meta.error}</span>}
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
                           </div>
                         )}
                       </Field>
@@ -339,8 +393,9 @@ export class CreateTutorial extends React.PureComponent<
                                 this.onInputChange(event, 'tutorial_time')
                               }}
                             />
-                            {meta.error &&
-                              meta.touched && <span>{meta.error}</span>}
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
                           </div>
                         )}
                       </Field>
@@ -370,8 +425,9 @@ export class CreateTutorial extends React.PureComponent<
                                 </InputAdornment>
                               }
                             />
-                            {meta.error &&
-                              meta.touched && <span>{meta.error}</span>}
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
                           </div>
                         )}
                       </Field>
@@ -404,7 +460,7 @@ export class CreateTutorial extends React.PureComponent<
                         accept="*"
                         name="files"
                         buttonText="Upload a file"
-                        storagePath={this.state._uploadImgPath}
+                        storagePath={this.state._uploadPath}
                         onUploadSuccess={this.handleUploadFilesSuccess}
                       />
                       <span className="uploaded-file-name" />
@@ -429,8 +485,9 @@ export class CreateTutorial extends React.PureComponent<
                                 )
                               }}
                             />
-                            {meta.error &&
-                              meta.touched && <span>{meta.error}</span>}
+                            {meta.error && meta.touched && (
+                              <span>{meta.error}</span>
+                            )}
                           </div>
                         )}
                       </Field>
@@ -496,21 +553,21 @@ export class CreateTutorial extends React.PureComponent<
                                 {this.state.formValues.steps[index] &&
                                   this.state.formValues.steps[index].images
                                     .length >= 1 &&
-                                  this.state.formValues.steps[index].images.map(
-                                    (stepImg, stepImgindex) => (
-                                      <img
-                                        key={stepImgindex}
-                                        className="step-img"
-                                        src={stepImg}
-                                      />
-                                    ),
-                                  )}
+                                  typeof this.state.formValues.steps[
+                                    index
+                                  ].images.map((stepImg, stepImgindex) => (
+                                    <img
+                                      key={stepImgindex}
+                                      className="step-img"
+                                      src={stepImg.downloadUrl}
+                                    />
+                                  ))}
 
                                 <FirebaseFileUploader
                                   hidden
                                   buttonText="Upload picture(s)"
                                   name={`${step}.images`}
-                                  storagePath={this.state._uploadImgPath}
+                                  storagePath={this.state._uploadPath}
                                   callbackData={index}
                                   onUploadSuccess={
                                     this.handleUploadStepImgSuccess

@@ -8,6 +8,7 @@ import { HomePage } from './Home/Home'
 import { NotFoundPage } from './NotFound/NotFound'
 import { TemplatePage } from './_Template/Template'
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
+import { EventsPage } from './Events/Events'
 
 interface IState {
   singlePageMode: boolean
@@ -32,6 +33,7 @@ export class Routes extends React.Component<any, IState> {
             <Switch>
               <Route path="/docs" component={DocsPage} />
               <Route path="/template" component={TemplatePage} />
+              <Route path="/events" component={EventsPage} />
               <Route exact path="/" component={HomePage} />
               <Route component={NotFoundPage} />
             </Switch>

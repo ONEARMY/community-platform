@@ -18,7 +18,8 @@
     "no-empty": true,
     "no-any": false,
     "prefer-const": true,
-    "member-access": false
+    "member-access": false,
+    "array-type": false
   },
   "defaultSeverity": "warning"
 }

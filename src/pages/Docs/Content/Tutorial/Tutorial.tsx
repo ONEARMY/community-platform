@@ -101,7 +101,7 @@ export class Tutorial extends React.Component<
   }
 
   public renderMultipleImages(step: any) {
-    const preloadedImages = []
+    const preloadedImages: any[] = []
     for (const image of step.images) {
       const imageObj = new Image()
       imageObj.src = image

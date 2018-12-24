@@ -35,7 +35,7 @@ export class EventsList extends React.Component<IProps, IState> {
           <div className="top-info-container">
             <div className="list-total">We found {events.length} events</div>
             <Button
-              className="show-map"
+              className="show-map view-toggle"
               variant="outlined"
               onClick={() => this.showMap()}
             >

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import Button from '@material-ui/core/Button'
-import { Map, TileLayer, Marker, Popup } from 'react-leaflet'
+import { Map, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { IEvent } from 'src/models/events.models'
@@ -45,7 +45,7 @@ export class EventsMap extends React.Component<IProps, IState> {
           <div className="top-info-container">
             <div className="list-total">We found {events.length} events</div>
             <Button
-              className="show-list"
+              className="show-list view-toggle"
               variant="outlined"
               onClick={() => this.showList()}
             >
@@ -54,7 +54,8 @@ export class EventsMap extends React.Component<IProps, IState> {
           </div>
         </div>
         <div className="map-container">
-          <Map center={[lat, lng]} zoom={zoom}>
+          <Map center={[lat, lng]} zoom={zoom} zoomControl={false}>
+            <ZoomControl position="topright" />
             <TileLayer
               attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

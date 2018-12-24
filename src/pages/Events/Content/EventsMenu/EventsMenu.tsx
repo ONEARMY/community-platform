@@ -126,6 +126,7 @@ export class EventsMenu extends React.Component<any, IState> {
     )
   }
 
+  // *** NOTE - WiP to convert named time period to specific dates
   private setDate(period: timePeriod) {
     const filters = { ...this.state.filters }
     const from = new Date()
@@ -139,5 +140,6 @@ export class EventsMenu extends React.Component<any, IState> {
     }
     filters.dateFrom = d
     filters.dateTo = d
+    this.setState({ timePeriod: period })
   }
 }

@@ -3,27 +3,35 @@
   background-color: white;
   margin: 20px;
   flex: 1;
+  position: relative;
+  height: 500px;
   .top-info--floating {
-    position: absolute;
     z-index: 401;
-    width: 467px;
     margin: 20px 15px;
+    position: relative;
   }
   .list-total {
     font-size: x-large;
     background: white;
     padding: 5px;
+    height: 30px;
   }
-  .map-container,
+  .map-container {
+    height: 500px;
+    position: relative;
+    top: -80px;
+  }
   .leaflet-container {
     height: 500px;
   }
   button.show-list {
-    float: right;
     background-color: white;
+    right: 15px;
+    width: 120px;
   }
   .leaflet-control-zoom {
-    margin-top: 60px;
+    margin-top: 70px;
+    margin-right: 20px;
   }
   .leaflet-popup-content-wrapper {
     padding: 0;

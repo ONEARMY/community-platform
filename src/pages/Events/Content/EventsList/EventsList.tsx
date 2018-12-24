@@ -4,12 +4,17 @@ import './EventsList.scss'
 import * as Mocks from 'src/mocks/events.mock'
 import Button from '@material-ui/core/Button'
 import { ClampLines } from 'src/components/ClampLines/ClampLines'
+import { EventStore } from 'src/stores/Events/events.store'
 
 interface IState {
   events: IEvent[]
 }
 
-export class EventsList extends React.Component<any, IState> {
+interface IProps {
+  eventStore: EventStore
+}
+
+export class EventsList extends React.Component<IProps, IState> {
   constructor(props: any) {
     super(props)
     // initial state
@@ -17,6 +22,9 @@ export class EventsList extends React.Component<any, IState> {
   }
   public formatDate(d: Date) {
     return `${Mocks.MONTHS[d.getMonth()]} ${d.getDay()}`
+  }
+  public showMap() {
+    this.props.eventStore.setEventView('map')
   }
 
   public render() {
@@ -26,7 +34,11 @@ export class EventsList extends React.Component<any, IState> {
         <div className="list-container">
           <div className="top-info-container">
             <div className="list-total">We found {events.length} events</div>
-            <Button className="show-map" variant="outlined">
+            <Button
+              className="show-map view-toggle"
+              variant="outlined"
+              onClick={() => this.showMap()}
+            >
               Show Map
             </Button>
           </div>
@@ -36,7 +48,7 @@ export class EventsList extends React.Component<any, IState> {
               <div className="event-info">
                 <div className="event-name">{event.name}</div>
                 <div className="event-date">
-                  {`${this.formatDate(event.date)} / ${event.location}`}
+                  {`${this.formatDate(event.date)} / ${event.location.city}`}
                 </div>
                 <div className="event-description">
                   <ClampLines text={event.description} lines={2} />

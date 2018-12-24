@@ -41,8 +41,13 @@ export const TIMEFRAMES = [
 
 export const EVENTS: IEvent[] = [
   {
-    name: 'Open Workspace and Free Lunch - Brighton',
-    location: 'Brighton, UK',
+    name: 'Open Workspace and Free Lunch - Eindhoven',
+    location: {
+      lat: 51.4416,
+      lng: 5.4697,
+      country: 'NL',
+      city: 'Eindhoven',
+    },
     description:
       'The family moved to New York City in 1940. The next year Eisuke was transferred from New York City',
     host: 'PlasticNL',
@@ -55,7 +60,12 @@ export const EVENTS: IEvent[] = [
   },
   {
     name: 'Beach Clean in Brighton',
-    location: 'Brighton, UK',
+    location: {
+      lat: 50.8225,
+      lng: 0.1372,
+      country: 'UK',
+      city: 'Brighton',
+    },
     description:
       'In meteorology, a cloud is an aerosol ocnsisting of a visible mass of rain dropletx, frozen crystals, or other particles suspended in the atmospher',
     host: 'BeachCleans',

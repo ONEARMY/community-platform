@@ -6,7 +6,10 @@ export class EventStore {
   // observables are data variables that can be subscribed to and change over time
   @observable
   public allEvents: IEvent[]
+  @observable
   public activeEvent: IEvent | undefined
+  @observable
+  public eventViewType: 'map' | 'list'
 
   @action
   public async getEventsList() {
@@ -26,5 +29,10 @@ export class EventStore {
         ? (collection.docs[0].data() as IEvent)
         : undefined
     return this.activeEvent
+  }
+
+  public setEventView(type: 'map' | 'list') {
+    this.eventViewType = type
+    console.log('event view type', this.eventViewType)
   }
 }

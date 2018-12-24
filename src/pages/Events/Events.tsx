@@ -10,6 +10,7 @@ import MainLayout from '../common/MainLayout'
 import { EventStore } from 'src/stores/Events/events.store'
 import { EventsMenu } from './Content/EventsMenu/EventsMenu'
 import { EventsList } from './Content/EventsList/EventsList'
+import { EventsMap } from './Content/EventsMap/EventsMap'
 
 // define the page properties with typing information for fields
 // properties are things that will have been passed down from parent component
@@ -42,7 +43,11 @@ export class EventsPage extends React.Component<IProps> {
           style={{ backgroundColor: '#EDEDED', display: 'flex' }}
         >
           <EventsMenu />
-          <EventsList />
+          {this.props.eventStore.eventViewType === 'map' ? (
+            <EventsMap {...this.props} />
+          ) : (
+            <EventsList {...this.props} />
+          )}
         </div>
       </MainLayout>
     )

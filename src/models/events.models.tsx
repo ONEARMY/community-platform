@@ -1,6 +1,6 @@
 export interface IEvent {
   name: string
-  location: IEventLocation | string
+  location: IEventLocation
   description: string
   host: string
   date: Date
@@ -15,7 +15,10 @@ export interface IEvent {
 interface IEventLocation {
   city: string
   country: string
-  gps: number[]
+  label?: string
+  address?: string
+  lat: number
+  lng: number
 }
 
 export interface IEventFilters {

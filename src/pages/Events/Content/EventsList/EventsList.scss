@@ -1,7 +1,10 @@
 #EventsList {
+  padding: 20px;
+}
+#EventsList,
+#EventsMap {
   background-color: white;
   margin: 20px;
-  padding: 20px;
   flex: 1;
   .top-info-container {
     display: flex;

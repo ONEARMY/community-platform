@@ -1,11 +1,11 @@
 import * as React from 'react'
 import FormControl from '@material-ui/core/FormControl'
+import Button from '@material-ui/core/Button'
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import { IEventFilters } from 'src/models/events.models'
 import './EventsMenu.scss'
 import * as Mocks from 'src/mocks/events.mock'
-import Button from '@material-ui/core/Button'
 
 type timePeriod = 'weekend' | 'week' | 'month' | 'year'
 
@@ -15,6 +15,7 @@ interface IState {
 }
 
 const d = new Date()
+
 export class EventsMenu extends React.Component<any, IState> {
   constructor(props: any) {
     super(props)

@@ -1,8 +1,18 @@
 import { ITutorial } from '../models/tutorial.models'
+import { IFirebaseUploadInfo } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
+
+const exampleUploadImage: IFirebaseUploadInfo = {
+  downloadUrl: 'http://placekitten.com/g/400/250',
+  fullPath: '',
+  name: '250.jpg',
+  size: 11035,
+  timeCreated: '',
+  updated: '',
+}
 
 export const TUTORIALS_MOCK: ITutorial[] = [
   {
-    cover_image_url: 'http://placekitten.com/g/400/250',
+    cover_image: exampleUploadImage,
     tutorial_title: 'Tutorial 1',
     workspace_name: 'Eindhoven Mate',
     id: 'fakeid1',
@@ -13,15 +23,12 @@ export const TUTORIALS_MOCK: ITutorial[] = [
     tutorial_time: '30 hours',
     steps: [
       {
-        images: ['http://placekitten.com/g/400/250'],
+        images: [exampleUploadImage],
         text: 'this text is wonderful oh my god',
         title: 'My super step1 title',
       },
       {
-        images: [
-          'http://placekitten.com/g/400/250',
-          'http://placekitten.com/400/250',
-        ],
+        images: [exampleUploadImage, exampleUploadImage],
         text: 'this text is wonderful oh my god',
         title: 'My super step2 title',
       },
@@ -33,7 +40,7 @@ export const TUTORIALS_MOCK: ITutorial[] = [
     _modified: new Date(),
   },
   {
-    cover_image_url: 'http://placekitten.com/g/400/250',
+    cover_image: exampleUploadImage,
     tutorial_title: 'Tutorial 2',
     workspace_name: 'Eindhoven Mate',
     id: 'fakeid2',
@@ -44,18 +51,12 @@ export const TUTORIALS_MOCK: ITutorial[] = [
     tutorial_time: '30 hours',
     steps: [
       {
-        images: [
-          'http://placekitten.com/400/250',
-          'http://placekitten.com/g/400/250',
-        ],
+        images: [exampleUploadImage, exampleUploadImage],
         text: 'this text is wonderful oh my god',
         title: 'My super step1 title',
       },
       {
-        images: [
-          'http://placekitten.com/g/400/250',
-          'http://placekitten.com/400/250',
-        ],
+        images: [exampleUploadImage],
         text: 'this text is wonderful oh my god',
         title: 'My super step2 title',
       },
@@ -67,7 +68,7 @@ export const TUTORIALS_MOCK: ITutorial[] = [
     _modified: new Date(),
   },
   {
-    cover_image_url: 'http://placekitten.com/g/400/250',
+    cover_image: exampleUploadImage,
     tutorial_title: 'Tutorial 3',
     workspace_name: 'Eindhoven Mate',
     id: 'fakeid3',
@@ -78,18 +79,12 @@ export const TUTORIALS_MOCK: ITutorial[] = [
     tutorial_time: '30 days',
     steps: [
       {
-        images: [
-          'http://placekitten.com/400/250',
-          'http://placekitten.com/g/400/250',
-        ],
+        images: [exampleUploadImage],
         text: 'this text is wonderful oh my god',
         title: 'My super step1 title',
       },
       {
-        images: [
-          'http://placekitten.com/g/400/250',
-          'http://placekitten.com/400/250',
-        ],
+        images: [exampleUploadImage],
         text: 'this text is wonderful oh my god',
         title: 'My super step2 title',
       },

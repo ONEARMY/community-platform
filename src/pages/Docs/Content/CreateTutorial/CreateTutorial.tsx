@@ -3,7 +3,6 @@ import { RouteComponentProps } from 'react-router'
 import { Form, Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
-import './CreateTutorial.scss'
 import { ITutorial, ITutorialFormInput } from 'src/models/tutorial.models'
 import { db } from 'src/utils/firebase'
 import { TUTORIAL_TEMPLATE_DATA } from './TutorialTemplate'
@@ -344,12 +343,12 @@ export class CreateTutorial extends React.PureComponent<
                     <FieldArray name="steps">
                       {({ fields }) => (
                         <div>
-                          {fields.map((step, index: any) => (
+                          {fields.map((step, index: number) => (
                             <Step
                               step={step}
                               index={index}
                               key={index}
-                              onDelete={(fieldIndex: any) => {
+                              onDelete={(fieldIndex: number) => {
                                 fields.remove(fieldIndex)
                               }}
                               values={values}

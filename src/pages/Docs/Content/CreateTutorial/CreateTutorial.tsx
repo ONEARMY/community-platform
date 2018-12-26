@@ -149,38 +149,6 @@ export class CreateTutorial extends React.PureComponent<
     })
   }
 
-  public onInputChange = (event: any, inputType: string) => {
-    const value = event.target.value
-    switch (inputType) {
-      case 'tutorial_title':
-        const clearUrlSlug = helpers.stripSpecialCharacters(value)
-        this.setState({
-          formValues: {
-            ...this.state.formValues,
-            tutorial_title: event.target.value,
-            slug: clearUrlSlug,
-          },
-        })
-        break
-      case 'tutorial_extern_file_url':
-        // TODO check is proper url
-        this.setState({
-          formValues: {
-            ...this.state.formValues,
-            tutorial_extern_file_url: event.target.value,
-          },
-        })
-      default:
-        this.setState({
-          formValues: {
-            ...this.state.formValues,
-            [inputType]: event.target.value,
-          },
-        })
-        break
-    }
-  }
-
   public onSelectedTagsChanged(selectedTags: ISelectedTags) {
     // TODO: make tags save to form values instead
     this.setState({
@@ -232,10 +200,6 @@ export class CreateTutorial extends React.PureComponent<
                         component={InputField}
                         label="What is the title of your documentation ?"
                         placeholder="How to make XXX using YYY"
-                        customEvent
-                        onBlur={(event: any) => {
-                          this.onInputChange(event, 'tutorial_title')
-                        }}
                       />
                       {v.cover_image ? (
                         <UploadedFile

@@ -11,7 +11,8 @@ import DeleteIcon from '@material-ui/icons/Delete'
  * providing image preview, download links and delete
  ************************************************************************/
 
-interface IProps {
+//  export props so can be used in UploadedFileField variant
+export interface IUploadedFileProps {
   file: IFirebaseUploadInfo
   imagePreview: boolean
   showDelete: boolean
@@ -23,8 +24,8 @@ interface IState {
   deleted: boolean
 }
 
-export class UploadedFile extends React.Component<IProps, IState> {
-  public static defaultProps: Partial<IProps>
+export class UploadedFile extends React.Component<IUploadedFileProps, IState> {
+  public static defaultProps: Partial<IUploadedFileProps>
   constructor(props: any) {
     super(props)
     this.state = { imageLoaded: false, deleted: false }

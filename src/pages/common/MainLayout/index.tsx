@@ -1,9 +1,6 @@
-import * as React from 'react';
+import * as React from 'react'
 
-import Header from "../Header";
-
-import logo from "../../../assets/images/logo.png";
-import './MainLayout.scss';
+import Header from '../Header'
 
 const MainLayout: React.StatelessComponent<{}> = ({ children }) => {
   return (
@@ -11,7 +8,7 @@ const MainLayout: React.StatelessComponent<{}> = ({ children }) => {
       <Header />
       {children}
     </div>
-  );
+  )
 }
 
-export default MainLayout;
+export default MainLayout

@@ -4,30 +4,31 @@ import { Form, Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
 import './CreateTutorial.scss'
-import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/CardContent'
-import Typography from '@material-ui/core/Typography'
-import Input from '@material-ui/core/Input'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogTitle from '@material-ui/core/DialogTitle'
 import { ITutorial, ITutorialFormInput } from 'src/models/tutorial.models'
-
-import AddIcon from 'src/assets/icons/add.svg'
-import SaveIcon from 'src/assets/icons/save.svg'
-
 import { db } from 'src/utils/firebase'
-
 import { TUTORIAL_TEMPLATE_DATA } from './TutorialTemplate'
 import {
-  FirebaseFileUploader,
   IFirebaseUploadInfo,
+  FirebaseFileUploader,
 } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
 import helpers from 'src/utils/helpers'
 import { TagsSelect } from 'src/pages/common/Tags'
 import { ISelectedTags } from 'src/models/tags.model'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
+import { FirebaseFileUploaderField } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploaderField'
+import Button from 'src/components/Button/Button'
+import { InputField, Label, TextArea } from 'src/components/Form/Fields'
+import { Step } from './Step/Step'
+import {
+  FormContainer,
+  Title,
+  TutorialForm,
+  Background,
+  DescriptionContainer,
+  StepBackground,
+  CoverImage,
+  Select,
+} from './elements'
 
 export interface IState {
   formValues: ITutorialFormInput
@@ -35,7 +36,6 @@ export interface IState {
   _docID: string
   _uploadPath: string
   _toDocsList: boolean
-  _isModaleStepDeleteOpen: boolean
 }
 
 const required = (value: any) => (value ? undefined : 'Required')
@@ -56,7 +56,6 @@ export class CreateTutorial extends React.PureComponent<
       _docID: docID,
       _uploadPath: `uploads/documentation/${docID}`,
       _toDocsList: false,
-      _isModaleStepDeleteOpen: false,
     }
   }
 
@@ -90,25 +89,17 @@ export class CreateTutorial extends React.PureComponent<
     values.cover_image = null
     this.setState({ formValues: values })
   }
-  uploadedStepImageDeleted(stepIndex, imageIndex) {
-    const values = { ...this.state.formValues }
-    values.steps[stepIndex].images.splice(imageIndex, 1)
-    this.setState({ formValues: values })
-  }
-  uploadedTutorialFileDeleted(index: number) {
-    const values = { ...this.state.formValues }
-    values.tutorial_files.splice(index, 1)
-    this.setState({ formValues: values })
-  }
 
   public onSubmit = async (formValues: ITutorialFormInput) => {
     if (!this.state.formValues.cover_image) {
       alert('Please provide a cover image before saving your tutorial')
     } else {
       const timestamp = new Date()
+      const slug = helpers.stripSpecialCharacters(formValues.tutorial_title)
       // convert data to correct types and populate metadata
       const values: ITutorial = {
         ...this.castFormValuesToCorrectTypes(formValues),
+        slug,
         cover_image: formValues.cover_image as IFirebaseUploadInfo,
         _created: timestamp,
         _modified: timestamp,
@@ -127,6 +118,13 @@ export class CreateTutorial extends React.PureComponent<
     }
   }
 
+  public validate = async (formValues: ITutorialFormInput) => {
+    // TODO: validate cover image exists
+    // if (this.state.formValues.cover_image_url === '') {
+    // alert('Please provide a cover image before saving your tutorial')
+    return Promise.resolve({})
+  }
+
   // By default all tutorial form input fields come as strings. We want to cast to the
   // correct data types if this ever becomes more complex could use
   // https://medium.freecodecamp.org/how-to-write-powerful-schemas-in-javascript-490da6233d37
@@ -136,29 +134,6 @@ export class CreateTutorial extends React.PureComponent<
       tutorial_cost: Number(values.tutorial_cost),
     }
     return formattedValues
-  }
-
-  public handleUploadStepImgSuccess = (
-    fileInfo: IFirebaseUploadInfo,
-    stepIndex: number,
-  ) => {
-    const currentSteps: any = this.state.formValues.steps
-    // get the step at the index where the new image will go
-    // use the spread operator to merge the existing images with the new url
-    currentSteps[stepIndex].images = [
-      ...currentSteps[stepIndex].images,
-      fileInfo,
-    ]
-    this.forceUpdate()
-    console.log('this.state.formValues', this.state.formValues)
-  }
-  public handleUploadFilesSuccess = (fileInfo: IFirebaseUploadInfo) => {
-    const files = this.state.formValues.tutorial_files
-    files.push(fileInfo)
-    console.log('files', files)
-    this.setState({
-      formValues: { ...this.state.formValues, tutorial_files: files },
-    })
   }
 
   /* EXAMPLE
@@ -208,6 +183,8 @@ export class CreateTutorial extends React.PureComponent<
   }
 
   public onSelectedTagsChanged(selectedTags: ISelectedTags) {
+    console.log('selected tags changed', selectedTags)
+    // TODO: make tags save to form values instead
     this.setState({
       formValues: {
         ...this.state.formValues,
@@ -216,472 +193,193 @@ export class CreateTutorial extends React.PureComponent<
     })
   }
 
-  public handleModaleDeleteStepOpen() {
-    this.setState({
-      _isModaleStepDeleteOpen: true,
-    })
-  }
-  public handleModaleDeleteStepClose() {
-    this.setState({
-      _isModaleStepDeleteOpen: false,
-    })
-  }
-
   public render() {
     const { formValues } = this.state
+    console.log('form values', formValues)
     return (
       <div>
-        <Typography
-          style={{ margin: '30px auto', display: 'table' }}
-          variant="h4"
-          component="h4"
-        >
+        <Title variant="h4" component="h4">
           Create a documentation
-        </Typography>
+        </Title>
         <Form
           onSubmit={this.onSubmit}
           initialValues={formValues}
+          validate={this.validate}
           mutators={{
             ...arrayMutators,
           }}
-          render={({ handleSubmit, submitting, values, form, invalid }) => {
+          render={({
+            handleSubmit,
+            mutators,
+            submitting,
+            values,
+            form,
+            invalid,
+          }) => {
+            const v = values as ITutorial
             return (
-              <div className="create-tutorial-form__container">
-                <form className="create-tutorial-form" onSubmit={handleSubmit}>
-                  <div className="create-tutorial-infos__container-background">
-                    <div className="create-tutorial-infos__container">
-                      <Typography
-                        component="label"
-                        className="create-tutorial__label"
-                      >
-                        What is your davehakkens.nl account ?
-                      </Typography>
-                      <Field name="workspace_name" validate={required}>
-                        {({ input, meta }) => (
-                          <div>
-                            <Input
-                              {...input}
-                              placeholder="@janedoe"
-                              className="create-tutorial__input"
-                              onBlur={(event: any) => {
-                                this.onInputChange(event, 'workspace_name')
-                              }}
-                            />
-                            {meta.error && meta.touched && (
-                              <span>{meta.error}</span>
-                            )}
-                          </div>
-                        )}
-                      </Field>
-                      <Typography
-                        component="label"
-                        className="create-tutorial__label label__margin"
-                      >
-                        What is the title of your documentation ?
-                      </Typography>
-                      <Field name="tutorial_title" validate={required}>
-                        {({ input, meta }) => (
-                          <div>
-                            <Input
-                              {...input}
-                              className="create-tutorial__input"
-                              type="text"
-                              onBlur={(event: any) => {
-                                this.onInputChange(event, 'tutorial_title')
-                              }}
-                              placeholder="How to make XXX using YYY"
-                            />
-                            {meta.error && meta.touched && (
-                              <span>{meta.error}</span>
-                            )}
-                          </div>
-                        )}
-                      </Field>
-                      <div
-                        className={
-                          this.state.formValues.slug === ''
-                            ? 'create-tutorial-form__title__note--clear'
-                            : 'create-tutorial-form__title__note--filled'
-                        }
-                      >
-                        {window.location.host + '/docs/' + formValues.slug}
-                      </div>
-                      {formValues.cover_image ? (
-                        <div>
-                          <Typography
-                            component="label"
-                            className="create-tutorial__label"
-                          >
-                            Cover image
-                          </Typography>
-                          <UploadedFile
-                            file={formValues.cover_image}
-                            imagePreview
-                            showDelete
-                            onFileDeleted={() =>
-                              this.uploadedCoverImageDeleted()
-                            }
-                            ref={el => this.addUploadRef(el, 'coverImage')}
-                          />
-                        </div>
+              <FormContainer>
+                <TutorialForm onSubmit={handleSubmit}>
+                  <Background>
+                    <DescriptionContainer>
+                      <Field
+                        name="workspace_name"
+                        validate={required}
+                        component={InputField}
+                        label="What is your davehakkens.nl account ?"
+                        placeholder="@janedoe"
+                      />
+                      <Field
+                        name="tutorial_title"
+                        validate={required}
+                        component={InputField}
+                        label="What is the title of your documentation ?"
+                        placeholder="How to make XXX using YYY"
+                        customEvent
+                        onBlur={(event: any) => {
+                          this.onInputChange(event, 'tutorial_title')
+                        }}
+                      />
+                      {v.cover_image ? (
+                        <UploadedFile
+                          file={v.cover_image}
+                          imagePreview
+                          showDelete
+                          onFileDeleted={() => this.uploadedCoverImageDeleted()}
+                          ref={el => this.addUploadRef(el, 'coverImage')}
+                        />
                       ) : (
-                        <FirebaseFileUploader
+                        // <CoverImage
+                        //   src={values.cover_image_url}
+                        //   alt={'cover image'}
+                        // />
+                        <Field
+                          name="cover_image"
+                          component={FirebaseFileUploaderField}
                           storagePath={this.state._uploadPath}
                           hidden={true}
                           accept="image/png, image/jpeg"
-                          name="coverImg"
-                          onUploadSuccess={this.handleUploadCoverSuccess}
                           buttonText="Upload a cover image"
                         />
                       )}
 
-                      <Typography
-                        component="label"
-                        className="create-tutorial__label label__margin"
-                      >
-                        Write a short description for the documentation
-                      </Typography>
-                      <Field name="tutorial_description" validate={required}>
-                        {({ input, meta }) => (
-                          <div>
-                            <textarea
-                              {...input}
-                              placeholder="This is what we will do"
-                              onBlur={(event: any) => {
-                                this.onInputChange(
-                                  event,
-                                  'tutorial_description',
-                                )
-                              }}
-                              className="create-tutorial__input create-tutorial__input--margin"
-                            />
-                            {meta.error && meta.touched && (
-                              <span>{meta.error}</span>
-                            )}
-                          </div>
-                        )}
-                      </Field>
-                      <Typography
-                        component="label"
-                        className="create-tutorial__label label__margin"
-                      >
-                        Add tags
-                      </Typography>
+                      <Label
+                        text={'Write a short description for the documentation'}
+                        style={{ margin: '50px 0 10px' }}
+                      />
+                      <Field
+                        name="tutorial_description"
+                        validate={required}
+                        component={TextArea}
+                        placeholder="This is what we will do"
+                      />
+                      <Label
+                        text={'Add Tags'}
+                        style={{ margin: '50px 0 10px' }}
+                      />
                       <TagsSelect
-                        value={this.state.formValues.tags}
+                        value={v.tags}
                         onChange={tags => this.onSelectedTagsChanged(tags)}
                       />
-                      <Field name="tutorial_time" validate={required}>
-                        {({ input, meta }) => (
-                          <div>
-                            <Typography
-                              component="label"
-                              className="create-tutorial__label label__margin"
-                            >
-                              How much time does it take ? (hours/week)
-                            </Typography>
-                            <Input
-                              {...input}
-                              type="text"
-                              className="create-tutorial__input"
-                              placeholder="2 hours"
-                              onBlur={(event: any) => {
-                                this.onInputChange(event, 'tutorial_time')
-                              }}
-                            />
-                            {meta.error && meta.touched && (
-                              <span>{meta.error}</span>
-                            )}
-                          </div>
-                        )}
-                      </Field>
-                      <Field name="tutorial_cost" validate={required}>
-                        {({ input, meta }) => (
-                          <div>
-                            <Typography
-                              component="label"
-                              className="create-tutorial__label label__margin"
-                            >
-                              How much does it cost (roughly in €)?
-                            </Typography>
-                            <Input
-                              {...input}
-                              type="number"
-                              className="create-tutorial__input"
-                              onBlur={(event: any) => {
-                                this.onInputChange(event, 'tutorial_cost')
-                              }}
-                              placeholder="10"
-                              startAdornment={
-                                <InputAdornment
-                                  position="start"
-                                  className="input__prefix--dollar"
-                                >
-                                  €
-                                </InputAdornment>
-                              }
-                            />
-                            {meta.error && meta.touched && (
-                              <span>{meta.error}</span>
-                            )}
-                          </div>
-                        )}
-                      </Field>
-                      <Typography
-                        component="label"
-                        className="create-tutorial__label label__margin"
-                      >
-                        How difficult to replicate is your documentation ?
-                      </Typography>
                       <Field
-                        name="difficulty_level"
-                        onBlur={(event: any) => {
-                          this.onInputChange(event, 'difficulty_level')
-                        }}
-                        component="select"
-                        className="create-tutorial__input input--selector"
-                      >
+                        name="tutorial_time"
+                        validate={required}
+                        component={InputField}
+                        label="How much time does it take ? (hours/week)"
+                        placeholder="2 hours"
+                      />
+                      <Field
+                        name="tutorial_cost"
+                        validate={required}
+                        component={InputField}
+                        label="How much does it cost (roughly in €)?"
+                        placeholder="10"
+                      />
+                      <Label
+                        text={
+                          'How difficult to replicate is your documentation ?'
+                        }
+                        style={{ margin: '50px 0 10px' }}
+                      />
+                      <Select name="difficulty_level" component="select">
                         <option value="easy">easy</option>
                         <option value="medium">medium</option>
                         <option value="difficult">difficult</option>
-                      </Field>
-                      <Typography
-                        component="label"
-                        className="create-tutorial__label label__margin"
-                      >
-                        File to support your documentation ? (20mb max)
-                      </Typography>
-                      <FirebaseFileUploader
-                        hidden
-                        accept="*"
-                        name="files"
-                        buttonText="Upload a file"
-                        storagePath={this.state._uploadPath}
-                        onUploadSuccess={this.handleUploadFilesSuccess}
+                      </Select>
+                      <Label
+                        text={'File to support your documentation ? (20mb max)'}
+                        style={{ margin: '50px 0 10px' }}
                       />
-                      {formValues.tutorial_files.map((tutorialFile, i) => (
+                      <FirebaseFileUploader
+                        hidden={true}
+                        buttonText="Upload files"
+                        storagePath={this.state._uploadPath}
+                        onUploadSuccess={fileInfo => {
+                          console.log('file uploaded successfully', fileInfo)
+                          mutators.push('tutorial_files', fileInfo)
+                        }}
+                      />
+                      {v.tutorial_files.map((file, index) => (
                         <UploadedFile
-                          file={tutorialFile}
+                          key={file.downloadUrl}
+                          file={file}
                           showDelete
-                          onFileDeleted={() =>
-                            this.uploadedTutorialFileDeleted(i)
-                          }
+                          onFileDeleted={() => {
+                            mutators.remove('tutorial_files', index)
+                          }}
                           ref={el =>
-                            this.addUploadRef(el, `tutorial_files[${i}]`)
+                            this.addUploadRef(el, `tutorial_files[${index}]`)
                           }
                         />
                       ))}
-                      <span className="uploaded-file-name" />
-                      <Field name="tutorial_extern_file_url">
-                        {({ input, meta }) => (
-                          <div>
-                            <Typography
-                              component="label"
-                              className="create-tutorial__label label__margin"
-                            >
-                              Or a link
-                            </Typography>
-                            <Input
-                              {...input}
-                              type="text"
-                              className="create-tutorial__input"
-                              placeholder="https://drive.google.com/drive/u/2/folders/..."
-                              onBlur={(event: any) => {
-                                this.onInputChange(
-                                  event,
-                                  'tutorial_extern_file_url',
-                                )
-                              }}
-                            />
-                            {meta.error && meta.touched && (
-                              <span>{meta.error}</span>
-                            )}
-                          </div>
-                        )}
-                      </Field>
-                    </div>
-                  </div>
-                  <div className="steps__container-background">
+                      <Field
+                        name="tutorial_extern_file_url"
+                        component={InputField}
+                        label="Or a link"
+                        placeholder="https://drive.google.com/drive/u/2/folders/..."
+                      />
+                    </DescriptionContainer>
+                  </Background>
+                  <StepBackground>
                     <FieldArray name="steps">
-                      {({ fields }) =>
-                        fields.map((step, index) => (
-                          <div className="step__container" key={index}>
-                            <Card key={step} className="step__card">
-                              <div className="step__header">
-                                <Typography
-                                  variant="h5"
-                                  component="h2"
-                                  className="step-number"
-                                >
-                                  Step {index + 1}
-                                </Typography>
-                              </div>
-                              <CardContent>
-                                <div>
-                                  <Typography
-                                    component="label"
-                                    className="create-tutorial__label"
-                                  >
-                                    Pick a title for this step
-                                  </Typography>
-                                  <Field
-                                    name={`${step}.title`}
-                                    component="input"
-                                    placeholder="Step title"
-                                    validate={required}
-                                    className="create-tutorial__input"
-                                  />
-                                  <Typography
-                                    component="label"
-                                    className="create-tutorial__label"
-                                  >
-                                    Describe this step
-                                  </Typography>
-                                  <Field
-                                    name={`${step}.text`}
-                                    component="textarea"
-                                    placeholder="Description"
-                                    validate={required}
-                                    className="create-tutorial__input create-tutorial__input--margin"
-                                    onBlur={() => {
-                                      const stepValuesInput: any = form.getFieldState(
-                                        'steps',
-                                      )!.value
-                                      this.setState({
-                                        formValues: {
-                                          ...this.state.formValues,
-                                          steps: stepValuesInput,
-                                        },
-                                      })
-                                    }}
-                                  />
-                                </div>
-
-                                {formValues.steps[index] &&
-                                formValues.steps[index].images.length >= 1
-                                  ? formValues.steps[index].images.map(
-                                      (stepImg, stepImgindex) => (
-                                        <div>
-                                          <UploadedFile
-                                            file={stepImg}
-                                            showDelete
-                                            imagePreview
-                                            onFileDeleted={() =>
-                                              this.uploadedStepImageDeleted(
-                                                index,
-                                                stepImgindex,
-                                              )
-                                            }
-                                            ref={el =>
-                                              this.addUploadRef(
-                                                el,
-                                                `step[${index}]_files[${stepImgindex}]`,
-                                              )
-                                            }
-                                          />
-                                        </div>
-                                      ),
-                                    )
-                                  : null}
-                                <FirebaseFileUploader
-                                  hidden
-                                  buttonText="Upload picture(s)"
-                                  name={`${step}.images`}
-                                  storagePath={this.state._uploadPath}
-                                  callbackData={index}
-                                  onUploadSuccess={
-                                    this.handleUploadStepImgSuccess
-                                  }
-                                />
-                              </CardContent>
-                              {index >= 1 && (
-                                <div
-                                  onClick={() => {
-                                    this.handleModaleDeleteStepOpen()
-                                  }}
-                                  className="step-delete__button"
-                                >
-                                  <span className="trash-icon" />
-                                  <span>delete this step</span>
-                                </div>
-                              )}
-                            </Card>
-                            <Dialog
-                              open={this.state._isModaleStepDeleteOpen}
-                              onClose={() => {
-                                this.setState({
-                                  _isModaleStepDeleteOpen: false,
-                                })
+                      {({ fields }) => (
+                        <div>
+                          {fields.map((step, index: any) => (
+                            <Step
+                              step={step}
+                              index={index}
+                              key={index}
+                              onDelete={(fieldIndex: any) => {
+                                fields.remove(fieldIndex)
                               }}
-                              aria-labelledby="alert-dialog-title"
-                              aria-describedby="alert-dialog-description"
-                            >
-                              <DialogTitle
-                                id="alert-dialog-title"
-                                className="dialog-container"
-                              >
-                                {'Are you sure to delete this step ?'}
-                              </DialogTitle>
-                              <DialogActions className="dialog-buttons-container">
-                                <button
-                                  className="dialog-button__cancel"
-                                  onClick={() => {
-                                    this.handleModaleDeleteStepClose()
-                                  }}
-                                >
-                                  Cancel
-                                </button>
-                                <button
-                                  className="dialog-button__validate"
-                                  onClick={() => {
-                                    fields.remove(index)
-                                    this.handleModaleDeleteStepClose()
-                                  }}
-                                >
-                                  Yes
-                                </button>
-                              </DialogActions>
-                            </Dialog>
-                          </div>
-                        ))
-                      }
+                              values={values}
+                              _uploadPath={this.state._uploadPath}
+                            />
+                          ))}
+                          <Button
+                            text={'Add step'}
+                            addstep
+                            style={{ margin: '60px auto', display: 'block' }}
+                            onClick={() => {
+                              fields.push({
+                                title: '',
+                                text: '',
+                                images: [],
+                              })
+                            }}
+                          />
+                        </div>
+                      )}
                     </FieldArray>
-                    <button
-                      className="add-step__button"
-                      type="button"
-                      onClick={() => {
-                        // create a empty step in the steps form value
-                        form.mutators.push('steps', {
-                          title: '',
-                          text: '',
-                          images: [],
-                        })
-                        // update the state with the empty new step
-                        const stepValuesInput: any = form.getFieldState(
-                          'steps',
-                        )!.value
-                        this.setState({
-                          formValues: {
-                            ...this.state.formValues,
-                            steps: stepValuesInput,
-                          },
-                        })
-                      }}
-                    >
-                      <img src={AddIcon} alt="" />
-                      <span>Add step</span>
-                    </button>
-                    <button
+                    <Button
                       type="submit"
-                      className="validate-form__button"
+                      text={'Save'}
+                      saveTut
                       disabled={submitting || invalid}
-                    >
-                      <img src={SaveIcon} alt="" />
-                      <span>Save</span>
-                    </button>
-                  </div>
-                </form>
-              </div>
+                    />
+                  </StepBackground>
+                </TutorialForm>
+              </FormContainer>
             )
           }}
         />

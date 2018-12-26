@@ -2,8 +2,7 @@ import * as React from 'react'
 import { ITag } from 'src/models/models'
 import { inject, observer } from 'mobx-react'
 import { TagsStore } from 'src/stores/Tags/tags.store'
-import { Button } from '@material-ui/core'
-import './TagsSelect.scss'
+import { Container, TagContainer, Tag, SelectedTag } from './elements'
 import { ISelectedTags } from 'src/models/tags.model'
 
 interface IProps {
@@ -53,24 +52,25 @@ export class TagsSelect extends React.Component<IProps, IState> {
     const { tags } = this.injectedProps.tagsStore
     const { selectedTags } = this.state
     return (
-      <div className="tags-container">
+      <Container>
         {tags.map(tag => (
           // use keys to help react understand when a tab has changed
-          <div key={tag._key} className="tag__container">
-            <Button
-              onClick={() => this.onTagClick(tag._key)}
-              variant="outlined"
-              className={
-                selectedTags.indexOf(tag._key) > -1
-                  ? 'tag__button tag__button--selected'
-                  : 'tag__button'
-              }
-            >
-              {tag.label}
-            </Button>
-          </div>
+          <TagContainer key={tag._key}>
+            {selectedTags.indexOf(tag._key) > -1 ? (
+              <SelectedTag
+                onClick={() => this.onTagClick(tag._key)}
+                variant="outlined"
+              >
+                {tag.label}
+              </SelectedTag>
+            ) : (
+              <Tag onClick={() => this.onTagClick(tag._key)} variant="outlined">
+                {tag.label}
+              </Tag>
+            )}
+          </TagContainer>
         ))}
-      </div>
+      </Container>
     )
   }
 

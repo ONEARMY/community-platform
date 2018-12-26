@@ -1,0 +1,72 @@
+import React from 'react'
+
+import Typography from '@material-ui/core/Typography'
+import { TagDisplay } from 'src/pages/common/Tags/TagDisplay/TagDisplay'
+
+import {
+  Container,
+  ContainerLeft,
+  Padding,
+  ContainerRight,
+  CoverImg,
+  TutorialInfo,
+} from './elements'
+import Button from 'src/components/Button/Button'
+
+export default class TutorialDescription extends React.PureComponent<any, any> {
+  constructor(props: any) {
+    super(props)
+  }
+  public render() {
+    const { tutorial } = this.props
+    return (
+      <Container>
+        <ContainerLeft>
+          <Padding>
+            <Typography variant="h4" component="h4">
+              {tutorial.tutorial_title}
+            </Typography>
+            <TutorialInfo component="p">
+              {tutorial.tutorial_description}
+            </TutorialInfo>
+            <TutorialInfo component="p">
+              <b>Workspace : {tutorial.workspace_name}</b>
+            </TutorialInfo>
+            <TutorialInfo component="p">
+              <b>{tutorial.steps.length} Steps</b>
+            </TutorialInfo>
+            <TutorialInfo component="p">
+              <b>Cost : {tutorial.tutorial_cost}</b>
+            </TutorialInfo>
+            <TutorialInfo component="p">
+              <b>Difficulty : {tutorial.difficulty_level}</b>
+            </TutorialInfo>
+            <TutorialInfo component="p">
+              <b>Time : {tutorial.tutorial_time}</b>
+            </TutorialInfo>
+            <div>
+              {Object.keys(tutorial.tags).map(k => (
+                <TagDisplay tagKey={k} key={k} />
+              ))}
+            </div>
+            {tutorial.tutorial_files.length > 0 ? (
+              <Button
+                target="_blank"
+                download
+                text={'Download files'}
+                href={
+                  tutorial.tutorial_files[tutorial.tutorial_files.length - 1]
+                    .downloadUrl
+                }
+                style={{ marginTop: '20px' }}
+              />
+            ) : null}
+          </Padding>
+        </ContainerLeft>
+        <ContainerRight>
+          <CoverImg src={tutorial.cover_image_url} alt="tutorial cover" />
+        </ContainerRight>
+      </Container>
+    )
+  }
+}

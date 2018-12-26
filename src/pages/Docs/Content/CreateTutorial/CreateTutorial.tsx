@@ -274,10 +274,15 @@ export class CreateTutorial extends React.PureComponent<
                         text={'Add Tags'}
                         style={{ margin: '50px 0 10px' }}
                       />
-                      <TagsSelect
+                      <Field
+                        name="tags"
+                        component={TagsSelect}
+                        onChange={tags => console.log('field changed', tags)}
+                      />
+                      {/* <TagsSelect
                         value={v.tags}
                         onChange={tags => this.onSelectedTagsChanged(tags)}
-                      />
+                      /> */}
                       <Field
                         name="tutorial_time"
                         validate={required}

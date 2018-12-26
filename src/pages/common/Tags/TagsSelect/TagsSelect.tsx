@@ -4,8 +4,10 @@ import { inject, observer } from 'mobx-react'
 import { TagsStore } from 'src/stores/Tags/tags.store'
 import { Container, TagContainer, Tag, SelectedTag } from './elements'
 import { ISelectedTags } from 'src/models/tags.model'
+import { FieldRenderProps } from 'react-final-form'
 
-interface IProps {
+// we include props from react-final-form fields so it can be used as a custom field component
+interface IProps extends FieldRenderProps {
   value?: ISelectedTags
   onChange: (val: ISelectedTags) => void
 }
@@ -29,10 +31,16 @@ export class TagsSelect extends React.Component<IProps, IState> {
   }
 
   // if we initialise with a value we want to update the state to reflect the selected tags
+  // we repeat this additionally for input in case it is being used as input component for react-final-form field
   public componentWillMount() {
     if (this.props.value) {
       this.setState({
         selectedTags: this._selectedJsonToTagsArray(this.props.value),
+      })
+    }
+    if (this.props.input.value) {
+      this.setState({
+        selectedTags: this._selectedJsonToTagsArray(this.props.input.value),
       })
     }
   }
@@ -88,10 +96,20 @@ export class TagsSelect extends React.Component<IProps, IState> {
 }
 
 // default function will be called if no onChange method supplied
+// include default input and meta bindings for use within form fields
+// default onChange calls the input onChange function (linked to react-final-form)
 TagsSelect.defaultProps = {
   onChange: val => {
-    return
+    TagsSelect.defaultProps.input.onChange(val)
   },
+  input: {
+    name: 'tagsSelect',
+    onBlur: () => null,
+    onChange: () => null,
+    onFocus: () => null,
+    value: {},
+  },
+  meta: {},
   value: {},
 }
 

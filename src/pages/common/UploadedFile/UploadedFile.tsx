@@ -11,8 +11,7 @@ import DeleteIcon from '@material-ui/icons/Delete'
  * providing image preview, download links and delete
  ************************************************************************/
 
-//  export props so can be used in UploadedFileField variant
-export interface IUploadedFileProps {
+interface IUploadedFileProps {
   file: IFirebaseUploadInfo
   imagePreview: boolean
   showDelete: boolean

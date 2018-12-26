@@ -83,12 +83,6 @@ export class CreateTutorial extends React.PureComponent<
     })
   }
 
-  uploadedCoverImageDeleted() {
-    const values = { ...this.state.formValues }
-    values.cover_image = null
-    this.setState({ formValues: values })
-  }
-
   public onSubmit = async (formValues: ITutorialFormInput) => {
     if (!this.state.formValues.cover_image) {
       alert('Please provide a cover image before saving your tutorial')
@@ -161,6 +155,7 @@ export class CreateTutorial extends React.PureComponent<
 
   public render() {
     const { formValues } = this.state
+    console.log('formvalues', formValues)
     return (
       <div>
         <Title variant="h4" component="h4">
@@ -172,6 +167,9 @@ export class CreateTutorial extends React.PureComponent<
           validate={this.validate}
           mutators={{
             ...arrayMutators,
+            clearCoverImage: (args, state, utils) => {
+              utils.changeValue(state, 'cover_image', () => null)
+            },
           }}
           render={({
             handleSubmit,
@@ -201,12 +199,12 @@ export class CreateTutorial extends React.PureComponent<
                         label="What is the title of your documentation ?"
                         placeholder="How to make XXX using YYY"
                       />
-                      {v.cover_image ? (
+                      {v.cover_image && v.cover_image.downloadUrl ? (
                         <UploadedFile
                           file={v.cover_image}
                           imagePreview
                           showDelete
-                          onFileDeleted={() => this.uploadedCoverImageDeleted()}
+                          onFileDeleted={form.mutators.clearCoverImage}
                           ref={el => this.addUploadRef(el, 'coverImage')}
                         />
                       ) : (

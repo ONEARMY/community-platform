@@ -3,7 +3,6 @@ import { storage } from '../../../utils/firebase'
 import FileUploader from 'react-firebase-file-uploader'
 import Button from 'src/components/Button/Button'
 import { FullMetadata } from '@firebase/storage-types'
-
 import { Container, ProgressContainer, ProgressBar } from './elements'
 /*
 This component takes a folder storage path and uploads files to firebase storage
@@ -75,6 +74,10 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
       updated: meta.updated,
     }
     return this.props.onUploadSuccess(fileInfo, this.props.callbackData)
+  }
+
+  public deleteUploads = async (fileInfo?: any) => {
+    // WiP
   }
 
   // the first styled button in our template intercepts all click events so we have a manual method

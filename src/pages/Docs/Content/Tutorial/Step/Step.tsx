@@ -11,20 +11,18 @@ import {
   StepDescription,
   StepImage,
 } from './elements'
+import { ITutorialStep } from 'src/models/tutorial.models'
 
 export default class Step extends React.PureComponent<any, any> {
   constructor(props: any) {
     super(props)
   }
 
-  public renderMultipleImages(step: any) {
-    const margin = {
-      style: 'margin: 20px auto;',
-    }
-    const preloadedImages = []
+  public renderMultipleImages(step: ITutorialStep) {
+    const preloadedImages: any[] = []
     for (const image of step.images) {
       const imageObj = new Image()
-      imageObj.src = image
+      imageObj.src = image.downloadUrl
       preloadedImages.push({
         src: imageObj.src,
       })

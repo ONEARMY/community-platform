@@ -8,6 +8,8 @@ admin.initializeApp()
 
 // custom module imports
 import * as DB from './databaseBackup'
+import * as ImageConverter from './imageConverter'
+import * as StorageFunctions from './storageFunctions'
 
 // update on change logging purposes
 const buildNumber = 1.03
@@ -58,15 +60,35 @@ Use pubsub to automatically subscribe to messages sent from cron.
 Add/change schedule from `./functions-cron/appengine/cron.yaml`
 ************************************************************************************/
 
-exports.backupFirestore = functions.pubsub
-  .topic('firebase-backup')
+exports.weeklyTasks = functions.pubsub
+  .topic('weekly-tick')
   .onPublish(async (message, context) => {
-    console.log('initiating backup')
-    // run our daily db backup task
     const backup = await DB.BackupDatabase()
-    console.log('backup:', backup)
-    return true
   })
+
+exports.dailyTasks = functions.pubsub
+  .topic('daily-tick')
+  .onPublish(async (message, context) => {
+    // we don't have daily tasks currently
+  })
+
+/************ Storage Triggers ******************************************************
+Functions called in response to changes to firebase storage objects
+************************************************************************************/
+
+exports.imageResize = functions.storage.object().onFinalize(async object => {
+  return ImageConverter.resizeImage(object)
+})
+
+/************ Callable *************************************************************
+These can be called from directly within the app (passing additional auth info)
+https://firebase.google.com/docs/functions/callable
+************************************************************************************/
+exports.removeStorageFolder = functions.https.onCall((data, context) => {
+  console.log('storage folder remove called', data, context)
+  const path = data.text
+  StorageFunctions.deleteStorageItems(data.text)
+})
 
 // add export so can be used by test
 export default app

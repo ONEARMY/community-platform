@@ -1,3 +1,5 @@
+node_modules
+
 ## Compiled JavaScript files
 **/*.js
 **/*.js.map

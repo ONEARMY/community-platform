@@ -75,7 +75,7 @@ export class LoginContainer extends React.Component<IProps, IInternalState> {
   }
 
   public async getUserProfile(userEmail: string) {
-    const ref = await db.doc(`usermeta/${userEmail}`).get()
+    const ref = await db.doc(`users/${userEmail}`).get()
     const user: IUser = ref.data() as IUser
     return user
   }

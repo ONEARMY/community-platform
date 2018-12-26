@@ -9,22 +9,33 @@ import { TextArea, InputField } from 'src/components/Form/Fields'
 import {
   StepHeader,
   StepTitle,
-  Label,
   Container,
   StepCard,
   DeleteStepBtn,
   DeleteText,
   DeleteIcon,
-  StepImage,
   DialogText,
   DialogButtons,
 } from './elements.js'
 
 import { FirebaseFileUploader } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
+import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 
-const required = value => (value ? undefined : 'Required')
+interface IProps {
+  step: string
+  index: number
+  onDelete: any
+  values: any
+  _uploadPath: string
+}
+interface IState {
+  _isModaleStepDeleteOpen: boolean
+  _toDocsList: boolean
+}
 
-const Header = ({ index }) => {
+const required = (value: any) => (value ? undefined : 'Required')
+
+const Header = (index: number) => {
   return (
     <StepHeader>
       <StepTitle variant="h5" component="h2">
@@ -34,14 +45,12 @@ const Header = ({ index }) => {
   )
 }
 
-class Step extends Component {
-  constructor(props) {
+class Step extends Component<IProps, IState> {
+  constructor(props: IProps) {
     super(props)
     this.state = {
       _isModaleStepDeleteOpen: false,
       _toDocsList: false,
-      _uploadFilesPath: 'uploads/test',
-      _uploadImgPath: 'uploads/test',
     }
   }
 
@@ -54,11 +63,11 @@ class Step extends Component {
   }
 
   render() {
-    const { step, index, onDelete, values } = this.props
+    const { step, index, onDelete, values, _uploadPath } = this.props
     return (
       <Container key={index}>
         <StepCard key={step}>
-          <Header {...this.props} />
+          {Header(index)}
           <CardContent>
             <div>
               <Field
@@ -79,13 +88,19 @@ class Step extends Component {
             <FieldArray name={`${step}.images`}>
               {({ fields }) => (
                 <React.Fragment>
-                  {fields.map((image, imgIndex) => {
+                  {fields.map((name, imgIndex) => {
+                    const images = values.steps[index].images
                     return (
-                      values.steps[index].images &&
-                      values.steps[index].images[imgIndex] && (
-                        <StepImage
-                          key={image}
-                          src={values.steps[index].images[imgIndex]}
+                      images &&
+                      images[imgIndex] && (
+                        <UploadedFile
+                          key={name}
+                          file={images[imgIndex]}
+                          showDelete
+                          imagePreview
+                          onFileDeleted={() => {
+                            fields.remove(imgIndex)
+                          }}
                         />
                       )
                     )
@@ -93,9 +108,9 @@ class Step extends Component {
                   <FirebaseFileUploader
                     hidden={true}
                     buttonText="Upload picture"
-                    storagePath={this.state._uploadImgPath}
+                    storagePath={_uploadPath}
                     onUploadSuccess={fileInfo => {
-                      fields.push(fileInfo.downloadUrl)
+                      fields.push(fileInfo)
                     }}
                   />
                 </React.Fragment>

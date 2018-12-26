@@ -1,19 +1,11 @@
 import { ITemplateData } from 'src/models/_template.model'
+import { MOCK_USER } from './user.mock'
 
 export const TemplateMock: ITemplateData[] = [
   {
     id: 1,
     message: { message: 'hello', read: true, type: 'short' },
-    createdBy: {
-      altName: 'chrismclarke',
-      email: 'chris@email.com',
-      firstName: 'Chris',
-      id: '_demo_001',
-      lastName: 'Clarke',
-      verified: true,
-      _created: new Date(),
-      _modified: new Date(),
-    },
+    createdBy: MOCK_USER,
     _created: new Date(),
     _modified: new Date(),
   },

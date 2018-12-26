@@ -1,0 +1,8 @@
+cron:
+  - description: Push a "tick" onto pubsub every day
+    url: /publish/daily-tick
+    schedule: every 24 hours
+
+  - description: Push a "tick" onto pubsub every week on Monday at 00:00
+    url: /publish/weekly-tick
+    schedule: every monday 00:00

@@ -3,23 +3,21 @@ import { RouteComponentProps } from 'react-router'
 import { Form, Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
-import {
-  ITutorial,
-  ITutorialFormInput,
-} from '../../../../models/tutorial.models'
-
-import { db } from '../../../../utils/firebase'
-
+import { ITutorial, ITutorialFormInput } from 'src/models/tutorial.models'
+import { db } from 'src/utils/firebase'
 import { TUTORIAL_TEMPLATE_DATA } from './TutorialTemplate'
+import {
+  IFirebaseUploadInfo,
+  FirebaseFileUploader,
+} from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
+import helpers from 'src/utils/helpers'
 import { TagsSelect } from 'src/pages/common/Tags'
 import { ISelectedTags } from 'src/models/tags.model'
-import { FirebaseFileUploaderField } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploaderField.jsx'
-import helpers from 'src/utils/helpers'
+import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
+import { FirebaseFileUploaderField } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploaderField'
 import Button from 'src/components/Button/Button'
 import { InputField, Label, TextArea } from 'src/components/Form/Fields'
-
-import { Step } from './Step/Step.jsx'
-
+import { Step } from './Step/Step'
 import {
   FormContainer,
   Title,
@@ -33,46 +31,58 @@ import {
 
 export interface IState {
   formValues: ITutorialFormInput
-  _uploadImgPath: string
-  _uploadFilesPath: string
+  formSaved: boolean
+  _docID: string
+  _uploadPath: string
   _toDocsList: boolean
 }
 
-// For now tags are raw in this variable, next we'll need to get them from our server
-// let selectedTags: any = []
 const required = (value: any) => (value ? undefined : 'Required')
 
 export class CreateTutorial extends React.PureComponent<
   RouteComponentProps<any>,
   IState
 > {
+  uploadRefs: { [key: string]: UploadedFile | null } = {}
   constructor(props: any) {
     super(props)
+    // generate unique id for db and storage references and assign to state
+    const databaseRef = db.collection('documentation').doc()
+    const docID = databaseRef.id
     this.state = {
-      formValues: TUTORIAL_TEMPLATE_DATA,
-      _uploadImgPath: 'uploads/test',
-      _uploadFilesPath: 'uploads/test',
+      formValues: { ...TUTORIAL_TEMPLATE_DATA, id: docID },
+      formSaved: false,
+      _docID: docID,
+      _uploadPath: `uploads/documentation/${docID}`,
       _toDocsList: false,
     }
   }
 
-  public submit = async (formValues: ITutorialFormInput) => {
-    const timestamp = new Date()
-    const slug = helpers.stripSpecialCharacters(formValues.tutorial_title)
-    const values: ITutorial = {
-      ...this.castFormValuesToCorrectTypes(formValues),
-      slug,
-      _created: timestamp,
-      _modified: timestamp,
-    }
-    console.log('submitting', values)
-    try {
-      await db.collection('documentation').add(values)
-      console.log('doc set successfully')
-      this.props.history.push('/docs/' + slug)
-      this.forceUpdate()
-    } catch (error) {
-      console.log('error while saving the tutorial')
+  public onSubmit = async (formValues: ITutorialFormInput) => {
+    if (!this.state.formValues.cover_image) {
+      alert('Please provide a cover image before saving your tutorial')
+    } else {
+      const timestamp = new Date()
+      const slug = helpers.stripSpecialCharacters(formValues.tutorial_title)
+      // convert data to correct types and populate metadata
+      const values: ITutorial = {
+        ...this.castFormValuesToCorrectTypes(formValues),
+        slug,
+        cover_image: formValues.cover_image as IFirebaseUploadInfo,
+        _created: timestamp,
+        _modified: timestamp,
+      }
+      try {
+        await db
+          .collection('documentation')
+          .doc(formValues.id)
+          .set(values)
+        this.setState({ formSaved: true })
+        this.props.history.push('/docs/' + this.state.formValues.slug)
+        this.forceUpdate()
+      } catch (error) {
+        console.log('error while saving the tutorial')
+      }
     }
   }
 
@@ -94,65 +104,33 @@ export class CreateTutorial extends React.PureComponent<
     return formattedValues
   }
 
-  public onInputChange = (event: any, inputType: string) => {
-    // *** TODO the event.target.value needs to be formated as the article id
-    const value = event.target.value
-    switch (inputType) {
-      case 'tutorial_title':
-        const clearUrlSlug = helpers.stripSpecialCharacters(value)
-        this.setState({
-          formValues: {
-            ...this.state.formValues,
-            tutorial_title: event.target.value,
-            slug: clearUrlSlug,
-          },
-          _uploadImgPath: 'uploads/' + encodeURIComponent(clearUrlSlug),
-          _uploadFilesPath: 'uploads/' + encodeURIComponent(clearUrlSlug),
-        })
-        break
-      case 'tutorial_extern_file_url':
-        // TODO check is proper url
-        this.setState({
-          formValues: {
-            ...this.state.formValues,
-            tutorial_extern_file_url: event.target.value,
-          },
-        })
-      default:
-        this.setState({
-          formValues: {
-            ...this.state.formValues,
-            [inputType]: event.target.value,
-          },
-        })
-        break
-    }
-  }
-
-  public onSelectedTagsChanged(selectedTags: ISelectedTags) {
-    // TODO: make tags save to form values instead
-    /*this.setState({
-      formValues: {
-        ...this.state.formValues,
-        tags: selectedTags,
-      },
-    })*/
-  }
-
   public render() {
+    const { formValues } = this.state
+    console.log('formvalues', formValues)
     return (
       <div>
         <Title variant="h4" component="h4">
           Create a documentation
         </Title>
         <Form
-          onSubmit={this.submit}
+          onSubmit={this.onSubmit}
+          initialValues={formValues}
           validate={this.validate}
-          initialValues={this.state.formValues}
           mutators={{
             ...arrayMutators,
+            clearCoverImage: (args, state, utils) => {
+              utils.changeValue(state, 'cover_image', () => null)
+            },
           }}
-          render={({ handleSubmit, submitting, values, form, invalid }) => {
+          render={({
+            handleSubmit,
+            mutators,
+            submitting,
+            values,
+            form,
+            invalid,
+          }) => {
+            const v = values as ITutorial
             return (
               <FormContainer>
                 <TutorialForm onSubmit={handleSubmit}>
@@ -171,25 +149,30 @@ export class CreateTutorial extends React.PureComponent<
                         component={InputField}
                         label="What is the title of your documentation ?"
                         placeholder="How to make XXX using YYY"
-                        customEvent
-                        onBlur={(event: any) => {
-                          this.onInputChange(event, 'tutorial_title')
-                        }}
                       />
-                      {values.cover_image_url && (
-                        <CoverImage
-                          src={values.cover_image_url}
-                          alt={'cover image'}
+                      {v.cover_image && v.cover_image.downloadUrl ? (
+                        <UploadedFile
+                          file={v.cover_image}
+                          imagePreview
+                          showDelete
+                          onFileDeleted={form.mutators.clearCoverImage}
+                          // ref={el => this.addUploadRef(el, 'coverImage')}
+                        />
+                      ) : (
+                        // <CoverImage
+                        //   src={values.cover_image_url}
+                        //   alt={'cover image'}
+                        // />
+                        <Field
+                          name="cover_image"
+                          component={FirebaseFileUploaderField}
+                          storagePath={this.state._uploadPath}
+                          hidden={true}
+                          accept="image/png, image/jpeg"
+                          buttonText="Upload a cover image"
                         />
                       )}
-                      <Field
-                        name="cover_image_url"
-                        component={FirebaseFileUploaderField}
-                        storagePath={this.state._uploadImgPath}
-                        hidden={true}
-                        accept="image/png, image/jpeg"
-                        buttonText="Upload a cover image"
-                      />
+
                       <Label
                         text={'Write a short description for the documentation'}
                         style={{ margin: '50px 0 10px' }}
@@ -204,9 +187,10 @@ export class CreateTutorial extends React.PureComponent<
                         text={'Add Tags'}
                         style={{ margin: '50px 0 10px' }}
                       />
-                      <TagsSelect
-                        value={this.state.formValues.tags}
-                        onChange={tags => this.onSelectedTagsChanged(tags)}
+                      <Field
+                        name="tags"
+                        component={TagsSelect}
+                        onChange={tags => console.log('field changed', tags)}
                       />
                       <Field
                         name="tutorial_time"
@@ -237,14 +221,27 @@ export class CreateTutorial extends React.PureComponent<
                         text={'File to support your documentation ? (20mb max)'}
                         style={{ margin: '50px 0 10px' }}
                       />
-                      <Field
-                        name="files"
-                        component={FirebaseFileUploaderField}
-                        storagePath={this.state._uploadImgPath}
+                      <FirebaseFileUploader
                         hidden={true}
-                        accept="*"
-                        buttonText="Upload a file"
+                        buttonText="Upload files"
+                        storagePath={this.state._uploadPath}
+                        onUploadSuccess={fileInfo => {
+                          mutators.push('tutorial_files', fileInfo)
+                        }}
                       />
+                      {v.tutorial_files.map((file, index) => (
+                        <UploadedFile
+                          key={file.downloadUrl}
+                          file={file}
+                          showDelete
+                          onFileDeleted={() => {
+                            mutators.remove('tutorial_files', index)
+                          }}
+                          // ref={el =>
+                          //   this.addUploadRef(el, `tutorial_files[${index}]`)
+                          // }
+                        />
+                      ))}
                       <Field
                         name="tutorial_extern_file_url"
                         component={InputField}
@@ -257,15 +254,16 @@ export class CreateTutorial extends React.PureComponent<
                     <FieldArray name="steps">
                       {({ fields }) => (
                         <div>
-                          {fields.map((step, index: any) => (
+                          {fields.map((step, index: number) => (
                             <Step
                               step={step}
                               index={index}
                               key={index}
-                              onDelete={(fieldIndex: any) => {
+                              onDelete={(fieldIndex: number) => {
                                 fields.remove(fieldIndex)
                               }}
                               values={values}
+                              _uploadPath={this.state._uploadPath}
                             />
                           ))}
                           <Button
@@ -299,3 +297,28 @@ export class CreateTutorial extends React.PureComponent<
     )
   }
 }
+
+// componentWillUnmount() {
+//   // remove any uploaded images if not saved
+//   if (!this.state.formSaved) {
+//     this.purgeUploads()
+//   }
+// }
+
+// // when a file upload component is created can optionally add a named reference
+// // to itself to enable calling methods (such as 'delete()') on it later from this component
+// // this will automatically populate as null when the component is destroyed
+// addUploadRef(ref: UploadedFile | null, key: string) {
+//   this.uploadRefs[key] = ref
+// }
+
+// // remove any uploaded images or files (case when user decided not to save doc)
+// // requires a name to be given to all UploadedFile components
+// purgeUploads() {
+//   Object.keys(this.uploadRefs).forEach(key => {
+//     const ref = this.uploadRefs[key]
+//     if (ref) {
+//       ref.delete()
+//     }
+//   })
+// }

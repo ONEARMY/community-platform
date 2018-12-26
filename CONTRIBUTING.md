@@ -1,6 +1,6 @@
 # Introduction (for first timers)
 
-Welcome to One Army! We’re excited to hear that you’re interested in supporting the development of our project. If you happened to just stumble across this, we are building a new platform to help unite people to support social causes, such as [Precious Plastic](https://preciousplastic.com) (which is where this all began).
+Welcome to One Army! We’re excited to hear that you’re interested in supporting the development of our project. If you happened to just stumble across this, we are building a new platform to help unite people to support social causes, such as [Precious Plastic](https://preciousplastic.com) (which is where this all began) or [ProjectKamp](https://projectkamp.com/). A platform to connect, educate and empower a global community to solve society's greatest challenges. 
 
 The platform is built in **React** (+ Mobx + Typescript), with backend microservices in Node. If you are unfamiliar with these technologies we suggest you first spend some time understanding how these frameworks function before getting in touch (as much as we’d love to be your teachers, we just don’t have the capacity to do that and build everything else). Here are a few links that might be of help on your journey:
 
@@ -27,10 +27,11 @@ The platform is built in **React** (+ Mobx + Typescript), with backend microserv
 
 Once you are confident with the basics of React, Mobx and Typescript we would love to welcome you to the team. Just [send a quick email](mailto:hello@preciousplastic.com?subject=Developers%20Call%20To%20Arms) , introducing yourself and outline:
 
-1. What you think you could contribute to the project
+1. Your experience working with the technologies listed above
 
-2. How much time you feel you can dedicate
-   We ask this so that we can better understand how you might fit in with the rest of the team, and maximise your contributions. From here we will then connect you to the github repository as well as slack channel which we use to handle regular communication.
+2. How much time you feel you can dedicate to the project
+
+We ask this so that we can better understand how you might fit in with the rest of the team, and maximise your contributions. From here we will then connect you to the github repository as well as slack channel which we use to handle regular communication.
 
 # Contribution guidelines
 

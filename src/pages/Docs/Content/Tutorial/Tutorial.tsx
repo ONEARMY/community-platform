@@ -5,7 +5,7 @@ import { ITutorial } from 'src/models/models'
 import { db } from 'src/utils/firebase'
 import { inject } from 'mobx-react'
 import { DocStore } from 'src/stores/Docs/docs.store'
-
+import { ITutorialStep } from 'src/models/tutorial.models'
 import TutorialDescription from './TutorialDescription/TutorialDescription'
 import Step from './Step/Step'
 
@@ -59,6 +59,29 @@ export class Tutorial extends React.Component<
       : undefined
   }
 
+  public renderMultipleImages(step: ITutorialStep) {
+    const preloadedImages: any[] = []
+    for (const image of step.images) {
+      const imageObj = new Image()
+      imageObj.src = image.downloadUrl
+      preloadedImages.push({
+        src: imageObj.src,
+      })
+    }
+    return preloadedImages.map((image: any, index: number) => (
+      <div className="step__image">
+        <img src={image.src} />
+      </div>
+    ))
+  }
+
+  public renderUniqueImage(url: string) {
+    return (
+      <div className="step__image">
+        <img src={url} />
+      </div>
+    )
+  }
   public render() {
     const { tutorial, isLoading } = this.state
     if (tutorial) {

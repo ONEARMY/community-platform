@@ -58,31 +58,6 @@ export class CreateTutorial extends React.PureComponent<
     }
   }
 
-  componentWillUnmount() {
-    // remove any uploaded images if not saved
-    if (!this.state.formSaved) {
-      this.purgeUploads()
-    }
-  }
-
-  // when a file upload component is created can optionally add a named reference
-  // to itself to enable calling methods (such as 'delete()') on it later from this component
-  // this will automatically populate as null when the component is destroyed
-  addUploadRef(ref: UploadedFile | null, key: string) {
-    this.uploadRefs[key] = ref
-  }
-
-  // remove any uploaded images or files (case when user decided not to save doc)
-  // requires a name to be given to all UploadedFile components
-  purgeUploads() {
-    Object.keys(this.uploadRefs).forEach(key => {
-      const ref = this.uploadRefs[key]
-      if (ref) {
-        ref.delete()
-      }
-    })
-  }
-
   public onSubmit = async (formValues: ITutorialFormInput) => {
     if (!this.state.formValues.cover_image) {
       alert('Please provide a cover image before saving your tutorial')
@@ -127,30 +102,6 @@ export class CreateTutorial extends React.PureComponent<
       tutorial_cost: Number(values.tutorial_cost),
     }
     return formattedValues
-  }
-
-  /* EXAMPLE
-    You want to pass the step index to the handle upload step image success function
-    When you have the url of the image you want to merge it with the existing step images
-    Then merge the updated step with all steps and update the state
-  */
-  public handleUploadCoverSuccess = (fileInfo: IFirebaseUploadInfo) => {
-    this.setState({
-      formValues: {
-        ...this.state.formValues,
-        cover_image: fileInfo,
-      },
-    })
-  }
-
-  public onSelectedTagsChanged(selectedTags: ISelectedTags) {
-    // TODO: make tags save to form values instead
-    this.setState({
-      formValues: {
-        ...this.state.formValues,
-        tags: selectedTags,
-      },
-    })
   }
 
   public render() {
@@ -205,7 +156,7 @@ export class CreateTutorial extends React.PureComponent<
                           imagePreview
                           showDelete
                           onFileDeleted={form.mutators.clearCoverImage}
-                          ref={el => this.addUploadRef(el, 'coverImage')}
+                          // ref={el => this.addUploadRef(el, 'coverImage')}
                         />
                       ) : (
                         // <CoverImage
@@ -241,10 +192,6 @@ export class CreateTutorial extends React.PureComponent<
                         component={TagsSelect}
                         onChange={tags => console.log('field changed', tags)}
                       />
-                      {/* <TagsSelect
-                        value={v.tags}
-                        onChange={tags => this.onSelectedTagsChanged(tags)}
-                      /> */}
                       <Field
                         name="tutorial_time"
                         validate={required}
@@ -290,9 +237,9 @@ export class CreateTutorial extends React.PureComponent<
                           onFileDeleted={() => {
                             mutators.remove('tutorial_files', index)
                           }}
-                          ref={el =>
-                            this.addUploadRef(el, `tutorial_files[${index}]`)
-                          }
+                          // ref={el =>
+                          //   this.addUploadRef(el, `tutorial_files[${index}]`)
+                          // }
                         />
                       ))}
                       <Field
@@ -350,3 +297,28 @@ export class CreateTutorial extends React.PureComponent<
     )
   }
 }
+
+// componentWillUnmount() {
+//   // remove any uploaded images if not saved
+//   if (!this.state.formSaved) {
+//     this.purgeUploads()
+//   }
+// }
+
+// // when a file upload component is created can optionally add a named reference
+// // to itself to enable calling methods (such as 'delete()') on it later from this component
+// // this will automatically populate as null when the component is destroyed
+// addUploadRef(ref: UploadedFile | null, key: string) {
+//   this.uploadRefs[key] = ref
+// }
+
+// // remove any uploaded images or files (case when user decided not to save doc)
+// // requires a name to be given to all UploadedFile components
+// purgeUploads() {
+//   Object.keys(this.uploadRefs).forEach(key => {
+//     const ref = this.uploadRefs[key]
+//     if (ref) {
+//       ref.delete()
+//     }
+//   })
+// }

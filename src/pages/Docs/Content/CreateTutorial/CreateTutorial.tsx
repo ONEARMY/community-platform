@@ -182,7 +182,6 @@ export class CreateTutorial extends React.PureComponent<
   }
 
   public onSelectedTagsChanged(selectedTags: ISelectedTags) {
-    console.log('selected tags changed', selectedTags)
     // TODO: make tags save to form values instead
     this.setState({
       formValues: {
@@ -194,7 +193,6 @@ export class CreateTutorial extends React.PureComponent<
 
   public render() {
     const { formValues } = this.state
-    console.log('form values', formValues)
     return (
       <div>
         <Title variant="h4" component="h4">
@@ -314,7 +312,6 @@ export class CreateTutorial extends React.PureComponent<
                         buttonText="Upload files"
                         storagePath={this.state._uploadPath}
                         onUploadSuccess={fileInfo => {
-                          console.log('file uploaded successfully', fileInfo)
                           mutators.push('tutorial_files', fileInfo)
                         }}
                       />

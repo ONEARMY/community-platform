@@ -64,7 +64,6 @@ class Step extends Component<IProps, IState> {
 
   render() {
     const { step, index, onDelete, values, _uploadPath } = this.props
-    console.log('index', index)
     return (
       <Container key={index}>
         <StepCard key={step}>

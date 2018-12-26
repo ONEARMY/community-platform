@@ -31,12 +31,10 @@ export class DocsPage extends React.Component<IProps, any> {
   public render() {
     const { activeTutorial, allTutorials } = this.props.docStore
     return (
-      <MainLayout>
-        <TutorialContent
-          allTutorials={this.props.docStore.allTutorials}
-          activeTutorial={this.props.docStore.activeTutorial}
-        />
-      </MainLayout>
+      <TutorialContent
+        allTutorials={this.props.docStore.allTutorials}
+        activeTutorial={this.props.docStore.activeTutorial}
+      />
     )
   }
 }

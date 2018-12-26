@@ -5,6 +5,6 @@ import logo from '../../assets/images/logo.png'
 
 export class NotFoundPage extends React.Component {
   public render() {
-    return <MainLayout>404 not found</MainLayout>
+    return <div>404 not found</div>
   }
 }

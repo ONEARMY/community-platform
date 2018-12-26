@@ -9,11 +9,20 @@ import { NotFoundPage } from './NotFound/NotFound'
 import { TemplatePage } from './_Template/Template'
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import { EventsPage } from './Events/Events'
+import MainLayout from './common/MainLayout'
+import Header from './common/Header/Header'
 
 interface IState {
   singlePageMode: boolean
   displayPageComponent?: any
 }
+
+export const COMMUNITY_PAGES = [
+  { path: '/docs', component: DocsPage, title: 'How-Tos' },
+  { path: '/events', component: EventsPage, title: 'Events' },
+  { path: '/template', component: TemplatePage, title: 'Template Demo' },
+]
+
 export class Routes extends React.Component<any, IState> {
   constructor(props: any) {
     super(props)
@@ -30,13 +39,16 @@ export class Routes extends React.Component<any, IState> {
         <BrowserRouter>
           {/* on page change scroll to top */}
           <ScrollToTop>
-            <Switch>
-              <Route path="/docs" component={DocsPage} />
-              <Route path="/template" component={TemplatePage} />
-              <Route path="/events" component={EventsPage} />
-              <Route exact path="/" component={HomePage} />
-              <Route component={NotFoundPage} />
-            </Switch>
+            <div style={{ height: '100vh' }}>
+              <Header variant="community" />
+              <Switch>
+                {COMMUNITY_PAGES.map(page => (
+                  <Route path={page.path} component={page.component} />
+                ))}
+                <Route exact path="/" component={HomePage} />
+                <Route component={NotFoundPage} />
+              </Switch>
+            </div>
           </ScrollToTop>
         </BrowserRouter>
       </div>

@@ -35,21 +35,21 @@ export class EventsPage extends React.Component<IProps> {
   }
 
   public render() {
+    {
+      /* want to add background styled component when available */
+    }
     return (
-      <MainLayout>
-        {/* want to add background styled component when available */}
-        <div
-          id="EventsPage"
-          style={{ backgroundColor: '#EDEDED', display: 'flex' }}
-        >
-          <EventsMenu />
-          {this.props.eventStore.eventViewType === 'map' ? (
-            <EventsMap {...this.props} />
-          ) : (
-            <EventsList {...this.props} />
-          )}
-        </div>
-      </MainLayout>
+      <div
+        id="EventsPage"
+        style={{ backgroundColor: '#EDEDED', display: 'flex' }}
+      >
+        <EventsMenu />
+        {this.props.eventStore.eventViewType === 'map' ? (
+          <EventsMap {...this.props} />
+        ) : (
+          <EventsList {...this.props} />
+        )}
+      </div>
     )
   }
 }

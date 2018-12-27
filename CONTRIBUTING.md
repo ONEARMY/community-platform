@@ -49,9 +49,9 @@ In addition app state, actions and dispatchers are handled within the **redux** 
 
 ## Branch Structure
 
-We have two main branches linked to production and development sites, you should always start with the **Dev** branch as this contains the most up-to-date code, and will be where pull requests are made to for review. The **master** branch contains the live production site, and will be merged from dev after regular review periods.
+We have two main branches linked to production and development sites, you should always start with the **master** branch as this contains the most up-to-date code, and will be where pull requests are made to for review. The **production** branch contains the live production site, and will be merged from master after regular review periods.
 
-We use additional branches to define a specific feature or issue group being worked on. An example might be work on the home page, which would be done in the ‘#19 home-page’ branch (where #19 refers to the issue number describing what needs to be done. These branches are ephemeral, and so removed after merging into the dev branch and closing the issue. Generally it is expected that only 1 developer will be working on a given branch, and it is that developer’s responsibility to create the branch, manage pull requests, reviews or ask for additional support when needed.
+We use additional branches to define a specific feature or issue group being worked on. An example might be work on the home page, which would be done in the ‘#19 home-page’ branch (where #19 refers to the issue number describing what needs to be done. These branches are ephemeral, and so removed after merging into the master branch and closing the issue. Generally it is expected that only 1 developer will be working on a given branch, and it is that developer’s responsibility to create the branch, manage pull requests, reviews or ask for additional support when needed.
 
 ## Issue Tracking and Management
 

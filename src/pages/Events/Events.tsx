@@ -41,7 +41,7 @@ export class EventsPage extends React.Component<IProps> {
     return (
       <div
         id="EventsPage"
-        style={{ backgroundColor: '#EDEDED', display: 'flex' }}
+        style={{ backgroundColor: '#EDEDED', display: 'flex', flex: 1 }}
       >
         <EventsMenu />
         {this.props.eventStore.eventViewType === 'map' ? (

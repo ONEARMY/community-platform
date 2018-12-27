@@ -18,9 +18,20 @@ interface IState {
 }
 
 export const COMMUNITY_PAGES = [
+  { path: '/news', component: NotFoundPage, title: 'Newsfeed' },
   { path: '/docs', component: DocsPage, title: 'How-Tos' },
   { path: '/events', component: EventsPage, title: 'Events' },
-  { path: '/template', component: TemplatePage, title: 'Template Demo' },
+]
+export const COMMUNITY_PAGES_MORE = [
+  { path: '/discussions', component: NotFoundPage, title: 'Discussions' },
+  { path: '/maps', component: NotFoundPage, title: 'Maps' },
+  { path: '/discover', component: NotFoundPage, title: 'Discover' },
+  { path: '/about', component: NotFoundPage, title: 'About' },
+]
+export const COMMUNITY_PAGES_PROFILE = [
+  { path: '/profile', component: NotFoundPage, title: 'Profile' },
+  { path: '/settings', component: NotFoundPage, title: 'Settings' },
+  { path: '/help', component: NotFoundPage, title: 'Help' },
 ]
 
 export class Routes extends React.Component<any, IState> {
@@ -30,6 +41,11 @@ export class Routes extends React.Component<any, IState> {
   }
 
   public render() {
+    const pages = [
+      ...COMMUNITY_PAGES,
+      ...COMMUNITY_PAGES_MORE,
+      ...COMMUNITY_PAGES_PROFILE,
+    ]
     // we are rendering different pages and navigation dependent on whether the user has navigated directly to view the
     // entire site, or just one page of it via subdomains. This is so we can effectively integrate just parts of this
     // platform into other sites. The first case is direct nav
@@ -39,10 +55,16 @@ export class Routes extends React.Component<any, IState> {
         <BrowserRouter>
           {/* on page change scroll to top */}
           <ScrollToTop>
-            <div style={{ height: '100vh' }}>
+            <div
+              style={{
+                minHeight: '100vh',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
               <Header variant="community" />
               <Switch>
-                {COMMUNITY_PAGES.map(page => (
+                {pages.map(page => (
                   <Route path={page.path} component={page.component} />
                 ))}
                 <Route exact path="/" component={HomePage} />

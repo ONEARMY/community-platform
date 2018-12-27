@@ -20,13 +20,15 @@
     margin-left: 5em;
     flex: 1;
   }
-  .nav-link {
-    margin-right: 2em;
-    text-decoration: none;
+  .header__avatar {
+    cursor: pointer;
   }
-  .nav-link.link-active {
-    text-decoration: underline;
+  .profile__menu-container {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
   }
+
   .community-badge {
     background-color: #eb7475;
     color: white;
@@ -41,4 +43,12 @@
     top: 3.5em;
     cursor: pointer;
   }
+}
+.nav-link {
+  margin-right: 2em;
+  text-decoration: none;
+  color: black;
+}
+.nav-link.link-active {
+  text-decoration: underline;
 }

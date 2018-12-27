@@ -74,17 +74,21 @@ export class UploadedFile extends React.Component<IUploadedFileProps, IState> {
           // file display
           <div className="file-meta__container">
             <div className="file-meta__name">
-              <a href={file.downloadUrl}>{file.name}</a>
+              <a download target="_blank" href={file.downloadUrl}>
+                {file.name}
+              </a>
             </div>
             <div className="file-meta__size">{formattedSize}</div>
-            <Button
-              className="file-meta__delete"
-              onClick={() => {
-                this.delete()
-              }}
-            >
-              <DeleteIcon />
-            </Button>
+            {showDelete ? (
+              <Button
+                className="file-meta__delete"
+                onClick={() => {
+                  this.delete()
+                }}
+              >
+                <DeleteIcon />
+              </Button>
+            ) : null}
           </div>
         )}
       </div>

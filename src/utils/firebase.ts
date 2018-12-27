@@ -2,6 +2,7 @@ import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/auth'
 import 'firebase/storage'
+import 'firebase/functions'
 import { FIREBASE_CONFIG } from '../../src/config/config'
 
 // initialise with config settings, additional firestore config to support future changes
@@ -16,7 +17,7 @@ firebase
 export const db = firebase.firestore()
 export const storage = firebase.storage()
 export const auth = firebase.auth()
-
+export const functions = firebase.functions()
 // want to also expose the default firebase user
 /* tslint:disable: no-empty-interface*/
 export interface IFirebaseUser extends firebase.User {}

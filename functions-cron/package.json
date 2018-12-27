@@ -1,0 +1,19 @@
+{
+  "name": "functions-cron-appengine",
+  "version": "1.0.0",
+  "description": "AppEngine component for functions-cron",
+  "main": "app.js",
+  "engines": {
+    "node": "8.x.x"
+  },
+  "scripts": {
+    "deploy": "gcloud app deploy --quiet app.yaml cron.yaml",
+    "start": "node app.js"
+  },
+  "author": "Google, Inc.",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@google-cloud/pubsub": "^0.20.1",
+    "express": "^4.16.3"
+  }
+}

@@ -3,26 +3,28 @@
   background-color: white;
   margin: 20px;
   flex: 1;
-  position: relative;
-  height: 500px;
+  position: inherit;
+  overflow: hidden;
+
   .top-info--floating {
     z-index: 401;
     margin: 20px 15px;
-    position: relative;
+    position: absolute;
+    width: calc(100% - 370px);
   }
   .list-total {
     font-size: x-large;
     background: white;
     padding: 5px;
     height: 30px;
+    opacity: 0;
   }
   .map-container {
-    height: 500px;
+    height: 100%;
     position: relative;
-    top: -80px;
   }
   .leaflet-container {
-    height: 500px;
+    height: 100%;
   }
   button.show-list {
     background-color: white;
@@ -31,7 +33,7 @@
   }
   .leaflet-control-zoom {
     margin-top: 70px;
-    margin-right: 20px;
+    margin-right: 30px;
   }
   .leaflet-popup-content-wrapper {
     padding: 0;

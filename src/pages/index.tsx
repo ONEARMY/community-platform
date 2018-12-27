@@ -16,19 +16,24 @@ interface IState {
   singlePageMode: boolean
   displayPageComponent?: any
 }
+export interface IPageMeta {
+  path: string
+  component: any
+  title: string
+}
 
-export const COMMUNITY_PAGES = [
+export const COMMUNITY_PAGES: IPageMeta[] = [
   { path: '/news', component: NotFoundPage, title: 'Newsfeed' },
   { path: '/docs', component: DocsPage, title: 'How-Tos' },
   { path: '/events', component: EventsPage, title: 'Events' },
 ]
-export const COMMUNITY_PAGES_MORE = [
+export const COMMUNITY_PAGES_MORE: IPageMeta[] = [
   { path: '/discussions', component: NotFoundPage, title: 'Discussions' },
   { path: '/maps', component: NotFoundPage, title: 'Maps' },
   { path: '/discover', component: NotFoundPage, title: 'Discover' },
   { path: '/about', component: NotFoundPage, title: 'About' },
 ]
-export const COMMUNITY_PAGES_PROFILE = [
+export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [
   { path: '/profile', component: NotFoundPage, title: 'Profile' },
   { path: '/settings', component: NotFoundPage, title: 'Settings' },
   { path: '/help', component: NotFoundPage, title: 'Help' },
@@ -65,7 +70,11 @@ export class Routes extends React.Component<any, IState> {
               <Header variant="community" />
               <Switch>
                 {pages.map(page => (
-                  <Route path={page.path} component={page.component} />
+                  <Route
+                    path={page.path}
+                    component={page.component}
+                    key={page.path}
+                  />
                 ))}
                 <Route exact path="/" component={HomePage} />
                 <Route component={NotFoundPage} />

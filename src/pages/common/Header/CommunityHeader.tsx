@@ -67,6 +67,7 @@ export class CommunityHeader extends React.Component<any, IState> {
               className="nav-link"
               to={page.path}
               activeClassName="link-active"
+              key={page.path}
             >
               {page.title}
             </NavLink>
@@ -87,17 +88,19 @@ export class CommunityHeader extends React.Component<any, IState> {
             style={{ marginTop: '3em' }}
           >
             <ClickAwayListener onClickAway={this.closeMoreMenu}>
-              {COMMUNITY_PAGES_MORE.map(page => (
-                <MenuItem onClick={this.closeMoreMenu}>
-                  <NavLink
-                    className="nav-link"
-                    to={page.path}
-                    activeClassName="link-active"
-                  >
-                    {page.title}
-                  </NavLink>
-                </MenuItem>
-              ))}
+              <div>
+                {COMMUNITY_PAGES_MORE.map(page => (
+                  <MenuItem onClick={this.closeMoreMenu} key={page.path}>
+                    <NavLink
+                      className="nav-link"
+                      to={page.path}
+                      activeClassName="link-active"
+                    >
+                      {page.title}
+                    </NavLink>
+                  </MenuItem>
+                ))}
+              </div>
             </ClickAwayListener>
           </Menu>
         </div>
@@ -128,19 +131,21 @@ export class CommunityHeader extends React.Component<any, IState> {
           style={{ marginTop: '3em' }}
         >
           <ClickAwayListener onClickAway={this.closeProfileMenu}>
-            {COMMUNITY_PAGES_PROFILE.map(page => (
-              <MenuItem onClick={this.closeProfileMenu}>
-                <NavLink
-                  className="nav-link"
-                  to={page.path}
-                  activeClassName="link-active"
-                >
-                  {page.title}
-                </NavLink>
-              </MenuItem>
-            ))}
-            <MenuItem onClick={this.closeProfileMenu}>Logout</MenuItem>
-            <MenuItem onClick={this.closeProfileMenu}>Main Site</MenuItem>
+            <div>
+              {COMMUNITY_PAGES_PROFILE.map(page => (
+                <MenuItem onClick={this.closeProfileMenu} key={page.path}>
+                  <NavLink
+                    className="nav-link"
+                    to={page.path}
+                    activeClassName="link-active"
+                  >
+                    {page.title}
+                  </NavLink>
+                </MenuItem>
+              ))}
+              <MenuItem onClick={this.closeProfileMenu}>Logout</MenuItem>
+              <MenuItem onClick={this.closeProfileMenu}>Main Site</MenuItem>
+            </div>
           </ClickAwayListener>
         </Menu>
       </div>

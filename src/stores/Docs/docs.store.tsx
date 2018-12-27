@@ -12,10 +12,8 @@ export class DocStore {
   // call getDocList to query 'tutorials' from db and map response to docs observable
   @action
   public async getDocList() {
-    console.log('getting doc list')
     const ref = await db.collection('documentation').get()
     this.allTutorials = ref.docs.map(doc => doc.data() as ITutorial)
-    console.log('tutorials retrieved', this.allTutorials)
   }
   @action
   public async getDocBySlug(slug: string) {

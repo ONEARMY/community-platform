@@ -12,8 +12,16 @@ import {
   TutorialInfo,
 } from './elements'
 import Button from 'src/components/Button/Button'
+import { ITutorial } from 'src/models/models'
 
-export default class TutorialDescription extends React.PureComponent<any, any> {
+interface IProps {
+  tutorial: ITutorial
+}
+
+export default class TutorialDescription extends React.PureComponent<
+  IProps,
+  any
+> {
   constructor(props: any) {
     super(props)
   }
@@ -64,7 +72,14 @@ export default class TutorialDescription extends React.PureComponent<any, any> {
           </Padding>
         </ContainerLeft>
         <ContainerRight>
-          <CoverImg src={tutorial.cover_image_url} alt="tutorial cover" />
+          <CoverImg
+            src={
+              tutorial.cover_image_url
+                ? tutorial.cover_image_url
+                : tutorial.cover_image.downloadUrl
+            }
+            alt="tutorial cover"
+          />
         </ContainerRight>
       </Container>
     )

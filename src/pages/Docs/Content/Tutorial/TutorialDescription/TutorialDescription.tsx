@@ -13,6 +13,7 @@ import {
 } from './elements'
 import Button from 'src/components/Button/Button'
 import { ITutorial } from 'src/models/models'
+import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 
 interface IProps {
   tutorial: ITutorial
@@ -57,18 +58,18 @@ export default class TutorialDescription extends React.PureComponent<
                 <TagDisplay tagKey={k} key={k} />
               ))}
             </div>
-            {tutorial.tutorial_files.length > 0 ? (
-              <Button
-                target="_blank"
-                download
-                text={'Download files'}
-                href={
-                  tutorial.tutorial_files[tutorial.tutorial_files.length - 1]
-                    .downloadUrl
-                }
-                style={{ marginTop: '20px' }}
+            {tutorial.tutorial_files.length > 0 && (
+              <TutorialInfo component="p">
+                <b>Files : </b>
+              </TutorialInfo>
+            )}
+            {tutorial.tutorial_files.map(file => (
+              <UploadedFile
+                file={file}
+                key={file.downloadUrl}
+                showDelete={false}
               />
-            ) : null}
+            ))}
           </Padding>
         </ContainerLeft>
         <ContainerRight>

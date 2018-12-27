@@ -59,7 +59,7 @@ export class CreateTutorial extends React.PureComponent<
   }
 
   public onSubmit = async (formValues: ITutorialFormInput) => {
-    if (!this.state.formValues.cover_image) {
+    if (!formValues.cover_image) {
       alert('Please provide a cover image before saving your tutorial')
     } else {
       const timestamp = new Date()

@@ -23,11 +23,11 @@ const styles: any = {
     marginLeft: theme.spacing.unit * 3,
     marginRight: theme.spacing.unit * 3,
     padding: `${theme.spacing.unit * 4}px 0`,
-    [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
-      width: 1100,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
+    // [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
+    //   width: 1100,
+    //   marginLeft: 'auto',
+    //   marginRight: 'auto',
+    // },
   },
   link: {
     textDecoration: 'none',

@@ -28,7 +28,6 @@ export class UploadedFile extends React.Component<IUploadedFileProps, IState> {
   constructor(props: any) {
     super(props)
     this.state = { imageLoaded: false, deleted: false }
-    console.log('rendering file', this.props.file, this.props.imagePreview)
   }
 
   // remove the file from storage repository

@@ -77,7 +77,7 @@ Functions called in response to changes to firebase storage objects
 ************************************************************************************/
 
 exports.imageResize = functions.storage.object().onFinalize(async (object, context) => {
-  if (object.metadata.resized || object.metadata.original) return Promise.resolve();
+  if (object.metadata && (object.metadata.resized || object.metadata.original)) return Promise.resolve();
   return ImageConverter.resizeImage(object)
 })
 

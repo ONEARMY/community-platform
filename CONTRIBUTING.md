@@ -33,6 +33,18 @@ Once you are confident with the basics of React, Mobx and Typescript we would lo
 
 We ask this so that we can better understand how you might fit in with the rest of the team, and maximise your contributions. From here we will then connect you to the github repository as well as slack channel which we use to handle regular communication.
 
+# How to contribute
+1. Thanks already!
+2. Pick a task off the top of the waffle board to-do list. The things at the top are our current top priority of things to get done.
+3. Mention @mattia-io, so he knows you’re working on it, so we don’t have two people doing the same thing
+4. Fork the project, or make a new feature branch from the dev branch
+5. Do your magic, and make sure your git branch is up to date
+6. Make a pull request back to our dev branch
+7. Get approvals, fix code based on feedback, go back to step 1
+
+Note: If you can’t find anything in our todo list that you can help with, it’s probably because we haven’t defined it yet. There’s lots of stuff to do, so if you think you can help out, let us know and we’ll find you something.
+
+
 # Contribution guidelines
 
 ## So how can I get started?

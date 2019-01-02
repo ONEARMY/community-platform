@@ -60,14 +60,14 @@ We have two main branches linked to production and development sites, you should
 We use additional branches to define a specific feature or issue group being worked on. An example might be work on the home page, which would be done in the ‘#19 home-page’ branch (where #19 refers to the issue number describing what needs to be done. These branches are ephemeral, and so removed after merging into the master branch and closing the issue. Generally it is expected that only 1 developer will be working on a given branch, and it is that developer’s responsibility to create the branch, manage pull requests, reviews or ask for additional support when needed.
 
 ## Epics and User stories
-As the project will get quite complex we use Epics and User stories to break down functionalities into smaller action items that can be worked on from our distributed team of contributors (remote and inhouse). 
+As the project will get quite complex we use **Epics and User stories** to break down functionalities into smaller action items that can be worked on from our distributed team of contributors (remote and inhouse). 
 More in details:
-- Epics are pages and complex pieces of functionality.
-- User Stories break down epics into tiny, actionable items that are easier to take on for devs both remote or on site. 
+- **Epics** are pages and complex pieces of functionality.
+- **User Stories** break down epics into tiny, actionable items that are easier to take on for devs both remote or on site. 
 
-If you’re interested, [here](https://docs.google.com/spreadsheets/d/1pkLRKCbQiJOtQwWEhVNgSTvDWf5SnVAz10vMo4k-LNg/edit#gid=0) you can find a backlog document outlining the full list of upcoming Epics and relevant User Stories waiting to be developed. Project lead (Mattia) will transfer User Stories from here to Waffle.  
+If you’re interested, [here](https://docs.google.com/spreadsheets/d/1pkLRKCbQiJOtQwWEhVNgSTvDWf5SnVAz10vMo4k-LNg/edit#gid=0) you can find a backlog document outlining the full list of upcoming **Epics** and relevant **User Stories** waiting to be developed. Project lead (Mattia) will transfer User Stories from here to Waffle.  
 
-Anyone can pick a User Story and get on with coding. When working on a User Story it should be tagged with in-progress on the above link and add the delivery date so that we are aware of what is being worked on and when is due for delivery. If upon assigning yourself a User Story you find yourself unable to contribute we kindly ask you to unassign yourself so we can be aware of it (max 2 weeks).
+Anyone can pick a **User Story** and get on with coding. When working on a **User Story** it should be tagged with in-progress on the [above link](https://docs.google.com/spreadsheets/d/1pkLRKCbQiJOtQwWEhVNgSTvDWf5SnVAz10vMo4k-LNg/edit#gid=0) and add the delivery date so that we are aware of what is being worked on and when is due for delivery. If upon assigning yourself a User Story you find yourself unable to contribute we kindly ask you to unassign yourself so we can be aware of it (max 2 weeks).
 
 
 ## Issue Tracking and Management

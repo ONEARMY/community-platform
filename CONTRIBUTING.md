@@ -32,8 +32,8 @@ We ask this so that we can better understand how you might fit in with the rest 
 
 # How to contribute
 1. Thanks already!
-2. Pick a task off the top of the waffle board to-do list. The things at the top are our current top priority of things to get done.
-3. Mention @mattia-io, so he knows you’re working on it, so we don’t have two people doing the same thing
+2. Pick an issue at the top of the waffle board next-to-do list. The things at the top are our current top priority of things to get done.
+3. In the issue you chose to work on comment to let us know you’re working on it (to avoid two people doing the same thing). The comment should include a mention to @mattia-io (our project lead) and an estimated delivery date. So you we can bug you when is time :)
 4. Fork the project, or make a new feature branch from the dev branch
 5. Do your magic, and make sure your git branch is up to date
 6. Make a pull request back to our dev branch

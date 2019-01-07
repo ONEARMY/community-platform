@@ -1,4 +1,6 @@
-# Quick start
+# Onearmy
+
+## Quick start
 
 Install dependencies
 `yarn`
@@ -6,10 +8,18 @@ Install dependencies
 Run
 `npm run start`
 
-(use chrome or firefox... things might work on other browsers but this will most likely be coincidence. Want wider support? Join us and help!)
+Note: Builds are currently tested on Chrome/Firefox. If your browser is not 
+supported, then consider contributing :-)
 
-# Getting Involved
+## Getting Involved
 
 If you are interested joining this project please see the [contributing guidelines](https://github.com/OneArmyWorld/onearmy/blob/dev/CONTRIBUTING.md)
 
 This project is based on Create React App, associated documentation can be found [here](https://github.com/facebook/create-react-app)
+
+## Deployment
+
+Master is our current development leading branch, and will autodeploy to the 
+[development site](https://dev.onearmy.world/). When things are production 
+ready, they will be pushed to the master branch which ends up on the [live 
+site](https://onearmy.world/)

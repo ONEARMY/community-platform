@@ -8,11 +8,36 @@ import { HomePage } from './Home/Home'
 import { NotFoundPage } from './NotFound/NotFound'
 import { TemplatePage } from './_Template/Template'
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
+import { EventsPage } from './Events/Events'
+import MainLayout from './common/MainLayout'
+import Header from './common/Header/Header'
 
 interface IState {
   singlePageMode: boolean
   displayPageComponent?: any
 }
+export interface IPageMeta {
+  path: string
+  component: any
+  title: string
+}
+
+export const COMMUNITY_PAGES: IPageMeta[] = [
+  { path: '/news', component: NotFoundPage, title: 'Newsfeed' },
+  { path: '/docs', component: DocsPage, title: 'How-Tos' },
+  { path: '/events', component: EventsPage, title: 'Events' },
+]
+export const COMMUNITY_PAGES_MORE: IPageMeta[] = [
+  { path: '/discussions', component: NotFoundPage, title: 'Discussions' },
+  { path: '/maps', component: NotFoundPage, title: 'Maps' },
+  { path: '/discover', component: NotFoundPage, title: 'Discover' },
+  { path: '/about', component: NotFoundPage, title: 'About' },
+]
+export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [
+  { path: '/profile', component: NotFoundPage, title: 'Profile' },
+  { path: '/settings', component: NotFoundPage, title: 'Settings' },
+  { path: '/help', component: NotFoundPage, title: 'Help' },
+]
 
 export class Routes extends React.Component<any, IState> {
   constructor(props: any) {
@@ -21,6 +46,11 @@ export class Routes extends React.Component<any, IState> {
   }
 
   public render() {
+    const pages = [
+      ...COMMUNITY_PAGES,
+      ...COMMUNITY_PAGES_MORE,
+      ...COMMUNITY_PAGES_PROFILE,
+    ]
     // we are rendering different pages and navigation dependent on whether the user has navigated directly to view the
     // entire site, or just one page of it via subdomains. This is so we can effectively integrate just parts of this
     // platform into other sites. The first case is direct nav
@@ -30,12 +60,26 @@ export class Routes extends React.Component<any, IState> {
         <BrowserRouter>
           {/* on page change scroll to top */}
           <ScrollToTop>
-            <Switch>
-              <Route path="/docs" component={DocsPage} />
-              <Route path="/template" component={TemplatePage} />
-              <Route exact path="/" component={HomePage} />
-              <Route component={NotFoundPage} />
-            </Switch>
+            <div
+              style={{
+                minHeight: '100vh',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <Header variant="community" />
+              <Switch>
+                {pages.map(page => (
+                  <Route
+                    path={page.path}
+                    component={page.component}
+                    key={page.path}
+                  />
+                ))}
+                <Route exact path="/" component={HomePage} />
+                <Route component={NotFoundPage} />
+              </Switch>
+            </div>
           </ScrollToTop>
         </BrowserRouter>
       </div>

@@ -1,6 +1,11 @@
 import { observable, action } from 'mobx'
 
-type ISWStatus = 'updated'
+/*
+The platform store handles information related to the platform, such as update
+status of service workers
+*/
+
+type ISWStatus = 'updated' | null
 
 export class PlatformStore {
   @observable
@@ -8,7 +13,6 @@ export class PlatformStore {
 
   @action
   public setServiceWorkerStatus(status: ISWStatus) {
-    console.log('sw update received to store')
     this.serviceWorkerStatus = status
   }
 }

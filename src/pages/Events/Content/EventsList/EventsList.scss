@@ -1,0 +1,57 @@
+#EventsList {
+  padding: 20px;
+}
+#EventsList,
+#EventsMap {
+  background-color: white;
+  margin: 20px;
+  flex: 1;
+  .top-info-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1em;
+  }
+  .list-total {
+    font-size: x-large;
+  }
+  .event-container {
+    display: flex;
+    margin-bottom: 1em;
+    cursor: pointer;
+  }
+  img.event-image {
+    width: 150px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  .event-info {
+    margin-left: 10px;
+    margin-right: 10px;
+    flex: 1;
+    max-width: 600px;
+  }
+  .event-name {
+    font-weight: bold;
+    font-size: large;
+    margin-bottom: 0.5em;
+  }
+  .event-date {
+    opacity: 0.5;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
+  .event-description {
+    margin-bottom: 0.5em;
+    color: #969393;
+  }
+  .event-host {
+    opacity: 0.5;
+    font-weight: bold;
+  }
+  button.show-map {
+    right: 10px;
+    width: 120px;
+  }
+}

@@ -108,6 +108,16 @@ export class CreateTutorial extends React.PureComponent<
     console.log('formvalues', formValues)
     return (
       <div>
+        <Button
+          text={'Back to documentation'}
+          to={`/docs/list`}
+          navback="true"
+          style={{
+            margin: '-100px 200px',
+            display: 'block',
+            position: 'absolute',
+          }}
+        />
         <Title variant="h4" component="h4">
           Create a documentation
         </Title>

@@ -44,7 +44,7 @@ export const BackBtn = styled(Link)
   background-color: none;
   border: 1px solid black;
   width: 250px;
-  height: 60px;
+  height: 50px;
 `;
 export const SaveTutBtn = styled.button `
   ${styles};

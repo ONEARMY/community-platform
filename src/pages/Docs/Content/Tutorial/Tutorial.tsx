@@ -91,8 +91,12 @@ export class Tutorial extends React.Component<
           <Button
             text={'Back to documentation'}
             to={`/docs/list`}
-            navback
-            style={{ margin: '60px 200px', display: 'block' }}
+            navback="true"
+            style={{
+              margin: '-70px 200px',
+              display: 'block',
+              position: 'absolute',
+            }}
           />
           <TutorialDescription tutorial={tutorial} />
           {tutorial.steps.map((step: any, index: number) => (
@@ -101,7 +105,7 @@ export class Tutorial extends React.Component<
           <Button
             text={'Back to documentation'}
             to={`/docs/list`}
-            navback
+            navback="true"
             style={{ margin: '60px auto', display: 'block' }}
           />
         </div>

@@ -1,6 +1,10 @@
 # Introduction (for first timers)
-Welcome to One Army! We’re excited to hear that you’re interested in supporting the development of our project. If you happened to just stumble across this, we are building a new platform to help unite people to support social causes, such as [Precious Plastic](https://preciousplastic.com) (which is where this all began) or [ProjectKamp](https://projectkamp.com/). A platform to connect, educate and empower a global community to solve society's greatest challenges. 
+Welcome to One Army! We’re excited to hear that you’re interested in supporting the development of our project. If you happened to just stumble across this, we are building a new platform to help unite people to support social causes, such as [Precious Plastic](https://preciousplastic.com) (which is where this all began), [ProjectKamp](https://projectkamp.com/) or [Story Hopper](https://story-hopper.com/). A platform to connect, educate and empower our global community (65K) to solve society's greatest challenges. 
 
+# Current team (Jan 2019)
+We currently have 1 full time inhouse developer (Benj), 2 part time developers (Chris & Ben) and other 3-4 remote. On the design side of things we've 1 ux and 1 ui (+1 joining in Feb). And Mattia acting as the project lead. UX and UI is evolving nicely getting ready for being developed. Now, we need more hands on coding for the next months if we're to pull off this ambitious project :)
+
+# Techstack
 The platform is built in **React** (+ Mobx + Typescript), with backend microservices in Node. If you are unfamiliar with these technologies we suggest you first spend some time understanding how these frameworks function before getting in touch (as much as we’d love to be your teachers, we just don’t have the capacity to do that and build everything else). Here are a few links that might be of help on your journey:
 
 - https://www.udemy.com/react-redux/

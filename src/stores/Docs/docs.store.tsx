@@ -12,7 +12,11 @@ export class DocStore {
   // call getDocList to query 'tutorials' from db and map response to docs observable
   @action
   public async getDocList() {
-    const ref = await db.collection('documentation').get()
+    const ref = await db
+      .collection('documentation')
+      .orderBy('_created', 'desc')
+      .get()
+
     this.allTutorials = ref.docs.map(doc => doc.data() as ITutorial)
   }
   @action

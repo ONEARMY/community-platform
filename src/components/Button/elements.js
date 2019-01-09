@@ -38,6 +38,14 @@ export const AddStepBtn = styled.button `
   width: 300px;
   height: 90px;
 `;
+export const BackBtn = styled(Link)
+`
+  ${styles};
+  background-color: none;
+  border: 1px solid black;
+  width: 250px;
+  height: 60px;
+`;
 export const SaveTutBtn = styled.button `
   ${styles};
   background-color: ${colors.green};

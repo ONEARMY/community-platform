@@ -1,10 +1,17 @@
 import React from 'react'
-import { MdFileDownload, MdAdd, MdCheck, MdFileUpload } from 'react-icons/md'
+import {
+  MdFileDownload,
+  MdAdd,
+  MdCheck,
+  MdFileUpload,
+  MdArrowBack,
+} from 'react-icons/md'
 import {
   AddTutBtn,
   AddStepBtn,
   SaveTutBtn,
   LoadButton,
+  BackBtn,
   Button,
   InnerButtonText,
   Container,
@@ -46,6 +53,17 @@ function ButtonComponent({ ...props }) {
         <MdAdd style={iconStyle} />
         <InnerButtonText>{props.text}</InnerButtonText>
       </AddStepBtn>
+    )
+  }
+
+  if (props.to && props.navback) {
+    return (
+      <BackBtn {...props}>
+        <Container>
+          <MdArrowBack style={iconStyle} />
+          <InnerButtonText>{props.text}</InnerButtonText>
+        </Container>
+      </BackBtn>
     )
   }
 

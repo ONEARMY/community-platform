@@ -78,8 +78,7 @@ export class CreateTutorial extends React.PureComponent<
           .doc(formValues.id)
           .set(values)
         this.setState({ formSaved: true })
-        this.props.history.push('/docs/' + this.state.formValues.slug)
-        this.forceUpdate()
+        this.props.history.push('/docs/' + slug)
       } catch (error) {
         console.log('error while saving the tutorial')
       }

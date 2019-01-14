@@ -1,7 +1,10 @@
 # Introduction (for first timers)
+Welcome to One Army! We’re excited to hear that you’re interested in supporting the development of our project. If you happened to just stumble across this, we are building a new platform to help unite people to support social causes, such as [Precious Plastic](https://preciousplastic.com) (which is where this all began), [ProjectKamp](https://projectkamp.com/) or [Story Hopper](https://story-hopper.com/). A platform to connect, educate and empower our global community (65K) to solve society's greatest challenges. 
 
-Welcome to One Army! We’re excited to hear that you’re interested in supporting the development of our project. If you happened to just stumble across this, we are building a new platform to help unite people to support social causes, such as [Precious Plastic](https://preciousplastic.com) (which is where this all began).
+# Current team (Jan 2019)
+We currently have 1 full time inhouse developer (Benj), 2 part time developers (Chris & Ben) and other 3-4 remote. On the design side of things we've 1 ux and 1 ui (+1 joining in Feb). And Mattia acting as the project lead. UX and UI is evolving nicely getting ready for being developed. Now, we need more hands on coding for the next months if we're to pull off this ambitious project :)
 
+# Techstack
 The platform is built in **React** (+ Mobx + Typescript), with backend microservices in Node. If you are unfamiliar with these technologies we suggest you first spend some time understanding how these frameworks function before getting in touch (as much as we’d love to be your teachers, we just don’t have the capacity to do that and build everything else). Here are a few links that might be of help on your journey:
 
 - https://www.udemy.com/react-redux/
@@ -24,22 +27,31 @@ The platform is built in **React** (+ Mobx + Typescript), with backend microserv
   Example using firebase auth with react and linking redux state
 
 ## Joining the community
-
 Once you are confident with the basics of React, Mobx and Typescript we would love to welcome you to the team. Just [send a quick email](mailto:hello@preciousplastic.com?subject=Developers%20Call%20To%20Arms) , introducing yourself and outline:
 
-1. What you think you could contribute to the project
+1. Your experience working with the technologies listed above
+2. How much time you feel you can dedicate to the project
 
-2. How much time you feel you can dedicate
-   We ask this so that we can better understand how you might fit in with the rest of the team, and maximise your contributions. From here we will then connect you to the github repository as well as slack channel which we use to handle regular communication.
+We ask this so that we can better understand how you might fit in with the rest of the team, and maximise your contributions. From here we will then connect you to the github repository as well as slack channel which we use to handle regular communication.
+
+# How to contribute
+1. Thanks already!
+2. Pick an issue at the top of the waffle board next-to-do list. The things at the top are our current top priority of things to get done.
+3. In the issue you chose to work on comment to let us know you’re working on it (to avoid two people doing the same thing). The comment should include a mention to @mattia-io (our project lead) and an estimated delivery date. So you we can bug you when is time :)
+4. Fork the project, or make a new feature branch from the dev branch
+5. Do your magic, and make sure your git branch is up to date
+6. Make a pull request back to our dev branch
+7. Get approvals, fix code based on feedback, go back to step 1
+
+Note: If you can’t find anything in our todo list that you can help with, it’s probably because we haven’t defined it yet. There’s lots of stuff to do, so if you think you can help out, let us know and we’ll find you something.
+
 
 # Contribution guidelines
 
 ## So how can I get started?
-
 We first ask that you quickly read through the document below so that you are familiar with the overall structure and workflow, after which you will either be assigned or can self-assign a group of issues to work on.
 
 ## Project Structure
-
 The project is split across **pages** which make up the visual routing of the application. Within pages there are **components**, some of which are specific to the page and others which are shared.
 
 Typescript **models** that relate to general data flow (such as a user’s profile) are within the models folder, whilst component states and properties are declared within the component. Artificial data for use in development is held in the **mocks** folder, with live data requests handled within **api**.
@@ -47,10 +59,20 @@ Typescript **models** that relate to general data flow (such as a user’s profi
 In addition app state, actions and dispatchers are handled within the **redux** folder, whilst global state property mapping is dealt with either in **containers**, or page components.
 
 ## Branch Structure
+We have two main branches linked to production and development sites, you should always start with the **master** branch as this contains the most up-to-date code, and will be where pull requests are made to for review. The **production** branch contains the live production site, and will be merged from master after regular review periods.
 
-We have two main branches linked to production and development sites, you should always start with the **Dev** branch as this contains the most up-to-date code, and will be where pull requests are made to for review. The **master** branch contains the live production site, and will be merged from dev after regular review periods.
+We use additional branches to define a specific feature or issue group being worked on. An example might be work on the home page, which would be done in the ‘#19 home-page’ branch (where #19 refers to the issue number describing what needs to be done. These branches are ephemeral, and so removed after merging into the master branch and closing the issue. Generally it is expected that only 1 developer will be working on a given branch, and it is that developer’s responsibility to create the branch, manage pull requests, reviews or ask for additional support when needed.
 
-We use additional branches to define a specific feature or issue group being worked on. An example might be work on the home page, which would be done in the ‘#19 home-page’ branch (where #19 refers to the issue number describing what needs to be done. These branches are ephemeral, and so removed after merging into the dev branch and closing the issue. Generally it is expected that only 1 developer will be working on a given branch, and it is that developer’s responsibility to create the branch, manage pull requests, reviews or ask for additional support when needed.
+## Epics and User stories
+As the project will get quite complex we use **Epics and User stories** to break down functionalities into smaller action items that can be worked on from our distributed team of contributors (remote and inhouse). 
+More in details:
+- **Epics** are pages and complex pieces of functionality.
+- **User Stories** break down epics into tiny, actionable items that are easier to take on for devs both remote or on site. 
+
+If you’re interested, [here](https://docs.google.com/spreadsheets/d/1pkLRKCbQiJOtQwWEhVNgSTvDWf5SnVAz10vMo4k-LNg/edit#gid=0) you can find a backlog document outlining the full list of upcoming **Epics** and relevant **User Stories** waiting to be developed. Project lead (Mattia) will transfer User Stories from here to Waffle.  
+
+Anyone can pick a **User Story** and get on with coding. When working on a **User Story** it should be tagged with in-progress on the [above link](https://docs.google.com/spreadsheets/d/1pkLRKCbQiJOtQwWEhVNgSTvDWf5SnVAz10vMo4k-LNg/edit#gid=0) and add the delivery date so that we are aware of what is being worked on and when is due for delivery. If upon assigning yourself a User Story you find yourself unable to contribute we kindly ask you to unassign yourself so we can be aware of it (max 2 weeks).
+
 
 ## Issue Tracking and Management
 

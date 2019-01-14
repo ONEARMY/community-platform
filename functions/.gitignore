@@ -1,0 +1,10 @@
+node_modules
+
+## Compiled JavaScript files
+**/*.js
+**/*.js.map
+
+# Typescript v1 declaration files
+types/
+src/config/*.json
+lib/

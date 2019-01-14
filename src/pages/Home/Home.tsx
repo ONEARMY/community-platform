@@ -4,12 +4,10 @@ This is the Home Page main component, rendering content seen at '/'
 
 import * as React from 'react'
 import './Home.scss'
-import { LoginContainer } from '../common/Login/Login.container'
 import { IUser } from '../../models/models'
 import { UserStore } from 'src/stores/User/user.store'
 import { IStores } from 'src/stores'
 import { inject } from 'mobx-react'
-import { VersionNumber } from 'src/components/VersionNumber/VersionNumber'
 
 interface IState {
   isLoggedIn: boolean
@@ -25,16 +23,6 @@ export class HomePage extends React.Component<IState, any> {
     this.setState({ isLoggedIn: user ? true : false })
   }
   public render() {
-    return (
-      <div id="HomePage">
-        <LoginContainer />
-        {this.state && this.state.isLoggedIn ? (
-          <div>User Logged in page</div>
-        ) : (
-          <div className="bgimg-1" />
-        )}
-        <VersionNumber />
-      </div>
-    )
+    return <div id="HomePage" />
   }
 }

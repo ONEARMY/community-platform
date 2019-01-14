@@ -13,13 +13,14 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "typeRoots": ["./types", "./node_modules/@types"]
+    "typeRoots": ["./types", "./node_modules/@types"],
+    "resolveJsonModule": true
   },
   "exclude": [
     "node_modules",
@@ -31,6 +32,9 @@
     "jest",
     "src/setupTests.ts",
     "config/*.js",
-    "config/jest/*.js"
+    "config/jest/*.js",
+    "functions-cron",
+    "functions",
+    "src/utils/UserMigration"
   ]
 }

@@ -1,17 +1,7 @@
-import * as React from 'react';
-
-import Header from "../Header";
-
-import logo from "../../../assets/images/logo.png";
-import './MainLayout.scss';
+import * as React from 'react'
 
 const MainLayout: React.StatelessComponent<{}> = ({ children }) => {
-  return (
-    <div className="App">
-      <Header />
-      {children}
-    </div>
-  );
+  return <div className="App">{children}</div>
 }
 
-export default MainLayout;
+export default MainLayout

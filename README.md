@@ -11,7 +11,6 @@ The platform is built in **React** and use [Mobx](https://mobx.js.org/index.html
 ### Backend
 
 Our backend contains microservices in Node and is based on Firebase's Firestore to manage our database.
-
 You can find usefull links to learn more about these technologies [here](/CONTRIBUTING.md#ressources)
 
 ## 🤝 &nbsp; Contributions

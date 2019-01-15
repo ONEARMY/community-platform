@@ -58,12 +58,12 @@ function ButtonComponent({ ...props }) {
 
   if (props.to && props.navback) {
     return (
-      <BackBtn {...props}>
-        <Container>
+      <div style={{ marginTop: 10 }}>
+        <BackBtn {...props}>
           <MdArrowBack style={iconStyle} />
           <InnerButtonText>{props.text}</InnerButtonText>
-        </Container>
-      </BackBtn>
+        </BackBtn>
+      </div>
     )
   }
 

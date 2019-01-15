@@ -113,12 +113,11 @@ export class CreateTutorial extends React.PureComponent<
           to={`/docs/list`}
           navback="true"
           style={{
-            margin: '-100px 200px',
-            display: 'block',
-            position: 'absolute',
+            border: 'none',
+            marginTop: 10,
           }}
         />
-        <Title variant="h4" component="h4">
+        <Title variant="h4" component="h4" style={{ marginTop: 0 }}>
           Create a documentation
         </Title>
         <Form

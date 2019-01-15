@@ -26,26 +26,26 @@ Note: If you can’t find anything in our todo list that you can help with, it�
 Note: Builds are currently tested on Chrome/Firefox. If your browser is not
 supported, then consider contributing :-)
 
-## 🚀 &nbsp; Deployment
-
-Master is our current development leading branch, and will autodeploy to the
-[development site](https://dev.onearmy.world/). When things are production
-ready, they will be pushed to the master branch which ends up on the [live
-site](https://onearmy.world/)
-
 ## 🏠 &nbsp; Project Structure
 
 The project is split across **pages** which make up the visual routing of the application. Within pages there are **components**, some of which are specific to the page and others which are shared.
 
 Typescript **models** that relate to general data flow (such as a user’s profile) are within the models folder, whilst component states and properties are declared within the component. Artificial data for use in development is held in the **mocks** folder, with live data requests handled within **api**.
 
-In addition app state, actions and dispatchers are handled within the **redux** folder, whilst global state property mapping is dealt with either in **containers**, or page components.
+In addition app state, actions and dispatchers are handled within the **stores** folder, whilst global state property mapping is dealt in page components.
 
 ## 🌳 &nbsp; Branch Structure
 
 We have two main branches linked to production and development sites, you should always start with the **master** branch as this contains the most up-to-date code, and will be where pull requests are made to for review. The **production** branch contains the live production site, and will be merged from master after regular review periods.
 
 We use additional branches to define a specific feature or issue group being worked on. An example might be work on the home page, which would be done in the ‘#19 home-page’ branch (where #19 refers to the issue number describing what needs to be done. These branches are ephemeral, and so removed after merging into the master branch and closing the issue. Generally it is expected that only 1 developer will be working on a given branch, and it is that developer’s responsibility to create the branch, manage pull requests, reviews or ask for additional support when needed.
+
+## 🚀 &nbsp; Deployment
+
+Master is our current development leading branch, and will autodeploy to the
+[development site](https://dev.onearmy.world/). When things are production
+ready, they will be pushed to the master branch which ends up on the [live
+site](https://onearmy.world/).
 
 ## 💌 &nbsp; Epics and User stories
 
@@ -55,7 +55,7 @@ More in details:
 - **Epics** are pages and complex pieces of functionality.
 - **User Stories** break down epics into tiny, actionable items that are easier to take on for devs both remote or on site.
 
-If you’re interested, [here](https://docs.google.com/spreadsheets/d/1pkLRKCbQiJOtQwWEhVNgSTvDWf5SnVAz10vMo4k-LNg/edit#gid=0) you can find a backlog document outlining the full list of upcoming **Epics** and relevant **User Stories** waiting to be developed. Project lead (Mattia) will transfer User Stories from here to Waffle.
+If you’re interested, [here](https://docs.google.com/spreadsheets/d/1pkLRKCbQiJOtQwWEhVNgSTvDWf5SnVAz10vMo4k-LNg/edit#gid=0) you can find a backlog document outlining the full list of upcoming **Epics** and relevant **User Stories** waiting to be developed. Project lead @mattia-io will transfer User Stories from here to Waffle.
 
 Anyone can pick a **User Story** and get on with coding. When working on a **User Story** it should be tagged with in-progress on the [above link](https://docs.google.com/spreadsheets/d/1pkLRKCbQiJOtQwWEhVNgSTvDWf5SnVAz10vMo4k-LNg/edit#gid=0) and add the delivery date so that we are aware of what is being worked on and when is due for delivery. If upon assigning yourself a User Story you find yourself unable to contribute we kindly ask you to unassign yourself so we can be aware of it (max 2 weeks).
 
@@ -65,7 +65,7 @@ Issues are tracked on GitHub and we also use [waffle](https://waffle.io) as a vi
 
 Anybody can create an issue or assign an issue to themselves, and when working on an issue it should be tagged with **in-progress** so that we are aware of what is being worked on. Once an issue is in progress we some sort of update to be made within a 1-2 week period (otherwise you should unmark, and possibly unassign if unlikely to come back to it soon).
 
-When a group of issues has been resolved a pull request to the dev branch should be made, where it will undergo a quick review and test. It is expected that the developer will have done thorough testing themselves first, and most pull requests can be quickly merged.
+When a group of issues has been resolved a pull request to the dev branch should be made, where it will undergo a quick review and test. It is expected that the developer will have done through testing themselves first, and most pull requests can be quickly merged.
 
 ## 🤓 &nbsp; Javascript style guide
 
@@ -79,9 +79,9 @@ We also expect code to follow standard good practice, such as sensible variable 
 
 For now you should use [materialUI](https://material-ui.com/) components where possible, as these will form a basis for future design principles.
 
-## 🤝 &nbsp; Joining the community
+## 🤝 &nbsp; Joining the team
 
-Once you are confident with the basics of React, Mobx and Typescript we would love to welcome you to the team. Just [send a quick email](mailto:hello@preciousplastic.com?subject=Developers%20Call%20To%20Arms), introducing yourself and outline:
+We are always open to have more people involve. If you would like to contribute more often, we would love to welcome you to the team. Just [send a quick email](mailto:hello@preciousplastic.com?subject=Developers%20Call%20To%20Arms), introducing yourself and outline:
 
 1. Your experience working with the technologies listed above
 2. How much time you feel you can dedicate to the project
@@ -89,8 +89,6 @@ Once you are confident with the basics of React, Mobx and Typescript we would lo
 We ask this so that we can better understand how you might fit in with the rest of the team, and maximise your contributions. From here we will then connect you to the github repository as well as slack channel which we use to handle regular communication.
 
 ## 📚 &nbsp; Ressources
-
-If you are unfamiliar with these technologies we suggest you first spend some time understanding how these frameworks function before getting in touch (as much as we’d love to be your teachers, we just don’t have the capacity to do that and build everything else). Here are a few links that might be of help on your journey:
 
 - https://www.udemy.com/react-redux/
   paid online course to cover most of the basics of React - it uses redux where we use mobx but rest is still very good

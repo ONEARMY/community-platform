@@ -1,25 +1,30 @@
-# Onearmy
+# 🌍 &nbsp; Onearmy
 
-## Quick start
+Welcome to One Army! We are building a new platform to help unite people to support social causes, such as [Precious Plastic](https://preciousplastic.com) (which is where this all began), [ProjectKamp](https://projectkamp.com/) or [Story Hopper](https://story-hopper.com/). A platform to connect, educate and empower our global community (65K) to solve society's greatest challenges. Together. As One Army. 
 
-Install dependencies
-`yarn`
+## 🤖 &nbsp; Technologies
 
-Run
-`npm run start`
+### Frontend
 
-Note: Builds are currently tested on Chrome/Firefox. If your browser is not
-supported, then consider contributing :-)
+The platform is built in **React** and use [Mobx](https://mobx.js.org/index.html) for state management, [Typescript](https://www.typescriptlang.org/docs/handbook/basic-types.html) for typing and consistency, and [styled-components](https://www.styled-components.com/) for reusability and component based styling.
 
-## Getting Involved
+### Backend
 
-If you are interested joining this project please see the [contributing guidelines](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md)
+Our backend contains microservices in Node and is based on Firebase's Firestore to manage our database.
+You can find usefull links to learn more about these technologies [here](/CONTRIBUTING.md#ressources)
 
-This project is based on Create React App, associated documentation can be found [here](https://github.com/facebook/create-react-app)
+## 🤝 &nbsp; Contributions
 
-## Deployment
+Contributions, issues and feature requests are very welcome.
+Please make sure to read the [Contributing Guide](/CONTRIBUTING.md) before making a pull request.
 
-Master is our current development leading branch, and will autodeploy to the
-[development site](https://dev.onearmy.world/). When things are production
-ready, they will be pushed to the master branch which ends up on the [live
-site](https://onearmy.world/)
+## 🌟 &nbsp; Core Team
+
+If needed you can [drop us a line here](mailto:hello@preciousplastic.com?subject=contact%20from%20github) 👋
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+| [<img src="https://avatars0.githubusercontent.com/u/10515065?s=60&v=4" width="60px;"/><br /><sub><b>Chris Clarke</b></sub>](https://github.com/chrismclarke)<br />[💻](https://github.com/OneArmyWorld/onearmy/commits?author=chrismclarke "Code") | [<img src="https://avatars2.githubusercontent.com/u/4993215?s=60&v=4" width="60px;"/><br /><sub><b>Benjamin Gammaire</b></sub>](https://github.com/bengamma)<br />[💻](https://github.com/OneArmyWorld/onearmy/commits?author=BenGamma "Code") | [<img src="https://avatars0.githubusercontent.com/u/4350925?s=60&v=4" width="60px;"/><br /><sub><b>Ben Naylor</b></sub>](https://github.com/nzchicken)<br />[💻](https://github.com/OneArmyWorld/onearmy/commits?author=nzchicken "Code") |
+| :---: | :---: | :---: |
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->

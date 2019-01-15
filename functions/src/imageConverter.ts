@@ -5,14 +5,19 @@ import * as os from 'os';
 import * as fs from 'fs';
 
 const saveFileToTmpDir = async ({ bucket, name }) => {
-  const tmpFile = path.join(os.tmpdir(), name);
+  const tmpFileName = name.replace(/\//g, '_');
+  const tmpFile = path.join(os.tmpdir(), tmpFileName);
 
   await bucket.file(name).download({destination: tmpFile});
   return tmpFile;
 }
 
-const saveFile = async ({ bucket, filePath, name }) => {
-  await bucket.upload(filePath, { destination: name });
+const saveFile = async ({ bucket, filePath, name, metadata }) => {
+  const options = {
+    destination: name,
+    metadata: { metadata }
+  };
+  await bucket.upload(filePath, options);
   return;
 }
 
@@ -23,7 +28,9 @@ const optimiseImage = async ({ filePath }) => {
 
   const newFileName = path.normalize(path.format({ dir: fileDir, name: fileName + '_resized', ext: fileExt }));
 
-  await spawn('convert', [ filePath, '-resize 540x360', newFileName ]);
+  const process = await spawn('convert', [ filePath, '-quiet', '-resize', '540x360', newFileName ]);
+
+  process.childProcess.stderr.on('data', data => { console.error(data); });
 
   return newFileName;
 }
@@ -36,17 +43,21 @@ export const resizeImage = async (obj) => {
     return null;
   }
 
-  const bucket = admin.storage().bucket(bucketName);
+  try {
+    const bucket = admin.storage().bucket(bucketName);
 
-  const tmpFile = await saveFileToTmpDir({ bucket, name });
+    const tmpFile = await saveFileToTmpDir({ bucket, name });
 
-  await saveFile({ bucket, filePath: tmpFile, name: name + '.orig'});
+    await saveFile({ bucket, filePath: tmpFile, name: name + '.orig', metadata: { original: true }});
 
-  const convertedFile = await optimiseImage({ filePath: tmpFile });
+    const convertedFile = await optimiseImage({ filePath: tmpFile });
 
-  await saveFile({ bucket, filePath: convertedFile, name });
-  
-  fs.unlinkSync(tmpFile);
-  fs.unlinkSync(convertedFile);
+    await saveFile({ bucket, filePath: convertedFile, name, metadata: { resized: true } });
+
+    fs.unlinkSync(tmpFile);
+    fs.unlinkSync(convertedFile);
+  } catch(e) {
+    console.error(e);
+  }
   return;
 }

@@ -1,12 +1,9 @@
 import React from 'react'
-import './Header.scss'
 import {
   COMMUNITY_PAGES,
   COMMUNITY_PAGES_MORE,
   COMMUNITY_PAGES_PROFILE,
 } from 'src/pages'
-import { NavLink } from 'react-router-dom'
-import Button from '@material-ui/core/Button'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
@@ -14,7 +11,16 @@ import IconButton from '@material-ui/core/IconButton'
 import MailOutlinedIcon from '@material-ui/icons/MailOutlined'
 import { MdNotifications } from 'react-icons/md'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
-import Avatar from '@material-ui/core/Avatar'
+import {
+  Content,
+  LogoText,
+  Logo,
+  Links,
+  Profile,
+  ListButton,
+  LinkButton,
+  Avatar,
+} from './elements'
 
 interface IState {
   moreMenuAnchor: any
@@ -52,35 +58,27 @@ export class CommunityHeader extends React.Component<any, IState> {
   render() {
     const { moreMenuAnchor, profileMenuAnchor } = this.state
     return (
-      <div id="communityHeader" className="header__content">
-        <div className="header__logo-text">One Army</div>
-        <div style={{ position: 'relative' }}>
-          <img
-            className="header__logo-image"
-            src="https://pngimage.net/wp-content/uploads/2018/06/logo-placeholder-png.png"
-          />
-          <div className="community-badge">Community Placeholder</div>
-        </div>
-        <div className="header__nav-links">
+      <Content>
+        <LogoText>One Army</LogoText>
+        <Logo src="https://pngimage.net/wp-content/uploads/2018/06/logo-placeholder-png.png" />
+        <Links>
           {COMMUNITY_PAGES.map(page => (
-            <NavLink
+            <LinkButton
               className="nav-link"
               to={page.path}
               activeClassName="link-active"
               key={page.path}
             >
               {page.title}
-            </NavLink>
+            </LinkButton>
           ))}
-          <Button
+          <ListButton
             className="nav-link"
             variant="text"
             onClick={this.openMoreMenu}
-            // onMouseEnter={this.openMenu}
-            // onMouseLeave={this.closeMenu}
           >
             More
-          </Button>
+          </ListButton>
           <Menu
             open={moreMenuAnchor ? true : false}
             anchorEl={moreMenuAnchor}
@@ -91,20 +89,20 @@ export class CommunityHeader extends React.Component<any, IState> {
               <div>
                 {COMMUNITY_PAGES_MORE.map(page => (
                   <MenuItem onClick={this.closeMoreMenu} key={page.path}>
-                    <NavLink
+                    <LinkButton
                       className="nav-link"
                       to={page.path}
                       activeClassName="link-active"
                     >
                       {page.title}
-                    </NavLink>
+                    </LinkButton>
                   </MenuItem>
                 ))}
               </div>
             </ClickAwayListener>
           </Menu>
-        </div>
-        <div className="header__nav-buttons">
+        </Links>
+        <div>
           <IconButton component="span">
             <MailOutlinedIcon />
           </IconButton>
@@ -112,18 +110,14 @@ export class CommunityHeader extends React.Component<any, IState> {
             <MdNotifications />
           </IconButton>
         </div>
-        <div
-          className="profile__menu-container"
-          style={{ display: 'flex' }}
-          onClick={this.openProfileMenu}
-        >
+        <Profile onClick={this.openProfileMenu}>
           <Avatar
             alt="Remy Sharp"
             src="http://i.pravatar.cc/200"
             className="header__avatar"
           />
           <KeyboardArrowDownIcon />
-        </div>
+        </Profile>
         <Menu
           open={profileMenuAnchor ? true : false}
           anchorEl={profileMenuAnchor}
@@ -134,13 +128,13 @@ export class CommunityHeader extends React.Component<any, IState> {
             <div>
               {COMMUNITY_PAGES_PROFILE.map(page => (
                 <MenuItem onClick={this.closeProfileMenu} key={page.path}>
-                  <NavLink
+                  <LinkButton
                     className="nav-link"
                     to={page.path}
-                    activeClassName="link-active"
+                    activeClassName={'link-active'}
                   >
                     {page.title}
-                  </NavLink>
+                  </LinkButton>
                 </MenuItem>
               ))}
               <MenuItem onClick={this.closeProfileMenu}>Logout</MenuItem>
@@ -148,7 +142,7 @@ export class CommunityHeader extends React.Component<any, IState> {
             </div>
           </ClickAwayListener>
         </Menu>
-      </div>
+      </Content>
     )
   }
 }

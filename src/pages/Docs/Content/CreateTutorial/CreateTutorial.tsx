@@ -78,8 +78,7 @@ export class CreateTutorial extends React.PureComponent<
           .doc(formValues.id)
           .set(values)
         this.setState({ formSaved: true })
-        this.props.history.push('/docs/' + this.state.formValues.slug)
-        this.forceUpdate()
+        this.props.history.push('/docs/' + slug)
       } catch (error) {
         console.log('error while saving the tutorial')
       }
@@ -109,7 +108,16 @@ export class CreateTutorial extends React.PureComponent<
     console.log('formvalues', formValues)
     return (
       <div>
-        <Title variant="h4" component="h4">
+        <Button
+          text={'Back to documentation'}
+          to={`/docs/list`}
+          navback="true"
+          style={{
+            border: 'none',
+            marginTop: 10,
+          }}
+        />
+        <Title variant="h4" component="h4" style={{ marginTop: 0 }}>
           Create a documentation
         </Title>
         <Form

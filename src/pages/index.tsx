@@ -88,7 +88,11 @@ export class Routes extends React.Component<any, IState> {
       <div>
         <BrowserRouter>
           <Switch>
-            <Route component={this.state.displayPageComponent} />
+            {/* <Route component={this.state.displayPageComponent} /> */}
+            <Route
+              path="/docs"
+              render={() => <this.state.displayPageComponent nonav={true} />}
+            />
           </Switch>
         </BrowserRouter>
       </div>

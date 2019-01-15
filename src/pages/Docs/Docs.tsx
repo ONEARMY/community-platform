@@ -1,12 +1,15 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
+import logo from '../../assets/images/logo.png'
 
 import MainLayout from '../common/MainLayout/'
 import TutorialContent from './Content/Tutorial.content'
 import { DocStore } from 'src/stores/Docs/docs.store'
+import { withRouter } from 'react-router'
 
 interface IProps {
   docStore: DocStore
+  nonav: boolean
 }
 
 // We're connecting to the 'docStore' state object and will pass down through child compoennts
@@ -14,7 +17,7 @@ interface IProps {
 @inject('docStore')
 // Then we can use the observer component decorator to automatically tracks observables and re-renders on change
 @observer
-export class DocsPage extends React.Component<IProps, any> {
+class DocsPageClass extends React.Component<IProps, any> {
   constructor(props: any) {
     super(props)
   }
@@ -29,12 +32,22 @@ export class DocsPage extends React.Component<IProps, any> {
   }
 
   public render() {
-    const { activeTutorial, allTutorials } = this.props.docStore
+    const { nonav } = this.props
     return (
-      <TutorialContent
-        allTutorials={this.props.docStore.allTutorials}
-        activeTutorial={this.props.docStore.activeTutorial}
-      />
+      <div>
+        {nonav && (
+          <img
+            src={logo}
+            alt="precious plastic logo"
+            style={{ display: 'block', margin: '0 auto', width: '200px' }}
+          />
+        )}
+        <TutorialContent
+          allTutorials={this.props.docStore.allTutorials}
+          activeTutorial={this.props.docStore.activeTutorial}
+        />
+      </div>
     )
   }
 }
+export const DocsPage = withRouter(DocsPageClass)

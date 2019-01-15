@@ -1,7 +1,6 @@
 import React from 'react'
-import './Header.scss'
-import { CommunityHeader } from './CommunityHeader'
-import { PublicHeader } from './PublicHeader'
+import { CommunityHeader } from './CommunityHeader/CommunityHeader'
+import { PublicHeader } from './PublicHeader/PublicHeader'
 import AppBar from '@material-ui/core/AppBar'
 
 interface IState {

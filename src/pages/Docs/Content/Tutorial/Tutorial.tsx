@@ -9,6 +9,7 @@ import { ITutorialStep } from 'src/models/tutorial.models'
 import TutorialDescription from './TutorialDescription/TutorialDescription'
 import Step from './Step/Step'
 import Button from 'src/components/Button/Button'
+import { TopBtnContainer, BottomBtnContainer } from './elements'
 
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
@@ -87,26 +88,27 @@ export class Tutorial extends React.Component<
     const { tutorial, isLoading } = this.state
     if (tutorial) {
       return (
-        <div>
-          <Button
-            text={'Back to documentation'}
-            to={`/docs/list`}
-            navback="true"
-            style={{
-              border: 'none',
-            }}
-          />
+        <>
+          <TopBtnContainer>
+            <Button
+              text={'Back to documentation'}
+              to={`/docs/list`}
+              navback="true"
+            />
+          </TopBtnContainer>
           <TutorialDescription tutorial={tutorial} />
           {tutorial.steps.map((step: any, index: number) => (
             <Step step={step} key={index} stepindex={index} />
           ))}
-          <Button
-            text={'Back to documentation'}
-            to={`/docs/list`}
-            navback="true"
-            style={{}}
-          />
-        </div>
+          <BottomBtnContainer>
+            <Button
+              text={'Back to documentation'}
+              to={`/docs/list`}
+              navback="true"
+              style={{ margin: '0 auto' }}
+            />
+          </BottomBtnContainer>
+        </>
       )
     } else {
       return isLoading ? <LinearProgress /> : <div>Documentation not found</div>

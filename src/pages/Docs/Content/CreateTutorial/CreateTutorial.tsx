@@ -23,6 +23,7 @@ import {
   Title,
   TutorialForm,
   Background,
+  BackBtnContainer,
   DescriptionContainer,
   StepBackground,
   CoverImage,
@@ -108,15 +109,13 @@ export class CreateTutorial extends React.PureComponent<
     console.log('formvalues', formValues)
     return (
       <div>
-        <Button
-          text={'Back to documentation'}
-          to={`/docs/list`}
-          navback="true"
-          style={{
-            border: 'none',
-            marginTop: 10,
-          }}
-        />
+        <BackBtnContainer>
+          <Button
+            text={'Back to documentation'}
+            to={`/docs/list`}
+            navback="true"
+          />
+        </BackBtnContainer>
         <Title variant="h4" component="h4" style={{ marginTop: 0 }}>
           Create a documentation
         </Title>

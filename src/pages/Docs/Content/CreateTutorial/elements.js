@@ -53,6 +53,11 @@ export const CoverImage = styled.img `
     margin: 20px auto;
 `;
 
+export const BackBtnContainer = styled.div `
+    display: flex;
+    margin: 40px 140px 20px;
+`;
+
 export const Select = styled(Field)
 `
     border: 1px solid ${colors.grey};

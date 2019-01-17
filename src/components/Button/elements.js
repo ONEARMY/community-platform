@@ -7,7 +7,7 @@ const getBorder = ({
   basic
 }) => {
   if (basic) {
-    return `borner: 1px solid black;`;
+    return `border: 1px solid black;`;
   }
 
   return `border: none;`;

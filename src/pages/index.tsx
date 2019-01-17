@@ -24,7 +24,7 @@ export interface IPageMeta {
 
 export const COMMUNITY_PAGES: IPageMeta[] = [
   { path: '/news', component: NotFoundPage, title: 'Newsfeed' },
-  { path: '/docs', component: DocsPage, title: 'How-Tos' },
+  { path: '/docs', component: DocsPage, title: 'How-To' },
   { path: '/events', component: EventsPage, title: 'Events' },
 ]
 export const COMMUNITY_PAGES_MORE: IPageMeta[] = [

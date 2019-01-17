@@ -90,11 +90,7 @@ export class Tutorial extends React.Component<
       return (
         <>
           <TopBtnContainer>
-            <Button
-              text={'Back to documentation'}
-              to={`/docs/list`}
-              navback="true"
-            />
+            <Button text={'Back to how-to'} to={`/docs/list`} navback="true" />
           </TopBtnContainer>
           <TutorialDescription tutorial={tutorial} />
           {tutorial.steps.map((step: any, index: number) => (
@@ -102,7 +98,7 @@ export class Tutorial extends React.Component<
           ))}
           <BottomBtnContainer>
             <Button
-              text={'Back to documentation'}
+              text={'Back to how-to'}
               to={`/docs/list`}
               navback="true"
               style={{ margin: '0 auto' }}
@@ -111,7 +107,7 @@ export class Tutorial extends React.Component<
         </>
       )
     } else {
-      return isLoading ? <LinearProgress /> : <div>Documentation not found</div>
+      return isLoading ? <LinearProgress /> : <div>How-to not found</div>
     }
   }
 }

@@ -1,6 +1,9 @@
+[![Build Status](https://travis-ci.org/OneArmyWorld/onearmy.svg?branch=master)](https://travis-ci.org/OneArmyWorld/onearmy)
+[![style: styled-components](https://img.shields.io/badge/style-%F0%9F%92%85%20styled--components-orange.svg?colorB=daa357&colorA=db748e)](https://github.com/styled-components/styled-components)
+
 # 🌍 &nbsp; Onearmy
 
-Welcome to One Army! We are building a new platform to help unite people to support social causes, such as [Precious Plastic](https://preciousplastic.com) (which is where this all began), [ProjectKamp](https://projectkamp.com/) or [Story Hopper](https://story-hopper.com/). A platform to connect, educate and empower our global community (65K) to solve society's greatest challenges.
+Welcome to One Army! We are building a new platform to help unite people to support social causes, such as [Precious Plastic](https://preciousplastic.com) (which is where this all began), [ProjectKamp](https://projectkamp.com/) or [Story Hopper](https://story-hopper.com/). A platform to connect, educate and empower our global community (65K) to solve society's greatest challenges. Together. As One Army.
 
 ## 🤖 &nbsp; Technologies
 
@@ -11,7 +14,6 @@ The platform is built in **React** and use [Mobx](https://mobx.js.org/index.html
 ### Backend
 
 Our backend contains microservices in Node and is based on Firebase's Firestore to manage our database.
-
 You can find usefull links to learn more about these technologies [here](/CONTRIBUTING.md#ressources)
 
 ## 🤝 &nbsp; Contributions

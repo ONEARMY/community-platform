@@ -2,6 +2,12 @@ import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 import { DISCUSSIONS_MOCK } from 'src/mocks/discussions.mock'
 
+import MaxWidth from 'src/components/Layout/MaxWidth.js'
+import Margin from 'src/components/Layout/Margin.js'
+import FilterBar from 'src/pages/common/FilterBar/FilterBar'
+
+import { Content } from './elements'
+
 import { DocStore } from 'src/stores/Docs/docs.store'
 import { withRouter } from 'react-router'
 
@@ -26,9 +32,13 @@ class DiscussionsPageClass extends React.Component<IProps, any> {
 
   public render() {
     return (
-      <div>
-        <span>DISCUSSION</span>
-      </div>
+      <MaxWidth>
+        <Margin vertical={1.5}>
+          <Content>
+            <FilterBar />
+          </Content>
+        </Margin>
+      </MaxWidth>
     )
   }
 }

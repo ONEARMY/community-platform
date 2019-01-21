@@ -60,7 +60,7 @@ export default class Step extends React.PureComponent<any, any> {
             <StepDescription component="p">{step.text}</StepDescription>
             {step.images.length > 1
               ? this.renderMultipleImages(step)
-              : this.renderUniqueImage(step.images[0])}
+              : this.renderUniqueImage(step.images[0].downloadUrl)}
           </CardContent>
         </StepCard>
       </Container>

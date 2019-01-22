@@ -58,11 +58,11 @@ export class TutorialList extends React.Component<IProps, any> {
           variant="h4"
           component="h4"
         >
-          Documentation
+          How-To
         </Typography>
         <Button
           to={`/docs/create`}
-          text={'create tutorial'}
+          text={'create how-to'}
           addtutorial="true"
           style={{ margin: '50px auto', display: 'block' }}
         />
@@ -79,7 +79,6 @@ export class TutorialList extends React.Component<IProps, any> {
                       style={styles.link}
                     >
                       <Card
-                        className="tutorial-list__card"
                         style={{
                           borderRadius: '0px',
                           height: '100%',
@@ -100,7 +99,7 @@ export class TutorialList extends React.Component<IProps, any> {
                           <Typography gutterBottom variant="h5" component="h2">
                             {tutorial.tutorial_title}
                           </Typography>
-                          <div className="tutorial-list__card-description">
+                          <div>
                             <ClampLines
                               text={tutorial.tutorial_description}
                               lines={4}
@@ -144,7 +143,7 @@ export class TutorialList extends React.Component<IProps, any> {
           {allTutorials.length > 15 ? (
             <Button
               to={`/docs/create`}
-              text={'create tutorial'}
+              text={'create how-to'}
               addtutorial="true"
               style={{ margin: '50px auto', display: 'block' }}
             />

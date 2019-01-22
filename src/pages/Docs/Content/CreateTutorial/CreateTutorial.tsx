@@ -23,6 +23,7 @@ import {
   Title,
   TutorialForm,
   Background,
+  BackBtnContainer,
   DescriptionContainer,
   StepBackground,
   CoverImage,
@@ -108,17 +109,11 @@ export class CreateTutorial extends React.PureComponent<
     console.log('formvalues', formValues)
     return (
       <div>
-        <Button
-          text={'Back to documentation'}
-          to={`/docs/list`}
-          navback="true"
-          style={{
-            border: 'none',
-            marginTop: 10,
-          }}
-        />
+        <BackBtnContainer>
+          <Button text={'Back to how-to'} to={`/docs/list`} navback="true" />
+        </BackBtnContainer>
         <Title variant="h4" component="h4" style={{ marginTop: 0 }}>
-          Create a documentation
+          Create a How-To
         </Title>
         <Form
           onSubmit={this.onSubmit}
@@ -155,7 +150,7 @@ export class CreateTutorial extends React.PureComponent<
                         name="tutorial_title"
                         validate={required}
                         component={InputField}
-                        label="What is the title of your documentation ?"
+                        label="What is the title of your How-To ?"
                         placeholder="How to make XXX using YYY"
                       />
                       {v.cover_image && v.cover_image.downloadUrl ? (
@@ -182,7 +177,7 @@ export class CreateTutorial extends React.PureComponent<
                       )}
 
                       <Label
-                        text={'Write a short description for the documentation'}
+                        text={'Write a short description for the How-To'}
                         style={{ margin: '50px 0 10px' }}
                       />
                       <Field
@@ -215,9 +210,7 @@ export class CreateTutorial extends React.PureComponent<
                         placeholder="10"
                       />
                       <Label
-                        text={
-                          'How difficult to replicate is your documentation ?'
-                        }
+                        text={'How difficult to replicate is your How-To ?'}
                         style={{ margin: '50px 0 10px' }}
                       />
                       <Select name="difficulty_level" component="select">
@@ -226,7 +219,7 @@ export class CreateTutorial extends React.PureComponent<
                         <option value="difficult">difficult</option>
                       </Select>
                       <Label
-                        text={'File to support your documentation ? (20mb max)'}
+                        text={'File to support your How-To ? (20mb max)'}
                         style={{ margin: '50px 0 10px' }}
                       />
                       <FirebaseFileUploader

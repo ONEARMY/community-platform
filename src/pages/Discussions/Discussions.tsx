@@ -1,29 +1,13 @@
 import * as React from 'react'
-import moment from 'moment'
 import { inject, observer } from 'mobx-react'
 import { DISCUSSIONS_MOCK } from 'src/mocks/discussions.mock'
 
 import MaxWidth from 'src/components/Layout/MaxWidth.js'
 import Margin from 'src/components/Layout/Margin.js'
 import FilterBar from 'src/pages/common/FilterBar/FilterBar'
+import ListRow from 'src/pages/Discussions/ListRow/ListRow'
 
-import {
-  Content,
-  Main,
-  Avatar,
-  Post,
-  List,
-  Title,
-  TitleAndTagsContaier,
-  TagsContainer,
-  Tag,
-  InteractionNb,
-  UsefullCount,
-  ViewCount,
-  PostDate,
-  DiscussIcon,
-  QaIcon,
-} from './elements'
+import { Content, Main, List } from './elements'
 
 import { DocStore } from 'src/stores/Docs/docs.store'
 import { withRouter } from 'react-router'
@@ -47,14 +31,6 @@ class DiscussionsPageClass extends React.Component<IProps, any> {
     console.log('mocks:', DISCUSSIONS_MOCK)
   }
 
-  public durationSincePosted(postDate: string) {
-    // TODO : return the freshness, with minutes/hours/days etc
-    const formatedPostDate = moment(postDate)
-    const now: any = moment()
-    const duration = moment.duration(now.diff(formatedPostDate))
-    return Math.round(duration.as('years'))
-  }
-
   public render() {
     return (
       <MaxWidth>
@@ -65,34 +41,7 @@ class DiscussionsPageClass extends React.Component<IProps, any> {
               <Main alignItems="flex-start">
                 <List>
                   {DISCUSSIONS_MOCK.map((post, i) => (
-                    <Post key={i}>
-                      <Avatar src={post.avatar} alt="avatar" />
-                      <TitleAndTagsContaier>
-                        <Title href={'/discussions/post/' + post._id}>
-                          {post.postTitle}
-                        </Title>
-                        <TagsContainer>
-                          {post.tags.map((tag, j) => (
-                            <Tag key={j}>{tag}</Tag>
-                          ))}
-                        </TagsContainer>
-                      </TitleAndTagsContaier>
-                      <InteractionNb>
-                        {post.postType === 'discussion'
-                          ? post.commentNumber + ' comments'
-                          : post.commentNumber + ' answers'}
-                      </InteractionNb>
-                      <UsefullCount>{post.usefullCount}</UsefullCount>
-                      <ViewCount>{post.viewCount}</ViewCount>
-                      <PostDate>
-                        {this.durationSincePosted(post.date)} years
-                      </PostDate>
-                      {post.postType === 'discussion' ? (
-                        <DiscussIcon />
-                      ) : (
-                        <QaIcon />
-                      )}
-                    </Post>
+                    <ListRow post={post} key={i} />
                   ))}
                 </List>
               </Main>

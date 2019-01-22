@@ -6,6 +6,7 @@ import DevTools from 'mobx-react-devtools'
 import { DocsPage } from './Docs/Docs'
 import { HomePage } from './Home/Home'
 import { NotFoundPage } from './NotFound/NotFound'
+import { DiscussionsPage } from './Discussions/Discussions'
 import { TemplatePage } from './_Template/Template'
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import { EventsPage } from './Events/Events'
@@ -25,12 +26,12 @@ export interface IPageMeta {
 export const COMMUNITY_PAGES: IPageMeta[] = [
   { path: '/news', component: NotFoundPage, title: 'Newsfeed' },
   { path: '/docs', component: DocsPage, title: 'How-To' },
-  { path: '/events', component: EventsPage, title: 'Events' },
+  { path: '/discussions', component: DiscussionsPage, title: 'Discussions' },
 ]
 export const COMMUNITY_PAGES_MORE: IPageMeta[] = [
-  { path: '/discussions', component: NotFoundPage, title: 'Discussions' },
   { path: '/maps', component: NotFoundPage, title: 'Maps' },
   { path: '/discover', component: NotFoundPage, title: 'Discover' },
+  { path: '/events', component: EventsPage, title: 'Events' },
   { path: '/about', component: NotFoundPage, title: 'About' },
 ]
 export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [

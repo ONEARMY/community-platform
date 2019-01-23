@@ -7,7 +7,7 @@ import Margin from 'src/components/Layout/Margin.js'
 import FilterBar from 'src/pages/common/FilterBar/FilterBar'
 import ListRow from 'src/pages/Discussions/ListRow/ListRow'
 
-import { Content, Main, List } from './elements'
+import { Content, Main, ListHeader, PostCount, List, OrderBy } from './elements'
 
 import { DocStore } from 'src/stores/Docs/docs.store'
 import { withRouter } from 'react-router'
@@ -24,11 +24,41 @@ interface IProps {
 class DiscussionsPageClass extends React.Component<IProps, any> {
   constructor(props: any) {
     super(props)
+    this.state = {
+      posts: DISCUSSIONS_MOCK,
+    }
   }
 
   public async componentDidMount() {
     // load mocks
     console.log('mocks:', DISCUSSIONS_MOCK)
+  }
+
+  public orderListBy(orderType: string) {
+    let sortedList = []
+    switch (orderType) {
+      case 'repliesCount':
+        sortedList = this.state.posts.sort((a, b) => {
+          return b.commentCount - a.commentCount
+        })
+        this.setState({ posts: sortedList })
+        break
+      case 'usefulCount':
+        sortedList = this.state.posts.sort((a, b) => {
+          return b.usefullCount - a.usefullCount
+        })
+        this.setState({ posts: sortedList })
+        break
+      case 'viewsCount':
+        sortedList = this.state.posts.sort((a, b) => {
+          return b.viewCount - a.viewCount
+        })
+        this.setState({ posts: sortedList })
+        break
+      case 'date':
+        // TODO : order by date
+        break
+    }
   }
 
   public render() {
@@ -37,10 +67,25 @@ class DiscussionsPageClass extends React.Component<IProps, any> {
         <Margin vertical={1.5}>
           <Content>
             <FilterBar />
-            <Margin vertical={1.5}>
+            <Margin vertical={1.5} horizontal={1.5}>
+              <ListHeader>
+                <PostCount>Showing {DISCUSSIONS_MOCK.length} posts</PostCount>
+                <OrderBy onClick={() => this.orderListBy('repliesCount')}>
+                  Replies
+                </OrderBy>
+                <OrderBy onClick={() => this.orderListBy('usefulCount')}>
+                  Useful
+                </OrderBy>
+                <OrderBy onClick={() => this.orderListBy('viewsCount')}>
+                  Views
+                </OrderBy>
+                <OrderBy onClick={() => this.orderListBy('date')}>
+                  Freshness
+                </OrderBy>
+              </ListHeader>
               <Main alignItems="flex-start">
                 <List>
-                  {DISCUSSIONS_MOCK.map((post, i) => (
+                  {this.state.posts.map((post, i) => (
                     <ListRow post={post} key={i} />
                   ))}
                 </List>

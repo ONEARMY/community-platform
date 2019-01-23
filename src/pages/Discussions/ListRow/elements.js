@@ -4,7 +4,6 @@ import { MdRecordVoiceOver, MdQuestionAnswer } from 'react-icons/md'
 
 export const Post = styled.li`
   height: 100px;
-  margin: 0 25px;
   border-bottom: 1px grey solid;
   &:before {
     content: '';

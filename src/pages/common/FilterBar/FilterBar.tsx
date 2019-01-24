@@ -2,12 +2,13 @@ import * as React from 'react'
 
 import { Container } from './elements'
 import Margin from 'src/components/Layout/Margin.js'
+import Selector from './Selector'
 
 interface IProps {
-  prop: string
+  onChange: () => void
 }
 
-export class FilterBar extends React.Component<IProps> {
+export default class FilterBar extends React.Component<IProps> {
   constructor(props: IProps) {
     super(props)
   }
@@ -15,10 +16,31 @@ export class FilterBar extends React.Component<IProps> {
   public componentDidUpdate(prevProps: IProps) {
     // component updated
   }
+  public onProjectChange() {
+    console.log('project changed')
+    this.props.onChange()
+  }
+
+  public onCategoryChange() {
+    console.log('onCategoryChange')
+    this.props.onChange()
+  }
+
+  public onTagsChange() {
+    console.log('onTagsChange')
+    this.props.onChange()
+  }
 
   render() {
-    return <Margin className="filter" vertical={1.5} />
+    return (
+      <Container>
+        <Selector type="project" onChange={() => this.onProjectChange()} />
+        <Selector type="category" onChange={() => this.onCategoryChange()} />
+        <Selector type="tags" onChange={() => this.onTagsChange()} />
+        {/* <TagSelector/>
+      <SearchBar/>
+      <PostTypeSelector/> */}
+      </Container>
+    )
   }
 }
-
-export default Container

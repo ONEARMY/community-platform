@@ -12,7 +12,6 @@ import {
 } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
 import helpers from 'src/utils/helpers'
 import { TagsSelect } from 'src/pages/common/Tags'
-import { ISelectedTags } from 'src/models/tags.model'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 import { FirebaseFileUploaderField } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploaderField'
 import Button from 'src/components/Button/Button'
@@ -159,13 +158,8 @@ export class CreateTutorial extends React.PureComponent<
                           imagePreview
                           showDelete
                           onFileDeleted={form.mutators.clearCoverImage}
-                          // ref={el => this.addUploadRef(el, 'coverImage')}
                         />
                       ) : (
-                        // <CoverImage
-                        //   src={values.cover_image_url}
-                        //   alt={'cover image'}
-                        // />
                         <Field
                           name="cover_image"
                           component={FirebaseFileUploaderField}

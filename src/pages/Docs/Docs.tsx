@@ -2,7 +2,6 @@ import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 import logo from '../../assets/images/logo.png'
 
-import MainLayout from '../common/MainLayout/'
 import TutorialContent from './Content/Tutorial.content'
 import { DocStore } from 'src/stores/Docs/docs.store'
 import { withRouter } from 'react-router'

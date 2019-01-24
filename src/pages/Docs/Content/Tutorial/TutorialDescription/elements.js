@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography'
 export const Container = styled.div`
   max-width: 1200px;
   display: inline-block;
-  background-color: #ededed;
+  background-color: white;
   width: 75%;
   margin: 30px auto;
   position: relative;

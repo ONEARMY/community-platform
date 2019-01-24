@@ -6,6 +6,7 @@ export const Content = styled.div`
   margin-top: 5%;
   text-align: left;
   color: black;
+  /* background-color: white; */
 `
 
 export const Main = styled(Row)`
@@ -39,5 +40,5 @@ export const List = styled.ul`
   list-style: none;
   width: 100%;
   display: inline-block;
-  padding: 0;
+  background-color: white;
 `

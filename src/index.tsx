@@ -7,6 +7,7 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 import { Routes } from './pages'
 import { stores } from './stores'
 import { theme } from './themes/app.theme'
+import { GlobalStyle } from './themes/app.globalStyle.js'
 
 import './index.css'
 
@@ -19,6 +20,7 @@ ReactDOM.render(
     <MuiThemeProvider theme={theme}>
       <Routes />
       <SWUpdateNotification />
+      <GlobalStyle />
     </MuiThemeProvider>
   </Provider>,
   document.getElementById('root') as HTMLElement,

@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { Container } from './elements'
+import Margin from 'src/components/Layout/Margin.js'
 
 interface IProps {
   prop: string
@@ -16,7 +17,7 @@ export class FilterBar extends React.Component<IProps> {
   }
 
   render() {
-    return <Container>HELLO</Container>
+    return <Margin className="filter" vertical={1.5} />
   }
 }
 

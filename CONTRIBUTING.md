@@ -73,6 +73,13 @@ As this is a large project spread across many developers it is important that no
 
 We also expect code to follow standard good practice, such as sensible variable naming, informative comments and avoiding files large than a couple hundred lines of code (emphasis on usability and reusability).
 
+### 😖 Why haven't you used [insert favourite language/framework/convention here]
+As an open-source project most of our decisions up till now have been guided by the people writing the code and conversations with people in our community whose opinions we value and respect. Some things are by design as the result of lengthy discussion, others are just individual preference/no knowledge of alternatives. As we both want to encourage input from newer contributors but also avoid getting too bogged down in circular or repeated debates we encourage you to:
+
+1. Start with an observation - instead of asking 'do you use redux' take a look at the package and see for yourself. If you really want to delve deep search in the github issues or slack channel to see if the conversation has already been raised.
+2. Clearly state what you believe the benefits to the project would be - simply 'because I've used it before and like it' isn't good enough, do a small bit of research so that others don't have to so much and try to present a balanced argument for why we might want to/not want to use something
+3. Be willing to support implementation - any great idea or suggestion will likely have direct impact on many others contributing to the project. If there is something you feel strongly about you should first create a clean, clear demo of how it would work in practice, and be willing to provide additional guidance if called upon
+
 ## 💅 &nbsp; Visual style guide
 
 (More details coming soon)
@@ -88,7 +95,7 @@ We are always open to have more people involved. If you would like to contribute
 
 We ask this so that we can better understand how you might fit in with the rest of the team, and maximise your contributions. From here we will then connect you to the github repository as well as slack channel which we use to handle regular communication.
 
-## 📚 &nbsp; Ressources
+## 📚 &nbsp; Resources
 
 - https://www.udemy.com/react-redux/
   paid online course to cover most of the basics of React - it uses redux where we use mobx but rest is still very good

@@ -36,7 +36,7 @@ function ButtonComponent({ ...props }) {
     )
   }
 
-  if (props.to && props.addtutorial) {
+  if (props.to && props.addcontent) {
     return (
       <AddTutBtn {...props}>
         <Container>

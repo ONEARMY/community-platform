@@ -63,7 +63,7 @@ export class TutorialList extends React.Component<IProps, any> {
         <Button
           to={`/docs/create`}
           text={'create how-to'}
-          addtutorial="true"
+          addcontent="true"
           style={{ margin: '50px auto', display: 'block' }}
         />
         <React.Fragment>

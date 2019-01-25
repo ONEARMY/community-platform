@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { Container } from './elements'
-import Margin from 'src/components/Layout/Margin.js'
+import Button from 'src/components/Button/Button'
 import Selector from './Selector'
 
 interface IProps {
@@ -37,9 +37,12 @@ export default class FilterBar extends React.Component<IProps> {
         <Selector type="project" onChange={() => this.onProjectChange()} />
         <Selector type="category" onChange={() => this.onCategoryChange()} />
         <Selector type="tags" onChange={() => this.onTagsChange()} />
-        {/* <TagSelector/>
-      <SearchBar/>
-      <PostTypeSelector/> */}
+        <Button
+          to={`/post/create`}
+          addcontent="true"
+          text={'create discussion'}
+          style={{ display: 'inherit', float: 'right', margin: '25px' }}
+        />
       </Container>
     )
   }

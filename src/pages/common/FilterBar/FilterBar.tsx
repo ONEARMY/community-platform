@@ -1,7 +1,6 @@
 import * as React from 'react'
 
-import { Container } from './elements'
-import Button from 'src/components/Button/Button'
+import { Container, CreateBtn, LinkToCreate } from './elements'
 import Selector from './Selector'
 
 interface IProps {
@@ -37,12 +36,15 @@ export default class FilterBar extends React.Component<IProps> {
         <Selector type="project" onChange={() => this.onProjectChange()} />
         <Selector type="category" onChange={() => this.onCategoryChange()} />
         <Selector type="tags" onChange={() => this.onTagsChange()} />
-        <Button
+        {/* <Button
           to={`/post/create`}
           addcontent="true"
           text={'create discussion'}
           style={{ display: 'inherit', float: 'right', margin: '25px' }}
-        />
+        /> */}
+        <LinkToCreate to={'discussions/create'}>
+          <CreateBtn icon={'add'}>create discussion</CreateBtn>
+        </LinkToCreate>
       </Container>
     )
   }

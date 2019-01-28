@@ -3,7 +3,7 @@ import * as React from 'react'
 import { Switch, Route, BrowserRouter } from 'react-router-dom'
 import DevTools from 'mobx-react-devtools'
 
-import { DocsPage } from './Docs/Docs'
+import { HowtoPage } from './Howto/Howto'
 import { HomePage } from './Home/Home'
 import { NotFoundPage } from './NotFound/NotFound'
 import { DiscussionsPage } from './Discussions/Discussions'
@@ -25,7 +25,7 @@ export interface IPageMeta {
 
 export const COMMUNITY_PAGES: IPageMeta[] = [
   { path: '/news', component: NotFoundPage, title: 'Newsfeed' },
-  { path: '/docs', component: DocsPage, title: 'How-To' },
+  { path: '/how-to', component: HowtoPage, title: 'How-To' },
   { path: '/discussions', component: DiscussionsPage, title: 'Discussions' },
 ]
 export const COMMUNITY_PAGES_MORE: IPageMeta[] = [
@@ -91,7 +91,7 @@ export class Routes extends React.Component<any, IState> {
           <Switch>
             {/* <Route component={this.state.displayPageComponent} /> */}
             <Route
-              path="/docs"
+              path="/how-to"
               render={() => <this.state.displayPageComponent nonav={true} />}
             />
           </Switch>
@@ -121,7 +121,7 @@ export class Routes extends React.Component<any, IState> {
   private getSubdomainComponent(subdomain: string) {
     switch (subdomain) {
       case 'documentation':
-        return DocsPage
+        return HowtoPage
       default:
         return NotFoundPage
     }

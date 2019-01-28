@@ -1,4 +1,4 @@
-import { ITutorial } from '../models/tutorial.models'
+import { IHowto } from '../models/howto.models'
 import { IFirebaseUploadInfo } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
 
 const exampleUploadImage: IFirebaseUploadInfo = {
@@ -10,7 +10,7 @@ const exampleUploadImage: IFirebaseUploadInfo = {
   updated: '',
 }
 
-export const TUTORIALS_MOCK: ITutorial[] = [
+export const TUTORIALS_MOCK: IHowto[] = [
   {
     cover_image: exampleUploadImage,
     tutorial_title: 'Tutorial 1',

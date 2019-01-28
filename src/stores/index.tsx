@@ -1,4 +1,4 @@
-import { DocStore } from './Docs/docs.store'
+import { HowtoStore } from './Howto/howto.store'
 import { UserStore } from './User/user.store'
 import { TemplateStore } from './_Template/template.store'
 import { TagsStore } from './Tags/tags.store'
@@ -7,7 +7,7 @@ import { EventStore } from './Events/events.store'
 
 // the following stores are passed into a top level app provider and can be accessed through @inject
 export const stores = {
-  docStore: new DocStore(),
+  howtoStore: new HowtoStore(),
   userStore: new UserStore(),
   templateStore: new TemplateStore(),
   tagsStore: new TagsStore(),
@@ -16,7 +16,7 @@ export const stores = {
 }
 
 export interface IStores {
-  docStore: DocStore
+  howtoStore: HowtoStore
   userStore: UserStore
   templateStore: TemplateStore
   tagsStore: TagsStore

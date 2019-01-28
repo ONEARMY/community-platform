@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
-import { Tutorial } from './Tutorial/Tutorial'
-import { CreateTutorial } from './CreateTutorial/CreateTutorial'
-import { TutorialList } from './TutorialList/TutorialList'
-import { ITutorial } from 'src/models/models'
+import { Howto } from './Howto/Howto'
+import { CreateHowto } from './CreateHowto/CreateHowto'
+import { HowtoList } from './HowtoList/HowtoList'
+import { IHowto } from 'src/models/models'
 import { observer } from 'mobx-react'
 /*
   This component handles routing for tutorial sub-pages and components. More info on the router can be found here:
@@ -24,8 +24,8 @@ import { observer } from 'mobx-react'
 */
 
 interface IContentProps {
-  allTutorials: ITutorial[]
-  activeTutorial?: ITutorial
+  allHowtos: IHowto[]
+  activeHowto?: IHowto
 }
 
 // if using the @withRouter decorator for a named export you might have to force typescript
@@ -37,19 +37,17 @@ export default class TutorialContent extends React.Component<any, any> {
     super(props)
   }
   public render = () => {
-    const allTutorials = this.props.allTutorials
+    const allHowtos = this.props.allHowtos
     return (
       <Switch>
         <Route
-          path="/docs/list"
-          render={props => (
-            <TutorialList {...props} allTutorials={allTutorials} />
-          )}
+          path="/how-to/list"
+          render={props => <HowtoList {...props} allHowtos={allHowtos} />}
         />
-        <Route path="/docs/create" component={CreateTutorial} />
-        <Route path="/docs/:slug" render={props => <Tutorial {...props} />} />
+        <Route path="/how-to/create" component={CreateHowto} />
+        <Route path="/how-to/:slug" render={props => <Howto {...props} />} />
 
-        <Redirect to="/docs/list" />
+        <Redirect to="/how-to/list" />
       </Switch>
     ) as React.ReactNode
   }

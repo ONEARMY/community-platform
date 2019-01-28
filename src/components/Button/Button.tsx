@@ -1,23 +1,25 @@
 import React from 'react'
+
 import {
-  MdFileDownload,
-  MdAdd,
-  MdCheck,
-  MdFileUpload,
-  MdArrowBack,
-} from 'react-icons/md'
-import {
+  Button,
   AddTutBtn,
   AddStepBtn,
   SaveTutBtn,
   LoadButton,
   BackBtn,
-  Button,
   InnerButtonText,
   Container,
   ModalValidation,
   ModalCancel,
 } from './elements'
+
+import {
+  MdFileDownload,
+  MdFileUpload,
+  MdAdd,
+  MdCheck,
+  MdArrowBack,
+} from 'react-icons/md'
 
 const iconStyle = {
   width: '25px',
@@ -36,7 +38,7 @@ function ButtonComponent({ ...props }) {
     )
   }
 
-  if (props.to && props.addtutorial) {
+  if (props.to && props.addcontent) {
     return (
       <AddTutBtn {...props}>
         <Container>

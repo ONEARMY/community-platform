@@ -41,7 +41,7 @@ export default class ListRow extends React.Component<IProps, IState> {
   }
 
   public durationSincePosted(postDate: string) {
-    const daysSince: int = differenceInDays(new Date(), postDate)
+    const daysSince: number = differenceInDays(new Date(), postDate)
 
     return `${daysSince} days`
   }

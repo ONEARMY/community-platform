@@ -5,6 +5,7 @@ import Selector from './Selector'
 
 interface IProps {
   onChange: () => void
+  section: string
 }
 
 export default class FilterBar extends React.Component<IProps> {
@@ -31,19 +32,14 @@ export default class FilterBar extends React.Component<IProps> {
   }
 
   render() {
+    const { section } = this.props
     return (
       <Container>
         <Selector type="project" onChange={() => this.onProjectChange()} />
         <Selector type="category" onChange={() => this.onCategoryChange()} />
         <Selector type="tags" onChange={() => this.onTagsChange()} />
-        {/* <Button
-          to={`/post/create`}
-          addcontent="true"
-          text={'create discussion'}
-          style={{ display: 'inherit', float: 'right', margin: '25px' }}
-        /> */}
-        <LinkToCreate to={'discussions/create'}>
-          <CreateBtn icon={'add'}>create discussion</CreateBtn>
+        <LinkToCreate to={section + '/create'}>
+          <CreateBtn>create {section}</CreateBtn>
         </LinkToCreate>
       </Container>
     )

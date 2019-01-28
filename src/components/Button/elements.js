@@ -23,6 +23,10 @@ const styles = css`
 const baseButton = css`
   text-transform: uppercase;
   text-decoration: none;
+  height: 40px;
+  background-color: white;
+  border-color: black;
+  border-radius: 5px;
   font-size: 0.8em;
   color: black;
   display: flex;

@@ -13,7 +13,7 @@ interface IBtnProps {
 
 export const Button = (props: IBtnProps) => (
   <StyledButton {...props}>
-    <Icon size={props.size} glyph={props.icon} />
+    {props.icon && <Icon glyph={props.icon} />}
     <Label>{props.children}</Label>
   </StyledButton>
 )

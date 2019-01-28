@@ -70,7 +70,10 @@ class DiscussionsPageClass extends React.Component<IProps, any> {
       <MaxWidth>
         <Margin vertical={1.5}>
           <Content>
-            <FilterBar onChange={() => this.updateResultsList()} />
+            <FilterBar
+              section={'discussion'}
+              onChange={() => this.updateResultsList()}
+            />
             <Margin vertical={1.5} horizontal={1.5}>
               <ListHeader>
                 <PostCount>Showing {DISCUSSIONS_MOCK.length} posts</PostCount>

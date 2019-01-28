@@ -8,7 +8,16 @@ import { shallow } from 'enzyme'
 describe('ListRow', () => {
   it('Should calculate duration since posted', () => {
     const sutPost = {
-      date: subDays(new Date(), 3),
+      _id: 'test id',
+      index: 0,
+      avatar: 'test avatar',
+      tags: [],
+      date: subDays(new Date(), 3).toString(),
+      postTitle: 'test title',
+      commentCount: 0,
+      viewCount: 0,
+      usefullCount: 0,
+      postType: 'article',
     }
     const wrapper = shallow(<ListRow post={sutPost} />)
 

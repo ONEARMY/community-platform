@@ -11,59 +11,55 @@ import {
   CoverImg,
   TutorialInfo,
 } from './elements'
-import Button from 'src/components/Button/Button'
-import { ITutorial } from 'src/models/models'
+import { IHowto } from 'src/models/models'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 
 interface IProps {
-  tutorial: ITutorial
+  howto: IHowto
 }
 
-export default class TutorialDescription extends React.PureComponent<
-  IProps,
-  any
-> {
+export default class HowtoDescription extends React.PureComponent<IProps, any> {
   constructor(props: any) {
     super(props)
   }
   public render() {
-    const { tutorial } = this.props
+    const { howto } = this.props
     return (
       <Container>
         <ContainerLeft>
           <Padding>
             <Typography variant="h4" component="h4">
-              {tutorial.tutorial_title}
+              {howto.tutorial_title}
             </Typography>
             <TutorialInfo component="p">
-              {tutorial.tutorial_description}
+              {howto.tutorial_description}
             </TutorialInfo>
             <TutorialInfo component="p">
-              <b>Workspace : {tutorial.workspace_name}</b>
+              <b>Workspace : {howto.workspace_name}</b>
             </TutorialInfo>
             <TutorialInfo component="p">
-              <b>{tutorial.steps.length} Steps</b>
+              <b>{howto.steps.length} Steps</b>
             </TutorialInfo>
             <TutorialInfo component="p">
-              <b>Cost : {tutorial.tutorial_cost}</b>
+              <b>Cost : {howto.tutorial_cost}</b>
             </TutorialInfo>
             <TutorialInfo component="p">
-              <b>Difficulty : {tutorial.difficulty_level}</b>
+              <b>Difficulty : {howto.difficulty_level}</b>
             </TutorialInfo>
             <TutorialInfo component="p">
-              <b>Time : {tutorial.tutorial_time}</b>
+              <b>Time : {howto.tutorial_time}</b>
             </TutorialInfo>
             <div>
-              {Object.keys(tutorial.tags).map(k => (
+              {Object.keys(howto.tags).map(k => (
                 <TagDisplay tagKey={k} key={k} />
               ))}
             </div>
-            {tutorial.tutorial_files.length > 0 && (
+            {howto.tutorial_files.length > 0 && (
               <TutorialInfo component="p">
                 <b>Files : </b>
               </TutorialInfo>
             )}
-            {tutorial.tutorial_files.map(file => (
+            {howto.tutorial_files.map(file => (
               <UploadedFile
                 file={file}
                 key={file.downloadUrl}
@@ -75,9 +71,9 @@ export default class TutorialDescription extends React.PureComponent<
         <ContainerRight>
           <CoverImg
             src={
-              tutorial.cover_image_url
-                ? tutorial.cover_image_url
-                : tutorial.cover_image.downloadUrl
+              howto.cover_image_url
+                ? howto.cover_image_url
+                : howto.cover_image.downloadUrl
             }
             alt="tutorial cover"
           />

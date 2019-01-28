@@ -13,7 +13,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert'
 import CommentIcon from '@material-ui/icons/Comment'
 import TurnedInIcon from '@material-ui/icons/TurnedIn'
 import { theme } from '../../../../themes/app.theme'
-import { ITutorial } from 'src/models/models'
+import { IHowto } from 'src/models/models'
 
 import Button from 'src/components/Button/Button'
 
@@ -42,15 +42,15 @@ const styles: any = {
 }
 
 interface IProps {
-  allTutorials: ITutorial[]
+  allHowtos: IHowto[]
 }
-export class TutorialList extends React.Component<IProps, any> {
+export class HowtoList extends React.Component<IProps, any> {
   constructor(props: any) {
     super(props)
   }
 
   public render() {
-    const { allTutorials } = this.props
+    const { allHowtos } = this.props
     return (
       <div>
         <Typography
@@ -61,21 +61,21 @@ export class TutorialList extends React.Component<IProps, any> {
           How-To
         </Typography>
         <Button
-          to={`/docs/create`}
+          to={`/how-to/create`}
           text={'create how-to'}
           addcontent="true"
           style={{ margin: '50px auto', display: 'block' }}
         />
         <React.Fragment>
           <div style={styles.layout}>
-            {allTutorials.length === 0 ? (
+            {allHowtos.length === 0 ? (
               <LinearProgress />
             ) : (
               <Grid container spacing={40}>
-                {allTutorials.map((tutorial: ITutorial, index: number) => (
+                {allHowtos.map((howto: IHowto, index: number) => (
                   <Grid item key={index} xs={4}>
                     <Link
-                      to={`/docs/${encodeURIComponent(tutorial.slug)}`}
+                      to={`/how-to/${encodeURIComponent(howto.slug)}`}
                       style={styles.link}
                     >
                       <Card
@@ -89,25 +89,25 @@ export class TutorialList extends React.Component<IProps, any> {
                         <CardMedia
                           style={styles.cardMedia}
                           image={
-                            tutorial.cover_image
-                              ? tutorial.cover_image.downloadUrl
-                              : tutorial.cover_image_url
+                            howto.cover_image
+                              ? howto.cover_image.downloadUrl
+                              : howto.cover_image_url
                           } // eslint-disable-line max-len
                           title="Image title"
                         />
                         <CardContent style={styles.cardContent}>
                           <Typography gutterBottom variant="h5" component="h2">
-                            {tutorial.tutorial_title}
+                            {howto.tutorial_title}
                           </Typography>
                           <div>
                             <ClampLines
-                              text={tutorial.tutorial_description}
+                              text={howto.tutorial_description}
                               lines={4}
                               ellipsis="..."
                               className="custom-class"
                             />
                           </div>
-                          <Typography>by {tutorial.workspace_name}</Typography>
+                          <Typography>by {howto.workspace_name}</Typography>
                         </CardContent>
                         <CardActions>
                           <Typography>PRECIOUS PLASTIC</Typography>
@@ -140,9 +140,9 @@ export class TutorialList extends React.Component<IProps, any> {
               </Grid>
             )}
           </div>
-          {allTutorials.length > 15 ? (
+          {allHowtos.length > 15 ? (
             <Button
-              to={`/docs/create`}
+              to={`/how-to/create`}
               text={'create how-to'}
               addtutorial="true"
               style={{ margin: '50px auto', display: 'block' }}

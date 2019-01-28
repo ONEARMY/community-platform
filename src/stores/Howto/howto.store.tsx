@@ -1,15 +1,15 @@
 import { observable, action } from 'mobx'
 import { db } from '../../utils/firebase'
-import { ITutorial } from 'src/models/models'
+import { IHowto } from 'src/models/models'
 
-export class DocStore {
+export class HowtoStore {
   // we have two property relating to docs that can be observed
   @observable
-  public activeTutorial: ITutorial | undefined
+  public activeHowto: IHowto | undefined
   @observable
-  public allTutorials: ITutorial[] = []
+  public allHowtos: IHowto[] = []
 
-  // call getDocList to query 'tutorials' from db and map response to docs observable
+  // call getDocList to query 'Howtos' from db and map response to docs observable
   @action
   public async getDocList() {
     const ref = await db
@@ -17,7 +17,7 @@ export class DocStore {
       .orderBy('_created', 'desc')
       .get()
 
-    this.allTutorials = ref.docs.map(doc => doc.data() as ITutorial)
+    this.allHowtos = ref.docs.map(doc => doc.data() as IHowto)
   }
   @action
   public async getDocBySlug(slug: string) {
@@ -26,11 +26,11 @@ export class DocStore {
       .where('slug', '==', slug)
       .limit(1)
     const collection = await ref.get()
-    const activeTutorial =
+    const activeHowto =
       collection.docs.length > 0
-        ? (collection.docs[0].data() as ITutorial)
+        ? (collection.docs[0].data() as IHowto)
         : undefined
-    this.activeTutorial = activeTutorial
-    return activeTutorial
+    this.activeHowto = activeHowto
+    return activeHowto
   }
 }

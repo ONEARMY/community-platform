@@ -3,7 +3,7 @@ import { RouteComponentProps } from 'react-router'
 import { Form, Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
-import { ITutorial, ITutorialFormInput } from 'src/models/tutorial.models'
+import { IHowto, IHowtoFormInput } from 'src/models/howto.models'
 import { db } from 'src/utils/firebase'
 import { TUTORIAL_TEMPLATE_DATA } from './TutorialTemplate'
 import {
@@ -30,7 +30,7 @@ import {
 } from './elements'
 
 export interface IState {
-  formValues: ITutorialFormInput
+  formValues: IHowtoFormInput
   formSaved: boolean
   _docID: string
   _uploadPath: string
@@ -39,7 +39,7 @@ export interface IState {
 
 const required = (value: any) => (value ? undefined : 'Required')
 
-export class CreateTutorial extends React.PureComponent<
+export class CreateHowto extends React.PureComponent<
   RouteComponentProps<any>,
   IState
 > {
@@ -58,14 +58,14 @@ export class CreateTutorial extends React.PureComponent<
     }
   }
 
-  public onSubmit = async (formValues: ITutorialFormInput) => {
+  public onSubmit = async (formValues: IHowtoFormInput) => {
     if (!formValues.cover_image) {
       alert('Please provide a cover image before saving your tutorial')
     } else {
       const timestamp = new Date()
       const slug = helpers.stripSpecialCharacters(formValues.tutorial_title)
       // convert data to correct types and populate metadata
-      const values: ITutorial = {
+      const values: IHowto = {
         ...this.castFormValuesToCorrectTypes(formValues),
         slug,
         cover_image: formValues.cover_image as IFirebaseUploadInfo,
@@ -85,7 +85,7 @@ export class CreateTutorial extends React.PureComponent<
     }
   }
 
-  public validate = async (formValues: ITutorialFormInput) => {
+  public validate = async (formValues: IHowtoFormInput) => {
     // TODO: validate cover image exists
     // if (this.state.formValues.cover_image_url === '') {
     // alert('Please provide a cover image before saving your tutorial')
@@ -95,7 +95,7 @@ export class CreateTutorial extends React.PureComponent<
   // By default all tutorial form input fields come as strings. We want to cast to the
   // correct data types if this ever becomes more complex could use
   // https://medium.freecodecamp.org/how-to-write-powerful-schemas-in-javascript-490da6233d37
-  public castFormValuesToCorrectTypes(values: ITutorialFormInput) {
+  public castFormValuesToCorrectTypes(values: IHowtoFormInput) {
     const formattedValues = {
       ...values,
       tutorial_cost: Number(values.tutorial_cost),
@@ -132,7 +132,7 @@ export class CreateTutorial extends React.PureComponent<
             form,
             invalid,
           }) => {
-            const v = values as ITutorial
+            const v = values as IHowto
             return (
               <FormContainer>
                 <TutorialForm onSubmit={handleSubmit}>

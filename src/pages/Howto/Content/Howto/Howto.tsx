@@ -1,15 +1,15 @@
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 import LinearProgress from '@material-ui/core/LinearProgress'
-import { ITutorial } from 'src/models/models'
+import { IHowto } from 'src/models/models'
 import { db } from 'src/utils/firebase'
 import { inject } from 'mobx-react'
-import { DocStore } from 'src/stores/Docs/docs.store'
-import { ITutorialStep } from 'src/models/tutorial.models'
-import TutorialDescription from './TutorialDescription/TutorialDescription'
+import { HowtoStore } from 'src/stores/Howto/howto.store'
+import HowtoDescription from './HowtoDescription/HowtoDescription'
 import Step from './Step/Step'
 import Button from 'src/components/Button/Button'
 import { TopBtnContainer, BottomBtnContainer } from './elements'
+import { IHowtoStep } from 'src/models/howto.models'
 
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
@@ -18,21 +18,21 @@ interface IRouterCustomParams {
   slug: string
 }
 interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
-  docStore: DocStore
+  howtoStore: HowtoStore
 }
 interface IState {
-  tutorial?: ITutorial
+  howto?: IHowto
   isLoading: boolean
 }
-@inject('docStore')
-export class Tutorial extends React.Component<
+@inject('howtoStore')
+export class Howto extends React.Component<
   RouteComponentProps<IRouterCustomParams>,
   IState
 > {
   constructor(props: any) {
     super(props)
     this.state = {
-      tutorial: undefined,
+      howto: undefined,
       isLoading: true,
     }
   }
@@ -43,9 +43,9 @@ export class Tutorial extends React.Component<
 
   public async componentWillMount() {
     const slug = this.props.match.params.slug
-    const doc = await this.injected.docStore.getDocBySlug(slug)
+    const doc = await this.injected.howtoStore.getDocBySlug(slug)
     this.setState({
-      tutorial: doc,
+      howto: doc,
       isLoading: false,
     })
   }
@@ -57,11 +57,11 @@ export class Tutorial extends React.Component<
       .limit(1)
     const collection = await ref.get()
     return collection.docs.length > 0
-      ? (collection.docs[0].data() as ITutorial)
+      ? (collection.docs[0].data() as IHowto)
       : undefined
   }
 
-  public renderMultipleImages(step: ITutorialStep) {
+  public renderMultipleImages(step: IHowtoStep) {
     const preloadedImages: any[] = []
     for (const image of step.images) {
       const imageObj = new Image()
@@ -85,21 +85,25 @@ export class Tutorial extends React.Component<
     )
   }
   public render() {
-    const { tutorial, isLoading } = this.state
-    if (tutorial) {
+    const { howto, isLoading } = this.state
+    if (howto) {
       return (
         <>
           <TopBtnContainer>
-            <Button text={'Back to how-to'} to={`/docs/list`} navback="true" />
+            <Button
+              text={'Back to how-to'}
+              to={`/how-to/list`}
+              navback="true"
+            />
           </TopBtnContainer>
-          <TutorialDescription tutorial={tutorial} />
-          {tutorial.steps.map((step: any, index: number) => (
+          <HowtoDescription howto={howto} />
+          {howto.steps.map((step: any, index: number) => (
             <Step step={step} key={index} stepindex={index} />
           ))}
           <BottomBtnContainer>
             <Button
               text={'Back to how-to'}
-              to={`/docs/list`}
+              to={`/how-to/list`}
               navback="true"
               style={{ margin: '0 auto' }}
             />

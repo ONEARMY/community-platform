@@ -1,6 +1,6 @@
-import { ITutorialFormInput } from 'src/models/tutorial.models'
+import { IHowtoFormInput } from 'src/models/howto.models'
 
-export const TUTORIAL_TEMPLATE_DATA: ITutorialFormInput = {
+export const TUTORIAL_TEMPLATE_DATA: IHowtoFormInput = {
   tutorial_description: '',
   tutorial_title: '',
   tutorial_time: '',

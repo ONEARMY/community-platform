@@ -9,16 +9,14 @@ import ListRow from 'src/pages/Discussions/ListRow/ListRow'
 
 import { Content, Main, ListHeader, PostCount, List, OrderBy } from './elements'
 
-import { DocStore } from 'src/stores/Docs/docs.store'
+import { HowtoStore } from 'src/stores/Howto/howto.store'
 import { withRouter } from 'react-router'
 
 interface IProps {
-  docStore: DocStore
+  howtoStore: HowtoStore
 }
 
-// We're connecting to the 'docStore' state object and will pass down through child compoennts
-// First we use the @inject decorator to bind to the docStore state
-@inject('docStore')
+// @inject('howtoStore')
 // Then we can use the observer component decorator to automatically tracks observables and re-renders on change
 @observer
 class DiscussionsPageClass extends React.Component<IProps, any> {

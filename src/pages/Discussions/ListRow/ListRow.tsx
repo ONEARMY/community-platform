@@ -1,5 +1,5 @@
 import * as React from 'react'
-import moment from 'moment'
+import differenceInDays from 'date-fns/difference_in_days'
 
 import {
   Avatar,
@@ -41,11 +41,9 @@ export default class ListRow extends React.Component<IProps, IState> {
   }
 
   public durationSincePosted(postDate: string) {
-    // TODO : return the freshness, with minutes/hours/days etc
-    const formatedPostDate = moment(postDate)
-    const now: any = moment()
-    const duration = moment.duration(now.diff(formatedPostDate))
-    return Math.round(duration.as('years'))
+    const daysSince: number = differenceInDays(new Date(), postDate)
+
+    return `${daysSince} days`
   }
 
   public render() {
@@ -56,9 +54,7 @@ export default class ListRow extends React.Component<IProps, IState> {
         <TitleAndTagsContaier>
           <Title href={'/discussions/post/' + post._id}>{post.postTitle}</Title>
           <TagsContainer>
-            {post.tags.map((tag, j) => (
-              <Tag key={j}>{tag}</Tag>
-            ))}
+            {post.tags && post.tags.map((tag, j) => <Tag key={j}>{tag}</Tag>)}
           </TagsContainer>
         </TitleAndTagsContaier>
         <InteractionNb>
@@ -68,7 +64,7 @@ export default class ListRow extends React.Component<IProps, IState> {
         </InteractionNb>
         <UsefullCount>{post.usefullCount}</UsefullCount>
         <ViewCount>{post.viewCount}</ViewCount>
-        <PostDate>{this.durationSincePosted(post.date)} years</PostDate>
+        <PostDate>{this.durationSincePosted(post.date)}</PostDate>
         {post.postType === 'discussion' ? <DiscussIcon /> : <QaIcon />}
       </Post>
     )

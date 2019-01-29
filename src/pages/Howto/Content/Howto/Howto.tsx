@@ -7,9 +7,9 @@ import { inject } from 'mobx-react'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
 import Step from './Step/Step'
-import Button from 'src/components/Button/Button'
-import { TopBtnContainer, BottomBtnContainer } from './elements'
+import { BackButtonTop, BackButtonBottom } from '../elements'
 import { IHowtoStep } from 'src/models/howto.models'
+import Link from 'react-router-dom/Link'
 
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
@@ -89,25 +89,18 @@ export class Howto extends React.Component<
     if (howto) {
       return (
         <>
-          <TopBtnContainer>
-            <Button
-              text={'Back to how-to'}
-              to={`/how-to/list`}
-              navback="true"
-            />
-          </TopBtnContainer>
+          <Link to={'/how-to/list'}>
+            <BackButtonTop icon={'arrow-back'}>Back to how-to</BackButtonTop>
+          </Link>
           <HowtoDescription howto={howto} />
           {howto.steps.map((step: any, index: number) => (
             <Step step={step} key={index} stepindex={index} />
           ))}
-          <BottomBtnContainer>
-            <Button
-              text={'Back to how-to'}
-              to={`/how-to/list`}
-              navback="true"
-              style={{ margin: '0 auto' }}
-            />
-          </BottomBtnContainer>
+          <Link to={'/how-to/list'}>
+            <BackButtonBottom icon={'arrow-back'}>
+              Back to how-to
+            </BackButtonBottom>
+          </Link>
         </>
       )
     } else {

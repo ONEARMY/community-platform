@@ -3,7 +3,6 @@ import CardContent from '@material-ui/core/CardContent'
 import Dialog from '@material-ui/core/Dialog'
 import { FieldArray } from 'react-final-form-arrays'
 import { Field } from 'react-final-form'
-import Button from 'src/components/Button/Button'
 import { TextArea, InputField } from 'src/components/Form/Fields'
 
 import {
@@ -16,6 +15,8 @@ import {
   DeleteIcon,
   DialogText,
   DialogButtons,
+  CancelButton,
+  ConfirmButton,
 } from './elements.js'
 
 import { FirebaseFileUploader } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
@@ -142,21 +143,23 @@ class Step extends Component<IProps, IState> {
             {'Are you sure to delete this step ?'}
           </DialogText>
           <DialogButtons>
-            <Button
-              text={'cancel'}
-              modalcancel
+            <CancelButton
+              border
               onClick={() => {
                 this.handleModaleDeleteStepClose()
               }}
-            />
-            <Button
-              modalvalidation
-              text={'yes'}
+            >
+              cancel
+            </CancelButton>
+            <ConfirmButton
+              icon={'check'}
               onClick={() => {
                 onDelete(index)
                 this.handleModaleDeleteStepClose()
               }}
-            />
+            >
+              yes
+            </ConfirmButton>
           </DialogButtons>
         </Dialog>
       </Container>

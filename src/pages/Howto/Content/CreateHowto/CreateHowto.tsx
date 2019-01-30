@@ -100,7 +100,7 @@ export class CreateHowto extends React.PureComponent<
   public castFormValuesToCorrectTypes(values: IHowtoFormInput) {
     const formattedValues = {
       ...values,
-      tutorial_cost: Number(values.tutorial_cost),
+      tutorial_cost: parseFloat(values.tutorial_cost.toString()),
     }
     return formattedValues
   }

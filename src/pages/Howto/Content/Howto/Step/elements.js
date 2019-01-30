@@ -37,4 +37,5 @@ export const StepDescription = styled(Typography)`
 
 export const StepImage = styled.img`
   max-width: 500px;
+  margin-bottom: 40px;
 `

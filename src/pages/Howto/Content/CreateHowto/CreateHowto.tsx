@@ -80,7 +80,7 @@ export class CreateHowto extends React.PureComponent<
           .doc(formValues.id)
           .set(values)
         this.setState({ formSaved: true })
-        this.props.history.push('/docs/' + slug)
+        this.props.history.push('/how-to/' + slug)
       } catch (error) {
         console.log('error while saving the tutorial')
       }
@@ -202,7 +202,7 @@ export class CreateHowto extends React.PureComponent<
                         name="tutorial_cost"
                         validate={required}
                         component={InputField}
-                        label="How much does it cost (roughly in €)?"
+                        label="How much does it cost roughly (€)?"
                         placeholder="10"
                       />
                       <Label

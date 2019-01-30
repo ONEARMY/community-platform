@@ -41,7 +41,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
               <b>{howto.steps.length} Steps</b>
             </TutorialInfo>
             <TutorialInfo component="p">
-              <b>Cost : {howto.tutorial_cost}</b>
+              <b>Cost : {howto.tutorial_cost} €</b>
             </TutorialInfo>
             <TutorialInfo component="p">
               <b>Difficulty : {howto.difficulty_level}</b>

@@ -39,7 +39,7 @@ export default class FilterBar extends React.Component<IProps> {
         <Selector type="category" onChange={() => this.onCategoryChange()} />
         <Selector type="tags" onChange={() => this.onTagsChange()} />
         <LinkToCreate to={section + '/create'}>
-          <CreateBtn>create {section}</CreateBtn>
+          <CreateBtn border>create {section}</CreateBtn>
         </LinkToCreate>
       </Container>
     )

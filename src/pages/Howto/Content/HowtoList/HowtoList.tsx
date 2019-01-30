@@ -15,7 +15,9 @@ import TurnedInIcon from '@material-ui/icons/TurnedIn'
 import { theme } from '../../../../themes/app.theme'
 import { IHowto } from 'src/models/models'
 
-import Button from 'src/components/Button/Button'
+import { CreateButton } from './elements'
+
+import { Button } from 'src/components/Button'
 
 const styles: any = {
   layout: {
@@ -60,12 +62,9 @@ export class HowtoList extends React.Component<IProps, any> {
         >
           How-To
         </Typography>
-        <Button
-          to={`/how-to/create`}
-          text={'create how-to'}
-          addcontent="true"
-          style={{ margin: '50px auto', display: 'block' }}
-        />
+        <Link to={'/how-to/create'}>
+          <CreateButton icon={'add'}>create how-to</CreateButton>
+        </Link>
         <React.Fragment>
           <div style={styles.layout}>
             {allHowtos.length === 0 ? (
@@ -141,12 +140,9 @@ export class HowtoList extends React.Component<IProps, any> {
             )}
           </div>
           {allHowtos.length > 15 ? (
-            <Button
-              to={`/how-to/create`}
-              text={'create how-to'}
-              addtutorial="true"
-              style={{ margin: '50px auto', display: 'block' }}
-            />
+            <Link to={'/how-to/create'}>
+              <CreateButton icon={'add'}>create how-to</CreateButton>
+            </Link>
           ) : null}
         </React.Fragment>
       </div>

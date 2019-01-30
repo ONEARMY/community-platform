@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import Typography from '@material-ui/core/Typography'
 import { Field } from 'react-final-form'
+import { Button } from 'src/components/Button'
 
 import colors from 'src/themes/colors'
 
@@ -50,11 +51,6 @@ export const CoverImage = styled.img`
   margin: 20px auto;
 `
 
-export const BackBtnContainer = styled.div`
-  display: flex;
-  margin: 40px 140px 20px;
-`
-
 export const Select = styled(Field)`
   border: 1px solid ${colors.grey};
   margin: 0 auto;
@@ -63,4 +59,22 @@ export const Select = styled(Field)`
   background: white;
   width: 40%;
   height: 45px;
+`
+
+export const AddStepButton = styled(Button)`
+  background-color: ${colors.yellow};
+  width: 300px;
+  height: 90px;
+  margin: 60px auto;
+`
+
+export const SubmitButton = styled(Button)`
+  background-color: ${colors.green};
+  width: 100%;
+  height: 90px;
+  color: white;
+  font-size: 1.1em;
+  &:disabled {
+    cursor: not-allowed;
+  }
 `

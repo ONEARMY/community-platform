@@ -5,10 +5,10 @@ import Icon from 'src/components/Icons'
 import { StyledButton, Label } from './elements'
 
 interface IBtnProps {
-  size?: 'small' | 'regular' | 'big'
   icon?: string
   color?: string
   children?: any
+  border?: boolean
 }
 
 export const Button = (props: IBtnProps) => (

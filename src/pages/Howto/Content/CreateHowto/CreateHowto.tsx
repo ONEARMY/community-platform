@@ -14,7 +14,6 @@ import helpers from 'src/utils/helpers'
 import { TagsSelect } from 'src/pages/common/Tags'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 import { FirebaseFileUploaderField } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploaderField'
-import Button from 'src/components/Button/Button'
 import { InputField, Label, TextArea } from 'src/components/Form/Fields'
 import { Step } from './Step/Step'
 import {
@@ -22,12 +21,15 @@ import {
   Title,
   TutorialForm,
   Background,
-  BackBtnContainer,
   DescriptionContainer,
   StepBackground,
   CoverImage,
   Select,
+  AddStepButton,
+  SubmitButton,
 } from './elements'
+import Link from 'react-router-dom/Link'
+import { BackButtonTop } from '../elements'
 
 export interface IState {
   formValues: IHowtoFormInput
@@ -108,9 +110,9 @@ export class CreateHowto extends React.PureComponent<
     console.log('formvalues', formValues)
     return (
       <div>
-        <BackBtnContainer>
-          <Button text={'Back to how-to'} to={`/docs/list`} navback="true" />
-        </BackBtnContainer>
+        <Link to={'/how-to/list'}>
+          <BackButtonTop icon={'arrow-back'}>Back to how-to</BackButtonTop>
+        </Link>
         <Title variant="h4" component="h4" style={{ marginTop: 0 }}>
           Create a How-To
         </Title>
@@ -261,10 +263,8 @@ export class CreateHowto extends React.PureComponent<
                               _uploadPath={this.state._uploadPath}
                             />
                           ))}
-                          <Button
-                            text={'Add step'}
-                            addstep
-                            style={{ margin: '60px auto', display: 'block' }}
+                          <AddStepButton
+                            icon={'add'}
                             onClick={() => {
                               fields.push({
                                 title: '',
@@ -272,16 +272,19 @@ export class CreateHowto extends React.PureComponent<
                                 images: [],
                               })
                             }}
-                          />
+                          >
+                            add step
+                          </AddStepButton>
                         </div>
                       )}
                     </FieldArray>
-                    <Button
+                    <SubmitButton
                       type="submit"
-                      text={'Save'}
-                      saveTut
+                      icon={'check'}
                       disabled={submitting || invalid}
-                    />
+                    >
+                      Save
+                    </SubmitButton>
                   </StepBackground>
                 </TutorialForm>
               </FormContainer>

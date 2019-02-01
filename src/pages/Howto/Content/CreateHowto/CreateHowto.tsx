@@ -40,6 +40,7 @@ export interface IState {
 }
 
 const required = (value: any) => (value ? undefined : 'Required')
+const isNumber = (value: any) => (!isNaN(Number(value)) ? false : 'Number is required')
 
 export class CreateHowto extends React.PureComponent<
   RouteComponentProps<any>,
@@ -68,7 +69,7 @@ export class CreateHowto extends React.PureComponent<
       const slug = helpers.stripSpecialCharacters(formValues.tutorial_title)
       // convert data to correct types and populate metadata
       const values: IHowto = {
-        ...this.castFormValuesToCorrectTypes(formValues),
+        ...formValues,
         slug,
         cover_image: formValues.cover_image as IFirebaseUploadInfo,
         _created: timestamp,
@@ -97,13 +98,13 @@ export class CreateHowto extends React.PureComponent<
   // By default all tutorial form input fields come as strings. We want to cast to the
   // correct data types if this ever becomes more complex could use
   // https://medium.freecodecamp.org/how-to-write-powerful-schemas-in-javascript-490da6233d37
-  public castFormValuesToCorrectTypes(values: IHowtoFormInput) {
-    const formattedValues = {
-      ...values,
-      tutorial_cost: parseFloat(values.tutorial_cost.toString()),
-    }
-    return formattedValues
-  }
+  // public castFormValuesToCorrectTypes(values: IHowtoFormInput) {
+  //   const formattedValues = {
+  //     ...values,
+  //     tutorial_cost: parseFloat(values.tutorial_cost),
+  //   }
+  //   return formattedValues
+  // }
 
   public render() {
     const { formValues } = this.state
@@ -200,10 +201,10 @@ export class CreateHowto extends React.PureComponent<
                       />
                       <Field
                         name="tutorial_cost"
-                        validate={required}
+                        validate={required && isNumber}
                         component={InputField}
                         label="How much does it cost roughly (€)?"
-                        placeholder="10"
+                        // placeholder="10"
                       />
                       <Label
                         text={'How difficult to replicate is your How-To ?'}

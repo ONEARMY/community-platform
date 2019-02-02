@@ -27,7 +27,7 @@ export interface IHowtoFormInput {
   tutorial_description: string
   difficulty_level: 'easy' | 'medium' | 'difficult'
   tutorial_time: string
-  tutorial_cost: number | string
+  tutorial_cost: any
   tutorial_extern_file_url: string
   tutorial_files: IFirebaseUploadInfo[]
   steps: IHowtoStep[]

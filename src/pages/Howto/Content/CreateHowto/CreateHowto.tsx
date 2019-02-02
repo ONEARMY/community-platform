@@ -40,7 +40,15 @@ export interface IState {
 }
 
 const required = (value: any) => (value ? undefined : 'Required')
-const isNumber = (value: any) => (!isNaN(Number(value)) ? false : 'Number is required')
+const isNumber = (value: any) => {
+  if (!value) {
+    return 'Required'
+  }
+  if (isNaN(Number(value))) {
+    return 'Number is required'
+  }
+  return
+}
 
 export class CreateHowto extends React.PureComponent<
   RouteComponentProps<any>,
@@ -71,6 +79,7 @@ export class CreateHowto extends React.PureComponent<
       const values: IHowto = {
         ...formValues,
         slug,
+        tutorial_cost: Number(formValues.tutorial_cost),
         cover_image: formValues.cover_image as IFirebaseUploadInfo,
         _created: timestamp,
         _modified: timestamp,
@@ -201,10 +210,10 @@ export class CreateHowto extends React.PureComponent<
                       />
                       <Field
                         name="tutorial_cost"
-                        validate={required && isNumber}
+                        validate={isNumber}
                         component={InputField}
                         label="How much does it cost roughly (€)?"
-                        // placeholder="10"
+                        placeholder="10"
                       />
                       <Label
                         text={'How difficult to replicate is your How-To ?'}

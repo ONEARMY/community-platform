@@ -1,5 +1,5 @@
 import React from 'react'
-
+import Linkify from 'react-linkify'
 import CardContent from '@material-ui/core/CardContent'
 
 import {
@@ -12,62 +12,38 @@ import {
   StepImage,
 } from './elements'
 import { IHowtoStep } from 'src/models/howto.models'
+import {IFirebaseUploadInfo} from "../../../../common/FirebaseFileUploader/FirebaseFileUploader";
 
-export default class Step extends React.PureComponent<any, any> {
-  constructor(props: any) {
-    super(props)
-  }
+interface IProps {
+  step: IHowtoStep,
+  stepindex: number,
+}
 
-  public renderImages(step: IHowtoStep) {
-    // If we have multiple images
-    if (step.images.length > 1) {
-      const preloadedImages: any[] = []
-      // Preload images and add them to preloadedImages array
-      for (const image of step.images) {
-        const imageObj = new Image()
-        imageObj.src = image.downloadUrl
-        preloadedImages.push({
-          src: imageObj.src,
-        })
-      }
-      // Return the <img> element from preloaded images
-      return preloadedImages.map((image: any, index: number) =>
-        index !== 1 ? (
-          <StepImage src={image.src} key={index} />
-        ) : (
-          <StepImage
-            style={{ margin: '20px auto' }}
-            src={image.src}
-            key={index}
-          />
-        ),
-      )
-      // else if only one image
-    } else if (step.images.length === 1) {
-      return <StepImage src={step.images[0].downloadUrl} />
-    } else {
-      return null
-    }
-  }
+export default class Step extends React.PureComponent<IProps> {
+  renderImages = (images: IFirebaseUploadInfo[]) => (
+      images.map((image: any, index: number) => (
+          <StepImage src={image.downloadUrl} key={index}/>
+      ))
+  );
 
-  public render() {
-    const { step, stepindex } = this.props
-
+  render() {
     return (
-      <Container>
-        <StepCard>
-          <StepHeader>
-            <StepIndex variant="h5">Step {stepindex + 1}</StepIndex>
-          </StepHeader>
-          <CardContent>
-            <StepTitle variant="h5" component="h2">
-              {step.title}
-            </StepTitle>
-            <StepDescription component="p">{step.text}</StepDescription>
-            {this.renderImages(step)}
-          </CardContent>
-        </StepCard>
-      </Container>
+        <Container>
+          <StepCard>
+            <StepHeader>
+              <StepIndex variant="h5">STEP {this.props.stepindex + 1}</StepIndex>
+            </StepHeader>
+            <CardContent>
+              <StepTitle variant="h5" component="h2">
+                {this.props.step.title}
+              </StepTitle>
+              <StepDescription component="p">
+                <Linkify>{this.props.step.text}</Linkify>
+              </StepDescription>
+              {this.renderImages(this.props.step.images)}
+            </CardContent>
+          </StepCard>
+        </Container>
     )
   }
 }

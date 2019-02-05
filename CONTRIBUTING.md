@@ -8,6 +8,7 @@
 4. Fork the project, or make a new feature branch from the master branch
 5. Do your magic, and make sure your git branch is up to date
 6. Make a pull request back to our master branch
+7. We review contributors' pull requests on tuesday (sometimes earlier 🤫)
 
 Note: If you can’t find anything in our todo list that you can help with, it’s probably because we haven’t defined it yet. There’s lots of stuff to do, so if you think you can help out, let us know and we’ll find you something.
 

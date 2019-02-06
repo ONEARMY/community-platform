@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography'
 import Card from '@material-ui/core/Card'
 import { MdDelete } from 'react-icons/md'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import { DialogActions } from '@material-ui/core'
+import DialogActions from '@material-ui/core/DialogActions'
 import { Button } from 'src/components/Button'
 
 export const StepHeader = styled.div`

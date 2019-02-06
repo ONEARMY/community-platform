@@ -116,6 +116,7 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
         <UploadBtn
           icon={'upload'}
           onClick={() => this.triggerFileUploaderClick()}
+          type="button"
         >
           {this.props.buttonText}
           <div ref={(input: any) => (this.fileInputRef = input)}>

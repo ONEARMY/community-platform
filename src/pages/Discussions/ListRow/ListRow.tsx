@@ -12,7 +12,6 @@ import {
   InteractionNb,
   UsefullCount,
   ViewCount,
-
   PostDate,
   DiscussIcon,
   QaIcon,

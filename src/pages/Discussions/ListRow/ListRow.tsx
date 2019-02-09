@@ -55,32 +55,32 @@ export default class ListRow extends React.Component<IProps, IState> {
 
   public render() {
     const { post } = this.props
-      return (
-        <Post>
-          <Avatar src={post.avatar} alt="avatar"/>
-          <TitleAndTagsContaier>
+    return (
+      <Post>
+        <Avatar src={post.avatar} alt="avatar" />
+        <TitleAndTagsContaier>
             <Title
               href={'/discussions/post/' + post._id}
               target="_blank"
               onClick={() => this.postViewReactGA(post._id)}>
               {post.postTitle}
             </Title>
-            <TagsContainer>
-              {post.tags && post.tags.map((tag, j) => <Tag key={j}>{tag}</Tag>)}
-            </TagsContainer>
-          </TitleAndTagsContaier>
-          <InteractionNb>
-            {post.postType === 'discussion'
-              ? post.commentCount + ' comments'
-              : post.commentCount + ' answers'}
-          </InteractionNb>
-          <UsefullCount>{post.usefullCount}</UsefullCount>
-          {/*<Count isViewCounter={true} firebaseHost={FIREBASE_CONFIG.databaseURL}*/}
-          {/*firebaseResourceId={'post-' + post._id + '-viewCount'}/>*/}
-          <ViewCount>{post.viewCount}</ViewCount>
-          <PostDate>{this.durationSincePosted(post.date)}</PostDate>
-          {post.postType === 'discussion' ? <DiscussIcon/> : <QaIcon/>}
-        </Post>
-      )
-    }
+          <TagsContainer>
+            {post.tags && post.tags.map((tag, j) => <Tag key={j}>{tag}</Tag>)}
+          </TagsContainer>
+        </TitleAndTagsContaier>
+        <InteractionNb>
+          {post.postType === 'discussion'
+            ? post.commentCount + ' comments'
+            : post.commentCount + ' answers'}
+        </InteractionNb>
+        <UsefullCount>{post.usefullCount}</UsefullCount>
+        {/*<Count isViewCounter={true} firebaseHost={FIREBASE_CONFIG.databaseURL}*/}
+        {/*firebaseResourceId={'post-' + post._id + '-viewCount'}/>*/}
+        <ViewCount>{post.viewCount}</ViewCount>
+        <PostDate>{this.durationSincePosted(post.date)}</PostDate>
+        {post.postType === 'discussion' ? <DiscussIcon /> : <QaIcon />}
+      </Post>
+    )
+  }
 }

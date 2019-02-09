@@ -41,6 +41,9 @@ if (productionSites.indexOf(window.location.host) > -1) {
 }
 export const FIREBASE_CONFIG = config
 
+// todo: remove when figure out the issue with google authorization
+export const JWT_ACCESS_TOKEN = 'ya29.GmCrBgp-DnzfXQxoa4tiLXtYnkSjZavmXe3osq3tVgdfLYG7SwCt4bJ7NrKL6NoMrh9HAm8H14m33HXvHTqvWDloOdALIzL9bhfcLRbXh7O5sDX-9NelGWiDQP48xHHwX1s'
+
 let analyticsConfig
 if (process.env.NODE_ENV === 'production') {
   analyticsConfig = {
@@ -53,4 +56,5 @@ if (process.env.NODE_ENV === 'production') {
     viewId: '189456245'
   }
 }
+
 export const GOOGLE_ANALYTICS_CONFIG = analyticsConfig

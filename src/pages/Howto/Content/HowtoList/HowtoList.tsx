@@ -13,7 +13,7 @@ import CommentIcon from '@material-ui/icons/Comment'
 import TurnedInIcon from '@material-ui/icons/TurnedIn'
 import { IHowto } from 'src/models/models'
 
-import { TagDisplay } from 'src/pages/common/Tags';
+import { TagDisplay } from 'src/pages/common/Tags'
 
 const styles: any = {
   cards: {
@@ -73,6 +73,7 @@ export class HowtoList extends React.Component<IProps, any> {
   renderLabelContent(howto) {
     return (
       <CardContent style={styles.labelContent}>
+      {/* placeholder for tags */}
       <div>
         {Object.keys(howto.tags).map(k => (
           <TagDisplay tagKey={k} key={k} />
@@ -84,6 +85,7 @@ export class HowtoList extends React.Component<IProps, any> {
 
   renderCardActions(howto) {
     // use passed in howto for user info, other relevant props
+    // TODO: use designed icon buttons when available
     return (
       <CardActions>
       <Typography>username and coverimage</Typography>

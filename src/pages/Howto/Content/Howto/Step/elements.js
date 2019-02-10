@@ -33,8 +33,10 @@ export const StepTitle = styled(Typography)`
 
 export const StepDescription = styled(Typography)`
   margin: 20px 25px 30px !important;
+  word-wrap: break-word;
 `
 
 export const StepImage = styled.img`
   max-width: 500px;
+  margin-bottom: 40px;
 `

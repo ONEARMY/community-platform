@@ -1,16 +1,15 @@
 import * as React from 'react'
-import {
-  Typography,
-  Button,
-  CssBaseline,
-  Paper,
-  Avatar,
-  FormControl,
-  InputLabel,
-  FormControlLabel,
-  Checkbox,
-  Input,
-} from '@material-ui/core'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import Paper from '@material-ui/core/Paper'
+import Avatar from '@material-ui/core/Avatar'
+import FormControl from '@material-ui/core/FormControl'
+import InputLabel from '@material-ui/core/InputLabel'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Checkbox from '@material-ui/core/Checkbox'
+import Input from '@material-ui/core/Input'
+
 import Lock from '@material-ui/icons/Lock'
 import { loginFormSubmit } from '../../../utils/user-migration'
 import { auth } from '../../../utils/firebase'

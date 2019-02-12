@@ -1,5 +1,4 @@
-import { IUser } from '../models/models'
-import { ILegacyUser } from 'src/models/user.models'
+import { ILegacyUser, IUser } from 'src/models/user.models'
 
 export const MOCK_USER: IUser = {
   verified: true,

@@ -13,11 +13,11 @@ import MoreVertIcon from '@material-ui/icons/MoreVert'
 import CommentIcon from '@material-ui/icons/Comment'
 import TurnedInIcon from '@material-ui/icons/TurnedIn'
 import { theme } from '../../../../themes/app.theme'
-import { IHowto } from 'src/models/models'
 
 import { CreateButton } from './elements'
 
 import { Button } from 'src/components/Button'
+import { IHowto } from 'src/models/howto.models'
 
 const styles: any = {
   layout: {

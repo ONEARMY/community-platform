@@ -3,8 +3,8 @@ import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
 import { Howto } from './Howto/Howto'
 import { CreateHowto } from './CreateHowto/CreateHowto'
 import { HowtoList } from './HowtoList/HowtoList'
-import { IHowto } from 'src/models/models'
 import { observer } from 'mobx-react'
+import { IHowto } from 'src/models/howto.models'
 /*
   This component handles routing for tutorial sub-pages and components. More info on the router can be found here:
   https://reacttraining.com/react-router/web/guides/basic-components
@@ -30,7 +30,7 @@ interface IContentProps {
 
 // if using the @withRouter decorator for a named export you might have to force typescript
 // to register the render output 'as React.ReactNode' as seen below
-@withRouter
+@(withRouter as any)
 @observer
 export default class TutorialContent extends React.Component<any, any> {
   constructor(props: IContentProps) {

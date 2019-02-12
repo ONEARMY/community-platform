@@ -1,4 +1,4 @@
-import { IProject } from './models'
+import { IProject } from './project.models'
 
 export interface IUserState {
   user?: IUser

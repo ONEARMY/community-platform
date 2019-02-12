@@ -1,4 +1,4 @@
-import { ITag } from 'src/models/models'
+import { ITag } from 'src/models/tags.model'
 
 export const TAGS_MOCK: ITag[] = [
   {

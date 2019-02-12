@@ -6,9 +6,9 @@ and user properties to LoginButton and LoginModal components
 import * as React from 'react'
 import { auth, IFirebaseUser, db } from '../../../utils/firebase'
 import { LoginComponent } from './Login'
-import { IUser } from '../../../models/models'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
+import { IUser } from 'src/models/user.models'
 
 // internal state properties
 interface IInternalState {

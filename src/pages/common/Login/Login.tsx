@@ -5,7 +5,7 @@ import Lock from '@material-ui/icons/Lock'
 import LockOpen from '@material-ui/icons/LockOpen'
 import { LoginFormComponent } from './LoginForm'
 import { auth } from '../../../utils/firebase'
-import { IUser } from '../../../models/models'
+import { IUser } from 'src/models/user.models'
 
 const styles: any = {
   container: {

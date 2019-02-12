@@ -3,7 +3,7 @@
 
 # 🌍 &nbsp; Onearmy
 
-Welcome to One Army! We are building a new platform to help unite people to support social causes, such as [Precious Plastic](https://preciousplastic.com) (which is where this all began), [ProjectKamp](https://projectkamp.com/) or [Story Hopper](https://story-hopper.com/). A platform to connect, educate and empower our global community (65K) to solve society's greatest challenges. Together. As One Army.
+Welcome to One Army! We are building a new platform to help unite people to support social & environmental causes, such as [Precious Plastic](https://preciousplastic.com) (which is where this all began), [ProjectKamp](https://projectkamp.com/) or [Story Hopper](https://story-hopper.com/). A platform to connect, educate and empower our global community (65K) to solve society's greatest challenges. Together. As One Army.
 
 ## 🤖 &nbsp; Technologies
 

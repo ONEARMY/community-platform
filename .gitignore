@@ -24,3 +24,6 @@ yarn-error.log*
 
 # IntelliJ
 /.idea
+
+# Private settings
+/src/config/config.json

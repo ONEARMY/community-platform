@@ -13,7 +13,7 @@ import { HowtoStore } from 'src/stores/Howto/howto.store'
 import { withRouter } from 'react-router'
 import Axios from 'axios'
 import { GOOGLE_ANALYTICS_CONFIG} from '../../config/config'
-import { getAccessToken } from 'functions/src/gAPIJwtAccessToken'
+import { getAccessToken } from 'src/utils/gAPIJwtAccessToken'
 
 interface IProps {
   howtoStore: HowtoStore

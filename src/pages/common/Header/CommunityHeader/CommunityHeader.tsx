@@ -25,17 +25,20 @@ import {
 
 interface IState {
   moreMenuAnchor: any
-  profileMenuAnchor: any,
-  labelText: string
+  profileMenuAnchor: any
 }
 
-export class CommunityHeader extends React.Component<any, IState> {
+interface IProps {
+  title: string
+  description: string
+}
+
+export class CommunityHeader extends React.Component<IProps, IState> {
   constructor(props) {
     super(props)
     this.state = {
       moreMenuAnchor: null,
       profileMenuAnchor: null,
-      labelText: this.getInitialState()
     }
   }
 
@@ -45,14 +48,6 @@ export class CommunityHeader extends React.Component<any, IState> {
     this.setState({
       moreMenuAnchor: e.currentTarget,
     })
-  }
-
-  getInitialState = () => {
-    let labelText  = localStorage.getItem('labelText');
-    if(labelText === null){
-      labelText=''
-    }
-    return labelText;
   }
 
   openProfileMenu = (e: React.MouseEvent) => {
@@ -67,104 +62,105 @@ export class CommunityHeader extends React.Component<any, IState> {
     this.setState({ profileMenuAnchor: null })
   }
 
-  handleClick = (page) => {
-    localStorage.setItem('labelText', page.title);
-    this.setState({labelText: page.title})
-  };
-
-
   render() {
-    const { moreMenuAnchor, profileMenuAnchor, labelText} = this.state
+    const { moreMenuAnchor, profileMenuAnchor } = this.state
     return (
       <div>
-          <Content>
-            <LogoText>One Army</LogoText>
-            <Logo src="https://pngimage.net/wp-content/uploads/2018/06/logo-placeholder-png.png" />
-            <Links>
-              {COMMUNITY_PAGES.map(page => (
-                <LinkButton
-                  className="nav-link"
-                  to={page.path}
-                  activeClassName="link-active"
-                  key={page.path}
-                  onClick={this.handleClick.bind(this, page)}
-                >
-                  {page.title}
-                </LinkButton>
-              ))}
-              <ListButton
+        <Content>
+          <LogoText>One Army</LogoText>
+          <Logo src="https://pngimage.net/wp-content/uploads/2018/06/logo-placeholder-png.png" />
+          <Links>
+            {COMMUNITY_PAGES.map(page => (
+              <LinkButton
                 className="nav-link"
-                variant="text"
-                onClick={this.openMoreMenu}
+                to={page.path}
+                activeClassName="link-active"
+                key={page.path}
               >
-                More
-              </ListButton>
-              <Menu
-                open={moreMenuAnchor ? true : false}
-                anchorEl={moreMenuAnchor}
-                className="nav__more-menu"
-                style={{ marginTop: '3em' }}
-              >
-                <ClickAwayListener onClickAway={this.closeMoreMenu}>
-                  <div>
-                    {COMMUNITY_PAGES_MORE.map(page => (
-                      <MenuItem onClick={this.closeMoreMenu} key={page.path}>
-                        <LinkButton
-                          className="nav-link"
-                          to={page.path}
-                          activeClassName="link-active"
-                          onClick={this.handleClick.bind(this, page)}
-                        >
-                          {page.title}
-                        </LinkButton>
-                      </MenuItem>
-                    ))}
-                  </div>
-                </ClickAwayListener>
-              </Menu>
-            </Links>
-            <div>
-              <IconButton component="span">
-                <MailOutlinedIcon />
-              </IconButton>
-              <IconButton component="span">
-                <MdNotifications />
-              </IconButton>
-            </div>
-            <Profile onClick={this.openProfileMenu}>
-              <Avatar
-                alt="Remy Sharp"
-                src="http://i.pravatar.cc/200"
-                className="header__avatar"
-              />
-              <KeyboardArrowDownIcon />
-            </Profile>
+                {page.title}
+              </LinkButton>
+            ))}
+            <ListButton
+              className="nav-link"
+              variant="text"
+              onClick={this.openMoreMenu}
+            >
+              More
+            </ListButton>
             <Menu
-              open={profileMenuAnchor ? true : false}
-              anchorEl={profileMenuAnchor}
+              open={moreMenuAnchor ? true : false}
+              anchorEl={moreMenuAnchor}
               className="nav__more-menu"
               style={{ marginTop: '3em' }}
             >
-              <ClickAwayListener onClickAway={this.closeProfileMenu}>
+              <ClickAwayListener onClickAway={this.closeMoreMenu}>
                 <div>
-                  {COMMUNITY_PAGES_PROFILE.map(page => (
-                    <MenuItem onClick={this.closeProfileMenu} key={page.path}>
+                  {COMMUNITY_PAGES_MORE.map(page => (
+                    <MenuItem onClick={this.closeMoreMenu} key={page.path}>
                       <LinkButton
                         className="nav-link"
                         to={page.path}
-                        activeClassName={'link-active'}
+                        activeClassName="link-active"
                       >
                         {page.title}
                       </LinkButton>
                     </MenuItem>
                   ))}
-                  <MenuItem onClick={this.closeProfileMenu}>Logout</MenuItem>
-                  <MenuItem onClick={this.closeProfileMenu}>Main Site</MenuItem>
                 </div>
               </ClickAwayListener>
             </Menu>
-          </Content>
-          <FormLabel style={{ backgroundColor: '#2d5786', display: 'block', color: 'white'}}>{labelText}</FormLabel>
+          </Links>
+          <div>
+            <IconButton component="span">
+              <MailOutlinedIcon />
+            </IconButton>
+            <IconButton component="span">
+              <MdNotifications />
+            </IconButton>
+          </div>
+          <Profile onClick={this.openProfileMenu}>
+            <Avatar
+              alt="Remy Sharp"
+              src="http://i.pravatar.cc/200"
+              className="header__avatar"
+            />
+            <KeyboardArrowDownIcon />
+          </Profile>
+          <Menu
+            open={profileMenuAnchor ? true : false}
+            anchorEl={profileMenuAnchor}
+            className="nav__more-menu"
+            style={{ marginTop: '3em' }}
+          >
+            <ClickAwayListener onClickAway={this.closeProfileMenu}>
+              <div>
+                {COMMUNITY_PAGES_PROFILE.map(page => (
+                  <MenuItem onClick={this.closeProfileMenu} key={page.path}>
+                    <LinkButton
+                      className="nav-link"
+                      to={page.path}
+                      activeClassName={'link-active'}
+                    >
+                      {page.title}
+                    </LinkButton>
+                  </MenuItem>
+                ))}
+                <MenuItem onClick={this.closeProfileMenu}>Logout</MenuItem>
+                <MenuItem onClick={this.closeProfileMenu}>Main Site</MenuItem>
+              </div>
+            </ClickAwayListener>
+          </Menu>
+        </Content>
+        <FormLabel
+          style={{
+            backgroundColor: '#2d5786',
+            display: 'block',
+            color: 'white',
+          }}
+        >
+          {this.props.title}
+          {this.props.description}
+        </FormLabel>
       </div>
     )
   }

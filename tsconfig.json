@@ -1,30 +1,28 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "outDir": "build/dist",
-    "module": "esnext",
     "target": "es5",
-    "lib": ["es6", "dom"],
-    "sourceMap": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
-    "jsx": "react",
-    "moduleResolution": "node",
-    "rootDir": "src",
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noImplicitAny": false,
-    "strictNullChecks": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "skipLibCheck": true,
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    "noImplicitAny": false,
+    "strictPropertyInitialization": false,
     "experimentalDecorators": true,
-    "typeRoots": ["./types", "./node_modules/@types"],
-    "resolveJsonModule": true
+    "typeRoots": ["./node_modules/@types", "./types"]
   },
+  "include": ["src", "types"],
   "exclude": [
     "node_modules",
-    "types",
     "build",
     "scripts",
     "acceptance-tests",
@@ -35,6 +33,7 @@
     "config/jest/*.js",
     "functions-cron",
     "functions",
-    "src/utils/UserMigration"
+    "src/utils/UserMigration",
+    "src/setupProxy.js"
   ]
 }

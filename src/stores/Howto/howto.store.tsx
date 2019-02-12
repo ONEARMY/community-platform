@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx'
 import { db } from '../../utils/firebase'
-import { IHowto } from 'src/models/models'
+import { IHowto } from 'src/models/howto.models'
 
 export class HowtoStore {
   // we have two property relating to docs that can be observed

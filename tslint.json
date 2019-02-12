@@ -19,7 +19,8 @@
     "no-any": false,
     "prefer-const": true,
     "member-access": false,
-    "array-type": false
+    "array-type": false,
+    "no-reference": false
   },
   "defaultSeverity": "warning"
 }

@@ -1,4 +1,4 @@
-import * as config from '../config/config.json'
+import * as config from './config/config.json'
 import { TokenCache } from 'google-oauth-jwt'
 
 export const getAccessToken = async (accessScopes: string[], callback) => {

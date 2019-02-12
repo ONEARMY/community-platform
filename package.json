@@ -35,7 +35,7 @@
     "postcss-loader": "2.0.8",
     "promise": "8.0.1",
     "raf": "3.4.0",
-    "react": "16.7.0",
+    "react": "16.8.1",
     "react-dev-utils": "5.0.2",
     "react-dom": "16.5.2",
     "react-final-form": "3.6.6",

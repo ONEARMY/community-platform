@@ -4,7 +4,7 @@
 # 🌍 &nbsp; Onearmy
 
 Welcome to One Army! 
-We are building a new platform to help unite people to work on social & environmental projects, such as [Precious Plastic](https://preciousplastic.com), [Phonebloks](https://phonebloks.com/), [ProjectKamp](https://projectkamp.com/) or [Story Hopper](https://story-hopper.com/). A platform to connect, educate and empower our global community (65K) to solve society's greatest challenges. Together. As One Army.
+We are building a new platform to help unite people and contribute to social & environmental projects, such as [Precious Plastic](https://preciousplastic.com), [Phonebloks](https://phonebloks.com/), [ProjectKamp](https://projectkamp.com/) or [Story Hopper](https://story-hopper.com/). A platform to connect, educate and empower our global community (65K) to solve society's greatest challenges. Together. As One Army.
 
 ## 🤖 &nbsp; Technologies
 

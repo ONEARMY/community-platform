@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "3.7.1",
-    "@material-ui/icons": "3.0.1",
+    "@material-ui/icons": "3.0.2",
     "autoprefixer": "7.1.6",
     "babel-jest": "22.1.0",
     "babel-loader": "7.1.2",
@@ -77,7 +77,7 @@
     "@types/jest": "23.3.2",
     "@types/md5": "^2.1.33",
     "@types/node": "10.11.0",
-    "@types/react": "16.7.22",
+    "@types/react": "16.8.2",
     "@types/react-dom": "16.0.7",
     "@types/react-leaflet": "^1.1.6",
     "@types/react-router-dom": "4.3.1",
@@ -89,7 +89,7 @@
     "typescript": "3.1.1"
   },
   "resolutions": {
-    "@types/react": "16.7.22"
+    "@types/react": "16.8.2"
   },
   "jest": {
     "collectCoverageFrom": [

@@ -18,23 +18,23 @@ One Army aims to tackle the above problems by creating a strong unified communit
 The One Army platform helps people to connect and collaborate on environmental projects in one single place. A place where people can meet, help each other, ask and answer questions, share their innovative ways of fixing problems, discover people around them, connect locally, find events and more. One Army aims to provide the tools to connect both online and offline. Amongst other features we have Newsfeed, How-to, Q&A, Discussion, Events, Discover, Maps and more.
 
 
-## 🤖 &nbsp; Technologies
+# 🤖 &nbsp; Technologies
 
-### Frontend
+## Frontend
 
 The platform is built in **React** and use [Mobx](https://mobx.js.org/index.html) for state management, [Typescript](https://www.typescriptlang.org/docs/handbook/basic-types.html) for typing and consistency, and [styled-components](https://www.styled-components.com/) for reusability and component based styling.
 
-### Backend
+## Backend
 
 Our backend contains microservices in Node and is based on Firebase's Firestore to manage our database.
 You can find usefull links to learn more about these technologies [here](/CONTRIBUTING.md#ressources)
 
-## 🤝 &nbsp; Contributions
+# 🤝 &nbsp; Contributions
 
 Contributions, issues and feature requests are very welcome.
 Please make sure to read the [Contributing Guide](/CONTRIBUTING.md) before making a pull request.
 
-## 🌟 &nbsp; Core Team
+# 🌟 &nbsp; Core Team
 
 If needed you can [drop us a line here](mailto:hello@preciousplastic.com?subject=contact%20from%20github) 👋
 

@@ -1,7 +1,11 @@
-import styled, { css } from 'styled-components'
-import Link from 'react-router-dom/Link'
+import styled, {
+  css
+} from 'styled-components'
+import colors from 'src/themes/colors'
 
-const getBorder = ({ border }) => {
+const getBorder = ({
+  border
+}) => {
   if (border) {
     return `border: 1px solid black;`
   }
@@ -9,11 +13,11 @@ const getBorder = ({ border }) => {
   return `border: none;`
 }
 
-const baseButton = css`
+const baseButton = css `
   text-transform: uppercase;
   text-decoration: none;
   height: 40px;
-  background-color: white;
+  background-color: ${props => props.disabled ? colors.grey : colors.white}}
   ${props => getBorder(props)};
   border-radius: 5px;
   font-size: 0.8em;
@@ -26,14 +30,14 @@ const baseButton = css`
   font-weight: 600;
   white-space: nowrap;
   word-break: keep-all;
-  cursor: pointer;
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
 `
 
-export const StyledButton = styled.button`
+export const StyledButton = styled.button `
   ${baseButton};
 `
 
-export const Label = styled.span`
+export const Label = styled.span `
   display: block;
   flex: 0 0 auto;
   line-height: inherit;

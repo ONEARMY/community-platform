@@ -6,6 +6,18 @@
 Welcome to One Army! 
 We are building a new platform to help unite people and contribute to social & environmental projects, such as [Precious Plastic](https://preciousplastic.com), [Phonebloks](https://phonebloks.com/), [ProjectKamp](https://projectkamp.com/) or [Story Hopper](https://story-hopper.com/). A platform to connect, educate and empower our global community (65K) to solve society's greatest challenges. Together. As One Army.
 
+# 👀 &nbsp; Why One Army
+For the past 5+ years we’ve worked on open hardware projects to tackle some of the most pressing environmental issues. Together with thousands of people from all around the world, both online and offline. Building machines and tools to fix the mess. The more we worked on this projects the more we realise there are two main hurdles to the success of a project. 
+
+First, a project success is closely linked to its community.  And for a new project starting up finding and creating their own strong community is often a time-consuming activity that can take lots of resource. 
+Second, while working on a project we often find ourselves having to use a multitude of digital tools that are often incomplete, disconnected, privately owned and not open source. 
+
+One Army aims to tackle the above problems by creating a strong unified community for the different projects under its umbrella and offer the necessary tools to collaborate and connect in one single place. Free and opensource. 
+
+# ⚡️ &nbsp; What is One Army
+The One Army platform helps people to connect and collaborate on environmental projects in one single place. A place where people can meet, help each other, ask and answer questions, share their innovative ways of fixing problems, discover people around them, connect locally, find events and more. One Army aims to provide the tools to connect both online and offline. Amongst other features we have Newsfeed, How-to, Q&A, Discussion, Events, Discover, Maps and more.
+
+
 ## 🤖 &nbsp; Technologies
 
 ### Frontend

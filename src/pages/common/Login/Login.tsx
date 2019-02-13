@@ -1,10 +1,6 @@
 import * as React from 'react'
-import IconButton from '@material-ui/core/IconButton'
 import Modal from '@material-ui/core/Modal'
-import Lock from '@material-ui/icons/Lock'
-import LockOpen from '@material-ui/icons/LockOpen'
 import { LoginFormComponent } from './LoginForm'
-import { auth } from '../../../utils/firebase'
 import { IUser } from 'src/models/user.models'
 
 const styles: any = {
@@ -13,6 +9,8 @@ const styles: any = {
     padding: '5px',
   },
 }
+import { auth } from 'src/utils/firebase'
+import { Button } from 'src/components/Button'
 
 interface IProps {
   user?: IUser | null
@@ -51,22 +49,10 @@ export class LoginComponent extends React.Component<IProps, IState> {
   }
   public render() {
     return (
-      <div>
-        <div style={styles.container}>
-          <div className="login-icon">
-            {this.props.user ? (
-              <IconButton color="primary" onClick={this.logout}>
-                <LockOpen />
-                Log out
-              </IconButton>
-            ) : (
-              <IconButton color="primary" onClick={this.openLogin}>
-                <Lock />
-                Log in
-              </IconButton>
-            )}
-          </div>
-        </div>
+      <>
+        <Button onClick={this.openLogin}>Log in</Button>
+
+        {/* )} */}
         <Modal
           aria-labelledby="user-login-modal"
           aria-describedby="click to show user login"
@@ -77,7 +63,7 @@ export class LoginComponent extends React.Component<IProps, IState> {
             <LoginFormComponent />
           </div>
         </Modal>
-      </div>
+      </>
     )
   }
 }

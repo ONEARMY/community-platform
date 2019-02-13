@@ -21,13 +21,23 @@ import {
   LinkButton,
   Avatar,
 } from './elements'
+import { LoginComponent } from '../../Login/Login'
+import { UserStore } from 'src/stores/User/user.store'
+import { observer } from 'mobx-react'
+import { IUser } from 'src/models/user.models'
 
+interface IProps {
+  // had initially only passed user but then also wanted to be able to call logout
+  // could be refactored if code also required in public header
+  userStore: UserStore
+}
 interface IState {
   moreMenuAnchor: any
   profileMenuAnchor: any
 }
 
-export class CommunityHeader extends React.Component<any, IState> {
+@observer
+export class CommunityHeader extends React.Component<IProps, IState> {
   constructor(props) {
     super(props)
     this.state = {
@@ -54,9 +64,26 @@ export class CommunityHeader extends React.Component<any, IState> {
   closeProfileMenu = () => {
     this.setState({ profileMenuAnchor: null })
   }
+  getProfile = (user: IUser) => {
+    return (
+      <Profile onClick={this.openProfileMenu}>
+        <Avatar
+          alt={user.display_name}
+          src="http://i.pravatar.cc/200"
+          className="header__avatar"
+        />
+        <KeyboardArrowDownIcon />
+      </Profile>
+    )
+  }
+  logout = () => {
+    this.props.userStore.logout()
+    this.closeProfileMenu()
+  }
 
   render() {
     const { moreMenuAnchor, profileMenuAnchor } = this.state
+    const user = this.props.userStore.user
     return (
       <Content>
         <LogoText>One Army</LogoText>
@@ -110,14 +137,10 @@ export class CommunityHeader extends React.Component<any, IState> {
             <MdNotifications />
           </IconButton>
         </div>
-        <Profile onClick={this.openProfileMenu}>
-          <Avatar
-            alt="Remy Sharp"
-            src="http://i.pravatar.cc/200"
-            className="header__avatar"
-          />
-          <KeyboardArrowDownIcon />
-        </Profile>
+        <div>
+          {user ? this.getProfile(user) : <LoginComponent user={user} />}
+        </div>
+
         <Menu
           open={profileMenuAnchor ? true : false}
           anchorEl={profileMenuAnchor}
@@ -137,7 +160,7 @@ export class CommunityHeader extends React.Component<any, IState> {
                   </LinkButton>
                 </MenuItem>
               ))}
-              <MenuItem onClick={this.closeProfileMenu}>Logout</MenuItem>
+              <MenuItem onClick={this.logout}>Logout</MenuItem>
               <MenuItem onClick={this.closeProfileMenu}>Main Site</MenuItem>
             </div>
           </ClickAwayListener>

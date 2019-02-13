@@ -20,7 +20,8 @@
     "prefer-const": true,
     "member-access": false,
     "array-type": false,
-    "no-reference": false
+    "no-reference": false,
+    "member-ordering": false
   },
   "defaultSeverity": "warning"
 }

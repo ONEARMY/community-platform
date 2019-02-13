@@ -1,13 +1,17 @@
-import React from 'react'
+import React, { DetailedHTMLProps } from 'react'
 
 import Icon from 'src/components/Icons'
 
 import { StyledButton, Label } from './elements'
 
-interface IBtnProps {
+// extend to allow any default button props (e.g. onClick) to also be passed
+interface IBtnProps
+  extends React.DetailedHTMLProps<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > {
   icon?: string
   color?: string
-  children?: any
   border?: boolean
 }
 

@@ -10,4 +10,17 @@ const colors = {
   white: '#fff',
 }
 
+// the appColors type provide a list of available colors if wanting to enforce with typescript
+export type appColors = [
+  'blue',
+  'green',
+  'yellow',
+  'grey',
+  'grey2',
+  'grey3',
+  'greyTag',
+  'greyBg',
+  'white'
+]
+
 export default colors

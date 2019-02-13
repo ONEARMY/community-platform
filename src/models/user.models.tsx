@@ -1,5 +1,14 @@
 import { IProject } from './project.models'
 
+export class User {
+  constructor() {
+    //
+  }
+
+  _listenToLoginState() {
+    console.log('listening to login state')
+  }
+}
 export interface IUserState {
   user?: IUser
 }

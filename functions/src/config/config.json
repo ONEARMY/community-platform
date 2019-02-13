@@ -1,12 +1,12 @@
 {
-  "type": "COPY FROM DEV OR PROD CONFIG ",
-  "project_id": "",
-  "private_key_id": "",
-  "private_key": "",
-  "client_email": "",
-  "client_id": "",
-  "auth_uri": "",
-  "token_uri": "",
-  "auth_provider_x509_cert_url": "",
-  "client_x509_cert_url": ""
+  "type": "service_account",
+  "project_id": "precious-plastics-v4-dev",
+  "private_key_id": "ab6b69135b2f892567d8ac2b4fee8b0919c17007",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCVtMIiKp01nA0X\nLC7sXSqMiOzIzw2OBQyxkZ1kFegkfEI0ztSS4w9BTKmtRCb3gWDKpqaVIAxIAzVz\nRdNZ6cO5hOjFr0sw9zBmiggDYMr5dxaOczKfN3/teCT3Ya8AusuePJ5ciu+90tZV\nnPwiLgNid4i33FGFP53ePO55xCGDhy9yxcTGHsbWYA9W1cI1ynVNqrICA2iT9fdk\nG2UkqwTshV8h+/KpvU8ojEDadiSMLr6CiGuWzONFqtR5qRo5njqB1RQzjv0Vqdio\nq5Iaksu9hkX/NSejxTzf1Lp0WgkqHPI3JbY9E8UUTmg8KWStkzoeDPkFXDvB2+7d\n9uTRrlplAgMBAAECggEAH0+WBuVYyhygVEdmbQMzYf9FXt6HXDvMIttsysEWM4NV\nqYvUw///cc3h8x489Ck4IEporunsB6e8JybkhHqy9/tHYAlAtbYNhnS6JlK5QSHa\nMuL/JHPMKtOlD6R7oLBw4+CT0pEwgUg2keNqjI+JH7AWhTXsSu06TH/79LXDuKlc\niLqN8onZ60pCBDineOZFRUlEko8Gm+qxlMvhjpMuOUpuz5Jpt9FwuAFFlu2xDTRf\nqFv7qKUpuov3vrr4onh/wHsJhmpas92W6UMvldFPuAG9ObtnbLD75ZofH8UlCZzj\nwXdTe03QI1lxP38w17iozfCUGQUMXoVs8mPi/CYc5QKBgQDPgGH57C4U9EMpEtaj\nu1TxUNWMZfl67eggDDPjdoq5GHs/csytcNPVHk3dZeAJW3JGorBgrZBKD2Cj2/ou\n3kgJPh4ZuOJofBQhSEj366t42SZQSj2nCMmIjRYL6ORuHT01uRS3q5qylVuM/sY6\nucCNqt2xUkukA/uzAPchTumXMwKBgQC4skC0gywr1reEaPaznodBUgs34ONgb5/1\nH5X1Pg2HrY2yzLoRw5Ut4yKWLWLNT5nFDREP2UC82jhK0yje5CisZk7IGZhx5Q0t\nCrH2Qjxd8VPtf8OdqhW/S0rkX2o8NxDUhcc91TBRlRaXnO24GgHXQ6B/MfNpoyKG\n6MS4UqfoBwKBgEjFdZb4xZCDuaoF+VCiuj+HYd1DRiNenDHhFbGIOU6Az3iJAk8x\napkrb5Ndzxx4/bLYC5NcS2Ytzm6pDyywuALFzjinJoAOQ+EIQM7xz8kqHs25u7WA\n120UTc8Pdk1H49ebeTCQ9kf7KYhhMZQW4PjOG8G8Ytq6quM0S3da/YERAoGAOOqV\njgsuPYQ5oZBHFiswOyzxUBL5fupnPL6zE5Q/zyPomsUEQh0nh7CLJARwghyZomPY\nci3dCVWmK0jPO4DMF/SfKoLYu6B+Yvb8yIq416pa1sGcoqWbdgvZ1G6i6lN92EAx\nmhhsf3eWMrqldypsjs3EU+4suM0RAsoQdUzjeVkCgYAz22OCd/RgW3k5t5BLZ9p+\nQA2IzlvyRAQr3+aVKxB5W195txQtXIAmZahzwiBxA5Dj3q6FnWuIlWidoWhRivS/\nJ++FyOsXar8RYYGwoDkf+pOP9YbzafmX0ANq/LcGLnlydYycfDhj7E7NsG+Q1/zt\nmhD4UsRl0Zhm1xtHYpMLOA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "node-service-account@precious-plastics-v4-dev.iam.gserviceaccount.com",
+  "client_id": "111454422147285188940",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/node-service-account%40precious-plastics-v4-dev.iam.gserviceaccount.com"
 }

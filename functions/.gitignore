@@ -7,4 +7,5 @@ node_modules
 # Typescript v1 declaration files
 types/
 src/config/config.prod.json
+src/config/config.json
 lib/

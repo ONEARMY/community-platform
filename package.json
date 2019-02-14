@@ -3,6 +3,7 @@
   "version": "0.1.5",
   "private": true,
   "dependencies": {
+    "@ephox/sand": "^2.0.11",
     "@babel/core": "7.2.2",
     "@material-ui/core": "3.7.1",
     "@material-ui/icons": "3.0.2",

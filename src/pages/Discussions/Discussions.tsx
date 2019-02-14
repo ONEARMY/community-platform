@@ -102,4 +102,4 @@ class DiscussionsPageClass extends React.Component<IProps, any> {
     )
   }
 }
-export const DiscussionsPage = withRouter(DiscussionsPageClass)
+export const DiscussionsPage = withRouter(DiscussionsPageClass as any)

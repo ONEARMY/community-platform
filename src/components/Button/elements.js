@@ -1,6 +1,7 @@
 import styled, {
   css
 } from 'styled-components'
+import colors from 'src/themes/colors'
 
 const getBorder = ({
   border
@@ -16,7 +17,7 @@ const baseButton = css `
   text-transform: uppercase;
   text-decoration: none;
   height: 40px;
-  background-color: white;
+  background-color: ${props => props.disabled ? colors.grey : colors.white}}
   ${props => getBorder(props)};
   border-radius: 5px;
   font-size: 0.8em;

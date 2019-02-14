@@ -17,11 +17,7 @@ Future
 
 ## How to build and deploy
 
-The functions are not integrated into the existing CI pipeline for automated deployment as they require
-a specific config file which is not shared in the public git repository.
-
-As such you will need to be authenticated as a firebase project admin (available from repo admin)
-and populate the src/config files (available from repo admin)
+The functions are not integrated into the existing CI pipeline for automated deployment as they require additional config. This is public for dev config however needs to be manually populated for production config (available from admins).
 
 To deploy functions use the following scripts
 

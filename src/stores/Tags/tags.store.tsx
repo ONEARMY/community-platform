@@ -1,8 +1,7 @@
 import { observable, action, computed } from 'mobx'
 import { db } from '../../utils/firebase'
-import { ITag } from 'src/models/models'
 import { TAGS_MOCK } from 'src/mocks/tags.mock'
-import { ITagQuery } from 'src/models/tags.model'
+import { ITagQuery, ITag } from 'src/models/tags.model'
 import helpers from '../../utils/helpers'
 
 export class TagsStore {

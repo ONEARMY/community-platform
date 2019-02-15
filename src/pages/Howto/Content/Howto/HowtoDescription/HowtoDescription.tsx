@@ -11,8 +11,8 @@ import {
   CoverImg,
   TutorialInfo,
 } from './elements'
-import { IHowto } from 'src/models/models'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
+import { IHowto } from 'src/models/howto.models'
 
 interface IProps {
   howto: IHowto

@@ -69,8 +69,9 @@ export class CreateHowto extends React.PureComponent<
     }
   }
 
-  public onSubmit = async (formValues: IHowtoFormInput) => {
-    if (!formValues.cover_image) {
+  public onSubmit = async (formValues: any) => {
+    const inputValues = formValues as IHowtoFormInput
+    if (!inputValues.cover_image) {
       alert('Please provide a cover image before saving your tutorial')
     } else {
       const timestamp = new Date()
@@ -129,7 +130,7 @@ export class CreateHowto extends React.PureComponent<
         <Form
           onSubmit={this.onSubmit}
           initialValues={formValues}
-          validate={this.validate}
+          validate={() => this.validate}
           mutators={{
             ...arrayMutators,
             clearCoverImage: (args, state, utils) => {

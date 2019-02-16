@@ -5,31 +5,12 @@ import { FormDialog } from '../../../ui/Dialog'
 import { FirebaseFileUploader } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 import {
-  IImageData,
   NewAppNode,
   deleteUpload,
   storagePath,
-  TEXT
+  TEXT,
+  toImageData
 } from '../../../common'
-
-const toImageData = (src: string, extra = {}): IImageData => {
-  return {
-    src,
-    alt: '',
-    title: '',
-    width: '',
-    height: '',
-    class: '',
-    style: '',
-    caption: false,
-    hspace: '',
-    vspace: '',
-    border: '',
-    borderStyle: '',
-    constrain: true,
-    ...extra,
-  }
-}
 
 const ACCEPT = 'image/png, image/jpeg'
 

@@ -11,5 +11,21 @@ export interface IImageData {
   vspace: string
   border: string
   borderStyle: string
-  constrain: boolean
+}
+export const toImageData = (src: string, extra = {}): IImageData => {
+  return {
+    src,
+    alt: '',
+    title: '',
+    width: '',
+    height: '',
+    class: '',
+    style: '',
+    caption: false,
+    hspace: '',
+    vspace: '',
+    border: '',
+    borderStyle: '',
+    ...extra,
+  }
 }

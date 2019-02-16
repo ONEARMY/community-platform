@@ -1,11 +1,11 @@
 import {
   defaultData,
   read,
-  ImageData,
   create,
   isFigure
 } from '../core/ImageData'
 import Utils from '../core/Utils'
+import { IImageData } from 'src/components/Editor/common';
 
 const normalizeCss = (editor: any, cssText: string): string => {
   const css = editor.dom.styles.parse(cssText)
@@ -54,12 +54,12 @@ const splitTextBlock = (editor: any, figure: HTMLElement) => {
   }
 }
 
-const readImageDataFromSelection = (editor: any): ImageData => {
+const readIImageDataFromSelection = (editor: any): IImageData => {
   const image = getSelectedImage(editor)
   return image ? read(css => normalizeCss(editor, css), image) : defaultData()
 }
 
-const insertImageAtCaret = (editor: any, data: ImageData) => {
+const insertImageAtCaret = (editor: any, data: IImageData) => {
   const elm = create(css => normalizeCss(editor, css), data)
 
   editor.dom.setAttrib(elm, 'data-mce-id', '__mcenew')
@@ -99,7 +99,7 @@ const deleteImage = (editor: any, image: HTMLElement) => {
 }
 
 /*
-const writeImageDataToSelection = (editor: any, data: ImageData) => {
+const writeIImageDataToSelection = (editor: any, data: IImageData) => {
   const image = getSelectedImage(editor)
 
   write(css => normalizeCss(editor, css), data, image)
@@ -116,11 +116,11 @@ const writeImageDataToSelection = (editor: any, data: ImageData) => {
 }
 */
 
-const insertOrUpdateImage = (editor: any, data: ImageData) => {
+const insertOrUpdateImage = (editor: any, data: IImageData) => {
   const image = getSelectedImage(editor)
   if (image) {
     if (data.src) {
-      // writeImageDataToSelection(editor, data)
+      // writeIImageDataToSelection(editor, data)
     } else {
       deleteImage(editor, image)
     }
@@ -129,4 +129,4 @@ const insertOrUpdateImage = (editor: any, data: ImageData) => {
   }
 }
 
-export { normalizeCss, readImageDataFromSelection, insertOrUpdateImage }
+export { normalizeCss, readIImageDataFromSelection, insertOrUpdateImage }

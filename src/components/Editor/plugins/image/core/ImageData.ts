@@ -1,20 +1,7 @@
 declare var tinymce
 import Utils from '../core/Utils'
+import { IImageData } from 'src/components/Editor/common';
 const DOM = tinymce.dom.domutils
-interface ImageData {
-  src: string
-  alt: string
-  title: string
-  width: string
-  height: string
-  class: string
-  style: string
-  caption: boolean
-  hspace: string
-  vspace: string
-  border: string
-  borderStyle: string
-}
 
 type CssNormalizer = (css: string) => string
 
@@ -153,7 +140,7 @@ const isFigure = (elm: Node) => elm.nodeName === 'FIGURE'
 
 const isImage = (elm: Node) => elm.nodeName === 'IMG'
 
-const defaultData = (): ImageData => {
+const defaultData = (): IImageData => {
   return {
     src: '',
     alt: '',
@@ -166,13 +153,13 @@ const defaultData = (): ImageData => {
     hspace: '',
     vspace: '',
     border: '',
-    borderStyle: '',
+    borderStyle: ''
   }
 }
 
 const getStyleValue = (
   normalizeCss: CssNormalizer,
-  data: ImageData,
+  data: IImageData,
 ): string => {
   const image = document.createElement('img')
 
@@ -197,7 +184,7 @@ const getStyleValue = (
   return normalizeCss(image.getAttribute('style') || '')
 }
 
-const create = (normalizeCss: CssNormalizer, data: ImageData): HTMLElement => {
+const create = (normalizeCss: CssNormalizer, data: IImageData): HTMLElement => {
   const image = document.createElement('img')
   write(normalizeCss, { ...data, ...{ caption: false } }, image)
 
@@ -219,7 +206,7 @@ const create = (normalizeCss: CssNormalizer, data: ImageData): HTMLElement => {
   }
 }
 
-const read = (normalizeCss: CssNormalizer, image: HTMLElement): ImageData => {
+const read = (normalizeCss: CssNormalizer, image: HTMLElement): IImageData => {
   return {
     src: getAttrib(image, 'src'),
     alt: getAttrib(image, 'alt'),
@@ -238,8 +225,8 @@ const read = (normalizeCss: CssNormalizer, image: HTMLElement): ImageData => {
 
 const updateProp = (
   image: HTMLElement,
-  oldData: ImageData,
-  newData: ImageData,
+  oldData: IImageData,
+  newData: IImageData,
   name: string,
   set: (image: HTMLElement, name: string, value: string) => void,
 ) => {
@@ -260,7 +247,7 @@ const normalized = (
 
 const write = (
   normalizeCss: CssNormalizer,
-  newData: ImageData,
+  newData: IImageData,
   image: HTMLElement,
 ) => {
   const oldData = read(normalizeCss, image)
@@ -312,7 +299,6 @@ const write = (
 }
 
 export {
-  ImageData,
   getStyleValue,
   defaultData,
   isFigure,

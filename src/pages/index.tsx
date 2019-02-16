@@ -7,11 +7,11 @@ import { HowtoPage } from './Howto/Howto'
 import { HomePage } from './Home/Home'
 import { NotFoundPage } from './NotFound/NotFound'
 import { DiscussionsPage } from './Discussions/Discussions'
-import { TemplatePage } from './_Template/Template'
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import { EventsPage } from './Events/Events'
-import MainLayout from './common/MainLayout'
 import Header from './common/Header/Header'
+import { isDebug } from 'src/config/config'
+import { DebugEditorPage } from 'src/components/Editor/Debug';
 
 interface IState {
   singlePageMode: boolean
@@ -28,6 +28,11 @@ export const COMMUNITY_PAGES: IPageMeta[] = [
   { path: '/how-to', component: HowtoPage, title: 'How-To' },
   { path: '/discussions', component: DiscussionsPage, title: 'Discussions' },
 ]
+
+export const DEBUG_PAGES: IPageMeta[] = isDebug
+  ? [{ path: '/debugEditor', component: DebugEditorPage, title: 'Debug Editor' }]
+  : []
+
 export const COMMUNITY_PAGES_MORE: IPageMeta[] = [
   { path: '/maps', component: NotFoundPage, title: 'Maps' },
   { path: '/discover', component: NotFoundPage, title: 'Discover' },
@@ -51,6 +56,7 @@ export class Routes extends React.Component<any, IState> {
       ...COMMUNITY_PAGES,
       ...COMMUNITY_PAGES_MORE,
       ...COMMUNITY_PAGES_PROFILE,
+      ...DEBUG_PAGES
     ]
     // we are rendering different pages and navigation dependent on whether the user has navigated directly to view the
     // entire site, or just one page of it via subdomains. This is so we can effectively integrate just parts of this

@@ -1,3 +1,3 @@
-export const enum PluginNames {
+export enum PluginNames {
   IMAGE = 'fbimage',
 }

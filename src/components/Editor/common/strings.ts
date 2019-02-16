@@ -1,5 +1,5 @@
 // @TODO: i8n
-export const enum TEXT {
+export enum TEXT {
   INSERT = 'Insert Image',
   UPLOAD_BUTTON = 'Upload image',
   UPLOAD_OK = 'Save',

@@ -1,5 +1,8 @@
 import { PluginNames } from './common'
 
+export const TinyMCEUrl = (root: string = '') =>
+  `${root}/vendor/tinymce/tinymce.min.js`
+
 const DEFAULT_PLUGINS = `link image code emoticons hr autoresize ${
   PluginNames.IMAGE
 }`

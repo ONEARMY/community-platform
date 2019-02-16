@@ -1,9 +1,10 @@
 declare var tinymce
 import Utils from '../core/Utils'
-import { IImageData } from 'src/components/Editor/common';
-const DOM = tinymce.dom.domutils
+import { IImageData } from 'src/components/Editor/common'
 
 type CssNormalizer = (css: string) => string
+
+const DOM = () => tinymce.dom.domutils
 
 const getHspace = (image: HTMLElement): string => {
   if (
@@ -58,20 +59,20 @@ const setAttrib = (image: HTMLElement, name: string, value: string) => {
 }
 
 const wrapInFigure = (image: HTMLElement) => {
-  const figureElm = DOM.create('figure', { class: 'image' })
-  DOM.insertAfter(figureElm, image)
+  const figureElm = DOM().create('figure', { class: 'image' })
+  DOM().insertAfter(figureElm, image)
 
   figureElm.appendChild(image)
   figureElm.appendChild(
-    DOM.create('figcaption', { contentEditable: true }, 'Caption'),
+    DOM().create('figcaption', { contentEditable: true }, 'Caption'),
   )
   figureElm.contentEditable = 'false'
 }
 
 const removeFigure = (image: HTMLElement) => {
   const figureElm = image.parentNode
-  DOM.insertAfter(image, figureElm as Node)
-  DOM.remove(figureElm as Node)
+  DOM().insertAfter(image, figureElm as Node)
+  DOM().remove(figureElm as Node)
 }
 
 const toggleCaption = (image: HTMLElement) => {
@@ -153,7 +154,7 @@ const defaultData = (): IImageData => {
     hspace: '',
     vspace: '',
     border: '',
-    borderStyle: ''
+    borderStyle: '',
   }
 }
 
@@ -192,11 +193,11 @@ const create = (normalizeCss: CssNormalizer, data: IImageData): HTMLElement => {
   setAttrib(image, 'alt', data.alt)
 
   if (data.caption) {
-    const figure = DOM.create('figure', { class: 'image' })
+    const figure = DOM().create('figure', { class: 'image' })
 
     figure.appendChild(image)
     figure.appendChild(
-      DOM.create('figcaption', { contentEditable: true }, 'Caption'),
+      DOM().create('figcaption', { contentEditable: true }, 'Caption'),
     )
     figure.contentEditable = 'false'
 
@@ -298,12 +299,4 @@ const write = (
   )
 }
 
-export {
-  getStyleValue,
-  defaultData,
-  isFigure,
-  isImage,
-  create,
-  read,
-  write,
-}
+export { getStyleValue, defaultData, isFigure, isImage, create, read, write }

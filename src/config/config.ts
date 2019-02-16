@@ -40,3 +40,4 @@ if (productionSites.indexOf(window.location.host) > -1) {
   config = devConfig
 }
 export const FIREBASE_CONFIG = config
+export const isDebug = process.env.NODE_ENV === 'development'

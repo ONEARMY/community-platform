@@ -10,6 +10,7 @@ admin.initializeApp()
 import * as DB from './databaseBackup'
 import * as ImageConverter from './imageConverter'
 import * as StorageFunctions from './storageFunctions'
+import * as PostViewCounter from './postViewCounter'
 
 // update on change logging purposes
 const buildNumber = 1.03
@@ -89,6 +90,11 @@ exports.removeStorageFolder = functions.https.onCall((data, context) => {
   console.log('storage folder remove called', data, context)
   const path = data.text
   StorageFunctions.deleteStorageItems(data.text)
+})
+
+exports.hitPostCounter = functions.https.onCall((data, context) => {
+  console.log('hit post counter called', data, context)
+  PostViewCounter.hitPostCounter(data)
 })
 
 // add export so can be used by test

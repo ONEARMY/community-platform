@@ -11,10 +11,9 @@ import LinearProgress from '@material-ui/core/LinearProgress'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import CommentIcon from '@material-ui/icons/Comment'
 import TurnedInIcon from '@material-ui/icons/TurnedIn'
-import { IHowto } from 'src/models/models'
-
 import { CreateButton } from './elements'
-import { TagDisplay } from 'src/pages/common/Tags';
+import { Button } from 'src/components/Button'
+import { IHowto } from 'src/models/howto.models'
 
 const styles: any = {
   cards: {

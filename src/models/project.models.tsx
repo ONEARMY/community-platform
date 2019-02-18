@@ -1,4 +1,4 @@
-import { IUser } from './models'
+import { IUser } from './user.models'
 
 export interface IProject {
   id: string

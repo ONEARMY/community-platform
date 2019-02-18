@@ -4,10 +4,10 @@ This is the Home Page main component, rendering content seen at '/'
 
 import * as React from 'react'
 import './Home.scss'
-import { IUser } from '../../models/models'
 import { UserStore } from 'src/stores/User/user.store'
 import { IStores } from 'src/stores'
 import { inject } from 'mobx-react'
+import { IUser } from 'src/models/user.models'
 
 interface IState {
   isLoggedIn: boolean

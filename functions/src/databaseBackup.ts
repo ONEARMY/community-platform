@@ -4,6 +4,9 @@ import { config } from 'firebase-functions'
 
 /*  Cloud function to automatically backup the firebase database adapted from: 
     https://thatweirddeveloper.com/how-to-back-up-cloud-firestore-periodically
+
+    Note this requires use of a service account to access drive storage,
+    which is accessed from environment variables
 */
 
 // config has access to environment variables set in root scripts/deploy.sh

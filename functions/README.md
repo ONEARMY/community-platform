@@ -18,9 +18,20 @@ Future
 ## How to build and deploy
 
 The functions are integrated into the ci pipeline for master and production branches.
+Simply make a PR and once approved the function will be deployed
+
+## Testing locally
+
+If the code is built you can run firebase serve from the main repo and the functions will also be made available. More info: https://firebase.google.com/docs/functions/local-emulator
+
+Note, this will require authentication for the firebase project. You can request to be added to the project from any of the admins. Alternatively you can use the service account below.
+
+## Accessing service account
+
 Functions have access to environment variables set in the root `scripts/deploy.sh` scripts,
-and include access to service worker variables via the config() firebase function import
-E.g. to recreate:
+and include access to service account variables via the config() firebase function import.
+More info: https://firebase.google.com/docs/functions/config-env
+E.g. can recreate service account json via:
 
 ```
 {
@@ -42,11 +53,13 @@ To view console logs and events from deployed functions request project access f
 
 If wanting to test locally before deploy the easiest method would be to hardcode the above environment variables. Make sure to change these to config() functions before PR
 
+More info: https://firebase.google.com/docs/functions/local-emulator
+
 You can access a copy of the dev environment variables [here](https://www.dropbox.com/s/54l093zumid9kxu/precious-plastics-v4-dev-service-account-key.json?dl=0)
 
 DO NOT COMMIT THESE VARIABLES TO THE REPO!
 
-(security notice - the service account has permissions for firebase admin only, so afraid you can't turn the whole project into a crypto miner just yet!)
+(security notice - the service account has limited permissions, so afraid you can't turn the whole project into a crypto miner just yet!)
 
 ## Adding cron tasks
 

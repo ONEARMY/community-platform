@@ -107,6 +107,9 @@ export class HowtoList extends React.Component<IProps, any> {
     const { allHowtos } = this.props
     return (
       <div>
+        <Link to={'/how-to/create'}>
+          <CreateButton icon={'add'}>create how-to</CreateButton>
+        </Link>
         <React.Fragment>
           <div style={styles.layout}>
             {allHowtos.length === 0 ? (

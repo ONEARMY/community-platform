@@ -8,7 +8,7 @@ import { blue, green, red } from "@material-ui/core/colors";
 export const theme = createMuiTheme({
   typography: {
     useNextVariants: true,
-    fontFamily: 'Karla'
+    fontFamily: 'Karla-Regular'
   },
   palette: {
     primary: {

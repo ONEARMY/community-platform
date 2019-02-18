@@ -12,6 +12,7 @@ import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import { EventsPage } from './Events/Events'
 import MainLayout from './common/MainLayout'
 import Header from './common/Header/Header'
+import { DevNotice } from 'src/components/Dev/DevNotice'
 
 interface IState {
   singlePageMode: boolean
@@ -58,6 +59,7 @@ export class Routes extends React.Component<any, IState> {
     return !this.state.singlePageMode ? (
       <div>
         <DevTools />
+        <DevNotice />
         <BrowserRouter>
           {/* on page change scroll to top */}
           <ScrollToTop>

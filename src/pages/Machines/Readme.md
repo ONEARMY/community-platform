@@ -13,4 +13,3 @@
 5. Geo aware component sources
 6. User feedback: warnings, limitations, small improvments, upvotes
 7. Machine versioning (user builds)
-

@@ -19,9 +19,9 @@ const getAccessToken = async () => {
     'https://www.googleapis.com/auth/cloud-platform',
   ]
   const jwtClient = new JWT(
-    config().client_email,
+    config().service.client_email,
     null,
-    config().private_key,
+    config().service.private_key,
     scopes,
   )
   try {

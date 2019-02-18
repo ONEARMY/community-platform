@@ -21,6 +21,7 @@ export const functions = firebase.functions()
 // want to also expose the default firebase user
 /* tslint:disable: no-empty-interface*/
 export interface IFirebaseUser extends firebase.User {}
+export const hitPostCounter = functions.httpsCallable('hitPostCounter')
 
 /* Firestore use examples
    See full docs at: https://firebase.google.com/docs/firestore/

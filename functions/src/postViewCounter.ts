@@ -3,7 +3,6 @@ import * as admin from 'firebase-admin'
 const db = admin.firestore()
 
 export const hitPostCounter = ({'_id': postId}) => {
-  console.log('hitPostCounter called...')
   db.collection('discussions').doc(postId).get().then((data) => data.ref).then((ref) => {
     // Update count in a transaction
     return db.runTransaction(t => {

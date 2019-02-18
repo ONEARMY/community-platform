@@ -54,10 +54,7 @@ export default class ListRow extends React.Component<IProps, IState> {
       await Axios({
         url: `https://${FIREBASE_CONFIG.region}-${FIREBASE_CONFIG.projectId}.cloudfunctions.net/hitPostCounter`,
         method: 'post',
-        // headers: {
-        //   Authorization: `Bearer ${accessToken}`,
-        // },
-        data: postId,
+        data: {'_id': postId},
       })
     } catch (error) {
       console.log(error)
@@ -66,8 +63,6 @@ export default class ListRow extends React.Component<IProps, IState> {
 
   public render() {
     const { post } = this.props
-    // console.log(functions)
-    // console.log(hitPostCounter)
     return (
       <Post>
         <Avatar src={post.avatar} alt="avatar" />
@@ -76,7 +71,6 @@ export default class ListRow extends React.Component<IProps, IState> {
             href={'/discussions/post/' + post._id}
             onClick={() => this.trackPost(post._id)}
             // onClick={() => hitPostCounter.call({data: post._id})}
-            // onClick={() => fetch(`//${FIREBASE_CONFIG.region}-${FIREBASE_CONFIG.projectId}.cloudfunctions.net/hitPostCounter/`)}
               >
             {post.postTitle}
           </Title>

@@ -18,6 +18,7 @@ const devConfig = {
   messagingSenderId: '174193431763',
   projectId: 'precious-plastics-v4-dev',
   storageBucket: 'precious-plastics-v4-dev.appspot.com',
+  region: 'us-central1'
 }
 
 // different production site config pulled from environment variable
@@ -35,6 +36,7 @@ if (productionSites.indexOf(window.location.host) > -1) {
     projectId: e.REACT_APP_FIREBASE_PROJECT_ID,
     storageBucket: e.REACT_APP_FIREBASE_STORAGE_BUCKET,
     messagingSenderId: e.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+    region: e.REACT_APP_FIREBASE_REGION
   }
 } else {
   config = devConfig

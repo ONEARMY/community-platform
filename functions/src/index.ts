@@ -52,9 +52,9 @@ app.all('*', async (req, res, next) => {
 })
 exports.api = functions.https.onRequest(app)
 
-app.listen(3000, 'localhost', listen => {
-  console.log(`API v${buildNumber} listening on port 3000`)
-})
+// app.listen(3000, 'localhost', listen => {
+//   console.log(`API v${buildNumber} listening on port 3000`)
+// })
 
 /************ Cron tasks ***********************************************************
 Use pubsub to automatically subscribe to messages sent from cron.
@@ -94,6 +94,7 @@ exports.removeStorageFolder = functions.https.onCall((data, context) => {
 
 exports.hitPostCounter = functions.https.onCall((data, context) => {
   console.log('hit post counter called', data, context)
+  console.log('Data: ' + Object.keys(data))
   PostViewCounter.hitPostCounter(data)
 })
 

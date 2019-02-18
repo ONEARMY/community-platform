@@ -1,5 +1,7 @@
 import * as React from 'react'
 import differenceInDays from 'date-fns/difference_in_days'
+import { FIREBASE_CONFIG } from 'src/config/config'
+import Axios from 'axios'
 
 import {
   Avatar,
@@ -15,6 +17,7 @@ import {
   DiscussIcon,
   QaIcon,
 } from './elements'
+import { functions, hitPostCounter} from 'src/utils/firebase'
 
 export interface IPostInfos {
   _id: string
@@ -46,13 +49,37 @@ export default class ListRow extends React.Component<IProps, IState> {
     return `${daysSince} days`
   }
 
+  public async trackPost(postId:string) {
+    try {
+      await Axios({
+        url: `https://${FIREBASE_CONFIG.region}-${FIREBASE_CONFIG.projectId}.cloudfunctions.net/hitPostCounter`,
+        method: 'post',
+        // headers: {
+        //   Authorization: `Bearer ${accessToken}`,
+        // },
+        data: postId,
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   public render() {
     const { post } = this.props
+    // console.log(functions)
+    // console.log(hitPostCounter)
     return (
       <Post>
         <Avatar src={post.avatar} alt="avatar" />
         <TitleAndTagsContaier>
-          <Title href={'/discussions/post/' + post._id}>{post.postTitle}</Title>
+          <Title
+            href={'/discussions/post/' + post._id}
+            onClick={() => this.trackPost(post._id)}
+            // onClick={() => hitPostCounter.call({data: post._id})}
+            // onClick={() => fetch(`//${FIREBASE_CONFIG.region}-${FIREBASE_CONFIG.projectId}.cloudfunctions.net/hitPostCounter/`)}
+              >
+            {post.postTitle}
+          </Title>
           <TagsContainer>
             {post.tags && post.tags.map((tag, j) => <Tag key={j}>{tag}</Tag>)}
           </TagsContainer>

@@ -20,7 +20,8 @@ const styles: any = {
   cards: {
     height: '100%',
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    boxShadow: 'none'
   },
   layout: {
     width: 'auto',
@@ -39,15 +40,56 @@ const styles: any = {
 interface IProps {
   allHowtos: IHowto[]
 }
+
 export class HowtoList extends React.Component<IProps, any> {
   constructor(props: any) {
     super(props)
   }
+  
+  renderCardMedia(howto) {
+    return (
+    <CardMedia
+      style={styles.cardMedia}
+      image={
+        howto.cover_image
+        ? howto.cover_image.downloadUrl
+        : howto.cover_image_url
+      } // eslint-disable-line max-len
+      title="Image title"
+    /> 
+    )
+  }
 
-  renderCardActions() {
+  renderCardContent(howto) {
+    return (
+    <CardContent style={styles.cardContent}>
+      <Typography 
+        variant='h6'>
+        {howto.tutorial_title}
+      </Typography>
+    </CardContent>
+    ) 
+  }
+
+  renderLabelContent(howto) {
+    return (
+      <CardContent style={styles.labelContent}>
+      {/* placeholder for tags */}
+      <div>
+        {Object.keys(howto.tags).map(k => (
+          <TagDisplay tagKey={k} key={k} />
+        ))}
+      </div>
+      </CardContent>
+    )
+  }
+
+  renderCardActions(howto) {
+    // use passed in howto for user info, other relevant props
+    // TODO: use designed icon buttons when available
     return (
       <CardActions>
-      <Typography>username</Typography>
+      <Typography>username and coverimage</Typography>
         <IconButton>
           <TurnedInIcon />
         </IconButton>
@@ -78,32 +120,16 @@ export class HowtoList extends React.Component<IProps, any> {
                       style={styles.link}
                     >
                       <Card
-                        style={styles.cards}
-                        raised={false}
+                        style={ styles.cards }
+                        raised={ false }
+                        square={ true }
                       >
-                        <CardMedia
-                          style={styles.cardMedia}
-                          image={
-                            howto.cover_image
-                              ? howto.cover_image.downloadUrl
-                              : howto.cover_image_url
-                          } // eslint-disable-line max-len
-                          title="Image title"
-                        />
-                        <CardContent style={styles.cardContent}>
-                          <Typography 
-                            variant='h6'>
-                            {howto.tutorial_title}
-                          </Typography>
-                        </CardContent>
-                        <CardContent style={styles.labelContent}>
-                        <div>
-                          {Object.keys(howto.tags).map(k => (
-                            <TagDisplay tagKey={k} key={k} />
-                          ))}
-                        </div>
-                        </CardContent>
-                        {this.renderCardActions()}
+
+                        { this.renderCardMedia(howto) }
+                        { this.renderCardContent(howto) }
+                        { this.renderLabelContent(howto) }
+                        { this.renderCardActions(howto) }
+                    
                       </Card>
                     </Link>
                   </Grid>
@@ -111,11 +137,6 @@ export class HowtoList extends React.Component<IProps, any> {
               </Grid>
             )}
           </div>
-          {allHowtos.length > 15 ? (
-            <Link to={'/how-to/create'}>
-              <CreateButton icon={'add'}>create how-to</CreateButton>
-            </Link>
-          ) : null}
         </React.Fragment>
       </div>
     )

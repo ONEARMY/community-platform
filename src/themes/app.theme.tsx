@@ -26,5 +26,6 @@ export const theme = createMuiTheme({
       main: red[500],
       dark: red[700]
     }
-  }
+  },
 });
+

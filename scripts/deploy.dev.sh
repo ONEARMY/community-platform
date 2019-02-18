@@ -8,5 +8,8 @@ service.private_key=$firebase_dev_private_key \
 service.client_email=$firebase_dev_client_email \
 service.client_id=$firebase_dev_client_id
 # deploy site, functions, rules etc.
-echo functions:config:get
+config=firebase functions:config:get
+echo $config
+echo firebase functions:config:get
+echo $(firebase functions:config:get)
 firebase deploy

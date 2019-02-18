@@ -36,11 +36,11 @@ E.g. can recreate service account json via:
 ```
 {
   "type": "service_account",
-  "project_id": config().project_id,
-  "private_key_id": config().private_key_id,
-  "private_key": config().private_key,
-  "client_email": config().client_email,
-  "client_id": config().client_id,
+  "project_id": config().service.project_id,
+  "private_key_id": config().service.private_key_id,
+  "private_key": config().service.private_key,
+  "client_email": config().service.client_email,
+  "client_id": config().service.client_id,
   "auth_uri": "https://accounts.google.com/o/oauth2/auth",
   "token_uri": "https://oauth2.googleapis.com/token",
   "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",

@@ -8,4 +8,5 @@ node_modules
 types/
 src/config/config.prod.json
 src/config/config.json
+src/config/config.dev.json
 lib/

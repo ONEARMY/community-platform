@@ -1,6 +1,7 @@
 // node module imports
 import * as bodyParser from 'body-parser'
-import * as cors from 'cors'
+import * as corsLib from 'cors'
+const cors = corsLib({ origin: true })
 import * as express from 'express'
 import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
@@ -18,8 +19,6 @@ const buildNumber = 1.03
 
 // express settings to handle api
 const app = express()
-// Automatically allow cross-origin requests
-app.use(cors({ origin: true }))
 // use bodyparse to create json object from body
 app.use(
   bodyParser.json({

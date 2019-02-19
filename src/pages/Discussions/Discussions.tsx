@@ -30,37 +30,31 @@ class DiscussionsPageClass extends React.Component<IProps, any> {
 
   public async componentDidMount() {
     // load mocks
-    console.log('mocks:', DISCUSSIONS_MOCK)
-    console.log('test')
-    functions
-      .httpsCallable('test')()
-      .then(res => console.log('test res', res))
-      .catch(err => console.log('test err', err))
-
-    // const analyticsReportRequest = functions.httpsCallable('getAnalyticsReport')
-    // let analyticsReportRows
-    // try {
-    //   analyticsReportRows = (await analyticsReportRequest({
-    //     viewId: GOOGLE_ANALYTICS_CONFIG.viewId,
-    //   }).catch(err => console.log('err', err))) as any
-    // } catch (error) {
-    //   console.log('error', error)
-    // }
-    // console.log('report rows', analyticsReportRows)
-    // const updatedPosts = this.state.posts
-    // if (analyticsReportRows) {
-    //   for (const post of updatedPosts) {
-    //     const postAnalytic = analyticsReportRows.find(
-    //       row => row.dimensions[0] === `/discussions/post/${post._id}`,
-    //     )
-    //     if (postAnalytic) {
-    //       post.viewCount = Number(postAnalytic.metrics[0].values[0])
-    //     } else {
-    //       post.viewCount = 0
-    //     }
-    //   }
-    //   this.setState({ posts: updatedPosts })
-    // }
+    const analyticsReportRequest = functions.httpsCallable('getAnalyticsReport')
+    console.log('getting analytics')
+    let analyticsReportRows
+    try {
+      analyticsReportRows = (await analyticsReportRequest({
+        viewId: GOOGLE_ANALYTICS_CONFIG.viewId,
+      }).catch(err => console.log('err', err))) as any
+    } catch (error) {
+      console.log('error', error)
+    }
+    console.log('report rows', analyticsReportRows)
+    const updatedPosts = this.state.posts
+    if (analyticsReportRows) {
+      for (const post of updatedPosts) {
+        const postAnalytic = analyticsReportRows.find(
+          row => row.dimensions[0] === `/discussions/post/${post._id}`,
+        )
+        if (postAnalytic) {
+          post.viewCount = Number(postAnalytic.metrics[0].values[0])
+        } else {
+          post.viewCount = 0
+        }
+      }
+      this.setState({ posts: updatedPosts })
+    }
   }
 
   public orderListBy(orderType: string) {

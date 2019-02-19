@@ -21,12 +21,12 @@ before_deploy:
   - export FIREBASE_TOKEN=$(if [ "$TRAVIS_BRANCH" == "production" ]; then echo "$FIREBASE_PRODUCTION_TOKEN"; else echo "$FIREBASE_STAGING_TOKEN"; fi)
 deploy:
   - provider: script
-    script: bash scripts/deploy.dev.sh
+    script: bash scripts/deploy.dev.sh env
     skip_cleanup: true
     on:
       branch: master
   - provider: script
-    script: bash scripts/deploy.prod.sh
+    script: bash scripts/deploy.prod.sh env
     skip_cleanup: true
     on:
       branch: production

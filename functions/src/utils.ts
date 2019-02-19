@@ -12,6 +12,8 @@ export const getAccessToken = async (
   accessScopes: string[],
   callback?: (token: string) => void,
 ) => {
+  console.log('getting access token', accessScopes)
+  console.log('config', config())
   const jwtClient = new JWT(
     config().service.client_email,
     null,
@@ -20,6 +22,7 @@ export const getAccessToken = async (
   )
   try {
     const authorization = await jwtClient.authorize()
+    console.log('authorization received', authorization)
     return callback
       ? callback(authorization.access_token)
       : authorization.access_token

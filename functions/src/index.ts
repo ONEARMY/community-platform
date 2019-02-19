@@ -33,22 +33,25 @@ at /api/[endpoint]
 ************************************************************************************/
 
 app.all('*', async (req, res, next) => {
-  // get the endpoint based on the request path
-  const endpoint = req.path.split('/')[1]
-  // *** NOTE currently all request types handled the same, i.e. GET/POST
-  // will likely change behaviour in future when required
-  switch (endpoint) {
-    case 'db-test':
-      const token = await UtilsFunctions.AuthTest()
-      res.send(token)
-      break
-    case 'backup':
-      const response = await DB.BackupDatabase()
-      res.send(response)
-      break
-    default:
-      res.send('invalid api endpoint')
-  }
+  // add cors to requests
+  cors(req, res, async () => {
+    // get the endpoint based on the request path
+    const endpoint = req.path.split('/')[1]
+    // *** NOTE currently all request types handled the same, i.e. GET/POST
+    // will likely change behaviour in future when required
+    switch (endpoint) {
+      case 'db-test':
+        const token = await UtilsFunctions.AuthTest()
+        res.send(token)
+        break
+      case 'backup':
+        const response = await DB.BackupDatabase()
+        res.send(response)
+        break
+      default:
+        res.send('invalid api endpoint')
+    }
+  })
 })
 exports.api = functions.https.onRequest(app)
 

@@ -27,6 +27,7 @@ export const getAccessToken = async (
       ? callback(authorization.access_token)
       : authorization.access_token
   } catch (error) {
+    console.log('error', error)
     return null
   }
 }

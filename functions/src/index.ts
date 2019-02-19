@@ -10,6 +10,8 @@ admin.initializeApp()
 import * as DB from './databaseBackup'
 import * as ImageConverter from './imageConverter'
 import * as StorageFunctions from './storageFunctions'
+import * as UtilsFunctions from './utils'
+import * as AnalyticsFunctions from './analytics'
 
 // update on change logging purposes
 const buildNumber = 1.03
@@ -38,7 +40,7 @@ app.all('*', async (req, res, next) => {
   // will likely change behaviour in future when required
   switch (endpoint) {
     case 'db-test':
-      const token = await DB.AuthTest()
+      const token = await UtilsFunctions.AuthTest()
       res.send(token)
       break
     case 'backup':
@@ -76,10 +78,16 @@ exports.dailyTasks = functions.pubsub
 Functions called in response to changes to firebase storage objects
 ************************************************************************************/
 
-exports.imageResize = functions.storage.object().onFinalize(async (object, context) => {
-  if (object.metadata && (object.metadata.resized || object.metadata.original)) return Promise.resolve();
-  return ImageConverter.resizeImage(object)
-})
+exports.imageResize = functions.storage
+  .object()
+  .onFinalize(async (object, context) => {
+    if (
+      object.metadata &&
+      (object.metadata.resized || object.metadata.original)
+    )
+      return Promise.resolve()
+    return ImageConverter.resizeImage(object)
+  })
 
 /************ Callable *************************************************************
 These can be called from directly within the app (passing additional auth info)
@@ -89,6 +97,18 @@ exports.removeStorageFolder = functions.https.onCall((data, context) => {
   console.log('storage folder remove called', data, context)
   const path = data.text
   StorageFunctions.deleteStorageItems(data.text)
+})
+interface getAnalyticsData {
+  viewId: string
+}
+exports.getAnalytics = functions.https.onCall(
+  (data: getAnalyticsData, context) => {
+    AnalyticsFunctions.getAnalyticsReport(data.viewId)
+  },
+)
+exports.callTest = functions.https.onCall((data, context) => {
+  console.log('test function called')
+  return 'received'
 })
 
 // add export so can be used by test

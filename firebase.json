@@ -12,14 +12,6 @@
         "function": "test"
       },
       {
-        "source": "/imageResize",
-        "function": "imageResize"
-      },
-      {
-        "source": "/imageResize",
-        "function": "imageResize"
-      },
-      {
         "source": "/getAnalytics",
         "function": "getAnalytics"
       },

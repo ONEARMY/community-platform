@@ -105,10 +105,20 @@ exports.getAnalytics = functions.https.onCall(
     AnalyticsFunctions.getAnalyticsReport(data.viewId)
   },
 )
+exports.getAccessToken = functions.https.onCall(
+  async (data: getAccessTokenData, context) => {
+    const token = await UtilsFunctions.getAccessToken(data.accessScopes)
+    console.log('token received', token)
+    return token
+  },
+)
 
 // add export so can be used by test
 export default app
 
 interface getAnalyticsData {
   viewId: string
+}
+interface getAccessTokenData {
+  accessScopes: string[]
 }

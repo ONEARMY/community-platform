@@ -30,6 +30,13 @@ class DiscussionsPageClass extends React.Component<IProps, any> {
 
   public async componentDidMount() {
     // load mocks
+    const token = await functions.httpsCallable('getAccessToken')({
+      accessScopes: [
+        'https://www.googleapis.com/auth/analytics',
+        'https://www.googleapis.com/auth/analytics.readonly',
+      ],
+    })
+    console.log('token', token)
     const analyticsReportRequest = functions.httpsCallable('getAnalyticsReport')
     console.log('getting analytics')
     let analyticsReportRows

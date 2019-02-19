@@ -26,6 +26,12 @@ If the code is built you can run firebase serve from the main repo and the funct
 
 Note, this will require authentication for the firebase project. You can request to be added to the project from any of the admins. Alternatively you can use the service account below.
 
+## Handling headers and redirects
+
+By default firebase redirects most requests to the main index file. Custom rewrite has
+been added for /api requests and some other exports.
+If specific rewrite needs to be handled you can update the root `firebase.json` file.
+
 ## Accessing service account
 
 Functions have access to environment variables set in the root `scripts/deploy.sh` scripts,

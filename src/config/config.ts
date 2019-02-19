@@ -10,14 +10,19 @@ Dev config is hardcoded - it is recommended if changing for production to hide t
 details via gitignore. You can find more information about potential security risk here:
 https://javebratt.com/hide-firebase-api/
 *****************************************************************************************/
-let config
-const devConfig = {
+let firebaseConfig
+let analyticsConfig
+firebaseConfig = {
   apiKey: 'AIzaSyChVNSMiYxCkbGd9C95aChr9GxRJtW6NRA',
   authDomain: 'precious-plastics-v4-dev.firebaseapp.com',
   databaseURL: 'https://precious-plastics-v4-dev.firebaseio.com',
   messagingSenderId: '174193431763',
   projectId: 'precious-plastics-v4-dev',
   storageBucket: 'precious-plastics-v4-dev.appspot.com',
+}
+analyticsConfig = {
+  trackingCode: 'UA-133973230-2',
+  viewId: '189456245',
 }
 
 // different production site config pulled from environment variable
@@ -28,7 +33,7 @@ const productionSites = [
 ]
 if (productionSites.indexOf(window.location.host) > -1) {
   const e = process.env
-  config = {
+  firebaseConfig = {
     apiKey: e.REACT_APP_FIREBASE_API_KEY,
     authDomain: e.REACT_APP_FIREBASE_AUTH_DOMAIN,
     databaseURL: e.REACT_APP_FIREBASE_DATABASE_URL,
@@ -36,21 +41,11 @@ if (productionSites.indexOf(window.location.host) > -1) {
     storageBucket: e.REACT_APP_FIREBASE_STORAGE_BUCKET,
     messagingSenderId: e.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
   }
-} else {
-  config = devConfig
+  analyticsConfig = {
+    trackingCode: e.REACT_APP_GA_TRACKING_CODE,
+    viewId: e.REACT_APP_GA_VIEW_ID,
+  }
 }
-export const FIREBASE_CONFIG = config
 
-let analyticsConfig
-if (process.env.NODE_ENV === 'production') {
-  analyticsConfig = {
-    trackingCode: 'UA-133973230-1',
-    viewId: '189356303'
-  }
-} else {
-  analyticsConfig = {
-    trackingCode: 'UA-133973230-2',
-    viewId: '189456245'
-  }
-}
+export const FIREBASE_CONFIG = firebaseConfig
 export const GOOGLE_ANALYTICS_CONFIG = analyticsConfig

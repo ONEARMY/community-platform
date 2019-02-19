@@ -12,6 +12,8 @@ import { EventsMenu } from './Content/EventsMenu/EventsMenu'
 import { EventsList } from './Content/EventsList/EventsList'
 import { EventsMap } from './Content/EventsMap/EventsMap'
 
+import { withRouter } from 'react-router'
+
 // define the page properties with typing information for fields
 // properties are things that will have been passed down from parent component
 // so for pages are likely to not contain much except perhaps global store objects
@@ -23,8 +25,8 @@ interface IProps {
   eventStore: allStores.eventStore,
 }))
 @observer
-export class EventsPage extends React.Component<IProps> {
-  constructor(props: IProps) {
+class EventsPageClass extends React.Component<IProps, any> {
+  constructor(props: any) {
     super(props)
   }
 
@@ -53,3 +55,4 @@ export class EventsPage extends React.Component<IProps> {
     )
   }
 }
+export const EventsPage = withRouter(EventsPageClass)

@@ -11,6 +11,7 @@
   },
   "functions": {
     "predeploy": [
+      "npm install -g tslint",
       "npm --prefix \"$RESOURCE_DIR\" run lint",
       "npm --prefix \"$RESOURCE_DIR\" build"
     ]

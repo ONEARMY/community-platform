@@ -92,6 +92,8 @@ exports.imageResize = functions.storage
 /************ Callable *************************************************************
 These can be called from directly within the app (passing additional auth info)
 https://firebase.google.com/docs/functions/callable
+Any functions added here should have a custom url rewrite specified in root firebase.json
+to handle CORS preflight requests correctly
 ************************************************************************************/
 exports.removeStorageFolder = functions.https.onCall((data, context) => {
   console.log('storage folder remove called', data, context)

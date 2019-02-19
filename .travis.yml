@@ -11,7 +11,6 @@ addons:
 
 before_script:
   - npm install -g firebase-tools
-  - cp functions/src/config/config.json src/config/config.json
 script:
   - npm run build
 

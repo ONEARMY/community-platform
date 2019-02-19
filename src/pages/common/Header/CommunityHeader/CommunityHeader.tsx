@@ -22,16 +22,8 @@ import {
   Avatar,
   SectionDescription,
 } from './elements'
-import { LoginComponent } from '../../Login/Login'
-import { UserStore } from 'src/stores/User/user.store'
-import { observer } from 'mobx-react'
 import { IUser } from 'src/models/user.models'
 
-interface IProps {
-  // had initially only passed user but then also wanted to be able to call logout
-  // could be refactored if code also required in public header
-  userStore: UserStore
-}
 interface IState {
   moreMenuAnchor: any
   profileMenuAnchor: any
@@ -81,10 +73,6 @@ export class CommunityHeader extends React.Component<IProps, IState> {
         <KeyboardArrowDownIcon />
       </Profile>
     )
-  }
-  logout = () => {
-    this.props.userStore.logout()
-    this.closeProfileMenu()
   }
 
   render() {

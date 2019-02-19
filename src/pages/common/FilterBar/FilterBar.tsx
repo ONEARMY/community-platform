@@ -1,7 +1,9 @@
 import * as React from 'react'
 
-import { Container, CreateBtn, LinkToCreate } from './elements'
-import Selector from './Selector'
+import { Box, Flex } from 'rebass'
+import { Button } from 'src/components/Button'
+import Selector from 'src/components/Selector'
+import Link from 'react-router-dom/Link'
 
 interface IProps {
   onChange: () => void
@@ -34,14 +36,18 @@ export default class FilterBar extends React.Component<IProps> {
   render() {
     const { section } = this.props
     return (
-      <Container>
-        <Selector type="project" onChange={() => this.onProjectChange()} />
-        <Selector type="category" onChange={() => this.onCategoryChange()} />
-        <Selector type="tags" onChange={() => this.onTagsChange()} />
-        <LinkToCreate to={section + '/create'}>
-          <CreateBtn border>create {section}</CreateBtn>
-        </LinkToCreate>
-      </Container>
+      <Flex width={1} bg="white" justifyContent={'space-between'} p={2}>
+        <Box>
+          <Selector type="project" onChange={() => this.onProjectChange()} />
+          <Selector type="category" onChange={() => this.onCategoryChange()} />
+          <Selector type="tags" onChange={() => this.onTagsChange()} />
+        </Box>
+        <Box>
+          <Link to={section + '/create'}>
+            <Button variant="outline">create {section}</Button>
+          </Link>
+        </Box>
+      </Flex>
     )
   }
 }

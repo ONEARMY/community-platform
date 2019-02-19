@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import { DISCUSSIONS_MOCK } from 'src/mocks/discussions.mock'
 
 import MaxWidth from 'src/components/Layout/MaxWidth.js'
@@ -11,12 +11,13 @@ import { Content, Main, ListHeader, PostCount, List, OrderBy } from './elements'
 
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import { withRouter } from 'react-router'
+import { functions } from 'src/utils/firebase'
+import { GOOGLE_ANALYTICS_CONFIG } from 'src/config/config'
 
 interface IProps {
   howtoStore: HowtoStore
 }
 
-// @inject('howtoStore')
 // Then we can use the observer component decorator to automatically tracks observables and re-renders on change
 @observer
 class DiscussionsPageClass extends React.Component<IProps, any> {
@@ -30,6 +31,36 @@ class DiscussionsPageClass extends React.Component<IProps, any> {
   public async componentDidMount() {
     // load mocks
     console.log('mocks:', DISCUSSIONS_MOCK)
+    console.log('test')
+    functions
+      .httpsCallable('test')()
+      .then(res => console.log('test res', res))
+      .catch(err => console.log('test err', err))
+
+    // const analyticsReportRequest = functions.httpsCallable('getAnalyticsReport')
+    // let analyticsReportRows
+    // try {
+    //   analyticsReportRows = (await analyticsReportRequest({
+    //     viewId: GOOGLE_ANALYTICS_CONFIG.viewId,
+    //   }).catch(err => console.log('err', err))) as any
+    // } catch (error) {
+    //   console.log('error', error)
+    // }
+    // console.log('report rows', analyticsReportRows)
+    // const updatedPosts = this.state.posts
+    // if (analyticsReportRows) {
+    //   for (const post of updatedPosts) {
+    //     const postAnalytic = analyticsReportRows.find(
+    //       row => row.dimensions[0] === `/discussions/post/${post._id}`,
+    //     )
+    //     if (postAnalytic) {
+    //       post.viewCount = Number(postAnalytic.metrics[0].values[0])
+    //     } else {
+    //       post.viewCount = 0
+    //     }
+    //   }
+    //   this.setState({ posts: updatedPosts })
+    // }
   }
 
   public orderListBy(orderType: string) {

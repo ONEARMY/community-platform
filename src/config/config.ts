@@ -49,6 +49,7 @@ if (productionSites.indexOf(window.location.host) > -1) {
     viewId: e.REACT_APP_GA_VIEW_ID as string,
   }
 }
+export const isDebug = process.env.NODE_ENV === 'development'
 
 export const FIREBASE_CONFIG = firebaseConfig
 export const GOOGLE_ANALYTICS_CONFIG = analyticsConfig

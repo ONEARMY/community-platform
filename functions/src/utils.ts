@@ -1,6 +1,5 @@
 import { JWT } from 'google-auth-library'
 import { config } from 'firebase-functions'
-import atob from 'atob'
 
 // config has access to environment variables set in root scripts/deploy.sh
 // authorise application using JWT
@@ -16,7 +15,8 @@ export const getAccessToken = async (
 ) => {
   console.log('getting access token', accessScopes)
   console.log('config', config().service)
-  const privateKey = atob(config().service.private_key)
+  const b64Key = config().service.private_key
+  const privateKey = Buffer.from(b64Key, 'base64').toString('binary')
   // private key set to firebase config from CI is encoded as base64 as
   // contains large number of special characters
   console.log('private key', privateKey)

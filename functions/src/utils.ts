@@ -5,7 +5,8 @@ import { config } from 'firebase-functions'
 // authorise application using JWT
 
 export const AuthTest = async () => {
-  await getAccessToken([], token => console.log('token received successfully'))
+  const token = await getAccessToken([])
+  return token
 }
 
 export const getAccessToken = async (

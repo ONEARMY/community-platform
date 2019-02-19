@@ -15,7 +15,7 @@ import * as UtilsFunctions from './utils'
 import * as AnalyticsFunctions from './analytics'
 
 // update on change logging purposes
-const buildNumber = 1.03
+const buildNumber = 1.04
 
 // express settings to handle api
 const app = express()
@@ -25,6 +25,8 @@ app.use(
     limit: '1mb',
   }),
 )
+// configure app to use cors by default
+app.use(corsLib({ origin: true }))
 app.use(bodyParser.urlencoded({ extended: false }))
 
 /************ GET and POST requests ************************************************
@@ -41,12 +43,18 @@ app.all('*', async (req, res, next) => {
     // will likely change behaviour in future when required
     switch (endpoint) {
       case 'db-test':
-        const token = await UtilsFunctions.AuthTest()
-        res.send(token)
+        const testToken = await UtilsFunctions.AuthTest()
+        res.send(testToken)
         break
       case 'backup':
         const response = await DB.BackupDatabase()
         res.send(response)
+        break
+      case 'getAccessToken':
+        const token = await UtilsFunctions.getAccessToken(
+          req.params.accessScopes,
+        )
+        res.send(token)
         break
       default:
         res.send('invalid api endpoint')

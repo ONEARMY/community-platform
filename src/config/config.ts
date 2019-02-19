@@ -40,3 +40,17 @@ if (productionSites.indexOf(window.location.host) > -1) {
   config = devConfig
 }
 export const FIREBASE_CONFIG = config
+
+let analyticsConfig
+if (process.env.NODE_ENV === 'production') {
+  analyticsConfig = {
+    trackingCode: 'UA-133973230-1',
+    viewId: '189356303'
+  }
+} else {
+  analyticsConfig = {
+    trackingCode: 'UA-133973230-2',
+    viewId: '189456245'
+  }
+}
+export const GOOGLE_ANALYTICS_CONFIG = analyticsConfig

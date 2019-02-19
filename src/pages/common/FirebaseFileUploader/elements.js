@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 import LinearProgress from '@material-ui/core/LinearProgress'
-import colors from 'src/themes/colors'
+import { colors } from 'src/themes/styled.theme'
 import { Button } from 'src/components/Button'
 
 const getColor = ({ progress }) => {

@@ -7,11 +7,12 @@ import { HowtoPage } from './Howto/Howto'
 import { HomePage } from './Home/Home'
 import { NotFoundPage } from './NotFound/NotFound'
 import { DiscussionsPage } from './Discussions/Discussions'
-import { TemplatePage } from './_Template/Template'
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import { EventsPage } from './Events/Events'
-import MainLayout from './common/MainLayout'
 import Header from './common/Header/Header'
+import { isDebug } from 'src/config/config'
+import { DebugEditorPage } from 'src/components/Editor/Debug'
+import { Title } from './Howto/Content/CreateHowto/elements'
 
 interface IState {
   singlePageMode: boolean
@@ -21,23 +22,86 @@ export interface IPageMeta {
   path: string
   component: any
   title: string
+  description: string
 }
 
 export const COMMUNITY_PAGES: IPageMeta[] = [
-  { path: '/news', component: NotFoundPage, title: 'Newsfeed' },
-  { path: '/how-to', component: HowtoPage, title: 'How-To' },
-  { path: '/discussions', component: DiscussionsPage, title: 'Discussions' },
+  {
+    path: '/news',
+    component: <NotFoundPage />,
+    title: 'Newsfeed',
+    description: "Welcome home, here is all the stuff you're interested in",
+  },
+  {
+    path: '/how-to',
+    component: <HowtoPage />,
+    title: 'How-To',
+    description: '',
+  },
+  {
+    path: '/discussions',
+    component: <DiscussionsPage />,
+    title: 'Discussions',
+    description: '',
+  },
 ]
+
+export const DEBUG_PAGES: IPageMeta[] = isDebug
+  ? [
+      {
+        path: '/debugEditor',
+        component: <DebugEditorPage />,
+        title: 'Debug Editor',
+        description: '',
+      },
+    ]
+  : []
+
 export const COMMUNITY_PAGES_MORE: IPageMeta[] = [
-  { path: '/maps', component: NotFoundPage, title: 'Maps' },
-  { path: '/discover', component: NotFoundPage, title: 'Discover' },
-  { path: '/events', component: EventsPage, title: 'Events' },
-  { path: '/about', component: NotFoundPage, title: 'About' },
+  {
+    path: '/maps',
+    component: <NotFoundPage />,
+    title: 'Maps',
+    description: '',
+  },
+  {
+    path: '/discover',
+    component: <NotFoundPage />,
+    title: 'Discover',
+    description: '',
+  },
+  {
+    path: '/events',
+    component: <EventsPage />,
+    title: 'Events',
+    description: '',
+  },
+  {
+    path: '/about',
+    component: <NotFoundPage />,
+    title: 'About',
+    description: '',
+  },
 ]
 export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [
-  { path: '/profile', component: NotFoundPage, title: 'Profile' },
-  { path: '/settings', component: NotFoundPage, title: 'Settings' },
-  { path: '/help', component: NotFoundPage, title: 'Help' },
+  {
+    path: '/profile',
+    component: <NotFoundPage />,
+    title: 'Profile',
+    description: '',
+  },
+  {
+    path: '/settings',
+    component: <NotFoundPage />,
+    title: 'Settings',
+    description: '',
+  },
+  {
+    path: '/help',
+    component: <NotFoundPage />,
+    title: 'Help',
+    description: '',
+  },
 ]
 
 export class Routes extends React.Component<any, IState> {
@@ -51,6 +115,7 @@ export class Routes extends React.Component<any, IState> {
       ...COMMUNITY_PAGES,
       ...COMMUNITY_PAGES_MORE,
       ...COMMUNITY_PAGES_PROFILE,
+      ...DEBUG_PAGES,
     ]
     // we are rendering different pages and navigation dependent on whether the user has navigated directly to view the
     // entire site, or just one page of it via subdomains. This is so we can effectively integrate just parts of this
@@ -68,13 +133,21 @@ export class Routes extends React.Component<any, IState> {
                 flexDirection: 'column',
               }}
             >
-              <Header variant="community" />
               <Switch>
                 {pages.map(page => (
                   <Route
                     path={page.path}
-                    component={page.component}
                     key={page.path}
+                    render={props => (
+                      <React.Fragment>
+                        <Header
+                          variant="community"
+                          title={page.title}
+                          description={page.description}
+                        />
+                        {page.component}
+                      </React.Fragment>
+                    )}
                   />
                 ))}
                 <Route exact path="/" component={HomePage} />

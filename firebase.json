@@ -4,15 +4,42 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
+        "source": "/api",
+        "function": "api"
+      },
+      {
+        "source": "/test",
+        "function": "test"
+      },
+      {
+        "source": "/imageResize",
+        "function": "imageResize"
+      },
+      {
+        "source": "/imageResize",
+        "function": "imageResize"
+      },
+      {
+        "source": "/getAnalytics",
+        "function": "getAnalytics"
+      },
+      {
         "source": "**",
-        "destination": "/index.html"
+        "destination": "/index.html",
+        "headers": [
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+          }
+        ]
       }
     ]
   },
   "functions": {
     "predeploy": [
-      "npm --prefix ./functions run lint",
-      "npm --prefix ./functions run build"
+      "npm --prefix \"$RESOURCE_DIR\" install",
+      "npm --prefix \"$RESOURCE_DIR\" run lint",
+      "npm --prefix \"$RESOURCE_DIR\" run build"
     ]
   }
 }

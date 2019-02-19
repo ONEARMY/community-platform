@@ -22,7 +22,16 @@ import {
   Avatar,
   SectionDescription,
 } from './elements'
+import { LoginComponent } from '../../Login/Login'
+import { UserStore } from 'src/stores/User/user.store'
+import { observer } from 'mobx-react'
+import { IUser } from 'src/models/user.models'
 
+interface IProps {
+  // had initially only passed user but then also wanted to be able to call logout
+  // could be refactored if code also required in public header
+  userStore: UserStore
+}
 interface IState {
   moreMenuAnchor: any
   profileMenuAnchor: any
@@ -32,6 +41,8 @@ interface IProps {
   title: string
   description: string
 }
+
+@observer
 
 export class CommunityHeader extends React.Component<IProps, IState> {
   constructor(props) {
@@ -61,9 +72,26 @@ export class CommunityHeader extends React.Component<IProps, IState> {
   closeProfileMenu = () => {
     this.setState({ profileMenuAnchor: null })
   }
+  getProfile = (user: IUser) => {
+    return (
+      <Profile onClick={this.openProfileMenu}>
+        <Avatar
+          alt={user.display_name}
+          src="http://i.pravatar.cc/200"
+          className="header__avatar"
+        />
+        <KeyboardArrowDownIcon />
+      </Profile>
+    )
+  }
+  logout = () => {
+    this.props.userStore.logout()
+    this.closeProfileMenu()
+  }
 
   render() {
     const { moreMenuAnchor, profileMenuAnchor } = this.state
+    const user = this.props.userStore.user
     return (
       <div>
         <Content>

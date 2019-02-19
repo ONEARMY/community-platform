@@ -1,9 +1,8 @@
 import * as React from 'react'
-import { ITag } from 'src/models/models'
 import { inject, observer } from 'mobx-react'
 import { TagsStore } from 'src/stores/Tags/tags.store'
 import { Container, TagContainer, Tag, SelectedTag } from './elements'
-import { ISelectedTags } from 'src/models/tags.model'
+import { ISelectedTags, ITag } from 'src/models/tags.model'
 import { FieldRenderProps } from 'react-final-form'
 
 // we include props from react-final-form fields so it can be used as a custom field component

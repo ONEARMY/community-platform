@@ -49,4 +49,4 @@ class HowtoPageClass extends React.Component<IProps, any> {
     )
   }
 }
-export const HowtoPage = withRouter(HowtoPageClass)
+export const HowtoPage = withRouter(HowtoPageClass as any)

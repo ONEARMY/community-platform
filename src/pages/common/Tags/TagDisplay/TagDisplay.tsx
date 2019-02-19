@@ -1,8 +1,8 @@
 import * as React from 'react'
-import { ITag } from 'src/models/models'
 import { inject, observer } from 'mobx-react'
 import { TagsStore } from 'src/stores/Tags/tags.store'
 import './TagDisplay.scss'
+import { ITag } from 'src/models/tags.model'
 
 /*
 This component takes a tag key as an input, looks up the tag information from the global store

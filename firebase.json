@@ -13,7 +13,7 @@
     "predeploy": [
       "npm --prefix \"$RESOURCE_DIR\" install",
       "npm --prefix \"$RESOURCE_DIR\" run lint",
-      "npm --prefix \"$RESOURCE_DIR\" build"
+      "npm --prefix \"$RESOURCE_DIR\" run build"
     ]
   }
 }

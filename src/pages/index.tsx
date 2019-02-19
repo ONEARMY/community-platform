@@ -32,39 +32,64 @@ export const COMMUNITY_PAGES: IPageMeta[] = [
     title: 'Newsfeed',
     description: "Welcome home, here is all the stuff you're interested in",
   },
-  { path: '/how-to', component: HowtoPage, title: 'How-To', description: '' },
+  {
+    path: '/how-to',
+    component: <HowtoPage />,
+    title: 'How-To',
+    description: '',
+  },
   {
     path: '/discussions',
-    component: DiscussionsPage,
+    component: <DiscussionsPage />,
     title: 'Discussions',
     description: '',
   },
 ]
 export const COMMUNITY_PAGES_MORE: IPageMeta[] = [
-  { path: '/maps', component: NotFoundPage, title: 'Maps', description: '' },
+  {
+    path: '/maps',
+    component: <NotFoundPage />,
+    title: 'Maps',
+    description: '',
+  },
   {
     path: '/discover',
-    component: NotFoundPage,
+    component: <NotFoundPage />,
     title: 'Discover',
     description: '',
   },
-  { path: '/events', component: EventsPage, title: 'Events', description: '' },
-  { path: '/about', component: NotFoundPage, title: 'About', description: '' },
+  {
+    path: '/events',
+    component: <EventsPage />,
+    title: 'Events',
+    description: '',
+  },
+  {
+    path: '/about',
+    component: <NotFoundPage />,
+    title: 'About',
+    description: '',
+  },
 ]
 export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [
   {
     path: '/profile',
-    component: NotFoundPage,
+    component: <NotFoundPage />,
     title: 'Profile',
     description: '',
   },
   {
     path: '/settings',
-    component: NotFoundPage,
+    component: <NotFoundPage />,
     title: 'Settings',
     description: '',
   },
-  { path: '/help', component: NotFoundPage, title: 'Help', description: '' },
+  {
+    path: '/help',
+    component: <NotFoundPage />,
+    title: 'Help',
+    description: '',
+  },
 ]
 
 export class Routes extends React.Component<any, IState> {

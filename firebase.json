@@ -16,6 +16,10 @@
         "function": "getAnalytics"
       },
       {
+        "source": "/getAnalyticsReport",
+        "function": "getAnalyticsReport"
+      },
+      {
         "source": "**",
         "destination": "/index.html",
         "headers": [

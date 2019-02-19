@@ -11,7 +11,6 @@ import IconButton from '@material-ui/core/IconButton'
 import MailOutlinedIcon from '@material-ui/icons/MailOutlined'
 import { MdNotifications } from 'react-icons/md'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
-import FormLabel from '@material-ui/core/FormLabel'
 import {
   Content,
   LogoText,
@@ -21,6 +20,7 @@ import {
   ListButton,
   LinkButton,
   Avatar,
+  SectionDescription,
 } from './elements'
 
 interface IState {
@@ -151,16 +151,10 @@ export class CommunityHeader extends React.Component<IProps, IState> {
             </ClickAwayListener>
           </Menu>
         </Content>
-        <FormLabel
-          style={{
-            backgroundColor: '#2d5786',
-            display: 'block',
-            color: 'white',
-          }}
-        >
+        <SectionDescription>
           {this.props.title}
           {this.props.description}
-        </FormLabel>
+        </SectionDescription>
       </div>
     )
   }

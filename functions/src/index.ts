@@ -15,7 +15,7 @@ import * as UtilsFunctions from './utils'
 import * as AnalyticsFunctions from './analytics'
 
 // update on change logging purposes
-const buildNumber = 1.04
+const buildNumber = 1.05
 
 // express settings to handle api
 const app = express()

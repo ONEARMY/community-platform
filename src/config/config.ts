@@ -11,7 +11,10 @@ details via gitignore. You can find more information about potential security ri
 https://javebratt.com/hide-firebase-api/
 *****************************************************************************************/
 let firebaseConfig
-let analyticsConfig
+let analyticsConfig: {
+  viewId: string
+  trackingCode: string
+}
 firebaseConfig = {
   apiKey: 'AIzaSyChVNSMiYxCkbGd9C95aChr9GxRJtW6NRA',
   authDomain: 'precious-plastics-v4-dev.firebaseapp.com',
@@ -42,8 +45,8 @@ if (productionSites.indexOf(window.location.host) > -1) {
     messagingSenderId: e.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
   }
   analyticsConfig = {
-    trackingCode: e.REACT_APP_GA_TRACKING_CODE,
-    viewId: e.REACT_APP_GA_VIEW_ID,
+    trackingCode: e.REACT_APP_GA_TRACKING_CODE as string,
+    viewId: e.REACT_APP_GA_VIEW_ID as string,
   }
 }
 

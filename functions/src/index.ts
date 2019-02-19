@@ -11,6 +11,7 @@ import * as DB from './databaseBackup'
 import * as ImageConverter from './imageConverter'
 import * as StorageFunctions from './storageFunctions'
 import * as UtilsFunctions from './utils'
+import * as AnalyticsFunctions from './analytics'
 
 // update on change logging purposes
 const buildNumber = 1.03
@@ -97,15 +98,18 @@ exports.removeStorageFolder = functions.https.onCall((data, context) => {
   const path = data.text
   StorageFunctions.deleteStorageItems(data.text)
 })
-interface getAccessTokenData {
-  accessScopes: string[]
-  callback?: () => void
+interface getAnalyticsData {
+  viewId: string
 }
-exports.getAccessToken = functions.https.onCall(
-  (data: getAccessTokenData, context) => {
-    UtilsFunctions.getAccessToken(data.accessScopes, data.callback)
+exports.getAnalytics = functions.https.onCall(
+  (data: getAnalyticsData, context) => {
+    AnalyticsFunctions.getAnalyticsReport(data.viewId)
   },
 )
+exports.callTest = functions.https.onCall((data, context) => {
+  console.log('test function called')
+  return 'received'
+})
 
 // add export so can be used by test
 export default app

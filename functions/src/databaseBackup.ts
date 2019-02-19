@@ -1,5 +1,5 @@
-import { JWT } from 'google-auth-library'
 import Axios from 'axios'
+import { getAccessToken } from './utils'
 import { config } from 'firebase-functions'
 
 /*  Cloud function to automatically backup the firebase database adapted from: 
@@ -9,39 +9,17 @@ import { config } from 'firebase-functions'
     which is accessed from environment variables
 */
 
-// config has access to environment variables set in root scripts/deploy.sh
-const PROJECT_ID = config().project_id
-console.log('project id', PROJECT_ID)
-// authorise application using JWT
-const getAccessToken = async () => {
+// rest reference: https://cloud.google.com/firestore/docs/reference/rest/v1beta2/projects.databases/exportDocuments
+export const BackupDatabase = async () => {
+  console.log('executing database backup')
   const scopes = [
     'https://www.googleapis.com/auth/datastore',
     'https://www.googleapis.com/auth/cloud-platform',
   ]
-  const jwtClient = new JWT(
-    config().service.client_email,
-    null,
-    config().service.private_key,
-    scopes,
-  )
-  try {
-    const authorization = await jwtClient.authorize()
-    return authorization.access_token
-  } catch (error) {
-    return null
-  }
-}
-
-export const AuthTest = async () => {
-  const token = await getAccessToken()
-  return token
-}
-
-// rest reference: https://cloud.google.com/firestore/docs/reference/rest/v1beta2/projects.databases/exportDocuments
-export const BackupDatabase = async () => {
-  console.log('executing database backup')
-  const accessToken = await getAccessToken()
+  const accessToken = await getAccessToken(scopes)
   console.log('access token received', accessToken)
+  const PROJECT_ID = config().project_id
+  console.log('project id', PROJECT_ID)
   const url = `https://firestore.googleapis.com/v1beta1/projects/${PROJECT_ID}/databases/(default):exportDocuments`
   // use axios to send post request as promise
   console.log('posting', url)

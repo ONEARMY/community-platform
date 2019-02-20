@@ -23,14 +23,25 @@ export interface IPageMeta {
   component: any
   title: string
   description: string
+  exact?: boolean
 }
+
+export const HOME_PAGE: IPageMeta[] = [
+  {
+    path: '/',
+    component: <HomePage />,
+    title: 'Home',
+    description: "Welcome home, here is all the stuff you're interested in",
+    exact: true,
+  },
+]
 
 export const COMMUNITY_PAGES: IPageMeta[] = [
   {
     path: '/news',
     component: <NotFoundPage />,
     title: 'Newsfeed',
-    description: "Welcome home, here is all the stuff you're interested in",
+    description: 'Welcome to news',
   },
   {
     path: '/how-to',
@@ -113,6 +124,7 @@ export class Routes extends React.Component<any, IState> {
 
   public render() {
     const pages = [
+      ...HOME_PAGE,
       ...COMMUNITY_PAGES,
       ...COMMUNITY_PAGES_MORE,
       ...COMMUNITY_PAGES_PROFILE,
@@ -138,6 +150,7 @@ export class Routes extends React.Component<any, IState> {
               <Switch>
                 {pages.map(page => (
                   <Route
+                    exact={page.exact}
                     path={page.path}
                     key={page.path}
                     render={props => (
@@ -152,7 +165,6 @@ export class Routes extends React.Component<any, IState> {
                     )}
                   />
                 ))}
-                <Route exact path="/" component={HomePage} />
                 <Route component={NotFoundPage} />
               </Switch>
             </div>

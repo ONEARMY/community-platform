@@ -17,7 +17,7 @@ interface IProps {
 // Then we can use the observer component decorator to automatically tracks observables and re-renders on change
 @observer
 class HowtoPageClass extends React.Component<IProps, any> {
-  constructor(props: any) {
+  constructor(props) {
     super(props)
   }
 

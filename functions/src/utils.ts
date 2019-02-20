@@ -25,7 +25,7 @@ export const getAccessToken = async (
   const jwtClient = new JWT(
     config().service.client_email,
     null,
-    service.privateKey,
+    service.private_Key,
     accessScopes,
   )
   try {

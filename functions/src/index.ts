@@ -124,12 +124,13 @@ interface getAccessTokenData {
 
 exports.getAnalytics = functions.https.onCall(
   async (data: getAnalyticsData, context) => {
-    AnalyticsFunctions.getAnalyticsReport(data.viewId, data.credentials)
+    console.log('get analytics request received', data)
+    AnalyticsFunctions.getAnalyticsReport(data.viewId, data.token)
   },
 )
 interface getAnalyticsData {
   viewId: string
-  credentials: Credentials
+  token: string
 }
 
 // add export so can be used by test

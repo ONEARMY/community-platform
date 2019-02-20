@@ -10,7 +10,7 @@ import { DiscussionsPage } from './Discussions/Discussions'
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import { EventsPage } from './Events/Events'
 import Header from './common/Header/Header'
-import { isDebug } from 'src/config/config'
+import { SITE } from 'src/config/config'
 import { DebugEditorPage } from 'src/components/Editor/Debug'
 import { DevNotice } from 'src/components/Dev/DevNotice'
 
@@ -46,16 +46,17 @@ export const COMMUNITY_PAGES: IPageMeta[] = [
   },
 ]
 
-export const DEBUG_PAGES: IPageMeta[] = isDebug
-  ? [
-      {
-        path: '/debugEditor',
-        component: <DebugEditorPage />,
-        title: 'Debug Editor',
-        description: '',
-      },
-    ]
-  : []
+export const DEBUG_PAGES: IPageMeta[] =
+  SITE === 'localhost'
+    ? [
+        {
+          path: '/debugEditor',
+          component: <DebugEditorPage />,
+          title: 'Debug Editor',
+          description: '',
+        },
+      ]
+    : []
 
 export const COMMUNITY_PAGES_MORE: IPageMeta[] = [
   {

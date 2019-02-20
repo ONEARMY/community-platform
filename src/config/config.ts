@@ -10,6 +10,7 @@ Dev config is hardcoded - it is recommended if changing for production to hide t
 details via gitignore. You can find more information about potential security risk here:
 https://javebratt.com/hide-firebase-api/
 *****************************************************************************************/
+
 let firebaseConfig
 let analyticsConfig: {
   viewId: string
@@ -34,7 +35,15 @@ const productionSites = [
   'onearmyworld.firebaseapp.com',
   'documentation.preciousplastic.com',
 ]
+// as both dev.onearmy.world and onearmy.world are production builds
+// we can't use process.env to distinguish, so making explicit here
+// (in future may wish to rename 'dev' site to 'staging')
+type siteVariants = 'localhost' | 'staging' | 'production'
+let siteVariant: siteVariants =
+  process.env.NODE_ENV === 'development' ? 'localhost' : 'staging'
+
 if (productionSites.indexOf(window.location.host) > -1) {
+  siteVariant = 'production'
   const e = process.env
   firebaseConfig = {
     apiKey: e.REACT_APP_FIREBASE_API_KEY,
@@ -49,7 +58,6 @@ if (productionSites.indexOf(window.location.host) > -1) {
     viewId: e.REACT_APP_GA_VIEW_ID as string,
   }
 }
-export const isDebug = process.env.NODE_ENV === 'development'
-
+export const SITE = siteVariant
 export const FIREBASE_CONFIG = firebaseConfig
 export const GOOGLE_ANALYTICS_CONFIG = analyticsConfig

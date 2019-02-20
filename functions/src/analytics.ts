@@ -1,11 +1,11 @@
 import Axios from 'axios'
-import { getAccessToken } from './utils'
+import { Credentials } from 'google-auth-library'
+import { resolve } from 'url'
 
-export const getAnalyticsReport = async (viewId: string) => {
-  const accessToken = await getAccessToken([
-    'https://www.googleapis.com/auth/analytics',
-    'https://www.googleapis.com/auth/analytics.readonly',
-  ])
+export const getAnalyticsReport = async (
+  viewId: string,
+  accessToken: Credentials,
+) => {
   console.log('access token received', accessToken)
   const result = await Axios({
     url: 'https://analyticsreporting.googleapis.com/v4/reports:batchGet',
@@ -47,6 +47,9 @@ export const getAnalyticsReport = async (viewId: string) => {
         },
       ],
     },
+  }).catch(err => {
+    console.log('analytics error', err)
+    return err
   })
   console.log('result received', result)
   return result.data.reports[0].data.rows

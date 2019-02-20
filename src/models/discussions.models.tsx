@@ -9,6 +9,7 @@ export interface IDiscussionQuestion {
   _last3Comments: any
   // user id only saved for created by
   createdBy: string
+  isClosed: boolean
   tags: string[]
   title: string
   content: string

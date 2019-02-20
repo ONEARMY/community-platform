@@ -14,7 +14,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
     _created: new Date('Tuesday, February 14, 2017 1:33 PM'),
     _modified: new Date('Monday, August 7, 2017 5:43 AM'),
     _lastResponse: new Date('Saturday, August 27, 2016 6:54 AM'),
-    _commentCount: 8,
+    _commentCount: 5,
     _viewCount: 6231,
     _usefullCount: 2,
     _last3Comments: [
@@ -23,6 +23,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/200',
     ],
     createdBy: 'http://i.pravatar.cc/200',
+    isClosed: false,
     tags: ['non', 'nulla', 'nostrud', 'incididunt', 'occaecat'],
     title:
       'Nulla incididunt excepteur pariatur sit labore ipsum consequat aute adipisicing.',
@@ -44,6 +45,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/200',
     ],
     createdBy: 'http://i.pravatar.cc/200',
+    isClosed: false,
     tags: ['ullamco', 'velit', 'anim', 'aliqua', 'deserunt'],
     title:
       'Ad ut esse ex laboris tempor tempor aliquip in id aliqua non reprehenderit.',
@@ -65,6 +67,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/200',
     ],
     createdBy: 'http://i.pravatar.cc/200',
+    isClosed: true,
     tags: ['consectetur', 'veniam', 'ut', 'ipsum', 'veniam'],
     title: 'Ut ad eu minim ullamco id occaecat tempor.',
     content:
@@ -85,6 +88,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/200',
     ],
     createdBy: 'http://i.pravatar.cc/200',
+    isClosed: false,
     tags: ['excepteur', 'proident', 'adipisicing', 'irure', 'aliquip'],
     title: 'Duis non incididunt commodo duis aliqua elit.',
     content:
@@ -105,6 +109,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/200',
     ],
     createdBy: 'http://i.pravatar.cc/200',
+    isClosed: false,
     tags: ['deserunt', 'minim', 'aliquip', 'laborum', 'tempor'],
     title: 'Commodo ullamco sit quis ex.',
     content:
@@ -125,6 +130,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/200',
     ],
     createdBy: 'http://i.pravatar.cc/200',
+    isClosed: true,
     tags: ['velit', 'proident', 'nisi', 'laborum', 'minim'],
     title:
       'Nostrud aliqua sunt amet veniam enim quis quis incididunt sunt sit eiusmod sit.',
@@ -146,6 +152,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/200',
     ],
     createdBy: 'http://i.pravatar.cc/200',
+    isClosed: false,
     tags: ['laborum', 'esse', 'quis', 'pariatur', 'quis'],
     title:
       'Ut qui magna ipsum duis incididunt voluptate dolor magna deserunt sint veniam laborum dolore.',
@@ -167,6 +174,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/200',
     ],
     createdBy: 'http://i.pravatar.cc/200',
+    isClosed: true,
     tags: ['eu', 'nisi', 'ullamco', 'labore', 'id'],
     title:
       'Proident ad aliquip aliqua excepteur est cupidatat minim sint officia.',
@@ -188,6 +196,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/200',
     ],
     createdBy: 'http://i.pravatar.cc/200',
+    isClosed: false,
     tags: ['fugiat', 'labore', 'non', 'consectetur', 'qui'],
     title:
       'Proident laborum qui laborum labore aute adipisicing dolor incididunt cillum.',
@@ -200,7 +209,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
 export const DISCUSSION_COMMENT_MOCKS: IDiscussionComment[] = [
   {
     _id: '5c6dad39f669db9d335153d2',
-    _discussionID: 'undefined',
+    _discussionID: '5c6d7a294475199744afe2d1',
     _created: new Date('Thursday, July 13, 2017 2:40 AM'),
     _modified: new Date('Wednesday, December 5, 2018 6:55 AM'),
     replies: [],
@@ -211,19 +220,19 @@ export const DISCUSSION_COMMENT_MOCKS: IDiscussionComment[] = [
   },
   {
     _id: '5c6dad39134eaab99e1f56cb',
-    _discussionID: 'undefined',
+    _discussionID: '5c6d7a294475199744afe2d1',
     _created: new Date('Sunday, October 1, 2017 8:14 PM'),
     _modified: new Date('Thursday, August 17, 2017 12:37 AM'),
     replies: [
       {
         _id: '5c6dadd6efb4c060265a127a',
-        _discussionID: 'undefined',
+        _discussionID: '5c6d7a294475199744afe2d1',
         _created: new Date('Friday, October 28, 2016 6:52 PM'),
         _modified: new Date('Tuesday, September 1, 2015 2:52 PM'),
         replies: [
           {
             _id: '5c6dae0e66a1d753e4f71312',
-            _discussionID: 'undefined',
+            _discussionID: '5c6d7a294475199744afe2d1',
             _created: new Date('Wednesday, December 27, 2017 5:34 AM'),
             _modified: new Date('Saturday, January 20, 2018 2:14 AM'),
             replies: [],
@@ -246,7 +255,7 @@ export const DISCUSSION_COMMENT_MOCKS: IDiscussionComment[] = [
   },
   {
     _id: '5c6dad39b88053eec7edf6ba',
-    _discussionID: 'undefined',
+    _discussionID: '5c6d7a294475199744afe2d1',
     _created: new Date('Friday, April 14, 2017 7:50 PM'),
     _modified: new Date('Saturday, December 1, 2018 1:50 AM'),
     replies: [],
@@ -275,6 +284,7 @@ const questionsTemplate = [
       _usefullCount: '{{integer(0, 6)}}',
       _last3Comments: [{ 'repeat(3)': 'http://i.pravatar.cc/200' }],
       createdBy: 'http://i.pravatar.cc/200',
+      isClosed: '{{bool()}}',
       tags: [
         {
           'repeat(5)': '{{lorem(1, "words")}}',

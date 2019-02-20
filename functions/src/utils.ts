@@ -5,25 +5,30 @@ import { config } from 'firebase-functions'
 // authorise application using JWT
 
 export const AuthTest = async () => {
-  await getAccessToken([], token => console.log('token received successfully'))
+  // test to get readonly access to analytics data
+  const token = await getAccessToken([
+    'https://www.googleapis.com/auth/analytics.readonly',
+  ])
+  return token
 }
 
 export const getAccessToken = async (
   accessScopes: string[],
-  callback?: (token: string) => void,
+  // callback?: (token: string) => void,
 ) => {
+  // service account details json encoded as base64 string
+  const service_b64 = config().service.json
+  const service = JSON.parse(
+    Buffer.from(service_b64, 'base64').toString('binary'),
+  )
+  // private key set to firebase config from CI is encoded as base64 as
+  // contains large number of special characters
   const jwtClient = new JWT(
     config().service.client_email,
     null,
-    config().service.private_key,
+    service.private_key,
     accessScopes,
   )
-  try {
-    const authorization = await jwtClient.authorize()
-    return callback
-      ? callback(authorization.access_token)
-      : authorization.access_token
-  } catch (error) {
-    return null
-  }
+  const credentials = await jwtClient.authorize()
+  return credentials
 }

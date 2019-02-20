@@ -1,6 +1,7 @@
 // node module imports
 import * as bodyParser from 'body-parser'
-import * as cors from 'cors'
+import * as corsLib from 'cors'
+const cors = corsLib({ origin: true })
 import * as express from 'express'
 import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
@@ -12,20 +13,21 @@ import * as ImageConverter from './imageConverter'
 import * as StorageFunctions from './storageFunctions'
 import * as UtilsFunctions from './utils'
 import * as AnalyticsFunctions from './analytics'
+import { Credentials } from 'google-auth-library'
 
 // update on change logging purposes
-const buildNumber = 1.03
+const buildNumber = 1.09
 
 // express settings to handle api
 const app = express()
-// Automatically allow cross-origin requests
-app.use(cors({ origin: true }))
 // use bodyparse to create json object from body
 app.use(
   bodyParser.json({
     limit: '1mb',
   }),
 )
+// configure app to use cors by default
+app.use(corsLib({ origin: true }))
 app.use(bodyParser.urlencoded({ extended: false }))
 
 /************ GET and POST requests ************************************************
@@ -34,22 +36,31 @@ at /api/[endpoint]
 ************************************************************************************/
 
 app.all('*', async (req, res, next) => {
-  // get the endpoint based on the request path
-  const endpoint = req.path.split('/')[1]
-  // *** NOTE currently all request types handled the same, i.e. GET/POST
-  // will likely change behaviour in future when required
-  switch (endpoint) {
-    case 'db-test':
-      const token = await UtilsFunctions.AuthTest()
-      res.send(token)
-      break
-    case 'backup':
-      const response = await DB.BackupDatabase()
-      res.send(response)
-      break
-    default:
-      res.send('invalid api endpoint')
-  }
+  // add cors to requests
+  cors(req, res, async () => {
+    // get the endpoint based on the request path
+    const endpoint = req.path.split('/')[1]
+    // *** NOTE currently all request types handled the same, i.e. GET/POST
+    // will likely change behaviour in future when required
+    switch (endpoint) {
+      case 'db-test':
+        const testToken = await UtilsFunctions.AuthTest()
+        res.send(testToken)
+        break
+      case 'backup':
+        const response = await DB.BackupDatabase()
+        res.send(response)
+        break
+      case 'getAccessToken':
+        const token = await UtilsFunctions.getAccessToken(
+          req.params.accessScopes,
+        )
+        res.send(token)
+        break
+      default:
+        res.send('invalid api endpoint')
+    }
+  })
 })
 exports.api = functions.https.onRequest(app)
 
@@ -100,15 +111,27 @@ exports.removeStorageFolder = functions.https.onCall((data, context) => {
   const path = data.text
   StorageFunctions.deleteStorageItems(data.text)
 })
-exports.getAnalytics = functions.https.onCall(
-  (data: getAnalyticsData, context) => {
-    AnalyticsFunctions.getAnalyticsReport(data.viewId)
+// use service agent to gain access credentials for gcp with  given access scopes
+exports.getAccessToken = functions.https.onCall(
+  async (data: getAccessTokenData, context) => {
+    const token = await UtilsFunctions.getAccessToken(data.accessScopes)
+    return token
   },
 )
+interface getAccessTokenData {
+  accessScopes: string[]
+}
+
+exports.getAnalytics = functions.https.onCall(
+  async (data: getAnalyticsData, context) => {
+    console.log('get analytics request received', data)
+    AnalyticsFunctions.getAnalyticsReport(data.viewId, data.token)
+  },
+)
+interface getAnalyticsData {
+  viewId: string
+  token: string
+}
 
 // add export so can be used by test
 export default app
-
-interface getAnalyticsData {
-  viewId: string
-}

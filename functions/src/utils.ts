@@ -14,7 +14,7 @@ export const getAccessToken = async (
   callback?: (token: string) => void,
 ) => {
   // service account details json encoded as base64 string
-  const service_b64 = config().servicejson
+  const service_b64 = config().service.json
   console.log('service', service_b64)
   const service = JSON.parse(
     Buffer.from(service_b64, 'base64').toString('binary'),

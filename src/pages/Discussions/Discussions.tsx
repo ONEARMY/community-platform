@@ -30,23 +30,19 @@ class DiscussionsPageClass extends React.Component<IProps, any> {
 
   public async componentDidMount() {
     // load mocks
-    const token = await functions.httpsCallable('getAccessToken')({
+    const creds = await functions.httpsCallable('getAccessToken')({
       accessScopes: [
         'https://www.googleapis.com/auth/analytics',
         'https://www.googleapis.com/auth/analytics.readonly',
       ],
     })
-    console.log('token', token)
+    console.log('creds', creds)
     const analyticsReportRequest = functions.httpsCallable('getAnalyticsReport')
     console.log('getting analytics')
-    let analyticsReportRows
-    try {
-      analyticsReportRows = (await analyticsReportRequest({
-        viewId: GOOGLE_ANALYTICS_CONFIG.viewId,
-      }).catch(err => console.log('err', err))) as any
-    } catch (error) {
-      console.log('error', error)
-    }
+    const analyticsReportRows = (await analyticsReportRequest({
+      viewId: GOOGLE_ANALYTICS_CONFIG.viewId,
+      credentials: creds,
+    })) as any
     console.log('report rows', analyticsReportRows)
     const updatedPosts = this.state.posts
     if (analyticsReportRows) {

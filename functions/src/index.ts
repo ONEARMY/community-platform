@@ -13,9 +13,10 @@ import * as ImageConverter from './imageConverter'
 import * as StorageFunctions from './storageFunctions'
 import * as UtilsFunctions from './utils'
 import * as AnalyticsFunctions from './analytics'
+import { Credentials } from 'google-auth-library'
 
 // update on change logging purposes
-const buildNumber = 1.08
+const buildNumber = 1.09
 
 // express settings to handle api
 const app = express()
@@ -110,25 +111,26 @@ exports.removeStorageFolder = functions.https.onCall((data, context) => {
   const path = data.text
   StorageFunctions.deleteStorageItems(data.text)
 })
-exports.getAnalytics = functions.https.onCall(
-  (data: getAnalyticsData, context) => {
-    AnalyticsFunctions.getAnalyticsReport(data.viewId)
-  },
-)
+// use service agent to gain access credentials for gcp with  given access scopes
 exports.getAccessToken = functions.https.onCall(
   async (data: getAccessTokenData, context) => {
     const token = await UtilsFunctions.getAccessToken(data.accessScopes)
-    console.log('token received', token)
     return token
   },
 )
-
-// add export so can be used by test
-export default app
-
-interface getAnalyticsData {
-  viewId: string
-}
 interface getAccessTokenData {
   accessScopes: string[]
 }
+
+exports.getAnalytics = functions.https.onCall(
+  async (data: getAnalyticsData, context) => {
+    AnalyticsFunctions.getAnalyticsReport(data.viewId, data.credentials)
+  },
+)
+interface getAnalyticsData {
+  viewId: string
+  credentials: Credentials
+}
+
+// add export so can be used by test
+export default app

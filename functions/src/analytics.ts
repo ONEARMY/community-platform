@@ -1,12 +1,10 @@
 import Axios from 'axios'
-import { Credentials } from 'google-auth-library'
-import { resolve } from 'url'
 
 export const getAnalyticsReport = async (
   viewId: string,
-  accessToken: Credentials,
+  accessToken: string,
 ) => {
-  console.log('access token received', accessToken)
+  console.log('getting analytics report', viewId, accessToken)
   const result = await Axios({
     url: 'https://analyticsreporting.googleapis.com/v4/reports:batchGet',
     method: 'POST',

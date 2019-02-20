@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { observer } from 'mobx-react'
-import { DISCUSSIONS_MOCK } from 'src/mocks/discussions.mock'
+import { DISCUSSION_QUESTION_MOCKS } from 'src/mocks/discussions.mock'
 
 import MaxWidth from 'src/components/Layout/MaxWidth.js'
 import Margin from 'src/components/Layout/Margin.js'
@@ -24,7 +24,7 @@ class DiscussionsPageClass extends React.Component<IProps, any> {
   constructor(props: any) {
     super(props)
     this.state = {
-      posts: DISCUSSIONS_MOCK,
+      posts: DISCUSSION_QUESTION_MOCKS,
     }
   }
 
@@ -102,7 +102,9 @@ class DiscussionsPageClass extends React.Component<IProps, any> {
             />
             <Margin vertical={1.5} horizontal={1.5}>
               <ListHeader>
-                <PostCount>Showing {DISCUSSIONS_MOCK.length} posts</PostCount>
+                <PostCount>
+                  Showing {DISCUSSION_QUESTION_MOCKS.length} posts
+                </PostCount>
                 <OrderBy onClick={() => this.orderListBy('repliesCount')}>
                   Replies
                 </OrderBy>

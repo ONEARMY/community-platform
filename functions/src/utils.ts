@@ -13,17 +13,19 @@ export const getAccessToken = async (
   accessScopes: string[],
   callback?: (token: string) => void,
 ) => {
-  console.log('getting access token', accessScopes)
-  console.log('config', config().service)
-  const b64Key = config().service.private_key
-  const privateKey = Buffer.from(b64Key, 'base64').toString('binary')
+  // service account details json encoded as base64 string
+  const service_b64 = config().serviceJson
+  console.log('service', service_b64)
+  const service = JSON.parse(
+    Buffer.from(service_b64, 'base64').toString('binary'),
+  )
+  console.log('service', service)
   // private key set to firebase config from CI is encoded as base64 as
   // contains large number of special characters
-  console.log('private key', privateKey)
   const jwtClient = new JWT(
     config().service.client_email,
     null,
-    privateKey,
+    service.privateKey,
     accessScopes,
   )
   try {

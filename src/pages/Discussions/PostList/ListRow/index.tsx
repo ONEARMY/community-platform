@@ -17,10 +17,10 @@ import {
   QaIcon,
 } from './elements'
 import { GOOGLE_ANALYTICS_CONFIG } from 'src/config/config'
-import { IDiscussionQuestion } from 'src/models/discussions.models'
+import { IDiscussionPost } from 'src/models/discussions.models'
 
 interface IProps {
-  post: IDiscussionQuestion
+  post: IDiscussionPost
 }
 interface IState {
   isLucky: boolean

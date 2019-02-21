@@ -26,11 +26,30 @@ export class Database {
   }
 
   // get a single doc. returns an observable, first pulling from local cache and then searching for updates
-  public static getDoc() {}
+  public static getDoc(path) {
+    const doc$ = new Subject()
+    this._getCachedDoc(path).then(cached => {
+      // emit cached values and look for fresh
+      doc$.next(cached.data())
+      this._getLiveDoc(path).then(update => {
+        doc$.next(update.data())
+      })
+    })
+    return doc$
+  }
 
   public static setDoc(path: string, docValues: any) {
     docValues._modified = new Date()
     return afs.doc(path).set(docValues)
+  }
+  // search the persisted cache for documents, return oldest to newest
+  private static _getCachedDoc(path: string) {
+    return afs.doc(path).get({ source: 'cache' })
+  }
+  // get any documents that have been updated since last document in cache
+  // if no documents in cache fetch everything
+  private static _getLiveDoc(path: string) {
+    return afs.doc(path).get({ source: 'server' })
   }
 
   // search the persisted cache for documents, return oldest to newest

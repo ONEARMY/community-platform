@@ -17,6 +17,7 @@ import { Button } from 'src/components/Button/'
 export interface IState {
   formValues: IPostFormInput
   formSaved: boolean
+  postContent: string
 }
 
 const required = (value: any) => (value ? undefined : 'Required')
@@ -34,27 +35,27 @@ export class PostCreate extends React.PureComponent<
     this.state = {
       formValues: { ...POST_TEMPLATE_DATA },
       formSaved: false,
+      postContent: '',
     }
   }
 
   public onSubmit = async (formValues: any) => {
-    const inputValues = formValues as IPostFormInput
-
+    const content = this.state.postContent
     const timestamp = new Date()
-    const slug = helpers.stripSpecialCharacters(formValues.tutorial_title)
+    const slug = helpers.stripSpecialCharacters(formValues.title)
     // convert data to correct types and populate metadata
     const values: IDiscussionPost = {
       ...formValues,
-      slug,
+      content,
       _created: timestamp,
     }
     try {
       await db
         .collection('discussions')
-        .doc(formValues.id)
+        .doc()
         .set(values)
       this.setState({ formSaved: true })
-      this.props.history.push('/discussions/' + slug)
+      this.props.history.push('/' + slug)
     } catch (error) {
       console.log('error while saving the Post')
     }
@@ -95,7 +96,7 @@ export class PostCreate extends React.PureComponent<
               <div>
                 <form onSubmit={handleSubmit}>
                   <Field
-                    name="post_title"
+                    name="title"
                     validate={required}
                     component={InputField}
                     label="What is the title of your post ?"
@@ -106,9 +107,8 @@ export class PostCreate extends React.PureComponent<
                     variant={VARIANT.SMALL}
                     onChange={content => {
                       console.log('content changed : ' + content)
-                      return (
-                        content.indexOf('shit shit shit fucking shit') === -1
-                      )
+                      this.setState({ postContent: content })
+                      return content.indexOf('') === -1
                     }}
                   />
 

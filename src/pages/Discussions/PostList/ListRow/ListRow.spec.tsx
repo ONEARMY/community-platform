@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import subDays from 'date-fns/sub_days'
-import ListRow from './ListRow'
+import ListRow from '.'
 import { PostDate } from './elements'
 import { shallow } from 'enzyme'
 

@@ -1,25 +1,25 @@
 import { observable, action } from 'mobx'
 import {
-  IDiscussionQuestion,
   IDiscussionComment,
+  IDiscussionPost,
 } from 'src/models/discussions.models'
 import { Database } from '../database'
 
 export class DiscussionsStore {
   // we have two property relating to docs that can be observed
   @observable
-  public activeDiscussion: IDiscussionQuestion | undefined
+  public activeDiscussion: IDiscussionPost | undefined
   @observable
   public allDiscussionComments: IDiscussionComment[] = []
   @observable
-  public allDiscussions: IDiscussionQuestion[] = []
+  public allDiscussions: IDiscussionPost[] = []
 
   // call getDocList to query 'discussions' from db and map response to docs observable
   @action
   public async getDocList() {
     Database.getCollection('discussions').subscribe(data => {
       console.log('data received', data)
-      this.allDiscussions = data as IDiscussionQuestion[]
+      this.allDiscussions = data as IDiscussionPost[]
     })
   }
   // @action

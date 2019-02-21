@@ -26,6 +26,12 @@ let analyticsConfig = {
 let sentryConfig = {
   dsn: 'https://8c1f7eb4892e48b18956af087bdfa3ac@sentry.io/1399729',
 }
+let algoliaConfig = {
+  adminAPIKey: '271f0ad7a58b72cad2ca625497ce6f99',
+  searchOnlyAPIKey: 'af213b7fb41ac5cbc6a2e10164370779',
+  monitoringAPIKey: 'b38f41ddf7203342a6daffdb17de99a9',
+  applicationID: '4RM0GZKTOC',
+}
 
 // different production site config pulled from environment variable
 const productionSites = [
@@ -63,3 +69,4 @@ export const SITE = siteVariant
 export const FIREBASE_CONFIG = firebaseConfig
 export const GOOGLE_ANALYTICS_CONFIG = analyticsConfig
 export const SENTRY_CONFIG = sentryConfig
+export const ALGOLIA_CONFIG = algoliaConfig

@@ -1,5 +1,5 @@
 import {
-  IDiscussionQuestion,
+  IDiscussionPost,
   IDiscussionComment,
 } from 'src/models/discussions.models'
 
@@ -8,7 +8,7 @@ import {
 */
 
 // mocks generated from template, note the Date fields are populated as string so require reformatting
-export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
+export const DISCUSSION_QUESTION_MOCKS: IDiscussionPost[] = [
   {
     _id: '5c6d7a294475199744afe2d1',
     _created: new Date('Tuesday, February 14, 2017 1:33 PM'),
@@ -22,6 +22,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/201',
       'http://i.pravatar.cc/202',
     ],
+    slug: 'test-slug',
     createdBy: 'http://i.pravatar.cc/203',
     isClosed: false,
     tags: ['non', 'nulla', 'nostrud', 'incididunt', 'occaecat'],
@@ -44,6 +45,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/205',
       'http://i.pravatar.cc/206',
     ],
+    slug: 'test-slug',
     createdBy: 'http://i.pravatar.cc/207',
     isClosed: false,
     tags: ['ullamco', 'velit', 'anim', 'aliqua', 'deserunt'],
@@ -66,6 +68,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/209',
       'http://i.pravatar.cc/210',
     ],
+    slug: 'test-slug',
     createdBy: 'http://i.pravatar.cc/220',
     isClosed: true,
     tags: ['consectetur', 'veniam', 'ut', 'ipsum', 'veniam'],
@@ -87,6 +90,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/240',
       'http://i.pravatar.cc/250',
     ],
+    slug: 'test-slug',
     createdBy: 'http://i.pravatar.cc/260',
     isClosed: false,
     tags: ['excepteur', 'proident', 'adipisicing', 'irure', 'aliquip'],
@@ -108,6 +112,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/280',
       'http://i.pravatar.cc/290',
     ],
+    slug: 'test-slug',
     createdBy: 'http://i.pravatar.cc/211',
     isClosed: false,
     tags: ['deserunt', 'minim', 'aliquip', 'laborum', 'tempor'],
@@ -129,6 +134,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/233',
       'http://i.pravatar.cc/244',
     ],
+    slug: 'test-slug',
     createdBy: 'http://i.pravatar.cc/255',
     isClosed: true,
     tags: ['velit', 'proident', 'nisi', 'laborum', 'minim'],
@@ -151,6 +157,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/277',
       'http://i.pravatar.cc/288',
     ],
+    slug: 'test-slug',
     createdBy: 'http://i.pravatar.cc/299',
     isClosed: false,
     tags: ['laborum', 'esse', 'quis', 'pariatur', 'quis'],
@@ -173,6 +180,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/223',
       'http://i.pravatar.cc/234',
     ],
+    slug: 'test-slug',
     createdBy: 'http://i.pravatar.cc/245',
     isClosed: true,
     tags: ['eu', 'nisi', 'ullamco', 'labore', 'id'],
@@ -195,6 +203,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/267',
       'http://i.pravatar.cc/278',
     ],
+    slug: 'test-slug',
     createdBy: 'http://i.pravatar.cc/289',
     isClosed: false,
     tags: ['fugiat', 'labore', 'non', 'consectetur', 'qui'],
@@ -283,6 +292,7 @@ const questionsTemplate = [
       _viewCount: '{{integer(1, 25000)}}',
       _usefullCount: '{{integer(0, 6)}}',
       _last3Comments: [{ 'repeat(3)': 'http://i.pravatar.cc/200' }],
+      slug: '{{objectId()}}',
       createdBy: 'http://i.pravatar.cc/200',
       isClosed: '{{bool()}}',
       tags: [

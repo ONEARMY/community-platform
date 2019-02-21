@@ -1,4 +1,4 @@
-export interface IDiscussionQuestion {
+export interface IDiscussionPost extends IPostFormInput {
   _id: string
   _created: Date
   _modified: Date
@@ -11,8 +11,7 @@ export interface IDiscussionQuestion {
   createdBy: string
   isClosed: boolean
   tags: string[]
-  title: string
-  content: string
+  slug: string
   type: 'discussionQuestion'
 }
 
@@ -29,4 +28,9 @@ export interface IDiscussionComment {
   // comment including images saved as html
   comment: string
   type: 'discussionComment'
+}
+
+export interface IPostFormInput {
+  title: string
+  content: string
 }

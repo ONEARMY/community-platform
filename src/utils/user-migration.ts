@@ -1,5 +1,5 @@
 // This file handles most of the logic involved with user migration
-import { auth, db } from './firebase'
+import { auth, afs } from './firebase'
 import { ILegacyUser, IUser } from 'src/models/user.models'
 import * as phpassHasher from 'wordpress-hash-node'
 
@@ -52,7 +52,7 @@ const attemptFirebaseLogin = async (email: string, pw: string) => {
 
 const attemptLegacyMigration = async (email: string, pw: string) => {
   console.log('checking for legacy user')
-  const userDoc = await db.doc(`_legacyUsers/${email}`).get()
+  const userDoc = await afs.doc(`_legacyUsers/${email}`).get()
   if (userDoc.exists) {
     // legacy user exists, lets check the password and migrate if match
     const legacyDoc = userDoc.data() as ILegacyUser
@@ -82,7 +82,7 @@ const migrateUser = async (
 ) => {
   // populate legacy data onto user doc
   const userDoc: IUser = generateNewUserDoc(email, legacyDoc)
-  await db.doc(`users/${email}`).set(userDoc)
+  await afs.doc(`users/${email}`).set(userDoc)
   const credentials = await registerNewUser(email, pw)
   console.log('credentials received', credentials)
 }

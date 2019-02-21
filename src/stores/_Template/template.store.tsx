@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx'
-import { db } from '../../utils/firebase'
+import { afs } from '../../utils/firebase'
 
 interface IExampleDoc {
   savedNumber: number
@@ -23,13 +23,13 @@ export class TemplateStore {
   // example getting a document from the main database at a given endpoint path
   @action
   public async dbDocRequest() {
-    const ref = await db.doc('_Demo/example1').get()
+    const ref = await afs.doc('_Demo/example1').get()
     this.exampleDoc = ref.data() as IExampleDoc
   }
   // example getting a collection of documents from the main database at a given endpoint path
   @action
   public async dbCollectionRequest() {
-    const ref = await db.collection('_Demo').get()
+    const ref = await afs.collection('_Demo').get()
     this.exampleCollection = ref.docs.map(doc => doc.data() as IExampleDoc)
   }
 }

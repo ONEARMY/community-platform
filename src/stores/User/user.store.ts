@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx'
 import { IUser } from 'src/models/user.models'
-import { IFirebaseUser, auth, db } from 'src/utils/firebase'
+import { IFirebaseUser, auth, afs } from 'src/utils/firebase'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
@@ -50,7 +50,7 @@ export class UserStore {
   }
 
   public async getUserProfile(userEmail: string) {
-    const ref = await db.doc(`users/${userEmail}`).get()
+    const ref = await afs.doc(`users/${userEmail}`).get()
     const user: IUser = ref.data() as IUser
     return user
   }

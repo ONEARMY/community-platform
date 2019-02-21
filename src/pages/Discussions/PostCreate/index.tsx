@@ -3,7 +3,7 @@ import { RouteComponentProps } from 'react-router'
 import { Form, Field } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import { IPostFormInput } from 'src/models/discussions.models'
-import { db } from 'src/utils/firebase'
+import { afs } from 'src/utils/firebase'
 import { POST_TEMPLATE_DATA } from './PostTemplate'
 import helpers from 'src/utils/helpers'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
@@ -30,7 +30,7 @@ export class PostCreate extends React.PureComponent<
   constructor(props: any) {
     super(props)
     // generate unique id for db and storage references and assign to state
-    const databaseRef = db.collection('documentation').doc()
+    const databaseRef = afs.collection('documentation').doc()
     const docID = databaseRef.id
     this.state = {
       formValues: { ...POST_TEMPLATE_DATA },
@@ -50,7 +50,7 @@ export class PostCreate extends React.PureComponent<
       _created: timestamp,
     }
     try {
-      await db
+      await afs
         .collection('discussions')
         .doc()
         .set(values)

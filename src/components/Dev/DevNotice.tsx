@@ -1,14 +1,14 @@
 import * as React from 'react'
 import colors from 'src/themes/colors'
 import { FaExclamationTriangle } from 'react-icons/fa'
-import { isDebug } from 'src/config/config'
+import { SITE } from 'src/config/config'
 export const DevNotice = () =>
-  isDebug ? (
-    <div title="This is the dev site and all datas posted here can be public">
-      <FaExclamationTriangle
-        color={colors.green}
-        style={{ position: 'absolute', right: 175, padding: '5px 5px' }}
-      />
+  SITE !== 'production' ? (
+    <div style={{padding: '5px 5px', color: colors.green}}
+    title="This site is for development purposes, do not share private information" >
+      <a style={{position: 'absolute', right: 200}}>Dev site notice</a>
+      <FaExclamationTriangle 
+      style={{position: 'absolute', right: 175}}/>
     </div>
   ) : (
     <div />

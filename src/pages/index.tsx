@@ -10,7 +10,7 @@ import { DiscussionsPage } from './Discussions/Discussions'
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import { EventsPage } from './Events/Events'
 import Header from './common/Header/Header'
-import { isDebug } from 'src/config/config'
+import { SITE } from 'src/config/config'
 import { DebugEditorPage } from 'src/components/Editor/Debug'
 import { DevNotice } from 'src/components/Dev/DevNotice'
 
@@ -23,14 +23,25 @@ export interface IPageMeta {
   component: any
   title: string
   description: string
+  exact?: boolean
 }
+
+export const HOME_PAGE: IPageMeta[] = [
+  {
+    path: '/',
+    component: <HomePage />,
+    title: 'Home',
+    description: "Welcome home, here is all the stuff you're interested in",
+    exact: true,
+  },
+]
 
 export const COMMUNITY_PAGES: IPageMeta[] = [
   {
     path: '/news',
     component: <NotFoundPage />,
     title: 'Newsfeed',
-    description: "Welcome home, here is all the stuff you're interested in",
+    description: 'Welcome to news',
   },
   {
     path: '/how-to',
@@ -46,16 +57,17 @@ export const COMMUNITY_PAGES: IPageMeta[] = [
   },
 ]
 
-export const DEBUG_PAGES: IPageMeta[] = isDebug
-  ? [
-      {
-        path: '/debugEditor',
-        component: <DebugEditorPage />,
-        title: 'Debug Editor',
-        description: '',
-      },
-    ]
-  : []
+export const DEBUG_PAGES: IPageMeta[] =
+  SITE === 'localhost'
+    ? [
+        {
+          path: '/debugEditor',
+          component: <DebugEditorPage />,
+          title: 'Debug Editor',
+          description: '',
+        },
+      ]
+    : []
 
 export const COMMUNITY_PAGES_MORE: IPageMeta[] = [
   {
@@ -112,6 +124,7 @@ export class Routes extends React.Component<any, IState> {
 
   public render() {
     const pages = [
+      ...HOME_PAGE,
       ...COMMUNITY_PAGES,
       ...COMMUNITY_PAGES_MORE,
       ...COMMUNITY_PAGES_PROFILE,
@@ -137,6 +150,7 @@ export class Routes extends React.Component<any, IState> {
               <Switch>
                 {pages.map(page => (
                   <Route
+                    exact={page.exact}
                     path={page.path}
                     key={page.path}
                     render={props => (
@@ -151,7 +165,6 @@ export class Routes extends React.Component<any, IState> {
                     )}
                   />
                 ))}
-                <Route exact path="/" component={HomePage} />
                 <Route component={NotFoundPage} />
               </Switch>
             </div>

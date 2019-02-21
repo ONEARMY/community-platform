@@ -5,7 +5,7 @@ import { DISCUSSION_QUESTION_MOCKS } from 'src/mocks/discussions.mock'
 import MaxWidth from 'src/components/Layout/MaxWidth.js'
 import Margin from 'src/components/Layout/Margin.js'
 import FilterBar from 'src/pages/common/FilterBar/FilterBar'
-import ListRow from 'src/pages/Discussions/ListRow/ListRow'
+import ListRow from 'src/pages/Discussions/PostList/ListRow'
 
 import { Content, Main, ListHeader, PostCount, List, OrderBy } from './elements'
 
@@ -20,7 +20,7 @@ interface IProps {
 
 // Then we can use the observer component decorator to automatically tracks observables and re-renders on change
 @observer
-class DiscussionsPageClass extends React.Component<IProps, any> {
+class PostListClass extends React.Component<IProps, any> {
   constructor(props: any) {
     super(props)
     this.state = {
@@ -97,7 +97,7 @@ class DiscussionsPageClass extends React.Component<IProps, any> {
         <Margin vertical={1.5}>
           <Content>
             <FilterBar
-              section={'discussion'}
+              section={'discussions'}
               onChange={() => this.updateResultsList()}
             />
             <Margin vertical={1.5} horizontal={1.5}>
@@ -132,4 +132,4 @@ class DiscussionsPageClass extends React.Component<IProps, any> {
     )
   }
 }
-export const DiscussionsPage = withRouter(DiscussionsPageClass as any)
+export const PostList = withRouter(PostListClass as any)

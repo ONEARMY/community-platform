@@ -16,7 +16,7 @@ import {
   DiscussIcon,
   QaIcon,
 } from './elements'
-import { GOOGLE_ANALYTICS_CONFIG } from '../../../config/config'
+import { GOOGLE_ANALYTICS_CONFIG } from 'src/config/config'
 import { IDiscussionQuestion } from 'src/models/discussions.models'
 
 interface IProps {

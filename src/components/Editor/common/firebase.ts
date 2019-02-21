@@ -1,9 +1,9 @@
-import { db, storage } from 'src/utils/firebase'
+import { afs, storage } from 'src/utils/firebase'
 
 // @TODO : this is copied from other code, please extract
 
 export const storagePath = () => {
-  const databaseRef = db.collection('documentation').doc()
+  const databaseRef = afs.collection('documentation').doc()
   const docID = databaseRef.id
   return `uploads/documentation/${docID}`
 }

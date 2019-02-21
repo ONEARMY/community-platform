@@ -13,7 +13,7 @@ firebase
   .catch(err => console.error('could not persist firestore', err))
 
 // export firebase endpoints to be accessed by other functions
-export const db = firebase.firestore()
+export const afs = firebase.firestore()
 export const storage = firebase.storage()
 export const auth = firebase.auth()
 export const functions = firebase.functions()

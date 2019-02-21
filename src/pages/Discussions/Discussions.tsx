@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { observer } from 'mobx-react'
+import { observer, inject } from 'mobx-react'
 import { DISCUSSION_QUESTION_MOCKS } from 'src/mocks/discussions.mock'
 
 import MaxWidth from 'src/components/Layout/MaxWidth.js'
@@ -9,15 +9,19 @@ import ListRow from 'src/pages/Discussions/ListRow/ListRow'
 
 import { Content, Main, ListHeader, PostCount, List, OrderBy } from './elements'
 
-import { HowtoStore } from 'src/stores/Howto/howto.store'
 import { withRouter } from 'react-router'
 import { functions } from 'src/utils/firebase'
 import { GOOGLE_ANALYTICS_CONFIG } from 'src/config/config'
+import { IStores } from 'src/stores'
+import { DiscussionsStore } from 'src/stores/Discussions/discussions.store'
 
 interface IProps {
-  howtoStore: HowtoStore
+  discussionsStore: DiscussionsStore
 }
 
+@inject((allStores: IStores) => ({
+  discussionsStore: allStores.discussionsStore,
+}))
 // Then we can use the observer component decorator to automatically tracks observables and re-renders on change
 @observer
 class DiscussionsPageClass extends React.Component<IProps, any> {
@@ -29,7 +33,14 @@ class DiscussionsPageClass extends React.Component<IProps, any> {
   }
 
   public async componentDidMount() {
-    // load mocks
+    console.log('store', this.props.discussionsStore)
+    // load data
+    this.props.discussionsStore.getDocList()
+  }
+
+  // function to pull data from google analytics
+  // *** NOTE - currently broken (CORs) and requires move to server functions (see issue #320)
+  public async getAnalytics() {
     const credsRequest = await functions.httpsCallable('getAccessToken')({
       accessScopes: [
         'https://www.googleapis.com/auth/analytics',

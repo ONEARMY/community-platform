@@ -135,7 +135,7 @@ export class Routes extends React.Component<any, IState> {
     // platform into other sites. The first case is direct nav
     return !this.state.singlePageMode ? (
       <div>
-        <DevTools />
+        {SITE !== 'production' ? <DevTools /> : null}
         <DevNotice />
         <BrowserRouter>
           {/* on page change scroll to top */}

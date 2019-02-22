@@ -45,6 +45,7 @@ class PostListClass extends React.Component<IProps, IState> {
 
   public orderList(list: IDiscussionPost[]) {
     // mobx observable must first be sliced in order to sort properly
+    // TODO - Replace repeated code with filter util (WiP) - see discussion in #215
     list = list.slice()
     switch (this.state.orderBy) {
       case 'repliesCount':

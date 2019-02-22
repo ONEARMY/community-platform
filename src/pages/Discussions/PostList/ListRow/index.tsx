@@ -31,9 +31,8 @@ export default class ListRow extends React.Component<IProps, IState> {
     super(props)
   }
 
-  public durationSincePosted(postDate: string) {
-    const daysSince: number = differenceInDays(new Date(), postDate)
-
+  public durationSincePosted(postDate: Date) {
+    const daysSince: number = differenceInDays(new Date(), new Date(postDate))
     return `${daysSince} days`
   }
   // public postViewReactGA(postId: string) {
@@ -67,9 +66,7 @@ export default class ListRow extends React.Component<IProps, IState> {
         {/*<Count isViewCounter={true} firebaseHost={FIREBASE_CONFIG.databaseURL}*/}
         {/*firebaseResourceId={'post-' + post._id + '-viewCount'}/>*/}
         <ViewCount>{post._viewCount}</ViewCount>
-        <PostDate>
-          {this.durationSincePosted(post._created.toString())}
-        </PostDate>
+        <PostDate>{this.durationSincePosted(post._created.toDate())}</PostDate>
         {post.type === 'discussionQuestion' ? <DiscussIcon /> : <QaIcon />}
       </Post>
     )

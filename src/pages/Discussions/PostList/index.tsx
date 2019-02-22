@@ -40,7 +40,6 @@ class PostListClass extends React.Component<IProps, IState> {
   }
 
   public async componentDidMount() {
-    console.log('store', this.props.discussionsStore)
     // load data
     this.props.discussionsStore.getDiscussionList()
   }
@@ -70,7 +69,6 @@ class PostListClass extends React.Component<IProps, IState> {
       default:
         break
     }
-    console.log('list sorted', list)
     return list
   }
 
@@ -79,7 +77,6 @@ class PostListClass extends React.Component<IProps, IState> {
   }
 
   public render() {
-    console.log('rendering', this.state.orderBy)
     return (
       <MaxWidth>
         <Margin vertical={1.5}>

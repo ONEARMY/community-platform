@@ -8,49 +8,80 @@ import { Subject } from 'rxjs'
 import { afs } from 'src/utils/firebase'
 import { firestore } from 'firebase/app'
 export class Database {
+  /****************************************************************************** *
+        Available Functions
+  /****************************************************************************** */
+
   // get a group of docs. returns an observable, first pulling from local cache and then searching for updates
   public static getCollection(path: string) {
-    const collection$ = new Subject()
-    this._getCachedCollection(path).then(data => {
-      // emit cached values and look for fresh
-      const cached = this._preProcessData(data)
-      collection$.next([...cached].reverse())
-      this._getLiveCollection(path, cached[cached.length - 1]).then(data2 => {
-        const updates = this._preProcessData(data2)
-        // emit combination of cached and updates
-        const merged = this._mergeData(cached, updates)
-        collection$.next([...merged].reverse())
-      })
-    })
+    const collection$ = new Subject<any[]>()
+    this._emitCollectionUpdates(path, collection$)
     return collection$
   }
 
-  // get a single doc. returns an observable, first pulling from local cache and then searching for updates
-  public static getDoc(path) {
-    const doc$ = new Subject()
-    this._getCachedDoc(path).then(cached => {
-      // emit cached values and look for fresh
-      doc$.next(cached.data())
-      this._getLiveDoc(path).then(update => {
-        doc$.next(update.data())
-      })
+  // get cached value, emit, and then subscribe and emit any updates
+  public static async _emitCollectionUpdates(
+    path: string,
+    subject: Subject<any[]>,
+  ) {
+    // get cached and emit
+    const cachedSnapshot = await this._getCachedCollection(path)
+    let cached = this._preProcessData(cachedSnapshot)
+    subject.next([...cached].reverse())
+    // subscribe to any updates, emit when received
+    const updatesRef = this._getCollectionUpdatesRef(
+      path,
+      cached[cached.length - 1],
+    )
+    updatesRef.onSnapshot(updateSnapshot => {
+      const update = this._preProcessData(updateSnapshot)
+      cached = this._mergeData(cached, update)
+      subject.next([...cached].reverse())
     })
+  }
+
+  // get a single doc. returns an observable, first pulling from local cache and then searching for updates
+  public static getDoc(path: string) {
+    const doc$ = new Subject()
+    afs
+      .doc(path)
+      .get({ source: 'cache' })
+      .then(cached => {
+        // emit cached values and look for fresh
+        doc$.next(cached.data())
+        afs.doc(path).onSnapshot(update => doc$.next(update.data()))
+      })
     return doc$
   }
 
   public static setDoc(path: string, docValues: any) {
-    docValues._modified = new Date()
-    return afs.doc(path).set(docValues)
+    return afs.doc(path).set({ ...docValues, _modified: new Date() })
   }
-  // search the persisted cache for documents, return oldest to newest
-  private static _getCachedDoc(path: string) {
-    return afs.doc(path).get({ source: 'cache' })
+  // to allow caching to work docs are not completed deleted from the database, but instead emptied and marked as deleted
+  // we could consider changing this to a full delete if it can be verified that users' cache won't repeatedly show the deleted doc
+  public static deleteDoc(path: string) {
+    return afs.doc(path).set({
+      _modified: new Date(),
+      _deleted: true,
+    })
   }
-  // get any documents that have been updated since last document in cache
-  // if no documents in cache fetch everything
-  private static _getLiveDoc(path: string) {
-    return afs.doc(path).get({ source: 'server' })
+
+  public static async queryCollection(
+    path: string,
+    field: string,
+    operation: firestore.WhereFilterOp,
+    value: string,
+  ) {
+    const data = await afs
+      .collection(path)
+      .where(field, operation, value)
+      .get()
+    return data.docs.map(doc => doc.data())
   }
+
+  /****************************************************************************** *
+        Helper Methods
+  /****************************************************************************** */
 
   // search the persisted cache for documents, return oldest to newest
   private static _getCachedCollection(path: string) {
@@ -61,13 +92,13 @@ export class Database {
   }
   // get any documents that have been updated since last document in cache
   // if no documents in cache fetch everything
-  private static _getLiveCollection(path: string, latestDoc?: any) {
+  private static _getCollectionUpdatesRef(path: string, latestDoc?: any) {
     return afs
       .collection(path)
       .orderBy('_modified', 'asc')
       .startAfter(latestDoc ? latestDoc._modified : -1)
-      .get({ source: 'server' })
   }
+
   // when data comes in from firebase we want to preprocess, to extract the document data from firestore
   // documents, populate a _id field (if not present) and remove deleted items
   private static _preProcessData(data: firestore.QuerySnapshot) {

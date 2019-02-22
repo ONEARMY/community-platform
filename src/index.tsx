@@ -13,12 +13,16 @@ import './index.css'
 
 import registerServiceWorker from './registerServiceWorker'
 import { SWUpdateNotification } from './pages/common/SWUpdateNotification/SWUpdateNotification'
-
+import ErrorBoundary from './common/ErrorBoundary'
+import { initErrorHandler } from './common/errors'
+initErrorHandler()
 ReactDOM.render(
   // provider makes all stores available through the app via @inject
   <Provider {...stores}>
     <MuiThemeProvider theme={theme}>
-      <Routes />
+      <ErrorBoundary>
+        <Routes />
+      </ErrorBoundary>
       <SWUpdateNotification />
       <GlobalStyle />
     </MuiThemeProvider>

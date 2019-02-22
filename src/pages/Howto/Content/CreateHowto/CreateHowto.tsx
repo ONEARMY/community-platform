@@ -121,7 +121,7 @@ export class CreateHowto extends React.PureComponent<
     console.log('formvalues', formValues)
     return (
       <div>
-        <Link to={'/how-to/list'}>
+        <Link to={'/how-to'}>
           <BackButtonTop icon={'arrow-back'}>Back to how-to</BackButtonTop>
         </Link>
         <Title variant="h4" component="h4" style={{ marginTop: 0 }}>

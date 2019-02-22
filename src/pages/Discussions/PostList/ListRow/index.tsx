@@ -1,6 +1,5 @@
 import * as React from 'react'
 import differenceInDays from 'date-fns/difference_in_days'
-import ReactGA from 'react-ga'
 
 import {
   Avatar,
@@ -16,7 +15,6 @@ import {
   DiscussIcon,
   QaIcon,
 } from './elements'
-import { GOOGLE_ANALYTICS_CONFIG } from 'src/config/config'
 import { IDiscussionPost } from 'src/models/discussions.models'
 
 interface IProps {
@@ -35,10 +33,6 @@ export default class ListRow extends React.Component<IProps, IState> {
     const daysSince: number = differenceInDays(new Date(), new Date(postDate))
     return `${daysSince} days`
   }
-  // public postViewReactGA(postId: string) {
-  //   ReactGA.initialize(GOOGLE_ANALYTICS_CONFIG.trackingCode, { debug: true })
-  //   ReactGA.ga('send', 'pageview', '/discussions/post/' + postId)
-  // }
 
   public render() {
     const { post } = this.props
@@ -49,6 +43,7 @@ export default class ListRow extends React.Component<IProps, IState> {
           <Title
             href={'/discussions/post/' + post._id}
             target="_blank"
+            // *** TODO - Build and link to analytics store method
             // onClick={() => this.postViewReactGA(post._id)}
           >
             {post.title}
@@ -63,6 +58,7 @@ export default class ListRow extends React.Component<IProps, IState> {
             : post._commentCount + ' answers'}
         </InteractionNb>
         <UsefullCount>{post._usefullCount}</UsefullCount>
+        {/* *** TODO - Build and pull data from analytics */}
         {/*<Count isViewCounter={true} firebaseHost={FIREBASE_CONFIG.databaseURL}*/}
         {/*firebaseResourceId={'post-' + post._id + '-viewCount'}/>*/}
         <ViewCount>{post._viewCount}</ViewCount>

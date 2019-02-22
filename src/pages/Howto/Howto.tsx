@@ -2,9 +2,11 @@ import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 import logo from '../../assets/images/logo.png'
 
-import HowtoContent from './Content/Howto.content'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
-import { withRouter } from 'react-router'
+import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
+import { Howto } from './Content/Howto/Howto'
+import { CreateHowto } from './Content/CreateHowto/CreateHowto'
+import { HowtoList } from './Content/HowtoList/HowtoList'
 
 interface IProps {
   howtoStore: HowtoStore
@@ -17,7 +19,7 @@ interface IProps {
 // Then we can use the observer component decorator to automatically tracks observables and re-renders on change
 @observer
 class HowtoPageClass extends React.Component<IProps, any> {
-  constructor(props: any) {
+  constructor(props) {
     super(props)
   }
 
@@ -41,10 +43,15 @@ class HowtoPageClass extends React.Component<IProps, any> {
             style={{ display: 'block', margin: '0 auto', width: '200px' }}
           />
         )}
-        <HowtoContent
-          allHowtos={this.props.howtoStore.allHowtos}
-          activeHowTo={this.props.howtoStore.activeHowto}
-        />
+        <Switch>
+          <Route
+            exact path="/how-to"
+            render={props => <HowtoList {...props}
+            allHowtos={this.props.howtoStore.allHowtos} />}
+          />
+          <Route path="/how-to/create" component={CreateHowto} />
+          <Route path="/how-to/:slug" render={props => <Howto {...props} />} />
+        </Switch>
       </div>
     )
   }

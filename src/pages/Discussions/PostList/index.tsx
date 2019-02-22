@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { observer } from 'mobx-react'
-import { DISCUSSIONS_MOCK } from 'src/mocks/discussions.mock'
+import { DISCUSSION_QUESTION_MOCKS } from 'src/mocks/discussions.mock'
 
 import MaxWidth from 'src/components/Layout/MaxWidth.js'
 import Margin from 'src/components/Layout/Margin.js'
 import FilterBar from 'src/pages/common/FilterBar/FilterBar'
-import ListRow from 'src/pages/Discussions/ListRow/ListRow'
+import ListRow from 'src/pages/Discussions/PostList/ListRow'
 
 import { Content, Main, ListHeader, PostCount, List, OrderBy } from './elements'
 
@@ -20,47 +20,44 @@ interface IProps {
 
 // Then we can use the observer component decorator to automatically tracks observables and re-renders on change
 @observer
-class DiscussionsPageClass extends React.Component<IProps, any> {
+class PostListClass extends React.Component<IProps, any> {
   constructor(props: any) {
     super(props)
     this.state = {
-      posts: DISCUSSIONS_MOCK,
+      posts: DISCUSSION_QUESTION_MOCKS,
     }
   }
 
   public async componentDidMount() {
     // load mocks
-    console.log('mocks:', DISCUSSIONS_MOCK)
-    console.log('test')
-    functions
-      .httpsCallable('test')()
-      .then(res => console.log('test res', res))
-      .catch(err => console.log('test err', err))
-
-    // const analyticsReportRequest = functions.httpsCallable('getAnalyticsReport')
-    // let analyticsReportRows
-    // try {
-    //   analyticsReportRows = (await analyticsReportRequest({
-    //     viewId: GOOGLE_ANALYTICS_CONFIG.viewId,
-    //   }).catch(err => console.log('err', err))) as any
-    // } catch (error) {
-    //   console.log('error', error)
-    // }
-    // console.log('report rows', analyticsReportRows)
-    // const updatedPosts = this.state.posts
-    // if (analyticsReportRows) {
-    //   for (const post of updatedPosts) {
-    //     const postAnalytic = analyticsReportRows.find(
-    //       row => row.dimensions[0] === `/discussions/post/${post._id}`,
-    //     )
-    //     if (postAnalytic) {
-    //       post.viewCount = Number(postAnalytic.metrics[0].values[0])
-    //     } else {
-    //       post.viewCount = 0
-    //     }
-    //   }
-    //   this.setState({ posts: updatedPosts })
-    // }
+    const credsRequest = await functions.httpsCallable('getAccessToken')({
+      accessScopes: [
+        'https://www.googleapis.com/auth/analytics',
+        'https://www.googleapis.com/auth/analytics.readonly',
+      ],
+    })
+    console.log('creds request', credsRequest)
+    const analyticsReportRequest = functions.httpsCallable('getAnalyticsReport')
+    console.log('getting analytics')
+    const analyticsReportRows = (await analyticsReportRequest({
+      viewId: GOOGLE_ANALYTICS_CONFIG.viewId,
+      credentials: credsRequest.data.token,
+    })) as any
+    console.log('report rows', analyticsReportRows)
+    const updatedPosts = this.state.posts
+    if (analyticsReportRows) {
+      for (const post of updatedPosts) {
+        const postAnalytic = analyticsReportRows.find(
+          row => row.dimensions[0] === `/discussions/post/${post._id}`,
+        )
+        if (postAnalytic) {
+          post.viewCount = Number(postAnalytic.metrics[0].values[0])
+        } else {
+          post.viewCount = 0
+        }
+      }
+      this.setState({ posts: updatedPosts })
+    }
   }
 
   public orderListBy(orderType: string) {
@@ -100,12 +97,14 @@ class DiscussionsPageClass extends React.Component<IProps, any> {
         <Margin vertical={1.5}>
           <Content>
             <FilterBar
-              section={'discussion'}
+              section={'discussions'}
               onChange={() => this.updateResultsList()}
             />
             <Margin vertical={1.5} horizontal={1.5}>
               <ListHeader>
-                <PostCount>Showing {DISCUSSIONS_MOCK.length} posts</PostCount>
+                <PostCount>
+                  Showing {DISCUSSION_QUESTION_MOCKS.length} posts
+                </PostCount>
                 <OrderBy onClick={() => this.orderListBy('repliesCount')}>
                   Replies
                 </OrderBy>
@@ -133,4 +132,4 @@ class DiscussionsPageClass extends React.Component<IProps, any> {
     )
   }
 }
-export const DiscussionsPage = withRouter(DiscussionsPageClass as any)
+export const PostList = withRouter(PostListClass as any)

@@ -36,10 +36,10 @@ export default class ListRow extends React.Component<IProps, IState> {
 
     return `${daysSince} days`
   }
-  public postViewReactGA(postId: string) {
-    ReactGA.initialize(GOOGLE_ANALYTICS_CONFIG.trackingCode, { debug: true })
-    ReactGA.ga('send', 'pageview', '/discussions/post/' + postId)
-  }
+  // public postViewReactGA(postId: string) {
+  //   ReactGA.initialize(GOOGLE_ANALYTICS_CONFIG.trackingCode, { debug: true })
+  //   ReactGA.ga('send', 'pageview', '/discussions/post/' + postId)
+  // }
 
   public render() {
     const { post } = this.props
@@ -50,7 +50,7 @@ export default class ListRow extends React.Component<IProps, IState> {
           <Title
             href={'/discussions/post/' + post._id}
             target="_blank"
-            onClick={() => this.postViewReactGA(post._id)}
+            // onClick={() => this.postViewReactGA(post._id)}
           >
             {post.title}
           </Title>

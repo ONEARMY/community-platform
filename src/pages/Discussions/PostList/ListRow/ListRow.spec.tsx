@@ -4,21 +4,11 @@ import subDays from 'date-fns/sub_days'
 import ListRow from '.'
 import { PostDate } from './elements'
 import { shallow } from 'enzyme'
+import { DISCUSSION_QUESTION_MOCKS } from 'src/mocks/discussions.mock'
 
 describe('ListRow', () => {
   it('Should calculate duration since posted', () => {
-    const sutPost = {
-      _id: 'test id',
-      index: 0,
-      avatar: 'test avatar',
-      tags: [],
-      date: subDays(new Date(), 3).toString(),
-      postTitle: 'test title',
-      commentCount: 0,
-      viewCount: 0,
-      usefullCount: 0,
-      postType: 'article',
-    }
+    const sutPost = DISCUSSION_QUESTION_MOCKS[0]
     const wrapper = shallow(<ListRow post={sutPost} />)
 
     const daysSince = wrapper.find(PostDate).text()

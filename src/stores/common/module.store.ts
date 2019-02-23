@@ -37,7 +37,9 @@ export class ModuleStore {
     // first emit undefined to clear any old records
     // use undefined instead of null to keep consistent with later find method
     this.activeDoc$.next(undefined)
-    this.activeDocSub.unsubscribe()
+    if (this.activeDocSub) {
+      this.activeDocSub.unsubscribe()
+    }
     this.activeDocSub = this.allDocs$.subscribe(docs => {
       const doc = docs.find(d => d[key] === value)
       this.activeDoc$.next(doc)

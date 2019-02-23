@@ -7,6 +7,7 @@
 import { Subject } from 'rxjs'
 import { afs } from 'src/utils/firebase'
 import { firestore, auth } from 'firebase/app'
+import { IDbDoc } from 'src/models/common.models'
 export class Database {
   /****************************************************************************** *
         Available Functions
@@ -49,13 +50,13 @@ export class Database {
   }
 
   public static async queryCollection(
-    path: string,
+    collectionPath: string,
     field: string,
     operation: firestore.WhereFilterOp,
     value: string,
   ) {
     const data = await afs
-      .collection(path)
+      .collection(collectionPath)
       .where(field, operation, value)
       .get()
     return data.docs.map(doc => doc.data())
@@ -66,8 +67,8 @@ export class Database {
   /****************************************************************************** */
 
   // instantiate a blank document to generate an id
-  public static generateId(collection: string) {
-    return afs.collection(collection).doc().id
+  public static generateId(collectionPath: string) {
+    return afs.collection(collectionPath).doc().id
   }
   public static generateTimestamp(date?: Date) {
     return firestore.Timestamp.fromDate(date ? date : new Date())
@@ -82,8 +83,28 @@ export class Database {
       throw new Error('user not signed in')
     }
   }
-  public checkSlugUnique(collection, slug) {
-    // *** TODO ***
+  public static async checkSlugUnique(collectionPath: string, slug: string) {
+    const matches = await this.queryCollection(
+      collectionPath,
+      'slug',
+      '==',
+      slug,
+    )
+    if (matches.length > 0) {
+      throw new Error('A document with that name already exists')
+    } else {
+      return
+    }
+  }
+  // creates standard set of meta fields applied to all docs
+  public static generateDocMeta(collectionPath: string) {
+    const meta: IDbDoc = {
+      _created: this.generateTimestamp(),
+      _deleted: false,
+      _id: this.generateId(collectionPath),
+      _modified: this.generateTimestamp(),
+    }
+    return meta
   }
 
   /****************************************************************************** *

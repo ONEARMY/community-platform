@@ -1,5 +1,9 @@
-import { Subject, BehaviorSubject, Subscription } from 'rxjs'
+import { BehaviorSubject, Subscription } from 'rxjs'
 import { Database } from '../database'
+
+/*  The module store contains common methods used across modules that access specfic
+    collections on the database
+*/
 
 export class ModuleStore {
   cacheLoaded = false
@@ -30,6 +34,9 @@ export class ModuleStore {
   }
 
   public setActiveDoc(key: string, value: string) {
+    // first emit undefined to clear any old records
+    // use undefined instead of null to keep consistent with later find method
+    this.activeDoc$.next(undefined)
     this.activeDocSub.unsubscribe()
     this.activeDocSub = this.allDocs$.subscribe(docs => {
       const doc = docs.find(d => d[key] === value)

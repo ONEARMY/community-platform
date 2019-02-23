@@ -12,7 +12,6 @@ export interface IDiscussionPost extends IPostFormInput {
   // user id only saved for created by
   createdBy: string
   isClosed: boolean
-  tags: string[]
   slug: string
   type: 'discussionQuestion'
 }
@@ -35,4 +34,5 @@ export interface IDiscussionComment {
 export interface IPostFormInput {
   title: string
   content: string
+  tags: string[]
 }

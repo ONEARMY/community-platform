@@ -1,9 +1,7 @@
 import { firestore } from 'firebase/app'
+import { IDbDoc } from './common.models'
 
-export interface IDiscussionPost extends IPostFormInput {
-  _id: string
-  _created: firestore.Timestamp
-  _modified: firestore.Timestamp
+export interface IDiscussionPost extends IPostFormInput, IDbDoc {
   _lastResponse: firestore.Timestamp | null
   _commentCount: number
   _viewCount: number
@@ -16,11 +14,8 @@ export interface IDiscussionPost extends IPostFormInput {
   type: 'discussionQuestion'
 }
 
-export interface IDiscussionComment {
-  _id: string
+export interface IDiscussionComment extends IDbDoc {
   _discussionID: string
-  _created: firestore.Timestamp
-  _modified: firestore.Timestamp
   // replies will be built recursively from repliesTo field
   replies: IDiscussionComment[]
   // repliesTo references a specific comment ID marked as a reply to

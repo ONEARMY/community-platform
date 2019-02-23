@@ -2,61 +2,55 @@ import { observable, action } from 'mobx'
 import {
   IDiscussionComment,
   IDiscussionPost,
+  IPostFormInput,
 } from 'src/models/discussions.models'
 import { Database } from '../database'
-import { Subject } from 'rxjs'
+import helpers from 'src/utils/helpers'
+import { ModuleStore } from '../common/module.store'
 
-export class DiscussionsStore {
-  isLoaded = new Subject<boolean>()
-  // we have two property relating to docs that can be observed
+export class DiscussionsStore extends ModuleStore {
   @observable
   public activeDiscussion: IDiscussionPost | undefined
   @observable
   public allDiscussionComments: IDiscussionComment[] = []
   @observable
-  public allDiscussions: IDiscussionPost[] = []
+  public allDiscussions: IDiscussionPost[]
 
-  // call getDocList to query 'discussions' from db and map response to docs observable
-  // note, the action will first quickly emit any cached results, followed by latest from server
-  // and will continue to emit any changes
-  @action
-  public getDiscussionList() {
-    Database.getCollection('discussions').subscribe(data => {
-      console.log('data received', data)
-      this.allDiscussions = data as IDiscussionPost[]
-      if (data.length > 0) {
-        this.isLoaded.complete()
-      }
-    })
+  // when initiating discussions will be fetched from module.store.ts method
+  // keep results of allDocs and activeDoc in sync with local varialbes
+  constructor() {
+    super('discussions')
+    this.allDocs$.subscribe(docs => (this.allDiscussions = docs))
+    this.activeDoc$.subscribe(doc => (this.activeDiscussion = doc))
   }
-  // when getting a document by slug we want to do a quick query of current list of docs
-  // in case of navigating directly to a page where this function is called on init we want to ensure docs loaded first
-  // if cache loaded and
+
   @action
-  public async getDiscussionBySlug(slug: string) {
-    this.activeDiscussion = undefined
-    const discussion = this.allDiscussions.find(d => d.slug === slug)
-    if (!discussion) {
-      // if data isn't loaded from cache yet try again once it is
-      if (!this.isLoaded.isStopped) {
-        this.isLoaded.subscribe(
-          data => null,
-          err => null,
-          () => this.getDiscussionBySlug(slug),
-        )
-      } else {
-        // cache data is loaded but doc doesn't exist. Query live server
-        const results = await Database.queryCollection(
-          'discussions',
-          'slug',
-          '==',
-          slug,
-        )
-        this.activeDiscussion = results[0] as IDiscussionPost
-      }
-    } else {
-      this.activeDiscussion = discussion
+  public async setActiveDiscussion(slug: string) {
+    this.setActiveDoc('slug', slug)
+  }
+
+  @action
+  public async createDiscussion(values: IPostFormInput) {
+    console.log('adding discussion', values)
+    const discussion: IDiscussionPost = {
+      _commentCount: 0,
+      _created: Database.generateTimestamp(),
+      _id: Database.generateId('discussions'),
+      _last3Comments: [],
+      _lastResponse: null,
+      _modified: Database.generateTimestamp(),
+      _usefullCount: 0,
+      _viewCount: 0,
+      content: values.content,
+      createdBy: Database.getUser() as string,
+      isClosed: false,
+      slug: helpers.stripSpecialCharacters(values.title),
+      tags: values.tags,
+      title: values.title,
+      type: 'discussionQuestion',
     }
+    await this.saveDiscussion(discussion)
+    return discussion
   }
 
   public async saveDiscussion(discussion: IDiscussionPost) {

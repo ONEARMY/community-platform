@@ -16,7 +16,7 @@ export class DiscussionsStore extends ModuleStore {
   @observable
   public allDiscussions: IDiscussionPost[]
 
-  // when initiating discussions will be fetched from module.store.ts method
+  // when initiating, discussions will be fetched via common method in module.store.ts
   // keep results of allDocs and activeDoc in sync with local varialbes
   constructor() {
     super('discussions')
@@ -33,15 +33,12 @@ export class DiscussionsStore extends ModuleStore {
   public async createDiscussion(values: IPostFormInput) {
     console.log('adding discussion', values)
     const discussion: IDiscussionPost = {
+      ...Database.generateDocMeta('discussions'),
       _commentCount: 0,
-      _created: Database.generateTimestamp(),
-      _id: Database.generateId('discussions'),
       _last3Comments: [],
       _lastResponse: null,
-      _modified: Database.generateTimestamp(),
       _usefullCount: 0,
       _viewCount: 0,
-      _deleted: false,
       content: values.content,
       createdBy: Database.getUser() as string,
       isClosed: false,
@@ -50,8 +47,15 @@ export class DiscussionsStore extends ModuleStore {
       title: values.title,
       type: 'discussionQuestion',
     }
+    await Database.checkSlugUnique('discussions', discussion.slug)
     await this.saveDiscussion(discussion)
+    // after creation want to return so slug or id can be used for navigation etc.
     return discussion
+  }
+
+  @action
+  public async deleteDiscussion(discussion: IDiscussionPost) {
+    return Database.deleteDoc(`discussions/${discussion._id}`)
   }
 
   public async saveDiscussion(discussion: IDiscussionPost) {

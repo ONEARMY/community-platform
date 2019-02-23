@@ -7,7 +7,6 @@ import { POST_TEMPLATE_DATA } from './PostTemplate'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 import { InputField } from 'src/components/Form/Fields'
 import { Editor, VARIANT } from 'src/components/Editor/'
-import { IDiscussionPost } from 'src/models/discussions.models'
 import { Button } from 'src/components/Button/'
 import { DiscussionsStore } from 'src/stores/Discussions/discussions.store'
 import { inject } from 'mobx-react'
@@ -38,24 +37,15 @@ export class PostCreate extends React.PureComponent<IProps, IState> {
   }
 
   public onSubmit = async (formValues: IPostFormInput) => {
-    console.log('formvalues', formValues)
     try {
-      // const post = await this.props.discussionsStore.createDiscussion(
-      //   formValues,
-      // )
-      // console.log('post', post)
-      // this.props.history.push('/discussions/' + post.slug)
+      const post = await this.props.discussionsStore.createDiscussion(
+        formValues,
+      )
+      this.props.history.push('/discussions/' + post.slug)
     } catch (error) {
       console.log('err', error)
-      console.log('error while saving the Post')
+      throw new Error(JSON.stringify(error))
     }
-  }
-
-  public validate = async (formValues: IPostFormInput) => {
-    // TODO: validate cover image exists
-    // if (this.state.formValues.cover_image_url === '') {
-    // alert('Please provide a cover image before saving your tutorial')
-    return Promise.resolve({})
   }
 
   public EditorField: React.ComponentType<FieldRenderProps> = ({
@@ -83,22 +73,10 @@ export class PostCreate extends React.PureComponent<IProps, IState> {
         <Form
           onSubmit={values => this.onSubmit(values as IPostFormInput)}
           initialValues={formValues}
-          validate={() => this.validate}
           mutators={{
             ...arrayMutators,
-            clearCoverImage: (args, state, utils) => {
-              utils.changeValue(state, 'cover_image', () => null)
-            },
           }}
-          render={({
-            handleSubmit,
-            mutators,
-            submitting,
-            values,
-            form,
-            invalid,
-          }) => {
-            const v = values as IDiscussionPost
+          render={({ handleSubmit, submitting, invalid }) => {
             return (
               <div>
                 <form onSubmit={handleSubmit}>
@@ -115,7 +93,6 @@ export class PostCreate extends React.PureComponent<IProps, IState> {
                     validate={required}
                     label="What would you like to discuss?"
                   />
-
                   <Button
                     type="submit"
                     icon={'check'}

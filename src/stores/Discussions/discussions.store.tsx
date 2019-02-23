@@ -41,6 +41,7 @@ export class DiscussionsStore extends ModuleStore {
       _modified: Database.generateTimestamp(),
       _usefullCount: 0,
       _viewCount: 0,
+      _deleted: false,
       content: values.content,
       createdBy: Database.getUser() as string,
       isClosed: false,

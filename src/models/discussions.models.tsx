@@ -1,6 +1,12 @@
 import { firestore } from 'firebase/app'
 import { IDbDoc } from './common.models'
 
+export interface IPostFormInput {
+  title: string
+  content: string
+  tags: string[]
+}
+
 export interface IDiscussionPost extends IPostFormInput, IDbDoc {
   _lastResponse: firestore.Timestamp | null
   _commentCount: number
@@ -24,10 +30,4 @@ export interface IDiscussionComment extends IDbDoc {
   // comment including images saved as html
   comment: string
   type: 'discussionComment'
-}
-
-export interface IPostFormInput {
-  title: string
-  content: string
-  tags: string[]
 }

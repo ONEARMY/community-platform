@@ -33,9 +33,11 @@ export class Database {
     return doc$
   }
 
-  // when setting a doc automatically populate the modified field
+  // when setting a doc automatically populate the modified field and mark _deleted: false (for future query)
   public static setDoc(path: string, docValues: any) {
-    return afs.doc(path).set({ ...docValues, _modified: new Date() })
+    return afs
+      .doc(path)
+      .set({ ...docValues, _modified: new Date(), _deleted: false })
   }
   // to allow caching to work docs are not completed deleted from the database, but instead emptied and marked as deleted
   // we could consider changing this to a full delete if it can be verified that users' cache won't repeatedly show the deleted doc

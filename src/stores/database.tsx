@@ -6,7 +6,7 @@
 
 import { Subject } from 'rxjs'
 import { afs } from 'src/utils/firebase'
-import { firestore } from 'firebase/app'
+import { firestore, auth } from 'firebase/app'
 export class Database {
   /****************************************************************************** *
         Available Functions
@@ -17,27 +17,6 @@ export class Database {
     const collection$ = new Subject<any[]>()
     this._emitCollectionUpdates(path, collection$)
     return collection$
-  }
-
-  // get cached value, emit, and then subscribe and emit any updates
-  public static async _emitCollectionUpdates(
-    path: string,
-    subject: Subject<any[]>,
-  ) {
-    // get cached and emit
-    const cachedSnapshot = await this._getCachedCollection(path)
-    let cached = this._preProcessData(cachedSnapshot)
-    subject.next([...cached].reverse())
-    // subscribe to any updates, emit when received
-    const updatesRef = this._getCollectionUpdatesRef(
-      path,
-      cached[cached.length - 1],
-    )
-    updatesRef.onSnapshot(updateSnapshot => {
-      const update = this._preProcessData(updateSnapshot)
-      cached = this._mergeData(cached, update)
-      subject.next([...cached].reverse())
-    })
   }
 
   // get a single doc. returns an observable, first pulling from local cache and then searching for updates
@@ -54,6 +33,7 @@ export class Database {
     return doc$
   }
 
+  // when setting a doc automatically populate the modified field
   public static setDoc(path: string, docValues: any) {
     return afs.doc(path).set({ ...docValues, _modified: new Date() })
   }
@@ -80,8 +60,54 @@ export class Database {
   }
 
   /****************************************************************************** *
+        Generators
+  /****************************************************************************** */
+
+  // instantiate a blank document to generate an id
+  public static generateId(collection: string) {
+    return afs.collection(collection).doc().id
+  }
+  public static generateTimestamp(date?: Date) {
+    return firestore.Timestamp.fromDate(date ? date : new Date())
+  }
+  public static getUser() {
+    const currentUser = auth().currentUser
+    if (currentUser) {
+      return currentUser.email
+    } else {
+      // *** TODO - fix user login and throw error here
+      return '_test'
+      throw new Error('user not signed in')
+    }
+  }
+  public checkSlugUnique(collection, slug) {
+    // *** TODO ***
+  }
+
+  /****************************************************************************** *
         Helper Methods
   /****************************************************************************** */
+
+  // get cached value, emit, and then subscribe and emit any updates
+  private static async _emitCollectionUpdates(
+    path: string,
+    subject: Subject<any[]>,
+  ) {
+    // get cached and emit
+    const cachedSnapshot = await this._getCachedCollection(path)
+    let cached = this._preProcessData(cachedSnapshot)
+    subject.next([...cached].reverse())
+    // subscribe to any updates, emit when received
+    const updatesRef = this._getCollectionUpdatesRef(
+      path,
+      cached[cached.length - 1],
+    )
+    updatesRef.onSnapshot(updateSnapshot => {
+      const update = this._preProcessData(updateSnapshot)
+      cached = this._mergeData(cached, update)
+      subject.next([...cached].reverse())
+    })
+  }
 
   // search the persisted cache for documents, return oldest to newest
   private static _getCachedCollection(path: string) {

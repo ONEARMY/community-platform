@@ -11,6 +11,7 @@ import IconButton from '@material-ui/core/IconButton'
 import MailOutlinedIcon from '@material-ui/icons/MailOutlined'
 import { MdNotifications } from 'react-icons/md'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
+import { LoginComponent } from '../../Login/Login'
 import {
   Content,
   LogoText,
@@ -25,7 +26,6 @@ import {
 import { IUser } from 'src/models/user.models'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
-import { LoginComponent } from '../../Login/Login'
 
 interface IState {
   moreMenuAnchor: any

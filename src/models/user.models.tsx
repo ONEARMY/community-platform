@@ -13,6 +13,18 @@ export interface IUserState {
   user?: IUser
 }
 
+export interface IUserFormInput {
+  login: string
+  email: string
+  display_name: string
+  password?: string
+  repeat_password?: string
+  first_name?: string
+  last_name?: string
+  nickname?: string
+  country?: string
+}
+
 // IUser retains most of the fields from legacy users (omitting passwords),
 // and has a few additional fields
 export interface IUser {

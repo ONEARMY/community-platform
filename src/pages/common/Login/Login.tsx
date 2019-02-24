@@ -60,7 +60,7 @@ export class LoginComponent extends React.Component<IProps, IState> {
           onClose={this.closeLogin}
         >
           <div className="login-modal">
-            <LoginFormComponent />
+            <LoginFormComponent closeLogin={this.closeLogin}/>
           </div>
         </Modal>
       </>

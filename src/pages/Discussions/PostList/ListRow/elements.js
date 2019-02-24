@@ -70,7 +70,7 @@ export const ViewCount = styled.span`
   vertical-align: middle;
 `
 
-export const UsefullCount = styled.span`
+export const UsefulCount = styled.span`
   font-size: 0.8em;
   padding: 20px;
   margin-left: 30px;

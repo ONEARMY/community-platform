@@ -9,7 +9,7 @@ import {
   TagsContainer,
   Tag,
   InteractionNb,
-  UsefullCount,
+  UsefulCount,
   ViewCount,
   PostDate,
   DiscussIcon,
@@ -59,7 +59,7 @@ export default class ListRow extends React.Component<IProps, IState> {
                 ? post._commentCount + ' comments'
                 : post._commentCount + ' answers'}
             </InteractionNb>
-            <UsefullCount>{post._usefullCount}</UsefullCount>
+            <UsefulCount>{post._usefulCount}</UsefulCount>
             {/* *** TODO - Build and pull data from analytics */}
             {/*<Count isViewCounter={true} firebaseHost={FIREBASE_CONFIG.databaseURL}*/}
             {/*firebaseResourceId={'post-' + post._id + '-viewCount'}/>*/}

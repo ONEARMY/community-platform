@@ -20,8 +20,6 @@ export class DiscussionsPage extends React.Component<any> {
         <Route exact path="/discussions" render={props => <PostList />} />
         <Route exact path="/discussions/create" component={PostCreate} />
         <Route path="/discussions/:slug" component={PostView} />
-
-        {/* <Redirect to="/discussions/list" /> */}
       </Switch>
     ) as React.ReactNode
   }

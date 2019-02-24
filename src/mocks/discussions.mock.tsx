@@ -19,7 +19,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionPost[] = [
     _lastResponse: toTimestamp('Saturday, August 27, 2016 6:54 AM'),
     _commentCount: 5,
     _viewCount: 6231,
-    _usefullCount: 2,
+    _usefulCount: 2,
     _last3Comments: [
       'http://i.pravatar.cc/200',
       'http://i.pravatar.cc/201',
@@ -43,7 +43,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionPost[] = [
     _lastResponse: toTimestamp('Wednesday, July 4, 2018 5:51 PM'),
     _commentCount: 2,
     _viewCount: 16211,
-    _usefullCount: 4,
+    _usefulCount: 4,
     _last3Comments: [
       'http://i.pravatar.cc/204',
       'http://i.pravatar.cc/205',
@@ -67,7 +67,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionPost[] = [
     _lastResponse: toTimestamp('Saturday, December 23, 2017 3:40 PM'),
     _commentCount: 22,
     _viewCount: 7810,
-    _usefullCount: 4,
+    _usefulCount: 4,
     _last3Comments: [
       'http://i.pravatar.cc/208',
       'http://i.pravatar.cc/209',
@@ -90,7 +90,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionPost[] = [
     _lastResponse: toTimestamp('Wednesday, November 26, 2014 9:57 AM'),
     _commentCount: 0,
     _viewCount: 1318,
-    _usefullCount: 1,
+    _usefulCount: 1,
     _last3Comments: [
       'http://i.pravatar.cc/230',
       'http://i.pravatar.cc/240',
@@ -113,7 +113,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionPost[] = [
     _lastResponse: toTimestamp('Saturday, May 31, 2014 4:52 AM'),
     _commentCount: 1,
     _viewCount: 20422,
-    _usefullCount: 2,
+    _usefulCount: 2,
     _last3Comments: [
       'http://i.pravatar.cc/270',
       'http://i.pravatar.cc/280',
@@ -136,7 +136,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionPost[] = [
     _lastResponse: toTimestamp('Sunday, September 6, 2015 11:28 PM'),
     _commentCount: 24,
     _viewCount: 1387,
-    _usefullCount: 6,
+    _usefulCount: 6,
     _last3Comments: [
       'http://i.pravatar.cc/222',
       'http://i.pravatar.cc/233',
@@ -160,7 +160,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionPost[] = [
     _lastResponse: toTimestamp('Tuesday, September 1, 2015 2:40 AM'),
     _commentCount: 4,
     _viewCount: 10149,
-    _usefullCount: 3,
+    _usefulCount: 3,
     _last3Comments: [
       'http://i.pravatar.cc/266',
       'http://i.pravatar.cc/277',
@@ -184,7 +184,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionPost[] = [
     _lastResponse: toTimestamp('Tuesday, December 2, 2014 10:48 AM'),
     _commentCount: 16,
     _viewCount: 24936,
-    _usefullCount: 5,
+    _usefulCount: 5,
     _last3Comments: [
       'http://i.pravatar.cc/212',
       'http://i.pravatar.cc/223',
@@ -208,7 +208,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionPost[] = [
     _lastResponse: toTimestamp('Tuesday, March 10, 2015 8:06 AM'),
     _commentCount: 11,
     _viewCount: 23933,
-    _usefullCount: 0,
+    _usefulCount: 0,
     _last3Comments: [
       'http://i.pravatar.cc/256',
       'http://i.pravatar.cc/267',
@@ -311,7 +311,7 @@ const questionsTemplate = [
         '{{moment(this.date(toTimestamp(2014, 0, 1), toTimestamp())).format("LLLL")}}',
       _commentCount: '{{integer(0, 25)}}',
       _viewCount: '{{integer(1, 25000)}}',
-      _usefullCount: '{{integer(0, 6)}}',
+      _usefulCount: '{{integer(0, 6)}}',
       _last3Comments: [{ 'repeat(3)': 'http://i.pravatar.cc/200' }],
       slug: '{{objectId()}}',
       _createdBy: 'http://i.pravatar.cc/200',

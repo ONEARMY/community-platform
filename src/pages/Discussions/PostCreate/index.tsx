@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
-import { Form, Field, FieldProps, FieldRenderProps } from 'react-final-form'
+import { Form, Field, FieldRenderProps } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import { IPostFormInput } from 'src/models/discussions.models'
 import { POST_TEMPLATE_DATA } from './PostTemplate'
@@ -38,9 +38,7 @@ export class PostCreate extends React.PureComponent<IProps, IState> {
 
   public onSubmit = async (formValues: IPostFormInput) => {
     try {
-      const post = await this.props.discussionsStore.createDiscussion(
-        formValues,
-      )
+      const post = await this.props.discussionsStore.saveDiscussion(formValues)
       this.props.history.push('/discussions/' + post.slug)
     } catch (error) {
       console.log('err', error)

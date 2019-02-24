@@ -50,7 +50,7 @@ class PostListClass extends React.Component<IProps, IState> {
         break
       case 'usefulCount':
         list.sort((a, b) => {
-          return b._usefullCount - a._usefullCount
+          return b._usefulCount - a._usefulCount
         })
         break
       case 'viewsCount':

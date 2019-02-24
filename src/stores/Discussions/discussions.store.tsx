@@ -34,29 +34,6 @@ export class DiscussionsStore extends ModuleStore {
   }
 
   @action
-  public async createDiscussion(values: IPostFormInput) {
-    console.log('adding discussion', values)
-    const discussion: IDiscussionPost = {
-      ...Database.generateDocMeta('discussions'),
-      _commentCount: 0,
-      _last3Comments: [],
-      _lastResponse: null,
-      _usefullCount: 0,
-      _viewCount: 0,
-      content: values.content,
-      isClosed: false,
-      slug: helpers.stripSpecialCharacters(values.title),
-      tags: values.tags,
-      title: values.title,
-      type: 'discussionQuestion',
-    }
-    await Database.checkSlugUnique('discussions', discussion.slug)
-    await this.saveDiscussion(discussion)
-    // after creation want to return so slug or id can be used for navigation etc.
-    return discussion
-  }
-
-  @action
   public createComment(
     discussionID: string,
     comment: string,
@@ -81,8 +58,39 @@ export class DiscussionsStore extends ModuleStore {
     return Database.deleteDoc(`discussions/${discussion._id}`)
   }
 
-  public async saveDiscussion(discussion: IDiscussionPost) {
-    return Database.setDoc(`discussions/${discussion._id}`, discussion)
+  @action
+  public async saveDiscussion(discussion: IDiscussionPost | IPostFormInput) {
+    // differentiate between creating a new discussion and saving an old discussion
+    let d: IDiscussionPost
+    if (discussion.hasOwnProperty('_id')) {
+      d = discussion as IDiscussionPost
+      await Database.setDoc(`discussions/${d._id}`, d)
+    } else {
+      d = await this._createNewDiscussion(discussion as IPostFormInput)
+      await this.saveDiscussion(discussion)
+    }
+    // after creation want to return so slug or id can be used for navigation etc.
+    return d
+  }
+
+  private async _createNewDiscussion(values: IPostFormInput) {
+    console.log('adding discussion', values)
+    const discussion: IDiscussionPost = {
+      ...Database.generateDocMeta('discussions'),
+      _commentCount: 0,
+      _last3Comments: [],
+      _lastResponse: null,
+      _usefulCount: 0,
+      _viewCount: 0,
+      content: values.content,
+      isClosed: false,
+      slug: helpers.stripSpecialCharacters(values.title),
+      tags: values.tags,
+      title: values.title,
+      type: 'discussionQuestion',
+    }
+    await Database.checkSlugUnique('discussions', discussion.slug)
+    return discussion
   }
 
   // want to add an additional listener so that when the active discussion changes

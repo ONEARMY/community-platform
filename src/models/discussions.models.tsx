@@ -11,9 +11,8 @@ export interface IDiscussionPost extends IPostFormInput, IDbDoc {
   _lastResponse: firestore.Timestamp | null
   _commentCount: number
   _viewCount: number
-  _usefullCount: number
+  _usefulCount: number
   _last3Comments: any
-  // user id only saved for created by
   isClosed: boolean
   slug: string
   type: 'discussionQuestion'

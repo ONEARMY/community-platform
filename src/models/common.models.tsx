@@ -6,4 +6,5 @@ export interface IDbDoc {
   _created: firestore.Timestamp
   _modified: firestore.Timestamp
   _deleted: boolean
+  _createdBy: string
 }

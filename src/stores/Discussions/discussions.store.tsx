@@ -44,7 +44,7 @@ export class DiscussionsStore extends ModuleStore {
       _usefullCount: 0,
       _viewCount: 0,
       content: values.content,
-      createdBy: Database.getUser() as string,
+      _createdBy: Database.getUser() as string,
       isClosed: false,
       slug: helpers.stripSpecialCharacters(values.title),
       tags: values.tags,

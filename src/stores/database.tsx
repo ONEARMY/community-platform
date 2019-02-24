@@ -98,11 +98,13 @@ export class Database {
   }
   // creates standard set of meta fields applied to all docs
   public static generateDocMeta(collectionPath: string) {
+    const user = auth().currentUser
     const meta: IDbDoc = {
       _created: this.generateTimestamp(),
       _deleted: false,
       _id: this.generateId(collectionPath),
       _modified: this.generateTimestamp(),
+      _createdBy: user ? (user.email as string) : 'anonymous',
     }
     return meta
   }

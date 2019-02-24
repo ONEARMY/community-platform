@@ -41,7 +41,7 @@ export default class ListRow extends React.Component<IProps, IState> {
       <>
         <Link to={`/discussions/${post.slug}`}>
           <Post>
-            <Avatar src={post.createdBy} alt="avatar" />
+            <Avatar src={post._createdBy} alt="avatar" />
             <TitleAndTagsContaier>
               <Title
               // *** TODO - Build and link to analytics store method

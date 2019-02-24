@@ -14,7 +14,7 @@ export interface IDiscussionPost extends IPostFormInput, IDbDoc {
   _usefullCount: number
   _last3Comments: any
   // user id only saved for created by
-  createdBy: string
+  _createdBy: string
   isClosed: boolean
   slug: string
   type: 'discussionQuestion'

@@ -26,10 +26,16 @@ export class Database {
     afs
       .doc(path)
       .get({ source: 'cache' })
-      .then(cached => {
-        // emit cached values and look for fresh
-        doc$.next(cached.data())
-        afs.doc(path).onSnapshot(update => doc$.next(update.data()))
+      .then(cachedSnapshot => {
+        // emit cached values and look for live, emitting if newer
+        const cached = cachedSnapshot.data() as IDbDoc
+        doc$.next(cached)
+        afs.doc(path).onSnapshot(updateSnapshot => {
+          const update = updateSnapshot.data() as IDbDoc
+          if (update._modified.seconds > cached._modified.seconds) {
+            doc$.next(update)
+          }
+        })
       })
     return doc$
   }
@@ -119,9 +125,11 @@ export class Database {
       cached[cached.length - 1],
     )
     updatesRef.onSnapshot(updateSnapshot => {
-      const update = this._preProcessData(updateSnapshot)
-      cached = this._mergeData(cached, update)
-      subject.next([...cached].reverse())
+      if (updateSnapshot.size > 0) {
+        const update = this._preProcessData(updateSnapshot)
+        cached = this._mergeData(cached, update)
+        subject.next([...cached].reverse())
+      }
     })
   }
 

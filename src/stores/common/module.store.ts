@@ -7,7 +7,6 @@ import { Database } from '../database'
 
 export class ModuleStore {
   cacheLoaded = false
-  liveLoaded = false
   allDocs$ = new BehaviorSubject<any[]>([])
   activeDoc$ = new BehaviorSubject<any>(null)
   private activeDocSubscription = new Subscription()
@@ -28,9 +27,8 @@ export class ModuleStore {
     this.activeCollectionSubscription = Database.getCollection(path).subscribe(
       data => {
         this.allDocs$.next(data)
-        if (this.cacheLoaded) {
-          this.liveLoaded = true
-        } else {
+        // first emit from cache, future emits will be from live but only if data is newer
+        if (!this.cacheLoaded) {
           this.cacheLoaded = true
         }
       },

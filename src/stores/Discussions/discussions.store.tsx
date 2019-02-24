@@ -94,7 +94,6 @@ export class DiscussionsStore extends ModuleStore {
         this.allDiscussionComments$ = Database.getCollection(
           `discussions/${doc._id}/comments`,
         ).subscribe(docs => {
-          console.log('comments', docs)
           this.allDiscussionComments = docs
         })
       }

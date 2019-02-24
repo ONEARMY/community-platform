@@ -23,6 +23,10 @@ import {
   SectionDescription,
 } from './elements'
 import { IUser } from 'src/models/user.models'
+import { UserStore } from 'src/stores/User/user.store'
+import { inject, observer } from 'mobx-react'
+import { InjectedProps } from '@material-ui/core/withMobileDialog'
+import { LoginComponent } from '../../Login/Login'
 
 interface IState {
   moreMenuAnchor: any
@@ -34,6 +38,12 @@ interface IProps {
   description: string
 }
 
+interface IInjectProps extends IProps {
+  userStore: UserStore
+}
+
+@inject('userStore')
+@observer
 export class CommunityHeader extends React.Component<IProps, IState> {
   constructor(props) {
     super(props)
@@ -41,6 +51,9 @@ export class CommunityHeader extends React.Component<IProps, IState> {
       moreMenuAnchor: null,
       profileMenuAnchor: null,
     }
+  }
+  get props() {
+    return this.props as InjectedProps
   }
 
   // function receives clicked element which then sets itself as an 'anchor'
@@ -131,38 +144,46 @@ export class CommunityHeader extends React.Component<IProps, IState> {
               <MdNotifications />
             </IconButton>
           </div>
-          <Profile onClick={this.openProfileMenu}>
-            <Avatar
-              alt="Remy Sharp"
-              src="http://i.pravatar.cc/200"
-              className="header__avatar"
-            />
-            <KeyboardArrowDownIcon />
-          </Profile>
-          <Menu
-            open={profileMenuAnchor ? true : false}
-            anchorEl={profileMenuAnchor}
-            className="nav__more-menu"
-            style={{ marginTop: '3em' }}
-          >
-            <ClickAwayListener onClickAway={this.closeProfileMenu}>
-              <div>
-                {COMMUNITY_PAGES_PROFILE.map(page => (
-                  <MenuItem onClick={this.closeProfileMenu} key={page.path}>
-                    <LinkButton
-                      className="nav-link"
-                      to={page.path}
-                      activeClassName={'link-active'}
-                    >
-                      {page.title}
-                    </LinkButton>
-                  </MenuItem>
-                ))}
-                <MenuItem onClick={this.closeProfileMenu}>Logout</MenuItem>
-                <MenuItem onClick={this.closeProfileMenu}>Main Site</MenuItem>
-              </div>
-            </ClickAwayListener>
-          </Menu>
+          {this.props.userStore.user ? (
+            <>
+              <Profile onClick={this.openProfileMenu}>
+                <Avatar
+                  alt="Remy Sharp"
+                  src="http://i.pravatar.cc/200"
+                  className="header__avatar"
+                />
+                <KeyboardArrowDownIcon />
+              </Profile>
+              <Menu
+                open={profileMenuAnchor ? true : false}
+                anchorEl={profileMenuAnchor}
+                className="nav__more-menu"
+                style={{ marginTop: '3em' }}
+              >
+                <ClickAwayListener onClickAway={this.closeProfileMenu}>
+                  <div>
+                    {COMMUNITY_PAGES_PROFILE.map(page => (
+                      <MenuItem onClick={this.closeProfileMenu} key={page.path}>
+                        <LinkButton
+                          className="nav-link"
+                          to={page.path}
+                          activeClassName={'link-active'}
+                        >
+                          {page.title}
+                        </LinkButton>
+                      </MenuItem>
+                    ))}
+                    <MenuItem onClick={this.closeProfileMenu}>Logout</MenuItem>
+                    <MenuItem onClick={this.closeProfileMenu}>
+                      Main Site
+                    </MenuItem>
+                  </div>
+                </ClickAwayListener>
+              </Menu>
+            </>
+          ) : (
+            <LoginComponent user={this.props.userStore.user} />
+          )}
         </Content>
         <SectionDescription>
           {this.props.title}

@@ -6,7 +6,8 @@
 
 import { Subject } from 'rxjs'
 import { afs } from 'src/utils/firebase'
-import { firestore } from 'firebase/app'
+import { firestore, auth } from 'firebase/app'
+import { IDbDoc } from 'src/models/common.models'
 export class Database {
   /****************************************************************************** *
         Available Functions
@@ -19,8 +20,98 @@ export class Database {
     return collection$
   }
 
+  // get a single doc. returns an observable, first pulling from local cache and then searching for updates
+  public static getDoc(path: string) {
+    const doc$ = new Subject()
+    afs
+      .doc(path)
+      .get({ source: 'cache' })
+      .then(cachedSnapshot => {
+        // emit cached values and look for live, emitting if newer
+        const cached = cachedSnapshot.data() as IDbDoc
+        doc$.next(cached)
+        afs.doc(path).onSnapshot(updateSnapshot => {
+          const update = updateSnapshot.data() as IDbDoc
+          if (update._modified.seconds > cached._modified.seconds) {
+            doc$.next(update)
+          }
+        })
+      })
+    return doc$
+  }
+
+  // when setting a doc automatically populate the modified field and mark _deleted: false (for future query)
+  public static setDoc(path: string, docValues: any) {
+    return afs
+      .doc(path)
+      .set({ ...docValues, _modified: new Date(), _deleted: false })
+  }
+  // to allow caching to work docs are not completed deleted from the database, but instead emptied and marked as deleted
+  // we could consider changing this to a full delete if it can be verified that users' cache won't repeatedly show the deleted doc
+  public static deleteDoc(path: string) {
+    return afs.doc(path).set({
+      _modified: new Date(),
+      _deleted: true,
+    })
+  }
+
+  public static async queryCollection(
+    collectionPath: string,
+    field: string,
+    operation: firestore.WhereFilterOp,
+    value: string,
+  ) {
+    const data = await afs
+      .collection(collectionPath)
+      .where(field, operation, value)
+      .get()
+    return data.docs.map(doc => doc.data())
+  }
+
+  /****************************************************************************** *
+        Generators
+  /****************************************************************************** */
+
+  // instantiate a blank document to generate an id
+  public static generateId(collectionPath: string) {
+    return afs.collection(collectionPath).doc().id
+  }
+  public static generateTimestamp(date?: Date) {
+    return firestore.Timestamp.fromDate(date ? date : new Date())
+  }
+
+  public static async checkSlugUnique(collectionPath: string, slug: string) {
+    const matches = await this.queryCollection(
+      collectionPath,
+      'slug',
+      '==',
+      slug,
+    )
+    if (matches.length > 0) {
+      throw new Error('A document with that name already exists')
+    } else {
+      return
+    }
+  }
+  // creates standard set of meta fields applied to all docs
+  public static generateDocMeta(collectionPath: string) {
+    const user = auth().currentUser
+    const meta: IDbDoc = {
+      _created: this.generateTimestamp(),
+      _deleted: false,
+      _id: this.generateId(collectionPath),
+      _modified: this.generateTimestamp(),
+      _createdBy: user ? (user.email as string) : 'anonymous',
+    }
+    return meta
+  }
+
+  /****************************************************************************** *
+        Helper Methods
+  /****************************************************************************** */
+
   // get cached value, emit, and then subscribe and emit any updates
-  public static async _emitCollectionUpdates(
+  private static async _emitCollectionUpdates(
     path: string,
     subject: Subject<any[]>,
   ) {
@@ -34,54 +125,13 @@ export class Database {
       cached[cached.length - 1],
     )
     updatesRef.onSnapshot(updateSnapshot => {
-      const update = this._preProcessData(updateSnapshot)
-      cached = this._mergeData(cached, update)
-      subject.next([...cached].reverse())
+      if (updateSnapshot.size > 0) {
+        const update = this._preProcessData(updateSnapshot)
+        cached = this._mergeData(cached, update)
+        subject.next([...cached].reverse())
+      }
     })
   }
-
-  // get a single doc. returns an observable, first pulling from local cache and then searching for updates
-  public static getDoc(path: string) {
-    const doc$ = new Subject()
-    afs
-      .doc(path)
-      .get({ source: 'cache' })
-      .then(cached => {
-        // emit cached values and look for fresh
-        doc$.next(cached.data())
-        afs.doc(path).onSnapshot(update => doc$.next(update.data()))
-      })
-    return doc$
-  }
-
-  public static setDoc(path: string, docValues: any) {
-    return afs.doc(path).set({ ...docValues, _modified: new Date() })
-  }
-  // to allow caching to work docs are not completed deleted from the database, but instead emptied and marked as deleted
-  // we could consider changing this to a full delete if it can be verified that users' cache won't repeatedly show the deleted doc
-  public static deleteDoc(path: string) {
-    return afs.doc(path).set({
-      _modified: new Date(),
-      _deleted: true,
-    })
-  }
-
-  public static async queryCollection(
-    path: string,
-    field: string,
-    operation: firestore.WhereFilterOp,
-    value: string,
-  ) {
-    const data = await afs
-      .collection(path)
-      .where(field, operation, value)
-      .get()
-    return data.docs.map(doc => doc.data())
-  }
-
-  /****************************************************************************** *
-        Helper Methods
-  /****************************************************************************** */
 
   // search the persisted cache for documents, return oldest to newest
   private static _getCachedCollection(path: string) {

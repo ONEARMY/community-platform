@@ -38,11 +38,6 @@ class PostListClass extends React.Component<IProps, IState> {
     }
   }
 
-  public async componentDidMount() {
-    // load data
-    this.props.discussionsStore.getDiscussionList()
-  }
-
   public orderList(list: IDiscussionPost[]) {
     // mobx observable must first be sliced in order to sort properly
     // TODO - Replace repeated code with filter util (WiP) - see discussion in #215
@@ -55,7 +50,7 @@ class PostListClass extends React.Component<IProps, IState> {
         break
       case 'usefulCount':
         list.sort((a, b) => {
-          return b._usefullCount - a._usefullCount
+          return b._usefulCount - a._usefulCount
         })
         break
       case 'viewsCount':

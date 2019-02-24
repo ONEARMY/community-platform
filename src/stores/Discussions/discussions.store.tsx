@@ -2,64 +2,109 @@ import { observable, action } from 'mobx'
 import {
   IDiscussionComment,
   IDiscussionPost,
+  IPostFormInput,
 } from 'src/models/discussions.models'
 import { Database } from '../database'
-import { Subject } from 'rxjs'
+import helpers from 'src/utils/helpers'
+import { ModuleStore } from '../common/module.store'
+import { Subscription } from 'rxjs'
 
-export class DiscussionsStore {
-  isLoaded = new Subject<boolean>()
-  // we have two property relating to docs that can be observed
+export class DiscussionsStore extends ModuleStore {
+  private allDiscussionComments$ = new Subscription()
   @observable
   public activeDiscussion: IDiscussionPost | undefined
   @observable
   public allDiscussionComments: IDiscussionComment[] = []
   @observable
-  public allDiscussions: IDiscussionPost[] = []
+  public allDiscussions: IDiscussionPost[]
 
-  // call getDocList to query 'discussions' from db and map response to docs observable
-  // note, the action will first quickly emit any cached results, followed by latest from server
-  // and will continue to emit any changes
+  // when initiating, discussions will be fetched via common method in module.store.ts
+  // keep results of allDocs and activeDoc in sync with local varialbes
+  constructor() {
+    super('discussions')
+    this.allDocs$.subscribe(docs => (this.allDiscussions = docs))
+    this.activeDoc$.subscribe(doc => (this.activeDiscussion = doc))
+    this._addCommentsSubscription()
+  }
+  componentDidMount() {}
+
   @action
-  public getDiscussionList() {
-    Database.getCollection('discussions').subscribe(data => {
-      console.log('data received', data)
-      this.allDiscussions = data as IDiscussionPost[]
-      if (data.length > 0) {
-        this.isLoaded.complete()
+  public async setActiveDiscussion(slug: string) {
+    this.setActiveDoc('slug', slug)
+  }
+
+  @action
+  public createComment(
+    discussionID: string,
+    comment: string,
+    repliesToId?: string,
+  ) {
+    const values: IDiscussionComment = {
+      ...Database.generateDocMeta(`discussions/${discussionID}/comments`),
+      comment,
+      _discussionID: discussionID,
+      replies: [],
+      repliesTo: repliesToId ? repliesToId : discussionID,
+      type: 'discussionComment',
+    }
+    return Database.setDoc(
+      `discussions/${discussionID}/comments/${values._id}`,
+      values,
+    )
+  }
+
+  @action
+  public async deleteDiscussion(discussion: IDiscussionPost) {
+    return Database.deleteDoc(`discussions/${discussion._id}`)
+  }
+
+  @action
+  public async saveDiscussion(discussion: IDiscussionPost | IPostFormInput) {
+    // differentiate between creating a new discussion and saving an old discussion
+    let d: IDiscussionPost
+    if (discussion.hasOwnProperty('_id')) {
+      d = discussion as IDiscussionPost
+      await Database.setDoc(`discussions/${d._id}`, d)
+    } else {
+      d = await this._createNewDiscussion(discussion as IPostFormInput)
+      await this.saveDiscussion(discussion)
+    }
+    // after creation want to return so slug or id can be used for navigation etc.
+    return d
+  }
+
+  private async _createNewDiscussion(values: IPostFormInput) {
+    console.log('adding discussion', values)
+    const discussion: IDiscussionPost = {
+      ...Database.generateDocMeta('discussions'),
+      _commentCount: 0,
+      _last3Comments: [],
+      _lastResponse: null,
+      _usefulCount: 0,
+      _viewCount: 0,
+      content: values.content,
+      isClosed: false,
+      slug: helpers.stripSpecialCharacters(values.title),
+      tags: values.tags,
+      title: values.title,
+      type: 'discussionQuestion',
+    }
+    await Database.checkSlugUnique('discussions', discussion.slug)
+    return discussion
+  }
+
+  // want to add an additional listener so that when the active discussion changes
+  // any comments are also loaded from subcollection
+  private _addCommentsSubscription() {
+    this.allDiscussionComments$.unsubscribe()
+    this.activeDoc$.subscribe(doc => {
+      if (doc) {
+        this.allDiscussionComments$ = Database.getCollection(
+          `discussions/${doc._id}/comments`,
+        ).subscribe(docs => {
+          this.allDiscussionComments = docs
+        })
       }
     })
-  }
-  // when getting a document by slug we want to do a quick query of current list of docs
-  // in case of navigating directly to a page where this function is called on init we want to ensure docs loaded first
-  // if cache loaded and
-  @action
-  public async getDiscussionBySlug(slug: string) {
-    this.activeDiscussion = undefined
-    const discussion = this.allDiscussions.find(d => d.slug === slug)
-    if (!discussion) {
-      // if data isn't loaded from cache yet try again once it is
-      if (!this.isLoaded.isStopped) {
-        this.isLoaded.subscribe(
-          data => null,
-          err => null,
-          () => this.getDiscussionBySlug(slug),
-        )
-      } else {
-        // cache data is loaded but doc doesn't exist. Query live server
-        const results = await Database.queryCollection(
-          'discussions',
-          'slug',
-          '==',
-          slug,
-        )
-        this.activeDiscussion = results[0] as IDiscussionPost
-      }
-    } else {
-      this.activeDiscussion = discussion
-    }
-  }
-
-  public async saveDiscussion(discussion: IDiscussionPost) {
-    return Database.setDoc(`discussions/${discussion._id}`, discussion)
   }
 }

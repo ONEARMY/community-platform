@@ -28,7 +28,7 @@ export const TitleAndTagsContaier = styled.div`
   vertical-align: middle;
 `
 
-export const Title = styled.a`
+export const Title = styled.span`
   text-decoration: none;
   font-size: 1.1em;
   color: black;
@@ -37,9 +37,6 @@ export const Title = styled.a`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  &:hover {
-    text-decoration: underline;
-  }
 `
 
 export const TagsContainer = styled.div`
@@ -73,7 +70,7 @@ export const ViewCount = styled.span`
   vertical-align: middle;
 `
 
-export const UsefullCount = styled.span`
+export const UsefulCount = styled.span`
   font-size: 0.8em;
   padding: 20px;
   margin-left: 30px;

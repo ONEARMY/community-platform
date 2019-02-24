@@ -9,13 +9,14 @@ import {
   TagsContainer,
   Tag,
   InteractionNb,
-  UsefullCount,
+  UsefulCount,
   ViewCount,
   PostDate,
   DiscussIcon,
   QaIcon,
 } from './elements'
 import { IDiscussionPost } from 'src/models/discussions.models'
+import { Link } from 'react-router-dom'
 
 interface IProps {
   post: IDiscussionPost
@@ -37,34 +38,39 @@ export default class ListRow extends React.Component<IProps, IState> {
   public render() {
     const { post } = this.props
     return (
-      <Post>
-        <Avatar src={post.createdBy} alt="avatar" />
-        <TitleAndTagsContaier>
-          <Title
-            href={'/discussions/post/' + post._id}
-            target="_blank"
-            // *** TODO - Build and link to analytics store method
-            // onClick={() => this.postViewReactGA(post._id)}
-          >
-            {post.title}
-          </Title>
-          <TagsContainer>
-            {post.tags && post.tags.map((tag, j) => <Tag key={j}>{tag}</Tag>)}
-          </TagsContainer>
-        </TitleAndTagsContaier>
-        <InteractionNb>
-          {post.type === 'discussionQuestion'
-            ? post._commentCount + ' comments'
-            : post._commentCount + ' answers'}
-        </InteractionNb>
-        <UsefullCount>{post._usefullCount}</UsefullCount>
-        {/* *** TODO - Build and pull data from analytics */}
-        {/*<Count isViewCounter={true} firebaseHost={FIREBASE_CONFIG.databaseURL}*/}
-        {/*firebaseResourceId={'post-' + post._id + '-viewCount'}/>*/}
-        <ViewCount>{post._viewCount}</ViewCount>
-        <PostDate>{this.durationSincePosted(post._created.toDate())}</PostDate>
-        {post.type === 'discussionQuestion' ? <DiscussIcon /> : <QaIcon />}
-      </Post>
+      <>
+        <Link to={`/discussions/${post.slug}`}>
+          <Post>
+            <Avatar src={post._createdBy} alt="avatar" />
+            <TitleAndTagsContaier>
+              <Title
+              // *** TODO - Build and link to analytics store method
+              // onClick={() => this.postViewReactGA(post._id)}
+              >
+                {post.title}
+              </Title>
+              <TagsContainer>
+                {post.tags &&
+                  post.tags.map((tag, j) => <Tag key={j}>{tag}</Tag>)}
+              </TagsContainer>
+            </TitleAndTagsContaier>
+            <InteractionNb>
+              {post.type === 'discussionQuestion'
+                ? post._commentCount + ' comments'
+                : post._commentCount + ' answers'}
+            </InteractionNb>
+            <UsefulCount>{post._usefulCount}</UsefulCount>
+            {/* *** TODO - Build and pull data from analytics */}
+            {/*<Count isViewCounter={true} firebaseHost={FIREBASE_CONFIG.databaseURL}*/}
+            {/*firebaseResourceId={'post-' + post._id + '-viewCount'}/>*/}
+            <ViewCount>{post._viewCount}</ViewCount>
+            <PostDate>
+              {this.durationSincePosted(post._created.toDate())}
+            </PostDate>
+            {post.type === 'discussionQuestion' ? <DiscussIcon /> : <QaIcon />}
+          </Post>
+        </Link>
+      </>
     )
   }
 }

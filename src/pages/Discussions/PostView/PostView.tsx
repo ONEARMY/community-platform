@@ -73,7 +73,6 @@ class PostViewClass extends React.Component<IProps, IState> {
   public render() {
     if (this.post) {
       const p = this.post
-      console.log('rendering', this.state)
       return (
         <>
           <h1>Question</h1>

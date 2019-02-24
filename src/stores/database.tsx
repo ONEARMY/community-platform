@@ -73,16 +73,7 @@ export class Database {
   public static generateTimestamp(date?: Date) {
     return firestore.Timestamp.fromDate(date ? date : new Date())
   }
-  public static getUser() {
-    const currentUser = auth().currentUser
-    if (currentUser) {
-      return currentUser.email
-    } else {
-      // *** TODO - fix user login and throw error here
-      return '_test'
-      throw new Error('user not signed in')
-    }
-  }
+
   public static async checkSlugUnique(collectionPath: string, slug: string) {
     const matches = await this.queryCollection(
       collectionPath,

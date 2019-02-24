@@ -66,7 +66,6 @@ export class PostCreate extends React.PureComponent<IProps, IState> {
 
   public render() {
     const { formValues } = this.state
-    console.log('rendering', formValues)
     return (
       <div>
         <h2 style={{ marginTop: 0 }}>Create a Post</h2>

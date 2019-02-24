@@ -4,12 +4,17 @@ import { FaExclamationTriangle } from 'react-icons/fa'
 import { SITE } from 'src/config/config'
 export const DevNotice = () =>
   SITE !== 'production' ? (
-    <div style={{padding: '5px 5px', color: colors.green}}
-    title="This site is for development purposes, do not share private information" >
-      <a style={{position: 'absolute', right: 200}}>Dev site notice</a>
-      <FaExclamationTriangle 
-      style={{position: 'absolute', right: 175}}/>
+    <div
+      style={{
+        padding: '5px',
+        color: colors.green,
+        position: 'absolute',
+        display: 'flex',
+        alignItems: 'center',
+      }}
+      title="This site is for development purposes, do not share private information"
+    >
+      <span>Dev site notice</span>
+      <FaExclamationTriangle style={{ marginLeft: 5 }} />
     </div>
-  ) : (
-    <div />
-  )
+  ) : null

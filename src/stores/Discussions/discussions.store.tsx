@@ -7,8 +7,10 @@ import {
 import { Database } from '../database'
 import helpers from 'src/utils/helpers'
 import { ModuleStore } from '../common/module.store'
+import { Subscription } from 'rxjs'
 
 export class DiscussionsStore extends ModuleStore {
+  private allDiscussionComments$ = new Subscription()
   @observable
   public activeDiscussion: IDiscussionPost | undefined
   @observable
@@ -22,7 +24,9 @@ export class DiscussionsStore extends ModuleStore {
     super('discussions')
     this.allDocs$.subscribe(docs => (this.allDiscussions = docs))
     this.activeDoc$.subscribe(doc => (this.activeDiscussion = doc))
+    this._addCommentsSubscription()
   }
+  componentDidMount() {}
 
   @action
   public async setActiveDiscussion(slug: string) {
@@ -54,11 +58,47 @@ export class DiscussionsStore extends ModuleStore {
   }
 
   @action
+  public createComment(
+    discussionID: string,
+    comment: string,
+    repliesToId?: string,
+  ) {
+    const values: IDiscussionComment = {
+      ...Database.generateDocMeta(`discussions/${discussionID}/comments`),
+      comment,
+      _discussionID: discussionID,
+      replies: [],
+      repliesTo: repliesToId ? repliesToId : discussionID,
+      type: 'discussionComment',
+    }
+    return Database.setDoc(
+      `discussions/${discussionID}/comments/${values._id}`,
+      values,
+    )
+  }
+
+  @action
   public async deleteDiscussion(discussion: IDiscussionPost) {
     return Database.deleteDoc(`discussions/${discussion._id}`)
   }
 
   public async saveDiscussion(discussion: IDiscussionPost) {
     return Database.setDoc(`discussions/${discussion._id}`, discussion)
+  }
+
+  // want to add an additional listener so that when the active discussion changes
+  // any comments are also loaded from subcollection
+  private _addCommentsSubscription() {
+    this.allDiscussionComments$.unsubscribe()
+    this.activeDoc$.subscribe(doc => {
+      if (doc) {
+        this.allDiscussionComments$ = Database.getCollection(
+          `discussions/${doc._id}/comments`,
+        ).subscribe(docs => {
+          console.log('comments', docs)
+          this.allDiscussionComments = docs
+        })
+      }
+    })
   }
 }

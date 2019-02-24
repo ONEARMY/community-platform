@@ -25,7 +25,6 @@ import {
 import { IUser } from 'src/models/user.models'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
-import { InjectedProps } from '@material-ui/core/withMobileDialog'
 import { LoginComponent } from '../../Login/Login'
 
 interface IState {
@@ -38,7 +37,7 @@ interface IProps {
   description: string
 }
 
-interface IInjectProps extends IProps {
+interface IInjectedProps extends IProps {
   userStore: UserStore
 }
 
@@ -53,7 +52,7 @@ export class CommunityHeader extends React.Component<IProps, IState> {
     }
   }
   get props() {
-    return this.props as InjectedProps
+    return this.props as IInjectedProps
   }
 
   // function receives clicked element which then sets itself as an 'anchor'
@@ -86,6 +85,10 @@ export class CommunityHeader extends React.Component<IProps, IState> {
         <KeyboardArrowDownIcon />
       </Profile>
     )
+  }
+  logout() {
+    this.props.userStore.logout()
+    this.closeProfileMenu()
   }
 
   render() {
@@ -173,7 +176,7 @@ export class CommunityHeader extends React.Component<IProps, IState> {
                         </LinkButton>
                       </MenuItem>
                     ))}
-                    <MenuItem onClick={this.closeProfileMenu}>Logout</MenuItem>
+                    <MenuItem onClick={() => this.logout()}>Logout</MenuItem>
                     <MenuItem onClick={this.closeProfileMenu}>
                       Main Site
                     </MenuItem>

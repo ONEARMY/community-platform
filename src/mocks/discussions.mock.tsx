@@ -1,5 +1,4 @@
-import { firestore } from 'firebase/app'
-
+import { toTimestamp } from 'src/utils/helpers'
 import {
   IDiscussionPost,
   IDiscussionComment,
@@ -344,7 +343,3 @@ const commentsTemplate = [
     },
   },
 ]
-
-function toTimestamp(dateString: string) {
-  return firestore.Timestamp.fromDate(new Date(dateString))
-}

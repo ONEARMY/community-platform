@@ -7,6 +7,7 @@ import { withRouter, RouteComponentProps } from 'react-router'
 import { IDiscussionPost } from 'src/models/discussions.models'
 import { Editor, VARIANT } from 'src/components/Editor/'
 import { Button } from 'src/components/Button/'
+import { PostResponse } from '../PostResponse/PostResponse'
 
 interface IProps extends RouteComponentProps {
   discussionsStore: DiscussionsStore
@@ -80,7 +81,7 @@ class PostViewClass extends React.Component<IProps, IState> {
           <div dangerouslySetInnerHTML={{ __html: p.content }} />
           <h2>Responses</h2>
           {this.comments.map(c => (
-            <div dangerouslySetInnerHTML={{ __html: c.comment }} />
+            <PostResponse key={c._id} comment={c} />
           ))}
           <h2>Add response</h2>
           <Editor

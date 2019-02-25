@@ -5,15 +5,14 @@ import { DISCUSSION_QUESTION_MOCKS } from 'src/mocks/discussions.mock'
 import MaxWidth from 'src/components/Layout/MaxWidth.js'
 import Margin from 'src/components/Layout/Margin.js'
 import FilterBar from 'src/pages/common/FilterBar/FilterBar'
-import ListRow from 'src/pages/Discussions/PostList/ListRow'
 
-import { Content, Main, ListHeader, PostCount, List, OrderBy } from './elements'
+import { Content, Main, ListHeader, PostCount } from './elements'
 
 import { withRouter } from 'react-router'
 import { IStores } from 'src/stores'
 import { DiscussionsStore } from 'src/stores/Discussions/discussions.store'
 import { computed } from 'mobx'
-import { IDiscussionPost } from 'src/models/discussions.models'
+import { PostList2 } from './List'
 
 interface IProps {
   discussionsStore: DiscussionsStore
@@ -38,35 +37,6 @@ class PostListClass extends React.Component<IProps, IState> {
     }
   }
 
-  public orderList(list: IDiscussionPost[]) {
-    // mobx observable must first be sliced in order to sort properly
-    // TODO - Replace repeated code with filter util (WiP) - see discussion in #215
-    list = list.slice()
-    switch (this.state.orderBy) {
-      case 'repliesCount':
-        list.sort((a, b) => {
-          return b._commentCount - a._commentCount
-        })
-        break
-      case 'usefulCount':
-        list.sort((a, b) => {
-          return b._usefulCount - a._usefulCount
-        })
-        break
-      case 'viewsCount':
-        list.sort((a, b) => {
-          return b._viewCount - a._viewCount
-        })
-        break
-      case 'date':
-        // TODO : order by date
-        break
-      default:
-        break
-    }
-    return list
-  }
-
   public updateResultsList() {
     console.log('Change on filters')
   }
@@ -85,31 +55,9 @@ class PostListClass extends React.Component<IProps, IState> {
                 <PostCount>
                   Showing {DISCUSSION_QUESTION_MOCKS.length} posts
                 </PostCount>
-                <OrderBy
-                  onClick={() => this.setState({ orderBy: 'repliesCount' })}
-                >
-                  Replies
-                </OrderBy>
-                <OrderBy
-                  onClick={() => this.setState({ orderBy: 'usefulCount' })}
-                >
-                  Useful
-                </OrderBy>
-                <OrderBy
-                  onClick={() => this.setState({ orderBy: 'viewsCount' })}
-                >
-                  Views
-                </OrderBy>
-                <OrderBy onClick={() => this.setState({ orderBy: 'date' })}>
-                  Freshness
-                </OrderBy>
               </ListHeader>
               <Main alignItems="flex-start">
-                <List>
-                  {this.orderList(this.discussions).map((post, i) =>
-                    post._id ? <ListRow post={post} key={i} /> : null,
-                  )}
-                </List>
+                <PostList2 posts={this.discussions} />
               </Main>
             </Margin>
           </Content>

@@ -81,7 +81,10 @@ export const DialogButtons = styled(DialogActions)`
   justify-content: center !important;
 `
 
-export const CancelButton = styled(Button)`
+export const CancelButton: any =
+  styled(Button) <
+  any >
+  `
   width: 112px;
   height: 60px;
 `

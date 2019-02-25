@@ -23,7 +23,7 @@ export const buttons = {
   },
 }
 
-export const space = [5, 10, 15]
+export const space = [0, 4, 8, 16, 32, 64, 128]
 
 export default {
   colors,

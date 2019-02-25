@@ -21,7 +21,10 @@ export const ProgressContainer = styled.div`
   margin-top: 10px;
 `
 
-export const ProgressBar = styled(LinearProgress)`
+export const ProgressBar =
+  styled(LinearProgress) <
+  any >
+  `
   > div {
     ${props => getColor(props)};
   }

@@ -20,11 +20,13 @@ ReactDOM.render(
   // provider makes all stores available through the app via @inject
   <Provider {...stores}>
     <ThemeProvider theme={styledTheme}>
-      <ErrorBoundary>
-        <Routes />
-      </ErrorBoundary>
-      <SWUpdateNotification />
-      <GlobalStyle />
+      <>
+        <ErrorBoundary>
+          <Routes />
+        </ErrorBoundary>
+        <SWUpdateNotification />
+        <GlobalStyle />
+      </>
     </ThemeProvider>
   </Provider>,
   document.getElementById('root') as HTMLElement,

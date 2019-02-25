@@ -19,7 +19,7 @@ interface IProps {
   size?: number | string
 }
 
-export const IconWrapper = styled.div`
+export const IconWrapper = styled<IProps, 'div'>('div')`
   display: inline-block;
   flex: 0 0 ${props => (props.size ? `${props.size}px` : '32px')};
   width: ${props => (props.size ? `${props.size}px` : '32px')};
@@ -48,7 +48,7 @@ export const Glyph = ({ glyph }: IGlyphProps) => {
 }
 
 export default class Icon extends React.Component<IProps> {
-  constructor(props: any) {
+  constructor(props: IProps) {
     super(props)
   }
   public render() {

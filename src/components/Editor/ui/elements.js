@@ -21,7 +21,7 @@ export const CancelButton = styled(Button)`
   height: 60px;
 `
 export const ConfirmButton = styled(Button)`
-  background-color: ${props => (props.disabled ? colors.grey : colors.blue)}}
+  background-color: ${props => (props.disabled ? colors.grey : colors.blue)};
   width: 112px;
   height: 60px;
 `

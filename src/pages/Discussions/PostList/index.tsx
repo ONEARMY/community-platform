@@ -15,6 +15,8 @@ import { DiscussionsStore } from 'src/stores/Discussions/discussions.store'
 import { computed } from 'mobx'
 import { IDiscussionPost } from 'src/models/discussions.models'
 
+import { Box, Flex } from 'rebass'
+
 interface IProps {
   discussionsStore: DiscussionsStore
 }
@@ -74,13 +76,13 @@ class PostListClass extends React.Component<IProps, IState> {
   public render() {
     return (
       <MaxWidth>
-        <Margin vertical={1.5}>
+        <Box my={1.5}>
           <Content>
             <FilterBar
               section={'discussions'}
               onChange={() => this.updateResultsList()}
             />
-            <Margin vertical={1.5} horizontal={1.5}>
+            <Box m={1.5}>
               <ListHeader>
                 <PostCount>
                   Showing {DISCUSSION_QUESTION_MOCKS.length} posts
@@ -104,16 +106,16 @@ class PostListClass extends React.Component<IProps, IState> {
                   Freshness
                 </OrderBy>
               </ListHeader>
-              <Main alignItems="flex-start">
+              <Flex alignItems="flex-start">
                 <List>
                   {this.orderList(this.discussions).map((post, i) =>
                     post._id ? <ListRow post={post} key={i} /> : null,
                   )}
                 </List>
-              </Main>
-            </Margin>
+              </Flex>
+            </Box>
           </Content>
-        </Margin>
+        </Box>
       </MaxWidth>
     )
   }

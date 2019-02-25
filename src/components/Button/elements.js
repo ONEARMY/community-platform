@@ -1,11 +1,13 @@
 import styled, { css } from 'styled-components'
 import { variant, color, space, width } from 'styled-system'
+import {colors} from 'src/themes/styled.theme'
 
 const baseStyles = css`
   text-transform: uppercase;
   text-decoration: none;
   height: 50px;
   border: none;
+  /* background-color: ${props => props.disabled ? colors.grey : colors.white}} */
   border-radius: 5px;
   font-size: 0.8em;
   display: flex;
@@ -16,11 +18,7 @@ const baseStyles = css`
   font-weight: 600;
   white-space: nowrap;
   word-break: keep-all;
-  cursor: pointer;
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.3;
-  }
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
 `
 const colorsVariant = variant({
   key: 'buttons',
@@ -39,7 +37,7 @@ StyledButton.defaultProps = {
   variant: 'primary',
 }
 
-export const Label = styled.span`
+export const Label = styled.span `
   display: block;
   flex: 0 0 auto;
   line-height: inherit;

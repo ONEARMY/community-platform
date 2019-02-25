@@ -4,7 +4,7 @@ import { Form, Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
 import { IHowto, IHowtoFormInput } from 'src/models/howto.models'
-import { db } from 'src/utils/firebase'
+import { afs } from 'src/utils/firebase'
 import { TUTORIAL_TEMPLATE_DATA } from './TutorialTemplate'
 import {
   IFirebaseUploadInfo,
@@ -55,7 +55,7 @@ export class CreateHowto extends React.PureComponent<
   constructor(props: any) {
     super(props)
     // generate unique id for db and storage references and assign to state
-    const databaseRef = db.collection('documentation').doc()
+    const databaseRef = afs.collection('documentation').doc()
     const docID = databaseRef.id
     this.state = {
       formValues: { ...TUTORIAL_TEMPLATE_DATA, id: docID },
@@ -66,8 +66,9 @@ export class CreateHowto extends React.PureComponent<
     }
   }
 
-  public onSubmit = async (formValues: IHowtoFormInput) => {
-    if (!formValues.cover_image) {
+  public onSubmit = async (formValues: any) => {
+    const inputValues = formValues as IHowtoFormInput
+    if (!inputValues.cover_image) {
       alert('Please provide a cover image before saving your tutorial')
     } else {
       const timestamp = new Date()
@@ -82,7 +83,7 @@ export class CreateHowto extends React.PureComponent<
         _modified: timestamp,
       }
       try {
-        await db
+        await afs
           .collection('documentation')
           .doc(formValues.id)
           .set(values)
@@ -117,7 +118,7 @@ export class CreateHowto extends React.PureComponent<
     console.log('formvalues', formValues)
     return (
       <div>
-        <Link to={'/how-to/list'}>
+        <Link to={'/how-to'}>
           <Button m={50} icon={'arrow-back'} variant="outline">
             Back to how-to
           </Button>
@@ -128,7 +129,7 @@ export class CreateHowto extends React.PureComponent<
         <Form
           onSubmit={this.onSubmit}
           initialValues={formValues}
-          validate={this.validate}
+          validate={() => this.validate}
           mutators={{
             ...arrayMutators,
             clearCoverImage: (args, state, utils) => {

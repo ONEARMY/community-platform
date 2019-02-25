@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx'
-import { db } from '../../utils/firebase'
-import { IHowto } from 'src/models/models'
+import { afs } from '../../utils/firebase'
+import { IHowto } from 'src/models/howto.models'
 
 export class HowtoStore {
   // we have two property relating to docs that can be observed
@@ -12,7 +12,7 @@ export class HowtoStore {
   // call getDocList to query 'Howtos' from db and map response to docs observable
   @action
   public async getDocList() {
-    const ref = await db
+    const ref = await afs
       .collection('documentation')
       .orderBy('_created', 'desc')
       .get()
@@ -21,7 +21,7 @@ export class HowtoStore {
   }
   @action
   public async getDocBySlug(slug: string) {
-    const ref = db
+    const ref = afs
       .collection('documentation')
       .where('slug', '==', slug)
       .limit(1)

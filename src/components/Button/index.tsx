@@ -1,4 +1,5 @@
 import React from 'react'
+
 import Icon from 'src/components/Icons'
 import {
   ColorProps,
@@ -8,6 +9,7 @@ import {
 } from 'styled-system'
 import { StyledButton, Label } from './elements'
 
+// extend to allow any default button props (e.g. onClick) to also be passed
 interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
   icon?: string
 }

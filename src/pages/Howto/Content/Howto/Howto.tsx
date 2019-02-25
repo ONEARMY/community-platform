@@ -1,14 +1,13 @@
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 import LinearProgress from '@material-ui/core/LinearProgress'
-import { IHowto } from 'src/models/models'
-import { db } from 'src/utils/firebase'
+import { afs } from 'src/utils/firebase'
 import { inject } from 'mobx-react'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
 import Step from './Step/Step'
 import { Button } from 'src/components/Button'
-import { IHowtoStep } from 'src/models/howto.models'
+import { IHowtoStep, IHowto } from 'src/models/howto.models'
 import Link from 'react-router-dom/Link'
 
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
@@ -51,7 +50,7 @@ export class Howto extends React.Component<
   }
   // use firebase to query tutorials and return doc that matches the given slug
   public async getTutorialBySlug(slug: string) {
-    const ref = db
+    const ref = afs
       .collection('documentation')
       .where('slug', '==', slug)
       .limit(1)
@@ -89,7 +88,7 @@ export class Howto extends React.Component<
     if (howto) {
       return (
         <>
-          <Link to={'/how-to/list'}>
+          <Link to={'/how-to'}>
             <Button variant={'outline'} m={50} icon={'arrow-back'}>
               Back to how-to
             </Button>
@@ -98,7 +97,7 @@ export class Howto extends React.Component<
           {howto.steps.map((step: any, index: number) => (
             <Step step={step} key={index} stepindex={index} />
           ))}
-          <Link to={'/how-to/list'}>
+          <Link to={'/how-to'}>
             <Button variant={'outline'} mx={'auto'} my={50} icon={'arrow-back'}>
               Back to how-to
             </Button>

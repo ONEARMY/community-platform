@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx'
-import { db } from 'src/utils/firebase'
+import { afs } from 'src/utils/firebase'
 import { IEvent } from 'src/models/events.models'
 
 export class EventStore {
@@ -13,13 +13,13 @@ export class EventStore {
 
   @action
   public async getEventsList() {
-    const ref = await db.collection('events').get()
+    const ref = await afs.collection('events').get()
     this.allEvents = ref.docs.map(doc => doc.data() as IEvent)
     console.log('events retrieved', this.allEvents)
   }
 
   public async getEventBySlug(slug: string) {
-    const ref = db
+    const ref = afs
       .collection('events')
       .where('slug', '==', slug)
       .limit(1)

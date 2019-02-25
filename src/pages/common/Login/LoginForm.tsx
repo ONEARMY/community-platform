@@ -10,6 +10,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import Input from '@material-ui/core/Input'
 
+import Link from 'react-router-dom/Link'
 import Lock from '@material-ui/icons/Lock'
 import { loginFormSubmit } from '../../../utils/user-migration'
 import { auth } from '../../../utils/firebase'
@@ -20,6 +21,10 @@ interface IState {
   password: string
   message?: string
   submitDisabled: boolean
+}
+
+interface IProps {
+  closeLogin: () => void
 }
 
 const styles: any = {
@@ -48,9 +53,12 @@ const styles: any = {
   submit: {
     marginTop: theme.spacing.unit * 3,
   },
+  link: {
+    marginTop: theme.spacing.unit * 2,
+  }
 }
 
-export class LoginFormComponent extends React.Component {
+export class LoginFormComponent extends React.Component<IProps> {
   public state: IState = {
     email: '',
     password: '',
@@ -132,6 +140,13 @@ export class LoginFormComponent extends React.Component {
                 Sign in
               </Button>
             </form>
+            <Link
+              style={styles.link}
+              to="/sign-up"
+              onClick={this.props.closeLogin}
+            >
+              Sign up
+            </Link>
             <Typography color="error">{this.state.message}</Typography>
           </Paper>
         </main>

@@ -11,6 +11,8 @@ interface IState {
 
 interface IProps {
   variant: 'community' | 'public'
+  title: string
+  description: string
 }
 
 export class Header extends React.Component<IProps, IState> {
@@ -19,11 +21,12 @@ export class Header extends React.Component<IProps, IState> {
   }
 
   render() {
+    const { title, description } = this.props
     return (
       <div id="header">
         <AppBar position="static">
           {this.props.variant === 'community' ? (
-            <CommunityHeader />
+            <CommunityHeader {...{ title, description }} />
           ) : (
             <PublicHeader />
           )}

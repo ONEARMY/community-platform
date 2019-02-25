@@ -32,11 +32,11 @@ export interface IUser {
   verified: boolean
   _created: Date
   _modified: Date
-  legacy_id: number
   login: string
   email: string
-  legacy_registered: string /*mm/dd/yyyy hh:ss*/
   display_name: string
+  legacy_id?: number
+  legacy_registered?: string /*mm/dd/yyyy hh:ss*/
   first_name?: string
   last_name?: string
   nickname?: string

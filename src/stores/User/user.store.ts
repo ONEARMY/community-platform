@@ -58,10 +58,8 @@ export class UserStore {
 
   private async _createUserProfile(values: IUserFormInput) {
     const user: IUser = {
+      ...Database.generateDocMeta('users'),
       verified: false,
-      _created: new Date(),
-      _modified: new Date(),
-      login: values.login,
       email: values.email,
       display_name: values.display_name,
       first_name: values.first_name,

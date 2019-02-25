@@ -4,6 +4,7 @@ import { ILegacyUser, IUser } from 'src/models/user.models'
 import * as phpassHasher from 'wordpress-hash-node'
 
 import md5 from 'md5'
+import { Database } from 'src/stores/database';
 
 interface IMigrationResponse {
   success: boolean
@@ -92,8 +93,7 @@ const generateNewUserDoc = (email: string, legacyDoc: ILegacyUser) => {
   delete legacyDoc.password_alg
   const user: IUser = {
     ...legacyDoc,
-    _created: new Date(),
-    _modified: new Date(),
+    ...Database.generateDocMeta('users'),
     verified: false,
     email,
   }

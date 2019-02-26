@@ -25,7 +25,7 @@ export class UserStore {
     console.log('listening for auth state chagnes')
     this.authListener = auth.onAuthStateChanged(authUser => {
       console.log('auth user changed', authUser)
-      if (authUser) {
+      if (authUser && authUser.emailVerified) {
         this.userSignedIn(authUser)
       } else {
         this.updateUser()

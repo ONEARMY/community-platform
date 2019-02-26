@@ -74,8 +74,12 @@ export class LoginFormComponent extends React.Component<IProps> {
 
   // on login submit try call firebase auth sign in method
   public async processLogin() {
+    if (auth.currentUser) {
+      console.log('user already authenticated, signing out')
+      auth.signOut()
+    }
     console.log('attempting login')
-    loginFormSubmit(this.state.email, this.state.password)
+    await loginFormSubmit(this.state.email, this.state.password)
     // try {
     //   const status = await auth.signInWithEmailAndPassword(
     //     this.state.email,

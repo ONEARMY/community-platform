@@ -8,6 +8,7 @@ import { HomePage } from './Home/Home'
 import { NotFoundPage } from './NotFound/NotFound'
 import { DiscussionsPage } from './Discussions'
 import { SignUpPage } from './Home/SignUp'
+import { EmailConfirmation } from './Home/EmailConfirmation'
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import { EventsPage } from './Events/Events'
 import Header from './common/Header/Header'
@@ -39,6 +40,13 @@ export const HOME_PAGE: IPageMeta[] = [
     path: '/sign-up',
     component: <SignUpPage />,
     title: 'Sign up',
+    description: '',
+    exact: true,
+  },
+  {
+    path: '/email-confirmation',
+    component: <EmailConfirmation />,
+    title: 'Email confirmation',
     description: '',
     exact: true,
   },

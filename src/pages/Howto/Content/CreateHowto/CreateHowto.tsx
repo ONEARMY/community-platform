@@ -4,7 +4,7 @@ import { Form, Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
 import { IHowto, IHowtoFormInput } from 'src/models/howto.models'
-import { db } from 'src/utils/firebase'
+import { afs } from 'src/utils/firebase'
 import { TUTORIAL_TEMPLATE_DATA } from './TutorialTemplate'
 import {
   IFirebaseUploadInfo,
@@ -58,7 +58,7 @@ export class CreateHowto extends React.PureComponent<
   constructor(props: any) {
     super(props)
     // generate unique id for db and storage references and assign to state
-    const databaseRef = db.collection('documentation').doc()
+    const databaseRef = afs.collection('documentation').doc()
     const docID = databaseRef.id
     this.state = {
       formValues: { ...TUTORIAL_TEMPLATE_DATA, id: docID },
@@ -86,7 +86,7 @@ export class CreateHowto extends React.PureComponent<
         _modified: timestamp,
       }
       try {
-        await db
+        await afs
           .collection('documentation')
           .doc(formValues.id)
           .set(values)
@@ -121,7 +121,7 @@ export class CreateHowto extends React.PureComponent<
     console.log('formvalues', formValues)
     return (
       <div>
-        <Link to={'/how-to/list'}>
+        <Link to={'/how-to'}>
           <BackButtonTop icon={'arrow-back'}>Back to how-to</BackButtonTop>
         </Link>
         <Title variant="h4" component="h4" style={{ marginTop: 0 }}>

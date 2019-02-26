@@ -1,5 +1,7 @@
+import { firestore } from 'firebase/app'
+
 import {
-  IDiscussionQuestion,
+  IDiscussionPost,
   IDiscussionComment,
 } from 'src/models/discussions.models'
 
@@ -8,12 +10,12 @@ import {
 */
 
 // mocks generated from template, note the Date fields are populated as string so require reformatting
-export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
+export const DISCUSSION_QUESTION_MOCKS: IDiscussionPost[] = [
   {
     _id: '5c6d7a294475199744afe2d1',
-    _created: new Date('Tuesday, February 14, 2017 1:33 PM'),
-    _modified: new Date('Monday, August 7, 2017 5:43 AM'),
-    _lastResponse: new Date('Saturday, August 27, 2016 6:54 AM'),
+    _created: toTimestamp('Tuesday, February 14, 2017 1:33 PM'),
+    _modified: toTimestamp('Monday, August 7, 2017 5:43 AM'),
+    _lastResponse: toTimestamp('Saturday, August 27, 2016 6:54 AM'),
     _commentCount: 5,
     _viewCount: 6231,
     _usefullCount: 2,
@@ -22,6 +24,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/201',
       'http://i.pravatar.cc/202',
     ],
+    slug: 'test-slug',
     createdBy: 'http://i.pravatar.cc/203',
     isClosed: false,
     tags: ['non', 'nulla', 'nostrud', 'incididunt', 'occaecat'],
@@ -33,9 +36,9 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
   },
   {
     _id: '5c6d7a292ca7a215c97237ff',
-    _created: new Date('Sunday, December 17, 2017 1:23 PM'),
-    _modified: new Date('Wednesday, May 28, 2014 8:53 PM'),
-    _lastResponse: new Date('Wednesday, July 4, 2018 5:51 PM'),
+    _created: toTimestamp('Sunday, December 17, 2017 1:23 PM'),
+    _modified: toTimestamp('Wednesday, May 28, 2014 8:53 PM'),
+    _lastResponse: toTimestamp('Wednesday, July 4, 2018 5:51 PM'),
     _commentCount: 2,
     _viewCount: 16211,
     _usefullCount: 4,
@@ -44,6 +47,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/205',
       'http://i.pravatar.cc/206',
     ],
+    slug: 'test-slug',
     createdBy: 'http://i.pravatar.cc/207',
     isClosed: false,
     tags: ['ullamco', 'velit', 'anim', 'aliqua', 'deserunt'],
@@ -55,9 +59,9 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
   },
   {
     _id: '5c6d7a29755aaf19aa3821ca',
-    _created: new Date('Wednesday, March 9, 2016 6:56 PM'),
-    _modified: new Date('Tuesday, May 1, 2018 12:33 AM'),
-    _lastResponse: new Date('Saturday, December 23, 2017 3:40 PM'),
+    _created: toTimestamp('Wednesday, March 9, 2016 6:56 PM'),
+    _modified: toTimestamp('Tuesday, May 1, 2018 12:33 AM'),
+    _lastResponse: toTimestamp('Saturday, December 23, 2017 3:40 PM'),
     _commentCount: 22,
     _viewCount: 7810,
     _usefullCount: 4,
@@ -66,6 +70,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/209',
       'http://i.pravatar.cc/210',
     ],
+    slug: 'test-slug',
     createdBy: 'http://i.pravatar.cc/220',
     isClosed: true,
     tags: ['consectetur', 'veniam', 'ut', 'ipsum', 'veniam'],
@@ -76,9 +81,9 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
   },
   {
     _id: '5c6d7a295bbae94e85259607',
-    _created: new Date('Wednesday, October 15, 2014 7:33 AM'),
-    _modified: new Date('Friday, January 2, 2015 12:59 AM'),
-    _lastResponse: new Date('Wednesday, November 26, 2014 9:57 AM'),
+    _created: toTimestamp('Wednesday, October 15, 2014 7:33 AM'),
+    _modified: toTimestamp('Friday, January 2, 2015 12:59 AM'),
+    _lastResponse: toTimestamp('Wednesday, November 26, 2014 9:57 AM'),
     _commentCount: 0,
     _viewCount: 1318,
     _usefullCount: 1,
@@ -87,6 +92,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/240',
       'http://i.pravatar.cc/250',
     ],
+    slug: 'test-slug',
     createdBy: 'http://i.pravatar.cc/260',
     isClosed: false,
     tags: ['excepteur', 'proident', 'adipisicing', 'irure', 'aliquip'],
@@ -97,9 +103,9 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
   },
   {
     _id: '5c6d7a2956736681732af496',
-    _created: new Date('Thursday, December 10, 2015 7:30 AM'),
-    _modified: new Date('Sunday, December 7, 2014 8:02 PM'),
-    _lastResponse: new Date('Saturday, May 31, 2014 4:52 AM'),
+    _created: toTimestamp('Thursday, December 10, 2015 7:30 AM'),
+    _modified: toTimestamp('Sunday, December 7, 2014 8:02 PM'),
+    _lastResponse: toTimestamp('Saturday, May 31, 2014 4:52 AM'),
     _commentCount: 1,
     _viewCount: 20422,
     _usefullCount: 2,
@@ -108,6 +114,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/280',
       'http://i.pravatar.cc/290',
     ],
+    slug: 'test-slug',
     createdBy: 'http://i.pravatar.cc/211',
     isClosed: false,
     tags: ['deserunt', 'minim', 'aliquip', 'laborum', 'tempor'],
@@ -118,9 +125,9 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
   },
   {
     _id: '5c6d7a29c46abd230bbeb32f',
-    _created: new Date('Monday, February 10, 2014 9:42 PM'),
-    _modified: new Date('Friday, September 9, 2016 7:35 AM'),
-    _lastResponse: new Date('Sunday, September 6, 2015 11:28 PM'),
+    _created: toTimestamp('Monday, February 10, 2014 9:42 PM'),
+    _modified: toTimestamp('Friday, September 9, 2016 7:35 AM'),
+    _lastResponse: toTimestamp('Sunday, September 6, 2015 11:28 PM'),
     _commentCount: 24,
     _viewCount: 1387,
     _usefullCount: 6,
@@ -129,6 +136,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/233',
       'http://i.pravatar.cc/244',
     ],
+    slug: 'test-slug',
     createdBy: 'http://i.pravatar.cc/255',
     isClosed: true,
     tags: ['velit', 'proident', 'nisi', 'laborum', 'minim'],
@@ -140,9 +148,9 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
   },
   {
     _id: '5c6d7a2928acc4726f1b7780',
-    _created: new Date('Monday, December 10, 2018 8:15 PM'),
-    _modified: new Date('Tuesday, September 16, 2014 10:37 PM'),
-    _lastResponse: new Date('Tuesday, September 1, 2015 2:40 AM'),
+    _created: toTimestamp('Monday, December 10, 2018 8:15 PM'),
+    _modified: toTimestamp('Tuesday, September 16, 2014 10:37 PM'),
+    _lastResponse: toTimestamp('Tuesday, September 1, 2015 2:40 AM'),
     _commentCount: 4,
     _viewCount: 10149,
     _usefullCount: 3,
@@ -151,6 +159,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/277',
       'http://i.pravatar.cc/288',
     ],
+    slug: 'test-slug',
     createdBy: 'http://i.pravatar.cc/299',
     isClosed: false,
     tags: ['laborum', 'esse', 'quis', 'pariatur', 'quis'],
@@ -162,9 +171,9 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
   },
   {
     _id: '5c6d7a297fee346b98283041',
-    _created: new Date('Monday, July 9, 2018 5:13 PM'),
-    _modified: new Date('Sunday, January 17, 2016 3:46 PM'),
-    _lastResponse: new Date('Tuesday, December 2, 2014 10:48 AM'),
+    _created: toTimestamp('Monday, July 9, 2018 5:13 PM'),
+    _modified: toTimestamp('Sunday, January 17, 2016 3:46 PM'),
+    _lastResponse: toTimestamp('Tuesday, December 2, 2014 10:48 AM'),
     _commentCount: 16,
     _viewCount: 24936,
     _usefullCount: 5,
@@ -173,6 +182,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/223',
       'http://i.pravatar.cc/234',
     ],
+    slug: 'test-slug',
     createdBy: 'http://i.pravatar.cc/245',
     isClosed: true,
     tags: ['eu', 'nisi', 'ullamco', 'labore', 'id'],
@@ -184,9 +194,9 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
   },
   {
     _id: '5c6d7a299f70798b222a3b1f',
-    _created: new Date('Wednesday, July 26, 2017 4:49 PM'),
-    _modified: new Date('Sunday, April 15, 2018 8:27 AM'),
-    _lastResponse: new Date('Tuesday, March 10, 2015 8:06 AM'),
+    _created: toTimestamp('Wednesday, July 26, 2017 4:49 PM'),
+    _modified: toTimestamp('Sunday, April 15, 2018 8:27 AM'),
+    _lastResponse: toTimestamp('Tuesday, March 10, 2015 8:06 AM'),
     _commentCount: 11,
     _viewCount: 23933,
     _usefullCount: 0,
@@ -195,6 +205,7 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionQuestion[] = [
       'http://i.pravatar.cc/267',
       'http://i.pravatar.cc/278',
     ],
+    slug: 'test-slug',
     createdBy: 'http://i.pravatar.cc/289',
     isClosed: false,
     tags: ['fugiat', 'labore', 'non', 'consectetur', 'qui'],
@@ -210,8 +221,8 @@ export const DISCUSSION_COMMENT_MOCKS: IDiscussionComment[] = [
   {
     _id: '5c6dad39f669db9d335153d2',
     _discussionID: '5c6d7a294475199744afe2d1',
-    _created: new Date('Thursday, July 13, 2017 2:40 AM'),
-    _modified: new Date('Wednesday, December 5, 2018 6:55 AM'),
+    _created: toTimestamp('Thursday, July 13, 2017 2:40 AM'),
+    _modified: toTimestamp('Wednesday, December 5, 2018 6:55 AM'),
     replies: [],
     repliesTo: '',
     comment:
@@ -221,20 +232,20 @@ export const DISCUSSION_COMMENT_MOCKS: IDiscussionComment[] = [
   {
     _id: '5c6dad39134eaab99e1f56cb',
     _discussionID: '5c6d7a294475199744afe2d1',
-    _created: new Date('Sunday, October 1, 2017 8:14 PM'),
-    _modified: new Date('Thursday, August 17, 2017 12:37 AM'),
+    _created: toTimestamp('Sunday, October 1, 2017 8:14 PM'),
+    _modified: toTimestamp('Thursday, August 17, 2017 12:37 AM'),
     replies: [
       {
         _id: '5c6dadd6efb4c060265a127a',
         _discussionID: '5c6d7a294475199744afe2d1',
-        _created: new Date('Friday, October 28, 2016 6:52 PM'),
-        _modified: new Date('Tuesday, September 1, 2015 2:52 PM'),
+        _created: toTimestamp('Friday, October 28, 2016 6:52 PM'),
+        _modified: toTimestamp('Tuesday, September 1, 2015 2:52 PM'),
         replies: [
           {
             _id: '5c6dae0e66a1d753e4f71312',
             _discussionID: '5c6d7a294475199744afe2d1',
-            _created: new Date('Wednesday, December 27, 2017 5:34 AM'),
-            _modified: new Date('Saturday, January 20, 2018 2:14 AM'),
+            _created: toTimestamp('Wednesday, December 27, 2017 5:34 AM'),
+            _modified: toTimestamp('Saturday, January 20, 2018 2:14 AM'),
             replies: [],
             repliesTo: '5c6dadd6efb4c060265a127a',
             comment:
@@ -256,8 +267,8 @@ export const DISCUSSION_COMMENT_MOCKS: IDiscussionComment[] = [
   {
     _id: '5c6dad39b88053eec7edf6ba',
     _discussionID: '5c6d7a294475199744afe2d1',
-    _created: new Date('Friday, April 14, 2017 7:50 PM'),
-    _modified: new Date('Saturday, December 1, 2018 1:50 AM'),
+    _created: toTimestamp('Friday, April 14, 2017 7:50 PM'),
+    _modified: toTimestamp('Saturday, December 1, 2018 1:50 AM'),
     replies: [],
     repliesTo: '',
     comment:
@@ -274,15 +285,16 @@ const questionsTemplate = [
     'repeat(5, 10)': {
       _id: '{{objectId()}}',
       _created:
-        '{{moment(this.date(new Date(2014, 0, 1), new Date())).format("LLLL")}}',
+        '{{moment(this.date(toTimestamp(2014, 0, 1), toTimestamp())).format("LLLL")}}',
       _modified:
-        '{{moment(this.date(new Date(2014, 0, 1), new Date())).format("LLLL")}}',
+        '{{moment(this.date(toTimestamp(2014, 0, 1), toTimestamp())).format("LLLL")}}',
       _lastResponse:
-        '{{moment(this.date(new Date(2014, 0, 1), new Date())).format("LLLL")}}',
+        '{{moment(this.date(toTimestamp(2014, 0, 1), toTimestamp())).format("LLLL")}}',
       _commentCount: '{{integer(0, 25)}}',
       _viewCount: '{{integer(1, 25000)}}',
       _usefullCount: '{{integer(0, 6)}}',
       _last3Comments: [{ 'repeat(3)': 'http://i.pravatar.cc/200' }],
+      slug: '{{objectId()}}',
       createdBy: 'http://i.pravatar.cc/200',
       isClosed: '{{bool()}}',
       tags: [
@@ -303,9 +315,9 @@ const commentsTemplate = [
       _id: '{{objectId()}}',
       _discussionID: '{{objectID}}',
       _created:
-        '{{moment(this.date(new Date(2014, 0, 1), new Date())).format("LLLL")}}',
+        '{{moment(this.date(toTimestamp(2014, 0, 1), toTimestamp())).format("LLLL")}}',
       _modified:
-        '{{moment(this.date(new Date(2014, 0, 1), new Date())).format("LLLL")}}',
+        '{{moment(this.date(toTimestamp(2014, 0, 1), toTimestamp())).format("LLLL")}}',
       replies: [],
       repliesTo: '',
       comment: '{{lorem(1,"paragraphs")}}',
@@ -313,3 +325,7 @@ const commentsTemplate = [
     },
   },
 ]
+
+function toTimestamp(dateString: string) {
+  return firestore.Timestamp.fromDate(new Date(dateString))
+}

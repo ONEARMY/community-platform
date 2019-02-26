@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 import LinearProgress from '@material-ui/core/LinearProgress'
-import { db } from 'src/utils/firebase'
+import { afs } from 'src/utils/firebase'
 import { inject } from 'mobx-react'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
@@ -50,7 +50,7 @@ export class Howto extends React.Component<
   }
   // use firebase to query tutorials and return doc that matches the given slug
   public async getTutorialBySlug(slug: string) {
-    const ref = db
+    const ref = afs
       .collection('documentation')
       .where('slug', '==', slug)
       .limit(1)
@@ -88,14 +88,14 @@ export class Howto extends React.Component<
     if (howto) {
       return (
         <>
-          <Link to={'/how-to/list'}>
+          <Link to={'/how-to'}>
             <BackButtonTop icon={'arrow-back'}>Back to how-to</BackButtonTop>
           </Link>
           <HowtoDescription howto={howto} />
           {howto.steps.map((step: any, index: number) => (
             <Step step={step} key={index} stepindex={index} />
           ))}
-          <Link to={'/how-to/list'}>
+          <Link to={'/how-to'}>
             <BackButtonBottom icon={'arrow-back'}>
               Back to how-to
             </BackButtonBottom>

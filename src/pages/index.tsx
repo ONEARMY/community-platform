@@ -6,7 +6,7 @@ import DevTools from 'mobx-react-devtools'
 import { HowtoPage } from './Howto/Howto'
 import { HomePage } from './Home/Home'
 import { NotFoundPage } from './NotFound/NotFound'
-import { DiscussionsPage } from './Discussions/Discussions'
+import { DiscussionsPage } from './Discussions'
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import { EventsPage } from './Events/Events'
 import Header from './common/Header/Header'
@@ -135,7 +135,7 @@ export class Routes extends React.Component<any, IState> {
     // platform into other sites. The first case is direct nav
     return !this.state.singlePageMode ? (
       <div>
-        <DevTools />
+        {SITE !== 'production' ? <DevTools /> : null}
         <DevNotice />
         <BrowserRouter>
           {/* on page change scroll to top */}

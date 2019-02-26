@@ -1,8 +1,10 @@
-export interface IDiscussionQuestion {
+import { firestore } from 'firebase/app'
+
+export interface IDiscussionPost extends IPostFormInput {
   _id: string
-  _created: Date
-  _modified: Date
-  _lastResponse: Date | null
+  _created: firestore.Timestamp
+  _modified: firestore.Timestamp
+  _lastResponse: firestore.Timestamp | null
   _commentCount: number
   _viewCount: number
   _usefullCount: number
@@ -11,16 +13,15 @@ export interface IDiscussionQuestion {
   createdBy: string
   isClosed: boolean
   tags: string[]
-  title: string
-  content: string
+  slug: string
   type: 'discussionQuestion'
 }
 
 export interface IDiscussionComment {
   _id: string
   _discussionID: string
-  _created: Date
-  _modified: Date
+  _created: firestore.Timestamp
+  _modified: firestore.Timestamp
   // replies will be built recursively from repliesTo field
   replies: IDiscussionComment[]
   // repliesTo references a specific comment ID marked as a reply to
@@ -29,4 +30,9 @@ export interface IDiscussionComment {
   // comment including images saved as html
   comment: string
   type: 'discussionComment'
+}
+
+export interface IPostFormInput {
+  title: string
+  content: string
 }

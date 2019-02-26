@@ -767,6 +767,40 @@
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
+"@devexpress/dx-core@^1.10.1":
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/@devexpress/dx-core/-/dx-core-1.10.1.tgz#2b09b5123864f1eb0801580a7a0436d7f66ec0f9"
+  integrity sha512-bblt9aQMeyuNrW8XOMi10dWpbPgYBDSLedd1VFZq+qHwAsaz/UPJzjqHf2QTQFcQ6GI2pdbbuaZnyhDFdKi5eg==
+
+"@devexpress/dx-grid-core@^1.10.1":
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/@devexpress/dx-grid-core/-/dx-grid-core-1.10.1.tgz#bfb37858ea7985ad34cfa40e6ec4d53bf559fb93"
+  integrity sha512-QEr24NOHsSWN35bYabNGHD9dYv3AGqYTONDBMklwEDf4FlLbYE0/sIc+WtzNpnrKFmJHLNIMlxKV9zUwQZUNkA==
+
+"@devexpress/dx-react-core@^1.10.1":
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/@devexpress/dx-react-core/-/dx-react-core-1.10.1.tgz#7655760ce4cce3b6adc7d6f6b13ff372e3276104"
+  integrity sha512-fttfupW2jOBBs2rNVo88hAsDxyz1+sj2+wC8zqEdh6rlbIgkJSyYDdv8HmtAIV0DMlBU3Zk7dc5Z/T7hGOSjkA==
+  dependencies:
+    "@devexpress/dx-core" "^1.10.1"
+    prop-types "^15.6.2"
+
+"@devexpress/dx-react-grid-material-ui@^1.10.1":
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/@devexpress/dx-react-grid-material-ui/-/dx-react-grid-material-ui-1.10.1.tgz#ba7a2576dd70d8e9a60cf1bb62483c190d849281"
+  integrity sha512-QrTpjD5lVd+QhdB4/OBmq0dWJlABEMGJMPOOm7a8x7a4MWEQZLMbxZjang2GoIZNvLj3MIxfSF7T5c5d5HHXlA==
+  dependencies:
+    classnames "^2.2.6"
+    prop-types "^15.6.2"
+
+"@devexpress/dx-react-grid@^1.10.1":
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/@devexpress/dx-react-grid/-/dx-react-grid-1.10.1.tgz#5b8b8c855ee3fb25c0a811d2242f1e80cd06c4b7"
+  integrity sha512-OOpohqDy8AUnI7HJ9HofM4yuWLb7PkvfGQI8kSXTe1v+y+ajJDCHp5TAN9jRnlsOtxwbm+t/Vwtir5lZA3pbJA==
+  dependencies:
+    "@devexpress/dx-grid-core" "^1.10.1"
+    prop-types "^15.6.2"
+
 "@emotion/is-prop-valid@^0.7.3":
   version "0.7.3"
   resolved "https://registry.yarnpkg.com/@emotion/is-prop-valid/-/is-prop-valid-0.7.3.tgz#a6bf4fa5387cbba59d44e698a4680f481a8da6cc"
@@ -2720,7 +2754,7 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-classnames@^2.2.5:
+classnames@^2.2.5, classnames@^2.2.6:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
   integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==

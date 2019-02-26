@@ -6,7 +6,7 @@ import { inject } from 'mobx-react'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
 import Step from './Step/Step'
-import { BackButtonTop, BackButtonBottom } from '../elements'
+import { Button } from 'src/components/Button'
 import { IHowtoStep, IHowto } from 'src/models/howto.models'
 import Link from 'react-router-dom/Link'
 
@@ -89,16 +89,18 @@ export class Howto extends React.Component<
       return (
         <>
           <Link to={'/how-to'}>
-            <BackButtonTop icon={'arrow-back'}>Back to how-to</BackButtonTop>
+            <Button variant={'outline'} m={50} icon={'arrow-back'}>
+              Back to how-to
+            </Button>
           </Link>
           <HowtoDescription howto={howto} />
           {howto.steps.map((step: any, index: number) => (
             <Step step={step} key={index} stepindex={index} />
           ))}
           <Link to={'/how-to'}>
-            <BackButtonBottom icon={'arrow-back'}>
+            <Button variant={'outline'} mx={'auto'} my={50} icon={'arrow-back'}>
               Back to how-to
-            </BackButtonBottom>
+            </Button>
           </Link>
         </>
       )

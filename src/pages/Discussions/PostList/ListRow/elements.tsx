@@ -27,8 +27,8 @@ export const TitleAndTagsContaier = styled.div`
   display: inline-block;
   vertical-align: middle;
 `
-
-export const Title = styled.span`
+// TODO remove this strange typescript casting on new @types/styled-components release
+export const Title = styled<any, 'span'>('span')`
   text-decoration: none;
   font-size: 1.1em;
   color: black;
@@ -56,7 +56,6 @@ export const Tag = styled.span`
 
 export const InteractionNb = styled.span`
   font-size: 0.8em;
-  margin-left: 20px;
   width: 10%;
   display: inline-block;
   vertical-align: middle;
@@ -70,10 +69,9 @@ export const ViewCount = styled.span`
   vertical-align: middle;
 `
 
-export const UsefulCount = styled.span`
+export const UsefullCount = styled.span`
   font-size: 0.8em;
   padding: 20px;
-  margin-left: 30px;
   display: inline-block;
   vertical-align: middle;
   border: 1px solid black;

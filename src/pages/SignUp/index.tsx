@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
-import { Redirect } from 'react-router-dom'
-
+import { Redirect, withRouter } from 'react-router-dom'
+import { IUserFormInput } from 'src/models/user.models'
 import { UserStore } from 'src/stores/User/user.store'
 import { UserForm } from 'src/pages/common/User/Form'
 
@@ -9,14 +9,21 @@ interface InjectedProps {
   userStore: UserStore
 }
 
+@(withRouter as any)
 @inject('userStore')
-export class SignUpPage extends React.Component {
+@observer
+export class SignUpPage extends React.Component<any> {
   get injected() {
     return this.props as InjectedProps
   }
 
+  public onSubmit = async (formValues: IUserFormInput) => {
+    await this.props.userStore.signUpUser(formValues);
+    this.props.history.push('/');
+  }
+
   public render() {
     let user = this.injected.userStore.user
-    return user ? <Redirect to="/" /> : <UserForm userStore={this.injected.userStore}/>
+    return user ? <Redirect to="/" /> : <UserForm onSubmit={this.onSubmit}/>
   }
 }

@@ -98,6 +98,10 @@ export class UserStore {
     await this.authUser.sendEmailVerification()
   }
 
+  public async sendPasswordResetEmail(email) {
+    await auth.sendPasswordResetEmail(email)
+  }
+
   public async logout() {
     await auth.signOut()
   }

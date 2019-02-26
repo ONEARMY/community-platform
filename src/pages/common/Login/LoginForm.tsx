@@ -25,6 +25,7 @@ interface IState {
 
 interface IProps {
   closeLogin: () => void
+  openReset: () => void
 }
 
 const styles: any = {
@@ -146,6 +147,13 @@ export class LoginFormComponent extends React.Component<IProps> {
               onClick={this.props.closeLogin}
             >
               Sign up
+            </Link>
+            <Link
+              style={styles.link}
+              to="#"
+              onClick={this.props.openReset}
+            >
+              Forgot password?
             </Link>
             <Typography color="error">{this.state.message}</Typography>
           </Paper>

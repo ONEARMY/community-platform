@@ -4,6 +4,7 @@ import { Box, Flex } from 'rebass'
 import { Button } from 'src/components/Button'
 import Selector from 'src/components/Selector'
 import Link from 'react-router-dom/Link'
+import { FlexContainer } from 'src/components/Layout/FlexContainer'
 
 interface IProps {
   onChange: () => void
@@ -36,7 +37,7 @@ export default class FilterBar extends React.Component<IProps> {
   render() {
     const { section } = this.props
     return (
-      <Flex width={1} bg="white" justifyContent={'space-between'} p={2}>
+      <FlexContainer justifyContent={'space-between'}>
         <Box>
           <Selector type="project" onChange={() => this.onProjectChange()} />
           <Selector type="category" onChange={() => this.onCategoryChange()} />
@@ -47,7 +48,7 @@ export default class FilterBar extends React.Component<IProps> {
             <Button variant="outline">create {section}</Button>
           </Link>
         </Box>
-      </Flex>
+      </FlexContainer>
     )
   }
 }

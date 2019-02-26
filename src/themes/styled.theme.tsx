@@ -25,8 +25,11 @@ export const buttons = {
 
 export const space = [0, 4, 8, 16, 32, 64, 128]
 
+export const radii = space
+
 export default {
   colors,
   buttons,
   space,
+  radii,
 }

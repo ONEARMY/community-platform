@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { verticalAlign, VerticalAlignProps } from 'styled-system'
 
 import {
   MdFileDownload,
@@ -7,6 +8,7 @@ import {
   MdAdd,
   MdCheck,
   MdArrowBack,
+  MdKeyboardArrowDown,
 } from 'react-icons/md'
 import { IconContext } from 'react-icons'
 
@@ -19,7 +21,9 @@ interface IProps {
   size?: number | string
 }
 
-export const IconWrapper = styled<IProps, 'div'>('div')`
+type WrapperProps = IProps & VerticalAlignProps
+
+export const IconWrapper = styled<WrapperProps, 'div'>('div')`
   display: inline-block;
   flex: 0 0 ${props => (props.size ? `${props.size}px` : '32px')};
   width: ${props => (props.size ? `${props.size}px` : '32px')};
@@ -28,6 +32,7 @@ export const IconWrapper = styled<IProps, 'div'>('div')`
   min-height: ${props => (props.size ? `${props.size}px` : '32px')};
   position: relative;
   color: inherit;
+  ${verticalAlign}
 `
 
 export const Glyph = ({ glyph }: IGlyphProps) => {
@@ -42,20 +47,22 @@ export const Glyph = ({ glyph }: IGlyphProps) => {
       return <MdCheck />
     case 'arrow-back':
       return <MdArrowBack />
+    case 'arrow-down':
+      return <MdKeyboardArrowDown />
     default:
       return null
   }
 }
 
-export default class Icon extends React.Component<IProps> {
-  constructor(props: IProps) {
+export default class Icon extends React.Component<WrapperProps> {
+  constructor(props: WrapperProps) {
     super(props)
   }
   public render() {
     const { size = 32, glyph } = this.props
 
     return (
-      <IconWrapper size={size}>
+      <IconWrapper size={size} {...this.props}>
         <IconContext.Provider
           value={{ style: { width: size + 'px', height: size + 'px' } }}
         >

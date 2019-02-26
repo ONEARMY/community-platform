@@ -2,13 +2,6 @@ import * as React from 'react'
 import Modal from '@material-ui/core/Modal'
 import { LoginFormComponent } from './LoginForm'
 import { IUser } from 'src/models/user.models'
-
-const styles: any = {
-  container: {
-    float: 'right',
-    padding: '5px',
-  },
-}
 import { auth } from 'src/utils/firebase'
 import { Button } from 'src/components/Button'
 
@@ -51,8 +44,6 @@ export class LoginComponent extends React.Component<IProps, IState> {
     return (
       <>
         <Button onClick={this.openLogin}>Log in</Button>
-
-        {/* )} */}
         <Modal
           aria-labelledby="user-login-modal"
           aria-describedby="click to show user login"

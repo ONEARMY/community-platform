@@ -1,5 +1,9 @@
 import * as React from 'react'
 
+import { PROJECTS_MOCKS } from 'src/mocks/projects.mock'
+import { CATEGORY_MOCKS } from 'src/mocks/category.mock'
+import { TAGS_MOCK } from 'src/mocks/tags.mock'
+
 import { Box, Flex } from 'rebass'
 import { Button } from 'src/components/Button'
 import Selector from 'src/components/Selector'
@@ -14,10 +18,6 @@ interface IProps {
 export default class FilterBar extends React.Component<IProps> {
   constructor(props: IProps) {
     super(props)
-  }
-
-  public componentDidUpdate(prevProps: IProps) {
-    // component updated
   }
   public onProjectChange() {
     console.log('project changed')
@@ -39,9 +39,15 @@ export default class FilterBar extends React.Component<IProps> {
     return (
       <FlexContainer justifyContent={'space-between'}>
         <Box>
-          <Selector type="project" onChange={() => this.onProjectChange()} />
-          <Selector type="category" onChange={() => this.onCategoryChange()} />
-          <Selector type="tags" onChange={() => this.onTagsChange()} />
+          <Selector
+            onChange={() => this.onProjectChange()}
+            list={PROJECTS_MOCKS}
+          />
+          <Selector
+            onChange={() => this.onCategoryChange()}
+            list={CATEGORY_MOCKS}
+          />
+          <Selector onChange={() => this.onTagsChange()} list={TAGS_MOCK} />
         </Box>
         <Box>
           <Link to={section + '/create'}>

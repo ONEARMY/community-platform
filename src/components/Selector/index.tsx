@@ -1,48 +1,65 @@
 import * as React from 'react'
 
-import { Select } from './elements'
-import { PROJECTS_MOCKS } from 'src/mocks/projects.mock'
-import { CATEGORY_MOCKS } from 'src/mocks/category.mock'
-import { TAGS_MOCK } from 'src/mocks/tags.mock'
+import { ISelectorList } from 'src/models/selectorList.models'
+
+import styled from 'styled-components'
+import { colors } from 'src/themes/styled.theme'
+import {
+  color,
+  borderRadius,
+  BorderRadiusProps,
+  space,
+  SpaceProps,
+  fontSize,
+} from 'styled-system'
+
+import Icon from 'src/components/Icons'
 
 interface IProps {
   onChange: () => void
-  type: string
+  list: ISelectorList[]
+}
+type selectorProps = IProps & BorderRadiusProps & SpaceProps
+
+const Wrapper = styled.div`
+  ${color};
+  ${borderRadius};
+  ${space};
+  border: 1px solid ${colors.grey};
+  display: inline-block;
+  height: 50px;
+`
+
+const Select = styled.select`
+  ${fontSize};
+  appearance: none;
+  background: transparent;
+  border: none;
+  height: 100%;
+`
+
+const Selector = (props: selectorProps) => (
+  <Wrapper onChange={props.onChange} {...props}>
+    <Select {...props}>
+      {props.list.map((row, i) => (
+        <option key={i} value={row.label}>
+          {row.label}
+        </option>
+      ))}
+    </Select>
+    <Icon glyph={'arrow-down'} size={20} verticalAlign={'middle'} />
+  </Wrapper>
+)
+
+Selector.defaultProps = {
+  className: 'selector',
+  color: colors.black,
+  borderRadius: 2,
+  bg: 'white',
+  px: 2,
+  my: 0,
+  mx: 2,
+  fontSize: 2,
 }
 
-export default class Selector extends React.Component<IProps> {
-  constructor(props: IProps) {
-    super(props)
-  }
-
-  render() {
-    return (
-      <span>
-        <Select
-          name={this.props.type}
-          component="select"
-          onChange={this.props.onChange}
-        >
-          {this.props.type === 'project' &&
-            PROJECTS_MOCKS.map((project, i) => (
-              <option key={i} value={project.value}>
-                {project.name}
-              </option>
-            ))}
-          {this.props.type === 'category' &&
-            CATEGORY_MOCKS.map((category, i) => (
-              <option key={i} value={category.label}>
-                {category.label}
-              </option>
-            ))}
-          {this.props.type === 'tags' &&
-            TAGS_MOCK.map((tag, i) => (
-              <option key={i} value={tag.label}>
-                {tag.label}
-              </option>
-            ))}
-        </Select>
-      </span>
-    )
-  }
-}
+export default Selector

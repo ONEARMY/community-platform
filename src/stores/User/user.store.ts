@@ -75,6 +75,7 @@ export class UserStore {
     try {
       await auth.createUserWithEmailAndPassword(userForm.email, String(userForm.password))
       await this._createUserProfile(userForm)
+      await this.sendEmailVerification()
     } catch(error) {
       console.log(error)
       var { code, message } = error;
@@ -87,6 +88,14 @@ export class UserStore {
         throw message;
       }
     }
+  }
+
+  public get authUser() {
+    return auth.currentUser as firebase.User;
+  }
+
+  public async sendEmailVerification() {
+    await this.authUser.sendEmailVerification()
   }
 
   public async logout() {

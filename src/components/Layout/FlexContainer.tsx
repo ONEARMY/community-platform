@@ -1,12 +1,34 @@
 import React from 'react'
 import styled from 'styled-components'
-import { borderRadius, BorderRadiusProps } from 'styled-system'
-import { Flex, FlexProps } from 'rebass'
+import {
+  BorderRadiusProps,
+  flexWrap,
+  flexDirection,
+  flexBasis,
+  flex,
+  alignItems,
+  alignContent,
+  alignSelf,
+  justifyContent,
+  justifySelf,
+  order,
+} from 'styled-system'
+import { FlexProps } from 'rebass'
+import { BoxContainer } from './BoxContainer'
 
 type ContainerProps = FlexProps & BorderRadiusProps
 
-const ExtendedFlexContainer = styled(Flex)`
-  ${borderRadius}
+const ExtendedFlexContainer = styled(BoxContainer)`
+  ${flex}
+  ${flexWrap}
+  ${flexDirection}
+  ${flexBasis}
+  ${alignItems}
+  ${alignContent}
+  ${alignSelf}
+  ${justifyContent}
+  ${justifySelf}
+  ${order}
 `
 
 export const FlexContainer = (props: ContainerProps) => (
@@ -15,9 +37,6 @@ export const FlexContainer = (props: ContainerProps) => (
 
 // Default styling container props
 FlexContainer.defaultProps = {
-  className: 'FlexContainer',
-  width: 1,
-  borderRadius: 1,
-  bg: 'white',
-  p: 4,
+  className: 'flex-container',
+  display: 'flex',
 }

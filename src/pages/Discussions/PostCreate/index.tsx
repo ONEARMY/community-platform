@@ -56,7 +56,6 @@ export class PostCreate extends React.PureComponent<IProps, IState> {
       variant={VARIANT.SMALL}
       onChange={content => {
         input.onChange(content)
-        return true
       }}
       {...rest}
     />

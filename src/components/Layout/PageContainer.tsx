@@ -1,13 +1,21 @@
 import React from 'react'
 import styled from 'styled-components'
-import { maxWidth, space, MaxWidthProps, SpaceProps } from 'styled-system'
+import {
+  maxWidth,
+  space,
+  MaxWidthProps,
+  SpaceProps,
+  width,
+  WidthProps,
+} from 'styled-system'
 import { Flex, FlexProps } from 'rebass'
 import { maxContainerWidth } from 'src/themes/styled.theme'
 
-type InnerContainerProps = MaxWidthProps & SpaceProps
+type InnerContainerProps = MaxWidthProps & SpaceProps & WidthProps
 
 const InnerContainer = styled.div<InnerContainerProps>`
   ${space}
+  ${width}
   ${maxWidth}
 `
 
@@ -21,11 +29,11 @@ PageContainer.defaultProps = {
   className: 'page-container',
   justifyContent: 'center',
   px: '2em',
-  width: 1,
 }
 InnerContainer.defaultProps = {
   className: 'page-inner-container',
   maxWidth: maxContainerWidth,
+  width: 1,
   my: 4,
 }
 

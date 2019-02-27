@@ -29,10 +29,13 @@ export const radii = space
 
 export const fontSizes = [12, 14, 16, 20, 24, 32, 40, 56, 72]
 
+export const maxContainerWidth = 1280
+
 export default {
   colors,
   buttons,
   space,
   radii,
   fontSizes,
+  maxContainerWidth,
 }

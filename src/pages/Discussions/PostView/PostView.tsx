@@ -8,6 +8,8 @@ import { IDiscussionPost } from 'src/models/discussions.models'
 import { Editor, VARIANT } from 'src/components/Editor/'
 import { Button } from 'src/components/Button/'
 import { PostResponse } from '../PostResponse/PostResponse'
+import PageContainer from 'src/components/Layout/PageContainer'
+import { BoxContainer } from 'src/components/Layout/BoxContainer'
 
 interface IProps extends RouteComponentProps {
   discussionsStore: DiscussionsStore
@@ -75,29 +77,35 @@ class PostViewClass extends React.Component<IProps, IState> {
     if (this.post) {
       const p = this.post
       return (
-        <>
-          <h1>Question</h1>
-          <div>{p.title}</div>
-          <div dangerouslySetInnerHTML={{ __html: p.content }} />
+        <PageContainer>
+          <BoxContainer display={'inline-block'}>
+            <h1>Question</h1>
+            <div>{p.title}</div>
+            <div dangerouslySetInnerHTML={{ __html: p.content }} />
+          </BoxContainer>
           <h2>Responses</h2>
-          {this.comments.map(c => (
-            <PostResponse key={c._id} comment={c} />
-          ))}
+          <BoxContainer display={'inline-block'}>
+            {this.comments.map(c => (
+              <PostResponse key={c._id} comment={c} />
+            ))}
+          </BoxContainer>
           <h2>Add response</h2>
-          <Editor
-            variant={VARIANT.SMALL}
-            content={this.state.editorInput}
-            onChange={content => this.editorChanged(content)}
-          />
-          <Button
-            type="submit"
-            icon={'check'}
-            onClick={() => this.createComment(p._id)}
-            disabled={this.state.editorInput === '' || this.state.isSaving}
-          >
-            Submit
-          </Button>
-        </>
+          <BoxContainer display={'inline-block'}>
+            <Editor
+              variant={VARIANT.SMALL}
+              content={this.state.editorInput}
+              onChange={content => this.editorChanged(content)}
+            />
+            <Button
+              type="submit"
+              icon={'check'}
+              onClick={() => this.createComment(p._id)}
+              disabled={this.state.editorInput === '' || this.state.isSaving}
+            >
+              Submit
+            </Button>
+          </BoxContainer>
+        </PageContainer>
       )
     } else {
       return null

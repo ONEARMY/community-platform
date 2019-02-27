@@ -27,7 +27,6 @@ class DebugEditor extends React.Component<any, any> {
                   variant={VARIANT.SMALL}
                   onChange={content => {
                     console.log('content changed : ' + content)
-                    return content.indexOf('shit shit shit fucking shit') === -1
                   }}
                 />
               </Main>

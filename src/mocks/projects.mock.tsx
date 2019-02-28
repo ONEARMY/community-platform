@@ -1,14 +1,14 @@
 export const PROJECTS_MOCKS = [
   {
-    name: 'Project Kamp',
+    label: 'Project Kamp',
     value: 'project-kamp',
   },
   {
-    name: 'Precious Plastic',
+    label: 'Precious Plastic',
     value: 'precious-plastic',
   },
   {
-    name: 'Story Hooper',
+    label: 'Story Hooper',
     value: 'story-hooper',
   },
 ]

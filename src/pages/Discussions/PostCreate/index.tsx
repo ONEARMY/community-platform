@@ -12,6 +12,9 @@ import { DiscussionsStore } from 'src/stores/Discussions/discussions.store'
 import { inject } from 'mobx-react'
 import { IStores } from 'src/stores'
 
+import PageContainer from 'src/components/Layout/PageContainer'
+import { BoxContainer } from 'src/components/Layout/BoxContainer'
+
 interface IState {
   formValues: IPostFormInput
   formSaved: boolean
@@ -64,44 +67,46 @@ export class PostCreate extends React.PureComponent<IProps, IState> {
   public render() {
     const { formValues } = this.state
     return (
-      <div>
-        <h2 style={{ marginTop: 0 }}>Create a Post</h2>
-        <Form
-          onSubmit={values => this.onSubmit(values as IPostFormInput)}
-          initialValues={formValues}
-          mutators={{
-            ...arrayMutators,
-          }}
-          render={({ handleSubmit, submitting, invalid }) => {
-            return (
-              <div>
-                <form onSubmit={handleSubmit}>
-                  <Field
-                    name="title"
-                    validate={required}
-                    component={InputField}
-                    label="What is the title of your post ?"
-                    placeholder="Post title"
-                  />
-                  <Field
-                    name="content"
-                    component={this.EditorField}
-                    validate={required}
-                    label="What would you like to discuss?"
-                  />
-                  <Button
-                    type="submit"
-                    icon={'check'}
-                    disabled={submitting || invalid}
-                  >
-                    Save
-                  </Button>
-                </form>
-              </div>
-            )
-          }}
-        />
-      </div>
+      <PageContainer>
+        <BoxContainer display={'inline-block'}>
+          <h2 style={{ marginTop: 0 }}>Create a Post</h2>
+          <Form
+            onSubmit={values => this.onSubmit(values as IPostFormInput)}
+            initialValues={formValues}
+            mutators={{
+              ...arrayMutators,
+            }}
+            render={({ handleSubmit, submitting, invalid }) => {
+              return (
+                <div>
+                  <form onSubmit={handleSubmit}>
+                    <Field
+                      name="title"
+                      validate={required}
+                      component={InputField}
+                      label="What is the title of your post ?"
+                      placeholder="Post title"
+                    />
+                    <Field
+                      name="content"
+                      component={this.EditorField}
+                      validate={required}
+                      label="What would you like to discuss?"
+                    />
+                    <Button
+                      type="submit"
+                      icon={'check'}
+                      disabled={submitting || invalid}
+                    >
+                      Save
+                    </Button>
+                  </form>
+                </div>
+              )
+            }}
+          />
+        </BoxContainer>
+      </PageContainer>
     )
   }
 }

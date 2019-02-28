@@ -14,8 +14,6 @@ import CommentIcon from '@material-ui/icons/Comment'
 import TurnedInIcon from '@material-ui/icons/TurnedIn'
 import { theme } from '../../../../themes/app.theme'
 
-import { CreateButton } from './elements'
-
 import { Button } from 'src/components/Button'
 import { IHowto } from 'src/models/howto.models'
 
@@ -63,7 +61,9 @@ export class HowtoList extends React.Component<IProps, any> {
           How-To
         </Typography>
         <Link to={'/how-to/create'}>
-          <CreateButton icon={'add'}>create how-to</CreateButton>
+          <Button mx={'auto'} my={50} icon={'add'}>
+            create how-to
+          </Button>
         </Link>
         <React.Fragment>
           <div style={styles.layout}>
@@ -141,7 +141,9 @@ export class HowtoList extends React.Component<IProps, any> {
           </div>
           {allHowtos.length > 15 ? (
             <Link to={'/how-to/create'}>
-              <CreateButton icon={'add'}>create how-to</CreateButton>
+              <Button mx={'auto'} my={50} icon={'add'}>
+                create how-to
+              </Button>
             </Link>
           ) : null}
         </React.Fragment>

@@ -69,11 +69,8 @@ const attemptLegacyMigration = async (email: string, pw: string) => {
     } else {
       return buildResponse(false, 'Invalid password, please try again', true)
     }
-    // no legacy user, just create a new account
-  } else {
-    await registerNewUser(email, pw)
-    return buildResponse(true, 'User logged in succesfully', true)
   }
+  return buildResponse(false, 'User does not exists', true)
 }
 
 const migrateUser = async (

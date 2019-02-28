@@ -1,18 +1,15 @@
 import * as React from 'react'
 import { observer, inject } from 'mobx-react'
-import { DISCUSSION_QUESTION_MOCKS } from 'src/mocks/discussions.mock'
 
-import MaxWidth from 'src/components/Layout/MaxWidth.js'
-import Margin from 'src/components/Layout/Margin.js'
+import PageContainer from 'src/components/Layout/PageContainer'
 import FilterBar from 'src/pages/common/FilterBar/FilterBar'
-
-import { Content, Main, ListHeader, PostCount } from './elements'
 
 import { withRouter } from 'react-router'
 import { IStores } from 'src/stores'
 import { DiscussionsStore } from 'src/stores/Discussions/discussions.store'
 import { computed } from 'mobx'
 import { PostList2 } from './List'
+import { console } from '@ephox/dom-globals'
 
 interface IProps {
   discussionsStore: DiscussionsStore
@@ -43,26 +40,13 @@ class PostListClass extends React.Component<IProps, IState> {
 
   public render() {
     return (
-      <MaxWidth>
-        <Margin vertical={1.5}>
-          <Content>
-            <FilterBar
-              section={'discussions'}
-              onChange={() => this.updateResultsList()}
-            />
-            <Margin vertical={1.5} horizontal={1.5}>
-              <ListHeader>
-                <PostCount>
-                  Showing {DISCUSSION_QUESTION_MOCKS.length} posts
-                </PostCount>
-              </ListHeader>
-              <Main alignItems="flex-start">
-                <PostList2 posts={this.discussions} />
-              </Main>
-            </Margin>
-          </Content>
-        </Margin>
-      </MaxWidth>
+      <PageContainer>
+        <FilterBar
+          section={'discussions'}
+          onChange={() => this.updateResultsList()}
+        />
+        <PostList2 posts={this.discussions} />
+      </PageContainer>
     )
   }
 }

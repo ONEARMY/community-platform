@@ -23,13 +23,10 @@ import {
   Background,
   DescriptionContainer,
   StepBackground,
-  CoverImage,
   Select,
-  AddStepButton,
-  SubmitButton,
 } from './elements'
+import { Button } from 'src/components/Button'
 import Link from 'react-router-dom/Link'
-import { BackButtonTop } from '../elements'
 
 export interface IState {
   formValues: IHowtoFormInput
@@ -122,7 +119,9 @@ export class CreateHowto extends React.PureComponent<
     return (
       <div>
         <Link to={'/how-to'}>
-          <BackButtonTop icon={'arrow-back'}>Back to how-to</BackButtonTop>
+          <Button m={50} icon={'arrow-back'} variant="outline">
+            Back to how-to
+          </Button>
         </Link>
         <Title variant="h4" component="h4" style={{ marginTop: 0 }}>
           Create a How-To
@@ -274,8 +273,12 @@ export class CreateHowto extends React.PureComponent<
                               _uploadPath={this.state._uploadPath}
                             />
                           ))}
-                          <AddStepButton
+                          <Button
                             icon={'add'}
+                            width={300}
+                            mx="auto"
+                            my={60}
+                            bg="yellow"
                             onClick={() => {
                               fields.push({
                                 title: '',
@@ -285,17 +288,19 @@ export class CreateHowto extends React.PureComponent<
                             }}
                           >
                             add step
-                          </AddStepButton>
+                          </Button>
                         </div>
                       )}
                     </FieldArray>
-                    <SubmitButton
+                    <Button
                       type="submit"
+                      width={1}
+                      bg="green"
                       icon={'check'}
                       disabled={submitting || invalid}
                     >
                       Save
-                    </SubmitButton>
+                    </Button>
                   </StepBackground>
                 </TutorialForm>
               </FormContainer>

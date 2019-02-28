@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import colors from 'src/themes/colors'
+import { colors } from 'src/themes/styled.theme'
 import Typography from '@material-ui/core/Typography'
 import Card from '@material-ui/core/Card'
 import { MdDelete } from 'react-icons/md'
@@ -81,7 +81,10 @@ export const DialogButtons = styled(DialogActions)`
   justify-content: center !important;
 `
 
-export const CancelButton = styled(Button)`
+export const CancelButton: any =
+  styled(Button) <
+  any >
+  `
   width: 112px;
   height: 60px;
 `

@@ -27,8 +27,8 @@ export const TitleAndTagsContaier = styled.div`
   display: inline-block;
   vertical-align: middle;
 `
-
-export const Title = styled.span`
+// TODO remove this strange typescript casting on new @types/styled-components release
+export const Title = styled<any, 'span'>('span')`
   text-decoration: none;
   font-size: 1.1em;
   color: black;

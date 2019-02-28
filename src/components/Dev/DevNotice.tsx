@@ -1,5 +1,5 @@
 import * as React from 'react'
-import colors from 'src/themes/colors'
+import { colors } from 'src/themes/styled.theme'
 import { FaExclamationTriangle } from 'react-icons/fa'
 import { SITE } from 'src/config/config'
 export const DevNotice = () =>

@@ -17,7 +17,7 @@ import {
   DialogButtons,
   CancelButton,
   ConfirmButton,
-} from './elements.js'
+} from './elements'
 
 import { FirebaseFileUploader } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'

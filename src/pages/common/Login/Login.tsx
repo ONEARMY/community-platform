@@ -1,14 +1,8 @@
 import * as React from 'react'
 import Modal from '@material-ui/core/Modal'
 import { LoginFormComponent } from './LoginForm'
+import { ResetPasswordComponent } from './ResetPassword'
 import { IUser } from 'src/models/user.models'
-
-const styles: any = {
-  container: {
-    float: 'right',
-    padding: '5px',
-  },
-}
 import { auth } from 'src/utils/firebase'
 import { Button } from 'src/components/Button'
 
@@ -18,6 +12,7 @@ interface IProps {
 
 interface IState {
   showLoginModal: boolean
+  showResetModal: boolean
 }
 
 export class LoginComponent extends React.Component<IProps, IState> {
@@ -25,6 +20,7 @@ export class LoginComponent extends React.Component<IProps, IState> {
     super(props)
     this.state = {
       showLoginModal: false,
+      showResetModal: false,
     }
   }
   public componentWillReceiveProps(newProps: IProps) {
@@ -42,17 +38,21 @@ export class LoginComponent extends React.Component<IProps, IState> {
       })
     }
   }
+  public openReset = () => {
+    this.setState({
+      showResetModal: true,
+    })
+  }
   public closeLogin = () => {
     this.setState({
       showLoginModal: false,
+      showResetModal: false,
     })
   }
   public render() {
     return (
       <>
         <Button onClick={this.openLogin}>Log in</Button>
-
-        {/* )} */}
         <Modal
           aria-labelledby="user-login-modal"
           aria-describedby="click to show user login"
@@ -60,7 +60,12 @@ export class LoginComponent extends React.Component<IProps, IState> {
           onClose={this.closeLogin}
         >
           <div className="login-modal">
-            <LoginFormComponent closeLogin={this.closeLogin}/>
+            {
+              !this.state.showResetModal ?
+                <LoginFormComponent closeLogin={this.closeLogin} openReset={this.openReset} />
+              :
+                <ResetPasswordComponent closeLogin={this.closeLogin} />
+            }
           </div>
         </Modal>
       </>

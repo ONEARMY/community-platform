@@ -2,7 +2,7 @@ import React from 'react'
 import { Form, Field } from 'react-final-form'
 import { Button } from 'src/components/Button'
 import { InputField } from 'src/components/Form/Fields'
-import { IUserFormInput } from 'src/models/user.models'
+import { IUser, IUserFormInput } from 'src/models/user.models'
 import { USER_TEMPLATE_DATA } from './Template'
 
 interface IState {
@@ -13,13 +13,14 @@ interface IState {
 
 interface IProps {
   onSubmit: any
+  user?: IUser
 }
 
 export class UserForm extends React.Component<IProps, IState> {
   constructor(props: any) {
     super(props)
     this.state = {
-      formValues: { ...USER_TEMPLATE_DATA },
+      formValues: props.user ? props.user as IUserFormInput : USER_TEMPLATE_DATA,
       formSaved: false,
       errors: null,
     }
@@ -66,32 +67,40 @@ export class UserForm extends React.Component<IProps, IState> {
             return (
               <div>
                 <form onSubmit={handleSubmit}>
-                  <Field
-                    name="email"
-                    component={InputField}
-                    label="Email"
-                    type="email"
-                    required
-                  />
+                  {
+                    this.props.user ? null :
+                    <Field
+                      name="email"
+                      component={InputField}
+                      label="Email"
+                      type="email"
+                      required
+                    />
+                  }
                   <Field
                     name="display_name"
                     component={InputField}
                     label="Display name"
                   />
-                  <Field
-                    name="password"
-                    component={InputField}
-                    label="Password"
-                    type="password"
-                    required
-                  />
-                  <Field
-                    name="repeat_password"
-                    component={InputField}
-                    label="Repeat password"
-                    type="password"
-                    required
-                  />
+                  {
+                    this.props.user ? null :
+                    <div>
+                      <Field
+                        name="password"
+                        component={InputField}
+                        label="Password"
+                        type="password"
+                        required
+                      />
+                      <Field
+                        name="repeat_password"
+                        component={InputField}
+                        label="Repeat password"
+                        type="password"
+                        required
+                      />
+                    </div>
+                  }
                   <Field
                     name="country"
                     component={InputField}

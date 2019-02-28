@@ -56,6 +56,12 @@ export class UserStore {
     return user
   }
 
+  public async updateUserProfile(user: IUser, values: IUserFormInput) {
+    user.display_name = values.display_name;
+    user.country = values.country;
+    await Database.setDoc(`users/${user.email}`, user)
+  }
+
   private async _createUserProfile(values: IUserFormInput) {
     const user: IUser = {
       ...Database.generateDocMeta('users'),

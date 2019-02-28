@@ -95,6 +95,10 @@ export class UserStore {
     }
   }
 
+  public get authUser() {
+    return auth.currentUser as firebase.User;
+  }
+
   public async logout() {
     await auth.signOut()
   }

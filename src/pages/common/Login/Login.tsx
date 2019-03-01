@@ -23,11 +23,6 @@ export class LoginComponent extends React.Component<IProps, IState> {
       showResetModal: false,
     }
   }
-  public componentWillReceiveProps(newProps: IProps) {
-    if (newProps.user) {
-      this.closeLogin()
-    }
-  }
   public logout = () => {
     auth.signOut()
   }

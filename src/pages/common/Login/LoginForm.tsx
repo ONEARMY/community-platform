@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { inject, observer } from 'mobx-react'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -21,6 +22,7 @@ interface IState {
   password: string
   message?: string
   submitDisabled: boolean
+  userUnverified: boolean
 }
 
 interface IProps {
@@ -60,10 +62,29 @@ const styles: any = {
 }
 
 export class LoginFormComponent extends React.Component<IProps> {
+  unsubscribe: any
+
   public state: IState = {
     email: '',
     password: '',
     submitDisabled: false,
+    userUnverified: false,
+  }
+
+  componentDidMount() {
+    this.unsubscribe = auth.onAuthStateChanged(async authUser => {
+      if (authUser && authUser.emailVerified) {
+        console.log('User authenticated')
+        this.props.closeLogin()
+      } else if (authUser && !authUser.emailVerified) {
+        console.log('User has unverified email')
+        this.setState({ userUnverified: true })
+      }
+    })
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe()
   }
 
   public loginSubmit = (e: React.SyntheticEvent) => {
@@ -145,6 +166,17 @@ export class LoginFormComponent extends React.Component<IProps> {
                 Sign in
               </Button>
             </form>
+            {
+              this.state.userUnverified ? (
+              <Link
+              style={styles.link}
+              to="/email-confirmation"
+              onClick={this.props.closeLogin}
+              >
+                Your email is unverified. Resend confirmation message.
+              </Link>
+              ) :null
+            }
             <Link
               style={styles.link}
               to="/sign-up"

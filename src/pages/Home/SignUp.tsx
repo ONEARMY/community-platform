@@ -4,6 +4,8 @@ import { Redirect, withRouter } from 'react-router-dom'
 import { IUserFormInput } from 'src/models/user.models'
 import { UserStore } from 'src/stores/User/user.store'
 import { UserForm } from 'src/pages/common/User/Form'
+import PageContainer from 'src/components/Layout/PageContainer'
+import { BoxContainer } from 'src/components/Layout/BoxContainer'
 
 interface InjectedProps {
   userStore: UserStore
@@ -24,6 +26,12 @@ export class SignUpPage extends React.Component<any> {
 
   public render() {
     let user = this.injected.userStore.user
-    return user ? <Redirect to="/" /> : <UserForm onSubmit={this.onSubmit}/>
+    return (
+      <PageContainer>
+        <BoxContainer>
+          { user ? <Redirect to="/" /> : <UserForm onSubmit={this.onSubmit}/> }
+        </BoxContainer>
+      </PageContainer>
+    )
   }
 }

@@ -9,6 +9,7 @@ export const colors = {
   grey3: '#656565',
   greyTag: '#4a4a4a',
   greyBg: '#ededed',
+  error: '#f44336'
 }
 
 export const buttons = {

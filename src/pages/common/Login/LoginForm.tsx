@@ -1,4 +1,6 @@
 import * as React from 'react'
+import { inject, observer } from 'mobx-react'
+import Link from 'react-router-dom/Link'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -9,9 +11,8 @@ import InputLabel from '@material-ui/core/InputLabel'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import Input from '@material-ui/core/Input'
-
-import Link from 'react-router-dom/Link'
 import Lock from '@material-ui/icons/Lock'
+import { UserStore } from 'src/stores/User/user.store'
 import { loginFormSubmit } from '../../../utils/user-migration'
 import { auth } from '../../../utils/firebase'
 import { theme } from '../../../themes/app.theme'
@@ -21,6 +22,7 @@ interface IState {
   password: string
   message?: string
   submitDisabled: boolean
+  showResendConfirmationButton: boolean
 }
 
 interface IProps {
@@ -56,14 +58,25 @@ const styles: any = {
   },
   link: {
     marginTop: theme.spacing.unit * 2,
-  }
+  },
 }
 
+interface InjectedProps extends IProps {
+  userStore: UserStore
+}
+
+@inject('userStore')
+@observer
 export class LoginFormComponent extends React.Component<IProps> {
   public state: IState = {
     email: '',
     password: '',
     submitDisabled: false,
+    showResendConfirmationButton: false,
+  }
+
+  public get injected() {
+    return this.props as InjectedProps
   }
 
   public loginSubmit = (e: React.SyntheticEvent) => {
@@ -79,17 +92,24 @@ export class LoginFormComponent extends React.Component<IProps> {
       auth.signOut()
     }
     console.log('attempting login')
-    await loginFormSubmit(this.state.email, this.state.password)
-    // try {
-    //   const status = await auth.signInWithEmailAndPassword(
-    //     this.state.email,
-    //     this.state.password,
-    //   )
-    //   this.setState({ message: null })
-    //   console.log('signed in successfully', status)
-    // } catch (error) {
-    //   this.setState({ message: error.message, submitDisabled: false })
-    // }
+    const status = await loginFormSubmit(this.state.email, this.state.password)
+    console.log(status)
+    if (!status.success) {
+      this.setState({ message: status.message, submitDisabled: false })
+    } else if (
+      this.injected.userStore.authUser &&
+      !this.injected.userStore.authUser.emailVerified
+    ) {
+      this.setState({
+        message: 'Your email address is unverified',
+        showResendConfirmationButton: true,
+      })
+    }
+  }
+
+  resendConfirmation = () => {
+    this.injected.userStore.sendEmailVerification()
+    this.props.closeLogin()
   }
 
   // generic function to handle form input changes
@@ -130,10 +150,22 @@ export class LoginFormComponent extends React.Component<IProps> {
                   onChange={this.handleChange}
                 />
               </FormControl>
+              <Typography color="error">{this.state.message}</Typography>
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
+              {this.state.showResendConfirmationButton ? (
+                <Button
+                  onClick={this.resendConfirmation}
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  style={styles.submit}
+                >
+                  Resend confirmation email
+                </Button>
+              ) : null}
               <Button
                 type="submit"
                 fullWidth
@@ -159,7 +191,6 @@ export class LoginFormComponent extends React.Component<IProps> {
             >
               Forgot password?
             </Link>
-            <Typography color="error">{this.state.message}</Typography>
           </Paper>
         </main>
       </React.Fragment>

@@ -4,6 +4,7 @@ import { ILegacyUser, IUser } from 'src/models/user.models'
 import * as phpassHasher from 'wordpress-hash-node'
 
 import md5 from 'md5'
+import { Database } from 'src/stores/database';
 
 interface IMigrationResponse {
   success: boolean
@@ -68,11 +69,8 @@ const attemptLegacyMigration = async (email: string, pw: string) => {
     } else {
       return buildResponse(false, 'Invalid password, please try again', true)
     }
-    // no legacy user, just create a new account
-  } else {
-    await registerNewUser(email, pw)
-    return buildResponse(true, 'User logged in succesfully', true)
   }
+  return buildResponse(false, 'User does not exists', true)
 }
 
 const migrateUser = async (
@@ -92,8 +90,7 @@ const generateNewUserDoc = (email: string, legacyDoc: ILegacyUser) => {
   delete legacyDoc.password_alg
   const user: IUser = {
     ...legacyDoc,
-    _created: new Date(),
-    _modified: new Date(),
+    ...Database.generateDocMeta('users'),
     verified: false,
     email,
   }

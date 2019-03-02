@@ -35,6 +35,10 @@ Typescript **models** that relate to general data flow (such as a user’s profi
 
 In addition app state, actions and dispatchers are handled within the **stores** folder, whilst global state property mapping is dealt in page components.
 
+## 💅 &nbsp; Frontend guide
+
+We created a frontend guide to explain our choices and best practice in building the One Army interface. This guide is available in [the wiki](https://github.com/OneArmyWorld/onearmy/wiki/Frontend)
+
 ## 🌳 &nbsp; Branch Structure
 
 We have two main branches linked to production and development sites, you should always start with the **master** branch as this contains the most up-to-date code, and will be where pull requests are made to for review. The **production** branch contains the live production site, and will be merged from master after regular review periods.
@@ -75,18 +79,13 @@ As this is a large project spread across many developers it is important that no
 We also expect code to follow standard good practice, such as sensible variable naming, informative comments and avoiding files large than a couple hundred lines of code (emphasis on usability and reusability).
 
 ### 😖 Why haven't you used [insert favourite language/framework/convention here]
+
 As an open-source project most of our decisions up till now have been guided by the people writing the code and conversations with people in our community whose opinions we value and respect. Some things are by careful design after the result of lengthy discussion, others are just individual preference with few complaints to dates. As we both want to encourage input from newer contributors but also avoid getting too bogged down in circular or repeated debates we encourage you to:
 
-1. Start with an observation - instead of asking 'do you use redux' take a look at the package and see for yourself. 
+1. Start with an observation - instead of asking 'do you use redux' take a look at the package and see for yourself.
 2. See if this is something we've already talked about - we tracked some initial discussions in the google doc [PPv4 - Web Platform Discussions](https://docs.google.com/document/d/1spUOUXvisHoTvvH8UDgFo1-pOi8PBsb1F8H2GRaH4IM/edit?usp=sharing), and are trying to add more of the ongoing discussions to the [GitHub Wiki](https://github.com/OneArmyWorld/onearmy/wiki). There is also plenty more within Slack v4-website-dev channel, which we hope to slowly migrate onto the wiki.
 3. Clearly state what you believe the benefits to the project would be - simply 'because I've used it before and like it' isn't good enough! Do your research, evaluate common alternatives (in the very least google '[my awesome thought] vs ' and read the first few articles. Try to present a balanced argument for why we might want to/not want to use something.
 4. Be willing to support implementation - any great idea or suggestion will have direct impact on others contributing to the project. If there is something you feel strongly about you should first create a clean, clear demo of how it would work in practice, and be willing to provide additional guidance if called upon.
-
-## 💅 &nbsp; Visual style guide
-
-(More details coming soon)
-
-For now you should use [materialUI](https://material-ui.com/) components where possible, as these will form a basis for future design principles.
 
 ## 🤝 &nbsp; Joining the team
 

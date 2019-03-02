@@ -2,11 +2,11 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { Provider } from 'mobx-react'
 
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
+import { ThemeProvider } from 'styled-components'
+import styledTheme from 'src/themes/styled.theme'
 
 import { Routes } from './pages'
 import { stores } from './stores'
-import { theme } from './themes/app.theme'
 import { GlobalStyle } from './themes/app.globalStyle.js'
 
 import './index.css'
@@ -19,13 +19,15 @@ initErrorHandler()
 ReactDOM.render(
   // provider makes all stores available through the app via @inject
   <Provider {...stores}>
-    <MuiThemeProvider theme={theme}>
-      <ErrorBoundary>
-        <Routes />
-      </ErrorBoundary>
-      <SWUpdateNotification />
-      <GlobalStyle />
-    </MuiThemeProvider>
+    <ThemeProvider theme={styledTheme}>
+      <>
+        <ErrorBoundary>
+          <Routes />
+        </ErrorBoundary>
+        <SWUpdateNotification />
+        <GlobalStyle />
+      </>
+    </ThemeProvider>
   </Provider>,
   document.getElementById('root') as HTMLElement,
 )

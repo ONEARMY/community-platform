@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
-import colors from 'src/themes/colors'
+import { colors } from 'src/themes/styled.theme'
 
 export const Container = styled.div`
   display: inline-block;

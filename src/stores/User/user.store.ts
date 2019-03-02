@@ -1,5 +1,6 @@
 import { observable, action } from 'mobx'
-import { IUser } from 'src/models/user.models'
+import { Database } from '../database'
+import { IUser, IUserFormInput } from 'src/models/user.models'
 import { IFirebaseUser, auth, afs } from 'src/utils/firebase'
 
 /*
@@ -24,7 +25,7 @@ export class UserStore {
     console.log('listening for auth state chagnes')
     this.authListener = auth.onAuthStateChanged(authUser => {
       console.log('auth user changed', authUser)
-      if (authUser) {
+      if (authUser && authUser.emailVerified) {
         this.userSignedIn(authUser)
       } else {
         this.updateUser()
@@ -53,6 +54,58 @@ export class UserStore {
     const ref = await afs.doc(`users/${userEmail}`).get()
     const user: IUser = ref.data() as IUser
     return user
+  }
+
+  public async updateUserProfile(user: IUser, values: IUserFormInput) {
+    user.display_name = values.display_name;
+    user.country = values.country;
+    await Database.setDoc(`users/${user.email}`, user)
+  }
+
+  private async _createUserProfile(values: IUserFormInput) {
+    const user: IUser = {
+      ...Database.generateDocMeta('users'),
+      verified: false,
+      email: values.email,
+      display_name: values.display_name,
+      first_name: values.first_name,
+      last_name: values.last_name,
+      nickname: values.nickname,
+      country: values.country,
+    }
+    await Database.setDoc(`users/${user.email}`, user)
+  }
+
+  @action
+  public async signUpUser(userForm: IUserFormInput) {
+    try {
+      await auth.createUserWithEmailAndPassword(userForm.email, String(userForm.password))
+      await this._createUserProfile(userForm)
+      await this.sendEmailVerification()
+    } catch(error) {
+      console.log(error)
+      var { code, message } = error;
+      if (code === 'auth/weak-password') {
+        throw 'The password is too weak.';
+      }
+      else if (code === 'auth/email-already-in-use') {
+        throw 'The email address is already in use by another account.';
+      } else {
+        throw message;
+      }
+    }
+  }
+
+  public get authUser() {
+    return auth.currentUser as firebase.User;
+  }
+
+  public async sendEmailVerification() {
+    await this.authUser.sendEmailVerification()
+  }
+
+  public async sendPasswordResetEmail(email) {
+    await auth.sendPasswordResetEmail(email)
   }
 
   public async logout() {

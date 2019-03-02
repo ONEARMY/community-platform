@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 import LinearProgress from '@material-ui/core/LinearProgress'
-import colors from 'src/themes/colors'
+import { colors } from 'src/themes/styled.theme'
 import { Button } from 'src/components/Button'
 
 const getColor = ({ progress }) => {
@@ -21,7 +21,10 @@ export const ProgressContainer = styled.div`
   margin-top: 10px;
 `
 
-export const ProgressBar = styled(LinearProgress)`
+export const ProgressBar =
+  styled(LinearProgress) <
+  any >
+  `
   > div {
     ${props => getColor(props)};
   }

@@ -1,7 +1,14 @@
 import * as React from 'react'
 
-import { Container, CreateBtn, LinkToCreate } from './elements'
-import Selector from './Selector'
+import { PROJECTS_MOCKS } from 'src/mocks/projects.mock'
+import { CATEGORY_MOCKS } from 'src/mocks/category.mock'
+import { TAGS_MOCK } from 'src/mocks/tags.mock'
+
+import { Box, Flex } from 'rebass'
+import { Button } from 'src/components/Button'
+import Selector from 'src/components/Selector'
+import Link from 'react-router-dom/Link'
+import { FlexContainer } from 'src/components/Layout/FlexContainer'
 
 interface IProps {
   onChange: () => void
@@ -11,10 +18,6 @@ interface IProps {
 export default class FilterBar extends React.Component<IProps> {
   constructor(props: IProps) {
     super(props)
-  }
-
-  public componentDidUpdate(prevProps: IProps) {
-    // component updated
   }
   public onProjectChange() {
     console.log('project changed')
@@ -34,14 +37,24 @@ export default class FilterBar extends React.Component<IProps> {
   render() {
     const { section } = this.props
     return (
-      <Container>
-        <Selector type="project" onChange={() => this.onProjectChange()} />
-        <Selector type="category" onChange={() => this.onCategoryChange()} />
-        <Selector type="tags" onChange={() => this.onTagsChange()} />
-        <LinkToCreate to={section + '/create'}>
-          <CreateBtn border>create {section}</CreateBtn>
-        </LinkToCreate>
-      </Container>
+      <FlexContainer justifyContent={'space-between'} mb={4}>
+        <Box>
+          <Selector
+            onChange={() => this.onProjectChange()}
+            list={PROJECTS_MOCKS}
+          />
+          <Selector
+            onChange={() => this.onCategoryChange()}
+            list={CATEGORY_MOCKS}
+          />
+          <Selector onChange={() => this.onTagsChange()} list={TAGS_MOCK} />
+        </Box>
+        <Box>
+          <Link to={section + '/create'}>
+            <Button variant="outline">create {section}</Button>
+          </Link>
+        </Box>
+      </FlexContainer>
     )
   }
 }

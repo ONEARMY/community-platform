@@ -1,3 +1,5 @@
+import { firestore } from 'firebase/app'
+
 // remove special characters from string, also replacing spaces with dashes
 const stripSpecialCharacters = (text: string) => {
   return text
@@ -18,6 +20,10 @@ const arrayToJson = (arr: any[], keyField: string) => {
     }
   })
   return json
+}
+
+export function toTimestamp(dateString: string) {
+  return firestore.Timestamp.fromDate(new Date(dateString))
 }
 
 export default { stripSpecialCharacters, arrayToJson }

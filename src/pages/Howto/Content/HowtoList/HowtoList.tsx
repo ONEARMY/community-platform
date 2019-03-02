@@ -8,9 +8,9 @@ import Typography from '@material-ui/core/Typography'
 import Card from '@material-ui/core/Card'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import { UsefulIcon, SaveIcon, TickIcon } from 'src/assets/icons/icon_components'
-import { CreateButton } from './elements'
 import { IHowto } from 'src/models/howto.models'
 import { TagDisplay } from 'src/pages/common/Tags/TagDisplay/TagDisplay'
+import { CreateButton } from './elements'
 
 const styles: any = {
   cards: {
@@ -96,9 +96,9 @@ export class HowtoList extends React.Component<IProps, any> {
     const { allHowtos } = this.props
     return (
       <div>
-        <Link to={'/how-to/create'}>
-          <CreateButton icon={'add'}>create how-to</CreateButton>
-        </Link>
+          <Link to={'/how-to/create'}>
+            <CreateButton icon={'add'}>create how-to</CreateButton>
+          </Link>
         <React.Fragment>
           <div style={styles.layout}>
             {allHowtos.length === 0 ? (
@@ -129,6 +129,11 @@ export class HowtoList extends React.Component<IProps, any> {
               </Grid>
             )}
           </div>
+          {allHowtos.length > 15 ? (
+            <Link to={'/how-to/create'}>
+              <CreateButton icon={'add'}>create how-to</CreateButton>
+            </Link>
+          ) : null}
         </React.Fragment>
       </div>
     )

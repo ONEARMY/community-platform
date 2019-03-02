@@ -1,4 +1,5 @@
 import { IProject } from './project.models'
+import { IDbDoc } from './common.models'
 
 export class User {
   constructor() {
@@ -13,18 +14,26 @@ export interface IUserState {
   user?: IUser
 }
 
+export interface IUserFormInput {
+  email: string
+  display_name: string
+  password?: string
+  repeat_password?: string
+  first_name?: string
+  last_name?: string
+  nickname?: string
+  country?: string
+}
+
 // IUser retains most of the fields from legacy users (omitting passwords),
 // and has a few additional fields
-export interface IUser {
+export interface IUser extends IDbDoc {
   projects?: IProject
   verified: boolean
-  _created: Date
-  _modified: Date
-  legacy_id: number
-  login: string
   email: string
-  legacy_registered: string /*mm/dd/yyyy hh:ss*/
   display_name: string
+  legacy_id?: number
+  legacy_registered?: string /*mm/dd/yyyy hh:ss*/
   first_name?: string
   last_name?: string
   nickname?: string

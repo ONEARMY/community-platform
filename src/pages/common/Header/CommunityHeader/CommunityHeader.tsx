@@ -11,6 +11,7 @@ import IconButton from '@material-ui/core/IconButton'
 import MailOutlinedIcon from '@material-ui/icons/MailOutlined'
 import { MdNotifications } from 'react-icons/md'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
+import { LoginComponent } from '../../Login/Login'
 import {
   Content,
   LogoText,
@@ -23,6 +24,8 @@ import {
   SectionDescription,
 } from './elements'
 import { IUser } from 'src/models/user.models'
+import { UserStore } from 'src/stores/User/user.store'
+import { inject, observer } from 'mobx-react'
 
 interface IState {
   moreMenuAnchor: any
@@ -34,6 +37,12 @@ interface IProps {
   description: string
 }
 
+interface IInjectedProps extends IProps {
+  userStore: UserStore
+}
+
+@inject('userStore')
+@observer
 export class CommunityHeader extends React.Component<IProps, IState> {
   constructor(props) {
     super(props)
@@ -41,6 +50,9 @@ export class CommunityHeader extends React.Component<IProps, IState> {
       moreMenuAnchor: null,
       profileMenuAnchor: null,
     }
+  }
+  get props() {
+    return this.props as IInjectedProps
   }
 
   // function receives clicked element which then sets itself as an 'anchor'
@@ -73,6 +85,10 @@ export class CommunityHeader extends React.Component<IProps, IState> {
         <KeyboardArrowDownIcon />
       </Profile>
     )
+  }
+  logout() {
+    this.props.userStore.logout()
+    this.closeProfileMenu()
   }
 
   render() {
@@ -131,38 +147,46 @@ export class CommunityHeader extends React.Component<IProps, IState> {
               <MdNotifications />
             </IconButton>
           </div>
-          <Profile onClick={this.openProfileMenu}>
-            <Avatar
-              alt="Remy Sharp"
-              src="http://i.pravatar.cc/200"
-              className="header__avatar"
-            />
-            <KeyboardArrowDownIcon />
-          </Profile>
-          <Menu
-            open={profileMenuAnchor ? true : false}
-            anchorEl={profileMenuAnchor}
-            className="nav__more-menu"
-            style={{ marginTop: '3em' }}
-          >
-            <ClickAwayListener onClickAway={this.closeProfileMenu}>
-              <div>
-                {COMMUNITY_PAGES_PROFILE.map(page => (
-                  <MenuItem onClick={this.closeProfileMenu} key={page.path}>
-                    <LinkButton
-                      className="nav-link"
-                      to={page.path}
-                      activeClassName={'link-active'}
-                    >
-                      {page.title}
-                    </LinkButton>
-                  </MenuItem>
-                ))}
-                <MenuItem onClick={this.closeProfileMenu}>Logout</MenuItem>
-                <MenuItem onClick={this.closeProfileMenu}>Main Site</MenuItem>
-              </div>
-            </ClickAwayListener>
-          </Menu>
+          {this.props.userStore.user ? (
+            <>
+              <Profile onClick={this.openProfileMenu}>
+                <Avatar
+                  alt="Remy Sharp"
+                  src="http://i.pravatar.cc/200"
+                  className="header__avatar"
+                />
+                <KeyboardArrowDownIcon />
+              </Profile>
+              <Menu
+                open={profileMenuAnchor ? true : false}
+                anchorEl={profileMenuAnchor}
+                className="nav__more-menu"
+                style={{ marginTop: '3em' }}
+              >
+                <ClickAwayListener onClickAway={this.closeProfileMenu}>
+                  <div>
+                    {COMMUNITY_PAGES_PROFILE.map(page => (
+                      <MenuItem onClick={this.closeProfileMenu} key={page.path}>
+                        <LinkButton
+                          className="nav-link"
+                          to={page.path}
+                          activeClassName={'link-active'}
+                        >
+                          {page.title}
+                        </LinkButton>
+                      </MenuItem>
+                    ))}
+                    <MenuItem onClick={() => this.logout()}>Logout</MenuItem>
+                    <MenuItem onClick={this.closeProfileMenu}>
+                      Main Site
+                    </MenuItem>
+                  </div>
+                </ClickAwayListener>
+              </Menu>
+            </>
+          ) : (
+            <LoginComponent user={this.props.userStore.user} />
+          )}
         </Content>
         <SectionDescription>
           {this.props.title}

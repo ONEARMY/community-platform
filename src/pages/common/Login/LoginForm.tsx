@@ -1,21 +1,19 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
-import Link from 'react-router-dom/Link'
 import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import Paper from '@material-ui/core/Paper'
-import Avatar from '@material-ui/core/Avatar'
 import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import Input from '@material-ui/core/Input'
 import Lock from '@material-ui/icons/Lock'
+import { Button } from 'src/components/Button'
 import { UserStore } from 'src/stores/User/user.store'
+import { colors } from 'src/themes/styled.theme'
+import { Main, ModalPaper, ModalAvatar, Form, Link } from './elements'
 import { loginFormSubmit } from '../../../utils/user-migration'
 import { auth } from '../../../utils/firebase'
-import { theme } from '../../../themes/app.theme'
 
 interface IState {
   email: string
@@ -28,37 +26,6 @@ interface IState {
 interface IProps {
   closeLogin: () => void
   openReset: () => void
-}
-
-const styles: any = {
-  layout: {
-    width: 'auto',
-    display: 'block', // Fix IE11 issue.
-    paddingLeft: theme.spacing.unit * 3,
-    paddingRight: theme.spacing.unit * 3,
-  },
-  paper: {
-    marginTop: theme.spacing.unit * 8,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme
-      .spacing.unit * 3}px`,
-  },
-  avatar: {
-    margin: theme.spacing.unit,
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%',
-    marginTop: theme.spacing.unit,
-  },
-  submit: {
-    marginTop: theme.spacing.unit * 3,
-  },
-  link: {
-    marginTop: theme.spacing.unit * 2,
-  },
 }
 
 interface InjectedProps extends IProps {
@@ -123,13 +90,13 @@ export class LoginFormComponent extends React.Component<IProps> {
     return (
       <React.Fragment>
         <CssBaseline />
-        <main style={styles.layout}>
-          <Paper style={styles.paper}>
-            <Avatar style={styles.avatar}>
+        <Main>
+          <ModalPaper>
+            <ModalAvatar>
               <Lock />
-            </Avatar>
+            </ModalAvatar>
             <Typography variant="h5">Sign in</Typography>
-            <form style={styles.form} onSubmit={this.loginSubmit}>
+            <Form onSubmit={this.loginSubmit}>
               <FormControl margin="normal" required fullWidth>
                 <InputLabel htmlFor="email">Email Address</InputLabel>
                 <Input
@@ -158,41 +125,41 @@ export class LoginFormComponent extends React.Component<IProps> {
               {this.state.showResendConfirmationButton ? (
                 <Button
                   onClick={this.resendConfirmation}
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  style={styles.submit}
+                  width="100%"
+                  variant="primary"
+                  mb={3}
                 >
                   Resend confirmation email
                 </Button>
               ) : null}
               <Button
                 type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                style={styles.submit}
+                width="100%"
+                variant={this.state.submitDisabled ? 'disabled' : 'primary'}
                 disabled={this.state.submitDisabled}
+                mb={3}
               >
                 Sign in
               </Button>
-            </form>
+            </Form>
             <Link
-              style={styles.link}
+              color={colors.blue2}
+              mb={2}
               to="/sign-up"
               onClick={this.props.closeLogin}
             >
               Sign up
             </Link>
             <Link
-              style={styles.link}
+              color={colors.blue2}
+              mb={2}
               to="#"
               onClick={this.props.openReset}
             >
               Forgot password?
             </Link>
-          </Paper>
-        </main>
+          </ModalPaper>
+        </Main>
       </React.Fragment>
     )
   }

@@ -35,9 +35,17 @@ Typescript **models** that relate to general data flow (such as a user’s profi
 
 In addition app state, actions and dispatchers are handled within the **stores** folder, whilst global state property mapping is dealt in page components.
 
-## 💅 &nbsp; Frontend guide
+## 🤖 &nbsp; Technologies
 
+### Frontend
+
+The platform is built in **React** and [Typescript](https://www.typescriptlang.org/docs/handbook/basic-types.html) for typing and consistency, [styled-components](https://www.styled-components.com/) for reusability and component based styling.
 We created a frontend guide to explain our choices and best practice in building the One Army interface. This guide is available in [the wiki](https://github.com/OneArmyWorld/onearmy/wiki/Frontend)
+
+### Backend
+
+Our backend contains microservices in Node and is based on Firebase's Firestore to manage our database.
+You can find usefull links to learn more about these technologies [here](/CONTRIBUTING.md#ressources)
 
 ## 🌳 &nbsp; Branch Structure
 

@@ -68,7 +68,7 @@ export class ResetPasswordComponent extends React.Component<IProps> {
                 <Text m={3}>{this.state.message}</Text>
                 <Button
                   onClick={this.props.closeLogin}
-                  width="100%"
+                  width={1}
                   variant="primary"
                   mt={3}
                 >
@@ -91,7 +91,7 @@ export class ResetPasswordComponent extends React.Component<IProps> {
                       onChange={this.handleChange}
                     />
                   </FormControl>
-                  <Button type="submit" width="100%" variant="primary" mt={3}>
+                  <Button type="submit" width={1} variant="primary" mt={3}>
                     Reset password
                   </Button>
                 </Form>

@@ -125,7 +125,7 @@ export class LoginFormComponent extends React.Component<IProps> {
               {this.state.showResendConfirmationButton ? (
                 <Button
                   onClick={this.resendConfirmation}
-                  width="100%"
+                  width={1}
                   variant="primary"
                   mb={3}
                 >
@@ -134,7 +134,7 @@ export class LoginFormComponent extends React.Component<IProps> {
               ) : null}
               <Button
                 type="submit"
-                width="100%"
+                width={1}
                 variant={this.state.submitDisabled ? 'disabled' : 'primary'}
                 disabled={this.state.submitDisabled}
                 mb={3}

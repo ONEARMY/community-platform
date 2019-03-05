@@ -50,7 +50,8 @@ export const LinkButton = styled(NavLink).attrs(({ name }) => ({
 }))`
     ${navButtonStyle}
     &.${activeClassName} {
-        text-decoration: underline;
+      padding-bottom: .2rem;
+      border-bottom: .2rem solid black;
     }  
 `
 

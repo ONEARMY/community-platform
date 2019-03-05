@@ -51,8 +51,13 @@ export class LoginComponent extends React.Component<IProps, IState> {
   }
   public render() {
     return (
-      <>
-        <Button onClick={this.openLogin}>Log in</Button>
+      <React.Fragment>
+        <Button
+            className={'login-btn'}
+            onClick={this.openLogin}
+        >
+          Take me to the One Army Community
+        </Button>
         <Modal
           aria-labelledby="user-login-modal"
           aria-describedby="click to show user login"
@@ -68,7 +73,7 @@ export class LoginComponent extends React.Component<IProps, IState> {
             }
           </div>
         </Modal>
-      </>
+      </React.Fragment>
     )
   }
 }

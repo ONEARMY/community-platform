@@ -27,6 +27,15 @@ $colorSecondary: "yellow";
   margin: auto;
 }
 
+.login-btn {
+  background-color: white;
+  font-weight: normal;
+  box-shadow: 0 0 0.5rem 0.2rem rgba(0, 0, 0, 0.1);
+  padding: 0 3rem;
+  text-transform: none;
+  font-size: 1rem;
+}
+
 .login-icon {
   position: absolute;
   right: 10px;

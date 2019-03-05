@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography'
 import { Field } from 'react-final-form'
 import { Button } from 'src/components/Button'
 
-import colors from 'src/themes/colors'
+import { colors } from 'src/themes/styled.theme'
 
 export const FormContainer = styled.div`
   position: relative;
@@ -59,22 +59,4 @@ export const Select = styled(Field)`
   background: white;
   width: 40%;
   height: 45px;
-`
-
-export const AddStepButton = styled(Button)`
-  background-color: ${colors.yellow};
-  width: 300px;
-  height: 90px;
-  margin: 60px auto;
-`
-
-export const SubmitButton = styled(Button)`
-  background-color: ${colors.green};
-  width: 100%;
-  height: 90px;
-  color: white;
-  font-size: 1.1em;
-  &:disabled {
-    cursor: not-allowed;
-  }
 `

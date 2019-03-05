@@ -45,9 +45,9 @@ export const ListButton = styled(Button)`
   ${navButtonStyle}
 `
 
-export const LinkButton = styled(NavLink).attrs({
-  activeClassName,
-})`
+export const LinkButton = styled(NavLink).attrs(({ name }) => ({
+  activeClassName: name || activeClassName,
+}))`
     ${navButtonStyle}
     &.${activeClassName} {
         text-decoration: underline;

@@ -7,7 +7,10 @@ import { HowtoPage } from './Howto/Howto'
 import { HomePage } from './Home/Home'
 import { NotFoundPage } from './NotFound/NotFound'
 import { DiscussionsPage } from './Discussions'
-import { SignUpPage } from './SignUp'
+import { ProfilePage } from './Profile/Profile'
+import { SettingsPage } from './Profile/Settings'
+import { SignUpPage } from './Home/SignUp'
+import { EmailConfirmation } from './Home/EmailConfirmation'
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import { EventsPage } from './Events/Events'
 import Header from './common/Header/Header'
@@ -39,6 +42,13 @@ export const HOME_PAGE: IPageMeta[] = [
     path: '/sign-up',
     component: <SignUpPage />,
     title: 'Sign up',
+    description: '',
+    exact: true,
+  },
+  {
+    path: '/email-confirmation',
+    component: <EmailConfirmation />,
+    title: 'Email confirmation',
     description: '',
     exact: true,
   },
@@ -106,13 +116,13 @@ export const COMMUNITY_PAGES_MORE: IPageMeta[] = [
 export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [
   {
     path: '/profile',
-    component: <NotFoundPage />,
+    component: <ProfilePage />,
     title: 'Profile',
     description: '',
   },
   {
     path: '/settings',
-    component: <NotFoundPage />,
+    component: <SettingsPage />,
     title: 'Settings',
     description: '',
   },

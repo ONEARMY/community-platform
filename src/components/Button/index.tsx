@@ -10,18 +10,21 @@ import {
 import { StyledButton, Label } from './elements'
 
 // extend to allow any default button props (e.g. onClick) to also be passed
-interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
+export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
   icon?: string
 }
+
+type disabledProp = { boolean? : false };
 
 type BtnProps = IBtnProps &
   SpaceProps &
   WidthProps &
   ButtonStyleProps &
-  ColorProps
+  ColorProps &
+  disabledProp
 
 export const Button = (props: BtnProps) => (
-  <StyledButton {...props}>
+  <StyledButton {...props} px={3}>
     {props.icon && <Icon glyph={props.icon} />}
     <Label>{props.children}</Label>
   </StyledButton>

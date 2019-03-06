@@ -24,6 +24,9 @@ Note: If you canâ€™t find anything in our todo list that you can help with, itâ€
 - Run the dev server
   `yarn start`
 
+- Run Storybook
+  `yarn storybook`
+
 Note: Builds are currently tested on Chrome/Firefox. If your browser is not
 supported, then consider contributing :-)
 

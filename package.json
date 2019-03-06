@@ -15,7 +15,7 @@
     "@svgr/webpack": "4.1.0",
     "@tinymce/tinymce-react": "^3.0.1",
     "@types/rebass": "^3.0.3",
-    "@types/styled-components": "4.0",
+    "@types/styled-components": "^4.1.11",
     "@types/styled-system": "^3.2.2",
     "@types/dompurify": "^0.0.32",
     "babel-core": "7.0.0-bridge.0",
@@ -96,7 +96,9 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom"
+    "test": "node scripts/test.js --env=jsdom",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "eslintConfig": {},
   "browserslist": [
@@ -106,6 +108,11 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@storybook/addon-actions": "^5.0.0",
+    "@storybook/addon-knobs": "^5.0.0",
+    "@storybook/addon-info": "^5.0.0",
+    "@storybook/addons": "^5.0.0",
+    "@storybook/react": "^5.0.0",
     "@types/flux-standard-action": "1.1.0",
     "@types/jest": "23.3.2",
     "@types/md5": "^2.1.33",
@@ -115,11 +122,17 @@
     "@types/react-leaflet": "^1.1.6",
     "@types/react-router-dom": "4.3.1",
     "@types/react-slick": "0.23.2",
+    "@types/storybook__addon-actions": "^3.4.2",
+    "@types/storybook__addon-info": "^4.1.0",
+    "@types/storybook__addon-knobs": "^4.0.1",
+    "@types/storybook__react": "^4.0.1",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.8.0",
     "mobx-react-devtools": "^6.0.3",
     "node-sass": "^4.11.0",
+    "react-docgen-typescript-loader": "^3.0.1",
     "sass-loader": "7.1.0",
+    "storybook": "^1.0.0",
     "tslint": "5.7.0",
     "tslint-config-prettier": "1.10.0",
     "tslint-react": "3.2.0"

@@ -11,7 +11,7 @@ import Checkbox from '@material-ui/core/Checkbox'
 import Input from '@material-ui/core/Input'
 
 import Link from 'react-router-dom/Link'
-import Lock from '@material-ui/icons/Lock'
+import Icon from 'src/components/Icons'
 import { loginFormSubmit } from '../../../utils/user-migration'
 import { auth } from '../../../utils/firebase'
 import { theme } from '../../../themes/app.theme'
@@ -56,7 +56,7 @@ const styles: any = {
   },
   link: {
     marginTop: theme.spacing.unit * 2,
-  }
+  },
 }
 
 export class LoginFormComponent extends React.Component<IProps> {
@@ -106,7 +106,7 @@ export class LoginFormComponent extends React.Component<IProps> {
         <main style={styles.layout}>
           <Paper style={styles.paper}>
             <Avatar style={styles.avatar}>
-              <Lock />
+              <Icon glyph={'lock'} />
             </Avatar>
             <Typography variant="h5">Sign in</Typography>
             <form style={styles.form} onSubmit={this.loginSubmit}>
@@ -152,11 +152,7 @@ export class LoginFormComponent extends React.Component<IProps> {
             >
               Sign up
             </Link>
-            <Link
-              style={styles.link}
-              to="#"
-              onClick={this.props.openReset}
-            >
+            <Link style={styles.link} to="#" onClick={this.props.openReset}>
               Forgot password?
             </Link>
             <Typography color="error">{this.state.message}</Typography>

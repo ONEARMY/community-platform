@@ -2,7 +2,7 @@ import * as React from 'react'
 import Snackbar from '@material-ui/core/Snackbar'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
-import CloseIcon from '@material-ui/icons/Close'
+import Icon from 'src/components/Icons'
 import { PlatformStore } from 'src/stores/Platform/platform.store'
 import { inject, observer } from 'mobx-react'
 
@@ -55,7 +55,7 @@ export class SWUpdateNotification extends React.Component<IProps, IState> {
             color="inherit"
             onClick={this.handleClose}
           >
-            <CloseIcon />
+            <Icon glyph={'close'} />
           </IconButton>,
         ]}
         message={<span id="message-id">New version available</span>}

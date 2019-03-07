@@ -41,8 +41,9 @@ export class UserStore {
   public async userSignedIn(user: IFirebaseUser | null) {
     console.log('user signed in, getting meta', user)
     let userMeta: IUser | null = null
-    if (user && user.email) {
-      userMeta = await this.getUserProfile(user.email)
+    if (user && user.uid) {
+      userMeta = await this.getUserProfile(user.uid)
+      userMeta.email = user.email as string;
     }
     if (userMeta) {
       console.log('user meta retrieved', userMeta)
@@ -54,8 +55,8 @@ export class UserStore {
     }
   }
 
-  public async getUserProfile(userEmail: string) {
-    const ref = await afs.doc(`users/${userEmail}`).get()
+  public async getUserProfile(uid: string) {
+    const ref = await afs.doc(`users/${uid}`).get()
     const user: IUser = ref.data() as IUser
     return user
   }
@@ -63,21 +64,22 @@ export class UserStore {
   public async updateUserProfile(user: IUser, values: IUserFormInput) {
     user.display_name = values.display_name;
     user.country = values.country;
-    await Database.setDoc(`users/${user.email}`, user)
+    await Database.setDoc(`users/${user._id}`, user)
   }
 
   private async _createUserProfile(values: IUserFormInput) {
+    let authUser = auth.currentUser as firebase.User;
     const user: IUser = {
       ...Database.generateDocMeta('users'),
+      _id: authUser.uid,
       verified: false,
-      email: values.email,
       display_name: values.display_name,
       first_name: values.first_name,
       last_name: values.last_name,
       nickname: values.nickname,
       country: values.country,
     }
-    await Database.setDoc(`users/${user.email}`, user)
+    await Database.setDoc(`users/${user._id}`, user)
   }
 
   @action

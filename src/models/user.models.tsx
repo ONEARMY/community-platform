@@ -30,8 +30,8 @@ export interface IUserFormInput {
 export interface IUser extends IDbDoc {
   projects?: IProject
   verified: boolean
-  email: string
   display_name: string
+  email?: string
   legacy_id?: number
   legacy_registered?: string /*mm/dd/yyyy hh:ss*/
   first_name?: string

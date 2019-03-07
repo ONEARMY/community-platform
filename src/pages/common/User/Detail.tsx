@@ -18,15 +18,27 @@ export class UserDetail extends React.Component<IProps> {
           src="http://i.pravatar.cc/200"
           className="header__avatar"
         />
-        <FlexContainer p={0} justifyContent={'space-between'} alignItems={'center'}>
+        <FlexContainer
+          p={0}
+          justifyContent={'space-between'}
+          alignItems={'center'}
+        >
           <Label text="Display name" />
           <p>{user.display_name}</p>
         </FlexContainer>
-        <FlexContainer p={0} justifyContent={'space-between'} alignItems={'center'}>
+        <FlexContainer
+          p={0}
+          justifyContent={'space-between'}
+          alignItems={'center'}
+        >
           <Label text="Country" />
           <p>{user.country}</p>
         </FlexContainer>
-        <FlexContainer p={0} justifyContent={'space-between'} alignItems={'center'}>
+        <FlexContainer
+          p={0}
+          justifyContent={'space-between'}
+          alignItems={'center'}
+        >
           <Label text="Email" />
           <p>{user.email}</p>
         </FlexContainer>

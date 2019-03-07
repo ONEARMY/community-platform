@@ -43,14 +43,20 @@ export class UserStore {
     let userMeta: IUser | null = null
     if (user && user.uid) {
       userMeta = await this.getUserProfile(user.uid)
-      userMeta.email = user.email as string;
-    }
-    if (userMeta) {
-      console.log('user meta retrieved', userMeta)
+      if (userMeta) {
+        console.log('user meta retrieved', userMeta)
+        userMeta.email = user.email as string;
+      } else {
+        console.log('no user meta retrieved. creating empty user doc')
+        userMeta = await this._createUserProfile({
+          display_name: '',
+          first_name: '',
+          last_name: '',
+          nickname: '',
+          country: '',
+        } as IUserFormInput);
+      }
       this.updateUser(userMeta)
-    } else {
-      console.log('no user meta retrieved')
-      // *** TODO handle user has no profile - shouldn't happen as registration populates before creating user?
       // *** TODO should also handle timeout/no connection potential issue when fetching?
     }
   }
@@ -80,6 +86,7 @@ export class UserStore {
       country: values.country,
     }
     await Database.setDoc(`users/${user._id}`, user)
+    return user
   }
 
   @action

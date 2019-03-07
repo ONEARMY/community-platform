@@ -83,7 +83,7 @@ class PostViewClass extends React.Component<IProps, IState> {
           <BoxContainer display={'inline-block'}>
             <h1>Question</h1>
             <div>{p.title}</div>
-            <Avatar />
+            <Avatar userEmail={p._createdBy} />
             <div dangerouslySetInnerHTML={{ __html: p.content }} />
           </BoxContainer>
           <h2>Responses</h2>

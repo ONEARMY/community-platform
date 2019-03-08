@@ -13,6 +13,7 @@ import * as ImageConverter from './imageConverter'
 import * as StorageFunctions from './storageFunctions'
 import * as UtilsFunctions from './utils'
 import * as AnalyticsFunctions from './analytics'
+import * as postCommentsCounter from './postCommentsCounter'
 import { Credentials } from 'google-auth-library'
 
 // update on change logging purposes
@@ -132,6 +133,8 @@ interface getAnalyticsData {
   viewId: string
   token: string
 }
+
+exports.updateCommentsCount = postCommentsCounter.updateCommentsCount
 
 // add export so can be used by test
 export default app

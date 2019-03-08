@@ -16,15 +16,8 @@ import {
   QaIcon,
 } from './elements'
 import { IDiscussionPost } from 'src/models/discussions.models'
-import { Link, RouteComponentProps } from 'react-router-dom'
-import { computed } from 'mobx'
-import { inject, observer } from 'mobx-react'
-import { IStores } from '../../../../stores'
-import { DiscussionsStore } from '../../../../stores/Discussions/discussions.store'
+import { Link } from 'react-router-dom'
 
-interface IProps extends RouteComponentProps {
-  discussionsStore: DiscussionsStore
-}
 interface IProps {
   post: IDiscussionPost
 }
@@ -32,17 +25,9 @@ interface IState {
   isLucky: boolean
 }
 
-@inject((allStores: IStores) => ({
-  discussionsStore: allStores.discussionsStore,
-}))
-@observer
 export default class ListRow extends React.Component<IProps, IState> {
-  // @computed get comments() {
-  //   return this.props.discussionsStore.allDiscussionComments
-  // }
   constructor(props: any) {
     super(props)
-    this.state = { editorInput: '', isSaving: false }
   }
 
   public durationSincePosted(postDate: Date) {

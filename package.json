@@ -15,7 +15,7 @@
     "@svgr/webpack": "4.1.0",
     "@tinymce/tinymce-react": "^3.0.1",
     "@types/rebass": "^3.0.3",
-    "@types/styled-components": "^4.1.11",
+    "@types/styled-components": "4.0",
     "@types/styled-system": "^3.2.2",
     "@types/dompurify": "^0.0.32",
     "babel-core": "7.0.0-bridge.0",

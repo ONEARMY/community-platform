@@ -13,7 +13,6 @@ import * as ImageConverter from './imageConverter'
 import * as StorageFunctions from './storageFunctions'
 import * as UtilsFunctions from './utils'
 import * as AnalyticsFunctions from './analytics'
-import * as postCommentsCounter from './postCommentsCounter'
 import { Credentials } from 'google-auth-library'
 
 // update on change logging purposes
@@ -68,6 +67,22 @@ exports.api = functions.https.onRequest(app)
 app.listen(3000, 'localhost', listen => {
   console.log(`API v${buildNumber} listening on port 3000`)
 })
+
+/************ Cloud Firestore Triggers ******************************************************
+ Functions called in response to changes in Cloud Firestore database
+ ************************************************************************************/
+exports.syncCommentsCount = functions.firestore
+  .document('discussions/{discussionId}/comments/{commentId}')
+  .onWrite((change, context) => {
+    // ref to the parent document
+    const discussionId = context.params.discussionId
+    const docRef = admin.firestore().collection('discussions').doc(discussionId)
+
+    // get all comments and aggregate
+    return docRef.collection('comments').get().then(querySnapshot => {
+      return docRef.update({_commentCount: querySnapshot.size})
+    }).catch(err => console.log(err))
+  })
 
 /************ Cron tasks ***********************************************************
 Use pubsub to automatically subscribe to messages sent from cron.
@@ -133,8 +148,6 @@ interface getAnalyticsData {
   viewId: string
   token: string
 }
-
-exports.updateCommentsCount = postCommentsCounter.updateCommentsCount
 
 // add export so can be used by test
 export default app

@@ -3,6 +3,7 @@ export const colors = {
   black: 'black',
   blue: '#b6d8e6',
   blue2: '#3f51b5',
+  blue3: '#2d5786',
   green: '#88e3c7',
   yellow: '#ffe495',
   grey: '#dddddd',
@@ -15,13 +16,17 @@ export const colors = {
 
 export const buttons = {
   primary: {
-    color: colors.black,
+    color: colors.white,
     backgroundColor: colors.blue,
   },
   outline: {
     color: colors.black,
     border: '1px solid ' + colors.black,
     backgroundColor: 'none',
+  },
+  disabled: {
+    color: colors.grey,
+    backgroundColor: colors.black,
   },
 }
 

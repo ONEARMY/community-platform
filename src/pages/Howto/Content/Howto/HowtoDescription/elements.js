@@ -29,6 +29,7 @@ export const ContainerRight = styled.div`
 `
 
 export const CoverImg = styled.img`
+  object-fit: cover;
   max-height: 360px;
   max-width: 600px;
   width: 100%;

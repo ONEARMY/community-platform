@@ -10,7 +10,7 @@ import { DiscussionsPage } from './Discussions'
 import { ProfilePage } from './Profile/Profile'
 import { SettingsPage } from './Profile/Settings'
 import { SignUpPage } from './Home/SignUp'
-import { EmailConfirmation } from './Home/EmailConfirmation'
+import { ActionPage } from './Home/Action';
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import { EventsPage } from './Events/Events'
 import Header from './common/Header/Header'
@@ -46,9 +46,9 @@ export const HOME_PAGE: IPageMeta[] = [
     exact: true,
   },
   {
-    path: '/email-confirmation',
-    component: <EmailConfirmation />,
-    title: 'Email confirmation',
+    path: '/action',
+    component: <ActionPage />,
+    title: '',
     description: '',
     exact: true,
   },

@@ -9,6 +9,7 @@ import {
   MdCheck,
   MdArrowBack,
   MdKeyboardArrowDown,
+  MdAccountCircle,
 } from 'react-icons/md'
 import { IconContext } from 'react-icons'
 
@@ -49,6 +50,8 @@ export const Glyph = ({ glyph }: IGlyphProps) => {
       return <MdArrowBack />
     case 'arrow-down':
       return <MdKeyboardArrowDown />
+    case 'account-circle':
+      return <MdAccountCircle />
     default:
       return null
   }

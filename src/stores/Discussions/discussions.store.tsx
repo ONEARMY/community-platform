@@ -67,6 +67,7 @@ export class DiscussionsStore extends ModuleStore {
       await Database.setDoc(`discussions/${d._id}`, d)
     } else {
       d = await this._createNewDiscussion(discussion as IPostFormInput)
+      await Database.setDoc(`discussions/${d._id}`, d)
     }
     // after creation want to return so slug or id can be used for navigation etc.
     return d

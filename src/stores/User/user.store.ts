@@ -13,6 +13,9 @@ export class UserStore {
   @observable
   public user: IUser | undefined
 
+  @observable
+  public authUser: firebase.User | null
+
   @action
   public updateUser(user?: IUser) {
     if (user) {
@@ -23,14 +26,15 @@ export class UserStore {
   }
   constructor() {
     console.log('listening for auth state chagnes')
-    this.authListener = auth.onAuthStateChanged(authUser => {
+    this.authListener = action(auth.onAuthStateChanged(authUser => {
       console.log('auth user changed', authUser)
+      this.authUser = authUser
       if (authUser && authUser.emailVerified) {
         this.userSignedIn(authUser)
       } else {
         this.updateUser()
       }
-    })
+    }))
   }
 
   // handle user sign in, when firebase authenticates wnat to also fetch user document from the database
@@ -96,12 +100,8 @@ export class UserStore {
     }
   }
 
-  public get authUser() {
-    return auth.currentUser as firebase.User;
-  }
-
   public async sendEmailVerification() {
-    await this.authUser.sendEmailVerification()
+    this.authUser && await this.authUser.sendEmailVerification()
   }
 
   public async sendPasswordResetEmail(email) {

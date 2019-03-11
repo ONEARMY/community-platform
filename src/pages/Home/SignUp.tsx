@@ -1,29 +1,49 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
-import { Redirect, withRouter } from 'react-router-dom'
+import { Text } from 'rebass'
 import { IUserFormInput } from 'src/models/user.models'
 import { UserStore } from 'src/stores/User/user.store'
 import { UserForm } from 'src/pages/common/User/Form'
+import PageContainer from 'src/components/Layout/PageContainer'
+import { BoxContainer } from 'src/components/Layout/BoxContainer'
 
 interface InjectedProps {
   userStore: UserStore
 }
 
-@(withRouter as any)
+interface IState {
+  formSubmitted: boolean
+}
+
 @inject('userStore')
 @observer
-export class SignUpPage extends React.Component<any> {
+export class SignUpPage extends React.Component<any, IState> {
+  public state: IState = {
+    formSubmitted: false,
+  }
+
   get injected() {
     return this.props as InjectedProps
   }
 
   public onSubmit = async (formValues: IUserFormInput) => {
-    await this.props.userStore.signUpUser(formValues);
-    this.props.history.push('/');
+    await this.props.userStore.signUpUser(formValues)
+    this.setState({ formSubmitted: true })
   }
 
   public render() {
-    let user = this.injected.userStore.user
-    return user ? <Redirect to="/" /> : <UserForm onSubmit={this.onSubmit}/>
+    return (
+      <PageContainer>
+        <BoxContainer>
+          {this.state.formSubmitted ? (
+            <Text textAlign={'center'}>
+              A verification link has been sent to your email account.
+            </Text>
+          ) : (
+            <UserForm onSubmit={this.onSubmit} />
+          )}
+        </BoxContainer>
+      </PageContainer>
+    )
   }
 }

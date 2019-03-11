@@ -28,6 +28,9 @@ This project and everyone participating in it is governed by the [Franz Code of 
 - Run the dev server
   `yarn start`
 
+- Run Storybook
+  `yarn storybook`
+
 Note: Builds are currently tested on Chrome/Firefox. If your browser is not
 supported, then consider contributing :-)
 

@@ -14,7 +14,7 @@ Note: If you can’t find anything in our todo list that you can help with, it�
 
 ## 👐 &nbsp; Code of Conduct
 
-This project and everyone participating in it is governed by the [Franz Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [hello@onearmy.world](mailto:hello@onearmy.world).
+This project and everyone participating in it is governed by the [One Army Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [hello@onearmy.world](mailto:hello@onearmy.world).
 
 ## 📟 &nbsp; Getting started
 

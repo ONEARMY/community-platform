@@ -68,6 +68,22 @@ app.listen(3000, 'localhost', listen => {
   console.log(`API v${buildNumber} listening on port 3000`)
 })
 
+/************ Cloud Firestore Triggers ******************************************************
+ Functions called in response to changes in Cloud Firestore database
+ ************************************************************************************/
+exports.syncCommentsCount = functions.firestore
+  .document('discussions/{discussionId}/comments/{commentId}')
+  .onWrite((change, context) => {
+    // ref to the parent document
+    const discussionId = context.params.discussionId
+    const docRef = admin.firestore().collection('discussions').doc(discussionId)
+
+    // get all comments and aggregate
+    return docRef.collection('comments').get().then(querySnapshot => {
+      return docRef.update({_commentCount: querySnapshot.size})
+    }).catch(err => console.log(err))
+  })
+
 /************ Cron tasks ***********************************************************
 Use pubsub to automatically subscribe to messages sent from cron.
 Add/change schedule from `./functions-cron/appengine/cron.yaml`

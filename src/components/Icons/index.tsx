@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import styled from 'styled-components'
 import { verticalAlign, VerticalAlignProps } from 'styled-system'
 
@@ -21,6 +21,16 @@ interface IProps {
   size?: number | string
 }
 
+interface IGlyphs {
+  "download": JSX.Element
+  "upload": JSX.Element
+  "add": JSX.Element
+  "check": JSX.Element
+  "arrow-back": JSX.Element
+  "arrow-down": JSX.Element
+
+}
+
 type WrapperProps = IProps & VerticalAlignProps
 
 export const IconWrapper = styled<WrapperProps, 'div'>('div')`
@@ -35,26 +45,20 @@ export const IconWrapper = styled<WrapperProps, 'div'>('div')`
   ${verticalAlign}
 `
 
-export const Glyph = ({ glyph }: IGlyphProps) => {
-  switch (glyph) {
-    case 'download':
-      return <MdFileDownload />
-    case 'upload':
-      return <MdFileUpload />
-    case 'add':
-      return <MdAdd />
-    case 'check':
-      return <MdCheck />
-    case 'arrow-back':
-      return <MdArrowBack />
-    case 'arrow-down':
-      return <MdKeyboardArrowDown />
-    default:
-      return null
-  }
+export const glyphs: IGlyphs = {
+  "download": <MdFileDownload />,
+  "upload": <MdFileUpload />,
+  "add": <MdAdd />,
+  "check": <MdCheck />,
+  "arrow-back": <MdArrowBack />,
+  "arrow-down": <MdKeyboardArrowDown />
 }
 
-export default class Icon extends React.Component<WrapperProps> {
+const Glyph = ({ glyph = '' }: IGlyphProps) => {
+  return glyphs[glyph] || null;
+}
+
+class Icon extends Component<WrapperProps> {
   constructor(props: WrapperProps) {
     super(props)
   }
@@ -72,3 +76,4 @@ export default class Icon extends React.Component<WrapperProps> {
     )
   }
 }
+export default Icon;

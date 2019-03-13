@@ -41,21 +41,28 @@ export class UserStore {
   public async userSignedIn(user: IFirebaseUser | null) {
     console.log('user signed in, getting meta', user)
     let userMeta: IUser | null = null
-    if (user && user.email) {
-      userMeta = await this.getUserProfile(user.email)
-    }
-    if (userMeta) {
-      console.log('user meta retrieved', userMeta)
+    if (user && user.uid) {
+      userMeta = await this.getUserProfile(user.uid)
+      if (userMeta) {
+        console.log('user meta retrieved', userMeta)
+        userMeta.email = user.email as string;
+      } else {
+        console.log('no user meta retrieved. creating empty user doc')
+        userMeta = await this._createUserProfile({
+          display_name: '',
+          first_name: '',
+          last_name: '',
+          nickname: '',
+          country: '',
+        } as IUserFormInput);
+      }
       this.updateUser(userMeta)
-    } else {
-      console.log('no user meta retrieved')
-      // *** TODO handle user has no profile - shouldn't happen as registration populates before creating user?
       // *** TODO should also handle timeout/no connection potential issue when fetching?
     }
   }
 
-  public async getUserProfile(userEmail: string) {
-    const ref = await afs.doc(`users/${userEmail}`).get()
+  public async getUserProfile(uid: string) {
+    const ref = await afs.doc(`users/${uid}`).get()
     const user: IUser = ref.data() as IUser
     return user
   }
@@ -63,21 +70,23 @@ export class UserStore {
   public async updateUserProfile(user: IUser, values: IUserFormInput) {
     user.display_name = values.display_name;
     user.country = values.country;
-    await Database.setDoc(`users/${user.email}`, user)
+    await Database.setDoc(`users/${user._id}`, user)
   }
 
   private async _createUserProfile(values: IUserFormInput) {
+    let authUser = auth.currentUser as firebase.User;
     const user: IUser = {
       ...Database.generateDocMeta('users'),
+      _id: authUser.uid,
       verified: false,
-      email: values.email,
       display_name: values.display_name,
       first_name: values.first_name,
       last_name: values.last_name,
       nickname: values.nickname,
       country: values.country,
     }
-    await Database.setDoc(`users/${user.email}`, user)
+    await Database.setDoc(`users/${user._id}`, user)
+    return user
   }
 
   @action

@@ -132,6 +132,7 @@ interface getAnalyticsData {
   viewId: string
   token: string
 }
+exports.syncCommentsCount = () => null
 
 // add export so can be used by test
 export default app

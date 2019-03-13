@@ -1,12 +1,7 @@
-import * as React from 'react'
 import styled from 'styled-components'
 import Paper from '@material-ui/core/Paper'
 import Avatar from '@material-ui/core/Avatar'
-import RouterLink from 'react-router-dom/Link'
-import { Link as RebassLink } from 'rebass'
 import { theme } from 'src/themes/app.theme'
-
-export const Link = props => <RebassLink {...props} as={RouterLink} />
 
 export const ModalPaper = styled(Paper)`
   margin-top: ${theme.spacing.unit * 8}px;

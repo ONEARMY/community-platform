@@ -5,7 +5,7 @@ import {
   IPostFormInput,
 } from 'src/models/discussions.models'
 import { Database } from '../database'
-import helpers from 'src/utils/helpers'
+import { stripSpecialCharacters } from 'src/utils/helpers'
 import { ModuleStore } from '../common/module.store'
 import { Subscription } from 'rxjs'
 
@@ -84,7 +84,7 @@ export class DiscussionsStore extends ModuleStore {
       _viewCount: 0,
       content: values.content,
       isClosed: false,
-      slug: helpers.stripSpecialCharacters(values.title),
+      slug: stripSpecialCharacters(values.title),
       tags: values.tags,
       title: values.title,
       type: 'discussionQuestion',

@@ -132,7 +132,9 @@ interface getAnalyticsData {
   viewId: string
   token: string
 }
-exports.syncCommentsCount = () => null
+exports.syncCommentsCount = functions.https.onCall(async () => {
+  console.log('sync comments count called')
+})
 
 // add export so can be used by test
 export default app

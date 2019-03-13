@@ -9,7 +9,6 @@ import { IStores } from 'src/stores'
 import { DiscussionsStore } from 'src/stores/Discussions/discussions.store'
 import { computed } from 'mobx'
 import { PostList2 } from './List'
-import { console } from '@ephox/dom-globals'
 
 interface IProps {
   discussionsStore: DiscussionsStore

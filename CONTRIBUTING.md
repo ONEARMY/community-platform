@@ -12,6 +12,10 @@
 
 Note: If you can’t find anything in our todo list that you can help with, it’s probably because we haven’t defined it yet. There’s lots of stuff to do, so if you think you can help out, let us know and we’ll find you something.
 
+## 👐 &nbsp; Code of Conduct
+
+This project and everyone participating in it is governed by the [One Army Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [hello@onearmy.world](mailto:hello@onearmy.world).
+
 ## 📟 &nbsp; Getting started
 
 - Fork the repository
@@ -23,6 +27,9 @@ Note: If you can’t find anything in our todo list that you can help with, it�
 
 - Run the dev server
   `yarn start`
+
+- Run Storybook
+  `yarn storybook`
 
 Note: Builds are currently tested on Chrome/Firefox. If your browser is not
 supported, then consider contributing :-)

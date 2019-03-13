@@ -26,15 +26,17 @@ export class UserStore {
   }
   constructor() {
     console.log('listening for auth state chagnes')
-    this.authListener = action(auth.onAuthStateChanged(authUser => {
-      console.log('auth user changed', authUser)
-      this.authUser = authUser
-      if (authUser && authUser.emailVerified) {
-        this.userSignedIn(authUser)
-      } else {
-        this.updateUser()
-      }
-    }))
+    this.authListener = action(
+      auth.onAuthStateChanged(authUser => {
+        console.log('auth user changed', authUser)
+        this.authUser = authUser
+        if (authUser && authUser.emailVerified) {
+          this.userSignedIn(authUser)
+        } else {
+          this.updateUser()
+        }
+      }),
+    )
   }
 
   // handle user sign in, when firebase authenticates wnat to also fetch user document from the database
@@ -45,7 +47,7 @@ export class UserStore {
       userMeta = await this.getUserProfile(user.uid)
       if (userMeta) {
         console.log('user meta retrieved', userMeta)
-        userMeta.email = user.email as string;
+        userMeta.email = user.email as string
       } else {
         console.log('no user meta retrieved. creating empty user doc')
         userMeta = await this._createUserProfile({
@@ -54,7 +56,7 @@ export class UserStore {
           last_name: '',
           nickname: '',
           country: '',
-        } as IUserFormInput);
+        } as IUserFormInput)
       }
       this.updateUser(userMeta)
       // *** TODO should also handle timeout/no connection potential issue when fetching?
@@ -68,13 +70,13 @@ export class UserStore {
   }
 
   public async updateUserProfile(user: IUser, values: IUserFormInput) {
-    user.display_name = values.display_name;
-    user.country = values.country;
+    user.display_name = values.display_name
+    user.country = values.country
     await Database.setDoc(`users/${user._id}`, user)
   }
 
   private async _createUserProfile(values: IUserFormInput) {
-    let authUser = auth.currentUser as firebase.User;
+    let authUser = auth.currentUser as firebase.User
     const user: IUser = {
       ...Database.generateDocMeta('users'),
       _id: authUser.uid,
@@ -92,25 +94,29 @@ export class UserStore {
   @action
   public async signUpUser(userForm: IUserFormInput) {
     try {
-      await auth.createUserWithEmailAndPassword(userForm.email, String(userForm.password))
+      await auth.createUserWithEmailAndPassword(
+        userForm.email,
+        String(userForm.password),
+      )
       await this._createUserProfile(userForm)
       await this.sendEmailVerification()
-    } catch(error) {
+    } catch (error) {
       console.log(error)
-      var { code, message } = error;
+      const { code, message } = error
       if (code === 'auth/weak-password') {
-        throw 'The password is too weak.';
-      }
-      else if (code === 'auth/email-already-in-use') {
-        throw 'The email address is already in use by another account.';
+        throw new Error('The password is too weak.')
+      } else if (code === 'auth/email-already-in-use') {
+        throw new Error(
+          'The email address is already in use by another account.',
+        )
       } else {
-        throw message;
+        throw message
       }
     }
   }
 
   public async sendEmailVerification() {
-    this.authUser && await this.authUser.sendEmailVerification()
+    this.authUser && (await this.authUser.sendEmailVerification())
   }
 
   public async sendPasswordResetEmail(email) {

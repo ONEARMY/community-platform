@@ -51,7 +51,7 @@ export class ActionPage extends React.Component<any, IState> {
 
   public componentDidMount() {
     const values = queryString.parse(this.props.location.search)
-    let actionCode = values.oobCode
+    let actionCode = values.oobCode as string
     if (values.mode === 'verifyEmail') {
       this.handleVerifyEmail(auth, actionCode)
       this.setState({ verifyEmail: true })

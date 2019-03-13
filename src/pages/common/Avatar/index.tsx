@@ -1,6 +1,7 @@
 import React from 'react'
 import { Image, ImageProps } from 'rebass'
 import Icon from 'src/components/Icons'
+import { isEmail } from 'src/utils/helpers'
 
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
@@ -21,7 +22,7 @@ type AvatarProps = ImageProps & IProps
 
 @inject('userStore')
 @observer
-export class Avatar extends React.PureComponent<AvatarProps, IState> {
+export class Avatar extends React.Component<AvatarProps, IState> {
   constructor(props: any) {
     super(props)
     this.state = {
@@ -38,8 +39,10 @@ export class Avatar extends React.PureComponent<AvatarProps, IState> {
 
   public getUserAvatar = async (email: string) => {
     try {
-      const user = await this.props.userStore.getUserProfile(email)
-      this.setState({ avatarUrl: user.avatar })
+      if (isEmail(email)) {
+        const user = await this.props.userStore.getUserProfile(email)
+        this.setState({ avatarUrl: user.avatar })
+      }
     } catch (error) {
       console.log('err', error)
       throw new Error(JSON.stringify(error))

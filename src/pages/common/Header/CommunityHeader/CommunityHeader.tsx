@@ -8,9 +8,7 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import IconButton from '@material-ui/core/IconButton'
-import MailOutlinedIcon from '@material-ui/icons/MailOutlined'
-import { MdNotifications } from 'react-icons/md'
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
+import Icon from 'src/components/Icons'
 import { LoginComponent } from '../../Login/Login'
 import {
   Content,
@@ -82,7 +80,7 @@ export class CommunityHeader extends React.Component<IProps, IState> {
           src="http://i.pravatar.cc/200"
           className="header__avatar"
         />
-        <KeyboardArrowDownIcon />
+        <Icon glyph={'arrow-down'} />
       </Profile>
     )
   }
@@ -141,10 +139,10 @@ export class CommunityHeader extends React.Component<IProps, IState> {
           </Links>
           <div>
             <IconButton component="span">
-              <MailOutlinedIcon />
+              <Icon glyph={'mail-outline'} />
             </IconButton>
             <IconButton component="span">
-              <MdNotifications />
+              <Icon glyph={'notifications'} />
             </IconButton>
           </div>
           {this.props.userStore.user ? (
@@ -155,7 +153,7 @@ export class CommunityHeader extends React.Component<IProps, IState> {
                   src="http://i.pravatar.cc/200"
                   className="header__avatar"
                 />
-                <KeyboardArrowDownIcon />
+                <Icon glyph={'arrow-down'} />
               </Profile>
               <Menu
                 open={profileMenuAnchor ? true : false}

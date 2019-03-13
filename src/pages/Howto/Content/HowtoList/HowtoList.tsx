@@ -9,9 +9,7 @@ import Typography from '@material-ui/core/Typography'
 import Card from '@material-ui/core/Card'
 import IconButton from '@material-ui/core/IconButton'
 import LinearProgress from '@material-ui/core/LinearProgress'
-import MoreVertIcon from '@material-ui/icons/MoreVert'
-import CommentIcon from '@material-ui/icons/Comment'
-import TurnedInIcon from '@material-ui/icons/TurnedIn'
+import Icon from 'src/components/Icons'
 import { theme } from '../../../../themes/app.theme'
 
 import { Button } from 'src/components/Button'
@@ -119,16 +117,16 @@ export class HowtoList extends React.Component<IProps, any> {
                               <Typography style={{ marginRight: '5px' }}>
                                 {Math.trunc(Math.random() * (60 - 4) + 4) + ' '}
                               </Typography>
-                              <TurnedInIcon />
+                              <Icon glyph={'turned-in'} />
                             </IconButton>
                             <IconButton>
                               <Typography style={{ marginRight: '5px' }}>
                                 {Math.trunc(Math.random() * (60 - 4) + 4) + ' '}
                               </Typography>
-                              <CommentIcon />
+                              <Icon glyph={'comment'} />
                             </IconButton>
                             <IconButton>
-                              <MoreVertIcon />
+                              <Icon glyph={'more-vert'} />
                             </IconButton>
                           </div>
                         </CardActions>

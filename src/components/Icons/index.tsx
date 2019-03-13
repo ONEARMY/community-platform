@@ -9,6 +9,15 @@ import {
   MdCheck,
   MdArrowBack,
   MdKeyboardArrowDown,
+  MdMailOutline,
+  MdNotifications,
+  MdAccountCircle,
+  MdLock,
+  MdClose,
+  MdDelete,
+  MdMoreVert,
+  MdComment,
+  MdTurnedIn,
 } from 'react-icons/md'
 import { IconContext } from 'react-icons'
 
@@ -49,6 +58,24 @@ export const Glyph = ({ glyph }: IGlyphProps) => {
       return <MdArrowBack />
     case 'arrow-down':
       return <MdKeyboardArrowDown />
+    case 'mail-outline':
+      return <MdMailOutline />
+    case 'notifications':
+      return <MdNotifications />
+    case 'account-circle':
+      return <MdAccountCircle />
+    case 'lock':
+      return <MdLock />
+    case 'close':
+      return <MdClose />
+    case 'delete':
+      return <MdDelete />
+    case 'more-vert':
+      return <MdMoreVert />
+    case 'comment':
+      return <MdComment />
+    case 'turned-in':
+      return <MdTurnedIn />
     default:
       return null
   }

@@ -3,8 +3,7 @@ import { IFirebaseUploadInfo } from '../FirebaseFileUploader/FirebaseFileUploade
 import { storage } from 'src/utils/firebase'
 import './UploadedFile.scss'
 import Button from '@material-ui/core/Button'
-import CloseIcon from '@material-ui/icons/Close'
-import DeleteIcon from '@material-ui/icons/Delete'
+import Icon from 'src/components/Icons'
 
 /*************************************************************************
  * Component to display a file that has been uploaded to firebase storage,
@@ -65,7 +64,7 @@ export class UploadedFile extends React.Component<IUploadedFileProps, IState> {
                   this.delete()
                 }}
               >
-                <CloseIcon />
+                <Icon glyph={'close'} />
               </Button>
             ) : null}
           </div>
@@ -85,7 +84,7 @@ export class UploadedFile extends React.Component<IUploadedFileProps, IState> {
                   this.delete()
                 }}
               >
-                <DeleteIcon />
+                <Icon glyph={'delete'} />
               </Button>
             ) : null}
           </div>

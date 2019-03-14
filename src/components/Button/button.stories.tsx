@@ -10,7 +10,7 @@ import { wInfo } from '../../../.storybook/wInfo';
 
 
 
-const stories = storiesOf('Buttons', module);
+const stories = storiesOf('UI/Buttons', module);
 
 stories.addDecorator(withKnobs)
 
@@ -18,4 +18,4 @@ stories.addDecorator(withKnobs)
 stories.add('Default button', wInfo()(() => <Button disabled={boolean('Disabled', false)} onClick={action('onClick')}>{text('Label', 'Edit me')}</Button>))
 stories.add('Primary button with Icon', wInfo()(() => <Button icon={'add'} disabled={boolean('Disabled', false)} onClick={action('onClick')}>{text('Label', 'Edit me')}</Button>))
 stories.add('Outline button', wInfo()(() => <Button variant={'outline'} disabled={boolean('Disabled', false)} onClick={action('onClick')}>{text('Label', 'Edit me')}</Button>))
-stories.add('Outline button with Icon', wInfo()(() => <Button variant={'outline'} icon={'add'} disabled={boolean('Disabled', false)}onClick={action('onClick')}>{text('Label', 'Edit me')}</Button>))
+stories.add('Outline button with Icon', wInfo()(() => <Button variant={'outline'} icon={'add'} disabled={boolean('Disabled', false)} onClick={action('onClick')}>{text('Label', 'Edit me')}</Button>))

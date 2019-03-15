@@ -3,7 +3,7 @@
     "*.{ts,tsx}": [
       "tslint --project tsconfig.json --config tslint.json"
     ],
-    "*.+(js|jsx)": [
+    "*.{js,jsx}": [
       "eslint"
     ],
     "*.+(js|jsx|json|yml|yaml|css|less|scss|ts|tsx|md|graphql|mdx)": [

@@ -24,7 +24,7 @@ type BtnProps = IBtnProps &
   disabledProp
 
 export const Button = (props: BtnProps) => (
-  <StyledButton {...props} px={3}>
+  <StyledButton px={3} className={'button'} variant={'primary'} {...props}>
     {props.icon && <Icon glyph={props.icon} />}
     <Label>{props.children}</Label>
   </StyledButton>

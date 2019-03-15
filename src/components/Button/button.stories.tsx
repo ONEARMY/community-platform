@@ -11,7 +11,7 @@ import { wInfo } from '../../../.storybook/wInfo'
 const stories = storiesOf('UI/Buttons', module)
 
 stories.addDecorator(withKnobs)
-
+let preferConst = true
 stories.add(
   'Default button',
   wInfo()(() => (

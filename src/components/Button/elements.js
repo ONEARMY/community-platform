@@ -15,7 +15,6 @@ const baseStyles = css`
   justify-content: center;
   font-weight: 600;
   white-space: nowrap;
-  width: fit-content;
   word-break: keep-all;
   cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
 `

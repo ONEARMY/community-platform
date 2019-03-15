@@ -1,12 +1,11 @@
-import { withInfo } from '@storybook/addon-info';
+import { withInfo } from '@storybook/addon-info'
 
-const wInfoStyle = {};
+const wInfoStyle = {}
 
-export const wInfo = (text?: string) => (
+export const wInfo = (text?: string) =>
   withInfo({
     inline: true,
     source: true,
     styles: wInfoStyle,
     text,
   })
-);

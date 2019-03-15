@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import styled from 'styled-components'
 import { verticalAlign, VerticalAlignProps } from 'styled-system'
 
@@ -30,6 +30,24 @@ interface IProps {
   size?: number | string
 }
 
+interface IGlyphs {
+  download: JSX.Element
+  upload: JSX.Element
+  add: JSX.Element
+  check: JSX.Element
+  'arrow-back': JSX.Element
+  'arrow-down': JSX.Element
+  'mail-outline': JSX.Element
+  notifications: JSX.Element
+  'account-circle': JSX.Element
+  lock: JSX.Element
+  close: JSX.Element
+  delete: JSX.Element
+  'more-vert': JSX.Element
+  comment: JSX.Element
+  'turned-in': JSX.Element
+}
+
 type WrapperProps = IProps & VerticalAlignProps
 
 export const IconWrapper = styled<WrapperProps, 'div'>('div')`
@@ -44,44 +62,29 @@ export const IconWrapper = styled<WrapperProps, 'div'>('div')`
   ${verticalAlign}
 `
 
-export const Glyph = ({ glyph }: IGlyphProps) => {
-  switch (glyph) {
-    case 'download':
-      return <MdFileDownload />
-    case 'upload':
-      return <MdFileUpload />
-    case 'add':
-      return <MdAdd />
-    case 'check':
-      return <MdCheck />
-    case 'arrow-back':
-      return <MdArrowBack />
-    case 'arrow-down':
-      return <MdKeyboardArrowDown />
-    case 'mail-outline':
-      return <MdMailOutline />
-    case 'notifications':
-      return <MdNotifications />
-    case 'account-circle':
-      return <MdAccountCircle />
-    case 'lock':
-      return <MdLock />
-    case 'close':
-      return <MdClose />
-    case 'delete':
-      return <MdDelete />
-    case 'more-vert':
-      return <MdMoreVert />
-    case 'comment':
-      return <MdComment />
-    case 'turned-in':
-      return <MdTurnedIn />
-    default:
-      return null
-  }
+export const glyphs: IGlyphs = {
+  download: <MdFileDownload />,
+  upload: <MdFileUpload />,
+  add: <MdAdd />,
+  check: <MdCheck />,
+  'arrow-back': <MdArrowBack />,
+  'arrow-down': <MdKeyboardArrowDown />,
+  'mail-outline': <MdMailOutline />,
+  notifications: <MdNotifications />,
+  'account-circle': <MdAccountCircle />,
+  lock: <MdLock />,
+  close: <MdClose />,
+  delete: <MdDelete />,
+  'more-vert': <MdMoreVert />,
+  comment: <MdComment />,
+  'turned-in': <MdTurnedIn />,
 }
 
-export default class Icon extends React.Component<WrapperProps> {
+const Glyph = ({ glyph = '' }: IGlyphProps) => {
+  return glyphs[glyph] || null
+}
+
+class Icon extends Component<WrapperProps> {
   constructor(props: WrapperProps) {
     super(props)
   }
@@ -99,3 +102,4 @@ export default class Icon extends React.Component<WrapperProps> {
     )
   }
 }
+export default Icon

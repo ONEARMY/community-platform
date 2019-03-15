@@ -15,7 +15,7 @@ stories.addDecorator(withKnobs)
 stories.add(
   'Default button',
   wInfo()(() => (
-    <Button disabled={12} onClick={action('onClick')}>
+    <Button disabled={boolean('Disabled', false)} onClick={action('onClick')}>
       {text('Label', 'Edit me')}
     </Button>
   )),

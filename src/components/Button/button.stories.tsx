@@ -8,14 +8,14 @@ import { Button } from './'
 
 import { wInfo } from '../../../.storybook/wInfo'
 
-const stories = storiesOf('Buttons', module)
+const stories = storiesOf('UI/Buttons', module)
 
 stories.addDecorator(withKnobs)
 
 stories.add(
   'Default button',
   wInfo()(() => (
-    <Button disabled={11} onClick={action('onClick')}>
+    <Button disabled={10} onClick={action('onClick')}>
       {text('Label', 'Edit me')}
     </Button>
   )),

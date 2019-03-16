@@ -26,6 +26,12 @@ export const StyledButton = styled(BaseButton)`
   ${baseStyles}
 `
 
+StyledButton.defaultProps = {
+  as: 'button',
+  className: 'button',
+  variant: 'primary',
+}
+
 export const Label = styled.span`
   display: block;
   flex: 0 0 auto;

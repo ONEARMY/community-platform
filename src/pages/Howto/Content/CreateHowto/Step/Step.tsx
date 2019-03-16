@@ -144,7 +144,6 @@ class Step extends Component<IProps, IState> {
           </DialogText>
           <DialogButtons>
             <CancelButton
-              border
               onClick={() => {
                 this.handleModaleDeleteStepClose()
               }}

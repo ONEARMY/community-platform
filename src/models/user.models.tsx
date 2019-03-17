@@ -1,5 +1,6 @@
 import { IProject } from './project.models'
 import { IDbDoc } from './common.models'
+import { IFirebaseUploadInfo } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
 
 export class User {
   constructor() {
@@ -23,6 +24,7 @@ export interface IUserFormInput {
   last_name?: string
   nickname?: string
   country?: string
+  avatar?: string | IFirebaseUploadInfo
 }
 
 // IUser retains most of the fields from legacy users (omitting passwords),
@@ -38,6 +40,7 @@ export interface IUser extends IDbDoc {
   last_name?: string
   nickname?: string
   country?: string
+  avatar?: string
 }
 
 export interface ILegacyUser {

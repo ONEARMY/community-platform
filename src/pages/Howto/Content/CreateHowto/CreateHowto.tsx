@@ -27,6 +27,8 @@ import {
 } from './elements'
 import { Button } from 'src/components/Button'
 import Link from 'react-router-dom/Link'
+import { Database } from 'src/stores/database'
+import { FieldState } from 'final-form'
 
 export interface IState {
   formValues: IHowtoFormInput
@@ -45,6 +47,14 @@ const isNumber = (value: any) => {
     return 'Number is required'
   }
   return
+}
+
+const uniqueSlug = async (slug: string) => {
+  try {
+    await Database.checkSlugUnique('documentation', slug)
+  } catch (e) {
+    return 'How-to titles must be unique, please try being more specific'
+  }
 }
 
 export class CreateHowto extends React.PureComponent<
@@ -159,7 +169,19 @@ export class CreateHowto extends React.PureComponent<
                       />
                       <Field
                         name="tutorial_title"
-                        validate={required}
+                        validate={(value: any, _, meta?: FieldState) => {
+                          console.log(value)
+                          if (meta && (!meta.dirty && meta.valid)) {
+                            return undefined
+                          }
+                          if (value) {
+                            const error = uniqueSlug(
+                              helpers.stripSpecialCharacters(value),
+                            )
+                            return error
+                          }
+                          return undefined
+                        }}
                         component={InputField}
                         label="What is the title of your How-To ?"
                         placeholder="How to make XXX using YYY"

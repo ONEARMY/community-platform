@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { IUser } from 'src/models/user.models'
 import { Label } from 'src/components/Form/Fields'
-import { Avatar } from 'src/pages/common/Avatar'
+import { Avatar } from 'src/components/Avatar'
 import { FlexContainer } from 'src/components/Layout/FlexContainer'
 
 interface IProps {

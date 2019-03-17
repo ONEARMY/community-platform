@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { postViewReactGA, durationSincePosted } from '../common/'
-import { Avatar } from 'src/pages/common/Avatar'
+import { Avatar } from 'src/components/Avatar'
 import {
   InteractionNb,
   Title,

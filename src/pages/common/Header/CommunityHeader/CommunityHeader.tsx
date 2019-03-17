@@ -10,7 +10,7 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import IconButton from '@material-ui/core/IconButton'
 import Icon from 'src/components/Icons'
 import { LoginComponent } from '../../Login/Login'
-import { Avatar } from 'src/pages/common/Avatar'
+import { Avatar } from 'src/components/Avatar'
 import {
   Content,
   LogoText,

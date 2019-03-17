@@ -13,7 +13,7 @@ import {
   DiscussIcon,
   QaIcon,
 } from './elements'
-import { Avatar } from 'src/pages/common/Avatar'
+import { Avatar } from 'src/components/Avatar'
 import { IDiscussionPost } from 'src/models/discussions.models'
 import { Link } from 'react-router-dom'
 

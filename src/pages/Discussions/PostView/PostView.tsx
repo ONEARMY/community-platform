@@ -10,7 +10,7 @@ import { Button } from 'src/components/Button/'
 import { PostResponse } from '../PostResponse/PostResponse'
 import PageContainer from 'src/components/Layout/PageContainer'
 import { BoxContainer } from 'src/components/Layout/BoxContainer'
-import { Avatar } from 'src/pages/common/Avatar'
+import { Avatar } from 'src/components/Avatar'
 import Heading from 'src/components/Heading'
 
 interface IProps extends RouteComponentProps {

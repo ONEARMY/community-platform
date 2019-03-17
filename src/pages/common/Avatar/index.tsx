@@ -1,8 +1,6 @@
 import React from 'react'
 import { Image, ImageProps } from 'rebass'
 import Icon from 'src/components/Icons'
-import { isEmail } from 'src/utils/helpers'
-
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 
@@ -11,7 +9,8 @@ interface IInjectedProps extends IProps {
 }
 
 interface IProps {
-  userEmail?: string
+  userId?: string
+  width?: string
 }
 
 interface IState {
@@ -34,13 +33,13 @@ export class Avatar extends React.Component<AvatarProps, IState> {
   }
 
   componentWillMount() {
-    this.getUserAvatar(this.props.userEmail)
+    this.getUserAvatar(this.props.userId)
   }
 
-  public getUserAvatar = async (email: string) => {
+  public getUserAvatar = async (userId: string) => {
     try {
-      if (isEmail(email)) {
-        const user = await this.props.userStore.getUserProfile(email)
+      if (userId !== 'anonymous') {
+        const user = await this.props.userStore.getUserProfile(userId)
         this.setState({ avatarUrl: user.avatar })
       }
     } catch (error) {
@@ -55,7 +54,7 @@ export class Avatar extends React.Component<AvatarProps, IState> {
         {avatarUrl ? (
           <Image
             className="avatar"
-            width={50}
+            width={this.props.width ? this.props.width : 50}
             borderRadius={4}
             src={avatarUrl}
           />

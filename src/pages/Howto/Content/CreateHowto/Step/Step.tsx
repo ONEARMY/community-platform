@@ -140,7 +140,7 @@ class Step extends Component<IProps, IState> {
           aria-describedby="alert-dialog-description"
         >
           <DialogText id="alert-dialog-title">
-            {'Are you sure to delete this step ?'}
+            {'Are you sure you want to delete this step ?'}
           </DialogText>
           <DialogButtons>
             <CancelButton

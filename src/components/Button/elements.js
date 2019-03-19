@@ -1,6 +1,4 @@
-import React from 'react'
 import styled, { css } from 'styled-components'
-import { variant, color, space, width } from 'styled-system'
 import { Button as RebassButton } from 'rebass'
 
 const baseStyles = css`
@@ -19,9 +17,6 @@ const baseStyles = css`
   word-break: keep-all;
   cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
 `
-const colorsVariant = variant({
-  key: 'buttons',
-})
 
 export const BaseButton = styled(RebassButton)`
   ${baseStyles}

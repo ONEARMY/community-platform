@@ -1,6 +1,7 @@
+import React from 'react'
 import styled, { css } from 'styled-components'
 import { variant, color, space, width } from 'styled-system'
-import { Button as BaseButton } from 'rebass'
+import { Button as RebassButton } from 'rebass'
 
 const baseStyles = css`
   text-transform: uppercase;
@@ -22,15 +23,9 @@ const colorsVariant = variant({
   key: 'buttons',
 })
 
-export const StyledButton = styled(BaseButton)`
+export const BaseButton = styled(RebassButton)`
   ${baseStyles}
 `
-
-StyledButton.defaultProps = {
-  as: 'button',
-  className: 'button',
-  variant: 'primary',
-}
 
 export const Label = styled.span`
   display: block;

@@ -7,11 +7,20 @@ import {
   WidthProps,
   ButtonStyleProps,
 } from 'styled-system'
-import { StyledButton, Label } from './elements'
+import { BaseButton, Label } from './elements'
 
 // extend to allow any default button props (e.g. onClick) to also be passed
 export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
   icon?: string
+}
+
+const StyledButton = ({ children, ...props }) => (
+  <BaseButton {...props}>{children}</BaseButton>
+)
+
+StyledButton.defaultProps = {
+  className: 'button',
+  variant: 'primary',
 }
 
 type disabledProp = { boolean? : false };

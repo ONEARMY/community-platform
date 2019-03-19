@@ -12,6 +12,7 @@ import { BaseButton, Label } from './elements'
 // extend to allow any default button props (e.g. onClick) to also be passed
 export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
   icon?: string
+  disabled?: boolean
 }
 
 const StyledButton = ({ children, ...props }) => (
@@ -24,8 +25,7 @@ type BtnProps = IBtnProps &
   SpaceProps &
   WidthProps &
   ButtonStyleProps &
-  ColorProps &
-  disabledProp
+  ColorProps
 
 export const Button = (props: BtnProps) => (
   <StyledButton px={3} {...props}>

@@ -7,6 +7,6 @@ export const wInfo = (text?: string) => (
     inline: true,
     source: true,
     styles: wInfoStyle,
-    text,
+    text
   })
 );

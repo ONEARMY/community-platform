@@ -14,6 +14,10 @@ export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
   icon?: string
 }
 
+interface IDisabledProp {
+  boolean?: false
+}
+
 const StyledButton = ({ children, ...props }) => (
   <BaseButton {...props}>{children}</BaseButton>
 )
@@ -23,14 +27,12 @@ StyledButton.defaultProps = {
   variant: 'primary',
 }
 
-type disabledProp = { boolean? : false };
-
 type BtnProps = IBtnProps &
   SpaceProps &
   WidthProps &
   ButtonStyleProps &
   ColorProps &
-  disabledProp
+  IDisabledProp
 
 export const Button = (props: BtnProps) => (
   <StyledButton px={3} {...props}>

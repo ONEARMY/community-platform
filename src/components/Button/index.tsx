@@ -28,8 +28,13 @@ type BtnProps = IBtnProps &
   disabledProp
 
 export const Button = (props: BtnProps) => (
-  <StyledButton variant="primary" className="button" px={3} {...props}>
+  <StyledButton px={3} {...props}>
     {props.icon && <Icon glyph={props.icon} />}
     <Label>{props.children}</Label>
   </StyledButton>
 )
+
+Button.defaultProps = {
+  className: 'button',
+  variant: 'primary',
+}

@@ -8,12 +8,12 @@ We are building a new platform to help unite people and contribute to social & e
 
 ## 👀 &nbsp; Why One Army
 
-For the past 5+ years we’ve worked on open hardware projects to tackle some of the most pressing environmental issues. Together with thousands of people from all around the world, both online and offline. Building machines and tools to fix the mess. The more we worked on this projects the more we realise there are two main hurdles to the success of a project.
+For the past 5+ years we’ve worked together with thousands of people from all over the world on open hardware projects to tackle some of the most pressing environmental issues, building machines and tools to fix the mess. The more we worked on these projects, the more we realised that there are two main hurdles to the success of a project:
 
-First, a project success is closely linked to its community. And for a new project starting up finding and creating their own strong community is often a time-consuming activity that can take lots of resource.
-Second, while working on a project we often find ourselves having to use a multitude of digital tools that are often incomplete, disconnected, privately owned and not open source.
+- A project's success is closely linked to its community, and for a new project starting up, finding and creating their own strong community is often a time-consuming activity that can take lots of resources.
+- While working on a project we often find ourselves having to use a multitude of digital tools that are often incomplete, disconnected, privately owned and not open source.
 
-One Army aims to tackle the above problems by creating a strong unified community for the different projects under its umbrella and offer the necessary tools to collaborate and connect in one single place. Free and opensource.
+One Army aims to tackle these problems by creating a strong unified community for the different projects under its umbrella and offering the necessary tools to collaborate and connect in one single place. Free and opensource.
 
 ## ⚡️ &nbsp; What is One Army
 

@@ -172,7 +172,6 @@ export class CreateHowto extends React.PureComponent<
                         name="tutorial_title"
                         validateFields={[]}
                         validate={(value: any, _, meta?: FieldState) => {
-                          console.log(value)
                           if (meta && (!meta.dirty && meta.valid)) {
                             return undefined
                           }
@@ -181,6 +180,11 @@ export class CreateHowto extends React.PureComponent<
                               helpers.stripSpecialCharacters(value),
                             )
                             return error
+                          } else if (
+                            (meta && (meta.touched || meta.visited)) ||
+                            value === ''
+                          ) {
+                            return 'A title for your how-to is required'
                           }
                           return undefined
                         }}
@@ -330,7 +334,8 @@ export class CreateHowto extends React.PureComponent<
                       type="submit"
                       width={1}
                       bg="green"
-                      icon={'check'}
+                      icon="check"
+                      mx="auto"
                       disabled={submitting || invalid}
                     >
                       Save

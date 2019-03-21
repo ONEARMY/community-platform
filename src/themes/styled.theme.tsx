@@ -11,7 +11,7 @@ export const colors = {
   grey3: '#656565',
   greyTag: '#4a4a4a',
   greyBg: '#ededed',
-  error: '#f44336'
+  error: '#f44336',
 }
 
 export const buttons = {
@@ -22,7 +22,7 @@ export const buttons = {
   outline: {
     color: colors.black,
     border: '1px solid ' + colors.black,
-    backgroundColor: 'none',
+    backgroundColor: 'white',
   },
   disabled: {
     color: colors.grey,

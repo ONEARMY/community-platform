@@ -16,8 +16,8 @@ const baseStyles = css`
   justify-content: center;
   white-space: nowrap;
   word-break: keep-all;
-  /* cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')}; */
 `
+/* cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')}; */
 
 export const BaseButton = styled(RebassButton)`
   ${baseStyles}

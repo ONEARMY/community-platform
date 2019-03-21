@@ -7,7 +7,7 @@ import { TAGS_MOCK } from 'src/mocks/tags.mock'
 import { Box, Flex } from 'rebass'
 import { Button } from 'src/components/Button'
 import Selector from 'src/components/Selector'
-import Link from 'react-router-dom/Link'
+import { Link } from 'react-router-dom'
 import { FlexContainer } from 'src/components/Layout/FlexContainer'
 
 interface IProps {

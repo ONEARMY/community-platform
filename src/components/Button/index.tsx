@@ -1,14 +1,16 @@
 import React from 'react'
 import Icon from 'src/components/Icons'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import {
   Button as RebassButton,
   ButtonProps as RebassButtonProps,
 } from 'rebass'
 
+import theme from 'src/themes/styled.theme'
+
 export const BaseButton = styled(RebassButton)`
-  min-height: 50px;
-  border-radius: 5px;
+  min-height: ${props => props.theme.buttons.height};
+  border-radius: ${props => props.theme.radii[1] + 'px'};
   display: flex;
   flex: none;
   align-self: center;
@@ -46,4 +48,5 @@ export const Button = (props: BtnProps) => (
 Button.defaultProps = {
   className: 'button',
   variant: 'primary',
+  theme,
 }

@@ -15,6 +15,7 @@ export const colors = {
 }
 
 export const buttons = {
+  height: '50px',
   primary: {
     color: colors.white,
     backgroundColor: colors.blue,

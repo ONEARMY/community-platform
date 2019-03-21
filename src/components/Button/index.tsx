@@ -36,6 +36,7 @@ export const Label = styled.span`
 // extend to allow any default button props (e.g. onClick) to also be passed
 export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
   icon?: string
+  disabled?: boolean
 }
 
 interface IDisabledProp {
@@ -54,3 +55,8 @@ export const Button = (props: BtnProps) => (
     <Label>{props.children}</Label>
   </StyledButton>
 )
+
+Button.defaultProps = {
+  className: 'button',
+  variant: 'primary',
+}

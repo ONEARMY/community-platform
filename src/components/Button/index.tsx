@@ -6,7 +6,7 @@ import {
   ButtonProps as RebassButtonProps,
 } from 'rebass'
 
-const baseStyles = css`
+export const BaseButton = styled(RebassButton)`
   min-height: 50px;
   border-radius: 5px;
   display: flex;
@@ -16,13 +16,8 @@ const baseStyles = css`
   justify-content: center;
   white-space: nowrap;
   word-break: keep-all;
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
 `
-/* cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')}; */
-
-export const BaseButton = styled(RebassButton)`
-  ${baseStyles}
-`
-
 export const Label = styled.span`
   text-transform: uppercase;
   text-decoration: none;
@@ -39,21 +34,13 @@ export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
   disabled?: boolean
 }
 
-interface IDisabledProp {
-  disabled?: boolean
-}
-
-type BtnProps = IBtnProps & RebassButtonProps & IDisabledProp
-
-const StyledButton = ({ children, ...props }) => (
-  <BaseButton {...props}>{children}</BaseButton>
-)
+type BtnProps = IBtnProps & RebassButtonProps
 
 export const Button = (props: BtnProps) => (
-  <StyledButton className="button" variant="primary" px={3} {...props}>
+  <BaseButton {...props}>
     {props.icon && <Icon glyph={props.icon} />}
     <Label>{props.children}</Label>
-  </StyledButton>
+  </BaseButton>
 )
 
 Button.defaultProps = {

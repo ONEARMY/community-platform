@@ -34,7 +34,7 @@ If needed you can [drop us a line here](mailto:hello@preciousplastic.com?subject
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
-| [<img src="https://avatars0.githubusercontent.com/u/10515065?s=60&v=4" width="60px;"/><br /><sub><b>Chris Clarke</b></sub>](https://github.com/chrismclarke)<br />[💻](https://github.com/OneArmyWorld/onearmy/commits?author=chrismclarke "Code") | [<img src="https://avatars2.githubusercontent.com/u/4993215?s=60&v=4" width="60px;"/><br /><sub><b>Benjamin Gammaire</b></sub>](https://github.com/bengamma)<br />[💻](https://github.com/OneArmyWorld/onearmy/commits?author=BenGamma "Code") | [<img src="https://avatars0.githubusercontent.com/u/4350925?s=60&v=4" width="60px;"/><br /><sub><b>Ben Naylor</b></sub>](https://github.com/nzchicken)<br />[💻]|
+| [<img src="https://avatars0.githubusercontent.com/u/10515065?s=60&v=4" width="60px;"/><br /><sub><b>Chris Clarke</b></sub>](https://github.com/chrismclarke)<br />[💻](https://github.com/OneArmyWorld/onearmy/commits?author=chrismclarke "Code") | [<img src="https://avatars2.githubusercontent.com/u/4993215?s=60&v=4" width="60px;"/><br /><sub><b>Benjamin Gammaire</b></sub>](https://github.com/bengamma)<br />[💻](https://github.com/OneArmyWorld/onearmy/commits?author=BenGamma "Code") ||
 | :---: | :---: | :---: |
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->

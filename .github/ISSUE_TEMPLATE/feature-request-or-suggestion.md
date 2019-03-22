@@ -1,6 +1,6 @@
 ---
 name: Feature request or suggestion
-about: Suggest an idea to improve this project
+about: Suggest an idea for this project
 title: "[feature request]"
 labels: 'Feedback: Question'
 assignees: ''

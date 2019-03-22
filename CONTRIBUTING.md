@@ -1,16 +1,20 @@
 # Contribution Guidelines
 
-## 👊 &nbsp; How to contribute
+Thanks for behing here already ! You'll find all the informations you need to start contributing to the project. If you think something is missing, consider sendind us a PR.
 
-1. Thanks already!
-2. Pick an issue. We've labeled some of them with `Good-first-issue` to help you find the more accessible ones to start with.
-3. In the issue you chose to work on comment to let us know you’re working on it (to avoid two people doing the same thing). The comment should include a mention to @mattia-io (our project lead).
-4. Fork the project, or make a new feature branch from the master branch
-5. Do your magic, and make sure your git branch is up to date
-6. Make a pull request back to our master branch
-7. Our core team reviews contributors' pull requests on tuesday (sometimes earlier 🤫)
+## 🍽&nbsp; Summary
 
-Note: If you can’t find anything in our todo list that you can help with, it’s probably because we haven’t defined it yet. There’s lots of stuff to do, so if you think you can help out, let us know and we’ll find you something.
+- [Code of conduct](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--code-of-conduct)
+- [Getting started](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--getting-started)
+- [Issue Tracking and Management](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--issue-tracking-and-management)
+- [Project structure](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--project-structure)
+- [Technologies](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--technologies)
+  - [Frontend](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#frontend)
+  - [Backend](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#backend)
+- [Branch structure](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--branch-structure)
+- [Javascript style guide](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--javascript-style-guide)
+- [Why haven't you used ...](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#-why-havent-you-used-insert-favourite-languageframeworkconvention-here)
+- [Deployment](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--deployment)
 
 ## 👐 &nbsp; Code of Conduct
 
@@ -28,11 +32,24 @@ This project and everyone participating in it is governed by the [One Army Code 
 - Run the dev server
   `yarn start`
 
-- Run Storybook
+### Additional commands
+
+- Run the component documentation
   `yarn storybook`
 
 Note: Builds are currently tested on Chrome/Firefox. If your browser is not
-supported, then consider contributing :-)
+supported, then consider contributing.
+
+## 🐛 &nbsp; Issue Tracking and Management
+
+Issues are tracked on GitHub. Use the labels to filter them to your needs and/or competences.
+Anybody can create an issue or feature request, but be sure to use our templates if you want your voice to be eard.
+Some issues are collated to form modules which are the parent of each section of the plateform. Modules are then splitted into **pages** and finally **components**. You can navigate throught them by filtering with the labels `Type:Module` and `Type:Pages`. Having a look at **module** and **pages** issues is the best way to have a clear overview of the ongoing work on it.
+
+We've also labeled some of the issues with `Good-first-issue` to help you find the more accessible ones to start with.
+When you start working on an issue, comment it or if your are a registered contributor assign yourself to let us know and avoid working on something twice. The comment should include a mention to @mattia-io (our project lead).
+
+When a group of issues has been resolved a pull request to the master branch should be made, where it will undergo a quick review and test. It is expected that the developer will have done through testing themselves first, and most pull requests can be quickly merged.
 
 ## 🏠 &nbsp; Project Structure
 
@@ -58,22 +75,12 @@ You can find usefull links to learn more about these technologies [here](/CONTRI
 
 We have two main branches linked to production and development sites, you should always start with the **master** branch as this contains the most up-to-date code, and will be where pull requests are made to for review. The **production** branch contains the live production site, and will be merged from master after regular review periods.
 
-We use additional branches to define a specific feature or issue group being worked on. An example might be work on the home page, which would be done in the ‘19-home-page’ branch (where 19 refers to the issue number describing what needs to be done). These branches are ephemeral, and so removed after merging into the master branch and closing the issue. Generally it is expected that only 1 developer will be working on a given branch, and it is that developer’s responsibility to create the branch, create a pull requests, reviews or ask for additional support when needed.
+We use additional branches to define a specific feature or issue group being worked on. An example might be work on the home page, which would be done in the `19-home-page` branch (where 19 refers to the issue number describing what needs to be done). These branches are ephemeral, and so removed after merging into the master branch and closing the issue. Generally it is expected that only 1 developer will be working on a given branch, and it is that developer’s responsibility to create the branch, create a pull requests, reviews or ask for additional support when needed.
 
 ## 🚀 &nbsp; Deployment
 
 Master is our current development leading branch, and will autodeploy to the
 [development site](https://dev.onearmy.world/) with Travis CI.
-
-## 🐛 &nbsp; Issue Tracking and Management
-
-Issues are tracked on GitHub. Use the labels to filter them to your needs and/or competences.
-Anybody can create an issue or feature request, but be sure to use our templates if you want your voice to be eard.
-Some issues are collated to form modules which are the parent of each section of the plateform. Modules are then splitted into **pages** and finally **components**. You can navigate throught them by filtering with the labels `Type:Module` and `Type:Pages`. Having a look at **module** and **pages** issues is the best way to have a clear overview of the ongoing work on it.
-
-When you start working on an issue, comment it or if your are a registered contributor assign yourself to let us know and avoid working on something twice.
-
-When a group of issues has been resolved a pull request to the master branch should be made, where it will undergo a quick review and test. It is expected that the developer will have done through testing themselves first, and most pull requests can be quickly merged.
 
 ## 🤓 &nbsp; Javascript style guide
 

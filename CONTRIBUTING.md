@@ -58,34 +58,22 @@ You can find usefull links to learn more about these technologies [here](/CONTRI
 
 We have two main branches linked to production and development sites, you should always start with the **master** branch as this contains the most up-to-date code, and will be where pull requests are made to for review. The **production** branch contains the live production site, and will be merged from master after regular review periods.
 
-We use additional branches to define a specific feature or issue group being worked on. An example might be work on the home page, which would be done in the ‘#19 home-page’ branch (where #19 refers to the issue number describing what needs to be done). These branches are ephemeral, and so removed after merging into the master branch and closing the issue. Generally it is expected that only 1 developer will be working on a given branch, and it is that developer’s responsibility to create the branch, manage pull requests, reviews or ask for additional support when needed.
+We use additional branches to define a specific feature or issue group being worked on. An example might be work on the home page, which would be done in the ‘19-home-page’ branch (where 19 refers to the issue number describing what needs to be done). These branches are ephemeral, and so removed after merging into the master branch and closing the issue. Generally it is expected that only 1 developer will be working on a given branch, and it is that developer’s responsibility to create the branch, create a pull requests, reviews or ask for additional support when needed.
 
 ## 🚀 &nbsp; Deployment
 
 Master is our current development leading branch, and will autodeploy to the
-[development site](https://dev.onearmy.world/). When things are production
-ready, they will be pushed to the master branch which ends up on the [live
-site](https://onearmy.world/).
-
-## 💌 &nbsp; Epics and User stories
-
-As the project will get quite complex we use **Epics and User stories** to break down functionalities into smaller action items that can be worked on from our distributed team of contributors (remote and inhouse).
-More in details:
-
-- **Epics** are pages and complex pieces of functionality.
-- **User Stories** break down epics into tiny, actionable items that are easier to take on for devs both remote or on site.
-
-If you’re interested, [here](https://docs.google.com/spreadsheets/d/1pkLRKCbQiJOtQwWEhVNgSTvDWf5SnVAz10vMo4k-LNg/edit#gid=0) you can find a backlog document outlining the full list of upcoming **Epics** and relevant **User Stories** waiting to be developed. Project lead @mattia-io will transfer User Stories from here to Waffle where they're called **Issues**.
-
-Anyone can pick an **Issue** from [Waffle](https://waffle.io/OneArmyWorld/onearmy) and get on with coding. When working on an **Issue** you should comment on the issue with your name, delivery date, plus a mention to Mattia (@mattia-io). This way we can be aware of what is being worked on and when issues are due for delivery. If upon assigning yourself an **Issues** you find that you are unable to contribute to it we kindly ask you to let @mattia-io know on the same **Issues** (max 2 weeks).
+[development site](https://dev.onearmy.world/) with Travis CI.
 
 ## 🐛 &nbsp; Issue Tracking and Management
 
-Issues are tracked on GitHub and we also use [waffle](https://waffle.io) as a visual overlay to monitor progression. Some issues are collated to form **Epics** which are a more general narrative or story for what the intended development will result in for a user, and **Issues** may also have further child issues. If you are unfamiliar with ways to format or format issues, then refer to the links [here](https://github.com/OneArmyWorld/onearmy/issues/2).
+Issues are tracked on GitHub. Use the labels to filter them to your needs and/or competences.
+Anybody can create an issue or feature request, but be sure to use our templates if you want your voice to be eard.
+Some issues are collated to form modules which are the parent of each section of the plateform. Modules are then splitted into **pages** and finally **components**. You can navigate throught them by filtering with the labels `Type:Module` and `Type:Pages`. Having a look at **module** and **pages** issues is the best way to have a clear overview of the ongoing work on it.
 
-Anybody can create an issue or assign an issue to themselves (can't assign on Waffle, in this case you should comment your name), and when working on an issue it should be tagged with **in-progress** (on Waffle @mattia-io will take care of this) so that we are aware of what is being worked on. Once an issue is in progress we expect some sort of update to be made within a 1-2 week period (otherwise you should unmark, and possibly unassign if unlikely to come back to it soon).
+When you start working on an issue, comment it or if your are a registered contributor assign yourself to let us know and avoid working on something twice.
 
-When a group of issues has been resolved a pull request to the dev branch should be made, where it will undergo a quick review and test. It is expected that the developer will have done through testing themselves first, and most pull requests can be quickly merged.
+When a group of issues has been resolved a pull request to the master branch should be made, where it will undergo a quick review and test. It is expected that the developer will have done through testing themselves first, and most pull requests can be quickly merged.
 
 ## 🤓 &nbsp; Javascript style guide
 

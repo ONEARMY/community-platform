@@ -1,24 +1,41 @@
 # Contribution Guidelines
 
-Thanks for behing here already ! You'll find all the informations you need to start contributing to the project. If you think something is missing, consider sendind us a PR.
+Thanks for behing here already ! You'll find all the informations you need to start contributing to the project. Make sure to read them before submiting your contribution.
+
+If you think something is missing, consider sendind us a PR.
 
 ## 🍽&nbsp; Summary
 
 - [Code of conduct](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--code-of-conduct)
-- [Getting started](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--getting-started)
-- [Issue Tracking and Management](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--issue-tracking-and-management)
-- [Project structure](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--project-structure)
 - [Technologies](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--technologies)
   - [Frontend](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#frontend)
   - [Backend](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#backend)
+- [Getting started](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--getting-started)
+- [Issue Tracking and Management](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--issue-tracking-and-management)
+- [Project structure](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--project-structure)
 - [Branch structure](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--branch-structure)
 - [Javascript style guide](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--javascript-style-guide)
 - [Why haven't you used ...](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#-why-havent-you-used-insert-favourite-languageframeworkconvention-here)
 - [Deployment](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--deployment)
+- [Joining the team](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--joining-the-team)
+- [Resources](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--resources)
 
 ## 👐 &nbsp; Code of Conduct
 
 This project and everyone participating in it is governed by the [One Army Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [hello@onearmy.world](mailto:hello@onearmy.world).
+
+## 🤖 &nbsp; Technologies
+
+### Frontend
+
+The platform is built in **React** and [Typescript](https://www.typescriptlang.org/docs/handbook/basic-types.html) for typing and consistency, [styled-components](https://www.styled-components.com/) for reusability and component based styling.
+We created a frontend guide to explain our choices and best practice in building the One Army interface. This guide is available in [the wiki](https://github.com/OneArmyWorld/onearmy/wiki/Frontend).
+
+### Backend
+
+Our backend contains microservices in Node and is based on Firebase's Firestore to manage our database.
+
+You can find useful links to learn more about these technologies [in the resources section](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--resources).
 
 ## 📟 &nbsp; Getting started
 
@@ -53,23 +70,23 @@ When a group of issues has been resolved a pull request to the master branch sho
 
 ## 🏠 &nbsp; Project Structure
 
-The project is split across **pages** which make up the visual routing of the application. Within pages there are **components**, some of which are specific to the page and others which are shared.
+- **`scripts`** & **`config`** : contains build-related scripts and configuration files. Usually, you don't need to touch them.
 
-Typescript **models** that relate to general data flow (such as a user’s profile) are within the models folder, whilst component states and properties are declared within the component. Artificial data for use in development is held in the **mocks** folder, with live data requests handled within **api**.
+- **`functions`** : contains the backend firebase related functions.
 
-In addition app state, actions and dispatchers are handled within the **stores** folder, whilst global state property mapping is dealt in page components.
+- **`src`** : contains the source code. The codebase is written in ES2015.
 
-## 🤖 &nbsp; Technologies
+  - **`assets`** : contains assets such as icons/images.
+  - **`components`** : general stateless components that compose the app.
+  - **`mocks`** : artificial data for use in development.
+  - **`models`** : relate to general data flow (such as a user’s profile) are within the models folder, whilst component states and properties are declared within the component.
+  - **`pages`** : makes up the visual routing of the application. Each folder then correspond to a **section** or **module** of the plateform.
+    - **`common`** : contains shared stateful components between all pages.
+  - **`stores`** : In addition to app state, the store folder contains actions and dispatchers, whilst global state property mapping is dealt in page components.
+  - **`theme`** : contains theme files that defined the interface style values.
+  - **`utils`** : contains global utils functions, firebase db helper.
 
-### Frontend
-
-The platform is built in **React** and [Typescript](https://www.typescriptlang.org/docs/handbook/basic-types.html) for typing and consistency, [styled-components](https://www.styled-components.com/) for reusability and component based styling.
-We created a frontend guide to explain our choices and best practice in building the One Army interface. This guide is available in [the wiki](https://github.com/OneArmyWorld/onearmy/wiki/Frontend)
-
-### Backend
-
-Our backend contains microservices in Node and is based on Firebase's Firestore to manage our database.
-You can find usefull links to learn more about these technologies [here](/CONTRIBUTING.md#ressources)
+- **`types`** : contains TypeScript type definitions
 
 ## 🌳 &nbsp; Branch Structure
 

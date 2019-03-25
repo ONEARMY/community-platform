@@ -2,7 +2,7 @@
 
 Thanks for behing here already ! You'll find all the informations you need to start contributing to the project. Make sure to read them before submiting your contribution.
 
-If you think something is missing, consider sendind us a PR.
+If you think something is missing, consider sending us a PR.
 
 ## 🍽&nbsp; Summary
 

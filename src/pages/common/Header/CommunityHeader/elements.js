@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components'
 import Button from '@material-ui/core/Button'
-import AvatarPic from '@material-ui/core/Avatar'
 import { NavLink } from 'react-router-dom'
 
 const navButtonStyle = css`
@@ -51,11 +50,7 @@ export const LinkButton = styled(NavLink).attrs(({ name }) => ({
     ${navButtonStyle}
     &.${activeClassName} {
         text-decoration: underline;
-    }  
-`
-
-export const Avatar = styled(AvatarPic)`
-  cursor: pointer;
+    }
 `
 
 export const SectionDescription = styled.div`

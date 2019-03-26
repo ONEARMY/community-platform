@@ -10,6 +10,7 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import IconButton from '@material-ui/core/IconButton'
 import Icon from 'src/components/Icons'
 import { LoginComponent } from '../../Login/Login'
+import { Avatar } from 'src/components/Avatar'
 import {
   Content,
   LogoText,
@@ -18,7 +19,6 @@ import {
   Profile,
   ListButton,
   LinkButton,
-  Avatar,
   SectionDescription,
 } from './elements'
 import { IUser } from 'src/models/user.models'
@@ -71,18 +71,6 @@ export class CommunityHeader extends React.Component<IProps, IState> {
   }
   closeProfileMenu = () => {
     this.setState({ profileMenuAnchor: null })
-  }
-  getProfile = (user: IUser) => {
-    return (
-      <Profile onClick={this.openProfileMenu}>
-        <Avatar
-          alt={user.display_name}
-          src="http://i.pravatar.cc/200"
-          className="header__avatar"
-        />
-        <Icon glyph={'arrow-down'} />
-      </Profile>
-    )
   }
   logout() {
     this.props.userStore.logout()
@@ -148,11 +136,7 @@ export class CommunityHeader extends React.Component<IProps, IState> {
           {this.props.userStore.user ? (
             <>
               <Profile onClick={this.openProfileMenu}>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="http://i.pravatar.cc/200"
-                  className="header__avatar"
-                />
+                <Avatar userId={this.props.userStore.user._id} />
                 <Icon glyph={'arrow-down'} />
               </Profile>
               <Menu

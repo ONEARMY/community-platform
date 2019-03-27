@@ -23,5 +23,5 @@
     "no-reference": false,
     "member-ordering": false
   },
-  "defaultSeverity": "error"
+  "defaultSeverity": "warning"
 }

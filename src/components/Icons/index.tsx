@@ -31,21 +31,21 @@ interface IProps {
 }
 
 interface IGlyphs {
-  download: JSX.Element
-  upload: JSX.Element
-  add: JSX.Element
-  check: JSX.Element
-  'arrow-back': JSX.Element
-  'arrow-down': JSX.Element
-  'mail-outline': JSX.Element
-  notifications: JSX.Element
-  'account-circle': JSX.Element
-  lock: JSX.Element
-  close: JSX.Element
-  delete: JSX.Element
-  'more-vert': JSX.Element
-  comment: JSX.Element
-  'turned-in': JSX.Element
+  "download": JSX.Element
+  "upload": JSX.Element
+  "add": JSX.Element
+  "check": JSX.Element
+  "arrow-back": JSX.Element
+  "arrow-down": JSX.Element
+  "mail-outline": JSX.Element
+  "notifications": JSX.Element
+  "account-circle": JSX.Element
+  "lock": JSX.Element
+  "close": JSX.Element
+  "delete": JSX.Element
+  "more-vert": JSX.Element
+  "comment": JSX.Element
+  "turned-in": JSX.Element
 }
 
 type WrapperProps = IProps & VerticalAlignProps
@@ -63,25 +63,25 @@ export const IconWrapper = styled<WrapperProps, 'div'>('div')`
 `
 
 export const glyphs: IGlyphs = {
-  download: <MdFileDownload />,
-  upload: <MdFileUpload />,
-  add: <MdAdd />,
-  check: <MdCheck />,
-  'arrow-back': <MdArrowBack />,
-  'arrow-down': <MdKeyboardArrowDown />,
-  'mail-outline': <MdMailOutline />,
-  notifications: <MdNotifications />,
-  'account-circle': <MdAccountCircle />,
-  lock: <MdLock />,
-  close: <MdClose />,
-  delete: <MdDelete />,
-  'more-vert': <MdMoreVert />,
-  comment: <MdComment />,
-  'turned-in': <MdTurnedIn />,
+  "download": <MdFileDownload />,
+  "upload": <MdFileUpload />,
+  "add": <MdAdd />,
+  "check": <MdCheck />,
+  "arrow-back": <MdArrowBack />,
+  "arrow-down": <MdKeyboardArrowDown />,
+  "mail-outline": <MdMailOutline />,
+  "notifications": <MdNotifications />,
+  "account-circle": <MdAccountCircle />,
+  "lock": <MdLock />,
+  "close": <MdClose />,
+  "delete": <MdDelete />,
+  "more-vert": <MdMoreVert />,
+  "comment": <MdComment />,
+  "turned-in": <MdTurnedIn />,
 }
 
 const Glyph = ({ glyph = '' }: IGlyphProps) => {
-  return glyphs[glyph] || null
+  return glyphs[glyph] || null;
 }
 
 class Icon extends Component<WrapperProps> {
@@ -102,4 +102,4 @@ class Icon extends Component<WrapperProps> {
     )
   }
 }
-export default Icon
+export default Icon;

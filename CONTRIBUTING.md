@@ -1,6 +1,6 @@
 # Contribution Guidelines
 
-Thanks for behing here already ! You'll find all the informations you need to start contributing to the project. Make sure to read them before submiting your contribution.
+Thanks for being here already! You'll find all the information you need to start contributing to the project. Make sure to read them before submitting your contribution.
 
 If you think something is missing, consider sending us a PR.
 
@@ -40,7 +40,7 @@ You can find useful links to learn more about these technologies [in the resourc
 ## 📟 &nbsp; Getting started
 
 - Fork the repository
-- Clone the projet from the fork you have created previously at first step :
+- Clone the project from the fork you have created previously at first step :
   `git clone https://github.com/`**your-github-user**`/onearmy.git`
 
 - Install dependencies

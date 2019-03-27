@@ -8,7 +8,7 @@ import HowtoDescription from './HowtoDescription/HowtoDescription'
 import Step from './Step/Step'
 import { Button } from 'src/components/Button'
 import { IHowtoStep, IHowto } from 'src/models/howto.models'
-import Link from 'react-router-dom/Link'
+import { Link } from 'react-router-dom'
 
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.

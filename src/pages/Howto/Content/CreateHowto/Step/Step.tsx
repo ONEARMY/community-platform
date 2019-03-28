@@ -77,6 +77,7 @@ class Step extends Component<IProps, IState> {
                 label="Pick a title for this step"
                 placeholder="Step title"
                 validate={required}
+                validateFields={[]}
               />
               <Field
                 name={`${step}.text`}
@@ -84,6 +85,7 @@ class Step extends Component<IProps, IState> {
                 component={TextArea}
                 placeholder="Description"
                 validate={required}
+                validateFields={[]}
               />
             </div>
             <FieldArray name={`${step}.images`}>
@@ -140,11 +142,10 @@ class Step extends Component<IProps, IState> {
           aria-describedby="alert-dialog-description"
         >
           <DialogText id="alert-dialog-title">
-            {'Are you sure to delete this step ?'}
+            {'Are you sure you want to delete this step ?'}
           </DialogText>
           <DialogButtons>
             <CancelButton
-              border
               onClick={() => {
                 this.handleModaleDeleteStepClose()
               }}

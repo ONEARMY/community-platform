@@ -140,6 +140,7 @@ export class CreateHowto extends React.PureComponent<
           onSubmit={this.onSubmit}
           initialValues={formValues}
           validate={() => this.validate}
+          validateOnBlur
           mutators={{
             ...arrayMutators,
             clearCoverImage: (args, state, utils) => {

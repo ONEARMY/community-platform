@@ -27,8 +27,8 @@ import {
 } from './elements'
 import { Button } from 'src/components/Button'
 import Link from 'react-router-dom/Link'
-import { Database } from 'src/stores/database'
 import { FieldState } from 'final-form'
+import { HowtoStore } from 'src/stores/Howto/howto.store'
 
 export interface IState {
   formValues: IHowtoFormInput
@@ -49,19 +49,12 @@ const isNumber = (value: any) => {
   return
 }
 
-const uniqueSlug = async (slug: string) => {
-  try {
-    await Database.checkSlugUnique('documentation', slug)
-  } catch (e) {
-    return 'How-to titles must be unique, please try being more specific'
-  }
-}
-
 export class CreateHowto extends React.PureComponent<
   RouteComponentProps<any>,
   IState
 > {
   uploadRefs: { [key: string]: UploadedFile | null } = {}
+  store = new HowtoStore()
   constructor(props: any) {
     super(props)
     // generate unique id for db and storage references and assign to state
@@ -177,7 +170,7 @@ export class CreateHowto extends React.PureComponent<
                             return undefined
                           }
                           if (value) {
-                            const error = uniqueSlug(
+                            const error = this.store.isSlugUnique(
                               helpers.stripSpecialCharacters(value),
                             )
                             return error

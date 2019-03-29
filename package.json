@@ -146,14 +146,13 @@
     ],
     "resolver": "jest-pnp-resolver",
     "setupFiles": [
-      "react-app-polyfill/jsdom"
+      "react-app-polyfill/jsdom",
+      "config/enzyme"
     ],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
       "<rootDir>/src/**/?(*.)(spec|test).{js,jsx,ts,tsx}"
     ],
-    "testEnvironment": "jsdom",
-    "testURL": "http://localhost",
     "transform": {
       "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
@@ -164,6 +163,7 @@
       "^.+\\.module\\.(css|sass|scss)$"
     ],
     "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/mocks/file.mock.ts",
       "^react-native$": "react-native-web",
       "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
     },
@@ -180,8 +180,8 @@
       "node"
     ],
     "watchPlugins": [
-      "C:\\Apps\\chrismclarke\\_forks\\create-react-app\\2019-02-12\\node_modules\\jest-watch-typeahead\\filename.js",
-      "C:\\Apps\\chrismclarke\\_forks\\create-react-app\\2019-02-12\\node_modules\\jest-watch-typeahead\\testname.js"
+      "jest-watch-typeahead/filename",
+      "jest-watch-typeahead/testname"
     ]
   },
   "babel": {

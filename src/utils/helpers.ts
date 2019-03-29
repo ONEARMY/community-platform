@@ -1,4 +1,5 @@
 import { firestore } from 'firebase/app'
+import 'firebase/firestore'
 
 // remove special characters from string, also replacing spaces with dashes
 const stripSpecialCharacters = (text: string) => {

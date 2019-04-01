@@ -14,6 +14,7 @@ If you think something is missing, consider sending us a PR.
 - [Issue Tracking and Management](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--issue-tracking-and-management)
 - [Project structure](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--project-structure)
 - [Branch structure](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--branch-structure)
+- [Automated testing](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--automated-testing)
 - [Javascript style guide](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--javascript-style-guide)
 - [Why haven't you used ...](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#-why-havent-you-used-insert-favourite-languageframeworkconvention-here)
 - [Deployment](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--deployment)
@@ -93,6 +94,42 @@ When a group of issues have been resolved a pull request to the master branch sh
 We have two main branches linked to production and development sites, you should always start with the **master** branch as this contains the most up-to-date code, and will be where pull requests are added for review. The **production** branch contains the live production site, and will be synced with master after regular review periods.
 
 We use additional branches to define a specific feature or issue group being worked on. An example might be work on the home page, which would be done in the `19-home-page` branch (where 19 refers to the issue number describing what needs to be done). These branches are ephemeral, and will be removed after merging into master, followed by closing the issue. Generally it is expected that only 1 developer will be working on a given branch, and it is that developer's responsibility to create the branch, manage the pull request, reviews and ask for additional support when needed.
+
+## 🔍 &nbsp; Automated testing
+
+### Static Code Analysis
+
+This project uses Eslint and Tslint as linters to find problematic patterns or code that doesn’t adhere to certain style guidelines. You are encouraged to setup your editor to use Eslint, Tslint and Prettier. Having said that, any code that is staged and committed will be linted on a `precommit` hook. Should your code not pass linting then you should fix the errors as indicated before trying to commit your changes again. If for any reason you wish to bypass the precommit hook (not advised), pass the `--no-verify flag` in your commit commnd:
+
+```bash
+git commit --no-verify
+```
+
+### Unit Tests
+
+This project uses the testing framework [Jest](https://jestjs.io/). You are encouraged to write tests to cover critical parts of the application. To run tests locally first make sure you have all dependencies installed:
+
+```bash
+$ yarn
+```
+
+Then run the following command in your terminal from the project root:
+
+```bash
+$ npm t
+```
+
+As you will see, Jest is configured to run in watch mode by default.
+
+If you need to troubleshoot a test, then you can use Jest's [troubleshooting feature](https://jestjs.io/docs/en/troubleshooting) by running the following command in the terminal:
+
+```bash
+$ npm run test:debug
+```
+
+Follow the instructions [here](https://jestjs.io/docs/en/troubleshooting) to make use of this feature in Google Chrome, [VsCode](https://jestjs.io/docs/en/troubleshooting#debugging-in-vs-code) and [Webstorm](https://jestjs.io/docs/en/troubleshooting#debugging-in-webstorm)
+
+Jest is configured to use the Testing Utility [Enzyme](https://airbnb.io/enzyme/). This utility enables you to test your React Component's output.
 
 ## 🚀 &nbsp; Deployment
 

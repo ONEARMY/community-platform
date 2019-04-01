@@ -100,6 +100,7 @@
     "prettier": "prettier \"**/*.+(js|jsx|json|yml|yaml|css|less|scss|ts|tsx|md|graphql|mdx)\"",
     "validate": "npm run lint && npm run prettier -- --list-different",
     "test": "node scripts/test.js",
+    "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
@@ -154,7 +155,7 @@
     "resolver": "jest-pnp-resolver",
     "setupFiles": [
       "react-app-polyfill/jsdom",
-      "config/enzyme"
+      "<rootDir>/config/enzyme"
     ],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
@@ -174,6 +175,11 @@
       "^react-native$": "react-native-web",
       "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
     },
+    "moduleDirectories": [
+      "node_modules",
+      "src",
+      "<rootDir>"
+    ],
     "moduleFileExtensions": [
       "web.js",
       "js",

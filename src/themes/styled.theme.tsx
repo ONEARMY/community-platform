@@ -35,7 +35,7 @@ export const space = [0, 4, 8, 16, 32, 64, 128]
 
 export const radii = space
 
-export const fontSizes = [12, 14, 16, 20, 24, 32, 40, 56, 72]
+export const fontSizes = [10, 12, 15, 18, 24, 32, 40, 56, 72]
 
 export const maxContainerWidth = 1280
 

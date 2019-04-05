@@ -11,10 +11,11 @@ export const colors = {
   grey3: '#656565',
   greyTag: '#4a4a4a',
   greyBg: '#ededed',
-  error: '#f44336'
+  error: '#f44336',
 }
 
 export const buttons = {
+  height: '50px',
   primary: {
     color: colors.white,
     backgroundColor: colors.blue,
@@ -22,7 +23,7 @@ export const buttons = {
   outline: {
     color: colors.black,
     border: '1px solid ' + colors.black,
-    backgroundColor: 'none',
+    backgroundColor: 'white',
   },
   disabled: {
     color: colors.grey,
@@ -34,9 +35,13 @@ export const space = [0, 4, 8, 16, 32, 64, 128]
 
 export const radii = space
 
-export const fontSizes = [12, 14, 16, 20, 24, 32, 40, 56, 72]
+export const fontSizes = [10, 12, 15, 18, 24, 32, 40, 56, 72]
 
 export const maxContainerWidth = 1280
+
+export const regular = 400
+
+export const bold = 600
 
 export default {
   colors,
@@ -45,4 +50,6 @@ export default {
   radii,
   fontSizes,
   maxContainerWidth,
+  regular,
+  bold,
 }

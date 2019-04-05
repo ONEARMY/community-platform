@@ -27,6 +27,8 @@ import {
 } from './elements'
 import { Button } from 'src/components/Button'
 import Link from 'react-router-dom/Link'
+import { FieldState } from 'final-form'
+import { HowtoStore } from 'src/stores/Howto/howto.store'
 
 export interface IState {
   formValues: IHowtoFormInput
@@ -52,6 +54,7 @@ export class CreateHowto extends React.PureComponent<
   IState
 > {
   uploadRefs: { [key: string]: UploadedFile | null } = {}
+  store = new HowtoStore()
   constructor(props: any) {
     super(props)
     // generate unique id for db and storage references and assign to state
@@ -130,6 +133,7 @@ export class CreateHowto extends React.PureComponent<
           onSubmit={this.onSubmit}
           initialValues={formValues}
           validate={() => this.validate}
+          validateOnBlur
           mutators={{
             ...arrayMutators,
             clearCoverImage: (args, state, utils) => {
@@ -152,6 +156,7 @@ export class CreateHowto extends React.PureComponent<
                     <DescriptionContainer>
                       <Field
                         name="workspace_name"
+                        validateFields={[]}
                         validate={required}
                         component={InputField}
                         label="What is your davehakkens.nl account ?"
@@ -159,7 +164,24 @@ export class CreateHowto extends React.PureComponent<
                       />
                       <Field
                         name="tutorial_title"
-                        validate={required}
+                        validateFields={[]}
+                        validate={(value: any, _, meta?: FieldState) => {
+                          if (meta && (!meta.dirty && meta.valid)) {
+                            return undefined
+                          }
+                          if (value) {
+                            const error = this.store.isSlugUnique(
+                              helpers.stripSpecialCharacters(value),
+                            )
+                            return error
+                          } else if (
+                            (meta && (meta.touched || meta.visited)) ||
+                            value === ''
+                          ) {
+                            return 'A title for your how-to is required'
+                          }
+                          return undefined
+                        }}
                         component={InputField}
                         label="What is the title of your How-To ?"
                         placeholder="How to make XXX using YYY"
@@ -174,6 +196,7 @@ export class CreateHowto extends React.PureComponent<
                       ) : (
                         <Field
                           name="cover_image"
+                          validateFields={[]}
                           component={FirebaseFileUploaderField}
                           storagePath={this.state._uploadPath}
                           hidden={true}
@@ -189,6 +212,7 @@ export class CreateHowto extends React.PureComponent<
                       <Field
                         name="tutorial_description"
                         validate={required}
+                        validateFields={[]}
                         component={TextArea}
                         placeholder="This is what we will do"
                       />
@@ -198,12 +222,14 @@ export class CreateHowto extends React.PureComponent<
                       />
                       <Field
                         name="tags"
+                        validateFields={[]}
                         component={TagsSelect}
                         onChange={tags => console.log('field changed', tags)}
                       />
                       <Field
                         name="tutorial_time"
                         validate={required}
+                        validateFields={[]}
                         component={InputField}
                         label="How much time does it take ? (hours/week)"
                         placeholder="2 hours"
@@ -211,6 +237,7 @@ export class CreateHowto extends React.PureComponent<
                       <Field
                         name="tutorial_cost"
                         validate={isNumber}
+                        validateFields={[]}
                         component={InputField}
                         label="How much does it cost roughly (€)?"
                         placeholder="10"
@@ -219,7 +246,11 @@ export class CreateHowto extends React.PureComponent<
                         text={'How difficult to replicate is your How-To ?'}
                         style={{ margin: '50px 0 10px' }}
                       />
-                      <Select name="difficulty_level" component="select">
+                      <Select
+                        name="difficulty_level"
+                        component="select"
+                        validateFields={[]}
+                      >
                         <option value="easy">easy</option>
                         <option value="medium">medium</option>
                         <option value="difficult">difficult</option>
@@ -252,6 +283,7 @@ export class CreateHowto extends React.PureComponent<
                       <Field
                         name="tutorial_extern_file_url"
                         component={InputField}
+                        validateFields={[]}
                         label="Or a link"
                         placeholder="https://drive.google.com/drive/u/2/folders/..."
                       />
@@ -296,7 +328,8 @@ export class CreateHowto extends React.PureComponent<
                       type="submit"
                       width={1}
                       bg="green"
-                      icon={'check'}
+                      icon="check"
+                      mx="auto"
                       disabled={submitting || invalid}
                     >
                       Save

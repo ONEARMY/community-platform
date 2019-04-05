@@ -1,6 +1,6 @@
-import { Avatar } from '@material-ui/core'
 import * as React from 'react'
 import { postViewReactGA, durationSincePosted } from '../common/'
+import { Avatar } from 'src/components/Avatar'
 import {
   InteractionNb,
   Title,
@@ -19,7 +19,7 @@ import { Link } from 'react-router-dom'
 const UserCell = ({ value, ...restProps }): any => {
   const { row } = restProps
   return (
-    <Avatar style={{ margin: '0 auto' }} src={row._createdBy} alt="avatar" />
+    <Avatar userId={row._createdBy} />
   )
 }
 

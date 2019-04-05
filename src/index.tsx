@@ -9,8 +9,6 @@ import { Routes } from './pages'
 import { stores } from './stores'
 import { GlobalStyle } from './themes/app.globalStyle.js'
 
-import './index.css'
-
 import registerServiceWorker from './registerServiceWorker'
 import { SWUpdateNotification } from './pages/common/SWUpdateNotification/SWUpdateNotification'
 import ErrorBoundary from './common/ErrorBoundary'

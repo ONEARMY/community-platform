@@ -26,7 +26,7 @@ import {
   Select,
 } from './elements'
 import { Button } from 'src/components/Button'
-import Link from 'react-router-dom/Link'
+import { Link } from 'react-router-dom'
 import { FieldState } from 'final-form'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 

@@ -171,7 +171,7 @@ export class CreateHowto extends React.PureComponent<
                           }
                           if (value) {
                             const error = this.store.isSlugUnique(
-                              helpers.stripSpecialCharacters(value),
+                              stripSpecialCharacters(value),
                             )
                             return error
                           } else if (

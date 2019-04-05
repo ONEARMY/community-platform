@@ -33,7 +33,7 @@ export class Avatar extends React.Component<AvatarProps, IState> {
   }
 
   componentWillMount() {
-    this.getUserAvatar(this.props.userId)
+    // this.getUserAvatar(this.props.userId)
   }
 
   public getUserAvatar = async (userId: string) => {

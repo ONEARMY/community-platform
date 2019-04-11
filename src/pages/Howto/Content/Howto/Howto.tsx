@@ -96,7 +96,7 @@ export class Howto extends React.Component<
             </Button>
           </Link>
           <HowtoDescription howto={howto} />
-          <HowtoSummary steps={howto.steps} slug={howto.slug} />
+          <HowtoSummary steps={howto.steps} howToSlug={howto.slug} />
           {howto.steps.map((step: any, index: number) => (
             <Step step={step} key={index} stepindex={index} />
           ))}

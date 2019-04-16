@@ -17,7 +17,13 @@ export default class HowtoSummary extends React.PureComponent<IProps> {
       <Container>
         <List>
           <ListItem key={`intro`}>
-            <HashLink to={`/how-to/${this.props.howToSlug}`}>
+            <HashLink
+              smooth
+              to={{
+                pathname: `/how-to/${this.props.howToSlug}`,
+                hash: '#description',
+              }}
+            >
               <ListItemText>
                 <SummaryListItem variant="subtitle1">
                   Introduction
@@ -30,7 +36,10 @@ export default class HowtoSummary extends React.PureComponent<IProps> {
               <ListItem key={index}>
                 <HashLink
                   smooth
-                  to={`/how-to/${this.props.howToSlug}#${step.title}`}
+                  to={{
+                    pathname: `/how-to/${this.props.howToSlug}`,
+                    hash: `#${step.title}`,
+                  }}
                 >
                   <ListItemText>
                     <SummaryListItem variant="subtitle1">

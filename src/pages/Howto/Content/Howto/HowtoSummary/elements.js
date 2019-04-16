@@ -3,9 +3,10 @@ import Typography from '@material-ui/core/Typography'
 
 export const Container = styled.div`
   width: 10%;
+  position: fixed;
   display: inline-block;
-  float: right;
-  margin: 30px 3%;
+  right: 0;
+  margin: 30px 0;
   max-height: 360px;
   background-color: white;
   overflow: scroll;

@@ -10,7 +10,7 @@ import {
   IFirebaseUploadInfo,
   FirebaseFileUploader,
 } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
-import helpers from 'src/utils/helpers'
+import { stripSpecialCharacters } from 'src/utils/helpers'
 import { TagsSelect } from 'src/pages/common/Tags'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 import { FirebaseFileUploaderField } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploaderField'
@@ -26,7 +26,7 @@ import {
   Select,
 } from './elements'
 import { Button } from 'src/components/Button'
-import Link from 'react-router-dom/Link'
+import { Link } from 'react-router-dom'
 import { FieldState } from 'final-form'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 
@@ -75,7 +75,7 @@ export class CreateHowto extends React.PureComponent<
       alert('Please provide a cover image before saving your tutorial')
     } else {
       const timestamp = new Date()
-      const slug = helpers.stripSpecialCharacters(formValues.tutorial_title)
+      const slug = stripSpecialCharacters(formValues.tutorial_title)
       // convert data to correct types and populate metadata
       const values: IHowto = {
         ...formValues,
@@ -171,7 +171,7 @@ export class CreateHowto extends React.PureComponent<
                           }
                           if (value) {
                             const error = this.store.isSlugUnique(
-                              helpers.stripSpecialCharacters(value),
+                              stripSpecialCharacters(value),
                             )
                             return error
                           } else if (

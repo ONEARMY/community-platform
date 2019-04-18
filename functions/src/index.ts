@@ -53,10 +53,6 @@ app.all('*', async (req, res, next) => {
         )
         res.send(token)
         break
-      case 'migrateDH':
-        res.send('Migration started')
-        await migrateDHUserMeta()
-        break
       default:
         res.send('invalid api endpoint')
     }

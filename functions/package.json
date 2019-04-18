@@ -5,10 +5,10 @@
     "lint": "tslint --project tsconfig.json",
     "build": "tsc",
     "copy:local": "cp ./src/Firebase/admin.local.ts ./src/Firebase/admin.ts",
-    "copy:server": "cp ./src/Firebase/admin.server.ts ./src/Firebase/admin.ts",
+    "copy:ci": "cp ./src/Firebase/admin.ci.ts ./src/Firebase/admin.ts",
     "serve": "npm run build && firebase serve --only functions",
     "shell": "npm run build && firebase functions:shell",
-    "deploy": "npm run copy:local && firebase use default && firebase deploy --only functions",
+    "deploy:local": "npm run copy:local && firebase use default && firebase deploy --only functions",
     "start": "npm run shell",
     "logs": "firebase functions:log"
   },

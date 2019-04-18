@@ -16,7 +16,7 @@ export interface IUserState {
 
 export interface IUserFormInput {
   email: string
-  display_name: string
+  display_name?: string
   password?: string
   repeat_password?: string
   first_name?: string
@@ -26,12 +26,14 @@ export interface IUserFormInput {
 }
 
 // IUser retains most of the fields from legacy users (omitting passwords),
-// and has a few additional fields
+// and has a few additional fields. Note 'email' is excluded
+// _id is unique/fixed identifier
+// ALL USER INFO BELOW IS PUBLIC
 export interface IUser extends IDbDoc {
-  projects?: IProject
+  _id: string
   verified: boolean
-  display_name: string
-  email?: string
+  avatar: string
+  display_name?: string
   legacy_id?: number
   legacy_registered?: string /*mm/dd/yyyy hh:ss*/
   first_name?: string

@@ -9,14 +9,14 @@ export const migrateDHUserMeta = async () => {
   // use an initial request to see total numbers of pages from header
   console.log('migrating user data')
   const initialRequest = await sendRecordRequest(1)
-  updateBPDataRecords(initialRequest.data as BPMember[])
+  await updateBPDataRecords(initialRequest.data as BPMember[])
   // use meta to run subsequent queries
   const totalPages = Number(initialRequest.headers['x-wp-totalpages'])
   if (totalPages !== 1) {
     for (let i = 2; i <= totalPages; i++) {
       console.log(`${i}/${totalPages}`)
       const req = await sendRecordRequest(i)
-      updateBPDataRecords(req.data)
+      await updateBPDataRecords(req.data)
     }
   }
 }

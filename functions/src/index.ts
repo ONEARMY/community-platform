@@ -4,20 +4,16 @@ import * as corsLib from 'cors'
 const cors = corsLib({ origin: true })
 import * as express from 'express'
 import * as functions from 'firebase-functions'
-import * as admin from 'firebase-admin'
-admin.initializeApp()
 
 // custom module imports
 import * as DB from './databaseBackup'
 import * as ImageConverter from './imageConverter'
-import * as StorageFunctions from './storageFunctions'
 import * as UtilsFunctions from './utils'
 import * as AnalyticsFunctions from './analytics'
-import { Credentials } from 'google-auth-library'
+import { migrateDHUserMeta } from './DaveHakkensNL/dataMigrate'
+import { syncCommentsCount } from './comments'
 
-// update on change logging purposes
-const buildNumber = 1.09
-
+console.log('functions init')
 // express settings to handle api
 const app = express()
 // use bodyparse to create json object from body
@@ -57,6 +53,10 @@ app.all('*', async (req, res, next) => {
         )
         res.send(token)
         break
+      case 'migrateDH':
+        res.send('Migration started')
+        await migrateDHUserMeta()
+        break
       default:
         res.send('invalid api endpoint')
     }
@@ -64,24 +64,13 @@ app.all('*', async (req, res, next) => {
 })
 exports.api = functions.https.onRequest(app)
 
-app.listen(3000, 'localhost', listen => {
-  console.log(`API v${buildNumber} listening on port 3000`)
-})
-
 /************ Cloud Firestore Triggers ******************************************************
  Functions called in response to changes in Cloud Firestore database
  ************************************************************************************/
 exports.syncCommentsCount = functions.firestore
   .document('discussions/{discussionId}/comments/{commentId}')
-  .onWrite((change, context) => {
-    // ref to the parent document
-    const discussionId = context.params.discussionId
-    const docRef = admin.firestore().collection('discussions').doc(discussionId)
-
-    // get all comments and aggregate
-    return docRef.collection('comments').get().then(querySnapshot => {
-      return docRef.update({_commentCount: querySnapshot.size})
-    }).catch(err => console.log(err))
+  .onWrite(async (change, context) => {
+    await syncCommentsCount(context)
   })
 
 /************ Cron tasks ***********************************************************
@@ -92,12 +81,17 @@ Add/change schedule from `./functions-cron/appengine/cron.yaml`
 exports.weeklyTasks = functions.pubsub
   .topic('weekly-tick')
   .onPublish(async (message, context) => {
-    const backup = await DB.BackupDatabase()
+    console.log('weekly tick', message, context)
+    await DB.BackupDatabase()
+    console.log('backup complete')
+    await migrateDHUserMeta()
+    console.log('migrate complete')
   })
 
 exports.dailyTasks = functions.pubsub
   .topic('daily-tick')
   .onPublish(async (message, context) => {
+    console.log('daily tick', message, context)
     // we don't have daily tasks currently
   })
 
@@ -105,16 +99,11 @@ exports.dailyTasks = functions.pubsub
 Functions called in response to changes to firebase storage objects
 ************************************************************************************/
 
-exports.imageResize = functions.storage
-  .object()
-  .onFinalize(async (object, context) => {
-    if (
-      object.metadata &&
-      (object.metadata.resized || object.metadata.original)
-    )
-      return Promise.resolve()
-    return ImageConverter.resizeImage(object)
-  })
+exports.imageResize = functions.storage.object().onFinalize(async object => {
+  if (object.metadata && (object.metadata.resized || object.metadata.original))
+    return Promise.resolve()
+  return ImageConverter.resizeImage(object)
+})
 
 /************ Callable *************************************************************
 These can be called from directly within the app (passing additional auth info)
@@ -124,12 +113,10 @@ to handle CORS preflight requests correctly
 ************************************************************************************/
 exports.removeStorageFolder = functions.https.onCall((data, context) => {
   console.log('storage folder remove called', data, context)
-  const path = data.text
-  StorageFunctions.deleteStorageItems(data.text)
 })
 // use service agent to gain access credentials for gcp with  given access scopes
 exports.getAccessToken = functions.https.onCall(
-  async (data: getAccessTokenData, context) => {
+  async (data: getAccessTokenData) => {
     const token = await UtilsFunctions.getAccessToken(data.accessScopes)
     return token
   },
@@ -139,9 +126,9 @@ interface getAccessTokenData {
 }
 
 exports.getAnalytics = functions.https.onCall(
-  async (data: getAnalyticsData, context) => {
+  async (data: getAnalyticsData) => {
     console.log('get analytics request received', data)
-    AnalyticsFunctions.getAnalyticsReport(data.viewId, data.token)
+    await AnalyticsFunctions.getAnalyticsReport(data.viewId, data.token)
   },
 )
 interface getAnalyticsData {

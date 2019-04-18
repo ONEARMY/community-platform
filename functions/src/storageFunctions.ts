@@ -1,4 +1,4 @@
-import * as admin from 'firebase-admin'
+// import * as admin from 'firebase-admin'
 
 // full api here: https://cloud.google.com/nodejs/docs/reference/storage/2.3.x/Bucket.html
 // *** NOTE - WiP - functions not fully support to remove folders (but possible workaround with extra query)

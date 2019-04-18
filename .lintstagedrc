@@ -10,5 +10,6 @@
       "prettier --write",
       "git add"
     ]
-  }
+  },
+  "ignore": ["functions/**"]
 }

@@ -38,10 +38,7 @@ export class UserDetail extends React.Component<IProps> {
           p={0}
           justifyContent={'space-between'}
           alignItems={'center'}
-        >
-          <Label text="Email" />
-          <p>{user.email}</p>
-        </FlexContainer>
+        />
       </div>
     )
   }

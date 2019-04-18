@@ -101,7 +101,7 @@ export class Database {
       _deleted: false,
       _id: this.generateId(collectionPath),
       _modified: this.generateTimestamp(),
-      _createdBy: user ? (user.email as string) : 'anonymous',
+      _createdBy: user ? (user.uid as string) : 'anonymous',
     }
     return meta
   }

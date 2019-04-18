@@ -13,15 +13,15 @@ import { Link } from 'src/components/Links'
 import { UserStore } from 'src/stores/User/user.store'
 import { colors } from 'src/themes/styled.theme'
 import { Main, ModalPaper, ModalAvatar, Form } from './elements'
-import { loginFormSubmit } from '../../../utils/user-migration'
 import { auth } from '../../../utils/firebase'
 
 interface IState {
   email: string
   password: string
-  message?: string
+  passwordConfirmation?: string
   submitDisabled: boolean
-  showResendConfirmationButton: boolean
+  isSignIn: boolean
+  errorMsg?: string
 }
 
 interface IProps {
@@ -35,12 +35,13 @@ interface InjectedProps extends IProps {
 
 @inject('userStore')
 @observer
-export class LoginFormComponent extends React.Component<IProps> {
+export class LoginFormComponent extends React.Component<IProps, IState> {
   public state: IState = {
     email: '',
     password: '',
+    passwordConfirmation: '',
     submitDisabled: false,
-    showResendConfirmationButton: false,
+    isSignIn: true,
   }
 
   public get injected() {
@@ -53,41 +54,56 @@ export class LoginFormComponent extends React.Component<IProps> {
     this.processLogin()
   }
 
-  // on login submit try call firebase auth sign in method
-  public async processLogin() {
-    if (auth.currentUser) {
-      console.log('user already authenticated, signing out')
-      auth.signOut()
-    }
-    console.log('attempting login')
-    const status = await loginFormSubmit(this.state.email, this.state.password)
-    console.log(status)
-    if (!status.success) {
-      this.setState({ message: status.message, submitDisabled: false })
-    } else if (
-      this.injected.userStore.authUser &&
-      !this.injected.userStore.authUser.emailVerified
-    ) {
-      this.setState({
-        message: 'Your email address is unverified',
-        showResendConfirmationButton: true,
-      })
+  public signUpSubmit = (e: React.SyntheticEvent) => {
+    e.preventDefault()
+    this.setState({ submitDisabled: true })
+    this.processSignup()
+  }
+
+  public async processSignup() {
+    const { email, password } = this.state
+    try {
+      await this.injected.userStore.registerNewUser(email, password)
+    } catch (error) {
+      this.setState({ errorMsg: error.message, submitDisabled: false })
     }
   }
 
-  resendConfirmation = () => {
-    this.injected.userStore.sendEmailVerification()
-    this.props.closeLogin()
+  // on login submit try call firebase auth sign in method
+  public async processLogin() {
+    const { email, password } = this.state
+    try {
+      await this.injected.userStore.login(email, password)
+    } catch (error) {
+      this.setState({ errorMsg: error.message, submitDisabled: false })
+    }
   }
 
   // generic function to handle form input changes
   public handleChange = (e: React.FormEvent<any>) => {
-    this.setState({
+    const update = {
       [e.currentTarget.id]: e.currentTarget.value,
-    })
+    } as IState
+    this.setState(update)
   }
 
+  public validateLoginForm = () => {
+    const { email, password, passwordConfirmation, isSignIn } = this.state
+    let valid = false
+    if (email !== '' && password !== '') {
+      valid = isSignIn ? true : password === passwordConfirmation
+    }
+    return valid
+  }
+
+  // swap between sign up and sign in modes
+  public toggleSignUp = () => {
+    this.setState({ isSignIn: !this.state.isSignIn })
+  }
+
+  // render combination of email, pw and additional fields depending on whether part of sign-up or sign-in process
   public render() {
+    const disabled = this.state.submitDisabled || !this.validateLoginForm()
     return (
       <React.Fragment>
         <CssBaseline />
@@ -96,7 +112,10 @@ export class LoginFormComponent extends React.Component<IProps> {
             <ModalAvatar>
               <Lock />
             </ModalAvatar>
-            <Typography variant="h5">Sign in</Typography>
+            <Typography variant="h5">
+              {this.state.isSignIn ? 'Sign In' : 'Sign Up'}
+            </Typography>
+            {/* Same email and pw field displayed on both sign-up and sign-in */}
             <Form onSubmit={this.loginSubmit}>
               <FormControl margin="normal" required fullWidth>
                 <InputLabel htmlFor="email">Email Address</InputLabel>
@@ -118,39 +137,72 @@ export class LoginFormComponent extends React.Component<IProps> {
                   onChange={this.handleChange}
                 />
               </FormControl>
-              <Typography color="error">{this.state.message}</Typography>
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
-              {this.state.showResendConfirmationButton ? (
-                <Button
-                  onClick={this.resendConfirmation}
-                  width={1}
-                  variant="primary"
-                  mb={3}
-                >
-                  Resend confirmation email
-                </Button>
-              ) : null}
-              <Button
-                type="submit"
-                width={1}
-                variant={this.state.submitDisabled ? 'disabled' : 'primary'}
-                disabled={this.state.submitDisabled}
-                mb={3}
-              >
-                Sign in
-              </Button>
+              {this.state.isSignIn && (
+                <FormControlLabel
+                  control={<Checkbox value="remember" color="primary" />}
+                  label="Remember me"
+                />
+              )}
+              {!this.state.isSignIn && (
+                <FormControl margin="normal" required fullWidth>
+                  <InputLabel htmlFor="password">Confirm Password</InputLabel>
+                  <Input
+                    name="passwordConfirmation"
+                    type="password"
+                    id="passwordConfirmation"
+                    autoComplete="password-confirmation"
+                    onChange={this.handleChange}
+                  />
+                </FormControl>
+              )}
             </Form>
-            <Link
-              color={colors.blue2}
-              mb={2}
-              to="/sign-up"
-              onClick={this.props.closeLogin}
-            >
-              Sign up
-            </Link>
+
+            {this.state.isSignIn ? (
+              // sign in additional
+              <>
+                <Button
+                  type="submit"
+                  width={1}
+                  variant={disabled ? 'disabled' : 'outline'}
+                  disabled={disabled}
+                  mb={3}
+                  onClick={this.loginSubmit}
+                >
+                  Sign in
+                </Button>
+                <Link
+                  color={colors.blue2}
+                  mb={2}
+                  to="#"
+                  onClick={this.toggleSignUp}
+                >
+                  Sign Up
+                </Link>
+              </>
+            ) : (
+              // sign up additional
+              <>
+                <Button
+                  type="submit"
+                  width={1}
+                  variant={disabled ? 'disabled' : 'outline'}
+                  disabled={disabled}
+                  mb={3}
+                  onClick={this.signUpSubmit}
+                >
+                  Sign Up
+                </Button>
+                <Link
+                  color={colors.blue2}
+                  mb={2}
+                  to="#"
+                  onClick={this.toggleSignUp}
+                >
+                  Sign in
+                </Link>
+              </>
+            )}
+
             <Link
               color={colors.blue2}
               mb={2}
@@ -159,6 +211,9 @@ export class LoginFormComponent extends React.Component<IProps> {
             >
               Forgot password?
             </Link>
+            <Typography color="error" variant="caption">
+              {this.state.errorMsg}
+            </Typography>
           </ModalPaper>
         </Main>
       </React.Fragment>

@@ -31,16 +31,16 @@ export class ChangePasswordPage extends React.Component<any, IState> {
   }
 
   public onSubmit = async (formValues: IChangePasswordForm) => {
-    let { password, newPassword, repeatPassword } = formValues
+    const { password, newPassword, repeatPassword } = formValues
     try {
-      let user = this.props.userStore.authUser
-      let credentials = EmailAuthProvider.credential(user.email, password)
+      const user = this.props.userStore.authUser
+      const credentials = EmailAuthProvider.credential(user.email, password)
       await user.reauthenticateAndRetrieveDataWithCredential(credentials)
-      if (newPassword == repeatPassword) {
+      if (newPassword === repeatPassword) {
         await user.updatePassword(formValues.newPassword)
         this.props.history.push('/profile')
       } else {
-        throw 'Passwords does not match'
+        throw new Error('Passwords does not match')
       }
     } catch (error) {
       this.setState({ error: error.message ? error.message : error })

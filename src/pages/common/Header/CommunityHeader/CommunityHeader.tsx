@@ -42,14 +42,14 @@ interface IInjectedProps extends IProps {
 @inject('userStore')
 @observer
 export class CommunityHeader extends React.Component<IProps, IState> {
-  constructor(props) {
+  constructor(props: IProps) {
     super(props)
     this.state = {
       moreMenuAnchor: null,
       profileMenuAnchor: null,
     }
   }
-  get props() {
+  get injected() {
     return this.props as IInjectedProps
   }
 
@@ -77,7 +77,7 @@ export class CommunityHeader extends React.Component<IProps, IState> {
       <Profile onClick={this.openProfileMenu}>
         <Avatar
           alt={user.display_name}
-          src="http://i.pravatar.cc/200"
+          src={user.avatar}
           className="header__avatar"
         />
         <Icon glyph={'arrow-down'} />
@@ -85,12 +85,13 @@ export class CommunityHeader extends React.Component<IProps, IState> {
     )
   }
   logout() {
-    this.props.userStore.logout()
+    this.injected.userStore.logout()
     this.closeProfileMenu()
   }
 
   render() {
     const { moreMenuAnchor, profileMenuAnchor } = this.state
+    const user = this.injected.userStore.user
     return (
       <div>
         <Content>
@@ -145,12 +146,12 @@ export class CommunityHeader extends React.Component<IProps, IState> {
               <Icon glyph={'notifications'} />
             </IconButton>
           </div>
-          {this.props.userStore.user ? (
+          {user ? (
             <>
               <Profile onClick={this.openProfileMenu}>
                 <Avatar
                   alt="Remy Sharp"
-                  src="http://i.pravatar.cc/200"
+                  src={user.avatar}
                   className="header__avatar"
                 />
                 <Icon glyph={'arrow-down'} />
@@ -183,7 +184,7 @@ export class CommunityHeader extends React.Component<IProps, IState> {
               </Menu>
             </>
           ) : (
-            <LoginComponent user={this.props.userStore.user} />
+            <LoginComponent />
           )}
         </Content>
         <SectionDescription>

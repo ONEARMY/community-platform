@@ -2,6 +2,7 @@ import { observable, action } from 'mobx'
 import { Database } from '../database'
 import { IUser, IUserFormInput } from 'src/models/user.models'
 import { IFirebaseUser, auth, afs } from 'src/utils/firebase'
+import { IFirebaseUploadInfo } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
@@ -74,6 +75,13 @@ export class UserStore {
   public async updateUserProfile(user: IUser, values: IUserFormInput) {
     user.display_name = values.display_name
     user.country = values.country
+    if (values.avatar) {
+      let avatar =
+        typeof values.avatar === 'string'
+          ? values.avatar
+          : (values.avatar as IFirebaseUploadInfo).downloadUrl
+      user.avatar = avatar
+    }
     await Database.setDoc(`users/${user._id}`, user)
   }
 

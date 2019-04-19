@@ -10,6 +10,7 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import IconButton from '@material-ui/core/IconButton'
 import Icon from 'src/components/Icons'
 import { LoginComponent } from '../../Login/Login'
+import { Avatar } from 'src/components/Avatar'
 import {
   Content,
   LogoText,
@@ -18,7 +19,6 @@ import {
   Profile,
   ListButton,
   LinkButton,
-  Avatar,
   SectionDescription,
 } from './elements'
 import { IUser } from 'src/models/user.models'
@@ -149,11 +149,7 @@ export class CommunityHeader extends React.Component<IProps, IState> {
           {user ? (
             <>
               <Profile onClick={this.openProfileMenu}>
-                <Avatar
-                  alt="Remy Sharp"
-                  src={user.avatar}
-                  className="header__avatar"
-                />
+                <Avatar userId={user._id} />
                 <Icon glyph={'arrow-down'} />
               </Profile>
               <Menu

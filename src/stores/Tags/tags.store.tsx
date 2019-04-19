@@ -1,8 +1,8 @@
-import { observable, action, computed } from 'mobx'
-import { afs } from '../../utils/firebase'
+import { observable, action } from 'mobx'
+import { afs } from 'src/utils/firebase'
 import { TAGS_MOCK } from 'src/mocks/tags.mock'
 import { ITagQuery, ITag } from 'src/models/tags.model'
-import helpers from '../../utils/helpers'
+import { arrayToJson } from 'src/utils/helpers'
 
 export class TagsStore {
   @observable
@@ -29,7 +29,7 @@ export class TagsStore {
   @action
   public updateTags(tags: ITag[]) {
     this.tags = tags
-    this.tagsByKey = helpers.arrayToJson(tags, '_key')
+    this.tagsByKey = arrayToJson(tags, '_key')
     console.log('tags', tags)
     console.log('tagsByKey', this.tagsByKey)
   }

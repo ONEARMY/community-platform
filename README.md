@@ -30,7 +30,7 @@ Please make sure to read the [Contributing Guide](/CONTRIBUTING.md) before makin
 
 ## 🌟 &nbsp; Core Team
 
-If needed you can [drop us a line here](mailto:hello@preciousplastic.com?subject=contact%20from%20github) 👋
+If needed you can [drop us a line here](mailto:hello@onearmy.world?subject=contact%20from%20github) 👋
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->

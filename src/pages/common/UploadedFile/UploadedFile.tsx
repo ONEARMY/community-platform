@@ -4,6 +4,7 @@ import { storage } from 'src/utils/firebase'
 import './UploadedFile.scss'
 import Button from '@material-ui/core/Button'
 import Icon from 'src/components/Icons'
+import ImagePreview from './ImagePreview'
 
 /*************************************************************************
  * Component to display a file that has been uploaded to firebase storage,
@@ -18,7 +19,6 @@ interface IUploadedFileProps {
 }
 
 interface IState {
-  imageLoaded: boolean
   deleted: boolean
 }
 
@@ -26,11 +26,11 @@ export class UploadedFile extends React.Component<IUploadedFileProps, IState> {
   public static defaultProps: Partial<IUploadedFileProps>
   constructor(props: any) {
     super(props)
-    this.state = { imageLoaded: false, deleted: false }
+    this.state = { deleted: false }
   }
 
   // remove the file from storage repository
-  public delete() {
+  public delete = () => {
     const ref = storage.ref(this.props.file.fullPath)
     // return callback before confirmation of deletion to provide immediate feedback to user
     this.props.onFileDeleted()
@@ -47,27 +47,12 @@ export class UploadedFile extends React.Component<IUploadedFileProps, IState> {
       // apply transition on first load
       <div className="uploaded-file">
         {imagePreview ? (
-          // image display
-          <div className="img-preview__container">
-            <img
-              className={`img-preview__image ${this.state.imageLoaded &&
-                'loaded'} `}
-              src={file.downloadUrl}
-              alt={'cover image - ' + file.name}
-              onLoad={() => this.imageLoaded()}
-            />
-            {/* delete image button */}
-            {showDelete ? (
-              <Button
-                className="img-preview__delete"
-                onClick={() => {
-                  this.delete()
-                }}
-              >
-                <Icon glyph={'close'} />
-              </Button>
-            ) : null}
-          </div>
+          <ImagePreview
+            imageSrc={file.downloadUrl}
+            imageAlt={'cover image - ' + file.name}
+            onDelete={this.delete}
+            showDelete={showDelete}
+          />
         ) : (
           // file display
           <div className="file-meta__container">
@@ -91,10 +76,6 @@ export class UploadedFile extends React.Component<IUploadedFileProps, IState> {
         )}
       </div>
     )
-  }
-
-  private imageLoaded() {
-    this.setState({ imageLoaded: true })
   }
 
   private convertFileSize(bytes: number, decimals: number) {

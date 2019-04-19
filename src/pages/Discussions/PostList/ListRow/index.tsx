@@ -1,8 +1,6 @@
 import * as React from 'react'
 import differenceInDays from 'date-fns/difference_in_days'
-
 import {
-  Avatar,
   Post,
   Title,
   TitleAndTagsContaier,
@@ -15,6 +13,7 @@ import {
   DiscussIcon,
   QaIcon,
 } from './elements'
+import { Avatar } from 'src/components/Avatar'
 import { IDiscussionPost } from 'src/models/discussions.models'
 import { Link } from 'react-router-dom'
 
@@ -41,7 +40,7 @@ export default class ListRow extends React.Component<IProps, IState> {
       <>
         <Link to={`/discussions/${post.slug}`}>
           <Post>
-            <Avatar src={post._createdBy} alt="avatar" />
+            <Avatar userId={post._createdBy} />
             <TitleAndTagsContaier>
               <Title
               // *** TODO - Build and link to analytics store method

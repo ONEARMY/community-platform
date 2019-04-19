@@ -77,7 +77,7 @@ export class CommunityHeader extends React.Component<IProps, IState> {
       <Profile onClick={this.openProfileMenu}>
         <Avatar
           alt={user.display_name}
-          src={user.avatar}
+          src={user.avatar_thumb}
           className="header__avatar"
         />
         <Icon glyph={'arrow-down'} />

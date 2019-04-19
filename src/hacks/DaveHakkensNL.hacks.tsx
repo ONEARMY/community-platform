@@ -42,6 +42,7 @@ export class DHImport extends React.Component<IProps, IState> {
       console.log('member', member)
       const profile: Partial<IUser> = {
         avatar: member.avatar_urls.full,
+        avatar_thumb: member.avatar_urls.thumb,
         legacy_id: member.id,
         mention_name: member.mention_name,
         country: member.xprofile.groups[1].fields[42].value,

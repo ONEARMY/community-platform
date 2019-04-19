@@ -9,6 +9,7 @@ export const MOCK_USER: IUser = {
   _created: toTimestamp('Friday, January 2, 2015 12:59 AM'),
   _modified: toTimestamp('Friday, January 2, 2015 12:59 AM'),
   avatar: 'https://i.ibb.co/YhRNk4B/avatar-placeholder.gif',
+  avatar_thumb: 'https://i.ibb.co/YhRNk4B/avatar-placeholder.gif',
   legacy_id: 70134,
   legacy_registered: '14/09/2018 14:45',
   display_name: 'Chris Clarke',

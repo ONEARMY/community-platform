@@ -100,6 +100,7 @@ export class UserStore {
       _id: authUser.uid,
       verified: false,
       avatar: 'https://i.ibb.co/YhRNk4B/avatar-placeholder.gif',
+      avatar_thumb: 'https://i.ibb.co/YhRNk4B/avatar-placeholder.gif',
       display_name: values.display_name,
       first_name: values.first_name,
       last_name: values.last_name,

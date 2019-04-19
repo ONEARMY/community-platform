@@ -70,14 +70,13 @@ export class UserStore {
   }
 
   public async updateUserProfile(values: IUserFormInput) {
-    console.log('updating user', values)
     const update = { ...(this.user as IUser), ...values }
-    console.log('update', update)
     await Database.setDoc(`users/${update._id}`, update)
     this.user = update
+    console.log('user updated', update)
   }
   public async changeUserPassword() {
-    //
+    // (see code in change pw component and move here)
   }
 
   public async sendEmailVerification() {

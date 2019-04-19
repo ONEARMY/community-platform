@@ -62,6 +62,7 @@ export class UserProfile extends React.Component<IProps, IState> {
             user={user}
             readOnly={!this.state.editMode}
             onChange={formValues => this.profileFormValueChanged(formValues)}
+            userStore={this.props.userStore}
           />
 
           <></>

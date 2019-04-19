@@ -17,6 +17,7 @@ export interface IUser extends IDbDoc {
   _id: string
   verified: boolean
   avatar: string
+  about?: string
   mention_name?: string
   display_name?: string
   legacy_id?: number

@@ -6,17 +6,21 @@ import { IUser, IUserFormInput } from 'src/models/user.models'
 import ImagePreview from 'src/pages/common/UploadedFile/ImagePreview'
 import { LinkButton } from 'src/pages/common/Header/CommunityHeader/elements'
 import { Button } from 'src/components/Button'
+import { UserStore } from 'src/stores/User/user.store'
+import { DHImport } from 'src/hacks/DaveHakkensNL.hacks'
 
 interface IState {
   formValues: IUserFormInput
   formSaved: boolean
   errors: any
+  isImporting: boolean
 }
 
 interface IProps {
   onChange: (formValues: IUserFormInput) => void
   readOnly?: boolean
   user: IUser
+  userStore: UserStore
 }
 
 export class ProfileEditForm extends React.Component<IProps, IState> {
@@ -26,6 +30,7 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
       formValues: props.user as IUserFormInput,
       formSaved: false,
       errors: null,
+      isImporting: false,
     }
   }
 
@@ -47,11 +52,6 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
   public validate(formValues: IUserFormInput): boolean {
     // currently no validation done
     return true
-  }
-
-  public importProfileFromDH() {
-    const mention_name = this.state.formValues.mention_name
-    console.log('importing mention name', mention_name)
   }
 
   public render() {
@@ -100,11 +100,10 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
                       /> */}
                     </>
                   )}
-                  <ImagePreview
-                    imageSrc={user.avatar}
-                    imageAlt={user.mention_name ? user.mention_name : user._id}
-                    onDelete={this.deleteAvatar}
-                    showDelete={false}
+                  <img
+                    src={user.avatar}
+                    alt={user.mention_name ? user.mention_name : user._id}
+                    style={{ maxWidth: 180 }}
                   />
 
                   <Field
@@ -114,12 +113,10 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
                     disabled={this.props.readOnly}
                   />
                   {!this.props.readOnly && (
-                    <Button
-                      disabled={!values.mention_name}
-                      onClick={() => this.importProfileFromDH()}
-                    >
-                      Import @{values.mention_name} from Dave Hakkens
-                    </Button>
+                    <DHImport
+                      mention_name={values.mention_name}
+                      userStore={this.props.userStore}
+                    />
                   )}
 
                   <Field

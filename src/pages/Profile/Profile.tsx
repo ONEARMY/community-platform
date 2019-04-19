@@ -1,84 +1,75 @@
 import * as React from 'react'
-import { Route, Switch, withRouter} from 'react-router-dom'
+import { Route, Switch, withRouter } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
-import { Box } from 'rebass'
 import PageContainer from 'src/components/Layout/PageContainer'
 import { BoxContainer } from 'src/components/Layout/BoxContainer'
-import { Link } from 'src/components/Links'
 import { UserStore } from 'src/stores/User/user.store'
 import { IUser } from 'src/models/user.models'
-import { UserDetail } from 'src/pages/common/User/Detail'
+import { UserProfile } from './content/UserProfile'
+import { ChangePasswordPage } from './content/ChangePassword'
 
-interface InjectedProps {
+interface InjectedProps extends IProps {
   userStore: UserStore
 }
+// tslint:disable no-empty-interface
+interface IProps {}
 
 @(withRouter as any)
 @inject('userStore')
 @observer
-export class ProfilePage extends React.Component<any> {
+export class ProfilePage extends React.Component<IProps> {
   get injected() {
     return this.props as InjectedProps
   }
 
   public render() {
-    let currentUser = this.injected.userStore.user as IUser
+    const currentUser = this.injected.userStore.user as IUser
     return currentUser ? (
       <PageContainer>
         <BoxContainer>
           <Switch>
+            {/* own profile */}
             <Route
-              exact path="/profile"
-              render={props => <CurrentUserProfile {...props} user={currentUser} />}
+              exact
+              path="/profile"
+              render={props => (
+                <UserProfile
+                  {...props}
+                  user={currentUser}
+                  userStore={this.injected.userStore}
+                />
+              )}
             />
             <Route
-              exact path="/profile/:id"
+              exact
+              path="/profile/change-password"
+              render={props => (
+                <ChangePasswordPage
+                  {...props}
+                  userStore={this.injected.userStore}
+                />
+              )}
+            />
+            {/* other profile */}
+            {/* <Route
+              exact
+              path="/profile/:id"
               render={props => {
-                let user = this.props.userStore.getUserProfile(
+                const user = this.injected.userStore.getUserProfile(
                   props.match.params.id,
                 )
-                return <UserProfile {...props} user={user} />
+                return (
+                  <UserProfile
+                    {...props}
+                    user={user}
+                    userStore={this.injected.userStore}
+                  />
+                )
               }}
-            />
+            /> */}
           </Switch>
         </BoxContainer>
       </PageContainer>
-    ) : null
-  }
-}
-interface IUserProfile {
-  user: IUser | null
-}
-
-class CurrentUserProfile extends React.Component<IUserProfile> {
-  public render() {
-    return (
-      <>
-        <Box mb={2}>
-          <Link to="/settings">Profile settings</Link>
-        </Box>
-        <UserDetail user={this.props.user as IUser}/>
-      </>
-    )
-  }
-}
-
-class UserProfile extends React.Component<IUserProfile> {
-  public state: IUserProfile = {
-    user: null,
-  }
-  async componentDidMount() {
-    let user = await this.props.user
-    this.setState({ user })
-  }
-  public render() {
-    return this.state.user ? (
-      <>
-        <Box mb={2}>
-          <Link to="/message">Send message</Link>
-        </Box>
-        <UserDetail user={this.state.user as IUser} />
-      </>
     ) : null
   }
 }

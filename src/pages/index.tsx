@@ -8,9 +8,8 @@ import { HomePage } from './Home/Home'
 import { NotFoundPage } from './NotFound/NotFound'
 import { DiscussionsPage } from './Discussions'
 import { ProfilePage } from './Profile/Profile'
-import { SettingsPage } from './Profile/Settings'
 import { SignUpPage } from './Home/SignUp'
-import { ActionPage } from './Home/Action';
+import { ActionPage } from './Home/Action'
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import { EventsPage } from './Events/Events'
 import Header from './common/Header/Header'
@@ -118,12 +117,6 @@ export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [
     path: '/profile',
     component: <ProfilePage />,
     title: 'Profile',
-    description: '',
-  },
-  {
-    path: '/settings',
-    component: <SettingsPage />,
-    title: 'Settings',
     description: '',
   },
   {

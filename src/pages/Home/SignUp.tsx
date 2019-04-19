@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react'
 import { Text } from 'rebass'
 import { IUserFormInput } from 'src/models/user.models'
 import { UserStore } from 'src/stores/User/user.store'
-import { UserForm } from 'src/pages/common/User/Form'
 import PageContainer from 'src/components/Layout/PageContainer'
 import { BoxContainer } from 'src/components/Layout/BoxContainer'
 
@@ -39,9 +38,7 @@ export class SignUpPage extends React.Component<any, IState> {
             <Text textAlign={'center'}>
               A verification link has been sent to your email account.
             </Text>
-          ) : (
-            <UserForm onSubmit={this.onSubmit} />
-          )}
+          ) : null}
         </BoxContainer>
       </PageContainer>
     )

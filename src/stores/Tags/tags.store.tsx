@@ -30,8 +30,6 @@ export class TagsStore {
   public updateTags(tags: ITag[]) {
     this.tags = tags
     this.tagsByKey = arrayToJson(tags, '_key')
-    console.log('tags', tags)
-    console.log('tagsByKey', this.tagsByKey)
   }
 
   // sometimes during testing we might want to put the mock data in the database

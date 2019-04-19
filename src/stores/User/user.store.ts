@@ -18,7 +18,7 @@ export class UserStore {
   @action
   public updateUser(user?: IUser) {
     this.user = user
-    console.log('store user', this.user)
+    console.log('user updated', user)
   }
   constructor() {
     this._listenToAuthStateChanges()
@@ -46,13 +46,10 @@ export class UserStore {
 
   // handle user sign in, when firebase authenticates wnat to also fetch user document from the database
   public async userSignedIn(user: IFirebaseUser | null) {
-    console.log('user signed in, getting meta', user)
     let userMeta: IUser | null = null
     if (user && user.uid) {
       userMeta = await this.getUserProfile(user.uid)
-      if (userMeta) {
-        console.log('user meta retrieved', userMeta)
-      } else {
+      if (!userMeta) {
         console.log('no user meta retrieved. creating empty user doc')
         userMeta = await this._createUserProfile({
           display_name: '',
@@ -72,17 +69,15 @@ export class UserStore {
     return user
   }
 
-  public async updateUserProfile(user: IUser, values: IUserFormInput) {
-    user.display_name = values.display_name
-    user.country = values.country
-    if (values.avatar) {
-      let avatar =
-        typeof values.avatar === 'string'
-          ? values.avatar
-          : (values.avatar as IFirebaseUploadInfo).downloadUrl
-      user.avatar = avatar
-    }
-    await Database.setDoc(`users/${user._id}`, user)
+  public async updateUserProfile(values: IUserFormInput) {
+    console.log('updating user', values)
+    const update = { ...(this.user as IUser), ...values }
+    console.log('update', update)
+    await Database.setDoc(`users/${update._id}`, update)
+    this.user = update
+  }
+  public async changeUserPassword() {
+    //
   }
 
   public async sendEmailVerification() {

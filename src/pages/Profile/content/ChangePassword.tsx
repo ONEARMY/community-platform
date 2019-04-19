@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { EmailAuthProvider } from 'src/utils/firebase'
-import { inject, observer } from 'mobx-react'
-import { withRouter } from 'react-router-dom'
 import { Form, Field } from 'react-final-form'
 import { Button } from 'src/components/Button'
 import { InputField } from 'src/components/Form/Fields'
+import { UserStore } from 'src/stores/User/user.store'
+import { RouteComponentProps } from 'react-router'
 
 interface IChangePasswordForm {
   password: string
@@ -15,11 +15,11 @@ interface IChangePasswordForm {
 interface IState {
   error?: any
 }
+interface IProps extends RouteComponentProps {
+  userStore: UserStore
+}
 
-@(withRouter as any)
-@inject('userStore')
-@observer
-export class ChangePasswordPage extends React.Component<any, IState> {
+export class ChangePasswordPage extends React.Component<IProps, IState> {
   public state: IState = {
     error: null,
   }
@@ -33,8 +33,11 @@ export class ChangePasswordPage extends React.Component<any, IState> {
   public onSubmit = async (formValues: IChangePasswordForm) => {
     const { password, newPassword, repeatPassword } = formValues
     try {
-      const user = this.props.userStore.authUser
-      const credentials = EmailAuthProvider.credential(user.email, password)
+      const user = this.props.userStore.authUser as firebase.User
+      const credentials = EmailAuthProvider.credential(
+        user.email as string,
+        password,
+      )
       await user.reauthenticateAndRetrieveDataWithCredential(credentials)
       if (newPassword === repeatPassword) {
         await user.updatePassword(formValues.newPassword)

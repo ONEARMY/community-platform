@@ -3,7 +3,6 @@ import { BPMember } from './BPMember.model'
 import * as db from '../Firebase/realtimeDB'
 const endpoint = 'https://davehakkens.nl/wp-json/buddypress/v1/members'
 
-// 70134
 /************ Exported Functions ****************************************************
   These functions handle creation of a database that stores and tracks buddypress
   user ids by the user's mention name (as user unlikely to know id number) for lookup.
@@ -12,7 +11,10 @@ const endpoint = 'https://davehakkens.nl/wp-json/buddypress/v1/members'
  ************************************************************************************/
 // take a user id number and return the buddypress profile data with email stripped
 // id numbers can be identified from db object saved in function below
-export const getUserProfile = async (id: number) => {
+export const getDHUserProfile = async (id: number) => {
+  if (!id) {
+    return null
+  }
   const req = await axios.get(endpoint, {
     params: {
       per_page: 1,
@@ -21,7 +23,7 @@ export const getUserProfile = async (id: number) => {
   })
   const profile = req.data[0]
   // not sharing email between sites as user has registered new account
-  if (profile.hasOwnProperty('email')) {
+  if (profile && profile.hasOwnProperty('email')) {
     delete profile.email
   }
   return profile

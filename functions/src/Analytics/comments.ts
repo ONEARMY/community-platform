@@ -1,4 +1,4 @@
-import { db } from './Firebase/firestoreDB'
+import { db } from '../Firebase/firestoreDB'
 
 export const syncCommentsCount = async context => {
   // ref to the parent document

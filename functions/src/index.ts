@@ -52,13 +52,17 @@ app.all('*', async (req, res, next) => {
         res.send(token)
         break
       case 'DHSite_updateIds':
-        const data = await DHSite.updateDHUserIds()
-        res.send(data)
+        const DHupdated = await DHSite.updateDHUserIds()
+        res.send(DHupdated)
         break
       case 'DHSite_getUser':
-        const id = req.query.id
-        const profile = await DHSite.getDHUserProfile(id)
-        res.send(profile)
+        const mention_name = req.query.mention_name
+        try {
+          const profile = await DHSite.getDHUserProfile(mention_name)
+          res.status(200).send(profile)
+        } catch (err) {
+          res.status(500).send({ error: err.message })
+        }
         break
       default:
         res.send('invalid api endpoint')
@@ -138,8 +142,10 @@ exports.syncCommentsCount = functions.https.onCall(async () => {
   console.log('sync comments count called')
 })
 
-exports.DHSite_getUser = functions.https.onCall(async (id: number) => {
-  console.log('getting DH user profile', id)
-  const profile = await DHSite.getDHUserProfile(id)
-  return profile
-})
+exports.DHSite_getUser = functions.https.onCall(
+  async (mention_name: string) => {
+    console.log('getting DH user profile', mention_name)
+    const profile = await DHSite.getDHUserProfile(mention_name)
+    return profile
+  },
+)

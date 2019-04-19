@@ -9,24 +9,39 @@ const endpoint = 'https://davehakkens.nl/wp-json/buddypress/v1/members'
   Once id has been identified for a user, the getUserProfile function can extract 
   the user's buddypress profile information
  ************************************************************************************/
-// take a user id number and return the buddypress profile data with email stripped
-// id numbers can be identified from db object saved in function below
-export const getDHUserProfile = async (id: number) => {
-  if (!id) {
-    return null
+// take a user name, lookup their id and return the buddypress profile data with email stripped
+export const getDHUserProfile = async (mention_name: string) => {
+  try {
+    console.log('getting user profile', mention_name)
+    const id = (await getUserId(mention_name)) as number
+    console.log(`id retrieved: ${mention_name}:${id}`)
+    if (!id) {
+      throw new Error('user @mention_name not found')
+    }
+    const req = await axios.get(endpoint, {
+      params: {
+        per_page: 1,
+        user_ids: [id],
+      },
+    })
+    const profile = req.data[0]
+    // not sharing email between sites as user has registered new account
+    if (profile && profile.hasOwnProperty('email')) {
+      delete profile.email
+      return profile
+    } else {
+      throw new Error(
+        'migration not possible - profile contains no public information',
+      )
+    }
+  } catch (error) {
+    throw new Error('user @mention_name not found')
   }
-  const req = await axios.get(endpoint, {
-    params: {
-      per_page: 1,
-      user_ids: [id],
-    },
-  })
-  const profile = req.data[0]
-  // not sharing email between sites as user has registered new account
-  if (profile && profile.hasOwnProperty('email')) {
-    delete profile.email
-  }
-  return profile
+}
+
+// identify a user id from their mention name
+export const getUserId = async (mention_name: string) => {
+  return db.get(`_DHSiteUserIDs/${mention_name}`)
 }
 
 // check how many IDs already exist in db and how many are on the buddypress server
@@ -40,8 +55,10 @@ export const updateDHUserIds = async () => {
   const initialRequest = await sendRecordRequest(1, 1)
   const totalOnBP = Number(initialRequest.headers['x-wp-totalpages'])
   console.log('total on BP', totalOnBP)
-  const pagesToFetch = Math.ceil((totalOnBP - totalOnDB) / 100)
+  const totalToFetch = totalOnBP - totalOnDB
+  const pagesToFetch = Math.ceil(totalToFetch / 100)
   await migrateDHUserIDs(pagesToFetch)
+  return `${totalToFetch} updated`
 }
 
 /************ Helper Methods ********************************************************

@@ -3,21 +3,15 @@ import { BPMember } from './BPMember.model'
 import * as db from '../Firebase/realtimeDB'
 const endpoint = 'https://davehakkens.nl/wp-json/buddypress/v1/members'
 
-// get list of DH site user ids based on their mention names
-export const updateDHUserIds = async () => {
-  console.log('updating ids')
-  const existingIDs = await db.get('_DHSiteUserIDs')
-  const totalExisting = Object.keys(existingIDs).length
-  console.log('total existing', totalExisting)
-  // use initial request to see how many total
-  const initialRequest = await sendRecordRequest(1, 1)
-  const totalOverall = Number(initialRequest.headers['x-wp-totalpages'])
-  console.log('total overall', totalOverall)
-  const pagesToFetch = Math.ceil((totalOverall - totalExisting) / 100)
-  console.log('fetching pages', pagesToFetch)
-  await migrateDHUserMeta(pagesToFetch)
-}
 // 70134
+/************ Exported Functions ****************************************************
+  These functions handle creation of a database that stores and tracks buddypress
+  user ids by the user's mention name (as user unlikely to know id number) for lookup.
+  Once id has been identified for a user, the getUserProfile function can extract 
+  the user's buddypress profile information
+ ************************************************************************************/
+// take a user id number and return the buddypress profile data with email stripped
+// id numbers can be identified from db object saved in function below
 export const getUserProfile = async (id: number) => {
   const req = await axios.get(endpoint, {
     params: {
@@ -33,11 +27,28 @@ export const getUserProfile = async (id: number) => {
   return profile
 }
 
-// generic function to get all endpoint - can be extended for any wpapi function calls
-// such as pages, taxonomies etc
-async function migrateDHUserMeta(endPage: number) {
+// check how many IDs already exist in db and how many are on the buddypress server
+// migrate all missing in batches of 100 (storing as mention_name:id pairs)
+export const updateDHUserIds = async () => {
+  console.log('updating ids')
+  const existingIDs = await db.get('_DHSiteUserIDs')
+  const totalOnDB = Object.keys(existingIDs).length
+  console.log('total on db', totalOnDB)
+  // use initial request to see how many total (response has custom header)
+  const initialRequest = await sendRecordRequest(1, 1)
+  const totalOnBP = Number(initialRequest.headers['x-wp-totalpages'])
+  console.log('total on BP', totalOnBP)
+  const pagesToFetch = Math.ceil((totalOnBP - totalOnDB) / 100)
+  await migrateDHUserIDs(pagesToFetch)
+}
+
+/************ Helper Methods ********************************************************
+
+ ************************************************************************************/
+
+//
+async function migrateDHUserIDs(endPage: number) {
   console.log(`fetching [${endPage}] pages of profile data`)
-  // will send of batches of 100 from here on
   // note, ids retrieved in reverse order so page 1 is newest
   for (let i = 1; i <= endPage; i++) {
     console.log(`${i}/${endPage}`)
@@ -58,6 +69,7 @@ function sendRecordRequest(pageNumber: number, perPage: number = 100) {
   })
 }
 
+// take batch of user profiles and return single object in format {mention_name:id}
 function extractBPIds(records: BPMember[]) {
   const recordObject = {}
   records.forEach(r => {
@@ -65,6 +77,10 @@ function extractBPIds(records: BPMember[]) {
   })
   return recordObject
 }
+
+/************ Deprecated ************************************************************
+  (code retained for likely future use)
+ ************************************************************************************/
 
 // // callback function that logs completion progress
 // function updateProgress(completed: number) {

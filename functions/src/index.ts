@@ -8,13 +8,15 @@ import * as functions from 'firebase-functions'
 // custom module imports
 import * as DB from './databaseBackup'
 import * as ImageConverter from './imageConverter'
-import * as UtilsFunctions from './utils'
-import * as AnalyticsFunctions from './analytics'
-import { migrateDHUserMeta } from './DaveHakkensNL/dataMigrate'
-import { syncCommentsCount } from './comments'
+import * as UtilsFunctions from './Utils/utils'
+import { updateDHUserIds } from './DaveHakkensNL/dataMigrate'
 
 console.log('functions init')
-// express settings to handle api
+
+/************ GET and POST requests ************************************************
+Redirect requests so that if a custom endpoint function exists we can call them
+at /api/[endpoint]
+************************************************************************************/
 const app = express()
 // use bodyparse to create json object from body
 app.use(
@@ -25,12 +27,6 @@ app.use(
 // configure app to use cors by default
 app.use(corsLib({ origin: true }))
 app.use(bodyParser.urlencoded({ extended: false }))
-
-/************ GET and POST requests ************************************************
-Redirect requests so that if a custom endpoint function exists we can call them
-at /api/[endpoint]
-************************************************************************************/
-
 app.all('*', async (req, res, next) => {
   // add cors to requests
   cors(req, res, async () => {
@@ -53,6 +49,10 @@ app.all('*', async (req, res, next) => {
         )
         res.send(token)
         break
+      case 'updateDH':
+        const data = await updateDHUserIds()
+        res.send(data)
+        break
       default:
         res.send('invalid api endpoint')
     }
@@ -63,11 +63,11 @@ exports.api = functions.https.onRequest(app)
 /************ Cloud Firestore Triggers ******************************************************
  Functions called in response to changes in Cloud Firestore database
  ************************************************************************************/
-exports.syncCommentsCount = functions.firestore
-  .document('discussions/{discussionId}/comments/{commentId}')
-  .onWrite(async (change, context) => {
-    await syncCommentsCount(context)
-  })
+// exports.syncCommentsCount = functions.firestore
+//   .document('discussions/{discussionId}/comments/{commentId}')
+//   .onWrite(async (change, context) => {
+//     await syncCommentsCount(context)
+//   })
 
 /************ Cron tasks ***********************************************************
 Use pubsub to automatically subscribe to messages sent from cron.
@@ -80,15 +80,13 @@ exports.weeklyTasks = functions.pubsub
     console.log('weekly tick', message, context)
     await DB.BackupDatabase()
     console.log('backup complete')
-    await migrateDHUserMeta()
-    console.log('migrate complete')
   })
 
 exports.dailyTasks = functions.pubsub
   .topic('daily-tick')
   .onPublish(async (message, context) => {
     console.log('daily tick', message, context)
-    // we don't have daily tasks currently
+    await updateDHUserIds()
   })
 
 /************ Storage Triggers ******************************************************
@@ -107,33 +105,30 @@ https://firebase.google.com/docs/functions/callable
 Any functions added here should have a custom url rewrite specified in root firebase.json
 to handle CORS preflight requests correctly
 ************************************************************************************/
-exports.removeStorageFolder = functions.https.onCall((data, context) => {
-  console.log('storage folder remove called', data, context)
-})
-// use service agent to gain access credentials for gcp with  given access scopes
-exports.getAccessToken = functions.https.onCall(
-  async (data: getAccessTokenData) => {
-    const token = await UtilsFunctions.getAccessToken(data.accessScopes)
-    return token
-  },
-)
-interface getAccessTokenData {
-  accessScopes: string[]
-}
+// exports.removeStorageFolder = functions.https.onCall((data, context) => {
+//   console.log('storage folder remove called', data, context)
+// })
+// // use service agent to gain access credentials for gcp with  given access scopes
+// exports.getAccessToken = functions.https.onCall(
+//   async (data: getAccessTokenData) => {
+//     const token = await UtilsFunctions.getAccessToken(data.accessScopes)
+//     return token
+//   },
+// )
+// interface getAccessTokenData {
+//   accessScopes: string[]
+// }
 
-exports.getAnalytics = functions.https.onCall(
-  async (data: getAnalyticsData) => {
-    console.log('get analytics request received', data)
-    await AnalyticsFunctions.getAnalyticsReport(data.viewId, data.token)
-  },
-)
-interface getAnalyticsData {
-  viewId: string
-  token: string
-}
-exports.syncCommentsCount = functions.https.onCall(async () => {
-  console.log('sync comments count called')
-})
-
-// add export so can be used by test
-export default app
+// exports.getAnalytics = functions.https.onCall(
+//   async (data: getAnalyticsData) => {
+//     console.log('get analytics request received', data)
+//     await AnalyticsFunctions.getAnalyticsReport(data.viewId, data.token)
+//   },
+// )
+// interface getAnalyticsData {
+//   viewId: string
+//   token: string
+// }
+// exports.syncCommentsCount = functions.https.onCall(async () => {
+//   console.log('sync comments count called')
+// })

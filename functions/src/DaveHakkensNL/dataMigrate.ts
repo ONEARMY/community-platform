@@ -3,45 +3,67 @@ import { BPMember } from './BPMember.model'
 import * as db from '../Firebase/realtimeDB'
 const endpoint = 'https://davehakkens.nl/wp-json/buddypress/v1/members'
 
+// get list of DH site user ids based on their mention names
+export const updateDHUserIds = async () => {
+  console.log('updating ids')
+  const existingIDs = await db.get('_DHSiteUserIDs')
+  const totalExisting = Object.keys(existingIDs).length
+  console.log('total existing', totalExisting)
+  // use initial request to see how many total
+  const initialRequest = await sendRecordRequest(1, 1)
+  const totalOverall = Number(initialRequest.headers['x-wp-totalpages'])
+  console.log('total overall', totalOverall)
+  const pagesToFetch = Math.ceil((totalOverall - totalExisting) / 100)
+  console.log('fetching pages', pagesToFetch)
+  await migrateDHUserMeta(pagesToFetch)
+}
+// 70134
+export const getUserProfile = async (id: number) => {
+  const req = await axios.get(endpoint, {
+    params: {
+      per_page: 1,
+      user_ids: [id],
+    },
+  })
+  const profile = req.data[0]
+  // not sharing email between sites as user has registered new account
+  if (profile.hasOwnProperty('email')) {
+    delete profile.email
+  }
+  return profile
+}
+
 // generic function to get all endpoint - can be extended for any wpapi function calls
 // such as pages, taxonomies etc
-export const migrateDHUserMeta = async () => {
-  // use an initial request to see total numbers of pages from header
-  console.log('migrating user data')
-  const initialRequest = await sendRecordRequest(1)
-  await updateBPDataRecords(initialRequest.data as BPMember[])
-  // use meta to run subsequent queries
-  const totalPages = Number(initialRequest.headers['x-wp-totalpages'])
-  if (totalPages !== 1) {
-    for (let i = 2; i <= totalPages; i++) {
-      console.log(`${i}/${totalPages}`)
-      const req = await sendRecordRequest(i)
-      await updateBPDataRecords(req.data)
-    }
+async function migrateDHUserMeta(endPage: number) {
+  console.log(`fetching [${endPage}] pages of profile data`)
+  // will send of batches of 100 from here on
+  // note, ids retrieved in reverse order so page 1 is newest
+  for (let i = 1; i <= endPage; i++) {
+    console.log(`${i}/${endPage}`)
+    const req = await sendRecordRequest(i)
+    const ids = extractBPIds(req.data)
+    // await fileUtils.appendJsonToFile('allUsers.json', nextRecords)
+    await db.update('_DHSiteUserIDs', ids)
   }
 }
 
-function sendRecordRequest(pageNumber: number) {
+// send a http get request to endpoint with paging parameters
+function sendRecordRequest(pageNumber: number, perPage: number = 100) {
   return axios.get(endpoint, {
     params: {
-      per_page: 100,
+      per_page: perPage,
       page: pageNumber,
     },
   })
 }
 
-async function updateBPDataRecords(records: BPMember[]) {
+function extractBPIds(records: BPMember[]) {
   const recordObject = {}
   records.forEach(r => {
-    if (r.hasOwnProperty('email')) {
-      delete r.email
-    }
-    recordObject[r.mention_name] = r
+    recordObject[r.mention_name] = r.id
   })
-  // populate database
-  console.log('updating records')
-  await db.update('legacyUsers', recordObject)
-  console.log('records updated')
+  return recordObject
 }
 
 // // callback function that logs completion progress

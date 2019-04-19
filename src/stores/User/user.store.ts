@@ -2,7 +2,6 @@ import { observable, action } from 'mobx'
 import { Database } from '../database'
 import { IUser, IUserFormInput } from 'src/models/user.models'
 import { IFirebaseUser, auth, afs } from 'src/utils/firebase'
-import { IFirebaseUploadInfo } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
@@ -73,7 +72,7 @@ export class UserStore {
   public async updateUserProfile(values: IUserFormInput) {
     const update = { ...(this.user as IUser), ...values }
     await Database.setDoc(`users/${update._id}`, update)
-    this.user = update
+    this.updateUser(update)
     console.log('user updated', update)
   }
   public async changeUserPassword() {

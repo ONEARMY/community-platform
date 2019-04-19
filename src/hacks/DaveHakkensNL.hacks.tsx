@@ -39,15 +39,16 @@ export class DHImport extends React.Component<IProps, IState> {
     try {
       const result = await functions.httpsCallable('DHSite_getUser')(name)
       const member = result.data as IBPMember
-      console.log('member', member)
       const profile: Partial<IUser> = {
         avatar: member.avatar_urls.full,
         avatar_thumb: member.avatar_urls.thumb,
         legacy_id: member.id,
         mention_name: member.mention_name,
         country: member.xprofile.groups[1].fields[42].value,
-        about: member.xprofile.groups[1].fields[667].value,
+        // strip \ characters populated by BP
+        about: member.xprofile.groups[1].fields[667].value.replace(/\\/g, ''),
       }
+      console.log('profile', profile)
       return profile
     } catch (error) {
       this.setState({ errMsg: 'User not found' })

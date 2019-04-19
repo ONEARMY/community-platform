@@ -1,11 +1,9 @@
 import React from 'react'
 import { Form, Field } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
-import { InputField } from 'src/components/Form/Fields'
+import { InputField, TextArea } from 'src/components/Form/Fields'
 import { IUser, IUserFormInput } from 'src/models/user.models'
-import ImagePreview from 'src/pages/common/UploadedFile/ImagePreview'
 import { LinkButton } from 'src/pages/common/Header/CommunityHeader/elements'
-import { Button } from 'src/components/Button'
 import { UserStore } from 'src/stores/User/user.store'
 import { DHImport } from 'src/hacks/DaveHakkensNL.hacks'
 
@@ -32,6 +30,11 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
       errors: null,
       isImporting: false,
     }
+  }
+
+  // force state update when user updated from parent
+  public componentWillReceiveProps(next: IProps) {
+    this.setState({ formValues: next.user })
   }
 
   public get uploadPath() {
@@ -118,7 +121,12 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
                       userStore={this.props.userStore}
                     />
                   )}
-
+                  <Field
+                    name="about"
+                    component={TextArea}
+                    label="About"
+                    disabled={this.props.readOnly}
+                  />
                   <Field
                     name="country"
                     component={InputField}

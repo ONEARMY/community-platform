@@ -19,6 +19,12 @@ One Army aims to tackle these problems by creating a strong unified community fo
 
 The One Army platform helps people to connect and collaborate on environmental projects in one single place. A place where people can meet, help each other, ask and answer questions, share their innovative ways of fixing problems, discover people around them, connect locally, find events and more. One Army aims to provide the tools to connect both online and offline. Amongst other features we have Newsfeed, How-to, Q&A, Discussion, Events, Discover, Maps and more.
 
+Check our video for more informations :
+
+<a href="https://www.youtube.com/watch?feature=player_embedded&v=IN_3SzDARKA
+" target="_blank"><img src="https://img.youtube.com/vi/IN_3SzDARKA/0.jpg" 
+alt="One army presentation video" width="240" height="180" /></a>
+
 ## 👐 Open Source
 
 Society and the environment are kind of screwed 💩 in many ways. We think free knowledge and open source are the fastest and most efficient ways to bring about innovation to tackle some of the most pressing humanity’s fuck ups. Simple.

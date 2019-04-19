@@ -55,12 +55,6 @@ export const HOME_PAGE: IPageMeta[] = [
 
 export const COMMUNITY_PAGES: IPageMeta[] = [
   {
-    path: '/news',
-    component: <NotFoundPage />,
-    title: 'Newsfeed',
-    description: 'Welcome to news',
-  },
-  {
     path: '/how-to',
     component: <HowtoPage />,
     title: 'How-To',
@@ -70,6 +64,12 @@ export const COMMUNITY_PAGES: IPageMeta[] = [
     path: '/discussions',
     component: <DiscussionsPage />,
     title: 'Discussions',
+    description: '',
+  },
+  {
+    path: '/events',
+    component: <EventsPage />,
+    title: 'Events',
     description: '',
   },
 ]
@@ -91,24 +91,6 @@ export const COMMUNITY_PAGES_MORE: IPageMeta[] = [
     path: '/maps',
     component: <NotFoundPage />,
     title: 'Maps',
-    description: '',
-  },
-  {
-    path: '/discover',
-    component: <NotFoundPage />,
-    title: 'Discover',
-    description: '',
-  },
-  {
-    path: '/events',
-    component: <EventsPage />,
-    title: 'Events',
-    description: '',
-  },
-  {
-    path: '/about',
-    component: <NotFoundPage />,
-    title: 'About',
     description: '',
   },
 ]

@@ -161,9 +161,6 @@ export class CommunityHeader extends React.Component<IProps, IState> {
                       </MenuItem>
                     ))}
                     <MenuItem onClick={() => this.logout()}>Logout</MenuItem>
-                    <MenuItem onClick={this.closeProfileMenu}>
-                      Main Site
-                    </MenuItem>
                   </div>
                 </ClickAwayListener>
               </Menu>

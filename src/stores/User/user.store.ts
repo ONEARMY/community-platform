@@ -63,6 +63,7 @@ export class UserStore {
     }
   }
 
+  // ***TODO - reduce number of calls by caching lists of user profiles (or calling cache-first)
   public async getUserProfile(uid: string) {
     const ref = await afs.doc(`users/${uid}`).get()
     const user: IUser = ref.data() as IUser

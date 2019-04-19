@@ -1,52 +1,46 @@
 import React from 'react'
 import { Image, ImageProps } from 'rebass'
 import Icon from 'src/components/Icons'
-import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
+import { UserStore } from 'src/stores/User/user.store'
 
-interface IInjectedProps extends IProps {
-  userStore: UserStore
+interface IProps extends ImageProps {
+  url?: string
+  width?: string
+  userId?: string
 }
 
-interface IProps {
-  userId?: string
-  width?: string
+interface IInjected extends IProps {
+  userStore: UserStore
 }
 
 interface IState {
   avatarUrl: string | null
 }
 
-type AvatarProps = ImageProps & IProps
-
 @inject('userStore')
 @observer
-export class Avatar extends React.Component<AvatarProps, IState> {
-  constructor(props: any) {
+export class Avatar extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
     super(props)
     this.state = {
-      avatarUrl: null,
+      avatarUrl: this.props.url ? this.props.url : null,
+    }
+    if (!this.state.avatarUrl && this.props.userId) {
+      this.getUserAvatar(this.props.userId)
     }
   }
-  get props() {
-    return this.props as IInjectedProps
+  get injected() {
+    return this.props as IInjected
   }
 
-  componentWillMount() {
-    // this.getUserAvatar(this.props.userId)
-  }
-
-  public getUserAvatar = async (userId: string) => {
-    try {
-      if (userId !== 'anonymous') {
-        const user = await this.props.userStore.getUserProfile(userId)
-        this.setState({ avatarUrl: user.avatar })
-      }
-    } catch (error) {
-      console.log('err', error)
-      throw new Error(JSON.stringify(error))
+  async getUserAvatar(userId: string) {
+    const profile = await this.injected.userStore.getUserProfile(userId)
+    if (profile && profile.avatar_thumb) {
+      this.setState({ avatarUrl: profile.avatar_thumb })
     }
   }
+
   render() {
     const avatarUrl = this.state.avatarUrl
     return (

@@ -72,18 +72,7 @@ export class CommunityHeader extends React.Component<IProps, IState> {
   closeProfileMenu = () => {
     this.setState({ profileMenuAnchor: null })
   }
-  getProfile = (user: IUser) => {
-    return (
-      <Profile onClick={this.openProfileMenu}>
-        <Avatar
-          alt={user.display_name}
-          src={user.avatar_thumb}
-          className="header__avatar"
-        />
-        <Icon glyph={'arrow-down'} />
-      </Profile>
-    )
-  }
+
   logout() {
     this.injected.userStore.logout()
     this.closeProfileMenu()
@@ -149,7 +138,7 @@ export class CommunityHeader extends React.Component<IProps, IState> {
           {user ? (
             <>
               <Profile onClick={this.openProfileMenu}>
-                <Avatar userId={user._id} />
+                <Avatar url={user.avatar_thumb} />
                 <Icon glyph={'arrow-down'} />
               </Profile>
               <Menu

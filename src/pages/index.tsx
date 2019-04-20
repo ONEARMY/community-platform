@@ -101,12 +101,6 @@ export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [
     title: 'Profile',
     description: '',
   },
-  {
-    path: '/help',
-    component: <NotFoundPage />,
-    title: 'Help',
-    description: '',
-  },
 ]
 
 export class Routes extends React.Component<any, IState> {

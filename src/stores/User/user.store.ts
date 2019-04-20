@@ -102,7 +102,7 @@ export class UserStore {
   }
 
   public async updateUserAvatar() {
-    // TODO
+    // *** TODO -
   }
   // take the username and return matching avatar url (includes undefined.jpg match if no user)
   public async getUserAvatar(userName: string | undefined) {

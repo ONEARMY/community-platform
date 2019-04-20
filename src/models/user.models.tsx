@@ -11,20 +11,19 @@ export interface IUserFormInput extends Partial<IUser> {}
 
 // IUser retains most of the fields from legacy users (omitting passwords),
 // and has a few additional fields. Note 'email' is excluded
-// _id is unique/fixed identifier
+// _uid is unique/fixed identifier
 // ALL USER INFO BELOW IS PUBLIC
 export interface IUser extends IDbDoc {
-  _id: string
+  // authID is additional id populated by firebase auth, required for some auth operations
+  _authID: string
+  // userName is same as legacy 'mention_name', e.g. @my-name. It will also be the doc _id and
+  // firebase auth displayName property
+  userName: string
+  // note, user avatar url is taken direct from userName so no longer populated here
+  // avatar:string
   verified: boolean
-  avatar: string
-  avatar_thumb: string
   about?: string
-  mention_name?: string
-  display_name?: string
   legacy_id?: number
   legacy_registered?: string /*mm/dd/yyyy hh:ss*/
-  first_name?: string
-  last_name?: string
-  nickname?: string
   country?: string
 }

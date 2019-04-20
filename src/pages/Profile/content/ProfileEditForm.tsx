@@ -6,6 +6,7 @@ import { IUser, IUserFormInput } from 'src/models/user.models'
 import { LinkButton } from 'src/pages/common/Header/CommunityHeader/elements'
 import { UserStore } from 'src/stores/User/user.store'
 import { DHImport } from 'src/hacks/DaveHakkensNL.hacks'
+import { Avatar } from 'src/components/Avatar'
 
 interface IState {
   formValues: IUserFormInput
@@ -103,11 +104,7 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
                       /> */}
                     </>
                   )}
-                  <img
-                    src={user.avatar}
-                    alt={user.mention_name ? user.mention_name : user._id}
-                    style={{ maxWidth: 180 }}
-                  />
+                  <Avatar userName={user.userName} width="180px" />
 
                   <Field
                     name="mention_name"

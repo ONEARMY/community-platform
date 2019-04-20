@@ -4,9 +4,6 @@ import { auth } from 'src/utils/firebase'
 import { Button } from 'src/components/Button'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
-import Typography from '@material-ui/core/Typography'
-import CssBaseline from '@material-ui/core/CssBaseline'
-import { Main, ModalPaper, Form } from './elements'
 import { LoginForm } from './Login.form'
 import { SignUpForm } from './SignUp.form'
 import { ResetPWForm } from './ResetPW.form'
@@ -76,12 +73,10 @@ export class LoginComponent extends React.Component<IProps, IState> {
     const nextValues = { ...this.state.formValues }
     ;(nextValues[e.currentTarget.id] = e.currentTarget.value),
       this.setState({ formValues: nextValues })
-    console.log('state', this.state.formValues)
   }
 
   public render() {
     const user = this.injected.userStore.user
-    console.log('login user', user)
     return (
       <>
         <Button onClick={this.toggleModal}>Log in</Button>

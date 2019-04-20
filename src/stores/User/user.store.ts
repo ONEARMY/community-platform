@@ -2,6 +2,7 @@ import { observable, action } from 'mobx'
 import { Database } from '../database'
 import { IUser, IUserFormInput } from 'src/models/user.models'
 import { IFirebaseUser, auth, afs } from 'src/utils/firebase'
+import { Storage } from '../storage'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
@@ -35,8 +36,20 @@ export class UserStore {
     })
   }
 
-  public async registerNewUser(email: string, password: string) {
-    return auth.createUserWithEmailAndPassword(email, password)
+  public async registerNewUser(
+    email: string,
+    password: string,
+    userName: string,
+  ) {
+    const req = await auth.createUserWithEmailAndPassword(email, password)
+    // once registered populate displayname with the chosen username
+    if (req.user) {
+      console.log('updating user display name')
+      req.user.updateProfile({
+        displayName: userName,
+        photoURL: req.user.photoURL,
+      })
+    }
   }
 
   public async login(email: string, password: string) {
@@ -46,37 +59,40 @@ export class UserStore {
   // handle user sign in, when firebase authenticates wnat to also fetch user document from the database
   public async userSignedIn(user: IFirebaseUser | null) {
     let userMeta: IUser | null = null
-    if (user && user.uid) {
-      userMeta = await this.getUserProfile(user.uid)
-      if (!userMeta) {
-        console.log('no user meta retrieved. creating empty user doc')
-        userMeta = await this._createUserProfile({
-          display_name: '',
-          first_name: '',
-          last_name: '',
-          nickname: '',
-          country: '',
-        } as IUserFormInput)
+    if (user) {
+      if (user.displayName) {
+        userMeta = await this.getUserProfile(user.displayName)
+        if (!userMeta) {
+          console.log('no user meta retrieved. creating empty user doc')
+          userMeta = await this._createUserProfile({
+            userName: user.displayName,
+          })
+        }
+        this.updateUser(userMeta)
+      } else {
+        console.log('no user display name')
+        // if user just registered there might be a delay before their display name has been updated
+        return setTimeout(() => {
+          this.userSignedIn(user)
+        }, 500)
       }
-      this.updateUser(userMeta)
     }
   }
 
-  // ***TODO - reduce number of calls by caching lists of user profiles (or calling cache-first)
-  public async getUserProfile(uid: string) {
-    const ref = await afs.doc(`users/${uid}`).get()
-    const user: IUser = ref.data() as IUser
-    return user
+  public async getUserProfile(userName: string) {
+    const ref = await afs.doc(`users/${userName}`).get()
+    return ref.exists ? (ref.data() as IUser) : null
   }
 
   public async updateUserProfile(values: IUserFormInput) {
-    const update = { ...(this.user as IUser), ...values }
-    await Database.setDoc(`users/${update._id}`, update)
+    const user = this.user as IUser
+    const update = { ...user, ...values }
+    await Database.setDoc(`users/${user.userName}`, update)
     this.updateUser(update)
     console.log('user updated', update)
   }
   public async changeUserPassword() {
-    // (see code in change pw component and move here)
+    // *** TODO - (see code in change pw component and move here)
   }
 
   public async sendEmailVerification() {
@@ -85,7 +101,17 @@ export class UserStore {
     }
   }
 
-  public async sendPasswordResetEmail(email) {
+  public async updateUserAvatar() {
+    // TODO
+  }
+  // take the username and return matching avatar url (includes undefined.jpg match if no user)
+  public async getUserAvatar(userName: string | undefined) {
+    const url = Storage.getPublicDownloadUrl(`avatars/${userName}.jpg`)
+    return url
+  }
+  public async setUserAvatarFromUrl(url: string) {}
+
+  public async sendPasswordResetEmail(email: string) {
     return auth.sendPasswordResetEmail(email)
   }
 
@@ -96,18 +122,12 @@ export class UserStore {
   private async _createUserProfile(values: IUserFormInput) {
     const authUser = auth.currentUser as firebase.User
     const user: IUser = {
-      ...Database.generateDocMeta('users'),
-      _id: authUser.uid,
+      ...Database.generateDocMeta('users', values.userName),
+      _authID: authUser.uid,
+      userName: values.userName as string,
       verified: false,
-      avatar: 'https://i.ibb.co/YhRNk4B/avatar-placeholder.gif',
-      avatar_thumb: 'https://i.ibb.co/YhRNk4B/avatar-placeholder.gif',
-      display_name: values.display_name,
-      first_name: values.first_name,
-      last_name: values.last_name,
-      nickname: values.nickname,
-      country: values.country,
     }
-    await Database.setDoc(`users/${user._id}`, user)
+    await Database.setDoc(`users/${values.userName}`, user)
     return user
   }
 }

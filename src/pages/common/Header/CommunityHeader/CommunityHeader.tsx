@@ -21,7 +21,6 @@ import {
   LinkButton,
   SectionDescription,
 } from './elements'
-import { IUser } from 'src/models/user.models'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 
@@ -138,7 +137,7 @@ export class CommunityHeader extends React.Component<IProps, IState> {
           {user ? (
             <>
               <Profile onClick={this.openProfileMenu}>
-                <Avatar url={user.avatar_thumb} />
+                <Avatar userName={user.userName} />
                 <Icon glyph={'arrow-down'} />
               </Profile>
               <Menu

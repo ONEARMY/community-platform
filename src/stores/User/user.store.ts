@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx'
 import { Database } from '../database'
-import { IUser, IUserFormInput } from 'src/models/user.models'
+import { IUser } from 'src/models/user.models'
 import { IFirebaseUser, auth, afs, EmailAuthProvider } from 'src/utils/firebase'
 import { Storage } from '../storage'
 import { Subscription } from 'rxjs'
@@ -42,7 +42,7 @@ export class UserStore {
         photoURL: authReq.user.photoURL,
       })
       // populate db user profile and resume auth listener
-      await this._createUserProfile({ userName })
+      await this._createUserProfile(userName)
       this._listenToAuthStateChanges()
     }
   }
@@ -71,7 +71,7 @@ export class UserStore {
     return ref.exists ? (ref.data() as IUser) : null
   }
 
-  public async updateUserProfile(values: IUserFormInput) {
+  public async updateUserProfile(values: Partial<IUser>) {
     const user = this.user as IUser
     const update = { ...user, ...values }
     await Database.setDoc(`users/${user.userName}`, update)
@@ -117,15 +117,15 @@ export class UserStore {
     return auth.signOut()
   }
 
-  private async _createUserProfile(values: IUserFormInput) {
+  private async _createUserProfile(userName: string) {
     const authUser = auth.currentUser as firebase.User
     const user: IUser = {
-      ...Database.generateDocMeta('users', values.userName),
+      ...Database.generateDocMeta('users', userName),
       _authID: authUser.uid,
-      userName: values.userName as string,
+      userName,
       verified: false,
     }
-    await Database.setDoc(`users/${values.userName}`, user)
+    await Database.setDoc(`users/${userName}`, user)
     this.updateUser(user)
   }
 

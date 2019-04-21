@@ -1,14 +1,16 @@
 import { observable, action } from 'mobx'
 import { Database } from '../database'
 import { IUser, IUserFormInput } from 'src/models/user.models'
-import { IFirebaseUser, auth, afs } from 'src/utils/firebase'
+import { IFirebaseUser, auth, afs, EmailAuthProvider } from 'src/utils/firebase'
 import { Storage } from '../storage'
+import { Subscription } from 'rxjs'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
 */
 
 export class UserStore {
+  private authUnsubscribe: firebase.Unsubscribe
   @observable
   public user: IUser | undefined
 
@@ -24,31 +26,24 @@ export class UserStore {
     this._listenToAuthStateChanges()
   }
 
-  private _listenToAuthStateChanges() {
-    auth.onAuthStateChanged(authUser => {
-      console.log('auth user changed', authUser)
-      this.authUser = authUser
-      if (authUser) {
-        this.userSignedIn(authUser)
-      } else {
-        this.updateUser(undefined)
-      }
-    })
-  }
-
+  // when registering a new user create firebase auth profile as well as database user profile
   public async registerNewUser(
     email: string,
     password: string,
     userName: string,
   ) {
-    const req = await auth.createUserWithEmailAndPassword(email, password)
-    // once registered populate displayname with the chosen username
-    if (req.user) {
-      console.log('updating user display name')
-      req.user.updateProfile({
+    // stop auto detect of login as will pick up with incomplete information during registration
+    this._unsubscribeFromAuthStateChanges()
+    const authReq = await auth.createUserWithEmailAndPassword(email, password)
+    // once registered populate auth profile displayname with the chosen username
+    if (authReq.user) {
+      await authReq.user.updateProfile({
         displayName: userName,
-        photoURL: req.user.photoURL,
+        photoURL: authReq.user.photoURL,
       })
+      // populate db user profile and resume auth listener
+      await this._createUserProfile({ userName })
+      this._listenToAuthStateChanges()
     }
   }
 
@@ -60,21 +55,13 @@ export class UserStore {
   public async userSignedIn(user: IFirebaseUser | null) {
     let userMeta: IUser | null = null
     if (user) {
-      if (user.displayName) {
-        userMeta = await this.getUserProfile(user.displayName)
-        if (!userMeta) {
-          console.log('no user meta retrieved. creating empty user doc')
-          userMeta = await this._createUserProfile({
-            userName: user.displayName,
-          })
-        }
+      // legacy user formats did not save names so get profile via email - this option be removed in later version
+      // (assumes migration strategy and check)
+      userMeta = user.displayName
+        ? await this.getUserProfile(user.displayName)
+        : await this.getUserProfile(user.email as string)
+      if (userMeta) {
         this.updateUser(userMeta)
-      } else {
-        console.log('no user display name')
-        // if user just registered there might be a delay before their display name has been updated
-        return setTimeout(() => {
-          this.userSignedIn(user)
-        }, 500)
       }
     }
   }
@@ -89,10 +76,6 @@ export class UserStore {
     const update = { ...user, ...values }
     await Database.setDoc(`users/${user.userName}`, update)
     this.updateUser(update)
-    console.log('user updated', update)
-  }
-  public async changeUserPassword() {
-    // *** TODO - (see code in change pw component and move here)
   }
 
   public async sendEmailVerification() {
@@ -100,16 +83,31 @@ export class UserStore {
       return this.authUser.sendEmailVerification()
     }
   }
-
-  public async updateUserAvatar() {
-    // *** TODO -
-  }
   // take the username and return matching avatar url (includes undefined.jpg match if no user)
   public async getUserAvatar(userName: string | undefined) {
     const url = Storage.getPublicDownloadUrl(`avatars/${userName}.jpg`)
     return url
   }
-  public async setUserAvatarFromUrl(url: string) {}
+
+  public async updateUserAvatar() {
+    // *** TODO -
+  }
+
+  // during DHSite migration want to copy existing BP avatar to server
+  public async setUserAvatarFromUrl(url: string) {
+    // *** TODO
+  }
+
+  public async changeUserPassword(oldPassword: string, newPassword: string) {
+    // *** TODO - (see code in change pw component and move here)
+    const user = this.authUser as firebase.User
+    const credentials = EmailAuthProvider.credential(
+      user.email as string,
+      oldPassword,
+    )
+    await user.reauthenticateAndRetrieveDataWithCredential(credentials)
+    return user.updatePassword(newPassword)
+  }
 
   public async sendPasswordResetEmail(email: string) {
     return auth.sendPasswordResetEmail(email)
@@ -128,6 +126,25 @@ export class UserStore {
       verified: false,
     }
     await Database.setDoc(`users/${values.userName}`, user)
-    return user
+    this.updateUser(user)
+  }
+
+  // use firebase auth to listen to change to signed in user
+  // on sign in want to load user profile
+  // strange implementation return the unsubscribe object on subscription, so stored
+  // to authUnsubscribe variable for use later
+  private _listenToAuthStateChanges() {
+    this.authUnsubscribe = auth.onAuthStateChanged(authUser => {
+      this.authUser = authUser
+      if (authUser) {
+        this.userSignedIn(authUser)
+      } else {
+        this.updateUser(undefined)
+      }
+    })
+  }
+
+  private _unsubscribeFromAuthStateChanges() {
+    this.authUnsubscribe()
   }
 }

@@ -4,11 +4,6 @@ export interface IUserState {
   user?: IUser
 }
 
-// user form input can take any user profile fields, not necessary to have standalone
-// but keeping to make overt.
-// tslint:disable no-empty-interface
-export interface IUserFormInput extends Partial<IUser> {}
-
 // IUser retains most of the fields from legacy users (omitting passwords),
 // and has a few additional fields. Note 'email' is excluded
 // _uid is unique/fixed identifier
@@ -23,7 +18,7 @@ export interface IUser extends IDbDoc {
   // avatar:string
   verified: boolean
   about?: string
-  legacy_id?: number
-  legacy_registered?: string /*mm/dd/yyyy hh:ss*/
+  DHSite_id?: number
+  DHSite_mention_name?: string
   country?: string
 }

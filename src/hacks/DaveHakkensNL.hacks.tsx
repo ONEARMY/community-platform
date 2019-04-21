@@ -23,14 +23,25 @@ export class DHImport extends React.Component<IProps, IState> {
     this.state = { isImporting: false }
   }
 
+  // import a user given by mention name, copying avatar to server and updating specified DB fields
   public async importProfileFromDH() {
     const name = this.props.mention_name
     console.log('importing mention name', name)
     if (name) {
       this.setState({ isImporting: true })
-      const profile = await this.importBPMember(name)
-      await this.props.userStore.updateUserProfile(profile)
-      this.setState({ isImporting: false })
+      const member = (await this.importBPMember(name)) as IBPMember
+      if (member) {
+        await this.props.userStore.setUserAvatarFromUrl(member.avatar_urls.full)
+        const profile: Partial<IUser> = {
+          DHSite_id: member.id,
+          DHSite_mention_name: member.mention_name,
+          country: member.xprofile.groups[1].fields[42].value,
+          // strip \ characters populated by BP
+          about: member.xprofile.groups[1].fields[667].value.replace(/\\/g, ''),
+        }
+        await this.props.userStore.updateUserProfile(profile)
+        this.setState({ isImporting: false })
+      }
     }
   }
 
@@ -39,25 +50,14 @@ export class DHImport extends React.Component<IProps, IState> {
     try {
       const result = await functions.httpsCallable('DHSite_getUser')(name)
       const member = result.data as IBPMember
-      const profile: Partial<IUser> = {
-        avatar: member.avatar_urls.full,
-        avatar_thumb: member.avatar_urls.thumb,
-        legacy_id: member.id,
-        mention_name: member.mention_name,
-        country: member.xprofile.groups[1].fields[42].value,
-        // strip \ characters populated by BP
-        about: member.xprofile.groups[1].fields[667].value.replace(/\\/g, ''),
-      }
-      console.log('profile', profile)
-      return profile
+      return member
     } catch (error) {
-      this.setState({ errMsg: 'User not found' })
-      return {}
+      this.setState({ errMsg: `Error: ${error.message}`, isImporting: false })
+      return null
     }
   }
 
   public render() {
-    const user = ''
     return (
       <>
         <Button

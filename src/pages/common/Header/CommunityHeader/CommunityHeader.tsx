@@ -23,6 +23,7 @@ import {
 } from './elements'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
+import Text from 'src/components/Text'
 
 interface IState {
   moreMenuAnchor: any
@@ -147,7 +148,10 @@ export class CommunityHeader extends React.Component<IProps, IState> {
                 style={{ marginTop: '3em' }}
               >
                 <ClickAwayListener onClickAway={this.closeProfileMenu}>
-                  <div>
+                  <>
+                    <Text p={8} bold>
+                      {user.userName}
+                    </Text>
                     {COMMUNITY_PAGES_PROFILE.map(page => (
                       <MenuItem onClick={this.closeProfileMenu} key={page.path}>
                         <LinkButton
@@ -160,7 +164,7 @@ export class CommunityHeader extends React.Component<IProps, IState> {
                       </MenuItem>
                     ))}
                     <MenuItem onClick={() => this.logout()}>Logout</MenuItem>
-                  </div>
+                  </>
                 </ClickAwayListener>
               </Menu>
             </>

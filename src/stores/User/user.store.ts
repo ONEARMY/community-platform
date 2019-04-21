@@ -3,7 +3,6 @@ import { Database } from '../database'
 import { IUser } from 'src/models/user.models'
 import { IFirebaseUser, auth, afs, EmailAuthProvider } from 'src/utils/firebase'
 import { Storage } from '../storage'
-import { Subscription } from 'rxjs'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.

@@ -10,7 +10,7 @@ export const MOCK_USER: IUser = {
   _createdBy: '123',
   _created: toTimestamp('Friday, January 2, 2015 12:59 AM'),
   _modified: toTimestamp('Friday, January 2, 2015 12:59 AM'),
-  legacy_id: 70134,
-  legacy_registered: '14/09/2018 14:45',
+  DHSite_id: 70134,
+  DHSite_mention_name: 'chris-m-clarke',
   country: '',
 }

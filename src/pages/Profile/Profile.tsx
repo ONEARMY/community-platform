@@ -6,7 +6,6 @@ import { BoxContainer } from 'src/components/Layout/BoxContainer'
 import { UserStore } from 'src/stores/User/user.store'
 import { IUser } from 'src/models/user.models'
 import { UserProfile } from './content/UserProfile'
-import { ChangePasswordPage } from './content/ChangePassword'
 
 interface InjectedProps extends IProps {
   userStore: UserStore
@@ -36,16 +35,6 @@ export class ProfilePage extends React.Component<IProps> {
                 <UserProfile
                   {...props}
                   user={currentUser}
-                  userStore={this.injected.userStore}
-                />
-              )}
-            />
-            <Route
-              exact
-              path="/profile/change-password"
-              render={props => (
-                <ChangePasswordPage
-                  {...props}
                   userStore={this.injected.userStore}
                 />
               )}

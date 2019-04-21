@@ -1,9 +1,10 @@
 import * as React from 'react'
 import { Box } from 'rebass'
-import { IUser, IUserFormInput } from 'src/models/user.models'
-import { Button } from 'src/components/Button'
-import { ProfileEditForm } from './ProfileEditForm'
+import { IUser } from 'src/models/user.models'
 import { UserStore } from 'src/stores/User/user.store'
+import { ProfileEditForm } from './ProfileEdit.form'
+import { ChangePasswordForm } from './ChangePassword.form'
+import { ImportDHForm } from './ImportDH.form'
 
 interface IProps {
   user: IUser
@@ -14,60 +15,24 @@ interface IState {
   isSaving: boolean
 }
 export class UserProfile extends React.Component<IProps, IState> {
-  userFormValues: IUserFormInput
   constructor(props: IProps) {
     super(props)
     this.state = { editMode: false, isSaving: false }
   }
-  public async saveProfile() {
-    console.log('saving profile', this.userFormValues)
-    this.setState({ isSaving: true })
-    await this.props.userStore.updateUserProfile(this.userFormValues)
-    this.setState({ editMode: false, isSaving: false })
-  }
-  // want to track form values in child component so can trigger save from parent
-  public profileFormValueChanged(values: IUserFormInput) {
-    this.userFormValues = values
-  }
+
   public render() {
-    const user = this.props.user
+    const readOnly = !this.state.editMode
     return (
-      <>
-        <Box mb={2}>
-          {this.state.editMode ? (
-            <Button
-              variant={'outline'}
-              m={0}
-              icon={'check'}
-              style={{ float: 'right' }}
-              disabled={this.state.isSaving}
-              onClick={() => this.saveProfile()}
-            >
-              Save Profile
-            </Button>
-          ) : (
-            <Button
-              variant={'outline'}
-              m={0}
-              icon={'edit'}
-              style={{ float: 'right' }}
-              onClick={() => this.setState({ editMode: true })}
-              disabled={this.state.isSaving}
-            >
-              Edit Profile
-            </Button>
-          )}
-
-          <ProfileEditForm
-            user={user}
-            readOnly={!this.state.editMode}
-            onChange={formValues => this.profileFormValueChanged(formValues)}
-            userStore={this.props.userStore}
-          />
-
-          <></>
-        </Box>
-      </>
+      <Box mb={2}>
+        {/* TODO - add avatar edit form */}
+        <ProfileEditForm
+          user={this.props.user}
+          userStore={this.props.userStore}
+        />
+        {/* TODO - add email verification resend button (if user email not verified) */}
+        <ChangePasswordForm {...readOnly} userStore={this.props.userStore} />
+        <ImportDHForm userStore={this.props.userStore} {...readOnly} />
+      </Box>
     )
   }
 }

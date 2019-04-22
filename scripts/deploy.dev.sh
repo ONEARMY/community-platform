@@ -1,5 +1,3 @@
-# install dependencies
-npm install ./functions
 # set project (default = dev)
 firebase use default
 # assign variables that can be accessed from firebase config method for backend functions

@@ -1,58 +1,24 @@
-import { IProject } from './project.models'
 import { IDbDoc } from './common.models'
-import { IFirebaseUploadInfo } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
 
-export class User {
-  constructor() {
-    //
-  }
-
-  _listenToLoginState() {
-    console.log('listening to login state')
-  }
-}
 export interface IUserState {
   user?: IUser
 }
 
-export interface IUserFormInput {
-  email: string
-  display_name: string
-  password?: string
-  repeat_password?: string
-  first_name?: string
-  last_name?: string
-  nickname?: string
-  country?: string
-  avatar?: string | IFirebaseUploadInfo
-}
-
 // IUser retains most of the fields from legacy users (omitting passwords),
-// and has a few additional fields
+// and has a few additional fields. Note 'email' is excluded
+// _uid is unique/fixed identifier
+// ALL USER INFO BELOW IS PUBLIC
 export interface IUser extends IDbDoc {
-  projects?: IProject
+  // authID is additional id populated by firebase auth, required for some auth operations
+  _authID: string
+  // userName is same as legacy 'mention_name', e.g. @my-name. It will also be the doc _id and
+  // firebase auth displayName property
+  userName: string
+  // note, user avatar url is taken direct from userName so no longer populated here
+  // avatar:string
   verified: boolean
-  display_name: string
-  email?: string
-  legacy_id?: number
-  legacy_registered?: string /*mm/dd/yyyy hh:ss*/
-  first_name?: string
-  last_name?: string
-  nickname?: string
-  country?: string
-  avatar?: string
-}
-
-export interface ILegacyUser {
-  legacy_id: number
-  login: string
-  password: string
-  password_alg: 'phpass' | 'md5'
-  email?: string
-  legacy_registered: string /*mm/dd/yyyy hh:ss*/
-  display_name: string
-  first_name?: string
-  last_name?: string
-  nickname?: string
+  about?: string
+  DHSite_id?: number
+  DHSite_mention_name?: string
   country?: string
 }

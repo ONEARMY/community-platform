@@ -1,3 +1,5 @@
+# install dependencies
+npm install ./functions
 # set project
 firebase use production
 # assign variables that can be accessed from firebase config method for backend functions

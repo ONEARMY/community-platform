@@ -9,7 +9,6 @@ import Step from './Step/Step'
 import { Button } from 'src/components/Button'
 import { IHowtoStep, IHowto } from 'src/models/howto.models'
 import { Link } from 'react-router-dom'
-import { console } from '@ephox/dom-globals'
 import HowtoSummary from './HowtoSummary/HowtoSummary'
 
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).

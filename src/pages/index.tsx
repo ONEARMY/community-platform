@@ -8,8 +8,6 @@ import { HomePage } from './Home/Home'
 import { NotFoundPage } from './NotFound/NotFound'
 import { DiscussionsPage } from './Discussions'
 import { ProfilePage } from './Profile/Profile'
-import { SettingsPage } from './Profile/Settings'
-import { SignUpPage } from './Home/SignUp'
 import { ActionPage } from './Home/Action'
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import { EventsPage } from './Events/Events'
@@ -38,13 +36,7 @@ export const HOME_PAGE: IPageMeta[] = [
     description: "Welcome home, here is all the stuff you're interested in",
     exact: true,
   },
-  {
-    path: '/sign-up',
-    component: <SignUpPage />,
-    title: 'Sign up',
-    description: '',
-    exact: true,
-  },
+
   {
     path: '/action',
     component: <ActionPage />,
@@ -100,18 +92,6 @@ export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [
     path: '/profile',
     component: <ProfilePage />,
     title: 'Profile',
-    description: '',
-  },
-  {
-    path: '/settings',
-    component: <SettingsPage />,
-    title: 'Settings',
-    description: '',
-  },
-  {
-    path: '/help',
-    component: <NotFoundPage />,
-    title: 'Help',
     description: '',
   },
 ]

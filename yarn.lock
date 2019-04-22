@@ -1087,27 +1087,6 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.2.tgz#63985d3d8b02530e0869962f4da09142ee8e200e"
   integrity sha512-n/VQ4mbfr81aqkx/XmVicOLjviMuy02eenSdJY33SVA7S2J42EU0P1H0mOogfYedb3wXA0d/LVtBrgTSm04WEA==
 
-"@ephox/dom-globals@latest":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@ephox/dom-globals/-/dom-globals-1.1.2.tgz#cb181a7652c1f097c9920fcf551c1fe202f70041"
-  integrity sha512-wTcfYP5FH4n5tzVMaE8a7T6XqdTFiGfGAC6LiuCYPBh4mOeIEN5WkiPuAy+trJBl0wRdlwKl+XmhIW06Xf4tpg==
-
-"@ephox/katamari@latest":
-  version "2.4.10"
-  resolved "https://registry.yarnpkg.com/@ephox/katamari/-/katamari-2.4.10.tgz#abdc1aeef3aa78ce4ae6c2c0e8a9c4c4b84ba351"
-  integrity sha512-Ei2Ea+254SAmyEPLKorGkWEb+/5NpcjznYfFbFz//n1z+ytBpwIwXlNcDIUgqbrdoYEq5S1RSDHv6pHVSdGETw==
-  dependencies:
-    "@ephox/dom-globals" latest
-    tslib "^1.9.3"
-
-"@ephox/sand@^2.0.11":
-  version "2.0.11"
-  resolved "https://registry.yarnpkg.com/@ephox/sand/-/sand-2.0.11.tgz#9db3476b96651f14fc7d61e4ca12cd3fcc82db1b"
-  integrity sha512-bd/QkuHewxyHYa/f8TBgb3ilbw/ZkkDAHmwouk9lRC+h6lo0DzzGr+c4nkCYA81stU5nnKEC2t2hxVpNOxxgvw==
-  dependencies:
-    "@ephox/dom-globals" latest
-    "@ephox/katamari" latest
-
 "@firebase/app-types@0.3.3":
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/@firebase/app-types/-/app-types-0.3.3.tgz#87659dd4cce8d1e341c717c61bd654998ac7142b"
@@ -4968,7 +4947,7 @@ commander@2.17.x:
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.17.1.tgz#bd77ab7de6de94205ceacc72f1716d29f20a77bf"
   integrity sha512-wPMUt6FnH2yzG95SA6mzjQOEKUU3aLaDEmzs1ti+1E9h+CsrZghRlqEM/EJ4KscsQVG8uNN4uVreUeT8+drlgg==
 
-commander@^2.11.0, commander@^2.14.1, commander@^2.19.0, commander@^2.5.0, commander@^2.9.0, commander@~2.19.0:
+commander@^2.11.0, commander@^2.19.0, commander@^2.5.0, commander@^2.9.0, commander@~2.19.0:
   version "2.19.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.19.0.tgz#f6198aa84e5b83c46054b94ddedbfed5ee9ff12a"
   integrity sha512-6tvAOO+D6OENvRAh524Dh9jcfKTYDQAqvqezbCW82xj5X0pSrcpxtvRKHLG0yBY6SD7PSDrJaj+0AiOcKVd1Xg==

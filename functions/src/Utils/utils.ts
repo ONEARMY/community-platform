@@ -4,14 +4,6 @@ import { config } from 'firebase-functions'
 // config has access to environment variables set in root scripts/deploy.sh
 // authorise application using JWT
 
-export const AuthTest = async () => {
-  // test to get readonly access to analytics data
-  const token = await getAccessToken([
-    'https://www.googleapis.com/auth/analytics.readonly',
-  ])
-  return token
-}
-
 export const getAccessToken = async (
   accessScopes: string[],
   // callback?: (token: string) => void,
@@ -31,4 +23,12 @@ export const getAccessToken = async (
   )
   const credentials = await jwtClient.authorize()
   return credentials
+}
+
+export const AuthTest = async () => {
+  // test to get readonly access to analytics data
+  const token = await getAccessToken([
+    'https://www.googleapis.com/auth/analytics.readonly',
+  ])
+  return token
 }

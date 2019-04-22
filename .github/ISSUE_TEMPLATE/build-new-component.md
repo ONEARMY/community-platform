@@ -4,16 +4,19 @@ about: Describe the new component you want to build
 title: ''
 labels: ''
 assignees: ''
-
 ---
 
 ## Component infos
+
 ### Description
+
 Write a quick descritpion of what is the component for, and as mainy details you consider useful to the person that will have to build it.
 
 ### Page related
+
 Will be used in :
-* Related page name (#issue-number)
+
+- Related page name (#issue-number)
 
 ### Mockup
 

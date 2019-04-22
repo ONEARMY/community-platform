@@ -6,8 +6,9 @@
 
 import { Subject } from 'rxjs'
 import { afs } from 'src/utils/firebase'
-import { firestore, auth } from 'firebase/app'
 import { IDbDoc } from 'src/models/common.models'
+// additional imports for typings
+import { firestore, auth } from 'firebase/app'
 export class Database {
   /****************************************************************************** *
         Available Functions
@@ -94,14 +95,14 @@ export class Database {
     }
   }
   // creates standard set of meta fields applied to all docs
-  public static generateDocMeta(collectionPath: string) {
+  public static generateDocMeta(collectionPath: string, docID?: string) {
     const user = auth().currentUser
     const meta: IDbDoc = {
       _created: this.generateTimestamp(),
       _deleted: false,
-      _id: this.generateId(collectionPath),
+      _id: docID ? docID : this.generateId(collectionPath),
       _modified: this.generateTimestamp(),
-      _createdBy: user ? (user.uid as string) : 'anonymous',
+      _createdBy: user ? (user.displayName as string) : 'anonymous',
     }
     return meta
   }

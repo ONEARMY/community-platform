@@ -28,6 +28,11 @@ export const buttons = {
   disabled: {
     color: colors.grey,
     backgroundColor: colors.black,
+    opacity: 0.3,
+  },
+  dark: {
+    color: colors.white,
+    backgroundColor: colors.black,
   },
 }
 

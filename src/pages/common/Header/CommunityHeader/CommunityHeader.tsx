@@ -21,9 +21,9 @@ import {
   LinkButton,
   SectionDescription,
 } from './elements'
-import { IUser } from 'src/models/user.models'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
+import Text from 'src/components/Text'
 
 interface IState {
   moreMenuAnchor: any
@@ -42,14 +42,14 @@ interface IInjectedProps extends IProps {
 @inject('userStore')
 @observer
 export class CommunityHeader extends React.Component<IProps, IState> {
-  constructor(props) {
+  constructor(props: IProps) {
     super(props)
     this.state = {
       moreMenuAnchor: null,
       profileMenuAnchor: null,
     }
   }
-  get props() {
+  get injected() {
     return this.props as IInjectedProps
   }
 
@@ -72,13 +72,15 @@ export class CommunityHeader extends React.Component<IProps, IState> {
   closeProfileMenu = () => {
     this.setState({ profileMenuAnchor: null })
   }
+
   logout() {
-    this.props.userStore.logout()
+    this.injected.userStore.logout()
     this.closeProfileMenu()
   }
 
   render() {
     const { moreMenuAnchor, profileMenuAnchor } = this.state
+    const user = this.injected.userStore.user
     return (
       <div>
         <Content>
@@ -133,10 +135,10 @@ export class CommunityHeader extends React.Component<IProps, IState> {
               <Icon glyph={'notifications'} />
             </IconButton>
           </div>
-          {this.props.userStore.user ? (
+          {user ? (
             <>
               <Profile onClick={this.openProfileMenu}>
-                <Avatar userId={this.props.userStore.user._id} />
+                <Avatar userName={user.userName} />
                 <Icon glyph={'arrow-down'} />
               </Profile>
               <Menu
@@ -146,7 +148,10 @@ export class CommunityHeader extends React.Component<IProps, IState> {
                 style={{ marginTop: '3em' }}
               >
                 <ClickAwayListener onClickAway={this.closeProfileMenu}>
-                  <div>
+                  <>
+                    <Text p={8} bold>
+                      {user.userName}
+                    </Text>
                     {COMMUNITY_PAGES_PROFILE.map(page => (
                       <MenuItem onClick={this.closeProfileMenu} key={page.path}>
                         <LinkButton
@@ -159,12 +164,12 @@ export class CommunityHeader extends React.Component<IProps, IState> {
                       </MenuItem>
                     ))}
                     <MenuItem onClick={() => this.logout()}>Logout</MenuItem>
-                  </div>
+                  </>
                 </ClickAwayListener>
               </Menu>
             </>
           ) : (
-            <LoginComponent user={this.props.userStore.user} />
+            <LoginComponent />
           )}
         </Content>
         <SectionDescription>

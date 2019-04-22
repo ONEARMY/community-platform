@@ -1,16 +1,15 @@
 import { observable, action } from 'mobx'
 import { Database } from '../database'
-import { IUser, IUserFormInput } from 'src/models/user.models'
-import { IFirebaseUser, auth, afs } from 'src/utils/firebase'
-import { IFirebaseUploadInfo } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
+import { IUser } from 'src/models/user.models'
+import { IFirebaseUser, auth, afs, EmailAuthProvider } from 'src/utils/firebase'
+import { Storage } from '../storage'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
 */
 
 export class UserStore {
-  // listener not strictly types as firebase coupling defined in complex way
-  authListener: any
+  private authUnsubscribe: firebase.Unsubscribe
   @observable
   public user: IUser | undefined
 
@@ -19,119 +18,132 @@ export class UserStore {
 
   @action
   public updateUser(user?: IUser) {
-    if (user) {
-      this.user = user
-    } else {
-      this.user = undefined
-    }
+    this.user = user
+    console.log('user updated', user)
   }
   constructor() {
-    console.log('listening for auth state chagnes')
-    this.authListener = action(
-      auth.onAuthStateChanged(authUser => {
-        console.log('auth user changed', authUser)
-        this.authUser = authUser
-        if (authUser && authUser.emailVerified) {
-          this.userSignedIn(authUser)
-        } else {
-          this.updateUser()
-        }
-      }),
-    )
+    this._listenToAuthStateChanges()
+  }
+
+  // when registering a new user create firebase auth profile as well as database user profile
+  public async registerNewUser(
+    email: string,
+    password: string,
+    userName: string,
+  ) {
+    // stop auto detect of login as will pick up with incomplete information during registration
+    this._unsubscribeFromAuthStateChanges()
+    const authReq = await auth.createUserWithEmailAndPassword(email, password)
+    // once registered populate auth profile displayname with the chosen username
+    if (authReq.user) {
+      await authReq.user.updateProfile({
+        displayName: userName,
+        photoURL: authReq.user.photoURL,
+      })
+      // populate db user profile and resume auth listener
+      await this._createUserProfile(userName)
+      this._listenToAuthStateChanges()
+    }
+  }
+
+  public async login(email: string, password: string) {
+    return auth.signInWithEmailAndPassword(email, password)
   }
 
   // handle user sign in, when firebase authenticates wnat to also fetch user document from the database
   public async userSignedIn(user: IFirebaseUser | null) {
-    console.log('user signed in, getting meta', user)
     let userMeta: IUser | null = null
-    if (user && user.uid) {
-      userMeta = await this.getUserProfile(user.uid)
+    if (user) {
+      // legacy user formats did not save names so get profile via email - this option be removed in later version
+      // (assumes migration strategy and check)
+      userMeta = user.displayName
+        ? await this.getUserProfile(user.displayName)
+        : await this.getUserProfile(user.email as string)
       if (userMeta) {
-        console.log('user meta retrieved', userMeta)
-        userMeta.email = user.email as string
-      } else {
-        console.log('no user meta retrieved. creating empty user doc')
-        userMeta = await this._createUserProfile({
-          display_name: '',
-          first_name: '',
-          last_name: '',
-          nickname: '',
-          country: '',
-        } as IUserFormInput)
-      }
-      this.updateUser(userMeta)
-      // *** TODO should also handle timeout/no connection potential issue when fetching?
-    }
-  }
-
-  public async getUserProfile(uid: string) {
-    const ref = await afs.doc(`users/${uid}`).get()
-    const user: IUser = ref.data() as IUser
-    return user
-  }
-
-  public async updateUserProfile(user: IUser, values: IUserFormInput) {
-    user.display_name = values.display_name
-    user.country = values.country
-    if (values.avatar) {
-      let avatar =
-        typeof values.avatar === 'string'
-          ? values.avatar
-          : (values.avatar as IFirebaseUploadInfo).downloadUrl
-      user.avatar = avatar
-    }
-    await Database.setDoc(`users/${user._id}`, user)
-  }
-
-  private async _createUserProfile(values: IUserFormInput) {
-    let authUser = auth.currentUser as firebase.User
-    const user: IUser = {
-      ...Database.generateDocMeta('users'),
-      _id: authUser.uid,
-      verified: false,
-      display_name: values.display_name,
-      first_name: values.first_name,
-      last_name: values.last_name,
-      nickname: values.nickname,
-      country: values.country,
-    }
-    await Database.setDoc(`users/${user._id}`, user)
-    return user
-  }
-
-  @action
-  public async signUpUser(userForm: IUserFormInput) {
-    try {
-      await auth.createUserWithEmailAndPassword(
-        userForm.email,
-        String(userForm.password),
-      )
-      await this._createUserProfile(userForm)
-      await this.sendEmailVerification()
-    } catch (error) {
-      console.log(error)
-      const { code, message } = error
-      if (code === 'auth/weak-password') {
-        throw new Error('The password is too weak.')
-      } else if (code === 'auth/email-already-in-use') {
-        throw new Error(
-          'The email address is already in use by another account.',
-        )
-      } else {
-        throw message
+        this.updateUser(userMeta)
       }
     }
+  }
+
+  public async getUserProfile(userName: string) {
+    const ref = await afs.doc(`users/${userName}`).get()
+    return ref.exists ? (ref.data() as IUser) : null
+  }
+
+  public async updateUserProfile(values: Partial<IUser>) {
+    const user = this.user as IUser
+    const update = { ...user, ...values }
+    await Database.setDoc(`users/${user.userName}`, update)
+    this.updateUser(update)
   }
 
   public async sendEmailVerification() {
-    this.authUser && (await this.authUser.sendEmailVerification())
+    if (this.authUser) {
+      return this.authUser.sendEmailVerification()
+    }
+  }
+  // take the username and return matching avatar url (includes undefined.jpg match if no user)
+  public async getUserAvatar(userName: string | undefined) {
+    const url = Storage.getPublicDownloadUrl(`avatars/${userName}.jpg`)
+    return url
   }
 
-  public async sendPasswordResetEmail(email) {
-    await auth.sendPasswordResetEmail(email)
+  public async updateUserAvatar() {
+    // *** TODO -
+  }
+
+  // during DHSite migration want to copy existing BP avatar to server
+  public async setUserAvatarFromUrl(url: string) {
+    // *** TODO
+  }
+
+  public async changeUserPassword(oldPassword: string, newPassword: string) {
+    // *** TODO - (see code in change pw component and move here)
+    const user = this.authUser as firebase.User
+    const credentials = EmailAuthProvider.credential(
+      user.email as string,
+      oldPassword,
+    )
+    await user.reauthenticateAndRetrieveDataWithCredential(credentials)
+    return user.updatePassword(newPassword)
+  }
+
+  public async sendPasswordResetEmail(email: string) {
+    return auth.sendPasswordResetEmail(email)
   }
 
   public async logout() {
-    await auth.signOut()
+    return auth.signOut()
+  }
+
+  private async _createUserProfile(userName: string) {
+    const authUser = auth.currentUser as firebase.User
+    const user: IUser = {
+      ...Database.generateDocMeta('users', userName),
+      _authID: authUser.uid,
+      userName,
+      verified: false,
+    }
+    await Database.setDoc(`users/${userName}`, user)
+    this.updateUser(user)
+  }
+
+  // use firebase auth to listen to change to signed in user
+  // on sign in want to load user profile
+  // strange implementation return the unsubscribe object on subscription, so stored
+  // to authUnsubscribe variable for use later
+  private _listenToAuthStateChanges() {
+    this.authUnsubscribe = auth.onAuthStateChanged(authUser => {
+      this.authUser = authUser
+      if (authUser) {
+        this.userSignedIn(authUser)
+      } else {
+        this.updateUser(undefined)
+      }
+    })
+  }
+
+  private _unsubscribeFromAuthStateChanges() {
+    this.authUnsubscribe()
   }
 }

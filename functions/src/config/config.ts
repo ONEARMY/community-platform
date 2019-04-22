@@ -3,14 +3,12 @@ import { config } from 'firebase-functions'
 // config variables are attached to the firebase config() function during build, and exposed as follows
 // to have additional config passed contact admin who will add the environment variables to the CI build
 const configVars = config() as configVars
-const service_b64 = config().service.json as string
+const service_b64 = configVars.service.json
 const serviceAccount = _b64StrToJson(service_b64) as IServiceAccount
-const analytics_b64 = config().analytics.json as string
+const analytics_b64 = configVars.analytics.json
 const analytics = _b64StrToJson(analytics_b64) as IAnalytics
-
 export const SERVICE_ACCOUNT_CONFIG = serviceAccount
 export const ANALYTICS_CONFIG = analytics
-
 /************** Interfaces ************** */
 interface IServiceAccount {
   type: string

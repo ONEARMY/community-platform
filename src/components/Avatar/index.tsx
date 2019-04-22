@@ -1,65 +1,55 @@
 import React from 'react'
 import { Image, ImageProps } from 'rebass'
 import Icon from 'src/components/Icons'
-import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
+import { UserStore } from 'src/stores/User/user.store'
 
-interface IInjectedProps extends IProps {
+interface IProps extends ImageProps {
+  width?: string
+  userName: string
+}
+
+interface IInjected extends IProps {
   userStore: UserStore
 }
 
-interface IProps {
-  userId?: string
-  width?: string
-}
-
 interface IState {
-  avatarUrl: string | null
+  avatarUrl?: string
+  showFallback?: boolean
 }
-
-type AvatarProps = ImageProps & IProps
 
 @inject('userStore')
 @observer
-export class Avatar extends React.Component<AvatarProps, IState> {
-  constructor(props: any) {
+export class Avatar extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
     super(props)
-    this.state = {
-      avatarUrl: null,
-    }
+    this.state = {}
+    this.getUserAvatar(this.props.userName)
   }
-  get props() {
-    return this.props as IInjectedProps
-  }
-
-  componentWillMount() {
-    // this.getUserAvatar(this.props.userId)
+  get injected() {
+    return this.props as IInjected
   }
 
-  public getUserAvatar = async (userId: string) => {
-    try {
-      if (userId !== 'anonymous') {
-        const user = await this.props.userStore.getUserProfile(userId)
-        this.setState({ avatarUrl: user.avatar })
-      }
-    } catch (error) {
-      console.log('err', error)
-      throw new Error(JSON.stringify(error))
-    }
+  async getUserAvatar(userName: string) {
+    const url = await this.injected.userStore.getUserAvatar(userName)
+    this.setState({ avatarUrl: url })
   }
+
   render() {
-    const avatarUrl = this.state.avatarUrl
     return (
       <>
-        {avatarUrl ? (
+        {this.state.showFallback && <Icon glyph={'account-circle'} />}
+        {!this.state.showFallback && this.state.avatarUrl && (
           <Image
             className="avatar"
             width={this.props.width ? this.props.width : 50}
             borderRadius={4}
-            src={avatarUrl}
+            src={this.state.avatarUrl}
+            onError={() => {
+              // if user image doesn't exist show fallback image instead
+              this.setState({ showFallback: true })
+            }}
           />
-        ) : (
-          <Icon glyph={'account-circle'} />
         )}
       </>
     )

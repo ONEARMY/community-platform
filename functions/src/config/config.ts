@@ -1,14 +1,14 @@
 import { config } from 'firebase-functions'
 
-// config variables are attached to the firebase config() function during build, and exposed as follows
-// to have additional config passed contact admin who will add the environment variables to the CI build
-const configVars = config() as configVars
-const service_b64 = configVars.service.json
-const serviceAccount = _b64StrToJson(service_b64) as IServiceAccount
-const analytics_b64 = configVars.analytics.json
-const analytics = _b64StrToJson(analytics_b64) as IAnalytics
-export const SERVICE_ACCOUNT_CONFIG = serviceAccount
-export const ANALYTICS_CONFIG = analytics
+/* config variables are attached attached directly to firebase using the cli
+   $firebase functions:config:set ...
+   to have additional config passed contact admin who will add it
+*/
+const c = config() as configVars
+// strip additional character escapes (\\n -> \n)
+c.service.private_key = c.service.private_key.replace(/\\n/g, '\n')
+export const SERVICE_ACCOUNT_CONFIG = c.service
+export const ANALYTICS_CONFIG = c.analytics
 /************** Interfaces ************** */
 interface IServiceAccount {
   type: string
@@ -23,26 +23,17 @@ interface IServiceAccount {
   client_x509_cert_url: string
 }
 interface IAnalytics {
-  trackingCode: string
-  viewId: string
+  tracking_code: string
+  view_id: string
 }
 
-// most config is passed as base64 encoded strings, to allow more complex json objects to be passed as strings
-// this can be done online at: https://www.browserling.com/tools/json-to-base64
 interface configVars {
-  service: {
-    json: string
-  }
-  analytics: {
-    json: string
-  }
+  service: IServiceAccount
+  analytics: IAnalytics
 }
 
-function _b64StrToJson(str: string) {
-  try {
-    const json = JSON.parse(Buffer.from(str, 'base64').toString('binary'))
-    return json
-  } catch (error) {
-    return {}
-  }
+// if passing complex config variables, may want to
+// encode as b64 and unencode here to avoid character escape challenges
+function _b64ToString(b64str: string) {
+  return Buffer.from(b64str, 'base64').toString('binary')
 }

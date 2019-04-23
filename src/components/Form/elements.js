@@ -7,12 +7,14 @@ const inputStyles = css`
   font-size: 1.1em;
   background: white;
   width: 100%;
+  margin-bottom: 16px;
 `
 
 export const Input = styled.input`
   ${inputStyles};
   height: 45px;
   padding-left: 5px;
+  box-sizing: border-box;
 `
 
 export const TextAreaStyled = styled.textarea`
@@ -27,4 +29,8 @@ export const LabelStyled = styled(Typography)`
   color: ${colors.grey3} !important;
   font-size: 1.3em !important;
   margin: 25px 0 !important;
+`
+
+export const SelectStyled = styled.select`
+  ${inputStyles}
 `

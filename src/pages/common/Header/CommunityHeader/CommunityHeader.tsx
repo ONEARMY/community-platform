@@ -7,17 +7,13 @@ import {
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
-import IconButton from '@material-ui/core/IconButton'
 import Icon from 'src/components/Icons'
 import { LoginComponent } from '../../Login/Login'
 import { Avatar } from 'src/components/Avatar'
 import {
   Content,
-  LogoText,
-  Logo,
   Links,
   Profile,
-  ListButton,
   LinkButton,
   SectionDescription,
 } from './elements'
@@ -84,8 +80,9 @@ export class CommunityHeader extends React.Component<IProps, IState> {
     return (
       <div>
         <Content>
-          <LogoText>One Army</LogoText>
-          <Logo src="https://pngimage.net/wp-content/uploads/2018/06/logo-placeholder-png.png" />
+          <Text large caps bold>
+            One Army
+          </Text>
           <Links>
             {COMMUNITY_PAGES.map(page => (
               <LinkButton

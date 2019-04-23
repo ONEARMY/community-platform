@@ -79,7 +79,21 @@ export class LoginComponent extends React.Component<IProps, IState> {
     const user = this.injected.userStore.user
     return (
       <>
-        <Button onClick={this.toggleModal}>Log in</Button>
+        <Button
+          onClick={() =>
+            this.setState({
+              showLoginModal: !this.state.showLoginModal,
+              showResetPWForm: false,
+              showLoginForm: false,
+              showSignUpForm: true,
+            })
+          }
+        >
+          Sign up
+        </Button>
+        <Button variant="outline" onClick={this.toggleModal}>
+          Log in
+        </Button>
         <Modal
           aria-labelledby="user-login-modal"
           aria-describedby="click to show user login"

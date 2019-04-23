@@ -24,13 +24,11 @@ export class Header extends React.Component<IProps, IState> {
     const { title, description } = this.props
     return (
       <div id="header">
-        <AppBar position="static">
-          {this.props.variant === 'community' ? (
-            <CommunityHeader {...{ title, description }} />
-          ) : (
-            <PublicHeader />
-          )}
-        </AppBar>
+        {this.props.variant === 'community' ? (
+          <CommunityHeader {...{ title, description }} />
+        ) : (
+          <PublicHeader />
+        )}
       </div>
     )
   }

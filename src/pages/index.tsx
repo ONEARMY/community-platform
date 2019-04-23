@@ -27,8 +27,8 @@ export const COMMUNITY_PAGES: IPageMeta[] = [
   {
     path: '/how-to',
     component: <HowtoPage />,
-    title: 'How-To',
-    description: '',
+    title: 'How-to',
+    description: 'Welcome to how-to',
   },
 ]
 

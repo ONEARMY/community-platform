@@ -10,20 +10,21 @@ export const colors = {
   grey2: '#9b9b9b',
   grey3: '#656565',
   grey4: '#E9E9E9',
+  greyStroke: '#AEAEAE',
   greyTag: '#4a4a4a',
   greyBg: '#F6F6F6',
   error: '#f44336',
 }
 
 export const buttons = {
-  height: '50px',
+  height: '40px',
   primary: {
-    color: colors.white,
-    backgroundColor: colors.blue,
+    color: colors.black,
+    backgroundColor: colors.white,
   },
   outline: {
     color: colors.black,
-    border: '1px solid ' + colors.black,
+    border: '1px solid ' + colors.greyStroke,
     backgroundColor: 'white',
   },
   disabled: {

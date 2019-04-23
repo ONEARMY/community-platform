@@ -18,7 +18,6 @@ import { inject, observer } from 'mobx-react'
 import Text from 'src/components/Text'
 
 interface IState {
-  moreMenuAnchor: any
   profileMenuAnchor: any
 }
 
@@ -37,7 +36,6 @@ export class CommunityHeader extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
-      moreMenuAnchor: null,
       profileMenuAnchor: null,
     }
   }
@@ -47,19 +45,11 @@ export class CommunityHeader extends React.Component<IProps, IState> {
 
   // function receives clicked element which then sets itself as an 'anchor'
   // for displaying the dropdown menu
-  openMoreMenu = (e: React.MouseEvent) => {
-    this.setState({
-      moreMenuAnchor: e.currentTarget,
-    })
-  }
 
   openProfileMenu = (e: React.MouseEvent) => {
     this.setState({
       profileMenuAnchor: e.currentTarget,
     })
-  }
-  closeMoreMenu = () => {
-    this.setState({ moreMenuAnchor: null })
   }
   closeProfileMenu = () => {
     this.setState({ profileMenuAnchor: null })
@@ -71,7 +61,7 @@ export class CommunityHeader extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { moreMenuAnchor, profileMenuAnchor } = this.state
+    const { profileMenuAnchor } = this.state
     const user = this.injected.userStore.user
     return (
       <div>
@@ -129,8 +119,7 @@ export class CommunityHeader extends React.Component<IProps, IState> {
           )}
         </Content>
         <SectionDescription>
-          {this.props.title}
-          {this.props.description}
+          <Text small>{this.props.description}</Text>
         </SectionDescription>
       </div>
     )

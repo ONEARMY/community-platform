@@ -44,6 +44,8 @@ export const radii = space
 
 export const fontSizes = [10, 12, 15, 18, 24, 32, 40, 56, 72]
 
+export const breakpoints = ['32em', '48em', '64em']
+
 export const maxContainerWidth = 1280
 
 export const regular = 400
@@ -53,6 +55,7 @@ export const bold = 600
 export default {
   colors,
   buttons,
+  breakpoints,
   space,
   radii,
   fontSizes,

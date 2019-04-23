@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components'
 import { NavLink } from 'react-router-dom'
+import { colors } from 'src/themes/styled.theme'
 
 const navButtonStyle = css`
   margin-right: 2em;
@@ -39,9 +40,7 @@ export const LinkButton = styled(NavLink).attrs(({ name }) => ({
 `
 
 export const SectionDescription = styled.div`
-  background-color: #2d5786;
+  background-color: ${colors.grey4};
   display: block;
-  color: white;
   padding: 10px;
-  text-align: center;
 `

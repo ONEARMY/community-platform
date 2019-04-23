@@ -9,8 +9,9 @@ export const colors = {
   grey: '#dddddd',
   grey2: '#9b9b9b',
   grey3: '#656565',
+  grey4: '#E9E9E9',
   greyTag: '#4a4a4a',
-  greyBg: '#ededed',
+  greyBg: '#F6F6F6',
   error: '#f44336',
 }
 

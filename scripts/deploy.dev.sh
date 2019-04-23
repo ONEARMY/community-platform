@@ -4,6 +4,8 @@ firebase use default
 # NOTE - GA_SERVICE_DEV is json encrypted as base64 string (using https://www.browserling.com/tools/json-to-base64)
 firebase functions:config:set service.json="$SERVICE_ACCOUNT_JSON_DEV"
 firebase functions:config:set analytics.json="$REACT_APP_ANALYTICS_JSON_DEV"
+echo "$SERVICE_ACCOUNT_JSON_DEV"
+echo "$functions:config:get"
 # ensure functions admin scripts correct
 cp functions/src/Firebase/admin.ci.ts functions/src/Firebase/admin.ts
 # deploy site, functions, rules etc.

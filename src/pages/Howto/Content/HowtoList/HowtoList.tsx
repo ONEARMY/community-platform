@@ -51,16 +51,9 @@ export class HowtoList extends React.Component<IProps, any> {
     const { allHowtos } = this.props
     return (
       <div>
-        <Typography
-          style={{ margin: '30px auto', display: 'table' }}
-          variant="h4"
-          component="h4"
-        >
-          How-To
-        </Typography>
         <Link to={'/how-to/create'}>
-          <Button mx={'auto'} my={50} icon={'add'}>
-            create how-to
+          <Button variant="outline" mx={'auto'} my={50} icon={'add'}>
+            create
           </Button>
         </Link>
         <React.Fragment>

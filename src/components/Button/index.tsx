@@ -6,6 +6,7 @@ import {
   ButtonProps as RebassButtonProps,
 } from 'rebass'
 
+import Text from 'src/components/Text'
 import theme from 'src/themes/styled.theme'
 
 export const BaseButton = styled(RebassButton)`
@@ -20,14 +21,8 @@ export const BaseButton = styled(RebassButton)`
   word-break: keep-all;
   cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
 `
-export const Label = styled.span`
-  text-transform: uppercase;
-  text-decoration: none;
-  display: block;
-  flex: 0 0 auto;
-  line-height: inherit;
+export const Label = styled(Text)`
   color: inherit;
-  align-self: center;
 `
 
 // extend to allow any default button props (e.g. onClick) to also be passed
@@ -41,7 +36,9 @@ type BtnProps = IBtnProps & RebassButtonProps
 export const Button = (props: BtnProps) => (
   <BaseButton {...props}>
     {props.icon && <Icon glyph={props.icon} />}
-    <Label>{props.children}</Label>
+    <Label caps regular pl={'5px'}>
+      {props.children}
+    </Label>
   </BaseButton>
 )
 

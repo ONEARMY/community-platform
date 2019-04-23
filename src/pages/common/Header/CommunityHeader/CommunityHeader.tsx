@@ -6,16 +6,12 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import Icon from 'src/components/Icons'
 import { LoginComponent } from '../../Login/Login'
 import { Avatar } from 'src/components/Avatar'
-import {
-  Content,
-  Links,
-  Profile,
-  LinkButton,
-  SectionDescription,
-} from './elements'
+import { Content, Links, Profile, LinkButton } from './elements'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import Text from 'src/components/Text'
+import { Box } from 'rebass'
+import { maxContainerWidth } from 'src/themes/styled.theme'
 
 interface IState {
   profileMenuAnchor: any
@@ -118,9 +114,11 @@ export class CommunityHeader extends React.Component<IProps, IState> {
             <LoginComponent />
           )}
         </Content>
-        <SectionDescription>
-          <Text small>{this.props.description}</Text>
-        </SectionDescription>
+        <Box bg={'grey4'} width={1} p={3}>
+          <Text small width={maxContainerWidth + 'px'} m={'0 auto'}>
+            {this.props.description}
+          </Text>
+        </Box>
       </div>
     )
   }

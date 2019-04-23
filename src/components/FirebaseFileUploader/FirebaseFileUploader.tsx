@@ -8,6 +8,7 @@ import {
   ProgressBar,
   UploadBtn,
 } from './elements'
+import { Button } from '../Button'
 /*
 This component takes a folder storage path and uploads files to firebase storage
 onUploadSucess allows URLs of completed uploads to be passed back to parent component
@@ -112,8 +113,8 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
 
   public render() {
     return (
-      <Container>
-        <UploadBtn
+      <>
+        <Button
           icon={'upload'}
           onClick={() => this.triggerFileUploaderClick()}
           type="button"
@@ -131,9 +132,9 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
               onProgress={this.handleProgress}
             />
           </div>
-        </UploadBtn>
+        </Button>
         <ProgressContainer>{this.renderProgressBar()}</ProgressContainer>
-      </Container>
+      </>
     )
   }
 }

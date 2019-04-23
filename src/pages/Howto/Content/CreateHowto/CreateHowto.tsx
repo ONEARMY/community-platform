@@ -25,7 +25,7 @@ import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 import { FirebaseFileUploaderField } from 'src/components/Form/FirebaseFileUploader.field'
 
 export interface IState {
-  formValues: IHowtoFormInput
+  formValues: Partial<IHowtoFormInput>
   formSaved: boolean
   _docID: string
   _uploadPath: string
@@ -33,15 +33,6 @@ export interface IState {
 }
 
 const required = (value: any) => (value ? undefined : 'Required')
-const isNumber = (value: any) => {
-  if (!value) {
-    return 'Required'
-  }
-  if (isNaN(Number(value))) {
-    return 'Number is required'
-  }
-  return
-}
 
 export class CreateHowto extends React.PureComponent<
   RouteComponentProps<any>,
@@ -55,7 +46,7 @@ export class CreateHowto extends React.PureComponent<
     const databaseRef = afs.collection('documentation').doc()
     const docID = databaseRef.id
     this.state = {
-      formValues: { ...TUTORIAL_TEMPLATE_DATA, id: docID },
+      formValues: { id: docID },
       formSaved: false,
       _docID: docID,
       _uploadPath: `uploads/documentation/${docID}`,
@@ -152,7 +143,7 @@ export class CreateHowto extends React.PureComponent<
               <form onSubmit={handleSubmit}>
                 <BoxContainer bg="white">
                   <Heading medium>Create your How-To</Heading>
-                  <FlexContainer p={0}>
+                  <FlexContainer p={0} mb={3}>
                     <BoxContainer p={0} mr={3}>
                       <Field
                         name="tutorial_title"
@@ -183,29 +174,34 @@ export class CreateHowto extends React.PureComponent<
                           placeholder="How hard is it? *"
                           style={{ marginLeft: '4px' }}
                         >
+                          <option value="" disabled>
+                            How hard is it? *
+                          </option>
                           <option value="easy">easy</option>
                           <option value="medium">medium</option>
                           <option value="difficult">difficult</option>
                         </Field>
                       </FlexContainer>
-                      <FirebaseFileUploader
-                        hidden={true}
-                        buttonText="Upload files"
+                      <Field
+                        name="tutorial_time"
+                        component={FirebaseFileUploaderField}
+                        buttonText="UPLOAD FILES"
                         storagePath={this.state._uploadPath}
-                        onUploadSuccess={fileInfo => {
-                          mutators.push('tutorial_files', fileInfo)
-                        }}
+                        hidden={true}
+                        style={{ marginLeft: 0, padding: 0 }}
                       />
-                      {v.tutorial_files.map((file, index) => (
-                        <UploadedFile
-                          key={file.downloadUrl}
-                          file={file}
-                          showDelete
-                          onFileDeleted={() => {
-                            mutators.remove('tutorial_files', index)
-                          }}
-                        />
-                      ))}
+
+                      {v.tutorial_files &&
+                        v.tutorial_files.map((file, index) => (
+                          <UploadedFile
+                            key={file.downloadUrl}
+                            file={file}
+                            showDelete
+                            onFileDeleted={() => {
+                              mutators.remove('tutorial_files', index)
+                            }}
+                          />
+                        ))}
                     </BoxContainer>
                     {v.cover_image && v.cover_image.downloadUrl ? (
                       <UploadedFile
@@ -215,15 +211,25 @@ export class CreateHowto extends React.PureComponent<
                         onFileDeleted={form.mutators.clearCoverImage}
                       />
                     ) : (
-                      <Field
-                        name="cover_image"
-                        validateFields={[]}
-                        component={FirebaseFileUploaderField}
-                        storagePath={this.state._uploadPath}
-                        hidden={true}
-                        accept="image/png, image/jpeg"
-                        buttonText="Upload a cover image"
-                      />
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          border: '1px solid #dddddd',
+                          justifyContent: 'center',
+                          padding: '16px',
+                        }}
+                      >
+                        <Field
+                          name="cover_image"
+                          validateFields={[]}
+                          component={FirebaseFileUploaderField}
+                          storagePath={this.state._uploadPath}
+                          hidden={true}
+                          accept="image/png, image/jpeg"
+                          buttonText="UPLOAD IMAGE"
+                        />
+                      </div>
                     )}
                   </FlexContainer>
                   <Field

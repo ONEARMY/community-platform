@@ -9,6 +9,7 @@
     "serve": "npm run build && firebase serve --only functions",
     "shell": "npm run build && firebase functions:shell",
     "deploy:local": "npm run copy:local && firebase use default && firebase deploy --only functions",
+    "deploy:ci": "npm run copy:ci && firebase use default && firebase deploy --only functions",
     "start": "npm run shell",
     "logs": "firebase functions:log"
   },

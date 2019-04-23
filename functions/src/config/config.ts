@@ -39,5 +39,10 @@ interface configVars {
 }
 
 function _b64StrToJson(str: string) {
-  return JSON.parse(Buffer.from(str, 'base64').toString('binary'))
+  try {
+    const json = JSON.parse(Buffer.from(str, 'base64').toString('binary'))
+    return json
+  } catch (error) {
+    return {}
+  }
 }

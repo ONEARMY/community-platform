@@ -8,9 +8,7 @@ import { HomePage } from './Home/Home'
 import { NotFoundPage } from './NotFound/NotFound'
 import { DiscussionsPage } from './Discussions'
 import { ProfilePage } from './Profile/Profile'
-import { SettingsPage } from './Profile/Settings'
-import { SignUpPage } from './Home/SignUp'
-import { EmailConfirmation } from './Home/EmailConfirmation'
+import { ActionPage } from './Home/Action'
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import { EventsPage } from './Events/Events'
 import Header from './common/Header/Header'
@@ -38,29 +36,9 @@ export const HOME_PAGE: IPageMeta[] = [
     description: "Welcome home, here is all the stuff you're interested in",
     exact: true,
   },
-  {
-    path: '/sign-up',
-    component: <SignUpPage />,
-    title: 'Sign up',
-    description: '',
-    exact: true,
-  },
-  {
-    path: '/email-confirmation',
-    component: <EmailConfirmation />,
-    title: 'Email confirmation',
-    description: '',
-    exact: true,
-  },
 ]
 
 export const COMMUNITY_PAGES: IPageMeta[] = [
-  {
-    path: '/news',
-    component: <NotFoundPage />,
-    title: 'Newsfeed',
-    description: 'Welcome to news',
-  },
   {
     path: '/how-to',
     component: <HowtoPage />,
@@ -71,6 +49,12 @@ export const COMMUNITY_PAGES: IPageMeta[] = [
     path: '/discussions',
     component: <DiscussionsPage />,
     title: 'Discussions',
+    description: '',
+  },
+  {
+    path: '/events',
+    component: <EventsPage />,
+    title: 'Events',
     description: '',
   },
 ]
@@ -94,42 +78,12 @@ export const COMMUNITY_PAGES_MORE: IPageMeta[] = [
     title: 'Maps',
     description: '',
   },
-  {
-    path: '/discover',
-    component: <NotFoundPage />,
-    title: 'Discover',
-    description: '',
-  },
-  {
-    path: '/events',
-    component: <EventsPage />,
-    title: 'Events',
-    description: '',
-  },
-  {
-    path: '/about',
-    component: <NotFoundPage />,
-    title: 'About',
-    description: '',
-  },
 ]
 export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [
   {
     path: '/profile',
     component: <ProfilePage />,
     title: 'Profile',
-    description: '',
-  },
-  {
-    path: '/settings',
-    component: <SettingsPage />,
-    title: 'Settings',
-    description: '',
-  },
-  {
-    path: '/help',
-    component: <NotFoundPage />,
-    title: 'Help',
     description: '',
   },
 ]

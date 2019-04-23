@@ -25,7 +25,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
   public render() {
     const { howto } = this.props
     return (
-      <Container>
+      <Container id="description">
         <ContainerLeft>
           <Padding>
             <Typography variant="h4" component="h4">

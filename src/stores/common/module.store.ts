@@ -14,7 +14,6 @@ export class ModuleStore {
 
   // when a module store is initiated automatically load the docs in the collection
   constructor(public basePath: string) {
-    console.log('initiating store', basePath)
     this.getCollection(basePath)
   }
 

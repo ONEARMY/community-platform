@@ -10,6 +10,8 @@ import { Button } from 'src/components/Button/'
 import { PostResponse } from '../PostResponse/PostResponse'
 import PageContainer from 'src/components/Layout/PageContainer'
 import { BoxContainer } from 'src/components/Layout/BoxContainer'
+import { Avatar } from 'src/components/Avatar'
+import Heading from 'src/components/Heading'
 
 interface IProps extends RouteComponentProps {
   discussionsStore: DiscussionsStore
@@ -76,11 +78,12 @@ class PostViewClass extends React.Component<IProps, IState> {
   public render() {
     if (this.post) {
       const p = this.post
+
       return (
         <PageContainer>
           <BoxContainer display={'inline-block'}>
-            <h1>Question</h1>
-            <div>{p.title}</div>
+            <Heading as={'h1'}>{p.title}</Heading>
+            <Avatar userName={p._createdBy} />
             <div dangerouslySetInnerHTML={{ __html: p.content }} />
           </BoxContainer>
           <h2>Responses</h2>

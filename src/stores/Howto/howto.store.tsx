@@ -1,6 +1,7 @@
 import { observable, action } from 'mobx'
 import { afs } from '../../utils/firebase'
 import { IHowto } from 'src/models/howto.models'
+import { Database } from 'src/stores/database'
 
 export class HowtoStore {
   // we have two property relating to docs that can be observed
@@ -32,5 +33,13 @@ export class HowtoStore {
         : undefined
     this.activeHowto = activeHowto
     return activeHowto
+  }
+
+  public isSlugUnique = async (slug: string) => {
+    try {
+      await Database.checkSlugUnique('documentation', slug)
+    } catch (e) {
+      return 'How-to titles must be unique, please try being more specific'
+    }
   }
 }

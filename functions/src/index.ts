@@ -4,21 +4,21 @@ import * as corsLib from 'cors'
 const cors = corsLib({ origin: true })
 import * as express from 'express'
 import * as functions from 'firebase-functions'
-import * as admin from 'firebase-admin'
-admin.initializeApp()
 
 // custom module imports
-import * as DB from './databaseBackup'
-import * as ImageConverter from './imageConverter'
-import * as StorageFunctions from './storageFunctions'
-import * as UtilsFunctions from './utils'
-import * as AnalyticsFunctions from './analytics'
-import { Credentials } from 'google-auth-library'
+import * as DB from './Firebase/databaseBackup'
+import * as ImageConverter from './Utils/imageConverter'
+import * as UtilsFunctions from './Utils/utils'
+import * as DHSite from './DaveHakkensNL/dataMigrate'
+import * as AnalyticsFunctions from './Analytics/analytics'
+import { syncCommentsCount } from './Analytics/comments'
 
-// update on change logging purposes
-const buildNumber = 1.09
+console.log('functions init')
 
-// express settings to handle api
+/************ GET and POST requests ************************************************
+Redirect requests so that if a custom endpoint function exists we can call them
+at /api/[endpoint]
+************************************************************************************/
 const app = express()
 // use bodyparse to create json object from body
 app.use(
@@ -29,12 +29,6 @@ app.use(
 // configure app to use cors by default
 app.use(corsLib({ origin: true }))
 app.use(bodyParser.urlencoded({ extended: false }))
-
-/************ GET and POST requests ************************************************
-Redirect requests so that if a custom endpoint function exists we can call them
-at /api/[endpoint]
-************************************************************************************/
-
 app.all('*', async (req, res, next) => {
   // add cors to requests
   cors(req, res, async () => {
@@ -57,6 +51,19 @@ app.all('*', async (req, res, next) => {
         )
         res.send(token)
         break
+      case 'DHSite_updateIds':
+        const DHupdated = await DHSite.updateDHUserIds()
+        res.send(DHupdated)
+        break
+      case 'DHSite_getUser':
+        const mention_name = req.query.mention_name
+        try {
+          const profile = await DHSite.getDHUserProfile(mention_name)
+          res.status(200).send(profile)
+        } catch (err) {
+          res.status(500).send({ error: err.message })
+        }
+        break
       default:
         res.send('invalid api endpoint')
     }
@@ -64,9 +71,14 @@ app.all('*', async (req, res, next) => {
 })
 exports.api = functions.https.onRequest(app)
 
-app.listen(3000, 'localhost', listen => {
-  console.log(`API v${buildNumber} listening on port 3000`)
-})
+/************ Cloud Firestore Triggers ******************************************************
+ Functions called in response to changes in Cloud Firestore database
+ ************************************************************************************/
+exports.syncCommentsCount = functions.firestore
+  .document('discussions/{discussionId}/comments/{commentId}')
+  .onWrite(async (change, context) => {
+    await syncCommentsCount(context)
+  })
 
 /************ Cron tasks ***********************************************************
 Use pubsub to automatically subscribe to messages sent from cron.
@@ -76,29 +88,27 @@ Add/change schedule from `./functions-cron/appengine/cron.yaml`
 exports.weeklyTasks = functions.pubsub
   .topic('weekly-tick')
   .onPublish(async (message, context) => {
-    const backup = await DB.BackupDatabase()
+    console.log('weekly tick', message, context)
+    await DB.BackupDatabase()
+    console.log('backup complete')
   })
 
 exports.dailyTasks = functions.pubsub
   .topic('daily-tick')
   .onPublish(async (message, context) => {
-    // we don't have daily tasks currently
+    console.log('daily tick', message, context)
+    await DHSite.updateDHUserIds()
   })
 
 /************ Storage Triggers ******************************************************
 Functions called in response to changes to firebase storage objects
 ************************************************************************************/
 
-exports.imageResize = functions.storage
-  .object()
-  .onFinalize(async (object, context) => {
-    if (
-      object.metadata &&
-      (object.metadata.resized || object.metadata.original)
-    )
-      return Promise.resolve()
-    return ImageConverter.resizeImage(object)
-  })
+exports.imageResize = functions.storage.object().onFinalize(async object => {
+  if (object.metadata && (object.metadata.resized || object.metadata.original))
+    return Promise.resolve()
+  return ImageConverter.resizeImage(object)
+})
 
 /************ Callable *************************************************************
 These can be called from directly within the app (passing additional auth info)
@@ -106,14 +116,10 @@ https://firebase.google.com/docs/functions/callable
 Any functions added here should have a custom url rewrite specified in root firebase.json
 to handle CORS preflight requests correctly
 ************************************************************************************/
-exports.removeStorageFolder = functions.https.onCall((data, context) => {
-  console.log('storage folder remove called', data, context)
-  const path = data.text
-  StorageFunctions.deleteStorageItems(data.text)
-})
+
 // use service agent to gain access credentials for gcp with  given access scopes
 exports.getAccessToken = functions.https.onCall(
-  async (data: getAccessTokenData, context) => {
+  async (data: getAccessTokenData) => {
     const token = await UtilsFunctions.getAccessToken(data.accessScopes)
     return token
   },
@@ -123,15 +129,23 @@ interface getAccessTokenData {
 }
 
 exports.getAnalytics = functions.https.onCall(
-  async (data: getAnalyticsData, context) => {
+  async (data: getAnalyticsData) => {
     console.log('get analytics request received', data)
-    AnalyticsFunctions.getAnalyticsReport(data.viewId, data.token)
+    await AnalyticsFunctions.getAnalyticsReport(data.viewId, data.token)
   },
 )
 interface getAnalyticsData {
   viewId: string
   token: string
 }
+exports.syncCommentsCount = functions.https.onCall(async () => {
+  console.log('sync comments count called')
+})
 
-// add export so can be used by test
-export default app
+exports.DHSite_getUser = functions.https.onCall(
+  async (mention_name: string) => {
+    console.log('getting DH user profile', mention_name)
+    const profile = await DHSite.getDHUserProfile(mention_name)
+    return profile
+  },
+)

@@ -2,7 +2,7 @@ import React from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import IconButton from '@material-ui/core/IconButton'
-import AccountCircle from '@material-ui/icons/AccountCircle'
+import Icon from 'src/components/Icons'
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
 import { VersionNumber } from 'src/components/VersionNumber/VersionNumber'
@@ -75,7 +75,7 @@ export class PublicHeader extends React.Component<IProps, IState> {
                     onClick={this.handleMenu}
                     color="inherit"
                   >
-                    <AccountCircle />
+                    <Icon glyph={'account-circle'} />
                   </IconButton>
                   <Menu
                     id="menu-appbar"

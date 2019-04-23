@@ -1,6 +1,5 @@
 declare var XHR
 declare var tinymce
-import { FileReader } from '@ephox/sand'
 import Settings from '../api/Settings'
 
 const parseIntAndGetMax = (val1, val2) =>
@@ -110,7 +109,7 @@ const mergeMargins = css => {
 
 const waitLoadImage = (editor, data, imgElm) => {
   // tslint:disable-next-line:no-debugger
-  debugger;
+  debugger
   function selectImage() {
     imgElm.onload = imgElm.onerror = null
 
@@ -134,12 +133,11 @@ const waitLoadImage = (editor, data, imgElm) => {
   imgElm.onerror = selectImage
 }
 
-
 export default {
   getImageSize,
   buildListItems,
   removePixelSuffix,
   addPixelSuffix,
   mergeMargins,
-  waitLoadImage
+  waitLoadImage,
 }

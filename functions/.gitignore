@@ -7,3 +7,9 @@ node_modules
 # Typescript v1 declaration files
 types/
 lib/
+
+# Testing config files
+src/config/*.sh
+src/config/*.json
+
+./firebase-debug.log

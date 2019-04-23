@@ -5,9 +5,8 @@ firebase use default
 firebase functions:config:set service.json="$SERVICE_ACCOUNT_JSON_DEV"
 firebase functions:config:set analytics.json="$REACT_APP_ANALYTICS_JSON_DEV"
 echo "Service Account JSON: $SERVICE_ACCOUNT_JSON_DEV"
-FIREBASE_CONF=functions:config:get
-echo "conf1: ${firebase:config:get}"
-echo "Firebase Conf: $FIREBASE_CONF"
+FIREBASE_CONF=$(firebase functions:config:get)
+echo "conf1: $FIREBASE_CONF"
 # ensure functions admin scripts correct
 cp functions/src/Firebase/admin.ci.ts functions/src/Firebase/admin.ts
 # deploy site, functions, rules etc.

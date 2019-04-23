@@ -12,7 +12,7 @@ import {
   StepImage,
 } from './elements'
 import { IHowtoStep } from 'src/models/howto.models'
-import { IFirebaseUploadInfo } from '../../../../common/FirebaseFileUploader/FirebaseFileUploader'
+import { IFirebaseUploadInfo } from '../../../../../components/FirebaseFileUploader/FirebaseFileUploader'
 
 interface IProps {
   step: IHowtoStep

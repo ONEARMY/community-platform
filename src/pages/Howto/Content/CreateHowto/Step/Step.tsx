@@ -19,7 +19,7 @@ import {
   ConfirmButton,
 } from './elements'
 
-import { FirebaseFileUploader } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
+import { FirebaseFileUploader } from 'src/components/FirebaseFileUploader/FirebaseFileUploader'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 
 interface IProps {

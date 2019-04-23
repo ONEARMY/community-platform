@@ -1,5 +1,5 @@
 import { IHowto } from '../models/howto.models'
-import { IFirebaseUploadInfo } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
+import { IFirebaseUploadInfo } from 'src/components/FirebaseFileUploader/FirebaseFileUploader'
 
 const exampleUploadImage: IFirebaseUploadInfo = {
   downloadUrl: 'http://placekitten.com/g/400/250',

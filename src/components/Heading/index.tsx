@@ -30,6 +30,7 @@ Heading.defaultProps = {
   theme,
   className: 'heading',
   color: colors.black,
+  mb: 3,
 }
 
 export default Heading

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { storage } from '../../../utils/firebase'
+import { storage } from '../../utils/firebase'
 import FileUploader from 'react-firebase-file-uploader'
 import { FullMetadata } from '@firebase/storage-types'
 import {

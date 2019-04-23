@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Typography from '@material-ui/core/Typography'
-import { TagDisplay } from 'src/pages/common/Tags/TagDisplay/TagDisplay'
+import { TagDisplay } from 'src/components/Tags/TagDisplay/TagDisplay'
 
 import {
   Container,

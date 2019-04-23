@@ -13,7 +13,7 @@ import {
   TickIcon,
 } from 'src/assets/icons/icon_components'
 import { IHowto } from 'src/models/howto.models'
-import { TagDisplay } from 'src/pages/common/Tags/TagDisplay/TagDisplay'
+import { TagDisplay } from 'src/components/Tags/TagDisplay/TagDisplay'
 import { CreateButton } from './elements'
 
 const styles: any = {

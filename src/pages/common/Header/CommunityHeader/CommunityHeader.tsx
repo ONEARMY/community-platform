@@ -1,9 +1,5 @@
 import React from 'react'
-import {
-  COMMUNITY_PAGES,
-  COMMUNITY_PAGES_MORE,
-  COMMUNITY_PAGES_PROFILE,
-} from 'src/pages'
+import { COMMUNITY_PAGES, COMMUNITY_PAGES_PROFILE } from 'src/pages'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
@@ -97,44 +93,7 @@ export class CommunityHeader extends React.Component<IProps, IState> {
                 {page.title}
               </LinkButton>
             ))}
-            <ListButton
-              className="nav-link"
-              variant="text"
-              onClick={this.openMoreMenu}
-            >
-              More
-            </ListButton>
-            <Menu
-              open={moreMenuAnchor ? true : false}
-              anchorEl={moreMenuAnchor}
-              className="nav__more-menu"
-              style={{ marginTop: '3em' }}
-            >
-              <ClickAwayListener onClickAway={this.closeMoreMenu}>
-                <div>
-                  {COMMUNITY_PAGES_MORE.map(page => (
-                    <MenuItem onClick={this.closeMoreMenu} key={page.path}>
-                      <LinkButton
-                        className="nav-link"
-                        to={page.path}
-                        activeClassName="link-active"
-                      >
-                        {page.title}
-                      </LinkButton>
-                    </MenuItem>
-                  ))}
-                </div>
-              </ClickAwayListener>
-            </Menu>
           </Links>
-          <div>
-            <IconButton component="span">
-              <Icon glyph={'mail-outline'} />
-            </IconButton>
-            <IconButton component="span">
-              <Icon glyph={'notifications'} />
-            </IconButton>
-          </div>
           {user ? (
             <>
               <Profile onClick={this.openProfileMenu}>

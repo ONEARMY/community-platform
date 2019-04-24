@@ -7,6 +7,7 @@ import theme from 'src/themes/styled.theme'
 
 export interface ITextProps {
   caps?: boolean
+  inline?: boolean
   regular?: boolean
   bold?: boolean
   large?: boolean
@@ -21,6 +22,9 @@ export const caps = props =>
         textTransform: 'uppercase',
       }
     : null
+
+export const inline = props =>
+  props.inline ? { display: 'inline-block' } : null
 
 export const regular = props =>
   props.regular ? { fontWeight: props.theme.regular } : null
@@ -41,6 +45,7 @@ export const superSmall = props =>
   props.small ? { fontSize: props.theme.fontSizes[0] } : null
 
 export const BaseText = styled(RebassText)`
+    ${inline}
     ${caps}
     ${regular}
     ${bold}

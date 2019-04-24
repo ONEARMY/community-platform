@@ -25,7 +25,6 @@ interface InjectedProps extends IProps {
 const TagContainer = Styled(Box)`
   border-radius: ${theme.radii[1] + 'px'};
   display: inline-block;
-  margin-left: 5px;
 `
 
 @inject('tagsStore')
@@ -46,7 +45,7 @@ export class TagDisplay extends React.Component<IProps, IState> {
   public render() {
     const { tag } = this.state
     return tag ? (
-      <TagContainer bg={'greyTag'} p={2}>
+      <TagContainer bg={'greyTag'} p={2} ml={'5px'} mt={'5px'}>
         <Text small>{tag.label}</Text>
       </TagContainer>
     ) : null

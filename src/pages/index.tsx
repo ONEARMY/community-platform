@@ -16,6 +16,7 @@ import { SITE } from 'src/config/config'
 import { DebugEditorPage } from 'src/components/Editor/Debug'
 import { DevNotice } from 'src/components/Dev/DevNotice'
 import { FeedbackPage } from './Feedback/Feedback'
+import PageContainer from 'src/components/Layout/PageContainer'
 
 interface IState {
   singlePageMode: boolean
@@ -51,8 +52,8 @@ export const COMMUNITY_PAGES: IPageMeta[] = [
   {
     path: '/how-to',
     component: <HowtoPage />,
-    title: 'How-To',
-    description: '',
+    title: 'How-to',
+    description: 'Welcome to how-to',
   },
   {
     path: '/discussions',
@@ -147,7 +148,7 @@ export class Routes extends React.Component<any, IState> {
                           title={page.title}
                           description={page.description}
                         />
-                        {page.component}
+                        <PageContainer>{page.component}</PageContainer>
                       </React.Fragment>
                     )}
                   />

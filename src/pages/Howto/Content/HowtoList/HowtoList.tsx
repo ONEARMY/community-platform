@@ -1,47 +1,28 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
-import { ClampLines } from '../../../../components/ClampLines/ClampLines'
-import CardActions from '@material-ui/core/CardActions'
-import CardMedia from '@material-ui/core/CardMedia'
-import CardContent from '@material-ui/core/CardContent'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-import Card from '@material-ui/core/Card'
-import IconButton from '@material-ui/core/IconButton'
+import { Card, Image, Box } from 'rebass'
+import { Flex as FlexGrid } from '@rebass/grid'
 import LinearProgress from '@material-ui/core/LinearProgress'
-import Icon from 'src/components/Icons'
-import { theme } from '../../../../themes/app.theme'
+import Text from 'src/components/Text'
+import Heading from 'src/components/Heading'
+import styled from 'styled-components'
 
 import { Button } from 'src/components/Button'
 import { IHowto } from 'src/models/howto.models'
 
-const styles: any = {
-  layout: {
-    width: 'auto',
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3,
-    padding: `${theme.spacing.unit * 4}px 0`,
-    // [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
-    //   width: 1100,
-    //   marginLeft: 'auto',
-    //   marginRight: 'auto',
-    // },
-  },
-  link: {
-    textDecoration: 'none',
-    color: 'black',
-  },
-  cardMedia: {
-    paddingTop: '56.25%', // 16:9
-  },
-  cardContent: {
-    flexGrow: 1,
-  },
-}
-
 interface IProps {
   allHowtos: IHowto[]
 }
+
+const CardImage = styled(Image)`
+  height: 230px;
+  object-fit: cover;
+  width: 100%;
+`
+const CardInfosContainer = styled(Box)`
+  height: 170px;
+`
+
 export class HowtoList extends React.Component<IProps, any> {
   constructor(props: any) {
     super(props)
@@ -50,91 +31,42 @@ export class HowtoList extends React.Component<IProps, any> {
   public render() {
     const { allHowtos } = this.props
     return (
-      <div>
-        <Typography
-          style={{ margin: '30px auto', display: 'table' }}
-          variant="h4"
-          component="h4"
-        >
-          How-To
-        </Typography>
+      <>
         <Link to={'/how-to/create'}>
-          <Button mx={'auto'} my={50} icon={'add'}>
-            create how-to
+          <Button variant="outline" mx={'auto'} my={3} icon={'add'}>
+            create
           </Button>
         </Link>
         <React.Fragment>
-          <div style={styles.layout}>
+          <div>
             {allHowtos.length === 0 ? (
               <LinearProgress />
             ) : (
-              <Grid container spacing={40}>
+              <FlexGrid flexWrap={'wrap'} justifyContent={'center'}>
                 {allHowtos.map((howto: IHowto, index: number) => (
-                  <Grid item key={index} xs={4}>
-                    <Link
-                      to={`/how-to/${encodeURIComponent(howto.slug)}`}
-                      style={styles.link}
-                    >
-                      <Card
-                        style={{
-                          borderRadius: '0px',
-                          height: '100%',
-                          display: 'flex',
-                          flexDirection: 'column',
-                        }}
-                      >
-                        <CardMedia
-                          style={styles.cardMedia}
-                          image={
-                            howto.cover_image
-                              ? howto.cover_image.downloadUrl
-                              : howto.cover_image_url
-                          } // eslint-disable-line max-len
-                          title="Image title"
-                        />
-                        <CardContent style={styles.cardContent}>
-                          <Typography gutterBottom variant="h5" component="h2">
+                  <Box m={2}>
+                    <Card borderRadius={1} width={[380]} bg={'white'}>
+                      <CardImage
+                        src={
+                          howto.cover_image
+                            ? howto.cover_image.downloadUrl
+                            : howto.cover_image_url
+                        }
+                      />
+                      <CardInfosContainer px={2}>
+                        <Link to={`/how-to/${encodeURIComponent(howto.slug)}`}>
+                          <Heading small bold>
                             {howto.tutorial_title}
-                          </Typography>
-                          <div>
-                            <ClampLines
-                              text={howto.tutorial_description}
-                              lines={4}
-                              ellipsis="..."
-                              className="custom-class"
-                            />
-                          </div>
-                          <Typography>by {howto.workspace_name}</Typography>
-                        </CardContent>
-                        <CardActions>
-                          <Typography>PRECIOUS PLASTIC</Typography>
-                          <div
-                            style={{
-                              marginLeft: 'auto',
-                            }}
-                          >
-                            <IconButton>
-                              <Typography style={{ marginRight: '5px' }}>
-                                {Math.trunc(Math.random() * (60 - 4) + 4) + ' '}
-                              </Typography>
-                              <Icon glyph={'turned-in'} />
-                            </IconButton>
-                            <IconButton>
-                              <Typography style={{ marginRight: '5px' }}>
-                                {Math.trunc(Math.random() * (60 - 4) + 4) + ' '}
-                              </Typography>
-                              <Icon glyph={'comment'} />
-                            </IconButton>
-                            <IconButton>
-                              <Icon glyph={'more-vert'} />
-                            </IconButton>
-                          </div>
-                        </CardActions>
-                      </Card>
-                    </Link>
-                  </Grid>
+                          </Heading>
+                        </Link>
+                        <Text fontSize={1} my={2}>
+                          by <b>{howto.workspace_name}</b>
+                        </Text>
+                      </CardInfosContainer>
+                    </Card>
+                  </Box>
                 ))}
-              </Grid>
+              </FlexGrid>
             )}
           </div>
           {allHowtos.length > 15 ? (
@@ -145,7 +77,7 @@ export class HowtoList extends React.Component<IProps, any> {
             </Link>
           ) : null}
         </React.Fragment>
-      </div>
+      </>
     )
   }
 }

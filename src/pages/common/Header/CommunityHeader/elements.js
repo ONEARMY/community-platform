@@ -12,23 +12,17 @@ const activeClassName = 'link-active'
 
 export const Content = styled.div`
   display: flex;
-  height: 6em;
+  height: 40px;
   align-items: center;
   padding: 10px;
   background-color: white;
   color: black;
 `
 
-export const LogoText = styled.div`
-  font-size: xx-large;
+export const ListButton = styled(Button)`
+  ${navButtonStyle}
 `
 
-export const Logo = styled.img`
-  height: 4em;
-  width: 4em;
-  object-fit: cover;
-  position: relative;
-`
 export const Links = styled.div`
   margin-left: 5em;
   flex: 1;
@@ -40,10 +34,6 @@ export const Profile = styled.div`
   align-items: center;
 `
 
-export const ListButton = styled(Button)`
-  ${navButtonStyle}
-`
-
 export const LinkButton = styled(NavLink).attrs(({ name }) => ({
   activeClassName: name || activeClassName,
 }))`
@@ -51,12 +41,4 @@ export const LinkButton = styled(NavLink).attrs(({ name }) => ({
     &.${activeClassName} {
         text-decoration: underline;
     }
-`
-
-export const SectionDescription = styled.div`
-  background-color: #2d5786;
-  display: block;
-  color: white;
-  padding: 10px;
-  text-align: center;
 `

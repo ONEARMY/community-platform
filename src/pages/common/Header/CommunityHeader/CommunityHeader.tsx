@@ -7,23 +7,15 @@ import {
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
-import IconButton from '@material-ui/core/IconButton'
 import Icon from 'src/components/Icons'
 import { LoginComponent } from '../../Login/Login'
 import { Avatar } from 'src/components/Avatar'
-import {
-  Content,
-  LogoText,
-  Logo,
-  Links,
-  Profile,
-  ListButton,
-  LinkButton,
-  SectionDescription,
-} from './elements'
+import { Content, Links, Profile, LinkButton, ListButton } from './elements'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import Text from 'src/components/Text'
+import { Box } from 'rebass'
+import { maxContainerWidth } from 'src/themes/styled.theme'
 
 interface IState {
   moreMenuAnchor: any
@@ -84,8 +76,9 @@ export class CommunityHeader extends React.Component<IProps, IState> {
     return (
       <div>
         <Content>
-          <LogoText>One Army</LogoText>
-          <Logo src="https://pngimage.net/wp-content/uploads/2018/06/logo-placeholder-png.png" />
+          <Text large caps bold>
+            One Army
+          </Text>
           <Links>
             {COMMUNITY_PAGES.map(page => (
               <LinkButton
@@ -127,14 +120,6 @@ export class CommunityHeader extends React.Component<IProps, IState> {
               </ClickAwayListener>
             </Menu>
           </Links>
-          <div>
-            <IconButton component="span">
-              <Icon glyph={'mail-outline'} />
-            </IconButton>
-            <IconButton component="span">
-              <Icon glyph={'notifications'} />
-            </IconButton>
-          </div>
           {user ? (
             <>
               <Profile onClick={this.openProfileMenu}>
@@ -172,10 +157,11 @@ export class CommunityHeader extends React.Component<IProps, IState> {
             <LoginComponent />
           )}
         </Content>
-        <SectionDescription>
-          {this.props.title}
-          {this.props.description}
-        </SectionDescription>
+        <Box bg={'grey4'} width={1} p={3}>
+          <Text small width={maxContainerWidth + 'px'} m={'0 auto'}>
+            {this.props.description}
+          </Text>
+        </Box>
       </div>
     )
   }

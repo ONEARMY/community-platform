@@ -92,7 +92,7 @@ class Icon extends Component<WrapperProps> {
     super(props)
   }
   public render() {
-    const { size = 32, glyph } = this.props
+    const { size = 16, glyph } = this.props
 
     return (
       <IconWrapper size={size} {...this.props}>

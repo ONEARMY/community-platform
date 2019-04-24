@@ -1,10 +1,10 @@
 import * as React from 'react'
-import { Link } from 'react-router-dom'
-import { Card, Image, Box } from 'rebass'
+import { Card, Image, Box, Flex } from 'rebass'
 import { Flex as FlexGrid } from '@rebass/grid'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import Text from 'src/components/Text'
 import Heading from 'src/components/Heading'
+import { Link } from 'src/components/Links'
 import styled from 'styled-components'
 
 import { Button } from 'src/components/Button'
@@ -14,6 +14,7 @@ interface IProps {
   allHowtos: IHowto[]
 }
 
+// TODO create Card component
 const CardImage = styled(Image)`
   height: 230px;
   object-fit: cover;
@@ -32,17 +33,19 @@ export class HowtoList extends React.Component<IProps, any> {
     const { allHowtos } = this.props
     return (
       <>
-        <Link to={'/how-to/create'}>
-          <Button variant="outline" mx={'auto'} my={3} icon={'add'}>
-            create
-          </Button>
-        </Link>
+        <Flex justifyContent={'right'}>
+          <Link to={'/how-to/create'}>
+            <Button variant="outline" icon={'add'}>
+              create
+            </Button>
+          </Link>
+        </Flex>
         <React.Fragment>
           <div>
             {allHowtos.length === 0 ? (
               <LinearProgress />
             ) : (
-              <FlexGrid flexWrap={'wrap'} justifyContent={'center'}>
+              <FlexGrid flexWrap={'wrap'} justifyContent={'center'} my={4}>
                 {allHowtos.map((howto: IHowto, index: number) => (
                   <Box m={2}>
                     <Card borderRadius={1} width={[380]} bg={'white'}>

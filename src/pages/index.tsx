@@ -10,6 +10,7 @@ import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import Header from './common/Header/Header'
 import { SITE } from 'src/config/config'
 import { DevNotice } from 'src/components/Dev/DevNotice'
+import PageContainer from 'src/components/Layout/PageContainer'
 
 interface IState {
   singlePageMode: boolean
@@ -78,7 +79,7 @@ export class Routes extends React.Component<any, IState> {
                           title={page.title}
                           description={page.description}
                         />
-                        {page.component}
+                        <PageContainer>{page.component}</PageContainer>
                       </React.Fragment>
                     )}
                   />

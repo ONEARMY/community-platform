@@ -9,17 +9,10 @@ import styled from 'styled-components'
 
 import { Button } from 'src/components/Button'
 import { IHowto } from 'src/models/howto.models'
-import { maxContainerWidth } from 'src/themes/styled.theme'
 
 interface IProps {
   allHowtos: IHowto[]
 }
-
-const FlexGridContainer = styled(FlexGrid)`
-  flex-wrap: wrap;
-  max-width: ${maxContainerWidth + 'px'};
-  margin: 0 auto;
-`
 
 const CardImage = styled(Image)`
   height: 230px;
@@ -38,7 +31,7 @@ export class HowtoList extends React.Component<IProps, any> {
   public render() {
     const { allHowtos } = this.props
     return (
-      <div>
+      <>
         <Link to={'/how-to/create'}>
           <Button variant="outline" mx={'auto'} my={3} icon={'add'}>
             create
@@ -49,10 +42,10 @@ export class HowtoList extends React.Component<IProps, any> {
             {allHowtos.length === 0 ? (
               <LinearProgress />
             ) : (
-              <FlexGridContainer>
+              <FlexGrid flexWrap={'wrap'} justifyContent={'center'}>
                 {allHowtos.map((howto: IHowto, index: number) => (
                   <Box m={2}>
-                    <Card borderRadius={1} width={380} bg={'white'}>
+                    <Card borderRadius={1} width={[380]} bg={'white'}>
                       <CardImage
                         src={
                           howto.cover_image
@@ -62,16 +55,18 @@ export class HowtoList extends React.Component<IProps, any> {
                       />
                       <CardInfosContainer px={2}>
                         <Link to={`/how-to/${encodeURIComponent(howto.slug)}`}>
-                          <Heading medium>{howto.tutorial_title}</Heading>
+                          <Heading small bold>
+                            {howto.tutorial_title}
+                          </Heading>
                         </Link>
-                        <Text small>
+                        <Text fontSize={1} my={2}>
                           by <b>{howto.workspace_name}</b>
                         </Text>
                       </CardInfosContainer>
                     </Card>
                   </Box>
                 ))}
-              </FlexGridContainer>
+              </FlexGrid>
             )}
           </div>
           {allHowtos.length > 15 ? (
@@ -82,7 +77,7 @@ export class HowtoList extends React.Component<IProps, any> {
             </Link>
           ) : null}
         </React.Fragment>
-      </div>
+      </>
     )
   }
 }

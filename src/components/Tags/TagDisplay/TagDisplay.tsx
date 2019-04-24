@@ -1,8 +1,12 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 import { TagsStore } from 'src/stores/Tags/tags.store'
-import './TagDisplay.scss'
 import { ITag } from 'src/models/tags.model'
+import { Box } from 'rebass'
+import Text from 'src/components/Text'
+
+import theme from 'src/themes/styled.theme'
+import Styled from 'styled-components'
 
 /*
 This component takes a tag key as an input, looks up the tag information from the global store
@@ -17,6 +21,13 @@ interface IState {
 interface InjectedProps extends IProps {
   tagsStore: TagsStore
 }
+
+const TagContainer = Styled(Box)`
+  border-radius: ${theme.radii[1] + 'px'};
+  display: inline-block;
+  margin-left: 5px;
+`
+
 @inject('tagsStore')
 @observer
 export class TagDisplay extends React.Component<IProps, IState> {
@@ -35,9 +46,9 @@ export class TagDisplay extends React.Component<IProps, IState> {
   public render() {
     const { tag } = this.state
     return tag ? (
-      <div className="tag-display">
-        <div className="tag__label">{tag.label}</div>
-      </div>
+      <TagContainer bg={'greyTag'} p={2}>
+        <Text small>{tag.label}</Text>
+      </TagContainer>
     ) : null
   }
 }

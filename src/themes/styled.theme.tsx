@@ -11,7 +11,7 @@ export const colors = {
   grey3: '#656565',
   grey4: '#E9E9E9',
   greyStroke: '#AEAEAE',
-  greyTag: '#4a4a4a',
+  greyTag: '#E4E4E4',
   greyBg: '#F6F6F6',
   error: '#f44336',
 }

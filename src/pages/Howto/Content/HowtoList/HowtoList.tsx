@@ -11,6 +11,7 @@ import PpLogo from 'src/assets/images/pp-icon-small.png'
 
 import { Button } from 'src/components/Button'
 import { IHowto } from 'src/models/howto.models'
+import { TagDisplay } from 'src/components/Tags/TagDisplay/TagDisplay'
 
 interface IProps {
   allHowtos: IHowto[]
@@ -67,12 +68,15 @@ export class HowtoList extends React.Component<IProps, any> {
                             {howto.tutorial_title}
                           </Heading>
                         </Link>
-                        <Text fontSize={1} my={2} color={'grey4'}>
+                        <Text fontSize={1} mt={2} mb={3} color={'grey4'}>
                           by{' '}
                           <Text inline color={'black'}>
                             {howto.workspace_name}
                           </Text>
                         </Text>
+                        {Object.keys(howto.tags).map(tag => {
+                          return <TagDisplay key={tag} tagKey={tag} />
+                        })}
                       </CardInfosContainer>
                     </Card>
                   </Box>

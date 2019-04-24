@@ -83,6 +83,7 @@ const IconWrapper = styled<WrapperProps, 'div'>('div')`
   position: relative;
   color: inherit;
   ${verticalAlign}
+  margin-right: 4px;
 `
 
 const Glyph = ({ glyph = '' }: IGlyphProps) => {

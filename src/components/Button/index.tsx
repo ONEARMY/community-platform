@@ -36,10 +36,8 @@ type BtnProps = IBtnProps & RebassButtonProps
 
 export const Button = (props: BtnProps) => (
   <BaseButton {...props}>
-    <span style={{ marginRight: '8px' }}>
-      {props.icon && <Icon glyph={props.icon} />}
-    </span>
-    <Label caps regular pl={'5px'}>
+    {props.icon && <Icon glyph={props.icon} />}
+    <Label caps regular>
       {props.children}
     </Label>
   </BaseButton>

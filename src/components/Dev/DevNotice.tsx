@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { colors } from 'src/themes/styled.theme'
+import theme from 'src/themes/styled.theme'
 import { FaExclamationTriangle } from 'react-icons/fa'
 import { SITE } from 'src/config/config'
 export const DevNotice = () =>
@@ -7,7 +7,7 @@ export const DevNotice = () =>
     <div
       style={{
         padding: '5px',
-        color: colors.green,
+        color: theme.colors.green,
         position: 'absolute',
         display: 'flex',
         alignItems: 'center',

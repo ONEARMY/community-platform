@@ -3,7 +3,7 @@ import { Form, Field } from 'react-final-form'
 import Heading from 'src/components/Heading'
 import { IUser } from 'src/models/user.models'
 import { Avatar } from 'src/components/Avatar'
-import { InputField, TextArea } from 'src/components/Form/Fields'
+import { InputField, TextAreaField } from 'src/components/Form/Fields'
 import { UserStore } from 'src/stores/User/user.store'
 import { Button } from 'src/components/Button'
 
@@ -80,7 +80,7 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
                 />
                 <Field
                   name="about"
-                  component={TextArea}
+                  component={TextAreaField}
                   label="About"
                   disabled={this.state.readOnly}
                 />

@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
-import { colors } from 'src/themes/styled.theme'
+import theme from 'src/themes/styled.theme'
 
 export const GlobalStyle = createGlobalStyle`
   @font-face {
@@ -9,7 +9,7 @@ export const GlobalStyle = createGlobalStyle`
   }
   body {
       font-family: "system";
-      background-color: ${colors.greyBg};
+      background-color: ${theme.colors.greyBg};
       margin: 0;
       padding: 0;
   }

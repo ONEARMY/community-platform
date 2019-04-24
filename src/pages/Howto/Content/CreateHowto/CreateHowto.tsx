@@ -6,13 +6,15 @@ import arrayMutators from 'final-form-arrays'
 import { IHowto, IHowtoFormInput } from 'src/models/howto.models'
 import { afs } from 'src/utils/firebase'
 import { TUTORIAL_TEMPLATE_DATA } from './TutorialTemplate'
-import {
-  IFirebaseUploadInfo,
-  FirebaseFileUploader,
-} from 'src/components/FirebaseFileUploader/FirebaseFileUploader'
+import { IFirebaseUploadInfo } from 'src/components/FirebaseFileUploader/FirebaseFileUploader'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
-import { InputField, TextArea, SelectField } from 'src/components/Form/Fields'
+import {
+  InputField,
+  TextAreaField,
+  SelectField,
+} from 'src/components/Form/Fields'
+import { FirebaseFileUploaderField } from 'src/components/Form/FirebaseFileUploader.field'
 import { Step } from './Step/Step'
 import { Button } from 'src/components/Button'
 import { FieldState } from 'final-form'
@@ -22,10 +24,11 @@ import PageContainer from 'src/components/Layout/PageContainer'
 import { FlexContainer } from 'src/components/Layout/FlexContainer'
 import { BoxContainer } from 'src/components/Layout/BoxContainer'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
-import { FirebaseFileUploaderField } from 'src/components/Form/FirebaseFileUploader.field'
+
+import Icon from 'src/components/Icons'
 
 export interface IState {
-  formValues: Partial<IHowtoFormInput>
+  formValues: IHowtoFormInput
   formSaved: boolean
   _docID: string
   _uploadPath: string
@@ -46,7 +49,7 @@ export class CreateHowto extends React.PureComponent<
     const databaseRef = afs.collection('documentation').doc()
     const docID = databaseRef.id
     this.state = {
-      formValues: { id: docID },
+      formValues: { id: docID } as IHowtoFormInput,
       formSaved: false,
       _docID: docID,
       _uploadPath: `uploads/documentation/${docID}`,
@@ -54,7 +57,7 @@ export class CreateHowto extends React.PureComponent<
     }
   }
 
-  public onSubmit = async (formValues: any) => {
+  public onSubmit = async (formValues: IHowtoFormInput) => {
     const inputValues = formValues as IHowtoFormInput
     if (!inputValues.cover_image) {
       alert('Please provide a cover image before saving your tutorial')
@@ -103,24 +106,13 @@ export class CreateHowto extends React.PureComponent<
     return Promise.resolve({})
   }
 
-  // By default all tutorial form input fields come as strings. We want to cast to the
-  // correct data types if this ever becomes more complex could use
-  // https://medium.freecodecamp.org/how-to-write-powerful-schemas-in-javascript-490da6233d37
-  // public castFormValuesToCorrectTypes(values: IHowtoFormInput) {
-  //   const formattedValues = {
-  //     ...values,
-  //     tutorial_cost: parseFloat(values.tutorial_cost),
-  //   }
-  //   return formattedValues
-  // }
-
   public render() {
     const { formValues } = this.state
     console.log('formvalues', formValues)
     return (
       <PageContainer>
         <Form
-          onSubmit={this.onSubmit}
+          onSubmit={v => this.onSubmit(v as IHowtoFormInput)}
           initialValues={formValues}
           validate={() => this.validate}
           validateOnBlur
@@ -156,7 +148,6 @@ export class CreateHowto extends React.PureComponent<
                         name="tags"
                         validateFields={[]}
                         component={TagsSelectField}
-                        onChange={tags => console.log('field changed', tags)}
                       />
                       <FlexContainer p={0}>
                         <Field
@@ -188,7 +179,7 @@ export class CreateHowto extends React.PureComponent<
                         buttonText="UPLOAD FILES"
                         storagePath={this.state._uploadPath}
                         hidden={true}
-                        style={{ marginLeft: 0, padding: 0 }}
+                        icon="upload"
                       />
 
                       {v.tutorial_files &&
@@ -220,15 +211,20 @@ export class CreateHowto extends React.PureComponent<
                           padding: '16px',
                         }}
                       >
-                        <Field
-                          name="cover_image"
-                          validateFields={[]}
-                          component={FirebaseFileUploaderField}
-                          storagePath={this.state._uploadPath}
-                          hidden={true}
-                          accept="image/png, image/jpeg"
-                          buttonText="UPLOAD IMAGE"
-                        />
+                        <>
+                          <FlexContainer p={0} mb={3} justifyContent="center">
+                            <Icon glyph="upload" />
+                          </FlexContainer>
+                          <Field
+                            name="cover_image"
+                            validateFields={[]}
+                            component={FirebaseFileUploaderField}
+                            storagePath={this.state._uploadPath}
+                            hidden={true}
+                            accept="image/png, image/jpeg"
+                            buttonText="UPLOAD IMAGE"
+                          />
+                        </>
                       </div>
                     )}
                   </FlexContainer>
@@ -236,7 +232,7 @@ export class CreateHowto extends React.PureComponent<
                     name="tutorial_description"
                     validate={required}
                     validateFields={[]}
-                    component={TextArea}
+                    component={TextAreaField}
                     placeholder="Introduction to your How-To, keep it to 100 words please! *"
                   />
                 </BoxContainer>

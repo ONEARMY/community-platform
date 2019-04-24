@@ -3,7 +3,7 @@ import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { withKnobs, select } from '@storybook/addon-knobs'
 
-import Icon, { glyphs } from './'
+import Icon, { glyphs, IGlyphs } from './'
 
 import { wInfo } from '../../../.storybook/wInfo'
 
@@ -22,7 +22,10 @@ Object.keys(glyphs).map(glyph =>
   stories.add(
     glyph,
     wInfo()(() => (
-      <Icon glyph={glyph} size={select('Size', sizes, 32, 'iconSizes')} />
+      <Icon
+        glyph={glyph as keyof IGlyphs}
+        size={select('Size', sizes, 32, 'iconSizes')}
+      />
     )),
   ),
 )

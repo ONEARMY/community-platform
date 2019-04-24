@@ -9,7 +9,7 @@ import {
   WidthProps,
 } from 'styled-system'
 import { Flex, FlexProps } from 'rebass'
-import { maxContainerWidth } from 'src/themes/styled.theme'
+import theme from 'src/themes/styled.theme'
 
 type InnerContainerProps = MaxWidthProps & SpaceProps & WidthProps
 
@@ -32,7 +32,7 @@ PageContainer.defaultProps = {
 }
 InnerContainer.defaultProps = {
   className: 'page-inner-container',
-  maxWidth: maxContainerWidth,
+  maxWidth: theme.maxContainerWidth,
   width: 1,
   my: 4,
 }

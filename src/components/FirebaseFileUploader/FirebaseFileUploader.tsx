@@ -2,13 +2,10 @@ import * as React from 'react'
 import { storage } from '../../utils/firebase'
 import FileUploader from 'react-firebase-file-uploader'
 import { FullMetadata } from '@firebase/storage-types'
-import {
-  Container,
-  ProgressContainer,
-  ProgressBar,
-  UploadBtn,
-} from './elements'
+import { ProgressBar } from './elements'
 import { Button } from '../Button'
+import { IGlyphs } from '../Icons'
+import { FlexContainer } from '../Layout/FlexContainer'
 /*
 This component takes a folder storage path and uploads files to firebase storage
 onUploadSucess allows URLs of completed uploads to be passed back to parent component
@@ -22,6 +19,7 @@ interface IProps {
   accept?: string
   name?: string
   hidden?: boolean
+  icon?: keyof IGlyphs
 }
 interface IState {
   isUploading: boolean
@@ -115,9 +113,10 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
     return (
       <>
         <Button
-          icon={'upload'}
+          icon={this.props.icon}
           onClick={() => this.triggerFileUploaderClick()}
           type="button"
+          variant="light"
         >
           {this.props.buttonText}
           <div ref={(input: any) => (this.fileInputRef = input)}>
@@ -133,7 +132,7 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
             />
           </div>
         </Button>
-        <ProgressContainer>{this.renderProgressBar()}</ProgressContainer>
+        <FlexContainer mt={3}>{this.renderProgressBar()}</FlexContainer>
       </>
     )
   }

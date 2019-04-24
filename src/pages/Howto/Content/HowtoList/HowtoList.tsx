@@ -7,6 +7,8 @@ import Heading from 'src/components/Heading'
 import { Link } from 'src/components/Links'
 import styled from 'styled-components'
 
+import PpLogo from 'src/assets/images/pp-icon-small.png'
+
 import { Button } from 'src/components/Button'
 import { IHowto } from 'src/models/howto.models'
 
@@ -56,6 +58,9 @@ export class HowtoList extends React.Component<IProps, any> {
                             : howto.cover_image_url
                         }
                       />
+                      <Box width={'45px'} bg="white" mt={'-24px'} ml={'29px'}>
+                        <Image src={PpLogo} />
+                      </Box>
                       <CardInfosContainer px={2}>
                         <Link to={`/how-to/${encodeURIComponent(howto.slug)}`}>
                           <Heading small bold>

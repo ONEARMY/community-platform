@@ -2,14 +2,14 @@ import { insertOrUpdateImage } from '../core/ImageSelection'
 import React, { useState } from 'react'
 import * as ReactDOM from 'react-dom'
 import { FormDialog } from '../../../ui/Dialog'
-import { FirebaseFileUploader } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
+import { FirebaseFileUploader } from 'src/components/FirebaseFileUploader/FirebaseFileUploader'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 import {
   NewAppNode,
   deleteUpload,
   storagePath,
   TEXT,
-  toImageData
+  toImageData,
 } from '../../../common'
 
 const ACCEPT = 'image/png, image/jpeg'

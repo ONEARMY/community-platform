@@ -1,10 +1,9 @@
 import * as React from 'react'
 
 import styled from 'styled-components'
-import { colors } from 'src/themes/styled.theme'
+import theme from 'src/themes/styled.theme'
 import Text, { ITextProps } from 'src/components/Text'
 import { HeadingProps as RebassHeadingProps } from 'rebass'
-import theme from 'src/themes/styled.theme'
 
 export const large = props =>
   props.large ? { fontSize: props.theme.fontSizes[6] } : null
@@ -29,7 +28,8 @@ const Heading = (props: IHeadingProps) => (
 Heading.defaultProps = {
   theme,
   className: 'heading',
-  color: colors.black,
+  color: theme.colors.black,
+  mb: 3,
 }
 
 export default Heading

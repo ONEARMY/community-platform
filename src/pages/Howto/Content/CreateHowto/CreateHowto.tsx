@@ -6,29 +6,26 @@ import arrayMutators from 'final-form-arrays'
 import { IHowto, IHowtoFormInput } from 'src/models/howto.models'
 import { afs } from 'src/utils/firebase'
 import { TUTORIAL_TEMPLATE_DATA } from './TutorialTemplate'
-import {
-  IFirebaseUploadInfo,
-  FirebaseFileUploader,
-} from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
+import { IFirebaseUploadInfo } from 'src/components/FirebaseFileUploader/FirebaseFileUploader'
 import { stripSpecialCharacters } from 'src/utils/helpers'
-import { TagsSelect } from 'src/pages/common/Tags'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
-import { FirebaseFileUploaderField } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploaderField'
-import { InputField, Label, TextArea } from 'src/components/Form/Fields'
-import { Step } from './Step/Step'
 import {
-  FormContainer,
-  Title,
-  TutorialForm,
-  Background,
-  DescriptionContainer,
-  StepBackground,
-  Select,
-} from './elements'
+  InputField,
+  TextAreaField,
+  SelectField,
+} from 'src/components/Form/Fields'
+import { FirebaseFileUploaderField } from 'src/components/Form/FirebaseFileUploader.field'
+import { Step } from './Step/Step'
 import { Button } from 'src/components/Button'
-import { Link } from 'react-router-dom'
 import { FieldState } from 'final-form'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
+import Heading from 'src/components/Heading'
+import PageContainer from 'src/components/Layout/PageContainer'
+import { FlexContainer } from 'src/components/Layout/FlexContainer'
+import { BoxContainer } from 'src/components/Layout/BoxContainer'
+import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
+
+import Icon from 'src/components/Icons'
 
 export interface IState {
   formValues: IHowtoFormInput
@@ -39,15 +36,6 @@ export interface IState {
 }
 
 const required = (value: any) => (value ? undefined : 'Required')
-const isNumber = (value: any) => {
-  if (!value) {
-    return 'Required'
-  }
-  if (isNaN(Number(value))) {
-    return 'Number is required'
-  }
-  return
-}
 
 export class CreateHowto extends React.PureComponent<
   RouteComponentProps<any>,
@@ -61,7 +49,7 @@ export class CreateHowto extends React.PureComponent<
     const databaseRef = afs.collection('documentation').doc()
     const docID = databaseRef.id
     this.state = {
-      formValues: { ...TUTORIAL_TEMPLATE_DATA, id: docID },
+      formValues: { id: docID } as IHowtoFormInput,
       formSaved: false,
       _docID: docID,
       _uploadPath: `uploads/documentation/${docID}`,
@@ -69,7 +57,7 @@ export class CreateHowto extends React.PureComponent<
     }
   }
 
-  public onSubmit = async (formValues: any) => {
+  public onSubmit = async (formValues: IHowtoFormInput) => {
     const inputValues = formValues as IHowtoFormInput
     if (!inputValues.cover_image) {
       alert('Please provide a cover image before saving your tutorial')
@@ -98,6 +86,19 @@ export class CreateHowto extends React.PureComponent<
     }
   }
 
+  public validateTitle = async (value: any, meta?: FieldState) => {
+    if (meta && (!meta.dirty && meta.valid)) {
+      return undefined
+    }
+    if (value) {
+      const error = this.store.isSlugUnique(stripSpecialCharacters(value))
+      return error
+    } else if ((meta && (meta.touched || meta.visited)) || value === '') {
+      return 'A title for your how-to is required'
+    }
+    return undefined
+  }
+
   public validate = async (formValues: IHowtoFormInput) => {
     // TODO: validate cover image exists
     // if (this.state.formValues.cover_image_url === '') {
@@ -105,32 +106,13 @@ export class CreateHowto extends React.PureComponent<
     return Promise.resolve({})
   }
 
-  // By default all tutorial form input fields come as strings. We want to cast to the
-  // correct data types if this ever becomes more complex could use
-  // https://medium.freecodecamp.org/how-to-write-powerful-schemas-in-javascript-490da6233d37
-  // public castFormValuesToCorrectTypes(values: IHowtoFormInput) {
-  //   const formattedValues = {
-  //     ...values,
-  //     tutorial_cost: parseFloat(values.tutorial_cost),
-  //   }
-  //   return formattedValues
-  // }
-
   public render() {
     const { formValues } = this.state
     console.log('formvalues', formValues)
     return (
-      <div>
-        <Link to={'/how-to'}>
-          <Button m={50} icon={'arrow-back'} variant="outline">
-            Back to how-to
-          </Button>
-        </Link>
-        <Title variant="h4" component="h4" style={{ marginTop: 0 }}>
-          Create a How-To
-        </Title>
+      <PageContainer>
         <Form
-          onSubmit={this.onSubmit}
+          onSubmit={v => this.onSubmit(v as IHowtoFormInput)}
           initialValues={formValues}
           validate={() => this.validate}
           validateOnBlur
@@ -150,222 +132,160 @@ export class CreateHowto extends React.PureComponent<
           }) => {
             const v = values as IHowto
             return (
-              <FormContainer>
-                <TutorialForm onSubmit={handleSubmit}>
-                  <Background>
-                    <DescriptionContainer>
-                      <Field
-                        name="workspace_name"
-                        validateFields={[]}
-                        validate={required}
-                        component={InputField}
-                        label="What is your davehakkens.nl account ?"
-                        placeholder="@janedoe"
-                      />
+              <form onSubmit={handleSubmit}>
+                <BoxContainer bg="white">
+                  <Heading medium>Create your How-To</Heading>
+                  <FlexContainer p={0} mb={3}>
+                    <BoxContainer p={0} mr={3}>
                       <Field
                         name="tutorial_title"
                         validateFields={[]}
-                        validate={(value: any, _, meta?: FieldState) => {
-                          if (meta && (!meta.dirty && meta.valid)) {
-                            return undefined
-                          }
-                          if (value) {
-                            const error = this.store.isSlugUnique(
-                              stripSpecialCharacters(value),
-                            )
-                            return error
-                          } else if (
-                            (meta && (meta.touched || meta.visited)) ||
-                            value === ''
-                          ) {
-                            return 'A title for your how-to is required'
-                          }
-                          return undefined
-                        }}
+                        validate={value => this.validateTitle(value)}
                         component={InputField}
-                        label="What is the title of your How-To ?"
-                        placeholder="How to make XXX using YYY"
-                      />
-                      {v.cover_image && v.cover_image.downloadUrl ? (
-                        <UploadedFile
-                          file={v.cover_image}
-                          imagePreview
-                          showDelete
-                          onFileDeleted={form.mutators.clearCoverImage}
-                        />
-                      ) : (
-                        <Field
-                          name="cover_image"
-                          validateFields={[]}
-                          component={FirebaseFileUploaderField}
-                          storagePath={this.state._uploadPath}
-                          hidden={true}
-                          accept="image/png, image/jpeg"
-                          buttonText="Upload a cover image"
-                        />
-                      )}
-
-                      <Label
-                        text={'Write a short description for the How-To'}
-                        style={{ margin: '50px 0 10px' }}
-                      />
-                      <Field
-                        name="tutorial_description"
-                        validate={required}
-                        validateFields={[]}
-                        component={TextArea}
-                        placeholder="This is what we will do"
-                      />
-                      <Label
-                        text={'Add Tags'}
-                        style={{ margin: '50px 0 10px' }}
+                        placeholder="Title of your How-to *"
                       />
                       <Field
                         name="tags"
                         validateFields={[]}
-                        component={TagsSelect}
-                        onChange={tags => console.log('field changed', tags)}
+                        component={TagsSelectField}
                       />
+                      <FlexContainer p={0}>
+                        <Field
+                          name="tutorial_time"
+                          validate={required}
+                          validateFields={[]}
+                          component={InputField}
+                          placeholder="How much time? *"
+                          style={{ marginRight: '4px' }}
+                        />
+                        <Field
+                          name="difficulty_level"
+                          component={SelectField}
+                          validateFields={[]}
+                          placeholder="How hard is it? *"
+                          style={{ marginLeft: '4px' }}
+                        >
+                          <option value="" disabled>
+                            How hard is it? *
+                          </option>
+                          <option value="easy">easy</option>
+                          <option value="medium">medium</option>
+                          <option value="difficult">difficult</option>
+                        </Field>
+                      </FlexContainer>
                       <Field
                         name="tutorial_time"
-                        validate={required}
-                        validateFields={[]}
-                        component={InputField}
-                        label="How much time does it take ? (hours/week)"
-                        placeholder="2 hours"
-                      />
-                      <Field
-                        name="tutorial_cost"
-                        validate={isNumber}
-                        validateFields={[]}
-                        component={InputField}
-                        label="How much does it cost roughly (€)?"
-                        placeholder="10"
-                      />
-                      <Label
-                        text={'How difficult to replicate is your How-To ?'}
-                        style={{ margin: '50px 0 10px' }}
-                      />
-                      <Select
-                        name="difficulty_level"
-                        component="select"
-                        validateFields={[]}
-                      >
-                        <option value="easy">easy</option>
-                        <option value="medium">medium</option>
-                        <option value="difficult">difficult</option>
-                      </Select>
-                      <Label
-                        text={'File to support your How-To ? (20mb max)'}
-                        style={{ margin: '50px 0 10px' }}
-                      />
-                      <FirebaseFileUploader
-                        hidden={true}
-                        buttonText="Upload files"
+                        component={FirebaseFileUploaderField}
+                        buttonText="UPLOAD FILES"
                         storagePath={this.state._uploadPath}
-                        onUploadSuccess={fileInfo => {
-                          mutators.push('tutorial_files', fileInfo)
-                        }}
+                        hidden={true}
+                        icon="upload"
                       />
-                      {v.tutorial_files.map((file, index) => (
-                        <UploadedFile
-                          key={file.downloadUrl}
-                          file={file}
-                          showDelete
-                          onFileDeleted={() => {
-                            mutators.remove('tutorial_files', index)
+
+                      {v.tutorial_files &&
+                        v.tutorial_files.map((file, index) => (
+                          <UploadedFile
+                            key={file.downloadUrl}
+                            file={file}
+                            showDelete
+                            onFileDeleted={() => {
+                              mutators.remove('tutorial_files', index)
+                            }}
+                          />
+                        ))}
+                    </BoxContainer>
+                    {v.cover_image && v.cover_image.downloadUrl ? (
+                      <UploadedFile
+                        file={v.cover_image}
+                        imagePreview
+                        showDelete
+                        onFileDeleted={form.mutators.clearCoverImage}
+                      />
+                    ) : (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          border: '1px solid #dddddd',
+                          justifyContent: 'center',
+                          padding: '16px',
+                        }}
+                      >
+                        <>
+                          <FlexContainer p={0} mb={3} justifyContent="center">
+                            <Icon glyph="upload" />
+                          </FlexContainer>
+                          <Field
+                            name="cover_image"
+                            validateFields={[]}
+                            component={FirebaseFileUploaderField}
+                            storagePath={this.state._uploadPath}
+                            hidden={true}
+                            accept="image/png, image/jpeg"
+                            buttonText="UPLOAD IMAGE"
+                          />
+                        </>
+                      </div>
+                    )}
+                  </FlexContainer>
+                  <Field
+                    name="tutorial_description"
+                    validate={required}
+                    validateFields={[]}
+                    component={TextAreaField}
+                    placeholder="Introduction to your How-To, keep it to 100 words please! *"
+                  />
+                </BoxContainer>
+
+                <FieldArray name="steps">
+                  {({ fields }) => (
+                    <BoxContainer bg="white" mt={3}>
+                      {fields.map((step, index: number) => (
+                        <Step
+                          step={step}
+                          index={index}
+                          key={index}
+                          onDelete={(fieldIndex: number) => {
+                            fields.remove(fieldIndex)
                           }}
-                          // ref={el =>
-                          //   this.addUploadRef(el, `tutorial_files[${index}]`)
-                          // }
+                          values={values}
+                          _uploadPath={this.state._uploadPath}
                         />
                       ))}
-                      <Field
-                        name="tutorial_extern_file_url"
-                        component={InputField}
-                        validateFields={[]}
-                        label="Or a link"
-                        placeholder="https://drive.google.com/drive/u/2/folders/..."
-                      />
-                    </DescriptionContainer>
-                  </Background>
-                  <StepBackground>
-                    <FieldArray name="steps">
-                      {({ fields }) => (
-                        <div>
-                          {fields.map((step, index: number) => (
-                            <Step
-                              step={step}
-                              index={index}
-                              key={index}
-                              onDelete={(fieldIndex: number) => {
-                                fields.remove(fieldIndex)
-                              }}
-                              values={values}
-                              _uploadPath={this.state._uploadPath}
-                            />
-                          ))}
-                          <Button
-                            icon={'add'}
-                            width={300}
-                            mx="auto"
-                            my={60}
-                            bg="yellow"
-                            onClick={() => {
-                              fields.push({
-                                title: '',
-                                text: '',
-                                images: [],
-                              })
-                            }}
-                          >
-                            add step
-                          </Button>
-                        </div>
-                      )}
-                    </FieldArray>
-                    <Button
-                      type="submit"
-                      width={1}
-                      bg="green"
-                      icon="check"
-                      mx="auto"
-                      disabled={submitting || invalid}
-                    >
-                      Save
-                    </Button>
-                  </StepBackground>
-                </TutorialForm>
-              </FormContainer>
+                      <Button
+                        icon={'add'}
+                        width={300}
+                        mx="auto"
+                        my={60}
+                        bg="yellow"
+                        onClick={() => {
+                          fields.push({
+                            title: '',
+                            text: '',
+                            images: [],
+                          })
+                        }}
+                      >
+                        add step
+                      </Button>
+                    </BoxContainer>
+                  )}
+                </FieldArray>
+                <Button
+                  type="submit"
+                  width={1}
+                  bg="green"
+                  icon="check"
+                  mx="auto"
+                  disabled={submitting || invalid}
+                >
+                  Save
+                </Button>
+              </form>
             )
           }}
         />
-      </div>
+      </PageContainer>
     )
   }
 }
-
-// componentWillUnmount() {
-//   // remove any uploaded images if not saved
-//   if (!this.state.formSaved) {
-//     this.purgeUploads()
-//   }
-// }
-
-// // when a file upload component is created can optionally add a named reference
-// // to itself to enable calling methods (such as 'delete()') on it later from this component
-// // this will automatically populate as null when the component is destroyed
-// addUploadRef(ref: UploadedFile | null, key: string) {
-//   this.uploadRefs[key] = ref
-// }
-
-// // remove any uploaded images or files (case when user decided not to save doc)
-// // requires a name to be given to all UploadedFile components
-// purgeUploads() {
-//   Object.keys(this.uploadRefs).forEach(key => {
-//     const ref = this.uploadRefs[key]
-//     if (ref) {
-//       ref.delete()
-//     }
-//   })
-// }

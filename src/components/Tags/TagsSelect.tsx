@@ -1,9 +1,10 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 import { TagsStore } from 'src/stores/Tags/tags.store'
-import { Container, TagContainer, Tag, SelectedTag } from './elements'
 import { ISelectedTags, ITag } from 'src/models/tags.model'
 import { FieldRenderProps } from 'react-final-form'
+import Select from 'react-select'
+import { Styles } from 'react-select/lib/styles'
 
 // we include props from react-final-form fields so it can be used as a custom field component
 interface IProps extends FieldRenderProps {
@@ -17,9 +18,19 @@ interface IState {
 interface InjectedProps extends IProps {
   tagsStore: TagsStore
 }
+
+// add optional style overrides here (see https://react-select.com/styles)
+// NOTE, hardcoded margin bottom here as could not find way to pass through styled system
+const customStyles: Partial<Styles> = {
+  container: (provided, state) => ({
+    ...provided,
+    marginBottom: '16px',
+  }),
+}
+
 @inject('tagsStore')
 @observer
-export class TagsSelect extends React.Component<IProps, IState> {
+class TagsSelect extends React.Component<IProps, IState> {
   public static defaultProps: IProps
   constructor(props: any) {
     super(props)
@@ -44,40 +55,24 @@ export class TagsSelect extends React.Component<IProps, IState> {
     }
   }
 
-  public onTagClick(tagKey: string) {
-    const selected = this.state.selectedTags
-    const isSelectedIndex = selected.indexOf(tagKey)
-    isSelectedIndex > -1
-      ? selected.splice(isSelectedIndex, 1)
-      : selected.push(tagKey)
-    this.setState({ selectedTags: selected })
-    // trigger onChange callback to update parent
-    this.props.onChange(this._tagsArrayToSelectedJson(selected))
+  // emit values as {[tagKey]:true} object to be picked up by field
+  public onSelectedTagsChanged(selected: ITag[]) {
+    const selectedIDs = selected.map(tag => tag._key)
+    this.props.onChange(this._tagsArrayToSelectedJson(selectedIDs))
   }
 
   public render() {
     const { tags } = this.injectedProps.tagsStore
-    const { selectedTags } = this.state
     return (
-      <Container>
-        {tags.map(tag => (
-          // use keys to help react understand when a tab has changed
-          <TagContainer key={tag._key}>
-            {selectedTags.indexOf(tag._key) > -1 ? (
-              <SelectedTag
-                onClick={() => this.onTagClick(tag._key)}
-                variant="outlined"
-              >
-                {tag.label}
-              </SelectedTag>
-            ) : (
-              <Tag onClick={() => this.onTagClick(tag._key)} variant="outlined">
-                {tag.label}
-              </Tag>
-            )}
-          </TagContainer>
-        ))}
-      </Container>
+      <Select
+        styles={customStyles}
+        isMulti
+        options={tags}
+        getOptionLabel={(tag: ITag) => tag.label}
+        getOptionValue={(tag: ITag) => tag._key}
+        onChange={values => this.onSelectedTagsChanged(values as ITag[])}
+        placeholder="Select tags"
+      />
     )
   }
 
@@ -93,6 +88,9 @@ export class TagsSelect extends React.Component<IProps, IState> {
     return Object.keys(json)
   }
 }
+
+// use default (non-named) export to save accidentally importing instead of styled component
+export default TagsSelect
 
 // default function will be called if no onChange method supplied
 // include default input and meta bindings for use within form fields
@@ -111,16 +109,3 @@ TagsSelect.defaultProps = {
   meta: {},
   value: {},
 }
-
-// public sortTagsIntoCategories(tags: ITag[]) {
-// this is where the method will go to sort tags via their category field
-// so that we can use multiple tags with the same label
-// (e.g. 'compression' as machine and 'compression' as process)
-// }
-
-/*  As the tag store has a method to automatically populate tags on construction we don't need to 
-      explictly call the subscription initialisation function, code remaining just as example of how we could
-  */
-// public componentDidMount() {
-//   this.injectedProps.tagsStore.subscribeToTags()
-// }

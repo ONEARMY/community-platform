@@ -1,13 +1,13 @@
 import React from 'react'
-import Icon from 'src/components/Icons'
+import { Icon, IGlyphs } from 'src/components/Icons'
 import styled from 'styled-components'
 import {
   Button as RebassButton,
   ButtonProps as RebassButtonProps,
 } from 'rebass'
 
+import theme, { ButtonVariants } from 'src/themes/styled.theme'
 import Text from 'src/components/Text'
-import theme from 'src/themes/styled.theme'
 
 export const BaseButton = styled(RebassButton)`
   min-height: ${props => props.theme.buttons.height};
@@ -27,15 +27,18 @@ export const Label = styled(Text)`
 
 // extend to allow any default button props (e.g. onClick) to also be passed
 export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
-  icon?: string
+  icon?: keyof IGlyphs
   disabled?: boolean
+  variant?: ButtonVariants
 }
 
 type BtnProps = IBtnProps & RebassButtonProps
 
 export const Button = (props: BtnProps) => (
   <BaseButton {...props}>
-    {props.icon && <Icon glyph={props.icon} />}
+    <span style={{ marginRight: '8px' }}>
+      {props.icon && <Icon glyph={props.icon} />}
+    </span>
     <Label caps regular pl={'5px'}>
       {props.children}
     </Label>

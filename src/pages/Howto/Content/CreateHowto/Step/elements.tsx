@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { colors } from 'src/themes/styled.theme'
+import theme from 'src/themes/styled.theme'
 import Typography from '@material-ui/core/Typography'
 import Card from '@material-ui/core/Card'
 import { MdDelete } from 'react-icons/md'
@@ -8,7 +8,7 @@ import DialogActions from '@material-ui/core/DialogActions'
 import { Button } from 'src/components/Button'
 
 export const StepHeader = styled.div`
-  background-color: ${colors.yellow};
+  background-color: ${theme.colors.yellow};
   height: 70px;
 `
 
@@ -30,7 +30,7 @@ export const Container = styled.div`
 
 export const StepCard = styled(Card)`
   box-shadow: inherit !important;
-  border: 1px solid ${colors.grey};
+  border: 1px solid ${theme.colors.grey};
   border-radius: 0 !important;
   margin-top: 1em;
   width: 100%;
@@ -47,7 +47,7 @@ export const DeleteText = styled.span`
   text-transform: uppercase;
   font-size: 0.8em;
   line-height: 50px;
-  color: ${colors.grey2};
+  color: ${theme.colors.grey2};
   margin-left: 10px;
   ${DeleteStepBtn}:hover & {
     color: black;
@@ -55,7 +55,7 @@ export const DeleteText = styled.span`
 `
 
 export const DeleteIcon = styled(MdDelete)`
-  color: ${colors.grey2};
+  color: ${theme.colors.grey2};
   vertical-align: text-top;
   width: 18px;
   display: inline-block;
@@ -81,15 +81,12 @@ export const DialogButtons = styled(DialogActions)`
   justify-content: center !important;
 `
 
-export const CancelButton: any =
-  styled(Button) <
-  any >
-  `
-  width: 112px;
-  height: 60px;
-`
-export const ConfirmButton = styled(Button)`
-  background-color: ${colors.blue};
-  width: 112px;
-  height: 60px;
-`
+// export const CancelButton: any = styled(Button)<any>`
+//   width: 112px;
+//   height: 60px;
+// `
+// export const ConfirmButton = styled(Button)`
+//   background-color: ${theme.colors.blue};
+//   width: 112px;
+//   height: 60px;
+// `

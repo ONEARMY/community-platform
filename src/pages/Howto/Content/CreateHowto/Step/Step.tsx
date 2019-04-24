@@ -3,7 +3,7 @@ import CardContent from '@material-ui/core/CardContent'
 import Dialog from '@material-ui/core/Dialog'
 import { FieldArray } from 'react-final-form-arrays'
 import { Field } from 'react-final-form'
-import { TextArea, InputField } from 'src/components/Form/Fields'
+import { TextAreaField, InputField } from 'src/components/Form/Fields'
 
 import {
   StepHeader,
@@ -15,11 +15,9 @@ import {
   DeleteIcon,
   DialogText,
   DialogButtons,
-  CancelButton,
-  ConfirmButton,
 } from './elements'
 
-import { FirebaseFileUploader } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
+import { FirebaseFileUploader } from 'src/components/FirebaseFileUploader/FirebaseFileUploader'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 
 interface IProps {
@@ -82,7 +80,7 @@ class Step extends Component<IProps, IState> {
               <Field
                 name={`${step}.text`}
                 label="Describe this step"
-                component={TextArea}
+                component={TextAreaField}
                 placeholder="Description"
                 validate={required}
                 validateFields={[]}
@@ -145,7 +143,7 @@ class Step extends Component<IProps, IState> {
             {'Are you sure you want to delete this step ?'}
           </DialogText>
           <DialogButtons>
-            <CancelButton
+            {/* <CancelButton
               onClick={() => {
                 this.handleModaleDeleteStepClose()
               }}
@@ -160,7 +158,7 @@ class Step extends Component<IProps, IState> {
               }}
             >
               yes
-            </ConfirmButton>
+            </ConfirmButton> */}
           </DialogButtons>
         </Dialog>
       </Container>

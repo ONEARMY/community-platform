@@ -1,5 +1,5 @@
 import { ISelectedTags } from './tags.model'
-import { IFirebaseUploadInfo } from 'src/pages/common/FirebaseFileUploader/FirebaseFileUploader'
+import { IFirebaseUploadInfo } from 'src/components/FirebaseFileUploader/FirebaseFileUploader'
 
 // By default all tutorial form input fields come as strings
 // The IHowto interface imposes the correct formats on fields
@@ -25,7 +25,7 @@ export interface IHowtoFormInput {
   cover_image_url?: string
   tutorial_title: string
   tutorial_description: string
-  difficulty_level: 'easy' | 'medium' | 'difficult'
+  difficulty_level: 'easy' | 'medium' | 'difficult' | ''
   tutorial_time: string
   tutorial_cost: any
   tutorial_extern_file_url: string

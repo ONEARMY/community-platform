@@ -3,7 +3,7 @@ import * as React from 'react'
 import { ISelectorList } from 'src/models/selectorList.models'
 
 import styled from 'styled-components'
-import { colors } from 'src/themes/styled.theme'
+import theme from 'src/themes/styled.theme'
 import {
   color,
   borderRadius,
@@ -25,7 +25,7 @@ const Wrapper = styled.div`
   ${color};
   ${borderRadius};
   ${space};
-  border: 1px solid ${colors.grey};
+  border: 1px solid ${theme.colors.grey};
   display: inline-block;
   height: 50px;
 `
@@ -53,7 +53,7 @@ const Selector = (props: selectorProps) => (
 
 Selector.defaultProps = {
   className: 'selector',
-  color: colors.black,
+  color: theme.colors.black,
   borderRadius: 2,
   bg: 'white',
   px: 2,

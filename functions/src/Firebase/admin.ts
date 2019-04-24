@@ -1,14 +1,14 @@
 /***********************************************************
-When serving locally use service account info provided
-
+When running on live the config below pulls all data from 
+environment variables.
 ***********************************************************/
 import * as admin from 'firebase-admin'
 const FIREBASE_CONFIG = JSON.parse(
   process.env.FIREBASE_CONFIG,
 ) as IFirebaseConfig
 
-const serviceAccount = require('../config/serviceAccount.json')
-
+import { SERVICE_ACCOUNT_CONFIG } from '../config/config'
+const serviceAccount = SERVICE_ACCOUNT_CONFIG
 admin.initializeApp({
   credential: admin.credential.cert({
     clientEmail: serviceAccount.client_email,

@@ -11,3 +11,5 @@ lib/
 # Testing config files
 src/config/*.sh
 src/config/*.json
+
+./firebase-debug.log

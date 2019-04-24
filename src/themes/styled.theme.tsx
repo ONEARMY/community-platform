@@ -16,7 +16,14 @@ export const colors = {
   error: '#f44336',
 }
 
-export const buttons = {
+export type ButtonVariants =
+  | 'primary'
+  | 'outline'
+  | 'disabled'
+  | 'dark'
+  | 'light'
+
+const buttons = {
   height: '40px',
   primary: {
     color: colors.black,
@@ -36,21 +43,19 @@ export const buttons = {
     color: colors.white,
     backgroundColor: colors.black,
   },
+  light: {
+    backgroundColor: colors.grey,
+    color: colors.black,
+  },
 }
 
-export const space = [0, 4, 8, 16, 32, 64, 128]
-
-export const radii = space
-
-export const fontSizes = [10, 12, 15, 18, 24, 32, 40, 56, 72]
-
-export const breakpoints = ['32em', '48em', '64em']
-
-export const maxContainerWidth = 1280
-
-export const regular = 400
-
-export const bold = 600
+const space = [0, 4, 8, 16, 32, 64, 128]
+const radii = space
+const fontSizes = [10, 12, 15, 18, 24, 32, 40, 56, 72]
+const breakpoints = ['32em', '48em', '64em']
+const maxContainerWidth = 1280
+const regular = 400
+const bold = 600
 
 export default {
   colors,

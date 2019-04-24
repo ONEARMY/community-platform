@@ -1,24 +1,23 @@
 import * as React from 'react'
-import { LabelStyled, TextAreaStyled, Input } from './elements'
+import { TextAreaStyled, Input, SelectStyled } from './elements'
 
 export const InputField = ({ input, meta, label, ...rest }: any) => (
   <>
-    <LabelStyled>{label}</LabelStyled>
     <Input {...input} {...rest} />
     {meta.error && meta.touched && <span>{meta.error}</span>}
   </>
 )
 
-export const TextArea = ({ input, meta, label, ...rest }: any) => (
+export const TextAreaField = ({ input, meta, label, ...rest }: any) => (
   <>
-    {label && <LabelStyled>{label}</LabelStyled>}
     <TextAreaStyled {...input} {...rest} />
     {meta.error && meta.touched && <span>{meta.error}</span>}
   </>
 )
 
-export const Label = ({ text }: any) => (
+export const SelectField = ({ input, meta, label, ...rest }: any) => (
   <>
-    <LabelStyled>{text}</LabelStyled>
+    <SelectStyled {...input} {...rest} />
+    {meta.error && meta.touched && <span>{meta.error}</span>}
   </>
 )

@@ -8,7 +8,6 @@ import { HomePage } from './Home/Home'
 import { NotFoundPage } from './NotFound/NotFound'
 import { DiscussionsPage } from './Discussions'
 import { ProfilePage } from './Profile/Profile'
-import { ActionPage } from './Home/Action'
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import { EventsPage } from './Events/Events'
 import Header from './common/Header/Header'
@@ -36,14 +35,6 @@ export const HOME_PAGE: IPageMeta[] = [
     component: <HomePage />,
     title: 'Home',
     description: "Welcome home, here is all the stuff you're interested in",
-    exact: true,
-  },
-
-  {
-    path: '/action',
-    component: <ActionPage />,
-    title: '',
-    description: '',
     exact: true,
   },
 ]

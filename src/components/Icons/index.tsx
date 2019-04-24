@@ -19,54 +19,42 @@ import {
   MdComment,
   MdTurnedIn,
   MdEdit,
+  MdCloudUpload,
 } from 'react-icons/md'
+import { GoCloudUpload } from 'react-icons/go'
 import { IconContext } from 'react-icons'
 
 interface IGlyphProps {
-  glyph?: string
+  glyph: string
 }
 
 interface IProps {
-  glyph?: string
+  glyph: keyof IGlyphs
   size?: number | string
 }
+type availableGlyphs =
+  | 'download'
+  | 'upload'
+  | 'add'
+  | 'check'
+  | 'arrow-back'
+  | 'arrow-down'
+  | 'mail-outline'
+  | 'notifications'
+  | 'account-circle'
+  | 'lock'
+  | 'close'
+  | 'delete'
+  | 'more-vert'
+  | 'comment'
+  | 'turned-in'
+  | 'edit'
 
-interface IGlyphs {
-  download: JSX.Element
-  upload: JSX.Element
-  add: JSX.Element
-  check: JSX.Element
-  'arrow-back': JSX.Element
-  'arrow-down': JSX.Element
-  'mail-outline': JSX.Element
-  notifications: JSX.Element
-  'account-circle': JSX.Element
-  lock: JSX.Element
-  close: JSX.Element
-  delete: JSX.Element
-  'more-vert': JSX.Element
-  comment: JSX.Element
-  'turned-in': JSX.Element
-  edit: JSX.Element
-}
-
-type WrapperProps = IProps & VerticalAlignProps
-
-export const IconWrapper = styled<WrapperProps, 'div'>('div')`
-  display: inline-block;
-  flex: 0 0 ${props => (props.size ? `${props.size}px` : '32px')};
-  width: ${props => (props.size ? `${props.size}px` : '32px')};
-  height: ${props => (props.size ? `${props.size}px` : '32px')};
-  min-width: ${props => (props.size ? `${props.size}px` : '32px')};
-  min-height: ${props => (props.size ? `${props.size}px` : '32px')};
-  position: relative;
-  color: inherit;
-  ${verticalAlign}
-`
+export type IGlyphs = { [k in availableGlyphs]: JSX.Element }
 
 export const glyphs: IGlyphs = {
   download: <MdFileDownload />,
-  upload: <MdFileUpload />,
+  upload: <GoCloudUpload />,
   add: <MdAdd />,
   check: <MdCheck />,
   'arrow-back': <MdArrowBack />,
@@ -83,11 +71,25 @@ export const glyphs: IGlyphs = {
   edit: <MdEdit />,
 }
 
+type WrapperProps = IProps & VerticalAlignProps
+
+const IconWrapper = styled<WrapperProps, 'div'>('div')`
+  display: inline-block;
+  flex: 0 0 ${props => (props.size ? `${props.size}px` : '32px')};
+  width: ${props => (props.size ? `${props.size}px` : '32px')};
+  height: ${props => (props.size ? `${props.size}px` : '32px')};
+  min-width: ${props => (props.size ? `${props.size}px` : '32px')};
+  min-height: ${props => (props.size ? `${props.size}px` : '32px')};
+  position: relative;
+  color: inherit;
+  ${verticalAlign}
+`
+
 const Glyph = ({ glyph = '' }: IGlyphProps) => {
   return glyphs[glyph] || null
 }
 
-class Icon extends Component<WrapperProps> {
+export class Icon extends Component<WrapperProps> {
   constructor(props: WrapperProps) {
     super(props)
   }
@@ -99,7 +101,7 @@ class Icon extends Component<WrapperProps> {
         <IconContext.Provider
           value={{ style: { width: size + 'px', height: size + 'px' } }}
         >
-          <Glyph glyph={glyph} />
+          <Glyph glyph={glyph as string} />
         </IconContext.Provider>
       </IconWrapper>
     )

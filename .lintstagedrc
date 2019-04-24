@@ -11,5 +11,5 @@
       "git add"
     ]
   },
-  "ignore": ["functions/**","src/assets/userReportInit.js"]
+  "ignore": ["functions/**",".storybook/**"]
 }

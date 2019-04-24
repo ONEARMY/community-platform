@@ -15,7 +15,7 @@ import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import Text from 'src/components/Text'
 import { Box } from 'rebass'
-import { maxContainerWidth } from 'src/themes/styled.theme'
+import theme from 'src/themes/styled.theme'
 
 interface IState {
   moreMenuAnchor: any
@@ -158,7 +158,7 @@ export class CommunityHeader extends React.Component<IProps, IState> {
           )}
         </Content>
         <Box bg={'grey4'} width={1} p={3}>
-          <Text small width={maxContainerWidth + 'px'} m={'0 auto'}>
+          <Text small width={theme.maxContainerWidth + 'px'} m={'0 auto'}>
             {this.props.description}
           </Text>
         </Box>

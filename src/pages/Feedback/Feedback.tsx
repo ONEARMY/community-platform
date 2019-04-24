@@ -17,16 +17,6 @@ export class FeedbackPage extends React.Component<IProps, IState> {
     this.state = { pageName: 'Demo Page Template' }
   }
 
-  public componentDidMount() {
-    // call methods you want to fire once when component mounted
-    const script = document.createElement('script')
-
-    script.src = '/assets/userReport.js'
-    script.async = true
-
-    document.body.appendChild(script)
-  }
-
   public render() {
     return (
       <MainLayout>

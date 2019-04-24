@@ -3,10 +3,9 @@ import { Link } from 'react-router-dom'
 import { Card, Image, Box } from 'rebass'
 import { Flex as FlexGrid } from '@rebass/grid'
 import LinearProgress from '@material-ui/core/LinearProgress'
-import Icon from 'src/components/Icons'
-import { theme } from 'src/themes/app.theme'
 import Text from 'src/components/Text'
 import Heading from 'src/components/Heading'
+import styled from 'styled-components'
 
 import { Button } from 'src/components/Button'
 import { IHowto } from 'src/models/howto.models'
@@ -15,6 +14,22 @@ import { maxContainerWidth } from 'src/themes/styled.theme'
 interface IProps {
   allHowtos: IHowto[]
 }
+
+const FlexGridContainer = styled(FlexGrid)`
+  flex-wrap: wrap;
+  max-width: ${maxContainerWidth + 'px'};
+  margin: 0 auto;
+`
+
+const CardImage = styled(Image)`
+  height: 230px;
+  object-fit: cover;
+  width: 100%;
+`
+const CardInfosContainer = styled(Box)`
+  height: 170px;
+`
+
 export class HowtoList extends React.Component<IProps, any> {
   constructor(props: any) {
     super(props)
@@ -34,31 +49,29 @@ export class HowtoList extends React.Component<IProps, any> {
             {allHowtos.length === 0 ? (
               <LinearProgress />
             ) : (
-              <FlexGrid
-                flexWrap={'wrap'}
-                maxWidth={maxContainerWidth}
-                m={'0 auto'}
-              >
+              <FlexGridContainer>
                 {allHowtos.map((howto: IHowto, index: number) => (
                   <Box m={2}>
                     <Card borderRadius={1} width={380} bg={'white'}>
-                      <Image
+                      <CardImage
                         src={
                           howto.cover_image
                             ? howto.cover_image.downloadUrl
                             : howto.cover_image_url
                         }
                       />
-                      <Box px={2}>
+                      <CardInfosContainer px={2}>
                         <Link to={`/how-to/${encodeURIComponent(howto.slug)}`}>
                           <Heading medium>{howto.tutorial_title}</Heading>
                         </Link>
-                        <Text small>by {howto.workspace_name}</Text>
-                      </Box>
+                        <Text small>
+                          by <b>{howto.workspace_name}</b>
+                        </Text>
+                      </CardInfosContainer>
                     </Card>
                   </Box>
                 ))}
-              </FlexGrid>
+              </FlexGridContainer>
             )}
           </div>
           {allHowtos.length > 15 ? (

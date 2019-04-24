@@ -14,6 +14,7 @@ import Header from './common/Header/Header'
 import { SITE } from 'src/config/config'
 import { DebugEditorPage } from 'src/components/Editor/Debug'
 import { DevNotice } from 'src/components/Dev/DevNotice'
+import { FeedbackPage } from './Feedback/Feedback'
 
 interface IState {
   singlePageMode: boolean
@@ -71,6 +72,12 @@ export const DEBUG_PAGES: IPageMeta[] =
     : []
 
 export const COMMUNITY_PAGES_MORE: IPageMeta[] = [
+  {
+    path: '/feedback',
+    component: <FeedbackPage />,
+    title: 'Feedback',
+    description: 'Let us know what you think!',
+  },
   {
     path: '/maps',
     component: <NotFoundPage />,

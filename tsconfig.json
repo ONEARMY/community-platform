@@ -34,6 +34,7 @@
     "functions-cron",
     "functions",
     "src/utils/UserMigration",
-    "src/setupProxy.js"
+    "src/setupProxy.js",
+    "src/assets/userReportInit.js"
   ]
 }

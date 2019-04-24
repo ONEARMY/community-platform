@@ -7,6 +7,7 @@ import {
 } from 'rebass'
 
 import theme, { ButtonVariants } from 'src/themes/styled.theme'
+import Text from 'src/components/Text'
 
 export const BaseButton = styled(RebassButton)`
   min-height: ${props => props.theme.buttons.height};
@@ -20,14 +21,8 @@ export const BaseButton = styled(RebassButton)`
   word-break: keep-all;
   cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
 `
-export const Label = styled.span`
-  text-transform: uppercase;
-  text-decoration: none;
-  display: block;
-  flex: 0 0 auto;
-  line-height: inherit;
+export const Label = styled(Text)`
   color: inherit;
-  align-self: center;
 `
 
 // extend to allow any default button props (e.g. onClick) to also be passed
@@ -44,7 +39,9 @@ export const Button = (props: BtnProps) => (
     <span style={{ marginRight: '8px' }}>
       {props.icon && <Icon glyph={props.icon} />}
     </span>
-    <Label>{props.children}</Label>
+    <Label caps regular pl={'5px'}>
+      {props.children}
+    </Label>
   </BaseButton>
 )
 

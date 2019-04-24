@@ -1,136 +1,83 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
-import CardActions from '@material-ui/core/CardActions'
-import CardMedia from '@material-ui/core/CardMedia'
-import CardContent from '@material-ui/core/CardContent'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-import Card from '@material-ui/core/Card'
+import { Card, Image, Box } from 'rebass'
+import { Flex as FlexGrid } from '@rebass/grid'
 import LinearProgress from '@material-ui/core/LinearProgress'
-import {
-  UsefulIcon,
-  SaveIcon,
-  TickIcon,
-} from 'src/assets/icons/icon_components'
-import { IHowto } from 'src/models/howto.models'
-import { TagDisplay } from 'src/components/Tags/TagDisplay/TagDisplay'
-import { CreateButton } from './elements'
+import Text from 'src/components/Text'
+import Heading from 'src/components/Heading'
+import styled from 'styled-components'
 
-const styles: any = {
-  cards: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    boxShadow: 'none',
-  },
-  layout: {
-    width: 'auto',
-  },
-  link: {
-    textDecoration: 'none',
-    color: 'black',
-  },
-  cardMedia: {
-    paddingTop: '70%',
-  },
-  cardContent: {},
-  labelContent: {},
-}
+import { Button } from 'src/components/Button'
+import { IHowto } from 'src/models/howto.models'
 
 interface IProps {
   allHowtos: IHowto[]
 }
+
+const CardImage = styled(Image)`
+  height: 230px;
+  object-fit: cover;
+  width: 100%;
+`
+const CardInfosContainer = styled(Box)`
+  height: 170px;
+`
 
 export class HowtoList extends React.Component<IProps, any> {
   constructor(props: any) {
     super(props)
   }
 
-  renderCardMedia(howto) {
-    return (
-      <CardMedia
-        style={styles.cardMedia}
-        image={
-          howto.cover_image
-            ? howto.cover_image.downloadUrl
-            : howto.cover_image_url
-        } // eslint-disable-line max-len
-        title="Image title"
-      />
-    )
-  }
-
-  renderCardContent(howto) {
-    return (
-      <CardContent style={styles.cardContent}>
-        <Typography variant="h6">{howto.tutorial_title}</Typography>
-      </CardContent>
-    )
-  }
-
-  renderLabelContent(howto) {
-    return (
-      <CardContent style={styles.labelContent}>
-        {/* placeholder for tags */}
-        <div>
-          {Object.keys(howto.tags).map(k => (
-            <TagDisplay tagKey={k} key={k} />
-          ))}
-        </div>
-      </CardContent>
-    )
-  }
-
-  renderCardActions(howto) {
-    // use passed in howto for user info, other relevant props
-    return (
-      <CardActions>
-        <Typography>username and coverimage</Typography>
-        <UsefulIcon />
-        <SaveIcon />
-        <TickIcon />
-      </CardActions>
-    )
-  }
-
   public render() {
     const { allHowtos } = this.props
     return (
-      <div>
+      <>
         <Link to={'/how-to/create'}>
-          <CreateButton icon={'add'}>create how-to</CreateButton>
+          <Button variant="outline" mx={'auto'} my={3} icon={'add'}>
+            create
+          </Button>
         </Link>
         <React.Fragment>
-          <div style={styles.layout}>
+          <div>
             {allHowtos.length === 0 ? (
               <LinearProgress />
             ) : (
-              <Grid container spacing={16}>
+              <FlexGrid flexWrap={'wrap'} justifyContent={'center'}>
                 {allHowtos.map((howto: IHowto, index: number) => (
-                  <Grid item key={index} xs={4}>
-                    <Link
-                      to={`/how-to/${encodeURIComponent(howto.slug)}`}
-                      style={styles.link}
-                    >
-                      <Card style={styles.cards} raised={false} square={true}>
-                        {this.renderCardMedia(howto)}
-                        {this.renderCardContent(howto)}
-                        {this.renderLabelContent(howto)}
-                        {this.renderCardActions(howto)}
-                      </Card>
-                    </Link>
-                  </Grid>
+                  <Box m={2}>
+                    <Card borderRadius={1} width={[380]} bg={'white'}>
+                      <CardImage
+                        src={
+                          howto.cover_image
+                            ? howto.cover_image.downloadUrl
+                            : howto.cover_image_url
+                        }
+                      />
+                      <CardInfosContainer px={2}>
+                        <Link to={`/how-to/${encodeURIComponent(howto.slug)}`}>
+                          <Heading small bold>
+                            {howto.tutorial_title}
+                          </Heading>
+                        </Link>
+                        <Text fontSize={1} my={2}>
+                          by <b>{howto.workspace_name}</b>
+                        </Text>
+                      </CardInfosContainer>
+                    </Card>
+                  </Box>
                 ))}
-              </Grid>
+              </FlexGrid>
             )}
           </div>
           {allHowtos.length > 15 ? (
             <Link to={'/how-to/create'}>
-              <CreateButton icon={'add'}>create how-to</CreateButton>
+              <Button mx={'auto'} my={50} icon={'add'}>
+                create how-to
+              </Button>
             </Link>
           ) : null}
         </React.Fragment>
-      </div>
+      </>
     )
   }
 }

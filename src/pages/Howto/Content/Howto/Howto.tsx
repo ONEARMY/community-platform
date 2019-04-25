@@ -89,21 +89,11 @@ export class Howto extends React.Component<
     if (howto) {
       return (
         <>
-          <Link to={'/how-to'}>
-            <Button variant={'outline'} m={50} icon={'arrow-back'}>
-              Back to how-to
-            </Button>
-          </Link>
           <HowtoDescription howto={howto} />
           <HowtoSummary steps={howto.steps} howToSlug={howto.slug} />
           {howto.steps.map((step: any, index: number) => (
             <Step step={step} key={index} stepindex={index} />
           ))}
-          <Link to={'/how-to'}>
-            <Button variant={'outline'} mx={'auto'} my={50} icon={'arrow-back'}>
-              Back to how-to
-            </Button>
-          </Link>
         </>
       )
     } else {

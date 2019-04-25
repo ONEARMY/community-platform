@@ -1,19 +1,23 @@
 import * as React from 'react'
-import { Link } from 'react-router-dom'
-import { Card, Image, Box } from 'rebass'
+import { Card, Image, Box, Flex } from 'rebass'
 import { Flex as FlexGrid } from '@rebass/grid'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import Text from 'src/components/Text'
 import Heading from 'src/components/Heading'
+import { Link } from 'src/components/Links'
 import styled from 'styled-components'
+
+import PpLogo from 'src/assets/images/pp-icon-small.png'
 
 import { Button } from 'src/components/Button'
 import { IHowto } from 'src/models/howto.models'
+import { TagDisplay } from 'src/components/Tags/TagDisplay/TagDisplay'
 
 interface IProps {
   allHowtos: IHowto[]
 }
 
+// TODO create Card component
 const CardImage = styled(Image)`
   height: 230px;
   object-fit: cover;
@@ -32,17 +36,19 @@ export class HowtoList extends React.Component<IProps, any> {
     const { allHowtos } = this.props
     return (
       <>
-        <Link to={'/how-to/create'}>
-          <Button variant="outline" mx={'auto'} my={3} icon={'add'}>
-            create
-          </Button>
-        </Link>
+        <Flex justifyContent={'right'}>
+          <Link to={'/how-to/create'}>
+            <Button variant="outline" icon={'add'}>
+              create
+            </Button>
+          </Link>
+        </Flex>
         <React.Fragment>
           <div>
             {allHowtos.length === 0 ? (
               <LinearProgress />
             ) : (
-              <FlexGrid flexWrap={'wrap'} justifyContent={'center'}>
+              <FlexGrid flexWrap={'wrap'} justifyContent={'center'} my={4}>
                 {allHowtos.map((howto: IHowto, index: number) => (
                   <Box m={2}>
                     <Card borderRadius={1} width={[380]} bg={'white'}>
@@ -53,15 +59,24 @@ export class HowtoList extends React.Component<IProps, any> {
                             : howto.cover_image_url
                         }
                       />
-                      <CardInfosContainer px={2}>
+                      <Box width={'45px'} bg="white" mt={'-24px'} ml={'29px'}>
+                        <Image src={PpLogo} />
+                      </Box>
+                      <CardInfosContainer px={4} pb={3}>
                         <Link to={`/how-to/${encodeURIComponent(howto.slug)}`}>
                           <Heading small bold>
                             {howto.tutorial_title}
                           </Heading>
                         </Link>
-                        <Text fontSize={1} my={2}>
-                          by <b>{howto.workspace_name}</b>
+                        <Text fontSize={1} mt={2} mb={3} color={'grey4'}>
+                          by{' '}
+                          <Text inline color={'black'}>
+                            {howto.workspace_name}
+                          </Text>
                         </Text>
+                        {Object.keys(howto.tags).map(tag => {
+                          return <TagDisplay key={tag} tagKey={tag} />
+                        })}
                       </CardInfosContainer>
                     </Card>
                   </Box>

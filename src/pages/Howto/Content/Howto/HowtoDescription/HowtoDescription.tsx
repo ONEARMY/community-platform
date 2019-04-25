@@ -29,11 +29,11 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
       <Flex id="description">
         <Box width={[1, 1 / 2]}>
           <Text fontSize={1} mt={2} mb={3} color={'grey2'} p={1}>
-            by{' '}
+            by&nbsp;
             <Text inline color={'black'}>
-              {howto.workspace_name}
+              &nbsp;{howto.workspace_name}
             </Text>
-            |
+            &nbsp;|&nbsp;
             <Text inline color={'black'}>
               {/* TODO : Use proper date  */}4 days ago
             </Text>

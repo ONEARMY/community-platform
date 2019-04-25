@@ -60,29 +60,22 @@ export class Howto extends React.Component<
       : undefined
   }
 
-  public renderMultipleImages(step: IHowtoStep) {
-    const preloadedImages: any[] = []
-    for (const image of step.images) {
-      const imageObj = new Image()
-      imageObj.src = image.downloadUrl
-      preloadedImages.push({
-        src: imageObj.src,
-      })
-    }
-    return preloadedImages.map((image: any, index: number) => (
-      <div className="step__image">
-        <img src={image.src} />
-      </div>
-    ))
-  }
+  // public renderMultipleImages(step: IHowtoStep) {
+  //   const preloadedImages: any[] = []
+  //   for (const image of step.images) {
+  //     const imageObj = new Image()
+  //     imageObj.src = image.downloadUrl
+  //     preloadedImages.push({
+  //       src: imageObj.src,
+  //     })
+  //   }
+  //   return preloadedImages.map((image: any, index: number) => (
+  //     <div className="step__image">
+  //       <img src={image.src} />
+  //     </div>
+  //   ))
+  // }
 
-  public renderUniqueImage(url: string) {
-    return (
-      <div className="step__image">
-        <img src={url} />
-      </div>
-    )
-  }
   public render() {
     const { howto, isLoading } = this.state
     if (howto) {

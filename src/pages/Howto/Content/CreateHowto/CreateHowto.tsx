@@ -26,6 +26,7 @@ import { BoxContainer } from 'src/components/Layout/BoxContainer'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 
 import Icon from 'src/components/Icons'
+import { ImageUpload } from 'src/components/ImageUpload/ImageUpload'
 
 export interface IState {
   formValues: IHowtoFormInput
@@ -181,6 +182,7 @@ export class CreateHowto extends React.PureComponent<
                         hidden={true}
                         icon="upload"
                       />
+                      <ImageUpload />
 
                       {v.tutorial_files &&
                         v.tutorial_files.map((file, index) => (

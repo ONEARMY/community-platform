@@ -4247,6 +4247,13 @@ cli-width@^2.0.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/cli-width/-/cli-width-2.2.0.tgz#ff19ede8a9a5e579324147b0c11f0fbcbabed639"
 
+client-compress@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/client-compress/-/client-compress-2.1.2.tgz#bf7b85a3afa7b0a0e99edd485b144f12447504be"
+  integrity sha512-z7wRt5BYYUYwFxf32n4kn5Mc0O9ExHV6zGI1PLCsGOCXVcCvfafKMHxnG4WF9UcD4wgbKv8LWf+xbW+oXST2KA==
+  dependencies:
+    babel-runtime "^6.26.0"
+
 clipboard@^2.0.0:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/clipboard/-/clipboard-2.0.4.tgz#836dafd66cf0fea5d71ce5d5b0bf6e958009112d"
@@ -11216,6 +11223,14 @@ react-icons@^3.2.2:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-3.5.0.tgz#a6135480e3bcbc63f5dd045193ef2a814263d8d1"
 
+react-image-lightbox@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/react-image-lightbox/-/react-image-lightbox-5.1.0.tgz#b47b904b027c918acdd9efa94dc0a0ddd8125c86"
+  integrity sha512-R46QvffoDBscLQgTl4s3kFxVbnP7a+nIh7AXJNS0EXVeDaa6zKDKtIT+jFeEvs+F9oUHtZfenG1NHhTkO4hEOA==
+  dependencies:
+    prop-types "^15.6.2"
+    react-modal "^3.6.1"
+
 react-input-autosize@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/react-input-autosize/-/react-input-autosize-2.2.1.tgz#ec428fa15b1592994fb5f9aa15bb1eb6baf420f8"
@@ -11255,7 +11270,7 @@ react-linkify@^0.2.2:
     prop-types "^15.5.8"
     tlds "^1.57.0"
 
-react-modal@^3.8.1:
+react-modal@^3.6.1, react-modal@^3.8.1:
   version "3.8.1"
   resolved "https://registry.yarnpkg.com/react-modal/-/react-modal-3.8.1.tgz#7300f94a6f92a2e17994de0be6ccb61734464c9e"
   dependencies:

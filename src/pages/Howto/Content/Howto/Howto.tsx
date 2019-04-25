@@ -6,10 +6,9 @@ import { inject } from 'mobx-react'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
 import Step from './Step/Step'
-import { Button } from 'src/components/Button'
 import { IHowtoStep, IHowto } from 'src/models/howto.models'
-import { Link } from 'react-router-dom'
 import HowtoSummary from './HowtoSummary/HowtoSummary'
+import { Box } from 'rebass'
 
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
@@ -61,49 +60,34 @@ export class Howto extends React.Component<
       : undefined
   }
 
-  public renderMultipleImages(step: IHowtoStep) {
-    const preloadedImages: any[] = []
-    for (const image of step.images) {
-      const imageObj = new Image()
-      imageObj.src = image.downloadUrl
-      preloadedImages.push({
-        src: imageObj.src,
-      })
-    }
-    return preloadedImages.map((image: any, index: number) => (
-      <div className="step__image">
-        <img src={image.src} />
-      </div>
-    ))
-  }
+  // public renderMultipleImages(step: IHowtoStep) {
+  //   const preloadedImages: any[] = []
+  //   for (const image of step.images) {
+  //     const imageObj = new Image()
+  //     imageObj.src = image.downloadUrl
+  //     preloadedImages.push({
+  //       src: imageObj.src,
+  //     })
+  //   }
+  //   return preloadedImages.map((image: any, index: number) => (
+  //     <div className="step__image">
+  //       <img src={image.src} />
+  //     </div>
+  //   ))
+  // }
 
-  public renderUniqueImage(url: string) {
-    return (
-      <div className="step__image">
-        <img src={url} />
-      </div>
-    )
-  }
   public render() {
     const { howto, isLoading } = this.state
     if (howto) {
       return (
         <>
-          <Link to={'/how-to'}>
-            <Button variant={'outline'} m={50} icon={'arrow-back'}>
-              Back to how-to
-            </Button>
-          </Link>
           <HowtoDescription howto={howto} />
-          <HowtoSummary steps={howto.steps} howToSlug={howto.slug} />
-          {howto.steps.map((step: any, index: number) => (
-            <Step step={step} key={index} stepindex={index} />
-          ))}
-          <Link to={'/how-to'}>
-            <Button variant={'outline'} mx={'auto'} my={50} icon={'arrow-back'}>
-              Back to how-to
-            </Button>
-          </Link>
+          {/* <HowtoSummary steps={howto.steps} howToSlug={howto.slug} /> */}
+          <Box my={4} p={5} bg={'white'}>
+            {howto.steps.map((step: any, index: number) => (
+              <Step step={step} key={index} stepindex={index} />
+            ))}
+          </Box>
         </>
       )
     } else {

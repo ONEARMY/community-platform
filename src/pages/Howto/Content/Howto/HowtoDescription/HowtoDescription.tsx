@@ -1,22 +1,23 @@
 import React from 'react'
-
-import Typography from '@material-ui/core/Typography'
 import { TagDisplay } from 'src/components/Tags/TagDisplay/TagDisplay'
-
-import {
-  Container,
-  ContainerLeft,
-  Padding,
-  ContainerRight,
-  CoverImg,
-  TutorialInfo,
-} from './elements'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 import { IHowto } from 'src/models/howto.models'
+import Heading from 'src/components/Heading'
+import Text from 'src/components/Text'
+import { Box, Flex, Card } from 'rebass'
+import Icon from 'src/components/Icons'
+import styled from 'styled-components'
 
 interface IProps {
   howto: IHowto
 }
+
+export const CoverImg = styled.img`
+  object-fit: cover;
+  max-height: 360px;
+  max-width: 600px;
+  width: 100%;
+`
 
 export default class HowtoDescription extends React.PureComponent<IProps, any> {
   constructor(props: any) {
@@ -25,50 +26,54 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
   public render() {
     const { howto } = this.props
     return (
-      <Container id="description">
-        <ContainerLeft>
-          <Padding>
-            <Typography variant="h4" component="h4">
-              {howto.tutorial_title}
-            </Typography>
-            <TutorialInfo component="p">
-              {howto.tutorial_description}
-            </TutorialInfo>
-            <TutorialInfo component="p">
-              <b>Workspace : {howto.workspace_name}</b>
-            </TutorialInfo>
-            <TutorialInfo component="p">
-              <b>{howto.steps.length} Steps</b>
-            </TutorialInfo>
-            <TutorialInfo component="p">
-              <b>Cost : {howto.tutorial_cost} €</b>
-            </TutorialInfo>
-            <TutorialInfo component="p">
-              <b>Difficulty : {howto.difficulty_level}</b>
-            </TutorialInfo>
-            <TutorialInfo component="p">
-              <b>Time : {howto.tutorial_time}</b>
-            </TutorialInfo>
-            <div>
-              {Object.keys(howto.tags).map(k => (
-                <TagDisplay tagKey={k} key={k} />
-              ))}
-            </div>
-            {howto.tutorial_files.length > 0 && (
-              <TutorialInfo component="p">
-                <b>Files : </b>
-              </TutorialInfo>
-            )}
-            {howto.tutorial_files.map(file => (
-              <UploadedFile
-                file={file}
-                key={file.downloadUrl}
-                showDelete={false}
-              />
+      <Flex id="description">
+        <Box width={[1, 1 / 2]}>
+          <Text fontSize={1} mt={2} mb={3} color={'grey2'} p={1}>
+            by&nbsp;
+            <Text inline color={'black'}>
+              &nbsp;{howto.workspace_name}
+            </Text>
+            &nbsp;|&nbsp;
+            <Text inline color={'black'}>
+              {/* TODO : Use proper date  */}4 days ago
+            </Text>
+          </Text>
+          <Heading large>{howto.tutorial_title}</Heading>
+          <Text large>{howto.tutorial_description}</Text>
+
+          <Box my={3}>
+            {Object.keys(howto.tags).map(k => (
+              <TagDisplay tagKey={k} key={k} />
             ))}
-          </Padding>
-        </ContainerLeft>
-        <ContainerRight>
+          </Box>
+          <Flex width={1 / 2} my={3}>
+            <Box width={1 / 3}>
+              <Icon glyph={'step'} mr={2} verticalAlign={'bottom'} />
+              {howto.steps.length} steps
+            </Box>
+            <Box width={1 / 3}>
+              <Icon glyph={'time'} mr={2} verticalAlign={'bottom'} />
+              {howto.tutorial_time}
+            </Box>
+            <Box width={1 / 3}>
+              <Icon glyph={'difficulty'} mr={2} verticalAlign={'bottom'} />
+              {howto.difficulty_level}
+            </Box>
+          </Flex>
+          {howto.tutorial_files.length > 0 && (
+            <Text>
+              <b>Files : </b>
+            </Text>
+          )}
+          {howto.tutorial_files.map(file => (
+            <UploadedFile
+              file={file}
+              key={file.downloadUrl}
+              showDelete={false}
+            />
+          ))}
+        </Box>
+        <Box width={[1 / 2]}>
           <CoverImg
             src={
               howto.cover_image_url
@@ -77,8 +82,8 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             }
             alt="tutorial cover"
           />
-        </ContainerRight>
-      </Container>
+        </Box>
+      </Flex>
     )
   }
 }

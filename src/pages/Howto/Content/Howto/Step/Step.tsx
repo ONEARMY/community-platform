@@ -1,18 +1,10 @@
 import React from 'react'
 import Linkify from 'react-linkify'
-import CardContent from '@material-ui/core/CardContent'
-
-import {
-  Container,
-  StepCard,
-  StepHeader,
-  StepIndex,
-  StepTitle,
-  StepDescription,
-  StepImage,
-} from './elements'
 import { IHowtoStep } from 'src/models/howto.models'
 import { IFirebaseUploadInfo } from '../../../../../components/FirebaseFileUploader/FirebaseFileUploader'
+import { Box, Image } from 'rebass'
+import Heading from 'src/components/Heading'
+import Text from 'src/components/Text'
 
 interface IProps {
   step: IHowtoStep
@@ -22,27 +14,23 @@ interface IProps {
 export default class Step extends React.PureComponent<IProps> {
   renderImages = (images: IFirebaseUploadInfo[]) =>
     images.map((image: any, index: number) => (
-      <StepImage src={image.downloadUrl} key={index} />
+      <Image src={image.downloadUrl} key={index} />
     ))
 
   render() {
     return (
-      <Container>
-        <StepCard id={this.props.step.title}>
-          <StepHeader>
-            <StepIndex variant="h5">STEP {this.props.stepindex + 1}</StepIndex>
-          </StepHeader>
-          <CardContent>
-            <StepTitle variant="h5" component="h2">
-              {this.props.step.title}
-            </StepTitle>
-            <StepDescription component="p">
-              <Linkify>{this.props.step.text}</Linkify>
-            </StepDescription>
-            {this.renderImages(this.props.step.images)}
-          </CardContent>
-        </StepCard>
-      </Container>
+      <Box id={this.props.step.title}>
+        <Heading bold large>
+          Step {this.props.stepindex + 1}:&nbsp;
+          <Heading inline large regular>
+            {this.props.step.title}
+          </Heading>
+        </Heading>
+        <Text regular my={4}>
+          <Linkify>{this.props.step.text}</Linkify>
+        </Text>
+        {this.renderImages(this.props.step.images)}
+      </Box>
     )
   }
 }

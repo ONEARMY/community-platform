@@ -6,10 +6,9 @@ import { inject } from 'mobx-react'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
 import Step from './Step/Step'
-import { Button } from 'src/components/Button'
 import { IHowtoStep, IHowto } from 'src/models/howto.models'
-import { Link } from 'react-router-dom'
 import HowtoSummary from './HowtoSummary/HowtoSummary'
+import { Box } from 'rebass'
 
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
@@ -90,10 +89,12 @@ export class Howto extends React.Component<
       return (
         <>
           <HowtoDescription howto={howto} />
-          <HowtoSummary steps={howto.steps} howToSlug={howto.slug} />
-          {howto.steps.map((step: any, index: number) => (
-            <Step step={step} key={index} stepindex={index} />
-          ))}
+          {/* <HowtoSummary steps={howto.steps} howToSlug={howto.slug} /> */}
+          <Box my={4} p={5} bg={'white'}>
+            {howto.steps.map((step: any, index: number) => (
+              <Step step={step} key={index} stepindex={index} />
+            ))}
+          </Box>
         </>
       )
     } else {

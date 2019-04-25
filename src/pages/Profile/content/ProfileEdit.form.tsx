@@ -6,6 +6,7 @@ import { Avatar } from 'src/components/Avatar'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
 import { UserStore } from 'src/stores/User/user.store'
 import { Button } from 'src/components/Button'
+import { TextNotification } from 'src/components/Notification/TextNotification'
 
 // tslint:disable no-empty-interface
 interface IFormValues extends Partial<IUser> {
@@ -20,6 +21,7 @@ interface IState {
   formValues: IFormValues
   readOnly: boolean
   isSaving?: boolean
+  showNotification?: boolean
 }
 export class ProfileEditForm extends React.Component<IProps, IState> {
   constructor(props: IProps) {
@@ -29,7 +31,7 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
 
   public async saveProfile(values: IFormValues) {
     await this.props.userStore.updateUserProfile(values)
-    this.setState({ readOnly: true })
+    this.setState({ readOnly: true, showNotification: true })
   }
 
   render() {
@@ -43,15 +45,21 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
           return (
             <>
               {this.state.readOnly && (
-                <Button
-                  variant={'outline'}
-                  m={0}
-                  icon={'edit'}
-                  style={{ float: 'right' }}
-                  onClick={() => this.setState({ readOnly: false })}
-                >
-                  Edit Profile
-                </Button>
+                <div style={{ float: 'right' }}>
+                  <Button
+                    variant={'outline'}
+                    m={0}
+                    icon={'edit'}
+                    onClick={() => this.setState({ readOnly: false })}
+                  >
+                    Edit Profile
+                  </Button>
+                  <TextNotification
+                    text="profile saved"
+                    icon="check"
+                    show={this.state.showNotification}
+                  />
+                </div>
               )}
               {/* NOTE - need to put submit method on form to prevent
               default post request */}

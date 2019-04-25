@@ -75,6 +75,7 @@
     "react-icons": "^3.2.2",
     "react-leaflet": "^2.1.4",
     "react-linkify": "^0.2.2",
+    "react-pose": "^4.0.8",
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
     "react-router-hash-link": "^1.2.1",

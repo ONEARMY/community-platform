@@ -1,6 +1,11 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { verticalAlign, VerticalAlignProps } from 'styled-system'
+import {
+  verticalAlign,
+  VerticalAlignProps,
+  space,
+  SpaceProps,
+} from 'styled-system'
 
 import {
   MdFileDownload,
@@ -20,8 +25,11 @@ import {
   MdTurnedIn,
   MdEdit,
   MdCloudUpload,
+  MdAccessTime,
+  MdList,
 } from 'react-icons/md'
 import { GoCloudUpload } from 'react-icons/go'
+import { FaSignal } from 'react-icons/fa'
 import { IconContext } from 'react-icons'
 
 interface IGlyphProps {
@@ -49,6 +57,9 @@ type availableGlyphs =
   | 'comment'
   | 'turned-in'
   | 'edit'
+  | 'time'
+  | 'step'
+  | 'difficulty'
 
 export type IGlyphs = { [k in availableGlyphs]: JSX.Element }
 
@@ -69,9 +80,12 @@ export const glyphs: IGlyphs = {
   comment: <MdComment />,
   'turned-in': <MdTurnedIn />,
   edit: <MdEdit />,
+  time: <MdAccessTime />,
+  step: <MdList />,
+  difficulty: <FaSignal />,
 }
 
-type WrapperProps = IProps & VerticalAlignProps
+type WrapperProps = IProps & VerticalAlignProps & SpaceProps
 
 const IconWrapper = styled<WrapperProps, 'div'>('div')`
   display: inline-block;
@@ -83,7 +97,7 @@ const IconWrapper = styled<WrapperProps, 'div'>('div')`
   position: relative;
   color: inherit;
   ${verticalAlign}
-  margin-right: 4px;
+  ${space}
 `
 
 const Glyph = ({ glyph = '' }: IGlyphProps) => {

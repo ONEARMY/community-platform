@@ -7,14 +7,15 @@ import { InputField, TextAreaField } from 'src/components/Form/Fields'
 import { UserStore } from 'src/stores/User/user.store'
 import { Button } from 'src/components/Button'
 import { TextNotification } from 'src/components/Notification/TextNotification'
+import { observer, inject } from 'mobx-react'
 
 // tslint:disable no-empty-interface
 interface IFormValues extends Partial<IUser> {
   // form values are simply subset of user profile fields
 }
 
-interface IProps {
-  user: IUser
+interface IProps {}
+interface IInjectedProps {
   userStore: UserStore
 }
 interface IState {
@@ -23,24 +24,33 @@ interface IState {
   isSaving?: boolean
   showNotification?: boolean
 }
+// we inject the userstore here instead of passing down as would have to pass
+// from Profile -> UserProfile -> ProfileEditForm which is less reliable
+@inject('userStore')
+@observer
 export class ProfileEditForm extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
-    this.state = { formValues: props.user, readOnly: true }
+    const user = this.injected.userStore.user
+    this.state = { formValues: user ? user : {}, readOnly: true }
+  }
+
+  get injected() {
+    return this.props as IInjectedProps
   }
 
   public async saveProfile(values: IFormValues) {
-    await this.props.userStore.updateUserProfile(values)
+    await this.injected.userStore.updateUserProfile(values)
     this.setState({ readOnly: true, showNotification: true })
   }
 
   render() {
-    const user = this.props.user
-    return (
+    const user = this.injected.userStore.user
+    return user ? (
       <Form
         // submission managed by button and state above
         onSubmit={values => this.saveProfile(values)}
-        initialValues={this.state.formValues}
+        initialValues={user}
         render={({ handleSubmit, submitting }) => {
           return (
             <>
@@ -103,6 +113,6 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
           )
         }}
       />
-    )
+    ) : null
   }
 }

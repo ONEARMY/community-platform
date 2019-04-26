@@ -8,12 +8,15 @@ const inputStyles = css`
   width: 100%;
   margin-bottom: 16px;
   padding: 10px;
+  box-sizing: border-box;
+  &:disabled {
+    background: ${theme.colors.grey4};
+  }
 `
 
 export const Input = styled.input`
   ${inputStyles};
   height: 45px;
-  box-sizing: border-box;
 `
 
 export const TextAreaStyled = styled.textarea`

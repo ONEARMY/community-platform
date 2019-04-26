@@ -13,8 +13,9 @@ import { observer, inject } from 'mobx-react'
 interface IFormValues extends Partial<IUser> {
   // form values are simply subset of user profile fields
 }
-
-interface IProps {}
+interface IProps {
+  // no additional props here
+}
 interface IInjectedProps {
   userStore: UserStore
 }
@@ -26,6 +27,7 @@ interface IState {
 }
 // we inject the userstore here instead of passing down as would have to pass
 // from Profile -> UserProfile -> ProfileEditForm which is less reliable
+// could use contextAPI but as we have mobx feels easier
 @inject('userStore')
 @observer
 export class ProfileEditForm extends React.Component<IProps, IState> {

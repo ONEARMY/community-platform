@@ -72,16 +72,14 @@ class Step extends Component<IProps, IState> {
               <Field
                 name={`${step}.title`}
                 component={InputField}
-                label="Pick a title for this step"
-                placeholder="Step title"
+                placeholder="Pick a title for this step"
                 validate={required}
                 validateFields={[]}
               />
               <Field
                 name={`${step}.text`}
-                label="Describe this step"
+                placeholder="Describe this step"
                 component={TextAreaField}
-                placeholder="Description"
                 validate={required}
                 validateFields={[]}
               />

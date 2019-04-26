@@ -7,6 +7,7 @@ import { IUser } from 'src/models/user.models'
 import { Button } from 'src/components/Button'
 import { UserStore } from 'src/stores/User/user.store'
 import Text from 'src/components/Text'
+import { TextNotification } from 'src/components/Notification/TextNotification'
 
 interface IProps {
   mention_name: string
@@ -41,7 +42,8 @@ export class DHImport extends React.Component<IProps, IState> {
           about: member.xprofile.groups[1].fields[667].value.replace(/\\/g, ''),
         }
         await this.props.userStore.updateUserProfile(profile)
-        this.setState({ isImporting: false, showImportSuccess: true })
+        console.log('update showImportSuccess')
+        this.setState({ showImportSuccess: true })
       }
     }
   }
@@ -70,6 +72,11 @@ export class DHImport extends React.Component<IProps, IState> {
           Import @{this.props.mention_name} from Dave Hakkens
         </Button>
         <Text color="error">{this.state.errMsg}</Text>
+        <TextNotification
+          show={this.state.showImportSuccess}
+          text="Profile imported!"
+          icon="check"
+        />
       </>
     )
   }

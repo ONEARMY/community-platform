@@ -29,7 +29,7 @@ export class UserProfile extends React.Component<IProps, IState> {
         <ProfileEditForm />
         {/* TODO - add email verification resend button (if user email not verified) */}
         <ChangePasswordForm {...readOnly} userStore={this.props.userStore} />
-        <ImportDHForm userStore={this.props.userStore} {...readOnly} />
+        <ImportDHForm {...readOnly} />
       </Box>
     )
   }

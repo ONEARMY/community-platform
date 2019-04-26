@@ -9,7 +9,6 @@ import { Button } from 'src/components/Button'
 import { TextNotification } from 'src/components/Notification/TextNotification'
 import { observer, inject } from 'mobx-react'
 
-// tslint:disable no-empty-interface
 interface IFormValues extends Partial<IUser> {
   // form values are simply subset of user profile fields
 }
@@ -95,19 +94,19 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
                 <Field
                   name="userName"
                   component={InputField}
-                  label="User Name"
+                  placeholder="User Name"
                   disabled={true}
                 />
                 <Field
                   name="about"
                   component={TextAreaField}
-                  label="About"
+                  placeholder="About"
                   disabled={this.state.readOnly}
                 />
                 <Field
                   name="country"
                   component={InputField}
-                  label="Country"
+                  placeholder="Country"
                   disabled={this.state.readOnly || submitting}
                 />
               </form>

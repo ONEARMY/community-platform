@@ -84,14 +84,13 @@ export class PostCreate extends React.PureComponent<IProps, IState> {
                       name="title"
                       validate={required}
                       component={InputField}
-                      label="What is the title of your post ?"
-                      placeholder="Post title"
+                      placeholder="What is the title of your post ?"
                     />
                     <Field
                       name="content"
                       component={this.EditorField}
                       validate={required}
-                      label="What would you like to discuss?"
+                      placeholder="What would you like to discuss?"
                     />
                     <Button
                       type="submit"

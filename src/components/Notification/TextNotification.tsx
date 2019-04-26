@@ -26,31 +26,28 @@ export class TextNotification extends React.Component<IProps, IState> {
   static defaultProps: Partial<IProps> = {
     duration: 2000,
   }
-
-  componentWillReceiveProps() {
-    this.triggerNotification()
+  componentWillReceiveProps(next: IProps, prev: IProps) {
+    if (next.show && !prev.show) {
+      this.setState({ show: true })
+      this.triggerNotificationHide()
+    }
   }
 
   componentDidMount() {
-    this.triggerNotification()
+    this.triggerNotificationHide()
   }
-  triggerNotification() {
-    if (this.props.show) {
-      console.log('showing notification', this.props.duration)
-      this.setState({
-        show: true,
-      })
-      setTimeout(() => {
-        this.setState({ show: false })
-      }, this.props.duration)
-    }
+
+  triggerNotificationHide() {
+    setTimeout(() => {
+      this.setState({ show: false })
+    }, this.props.duration)
   }
 
   render() {
     const { text, icon } = this.props
     return (
       <FadeInOut show={this.state.show}>
-        <FlexContainer p={0} mt={1} alignItems="center">
+        <FlexContainer p={0} mt={2} alignItems="center" bg="none">
           {icon && <Icon glyph={icon} />}
           <Text>{text}</Text>
         </FlexContainer>

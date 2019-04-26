@@ -10,7 +10,6 @@ import { UserProfile } from './content/UserProfile'
 interface InjectedProps extends IProps {
   userStore: UserStore
 }
-// tslint:disable no-empty-interface
 interface IProps {}
 
 @(withRouter as any)

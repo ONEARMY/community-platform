@@ -10,9 +10,9 @@
 // This link also includes instructions on opting out of this behavior.
 
 const isLocalhost = Boolean(
-  window.location.hostname === 'localhost' ||
-    // [::1] is the IPv6 localhost address.
-    window.location.hostname === '[::1]' ||
+  // window.location.hostname === 'localhost' ||
+  // [::1] is the IPv6 localhost address.
+  window.location.hostname === '[::1]' ||
     // 127.0.0.1/8 is considered localhost for IPv4.
     window.location.hostname.match(
       /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/,
@@ -20,6 +20,7 @@ const isLocalhost = Boolean(
 )
 /* tslint:disable:no-empty */
 const register = (onUpdateCallback?: () => any) => {
+  console.log('register service worker', onUpdateCallback)
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(
@@ -39,15 +40,7 @@ const register = (onUpdateCallback?: () => any) => {
       if (isLocalhost) {
         // This is running on localhost. Lets check if a service worker still exists or not.
         checkValidServiceWorker(swUrl)
-
-        // Add some additional logging to localhost, pointing developers to the
-        // service worker/PWA documentation.
-        navigator.serviceWorker.ready.then(() => {
-          console.log(
-            'This web app is being served cache-first by a service ' +
-              'worker. To learn more, visit https://goo.gl/SC7cgQ',
-          )
-        })
+        registerValidSW(swUrl, onUpdateCallback)
       } else {
         // Is not local host. Just register service worker
         registerValidSW(swUrl, onUpdateCallback)
@@ -66,6 +59,7 @@ function registerValidSW(swUrl: string, onUpdateCallback?: () => any) {
         const installingWorker = registration.installing
         if (installingWorker) {
           installingWorker.onstatechange = () => {
+            console.log('update state change', installingWorker.state)
             if (installingWorker.state === 'installed') {
               if (navigator.serviceWorker.controller) {
                 // At this point, the old content will have been purged and
@@ -97,6 +91,7 @@ function checkValidServiceWorker(swUrl: string) {
   fetch(swUrl)
     .then(response => {
       // Ensure service worker exists, and that we really are getting a JS file.
+      console.log('checking local service worker', response)
       if (
         response.status === 404 ||
         response.headers.get('content-type')!.indexOf('javascript') === -1

@@ -16,7 +16,7 @@ export const getDHUserProfile = async (mention_name: string) => {
     const id = (await getUserId(mention_name)) as number
     console.log(`id retrieved: ${mention_name}:${id}`)
     if (!id) {
-      throw new Error('user @mention_name not found')
+      throw new Error(`user @${mention_name} not found`)
     }
     const req = await axios.get(endpoint, {
       params: {
@@ -35,7 +35,7 @@ export const getDHUserProfile = async (mention_name: string) => {
       )
     }
   } catch (error) {
-    throw new Error('user @mention_name not found')
+    throw new Error(`user @${mention_name} not found`)
   }
 }
 

@@ -18,6 +18,7 @@ console.log('functions init')
 /************ GET and POST requests ************************************************
 Redirect requests so that if a custom endpoint function exists we can call them
 at /api/[endpoint]
+As most functions are called from triggers the api is mostly just used for testing
 ************************************************************************************/
 const app = express()
 // use bodyparse to create json object from body
@@ -40,29 +41,6 @@ app.all('*', async (req, res, next) => {
       case 'db-test':
         const testToken = await UtilsFunctions.AuthTest()
         res.send(testToken)
-        break
-      case 'backup':
-        const response = await DB.BackupDatabase()
-        res.send(response)
-        break
-      case 'getAccessToken':
-        const token = await UtilsFunctions.getAccessToken(
-          req.params.accessScopes,
-        )
-        res.send(token)
-        break
-      case 'DHSite_updateIds':
-        const DHupdated = await DHSite.updateDHUserIds()
-        res.send(DHupdated)
-        break
-      case 'DHSite_getUser':
-        const mention_name = req.query.mention_name
-        try {
-          const profile = await DHSite.getDHUserProfile(mention_name)
-          res.status(200).send(profile)
-        } catch (err) {
-          res.status(500).send({ error: err.message })
-        }
         break
       default:
         res.send('invalid api endpoint')
@@ -145,7 +123,11 @@ exports.syncCommentsCount = functions.https.onCall(async () => {
 exports.DHSite_getUser = functions.https.onCall(
   async (mention_name: string) => {
     console.log('getting DH user profile', mention_name)
-    const profile = await DHSite.getDHUserProfile(mention_name)
-    return profile
+    try {
+      const profile = await DHSite.getDHUserProfile(mention_name)
+      return profile
+    } catch (error) {
+      throw new functions.https.HttpsError('not-found', error.message)
+    }
   },
 )

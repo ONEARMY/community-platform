@@ -30,7 +30,7 @@ export class DHImport extends React.Component<IProps, IState> {
     const name = this.props.mention_name
     console.log('importing mention name', name)
     if (name) {
-      this.setState({ isImporting: true })
+      this.setState({ isImporting: true, errMsg: undefined })
       const member = (await this.importBPMember(name)) as IBPMember
       if (member) {
         await this.props.userStore.setUserAvatarFromUrl(member.avatar_urls.full)

@@ -3,8 +3,11 @@ export enum colors {
   white = 'white',
   black = 'black',
   grey = '#dddddd',
+  grey2 = '#9b9b9b',
   grey4 = '#E9E9E9',
   greyStroke = '#AEAEAE',
+  green = '#88e3c7',
+  yellow = '#ffe495',
   error = '#f44336',
 }
 

@@ -31,7 +31,6 @@ export class ImportDHForm extends React.Component<IProps, IState> {
 
   render() {
     const user = this.injected.userStore.user as IUser
-    console.log('user', user)
     return (
       <div>
         <Heading medium bold mt={4}>

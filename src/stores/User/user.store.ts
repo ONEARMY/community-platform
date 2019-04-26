@@ -89,11 +89,14 @@ export class UserStore {
   }
 
   public async updateUserAvatar() {
+    console.log('updating user avatar')
     // *** TODO -
   }
 
   // during DHSite migration want to copy existing BP avatar to server
   public async setUserAvatarFromUrl(url: string) {
+    console.log('setting user avatar from url', url)
+
     // *** TODO
   }
 

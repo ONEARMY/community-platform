@@ -42,8 +42,11 @@ export class DHImport extends React.Component<IProps, IState> {
           about: member.xprofile.groups[1].fields[667].value.replace(/\\/g, ''),
         }
         await this.props.userStore.updateUserProfile(profile)
-        console.log('update showImportSuccess')
+        // show notification. Hide again in case planning to make further changes
         this.setState({ showImportSuccess: true })
+        setTimeout(() => {
+          this.setState({ showImportSuccess: false })
+        }, 2000)
       }
     }
   }

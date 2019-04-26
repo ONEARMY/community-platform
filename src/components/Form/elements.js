@@ -10,7 +10,8 @@ const inputStyles = css`
   padding: 10px;
   box-sizing: border-box;
   &:disabled {
-    background: ${theme.colors.grey4};
+    border: none;
+    color: ${theme.colors.black};
   }
 `
 
@@ -23,6 +24,10 @@ export const TextAreaStyled = styled.textarea`
   ${inputStyles};
   height: 150px;
   font-family: inherit;
+`
+export const TextAreaDisabled = styled.div`
+  ${inputStyles};
+  border: none;
 `
 
 export const SelectStyled = styled.select`

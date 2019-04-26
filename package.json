@@ -64,10 +64,10 @@
     "postcss-preset-env": "6.5.0",
     "postcss-safe-parser": "4.0.1",
     "query-string": "^6.2.0",
-    "react": "^16.8.1",
+    "react": "16.8.4",
     "react-app-polyfill": "^0.2.1",
     "react-dev-utils": "^7.0.3",
-    "react-dom": "^16.8.1",
+    "react-dom": "16.8.4",
     "react-final-form": "3.6.6",
     "react-final-form-arrays": "^1.0.6",
     "react-firebase-file-uploader": "2.4.2",
@@ -123,8 +123,8 @@
     "@types/jest": "23.3.2",
     "@types/md5": "^2.1.33",
     "@types/node": "10.11.0",
-    "@types/react": "16.8.0",
-    "@types/react-dom": "16.8.0",
+    "@types/react": "16.8.4",
+    "@types/react-dom": "16.8.4",
     "@types/react-leaflet": "^1.1.6",
     "@types/react-router-dom": "4.3.1",
     "@types/react-select": "^2.0.17",
@@ -148,7 +148,7 @@
     "tslint-react": "3.2.0"
   },
   "resolutions": {
-    "@types/react": "16.8.0"
+    "@types/react": "16.8.4"
   },
   "jest": {
     "collectCoverageFrom": [

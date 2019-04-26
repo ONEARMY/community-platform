@@ -1720,16 +1720,10 @@
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.2.tgz#690a1475b84f2a884fd07cd797c00f5f31356ea8"
 
-"@types/react-dom@*":
+"@types/react-dom@*", "@types/react-dom@16.8.4":
   version "16.8.4"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.8.4.tgz#7fb7ba368857c7aa0f4e4511c4710ca2c5a12a88"
   integrity sha512-eIRpEW73DCzPIMaNBDP5pPIpK1KXyZwNgfxiVagb5iGiz6da+9A5hslSX6GAQKdO7SayVCS/Fr2kjqprgAvkfA==
-  dependencies:
-    "@types/react" "*"
-
-"@types/react-dom@16.8.0":
-  version "16.8.0"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.8.0.tgz#c565f43f9d2ec911f9e0b8f3b74e25e67879aa3f"
   dependencies:
     "@types/react" "*"
 
@@ -1790,9 +1784,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@16.8.0":
-  version "16.8.0"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.8.0.tgz#0933e105ea21739948b1525920e0536312d54c58"
+"@types/react@*", "@types/react@16.8.4":
+  version "16.8.4"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.8.4.tgz#134307f5266e866d5e7c25e47f31f9abd5b2ea34"
+  integrity sha512-Mpz1NNMJvrjf0GcDqiK8+YeOydXfD8Mgag3UtqQ5lXYTsMnOiHcKmO48LiSWMb1rSHB9MV/jlgyNzeAVxWMZRQ==
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
@@ -11202,9 +11197,10 @@ react-docgen@^3.0.0:
     node-dir "^0.1.10"
     recast "^0.16.0"
 
-react-dom@^16.8.1:
+react-dom@16.8.4, react-dom@^16.8.1:
   version "16.8.4"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.8.4.tgz#1061a8e01a2b3b0c8160037441c3bf00a0e3bc48"
+  integrity sha512-Ob2wK7XG2tUDt7ps7LtLzGYYB6DXMCLj0G5fO6WeEICtT4/HdpOi7W/xLzZnR6RCG1tYza60nMdqtxzA8FaPJQ==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
@@ -11467,9 +11463,10 @@ react-transition-group@^2.2.1:
     prop-types "^15.6.2"
     react-lifecycles-compat "^3.0.4"
 
-react@^16.8.1:
+react@16.8.4, react@^16.8.1:
   version "16.8.4"
   resolved "https://registry.yarnpkg.com/react/-/react-16.8.4.tgz#fdf7bd9ae53f03a9c4cd1a371432c206be1c4768"
+  integrity sha512-0GQ6gFXfUH7aZcjGVymlPOASTuSjlQL4ZtVC5YKH+3JL6bBLCVO21DknzmaPlI90LN253ojj02nsapy+j7wIjg==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"

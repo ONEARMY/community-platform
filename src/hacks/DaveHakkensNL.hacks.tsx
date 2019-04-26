@@ -6,7 +6,7 @@ import { functions } from 'src/utils/firebase'
 import { IUser } from 'src/models/user.models'
 import { Button } from 'src/components/Button'
 import { UserStore } from 'src/stores/User/user.store'
-import { Typography } from '@material-ui/core'
+import Text from 'src/components/Text'
 
 interface IProps {
   mention_name: string
@@ -15,6 +15,7 @@ interface IProps {
 interface IState {
   isImporting: boolean
   errMsg?: string
+  showImportSuccess?: boolean
 }
 
 export class DHImport extends React.Component<IProps, IState> {
@@ -40,7 +41,7 @@ export class DHImport extends React.Component<IProps, IState> {
           about: member.xprofile.groups[1].fields[667].value.replace(/\\/g, ''),
         }
         await this.props.userStore.updateUserProfile(profile)
-        this.setState({ isImporting: false })
+        this.setState({ isImporting: false, showImportSuccess: true })
       }
     }
   }
@@ -58,17 +59,17 @@ export class DHImport extends React.Component<IProps, IState> {
   }
 
   public render() {
+    const disabled = !this.props.mention_name || this.state.isImporting
     return (
       <>
         <Button
-          disabled={!this.props.mention_name || this.state.isImporting}
+          disabled={disabled}
           onClick={() => this.importProfileFromDH()}
+          variant={disabled ? 'disabled' : 'outline'}
         >
           Import @{this.props.mention_name} from Dave Hakkens
         </Button>
-        <Typography color="error" variant="caption">
-          {this.state.errMsg}
-        </Typography>
+        <Text color="error">{this.state.errMsg}</Text>
       </>
     )
   }

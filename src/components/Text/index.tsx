@@ -14,6 +14,8 @@ export interface ITextProps {
   medium?: boolean
   small?: boolean
   superSmall?: boolean
+  // keyof colors returns full object prototype, include typeof for just named keys (i.e. color list)
+  color?: keyof typeof colors
 }
 
 export const caps = props =>
@@ -58,12 +60,13 @@ export const BaseText = styled(RebassText)`
 type TextProps = ITextProps & RebassTextProps
 
 export const Text = (props: TextProps) => (
-  <BaseText {...props}>{props.children}</BaseText>
+  <BaseText color={colors[props.color ? props.color : 'black']} {...props}>
+    {props.children}
+  </BaseText>
 )
 
 Text.defaultProps = {
   theme,
-  color: colors.black,
   className: 'text',
 }
 

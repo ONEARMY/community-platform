@@ -106,7 +106,7 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
                     Submit
                   </Button>
 
-                  <Text color={colors.error}>{this.state.errorMsg}</Text>
+                  <Text color="error">{this.state.errorMsg}</Text>
                 </form>
               )
             }}

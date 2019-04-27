@@ -7,11 +7,12 @@ import * as functions from 'firebase-functions'
 
 // custom module imports
 import * as DB from './Firebase/databaseBackup'
-import * as ImageConverter from './Utils/imageConverter'
-import * as UtilsFunctions from './Utils/utils'
+import * as ImageConverter from './Utils/image.utils'
+import * as UtilsFunctions from './Utils/auth.utils'
 import * as DHSite from './DaveHakkensNL/dataMigrate'
 import * as AnalyticsFunctions from './Analytics/analytics'
 import { syncCommentsCount } from './Analytics/comments'
+import { migrateAvatar } from './DaveHakkensNL/avatarMigrate'
 
 console.log('functions init')
 
@@ -41,6 +42,16 @@ app.all('*', async (req, res, next) => {
       case 'db-test':
         const testToken = await UtilsFunctions.AuthTest()
         res.send(testToken)
+        break
+      case 'import-user-avatar':
+        console.log('import user avatar', req.query)
+        const user = req.query.user
+        const url = req.query.url
+        await migrateAvatar(url, user)
+        res.send({
+          user: user,
+          url: url,
+        })
         break
       default:
         res.send('invalid api endpoint')

@@ -4,7 +4,9 @@
   "scripts": {
     "lint": "tslint --project tsconfig.json",
     "build": "tsc",
-    "serve": "npm run build && firebase serve --only functions",
+    "copyDevConfig": "firebase functions:config:get > .runtimeconfig.json",
+    "copyDevConfigWin": "firebase functions:config:get | ac .runtimeconfig.json",
+    "serve": "npm run copyDevConfig && npm run build && firebase serve --only functions",
     "shell": "npm run build && firebase functions:shell",
     "deploy:dev": "firebase use default && firebase deploy --only functions",
     "start": "npm run shell",
@@ -25,6 +27,7 @@
     "log-update": "^3.2.0"
   },
   "devDependencies": {
+    "@google-cloud/storage": "^2.5.0",
     "@types/fs-extra": "^5.0.5",
     "tslint": "~5.8.0",
     "typescript": "3.1.6"

@@ -1,5 +1,5 @@
 import Axios from 'axios'
-import { getAccessToken } from '../Utils/utils'
+import { getAccessToken } from '../Utils/auth.utils'
 import { config } from 'firebase-functions'
 
 /*  Cloud function to automatically backup the firebase database adapted from: 

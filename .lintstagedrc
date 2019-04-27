@@ -11,5 +11,5 @@
       "git add"
     ]
   },
-  "ignore": ["functions/**",".storybook/**"]
+  "ignore": ["functions/**",".storybook/**",config/**]
 }

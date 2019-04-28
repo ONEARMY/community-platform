@@ -1,4 +1,5 @@
 import { observable, action } from 'mobx'
+import PubSub from 'pubsub-js'
 import { Database } from '../database'
 import { functions } from 'src/utils/firebase'
 import { IUser } from 'src/models/user.models'
@@ -96,11 +97,15 @@ export class UserStore {
 
   // during DHSite migration want to copy existing BP avatar to server
   public async setUserAvatarFromUrl(url: string) {
+    console.log('setting user avatar', url)
     try {
       await functions.httpsCallable('DHSite_migrateAvatar')({
         avatarUrl: url,
         user: this.user ? this.user._id : null,
       })
+      // use pubsub to let avatar component know new avatar available
+      console.log('publishing message')
+      PubSub.publish('USER_MESSAGE', 'avatar updated')
     } catch (error) {
       console.log('error', error)
     }

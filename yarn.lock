@@ -1716,6 +1716,11 @@
   version "15.7.0"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.0.tgz#4c48fed958d6dcf9487195a0ef6456d5f6e0163a"
 
+"@types/pubsub-js@^1.5.18":
+  version "1.5.18"
+  resolved "https://registry.yarnpkg.com/@types/pubsub-js/-/pubsub-js-1.5.18.tgz#dd12284c5e93b39874e62675702bf50c6f55e9ec"
+  integrity sha512-1xFx7o/DKwbDm5UwjnkkeAVk+U1puh0odDkY+NpTCuQfbhcGh4+fjQSuKVHLPP1F9osj3/lDtnr71kud9u3ZYA==
+
 "@types/q@^1.5.1":
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.2.tgz#690a1475b84f2a884fd07cd797c00f5f31356ea8"
@@ -10971,6 +10976,11 @@ public-encrypt@^4.0.0:
     parse-asn1 "^5.0.0"
     randombytes "^2.0.1"
     safe-buffer "^5.1.2"
+
+pubsub-js@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/pubsub-js/-/pubsub-js-1.7.0.tgz#eca97f9a4217bef62b2d3aaa1552005260cc2e49"
+  integrity sha512-Pb68P9qFZxnvDipHMuj9oT1FoIgBcXJ9C9eWdHCLZAnulaUoJ3+Y87RhGMYilWpun6DMWVmvK70T4RP4drZMSA==
 
 pump@^2.0.0:
   version "2.0.1"

@@ -1,4 +1,6 @@
 import React from 'react'
+import PubSub from 'pubsub-js'
+
 import { Image, ImageProps } from 'rebass'
 import Icon from 'src/components/Icons'
 import { inject, observer } from 'mobx-react'
@@ -28,6 +30,22 @@ export class Avatar extends React.Component<IProps, IState> {
   }
   get injected() {
     return this.props as IInjected
+  }
+
+  // subscribe/unsubscribe from specific user profile message when
+  // user updates their avatar (same url so by default will now be aware of change)
+  componentDidMount() {
+    PubSub.subscribe('USER_MESSAGE', (message, data) => {
+      if (data === 'avatar updated') {
+        console.log('avatar update detected')
+        this.setState({
+          showFallback: false,
+        })
+      }
+    })
+  }
+  componentWillUnmount() {
+    PubSub.clearAllSubscriptions()
   }
 
   async getUserAvatar(userName: string) {

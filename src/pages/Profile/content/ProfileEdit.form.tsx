@@ -96,6 +96,7 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
                   component={InputField}
                   placeholder="User Name"
                   disabled={true}
+                  style={{ fontWeight: 'bold' }}
                 />
                 <Field
                   name="about"

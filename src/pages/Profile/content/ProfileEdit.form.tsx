@@ -90,7 +90,7 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
                 <Heading medium bold>
                   Profile
                 </Heading>
-                <Avatar userName={user.userName} width="180px" />
+                <Avatar userName={user.userName} width="200px" />
                 <Field
                   name="userName"
                   component={InputField}

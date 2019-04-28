@@ -8,17 +8,14 @@
         "function": "api"
       },
       {
-        "source": "/test",
-        "function": "test"
+        "source": "/DHSite_getUser",
+        "function": "DHSite_getUser"
       },
       {
-        "source": "/getAnalytics",
-        "function": "getAnalytics"
+        "source": "/DHSite_migrateAvatar",
+        "function": "DHSite_migrateAvatar"
       },
-      {
-        "source": "/getAnalyticsReport",
-        "function": "getAnalyticsReport"
-      },
+
       {
         "source": "**",
         "destination": "/index.html",

@@ -1,5 +1,6 @@
 import { observable, action } from 'mobx'
 import { Database } from '../database'
+import { functions } from 'src/utils/firebase'
 import { IUser } from 'src/models/user.models'
 import { IFirebaseUser, auth, afs, EmailAuthProvider } from 'src/utils/firebase'
 import { Storage } from '../storage'
@@ -95,9 +96,14 @@ export class UserStore {
 
   // during DHSite migration want to copy existing BP avatar to server
   public async setUserAvatarFromUrl(url: string) {
-    console.log('setting user avatar from url', url)
-
-    // *** TODO
+    try {
+      await functions.httpsCallable('DHSite_migrateAvatar')({
+        avatarUrl: url,
+        user: this.user ? this.user._id : null,
+      })
+    } catch (error) {
+      console.log('error', error)
+    }
   }
 
   public async changeUserPassword(oldPassword: string, newPassword: string) {

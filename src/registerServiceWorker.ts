@@ -19,7 +19,6 @@ const isLocalhost = Boolean(
     ),
 )
 const register = (onUpdateCallback?: () => any) => {
-  console.log('register service worker', onUpdateCallback)
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(

@@ -3,7 +3,6 @@ import { join } from 'path'
 import {
   ensureFile,
   writeFile,
-  readFile,
   readJSON,
   pathExists,
   createWriteStream,
@@ -30,7 +29,7 @@ export async function appendJsonToFile(filename: string, json: any) {
 }
 
 // take an external url and download the file to a temp directory
-export async function downloadFileToTmp(url: string) {
+export async function downloadFileToTemp(url: string) {
   // prepare directory
   const filename = url.split('/').pop()
   const tmpFilePath = join(tmpdir(), filename)

@@ -16,7 +16,6 @@
   "dependencies": {
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
-    "child-process-promise": "^2.2.1",
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "firebase-admin": "^7.3.0",
@@ -24,11 +23,12 @@
     "fs-extra": "^7.0.1",
     "google-auth-library": "^2.0.1",
     "googleapis": "^35.0.0",
-    "log-update": "^3.2.0"
+    "log-update": "^3.2.0",
+    "sharp": "^0.22.1"
   },
   "devDependencies": {
-    "@google-cloud/storage": "^2.5.0",
     "@types/fs-extra": "^5.0.5",
+    "@types/sharp": "^0.22.1",
     "tslint": "~5.8.0",
     "typescript": "3.1.6"
   },

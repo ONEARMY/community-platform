@@ -1,7 +1,6 @@
 // node module imports
 import * as bodyParser from 'body-parser'
-import * as corsLib from 'cors'
-const cors = corsLib({ origin: true })
+import * as cors from 'cors'
 import * as express from 'express'
 import * as functions from 'firebase-functions'
 
@@ -25,28 +24,39 @@ app.use(
     limit: '1mb',
   }),
 )
+// use cors
+const corsOptions: cors.CorsOptions = {
+  allowedHeaders: [
+    'Origin',
+    'X-Requested-With',
+    'Content-Type',
+    'Accept',
+    'X-Access-Token',
+  ],
+  credentials: true,
+  methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
+  origin: true,
+  preflightContinue: false,
+}
 // configure app to use cors by default
-app.use(corsLib({ origin: true }))
+app.use(cors(corsOptions))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.all('*', async (req, res, next) => {
-  // add cors to requests
-  cors(req, res, async () => {
-    // get the endpoint based on the request path
-    const endpoint = req.path.split('/')[1]
-    // *** NOTE currently all request types handled the same, i.e. GET/POST
-    // will likely change behaviour in future when required
-    switch (endpoint) {
-      case 'import-user-avatar':
-        console.log('import user avatar', req.query)
-        const user = req.query.user
-        const url = req.query.url
-        const meta = await migrateAvatar(url, user)
-        res.send(meta)
-        break
-      default:
-        res.send('invalid api endpoint')
-    }
-  })
+  // get the endpoint based on the request path
+  const endpoint = req.path.split('/')[1]
+  // *** NOTE currently all request types handled the same, i.e. GET/POST
+  // will likely change behaviour in future when required
+  switch (endpoint) {
+    case 'import-user-avatar':
+      console.log('import user avatar', req.query)
+      const user = req.query.user
+      const url = req.query.url
+      const meta = await migrateAvatar(url, user)
+      res.send(meta)
+      break
+    default:
+      res.send('invalid api endpoint')
+  }
 })
 exports.api = functions.https.onRequest(app)
 

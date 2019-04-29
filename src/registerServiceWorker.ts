@@ -18,9 +18,7 @@ const isLocalhost = Boolean(
       /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/,
     ),
 )
-/* tslint:disable:no-empty */
 const register = (onUpdateCallback?: () => any) => {
-  console.log('register service worker', onUpdateCallback)
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(

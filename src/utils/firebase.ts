@@ -20,7 +20,6 @@ export const functions = firebase.functions()
 export const EmailAuthProvider = firebase.auth.EmailAuthProvider
 
 // want to also expose the default firebase user
-/* tslint:disable: no-empty-interface*/
 export interface IFirebaseUser extends firebase.User {}
 
 /* Firestore use examples

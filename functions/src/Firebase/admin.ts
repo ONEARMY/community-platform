@@ -17,6 +17,7 @@ admin.initializeApp({
   }),
   databaseURL: FIREBASE_CONFIG.databaseURL,
 })
+
 export const firebaseAdmin = admin
 
 // this is automatically populated by firebase

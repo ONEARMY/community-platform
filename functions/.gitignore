@@ -9,7 +9,6 @@ types/
 lib/
 
 # Testing config files
-src/config/*.sh
-src/config/*.json
+.runtimeconfig.json
 
 ./firebase-debug.log

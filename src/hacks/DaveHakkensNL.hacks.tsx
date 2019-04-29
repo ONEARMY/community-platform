@@ -6,7 +6,8 @@ import { functions } from 'src/utils/firebase'
 import { IUser } from 'src/models/user.models'
 import { Button } from 'src/components/Button'
 import { UserStore } from 'src/stores/User/user.store'
-import { Typography } from '@material-ui/core'
+import Text from 'src/components/Text'
+import { TextNotification } from 'src/components/Notification/TextNotification'
 
 interface IProps {
   mention_name: string
@@ -15,6 +16,7 @@ interface IProps {
 interface IState {
   isImporting: boolean
   errMsg?: string
+  showImportSuccess?: boolean
 }
 
 export class DHImport extends React.Component<IProps, IState> {
@@ -28,7 +30,7 @@ export class DHImport extends React.Component<IProps, IState> {
     const name = this.props.mention_name
     console.log('importing mention name', name)
     if (name) {
-      this.setState({ isImporting: true })
+      this.setState({ isImporting: true, errMsg: undefined })
       const member = (await this.importBPMember(name)) as IBPMember
       if (member) {
         await this.props.userStore.setUserAvatarFromUrl(member.avatar_urls.full)
@@ -40,7 +42,11 @@ export class DHImport extends React.Component<IProps, IState> {
           about: member.xprofile.groups[1].fields[667].value.replace(/\\/g, ''),
         }
         await this.props.userStore.updateUserProfile(profile)
-        this.setState({ isImporting: false })
+        // show notification. Hide again in case planning to make further changes
+        this.setState({ showImportSuccess: true })
+        setTimeout(() => {
+          this.setState({ showImportSuccess: false })
+        }, 2000)
       }
     }
   }
@@ -58,17 +64,22 @@ export class DHImport extends React.Component<IProps, IState> {
   }
 
   public render() {
+    const disabled = !this.props.mention_name || this.state.isImporting
     return (
       <>
         <Button
-          disabled={!this.props.mention_name || this.state.isImporting}
+          disabled={disabled}
           onClick={() => this.importProfileFromDH()}
+          variant={disabled ? 'disabled' : 'outline'}
         >
           Import @{this.props.mention_name} from Dave Hakkens
         </Button>
-        <Typography color="error" variant="caption">
-          {this.state.errMsg}
-        </Typography>
+        <Text color="error">{this.state.errMsg}</Text>
+        <TextNotification
+          show={this.state.showImportSuccess}
+          text="Profile imported!"
+          icon="check"
+        />
       </>
     )
   }

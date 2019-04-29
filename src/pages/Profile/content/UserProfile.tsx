@@ -13,11 +13,12 @@ interface IProps {
 interface IState {
   editMode: boolean
   isSaving: boolean
+  user: IUser
 }
 export class UserProfile extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
-    this.state = { editMode: false, isSaving: false }
+    this.state = { editMode: false, isSaving: false, user: props.user }
   }
 
   public render() {
@@ -25,13 +26,10 @@ export class UserProfile extends React.Component<IProps, IState> {
     return (
       <Box mb={2}>
         {/* TODO - add avatar edit form */}
-        <ProfileEditForm
-          user={this.props.user}
-          userStore={this.props.userStore}
-        />
+        <ProfileEditForm />
         {/* TODO - add email verification resend button (if user email not verified) */}
         <ChangePasswordForm {...readOnly} userStore={this.props.userStore} />
-        <ImportDHForm userStore={this.props.userStore} {...readOnly} />
+        <ImportDHForm {...readOnly} />
       </Box>
     )
   }

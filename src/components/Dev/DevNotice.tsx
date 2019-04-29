@@ -1,12 +1,13 @@
 import * as React from 'react'
 import theme from 'src/themes/styled.theme'
 import { FaExclamationTriangle } from 'react-icons/fa'
-import { SITE } from 'src/config/config'
+import { SITE, VERSION } from 'src/config/config'
+
 export const DevNotice = () =>
   SITE !== 'production' ? (
     <div
       style={{
-        padding: '5px',
+        marginLeft: '5px',
         color: theme.colors.green,
         position: 'absolute',
         display: 'flex',
@@ -14,7 +15,7 @@ export const DevNotice = () =>
       }}
       title="This site is for development purposes, do not share private information"
     >
-      <span>Dev site notice</span>
+      <span>v{VERSION}</span>
       <FaExclamationTriangle style={{ marginLeft: 5 }} />
     </div>
   ) : null

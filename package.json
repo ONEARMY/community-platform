@@ -1,6 +1,6 @@
 {
   "name": "one-army-world",
-  "version": "0.1.6",
+  "version": "0.3.0-alpha.1",
   "private": true,
   "dependencies": {
     "@babel/core": "7.2.2",
@@ -63,6 +63,7 @@
     "postcss-loader": "3.0.0",
     "postcss-preset-env": "6.5.0",
     "postcss-safe-parser": "4.0.1",
+    "pubsub-js": "^1.7.0",
     "query-string": "^6.2.0",
     "react": "16.8.4",
     "react-app-polyfill": "^0.2.1",
@@ -75,6 +76,7 @@
     "react-icons": "^3.2.2",
     "react-leaflet": "^2.1.4",
     "react-linkify": "^0.2.2",
+    "react-pose": "^4.0.8",
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
     "react-router-hash-link": "^1.2.1",
@@ -122,6 +124,7 @@
     "@types/jest": "23.3.2",
     "@types/md5": "^2.1.33",
     "@types/node": "10.11.0",
+    "@types/pubsub-js": "^1.5.18",
     "@types/react": "16.8.4",
     "@types/react-dom": "16.8.4",
     "@types/react-leaflet": "^1.1.6",

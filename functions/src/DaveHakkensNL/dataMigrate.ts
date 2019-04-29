@@ -9,6 +9,12 @@ const endpoint = 'https://davehakkens.nl/wp-json/buddypress/v1/members'
   Once id has been identified for a user, the getUserProfile function can extract 
   the user's buddypress profile information
  ************************************************************************************/
+
+// identify a user id from their mention name
+export const getUserId = async (mention_name: string) => {
+  return db.get(`_DHSiteUserIDs/${mention_name}`)
+}
+
 // take a user name, lookup their id and return the buddypress profile data with email stripped
 export const getDHUserProfile = async (mention_name: string) => {
   try {
@@ -16,7 +22,7 @@ export const getDHUserProfile = async (mention_name: string) => {
     const id = (await getUserId(mention_name)) as number
     console.log(`id retrieved: ${mention_name}:${id}`)
     if (!id) {
-      throw new Error('user @mention_name not found')
+      throw new Error(`user @${mention_name} not found`)
     }
     const req = await axios.get(endpoint, {
       params: {
@@ -35,13 +41,8 @@ export const getDHUserProfile = async (mention_name: string) => {
       )
     }
   } catch (error) {
-    throw new Error('user @mention_name not found')
+    throw new Error(`user @${mention_name} not found`)
   }
-}
-
-// identify a user id from their mention name
-export const getUserId = async (mention_name: string) => {
-  return db.get(`_DHSiteUserIDs/${mention_name}`)
 }
 
 // check how many IDs already exist in db and how many are on the buddypress server

@@ -28,6 +28,9 @@ export const SelectStyles: Partial<Styles> = {
   }),
 }
 
+// annoyingly react-final-form saves the full option as values (not just the value field)
+// therefore the following two functions are used for converting to-from string values and field options
+
 // depending on select type (e.g. multi) and option selected get value
 function getValueFromSelect(
   v: ISelectOption | ISelectOption[] | null | undefined,
@@ -50,17 +53,20 @@ function getValueForSelect(
     : null
 }
 
+const defaultProps: Partial<ISelectFieldProps> = {
+  getOptionLabel: (option: ISelectOption) => option.label,
+  getOptionValue: (option: ISelectOption) => option.value,
+  options: [],
+}
 export const SelectField = ({ input, meta, ...rest }: ISelectFieldProps) => (
   // note, we first use a div container so that default styles can be applied
   <FieldContainer style={rest.style}>
     <Select
       styles={SelectStyles}
-      options={rest.options}
       onChange={v => input.onChange(getValueFromSelect(v))}
       value={getValueForSelect(rest.options, input.value)}
-      placeholder={rest.placeholder}
-      getOptionLabel={(option: ISelectOption) => option.label}
-      getOptionValue={(option: ISelectOption) => option.value}
+      {...defaultProps}
+      {...rest}
     />
   </FieldContainer>
 )

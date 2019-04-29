@@ -5,16 +5,13 @@ import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
 import { IHowto, IHowtoFormInput } from 'src/models/howto.models'
 import { afs } from 'src/utils/firebase'
-import { TUTORIAL_TEMPLATE_DATA } from './TutorialTemplate'
+import TEMPLATE from './TutorialTemplate'
 import { IFirebaseUploadInfo } from 'src/components/FirebaseFileUploader/FirebaseFileUploader'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
-import {
-  InputField,
-  TextAreaField,
-  SelectField,
-} from 'src/components/Form/Fields'
+import { InputField, TextAreaField } from 'src/components/Form/Fields'
 import { FirebaseFileUploaderField } from 'src/components/Form/FirebaseFileUploader.field'
+import { SelectField } from 'src/components/Form/Select.field'
 import { Step } from './Step/Step'
 import { Button } from 'src/components/Button'
 import { FieldState } from 'final-form'
@@ -155,24 +152,19 @@ export class CreateHowto extends React.PureComponent<
                           name="tutorial_time"
                           validate={required}
                           validateFields={[]}
-                          component={InputField}
+                          options={TEMPLATE.TIME_OPTIONS}
+                          component={SelectField}
                           placeholder="How much time? *"
                           style={{ marginRight: '4px' }}
                         />
                         <Field
                           name="difficulty_level"
                           component={SelectField}
+                          options={TEMPLATE.DIFFICULTY_OPTIONS}
                           validateFields={[]}
                           placeholder="How hard is it? *"
                           style={{ marginLeft: '4px' }}
-                        >
-                          <option value="" disabled>
-                            How hard is it? *
-                          </option>
-                          <option value="easy">easy</option>
-                          <option value="medium">medium</option>
-                          <option value="difficult">difficult</option>
-                        </Field>
+                        />
                       </FlexContainer>
                       <Field
                         name="tutorial_time"
@@ -261,6 +253,7 @@ export class CreateHowto extends React.PureComponent<
                         my={60}
                         bg="yellow"
                         onClick={() => {
+                          console.log('adding step', values)
                           fields.push({
                             title: '',
                             text: '',

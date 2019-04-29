@@ -1,17 +1,12 @@
 import * as React from 'react'
-import {
-  TextAreaStyled,
-  Input,
-  SelectStyled,
-  TextAreaDisabled,
-} from './elements'
+import { TextAreaStyled, Input, TextAreaDisabled } from './elements'
 import { FieldRenderProps } from 'react-final-form'
 
 // any props can be passed to field and down to child component
 // input and meta props come from react field render props and will be
 // picked up by typing
 type FieldProps = FieldRenderProps & { children?: React.ReactNode }
-interface IFieldProps extends FieldProps {
+export interface IFieldProps extends FieldProps {
   // additional fields intending to pass down
   disabled?: boolean
   children?: React.ReactNode
@@ -38,13 +33,6 @@ export const TextAreaField = ({
       <TextAreaStyled {...input} {...rest} />
     )}
 
-    {meta.error && meta.touched && <span>{meta.error}</span>}
-  </>
-)
-
-export const SelectField = ({ input, meta, ...rest }: IFieldProps) => (
-  <>
-    <SelectStyled {...input} {...rest} />
     {meta.error && meta.touched && <span>{meta.error}</span>}
   </>
 )

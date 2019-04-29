@@ -23,7 +23,7 @@ import { BoxContainer } from 'src/components/Layout/BoxContainer'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 
 import Icon from 'src/components/Icons'
-import { ImageUpload } from 'src/components/ImageUpload/ImageUpload'
+import { ImageInputField } from 'src/components/Form/ImageInput.field'
 
 export interface IState {
   formValues: IHowtoFormInput
@@ -108,7 +108,7 @@ export class CreateHowto extends React.PureComponent<
     const { formValues } = this.state
     console.log('formvalues', formValues)
     return (
-      <PageContainer>
+      <>
         <Form
           onSubmit={v => this.onSubmit(v as IHowtoFormInput)}
           initialValues={formValues}
@@ -133,8 +133,8 @@ export class CreateHowto extends React.PureComponent<
               <form onSubmit={handleSubmit}>
                 <BoxContainer bg="white">
                   <Heading medium>Create your How-To</Heading>
-                  <FlexContainer p={0} mb={3}>
-                    <BoxContainer p={0} mr={3}>
+                  <FlexContainer p={0} mb={3} flexWrap="wrap">
+                    <BoxContainer p={0} pr={2} flex={1}>
                       <Field
                         name="tutorial_title"
                         validateFields={[]}
@@ -174,8 +174,6 @@ export class CreateHowto extends React.PureComponent<
                         hidden={true}
                         icon="upload"
                       />
-                      <ImageUpload />
-
                       {v.tutorial_files &&
                         v.tutorial_files.map((file, index) => (
                           <UploadedFile
@@ -188,39 +186,32 @@ export class CreateHowto extends React.PureComponent<
                           />
                         ))}
                     </BoxContainer>
-                    {v.cover_image && v.cover_image.downloadUrl ? (
-                      <UploadedFile
-                        file={v.cover_image}
-                        imagePreview
-                        showDelete
-                        onFileDeleted={form.mutators.clearCoverImage}
-                      />
-                    ) : (
-                      <div
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          border: '1px solid #dddddd',
-                          justifyContent: 'center',
-                          padding: '16px',
-                        }}
-                      >
-                        <>
-                          <FlexContainer p={0} mb={3} justifyContent="center">
-                            <Icon glyph="upload" />
-                          </FlexContainer>
+                    <BoxContainer p={0} width={[1, null, '380px']}>
+                      {v.cover_image && v.cover_image.downloadUrl ? (
+                        <UploadedFile
+                          file={v.cover_image}
+                          imagePreview
+                          showDelete
+                          onFileDeleted={form.mutators.clearCoverImage}
+                        />
+                      ) : (
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            border: '1px solid #dddddd',
+                            justifyContent: 'center',
+                            minHeight: '230px',
+                          }}
+                        >
                           <Field
                             name="cover_image"
                             validateFields={[]}
-                            component={FirebaseFileUploaderField}
-                            storagePath={this.state._uploadPath}
-                            hidden={true}
-                            accept="image/png, image/jpeg"
-                            buttonText="UPLOAD IMAGE"
+                            component={ImageInputField}
                           />
-                        </>
-                      </div>
-                    )}
+                        </div>
+                      )}
+                    </BoxContainer>
                   </FlexContainer>
                   <Field
                     name="tutorial_description"
@@ -280,7 +271,7 @@ export class CreateHowto extends React.PureComponent<
             )
           }}
         />
-      </PageContainer>
+      </>
     )
   }
 }

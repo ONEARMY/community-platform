@@ -5,6 +5,7 @@ import { Button } from '../Button'
 import { FlexContainer } from '../Layout/FlexContainer'
 import Lightbox from 'react-image-lightbox'
 import 'react-image-lightbox/style.css'
+import Text from '../Text'
 
 /*
     This component takes an image through drag/drop or using filepicker, offers resize and upload to firebase
@@ -13,7 +14,7 @@ import 'react-image-lightbox/style.css'
 */
 
 interface IProps {
-  test?: 'hello'
+  onInputChange?: (files: FileList) => null
 }
 
 type ImageQualities = 'normal' | 'high' | 'low'
@@ -37,8 +38,8 @@ interface IState {
   openLightbox?: boolean
 }
 
-export class ImageUpload extends React.Component<IProps, IState> {
-  private uploadRef = React.createRef<HTMLInputElement>()
+export class ImageInput extends React.Component<IProps, IState> {
+  private fileInputRef = React.createRef<HTMLInputElement>()
   private compressionOptions = {
     quality: 0.75,
     maxWidth: imageSizes.normal,
@@ -49,9 +50,9 @@ export class ImageUpload extends React.Component<IProps, IState> {
     super(props)
     this.state = { imageQuality: 'normal', convertedFiles: [] }
   }
-  get uploadedFiles() {
-    const upload = this.uploadRef.current as HTMLInputElement
-    return upload.files
+  get inputFiles() {
+    const filesRef = this.fileInputRef.current as HTMLInputElement
+    return filesRef.files
   }
 
   async setImageQuality(quality: ImageQualities) {
@@ -60,17 +61,17 @@ export class ImageUpload extends React.Component<IProps, IState> {
     })
     this.compressionOptions.maxWidth = imageSizes[quality]
     this.compress = new clientCompress(this.compressionOptions)
-    await this.compressFiles(this.uploadedFiles as FileList)
+    await this.compressFiles(this.inputFiles as FileList)
   }
 
   componentDidMount() {
-    const upload = this.uploadRef.current as HTMLInputElement
+    const upload = this.fileInputRef.current as HTMLInputElement
     console.log('ref', upload)
     upload.addEventListener(
       'change',
       e => {
-        if (this.uploadedFiles) {
-          this.compressFiles(this.uploadedFiles)
+        if (this.inputFiles) {
+          this.compressFiles(this.inputFiles)
         }
       },
       false,
@@ -107,6 +108,11 @@ export class ImageUpload extends React.Component<IProps, IState> {
     })
   }
 
+  public triggerFileUploaderClick() {
+    const inputRef = this.fileInputRef.current as HTMLInputElement
+    inputRef.click()
+  }
+
   bytesToSize(bytes: number) {
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
     if (bytes === 0) {
@@ -120,46 +126,74 @@ export class ImageUpload extends React.Component<IProps, IState> {
   render() {
     const { convertedFiles, imageQuality, openLightbox } = this.state
     const qualities: ImageQualities[] = ['low', 'normal', 'high']
+    const imgPreviewMode = convertedFiles[0] ? true : false
     return (
-      <BoxContainer width="300px">
+      <BoxContainer width="380px" p={0}>
         <>
-          <div>Image Upload</div>
-          <input type="file" name="pic" accept="image/*" ref={this.uploadRef} />
+          <div style={{ display: imgPreviewMode ? 'none' : 'block' }}>
+            <Text regular textAlign="center" mb={2}>
+              Image Upload
+            </Text>
+            <Button
+              variant="outline"
+              onClick={() => this.triggerFileUploaderClick()}
+              m="auto"
+            >
+              Choose File
+            </Button>
+            <input
+              type="file"
+              name="pic"
+              accept="image/*"
+              ref={this.fileInputRef}
+              style={{ display: 'none' }}
+            />
+          </div>
           {convertedFiles.map(file => {
             return (
-              <div key={file.name}>
-                <img
-                  style={{ width: '400px' }}
-                  alt=""
+              <>
+                <div
+                  key={file.name}
+                  style={{
+                    backgroundImage: `url(${file.objectUrl})`,
+                    backgroundSize: 'contain',
+                    height: '220px',
+                  }}
                   id="preview"
-                  src={file.objectUrl}
                   onClick={() => this.setState({ openLightbox: true })}
                 />
+                <FlexContainer p={0} bg="none" mt={2} mb={2}>
+                  {convertedFiles.length > 0 &&
+                    qualities.map(quality => (
+                      <Button
+                        variant={imageQuality === quality ? 'dark' : 'outline'}
+                        key={quality}
+                        onClick={() => this.setImageQuality(quality)}
+                      >
+                        {quality}
+                      </Button>
+                    ))}
+                  <Button
+                    onClick={() => this.triggerFileUploaderClick()}
+                    ml="auto"
+                    icon="edit"
+                    variant="outline"
+                  />
+                </FlexContainer>
                 <div>
                   {file.startSize} -> {file.endSize}
                 </div>
-                <div>({file.compressionPercent}% reduced)</div>
-              </div>
+                <div>{file.compressionPercent}% smaller 🌍</div>
+              </>
             )
           })}
+
           {openLightbox && (
             <Lightbox
               mainSrc={convertedFiles[0].objectUrl}
               onCloseRequest={() => this.setState({ openLightbox: false })}
             />
           )}
-          <FlexContainer>
-            {convertedFiles.length > 0 &&
-              qualities.map(quality => (
-                <Button
-                  variant={imageQuality === quality ? 'dark' : 'outline'}
-                  key={quality}
-                  onClick={() => this.setImageQuality(quality)}
-                >
-                  {quality}
-                </Button>
-              ))}
-          </FlexContainer>
         </>
       </BoxContainer>
     )

@@ -1,10 +1,10 @@
 import { observable, action } from 'mobx'
-import PubSub from 'pubsub-js'
 import { Database } from '../database'
 import { functions } from 'src/utils/firebase'
 import { IUser } from 'src/models/user.models'
 import { IFirebaseUser, auth, afs, EmailAuthProvider } from 'src/utils/firebase'
 import { Storage } from '../storage'
+import { notificationPublish } from '../Notifications/notifications.service'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
@@ -105,7 +105,7 @@ export class UserStore {
       })
       // use pubsub to let avatar component know new avatar available
       console.log('publishing message')
-      PubSub.publish('USER_MESSAGE', 'avatar updated')
+      notificationPublish('Profile.Avatar.Updated')
     } catch (error) {
       console.log('error', error)
     }

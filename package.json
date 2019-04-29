@@ -1,6 +1,6 @@
 {
   "name": "one-army-world",
-  "version": "0.1.6",
+  "version": "0.3.0-alpha.1",
   "private": true,
   "dependencies": {
     "@babel/core": "7.2.2",
@@ -64,11 +64,12 @@
     "postcss-loader": "3.0.0",
     "postcss-preset-env": "6.5.0",
     "postcss-safe-parser": "4.0.1",
+    "pubsub-js": "^1.7.0",
     "query-string": "^6.2.0",
-    "react": "^16.8.1",
+    "react": "16.8.4",
     "react-app-polyfill": "^0.2.1",
     "react-dev-utils": "^7.0.3",
-    "react-dom": "^16.8.1",
+    "react-dom": "16.8.4",
     "react-final-form": "3.6.6",
     "react-final-form-arrays": "^1.0.6",
     "react-firebase-file-uploader": "2.4.2",
@@ -77,6 +78,7 @@
     "react-image-lightbox": "^5.1.0",
     "react-leaflet": "^2.1.4",
     "react-linkify": "^0.2.2",
+    "react-pose": "^4.0.8",
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
     "react-router-hash-link": "^1.2.1",
@@ -124,8 +126,9 @@
     "@types/jest": "23.3.2",
     "@types/md5": "^2.1.33",
     "@types/node": "10.11.0",
-    "@types/react": "16.8.0",
-    "@types/react-dom": "16.8.0",
+    "@types/pubsub-js": "^1.5.18",
+    "@types/react": "16.8.4",
+    "@types/react-dom": "16.8.4",
     "@types/react-leaflet": "^1.1.6",
     "@types/react-router-dom": "4.3.1",
     "@types/react-select": "^2.0.17",
@@ -149,7 +152,7 @@
     "tslint-react": "3.2.0"
   },
   "resolutions": {
-    "@types/react": "16.8.0"
+    "@types/react": "16.8.4"
   },
   "jest": {
     "collectCoverageFrom": [

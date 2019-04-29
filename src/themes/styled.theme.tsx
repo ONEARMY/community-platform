@@ -1,19 +1,14 @@
-export const colors = {
-  white: 'white',
-  black: 'black',
-  blue: '#b6d8e6',
-  blue2: '#3f51b5',
-  blue3: '#2d5786',
-  green: '#88e3c7',
-  yellow: '#ffe495',
-  grey: '#dddddd',
-  grey2: '#9b9b9b',
-  grey3: '#656565',
-  grey4: '#E9E9E9',
-  greyStroke: '#AEAEAE',
-  greyTag: '#4a4a4a',
-  greyBg: '#F6F6F6',
-  error: '#f44336',
+// use enum to specify list of possible colors for typing
+export enum colors {
+  white = 'white',
+  black = 'black',
+  grey = '#dddddd',
+  grey2 = '#9b9b9b',
+  grey4 = '#E9E9E9',
+  greyStroke = '#AEAEAE',
+  green = '#88e3c7',
+  yellow = '#ffe495',
+  error = '#f44336',
 }
 
 export type ButtonVariants =

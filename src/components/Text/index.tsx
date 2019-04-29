@@ -7,12 +7,15 @@ import theme from 'src/themes/styled.theme'
 
 export interface ITextProps {
   caps?: boolean
+  inline?: boolean
   regular?: boolean
   bold?: boolean
   large?: boolean
   medium?: boolean
   small?: boolean
   superSmall?: boolean
+  // keyof colors returns full object prototype, include typeof for just named keys (i.e. color list)
+  color?: keyof typeof colors
 }
 
 export const caps = props =>
@@ -21,6 +24,9 @@ export const caps = props =>
         textTransform: 'uppercase',
       }
     : null
+
+export const inline = props =>
+  props.inline ? { display: 'inline-block' } : null
 
 export const regular = props =>
   props.regular ? { fontWeight: props.theme.regular } : null
@@ -41,6 +47,7 @@ export const superSmall = props =>
   props.small ? { fontSize: props.theme.fontSizes[0] } : null
 
 export const BaseText = styled(RebassText)`
+    ${inline}
     ${caps}
     ${regular}
     ${bold}
@@ -53,12 +60,13 @@ export const BaseText = styled(RebassText)`
 type TextProps = ITextProps & RebassTextProps
 
 export const Text = (props: TextProps) => (
-  <BaseText {...props}>{props.children}</BaseText>
+  <BaseText color={colors[props.color ? props.color : 'black']} {...props}>
+    {props.children}
+  </BaseText>
 )
 
 Text.defaultProps = {
   theme,
-  color: colors.black,
   className: 'text',
 }
 

@@ -1,8 +1,13 @@
 import React from 'react'
+
 import { Image, ImageProps } from 'rebass'
 import Icon from 'src/components/Icons'
 import { inject, observer } from 'mobx-react'
 import { UserStore } from 'src/stores/User/user.store'
+import {
+  notificationSubscribe,
+  notificationUnsubscribeAll,
+} from 'src/stores/Notifications/notifications.service'
 
 interface IProps extends ImageProps {
   width?: string
@@ -28,6 +33,19 @@ export class Avatar extends React.Component<IProps, IState> {
   }
   get injected() {
     return this.props as IInjected
+  }
+
+  // subscribe/unsubscribe from specific user profile message when
+  // user updates their avatar (same url so by default will now be aware of change)
+  componentDidMount() {
+    notificationSubscribe('Profile.Avatar.Updated', () =>
+      this.setState({
+        showFallback: false,
+      }),
+    )
+  }
+  componentWillUnmount() {
+    notificationUnsubscribeAll()
   }
 
   async getUserAvatar(userName: string) {

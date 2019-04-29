@@ -10,7 +10,6 @@ import { UserProfile } from './content/UserProfile'
 interface InjectedProps extends IProps {
   userStore: UserStore
 }
-// tslint:disable no-empty-interface
 interface IProps {}
 
 @(withRouter as any)
@@ -25,7 +24,7 @@ export class ProfilePage extends React.Component<IProps> {
     const currentUser = this.injected.userStore.user as IUser
     return currentUser ? (
       <PageContainer>
-        <BoxContainer>
+        <BoxContainer p={0}>
           <Switch>
             {/* own profile */}
             <Route

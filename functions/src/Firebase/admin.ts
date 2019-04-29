@@ -21,6 +21,7 @@ admin.initializeApp({
   credential: admin.credential.cert(cert),
   databaseURL: FIREBASE_CONFIG.databaseURL,
 })
+
 export const firebaseAdmin = admin
 
 // this is automatically populated by firebase

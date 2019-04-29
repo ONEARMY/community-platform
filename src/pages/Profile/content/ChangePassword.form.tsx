@@ -76,7 +76,7 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
                   <Field
                     name="oldPassword"
                     component={InputField}
-                    label="Old password"
+                    placeholder="Old password"
                     type="password"
                     autocomplete="off"
                     required
@@ -84,7 +84,7 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
                   <Field
                     name="newPassword"
                     component={InputField}
-                    label="New password"
+                    placeholder="New password"
                     type="password"
                     autocomplete="off"
                     required
@@ -92,7 +92,7 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
                   <Field
                     name="repeatPassword"
                     component={InputField}
-                    label="Repeat new password"
+                    placeholder="Repeat new password"
                     type="password"
                     autocomplete="off"
                     required
@@ -106,7 +106,7 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
                     Submit
                   </Button>
 
-                  <Text color={colors.error}>{this.state.errorMsg}</Text>
+                  <Text color="error">{this.state.errorMsg}</Text>
                 </form>
               )
             }}

@@ -6,52 +6,71 @@ import { Avatar } from 'src/components/Avatar'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
 import { UserStore } from 'src/stores/User/user.store'
 import { Button } from 'src/components/Button'
+import { TextNotification } from 'src/components/Notification/TextNotification'
+import { observer, inject } from 'mobx-react'
 
-// tslint:disable no-empty-interface
 interface IFormValues extends Partial<IUser> {
   // form values are simply subset of user profile fields
 }
-
 interface IProps {
-  user: IUser
+  // no additional props here
+}
+interface IInjectedProps {
   userStore: UserStore
 }
 interface IState {
   formValues: IFormValues
   readOnly: boolean
   isSaving?: boolean
+  showNotification?: boolean
 }
+// we inject the userstore here instead of passing down as would have to pass
+// from Profile -> UserProfile -> ProfileEditForm which is less reliable
+// could use contextAPI but as we have mobx feels easier
+@inject('userStore')
+@observer
 export class ProfileEditForm extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
-    this.state = { formValues: props.user, readOnly: true }
+    const user = this.injected.userStore.user
+    this.state = { formValues: user ? user : {}, readOnly: true }
+  }
+
+  get injected() {
+    return this.props as IInjectedProps
   }
 
   public async saveProfile(values: IFormValues) {
-    await this.props.userStore.updateUserProfile(values)
-    this.setState({ readOnly: true })
+    await this.injected.userStore.updateUserProfile(values)
+    this.setState({ readOnly: true, showNotification: true })
   }
 
   render() {
-    const user = this.props.user
-    return (
+    const user = this.injected.userStore.user
+    return user ? (
       <Form
         // submission managed by button and state above
         onSubmit={values => this.saveProfile(values)}
-        initialValues={this.state.formValues}
+        initialValues={user}
         render={({ handleSubmit, submitting }) => {
           return (
             <>
               {this.state.readOnly && (
-                <Button
-                  variant={'outline'}
-                  m={0}
-                  icon={'edit'}
-                  style={{ float: 'right' }}
-                  onClick={() => this.setState({ readOnly: false })}
-                >
-                  Edit Profile
-                </Button>
+                <div style={{ float: 'right' }}>
+                  <Button
+                    variant={'outline'}
+                    m={0}
+                    icon={'edit'}
+                    onClick={() => this.setState({ readOnly: false })}
+                  >
+                    Edit Profile
+                  </Button>
+                  <TextNotification
+                    text="profile saved"
+                    icon="check"
+                    show={this.state.showNotification}
+                  />
+                </div>
               )}
               {/* NOTE - need to put submit method on form to prevent
               default post request */}
@@ -71,23 +90,24 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
                 <Heading medium bold>
                   Profile
                 </Heading>
-                <Avatar userName={user.userName} width="180px" />
+                <Avatar userName={user.userName} width="200px" />
                 <Field
                   name="userName"
                   component={InputField}
-                  label="User Name"
+                  placeholder="User Name"
                   disabled={true}
+                  style={{ fontWeight: 'bold' }}
                 />
                 <Field
                   name="about"
                   component={TextAreaField}
-                  label="About"
+                  placeholder="About"
                   disabled={this.state.readOnly}
                 />
                 <Field
                   name="country"
                   component={InputField}
-                  label="Country"
+                  placeholder="Country"
                   disabled={this.state.readOnly || submitting}
                 />
               </form>
@@ -95,6 +115,6 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
           )
         }}
       />
-    )
+    ) : null
   }
 }

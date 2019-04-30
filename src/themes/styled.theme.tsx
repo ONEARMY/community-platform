@@ -9,6 +9,7 @@ export enum colors {
   green = '#88e3c7',
   yellow = '#ffe495',
   error = '#f44336',
+  background = '#f6f6f6',
 }
 
 export type ButtonVariants =

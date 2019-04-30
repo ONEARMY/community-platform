@@ -134,9 +134,10 @@ export class CreateHowto extends React.PureComponent<
             const v = values as IHowto
             return (
               <form onSubmit={handleSubmit}>
-                <BoxContainer bg="white">
+                {/* How To Info */}
+                <BoxContainer bg="white" mb={3}>
                   <Heading medium>Create your How-To</Heading>
-                  <FlexContainer p={0} mb={3} flexWrap="wrap">
+                  <FlexContainer p={0} flexWrap="wrap">
                     {/* Left Side */}
                     <FlexContainer p={0} pr={2} flex={1} flexDirection="column">
                       <Field
@@ -191,9 +192,10 @@ export class CreateHowto extends React.PureComponent<
                   </FlexContainer>
                 </BoxContainer>
 
+                {/* Steps Info */}
                 <FieldArray name="steps">
                   {({ fields }) => (
-                    <BoxContainer bg="white" mt={3}>
+                    <BoxContainer bg="white">
                       {fields.map((step, index: number) => (
                         <Step
                           step={step}

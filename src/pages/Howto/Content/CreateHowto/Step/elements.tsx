@@ -25,7 +25,6 @@ export const Label = styled(Typography)`
 
 export const Container = styled.div`
   text-align: center;
-  margin-top: 80px;
 `
 
 export const StepCard = styled(Card)`

@@ -14,7 +14,7 @@ import Text from '../Text'
 */
 
 interface IProps {
-  onInputChange?: (files: FileList) => null
+  onFilesChange?: (fileMeta: IConvertedFileMeta[]) => void
 }
 
 type ImageQualities = 'normal' | 'high' | 'low'
@@ -65,9 +65,8 @@ export class ImageInput extends React.Component<IProps, IState> {
   }
 
   componentDidMount() {
-    const upload = this.fileInputRef.current as HTMLInputElement
-    console.log('ref', upload)
-    upload.addEventListener(
+    const inputRef = this.fileInputRef.current as HTMLInputElement
+    inputRef.addEventListener(
       'change',
       e => {
         if (this.inputFiles) {
@@ -106,6 +105,13 @@ export class ImageInput extends React.Component<IProps, IState> {
     this.setState({
       convertedFiles: convertedMeta,
     })
+    this.triggerCallback()
+  }
+
+  public triggerCallback() {
+    if (this.props.onFilesChange) {
+      this.props.onFilesChange(this.state.convertedFiles)
+    }
   }
 
   public triggerFileUploaderClick() {
@@ -130,16 +136,23 @@ export class ImageInput extends React.Component<IProps, IState> {
     return (
       <BoxContainer width="380px" p={0}>
         <>
-          <div style={{ display: imgPreviewMode ? 'none' : 'block' }}>
+          <div
+            style={{
+              display: imgPreviewMode ? 'none' : 'flex',
+              flexDirection: 'column',
+              border: '1px solid #dddddd',
+              justifyContent: 'center',
+              height: '230px',
+            }}
+          >
             <Text regular textAlign="center" mb={2}>
-              Image Upload
+              Cover Image
             </Text>
             <Button
               variant="outline"
               onClick={() => this.triggerFileUploaderClick()}
-              m="auto"
             >
-              Choose File
+              Choose Image
             </Button>
             <input
               type="file"
@@ -151,40 +164,49 @@ export class ImageInput extends React.Component<IProps, IState> {
           </div>
           {convertedFiles.map(file => {
             return (
-              <>
+              <div key={file.name}>
                 <div
                   key={file.name}
                   style={{
                     backgroundImage: `url(${file.objectUrl})`,
-                    backgroundSize: 'contain',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
                     height: '220px',
+                    border: '1px solid #dddddd',
                   }}
                   id="preview"
                   onClick={() => this.setState({ openLightbox: true })}
                 />
-                <FlexContainer p={0} bg="none" mt={2} mb={2}>
-                  {convertedFiles.length > 0 &&
-                    qualities.map(quality => (
-                      <Button
-                        variant={imageQuality === quality ? 'dark' : 'outline'}
-                        key={quality}
-                        onClick={() => this.setImageQuality(quality)}
-                      >
-                        {quality}
-                      </Button>
-                    ))}
-                  <Button
-                    onClick={() => this.triggerFileUploaderClick()}
-                    ml="auto"
-                    icon="edit"
-                    variant="outline"
-                  />
-                </FlexContainer>
-                <div>
-                  {file.startSize} -> {file.endSize}
+                <div
+                  style={{ visibility: imgPreviewMode ? 'initial' : 'hidden' }}
+                >
+                  <FlexContainer p={0} bg="none" mt={2} mb={2}>
+                    {convertedFiles.length > 0 &&
+                      qualities.map(quality => (
+                        <Button
+                          variant={
+                            imageQuality === quality ? 'dark' : 'outline'
+                          }
+                          key={quality}
+                          onClick={() => this.setImageQuality(quality)}
+                        >
+                          {quality}
+                        </Button>
+                      ))}
+                    <Button
+                      onClick={() => this.triggerFileUploaderClick()}
+                      ml="auto"
+                      icon="edit"
+                      variant="outline"
+                    />
+                  </FlexContainer>
+                  <div>
+                    {file.startSize} -> {file.endSize}
+                  </div>
+                  <Text small>{file.compressionPercent}% smaller 🌍</Text>
                 </div>
-                <div>{file.compressionPercent}% smaller 🌍</div>
-              </>
+              </div>
             )
           })}
 

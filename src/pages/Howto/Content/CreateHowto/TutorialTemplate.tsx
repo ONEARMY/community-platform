@@ -1,16 +1,7 @@
 import { IHowtoFormInput } from 'src/models/howto.models'
 
-const INITIAL_VALUES: IHowtoFormInput = {
-  tutorial_description: '',
-  tutorial_title: '',
-  tutorial_time: '',
-  tutorial_cost: null,
-  difficulty_level: '',
-  cover_image: null,
-  tutorial_extern_file_url: '',
-  tutorial_files: [],
-  id: '',
-  slug: '',
+// initialise fields which contain nested objects (and steps to have 3 placeholders)
+const INITIAL_VALUES: Partial<IHowtoFormInput> = {
   steps: [
     {
       title: '',
@@ -29,7 +20,7 @@ const INITIAL_VALUES: IHowtoFormInput = {
     },
   ],
   tags: {},
-  workspace_name: '',
+  tutorial_files: [],
 }
 
 const TIME_OPTIONS = [

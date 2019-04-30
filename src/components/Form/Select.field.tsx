@@ -24,7 +24,7 @@ export const SelectStyles: Partial<Styles> = {
   control: (provided, state) => ({
     ...provided,
     borderRadius: 0,
-    fontSize: '1.1em',
+    fontSize: '1em',
   }),
 }
 

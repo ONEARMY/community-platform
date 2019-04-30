@@ -19,7 +19,7 @@ export const TUTORIALS_MOCK: IHowto[] = [
     slug: 'tutorial-1',
     tutorial_description: 'this is a great description 1',
     tutorial_cost: 20,
-    difficulty_level: 'difficult',
+    difficulty_level: 'Hard',
     tutorial_time: '30 hours',
     steps: [
       {
@@ -47,7 +47,7 @@ export const TUTORIALS_MOCK: IHowto[] = [
     slug: 'tutorial-2',
     tutorial_description: 'this is a great description 2',
     tutorial_cost: 20,
-    difficulty_level: 'difficult',
+    difficulty_level: 'Hard',
     tutorial_time: '30 hours',
     steps: [
       {
@@ -75,7 +75,7 @@ export const TUTORIALS_MOCK: IHowto[] = [
     slug: 'tutorial-3',
     tutorial_description: 'this is a great description 3',
     tutorial_cost: 20,
-    difficulty_level: 'difficult',
+    difficulty_level: 'Hard',
     tutorial_time: '30 days',
     steps: [
       {

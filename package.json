@@ -18,6 +18,8 @@
     "@types/rebass": "^3.0.3",
     "@types/styled-components": "4.0",
     "@types/styled-system": "^3.2.2",
+    "@uppy/core": "^1.0.0",
+    "@uppy/react": "^1.0.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "9.0.0",
     "babel-jest": "23.6.0",

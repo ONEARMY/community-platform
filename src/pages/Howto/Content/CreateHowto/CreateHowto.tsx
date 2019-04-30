@@ -24,6 +24,7 @@ import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 
 import Icon from 'src/components/Icons'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
+import { FileInputField } from 'src/components/Form/FileInput.field'
 
 export interface IState {
   formValues: IHowtoFormInput
@@ -47,13 +48,15 @@ export class CreateHowto extends React.PureComponent<
     const databaseRef = afs.collection('documentation').doc()
     const docID = databaseRef.id
     this.state = {
-      formValues: { id: docID } as IHowtoFormInput,
+      formValues: { ...TEMPLATE.INITIAL_VALUES, id: docID } as IHowtoFormInput,
       formSaved: false,
       _docID: docID,
       _uploadPath: `uploads/documentation/${docID}`,
       _toDocsList: false,
     }
   }
+
+  public initialiseValues() {}
 
   public onSubmit = async (formValues: IHowtoFormInput) => {
     const inputValues = formValues as IHowtoFormInput
@@ -166,14 +169,7 @@ export class CreateHowto extends React.PureComponent<
                           style={{ marginLeft: '4px' }}
                         />
                       </FlexContainer>
-                      <Field
-                        name="tutorial_time"
-                        component={FirebaseFileUploaderField}
-                        buttonText="UPLOAD FILES"
-                        storagePath={this.state._uploadPath}
-                        hidden={true}
-                        icon="upload"
-                      />
+                      <Field name="tutorial_files" component={FileInputField} />
                       {v.tutorial_files &&
                         v.tutorial_files.map((file, index) => (
                           <UploadedFile
@@ -195,21 +191,11 @@ export class CreateHowto extends React.PureComponent<
                           onFileDeleted={form.mutators.clearCoverImage}
                         />
                       ) : (
-                        <div
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            border: '1px solid #dddddd',
-                            justifyContent: 'center',
-                            minHeight: '230px',
-                          }}
-                        >
-                          <Field
-                            name="cover_image"
-                            validateFields={[]}
-                            component={ImageInputField}
-                          />
-                        </div>
+                        <Field
+                          name="cover_image"
+                          validateFields={[]}
+                          component={ImageInputField}
+                        />
                       )}
                     </BoxContainer>
                   </FlexContainer>

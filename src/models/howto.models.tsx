@@ -25,7 +25,7 @@ export interface IHowtoFormInput {
   cover_image_url?: string
   tutorial_title: string
   tutorial_description: string
-  difficulty_level: 'easy' | 'medium' | 'difficult' | ''
+  difficulty_level: 'Easy' | 'Medium' | 'Hard' | 'Very Hard'
   tutorial_time: string
   tutorial_cost: any
   tutorial_extern_file_url: string

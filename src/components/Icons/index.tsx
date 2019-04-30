@@ -27,7 +27,7 @@ import {
   MdList,
   MdImage,
 } from 'react-icons/md'
-import { GoCloudUpload } from 'react-icons/go'
+import { GoCloudUpload, GoFilePdf } from 'react-icons/go'
 import { FaSignal } from 'react-icons/fa'
 import { IconContext } from 'react-icons'
 
@@ -40,7 +40,7 @@ interface IProps {
   size?: number | string
   marginRight?: string
 }
-type availableGlyphs =
+export type availableGlyphs =
   | 'download'
   | 'upload'
   | 'add'
@@ -61,6 +61,7 @@ type availableGlyphs =
   | 'step'
   | 'difficulty'
   | 'image'
+  | 'pdf'
 
 export type IGlyphs = { [k in availableGlyphs]: JSX.Element }
 
@@ -85,6 +86,7 @@ export const glyphs: IGlyphs = {
   step: <MdList />,
   difficulty: <FaSignal />,
   image: <MdImage />,
+  pdf: <GoFilePdf />,
 }
 
 type WrapperProps = IProps & VerticalAlignProps & SpaceProps

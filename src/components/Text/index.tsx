@@ -16,6 +16,8 @@ export interface ITextProps {
   superSmall?: boolean
   // keyof colors returns full object prototype, include typeof for just named keys (i.e. color list)
   color?: keyof typeof colors
+  // clip forces text to fill max 1 line and add '...' for overflow
+  clip?: boolean
 }
 
 export const caps = props =>
@@ -46,6 +48,11 @@ export const small = props =>
 export const superSmall = props =>
   props.small ? { fontSize: props.theme.fontSizes[0] } : null
 
+export const clip = props =>
+  props.clip
+    ? { whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }
+    : null
+
 export const BaseText = styled(RebassText)`
     ${inline}
     ${caps}
@@ -55,6 +62,7 @@ export const BaseText = styled(RebassText)`
     ${medium}
     ${small}
     ${superSmall}
+    ${clip}
 `
 
 type TextProps = ITextProps & RebassTextProps

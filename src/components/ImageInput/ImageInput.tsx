@@ -86,8 +86,8 @@ export class ImageInput extends React.Component<IProps, IState> {
   private _generateFileMeta(c: ICompressedOutput) {
     const meta: IConvertedFileMeta = {
       name: c.photo.name,
-      startSize: this.bytesToSize(c.info.startSizeMB * 1000 * 1000),
-      endSize: this.bytesToSize(c.info.endSizeMB * 1000 * 1000),
+      startSize: bytesToSize(c.info.startSizeMB * 1000 * 1000),
+      endSize: bytesToSize(c.info.endSizeMB * 1000 * 1000),
       compressionPercent: Number(c.info.sizeReducedInPercent.toFixed(1)),
       photoData: c.photo.data,
       objectUrl: URL.createObjectURL(c.photo.data),
@@ -117,16 +117,6 @@ export class ImageInput extends React.Component<IProps, IState> {
   public triggerFileUploaderClick() {
     const inputRef = this.fileInputRef.current as HTMLInputElement
     inputRef.click()
-  }
-
-  bytesToSize(bytes: number) {
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
-    if (bytes === 0) {
-      return '0 Byte'
-    }
-    const i = Number(Math.floor(Math.log(bytes) / Math.log(1024)))
-    const size = (bytes / Math.pow(1024, i)).toPrecision(3) + ' ' + sizes[i]
-    return size
   }
 
   render() {
@@ -221,6 +211,21 @@ export class ImageInput extends React.Component<IProps, IState> {
       </BoxContainer>
     )
   }
+}
+
+/************************************************************************************
+ *    Exported helpers (could be moved to appropriate utils)
+ *
+ *************************************************************************************/
+
+export const bytesToSize = (bytes: number) => {
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+  if (bytes === 0) {
+    return '0 Byte'
+  }
+  const i = Number(Math.floor(Math.log(bytes) / Math.log(1024)))
+  const size = (bytes / Math.pow(1024, i)).toPrecision(3) + ' ' + sizes[i]
+  return size
 }
 
 /************************************************************************************

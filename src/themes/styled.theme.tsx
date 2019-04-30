@@ -10,10 +10,13 @@ export enum colors {
   yellow = '#ffe495',
   error = '#f44336',
   background = '#f6f6f6',
+  primary = 'black',
+  secondary = '#FF9900',
 }
 
 export type ButtonVariants =
   | 'primary'
+  | 'secondary'
   | 'outline'
   | 'disabled'
   | 'dark'
@@ -22,8 +25,12 @@ export type ButtonVariants =
 const buttons = {
   height: '40px',
   primary: {
-    color: colors.black,
+    color: colors.primary,
     backgroundColor: colors.white,
+  },
+  secondary: {
+    color: colors.white,
+    backgroundColor: colors.secondary,
   },
   outline: {
     color: colors.black,

@@ -15,6 +15,7 @@ import Text from '../Text'
 
 interface IProps {
   onFilesChange?: (fileMeta: IConvertedFileMeta[]) => void
+  text?: string
 }
 
 type ImageQualities = 'normal' | 'high' | 'low'
@@ -121,6 +122,7 @@ export class ImageInput extends React.Component<IProps, IState> {
 
   render() {
     const { convertedFiles, imageQuality, openLightbox } = this.state
+    const { text } = this.props
     const qualities: ImageQualities[] = ['low', 'normal', 'high']
     const imgPreviewMode = convertedFiles[0] ? true : false
     return (
@@ -136,7 +138,7 @@ export class ImageInput extends React.Component<IProps, IState> {
             }}
           >
             <Text regular textAlign="center" mb={2}>
-              Cover Image
+              {text ? text : 'Image'}
             </Text>
             <Button
               variant="outline"

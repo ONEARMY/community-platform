@@ -80,6 +80,7 @@
     "react-image-lightbox": "^5.1.0",
     "react-leaflet": "^2.1.4",
     "react-linkify": "^0.2.2",
+    "react-portal": "^4.2.0",
     "react-pose": "^4.0.8",
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",

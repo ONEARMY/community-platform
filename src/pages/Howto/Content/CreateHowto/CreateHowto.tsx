@@ -10,19 +10,15 @@ import { IFirebaseUploadInfo } from 'src/components/FirebaseFileUploader/Firebas
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
-import { FirebaseFileUploaderField } from 'src/components/Form/FirebaseFileUploader.field'
 import { SelectField } from 'src/components/Form/Select.field'
 import { Step } from './Step/Step'
 import { Button } from 'src/components/Button'
 import { FieldState } from 'final-form'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import Heading from 'src/components/Heading'
-import PageContainer from 'src/components/Layout/PageContainer'
 import { FlexContainer } from 'src/components/Layout/FlexContainer'
 import { BoxContainer } from 'src/components/Layout/BoxContainer'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
-
-import Icon from 'src/components/Icons'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { FileInputField } from 'src/components/Form/FileInput.field'
 
@@ -132,6 +128,7 @@ export class CreateHowto extends React.PureComponent<
             invalid,
           }) => {
             const v = values as IHowto
+            const disabled = invalid || submitting
             return (
               <form onSubmit={handleSubmit}>
                 {/* How To Info */}
@@ -186,6 +183,7 @@ export class CreateHowto extends React.PureComponent<
                         name="cover_image"
                         validateFields={[]}
                         component={ImageInputField}
+                        text="Cover Image"
                       />
                       <Field name="tutorial_files" component={FileInputField} />
                     </BoxContainer>
@@ -195,7 +193,7 @@ export class CreateHowto extends React.PureComponent<
                 {/* Steps Info */}
                 <FieldArray name="steps">
                   {({ fields }) => (
-                    <BoxContainer bg="white">
+                    <>
                       {fields.map((step, index: number) => (
                         <Step
                           step={step}
@@ -212,7 +210,8 @@ export class CreateHowto extends React.PureComponent<
                         icon={'add'}
                         width={300}
                         mx="auto"
-                        my={60}
+                        my={20}
+                        variant="dark"
                         bg="yellow"
                         onClick={() => {
                           console.log('adding step', values)
@@ -225,18 +224,18 @@ export class CreateHowto extends React.PureComponent<
                       >
                         add step
                       </Button>
-                    </BoxContainer>
+                    </>
                   )}
                 </FieldArray>
                 <Button
                   type="submit"
                   width={1}
-                  bg="green"
                   icon="check"
                   mx="auto"
+                  variant={disabled ? 'disabled' : 'secondary'}
                   disabled={submitting || invalid}
                 >
-                  Save
+                  Publish
                 </Button>
               </form>
             )

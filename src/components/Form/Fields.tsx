@@ -33,6 +33,6 @@ export const TextAreaField = ({
       <TextAreaStyled {...input} {...rest} />
     )}
 
-    {meta.error && meta.touched && <span>{meta.error}</span>}
+    {/* {meta.error && meta.touched && <span>{meta.error}</span>} */}
   </>
 )

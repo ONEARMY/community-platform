@@ -137,7 +137,8 @@ export class CreateHowto extends React.PureComponent<
                 <BoxContainer bg="white">
                   <Heading medium>Create your How-To</Heading>
                   <FlexContainer p={0} mb={3} flexWrap="wrap">
-                    <BoxContainer p={0} pr={2} flex={1}>
+                    {/* Left Side */}
+                    <FlexContainer p={0} pr={2} flex={1} flexDirection="column">
                       <Field
                         name="tutorial_title"
                         validateFields={[]}
@@ -169,43 +170,25 @@ export class CreateHowto extends React.PureComponent<
                           style={{ marginLeft: '4px' }}
                         />
                       </FlexContainer>
-                      <Field name="tutorial_files" component={FileInputField} />
-                      {v.tutorial_files &&
-                        v.tutorial_files.map((file, index) => (
-                          <UploadedFile
-                            key={file.downloadUrl}
-                            file={file}
-                            showDelete
-                            onFileDeleted={() => {
-                              mutators.remove('tutorial_files', index)
-                            }}
-                          />
-                        ))}
-                    </BoxContainer>
+                      <Field
+                        name="tutorial_description"
+                        validate={required}
+                        validateFields={[]}
+                        component={TextAreaField}
+                        style={{ resize: 'none', flex: 1, minHeight: '150px' }}
+                        placeholder="Introduction to your How-To, keep it to 100 words please! *"
+                      />
+                    </FlexContainer>
+                    {/* Right side */}
                     <BoxContainer p={0} width={[1, null, '380px']}>
-                      {v.cover_image && v.cover_image.downloadUrl ? (
-                        <UploadedFile
-                          file={v.cover_image}
-                          imagePreview
-                          showDelete
-                          onFileDeleted={form.mutators.clearCoverImage}
-                        />
-                      ) : (
-                        <Field
-                          name="cover_image"
-                          validateFields={[]}
-                          component={ImageInputField}
-                        />
-                      )}
+                      <Field
+                        name="cover_image"
+                        validateFields={[]}
+                        component={ImageInputField}
+                      />
+                      <Field name="tutorial_files" component={FileInputField} />
                     </BoxContainer>
                   </FlexContainer>
-                  <Field
-                    name="tutorial_description"
-                    validate={required}
-                    validateFields={[]}
-                    component={TextAreaField}
-                    placeholder="Introduction to your How-To, keep it to 100 words please! *"
-                  />
                 </BoxContainer>
 
                 <FieldArray name="steps">

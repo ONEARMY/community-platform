@@ -151,6 +151,7 @@ export class ImageInput extends React.Component<IProps, IState> {
             <Button
               variant="outline"
               onClick={() => this.triggerFileUploaderClick()}
+              icon="image"
             >
               Choose Image
             </Button>

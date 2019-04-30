@@ -9,7 +9,6 @@ import {
 
 import {
   MdFileDownload,
-  MdFileUpload,
   MdAdd,
   MdCheck,
   MdArrowBack,
@@ -24,9 +23,9 @@ import {
   MdComment,
   MdTurnedIn,
   MdEdit,
-  MdCloudUpload,
   MdAccessTime,
   MdList,
+  MdImage,
 } from 'react-icons/md'
 import { GoCloudUpload } from 'react-icons/go'
 import { FaSignal } from 'react-icons/fa'
@@ -39,6 +38,7 @@ interface IGlyphProps {
 interface IProps {
   glyph: keyof IGlyphs
   size?: number | string
+  marginRight?: string
 }
 type availableGlyphs =
   | 'download'
@@ -60,6 +60,7 @@ type availableGlyphs =
   | 'time'
   | 'step'
   | 'difficulty'
+  | 'image'
 
 export type IGlyphs = { [k in availableGlyphs]: JSX.Element }
 
@@ -83,6 +84,7 @@ export const glyphs: IGlyphs = {
   time: <MdAccessTime />,
   step: <MdList />,
   difficulty: <FaSignal />,
+  image: <MdImage />,
 }
 
 type WrapperProps = IProps & VerticalAlignProps & SpaceProps
@@ -112,7 +114,11 @@ export class Icon extends Component<WrapperProps> {
     const { size = 16, glyph } = this.props
 
     return (
-      <IconWrapper size={size} {...this.props}>
+      <IconWrapper
+        size={size}
+        {...this.props}
+        style={{ marginRight: this.props.marginRight }}
+      >
         <IconContext.Provider
           value={{ style: { width: size + 'px', height: size + 'px' } }}
         >

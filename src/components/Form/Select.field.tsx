@@ -63,7 +63,9 @@ export const SelectField = ({ input, meta, ...rest }: ISelectFieldProps) => (
   <FieldContainer style={rest.style}>
     <Select
       styles={SelectStyles}
-      onChange={v => input.onChange(getValueFromSelect(v))}
+      onChange={v => {
+        input.onChange(getValueFromSelect(v))
+      }}
       value={getValueForSelect(rest.options, input.value)}
       {...defaultProps}
       {...rest}

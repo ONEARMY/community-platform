@@ -42,7 +42,7 @@ export class FileInfo extends React.Component<IProps, IState> {
         alignItems="center"
       >
         <Icon size={24} glyph={this.state.glyph} marginRight="4px" />
-        <Text clip flex={1}>
+        <Text clipped={true} flex={1}>
           {file.name}
         </Text>
         <Text small>{this.state.size}</Text>

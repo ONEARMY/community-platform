@@ -6,7 +6,6 @@ import arrayMutators from 'final-form-arrays'
 import { IHowto, IHowtoFormInput } from 'src/models/howto.models'
 import { afs } from 'src/utils/firebase'
 import TEMPLATE from './TutorialTemplate'
-import { IFirebaseUploadInfo } from 'src/components/FirebaseFileUploader/FirebaseFileUploader'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
@@ -22,6 +21,8 @@ import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { FileInputField } from 'src/components/Form/FileInput.field'
 import posed, { PoseGroup } from 'react-pose'
+import { Storage, IUploadedFileMeta } from 'src/stores/storage'
+import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 
 export interface IState {
   formValues: IHowtoFormInput
@@ -35,6 +36,8 @@ const AnimationContainer = posed.div({
   enter: { x: 0, opacity: 1, delay: 300 },
   exit: { x: 200, opacity: 0, delay: 200 },
 })
+
+// validation - return undefined if no error (i.e. valid)
 const required = (value: any) => (value ? undefined : 'Required')
 
 export class CreateHowto extends React.PureComponent<
@@ -49,7 +52,7 @@ export class CreateHowto extends React.PureComponent<
     const databaseRef = afs.collection('documentation').doc()
     const docID = databaseRef.id
     this.state = {
-      formValues: { ...TEMPLATE.INITIAL_VALUES, id: docID } as IHowtoFormInput,
+      formValues: { ...TEMPLATE.TESTING_VALUES, id: docID } as IHowtoFormInput,
       formSaved: false,
       _docID: docID,
       _uploadPath: `uploads/documentation/${docID}`,
@@ -57,35 +60,9 @@ export class CreateHowto extends React.PureComponent<
     }
   }
 
-  public initialiseValues() {}
-
   public onSubmit = async (formValues: IHowtoFormInput) => {
-    const inputValues = formValues as IHowtoFormInput
-    if (!inputValues.cover_image) {
-      alert('Please provide a cover image before saving your tutorial')
-    } else {
-      const timestamp = new Date()
-      const slug = stripSpecialCharacters(formValues.tutorial_title)
-      // convert data to correct types and populate metadata
-      const values: IHowto = {
-        ...formValues,
-        slug,
-        tutorial_cost: Number(formValues.tutorial_cost),
-        cover_image: formValues.cover_image as IFirebaseUploadInfo,
-        _created: timestamp,
-        _modified: timestamp,
-      }
-      try {
-        await afs
-          .collection('documentation')
-          .doc(formValues.id)
-          .set(values)
-        this.setState({ formSaved: true })
-        this.props.history.push('/how-to/' + slug)
-      } catch (error) {
-        console.log('error while saving the tutorial')
-      }
-    }
+    console.log('submitting')
+    // this.injected.store
   }
 
   public validateTitle = async (value: any, meta?: FieldState) => {
@@ -110,7 +87,6 @@ export class CreateHowto extends React.PureComponent<
 
   public render() {
     const { formValues } = this.state
-    console.log('formvalues', formValues)
     return (
       <>
         <Form
@@ -120,18 +96,8 @@ export class CreateHowto extends React.PureComponent<
           validateOnBlur
           mutators={{
             ...arrayMutators,
-            clearCoverImage: (args, state, utils) => {
-              utils.changeValue(state, 'cover_image', () => null)
-            },
           }}
-          render={({
-            handleSubmit,
-            mutators,
-            submitting,
-            values,
-            form,
-            invalid,
-          }) => {
+          render={({ handleSubmit, submitting, values, invalid, errors }) => {
             const v = values as IHowto
             const disabled = invalid || submitting
             return (
@@ -157,8 +123,9 @@ export class CreateHowto extends React.PureComponent<
                       <FlexContainer p={0}>
                         <Field
                           name="tutorial_time"
-                          validate={required}
-                          validateFields={[]}
+                          // TODO - fix validation (#462)
+                          // validate={required}
+                          // validateFields={[]}
                           options={TEMPLATE.TIME_OPTIONS}
                           component={SelectField}
                           placeholder="How much time? *"
@@ -166,9 +133,11 @@ export class CreateHowto extends React.PureComponent<
                         />
                         <Field
                           name="difficulty_level"
+                          // TODO - fix validation (#462)
+                          // validate={required}
+                          // validateFields={[]}
                           component={SelectField}
                           options={TEMPLATE.DIFFICULTY_OPTIONS}
-                          validateFields={[]}
                           placeholder="How hard is it? *"
                           style={{ marginLeft: '4px' }}
                         />
@@ -186,6 +155,9 @@ export class CreateHowto extends React.PureComponent<
                     <BoxContainer p={0} width={[1, null, '380px']}>
                       <Field
                         name="cover_image"
+                        // TODO - fix validation (#462)
+                        // validate={required}
+                        // validateFields={[]}
                         validateFields={[]}
                         component={ImageInputField}
                         text="Cover Image"
@@ -209,7 +181,9 @@ export class CreateHowto extends React.PureComponent<
                               step={name}
                               index={index}
                               onDelete={(fieldIndex: number) => {
+                                console.log('removing field at index', index)
                                 fields.remove(fieldIndex)
+                                console.log('values', values, errors)
                               }}
                               values={values}
                               _uploadPath={this.state._uploadPath}
@@ -226,7 +200,6 @@ export class CreateHowto extends React.PureComponent<
                         variant="dark"
                         bg="yellow"
                         onClick={() => {
-                          console.log('adding step', values)
                           fields.push({
                             title: '',
                             text: '',
@@ -252,6 +225,12 @@ export class CreateHowto extends React.PureComponent<
                   disabled={submitting || invalid}
                 >
                   Publish
+                </Button>
+                <Button onClick={() => console.log(values)}>
+                  Dev: Log values
+                </Button>
+                <Button onClick={() => console.log(errors)}>
+                  Dev: Log validation state
                 </Button>
               </form>
             )

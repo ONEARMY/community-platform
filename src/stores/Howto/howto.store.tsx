@@ -1,7 +1,10 @@
 import { observable, action } from 'mobx'
 import { afs } from '../../utils/firebase'
-import { IHowto } from 'src/models/howto.models'
+import { IHowto, IHowtoFormInput, IHowtoStep } from 'src/models/howto.models'
 import { Database } from 'src/stores/database'
+import { stripSpecialCharacters } from 'src/utils/helpers'
+import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
+import { Storage } from '../storage'
 
 export class HowtoStore {
   // we have two property relating to docs that can be observed
@@ -42,4 +45,70 @@ export class HowtoStore {
       return 'How-to titles must be unique, please try being more specific'
     }
   }
+
+  public async uploadHowTo(values: IHowtoFormInput, id: string) {
+    const slug = stripSpecialCharacters(values.tutorial_title)
+    // present uploading modal
+
+    // upload images
+
+    try {
+      values.cover_image = await this.uploadCoverImg(values.cover_image[0], id)
+      console.log('cover image uploaded')
+      values.steps = await this.uploadStepImgs(values.steps, id)
+      console.log('step images uploaded')
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  private uploadCoverImg(file: IConvertedFileMeta, id: string) {
+    return Storage.uploadFile(`uploads/howTos/${id}`, file.name, file.photoData)
+  }
+
+  private async uploadStepImgs(steps: IHowtoStep[], id: string) {
+    const firstStep = steps[0]
+    const stepImages = firstStep.images as IConvertedFileMeta[]
+    const promises = stepImages.map(async img => {
+      const meta = await Storage.uploadFile(
+        `uploads/howTos/${id}`,
+        img.name,
+        img.photoData,
+      )
+      return meta
+    })
+    const imgMeta = await Promise.all(promises)
+
+    // const promises = steps.map(step =>
+    //   step.images.map(async img => {
+    //     const i = img as IConvertedFileMeta
+    //     const meta = await Storage.uploadFile(
+    //       `uploads/howTos/${id}`,
+    //       i.name,
+    //       i.photoData,
+    //     )
+    //     return meta
+    //   }),
+    // )
+    return steps
+  }
 }
+
+//
+
+// convert data to correct types and populate metadata
+// const values: IHowto = {
+//   ...formValues,
+//   slug,
+//   cover_image: formValues.cover_image as IFirebaseUploadInfo,
+// }
+// try {
+//   await afs
+//     .collection('documentation')
+//     .doc(formValues.id)
+//     .set(values)
+//   this.setState({ formSaved: true })
+//   this.props.history.push('/how-to/' + slug)
+// } catch (error) {
+//   console.log('error while saving the tutorial')
+// }

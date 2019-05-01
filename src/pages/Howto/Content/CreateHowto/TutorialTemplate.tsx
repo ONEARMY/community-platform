@@ -26,6 +26,19 @@ const INITIAL_VALUES: Partial<IHowtoFormInput> = {
   tutorial_files: [],
 }
 
+const TESTING_VALUES: Partial<IHowtoFormInput> = {
+  tutorial_title: `Test-${new Date().toString()}`,
+  tutorial_description: 'example description',
+  steps: [
+    {
+      title: 'Step 1',
+      text: 'Example step text',
+      images: [],
+      _animationKey: 'unique1',
+    },
+  ],
+}
+
 const TIME_OPTIONS = [
   {
     value: '< 1 week',
@@ -68,4 +81,5 @@ export default {
   INITIAL_VALUES,
   TIME_OPTIONS,
   DIFFICULTY_OPTIONS,
+  TESTING_VALUES,
 }

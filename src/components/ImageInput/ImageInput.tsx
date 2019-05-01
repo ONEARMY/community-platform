@@ -24,7 +24,7 @@ const imageSizes = {
   normal: 1280,
   high: 1920,
 }
-interface IConvertedFileMeta {
+export interface IConvertedFileMeta {
   startSize: string
   endSize: string
   compressionPercent: number

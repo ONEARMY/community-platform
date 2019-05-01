@@ -190,7 +190,7 @@ export class ImageInput extends React.Component<IProps, IState> {
                     <Button
                       onClick={() => this.triggerFileUploaderClick()}
                       ml="auto"
-                      icon="edit"
+                      icon="image"
                       variant="outline"
                     />
                   </FlexContainer>

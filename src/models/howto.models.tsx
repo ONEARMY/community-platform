@@ -13,9 +13,11 @@ export interface IHowto extends IHowtoFormInput {
 
 export interface IHowtoStep {
   // *** NOTE legacy format only tracked urls - this will be removed once data upgraded
+  // *** NOTE 2 - adding an '_animationKey' field to track when specific array element removed for
   images: IFirebaseUploadInfo[]
   title: string
   text: string
+  _animationKey?: string
 }
 
 export interface IHowtoFormInput {

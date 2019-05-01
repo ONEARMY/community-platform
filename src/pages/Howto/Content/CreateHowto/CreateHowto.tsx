@@ -21,6 +21,7 @@ import { BoxContainer } from 'src/components/Layout/BoxContainer'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { FileInputField } from 'src/components/Form/FileInput.field'
+import posed, { PoseGroup } from 'react-pose'
 
 export interface IState {
   formValues: IHowtoFormInput
@@ -30,6 +31,10 @@ export interface IState {
   _toDocsList: boolean
 }
 
+const AnimationContainer = posed.div({
+  enter: { x: 0, opacity: 1, delay: 300 },
+  exit: { x: 200, opacity: 0, delay: 200 },
+})
 const required = (value: any) => (value ? undefined : 'Required')
 
 export class CreateHowto extends React.PureComponent<
@@ -194,18 +199,25 @@ export class CreateHowto extends React.PureComponent<
                 <FieldArray name="steps">
                   {({ fields }) => (
                     <>
-                      {fields.map((step, index: number) => (
-                        <Step
-                          step={step}
-                          index={index}
-                          key={index}
-                          onDelete={(fieldIndex: number) => {
-                            fields.remove(fieldIndex)
-                          }}
-                          values={values}
-                          _uploadPath={this.state._uploadPath}
-                        />
-                      ))}
+                      <PoseGroup>
+                        {fields.map((name, index: number) => (
+                          <AnimationContainer
+                            key={fields.value[index]._animationKey}
+                          >
+                            <Step
+                              key={fields.value[index]._animationKey}
+                              step={name}
+                              index={index}
+                              onDelete={(fieldIndex: number) => {
+                                fields.remove(fieldIndex)
+                              }}
+                              values={values}
+                              _uploadPath={this.state._uploadPath}
+                            />
+                          </AnimationContainer>
+                        ))}
+                      </PoseGroup>
+
                       <Button
                         icon={'add'}
                         width={300}
@@ -219,6 +231,10 @@ export class CreateHowto extends React.PureComponent<
                             title: '',
                             text: '',
                             images: [],
+                            // HACK - need unique key, this is a rough method to generate form random numbers
+                            _animationKey: `unique${Math.random()
+                              .toString(36)
+                              .substring(7)}`,
                           })
                         }}
                       >

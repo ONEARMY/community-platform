@@ -15,7 +15,8 @@ export interface IFieldProps extends FieldProps {
 export const InputField = ({ input, meta, ...rest }: IFieldProps) => (
   <>
     <Input {...input} {...rest} />
-    {meta.error && meta.touched && <span>{meta.error}</span>}
+    {/* CC - removed clunky error reporting until better solution implemented */}
+    {/* {meta.error && meta.touched && <span>{meta.error}</span>} */}
   </>
 )
 

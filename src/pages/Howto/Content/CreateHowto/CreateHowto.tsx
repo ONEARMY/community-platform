@@ -54,7 +54,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
     // generate unique id for db and storage references and assign to state
     const docID = this.store.generateID()
     this.state = {
-      formValues: { ...TEMPLATE.TESTING_VALUES, id: docID } as IHowtoFormInput,
+      formValues: { ...TEMPLATE.INITIAL_VALUES, id: docID } as IHowtoFormInput,
       formSaved: false,
       _docID: docID,
       _uploadPath: `uploads/documentation/${docID}`,

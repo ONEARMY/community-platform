@@ -20,7 +20,7 @@ export class HowtoStore {
   @action
   public async getDocList() {
     const ref = await afs
-      .collection('howtos')
+      .collection('howtosV1')
       .orderBy('_created', 'desc')
       .get()
 
@@ -29,7 +29,7 @@ export class HowtoStore {
   @action
   public async getDocBySlug(slug: string) {
     const ref = afs
-      .collection('howtos')
+      .collection('howtosV1')
       .where('slug', '==', slug)
       .limit(1)
     const collection = await ref.get()
@@ -99,7 +99,11 @@ export class HowtoStore {
   }
 
   private uploadCoverImg(file: IConvertedFileMeta, id: string) {
-    return Storage.uploadFile(`uploads/howTos/${id}`, file.name, file.photoData)
+    return Storage.uploadFile(
+      `uploads/howtosV1/${id}`,
+      file.name,
+      file.photoData,
+    )
   }
 
   private async uploadStepImgs(steps: IHowtoStep[], id: string) {
@@ -109,7 +113,7 @@ export class HowtoStore {
       const stepImages = step.images as IConvertedFileMeta[]
       const promises = stepImages.map(async img => {
         const meta = await Storage.uploadFile(
-          `uploads/howTos/${id}`,
+          `uploads/howtosV1/${id}`,
           img.name,
           img.photoData,
         )
@@ -123,7 +127,7 @@ export class HowtoStore {
   }
 
   private updateDatabase(howTo: IHowto, id: string) {
-    return Database.setDoc(`howtos/${id}`, howTo)
+    return Database.setDoc(`howtosV1/${id}`, howTo)
   }
 }
 

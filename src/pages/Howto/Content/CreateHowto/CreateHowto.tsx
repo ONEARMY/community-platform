@@ -20,6 +20,8 @@ import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { FileInputField } from 'src/components/Form/FileInput.field'
 import posed, { PoseGroup } from 'react-pose'
 import { inject } from 'mobx-react'
+import { Modal } from 'src/components/Modal/Modal'
+import { HowToSubmitStatus } from './SubmitStatus'
 
 interface IState {
   formValues: IHowtoFormInput
@@ -65,8 +67,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
   }
 
   public onSubmit = async (formValues: IHowtoFormInput) => {
-    console.log('submitting')
-    this.store.uploadHowTo(formValues, this.state._docID)
+    await this.store.uploadHowTo(formValues, this.state._docID)
   }
 
   public validateTitle = async (value: any, meta?: FieldState) => {
@@ -84,133 +85,151 @@ export class CreateHowto extends React.Component<IProps, IState> {
             ...arrayMutators,
           }}
           validateOnBlur
-          render={({ handleSubmit, submitting, values, invalid, errors }) => {
+          render={({ submitting, values, invalid, errors, handleSubmit }) => {
             const disabled = invalid || submitting
             return (
-              <form onSubmit={handleSubmit}>
-                {/* How To Info */}
-                <BoxContainer bg="white" mb={3}>
-                  <Heading medium>Create your How-To</Heading>
-                  <FlexContainer p={0} flexWrap="wrap">
-                    {/* Left Side */}
-                    <FlexContainer p={0} pr={2} flex={1} flexDirection="column">
-                      <Field
-                        name="tutorial_title"
-                        validateFields={[]}
-                        validate={value => this.validateTitle(value)}
-                        component={InputField}
-                        placeholder="Title of your How-to *"
-                      />
-                      <Field name="tags" component={TagsSelectField} />
-                      <FlexContainer p={0}>
+              <>
+                {/* using prevent default as sometimes submit triggered unintentionally */}
+                <form onSubmit={e => e.preventDefault()}>
+                  {/* How To Info */}
+                  <BoxContainer bg="white" mb={3}>
+                    <Heading medium>Create your How-To</Heading>
+                    <FlexContainer p={0} flexWrap="wrap">
+                      {/* Left Side */}
+                      <FlexContainer
+                        p={0}
+                        pr={2}
+                        flex={1}
+                        flexDirection="column"
+                      >
                         <Field
-                          name="tutorial_time"
-                          validate={required}
+                          name="tutorial_title"
                           validateFields={[]}
-                          options={TEMPLATE.TIME_OPTIONS}
-                          component={SelectField}
-                          placeholder="How much time? *"
-                          style={{ marginRight: '4px' }}
+                          validate={value => this.validateTitle(value)}
+                          component={InputField}
+                          placeholder="Title of your How-to *"
                         />
+                        <Field name="tags" component={TagsSelectField} />
+                        <FlexContainer p={0}>
+                          <Field
+                            name="tutorial_time"
+                            validate={required}
+                            validateFields={[]}
+                            options={TEMPLATE.TIME_OPTIONS}
+                            component={SelectField}
+                            placeholder="How much time? *"
+                            style={{ marginRight: '4px' }}
+                          />
+                          <Field
+                            name="difficulty_level"
+                            validate={required}
+                            validateFields={[]}
+                            component={SelectField}
+                            options={TEMPLATE.DIFFICULTY_OPTIONS}
+                            placeholder="How hard is it? *"
+                            style={{ marginLeft: '4px' }}
+                          />
+                        </FlexContainer>
                         <Field
-                          name="difficulty_level"
+                          name="tutorial_description"
                           validate={required}
                           validateFields={[]}
-                          component={SelectField}
-                          options={TEMPLATE.DIFFICULTY_OPTIONS}
-                          placeholder="How hard is it? *"
-                          style={{ marginLeft: '4px' }}
+                          component={TextAreaField}
+                          style={{
+                            resize: 'none',
+                            flex: 1,
+                            minHeight: '150px',
+                          }}
+                          placeholder="Introduction to your How-To, keep it to 100 words please! *"
                         />
                       </FlexContainer>
-                      <Field
-                        name="tutorial_description"
-                        validate={required}
-                        validateFields={[]}
-                        component={TextAreaField}
-                        style={{ resize: 'none', flex: 1, minHeight: '150px' }}
-                        placeholder="Introduction to your How-To, keep it to 100 words please! *"
-                      />
+                      {/* Right side */}
+                      <BoxContainer p={0} width={[1, null, '380px']}>
+                        <Field
+                          name="cover_image"
+                          validate={required}
+                          validateFields={[]}
+                          component={ImageInputField}
+                          text="Cover Image"
+                        />
+                        <Field
+                          name="tutorial_files"
+                          component={FileInputField}
+                        />
+                      </BoxContainer>
                     </FlexContainer>
-                    {/* Right side */}
-                    <BoxContainer p={0} width={[1, null, '380px']}>
-                      <Field
-                        name="cover_image"
-                        validate={required}
-                        validateFields={[]}
-                        component={ImageInputField}
-                        text="Cover Image"
-                      />
-                      <Field name="tutorial_files" component={FileInputField} />
-                    </BoxContainer>
-                  </FlexContainer>
-                </BoxContainer>
+                  </BoxContainer>
 
-                {/* Steps Info */}
-                <FieldArray name="steps">
-                  {({ fields }) => (
-                    <>
-                      <PoseGroup>
-                        {fields.map((name, index: number) => (
-                          <AnimationContainer
-                            key={fields.value[index]._animationKey}
-                          >
-                            <Step
+                  {/* Steps Info */}
+                  <FieldArray name="steps">
+                    {({ fields }) => (
+                      <>
+                        <PoseGroup>
+                          {fields.map((name, index: number) => (
+                            <AnimationContainer
                               key={fields.value[index]._animationKey}
-                              step={name}
-                              index={index}
-                              onDelete={(fieldIndex: number) => {
-                                console.log('removing field at index', index)
-                                fields.remove(fieldIndex)
-                                console.log('values', values, errors)
-                              }}
-                              values={values}
-                              _uploadPath={this.state._uploadPath}
-                            />
-                          </AnimationContainer>
-                        ))}
-                      </PoseGroup>
+                            >
+                              <Step
+                                key={fields.value[index]._animationKey}
+                                step={name}
+                                index={index}
+                                onDelete={(fieldIndex: number) => {
+                                  fields.remove(fieldIndex)
+                                }}
+                                values={values}
+                                _uploadPath={this.state._uploadPath}
+                              />
+                            </AnimationContainer>
+                          ))}
+                        </PoseGroup>
 
-                      <Button
-                        icon={'add'}
-                        width={300}
-                        mx="auto"
-                        my={20}
-                        variant="dark"
-                        bg="yellow"
-                        onClick={() => {
-                          fields.push({
-                            title: '',
-                            text: '',
-                            images: [],
-                            // HACK - need unique key, this is a rough method to generate form random numbers
-                            _animationKey: `unique${Math.random()
-                              .toString(36)
-                              .substring(7)}`,
-                          })
-                        }}
-                      >
-                        add step
-                      </Button>
-                    </>
-                  )}
-                </FieldArray>
-                <Button
-                  type="submit"
-                  width={1}
-                  icon="check"
-                  mx="auto"
-                  variant={disabled ? 'disabled' : 'secondary'}
-                  disabled={submitting || invalid}
-                >
-                  Publish
-                </Button>
-                <Button onClick={() => console.log(values)}>
-                  Dev: Log values
-                </Button>
-                <Button onClick={() => console.log(errors)}>
-                  Dev: Log validation state
-                </Button>
-              </form>
+                        <Button
+                          icon={'add'}
+                          width={300}
+                          mx="auto"
+                          my={20}
+                          variant="dark"
+                          bg="yellow"
+                          onClick={() => {
+                            fields.push({
+                              title: '',
+                              text: '',
+                              images: [],
+                              // HACK - need unique key, this is a rough method to generate form random numbers
+                              _animationKey: `unique${Math.random()
+                                .toString(36)
+                                .substring(7)}`,
+                            })
+                          }}
+                        >
+                          add step
+                        </Button>
+                      </>
+                    )}
+                  </FieldArray>
+                  <Button
+                    onClick={() => handleSubmit()}
+                    width={1}
+                    icon="check"
+                    mx="auto"
+                    variant={disabled ? 'disabled' : 'secondary'}
+                    disabled={submitting || invalid}
+                  >
+                    Publish
+                  </Button>
+                  <Button onClick={() => console.log(values)}>
+                    Dev: Log values
+                  </Button>
+                  <Button onClick={() => console.log(errors)}>
+                    Dev: Log validation state
+                  </Button>
+                </form>
+                {submitting && (
+                  <Modal>
+                    <HowToSubmitStatus />
+                  </Modal>
+                )}
+              </>
             )
           }}
         />

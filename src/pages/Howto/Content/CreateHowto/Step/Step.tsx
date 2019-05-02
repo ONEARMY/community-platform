@@ -85,7 +85,7 @@ class Step extends Component<IProps, IState> {
           {/* Left */}
           <BoxContainer p={0} width={[1, null, '380px']}>
             <Field
-              name={`${step}.image`}
+              name={`${step}.images`}
               component={ImageInputField}
               text="Step Image"
             />

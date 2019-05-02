@@ -3,7 +3,8 @@ import { Portal } from 'react-portal'
 import styled from 'styled-components'
 
 interface IProps {
-  onDidDismiss: () => void
+  // provide onDidDismiss function to enable backdrop click dismiss
+  onDidDismiss?: () => void
 }
 interface IState {
   isOpen: boolean

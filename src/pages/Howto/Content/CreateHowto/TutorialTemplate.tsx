@@ -29,6 +29,8 @@ const INITIAL_VALUES: Partial<IHowtoFormInput> = {
 const TESTING_VALUES: Partial<IHowtoFormInput> = {
   tutorial_title: `Test-${new Date().toString()}`,
   tutorial_description: 'example description',
+  tutorial_time: '1-2 weeks',
+  difficulty_level: 'Hard',
   steps: [
     {
       title: 'Step 1',

@@ -78,6 +78,8 @@ export class HowtoStore {
   }
 
   public async uploadHowTo(values: IHowtoFormInput, id: string) {
+    console.log('uploading how-to', id)
+    console.log('values', values)
     try {
       // upload images
       const processedCover = await this.uploadHowToFile(
@@ -88,8 +90,8 @@ export class HowtoStore {
       const processedSteps = await this.processSteps(values.steps, id)
       this.updateUploadStatus('Step Images')
       // upload files
-      const processedFiles = await this.uploadBatchHowToFiles(
-        values.files as IConvertedFileMeta[],
+      const processedFiles = await this.uploadHowToBatch(
+        values.files as File[],
         id,
       )
       this.updateUploadStatus('Files')
@@ -123,24 +125,33 @@ export class HowtoStore {
     const stepsWithImgMeta: IHowtoStep[] = []
     for (const step of steps) {
       const stepImages = step.images as IConvertedFileMeta[]
-      const imgMeta = await this.uploadBatchHowToFiles(stepImages, id)
+      const imgMeta = await this.uploadHowToBatch(stepImages, id)
       step.images = imgMeta
       stepsWithImgMeta.push({ ...step, images: imgMeta })
     }
     return stepsWithImgMeta
   }
 
-  // upload files to individual howTo storage folder
-  private uploadHowToFile(file: IConvertedFileMeta, id: string) {
+  private uploadHowToFile(file: File | IConvertedFileMeta, id: string) {
+    console.log('uploading file', file)
+    // switch between converted file meta or standard file input
+    let data: File | Blob = file as File
+    if (file.hasOwnProperty('photoData')) {
+      file = file as IConvertedFileMeta
+      data = file.photoData
+    }
     return Storage.uploadFile(
       `uploads/howtosV1/${id}`,
       file.name,
-      file.photoData,
+      data,
+      file.type,
     )
   }
 
-  // upload multiple files in parallel
-  private async uploadBatchHowToFiles(files: IConvertedFileMeta[], id: string) {
+  private async uploadHowToBatch(
+    files: (File | IConvertedFileMeta)[],
+    id: string,
+  ) {
     const promises = files.map(async file => {
       return this.uploadHowToFile(file, id)
     })
@@ -163,8 +174,8 @@ interface IHowToUploadStatus {
 function getInitialUploadStatus() {
   const status: IHowToUploadStatus = {
     Cover: false,
-    Files: false,
     'Step Images': false,
+    Files: false,
     Database: false,
     Complete: false,
   }

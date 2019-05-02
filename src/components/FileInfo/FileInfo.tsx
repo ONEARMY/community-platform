@@ -3,9 +3,10 @@ import Icon, { availableGlyphs } from '../Icons'
 import { FlexContainer } from '../Layout/FlexContainer'
 import Text from '../Text'
 import { bytesToSize } from '../ImageInput/ImageInput'
+import { IUploadedFileMeta } from 'src/stores/storage'
 
 interface IProps {
-  file: File
+  file: File | IUploadedFileMeta
 }
 interface IState {
   glyph: availableGlyphs
@@ -22,7 +23,6 @@ export class FileInfo extends React.Component<IProps, IState> {
 
   getGlyph(filetype: string) {
     let glyph: availableGlyphs = 'image'
-    console.log('getting glyph', filetype)
     switch (filetype) {
       case 'application/pdf':
         glyph = 'pdf'

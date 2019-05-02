@@ -1,11 +1,13 @@
 import { firestore } from 'firebase/app'
 
 // remove special characters from string, also replacing spaces with dashes
-export const stripSpecialCharacters = (text: string) => {
+export const stripSpecialCharacters = (text?: string) => {
   return text
-    .replace(/[`~!@#$%^&*()_|+\-=÷¿?;:'",.<>\{\}\[\]\\\/]/gi, '')
-    .split(' ')
-    .join('-')
+    ? text
+        .replace(/[`~!@#$%^&*()_|+\-=÷¿?;:'",.<>\{\}\[\]\\\/]/gi, '')
+        .split(' ')
+        .join('-')
+    : ''
 }
 
 // take an array of objects and convert to an single object, using a unique key

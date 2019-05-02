@@ -34,7 +34,7 @@ export interface IHowtoFormInput {
   description: string
   difficulty_level: 'Easy' | 'Medium' | 'Hard' | 'Very Hard'
   time: string
-  files: IUploadedFileMeta[] | IConvertedFileMeta[]
+  files: IUploadedFileMeta[] | File[]
   steps: IHowToStepFormInput[]
   slug: string
   tags: ISelectedTags

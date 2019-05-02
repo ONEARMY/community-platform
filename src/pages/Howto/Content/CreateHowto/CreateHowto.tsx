@@ -5,7 +5,7 @@ import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
 import createDecorator from 'final-form-calculate'
 import { IHowto, IHowtoFormInput } from 'src/models/howto.models'
-import TEMPLATE from './TutorialTemplate'
+import TEMPLATE from './Template'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
 import { SelectField } from 'src/components/Form/Select.field'
@@ -238,6 +238,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
                     <>
                       <HowToSubmitStatus />
                       <Button
+                        mt={3}
                         variant={submitting ? 'disabled' : 'outline'}
                         icon="arrow-forward"
                         onClick={() =>

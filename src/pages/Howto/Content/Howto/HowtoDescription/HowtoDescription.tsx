@@ -7,6 +7,7 @@ import Text from 'src/components/Text'
 import { Box, Flex, Card } from 'rebass'
 import Icon from 'src/components/Icons'
 import styled from 'styled-components'
+import { FileInfo } from 'src/components/FileInfo/FileInfo'
 
 interface IProps {
   howto: IHowto
@@ -62,11 +63,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             </Text>
           )}
           {howto.files.map(file => (
-            <UploadedFile
-              file={file}
-              key={file.downloadUrl}
-              showDelete={false}
-            />
+            <FileInfo file={file} key={file.name} />
           ))}
         </Box>
         <Box width={[1 / 2]}>

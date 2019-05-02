@@ -31,6 +31,7 @@ export interface IConvertedFileMeta {
   photoData: Blob
   objectUrl: string
   name: string
+  type: string
 }
 
 interface IState {
@@ -92,6 +93,7 @@ export class ImageInput extends React.Component<IProps, IState> {
       compressionPercent: Number(c.info.sizeReducedInPercent.toFixed(1)),
       photoData: c.photo.data,
       objectUrl: URL.createObjectURL(c.photo.data),
+      type: c.photo.type,
     }
     return meta
   }

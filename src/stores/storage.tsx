@@ -22,13 +22,14 @@ export class Storage {
   public static async uploadFile(
     storageFolder: string,
     filename: string,
-    data: Blob,
+    data: Blob | File,
+    filetype: string,
   ) {
     const storageRef = storage.ref(storageFolder)
     const fileRef = storageRef.child(filename)
     const snapshot = await fileRef.put(data)
     const url = await fileRef.getDownloadURL()
-    const meta = generateUploadedFileMeta(snapshot.metadata, url)
+    const meta = generateUploadedFileMeta(snapshot.metadata, url, filetype)
     return meta
   }
 }
@@ -37,13 +38,14 @@ export class Storage {
         Helper Methods
 /****************************************************************************** */
 
-function generateUploadedFileMeta(snapshotMeta, url) {
+function generateUploadedFileMeta(snapshotMeta, url: string, filetype: string) {
   const fileInfo: IUploadedFileMeta = {
     downloadUrl: url,
     contentType: snapshotMeta.contentType,
     fullPath: snapshotMeta.fullPath,
     name: snapshotMeta.name,
     size: snapshotMeta.size,
+    type: filetype,
     timeCreated: snapshotMeta.timeCreated,
     updated: snapshotMeta.updated,
   }
@@ -58,6 +60,7 @@ export interface IUploadedFileMeta {
   contentType?: string | null
   fullPath: string
   name: string
+  type: string
   size: number
   timeCreated: string
   updated: string

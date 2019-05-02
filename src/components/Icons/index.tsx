@@ -31,6 +31,7 @@ import {
 import { GoCloudUpload, GoFilePdf } from 'react-icons/go'
 import { FaSignal } from 'react-icons/fa'
 import { IconContext } from 'react-icons'
+import SVGs from './svgs'
 
 interface IGlyphProps {
   glyph: string
@@ -64,6 +65,7 @@ export type availableGlyphs =
   | 'difficulty'
   | 'image'
   | 'pdf'
+  | 'loading'
 
 export type IGlyphs = { [k in availableGlyphs]: JSX.Element }
 
@@ -90,6 +92,7 @@ export const glyphs: IGlyphs = {
   difficulty: <FaSignal />,
   image: <MdImage />,
   pdf: <GoFilePdf />,
+  loading: SVGs.loading,
 }
 
 type WrapperProps = IProps & VerticalAlignProps & SpaceProps

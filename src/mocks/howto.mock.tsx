@@ -1,14 +1,15 @@
 import { IHowto } from '../models/howto.models'
-import { IFirebaseUploadInfo } from 'src/components/FirebaseFileUploader/FirebaseFileUploader'
 import { toTimestamp } from 'src/utils/helpers'
+import { IUploadedFileMeta } from 'src/stores/storage'
 
-const exampleUploadImage: IFirebaseUploadInfo = {
+const exampleUploadImage: IUploadedFileMeta = {
   downloadUrl: 'http://placekitten.com/g/400/250',
   fullPath: '',
   name: '250.jpg',
   size: 11035,
   timeCreated: '',
   updated: '',
+  type: 'image/jpg',
 }
 
 export const HOWTO_MOCK: IHowto[] = [
@@ -21,7 +22,7 @@ export const HOWTO_MOCK: IHowto[] = [
     time: '30 hours',
     steps: [
       {
-        images: [exampleUploadImage],
+        images: [],
         text: 'this text is wonderful oh my god',
         title: 'My super step1 title',
       },

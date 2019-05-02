@@ -31,6 +31,7 @@ const TESTING_VALUES: Partial<IHowtoFormInput> = {
   tutorial_description: 'example description',
   tutorial_time: '1-2 weeks',
   difficulty_level: 'Hard',
+  tutorial_files: [],
   steps: [
     {
       title: 'Step 1',

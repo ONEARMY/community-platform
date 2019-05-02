@@ -26,6 +26,7 @@ import {
   MdAccessTime,
   MdList,
   MdImage,
+  MdArrowForward,
 } from 'react-icons/md'
 import { GoCloudUpload, GoFilePdf } from 'react-icons/go'
 import { FaSignal } from 'react-icons/fa'
@@ -46,6 +47,7 @@ export type availableGlyphs =
   | 'add'
   | 'check'
   | 'arrow-back'
+  | 'arrow-forward'
   | 'arrow-down'
   | 'mail-outline'
   | 'notifications'
@@ -71,6 +73,7 @@ export const glyphs: IGlyphs = {
   add: <MdAdd />,
   check: <MdCheck />,
   'arrow-back': <MdArrowBack />,
+  'arrow-forward': <MdArrowForward />,
   'arrow-down': <MdKeyboardArrowDown />,
   'mail-outline': <MdMailOutline />,
   notifications: <MdNotifications />,

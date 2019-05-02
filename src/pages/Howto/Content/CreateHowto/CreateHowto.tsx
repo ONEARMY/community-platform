@@ -3,6 +3,7 @@ import { RouteComponentProps } from 'react-router'
 import { Form, Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
+import createDecorator from 'final-form-calculate'
 import { IHowto, IHowtoFormInput } from 'src/models/howto.models'
 import TEMPLATE from './TutorialTemplate'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
@@ -22,6 +23,7 @@ import posed, { PoseGroup } from 'react-pose'
 import { inject } from 'mobx-react'
 import { Modal } from 'src/components/Modal/Modal'
 import { HowToSubmitStatus } from './SubmitStatus'
+import { stripSpecialCharacters } from 'src/utils/helpers'
 
 interface IState {
   formValues: IHowtoFormInput
@@ -29,6 +31,7 @@ interface IState {
   _docID: string
   _uploadPath: string
   _toDocsList: boolean
+  showSubmitModal?: boolean
 }
 interface IProps extends RouteComponentProps<any> {}
 interface IInjectedProps extends IProps {
@@ -67,14 +70,21 @@ export class CreateHowto extends React.Component<IProps, IState> {
   }
 
   public onSubmit = async (formValues: IHowtoFormInput) => {
-    const values = await this.store.uploadHowTo(formValues, this.state._docID)
-    this.props.history.push('/how-to/' + values.slug)
+    this.setState({ showSubmitModal: true })
+    await this.store.uploadHowTo(formValues, this.state._docID)
   }
 
   public validateTitle = async (value: any, meta?: FieldState) => {
     this.store.validateTitle(value, meta)
   }
 
+  // automatically generate the slug when the title changes
+  private calculatedFields = createDecorator({
+    field: 'tutorial_title',
+    updates: {
+      slug: title => stripSpecialCharacters(title).toLowerCase(),
+    },
+  })
   public render() {
     const { formValues } = this.state
     return (
@@ -86,6 +96,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
             ...arrayMutators,
           }}
           validateOnBlur
+          decorators={[this.calculatedFields]}
           render={({ submitting, values, invalid, errors, handleSubmit }) => {
             const disabled = invalid || submitting
             return (
@@ -225,9 +236,20 @@ export class CreateHowto extends React.Component<IProps, IState> {
                     Dev: Log validation state
                   </Button>
                 </form>
-                {submitting && (
+                {this.state.showSubmitModal && (
                   <Modal>
-                    <HowToSubmitStatus />
+                    <>
+                      <HowToSubmitStatus />
+                      <Button
+                        variant={submitting ? 'disabled' : 'outline'}
+                        icon="arrow-forward"
+                        onClick={() =>
+                          this.props.history.push('/how-to/' + values.slug)
+                        }
+                      >
+                        View How-To
+                      </Button>
+                    </>
                   </Modal>
                 )}
               </>

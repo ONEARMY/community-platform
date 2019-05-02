@@ -1,10 +1,15 @@
 import { observable, action } from 'mobx'
 import { afs } from '../../utils/firebase'
-import { IHowto, IHowtoFormInput, IHowtoStep } from 'src/models/howto.models'
+import {
+  IHowto,
+  IHowtoFormInput,
+  IHowToStepFormInput,
+  IHowtoStep,
+} from 'src/models/howto.models'
 import { Database } from 'src/stores/database'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
-import { Storage } from '../storage'
+import { Storage, IUploadedFileMeta } from '../storage'
 import { FieldState } from 'final-form'
 
 export class HowtoStore {
@@ -58,7 +63,9 @@ export class HowtoStore {
       return undefined
     }
     if (value) {
-      const error = this.isSlugUnique(stripSpecialCharacters(value))
+      const error = this.isSlugUnique(
+        stripSpecialCharacters(value).toLowerCase(),
+      )
       return error
     } else if ((meta && (meta.touched || meta.visited)) || value === '') {
       return 'A title for your how-to is required'
@@ -71,21 +78,33 @@ export class HowtoStore {
   }
 
   public async uploadHowTo(values: IHowtoFormInput, id: string) {
-    values.slug = stripSpecialCharacters(values.tutorial_title)
     try {
       // upload images
-      values.cover_image = await this.uploadCoverImg(values.cover_image[0], id)
+      const processedCover = await this.uploadHowToFile(
+        values.cover_image[0],
+        id,
+      )
       this.updateUploadStatus('Cover')
-      values.steps = await this.uploadStepImgs(values.steps, id)
+      const processedSteps = await this.processSteps(values.steps, id)
       this.updateUploadStatus('Step Images')
       // upload files
-
+      const processedFiles = await this.uploadBatchHowToFiles(
+        values.tutorial_files as IConvertedFileMeta[],
+        id,
+      )
       this.updateUploadStatus('Files')
       // populate DB
       const meta = Database.generateDocMeta('howtosV1', id)
-      // TODO - tighten typings (will require additional types for pre/post image compression data)
-      const howTo: IHowto = { ...values, ...meta } as IHowto
-      this.updateDatabase(howTo, id)
+      // redefine howTo based on processing done above (should match stronger typing)
+      const howTo: IHowto = {
+        ...values,
+        cover_image: processedCover,
+        steps: processedSteps,
+        tutorial_files: processedFiles,
+        ...meta,
+      }
+      console.log('populating database', howTo)
+      this.updateDatabase(howTo)
       this.updateUploadStatus('Database')
       // complete
       this.updateUploadStatus('Complete')
@@ -98,7 +117,21 @@ export class HowtoStore {
     }
   }
 
-  private uploadCoverImg(file: IConvertedFileMeta, id: string) {
+  // go through each step, upload images and replace data
+  private async processSteps(steps: IHowToStepFormInput[], id: string) {
+    // NOTE - outer loop could be a map and done in parallel but for loop easier to manage
+    const stepsWithImgMeta: IHowtoStep[] = []
+    for (const step of steps) {
+      const stepImages = step.images as IConvertedFileMeta[]
+      const imgMeta = await this.uploadBatchHowToFiles(stepImages, id)
+      step.images = imgMeta
+      stepsWithImgMeta.push({ ...step, images: imgMeta })
+    }
+    return stepsWithImgMeta
+  }
+
+  // upload files to individual howTo storage folder
+  private uploadHowToFile(file: IConvertedFileMeta, id: string) {
     return Storage.uploadFile(
       `uploads/howtosV1/${id}`,
       file.name,
@@ -106,28 +139,16 @@ export class HowtoStore {
     )
   }
 
-  private async uploadStepImgs(steps: IHowtoStep[], id: string) {
-    // NOTE - outer loop could be a map and done in parallel but for loop easier to manage
-    const stepsWithImgMeta: IHowtoStep[] = []
-    for (const step of steps) {
-      const stepImages = step.images as IConvertedFileMeta[]
-      const promises = stepImages.map(async img => {
-        const meta = await Storage.uploadFile(
-          `uploads/howtosV1/${id}`,
-          img.name,
-          img.photoData,
-        )
-        return meta
-      })
-      const imgMeta = await Promise.all(promises)
-      step.images = imgMeta
-      stepsWithImgMeta.push(step)
-    }
-    return stepsWithImgMeta
+  // upload multiple files in parallel
+  private async uploadBatchHowToFiles(files: IConvertedFileMeta[], id: string) {
+    const promises = files.map(async file => {
+      return this.uploadHowToFile(file, id)
+    })
+    return Promise.all(promises)
   }
 
-  private updateDatabase(howTo: IHowto, id: string) {
-    return Database.setDoc(`howtosV1/${id}`, howTo)
+  private updateDatabase(howTo: IHowto) {
+    return Database.setDoc(`howtosV1/${howTo._id}`, howTo)
   }
 }
 

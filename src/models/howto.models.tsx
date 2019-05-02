@@ -5,14 +5,22 @@ import { IUploadedFileMeta } from 'src/stores/storage'
 
 // By default all tutorial form input fields come as strings
 // The IHowto interface can imposes the correct formats on fields
-// adds additional populated meta fields, and forces cover image
+// Additionally convert from local filemeta to uploaded filemeta
 export interface IHowto extends IHowtoFormInput, IDbDoc {
   cover_image: IUploadedFileMeta
+  tutorial_files: IUploadedFileMeta[]
+  steps: IHowtoStep[]
 }
 
-export interface IHowtoStep {
-  // *** NOTE legacy format only tracked urls - this will be removed once data upgraded
-  // *** NOTE 2 - adding an '_animationKey' field to track when specific array element removed for
+export interface IHowtoStep extends IHowToStepFormInput {
+  // *** NOTE - adding an '_animationKey' field to track when specific array element removed for
+  images: IUploadedFileMeta[]
+  title: string
+  text: string
+  _animationKey?: string
+}
+
+export interface IHowToStepFormInput {
   images: IUploadedFileMeta[] | IConvertedFileMeta[]
   title: string
   text: string
@@ -31,8 +39,8 @@ export interface IHowtoFormInput {
   tutorial_time: string
   tutorial_cost: any
   tutorial_extern_file_url: string
-  tutorial_files: IUploadedFileMeta[]
-  steps: IHowtoStep[]
+  tutorial_files: IUploadedFileMeta[] | IConvertedFileMeta[]
+  steps: IHowToStepFormInput[]
   slug: string
   tags: ISelectedTags
 }

@@ -50,28 +50,29 @@ export class HowtoList extends React.Component<IProps, any> {
             ) : (
               <FlexGrid flexWrap={'wrap'} justifyContent={'center'} my={4}>
                 {allHowtos.map((howto: IHowto, index: number) => (
-                  <Box m={2}>
-                    <Card borderRadius={1} width={[380]} bg={'white'}>
-                      <CardImage src={howto.cover_image.downloadUrl} />
-                      <Box width={'45px'} bg="white" mt={'-24px'} ml={'29px'}>
-                        <Image src={PpLogo} />
-                      </Box>
-                      <CardInfosContainer px={4} pb={3}>
-                        <Link to={`/how-to/${encodeURIComponent(howto.slug)}`}>
+                  <Link to={`/how-to/${encodeURIComponent(howto.slug)}`}>
+                    <Box m={2}>
+                      <Card borderRadius={1} width={[380]} bg={'white'}>
+                        <CardImage src={howto.cover_image.downloadUrl} />
+                        <Box width={'45px'} bg="white" mt={'-24px'} ml={'29px'}>
+                          <Image src={PpLogo} />
+                        </Box>
+                        <CardInfosContainer px={4} pb={3}>
                           <Heading small bold>
                             {howto.title}
                           </Heading>
-                        </Link>
-                        <Text fontSize={1} mt={2} mb={3} color={'grey4'}>
-                          by{' '}
-                        </Text>
-                        {howto.tags &&
-                          Object.keys(howto.tags).map(tag => {
-                            return <TagDisplay key={tag} tagKey={tag} />
-                          })}
-                      </CardInfosContainer>
-                    </Card>
-                  </Box>
+
+                          <Text fontSize={1} mt={2} mb={3} color={'grey4'}>
+                            by{' '}
+                          </Text>
+                          {howto.tags &&
+                            Object.keys(howto.tags).map(tag => {
+                              return <TagDisplay key={tag} tagKey={tag} />
+                            })}
+                        </CardInfosContainer>
+                      </Card>
+                    </Box>
+                  </Link>
                 ))}
               </FlexGrid>
             )}

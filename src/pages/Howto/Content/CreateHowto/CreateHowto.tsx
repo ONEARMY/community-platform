@@ -4,7 +4,6 @@ import { Form, Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
 import { IHowto, IHowtoFormInput } from 'src/models/howto.models'
-import { afs } from 'src/utils/firebase'
 import TEMPLATE from './TutorialTemplate'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
@@ -21,15 +20,19 @@ import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { FileInputField } from 'src/components/Form/FileInput.field'
 import posed, { PoseGroup } from 'react-pose'
-import { Storage, IUploadedFileMeta } from 'src/stores/storage'
-import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
+import { inject } from 'mobx-react'
+import { Database } from 'src/stores/database'
 
-export interface IState {
+interface IState {
   formValues: IHowtoFormInput
   formSaved: boolean
   _docID: string
   _uploadPath: string
   _toDocsList: boolean
+}
+interface IProps extends RouteComponentProps<any> {}
+interface IInjectedProps extends IProps {
+  howtoStore: HowtoStore
 }
 
 const AnimationContainer = posed.div({
@@ -40,17 +43,13 @@ const AnimationContainer = posed.div({
 // validation - return undefined if no error (i.e. valid)
 const required = (value: any) => (value ? undefined : 'Required')
 
-export class CreateHowto extends React.PureComponent<
-  RouteComponentProps<any>,
-  IState
-> {
+@inject('howtoStore')
+export class CreateHowto extends React.Component<IProps, IState> {
   uploadRefs: { [key: string]: UploadedFile | null } = {}
-  store = new HowtoStore()
   constructor(props: any) {
     super(props)
     // generate unique id for db and storage references and assign to state
-    const databaseRef = afs.collection('documentation').doc()
-    const docID = databaseRef.id
+    const docID = this.store.generateID()
     this.state = {
       formValues: { ...TEMPLATE.TESTING_VALUES, id: docID } as IHowtoFormInput,
       formSaved: false,
@@ -60,9 +59,16 @@ export class CreateHowto extends React.PureComponent<
     }
   }
 
+  get injected() {
+    return this.props as IInjectedProps
+  }
+  get store() {
+    return this.injected.howtoStore
+  }
+
   public onSubmit = async (formValues: IHowtoFormInput) => {
     console.log('submitting')
-    // this.injected.store
+    this.store.uploadHowTo(formValues, this.state._docID)
   }
 
   public validateTitle = async (value: any, meta?: FieldState) => {

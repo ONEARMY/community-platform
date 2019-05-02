@@ -15,7 +15,7 @@ export class Database {
   /****************************************************************************** */
 
   // get a group of docs. returns an observable, first pulling from local cache and then searching for updates
-  public static getCollection(path: string) {
+  public static getCollection(path: IDBEndpoints) {
     const collection$ = new Subject<any[]>()
     this._emitCollectionUpdates(path, collection$)
     return collection$
@@ -57,7 +57,7 @@ export class Database {
   }
 
   public static async queryCollection(
-    collectionPath: string,
+    collectionPath: IDBEndpoints,
     field: string,
     operation: firestore.WhereFilterOp,
     value: string,
@@ -74,14 +74,17 @@ export class Database {
   /****************************************************************************** */
 
   // instantiate a blank document to generate an id
-  public static generateId(collectionPath: string) {
+  public static generateDocId(collectionPath: IDBEndpoints) {
     return afs.collection(collectionPath).doc().id
   }
   public static generateTimestamp(date?: Date) {
     return firestore.Timestamp.fromDate(date ? date : new Date())
   }
 
-  public static async checkSlugUnique(collectionPath: string, slug: string) {
+  public static async checkSlugUnique(
+    collectionPath: IDBEndpoints,
+    slug: string,
+  ) {
     const matches = await this.queryCollection(
       collectionPath,
       'slug',
@@ -95,12 +98,12 @@ export class Database {
     }
   }
   // creates standard set of meta fields applied to all docs
-  public static generateDocMeta(collectionPath: string, docID?: string) {
+  public static generateDocMeta(collectionPath: IDBEndpoints, docID?: string) {
     const user = auth().currentUser
     const meta: IDbDoc = {
       _created: this.generateTimestamp(),
       _deleted: false,
-      _id: docID ? docID : this.generateId(collectionPath),
+      _id: docID ? docID : this.generateDocId(collectionPath),
       _modified: this.generateTimestamp(),
       _createdBy: user ? (user.displayName as string) : 'anonymous',
     }
@@ -173,3 +176,9 @@ export class Database {
     return Object.values(json)
   }
 }
+
+/****************************************************************************** *
+        Interfaces
+  /****************************************************************************** */
+
+export type IDBEndpoints = 'howtos' | 'users' | 'discussions' | 'tags'

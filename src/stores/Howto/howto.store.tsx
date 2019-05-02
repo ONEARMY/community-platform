@@ -17,7 +17,7 @@ export class HowtoStore {
   @action
   public async getDocList() {
     const ref = await afs
-      .collection('documentation')
+      .collection('howtos')
       .orderBy('_created', 'desc')
       .get()
 
@@ -26,7 +26,7 @@ export class HowtoStore {
   @action
   public async getDocBySlug(slug: string) {
     const ref = afs
-      .collection('documentation')
+      .collection('howtos')
       .where('slug', '==', slug)
       .limit(1)
     const collection = await ref.get()
@@ -40,10 +40,14 @@ export class HowtoStore {
 
   public isSlugUnique = async (slug: string) => {
     try {
-      await Database.checkSlugUnique('documentation', slug)
+      await Database.checkSlugUnique('howtos', slug)
     } catch (e) {
       return 'How-to titles must be unique, please try being more specific'
     }
+  }
+
+  public generateID = () => {
+    return Database.generateDocId('howtos')
   }
 
   public async uploadHowTo(values: IHowtoFormInput, id: string) {
@@ -69,15 +73,22 @@ export class HowtoStore {
   private async uploadStepImgs(steps: IHowtoStep[], id: string) {
     const firstStep = steps[0]
     const stepImages = firstStep.images as IConvertedFileMeta[]
-    const promises = stepImages.map(async img => {
-      const meta = await Storage.uploadFile(
-        `uploads/howTos/${id}`,
-        img.name,
-        img.photoData,
-      )
-      return meta
-    })
-    const imgMeta = await Promise.all(promises)
+    // NOTE - outer loop could be a map and done in parallel also
+    for (const step of steps) {
+      console.log('uploading step', step)
+      const promises = stepImages.map(async img => {
+        console.log('uploading image', img)
+        const meta = await Storage.uploadFile(
+          `uploads/howTos/${id}`,
+          img.name,
+          img.photoData,
+        )
+        return meta
+      })
+      console.log('running all promises')
+      const imgMeta = await Promise.all(promises)
+      console.log('imgMeta', imgMeta)
+    }
 
     // const promises = steps.map(step =>
     //   step.images.map(async img => {

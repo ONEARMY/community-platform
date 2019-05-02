@@ -5,7 +5,6 @@ import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
 import { IHowto, IHowtoFormInput } from 'src/models/howto.models'
 import TEMPLATE from './TutorialTemplate'
-import { stripSpecialCharacters } from 'src/utils/helpers'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
 import { SelectField } from 'src/components/Form/Select.field'
@@ -21,7 +20,6 @@ import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { FileInputField } from 'src/components/Form/FileInput.field'
 import posed, { PoseGroup } from 'react-pose'
 import { inject } from 'mobx-react'
-import { Database } from 'src/stores/database'
 
 interface IState {
   formValues: IHowtoFormInput
@@ -72,23 +70,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
   }
 
   public validateTitle = async (value: any, meta?: FieldState) => {
-    if (meta && (!meta.dirty && meta.valid)) {
-      return undefined
-    }
-    if (value) {
-      const error = this.store.isSlugUnique(stripSpecialCharacters(value))
-      return error
-    } else if ((meta && (meta.touched || meta.visited)) || value === '') {
-      return 'A title for your how-to is required'
-    }
-    return undefined
-  }
-
-  public validate = async (formValues: IHowtoFormInput) => {
-    // TODO: validate cover image exists
-    // if (this.state.formValues.cover_image_url === '') {
-    // alert('Please provide a cover image before saving your tutorial')
-    return Promise.resolve({})
+    this.store.validateTitle(value, meta)
   }
 
   public render() {
@@ -98,13 +80,11 @@ export class CreateHowto extends React.Component<IProps, IState> {
         <Form
           onSubmit={v => this.onSubmit(v as IHowtoFormInput)}
           initialValues={formValues}
-          validate={() => this.validate}
-          validateOnBlur
           mutators={{
             ...arrayMutators,
           }}
+          validateOnBlur
           render={({ handleSubmit, submitting, values, invalid, errors }) => {
-            const v = values as IHowto
             const disabled = invalid || submitting
             return (
               <form onSubmit={handleSubmit}>
@@ -121,17 +101,12 @@ export class CreateHowto extends React.Component<IProps, IState> {
                         component={InputField}
                         placeholder="Title of your How-to *"
                       />
-                      <Field
-                        name="tags"
-                        validateFields={[]}
-                        component={TagsSelectField}
-                      />
+                      <Field name="tags" component={TagsSelectField} />
                       <FlexContainer p={0}>
                         <Field
                           name="tutorial_time"
-                          // TODO - fix validation (#462)
-                          // validate={required}
-                          // validateFields={[]}
+                          validate={required}
+                          validateFields={[]}
                           options={TEMPLATE.TIME_OPTIONS}
                           component={SelectField}
                           placeholder="How much time? *"
@@ -139,9 +114,8 @@ export class CreateHowto extends React.Component<IProps, IState> {
                         />
                         <Field
                           name="difficulty_level"
-                          // TODO - fix validation (#462)
-                          // validate={required}
-                          // validateFields={[]}
+                          validate={required}
+                          validateFields={[]}
                           component={SelectField}
                           options={TEMPLATE.DIFFICULTY_OPTIONS}
                           placeholder="How hard is it? *"
@@ -161,9 +135,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
                     <BoxContainer p={0} width={[1, null, '380px']}>
                       <Field
                         name="cover_image"
-                        // TODO - fix validation (#462)
-                        // validate={required}
-                        // validateFields={[]}
+                        validate={required}
                         validateFields={[]}
                         component={ImageInputField}
                         text="Cover Image"

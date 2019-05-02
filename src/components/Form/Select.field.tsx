@@ -66,6 +66,8 @@ export const SelectField = ({ input, meta, ...rest }: ISelectFieldProps) => (
       onChange={v => {
         input.onChange(getValueFromSelect(v))
       }}
+      onBlur={input.onBlur}
+      onFocus={input.onFocus}
       value={getValueForSelect(rest.options, input.value)}
       {...defaultProps}
       {...rest}

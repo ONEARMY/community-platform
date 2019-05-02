@@ -5,6 +5,7 @@ import { Database } from 'src/stores/database'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { Storage } from '../storage'
+import { FieldState } from 'final-form'
 
 export class HowtoStore {
   // we have two property relating to docs that can be observed
@@ -13,6 +14,7 @@ export class HowtoStore {
   @observable
   public allHowtos: IHowto[] = []
 
+  // *** TODO - migrate these to standard database/common module.store methods (not call afs directly)
   // call getDocList to query 'Howtos' from db and map response to docs observable
   @action
   public async getDocList() {
@@ -44,6 +46,19 @@ export class HowtoStore {
     } catch (e) {
       return 'How-to titles must be unique, please try being more specific'
     }
+  }
+
+  public validateTitle = async (value: any, meta?: FieldState) => {
+    if (meta && (!meta.dirty && meta.valid)) {
+      return undefined
+    }
+    if (value) {
+      const error = this.isSlugUnique(stripSpecialCharacters(value))
+      return error
+    } else if ((meta && (meta.touched || meta.visited)) || value === '') {
+      return 'A title for your how-to is required'
+    }
+    return undefined
   }
 
   public generateID = () => {

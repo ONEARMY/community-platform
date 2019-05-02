@@ -65,9 +65,10 @@ export class HowtoList extends React.Component<IProps, any> {
                         <Text fontSize={1} mt={2} mb={3} color={'grey4'}>
                           by{' '}
                         </Text>
-                        {Object.keys(howto.tags).map(tag => {
-                          return <TagDisplay key={tag} tagKey={tag} />
-                        })}
+                        {howto.tags &&
+                          Object.keys(howto.tags).map(tag => {
+                            return <TagDisplay key={tag} tagKey={tag} />
+                          })}
                       </CardInfosContainer>
                     </Card>
                   </Box>

@@ -37,5 +37,6 @@ export interface IHowtoFormInput {
   files: IUploadedFileMeta[] | File[]
   steps: IHowToStepFormInput[]
   slug: string
-  tags: ISelectedTags
+  // note, tags will remain optional as if populated {} will be stripped by db (firestore)
+  tags?: ISelectedTags
 }

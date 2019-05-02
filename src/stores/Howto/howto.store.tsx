@@ -47,7 +47,7 @@ export class HowtoStore {
 
   public isSlugUnique = async (slug: string) => {
     try {
-      await Database.checkSlugUnique('howtos', slug)
+      await Database.checkSlugUnique('howtosV1', slug)
     } catch (e) {
       return 'How-to titles must be unique, please try being more specific'
     }
@@ -67,34 +67,34 @@ export class HowtoStore {
   }
 
   public generateID = () => {
-    return Database.generateDocId('howtos')
+    return Database.generateDocId('howtosV1')
   }
 
   public async uploadHowTo(values: IHowtoFormInput, id: string) {
-    const slug = stripSpecialCharacters(values.tutorial_title)
-    // present uploading modal
-
+    values.slug = stripSpecialCharacters(values.tutorial_title)
     try {
       // upload images
-      console.log('uploading cover images', values.cover_image)
       values.cover_image = await this.uploadCoverImg(values.cover_image[0], id)
       this.updateUploadStatus('Cover')
-      console.log('cover image uploaded')
       values.steps = await this.uploadStepImgs(values.steps, id)
       this.updateUploadStatus('Step Images')
-      console.log('step images uploaded')
       // upload files
 
       this.updateUploadStatus('Files')
       // populate DB
-      this.updateDatabase(values, id)
+      const meta = Database.generateDocMeta('howtosV1', id)
+      // TODO - tighten typings (will require additional types for pre/post image compression data)
+      const howTo: IHowto = { ...values, ...meta } as IHowto
+      this.updateDatabase(howTo, id)
       this.updateUploadStatus('Database')
       // complete
       this.updateUploadStatus('Complete')
       console.log('post added')
+      this.activeHowto = howTo
+      return howTo
     } catch (error) {
       console.log('error', error)
-      return error
+      throw new Error(error.message)
     }
   }
 
@@ -104,10 +104,8 @@ export class HowtoStore {
 
   private async uploadStepImgs(steps: IHowtoStep[], id: string) {
     // NOTE - outer loop could be a map and done in parallel but for loop easier to manage
-    console.log('uploading steps', steps)
     const stepsWithImgMeta: IHowtoStep[] = []
     for (const step of steps) {
-      console.log('uploading step', step)
       const stepImages = step.images as IConvertedFileMeta[]
       const promises = stepImages.map(async img => {
         const meta = await Storage.uploadFile(
@@ -121,36 +119,13 @@ export class HowtoStore {
       step.images = imgMeta
       stepsWithImgMeta.push(step)
     }
-    console.log('steps', steps)
     return stepsWithImgMeta
   }
 
-  // TODO - tighten typings (will require additional types for pre/post image compression data)
-  private updateDatabase(values, id: string) {
-    const meta = Database.generateDocMeta('howtos', id)
-    const howTo: IHowto = { ...values, ...meta }
-    return Database.setDoc(`howtos/${values._id}`, howTo)
+  private updateDatabase(howTo: IHowto, id: string) {
+    return Database.setDoc(`howtos/${id}`, howTo)
   }
 }
-
-//
-
-// convert data to correct types and populate metadata
-// const values: IHowto = {
-//   ...formValues,
-//   slug,
-//   cover_image: formValues.cover_image as IFirebaseUploadInfo,
-// }
-// try {
-//   await afs
-//     .collection('documentation')
-//     .doc(formValues.id)
-//     .set(values)
-//   this.setState({ formSaved: true })
-//   this.props.history.push('/how-to/' + slug)
-// } catch (error) {
-//   console.log('error while saving the tutorial')
-// }
 
 interface IHowToUploadStatus {
   Cover: boolean

@@ -13,7 +13,6 @@ interface IInjected {
 export class HowToSubmitStatus extends React.Component<IProps> {
   constructor(props: IProps) {
     super(props)
-    console.log('props', props)
   }
 
   get injected() {

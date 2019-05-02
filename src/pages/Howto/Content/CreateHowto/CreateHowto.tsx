@@ -67,7 +67,8 @@ export class CreateHowto extends React.Component<IProps, IState> {
   }
 
   public onSubmit = async (formValues: IHowtoFormInput) => {
-    await this.store.uploadHowTo(formValues, this.state._docID)
+    const values = await this.store.uploadHowTo(formValues, this.state._docID)
+    this.props.history.push('/how-to/' + values.slug)
   }
 
   public validateTitle = async (value: any, meta?: FieldState) => {

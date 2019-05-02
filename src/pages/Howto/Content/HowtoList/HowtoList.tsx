@@ -52,27 +52,18 @@ export class HowtoList extends React.Component<IProps, any> {
                 {allHowtos.map((howto: IHowto, index: number) => (
                   <Box m={2}>
                     <Card borderRadius={1} width={[380]} bg={'white'}>
-                      <CardImage
-                        src={
-                          howto.cover_image
-                            ? howto.cover_image.downloadUrl
-                            : howto.cover_image_url
-                        }
-                      />
+                      <CardImage src={howto.cover_image.downloadUrl} />
                       <Box width={'45px'} bg="white" mt={'-24px'} ml={'29px'}>
                         <Image src={PpLogo} />
                       </Box>
                       <CardInfosContainer px={4} pb={3}>
                         <Link to={`/how-to/${encodeURIComponent(howto.slug)}`}>
                           <Heading small bold>
-                            {howto.tutorial_title}
+                            {howto.title}
                           </Heading>
                         </Link>
                         <Text fontSize={1} mt={2} mb={3} color={'grey4'}>
                           by{' '}
-                          <Text inline color={'black'}>
-                            {howto.workspace_name}
-                          </Text>
                         </Text>
                         {Object.keys(howto.tags).map(tag => {
                           return <TagDisplay key={tag} tagKey={tag} />

@@ -80,7 +80,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
 
   // automatically generate the slug when the title changes
   private calculatedFields = createDecorator({
-    field: 'tutorial_title',
+    field: 'title',
     updates: {
       slug: title => stripSpecialCharacters(title).toLowerCase(),
     },
@@ -115,7 +115,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
                         flexDirection="column"
                       >
                         <Field
-                          name="tutorial_title"
+                          name="title"
                           validateFields={[]}
                           validate={value => this.validateTitle(value)}
                           component={InputField}
@@ -124,7 +124,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
                         <Field name="tags" component={TagsSelectField} />
                         <FlexContainer p={0}>
                           <Field
-                            name="tutorial_time"
+                            name="time"
                             validate={required}
                             validateFields={[]}
                             options={TEMPLATE.TIME_OPTIONS}
@@ -143,7 +143,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
                           />
                         </FlexContainer>
                         <Field
-                          name="tutorial_description"
+                          name="description"
                           validate={required}
                           validateFields={[]}
                           component={TextAreaField}
@@ -164,10 +164,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
                           component={ImageInputField}
                           text="Cover Image"
                         />
-                        <Field
-                          name="tutorial_files"
-                          component={FileInputField}
-                        />
+                        <Field name="files" component={FileInputField} />
                       </BoxContainer>
                     </FlexContainer>
                   </BoxContainer>

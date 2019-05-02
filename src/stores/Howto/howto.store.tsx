@@ -89,7 +89,7 @@ export class HowtoStore {
       this.updateUploadStatus('Step Images')
       // upload files
       const processedFiles = await this.uploadBatchHowToFiles(
-        values.tutorial_files as IConvertedFileMeta[],
+        values.files as IConvertedFileMeta[],
         id,
       )
       this.updateUploadStatus('Files')
@@ -100,7 +100,7 @@ export class HowtoStore {
         ...values,
         cover_image: processedCover,
         steps: processedSteps,
-        tutorial_files: processedFiles,
+        files: processedFiles,
         ...meta,
       }
       console.log('populating database', howTo)

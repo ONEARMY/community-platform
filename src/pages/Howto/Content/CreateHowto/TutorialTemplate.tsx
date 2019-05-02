@@ -23,15 +23,15 @@ const INITIAL_VALUES: Partial<IHowtoFormInput> = {
     },
   ],
   tags: {},
-  tutorial_files: [],
+  files: [],
 }
 
 const TESTING_VALUES: Partial<IHowtoFormInput> = {
-  tutorial_title: `Test-${new Date().toString()}`,
-  tutorial_description: 'example description',
-  tutorial_time: '1-2 weeks',
+  title: `Test-${new Date().toString()}`,
+  description: 'example description',
+  time: '1-2 weeks',
   difficulty_level: 'Hard',
-  tutorial_files: [],
+  files: [],
   steps: [
     {
       title: 'Step 1',

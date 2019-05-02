@@ -48,17 +48,6 @@ export class Howto extends React.Component<
       isLoading: false,
     })
   }
-  // use firebase to query tutorials and return doc that matches the given slug
-  public async getTutorialBySlug(slug: string) {
-    const ref = afs
-      .collection('documentation')
-      .where('slug', '==', slug)
-      .limit(1)
-    const collection = await ref.get()
-    return collection.docs.length > 0
-      ? (collection.docs[0].data() as IHowto)
-      : undefined
-  }
 
   public render() {
     const { howto, isLoading } = this.state

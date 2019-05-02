@@ -11,16 +11,14 @@ const exampleUploadImage: IFirebaseUploadInfo = {
   updated: '',
 }
 
-export const TUTORIALS_MOCK: IHowto[] = [
+export const HOWTO_MOCK: IHowto[] = [
   {
     cover_image: exampleUploadImage,
-    tutorial_title: 'Tutorial 1',
-    workspace_name: 'Eindhoven Mate',
-    slug: 'tutorial-1',
-    tutorial_description: 'this is a great description 1',
-    tutorial_cost: 20,
+    title: 'How-To 1',
+    slug: 'how-to-1',
+    description: 'this is a great description 1',
     difficulty_level: 'Hard',
-    tutorial_time: '30 hours',
+    time: '30 hours',
     steps: [
       {
         images: [exampleUploadImage],
@@ -34,8 +32,7 @@ export const TUTORIALS_MOCK: IHowto[] = [
       },
     ],
     tags: {},
-    tutorial_extern_file_url: '',
-    tutorial_files: [],
+    files: [],
     _id: 'howTo1',
     _deleted: false,
     _createdBy: '123',
@@ -44,13 +41,11 @@ export const TUTORIALS_MOCK: IHowto[] = [
   },
   {
     cover_image: exampleUploadImage,
-    tutorial_title: 'Tutorial 2',
-    workspace_name: 'Eindhoven Mate',
-    slug: 'tutorial-2',
-    tutorial_description: 'this is a great description 2',
-    tutorial_cost: 20,
+    title: 'How-to 2',
+    slug: 'how-to-2',
+    description: 'this is a great description 2',
     difficulty_level: 'Hard',
-    tutorial_time: '30 hours',
+    time: '30 hours',
     steps: [
       {
         images: [exampleUploadImage, exampleUploadImage],
@@ -64,8 +59,7 @@ export const TUTORIALS_MOCK: IHowto[] = [
       },
     ],
     tags: {},
-    tutorial_extern_file_url: '',
-    tutorial_files: [],
+    files: [],
     _id: 'howTo2',
     _deleted: false,
     _createdBy: '123',
@@ -74,13 +68,11 @@ export const TUTORIALS_MOCK: IHowto[] = [
   },
   {
     cover_image: exampleUploadImage,
-    tutorial_title: 'Tutorial 3',
-    workspace_name: 'Eindhoven Mate',
-    slug: 'tutorial-3',
-    tutorial_description: 'this is a great description 3',
-    tutorial_cost: 20,
+    title: 'How-to 3',
+    slug: 'how-to-3',
+    description: 'this is a great description 3',
     difficulty_level: 'Hard',
-    tutorial_time: '30 days',
+    time: '30 days',
     steps: [
       {
         images: [exampleUploadImage],
@@ -94,8 +86,7 @@ export const TUTORIALS_MOCK: IHowto[] = [
       },
     ],
     tags: {},
-    tutorial_extern_file_url: '',
-    tutorial_files: [],
+    files: [],
     _id: 'howTo3',
     _deleted: false,
     _createdBy: '123',

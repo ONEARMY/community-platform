@@ -20,7 +20,7 @@ const InnerContainer = styled.div<InnerContainerProps>`
 `
 
 const PageContainer = (props: FlexProps) => (
-  <Flex {...props}>
+  <Flex {...props} bg={theme.colors.background}>
     <InnerContainer>{props.children}</InnerContainer>
   </Flex>
 )

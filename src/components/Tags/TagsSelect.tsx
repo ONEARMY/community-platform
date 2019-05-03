@@ -4,7 +4,8 @@ import { TagsStore } from 'src/stores/Tags/tags.store'
 import { ISelectedTags, ITag } from 'src/models/tags.model'
 import { FieldRenderProps } from 'react-final-form'
 import Select from 'react-select'
-import { Styles } from 'react-select/lib/styles'
+import { SelectStyles } from '../Form/Select.field'
+import { FieldContainer } from '../Form/elements'
 
 // we include props from react-final-form fields so it can be used as a custom field component
 interface IProps extends FieldRenderProps {
@@ -17,15 +18,6 @@ interface IState {
 }
 interface InjectedProps extends IProps {
   tagsStore: TagsStore
-}
-
-// add optional style overrides here (see https://react-select.com/styles)
-// NOTE, hardcoded margin bottom here as could not find way to pass through styled system
-const customStyles: Partial<Styles> = {
-  container: (provided, state) => ({
-    ...provided,
-    marginBottom: '16px',
-  }),
 }
 
 @inject('tagsStore')
@@ -64,15 +56,17 @@ class TagsSelect extends React.Component<IProps, IState> {
   public render() {
     const { tags } = this.injectedProps.tagsStore
     return (
-      <Select
-        styles={customStyles}
-        isMulti
-        options={tags}
-        getOptionLabel={(tag: ITag) => tag.label}
-        getOptionValue={(tag: ITag) => tag._key}
-        onChange={values => this.onSelectedTagsChanged(values as ITag[])}
-        placeholder="Select tags"
-      />
+      <FieldContainer>
+        <Select
+          styles={SelectStyles}
+          isMulti
+          options={tags}
+          getOptionLabel={(tag: ITag) => tag.label}
+          getOptionValue={(tag: ITag) => tag._key}
+          onChange={values => this.onSelectedTagsChanged(values as ITag[])}
+          placeholder="Select tags"
+        />
+      </FieldContainer>
     )
   }
 

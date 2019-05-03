@@ -30,6 +30,9 @@ export const TextAreaDisabled = styled.div`
   border: none;
 `
 
-export const SelectStyled = styled.select`
-  ${inputStyles}
+// generic container used for some custom component fields
+export const FieldContainer = styled.div`
+  ${inputStyles};
+  border: none;
+  padding: 0;
 `

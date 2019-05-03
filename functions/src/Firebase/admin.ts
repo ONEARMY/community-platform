@@ -9,12 +9,16 @@ const FIREBASE_CONFIG = JSON.parse(
 
 import { SERVICE_ACCOUNT_CONFIG } from '../config/config'
 const serviceAccount = SERVICE_ACCOUNT_CONFIG
+
+const cert = {
+  clientEmail: serviceAccount.client_email,
+  privateKey: serviceAccount.private_key,
+  projectId: serviceAccount.project_id,
+}
+console.log('initialising app', cert, FIREBASE_CONFIG.databaseURL)
+
 admin.initializeApp({
-  credential: admin.credential.cert({
-    clientEmail: serviceAccount.client_email,
-    privateKey: serviceAccount.private_key,
-    projectId: serviceAccount.project_id,
-  }),
+  credential: admin.credential.cert(cert),
   databaseURL: FIREBASE_CONFIG.databaseURL,
 })
 

@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Card, Image, Box, Flex } from 'rebass'
 import { Flex as FlexGrid } from '@rebass/grid'
+// TODO add loader (and remove this material-ui dep)
 import LinearProgress from '@material-ui/core/LinearProgress'
 import Text from 'src/components/Text'
 import Heading from 'src/components/Heading'

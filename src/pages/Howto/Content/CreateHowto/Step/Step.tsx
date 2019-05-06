@@ -64,15 +64,15 @@ class Step extends Component<IProps, IState> {
         </FlexContainer>
 
         <FlexContainer p={0} flexWrap="wrap">
+          <Field
+            name={`${step}.title`}
+            component={InputField}
+            placeholder={`Title of Step ${index + 1}`}
+            validate={required}
+            validateFields={[]}
+          />
           {/* Left */}
           <FlexContainer p={0} pr={2} flexDirection="column" flex={1}>
-            <Field
-              name={`${step}.title`}
-              component={InputField}
-              placeholder={`Title of Step ${index + 1}`}
-              validate={required}
-              validateFields={[]}
-            />
             <Field
               name={`${step}.text`}
               placeholder="Describe this step"

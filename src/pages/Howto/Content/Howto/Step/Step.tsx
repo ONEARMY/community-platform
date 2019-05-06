@@ -1,10 +1,10 @@
 import React from 'react'
 import Linkify from 'react-linkify'
 import { IHowtoStep } from 'src/models/howto.models'
-import { IFirebaseUploadInfo } from '../../../../../components/FirebaseFileUploader/FirebaseFileUploader'
 import { Box, Image } from 'rebass'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
+import { IUploadedFileMeta } from 'src/stores/storage'
 
 interface IProps {
   step: IHowtoStep
@@ -12,7 +12,7 @@ interface IProps {
 }
 
 export default class Step extends React.PureComponent<IProps> {
-  renderImages = (images: IFirebaseUploadInfo[]) =>
+  renderImages = (images: IUploadedFileMeta[]) =>
     images.map((image: any, index: number) => (
       <Image src={image.downloadUrl} key={index} />
     ))
@@ -29,7 +29,7 @@ export default class Step extends React.PureComponent<IProps> {
         <Text regular my={4}>
           <Linkify>{this.props.step.text}</Linkify>
         </Text>
-        {this.renderImages(this.props.step.images)}
+        {this.renderImages(this.props.step.images as IUploadedFileMeta[])}
       </Box>
     )
   }

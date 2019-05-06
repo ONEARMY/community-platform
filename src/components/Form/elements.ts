@@ -8,12 +8,16 @@ const inputStyles = css`
   width: 100%;
   margin-bottom: 16px;
   padding: 10px;
+  box-sizing: border-box;
+  &:disabled {
+    border: none;
+    color: ${theme.colors.black};
+  }
 `
 
 export const Input = styled.input`
   ${inputStyles};
   height: 45px;
-  box-sizing: border-box;
 `
 
 export const TextAreaStyled = styled.textarea`
@@ -21,7 +25,14 @@ export const TextAreaStyled = styled.textarea`
   height: 150px;
   font-family: inherit;
 `
+export const TextAreaDisabled = styled.div`
+  ${inputStyles};
+  border: none;
+`
 
-export const SelectStyled = styled.select`
-  ${inputStyles}
+// generic container used for some custom component fields
+export const FieldContainer = styled.div`
+  ${inputStyles};
+  border: none;
+  padding: 0;
 `

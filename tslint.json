@@ -22,7 +22,8 @@
     "member-access": false,
     "array-type": false,
     "no-reference": false,
-    "member-ordering": false
+    "member-ordering": false,
+    "no-empty-interface": false
   },
   "defaultSeverity": "warning"
 }

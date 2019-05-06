@@ -132,7 +132,9 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
             />
           </div>
         </Button>
-        <FlexContainer mt={3}>{this.renderProgressBar()}</FlexContainer>
+        <FlexContainer p={0} mt={3}>
+          {this.renderProgressBar()}
+        </FlexContainer>
       </>
     )
   }

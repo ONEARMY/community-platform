@@ -62,7 +62,10 @@ export class Routes extends React.Component<any, IState> {
             <div
               style={{
                 minHeight: '100vh',
+                maxWidth: '100vw',
                 display: 'flex',
+                overflowY: 'auto',
+                overflowX: 'hidden',
                 flexDirection: 'column',
               }}
             >

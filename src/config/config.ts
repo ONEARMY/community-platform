@@ -84,6 +84,8 @@ export const FIREBASE_CONFIG = firebaseConfig
 export const GOOGLE_ANALYTICS_CONFIG = analyticsConfig
 export const ALGOLIA_CONFIG = algoliaConfig
 export const SENTRY_CONFIG = sentryConfig
+// tslint:disable no-var-requires
+export const VERSION = require('../../package.json').version
 
 /*********************************************************************************************** /
                                         Utils

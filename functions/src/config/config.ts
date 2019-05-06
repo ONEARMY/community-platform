@@ -7,6 +7,9 @@ import { config } from 'firebase-functions'
 const c = config() as configVars
 // strip additional character escapes (\\n -> \n)
 c.service.private_key = c.service.private_key.replace(/\\n/g, '\n')
+export const FIREBASE_CONFIG: IFirebaseConfig = JSON.parse(
+  process.env.FIREBASE_CONFIG,
+)
 export const SERVICE_ACCOUNT_CONFIG = c.service
 export const ANALYTICS_CONFIG = c.analytics
 /************** Interfaces ************** */
@@ -30,6 +33,11 @@ interface IAnalytics {
 interface configVars {
   service: IServiceAccount
   analytics: IAnalytics
+}
+interface IFirebaseConfig {
+  databaseURL: string
+  storageBucket: string
+  projectId: string
 }
 
 // if passing complex config variables, may want to

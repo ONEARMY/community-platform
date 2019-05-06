@@ -1,5 +1,5 @@
 import { BehaviorSubject, Subscription } from 'rxjs'
-import { Database } from '../database'
+import { Database, IDBEndpoints } from '../database'
 
 /*  The module store contains common methods used across modules that access specfic
     collections on the database
@@ -13,14 +13,14 @@ export class ModuleStore {
   private activeCollectionSubscription = new Subscription()
 
   // when a module store is initiated automatically load the docs in the collection
-  constructor(public basePath: string) {
+  constructor(public basePath: IDBEndpoints) {
     this.getCollection(basePath)
   }
 
   // when accessing a collection want to call the database getCollection method which
   // efficiently checks the cache first and emits any subsequent updates
   // we will stop subscribing
-  public getCollection(path: string) {
+  public getCollection(path: IDBEndpoints) {
     this.allDocs$.next([])
     this.activeCollectionSubscription.unsubscribe()
     this.activeCollectionSubscription = Database.getCollection(path).subscribe(

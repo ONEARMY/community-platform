@@ -7,7 +7,6 @@ import { Button } from '../Button'
 import { UPPY_CONFIG } from './UppyConfig'
 import { FlexContainer } from '../Layout/FlexContainer'
 import theme from 'src/themes/styled.theme'
-import Text from '../Text'
 import { FileInfo } from '../FileInfo/FileInfo'
 
 interface IUppyFiles {
@@ -27,6 +26,10 @@ export class FileInput extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = { open: false }
+  }
+
+  componentWillUnmount() {
+    this.uppy.close()
   }
   get files() {
     const files = this.uppy.getState().files as IUppyFiles
@@ -69,9 +72,6 @@ export class FileInput extends React.Component<IProps, IState> {
         }}
       >
         <FlexContainer flexDirection="column" justifyContent="center">
-          <Text regular textAlign="center" mb={2}>
-            Additional Files
-          </Text>
           {showFileList ? (
             <>
               <Button
@@ -97,6 +97,7 @@ export class FileInput extends React.Component<IProps, IState> {
             proudlyDisplayPoweredByUppy={false}
             uppy={this.uppy}
             open={this.state.open}
+            closeModalOnClickOutside
             onRequestClose={() => this.toggleModal()}
           />
         </FlexContainer>

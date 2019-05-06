@@ -165,7 +165,6 @@ export class CreateHowto extends React.Component<IProps, IState> {
                           validate={required}
                           validateFields={[]}
                           component={ImageInputField}
-                          text="Cover Image"
                         />
                         <Field name="files" component={FileInputField} />
                       </BoxContainer>

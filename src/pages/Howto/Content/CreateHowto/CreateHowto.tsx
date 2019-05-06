@@ -24,6 +24,7 @@ import { inject } from 'mobx-react'
 import { Modal } from 'src/components/Modal/Modal'
 import { HowToSubmitStatus } from './SubmitStatus'
 import { stripSpecialCharacters } from 'src/utils/helpers'
+import Text from 'src/components/Text'
 
 interface IState {
   formValues: IHowtoFormInput
@@ -88,7 +89,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
   public render() {
     const { formValues } = this.state
     return (
-      <>
+      <FlexContainer m={'0'} p={'0'} bg={'inherit'}>
         <Form
           onSubmit={v => this.onSubmit(v as IHowtoFormInput)}
           initialValues={formValues}
@@ -100,12 +101,14 @@ export class CreateHowto extends React.Component<IProps, IState> {
           render={({ submitting, values, invalid, errors, handleSubmit }) => {
             const disabled = invalid || submitting
             return (
-              <>
+              <BoxContainer bg="inherit" p={'0'}>
                 {/* using prevent default as sometimes submit triggered unintentionally */}
                 <form onSubmit={e => e.preventDefault()}>
                   {/* How To Info */}
-                  <BoxContainer bg="white" mb={3}>
-                    <Heading medium>Create your How-To</Heading>
+                  <BoxContainer p={3}>
+                    <Heading small bold>
+                      Create your How-To
+                    </Heading>
                     <FlexContainer p={0} flexWrap="wrap">
                       {/* Left Side */}
                       <FlexContainer
@@ -250,11 +253,29 @@ export class CreateHowto extends React.Component<IProps, IState> {
                     </>
                   </Modal>
                 )}
-              </>
+              </BoxContainer>
             )
           }}
         />
-      </>
+        <BoxContainer bg="white" width={'34%'} height={'100%'} ml={2} p={3}>
+          <Heading small bold>
+            How-to Posting Guidelines
+          </Heading>
+          <Text my={3}> 1. You think water moves fast ?</Text>
+          <Text my={3}> 2. You should see ice.</Text>
+          <Text my={3}> 3. It moves like it has a mind.</Text>
+          <Text my={3}>
+            {' '}
+            4. Like it knows it killed the world once and got a taste for
+            murder.
+          </Text>
+          <Text my={3}> 5. After the avalanche, it took us a week.</Text>
+          <Text small>
+            If unsure please read our posting policy as well as our code of
+            conduct.
+          </Text>
+        </BoxContainer>
+      </FlexContainer>
     )
   }
 }

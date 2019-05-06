@@ -44,7 +44,7 @@ class Step extends Component<IProps, IState> {
     const { step, index } = this.props
     return (
       // NOTE - animation parent container in CreateHowTo
-      <BoxContainer mb={3} key={index}>
+      <BoxContainer mt={3} p={3} key={index}>
         <FlexContainer p={0}>
           <Heading medium flex={1}>
             Step {index + 1}

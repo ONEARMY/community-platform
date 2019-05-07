@@ -65,6 +65,9 @@ export class HowtoList extends React.Component<IProps, any> {
 
                           <Text fontSize={1} mt={2} mb={3} color={'grey4'}>
                             by{' '}
+                            <Text inline color={'black'}>
+                              {howto._createdBy}
+                            </Text>
                           </Text>
                           {howto.tags &&
                             Object.keys(howto.tags).map(tag => {

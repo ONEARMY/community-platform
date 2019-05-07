@@ -30,8 +30,12 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
       <Flex id="description">
         <Box width={[1, 1 / 2]}>
           <Text fontSize={1} mt={2} mb={3} color={'grey2'} p={1}>
-            by&nbsp; &nbsp;|&nbsp;
-            <Text inline color={'black'}>
+            by&nbsp;
+            <Text inline bold color={'black'}>
+              {howto._createdBy}
+            </Text>
+            &nbsp;|&nbsp;
+            <Text inline color={'darkgrey'}>
               {/* TODO : Use proper date  */}4 days ago
             </Text>
           </Text>

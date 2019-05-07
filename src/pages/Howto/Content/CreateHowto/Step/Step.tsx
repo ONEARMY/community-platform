@@ -48,7 +48,7 @@ class Step extends Component<IProps, IState> {
             Step {index + 1}
           </Heading>
           {index >= 1 && (
-            <Button icon="close" onClick={() => this.toggleDeleteModal()} />
+            <Button icon="delete" onClick={() => this.toggleDeleteModal()} />
           )}
           {this.state.showDeleteModal && (
             <Modal onDidDismiss={() => this.toggleDeleteModal()}>

@@ -6,6 +6,7 @@ import { FlexContainer } from '../Layout/FlexContainer'
 import Lightbox from 'react-image-lightbox'
 import 'react-image-lightbox/style.css'
 import Text from '../Text'
+import { ImageConverter } from './ImageConverter'
 
 /*
     This component takes multiple imageusing filepicker and resized clientside
@@ -29,8 +30,10 @@ export interface IConvertedFileMeta {
 }
 
 interface IState {
+  inputFiles: File[]
   convertedFiles: IConvertedFileMeta[]
   openLightbox?: boolean
+  lightboxImg?: IConvertedFileMeta
 }
 
 export class ImageInput extends React.Component<IProps, IState> {
@@ -38,31 +41,24 @@ export class ImageInput extends React.Component<IProps, IState> {
 
   constructor(props: IProps) {
     super(props)
-    this.state = { convertedFiles: [] }
+    this.state = { inputFiles: [], convertedFiles: [] }
   }
   get inputFiles() {
     const filesRef = this.fileInputRef.current as HTMLInputElement
-    return filesRef.files
+    const files = filesRef.files
+    return files ? Array.from(files) : []
   }
 
   // on mount add listener to automatically convert images on file pick
-  // componentDidMount() {
-  //   const inputRef = this.fileInputRef.current as HTMLInputElement
-  //   inputRef.addEventListener(
-  //     'change',
-  //     e => {
-  //       if (this.inputFiles) {
-  //         this.compressFiles(this.inputFiles)
-  //       }
-  //     },
-  //     false,
-  //   )
-  // }
-  componentWillUnmount() {
-    // Revoke the object URL to free up memory
-    this.state.convertedFiles.forEach(file => {
-      URL.revokeObjectURL(file.objectUrl)
-    })
+  componentDidMount() {
+    const inputRef = this.fileInputRef.current as HTMLInputElement
+    inputRef.addEventListener(
+      'change',
+      e => {
+        this.setState({ inputFiles: this.inputFiles })
+      },
+      false,
+    )
   }
 
   public triggerCallback() {
@@ -76,10 +72,25 @@ export class ImageInput extends React.Component<IProps, IState> {
     inputRef.click()
   }
 
+  public handleConvertedFileChange(file: IConvertedFileMeta, index: number) {
+    const { convertedFiles } = this.state
+    convertedFiles[index] = file
+    this.setState({ convertedFiles })
+    this.triggerCallback()
+  }
+
+  public showImgLightbox(file: IConvertedFileMeta) {
+    this.setState({
+      openLightbox: true,
+      lightboxImg: file,
+    })
+  }
+
   render() {
-    const { convertedFiles, openLightbox } = this.state
+    const { inputFiles, openLightbox, lightboxImg } = this.state
     const { text } = this.props
-    const imgPreviewMode = convertedFiles[0] ? true : false
+    // if at least one image present, hide the 'choose image' button and replace with smaller button
+    const imgPreviewMode = inputFiles.length > 0
     return (
       <BoxContainer width="380px" p={0}>
         <>
@@ -100,7 +111,7 @@ export class ImageInput extends React.Component<IProps, IState> {
               onClick={() => this.triggerFileUploaderClick()}
               icon="image"
             >
-              Choose Image
+              Choose Images
             </Button>
             <input
               type="file"
@@ -111,13 +122,30 @@ export class ImageInput extends React.Component<IProps, IState> {
               style={{ display: 'none' }}
             />
           </div>
-          {convertedFiles.map(file => {
-            return <div key={file.name}>Placeholder</div>
+          {inputFiles.map((file, index) => {
+            return (
+              <ImageConverter
+                key={file.name}
+                file={file}
+                onImgConverted={meta =>
+                  this.handleConvertedFileChange(meta, index)
+                }
+                onImgClicked={meta => this.showImgLightbox(meta)}
+              />
+            )
           })}
+          {imgPreviewMode && (
+            <Button
+              onClick={() => this.triggerFileUploaderClick()}
+              ml="auto"
+              icon="image"
+              variant="outline"
+            />
+          )}
 
           {openLightbox && (
             <Lightbox
-              mainSrc={convertedFiles[0].objectUrl}
+              mainSrc={lightboxImg!.objectUrl}
               onCloseRequest={() => this.setState({ openLightbox: false })}
             />
           )}
@@ -141,12 +169,3 @@ export const bytesToSize = (bytes: number) => {
   const size = (bytes / Math.pow(1024, i)).toPrecision(3) + ' ' + sizes[i]
   return size
 }
-
-/************************************************************************************
- *    Interfaces
- *
- *************************************************************************************/
-
-type imageFormats = 'image/jpeg' | 'image/jpg' | 'image/gif' | 'image/png'
-// NOTE - gifs will lose animation and png will lost transparency
-// Additional types: image/bmp, image/tiff, image/x-icon,  image/svg+xml, image/webp, image/xxx

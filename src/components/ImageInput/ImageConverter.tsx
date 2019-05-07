@@ -7,7 +7,8 @@ import Text from '../Text'
 
 interface IProps {
   file: File
-  onChange: (meta: IConvertedFileMeta) => void
+  onImgConverted: (meta: IConvertedFileMeta) => void
+  onImgClicked: (meta: IConvertedFileMeta) => void
 }
 interface IState {
   imageQuality: ImageQualities
@@ -23,6 +24,7 @@ const imageSizes = {
 }
 
 export class ImageConverter extends React.Component<IProps, IState> {
+  public static defaultProps: Partial<IProps>
   private compressionOptions = {
     quality: 0.75,
     maxWidth: imageSizes.normal,
@@ -34,22 +36,35 @@ export class ImageConverter extends React.Component<IProps, IState> {
     this.state = { imageQuality: 'normal' }
   }
 
+  componentDidMount() {
+    // call on mount to trigger initial conversion when converter created
+    this.setImageQuality('normal')
+  }
+
+  componentWillUnmount() {
+    // Revoke the object URL to free up memory
+    if (this.state.convertedFile) {
+      URL.revokeObjectURL(this.state.convertedFile.objectUrl)
+    }
+  }
+
   async setImageQuality(quality: ImageQualities) {
     this.setState({
       imageQuality: quality,
     })
     this.compressionOptions.maxWidth = imageSizes[quality]
     this.compress = new clientCompress(this.compressionOptions)
-    await this.compressFile(this.props.file)
+    await this.compressFiles(this.props.file)
   }
 
-  async compressFile(file: File) {
-    const conversion: ICompressedOutput = await this.compress.compress(file)
-    const convertedMeta = this._generateFileMeta(conversion)
+  async compressFiles(file: File) {
+    // by default compress takes an array and gives back an array. We only want to handle a single image
+    const conversion: ICompressedOutput[] = await this.compress.compress([file])
+    const convertedMeta = this._generateFileMeta(conversion[0])
     this.setState({
       convertedFile: convertedMeta,
     })
-    this.props.onChange(convertedMeta)
+    this.props.onImgConverted(convertedMeta)
   }
 
   private _generateFileMeta(c: ICompressedOutput) {
@@ -81,7 +96,7 @@ export class ImageConverter extends React.Component<IProps, IState> {
             border: '1px solid #dddddd',
           }}
           id="preview"
-          onClick={() => this.setState({ openLightbox: true })}
+          onClick={() => this.props.onImgClicked(convertedFile)}
         />
         <div>
           <FlexContainer p={0} bg="none" mt={2} mb={2}>
@@ -95,12 +110,6 @@ export class ImageConverter extends React.Component<IProps, IState> {
                   {quality}
                 </Button>
               ))}
-            {/* <Button
-          onClick={() => this.triggerFileUploaderClick()}
-          ml="auto"
-          icon="image"
-          variant="outline"
-        /> */}
           </FlexContainer>
           <div>
             {convertedFile.startSize} -> {convertedFile.endSize}
@@ -110,6 +119,9 @@ export class ImageConverter extends React.Component<IProps, IState> {
       </div>
     ) : null
   }
+}
+ImageConverter.defaultProps = {
+  onImgClicked: () => null,
 }
 
 /************************************************************************************
@@ -148,3 +160,7 @@ interface ICompressedInfo {
   elapsedTimeInSeconds: number
   endType: 'image/jpeg'
 }
+
+type imageFormats = 'image/jpeg' | 'image/jpg' | 'image/gif' | 'image/png'
+// NOTE - gifs will lose animation and png will lost transparency
+// Additional types: image/bmp, image/tiff, image/x-icon,  image/svg+xml, image/webp, image/xxx

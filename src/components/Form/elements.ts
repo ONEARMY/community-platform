@@ -4,7 +4,7 @@ import theme from 'src/themes/styled.theme'
 const inputStyles = css`
   border: 1px solid ${theme.colors.black};
   border-radius: 4px;
-  font-size: 1.1em;
+  font-size: ${theme.fontSizes[2] + 'px'};
   background: white;
   width: 100%;
   margin-bottom: 16px;

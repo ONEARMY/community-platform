@@ -4,6 +4,7 @@ import { IFieldProps } from './Fields'
 import { Styles } from 'react-select/lib/styles'
 import { Props as SelectProps } from 'react-select/lib/Select'
 import { FieldContainer } from './elements'
+import theme from 'src/themes/styled.theme'
 
 interface ISelectOption {
   value: string
@@ -20,11 +21,11 @@ interface ISelectFieldProps extends IFieldProps, SelectProps {
 export const SelectStyles: Partial<Styles> = {
   container: (provided, state) => ({
     ...provided,
+    fontSize: theme.fontSizes[2] + 'px',
   }),
   control: (provided, state) => ({
     ...provided,
     border: 'none',
-    fontSize: '1em',
   }),
 }
 

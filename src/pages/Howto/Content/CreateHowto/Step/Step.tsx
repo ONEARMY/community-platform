@@ -42,7 +42,7 @@ class Step extends Component<IProps, IState> {
     const { step, index } = this.props
     return (
       // NOTE - animation parent container in CreateHowTo
-      <BoxContainer mb={3} key={index}>
+      <BoxContainer mt={3} p={3} key={index}>
         <FlexContainer p={0}>
           <Heading medium flex={1}>
             Step {index + 1}
@@ -62,15 +62,15 @@ class Step extends Component<IProps, IState> {
         </FlexContainer>
 
         <FlexContainer p={0} flexWrap="wrap">
+          <Field
+            name={`${step}.title`}
+            component={InputField}
+            placeholder={`Title of Step ${index + 1}`}
+            validate={required}
+            validateFields={[]}
+          />
           {/* Left */}
           <FlexContainer p={0} pr={2} flexDirection="column" flex={1}>
-            <Field
-              name={`${step}.title`}
-              component={InputField}
-              placeholder={`Title of Step ${index + 1}`}
-              validate={required}
-              validateFields={[]}
-            />
             <Field
               name={`${step}.text`}
               placeholder="Describe this step"
@@ -81,12 +81,8 @@ class Step extends Component<IProps, IState> {
             />
           </FlexContainer>
           {/* Left */}
-          <BoxContainer p={0} width={[1, null, '380px']}>
-            <Field
-              name={`${step}.images`}
-              component={ImageInputField}
-              text="Step Image"
-            />
+          <BoxContainer p={0} width={[1, null, '220px']}>
+            <Field name={`${step}.images`} component={ImageInputField} />
           </BoxContainer>
         </FlexContainer>
       </BoxContainer>

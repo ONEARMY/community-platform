@@ -1,11 +1,8 @@
 import * as React from 'react'
 import { BoxContainer } from '../Layout/BoxContainer'
-
 import { Button } from '../Button'
-import { FlexContainer } from '../Layout/FlexContainer'
 import Lightbox from 'react-image-lightbox'
 import 'react-image-lightbox/style.css'
-import Text from '../Text'
 import { ImageConverter } from './ImageConverter'
 
 /*
@@ -16,7 +13,6 @@ import { ImageConverter } from './ImageConverter'
 
 interface IProps {
   onFilesChange?: (fileMeta: IConvertedFileMeta[]) => void
-  text?: string
 }
 
 export interface IConvertedFileMeta {
@@ -88,26 +84,21 @@ export class ImageInput extends React.Component<IProps, IState> {
 
   render() {
     const { inputFiles, openLightbox, lightboxImg } = this.state
-    const { text } = this.props
     // if at least one image present, hide the 'choose image' button and replace with smaller button
     const imgPreviewMode = inputFiles.length > 0
     return (
-      <BoxContainer width="380px" p={0}>
+      <BoxContainer p={0}>
         <>
           <div
             style={{
               display: imgPreviewMode ? 'none' : 'flex',
               flexDirection: 'column',
-              border: '1px solid #dddddd',
               justifyContent: 'center',
               height: '230px',
             }}
           >
-            <Text regular textAlign="center" mb={2}>
-              {text ? text : 'Image'}
-            </Text>
             <Button
-              variant="outline"
+              variant="light"
               onClick={() => this.triggerFileUploaderClick()}
               icon="image"
             >

@@ -1,10 +1,12 @@
 import React from 'react'
+// TODO remove material-ui from here
 import List from '@material-ui/core/List'
 import { HashLink } from 'react-router-hash-link'
 
-import { Container, SummaryListItem } from './elements'
+import { Container } from './elements'
 import { IHowtoStep } from 'src/models/howto.models'
 import { ListItem, ListItemText } from '@material-ui/core'
+import Text from 'src/components/Text'
 
 interface IProps {
   steps: IHowtoStep[]
@@ -25,9 +27,7 @@ export default class HowtoSummary extends React.PureComponent<IProps> {
               }}
             >
               <ListItemText>
-                <SummaryListItem variant="subtitle1">
-                  Introduction
-                </SummaryListItem>
+                <Text caps>Introduction</Text>
               </ListItemText>
             </HashLink>
           </ListItem>
@@ -42,9 +42,7 @@ export default class HowtoSummary extends React.PureComponent<IProps> {
                   }}
                 >
                   <ListItemText>
-                    <SummaryListItem variant="subtitle1">
-                      {step.title}
-                    </SummaryListItem>
+                    <Text caps>{step.title}</Text>
                   </ListItemText>
                 </HashLink>
               </ListItem>

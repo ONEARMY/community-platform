@@ -24,6 +24,8 @@ import { inject } from 'mobx-react'
 import { Modal } from 'src/components/Modal/Modal'
 import { HowToSubmitStatus } from './SubmitStatus'
 import { stripSpecialCharacters } from 'src/utils/helpers'
+import Text from 'src/components/Text'
+import { Link } from 'rebass'
 
 interface IState {
   formValues: IHowtoFormInput
@@ -39,8 +41,8 @@ interface IInjectedProps extends IProps {
 }
 
 const AnimationContainer = posed.div({
-  enter: { x: 0, opacity: 1, delay: 300 },
-  exit: { x: 200, opacity: 0, delay: 200 },
+  enter: { opacity: 1 },
+  exit: { opacity: 0 },
 })
 
 // validation - return undefined if no error (i.e. valid)
@@ -88,24 +90,26 @@ export class CreateHowto extends React.Component<IProps, IState> {
   public render() {
     const { formValues } = this.state
     return (
-      <>
-        <Form
-          onSubmit={v => this.onSubmit(v as IHowtoFormInput)}
-          initialValues={formValues}
-          mutators={{
-            ...arrayMutators,
-          }}
-          validateOnBlur
-          decorators={[this.calculatedFields]}
-          render={({ submitting, values, invalid, errors, handleSubmit }) => {
-            const disabled = invalid || submitting
-            return (
-              <>
+      <Form
+        onSubmit={v => this.onSubmit(v as IHowtoFormInput)}
+        initialValues={formValues}
+        mutators={{
+          ...arrayMutators,
+        }}
+        validateOnBlur
+        decorators={[this.calculatedFields]}
+        render={({ submitting, values, invalid, errors, handleSubmit }) => {
+          const disabled = invalid || submitting
+          return (
+            <FlexContainer m={'0'} p={'0'} bg={'inherit'}>
+              <BoxContainer bg="inherit" p={'0'}>
                 {/* using prevent default as sometimes submit triggered unintentionally */}
                 <form onSubmit={e => e.preventDefault()}>
                   {/* How To Info */}
-                  <BoxContainer bg="white" mb={3}>
-                    <Heading medium>Create your How-To</Heading>
+                  <BoxContainer p={3}>
+                    <Heading small bold>
+                      Create your How-To
+                    </Heading>
                     <FlexContainer p={0} flexWrap="wrap">
                       {/* Left Side */}
                       <FlexContainer
@@ -162,7 +166,6 @@ export class CreateHowto extends React.Component<IProps, IState> {
                           validate={required}
                           validateFields={[]}
                           component={ImageInputField}
-                          text="Cover Image"
                         />
                         <Field name="files" component={FileInputField} />
                       </BoxContainer>
@@ -214,16 +217,6 @@ export class CreateHowto extends React.Component<IProps, IState> {
                       </>
                     )}
                   </FieldArray>
-                  <Button
-                    onClick={() => handleSubmit()}
-                    width={1}
-                    icon="check"
-                    mx="auto"
-                    variant={disabled ? 'disabled' : 'secondary'}
-                    disabled={submitting || invalid}
-                  >
-                    Publish
-                  </Button>
                   <Button onClick={() => console.log(values)}>
                     Dev: Log values
                   </Button>
@@ -248,11 +241,57 @@ export class CreateHowto extends React.Component<IProps, IState> {
                     </>
                   </Modal>
                 )}
-              </>
-            )
-          }}
-        />
-      </>
+              </BoxContainer>
+              <BoxContainer
+                width={'35%'}
+                height={'100%'}
+                ml={2}
+                bg="inherit"
+                p={0}
+              >
+                <BoxContainer bg="white" p={3}>
+                  <Heading small bold>
+                    How-to Posting Guidelines
+                  </Heading>
+                  <Text my={3}> 1. You think water moves fast ?</Text>
+                  <Text my={3}> 2. You should see ice.</Text>
+                  <Text my={3}> 3. It moves like it has a mind.</Text>
+                  <Text my={3}>
+                    {' '}
+                    4. Like it knows it killed the world once and got a taste
+                    for murder.
+                  </Text>
+                  <Text my={3}>
+                    {' '}
+                    5. After the avalanche, it took us a week.
+                  </Text>
+                  <Text small>
+                    If unsure please read our posting policy as well as our{' '}
+                    <Link
+                      color={'black'}
+                      href="https://github.com/OneArmyWorld/onearmy/blob/master/CODE_OF_CONDUCT.md"
+                      target="_blank"
+                    >
+                      {' '}
+                      <b>code of conduct</b>
+                    </Link>
+                    .
+                  </Text>
+                </BoxContainer>
+                <Button
+                  onClick={() => handleSubmit()}
+                  width={1}
+                  mt={3}
+                  variant={disabled ? 'disabled' : 'secondary'}
+                  disabled={submitting || invalid}
+                >
+                  Publish
+                </Button>
+              </BoxContainer>
+            </FlexContainer>
+          )
+        }}
+      />
     )
   }
 }

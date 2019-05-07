@@ -2,8 +2,11 @@
 export enum colors {
   white = 'white',
   black = 'black',
+  darkgrey = '#333333',
+  lightgrey = '#f6f6f6',
   grey = '#dddddd',
   grey2 = '#9b9b9b',
+  grey3 = '#E4E4E4',
   grey4 = '#E9E9E9',
   greyStroke = '#AEAEAE',
   green = '#88e3c7',
@@ -47,7 +50,7 @@ const buttons = {
     backgroundColor: colors.black,
   },
   light: {
-    backgroundColor: colors.grey,
+    backgroundColor: colors.lightgrey,
     color: colors.black,
   },
 }

@@ -4,7 +4,6 @@ import { Flex as FlexGrid } from '@rebass/grid'
 // TODO add loader (and remove this material-ui dep)
 import LinearProgress from '@material-ui/core/LinearProgress'
 import Text from 'src/components/Text'
-import Heading from 'src/components/Heading'
 import { Link } from 'src/components/Links'
 import styled from 'styled-components'
 
@@ -26,6 +25,12 @@ const CardImage = styled(Image)`
 `
 const CardInfosContainer = styled(Box)`
   height: 170px;
+`
+
+const CardTitle = styled(Text)`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 `
 
 export class HowtoList extends React.Component<IProps, any> {
@@ -59,9 +64,9 @@ export class HowtoList extends React.Component<IProps, any> {
                           <Image src={PpLogo} />
                         </Box>
                         <CardInfosContainer px={4} pb={3}>
-                          <Heading small bold>
+                          <CardTitle fontSize={4} bold>
                             {howto.title}
-                          </Heading>
+                          </CardTitle>
 
                           <Text fontSize={1} mt={2} mb={3} color={'grey4'}>
                             by{' '}

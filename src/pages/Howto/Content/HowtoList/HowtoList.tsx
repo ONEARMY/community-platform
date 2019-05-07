@@ -24,7 +24,7 @@ const CardImage = styled(Image)`
   width: 100%;
 `
 const CardInfosContainer = styled(Box)`
-  height: 170px;
+  height: 120px;
 `
 
 const CardTitle = styled(Text)`
@@ -54,10 +54,10 @@ export class HowtoList extends React.Component<IProps, any> {
             {allHowtos.length === 0 ? (
               <LinearProgress />
             ) : (
-              <FlexGrid flexWrap={'wrap'} justifyContent={'center'} my={4}>
+              <FlexGrid flexWrap={'wrap'} justifyContent={'space-between'}>
                 {allHowtos.map((howto: IHowto, index: number) => (
                   <Link to={`/how-to/${encodeURIComponent(howto.slug)}`}>
-                    <Box m={2}>
+                    <Box my={4}>
                       <Card borderRadius={1} width={[380]} bg={'white'}>
                         <CardImage src={howto.cover_image.downloadUrl} />
                         <Box width={'45px'} bg="white" mt={'-24px'} ml={'29px'}>

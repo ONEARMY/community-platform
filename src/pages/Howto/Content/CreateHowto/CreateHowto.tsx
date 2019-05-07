@@ -40,8 +40,8 @@ interface IInjectedProps extends IProps {
 }
 
 const AnimationContainer = posed.div({
-  enter: { x: 0, opacity: 1, delay: 300 },
-  exit: { x: 200, opacity: 0, delay: 200 },
+  enter: { opacity: 1 },
+  exit: { opacity: 0 },
 })
 
 // validation - return undefined if no error (i.e. valid)

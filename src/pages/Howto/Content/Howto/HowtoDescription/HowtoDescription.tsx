@@ -1,5 +1,6 @@
 import React from 'react'
 import { TagDisplay } from 'src/components/Tags/TagDisplay/TagDisplay'
+import differenceInDays from 'date-fns/difference_in_days'
 import { IHowto } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
@@ -21,9 +22,14 @@ export const CoverImg = styled.img`
 
 export default class HowtoDescription extends React.PureComponent<IProps, any> {
   constructor(props: IProps) {
-    console.log('description', props.howto)
     super(props)
   }
+
+  public durationSincePosted(postDate: Date) {
+    const daysSince: number = differenceInDays(new Date(), new Date(postDate))
+    return `${daysSince} days ago`
+  }
+
   public render() {
     const { howto } = this.props
     return (
@@ -36,7 +42,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             </Text>
             &nbsp;|&nbsp;
             <Text inline color={'darkgrey'}>
-              {/* TODO : Use proper date  */}4 days ago
+              {this.durationSincePosted(howto._created.toDate())}
             </Text>
           </Text>
           <Heading large>{howto.title}</Heading>

@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import Typography from '@material-ui/core/Typography'
 
 export const Container = styled.div`
   width: 10%;
@@ -11,7 +10,4 @@ export const Container = styled.div`
   background-color: white;
   overflow: scroll;
   border-radius: 2%;
-`
-export const SummaryListItem = styled(Typography)`
-  text-transform: capitalize;
 `

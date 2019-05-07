@@ -15,7 +15,6 @@ import Text from '../Text'
 
 interface IProps {
   onFilesChange?: (fileMeta: IConvertedFileMeta[]) => void
-  text?: string
 }
 
 type ImageQualities = 'normal' | 'high' | 'low'
@@ -124,26 +123,21 @@ export class ImageInput extends React.Component<IProps, IState> {
 
   render() {
     const { convertedFiles, imageQuality, openLightbox } = this.state
-    const { text } = this.props
     const qualities: ImageQualities[] = ['low', 'normal', 'high']
     const imgPreviewMode = convertedFiles[0] ? true : false
     return (
-      <BoxContainer width="380px" p={0}>
+      <BoxContainer p={0}>
         <>
           <div
             style={{
               display: imgPreviewMode ? 'none' : 'flex',
               flexDirection: 'column',
-              border: '1px solid #dddddd',
               justifyContent: 'center',
               height: '230px',
             }}
           >
-            <Text regular textAlign="center" mb={2}>
-              {text ? text : 'Image'}
-            </Text>
             <Button
-              variant="outline"
+              variant="light"
               onClick={() => this.triggerFileUploaderClick()}
               icon="image"
             >

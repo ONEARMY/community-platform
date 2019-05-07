@@ -5,14 +5,24 @@ import {
   BorderRadiusProps,
   display,
   DisplayProps,
+  width,
+  WidthProps,
+  height,
+  HeightProps,
 } from 'styled-system'
 import { Box, BoxProps } from 'rebass'
 
-type ContainerProps = BoxProps & BorderRadiusProps & DisplayProps
+type ContainerProps = BoxProps &
+  BorderRadiusProps &
+  DisplayProps &
+  WidthProps &
+  HeightProps
 
 const ExtendedBoxContainer = styled(Box)`
   ${display}
   ${borderRadius}
+  ${width}
+  ${height}
 `
 
 export const BoxContainer = (props: ContainerProps) => (

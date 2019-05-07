@@ -36,20 +36,24 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
       <Flex id="description">
         <Box width={[1, 1 / 2]}>
           <Text fontSize={1} mt={2} mb={3} color={'grey2'} p={1}>
-            by&nbsp; &nbsp;|&nbsp;
-            <Text inline color={'black'}>
+            by&nbsp;
+            <Text inline bold color={'black'}>
+              {howto._createdBy}
+            </Text>
+            &nbsp;|&nbsp;
+            <Text inline color={'darkgrey'}>
               {this.durationSincePosted(howto._created.toDate())}
             </Text>
           </Text>
           <Heading large>{howto.title}</Heading>
-          <Text large>{howto.description}</Text>
-
           <Box my={3}>
             {howto.tags &&
               Object.keys(howto.tags).map(k => (
                 <TagDisplay tagKey={k} key={k} />
               ))}
           </Box>
+          <Text large>{howto.description}</Text>
+
           <Flex width={1 / 2} my={3}>
             <Box width={1 / 3}>
               <Icon glyph={'step'} mr={2} verticalAlign={'bottom'} />
@@ -71,9 +75,9 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             ) &&
             howto.files.map(file => <FileInfo file={file} key={file.name} />)}
         </Box>
-        <Box width={[1 / 2]}>
+        <Flex justifyContent={'end'} width={[1 / 2]}>
           <CoverImg src={howto.cover_image.downloadUrl} alt="how-to cover" />
-        </Box>
+        </Flex>
       </Flex>
     )
   }

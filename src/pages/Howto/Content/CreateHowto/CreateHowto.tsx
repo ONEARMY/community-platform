@@ -4,7 +4,7 @@ import { Form, Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
 import createDecorator from 'final-form-calculate'
-import { IHowtoFormInput } from 'src/models/howto.models'
+import { IHowtoFormInput, IHowToStepFormInput } from 'src/models/howto.models'
 import TEMPLATE from './Template'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
@@ -185,8 +185,6 @@ export class CreateHowto extends React.Component<IProps, IState> {
                                 onDelete={(fieldIndex: number) => {
                                   fields.remove(fieldIndex)
                                 }}
-                                values={values}
-                                _uploadPath={this.state._uploadPath}
                               />
                             </AnimationContainer>
                           ))}

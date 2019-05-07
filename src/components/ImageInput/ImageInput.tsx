@@ -131,8 +131,11 @@ export class ImageInput extends React.Component<IProps, IState> {
               onClick={() => this.triggerFileUploaderClick()}
               ml="auto"
               icon="image"
-              variant="outline"
-            />
+              variant="light"
+              width={1}
+            >
+              Choose Images
+            </Button>
           )}
 
           {openLightbox && (

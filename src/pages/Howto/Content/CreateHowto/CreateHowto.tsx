@@ -25,6 +25,7 @@ import { Modal } from 'src/components/Modal/Modal'
 import { HowToSubmitStatus } from './SubmitStatus'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import Text from 'src/components/Text'
+import { Link } from 'rebass'
 
 interface IState {
   formValues: IHowtoFormInput
@@ -89,18 +90,18 @@ export class CreateHowto extends React.Component<IProps, IState> {
   public render() {
     const { formValues } = this.state
     return (
-      <FlexContainer m={'0'} p={'0'} bg={'inherit'}>
-        <Form
-          onSubmit={v => this.onSubmit(v as IHowtoFormInput)}
-          initialValues={formValues}
-          mutators={{
-            ...arrayMutators,
-          }}
-          validateOnBlur
-          decorators={[this.calculatedFields]}
-          render={({ submitting, values, invalid, errors, handleSubmit }) => {
-            const disabled = invalid || submitting
-            return (
+      <Form
+        onSubmit={v => this.onSubmit(v as IHowtoFormInput)}
+        initialValues={formValues}
+        mutators={{
+          ...arrayMutators,
+        }}
+        validateOnBlur
+        decorators={[this.calculatedFields]}
+        render={({ submitting, values, invalid, errors, handleSubmit }) => {
+          const disabled = invalid || submitting
+          return (
+            <FlexContainer m={'0'} p={'0'} bg={'inherit'}>
               <BoxContainer bg="inherit" p={'0'}>
                 {/* using prevent default as sometimes submit triggered unintentionally */}
                 <form onSubmit={e => e.preventDefault()}>
@@ -218,16 +219,6 @@ export class CreateHowto extends React.Component<IProps, IState> {
                       </>
                     )}
                   </FieldArray>
-                  <Button
-                    onClick={() => handleSubmit()}
-                    width={1}
-                    icon="check"
-                    mx="auto"
-                    variant={disabled ? 'disabled' : 'secondary'}
-                    disabled={submitting || invalid}
-                  >
-                    Publish
-                  </Button>
                   <Button onClick={() => console.log(values)}>
                     Dev: Log values
                   </Button>
@@ -253,28 +244,56 @@ export class CreateHowto extends React.Component<IProps, IState> {
                   </Modal>
                 )}
               </BoxContainer>
-            )
-          }}
-        />
-        <BoxContainer bg="white" width={'34%'} height={'100%'} ml={2} p={3}>
-          <Heading small bold>
-            How-to Posting Guidelines
-          </Heading>
-          <Text my={3}> 1. You think water moves fast ?</Text>
-          <Text my={3}> 2. You should see ice.</Text>
-          <Text my={3}> 3. It moves like it has a mind.</Text>
-          <Text my={3}>
-            {' '}
-            4. Like it knows it killed the world once and got a taste for
-            murder.
-          </Text>
-          <Text my={3}> 5. After the avalanche, it took us a week.</Text>
-          <Text small>
-            If unsure please read our posting policy as well as our code of
-            conduct.
-          </Text>
-        </BoxContainer>
-      </FlexContainer>
+              <BoxContainer
+                width={'35%'}
+                height={'100%'}
+                ml={2}
+                bg="inherit"
+                p={0}
+              >
+                <BoxContainer bg="white" p={3}>
+                  <Heading small bold>
+                    How-to Posting Guidelines
+                  </Heading>
+                  <Text my={3}> 1. You think water moves fast ?</Text>
+                  <Text my={3}> 2. You should see ice.</Text>
+                  <Text my={3}> 3. It moves like it has a mind.</Text>
+                  <Text my={3}>
+                    {' '}
+                    4. Like it knows it killed the world once and got a taste
+                    for murder.
+                  </Text>
+                  <Text my={3}>
+                    {' '}
+                    5. After the avalanche, it took us a week.
+                  </Text>
+                  <Text small>
+                    If unsure please read our posting policy as well as our{' '}
+                    <Link
+                      color={'black'}
+                      href="https://github.com/OneArmyWorld/onearmy/blob/master/CODE_OF_CONDUCT.md"
+                      target="_blank"
+                    >
+                      {' '}
+                      <b>code of conduct</b>
+                    </Link>
+                    .
+                  </Text>
+                </BoxContainer>
+                <Button
+                  onClick={() => handleSubmit()}
+                  width={1}
+                  mt={3}
+                  variant={disabled ? 'disabled' : 'secondary'}
+                  disabled={submitting || invalid}
+                >
+                  Publish
+                </Button>
+              </BoxContainer>
+            </FlexContainer>
+          )
+        }}
+      />
     )
   }
 }

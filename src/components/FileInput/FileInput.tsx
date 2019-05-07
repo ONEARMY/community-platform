@@ -67,8 +67,7 @@ export class FileInput extends React.Component<IProps, IState> {
     return (
       <div
         style={{
-          border: `1px solid ${theme.colors.grey}`,
-          width: '380px',
+          width: '378px',
         }}
       >
         <FlexContainer flexDirection="column" justifyContent="center">

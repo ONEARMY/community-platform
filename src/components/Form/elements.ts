@@ -2,7 +2,8 @@ import styled, { css } from 'styled-components'
 import theme from 'src/themes/styled.theme'
 
 const inputStyles = css`
-  border: 1px solid ${theme.colors.grey};
+  border: 1px solid ${theme.colors.black};
+  border-radius: 4px;
   font-size: 1.1em;
   background: white;
   width: 100%;
@@ -33,6 +34,6 @@ export const TextAreaDisabled = styled.div`
 // generic container used for some custom component fields
 export const FieldContainer = styled.div`
   ${inputStyles};
-  border: none;
+  border: 'none';
   padding: 0;
 `

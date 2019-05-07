@@ -132,7 +132,6 @@ export class ImageInput extends React.Component<IProps, IState> {
             style={{
               display: imgPreviewMode ? 'none' : 'flex',
               flexDirection: 'column',
-              border: '1px solid #dddddd',
               justifyContent: 'center',
               height: '230px',
             }}

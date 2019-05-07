@@ -40,8 +40,30 @@ interface IInjectedProps extends IProps {
 }
 
 const AnimationContainer = posed.div({
-  enter: { opacity: 1 },
-  exit: { opacity: 0 },
+  // use flip pose to prevent default spring action on list item removed
+  flip: {
+    transition: {
+      // type: 'tween',
+      // ease: 'linear',
+    },
+  },
+  // use a pre-enter pose as otherwise default will be the exit state and so will animate
+  // horizontally as well
+  preEnter: {
+    opacity: 0,
+  },
+  enter: {
+    opacity: 1,
+    duration: 200,
+    applyAtStart: { display: 'block' },
+  },
+  exit: {
+    applyAtStart: { display: 'none' },
+    duration: 200,
+  },
+  // note, on react final forms all array animations are really buggy, see
+  // https://github.com/final-form/react-final-form-arrays/issues/22
+  // not including exit animation as really bad performance
 })
 
 // validation - return undefined if no error (i.e. valid)
@@ -175,7 +197,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
                   <FieldArray name="steps">
                     {({ fields }) => (
                       <>
-                        <PoseGroup>
+                        <PoseGroup preEnterPose="preEnter">
                           {fields.map((name, index: number) => (
                             <AnimationContainer
                               key={fields.value[index]._animationKey}

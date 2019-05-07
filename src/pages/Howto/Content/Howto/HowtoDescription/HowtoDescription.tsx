@@ -40,14 +40,14 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             </Text>
           </Text>
           <Heading large>{howto.title}</Heading>
-          <Text large>{howto.description}</Text>
-
           <Box my={3}>
             {howto.tags &&
               Object.keys(howto.tags).map(k => (
                 <TagDisplay tagKey={k} key={k} />
               ))}
           </Box>
+          <Text large>{howto.description}</Text>
+
           <Flex width={1 / 2} my={3}>
             <Box width={1 / 3}>
               <Icon glyph={'step'} mr={2} verticalAlign={'bottom'} />
@@ -69,9 +69,9 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             ) &&
             howto.files.map(file => <FileInfo file={file} key={file.name} />)}
         </Box>
-        <Box width={[1 / 2]}>
+        <Flex justifyContent={'end'} width={[1 / 2]}>
           <CoverImg src={howto.cover_image.downloadUrl} alt="how-to cover" />
-        </Box>
+        </Flex>
       </Flex>
     )
   }

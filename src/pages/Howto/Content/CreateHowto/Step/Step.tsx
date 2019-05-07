@@ -80,8 +80,8 @@ class Step extends Component<IProps, IState> {
               validateFields={[]}
             />
           </FlexContainer>
-          {/* Left */}
-          <BoxContainer p={0} width={[1, null, '220px']}>
+          {/* right */}
+          <BoxContainer p={0} width={[1, '305px', null]}>
             <Field name={`${step}.images`} component={ImageInputField} />
           </BoxContainer>
         </FlexContainer>

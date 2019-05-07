@@ -63,6 +63,7 @@ const breakpoints = ['32em', '48em', '64em']
 const maxContainerWidth = 1280
 const regular = 400
 const bold = 600
+// cc - assume standard image widths are 4:3, however not clearly defined
 
 export default {
   colors,

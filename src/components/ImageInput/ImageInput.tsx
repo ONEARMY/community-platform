@@ -95,6 +95,7 @@ export class ImageInput extends React.Component<IProps, IState> {
               flexDirection: 'column',
               justifyContent: 'center',
               height: '230px',
+              // ideally width should fill container around 300px for 4:3
             }}
           >
             <Button

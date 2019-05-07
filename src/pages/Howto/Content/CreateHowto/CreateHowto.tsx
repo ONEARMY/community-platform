@@ -4,7 +4,7 @@ import { Form, Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
 import createDecorator from 'final-form-calculate'
-import { IHowtoFormInput, IHowToStepFormInput } from 'src/models/howto.models'
+import { IHowtoFormInput } from 'src/models/howto.models'
 import TEMPLATE from './Template'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
@@ -24,8 +24,7 @@ import { inject } from 'mobx-react'
 import { Modal } from 'src/components/Modal/Modal'
 import { HowToSubmitStatus } from './SubmitStatus'
 import { stripSpecialCharacters } from 'src/utils/helpers'
-import Text from 'src/components/Text'
-import { Link } from 'rebass'
+import { PostingGuidelines } from './PostingGuidelines'
 
 interface IState {
   formValues: IHowtoFormInput
@@ -101,8 +100,8 @@ export class CreateHowto extends React.Component<IProps, IState> {
         render={({ submitting, values, invalid, errors, handleSubmit }) => {
           const disabled = invalid || submitting
           return (
-            <FlexContainer m={'0'} p={'0'} bg={'inherit'}>
-              <BoxContainer bg="inherit" p={'0'}>
+            <FlexContainer m={'0'} p={'0'} bg={'inherit'} flexWrap="wrap">
+              <BoxContainer bg="inherit" p={'0'} width={[1, 1, 2 / 3]}>
                 {/* using prevent default as sometimes submit triggered unintentionally */}
                 <form onSubmit={e => e.preventDefault()}>
                   {/* How To Info */}
@@ -217,12 +216,6 @@ export class CreateHowto extends React.Component<IProps, IState> {
                       </>
                     )}
                   </FieldArray>
-                  <Button onClick={() => console.log(values)}>
-                    Dev: Log values
-                  </Button>
-                  <Button onClick={() => console.log(errors)}>
-                    Dev: Log validation state
-                  </Button>
                 </form>
                 {this.state.showSubmitModal && (
                   <Modal>
@@ -242,42 +235,15 @@ export class CreateHowto extends React.Component<IProps, IState> {
                   </Modal>
                 )}
               </BoxContainer>
+              {/* post guidelines container */}
               <BoxContainer
-                width={'35%'}
+                width={[1, 1, 1 / 3]}
                 height={'100%'}
-                ml={2}
                 bg="inherit"
                 p={0}
+                pl={2}
               >
-                <BoxContainer bg="white" p={3}>
-                  <Heading small bold>
-                    How-to Posting Guidelines
-                  </Heading>
-                  <Text my={3}> 1. You think water moves fast ?</Text>
-                  <Text my={3}> 2. You should see ice.</Text>
-                  <Text my={3}> 3. It moves like it has a mind.</Text>
-                  <Text my={3}>
-                    {' '}
-                    4. Like it knows it killed the world once and got a taste
-                    for murder.
-                  </Text>
-                  <Text my={3}>
-                    {' '}
-                    5. After the avalanche, it took us a week.
-                  </Text>
-                  <Text small>
-                    If unsure please read our posting policy as well as our{' '}
-                    <Link
-                      color={'black'}
-                      href="https://github.com/OneArmyWorld/onearmy/blob/master/CODE_OF_CONDUCT.md"
-                      target="_blank"
-                    >
-                      {' '}
-                      <b>code of conduct</b>
-                    </Link>
-                    .
-                  </Text>
-                </BoxContainer>
+                <PostingGuidelines />
                 <Button
                   onClick={() => handleSubmit()}
                   width={1}

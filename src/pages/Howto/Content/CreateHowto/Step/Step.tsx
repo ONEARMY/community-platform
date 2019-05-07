@@ -13,8 +13,6 @@ interface IProps {
   step: string
   index: number
   onDelete: (index: number) => void
-  values: any
-  _uploadPath: string
 }
 interface IState {
   showDeleteModal: boolean

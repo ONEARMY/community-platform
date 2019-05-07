@@ -24,8 +24,7 @@ import { inject } from 'mobx-react'
 import { Modal } from 'src/components/Modal/Modal'
 import { HowToSubmitStatus } from './SubmitStatus'
 import { stripSpecialCharacters } from 'src/utils/helpers'
-import Text from 'src/components/Text'
-import { Link } from 'rebass'
+import { PostingGuidelines } from './PostingGuidelines'
 
 interface IState {
   formValues: IHowtoFormInput
@@ -41,8 +40,30 @@ interface IInjectedProps extends IProps {
 }
 
 const AnimationContainer = posed.div({
-  enter: { opacity: 1 },
-  exit: { opacity: 0 },
+  // use flip pose to prevent default spring action on list item removed
+  flip: {
+    transition: {
+      // type: 'tween',
+      // ease: 'linear',
+    },
+  },
+  // use a pre-enter pose as otherwise default will be the exit state and so will animate
+  // horizontally as well
+  preEnter: {
+    opacity: 0,
+  },
+  enter: {
+    opacity: 1,
+    duration: 200,
+    applyAtStart: { display: 'block' },
+  },
+  exit: {
+    applyAtStart: { display: 'none' },
+    duration: 200,
+  },
+  // note, on react final forms all array animations are really buggy, see
+  // https://github.com/final-form/react-final-form-arrays/issues/22
+  // not including exit animation as really bad performance
 })
 
 // validation - return undefined if no error (i.e. valid)
@@ -101,8 +122,8 @@ export class CreateHowto extends React.Component<IProps, IState> {
         render={({ submitting, values, invalid, errors, handleSubmit }) => {
           const disabled = invalid || submitting
           return (
-            <FlexContainer m={'0'} p={'0'} bg={'inherit'}>
-              <BoxContainer bg="inherit" p={'0'}>
+            <FlexContainer m={'0'} p={'0'} bg={'inherit'} flexWrap="wrap">
+              <BoxContainer bg="inherit" p={'0'} width={[1, 1, 2 / 3]}>
                 {/* using prevent default as sometimes submit triggered unintentionally */}
                 <form onSubmit={e => e.preventDefault()}>
                   {/* How To Info */}
@@ -176,7 +197,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
                   <FieldArray name="steps">
                     {({ fields }) => (
                       <>
-                        <PoseGroup>
+                        <PoseGroup preEnterPose="preEnter">
                           {fields.map((name, index: number) => (
                             <AnimationContainer
                               key={fields.value[index]._animationKey}
@@ -188,8 +209,6 @@ export class CreateHowto extends React.Component<IProps, IState> {
                                 onDelete={(fieldIndex: number) => {
                                   fields.remove(fieldIndex)
                                 }}
-                                values={values}
-                                _uploadPath={this.state._uploadPath}
                               />
                             </AnimationContainer>
                           ))}
@@ -219,12 +238,6 @@ export class CreateHowto extends React.Component<IProps, IState> {
                       </>
                     )}
                   </FieldArray>
-                  <Button onClick={() => console.log(values)}>
-                    Dev: Log values
-                  </Button>
-                  <Button onClick={() => console.log(errors)}>
-                    Dev: Log validation state
-                  </Button>
                 </form>
                 {this.state.showSubmitModal && (
                   <Modal>
@@ -244,42 +257,15 @@ export class CreateHowto extends React.Component<IProps, IState> {
                   </Modal>
                 )}
               </BoxContainer>
+              {/* post guidelines container */}
               <BoxContainer
-                width={'35%'}
+                width={[1, 1, 1 / 3]}
                 height={'100%'}
-                ml={2}
                 bg="inherit"
                 p={0}
+                pl={2}
               >
-                <BoxContainer bg="white" p={3}>
-                  <Heading small bold>
-                    How-to Posting Guidelines
-                  </Heading>
-                  <Text my={3}> 1. You think water moves fast ?</Text>
-                  <Text my={3}> 2. You should see ice.</Text>
-                  <Text my={3}> 3. It moves like it has a mind.</Text>
-                  <Text my={3}>
-                    {' '}
-                    4. Like it knows it killed the world once and got a taste
-                    for murder.
-                  </Text>
-                  <Text my={3}>
-                    {' '}
-                    5. After the avalanche, it took us a week.
-                  </Text>
-                  <Text small>
-                    If unsure please read our posting policy as well as our{' '}
-                    <Link
-                      color={'black'}
-                      href="https://github.com/OneArmyWorld/onearmy/blob/master/CODE_OF_CONDUCT.md"
-                      target="_blank"
-                    >
-                      {' '}
-                      <b>code of conduct</b>
-                    </Link>
-                    .
-                  </Text>
-                </BoxContainer>
+                <PostingGuidelines />
                 <Button
                   onClick={() => handleSubmit()}
                   width={1}

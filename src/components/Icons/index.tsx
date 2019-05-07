@@ -18,7 +18,6 @@ import {
   MdAccountCircle,
   MdLock,
   MdClose,
-  MdDelete,
   MdMoreVert,
   MdComment,
   MdTurnedIn,
@@ -28,7 +27,7 @@ import {
   MdImage,
   MdArrowForward,
 } from 'react-icons/md'
-import { GoCloudUpload, GoFilePdf } from 'react-icons/go'
+import { GoCloudUpload, GoFilePdf, GoTrashcan } from 'react-icons/go'
 import { FaSignal } from 'react-icons/fa'
 import { IconContext } from 'react-icons'
 import SVGs from './svgs'
@@ -82,7 +81,7 @@ export const glyphs: IGlyphs = {
   'account-circle': <MdAccountCircle />,
   lock: <MdLock />,
   close: <MdClose />,
-  delete: <MdDelete />,
+  delete: <GoTrashcan />,
   'more-vert': <MdMoreVert />,
   comment: <MdComment />,
   'turned-in': <MdTurnedIn />,

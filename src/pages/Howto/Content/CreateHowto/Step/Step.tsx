@@ -13,8 +13,6 @@ interface IProps {
   step: string
   index: number
   onDelete: (index: number) => void
-  values: any
-  _uploadPath: string
 }
 interface IState {
   showDeleteModal: boolean
@@ -50,7 +48,7 @@ class Step extends Component<IProps, IState> {
             Step {index + 1}
           </Heading>
           {index >= 1 && (
-            <Button icon="close" onClick={() => this.toggleDeleteModal()} />
+            <Button icon="delete" onClick={() => this.toggleDeleteModal()} />
           )}
           {this.state.showDeleteModal && (
             <Modal onDidDismiss={() => this.toggleDeleteModal()}>
@@ -82,8 +80,8 @@ class Step extends Component<IProps, IState> {
               validateFields={[]}
             />
           </FlexContainer>
-          {/* Left */}
-          <BoxContainer p={0} width={[1, null, '220px']}>
+          {/* right */}
+          <BoxContainer p={0} width={[1, '305px', null]}>
             <Field name={`${step}.images`} component={ImageInputField} />
           </BoxContainer>
         </FlexContainer>

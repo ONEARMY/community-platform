@@ -42,7 +42,8 @@ export class FileInfo extends React.Component<IProps, IState> {
         alignItems="center"
       >
         <Icon size={24} glyph={this.state.glyph} marginRight="4px" />
-        <Text clipped={true} flex={1}>
+        {/* TODO allow file download with file.downloadUrl */}
+        <Text small clipped={true} flex={1}>
           {file.name}
         </Text>
         <Text small>{this.state.size}</Text>

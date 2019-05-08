@@ -64,7 +64,7 @@ class TagsSelect extends React.Component<IProps, IState> {
           getOptionLabel={(tag: ITag) => tag.label}
           getOptionValue={(tag: ITag) => tag._key}
           onChange={values => this.onSelectedTagsChanged(values as ITag[])}
-          placeholder="Select tags"
+          placeholder="Select tags - 4 maximum"
         />
       </FieldContainer>
     )

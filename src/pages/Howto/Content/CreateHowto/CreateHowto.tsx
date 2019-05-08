@@ -24,6 +24,7 @@ import { inject } from 'mobx-react'
 import { Modal } from 'src/components/Modal/Modal'
 import { HowToSubmitStatus } from './SubmitStatus'
 import { stripSpecialCharacters } from 'src/utils/helpers'
+import { PostingGuidelines } from './PostingGuidelines'
 
 interface IState {
   formValues: IHowtoFormInput
@@ -39,8 +40,30 @@ interface IInjectedProps extends IProps {
 }
 
 const AnimationContainer = posed.div({
-  enter: { x: 0, opacity: 1, delay: 300 },
-  exit: { x: 200, opacity: 0, delay: 200 },
+  // use flip pose to prevent default spring action on list item removed
+  flip: {
+    transition: {
+      // type: 'tween',
+      // ease: 'linear',
+    },
+  },
+  // use a pre-enter pose as otherwise default will be the exit state and so will animate
+  // horizontally as well
+  preEnter: {
+    opacity: 0,
+  },
+  enter: {
+    opacity: 1,
+    duration: 200,
+    applyAtStart: { display: 'block' },
+  },
+  exit: {
+    applyAtStart: { display: 'none' },
+    duration: 200,
+  },
+  // note, on react final forms all array animations are really buggy, see
+  // https://github.com/final-form/react-final-form-arrays/issues/22
+  // not including exit animation as really bad performance
 })
 
 // validation - return undefined if no error (i.e. valid)
@@ -88,24 +111,26 @@ export class CreateHowto extends React.Component<IProps, IState> {
   public render() {
     const { formValues } = this.state
     return (
-      <>
-        <Form
-          onSubmit={v => this.onSubmit(v as IHowtoFormInput)}
-          initialValues={formValues}
-          mutators={{
-            ...arrayMutators,
-          }}
-          validateOnBlur
-          decorators={[this.calculatedFields]}
-          render={({ submitting, values, invalid, errors, handleSubmit }) => {
-            const disabled = invalid || submitting
-            return (
-              <>
+      <Form
+        onSubmit={v => this.onSubmit(v as IHowtoFormInput)}
+        initialValues={formValues}
+        mutators={{
+          ...arrayMutators,
+        }}
+        validateOnBlur
+        decorators={[this.calculatedFields]}
+        render={({ submitting, values, invalid, errors, handleSubmit }) => {
+          const disabled = invalid || submitting
+          return (
+            <FlexContainer m={'0'} p={'0'} bg={'inherit'} flexWrap="wrap">
+              <BoxContainer bg="inherit" p={'0'} width={[1, 1, 2 / 3]}>
                 {/* using prevent default as sometimes submit triggered unintentionally */}
                 <form onSubmit={e => e.preventDefault()}>
                   {/* How To Info */}
-                  <BoxContainer bg="white" mb={3}>
-                    <Heading medium>Create your How-To</Heading>
+                  <BoxContainer p={3}>
+                    <Heading small bold>
+                      Create your How-To
+                    </Heading>
                     <FlexContainer p={0} flexWrap="wrap">
                       {/* Left Side */}
                       <FlexContainer
@@ -162,7 +187,6 @@ export class CreateHowto extends React.Component<IProps, IState> {
                           validate={required}
                           validateFields={[]}
                           component={ImageInputField}
-                          text="Cover Image"
                         />
                         <Field name="files" component={FileInputField} />
                       </BoxContainer>
@@ -173,7 +197,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
                   <FieldArray name="steps">
                     {({ fields }) => (
                       <>
-                        <PoseGroup>
+                        <PoseGroup preEnterPose="preEnter">
                           {fields.map((name, index: number) => (
                             <AnimationContainer
                               key={fields.value[index]._animationKey}
@@ -185,8 +209,6 @@ export class CreateHowto extends React.Component<IProps, IState> {
                                 onDelete={(fieldIndex: number) => {
                                   fields.remove(fieldIndex)
                                 }}
-                                values={values}
-                                _uploadPath={this.state._uploadPath}
                               />
                             </AnimationContainer>
                           ))}
@@ -216,22 +238,6 @@ export class CreateHowto extends React.Component<IProps, IState> {
                       </>
                     )}
                   </FieldArray>
-                  <Button
-                    onClick={() => handleSubmit()}
-                    width={1}
-                    icon="check"
-                    mx="auto"
-                    variant={disabled ? 'disabled' : 'secondary'}
-                    disabled={submitting || invalid}
-                  >
-                    Publish
-                  </Button>
-                  <Button onClick={() => console.log(values)}>
-                    Dev: Log values
-                  </Button>
-                  <Button onClick={() => console.log(errors)}>
-                    Dev: Log validation state
-                  </Button>
                 </form>
                 {this.state.showSubmitModal && (
                   <Modal>
@@ -250,11 +256,30 @@ export class CreateHowto extends React.Component<IProps, IState> {
                     </>
                   </Modal>
                 )}
-              </>
-            )
-          }}
-        />
-      </>
+              </BoxContainer>
+              {/* post guidelines container */}
+              <BoxContainer
+                width={[1, 1, 1 / 3]}
+                height={'100%'}
+                bg="inherit"
+                p={0}
+                pl={2}
+              >
+                <PostingGuidelines />
+                <Button
+                  onClick={() => handleSubmit()}
+                  width={1}
+                  mt={3}
+                  variant={disabled ? 'disabled' : 'secondary'}
+                  disabled={submitting || invalid}
+                >
+                  Publish
+                </Button>
+              </BoxContainer>
+            </FlexContainer>
+          )
+        }}
+      />
     )
   }
 }

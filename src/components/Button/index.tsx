@@ -37,7 +37,7 @@ type BtnProps = IBtnProps & RebassButtonProps
 export const Button = (props: BtnProps) => (
   <BaseButton {...props}>
     {props.icon && <Icon glyph={props.icon} marginRight="4px" />}
-    <Label caps regular>
+    <Label caps regular medium>
       {props.children}
     </Label>
   </BaseButton>

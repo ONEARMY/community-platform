@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
+// TODO add loader (and remove this material-ui dep)
 import LinearProgress from '@material-ui/core/LinearProgress'
 import { afs } from 'src/utils/firebase'
 import { inject } from 'mobx-react'
@@ -7,7 +8,7 @@ import { HowtoStore } from 'src/stores/Howto/howto.store'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
 import Step from './Step/Step'
 import { IHowtoStep, IHowto } from 'src/models/howto.models'
-import HowtoSummary from './HowtoSummary/HowtoSummary'
+// import HowtoSummary from './HowtoSummary/HowtoSummary'
 import { Box } from 'rebass'
 
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).

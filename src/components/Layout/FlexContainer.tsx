@@ -4,7 +4,7 @@ import {
   BorderRadiusProps,
   flexWrap,
   flexDirection,
-  flexBasis,
+  FlexBasisProps,
   flex,
   alignItems,
   alignContent,
@@ -16,13 +16,12 @@ import {
 import { FlexProps } from 'rebass'
 import { BoxContainer } from './BoxContainer'
 
-type ContainerProps = FlexProps & BorderRadiusProps
+type ContainerProps = FlexProps & FlexBasisProps & BorderRadiusProps
 
 const ExtendedFlexContainer = styled(BoxContainer)`
   ${flex}
   ${flexWrap}
   ${flexDirection}
-  ${flexBasis}
   ${alignItems}
   ${alignContent}
   ${alignSelf}

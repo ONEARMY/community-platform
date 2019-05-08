@@ -45,7 +45,7 @@ export class TagDisplay extends React.Component<IProps, IState> {
   public render() {
     const { tag } = this.state
     return tag ? (
-      <TagContainer bg={'greyTag'} p={2} ml={'5px'} mt={'5px'}>
+      <TagContainer bg={'grey4'} p={2} ml={'5px'} mt={'5px'}>
         <Text small>{tag.label}</Text>
       </TagContainer>
     ) : null

@@ -12,6 +12,7 @@ import PpLogo from 'src/assets/images/pp-icon-small.png'
 import { Button } from 'src/components/Button'
 import { IHowto } from 'src/models/howto.models'
 import { TagDisplay } from 'src/components/Tags/TagDisplay/TagDisplay'
+import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
 interface IProps {
   allHowtos: IHowto[]
@@ -43,11 +44,13 @@ export class HowtoList extends React.Component<IProps, any> {
     return (
       <>
         <Flex justifyContent={'right'}>
-          <Link to={'/how-to/create'}>
-            <Button variant="outline" icon={'add'}>
-              create
-            </Button>
-          </Link>
+          <AuthWrapper>
+            <Link to={'/how-to/create'}>
+              <Button variant="outline" icon={'add'}>
+                create
+              </Button>
+            </Link>
+          </AuthWrapper>
         </Flex>
         <React.Fragment>
           <div>
@@ -55,8 +58,11 @@ export class HowtoList extends React.Component<IProps, any> {
               <LinearProgress />
             ) : (
               <FlexGrid flexWrap={'wrap'} justifyContent={'space-between'}>
-                {allHowtos.map((howto: IHowto, index: number) => (
-                  <Link to={`/how-to/${encodeURIComponent(howto.slug)}`}>
+                {allHowtos.map((howto: IHowto) => (
+                  <Link
+                    to={`/how-to/${encodeURIComponent(howto.slug)}`}
+                    key={howto._id}
+                  >
                     <Box my={4}>
                       <Card borderRadius={1} width={[380]} bg={'white'}>
                         <CardImage src={howto.cover_image.downloadUrl} />

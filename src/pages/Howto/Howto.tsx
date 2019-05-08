@@ -7,9 +7,10 @@ import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
 import { Howto } from './Content/Howto/Howto'
 import { CreateHowto } from './Content/CreateHowto/CreateHowto'
 import { HowtoList } from './Content/HowtoList/HowtoList'
+import { AuthRoute } from '../common/AuthRoute'
 
 interface IProps {
-  howtoStore: HowtoStore
+  howtoStore?: HowtoStore
   nonav: boolean
 }
 
@@ -28,7 +29,7 @@ class HowtoPageClass extends React.Component<IProps, any> {
     // this will be reflected in the props.howtoStore.docs object
     // it should automatically update components however for some reason failing to
     // so call force update after first update
-    await this.props.howtoStore.getDocList()
+    await this.props.howtoStore!.getDocList()
     this.forceUpdate()
   }
 
@@ -45,11 +46,20 @@ class HowtoPageClass extends React.Component<IProps, any> {
         )}
         <Switch>
           <Route
-            exact path="/how-to"
-            render={props => <HowtoList {...props}
-            allHowtos={this.props.howtoStore.allHowtos} />}
+            exact
+            path="/how-to"
+            render={props => (
+              <HowtoList
+                {...props}
+                allHowtos={this.props.howtoStore!.allHowtos}
+              />
+            )}
           />
-          <Route path="/how-to/create" component={CreateHowto} />
+          <AuthRoute
+            path="/how-to/create"
+            component={CreateHowto}
+            redirectPath="/how-to"
+          />
           <Route path="/how-to/:slug" render={props => <Howto {...props} />} />
         </Switch>
       </div>

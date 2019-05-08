@@ -17,6 +17,7 @@ const InnerContainer = styled.div<InnerContainerProps>`
   ${space}
   ${width}
   ${maxWidth}
+  min-height: 100vh;
 `
 
 const PageContainer = (props: FlexProps) => (

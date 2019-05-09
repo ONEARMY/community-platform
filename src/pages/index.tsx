@@ -10,6 +10,7 @@ import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import Header from './common/Header/Header'
 import { SITE } from 'src/config/config'
 import { DevNotice } from 'src/components/Dev/DevNotice'
+import { FeedbackPage } from './Feedback/Feedback'
 import PageContainer from 'src/components/Layout/PageContainer'
 
 interface IState {
@@ -39,6 +40,12 @@ export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [
     component: <ProfilePage />,
     title: 'Profile',
     description: '',
+  },
+  {
+    path: '/feedback',
+    component: <FeedbackPage />,
+    title: 'Feedback',
+    description: 'Let us know what you think!',
   },
 ]
 

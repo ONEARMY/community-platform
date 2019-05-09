@@ -63,7 +63,9 @@ export class Routes extends React.Component<any, IState> {
                           title={page.title}
                           description={page.description}
                         />
-                        <PageContainer>{page.component}</PageContainer>
+                        <PageContainer>
+                          <>{page.component}</>
+                        </PageContainer>
                       </React.Fragment>
                     )}
                   />

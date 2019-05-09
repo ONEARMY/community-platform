@@ -1,20 +1,19 @@
 import * as React from 'react'
-import { CSSProperties } from '@material-ui/core/styles/withStyles'
+import { VERSION } from 'src/config/config'
 
 /*
 A simple component to render the current build version number.
 This number is from the version in package.json and passed as an environment variable
 */
 
-const styles: CSSProperties = {
-  right: 20,
+const styles: React.CSSProperties = {
+  width: '100%',
+  textAlign: 'center',
   color: '#313131',
-  bottom: 0,
-  position: 'fixed',
-  opacity: 0.7,
+  opacity: 0.4,
+  position: 'absolute',
+  bottom: '16px',
 }
-const VersionNumber = () => (
-  <div style={styles}>Version: {process.env.REACT_APP_PLATFORM_VERSION}</div>
-)
+const VersionNumber = () => <div style={styles}>v{VERSION}</div>
 
 export { VersionNumber }

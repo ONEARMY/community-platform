@@ -10,6 +10,7 @@ import {
 } from 'styled-system'
 import { Flex, FlexProps } from 'rebass'
 import theme from 'src/themes/styled.theme'
+import { VersionNumber } from '../VersionNumber/VersionNumber'
 
 type InnerContainerProps = MaxWidthProps & SpaceProps & WidthProps
 
@@ -17,12 +18,17 @@ const InnerContainer = styled.div<InnerContainerProps>`
   ${space}
   ${width}
   ${maxWidth}
-  min-height: 100vh;
+  min-height: calc(100vh - 156px);
+  margin-bottom:0;
+  padding-bottom: 32px;
+  position: relative
 `
 
 const PageContainer = (props: FlexProps) => (
   <Flex {...props} bg={theme.colors.background}>
-    <InnerContainer>{props.children}</InnerContainer>
+    <InnerContainer>
+      {props.children} <VersionNumber />
+    </InnerContainer>
   </Flex>
 )
 

@@ -24,7 +24,7 @@ export class ProfilePage extends React.Component<IProps> {
     const currentUser = this.injected.userStore.user as IUser
     return currentUser ? (
       <PageContainer>
-        <BoxContainer p={0}>
+        <BoxContainer p={4}>
           <Switch>
             {/* own profile */}
             <Route

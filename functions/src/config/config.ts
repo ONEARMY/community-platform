@@ -45,3 +45,4 @@ interface IFirebaseConfig {
 function _b64ToString(b64str: string) {
   return Buffer.from(b64str, 'base64').toString('binary')
 }
+

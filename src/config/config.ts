@@ -35,7 +35,7 @@ let algoliaConfig: IAlgoliaConfig = {
                                         Site Variants
 /********************************************************************************************** */
 const e = process.env
-
+console.log('env', e)
 // the name of the github branch is passed via travis as an environment variable
 const branch = e.REACT_APP_BRANCH as string
 // as both dev.onearmy.world and onearmy.world are production builds we can't use process.env to distinguish

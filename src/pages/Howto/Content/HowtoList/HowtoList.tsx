@@ -92,13 +92,6 @@ export class HowtoList extends React.Component<IProps, any> {
               </FlexGrid>
             )}
           </div>
-          {allHowtos.length > 15 ? (
-            <Link to={'/how-to/create'}>
-              <Button mx={'auto'} my={50} icon={'add'}>
-                create how-to
-              </Button>
-            </Link>
-          ) : null}
         </React.Fragment>
       </>
     )

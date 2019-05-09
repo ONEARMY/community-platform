@@ -5,7 +5,7 @@ export const UPPY_CONFIG: Partial<Uppy.UppyOptions> = {
     maxFileSize: 5000000,
     maxNumberOfFiles: 5,
     minNumberOfFiles: null,
-    allowedFileTypes: ['*'],
+    allowedFileTypes: null,
   },
   locale: {
     strings: {

@@ -73,7 +73,9 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
                 <b>Files : </b>
               </Text>
             ) &&
-            howto.files.map(file => <FileInfo file={file} key={file.name} />)}
+            howto.files.map(file => (
+              <FileInfo allowDownload file={file} key={file.name} />
+            ))}
         </Box>
         <Flex justifyContent={'end'} width={[1 / 2]}>
           <CoverImg src={howto.cover_image.downloadUrl} alt="how-to cover" />

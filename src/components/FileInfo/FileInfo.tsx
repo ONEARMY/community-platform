@@ -1,17 +1,18 @@
 import * as React from 'react'
-import Icon, { availableGlyphs } from '../Icons'
-import { FlexContainer } from '../Layout/FlexContainer'
-import Text from '../Text'
+import { availableGlyphs } from '../Icons'
 import { bytesToSize } from '../ImageInput/ImageInput'
 import { IUploadedFileMeta } from 'src/stores/storage'
+import { FileDetails } from './FileDetails'
 
 interface IProps {
   file: File | IUploadedFileMeta
+  allowDownload?: boolean
 }
 interface IState {
   glyph: availableGlyphs
   size: string
 }
+
 export class FileInfo extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
@@ -32,22 +33,21 @@ export class FileInfo extends React.Component<IProps, IState> {
     }
     return glyph
   }
+
   render() {
-    const { file } = this.props
+    const { file, allowDownload } = this.props
+    const { glyph, size } = this.state
+    const meta = file as IUploadedFileMeta
     return (
-      <FlexContainer
-        p={0}
-        mb={2}
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <Icon size={24} glyph={this.state.glyph} marginRight="4px" />
-        {/* TODO allow file download with file.downloadUrl */}
-        <Text small clipped={true} flex={1}>
-          {file.name}
-        </Text>
-        <Text small>{this.state.size}</Text>
-      </FlexContainer>
+      <>
+        {allowDownload && meta.downloadUrl ? (
+          <a href={meta.downloadUrl} target="_blank" download={file.name}>
+            <FileDetails file={file} glyph={glyph} size={size} />
+          </a>
+        ) : (
+          <FileDetails file={file} glyph={glyph} size={size} />
+        )}
+      </>
     )
   }
 }

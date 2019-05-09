@@ -14,7 +14,7 @@ script:
 
 before_deploy:
   - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH"
-  - export REACT_APP_BRANCH=$(if [ "$TRAVIS_BRANCH" == "production" ]; then echo "PRODUCTION"; else echo "STAGING"; fi)
+  - export REACT_APP_BRANCH=$TRAVIS_BRANCH
   - echo "REACT_APP_BRANCH=$REACT_APP_BRANCH"
   - export FIREBASE_TOKEN=$(if [ "$TRAVIS_BRANCH" == "production" ]; then echo "$FIREBASE_PRODUCTION_TOKEN"; else echo "$FIREBASE_STAGING_TOKEN"; fi)
 deploy:

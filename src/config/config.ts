@@ -21,10 +21,6 @@ let firebaseConfig: IFirebaseConfig = {
   projectId: 'precious-plastics-v4-dev',
   storageBucket: 'precious-plastics-v4-dev.appspot.com',
 }
-let analyticsConfig: IAnalyticsConfig = {
-  trackingCode: 'UA-133973230-2',
-  viewId: '189456245',
-}
 let sentryConfig: ISentryConfig = {
   dsn: 'https://8c1f7eb4892e48b18956af087bdfa3ac@sentry.io/1399729',
 }
@@ -38,41 +34,45 @@ let algoliaConfig: IAlgoliaConfig = {
 /*********************************************************************************************** /
                                         Site Variants
 /********************************************************************************************** */
+const e = process.env
 
-// different production site config pulled from environment variable
-const productionSites = [
-  'onearmy.world',
-  'onearmyworld.firebaseapp.com',
-  'documentation.preciousplastic.com',
-]
+// the name of the github branch is passed via travis as an environment variable
+const branch = e.REACT_APP_BRANCH as string
 // as both dev.onearmy.world and onearmy.world are production builds we can't use process.env to distinguish
 // will be set to one of 'localhost', 'staging' or 'production'
-let siteVariant: siteVariants =
-  process.env.NODE_ENV === 'development' ? 'localhost' : 'staging'
-
+console.log(`git branch: ${branch}`)
+const siteVariant: siteVariants =
+  branch === 'production'
+    ? 'production'
+    : branch === 'master'
+    ? 'staging'
+    : 'localhost'
+console.log(`site: ${siteVariant}`)
 /*********************************************************************************************** /
                                         Production
 /********************************************************************************************** */
 
 // production config is passed as environment variables during CI build.
-// most config requires json objects, so these are encoded as base64 strings to make for easier storing
-if (productionSites.indexOf(window.location.host) > -1) {
-  siteVariant = 'production'
-  const e = process.env
+if (siteVariant === 'production') {
   // note, technically not required as supplied directly to firebase config() method during build
-  firebaseConfig = b64StrToJson(
-    e.REACT_APP_FIREBASE_CONFIG as string,
-  ) as IFirebaseConfig
-  analyticsConfig = b64StrToJson(
-    e.REACT_APP_ANALYTICS_CONFIG_PROD as string,
-  ) as IAnalyticsConfig
+  firebaseConfig = {
+    apiKey: e.REACT_APP_FIREBASE_API_KEY as string,
+    authDomain: e.REACT_APP_FIREBASE_AUTH_DOMAIN as string,
+    databaseURL: e.REACT_APP_FIREBASE_DATABASE_URL as string,
+    messagingSenderId: e.REACT_APP_FIREBASE_MESSAGING_SENDER_ID as string,
+    projectId: e.REACT_APP_FIREBASE_PROJECT_ID as string,
+    storageBucket: e.REACT_APP_FIREBASE_STORAGE_BUCKET as string,
+  }
   sentryConfig = {
     dsn: e.REACT_APP_SENTRY_DSN as string,
   }
-  algoliaConfig = b64StrToJson(
-    // *** NOTE - Needs to be created
-    e.REACT_APP_ALGOLIA_CONFIG as string,
-  ) as IAlgoliaConfig
+  // TODO - create production algolia config
+  algoliaConfig = {
+    adminAPIKey: '',
+    applicationID: '',
+    monitoringAPIKey: '',
+    searchOnlyAPIKey: '',
+  }
 }
 
 /*********************************************************************************************** /
@@ -81,19 +81,10 @@ if (productionSites.indexOf(window.location.host) > -1) {
 
 export const SITE = siteVariant
 export const FIREBASE_CONFIG = firebaseConfig
-export const GOOGLE_ANALYTICS_CONFIG = analyticsConfig
 export const ALGOLIA_CONFIG = algoliaConfig
 export const SENTRY_CONFIG = sentryConfig
 // tslint:disable no-var-requires
 export const VERSION = require('../../package.json').version
-
-/*********************************************************************************************** /
-                                        Utils
-/********************************************************************************************** */
-
-function b64StrToJson(str: string) {
-  return JSON.parse(atob(str))
-}
 
 /*********************************************************************************************** /
                                         Interfaces
@@ -105,10 +96,6 @@ interface IFirebaseConfig {
   projectId: string
   storageBucket: string
   messagingSenderId: string
-}
-interface IAnalyticsConfig {
-  trackingCode: string
-  viewId: string
 }
 interface ISentryConfig {
   dsn: string

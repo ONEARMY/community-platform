@@ -6,7 +6,7 @@ import Icon from 'src/components/Icons'
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
 import { VersionNumber } from 'src/components/VersionNumber/VersionNumber'
-import { COMMUNITY_PAGES } from 'src/pages'
+import { COMMUNITY_PAGES } from 'src/pages/PageList'
 import { NavLink } from 'react-router-dom'
 
 interface IState {

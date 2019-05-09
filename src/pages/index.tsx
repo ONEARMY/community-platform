@@ -2,52 +2,22 @@
 import * as React from 'react'
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom'
 import DevTools from 'mobx-react-devtools'
-
-import { HowtoPage } from './Howto/Howto'
 import { NotFoundPage } from './NotFound/NotFound'
-import { ProfilePage } from './Profile/Profile'
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import Header from './common/Header/Header'
 import { SITE } from 'src/config/config'
 import { DevNotice } from 'src/components/Dev/DevNotice'
-import { FeedbackPage } from './Feedback/Feedback'
 import PageContainer from 'src/components/Layout/PageContainer'
+import {
+  COMMUNITY_PAGES,
+  COMMUNITY_PAGES_PROFILE,
+  COMMUNITY_PAGES_MORE,
+} from './PageList'
 
 interface IState {
   singlePageMode: boolean
   displayPageComponent?: any
 }
-export interface IPageMeta {
-  path: string
-  component: any
-  title: string
-  description: string
-  exact?: boolean
-}
-
-export const COMMUNITY_PAGES: IPageMeta[] = [
-  {
-    path: '/how-to',
-    component: <HowtoPage />,
-    title: 'How-to',
-    description: 'Welcome to how-to',
-  },
-]
-
-export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [
-  {
-    path: '/profile',
-    component: <ProfilePage />,
-    title: 'Profile',
-    description: '',
-  },
-  {
-    path: '/feedback',
-    component: <FeedbackPage />,
-    title: 'Feedback',
-    description: 'Let us know what you think!',
-  },
-]
 
 export class Routes extends React.Component<any, IState> {
   constructor(props: any) {
@@ -55,7 +25,11 @@ export class Routes extends React.Component<any, IState> {
   }
 
   public render() {
-    const pages = [...COMMUNITY_PAGES, ...COMMUNITY_PAGES_PROFILE]
+    const pages = [
+      ...COMMUNITY_PAGES,
+      ...COMMUNITY_PAGES_PROFILE,
+      ...COMMUNITY_PAGES_MORE,
+    ]
     // we are rendering different pages and navigation dependent on whether the user has navigated directly to view the
     // entire site, or just one page of it via subdomains. This is so we can effectively integrate just parts of this
     // platform into other sites. The first case is direct nav
@@ -89,7 +63,9 @@ export class Routes extends React.Component<any, IState> {
                           title={page.title}
                           description={page.description}
                         />
-                        <PageContainer>{page.component}</PageContainer>
+                        <PageContainer>
+                          <>{page.component}</>
+                        </PageContainer>
                       </React.Fragment>
                     )}
                   />

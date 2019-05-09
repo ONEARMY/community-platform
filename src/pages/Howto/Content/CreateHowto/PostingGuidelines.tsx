@@ -9,14 +9,11 @@ export const PostingGuidelines = () => (
     <Heading small bold>
       How-to Posting Guidelines
     </Heading>
-    <Text my={3}> 1. You think water moves fast ?</Text>
-    <Text my={3}> 2. You should see ice.</Text>
-    <Text my={3}> 3. It moves like it has a mind.</Text>
-    <Text my={3}>
-      {' '}
-      4. Like it knows it killed the world once and got a taste for murder.
-    </Text>
-    <Text my={3}> 5. After the avalanche, it took us a week.</Text>
+    <Text my={3}> 1. Titles are powerful. Choose wisely.</Text>
+    <Text my={3}> 2. Use tags, that's how we stay organised.</Text>
+    <Text my={3}> 3. Upload minimum 3 steps.</Text>
+    <Text my={3}>4. Try to keep it short but informative.</Text>
+    <Text my={3}> 5. For each steps try to use an image.</Text>
     <Text small>
       If unsure please read our posting policy as well as our{' '}
       <Link

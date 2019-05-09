@@ -2,7 +2,7 @@
 
 ## What are they?
 
-Firebase functions are backend functions, triggered either via https requests, cloud pub/sub or other specific Firebase events (e.g. database writes). They run within a nodejs environment and have full ability to interact with the firebase platform.
+Firebase functions are backend functions, triggered either via https requests, cloud pub/sub or other specific Firebase events (e.g. database/storage writes). They run within a nodejs environment and have full ability to interact with the firebase platform.
 https://firebase.google.com/docs/functions/
 
 ## How are they used at One Army?
@@ -10,28 +10,52 @@ https://firebase.google.com/docs/functions/
 Currently
 
 - Database backups
+- Image compression
+- DHSite tracking and migration
 
 Future
 
-- Image compression on upload
+- Analytics
 
 ## How to build and deploy
 
-The functions are not integrated into the existing CI pipeline for automated deployment as they require
-a specific config file which is not shared in the public git repository.
+The functions are integrated into the ci pipeline for master and production branches.
+Simply make a PR and once approved the function will be deployed
 
-As such you will need to be authenticated as a firebase project admin (available from repo admin)
-and populate the src/config files (available from repo admin)
+## Testing locally
 
-To deploy functions use the following scripts
+If the code is built you can run firebase serve from the main repo and the functions will also be made available. More info: https://firebase.google.com/docs/functions/local-emulator
 
-`$cd functions`
+Note, this will require authentication for the firebase project. You can request to be added to the project from any of the admins.
 
-dev:
-`$npm run deploy-functions-dev`
+This also only works for specific triggers (namely the api endpoints). If you want to
+test a functions triggered in other ways you may first want to create an api endpoint
+for testing and later test further with the [firebase functions shell](https://firebase.google.com/docs/functions/local-emulator#install_and_configure_the_cloud_functions_shell), via command `$npm run shell`
 
-prod:
-`$npm run deploy-functions-prod`
+Additionally, the functions won't be automatically reloaded on change. This should be possible
+(easier when working with JS instead of TS), so if anybody wishes to investigate further they would
+be most welcome. Alternatively just restart the serve process on changes.
+
+## Handling headers and redirects
+
+By default firebase redirects most requests to the main index file. Custom rewrite has
+been added for /api requests and some other exports.
+If specific rewrite needs to be handled you can update the root `firebase.json` file.
+
+## Accessing environment variables (e.g. service account)
+
+Functions have a config:set method which makes environment variables available to
+all instances running on the project. These can be set and retrieved by anybody with
+appropriate access rights on the repository (if you need them just ask Chris or one of
+the other project admins)
+
+When testing locally you can run the `serve` script which also takes a copy of the
+server config and copies locally (to `.runtimeconfig.json` ) so that it can be accessed
+by localhost functions also.
+
+## Viewing console logs
+
+To view console logs and events from deployed functions request project access from one of the admins.
 
 ## Adding cron tasks
 

@@ -5,7 +5,7 @@ export const TemplateMock: ITemplateData[] = [
   {
     id: 1,
     message: { message: 'hello', read: true, type: 'short' },
-    createdBy: MOCK_USER,
+    _createdBy: MOCK_USER,
     _created: new Date(),
     _modified: new Date(),
   },
@@ -30,7 +30,7 @@ means we expect an array of items all matching that data structure
 (for more info see https://www.typescriptlang.org/docs/handbook/basic-types.html)
 
 Q. Isn't the data incomplete?
-No, createdBy is an optional field (denoted by ? in the model)
+No, _createdBy is an optional field (denoted by ? in the model)
 
 
 Anything else you want to know? Add it to a git issue and so we can make the 

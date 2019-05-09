@@ -1,9 +1,9 @@
-import { IUser } from './models'
+import { IUser } from './user.models'
 
 export interface IProject {
   id: string
   name: string
-  createdBy: string
+  _createdBy: string
   users: IUser[]
   _created: Date
   _modified: Date

@@ -3,7 +3,7 @@ import { IUser } from './user.models'
 export interface ITemplateData {
   id: number
   message: ITemplateMessage
-  createdBy?: IUser
+  _createdBy?: IUser
   _created: Date
   _modified: Date
 }
@@ -34,7 +34,7 @@ to identify differently, namely starting with '_'
 
 Q. How do I define more complex structures?
 You can define a field as another interface for nested properties like has been
-done for message and createdBy. There's lots more ways for further advanced
+done for message and _createdBy. There's lots more ways for further advanced
 types, such as providing a specific list of strings (e.g. ITemplateMessage type),
 including unknown fields via [key]:valueType etc. (see link above for more) 
 

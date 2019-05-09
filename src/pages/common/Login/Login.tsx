@@ -1,83 +1,144 @@
 import * as React from 'react'
-import IconButton from '@material-ui/core/IconButton'
 import Modal from '@material-ui/core/Modal'
-import Lock from '@material-ui/icons/Lock'
-import LockOpen from '@material-ui/icons/LockOpen'
-import { LoginFormComponent } from './LoginForm'
-import { auth } from '../../../utils/firebase'
-import { IUser } from '../../../models/models'
-
-const styles: any = {
-  container: {
-    float: 'right',
-    padding: '5px',
-  },
-}
+import { auth } from 'src/utils/firebase'
+import { Button } from 'src/components/Button'
+import { UserStore } from 'src/stores/User/user.store'
+import { inject, observer } from 'mobx-react'
+import { LoginForm } from './Login.form'
+import { SignUpForm } from './SignUp.form'
+import { ResetPWForm } from './ResetPW.form'
+import { BoxContainer } from 'src/components/Layout/BoxContainer'
 
 interface IProps {
-  user?: IUser | null
+  userStore?: UserStore
 }
 
+interface IFormValues {
+  email: string
+  password: string
+  userName: string
+  passwordConfirmation?: string
+}
 interface IState {
   showLoginModal: boolean
+  submitDisabled?: boolean
+  formValues: IFormValues
+  showSignUpForm?: boolean
+  showLoginForm?: boolean
+  showResetPWForm?: boolean
+  errorMsg?: string
 }
 
+interface InjectedProps extends IProps {
+  userStore: UserStore
+}
+
+@inject('userStore')
+@observer
 export class LoginComponent extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
       showLoginModal: false,
+      showLoginForm: true,
+      formValues: {
+        email: '',
+        password: '',
+        userName: '',
+      },
     }
   }
-  public componentWillReceiveProps(newProps: IProps) {
-    if (newProps.user) {
-      this.closeLogin()
-    }
+
+  public get injected() {
+    return this.props as InjectedProps
   }
+
   public logout = () => {
     auth.signOut()
   }
-  public openLogin = () => {
-    if (!this.props.user) {
-      this.setState({
-        showLoginModal: true,
-      })
-    }
-  }
-  public closeLogin = () => {
+
+  public toggleModal = () => {
     this.setState({
-      showLoginModal: false,
+      showLoginModal: !this.state.showLoginModal,
+      showLoginForm: true,
+      showResetPWForm: false,
+      showSignUpForm: false,
     })
   }
+
+  // generic function to handle form input changes
+  // these values can then be shared between the different form components
+  // (e.g. to retain the email typed when moving to forgot pw)
+  public handleChange = (e: React.FormEvent<any>) => {
+    const nextValues = { ...this.state.formValues }
+    ;(nextValues[e.currentTarget.id] = e.currentTarget.value),
+      this.setState({ formValues: nextValues })
+  }
+
   public render() {
+    const user = this.injected.userStore.user
     return (
-      <div>
-        <div style={styles.container}>
-          <div className="login-icon">
-            {this.props.user ? (
-              <IconButton color="primary" onClick={this.logout}>
-                <LockOpen />
-                Log out
-              </IconButton>
-            ) : (
-              <IconButton color="primary" onClick={this.openLogin}>
-                <Lock />
-                Log in
-              </IconButton>
-            )}
-          </div>
-        </div>
+      <>
+        <Button
+          onClick={() =>
+            this.setState({
+              showLoginModal: !this.state.showLoginModal,
+              showResetPWForm: false,
+              showLoginForm: false,
+              showSignUpForm: true,
+            })
+          }
+        >
+          Sign up
+        </Button>
+        <Button variant="outline" onClick={this.toggleModal}>
+          Log in
+        </Button>
         <Modal
           aria-labelledby="user-login-modal"
           aria-describedby="click to show user login"
-          open={this.state.showLoginModal && !this.props.user}
-          onClose={this.closeLogin}
+          open={this.state.showLoginModal && !user}
+          onClose={this.toggleModal}
         >
-          <div className="login-modal">
-            <LoginFormComponent />
-          </div>
+          <BoxContainer width={350} mx="auto" mt={5}>
+            {this.state.showLoginForm && (
+              <LoginForm
+                onChange={e => this.handleChange(e)}
+                onForgotPWClick={() =>
+                  this.setState({
+                    showResetPWForm: true,
+                    showLoginForm: false,
+                    showSignUpForm: false,
+                  })
+                }
+                onSignUpLinkClick={() =>
+                  this.setState({
+                    showResetPWForm: false,
+                    showLoginForm: false,
+                    showSignUpForm: true,
+                  })
+                }
+                userStore={this.injected.userStore}
+                preloadValues={this.state.formValues}
+              />
+            )}
+            {this.state.showSignUpForm && (
+              <SignUpForm
+                onChange={e => this.handleChange(e)}
+                userStore={this.injected.userStore}
+                preloadValues={this.state.formValues}
+              />
+            )}
+            {this.state.showResetPWForm && (
+              <ResetPWForm
+                onChange={e => this.handleChange(e)}
+                userStore={this.injected.userStore}
+                preloadValues={this.state.formValues}
+              />
+            )}
+          </BoxContainer>
         </Modal>
-      </div>
+      </>
     )
   }
 }

@@ -1,15 +1,19 @@
+import { firestore } from 'firebase/app'
+
 // remove special characters from string, also replacing spaces with dashes
-const stripSpecialCharacters = (text: string) => {
+export const stripSpecialCharacters = (text?: string) => {
   return text
-    .replace(/[`~!@#$%^&*()_|+\-=÷¿?;:'",.<>\{\}\[\]\\\/]/gi, '')
-    .split(' ')
-    .join('-')
+    ? text
+        .replace(/[`~!@#$%^&*()_|+\-=÷¿?;:'",.<>\{\}\[\]\\\/]/gi, '')
+        .split(' ')
+        .join('-')
+    : ''
 }
 
 // take an array of objects and convert to an single object, using a unique key
 // that already exists in the array element, i.e.
 // [{id:'abc',val:'hello'},{id:'def',val:'world'}] = > {abc:{id:abc,val:'hello}, def:{id:'def',val:'world'}}
-const arrayToJson = (arr: any[], keyField: string) => {
+export const arrayToJson = (arr: any[], keyField: string) => {
   const json = {}
   arr.forEach(el => {
     if (el.hasOwnProperty(keyField)) {
@@ -20,4 +24,11 @@ const arrayToJson = (arr: any[], keyField: string) => {
   return json
 }
 
-export default { stripSpecialCharacters, arrayToJson }
+export const toTimestamp = (dateString: string) => {
+  return firestore.Timestamp.fromDate(new Date(dateString))
+}
+
+export const isEmail = (email: string) => {
+  const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  return re.test(email)
+}

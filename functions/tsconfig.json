@@ -2,17 +2,11 @@
   "compilerOptions": {
     "lib": ["es6"],
     "module": "commonjs",
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
     "noImplicitAny": false,
     "outDir": "lib",
     "sourceMap": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "allowSyntheticDefaultImports": true,
     "target": "es6",
-    "typeRoots": ["./types", "./node_modules/@types"],
-    "resolveJsonModule": true
+    "typeRoots": ["node_modules/@types"]
   },
-  "compileOnSave": true,
-  "include": ["src"]
+  "include": ["src/**/*.ts", "spec/**/*.ts"]
 }

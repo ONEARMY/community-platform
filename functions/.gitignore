@@ -6,5 +6,9 @@ node_modules
 
 # Typescript v1 declaration files
 types/
-src/config/*.json
 lib/
+
+# Testing config files
+.runtimeconfig.json
+
+./firebase-debug.log

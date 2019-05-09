@@ -104,7 +104,7 @@ export class ImageInput extends React.Component<IProps, IState> {
               onClick={() => this.triggerFileUploaderClick()}
               icon="image"
             >
-              {this.props.multi ? 'Choose Images' : 'Choose Image'}
+              {this.props.multi ? 'Choose Image(s)' : 'Choose Image'}
             </Button>
             <input
               type="file"

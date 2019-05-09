@@ -31,7 +31,6 @@ export class FileInfo extends React.Component<IProps, IState> {
       default:
         break
     }
-    console.log('glyph', glyph)
     return glyph
   }
 
@@ -39,8 +38,6 @@ export class FileInfo extends React.Component<IProps, IState> {
     const { file, allowDownload } = this.props
     const { glyph, size } = this.state
     const meta = file as IUploadedFileMeta
-    console.log('download', allowDownload, 'meta', meta)
-    console.log(allowDownload && meta.downloadUrl)
     return (
       <>
         {allowDownload && meta.downloadUrl ? (

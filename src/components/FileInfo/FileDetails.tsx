@@ -3,7 +3,6 @@ import Icon, { availableGlyphs } from '../Icons'
 import { FlexContainer } from '../Layout/FlexContainer'
 import Text from '../Text'
 import { IUploadedFileMeta } from 'src/stores/storage'
-import Theme from 'src/themes/styled.theme'
 
 interface IProps {
   file: File | IUploadedFileMeta

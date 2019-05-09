@@ -13,6 +13,7 @@ import { ImageConverter } from './ImageConverter'
 
 interface IProps {
   onFilesChange?: (fileMeta: IConvertedFileMeta[]) => void
+  multi?: boolean
 }
 
 export interface IConvertedFileMeta {
@@ -103,13 +104,13 @@ export class ImageInput extends React.Component<IProps, IState> {
               onClick={() => this.triggerFileUploaderClick()}
               icon="image"
             >
-              Choose Image(s)
+              {this.props.multi ? 'Choose Image(s)' : 'Choose Image'}
             </Button>
             <input
               type="file"
               name="pic"
-              accept="image/*"
-              multiple
+              accept="image/jpeg,image/png"
+              multiple={this.props.multi}
               ref={this.fileInputRef}
               style={{ display: 'none' }}
             />

@@ -82,7 +82,7 @@ class Step extends Component<IProps, IState> {
           </FlexContainer>
           {/* right */}
           <BoxContainer p={0} width={[1, '305px', null]}>
-            <Field name={`${step}.images`} component={ImageInputField} />
+            <Field name={`${step}.images`} component={ImageInputField} multi />
           </BoxContainer>
         </FlexContainer>
       </BoxContainer>

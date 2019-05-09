@@ -9,6 +9,7 @@ import * as bodyParser from 'body-parser'
 import * as cors from 'cors'
 import * as express from 'express'
 
+console.log('api init')
 const app = express()
 // use bodyparse to create json object from body
 app.use(

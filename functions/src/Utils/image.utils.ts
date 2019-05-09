@@ -3,7 +3,6 @@ import * as sharp from 'sharp'
 import { tmpdir } from 'os'
 import { ensureDir } from 'fs-extra'
 
-console.log('sharp', sharp)
 // These are the widths used when compressing images to different sizes
 export enum STANDARD_WIDTHS {
   thumb = 160,

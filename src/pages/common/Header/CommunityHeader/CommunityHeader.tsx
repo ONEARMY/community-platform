@@ -1,5 +1,9 @@
 import React from 'react'
-import { COMMUNITY_PAGES, COMMUNITY_PAGES_PROFILE } from 'src/pages'
+import {
+  COMMUNITY_PAGES,
+  COMMUNITY_PAGES_MORE,
+  COMMUNITY_PAGES_PROFILE,
+} from 'src/pages/PageList'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
@@ -12,8 +16,10 @@ import { inject, observer } from 'mobx-react'
 import Text from 'src/components/Text'
 import { Box } from 'rebass'
 import theme from 'src/themes/styled.theme'
+import { Button } from 'src/components/Button'
 
 interface IState {
+  moreMenuAnchor: any
   profileMenuAnchor: any
 }
 
@@ -32,6 +38,7 @@ export class CommunityHeader extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
+      moreMenuAnchor: null,
       profileMenuAnchor: null,
     }
   }
@@ -41,11 +48,19 @@ export class CommunityHeader extends React.Component<IProps, IState> {
 
   // function receives clicked element which then sets itself as an 'anchor'
   // for displaying the dropdown menu
+  openMoreMenu = (e: React.MouseEvent) => {
+    this.setState({
+      moreMenuAnchor: e.currentTarget,
+    })
+  }
 
   openProfileMenu = (e: React.MouseEvent) => {
     this.setState({
       profileMenuAnchor: e.currentTarget,
     })
+  }
+  closeMoreMenu = () => {
+    this.setState({ moreMenuAnchor: null })
   }
   closeProfileMenu = () => {
     this.setState({ profileMenuAnchor: null })
@@ -57,7 +72,7 @@ export class CommunityHeader extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { profileMenuAnchor } = this.state
+    const { moreMenuAnchor, profileMenuAnchor } = this.state
     const user = this.injected.userStore.user
     return (
       <div>
@@ -76,6 +91,39 @@ export class CommunityHeader extends React.Component<IProps, IState> {
                 {page.title}
               </LinkButton>
             ))}
+            {COMMUNITY_PAGES_MORE.length > 0 && (
+              <LinkButton
+                className="nav-link"
+                variant="primary"
+                to={'#'}
+                onClick={this.openMoreMenu}
+                activeClassName="link-active"
+              >
+                More
+              </LinkButton>
+            )}
+            <Menu
+              open={moreMenuAnchor ? true : false}
+              anchorEl={moreMenuAnchor}
+              className="nav__more-menu"
+              style={{ marginTop: '3em' }}
+            >
+              <ClickAwayListener onClickAway={this.closeMoreMenu}>
+                <div>
+                  {COMMUNITY_PAGES_MORE.map(page => (
+                    <MenuItem onClick={this.closeMoreMenu} key={page.path}>
+                      <LinkButton
+                        className="nav-link"
+                        to={page.path}
+                        activeClassName="link-active"
+                      >
+                        {page.title}
+                      </LinkButton>
+                    </MenuItem>
+                  ))}
+                </div>
+              </ClickAwayListener>
+            </Menu>
           </Links>
           {user ? (
             <>

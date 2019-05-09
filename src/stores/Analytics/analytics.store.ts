@@ -1,13 +1,13 @@
 import ReactGA from 'react-ga'
-import { GOOGLE_ANALYTICS_CONFIG } from 'src/config/config'
+// import { GOOGLE_ANALYTICS_CONFIG } from 'src/config/config'
 
 export class AnalyticsStore {
-  constructor() {
-    ReactGA.initialize(GOOGLE_ANALYTICS_CONFIG.trackingCode, { debug: true })
-  }
-  public postViewReactGA(postId: string) {
-    ReactGA.ga('send', 'pageview', '/discussions/post/' + postId)
-  }
+  //   constructor() {
+  //     ReactGA.initialize(GOOGLE_ANALYTICS_CONFIG.trackingCode, { debug: true })
+  //   }
+  //   public postViewReactGA(postId: string) {
+  //     ReactGA.ga('send', 'pageview', '/discussions/post/' + postId)
+  //   }
 
   // function to pull data from google analytics
   // *** NOTE - currently broken (CORs) and requires move to server functions (see issue #320)

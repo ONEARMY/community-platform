@@ -28,6 +28,5 @@ deploy:
     skip_cleanup: true
     on:
       branch: production
-      tags: true
 after_deploy:
   - echo "REACT_APP_BRANCH=$REACT_APP_BRANCH"

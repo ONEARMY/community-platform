@@ -6,7 +6,6 @@ import { config } from 'firebase-functions'
 */
 const c = config() as configVars
 // strip additional character escapes (\\n -> \n)
-console.log('config', c)
 c.service.private_key = c.service.private_key.replace(/\\n/g, '\n')
 
 export const SERVICE_ACCOUNT_CONFIG = c.service

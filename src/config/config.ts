@@ -30,24 +30,20 @@ let algoliaConfig: IAlgoliaConfig = {
   monitoringAPIKey: 'b38f41ddf7203342a6daffdb17de99a9',
   applicationID: '4RM0GZKTOC',
 }
-
 /*********************************************************************************************** /
                                         Site Variants
 /********************************************************************************************** */
 const e = process.env
-
 // the name of the github branch is passed via travis as an environment variable
 const branch = e.REACT_APP_BRANCH as string
 // as both dev.onearmy.world and onearmy.world are production builds we can't use process.env to distinguish
 // will be set to one of 'localhost', 'staging' or 'production'
-console.log(`git branch: ${branch}`)
 const siteVariant: siteVariants =
   branch === 'production'
     ? 'production'
     : branch === 'master'
     ? 'staging'
     : 'localhost'
-console.log(`site: ${siteVariant}`)
 /*********************************************************************************************** /
                                         Production
 /********************************************************************************************** */
@@ -73,6 +69,9 @@ if (siteVariant === 'production') {
     monitoringAPIKey: '',
     searchOnlyAPIKey: '',
   }
+  // disable console logs
+  // tslint:disable no-empty
+  console.log = () => {}
 }
 
 /*********************************************************************************************** /

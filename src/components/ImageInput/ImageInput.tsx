@@ -109,7 +109,7 @@ export class ImageInput extends React.Component<IProps, IState> {
             <input
               type="file"
               name="pic"
-              accept="image/*"
+              accept="image/jpeg,image/png"
               multiple={this.props.multi}
               ref={this.fileInputRef}
               style={{ display: 'none' }}

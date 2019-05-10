@@ -17,6 +17,8 @@ import Text from 'src/components/Text'
 import { Box } from 'rebass'
 import theme from 'src/themes/styled.theme'
 import { Button } from 'src/components/Button'
+import { Link } from 'rebass'
+import styled from 'styled-components'
 
 interface IState {
   moreMenuAnchor: any
@@ -31,6 +33,10 @@ interface IProps {
 interface IInjectedProps extends IProps {
   userStore: UserStore
 }
+
+const TopLink = styled(Link)`
+  text-align: center;
+`
 
 @inject('userStore')
 @observer
@@ -76,6 +82,13 @@ export class CommunityHeader extends React.Component<IProps, IState> {
     const user = this.injected.userStore.user
     return (
       <div>
+        <TopLink target="_blank" width={1} href="https://build.onearmy.world">
+          <Text bg="blue" color="white" py={2} medium>
+            This is the alpha version of onearmy platform, if you want to help
+            click here.
+          </Text>
+        </TopLink>
+
         <Content>
           <Text large caps bold>
             One Army

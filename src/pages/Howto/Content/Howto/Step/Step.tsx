@@ -19,7 +19,7 @@ export default class Step extends React.PureComponent<IProps> {
 
   render() {
     return (
-      <Box id={this.props.step.title}>
+      <Box pt={5} id={this.props.step.title}>
         <Heading bold large>
           Step {this.props.stepindex + 1}:&nbsp;
           <Heading inline large regular>

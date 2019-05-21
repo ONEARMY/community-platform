@@ -24,11 +24,17 @@ let firebaseConfig: IFirebaseConfig = {
 let sentryConfig: ISentryConfig = {
   dsn: 'https://8c1f7eb4892e48b18956af087bdfa3ac@sentry.io/1399729',
 }
-let algoliaConfig: IAlgoliaConfig = {
-  adminAPIKey: '271f0ad7a58b72cad2ca625497ce6f99',
+// note - algolia lets you have multiple apps which can serve different purposes
+// (and all have their own free quotas)
+let algoliaSearchConfig: IAlgoliaConfig = {
   searchOnlyAPIKey: 'af213b7fb41ac5cbc6a2e10164370779',
   monitoringAPIKey: 'b38f41ddf7203342a6daffdb17de99a9',
   applicationID: '4RM0GZKTOC',
+}
+let algoliaPlacesConfig: IAlgoliaConfig = {
+  searchOnlyAPIKey: 'bd622e6c60cc48e571e47b9f6ff63489',
+  monitoringAPIKey: '22c721903a87aa68cb4f8b337d83706d',
+  applicationID: 'plG9OH6JI4BR',
 }
 /*********************************************************************************************** /
                                         Site Variants
@@ -63,8 +69,12 @@ if (siteVariant === 'production') {
     dsn: e.REACT_APP_SENTRY_DSN as string,
   }
   // TODO - create production algolia config
-  algoliaConfig = {
-    adminAPIKey: '',
+  algoliaSearchConfig = {
+    applicationID: '',
+    monitoringAPIKey: '',
+    searchOnlyAPIKey: '',
+  }
+  algoliaPlacesConfig = {
     applicationID: '',
     monitoringAPIKey: '',
     searchOnlyAPIKey: '',
@@ -80,7 +90,8 @@ if (siteVariant === 'production') {
 
 export const SITE = siteVariant
 export const FIREBASE_CONFIG = firebaseConfig
-export const ALGOLIA_CONFIG = algoliaConfig
+export const ALGOLIA_SEARCH_CONFIG = algoliaSearchConfig
+export const ALGOLIA_PLACES_CONFIG = algoliaPlacesConfig
 export const SENTRY_CONFIG = sentryConfig
 // tslint:disable no-var-requires
 export const VERSION = require('../../package.json').version
@@ -100,7 +111,6 @@ interface ISentryConfig {
   dsn: string
 }
 interface IAlgoliaConfig {
-  adminAPIKey: string
   searchOnlyAPIKey: string
   monitoringAPIKey: string
   applicationID: string

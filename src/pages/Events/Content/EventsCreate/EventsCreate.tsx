@@ -19,6 +19,7 @@ import { inject } from 'mobx-react'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import { PostingGuidelines } from './PostingGuidelines'
 import { IEvent } from 'src/models/events.models'
+import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
 
 interface IState {
   formValues: IEvent
@@ -60,8 +61,9 @@ export class EventsCreate extends React.Component<IProps, IState> {
   }
 
   public onSubmit = async (formValues: IHowtoFormInput) => {
-    this.setState({ showSubmitModal: true })
-    await this.store.uploadHowTo(formValues, this.state._docID)
+    console.log('form values', formValues)
+    // this.setState({ showSubmitModal: true })
+    // await this.store.uploadHowTo(formValues, this.state._docID)
   }
 
   public validateTitle = async (value: any, meta?: FieldState) => {
@@ -107,6 +109,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                       placeholder="Title of your event"
                     />
                     <Field name="tags" component={TagsSelectField} />
+                    <Field name="location" component={LocationSearchField} />
                     <input id="meeting" type="date" value="2011-01-13" />
                     <Field
                       name="title"

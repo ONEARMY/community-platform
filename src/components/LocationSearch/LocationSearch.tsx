@@ -14,7 +14,7 @@ import './LocationSearch.css'
 interface IProps {
   placeholder: string
   debounceTime: number
-  onChange: (selected: IAlgoliaResponse) => void
+  onChange: (selected: ILocation) => void
 }
 interface IState {
   debouncedInputValue: string
@@ -66,6 +66,7 @@ export class LocationSearch extends React.Component<IProps, IState> {
       .subscribe((v: string) => this.handleInputChange(v))
   }
 
+  // handle changes to debounced input change
   handleInputChange(value: string) {
     this.setState({
       debouncedInputValue: value,
@@ -76,11 +77,10 @@ export class LocationSearch extends React.Component<IProps, IState> {
   }
 
   // this time we need to pass back changes from the algolia dropdown to the initial input box
+  // and emit the value to callback
   handlePlaceSelectChange(selected: IAlgoliaResponse) {
-    this.setState({
-      debouncedInputValue: selected.suggestion.value,
-    })
-    this.props.onChange(selected)
+    this.userInputRef.current.value = selected.suggestion.value
+    this.props.onChange(_resultToLocation(selected))
   }
 
   render() {
@@ -111,9 +111,30 @@ LocationSearch.defaultProps = {
   onChange: () => null,
 }
 
-/****************************************************
+/*****************************************************************
+ *            Helpers
+ ****************************************************************/
+
+function _resultToLocation(result: IAlgoliaResponse) {
+  const l = result.suggestion
+  const location: ILocation = {
+    administrative: l.administrative,
+    city: l.city,
+    country: l.country,
+    countryCode: l.countryCode,
+    county: l.county,
+    latlng: l.latlng,
+    name: l.name,
+    postcode: l.postcode,
+    suburb: l.suburb,
+    value: l.value,
+  }
+  return location
+}
+
+/*****************************************************************
  *            Interfaces
- *****************************************************/
+ ****************************************************************/
 // algolia doesn't provide typings so taken from
 // https://community.algolia.com/places/documentation.html
 // implementation contains more fields but assumed not relevant
@@ -124,7 +145,8 @@ interface IAlgoliaResponse {
   suggestion: IAlgoliaSuggestion
   suggestionIndex: number
 }
-interface IAlgoliaSuggestion {
+interface IAlgoliaSuggestion extends ILocation {
+  higlight: Partial<IAlgoliaSuggestion>
   type:
     | 'country'
     | 'city'
@@ -133,6 +155,8 @@ interface IAlgoliaSuggestion {
     | 'trainStation'
     | 'townhall'
     | 'airport'
+}
+interface ILocation {
   name: string
   city: string
   country: string
@@ -142,9 +166,7 @@ interface IAlgoliaSuggestion {
   suburb: string
   latlng: ILatLng
   postcode: string
-  postcodes: string[]
   value: string
-  higlight: Partial<IAlgoliaSuggestion>
 }
 interface ILatLng {
   lat: number

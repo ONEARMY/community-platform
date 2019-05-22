@@ -7,25 +7,28 @@ import React from 'react'
 import AlgoliaPlaces from 'places.js'
 import { ALGOLIA_PLACES_CONFIG } from 'src/config/config'
 import { Input } from '../Form/elements'
-import { Subscription } from 'rxjs'
+import { Observable, fromEvent, Subscription } from 'rxjs'
+import { debounceTime, map } from 'rxjs/operators'
 
 interface IProps {
   placeholder: string
+  debounceTime: number
 }
 interface IState {
   debouncedInputValue: string
-  rawInputValue: string
 }
 
 export class LocationSearch extends React.Component<IProps, IState> {
   public static defaultProps: Partial<IProps>
-  inputContainerRef: React.RefObject<any> = React.createRef()
-  inputValue$: Subscription
+  private userInputRef: React.RefObject<any> = React.createRef()
+  private placesInputRef: React.RefObject<any> = React.createRef()
+  // create an observable that will be used to track changes to the user input and emit with debounce
+  private inputValue$: Subscription
   // algolia places doesn't provide typings so for now leave as 'any'
-  places: any
+  private places: any
   constructor(props: IProps) {
     super(props)
-    this.state = { debouncedInputValue: '', rawInputValue: '' }
+    this.state = { debouncedInputValue: '' }
   }
 
   componentDidMount() {
@@ -33,47 +36,66 @@ export class LocationSearch extends React.Component<IProps, IState> {
     this.places = AlgoliaPlaces({
       appId: ALGOLIA_PLACES_CONFIG.applicationID,
       apiKey: ALGOLIA_PLACES_CONFIG.searchOnlyAPIKey,
-      container: this.inputContainerRef.current,
+      container: this.placesInputRef.current,
     })
     // add custom handler when place selected from list
-    this.places.on('change', selected =>
-      this.handlePlaceSelectChange(selected as IAlgoliaResponse),
+    this.places.on('change', (selected: IAlgoliaResponse) =>
+      this.handlePlaceSelectChange(selected),
     )
+    this.subscribeToInputChanges()
   }
 
-  // debounce user input to update algolia search input
-  handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({
-      debouncedInputValue: e.target.value,
-      rawInputValue: e.target.value,
-    })
-    // manually trigger the input method so places picks up the change
-    const event = new Event('input', { bubbles: true })
-    this.inputContainerRef.current.dispatchEvent(event)
+  componentWillUnmount() {
+    // unsubscribe to prevent memory leaks
+    this.inputValue$.unsubscribe()
   }
+
+  // when user changes input want to debounce and pass to places input
+  subscribeToInputChanges() {
+    const observable: Observable<
+      React.ChangeEvent<HTMLInputElement>
+    > = fromEvent(this.userInputRef.current, 'keyup')
+    this.inputValue$ = observable
+      .pipe(
+        map(e => e.currentTarget.value),
+        debounceTime(this.props.debounceTime),
+      )
+
+      .subscribe((v: string) => this.handleInputChange(v))
+  }
+
+  handleInputChange(value: string) {
+    this.setState({
+      debouncedInputValue: value,
+    })
+    // need to manually trigger an input event as this is what algolia places uses to pick up change
+    const event = new Event('input', { bubbles: true })
+    this.placesInputRef.current.dispatchEvent(event)
+  }
+
   // this time we need to pass back changes from the algolia dropdown to the initial input box
   handlePlaceSelectChange(selected: IAlgoliaResponse) {
     this.setState({
-      rawInputValue: selected.suggestion.value,
       debouncedInputValue: selected.suggestion.value,
     })
   }
+
   render() {
     return (
       <>
-        {/* the first input uses custom component with debounced onChange function */}
+        {/* the first input uses our styled input component and has ref to subscribe to value changes */}
         <Input
           placeholder={this.props.placeholder}
-          onChange={v => this.handleInputChange(v)}
-          value={this.state.rawInputValue}
           style={{ marginBottom: 0 }}
+          ref={this.userInputRef}
         />
         {/* the second input takes debounced value from the first input and binds to algolia search  */}
         <input
           type="search"
           id="address-input"
           value={this.state.debouncedInputValue}
-          ref={this.inputContainerRef}
+          ref={this.placesInputRef}
+          readOnly
           style={{ display: 'none' }}
         />
       </>
@@ -82,6 +104,7 @@ export class LocationSearch extends React.Component<IProps, IState> {
 }
 LocationSearch.defaultProps = {
   placeholder: 'Search for a location',
+  debounceTime: 500,
 }
 
 /****************************************************

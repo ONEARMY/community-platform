@@ -13,6 +13,7 @@ import { debounceTime, map } from 'rxjs/operators'
 interface IProps {
   placeholder: string
   debounceTime: number
+  onChange: (selected: IAlgoliaResponse) => void
 }
 interface IState {
   debouncedInputValue: string
@@ -78,6 +79,7 @@ export class LocationSearch extends React.Component<IProps, IState> {
     this.setState({
       debouncedInputValue: selected.suggestion.value,
     })
+    this.props.onChange(selected)
   }
 
   render() {
@@ -105,6 +107,7 @@ export class LocationSearch extends React.Component<IProps, IState> {
 LocationSearch.defaultProps = {
   placeholder: 'Search for a location',
   debounceTime: 500,
+  onChange: () => null,
 }
 
 /****************************************************

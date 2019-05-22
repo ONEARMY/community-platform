@@ -9,6 +9,7 @@ import { ALGOLIA_PLACES_CONFIG } from 'src/config/config'
 import { Input } from '../Form/elements'
 import { Observable, fromEvent, Subscription } from 'rxjs'
 import { debounceTime, map } from 'rxjs/operators'
+import './LocationSearch.css'
 
 interface IProps {
   placeholder: string
@@ -38,7 +39,7 @@ export class LocationSearch extends React.Component<IProps, IState> {
       appId: ALGOLIA_PLACES_CONFIG.applicationID,
       apiKey: ALGOLIA_PLACES_CONFIG.searchOnlyAPIKey,
       container: this.placesInputRef.current,
-    })
+    }).configure({ style: false, useDeviceLocation: false })
     // add custom handler when place selected from list
     this.places.on('change', (selected: IAlgoliaResponse) =>
       this.handlePlaceSelectChange(selected),

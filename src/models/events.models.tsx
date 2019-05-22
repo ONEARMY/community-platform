@@ -1,11 +1,14 @@
+import { ISelectedTags } from './tags.model'
+
 export interface IEvent {
-  name: string
+  title: string
   location: IEventLocation
   description: string
   host: string
   date: Date
   type: string
   image: string
+  tags?: ISelectedTags
   _slug: string
   _created: Date
   _modified: Date

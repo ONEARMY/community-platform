@@ -41,7 +41,7 @@ export const TIMEFRAMES = [
 
 export const EVENTS: IEvent[] = [
   {
-    name: 'Open Workspace and Free Lunch - Eindhoven',
+    title: 'Open Workspace and Free Lunch - Eindhoven',
     location: {
       lat: 51.4416,
       lng: 5.4697,
@@ -59,7 +59,7 @@ export const EVENTS: IEvent[] = [
     _modified: new Date(),
   },
   {
-    name: 'Beach Clean in Brighton',
+    title: 'Beach Clean in Brighton',
     location: {
       lat: 50.8225,
       lng: 0.1372,

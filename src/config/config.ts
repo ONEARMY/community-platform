@@ -28,12 +28,10 @@ let sentryConfig: ISentryConfig = {
 // (and all have their own free quotas)
 let algoliaSearchConfig: IAlgoliaConfig = {
   searchOnlyAPIKey: 'af213b7fb41ac5cbc6a2e10164370779',
-  monitoringAPIKey: 'b38f41ddf7203342a6daffdb17de99a9',
   applicationID: '4RM0GZKTOC',
 }
 let algoliaPlacesConfig: IAlgoliaConfig = {
   searchOnlyAPIKey: 'bd622e6c60cc48e571e47b9f6ff63489',
-  monitoringAPIKey: '22c721903a87aa68cb4f8b337d83706d',
   applicationID: 'plG9OH6JI4BR',
 }
 /*********************************************************************************************** /
@@ -71,13 +69,11 @@ if (siteVariant === 'production') {
   // TODO - create production algolia config
   algoliaSearchConfig = {
     applicationID: '',
-    monitoringAPIKey: '',
     searchOnlyAPIKey: '',
   }
   algoliaPlacesConfig = {
-    applicationID: '',
-    monitoringAPIKey: '',
-    searchOnlyAPIKey: '',
+    applicationID: e.REACT_APP_ALGOLIA_PLACES_APP_ID as string,
+    searchOnlyAPIKey: e.REACT_APP_ALGOLIA_PLACES_API_KEY as string,
   }
   // disable console logs
   // tslint:disable no-empty
@@ -112,7 +108,6 @@ interface ISentryConfig {
 }
 interface IAlgoliaConfig {
   searchOnlyAPIKey: string
-  monitoringAPIKey: string
   applicationID: string
 }
 type siteVariants = 'localhost' | 'staging' | 'production'

@@ -2,9 +2,10 @@ import * as React from 'react'
 import { IEvent } from 'src/models/events.models'
 import './EventsList.scss'
 import * as Mocks from 'src/mocks/events.mock'
-import Button from '@material-ui/core/Button'
+import { Button } from 'src/components/Button'
 import { ClampLines } from 'src/components/ClampLines/ClampLines'
 import { EventStore } from 'src/stores/Events/events.store'
+import { Link } from 'src/components/Links'
 
 interface IState {
   events: IEvent[]
@@ -31,12 +32,17 @@ export class EventsList extends React.Component<IProps, IState> {
     const { events } = this.state
     return (
       <div id="EventsList">
+        <Link to={'/events/create'}>
+          <Button variant="outline" icon={'add'}>
+            create
+          </Button>
+        </Link>
         <div className="list-container">
           <div className="top-info-container">
             <div className="list-total">We found {events.length} events</div>
             <Button
               className="show-map view-toggle"
-              variant="outlined"
+              variant="outline"
               onClick={() => this.showMap()}
             >
               Show Map
@@ -46,7 +52,7 @@ export class EventsList extends React.Component<IProps, IState> {
             <div className="event-container" key={`event-${i}`}>
               <img className="event-image" src={event.image} />
               <div className="event-info">
-                <div className="event-name">{event.name}</div>
+                <div className="event-name">{event.title}</div>
                 <div className="event-date">
                   {`${this.formatDate(event.date)} / ${event.location.city}`}
                 </div>

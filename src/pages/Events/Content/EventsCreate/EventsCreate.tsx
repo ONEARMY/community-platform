@@ -110,12 +110,12 @@ export class EventsCreate extends React.Component<IProps, IState> {
                     />
                     <Field name="tags" component={TagsSelectField} />
                     <Field name="location" component={LocationSearchField} />
-                    <input id="meeting" type="date" value="2011-01-13" />
+                    <Field name="date" component={InputField} type="date" />
                     <Field
-                      name="title"
+                      name="url"
                       validateFields={[]}
                       component={InputField}
-                      placeholder="URL to offsite link (Facebook, Meetup, etc"
+                      placeholder="URL to offsite link (Facebook, Meetup, etc)"
                     />
                   </BoxContainer>
                 </form>

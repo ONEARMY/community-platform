@@ -7,12 +7,11 @@ import {
   IHowtoStep,
 } from 'src/models/howto.models'
 import { Database } from 'src/stores/database'
-import { stripSpecialCharacters } from 'src/utils/helpers'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { Storage, IUploadedFileMeta } from '../storage'
-import { FieldState } from 'final-form'
+import { ModuleStore } from '../common/module.store'
 
-export class HowtoStore {
+export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
   @observable
   public activeHowto: IHowto | undefined
@@ -20,6 +19,11 @@ export class HowtoStore {
   public allHowtos: IHowto[] = []
   @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
+
+  constructor() {
+    super('howtosV1')
+  }
+
   // *** TODO - migrate these to standard database/common module.store methods (not call afs directly)
   // call getDocList to query 'Howtos' from db and map response to docs observable
   @action
@@ -48,29 +52,6 @@ export class HowtoStore {
   @action
   public updateUploadStatus(update: keyof IHowToUploadStatus) {
     this.uploadStatus[update] = true
-  }
-
-  public isSlugUnique = async (slug: string) => {
-    try {
-      await Database.checkSlugUnique('howtosV1', slug)
-    } catch (e) {
-      return 'How-to titles must be unique, please try being more specific'
-    }
-  }
-
-  public validateTitle = async (value: any, meta?: FieldState) => {
-    if (meta && (!meta.dirty && meta.valid)) {
-      return undefined
-    }
-    if (value) {
-      const error = this.isSlugUnique(
-        stripSpecialCharacters(value).toLowerCase(),
-      )
-      return error
-    } else if ((meta && (meta.touched || meta.visited)) || value === '') {
-      return 'A title for your how-to is required'
-    }
-    return undefined
   }
 
   public generateID = () => {

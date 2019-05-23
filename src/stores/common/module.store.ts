@@ -1,5 +1,7 @@
 import { BehaviorSubject, Subscription } from 'rxjs'
 import { Database, IDBEndpoints } from '../database'
+import { FieldState } from 'final-form'
+import { stripSpecialCharacters } from 'src/utils/helpers'
 
 /*  The module store contains common methods used across modules that access specfic
     collections on the database
@@ -46,5 +48,33 @@ export class ModuleStore {
       const doc = docs.find(d => d[key] === value)
       this.activeDoc$.next(doc)
     })
+  }
+
+  public isSlugUnique = async (slug: string, endpoint: IDBEndpoints) => {
+    try {
+      await Database.checkSlugUnique(endpoint, slug)
+    } catch (e) {
+      return 'Titles must be unique, please try being more specific'
+    }
+  }
+
+  public validateTitle = async (
+    value: any,
+    endpoint: IDBEndpoints,
+    meta?: FieldState,
+  ) => {
+    if (meta && (!meta.dirty && meta.valid)) {
+      return undefined
+    }
+    if (value) {
+      const error = this.isSlugUnique(
+        stripSpecialCharacters(value).toLowerCase(),
+        endpoint,
+      )
+      return error
+    } else if ((meta && (meta.touched || meta.visited)) || value === '') {
+      return 'A title is required'
+    }
+    return undefined
   }
 }

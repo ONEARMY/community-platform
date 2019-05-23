@@ -181,4 +181,9 @@ export class Database {
         Interfaces
   /****************************************************************************** */
 
-export type IDBEndpoints = 'howtosV1' | 'users' | 'discussions' | 'tags'
+export type IDBEndpoints =
+  | 'howtosV1'
+  | 'users'
+  | 'discussions'
+  | 'tags'
+  | 'events'

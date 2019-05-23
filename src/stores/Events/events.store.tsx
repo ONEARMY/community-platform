@@ -1,8 +1,10 @@
 import { observable, action } from 'mobx'
 import { afs } from 'src/utils/firebase'
 import { IEvent } from 'src/models/events.models'
+import { ModuleStore } from '../common/module.store'
+import { Database } from '../database'
 
-export class EventStore {
+export class EventStore extends ModuleStore {
   // observables are data variables that can be subscribed to and change over time
   @observable
   public allEvents: IEvent[]
@@ -10,6 +12,10 @@ export class EventStore {
   public activeEvent: IEvent | undefined
   @observable
   public eventViewType: 'map' | 'list'
+
+  constructor() {
+    super('events')
+  }
 
   @action
   public async getEventsList() {
@@ -34,5 +40,9 @@ export class EventStore {
   public setEventView(type: 'map' | 'list') {
     this.eventViewType = type
     console.log('event view type', this.eventViewType)
+  }
+
+  public generateID = () => {
+    return Database.generateDocId('events')
   }
 }

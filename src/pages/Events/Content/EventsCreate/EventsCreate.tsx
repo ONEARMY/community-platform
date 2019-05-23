@@ -67,6 +67,10 @@ export class EventsCreate extends React.Component<IProps, IState> {
     this.store.validateTitle(value, 'events', meta)
   }
 
+  public validateUrl = async (value: any, meta?: FieldState) => {
+    this.store.validateUrl(value, meta)
+  }
+
   // automatically generate the slug when the title changes
   private calculatedFields = createDecorator({
     field: 'title',
@@ -100,17 +104,30 @@ export class EventsCreate extends React.Component<IProps, IState> {
 
                     <Field
                       name="title"
-                      validateFields={[]}
                       validate={value => this.validateTitle(value)}
                       component={InputField}
                       placeholder="Title of your event"
                     />
                     <Field name="tags" component={TagsSelectField} />
-                    <Field name="location" component={LocationSearchField} />
-                    <Field name="date" component={InputField} type="date" />
+                    <Field
+                      name="location"
+                      validateFields={[]}
+                      validate={(value: any) =>
+                        value.hasOwnProperty('latlng') ? undefined : 'Required'
+                      }
+                      component={LocationSearchField}
+                    />
+                    <Field
+                      name="date"
+                      validateFields={[]}
+                      validate={required}
+                      component={InputField}
+                      type="date"
+                    />
                     <Field
                       name="url"
                       validateFields={[]}
+                      validate={value => this.validateUrl(value)}
                       component={InputField}
                       placeholder="URL to offsite link (Facebook, Meetup, etc)"
                     />
@@ -134,6 +151,9 @@ export class EventsCreate extends React.Component<IProps, IState> {
                   disabled={submitting || invalid}
                 >
                   Publish
+                </Button>
+                <Button onClick={() => console.log(errors)} width={1} mt={3}>
+                  check
                 </Button>
               </BoxContainer>
             </FlexContainer>

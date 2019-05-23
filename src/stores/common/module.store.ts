@@ -2,6 +2,7 @@ import { BehaviorSubject, Subscription } from 'rxjs'
 import { Database, IDBEndpoints } from '../database'
 import { FieldState } from 'final-form'
 import { stripSpecialCharacters } from 'src/utils/helpers'
+import isUrl from 'is-url'
 
 /*  The module store contains common methods used across modules that access specfic
     collections on the database
@@ -72,6 +73,18 @@ export class ModuleStore {
         endpoint,
       )
       return error
+    } else if ((meta && (meta.touched || meta.visited)) || value === '') {
+      return 'A title is required'
+    }
+    return undefined
+  }
+
+  public validateUrl = async (value: any, meta?: FieldState) => {
+    if (meta && (!meta.dirty && meta.valid)) {
+      return undefined
+    }
+    if (value && !isUrl(value)) {
+      return 'invalid url'
     } else if ((meta && (meta.touched || meta.visited)) || value === '') {
       return 'A title is required'
     }

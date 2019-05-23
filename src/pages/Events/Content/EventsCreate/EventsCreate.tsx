@@ -10,7 +10,7 @@ import { InputField, TextAreaField } from 'src/components/Form/Fields'
 import { SelectField } from 'src/components/Form/Select.field'
 import { Button } from 'src/components/Button'
 import { FieldState } from 'final-form'
-import { HowtoStore } from 'src/stores/Howto/howto.store'
+import { EventStore } from 'src/stores/Events/events.store'
 import Heading from 'src/components/Heading'
 import { FlexContainer } from 'src/components/Layout/FlexContainer'
 import { BoxContainer } from 'src/components/Layout/BoxContainer'
@@ -26,18 +26,17 @@ interface IState {
   formSaved: boolean
   _docID: string
   _uploadPath: string
-  _toDocsList: boolean
   showSubmitModal?: boolean
 }
 interface IProps extends RouteComponentProps<any> {}
 interface IInjectedProps extends IProps {
-  howtoStore: HowtoStore
+  eventStore: EventStore
 }
 
 // validation - return undefined if no error (i.e. valid)
 const required = (value: any) => (value ? undefined : 'Required')
 
-@inject('howtoStore')
+@inject('eventStore')
 export class EventsCreate extends React.Component<IProps, IState> {
   uploadRefs: { [key: string]: UploadedFile | null } = {}
   constructor(props: any) {
@@ -48,8 +47,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
       formValues: { ...TEMPLATE.INITIAL_VALUES, id: docID } as IEvent,
       formSaved: false,
       _docID: docID,
-      _uploadPath: `uploads/documentation/${docID}`,
-      _toDocsList: false,
+      _uploadPath: `uploads/events/${docID}`,
     }
   }
 
@@ -57,17 +55,16 @@ export class EventsCreate extends React.Component<IProps, IState> {
     return this.props as IInjectedProps
   }
   get store() {
-    return this.injected.howtoStore
+    return this.injected.eventStore
   }
 
   public onSubmit = async (formValues: IHowtoFormInput) => {
     console.log('form values', formValues)
-    // this.setState({ showSubmitModal: true })
     // await this.store.uploadHowTo(formValues, this.state._docID)
   }
 
   public validateTitle = async (value: any, meta?: FieldState) => {
-    this.store.validateTitle(value, meta)
+    this.store.validateTitle(value, 'events', meta)
   }
 
   // automatically generate the slug when the title changes

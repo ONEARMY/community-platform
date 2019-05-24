@@ -42,6 +42,7 @@ export class EventStore extends ModuleStore {
     console.log('values', values)
     try {
       const event: IEventFormInput = {
+        ...Database.generateDocMeta('eventsV1'),
         ...values,
       }
       console.log('populating database', event)

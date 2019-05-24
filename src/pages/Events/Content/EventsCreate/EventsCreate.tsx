@@ -2,12 +2,10 @@ import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 import { Form, Field } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
-import createDecorator from 'final-form-calculate'
 import { IHowtoFormInput } from 'src/models/howto.models'
 import TEMPLATE from './Template'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
-import { SelectField } from 'src/components/Form/Select.field'
 import { Button } from 'src/components/Button'
 import { FieldState } from 'final-form'
 import { EventStore } from 'src/stores/Events/events.store'
@@ -16,9 +14,8 @@ import { FlexContainer } from 'src/components/Layout/FlexContainer'
 import { BoxContainer } from 'src/components/Layout/BoxContainer'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 import { inject } from 'mobx-react'
-import { stripSpecialCharacters } from 'src/utils/helpers'
 import { PostingGuidelines } from './PostingGuidelines'
-import { IEvent } from 'src/models/events.models'
+import { IEvent, IEventFormInput } from 'src/models/events.models'
 import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
 
 interface IState {
@@ -58,37 +55,29 @@ export class EventsCreate extends React.Component<IProps, IState> {
     return this.injected.eventStore
   }
 
-  public onSubmit = async (formValues: IHowtoFormInput) => {
+  public onSubmit = async (formValues: IEventFormInput) => {
     console.log('form values', formValues)
-    // await this.store.uploadHowTo(formValues, this.state._docID)
+    await this.store.uploadEvent(formValues, this.state._docID)
   }
 
   public validateTitle = async (value: any, meta?: FieldState) => {
-    this.store.validateTitle(value, 'events', meta)
+    this.store.validateTitle(value, 'eventsV1', meta)
   }
 
   public validateUrl = async (value: any, meta?: FieldState) => {
     this.store.validateUrl(value, meta)
   }
 
-  // automatically generate the slug when the title changes
-  private calculatedFields = createDecorator({
-    field: 'title',
-    updates: {
-      slug: title => stripSpecialCharacters(title).toLowerCase(),
-    },
-  })
   public render() {
     const { formValues } = this.state
     return (
       <Form
-        onSubmit={v => this.onSubmit(v as IHowtoFormInput)}
+        onSubmit={v => this.onSubmit(v as IEventFormInput)}
         initialValues={formValues}
         mutators={{
           ...arrayMutators,
         }}
         validateOnBlur
-        decorators={[this.calculatedFields]}
         render={({ submitting, values, invalid, errors, handleSubmit }) => {
           const disabled = invalid || submitting
           return (

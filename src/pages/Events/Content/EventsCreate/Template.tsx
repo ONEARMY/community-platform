@@ -4,7 +4,7 @@ const INITIAL_VALUES: Partial<IEvent> = {
   tags: {},
   location: {
     address: '',
-    city: '',
+    name: '',
     country: '',
     lat: 0,
     lng: 0,

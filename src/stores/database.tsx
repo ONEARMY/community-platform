@@ -186,4 +186,4 @@ export type IDBEndpoints =
   | 'users'
   | 'discussions'
   | 'tags'
-  | 'events'
+  | 'eventsV1'

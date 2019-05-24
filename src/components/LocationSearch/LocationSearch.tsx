@@ -119,14 +119,11 @@ function _resultToLocation(result: IAlgoliaResponse) {
   const l = result.suggestion
   const location: ILocation = {
     administrative: l.administrative,
-    city: l.city,
     country: l.country,
     countryCode: l.countryCode,
-    county: l.county,
     latlng: l.latlng,
     name: l.name,
     postcode: l.postcode,
-    suburb: l.suburb,
     value: l.value,
   }
   return location
@@ -158,12 +155,9 @@ interface IAlgoliaSuggestion extends ILocation {
 }
 interface ILocation {
   name: string
-  city: string
   country: string
   countryCode: string
   administrative: string
-  county: string
-  suburb: string
   latlng: ILatLng
   postcode: string
   value: string

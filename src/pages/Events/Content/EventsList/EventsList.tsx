@@ -54,7 +54,7 @@ export class EventsList extends React.Component<IProps, IState> {
               <div className="event-info">
                 <div className="event-name">{event.title}</div>
                 <div className="event-date">
-                  {`${this.formatDate(event.date)} / ${event.location.city}`}
+                  {`${this.formatDate(event.date)} / ${event.location.name}`}
                 </div>
                 <div className="event-description">
                   <ClampLines text={event.description} lines={2} />

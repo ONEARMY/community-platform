@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx'
 import { afs } from 'src/utils/firebase'
-import { IEvent } from 'src/models/events.models'
+import { IEvent, IEventFormInput } from 'src/models/events.models'
 import { ModuleStore } from '../common/module.store'
 import { Database } from '../database'
 
@@ -14,7 +14,7 @@ export class EventStore extends ModuleStore {
   public eventViewType: 'map' | 'list'
 
   constructor() {
-    super('events')
+    super('eventsV1')
   }
 
   @action
@@ -37,12 +37,32 @@ export class EventStore extends ModuleStore {
     return this.activeEvent
   }
 
+  public async uploadEvent(values: IEventFormInput, id: string) {
+    console.log('uploading event', id)
+    console.log('values', values)
+    try {
+      const event: IEventFormInput = {
+        ...values,
+      }
+      console.log('populating database', event)
+      this.updateDatabase(event)
+      console.log('event added')
+      return event
+    } catch (error) {
+      console.log('error', error)
+      throw new Error(error.message)
+    }
+  }
+
   public setEventView(type: 'map' | 'list') {
     this.eventViewType = type
     console.log('event view type', this.eventViewType)
   }
 
   public generateID = () => {
-    return Database.generateDocId('events')
+    return Database.generateDocId('eventsV1')
+  }
+  private updateDatabase(event: IEventFormInput) {
+    return Database.setDoc(`eventsV1/${event._id}`, event)
   }
 }

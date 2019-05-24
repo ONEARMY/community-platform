@@ -1,4 +1,5 @@
 import { IEventFilters, IEvent } from 'src/models/events.models'
+import { toTimestamp } from 'src/utils/helpers'
 
 const d = new Date()
 export const EVENT_FILTERS: IEventFilters = {
@@ -46,17 +47,22 @@ export const EVENTS: IEvent[] = [
       lat: 51.4416,
       lng: 5.4697,
       country: 'NL',
-      city: 'Eindhoven',
+      name: 'Eindhoven',
     },
+    _id: 'event1',
     description:
       'The family moved to New York City in 1940. The next year Eisuke was transferred from New York City',
     host: 'PlasticNL',
     image: 'https://picsum.photos/200/300/?random',
     date: new Date(2019, 6, 13),
     type: 'Workshops',
-    _slug: 'open-workshop-and-free-lunch---brighton',
-    _created: new Date(),
-    _modified: new Date(),
+    slug: 'open-workshop-and-free-lunch---brighton',
+    tags: {},
+    _deleted: false,
+    _createdBy: '123',
+    _created: toTimestamp('Friday, January 2, 2015 12:59 AM'),
+    _modified: toTimestamp('Friday, January 2, 2015 12:59 AM'),
+    url: 'http://fakeurl.com',
   },
   {
     title: 'Beach Clean in Brighton',
@@ -64,17 +70,22 @@ export const EVENTS: IEvent[] = [
       lat: 50.8225,
       lng: 0.1372,
       country: 'UK',
-      city: 'Brighton',
+      name: 'Brighton',
     },
+    _id: 'event2',
     description:
       'In meteorology, a cloud is an aerosol ocnsisting of a visible mass of rain dropletx, frozen crystals, or other particles suspended in the atmospher',
     host: 'BeachCleans',
     image: 'https://picsum.photos/150/100/?random',
     date: new Date(2019, 6, 26),
     type: 'Workshops',
-    _slug: 'open-workshop-and-free-lunch---brighton',
-    _created: new Date(),
-    _modified: new Date(),
+    slug: 'open-workshop-and-free-lunch---brighton',
+    tags: {},
+    _deleted: false,
+    _createdBy: '123',
+    _created: toTimestamp('Friday, January 2, 2015 12:59 AM'),
+    _modified: toTimestamp('Friday, January 2, 2015 12:59 AM'),
+    url: 'http://fakeurl.com',
   },
 ]
 

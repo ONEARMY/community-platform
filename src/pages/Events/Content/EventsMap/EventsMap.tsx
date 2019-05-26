@@ -7,7 +7,6 @@ import { IEvent } from 'src/models/events.models'
 import * as Mocks from 'src/mocks/events.mock'
 import { EventStore } from 'src/stores/Events/events.store'
 import './EventsMap.scss'
-import Card from '@material-ui/core/Card'
 import { ClampLines } from 'src/components/ClampLines/ClampLines'
 
 interface IState {

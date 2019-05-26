@@ -1,9 +1,6 @@
 import * as React from 'react'
 import { IEvent } from 'src/models/events.models'
-import './EventsList.scss'
-import * as Mocks from 'src/mocks/events.mock'
 import { Button } from 'src/components/Button'
-import { EventStore } from 'src/stores/Events/events.store'
 import { Link } from 'src/components/Links'
 import { Flex, Box, Link as ExternalLink } from 'rebass'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
@@ -14,33 +11,24 @@ import { colors } from 'src/themes/styled.theme'
 import Icon from 'src/components/Icons'
 import { TagDisplay } from 'src/components/Tags/TagDisplay/TagDisplay'
 
-interface IState {
-  events: IEvent[]
-}
-
 interface IProps {
-  eventStore: EventStore
+  allEvents: IEvent[]
 }
 
 const RowContainer = styled(Flex)`
   border-bottom: 1px solid ${colors.grey4};
 `
 
-export class EventsList extends React.Component<IProps, IState> {
+export class EventsList extends React.Component<IProps> {
   constructor(props: any) {
     super(props)
-    // initial state
-    this.state = { events: Mocks.EVENTS }
   }
-  public formatDate(d: Date) {
-    return `${Mocks.MONTHS[d.getMonth()]} ${d.getDay()}`
-  }
-  public showMap() {
-    this.props.eventStore.setEventView('map')
-  }
+  // public formatDate(d: Date) {
+  //   return `${Mocks.MONTHS[d.getMonth()]} ${d.getDay()}`
+  // }
 
   public render() {
-    const { events } = this.state
+    const { allEvents } = this.props
     return (
       <>
         <Flex justifyContent={'right'}>
@@ -54,7 +42,7 @@ export class EventsList extends React.Component<IProps, IState> {
         </Flex>
         <React.Fragment>
           <>
-            {events.length === 0 ? (
+            {allEvents.length === 0 ? (
               <LinearProgress />
             ) : (
               <Flex
@@ -64,8 +52,8 @@ export class EventsList extends React.Component<IProps, IState> {
                 mt={4}
                 px={4}
               >
-                {events.map((event: IEvent) => (
-                  <RowContainer width={1} py={4}>
+                {allEvents.map((event: IEvent) => (
+                  <RowContainer width={1} py={4} key={event._id}>
                     <Flex flexWrap={'wrap'} flex={'1'}>
                       <Text large bold width={1}>
                         June
@@ -88,7 +76,7 @@ export class EventsList extends React.Component<IProps, IState> {
                     </Flex>
                     <Flex flexWrap={'nowrap'} alignItems={'center'} flex={'2'}>
                       <Icon glyph={'location-on'} />
-                      <Text large bold width={1} ml={2}>
+                      <Text large width={1} ml={2}>
                         {event.location.name},{' '}
                         <Text caps inline>
                           {event.location.countryCode}

@@ -1,11 +1,5 @@
-/*************************************************************************************  
-This is an example page viewable at /template
-For more info on pages see the Q & A at the bottom
-**************************************************************************************/
-
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
-import { IStores } from 'src/stores'
 import { EventStore } from 'src/stores/Events/events.store'
 import { EventsCreate } from './Content/EventsCreate/EventsCreate'
 import { EventsList } from './Content/EventsList/EventsList'
@@ -13,16 +7,11 @@ import { EventsList } from './Content/EventsList/EventsList'
 import { withRouter, Switch, Route } from 'react-router'
 import { AuthRoute } from '../common/AuthRoute'
 
-// define the page properties with typing information for fields
-// properties are things that will have been passed down from parent component
-// so for pages are likely to not contain much except perhaps global store objects
 interface IProps {
-  eventStore: EventStore
+  eventStore?: EventStore
 }
 
-@inject((allStores: IStores) => ({
-  eventStore: allStores.eventStore,
-}))
+@inject('eventStore')
 @observer
 class EventsPageClass extends React.Component<IProps, any> {
   constructor(props: any) {
@@ -31,21 +20,23 @@ class EventsPageClass extends React.Component<IProps, any> {
 
   public async componentDidMount() {
     // call methods you want to fire once when component mounted
-    await this.props.eventStore.getEventsList()
+    await this.props.eventStore!.getEventsList()
     this.forceUpdate()
   }
 
   public render() {
-    {
-      /* want to add background styled component when available */
-    }
     return (
       <div id="EventsPage">
         <Switch>
           <Route
             exact
             path="/events"
-            render={props => <EventsList {...this.props} />}
+            render={props => (
+              <EventsList
+                {...props}
+                allEvents={this.props.eventStore!.allEvents}
+              />
+            )}
           />
           <AuthRoute
             path="/events/create"

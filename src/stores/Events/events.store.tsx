@@ -7,7 +7,7 @@ import { Database } from '../database'
 export class EventStore extends ModuleStore {
   // observables are data variables that can be subscribed to and change over time
   @observable
-  public allEvents: IEvent[]
+  public allEvents: IEvent[] = []
   @observable
   public activeEvent: IEvent | undefined
   @observable
@@ -19,22 +19,9 @@ export class EventStore extends ModuleStore {
 
   @action
   public async getEventsList() {
-    const ref = await afs.collection('events').get()
+    const ref = await afs.collection('eventsV1').get()
     this.allEvents = ref.docs.map(doc => doc.data() as IEvent)
     console.log('events retrieved', this.allEvents)
-  }
-
-  public async getEventBySlug(slug: string) {
-    const ref = afs
-      .collection('events')
-      .where('slug', '==', slug)
-      .limit(1)
-    const collection = await ref.get()
-    this.activeEvent =
-      collection.docs.length > 0
-        ? (collection.docs[0].data() as IEvent)
-        : undefined
-    return this.activeEvent
   }
 
   public async uploadEvent(values: IEventFormInput, id: string) {

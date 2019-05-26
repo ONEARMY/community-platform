@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import { colors } from 'src/themes/styled.theme'
 import Icon from 'src/components/Icons'
 import { TagDisplay } from 'src/components/Tags/TagDisplay/TagDisplay'
+import Heading from 'src/components/Heading'
 
 interface IProps {
   allEvents: IEvent[]
@@ -23,9 +24,16 @@ export class EventsList extends React.Component<IProps> {
   constructor(props: any) {
     super(props)
   }
-  // public formatDate(d: Date) {
-  //   return `${Mocks.MONTHS[d.getMonth()]} ${d.getDay()}`
-  // }
+
+  public getMonth(d: Date) {
+    const newDate = new Date(d)
+    // use ECMAScript Internationalization API to return month
+    return `${newDate.toLocaleString('en-us', { month: 'long' })}`
+  }
+  public getDay(d: Date) {
+    const newDate = new Date(d)
+    return `${newDate.getDay()}`
+  }
 
   public render() {
     const { allEvents } = this.props
@@ -56,11 +64,11 @@ export class EventsList extends React.Component<IProps> {
                   <RowContainer width={1} py={4} key={event._id}>
                     <Flex flexWrap={'wrap'} flex={'1'}>
                       <Text large bold width={1}>
-                        June
+                        {this.getMonth(event.date)}
                       </Text>
-                      <Text large bold width={1}>
-                        1
-                      </Text>
+                      <Heading small bold width={1}>
+                        {this.getDay(event.date)}
+                      </Heading>
                     </Flex>
                     <Flex flexWrap={'wrap'} flex={'3'}>
                       <Text large width={1}>

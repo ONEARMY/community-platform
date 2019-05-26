@@ -6,6 +6,7 @@ const INITIAL_VALUES: Partial<IEvent> = {
     address: '',
     name: '',
     country: '',
+    countryCode: '',
     lat: 0,
     lng: 0,
   },

@@ -46,7 +46,8 @@ export const EVENTS: IEvent[] = [
     location: {
       lat: 51.4416,
       lng: 5.4697,
-      country: 'NL',
+      country: 'Netherlands',
+      countryCode: 'NL',
       name: 'Eindhoven',
     },
     _id: 'event1',
@@ -69,7 +70,8 @@ export const EVENTS: IEvent[] = [
     location: {
       lat: 50.8225,
       lng: 0.1372,
-      country: 'UK',
+      country: 'United Kingdom',
+      countryCode: 'UK',
       name: 'Brighton',
     },
     _id: 'event2',

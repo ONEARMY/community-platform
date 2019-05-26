@@ -15,6 +15,7 @@ export interface IEvent extends IEventFormInput, IDbDoc {
 interface IEventLocation {
   name: string
   country: string
+  countryCode: string
   label?: string
   address?: string
   lat: number

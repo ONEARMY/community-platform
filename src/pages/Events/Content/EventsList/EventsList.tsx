@@ -3,9 +3,16 @@ import { IEvent } from 'src/models/events.models'
 import './EventsList.scss'
 import * as Mocks from 'src/mocks/events.mock'
 import { Button } from 'src/components/Button'
-import { ClampLines } from 'src/components/ClampLines/ClampLines'
 import { EventStore } from 'src/stores/Events/events.store'
 import { Link } from 'src/components/Links'
+import { Flex, Box, Link as ExternalLink } from 'rebass'
+import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { LinearProgress } from '@material-ui/core'
+import Text from 'src/components/Text'
+import styled from 'styled-components'
+import { colors } from 'src/themes/styled.theme'
+import Icon from 'src/components/Icons'
+import { TagDisplay } from 'src/components/Tags/TagDisplay/TagDisplay'
 
 interface IState {
   events: IEvent[]
@@ -14,6 +21,10 @@ interface IState {
 interface IProps {
   eventStore: EventStore
 }
+
+const RowContainer = styled(Flex)`
+  border-bottom: 1px solid ${colors.grey4};
+`
 
 export class EventsList extends React.Component<IProps, IState> {
   constructor(props: any) {
@@ -31,40 +42,83 @@ export class EventsList extends React.Component<IProps, IState> {
   public render() {
     const { events } = this.state
     return (
-      <div id="EventsList">
-        <Link to={'/events/create'}>
-          <Button variant="outline" icon={'add'}>
-            create
-          </Button>
-        </Link>
-        <div className="list-container">
-          <div className="top-info-container">
-            <div className="list-total">We found {events.length} events</div>
-            <Button
-              className="show-map view-toggle"
-              variant="outline"
-              onClick={() => this.showMap()}
-            >
-              Show Map
-            </Button>
-          </div>
-          {events.map((event, i) => (
-            <div className="event-container" key={`event-${i}`}>
-              <img className="event-image" src={event.image} />
-              <div className="event-info">
-                <div className="event-name">{event.title}</div>
-                <div className="event-date">
-                  {`${this.formatDate(event.date)} / ${event.location.name}`}
-                </div>
-                <div className="event-description">
-                  <ClampLines text={event.description} lines={2} />
-                </div>
-                <div className="event-host">by {event.host}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <>
+        <Flex justifyContent={'right'}>
+          <AuthWrapper>
+            <Link to={'/events/create'}>
+              <Button variant="outline" icon={'add'}>
+                create
+              </Button>
+            </Link>
+          </AuthWrapper>
+        </Flex>
+        <React.Fragment>
+          <>
+            {events.length === 0 ? (
+              <LinearProgress />
+            ) : (
+              <Flex
+                bg={'white'}
+                className="list-container"
+                flexWrap={'wrap'}
+                mt={4}
+                px={4}
+              >
+                {events.map((event: IEvent) => (
+                  <RowContainer width={1} py={4}>
+                    <Flex flexWrap={'wrap'} flex={'1'}>
+                      <Text large bold width={1}>
+                        June
+                      </Text>
+                      <Text large bold width={1}>
+                        1
+                      </Text>
+                    </Flex>
+                    <Flex flexWrap={'wrap'} flex={'3'}>
+                      <Text large width={1}>
+                        {event.title}
+                      </Text>
+                      <Text py={2} small width={1}>
+                        by{' '}
+                        <Text inline bold>
+                          {' '}
+                          {event._createdBy}
+                        </Text>
+                      </Text>
+                    </Flex>
+                    <Flex flexWrap={'nowrap'} alignItems={'center'} flex={'2'}>
+                      <Icon glyph={'location-on'} />
+                      <Text large bold width={1} ml={2}>
+                        {event.location.name},{' '}
+                        <Text caps inline>
+                          {event.location.countryCode}
+                        </Text>
+                      </Text>
+                    </Flex>
+                    <Flex flexWrap={'nowrap'} alignItems={'center'} flex={'2'}>
+                      {event.tags &&
+                        Object.keys(event.tags).map(tag => {
+                          return <TagDisplay key={tag} tagKey={tag} />
+                        })}
+                    </Flex>
+                    <Flex flexWrap={'nowrap'} alignItems={'center'} flex={'1'}>
+                      <ExternalLink
+                        target="_blank"
+                        href={event.url}
+                        color={'black'}
+                        mr={1}
+                      >
+                        <Text small>Go to Event Page</Text>
+                      </ExternalLink>
+                      <Icon glyph={'external-link'} />
+                    </Flex>
+                  </RowContainer>
+                ))}
+              </Flex>
+            )}
+          </>
+        </React.Fragment>
+      </>
     )
   }
 }

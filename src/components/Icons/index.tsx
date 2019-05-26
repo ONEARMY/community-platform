@@ -26,8 +26,14 @@ import {
   MdList,
   MdImage,
   MdArrowForward,
+  MdLocationOn,
 } from 'react-icons/md'
-import { GoCloudUpload, GoFilePdf, GoTrashcan } from 'react-icons/go'
+import {
+  GoCloudUpload,
+  GoFilePdf,
+  GoTrashcan,
+  GoLinkExternal,
+} from 'react-icons/go'
 import { FaSignal } from 'react-icons/fa'
 import { IconContext } from 'react-icons'
 import SVGs from './svgs'
@@ -65,6 +71,8 @@ export type availableGlyphs =
   | 'image'
   | 'pdf'
   | 'loading'
+  | 'location-on'
+  | 'external-link'
 
 export type IGlyphs = { [k in availableGlyphs]: JSX.Element }
 
@@ -92,6 +100,8 @@ export const glyphs: IGlyphs = {
   image: <MdImage />,
   pdf: <GoFilePdf />,
   loading: SVGs.loading,
+  'location-on': <MdLocationOn />,
+  'external-link': <GoLinkExternal />,
 }
 
 type WrapperProps = IProps & VerticalAlignProps & SpaceProps

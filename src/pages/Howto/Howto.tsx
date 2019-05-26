@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
-import logo from '../../assets/images/logo.png'
 
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
@@ -11,7 +10,6 @@ import { AuthRoute } from '../common/AuthRoute'
 
 interface IProps {
   howtoStore?: HowtoStore
-  nonav: boolean
 }
 
 // We're connecting to the 'docStore' state object and will pass down through child compoennts
@@ -34,16 +32,8 @@ class HowtoPageClass extends React.Component<IProps, any> {
   }
 
   public render() {
-    const { nonav } = this.props
     return (
       <div>
-        {nonav && (
-          <img
-            src={logo}
-            alt="precious plastic logo"
-            style={{ display: 'block', margin: '0 auto', width: '200px' }}
-          />
-        )}
         <Switch>
           <Route
             exact

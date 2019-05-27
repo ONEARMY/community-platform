@@ -28,9 +28,11 @@ export class EventStore extends ModuleStore {
   constructor() {
     super('eventsV1')
     this.allDocs$.subscribe((docs: IEvent[]) => {
-      // convert firestore timestamp back to date objects
+      // convert firestore timestamp back to date objects and sort
       this.allEvents = [
-        ...docs.map(doc => ({ ...doc, date: toDate(doc.date) })),
+        ...docs
+          .map(doc => ({ ...doc, date: toDate(doc.date) }))
+          .sort((a, b) => (a.date > b.date ? 1 : -1)),
       ]
     })
   }

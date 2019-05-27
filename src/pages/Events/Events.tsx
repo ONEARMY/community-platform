@@ -21,9 +21,7 @@ class EventsPageClass extends React.Component<IProps, any> {
 
   public render() {
     const upcomingEvents = this.props.eventStore!.upcomingEvents
-    console.log('upcoming events', upcomingEvents)
     const pastEvents = this.props.eventStore!.pastEvents
-    console.log('past events', pastEvents)
     return (
       <div id="EventsPage">
         <Switch>

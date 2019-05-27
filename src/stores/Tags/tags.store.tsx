@@ -19,13 +19,14 @@ export class TagsStore extends ModuleStore {
   }
 
   constructor() {
-    super('tags')
+    super('tagsV1')
     this.allDocs$.subscribe((docs: ITag[]) => {
       // convert firestore timestamp back to date objects and sort
       this.allTags = docs.sort((a, b) => (a.label > b.label ? 1 : -1))
       this.allTagsByKey = arrayToJson(docs, '_id')
       this._filterTags()
     })
+    this._uploadTagsMockToDatabase()
   }
 
   private _filterTags() {
@@ -44,7 +45,7 @@ export class TagsStore extends ModuleStore {
     const batch = afs.batch()
     TAGS_MOCK.forEach(tag => {
       if (tag._id) {
-        const ref = afs.doc(`tags/${tag._id}`)
+        const ref = afs.doc(`tagsV1/${tag._id}`)
         batch.set(ref, tag)
       }
     })

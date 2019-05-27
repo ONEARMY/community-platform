@@ -186,5 +186,5 @@ export type IDBEndpoints =
   | 'howtosV1'
   | 'users'
   | 'discussions'
-  | 'tags'
+  | 'tagsV1'
   | 'eventsV1'

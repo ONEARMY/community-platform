@@ -126,6 +126,12 @@ function _resultToLocation(result: IAlgoliaResponse) {
     postcode: l.postcode,
     value: l.value,
   }
+  // some fields may be undefined, so convert to null so can store in db
+  Object.keys(location).forEach(key => {
+    if (location[key] === undefined) {
+      location[key] = null
+    }
+  })
   return location
 }
 

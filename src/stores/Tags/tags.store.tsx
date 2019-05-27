@@ -1,44 +1,50 @@
 import { observable, action } from 'mobx'
 import { afs } from 'src/utils/firebase'
 import { TAGS_MOCK } from 'src/mocks/tags.mock'
-import { ITagQuery, ITag } from 'src/models/tags.model'
+import { ITag, TagCategory } from 'src/models/tags.model'
 import { arrayToJson } from 'src/utils/helpers'
+import { ModuleStore } from '../common/module.store'
 
-export class TagsStore {
+export class TagsStore extends ModuleStore {
+  activeCategory?: TagCategory
   @observable
-  public tags: ITag[] = []
-  public tagsByKey: { [key: string]: ITag } = {}
-
-  constructor() {
-    this.subscribeToTags()
+  public allTags: ITag[] = []
+  @observable
+  public allTagsByKey: { [key: string]: ITag } = {}
+  @observable
+  public categoryTags: ITag[] = []
+  @action public setTagsCategory(category?: TagCategory) {
+    this.activeCategory = category
+    this._filterTags()
   }
 
-  // when tags are received from the database we want to populate the _key field and
-  // dispatch back to the observable tags property
-  public subscribeToTags() {
-    afs.collection('tags').onSnapshot(snapshot => {
-      const tags: ITag[] = snapshot.docs.map(doc => {
-        const data = doc.data() as ITagQuery
-        const tag: ITag = { ...data, _key: doc.id }
-        return tag
-      })
-      this.updateTags(tags)
+  constructor() {
+    super('tags')
+    this.allDocs$.subscribe((docs: ITag[]) => {
+      // convert firestore timestamp back to date objects and sort
+      this.allTags = docs.sort((a, b) => (a.label > b.label ? 1 : -1))
+      this.allTagsByKey = arrayToJson(docs, '_id')
+      this._filterTags()
     })
   }
 
-  @action
-  public updateTags(tags: ITag[]) {
-    this.tags = tags
-    this.tagsByKey = arrayToJson(tags, '_key')
+  private _filterTags() {
+    let tags = [...this.allTags]
+    if (this.activeCategory) {
+      tags = tags.filter(tag =>
+        tag.categories.includes(this.activeCategory as TagCategory),
+      )
+    }
+    this.categoryTags = [...tags]
   }
 
   // sometimes during testing we might want to put the mock data in the database
   // if so call this method
-  private uploadTagsMockToDatabase() {
+  private _uploadTagsMockToDatabase() {
     const batch = afs.batch()
     TAGS_MOCK.forEach(tag => {
-      if (tag._key) {
-        const ref = afs.doc(`tags/${tag._key}`)
+      if (tag._id) {
+        const ref = afs.doc(`tags/${tag._id}`)
         batch.set(ref, tag)
       }
     })

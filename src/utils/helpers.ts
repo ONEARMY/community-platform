@@ -27,7 +27,7 @@ export const arrayToJson = (arr: any[], keyField: string) => {
 /************************************************************************
  *              Date Methods
  ***********************************************************************/
-export const toTimestamp = (dateString: string) => {
+export const toTimestamp = (dateString: string | Date) => {
   return firestore.Timestamp.fromDate(new Date(dateString))
 }
 

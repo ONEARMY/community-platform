@@ -60,12 +60,12 @@ export class EventsCreate extends React.Component<IProps, IState> {
     await this.store.uploadEvent(formValues, this.state._docID)
   }
 
-  public validateTitle = async (value: any, meta?: FieldState) => {
-    this.store.validateTitle(value, 'eventsV1', meta)
+  public validateTitle = async (value: any) => {
+    return this.store.validateTitle(value, 'eventsV1')
   }
 
-  public validateUrl = async (value: any, meta?: FieldState) => {
-    this.store.validateUrl(value, meta)
+  public validateUrl = async (value: any) => {
+    return this.store.validateUrl(value)
   }
 
   public render() {
@@ -94,6 +94,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                     <Field
                       name="title"
                       validate={value => this.validateTitle(value)}
+                      validateFields={[]}
                       component={InputField}
                       placeholder="Title of your event"
                     />

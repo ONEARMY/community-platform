@@ -1,6 +1,6 @@
 {
   "name": "one-army-world",
-  "version": "0.3.0",
+  "version": "0.4.0rc2",
   "private": true,
   "dependencies": {
     "@babel/core": "7.2.2",

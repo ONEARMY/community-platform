@@ -97,8 +97,8 @@ export class CreateHowto extends React.Component<IProps, IState> {
     await this.store.uploadHowTo(formValues, this.state._docID)
   }
 
-  public validateTitle = async (value: any, meta?: FieldState) => {
-    this.store.validateTitle(value, meta)
+  public validateTitle = async (value: any) => {
+    return this.store.validateTitle(value, 'howtosV1')
   }
 
   // automatically generate the slug when the title changes

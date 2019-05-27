@@ -7,7 +7,6 @@ import { IEvent } from 'src/models/events.models'
 import * as Mocks from 'src/mocks/events.mock'
 import { EventStore } from 'src/stores/Events/events.store'
 import './EventsMap.scss'
-import Card from '@material-ui/core/Card'
 import { ClampLines } from 'src/components/ClampLines/ClampLines'
 
 interface IState {
@@ -68,7 +67,7 @@ export class EventsMap extends React.Component<IProps, IState> {
                 <Popup maxWidth={225} minWidth={225}>
                   <img className="popup-image" src={event.image} />
                   <div className="popup-info">
-                    <div className="event-name">{event.name}</div>
+                    <div className="event-name">{event.title}</div>
                     <div className="event-date">
                       {/* {`${this.formatDate(event.date)} / ${event.location.city}`} */}
                     </div>

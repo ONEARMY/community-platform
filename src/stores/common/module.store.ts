@@ -9,30 +9,29 @@ import isUrl from 'is-url'
 */
 
 export class ModuleStore {
-  cacheLoaded = false
   allDocs$ = new BehaviorSubject<any[]>([])
   activeDoc$ = new BehaviorSubject<any>(null)
   private activeDocSubscription = new Subscription()
   private activeCollectionSubscription = new Subscription()
 
   // when a module store is initiated automatically load the docs in the collection
+  // this can be subscribed to in individual stores
   constructor(public basePath: IDBEndpoints) {
     this.getCollection(basePath)
   }
 
+  /****************************************************************************
+   *            Database Management Methods
+   * **************************************************************************/
+
   // when accessing a collection want to call the database getCollection method which
   // efficiently checks the cache first and emits any subsequent updates
-  // we will stop subscribing
   public getCollection(path: IDBEndpoints) {
     this.allDocs$.next([])
     this.activeCollectionSubscription.unsubscribe()
     this.activeCollectionSubscription = Database.getCollection(path).subscribe(
       data => {
         this.allDocs$.next(data)
-        // first emit from cache, future emits will be from live but only if data is newer
-        if (!this.cacheLoaded) {
-          this.cacheLoaded = true
-        }
       },
     )
     return this.activeCollectionSubscription
@@ -51,6 +50,10 @@ export class ModuleStore {
     })
   }
 
+  /****************************************************************************
+   *            Data Validation Methods
+   * **************************************************************************/
+
   public isSlugUnique = async (slug: string, endpoint: IDBEndpoints) => {
     try {
       await Database.checkSlugUnique(endpoint, slug)
@@ -59,35 +62,19 @@ export class ModuleStore {
     }
   }
 
-  public validateTitle = async (
-    value: any,
-    endpoint: IDBEndpoints,
-    meta?: FieldState,
-  ) => {
-    if (meta && (!meta.dirty && meta.valid)) {
-      return undefined
-    }
+  public validateTitle = async (value: any, endpoint: IDBEndpoints) => {
     if (value) {
       const error = this.isSlugUnique(
         stripSpecialCharacters(value).toLowerCase(),
         endpoint,
       )
       return error
-    } else if ((meta && (meta.touched || meta.visited)) || value === '') {
-      return 'A title is required'
+    } else {
+      return 'Required'
     }
-    return undefined
   }
 
-  public validateUrl = async (value: any, meta?: FieldState) => {
-    if (meta && (!meta.dirty && meta.valid)) {
-      return undefined
-    }
-    if (value && !isUrl(value)) {
-      return 'invalid url'
-    } else if ((meta && (meta.touched || meta.visited)) || value === '') {
-      return 'A title is required'
-    }
-    return undefined
+  public validateUrl = async (value: any) => {
+    return value ? (isUrl(value) ? undefined : 'Invalid url') : 'Required'
   }
 }

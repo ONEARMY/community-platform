@@ -8,7 +8,7 @@ import {
 } from 'src/models/howto.models'
 import { Database } from 'src/stores/database'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
-import { Storage, IUploadedFileMeta } from '../storage'
+import { Storage } from '../storage'
 import { ModuleStore } from '../common/module.store'
 
 export class HowtoStore extends ModuleStore {
@@ -16,25 +16,19 @@ export class HowtoStore extends ModuleStore {
   @observable
   public activeHowto: IHowto | undefined
   @observable
-  public allHowtos: IHowto[] = []
+  public allHowtos: IHowto[]
   @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
 
   constructor() {
+    // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
+    // the given endpoint and emits changes as data is retrieved from cache and live collection
     super('howtosV1')
+    this.allDocs$.subscribe(docs => {
+      this.allHowtos = docs as IHowto[]
+    })
   }
 
-  // *** TODO - migrate these to standard database/common module.store methods (not call afs directly)
-  // call getDocList to query 'Howtos' from db and map response to docs observable
-  @action
-  public async getDocList() {
-    const ref = await afs
-      .collection('howtosV1')
-      .orderBy('_created', 'desc')
-      .get()
-
-    this.allHowtos = ref.docs.map(doc => doc.data() as IHowto)
-  }
   @action
   public async getDocBySlug(slug: string) {
     const ref = afs

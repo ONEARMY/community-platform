@@ -11,8 +11,13 @@ export const PostingGuidelines = () => (
     <Heading small bold>
       Event Posting Guidelines
     </Heading>
-    <Text my={3}> 1. Titles are powerful. Choose wisely.</Text>
-    <Text my={3}> 2. Use tags, that's how we stay organised.</Text>
+    <Text my={3}>
+      {' '}
+      1. Use a platform like Facebook, Eventbrite, Meetup, etc.
+    </Text>
+    <Text my={3}> 2. Copy and paste the url.</Text>
+    <Text my={3}> 3. Add additional information.</Text>
+    <Text my={3}> 4. Reach an army of likeminded people :)</Text>
     <Text small>
       If unsure please read our posting policy as well as our{' '}
       <Link

@@ -17,8 +17,11 @@ export interface IUser extends IDbDoc {
   // note, user avatar url is taken direct from userName so no longer populated here
   // avatar:string
   verified: boolean
+  userRoles?: UserRole[]
   about?: string
   DHSite_id?: number
   DHSite_mention_name?: string
   country?: string
 }
+
+export type UserRole = 'super-admin' | 'subscriber'

@@ -6,6 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import { IEventFilters } from 'src/models/events.models'
 import './EventsMenu.scss'
 import * as Mocks from 'src/mocks/events.mock'
+import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
 
 type timePeriod = 'weekend' | 'week' | 'month' | 'year'
 
@@ -45,8 +46,10 @@ export class EventsMenu extends React.Component<any, IState> {
     return (
       <div id="EventsMenu">
         <div className="container">
+          <LocationSearch placeholder="Type Location" />
           <form autoComplete="off">
             {/* Project */}
+
             <FormControl className="form-control" variant="outlined">
               <Select
                 displayEmpty

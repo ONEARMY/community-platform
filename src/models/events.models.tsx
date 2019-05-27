@@ -1,20 +1,22 @@
-export interface IEvent {
-  name: string
-  location: IEventLocation
+import { ISelectedTags } from './tags.model'
+import { firestore } from 'firebase/app'
+import { IDbDoc } from './common.models'
+
+export interface IEvent extends IEventFormInput, IDbDoc {
   description: string
   host: string
-  date: Date
+  date: firestore.Timestamp | Date
   type: string
   image: string
-  _slug: string
-  _created: Date
-  _modified: Date
+  tags: ISelectedTags
+  slug: string
 }
 
 // will most likely populate as some sort of google reference
 interface IEventLocation {
-  city: string
+  name: string
   country: string
+  countryCode: string
   label?: string
   address?: string
   lat: number
@@ -27,4 +29,15 @@ export interface IEventFilters {
   dateFrom: Date
   dateTo: Date
   type: string
+}
+
+export interface IEventFormInput {
+  _id: string
+  title: string
+  location: IEventLocation
+  // note, tags will remain optional as if populated {} will be stripped by db (firestore)
+  tags: ISelectedTags
+  // note, datepicker passes simple yyyy-mm-dd string format for dates
+  date: string | firestore.Timestamp | Date
+  url: string
 }

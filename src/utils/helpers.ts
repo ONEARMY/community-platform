@@ -24,10 +24,22 @@ export const arrayToJson = (arr: any[], keyField: string) => {
   return json
 }
 
+/************************************************************************
+ *              Date Methods
+ ***********************************************************************/
 export const toTimestamp = (dateString: string) => {
   return firestore.Timestamp.fromDate(new Date(dateString))
 }
 
+// as firestore automatically populates timestamps from dates, want method to convert back
+// and allow workign with Date objects (a bit hacky, but required for current firebase integration)
+export const toDate = (d: firestore.Timestamp | Date) => {
+  return d instanceof Date ? d : d.toDate()
+}
+
+/************************************************************************
+ *             Validators
+ ***********************************************************************/
 export const isEmail = (email: string) => {
   const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   return re.test(email)

@@ -25,7 +25,6 @@ export class AuthRoute extends React.Component<IProps, IState> {
   isUserAuthenticated() {
     const { user } = this.props.userStore!
     const { roleRequired } = this.props
-    console.log('is user authenticated?', user, roleRequired)
     if (user) {
       if (roleRequired) {
         return user.userRoles && user.userRoles.includes(roleRequired)

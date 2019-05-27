@@ -7,6 +7,7 @@ import { EventsList } from './Content/EventsList/EventsList'
 import { withRouter, Switch, Route } from 'react-router'
 import { AuthRoute } from '../common/AuthRoute'
 
+// see similar implementation in 'how-to' page for more detailed commenting
 interface IProps {
   eventStore?: EventStore
 }
@@ -18,13 +19,11 @@ class EventsPageClass extends React.Component<IProps, any> {
     super(props)
   }
 
-  public async componentDidMount() {
-    // call methods you want to fire once when component mounted
-    await this.props.eventStore!.getEventsList()
-    this.forceUpdate()
-  }
-
   public render() {
+    const upcomingEvents = this.props.eventStore!.upcomingEvents
+    console.log('upcoming events', upcomingEvents)
+    const pastEvents = this.props.eventStore!.pastEvents
+    console.log('past events', pastEvents)
     return (
       <div id="EventsPage">
         <Switch>
@@ -32,10 +31,7 @@ class EventsPageClass extends React.Component<IProps, any> {
             exact
             path="/events"
             render={props => (
-              <EventsList
-                {...props}
-                allEvents={this.props.eventStore!.allEvents}
-              />
+              <EventsList {...props} upcomingEvents={upcomingEvents} />
             )}
           />
           <AuthRoute

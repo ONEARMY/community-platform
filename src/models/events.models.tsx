@@ -1,10 +1,11 @@
 import { ISelectedTags } from './tags.model'
+import { firestore } from 'firebase/app'
 import { IDbDoc } from './common.models'
 
 export interface IEvent extends IEventFormInput, IDbDoc {
   description: string
   host: string
-  date: Date
+  date: firestore.Timestamp | Date
   type: string
   image: string
   tags: ISelectedTags
@@ -36,6 +37,7 @@ export interface IEventFormInput {
   location: IEventLocation
   // note, tags will remain optional as if populated {} will be stripped by db (firestore)
   tags: ISelectedTags
-  date: Date
+  // note, datepicker passes simple yyyy-mm-dd string format for dates
+  date: string | firestore.Timestamp | Date
   url: string
 }

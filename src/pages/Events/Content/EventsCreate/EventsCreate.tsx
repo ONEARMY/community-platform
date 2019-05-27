@@ -143,9 +143,6 @@ export class EventsCreate extends React.Component<IProps, IState> {
                 >
                   Publish
                 </Button>
-                <Button onClick={() => console.log(errors)} width={1} mt={3}>
-                  check
-                </Button>
               </BoxContainer>
             </FlexContainer>
           )

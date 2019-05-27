@@ -43,7 +43,7 @@ const events = {
   path: '/events',
   component: <EventsPage />,
   title: 'Events',
-  description: '',
+  description: 'Welcome to Events',
 }
 const maps = {
   path: '/maps',

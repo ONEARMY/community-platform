@@ -58,6 +58,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
   public onSubmit = async (formValues: IEventFormInput) => {
     console.log('form values', formValues)
     await this.store.uploadEvent(formValues, this.state._docID)
+    this.props.history.push('/events')
   }
 
   public validateTitle = async (value: any) => {

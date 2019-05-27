@@ -2,18 +2,18 @@ import * as React from 'react'
 import { IEvent } from 'src/models/events.models'
 import { Button } from 'src/components/Button'
 import { Link } from 'src/components/Links'
-import { Flex, Box, Link as ExternalLink } from 'rebass'
+import { Flex, Link as ExternalLink } from 'rebass'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
-import { LinearProgress } from '@material-ui/core'
 import Text from 'src/components/Text'
 import styled from 'styled-components'
 import { colors } from 'src/themes/styled.theme'
 import Icon from 'src/components/Icons'
 import { TagDisplay } from 'src/components/Tags/TagDisplay/TagDisplay'
 import Heading from 'src/components/Heading'
+import { toDate } from 'src/utils/helpers'
 
 interface IProps {
-  allEvents: IEvent[]
+  upcomingEvents: IEvent[]
 }
 
 const RowContainer = styled(Flex)`
@@ -26,17 +26,15 @@ export class EventsList extends React.Component<IProps> {
   }
 
   public getMonth(d: Date) {
-    const newDate = new Date(d)
     // use ECMAScript Internationalization API to return month
-    return `${newDate.toLocaleString('en-us', { month: 'long' })}`
+    return `${d.toLocaleString('en-us', { month: 'long' })}`
   }
   public getDay(d: Date) {
-    const newDate = new Date(d)
-    return `${newDate.getDay()}`
+    return `${d.getDate()}`
   }
 
   public render() {
-    const { allEvents } = this.props
+    const { upcomingEvents } = this.props
     return (
       <>
         <Flex justifyContent={'right'}>
@@ -50,9 +48,7 @@ export class EventsList extends React.Component<IProps> {
         </Flex>
         <React.Fragment>
           <>
-            {allEvents.length === 0 ? (
-              <LinearProgress />
-            ) : (
+            {upcomingEvents.length === 0 ? null : ( // *** TODO - indicate whether no upcoming events or data still just loading
               <Flex
                 bg={'white'}
                 className="list-container"
@@ -60,14 +56,14 @@ export class EventsList extends React.Component<IProps> {
                 mt={4}
                 px={4}
               >
-                {allEvents.map((event: IEvent) => (
+                {upcomingEvents.map((event: IEvent) => (
                   <RowContainer width={1} py={4} key={event._id}>
                     <Flex flexWrap={'wrap'} flex={'1'}>
                       <Text large bold width={1}>
-                        {this.getMonth(event.date)}
+                        {this.getMonth(event.date as Date)}
                       </Text>
                       <Heading small bold width={1}>
-                        {this.getDay(event.date)}
+                        {this.getDay(event.date as Date)}
                       </Heading>
                     </Flex>
                     <Flex flexWrap={'wrap'} flex={'3'}>

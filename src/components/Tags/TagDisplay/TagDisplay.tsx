@@ -38,7 +38,9 @@ export class TagDisplay extends React.Component<IProps, IState> {
   }
 
   public componentWillMount() {
-    const activeTag = this.injectedProps.tagsStore.tagsByKey[this.props.tagKey]
+    const activeTag = this.injectedProps.tagsStore.allTagsByKey[
+      this.props.tagKey
+    ]
     this.setState({ tag: activeTag })
   }
 

@@ -1,8 +1,8 @@
 import { BehaviorSubject, Subscription } from 'rxjs'
 import { Database, IDBEndpoints } from '../database'
-import { FieldState } from 'final-form'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import isUrl from 'is-url'
+import { TagCategory } from 'src/models/tags.model'
 
 /*  The module store contains common methods used across modules that access specfic
     collections on the database

@@ -2,12 +2,10 @@ import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 import { Form, Field } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
-import { IHowtoFormInput } from 'src/models/howto.models'
 import TEMPLATE from './Template'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
-import { InputField, TextAreaField } from 'src/components/Form/Fields'
+import { InputField } from 'src/components/Form/Fields'
 import { Button } from 'src/components/Button'
-import { FieldState } from 'final-form'
 import { EventStore } from 'src/stores/Events/events.store'
 import Heading from 'src/components/Heading'
 import { FlexContainer } from 'src/components/Layout/FlexContainer'
@@ -99,7 +97,11 @@ export class EventsCreate extends React.Component<IProps, IState> {
                       component={InputField}
                       placeholder="Title of your event"
                     />
-                    <Field name="tags" component={TagsSelectField} />
+                    <Field
+                      name="tags"
+                      component={TagsSelectField}
+                      category="event"
+                    />
                     <Field
                       name="location"
                       validateFields={[]}

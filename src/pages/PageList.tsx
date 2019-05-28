@@ -6,6 +6,7 @@ import { SITE } from 'src/config/config'
 import { DiscussionsPage } from './Discussions'
 import { EventsPage } from './Events/Events'
 import { NotFoundPage } from './NotFound/NotFound'
+import { AdminPage } from './admin/Admin'
 
 export interface IPageMeta {
   path: string
@@ -51,6 +52,12 @@ const maps = {
   title: 'Maps',
   description: '',
 }
+const admin = {
+  path: '/admin',
+  component: <AdminPage />,
+  title: 'Admin',
+  description: '',
+}
 
 // community pages (various pages hidden on production build)
 const devCommunityPages = [howTo, events, discussions]
@@ -66,3 +73,4 @@ const communityPagesMore =
 export const COMMUNITY_PAGES: IPageMeta[] = communityPages
 export const COMMUNITY_PAGES_MORE: IPageMeta[] = communityPagesMore
 export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [profile, feedback]
+export const ADMIN_PAGES: IPageMeta[] = [admin]

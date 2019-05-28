@@ -26,7 +26,6 @@ export class TagsStore extends ModuleStore {
       this.allTagsByKey = arrayToJson(docs, '_id')
       this._filterTags()
     })
-    this._uploadTagsMockToDatabase()
   }
 
   private _filterTags() {
@@ -40,8 +39,8 @@ export class TagsStore extends ModuleStore {
   }
 
   // sometimes during testing we might want to put the mock data in the database
-  // if so call this method
-  private _uploadTagsMockToDatabase() {
+  // currently called from super-admin page
+  uploadTagsMockToDatabase() {
     const batch = afs.batch()
     TAGS_MOCK.forEach(tag => {
       if (tag._id) {
@@ -49,12 +48,6 @@ export class TagsStore extends ModuleStore {
         batch.set(ref, tag)
       }
     })
-    batch
-      .commit()
-      .then(
-        () => console.log('commit successful'),
-        err => console.log('commit rejected', err),
-      )
-      .catch(err => console.log('batch commit err', err))
+    return batch.commit()
   }
 }

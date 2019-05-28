@@ -84,8 +84,8 @@ export class CommunityHeader extends React.Component<IProps, IState> {
       <div>
         <TopLink target="_blank" width={1} href="https://build.onearmy.world">
           <Text bg="blue" color="white" py={2} medium>
-            This is the alpha version of onearmy platform, if you want to help
-            click here.
+            This is the alpha version of onearmy platform, click here to help
+            building it.
           </Text>
         </TopLink>
 

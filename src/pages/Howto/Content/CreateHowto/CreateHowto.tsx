@@ -11,7 +11,6 @@ import { InputField, TextAreaField } from 'src/components/Form/Fields'
 import { SelectField } from 'src/components/Form/Select.field'
 import { Step } from './Step/Step'
 import { Button } from 'src/components/Button'
-import { FieldState } from 'final-form'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import Heading from 'src/components/Heading'
 import { FlexContainer } from 'src/components/Layout/FlexContainer'
@@ -97,8 +96,8 @@ export class CreateHowto extends React.Component<IProps, IState> {
     await this.store.uploadHowTo(formValues, this.state._docID)
   }
 
-  public validateTitle = async (value: any, meta?: FieldState) => {
-    this.store.validateTitle(value, meta)
+  public validateTitle = async (value: any) => {
+    return this.store.validateTitle(value, 'howtosV1')
   }
 
   // automatically generate the slug when the title changes
@@ -146,7 +145,11 @@ export class CreateHowto extends React.Component<IProps, IState> {
                           component={InputField}
                           placeholder="Title of your How-to *"
                         />
-                        <Field name="tags" component={TagsSelectField} />
+                        <Field
+                          name="tags"
+                          component={TagsSelectField}
+                          category="how-to"
+                        />
                         <FlexContainer p={0}>
                           <Field
                             name="time"

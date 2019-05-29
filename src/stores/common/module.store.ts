@@ -1,35 +1,37 @@
 import { BehaviorSubject, Subscription } from 'rxjs'
 import { Database, IDBEndpoints } from '../database'
+import { stripSpecialCharacters } from 'src/utils/helpers'
+import isUrl from 'is-url'
+import { TagCategory } from 'src/models/tags.model'
 
 /*  The module store contains common methods used across modules that access specfic
     collections on the database
 */
 
 export class ModuleStore {
-  cacheLoaded = false
   allDocs$ = new BehaviorSubject<any[]>([])
   activeDoc$ = new BehaviorSubject<any>(null)
   private activeDocSubscription = new Subscription()
   private activeCollectionSubscription = new Subscription()
 
   // when a module store is initiated automatically load the docs in the collection
+  // this can be subscribed to in individual stores
   constructor(public basePath: IDBEndpoints) {
     this.getCollection(basePath)
   }
 
+  /****************************************************************************
+   *            Database Management Methods
+   * **************************************************************************/
+
   // when accessing a collection want to call the database getCollection method which
   // efficiently checks the cache first and emits any subsequent updates
-  // we will stop subscribing
   public getCollection(path: IDBEndpoints) {
     this.allDocs$.next([])
     this.activeCollectionSubscription.unsubscribe()
     this.activeCollectionSubscription = Database.getCollection(path).subscribe(
       data => {
         this.allDocs$.next(data)
-        // first emit from cache, future emits will be from live but only if data is newer
-        if (!this.cacheLoaded) {
-          this.cacheLoaded = true
-        }
       },
     )
     return this.activeCollectionSubscription
@@ -46,5 +48,33 @@ export class ModuleStore {
       const doc = docs.find(d => d[key] === value)
       this.activeDoc$.next(doc)
     })
+  }
+
+  /****************************************************************************
+   *            Data Validation Methods
+   * **************************************************************************/
+
+  public isSlugUnique = async (slug: string, endpoint: IDBEndpoints) => {
+    try {
+      await Database.checkSlugUnique(endpoint, slug)
+    } catch (e) {
+      return 'Titles must be unique, please try being more specific'
+    }
+  }
+
+  public validateTitle = async (value: any, endpoint: IDBEndpoints) => {
+    if (value) {
+      const error = this.isSlugUnique(
+        stripSpecialCharacters(value).toLowerCase(),
+        endpoint,
+      )
+      return error
+    } else {
+      return 'Required'
+    }
+  }
+
+  public validateUrl = async (value: any) => {
+    return value ? (isUrl(value) ? undefined : 'Invalid url') : 'Required'
   }
 }

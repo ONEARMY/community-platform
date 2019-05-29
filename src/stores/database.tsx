@@ -114,27 +114,37 @@ export class Database {
         Helper Methods
   /****************************************************************************** */
 
-  // get cached value, emit, and then subscribe and emit any updates
+  // get cached data, emit, and then subscribe to live updates and emit full collection on change
   private static async _emitCollectionUpdates(
     path: string,
     subject: Subject<any[]>,
   ) {
     // get cached and emit
-    const cachedSnapshot = await this._getCachedCollection(path)
-    let cached = this._preProcessData(cachedSnapshot)
-    subject.next([...cached].reverse())
+    const cached = await this._emitCachedCollection(path, subject)
     // subscribe to any updates, emit when received
     const updatesRef = this._getCollectionUpdatesRef(
       path,
       cached[cached.length - 1],
     )
-    updatesRef.onSnapshot(updateSnapshot => {
+    updatesRef.onSnapshot(async updateSnapshot => {
+      // whenever updates are found they will automatically be added to the cache,
+      // so we can just emit all values from the cache once more (and avoid manually merging changes in)
       if (updateSnapshot.size > 0) {
-        const update = this._preProcessData(updateSnapshot)
-        cached = this._mergeData(cached, update)
-        subject.next([...cached].reverse())
+        await this._emitCachedCollection(path, subject, true)
       }
     })
+  }
+
+  // get data from the cache, process and emit to subject
+  private static async _emitCachedCollection(
+    path: string,
+    subject: Subject<any[]>,
+    isNew?: boolean,
+  ) {
+    const cachedSnapshot = await this._getCachedCollection(path)
+    const cached = this._preProcessData(cachedSnapshot, isNew)
+    subject.next([...cached].reverse())
+    return cached
   }
 
   // search the persisted cache for documents, return oldest to newest
@@ -155,25 +165,16 @@ export class Database {
 
   // when data comes in from firebase we want to preprocess, to extract the document data from firestore
   // documents, populate a _id field (if not present) and remove deleted items
-  private static _preProcessData(data: firestore.QuerySnapshot) {
+  // additionally add a _isNew field to indicate whether this is the first time the data has been retrieved by the user
+  private static _preProcessData(
+    data: firestore.QuerySnapshot,
+    isNew?: boolean,
+  ) {
     const docs = data.docs.map(doc => {
-      return { ...doc.data(), _id: doc.id }
+      return { ...doc.data(), _id: doc.id, _isNew: isNew }
     }) as any[]
     const filtered = docs.filter(doc => !doc._deleted)
     return filtered
-  }
-
-  // when we have both cached and updated data retrieved, we want to merge so that any documents
-  // that have been updated don't appear in both lists
-  private static _mergeData(cached: any[], updates: any[]) {
-    const json = {}
-    cached.forEach(d => {
-      json[d._id] = d
-    })
-    updates.forEach(d => {
-      json[d._id] = d
-    })
-    return Object.values(json)
   }
 }
 
@@ -181,4 +182,9 @@ export class Database {
         Interfaces
   /****************************************************************************** */
 
-export type IDBEndpoints = 'howtosV1' | 'users' | 'discussions' | 'tags'
+export type IDBEndpoints =
+  | 'howtosV1'
+  | 'users'
+  | 'discussions'
+  | 'tagsV1'
+  | 'eventsV1'

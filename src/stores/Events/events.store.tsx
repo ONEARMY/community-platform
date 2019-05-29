@@ -1,8 +1,11 @@
-import { observable, action } from 'mobx'
-import { afs } from 'src/utils/firebase'
-import { IEvent } from 'src/models/events.models'
+import { observable, computed } from 'mobx'
+import { IEvent, IEventFormInput } from 'src/models/events.models'
+import { ModuleStore } from '../common/module.store'
+import { Database } from '../database'
+import Filters from 'src/utils/filters'
+import { toDate } from 'src/utils/helpers'
 
-export class EventStore {
+export class EventStore extends ModuleStore {
   // observables are data variables that can be subscribed to and change over time
   @observable
   public allEvents: IEvent[]
@@ -10,29 +13,61 @@ export class EventStore {
   public activeEvent: IEvent | undefined
   @observable
   public eventViewType: 'map' | 'list'
-
-  @action
-  public async getEventsList() {
-    const ref = await afs.collection('events').get()
-    this.allEvents = ref.docs.map(doc => doc.data() as IEvent)
-    console.log('events retrieved', this.allEvents)
+  @computed get upcomingEvents() {
+    return this.allEvents.filter(event => {
+      // dates saved as yyyy-mm-dd string so convert to date object for comparison
+      return Filters.newerThan(event.date, 'yesterday')
+    })
+  }
+  @computed get pastEvents() {
+    return this.allEvents.filter(event => {
+      return Filters.olderThan(event.date, 'today')
+    })
   }
 
-  public async getEventBySlug(slug: string) {
-    const ref = afs
-      .collection('events')
-      .where('slug', '==', slug)
-      .limit(1)
-    const collection = await ref.get()
-    this.activeEvent =
-      collection.docs.length > 0
-        ? (collection.docs[0].data() as IEvent)
-        : undefined
-    return this.activeEvent
+  constructor() {
+    super('eventsV1')
+    this.allDocs$.subscribe((docs: IEvent[]) => {
+      // convert firestore timestamp back to date objects and sort
+      this.allEvents = [
+        ...docs
+          .map(doc => ({ ...doc, date: toDate(doc.date) }))
+          .sort((a, b) => (a.date > b.date ? 1 : -1)),
+      ]
+    })
+  }
+
+  public async uploadEvent(values: IEventFormInput, id: string) {
+    console.log('uploading event', id)
+    console.log('values', values)
+    try {
+      const event: IEventFormInput = {
+        ...Database.generateDocMeta('eventsV1'),
+        ...values,
+        // convert string yyyy-mm-dd format to timestamp
+        date: Database.generateTimestamp(
+          new Date(Date.parse(values.date as string)),
+        ),
+      }
+      console.log('populating database', event)
+      this.updateDatabase(event)
+      console.log('event added')
+      return event
+    } catch (error) {
+      console.log('error', error)
+      throw new Error(error.message)
+    }
   }
 
   public setEventView(type: 'map' | 'list') {
     this.eventViewType = type
     console.log('event view type', this.eventViewType)
+  }
+
+  public generateID = () => {
+    return Database.generateDocId('eventsV1')
+  }
+  private updateDatabase(event: IEventFormInput) {
+    return Database.setDoc(`eventsV1/${event._id}`, event)
   }
 }

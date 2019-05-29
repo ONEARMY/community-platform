@@ -1,56 +1,43 @@
-/*************************************************************************************  
-This is an example page viewable at /template
-For more info on pages see the Q & A at the bottom
-**************************************************************************************/
-
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
-import { IStores } from 'src/stores'
-import MainLayout from '../common/MainLayout'
 import { EventStore } from 'src/stores/Events/events.store'
-import { EventsMenu } from './Content/EventsMenu/EventsMenu'
+import { EventsCreate } from './Content/EventsCreate/EventsCreate'
 import { EventsList } from './Content/EventsList/EventsList'
-import { EventsMap } from './Content/EventsMap/EventsMap'
 
-import { withRouter } from 'react-router'
+import { withRouter, Switch, Route } from 'react-router'
+import { AuthRoute } from '../common/AuthRoute'
 
-// define the page properties with typing information for fields
-// properties are things that will have been passed down from parent component
-// so for pages are likely to not contain much except perhaps global store objects
+// see similar implementation in 'how-to' page for more detailed commenting
 interface IProps {
-  eventStore: EventStore
+  eventStore?: EventStore
 }
 
-@inject((allStores: IStores) => ({
-  eventStore: allStores.eventStore,
-}))
+@inject('eventStore')
 @observer
 class EventsPageClass extends React.Component<IProps, any> {
   constructor(props: any) {
     super(props)
   }
 
-  public async componentDidMount() {
-    // call methods you want to fire once when component mounted
-    await this.props.eventStore.getEventsList()
-    this.forceUpdate()
-  }
-
   public render() {
-    {
-      /* want to add background styled component when available */
-    }
+    const upcomingEvents = this.props.eventStore!.upcomingEvents
+    const pastEvents = this.props.eventStore!.pastEvents
     return (
-      <div
-        id="EventsPage"
-        style={{ backgroundColor: '#EDEDED', display: 'flex', flex: 1 }}
-      >
-        <EventsMenu />
-        {this.props.eventStore.eventViewType === 'map' ? (
-          <EventsMap {...this.props} />
-        ) : (
-          <EventsList {...this.props} />
-        )}
+      <div id="EventsPage">
+        <Switch>
+          <Route
+            exact
+            path="/events"
+            render={props => (
+              <EventsList {...props} upcomingEvents={upcomingEvents} />
+            )}
+          />
+          <AuthRoute
+            path="/events/create"
+            component={EventsCreate}
+            redirectPath="/events"
+          />
+        </Switch>
       </div>
     )
   }

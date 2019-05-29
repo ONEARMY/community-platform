@@ -46,7 +46,7 @@ export const small = (props: ITextProps) =>
   props.small ? { fontSize: theme.fontSizes[1] } : null
 
 export const superSmall = (props: ITextProps) =>
-  props.small ? { fontSize: theme.fontSizes[0] } : null
+  props.superSmall ? { fontSize: theme.fontSizes[0] } : null
 
 export const clipped = (props: ITextProps) =>
   props.clipped

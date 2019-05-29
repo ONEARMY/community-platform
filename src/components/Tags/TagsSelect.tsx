@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 import { TagsStore } from 'src/stores/Tags/tags.store'
-import { ISelectedTags, ITag } from 'src/models/tags.model'
+import { ISelectedTags, ITag, TagCategory } from 'src/models/tags.model'
 import { FieldRenderProps } from 'react-final-form'
 import Select from 'react-select'
 import { SelectStyles } from '../Form/Select.field'
@@ -11,10 +11,10 @@ import { FieldContainer } from '../Form/elements'
 interface IProps extends FieldRenderProps {
   value?: ISelectedTags
   onChange: (val: ISelectedTags) => void
+  category: TagCategory | undefined
 }
 interface IState {
   selectedTags: string[]
-  allTags: ITag[]
 }
 interface InjectedProps extends IProps {
   tagsStore: TagsStore
@@ -26,7 +26,7 @@ class TagsSelect extends React.Component<IProps, IState> {
   public static defaultProps: IProps
   constructor(props: any) {
     super(props)
-    this.state = { selectedTags: [], allTags: [] }
+    this.state = { selectedTags: [] }
   }
   get injectedProps() {
     return this.props as InjectedProps
@@ -45,24 +45,25 @@ class TagsSelect extends React.Component<IProps, IState> {
         selectedTags: this._selectedJsonToTagsArray(this.props.input.value),
       })
     }
+    this.injectedProps.tagsStore.setTagsCategory(this.props.category)
   }
 
   // emit values as {[tagKey]:true} object to be picked up by field
   public onSelectedTagsChanged(selected: ITag[]) {
-    const selectedIDs = selected.map(tag => tag._key)
+    const selectedIDs = selected.map(tag => tag._id)
     this.props.onChange(this._tagsArrayToSelectedJson(selectedIDs))
   }
 
   public render() {
-    const { tags } = this.injectedProps.tagsStore
+    const { categoryTags } = this.injectedProps.tagsStore
     return (
       <FieldContainer>
         <Select
           styles={SelectStyles}
           isMulti
-          options={tags}
+          options={categoryTags}
           getOptionLabel={(tag: ITag) => tag.label}
-          getOptionValue={(tag: ITag) => tag._key}
+          getOptionValue={(tag: ITag) => tag._id}
           onChange={values => this.onSelectedTagsChanged(values as ITag[])}
           placeholder="Select tags - 4 maximum"
         />
@@ -102,4 +103,5 @@ TagsSelect.defaultProps = {
   },
   meta: {},
   value: {},
+  category: undefined,
 }

@@ -1,6 +1,6 @@
 import { ISelectedTags } from './tags.model'
 import { firestore } from 'firebase/app'
-import { IDbDoc } from './common.models'
+import { IDbDoc, ILocation } from './common.models'
 
 export interface IEvent extends IEventFormInput, IDbDoc {
   description: string
@@ -10,17 +10,6 @@ export interface IEvent extends IEventFormInput, IDbDoc {
   image: string
   tags: ISelectedTags
   slug: string
-}
-
-// will most likely populate as some sort of google reference
-interface IEventLocation {
-  name: string
-  country: string
-  countryCode: string
-  label?: string
-  address?: string
-  lat: number
-  lng: number
 }
 
 export interface IEventFilters {
@@ -34,7 +23,7 @@ export interface IEventFilters {
 export interface IEventFormInput {
   _id: string
   title: string
-  location: IEventLocation
+  location: ILocation
   // note, tags will remain optional as if populated {} will be stripped by db (firestore)
   tags: ISelectedTags
   // note, datepicker passes simple yyyy-mm-dd string format for dates

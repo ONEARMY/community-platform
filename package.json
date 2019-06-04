@@ -113,7 +113,8 @@
     "validate": "npm run lint && npm run prettier -- --list-different",
     "test": "node scripts/test.js --env=jsdom",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "analyze": "npm run build -- --stats & npx webpack-bundle-analyzer ./build/bundle-stats.json"
   },
   "eslintConfig": {},
   "browserslist": [

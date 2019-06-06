@@ -8716,6 +8716,11 @@ lcid@^2.0.0:
   dependencies:
     invert-kv "^2.0.0"
 
+leaflet.markercluster@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/leaflet.markercluster/-/leaflet.markercluster-1.4.1.tgz#b53f2c4f2ca7306ddab1dbb6f1861d5e8aa6c5e5"
+  integrity sha512-ZSEpE/EFApR0bJ1w/dUGwTSUvWlpalKqIzkaYdYB7jaftQA/Y2Jav+eT4CMtEYFj+ZK4mswP13Q2acnPBnhGOw==
+
 leaflet@^1.3.4:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.4.0.tgz#d5f56eeb2aa32787c24011e8be4c77e362ae171b"
@@ -11584,6 +11589,11 @@ react-inspector@^2.3.0, react-inspector@^2.3.1:
 react-is@^16.6.0, react-is@^16.6.3, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4:
   version "16.8.4"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.4.tgz#90f336a68c3a29a096a3d648ab80e87ec61482a2"
+
+react-leaflet-markercluster@^2.0.0-rc3:
+  version "2.0.0-rc3"
+  resolved "https://registry.yarnpkg.com/react-leaflet-markercluster/-/react-leaflet-markercluster-2.0.0-rc3.tgz#8cadfa62eca88fe1fa7b404a81a5b171e6be60f6"
+  integrity sha512-9Z02sZTte8UPqXdm2R5HnLs24MGQgVc1Fdy2R8KPiZQv+sgUCDoFwMUxiVxyqLjGB643RI33MOQVif8kQCkELg==
 
 react-leaflet@^2.1.4:
   version "2.2.1"

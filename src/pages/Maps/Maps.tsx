@@ -6,11 +6,24 @@ import { MapView } from './Content/MapView'
 
 import './styles.css'
 
+import { IMapPin, PinType } from 'src/models/maps.models'
+
+const defaultFilters: Array<PinType> = [
+  'injector',
+  'shredder',
+  'extruder',
+  'press',
+  'research',
+  'member',
+  'community',
+  'builder',
+]
+
 interface IProps {}
 interface IState {
   pins: Array<IMapPin>
+  pinFilters: Array<PinType>
 }
-import { IMapPin } from 'src/models/maps.models'
 
 import { generatePins } from 'src/mocks/maps.mock'
 
@@ -19,6 +32,7 @@ class MapsPageClass extends React.Component<IProps, IState> {
     super(props)
     this.state = {
       pins: generatePins(10000),
+      pinFilters: defaultFilters,
     }
   }
 
@@ -29,8 +43,15 @@ class MapsPageClass extends React.Component<IProps, IState> {
     })
   }
 
+  private popFilter() {
+    const { pinFilters } = this.state
+    pinFilters.pop()
+    this.setState({ pinFilters })
+  }
+
   public render() {
-    const { pins } = this.state
+    const { pins, pinFilters } = this.state
+    const filteredPins = pins.filter(pin => pinFilters.includes(pin.pinType))
     return (
       <div id="MapPage" style={{ height: '100vh' }}>
         <Switch>
@@ -46,7 +67,14 @@ class MapsPageClass extends React.Component<IProps, IState> {
                 >
                   Testing
                 </button>
-                <MapView pins={pins} />
+                <button
+                  onClick={() => {
+                    this.popFilter()
+                  }}
+                >
+                  PopFilter
+                </button>
+                <MapView pins={filteredPins} />
               </>
             )}
           />

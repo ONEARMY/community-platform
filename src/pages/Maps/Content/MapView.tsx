@@ -5,15 +5,27 @@ import { Map, TileLayer } from 'react-leaflet'
 
 import 'leaflet/dist/leaflet.css'
 
-import { getClustersFromPins } from './Cluster'
+import { Clusters } from './Cluster'
 
-import { IMapPin, ILatLng, IBoundingBox } from 'src/models/maps.models'
+import { IMapPin, ILatLng, IBoundingBox, PinType } from 'src/models/maps.models'
 interface IProps {
   pins: Array<IMapPin>
 }
 interface IState {
   boundingBox: IBoundingBox
+  pinFilters: Array<PinType>
 }
+
+const defaultFilters: Array<PinType> = [
+  'injector',
+  'shredder',
+  'extruder',
+  'press',
+  'research',
+  'member',
+  'community',
+  'builder',
+]
 
 class MapView extends React.Component<IProps, IState> {
   private map
@@ -25,6 +37,7 @@ class MapView extends React.Component<IProps, IState> {
         topLeft: { lat: -90, lng: -180 },
         bottomRight: { lat: 90, lng: 180 },
       },
+      pinFilters: defaultFilters,
     }
     this.map = React.createRef()
     this.updateBoundingBox = debounce(this.updateBoundingBox.bind(this), 1000)
@@ -35,7 +48,6 @@ class MapView extends React.Component<IProps, IState> {
   }
 
   private updateBoundingBox() {
-    // @ts-ignore
     const boundingBox = this.map.current.leafletElement.getBounds()
     const newBoundingBox: IBoundingBox = {
       topLeft: boundingBox._northEast,
@@ -44,8 +56,13 @@ class MapView extends React.Component<IProps, IState> {
     this.setState({ boundingBox: newBoundingBox })
   }
 
+  private updateFilters() {
+    const { pinFilters } = this.state
+    pinFilters.pop()
+    this.setState({ pinFilters })
+  }
+
   public render() {
-    const things = getClustersFromPins(this.props.pins, this.state.boundingBox)
     return (
       <Map
         ref={this.map}
@@ -61,7 +78,7 @@ class MapView extends React.Component<IProps, IState> {
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
         <div>Testing</div>
-        {things}
+        <Clusters pins={this.props.pins} boundingBox={this.state.boundingBox} />
       </Map>
     )
   }

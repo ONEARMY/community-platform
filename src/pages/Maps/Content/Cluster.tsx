@@ -9,13 +9,15 @@ import { createClusterIcon, createMarkerIcon } from './Sprites'
 
 import { IMapPin, EntityType, IBoundingBox } from 'src/models/maps.models'
 
-export const getClustersFromPins: React.SFC<Array<IMapPin>> = (
-  pins: Array<IMapPin>,
-  box: IBoundingBox,
-) => {
-  const boundingBox = getBoundingBox([box.topLeft, box.bottomRight], 0)
+interface IProps {
+  pins: Array<IMapPin>
+  boundingBox: IBoundingBox
+}
+
+export const Clusters: React.SFC<IProps> = ({ pins, boundingBox }) => {
+  const box = getBoundingBox([boundingBox.topLeft, boundingBox.bottomRight], 0)
   const entities = pins
-    .filter(pin => insideBoundingBox(pin.location, boundingBox))
+    .filter(pin => insideBoundingBox(pin.location, box))
     .reduce(
       (accumulator, pin) => {
         const { entityType } = pin

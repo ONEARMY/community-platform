@@ -1,7 +1,13 @@
-import { IMapPin } from 'src/models/maps.models'
+import { IMapPin, PinType } from 'src/models/maps.models'
 
-const eTypes = ['shredder', 'extruder', 'injector', 'research', 'press']
-const iTypes = ['community', 'member', 'builder']
+const eTypes: Array<PinType> = [
+  'shredder',
+  'extruder',
+  'injector',
+  'research',
+  'press',
+]
+const iTypes: Array<PinType> = ['community', 'member', 'builder']
 
 export const generatePins = (count: number): Array<IMapPin> => {
   const newPins = [] as Array<IMapPin>

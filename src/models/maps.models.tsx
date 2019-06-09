@@ -4,7 +4,7 @@ export interface IMapPin {
     address: string
   }
   entityType: EntityType
-  pinType: string
+  pinType: PinType
 }
 
 export interface ILatLng {
@@ -19,9 +19,9 @@ export interface IBoundingBox {
 
 export type EntityType = 'individual' | 'place'
 export type PinType =
-  | 'workspace'
+  | 'injector'
   | 'shredder'
-  | 'extrustion'
+  | 'extruder'
   | 'press'
   | 'research'
   | 'member'

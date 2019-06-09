@@ -1,12 +1,20 @@
 export interface IMapPin {
   id: string
-  location: {
-    lat: number
-    lng: number
+  location: ILatLng & {
     address: string
   }
   entityType: EntityType
   pinType: string
+}
+
+export interface ILatLng {
+  lat: number
+  lng: number
+}
+
+export interface IBoundingBox {
+  topLeft: ILatLng
+  bottomRight: ILatLng
 }
 
 export type EntityType = 'individual' | 'place'

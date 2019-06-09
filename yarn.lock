@@ -5172,7 +5172,7 @@ date-now@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
 
-debounce@^1.1.0:
+debounce@^1.1.0, debounce@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/debounce/-/debounce-1.2.0.tgz#44a540abc0ea9943018dc0eaa95cce87f65cd131"
 
@@ -6690,6 +6690,13 @@ gcp-metadata@^1.0.0:
   dependencies:
     gaxios "^1.0.2"
     json-bigint "^0.3.0"
+
+geolocation-utils@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/geolocation-utils/-/geolocation-utils-1.2.1.tgz#3928be1a7a0c4f0283a7ca884128e09c4ada12cf"
+  integrity sha512-iz3k862SXYmGxBJvfDi3IfNRsWZeCugcjfh6H3dPpk//KV1T9+RO2AHP4ALYFtF7fTOd6VsOboqfjFgmviiUyw==
+  dependencies:
+    point-in-polygon "1.0.1"
 
 get-caller-file@^1.0.1:
   version "1.0.3"
@@ -10415,6 +10422,11 @@ pnp-webpack-plugin@1.2.1:
   resolved "https://registry.yarnpkg.com/pnp-webpack-plugin/-/pnp-webpack-plugin-1.2.1.tgz#cd9d698df2a6fcf7255093c1c9511adf65b9421b"
   dependencies:
     ts-pnp "^1.0.0"
+
+point-in-polygon@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/point-in-polygon/-/point-in-polygon-1.0.1.tgz#d59b64e8fee41c49458aac82b56718c5957b2af7"
+  integrity sha1-1Ztk6P7kHElFiqyCtWcYxZV7Kvc=
 
 polished@^2.3.3:
   version "2.3.3"

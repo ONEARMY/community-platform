@@ -26,7 +26,7 @@ const profile = {
   path: '/profile',
   component: <ProfilePage />,
   title: 'Profile',
-  description: '',
+  description: 'Profile',
 }
 const feedback = {
   path: '/feedback',

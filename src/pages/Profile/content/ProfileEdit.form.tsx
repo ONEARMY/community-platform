@@ -3,11 +3,13 @@ import { Form, Field } from 'react-final-form'
 import Heading from 'src/components/Heading'
 import { IUser } from 'src/models/user.models'
 import { Avatar } from 'src/components/Avatar'
+import Text from 'src/components/Text'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
 import { UserStore } from 'src/stores/User/user.store'
 import { Button } from 'src/components/Button'
 import { TextNotification } from 'src/components/Notification/TextNotification'
 import { observer, inject } from 'mobx-react'
+import { Flex } from 'rebass'
 
 interface IFormValues extends Partial<IUser> {
   // form values are simply subset of user profile fields
@@ -87,17 +89,19 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
                     Save Profile
                   </Button>
                 )}
-                <Heading medium bold>
-                  Profile
-                </Heading>
-                <Avatar userName={user.userName} width="200px" />
-                <Field
+                <Flex alignItems={'center'}>
+                  <Avatar userName={user.userName} width="60px" />
+                  <Text inline bold ml={3}>
+                    {user.userName}
+                  </Text>
+                </Flex>
+                {/* <Field
                   name="userName"
                   component={InputField}
                   placeholder="User Name"
                   disabled={true}
                   style={{ fontWeight: 'bold' }}
-                />
+                /> */}
                 <Field
                   name="about"
                   component={TextAreaField}

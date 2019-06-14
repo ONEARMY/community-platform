@@ -99,7 +99,6 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
                   />
                   <Button
                     type="submit"
-                    icon={'check'}
                     disabled={disabled}
                     variant={disabled ? 'disabled' : 'outline'}
                   >

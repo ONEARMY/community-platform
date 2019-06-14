@@ -23,23 +23,22 @@ export class ProfilePage extends React.Component<IProps> {
   public render() {
     const currentUser = this.injected.userStore.user as IUser
     return currentUser ? (
-      <PageContainer>
-        <BoxContainer p={4}>
-          <Switch>
-            {/* own profile */}
-            <Route
-              exact
-              path="/profile"
-              render={props => (
-                <UserProfile
-                  {...props}
-                  user={currentUser}
-                  userStore={this.injected.userStore}
-                />
-              )}
-            />
-            {/* other profile */}
-            {/* <Route
+      <BoxContainer p={4}>
+        <Switch>
+          {/* own profile */}
+          <Route
+            exact
+            path="/profile"
+            render={props => (
+              <UserProfile
+                {...props}
+                user={currentUser}
+                userStore={this.injected.userStore}
+              />
+            )}
+          />
+          {/* other profile */}
+          {/* <Route
               exact
               path="/profile/:id"
               render={props => {
@@ -55,9 +54,8 @@ export class ProfilePage extends React.Component<IProps> {
                 )
               }}
             /> */}
-          </Switch>
-        </BoxContainer>
-      </PageContainer>
+        </Switch>
+      </BoxContainer>
     ) : null
   }
 }

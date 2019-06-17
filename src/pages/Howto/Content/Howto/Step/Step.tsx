@@ -26,7 +26,7 @@ export default class Step extends React.PureComponent<IProps> {
             {this.props.step.title}
           </Heading>
         </Heading>
-        <Text regular my={4}>
+        <Text regular preLine my={4}>
           <Linkify>{this.props.step.text}</Linkify>
         </Text>
         {this.renderImages(this.props.step.images as IUploadedFileMeta[])}

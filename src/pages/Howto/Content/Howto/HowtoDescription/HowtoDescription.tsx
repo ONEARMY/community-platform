@@ -52,7 +52,9 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
                 <TagDisplay tagKey={k} key={k} />
               ))}
           </Box>
-          <Text large>{howto.description}</Text>
+          <Text large preLine>
+            {howto.description}
+          </Text>
 
           <Flex width={1 / 2} my={3}>
             <Box width={1 / 3}>

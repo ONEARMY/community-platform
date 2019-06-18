@@ -2,7 +2,6 @@ import * as React from 'react'
 import { Form, Field } from 'react-final-form'
 import Heading from 'src/components/Heading'
 import { IUser } from 'src/models/user.models'
-import { Avatar } from 'src/components/Avatar'
 import Text from 'src/components/Text'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
 import { UserStore } from 'src/stores/User/user.store'
@@ -89,12 +88,6 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
                     Save Profile
                   </Button>
                 )}
-                <Flex alignItems={'center'}>
-                  <Avatar userName={user.userName} width="60px" />
-                  <Text inline bold ml={3}>
-                    {user.userName}
-                  </Text>
-                </Flex>
                 {/* <Field
                   name="userName"
                   component={InputField}

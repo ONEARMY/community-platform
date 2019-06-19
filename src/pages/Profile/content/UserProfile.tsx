@@ -80,7 +80,7 @@ export class UserProfile extends React.Component<IProps, IState> {
             // variant={disabled ? 'disabled' : 'secondary'}
             // disabled={submitting || invalid}
           >
-            Publish
+            save profile
           </Button>
         </BoxContainer>
       </FlexContainer>

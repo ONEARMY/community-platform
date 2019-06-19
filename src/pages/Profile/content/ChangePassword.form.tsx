@@ -49,7 +49,6 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
       <>
         <Button
           mt={3}
-          icon={'lock'}
           variant={'outline'}
           onClick={() =>
             this.setState({

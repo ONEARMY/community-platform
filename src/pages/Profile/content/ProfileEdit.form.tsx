@@ -21,6 +21,7 @@ import COM_TYPE_MOCK from 'src/mocks/communicationSelector.mock'
 import { Map, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
 
 interface IFormValues extends Partial<IUser> {
   // form values are simply subset of user profile fields
@@ -88,6 +89,10 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
   }
   public onChangeMonth() {
     console.log('month change')
+  }
+
+  public onLocationChange() {
+    console.log('location changed')
   }
 
   public getCountryCode(countryName: string | undefined) {
@@ -195,12 +200,19 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
                     component={TextAreaField}
                     placeholder="About"
                   />
+                  <Field
+                    name="location"
+                    validateFields={[]}
+                    onChange={this.onLocationChange()}
+                    component={LocationSearchField}
+                  />
                   <Map
                     center={[lat, lng]}
                     zoom={zoom}
                     zoomControl={false}
                     style={{
                       height: '300px',
+                      zIndex: 1,
                     }}
                   >
                     <ZoomControl position="topright" />

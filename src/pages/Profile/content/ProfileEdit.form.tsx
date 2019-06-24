@@ -15,6 +15,8 @@ import countries from 'react-flags-select/lib/countries.js'
 import 'react-flags-select/scss/react-flags-select.scss'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
+import Selector from 'src/components/Selector'
+import COM_TYPE_MOCK from 'src/mocks/communicationSelector.mock'
 
 interface IFormValues extends Partial<IUser> {
   // form values are simply subset of user profile fields
@@ -145,6 +147,24 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
                       type="date"
                     />
                   </Flex>
+                  <Text width={1} mt={4} medium>
+                    Do you want to add communication links (Facebook, Discord,
+                    Slack, Email ?)
+                  </Text>
+                  <Flex>
+                    <Selector
+                      list={COM_TYPE_MOCK}
+                      width={[1 / 5]}
+                      my={2}
+                      mr={2}
+                    />
+                    <Field
+                      name="communication"
+                      component={InputField}
+                      placeholder="Link"
+                    />
+                  </Flex>
+                  <Button variant="outline">add another</Button>
                 </BoxContainer>
                 <BoxContainer mt={4}>
                   <Heading small bold>

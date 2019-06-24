@@ -5,6 +5,7 @@ import { Box, Image } from 'rebass'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import { IUploadedFileMeta } from 'src/stores/storage'
+import ImageGallery from './ImageGallery'
 
 interface IProps {
   step: IHowtoStep
@@ -12,11 +13,6 @@ interface IProps {
 }
 
 export default class Step extends React.PureComponent<IProps> {
-  renderImages = (images: IUploadedFileMeta[]) =>
-    images.map((image: any, index: number) => (
-      <Image src={image.downloadUrl} key={index} />
-    ))
-
   render() {
     return (
       <Box pt={5} id={this.props.step.title}>
@@ -26,10 +22,10 @@ export default class Step extends React.PureComponent<IProps> {
             {this.props.step.title}
           </Heading>
         </Heading>
-        <Text regular my={4}>
+        <Text regular preLine my={4}>
           <Linkify>{this.props.step.text}</Linkify>
         </Text>
-        {this.renderImages(this.props.step.images as IUploadedFileMeta[])}
+        <ImageGallery images={this.props.step.images as IUploadedFileMeta[]} />
       </Box>
     )
   }

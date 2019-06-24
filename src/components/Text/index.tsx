@@ -18,6 +18,7 @@ export interface ITextProps {
   color?: keyof typeof colors
   // clip forces text to fill max 1 line and add '...' for overflow
   clipped?: boolean
+  preLine?: boolean
 }
 
 export const caps = props =>
@@ -53,6 +54,9 @@ export const clipped = (props: ITextProps) =>
     ? { whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }
     : null
 
+export const preLine = (props: ITextProps) =>
+  props.preLine ? { whiteSpace: 'pre-line' } : null
+
 export const BaseText = styled(RebassText)`
     ${inline}
     ${caps}
@@ -63,6 +67,7 @@ export const BaseText = styled(RebassText)`
     ${small}
     ${superSmall}
     ${clipped}
+    ${preLine}
 `
 
 type TextProps = ITextProps & RebassTextProps

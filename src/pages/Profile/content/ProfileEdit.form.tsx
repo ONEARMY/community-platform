@@ -8,7 +8,13 @@ import { UserStore } from 'src/stores/User/user.store'
 import { Button } from 'src/components/Button'
 import { TextNotification } from 'src/components/Notification/TextNotification'
 import { observer, inject } from 'mobx-react'
-import { Flex } from 'rebass'
+import { Flex, Box } from 'rebass'
+import { BoxContainer } from 'src/components/Layout/BoxContainer'
+import ReactFlagsSelect from 'react-flags-select'
+import countries from 'react-flags-select/lib/countries.js'
+import 'react-flags-select/scss/react-flags-select.scss'
+import styled from 'styled-components'
+import theme from 'src/themes/styled.theme'
 
 interface IFormValues extends Partial<IUser> {
   // form values are simply subset of user profile fields
@@ -25,6 +31,13 @@ interface IState {
   isSaving?: boolean
   showNotification?: boolean
 }
+
+const FlagSelectContainer = styled(Flex)`
+  border: 1px solid ${theme.colors.black};
+  border-radius: 4px;
+  height: 40px;
+`
+
 // we inject the userstore here instead of passing down as would have to pass
 // from Profile -> UserProfile -> ProfileEditForm which is less reliable
 // could use contextAPI but as we have mobx feels easier
@@ -46,8 +59,23 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
     this.setState({ readOnly: true, showNotification: true })
   }
 
+  public countryChange() {
+    console.log('country change')
+  }
+  public onChangeYear() {
+    console.log('year change')
+  }
+  public onChangeMonth() {
+    console.log('month change')
+  }
+
+  public getCountryCode(countryName: string | undefined) {
+    return Object.keys(countries).find(key => countries[key] === countryName)
+  }
+
   render() {
     const user = this.injected.userStore.user
+
     return user ? (
       <Form
         // submission managed by button and state above
@@ -88,25 +116,46 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
                     Save Profile
                   </Button>
                 )}
-                {/* <Field
-                  name="userName"
-                  component={InputField}
-                  placeholder="User Name"
-                  disabled={true}
-                  style={{ fontWeight: 'bold' }}
-                /> */}
-                <Field
-                  name="about"
-                  component={TextAreaField}
-                  placeholder="About"
-                  disabled={this.state.readOnly}
-                />
-                <Field
-                  name="country"
-                  component={InputField}
-                  placeholder="Country"
-                  disabled={this.state.readOnly || submitting}
-                />
+                <BoxContainer mt={4}>
+                  <Heading small bold>
+                    Your infos
+                  </Heading>
+                  <Flex width={1 / 2} flexWrap={'wrap'}>
+                    <Field
+                      name="userName"
+                      component={InputField}
+                      placeholder="User Name"
+                    />
+                    <FlagSelectContainer width={1} alignItems="center">
+                      <ReactFlagsSelect
+                        searchable={true}
+                        defaultCountry={this.getCountryCode(user.country)}
+                        onSelect={this.countryChange}
+                      />
+                    </FlagSelectContainer>
+                    <Text width={1} mt={2} medium>
+                      Birth year :
+                    </Text>
+                    <Field
+                      name="date"
+                      validateFields={[]}
+                      // validate={required}
+                      component={InputField}
+                      onBlur={this.onChangeYear}
+                      type="date"
+                    />
+                  </Flex>
+                </BoxContainer>
+                <BoxContainer mt={4}>
+                  <Heading small bold>
+                    Your map pin
+                  </Heading>
+                  <Field
+                    name="about"
+                    component={TextAreaField}
+                    placeholder="About"
+                  />
+                </BoxContainer>
               </form>
             </>
           )

@@ -11527,6 +11527,13 @@ react-firebase-file-uploader@2.4.2:
   dependencies:
     uuid "^3.2.1"
 
+react-flags-select@^1.1.10:
+  version "1.1.10"
+  resolved "https://registry.yarnpkg.com/react-flags-select/-/react-flags-select-1.1.10.tgz#3ad8bd8bbc8ef206bb41d2fa3ac90f522826dbda"
+  integrity sha512-8bGih8XVIXwXpuio0I7MqU3nqh82Hdj28rS21HzNUAVdKGtO3lqY6TLDNSTpanAupXSXGfkajkpFQv5XsRvUfA==
+  dependencies:
+    prop-types "^15.5.8"
+
 react-focus-lock@^1.17.7:
   version "1.18.3"
   resolved "https://registry.yarnpkg.com/react-focus-lock/-/react-focus-lock-1.18.3.tgz#19d84afeab935c0b5de196922f71db7c481baba4"

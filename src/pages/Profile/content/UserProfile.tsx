@@ -30,6 +30,8 @@ export class UserProfile extends React.Component<IProps, IState> {
 
   public render() {
     const readOnly = !this.state.editMode
+    console.log('user', this.state.user)
+
     return (
       <FlexContainer m={'0'} bg={'inherit'} flexWrap="wrap">
         <BoxContainer bg={'inherit'} p={'0'} width={[1, 1, 2 / 3]}>
@@ -51,17 +53,8 @@ export class UserProfile extends React.Component<IProps, IState> {
             />
             <ImportDHForm {...readOnly} />
           </BoxContainer>
-          <BoxContainer mt={4}>
-            <Heading small bold>
-              Your infos
-            </Heading>
-            <ProfileEditForm />
-          </BoxContainer>
-          <BoxContainer mt={4}>
-            <Heading small bold>
-              Your map pin
-            </Heading>
-          </BoxContainer>
+
+          <ProfileEditForm />
         </BoxContainer>
         {/* post guidelines container */}
         <BoxContainer

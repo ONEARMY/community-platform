@@ -18,6 +18,10 @@ import theme from 'src/themes/styled.theme'
 import Selector from 'src/components/Selector'
 import COM_TYPE_MOCK from 'src/mocks/communicationSelector.mock'
 
+import { Map, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
+
 interface IFormValues extends Partial<IUser> {
   // form values are simply subset of user profile fields
 }
@@ -32,6 +36,9 @@ interface IState {
   readOnly: boolean
   isSaving?: boolean
   showNotification?: boolean
+  lat: number
+  lng: number
+  zoom: number
 }
 
 const FlagSelectContainer = styled(Flex)`
@@ -39,6 +46,12 @@ const FlagSelectContainer = styled(Flex)`
   border-radius: 4px;
   height: 40px;
 `
+
+const customMarker = L.icon({
+  iconUrl: require('src/assets/icons/map-marker.png'),
+  iconSize: [20, 28],
+  iconAnchor: [20, 56],
+})
 
 // we inject the userstore here instead of passing down as would have to pass
 // from Profile -> UserProfile -> ProfileEditForm which is less reliable
@@ -49,7 +62,13 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     const user = this.injected.userStore.user
-    this.state = { formValues: user ? user : {}, readOnly: true }
+    this.state = {
+      formValues: user ? user : {},
+      readOnly: true,
+      lat: 51.4416,
+      lng: 5.4697,
+      zoom: 8,
+    }
   }
 
   get injected() {
@@ -77,6 +96,7 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
 
   render() {
     const user = this.injected.userStore.user
+    const { lat, lng, zoom } = this.state
 
     return user ? (
       <Form
@@ -175,6 +195,25 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
                     component={TextAreaField}
                     placeholder="About"
                   />
+                  <Map
+                    center={[lat, lng]}
+                    zoom={zoom}
+                    zoomControl={false}
+                    style={{
+                      height: '300px',
+                    }}
+                  >
+                    <ZoomControl position="topright" />
+                    <TileLayer
+                      attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <Marker position={[lat, lng]} icon={customMarker}>
+                      <Popup maxWidth={225} minWidth={225}>
+                        Add more content here later
+                      </Popup>
+                    </Marker>
+                  </Map>
                 </BoxContainer>
               </form>
             </>

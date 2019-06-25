@@ -1,8 +1,10 @@
 import * as React from 'react'
 import { Form, Field } from 'react-final-form'
+import arrayMutators from 'final-form-arrays'
 import Heading from 'src/components/Heading'
-import { IUser } from 'src/models/user.models'
+import { IUser, ILink } from 'src/models/user.models'
 import Text from 'src/components/Text'
+import TEMPLATE from './Template'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
 import { UserStore } from 'src/stores/User/user.store'
 import { Button } from 'src/components/Button'
@@ -15,13 +17,13 @@ import countries from 'react-flags-select/lib/countries.js'
 import 'react-flags-select/scss/react-flags-select.scss'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
-import Selector from 'src/components/Selector'
-import COM_TYPE_MOCK from 'src/mocks/communicationSelector.mock'
 
 import { Map, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
+import { FieldArray } from 'react-final-form-arrays'
+import { Link } from './Link.field'
 
 interface IFormValues extends Partial<IUser> {
   // form values are simply subset of user profile fields
@@ -77,6 +79,8 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
   }
 
   public async saveProfile(values: IFormValues) {
+    console.log('update profile, submit triggered')
+
     await this.injected.userStore.updateUserProfile(values)
     this.setState({ readOnly: true, showNotification: true })
   }
@@ -102,13 +106,18 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
   render() {
     const user = this.injected.userStore.user
     const { lat, lng, zoom } = this.state
+    console.log('formValues', this.state.formValues)
 
     return user ? (
       <Form
         // submission managed by button and state above
         onSubmit={values => this.saveProfile(values)}
         initialValues={user}
-        render={({ handleSubmit, submitting }) => {
+        validateOnBlur
+        mutators={{
+          ...arrayMutators,
+        }}
+        render={({ handleSubmit, submitting, values }) => {
           return (
             <>
               {this.state.readOnly && (
@@ -176,20 +185,35 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
                     Do you want to add communication links (Facebook, Discord,
                     Slack, Email ?)
                   </Text>
-                  <Flex>
-                    <Selector
-                      list={COM_TYPE_MOCK}
-                      width={[1 / 5]}
-                      my={2}
-                      mr={2}
-                    />
-                    <Field
-                      name="communication"
-                      component={InputField}
-                      placeholder="Link"
-                    />
-                  </Flex>
-                  <Button variant="outline">add another</Button>
+                  <FieldArray name="links">
+                    {({ fields }) => (
+                      <>
+                        {fields.map((name, index: number) => (
+                          <Link
+                            key={index}
+                            link={name}
+                            index={index}
+                            onDelete={(fieldIndex: number) => {
+                              fields.remove(fieldIndex)
+                            }}
+                          />
+                        ))}
+                        {/* TODO why is the sumbit triggered on first click f add another btn ? */}
+                        <Button
+                          my={2}
+                          variant="outline"
+                          onClick={() => {
+                            fields.push({
+                              label: '',
+                              url: '',
+                            })
+                          }}
+                        >
+                          add another
+                        </Button>
+                      </>
+                    )}
+                  </FieldArray>
                 </BoxContainer>
                 <BoxContainer mt={4}>
                   <Heading small bold>

@@ -46,6 +46,7 @@ interface IProps {
   glyph: keyof IGlyphs
   size?: number | string
   marginRight?: string
+  OnClick?: () => void
 }
 export type availableGlyphs =
   | 'download'

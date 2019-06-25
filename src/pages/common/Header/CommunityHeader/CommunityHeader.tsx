@@ -19,6 +19,7 @@ import theme from 'src/themes/styled.theme'
 import { Button } from 'src/components/Button'
 import { Link } from 'rebass'
 import styled from 'styled-components'
+import Breadcrumb from './Breadcrumb'
 
 interface IState {
   moreMenuAnchor: any
@@ -177,7 +178,7 @@ export class CommunityHeader extends React.Component<IProps, IState> {
         </Content>
         <Box bg={'grey4'} width={1} p={3}>
           <Text small width={theme.maxContainerWidth + 'px'} m={'0 auto'}>
-            {this.props.description}
+            <Breadcrumb />
           </Text>
         </Box>
       </div>

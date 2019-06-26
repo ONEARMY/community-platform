@@ -1,22 +1,17 @@
-import { IMapPin, PinType } from 'src/models/maps.models'
+import { loremIpsum } from 'lorem-ipsum'
+import {
+  IMapPin,
+  IMapPinDetail,
+  IPinType,
+  IDatabaseMapPin,
+  EntityType,
+} from 'src/models/maps.models'
 
-const eTypes: Array<PinType> = [
-  'shredder',
-  'extruder',
-  'injector',
-  'research',
-  'press',
-]
-const iTypes: Array<PinType> = ['community', 'member', 'builder']
-
-export const generatePins = (count: number): Array<IMapPin> => {
-  const newPins = [] as Array<IMapPin>
+export const generatePins = (count: number): Array<IDatabaseMapPin> => {
+  const filters = generatePinFilters()
+  const newPins = [] as Array<IDatabaseMapPin>
   for (let i = 0; i < count; i++) {
-    const entityType = Math.random() < 0.5 ? 'place' : 'individual'
-    const pinType =
-      entityType === 'place'
-        ? eTypes[Math.floor(Math.random() * eTypes.length)]
-        : iTypes[Math.floor(Math.random() * iTypes.length)]
+    const pinType = filters[Math.floor(Math.random() * filters.length)]
 
     newPins.push({
       id: '' + Math.random(),
@@ -25,9 +20,74 @@ export const generatePins = (count: number): Array<IMapPin> => {
         lat: 51 + (Math.random() * 1000 - 500) / 500,
         lng: 0 + (Math.random() * 1000 - 500) / 250,
       },
-      entityType,
-      pinType,
+      pinType: pinType.name,
     })
   }
   return newPins
+}
+
+export const generatePinDetails = (pin: IMapPin): IMapPinDetail => {
+  const lastActive = new Date()
+  lastActive.setSeconds(lastActive.getSeconds() - Math.random() * 10000)
+  return {
+    ...pin,
+    name: loremIpsum({ count: 2, units: 'words' }),
+    shortDescription: loremIpsum({ count: 2, units: 'sentences' }),
+    lastActive,
+    profilePicUrl: 'https://picsum.photos/200/200',
+    profileUrl: '/testing',
+  }
+}
+
+export const generatePinFilters = (): Array<IPinType> => {
+  return [
+    {
+      grouping: 'place' as EntityType,
+      displayName: 'Extruder',
+      name: 'extruder',
+      icon: 'E',
+    },
+    {
+      grouping: 'place' as EntityType,
+      displayName: 'Injection',
+      name: 'injecter',
+      icon: 'I',
+    },
+    {
+      grouping: 'place' as EntityType,
+      displayName: 'Shredder',
+      name: 'shredder',
+      icon: 'S',
+    },
+    {
+      grouping: 'place' as EntityType,
+      displayName: 'Sheet Press',
+      name: 'sheetPresser',
+      icon: 'P',
+    },
+    {
+      grouping: 'place' as EntityType,
+      displayName: 'R & D / Lab',
+      name: 'lab',
+      icon: 'R',
+    },
+    {
+      grouping: 'individual' as EntityType,
+      displayName: 'Community Builder',
+      name: 'communityBuilder',
+      icon: 'C',
+    },
+    {
+      grouping: 'individual' as EntityType,
+      displayName: 'Member',
+      name: 'member',
+      icon: '',
+    },
+    {
+      grouping: 'individual' as EntityType,
+      displayName: 'Machine Builder',
+      name: 'machineBuilder',
+      icon: 'M',
+    },
+  ]
 }

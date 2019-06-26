@@ -1,57 +1,52 @@
 import * as React from 'react'
+import { inject, observer } from 'mobx-react'
 import { withRouter, Route, Switch } from 'react-router'
+
+import { MapsStore } from 'src/stores/Maps/maps.store'
 
 import { Map, TileLayer, Marker } from 'react-leaflet'
 import { MapView } from './Content/MapView'
+import { Controls } from './Content/Controls'
 
 import './styles.css'
 
-import { IMapPin, PinType } from 'src/models/maps.models'
+import { IMapPin, IPinType } from 'src/models/maps.models'
 
-const defaultFilters: Array<PinType> = [
-  'injector',
-  'shredder',
-  'extruder',
-  'press',
-  'research',
-  'member',
-  'community',
-  'builder',
-]
-
-interface IProps {}
-interface IState {
-  pins: Array<IMapPin>
-  pinFilters: Array<PinType>
+interface IProps {
+  mapsStore: MapsStore
 }
+interface IState {}
 
 import { generatePins } from 'src/mocks/maps.mock'
 
+@inject('mapsStore')
+@observer
 class MapsPageClass extends React.Component<IProps, IState> {
   constructor(props: any) {
     super(props)
-    this.state = {
-      pins: generatePins(10000),
-      pinFilters: defaultFilters,
-    }
+    this.setFilters = this.setFilters.bind(this)
   }
 
-  private addItems() {
-    console.log('add')
-    this.setState({
-      pins: this.state.pins.concat(generatePins(1000)),
-    })
+  public async componentDidMount() {
+    this.props.mapsStore.retrieveMapPins()
+    this.props.mapsStore.retrievePinFilters()
   }
 
-  private popFilter() {
-    const { pinFilters } = this.state
-    pinFilters.pop()
-    this.setState({ pinFilters })
+  private setFilters() {
+    const { activePinFilters } = this.props.mapsStore
+    this.props.mapsStore.setActivePinFilters(activePinFilters.slice(1))
+  }
+
+  private setLocation(location) {
+    // TODO: change the center of the map
   }
 
   public render() {
-    const { pins, pinFilters } = this.state
-    const filteredPins = pins.filter(pin => pinFilters.includes(pin.pinType))
+    const {
+      mapPins,
+      availablePinFilters,
+      activePinFilters,
+    } = this.props.mapsStore
     return (
       <div id="MapPage" style={{ height: '100vh' }}>
         <Switch>
@@ -60,21 +55,12 @@ class MapsPageClass extends React.Component<IProps, IState> {
             path="/maps"
             render={props => (
               <>
-                <button
-                  onClick={() => {
-                    this.addItems()
-                  }}
-                >
-                  Testing
-                </button>
-                <button
-                  onClick={() => {
-                    this.popFilter()
-                  }}
-                >
-                  PopFilter
-                </button>
-                <MapView pins={filteredPins} />
+                <Controls
+                  availableFilters={availablePinFilters}
+                  setFilters={this.setFilters}
+                  onLocationChange={this.setLocation}
+                />
+                <MapView pins={mapPins} filters={activePinFilters} />
               </>
             )}
           />

@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { toJS } from 'mobx'
 import debounce from 'debounce'
 import L from 'leaflet'
 import { Map, TileLayer } from 'react-leaflet'
@@ -7,25 +8,19 @@ import 'leaflet/dist/leaflet.css'
 
 import { Clusters } from './Cluster'
 
-import { IMapPin, ILatLng, IBoundingBox, PinType } from 'src/models/maps.models'
+import {
+  IMapPin,
+  ILatLng,
+  IBoundingBox,
+  IPinType,
+} from 'src/models/maps.models'
 interface IProps {
   pins: Array<IMapPin>
+  filters: Array<IPinType>
 }
 interface IState {
   boundingBox: IBoundingBox
-  pinFilters: Array<PinType>
 }
-
-const defaultFilters: Array<PinType> = [
-  'injector',
-  'shredder',
-  'extruder',
-  'press',
-  'research',
-  'member',
-  'community',
-  'builder',
-]
 
 class MapView extends React.Component<IProps, IState> {
   private map
@@ -37,7 +32,6 @@ class MapView extends React.Component<IProps, IState> {
         topLeft: { lat: -90, lng: -180 },
         bottomRight: { lat: 90, lng: 180 },
       },
-      pinFilters: defaultFilters,
     }
     this.map = React.createRef()
     this.updateBoundingBox = debounce(this.updateBoundingBox.bind(this), 1000)
@@ -56,13 +50,11 @@ class MapView extends React.Component<IProps, IState> {
     this.setState({ boundingBox: newBoundingBox })
   }
 
-  private updateFilters() {
-    const { pinFilters } = this.state
-    pinFilters.pop()
-    this.setState({ pinFilters })
-  }
-
   public render() {
+    const filters = this.props.filters.map(filter => filter.name)
+    const pins = this.props.pins.filter(pin =>
+      filters.includes(pin.pinType.name),
+    )
     return (
       <Map
         ref={this.map}
@@ -78,7 +70,7 @@ class MapView extends React.Component<IProps, IState> {
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
         <div>Testing</div>
-        <Clusters pins={this.props.pins} boundingBox={this.state.boundingBox} />
+        <Clusters pins={pins} />
       </Map>
     )
   }

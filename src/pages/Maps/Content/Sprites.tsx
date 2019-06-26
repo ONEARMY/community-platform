@@ -1,28 +1,29 @@
 import L from 'leaflet'
 import './sprites.css'
+import { IMapPin } from 'src/models/maps.models'
 
 // mmm curry
-export const createClusterIcon = entityType => {
+export const createClusterIcon = clusterKey => {
   return cluster => {
     return L.divIcon({
       html: `${cluster.getChildCount()}`,
-      className: `icon-cluster-${entityType}`,
+      className: `icon-cluster-${clusterKey}`,
       iconSize: L.point(35, 35, true),
     })
   }
 }
 
-export const createMarkerIcon = data => {
-  const { entityType } = data
-  return data.entityType === 'individual'
+export const createMarkerIcon = (pin: IMapPin) => {
+  const { grouping, icon } = pin.pinType
+  return icon === ''
     ? L.divIcon({
-        className: `icon-marker-${entityType}`,
+        className: `icon-marker-${grouping}`,
         html: `&nbsp;`,
-        iconSize: L.point(12, 12, true),
+        iconSize: L.point(13, 13, true),
       })
     : L.divIcon({
-        className: `icon-marker-${entityType}`,
-        html: `${data.pinType.charAt(0).toUpperCase()}`,
+        className: `icon-marker-${grouping}`,
+        html: `${icon}`,
         iconSize: L.point(23, 23, true),
       })
 }

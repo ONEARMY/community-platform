@@ -1,5 +1,5 @@
 .icon-cluster-place {
-  background-color: red;
+  background-color: #ff6666;
   line-height: 36px;
   text-align: center;
   font-size: 13px;
@@ -7,7 +7,7 @@
 }
 
 .icon-cluster-individual {
-  background-color: blue;
+  background-color: #6666ff;
   line-height: 36px;
   border-radius: 50%;
   text-align: center;
@@ -20,9 +20,14 @@
   line-height: 26px;
   text-align: center;
   color: white;
+  padding-left: 1px;
 }
 
 .icon-marker-individual {
   border-radius: 50%;
   background-color: blue;
+  line-height: 26px;
+  text-align: center;
+  color: white;
+  padding-left: 1px;
 }

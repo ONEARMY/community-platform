@@ -4,6 +4,9 @@ import styled from 'styled-components'
 import { Button } from 'src/components/Button'
 import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
 import { FlexContainer } from 'src/components/Layout/FlexContainer'
+
+import { FilterSelect } from './FilterSelect'
+
 import { IPinType } from 'src/models/maps.models'
 
 interface IProps {
@@ -28,6 +31,18 @@ class Controls extends React.Component<IProps> {
 
   public render() {
     const { availableFilters } = this.props
+    const groupedFilters = availableFilters.reduce(
+      (accumulator, current) => {
+        const { grouping } = current
+        if (accumulator[grouping] === undefined) {
+          accumulator[grouping] = []
+        }
+        accumulator[grouping].push(current)
+        return accumulator
+      },
+      {} as Record<string, Array<IPinType>>,
+    )
+
     return (
       <FlexContainer
         style={{
@@ -46,6 +61,13 @@ class Controls extends React.Component<IProps> {
             }}
           />
         </SearchWrapper>
+        {Object.keys(groupedFilters).map(grouping => (
+          <FilterSelect
+            key={grouping}
+            entityType={grouping}
+            items={groupedFilters[grouping]}
+          />
+        ))}
         <FlexSpacer />
         <Button variant="outline">My Pin</Button>
       </FlexContainer>

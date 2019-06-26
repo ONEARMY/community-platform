@@ -6,7 +6,7 @@ import { MapsStore } from 'src/stores/Maps/maps.store'
 
 import { Map, TileLayer, Marker } from 'react-leaflet'
 import { MapView } from './Content/MapView'
-import { Controls } from './Content/Controls'
+import { Controls } from './Content/Controls/'
 
 import './styles.css'
 

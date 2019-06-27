@@ -95,8 +95,8 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
     console.log('month change')
   }
 
-  public onLocationChange() {
-    console.log('location changed')
+  public onLocationChange(v) {
+    this.setState({ lat: v.latlng.lat, lng: v.latlng.lng })
   }
 
   public getCountryCode(countryName: string | undefined) {
@@ -106,7 +106,6 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
   render() {
     const user = this.injected.userStore.user
     const { lat, lng, zoom } = this.state
-    console.log('formValues', this.state.formValues)
 
     return user ? (
       <Form
@@ -122,14 +121,14 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
             <>
               {this.state.readOnly && (
                 <div style={{ float: 'right' }}>
-                  <Button
+                  {/* <Button
                     variant={'outline'}
                     m={0}
                     icon={'edit'}
                     onClick={() => this.setState({ readOnly: false })}
                   >
                     Edit Profile
-                  </Button>
+                  </Button> */}
                   <TextNotification
                     text="profile saved"
                     icon="check"
@@ -140,7 +139,7 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
               {/* NOTE - need to put submit method on form to prevent
               default post request */}
               <form onSubmit={handleSubmit}>
-                {!this.state.readOnly && (
+                {/* {!this.state.readOnly && (
                   <Button
                     variant={submitting ? 'disabled' : 'outline'}
                     m={0}
@@ -151,7 +150,7 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
                   >
                     Save Profile
                   </Button>
-                )}
+                )} */}
                 <BoxContainer mt={4}>
                   <Heading small bold>
                     Your infos
@@ -198,7 +197,6 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
                             }}
                           />
                         ))}
-                        {/* TODO why is the sumbit triggered on first click f add another btn ? */}
                         <Button
                           my={2}
                           variant="outline"
@@ -227,7 +225,7 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
                   <Field
                     name="location"
                     validateFields={[]}
-                    onChange={this.onLocationChange()}
+                    customChange={v => this.onLocationChange(v)}
                     component={LocationSearchField}
                   />
                   <Map

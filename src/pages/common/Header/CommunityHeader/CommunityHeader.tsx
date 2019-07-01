@@ -19,7 +19,7 @@ import theme from 'src/themes/styled.theme'
 import { Button } from 'src/components/Button'
 import { Link } from 'rebass'
 import styled from 'styled-components'
-import Breadcrumb from './Breadcrumb'
+import Breadcrumb from './Breadcrumb/Breadcrumb'
 
 interface IState {
   moreMenuAnchor: any

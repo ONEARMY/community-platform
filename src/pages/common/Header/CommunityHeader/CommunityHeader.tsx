@@ -82,12 +82,36 @@ export class CommunityHeader extends React.Component<IProps, IState> {
     const user = this.injected.userStore.user
     return (
       <div>
-        <TopLink target="_blank" width={1} href="https://build.onearmy.world">
-          <Text bg="blue" color="white" py={2} medium>
-            This is the alpha version of onearmy platform, click here to help
-            building it.
-          </Text>
-        </TopLink>
+        <Text
+          style={{ textAlign: 'center' }}
+          bg="blue"
+          color="white"
+          py={2}
+          medium
+        >
+          This is the alpha version of our new community platform, click here to
+          <TopLink
+            target="_blank"
+            style={{ textDecorationLine: 'underline' }}
+            color="red"
+            width={1}
+            href="https://build.onearmy.world"
+          >
+            {' '}
+            help code it.
+          </TopLink>{' '}
+          And here to leave
+          <TopLink
+            target="_blank"
+            style={{ textDecorationLine: 'underline' }}
+            color="red"
+            width={1}
+            href="https://preciousplastic.typeform.com/to/tO6uDw"
+          >
+            {' '}
+            feedback or bugs 👊
+          </TopLink>
+        </Text>
 
         <Content>
           <Text large caps bold>

@@ -11659,6 +11659,11 @@ react-resize-detector@^3.2.1:
     prop-types "^15.6.2"
     resize-observer-polyfill "^1.5.1"
 
+react-router-breadcrumbs-hoc@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/react-router-breadcrumbs-hoc/-/react-router-breadcrumbs-hoc-3.2.0.tgz#41c33587cfb057a605ab5ea45950d3d6477afe50"
+  integrity sha512-XXOdrI4V0u+XkaZrQnnLioespmqFuUoeabt/hn+WDKB+cCvBX7SLlHyeD3k+PWHJn9F/6GO2bNLXIDi5yTn54A==
+
 react-router-dom@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-5.0.0.tgz#542a9b86af269a37f0b87218c4c25ea8dcf0c073"

@@ -1,19 +1,22 @@
-import { ISelectorList } from 'src/models/selectorList.models'
-
-const COM_TYPE_MOCKS: ISelectorList[] = [
+const COM_TYPE_MOCKS = [
   {
+    value: 'email',
     label: 'email',
   },
   {
+    value: 'slack',
     label: 'slack',
   },
   {
+    value: 'discord',
     label: 'discord',
   },
   {
+    value: 'instagram',
     label: 'instagram',
   },
   {
+    value: 'facebook',
     label: 'facebook',
   },
 ]

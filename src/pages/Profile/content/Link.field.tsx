@@ -8,6 +8,7 @@ import { Modal } from 'src/components/Modal/Modal'
 import Text from 'src/components/Text'
 import { Flex } from 'rebass'
 import { FlexContainer } from 'src/components/Layout/FlexContainer'
+import { SelectField } from 'src/components/Form/Select.field'
 
 interface IProps {
   link: string
@@ -18,6 +19,9 @@ interface IState {
   showDeleteModal: boolean
   _toDocsList: boolean
 }
+
+// validation - return undefined if no error (i.e. valid)
+const required = (value: any) => (value ? undefined : 'Required')
 
 class Link extends Component<IProps, IState> {
   constructor(props: IProps) {
@@ -40,7 +44,17 @@ class Link extends Component<IProps, IState> {
     const { link, index } = this.props
     return (
       <Flex key={index}>
-        <Selector list={COM_TYPE_MOCK} width={[1 / 5]} my={2} mr={2} />
+        <Field
+          name={`${link}.label`}
+          validate={required}
+          validateFields={[]}
+          options={COM_TYPE_MOCK}
+          component={SelectField}
+          placeholder="type"
+          // width={[1 / 5]}
+          // my={2}
+          // mr={2}
+        />
         <Field name={`${link}.url`} component={InputField} placeholder="Link" />
         <Button icon={'delete'} onClick={() => this.toggleDeleteModal()} />
         {this.state.showDeleteModal && (

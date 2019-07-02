@@ -44,6 +44,9 @@ interface IState {
   zoom: number
 }
 
+// validation - return undefined if no error (i.e. valid)
+const required = (value: any) => (value ? undefined : 'Required')
+
 const FlagSelectContainer = styled(Flex)`
   border: 1px solid ${theme.colors.black};
   border-radius: 4px;
@@ -80,8 +83,9 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
 
   public async saveProfile(values: IFormValues) {
     console.log('update profile, submit triggered')
+    console.log('profile values :', values)
 
-    await this.injected.userStore.updateUserProfile(values)
+    // await this.injected.userStore.updateUserProfile(values)
     this.setState({ readOnly: true, showNotification: true })
   }
 
@@ -96,7 +100,7 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
   }
 
   public onLocationChange(v) {
-    this.setState({ lat: v.latlng.lat, lng: v.latlng.lng })
+    this.setState({ lat: v.latlng.lat, lng: v.latlng.lng, zoom: 15 })
   }
 
   public getCountryCode(countryName: string | undefined) {
@@ -139,18 +143,18 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
               {/* NOTE - need to put submit method on form to prevent
               default post request */}
               <form onSubmit={handleSubmit}>
-                {/* {!this.state.readOnly && (
-                  <Button
-                    variant={submitting ? 'disabled' : 'outline'}
-                    m={0}
-                    icon={'check'}
-                    style={{ float: 'right' }}
-                    disabled={submitting}
-                    type="submit"
-                  >
-                    Save Profile
-                  </Button>
-                )} */}
+                {/* {!this.state.readOnly && ( */}
+                <Button
+                  variant={submitting ? 'disabled' : 'outline'}
+                  m={0}
+                  icon={'check'}
+                  style={{ float: 'right' }}
+                  disabled={submitting}
+                  type="submit"
+                >
+                  Save Profile
+                </Button>
+                {/* )} */}
                 <BoxContainer mt={4}>
                   <Heading small bold>
                     Your infos
@@ -162,7 +166,11 @@ export class ProfileEditForm extends React.Component<IProps, IState> {
                       placeholder="User Name"
                     />
                     <FlagSelectContainer width={1} alignItems="center">
-                      <ReactFlagsSelect
+                      <Field
+                        name="country"
+                        validate={required}
+                        validateFields={[]}
+                        component={ReactFlagsSelect}
                         searchable={true}
                         defaultCountry={this.getCountryCode(user.country)}
                         onSelect={this.countryChange}

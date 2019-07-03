@@ -48,7 +48,9 @@ const ItemRenderer = ({ checked, option, onClick }) => {
         checked={checked}
         tabIndex={-1}
       />
-      <ItemCounter grouping={option.value.grouping}>9</ItemCounter>
+      <ItemCounter grouping={option.value.grouping}>
+        {option.value.count}
+      </ItemCounter>
       <ItemLabel>{option.label}</ItemLabel>
     </span>
   )

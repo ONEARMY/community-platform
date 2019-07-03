@@ -17,22 +17,16 @@ import {
 interface IProps {
   pins: Array<IMapPin>
   filters: Array<IPinType>
+  onBoundingBoxChange: (boundingBox: IBoundingBox) => void
 }
-interface IState {
-  boundingBox: IBoundingBox
-}
+interface IState {}
 
 class MapView extends React.Component<IProps, IState> {
   private map
 
   constructor(props) {
     super(props)
-    this.state = {
-      boundingBox: {
-        topLeft: { lat: -90, lng: -180 },
-        bottomRight: { lat: 90, lng: 180 },
-      },
-    }
+    this.state = {}
     this.map = React.createRef()
     this.updateBoundingBox = debounce(this.updateBoundingBox.bind(this), 1000)
   }
@@ -47,7 +41,7 @@ class MapView extends React.Component<IProps, IState> {
       topLeft: boundingBox._northEast,
       bottomRight: boundingBox._southWest,
     }
-    this.setState({ boundingBox: newBoundingBox })
+    this.props.onBoundingBoxChange(newBoundingBox)
   }
 
   public render() {

@@ -56,7 +56,13 @@ class MapsPageClass extends React.Component<IProps, IState> {
                   }
                   onLocationChange={this.setLocation}
                 />
-                <MapView pins={mapPins} filters={activePinFilters} />
+                <MapView
+                  pins={mapPins}
+                  filters={activePinFilters}
+                  onBoundingBoxChange={boundingBox =>
+                    this.props.mapsStore.setMapBoundingBox(boundingBox)
+                  }
+                />
               </>
             )}
           />

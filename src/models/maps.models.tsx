@@ -37,6 +37,7 @@ export interface IPinType {
   name: string
   grouping: EntityType
   icon: string
+  count: number
 }
 
 export type EntityType = 'individual' | 'place'

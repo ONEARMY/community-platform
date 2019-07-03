@@ -1,4 +1,11 @@
 import { observable, computed, action } from 'mobx'
+import {
+  insideBoundingBox,
+  getBoundingBox,
+  createLocation,
+  LatLng,
+  BoundingBox,
+} from 'geolocation-utils'
 
 import {
   IMapPin,
@@ -6,6 +13,7 @@ import {
   IMapPinDetail,
   ILatLng,
   IDatabaseMapPin,
+  IBoundingBox,
   EntityType,
 } from 'src/models/maps.models'
 import {
@@ -15,6 +23,12 @@ import {
 } from 'src/mocks/maps.mock'
 
 export class MapsStore {
+  @observable
+  public mapBoundingBox: IBoundingBox = {
+    topLeft: { lat: -90, lng: -180 },
+    bottomRight: { lat: 90, lng: 180 },
+  }
+
   @observable
   public availablePinFilters: Array<IPinType> = []
   @observable
@@ -53,10 +67,16 @@ export class MapsStore {
   public pinDetail: IMapPinDetail | undefined = undefined
 
   @action
+  public setMapBoundingBox(boundingBox: IBoundingBox) {
+    this.mapBoundingBox = boundingBox
+    this.recalculatePinCounts()
+  }
+
+  @action
   public async retrieveMapPins() {
     // TODO: make the function accept a bounding box to reduce load from DB
     // TODO: make the database callout instead of random mocks
-    this.pinData = await generatePins(1000)
+    this.pinData = await generatePins(10)
   }
 
   @action
@@ -85,5 +105,32 @@ export class MapsStore {
       this.pinDetailCache.set(id, generatePinDetails(pin))
     }
     this.pinDetail = this.pinDetailCache.get(id)
+  }
+
+  private recalculatePinCounts() {
+    const boundingBox = getBoundingBox(
+      [
+        this.mapBoundingBox.topLeft as LatLng,
+        this.mapBoundingBox.bottomRight as LatLng,
+      ],
+      0,
+    )
+
+    const pinTypeMap = this.availablePinFilters.reduce(
+      (accumulator, current) => {
+        current.count = 0
+        if (accumulator[current.name] === undefined) {
+          accumulator[current.name] = current
+        }
+        return accumulator
+      },
+      {} as Record<string, IPinType>,
+    )
+
+    this.pinData.forEach(pin => {
+      if (insideBoundingBox(pin.location as LatLng, boundingBox)) {
+        pinTypeMap[pin.pinType].count++
+      }
+    })
   }
 }

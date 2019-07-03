@@ -5,11 +5,14 @@ import L from 'leaflet'
 import { Map, TileLayer } from 'react-leaflet'
 
 import 'leaflet/dist/leaflet.css'
+import './map.css'
 
 import { Clusters } from './Cluster'
+import { Popup } from './Popup'
 
 import {
   IMapPin,
+  IMapPinDetail,
   ILatLng,
   IBoundingBox,
   IPinType,
@@ -19,6 +22,8 @@ interface IProps {
   pins: Array<IMapPin>
   filters: Array<IPinType>
   onBoundingBoxChange: (boundingBox: IBoundingBox) => void
+  onPinClicked: (pin: IMapPin) => void
+  activePinDetail?: IMapPin | IMapPinDetail
   center: ILatLng
   zoom: number
 }
@@ -29,9 +34,9 @@ class MapView extends React.Component<IProps, IState> {
 
   constructor(props) {
     super(props)
-    this.state = {}
     this.map = React.createRef()
     this.updateBoundingBox = debounce(this.updateBoundingBox.bind(this), 1000)
+    this.pinClicked = this.pinClicked.bind(this)
   }
 
   public componentDidMount() {
@@ -47,18 +52,21 @@ class MapView extends React.Component<IProps, IState> {
     this.props.onBoundingBoxChange(newBoundingBox)
   }
 
+  private pinClicked(pin) {
+    this.props.onPinClicked(pin)
+  }
+
   public render() {
-    const filters = this.props.filters.map(filter => filter.name)
-    const pins = this.props.pins.filter(pin =>
-      filters.includes(pin.pinType.name),
-    )
-    const { center } = this.props
+    const { center, zoom, filters, pins, activePinDetail } = this.props
+    const mapFilters = filters.map(filter => filter.name)
+    const mapPins = pins.filter(pin => mapFilters.includes(pin.pinType.name))
+
     return (
       <Map
         ref={this.map}
         className="markercluster-map"
         center={[center.lat, center.lng]}
-        zoom={this.props.zoom}
+        zoom={zoom}
         maxZoom={18}
         style={{ height: '100%' }}
         onMove={this.updateBoundingBox}
@@ -68,7 +76,8 @@ class MapView extends React.Component<IProps, IState> {
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
         <div>Testing</div>
-        <Clusters pins={pins} />
+        <Clusters pins={mapPins} onPinClick={this.pinClicked} />
+        <Popup map={this.map} pinDetail={activePinDetail} />
       </Map>
     )
   }

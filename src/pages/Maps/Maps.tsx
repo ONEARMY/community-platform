@@ -50,7 +50,11 @@ class MapsPageClass extends React.Component<IProps, IState> {
       mapPins,
       availablePinFilters,
       activePinFilters,
+      pinDetail,
     } = this.props.mapsStore
+
+    const { center, zoom } = this.state
+
     return (
       <div id="MapPage" style={{ height: '100vh' }}>
         <Switch>
@@ -72,8 +76,10 @@ class MapsPageClass extends React.Component<IProps, IState> {
                   onBoundingBoxChange={boundingBox =>
                     this.props.mapsStore.setMapBoundingBox(boundingBox)
                   }
-                  center={this.state.center}
-                  zoom={this.state.zoom}
+                  onPinClicked={pin => this.props.mapsStore.getPinDetails(pin)}
+                  activePinDetail={pinDetail}
+                  center={center}
+                  zoom={zoom}
                 />
               </>
             )}

@@ -62,7 +62,7 @@ export class MapsStore {
 
   // Caching pinDetails in a map to reduce database calls. We don't want to cache
   //  this using firebase since this data could change over time
-  private pinDetailCache: Map<string, IMapPinDetail>
+  private pinDetailCache: Map<string, IMapPinDetail> = new Map()
   @observable
   public pinDetail: IMapPinDetail | undefined = undefined
 

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { HowtoPage } from './Howto/Howto'
-import { SettingsPage } from './Settings/Settings'
+import { SettingsPage } from './Settings'
 import { FeedbackPage } from './Feedback/Feedback'
 import { SITE } from 'src/config/config'
 import { DiscussionsPage } from './Discussions'
@@ -22,11 +22,17 @@ const howTo = {
   title: 'How-to',
   description: 'Welcome to how-to',
 }
-const profile = {
+const settings = {
   path: '/settings',
   component: <SettingsPage />,
   title: 'Settings',
   description: 'Settings',
+}
+const user = {
+  path: '/u',
+  component: <SettingsPage />,
+  title: 'User profile',
+  description: 'User profile',
 }
 const feedback = {
   path: '/feedback',
@@ -60,8 +66,8 @@ const admin = {
 }
 
 // community pages (various pages hidden on production build)
-const devCommunityPages = [howTo, events, discussions]
-const prodCommunityPages = [howTo, events]
+const devCommunityPages = [howTo, events, discussions, user]
+const prodCommunityPages = [howTo, events, user]
 const communityPages =
   SITE === 'production' ? prodCommunityPages : devCommunityPages
 // community 'more' dropdown pages (various pages hidden on production build)
@@ -72,5 +78,5 @@ const communityPagesMore =
 
 export const COMMUNITY_PAGES: IPageMeta[] = communityPages
 export const COMMUNITY_PAGES_MORE: IPageMeta[] = communityPagesMore
-export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [profile, feedback]
+export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [settings, feedback]
 export const ADMIN_PAGES: IPageMeta[] = [admin]

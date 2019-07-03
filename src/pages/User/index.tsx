@@ -32,7 +32,7 @@ export class SettingsPage extends React.Component<IProps> {
             return (
               <UserPage
                 {...props}
-                user={user}
+                user={currentUser}
                 userStore={this.injected.userStore}
               />
             )

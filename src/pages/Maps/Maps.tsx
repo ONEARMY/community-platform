@@ -10,12 +10,15 @@ import { Controls } from './Content/Controls/'
 
 import './styles.css'
 
-import { IMapPin, IPinType } from 'src/models/maps.models'
+import { IMapPin, IPinType, ILatLng } from 'src/models/maps.models'
 
 interface IProps {
   mapsStore: MapsStore
 }
-interface IState {}
+interface IState {
+  center: ILatLng
+  zoom: number
+}
 
 import { generatePins } from 'src/mocks/maps.mock'
 
@@ -24,6 +27,10 @@ import { generatePins } from 'src/mocks/maps.mock'
 class MapsPageClass extends React.Component<IProps, IState> {
   constructor(props: any) {
     super(props)
+    this.state = {
+      center: { lat: 51.0, lng: 19.0 },
+      zoom: 4,
+    }
   }
 
   public async componentDidMount() {
@@ -31,8 +38,11 @@ class MapsPageClass extends React.Component<IProps, IState> {
     this.props.mapsStore.retrievePinFilters()
   }
 
-  private setLocation(location) {
-    // TODO: change the center of the map
+  private setCenter(location) {
+    this.setState({
+      center: location.latlng as ILatLng,
+      zoom: 11,
+    })
   }
 
   public render() {
@@ -54,7 +64,7 @@ class MapsPageClass extends React.Component<IProps, IState> {
                   setGroupingFilters={(grouping, filters) =>
                     this.props.mapsStore.setActivePinFilters(grouping, filters)
                   }
-                  onLocationChange={this.setLocation}
+                  onLocationChange={location => this.setCenter(location)}
                 />
                 <MapView
                   pins={mapPins}
@@ -62,6 +72,8 @@ class MapsPageClass extends React.Component<IProps, IState> {
                   onBoundingBoxChange={boundingBox =>
                     this.props.mapsStore.setMapBoundingBox(boundingBox)
                   }
+                  center={this.state.center}
+                  zoom={this.state.zoom}
                 />
               </>
             )}

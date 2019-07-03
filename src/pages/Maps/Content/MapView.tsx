@@ -14,10 +14,13 @@ import {
   IBoundingBox,
   IPinType,
 } from 'src/models/maps.models'
+
 interface IProps {
   pins: Array<IMapPin>
   filters: Array<IPinType>
   onBoundingBoxChange: (boundingBox: IBoundingBox) => void
+  center: ILatLng
+  zoom: number
 }
 interface IState {}
 
@@ -49,12 +52,13 @@ class MapView extends React.Component<IProps, IState> {
     const pins = this.props.pins.filter(pin =>
       filters.includes(pin.pinType.name),
     )
+    const { center } = this.props
     return (
       <Map
         ref={this.map}
         className="markercluster-map"
-        center={[51.0, 19.0]}
-        zoom={4}
+        center={[center.lat, center.lng]}
+        zoom={this.props.zoom}
         maxZoom={18}
         style={{ height: '100%' }}
         onMove={this.updateBoundingBox}

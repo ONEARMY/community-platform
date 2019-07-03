@@ -1,10 +1,9 @@
 import * as React from 'react'
 import { Route, Switch, withRouter } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
-import { BoxContainer } from 'src/components/Layout/BoxContainer'
 import { UserStore } from 'src/stores/User/user.store'
 import { IUser } from 'src/models/user.models'
-import { UserProfile } from './content/UserProfile'
+import { UserSettings } from './content/UserSettings'
 
 interface InjectedProps extends IProps {
   userStore: UserStore
@@ -14,7 +13,7 @@ interface IProps {}
 @(withRouter as any)
 @inject('userStore')
 @observer
-export class ProfilePage extends React.Component<IProps> {
+export class SettingsPage extends React.Component<IProps> {
   get injected() {
     return this.props as InjectedProps
   }
@@ -23,12 +22,12 @@ export class ProfilePage extends React.Component<IProps> {
     const currentUser = this.injected.userStore.user as IUser
     return currentUser ? (
       <Switch>
-        {/* own profile */}
+        {/* own profile settings */}
         <Route
           exact
-          path="/profile"
+          path="/settings"
           render={props => (
-            <UserProfile
+            <UserSettings
               {...props}
               user={currentUser}
               userStore={this.injected.userStore}

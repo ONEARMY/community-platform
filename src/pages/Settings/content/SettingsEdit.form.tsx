@@ -64,7 +64,7 @@ const customMarker = L.icon({
 // could use contextAPI but as we have mobx feels easier
 @inject('userStore')
 @observer
-export class ProfileEditForm extends React.Component<IProps, IState> {
+export class SettingsEditForm extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     const user = this.injected.userStore.user

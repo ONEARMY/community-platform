@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { HowtoPage } from './Howto/Howto'
-import { ProfilePage } from './Profile/Profile'
+import { SettingsPage } from './Settings/Settings'
 import { FeedbackPage } from './Feedback/Feedback'
 import { SITE } from 'src/config/config'
 import { DiscussionsPage } from './Discussions'
@@ -23,10 +23,10 @@ const howTo = {
   description: 'Welcome to how-to',
 }
 const profile = {
-  path: '/profile',
-  component: <ProfilePage />,
-  title: 'Profile',
-  description: 'Profile',
+  path: '/settings',
+  component: <SettingsPage />,
+  title: 'Settings',
+  description: 'Settings',
 }
 const feedback = {
   path: '/feedback',

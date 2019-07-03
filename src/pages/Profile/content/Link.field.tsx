@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import Selector from 'src/components/Selector'
 import COM_TYPE_MOCK from 'src/mocks/communicationSelector.mock'
 import { Field } from 'react-final-form'
 import { InputField } from 'src/components/Form/Fields'
@@ -51,9 +50,7 @@ class Link extends Component<IProps, IState> {
           options={COM_TYPE_MOCK}
           component={SelectField}
           placeholder="type"
-          // width={[1 / 5]}
-          // my={2}
-          // mr={2}
+          style={{ width: '160px', marginRight: '8px' }}
         />
         <Field name={`${link}.url`} component={InputField} placeholder="Link" />
         <Button icon={'delete'} onClick={() => this.toggleDeleteModal()} />

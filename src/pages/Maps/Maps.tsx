@@ -24,17 +24,11 @@ import { generatePins } from 'src/mocks/maps.mock'
 class MapsPageClass extends React.Component<IProps, IState> {
   constructor(props: any) {
     super(props)
-    this.setFilters = this.setFilters.bind(this)
   }
 
   public async componentDidMount() {
     this.props.mapsStore.retrieveMapPins()
     this.props.mapsStore.retrievePinFilters()
-  }
-
-  private setFilters() {
-    const { activePinFilters } = this.props.mapsStore
-    this.props.mapsStore.setActivePinFilters(activePinFilters.slice(1))
   }
 
   private setLocation(location) {
@@ -57,7 +51,9 @@ class MapsPageClass extends React.Component<IProps, IState> {
               <>
                 <Controls
                   availableFilters={availablePinFilters}
-                  setFilters={this.setFilters}
+                  setGroupingFilters={(grouping, filters) =>
+                    this.props.mapsStore.setActivePinFilters(grouping, filters)
+                  }
                   onLocationChange={this.setLocation}
                 />
                 <MapView pins={mapPins} filters={activePinFilters} />

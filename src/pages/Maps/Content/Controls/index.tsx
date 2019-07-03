@@ -7,11 +7,11 @@ import { FlexContainer } from 'src/components/Layout/FlexContainer'
 
 import { FilterSelect } from './FilterSelect'
 
-import { IPinType } from 'src/models/maps.models'
+import { IPinType, EntityType } from 'src/models/maps.models'
 
 interface IProps {
   availableFilters: Array<IPinType>
-  setFilters: (filters: Array<IPinType>) => void
+  setGroupingFilters: (grouping: EntityType, filters: Array<IPinType>) => void
   onLocationChange: (selectedLocation) => void
 }
 
@@ -40,7 +40,7 @@ class Controls extends React.Component<IProps> {
         accumulator[grouping].push(current)
         return accumulator
       },
-      {} as Record<string, Array<IPinType>>,
+      {} as Record<EntityType, Array<IPinType>>,
     )
 
     return (
@@ -66,6 +66,9 @@ class Controls extends React.Component<IProps> {
             key={grouping}
             entityType={grouping}
             items={groupedFilters[grouping]}
+            onChange={options =>
+              this.props.setGroupingFilters(grouping as EntityType, options)
+            }
           />
         ))}
         <FlexSpacer />

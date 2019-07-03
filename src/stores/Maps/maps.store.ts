@@ -67,8 +67,14 @@ export class MapsStore {
   }
 
   @action
-  public async setActivePinFilters(filters: Array<IPinType>) {
-    this.activePinFilters = filters
+  public async setActivePinFilters(
+    grouping: EntityType,
+    filters: Array<IPinType>,
+  ) {
+    const newFilters = this.activePinFilters.filter(
+      filter => filter.grouping !== grouping,
+    )
+    this.activePinFilters = newFilters.concat(filters)
   }
 
   @action

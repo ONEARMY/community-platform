@@ -11,7 +11,6 @@ interface IProps {
 
 interface IState {
   selectedItems: Array<string>
-  open: boolean
 }
 
 const ItemLabel = styled.span`
@@ -59,14 +58,12 @@ class FilterSelect extends React.Component<IProps, IState> {
   constructor(props) {
     super(props)
     this.state = {
-      selectedItems: [],
-      open: true,
+      selectedItems: props.items,
     }
     this.handleChange = this.handleChange.bind(this)
   }
 
   handleChange(selectedItems) {
-    console.log(selectedItems)
     if (this.props.onChange) {
       this.props.onChange(selectedItems)
     }

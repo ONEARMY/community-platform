@@ -31,11 +31,15 @@ export const generatePinDetails = (pin: IMapPin): IMapPinDetail => {
   lastActive.setSeconds(lastActive.getSeconds() - Math.random() * 10000)
   return {
     ...pin,
-    name: loremIpsum({ count: 2, units: 'words' }),
+    name: loremIpsum({ count: 2, units: 'words' })
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' '),
     shortDescription: loremIpsum({ count: 2, units: 'sentences' }),
     lastActive,
-    profilePicUrl: 'https://picsum.photos/200/200',
+    profilePicUrl: 'https://picsum.photos/50/50',
     profileUrl: '/testing',
+    heroImageUrl: 'https://picsum.photos/285/175',
   }
 }
 

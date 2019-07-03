@@ -20,6 +20,7 @@ export interface IMapPinDetail extends IMapPin {
   lastActive: Date
   profilePicUrl: string
   profileUrl: string
+  heroImageUrl: string
 }
 
 export interface ILatLng {

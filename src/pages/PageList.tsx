@@ -7,7 +7,6 @@ import { DiscussionsPage } from './Discussions'
 import { EventsPage } from './Events/Events'
 import { NotFoundPage } from './NotFound/NotFound'
 import { AdminPage } from './admin/Admin'
-import { MapPage } from './Map/Map'
 
 export interface IPageMeta {
   path: string
@@ -47,10 +46,10 @@ const events = {
   title: 'Events',
   description: 'Welcome to Events',
 }
-const map = {
-  path: '/map',
-  component: <MapPage />,
-  title: 'Map',
+const maps = {
+  path: '/maps',
+  component: <NotFoundPage />,
+  title: 'Maps',
   description: '',
 }
 const admin = {
@@ -61,12 +60,12 @@ const admin = {
 }
 
 // community pages (various pages hidden on production build)
-const devCommunityPages = [howTo, events, map]
+const devCommunityPages = [howTo, events, discussions]
 const prodCommunityPages = [howTo, events]
 const communityPages =
   SITE === 'production' ? prodCommunityPages : devCommunityPages
 // community 'more' dropdown pages (various pages hidden on production build)
-const devCommunityPagesMore = [discussions]
+const devCommunityPagesMore = [maps]
 const prodCommunityPagesMore = []
 const communityPagesMore =
   SITE === 'production' ? prodCommunityPagesMore : devCommunityPagesMore

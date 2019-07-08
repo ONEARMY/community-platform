@@ -7,6 +7,7 @@ import { DiscussionsPage } from './Discussions'
 import { EventsPage } from './Events/Events'
 import { NotFoundPage } from './NotFound/NotFound'
 import { AdminPage } from './admin/Admin'
+import { User } from './User/User'
 
 export interface IPageMeta {
   path: string
@@ -30,7 +31,7 @@ const settings = {
 }
 const user = {
   path: '/u',
-  component: <SettingsPage />,
+  component: <User />,
   title: 'User profile',
   description: 'User profile',
 }
@@ -66,8 +67,8 @@ const admin = {
 }
 
 // community pages (various pages hidden on production build)
-const devCommunityPages = [howTo, events, discussions]
-const prodCommunityPages = [howTo, events]
+const devCommunityPages = [howTo, events, user, discussions]
+const prodCommunityPages = [howTo, events, user]
 const communityPages =
   SITE === 'production' ? prodCommunityPages : devCommunityPages
 // community 'more' dropdown pages (various pages hidden on production build)

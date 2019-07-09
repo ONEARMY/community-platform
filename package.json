@@ -73,6 +73,7 @@
     "query-string": "^6.2.0",
     "react": "16.8.4",
     "react-app-polyfill": "^0.2.1",
+    "react-calendar": "^2.19.0",
     "react-dev-utils": "^7.0.3",
     "react-dom": "16.8.4",
     "react-final-form": "3.6.6",

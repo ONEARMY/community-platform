@@ -1,4 +1,5 @@
 import { firestore } from 'firebase/app'
+import countries from 'react-flags-select/lib/countries.js'
 
 // remove special characters from string, also replacing spaces with dashes
 export const stripSpecialCharacters = (text?: string) => {
@@ -43,4 +44,19 @@ export const toDate = (d: firestore.Timestamp | Date) => {
 export const isEmail = (email: string) => {
   const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   return re.test(email)
+}
+
+/************************************************************************
+ *             Country code to country name converters
+ ***********************************************************************/
+export const getCountryCode = (countryName: string | undefined) => {
+  return Object.keys(countries).find(key => countries[key] === countryName)
+}
+
+export const getCountryName = (countryCode: string | undefined) => {
+  if (countries.hasOwnProperty(countryCode)) {
+    return countries[countryCode]
+  } else {
+    return countryCode
+  }
 }

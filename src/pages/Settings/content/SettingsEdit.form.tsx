@@ -2,18 +2,20 @@ import * as React from 'react'
 import { Form, Field } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import Heading from 'src/components/Heading'
-import { IUser, ILink } from 'src/models/user.models'
+import { IUser } from 'src/models/user.models'
 import Text from 'src/components/Text'
-import TEMPLATE from './Template'
-import { InputField, TextAreaField } from 'src/components/Form/Fields'
+import {
+  InputField,
+  TextAreaField,
+  YearPicker,
+} from 'src/components/Form/Fields'
+import { FlagSelector } from 'src/components/Form/Select.field'
 import { UserStore } from 'src/stores/User/user.store'
 import { Button } from 'src/components/Button'
-import { TextNotification } from 'src/components/Notification/TextNotification'
 import { observer, inject } from 'mobx-react'
 import { Flex, Box } from 'rebass'
 import { BoxContainer } from 'src/components/Layout/BoxContainer'
-import ReactFlagsSelect from 'react-flags-select'
-import countries from 'react-flags-select/lib/countries.js'
+import { getCountryCode } from 'src/utils/helpers'
 import 'react-flags-select/scss/react-flags-select.scss'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
@@ -104,10 +106,6 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
     this.setState({ lat: v.latlng.lat, lng: v.latlng.lng, zoom: 15 })
   }
 
-  public getCountryCode(countryName: string | undefined) {
-    return Object.keys(countries).find(key => countries[key] === countryName)
-  }
-
   render() {
     const user = this.injected.userStore.user
     const { lat, lng, zoom } = this.state
@@ -142,22 +140,18 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
                         name="country"
                         validate={required}
                         validateFields={[]}
-                        component={ReactFlagsSelect}
+                        component={FlagSelector}
                         searchable={true}
-                        defaultCountry={this.getCountryCode(user.country)}
-                        onSelect={this.countryChange}
+                        defaultCountry={getCountryCode(user.country)}
                       />
                     </FlagSelectContainer>
                     <Text width={1} mt={2} medium>
                       Birth year :
                     </Text>
                     <Field
-                      name="date"
+                      name="year"
                       validateFields={[]}
-                      // validate={required}
-                      component={InputField}
-                      onBlur={this.onChangeYear}
-                      type="date"
+                      component={YearPicker}
                     />
                   </Flex>
                   <Text width={1} mt={4} medium>

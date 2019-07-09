@@ -29,9 +29,9 @@ interface IFormValues extends Partial<IUser> {
   // form values are simply subset of user profile fields
 }
 interface IProps {
-  // no additional props here
+  onProfileSave: () => void
 }
-interface IInjectedProps {
+interface IInjectedProps extends IProps {
   userStore: UserStore
 }
 interface IState {
@@ -84,6 +84,7 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
   public async saveProfile(values: IFormValues) {
     console.log('update profile, submit triggered')
     console.log('profile values :', values)
+    this.props.onProfileSave()
 
     // await this.injected.userStore.updateUserProfile(values)
     this.setState({ readOnly: true, showNotification: true })
@@ -123,38 +124,9 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
         render={({ handleSubmit, submitting, values }) => {
           return (
             <>
-              {this.state.readOnly && (
-                <div style={{ float: 'right' }}>
-                  {/* <Button
-                    variant={'outline'}
-                    m={0}
-                    icon={'edit'}
-                    onClick={() => this.setState({ readOnly: false })}
-                  >
-                    Edit Profile
-                  </Button> */}
-                  <TextNotification
-                    text="profile saved"
-                    icon="check"
-                    show={this.state.showNotification}
-                  />
-                </div>
-              )}
               {/* NOTE - need to put submit method on form to prevent
               default post request */}
-              <form onSubmit={handleSubmit}>
-                {/* {!this.state.readOnly && ( */}
-                <Button
-                  variant={submitting ? 'disabled' : 'outline'}
-                  m={0}
-                  icon={'check'}
-                  style={{ float: 'right' }}
-                  disabled={submitting}
-                  type="submit"
-                >
-                  Save Profile
-                </Button>
-                {/* )} */}
+              <form id="userProfileForm" onSubmit={handleSubmit}>
                 <BoxContainer mt={4}>
                   <Heading small bold>
                     Your infos

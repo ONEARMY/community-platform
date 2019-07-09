@@ -9,6 +9,7 @@ import { ImportDHForm } from './content/ImportDH.form'
 import { Button } from 'src/components/Button'
 import { PostingGuidelines } from './content/PostingGuidelines'
 import Heading from 'src/components/Heading'
+import { TextNotification } from 'src/components/Notification/TextNotification'
 import { Flex } from 'rebass'
 import { Avatar } from 'src/components/Avatar'
 import Text from 'src/components/Text'
@@ -19,13 +20,17 @@ interface IProps {
 }
 interface IState {
   editMode: boolean
-  isSaving: boolean
   user: IUser
+  showNotification: boolean
 }
 export class UserSettings extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
-    this.state = { editMode: false, isSaving: false, user: props.user }
+    this.state = { editMode: false, showNotification: false, user: props.user }
+  }
+
+  public showSaveNotification() {
+    this.setState({ showNotification: true })
   }
 
   public render() {
@@ -54,7 +59,7 @@ export class UserSettings extends React.Component<IProps, IState> {
             <ImportDHForm {...readOnly} />
           </BoxContainer>
 
-          <SettingsEditForm />
+          <SettingsEditForm onProfileSave={() => this.showSaveNotification()} />
         </BoxContainer>
         {/* post guidelines container */}
         <BoxContainer
@@ -66,15 +71,28 @@ export class UserSettings extends React.Component<IProps, IState> {
         >
           <PostingGuidelines />
           <Button
-            // onClick={() => handleSubmit()}
+            onClick={() => {
+              let form = document.getElementById('userProfileForm')
+              if (typeof form !== 'undefined' && form !== null) {
+                form.dispatchEvent(new Event('submit', { cancelable: true }))
+              }
+            }}
             width={1}
             mt={3}
             variant={'secondary'}
+            type="submit"
             // variant={disabled ? 'disabled' : 'secondary'}
             // disabled={submitting || invalid}
           >
             save profile
           </Button>
+          <div style={{ float: 'right' }}>
+            <TextNotification
+              text="profile saved"
+              icon="check"
+              show={this.state.showNotification}
+            />
+          </div>
         </BoxContainer>
       </FlexContainer>
     )

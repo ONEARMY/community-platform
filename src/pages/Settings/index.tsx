@@ -34,23 +34,6 @@ export class SettingsPage extends React.Component<IProps> {
             />
           )}
         />
-        {/* other profile */}
-        {/* <Route
-              exact
-              path="/profile/:id"
-              render={props => {
-                const user = this.injected.userStore.getUserProfile(
-                  props.match.params.id,
-                )
-                return (
-                  <UserProfile
-                    {...props}
-                    user={user}
-                    userStore={this.injected.userStore}
-                  />
-                )
-              }}
-            /> */}
       </Switch>
     ) : null
   }

@@ -159,7 +159,7 @@ interface IAlgoliaSuggestion extends ILocation {
     | 'townhall'
     | 'airport'
 }
-interface ILocation {
+export interface ILocation {
   name: string
   country: string
   countryCode: string

@@ -84,11 +84,10 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
   }
 
   public async saveProfile(values: IFormValues) {
-    console.log('update profile, submit triggered')
     console.log('profile values :', values)
     this.props.onProfileSave()
 
-    // await this.injected.userStore.updateUserProfile(values)
+    await this.injected.userStore.updateUserProfile(values)
     this.setState({ readOnly: true, showNotification: true })
   }
 
@@ -197,13 +196,17 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
                     placeholder="About"
                   />
                   <Field
-                    name="location"
+                    name={user ? `${user.location!.value}` : 'location'}
                     validateFields={[]}
                     customChange={v => this.onLocationChange(v)}
                     component={LocationSearchField}
                   />
                   <Map
-                    center={[lat, lng]}
+                    center={
+                      user.location
+                        ? [user.location.latlng.lat, user.location.latlng.lng]
+                        : [lat, lng]
+                    }
                     zoom={zoom}
                     zoomControl={false}
                     style={{
@@ -216,7 +219,14 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
                       attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    <Marker position={[lat, lng]} icon={customMarker}>
+                    <Marker
+                      position={
+                        user.location
+                          ? [user.location.latlng.lat, user.location.latlng.lng]
+                          : [lat, lng]
+                      }
+                      icon={customMarker}
+                    >
                       <Popup maxWidth={225} minWidth={225}>
                         Add more content here later
                       </Popup>

@@ -1,4 +1,5 @@
 import { IDbDoc } from './common.models'
+import { ILocation } from 'src/components/LocationSearch/LocationSearch'
 
 export interface IUserState {
   user?: IUser
@@ -28,6 +29,7 @@ export interface IUser extends IDbDoc {
   DHSite_mention_name?: string
   country?: string
   links?: ILink[]
+  location?: ILocation
 }
 
 export type UserRole = 'super-admin' | 'subscriber'

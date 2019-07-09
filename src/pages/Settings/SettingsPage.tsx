@@ -72,7 +72,7 @@ export class UserSettings extends React.Component<IProps, IState> {
           <PostingGuidelines />
           <Button
             onClick={() => {
-              let form = document.getElementById('userProfileForm')
+              const form = document.getElementById('userProfileForm')
               if (typeof form !== 'undefined' && form !== null) {
                 form.dispatchEvent(new Event('submit', { cancelable: true }))
               }
@@ -81,8 +81,6 @@ export class UserSettings extends React.Component<IProps, IState> {
             mt={3}
             variant={'secondary'}
             type="submit"
-            // variant={disabled ? 'disabled' : 'secondary'}
-            // disabled={submitting || invalid}
           >
             save profile
           </Button>

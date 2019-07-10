@@ -5,7 +5,7 @@ import L from 'leaflet'
 import { Map, TileLayer } from 'react-leaflet'
 
 import 'leaflet/dist/leaflet.css'
-import './map.css'
+import './index.css'
 
 import { Clusters } from './Cluster'
 import { Popup } from './Popup'

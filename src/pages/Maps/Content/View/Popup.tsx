@@ -6,6 +6,8 @@ import { distanceInWords } from 'date-fns'
 
 import { IMapPin, IMapPinDetail } from 'src/models/maps.models'
 
+import './popup.css'
+
 interface IProps {
   pinDetail?: IMapPin | IMapPinDetail
   map: any

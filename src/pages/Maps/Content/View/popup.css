@@ -1,11 +1,8 @@
-.markercluster-map .closed {
-  display: none;
-}
-
 .markercluster-map .leaflet-popup-content {
   margin: 0;
   line-height: 1;
   font-family: system;
+  z-index: 99991;
 }
 
 .markercluster-map .leaflet-popup-content p {

@@ -12,21 +12,28 @@ import { Flex, FlexProps } from 'rebass'
 import theme from 'src/themes/styled.theme'
 import { VersionNumber } from '../VersionNumber/VersionNumber'
 
-type InnerContainerProps = MaxWidthProps & SpaceProps & WidthProps
+type InnerContainerProps = MaxWidthProps &
+  SpaceProps &
+  WidthProps & {
+    ignoreMaxWidth?: boolean
+  }
 
 const InnerContainer = styled.div<InnerContainerProps>`
   ${space}
   ${width}
-  ${maxWidth}
+  ${p => (p.ignoreMaxWidth ? 'max-width: inherit;' : maxWidth)}
   min-height: calc(100vh - 156px);
   margin-bottom:0;
   padding-bottom: 32px;
   position: relative
 `
+interface IProps extends FlexProps {
+  ignoreMaxWidth?: boolean
+}
 
-const PageContainer = (props: FlexProps) => (
+const PageContainer = (props: IProps) => (
   <Flex {...props} bg={theme.colors.background}>
-    <InnerContainer>
+    <InnerContainer ignoreMaxWidth={props.ignoreMaxWidth}>
       {props.children} <VersionNumber />
     </InnerContainer>
   </Flex>

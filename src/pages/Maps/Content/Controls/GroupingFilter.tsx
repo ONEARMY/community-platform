@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import MultiSelect from '@khanacademy/react-multi-select'
-import './FilterSelect.css'
+import './GroupingFilter.css'
 
 interface IProps {
   items: Array<any>
@@ -56,13 +56,12 @@ const ItemRenderer = ({ checked, option, onClick }) => {
   )
 }
 
-class FilterSelect extends React.Component<IProps, IState> {
+class GroupingFilter extends React.Component<IProps, IState> {
   constructor(props) {
     super(props)
     this.state = {
       selectedItems: props.items,
     }
-    this.handleChange = this.handleChange.bind(this)
   }
 
   handleChange(selectedItems) {
@@ -85,7 +84,7 @@ class FilterSelect extends React.Component<IProps, IState> {
         selected={selectedItems}
         selectAllLabel="Select All"
         disableSearch={true}
-        onSelectedChanged={this.handleChange}
+        onSelectedChanged={selected => this.handleChange(selected)}
         valueRenderer={() =>
           entityType === 'place' ? 'Workplaces' : 'Members'
         }
@@ -100,4 +99,4 @@ class FilterSelect extends React.Component<IProps, IState> {
   }
 }
 
-export { FilterSelect }
+export { GroupingFilter }

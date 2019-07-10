@@ -36,7 +36,6 @@ class MapView extends React.Component<IProps, IState> {
     super(props)
     this.map = React.createRef()
     this.updateBoundingBox = debounce(this.updateBoundingBox.bind(this), 1000)
-    this.pinClicked = this.pinClicked.bind(this)
   }
 
   public componentDidMount() {
@@ -75,8 +74,7 @@ class MapView extends React.Component<IProps, IState> {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
-        <div>Testing</div>
-        <Clusters pins={mapPins} onPinClick={this.pinClicked} />
+        <Clusters pins={mapPins} onPinClick={pin => this.pinClicked(pin)} />
         <Popup map={this.map} pinDetail={activePinDetail} />
       </Map>
     )

@@ -5,13 +5,13 @@ import { Button } from 'src/components/Button'
 import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
 import { FlexContainer } from 'src/components/Layout/FlexContainer'
 
-import { FilterSelect } from './FilterSelect'
+import { GroupingFilter } from './GroupingFilter'
 
 import { IPinType, EntityType } from 'src/models/maps.models'
 
 interface IProps {
   availableFilters: Array<IPinType>
-  setGroupingFilters: (grouping: EntityType, filters: Array<IPinType>) => void
+  onFilterChange: (grouping: EntityType, filters: Array<IPinType>) => void
   onLocationChange: (selectedLocation) => void
 }
 
@@ -62,12 +62,12 @@ class Controls extends React.Component<IProps> {
           />
         </SearchWrapper>
         {Object.keys(groupedFilters).map(grouping => (
-          <FilterSelect
+          <GroupingFilter
             key={grouping}
             entityType={grouping}
             items={groupedFilters[grouping]}
             onChange={options =>
-              this.props.setGroupingFilters(grouping as EntityType, options)
+              this.props.onFilterChange(grouping as EntityType, options)
             }
           />
         ))}

@@ -5,8 +5,7 @@ import { withRouter, Route, Switch } from 'react-router'
 import { MapsStore } from 'src/stores/Maps/maps.store'
 
 import { Map, TileLayer, Marker } from 'react-leaflet'
-import { MapView } from './Content/MapView'
-import { Controls } from './Content/Controls/'
+import { MapView, Controls } from './Content/'
 
 import './styles.css'
 
@@ -65,7 +64,7 @@ class MapsPageClass extends React.Component<IProps, IState> {
               <>
                 <Controls
                   availableFilters={availablePinFilters}
-                  setGroupingFilters={(grouping, filters) =>
+                  onFilterChange={(grouping, filters) =>
                     this.props.mapsStore.setActivePinFilters(grouping, filters)
                   }
                   onLocationChange={location => this.setCenter(location)}

@@ -15,7 +15,7 @@ import { Button } from 'src/components/Button'
 import { observer, inject } from 'mobx-react'
 import { Flex, Box } from 'rebass'
 import { BoxContainer } from 'src/components/Layout/BoxContainer'
-import { getCountryCode } from 'src/utils/helpers'
+import { getCountryCode, toTimestamp } from 'src/utils/helpers'
 import 'react-flags-select/scss/react-flags-select.scss'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
@@ -26,6 +26,8 @@ import 'leaflet/dist/leaflet.css'
 import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
 import { FieldArray } from 'react-final-form-arrays'
 import { Link } from './Link.field'
+import { timestampToYear } from 'src/utils/helpers'
+import { firestore } from 'firebase'
 
 interface IFormValues extends Partial<IUser> {
   // form values are simply subset of user profile fields
@@ -40,6 +42,7 @@ interface IState {
   formValues: IFormValues
   readOnly: boolean
   isSaving?: boolean
+  showYearSelector?: boolean
   showNotification?: boolean
   lat: number
   lng: number
@@ -73,6 +76,7 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
     this.state = {
       formValues: user ? user : {},
       readOnly: true,
+      showYearSelector: false,
       lat: 51.4416,
       lng: 5.4697,
       zoom: 8,
@@ -144,14 +148,33 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
                         defaultCountry={getCountryCode(user.country)}
                       />
                     </FlagSelectContainer>
-                    <Text width={1} mt={2} medium>
+                    <Text width={1} my={3} medium>
                       Birth year :
                     </Text>
-                    <Field
-                      name="year"
-                      validateFields={[]}
-                      component={YearPicker}
-                    />
+                    <Button
+                      icon={'arrow-down'}
+                      variant={'outline'}
+                      width={1}
+                      onClick={() => {
+                        this.setState({
+                          showYearSelector: !this.state.showYearSelector,
+                        })
+                      }}
+                    >
+                      {user.year
+                        ? timestampToYear(user.year.seconds)
+                        : 'Choose a date'}
+                    </Button>
+                    {this.state.showYearSelector && (
+                      <Field
+                        name="year"
+                        validateFields={[]}
+                        component={YearPicker}
+                        onChange={year => {
+                          console.log(year)
+                        }}
+                      />
+                    )}
                   </Flex>
                   <Text width={1} mt={4} medium>
                     Do you want to add communication links (Facebook, Discord,

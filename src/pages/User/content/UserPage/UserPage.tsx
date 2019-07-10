@@ -15,11 +15,9 @@ import Text from 'src/components/Text'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import PageContainer from 'src/components/Layout/PageContainer'
 import styled from 'styled-components'
-import { themeGet } from 'styled-system'
 import theme from 'src/themes/styled.theme'
-import { firestore } from 'firebase'
 import Icon from 'src/components/Icons'
-import { Link } from 'src/pages/Settings/content/Link.field'
+import { timestampToYear } from 'src/utils/helpers'
 
 interface IRouterCustomParams {
   id: string
@@ -67,11 +65,6 @@ export class UserPage extends React.Component<
     })
   }
 
-  public timestampToYear(timestamp: number) {
-    const date = new Date(timestamp * 1000)
-    return date.getFullYear()
-  }
-
   public render() {
     const { user, isLoading } = this.state
     if (user) {
@@ -95,7 +88,7 @@ export class UserPage extends React.Component<
             </Heading>
             {user.year && (
               <Heading small inline color={'grey'} ml={2} my={0}>
-                Since {this.timestampToYear(user.year.seconds)}
+                Since {timestampToYear(user.year.seconds)}
               </Heading>
             )}
           </Flex>

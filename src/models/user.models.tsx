@@ -1,5 +1,6 @@
 import { IDbDoc } from './common.models'
 import { ILocation } from 'src/components/LocationSearch/LocationSearch'
+import { firestore } from 'firebase/app'
 
 export interface IUserState {
   user?: IUser
@@ -30,6 +31,7 @@ export interface IUser extends IDbDoc {
   country?: string
   links?: ILink[]
   location?: ILocation
+  year?: firestore.Timestamp
 }
 
 export type UserRole = 'super-admin' | 'subscriber'

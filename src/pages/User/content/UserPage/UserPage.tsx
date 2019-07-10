@@ -9,10 +9,17 @@ import { IUser } from 'src/models/user.models'
 import { UserStore } from 'src/stores/User/user.store'
 import { Button } from 'src/components/Button'
 import Heading from 'src/components/Heading'
-import { Flex } from 'rebass'
+import { Flex, Box } from 'rebass'
 import { Avatar } from 'src/components/Avatar'
 import Text from 'src/components/Text'
 import LinearProgress from '@material-ui/core/LinearProgress'
+import PageContainer from 'src/components/Layout/PageContainer'
+import styled from 'styled-components'
+import { themeGet } from 'styled-system'
+import theme from 'src/themes/styled.theme'
+import { firestore } from 'firebase'
+import Icon from 'src/components/Icons'
+import { Link } from 'src/pages/Settings/content/Link.field'
 
 interface IRouterCustomParams {
   id: string
@@ -25,6 +32,13 @@ interface IState {
   user?: IUser
   isLoading: boolean
 }
+
+const BlueCircle = styled(Flex)`
+  border-radius: ${theme.radii[4] + 'px'};
+  width: 40px;
+  height: 40px;
+`
+
 @(withRouter as any)
 @inject('userStore')
 @observer
@@ -53,44 +67,56 @@ export class UserPage extends React.Component<
     })
   }
 
+  public timestampToYear(timestamp: number) {
+    const date = new Date(timestamp * 1000)
+    return date.getFullYear()
+  }
+
   public render() {
     const { user, isLoading } = this.state
     if (user) {
       return (
-        <FlexContainer m={'0'} bg={'inherit'} flexWrap="wrap">
-          <BoxContainer bg={'inherit'} p={'0'} width={[1, 1, 2 / 3]}>
-            <BoxContainer mb={2}>
-              <Heading small bold>
-                Your details
+        <BoxContainer>
+          <Avatar userName={user.userName} width="120px" borderRadius={5} />
+          <Heading large color={'black'} my={3}>
+            {user.userName}
+          </Heading>
+          <Text small color={'grey'}>
+            @{user.userName}
+          </Text>
+          <Flex wrap={'nowrap'} alignItems={'center'}>
+            <BlueCircle bg={'blue'} alignItems={'center'} my={3}>
+              <Text color={'white'} m={'auto'}>
+                C
+              </Text>
+            </BlueCircle>
+            <Heading small inline ml={2} my={0}>
+              Community builder
+            </Heading>
+            {user.year && (
+              <Heading small inline color={'grey'} ml={2} my={0}>
+                Since {this.timestampToYear(user.year.seconds)}
               </Heading>
-              <Flex alignItems={'center'}>
-                <Avatar userName={user.userName} width="60px" />
-                <Text inline bold ml={3}>
-                  {user.userName}
-                </Text>
-              </Flex>
-            </BoxContainer>
-          </BoxContainer>
-          {/* post guidelines container */}
-          <BoxContainer
-            width={[1, 1, 1 / 3]}
-            height={'100%'}
-            bg="inherit"
-            p={0}
-            pl={2}
-          >
-            <Button
-              // onClick={() => handleSubmit()}
-              width={1}
-              mt={3}
-              variant={'secondary'}
-              // variant={disabled ? 'disabled' : 'secondary'}
-              // disabled={submitting || invalid}
-            >
-              save profile
-            </Button>
-          </BoxContainer>
-        </FlexContainer>
+            )}
+          </Flex>
+          <Text>{user.about}</Text>
+          {user.location && (
+            <Flex alignItems={'center'}>
+              <Icon size={25} glyph={'location-on'} />
+              <Heading small m={3}>
+                {user.location.value}
+              </Heading>
+            </Flex>
+          )}
+          {user.links
+            ? user.links.map((link, index) => (
+                <Box mt={4}>
+                  <Heading large>My Links</Heading>
+                  <a href={link.url}>{link.label}</a>
+                </Box>
+              ))
+            : null}
+        </BoxContainer>
       )
     } else {
       return isLoading ? <LinearProgress /> : <div>user not found</div>

@@ -65,7 +65,7 @@ export class Routes extends React.Component<any, IState> {
                           title={page.title}
                           description={page.description}
                         />
-                        <PageContainer>
+                        <PageContainer ignoreMaxWidth={page.fullPageWidth}>
                           <>{page.component}</>
                         </PageContainer>
                       </React.Fragment>

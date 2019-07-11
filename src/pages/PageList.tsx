@@ -14,6 +14,7 @@ export interface IPageMeta {
   title: string
   description: string
   exact?: boolean
+  fullPageWidth?: boolean
 }
 
 const howTo = {
@@ -51,6 +52,7 @@ const maps = {
   component: <NotFoundPage />,
   title: 'Maps',
   description: '',
+  fullPageWidth: true,
 }
 const admin = {
   path: '/admin',

@@ -4,16 +4,13 @@ import { RouteComponentProps } from 'react-router'
 import { withRouter } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
 import { BoxContainer } from 'src/components/Layout/BoxContainer'
-import { FlexContainer } from 'src/components/Layout/FlexContainer'
-import { IUser } from 'src/models/user.models'
+import { IUser, ILink } from 'src/models/user.models'
 import { UserStore } from 'src/stores/User/user.store'
-import { Button } from 'src/components/Button'
 import Heading from 'src/components/Heading'
-import { Flex, Box } from 'rebass'
+import { Flex, Box, Link } from 'rebass'
 import { Avatar } from 'src/components/Avatar'
 import Text from 'src/components/Text'
 import LinearProgress from '@material-ui/core/LinearProgress'
-import PageContainer from 'src/components/Layout/PageContainer'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
 import Icon from 'src/components/Icons'
@@ -31,8 +28,10 @@ interface IState {
   isLoading: boolean
 }
 
-const BlueCircle = styled(Flex)`
+const Circle = styled(Flex)`
   border-radius: ${theme.radii[4] + 'px'};
+  align-items: center;
+  justify-content: center;
   width: 40px;
   height: 40px;
 `
@@ -65,6 +64,87 @@ export class UserPage extends React.Component<
     })
   }
 
+  public renderLinks(links: ILink[]) {
+    return links.map((link: ILink, index) => {
+      console.log('link.label', link.label)
+      switch (link.label) {
+        case 'email':
+          return (
+            <Flex m={2} key={index} alignItems={'center'}>
+              <Circle bg={'black'}>
+                <Icon color={'white'} glyph={'email'} />
+              </Circle>
+              <Link
+                ml={2}
+                color={'black'}
+                href={'mailto:' + link.url}
+                target="_blank"
+              >
+                {link.label}
+              </Link>
+            </Flex>
+          )
+        case 'facebook':
+          return (
+            <Flex m={2} key={index} alignItems={'center'}>
+              <Circle bg={'black'}>
+                <Icon color={'white'} glyph={'facebook'} />
+              </Circle>
+              <Link ml={2} color={'black'} href={'' + link.url} target="_blank">
+                {link.label}
+              </Link>
+            </Flex>
+          )
+        case 'instagram':
+          return (
+            <Flex m={2} key={index} alignItems={'center'}>
+              <Circle bg={'black'}>
+                <Icon color={'white'} glyph={'instagram'} />
+              </Circle>
+              <Link ml={2} color={'black'} href={'' + link.url} target="_blank">
+                {link.label}
+              </Link>
+            </Flex>
+          )
+        case 'slack':
+          return (
+            <Flex m={2} key={index} alignItems={'center'}>
+              <Circle bg={'black'}>
+                <Icon color={'white'} glyph={'slack'} />
+              </Circle>
+              <Link ml={2} color={'black'} href={'' + link.url} target="_blank">
+                {link.label}
+              </Link>
+            </Flex>
+          )
+        case 'discord':
+          return (
+            <Flex m={2} key={index} alignItems={'center'}>
+              <Circle bg={'black'}>
+                <Icon color={'white'} glyph={'discord'} />
+              </Circle>
+              <Link ml={2} color={'black'} href={'' + link.url} target="_blank">
+                {link.label}
+              </Link>
+            </Flex>
+          )
+        case 'other':
+          return (
+            <Flex m={2} key={index} alignItems={'center'}>
+              <Circle bg={'black'}>
+                <Icon color={'white'} glyph={'external-link'} />
+              </Circle>
+              <Link ml={2} color={'black'} href={'' + link.url} target="_blank">
+                {link.label}
+              </Link>
+            </Flex>
+          )
+        default:
+          return null
+      }
+    })
+  }
+
   public render() {
     const { user, isLoading } = this.state
     if (user) {
@@ -78,11 +158,11 @@ export class UserPage extends React.Component<
             @{user.userName}
           </Text>
           <Flex wrap={'nowrap'} alignItems={'center'}>
-            <BlueCircle bg={'blue'} alignItems={'center'} my={3}>
+            <Circle bg={'blue'} my={3}>
               <Text color={'white'} m={'auto'}>
                 C
               </Text>
-            </BlueCircle>
+            </Circle>
             <Heading small inline ml={2} my={0}>
               Community builder
             </Heading>
@@ -92,7 +172,7 @@ export class UserPage extends React.Component<
               </Heading>
             )}
           </Flex>
-          <Text>{user.about}</Text>
+          <Text lineHeight={2}>{user.about}</Text>
           {user.location && (
             <Flex alignItems={'center'}>
               <Icon size={25} glyph={'location-on'} />
@@ -101,14 +181,12 @@ export class UserPage extends React.Component<
               </Heading>
             </Flex>
           )}
-          {user.links
-            ? user.links.map((link, index) => (
-                <Box mt={4}>
-                  <Heading large>My Links</Heading>
-                  <a href={link.url}>{link.label}</a>
-                </Box>
-              ))
-            : null}
+          {user.links ? (
+            <Box mt={4}>
+              <Heading large>My Links</Heading>
+              {this.renderLinks(user.links)}
+            </Box>
+          ) : null}
         </BoxContainer>
       )
     } else {

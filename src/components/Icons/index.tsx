@@ -27,6 +27,7 @@ import {
   MdImage,
   MdArrowForward,
   MdLocationOn,
+  MdMail,
 } from 'react-icons/md'
 import {
   GoCloudUpload,
@@ -34,7 +35,13 @@ import {
   GoTrashcan,
   GoLinkExternal,
 } from 'react-icons/go'
-import { FaSignal } from 'react-icons/fa'
+import {
+  FaSignal,
+  FaFacebookF,
+  FaSlack,
+  FaInstagram,
+  FaDiscord,
+} from 'react-icons/fa'
 import { IconContext } from 'react-icons'
 import SVGs from './svgs'
 
@@ -46,6 +53,7 @@ interface IProps {
   glyph: keyof IGlyphs
   size?: number | string
   marginRight?: string
+  color?: string
   OnClick?: () => void
 }
 export type availableGlyphs =
@@ -74,6 +82,11 @@ export type availableGlyphs =
   | 'loading'
   | 'location-on'
   | 'external-link'
+  | 'facebook'
+  | 'instagram'
+  | 'slack'
+  | 'discord'
+  | 'email'
 
 export type IGlyphs = { [k in availableGlyphs]: JSX.Element }
 
@@ -103,6 +116,11 @@ export const glyphs: IGlyphs = {
   loading: SVGs.loading,
   'location-on': <MdLocationOn />,
   'external-link': <GoLinkExternal />,
+  facebook: <FaFacebookF />,
+  instagram: <FaInstagram />,
+  slack: <FaSlack />,
+  discord: <FaDiscord />,
+  email: <MdMail />,
 }
 
 type WrapperProps = IProps & VerticalAlignProps & SpaceProps
@@ -115,7 +133,7 @@ const IconWrapper = styled<WrapperProps, 'div'>('div')`
   min-width: ${props => (props.size ? `${props.size}px` : '32px')};
   min-height: ${props => (props.size ? `${props.size}px` : '32px')};
   position: relative;
-  color: inherit;
+  color: ${props => (props.color ? `${props.color}` : 'inherit')};
   ${verticalAlign}
   ${space}
 `

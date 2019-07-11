@@ -9,6 +9,7 @@ import {
   TextAreaField,
   YearPicker,
 } from 'src/components/Form/Fields'
+import { inputStyles } from 'src/components/Form/elements'
 import { FlagSelector } from 'src/components/Form/Select.field'
 import { UserStore } from 'src/stores/User/user.store'
 import { Button } from 'src/components/Button'
@@ -28,6 +29,7 @@ import { FieldArray } from 'react-final-form-arrays'
 import { Link } from './Link.field'
 import { timestampToYear } from 'src/utils/helpers'
 import { firestore } from 'firebase'
+import { Icon } from 'src/components/Icons'
 
 interface IFormValues extends Partial<IUser> {
   // form values are simply subset of user profile fields
@@ -63,6 +65,11 @@ const customMarker = L.icon({
   iconSize: [20, 28],
   iconAnchor: [20, 56],
 })
+
+const YearBox = styled(Box)`
+  ${inputStyles}
+  cursor: pointer;
+`
 
 // we inject the userstore here instead of passing down as would have to pass
 // from Profile -> UserProfile -> ProfileEditForm which is less reliable
@@ -148,12 +155,10 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
                         defaultCountry={getCountryCode(user.country)}
                       />
                     </FlagSelectContainer>
-                    <Text width={1} my={3} medium>
+                    <Text width={1} mt={2} medium>
                       Birth year :
                     </Text>
-                    <Button
-                      icon={'arrow-down'}
-                      variant={'outline'}
+                    <YearBox
                       width={1}
                       onClick={() => {
                         this.setState({
@@ -161,10 +166,13 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
                         })
                       }}
                     >
-                      {user.year
-                        ? this.displayYear(user.year)
-                        : 'Choose a date'}
-                    </Button>
+                      <Icon glyph={'arrow-down'} />
+                      <Text inline ml={2}>
+                        {user.year
+                          ? this.displayYear(user.year)
+                          : 'Choose a date'}
+                      </Text>
+                    </YearBox>
                     {this.state.showYearSelector && (
                       <Field
                         name="year"

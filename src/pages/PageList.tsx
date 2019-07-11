@@ -14,7 +14,7 @@ export interface IPageMeta {
   title: string
   description: string
   exact?: boolean
-  fullPageWidth: boolean
+  fullPageWidth?: boolean
 }
 
 const howTo = {
@@ -22,35 +22,30 @@ const howTo = {
   component: <HowtoPage />,
   title: 'How-to',
   description: 'Welcome to how-to',
-  fullPageWidth: false,
 }
 const profile = {
   path: '/profile',
   component: <ProfilePage />,
   title: 'Profile',
   description: '',
-  fullPageWidth: false,
 }
 const feedback = {
   path: '/feedback',
   component: <FeedbackPage />,
   title: 'Feedback',
   description: 'Let us know what you think!',
-  fullPageWidth: false,
 }
 const discussions = {
   path: '/discussions',
   component: <DiscussionsPage />,
   title: 'Discussions',
   description: '',
-  fullPageWidth: false,
 }
 const events = {
   path: '/events',
   component: <EventsPage />,
   title: 'Events',
   description: 'Welcome to Events',
-  fullPageWidth: false,
 }
 const maps = {
   path: '/maps',
@@ -64,7 +59,6 @@ const admin = {
   component: <AdminPage />,
   title: 'Admin',
   description: '',
-  fullPageWidth: false,
 }
 
 // community pages (various pages hidden on production build)

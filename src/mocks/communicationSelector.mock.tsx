@@ -19,6 +19,10 @@ const COM_TYPE_MOCKS = [
     value: 'facebook',
     label: 'facebook',
   },
+  {
+    value: 'other',
+    label: 'other',
+  },
 ]
 
 export default COM_TYPE_MOCKS

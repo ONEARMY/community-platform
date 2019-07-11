@@ -7,6 +7,7 @@ import { DiscussionsPage } from './Discussions'
 import { EventsPage } from './Events/Events'
 import { NotFoundPage } from './NotFound/NotFound'
 import { AdminPage } from './admin/Admin'
+import { MapsPage } from './Maps/Maps'
 
 export interface IPageMeta {
   path: string
@@ -49,7 +50,7 @@ const events = {
 }
 const maps = {
   path: '/maps',
-  component: <NotFoundPage />,
+  component: <MapsPage />,
   title: 'Maps',
   description: '',
   fullPageWidth: true,

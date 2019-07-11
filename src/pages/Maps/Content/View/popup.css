@@ -1,0 +1,20 @@
+.markercluster-map .leaflet-popup-content {
+  margin: 0;
+  line-height: 1;
+  font-family: system;
+  z-index: 99991;
+}
+
+.markercluster-map .leaflet-popup-content p {
+  margin: 0;
+}
+
+.markercluster-map .leaflet-popup-content-wrapper {
+  border-radius: 0px;
+  box-shadow: 0px 0px 2px grey;
+  padding: 0;
+}
+
+.markercluster-map .leaflet-popup-tip-container .leaflet-popup-tip {
+  box-shadow: 0px 0px 2px grey;
+}

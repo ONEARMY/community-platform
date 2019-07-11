@@ -95,14 +95,14 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
     this.setState({ readOnly: true, showNotification: true })
   }
 
-  public countryChange() {
-    console.log('country change')
-  }
-  public onChangeYear() {
-    console.log('year change')
-  }
-  public onChangeMonth() {
-    console.log('month change')
+  public displayYear(dateOrTmstp) {
+    // if date comes from db, it will be formated in firebase.Timestamp whereas if it comes from calendar (user modifications) it's a Date object
+    // this fn check the type of the date and return a year in format YYYY
+    if (dateOrTmstp instanceof Date && !isNaN(dateOrTmstp.valueOf())) {
+      return dateOrTmstp.getFullYear()
+    } else {
+      return timestampToYear(dateOrTmstp.seconds)
+    }
   }
 
   public onLocationChange(v) {
@@ -162,7 +162,7 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
                       }}
                     >
                       {user.year
-                        ? timestampToYear(user.year.seconds)
+                        ? this.displayYear(user.year)
                         : 'Choose a date'}
                     </Button>
                     {this.state.showYearSelector && (
@@ -171,7 +171,7 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
                         validateFields={[]}
                         component={YearPicker}
                         onChange={year => {
-                          console.log(year)
+                          user.year = year
                         }}
                       />
                     )}

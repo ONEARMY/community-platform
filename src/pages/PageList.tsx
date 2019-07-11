@@ -67,8 +67,8 @@ const admin = {
 }
 
 // community pages (various pages hidden on production build)
-const devCommunityPages = [howTo, events, user, discussions]
-const prodCommunityPages = [howTo, events, user]
+const devCommunityPages = [howTo, events, discussions]
+const prodCommunityPages = [howTo, events]
 const communityPages =
   SITE === 'production' ? prodCommunityPages : devCommunityPages
 // community 'more' dropdown pages (various pages hidden on production build)
@@ -81,3 +81,4 @@ export const COMMUNITY_PAGES: IPageMeta[] = communityPages
 export const COMMUNITY_PAGES_MORE: IPageMeta[] = communityPagesMore
 export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [settings, feedback]
 export const ADMIN_PAGES: IPageMeta[] = [admin]
+export const NO_HEADER_PAGES: IPageMeta[] = [user]

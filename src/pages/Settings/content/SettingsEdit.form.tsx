@@ -9,6 +9,7 @@ import {
   TextAreaField,
   YearPicker,
 } from 'src/components/Form/Fields'
+import Switch from '@material-ui/core/Switch'
 import { inputStyles } from 'src/components/Form/elements'
 import { FlagSelector } from 'src/components/Form/Select.field'
 import { UserStore } from 'src/stores/User/user.store'
@@ -47,6 +48,8 @@ interface IState {
   isSaving?: boolean
   showYearSelector?: boolean
   showNotification?: boolean
+  showComLinks?: boolean
+  showMap?: boolean
   lat: number
   lng: number
   zoom: number
@@ -72,6 +75,11 @@ const YearBox = styled(Box)`
   cursor: pointer;
 `
 
+const HideShowBox = styled(Box)`
+  opacity: ${props => (props.disabled ? 1 : 0.5)};
+  pointer-events: ${props => (props.disabled ? undefined : 'none')};
+`
+
 // we inject the userstore here instead of passing down as would have to pass
 // from Profile -> UserProfile -> ProfileEditForm which is less reliable
 // could use contextAPI but as we have mobx feels easier
@@ -85,10 +93,30 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
       formValues: user ? user : {},
       readOnly: true,
       showYearSelector: false,
+      showComLinks: true,
+      showMap: true,
       lat: 51.4416,
       lng: 5.4697,
       zoom: 8,
     }
+    if (user) {
+      if (user.links) {
+        this.setState({ showComLinks: false })
+      }
+      if (user.location) {
+        this.setState({ showMap: false })
+      }
+    }
+    this.changeComLinkSwitch = this.changeComLinkSwitch.bind(this)
+    this.changeMapSwitch = this.changeMapSwitch.bind(this)
+  }
+
+  public changeComLinkSwitch() {
+    this.setState({ showComLinks: !this.state.showComLinks })
+  }
+
+  public changeMapSwitch() {
+    this.setState({ showMap: !this.state.showMap })
   }
 
   get injected() {
@@ -188,85 +216,105 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
                       />
                     )}
                   </Flex>
-                  <Text width={1} mt={4} medium>
-                    Do you want to add communication links (Facebook, Discord,
-                    Slack, Email ?)
-                  </Text>
-                  <FieldArray name="links">
-                    {({ fields }) => (
-                      <>
-                        {fields.map((name, index: number) => (
-                          <Link
-                            key={index}
-                            link={name}
-                            index={index}
-                            onDelete={(fieldIndex: number) => {
-                              fields.remove(fieldIndex)
+                  <Flex wrap={'nowrap'} alignItems={'center'} width={1}>
+                    <Text medium>
+                      Do you want to add communication links (Facebook, Discord,
+                      Slack, Email ?)
+                    </Text>
+                    <Switch
+                      checked={this.state.showComLinks}
+                      onChange={this.changeComLinkSwitch}
+                    />
+                  </Flex>
+                  <HideShowBox disabled={this.state.showComLinks}>
+                    <FieldArray name="links">
+                      {({ fields }) => (
+                        <>
+                          {fields.map((name, index: number) => (
+                            <Link
+                              key={index}
+                              link={name}
+                              index={index}
+                              onDelete={(fieldIndex: number) => {
+                                fields.remove(fieldIndex)
+                              }}
+                            />
+                          ))}
+                          <Button
+                            my={2}
+                            variant="outline"
+                            onClick={() => {
+                              fields.push({
+                                label: '',
+                                url: '',
+                              })
                             }}
-                          />
-                        ))}
-                        <Button
-                          my={2}
-                          variant="outline"
-                          onClick={() => {
-                            fields.push({
-                              label: '',
-                              url: '',
-                            })
-                          }}
-                        >
-                          add another
-                        </Button>
-                      </>
-                    )}
-                  </FieldArray>
+                          >
+                            add another
+                          </Button>
+                        </>
+                      )}
+                    </FieldArray>
+                  </HideShowBox>
                 </BoxContainer>
                 <BoxContainer mt={4}>
                   <Heading small bold>
                     Your map pin
                   </Heading>
-                  <Field
-                    name="about"
-                    component={TextAreaField}
-                    placeholder="About"
-                  />
-                  <Field
-                    name={user ? `${user.location!.value}` : 'location'}
-                    validateFields={[]}
-                    customChange={v => this.onLocationChange(v)}
-                    component={LocationSearchField}
-                  />
-                  <Map
-                    center={
-                      user.location
-                        ? [user.location.latlng.lat, user.location.latlng.lng]
-                        : [lat, lng]
-                    }
-                    zoom={zoom}
-                    zoomControl={false}
-                    style={{
-                      height: '300px',
-                      zIndex: 1,
-                    }}
-                  >
-                    <ZoomControl position="topright" />
-                    <TileLayer
-                      attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  <Flex wrap={'nowrap'} alignItems={'center'}>
+                    <Text inline>Add me to the map</Text>
+                    <Switch
+                      checked={this.state.showMap}
+                      onChange={this.changeMapSwitch}
                     />
-                    <Marker
-                      position={
+                  </Flex>
+                  <HideShowBox disabled={this.state.showMap}>
+                    <Field
+                      name="about"
+                      component={TextAreaField}
+                      placeholder="About"
+                    />
+                    <Field
+                      name={user ? `${user.location!.value}` : 'location'}
+                      validateFields={[]}
+                      customChange={v => this.onLocationChange(v)}
+                      component={LocationSearchField}
+                    />
+                    <Map
+                      center={
                         user.location
                           ? [user.location.latlng.lat, user.location.latlng.lng]
                           : [lat, lng]
                       }
-                      icon={customMarker}
+                      zoom={zoom}
+                      zoomControl={false}
+                      style={{
+                        height: '300px',
+                        zIndex: 1,
+                      }}
                     >
-                      <Popup maxWidth={225} minWidth={225}>
-                        Add more content here later
-                      </Popup>
-                    </Marker>
-                  </Map>
+                      <ZoomControl position="topright" />
+                      <TileLayer
+                        attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      />
+                      <Marker
+                        position={
+                          user.location
+                            ? [
+                                user.location.latlng.lat,
+                                user.location.latlng.lng,
+                              ]
+                            : [lat, lng]
+                        }
+                        icon={customMarker}
+                      >
+                        <Popup maxWidth={225} minWidth={225}>
+                          Add more content here later
+                        </Popup>
+                      </Marker>
+                    </Map>
+                  </HideShowBox>
                 </BoxContainer>
               </form>
             </>

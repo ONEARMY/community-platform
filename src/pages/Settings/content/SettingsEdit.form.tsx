@@ -30,6 +30,7 @@ import { Link } from './Link.field'
 import { timestampToYear } from 'src/utils/helpers'
 import { firestore } from 'firebase'
 import { Icon } from 'src/components/Icons'
+import { toJS } from 'mobx'
 
 interface IFormValues extends Partial<IUser> {
   // form values are simply subset of user profile fields
@@ -118,13 +119,16 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
 
   render() {
     const user = this.injected.userStore.user
+    // Need to convert mobx observable user object into a Javasrcipt structure using toJS fn
+    // to allow final-form-array to display the initial values
+    const initialFormValues = toJS(user)
     const { lat, lng, zoom } = this.state
 
     return user ? (
       <Form
         // submission managed by button and state above
         onSubmit={values => this.saveProfile(values)}
-        initialValues={user}
+        initialValues={initialFormValues}
         validateOnBlur
         mutators={{
           ...arrayMutators,

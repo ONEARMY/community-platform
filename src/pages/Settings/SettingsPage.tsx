@@ -35,7 +35,6 @@ export class UserSettings extends React.Component<IProps, IState> {
 
   public render() {
     const readOnly = !this.state.editMode
-    console.log('user', this.state.user)
 
     return (
       <FlexContainer m={'0'} bg={'inherit'} flexWrap="wrap">

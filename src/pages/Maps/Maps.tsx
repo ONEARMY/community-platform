@@ -51,7 +51,8 @@ class MapsPageClass extends React.Component<IProps, IState> {
     const { center, zoom } = this.state
 
     return (
-      <div id="MapPage" style={{ height: '100vh' }}>
+      // the calculation for the height is kind of hacky for now, will set properly on final mockups
+      <div id="mapPage" style={{ height: 'calc(100vh - 158px)' }}>
         <Switch>
           <Route
             exact

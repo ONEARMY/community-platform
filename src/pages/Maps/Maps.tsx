@@ -3,8 +3,6 @@ import { inject, observer } from 'mobx-react'
 import { withRouter, Route, Switch } from 'react-router'
 
 import { MapsStore } from 'src/stores/Maps/maps.store'
-
-import { Map, TileLayer, Marker } from 'react-leaflet'
 import { MapView, Controls } from './Content'
 
 import './styles.css'
@@ -18,8 +16,6 @@ interface IState {
   center: ILatLng
   zoom: number
 }
-
-import { generatePins } from 'src/mocks/maps.mock'
 
 @inject('mapsStore')
 @observer

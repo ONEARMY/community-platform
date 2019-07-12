@@ -179,8 +179,6 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
                     <FlagSelectContainer width={1} alignItems="center">
                       <Field
                         name="country"
-                        validate={required}
-                        validateFields={[]}
                         component={FlagSelector}
                         searchable={true}
                         defaultCountry={getCountryCode(user.country)}
@@ -207,7 +205,6 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
                     {this.state.showYearSelector && (
                       <Field
                         name="year"
-                        validateFields={[]}
                         component={YearPicker}
                         onChange={year => {
                           user.year = year
@@ -279,7 +276,6 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
                           ? `${user.location.value}`
                           : 'location'
                       }
-                      validateFields={[]}
                       customChange={v => this.onLocationChange(v)}
                       component={LocationSearchField}
                     />

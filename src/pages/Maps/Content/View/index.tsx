@@ -79,6 +79,15 @@ class MapView extends React.Component<IProps, IState> {
       </Map>
     )
   }
+
+  static defaultProps: Partial<IProps> = {
+    onBoundingBoxChange: () => null,
+    onPinClicked: () => null,
+    pins: [],
+    filters: [],
+    center: { lat: 51.0, lng: 19.0 },
+    zoom: 3,
+  }
 }
 
 export { MapView }

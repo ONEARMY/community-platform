@@ -8,6 +8,7 @@ import { FlexContainer } from 'src/components/Layout/FlexContainer'
 import { GroupingFilter } from './GroupingFilter'
 
 import { IPinType, EntityType } from 'src/models/maps.models'
+import { HashLink } from 'react-router-hash-link'
 
 interface IProps {
   availableFilters: Array<IPinType>
@@ -72,7 +73,15 @@ class Controls extends React.Component<IProps> {
           />
         ))}
         <FlexSpacer />
-        <Button variant="outline">My Pin</Button>
+        <HashLink
+          smooth
+          to={{
+            pathname: `/settings`,
+            hash: '#your-map-pin',
+          }}
+        >
+          <Button variant="outline">My Pin</Button>
+        </HashLink>
       </FlexContainer>
     )
   }

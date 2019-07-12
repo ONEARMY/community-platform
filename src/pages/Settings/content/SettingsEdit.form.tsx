@@ -256,7 +256,7 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
                     </FieldArray>
                   </HideShowBox>
                 </BoxContainer>
-                <BoxContainer mt={4}>
+                <BoxContainer id="your-map-pin" mt={4}>
                   <Heading small bold>
                     Your map pin
                   </Heading>

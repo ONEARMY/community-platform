@@ -11,23 +11,26 @@ import {
   space,
   SpaceProps,
   fontSize,
+  width,
+  WidthProps,
 } from 'styled-system'
 
 import Icon from 'src/components/Icons'
 
 interface IProps {
-  onChange: () => void
+  onChange?: () => void
   list: ISelectorList[]
 }
-type selectorProps = IProps & BorderRadiusProps & SpaceProps
+type selectorProps = IProps & BorderRadiusProps & SpaceProps & WidthProps
 
 const Wrapper = styled.div`
   ${color};
   ${borderRadius};
   ${space};
-  border: 1px solid ${theme.colors.grey};
+  ${width};
+  border: 1px solid ${theme.colors.black};
   display: inline-block;
-  height: 50px;
+  height: 38px;
 `
 
 const Select = styled.select`
@@ -54,11 +57,9 @@ const Selector = (props: selectorProps) => (
 Selector.defaultProps = {
   className: 'selector',
   color: theme.colors.black,
-  borderRadius: 2,
+  borderRadius: 1,
   bg: 'white',
   px: 2,
-  my: 0,
-  mx: 2,
   fontSize: 2,
 }
 

@@ -5,7 +5,6 @@ import { FeedbackPage } from './Feedback/Feedback'
 import { SITE } from 'src/config/config'
 import { DiscussionsPage } from './Discussions'
 import { EventsPage } from './Events/Events'
-import { NotFoundPage } from './NotFound/NotFound'
 import { AdminPage } from './admin/Admin'
 import { MapsPage } from './Maps/Maps'
 import { User } from './User/User'
@@ -56,10 +55,10 @@ const events = {
   description: 'Welcome to Events',
 }
 const maps = {
-  path: '/maps',
+  path: '/map',
   component: <MapsPage />,
-  title: 'Maps',
-  description: '',
+  title: 'Map',
+  description: 'Welcome to the Map',
   fullPageWidth: true,
 }
 const admin = {
@@ -70,12 +69,12 @@ const admin = {
 }
 
 // community pages (various pages hidden on production build)
-const devCommunityPages = [howTo, events, discussions]
+const devCommunityPages = [howTo, events, maps]
 const prodCommunityPages = [howTo, events]
 const communityPages =
   SITE === 'production' ? prodCommunityPages : devCommunityPages
 // community 'more' dropdown pages (various pages hidden on production build)
-const devCommunityPagesMore = [maps]
+const devCommunityPagesMore = []
 const prodCommunityPagesMore = []
 const communityPagesMore =
   SITE === 'production' ? prodCommunityPagesMore : devCommunityPagesMore

@@ -5,7 +5,7 @@ import { withRouter, Route, Switch } from 'react-router'
 import { MapsStore } from 'src/stores/Maps/maps.store'
 
 import { Map, TileLayer, Marker } from 'react-leaflet'
-import { MapView, Controls } from './Content/'
+import { MapView, Controls } from './Content'
 
 import './styles.css'
 
@@ -59,7 +59,7 @@ class MapsPageClass extends React.Component<IProps, IState> {
         <Switch>
           <Route
             exact
-            path="/maps"
+            path="/map"
             render={props => (
               <>
                 <Controls

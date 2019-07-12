@@ -71,8 +71,9 @@ export class DHImport extends React.Component<IProps, IState> {
           disabled={disabled}
           onClick={() => this.importProfileFromDH()}
           variant={disabled ? 'disabled' : 'outline'}
+          ml={2}
         >
-          Import @{this.props.mention_name} from Dave Hakkens
+          Import profile from davehakkens.nl
         </Button>
         <Text color="error">{this.state.errMsg}</Text>
         <TextNotification

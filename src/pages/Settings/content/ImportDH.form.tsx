@@ -6,6 +6,7 @@ import { InputField } from 'src/components/Form/Fields'
 import { UserStore } from 'src/stores/User/user.store'
 import { IUser } from 'src/models/user.models'
 import { inject, observer } from 'mobx-react'
+import { Flex } from 'rebass'
 
 interface IProps {}
 interface IInjectedProps extends IProps {
@@ -33,9 +34,6 @@ export class ImportDHForm extends React.Component<IProps, IState> {
     const user = this.injected.userStore.user as IUser
     return (
       <div>
-        <Heading medium bold mt={4}>
-          Dave Hakkens.NL Profile
-        </Heading>
         <Form
           // form isn't submitted but instead DHImport button click triggered
           onSubmit={() => undefined}
@@ -43,15 +41,17 @@ export class ImportDHForm extends React.Component<IProps, IState> {
           render={({ values }) => {
             return (
               <form onSubmit={e => e.preventDefault()}>
-                <Field
-                  name="DHSite_mention_name"
-                  component={InputField}
-                  placeholder="Mention Name"
-                />
-                <DHImport
-                  mention_name={values.DHSite_mention_name as string}
-                  userStore={this.injected.userStore}
-                />
+                <Flex alignItems={'center'}>
+                  <Field
+                    name="DHSite_mention_name"
+                    component={InputField}
+                    placeholder="davehakkens.nl username"
+                  />
+                  <DHImport
+                    mention_name={values.DHSite_mention_name as string}
+                    userStore={this.injected.userStore}
+                  />
+                </Flex>
               </form>
             )
           }}

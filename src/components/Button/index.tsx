@@ -46,5 +46,6 @@ export const Button = (props: BtnProps) => (
 Button.defaultProps = {
   className: 'button',
   variant: 'primary',
+  type: 'button',
   theme,
 }

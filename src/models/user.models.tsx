@@ -1,7 +1,13 @@
-import { IDbDoc } from './common.models'
+import { IDbDoc, ITimestamp } from './common.models'
+import { ILocation } from 'src/components/LocationSearch/LocationSearch'
 
 export interface IUserState {
   user?: IUser
+}
+
+export interface ILink {
+  label: string
+  url: string
 }
 
 // IUser retains most of the fields from legacy users (omitting passwords),
@@ -22,6 +28,9 @@ export interface IUser extends IDbDoc {
   DHSite_id?: number
   DHSite_mention_name?: string
   country?: string
+  links?: ILink[]
+  location?: ILocation
+  year?: ITimestamp
 }
 
 export type UserRole = 'super-admin' | 'subscriber'

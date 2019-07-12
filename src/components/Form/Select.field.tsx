@@ -5,6 +5,8 @@ import { Styles } from 'react-select/lib/styles'
 import { Props as SelectProps } from 'react-select/lib/Select'
 import { FieldContainer } from './elements'
 import theme from 'src/themes/styled.theme'
+import ReactFlagsSelect from 'react-flags-select'
+import { getCountryName } from 'src/utils/helpers'
 
 interface ISelectOption {
   value: string
@@ -74,4 +76,20 @@ export const SelectField = ({ input, meta, ...rest }: ISelectFieldProps) => (
       {...rest}
     />
   </FieldContainer>
+)
+
+export const FlagSelector = ({ input, meta, ...rest }: ISelectFieldProps) => (
+  <>
+    <ReactFlagsSelect
+      onSelect={v => {
+        input.onChange(getCountryName(v))
+      }}
+      onBlur={input.onBlur}
+      onFocus={input.onFocus}
+      {...defaultProps}
+      {...rest}
+    />
+
+    {/* {meta.error && meta.touched && <span>{meta.error}</span>} */}
+  </>
 )

@@ -274,7 +274,11 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
                       placeholder="About"
                     />
                     <Field
-                      name={user ? `${user.location!.value}` : 'location'}
+                      name={
+                        user && user.location
+                          ? `${user.location.value}`
+                          : 'location'
+                      }
                       validateFields={[]}
                       customChange={v => this.onLocationChange(v)}
                       component={LocationSearchField}
@@ -299,7 +303,7 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
                       />
                       <Marker
                         position={
-                          user.location
+                          user.location && user.location.latlng
                             ? [
                                 user.location.latlng.lat,
                                 user.location.latlng.lng,

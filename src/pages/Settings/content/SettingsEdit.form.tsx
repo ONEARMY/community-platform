@@ -208,6 +208,7 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
                         component={YearPicker}
                         onChange={year => {
                           user.year = year
+                          this.setState({ showYearSelector: false })
                         }}
                       />
                     )}

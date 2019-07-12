@@ -9,6 +9,7 @@ const routes = [
   { path: '/how-to/:slug', breadcrumb: HowtoBreadcrumb },
   { path: '/events', breadcrumb: 'Events' },
   { path: '/events/create', breadcrumb: 'Create' },
+  { path: '/map', breadcrumb: 'Welcome to the Map' },
 ]
 
 const Breadcrumbs = ({ breadcrumbs }) => (

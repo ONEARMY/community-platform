@@ -21,16 +21,12 @@ import { getCountryCode } from 'src/utils/helpers'
 import 'react-flags-select/scss/react-flags-select.scss'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
-
-import { Map, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet'
-import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
-import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
 import { FieldArray } from 'react-final-form-arrays'
 import { Link } from './Link.field'
 import { timestampToYear } from 'src/utils/helpers'
 import { Icon } from 'src/components/Icons'
 import { toJS } from 'mobx'
+import { ILocation } from 'src/components/LocationSearch/LocationSearch'
 
 interface IFormValues extends Partial<IUser> {
   // form values are simply subset of user profile fields
@@ -48,10 +44,6 @@ interface IState {
   showYearSelector?: boolean
   showNotification?: boolean
   showComLinks?: boolean
-  showMap?: boolean
-  lat: number
-  lng: number
-  zoom: number
 }
 
 // validation - return undefined if no error (i.e. valid)
@@ -62,12 +54,6 @@ const FlagSelectContainer = styled(Flex)`
   border-radius: 4px;
   height: 40px;
 `
-
-const customMarker = L.icon({
-  iconUrl: require('src/assets/icons/map-marker.png'),
-  iconSize: [20, 28],
-  iconAnchor: [20, 56],
-})
 
 const YearBox = styled(Box)`
   ${inputStyles}
@@ -92,30 +78,13 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
       formValues: user ? user : {},
       readOnly: true,
       showYearSelector: false,
-      showComLinks: true,
-      showMap: true,
-      lat: 51.4416,
-      lng: 5.4697,
-      zoom: 8,
-    }
-    if (user) {
-      if (user.links) {
-        this.setState({ showComLinks: false })
-      }
-      if (user.location) {
-        this.setState({ showMap: false })
-      }
+      showComLinks: user && user.links ? true : false,
     }
     this.changeComLinkSwitch = this.changeComLinkSwitch.bind(this)
-    this.changeMapSwitch = this.changeMapSwitch.bind(this)
   }
 
   public changeComLinkSwitch() {
     this.setState({ showComLinks: !this.state.showComLinks })
-  }
-
-  public changeMapSwitch() {
-    this.setState({ showMap: !this.state.showMap })
   }
 
   get injected() {
@@ -140,16 +109,11 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
     }
   }
 
-  public onLocationChange(v) {
-    this.setState({ lat: v.latlng.lat, lng: v.latlng.lng, zoom: 15 })
-  }
-
   render() {
     const user = this.injected.userStore.user
     // Need to convert mobx observable user object into a Javasrcipt structure using toJS fn
     // to allow final-form-array to display the initial values
     const initialFormValues = toJS(user)
-    const { lat, lng, zoom } = this.state
 
     return user ? (
       <Form
@@ -253,70 +217,17 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
                       )}
                     </FieldArray>
                   </HideShowBox>
-                </BoxContainer>
-                <BoxContainer id="your-map-pin" mt={4}>
-                  <Heading small bold>
-                    Your map pin
-                  </Heading>
-                  <Flex wrap={'nowrap'} alignItems={'center'}>
-                    <Text inline>Add me to the map</Text>
-                    <Switch
-                      checked={this.state.showMap}
-                      onChange={this.changeMapSwitch}
-                    />
-                  </Flex>
-                  <HideShowBox disabled={this.state.showMap}>
-                    <Field
-                      name="about"
-                      component={TextAreaField}
-                      placeholder="About"
-                    />
-                    <Field
-                      name={
-                        user && user.location
-                          ? `${user.location.value}`
-                          : 'location'
-                      }
-                      customChange={v => this.onLocationChange(v)}
-                      component={LocationSearchField}
-                    />
-                    <Map
-                      center={
-                        user.location
-                          ? [user.location.latlng.lat, user.location.latlng.lng]
-                          : [lat, lng]
-                      }
-                      zoom={zoom}
-                      zoomControl={false}
-                      style={{
-                        height: '300px',
-                        zIndex: 1,
-                      }}
-                    >
-                      <ZoomControl position="topright" />
-                      <TileLayer
-                        attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                      />
-                      <Marker
-                        position={
-                          user.location && user.location.latlng
-                            ? [
-                                user.location.latlng.lat,
-                                user.location.latlng.lng,
-                              ]
-                            : [lat, lng]
-                        }
-                        icon={customMarker}
-                      >
-                        <Popup maxWidth={225} minWidth={225}>
-                          Add more content here later
-                        </Popup>
-                      </Marker>
-                    </Map>
-                  </HideShowBox>
+                  <Text width={1} mt={2} medium>
+                    About Me
+                  </Text>
+                  <Field
+                    name="about"
+                    component={TextAreaField}
+                    placeholder="About"
+                  />
                 </BoxContainer>
               </form>
+              {/* Map update separate to rest of form */}
             </>
           )
         }}

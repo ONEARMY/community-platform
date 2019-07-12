@@ -13,6 +13,7 @@ import { TextNotification } from 'src/components/Notification/TextNotification'
 import { Flex } from 'rebass'
 import { Avatar } from 'src/components/Avatar'
 import Text from 'src/components/Text'
+import { UserMapPin } from './content/UserMapPin'
 
 interface IProps {
   user: IUser
@@ -59,6 +60,7 @@ export class UserSettings extends React.Component<IProps, IState> {
           </BoxContainer>
 
           <SettingsEditForm onProfileSave={() => this.showSaveNotification()} />
+          <UserMapPin />
         </BoxContainer>
         {/* post guidelines container */}
         <BoxContainer

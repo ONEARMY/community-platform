@@ -45,8 +45,6 @@ class Link extends Component<IProps, IState> {
       <Flex key={index}>
         <Field
           name={`${link}.label`}
-          validate={required}
-          validateFields={[]}
           options={COM_TYPE_MOCK}
           component={SelectField}
           placeholder="type"

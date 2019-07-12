@@ -12,21 +12,30 @@ import { Flex, FlexProps } from 'rebass'
 import theme from 'src/themes/styled.theme'
 import { VersionNumber } from '../VersionNumber/VersionNumber'
 
-type InnerContainerProps = MaxWidthProps & SpaceProps & WidthProps
+type InnerContainerProps = MaxWidthProps &
+  SpaceProps &
+  WidthProps & {
+    ignoreMaxWidth?: boolean
+  }
 
 const InnerContainer = styled.div<InnerContainerProps>`
   ${space}
   ${width}
-  ${maxWidth}
+  ${p => (p.ignoreMaxWidth ? 'max-width: inherit;' : maxWidth)}
+  margin: ${p => (p.ignoreMaxWidth ? 0 : undefined)};
+  padding: ${p => (p.ignoreMaxWidth ? 0 : undefined)};
   min-height: calc(100vh - 156px);
   margin-bottom:0;
   padding-bottom: 32px;
-  position: relative
+  position: relative;
 `
+interface IProps extends FlexProps {
+  ignoreMaxWidth?: boolean
+}
 
-const PageContainer = (props: FlexProps) => (
+const PageContainer = (props: IProps) => (
   <Flex {...props} bg={theme.colors.background}>
-    <InnerContainer>
+    <InnerContainer ignoreMaxWidth={props.ignoreMaxWidth}>
       {props.children} <VersionNumber />
     </InnerContainer>
   </Flex>
@@ -35,13 +44,13 @@ const PageContainer = (props: FlexProps) => (
 PageContainer.defaultProps = {
   className: 'page-container',
   justifyContent: 'center',
-  px: '2em',
 }
 InnerContainer.defaultProps = {
   className: 'page-inner-container',
   maxWidth: theme.maxContainerWidth,
   width: 1,
   my: 4,
+  px: '2em',
 }
 
 export default PageContainer

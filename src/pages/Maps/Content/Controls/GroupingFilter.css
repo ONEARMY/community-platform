@@ -1,0 +1,13 @@
+.multi-select {
+  width: 100%;
+  max-width: 225px;
+  margin-left: 20px;
+}
+
+.multi-select .dropdown-heading {
+  height: 45px !important;
+}
+
+.multi-select .dropdown-heading-value {
+  line-height: 45px !important;
+}

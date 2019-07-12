@@ -1084,6 +1084,13 @@
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/@icons/material/-/material-0.2.4.tgz#e90c9f71768b3736e76d7dd6783fc6c2afa88bc8"
 
+"@khanacademy/react-multi-select@^0.3.3":
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/@khanacademy/react-multi-select/-/react-multi-select-0.3.3.tgz#16230ff1bb48f40d978eae26cec30df4db450f5b"
+  integrity sha512-+RW+mzA+CFxhDxNrYYlKLo5SS50qB/xxS+nBWrYGvIWfBrtsmWMq2DdP8QH8Jrh7zqEyTjea/k8+RT/V/UxLMA==
+  dependencies:
+    fuzzy-match-utils "^1.2.0"
+
 "@material-ui/core@3.7.1":
   version "3.7.1"
   resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-3.7.1.tgz#353845d59489453fb474a4deabdb62a98d0e0ef7"
@@ -4561,7 +4568,7 @@ commander@^2.11.0, commander@^2.19.0, commander@^2.5.0, commander@^2.9.0, comman
   version "2.19.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.19.0.tgz#f6198aa84e5b83c46054b94ddedbfed5ee9ff12a"
 
-commander@^2.14.1:
+commander@^2.14.1, commander@^2.17.1:
   version "2.20.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.0.tgz#d58bb2b5c1ee8f87b0d340027e9e94e222c5a422"
 
@@ -5172,7 +5179,7 @@ date-now@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
 
-debounce@^1.1.0:
+debounce@^1.1.0, debounce@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/debounce/-/debounce-1.2.0.tgz#44a540abc0ea9943018dc0eaa95cce87f65cd131"
 
@@ -6644,6 +6651,11 @@ functional-red-black-tree@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz#1b0ab3bd553b2a0d6399d29c0e3ea0b252078327"
 
+fuzzy-match-utils@^1.2.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/fuzzy-match-utils/-/fuzzy-match-utils-1.3.0.tgz#7debe2d6dab1dfde3d9526402c3e6b03fc1684f0"
+  integrity sha1-fevi1tqx3949lSZALD5rA/wWhPA=
+
 fuzzy-search@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/fuzzy-search/-/fuzzy-search-3.0.1.tgz#14a4964508a9607d6e9a88818e7ff634108260b6"
@@ -6690,6 +6702,13 @@ gcp-metadata@^1.0.0:
   dependencies:
     gaxios "^1.0.2"
     json-bigint "^0.3.0"
+
+geolocation-utils@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/geolocation-utils/-/geolocation-utils-1.2.1.tgz#3928be1a7a0c4f0283a7ca884128e09c4ada12cf"
+  integrity sha512-iz3k862SXYmGxBJvfDi3IfNRsWZeCugcjfh6H3dPpk//KV1T9+RO2AHP4ALYFtF7fTOd6VsOboqfjFgmviiUyw==
+  dependencies:
+    point-in-polygon "1.0.1"
 
 get-caller-file@^1.0.1:
   version "1.0.3"
@@ -8723,6 +8742,11 @@ lcid@^2.0.0:
   dependencies:
     invert-kv "^2.0.0"
 
+leaflet.markercluster@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/leaflet.markercluster/-/leaflet.markercluster-1.4.1.tgz#b53f2c4f2ca7306ddab1dbb6f1861d5e8aa6c5e5"
+  integrity sha512-ZSEpE/EFApR0bJ1w/dUGwTSUvWlpalKqIzkaYdYB7jaftQA/Y2Jav+eT4CMtEYFj+ZK4mswP13Q2acnPBnhGOw==
+
 leaflet@^1.3.4:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.4.0.tgz#d5f56eeb2aa32787c24011e8be4c77e362ae171b"
@@ -9037,6 +9061,13 @@ loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.2.0, loose-envify@^1.3
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
+
+lorem-ipsum@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/lorem-ipsum/-/lorem-ipsum-2.0.3.tgz#9f1fa634780c9f58a349d4e091c3ba74f733164e"
+  integrity sha512-CX2r84DMWjW/DWiuzicTI9aRaJPAw2cvAGMJYZh/nx12OkTGqloj8y8FU0S8ZkKwOdqhfxEA6Ly8CW2P6Yxjwg==
+  dependencies:
+    commander "^2.17.1"
 
 loud-rejection@^1.0.0:
   version "1.6.0"
@@ -10428,6 +10459,11 @@ pnp-webpack-plugin@1.2.1:
   dependencies:
     ts-pnp "^1.0.0"
 
+point-in-polygon@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/point-in-polygon/-/point-in-polygon-1.0.1.tgz#d59b64e8fee41c49458aac82b56718c5957b2af7"
+  integrity sha1-1Ztk6P7kHElFiqyCtWcYxZV7Kvc=
+
 polished@^2.3.3:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/polished/-/polished-2.3.3.tgz#bdbaba962ba8271b0e11aa287f2befd4c87be99a"
@@ -11618,6 +11654,11 @@ react-inspector@^2.3.0, react-inspector@^2.3.1:
 react-is@^16.6.0, react-is@^16.6.3, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4:
   version "16.8.4"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.4.tgz#90f336a68c3a29a096a3d648ab80e87ec61482a2"
+
+react-leaflet-markercluster@^2.0.0-rc3:
+  version "2.0.0-rc3"
+  resolved "https://registry.yarnpkg.com/react-leaflet-markercluster/-/react-leaflet-markercluster-2.0.0-rc3.tgz#8cadfa62eca88fe1fa7b404a81a5b171e6be60f6"
+  integrity sha512-9Z02sZTte8UPqXdm2R5HnLs24MGQgVc1Fdy2R8KPiZQv+sgUCDoFwMUxiVxyqLjGB643RI33MOQVif8kQCkELg==
 
 react-leaflet@^2.1.4:
   version "2.2.1"

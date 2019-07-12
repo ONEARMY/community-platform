@@ -1,0 +1,33 @@
+.icon-cluster-place {
+  background-color: #ff6666;
+  line-height: 36px;
+  text-align: center;
+  font-size: 13px;
+  color: white;
+}
+
+.icon-cluster-individual {
+  background-color: #6666ff;
+  line-height: 36px;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 13px;
+  color: white;
+}
+
+.icon-marker-place {
+  background-color: red;
+  line-height: 26px;
+  text-align: center;
+  color: white;
+  padding-left: 1px;
+}
+
+.icon-marker-individual {
+  border-radius: 50%;
+  background-color: blue;
+  line-height: 26px;
+  text-align: center;
+  color: white;
+  padding-left: 1px;
+}

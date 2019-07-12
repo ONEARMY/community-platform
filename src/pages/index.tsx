@@ -15,11 +15,21 @@ import {
   ADMIN_PAGES,
   NO_HEADER_PAGES,
 } from './PageList'
+import { Link } from 'rebass'
+import styled from 'styled-components'
 
 interface IState {
   singlePageMode: boolean
   displayPageComponent?: any
 }
+
+const FeedbackBtn = styled(Link)`
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  padding: 8px;
+  border-radius: 4px;
+`
 
 export class Routes extends React.Component<any, IState> {
   constructor(props: any) {
@@ -86,6 +96,14 @@ export class Routes extends React.Component<any, IState> {
             </div>
           </ScrollToTop>
         </BrowserRouter>
+        <FeedbackBtn
+          bg={'blue'}
+          color={'white'}
+          target="_blank"
+          href={'https://preciousplastic.typeform.com/to/tO6uDw'}
+        >
+          Have a feedback ?
+        </FeedbackBtn>
       </div>
     )
   }

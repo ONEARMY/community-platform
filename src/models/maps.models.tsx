@@ -1,4 +1,6 @@
-export interface IDatabaseMapPin {
+import { IDbDoc } from './common.models'
+
+export interface IDatabaseMapPin extends IDbDoc {
   id: string
   location: ILatLng & {
     address: string

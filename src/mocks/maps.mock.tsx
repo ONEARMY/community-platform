@@ -6,6 +6,7 @@ import {
   IDatabaseMapPin,
   EntityType,
 } from 'src/models/maps.models'
+import { DB_META_MOCK } from './database.mock'
 
 export const generatePins = (count: number): Array<IDatabaseMapPin> => {
   const filters = generatePinFilters()
@@ -14,6 +15,7 @@ export const generatePins = (count: number): Array<IDatabaseMapPin> => {
     const pinType = filters[Math.floor(Math.random() * filters.length)]
 
     newPins.push({
+      ...DB_META_MOCK,
       id: '' + Math.random(),
       location: {
         address: 'testing',

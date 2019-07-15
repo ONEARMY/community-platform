@@ -7,16 +7,18 @@ import { EventStore } from './Events/events.store'
 import { DiscussionsStore } from './Discussions/discussions.store'
 import { MapsStore } from './Maps/maps.store'
 
+// userStore is injected into mapStore so defined separate
+const userStore = new UserStore()
 // the following stores are passed into a top level app provider and can be accessed through @inject
 export const stores = {
   howtoStore: new HowtoStore(),
-  userStore: new UserStore(),
+  userStore,
   templateStore: new TemplateStore(),
   tagsStore: new TagsStore(),
   platformStore: new PlatformStore(),
   eventStore: new EventStore(),
   discussionsStore: new DiscussionsStore(),
-  mapsStore: new MapsStore(),
+  mapsStore: new MapsStore(userStore),
 }
 
 export interface IStores {

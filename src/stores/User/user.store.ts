@@ -73,20 +73,6 @@ export class UserStore {
     return ref.exists ? (ref.data() as IUser) : null
   }
 
-  // return subset of profile info used when displaying map pins
-  public async getUserProfilePin(username: string) {
-    const u = (await this.getUserProfile(username)) as IUser
-    const avatar = await this.getUserAvatar(u.userName)
-    return {
-      heroImageUrl: avatar,
-      lastActive: toDate(u._lastActive ? u._lastActive : u._modified),
-      profilePicUrl: avatar,
-      shortDescription: u.about ? u.about : '',
-      name: u.userName,
-      profileUrl: `${location.origin}/u/${u.userName}`,
-    }
-  }
-
   public async updateUserProfile(values: Partial<IUser>) {
     const user = this.user as IUser
     const update = { ...user, ...values }
@@ -100,7 +86,7 @@ export class UserStore {
     }
   }
   // take the username and return matching avatar url (includes undefined.jpg match if no user)
-  public async getUserAvatar(userName: string | undefined) {
+  public getUserAvatar(userName: string | undefined) {
     const url = Storage.getPublicDownloadUrl(`avatars/${userName}.jpg`)
     return url
   }

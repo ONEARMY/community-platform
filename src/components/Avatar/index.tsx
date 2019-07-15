@@ -48,8 +48,8 @@ export class Avatar extends React.Component<IProps, IState> {
     notificationUnsubscribeAll()
   }
 
-  async getUserAvatar(userName: string) {
-    const url = await this.injected.userStore.getUserAvatar(userName)
+  getUserAvatar(userName: string) {
+    const url = this.injected.userStore.getUserAvatar(userName)
     this.setState({ avatarUrl: url })
   }
 

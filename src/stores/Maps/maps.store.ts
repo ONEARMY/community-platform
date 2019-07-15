@@ -1,4 +1,4 @@
-import { observable, computed, action } from 'mobx'
+import { observable, computed, action, toJS } from 'mobx'
 import {
   insideBoundingBox,
   getBoundingBox,
@@ -21,8 +21,14 @@ import {
   generatePinDetails,
   generatePinFilters,
 } from 'src/mocks/maps.mock'
+import { Database, IDBEndpoints } from '../database'
+import { IUser } from 'src/models/user.models'
+import { UserStore } from '../User/user.store'
+import { toDate } from 'src/utils/helpers'
 
 export class MapsStore {
+  mapEndpoint: IDBEndpoints = 'mapPinsV1'
+  constructor(private userStore: UserStore) {}
   @observable
   public mapBoundingBox: IBoundingBox = {
     topLeft: { lat: -90, lng: -180 },
@@ -76,7 +82,11 @@ export class MapsStore {
   public async retrieveMapPins() {
     // TODO: make the function accept a bounding box to reduce load from DB
     // TODO: make the database callout instead of random mocks
-    this.pinData = await generatePins(10)
+    console.log('generating map pins')
+    Database.getLargeCollection(this.mapEndpoint).subscribe(data =>
+      console.log('map pins received', data),
+    )
+    // this.pinData = await generatePins(10)
   }
 
   @action
@@ -98,13 +108,31 @@ export class MapsStore {
   }
 
   @action
-  public async getPinDetails(pin: IMapPin) {
-    const { id } = pin
-    if (!this.pinDetailCache.has(id)) {
-      // TODO: get from database
-      this.pinDetailCache.set(id, generatePinDetails(pin))
+  public async getPinDetails(pin: IMapPin): Promise<IMapPinDetail> {
+    if (!this.pinDetailCache.has(pin.id)) {
+      // get from db if not already in cache. note map ids match with user ids
+      const pinDetail = await this.getUserProfilePin(pin.id)
+      this.pinDetailCache.set(pin.id, { ...pin, ...pinDetail })
+      return this.getPinDetails(pin)
     }
-    this.pinDetail = this.pinDetailCache.get(id)
+    this.pinDetail = this.pinDetailCache.get(pin.id)
+    return toJS(this.pinDetail as IMapPinDetail)
+  }
+
+  // get core pin geo information
+  public async getPin(id: string) {
+    const pin = (await Database.getDoc(
+      `${this.mapEndpoint}/${id}`,
+      'once',
+    )) as IDatabaseMapPin
+    return pin
+  }
+
+  // add new pin or update existing
+  public async setPin(pin: IMapPin) {
+    // generate standard doc meta
+    const meta = Database.generateDocMeta(this.mapEndpoint, pin.id)
+    await Database.setDoc(`${this.mapEndpoint}/${pin.id}`, { ...meta, ...pin })
   }
 
   private recalculatePinCounts() {
@@ -132,5 +160,20 @@ export class MapsStore {
         pinTypeMap[pin.pinType].count++
       }
     })
+  }
+
+  // return subset of profile info used when displaying map pins
+  private async getUserProfilePin(username: string) {
+    const u = (await this.userStore.getUserProfile(username)) as IUser
+    console.log('user profile retrieved', u)
+    const avatar = await this.userStore.getUserAvatar(u.userName)
+    return {
+      heroImageUrl: avatar,
+      lastActive: toDate(u._lastActive ? u._lastActive : u._modified),
+      profilePicUrl: avatar,
+      shortDescription: u.about ? u.about : '',
+      name: u.userName,
+      profileUrl: `${location.origin}/u/${u.userName}`,
+    }
   }
 }

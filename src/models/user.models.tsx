@@ -30,7 +30,6 @@ export interface IUser extends IDbDoc {
   about?: string
   DHSite_id?: number
   DHSite_mention_name?: string
-  // NOTE, country no longer stored as location includes field
   country?: string
   links?: ILink[]
   // NOTE, user location is stored in the users map pin, and kept out of profile to avoid duplication

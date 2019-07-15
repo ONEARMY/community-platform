@@ -11,6 +11,7 @@ import { MapsStore } from 'src/stores/Maps/maps.store'
 import { UserStore } from 'src/stores/User/user.store'
 import { MapView } from 'src/pages/Maps/Content'
 import { IMapPin, IPinType, IMapPinDetail } from 'src/models/maps.models'
+import { IUser } from 'src/models/user.models'
 
 interface IProps {}
 interface IInjectedProps extends IProps {
@@ -32,16 +33,23 @@ const DEFAULT_PIN_TYPE: IPinType = {
 
 @inject('mapsStore', 'userStore')
 @observer
-export class UserMapPin extends React.Component<IProps, IState> {
+export class UserMapPinEdit extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {}
   }
+  componentDidMount() {
+    this.loadUserPin()
+  }
   get injected() {
     return this.props as IInjectedProps
   }
+  get user() {
+    return this.injected.userStore.user as IUser
+  }
 
   private async saveUserPin() {
+    console.log('saving pin', this.state.userPin)
     await this.injected.mapsStore.setPin(this.state.userPin!)
   }
 
@@ -61,19 +69,21 @@ export class UserMapPin extends React.Component<IProps, IState> {
     const { lat, lng } = location.latlng
     const address = location.value
     return {
-      id: this.injected.userStore.user!.userName,
+      id: this.user.userName,
       location: { lat, lng, address },
       // TODO - give proper options for pin type and pass
       pinType: DEFAULT_PIN_TYPE,
     }
   }
 
-  // Pull rest of pin detail from user profile and set to state
-  // Not currently implemented
-  private async getActivePinDetail() {
-    const u = this.injected.userStore.user
-    const detail = await this.injected.userStore.getUserProfilePin(u!.userName)
-    this.setState({ activePinDetail: { ...this.state.userPin!, ...detail } })
+  // load existing user pin from database (used on first load)
+  private async loadUserPin() {
+    const userPin = (await this.injected.mapsStore.getPin(
+      this.user.userName,
+    )) as unknown
+    console.log('userPin', userPin)
+    // use unknown type to allow rebase of IMapDatabasePin -> IMapPin
+    this.setState({ userPin: userPin as IMapPin })
   }
 
   render() {

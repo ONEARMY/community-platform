@@ -8,9 +8,10 @@ export const MOCK_USER: IUser = {
   _authID: '123',
   _deleted: false,
   _createdBy: '123',
-  _created: toTimestamp('Friday, January 2, 2015 12:59 AM'),
-  _modified: toTimestamp('Friday, January 2, 2015 12:59 AM'),
+  _created: toTimestamp(new Date()),
+  _modified: toTimestamp(new Date()),
+  _lastActive: toTimestamp(new Date()),
+  country: '',
   DHSite_id: 70134,
   DHSite_mention_name: 'chris-m-clarke',
-  country: '',
 }

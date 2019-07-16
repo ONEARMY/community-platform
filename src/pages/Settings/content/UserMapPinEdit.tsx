@@ -10,8 +10,14 @@ import {
 import { MapsStore } from 'src/stores/Maps/maps.store'
 import { UserStore } from 'src/stores/User/user.store'
 import { MapView } from 'src/pages/Maps/Content'
-import { IMapPin, IPinType, IMapPinDetail } from 'src/models/maps.models'
+import {
+  IMapPin,
+  IPinType,
+  IMapPinDetail,
+  IDatabaseMapPin,
+} from 'src/models/maps.models'
 import { IUser } from 'src/models/user.models'
+import { generatePinFilters } from 'src/mocks/maps.mock'
 
 interface IProps {}
 interface IInjectedProps extends IProps {
@@ -19,21 +25,16 @@ interface IInjectedProps extends IProps {
   userStore: UserStore
 }
 interface IState {
-  userPin?: IMapPin
+  userPin?: Partial<IDatabaseMapPin>
   activePinDetail?: IMapPinDetail
 }
 
-const DEFAULT_PIN_TYPE: IPinType = {
-  grouping: 'individual',
-  displayName: 'Member',
-  name: 'member',
-  icon: '',
-  count: 0,
-}
+const DEFAULT_PIN_TYPE: string = 'member'
 
 @inject('mapsStore', 'userStore')
 @observer
 export class UserMapPinEdit extends React.Component<IProps, IState> {
+  pinFilters = generatePinFilters()
   constructor(props: IProps) {
     super(props)
     this.state = {}
@@ -46,6 +47,13 @@ export class UserMapPinEdit extends React.Component<IProps, IState> {
   }
   get user() {
     return this.injected.userStore.user as IUser
+  }
+  // NIT - semi duplication of maps.store code could be refactored
+  // small function to change string pinType into proper type (without accumulation method)
+  get mapPins(): IMapPin[] {
+    return this.state.userPin
+      ? [this.setPinTypeMeta(this.state.userPin as IDatabaseMapPin)]
+      : []
   }
 
   private async saveUserPin() {
@@ -65,25 +73,29 @@ export class UserMapPinEdit extends React.Component<IProps, IState> {
   // Map pin only stores a small amount of user data (id, address)
   // Rest is pulled from user profile, and kept independent of map pin datapoint
   // So that data only needs to be kept fresh in one place (i.e. not have user.location in profile)
-  private generateUserPin(location: ILocation): IMapPin {
+  private generateUserPin(location: ILocation): Partial<IDatabaseMapPin> {
     const { lat, lng } = location.latlng
     const address = location.value
     return {
-      id: this.user.userName,
       location: { lat, lng, address },
       // TODO - give proper options for pin type and pass
       pinType: DEFAULT_PIN_TYPE,
+      _id: this.user._id,
     }
   }
 
   // load existing user pin from database (used on first load)
   private async loadUserPin() {
-    const userPin = (await this.injected.mapsStore.getPin(
-      this.user.userName,
-    )) as unknown
-    // use unknown type to allow rebase of IMapDatabasePin -> IMapPin
-    // in future this could be removed if IMapPin and Database pin have same pintype
-    this.setState({ userPin: userPin as IMapPin })
+    const userPin = await this.injected.mapsStore.getPin(this.user.userName)
+    this.setState({ userPin })
+  }
+
+  // convert database pin type (string) to pin with enhanced pinType meta
+  private setPinTypeMeta(pin: IDatabaseMapPin): IMapPin {
+    return {
+      ...pin,
+      pinType: this.pinFilters.find(p => p.name === pin.pinType) as IPinType,
+    }
   }
 
   render() {
@@ -102,8 +114,8 @@ export class UserMapPinEdit extends React.Component<IProps, IState> {
           <MapView
             zoom={pin ? 13 : 2}
             center={pin ? pin.location : undefined}
-            pins={pin ? [pin] : []}
-            filters={[DEFAULT_PIN_TYPE]}
+            pins={this.mapPins}
+            filters={this.pinFilters}
             // TODO - popup not currently shown as doesn't update correctly
             // activePinDetail={this.state.activePinDetail}
             // onPinClicked={() => this.getActivePinDetail()}

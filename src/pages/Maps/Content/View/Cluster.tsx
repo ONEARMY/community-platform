@@ -37,7 +37,7 @@ export const Clusters: React.SFC<IProps> = ({ pins, onPinClick }) => {
           >
             {entities[key].map(pin => (
               <Marker
-                key={pin.id}
+                key={pin._id}
                 position={[pin.location.lat, pin.location.lng]}
                 icon={createMarkerIcon(pin)}
                 onClick={() => {

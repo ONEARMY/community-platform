@@ -58,8 +58,8 @@ export class MapsStore {
       {} as Record<string, IPinType>,
     )
 
-    return this.pinData.map(({ id, location, pinType }) => ({
-      id,
+    return this.pinData.map(({ _id, location, pinType }) => ({
+      _id,
       location,
       pinType: filterMap[pinType],
     }))
@@ -106,13 +106,13 @@ export class MapsStore {
 
   @action
   public async getPinDetails(pin: IMapPin): Promise<IMapPinDetail> {
-    if (!this.pinDetailCache.has(pin.id)) {
+    if (!this.pinDetailCache.has(pin._id)) {
       // get from db if not already in cache. note map ids match with user ids
-      const pinDetail = await this.getUserProfilePin(pin.id)
-      this.pinDetailCache.set(pin.id, { ...pin, ...pinDetail })
+      const pinDetail = await this.getUserProfilePin(pin._id)
+      this.pinDetailCache.set(pin._id, { ...pin, ...pinDetail })
       return this.getPinDetails(pin)
     }
-    this.pinDetail = this.pinDetailCache.get(pin.id)
+    this.pinDetail = this.pinDetailCache.get(pin._id)
     return toJS(this.pinDetail as IMapPinDetail)
   }
 
@@ -126,10 +126,13 @@ export class MapsStore {
   }
 
   // add new pin or update existing
-  public async setPin(pin: IMapPin) {
+  public async setPin(pin: Partial<IDatabaseMapPin>) {
     // generate standard doc meta
-    const meta = Database.generateDocMeta(this.mapEndpoint, pin.id)
-    await Database.setDoc(`${this.mapEndpoint}/${pin.id}`, { ...meta, ...pin })
+    const meta = Database.generateDocMeta(this.mapEndpoint)
+    await Database.setDoc(`${this.mapEndpoint}/${meta._id}`, {
+      ...meta,
+      ...pin,
+    })
   }
 
   private recalculatePinCounts() {

@@ -1,7 +1,6 @@
 import { IDbDoc } from './common.models'
 
 export interface IDatabaseMapPin extends IDbDoc {
-  id: string
   location: ILatLng & {
     address: string
   }
@@ -9,7 +8,7 @@ export interface IDatabaseMapPin extends IDbDoc {
 }
 
 export interface IMapPin {
-  id: string
+  _id: string
   location: ILatLng & {
     address: string
   }

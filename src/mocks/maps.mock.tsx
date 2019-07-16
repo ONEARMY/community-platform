@@ -16,7 +16,6 @@ export const generatePins = (count: number): Array<IDatabaseMapPin> => {
 
     newPins.push({
       ...DB_META_MOCK,
-      id: '' + Math.random(),
       location: {
         address: 'testing',
         lat: 51 + (Math.random() * 1000 - 500) / 500,

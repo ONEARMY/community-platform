@@ -16,11 +16,7 @@ import {
   IBoundingBox,
   EntityType,
 } from 'src/models/maps.models'
-import {
-  generatePins,
-  generatePinDetails,
-  generatePinFilters,
-} from 'src/mocks/maps.mock'
+import { generatePinFilters, generatePins } from 'src/mocks/maps.mock'
 import { Database, IDBEndpoints } from '../database'
 import { IUser } from 'src/models/user.models'
 import { UserStore } from '../User/user.store'
@@ -28,6 +24,7 @@ import { toDate } from 'src/utils/helpers'
 
 export class MapsStore {
   mapEndpoint: IDBEndpoints = 'mapPinsV1'
+  availablePinFilters = generatePinFilters()
   constructor(private userStore: UserStore) {}
   @observable
   public mapBoundingBox: IBoundingBox = {
@@ -36,18 +33,16 @@ export class MapsStore {
   }
 
   @observable
-  public availablePinFilters: Array<IPinType> = []
-  @observable
   public activePinFilters: Array<IPinType> = []
 
-  private pinData: Array<IDatabaseMapPin> = []
+  @observable
+  public mapPins: Array<IMapPin> = []
 
-  @computed
-  get mapPins(): Array<IMapPin> {
-    // TODO: for some reason it only computes the below when the console is
-    // there?
-    if (this.pinData.length === 0 || this.availablePinFilters.length === 0) {
-      return []
+  @action
+  private processDBMapPins(pins: IDatabaseMapPin[]) {
+    if (pins.length === 0 || this.availablePinFilters.length === 0) {
+      this.mapPins = []
+      return
     }
 
     const filterMap = this.availablePinFilters.reduce(
@@ -58,7 +53,7 @@ export class MapsStore {
       {} as Record<string, IPinType>,
     )
 
-    return this.pinData.map(({ _id, location, pinType }) => ({
+    this.mapPins = pins.map(({ _id, location, pinType }) => ({
       _id,
       location,
       pinType: filterMap[pinType],
@@ -80,10 +75,12 @@ export class MapsStore {
   @action
   public async retrieveMapPins() {
     // TODO: make the function accept a bounding box to reduce load from DB
-    Database.getLargeCollection(this.mapEndpoint).subscribe(data => {
-      console.log('map pins received', data)
-      this.pinData = data
-    })
+    Database.getLargeCollection<IDatabaseMapPin>(this.mapEndpoint).subscribe(
+      data => {
+        console.log('setting pin data', data)
+        this.processDBMapPins(data)
+      },
+    )
   }
 
   @action
@@ -128,7 +125,7 @@ export class MapsStore {
   // add new pin or update existing
   public async setPin(pin: Partial<IDatabaseMapPin>) {
     // generate standard doc meta
-    const meta = Database.generateDocMeta(this.mapEndpoint)
+    const meta = Database.generateDocMeta(this.mapEndpoint, pin._id)
     await Database.setDoc(`${this.mapEndpoint}/${meta._id}`, {
       ...meta,
       ...pin,
@@ -155,9 +152,9 @@ export class MapsStore {
       {} as Record<string, IPinType>,
     )
 
-    this.pinData.forEach(pin => {
+    this.mapPins.forEach(pin => {
       if (insideBoundingBox(pin.location as LatLng, boundingBox)) {
-        pinTypeMap[pin.pinType].count++
+        pinTypeMap[pin.pinType.name].count++
       }
     })
   }

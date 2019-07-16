@@ -27,8 +27,8 @@ export class Database {
   // an issue with firestore is high cost if large number of docs returned. Use below
   // method to use alternate approach if using firebase as db provider
   // NOTE - requires endpoint to be sync'd with realtimeDB via cloud-function
-  public static getLargeCollection(path: IDBEndpoints) {
-    const collection$ = new Subject<any[]>()
+  public static getLargeCollection<T>(path: IDBEndpoints) {
+    const collection$ = new Subject<T[]>()
     this._emitLargeCollectionUpdates(path, collection$)
     return collection$
   }
@@ -177,6 +177,7 @@ export class Database {
 
   // get cached data from local storage, emit, then subscribe to live update
   // if no cached data exists pull large data from firebase-realtime instead of firestore
+  // TODO - split indexedDB, firebase realtime and firestore into better-marked sections
   private static async _emitLargeCollectionUpdates(
     path: IDBEndpoints,
     subject: Subject<any[]>,
@@ -185,6 +186,10 @@ export class Database {
     // pass basic schema for a table with same name as endpoint
     // and allow indexing on _id, and _modified (TODO - allow more indexes for specific tables)
     const stores = { [path]: '_id,_modified' }
+    if (indexedDB.isOpen()) {
+      await indexedDB.close()
+    }
+    // setting version requires closed db and will reopen
     indexedDB.version(1).stores(stores)
     const table = indexedDB.table(path)
     let cached = await table.toCollection().toArray()

@@ -28,8 +28,9 @@ interface IState {
 export class Avatar extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
-    this.state = {}
-    this.getUserAvatar(this.props.userName)
+    this.state = {
+      avatarUrl: this.getUserAvatar(this.props.userName),
+    }
   }
   get injected() {
     return this.props as IInjected
@@ -49,8 +50,7 @@ export class Avatar extends React.Component<IProps, IState> {
   }
 
   getUserAvatar(userName: string) {
-    const url = this.injected.userStore.getUserAvatar(userName)
-    this.setState({ avatarUrl: url })
+    return this.injected.userStore.getUserAvatar(userName)
   }
 
   render() {

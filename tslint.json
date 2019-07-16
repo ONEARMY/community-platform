@@ -16,7 +16,7 @@
     "no-console": false,
     "jsx-no-lambda": false,
     "jsx-boolean-value": false,
-    "no-empty": true,
+    "no-empty": false,
     "no-any": false,
     "prefer-const": true,
     "member-access": false,

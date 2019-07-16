@@ -81,8 +81,8 @@ export class UserMapPinEdit extends React.Component<IProps, IState> {
     const userPin = (await this.injected.mapsStore.getPin(
       this.user.userName,
     )) as unknown
-    console.log('userPin', userPin)
     // use unknown type to allow rebase of IMapDatabasePin -> IMapPin
+    // in future this could be removed if IMapPin and Database pin have same pintype
     this.setState({ userPin: userPin as IMapPin })
   }
 

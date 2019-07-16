@@ -67,7 +67,7 @@ class MapView extends React.Component<IProps, IState> {
         center={[center.lat, center.lng]}
         zoom={zoom}
         maxZoom={18}
-        style={{ height: '100%' }}
+        style={{ height: '100%', zIndex: 1 }}
         onMove={this.updateBoundingBox}
       >
         <TileLayer

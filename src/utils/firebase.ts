@@ -3,6 +3,7 @@ import 'firebase/firestore'
 import 'firebase/auth'
 import 'firebase/storage'
 import 'firebase/functions'
+import 'firebase/database'
 import { FIREBASE_CONFIG } from '../../src/config/config'
 
 // initialise with config settings, additional firestore config to support future changes
@@ -17,6 +18,7 @@ export const afs = firebase.firestore()
 export const storage = firebase.storage()
 export const auth = firebase.auth()
 export const functions = firebase.functions()
+export const rdb = firebase.database()
 export const EmailAuthProvider = firebase.auth.EmailAuthProvider
 
 // want to also expose the default firebase user

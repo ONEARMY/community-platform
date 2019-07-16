@@ -46,7 +46,6 @@ export class MapsStore {
   get mapPins(): Array<IMapPin> {
     // TODO: for some reason it only computes the below when the console is
     // there?
-    console.log(this.pinData, this.availablePinFilters)
     if (this.pinData.length === 0 || this.availablePinFilters.length === 0) {
       return []
     }
@@ -81,12 +80,10 @@ export class MapsStore {
   @action
   public async retrieveMapPins() {
     // TODO: make the function accept a bounding box to reduce load from DB
-    // TODO: make the database callout instead of random mocks
-    console.log('generating map pins')
-    Database.getLargeCollection(this.mapEndpoint).subscribe(data =>
-      console.log('map pins received', data),
-    )
-    // this.pinData = await generatePins(10)
+    Database.getLargeCollection(this.mapEndpoint).subscribe(data => {
+      console.log('map pins received', data)
+      this.pinData = data
+    })
   }
 
   @action
@@ -119,7 +116,7 @@ export class MapsStore {
     return toJS(this.pinDetail as IMapPinDetail)
   }
 
-  // get core pin geo information
+  // get base pin geo information
   public async getPin(id: string) {
     const pin = (await Database.getDoc(
       `${this.mapEndpoint}/${id}`,

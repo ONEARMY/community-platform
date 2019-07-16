@@ -6,9 +6,12 @@
 
 import { Subject } from 'rxjs'
 import { afs } from 'src/utils/firebase'
+import { rdb } from 'src/utils/firebase'
 import { IDbDoc } from 'src/models/common.models'
 // additional imports for typings
 import { firestore, auth } from 'firebase/app'
+import Dexie from 'dexie'
+const indexedDB = new Dexie('onearmyIDB')
 export class Database {
   /****************************************************************************** *
         Available Functions
@@ -21,24 +24,64 @@ export class Database {
     return collection$
   }
 
-  // get a single doc. returns an observable, first pulling from local cache and then searching for updates
-  public static getDoc(path: string) {
-    const doc$ = new Subject()
+  // an issue with firestore is high cost if large number of docs returned. Use below
+  // method to use alternate approach if using firebase as db provider
+  // NOTE - requires endpoint to be sync'd with realtimeDB via cloud-function
+  public static getLargeCollection(path: IDBEndpoints) {
+    const collection$ = new Subject<any[]>()
+    this._emitLargeCollectionUpdates(path, collection$)
+    return collection$
+  }
+
+  // get a single doc. returns either stream of cached->live->updates
+  // or a single doc pulled cache-first with live fallback
+  public static getDoc<T extends IDbDoc>(
+    path: string,
+    returnFormat: 'stream' | 'once' = 'stream',
+  ): Subject<T> | Promise<T> {
+    switch (returnFormat) {
+      case 'once':
+        return this.getDocOnce<T>(path)
+      default:
+        return this.getDocStream<T>(path)
+    }
+  }
+  private static getDocStream<T extends IDbDoc>(path: string): Subject<T> {
+    const doc$ = new Subject<T>()
     afs
       .doc(path)
       .get({ source: 'cache' })
       .then(cachedSnapshot => {
         // emit cached values and look for live, emitting if newer
-        const cached = cachedSnapshot.data() as IDbDoc
+        const cached = cachedSnapshot.data() as T
         doc$.next(cached)
         afs.doc(path).onSnapshot(updateSnapshot => {
-          const update = updateSnapshot.data() as IDbDoc
+          const update = updateSnapshot.data() as T
           if (update._modified.seconds > cached._modified.seconds) {
             doc$.next(update)
           }
         })
       })
     return doc$
+  }
+  private static getDocOnce<T extends IDbDoc>(path: string): Promise<T> {
+    return new Promise<T>(resolve => {
+      afs
+        .doc(path)
+        .get({ source: 'cache' })
+        .then(cached => {
+          resolve(cached.data() as T)
+        })
+        // if no doc found in cache firebase throws error
+        .catch(err => {
+          afs
+            .doc(path)
+            .get({ source: 'server' })
+            .then(snap => {
+              resolve(snap.data() as T)
+            })
+        })
+    })
   }
 
   // when setting a doc automatically populate the modified field and mark _deleted: false (for future query)
@@ -122,15 +165,47 @@ export class Database {
     // get cached and emit
     const cached = await this._emitCachedCollection(path, subject)
     // subscribe to any updates, emit when received
-    const updatesRef = this._getCollectionUpdatesRef(
-      path,
-      cached[cached.length - 1],
-    )
+    const updatesRef = this._getCollectionUpdatesRef(path, cached.pop())
     updatesRef.onSnapshot(async updateSnapshot => {
       // whenever updates are found they will automatically be added to the cache,
       // so we can just emit all values from the cache once more (and avoid manually merging changes in)
       if (updateSnapshot.size > 0) {
         await this._emitCachedCollection(path, subject, true)
+      }
+    })
+  }
+
+  // get cached data from local storage, emit, then subscribe to live update
+  // if no cached data exists pull large data from firebase-realtime instead of firestore
+  private static async _emitLargeCollectionUpdates(
+    path: IDBEndpoints,
+    subject: Subject<any[]>,
+  ) {
+    // fetch from indexeddb and emit. First close existing open as auto-opens
+    // pass basic schema for a table with same name as endpoint
+    // and allow indexing on _id, and _modified (TODO - allow more indexes for specific tables)
+    const stores = { [path]: '_id,_modified' }
+    indexedDB.version(1).stores(stores)
+    const table = indexedDB.table(path)
+    let cached = await table.toCollection().toArray()
+    subject.next([...cached])
+    // fetch from realtime-db, cache and emit
+    if (cached.length === 0) {
+      const fetchSnapshot = await rdb.ref(path).once('value')
+      if (fetchSnapshot.exists()) {
+        await table.bulkPut(fetchSnapshot.val())
+        cached = await table.toCollection().toArray()
+        subject.next([...cached])
+      }
+    }
+    // fetch updates from firestore, cache and emit
+    const updatesRef = this._getCollectionUpdatesRef(path, cached.pop())
+    updatesRef.onSnapshot(async updateSnapshot => {
+      if (updateSnapshot.size > 0) {
+        const docs = updateSnapshot.docs.map(d => d.data())
+        await table.bulkPut(docs)
+        cached = await table.toCollection().toArray()
+        subject.next([...cached])
       }
     })
   }
@@ -188,3 +263,5 @@ export type IDBEndpoints =
   | 'discussions'
   | 'tagsV1'
   | 'eventsV1'
+  | 'mapPinsV1'
+  | '_mocks'

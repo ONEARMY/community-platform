@@ -8,6 +8,8 @@ import { EventsPage } from './Events/Events'
 import { AdminPage } from './admin/Admin'
 import { MapsPage } from './Maps/Maps'
 import { User } from './User/User'
+import { ExternalEmbed } from 'src/components/ExternalEmbed/ExternalEmbed'
+import PageContainer from 'src/components/Layout/PageContainer'
 
 export interface IPageMeta {
   path: string
@@ -35,6 +37,15 @@ const user = {
   component: <User />,
   title: 'User profile',
   description: 'User profile',
+}
+const academy = {
+  path: '/academy',
+  component: (
+    <ExternalEmbed src="https://onearmyworld.github.io/docs-demo/docs/intro" />
+  ),
+  title: 'Academy',
+  description: 'Demo external page embed',
+  fullPageWidth: true,
 }
 const feedback = {
   path: '/feedback',
@@ -69,7 +80,7 @@ const admin = {
 }
 
 // community pages (various pages hidden on production build)
-const devCommunityPages = [howTo, events, maps]
+const devCommunityPages = [howTo, events, maps, academy]
 const prodCommunityPages = [howTo, events]
 const communityPages =
   SITE === 'production' ? prodCommunityPages : devCommunityPages

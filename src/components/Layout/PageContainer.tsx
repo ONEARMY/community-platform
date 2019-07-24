@@ -24,7 +24,7 @@ const InnerContainer = styled.div<InnerContainerProps>`
   ${p => (p.ignoreMaxWidth ? 'max-width: inherit;' : maxWidth)}
   margin: ${p => (p.ignoreMaxWidth ? 0 : undefined)};
   padding: ${p => (p.ignoreMaxWidth ? 0 : undefined)};
-  min-height: calc(100vh - 156px);
+  min-height: calc(100vh - 160px);
   margin-bottom:0;
   padding-bottom: 32px;
   position: relative;

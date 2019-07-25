@@ -191,6 +191,11 @@ export class CreateHowto extends React.Component<IProps, IState> {
                           validateFields={[]}
                           component={ImageInputField}
                         />
+                        <Field
+                          name="caption"
+                          component={InputField}
+                          placeholder="Insert Caption"
+                        />
                         <Field name="files" component={FileInputField} />
                       </BoxContainer>
                     </FlexContainer>

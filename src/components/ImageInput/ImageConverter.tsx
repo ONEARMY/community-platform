@@ -9,6 +9,7 @@ interface IProps {
   onImgClicked: (meta: IConvertedFileMeta) => void
 }
 interface IState {
+  compressionOptions: ICompressionOptions
   convertedFile?: IConvertedFileMeta
   openLightbox?: boolean
 }
@@ -21,15 +22,15 @@ const imageSizes = {
 
 export class ImageConverter extends React.Component<IProps, IState> {
   public static defaultProps: Partial<IProps>
-  private compressionOptions = {
-    quality: 0.75,
-    maxWidth: imageSizes.low,
-  }
-  private compress: clientCompress = new clientCompress(this.compressionOptions)
 
   constructor(props: IProps) {
     super(props)
-    this.state = {}
+    this.state = {
+      compressionOptions: {
+        maxWidth: imageSizes.low,
+        quality: 0.75,
+      },
+    } as IState
   }
 
   async componentDidMount() {
@@ -45,8 +46,11 @@ export class ImageConverter extends React.Component<IProps, IState> {
   }
 
   async compressFiles(file: File) {
+    const { compressionOptions } = this.state
+    const compressor: clientCompress = new clientCompress(compressionOptions)
+
     // by default compress takes an array and gives back an array. We only want to handle a single image
-    const conversion: ICompressedOutput[] = await this.compress.compress([file])
+    const conversion: ICompressedOutput[] = await compressor.compress([file])
     const convertedMeta = this._generateFileMeta(conversion[0])
     this.setState({
       convertedFile: convertedMeta,
@@ -108,6 +112,10 @@ interface ICompressedOutput {
   info: ICompressedInfo
 }
 
+interface ICompressionOptions {
+  quality: number
+  maxWidth: number
+}
 interface ICompressedPhoto {
   name: string
   type: 'image/jpeg' | string

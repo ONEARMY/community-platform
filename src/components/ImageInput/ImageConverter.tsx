@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { FlexContainer } from '../Layout/FlexContainer'
-import { Button } from '../Button'
 import * as clientCompress from 'client-compress'
 import { IConvertedFileMeta, bytesToSize } from './ImageInput'
 import Text from '../Text'
@@ -11,12 +10,10 @@ interface IProps {
   onImgClicked: (meta: IConvertedFileMeta) => void
 }
 interface IState {
-  imageQuality: ImageQualities
   convertedFile?: IConvertedFileMeta
   openLightbox?: boolean
 }
 
-type ImageQualities = 'normal' | 'high' | 'low'
 const imageSizes = {
   low: 640,
   normal: 1280,
@@ -27,18 +24,18 @@ export class ImageConverter extends React.Component<IProps, IState> {
   public static defaultProps: Partial<IProps>
   private compressionOptions = {
     quality: 0.75,
-    maxWidth: imageSizes.normal,
+    maxWidth: imageSizes.low,
   }
   private compress: clientCompress = new clientCompress(this.compressionOptions)
 
   constructor(props: IProps) {
     super(props)
-    this.state = { imageQuality: 'normal' }
+    this.state = {}
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     // call on mount to trigger initial conversion when converter created
-    this.setImageQuality('normal')
+    await this.compressFiles(this.props.file)
   }
 
   componentWillUnmount() {
@@ -46,15 +43,6 @@ export class ImageConverter extends React.Component<IProps, IState> {
     if (this.state.convertedFile) {
       URL.revokeObjectURL(this.state.convertedFile.objectUrl)
     }
-  }
-
-  async setImageQuality(quality: ImageQualities) {
-    this.setState({
-      imageQuality: quality,
-    })
-    this.compressionOptions.maxWidth = imageSizes[quality]
-    this.compress = new clientCompress(this.compressionOptions)
-    await this.compressFiles(this.props.file)
   }
 
   async compressFiles(file: File) {
@@ -81,8 +69,7 @@ export class ImageConverter extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { convertedFile, imageQuality } = this.state
-    const qualities: ImageQualities[] = ['low', 'normal', 'high']
+    const { convertedFile } = this.state
 
     return convertedFile ? (
       <div>
@@ -99,18 +86,6 @@ export class ImageConverter extends React.Component<IProps, IState> {
           onClick={() => this.props.onImgClicked(convertedFile)}
         />
         <div>
-          <FlexContainer p={0} bg="none" mt={2} mb={2}>
-            {convertedFile &&
-              qualities.map(quality => (
-                <Button
-                  variant={imageQuality === quality ? 'dark' : 'outline'}
-                  key={quality}
-                  onClick={() => this.setImageQuality(quality)}
-                >
-                  {quality}
-                </Button>
-              ))}
-          </FlexContainer>
           <div>
             {convertedFile.startSize} -> {convertedFile.endSize}
           </div>

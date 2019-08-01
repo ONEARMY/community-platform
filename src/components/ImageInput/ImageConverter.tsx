@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { FlexContainer } from '../Layout/FlexContainer'
 import * as clientCompress from 'client-compress'
 import { IConvertedFileMeta, bytesToSize } from './ImageInput'
 import Text from '../Text'

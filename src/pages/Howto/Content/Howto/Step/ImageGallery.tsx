@@ -12,6 +12,8 @@ interface IProps {
 interface IState {
   activeImage: IUploadedFileMeta
   showLightbox: boolean
+  imagesList: string[]
+  imgIndex: number
 }
 
 const ImageWithPointer = styled(Image)`
@@ -21,13 +23,30 @@ const ImageWithPointer = styled(Image)`
 export default class ImageGallery extends React.PureComponent<IProps, IState> {
   constructor(props) {
     super(props)
-    this.state = { activeImage: this.props.images[0], showLightbox: false }
+    this.state = {
+      activeImage: this.props.images[0],
+      showLightbox: false,
+      imagesList: [],
+      imgIndex: 0,
+    }
+  }
+
+  componentWillMount() {
+    this.setState({ imagesList: this.objectToList(this.props.images) })
   }
 
   setActive = image => {
     this.setState({
       activeImage: image,
     })
+  }
+
+  public objectToList(images: IUploadedFileMeta[]) {
+    let arrayLIst: string[] = []
+    images.map(image => {
+      arrayLIst.push(image.downloadUrl)
+    })
+    return arrayLIst
   }
 
   triggerLightbox = (): void =>
@@ -38,7 +57,8 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
     })
 
   render() {
-    let imageNumber = this.props.images.length
+    const imageNumber = this.props.images.length
+    console.log((this.state.imgIndex + 1) % this.state.imagesList.length)
     return this.state.activeImage ? (
       <Flex flexDirection="column" alignItems="center">
         <ImageWithPointer
@@ -57,6 +77,7 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
                   p={1}
                   opacity={image === this.state.activeImage ? 1.0 : 0.5}
                   onClick={() => this.setActive(image)}
+                  key={index}
                 >
                   <Image
                     height={[50, 100, 200]}
@@ -70,8 +91,32 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
 
         {this.state.showLightbox && (
           <Lightbox
-            mainSrc={this.state.activeImage.downloadUrl}
+            mainSrc={this.state.imagesList[this.state.imgIndex]}
             imageCaption={this.props.caption}
+            nextSrc={
+              this.state.imagesList[
+                (this.state.imgIndex + 1) % this.state.imagesList.length
+              ]
+            }
+            prevSrc={
+              this.state.imagesList[
+                (this.state.imgIndex + this.state.imagesList.length - 1) %
+                  this.state.imagesList.length
+              ]
+            }
+            onMovePrevRequest={() => {
+              this.setState({
+                imgIndex:
+                  (this.state.imgIndex + this.state.imagesList.length - 1) %
+                  this.state.imagesList.length,
+              })
+            }}
+            onMoveNextRequest={() =>
+              this.setState({
+                imgIndex:
+                  (this.state.imgIndex + 1) % this.state.imagesList.length,
+              })
+            }
             onCloseRequest={() => this.triggerLightbox()}
           />
         )}

@@ -6,6 +6,7 @@ import styled from 'styled-components'
 
 interface IProps {
   images: IUploadedFileMeta[]
+  caption?: string
 }
 
 interface IState {
@@ -70,6 +71,7 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
         {this.state.showLightbox && (
           <Lightbox
             mainSrc={this.state.activeImage.downloadUrl}
+            imageCaption={this.props.caption}
             onCloseRequest={() => this.triggerLightbox()}
           />
         )}

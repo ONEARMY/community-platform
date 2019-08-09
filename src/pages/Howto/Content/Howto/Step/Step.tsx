@@ -26,6 +26,7 @@ export default class Step extends React.PureComponent<IProps> {
           <Linkify>{this.props.step.text}</Linkify>
         </Text>
         <ImageGallery images={this.props.step.images as IUploadedFileMeta[]} />
+        <Text pb={3}>{this.props.step.caption}</Text>
       </Box>
     )
   }

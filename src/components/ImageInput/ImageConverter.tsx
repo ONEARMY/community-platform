@@ -1,6 +1,4 @@
 import * as React from 'react'
-import { FlexContainer } from '../Layout/FlexContainer'
-import { Button } from '../Button'
 import * as clientCompress from 'client-compress'
 import { IConvertedFileMeta, bytesToSize } from './ImageInput'
 import Text from '../Text'
@@ -11,12 +9,11 @@ interface IProps {
   onImgClicked: (meta: IConvertedFileMeta) => void
 }
 interface IState {
-  imageQuality: ImageQualities
+  compressionOptions: ICompressionOptions
   convertedFile?: IConvertedFileMeta
   openLightbox?: boolean
 }
 
-type ImageQualities = 'normal' | 'high' | 'low'
 const imageSizes = {
   low: 640,
   normal: 1280,
@@ -25,20 +22,20 @@ const imageSizes = {
 
 export class ImageConverter extends React.Component<IProps, IState> {
   public static defaultProps: Partial<IProps>
-  private compressionOptions = {
-    quality: 0.75,
-    maxWidth: imageSizes.normal,
-  }
-  private compress: clientCompress = new clientCompress(this.compressionOptions)
 
   constructor(props: IProps) {
     super(props)
-    this.state = { imageQuality: 'normal' }
+    this.state = {
+      compressionOptions: {
+        maxWidth: imageSizes.low,
+        quality: 0.75,
+      },
+    } as IState
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     // call on mount to trigger initial conversion when converter created
-    this.setImageQuality('normal')
+    await this.compressFiles(this.props.file)
   }
 
   componentWillUnmount() {
@@ -48,18 +45,12 @@ export class ImageConverter extends React.Component<IProps, IState> {
     }
   }
 
-  async setImageQuality(quality: ImageQualities) {
-    this.setState({
-      imageQuality: quality,
-    })
-    this.compressionOptions.maxWidth = imageSizes[quality]
-    this.compress = new clientCompress(this.compressionOptions)
-    await this.compressFiles(this.props.file)
-  }
-
   async compressFiles(file: File) {
+    const { compressionOptions } = this.state
+    const compressor: clientCompress = new clientCompress(compressionOptions)
+
     // by default compress takes an array and gives back an array. We only want to handle a single image
-    const conversion: ICompressedOutput[] = await this.compress.compress([file])
+    const conversion: ICompressedOutput[] = await compressor.compress([file])
     const convertedMeta = this._generateFileMeta(conversion[0])
     this.setState({
       convertedFile: convertedMeta,
@@ -81,8 +72,7 @@ export class ImageConverter extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { convertedFile, imageQuality } = this.state
-    const qualities: ImageQualities[] = ['low', 'normal', 'high']
+    const { convertedFile } = this.state
 
     return convertedFile ? (
       <div>
@@ -99,18 +89,6 @@ export class ImageConverter extends React.Component<IProps, IState> {
           onClick={() => this.props.onImgClicked(convertedFile)}
         />
         <div>
-          <FlexContainer p={0} bg="none" mt={2} mb={2}>
-            {convertedFile &&
-              qualities.map(quality => (
-                <Button
-                  variant={imageQuality === quality ? 'dark' : 'outline'}
-                  key={quality}
-                  onClick={() => this.setImageQuality(quality)}
-                >
-                  {quality}
-                </Button>
-              ))}
-          </FlexContainer>
           <div>
             {convertedFile.startSize} -> {convertedFile.endSize}
           </div>
@@ -134,6 +112,10 @@ interface ICompressedOutput {
   info: ICompressedInfo
 }
 
+interface ICompressionOptions {
+  quality: number
+  maxWidth: number
+}
 interface ICompressedPhoto {
   name: string
   type: 'image/jpeg' | string

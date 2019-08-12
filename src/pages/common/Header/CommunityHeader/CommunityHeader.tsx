@@ -57,7 +57,8 @@ const LogoContainer = styled(Flex)`
   height: 60px;
   background-color: ${theme.colors.yellow};
   align-items: center;
-  position:relative &:before {
+  position: relative;
+  &:before {
     content: '';
     position: absolute;
     background-image: url(${LogoBackground});
@@ -83,7 +84,8 @@ const MenuLink = styled(NavLink).attrs(({ name }) => ({
   activeClassName: 'current',
 }))`
   color: ${theme.colors.black};
-  position: relative > div {
+  position: relative;
+  > div {
     z-index: 1;
     position: relative;
 

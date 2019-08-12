@@ -7,6 +7,7 @@ import { Container } from './elements'
 import { IHowtoStep } from 'src/models/howto.models'
 import { ListItem, ListItemText } from '@material-ui/core'
 import Text from 'src/components/Text'
+import { uppercase } from '../../../../../components/Text/index'
 
 interface IProps {
   steps: IHowtoStep[]
@@ -27,7 +28,7 @@ export default class HowtoSummary extends React.PureComponent<IProps> {
               }}
             >
               <ListItemText>
-                <Text caps>Introduction</Text>
+                <Text uppercase>Introduction</Text>
               </ListItemText>
             </HashLink>
           </ListItem>
@@ -42,7 +43,7 @@ export default class HowtoSummary extends React.PureComponent<IProps> {
                   }}
                 >
                   <ListItemText>
-                    <Text caps>{step.title}</Text>
+                    <Text uppercase>{step.title}</Text>
                   </ListItemText>
                 </HashLink>
               </ListItem>

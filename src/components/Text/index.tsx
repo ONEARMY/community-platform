@@ -6,10 +6,17 @@ import { colors } from 'src/themes/styled.theme'
 import theme from 'src/themes/styled.theme'
 
 export interface ITextProps {
-  caps?: boolean
+  uppercase?: boolean
   inline?: boolean
   regular?: boolean
+  txtcenter?: boolean
+  txtleft?: boolean
+  txtright?: boolean
+  capitalize?: boolean
   bold?: boolean
+  xlarge?: boolean
+  xxlarge?: boolean
+  xxxlarge?: boolean
   large?: boolean
   medium?: boolean
   small?: boolean
@@ -21,8 +28,8 @@ export interface ITextProps {
   preLine?: boolean
 }
 
-export const caps = props =>
-  props.caps
+export const uppercase = props =>
+  props.uppercase
     ? {
         textTransform: 'uppercase',
       }
@@ -30,6 +37,18 @@ export const caps = props =>
 
 export const inline = (props: ITextProps) =>
   props.inline ? { display: 'inline-block' } : null
+
+export const txtcenter = (props: ITextProps) =>
+  props.txtcenter ? { textAlign: 'center' } : null
+
+export const txtleft = (props: ITextProps) =>
+  props.txtleft ? { textAlign: 'left' } : null
+
+export const txtright = (props: ITextProps) =>
+  props.txtright ? { textAlign: 'right' } : null
+
+export const capitalize = (props: ITextProps) =>
+  props.txtright ? { textTransform: 'capitalize' } : null
 
 export const regular = (props: ITextProps) =>
   props.regular ? { fontWeight: theme.regular } : null
@@ -39,6 +58,15 @@ export const bold = (props: ITextProps) =>
 
 export const large = (props: ITextProps) =>
   props.large ? { fontSize: theme.fontSizes[3] } : null
+
+export const xlarge = (props: ITextProps) =>
+  props.xlarge ? { fontSize: theme.fontSizes[4] } : null
+
+export const xxlarge = (props: ITextProps) =>
+  props.xxlarge ? { fontSize: theme.fontSizes[5] } : null
+
+export const xxxlarge = (props: ITextProps) =>
+  props.xxxlarge ? { fontSize: theme.fontSizes[6] } : null
 
 export const medium = (props: ITextProps) =>
   props.medium ? { fontSize: theme.fontSizes[2] } : null
@@ -59,9 +87,16 @@ export const preLine = (props: ITextProps) =>
 
 export const BaseText = styled(RebassText)`
     ${inline}
-    ${caps}
+    ${uppercase}
     ${regular}
     ${bold}
+	${txtcenter}
+	${txtleft}
+	${txtright}
+	${capitalize}
+	${xlarge}
+	${xxlarge}
+	${xxxlarge}
     ${large}
     ${medium}
     ${small}
@@ -74,22 +109,7 @@ type TextProps = ITextProps & RebassTextProps
 
 // TODO - incorporate custom css into rebass props to allow things like below to be passed
 export const Text = (props: TextProps) => (
-  <BaseText color={_getTextColor(props)} {...props}>
-    {props.children}
-  </BaseText>
+  <BaseText {...props}>{props.children}</BaseText>
 )
-
-Text.defaultProps = {
-  theme,
-  className: 'text',
-}
-
-function _getTextColor(props: TextProps) {
-  if (props.color) {
-    return props.color
-  } else {
-    return 'black'
-  }
-}
 
 export default Text

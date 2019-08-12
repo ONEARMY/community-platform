@@ -9,11 +9,16 @@ export const GlobalStyle = createGlobalStyle`
   }
   body {
       font-family: "system";
-      background-color: ${theme.colors.greyBg};
+      background-color: ${theme.colors.background};
       margin: 0;
       padding: 0;
+      min-height: 100vh;
   }
   a {
     text-decoration: none;
+  }
+
+  * {
+    box-sizing: border-box;
   }
 `

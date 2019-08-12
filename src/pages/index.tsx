@@ -54,51 +54,36 @@ export class Routes extends React.Component<any, IState> {
         <BrowserRouter>
           {/* on page change scroll to top */}
           <ScrollToTop>
-            <div
-              style={{
-                minHeight: '100vh',
-                maxWidth: '100vw',
-                display: 'flex',
-                overflowY: 'auto',
-                overflowX: 'hidden',
-                flexDirection: 'column',
-              }}
-            >
-              <Switch>
-                {pages.map(page => (
-                  <Route
-                    exact={page.exact}
-                    path={page.path}
-                    key={page.path}
-                    render={props => (
-                      <React.Fragment>
-                        <Header
-                          variant="community"
-                          title={page.title}
-                          description={page.description}
-                        />
-                        <PageContainer ignoreMaxWidth={page.fullPageWidth}>
-                          <>{page.component}</>
-                        </PageContainer>
-                      </React.Fragment>
-                    )}
-                  />
-                ))}
-                <Route component={NotFoundPage} />
-              </Switch>
-              <Switch>
+            <Switch>
+              {pages.map(page => (
                 <Route
-                  exact
-                  path="/"
-                  render={() => <Redirect to="/how-to" />}
+                  exact={page.exact}
+                  path={page.path}
+                  key={page.path}
+                  render={props => (
+                    <React.Fragment>
+                      <Header
+                        variant="community"
+                        title={page.title}
+                        description={page.description}
+                      />
+                      <PageContainer ignoreMaxWidth={page.fullPageWidth}>
+                        <>{page.component}</>
+                      </PageContainer>
+                    </React.Fragment>
+                  )}
                 />
-              </Switch>
-            </div>
+              ))}
+              <Route component={NotFoundPage} />
+            </Switch>
+            <Switch>
+              <Route exact path="/" render={() => <Redirect to="/how-to" />} />
+            </Switch>
           </ScrollToTop>
         </BrowserRouter>
         <FeedbackBtn
-          bg={'blue'}
-          color={'white'}
+          bg={'yellow'}
+          color={'black'}
           target="_blank"
           href={'https://preciousplastic.typeform.com/to/tO6uDw'}
         >

@@ -24,9 +24,6 @@ const InnerContainer = styled.div<InnerContainerProps>`
   ${p => (p.ignoreMaxWidth ? 'max-width: inherit;' : maxWidth)}
   margin: ${p => (p.ignoreMaxWidth ? 0 : undefined)};
   padding: ${p => (p.ignoreMaxWidth ? 0 : undefined)};
-  min-height: calc(100vh - 156px);
-  margin-bottom:0;
-  padding-bottom: 32px;
   position: relative;
 `
 interface IProps extends FlexProps {
@@ -34,23 +31,20 @@ interface IProps extends FlexProps {
 }
 
 const PageContainer = (props: IProps) => (
-  <Flex {...props} bg={theme.colors.background}>
+  <Flex {...props} flexDirection="column">
     <InnerContainer ignoreMaxWidth={props.ignoreMaxWidth}>
-      {props.children} <VersionNumber />
+      {props.children}
     </InnerContainer>
   </Flex>
 )
 
-PageContainer.defaultProps = {
-  className: 'page-container',
-  justifyContent: 'center',
-}
+PageContainer.defaultProps = {}
 InnerContainer.defaultProps = {
-  className: 'page-inner-container',
   maxWidth: theme.maxContainerWidth,
   width: 1,
   my: 4,
-  px: '2em',
+  mx: 'auto',
+  px: [2, 3, 4],
 }
 
 export default PageContainer

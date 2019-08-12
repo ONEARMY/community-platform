@@ -1,4 +1,5 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 import {
   COMMUNITY_PAGES,
   COMMUNITY_PAGES_MORE,
@@ -7,19 +8,18 @@ import {
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
-import Icon from 'src/components/Icons'
 import { LoginComponent } from '../../Login/Login'
-import { Avatar } from 'src/components/Avatar'
-import { Content, Links, Profile, LinkButton } from './elements'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import Text from 'src/components/Text'
-import { Box } from 'rebass'
 import theme from 'src/themes/styled.theme'
-import { Button } from 'src/components/Button'
-import { Link } from 'rebass'
+import { Link, Flex, Image } from 'rebass'
 import styled from 'styled-components'
-import Breadcrumb from './Breadcrumb/Breadcrumb'
+import { SITE, VERSION } from 'src/config/config'
+import { DHImport } from '../../../../hacks/DaveHakkensNL.hacks'
+import Logo from 'src/assets/images/logo.svg'
+import LogoBackground from 'src/assets/images/logo-background.svg'
+import MenuCurrent from 'src/assets/images/menu-current.svg'
 
 interface IState {
   moreMenuAnchor: any
@@ -35,8 +35,80 @@ interface IInjectedProps extends IProps {
   userStore: UserStore
 }
 
-const TopLink = styled(Link)`
-  text-align: center;
+const FlexHeader = styled(Flex)`
+  height: 60px;
+`
+
+const Avatar = styled.div`
+  display: block;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: ${theme.colors.background};
+`
+
+const LogoImage = styled(Flex)`
+  width: 45px;
+  height: 45px;
+  margin-right: 20px;
+`
+
+const LogoContainer = styled(Flex)`
+  height: 60px;
+  background-color: ${theme.colors.yellow};
+  align-items: center;
+  position: relative;
+  &:before {
+    content: '';
+    position: absolute;
+    background-image: url(${LogoBackground});
+    width: 250px;
+    height: 70px;
+    z-index: 999;
+    background-size: contain;
+    background-repeat: no-repeat;
+    top: 0;
+    left: 0px;
+  }
+`
+
+const LogoLink = styled(Link)`
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  padding-left: 25px;
+  color: black;
+`
+
+const MenuLink = styled(NavLink).attrs(({ name }) => ({
+  activeClassName: 'current',
+}))`
+  color: ${theme.colors.black};
+  position: relative;
+  > div {
+    z-index: 1;
+    position: relative;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+  &.current {
+    &:after {
+      content: '';
+      width: 70px;
+      height: 20px;
+      display: block;
+      position: absolute;
+      bottom: -6px;
+      background-image: url(${MenuCurrent});
+      z-index: 0;
+      background-repeat: no-repeat;
+      background-size: contain;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
 `
 
 @inject('userStore')
@@ -82,106 +154,66 @@ export class CommunityHeader extends React.Component<IProps, IState> {
     const { moreMenuAnchor, profileMenuAnchor } = this.state
     const user = this.injected.userStore.user
     return (
-      <div>
-        <TopLink target="_blank" width={1} href="https://build.onearmy.world">
-          <Text bg="blue" color="white" py={2} medium>
-            This is the alpha version of onearmy platform, click here to help
-            building it.
-          </Text>
-        </TopLink>
+      <>
+        <FlexHeader
+          alignItems={'center'}
+          justifyContent={'space-between'}
+          bg={'white'}
+        >
+          <LogoContainer>
+            <LogoLink href="/">
+              <LogoImage>
+                <Image src={Logo} color={'black'} />
+              </LogoImage>
+              <Flex>Precious Plastic</Flex>
+            </LogoLink>
+          </LogoContainer>
 
-        <Content>
-          <Text large caps bold>
-            One Army
-          </Text>
-          <Links>
-            {COMMUNITY_PAGES.map(page => (
-              <LinkButton
-                className="nav-link"
-                to={page.path}
-                activeClassName="link-active"
-                key={page.path}
-              >
-                {page.title}
-              </LinkButton>
-            ))}
-            {COMMUNITY_PAGES_MORE.length > 0 && (
-              <LinkButton
-                className="nav-link"
-                variant="primary"
-                to={'#'}
-                onClick={this.openMoreMenu}
-                activeClassName="link-active"
-              >
-                More
-              </LinkButton>
-            )}
-            <Menu
-              open={moreMenuAnchor ? true : false}
-              anchorEl={moreMenuAnchor}
-              className="nav__more-menu"
-              style={{ marginTop: '3em' }}
-            >
-              <ClickAwayListener onClickAway={this.closeMoreMenu}>
-                <div>
-                  {COMMUNITY_PAGES_MORE.map(page => (
-                    <MenuItem onClick={this.closeMoreMenu} key={page.path}>
-                      <LinkButton
-                        className="nav-link"
-                        to={page.path}
-                        activeClassName="link-active"
-                      >
-                        {page.title}
-                      </LinkButton>
-                    </MenuItem>
-                  ))}
-                </div>
-              </ClickAwayListener>
-            </Menu>
-          </Links>
-          {user ? (
-            <>
-              <Profile onClick={this.openProfileMenu}>
-                <Avatar userName={user.userName} />
-                <Icon glyph={'arrow-down'} />
-              </Profile>
-              <Menu
-                open={profileMenuAnchor ? true : false}
-                anchorEl={profileMenuAnchor}
-                className="nav__more-menu"
-                style={{ marginTop: '3em' }}
-              >
-                <ClickAwayListener onClickAway={this.closeProfileMenu}>
-                  <>
-                    <Text p={8} bold>
-                      {user.userName}
-                    </Text>
-                    {COMMUNITY_PAGES_PROFILE.map(page => (
-                      <MenuItem onClick={this.closeProfileMenu} key={page.path}>
-                        <LinkButton
-                          className="nav-link"
-                          to={page.path}
-                          activeClassName={'link-active'}
+          <Flex>
+            <Flex alignItems={'center'} px={2}>
+              {COMMUNITY_PAGES.map(page => (
+                <Flex mx={5}>
+                  <MenuLink to={page.path} key={page.path}>
+                    <Flex>{page.title}</Flex>
+                  </MenuLink>
+                </Flex>
+              ))}
+            </Flex>
+            {user ? (
+              <>
+                <Flex onClick={this.openProfileMenu} ml={5} mr={5}>
+                  <Avatar />
+                </Flex>
+                <Menu
+                  open={profileMenuAnchor ? true : false}
+                  anchorEl={profileMenuAnchor}
+                >
+                  <ClickAwayListener onClickAway={this.closeProfileMenu}>
+                    <>
+                      <Text p={8} bold>
+                        {user.userName}
+                      </Text>
+                      {COMMUNITY_PAGES_PROFILE.map(page => (
+                        <MenuItem
+                          onClick={this.closeProfileMenu}
+                          key={page.path}
                         >
-                          {page.title}
-                        </LinkButton>
-                      </MenuItem>
-                    ))}
-                    <MenuItem onClick={() => this.logout()}>Logout</MenuItem>
-                  </>
-                </ClickAwayListener>
-              </Menu>
-            </>
-          ) : (
-            <LoginComponent />
-          )}
-        </Content>
-        <Box bg={'grey4'} width={1} p={3}>
-          <Text small width={theme.maxContainerWidth + 'px'} m={'0 auto'}>
-            <Breadcrumb />
-          </Text>
-        </Box>
-      </div>
+                          <NavLink to={page.path}>
+                            <Flex>{page.title}</Flex>
+                          </NavLink>
+                        </MenuItem>
+                      ))}
+                      <MenuItem onClick={() => this.logout()}>Logout</MenuItem>
+                    </>
+                  </ClickAwayListener>
+                </Menu>
+              </>
+            ) : (
+              <LoginComponent />
+            )}
+          </Flex>
+        </FlexHeader>
+      </>
     )
   }
 }

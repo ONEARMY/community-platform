@@ -5,18 +5,13 @@ import {
   Button as RebassButton,
   ButtonProps as RebassButtonProps,
 } from 'rebass'
+import { colors } from 'src/themes/styled.theme'
 
 import theme, { ButtonVariants } from 'src/themes/styled.theme'
 import Text from 'src/components/Text'
 
 export const BaseButton = styled(RebassButton)`
-  min-height: ${props => props.theme.buttons.height};
   border-radius: ${props => props.theme.radii[1] + 'px'};
-  display: flex;
-  flex: none;
-  align-self: center;
-  align-items: center;
-  justify-content: center;
   white-space: nowrap;
   word-break: keep-all;
   cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
@@ -37,14 +32,15 @@ type BtnProps = IBtnProps & RebassButtonProps
 export const Button = (props: BtnProps) => (
   <BaseButton {...props}>
     {props.icon && <Icon glyph={props.icon} marginRight="4px" />}
-    <Label caps regular medium>
+    <Label regular medium>
       {props.children}
     </Label>
   </BaseButton>
 )
 
 Button.defaultProps = {
-  className: 'button',
+  color: colors.black,
+  transition: '.2s ease',
   variant: 'primary',
   type: 'button',
   theme,

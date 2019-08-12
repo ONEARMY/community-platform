@@ -4,6 +4,7 @@ import { withRouter, Route, Switch } from 'react-router'
 
 import { MapsStore } from 'src/stores/Maps/maps.store'
 import { MapView, Controls } from './Content'
+import { Box } from 'rebass'
 
 import './styles.css'
 
@@ -52,7 +53,11 @@ class MapsPageClass extends React.Component<IProps, IState> {
 
     return (
       // the calculation for the height is kind of hacky for now, will set properly on final mockups
-      <div id="mapPage" style={{ height: 'calc(100vh - 158px)' }}>
+      <Box
+        id="mapPage"
+        style={{ height: 'calc(100vh - 60px)' }}
+        mx={[-2, -3, -4]}
+      >
         <Switch>
           <Route
             exact
@@ -81,7 +86,7 @@ class MapsPageClass extends React.Component<IProps, IState> {
             )}
           />
         </Switch>
-      </div>
+      </Box>
     )
   }
 }

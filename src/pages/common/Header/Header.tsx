@@ -22,13 +22,13 @@ export class Header extends React.Component<IProps, IState> {
   render() {
     const { title, description } = this.props
     return (
-      <div id="header">
+      <>
         {this.props.variant === 'community' ? (
           <CommunityHeader {...{ title, description }} />
         ) : (
           <PublicHeader />
         )}
-      </div>
+      </>
     )
   }
 }

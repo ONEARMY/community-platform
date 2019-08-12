@@ -1,37 +1,53 @@
 import * as React from 'react'
-import { Card, Image, Box, Flex } from 'rebass'
-import { Flex as FlexGrid } from '@rebass/grid'
+import { Image, Flex, Box } from 'rebass'
 // TODO add loader (and remove this material-ui dep)
 import LinearProgress from '@material-ui/core/LinearProgress'
 import Text from 'src/components/Text'
 import { Link } from 'src/components/Links'
 import styled from 'styled-components'
-
-import PpLogo from 'src/assets/images/pp-icon-small.png'
-
 import { Button } from 'src/components/Button'
 import { IHowto } from 'src/models/howto.models'
 import { TagDisplay } from 'src/components/Tags/TagDisplay/TagDisplay'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import WhiteBubble from 'src/assets/images/white-bubble.svg'
 
 interface IProps {
   allHowtos: IHowto[]
 }
 
-// TODO create Card component
-const CardImage = styled(Image)`
-  height: 230px;
-  object-fit: cover;
-  width: 100%;
+const HowToCard = styled(Flex)`
+  border-radius: 10px;
+  border: 2px solid black;
+  overflow: hidden;
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.02);
+  }
 `
-const CardInfosContainer = styled(Box)`
-  height: 120px;
+const HowToImage = styled(Image)`
+  width: 100%;
+  height: calc(((350px) / 3) * 2);
+  object-fit: cover;
 `
 
-const CardTitle = styled(Text)`
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
+const MoreBox = styled(Box)`
+  position: relative
+&:after {
+    content: '';
+    background-image: url(${WhiteBubble});
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    max-width: 850px;
+    background-position: center 10%;
+  }
 `
 
 export class HowtoList extends React.Component<IProps, any> {
@@ -43,55 +59,86 @@ export class HowtoList extends React.Component<IProps, any> {
     const { allHowtos } = this.props
     return (
       <>
-        <Flex justifyContent={'right'}>
+        <Flex>
+          <Text flex={1} py={26} txtcenter xxlarge bold>
+            Learn & share how to recycle, make and hack plastic
+          </Text>
+        </Flex>
+        <Flex justifyContent={'flex-end'} mb={8}>
           <AuthWrapper>
             <Link to={'/how-to/create'}>
-              <Button variant="outline" icon={'add'}>
-                create
-              </Button>
+              <Button>Create a How-to</Button>
             </Link>
           </AuthWrapper>
         </Flex>
         <React.Fragment>
-          <div>
-            {allHowtos.length === 0 ? (
-              <LinearProgress />
-            ) : (
-              <FlexGrid flexWrap={'wrap'} justifyContent={'space-between'}>
-                {allHowtos.map((howto: IHowto) => (
-                  <Link
-                    to={`/how-to/${encodeURIComponent(howto.slug)}`}
-                    key={howto._id}
-                  >
-                    <Box my={4}>
-                      <Card borderRadius={1} width={[380]} bg={'white'}>
-                        <CardImage src={howto.cover_image.downloadUrl} />
-                        <Box width={'45px'} bg="white" mt={'-24px'} ml={'29px'}>
-                          <Image src={PpLogo} />
-                        </Box>
-                        <CardInfosContainer px={4} pb={3}>
-                          <CardTitle fontSize={4} bold>
-                            {howto.title}
-                          </CardTitle>
+          {allHowtos.length === 0 ? (
+            <LinearProgress />
+          ) : (
+            <Flex flexWrap="wrap" mx={-4}>
+              {allHowtos.map((howto: IHowto) => (
+                <Flex px={4} py={4} width={[1, 1 / 2, 1 / 3]}>
+                  <HowToCard width={1} bg={'white'}>
+                    <Link
+                      to={`/how-to/${encodeURIComponent(howto.slug)}`}
+                      key={howto._id}
+                      width={1}
+                    >
+                      <Flex width="1" fontSize={'0px'}>
+                        <picture>
+                          <HowToImage src={howto.cover_image.downloadUrl} />
+                        </picture>
+                      </Flex>
 
-                          <Text fontSize={1} mt={2} mb={3} color={'grey4'}>
-                            by{' '}
-                            <Text inline color={'black'}>
-                              {howto._createdBy}
-                            </Text>
-                          </Text>
+                      <Flex px={3} py={3} flexDirection="column">
+                        <Text
+                          clipped
+                          fontSize={4}
+                          bold
+                          color={'black'}
+                          width={1}
+                        >
+                          {howto.title}
+                        </Text>
+                        <Text
+                          capitalize
+                          fontSize={1}
+                          mt={2}
+                          mb={3}
+                          color={'grey'}
+                        >
+                          By <Text inline>{howto._createdBy}</Text>
+                        </Text>
+                        <Flex width={1} mt={4}>
                           {howto.tags &&
                             Object.keys(howto.tags).map(tag => {
                               return <TagDisplay key={tag} tagKey={tag} />
                             })}
-                        </CardInfosContainer>
-                      </Card>
-                    </Box>
-                  </Link>
-                ))}
-              </FlexGrid>
-            )}
-          </div>
+                        </Flex>
+                      </Flex>
+                    </Link>
+                  </HowToCard>
+                </Flex>
+              ))}
+            </Flex>
+          )}
+          <Flex justifyContent={'center'} py={20}>
+            <Button px={3} variant={'secondary'}>
+              More How-Tos
+            </Button>
+          </Flex>
+          <MoreBox py={20}>
+            <Text xxlarge bold txtcenter>
+              Connect with a likeminded community.
+              <br />
+              All around the planet.
+            </Text>
+            <Flex justifyContent={'center'}>
+              <Button px={3} mt={5}>
+                Create an Event
+              </Button>
+            </Flex>
+          </MoreBox>
         </React.Fragment>
       </>
     )

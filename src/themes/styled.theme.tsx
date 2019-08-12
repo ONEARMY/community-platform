@@ -1,21 +1,23 @@
+import { darken, lighten } from 'polished'
 // use enum to specify list of possible colors for typing
 export enum colors {
   white = 'white',
   black = 'black',
   blue = '#89a3d4',
+  lightblue = '#e2edf7',
   darkgrey = '#333333',
   lightgrey = '#f6f6f6',
-  grey = '#dddddd',
+  grey = '#686868',
   grey2 = '#9b9b9b',
   grey3 = '#E4E4E4',
   grey4 = '#E9E9E9',
   greyStroke = '#AEAEAE',
   green = '#88e3c7',
-  yellow = '#ffe495',
+  yellow = '#fee77b',
   error = '#f44336',
-  background = '#f6f6f6',
-  primary = 'black',
-  secondary = '#FF9900',
+  background = '#f4f6f7',
+  primary = yellow,
+  secondary = lightblue,
 }
 
 export type ButtonVariants =
@@ -27,14 +29,25 @@ export type ButtonVariants =
   | 'light'
 
 const buttons = {
-  height: '40px',
   primary: {
-    color: colors.primary,
-    backgroundColor: colors.white,
+    border: '2px solid ' + colors.black,
+    backgroundColor: colors.primary,
+    padding: '15px',
+    transition: '.2s ease-in-out',
+    '&:hover': {
+      backgroundColor: darken(0.08, colors.primary),
+      transform: 'translateY(-5px)',
+    },
   },
   secondary: {
-    color: colors.white,
+    border: '2px solid ' + colors.black,
+    color: colors.black,
     backgroundColor: colors.secondary,
+    transition: '.2s ease-in-out',
+    '&:hover': {
+      backgroundColor: lighten(0.03, colors.secondary),
+      transform: 'translateY(-5px)',
+    },
   },
   outline: {
     color: colors.black,
@@ -56,9 +69,60 @@ const buttons = {
   },
 }
 
-const space = [0, 4, 8, 16, 32, 64, 128]
+const space = [
+  0,
+  5,
+  10,
+  15,
+  20,
+  25,
+  30,
+  35,
+  40,
+  45,
+  50,
+  55,
+  60,
+  65,
+  70,
+  75,
+  80,
+  85,
+  90,
+  95,
+  100,
+  105,
+  110,
+  115,
+  120,
+  125,
+  130,
+  135,
+  140,
+]
 const radii = space
-const fontSizes = [10, 12, 15, 18, 24, 32, 40, 56, 72]
+const fontSizes = [10, 12, 14, 18, 22, 30, 38, 42, 46, 50, 58, 66, 74]
+const lineHeights = [
+  10,
+  12,
+  14,
+  16,
+  18,
+  20,
+  22,
+  24,
+  26,
+  28,
+  30,
+  34,
+  38,
+  42,
+  46,
+  50,
+  58,
+  66,
+  74,
+]
 const breakpoints = ['32em', '48em', '64em']
 // standard widths: 512px, 768px, 1024px
 const maxContainerWidth = 1280
@@ -73,6 +137,7 @@ export default {
   space,
   radii,
   fontSizes,
+  lineHeights,
   maxContainerWidth,
   regular,
   bold,

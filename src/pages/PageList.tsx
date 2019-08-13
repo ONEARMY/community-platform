@@ -1,12 +1,13 @@
 import * as React from 'react'
 import { HowtoPage } from './Howto/Howto'
-import { ProfilePage } from './Profile/Profile'
+import { SettingsPage } from './Settings'
 import { FeedbackPage } from './Feedback/Feedback'
 import { SITE } from 'src/config/config'
 import { DiscussionsPage } from './Discussions'
 import { EventsPage } from './Events/Events'
-import { NotFoundPage } from './NotFound/NotFound'
 import { AdminPage } from './admin/Admin'
+import { MapsPage } from './Maps/Maps'
+import { User } from './User/User'
 
 export interface IPageMeta {
   path: string
@@ -14,6 +15,7 @@ export interface IPageMeta {
   title: string
   description: string
   exact?: boolean
+  fullPageWidth?: boolean
 }
 
 const howTo = {
@@ -22,11 +24,17 @@ const howTo = {
   title: 'How-to',
   description: 'Welcome to how-to',
 }
-const profile = {
-  path: '/profile',
-  component: <ProfilePage />,
-  title: 'Profile',
-  description: '',
+const settings = {
+  path: '/settings',
+  component: <SettingsPage />,
+  title: 'Settings',
+  description: 'Settings',
+}
+const user = {
+  path: '/u',
+  component: <User />,
+  title: 'User profile',
+  description: 'User profile',
 }
 const feedback = {
   path: '/feedback',
@@ -47,10 +55,11 @@ const events = {
   description: 'Welcome to Events',
 }
 const maps = {
-  path: '/maps',
-  component: <NotFoundPage />,
-  title: 'Maps',
-  description: '',
+  path: '/map',
+  component: <MapsPage />,
+  title: 'Map',
+  description: 'Welcome to the Map',
+  fullPageWidth: true,
 }
 const admin = {
   path: '/admin',
@@ -60,17 +69,18 @@ const admin = {
 }
 
 // community pages (various pages hidden on production build)
-const devCommunityPages = [howTo, events, discussions]
+const devCommunityPages = [howTo, events, maps]
 const prodCommunityPages = [howTo, events]
 const communityPages =
   SITE === 'production' ? prodCommunityPages : devCommunityPages
 // community 'more' dropdown pages (various pages hidden on production build)
-const devCommunityPagesMore = [maps]
+const devCommunityPagesMore = []
 const prodCommunityPagesMore = []
 const communityPagesMore =
   SITE === 'production' ? prodCommunityPagesMore : devCommunityPagesMore
 
 export const COMMUNITY_PAGES: IPageMeta[] = communityPages
 export const COMMUNITY_PAGES_MORE: IPageMeta[] = communityPagesMore
-export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [profile, feedback]
+export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [settings]
 export const ADMIN_PAGES: IPageMeta[] = [admin]
+export const NO_HEADER_PAGES: IPageMeta[] = [user]

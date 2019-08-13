@@ -13,12 +13,23 @@ import {
   COMMUNITY_PAGES_PROFILE,
   COMMUNITY_PAGES_MORE,
   ADMIN_PAGES,
+  NO_HEADER_PAGES,
 } from './PageList'
+import { Link } from 'rebass'
+import styled from 'styled-components'
 
 interface IState {
   singlePageMode: boolean
   displayPageComponent?: any
 }
+
+const FeedbackBtn = styled(Link)`
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  padding: 8px;
+  border-radius: 4px;
+`
 
 export class Routes extends React.Component<any, IState> {
   constructor(props: any) {
@@ -31,6 +42,7 @@ export class Routes extends React.Component<any, IState> {
       ...COMMUNITY_PAGES_PROFILE,
       ...COMMUNITY_PAGES_MORE,
       ...ADMIN_PAGES,
+      ...NO_HEADER_PAGES,
     ]
     // we are rendering different pages and navigation dependent on whether the user has navigated directly to view the
     // entire site, or just one page of it via subdomains. This is so we can effectively integrate just parts of this
@@ -65,7 +77,7 @@ export class Routes extends React.Component<any, IState> {
                           title={page.title}
                           description={page.description}
                         />
-                        <PageContainer>
+                        <PageContainer ignoreMaxWidth={page.fullPageWidth}>
                           <>{page.component}</>
                         </PageContainer>
                       </React.Fragment>
@@ -84,6 +96,14 @@ export class Routes extends React.Component<any, IState> {
             </div>
           </ScrollToTop>
         </BrowserRouter>
+        <FeedbackBtn
+          bg={'blue'}
+          color={'white'}
+          target="_blank"
+          href={'https://preciousplastic.typeform.com/to/tO6uDw'}
+        >
+          Have a feedback ?
+        </FeedbackBtn>
       </div>
     )
   }

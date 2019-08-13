@@ -5,6 +5,7 @@ import { TagsStore } from './Tags/tags.store'
 import { PlatformStore } from './Platform/platform.store'
 import { EventStore } from './Events/events.store'
 import { DiscussionsStore } from './Discussions/discussions.store'
+import { MapsStore } from './Maps/maps.store'
 
 // the following stores are passed into a top level app provider and can be accessed through @inject
 export const stores = {
@@ -15,6 +16,7 @@ export const stores = {
   platformStore: new PlatformStore(),
   eventStore: new EventStore(),
   discussionsStore: new DiscussionsStore(),
+  mapsStore: new MapsStore(),
 }
 
 export interface IStores {
@@ -25,4 +27,5 @@ export interface IStores {
   platformStore: PlatformStore
   eventStore: EventStore
   discussionsStore: DiscussionsStore
+  mapsStore: MapsStore
 }

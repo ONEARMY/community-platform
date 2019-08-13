@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { TextAreaStyled, Input, TextAreaDisabled } from './elements'
 import { FieldRenderProps } from 'react-final-form'
+import Calendar, { CalendarProps } from 'react-calendar'
 
 // any props can be passed to field and down to child component
 // input and meta props come from react field render props and will be
@@ -11,6 +12,8 @@ export interface IFieldProps extends FieldProps {
   disabled?: boolean
   children?: React.ReactNode
 }
+
+type YearPickerProps = IFieldProps & CalendarProps
 
 export const InputField = ({ input, meta, ...rest }: IFieldProps) => (
   <>
@@ -33,6 +36,23 @@ export const TextAreaField = ({
     ) : (
       <TextAreaStyled {...input} {...rest} />
     )}
+
+    {/* {meta.error && meta.touched && <span>{meta.error}</span>} */}
+  </>
+)
+
+export const YearPicker = ({ input, meta, ...rest }: YearPickerProps) => (
+  <>
+    <Calendar
+      {...input}
+      {...rest}
+      view={'decade'}
+      maxDetail={'decade'}
+      value={rest.value}
+      onClickYear={v => {
+        input.onChange(v)
+      }}
+    />
 
     {/* {meta.error && meta.touched && <span>{meta.error}</span>} */}
   </>

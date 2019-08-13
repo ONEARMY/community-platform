@@ -1,0 +1,3 @@
+.leaflet-tile {
+  filter: saturate(0.3);
+}

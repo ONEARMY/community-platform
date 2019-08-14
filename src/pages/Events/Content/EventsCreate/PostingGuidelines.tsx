@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { BoxContainer } from 'src/components/Layout/BoxContainer'
+import { Box } from 'rebass'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import { Link } from 'rebass'
@@ -7,7 +7,7 @@ import { Link } from 'rebass'
 // TODO : create a component to avoid duplicate with how-to's guidelines
 
 export const PostingGuidelines = () => (
-  <BoxContainer bg="white" p={3}>
+  <Box bg="white" p={3}>
     <Heading small bold>
       Event Posting Guidelines
     </Heading>
@@ -30,5 +30,5 @@ export const PostingGuidelines = () => (
       </Link>
       .
     </Text>
-  </BoxContainer>
+  </Box>
 )

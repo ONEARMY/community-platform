@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { BoxContainer } from 'src/components/Layout/BoxContainer'
-import { FlexContainer } from 'src/components/Layout/FlexContainer'
+import { Box } from 'rebass'
+import { Flex } from 'rebass'
 import { IUser } from 'src/models/user.models'
 import { UserStore } from 'src/stores/User/user.store'
 import { SettingsEditForm } from './content/SettingsEdit.form'
@@ -10,7 +10,6 @@ import { Button } from 'src/components/Button'
 import { PostingGuidelines } from './content/PostingGuidelines'
 import Heading from 'src/components/Heading'
 import { TextNotification } from 'src/components/Notification/TextNotification'
-import { Flex } from 'rebass'
 import { Avatar } from 'src/components/Avatar'
 import Text from 'src/components/Text'
 
@@ -37,9 +36,9 @@ export class UserSettings extends React.Component<IProps, IState> {
     const readOnly = !this.state.editMode
 
     return (
-      <FlexContainer m={'0'} bg={'inherit'} flexWrap="wrap">
-        <BoxContainer bg={'inherit'} p={'0'} width={[1, 1, 2 / 3]}>
-          <BoxContainer mb={2}>
+      <Flex m={'0'} bg={'inherit'} flexWrap="wrap">
+        <Box bg={'inherit'} p={'0'} width={[1, 1, 2 / 3]}>
+          <Box mb={2}>
             <Heading small bold>
               Your details
             </Heading>
@@ -56,18 +55,12 @@ export class UserSettings extends React.Component<IProps, IState> {
               userStore={this.props.userStore}
             />
             <ImportDHForm {...readOnly} />
-          </BoxContainer>
+          </Box>
 
           <SettingsEditForm onProfileSave={() => this.showSaveNotification()} />
-        </BoxContainer>
+        </Box>
         {/* post guidelines container */}
-        <BoxContainer
-          width={[1, 1, 1 / 3]}
-          height={'100%'}
-          bg="inherit"
-          p={0}
-          pl={2}
-        >
+        <Box width={[1, 1, 1 / 3]} height={'100%'} bg="inherit" p={0} pl={2}>
           <PostingGuidelines />
           <Button
             onClick={() => {
@@ -90,8 +83,8 @@ export class UserSettings extends React.Component<IProps, IState> {
               show={this.state.showNotification}
             />
           </div>
-        </BoxContainer>
-      </FlexContainer>
+        </Box>
+      </Flex>
     )
   }
 }

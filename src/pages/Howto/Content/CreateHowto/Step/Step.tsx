@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { Field } from 'react-final-form'
 import { TextAreaField, InputField } from 'src/components/Form/Fields'
-import { BoxContainer } from 'src/components/Layout/BoxContainer'
+import { Box } from 'rebass'
 import Heading from 'src/components/Heading'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
-import { FlexContainer } from 'src/components/Layout/FlexContainer'
+import { Flex } from 'rebass'
 import { Button } from 'src/components/Button'
 import { Modal } from 'src/components/Modal/Modal'
 import Text from 'src/components/Text'
@@ -42,8 +42,8 @@ class Step extends Component<IProps, IState> {
     const { step, index } = this.props
     return (
       // NOTE - animation parent container in CreateHowTo
-      <BoxContainer mt={3} p={3} key={index}>
-        <FlexContainer p={0}>
+      <Box mt={3} p={3} key={index}>
+        <Flex p={0}>
           <Heading medium flex={1}>
             Step {index + 1}
           </Heading>
@@ -53,15 +53,15 @@ class Step extends Component<IProps, IState> {
           {this.state.showDeleteModal && (
             <Modal onDidDismiss={() => this.toggleDeleteModal()}>
               <Text>Are you sure you want to delete this step?</Text>
-              <FlexContainer p={0} justifyContent="flex-end">
+              <Flex p={0} justifyContent="flex-end">
                 <Button onClick={() => this.toggleDeleteModal()}>Cancel</Button>
                 <Button onClick={() => this.confirmDelete()}>Delete</Button>
-              </FlexContainer>
+              </Flex>
             </Modal>
           )}
-        </FlexContainer>
+        </Flex>
 
-        <FlexContainer p={0} flexWrap="wrap">
+        <Flex p={0} flexWrap="wrap">
           <Field
             name={`${step}.title`}
             component={InputField}
@@ -70,7 +70,7 @@ class Step extends Component<IProps, IState> {
             validateFields={[]}
           />
           {/* Left */}
-          <FlexContainer p={0} pr={2} flexDirection="column" flex={1}>
+          <Flex p={0} pr={2} flexDirection="column" flex={1}>
             <Field
               name={`${step}.text`}
               placeholder="Describe this step"
@@ -79,13 +79,13 @@ class Step extends Component<IProps, IState> {
               validate={required}
               validateFields={[]}
             />
-          </FlexContainer>
+          </Flex>
           {/* right */}
-          <BoxContainer p={0} width={[1, '305px', null]}>
+          <Box p={0} width={[1, '305px', null]}>
             <Field name={`${step}.images`} component={ImageInputField} multi />
-          </BoxContainer>
-        </FlexContainer>
-      </BoxContainer>
+          </Box>
+        </Flex>
+      </Box>
     )
   }
 }

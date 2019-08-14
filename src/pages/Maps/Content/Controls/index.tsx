@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { Button } from 'src/components/Button'
 import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
-import { FlexContainer } from 'src/components/Layout/FlexContainer'
+import { Flex } from 'rebass'
 
 import { GroupingFilter } from './GroupingFilter'
 
@@ -19,6 +19,16 @@ interface IProps {
 const SearchWrapper = styled.div`
   width: 300px;
   height: 45px;
+`
+
+const MapFlexBar = styled(Flex)`
+  max-width: 1280px;
+  position: absolute;
+  top: 25px;
+  width: 100%;
+  z-index: 99999;
+  left: 50%;
+  transform: translateX(-50%);
 `
 
 const FlexSpacer = styled.div`
@@ -45,16 +55,7 @@ class Controls extends React.Component<IProps> {
     )
 
     return (
-      <FlexContainer
-        style={{
-          width: '80%',
-          position: 'absolute',
-          left: '10%',
-          borderRadius: '5px',
-          zIndex: 99999,
-          marginTop: '30px',
-        }}
-      >
+      <MapFlexBar px={1} py={1}>
         <SearchWrapper>
           <LocationSearch
             onChange={location => {
@@ -80,9 +81,9 @@ class Controls extends React.Component<IProps> {
             hash: '#your-map-pin',
           }}
         >
-          <Button variant="outline">My Pin</Button>
+          <Button>My Pin</Button>
         </HashLink>
-      </FlexContainer>
+      </MapFlexBar>
     )
   }
 }

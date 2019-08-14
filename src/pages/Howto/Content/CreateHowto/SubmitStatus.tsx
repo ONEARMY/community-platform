@@ -3,9 +3,9 @@ import { HowtoStore } from 'src/stores/Howto/howto.store'
 import { inject, observer } from 'mobx-react'
 import Heading from 'src/components/Heading'
 import Icon from 'src/components/Icons'
-import { FlexContainer } from 'src/components/Layout/FlexContainer'
+import { Flex } from 'rebass'
 import Text from 'src/components/Text'
-import { BoxContainer } from 'src/components/Layout/BoxContainer'
+import { Box } from 'rebass'
 
 interface IProps {}
 interface IInjected {
@@ -30,17 +30,17 @@ export class HowToSubmitStatus extends React.Component<IProps> {
         <Heading medium textAlign="center">
           Uploading How To
         </Heading>
-        <BoxContainer margin="auto" p={0}>
+        <Box margin="auto" p={0}>
           {Object.keys(status).map(key => (
-            <FlexContainer p={0} alignItems="center" key={key}>
+            <Flex p={0} alignItems="center" key={key}>
               <Icon
                 marginRight="4px"
                 glyph={status[key] ? 'check' : 'loading'}
               />
               <Text>| {key}</Text>
-            </FlexContainer>
+            </Flex>
           ))}
-        </BoxContainer>
+        </Box>
       </>
     )
   }

@@ -5,7 +5,7 @@ import Uppy from '@uppy/core'
 import { DashboardModal } from '@uppy/react'
 import { Button } from '../Button'
 import { UPPY_CONFIG } from './UppyConfig'
-import { FlexContainer } from '../Layout/FlexContainer'
+import { Flex } from 'rebass'
 import theme from 'src/themes/styled.theme'
 import { FileInfo } from '../FileInfo/FileInfo'
 
@@ -65,12 +65,8 @@ export class FileInput extends React.Component<IProps, IState> {
   render() {
     const showFileList = this.filesArray.length > 0
     return (
-      <div
-        style={{
-          width: '378px',
-        }}
-      >
-        <FlexContainer flexDirection="column" justifyContent="center">
+      <>
+        <Flex flexDirection="column" justifyContent="center">
           {showFileList ? (
             <>
               <Button
@@ -99,8 +95,8 @@ export class FileInput extends React.Component<IProps, IState> {
             closeModalOnClickOutside
             onRequestClose={() => this.toggleModal()}
           />
-        </FlexContainer>
-      </div>
+        </Flex>
+      </>
     )
   }
 }

@@ -9,7 +9,7 @@ import { Editor, VARIANT } from 'src/components/Editor/'
 import { Button } from 'src/components/Button/'
 import { PostResponse } from '../PostResponse/PostResponse'
 import PageContainer from 'src/components/Layout/PageContainer'
-import { BoxContainer } from 'src/components/Layout/BoxContainer'
+import { Box } from 'rebass'
 import { Avatar } from 'src/components/Avatar'
 import Heading from 'src/components/Heading'
 
@@ -81,19 +81,19 @@ class PostViewClass extends React.Component<IProps, IState> {
 
       return (
         <PageContainer>
-          <BoxContainer display={'inline-block'}>
+          <Box>
             <Heading as={'h1'}>{p.title}</Heading>
             <Avatar userName={p._createdBy} />
             <div dangerouslySetInnerHTML={{ __html: p.content }} />
-          </BoxContainer>
+          </Box>
           <h2>Responses</h2>
-          <BoxContainer display={'inline-block'}>
+          <Box>
             {this.comments.map(c => (
               <PostResponse key={c._id} comment={c} />
             ))}
-          </BoxContainer>
+          </Box>
           <h2>Add response</h2>
-          <BoxContainer display={'inline-block'}>
+          <Box>
             <Editor
               variant={VARIANT.SMALL}
               content={this.state.editorInput}
@@ -107,7 +107,7 @@ class PostViewClass extends React.Component<IProps, IState> {
             >
               Submit
             </Button>
-          </BoxContainer>
+          </Box>
         </PageContainer>
       )
     } else {

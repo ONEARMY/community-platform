@@ -6,7 +6,7 @@ import InputLabel from '@material-ui/core/InputLabel'
 import Input from '@material-ui/core/Input'
 import { Link } from 'src/components/Links'
 import { colors } from 'src/themes/styled.theme'
-import { FlexContainer } from 'src/components/Layout/FlexContainer'
+import { Flex } from 'rebass'
 import { UserStore } from 'src/stores/User/user.store'
 import { Form } from 'react-final-form'
 import Text from 'src/components/Text'
@@ -96,12 +96,7 @@ export class LoginForm extends React.Component<IProps, IState> {
                 onChange={e => this.handleChange(e)}
               />
             </FormControl>
-            <FlexContainer
-              justifyContent="flex-end"
-              p={0}
-              alignItems="center"
-              my={3}
-            >
+            <Flex justifyContent="flex-end" p={0} alignItems="center" my={3}>
               <Link
                 color={colors.black}
                 to="#"
@@ -110,7 +105,7 @@ export class LoginForm extends React.Component<IProps, IState> {
               >
                 Forgot password?
               </Link>
-            </FlexContainer>
+            </Flex>
             <Button
               width={1}
               variant={disabled ? 'disabled' : 'dark'}
@@ -121,11 +116,7 @@ export class LoginForm extends React.Component<IProps, IState> {
             >
               Log in
             </Button>
-            <FlexContainer
-              justifyContent="flex-end"
-              p={0}
-              alignItems="baseline"
-            >
+            <Flex justifyContent="flex-end" p={0} alignItems="baseline">
               <Typography variant="caption">Don't have an account?</Typography>
               <Link
                 color={colors.black}
@@ -135,7 +126,7 @@ export class LoginForm extends React.Component<IProps, IState> {
               >
                 Sign Up!
               </Link>
-            </FlexContainer>
+            </Flex>
             <Typography color="error" variant="caption">
               {this.state.errorMsg}
             </Typography>

@@ -7,7 +7,7 @@ import { inject, observer } from 'mobx-react'
 import { LoginForm } from './Login.form'
 import { SignUpForm } from './SignUp.form'
 import { ResetPWForm } from './ResetPW.form'
-import { BoxContainer } from 'src/components/Layout/BoxContainer'
+import { Box } from 'rebass'
 
 interface IProps {
   userStore?: UserStore
@@ -100,7 +100,7 @@ export class LoginComponent extends React.Component<IProps, IState> {
           open={this.state.showLoginModal && !user}
           onClose={this.toggleModal}
         >
-          <BoxContainer width={350} mx="auto" mt={5}>
+          <Box width={350} mx="auto" mt={5}>
             {this.state.showLoginForm && (
               <LoginForm
                 onChange={e => this.handleChange(e)}
@@ -136,7 +136,7 @@ export class LoginComponent extends React.Component<IProps, IState> {
                 preloadValues={this.state.formValues}
               />
             )}
-          </BoxContainer>
+          </Box>
         </Modal>
       </>
     )

@@ -3,7 +3,6 @@ import { RouteComponentProps } from 'react-router'
 
 import { withRouter } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
-import { BoxContainer } from 'src/components/Layout/BoxContainer'
 import { IUser, ILink } from 'src/models/user.models'
 import { UserStore } from 'src/stores/User/user.store'
 import Heading from 'src/components/Heading'
@@ -36,7 +35,6 @@ const Circle = styled(Flex)`
   height: 40px;
 `
 
-@(withRouter as any)
 @inject('userStore')
 @observer
 export class UserPage extends React.Component<
@@ -149,7 +147,7 @@ export class UserPage extends React.Component<
     const { user, isLoading } = this.state
     if (user) {
       return (
-        <BoxContainer>
+        <Box>
           <Avatar userName={user.userName} width="120px" borderRadius={5} />
           <Heading large color={'black'} my={3}>
             {user.userName}
@@ -187,7 +185,7 @@ export class UserPage extends React.Component<
               {this.renderLinks(user.links)}
             </Box>
           ) : null}
-        </BoxContainer>
+        </Box>
       )
     } else {
       return isLoading ? <LinearProgress /> : <div>user not found</div>

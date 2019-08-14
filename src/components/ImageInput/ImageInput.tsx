@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { BoxContainer } from '../Layout/BoxContainer'
+import { Box } from 'rebass'
 import { Button } from '../Button'
 import Lightbox from 'react-image-lightbox'
 import 'react-image-lightbox/style.css'
@@ -88,7 +88,7 @@ export class ImageInput extends React.Component<IProps, IState> {
     // if at least one image present, hide the 'choose image' button and replace with smaller button
     const imgPreviewMode = inputFiles.length > 0
     return (
-      <BoxContainer p={0}>
+      <Box p={0}>
         <>
           <div
             style={{
@@ -146,7 +146,7 @@ export class ImageInput extends React.Component<IProps, IState> {
             />
           )}
         </>
-      </BoxContainer>
+      </Box>
     )
   }
 }

@@ -7,7 +7,6 @@ import { IEvent } from 'src/models/events.models'
 import * as Mocks from 'src/mocks/events.mock'
 import { EventStore } from 'src/stores/Events/events.store'
 import './EventsMap.scss'
-import { ClampLines } from 'src/components/ClampLines/ClampLines'
 
 interface IState {
   events: IEvent[]
@@ -70,9 +69,6 @@ export class EventsMap extends React.Component<IProps, IState> {
                     <div className="event-name">{event.title}</div>
                     <div className="event-date">
                       {/* {`${this.formatDate(event.date)} / ${event.location.city}`} */}
-                    </div>
-                    <div className="event-description">
-                      <ClampLines text={event.description} lines={2} />
                     </div>
                     <div className="event-host">by {event.host}</div>
                   </div>

@@ -13,7 +13,7 @@ import { inject } from 'mobx-react'
 import { IStores } from 'src/stores'
 
 import PageContainer from 'src/components/Layout/PageContainer'
-import { BoxContainer } from 'src/components/Layout/BoxContainer'
+import { Box } from 'rebass'
 
 interface IState {
   formValues: IPostFormInput
@@ -68,7 +68,7 @@ export class PostCreate extends React.PureComponent<IProps, IState> {
     const { formValues } = this.state
     return (
       <PageContainer>
-        <BoxContainer display={'inline-block'}>
+        <Box>
           <h2 style={{ marginTop: 0 }}>Create a Post</h2>
           <Form
             onSubmit={values => this.onSubmit(values as IPostFormInput)}
@@ -104,7 +104,7 @@ export class PostCreate extends React.PureComponent<IProps, IState> {
               )
             }}
           />
-        </BoxContainer>
+        </Box>
       </PageContainer>
     )
   }

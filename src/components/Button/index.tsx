@@ -10,16 +10,6 @@ import { colors } from 'src/themes/styled.theme'
 import theme, { ButtonVariants } from 'src/themes/styled.theme'
 import Text from 'src/components/Text'
 
-export const BaseButton = styled(RebassButton)`
-  border-radius: ${props => props.theme.radii[1] + 'px'};
-  white-space: nowrap;
-  word-break: keep-all;
-  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
-`
-export const Label = styled(Text)`
-  color: inherit;
-`
-
 // extend to allow any default button props (e.g. onClick) to also be passed
 export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
   icon?: keyof IGlyphs
@@ -30,12 +20,12 @@ export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
 type BtnProps = IBtnProps & RebassButtonProps
 
 export const Button = (props: BtnProps) => (
-  <BaseButton {...props}>
+  <RebassButton {...props}>
     {props.icon && <Icon glyph={props.icon} marginRight="4px" />}
-    <Label regular medium>
+    <Text regular medium>
       {props.children}
-    </Label>
-  </BaseButton>
+    </Text>
+  </RebassButton>
 )
 
 Button.defaultProps = {

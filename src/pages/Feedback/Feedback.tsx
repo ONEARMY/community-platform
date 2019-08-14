@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { BoxContainer } from 'src/components/Layout/BoxContainer'
+import { Box } from 'rebass'
 
 interface IProps {
   test?: string
@@ -17,12 +17,12 @@ export class FeedbackPage extends React.Component<IProps, IState> {
 
   public render() {
     return (
-      <BoxContainer p={0} bg="white">
+      <Box p={0} bg="white">
         <iframe
           style={{ width: '100%', height: 'calc(100vh - 200px)' }}
           src="https://feedback.userreport.com/10883867-1bec-4892-9089-85f904f4d37b/"
         />
-      </BoxContainer>
+      </Box>
     )
   }
 }

@@ -6,7 +6,7 @@ import { NotFoundPage } from './NotFound/NotFound'
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import Header from './common/Header/Header'
 import { SITE } from 'src/config/config'
-import { DevNotice } from 'src/components/Dev/DevNotice'
+import { DevNotice } from 'src/components/DevNotice/DevNotice'
 import PageContainer from 'src/components/Layout/PageContainer'
 import {
   COMMUNITY_PAGES,

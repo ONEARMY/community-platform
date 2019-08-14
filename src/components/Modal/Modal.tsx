@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { Portal } from 'react-portal'
+import { Box } from 'rebass'
 import styled from 'styled-components'
 
 interface IProps {
@@ -10,7 +11,7 @@ interface IState {
   isOpen: boolean
 }
 
-const ModalBackdrop = styled.div`
+const ModalBackdrop = styled(Box)`
   position: fixed;
   top: 0;
   left: 0;
@@ -19,7 +20,7 @@ const ModalBackdrop = styled.div`
   z-index: 9;
   background: rgba(0, 0, 0, 0.4);
 `
-const ModalContent = styled.div`
+const ModalContent = styled(Box)`
   display: block;
   padding: 16px;
   display: flex;

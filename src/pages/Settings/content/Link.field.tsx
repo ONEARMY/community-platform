@@ -6,7 +6,6 @@ import { Button } from 'src/components/Button'
 import { Modal } from 'src/components/Modal/Modal'
 import Text from 'src/components/Text'
 import { Flex } from 'rebass'
-import { FlexContainer } from 'src/components/Layout/FlexContainer'
 import { SelectField } from 'src/components/Form/Select.field'
 
 interface IProps {
@@ -55,10 +54,10 @@ class Link extends Component<IProps, IState> {
         {this.state.showDeleteModal && (
           <Modal onDidDismiss={() => this.toggleDeleteModal()}>
             <Text>Are you sure you want to delete this link?</Text>
-            <FlexContainer p={0} justifyContent="flex-end">
+            <Flex p={0} justifyContent="flex-end">
               <Button onClick={() => this.toggleDeleteModal()}>Cancel</Button>
               <Button onClick={() => this.confirmDelete()}>Delete</Button>
-            </FlexContainer>
+            </Flex>
           </Modal>
         )}
       </Flex>

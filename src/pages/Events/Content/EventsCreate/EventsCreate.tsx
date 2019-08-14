@@ -8,8 +8,7 @@ import { InputField } from 'src/components/Form/Fields'
 import { Button } from 'src/components/Button'
 import { EventStore } from 'src/stores/Events/events.store'
 import Heading from 'src/components/Heading'
-import { FlexContainer } from 'src/components/Layout/FlexContainer'
-import { BoxContainer } from 'src/components/Layout/BoxContainer'
+import { Flex, Box } from 'rebass'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 import { inject } from 'mobx-react'
 import { PostingGuidelines } from './PostingGuidelines'
@@ -80,12 +79,12 @@ export class EventsCreate extends React.Component<IProps, IState> {
         render={({ submitting, values, invalid, errors, handleSubmit }) => {
           const disabled = invalid || submitting
           return (
-            <FlexContainer m={'0'} p={'0'} bg={'inherit'} flexWrap="wrap">
-              <BoxContainer bg="inherit" p={'0'} width={[1, 1, 2 / 3]}>
+            <Flex m={'0'} p={'0'} bg={'inherit'} flexWrap="wrap">
+              <Box bg="inherit" p={'0'} width={[1, 1, 2 / 3]}>
                 {/* using prevent default as sometimes submit triggered unintentionally */}
                 <form onSubmit={e => e.preventDefault()}>
                   {/* How To Info */}
-                  <BoxContainer p={3}>
+                  <Box p={3}>
                     <Heading small bold>
                       List your event
                     </Heading>
@@ -124,11 +123,11 @@ export class EventsCreate extends React.Component<IProps, IState> {
                       component={InputField}
                       placeholder="URL to offsite link (Facebook, Meetup, etc)"
                     />
-                  </BoxContainer>
+                  </Box>
                 </form>
-              </BoxContainer>
+              </Box>
               {/* post guidelines container */}
-              <BoxContainer
+              <Box
                 width={[1, 1, 1 / 3]}
                 height={'100%'}
                 bg="inherit"
@@ -145,8 +144,8 @@ export class EventsCreate extends React.Component<IProps, IState> {
                 >
                   Publish
                 </Button>
-              </BoxContainer>
-            </FlexContainer>
+              </Box>
+            </Flex>
           )
         }}
       />

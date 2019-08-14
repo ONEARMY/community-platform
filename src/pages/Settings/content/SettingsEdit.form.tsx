@@ -16,7 +16,6 @@ import { UserStore } from 'src/stores/User/user.store'
 import { Button } from 'src/components/Button'
 import { observer, inject } from 'mobx-react'
 import { Flex, Box } from 'rebass'
-import { BoxContainer } from 'src/components/Layout/BoxContainer'
 import { getCountryCode } from 'src/utils/helpers'
 import 'react-flags-select/scss/react-flags-select.scss'
 import styled from 'styled-components'
@@ -166,7 +165,7 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
               {/* NOTE - need to put submit method on form to prevent
               default post request */}
               <form id="userProfileForm" onSubmit={handleSubmit}>
-                <BoxContainer mt={4}>
+                <Box mt={4}>
                   <Heading small bold>
                     Your infos
                   </Heading>
@@ -253,8 +252,8 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
                       )}
                     </FieldArray>
                   </HideShowBox>
-                </BoxContainer>
-                <BoxContainer id="your-map-pin" mt={4}>
+                </Box>
+                <Box id="your-map-pin" mt={4}>
                   <Heading small bold>
                     Your map pin
                   </Heading>
@@ -315,7 +314,7 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
                       </Marker>
                     </Map>
                   </HideShowBox>
-                </BoxContainer>
+                </Box>
               </form>
             </>
           )

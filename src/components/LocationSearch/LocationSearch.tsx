@@ -9,7 +9,6 @@ import { ALGOLIA_PLACES_CONFIG } from 'src/config/config'
 import { Input } from '../Form/elements'
 import { Observable, fromEvent, Subscription } from 'rxjs'
 import { debounceTime, map } from 'rxjs/operators'
-import './LocationSearch.css'
 
 interface IProps {
   placeholder: string

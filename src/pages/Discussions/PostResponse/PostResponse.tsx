@@ -5,7 +5,7 @@ import { DiscussionsStore } from 'src/stores/Discussions/discussions.store'
 import { IDiscussionComment } from 'src/models/discussions.models'
 import { Editor, VARIANT } from 'src/components/Editor/'
 import { Button } from 'src/components/Button/'
-import { BoxContainer } from 'src/components/Layout/BoxContainer'
+import { Box } from 'rebass'
 
 interface IProps {
   comment: IDiscussionComment
@@ -70,7 +70,7 @@ export class PostResponse extends React.Component<IProps, IState> {
   public render() {
     const c = this.props.comment
     return (
-      <BoxContainer display={'inline-block'}>
+      <Box>
         <div dangerouslySetInnerHTML={{ __html: c.comment }} />
         <Button onClick={() => this.toggleEditor()}>Reply</Button>
         {this.state.showEditor ? (
@@ -90,7 +90,7 @@ export class PostResponse extends React.Component<IProps, IState> {
             </Button>
           </>
         ) : null}
-      </BoxContainer>
+      </Box>
     )
   }
 }

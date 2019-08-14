@@ -10,8 +10,10 @@ import theme from 'src/themes/styled.theme'
 import { TagDisplay } from 'src/components/Tags/TagDisplay/TagDisplay'
 import FlagIconEvents from 'src/components/Icons/FlagIcon/FlagIcon'
 import ImageTargetBlank from 'src/assets/icons/link-target-blank.svg'
-import WhiteBubble from 'src/assets/images/white-bubble.svg'
-import WhiteBubbleMobile from 'src/assets/images/white-mobile-bubble.svg'
+import WhiteBubble0 from 'src/assets/images/white-bubble_0.svg'
+import WhiteBubble1 from 'src/assets/images/white-bubble_1.svg'
+import WhiteBubble2 from 'src/assets/images/white-bubble_2.svg'
+import WhiteBubble3 from 'src/assets/images/white-bubble_3.svg'
 
 interface IProps {
   upcomingEvents: IEvent[]
@@ -47,14 +49,14 @@ const MoreBox = styled(Box)`
   position: relative
   &:after {
     content: '';
-    background-image: url(${WhiteBubbleMobile});
+    background-image: url(${WhiteBubble0});
     width: 100%;
     height: 100%;
     z-index: -1;
     background-size: contain;
     background-repeat: no-repeat;
     position: absolute;
-    top: 55%;
+    top: 59%;
     transform: translate(-50%, -50%);
     left: 50%;
     max-width: 850px;
@@ -63,19 +65,19 @@ const MoreBox = styled(Box)`
 
   @media only screen and (min-width: ${theme.breakpoints[0]}) {
     &:after {
-      content: '';
-      background-image: url(${WhiteBubble});
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      background-size: contain;
-      background-repeat: no-repeat;
-      position: absolute;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      left: 50%;
-      max-width: 850px;
-      background-position: center 10%;
+      background-image: url(${WhiteBubble1});
+    }
+  }
+
+  @media only screen and (min-width: ${theme.breakpoints[1]}) {
+    &:after {
+      background-image: url(${WhiteBubble2});
+    }
+  }
+
+  @media only screen and (min-width: ${theme.breakpoints[2]}) {
+    &:after {
+      background-image: url(${WhiteBubble3});
     }
   }
 `
@@ -180,7 +182,7 @@ export class EventsList extends React.Component<IProps> {
               </Button>
             </Flex>
             <MoreBox py={20}>
-              <Text xxlarge bold txtcenter>
+              <Text bold txtcenter fontSize={[4, 4, 5]}>
                 Connect with a likeminded community.
                 <br />
                 All around the planet.

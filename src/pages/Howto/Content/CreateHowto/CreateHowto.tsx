@@ -13,8 +13,8 @@ import { Step } from './Step/Step'
 import { Button } from 'src/components/Button'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import Heading from 'src/components/Heading'
-import { FlexContainer } from 'src/components/Layout/FlexContainer'
-import { BoxContainer } from 'src/components/Layout/BoxContainer'
+import { Flex } from 'rebass'
+import { Box } from 'rebass'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { FileInputField } from 'src/components/Form/FileInput.field'
@@ -121,23 +121,18 @@ export class CreateHowto extends React.Component<IProps, IState> {
         render={({ submitting, values, invalid, errors, handleSubmit }) => {
           const disabled = invalid || submitting
           return (
-            <FlexContainer m={'0'} p={'0'} bg={'inherit'} flexWrap="wrap">
-              <BoxContainer bg="inherit" p={'0'} width={[1, 1, 2 / 3]}>
+            <Flex m={'0'} p={'0'} bg={'inherit'} flexWrap="wrap">
+              <Box bg="inherit" p={'0'} width={[1, 1, 2 / 3]}>
                 {/* using prevent default as sometimes submit triggered unintentionally */}
                 <form onSubmit={e => e.preventDefault()}>
                   {/* How To Info */}
-                  <BoxContainer p={3}>
+                  <Box p={3}>
                     <Heading small bold>
                       Create your How-To
                     </Heading>
-                    <FlexContainer p={0} flexWrap="wrap">
+                    <Flex p={0} flexWrap="wrap">
                       {/* Left Side */}
-                      <FlexContainer
-                        p={0}
-                        pr={2}
-                        flex={1}
-                        flexDirection="column"
-                      >
+                      <Flex p={0} pr={2} flex={1} flexDirection="column">
                         <Field
                           name="title"
                           validateFields={[]}
@@ -150,7 +145,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
                           component={TagsSelectField}
                           category="how-to"
                         />
-                        <FlexContainer p={0}>
+                        <Flex p={0}>
                           <Field
                             name="time"
                             validate={required}
@@ -169,7 +164,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
                             placeholder="How hard is it? *"
                             style={{ marginLeft: '4px' }}
                           />
-                        </FlexContainer>
+                        </Flex>
                         <Field
                           name="description"
                           validate={required}
@@ -182,9 +177,9 @@ export class CreateHowto extends React.Component<IProps, IState> {
                           }}
                           placeholder="Introduction to your How-To, keep it to 100 words please! *"
                         />
-                      </FlexContainer>
+                      </Flex>
                       {/* Right side */}
-                      <BoxContainer p={0} width={[1, null, '380px']}>
+                      <Box p={0} width={[1, null, '380px']}>
                         <Field
                           name="cover_image"
                           validate={required}
@@ -192,9 +187,9 @@ export class CreateHowto extends React.Component<IProps, IState> {
                           component={ImageInputField}
                         />
                         <Field name="files" component={FileInputField} />
-                      </BoxContainer>
-                    </FlexContainer>
-                  </BoxContainer>
+                      </Box>
+                    </Flex>
+                  </Box>
 
                   {/* Steps Info */}
                   <FieldArray name="steps">
@@ -259,9 +254,9 @@ export class CreateHowto extends React.Component<IProps, IState> {
                     </>
                   </Modal>
                 )}
-              </BoxContainer>
+              </Box>
               {/* post guidelines container */}
-              <BoxContainer
+              <Box
                 width={[1, 1, 1 / 3]}
                 height={'100%'}
                 bg="inherit"
@@ -278,8 +273,8 @@ export class CreateHowto extends React.Component<IProps, IState> {
                 >
                   Publish
                 </Button>
-              </BoxContainer>
-            </FlexContainer>
+              </Box>
+            </Flex>
           )
         }}
       />

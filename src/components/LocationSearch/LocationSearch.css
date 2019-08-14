@@ -1,8 +1,0 @@
-/* Need small css override to hide additional icon */
-.ap-input-icon {
-  display: none;
-}
-
-.ap-dropdown-menu {
-  margin-top: -8px;
-}

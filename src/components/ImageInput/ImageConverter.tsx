@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { FlexContainer } from '../Layout/FlexContainer'
+import { Flex, Box } from 'rebass'
 import { Button } from '../Button'
 import * as clientCompress from 'client-compress'
 import { IConvertedFileMeta, bytesToSize } from './ImageInput'
@@ -85,8 +85,8 @@ export class ImageConverter extends React.Component<IProps, IState> {
     const qualities: ImageQualities[] = ['low', 'normal', 'high']
 
     return convertedFile ? (
-      <div>
-        <div
+      <Box>
+        <Box
           style={{
             backgroundImage: `url(${convertedFile.objectUrl})`,
             backgroundSize: 'cover',
@@ -98,8 +98,8 @@ export class ImageConverter extends React.Component<IProps, IState> {
           id="preview"
           onClick={() => this.props.onImgClicked(convertedFile)}
         />
-        <div>
-          <FlexContainer p={0} bg="none" mt={2} mb={2}>
+        <Box>
+          <Flex p={0} bg="none" mt={2} mb={2}>
             {convertedFile &&
               qualities.map(quality => (
                 <Button
@@ -110,13 +110,13 @@ export class ImageConverter extends React.Component<IProps, IState> {
                   {quality}
                 </Button>
               ))}
-          </FlexContainer>
-          <div>
+          </Flex>
+          <Box>
             {convertedFile.startSize} -> {convertedFile.endSize}
-          </div>
+          </Box>
           <Text small>{convertedFile.compressionPercent}% smaller 🌍</Text>
-        </div>
-      </div>
+        </Box>
+      </Box>
     ) : null
   }
 }

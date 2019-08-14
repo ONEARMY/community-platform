@@ -8,7 +8,7 @@ import {
   width,
   WidthProps,
 } from 'styled-system'
-import { Flex, FlexProps } from 'rebass'
+import { Flex, Box, FlexProps } from 'rebass'
 import theme from 'src/themes/styled.theme'
 import { VersionNumber } from '../VersionNumber/VersionNumber'
 
@@ -18,10 +18,10 @@ type InnerContainerProps = MaxWidthProps &
     ignoreMaxWidth?: boolean
   }
 
-const InnerContainer = styled.div<InnerContainerProps>`
+const InnerContainer = styled(Box)<InnerContainerProps>`
   ${space}
   ${width}
-  ${p => (p.ignoreMaxWidth ? 'max-width: inherit;' : maxWidth)}
+  ${props => (props.ignoreMaxWidth ? 'max-width: inherit;' : maxWidth)}
   margin: ${p => (p.ignoreMaxWidth ? 0 : undefined)};
   padding: ${p => (p.ignoreMaxWidth ? 0 : undefined)};
   position: relative;
@@ -38,7 +38,6 @@ const PageContainer = (props: IProps) => (
   </Flex>
 )
 
-PageContainer.defaultProps = {}
 InnerContainer.defaultProps = {
   maxWidth: theme.maxContainerWidth,
   width: 1,

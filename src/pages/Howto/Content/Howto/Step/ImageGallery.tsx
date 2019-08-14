@@ -26,8 +26,8 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
     let imageNumber = this.props.images.length
     return this.state.activeImage ? (
       <Box>
-        <Image px={1} pb={4} src={this.state.activeImage.downloadUrl} />
-        <Flex flexWrap={'wrap'}>
+        <Image src={this.state.activeImage.downloadUrl} />
+        <Flex flexWrap={'wrap'} m={-1}>
           {imageNumber > 1
             ? this.props.images.map((image: any, index: number) => (
                 <Card

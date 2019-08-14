@@ -7,7 +7,6 @@ export const inputStyles = css`
   font-size: ${theme.fontSizes[2] + 'px'};
   background: white;
   width: 100%;
-  margin: ${theme.space[2] + 'px'} 0;
   padding: 10px;
   box-sizing: border-box;
   &:disabled {
@@ -18,7 +17,7 @@ export const inputStyles = css`
 
 export const Input = styled.input`
   ${inputStyles};
-  height: 40px;
+  height: 45px;
 `
 
 export const TextAreaStyled = styled.textarea`

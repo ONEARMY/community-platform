@@ -67,7 +67,9 @@ export default class Step extends React.PureComponent<IProps> {
             <Flex width={[1, 5 / 9, 5 / 9]}>
               <ImageGallery
                 images={this.props.step.images as IUploadedFileMeta[]}
+                caption={this.props.step.caption}
               />
+              <Text pb={3}>{this.props.step.caption}</Text>
             </Flex>
           </FlexStepContainer>
         </Flex>

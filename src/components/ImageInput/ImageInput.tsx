@@ -27,10 +27,11 @@ export interface IConvertedFileMeta {
 }
 
 interface IState {
-  inputFiles: File[]
   convertedFiles: IConvertedFileMeta[]
-  openLightbox?: boolean
+  imgDelivered?: boolean
+  inputFiles: File[]
   lightboxImg?: IConvertedFileMeta
+  openLightbox?: boolean
 }
 
 export class ImageInput extends React.Component<IProps, IState> {
@@ -72,7 +73,10 @@ export class ImageInput extends React.Component<IProps, IState> {
   public handleConvertedFileChange(file: IConvertedFileMeta, index: number) {
     const { convertedFiles } = this.state
     convertedFiles[index] = file
-    this.setState({ convertedFiles })
+    this.setState(() => ({
+      convertedFiles,
+      imgDelivered: true,
+    }))
     this.triggerCallback()
   }
 
@@ -83,8 +87,14 @@ export class ImageInput extends React.Component<IProps, IState> {
     })
   }
 
+  public handleFileInput(files: FileList | null) {
+    this.setState(() => ({
+      imgDelivered: false,
+    }))
+  }
+
   render() {
-    const { inputFiles, openLightbox, lightboxImg } = this.state
+    const { inputFiles, openLightbox, lightboxImg, imgDelivered } = this.state
     // if at least one image present, hide the 'choose image' button and replace with smaller button
     const imgPreviewMode = inputFiles.length > 0
     return (
@@ -92,7 +102,8 @@ export class ImageInput extends React.Component<IProps, IState> {
         <>
           <div
             style={{
-              display: imgPreviewMode ? 'none' : 'flex',
+              opacity: imgPreviewMode ? 0 : 1, // prevent FOUC when image appears
+              display: imgDelivered ? 'none' : 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
               height: '230px',
@@ -113,6 +124,7 @@ export class ImageInput extends React.Component<IProps, IState> {
               multiple={this.props.multi}
               ref={this.fileInputRef}
               style={{ display: 'none' }}
+              onChange={e => this.handleFileInput(e.target.files)}
             />
           </div>
           {inputFiles.map((file, index) => {

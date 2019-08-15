@@ -1,12 +1,11 @@
 /* tslint:disable:no-eval */
 import * as React from 'react'
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom'
-import DevTools from 'mobx-react-devtools'
 import { NotFoundPage } from './NotFound/NotFound'
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import Header from './common/Header/Header'
 import { SITE } from 'src/config/config'
-import { DevNotice } from 'src/components/DevNotice/DevNotice'
+import DevHelpers from 'src/components/DevHelpers/DevHelpers'
 import PageContainer from 'src/components/Layout/PageContainer'
 import {
   COMMUNITY_PAGES,
@@ -49,8 +48,7 @@ export class Routes extends React.Component<any, IState> {
     // platform into other sites. The first case is direct nav
     return (
       <div>
-        {SITE !== 'production' ? <DevTools /> : null}
-        <DevNotice />
+        <DevHelpers />
         <BrowserRouter>
           {/* on page change scroll to top */}
           <ScrollToTop>
@@ -62,11 +60,7 @@ export class Routes extends React.Component<any, IState> {
                   key={page.path}
                   render={props => (
                     <React.Fragment>
-                      <Header
-                        variant="community"
-                        title={page.title}
-                        description={page.description}
-                      />
+                      <Header />
                       <PageContainer ignoreMaxWidth={page.fullPageWidth}>
                         <>{page.component}</>
                       </PageContainer>

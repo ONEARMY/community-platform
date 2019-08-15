@@ -8,8 +8,9 @@ import * as functions from 'firebase-functions'
 import * as bodyParser from 'body-parser'
 import * as cors from 'cors'
 import * as express from 'express'
+import * as sync from '../Firebase/firebaseSync'
 
-console.log('api init')
+console.log('api ready')
 const app = express()
 // use bodyparse to create json object from body
 app.use(
@@ -42,6 +43,15 @@ app.all('*', async (req, res, next) => {
   switch (endpoint) {
     case 'avatar':
       console.log('avatar test')
+      break
+    case 'sync':
+      console.log('sync test')
+      try {
+        const d = await sync.sync('howtosV1')
+        res.send(d)
+      } catch (error) {
+        console.log(error)
+      }
       break
     default:
       res.send('invalid api endpoint')

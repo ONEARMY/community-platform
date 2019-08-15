@@ -25,7 +25,7 @@ export class EventStore extends ModuleStore {
   }
 
   constructor() {
-    super('eventsV2')
+    super('v2_events')
     this.allDocs$.subscribe((docs: IEvent[]) => {
       this.allEvents = docs.sort((a, b) => (a.date > b.date ? 1 : -1))
     })
@@ -36,7 +36,7 @@ export class EventStore extends ModuleStore {
     console.log('values', values)
     try {
       const event: IEventFormInput = {
-        ...Database.generateDocMeta('eventsV2'),
+        ...Database.generateDocMeta('v2_events'),
         ...values,
         // convert string yyyy-mm-dd format to time string
         date: new Date(Date.parse(values.date as string)).toISOString(),
@@ -57,9 +57,9 @@ export class EventStore extends ModuleStore {
   }
 
   public generateID = () => {
-    return Database.generateDocId('eventsV2')
+    return Database.generateDocId('v2_events')
   }
   private updateDatabase(event: IEventFormInput) {
-    return Database.setDoc(`eventsV2/${event._id}`, event)
+    return Database.setDoc(`v2_events/${event._id}`, event)
   }
 }

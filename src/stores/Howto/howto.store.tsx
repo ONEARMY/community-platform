@@ -23,7 +23,7 @@ export class HowtoStore extends ModuleStore {
   constructor() {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
-    super('howtosV2')
+    super('v2_howtos')
     this.allDocs$.subscribe(docs => {
       this.allHowtos = docs as IHowto[]
     })
@@ -32,7 +32,7 @@ export class HowtoStore extends ModuleStore {
   @action
   public async getDocBySlug(slug: string) {
     const collection = await Database.queryCollection(
-      'howtosV2',
+      'v2_howtos',
       'slug',
       '==',
       slug,
@@ -48,7 +48,7 @@ export class HowtoStore extends ModuleStore {
   }
 
   public generateID = () => {
-    return Database.generateDocId('howtosV2')
+    return Database.generateDocId('v2_howtos')
   }
 
   public async uploadHowTo(values: IHowtoFormInput, id: string) {
@@ -70,7 +70,7 @@ export class HowtoStore extends ModuleStore {
       )
       this.updateUploadStatus('Files')
       // populate DB
-      const meta = Database.generateDocMeta('howtosV2', id)
+      const meta = Database.generateDocMeta('v2_howtos', id)
       // redefine howTo based on processing done above (should match stronger typing)
       const howTo: IHowto = {
         ...values,
@@ -115,7 +115,7 @@ export class HowtoStore extends ModuleStore {
       data = file.photoData
     }
     return Storage.uploadFile(
-      `uploads/howtosV2/${id}`,
+      `uploads/v2_howtos/${id}`,
       file.name,
       data,
       file.type,
@@ -133,7 +133,7 @@ export class HowtoStore extends ModuleStore {
   }
 
   private updateDatabase(howTo: IHowto) {
-    return Database.setDoc(`howtosV2/${howTo._id}`, howTo)
+    return Database.setDoc(`v2_howtos/${howTo._id}`, howTo)
   }
 }
 

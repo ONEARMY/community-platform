@@ -16,11 +16,11 @@ export type ISODateString = string
 type userId = string
 
 export type IDBEndpoint =
-  | 'howtosV2'
-  | 'usersV2'
-  | 'discussionsV2'
-  | 'tagsV2'
-  | 'eventsV2'
+  | 'v2_howtos'
+  | 'v2_users'
+  | 'v2_discussions'
+  | 'v2_tags'
+  | 'v2_events'
 
 /************************************************************************
  *  Deprecates - legacy interfaces used. Currently retained to troubleshoot

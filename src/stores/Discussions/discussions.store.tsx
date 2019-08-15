@@ -22,7 +22,7 @@ export class DiscussionsStore extends ModuleStore {
   // when initiating, discussions will be fetched via common method in module.store.ts
   // keep results of allDocs and activeDoc in sync with local varialbes
   constructor() {
-    super('discussionsV2')
+    super('v2_discussions')
     this.allDocs$.subscribe(docs => (this.allDiscussions = docs))
     this.activeDoc$.subscribe(doc => (this.activeDiscussion = doc))
     this._addCommentsSubscription()
@@ -78,7 +78,7 @@ export class DiscussionsStore extends ModuleStore {
   private async _createNewDiscussion(values: IPostFormInput) {
     console.log('adding discussion', values)
     const discussion: IDiscussionPost = {
-      ...Database.generateDocMeta('discussionsV2'),
+      ...Database.generateDocMeta('v2_discussions'),
       _commentCount: 0,
       _last3Comments: [],
       _usefulCount: 0,
@@ -90,7 +90,7 @@ export class DiscussionsStore extends ModuleStore {
       title: values.title,
       type: 'discussionQuestion',
     }
-    await Database.checkSlugUnique('discussionsV2', discussion.slug)
+    await Database.checkSlugUnique('v2_discussions', discussion.slug)
     return discussion
   }
 

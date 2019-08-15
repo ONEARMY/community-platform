@@ -4,7 +4,6 @@ import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom'
 import { NotFoundPage } from './NotFound/NotFound'
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import Header from './common/Header/Header'
-import { SITE } from 'src/config/config'
 import DevHelpers from 'src/components/DevHelpers/DevHelpers'
 import Main from 'src/pages/common/Layout/Main'
 import {

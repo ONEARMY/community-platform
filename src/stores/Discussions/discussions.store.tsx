@@ -4,10 +4,11 @@ import {
   IDiscussionPost,
   IPostFormInput,
 } from 'src/models/discussions.models'
-import { Database, IDBEndpoints } from '../database'
+import { Database } from '../database'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import { ModuleStore } from '../common/module.store'
 import { Subscription } from 'rxjs'
+import { IDBEndpoint } from 'src/models/common.models'
 
 export class DiscussionsStore extends ModuleStore {
   private allDiscussionComments$ = new Subscription()
@@ -40,7 +41,7 @@ export class DiscussionsStore extends ModuleStore {
     repliesToId?: string,
   ) {
     // cast endpoing to IDB endpoints as no way in typescript ot handle regex for subcollection path
-    const endpoint = `discussions/${discussionID}/comments` as IDBEndpoints
+    const endpoint = `discussions/${discussionID}/comments` as IDBEndpoint
     const values: IDiscussionComment = {
       ...Database.generateDocMeta(endpoint),
       comment,
@@ -101,7 +102,7 @@ export class DiscussionsStore extends ModuleStore {
     this.allDiscussionComments$.unsubscribe()
     this.activeDoc$.subscribe(doc => {
       if (doc) {
-        const endpoint = `discussions/${doc._id}/comments` as IDBEndpoints
+        const endpoint = `discussions/${doc._id}/comments` as IDBEndpoint
         this.allDiscussionComments$ = Database.getCollection(
           endpoint,
         ).subscribe(docs => {

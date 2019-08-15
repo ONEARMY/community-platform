@@ -7,7 +7,7 @@
 import { Subject } from 'rxjs'
 import { afs } from 'src/utils/firebase'
 import { rdb } from 'src/utils/firebase'
-import { IDbDoc } from 'src/models/common.models'
+import { IDbDoc, IDBEndpoint } from 'src/models/common.models'
 // additional imports for typings
 import { firestore, auth } from 'firebase/app'
 import Dexie from 'dexie'
@@ -18,7 +18,7 @@ export class Database {
   /****************************************************************************** */
 
   // get a group of docs. returns an observable, first pulling from local cache and then searching for updates
-  public static getCollection(path: IDBEndpoints) {
+  public static getCollection(path: IDBEndpoint) {
     const collection$ = new Subject<any[]>()
     this._emitCollectionUpdates(path, collection$)
     return collection$
@@ -27,7 +27,7 @@ export class Database {
   // an issue with firestore is high cost if large number of docs returned. Use below
   // method to use alternate approach if using firebase as db provider
   // NOTE - requires endpoint to be sync'd with realtimeDB via cloud-function
-  public static getLargeCollection<T>(path: IDBEndpoints) {
+  public static getLargeCollection<T>(path: IDBEndpoint) {
     const collection$ = new Subject<T[]>()
     this._emitLargeCollectionUpdates(path, collection$)
     return collection$
@@ -100,7 +100,7 @@ export class Database {
   }
 
   public static async queryCollection(
-    collectionPath: IDBEndpoints,
+    collectionPath: IDBEndpoint,
     field: string,
     operation: firestore.WhereFilterOp,
     value: string,
@@ -117,7 +117,7 @@ export class Database {
   /****************************************************************************** */
 
   // instantiate a blank document to generate an id
-  public static generateDocId(collectionPath: IDBEndpoints) {
+  public static generateDocId(collectionPath: IDBEndpoint) {
     return afs.collection(collectionPath).doc().id
   }
   public static generateTimestamp(date?: Date) {
@@ -125,7 +125,7 @@ export class Database {
   }
 
   public static async checkSlugUnique(
-    collectionPath: IDBEndpoints,
+    collectionPath: IDBEndpoint,
     slug: string,
   ) {
     const matches = await this.queryCollection(
@@ -141,7 +141,7 @@ export class Database {
     }
   }
   // creates standard set of meta fields applied to all docs
-  public static generateDocMeta(collectionPath: IDBEndpoints, docID?: string) {
+  public static generateDocMeta(collectionPath: IDBEndpoint, docID?: string) {
     const user = auth().currentUser
     const meta: IDbDoc = {
       _created: this.generateTimestamp(),
@@ -179,7 +179,7 @@ export class Database {
   // if no cached data exists pull large data from firebase-realtime instead of firestore
   // TODO - split indexedDB, firebase realtime and firestore into better-marked sections
   private static async _emitLargeCollectionUpdates(
-    path: IDBEndpoints,
+    path: IDBEndpoint,
     subject: Subject<any[]>,
   ) {
     // fetch from indexeddb and emit. First close existing open as auto-opens
@@ -257,16 +257,3 @@ export class Database {
     return filtered
   }
 }
-
-/****************************************************************************** *
-        Interfaces
-  /****************************************************************************** */
-
-export type IDBEndpoints =
-  | 'howtosV1'
-  | 'users'
-  | 'discussions'
-  | 'tagsV1'
-  | 'eventsV1'
-  | 'mapPinsV1'
-  | '_mocks'

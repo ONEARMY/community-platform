@@ -14,3 +14,12 @@ export interface IDbDoc {
 }
 
 type userId = string
+
+export type IDBEndpoint =
+  | 'howtosV1'
+  | 'users'
+  | 'discussions'
+  | 'tagsV1'
+  | 'eventsV1'
+  | 'mapPinsV1'
+  | '_mocks'

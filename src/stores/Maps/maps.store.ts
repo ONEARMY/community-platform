@@ -17,13 +17,14 @@ import {
   EntityType,
 } from 'src/models/maps.models'
 import { generatePinFilters, generatePins } from 'src/mocks/maps.mock'
-import { Database, IDBEndpoints } from '../database'
+import { Database } from '../database'
 import { IUser } from 'src/models/user.models'
 import { UserStore } from '../User/user.store'
 import { toDate } from 'src/utils/helpers'
+import { IDBEndpoint } from 'src/models/common.models'
 
 export class MapsStore {
-  mapEndpoint: IDBEndpoints = 'mapPinsV1'
+  mapEndpoint: IDBEndpoint = 'mapPinsV1'
   availablePinFilters = generatePinFilters()
   constructor(private userStore: UserStore) {}
   @observable

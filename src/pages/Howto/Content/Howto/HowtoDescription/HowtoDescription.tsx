@@ -42,7 +42,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             </Text>
             &nbsp;|&nbsp;
             <Text inline color={'darkgrey'}>
-              {this.durationSincePosted(howto._created.toDate())}
+              {this.durationSincePosted(new Date(howto._created))}
             </Text>
           </Text>
           <Heading large>{howto.title}</Heading>

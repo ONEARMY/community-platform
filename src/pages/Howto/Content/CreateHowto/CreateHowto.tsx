@@ -97,7 +97,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
   }
 
   public validateTitle = async (value: any) => {
-    return this.store.validateTitle(value, 'howtosV1')
+    return this.store.validateTitle(value, 'howtosV2')
   }
 
   // automatically generate the slug when the title changes

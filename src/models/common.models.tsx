@@ -42,5 +42,3 @@ type IDBEndpointV1 =
 //   _deleted: boolean
 //   _createdBy: userId
 // }
-
-export type IDBLargeEndpoint = IDBEndpoint

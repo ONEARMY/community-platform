@@ -8,7 +8,7 @@ import { IDiscussionPost } from 'src/models/discussions.models'
 import { Editor, VARIANT } from 'src/components/Editor/'
 import { Button } from 'src/components/Button/'
 import { PostResponse } from '../PostResponse/PostResponse'
-import PageContainer from 'src/components/Layout/PageContainer'
+import Main from 'src/pages/common/Layout/Main'
 import { Box } from 'rebass'
 import { Avatar } from 'src/components/Avatar'
 import Heading from 'src/components/Heading'
@@ -80,7 +80,7 @@ class PostViewClass extends React.Component<IProps, IState> {
       const p = this.post
 
       return (
-        <PageContainer>
+        <Main>
           <Box>
             <Heading as={'h1'}>{p.title}</Heading>
             <Avatar userName={p._createdBy} />
@@ -108,7 +108,7 @@ class PostViewClass extends React.Component<IProps, IState> {
               Submit
             </Button>
           </Box>
-        </PageContainer>
+        </Main>
       )
     } else {
       return null

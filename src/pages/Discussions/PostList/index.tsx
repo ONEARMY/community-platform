@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { observer, inject } from 'mobx-react'
 
-import PageContainer from 'src/components/Layout/PageContainer'
+import Main from 'src/pages/common/Layout/Main'
 import FilterBar from 'src/pages/common/FilterBar/FilterBar'
 
 import { withRouter } from 'react-router'
@@ -17,13 +17,14 @@ interface IState {
   orderBy: string | null
 }
 
+// Then we can use the observer component decorator to automatically tracks observables and re-renders on change
 @inject((allStores: IStores) => ({
   discussionsStore: allStores.discussionsStore,
 }))
-// Then we can use the observer component decorator to automatically tracks observables and re-renders on change
 @observer
 class PostListClass extends React.Component<IProps, IState> {
-  @computed get discussions() {
+  @computed
+  get discussions() {
     return this.props.discussionsStore.allDiscussions
   }
   constructor(props: any) {
@@ -39,13 +40,13 @@ class PostListClass extends React.Component<IProps, IState> {
 
   public render() {
     return (
-      <PageContainer>
+      <Main>
         <FilterBar
           section={'discussions'}
           onChange={() => this.updateResultsList()}
         />
         <PostList2 posts={this.discussions} />
-      </PageContainer>
+      </Main>
     )
   }
 }

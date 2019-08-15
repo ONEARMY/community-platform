@@ -6,7 +6,7 @@ import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import Header from './common/Header/Header'
 import { SITE } from 'src/config/config'
 import DevHelpers from 'src/components/DevHelpers/DevHelpers'
-import PageContainer from 'src/components/Layout/PageContainer'
+import Main from 'src/pages/common/Layout/Main'
 import {
   COMMUNITY_PAGES,
   COMMUNITY_PAGES_PROFILE,
@@ -61,9 +61,9 @@ export class Routes extends React.Component<any, IState> {
                   render={props => (
                     <React.Fragment>
                       <Header />
-                      <PageContainer ignoreMaxWidth={page.fullPageWidth}>
+                      <Main ignoreMaxWidth={page.fullPageWidth}>
                         <>{page.component}</>
-                      </PageContainer>
+                      </Main>
                     </React.Fragment>
                   )}
                 />

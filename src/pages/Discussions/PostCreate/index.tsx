@@ -12,7 +12,7 @@ import { DiscussionsStore } from 'src/stores/Discussions/discussions.store'
 import { inject } from 'mobx-react'
 import { IStores } from 'src/stores'
 
-import PageContainer from 'src/components/Layout/PageContainer'
+import Main from 'src/pages/common/Layout/Main'
 import { Box } from 'rebass'
 
 interface IState {
@@ -67,7 +67,7 @@ export class PostCreate extends React.PureComponent<IProps, IState> {
   public render() {
     const { formValues } = this.state
     return (
-      <PageContainer>
+      <Main>
         <Box>
           <h2 style={{ marginTop: 0 }}>Create a Post</h2>
           <Form
@@ -105,7 +105,7 @@ export class PostCreate extends React.PureComponent<IProps, IState> {
             }}
           />
         </Box>
-      </PageContainer>
+      </Main>
     )
   }
 }

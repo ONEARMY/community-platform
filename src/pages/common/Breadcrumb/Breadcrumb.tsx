@@ -1,8 +1,7 @@
 import React from 'react'
 import { Link } from 'src/components/Links'
 import withBreadcrumbs from 'react-router-breadcrumbs-hoc'
-import HowtoBreadcrumb from './HowtoBreadcrumb'
-
+import HowtoBreadcrumb from 'src/pages/common/Breadcrumb/HowtoBreadcrumb'
 const routes = [
   { path: '/how-to', breadcrumb: 'How-to' },
   { path: '/how-to/create', breadcrumb: 'Create' },

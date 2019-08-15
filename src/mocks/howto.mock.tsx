@@ -1,6 +1,6 @@
 import { IHowto } from '../models/howto.models'
-import { toTimestamp } from 'src/utils/helpers'
 import { IUploadedFileMeta } from 'src/stores/storage'
+import { MOCK_DB_META } from './db.mock'
 
 const exampleUploadImage: IUploadedFileMeta = {
   downloadUrl: 'http://placekitten.com/g/400/250',
@@ -34,11 +34,7 @@ export const HOWTO_MOCK: IHowto[] = [
     ],
     tags: {},
     files: [],
-    _id: 'howTo1',
-    _deleted: false,
-    _createdBy: '123',
-    _created: toTimestamp('Friday, January 2, 2015 12:59 AM'),
-    _modified: toTimestamp('Friday, January 2, 2015 12:59 AM'),
+    ...MOCK_DB_META('howTo1'),
   },
   {
     cover_image: exampleUploadImage,
@@ -61,11 +57,7 @@ export const HOWTO_MOCK: IHowto[] = [
     ],
     tags: {},
     files: [],
-    _id: 'howTo2',
-    _deleted: false,
-    _createdBy: '123',
-    _created: toTimestamp('Friday, January 2, 2015 12:59 AM'),
-    _modified: toTimestamp('Friday, January 2, 2015 12:59 AM'),
+    ...MOCK_DB_META('howTo2'),
   },
   {
     cover_image: exampleUploadImage,
@@ -88,10 +80,6 @@ export const HOWTO_MOCK: IHowto[] = [
     ],
     tags: {},
     files: [],
-    _id: 'howTo3',
-    _deleted: false,
-    _createdBy: '123',
-    _created: toTimestamp('Friday, January 2, 2015 12:59 AM'),
-    _modified: toTimestamp('Friday, January 2, 2015 12:59 AM'),
+    ...MOCK_DB_META('howTo3'),
   },
 ]

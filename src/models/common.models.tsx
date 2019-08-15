@@ -21,6 +21,7 @@ export type IDBEndpoint =
   | 'v2_discussions'
   | 'v2_tags'
   | 'v2_events'
+  | 'v2_mappins'
 
 /************************************************************************
  *  Deprecates - legacy interfaces used. Currently retained to troubleshoot
@@ -32,6 +33,7 @@ type IDBEndpointV1 =
   | 'discussions'
   | 'tagsV1'
   | 'eventsV1'
+  | 'mapPinsV1'
 
 // interface IDbDocV1 {
 //   _id: string
@@ -40,3 +42,5 @@ type IDBEndpointV1 =
 //   _deleted: boolean
 //   _createdBy: userId
 // }
+
+export type IDBLargeEndpoint = IDBEndpoint

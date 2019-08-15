@@ -23,3 +23,5 @@ export type IDBEndpoint =
   | 'eventsV1'
   | 'mapPinsV1'
   | '_mocks'
+
+export type IDBLargeEndpoint = IDBEndpoint

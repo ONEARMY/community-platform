@@ -18,6 +18,7 @@
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
+    "dateformat": "^3.0.3",
     "express": "^4.16.4",
     "firebase-admin": "8.3.0",
     "firebase-functions": "^3.2.0",
@@ -30,6 +31,7 @@
   "devDependencies": {
     "@types/axios": "^0.14.0",
     "@types/cors": "^2.8.5",
+    "@types/dateformat": "^3.0.0",
     "@types/fs-extra": "^5.0.5",
     "@types/sharp": "^0.22.1",
     "concurrently": "^4.1.1",

@@ -30,7 +30,7 @@ export interface IUser extends IDbDoc {
   country?: string
   links?: ILink[]
   location?: ILocation
-  year?: string
+  year?: ISODateString
 }
 
 export type UserRole = 'super-admin' | 'subscriber'

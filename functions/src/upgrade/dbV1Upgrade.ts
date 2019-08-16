@@ -15,49 +15,61 @@ const mappings: DBMapping = {
 
 export const upgradeDBAll = async () => {
   const promises = Object.keys(mappings).map(async endpoint => {
-    await upgradeDBEndpoint(endpoint)
+    const upgradedDocs = await upgradeDBEndpoint(endpoint)
+    return upgradedDocs
   })
   const updates = await Promise.all(promises)
+  console.log('upgrade complete')
   return updates
 }
 
 const upgradeDBEndpoint = async (endpoint: string) => {
+  console.log('upgrading endpoint', endpoint)
   const snap = await db.collection(endpoint).get()
   const docs = snap.empty ? [] : snap.docs.map(d => d.data())
+  console.log(`|${endpoint}|: [${docs.length}] docs to upgrade`)
   const batch = db.batch()
   docs.forEach(d => {
     if (!d._deleted) {
-      const v2Doc = upgradeV1Doc(d)
-      const v2Endpoint = mappings[endpoint]
-      const ref = db.doc(`${v2Endpoint}/${d._key}`)
-      batch.set(ref, v2Doc)
+      try {
+        const v2Doc = upgradeV1Doc(d)
+        const v2Endpoint = mappings[endpoint]
+        const ref = db.doc(`${v2Endpoint}/${d._key}`)
+        batch.set(ref, v2Doc)
+      } catch (error) {
+        console.log(d)
+        throw new Error('unable to upgrade doc')
+      }
     }
   })
+  console.log(`|${endpoint}|: upgrade ready`)
   // await batch.commit()
   return docs
 }
 
 function upgradeV1Doc(doc: any) {
-  // upgrade dates from timestamp
-  const dateFields = ['_created', '_modified']
-  dateFields.forEach(field => {
-    if (doc.hasOwnProperty(field)) {
+  // upgrade timestamps on all docs
+  const metaFields = ['_created', '_modified']
+  metaFields.forEach(field => {
+    doc[field] = _upgradeDate(doc[field])
+  })
+  // upgrade other specific fields
+  const optionalFields = ['_lastResponse', 'year', 'date']
+  optionalFields.forEach(field => {
+    // ignore case where field set to null (discussions)
+    if (doc.hasOwnProperty(field) && doc[field]) {
       doc[field] = _upgradeDate(doc[field])
     }
   })
-  const v2Doc = {
-    ...doc,
-    _modified: _upgradeDate(doc._modified),
-    _created: _upgradeDate(doc._created),
-  }
-  return v2Doc
+
+  return doc
 }
 
 function _upgradeDate(date: any) {
-  if (date.hasOwnProperty('seconds')) {
-    return new Date(date.seconds)
+  if (date.hasOwnProperty('_seconds') && date.hasOwnProperty('_nanoseconds')) {
+    const millis = date._seconds * 1000 + date._nanoseconds / 1e6
+    return new Date(millis)
   } else {
-    console.log(date)
     throw new Error(`no date upgrade method: ${JSON.stringify(date)}`)
   }
 }

@@ -214,6 +214,11 @@
   dependencies:
     "@types/express" "*"
 
+"@types/dateformat@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@types/dateformat/-/dateformat-3.0.0.tgz#d3cbfa8ac3789990592f3d9585331cdb2c5f979f"
+  integrity sha512-4N/J/ISasvUYOPnr5gfYRp+YYmPhHqkAyUgP9T9/HQHFoIfjU53lt3jaX67VuTvhpF5WsyNlCcEFbpI3spdxEA==
+
 "@types/express-serve-static-core@*":
   version "4.16.3"
   resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.16.3.tgz#49d9cea50e801f8bf757702060752fe65f169ba7"
@@ -709,6 +714,11 @@ date-fns@^1.23.0:
   version "1.30.1"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-1.30.1.tgz#2e71bf0b119153dbb4cc4e88d9ea5acfb50dc05c"
   integrity sha512-hBSVCvSmWC+QypYObzwGOd9wqdDpOt+0wl0KbU+R+uuZBS1jN8VsD1ss3irQDknRj5NvxiTF6oj/nDRnN/UQNw==
+
+dateformat@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/dateformat/-/dateformat-3.0.3.tgz#a6e37499a4d9a9cf85ef5872044d62901c9889ae"
+  integrity sha512-jyCETtSl3VMZMWeRo7iY1FL19ges1t55hMo5yaam4Jrsm5EPL89UQkoQRyiI+Yf4k8r2ZpdngkV8hr1lIdjb3Q==
 
 debug@2.6.9:
   version "2.6.9"

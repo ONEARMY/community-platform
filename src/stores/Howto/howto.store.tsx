@@ -31,14 +31,13 @@ export class HowtoStore extends ModuleStore {
 
   @action
   public async getDocBySlug(slug: string) {
-    const collection = await Database.queryCollection(
+    const collection = await Database.queryCollection<IHowto>(
       'v2_howtos',
       'slug',
       '==',
       slug,
     )
-    const activeHowto =
-      collection.length > 0 ? (collection[0].data() as IHowto) : undefined
+    const activeHowto = collection.length > 0 ? collection[0] : undefined
     this.activeHowto = activeHowto
     return activeHowto
   }

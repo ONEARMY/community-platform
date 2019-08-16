@@ -56,7 +56,9 @@ export class Database {
     })
   }
 
-  public static async queryCollection(
+  // find all docs in collection matching criteria
+  // if no docs are found returns an empty array
+  public static async queryCollection<T>(
     collectionPath: IDBEndpoint,
     field: string,
     operation: firestore.WhereFilterOp,
@@ -66,7 +68,8 @@ export class Database {
       .collection(collectionPath)
       .where(field, operation, value)
       .get()
-    return data.docs.map(doc => doc.data())
+    console.log('data', data)
+    return data.empty ? [] : data.docs.map(doc => doc.data() as T)
   }
 
   /****************************************************************************** *

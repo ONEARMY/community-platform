@@ -34,7 +34,7 @@ const upgradeDBEndpoint = async (endpoint: string) => {
       try {
         const v2Doc = upgradeV1Doc(d)
         const v2Endpoint = mappings[endpoint]
-        const ref = db.doc(`${v2Endpoint}/${d._key}`)
+        const ref = db.doc(`${v2Endpoint}/${d._id}`)
         batch.set(ref, v2Doc)
       } catch (error) {
         console.log(d)
@@ -43,7 +43,7 @@ const upgradeDBEndpoint = async (endpoint: string) => {
     }
   })
   console.log(`|${endpoint}|: upgrade ready`)
-  // await batch.commit()
+  await batch.commit()
   return docs
 }
 

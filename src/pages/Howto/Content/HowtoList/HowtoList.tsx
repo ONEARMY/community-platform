@@ -107,9 +107,7 @@ export class HowtoList extends React.Component<IProps, any> {
                       width={1}
                     >
                       <Flex width="1" fontSize={'0px'}>
-                        <picture>
-                          <HowToImage src={howto.cover_image.downloadUrl} />
-                        </picture>
+                        <HowToImage src={howto.cover_image.downloadUrl} />
                       </Flex>
 
                       <Flex px={3} py={3} flexDirection="column">

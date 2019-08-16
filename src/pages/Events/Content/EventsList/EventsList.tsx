@@ -10,7 +10,6 @@ import { colors } from 'src/themes/styled.theme'
 import Icon from 'src/components/Icons'
 import { TagDisplay } from 'src/components/Tags/TagDisplay/TagDisplay'
 import Heading from 'src/components/Heading'
-import { toDate } from 'src/utils/helpers'
 
 interface IProps {
   upcomingEvents: IEvent[]
@@ -60,10 +59,10 @@ export class EventsList extends React.Component<IProps> {
                   <RowContainer width={1} py={4} key={event._id}>
                     <Flex flexWrap={'wrap'} flex={'1'}>
                       <Text large bold width={1}>
-                        {this.getMonth(event.date as Date)}
+                        {this.getMonth(new Date(event.date))}
                       </Text>
                       <Heading small bold width={1}>
-                        {this.getDay(event.date as Date)}
+                        {this.getDay(new Date(event.date))}
                       </Heading>
                     </Flex>
                     <Flex flexWrap={'wrap'} flex={'3'}>

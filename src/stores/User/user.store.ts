@@ -68,14 +68,14 @@ export class UserStore {
   }
 
   public async getUserProfile(userName: string) {
-    const ref = await afs.doc(`users/${userName}`).get()
+    const ref = await afs.doc(`v2_users/${userName}`).get()
     return ref.exists ? (ref.data() as IUser) : null
   }
 
   public async updateUserProfile(values: Partial<IUser>) {
     const user = this.user as IUser
     const update = { ...user, ...values }
-    await Database.setDoc(`users/${user.userName}`, update)
+    await Database.setDoc(`v2_users/${user.userName}`, update)
     this.updateUser(update)
   }
 
@@ -133,12 +133,12 @@ export class UserStore {
   private async _createUserProfile(userName: string) {
     const authUser = auth.currentUser as firebase.User
     const user: IUser = {
-      ...Database.generateDocMeta('users', userName),
+      ...Database.generateDocMeta('v2_users', userName),
       _authID: authUser.uid,
       userName,
       verified: false,
     }
-    await Database.setDoc(`users/${userName}`, user)
+    await Database.setDoc(`v2_users${userName}`, user)
     this.updateUser(user)
   }
 

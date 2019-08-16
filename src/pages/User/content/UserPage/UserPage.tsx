@@ -14,7 +14,6 @@ import LinearProgress from '@material-ui/core/LinearProgress'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
 import Icon from 'src/components/Icons'
-import { timestampToYear } from 'src/utils/helpers'
 
 interface IRouterCustomParams {
   id: string
@@ -168,7 +167,7 @@ export class UserPage extends React.Component<
             </Heading>
             {user.year && (
               <Heading small inline color={'grey'} ml={2} my={0}>
-                Since {timestampToYear(user.year.seconds)}
+                Since {new Date(user.year).getFullYear()}
               </Heading>
             )}
           </Flex>

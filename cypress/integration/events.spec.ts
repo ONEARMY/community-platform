@@ -1,20 +1,15 @@
 describe('[Events]', () => {
-
-  before(() => {
-    cy.deleteDocuments('v2_events', 'title', '==', 'Create an Event test')
-    const today = '2019-08-15'
+  const today = '2019-08-15'
+  beforeEach(() => {
     cy.log(`Today as **${today}**`)
     cy.clock(Cypress.moment.utc(today).valueOf(), ['Date'])
   })
 
-  beforeEach(() => {
-    cy.visit('/events')
-    cy.logout()
-  })
-
   describe('[List events]', () => {
-    // const howtoUrl = '/how-to/make-glasslike-beams'
-    // const coverFileRegex = /howto-beams-glass-0-3.jpg/
+    beforeEach(() => {
+      cy.visit('/events')
+      cy.logout()
+    })
 
     it('[By Everyone]', () => {
       cy.step('The Create button is unavailable')
@@ -23,15 +18,19 @@ describe('[Events]', () => {
       cy.step('Upcoming events are shown')
       cy.get('[data-cy=card]').its('length').should('be.eq', 5)
 
-      cy.step('No tag is selected')
-      // - Create button is unavailable
-      // - No tag is selected
-      // - No location is inputted
-      // - More Events button is hidden
-      // - Some latest events are shown
-      // - The summary of an event is shown, including: date, title, organizer, location and tag
-      // - Click on the event's button
-      // - Check if it takes users to the event's page in a new tab"
+      cy.step('Move Events button is hidden')
+      cy.get('button').contains('More Events').should('not.visible')
+
+      cy.step(`Basic info of an event is shown`)
+      cy.get('[data-cy=card]:has(:contains(SURA BAYA Exhibition))').within(() => {
+        cy.contains('18').should('be.exist')
+        cy.contains('August').should('be.exist')
+        cy.contains('SURA BAYA Exhibition').should('be.exist')
+        cy.contains('By event_creator').should('be.exist')
+        cy.contains('Surabaya').should('be.exist')
+        cy.contains('exhibition').should('be.exist')
+        cy.get('a[target=_blank]').should('have.attr', 'href').and('eq', 'https://www.instagram.com/p/B1N6zVUjj0M/')
+      })
     })
 
     it('[By Authenticated]', () => {
@@ -45,13 +44,9 @@ describe('[Events]', () => {
     })
   })
 
-  describe('[Filter with Tag]', () => {
+  describe('[Filter Events]', () => {
     it('[By Everyone]', () => {
-      cy.step('Select a tag')
-      // - Select a tag on the dropdown list
-      // - Check if only relevant events are shown
-      // - Remove the selected tag
-      // - Expect all events are shown again"
+
     })
   })
 

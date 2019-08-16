@@ -78,8 +78,8 @@ export class EventsList extends React.Component<any> {
                 </Flex>
               )}
               <Flex justifyContent={'center'} mt={20}>
-                <Link to={'#'}>
-                  <Button variant={'secondary'}>More Events</Button>
+                <Link to={'#'} style={{ visibility: 'hidden' }}>
+                  <Button variant={'secondary'} data-cy={'more-events'}>More Events</Button>
                 </Link>
               </Flex>
               <MoreContainer m={'0 auto'} pt={60} pb={90}>

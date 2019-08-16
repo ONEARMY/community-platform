@@ -99,7 +99,7 @@ describe('[How To]', () => {
       cy.get('.data-cy__multi-value__label').should('not.exist')
       cy.get('[data-cy=card]')
         .its('length')
-        .should('be.gte', 7)
+        .should('be.eq', 7)
 
       cy.step('Show a message when there is no more how-tos')
       cy.visit('/how-to')

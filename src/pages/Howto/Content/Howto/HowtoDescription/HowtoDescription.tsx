@@ -80,7 +80,10 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             ))}
         </Box>
         <Flex justifyContent={'end'} width={[1 / 2]}>
-          <CoverImg src={howto.cover_image.downloadUrl} alt="how-to cover" />
+          <Box>
+            <CoverImg src={howto.cover_image.downloadUrl} alt="how-to cover" />
+            <Text pt={2}>{howto.caption}</Text>
+          </Box>
         </Flex>
       </Flex>
     )

@@ -15,7 +15,7 @@
   },
   "main": "./lib/functions/src/index.js",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "dateformat": "^3.0.3",

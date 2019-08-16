@@ -37,6 +37,7 @@ Please make sure to read the [Contributing Guide](/CONTRIBUTING.md) before makin
 ## 🌟 &nbsp; Core Team
 
 If needed you can [drop us a line here](mailto:hello@onearmy.world?subject=contact%20from%20github) 👋
+Or join our [Discord channel](https://discord.gg/AKuxkpx)
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->

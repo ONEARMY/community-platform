@@ -64,7 +64,12 @@ function upgradeV1Doc(doc: any) {
 }
 
 function _upgradeDate(date: any) {
-  if (date.hasOwnProperty('_seconds') && date.hasOwnProperty('_nanoseconds')) {
+  if (typeof date === 'string') {
+    return new Date(date).toISOString()
+  } else if (
+    date.hasOwnProperty('_seconds') &&
+    date.hasOwnProperty('_nanoseconds')
+  ) {
     const millis = date._seconds * 1000 + date._nanoseconds / 1e6
     return new Date(millis).toISOString()
   } else {

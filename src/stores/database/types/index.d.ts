@@ -108,6 +108,7 @@ export type ISODateString = string
  * These endpoints have to be explicity defined to enable proper
  * indexing within the offline cache db
  */
+
 export type DBEndpoint =
   | 'v2_howtos'
   | 'v2_users'
@@ -115,13 +116,3 @@ export type DBEndpoint =
   | 'v2_tags'
   | 'v2_events'
   | 'v2_mappins'
-
-/**
- * For mapping queries it is easiest to provide a common subset of defaults
- * which are designed to prevent accidental alter to the desired data structure
- */
-export const DB_QUERY_DEFAULTS: DBQueryOptions = {
-  limit: Infinity,
-  order: 'asc',
-  sortBy: '_id',
-}

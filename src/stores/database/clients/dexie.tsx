@@ -1,12 +1,7 @@
 import { IDBEndpoint, IDbDoc } from 'src/models/common.models'
 import Dexie from 'dexie'
-import { DB_API_VERSION } from 'src/stores/database/_deprecated/database.model'
-import {
-  DBQueryOptions,
-  DB_QUERY_DEFAULTS,
-  DBQueryWhereOptions,
-  AbstractDBClient,
-} from '../types'
+import { DBQueryOptions, DBQueryWhereOptions, AbstractDBClient } from '../types'
+import { DB_API_VERSION, DB_QUERY_DEFAULTS } from '../utils/db.utils'
 
 const db = new Dexie('OneArmyCache')
 

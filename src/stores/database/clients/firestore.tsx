@@ -1,7 +1,8 @@
 import { IDBEndpoint, IDbDoc } from 'src/models/common.models'
-import { firestore } from 'src/utils/firebase'
-import { DBQueryOptions, DB_QUERY_DEFAULTS, AbstractDBClient } from '../types'
+import { firestore } from '../utils/firebase.utils'
+import { DBQueryOptions, AbstractDBClient } from '../types'
 import { Observable, Observer } from 'rxjs'
+import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
 
 const db = firestore
 

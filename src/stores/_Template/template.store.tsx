@@ -1,11 +1,15 @@
 import { observable, action, computed } from 'mobx'
 import { afs } from '../../utils/firebase'
+import { RootStore } from '..'
 
 interface IExampleDoc {
   savedNumber: number
 }
 
 export class TemplateStore {
+  constructor(rootStore: RootStore) {
+    //
+  }
   // observables are data variables that can be subscribed to and change over time
   @observable
   public randomNumber: number

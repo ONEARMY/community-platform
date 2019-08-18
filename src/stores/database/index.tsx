@@ -3,7 +3,14 @@
 import { DexieClient } from './clients/dexie'
 import { FirestoreClient } from './clients/firestore'
 import { RealtimeDBClient } from './clients/rtdb'
-import { AbstractDatabase, DBClients, DBEndpoint, DBDoc } from './types'
+import {
+  AbstractDatabase,
+  DBClients,
+  DBEndpoint,
+  DBDoc,
+  DBQueryWhereOperator,
+  DBQueryWhereValue,
+} from './types'
 import { Observable, Observer } from 'rxjs'
 
 export class Database implements AbstractDatabase {
@@ -75,17 +82,14 @@ class CollectionReference {
     await cacheDB.setBulkDocs(this.endpoint, dbDocs)
   }
 
-  async checkDocExists(
-    searchField: string,
-    searchValue: string | number | Date,
+  async getWhere(
+    field: string,
+    operator: DBQueryWhereOperator,
+    value: DBQueryWhereValue,
   ) {
     const { serverDB } = this.clients
     const docs = await serverDB.queryCollection(this.endpoint, {
-      where: {
-        field: searchField,
-        operator: '==',
-        value: searchValue,
-      },
+      where: { field, operator, value },
     })
     return docs.length > 0 ? true : false
   }
@@ -125,6 +129,8 @@ class DocReference {
   }
 
   async stream() {
+    // TODO - if deemed useful by the platform
+    throw new Error('stream method does not currently exist for docs')
     return
   }
 

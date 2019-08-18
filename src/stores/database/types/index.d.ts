@@ -89,9 +89,11 @@ export interface DBQueryOptions {
 }
 export interface DBQueryWhereOptions {
   field: string
-  operator: '>' | '<' | '=='
-  value: string | number | Date
+  operator: DBQueryWhereOperator
+  value: DBQueryWhereValue
 }
+export type DBQueryWhereOperator = '>' | '<' | '=='
+export type DBQueryWhereValue = string | number
 
 /**
  * @remarks

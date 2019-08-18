@@ -1,9 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import { Text as RebassText, TextProps as RebassTextProps } from 'rebass'
-import { colors } from 'src/themes/styled.theme'
-
-import theme from 'src/themes/styled.theme'
+import theme from 'src/themes/styled.preciousplastic'
 
 export interface ITextProps {
   uppercase?: boolean
@@ -22,7 +20,7 @@ export interface ITextProps {
   small?: boolean
   superSmall?: boolean
   // keyof colors returns full object prototype, include typeof for just named keys (i.e. color list)
-  color?: keyof typeof colors
+  color?: keyof typeof theme.colors
   // clip forces text to fill max 1 line and add '...' for overflow
   clipped?: boolean
   preLine?: boolean
@@ -51,10 +49,10 @@ export const capitalize = (props: ITextProps) =>
   props.txtright ? { textTransform: 'capitalize' } : null
 
 export const regular = (props: ITextProps) =>
-  props.regular ? { fontWeight: theme.regular } : null
+  props.regular ? { fontWeight: 400 } : null
 
 export const bold = (props: ITextProps) =>
-  props.bold ? { fontWeight: theme.bold } : null
+  props.bold ? { fontWeight: 600 } : null
 
 export const large = (props: ITextProps) =>
   props.large ? { fontSize: theme.fontSizes[3] } : null

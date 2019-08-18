@@ -4,12 +4,12 @@ import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
-import { LoginComponent } from '../../Login/Login'
+import { LoginComponent } from 'src/pages/common/Login/Login'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import Text from 'src/components/Text'
 import { Flex } from 'rebass'
-import ProfileAvatar from './ProfileAvatar'
+import ProfileAvatar from './ProfilAvatar'
 
 interface IState {
   moreMenuAnchor: any

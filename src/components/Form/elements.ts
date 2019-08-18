@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import theme from 'src/themes/styled.theme'
+import theme from 'src/themes/styled.preciousplastic'
 
 export const inputStyles = css`
   border: 1px solid ${theme.colors.black};

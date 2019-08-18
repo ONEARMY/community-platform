@@ -1,19 +1,17 @@
 import * as React from 'react'
 import { IEvent } from 'src/models/events.models'
-import { Button } from 'src/components/Button'
 import { Link } from 'src/components/Links'
-import { Flex, Link as ExternalLink, Box } from 'rebass'
+import { Flex, Link as ExternalLink, Button } from 'rebass'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import Text from 'src/components/Text'
 import styled from 'styled-components'
-import theme from 'src/themes/styled.theme'
-import { TagDisplay } from 'src/components/Tags/TagDisplay/TagDisplay'
+import theme from 'src/themes/styled.preciousplastic'
+import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import FlagIconEvents from 'src/components/Icons/FlagIcon/FlagIcon'
 import ImageTargetBlank from 'src/assets/icons/link-target-blank.svg'
-import WhiteBubble0 from 'src/assets/images/white-bubble_0.svg'
-import WhiteBubble1 from 'src/assets/images/white-bubble_1.svg'
-import WhiteBubble2 from 'src/assets/images/white-bubble_2.svg'
-import WhiteBubble3 from 'src/assets/images/white-bubble_3.svg'
+import MoreElementsButton from 'src/components/MoreLinks/MoreElementsButton'
+import MoreDirectionModal from 'src/components/MoreLinks/MoreDirectionModal'
+import ListPageTitle from 'src/components/Titles/ListPageTitle'
 
 interface IProps {
   upcomingEvents: IEvent[]
@@ -45,43 +43,6 @@ const GoToEventLink = styled(ExternalLink)`
   }
 `
 
-const MoreBox = styled(Box)`
-  position: relative
-  &:after {
-    content: '';
-    background-image: url(${WhiteBubble0});
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    background-size: contain;
-    background-repeat: no-repeat;
-    position: absolute;
-    top: 59%;
-    transform: translate(-50%, -50%);
-    left: 50%;
-    max-width: 850px;
-    background-position: center 10%;
-  }
-
-  @media only screen and (min-width: ${theme.breakpoints[0]}) {
-    &:after {
-      background-image: url(${WhiteBubble1});
-    }
-  }
-
-  @media only screen and (min-width: ${theme.breakpoints[1]}) {
-    &:after {
-      background-image: url(${WhiteBubble2});
-    }
-  }
-
-  @media only screen and (min-width: ${theme.breakpoints[2]}) {
-    &:after {
-      background-image: url(${WhiteBubble3});
-    }
-  }
-`
-
 export class EventsList extends React.Component<IProps> {
   constructor(props: any) {
     super(props)
@@ -99,15 +60,13 @@ export class EventsList extends React.Component<IProps> {
     const { upcomingEvents } = this.props
     return (
       <>
-        <Flex>
-          <Text flex={1} py={26} txtcenter xxlarge bold>
-            Precious Plastic events from around the world
-          </Text>
-        </Flex>
+        <ListPageTitle
+          pageTitle={'Precious Plastic events from around the world'}
+        />
         <Flex justifyContent={'flex-end'} mb={8}>
           <AuthWrapper>
             <Link to={'/events/create'}>
-              <Button px={3}>Create an Event</Button>
+              <Button variant={'primary'}>Create an Event</Button>
             </Link>
           </AuthWrapper>
         </Flex>
@@ -176,23 +135,18 @@ export class EventsList extends React.Component<IProps> {
                 ))}
               </Flex>
             )}
-            <Flex justifyContent={'center'} py={20}>
-              <Button px={3} variant={'secondary'}>
-                More Events
-              </Button>
-            </Flex>
-            <MoreBox py={20}>
-              <Text bold txtcenter fontSize={[4, 4, 5]}>
-                Connect with a likeminded community.
-                <br />
-                All around the planet.
-              </Text>
-              <Flex justifyContent={'center'}>
-                <Button px={3} mt={5}>
-                  Create an Event
-                </Button>
-              </Flex>
-            </MoreBox>
+            <MoreElementsButton
+              buttonLink={'#'}
+              buttonLabel={'More events'}
+              buttonVariant={'secondary'}
+            />
+            <MoreDirectionModal
+              text={
+                'Connect with a likeminded community. All around the planet.'
+              }
+              buttonVariant={'primary'}
+              buttonLabel={'Create an event'}
+            />
           </>
         </React.Fragment>
       </>

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import theme from 'src/themes/styled.theme'
+import theme from 'src/themes/styled.preciousplastic'
 import { Box } from 'rebass'
 
 const ProfileAvatar = styled(Box)`

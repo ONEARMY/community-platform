@@ -1,6 +1,6 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import theme from 'src/themes/styled.theme'
+import theme from 'src/themes/styled.preciousplastic'
 import Text, { ITextProps } from 'src/components/Text'
 import { HeadingProps as RebassHeadingProps } from 'rebass'
 

@@ -11,7 +11,7 @@ import { Avatar } from 'src/components/Avatar'
 import Text from 'src/components/Text'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import styled from 'styled-components'
-import theme from 'src/themes/styled.theme'
+import theme from 'src/themes/styled.preciousplastic'
 import Icon from 'src/components/Icons'
 import { timestampToYear } from 'src/utils/helpers'
 
@@ -28,7 +28,7 @@ interface IState {
 }
 
 const Circle = styled(Flex)`
-  border-radius: ${theme.radii[4] + 'px'};
+  border-radius: 50%'};
   align-items: center;
   justify-content: center;
   width: 40px;

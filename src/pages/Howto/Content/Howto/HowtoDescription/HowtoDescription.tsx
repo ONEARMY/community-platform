@@ -1,5 +1,5 @@
 import React from 'react'
-import { TagDisplay } from 'src/components/Tags/TagDisplay/TagDisplay'
+import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import differenceInDays from 'date-fns/difference_in_days'
 import { IHowto } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
@@ -20,7 +20,6 @@ interface IProps {
 
 export const CoverImg = styled(Image)`
   object-fit: cover;
-  max-height: 450px;
   width: 100%;
 `
 

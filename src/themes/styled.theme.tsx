@@ -102,27 +102,6 @@ const space = [
 ]
 const radii = space
 const fontSizes = [10, 12, 14, 18, 22, 30, 38, 42, 46, 50, 58, 66, 74]
-const lineHeights = [
-  10,
-  12,
-  14,
-  16,
-  18,
-  20,
-  22,
-  24,
-  26,
-  28,
-  30,
-  34,
-  38,
-  42,
-  46,
-  50,
-  58,
-  66,
-  74,
-]
 const breakpoints = ['32em', '48em', '64em']
 // standard widths: 512px, 768px, 1024px
 const maxContainerWidth = 1280
@@ -137,7 +116,6 @@ export default {
   space,
   radii,
   fontSizes,
-  lineHeights,
   maxContainerWidth,
   regular,
   bold,

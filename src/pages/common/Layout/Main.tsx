@@ -9,7 +9,7 @@ import {
   WidthProps,
 } from 'styled-system'
 import { Flex, Box, FlexProps } from 'rebass'
-import theme from 'src/themes/styled.theme'
+import theme from 'src/themes/styled.preciousplastic'
 
 type InnerContainerProps = MaxWidthProps &
   SpaceProps &
@@ -38,11 +38,11 @@ const Main = (props: IProps) => (
 )
 
 InnerContainer.defaultProps = {
-  maxWidth: theme.maxContainerWidth,
+  maxWidth: theme.main.maxWidth,
   width: 1,
-  my: 4,
-  mx: 'auto',
-  px: [2, 3, 4],
+  mx: theme.main.marginX,
+  my: theme.main.marginY,
+  px: theme.main.paddingX,
 }
 
 export default Main

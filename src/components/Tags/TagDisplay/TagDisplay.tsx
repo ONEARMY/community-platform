@@ -5,7 +5,7 @@ import { ITag } from 'src/models/tags.model'
 import { Box } from 'rebass'
 import Text from 'src/components/Text'
 
-import theme from 'src/themes/styled.theme'
+import theme from 'src/themes/styled.preciousplastic'
 import Styled from 'styled-components'
 
 /*
@@ -38,7 +38,7 @@ const TagContainer = Styled(Text)`
 
 @inject('tagsStore')
 @observer
-export class TagDisplay extends React.Component<IProps, IState> {
+export default class TagDisplay extends React.Component<IProps, IState> {
   constructor(props: any) {
     super(props)
   }

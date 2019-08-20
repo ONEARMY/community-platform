@@ -21,6 +21,7 @@ interface IProps {
 export const CoverImg = styled(Image)`
   object-fit: cover;
   width: 100%;
+  height: 450px;
 `
 
 const HowToCard = styled(Flex)`
@@ -158,7 +159,6 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
         </Flex>
         <Flex justifyContent={'end'} width={[1, 1 / 2, 1 / 2]}>
           <CoverImg src={howto.cover_image.downloadUrl} alt="how-to cover" />
-          <Text pt={2}>{howto.caption}</Text>
         </Flex>
       </HowToCard>
     )

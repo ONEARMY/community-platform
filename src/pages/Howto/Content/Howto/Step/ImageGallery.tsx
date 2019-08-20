@@ -16,6 +16,23 @@ interface IState {
   imgIndex: number
 }
 
+const ThumbCard = styled(Card)`
+  padding: 5px;
+  overflow: hidden;
+  transition: 0.2s ease-in-out;
+  &:hover {
+    transform: translateY(-5px);
+  }
+`
+
+const ThumbImage = styled(Image)`
+  object-fit: cover;
+  width: 100px;
+  height: 67px;
+  border: 1px solid #ececec;
+  border-radius: 5px;
+`
+
 const ImageWithPointer = styled(Image)`
   cursor: pointer;
 `
@@ -60,31 +77,32 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
     const imageNumber = this.props.images.length
     console.log((this.state.imgIndex + 1) % this.state.imagesList.length)
     return this.state.activeImage ? (
-      <Flex>
-        <ImageWithPointer
-          width={[1, 1, 0.5]}
-          px={1}
-          pb={4}
-          src={this.state.activeImage.downloadUrl}
-          onClick={() => {
-            this.triggerLightbox()
-          }}
-        />
-        <Flex flexWrap={'wrap'}>
+      <Flex flexDirection={'column'}>
+        <Flex width={1}>
+          <ImageWithPointer
+            width={1}
+            src={this.state.activeImage.downloadUrl}
+            onClick={() => {
+              this.triggerLightbox()
+            }}
+          />
+        </Flex>
+        <Flex
+          flexWrap={'wrap'}
+          width={1}
+          mx={[2, '-5px', '-5px']}
+          mb={3}
+          mt={4}
+        >
           {imageNumber > 1
             ? this.props.images.map((image: any, index: number) => (
-                <Card
-                  p={1}
+                <ThumbCard
                   opacity={image === this.state.activeImage ? 1.0 : 0.5}
                   onClick={() => this.setActive(image)}
                   key={index}
                 >
-                  <Image
-                    height={[50, 100, 200]}
-                    src={image.downloadUrl}
-                    key={index}
-                  />
-                </Card>
+                  <ThumbImage src={image.downloadUrl} key={index} />
+                </ThumbCard>
               ))
             : null}
         </Flex>

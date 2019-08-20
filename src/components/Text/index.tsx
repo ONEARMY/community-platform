@@ -82,7 +82,13 @@ export const dateTitle = (props: ITextProps) =>
   props.dateTitle ? { fontSize: '24px', fontWeight: 700 } : null
 
 export const litleTitle = (props: ITextProps) =>
-  props.litleTitle ? { fontSize: '32px' } : null
+  props.litleTitle
+    ? {
+        fontFamily: '"Varela Round", Helvetica Neue, Arial, sans-serif;',
+        fontSize: '16px',
+        fontWeight: 700,
+      }
+    : null
 
 export const metaTitle = (props: ITextProps) =>
   props.metaTitle ? { fontSize: '32px' } : null

@@ -1,5 +1,9 @@
 import React, { RefObject } from 'react'
 import L from 'leaflet'
+import { Image } from 'rebass'
+import Flex from 'src/components/Flex'
+import Heading from 'src/components/Heading'
+import Text from 'src/components/Text'
 import { Popup as LeafletPopup } from 'react-leaflet'
 import styled from 'styled-components'
 import { distanceInWords } from 'date-fns'
@@ -7,40 +11,16 @@ import { distanceInWords } from 'date-fns'
 import { IMapPin, IMapPinDetail } from 'src/models/maps.models'
 
 import './popup.css'
-
+import { litleTitle } from '../../../../components/Text/index'
 interface IProps {
   pinDetail?: IMapPin | IMapPinDetail
   map: any
 }
 
-const HeroImage = styled.img`
-  width: 285px;
-  height: 175px;
-`
-
-const ProfileImage = styled.img`
-  width 50px;
-  height: 50px;
-  border-radius: 50%;
-  margin-top: -25px;
-  margin-left: 15px;
-`
-
-const ContentWrapper = styled.div`
-  padding: 10px 20px;
-  line-height: 1.5em;
-`
-
-const ComradeName = styled.div`
-  text-decoration: underline;
-  font-size: 1rem;
-`
-
-const PinTypeWrapper = styled.div`
+const HeroImage = styled(Image)`
   width: 100%;
-  margin: 12px 0px;
-  display: flex;
-  align-items: center;
+  height: 120x;
+  object-fit: cover;
 `
 
 interface IPinTypeDotProps {
@@ -55,17 +35,6 @@ const PinTypeDot = styled.div<IPinTypeDotProps>`
   color: white;
   width: 25px;
   height: 25px;
-`
-
-const PinTypeName = styled.div`
-  display: inline-block;
-  margin-left: 10px;
-  font-weight: bold;
-  font-size: 14px;
-`
-
-const Description = styled.p`
-  font-size: 0.85rem;
 `
 
 const LastOnline = styled.div`
@@ -116,18 +85,20 @@ export class Popup extends React.Component<IProps> {
     return (
       <>
         <HeroImage src={heroImageUrl} />
-        <ProfileImage src={profilePicUrl} />
-        <ContentWrapper>
-          <ComradeName>{name}</ComradeName>
-          <PinTypeWrapper>
-            <PinTypeDot type={pinType.grouping}>{pinType.icon}</PinTypeDot>
-            <PinTypeName>{pinType.displayName}</PinTypeName>
-          </PinTypeWrapper>
-          <Description>{shortDescription}</Description>
+        <Flex flexDirection={'column'} px={2} py={2}>
+          <Text tags mb={2}>
+            {pinType.displayName}
+          </Text>
+          <Heading litleTitle mb={1}>
+            {name}
+          </Heading>
+          <Text auxiliary mb={2}>
+            {shortDescription}
+          </Text>
           <LastOnline>
             last active {distanceInWords(lastActive, new Date())} ago
           </LastOnline>
-        </ContentWrapper>
+        </Flex>
       </>
     )
   }

@@ -41,11 +41,10 @@ app.all('*', async (req, res, next) => {
   // *** NOTE currently all request types handled the same, i.e. GET/POST
   // will likely change behaviour in future when required
   switch (endpoint) {
-    case 'dbV1Upgrade':
-      console.log('upgrading db v1')
-      const upgradeStatus = await upgradeDBAll()
-      res.send(upgradeStatus)
-      break
+    // case 'dbV1Upgrade':
+    //   const upgradeStatus = await upgradeDBAll()
+    //   res.send(upgradeStatus)
+    //   break
     default:
       res.send('invalid api endpoint')
   }

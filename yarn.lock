@@ -13718,12 +13718,12 @@ react-fast-compare@2.0.4:
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-2.0.4.tgz#e84b4d455b0fec113e0402c329352715196f81f9"
   integrity sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==
 
-react-final-form-arrays@^1.0.6:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/react-final-form-arrays/-/react-final-form-arrays-1.1.0.tgz#ac1232d26483b996a5f57395aab4886a1b01d9a0"
-  integrity sha512-DcNUoWxY7Ty7QeO/F/WVmX3BCssGUF6P+UCRjiVbX4halM1h/24BHxcWIEI7zr+pIfCY9YNsXWmcKgo0XrMerQ==
+react-final-form-arrays@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/react-final-form-arrays/-/react-final-form-arrays-3.1.1.tgz#39d23e7ede966e418cad209e8fde46da1d603e99"
+  integrity sha512-e6S1x9597cvI4QPniOPmllXXandDAqCCuBo4AvXstZYgcV8whsqzk8aCrmQEy6eEfy2tEhvn6f4VI1GY+JBRsg==
   dependencies:
-    react-lifecycles-compat "^3.0.4"
+    "@babel/runtime" "^7.4.5"
 
 react-final-form@6.3.0:
   version "6.3.0"

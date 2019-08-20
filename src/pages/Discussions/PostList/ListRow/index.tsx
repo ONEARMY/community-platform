@@ -64,7 +64,7 @@ export default class ListRow extends React.Component<IProps, IState> {
             {/*firebaseResourceId={'post-' + post._id + '-viewCount'}/>*/}
             <ViewCount>{post._viewCount}</ViewCount>
             <PostDate>
-              {this.durationSincePosted(post._created.toDate())}
+              {this.durationSincePosted(new Date(post._created))}
             </PostDate>
             {post.type === 'discussionQuestion' ? <DiscussIcon /> : <QaIcon />}
           </Post>

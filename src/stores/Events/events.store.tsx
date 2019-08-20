@@ -3,7 +3,6 @@ import { IEvent, IEventFormInput } from 'src/models/events.models'
 import { ModuleStore } from '../common/module.store'
 import { Database } from '../database'
 import Filters from 'src/utils/filters'
-import { toDate } from 'src/utils/helpers'
 
 export class EventStore extends ModuleStore {
   // observables are data variables that can be subscribed to and change over time
@@ -26,14 +25,9 @@ export class EventStore extends ModuleStore {
   }
 
   constructor() {
-    super('eventsV1')
+    super('v2_events')
     this.allDocs$.subscribe((docs: IEvent[]) => {
-      // convert firestore timestamp back to date objects and sort
-      this.allEvents = [
-        ...docs
-          .map(doc => ({ ...doc, date: toDate(doc.date) }))
-          .sort((a, b) => (a.date > b.date ? 1 : -1)),
-      ]
+      this.allEvents = docs.sort((a, b) => (a.date > b.date ? 1 : -1))
     })
   }
 
@@ -42,12 +36,10 @@ export class EventStore extends ModuleStore {
     console.log('values', values)
     try {
       const event: IEventFormInput = {
-        ...Database.generateDocMeta('eventsV1'),
+        ...Database.generateDocMeta('v2_events'),
         ...values,
-        // convert string yyyy-mm-dd format to timestamp
-        date: Database.generateTimestamp(
-          new Date(Date.parse(values.date as string)),
-        ),
+        // convert string yyyy-mm-dd format to time string
+        date: new Date(Date.parse(values.date as string)).toISOString(),
       }
       console.log('populating database', event)
       this.updateDatabase(event)
@@ -65,9 +57,9 @@ export class EventStore extends ModuleStore {
   }
 
   public generateID = () => {
-    return Database.generateDocId('eventsV1')
+    return Database.generateDocId('v2_events')
   }
   private updateDatabase(event: IEventFormInput) {
-    return Database.setDoc(`eventsV1/${event._id}`, event)
+    return Database.setDoc(`v2_events/${event._id}`, event)
   }
 }

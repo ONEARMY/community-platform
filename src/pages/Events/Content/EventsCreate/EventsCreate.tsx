@@ -60,7 +60,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
   }
 
   public validateTitle = async (value: any) => {
-    return this.store.validateTitle(value, 'eventsV1')
+    return this.store.validateTitle(value, 'v2_events')
   }
 
   public validateUrl = async (value: any) => {

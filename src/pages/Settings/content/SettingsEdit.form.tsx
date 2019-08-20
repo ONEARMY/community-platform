@@ -28,9 +28,9 @@ import 'leaflet/dist/leaflet.css'
 import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
 import { FieldArray } from 'react-final-form-arrays'
 import { Link } from './Link.field'
-import { timestampToYear } from 'src/utils/helpers'
 import { Icon } from 'src/components/Icons'
 import { toJS } from 'mobx'
+import { ISODateString } from 'src/models/common.models'
 
 interface IFormValues extends Partial<IUser> {
   // form values are simply subset of user profile fields
@@ -130,14 +130,8 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
     this.setState({ readOnly: true, showNotification: true })
   }
 
-  public displayYear(dateOrTmstp) {
-    // if date comes from db, it will be formated in firebase.Timestamp whereas if it comes from calendar (user modifications) it's a Date object
-    // this fn check the type of the date and return a year in format YYYY
-    if (dateOrTmstp instanceof Date && !isNaN(dateOrTmstp.valueOf())) {
-      return dateOrTmstp.getFullYear()
-    } else {
-      return timestampToYear(dateOrTmstp.seconds)
-    }
+  public displayYear(date: ISODateString) {
+    return new Date(date).getFullYear()
   }
 
   public onLocationChange(v) {

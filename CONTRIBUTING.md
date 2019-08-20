@@ -54,6 +54,7 @@ You can find useful links to learn more about these technologies [in the resourc
 - Run the component documentation
   `yarn storybook`
 
+We use [BrowserStack](https://www.browserstack.com/) to test our platform on multiple devices and browsers.
 Note: Builds are currently tested on Chrome/Firefox. If your browser is not
 supported, then consider contributing.
 

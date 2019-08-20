@@ -7528,10 +7528,10 @@ fill-range@^4.0.0:
     repeat-string "^1.6.1"
     to-regex-range "^2.1.0"
 
-final-form-arrays@^1.1.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/final-form-arrays/-/final-form-arrays-1.2.0.tgz#8b7ff78a5bb917d1b3bd40ba02e67710b0a23d08"
-  integrity sha512-7wC38TOHO4LBcKW5Cp14CXefT985nOsuLt+cibiYVTRWiiYmxytxkJpu43wy8gMpDrJPinw3LXRW2AJdJx3eyw==
+final-form-arrays@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/final-form-arrays/-/final-form-arrays-3.0.1.tgz#862e5e946d391039ebcdfadbe55fc3a63849e559"
+  integrity sha512-GKXecufCNCjDcz1+3peL21LuuTlApoxCcnpOnmfeJfC3xAlFKGdytYMfifP7W1IEWTGC8twTv3zItESkej8qpg==
 
 final-form-calculate@^1.3.1:
   version "1.3.1"

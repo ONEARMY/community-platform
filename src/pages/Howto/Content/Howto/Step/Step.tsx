@@ -1,7 +1,8 @@
 import React from 'react'
 import Linkify from 'react-linkify'
 import { IHowtoStep } from 'src/models/howto.models'
-import { Box, Image, Flex } from 'rebass'
+import { Box } from 'rebass'
+import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import { IUploadedFileMeta } from 'src/stores/storage'
@@ -14,23 +15,22 @@ interface IProps {
 }
 
 const FlexStepNumber = styled(Flex)`
-  border-radius: 10px;
-  border: 2px solid black;
   height: fit-content;
-`
-
-const FlexStepContainer = styled(Flex)`
-  border-radius: 10px;
-  border: 2px solid black;
 `
 
 export default class Step extends React.PureComponent<IProps> {
   render() {
     return (
       <>
-        <Flex mx={[-1, -2]} mt={9}>
-          <Flex flex={1} mx={[1, 2]} width={1}>
+        <Flex
+          mx={[0, 0, -2]}
+          mt={9}
+          flexDirection={['column', 'column', 'row']}
+        >
+          <Flex flex={1} mx={[0, 0, 2]} width={1} mb={[3, 3, 0]}>
             <FlexStepNumber
+              card
+              mediumRadius
               justifyContent={'center'}
               py={4}
               px={4}
@@ -42,19 +42,16 @@ export default class Step extends React.PureComponent<IProps> {
               </Text>
             </FlexStepNumber>
           </Flex>
-          <FlexStepContainer
-            mx={[1, 2]}
+          <Flex
+            card
+            mediumRadius
+            mx={[0, 0, 2]}
             bg={'white'}
             flex={9}
             width={1}
-            flexDirection={['column', 'row', 'row']}
+            flexDirection={['column', 'column', 'row']}
           >
-            <Flex
-              width={[1, 4 / 9, 4 / 9]}
-              py={4}
-              px={4}
-              flexDirection={'column'}
-            >
+            <Flex width={[1, 1, 4 / 9]} py={4} px={4} flexDirection={'column'}>
               <Heading heroTitle mb={0}>
                 {this.props.step.title}
               </Heading>
@@ -64,13 +61,13 @@ export default class Step extends React.PureComponent<IProps> {
                 </Text>
               </Box>
             </Flex>
-            <Flex width={[1, 5 / 9, 5 / 9]}>
+            <Flex width={[1, 1, 5 / 9]}>
               <ImageGallery
                 images={this.props.step.images as IUploadedFileMeta[]}
                 caption={this.props.step.caption}
               />
             </Flex>
-          </FlexStepContainer>
+          </Flex>
         </Flex>
       </>
     )

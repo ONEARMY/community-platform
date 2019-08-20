@@ -35,6 +35,10 @@ const ThumbImage = styled(Image)`
 
 const ImageWithPointer = styled(Image)`
   cursor: pointer;
+  width: 100%;
+  height: 450px;
+  object-fit: cover;
+  border-radius: 0px 0px 0px 5px;
 `
 
 export default class ImageGallery extends React.PureComponent<IProps, IState> {
@@ -87,16 +91,12 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
             }}
           />
         </Flex>
-        <Flex
-          flexWrap={'wrap'}
-          width={1}
-          mx={[2, '-5px', '-5px']}
-          mb={3}
-          mt={4}
-        >
+        <Flex flexWrap={'wrap'} width={1} mx={[2, 2, '-5px']}>
           {imageNumber > 1
             ? this.props.images.map((image: any, index: number) => (
                 <ThumbCard
+                  mb={3}
+                  mt={4}
                   opacity={image === this.state.activeImage ? 1.0 : 0.5}
                   onClick={() => this.setActive(image)}
                   key={index}

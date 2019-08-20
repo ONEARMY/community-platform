@@ -125,10 +125,10 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
     return (
       <HowToCard
         bg={'white'}
-        flexDirection={['column-reverse', 'row', 'row']}
+        flexDirection={['column-reverse', 'column-reverse', 'row']}
         mt={4}
       >
-        <Flex px={4} py={4} flexDirection={'column'} width={[1, 1 / 2, 1 / 2]}>
+        <Flex px={4} py={4} flexDirection={'column'} width={[1, 1, 1 / 2]}>
           <Box>
             <BreadcrumbBox>
               <BreadcrumbLink>Back</BreadcrumbLink>
@@ -157,7 +157,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             ))}
           </Flex>
         </Flex>
-        <Flex justifyContent={'end'} width={[1, 1 / 2, 1 / 2]}>
+        <Flex justifyContent={'end'} width={[1, 1, 1 / 2]}>
           <CoverImg src={howto.cover_image.downloadUrl} alt="how-to cover" />
         </Flex>
       </HowToCard>

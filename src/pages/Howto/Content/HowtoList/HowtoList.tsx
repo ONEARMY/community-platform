@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { Image, Flex, Box } from 'rebass'
 // TODO add loader (and remove this material-ui dep)
-import LinearProgress from '@material-ui/core/LinearProgress'
 import { Link } from 'src/components/Links'
 import { Button } from 'src/components/Button'
 import { IHowto } from 'src/models/howto.models'
@@ -9,6 +8,7 @@ import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import HowToCard from 'src/components/HowTo/HowToCard'
 import Heading from 'src/components/Heading'
+import { auxiliary } from '../../../../components/Text/index'
 
 interface IProps {
   allHowtos: IHowto[]
@@ -37,7 +37,11 @@ export class HowtoList extends React.Component<IProps, any> {
         </Flex>
         <React.Fragment>
           {allHowtos.length === 0 ? (
-            <LinearProgress />
+            <Flex>
+              <Heading auxiliary txtcenter width={1}>
+                loading...
+              </Heading>
+            </Flex>
           ) : (
             <Flex flexWrap="wrap" mx={-4}>
               {allHowtos.map((howto: IHowto) => (

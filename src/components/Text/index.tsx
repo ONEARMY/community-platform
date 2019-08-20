@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import { Text as RebassText, TextProps as RebassTextProps } from 'rebass'
-import theme from 'src/themes/styled.preciousplastic'
+import theme from 'src/themes/styled.theme'
 
 export interface ITextProps {
   uppercase?: boolean
@@ -12,9 +12,7 @@ export interface ITextProps {
   txtright?: boolean
   capitalize?: boolean
   bold?: boolean
-  xlarge?: boolean
-  xxlarge?: boolean
-  xxxlarge?: boolean
+
   large?: boolean
   medium?: boolean
   small?: boolean
@@ -24,6 +22,17 @@ export interface ITextProps {
   // clip forces text to fill max 1 line and add '...' for overflow
   clipped?: boolean
   preLine?: boolean
+
+  heroTitle?: boolean
+  cardTitle?: boolean
+  stepTitle?: boolean
+  subTitle?: boolean
+  dateTitle?: boolean
+  litleTitle?: boolean
+  metaTitle?: boolean
+  tags?: boolean
+  auxiliary?: boolean
+  paragraph?: boolean
 }
 
 export const uppercase = props =>
@@ -57,14 +66,47 @@ export const bold = (props: ITextProps) =>
 export const large = (props: ITextProps) =>
   props.large ? { fontSize: theme.fontSizes[3] } : null
 
-export const xlarge = (props: ITextProps) =>
-  props.xlarge ? { fontSize: theme.fontSizes[4] } : null
+export const heroTitle = (props: ITextProps) =>
+  props.heroTitle ? { fontSize: '32px', fontWeight: 700 } : null
 
-export const xxlarge = (props: ITextProps) =>
-  props.xxlarge ? { fontSize: theme.fontSizes[5] } : null
+export const cardTitle = (props: ITextProps) =>
+  props.cardTitle ? { fontSize: '22px', fontWeight: 700, color: 'black' } : null
 
-export const xxxlarge = (props: ITextProps) =>
-  props.xxxlarge ? { fontSize: theme.fontSizes[6] } : null
+export const stepTitle = (props: ITextProps) =>
+  props.stepTitle ? { fontSize: '32px' } : null
+
+export const subTitle = (props: ITextProps) =>
+  props.subTitle ? { fontSize: '32px' } : null
+
+export const dateTitle = (props: ITextProps) =>
+  props.dateTitle ? { fontSize: '24px', fontWeight: 700 } : null
+
+export const litleTitle = (props: ITextProps) =>
+  props.litleTitle ? { fontSize: '32px' } : null
+
+export const metaTitle = (props: ITextProps) =>
+  props.metaTitle ? { fontSize: '32px' } : null
+
+export const tags = (props: ITextProps) =>
+  props.tags ? { fontSize: '12px', color: '#83ceeb' } : null
+
+export const auxiliary = (props: ITextProps) =>
+  props.auxiliary
+    ? {
+        fontFamily: '"Inter", Helvetica Neue, Arial, sans-serif;',
+        fontSize: '12px',
+        color: '#686868',
+      }
+    : null
+
+export const paragraph = (props: ITextProps) =>
+  props.paragraph
+    ? {
+        fontFamily: '"Inter", Helvetica Neue, Arial, sans-serif;',
+        fontSize: '16px',
+        color: '#61646b',
+      }
+    : null
 
 export const medium = (props: ITextProps) =>
   props.medium ? { fontSize: theme.fontSizes[2] } : null
@@ -92,15 +134,22 @@ export const BaseText = styled(RebassText)`
 	${txtleft}
 	${txtright}
 	${capitalize}
-	${xlarge}
-	${xxlarge}
-	${xxxlarge}
     ${large}
     ${medium}
     ${small}
     ${superSmall}
     ${clipped}
-    ${preLine}
+	${preLine}
+	${heroTitle}
+	${cardTitle}
+	${stepTitle}
+	${subTitle}
+	${dateTitle}
+	${litleTitle}
+	${metaTitle}
+	${tags}
+	${auxiliary}
+	${paragraph}
 `
 
 type TextProps = ITextProps & RebassTextProps

@@ -37,7 +37,7 @@ export default class Step extends React.PureComponent<IProps> {
               bg={'white'}
               width={1}
             >
-              <Text xxlarge mb={0}>
+              <Text heroTitle mb={0}>
                 {this.props.stepindex + 1}
               </Text>
             </FlexStepNumber>
@@ -55,7 +55,7 @@ export default class Step extends React.PureComponent<IProps> {
               px={4}
               flexDirection={'column'}
             >
-              <Heading xxlarge mb={0}>
+              <Heading heroTitle mb={0}>
                 {this.props.step.title}
               </Heading>
               <Box>

@@ -19,7 +19,7 @@ import { Flex, Box } from 'rebass'
 import { getCountryCode } from 'src/utils/helpers'
 import 'react-flags-select/scss/react-flags-select.scss'
 import styled from 'styled-components'
-import theme from 'src/themes/styled.preciousplastic'
+import theme from 'src/themes/styled.theme'
 
 import { Map, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet'
 import L from 'leaflet'

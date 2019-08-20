@@ -30,7 +30,9 @@ export type ButtonVariants =
 
 const buttons = {
   primary: {
+    fontFamily: '"Varela Round", Arial, sans-serif',
     border: '2px solid ' + colors.black,
+    color: colors.black,
     backgroundColor: colors.primary,
     padding: '15px',
     transition: '.2s ease-in-out',
@@ -38,8 +40,12 @@ const buttons = {
       backgroundColor: darken(0.08, colors.primary),
       transform: 'translateY(-5px)',
     },
+    '&:focus': {
+      outline: 'none',
+    },
   },
   secondary: {
+    fontFamily: '"Varela Round", Arial, sans-serif',
     border: '2px solid ' + colors.black,
     color: colors.black,
     backgroundColor: colors.secondary,
@@ -47,6 +53,9 @@ const buttons = {
     '&:hover': {
       backgroundColor: lighten(0.03, colors.secondary),
       transform: 'translateY(-5px)',
+    },
+    '&:focus': {
+      outline: 'none',
     },
   },
   outline: {

@@ -4,7 +4,7 @@ import { IFieldProps } from './Fields'
 import { Styles } from 'react-select/lib/styles'
 import { Props as SelectProps } from 'react-select/lib/Select'
 import { FieldContainer } from './elements'
-import theme from 'src/themes/styled.preciousplastic'
+import theme from 'src/themes/styled.theme'
 import ReactFlagsSelect from 'react-flags-select'
 import { getCountryName } from 'src/utils/helpers'
 

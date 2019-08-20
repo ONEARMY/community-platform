@@ -133,22 +133,17 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
               <BreadcrumbLink>Back</BreadcrumbLink>
             </BreadcrumbBox>
           </Box>
-          <Text capitalize fontSize={1} mt={3} mb={2} color={'grey'}>
-            By{' '}
-            <Text inline capitalize>
-              {howto._createdBy}
-            </Text>
+          <Text capitalize auxiliary mt={3} mb={2}>
+            By {howto._createdBy}
             &nbsp;|&nbsp;
             <Text inline color={'grey'}>
               {this.durationSincePosted(howto._created.toDate())}
             </Text>
           </Text>
-          <Heading large mt={2} mb={1}>
+          <Heading heroTitle mt={2} mb={1}>
             {howto.title}
           </Heading>
-          <Text large preLine color={'grey'}>
-            {howto.description}
-          </Text>
+          <Text paragraph>{howto.description}</Text>
 
           <Flex mt={6} mb={2}>
             <StepsBox mr={4}>{howto.steps.length} steps</StepsBox>

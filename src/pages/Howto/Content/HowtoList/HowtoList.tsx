@@ -2,17 +2,13 @@ import * as React from 'react'
 import { Image, Flex, Box } from 'rebass'
 // TODO add loader (and remove this material-ui dep)
 import LinearProgress from '@material-ui/core/LinearProgress'
-import Text from 'src/components/Text'
 import { Link } from 'src/components/Links'
-import styled from 'styled-components'
 import { Button } from 'src/components/Button'
 import { IHowto } from 'src/models/howto.models'
-import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
-import MoreElementsButton from 'src/components/MoreLinks/MoreElementsButton'
-import MoreDirectionModal from 'src/components/MoreLinks/MoreDirectionModal'
-import ListPageTitle from 'src/components/Titles/ListPageTitle'
+import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import HowToCard from 'src/components/HowTo/HowToCard'
+import Heading from 'src/components/Heading'
 
 interface IProps {
   allHowtos: IHowto[]
@@ -27,9 +23,11 @@ export class HowtoList extends React.Component<IProps, any> {
     const { allHowtos } = this.props
     return (
       <>
-        <ListPageTitle
-          pageTitle={'Learn & share how to recycle, make and hack plastic'}
-        />
+        <Flex py={26}>
+          <Heading heroTitle txtcenter width={1}>
+            Learn & share how to recycle, make and hack plastic
+          </Heading>
+        </Flex>
         <Flex justifyContent={'flex-end'} mb={8}>
           <AuthWrapper>
             <Link to={'/how-to/create'}>
@@ -49,12 +47,12 @@ export class HowtoList extends React.Component<IProps, any> {
               ))}
             </Flex>
           )}
-          <MoreElementsButton
-            buttonLink={'#'}
-            buttonLabel={'More how-tos'}
-            buttonVariant={'secondary'}
-          />
-          <MoreDirectionModal
+          <Flex justifyContent={'center'} mt={20}>
+            <Link to={'#'}>
+              <Button variant={'secondary'}>More how-tos</Button>
+            </Link>
+          </Flex>
+          <MoreContainer
             text={'Connect with a likeminded community. All around the planet.'}
             buttonVariant={'primary'}
             buttonLabel={'Create an event'}

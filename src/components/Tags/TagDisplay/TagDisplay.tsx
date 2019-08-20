@@ -5,7 +5,7 @@ import { ITag } from 'src/models/tags.model'
 import { Box } from 'rebass'
 import Text from 'src/components/Text'
 
-import theme from 'src/themes/styled.preciousplastic'
+import theme from 'src/themes/styled.theme'
 import Styled from 'styled-components'
 
 /*
@@ -23,9 +23,9 @@ interface InjectedProps extends IProps {
 }
 
 const TagContainer = Styled(Text)`
-  position: relative;
-  display: inline;
-  padding-left: 8px;
+	position: relative;
+	display: inline;
+	padding-left: 8px;
 
   ::before {
     content: '#';
@@ -56,7 +56,7 @@ export default class TagDisplay extends React.Component<IProps, IState> {
   public render() {
     const { tag } = this.state
     return tag ? (
-      <TagContainer small color="blue" mr={2}>
+      <TagContainer tags mr={2}>
         {tag.label}
       </TagContainer>
     ) : null

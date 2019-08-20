@@ -81,7 +81,7 @@ class Controls extends React.Component<IProps> {
             hash: '#your-map-pin',
           }}
         >
-          <Button>My Pin</Button>
+          <Button variant={'primary'}>My pin</Button>
         </HashLink>
       </MapFlexBar>
     )

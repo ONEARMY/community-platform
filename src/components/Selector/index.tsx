@@ -3,7 +3,7 @@ import * as React from 'react'
 import { ISelectorList } from 'src/models/selectorList.models'
 
 import styled from 'styled-components'
-import theme from 'src/themes/styled.preciousplastic'
+import theme from 'src/themes/styled.theme'
 import {
   color,
   borderRadius,

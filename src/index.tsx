@@ -3,11 +3,11 @@ import * as ReactDOM from 'react-dom'
 import { Provider } from 'mobx-react'
 
 import { ThemeProvider } from 'styled-components'
-import styledTheme from 'src/themes/styled.preciousplastic'
+import styledTheme from 'src/themes/styled.theme'
 
 import { Routes } from './pages'
 import { stores } from './stores'
-import { GlobalStyle } from './themes/preciousplastic/app.globalStyle.js'
+import { GlobalStyle } from './themes/app.globalStyle.js'
 
 import registerServiceWorker from './registerServiceWorker'
 import { SWUpdateNotification } from './pages/common/SWUpdateNotification/SWUpdateNotification'

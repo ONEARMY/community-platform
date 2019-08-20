@@ -4,7 +4,7 @@ import { Flex } from 'rebass'
 import Text from '../Text'
 import { IUploadedFileMeta } from 'src/stores/storage'
 import styled from 'styled-components'
-import theme from 'src/themes/styled.preciousplastic'
+import theme from 'src/themes/styled.theme'
 
 interface IProps {
   file: File | IUploadedFileMeta

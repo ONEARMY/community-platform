@@ -141,7 +141,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
               {this.durationSincePosted(new Date(howto._created))}
             </Text>
           </Text>
-          <Heading heroTitle mt={2} mb={1}>
+          <Heading medium mt={2} mb={1}>
             {howto.title}
           </Heading>
           <Text paragraph>{howto.description}</Text>

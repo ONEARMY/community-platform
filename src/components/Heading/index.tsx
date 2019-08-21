@@ -4,7 +4,17 @@ import theme from 'src/themes/styled.theme'
 import Text, { ITextProps } from 'src/components/Text'
 import { HeadingProps as RebassHeadingProps } from 'rebass'
 
-export const BaseHeading = styled(Text)``
+export const large = (props: ITextProps) =>
+  props.medium ? { fontSize: theme.fontSizes[6] } : null
+export const medium = (props: ITextProps) =>
+  props.medium ? { fontSize: theme.fontSizes[5] } : null
+export const small = (props: ITextProps) =>
+  props.small ? { fontSize: theme.fontSizes[4] } : null
+
+export const BaseHeading = styled(Text)`
+    ${large}
+    ${medium}
+    ${small}`
 
 type IHeadingProps = ITextProps & RebassHeadingProps
 

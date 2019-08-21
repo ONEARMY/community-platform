@@ -11,7 +11,6 @@ import { distanceInWords } from 'date-fns'
 import { IMapPin, IMapPinDetail } from 'src/models/maps.models'
 
 import './popup.css'
-import { litleTitle } from '../../../../components/Text/index'
 interface IProps {
   pinDetail?: IMapPin | IMapPinDetail
   map: any
@@ -89,10 +88,10 @@ export class Popup extends React.Component<IProps> {
           <Text tags mb={2}>
             {pinType.displayName}
           </Text>
-          <Heading litleTitle mb={1}>
+          <Text medium mb={1}>
             {name}
-          </Heading>
-          <Text auxiliary mb={2}>
+          </Text>
+          <Text auxiliary small mb={2}>
             {shortDescription}
           </Text>
           <LastOnline>

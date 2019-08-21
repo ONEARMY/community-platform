@@ -29,7 +29,7 @@ export class EventsList extends React.Component<IProps> {
     return (
       <>
         <Flex py={26}>
-          <Heading heroTitle txtcenter width={1}>
+          <Heading medium txtcenter width={1}>
             Precious Plastic events from around the world
           </Heading>
         </Flex>

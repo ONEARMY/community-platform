@@ -25,6 +25,7 @@ export interface IHowToStepFormInput {
   images: IUploadedFileMeta[] | IConvertedFileMeta[]
   title: string
   text: string
+  caption?: string
   _animationKey?: string
 }
 

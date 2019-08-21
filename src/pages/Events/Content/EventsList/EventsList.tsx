@@ -127,10 +127,10 @@ export class EventsList extends React.Component<IProps> {
                   >
                     <Flex flexWrap={'wrap'} flex={'1'}>
                       <Text txtcenter xlarge bold width={1}>
-                        {this.getDay(event.date as Date)}
+                        {this.getDay(new Date(event.date))}
                       </Text>
                       <Text txtcenter xlarge bold width={1}>
-                        {this.getMonth(event.date as Date)}
+                        {this.getMonth(new Date(event.date))}
                       </Text>
                     </Flex>
                     <Flex flexWrap={'wrap'} flex={'2'} px={4}>

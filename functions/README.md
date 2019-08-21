@@ -24,9 +24,22 @@ Simply make a PR and once approved the function will be deployed
 
 ## Testing locally
 
-If the code is built you can run firebase serve from the main repo and the functions will also be made available. More info: https://firebase.google.com/docs/functions/local-emulator
+```
+cd functions
+npm run start
+```
 
-Note, this will require authentication for the firebase project. You can request to be added to the project from any of the admins.
+This spins up concurrent tasks to build and watch for changes to the typescript code, and run
+the firebase emulator which will hot-reload when the compiled code changes. This combination
+should mean that changes to functions can be tested locally, via the given endpoint, e.g.  
+`http://localhost:5001/precious-plastics-v4-dev/us-central1/api`
+More info: https://firebase.google.com/docs/functions/local-emulator
+
+It is recommended that you use a good API testing software, such as [Postman](https://www.getpostman.com/) or [Insomnia](https://insomnia.rest/) for this
+
+Note, this will require authentication for the firebase project. You can request to be added to the project from any of the admins. Once authenticated, you can login to firebase within your own console
+and the relevant config will automatically be made available
+(viewable with command `firebase functions:config:get`)
 
 This also only works for specific triggers (namely the api endpoints). If you want to
 test a functions triggered in other ways you may first want to create an api endpoint

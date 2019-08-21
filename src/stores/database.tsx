@@ -6,7 +6,7 @@
 
 import { Subject } from 'rxjs'
 import { afs } from 'src/utils/firebase'
-import { IDbDoc } from 'src/models/common.models'
+import { IDbDoc, IDBEndpoint } from 'src/models/common.models'
 // additional imports for typings
 import { firestore, auth } from 'firebase/app'
 export class Database {
@@ -15,7 +15,7 @@ export class Database {
   /****************************************************************************** */
 
   // get a group of docs. returns an observable, first pulling from local cache and then searching for updates
-  public static getCollection(path: IDBEndpoints) {
+  public static getCollection(path: IDBEndpoint) {
     const collection$ = new Subject<any[]>()
     this._emitCollectionUpdates(path, collection$)
     return collection$
@@ -33,7 +33,7 @@ export class Database {
         doc$.next(cached)
         afs.doc(path).onSnapshot(updateSnapshot => {
           const update = updateSnapshot.data() as IDbDoc
-          if (update._modified.seconds > cached._modified.seconds) {
+          if (update._modified > cached._modified) {
             doc$.next(update)
           }
         })
@@ -56,8 +56,10 @@ export class Database {
     })
   }
 
-  public static async queryCollection(
-    collectionPath: IDBEndpoints,
+  // find all docs in collection matching criteria
+  // if no docs are found returns an empty array
+  public static async queryCollection<T>(
+    collectionPath: IDBEndpoint,
     field: string,
     operation: firestore.WhereFilterOp,
     value: string,
@@ -66,7 +68,8 @@ export class Database {
       .collection(collectionPath)
       .where(field, operation, value)
       .get()
-    return data.docs.map(doc => doc.data())
+    console.log('data', data)
+    return data.empty ? [] : data.docs.map(doc => doc.data() as T)
   }
 
   /****************************************************************************** *
@@ -74,15 +77,12 @@ export class Database {
   /****************************************************************************** */
 
   // instantiate a blank document to generate an id
-  public static generateDocId(collectionPath: IDBEndpoints) {
+  public static generateDocId(collectionPath: IDBEndpoint) {
     return afs.collection(collectionPath).doc().id
-  }
-  public static generateTimestamp(date?: Date) {
-    return firestore.Timestamp.fromDate(date ? date : new Date())
   }
 
   public static async checkSlugUnique(
-    collectionPath: IDBEndpoints,
+    collectionPath: IDBEndpoint,
     slug: string,
   ) {
     const matches = await this.queryCollection(
@@ -98,13 +98,13 @@ export class Database {
     }
   }
   // creates standard set of meta fields applied to all docs
-  public static generateDocMeta(collectionPath: IDBEndpoints, docID?: string) {
+  public static generateDocMeta(collectionPath: IDBEndpoint, docID?: string) {
     const user = auth().currentUser
     const meta: IDbDoc = {
-      _created: this.generateTimestamp(),
+      _created: new Date().toISOString(),
       _deleted: false,
       _id: docID ? docID : this.generateDocId(collectionPath),
-      _modified: this.generateTimestamp(),
+      _modified: new Date().toISOString(),
       _createdBy: user ? (user.displayName as string) : 'anonymous',
     }
     return meta
@@ -116,7 +116,7 @@ export class Database {
 
   // get cached data, emit, and then subscribe to live updates and emit full collection on change
   private static async _emitCollectionUpdates(
-    path: string,
+    path: IDBEndpoint,
     subject: Subject<any[]>,
   ) {
     // get cached and emit
@@ -137,7 +137,7 @@ export class Database {
 
   // get data from the cache, process and emit to subject
   private static async _emitCachedCollection(
-    path: string,
+    path: IDBEndpoint,
     subject: Subject<any[]>,
     isNew?: boolean,
   ) {
@@ -148,7 +148,7 @@ export class Database {
   }
 
   // search the persisted cache for documents, return oldest to newest
-  private static _getCachedCollection(path: string) {
+  private static _getCachedCollection(path: IDBEndpoint) {
     return afs
       .collection(path)
       .orderBy('_modified', 'asc')
@@ -156,7 +156,7 @@ export class Database {
   }
   // get any documents that have been updated since last document in cache
   // if no documents in cache fetch everything
-  private static _getCollectionUpdatesRef(path: string, latestDoc?: any) {
+  private static _getCollectionUpdatesRef(path: IDBEndpoint, latestDoc?: any) {
     return afs
       .collection(path)
       .orderBy('_modified', 'asc')
@@ -177,14 +177,3 @@ export class Database {
     return filtered
   }
 }
-
-/****************************************************************************** *
-        Interfaces
-  /****************************************************************************** */
-
-export type IDBEndpoints =
-  | 'howtosV1'
-  | 'users'
-  | 'discussions'
-  | 'tagsV1'
-  | 'eventsV1'

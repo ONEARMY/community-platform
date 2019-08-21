@@ -8,6 +8,7 @@ import { LoginForm } from './Login.form'
 import { SignUpForm } from './SignUp.form'
 import { ResetPWForm } from './ResetPW.form'
 import { Box } from 'rebass'
+import { litleBtn } from '../../../components/Button/index'
 
 interface IProps {
   userStore?: UserStore
@@ -80,6 +81,9 @@ export class LoginComponent extends React.Component<IProps, IState> {
     return (
       <>
         <Button
+          variant="secondary"
+          litleBtn
+          mr={2}
           onClick={() =>
             this.setState({
               showLoginModal: !this.state.showLoginModal,
@@ -89,10 +93,10 @@ export class LoginComponent extends React.Component<IProps, IState> {
             })
           }
         >
-          Sign up
+          Login
         </Button>
-        <Button variant="outline" onClick={this.toggleModal}>
-          Log in
+        <Button variant="tertiary" litleBtn onClick={this.toggleModal}>
+          Join
         </Button>
         <Modal
           aria-labelledby="user-login-modal"

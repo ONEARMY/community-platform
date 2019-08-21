@@ -27,7 +27,6 @@ const LogoLink = styled(Link)`
   z-index: 9999;
   display: flex;
   align-items: center;
-  padding-left: 25px;
   color: black;
 `
 
@@ -47,7 +46,7 @@ export class Header extends React.Component {
     return (
       <>
         <LogoContainer>
-          <LogoLink href="/">
+          <LogoLink ml={[2, 3, 4]} href="/">
             <LogoImageContainer>
               <Image src={LogoImage} />
             </LogoImageContainer>

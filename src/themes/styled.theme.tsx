@@ -28,45 +28,30 @@ const buttons = {
     border: '2px solid ' + colors.black,
     color: colors.black,
     backgroundColor: colors.primary,
-    padding: '15px',
     transition: '.2s ease-in-out',
     '&:hover': {
       backgroundColor: darken(0.08, colors.primary),
-      transform: 'translateY(-5px)',
-    },
-    '&:focus': {
-      outline: 'none',
     },
   },
   secondary: {
     fontFamily: '"Varela Round", Arial, sans-serif',
     border: '2px solid ' + colors.black,
     color: colors.black,
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.softblue,
     transition: '.2s ease-in-out',
     '&:hover': {
-      backgroundColor: lighten(0.03, colors.secondary),
-      transform: 'translateY(-5px)',
-    },
-    '&:focus': {
-      outline: 'none',
+      backgroundColor: colors.white,
     },
   },
-  outline: {
+  tertiary: {
+    fontFamily: '"Varela Round", Arial, sans-serif',
+    border: '2px solid ' + colors.black,
     color: colors.black,
-    backgroundColor: 'white',
-  },
-  disabled: {
-    color: colors.grey,
-    backgroundColor: colors.black,
-    opacity: 0.3,
-  },
-  dark: {
-    color: colors.white,
-    backgroundColor: colors.black,
-  },
-  light: {
-    color: colors.black,
+    backgroundColor: colors.white,
+    transition: '.2s ease-in-out',
+    '&:hover': {
+      backgroundColor: colors.yellow,
+    },
   },
 }
 

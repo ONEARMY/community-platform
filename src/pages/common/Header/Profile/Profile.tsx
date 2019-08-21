@@ -78,9 +78,7 @@ export default class Profile extends React.Component<IProps, IState> {
             >
               <ClickAwayListener onClickAway={this.closeProfileMenu}>
                 <>
-                  <Text p={8} bold>
-                    {user.userName}
-                  </Text>
+                  <Text bold>{user.userName}</Text>
                   {COMMUNITY_PAGES_PROFILE.map(page => (
                     <MenuItem onClick={this.closeProfileMenu} key={page.path}>
                       <NavLink to={page.path}>

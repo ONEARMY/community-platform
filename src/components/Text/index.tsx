@@ -94,7 +94,7 @@ export const metaTitle = (props: ITextProps) =>
   props.metaTitle ? { fontSize: '32px' } : null
 
 export const tags = (props: ITextProps) =>
-  props.tags ? { fontSize: '12px', color: '#83ceeb' } : null
+  props.tags ? { fontSize: '12px', color: theme.colors.blue } : null
 
 export const auxiliary = (props: ITextProps) =>
   props.auxiliary
@@ -132,19 +132,19 @@ export const preLine = (props: ITextProps) =>
   props.preLine ? { whiteSpace: 'pre-line' } : null
 
 export const BaseText = styled(RebassText)`
-    ${inline}
-    ${uppercase}
-    ${regular}
-    ${bold}
+  ${inline}
+  ${uppercase}
+  ${regular}
+  ${bold}
 	${txtcenter}
 	${txtleft}
 	${txtright}
 	${capitalize}
-    ${large}
-    ${medium}
-    ${small}
-    ${superSmall}
-    ${clipped}
+  ${large}
+  ${medium}
+  ${small}
+  ${superSmall}
+  ${clipped}
 	${preLine}
 	${heroTitle}
 	${cardTitle}

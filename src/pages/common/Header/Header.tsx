@@ -21,7 +21,7 @@ export class Header extends React.Component {
           <Flex>
             <Logo />
           </Flex>
-          <Flex>
+          <Flex mr={[2, 3, 4]}>
             <MenuDesktop />
             <Profile />
           </Flex>

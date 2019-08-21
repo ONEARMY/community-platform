@@ -26,7 +26,7 @@ interface IState {
 }
 
 const Circle = styled(Flex)`
-  border-radius: 50%'};
+  border-radius: 50%;
   align-items: center;
   justify-content: center;
   width: 40px;
@@ -188,7 +188,7 @@ export class UserPage extends React.Component<
     } else {
       return isLoading ? (
         <Flex>
-          <Heading auxiliary txtcenter width={1}>
+          <Heading txtcenter width={1}>
             loading...
           </Heading>
         </Flex>

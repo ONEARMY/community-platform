@@ -8,8 +8,6 @@ export interface ITextProps {
   inline?: boolean
   regular?: boolean
   txtcenter?: boolean
-  txtleft?: boolean
-  txtright?: boolean
   capitalize?: boolean
   bold?: boolean
 
@@ -22,14 +20,6 @@ export interface ITextProps {
   // clip forces text to fill max 1 line and add '...' for overflow
   clipped?: boolean
   preLine?: boolean
-
-  heroTitle?: boolean
-  cardTitle?: boolean
-  stepTitle?: boolean
-  subTitle?: boolean
-  dateTitle?: boolean
-  litleTitle?: boolean
-  metaTitle?: boolean
   tags?: boolean
   auxiliary?: boolean
   paragraph?: boolean
@@ -48,15 +38,6 @@ export const inline = (props: ITextProps) =>
 export const txtcenter = (props: ITextProps) =>
   props.txtcenter ? { textAlign: 'center' } : null
 
-export const txtleft = (props: ITextProps) =>
-  props.txtleft ? { textAlign: 'left' } : null
-
-export const txtright = (props: ITextProps) =>
-  props.txtright ? { textAlign: 'right' } : null
-
-export const capitalize = (props: ITextProps) =>
-  props.txtright ? { textTransform: 'capitalize' } : null
-
 export const regular = (props: ITextProps) =>
   props.regular ? { fontWeight: 400 } : null
 
@@ -66,36 +47,10 @@ export const bold = (props: ITextProps) =>
 export const large = (props: ITextProps) =>
   props.large ? { fontSize: theme.fontSizes[3] } : null
 
-export const heroTitle = (props: ITextProps) =>
-  props.heroTitle ? { fontSize: '32px', fontWeight: 700 } : null
-
-export const cardTitle = (props: ITextProps) =>
-  props.cardTitle ? { fontSize: '22px', fontWeight: 700, color: 'black' } : null
-
-export const stepTitle = (props: ITextProps) =>
-  props.stepTitle ? { fontSize: '32px' } : null
-
-export const subTitle = (props: ITextProps) =>
-  props.subTitle ? { fontSize: '32px' } : null
-
-export const dateTitle = (props: ITextProps) =>
-  props.dateTitle ? { fontSize: '24px', fontWeight: 700 } : null
-
-export const litleTitle = (props: ITextProps) =>
-  props.litleTitle
-    ? {
-        fontFamily: '"Varela Round", Helvetica Neue, Arial, sans-serif;',
-        fontSize: '16px',
-        fontWeight: 700,
-      }
-    : null
-
-export const metaTitle = (props: ITextProps) =>
-  props.metaTitle ? { fontSize: '32px' } : null
-
 export const tags = (props: ITextProps) =>
   props.tags ? { fontSize: '12px', color: theme.colors.blue } : null
 
+// TODO : change auxiliary & paragaph prop to theme variant
 export const auxiliary = (props: ITextProps) =>
   props.auxiliary
     ? {
@@ -137,22 +92,12 @@ export const BaseText = styled(RebassText)`
   ${regular}
   ${bold}
 	${txtcenter}
-	${txtleft}
-	${txtright}
-	${capitalize}
   ${large}
   ${medium}
   ${small}
   ${superSmall}
   ${clipped}
 	${preLine}
-	${heroTitle}
-	${cardTitle}
-	${stepTitle}
-	${subTitle}
-	${dateTitle}
-	${litleTitle}
-	${metaTitle}
 	${tags}
 	${auxiliary}
 	${paragraph}

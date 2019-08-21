@@ -140,7 +140,6 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
             onCloseRequest={() => this.triggerLightbox()}
           />
         )}
-        <Text py={3}>{caption}</Text>
       </Flex>
     ) : null
   }

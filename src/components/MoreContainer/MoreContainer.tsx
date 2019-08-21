@@ -59,24 +59,13 @@ interface IProps {
   buttonLabel: string
 }
 
-export class MoreContainer extends React.Component<IProps> {
-  constructor(props: any) {
-    super(props)
-  }
-  render() {
-    return (
-      <>
-        <MoreModalContainer>
-          <MoreText>{this.props.text}</MoreText>
-          <Flex justifyContent={'center'} mt={5}>
-            <Button variant={this.props.buttonVariant}>
-              {this.props.buttonLabel}
-            </Button>
-          </Flex>
-        </MoreModalContainer>
-      </>
-    )
-  }
-}
+export const MoreContainer = (props: IProps) => (
+  <MoreModalContainer>
+    <MoreText>{props.text}</MoreText>
+    <Flex justifyContent={'center'} mt={5}>
+      <Button variant={props.buttonVariant}>{props.buttonLabel}</Button>
+    </Flex>
+  </MoreModalContainer>
+)
 
 export default MoreContainer

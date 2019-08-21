@@ -5,12 +5,12 @@ import { Flex as RebassFlex, FlexProps as RebassFlexProps } from 'rebass'
 
 export interface IFlexProps {
   border?: boolean
-  litleRadius?: boolean
+  littleRadius?: boolean
   mediumRadius?: boolean
   largeRadius?: boolean
   card?: boolean
   cardHeading?: boolean
-  litleScale?: boolean
+  littleScale?: boolean
   mediumScale?: boolean
 }
 
@@ -31,8 +31,8 @@ export const cardHeading = (props: IFlexProps) =>
 export const border = (props: IFlexProps) =>
   props.border ? { border: '2px solid black', overflow: 'hidden' } : null
 
-export const litleRadius = (props: IFlexProps) =>
-  props.litleRadius ? { borderRadius: '5px' } : null
+export const littleRadius = (props: IFlexProps) =>
+  props.littleRadius ? { borderRadius: '5px' } : null
 
 export const mediumRadius = (props: IFlexProps) =>
   props.mediumRadius ? { borderRadius: '10px' } : null
@@ -40,8 +40,8 @@ export const mediumRadius = (props: IFlexProps) =>
 export const largeRadius = (props: IFlexProps) =>
   props.largeRadius ? { borderRadius: '15px' } : null
 
-export const litleScale = (props: IFlexProps) =>
-  props.litleScale
+export const littleScale = (props: IFlexProps) =>
+  props.littleScale
     ? {
         transition: '.2s ease-in-out',
         '&:hover': {
@@ -62,12 +62,12 @@ export const mediumScale = (props: IFlexProps) =>
 
 export const BaseFlex = styled(RebassFlex)`
   ${border}
-  ${litleRadius}
+  ${littleRadius}
   ${mediumRadius}
   ${largeRadius}
   ${card}
   ${cardHeading}
-  ${litleScale}
+  ${littleScale}
   ${mediumScale}
 `
 

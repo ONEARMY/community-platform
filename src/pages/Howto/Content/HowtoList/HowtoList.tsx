@@ -6,9 +6,8 @@ import { Button } from 'src/components/Button'
 import { IHowto } from 'src/models/howto.models'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
-import HowToCard from 'src/components/HowTo/HowToCard'
+import HowToCard from 'src/components/HowToCard/HowToCard'
 import Heading from 'src/components/Heading'
-import { auxiliary } from '../../../../components/Text/index'
 
 interface IProps {
   allHowtos: IHowto[]
@@ -24,7 +23,7 @@ export class HowtoList extends React.Component<IProps, any> {
     return (
       <>
         <Flex py={26}>
-          <Heading heroTitle txtcenter width={1}>
+          <Heading medium bold txtcenter width={1}>
             Learn & share how to recycle, make and hack plastic
           </Heading>
         </Flex>

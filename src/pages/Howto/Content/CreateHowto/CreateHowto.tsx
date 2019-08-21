@@ -126,7 +126,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
                   {/* How To Info */}
                   <Flex flexDirection={'column'} p={3}>
                     <Flex card mediumRadius px={3} py={2}>
-                      <Heading heroTitle>Create your How-To</Heading>
+                      <Heading medium>Create your How-To</Heading>
                     </Flex>
                     <Flex p={0} flexWrap="wrap">
                       {/* Left Side */}

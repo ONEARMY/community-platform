@@ -5,7 +5,7 @@ import Text from 'src/components/Text'
 
 export const PostingGuidelines = () => (
   <Flex card mediumRadius flexDirection={'column'} bg="white" p={4} mt={4}>
-    <Heading cardTitle mb={2}>
+    <Heading medium bold mb={2}>
       How-to Guidelines
     </Heading>
     <Text auxiliary mb={1}>

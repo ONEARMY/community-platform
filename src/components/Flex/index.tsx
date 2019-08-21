@@ -1,5 +1,6 @@
 import * as React from 'react'
 import styled from 'styled-components'
+import theme from 'src/themes/styled.theme'
 import { Flex as RebassFlex, FlexProps as RebassFlexProps } from 'rebass'
 
 export interface IFlexProps {
@@ -8,6 +9,7 @@ export interface IFlexProps {
   mediumRadius?: boolean
   largeRadius?: boolean
   card?: boolean
+  cardHeading?: boolean
   litleScale?: boolean
   mediumScale?: boolean
 }
@@ -15,6 +17,15 @@ export interface IFlexProps {
 export const card = (props: IFlexProps) =>
   props.card
     ? { border: '2px solid black', overflow: 'hidden', background: 'white' }
+    : null
+
+export const cardHeading = (props: IFlexProps) =>
+  props.cardHeading
+    ? {
+        border: '2px solid black',
+        overflow: 'hidden',
+        background: theme.colors.blue,
+      }
     : null
 export const border = (props: IFlexProps) =>
   props.border ? { border: '2px solid black', overflow: 'hidden' } : null
@@ -54,6 +65,7 @@ export const BaseFlex = styled(RebassFlex)`
     ${mediumRadius}
     ${largeRadius}
     ${card}
+    ${cardHeading}
     ${litleScale}
     ${mediumScale}
 `

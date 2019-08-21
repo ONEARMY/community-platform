@@ -2,22 +2,16 @@ import { darken, lighten } from 'polished'
 // use enum to specify list of possible colors for typing
 export enum colors {
   white = 'white',
-  black = 'black',
-  blue = '#89a3d4',
-  lightblue = '#e2edf7',
-  darkgrey = '#333333',
-  lightgrey = '#f6f6f6',
-  grey = '#686868',
-  grey2 = '#9b9b9b',
-  grey3 = '#E4E4E4',
-  grey4 = '#E9E9E9',
-  greyStroke = '#AEAEAE',
-  green = '#88e3c7',
+  black = '#1b1b1b',
   yellow = '#fee77b',
-  error = '#f44336',
+  blue = '#83ceeb',
+  softblue = '#e2edf7',
+  bluetag = '#5683b0',
+  grey = '#61646b',
+  error = 'red',
   background = '#f4f6f7',
   primary = yellow,
-  secondary = lightblue,
+  secondary = blue,
 }
 
 export type ButtonVariants =
@@ -60,7 +54,6 @@ const buttons = {
   },
   outline: {
     color: colors.black,
-    border: '1px solid ' + colors.greyStroke,
     backgroundColor: 'white',
   },
   disabled: {
@@ -73,7 +66,6 @@ const buttons = {
     backgroundColor: colors.black,
   },
   light: {
-    backgroundColor: colors.lightgrey,
     color: colors.black,
   },
 }

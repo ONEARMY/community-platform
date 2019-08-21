@@ -11,7 +11,7 @@ import { distanceInWords } from 'date-fns'
 import { IMapPin, IMapPinDetail } from 'src/models/maps.models'
 
 import './popup.css'
-import { litleTitle } from '../../../../components/Text/index'
+
 interface IProps {
   pinDetail?: IMapPin | IMapPinDetail
   map: any
@@ -118,8 +118,8 @@ export class Popup extends React.Component<IProps> {
         offset={new L.Point(2, -10)}
         closeButton={false}
         className={this.props.pinDetail !== undefined ? '' : 'closed'}
-        minWidth={284}
-        maxWidth={284}
+        minWidth={230}
+        maxWidth={230}
       >
         {content}
       </LeafletPopup>

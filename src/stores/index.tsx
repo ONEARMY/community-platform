@@ -10,9 +10,9 @@ import { Database } from './database'
 import { DatabaseV2 } from './databaseV2'
 
 export class RootStore {
+  db = new Database()
+  dbV2 = new DatabaseV2()
   stores: IStores
-  db: Database
-  dbV2: DatabaseV2
   constructor() {
     this.stores = stores(this)
   }

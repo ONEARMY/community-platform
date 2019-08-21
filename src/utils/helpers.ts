@@ -1,4 +1,3 @@
-import { firestore } from 'firebase/app'
 import countries from 'react-flags-select/lib/countries.js'
 
 // remove special characters from string, also replacing spaces with dashes
@@ -28,19 +27,9 @@ export const arrayToJson = (arr: any[], keyField: string) => {
 /************************************************************************
  *              Date Methods
  ***********************************************************************/
-export const toTimestamp = (dateString: string | Date) => {
-  return firestore.Timestamp.fromDate(new Date(dateString))
-}
-
 export const timestampToYear = (timestamp: number) => {
   const date = new Date(timestamp * 1000)
   return date.getFullYear()
-}
-
-// as firestore automatically populates timestamps from dates, want method to convert back
-// and allow workign with Date objects (a bit hacky, but required for current firebase integration)
-export const toDate = (d: firestore.Timestamp | Date) => {
-  return d instanceof Date ? d : d.toDate()
 }
 
 /************************************************************************

@@ -49,7 +49,7 @@ export class PostCreate extends React.PureComponent<IProps, IState> {
     }
   }
 
-  public EditorField: React.ComponentType<FieldRenderProps> = ({
+  public EditorField: React.ComponentType<FieldRenderProps<any, any>> = ({
     input,
     meta,
     ...rest

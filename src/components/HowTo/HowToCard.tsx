@@ -24,16 +24,14 @@ export class HowToCard extends React.Component<IProps, any> {
   render() {
     return (
       <>
-        <Flex card mediumRadius mediumScale>
+        <Flex card mediumRadius mediumScale width={1}>
           <Link
             to={`/how-to/${encodeURIComponent(this.props.howto.slug)}`}
             key={this.props.howto._id}
             width={1}
           >
             <Flex width="1" fontSize={'0px'}>
-              <picture>
-                <HowToImage src={this.props.howto.cover_image.downloadUrl} />
-              </picture>
+              <HowToImage src={this.props.howto.cover_image.downloadUrl} />
             </Flex>
             <Flex px={3} py={3} flexDirection="column">
               <Text cardTitle clipped>

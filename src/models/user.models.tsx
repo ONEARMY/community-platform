@@ -1,4 +1,4 @@
-import { IDbDoc, ITimestamp } from './common.models'
+import { IDbDoc, ISODateString } from './common.models'
 import { ILocation } from 'src/components/LocationSearch/LocationSearch'
 
 export interface IUserState {
@@ -30,7 +30,7 @@ export interface IUser extends IDbDoc {
   country?: string
   links?: ILink[]
   location?: ILocation
-  year?: ITimestamp
+  year?: ISODateString
 }
 
 export type UserRole = 'super-admin' | 'subscriber'

@@ -1,5 +1,4 @@
-import { firestore } from 'firebase/app'
-import { IDbDoc } from './common.models'
+import { IDbDoc, ISODateString } from './common.models'
 
 export interface IPostFormInput {
   title: string
@@ -8,7 +7,7 @@ export interface IPostFormInput {
 }
 
 export interface IDiscussionPost extends IPostFormInput, IDbDoc {
-  _lastResponse: firestore.Timestamp | null
+  _lastResponse?: ISODateString
   _commentCount: number
   _viewCount: number
   _usefulCount: number

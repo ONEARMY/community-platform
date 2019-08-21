@@ -138,7 +138,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             By {howto._createdBy}
             &nbsp;|&nbsp;
             <Text inline color={'grey'}>
-              {this.durationSincePosted(howto._created.toDate())}
+              {this.durationSincePosted(new Date(howto._created))}
             </Text>
           </Text>
           <Heading heroTitle mt={2} mb={1}>

@@ -2,6 +2,7 @@ import React from 'react'
 import { Image, Card, Flex } from 'rebass'
 import { IUploadedFileMeta } from 'src/stores/storage'
 import Lightbox from 'react-image-lightbox'
+import Text from 'src/components/Text'
 import styled from 'styled-components'
 
 interface IProps {
@@ -79,6 +80,7 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
 
   render() {
     const imageNumber = this.props.images.length
+    const { caption } = this.props
     console.log((this.state.imgIndex + 1) % this.state.imagesList.length)
     return this.state.activeImage ? (
       <Flex flexDirection={'column'}>
@@ -138,6 +140,7 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
             onCloseRequest={() => this.triggerLightbox()}
           />
         )}
+        <Text py={3}>{caption}</Text>
       </Flex>
     ) : null
   }

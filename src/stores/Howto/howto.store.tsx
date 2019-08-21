@@ -23,7 +23,7 @@ export class HowtoStore extends ModuleStore {
   constructor() {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
-    super('howtosV1')
+    super('v2_howtos')
     this.allDocs$.subscribe(docs => {
       this.allHowtos = docs as IHowto[]
     })
@@ -31,15 +31,13 @@ export class HowtoStore extends ModuleStore {
 
   @action
   public async getDocBySlug(slug: string) {
-    const ref = afs
-      .collection('howtosV1')
-      .where('slug', '==', slug)
-      .limit(1)
-    const collection = await ref.get()
-    const activeHowto =
-      collection.docs.length > 0
-        ? (collection.docs[0].data() as IHowto)
-        : undefined
+    const collection = await Database.queryCollection<IHowto>(
+      'v2_howtos',
+      'slug',
+      '==',
+      slug,
+    )
+    const activeHowto = collection.length > 0 ? collection[0] : undefined
     this.activeHowto = activeHowto
     return activeHowto
   }
@@ -49,7 +47,7 @@ export class HowtoStore extends ModuleStore {
   }
 
   public generateID = () => {
-    return Database.generateDocId('howtosV1')
+    return Database.generateDocId('v2_howtos')
   }
 
   public async uploadHowTo(values: IHowtoFormInput, id: string) {
@@ -71,7 +69,7 @@ export class HowtoStore extends ModuleStore {
       )
       this.updateUploadStatus('Files')
       // populate DB
-      const meta = Database.generateDocMeta('howtosV1', id)
+      const meta = Database.generateDocMeta('v2_howtos', id)
       // redefine howTo based on processing done above (should match stronger typing)
       const howTo: IHowto = {
         ...values,
@@ -116,7 +114,7 @@ export class HowtoStore extends ModuleStore {
       data = file.photoData
     }
     return Storage.uploadFile(
-      `uploads/howtosV1/${id}`,
+      `uploads/v2_howtos/${id}`,
       file.name,
       data,
       file.type,
@@ -134,7 +132,7 @@ export class HowtoStore extends ModuleStore {
   }
 
   private updateDatabase(howTo: IHowto) {
-    return Database.setDoc(`howtosV1/${howTo._id}`, howTo)
+    return Database.setDoc(`v2_howtos/${howTo._id}`, howTo)
   }
 }
 

@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
 import Profile from 'src/pages/common/Header/Profile/Profile'
 import MenuDesktop from 'src/components/Menu/MenuDesktop'
+import MenuMobile from 'src/components/Menu/MenuMobile'
 import Logo from 'src/components/Logo/Logo'
 
 const FlexHeader = styled(Flex)`
@@ -23,6 +24,7 @@ export class Header extends React.Component {
           </Flex>
           <Flex>
             <MenuDesktop />
+            <MenuMobile />
             <Profile />
           </Flex>
         </FlexHeader>

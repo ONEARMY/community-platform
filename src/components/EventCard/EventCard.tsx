@@ -68,10 +68,10 @@ export class EventCard extends React.Component<IProps, any> {
         >
           <Flex flexWrap={'wrap'} flex={'1'}>
             <Text txtcenter dateTitle width={1}>
-              {this.getDay(this.props.event.date as Date)}
+              {this.getDay(new Date(this.props.event.date))}
             </Text>
             <Text txtcenter dateTitle width={1}>
-              {this.getMonth(this.props.event.date as Date)}
+              {this.getMonth(new Date(this.props.event.date))}
             </Text>
           </Flex>
           <Flex flexWrap={'wrap'} flex={'2'} px={4}>

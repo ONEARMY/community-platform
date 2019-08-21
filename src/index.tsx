@@ -19,7 +19,7 @@ const rootStore = new RootStore()
 
 ReactDOM.render(
   // provider makes all stores available through the app via @inject
-  <Provider {...rootStore}>
+  <Provider {...rootStore.stores} {...rootStore.db}>
     <ThemeProvider theme={styledTheme}>
       <>
         <ErrorBoundary>

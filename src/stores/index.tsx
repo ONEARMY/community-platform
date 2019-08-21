@@ -7,10 +7,12 @@ import { EventStore } from './Events/events.store'
 import { DiscussionsStore } from './Discussions/discussions.store'
 import { MapsStore } from './Maps/maps.store'
 import { Database } from './database'
+import { DatabaseV2 } from './databaseV2'
 
 export class RootStore {
   stores: IStores
   db: Database
+  dbV2: DatabaseV2
   constructor() {
     this.stores = stores(this)
   }

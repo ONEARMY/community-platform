@@ -13,7 +13,7 @@ import {
 } from './types'
 import { Observable, Observer } from 'rxjs'
 
-export class Database implements AbstractDatabase {
+export class DatabaseV2 implements AbstractDatabase {
   private _clients: DBClients
   constructor(clients?: DBClients) {
     this._clients = clients ? clients : this._getDefaultClients()

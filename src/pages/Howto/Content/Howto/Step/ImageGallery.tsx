@@ -2,6 +2,7 @@ import React from 'react'
 import { Image, Card, Flex } from 'rebass'
 import { IUploadedFileMeta } from 'src/stores/storage'
 import Lightbox from 'react-image-lightbox'
+import Text from 'src/components/Text'
 import styled from 'styled-components'
 
 interface IProps {
@@ -18,6 +19,8 @@ interface IState {
 
 const ImageWithPointer = styled(Image)`
   cursor: pointer;
+  object-fit: cover;
+  max-height: 400px;
 `
 
 export default class ImageGallery extends React.PureComponent<IProps, IState> {
@@ -58,21 +61,20 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
 
   render() {
     const imageNumber = this.props.images.length
+    const { caption } = this.props
     console.log((this.state.imgIndex + 1) % this.state.imagesList.length)
     return this.state.activeImage ? (
-      <Flex>
+      <Flex flexWrap={'wrap'} width={[1, 1, 0.5]}>
         <ImageWithPointer
-          width={[1, 1, 0.5]}
-          px={1}
-          pb={4}
+          width={1}
           src={this.state.activeImage.downloadUrl}
           onClick={() => {
             this.triggerLightbox()
           }}
         />
-        <Flex flexWrap={'wrap'}>
-          {imageNumber > 1
-            ? this.props.images.map((image: any, index: number) => (
+        {imageNumber > 1
+          ? this.props.images.map((image: any, index: number) => (
+              <Flex>
                 <Card
                   p={1}
                   opacity={image === this.state.activeImage ? 1.0 : 0.5}
@@ -85,9 +87,9 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
                     key={index}
                   />
                 </Card>
-              ))
-            : null}
-        </Flex>
+              </Flex>
+            ))
+          : null}
 
         {this.state.showLightbox && (
           <Lightbox
@@ -120,6 +122,7 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
             onCloseRequest={() => this.triggerLightbox()}
           />
         )}
+        <Text py={3}>{caption}</Text>
       </Flex>
     ) : null
   }

@@ -12,20 +12,20 @@ import styled from 'styled-components'
 export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
   icon?: keyof IGlyphs
   disabled?: boolean
-  litleBtn?: boolean
+  smallBtn?: boolean
   mediumBtn?: boolean
-  bigBtn?: boolean
+  largeBtn?: boolean
   translateY?: boolean
 }
 
-export const litleBtn = (props: IBtnProps) =>
-  props.litleBtn ? { padding: '8px 10px', fontSize: '12px' } : null
+export const smallBtn = (props: IBtnProps) =>
+  props.smallBtn ? { padding: '8px 10px', fontSize: '12px' } : null
 
 export const mediumBtn = (props: IBtnProps) =>
   props.mediumBtn ? { padding: '10px' } : null
 
-export const bigBtn = (props: IBtnProps) =>
-  props.bigBtn ? { padding: '15px' } : null
+export const largeBtn = (props: IBtnProps) =>
+  props.largeBtn ? { padding: '15px' } : null
 
 export const translateY = (props: IBtnProps) =>
   props.translateY
@@ -40,9 +40,9 @@ export const translateY = (props: IBtnProps) =>
     : null
 
 const BaseButton = styled(RebassButton)`
-  ${litleBtn}
+  ${smallBtn}
   ${mediumBtn}
-  ${bigBtn}
+  ${largeBtn}
   ${translateY}
 `
 

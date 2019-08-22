@@ -1,23 +1,23 @@
-export interface IDatabaseMapPin {
-  id: string
+import { IDbDoc, ISODateString } from './common.models'
+
+interface IMapPinBase {
+  _id: string
   location: ILatLng & {
     address: string
   }
+}
+export interface IMapPin extends IMapPinBase {
   pinType: string
 }
 
-export interface IMapPin {
-  id: string
-  location: ILatLng & {
-    address: string
-  }
+export interface IMapPinWithType extends IMapPinBase {
   pinType: IPinType
 }
 
 export interface IMapPinDetail extends IMapPin {
   name: string
   shortDescription: string
-  lastActive: Date
+  lastActive: ISODateString
   profilePicUrl: string
   profileUrl: string
   heroImageUrl: string

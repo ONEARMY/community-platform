@@ -16,10 +16,11 @@ import {
   ILatLng,
   IBoundingBox,
   IPinType,
+  IMapPinWithType,
 } from 'src/models/maps.models'
 
 interface IProps {
-  pins: Array<IMapPin>
+  pins: Array<IMapPinWithType>
   filters: Array<IPinType>
   onBoundingBoxChange: (boundingBox: IBoundingBox) => void
   onPinClicked: (pin: IMapPin) => void
@@ -67,7 +68,7 @@ class MapView extends React.Component<IProps, IState> {
         center={[center.lat, center.lng]}
         zoom={zoom}
         maxZoom={18}
-        style={{ height: '100%' }}
+        style={{ height: '100%', zIndex: 1 }}
         onMove={this.updateBoundingBox}
       >
         <TileLayer
@@ -78,6 +79,14 @@ class MapView extends React.Component<IProps, IState> {
         <Popup map={this.map} pinDetail={activePinDetail} />
       </Map>
     )
+  }
+  static defaultProps: Partial<IProps> = {
+    onBoundingBoxChange: () => null,
+    onPinClicked: () => null,
+    pins: [],
+    filters: [],
+    center: { lat: 51.0, lng: 19.0 },
+    zoom: 3,
   }
 }
 

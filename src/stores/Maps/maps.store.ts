@@ -1,4 +1,4 @@
-import { observable, computed, action } from 'mobx'
+import { observable, computed, action, toJS } from 'mobx'
 import {
   insideBoundingBox,
   getBoundingBox,
@@ -12,19 +12,27 @@ import {
   IPinType,
   IMapPinDetail,
   ILatLng,
-  IDatabaseMapPin,
   IBoundingBox,
   EntityType,
+  IMapPinWithType,
 } from 'src/models/maps.models'
-import {
-  generatePins,
-  generatePinDetails,
-  generatePinFilters,
-} from 'src/mocks/maps.mock'
+import { generatePinFilters, generatePins } from 'src/mocks/maps.mock'
+import { IUser } from 'src/models/user.models'
+import { IDBEndpoint } from 'src/models/common.models'
 import { RootStore } from '..'
+import { DatabaseV2 } from '../databaseV2'
+import { Subscription } from 'rxjs'
 
 export class MapsStore {
-  constructor(rootStore: RootStore) {}
+  mapEndpoint: IDBEndpoint = 'v2_mappins'
+  availablePinFilters = generatePinFilters()
+  db: DatabaseV2
+  rootStore: RootStore
+  mapPins$: Subscription
+  constructor(rootStore: RootStore) {
+    this.rootStore = rootStore
+    this.db = rootStore.dbV2
+  }
   @observable
   public mapBoundingBox: IBoundingBox = {
     topLeft: { lat: -90, lng: -180 },
@@ -32,19 +40,16 @@ export class MapsStore {
   }
 
   @observable
-  public availablePinFilters: Array<IPinType> = []
-  @observable
   public activePinFilters: Array<IPinType> = []
 
-  private pinData: Array<IDatabaseMapPin> = []
+  @observable
+  public mapPins: Array<IMapPinWithType> = []
 
-  @computed
-  get mapPins(): Array<IMapPin> {
-    // TODO: for some reason it only computes the below when the console is
-    // there?
-    console.log(this.pinData, this.availablePinFilters)
-    if (this.pinData.length === 0 || this.availablePinFilters.length === 0) {
-      return []
+  @action
+  private processDBMapPins(pins: IMapPin[]) {
+    if (pins.length === 0 || this.availablePinFilters.length === 0) {
+      this.mapPins = []
+      return
     }
 
     const filterMap = this.availablePinFilters.reduce(
@@ -55,8 +60,8 @@ export class MapsStore {
       {} as Record<string, IPinType>,
     )
 
-    return this.pinData.map(({ id, location, pinType }) => ({
-      id,
+    this.mapPins = pins.map(({ _id, location, pinType }) => ({
+      _id,
       location,
       pinType: filterMap[pinType],
     }))
@@ -77,8 +82,11 @@ export class MapsStore {
   @action
   public async retrieveMapPins() {
     // TODO: make the function accept a bounding box to reduce load from DB
-    // TODO: make the database callout instead of random mocks
-    this.pinData = await generatePins(10)
+    // TODO: stream will force repeated recalculation of all pins on any update,
+    // really inefficient, should either remove stream or find way just to process new
+    this.mapPins$ = this.db.collection('v2_mappins').stream<IMapPin>(pins => {
+      this.processDBMapPins(pins)
+    })
   }
 
   @action
@@ -100,13 +108,38 @@ export class MapsStore {
   }
 
   @action
-  public async getPinDetails(pin: IMapPin) {
-    const { id } = pin
-    if (!this.pinDetailCache.has(id)) {
-      // TODO: get from database
-      this.pinDetailCache.set(id, generatePinDetails(pin))
+  public async getPinDetails(pin: IMapPin): Promise<IMapPinDetail> {
+    if (!this.pinDetailCache.has(pin._id)) {
+      // get from db if not already in cache. note map ids match with user ids
+      const pinDetail = await this.getUserProfilePin(pin._id)
+      this.pinDetailCache.set(pin._id, { ...pin, ...pinDetail })
+      return this.getPinDetails(pin)
     }
-    this.pinDetail = this.pinDetailCache.get(id)
+    this.pinDetail = this.pinDetailCache.get(pin._id)
+    return toJS(this.pinDetail as IMapPinDetail)
+  }
+
+  // get base pin geo information
+  public async getPin(id: string) {
+    const pin = await this.db
+      .collection('v2_mappins')
+      .doc(id)
+      .get()
+    return pin as IMapPin
+  }
+
+  // add new pin or update existing
+  public async setPin(pin: IMapPin) {
+    // generate standard doc meta
+    console.log('setting pin', pin)
+    return this.db
+      .collection('v2_mappins')
+      .doc(pin._id)
+      .set(pin)
+  }
+
+  public removeSubscriptions() {
+    this.mapPins$.unsubscribe()
   }
 
   private recalculatePinCounts() {
@@ -129,10 +162,29 @@ export class MapsStore {
       {} as Record<string, IPinType>,
     )
 
-    this.pinData.forEach(pin => {
+    this.mapPins.forEach(pin => {
       if (insideBoundingBox(pin.location as LatLng, boundingBox)) {
-        pinTypeMap[pin.pinType].count++
+        pinTypeMap[pin.pinType.name].count++
       }
     })
+  }
+
+  // return subset of profile info used when displaying map pins
+  private async getUserProfilePin(username: string) {
+    const u = (await this.rootStore.stores.userStore.getUserProfile(
+      username,
+    )) as IUser
+    console.log('user profile retrieved', u)
+    const avatar = await this.rootStore.stores.userStore.getUserAvatar(
+      u.userName,
+    )
+    return {
+      heroImageUrl: avatar,
+      lastActive: u._lastActive ? u._lastActive : u._modified,
+      profilePicUrl: avatar,
+      shortDescription: u.about ? u.about : '',
+      name: u.userName,
+      profileUrl: `${location.origin}/u/${u.userName}`,
+    }
   }
 }

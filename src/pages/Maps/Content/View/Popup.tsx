@@ -89,7 +89,7 @@ export class Popup extends React.Component<IProps> {
 
     if (
       prevProps.pinDetail === undefined ||
-      prevProps.pinDetail.id !== this.props.pinDetail!.id
+      prevProps.pinDetail._id !== this.props.pinDetail!._id
     ) {
       this.setPinLocation(this.props.pinDetail)
     }

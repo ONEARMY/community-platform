@@ -54,7 +54,7 @@ export class DexieClient implements AbstractDBClient {
     const directed = order === 'desc' ? filtered.reverse() : filtered
     // as sortBy is a manual operation specify all other criteria first
     const sorted = await directed.sortBy(orderBy!)
-    return sorted.slice(0, limit)
+    return limit ? sorted.slice(0, limit) : sorted
   }
 
   private _generateQueryWhereRef<T>(

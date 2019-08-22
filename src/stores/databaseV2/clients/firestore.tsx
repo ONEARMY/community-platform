@@ -66,15 +66,13 @@ export class FirestoreClient implements AbstractDBClient {
 
   // mapping to generate firebase query from standard db queryOpts
   private _generateQueryRef(endpoint: IDBEndpoint, queryOpts: DBQueryOptions) {
-    const query = { ...DB_QUERY_DEFAULTS, queryOpts }
+    const query = { ...DB_QUERY_DEFAULTS, ...queryOpts }
     const { limit, orderBy, order, where } = query
     const { field, operator, value } = where!
     // all queries sent with a common list of conditions
-    const ref = db
-      .collection(endpoint)
-      .limit(limit!)
-      .orderBy(orderBy!, order!)
+    const baseRef = db.collection(endpoint).orderBy(orderBy!, order!)
+    const limitRef = limit ? baseRef.limit(limit) : baseRef
     // additional 'where' field only applied if specified
-    return where ? ref.where(field, operator, value) : ref
+    return where ? limitRef.where(field, operator, value) : limitRef
   }
 }

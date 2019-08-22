@@ -8,7 +8,7 @@ export const DB_API_VERSION = 2
  * which are designed to prevent accidental alter to the desired data structure
  */
 export const DB_QUERY_DEFAULTS: DBQueryOptions = {
-  limit: Infinity,
+  limit: undefined,
   order: 'asc',
   orderBy: '_id',
 }

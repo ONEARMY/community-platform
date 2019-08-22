@@ -39,7 +39,8 @@ class CollectionReference {
     return new DocReference(this.endpoint, docID, this.clients)
   }
 
-  async stream<T>() {
+  // TODO - allow partial observer instead of onUpdate and add unsubscribe
+  stream<T>(onUpdate: (value: T[]) => void) {
     const { cacheDB, serverDB, serverCacheDB } = this.clients
     const endpoint = this.endpoint
     const observer: Observable<T[]> = Observable.create(
@@ -49,9 +50,11 @@ class CollectionReference {
         obs.next(cached)
         if (cached.length === 0) {
           // 2. If no cache, populate using large query db
-          const largeCollection = await serverCacheDB.getCollection<T>(endpoint)
-          await cacheDB.setBulkDocs(endpoint, largeCollection)
-          obs.next(largeCollection)
+          console.log('getting server cache')
+          const serverCache = await serverCacheDB.getCollection<T>(endpoint)
+          console.log('serverCache', serverCache)
+          await cacheDB.setBulkDocs(endpoint, serverCache)
+          obs.next(serverCache)
         }
         // 3. get any newer docs from regular server db, merge with cache and emit
         const latest = await this._getCacheLastModified()
@@ -70,7 +73,8 @@ class CollectionReference {
         })
       },
     )
-    return observer
+    const subscription = observer.subscribe(value => onUpdate(value))
+    return subscription
   }
 
   async set(docs: any[]) {
@@ -148,6 +152,7 @@ class DocReference {
   private _setDocMeta(data: any = {}): DBDoc {
     const d = data
     return {
+      ...d,
       _created: d._created ? d._created : new Date().toISOString(),
       _deleted: d._deleted ? d._deleted : false,
       _id: d._id ? d._id : this._generateDocID(),

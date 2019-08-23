@@ -49,7 +49,7 @@ export class DesktopMenu extends React.Component {
         <FlexDesktopWrapper
           alignItems={'center'}
           px={2}
-          display={['none', 'flex', 'flex']}
+          display={['none', 'none', 'flex']}
         >
           {COMMUNITY_PAGES.map(page => (
             <Flex>

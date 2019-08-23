@@ -50,7 +50,7 @@ class Step extends Component<IProps, IState> {
     return (
       // NOTE - animation parent container in CreateHowTo
       <Flex
-        mt={3}
+        mt={5}
         p={3}
         key={index}
         card

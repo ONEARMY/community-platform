@@ -142,7 +142,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
                       card
                       mediumRadius
                       bg={'white'}
-                      mt={3}
+                      mt={5}
                       p={4}
                       flexWrap="wrap"
                       flexDirection="column"

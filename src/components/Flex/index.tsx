@@ -15,7 +15,7 @@ export interface IFlexProps {
 }
 
 export const card = (props: IFlexProps) =>
-  props.card ? { border: '2px solid black', overflow: 'hidden' } : null
+  props.card ? { border: '2px solid black' } : null
 
 export const cardHeading = (props: IFlexProps) =>
   props.cardHeading

@@ -8,7 +8,8 @@ import Flex from 'src/components/Flex'
 import { Button } from 'src/components/Button'
 import { Modal } from 'src/components/Modal/Modal'
 import Text from 'src/components/Text'
-import { flexDirection } from 'styled-system'
+import styled from 'styled-components'
+import theme from 'src/themes/styled.theme'
 
 interface IProps {
   step: string
@@ -21,6 +22,11 @@ interface IState {
 }
 
 const required = (value: any) => (value ? undefined : 'Required')
+
+const Label = styled.label`
+ font-size: ${theme.fontSizes[2] + 'px'}
+ margin-bottom: ${theme.space[2] + 'px'}
+`
 
 class Step extends Component<IProps, IState> {
   constructor(props: IProps) {
@@ -53,52 +59,72 @@ class Step extends Component<IProps, IState> {
         flexDirection={'column'}
       >
         <Flex p={0}>
-          <Heading medium flex={1}>
+          <Heading small flex={1} mb={3}>
             Step {index + 1}
           </Heading>
-
           {index >= 1 && (
-            <Button icon="delete" onClick={() => this.toggleDeleteModal()} />
+            <Button
+              small
+              variant={'tertiary'}
+              icon="delete"
+              onClick={() => this.toggleDeleteModal()}
+            />
           )}
           {this.state.showDeleteModal && (
             <Modal onDidDismiss={() => this.toggleDeleteModal()}>
               <Text>Are you sure you want to delete this step?</Text>
               <Flex p={0} justifyContent="flex-end">
-                <Button onClick={() => this.toggleDeleteModal()}>Cancel</Button>
-                <Button onClick={() => this.confirmDelete()}>Delete</Button>
+                <Button
+                  variant={'outline'}
+                  onClick={() => this.toggleDeleteModal()}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant={'outline'}
+                  onClick={() => this.confirmDelete()}
+                >
+                  Delete
+                </Button>
               </Flex>
             </Modal>
           )}
         </Flex>
 
-        <Flex p={0} flexWrap="wrap">
+        <Flex flexDirection="column" mb={3}>
+          <Label htmlFor={`${step}.title`}>Title of this step *</Label>
           <Field
             name={`${step}.title`}
             component={InputField}
-            placeholder={`Title of Step ${index + 1}`}
+            placeholder="Title of this step"
             validate={required}
             validateFields={[]}
           />
-          {/* Left */}
-          <Flex p={0} pr={2} flexDirection="column" flex={1}>
-            <Field
-              name={`${step}.text`}
-              placeholder="Describe this step"
-              component={TextAreaField}
-              style={{ resize: 'vertical', height: '100%' }}
-              validate={required}
-              validateFields={[]}
-            />
-          </Flex>
-          {/* right */}
-          <Box p={0} width={[1, '305px', null]}>
-            <Field name={`${step}.images`} component={ImageInputField} multi />
-            <Field
-              name={`${step}.caption`}
-              component={InputField}
-              placeholder="Insert Caption"
-            />
-          </Box>
+        </Flex>
+        <Flex flexDirection="column" mb={3}>
+          <Label htmlFor={`${step}.text`}>Description of this step *</Label>
+          <Field
+            name={`${step}.text`}
+            placeholder="Description of this step"
+            component={TextAreaField}
+            style={{ resize: 'vertical', height: '100%' }}
+            validate={required}
+            validateFields={[]}
+          />
+        </Flex>
+        {/* right */}
+        <Flex flexDirection="column">
+          <Label htmlFor={`${step}.text`}>
+            Upload image(s) for this step *
+          </Label>
+          <Field name={`${step}.images`} component={ImageInputField} multi />
+        </Flex>
+        <Flex mt={2}>
+          <Field
+            name={`${step}.caption`}
+            component={InputField}
+            placeholder="Insert Caption"
+          />
         </Flex>
       </Flex>
     )

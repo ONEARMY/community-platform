@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components'
 import theme from 'src/themes/styled.theme'
 
 export const inputStyles = css`
-  border: none;
+  border: 1px solid #dce4e5;
   border-radius: 5px;
   font-family: 'Inter', Arial, sans-serif;
   font-size: ${theme.fontSizes[1] + 'px'};

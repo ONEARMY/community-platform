@@ -73,7 +73,6 @@ const FormContainer = styled.form`
 const Label = styled.label`
  font-size: ${theme.fontSizes[2] + 'px'}
  margin-bottom: ${theme.space[2] + 'px'}
-
 `
 
 // validation - return undefined if no error (i.e. valid)
@@ -278,29 +277,28 @@ export class CreateHowto extends React.Component<IProps, IState> {
                             </AnimationContainer>
                           ))}
                         </PoseGroup>
-
-                        <Button
-                          icon={'add'}
-                          width={300}
-                          mx="auto"
-                          my={20}
-                          variant="dark"
-                          bg="yellow"
-                          small
-                          onClick={() => {
-                            fields.push({
-                              title: '',
-                              text: '',
-                              images: [],
-                              // HACK - need unique key, this is a rough method to generate form random numbers
-                              _animationKey: `unique${Math.random()
-                                .toString(36)
-                                .substring(7)}`,
-                            })
-                          }}
-                        >
-                          Add step
-                        </Button>
+                        <Flex>
+                          <Button
+                            icon={'add'}
+                            mx="auto"
+                            my={20}
+                            variant="secondary"
+                            medium
+                            onClick={() => {
+                              fields.push({
+                                title: '',
+                                text: '',
+                                images: [],
+                                // HACK - need unique key, this is a rough method to generate form random numbers
+                                _animationKey: `unique${Math.random()
+                                  .toString(36)
+                                  .substring(7)}`,
+                              })
+                            }}
+                          >
+                            Add step
+                          </Button>
+                        </Flex>
                       </>
                     )}
                   </FieldArray>

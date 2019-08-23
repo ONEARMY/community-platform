@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Box } from 'rebass'
+import { Box, Flex } from 'rebass'
 import { Button } from '../Button'
 import Lightbox from 'react-image-lightbox'
 import 'react-image-lightbox/style.css'
@@ -131,29 +131,32 @@ export class ImageInput extends React.Component<IProps, IState> {
               onChange={e => this.handleFileInput(e.target.files)}
             />
           </div>
-          {inputFiles.map((file, index) => {
-            return (
-              <ImageConverter
-                key={file.name}
-                file={file}
-                onImgConverted={meta =>
-                  this.handleConvertedFileChange(meta, index)
-                }
-                onImgClicked={meta => this.showImgLightbox(meta)}
-              />
-            )
-          })}
-          {imgPreviewMode && (
-            <Button
-              onClick={() => this.triggerFileUploaderClick()}
-              ml="auto"
-              icon="image"
-              variant="light"
-              width={1}
-            >
-              Choose Images
-            </Button>
-          )}
+          <Flex mx={-1}>
+            {inputFiles.map((file, index) => {
+              return (
+                <ImageConverter
+                  key={file.name}
+                  file={file}
+                  onImgConverted={meta =>
+                    this.handleConvertedFileChange(meta, index)
+                  }
+                  onImgClicked={meta => this.showImgLightbox(meta)}
+                />
+              )
+            })}
+            {imgPreviewMode && (
+              <Flex width={1 / 4} px={1}>
+                <Button
+                  large
+                  onClick={() => this.triggerFileUploaderClick()}
+                  ml="auto"
+                  icon="image"
+                  variant="imageInput"
+                  width={1}
+                />
+              </Flex>
+            )}
+          </Flex>
 
           {openLightbox && (
             <Lightbox

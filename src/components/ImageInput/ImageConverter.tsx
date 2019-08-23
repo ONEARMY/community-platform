@@ -3,7 +3,7 @@ import { Flex, Box } from 'rebass'
 import { Button } from '../Button'
 import * as clientCompress from 'client-compress'
 import { IConvertedFileMeta, bytesToSize } from './ImageInput'
-import Text from '../Text'
+import styled from 'styled-components'
 
 interface IProps {
   file: File
@@ -21,6 +21,15 @@ const imageSizes = {
   normal: 1280,
   high: 1920,
 }
+
+const PreviewImage = styled(Flex)`
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100px;
+  width: 100%;
+  border-radius: 5px;
+`
 
 export class ImageConverter extends React.Component<IProps, IState> {
   public static defaultProps: Partial<IProps>
@@ -77,24 +86,15 @@ export class ImageConverter extends React.Component<IProps, IState> {
     const { convertedFile } = this.state
 
     return convertedFile ? (
-      <Box>
-        <Box
+      <Flex px={1} width={1 / 4}>
+        <PreviewImage
           style={{
             backgroundImage: `url(${convertedFile.objectUrl})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            height: '220px',
-            border: '1px solid #dddddd',
           }}
           id="preview"
           onClick={() => this.props.onImgClicked(convertedFile)}
         />
-        <Box>
-          {convertedFile.startSize} -> {convertedFile.endSize}
-        </Box>
-        <Text small>{convertedFile.compressionPercent}% smaller 🌍</Text>
-      </Box>
+      </Flex>
     ) : null
   }
 }

@@ -37,6 +37,7 @@ const buttons = {
     fontFamily: '"Varela Round", Arial, sans-serif',
     border: '2px solid ' + colors.black,
     color: colors.black,
+    display: 'flex',
     backgroundColor: colors.softblue,
     transition: '.2s ease-in-out',
     '&:hover': {
@@ -47,6 +48,7 @@ const buttons = {
     fontFamily: '"Varela Round", Arial, sans-serif',
     border: '2px solid ' + colors.black,
     color: colors.black,
+    display: 'flex',
     backgroundColor: colors.white,
     transition: '.2s ease-in-out',
     '&:hover': {
@@ -67,6 +69,11 @@ const buttons = {
     '&:hover': {
       backgroundColor: lighten(0.02, colors.softblue),
     },
+  },
+  imageInput: {
+    border: '2px dashed #e0e0e0',
+    color: '#e0e0e0',
+    backgroundColor: 'transparent',
   },
 }
 

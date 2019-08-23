@@ -29,8 +29,13 @@ export const SelectStyles: Partial<Styles> = {
   }),
   control: (provided, state) => ({
     ...provided,
-    border: 'none',
+    border: '1px solid #dce4e5',
     backgroundColor: theme.colors.background,
+    ':focus': {
+      border: '1px solid #83ceeb',
+      outline: 'none',
+      boxShadow: 'none',
+    },
   }),
 }
 

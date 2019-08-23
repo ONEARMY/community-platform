@@ -15,11 +15,16 @@ export const inputStyles = css`
     border: none;
     color: ${theme.colors.black};
   }
+
+  &:focus {
+    border-color: #83ceeb;
+    outline: none;
+  }
 `
 
 export const Input = styled.input`
   ${inputStyles};
-  height: 45px;
+  height: 40px;
   padding: 10px;
 `
 

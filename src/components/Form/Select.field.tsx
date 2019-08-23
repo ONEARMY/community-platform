@@ -7,6 +7,7 @@ import { FieldContainer } from './elements'
 import theme from 'src/themes/styled.theme'
 import ReactFlagsSelect from 'react-flags-select'
 import { getCountryName } from 'src/utils/helpers'
+import { background } from 'styled-system'
 
 interface ISelectOption {
   value: string
@@ -31,11 +32,49 @@ export const SelectStyles: Partial<Styles> = {
     ...provided,
     border: '1px solid #dce4e5',
     backgroundColor: theme.colors.background,
+    height: '40px',
+    boxShadow: 'none',
     ':focus': {
       border: '1px solid #83ceeb',
       outline: 'none',
-      boxShadow: 'none',
     },
+    ':hover': {
+      border: '1px solid #83ceeb',
+    },
+  }),
+
+  option: (provided, state) => ({
+    ...provided,
+    backgroundColor: theme.colors.background,
+    boxShadow: 'none',
+    ':hover': {
+      outline: 'none',
+      backgroundColor: 'white',
+      color: 'black',
+    },
+  }),
+
+  menu: (provided, state) => ({
+    ...provided,
+    border: '1px solid #dce4e5',
+    boxShadow: 'none',
+    backgroundColor: theme.colors.background,
+    ':hover': {
+      border: '1px solid #dce4e5',
+    },
+  }),
+
+  multiValue: (provided, state) => ({
+    ...provided,
+    backgroundColor: '#e2edf7',
+    padding: '2px',
+    border: '1px solid #c2d4e4',
+    color: '#61646b',
+  }),
+
+  indicatorSeparator: (provided, state) => ({
+    ...provided,
+    display: 'none',
   }),
 }
 

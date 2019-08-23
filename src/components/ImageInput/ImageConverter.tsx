@@ -29,6 +29,7 @@ const PreviewImage = styled(Flex)`
   height: 100px;
   width: 100%;
   border-radius: 5px;
+  border: 1px solid #ececec;
 `
 
 export class ImageConverter extends React.Component<IProps, IState> {

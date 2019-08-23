@@ -53,6 +53,21 @@ const buttons = {
       backgroundColor: colors.yellow,
     },
   },
+
+  outline: {
+    fontFamily: '"Varela Round", Arial, sans-serif',
+    border: '2px solid ' + colors.black,
+    color: colors.black,
+    backgroundColor: colors.white,
+    transition: '.2s ease-in-out',
+    display: 'flex',
+    alignItems: 'center',
+    width: 'fit-content',
+    height: 'fit-content',
+    '&:hover': {
+      backgroundColor: lighten(0.02, colors.softblue),
+    },
+  },
 }
 
 const space = [

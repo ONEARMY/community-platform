@@ -1,10 +1,12 @@
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 import { Form, Field } from 'react-final-form'
+import styled from 'styled-components'
 import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
 import createDecorator from 'final-form-calculate'
 import { IHowtoFormInput } from 'src/models/howto.models'
+import Text from 'src/components/Text'
 import TEMPLATE from './Template'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
@@ -14,7 +16,6 @@ import { Button } from 'src/components/Button'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import Heading from 'src/components/Heading'
 import Flex from 'src/components/Flex'
-import { Box } from 'rebass'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { FileInputField } from 'src/components/Form/FileInput.field'
@@ -24,6 +25,7 @@ import { Modal } from 'src/components/Modal/Modal'
 import { HowToSubmitStatus } from './SubmitStatus'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import { PostingGuidelines } from './PostingGuidelines'
+import theme from 'src/themes/styled.theme'
 
 interface IState {
   formValues: IHowtoFormInput
@@ -63,6 +65,16 @@ const AnimationContainer = posed.div({
   // https://github.com/final-form/react-final-form-arrays/issues/22
   // not including exit animation as really bad performance
 })
+
+const FormContainer = styled.form`
+  width: 100%;
+`
+
+const Label = styled.label`
+ font-size: ${theme.fontSizes[2] + 'px'}
+ margin-bottom: ${theme.space[2] + 'px'}
+
+`
 
 // validation - return undefined if no error (i.e. valid)
 const required = (value: any) => (value ? undefined : 'Required')
@@ -119,78 +131,128 @@ export class CreateHowto extends React.Component<IProps, IState> {
         render={({ submitting, values, invalid, errors, handleSubmit }) => {
           const disabled = invalid || submitting
           return (
-            <Flex m={'0'} p={'0'} bg={'inherit'} flexWrap="wrap">
-              <Flex bg="inherit" p={'0'} width={[1, 1, 2 / 3]}>
-                {/* using prevent default as sometimes submit triggered unintentionally */}
-                <form onSubmit={e => e.preventDefault()}>
+            <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
+              <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} mt={4}>
+                <FormContainer onSubmit={e => e.preventDefault()}>
                   {/* How To Info */}
-                  <Flex flexDirection={'column'} p={3}>
-                    <Flex card mediumRadius px={3} py={2}>
+                  <Flex flexDirection={'column'}>
+                    <Flex card mediumRadius bg={'softblue'} px={3} py={2}>
                       <Heading medium>Create your How-To</Heading>
                     </Flex>
-                    <Flex p={0} flexWrap="wrap">
+                    <Flex
+                      card
+                      mediumRadius
+                      bg={'white'}
+                      mt={3}
+                      p={4}
+                      flexWrap="wrap"
+                      flexDirection="column"
+                    >
                       {/* Left Side */}
-                      <Flex p={0} pr={2} flex={1} flexDirection="column">
-                        <Field
-                          name="title"
-                          validateFields={[]}
-                          validate={value => this.validateTitle(value)}
-                          component={InputField}
-                          placeholder="Title of your How-to *"
-                        />
-                        <Field
-                          name="tags"
-                          component={TagsSelectField}
-                          category="how-to"
-                        />
-                        <Flex p={0}>
-                          <Field
-                            name="time"
-                            validate={required}
-                            validateFields={[]}
-                            options={TEMPLATE.TIME_OPTIONS}
-                            component={SelectField}
-                            placeholder="How much time? *"
-                            style={{ marginRight: '4px' }}
-                          />
-                          <Field
-                            name="difficulty_level"
-                            validate={required}
-                            validateFields={[]}
-                            component={SelectField}
-                            options={TEMPLATE.DIFFICULTY_OPTIONS}
-                            placeholder="How hard is it? *"
-                            style={{ marginLeft: '4px' }}
-                          />
+                      <Heading small mb={3}>
+                        Intro
+                      </Heading>
+                      <Flex mx={-2}>
+                        <Flex flex={4} px={2} flexDirection="column">
+                          <Flex flexDirection={'column'} mb={3}>
+                            <Label htmlFor="title">
+                              Title of your How-to *
+                            </Label>
+                            <Field
+                              id="title"
+                              name="title"
+                              validateFields={[]}
+                              validate={value => this.validateTitle(value)}
+                              component={InputField}
+                              placeholder="Make a chair from...
+                            "
+                            />
+                          </Flex>
+                          <Flex flexDirection={'column'} mb={3}>
+                            <Label>Select tags for your How-to (max 4) *</Label>
+                            <Field
+                              name="tags"
+                              component={TagsSelectField}
+                              category="how-to"
+                            />
+                          </Flex>
+                          <Flex flexDirection={'column'} mb={3}>
+                            <Label htmlFor="time">
+                              How long does it take? *
+                            </Label>
+                            <Field
+                              id="time"
+                              name="time"
+                              validate={required}
+                              validateFields={[]}
+                              options={TEMPLATE.TIME_OPTIONS}
+                              component={SelectField}
+                              placeholder="How much time? *"
+                            />
+                          </Flex>
+                          <Flex flexDirection={'column'} mb={3}>
+                            <Label htmlFor="difficulty_level">
+                              Difficulty level? *
+                            </Label>
+                            <Field
+                              px={1}
+                              id="difficulty_level"
+                              name="difficulty_level"
+                              validate={required}
+                              validateFields={[]}
+                              component={SelectField}
+                              options={TEMPLATE.DIFFICULTY_OPTIONS}
+                              placeholder="How hard is it? *"
+                            />
+                          </Flex>
+                          <Flex flexDirection={'column'} mb={3}>
+                            <Label htmlFor="description">
+                              Difficulty level? *
+                            </Label>
+                            <Field
+                              id="description"
+                              name="description"
+                              validate={required}
+                              validateFields={[]}
+                              component={TextAreaField}
+                              style={{
+                                resize: 'none',
+                                flex: 1,
+                                minHeight: '150px',
+                              }}
+                              placeholder="Introduction to your How-To, keep it to 100 words please! *"
+                            />
+                          </Flex>
+                          <Flex flexDirection={'column'}>
+                            <Label htmlFor="description">
+                              Do you have supporting file to help others
+                              replicate your How-to?
+                            </Label>
+                            <Field name="files" component={FileInputField} />
+                          </Flex>
                         </Flex>
-                        <Field
-                          name="description"
-                          validate={required}
-                          validateFields={[]}
-                          component={TextAreaField}
-                          style={{
-                            resize: 'none',
-                            flex: 1,
-                            minHeight: '150px',
-                          }}
-                          placeholder="Introduction to your How-To, keep it to 100 words please! *"
-                        />
+
+                        {/* Right side */}
+                        <Flex p={0} px={2} flex={3} flexDirection={'column'}>
+                          <Field
+                            name="cover_image"
+                            validate={required}
+                            validateFields={[]}
+                            component={ImageInputField}
+                          />
+
+                          <Text small color={'grey'} mt={2}>
+                            This image should be landscape. We advise 1280x960px
+                          </Text>
+                          <Flex mt={2}>
+                            <Field
+                              name="caption"
+                              component={InputField}
+                              placeholder="Insert Caption"
+                            />
+                          </Flex>
+                        </Flex>
                       </Flex>
-                      {/* Right side */}
-                      <Box p={0} width={[1, null, '380px']}>
-                        <Field
-                          name="cover_image"
-                          validate={required}
-                          validateFields={[]}
-                          component={ImageInputField}
-                        />
-                        <Field
-                          name="caption"
-                          component={InputField}
-                          placeholder="Insert Caption"
-                        />
-                        <Field name="files" component={FileInputField} />
-                      </Box>
                     </Flex>
                   </Flex>
 
@@ -222,6 +284,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
                           my={20}
                           variant="dark"
                           bg="yellow"
+                          small
                           onClick={() => {
                             fields.push({
                               title: '',
@@ -234,12 +297,12 @@ export class CreateHowto extends React.Component<IProps, IState> {
                             })
                           }}
                         >
-                          add step
+                          Add step
                         </Button>
                       </>
                     )}
                   </FieldArray>
-                </form>
+                </FormContainer>
                 {this.state.showSubmitModal && (
                   <Modal>
                     <>
@@ -259,24 +322,25 @@ export class CreateHowto extends React.Component<IProps, IState> {
                 )}
               </Flex>
               {/* post guidelines container */}
-              <Box
+              <Flex
+                flexDirection={'column'}
                 width={[1, 1, 1 / 3]}
                 height={'100%'}
                 bg="inherit"
-                p={0}
-                pl={2}
+                px={2}
+                mt={4}
               >
                 <PostingGuidelines />
                 <Button
                   onClick={() => handleSubmit()}
                   width={1}
                   mt={3}
-                  variant={disabled ? 'disabled' : 'secondary'}
+                  variant={disabled ? 'primary' : 'primary'}
                   disabled={submitting || invalid}
                 >
                   Publish
                 </Button>
-              </Box>
+              </Flex>
             </Flex>
           )
         }}

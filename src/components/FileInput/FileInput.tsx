@@ -69,6 +69,7 @@ export class FileInput extends React.Component<IProps, IState> {
           {showFileList ? (
             <>
               <Button
+                small
                 onClick={() => this.toggleModal()}
                 icon="upload"
                 variant="outline"
@@ -79,12 +80,13 @@ export class FileInput extends React.Component<IProps, IState> {
             </>
           ) : (
             <Button
+              small
               icon="upload"
               onClick={() => this.toggleModal()}
               type="button"
               variant="outline"
             >
-              Upload Files
+              Upload Files (.zip)
             </Button>
           )}
           <DashboardModal

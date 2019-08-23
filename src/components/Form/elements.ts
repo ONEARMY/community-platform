@@ -2,13 +2,15 @@ import styled, { css } from 'styled-components'
 import theme from 'src/themes/styled.theme'
 
 export const inputStyles = css`
-  border: 1px solid ${theme.colors.black};
-  border-radius: 4px;
-  font-size: ${theme.fontSizes[2] + 'px'};
-  background: white;
+  border: none;
+  border-radius: 5px;
+  font-family: 'Inter', Arial, sans-serif;
+  font-size: ${theme.fontSizes[1] + 'px'};
+  background: ${theme.colors.background};
   width: 100%;
-  padding: 10px;
   box-sizing: border-box;
+  margin-bottom: 10px;
+
   &:disabled {
     border: none;
     color: ${theme.colors.black};
@@ -18,12 +20,13 @@ export const inputStyles = css`
 export const Input = styled.input`
   ${inputStyles};
   height: 45px;
+  padding: 10px;
 `
 
 export const TextAreaStyled = styled.textarea`
   ${inputStyles};
+  padding: 10px;
   height: 150px;
-  font-family: inherit;
 `
 export const TextAreaDisabled = styled.div`
   ${inputStyles};
@@ -32,7 +35,5 @@ export const TextAreaDisabled = styled.div`
 
 // generic container used for some custom component fields
 export const FieldContainer = styled.div`
-  ${inputStyles};
-  border: 'none';
-  padding: 0;
+  width: 100%;
 `

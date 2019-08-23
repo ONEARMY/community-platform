@@ -4,10 +4,11 @@ import { TextAreaField, InputField } from 'src/components/Form/Fields'
 import { Box } from 'rebass'
 import Heading from 'src/components/Heading'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
-import { Flex } from 'rebass'
+import Flex from 'src/components/Flex'
 import { Button } from 'src/components/Button'
 import { Modal } from 'src/components/Modal/Modal'
 import Text from 'src/components/Text'
+import { flexDirection } from 'styled-system'
 
 interface IProps {
   step: string
@@ -42,11 +43,20 @@ class Step extends Component<IProps, IState> {
     const { step, index } = this.props
     return (
       // NOTE - animation parent container in CreateHowTo
-      <Box mt={3} p={3} key={index}>
+      <Flex
+        mt={3}
+        p={3}
+        key={index}
+        card
+        mediumRadius
+        bg={'white'}
+        flexDirection={'column'}
+      >
         <Flex p={0}>
           <Heading medium flex={1}>
             Step {index + 1}
           </Heading>
+
           {index >= 1 && (
             <Button icon="delete" onClick={() => this.toggleDeleteModal()} />
           )}
@@ -90,7 +100,7 @@ class Step extends Component<IProps, IState> {
             />
           </Box>
         </Flex>
-      </Box>
+      </Flex>
     )
   }
 }

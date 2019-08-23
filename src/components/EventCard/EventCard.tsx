@@ -36,6 +36,7 @@ export const EventCard = (props: IProps) => (
     card
     littleRadius
     littleScale
+    bg={'white'}
     px={3}
     mt={4}
     py={3}

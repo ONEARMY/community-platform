@@ -23,11 +23,14 @@ interface ISelectFieldProps extends IFieldProps, SelectProps {
 export const SelectStyles: Partial<Styles> = {
   container: (provided, state) => ({
     ...provided,
-    fontSize: theme.fontSizes[2] + 'px',
+    fontSize: theme.fontSizes[1] + 'px',
+    marginBottom: theme.space[2] + 'px',
+    fontFamily: "'Inter', Arial, sans-serif",
   }),
   control: (provided, state) => ({
     ...provided,
     border: 'none',
+    backgroundColor: theme.colors.background,
   }),
 }
 
@@ -63,7 +66,7 @@ const defaultProps: Partial<ISelectFieldProps> = {
 }
 export const SelectField = ({ input, meta, ...rest }: ISelectFieldProps) => (
   // note, we first use a div container so that default styles can be applied
-  <FieldContainer style={rest.style}>
+  <FieldContainer>
     <Select
       styles={SelectStyles}
       onChange={v => {

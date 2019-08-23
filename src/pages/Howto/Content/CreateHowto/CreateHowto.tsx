@@ -152,8 +152,8 @@ export class CreateHowto extends React.Component<IProps, IState> {
                       <Heading small mb={3}>
                         Intro
                       </Heading>
-                      <Flex mx={-2}>
-                        <Flex flex={4} px={2} flexDirection="column">
+                      <Flex mx={-2} flexDirection={['column', 'column', 'row']}>
+                        <Flex flex={[1, 1, 4]} px={2} flexDirection="column">
                           <Flex flexDirection={'column'} mb={3}>
                             <Label htmlFor="title">
                               Title of your How-to *
@@ -223,7 +223,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
                               placeholder="Introduction to your How-To, keep it to 100 words please! *"
                             />
                           </Flex>
-                          <Flex flexDirection={'column'}>
+                          <Flex flexDirection={'column'} mb={[4, 4, 0]}>
                             <Label htmlFor="description">
                               Do you have supporting file to help others
                               replicate your How-to?
@@ -233,8 +233,10 @@ export class CreateHowto extends React.Component<IProps, IState> {
                         </Flex>
 
                         {/* Right side */}
-                        <Flex p={0} px={2} flex={3} flexDirection={'column'}>
+                        <Flex px={2} flex={[1, 1, 3]} flexDirection={'column'}>
+                          <Label htmlFor="cover_image">Cover image *</Label>
                           <Field
+                            id="cover_image"
                             name="cover_image"
                             validate={required}
                             validateFields={[]}

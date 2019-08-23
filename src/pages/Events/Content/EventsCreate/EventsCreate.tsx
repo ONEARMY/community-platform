@@ -122,7 +122,11 @@ export class EventsCreate extends React.Component<IProps, IState> {
                           placeholder="Title of your event"
                         />
                       </Flex>
-                      <Flex mx={-2} width={1}>
+                      <Flex
+                        mx={-2}
+                        width={1}
+                        flexDirection={['column', 'column', 'row']}
+                      >
                         <Flex flexDirection={'column'} mb={3} px={2} width={1}>
                           <Label htmlFor="location">
                             When is your event taking place? *
@@ -152,7 +156,11 @@ export class EventsCreate extends React.Component<IProps, IState> {
                           />
                         </Flex>
                       </Flex>
-                      <Flex mx={-2} width={1}>
+                      <Flex
+                        mx={-2}
+                        width={1}
+                        flexDirection={['column', 'column', 'row']}
+                      >
                         <Flex flexDirection={'column'} mb={3} px={2} width={1}>
                           <Label htmlFor="location">
                             In which city is the event taking place? *

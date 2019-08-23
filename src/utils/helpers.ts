@@ -32,6 +32,14 @@ export const timestampToYear = (timestamp: number) => {
   return date.getFullYear()
 }
 
+export const getMonth = (d: Date) => {
+  // use ECMAScript Internationalization API to return month
+  return `${d.toLocaleString('en-us', { month: 'long' })}`
+}
+export const getDay = (d: Date) => {
+  return `${d.getDate()}`
+}
+
 /************************************************************************
  *             Validators
  ***********************************************************************/

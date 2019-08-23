@@ -2,22 +2,16 @@ import { darken, lighten } from 'polished'
 // use enum to specify list of possible colors for typing
 export enum colors {
   white = 'white',
-  black = 'black',
-  blue = '#89a3d4',
-  lightblue = '#e2edf7',
-  darkgrey = '#333333',
-  lightgrey = '#f6f6f6',
-  grey = '#686868',
-  grey2 = '#9b9b9b',
-  grey3 = '#E4E4E4',
-  grey4 = '#E9E9E9',
-  greyStroke = '#AEAEAE',
-  green = '#88e3c7',
+  black = '#1b1b1b',
   yellow = '#fee77b',
-  error = '#f44336',
+  blue = '#83ceeb',
+  softblue = '#e2edf7',
+  bluetag = '#5683b0',
+  grey = '#61646b',
+  error = 'red',
   background = '#f4f6f7',
   primary = yellow,
-  secondary = lightblue,
+  secondary = blue,
 }
 
 export type ButtonVariants =
@@ -30,42 +24,34 @@ export type ButtonVariants =
 
 const buttons = {
   primary: {
+    fontFamily: '"Varela Round", Arial, sans-serif',
     border: '2px solid ' + colors.black,
+    color: colors.black,
     backgroundColor: colors.primary,
-    padding: '15px',
     transition: '.2s ease-in-out',
     '&:hover': {
       backgroundColor: darken(0.08, colors.primary),
-      transform: 'translateY(-5px)',
     },
   },
   secondary: {
+    fontFamily: '"Varela Round", Arial, sans-serif',
     border: '2px solid ' + colors.black,
     color: colors.black,
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.softblue,
     transition: '.2s ease-in-out',
     '&:hover': {
-      backgroundColor: lighten(0.03, colors.secondary),
-      transform: 'translateY(-5px)',
+      backgroundColor: colors.white,
     },
   },
-  outline: {
+  tertiary: {
+    fontFamily: '"Varela Round", Arial, sans-serif',
+    border: '2px solid ' + colors.black,
     color: colors.black,
-    border: '1px solid ' + colors.greyStroke,
-    backgroundColor: 'white',
-  },
-  disabled: {
-    color: colors.grey,
-    backgroundColor: colors.black,
-    opacity: 0.3,
-  },
-  dark: {
-    color: colors.white,
-    backgroundColor: colors.black,
-  },
-  light: {
-    backgroundColor: colors.lightgrey,
-    color: colors.black,
+    backgroundColor: colors.white,
+    transition: '.2s ease-in-out',
+    '&:hover': {
+      backgroundColor: colors.yellow,
+    },
   },
 }
 
@@ -102,27 +88,6 @@ const space = [
 ]
 const radii = space
 const fontSizes = [10, 12, 14, 18, 22, 30, 38, 42, 46, 50, 58, 66, 74]
-const lineHeights = [
-  10,
-  12,
-  14,
-  16,
-  18,
-  20,
-  22,
-  24,
-  26,
-  28,
-  30,
-  34,
-  38,
-  42,
-  46,
-  50,
-  58,
-  66,
-  74,
-]
 const breakpoints = ['32em', '48em', '64em']
 // standard widths: 512px, 768px, 1024px
 const maxContainerWidth = 1280
@@ -137,7 +102,6 @@ export default {
   space,
   radii,
   fontSizes,
-  lineHeights,
   maxContainerWidth,
   regular,
   bold,

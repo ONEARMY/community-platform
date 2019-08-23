@@ -5,15 +5,8 @@ import styled from 'styled-components'
 import LogoImage from 'src/assets/images/logo.svg'
 import LogoBackground from 'src/assets/images/logo-background.svg'
 
-const LogoImageContainer = styled(Flex)`
-  width: 45px;
-  height: 45px;
-  margin-right: 20px;
-`
-
 const LogoContainer = styled(Flex)`
   height: 60px;
-  background-color: ${theme.colors.yellow};
   align-items: center;
   position: relative;
   &:before {
@@ -34,8 +27,18 @@ const LogoLink = styled(Link)`
   z-index: 9999;
   display: flex;
   align-items: center;
-  padding-left: 25px;
   color: black;
+`
+
+const LogoImageContainer = styled(Flex)`
+  width: 45px;
+  height: 45px;
+`
+
+const LogoTitle = styled.h1`
+  font-size: 17px;
+  font-weight: 400;
+  margin-left: 15px;
 `
 
 export class Header extends React.Component {
@@ -43,11 +46,11 @@ export class Header extends React.Component {
     return (
       <>
         <LogoContainer>
-          <LogoLink href="/">
+          <LogoLink ml={[2, 3, 4]} href="/">
             <LogoImageContainer>
               <Image src={LogoImage} />
             </LogoImageContainer>
-            <Flex>Precious Plastic</Flex>
+            <LogoTitle>Precious Plastic</LogoTitle>
           </LogoLink>
         </LogoContainer>
       </>

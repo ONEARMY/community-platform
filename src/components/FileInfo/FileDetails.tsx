@@ -5,7 +5,6 @@ import Text from '../Text'
 import { IUploadedFileMeta } from 'src/stores/storage'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
-import { maxWidth } from 'styled-system'
 
 interface IProps {
   file: File | IUploadedFileMeta

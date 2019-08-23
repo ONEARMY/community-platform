@@ -13,7 +13,7 @@ import { Step } from './Step/Step'
 import { Button } from 'src/components/Button'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import Heading from 'src/components/Heading'
-import { Flex } from 'rebass'
+import Flex from 'src/components/Flex'
 import { Box } from 'rebass'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
@@ -120,14 +120,14 @@ export class CreateHowto extends React.Component<IProps, IState> {
           const disabled = invalid || submitting
           return (
             <Flex m={'0'} p={'0'} bg={'inherit'} flexWrap="wrap">
-              <Box bg="inherit" p={'0'} width={[1, 1, 2 / 3]}>
+              <Flex bg="inherit" p={'0'} width={[1, 1, 2 / 3]}>
                 {/* using prevent default as sometimes submit triggered unintentionally */}
                 <form onSubmit={e => e.preventDefault()}>
                   {/* How To Info */}
-                  <Box p={3}>
-                    <Heading small bold>
-                      Create your How-To
-                    </Heading>
+                  <Flex flexDirection={'column'} p={3}>
+                    <Flex card mediumRadius px={3} py={2}>
+                      <Heading medium>Create your How-To</Heading>
+                    </Flex>
                     <Flex p={0} flexWrap="wrap">
                       {/* Left Side */}
                       <Flex p={0} pr={2} flex={1} flexDirection="column">
@@ -192,7 +192,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
                         <Field name="files" component={FileInputField} />
                       </Box>
                     </Flex>
-                  </Box>
+                  </Flex>
 
                   {/* Steps Info */}
                   <FieldArray name="steps">
@@ -257,7 +257,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
                     </>
                   </Modal>
                 )}
-              </Box>
+              </Flex>
               {/* post guidelines container */}
               <Box
                 width={[1, 1, 1 / 3]}

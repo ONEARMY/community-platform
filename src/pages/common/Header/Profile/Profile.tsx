@@ -4,12 +4,12 @@ import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
-import { LoginComponent } from '../../Login/Login'
+import { LoginComponent } from 'src/pages/common/Login/Login'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import Text from 'src/components/Text'
 import { Flex } from 'rebass'
-import ProfileAvatar from './ProfileAvatar'
+import ProfileAvatar from './ProfilAvatar'
 
 interface IState {
   moreMenuAnchor: any
@@ -78,9 +78,7 @@ export default class Profile extends React.Component<IProps, IState> {
             >
               <ClickAwayListener onClickAway={this.closeProfileMenu}>
                 <>
-                  <Text p={8} bold>
-                    {user.userName}
-                  </Text>
+                  <Text bold>{user.userName}</Text>
                   {COMMUNITY_PAGES_PROFILE.map(page => (
                     <MenuItem onClick={this.closeProfileMenu} key={page.path}>
                       <NavLink to={page.path}>

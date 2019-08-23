@@ -80,6 +80,9 @@ export class LoginComponent extends React.Component<IProps, IState> {
     return (
       <>
         <Button
+          variant="secondary"
+          small
+          mr={2}
           onClick={() =>
             this.setState({
               showLoginModal: !this.state.showLoginModal,
@@ -89,10 +92,10 @@ export class LoginComponent extends React.Component<IProps, IState> {
             })
           }
         >
-          Sign up
+          Login
         </Button>
-        <Button variant="outline" onClick={this.toggleModal}>
-          Log in
+        <Button variant="tertiary" small onClick={this.toggleModal}>
+          Join
         </Button>
         <Modal
           aria-labelledby="user-login-modal"

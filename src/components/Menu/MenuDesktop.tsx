@@ -10,12 +10,12 @@ import { display, DisplayProps } from 'styled-system'
 const MenuLink = styled(NavLink).attrs(({ name }) => ({
   activeClassName: 'current',
 }))`
-  color: ${theme.colors.black};
+  padding: 0px ${theme.space[4]}px;
+  color: ${'black'};
   position: relative;
   > div {
     z-index: 1;
     position: relative;
-
     &:hover {
       opacity: 0.7;
     }
@@ -52,7 +52,7 @@ export class DesktopMenu extends React.Component {
           display={['none', 'flex', 'flex']}
         >
           {COMMUNITY_PAGES.map(page => (
-            <Flex mx={5}>
+            <Flex>
               <MenuLink to={page.path} key={page.path}>
                 <Flex>{page.title}</Flex>
               </MenuLink>

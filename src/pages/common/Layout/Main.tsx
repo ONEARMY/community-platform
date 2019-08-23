@@ -40,8 +40,8 @@ const Main = (props: IProps) => (
 InnerContainer.defaultProps = {
   maxWidth: theme.maxContainerWidth,
   width: 1,
-  my: 4,
   mx: 'auto',
+  my: 0,
   px: [2, 3, 4],
 }
 

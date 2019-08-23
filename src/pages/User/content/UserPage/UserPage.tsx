@@ -9,7 +9,6 @@ import Heading from 'src/components/Heading'
 import { Flex, Box, Link } from 'rebass'
 import { Avatar } from 'src/components/Avatar'
 import Text from 'src/components/Text'
-import LinearProgress from '@material-ui/core/LinearProgress'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
 import Icon from 'src/components/Icons'
@@ -27,7 +26,7 @@ interface IState {
 }
 
 const Circle = styled(Flex)`
-  border-radius: ${theme.radii[4] + 'px'};
+  border-radius: 50%;
   align-items: center;
   justify-content: center;
   width: 40px;
@@ -187,7 +186,15 @@ export class UserPage extends React.Component<
         </Box>
       )
     } else {
-      return isLoading ? <LinearProgress /> : <div>user not found</div>
+      return isLoading ? (
+        <Flex>
+          <Heading txtcenter width={1}>
+            loading...
+          </Heading>
+        </Flex>
+      ) : (
+        <div>user not found</div>
+      )
     }
   }
 }

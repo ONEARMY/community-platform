@@ -4,7 +4,6 @@ import { Button } from 'src/components/Button'
 import { InputField } from 'src/components/Form/Fields'
 import { UserStore } from 'src/stores/User/user.store'
 import Text from 'src/components/Text'
-import { colors } from 'src/themes/styled.theme'
 
 interface IFormValues {
   oldPassword?: string

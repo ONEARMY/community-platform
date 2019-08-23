@@ -1,5 +1,5 @@
 import React from 'react'
-import { TagDisplay } from 'src/components/Tags/TagDisplay/TagDisplay'
+import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import differenceInDays from 'date-fns/difference_in_days'
 import { IHowto } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
@@ -20,8 +20,8 @@ interface IProps {
 
 export const CoverImg = styled(Image)`
   object-fit: cover;
-  max-height: 450px;
   width: 100%;
+  height: 450px;
 `
 
 const HowToCard = styled(Flex)`
@@ -125,31 +125,26 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
     return (
       <HowToCard
         bg={'white'}
-        flexDirection={['column-reverse', 'row', 'row']}
+        flexDirection={['column-reverse', 'column-reverse', 'row']}
         mt={4}
       >
-        <Flex px={4} py={4} flexDirection={'column'} width={[1, 1 / 2, 1 / 2]}>
+        <Flex px={4} py={4} flexDirection={'column'} width={[1, 1, 1 / 2]}>
           <Box>
             <BreadcrumbBox>
               <BreadcrumbLink>Back</BreadcrumbLink>
             </BreadcrumbBox>
           </Box>
-          <Text capitalize fontSize={1} mt={3} mb={2} color={'grey'}>
-            By{' '}
-            <Text inline capitalize>
-              {howto._createdBy}
-            </Text>
+          <Text capitalize auxiliary mt={3} mb={2}>
+            By {howto._createdBy}
             &nbsp;|&nbsp;
             <Text inline color={'grey'}>
               {this.durationSincePosted(new Date(howto._created))}
             </Text>
           </Text>
-          <Heading large mt={2} mb={1}>
+          <Heading medium mt={2} mb={1}>
             {howto.title}
           </Heading>
-          <Text large preLine color={'grey'}>
-            {howto.description}
-          </Text>
+          <Text paragraph>{howto.description}</Text>
 
           <Flex mt={6} mb={2}>
             <StepsBox mr={4}>{howto.steps.length} steps</StepsBox>
@@ -162,7 +157,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             ))}
           </Flex>
         </Flex>
-        <Flex justifyContent={'end'} width={[1, 1 / 2, 1 / 2]}>
+        <Flex justifyContent={'end'} width={[1, 1, 1 / 2]}>
           <CoverImg src={howto.cover_image.downloadUrl} alt="how-to cover" />
         </Flex>
       </HowToCard>

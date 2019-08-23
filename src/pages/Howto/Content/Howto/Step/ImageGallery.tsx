@@ -17,10 +17,29 @@ interface IState {
   imgIndex: number
 }
 
+const ThumbCard = styled(Card)`
+  padding: 5px;
+  overflow: hidden;
+  transition: 0.2s ease-in-out;
+  &:hover {
+    transform: translateY(-5px);
+  }
+`
+
+const ThumbImage = styled(Image)`
+  object-fit: cover;
+  width: 100px;
+  height: 67px;
+  border: 1px solid #ececec;
+  border-radius: 5px;
+`
+
 const ImageWithPointer = styled(Image)`
   cursor: pointer;
+  width: 100%;
+  height: 450px;
   object-fit: cover;
-  max-height: 400px;
+  border-radius: 0px 0px 0px 5px;
 `
 
 export default class ImageGallery extends React.PureComponent<IProps, IState> {
@@ -64,32 +83,31 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
     const { caption } = this.props
     console.log((this.state.imgIndex + 1) % this.state.imagesList.length)
     return this.state.activeImage ? (
-      <Flex flexWrap={'wrap'} width={[1, 1, 0.5]}>
-        <ImageWithPointer
-          width={1}
-          src={this.state.activeImage.downloadUrl}
-          onClick={() => {
-            this.triggerLightbox()
-          }}
-        />
-        {imageNumber > 1
-          ? this.props.images.map((image: any, index: number) => (
-              <Flex>
-                <Card
-                  p={1}
+      <Flex flexDirection={'column'}>
+        <Flex width={1}>
+          <ImageWithPointer
+            width={1}
+            src={this.state.activeImage.downloadUrl}
+            onClick={() => {
+              this.triggerLightbox()
+            }}
+          />
+        </Flex>
+        <Flex flexWrap={'wrap'} width={1} mx={[2, 2, '-5px']}>
+          {imageNumber > 1
+            ? this.props.images.map((image: any, index: number) => (
+                <ThumbCard
+                  mb={3}
+                  mt={4}
                   opacity={image === this.state.activeImage ? 1.0 : 0.5}
                   onClick={() => this.setActive(image)}
                   key={index}
                 >
-                  <Image
-                    height={[50, 100, 200]}
-                    src={image.downloadUrl}
-                    key={index}
-                  />
-                </Card>
-              </Flex>
-            ))
-          : null}
+                  <ThumbImage src={image.downloadUrl} key={index} />
+                </ThumbCard>
+              ))
+            : null}
+        </Flex>
 
         {this.state.showLightbox && (
           <Lightbox
@@ -122,7 +140,6 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
             onCloseRequest={() => this.triggerLightbox()}
           />
         )}
-        <Text py={3}>{caption}</Text>
       </Flex>
     ) : null
   }

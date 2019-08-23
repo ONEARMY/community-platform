@@ -5,7 +5,7 @@ import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 import Input from '@material-ui/core/Input'
 import { Link } from 'src/components/Links'
-import { colors } from 'src/themes/styled.theme'
+import theme from 'src/themes/styled.theme'
 import { Flex } from 'rebass'
 import { UserStore } from 'src/stores/User/user.store'
 import { Form } from 'react-final-form'
@@ -98,7 +98,7 @@ export class LoginForm extends React.Component<IProps, IState> {
             </FormControl>
             <Flex justifyContent="flex-end" p={0} alignItems="center" my={3}>
               <Link
-                color={colors.black}
+                color={theme.colors.black}
                 to="#"
                 onClick={this.props.onForgotPWClick}
                 variant="caption"
@@ -119,7 +119,7 @@ export class LoginForm extends React.Component<IProps, IState> {
             <Flex justifyContent="flex-end" p={0} alignItems="baseline">
               <Typography variant="caption">Don't have an account?</Typography>
               <Link
-                color={colors.black}
+                color={theme.colors.black}
                 ml={1}
                 to="#"
                 onClick={this.props.onSignUpLinkClick}

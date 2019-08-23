@@ -55,7 +55,7 @@ class Controls extends React.Component<IProps> {
     )
 
     return (
-      <MapFlexBar px={1} py={1}>
+      <MapFlexBar px={[2, 3, 4]} py={1}>
         <SearchWrapper>
           <LocationSearch
             onChange={location => {
@@ -81,7 +81,7 @@ class Controls extends React.Component<IProps> {
             hash: '#your-map-pin',
           }}
         >
-          <Button>My Pin</Button>
+          <Button variant={'primary'}>My pin</Button>
         </HashLink>
       </MapFlexBar>
     )

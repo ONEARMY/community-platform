@@ -23,9 +23,9 @@ interface InjectedProps extends IProps {
 }
 
 const TagContainer = Styled(Text)`
-  position: relative;
-  display: inline;
-  padding-left: 8px;
+	position: relative;
+	display: inline;
+	padding-left: 8px;
 
   ::before {
     content: '#';
@@ -38,7 +38,7 @@ const TagContainer = Styled(Text)`
 
 @inject('tagsStore')
 @observer
-export class TagDisplay extends React.Component<IProps, IState> {
+export default class TagDisplay extends React.Component<IProps, IState> {
   constructor(props: any) {
     super(props)
   }
@@ -56,7 +56,7 @@ export class TagDisplay extends React.Component<IProps, IState> {
   public render() {
     const { tag } = this.state
     return tag ? (
-      <TagContainer small color="blue" mr={2}>
+      <TagContainer tags mr={2}>
         {tag.label}
       </TagContainer>
     ) : null

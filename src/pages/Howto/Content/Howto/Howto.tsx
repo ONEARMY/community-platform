@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 // TODO add loader (and remove this material-ui dep)
-import LinearProgress from '@material-ui/core/LinearProgress'
+import Heading from 'src/components/Heading'
 import { afs } from 'src/utils/firebase'
 import { inject } from 'mobx-react'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
@@ -107,7 +107,7 @@ export class Howto extends React.Component<
               <Step step={step} key={index} stepindex={index} />
             ))}
           </Box>
-          <MoreBox py={20}>
+          <MoreBox py={20} mt={20}>
             <Text bold txtcenter fontSize={[4, 4, 5]}>
               Connect with a likeminded community.
               <br />
@@ -122,7 +122,15 @@ export class Howto extends React.Component<
         </>
       )
     } else {
-      return isLoading ? <LinearProgress /> : <div>How-to not found</div>
+      return isLoading ? (
+        <Flex>
+          <Heading auxiliary txtcenter width={1}>
+            loading...
+          </Heading>
+        </Flex>
+      ) : (
+        <div>How-to not found</div>
+      )
     }
   }
 }

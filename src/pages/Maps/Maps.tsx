@@ -8,7 +8,7 @@ import { Box } from 'rebass'
 
 import './styles.css'
 
-import { IMapPin, IPinType, ILatLng } from 'src/models/maps.models'
+import { ILatLng } from 'src/models/maps.models'
 
 interface IProps {
   mapsStore: MapsStore
@@ -37,7 +37,7 @@ class MapsPageClass extends React.Component<IProps, IState> {
   private setCenter(location) {
     this.setState({
       center: location.latlng as ILatLng,
-      zoom: 11,
+      zoom: 8,
     })
   }
 

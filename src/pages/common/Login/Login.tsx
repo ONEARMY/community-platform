@@ -81,7 +81,7 @@ export class LoginComponent extends React.Component<IProps, IState> {
       <>
         <Button
           variant="secondary"
-          smallBtn
+          small
           mr={2}
           onClick={() =>
             this.setState({
@@ -94,7 +94,7 @@ export class LoginComponent extends React.Component<IProps, IState> {
         >
           Login
         </Button>
-        <Button variant="tertiary" smallBtn onClick={this.toggleModal}>
+        <Button variant="tertiary" small onClick={this.toggleModal}>
           Join
         </Button>
         <Modal

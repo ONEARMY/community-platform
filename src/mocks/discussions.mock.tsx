@@ -1,8 +1,8 @@
-import { toTimestamp } from 'src/utils/helpers'
 import {
   IDiscussionPost,
   IDiscussionComment,
 } from 'src/models/discussions.models'
+import { MOCK_DB_META } from './db.mock'
 
 /*
   This file exports DISCUSSION_QUESTIONS_MOCK and DISCUSSION_COMMENTS_MOCK
@@ -11,11 +11,8 @@ import {
 // mocks generated from template, note the Date fields are populated as string so require reformatting
 export const DISCUSSION_QUESTION_MOCKS: IDiscussionPost[] = [
   {
-    _id: '5c6d7a294475199744afe2d1',
-    _created: toTimestamp('Tuesday, February 14, 2017 1:33 PM'),
-    _modified: toTimestamp('Monday, August 7, 2017 5:43 AM'),
-    _deleted: false,
-    _lastResponse: toTimestamp('Saturday, August 27, 2016 6:54 AM'),
+    ...MOCK_DB_META(),
+    _lastResponse: new Date('Saturday, August 27, 2016 6:54 AM').toISOString(),
     _commentCount: 5,
     _viewCount: 6231,
     _usefulCount: 2,
@@ -35,11 +32,8 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionPost[] = [
     type: 'discussionQuestion',
   },
   {
-    _id: '5c6d7a292ca7a215c97237ff',
-    _created: toTimestamp('Sunday, December 17, 2017 1:23 PM'),
-    _modified: toTimestamp('Wednesday, May 28, 2014 8:53 PM'),
-    _deleted: false,
-    _lastResponse: toTimestamp('Wednesday, July 4, 2018 5:51 PM'),
+    ...MOCK_DB_META('5c6d7a292ca7a215c97237ff'),
+    _lastResponse: new Date('Wednesday, July 4, 2018 5:51 PM').toISOString(),
     _commentCount: 2,
     _viewCount: 16211,
     _usefulCount: 4,
@@ -59,11 +53,10 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionPost[] = [
     type: 'discussionQuestion',
   },
   {
-    _id: '5c6d7a29755aaf19aa3821ca',
-    _created: toTimestamp('Wednesday, March 9, 2016 6:56 PM'),
-    _modified: toTimestamp('Tuesday, May 1, 2018 12:33 AM'),
-    _deleted: false,
-    _lastResponse: toTimestamp('Saturday, December 23, 2017 3:40 PM'),
+    ...MOCK_DB_META('5c6d7a29755aaf19aa3821ca'),
+    _lastResponse: new Date(
+      'Saturday, December 23, 2017 3:40 PM',
+    ).toISOString(),
     _commentCount: 22,
     _viewCount: 7810,
     _usefulCount: 4,
@@ -82,11 +75,10 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionPost[] = [
     type: 'discussionQuestion',
   },
   {
-    _id: '5c6d7a295bbae94e85259607',
-    _created: toTimestamp('Wednesday, October 15, 2014 7:33 AM'),
-    _modified: toTimestamp('Friday, January 2, 2015 12:59 AM'),
-    _deleted: false,
-    _lastResponse: toTimestamp('Wednesday, November 26, 2014 9:57 AM'),
+    ...MOCK_DB_META('5c6d7a295bbae94e85259607'),
+    _lastResponse: new Date(
+      'Wednesday, November 26, 2014 9:57 AM',
+    ).toISOString(),
     _commentCount: 0,
     _viewCount: 1318,
     _usefulCount: 1,
@@ -105,11 +97,8 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionPost[] = [
     type: 'discussionQuestion',
   },
   {
-    _id: '5c6d7a2956736681732af496',
-    _created: toTimestamp('Thursday, December 10, 2015 7:30 AM'),
-    _modified: toTimestamp('Sunday, December 7, 2014 8:02 PM'),
-    _deleted: false,
-    _lastResponse: toTimestamp('Saturday, May 31, 2014 4:52 AM'),
+    ...MOCK_DB_META('5c6d7a2956736681732af496'),
+    _lastResponse: new Date('Saturday, May 31, 2014 4:52 AM').toISOString(),
     _commentCount: 1,
     _viewCount: 20422,
     _usefulCount: 2,
@@ -128,11 +117,8 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionPost[] = [
     type: 'discussionQuestion',
   },
   {
-    _id: '5c6d7a29c46abd230bbeb32f',
-    _created: toTimestamp('Monday, February 10, 2014 9:42 PM'),
-    _modified: toTimestamp('Friday, September 9, 2016 7:35 AM'),
-    _deleted: false,
-    _lastResponse: toTimestamp('Sunday, September 6, 2015 11:28 PM'),
+    ...MOCK_DB_META('5c6d7a29c46abd230bbeb32f'),
+    _lastResponse: new Date('Sunday, September 6, 2015 11:28 PM').toISOString(),
     _commentCount: 24,
     _viewCount: 1387,
     _usefulCount: 6,
@@ -152,11 +138,8 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionPost[] = [
     type: 'discussionQuestion',
   },
   {
-    _id: '5c6d7a2928acc4726f1b7780',
-    _created: toTimestamp('Monday, December 10, 2018 8:15 PM'),
-    _modified: toTimestamp('Tuesday, September 16, 2014 10:37 PM'),
-    _deleted: false,
-    _lastResponse: toTimestamp('Tuesday, September 1, 2015 2:40 AM'),
+    ...MOCK_DB_META('5c6d7a2928acc4726f1b7780'),
+    _lastResponse: new Date('Tuesday, September 1, 2015 2:40 AM').toISOString(),
     _commentCount: 4,
     _viewCount: 10149,
     _usefulCount: 3,
@@ -176,11 +159,8 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionPost[] = [
     type: 'discussionQuestion',
   },
   {
-    _id: '5c6d7a297fee346b98283041',
-    _created: toTimestamp('Monday, July 9, 2018 5:13 PM'),
-    _modified: toTimestamp('Sunday, January 17, 2016 3:46 PM'),
-    _deleted: false,
-    _lastResponse: toTimestamp('Tuesday, December 2, 2014 10:48 AM'),
+    ...MOCK_DB_META('5c6d7a297fee346b98283041'),
+    _lastResponse: new Date('Tuesday, December 2, 2014 10:48 AM').toISOString(),
     _commentCount: 16,
     _viewCount: 24936,
     _usefulCount: 5,
@@ -200,11 +180,8 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionPost[] = [
     type: 'discussionQuestion',
   },
   {
-    _id: '5c6d7a299f70798b222a3b1f',
-    _created: toTimestamp('Wednesday, July 26, 2017 4:49 PM'),
-    _modified: toTimestamp('Sunday, April 15, 2018 8:27 AM'),
-    _deleted: false,
-    _lastResponse: toTimestamp('Tuesday, March 10, 2015 8:06 AM'),
+    ...MOCK_DB_META('5c6d7a299f70798b222a3b1f'),
+    _lastResponse: new Date('Tuesday, March 10, 2015 8:06 AM').toISOString(),
     _commentCount: 11,
     _viewCount: 23933,
     _usefulCount: 0,
@@ -227,12 +204,9 @@ export const DISCUSSION_QUESTION_MOCKS: IDiscussionPost[] = [
 
 export const DISCUSSION_COMMENT_MOCKS: IDiscussionComment[] = [
   {
-    _id: '5c6dad39f669db9d335153d2',
+    ...MOCK_DB_META('5c6dad39f669db9d335153d2'),
     _discussionID: '5c6d7a294475199744afe2d1',
-    _created: toTimestamp('Thursday, July 13, 2017 2:40 AM'),
     _createdBy: 'http://i.pravatar.cc/212',
-    _modified: toTimestamp('Wednesday, December 5, 2018 6:55 AM'),
-    _deleted: false,
     replies: [],
     repliesTo: '',
     comment:
@@ -240,28 +214,19 @@ export const DISCUSSION_COMMENT_MOCKS: IDiscussionComment[] = [
     type: 'discussionComment',
   },
   {
-    _id: '5c6dad39134eaab99e1f56cb',
+    ...MOCK_DB_META('5c6dad39134eaab99e1f56cb'),
     _discussionID: '5c6d7a294475199744afe2d1',
-    _created: toTimestamp('Sunday, October 1, 2017 8:14 PM'),
     _createdBy: 'http://i.pravatar.cc/217',
-    _modified: toTimestamp('Thursday, August 17, 2017 12:37 AM'),
-    _deleted: false,
     replies: [
       {
-        _id: '5c6dadd6efb4c060265a127a',
+        ...MOCK_DB_META('5c6dadd6efb4c060265a127a'),
         _discussionID: '5c6d7a294475199744afe2d1',
-        _created: toTimestamp('Friday, October 28, 2016 6:52 PM'),
         _createdBy: 'http://i.pravatar.cc/215',
-        _modified: toTimestamp('Tuesday, September 1, 2015 2:52 PM'),
-        _deleted: false,
         replies: [
           {
-            _id: '5c6dae0e66a1d753e4f71312',
+            ...MOCK_DB_META('5c6dae0e66a1d753e4f71312'),
             _discussionID: '5c6d7a294475199744afe2d1',
-            _created: toTimestamp('Wednesday, December 27, 2017 5:34 AM'),
             _createdBy: 'http://i.pravatar.cc/212',
-            _modified: toTimestamp('Saturday, January 20, 2018 2:14 AM'),
-            _deleted: false,
             replies: [],
             repliesTo: '5c6dadd6efb4c060265a127a',
             comment:
@@ -281,12 +246,9 @@ export const DISCUSSION_COMMENT_MOCKS: IDiscussionComment[] = [
     type: 'discussionComment',
   },
   {
-    _id: '5c6dad39b88053eec7edf6ba',
+    ...MOCK_DB_META('5c6dad39b88053eec7edf6ba'),
     _discussionID: '5c6d7a294475199744afe2d1',
-    _created: toTimestamp('Friday, April 14, 2017 7:50 PM'),
     _createdBy: 'http://i.pravatar.cc/218',
-    _modified: toTimestamp('Saturday, December 1, 2018 1:50 AM'),
-    _deleted: false,
     replies: [],
     repliesTo: '',
     comment:

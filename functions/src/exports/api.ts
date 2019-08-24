@@ -8,6 +8,7 @@ import * as functions from 'firebase-functions'
 import * as bodyParser from 'body-parser'
 import * as cors from 'cors'
 import * as express from 'express'
+import { upgradeDBAll } from '../upgrade/dbV1Upgrade'
 
 console.log('api init')
 const app = express()
@@ -40,9 +41,10 @@ app.all('*', async (req, res, next) => {
   // *** NOTE currently all request types handled the same, i.e. GET/POST
   // will likely change behaviour in future when required
   switch (endpoint) {
-    case 'avatar':
-      console.log('avatar test')
-      break
+    // case 'dbV1Upgrade':
+    //   const upgradeStatus = await upgradeDBAll()
+    //   res.send(upgradeStatus)
+    //   break
     default:
       res.send('invalid api endpoint')
   }

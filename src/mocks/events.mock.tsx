@@ -1,5 +1,5 @@
 import { IEventFilters, IEvent } from 'src/models/events.models'
-import { toTimestamp } from 'src/utils/helpers'
+import { MOCK_DB_META } from './db.mock'
 
 const d = new Date()
 export const EVENT_FILTERS: IEventFilters = {
@@ -50,19 +50,15 @@ export const EVENTS: IEvent[] = [
       countryCode: 'NL',
       name: 'Eindhoven',
     },
-    _id: 'event1',
+    ...MOCK_DB_META('event1'),
     description:
       'The family moved to New York City in 1940. The next year Eisuke was transferred from New York City',
     host: 'PlasticNL',
     image: 'https://picsum.photos/200/300/?random',
-    date: toTimestamp('Friday, January 2, 2015 12:59 AM'),
+    date: new Date('Friday, January 2, 2015 12:59 AM').toISOString(),
     type: 'Workshops',
     slug: 'open-workshop-and-free-lunch---brighton',
     tags: {},
-    _deleted: false,
-    _createdBy: '123',
-    _created: toTimestamp('Friday, January 2, 2015 12:59 AM'),
-    _modified: toTimestamp('Friday, January 2, 2015 12:59 AM'),
     url: 'http://fakeurl.com',
   },
   {
@@ -74,19 +70,15 @@ export const EVENTS: IEvent[] = [
       countryCode: 'UK',
       name: 'Brighton',
     },
-    _id: 'event2',
+    ...MOCK_DB_META('event2'),
     description:
       'In meteorology, a cloud is an aerosol ocnsisting of a visible mass of rain dropletx, frozen crystals, or other particles suspended in the atmospher',
     host: 'BeachCleans',
     image: 'https://picsum.photos/150/100/?random',
-    date: toTimestamp('Friday, January 2, 2015 12:59 AM'),
+    date: new Date('Friday, January 2, 2015 12:59 AM').toISOString(),
     type: 'Workshops',
     slug: 'open-workshop-and-free-lunch---brighton',
     tags: {},
-    _deleted: false,
-    _createdBy: '123',
-    _created: toTimestamp('Friday, January 2, 2015 12:59 AM'),
-    _modified: toTimestamp('Friday, January 2, 2015 12:59 AM'),
     url: 'http://fakeurl.com',
   },
 ]

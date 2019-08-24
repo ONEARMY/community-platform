@@ -1,0 +1,25 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.13.5
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-AXIOS-174505:
+    - google-auth-library > axios:
+        patched: '2019-08-24T02:16:58.184Z'
+    - google-auth-library > gcp-metadata > axios:
+        patched: '2019-08-24T02:16:58.184Z'
+    - googleapis > google-auth-library > axios:
+        patched: '2019-08-24T02:16:58.184Z'
+    - googleapis > googleapis-common > axios:
+        patched: '2019-08-24T02:16:58.184Z'
+    - googleapis > google-auth-library > gcp-metadata > axios:
+        patched: '2019-08-24T02:16:58.184Z'
+    - googleapis > googleapis-common > google-auth-library > axios:
+        patched: '2019-08-24T02:16:58.184Z'
+    - googleapis > googleapis-common > google-auth-library > gcp-metadata > axios:
+        patched: '2019-08-24T02:16:58.184Z'
+  SNYK-JS-LODASH-450202:
+    - firebase-functions > lodash:
+        patched: '2019-08-24T02:16:58.184Z'
+    - firebase-admin > @google-cloud/storage > async > lodash:
+        patched: '2019-08-24T02:16:58.184Z'

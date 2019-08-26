@@ -39,7 +39,7 @@ const ImageWithPointer = styled(Image)`
   width: 100%;
   height: 450px;
   object-fit: cover;
-  border-radius: 0px 0px 0px 5px;
+  border-radius: 0px 8px 0px 5px;
 `
 
 export default class ImageGallery extends React.PureComponent<IProps, IState> {

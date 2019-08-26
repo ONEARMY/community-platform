@@ -12,6 +12,7 @@ const HowToImage = styled(Image)`
   width: 100%;
   height: calc(((350px) / 3) * 2);
   object-fit: cover;
+  border-radius: 8px 8px 0px 0px;
 `
 
 interface IProps {

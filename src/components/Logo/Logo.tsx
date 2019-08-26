@@ -24,7 +24,7 @@ const LogoContainer = styled(Flex)`
   }
   @media only screen and (max-width: ${theme.breakpoints[1]}) {
     &:before {
-      left: -20px;
+      left: -50px;
     }
   }
 `
@@ -39,6 +39,11 @@ const LogoLink = styled(Link)`
 const LogoImageContainer = styled(Flex)`
   width: 45px;
   height: 45px;
+
+  @media only screen and (max-width: ${theme.breakpoints[1]}) {
+    width: 35px;
+    height: 35px;
+  }
 `
 
 const LogoTitle = styled.h1`
@@ -46,6 +51,11 @@ const LogoTitle = styled.h1`
   font-weight: 400;
   margin: 0px 0px 0px 15px;
   width: 130px;
+
+  @media only screen and (max-width: ${theme.breakpoints[1]}) {
+    margin: 0px 0px 0px 10px;
+    font-size: 16px;
+  }
 `
 
 export class Header extends React.Component {

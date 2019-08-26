@@ -4,6 +4,7 @@ import arrayMutators from 'final-form-arrays'
 import Heading from 'src/components/Heading'
 import { IUser } from 'src/models/user.models'
 import Text from 'src/components/Text'
+import Flex from 'src/components/Flex'
 import {
   InputField,
   TextAreaField,
@@ -15,7 +16,7 @@ import { FlagSelector } from 'src/components/Form/Select.field'
 import { UserStore } from 'src/stores/User/user.store'
 import { Button } from 'src/components/Button'
 import { observer, inject } from 'mobx-react'
-import { Flex, Box } from 'rebass'
+import { Box } from 'rebass'
 import { getCountryCode } from 'src/utils/helpers'
 import 'react-flags-select/scss/react-flags-select.scss'
 import styled from 'styled-components'
@@ -159,10 +160,16 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
               {/* NOTE - need to put submit method on form to prevent
               default post request */}
               <form id="userProfileForm" onSubmit={handleSubmit}>
-                <Box mt={4}>
-                  <Heading small bold>
-                    Your infos
-                  </Heading>
+                <Flex
+                  card
+                  mediumRadius
+                  bg={'white'}
+                  mt={5}
+                  p={4}
+                  flexWrap="wrap"
+                  flexDirection="column"
+                >
+                  <Heading small>Your infos</Heading>
                   <Flex width={1 / 2} flexWrap={'wrap'}>
                     <Field
                       name="userName"
@@ -246,11 +253,17 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
                       )}
                     </FieldArray>
                   </HideShowBox>
-                </Box>
-                <Box id="your-map-pin" mt={4}>
-                  <Heading small bold>
-                    Your map pin
-                  </Heading>
+                </Flex>
+                <Flex
+                  card
+                  mediumRadius
+                  bg={'white'}
+                  mt={5}
+                  p={4}
+                  flexWrap="wrap"
+                  flexDirection="column"
+                >
+                  <Heading small>Your map pin</Heading>
                   <Flex wrap={'nowrap'} alignItems={'center'}>
                     <Text inline>Add me to the map</Text>
                     <Switch
@@ -308,7 +321,7 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
                       </Marker>
                     </Map>
                   </HideShowBox>
-                </Box>
+                </Flex>
               </form>
             </>
           )

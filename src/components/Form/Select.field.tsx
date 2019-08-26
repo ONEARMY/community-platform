@@ -32,7 +32,7 @@ export const SelectStyles: Partial<Styles> = {
     ...provided,
     border: '1px solid #dce4e5',
     backgroundColor: theme.colors.background,
-    height: '40px',
+    minHeight: '40px',
     boxShadow: 'none',
     ':focus': {
       border: '1px solid #83ceeb',

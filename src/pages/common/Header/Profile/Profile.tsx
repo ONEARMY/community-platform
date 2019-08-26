@@ -69,7 +69,7 @@ export default class Profile extends React.Component<IProps, IState> {
       <>
         {user ? (
           <>
-            <Flex onClick={this.openProfileMenu} ml={5} mr={5}>
+            <Flex onClick={this.openProfileMenu} ml={1}>
               <ProfileAvatar />
             </Flex>
             <Menu

@@ -7,6 +7,7 @@ import LogoBackground from 'src/assets/images/logo-background.svg'
 
 const LogoContainer = styled(Flex)`
   height: 60px;
+  width: 200px;
   align-items: center;
   position: relative;
   &:before {
@@ -20,6 +21,11 @@ const LogoContainer = styled(Flex)`
     background-repeat: no-repeat;
     top: 0;
     left: 0px;
+  }
+  @media only screen and (max-width: ${theme.breakpoints[1]}) {
+    &:before {
+      left: -20px;
+    }
   }
 `
 
@@ -38,7 +44,8 @@ const LogoImageContainer = styled(Flex)`
 const LogoTitle = styled.h1`
   font-size: 17px;
   font-weight: 400;
-  margin-left: 15px;
+  margin: 0px 0px 0px 15px;
+  width: 130px;
 `
 
 export class Header extends React.Component {

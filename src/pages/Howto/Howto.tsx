@@ -26,14 +26,13 @@ class HowtoPageClass extends React.Component<IProps, any> {
     // mobx will automatically re-render when it sees updates to the following properties
     // (note 1, use ! to tell typescript that the store will exist (it's an injected prop))
     // (note 2, mobx seems to behave more consistently when observables are referenced outside of render methods)
-    const allHowtos = this.props.howtoStore!.allHowtos
     return (
       <div>
         <Switch>
           <Route
             exact
             path="/how-to"
-            render={props => <HowtoList {...props} allHowtos={allHowtos} />}
+            render={props => <HowtoList {...props} />}
           />
           {/* auth route only renders for logged in users */}
           <AuthRoute

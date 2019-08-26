@@ -10,6 +10,7 @@ import { Database } from 'src/stores/database'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { Storage } from '../storage'
 import { ModuleStore } from '../common/module.store'
+import { ISelectedTags } from 'src/models/tags.model'
 
 export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
@@ -90,6 +91,11 @@ export class HowtoStore extends ModuleStore {
       console.log('error', error)
       throw new Error(error.message)
     }
+  }
+
+  public filterByTags(list: IHowto[], tags: ISelectedTags) {
+    console.log('in howto store filterByTags')
+    return []
   }
 
   // go through each step, upload images and replace data

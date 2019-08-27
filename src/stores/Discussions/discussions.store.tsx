@@ -9,6 +9,7 @@ import { stripSpecialCharacters } from 'src/utils/helpers'
 import { ModuleStore } from '../common/module.store'
 import { Subscription } from 'rxjs'
 import { IDBEndpoint } from 'src/models/common.models'
+import { RootStore } from '..'
 
 export class DiscussionsStore extends ModuleStore {
   private allDiscussionComments$ = new Subscription()
@@ -21,7 +22,7 @@ export class DiscussionsStore extends ModuleStore {
 
   // when initiating, discussions will be fetched via common method in module.store.ts
   // keep results of allDocs and activeDoc in sync with local varialbes
-  constructor() {
+  constructor(rootStore: RootStore) {
     super('v2_discussions')
     this.allDocs$.subscribe(docs => (this.allDiscussions = docs))
     this.activeDoc$.subscribe(doc => (this.activeDiscussion = doc))

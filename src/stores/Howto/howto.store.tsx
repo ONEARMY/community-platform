@@ -1,5 +1,4 @@
 import { observable, action } from 'mobx'
-import { afs } from '../../utils/firebase'
 import {
   IHowto,
   IHowtoFormInput,
@@ -11,6 +10,7 @@ import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { Storage } from '../storage'
 import { ModuleStore } from '../common/module.store'
 import { ISelectedTags } from 'src/models/tags.model'
+import { RootStore } from '..'
 
 export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
@@ -21,7 +21,7 @@ export class HowtoStore extends ModuleStore {
   @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
 
-  constructor() {
+  constructor(rootStore: RootStore) {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
     super('v2_howtos')

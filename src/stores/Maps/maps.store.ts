@@ -21,8 +21,10 @@ import {
   generatePinDetails,
   generatePinFilters,
 } from 'src/mocks/maps.mock'
+import { RootStore } from '..'
 
 export class MapsStore {
+  constructor(rootStore: RootStore) {}
   @observable
   public mapBoundingBox: IBoundingBox = {
     topLeft: { lat: -90, lng: -180 },

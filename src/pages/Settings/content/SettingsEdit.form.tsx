@@ -169,7 +169,9 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
                   flexWrap="wrap"
                   flexDirection="column"
                 >
-                  <Heading small>Your infos</Heading>
+                  <Heading small mb={3}>
+                    Your infos
+                  </Heading>
                   <Flex width={1 / 2} flexWrap={'wrap'}>
                     <Field
                       name="userName"

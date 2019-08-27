@@ -1,7 +1,5 @@
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
-
-import { withRouter } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
 import { IUser, ILink } from 'src/models/user.models'
 import { UserStore } from 'src/stores/User/user.store'
@@ -10,7 +8,6 @@ import { Flex, Box, Link } from 'rebass'
 import { Avatar } from 'src/components/Avatar'
 import Text from 'src/components/Text'
 import styled from 'styled-components'
-import theme from 'src/themes/styled.theme'
 import Icon from 'src/components/Icons'
 
 interface IRouterCustomParams {

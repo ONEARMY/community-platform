@@ -9,8 +9,6 @@ import { ImportDHForm } from './content/ImportDH.form'
 import { Button } from 'src/components/Button'
 import { PostingGuidelines } from './content/PostingGuidelines'
 import Heading from 'src/components/Heading'
-import { TextNotification } from 'src/components/Notification/TextNotification'
-import { Avatar } from 'src/components/Avatar'
 import Text from 'src/components/Text'
 import styled from 'styled-components'
 
@@ -95,14 +93,25 @@ export class UserSettings extends React.Component<IProps, IState> {
                 <Heading small mb={3}>
                   Intro
                 </Heading>
-                <Text inline bold ml={3}>
-                  {this.state.user.userName}
-                </Text>
+                <Text mb={3}>{this.state.user.userName}</Text>
+                <ImportDHForm {...readOnly} />
+              </Flex>
+              <Flex
+                card
+                mediumRadius
+                bg={'white'}
+                mt={5}
+                p={4}
+                flexWrap="wrap"
+                flexDirection="column"
+              >
+                <Heading small mb={3}>
+                  Account settings
+                </Heading>
                 <ChangePasswordForm
                   {...readOnly}
                   userStore={this.props.userStore}
                 />
-                <ImportDHForm {...readOnly} />
               </Flex>
               <SettingsEditForm
                 onProfileSave={() => this.showSaveNotification()}

@@ -3,7 +3,7 @@ export interface IFilter {
   value: any
   type?: string
   next?: IFilter[]
-  visible: boolean
+  visible?: boolean
 }
 export interface IPropertyFilter {
   prop: string
@@ -173,7 +173,8 @@ export const operationPredicates = {
     */
   },
   has: (value, filter) => {
-    return value.find(v => v.indexOf(filter.value) !== -1) != null
+    const ret = value.find(v => v.indexOf(filter.value) !== -1) != null
+    return ret
   },
   hasNot: (value, filter) => value.indexOf(filter.value) === -1,
 }

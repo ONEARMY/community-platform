@@ -11,6 +11,15 @@ import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { Storage } from '../storage'
 import { ModuleStore } from '../common/module.store'
 import { ISelectedTags } from 'src/models/tags.model'
+import {
+  IPropertyFilter,
+  toFilterExpression,
+  operationPredicates,
+  filteredRows,
+} from '../../pages/Discussions/common/filters'
+export let FilterTypeMap = {
+  tags: 'array',
+}
 
 export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
@@ -94,8 +103,59 @@ export class HowtoStore extends ModuleStore {
   }
 
   public filterByTags(list: IHowto[], tags: ISelectedTags) {
-    console.log('in howto store filterByTags')
-    return []
+    console.log('in howto store filterByTags', { list, tags }, list.length)
+
+    const tagsNames = Object.keys(tags).map(key => key)
+
+    // convert tags to filters, currently only the first of 'tags'
+    // note that the property 'tags' has been mapped in filters.ts :: FilterTypeMap
+    const filters: IPropertyFilter[] = [
+      {
+        prop: 'tags',
+        filter: {
+          op: 'has',
+          value: tagsNames[0],
+        },
+      },
+      /* example,
+      {
+        prop: 'title',
+        filter: {
+          op: 'contains',
+          value: 'how-to'
+        }        
+      }
+      */
+
+      /* example,
+      {
+        prop: 'description',
+        filter: {
+          op: 'contains',
+          value: 'not much'
+        }        
+      }
+      */
+    ]
+
+    const expr = toFilterExpression(filters)
+    console.log('filters', filters)
+    console.log('expression', expr)
+    const getCellValue = (row, columnName) => {
+      const ret = row[columnName] // fancy, consider using get-value or jsonpath to pick a value inside objects via dot-notation
+      // since this won't be an array for howto['tags'], please convert it; the filter system wants it
+      if (columnName === 'tags') {
+        return Object.keys(tags).map(key => key)
+      }
+      return ret
+    }
+    const getColumnPredicate = () => (value, filter) => {
+      const filterFn = operationPredicates[filter.op]
+      return filterFn(value, filter)
+    }
+    const out = filteredRows(list, expr, getCellValue, getColumnPredicate).rows
+    console.log('out ' + out.length, out)
+    return out
   }
 
   // go through each step, upload images and replace data

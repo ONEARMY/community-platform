@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx'
+import { observable, action, computed } from 'mobx'
 import {
   IHowto,
   IHowtoFormInput,
@@ -19,7 +19,10 @@ export class HowtoStore extends ModuleStore {
   @observable
   public allHowtos: IHowto[]
   @observable
+  public selectedTags: ISelectedTags
+  @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
+  rootStore: RootStore
 
   constructor(rootStore: RootStore) {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
@@ -28,6 +31,8 @@ export class HowtoStore extends ModuleStore {
     this.allDocs$.subscribe(docs => {
       this.allHowtos = docs as IHowto[]
     })
+    this.rootStore = rootStore
+    this.selectedTags = {}
   }
 
   @action
@@ -45,6 +50,27 @@ export class HowtoStore extends ModuleStore {
   @action
   public updateUploadStatus(update: keyof IHowToUploadStatus) {
     this.uploadStatus[update] = true
+  }
+
+  @computed get currentHowtos() {
+    // Check if this.selectedTags is empty
+    if (
+      Object.keys(this.selectedTags).length === 0 &&
+      this.selectedTags.constructor === Object
+    ) {
+      return this.allHowtos
+    } else {
+      // If there is tags return a filtered array that compare howto.tags & the selectedTags
+      const filtered = this.allHowtos.filter(howto => {
+        // needs JSON.stringify to avoid return false when comparing two arrays
+        return JSON.stringify(howto.tags) === JSON.stringify(this.selectedTags)
+      })
+      return filtered
+    }
+  }
+
+  public updateSelectedTags(tagKey: ISelectedTags) {
+    this.selectedTags = tagKey
   }
 
   public generateID = () => {
@@ -91,11 +117,6 @@ export class HowtoStore extends ModuleStore {
       console.log('error', error)
       throw new Error(error.message)
     }
-  }
-
-  public filterByTags(list: IHowto[], tags: ISelectedTags) {
-    console.log('in howto store filterByTags')
-    return []
   }
 
   // go through each step, upload images and replace data

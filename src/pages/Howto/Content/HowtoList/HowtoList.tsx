@@ -71,10 +71,11 @@ export class HowtoList extends React.Component<any, IState> {
   }
 
   public updateTags(tags: ISelectedTags) {
-    console.log('selected : ', tags)
-    const { allHowtos } = this.props.howtoStore
     this.setState({
-      currentHowTos: this.props.howtoStore!.filterByTags(allHowtos, tags),
+      currentHowTos: this.props.howtoStore!.filterByTags(
+        this.state.currentHowTos,
+        tags,
+      ),
     })
   }
 

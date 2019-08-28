@@ -44,12 +44,15 @@ class MapView extends React.Component<IProps, IState> {
   }
 
   private updateBoundingBox() {
-    const boundingBox = this.map.current.leafletElement.getBounds()
-    const newBoundingBox: IBoundingBox = {
-      topLeft: boundingBox._northEast,
-      bottomRight: boundingBox._southWest,
+    // Note - sometimes throws (current undefined). Workaround
+    if (this.map && this.map.current) {
+      const boundingBox = this.map.current.leafletElement.getBounds()
+      const newBoundingBox: IBoundingBox = {
+        topLeft: boundingBox._northEast,
+        bottomRight: boundingBox._southWest,
+      }
+      this.props.onBoundingBoxChange(newBoundingBox)
     }
-    this.props.onBoundingBoxChange(newBoundingBox)
   }
 
   private pinClicked(pin) {

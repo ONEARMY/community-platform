@@ -52,7 +52,7 @@ export class HowtoStore extends ModuleStore {
     this.uploadStatus[update] = true
   }
 
-  @computed get currentHowtos() {
+  @computed get filteredHowtos() {
     // Check if this.selectedTags is empty
     if (
       Object.keys(this.selectedTags).length === 0 &&

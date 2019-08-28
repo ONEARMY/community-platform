@@ -61,9 +61,9 @@ export class HowtoList extends React.Component<any, IState> {
   }
 
   public render() {
-    const { currentHowtos } = this.props.howtoStore
+    const { filteredHowtos } = this.props.howtoStore
     const { isLoading } = this.state
-    if (currentHowtos) {
+    if (filteredHowtos) {
       return (
         <>
           <Flex flexWrap={'nowrap'} justifyContent={'space-between'}>
@@ -86,7 +86,7 @@ export class HowtoList extends React.Component<any, IState> {
           <React.Fragment>
             <div>
               <FlexGrid flexWrap={'wrap'} justifyContent={'space-between'}>
-                {currentHowtos.map((howto: IHowto) => (
+                {filteredHowtos.map((howto: IHowto) => (
                   <Link
                     to={`/how-to/${encodeURIComponent(howto.slug)}`}
                     key={howto._id}

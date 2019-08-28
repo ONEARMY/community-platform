@@ -73,19 +73,25 @@ class Step extends Component<IProps, IState> {
           {this.state.showDeleteModal && (
             <Modal onDidDismiss={() => this.toggleDeleteModal()}>
               <Text>Are you sure you want to delete this step?</Text>
-              <Flex p={0} justifyContent="flex-end">
-                <Button
-                  variant={'outline'}
-                  onClick={() => this.toggleDeleteModal()}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant={'outline'}
-                  onClick={() => this.confirmDelete()}
-                >
-                  Delete
-                </Button>
+              <Flex mt={3} p={0} mx={-1} justifyContent="flex-end">
+                <Flex px={1}>
+                  <Button
+                    small
+                    variant={'outline'}
+                    onClick={() => this.toggleDeleteModal()}
+                  >
+                    Cancel
+                  </Button>
+                </Flex>
+                <Flex px={1}>
+                  <Button
+                    small
+                    variant={'tertiary'}
+                    onClick={() => this.confirmDelete()}
+                  >
+                    Delete
+                  </Button>
+                </Flex>
               </Flex>
             </Modal>
           )}

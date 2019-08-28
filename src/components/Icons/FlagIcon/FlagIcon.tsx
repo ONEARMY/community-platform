@@ -14,7 +14,6 @@ const FlagIconEvents = styled(FlagIcon)`
   background-size: cover !important;
   height: 23px;
   width: 35px !important;
-  import { theme } from 'src/themes/app.theme';
 
   @media only screen and (max-width: ${theme.breakpoints[1]}) {
     height: 15px;

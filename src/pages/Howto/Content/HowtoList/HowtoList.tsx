@@ -24,7 +24,6 @@ interface InjectedProps {
 }
 
 interface IState {
-  currentHowTos?: IHowto[]
   isLoading: boolean
 }
 
@@ -44,15 +43,16 @@ const CardTitle = styled(Text)`
   white-space: nowrap;
 `
 
-// We're connecting to the 'docStore' state object and will pass down through child compoennts
-// First we use the @inject decorator to bind to the docStore state
+// First we use the @inject decorator to bind to the howtoStore state
 @inject('howtoStore')
 // Then we can use the observer component decorator to automatically tracks observables and re-renders on change
+// (note 1, use ! to tell typescript that the store will exist (it's an injected prop))
+// (note 2, mobx seems to behave more consistently when observables are referenced outside of render methods)
+@observer
 export class HowtoList extends React.Component<any, IState> {
   constructor(props: any) {
     super(props)
     this.state = {
-      currentHowTos: undefined,
       isLoading: true,
     }
   }
@@ -60,30 +60,14 @@ export class HowtoList extends React.Component<any, IState> {
     return this.props as InjectedProps
   }
 
-  public componentWillMount() {
-    const howtoList = this.props.howtoStore!.allHowtos
-    console.log('howtoList', howtoList)
-
-    this.setState({
-      currentHowTos: howtoList,
-      isLoading: false,
-    })
-  }
-
   public updateTags(tags: ISelectedTags) {
-    this.setState({
-      currentHowTos: this.props.howtoStore!.filterByTags(
-        this.state.currentHowTos,
-        tags,
-      ),
-    })
+    this.props.howtoStore.updateSelectedTags(tags)
   }
 
   public render() {
-    const { allHowtos } = this.props.howtoStore
+    const { currentHowtos } = this.props.howtoStore
     const { isLoading } = this.state
-    console.log('currentHowTos', allHowtos)
-    if (allHowtos) {
+    if (currentHowtos) {
       return (
         <>
           <Flex flexWrap={'nowrap'} justifyContent={'space-between'}>
@@ -104,7 +88,7 @@ export class HowtoList extends React.Component<any, IState> {
           <React.Fragment>
             <div>
               <FlexGrid flexWrap={'wrap'} justifyContent={'space-between'}>
-                {allHowtos.map((howto: IHowto) => (
+                {currentHowtos.map((howto: IHowto) => (
                   <Link
                     to={`/how-to/${encodeURIComponent(howto.slug)}`}
                     key={howto._id}

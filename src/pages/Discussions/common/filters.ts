@@ -94,7 +94,10 @@ export const toFilterExpression = (filters: IPropertyFilter[]) => {
   }
   return ret
 }
-// ui
+
+/*
+methods for ui, eg: visual filter builder. ask @catx23 for more. there is code in react & material-ui
+
 export const defaultMessages = {
   filterPlaceholder: 'Filter...',
   contains: 'Contains',
@@ -122,6 +125,7 @@ export const defaultOperands = {
   time: keyOf(defaultMessages, defaultMessages.atLeast),
   date: keyOf(defaultMessages, defaultMessages.after),
 }
+*/
 
 const operators = {
   or: predicates => row =>
@@ -150,27 +154,10 @@ export const operationPredicates = {
   after: (value, filter) => value > filter.value,
   before: (value, filter) => value < filter.value,
   atLeast: (value, filter) => {
-    /*
-    const d = new Date()
-    d.setSeconds(value)
-    const eD: Date = filter.value
-    const e = new Date()
-    e.setSeconds(eD.getSeconds())
-    e.setMinutes(eD.getMinutes())
-    const duration = moment.duration(moment(d).diff(moment(e)))
-    return duration.asSeconds() > 0*/
+    // @TODO : impl. native filter type = time for atLeast
   },
   atMost: (value, filter) => {
-    /*
-    const d = new Date()
-    d.setSeconds(value)
-    const eD: Date = filter.value
-    const e = new Date()
-    e.setSeconds(eD.getSeconds())
-    e.setMinutes(eD.getMinutes())
-    const duration = moment.duration(moment(d).diff(moment(e)))
-    return duration.asSeconds() < 0
-    */
+    // @TODO : impl. native filter type = time for atMost
   },
   has: (value, filter) => {
     return value.find(v => v.indexOf(filter.value) !== -1) != null
@@ -230,24 +217,22 @@ export const filteredRows = (
   return { rows: rows.filter(predicate) }
 }
 
-export const filteredCollapsedRowsGetter = ({ collapsedRowsMeta }) => row =>
-  collapsedRowsMeta && collapsedRowsMeta.get(row)
-
-export const unwrappedFilteredRows = ({ rows }) => rows
-
-export const tagFilter = (tags, time) => [
-  {
-    prop: 'tags',
-    filter: {
-      op: 'contains',
-      value: tags,
+/*
+  //Example filter for tags
+  export const tagFilter = (tags, time) => [
+    {
+      prop: 'tags',
+      filter: {
+        op: 'contains',
+        value: tags,
+      },
     },
-  },
-  {
-    prop: 'date',
-    filter: {
-      op: 'after',
-      value: time,
+    {
+      prop: 'date',
+      filter: {
+        op: 'after',
+        value: time,
+      },
     },
-  },
-]
+  ]
+*/

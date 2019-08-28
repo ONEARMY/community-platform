@@ -8,9 +8,10 @@ import * as functions from 'firebase-functions'
 import * as bodyParser from 'body-parser'
 import * as cors from 'cors'
 import * as express from 'express'
+import * as sync from '../Firebase/firebaseSync'
 import { upgradeDBAll } from '../upgrade/dbV1Upgrade'
 
-console.log('api init')
+console.log('api ready')
 const app = express()
 // use bodyparse to create json object from body
 app.use(
@@ -42,9 +43,20 @@ app.all('*', async (req, res, next) => {
   // will likely change behaviour in future when required
   switch (endpoint) {
     // case 'dbV1Upgrade':
+    //   console.log('upgrading db v1')
     //   const upgradeStatus = await upgradeDBAll()
     //   res.send(upgradeStatus)
     //   break
+    case 'sync':
+      console.log('sync test')
+      try {
+        const d = await sync.syncAll()
+        res.send(d)
+      } catch (error) {
+        console.log(error)
+        res.status(500).send(error.message)
+      }
+      break
     default:
       res.send('invalid api endpoint')
   }

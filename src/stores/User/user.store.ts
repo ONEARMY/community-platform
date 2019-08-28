@@ -5,6 +5,7 @@ import { IUser } from 'src/models/user.models'
 import { IFirebaseUser, auth, afs, EmailAuthProvider } from 'src/utils/firebase'
 import { Storage } from '../storage'
 import { notificationPublish } from '../Notifications/notifications.service'
+import { RootStore } from '..'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
@@ -23,7 +24,7 @@ export class UserStore {
     this.user = user
     console.log('user updated', user)
   }
-  constructor() {
+  constructor(rootStore: RootStore) {
     this._listenToAuthStateChanges()
   }
 

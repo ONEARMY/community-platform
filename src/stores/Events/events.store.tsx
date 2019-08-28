@@ -3,6 +3,7 @@ import { IEvent, IEventFormInput } from 'src/models/events.models'
 import { ModuleStore } from '../common/module.store'
 import { Database } from '../database'
 import Filters from 'src/utils/filters'
+import { RootStore } from '..'
 
 export class EventStore extends ModuleStore {
   // observables are data variables that can be subscribed to and change over time
@@ -24,7 +25,7 @@ export class EventStore extends ModuleStore {
     })
   }
 
-  constructor() {
+  constructor(rootStore: RootStore) {
     super('v2_events')
     this.allDocs$.subscribe((docs: IEvent[]) => {
       this.allEvents = docs.sort((a, b) => (a.date > b.date ? 1 : -1))

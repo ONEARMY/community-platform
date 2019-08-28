@@ -60,10 +60,6 @@ export class HowtoList extends React.Component<any, IState> {
     return this.props as InjectedProps
   }
 
-  public updateTags(tags: ISelectedTags) {
-    this.props.howtoStore.updateSelectedTags(tags)
-  }
-
   public render() {
     const { currentHowtos } = this.props.howtoStore
     const { isLoading } = this.state
@@ -73,7 +69,9 @@ export class HowtoList extends React.Component<any, IState> {
           <Flex flexWrap={'nowrap'} justifyContent={'space-between'}>
             <Box width={[1, 1, 0.2]}>
               <TagsSelect
-                onChange={val => this.updateTags(val)}
+                onChange={tags =>
+                  this.props.howtoStore.updateSelectedTags(tags)
+                }
                 category="how-to"
               />
             </Box>

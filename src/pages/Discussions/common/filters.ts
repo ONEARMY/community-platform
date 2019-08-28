@@ -173,8 +173,7 @@ export const operationPredicates = {
     */
   },
   has: (value, filter) => {
-    const ret = value.find(v => v.indexOf(filter.value) !== -1) != null
-    return ret
+    return value.find(v => v.indexOf(filter.value) !== -1) != null
   },
   hasNot: (value, filter) => value.indexOf(filter.value) === -1,
 }

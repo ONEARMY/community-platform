@@ -60,10 +60,20 @@ export class HowtoStore extends ModuleStore {
     ) {
       return this.allHowtos
     } else {
-      // If there is tags return a filtered array that compare howto.tags & the selectedTags
-      const filtered = this.allHowtos.filter(howto => {
-        // needs JSON.stringify to avoid return false when comparing two arrays
-        return JSON.stringify(howto.tags) === JSON.stringify(this.selectedTags)
+      const filtered: IHowto[] = []
+      this.allHowtos.map(howto => {
+        if (howto.tags !== undefined) {
+          // encapsulate howtoTags in const to avoid type error
+          const howtoTags = Object.keys(howto.tags)
+          // filter the howto containing the selected tags
+          const isMatching = Object.keys(this.selectedTags).every(val => {
+            return howtoTags.includes(val)
+          })
+          // push the matching howto to filtered array
+          if (isMatching) {
+            filtered.push(howto)
+          }
+        }
       })
       return filtered
     }

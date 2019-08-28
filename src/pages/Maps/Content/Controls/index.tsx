@@ -51,7 +51,7 @@ class Controls extends React.Component<IProps> {
           position: 'absolute',
           left: '10%',
           borderRadius: '5px',
-          zIndex: 99999,
+          zIndex: 2,
           marginTop: '30px',
         }}
       >

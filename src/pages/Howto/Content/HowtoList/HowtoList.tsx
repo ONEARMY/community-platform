@@ -2,24 +2,49 @@ import * as React from 'react'
 import { Image, Flex, Box } from 'rebass'
 // TODO add loader (and remove this material-ui dep)
 import { Link } from 'src/components/Links'
+import styled from 'styled-components'
+import TagsSelect from 'src/components/Tags/TagsSelect'
+
+import { inject, observer } from 'mobx-react'
+import { HowtoStore } from 'src/stores/Howto/howto.store'
+
+import PpLogo from 'src/assets/images/pp-icon-small.png'
+
 import { Button } from 'src/components/Button'
 import { IHowto } from 'src/models/howto.models'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import HowToCard from 'src/components/HowToCard/HowToCard'
 import Heading from 'src/components/Heading'
+import { ISelectedTags } from 'src/models/tags.model'
 
-interface IProps {
-  allHowtos: IHowto[]
+interface InjectedProps {
+  howtoStore?: HowtoStore
 }
 
-export class HowtoList extends React.Component<IProps, any> {
+interface IState {
+  isLoading: boolean
+}
+
+// First we use the @inject decorator to bind to the howtoStore state
+@inject('howtoStore')
+// Then we can use the observer component decorator to automatically tracks observables and re-renders on change
+// (note 1, use ! to tell typescript that the store will exist (it's an injected prop))
+// (note 2, mobx seems to behave more consistently when observables are referenced outside of render methods)
+@observer
+export class HowtoList extends React.Component<any, IState> {
   constructor(props: any) {
     super(props)
+    this.state = {
+      isLoading: true,
+    }
+  }
+  get injected() {
+    return this.props as InjectedProps
   }
 
   public render() {
-    const { allHowtos } = this.props
+    const { filteredHowtos } = this.props.howtoStore
     return (
       <>
         <Flex py={26}>
@@ -27,15 +52,21 @@ export class HowtoList extends React.Component<IProps, any> {
             Learn & share how to recycle, make and hack plastic
           </Heading>
         </Flex>
-        <Flex justifyContent={'flex-end'} mb={8}>
+        <Flex flexWrap={'nowrap'} justifyContent={'space-between'}>
+          <Box width={[1, 1, 0.2]}>
+            <TagsSelect
+              onChange={tags => this.props.howtoStore.updateSelectedTags(tags)}
+              category="how-to"
+            />
+          </Box>
           <AuthWrapper>
             <Link to={'/how-to/create'}>
-              <Button variant={'primary'}>Create a How-to</Button>
+              <Button variant={'primary'}>create a How-to</Button>
             </Link>
           </AuthWrapper>
         </Flex>
         <React.Fragment>
-          {allHowtos.length === 0 ? (
+          {filteredHowtos.length === 0 ? (
             <Flex>
               <Heading auxiliary txtcenter width={1}>
                 loading...
@@ -43,7 +74,7 @@ export class HowtoList extends React.Component<IProps, any> {
             </Flex>
           ) : (
             <Flex flexWrap="wrap" mx={-4}>
-              {allHowtos.map((howto: IHowto) => (
+              {filteredHowtos.map((howto: IHowto) => (
                 <Flex px={4} py={4} width={[1, 1 / 2, 1 / 3]}>
                   <HowToCard howto={howto} />
                 </Flex>

@@ -3,18 +3,18 @@ import {
   IMapPin,
   IMapPinDetail,
   IPinType,
-  IDatabaseMapPin,
   EntityType,
 } from 'src/models/maps.models'
+import { MOCK_DB_META } from './db.mock'
 
-export const generatePins = (count: number): Array<IDatabaseMapPin> => {
+export const generatePins = (count: number): Array<IMapPin> => {
   const filters = generatePinFilters()
-  const newPins = [] as Array<IDatabaseMapPin>
+  const newPins = [] as Array<IMapPin>
   for (let i = 0; i < count; i++) {
     const pinType = filters[Math.floor(Math.random() * filters.length)]
 
     newPins.push({
-      id: '' + Math.random(),
+      ...MOCK_DB_META(),
       location: {
         address: 'testing',
         lat: 51 + (Math.random() * 1000 - 500) / 500,
@@ -27,8 +27,9 @@ export const generatePins = (count: number): Array<IDatabaseMapPin> => {
 }
 
 export const generatePinDetails = (pin: IMapPin): IMapPinDetail => {
-  const lastActive = new Date()
-  lastActive.setSeconds(lastActive.getSeconds() - Math.random() * 10000)
+  const randomDate = new Date()
+  randomDate.setSeconds(randomDate.getSeconds() - Math.random() * 10000)
+  const lastActive = randomDate.toISOString()
   return {
     ...pin,
     name: loremIpsum({ count: 2, units: 'words' })

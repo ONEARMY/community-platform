@@ -12,6 +12,7 @@ import Heading from 'src/components/Heading'
 import { TextNotification } from 'src/components/Notification/TextNotification'
 import { Avatar } from 'src/components/Avatar'
 import Text from 'src/components/Text'
+import { UserMapPinEdit } from './content/UserMapPinEdit'
 
 interface IProps {
   user: IUser
@@ -58,6 +59,7 @@ export class UserSettings extends React.Component<IProps, IState> {
           </Box>
 
           <SettingsEditForm onProfileSave={() => this.showSaveNotification()} />
+          <UserMapPinEdit />
         </Box>
         {/* post guidelines container */}
         <Box width={[1, 1, 1 / 3]} height={'100%'} bg="inherit" p={0} pl={2}>

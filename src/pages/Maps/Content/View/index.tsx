@@ -14,10 +14,11 @@ import {
   ILatLng,
   IBoundingBox,
   IPinType,
+  IMapPinWithType,
 } from 'src/models/maps.models'
 
 interface IProps {
-  pins: Array<IMapPin>
+  pins: Array<IMapPinWithType>
   filters: Array<IPinType>
   onBoundingBoxChange: (boundingBox: IBoundingBox) => void
   onPinClicked: (pin: IMapPin) => void
@@ -41,12 +42,15 @@ class MapView extends React.Component<IProps, IState> {
   }
 
   private updateBoundingBox() {
-    const boundingBox = this.map.current.leafletElement.getBounds()
-    const newBoundingBox: IBoundingBox = {
-      topLeft: boundingBox._northEast,
-      bottomRight: boundingBox._southWest,
+    // Note - sometimes throws (current undefined). Workaround
+    if (this.map && this.map.current) {
+      const boundingBox = this.map.current.leafletElement.getBounds()
+      const newBoundingBox: IBoundingBox = {
+        topLeft: boundingBox._northEast,
+        bottomRight: boundingBox._southWest,
+      }
+      this.props.onBoundingBoxChange(newBoundingBox)
     }
-    this.props.onBoundingBoxChange(newBoundingBox)
   }
 
   private pinClicked(pin) {
@@ -76,6 +80,14 @@ class MapView extends React.Component<IProps, IState> {
         <Popup map={this.map} pinDetail={activePinDetail} />
       </Map>
     )
+  }
+  static defaultProps: Partial<IProps> = {
+    onBoundingBoxChange: () => null,
+    onPinClicked: () => null,
+    pins: [],
+    filters: [],
+    center: { lat: 51.0, lng: 19.0 },
+    zoom: 3,
   }
 }
 

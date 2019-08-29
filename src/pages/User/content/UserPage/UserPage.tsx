@@ -160,86 +160,45 @@ export class UserPage extends React.Component<
     const { user, isLoading } = this.state
     if (user) {
       return (
-        <>
-          <Flex card mediumRadius my={5} bg={'white'} flexDirection={'column'}>
-            <ProfileImage bg={'background'} />
-            <Flex
-              p={5}
-              mx={-2}
-              flexDirection={['column-reverse', 'row', 'row']}
-            >
-              <Flex
-                flex={[1, 4, 6]}
-                mt={[5, 0, 0]}
-                px={2}
-                flexDirection={'column'}
-              >
-                <Heading large>Extrusion Workspace</Heading>
-                <Flex mt={6}>
-                  <Heading large bold>
-                    {user.userName}
-                  </Heading>
-                  <FlagIconEvents code="DE" />
-                </Flex>
-                <Flex flexDirection={'column'} mt={2}>
-                  <Text large color={'grey'}>
-                    Discord: mattia-io#2124
-                  </Text>
-                  <Text large color={'grey'}>
-                    Forums: @vincentvega231029
-                  </Text>
-                </Flex>
-                <Flex mt={6}>
-                  <Text
-                    large
-                    color={'grey'}
-                    css={`
-                      max-width: 620px;
-                    `}
-                  >
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Suspendisse varius enim in eros elementum tristique. Duis
-                    cursus, mi quis viverra ornare, eros dolor interdum nulla,
-                    ut commodo diam libero vitae erat. Aenean faucibus nibh et
-                    justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae
-                    risus tristique posuere.
-                  </Text>
-                </Flex>
-                <Flex flexDirection={'column'}>
-                  {user.links ? (
-                    <Flex mt={4}>
-                      <Heading large>My Links</Heading>
-                      {this.renderLinks(user.links)}
-                    </Flex>
-                  ) : null}
-                </Flex>
-              </Flex>
-              <Flex
-                flex={[1, 3, 2]}
-                px={2}
-                flexDirection={'column'}
-                alignItems={'center'}
-              >
-                <BadgeImage bg={'background'} mt={-20} />
-                <Flex
-                  card
-                  littleRadius
-                  width={1}
-                  flexDirection={'column'}
-                  p={3}
-                  bg={'background'}
-                  height={'fit-content'}
-                  mt={4}
-                >
-                  <Text mb={2}>Expert</Text>
-                  <Text mb={2}>V4 member</Text>
-                  <Text mb={2}>How-to: 8</Text>
-                  <Text>Events: 12</Text>
-                </Flex>
-              </Flex>
-            </Flex>
+        <Box>
+          <Avatar userName={user.userName} width="120px" borderRadius={5} />
+          <Heading large color={'black'} my={3}>
+            {user.userName}
+          </Heading>
+          <Text small color={'grey'}>
+            @{user.userName}
+          </Text>
+          <Flex wrap={'nowrap'} alignItems={'center'}>
+            <Circle bg={'blue'} my={3}>
+              <Text color={'white'} m={'auto'}>
+                C
+              </Text>
+            </Circle>
+            <Heading small inline ml={2} my={0}>
+              Community builder
+            </Heading>
+            {user.year && (
+              <Heading small inline color={'grey'} ml={2} my={0}>
+                Since {new Date(user.year).getFullYear()}
+              </Heading>
+            )}
           </Flex>
-        </>
+          <Text lineHeight={2}>{user.about}</Text>
+          {/* {user.location && (
+            <Flex alignItems={'center'}>
+              <Icon size={25} glyph={'location-on'} />
+              <Heading small m={3}>
+                {user.location.value}
+              </Heading>
+            </Flex>
+          )} */}
+          {user.links ? (
+            <Box mt={4}>
+              <Heading large>My Links</Heading>
+              {this.renderLinks(user.links)}
+            </Box>
+          ) : null}
+        </Box>
       )
     } else {
       return isLoading ? (

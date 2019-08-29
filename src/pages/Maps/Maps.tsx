@@ -34,6 +34,11 @@ class MapsPageClass extends React.Component<IProps, IState> {
     this.props.mapsStore.retrievePinFilters()
   }
 
+  public async componentWillUnmount() {
+    console.log('map pins unmount')
+    this.props.mapsStore.removeSubscriptions()
+  }
+
   private setCenter(location) {
     this.setState({
       center: location.latlng as ILatLng,

@@ -17,6 +17,7 @@ export interface ILink {
 export interface IUser extends IDbDoc {
   // authID is additional id populated by firebase auth, required for some auth operations
   _authID: string
+  _lastActive?: ISODateString
   // userName is same as legacy 'mention_name', e.g. @my-name. It will also be the doc _id and
   // firebase auth displayName property
   userName: string

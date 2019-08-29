@@ -1,5 +1,4 @@
-import { observable, action } from 'mobx'
-import { afs } from '../../utils/firebase'
+import { observable, action, computed } from 'mobx'
 import {
   IHowto,
   IHowtoFormInput,
@@ -10,6 +9,8 @@ import { Database } from 'src/stores/database'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { Storage } from '../storage'
 import { ModuleStore } from '../common/module.store'
+import { ISelectedTags } from 'src/models/tags.model'
+import { RootStore } from '..'
 
 export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
@@ -18,15 +19,20 @@ export class HowtoStore extends ModuleStore {
   @observable
   public allHowtos: IHowto[]
   @observable
+  public selectedTags: ISelectedTags
+  @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
+  rootStore: RootStore
 
-  constructor() {
+  constructor(rootStore: RootStore) {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
     super('v2_howtos')
     this.allDocs$.subscribe(docs => {
       this.allHowtos = docs as IHowto[]
     })
+    this.rootStore = rootStore
+    this.selectedTags = {}
   }
 
   @action
@@ -44,6 +50,37 @@ export class HowtoStore extends ModuleStore {
   @action
   public updateUploadStatus(update: keyof IHowToUploadStatus) {
     this.uploadStatus[update] = true
+  }
+
+  @computed get filteredHowtos() {
+    // Check if this.selectedTags is empty
+    if (
+      Object.keys(this.selectedTags).length === 0 &&
+      this.selectedTags.constructor === Object
+    ) {
+      return this.allHowtos
+    } else {
+      const filtered: IHowto[] = []
+      this.allHowtos.map(howto => {
+        if (howto.tags !== undefined) {
+          // encapsulate howtoTags in const to avoid type error
+          const howtoTags = Object.keys(howto.tags)
+          // filter the howto containing the selected tags
+          const isMatching = Object.keys(this.selectedTags).every(val => {
+            return howtoTags.includes(val)
+          })
+          // push the matching howto to filtered array
+          if (isMatching) {
+            filtered.push(howto)
+          }
+        }
+      })
+      return filtered
+    }
+  }
+
+  public updateSelectedTags(tagKey: ISelectedTags) {
+    this.selectedTags = tagKey
   }
 
   public generateID = () => {

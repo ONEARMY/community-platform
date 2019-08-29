@@ -4,6 +4,7 @@ import { TAGS_MOCK } from 'src/mocks/tags.mock'
 import { ITag, TagCategory } from 'src/models/tags.model'
 import { arrayToJson } from 'src/utils/helpers'
 import { ModuleStore } from '../common/module.store'
+import { RootStore } from '..'
 
 export class TagsStore extends ModuleStore {
   activeCategory?: TagCategory
@@ -18,7 +19,7 @@ export class TagsStore extends ModuleStore {
     this._filterTags()
   }
 
-  constructor() {
+  constructor(rootStore: RootStore) {
     super('v2_tags')
     this.allDocs$.subscribe((docs: ITag[]) => {
       this.allTags = docs.sort((a, b) => (a.label > b.label ? 1 : -1))

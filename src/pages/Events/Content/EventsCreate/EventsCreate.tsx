@@ -37,8 +37,8 @@ const FormContainer = styled.form`
 `
 
 const Label = styled.label`
- font-size: ${theme.fontSizes[2] + 'px'}
- margin-bottom: ${theme.space[2] + 'px'}
+  font-size: ${theme.fontSizes[2] + 'px'};
+  margin-bottom: ${theme.space[2] + 'px'};
 `
 
 @inject('eventStore')
@@ -163,7 +163,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                       >
                         <Flex flexDirection={'column'} mb={3} px={2} width={1}>
                           <Label htmlFor="location">
-                            In which city is the event taking place? *
+                            Select tags for your event *
                           </Label>
                           <Field
                             name="tags"
@@ -172,9 +172,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                           />
                         </Flex>
                         <Flex flexDirection={'column'} mb={3} px={2} width={1}>
-                          <Label htmlFor="location">
-                            In which city is the event taking place? *
-                          </Label>
+                          <Label htmlFor="location">Link to your event *</Label>
                           <Field
                             name="url"
                             validateFields={[]}

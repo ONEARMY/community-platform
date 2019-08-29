@@ -4,6 +4,9 @@ import { Button } from 'src/components/Button'
 import { InputField } from 'src/components/Form/Fields'
 import { UserStore } from 'src/stores/User/user.store'
 import Text from 'src/components/Text'
+import theme from 'src/themes/styled.theme'
+import styled from 'styled-components'
+import Flex from 'src/components/Flex'
 
 interface IFormValues {
   oldPassword?: string
@@ -19,6 +22,12 @@ interface IState {
 interface IProps {
   userStore: UserStore
 }
+
+const Label = styled.label`
+font-size: ${theme.fontSizes[2] + 'px'}
+margin-bottom: ${theme.space[2] + 'px'}
+display: block;
+`
 
 export class ChangePasswordForm extends React.Component<IProps, IState> {
   constructor(props: IProps) {
@@ -47,8 +56,11 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
     return (
       <>
         <Button
-          mt={3}
-          variant={'outline'}
+          small
+          width={'130px'}
+          mr={3}
+          mb={3}
+          variant={'tertiary'}
           onClick={() =>
             this.setState({
               showChangePasswordForm: !this.state.showChangePasswordForm,
@@ -71,34 +83,46 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
                 oldPassword === newPassword
               return (
                 <form onSubmit={handleSubmit}>
-                  <Field
-                    name="oldPassword"
-                    component={InputField}
-                    placeholder="Old password"
-                    type="password"
-                    autocomplete="off"
-                    required
-                  />
-                  <Field
-                    name="newPassword"
-                    component={InputField}
-                    placeholder="New password"
-                    type="password"
-                    autocomplete="off"
-                    required
-                  />
-                  <Field
-                    name="repeatPassword"
-                    component={InputField}
-                    placeholder="Repeat new password"
-                    type="password"
-                    autocomplete="off"
-                    required
-                  />
+                  <Flex flexDirection={'column'} mb={3}>
+                    <Label htmlFor="oldPassword">Old password :</Label>
+                    <Field
+                      name="oldPassword"
+                      component={InputField}
+                      placeholder="Old password"
+                      type="password"
+                      autocomplete="off"
+                      required
+                    />
+                  </Flex>
+                  <Flex flexDirection={'column'} mb={3}>
+                    <Label htmlFor="newPassword">New password :</Label>
+                    <Field
+                      name="newPassword"
+                      component={InputField}
+                      placeholder="New password"
+                      type="password"
+                      autocomplete="off"
+                      required
+                    />
+                  </Flex>
+                  <Flex flexDirection={'column'} mb={3}>
+                    <Label htmlFor="repeatPassword">
+                      Repeat new password :
+                    </Label>
+                    <Field
+                      name="repeatPassword"
+                      component={InputField}
+                      placeholder="Repeat new password"
+                      type="password"
+                      autocomplete="off"
+                      required
+                    />
+                  </Flex>
                   <Button
+                    small
                     type="submit"
                     disabled={disabled}
-                    variant={disabled ? 'disabled' : 'outline'}
+                    variant={disabled ? 'primary' : 'primary'}
                   >
                     Submit
                   </Button>

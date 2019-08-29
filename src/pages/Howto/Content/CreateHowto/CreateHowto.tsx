@@ -73,6 +73,7 @@ const FormContainer = styled.form`
 const Label = styled.label`
  font-size: ${theme.fontSizes[2] + 'px'}
  margin-bottom: ${theme.space[2] + 'px'}
+ display: block;
 `
 
 // validation - return undefined if no error (i.e. valid)

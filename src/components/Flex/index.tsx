@@ -17,18 +17,6 @@ export interface IFlexProps {
 export const card = (props: IFlexProps) =>
   props.card ? { border: '2px solid black' } : null
 
-export const cardHeading = (props: IFlexProps) =>
-  props.cardHeading
-    ? {
-        border: '2px solid black',
-        overflow: 'hidden',
-        background: theme.colors.blue,
-      }
-    : null
-
-export const border = (props: IFlexProps) =>
-  props.border ? { border: '2px solid black', overflow: 'hidden' } : null
-
 export const littleRadius = (props: IFlexProps) =>
   props.littleRadius ? { borderRadius: '5px' } : null
 
@@ -59,12 +47,10 @@ export const mediumScale = (props: IFlexProps) =>
     : null
 
 export const BaseFlex = styled(RebassFlex)`
-  ${border}
   ${littleRadius}
   ${mediumRadius}
   ${largeRadius}
   ${card}
-  ${cardHeading}
   ${littleScale}
   ${mediumScale}
 `

@@ -6,6 +6,18 @@ import { ISODateString } from 'src/models/common.models'
 */
 
 /************************************************************************
+ *             Array Methods
+ ***********************************************************************/
+/**
+ * Test whether a one array contains all string values of another array
+ * @param arr1 The array that will be tested, e.g ["a","b","c"]
+ * @param arr2 The values to test, e.g. ["a","c"]
+ */
+export const includesAll = (arr1: string[], arr2: string[]) => {
+  return arr1.every(val => arr2.includes(val))
+}
+
+/************************************************************************
  *              Date Methods
  ***********************************************************************/
 const olderThan = (chosenDate: dateType, compareToDate: dateType) => {

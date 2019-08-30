@@ -1,5 +1,4 @@
-import { observable, action } from 'mobx'
-import { afs } from '../../utils/firebase'
+import { observable, action, computed } from 'mobx'
 import {
   IHowto,
   IHowtoFormInput,
@@ -10,6 +9,9 @@ import { Database } from 'src/stores/database'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { Storage } from '../storage'
 import { ModuleStore } from '../common/module.store'
+import { ISelectedTags } from 'src/models/tags.model'
+import { RootStore } from '..'
+import { includesAll } from 'src/utils/filters'
 
 export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
@@ -18,15 +20,20 @@ export class HowtoStore extends ModuleStore {
   @observable
   public allHowtos: IHowto[]
   @observable
+  public selectedTags: ISelectedTags
+  @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
+  rootStore: RootStore
 
-  constructor() {
+  constructor(rootStore: RootStore) {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
     super('v2_howtos')
     this.allDocs$.subscribe(docs => {
       this.allHowtos = docs as IHowto[]
     })
+    this.rootStore = rootStore
+    this.selectedTags = {}
   }
 
   @action
@@ -44,6 +51,20 @@ export class HowtoStore extends ModuleStore {
   @action
   public updateUploadStatus(update: keyof IHowToUploadStatus) {
     this.uploadStatus[update] = true
+  }
+
+  @computed get filteredHowtos() {
+    const selectedTagsArr = Object.keys(this.selectedTags)
+    return selectedTagsArr.length > 0
+      ? this.allHowtos.filter(howto => {
+          const tags = howto.tags ? Object.keys(howto.tags) : null
+          return tags ? includesAll(selectedTagsArr, tags) : false
+        })
+      : this.allHowtos
+  }
+
+  public updateSelectedTags(tagKey: ISelectedTags) {
+    this.selectedTags = tagKey
   }
 
   public generateID = () => {

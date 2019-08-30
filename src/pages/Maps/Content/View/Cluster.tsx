@@ -6,10 +6,10 @@ import 'react-leaflet-markercluster/dist/styles.min.css'
 
 import { createClusterIcon, createMarkerIcon } from './Sprites'
 
-import { IMapPin, IPinType, EntityType } from 'src/models/maps.models'
+import { IPinType, EntityType, IMapPinWithType } from 'src/models/maps.models'
 
 interface IProps {
-  pins: Array<IMapPin>
+  pins: Array<IMapPinWithType>
   onPinClick: (pin: IPinType) => void
 }
 
@@ -23,7 +23,7 @@ export const Clusters: React.SFC<IProps> = ({ pins, onPinClick }) => {
       accumulator[grouping].push(pin)
       return accumulator
     },
-    {} as Record<EntityType, Array<IMapPin>>,
+    {} as Record<EntityType, Array<IMapPinWithType>>,
   )
 
   return (
@@ -37,7 +37,7 @@ export const Clusters: React.SFC<IProps> = ({ pins, onPinClick }) => {
           >
             {entities[key].map(pin => (
               <Marker
-                key={pin.id}
+                key={pin._id}
                 position={[pin.location.lat, pin.location.lng]}
                 icon={createMarkerIcon(pin)}
                 onClick={() => {

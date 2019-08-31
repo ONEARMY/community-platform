@@ -1,4 +1,7 @@
 {
+  "extends": [
+    "plugin:security/recommended"
+  ],
   "rules": {
     "no-unexpected-multiline": "off"
   },
@@ -9,5 +12,8 @@
       "jsx": true,
       "modules": true
     }
-  }
+  },
+  "plugins": [
+    "security"
+  ]
 }

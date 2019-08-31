@@ -7,6 +7,9 @@ cache: yarn
 addons:
   chrome: stable
 
+services:
+  - docker
+
 # add the current github branch as an environment variable
 before_script:
   - export REACT_APP_BRANCH=$TRAVIS_BRANCH
@@ -31,3 +34,6 @@ deploy:
       branch: production
 after_deploy:
   - echo "REACT_APP_BRANCH=$REACT_APP_BRANCH"
+  - npm run lh -- --perf=95 https://dev.onearmy.world
+  - docker run -u zap -i owasp/zap2docker-stable zap-cli quick-scan -sc \
+    -o '-config api.disablekey=true' -s xss,sqli --spider "https://dev.onearmy.world"

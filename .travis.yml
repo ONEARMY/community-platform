@@ -32,6 +32,10 @@ deploy:
     skip_cleanup: true
     on:
       branch: production
+  - provider: script
+    script: bash scripts/deploy.notification.sh
+    on:
+      all_branches: true
 after_deploy:
   - echo "REACT_APP_BRANCH=$REACT_APP_BRANCH"
   - npm run lh -- --perf=95 https://dev.onearmy.world

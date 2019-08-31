@@ -1,11 +1,21 @@
 language: node_js
 node_js:
   - '8'
+  - '10'
+  - '11'
+  - '12'
 dist: trusty
 sudo: false
 cache: yarn
 addons:
   chrome: stable
+
+matrix:
+  allow_failures:
+    - node_js: '10'
+    - node_js: '11'
+    - node_js: '12'
+  fast_finish: true
 
 # add the current github branch as an environment variable
 before_script:

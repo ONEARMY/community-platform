@@ -21,8 +21,9 @@ matrix:
 before_script:
   - export REACT_APP_BRANCH=$TRAVIS_BRANCH
   - echo "REACT_APP_BRANCH=$REACT_APP_BRANCH"
+  - export NODE_OPTIONS=--max_old_space_size=4096
 script:
-  - node --max_old_space_size=8192 `which npm` run build
+  - npm run build
 
 # install firebase cli and set firebase project ci token from environment
 before_deploy:

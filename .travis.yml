@@ -11,6 +11,9 @@ cache: yarn
 addons:
   chrome: stable
 
+services:
+  - docker
+
 matrix:
   allow_failures:
     - node_js: '12'
@@ -39,5 +42,11 @@ deploy:
     skip_cleanup: true
     on:
       branch: production
+  - provider: script
+    script: bash scripts/deploy.notification.sh
+    on:
+      all_branches: true
 after_deploy:
   - echo "REACT_APP_BRANCH=$REACT_APP_BRANCH"
+  - npm run lh -- --perf=95 https://dev.onearmy.world
+  - docker run -u zap -i owasp/zap2docker-stable zap-cli quick-scan -sc -o '-config api.disablekey=true' -s xss,sqli --spider "https://dev.onearmy.world"

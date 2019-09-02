@@ -7,6 +7,7 @@ import { distanceInWords } from 'date-fns'
 import { IMapPin, IMapPinDetail } from 'src/models/maps.models'
 
 import './popup.css'
+import { Link } from 'src/components/Links'
 
 interface IProps {
   pinDetail?: IMapPin | IMapPinDetail
@@ -118,7 +119,9 @@ export class Popup extends React.Component<IProps> {
         <HeroImage src={heroImageUrl} />
         <ProfileImage src={profilePicUrl} />
         <ContentWrapper>
-          <ComradeName>{name}</ComradeName>
+          <Link to={'u/' + name}>
+            <ComradeName>{name}</ComradeName>
+          </Link>
           <PinTypeWrapper>
             <PinTypeDot type={pinType.grouping}>{pinType.icon}</PinTypeDot>
             <PinTypeName>{pinType.displayName}</PinTypeName>

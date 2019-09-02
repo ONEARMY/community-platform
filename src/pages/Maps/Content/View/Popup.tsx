@@ -8,6 +8,7 @@ import { IMapPin, IMapPinDetail } from 'src/models/maps.models'
 
 import './popup.css'
 import { Link } from 'src/components/Links'
+import Text from 'src/components/Text'
 
 interface IProps {
   pinDetail?: IMapPin | IMapPinDetail
@@ -17,10 +18,11 @@ interface IProps {
 const HeroImage = styled.img`
   width: 285px;
   height: 175px;
+  object-fit: cover;
 `
 
 const ProfileImage = styled.img`
-  width 50px;
+  width: 50px;
   height: 50px;
   border-radius: 50%;
   margin-top: -25px;
@@ -126,7 +128,7 @@ export class Popup extends React.Component<IProps> {
             <PinTypeDot type={pinType.grouping}>{pinType.icon}</PinTypeDot>
             <PinTypeName>{pinType.displayName}</PinTypeName>
           </PinTypeWrapper>
-          <Description>{shortDescription}</Description>
+          <Text clipped>{shortDescription}</Text>
           <LastOnline>
             last active {distanceInWords(lastActive, new Date())} ago
           </LastOnline>

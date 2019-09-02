@@ -84,7 +84,7 @@ export class ModuleStore {
    * **************************************************************************/
 
   public filteredCollectionByTags(
-    collection: any[],
+    collection: any[] = [],
     selectedTags: ISelectedTags,
   ) {
     const selectedTagsArr = Object.keys(selectedTags)

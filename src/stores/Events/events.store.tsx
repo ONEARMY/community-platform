@@ -9,7 +9,7 @@ import { RootStore } from '..'
 export class EventStore extends ModuleStore {
   // observables are data variables that can be subscribed to and change over time
   @observable
-  public allEvents: IEvent[]
+  public allEvents: IEvent[] = []
   @observable
   public activeEvent: IEvent | undefined
   @observable

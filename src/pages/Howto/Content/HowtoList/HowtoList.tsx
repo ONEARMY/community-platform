@@ -17,7 +17,6 @@ import { Button } from 'src/components/Button'
 import { IHowto } from 'src/models/howto.models'
 import { TagDisplay } from 'src/components/Tags/TagDisplay/TagDisplay'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
-import { ISelectedTags } from 'src/models/tags.model'
 
 interface InjectedProps {
   howtoStore?: HowtoStore

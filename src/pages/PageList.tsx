@@ -70,7 +70,7 @@ const admin = {
 
 // community pages (various pages hidden on production build)
 const devCommunityPages = [howTo, events, maps]
-const prodCommunityPages = [howTo, events]
+const prodCommunityPages = [howTo, events, maps]
 const communityPages =
   SITE === 'production' ? prodCommunityPages : devCommunityPages
 // community 'more' dropdown pages (various pages hidden on production build)

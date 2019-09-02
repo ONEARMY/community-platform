@@ -54,13 +54,7 @@ export class HowtoStore extends ModuleStore {
   }
 
   @computed get filteredHowtos() {
-    const selectedTagsArr = Object.keys(this.selectedTags)
-    return selectedTagsArr.length > 0
-      ? this.allHowtos.filter(howto => {
-          const tags = howto.tags ? Object.keys(howto.tags) : null
-          return tags ? includesAll(selectedTagsArr, tags) : false
-        })
-      : this.allHowtos
+    return this.filteredCollectionByTags(this.allHowtos, this.selectedTags)
   }
 
   public updateSelectedTags(tagKey: ISelectedTags) {

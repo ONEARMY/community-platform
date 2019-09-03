@@ -54,7 +54,7 @@ export class HowtoStore extends ModuleStore {
   }
 
   @computed get filteredHowtos() {
-    return this.filteredCollectionByTags(this.allHowtos, this.selectedTags)
+    return this.filterCollectionByTags(this.allHowtos, this.selectedTags)
   }
 
   public updateSelectedTags(tagKey: ISelectedTags) {

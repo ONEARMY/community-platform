@@ -84,7 +84,7 @@ export class ModuleStore {
    *            Filtering Methods
    * **************************************************************************/
 
-  public filteredCollectionByTags(
+  public filterCollectionByTags(
     collection: any[] = [],
     selectedTags: ISelectedTags,
   ) {
@@ -96,7 +96,7 @@ export class ModuleStore {
         })
       : collection
   }
-  public filteredCollectionByLocation(
+  public filterCollectionByLocation(
     collection: any[] = [],
     selectedLocation: ILocation,
   ) {

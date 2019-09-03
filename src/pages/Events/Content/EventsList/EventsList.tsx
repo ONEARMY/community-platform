@@ -13,6 +13,7 @@ import Heading from 'src/components/Heading'
 import TagsSelect from 'src/components/Tags/TagsSelect'
 import { inject, observer } from 'mobx-react'
 import { EventStore } from 'src/stores/Events/events.store'
+import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
 
 interface InjectedProps {
   eventStore?: EventStore
@@ -52,6 +53,9 @@ export class EventsList extends React.Component<any> {
                   this.props.eventStore.updateSelectedTags(tags)
                 }
                 category="event"
+              />
+              <LocationSearch
+                onChange={v => this.props.eventStore.updateSelectedLocation(v)}
               />
             </Box>
             <AuthWrapper>

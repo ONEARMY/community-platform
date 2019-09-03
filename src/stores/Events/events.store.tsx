@@ -5,6 +5,7 @@ import { Database } from '../database'
 import Filters from 'src/utils/filters'
 import { ISelectedTags } from 'src/models/tags.model'
 import { RootStore } from '..'
+import { ILocation } from 'src/components/LocationSearch/LocationSearch'
 
 export class EventStore extends ModuleStore {
   // observables are data variables that can be subscribed to and change over time
@@ -14,6 +15,8 @@ export class EventStore extends ModuleStore {
   public activeEvent: IEvent | undefined
   @observable
   public selectedTags: ISelectedTags
+  @observable
+  public selectedLocation: ILocation
   @observable
   public eventViewType: 'map' | 'list'
   @computed get upcomingEvents() {
@@ -29,7 +32,15 @@ export class EventStore extends ModuleStore {
   }
 
   @computed get filteredEvents() {
-    return this.filteredCollectionByTags(this.upcomingEvents, this.selectedTags)
+    return this.selectedLocation !== undefined
+      ? this.filteredCollectionByTags(
+          this.filteredCollectionByLocation(
+            this.upcomingEvents,
+            this.selectedLocation,
+          ),
+          this.selectedTags,
+        )
+      : this.filteredCollectionByTags(this.upcomingEvents, this.selectedTags)
   }
 
   constructor(rootStore: RootStore) {
@@ -41,6 +52,9 @@ export class EventStore extends ModuleStore {
   }
   public updateSelectedTags(tagKey: ISelectedTags) {
     this.selectedTags = tagKey
+  }
+  public updateSelectedLocation(loc: ILocation) {
+    this.selectedLocation = loc
   }
 
   public async uploadEvent(values: IEventFormInput, id: string) {

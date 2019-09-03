@@ -56,6 +56,7 @@ export class EventsList extends React.Component<any> {
               />
               <LocationSearch
                 onChange={v => this.props.eventStore.updateSelectedLocation(v)}
+                onClear={() => this.props.eventStore.clearLocationSearch()}
               />
             </Box>
             <AuthWrapper>

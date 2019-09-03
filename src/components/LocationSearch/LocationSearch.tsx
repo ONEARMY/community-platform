@@ -15,6 +15,7 @@ interface IProps {
   placeholder: string
   debounceTime: number
   onChange: (selected: ILocation) => void
+  onClear: () => void
 }
 interface IState {
   debouncedInputValue: string
@@ -44,6 +45,7 @@ export class LocationSearch extends React.Component<IProps, IState> {
     this.places.on('change', (selected: IAlgoliaResponse) =>
       this.handlePlaceSelectChange(selected),
     )
+    this.places.on('clear', () => this.onClearInput())
     this.subscribeToInputChanges()
   }
 
@@ -81,6 +83,10 @@ export class LocationSearch extends React.Component<IProps, IState> {
   handlePlaceSelectChange(selected: IAlgoliaResponse) {
     this.userInputRef.current.value = selected.suggestion.value
     this.props.onChange(_resultToLocation(selected))
+  }
+
+  onClearInput() {
+    this.props.onClear()
   }
 
   render() {

@@ -32,7 +32,7 @@ export class EventStore extends ModuleStore {
   }
 
   @computed get filteredEvents() {
-    return this.selectedLocation !== undefined
+    return this.selectedLocation.value !== ''
       ? this.filteredCollectionByTags(
           this.filteredCollectionByLocation(
             this.upcomingEvents,
@@ -49,12 +49,30 @@ export class EventStore extends ModuleStore {
       this.allEvents = docs.sort((a, b) => (a.date > b.date ? 1 : -1))
     })
     this.selectedTags = {}
+    this.initLocation()
   }
   public updateSelectedTags(tagKey: ISelectedTags) {
     this.selectedTags = tagKey
   }
   public updateSelectedLocation(loc: ILocation) {
     this.selectedLocation = loc
+  }
+  public clearLocationSearch() {
+    this.initLocation()
+  }
+  initLocation() {
+    this.selectedLocation = {
+      name: '',
+      country: '',
+      countryCode: '',
+      administrative: '',
+      latlng: {
+        lat: 0,
+        lng: 0,
+      },
+      postcode: '',
+      value: '',
+    }
   }
 
   public async uploadEvent(values: IEventFormInput, id: string) {

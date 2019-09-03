@@ -45,7 +45,7 @@ export class LocationSearch extends React.Component<IProps, IState> {
     this.places.on('change', (selected: IAlgoliaResponse) =>
       this.handlePlaceSelectChange(selected),
     )
-    this.places.on('clear', () => this.onClearInput())
+    this.places.on('clear', () => this.props.onClear())
     this.subscribeToInputChanges()
   }
 
@@ -83,10 +83,6 @@ export class LocationSearch extends React.Component<IProps, IState> {
   handlePlaceSelectChange(selected: IAlgoliaResponse) {
     this.userInputRef.current.value = selected.suggestion.value
     this.props.onChange(_resultToLocation(selected))
-  }
-
-  onClearInput() {
-    this.props.onClear()
   }
 
   render() {

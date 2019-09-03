@@ -32,15 +32,15 @@ export class EventStore extends ModuleStore {
   }
 
   @computed get filteredEvents() {
-    return this.selectedLocation.value !== ''
-      ? this.filteredCollectionByTags(
-          this.filteredCollectionByLocation(
-            this.upcomingEvents,
-            this.selectedLocation,
-          ),
-          this.selectedTags,
-        )
-      : this.filteredCollectionByTags(this.upcomingEvents, this.selectedTags)
+    if (this.selectedLocation.value !== '') {
+      const eventsByLocation = this.filterCollectionByLocation(
+        this.upcomingEvents,
+        this.selectedLocation,
+      )
+      return this.filterCollectionByTags(eventsByLocation, this.selectedTags)
+    } else {
+      return this.filterCollectionByTags(this.upcomingEvents, this.selectedTags)
+    }
   }
 
   constructor(rootStore: RootStore) {

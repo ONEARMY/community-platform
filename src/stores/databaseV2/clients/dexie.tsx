@@ -85,7 +85,6 @@ type IDexieSchema = { [key in IDBEndpoint]: string }
 const DEFAULT_SCHEMA = '_id,_modified'
 
 const DEXIE_SCHEMA: IDexieSchema = {
-  v2_discussions: DEFAULT_SCHEMA,
   v2_events: `${DEFAULT_SCHEMA},slug`,
   v2_howtos: `${DEFAULT_SCHEMA},slug`,
   v2_mappins: DEFAULT_SCHEMA,

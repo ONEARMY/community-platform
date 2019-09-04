@@ -14,7 +14,6 @@ import { IDBEndpoint, IDbDoc } from '../models'
 */
 
 const endpoints: IDBEndpoint[] = [
-  'v2_discussions',
   'v2_events',
   'v2_howtos',
   'v2_mappins',

@@ -16,7 +16,6 @@ export class MenuMobile extends React.Component {
       <>
         <FlexMobileWrapper
           alignItems={'center'}
-          px={2}
           display={['flex', 'flex', 'none']}
         >
           <div>MOBILE</div>

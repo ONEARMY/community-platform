@@ -1,17 +1,18 @@
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
-
-import { withRouter } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
 import { IUser, ILink } from 'src/models/user.models'
 import { UserStore } from 'src/stores/User/user.store'
 import Heading from 'src/components/Heading'
-import { Flex, Box, Link } from 'rebass'
+import { Box, Link, Image } from 'rebass'
 import { Avatar } from 'src/components/Avatar'
 import Text from 'src/components/Text'
 import styled from 'styled-components'
-import theme from 'src/themes/styled.theme'
 import Icon from 'src/components/Icons'
+import Flex from 'src/components/Flex'
+import { littleRadius } from '../../../../components/Flex/index'
+import { background } from 'styled-system'
+import FlagIconEvents from 'src/components/Icons/FlagIcon/FlagIcon'
 
 interface IRouterCustomParams {
   id: string
@@ -31,6 +32,20 @@ const Circle = styled(Flex)`
   justify-content: center;
   width: 40px;
   height: 40px;
+`
+
+const ProfileImage = styled(Image)`
+  width: 100%;
+  height: 450px;
+  object-fit: cover;
+  border-radius: 8px 8px 0px 0px;
+`
+
+const BadgeImage = styled(Image)`
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 2px solid black;
 `
 
 @inject('userStore')

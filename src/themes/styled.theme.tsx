@@ -32,6 +32,12 @@ const buttons = {
     '&:hover': {
       backgroundColor: darken(0.08, colors.primary),
     },
+    '&[disabled]': {
+      opacity: 0.5,
+    },
+    '&[disabled]:hover': {
+      backgroundColor: colors.primary,
+    },
   },
   secondary: {
     fontFamily: '"Varela Round", Arial, sans-serif',
@@ -43,6 +49,12 @@ const buttons = {
     '&:hover': {
       backgroundColor: colors.white,
     },
+    '&[disabled]': {
+      opacity: 0.5,
+    },
+    '&[disabled]:hover': {
+      backgroundColor: colors.softblue,
+    },
   },
   tertiary: {
     fontFamily: '"Varela Round", Arial, sans-serif',
@@ -53,6 +65,12 @@ const buttons = {
     transition: '.2s ease-in-out',
     '&:hover': {
       backgroundColor: colors.yellow,
+    },
+    '&[disabled]': {
+      opacity: 0.5,
+    },
+    '&[disabled]:hover': {
+      backgroundColor: colors.white,
     },
   },
 

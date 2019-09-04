@@ -26,4 +26,9 @@ export const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box;
   }
+
+  /***** Fix for Algolia search Icon *******/
+  .ap-input-icon {
+    margin-top: -70px;
+  }
 `

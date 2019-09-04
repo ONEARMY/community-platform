@@ -5,6 +5,7 @@ import isUrl from 'is-url'
 import { ISelectedTags } from 'src/models/tags.model'
 import { IDBEndpoint } from 'src/models/common.models'
 import { includesAll } from 'src/utils/filters'
+import { ILocation } from 'src/components/LocationSearch/LocationSearch'
 
 /*  The module store contains common methods used across modules that access specfic
     collections on the database
@@ -83,7 +84,7 @@ export class ModuleStore {
    *            Filtering Methods
    * **************************************************************************/
 
-  public filteredCollectionByTags(
+  public filterCollectionByTags(
     collection: any[] = [],
     selectedTags: ISelectedTags,
   ) {
@@ -94,5 +95,13 @@ export class ModuleStore {
           return tags ? includesAll(selectedTagsArr, tags) : false
         })
       : collection
+  }
+  public filterCollectionByLocation(
+    collection: any[] = [],
+    selectedLocation: ILocation,
+  ) {
+    return collection.filter(obj => {
+      return obj.location.name === selectedLocation.name
+    })
   }
 }

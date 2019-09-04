@@ -37,8 +37,8 @@ const FormContainer = styled.form`
 `
 
 const Label = styled.label`
- font-size: ${theme.fontSizes[2] + 'px'}
- margin-bottom: ${theme.space[2] + 'px'}
+  font-size: ${theme.fontSizes[2] + 'px'};
+  margin-bottom: ${theme.space[2] + 'px'};
 `
 
 @inject('eventStore')
@@ -146,6 +146,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                           <Field
                             id="location"
                             name="location"
+                            className="location-search-create"
                             validateFields={[]}
                             validate={(value: any) =>
                               value.hasOwnProperty('latlng')

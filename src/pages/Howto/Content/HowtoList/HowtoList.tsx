@@ -1,22 +1,17 @@
 import * as React from 'react'
-import { Image, Flex, Box } from 'rebass'
+import { Flex, Box } from 'rebass'
 // TODO add loader (and remove this material-ui dep)
 import { Link } from 'src/components/Links'
-import styled from 'styled-components'
 import TagsSelect from 'src/components/Tags/TagsSelect'
 
 import { inject, observer } from 'mobx-react'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
-
-import PpLogo from 'src/assets/images/pp-icon-small.png'
-
 import { Button } from 'src/components/Button'
 import { IHowto } from 'src/models/howto.models'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import HowToCard from 'src/components/HowToCard/HowToCard'
 import Heading from 'src/components/Heading'
-import { ISelectedTags } from 'src/models/tags.model'
 
 interface InjectedProps {
   howtoStore?: HowtoStore

@@ -3,14 +3,20 @@ import { IEvent, IEventFormInput } from 'src/models/events.models'
 import { ModuleStore } from '../common/module.store'
 import { Database } from '../database'
 import Filters from 'src/utils/filters'
+import { ISelectedTags } from 'src/models/tags.model'
 import { RootStore } from '..'
+import { ILocation } from 'src/components/LocationSearch/LocationSearch'
 
 export class EventStore extends ModuleStore {
   // observables are data variables that can be subscribed to and change over time
   @observable
-  public allEvents: IEvent[]
+  public allEvents: IEvent[] = []
   @observable
   public activeEvent: IEvent | undefined
+  @observable
+  public selectedTags: ISelectedTags
+  @observable
+  public selectedLocation: ILocation
   @observable
   public eventViewType: 'map' | 'list'
   @computed get upcomingEvents() {
@@ -25,11 +31,48 @@ export class EventStore extends ModuleStore {
     })
   }
 
+  @computed get filteredEvents() {
+    if (this.selectedLocation.value !== '') {
+      const eventsByLocation = this.filterCollectionByLocation(
+        this.upcomingEvents,
+        this.selectedLocation,
+      )
+      return this.filterCollectionByTags(eventsByLocation, this.selectedTags)
+    } else {
+      return this.filterCollectionByTags(this.upcomingEvents, this.selectedTags)
+    }
+  }
+
   constructor(rootStore: RootStore) {
     super('v2_events')
     this.allDocs$.subscribe((docs: IEvent[]) => {
       this.allEvents = docs.sort((a, b) => (a.date > b.date ? 1 : -1))
     })
+    this.selectedTags = {}
+    this.initLocation()
+  }
+  public updateSelectedTags(tagKey: ISelectedTags) {
+    this.selectedTags = tagKey
+  }
+  public updateSelectedLocation(loc: ILocation) {
+    this.selectedLocation = loc
+  }
+  public clearLocationSearch() {
+    this.initLocation()
+  }
+  initLocation() {
+    this.selectedLocation = {
+      name: '',
+      country: '',
+      countryCode: '',
+      administrative: '',
+      latlng: {
+        lat: 0,
+        lng: 0,
+      },
+      postcode: '',
+      value: '',
+    }
   }
 
   public async uploadEvent(values: IEventFormInput, id: string) {

@@ -1,14 +1,11 @@
 import * as React from 'react'
-import { Image, Flex, Box } from 'rebass'
+import { Flex, Box } from 'rebass'
 // TODO add loader (and remove this material-ui dep)
 import { Link } from 'src/components/Links'
-import styled from 'styled-components'
 import TagsSelect from 'src/components/Tags/TagsSelect'
 
 import { inject, observer } from 'mobx-react'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
-
-import PpLogo from 'src/assets/images/pp-icon-small.png'
 
 import { Button } from 'src/components/Button'
 import { IHowto } from 'src/models/howto.models'
@@ -16,7 +13,6 @@ import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import HowToCard from 'src/components/HowToCard/HowToCard'
 import Heading from 'src/components/Heading'
-import { ISelectedTags } from 'src/models/tags.model'
 
 interface InjectedProps {
   howtoStore?: HowtoStore
@@ -52,17 +48,25 @@ export class HowtoList extends React.Component<any, IState> {
             Learn & share how to recycle, make and hack plastic
           </Heading>
         </Flex>
-        <Flex flexWrap={'nowrap'} justifyContent={'space-between'}>
-          <Box width={[1, 1, 0.2]}>
+        <Flex
+          flexWrap={'nowrap'}
+          justifyContent={'space-between'}
+          flexDirection={['column-reverse', 'column-reverse', 'row']}
+        >
+          <Flex width={[1, 1, 0.2]}>
             <TagsSelect
               onChange={tags => this.props.howtoStore.updateSelectedTags(tags)}
               category="how-to"
             />
-          </Box>
+          </Flex>
           <AuthWrapper>
-            <Link to={'/how-to/create'}>
-              <Button variant={'primary'}>create a How-to</Button>
-            </Link>
+            <Flex justifyContent={['flex-end', 'flex-end', 'auto']}>
+              <Link to={'/how-to/create'} mb={[3, 3, 0]}>
+                <Button variant={'primary'} translateY>
+                  Create a How-to
+                </Button>
+              </Link>
+            </Flex>
           </AuthWrapper>
         </Flex>
         <React.Fragment>

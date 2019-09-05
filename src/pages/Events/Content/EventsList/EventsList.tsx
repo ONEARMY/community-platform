@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { IEvent } from 'src/models/events.models'
 import { Link } from 'src/components/Links'
-import { Flex, Link as ExternalLink, Button } from 'rebass'
+import { Flex, Link as ExternalLink } from 'rebass'
+import { Button } from 'src/components/Button'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import Heading from 'src/components/Heading'
@@ -36,7 +37,9 @@ export class EventsList extends React.Component<IProps> {
         <Flex justifyContent={'flex-end'} mb={8}>
           <AuthWrapper>
             <Link to={'/events/create'}>
-              <Button variant={'primary'}>Create an Event</Button>
+              <Button variant={'primary'} translateY>
+                Create an Event
+              </Button>
             </Link>
           </AuthWrapper>
         </Flex>

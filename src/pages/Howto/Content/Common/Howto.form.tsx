@@ -33,8 +33,9 @@ interface IState {
   _toDocsList: boolean
   showSubmitModal?: boolean
 }
-interface IProps {
+interface IProps extends RouteComponentProps<any> {
   formValues: IHowtoFormInput
+  parentType: 'create' | 'edit'
 }
 interface IInjectedProps extends IProps {
   howtoStore: HowtoStore
@@ -90,6 +91,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
       _docID: docID,
       _toDocsList: false,
     }
+    console.log('this.props.parentType', this.props.parentType)
   }
 
   get injected() {
@@ -311,8 +313,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                         variant={submitting ? 'disabled' : 'outline'}
                         icon="arrow-forward"
                         onClick={() =>
-                          //   this.props.history.push('/how-to/' + values.slug)
-                          console.log('ONCLIK PUBLISH')
+                          this.props.history.push('/how-to/' + values.slug)
                         }
                       >
                         View How-To

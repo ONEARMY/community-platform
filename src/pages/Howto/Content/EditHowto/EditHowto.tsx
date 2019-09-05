@@ -62,7 +62,7 @@ const Label = styled.label`
 const required = (value: any) => (value ? undefined : 'Required')
 
 @inject('howtoStore')
-export class CreateHowto extends React.Component<IProps, IState> {
+export class EditHowto extends React.Component<IProps, IState> {
   uploadRefs: { [key: string]: UploadedFile | null } = {}
   constructor(props: any) {
     super(props)

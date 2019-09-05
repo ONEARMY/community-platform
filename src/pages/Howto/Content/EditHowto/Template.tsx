@@ -4,21 +4,21 @@ import { IHowtoFormInput } from 'src/models/howto.models'
 const INITIAL_VALUES: Partial<IHowtoFormInput> = {
   steps: [
     {
-      title: '',
+      title: 'EDITABLE',
       text: '',
       images: [],
       caption: '',
       _animationKey: 'unique1',
     },
     {
-      title: '',
+      title: 'EDITABLE',
       text: '',
       images: [],
       caption: '',
       _animationKey: 'unique2',
     },
     {
-      title: '',
+      title: 'EDITABLE',
       text: '',
       images: [],
       caption: '',

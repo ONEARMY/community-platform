@@ -24,11 +24,11 @@ interface IState {
 const required = (value: any) => (value ? undefined : 'Required')
 
 const Label = styled.label`
- font-size: ${theme.fontSizes[2] + 'px'}
- margin-bottom: ${theme.space[2] + 'px'}
+  font-size: ${theme.fontSizes[2] + 'px'};
+  margin-bottom: ${theme.space[2] + 'px'};
 `
 
-class Step extends Component<IProps, IState> {
+class HowtoStep extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
@@ -137,4 +137,4 @@ class Step extends Component<IProps, IState> {
   }
 }
 
-export { Step }
+export { HowtoStep }

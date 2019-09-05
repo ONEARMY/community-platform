@@ -29,13 +29,13 @@ import { DIFFICULTY_OPTIONS, TIME_OPTIONS } from './FormSettings'
 
 interface IState {
   formSaved: boolean
-  _docID: string
   _toDocsList: boolean
   showSubmitModal?: boolean
 }
 interface IProps extends RouteComponentProps<any> {
   formValues: IHowtoFormInput
   parentType: 'create' | 'edit'
+  onSubmit: (value: IHowtoFormInput) => void
 }
 interface IInjectedProps extends IProps {
   howtoStore: HowtoStore
@@ -65,10 +65,6 @@ const AnimationContainer = posed.div({
   },
 })
 
-const FormContainer = styled.form`
-  width: 100%;
-`
-
 const Label = styled.label`
   font-size: ${theme.fontSizes[2] + 'px'};
   margin-bottom: ${theme.space[2] + 'px'};
@@ -83,15 +79,10 @@ export class HowtoForm extends React.Component<IProps, IState> {
   uploadRefs: { [key: string]: UploadedFile | null } = {}
   constructor(props: any) {
     super(props)
-    // generate unique id for db and storage references and assign to state
-    const docID = this.store.generateID()
     this.state = {
-      //   formValues: { ...TEMPLATE.INITIAL_VALUES, id: docID } as IHowtoFormInput,
       formSaved: false,
-      _docID: docID,
       _toDocsList: false,
     }
-    console.log('this.props.parentType', this.props.parentType)
   }
 
   get injected() {
@@ -99,11 +90,6 @@ export class HowtoForm extends React.Component<IProps, IState> {
   }
   get store() {
     return this.injected.howtoStore
-  }
-
-  public onSubmit = async (formValues: IHowtoFormInput) => {
-    this.setState({ showSubmitModal: true })
-    await this.store.uploadHowTo(formValues, this.state._docID)
   }
 
   public validateTitle = async (value: any) => {
@@ -121,7 +107,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
     const { formValues } = this.props
     return (
       <Form
-        onSubmit={v => this.onSubmit(v as IHowtoFormInput)}
+        onSubmit={v => this.props.onSubmit(v as IHowtoFormInput)}
         initialValues={formValues}
         mutators={{
           ...arrayMutators,
@@ -133,11 +119,18 @@ export class HowtoForm extends React.Component<IProps, IState> {
           return (
             <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
               <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} mt={4}>
-                <FormContainer onSubmit={e => e.preventDefault()}>
+                <form id="howtoForm" onSubmit={handleSubmit}>
                   {/* How To Info */}
                   <Flex flexDirection={'column'}>
                     <Flex card mediumRadius bg={'softblue'} px={3} py={2}>
-                      <Heading medium>Create your How-To</Heading>
+                      <Heading medium>
+                        {this.props.parentType === 'create' ? (
+                          <span>Create</span>
+                        ) : (
+                          <span>Edit</span>
+                        )}{' '}
+                        your How-To
+                      </Heading>
                     </Flex>
                     <Flex
                       card
@@ -162,7 +155,11 @@ export class HowtoForm extends React.Component<IProps, IState> {
                               id="title"
                               name="title"
                               validateFields={[]}
-                              validate={value => this.validateTitle(value)}
+                              validate={value =>
+                                this.props.parentType === 'create'
+                                  ? this.validateTitle(value)
+                                  : false
+                              }
                               component={InputField}
                               placeholder="Make a chair from...
                             "
@@ -303,7 +300,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                       </>
                     )}
                   </FieldArray>
-                </FormContainer>
+                </form>
                 {this.state.showSubmitModal && (
                   <Modal>
                     <>
@@ -333,11 +330,19 @@ export class HowtoForm extends React.Component<IProps, IState> {
               >
                 <PostingGuidelines />
                 <Button
-                  onClick={() => handleSubmit()}
+                  onClick={() => {
+                    const form = document.getElementById('howtoForm')
+                    if (typeof form !== 'undefined' && form !== null) {
+                      form.dispatchEvent(
+                        new Event('submit', { cancelable: true }),
+                      )
+                    }
+                  }}
                   width={1}
                   mt={3}
                   variant={disabled ? 'primary' : 'primary'}
-                  disabled={submitting || invalid}
+                  type="submit"
+                  //   disabled={submitting || invalid}
                 >
                   Publish
                 </Button>

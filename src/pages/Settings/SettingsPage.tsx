@@ -22,7 +22,7 @@ interface IState {
   showNotification: boolean
 }
 
-const FormContainer = styled.form`
+const FormContainer = styled.div`
   width: 100%;
 `
 export class UserSettings extends React.Component<IProps, IState> {
@@ -41,7 +41,7 @@ export class UserSettings extends React.Component<IProps, IState> {
     return (
       <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
         <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} my={4}>
-          <FormContainer onSubmit={e => e.preventDefault()}>
+          <FormContainer>
             {/* How To Info */}
             <Flex flexDirection={'column'}>
               <Flex card mediumRadius bg={'softblue'} px={3} py={2}>

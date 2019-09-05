@@ -1,9 +1,7 @@
 import * as React from 'react'
 import { HowtoPage } from './Howto/Howto'
 import { SettingsPage } from './Settings'
-import { FeedbackPage } from './Feedback/Feedback'
 import { SITE } from 'src/config/config'
-import { DiscussionsPage } from './Discussions'
 import { EventsPage } from './Events/Events'
 import { AdminPage } from './admin/Admin'
 import { MapsPage } from './Maps/Maps'
@@ -35,18 +33,6 @@ const user = {
   component: <User />,
   title: 'User profile',
   description: 'User profile',
-}
-const feedback = {
-  path: '/feedback',
-  component: <FeedbackPage />,
-  title: 'Feedback',
-  description: 'Let us know what you think!',
-}
-const discussions = {
-  path: '/discussions',
-  component: <DiscussionsPage />,
-  title: 'Discussions',
-  description: '',
 }
 const events = {
   path: '/events',

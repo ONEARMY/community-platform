@@ -52,8 +52,8 @@ export class DesktopMenu extends React.Component {
           display={['none', 'none', 'flex']}
         >
           {COMMUNITY_PAGES.map(page => (
-            <Flex>
-              <MenuLink to={page.path} key={page.path}>
+            <Flex key={page.path}>
+              <MenuLink to={page.path}>
                 <Flex>{page.title}</Flex>
               </MenuLink>
             </Flex>

@@ -4,7 +4,8 @@ import differenceInDays from 'date-fns/difference_in_days'
 import { IHowto } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
-import { Box, Flex, Image, Link } from 'rebass'
+import { Link } from 'src/components/Links'
+import { Box, Flex, Image } from 'rebass'
 import Icon from 'src/components/Icons'
 import styled from 'styled-components'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
@@ -13,6 +14,7 @@ import ArrowLeft from 'src/assets/icons/icon-arrow.svg'
 import Steps from 'src/assets/icons/icon-steps.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
+import { Button } from 'src/components/Button'
 
 interface IProps {
   howto: IHowto
@@ -57,7 +59,7 @@ const BreadcrumbLink = styled(Link)`
 `
 
 const StepsBox = styled(Box)`
-  padding-left: 30px
+  padding-left: 30px;
   position: relative;
   font-size: 12px;
 
@@ -75,7 +77,7 @@ const StepsBox = styled(Box)`
 `
 
 const TimeNeededBox = styled(Box)`
-  padding-left: 30px
+  padding-left: 30px;
   position: relative;
   font-size: 12px;
 
@@ -93,7 +95,7 @@ const TimeNeededBox = styled(Box)`
 `
 
 const DifficultyLevelBox = styled(Box)`
-  padding-left: 25px
+  padding-left: 25px;
   position: relative;
   font-size: 12px;
 
@@ -129,11 +131,14 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
         mt={4}
       >
         <Flex px={4} py={4} flexDirection={'column'} width={[1, 1, 1 / 2]}>
-          <Box>
+          <Flex justifyContent={'space-between'}>
             <BreadcrumbBox>
-              <BreadcrumbLink>Back</BreadcrumbLink>
+              <BreadcrumbLink to={'/how-to'}>Back</BreadcrumbLink>
             </BreadcrumbBox>
-          </Box>
+            <Link to={'/how-to/' + this.props.howto.slug + '/edit'}>
+              <Button variant={'primary'}>Edit</Button>
+            </Link>
+          </Flex>
           <Text capitalize auxiliary mt={3} mb={2}>
             By {howto._createdBy}
             &nbsp;|&nbsp;

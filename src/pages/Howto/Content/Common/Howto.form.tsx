@@ -204,7 +204,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                           </Flex>
                           <Flex flexDirection={'column'} mb={3}>
                             <Label htmlFor="description">
-                              Difficulty level? *
+                              Short description of your How-to *
                             </Label>
                             <Field
                               id="description"
@@ -344,7 +344,11 @@ export class HowtoForm extends React.Component<IProps, IState> {
                   type="submit"
                   //   disabled={submitting || invalid}
                 >
-                  Publish
+                  {this.props.parentType === 'create' ? (
+                    <span>Publish</span>
+                  ) : (
+                    <span>Save changes</span>
+                  )}{' '}
                 </Button>
               </Flex>
             </Flex>

@@ -8,6 +8,11 @@ import { EventsPage } from './Events/Events'
 import { AdminPage } from './admin/Admin'
 import { MapsPage } from './Maps/Maps'
 import { User } from './User/User'
+import { SignUpPage } from './SignUp/SignUp'
+import { SignUpMessagePage } from './SignUp/SignUpMessage'
+import { SignInPage } from './SignIn/SignIn'
+import { ForgotPasswordPage } from './Password/ForgotPassword'
+import { ForgotPasswordMessagePage } from './Password/ForgotPasswordMessage'
 
 export interface IPageMeta {
   path: string
@@ -68,6 +73,41 @@ const admin = {
   description: '',
 }
 
+const signup = {
+  path: '/sign-up',
+  component: <SignUpPage />,
+  title: 'Sign Up',
+  description: '',
+}
+
+const signin = {
+  path: '/sign-in',
+  component: <SignInPage />,
+  title: 'Sign In',
+  description: '',
+}
+
+const signupmessage = {
+  path: '/sign-up-message',
+  component: <SignUpMessagePage />,
+  title: 'Sign Up Message',
+  description: '',
+}
+
+const forgotpassword = {
+  path: '/forgot-password',
+  component: <ForgotPasswordPage />,
+  title: 'Forgot Password',
+  description: '',
+}
+
+const forgotpasswordmessage = {
+  path: '/forgot-password-message',
+  component: <ForgotPasswordMessagePage />,
+  title: 'Forgot Password Message',
+  description: '',
+}
+
 // community pages (various pages hidden on production build)
 const devCommunityPages = [howTo, events, maps]
 const prodCommunityPages = [howTo, events]
@@ -83,4 +123,11 @@ export const COMMUNITY_PAGES: IPageMeta[] = communityPages
 export const COMMUNITY_PAGES_MORE: IPageMeta[] = communityPagesMore
 export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [settings]
 export const ADMIN_PAGES: IPageMeta[] = [admin]
-export const NO_HEADER_PAGES: IPageMeta[] = [user]
+export const NO_HEADER_PAGES: IPageMeta[] = [
+  user,
+  signup,
+  signupmessage,
+  signin,
+  forgotpassword,
+  forgotpasswordmessage,
+]

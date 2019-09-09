@@ -6,18 +6,17 @@ import theme from 'src/themes/styled.theme'
 import { Button } from 'src/components/Button'
 import Text from 'src/components/Text'
 import { Link } from 'src/components/Links'
-import { InputField } from 'src/components/Form/Fields'
-import { inject, observer } from 'mobx-react'
 import { Form, Field } from 'react-final-form'
+import { InputField } from 'src/components/Form/Fields'
 
 const Label = styled.label`
  font-size: ${theme.fontSizes[2] + 'px'}
  margin-bottom: ${theme.space[2] + 'px'}
  display: block;
 `
+
 interface IFormValues {
   email: string
-  password: string
 }
 interface IState {
   formValues: IFormValues
@@ -29,32 +28,26 @@ interface IProps {
   preloadValues?: any
 }
 
-@inject('userStore')
-@observer
-export class SignInPage extends React.Component<IProps, IState> {
+export class ResendSignUpMessagePage extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
-      // if passed form values from props initially populate
       formValues: {
-        email: props.preloadValues ? props.preloadValues.email : '',
-        password: props.preloadValues ? props.preloadValues.password : '',
+        email: '',
       },
     }
   }
 
-  onLoginSubmit(e) {
+  onSignupSubmit(e) {
     console.log(e)
   }
 
   public render() {
-    const disabled =
-      this.state.disabled ||
-      this.state.formValues.email === '' ||
-      this.state.formValues.password === ''
+    const { email } = this.state.formValues
+    const disabled = this.state.disabled || email === ''
     return (
       <Form
-        onSubmit={e => this.onLoginSubmit(e)}
+        onSubmit={e => this.onSignupSubmit(e)}
         render={() => (
           <form>
             <Flex
@@ -69,7 +62,7 @@ export class SignInPage extends React.Component<IProps, IState> {
               <Flex flexDirection={'column'} width={1}>
                 <Flex card mediumRadius bg={'softblue'} px={3} py={2} width={1}>
                   <Heading medium width={1}>
-                    Welcome back homie
+                    Something didn't work
                   </Heading>
                 </Flex>
                 <Flex
@@ -85,51 +78,32 @@ export class SignInPage extends React.Component<IProps, IState> {
                   flexDirection="column"
                 >
                   <Heading small arrowDown py={4} width={1}>
-                    Log in to your account
+                    Resend email
                   </Heading>
                   <Flex flexDirection={'column'} mb={3}>
-                    <Label htmlFor="title">Email / Username</Label>
-                    <Field
-                      name="email"
-                      type="email"
-                      id="email"
-                      component={InputField}
-                      autoComplete="email"
-                    />
-                  </Flex>
-                  <Flex flexDirection={'column'} mb={3}>
-                    <Label htmlFor="title">Password</Label>
-                    <Field
-                      name="password"
-                      type="password"
-                      id="password"
-                      component={InputField}
-                      autoComplete="current-password"
-                    />
-                  </Flex>
-                  <Flex mb={3} justifyContent={'space-between'}>
-                    <Text small color={'grey'} mt={2}>
-                      <Link to="#">Don't have an account?</Link>
-                    </Text>
-                    <Text small color={'grey'} mt={2}>
-                      <Link to="#">Lost password?</Link>
-                    </Text>
-                  </Flex>
-
-                  <Flex>
+                    <Flex flexDirection={'column'} mb={3} width={[1, 1, 2 / 3]}>
+                      <Label htmlFor="email">Email</Label>
+                      <Field
+                        name="email"
+                        type="email"
+                        id="email"
+                        component={InputField}
+                        autoComplete="email"
+                      />
+                    </Flex>
                     <Button
                       width={1}
                       variant={'primary'}
                       disabled={disabled}
                       type="submit"
                     >
-                      Log in
+                      Resend
                     </Button>
                   </Flex>
                 </Flex>
                 <Flex mt={3} justifyContent={'flex-end'}>
                   <Button variant="tertiary" small>
-                    Close
+                    Home
                   </Button>
                 </Flex>
               </Flex>

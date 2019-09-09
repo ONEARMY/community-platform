@@ -6,12 +6,8 @@ import theme from 'src/themes/styled.theme'
 import { Button } from 'src/components/Button'
 import Text from 'src/components/Text'
 import { Link } from 'src/components/Links'
-
-const Label = styled.label`
- font-size: ${theme.fontSizes[2] + 'px'}
- margin-bottom: ${theme.space[2] + 'px'}
- display: block;
-`
+import { Form, Field } from 'react-final-form'
+import { InputField } from 'src/components/Form/Fields'
 
 export class ForgotPasswordMessagePage extends React.Component {
   public render() {
@@ -47,7 +43,6 @@ export class ForgotPasswordMessagePage extends React.Component {
               Check your email
             </Heading>
             <Flex flexDirection={'column'} mb={3}>
-              <Label htmlFor="password">Email / Username</Label>
               <Flex flexDirection={'column'}>
                 <Text>
                   We sent you an email with all the details to reset your

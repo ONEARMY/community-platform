@@ -35,3 +35,24 @@ type IDBEndpointV1 = 'howtosV1' | 'users' | 'tagsV1' | 'eventsV1' | 'mapPinsV1'
 //   _deleted: boolean
 //   _createdBy: userId
 // }
+
+/*****************************************************************
+ *            Algolia Locations
+ ****************************************************************/
+// algolia doesn't provide typings so taken from
+// https://community.algolia.com/places/documentation.html
+// implementation contains more fields but assumed not relevant
+
+export interface ILocation {
+  name: string
+  country: string
+  countryCode: string
+  administrative: string
+  latlng: ILatLng
+  postcode: string
+  value: string
+}
+interface ILatLng {
+  lat: number
+  lng: number
+}

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
-import { IHowtoFormInput } from 'src/models/howto.models'
+import { IHowtoFormInput, IHowto } from 'src/models/howto.models'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import { inject } from 'mobx-react'
 import { toJS } from 'mobx'
@@ -56,11 +56,14 @@ export class EditHowto extends React.Component<IProps, IState> {
     return this.injected.howtoStore
   }
 
-  public onSubmit = async (formValues: IHowtoFormInput) => {
+  public onSubmit = async (formValues: IHowto) => {
     this.setState({ showSubmitModal: true })
     console.log('onSubmit edit howto', formValues)
 
-    // await this.store.editHowTo(formValues, this.state._docID)
+    await this.store.uploadHowTo(
+      formValues,
+      this.injected.howtoStore.activeHowto!._id,
+    )
   }
 
   public render() {
@@ -68,7 +71,7 @@ export class EditHowto extends React.Component<IProps, IState> {
     if (formValues && !isLoading) {
       return (
         <HowtoForm
-          onSubmit={v => this.onSubmit(v)}
+          onSubmit={v => this.onSubmit(v as IHowto)}
           formValues={formValues}
           parentType="edit"
           {...this.props}

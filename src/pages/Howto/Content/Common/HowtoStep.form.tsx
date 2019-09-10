@@ -154,6 +154,7 @@ class HowtoStep extends Component<IProps, IState> {
               })}
               <AbsoluteBtn
                 icon={'delete'}
+                variant={'tertiary'}
                 onClick={() =>
                   this.setState({
                     editStepImgs: !editStepImgs,

@@ -27,12 +27,14 @@ import { PostingGuidelines } from './PostingGuidelines'
 import theme from 'src/themes/styled.theme'
 import { DIFFICULTY_OPTIONS, TIME_OPTIONS } from './FormSettings'
 import { Image } from 'rebass'
+import { FileInfo } from 'src/components/FileInfo/FileInfo'
 
 interface IState {
   formSaved: boolean
   _toDocsList: boolean
   showSubmitModal?: boolean
   editCoverImg?: boolean
+  fileEditMode?: boolean
 }
 interface IProps extends RouteComponentProps<any> {
   formValues: any
@@ -93,6 +95,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
       formSaved: false,
       _toDocsList: false,
       editCoverImg: false,
+      fileEditMode: false,
     }
   }
 
@@ -115,8 +118,8 @@ export class HowtoForm extends React.Component<IProps, IState> {
     },
   })
   public render() {
-    const { formValues } = this.props
-    const { editCoverImg } = this.state
+    const { formValues, parentType } = this.props
+    const { editCoverImg, fileEditMode } = this.state
     return (
       <Form
         onSubmit={v => this.props.onSubmit(v as IHowtoFormInput)}
@@ -232,12 +235,47 @@ export class HowtoForm extends React.Component<IProps, IState> {
                               placeholder="Introduction to your How-To, keep it to 100 words please! *"
                             />
                           </Flex>
+                          <Label htmlFor="description">
+                            Do you have supporting file to help others replicate
+                            your How-to?
+                          </Label>
                           <Flex flexDirection={'column'} mb={[4, 4, 0]}>
-                            <Label htmlFor="description">
-                              Do you have supporting file to help others
-                              replicate your How-to?
-                            </Label>
-                            <Field name="files" component={FileInputField} />
+                            {formValues.files.length !== 0 &&
+                            parentType === 'edit' &&
+                            !fileEditMode ? (
+                              <Flex
+                                flexDirection={'column'}
+                                alignItems={'center'}
+                              >
+                                {formValues.files.map(file => (
+                                  <FileInfo
+                                    allowDownload
+                                    file={file}
+                                    key={file.name}
+                                  />
+                                ))}
+                                <Button
+                                  small
+                                  variant={'tertiary'}
+                                  icon="delete"
+                                  onClick={() =>
+                                    this.setState({
+                                      fileEditMode: !this.state.fileEditMode,
+                                    })
+                                  }
+                                >
+                                  Re-upload files (this will delete the existing
+                                  ones)
+                                </Button>
+                              </Flex>
+                            ) : (
+                              <>
+                                <Field
+                                  name="files"
+                                  component={FileInputField}
+                                />
+                              </>
+                            )}
                           </Flex>
                         </Flex>
 
@@ -255,6 +293,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                               />
                               <AbsoluteBtn
                                 icon={'delete'}
+                                variant={'tertiary'}
                                 onClick={() =>
                                   this.setState({
                                     editCoverImg: !editCoverImg,

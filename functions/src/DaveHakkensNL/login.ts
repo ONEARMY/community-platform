@@ -1,4 +1,4 @@
-const endpoint = 'https://testwp.onearmy.world/wp-json/aam/v1/authenticate'
+const endpoint = 'https://davehakkens.nl/wp-json/aam/v1/authenticate'
 import axios from 'axios'
 import { firebaseAdmin } from '../Firebase/admin'
 // tslint:disable no-implicit-dependencies

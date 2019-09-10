@@ -34,25 +34,19 @@ class TagsSelect extends React.Component<IProps, IState> {
 
   // if we initialise with a value we want to update the state to reflect the selected tags
   // we repeat this additionally for input in case it is being used as input component for react-final-form field
-  public componentWillMount() {
-    if (this.props.value) {
-      console.log('this.props.value', this.props.value)
-      this.setState({
-        selectedTags: this._selectedJsonToTagsArray(this.props.value),
-      })
-    }
-    if (this.props.input.value) {
-      this.setState({
-        selectedTags: this._selectedJsonToTagsArray(this.props.input.value),
-      })
-    }
+  public componentDidMount() {
+    const propsVal = { ...this.props.value, ...this.props.input.value }
+    const selectedTags = Object.keys(propsVal)
+    this.setState({ selectedTags })
+    this.props.onChange(propsVal)
     this.injectedProps.tagsStore.setTagsCategory(this.props.category)
   }
 
   // emit values as {[tagKey]:true} object to be picked up by field
   public onSelectedTagsChanged(selected: ITag[]) {
-    const selectedIDs = selected.map(tag => tag._id)
-    this.props.onChange(this._tagsArrayToSelectedJson(selectedIDs))
+    const selectedTags = selected.map(tag => tag._id)
+    this.setState({ selectedTags })
+    this.props.onChange(this._tagsArrayToSelectedJson(selectedTags))
   }
 
   public render() {
@@ -63,14 +57,20 @@ class TagsSelect extends React.Component<IProps, IState> {
           styles={SelectStyles}
           isMulti
           options={categoryTags}
+          value={this._getSelected(categoryTags)}
           getOptionLabel={(tag: ITag) => tag.label}
           getOptionValue={(tag: ITag) => tag._id}
           onChange={values => this.onSelectedTagsChanged(values as ITag[])}
-          // value={this.state.selectedTags}
           placeholder="Select tags - 4 maximum"
         />
       </FieldContainer>
     )
+  }
+
+  // as react-select can't keep track of which object key corresponds to the selected
+  // value include manual lookup so that value can also be passed from props
+  private _getSelected(categoryTags: ITag[]) {
+    return categoryTags.filter(tag => this.state.selectedTags.includes(tag._id))
   }
 
   // whilst we deal with arrays of selected tag ids in the component we want to store as a json map
@@ -80,9 +80,6 @@ class TagsSelect extends React.Component<IProps, IState> {
     const selectedJson = {}
     arr.forEach(el => (selectedJson[el] = true))
     return selectedJson
-  }
-  private _selectedJsonToTagsArray(json: ISelectedTags) {
-    return Object.keys(json)
   }
 }
 

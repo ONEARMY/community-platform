@@ -14,7 +14,8 @@ firebase
   .firestore()
   .enablePersistence({ experimentalTabSynchronization: true })
   .catch(err => console.error('could not persist firestore', err))
-
+// note, if also testing backend functions the emulated version can be accessed below
+// firebase.functions().useFunctionsEmulator('http://localhost:5001')
 // export firebase endpoints to be accessed by other functions
 export const afs = firebase.firestore()
 export const rtdb = firebase.database()

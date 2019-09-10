@@ -12,6 +12,7 @@ import { ModuleStore } from '../common/module.store'
 import { ISelectedTags } from 'src/models/tags.model'
 import { RootStore } from '..'
 import { includesAll } from 'src/utils/filters'
+import { IDbDoc } from 'src/models/common.models'
 
 export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
@@ -65,7 +66,11 @@ export class HowtoStore extends ModuleStore {
     return Database.generateDocId('v2_howtos')
   }
 
-  public async uploadHowTo(values: IHowtoFormInput, id: string) {
+  public async uploadHowTo(
+    values: IHowtoFormInput,
+    id: string,
+    isUpdate?: boolean,
+  ) {
     console.log('uploading how-to', id)
     console.log('values', values)
     try {
@@ -85,7 +90,9 @@ export class HowtoStore extends ModuleStore {
       )
       this.updateUploadStatus('Files')
       // populate DB
-      const meta = Database.generateDocMeta('v2_howtos', id)
+      const meta = isUpdate
+        ? Database.updateDocMeta('v2_howtos', this.activeHowto)
+        : Database.generateDocMeta('v2_howtos', id)
       // redefine howTo based on processing done above (should match stronger typing)
       const howTo: IHowto = {
         ...values,

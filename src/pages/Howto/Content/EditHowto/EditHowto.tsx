@@ -63,6 +63,7 @@ export class EditHowto extends React.Component<IProps, IState> {
     await this.store.uploadHowTo(
       formValues,
       this.injected.howtoStore.activeHowto!._id,
+      true,
     )
   }
 

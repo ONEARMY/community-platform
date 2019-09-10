@@ -36,6 +36,7 @@ class TagsSelect extends React.Component<IProps, IState> {
   // we repeat this additionally for input in case it is being used as input component for react-final-form field
   public componentWillMount() {
     if (this.props.value) {
+      console.log('this.props.value', this.props.value)
       this.setState({
         selectedTags: this._selectedJsonToTagsArray(this.props.value),
       })
@@ -65,6 +66,7 @@ class TagsSelect extends React.Component<IProps, IState> {
           getOptionLabel={(tag: ITag) => tag.label}
           getOptionValue={(tag: ITag) => tag._id}
           onChange={values => this.onSelectedTagsChanged(values as ITag[])}
+          // value={this.state.selectedTags}
           placeholder="Select tags - 4 maximum"
         />
       </FieldContainer>

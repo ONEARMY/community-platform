@@ -6,5 +6,6 @@ export const TagsSelectField = ({ input, meta, ...rest }) => (
     {...rest}
     onChange={tags => input.onChange(tags)}
     category={rest.category}
+    value={input.value}
   />
 )

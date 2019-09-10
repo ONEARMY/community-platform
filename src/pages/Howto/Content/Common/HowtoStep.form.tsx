@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Field } from 'react-final-form'
 import { TextAreaField, InputField } from 'src/components/Form/Fields'
-import { Image } from 'rebass'
+import { Box, Image } from 'rebass'
 import Heading from 'src/components/Heading'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import Flex from 'src/components/Flex'
@@ -10,16 +10,19 @@ import { Modal } from 'src/components/Modal/Modal'
 import Text from 'src/components/Text'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
+import { IHowtoStep } from 'src/models/howto.models'
+import { IUploadedFileMeta } from 'src/stores/storage'
 
 interface IProps {
-  step: any
+  step: any | IHowtoStep
   index: number
+  images: IUploadedFileMeta[]
   onDelete: (index: number) => void
 }
 interface IState {
   showDeleteModal: boolean
   _toDocsList: boolean
-  editImgs: boolean
+  editStepImgs: boolean
 }
 
 const required = (value: any) => (value ? undefined : 'Required')
@@ -43,7 +46,7 @@ class HowtoStep extends Component<IProps, IState> {
     this.state = {
       showDeleteModal: false,
       _toDocsList: false,
-      editImgs: false,
+      editStepImgs: false,
     }
   }
 
@@ -56,8 +59,9 @@ class HowtoStep extends Component<IProps, IState> {
   }
 
   render() {
-    const { step, index } = this.props
-    const { editImgs } = this.state
+    const { step, index, images } = this.props
+    const { editStepImgs } = this.state
+
     return (
       // NOTE - animation parent container in CreateHowTo
       <Flex
@@ -134,31 +138,31 @@ class HowtoStep extends Component<IProps, IState> {
           <Label htmlFor={`${step}.text`}>
             Upload image(s) for this step *
           </Label>
-          <Field name={`${step}.images`} component={ImageInputField} multi />
-          {step.images && !editImgs ? (
-            <Flex
-              alignItems={'center'}
-              justifyContent={'center'}
-              flexDirection={'column'}
-            >
-              <ImageWithOpacity src={step.images[0].downloadUrl} />
+          {images.length >= 1 && !editStepImgs ? (
+            <Flex alignItems={'center'} justifyContent={'center'}>
+              {images.map(image => {
+                return (
+                  <Flex
+                    flexWrap={'nowrap'}
+                    px={1}
+                    width={1 / 4}
+                    key={image.name}
+                  >
+                    <ImageWithOpacity src={image.downloadUrl} />
+                  </Flex>
+                )
+              })}
               <AbsoluteBtn
                 icon={'delete'}
                 onClick={() =>
                   this.setState({
-                    editImgs: !editImgs,
+                    editStepImgs: !editStepImgs,
                   })
                 }
               />
             </Flex>
           ) : (
-            <Field
-              id="cover_image"
-              name="cover_image"
-              validate={required}
-              validateFields={[]}
-              component={ImageInputField}
-            />
+            <Field name={`${step}.images`} component={ImageInputField} multi />
           )}
         </Flex>
         <Flex mt={2}>

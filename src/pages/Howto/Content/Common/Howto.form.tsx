@@ -300,6 +300,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                                 key={fields.value[index]._animationKey}
                                 step={name}
                                 index={index}
+                                images={fields.value[index].images}
                                 onDelete={(fieldIndex: number) => {
                                   fields.remove(fieldIndex)
                                 }}

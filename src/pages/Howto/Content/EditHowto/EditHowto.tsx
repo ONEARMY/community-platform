@@ -65,7 +65,7 @@ export class EditHowto extends React.Component<IProps, IState> {
 
   public render() {
     const { formValues, isLoading } = this.state
-    if (formValues) {
+    if (formValues && !isLoading) {
       return (
         <HowtoForm
           onSubmit={v => this.onSubmit(v)}

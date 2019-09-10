@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Field } from 'react-final-form'
 import { TextAreaField, InputField } from 'src/components/Form/Fields'
-import { Box } from 'rebass'
+import { Image } from 'rebass'
 import Heading from 'src/components/Heading'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import Flex from 'src/components/Flex'
@@ -12,13 +12,14 @@ import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
 
 interface IProps {
-  step: string
+  step: any
   index: number
   onDelete: (index: number) => void
 }
 interface IState {
   showDeleteModal: boolean
   _toDocsList: boolean
+  editImgs: boolean
 }
 
 const required = (value: any) => (value ? undefined : 'Required')
@@ -28,12 +29,21 @@ const Label = styled.label`
   margin-bottom: ${theme.space[2] + 'px'};
 `
 
+const AbsoluteBtn = styled(Button)`
+  position: absolute;
+`
+
+const ImageWithOpacity = styled(Image)`
+  opacity: 0.5;
+`
+
 class HowtoStep extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
       showDeleteModal: false,
       _toDocsList: false,
+      editImgs: false,
     }
   }
 
@@ -47,6 +57,7 @@ class HowtoStep extends Component<IProps, IState> {
 
   render() {
     const { step, index } = this.props
+    const { editImgs } = this.state
     return (
       // NOTE - animation parent container in CreateHowTo
       <Flex
@@ -124,6 +135,31 @@ class HowtoStep extends Component<IProps, IState> {
             Upload image(s) for this step *
           </Label>
           <Field name={`${step}.images`} component={ImageInputField} multi />
+          {step.images && !editImgs ? (
+            <Flex
+              alignItems={'center'}
+              justifyContent={'center'}
+              flexDirection={'column'}
+            >
+              <ImageWithOpacity src={step.images[0].downloadUrl} />
+              <AbsoluteBtn
+                icon={'delete'}
+                onClick={() =>
+                  this.setState({
+                    editImgs: !editImgs,
+                  })
+                }
+              />
+            </Flex>
+          ) : (
+            <Field
+              id="cover_image"
+              name="cover_image"
+              validate={required}
+              validateFields={[]}
+              component={ImageInputField}
+            />
+          )}
         </Flex>
         <Flex mt={2}>
           <Field

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
 import createDecorator from 'final-form-calculate'
-import { IHowtoFormInput } from 'src/models/howto.models'
+import { IHowtoFormInput, IHowto } from 'src/models/howto.models'
 import Text from 'src/components/Text'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
@@ -26,14 +26,16 @@ import { stripSpecialCharacters } from 'src/utils/helpers'
 import { PostingGuidelines } from './PostingGuidelines'
 import theme from 'src/themes/styled.theme'
 import { DIFFICULTY_OPTIONS, TIME_OPTIONS } from './FormSettings'
+import { Image } from 'rebass'
 
 interface IState {
   formSaved: boolean
   _toDocsList: boolean
   showSubmitModal?: boolean
+  editCoverImg?: boolean
 }
 interface IProps extends RouteComponentProps<any> {
-  formValues: IHowtoFormInput
+  formValues: any
   parentType: 'create' | 'edit'
   onSubmit: (value: IHowtoFormInput) => void
 }
@@ -71,6 +73,14 @@ const Label = styled.label`
   display: block;
 `
 
+const AbsoluteBtn = styled(Button)`
+  position: absolute;
+`
+
+const ImageWithOpacity = styled(Image)`
+  opacity: 0.5;
+`
+
 // validation - return undefined if no error (i.e. valid)
 const required = (value: any) => (value ? undefined : 'Required')
 
@@ -82,6 +92,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
     this.state = {
       formSaved: false,
       _toDocsList: false,
+      editCoverImg: false,
     }
   }
 
@@ -105,6 +116,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
   })
   public render() {
     const { formValues } = this.props
+    const { editCoverImg } = this.state
     return (
       <Form
         onSubmit={v => this.props.onSubmit(v as IHowtoFormInput)}
@@ -232,13 +244,33 @@ export class HowtoForm extends React.Component<IProps, IState> {
                         {/* Right side */}
                         <Flex px={2} flex={[1, 1, 3]} flexDirection={'column'}>
                           <Label htmlFor="cover_image">Cover image *</Label>
-                          <Field
-                            id="cover_image"
-                            name="cover_image"
-                            validate={required}
-                            validateFields={[]}
-                            component={ImageInputField}
-                          />
+                          {formValues.cover_image && !editCoverImg ? (
+                            <Flex
+                              alignItems={'center'}
+                              justifyContent={'center'}
+                              flexDirection={'column'}
+                            >
+                              <ImageWithOpacity
+                                src={formValues.cover_image.downloadUrl}
+                              />
+                              <AbsoluteBtn
+                                icon={'delete'}
+                                onClick={() =>
+                                  this.setState({
+                                    editCoverImg: !editCoverImg,
+                                  })
+                                }
+                              />
+                            </Flex>
+                          ) : (
+                            <Field
+                              id="cover_image"
+                              name="cover_image"
+                              validate={required}
+                              validateFields={[]}
+                              component={ImageInputField}
+                            />
+                          )}
 
                           <Text small color={'grey'} mt={2}>
                             This image should be landscape. We advise 1280x960px

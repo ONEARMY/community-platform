@@ -138,14 +138,15 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             <BreadcrumbBox>
               <BreadcrumbLink to={'/how-to'}>Back</BreadcrumbLink>
             </BreadcrumbBox>
-            {(loggedInUser && howto._createdBy === loggedInUser.userName) ||
-              (loggedInUser &&
-                loggedInUser.userRoles &&
-                loggedInUser.userRoles.includes('super-admin') && (
-                  <Link to={'/how-to/' + this.props.howto.slug + '/edit'}>
-                    <Button variant={'primary'}>Edit</Button>
-                  </Link>
-                ))}
+            {/* Check if logged in user is the creator of the how-to OR a super-admin */}
+            {loggedInUser &&
+              (howto._createdBy === loggedInUser.userName ||
+                (loggedInUser.userRoles &&
+                  loggedInUser.userRoles.includes('super-admin') && (
+                    <Link to={'/how-to/' + this.props.howto.slug + '/edit'}>
+                      <Button variant={'primary'}>Edit</Button>
+                    </Link>
+                  )))}
           </Flex>
           <Text capitalize auxiliary mt={3} mb={2}>
             By {howto._createdBy}

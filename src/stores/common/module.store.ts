@@ -3,9 +3,8 @@ import { Database } from '../database'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import isUrl from 'is-url'
 import { ISelectedTags } from 'src/models/tags.model'
-import { IDBEndpoint } from 'src/models/common.models'
+import { IDBEndpoint, ILocation } from 'src/models/common.models'
 import { includesAll } from 'src/utils/filters'
-import { ILocation } from 'src/components/LocationSearch/LocationSearch'
 
 /*  The module store contains common methods used across modules that access specfic
     collections on the database

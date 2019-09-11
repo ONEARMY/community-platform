@@ -1,5 +1,5 @@
 import { IDbDoc, ISODateString } from './common.models'
-import { ILocation } from 'src/components/LocationSearch/LocationSearch'
+import { ILocation } from './common.models'
 
 export interface IUserState {
   user?: IUser

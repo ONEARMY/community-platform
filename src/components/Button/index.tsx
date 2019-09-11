@@ -59,7 +59,6 @@ const BaseButton = styled(RebassButton)`
   ${small}
   ${medium}
   ${large}
-
 `
 
 export const Button = (props: BtnProps) => (

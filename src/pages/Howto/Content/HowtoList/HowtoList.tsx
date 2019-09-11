@@ -47,17 +47,25 @@ export class HowtoList extends React.Component<any, IState> {
             Learn & share how to recycle, make and hack plastic
           </Heading>
         </Flex>
-        <Flex flexWrap={'nowrap'} justifyContent={'space-between'}>
-          <Box width={[1, 1, 0.2]}>
+        <Flex
+          flexWrap={'nowrap'}
+          justifyContent={'space-between'}
+          flexDirection={['column-reverse', 'column-reverse', 'row']}
+        >
+          <Flex width={[1, 1, 0.2]}>
             <TagsSelect
               onChange={tags => this.props.howtoStore.updateSelectedTags(tags)}
               category="how-to"
             />
-          </Box>
+          </Flex>
           <AuthWrapper>
-            <Link to={'/how-to/create'}>
-              <Button variant={'primary'}>create a How-to</Button>
-            </Link>
+            <Flex justifyContent={['flex-end', 'flex-end', 'auto']}>
+              <Link to={'/how-to/create'} mb={[3, 3, 0]}>
+                <Button variant={'primary'} translateY>
+                  Create a How-to
+                </Button>
+              </Link>
+            </Flex>
           </AuthWrapper>
         </Flex>
         <React.Fragment>

@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { Box } from 'rebass'
 import Flex from 'src/components/Flex'
 import { IUser } from 'src/models/user.models'
 import { UserStore } from 'src/stores/User/user.store'
@@ -52,11 +51,12 @@ export class UserSettings extends React.Component<IProps, IState> {
                 mediumRadius
                 bg={'white'}
                 mt={5}
-                p={4}
                 flexWrap="wrap"
                 flexDirection="column"
               >
-                <Heading small>Focus</Heading>
+                <Heading small arrowDown p={4}>
+                  Focus
+                </Heading>
               </Flex>
               <Flex
                 card

@@ -23,6 +23,7 @@ export interface ITextProps {
   tags?: boolean
   auxiliary?: boolean
   paragraph?: boolean
+  arrowDown?: boolean
 }
 
 export const uppercase = props =>

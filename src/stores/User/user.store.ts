@@ -139,7 +139,7 @@ export class UserStore {
       userName,
       verified: false,
     }
-    await Database.setDoc(`v2_users${userName}`, user)
+    await Database.setDoc(`v2_users/${userName}`, user)
     this.updateUser(user)
   }
 

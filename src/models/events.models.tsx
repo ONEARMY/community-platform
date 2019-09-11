@@ -1,6 +1,6 @@
 import { ISelectedTags } from './tags.model'
 import { IDbDoc, ISODateString } from './common.models'
-import { ILocation } from 'src/components/LocationSearch/LocationSearch'
+import { ILocation } from 'src/models/common.models'
 
 export interface IEvent extends IEventFormInput {
   _createdBy: string

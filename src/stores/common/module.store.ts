@@ -84,8 +84,8 @@ export class ModuleStore {
    *            Filtering Methods
    * **************************************************************************/
 
-  public filterCollectionByTags(
-    collection: any[] = [],
+  public filterCollectionByTags<T extends ICollectionWithTags>(
+    collection: T[] = [],
     selectedTags: ISelectedTags,
   ) {
     const selectedTagsArr = Object.keys(selectedTags)
@@ -96,12 +96,21 @@ export class ModuleStore {
         })
       : collection
   }
-  public filterCollectionByLocation(
-    collection: any[] = [],
+  public filterCollectionByLocation<T extends ICollectionWithLocation>(
+    collection: T[] = [],
     selectedLocation: ILocation,
   ) {
     return collection.filter(obj => {
       return obj.location.name === selectedLocation.name
     })
   }
+}
+
+// collection typings to ensure correct fields are available for filter
+interface ICollectionWithTags {
+  // NOTE - tags field can't be ensured as firebase ignores empty tags:{}
+  tags?: ISelectedTags
+}
+interface ICollectionWithLocation {
+  location: ILocation
 }

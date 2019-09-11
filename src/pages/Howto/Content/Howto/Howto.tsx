@@ -114,13 +114,13 @@ export class Howto extends React.Component<
           </Box>
           <MoreBox py={20} mt={20}>
             <Text bold txtcenter fontSize={[4, 4, 5]}>
-              Connect with a likeminded community.
+              You're done.
               <br />
-              All around the planet.
+              Nice one!
             </Text>
             <Flex justifyContent={'center'}>
               <Button variant={'secondary'} px={3} mt={5}>
-                Create an Event
+                Back
               </Button>
             </Flex>
           </MoreBox>

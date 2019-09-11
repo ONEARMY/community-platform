@@ -131,6 +131,26 @@ export class UserStore {
     return auth.signOut()
   }
 
+  public async deleteUser(reauthPw: string) {
+    // as delete operation is sensitive requires user to revalidate credentials first
+    const authUser = auth.currentUser as firebase.User
+    const credential = EmailAuthProvider.credential(
+      authUser.email as string,
+      reauthPw,
+    )
+    try {
+      await authUser.reauthenticateAndRetrieveDataWithCredential(credential)
+      const user = this.user as IUser
+      await Database.deleteDoc(`v2_users/${user.userName}`)
+      await authUser.delete()
+      // TODO - delete user avatar
+      // TODO - show deleted notification
+    } catch (error) {
+      // TODO show notification if invalid credential
+      throw error
+    }
+  }
+
   private async _createUserProfile(userName: string) {
     const authUser = auth.currentUser as firebase.User
     const user: IUser = {
@@ -139,7 +159,7 @@ export class UserStore {
       userName,
       verified: false,
     }
-    await Database.setDoc(`v2_users${userName}`, user)
+    await Database.setDoc(`v2_users/${userName}`, user)
     this.updateUser(user)
   }
 

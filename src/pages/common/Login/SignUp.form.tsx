@@ -70,7 +70,7 @@ export class SignUpForm extends React.Component<IProps, IState> {
 
   public async checkUserNameUnique(userName: string) {
     const user = await this.props.userStore.getUserProfile(userName)
-    return user ? false : true
+    return user && !user._deleted ? false : true
   }
 
   public render = () => {

@@ -19,6 +19,7 @@ export class FirestoreClient implements AbstractDBClient {
   }
 
   async setDoc(endpoint: IDBEndpoint, doc: IDbDoc) {
+    console.log('setting doc', endpoint, doc._id)
     return db.doc(`${endpoint}/${doc._id}`).set(doc)
   }
 

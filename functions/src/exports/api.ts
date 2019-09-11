@@ -8,8 +8,7 @@ import * as functions from 'firebase-functions'
 import * as bodyParser from 'body-parser'
 import * as cors from 'cors'
 import * as express from 'express'
-import * as sync from '../Firebase/firebaseSync'
-import { upgradeDBAll } from '../upgrade/dbV1Upgrade'
+import { DHLogin } from '../DaveHakkensNL/login'
 
 console.log('api ready')
 const app = express()
@@ -47,10 +46,12 @@ app.all('*', async (req, res, next) => {
     //   const upgradeStatus = await upgradeDBAll()
     //   res.send(upgradeStatus)
     //   break
-    case 'sync':
-      console.log('sync test')
+    case 'DHSite_login':
+      console.log('dh login test', JSON.stringify(req.body))
       try {
-        const d = await sync.syncAll()
+        const { username, password } = req.body
+        console.log('testing login', username, password)
+        const d = await DHLogin(username, password)
         res.send(d)
       } catch (error) {
         console.log(error)

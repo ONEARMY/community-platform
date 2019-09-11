@@ -31,6 +31,13 @@ export class CollectionReference {
    * has full access to required db client methods (e.g. server and cache)
    */
   private constructor(endpoint: DBEndpoint, clients: DBClients)
+
+  /**
+   *
+   * @param docID pass a `docID` to provide a reference to a specific database document
+   * Leaving blank will generate a new id
+   */
+  doc(docID?: string): DocReference
 }
 
 /**

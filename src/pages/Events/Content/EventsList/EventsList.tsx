@@ -1,7 +1,8 @@
 import * as React from 'react'
-import { IEvent } from 'src/models/events.models'
+import { IEvent, IEventDB } from 'src/models/events.models'
+import { Button } from 'src/components/Button'
 import { Link } from 'src/components/Links'
-import { Flex, Link as ExternalLink, Box, Button } from 'rebass'
+import { Flex, Link as ExternalLink, Box } from 'rebass'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import Heading from 'src/components/Heading'
@@ -12,7 +13,7 @@ import { EventStore } from 'src/stores/Events/events.store'
 import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
 
 interface InjectedProps {
-  eventStore?: EventStore
+  eventStore: EventStore
 }
 
 @inject('eventStore')
@@ -26,16 +27,8 @@ export class EventsList extends React.Component<any> {
     return this.props as InjectedProps
   }
 
-  public getMonth(d: Date) {
-    // use ECMAScript Internationalization API to return month
-    return `${d.toLocaleString('en-us', { month: 'long' })}`
-  }
-  public getDay(d: Date) {
-    return `${d.getDate()}`
-  }
-
   public render() {
-    const { filteredEvents } = this.props.eventStore
+    const { filteredEvents } = this.injected.eventStore
     if (filteredEvents) {
       return (
         <>
@@ -76,7 +69,7 @@ export class EventsList extends React.Component<any> {
               {filteredEvents.length === 0 ? null : ( // *** TODO - indicate whether no upcoming events or data still just loading
                 <Flex flexWrap={'wrap'} flexDirection="column">
                   {filteredEvents.map((event: IEvent) => (
-                    <EventCard event={event} />
+                    <EventCard key={event.slug} event={event} />
                   ))}
                 </Flex>
               )}

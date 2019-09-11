@@ -35,7 +35,7 @@ export class DatabaseV2 implements AbstractDatabase {
 class CollectionReference {
   constructor(private endpoint: DBEndpoint, private clients: DBClients) {}
 
-  doc(docID: string) {
+  doc(docID?: string) {
     return new DocReference(this.endpoint, docID, this.clients)
   }
 
@@ -110,21 +110,24 @@ class CollectionReference {
 }
 
 class DocReference {
+  public id: string
   constructor(
     private endpoint: DBEndpoint,
-    private docID: string,
+    docID: string = '_generate',
     private clients: DBClients,
-  ) {}
+  ) {
+    this.id = docID === '_generate' ? this._generateDocID() : docID
+  }
 
   async get<T>(source: 'server' | 'cache' = 'cache') {
     const { cacheDB, serverDB } = this.clients
     if (source === 'cache') {
       // 1. check cache, return if exists or skip to 2 if does not
-      const cachedDoc = await cacheDB.getDoc<T>(this.endpoint, this.docID)
+      const cachedDoc = await cacheDB.getDoc<T>(this.endpoint, this.id)
       return cachedDoc ? cachedDoc : this.get<T>('server')
     } else {
       // 2. get server docs, add to cache and return
-      const serverDoc = await serverDB.getDoc<T>(this.endpoint, this.docID)
+      const serverDoc = await serverDB.getDoc<T>(this.endpoint, this.id)
       if (serverDoc) {
         await cacheDB.setDoc(this.endpoint, serverDoc)
       }
@@ -155,7 +158,7 @@ class DocReference {
       ...d,
       _created: d._created ? d._created : new Date().toISOString(),
       _deleted: d._deleted ? d._deleted : false,
-      _id: d._id ? d._id : this._generateDocID(),
+      _id: this.id,
       _modified: new Date().toISOString(),
     }
   }

@@ -155,7 +155,9 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
           <Heading medium mt={2} mb={1}>
             {howto.title}
           </Heading>
-          <Text paragraph>{howto.description}</Text>
+          <Text preLine paragraph>
+            {howto.description}
+          </Text>
 
           <Flex mt={6} mb={2}>
             <StepsBox mr={4}>{howto.steps.length} steps</StepsBox>

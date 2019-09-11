@@ -15,10 +15,11 @@ import Steps from 'src/assets/icons/icon-steps.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
 import { Button } from 'src/components/Button'
+import { IUser } from 'src/models/user.models'
 
 interface IProps {
   howto: IHowto
-  loggedInUserName: string | undefined
+  loggedInUser: IUser | undefined
 }
 
 export const CoverImg = styled(Image)`
@@ -124,7 +125,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
   }
 
   public render() {
-    const { howto, loggedInUserName } = this.props
+    const { howto, loggedInUser } = this.props
 
     return (
       <HowToCard
@@ -137,11 +138,14 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             <BreadcrumbBox>
               <BreadcrumbLink to={'/how-to'}>Back</BreadcrumbLink>
             </BreadcrumbBox>
-            {loggedInUserName && howto._createdBy === loggedInUserName && (
-              <Link to={'/how-to/' + this.props.howto.slug + '/edit'}>
-                <Button variant={'primary'}>Edit</Button>
-              </Link>
-            )}
+            {(loggedInUser && howto._createdBy === loggedInUser.userName) ||
+              (loggedInUser &&
+                loggedInUser.userRoles &&
+                loggedInUser.userRoles.includes('super-admin') && (
+                  <Link to={'/how-to/' + this.props.howto.slug + '/edit'}>
+                    <Button variant={'primary'}>Edit</Button>
+                  </Link>
+                ))}
           </Flex>
           <Text capitalize auxiliary mt={3} mb={2}>
             By {howto._createdBy}

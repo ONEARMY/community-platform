@@ -17,6 +17,7 @@ import WhiteBubble0 from 'src/assets/images/white-bubble_0.svg'
 import WhiteBubble1 from 'src/assets/images/white-bubble_1.svg'
 import WhiteBubble2 from 'src/assets/images/white-bubble_2.svg'
 import WhiteBubble3 from 'src/assets/images/white-bubble_3.svg'
+import { IUser } from 'src/models/user.models'
 
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
@@ -30,7 +31,7 @@ interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
 interface IState {
   howto?: IHowto
   isLoading: boolean
-  loggedInUserName: string | undefined
+  loggedInUser: IUser | undefined
 }
 const MoreBox = styled(Box)`
   position: relative;
@@ -79,7 +80,7 @@ export class Howto extends React.Component<
     this.state = {
       howto: undefined,
       isLoading: true,
-      loggedInUserName: undefined,
+      loggedInUser: undefined,
     }
   }
   // workaround used later so that userStore can be called in render method when not existing on
@@ -95,16 +96,16 @@ export class Howto extends React.Component<
     this.setState({
       howto: doc,
       isLoading: false,
-      loggedInUserName: loggedInUser ? loggedInUser.userName : undefined,
+      loggedInUser: loggedInUser ? loggedInUser : undefined,
     })
   }
 
   public render() {
-    const { howto, isLoading, loggedInUserName } = this.state
+    const { howto, isLoading, loggedInUser } = this.state
     if (howto) {
       return (
         <>
-          <HowtoDescription howto={howto} loggedInUserName={loggedInUserName} />
+          <HowtoDescription howto={howto} loggedInUser={loggedInUser} />
           {/* <HowtoSummary steps={howto.steps} howToSlug={howto.slug} /> */}
           <Box mt={9}>
             {howto.steps.map((step: any, index: number) => (

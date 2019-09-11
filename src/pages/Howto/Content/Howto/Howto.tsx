@@ -2,7 +2,6 @@ import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 // TODO add loader (and remove this material-ui dep)
 import Heading from 'src/components/Heading'
-import { afs } from 'src/utils/firebase'
 import { inject } from 'mobx-react'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
@@ -31,6 +30,7 @@ interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
 interface IState {
   howto?: IHowto
   isLoading: boolean
+  loggedInUserName: string | undefined
 }
 const MoreBox = styled(Box)`
   position: relative;
@@ -79,6 +79,7 @@ export class Howto extends React.Component<
     this.state = {
       howto: undefined,
       isLoading: true,
+      loggedInUserName: undefined,
     }
   }
   // workaround used later so that userStore can be called in render method when not existing on
@@ -89,18 +90,21 @@ export class Howto extends React.Component<
   public async componentWillMount() {
     const slug = this.props.match.params.slug
     const doc = await this.injected.howtoStore.getDocBySlug(slug)
+    const loggedInUser = this.injected.howtoStore.rootStore.stores.userStore
+      .user!
     this.setState({
       howto: doc,
       isLoading: false,
+      loggedInUserName: loggedInUser ? loggedInUser.userName : undefined,
     })
   }
 
   public render() {
-    const { howto, isLoading } = this.state
+    const { howto, isLoading, loggedInUserName } = this.state
     if (howto) {
       return (
         <>
-          <HowtoDescription howto={howto} />
+          <HowtoDescription howto={howto} loggedInUserName={loggedInUserName} />
           {/* <HowtoSummary steps={howto.steps} howToSlug={howto.slug} /> */}
           <Box mt={9}>
             {howto.steps.map((step: any, index: number) => (

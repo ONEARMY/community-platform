@@ -18,6 +18,7 @@ import { Button } from 'src/components/Button'
 
 interface IProps {
   howto: IHowto
+  loggedInUserName: string | undefined
 }
 
 export const CoverImg = styled(Image)`
@@ -123,7 +124,8 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
   }
 
   public render() {
-    const { howto } = this.props
+    const { howto, loggedInUserName } = this.props
+
     return (
       <HowToCard
         bg={'white'}
@@ -135,9 +137,11 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             <BreadcrumbBox>
               <BreadcrumbLink to={'/how-to'}>Back</BreadcrumbLink>
             </BreadcrumbBox>
-            <Link to={'/how-to/' + this.props.howto.slug + '/edit'}>
-              <Button variant={'primary'}>Edit</Button>
-            </Link>
+            {loggedInUserName && howto._createdBy === loggedInUserName && (
+              <Link to={'/how-to/' + this.props.howto.slug + '/edit'}>
+                <Button variant={'primary'}>Edit</Button>
+              </Link>
+            )}
           </Flex>
           <Text capitalize auxiliary mt={3} mb={2}>
             By {howto._createdBy}

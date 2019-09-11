@@ -6,7 +6,6 @@ import TagsSelect from 'src/components/Tags/TagsSelect'
 
 import { inject, observer } from 'mobx-react'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
-
 import { Button } from 'src/components/Button'
 import { IHowto } from 'src/models/howto.models'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'

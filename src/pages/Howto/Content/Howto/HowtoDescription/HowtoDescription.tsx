@@ -57,7 +57,7 @@ const BreadcrumbLink = styled(Link)`
 `
 
 const StepsBox = styled(Box)`
-  padding-left: 30px
+  padding-left: 30px;
   position: relative;
   font-size: 12px;
 
@@ -75,7 +75,7 @@ const StepsBox = styled(Box)`
 `
 
 const TimeNeededBox = styled(Box)`
-  padding-left: 30px
+  padding-left: 30px;
   position: relative;
   font-size: 12px;
 
@@ -93,7 +93,7 @@ const TimeNeededBox = styled(Box)`
 `
 
 const DifficultyLevelBox = styled(Box)`
-  padding-left: 25px
+  padding-left: 25px;
   position: relative;
   font-size: 12px;
 

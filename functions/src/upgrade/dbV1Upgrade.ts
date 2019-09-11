@@ -6,7 +6,6 @@ import { db } from '../Firebase/firestoreDB'
 */
 
 const mappings: DBMapping = {
-  discussions: 'v2_discussions',
   eventsV1: 'v2_events',
   howtosV1: 'v2_howtos',
   tagsV1: 'v2_tags',
@@ -79,16 +78,6 @@ function _upgradeDate(date: any) {
 
 type DBMapping = { [key in IDBEndpointV1]: IDBEndpointV2 }
 
-type IDBEndpointV1 =
-  | 'howtosV1'
-  | 'users'
-  | 'discussions'
-  | 'tagsV1'
-  | 'eventsV1'
+type IDBEndpointV1 = 'howtosV1' | 'users' | 'tagsV1' | 'eventsV1'
 
-type IDBEndpointV2 =
-  | 'v2_howtos'
-  | 'v2_users'
-  | 'v2_discussions'
-  | 'v2_tags'
-  | 'v2_events'
+type IDBEndpointV2 = 'v2_howtos' | 'v2_users' | 'v2_tags' | 'v2_events'

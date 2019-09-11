@@ -11,6 +11,7 @@ import { Storage } from '../storage'
 import { ModuleStore } from '../common/module.store'
 import { ISelectedTags } from 'src/models/tags.model'
 import { RootStore } from '..'
+import { includesAll } from 'src/utils/filters'
 
 export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
@@ -53,30 +54,7 @@ export class HowtoStore extends ModuleStore {
   }
 
   @computed get filteredHowtos() {
-    // Check if this.selectedTags is empty
-    if (
-      Object.keys(this.selectedTags).length === 0 &&
-      this.selectedTags.constructor === Object
-    ) {
-      return this.allHowtos
-    } else {
-      const filtered: IHowto[] = []
-      this.allHowtos.map(howto => {
-        if (howto.tags !== undefined) {
-          // encapsulate howtoTags in const to avoid type error
-          const howtoTags = Object.keys(howto.tags)
-          // filter the howto containing the selected tags
-          const isMatching = Object.keys(this.selectedTags).every(val => {
-            return howtoTags.includes(val)
-          })
-          // push the matching howto to filtered array
-          if (isMatching) {
-            filtered.push(howto)
-          }
-        }
-      })
-      return filtered
-    }
+    return this.filterCollectionByTags(this.allHowtos, this.selectedTags)
   }
 
   public updateSelectedTags(tagKey: ISelectedTags) {

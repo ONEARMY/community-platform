@@ -146,6 +146,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                           <Field
                             id="location"
                             name="location"
+                            className="location-search-create"
                             validateFields={[]}
                             validate={(value: any) =>
                               value.hasOwnProperty('latlng')

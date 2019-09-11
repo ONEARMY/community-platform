@@ -20,16 +20,13 @@ class EventsPageClass extends React.Component<IProps, any> {
   }
 
   public render() {
-    const upcomingEvents = this.props.eventStore!.upcomingEvents
-    const pastEvents = this.props.eventStore!.pastEvents
+    // const pastEvents = this.props.eventStore!.pastEvents
     return (
       <Switch>
         <Route
           exact
           path="/events"
-          render={props => (
-            <EventsList {...props} upcomingEvents={upcomingEvents} />
-          )}
+          render={props => <EventsList {...props} />}
         />
         <AuthRoute
           path="/events/create"

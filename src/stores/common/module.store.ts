@@ -2,8 +2,10 @@ import { BehaviorSubject, Subscription } from 'rxjs'
 import { Database } from '../database'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import isUrl from 'is-url'
-import { TagCategory } from 'src/models/tags.model'
+import { ISelectedTags } from 'src/models/tags.model'
 import { IDBEndpoint } from 'src/models/common.models'
+import { includesAll } from 'src/utils/filters'
+import { ILocation } from 'src/components/LocationSearch/LocationSearch'
 
 /*  The module store contains common methods used across modules that access specfic
     collections on the database
@@ -77,5 +79,29 @@ export class ModuleStore {
 
   public validateUrl = async (value: any) => {
     return value ? (isUrl(value) ? undefined : 'Invalid url') : 'Required'
+  }
+  /****************************************************************************
+   *            Filtering Methods
+   * **************************************************************************/
+
+  public filterCollectionByTags(
+    collection: any[] = [],
+    selectedTags: ISelectedTags,
+  ) {
+    const selectedTagsArr = Object.keys(selectedTags)
+    return selectedTagsArr.length > 0
+      ? collection.filter(obj => {
+          const tags = obj.tags ? Object.keys(obj.tags) : null
+          return tags ? includesAll(selectedTagsArr, tags) : false
+        })
+      : collection
+  }
+  public filterCollectionByLocation(
+    collection: any[] = [],
+    selectedLocation: ILocation,
+  ) {
+    return collection.filter(obj => {
+      return obj.location.name === selectedLocation.name
+    })
   }
 }

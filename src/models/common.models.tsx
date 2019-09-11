@@ -18,7 +18,6 @@ type userId = string
 export type IDBEndpoint =
   | 'v2_howtos'
   | 'v2_users'
-  | 'v2_discussions'
   | 'v2_tags'
   | 'v2_events'
   | 'v2_mappins'
@@ -27,13 +26,7 @@ export type IDBEndpoint =
  *  Deprecates - legacy interfaces used. Currently retained to troubleshoot
  *  upgrades, can remove once database working in production site
  ***************************************************************************/
-type IDBEndpointV1 =
-  | 'howtosV1'
-  | 'users'
-  | 'discussions'
-  | 'tagsV1'
-  | 'eventsV1'
-  | 'mapPinsV1'
+type IDBEndpointV1 = 'howtosV1' | 'users' | 'tagsV1' | 'eventsV1' | 'mapPinsV1'
 
 // interface IDbDocV1 {
 //   _id: string

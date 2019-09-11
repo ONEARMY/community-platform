@@ -3,9 +3,8 @@ import { Database } from '../database'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import isUrl from 'is-url'
 import { ISelectedTags } from 'src/models/tags.model'
-import { IDBEndpoint } from 'src/models/common.models'
+import { IDBEndpoint, ILocation } from 'src/models/common.models'
 import { includesAll } from 'src/utils/filters'
-import { ILocation } from 'src/components/LocationSearch/LocationSearch'
 
 /*  The module store contains common methods used across modules that access specfic
     collections on the database
@@ -84,8 +83,8 @@ export class ModuleStore {
    *            Filtering Methods
    * **************************************************************************/
 
-  public filterCollectionByTags(
-    collection: any[] = [],
+  public filterCollectionByTags<T extends ICollectionWithTags>(
+    collection: T[] = [],
     selectedTags: ISelectedTags,
   ) {
     const selectedTagsArr = Object.keys(selectedTags)
@@ -96,12 +95,21 @@ export class ModuleStore {
         })
       : collection
   }
-  public filterCollectionByLocation(
-    collection: any[] = [],
+  public filterCollectionByLocation<T extends ICollectionWithLocation>(
+    collection: T[] = [],
     selectedLocation: ILocation,
   ) {
     return collection.filter(obj => {
       return obj.location.name === selectedLocation.name
     })
   }
+}
+
+// collection typings to ensure correct fields are available for filter
+interface ICollectionWithTags {
+  // NOTE - tags field can't be ensured as firebase ignores empty tags:{}
+  tags?: ISelectedTags
+}
+interface ICollectionWithLocation {
+  location: ILocation
 }

@@ -41,7 +41,7 @@ export const EventCard = (props: IProps) => (
     mt={4}
     py={3}
     flex={1}
-    key={props.event._id}
+    key={props.event.slug}
     flexDirection={['column', 'column', 'initial']}
   >
     <Flex flexWrap={'wrap'} flex={'1'} mb={[1, 1, 0]} order={[1, 1, 1]}>

@@ -1,12 +1,8 @@
 import * as React from 'react'
 import { observer, inject } from 'mobx-react'
 import Heading from 'src/components/Heading'
-import { Button } from 'src/components/Button'
 import { Box } from 'rebass'
-import {
-  ILocation,
-  LocationSearch,
-} from 'src/components/LocationSearch/LocationSearch'
+import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
 import { MapsStore } from 'src/stores/Maps/maps.store'
 import { UserStore } from 'src/stores/User/user.store'
 import { MapView } from 'src/pages/Maps/Content'
@@ -18,6 +14,7 @@ import {
 } from 'src/models/maps.models'
 import { IUser } from 'src/models/user.models'
 import { generatePinFilters } from 'src/mocks/maps.mock'
+import { ILocation } from 'src/models/common.models'
 
 interface IProps {}
 interface IInjectedProps extends IProps {

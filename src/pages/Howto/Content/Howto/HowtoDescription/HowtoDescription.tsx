@@ -6,16 +6,15 @@ import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import { Link } from 'src/components/Links'
 import { Box, Flex, Image } from 'rebass'
-import Icon from 'src/components/Icons'
 import styled from 'styled-components'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
-import { background } from 'styled-system'
 import ArrowLeft from 'src/assets/icons/icon-arrow.svg'
 import Steps from 'src/assets/icons/icon-steps.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
 import { Button } from 'src/components/Button'
 import { IUser } from 'src/models/user.models'
+import { isAllowToEditContent } from 'src/utils/helpers'
 
 interface IProps {
   howto: IHowto
@@ -140,13 +139,11 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             </BreadcrumbBox>
             {/* Check if logged in user is the creator of the how-to OR a super-admin */}
             {loggedInUser &&
-              (howto._createdBy === loggedInUser.userName ||
-                (loggedInUser.userRoles &&
-                  loggedInUser.userRoles.includes('super-admin') && (
-                    <Link to={'/how-to/' + this.props.howto.slug + '/edit'}>
-                      <Button variant={'primary'}>Edit</Button>
-                    </Link>
-                  )))}
+              (isAllowToEditContent(howto, loggedInUser) && (
+                <Link to={'/how-to/' + this.props.howto.slug + '/edit'}>
+                  <Button variant={'primary'}>Edit</Button>
+                </Link>
+              ))}
           </Flex>
           <Text capitalize auxiliary mt={3} mb={2}>
             By {howto._createdBy}

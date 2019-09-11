@@ -5,7 +5,7 @@ import { Database } from '../database'
 import Filters from 'src/utils/filters'
 import { ISelectedTags } from 'src/models/tags.model'
 import { RootStore } from '..'
-import { ILocation } from 'src/components/LocationSearch/LocationSearch'
+import { ILocation } from 'src/models/common.models'
 
 export class EventStore extends ModuleStore {
   // observables are data variables that can be subscribed to and change over time

@@ -39,7 +39,7 @@
     "typescript": "^3.2.2"
   },
   "engines": {
-    "node": "8"
+    "node": "10"
   },
   "private": true
 }

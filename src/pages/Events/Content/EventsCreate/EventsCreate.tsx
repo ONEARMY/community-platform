@@ -17,10 +17,8 @@ import { IEvent, IEventFormInput } from 'src/models/events.models'
 import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
 
 interface IState {
-  formValues: IEvent
+  formValues: IEventFormInput
   formSaved: boolean
-  _docID: string
-  _uploadPath: string
   showSubmitModal?: boolean
 }
 interface IProps extends RouteComponentProps<any> {}
@@ -37,12 +35,9 @@ export class EventsCreate extends React.Component<IProps, IState> {
   constructor(props: any) {
     super(props)
     // generate unique id for db and storage references and assign to state
-    const docID = this.store.generateID()
     this.state = {
-      formValues: { ...TEMPLATE.INITIAL_VALUES, id: docID } as IEvent,
+      formValues: { ...TEMPLATE.INITIAL_VALUES },
       formSaved: false,
-      _docID: docID,
-      _uploadPath: `uploads/events/${docID}`,
     }
   }
 
@@ -55,7 +50,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
 
   public onSubmit = async (formValues: IEventFormInput) => {
     console.log('form values', formValues)
-    await this.store.uploadEvent(formValues, this.state._docID)
+    await this.store.uploadEvent(formValues)
     this.props.history.push('/events')
   }
 

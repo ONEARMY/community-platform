@@ -122,7 +122,10 @@ export class HowtoForm extends React.Component<IProps, IState> {
     const { editCoverImg, fileEditMode } = this.state
     return (
       <Form
-        onSubmit={v => this.props.onSubmit(v as IHowtoFormInput)}
+        onSubmit={v => {
+          this.setState({ showSubmitModal: true })
+          this.props.onSubmit(v as IHowtoFormInput)
+        }}
         initialValues={formValues}
         mutators={{
           ...arrayMutators,

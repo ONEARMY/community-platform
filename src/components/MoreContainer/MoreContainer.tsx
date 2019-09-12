@@ -6,12 +6,11 @@ import WhiteBubble0 from 'src/assets/images/white-bubble_0.svg'
 import WhiteBubble1 from 'src/assets/images/white-bubble_1.svg'
 import WhiteBubble2 from 'src/assets/images/white-bubble_2.svg'
 import WhiteBubble3 from 'src/assets/images/white-bubble_3.svg'
+import { BoxProps } from 'rebass'
 
 const MoreModalContainer = styled(Box)`
   position: relative;
-  margin-top: 50px;
-  padding-top: 90px;
-  padding-bottom: 90px;
+  max-width: 780px;
   &:after {
     content: '';
     background-image: url(${WhiteBubble0});
@@ -48,23 +47,15 @@ const MoreModalContainer = styled(Box)`
 const MoreText = styled(Text)`
   text-align: center;
   font-size: 26px;
-  max-width: 780px;
+
   margin: 0 auto;
   padding: 0px 20px;
 `
 
-interface IProps {
-  text: string
-  buttonVariant: string
-  buttonLabel: string
-}
-
-export const MoreContainer = (props: IProps) => (
-  <MoreModalContainer>
-    <MoreText>{props.text}</MoreText>
-    <Flex justifyContent={'center'} mt={5}>
-      <Button variant={props.buttonVariant}>{props.buttonLabel}</Button>
-    </Flex>
+export const MoreContainer = (props: BoxProps) => (
+  <MoreModalContainer {...props}>
+    {/* <MoreText color={'black'}>{props.text}</MoreText> */}
+    {props.children}
   </MoreModalContainer>
 )
 

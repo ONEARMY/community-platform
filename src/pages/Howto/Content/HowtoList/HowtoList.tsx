@@ -6,6 +6,10 @@ import LinearProgress from '@material-ui/core/LinearProgress'
 import Text from 'src/components/Text'
 import { Link } from 'src/components/Links'
 import styled from 'styled-components'
+import TagsSelect from 'src/components/Tags/TagsSelect'
+
+import { inject, observer } from 'mobx-react'
+import { HowtoStore } from 'src/stores/Howto/howto.store'
 
 import PpLogo from 'src/assets/images/pp-icon-small.png'
 
@@ -14,8 +18,12 @@ import { IHowto } from 'src/models/howto.models'
 import { TagDisplay } from 'src/components/Tags/TagDisplay/TagDisplay'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
-interface IProps {
-  allHowtos: IHowto[]
+interface InjectedProps {
+  howtoStore?: HowtoStore
+}
+
+interface IState {
+  isLoading: boolean
 }
 
 // TODO create Card component
@@ -34,31 +42,50 @@ const CardTitle = styled(Text)`
   white-space: nowrap;
 `
 
-export class HowtoList extends React.Component<IProps, any> {
+// First we use the @inject decorator to bind to the howtoStore state
+@inject('howtoStore')
+// Then we can use the observer component decorator to automatically tracks observables and re-renders on change
+// (note 1, use ! to tell typescript that the store will exist (it's an injected prop))
+// (note 2, mobx seems to behave more consistently when observables are referenced outside of render methods)
+@observer
+export class HowtoList extends React.Component<any, IState> {
   constructor(props: any) {
     super(props)
+    this.state = {
+      isLoading: true,
+    }
+  }
+  get injected() {
+    return this.props as InjectedProps
   }
 
   public render() {
-    const { allHowtos } = this.props
-    return (
-      <>
-        <Flex justifyContent={'right'}>
-          <AuthWrapper>
-            <Link to={'/how-to/create'}>
-              <Button variant="outline" icon={'add'}>
-                create
-              </Button>
-            </Link>
-          </AuthWrapper>
-        </Flex>
-        <React.Fragment>
-          <div>
-            {allHowtos.length === 0 ? (
-              <LinearProgress />
-            ) : (
+    const { filteredHowtos } = this.props.howtoStore
+    const { isLoading } = this.state
+    if (filteredHowtos) {
+      return (
+        <>
+          <Flex flexWrap={'nowrap'} justifyContent={'space-between'}>
+            <Box width={[1, 1, 0.2]}>
+              <TagsSelect
+                onChange={tags =>
+                  this.props.howtoStore.updateSelectedTags(tags)
+                }
+                category="how-to"
+              />
+            </Box>
+            <AuthWrapper>
+              <Link to={'/how-to/create'}>
+                <Button variant="outline" icon={'add'}>
+                  create
+                </Button>
+              </Link>
+            </AuthWrapper>
+          </Flex>
+          <React.Fragment>
+            <div>
               <FlexGrid flexWrap={'wrap'} justifyContent={'space-between'}>
-                {allHowtos.map((howto: IHowto) => (
+                {filteredHowtos.map((howto: IHowto) => (
                   <Link
                     to={`/how-to/${encodeURIComponent(howto.slug)}`}
                     key={howto._id}
@@ -90,10 +117,12 @@ export class HowtoList extends React.Component<IProps, any> {
                   </Link>
                 ))}
               </FlexGrid>
-            )}
-          </div>
-        </React.Fragment>
-      </>
-    )
+            </div>
+          </React.Fragment>
+        </>
+      )
+    } else {
+      return isLoading ? <LinearProgress /> : <div>How-tos not found</div>
+    }
   }
 }

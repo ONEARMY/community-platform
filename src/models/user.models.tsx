@@ -1,5 +1,5 @@
-import { IDbDoc, ITimestamp } from './common.models'
-import { ILocation } from 'src/components/LocationSearch/LocationSearch'
+import { IDbDoc, ISODateString } from './common.models'
+import { ILocation } from './common.models'
 
 export interface IUserState {
   user?: IUser
@@ -17,6 +17,7 @@ export interface ILink {
 export interface IUser extends IDbDoc {
   // authID is additional id populated by firebase auth, required for some auth operations
   _authID: string
+  _lastActive?: ISODateString
   // userName is same as legacy 'mention_name', e.g. @my-name. It will also be the doc _id and
   // firebase auth displayName property
   userName: string
@@ -30,7 +31,7 @@ export interface IUser extends IDbDoc {
   country?: string
   links?: ILink[]
   location?: ILocation
-  year?: ITimestamp
+  year?: ISODateString
 }
 
 export type UserRole = 'super-admin' | 'subscriber'

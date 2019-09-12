@@ -65,25 +65,36 @@ class Step extends Component<IProps, IState> {
           <Field
             name={`${step}.title`}
             component={InputField}
-            placeholder={`Title of Step ${index + 1}`}
+            placeholder={`Title of Step ${index + 1} *`}
             validate={required}
             validateFields={[]}
           />
-          {/* Left */}
-          <FlexContainer p={0} pr={2} flexDirection="column" flex={1}>
-            <Field
-              name={`${step}.text`}
-              placeholder="Describe this step"
-              component={TextAreaField}
-              style={{ resize: 'vertical', height: '100%' }}
-              validate={required}
-              validateFields={[]}
-            />
+          <FlexContainer p={0} flexWrap="wrap">
+            {/* Left */}
+            <FlexContainer p={0} pr={2} flexDirection="column" flex={1}>
+              <Field
+                name={`${step}.text`}
+                placeholder="Describe this step *"
+                component={TextAreaField}
+                style={{ resize: 'vertical', height: '100%' }}
+                validate={required}
+                validateFields={[]}
+              />
+            </FlexContainer>
+            {/* right */}
+            <BoxContainer p={0} width={[1, '305px', null]}>
+              <Field
+                name={`${step}.images`}
+                component={ImageInputField}
+                multi
+              />
+              <Field
+                name={`${step}.caption`}
+                component={InputField}
+                placeholder="Insert Caption"
+              />
+            </BoxContainer>
           </FlexContainer>
-          {/* right */}
-          <BoxContainer p={0} width={[1, '305px', null]}>
-            <Field name={`${step}.images`} component={ImageInputField} multi />
-          </BoxContainer>
         </FlexContainer>
       </BoxContainer>
     )

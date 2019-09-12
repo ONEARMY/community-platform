@@ -1,9 +1,21 @@
-import { firestore } from 'firebase/app'
 import dateFns from 'date-fns'
+import { ISODateString } from 'src/models/common.models'
 /*
     Manual implementation of filters commonly used through the app
     In the future this could possibly be replaced by more comprehensive libraries
 */
+
+/************************************************************************
+ *             Array Methods
+ ***********************************************************************/
+/**
+ * Test whether a one array contains all string values of another array
+ * @param arr1 The array that will be tested, e.g ["a","b","c"]
+ * @param arr2 The values to test, e.g. ["a","c"]
+ */
+export const includesAll = (arr1: string[], arr2: string[]) => {
+  return arr1.every(val => arr2.includes(val))
+}
 
 /************************************************************************
  *              Date Methods
@@ -30,25 +42,16 @@ export default { olderThan, newerThan }
  ***********************************************************************/
 
 // Take date in various formats and return as a Date object
-const _formatDate = (date: Date | datestring | firestore.Timestamp) => {
+const _formatDate = (date: dateType): Date => {
   const d: any = date
   // case date object
-  return date instanceof Date
-    ? date
-    : // case datestring
-    typeof date === 'string'
-    ? _datestringToDate(date as datestring)
-    : // case timestamp
-    date instanceof firestore.Timestamp
-    ? _timestampToDate(date as firestore.Timestamp)
-    : // case other - should not be reached
-      (d as Date)
+  return relativeDates.includes(d)
+    ? _datestringToDate(date as RelativeDateString)
+    : new Date(d as ISODateString)
 }
-const _timestampToDate = (timestamp: firestore.Timestamp) => {
-  return timestamp.toDate()
-}
+
 // convert standard named dates (e.g. yesterday, lastweek, lastmonth) to date objects
-const _datestringToDate = (str: datestring) => {
+const _datestringToDate = (str: RelativeDateString) => {
   switch (str) {
     case 'yesterday':
       return dateFns.startOfYesterday()
@@ -65,6 +68,13 @@ const _datestringToDate = (str: datestring) => {
  *             Interfaces
  ***********************************************************************/
 // dates come in lots of different formats in the app, here's a general catch-all
-type dateType = Date | datestring | firestore.Timestamp
+type dateType = ISODateString | RelativeDateString
 // some custom strings used to describe named dates
-type datestring = 'yesterday' | 'tomorrow' | 'thisweek' | 'today'
+type RelativeDateString = 'yesterday' | 'tomorrow' | 'thisweek' | 'today'
+
+const relativeDates: RelativeDateString[] = [
+  'thisweek',
+  'today',
+  'tomorrow',
+  'yesterday',
+]

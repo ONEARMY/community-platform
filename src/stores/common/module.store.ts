@@ -1,8 +1,10 @@
 import { BehaviorSubject, Subscription } from 'rxjs'
-import { Database, IDBEndpoints } from '../database'
+import { Database } from '../database'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import isUrl from 'is-url'
-import { TagCategory } from 'src/models/tags.model'
+import { ISelectedTags } from 'src/models/tags.model'
+import { IDBEndpoint, ILocation } from 'src/models/common.models'
+import { includesAll } from 'src/utils/filters'
 
 /*  The module store contains common methods used across modules that access specfic
     collections on the database
@@ -16,7 +18,7 @@ export class ModuleStore {
 
   // when a module store is initiated automatically load the docs in the collection
   // this can be subscribed to in individual stores
-  constructor(public basePath: IDBEndpoints) {
+  constructor(public basePath: IDBEndpoint) {
     this.getCollection(basePath)
   }
 
@@ -26,7 +28,7 @@ export class ModuleStore {
 
   // when accessing a collection want to call the database getCollection method which
   // efficiently checks the cache first and emits any subsequent updates
-  public getCollection(path: IDBEndpoints) {
+  public getCollection(path: IDBEndpoint) {
     this.allDocs$.next([])
     this.activeCollectionSubscription.unsubscribe()
     this.activeCollectionSubscription = Database.getCollection(path).subscribe(
@@ -54,7 +56,7 @@ export class ModuleStore {
    *            Data Validation Methods
    * **************************************************************************/
 
-  public isSlugUnique = async (slug: string, endpoint: IDBEndpoints) => {
+  public isSlugUnique = async (slug: string, endpoint: IDBEndpoint) => {
     try {
       await Database.checkSlugUnique(endpoint, slug)
     } catch (e) {
@@ -62,7 +64,7 @@ export class ModuleStore {
     }
   }
 
-  public validateTitle = async (value: any, endpoint: IDBEndpoints) => {
+  public validateTitle = async (value: any, endpoint: IDBEndpoint) => {
     if (value) {
       const error = this.isSlugUnique(
         stripSpecialCharacters(value).toLowerCase(),
@@ -77,4 +79,37 @@ export class ModuleStore {
   public validateUrl = async (value: any) => {
     return value ? (isUrl(value) ? undefined : 'Invalid url') : 'Required'
   }
+  /****************************************************************************
+   *            Filtering Methods
+   * **************************************************************************/
+
+  public filterCollectionByTags<T extends ICollectionWithTags>(
+    collection: T[] = [],
+    selectedTags: ISelectedTags,
+  ) {
+    const selectedTagsArr = Object.keys(selectedTags)
+    return selectedTagsArr.length > 0
+      ? collection.filter(obj => {
+          const tags = obj.tags ? Object.keys(obj.tags) : null
+          return tags ? includesAll(selectedTagsArr, tags) : false
+        })
+      : collection
+  }
+  public filterCollectionByLocation<T extends ICollectionWithLocation>(
+    collection: T[] = [],
+    selectedLocation: ILocation,
+  ) {
+    return collection.filter(obj => {
+      return obj.location.name === selectedLocation.name
+    })
+  }
+}
+
+// collection typings to ensure correct fields are available for filter
+interface ICollectionWithTags {
+  // NOTE - tags field can't be ensured as firebase ignores empty tags:{}
+  tags?: ISelectedTags
+}
+interface ICollectionWithLocation {
+  location: ILocation
 }

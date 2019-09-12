@@ -6,7 +6,13 @@
     "outDir": "lib",
     "sourceMap": true,
     "target": "es6",
-    "typeRoots": ["node_modules/@types"]
+    "jsx": "react",
+    "typeRoots": ["node_modules/@types"],
+    "baseUrl": "./",
+    "paths": {
+      "@OAModels/*": ["../src/models/*"]
+    },
+    "skipLibCheck": true
   },
   "include": ["src/**/*.ts", "spec/**/*.ts"]
 }

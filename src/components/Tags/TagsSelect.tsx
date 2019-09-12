@@ -8,7 +8,7 @@ import { SelectStyles } from '../Form/Select.field'
 import { FieldContainer } from '../Form/elements'
 
 // we include props from react-final-form fields so it can be used as a custom field component
-interface IProps extends FieldRenderProps {
+interface IProps extends FieldRenderProps<any, any> {
   value?: ISelectedTags
   onChange: (val: ISelectedTags) => void
   category: TagCategory | undefined

@@ -1,9 +1,7 @@
 import * as React from 'react'
 import { HowtoPage } from './Howto/Howto'
 import { SettingsPage } from './Settings'
-import { FeedbackPage } from './Feedback/Feedback'
 import { SITE } from 'src/config/config'
-import { DiscussionsPage } from './Discussions'
 import { EventsPage } from './Events/Events'
 import { AdminPage } from './admin/Admin'
 import { MapsPage } from './Maps/Maps'
@@ -41,23 +39,11 @@ const user = {
 const academy = {
   path: '/academy',
   component: (
-    <ExternalEmbed src="https://onearmyworld.github.io/docs-demo/docs/intro" />
+    <ExternalEmbed src="https://onearmy.github.io/docs-demo/docs/intro" />
   ),
   title: 'Academy',
   description: 'Demo external page embed',
   fullPageWidth: true,
-}
-const feedback = {
-  path: '/feedback',
-  component: <FeedbackPage />,
-  title: 'Feedback',
-  description: 'Let us know what you think!',
-}
-const discussions = {
-  path: '/discussions',
-  component: <DiscussionsPage />,
-  title: 'Discussions',
-  description: '',
 }
 const events = {
   path: '/events',
@@ -81,7 +67,7 @@ const admin = {
 
 // community pages (various pages hidden on production build)
 const devCommunityPages = [howTo, events, maps, academy]
-const prodCommunityPages = [howTo, events]
+const prodCommunityPages = [howTo, events, maps]
 const communityPages =
   SITE === 'production' ? prodCommunityPages : devCommunityPages
 // community 'more' dropdown pages (various pages hidden on production build)

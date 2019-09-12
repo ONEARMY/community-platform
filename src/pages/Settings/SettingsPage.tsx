@@ -13,6 +13,8 @@ import { TextNotification } from 'src/components/Notification/TextNotification'
 import { Flex } from 'rebass'
 import { Avatar } from 'src/components/Avatar'
 import Text from 'src/components/Text'
+import { UserMapPinEdit } from './content/UserMapPinEdit'
+import { ProfileDelete } from './content/ProfileDelete'
 
 interface IProps {
   user: IUser
@@ -22,6 +24,7 @@ interface IState {
   editMode: boolean
   user: IUser
   showNotification: boolean
+  showDeleteDialog?: boolean
 }
 export class UserSettings extends React.Component<IProps, IState> {
   constructor(props: IProps) {
@@ -31,6 +34,10 @@ export class UserSettings extends React.Component<IProps, IState> {
 
   public showSaveNotification() {
     this.setState({ showNotification: true })
+  }
+
+  public deleteProfile(reauthPw: string) {
+    this.props.userStore.deleteUser(reauthPw)
   }
 
   public render() {
@@ -59,6 +66,7 @@ export class UserSettings extends React.Component<IProps, IState> {
           </BoxContainer>
 
           <SettingsEditForm onProfileSave={() => this.showSaveNotification()} />
+          <UserMapPinEdit />
         </BoxContainer>
         {/* post guidelines container */}
         <BoxContainer
@@ -91,6 +99,9 @@ export class UserSettings extends React.Component<IProps, IState> {
             />
           </div>
         </BoxContainer>
+        <ProfileDelete
+          onConfirmation={reauthPw => this.deleteProfile(reauthPw)}
+        />
       </FlexContainer>
     )
   }

@@ -29,7 +29,6 @@ interface IState {
   formValues: IHowtoFormInput
   formSaved: boolean
   _docID: string
-  _uploadPath: string
   _toDocsList: boolean
   showSubmitModal?: boolean
 }
@@ -79,7 +78,6 @@ export class CreateHowto extends React.Component<IProps, IState> {
       formValues: { ...TEMPLATE.INITIAL_VALUES, id: docID } as IHowtoFormInput,
       formSaved: false,
       _docID: docID,
-      _uploadPath: `uploads/documentation/${docID}`,
       _toDocsList: false,
     }
   }
@@ -97,7 +95,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
   }
 
   public validateTitle = async (value: any) => {
-    return this.store.validateTitle(value, 'howtosV1')
+    return this.store.validateTitle(value, 'v2_howtos')
   }
 
   // automatically generate the slug when the title changes
@@ -190,6 +188,11 @@ export class CreateHowto extends React.Component<IProps, IState> {
                           validate={required}
                           validateFields={[]}
                           component={ImageInputField}
+                        />
+                        <Field
+                          name="caption"
+                          component={InputField}
+                          placeholder="Insert Caption"
                         />
                         <Field name="files" component={FileInputField} />
                       </BoxContainer>

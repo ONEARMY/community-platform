@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { SvgIcon } from '@material-ui/core'
-import { createSvgIcon } from '@material-ui/icons/utils/createSvgIcon'
 
 const UsefulIcon: React.SFC<any> = props => {
   return (

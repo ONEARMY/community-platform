@@ -42,7 +42,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             </Text>
             &nbsp;|&nbsp;
             <Text inline color={'darkgrey'}>
-              {this.durationSincePosted(howto._created.toDate())}
+              {this.durationSincePosted(new Date(howto._created))}
             </Text>
           </Text>
           <Heading large>{howto.title}</Heading>
@@ -80,7 +80,10 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             ))}
         </Box>
         <Flex justifyContent={'end'} width={[1 / 2]}>
-          <CoverImg src={howto.cover_image.downloadUrl} alt="how-to cover" />
+          <Box>
+            <CoverImg src={howto.cover_image.downloadUrl} alt="how-to cover" />
+            <Text pt={2}>{howto.caption}</Text>
+          </Box>
         </Flex>
       </Flex>
     )

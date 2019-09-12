@@ -1,6 +1,6 @@
 import L from 'leaflet'
 import './sprites.css'
-import { IMapPin } from 'src/models/maps.models'
+import { IMapPinWithType } from 'src/models/maps.models'
 
 // mmm curry
 export const createClusterIcon = clusterKey => {
@@ -13,7 +13,7 @@ export const createClusterIcon = clusterKey => {
   }
 }
 
-export const createMarkerIcon = (pin: IMapPin) => {
+export const createMarkerIcon = (pin: IMapPinWithType) => {
   const { grouping, icon } = pin.pinType
   return icon === ''
     ? L.divIcon({

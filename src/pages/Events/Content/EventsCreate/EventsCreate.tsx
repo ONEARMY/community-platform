@@ -17,10 +17,8 @@ import { IEvent, IEventFormInput } from 'src/models/events.models'
 import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
 
 interface IState {
-  formValues: IEvent
+  formValues: IEventFormInput
   formSaved: boolean
-  _docID: string
-  _uploadPath: string
   showSubmitModal?: boolean
 }
 interface IProps extends RouteComponentProps<any> {}
@@ -37,12 +35,9 @@ export class EventsCreate extends React.Component<IProps, IState> {
   constructor(props: any) {
     super(props)
     // generate unique id for db and storage references and assign to state
-    const docID = this.store.generateID()
     this.state = {
-      formValues: { ...TEMPLATE.INITIAL_VALUES, id: docID } as IEvent,
+      formValues: { ...TEMPLATE.INITIAL_VALUES },
       formSaved: false,
-      _docID: docID,
-      _uploadPath: `uploads/events/${docID}`,
     }
   }
 
@@ -55,12 +50,12 @@ export class EventsCreate extends React.Component<IProps, IState> {
 
   public onSubmit = async (formValues: IEventFormInput) => {
     console.log('form values', formValues)
-    await this.store.uploadEvent(formValues, this.state._docID)
+    await this.store.uploadEvent(formValues)
     this.props.history.push('/events')
   }
 
   public validateTitle = async (value: any) => {
-    return this.store.validateTitle(value, 'eventsV1')
+    return this.store.validateTitle(value, 'v2_events')
   }
 
   public validateUrl = async (value: any) => {
@@ -95,7 +90,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                       validate={value => this.validateTitle(value)}
                       validateFields={[]}
                       component={InputField}
-                      placeholder="Title of your event"
+                      placeholder="Title of your event *"
                     />
                     <Field
                       name="tags"
@@ -122,7 +117,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                       validateFields={[]}
                       validate={value => this.validateUrl(value)}
                       component={InputField}
-                      placeholder="URL to offsite link (Facebook, Meetup, etc)"
+                      placeholder="URL to offsite link (Facebook, Meetup, etc) *"
                     />
                   </BoxContainer>
                 </form>

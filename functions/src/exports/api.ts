@@ -8,8 +8,9 @@ import * as functions from 'firebase-functions'
 import * as bodyParser from 'body-parser'
 import * as cors from 'cors'
 import * as express from 'express'
+import { DHLogin } from '../DaveHakkensNL/login'
 
-console.log('api init')
+console.log('api ready')
 const app = express()
 // use bodyparse to create json object from body
 app.use(
@@ -40,8 +41,22 @@ app.all('*', async (req, res, next) => {
   // *** NOTE currently all request types handled the same, i.e. GET/POST
   // will likely change behaviour in future when required
   switch (endpoint) {
-    case 'avatar':
-      console.log('avatar test')
+    // case 'dbV1Upgrade':
+    //   console.log('upgrading db v1')
+    //   const upgradeStatus = await upgradeDBAll()
+    //   res.send(upgradeStatus)
+    //   break
+    case 'DHSite_login':
+      console.log('dh login test', JSON.stringify(req.body))
+      try {
+        const { username, password } = req.body
+        console.log('testing login', username, password)
+        const d = await DHLogin(username, password)
+        res.send(d)
+      } catch (error) {
+        console.log(error)
+        res.status(500).send(error.message)
+      }
       break
     default:
       res.send('invalid api endpoint')

@@ -1,8 +1,12 @@
 import styled, { css } from 'styled-components'
 import theme from 'src/themes/styled.theme'
 
-export const inputStyles = css`
-  border: 1px solid ${theme.colors.black};
+interface IFormElement {
+  invalid?: boolean
+}
+
+export const inputStyles = ({ invalid }: IFormElement) => css`
+  border: 1px solid ${invalid ? theme.colors.error : theme.colors.black};
   border-radius: 4px;
   font-size: ${theme.fontSizes[2] + 'px'};
   background: white;
@@ -16,12 +20,12 @@ export const inputStyles = css`
   }
 `
 
-export const Input = styled.input`
+export const Input = styled.input<IFormElement>`
   ${inputStyles};
   height: 40px;
 `
 
-export const TextAreaStyled = styled.textarea`
+export const TextAreaStyled = styled.textarea<IFormElement>`
   ${inputStyles};
   height: 150px;
   font-family: inherit;
@@ -32,8 +36,15 @@ export const TextAreaDisabled = styled.div`
 `
 
 // generic container used for some custom component fields
-export const FieldContainer = styled.div`
+export const FieldContainer = styled.div<IFormElement>`
   ${inputStyles};
   border: 'none';
   padding: 0;
+`
+export const ErrorMessage = styled.span`
+  position: relative;
+  bottom: ${theme.space[2]}px;
+  color: ${theme.colors.error};
+  font-size: ${theme.fontSizes[0]}px;
+  height: ${theme.space[0]};
 `

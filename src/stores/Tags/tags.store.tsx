@@ -4,6 +4,7 @@ import { TAGS_MOCK } from 'src/mocks/tags.mock'
 import { ITag, TagCategory } from 'src/models/tags.model'
 import { arrayToJson } from 'src/utils/helpers'
 import { ModuleStore } from '../common/module.store'
+import { RootStore } from '..'
 
 export class TagsStore extends ModuleStore {
   activeCategory?: TagCategory
@@ -18,10 +19,9 @@ export class TagsStore extends ModuleStore {
     this._filterTags()
   }
 
-  constructor() {
-    super('tagsV1')
+  constructor(rootStore: RootStore) {
+    super('v2_tags')
     this.allDocs$.subscribe((docs: ITag[]) => {
-      // convert firestore timestamp back to date objects and sort
       this.allTags = docs.sort((a, b) => (a.label > b.label ? 1 : -1))
       this.allTagsByKey = arrayToJson(docs, '_id')
       this._filterTags()
@@ -44,7 +44,7 @@ export class TagsStore extends ModuleStore {
     const batch = afs.batch()
     TAGS_MOCK.forEach(tag => {
       if (tag._id) {
-        const ref = afs.doc(`tagsV1/${tag._id}`)
+        const ref = afs.doc(`v2_tags/${tag._id}`)
         batch.set(ref, tag)
       }
     })

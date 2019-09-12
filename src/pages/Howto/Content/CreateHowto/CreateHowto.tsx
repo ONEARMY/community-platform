@@ -28,7 +28,6 @@ import { PostingGuidelines } from './PostingGuidelines'
 interface IState {
   formValues: IHowtoFormInput
   formSaved: boolean
-  _docID: string
   _toDocsList: boolean
   showSubmitModal?: boolean
 }
@@ -73,11 +72,9 @@ export class CreateHowto extends React.Component<IProps, IState> {
   constructor(props: any) {
     super(props)
     // generate unique id for db and storage references and assign to state
-    const docID = this.store.generateID()
     this.state = {
-      formValues: { ...TEMPLATE.INITIAL_VALUES, id: docID } as IHowtoFormInput,
+      formValues: { ...TEMPLATE.INITIAL_VALUES } as IHowtoFormInput,
       formSaved: false,
-      _docID: docID,
       _toDocsList: false,
     }
   }
@@ -91,7 +88,7 @@ export class CreateHowto extends React.Component<IProps, IState> {
 
   public onSubmit = async (formValues: IHowtoFormInput) => {
     this.setState({ showSubmitModal: true })
-    await this.store.uploadHowTo(formValues, this.state._docID)
+    await this.store.uploadHowTo(formValues)
   }
 
   public validateTitle = async (value: any) => {

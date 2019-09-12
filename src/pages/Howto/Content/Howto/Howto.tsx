@@ -6,7 +6,7 @@ import { inject } from 'mobx-react'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
 import Step from './Step/Step'
-import { IHowto } from 'src/models/howto.models'
+import { IHowtoDB } from 'src/models/howto.models'
 // import HowtoSummary from './HowtoSummary/HowtoSummary'
 import { Box } from 'rebass'
 
@@ -20,7 +20,7 @@ interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
   howtoStore: HowtoStore
 }
 interface IState {
-  howto?: IHowto
+  howto?: IHowtoDB
   isLoading: boolean
 }
 @inject('howtoStore')

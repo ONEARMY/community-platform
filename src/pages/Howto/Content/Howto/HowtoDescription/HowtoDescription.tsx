@@ -1,7 +1,7 @@
 import React from 'react'
 import { TagDisplay } from 'src/components/Tags/TagDisplay/TagDisplay'
 import differenceInDays from 'date-fns/difference_in_days'
-import { IHowto } from 'src/models/howto.models'
+import { IHowtoDB } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import { Box, Flex } from 'rebass'
@@ -10,7 +10,7 @@ import styled from 'styled-components'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
 
 interface IProps {
-  howto: IHowto
+  howto: IHowtoDB
 }
 
 export const CoverImg = styled.img`

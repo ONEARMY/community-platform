@@ -14,7 +14,7 @@ import { HowtoStore } from 'src/stores/Howto/howto.store'
 import PpLogo from 'src/assets/images/pp-icon-small.png'
 
 import { Button } from 'src/components/Button'
-import { IHowto } from 'src/models/howto.models'
+import { IHowto, IHowtoDB } from 'src/models/howto.models'
 import { TagDisplay } from 'src/components/Tags/TagDisplay/TagDisplay'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
@@ -85,7 +85,7 @@ export class HowtoList extends React.Component<any, IState> {
           <React.Fragment>
             <div>
               <FlexGrid flexWrap={'wrap'} justifyContent={'space-between'}>
-                {filteredHowtos.map((howto: IHowto) => (
+                {filteredHowtos.map((howto: IHowtoDB) => (
                   <Link
                     to={`/how-to/${encodeURIComponent(howto.slug)}`}
                     key={howto._id}

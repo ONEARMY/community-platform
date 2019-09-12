@@ -70,10 +70,11 @@ export class FirestoreClient implements AbstractDBClient {
     const query = { ...DB_QUERY_DEFAULTS, ...queryOpts }
     const { limit, orderBy, order, where } = query
     const { field, operator, value } = where!
-    // all queries sent with a common list of conditions
-    const baseRef = db.collection(endpoint).orderBy(orderBy!, order!)
+    const baseRef = db.collection(endpoint)
     const limitRef = limit ? baseRef.limit(limit) : baseRef
-    // additional 'where' field only applied if specified
-    return where ? limitRef.where(field, operator, value) : limitRef
+    // if using where query ignore orderBy parameters to avoid need for composite indexes?
+    return where
+      ? limitRef.where(field, operator, value)
+      : limitRef.orderBy(field ? field : orderBy!, order!)
   }
 }

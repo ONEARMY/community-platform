@@ -12,6 +12,7 @@ import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import HowToCard from 'src/components/HowToCard/HowToCard'
 import Heading from 'src/components/Heading'
+import Text from 'src/components/Text'
 
 interface InjectedProps {
   howtoStore?: HowtoStore
@@ -89,11 +90,19 @@ export class HowtoList extends React.Component<any, IState> {
               <Button variant={'secondary'}>More how-tos</Button>
             </Link>
           </Flex>
-          <MoreContainer
-            text={'Connect with a likeminded community. All around the planet.'}
-            buttonVariant={'primary'}
-            buttonLabel={'Create an event'}
-          />
+          <MoreContainer m={'0 auto'} pt={60} pb={90}>
+            <Flex alignItems={'center'} flexDirection={'column'} mt={5}>
+              <Heading medium>Inspire the Precious Plastic world.</Heading>
+              <Heading medium>Share your how-to!</Heading>
+              <AuthWrapper>
+                <Link to={'/how-to/create'}>
+                  <Button variant="primary" mt={30}>
+                    Create a howto
+                  </Button>
+                </Link>
+              </AuthWrapper>
+            </Flex>
+          </MoreContainer>
         </React.Fragment>
       </>
     )

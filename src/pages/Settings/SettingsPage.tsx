@@ -10,6 +10,9 @@ import { PostingGuidelines } from './content/PostingGuidelines'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import styled from 'styled-components'
+import { TextNotification } from 'src/components/Notification/TextNotification'
+import { UserMapPinEdit } from './content/UserMapPinEdit'
+import { ProfileDelete } from './content/ProfileDelete'
 
 interface IProps {
   user: IUser
@@ -19,6 +22,7 @@ interface IState {
   editMode: boolean
   user: IUser
   showNotification: boolean
+  showDeleteDialog?: boolean
 }
 
 const FormContainer = styled.div`
@@ -32,6 +36,10 @@ export class UserSettings extends React.Component<IProps, IState> {
 
   public showSaveNotification() {
     this.setState({ showNotification: true })
+  }
+
+  public deleteProfile(reauthPw: string) {
+    this.props.userStore.deleteUser(reauthPw)
   }
 
   public render() {
@@ -143,7 +151,17 @@ export class UserSettings extends React.Component<IProps, IState> {
           >
             Save profile
           </Button>
+          <div style={{ float: 'right' }}>
+            <TextNotification
+              text="profile saved"
+              icon="check"
+              show={this.state.showNotification}
+            />
+          </div>
         </Flex>
+        <ProfileDelete
+          onConfirmation={reauthPw => this.deleteProfile(reauthPw)}
+        />
       </Flex>
     )
   }

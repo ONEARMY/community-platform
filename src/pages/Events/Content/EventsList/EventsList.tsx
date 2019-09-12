@@ -59,7 +59,7 @@ export class EventsList extends React.Component<any> {
             <Flex>
               <AuthWrapper>
                 <Link to={'/events/create'}>
-                  <Button variant="primary">create</Button>
+                  <Button variant="primary">Create an event</Button>
                 </Link>
               </AuthWrapper>
             </Flex>
@@ -68,8 +68,8 @@ export class EventsList extends React.Component<any> {
             <>
               {filteredEvents.length === 0 ? null : ( // *** TODO - indicate whether no upcoming events or data still just loading
                 <Flex flexWrap={'wrap'} flexDirection="column">
-                  {filteredEvents.map((event: IEvent) => (
-                    <EventCard key={event.slug} event={event} />
+                  {filteredEvents.map((event: IEventDB) => (
+                    <EventCard key={event._id} event={event} />
                   ))}
                 </Flex>
               )}
@@ -78,13 +78,19 @@ export class EventsList extends React.Component<any> {
                   <Button variant={'secondary'}>More Events</Button>
                 </Link>
               </Flex>
-              <MoreContainer
-                text={
-                  'Connect with a likeminded community. All around the planet.'
-                }
-                buttonVariant={'primary'}
-                buttonLabel={'Create an event'}
-              />
+              <MoreContainer m={'0 auto'} pt={60} pb={90}>
+                <Flex alignItems={'center'} flexDirection={'column'} mt={5}>
+                  <Heading medium>Connect with a likeminded community.</Heading>
+                  <Heading medium>All around the planet.</Heading>
+                  <AuthWrapper>
+                    <Link to={'/events/create'}>
+                      <Button variant="primary" mt={30}>
+                        Create an event
+                      </Button>
+                    </Link>
+                  </AuthWrapper>
+                </Flex>
+              </MoreContainer>
             </>
           </React.Fragment>
         </>

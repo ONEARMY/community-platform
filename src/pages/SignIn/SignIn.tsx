@@ -11,9 +11,9 @@ import { inject, observer } from 'mobx-react'
 import { Form, Field } from 'react-final-form'
 
 const Label = styled.label`
- font-size: ${theme.fontSizes[2] + 'px'}
- margin-bottom: ${theme.space[2] + 'px'}
- display: block;
+  font-size: ${theme.fontSizes[2] + 'px'};
+  margin-bottom: ${theme.space[2] + 'px'};
+  display: block;
 `
 interface IFormValues {
   email: string

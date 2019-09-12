@@ -107,7 +107,7 @@ export class LoginComponent extends React.Component<IProps, IState> {
         <Link to={'/sign-up'}>
           <ButtonSign
             display={['none', 'none', 'flex']}
-            variant="tertiary"
+            variant="secondary"
             small
             // onClick={this.toggleModal}
           >

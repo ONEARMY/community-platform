@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { IEvent } from 'src/models/events.models'
+import { IEvent, IEventDB } from 'src/models/events.models'
 import { Button } from 'src/components/Button'
 import { Link } from 'src/components/Links'
 import { Flex, Link as ExternalLink, Box } from 'rebass'
@@ -16,7 +16,7 @@ import { EventStore } from 'src/stores/Events/events.store'
 import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
 
 interface InjectedProps {
-  eventStore?: EventStore
+  eventStore: EventStore
 }
 
 const RowContainer = styled(Flex)`
@@ -42,7 +42,7 @@ export class EventsList extends React.Component<any> {
   }
 
   public render() {
-    const { filteredEvents } = this.props.eventStore
+    const { filteredEvents } = this.injected.eventStore
     if (filteredEvents) {
       return (
         <>
@@ -77,7 +77,7 @@ export class EventsList extends React.Component<any> {
                   mt={4}
                   px={4}
                 >
-                  {filteredEvents.map((event: IEvent) => (
+                  {filteredEvents.map(event => (
                     <RowContainer width={1} py={4} key={event._id}>
                       <Flex flexWrap={'wrap'} flex={'1'}>
                         <Text large bold width={1}>

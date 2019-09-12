@@ -1,12 +1,13 @@
 import * as React from 'react'
-import Select from 'react-select'
-import { IFieldProps } from './Fields'
-import { Styles } from 'react-select/lib/styles'
-import { Props as SelectProps } from 'react-select/lib/Select'
-import { FieldContainer } from './elements'
-import theme from 'src/themes/styled.theme'
 import ReactFlagsSelect from 'react-flags-select'
+import Select from 'react-select'
+import { Props as SelectProps } from 'react-select/lib/Select'
+import { Styles } from 'react-select/lib/styles'
+import theme from 'src/themes/styled.theme'
 import { getCountryName } from 'src/utils/helpers'
+import { FlexContainer } from '../Layout/FlexContainer'
+import { ErrorMessage, FieldContainer } from './elements'
+import { IFieldProps } from './Fields'
 
 interface ISelectOption {
   value: string
@@ -63,19 +64,22 @@ const defaultProps: Partial<ISelectFieldProps> = {
 }
 export const SelectField = ({ input, meta, ...rest }: ISelectFieldProps) => (
   // note, we first use a div container so that default styles can be applied
-  <FieldContainer style={rest.style}>
-    <Select
-      styles={SelectStyles}
-      onChange={v => {
-        input.onChange(getValueFromSelect(v))
-      }}
-      onBlur={input.onBlur}
-      onFocus={input.onFocus}
-      value={getValueForSelect(rest.options, input.value)}
-      {...defaultProps}
-      {...rest}
-    />
-  </FieldContainer>
+  <FlexContainer p={0} flexWrap="wrap">
+    <FieldContainer invalid={meta.error && meta.touched} style={rest.style}>
+      <Select
+        styles={SelectStyles}
+        onChange={v => {
+          input.onChange(getValueFromSelect(v))
+        }}
+        onBlur={input.onBlur}
+        onFocus={input.onFocus}
+        value={getValueForSelect(rest.options, input.value)}
+        {...defaultProps}
+        {...rest}
+      />
+    </FieldContainer>
+    {meta.error && meta.touched && <ErrorMessage>{meta.error}</ErrorMessage>}
+  </FlexContainer>
 )
 
 export const FlagSelector = ({ input, meta, ...rest }: ISelectFieldProps) => (
@@ -89,7 +93,6 @@ export const FlagSelector = ({ input, meta, ...rest }: ISelectFieldProps) => (
       {...defaultProps}
       {...rest}
     />
-
-    {/* {meta.error && meta.touched && <span>{meta.error}</span>} */}
+    {/* meta.error && meta.touched && <ErrorMessage>{meta.error}</ErrorMessage> */}
   </>
 )

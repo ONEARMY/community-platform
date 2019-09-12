@@ -68,8 +68,8 @@ export class EventsList extends React.Component<any> {
             <>
               {filteredEvents.length === 0 ? null : ( // *** TODO - indicate whether no upcoming events or data still just loading
                 <Flex flexWrap={'wrap'} flexDirection="column">
-                  {filteredEvents.map((event: IEvent) => (
-                    <EventCard key={event.slug} event={event} />
+                  {filteredEvents.map((event: IEventDB) => (
+                    <EventCard key={event._id} event={event} />
                   ))}
                 </Flex>
               )}

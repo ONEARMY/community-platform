@@ -90,7 +90,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                       validate={value => this.validateTitle(value)}
                       validateFields={[]}
                       component={InputField}
-                      placeholder="Title of your event"
+                      placeholder="Title of your event *"
                     />
                     <Field
                       name="tags"
@@ -117,7 +117,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                       validateFields={[]}
                       validate={value => this.validateUrl(value)}
                       component={InputField}
-                      placeholder="URL to offsite link (Facebook, Meetup, etc)"
+                      placeholder="URL to offsite link (Facebook, Meetup, etc) *"
                     />
                   </BoxContainer>
                 </form>

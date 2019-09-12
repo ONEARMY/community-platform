@@ -7,11 +7,12 @@ import {
 } from 'src/models/howto.models'
 import { Database } from 'src/stores/database'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
-import { Storage } from '../storage'
+import { Storage, IUploadedFileMeta } from '../storage'
 import { ModuleStore } from '../common/module.store'
 import { ISelectedTags } from 'src/models/tags.model'
 import { RootStore } from '..'
 import { includesAll } from 'src/utils/filters'
+import { IDbDoc } from 'src/models/common.models'
 
 export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
@@ -65,15 +66,20 @@ export class HowtoStore extends ModuleStore {
     return Database.generateDocId('v2_howtos')
   }
 
-  public async uploadHowTo(values: IHowtoFormInput, id: string) {
+  public async uploadHowTo(
+    values: IHowtoFormInput,
+    id: string,
+    isUpdate?: boolean,
+  ) {
     console.log('uploading how-to', id)
     console.log('values', values)
     try {
-      // upload images
-      const processedCover = await this.uploadHowToFile(
-        values.cover_image[0],
-        id,
-      )
+      // upload any pending images, avoid trying to re-upload images previously saved
+      // if cover already uploaded stored as object not array
+      // file and step image re-uploads handled in uploadFile script
+      const processedCover = Array.isArray(values.cover_image)
+        ? await this.uploadHowToFile(values.cover_image[0], id)
+        : (values.cover_image as IUploadedFileMeta)
       this.updateUploadStatus('Cover')
       const processedSteps = await this.processSteps(values.steps, id)
       this.updateUploadStatus('Step Images')
@@ -84,7 +90,9 @@ export class HowtoStore extends ModuleStore {
       )
       this.updateUploadStatus('Files')
       // populate DB
-      const meta = Database.generateDocMeta('v2_howtos', id)
+      const meta = isUpdate
+        ? Database.updateDocMeta('v2_howtos', this.activeHowto)
+        : Database.generateDocMeta('v2_howtos', id)
       // redefine howTo based on processing done above (should match stronger typing)
       const howTo: IHowto = {
         ...values,
@@ -112,6 +120,7 @@ export class HowtoStore extends ModuleStore {
     // NOTE - outer loop could be a map and done in parallel but for loop easier to manage
     const stepsWithImgMeta: IHowtoStep[] = []
     for (const step of steps) {
+      // determine any new images to upload
       const stepImages = step.images as IConvertedFileMeta[]
       const imgMeta = await this.uploadHowToBatch(stepImages, id)
       step.images = imgMeta
@@ -120,8 +129,16 @@ export class HowtoStore extends ModuleStore {
     return stepsWithImgMeta
   }
 
-  private uploadHowToFile(file: File | IConvertedFileMeta, id: string) {
+  private uploadHowToFile(
+    file: File | IConvertedFileMeta | IUploadedFileMeta,
+    id: string,
+  ) {
     console.log('uploading file', file)
+    // if already uploaded (e.g. editing but not replaced), skip
+    if (file.hasOwnProperty('downloadUrl')) {
+      console.log('file already uploaded, skipping')
+      return file as IUploadedFileMeta
+    }
     // switch between converted file meta or standard file input
     let data: File | Blob = file as File
     if (file.hasOwnProperty('photoData')) {

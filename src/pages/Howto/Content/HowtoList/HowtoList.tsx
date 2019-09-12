@@ -78,7 +78,7 @@ export class HowtoList extends React.Component<any, IState> {
           ) : (
             <Flex flexWrap="wrap" mx={-4}>
               {filteredHowtos.map((howto: IHowto) => (
-                <Flex px={4} py={4} width={[1, 1 / 2, 1 / 3]}>
+                <Flex key={howto._id} px={4} py={4} width={[1, 1 / 2, 1 / 3]}>
                   <HowToCard howto={howto} />
                 </Flex>
               ))}

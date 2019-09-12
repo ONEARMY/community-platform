@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Field } from 'react-final-form'
 import { TextAreaField, InputField } from 'src/components/Form/Fields'
-import { Box } from 'rebass'
+import { Box, Image } from 'rebass'
 import Heading from 'src/components/Heading'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import Flex from 'src/components/Flex'
@@ -10,30 +10,43 @@ import { Modal } from 'src/components/Modal/Modal'
 import Text from 'src/components/Text'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
+import { IHowtoStep } from 'src/models/howto.models'
+import { IUploadedFileMeta } from 'src/stores/storage'
 
 interface IProps {
-  step: string
+  step: any | IHowtoStep
   index: number
+  images: IUploadedFileMeta[]
   onDelete: (index: number) => void
 }
 interface IState {
   showDeleteModal: boolean
   _toDocsList: boolean
+  editStepImgs: boolean
 }
 
 const required = (value: any) => (value ? undefined : 'Required')
 
 const Label = styled.label`
- font-size: ${theme.fontSizes[2] + 'px'}
- margin-bottom: ${theme.space[2] + 'px'}
+  font-size: ${theme.fontSizes[2] + 'px'};
+  margin-bottom: ${theme.space[2] + 'px'};
 `
 
-class Step extends Component<IProps, IState> {
+const AbsoluteBtn = styled(Button)`
+  position: absolute;
+`
+
+const ImageWithOpacity = styled(Image)`
+  opacity: 0.5;
+`
+
+class HowtoStep extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
       showDeleteModal: false,
       _toDocsList: false,
+      editStepImgs: false,
     }
   }
 
@@ -46,7 +59,9 @@ class Step extends Component<IProps, IState> {
   }
 
   render() {
-    const { step, index } = this.props
+    const { step, index, images } = this.props
+    const { editStepImgs } = this.state
+
     return (
       // NOTE - animation parent container in CreateHowTo
       <Flex
@@ -123,7 +138,33 @@ class Step extends Component<IProps, IState> {
           <Label htmlFor={`${step}.text`}>
             Upload image(s) for this step *
           </Label>
-          <Field name={`${step}.images`} component={ImageInputField} multi />
+          {images.length >= 1 && !editStepImgs ? (
+            <Flex alignItems={'center'} justifyContent={'center'}>
+              {images.map(image => {
+                return (
+                  <Flex
+                    flexWrap={'nowrap'}
+                    px={1}
+                    width={1 / 4}
+                    key={image.name}
+                  >
+                    <ImageWithOpacity src={image.downloadUrl} />
+                  </Flex>
+                )
+              })}
+              <AbsoluteBtn
+                icon={'delete'}
+                variant={'tertiary'}
+                onClick={() =>
+                  this.setState({
+                    editStepImgs: !editStepImgs,
+                  })
+                }
+              />
+            </Flex>
+          ) : (
+            <Field name={`${step}.images`} component={ImageInputField} multi />
+          )}
         </Flex>
         <Flex mt={2}>
           <Field
@@ -137,4 +178,4 @@ class Step extends Component<IProps, IState> {
   }
 }
 
-export { Step }
+export { HowtoStep }

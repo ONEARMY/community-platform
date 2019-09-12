@@ -53,7 +53,7 @@ export class DesktopMenu extends React.Component {
         >
           {COMMUNITY_PAGES.map(page => (
             <Flex key={page.path}>
-              <MenuLink to={page.path} key={page.path}>
+              <MenuLink to={page.path}>
                 <Flex>{page.title}</Flex>
               </MenuLink>
             </Flex>

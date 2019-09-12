@@ -5,6 +5,7 @@ export enum colors {
   black = '#1b1b1b',
   yellow = '#fee77b',
   blue = '#83ceeb',
+  red = '#eb1b1f',
   softblue = '#e2edf7',
   bluetag = '#5683b0',
   grey = '#61646b',
@@ -64,7 +65,7 @@ const buttons = {
     backgroundColor: colors.white,
     transition: '.2s ease-in-out',
     '&:hover': {
-      backgroundColor: colors.yellow,
+      backgroundColor: colors.red,
     },
     '&[disabled]': {
       opacity: 0.5,

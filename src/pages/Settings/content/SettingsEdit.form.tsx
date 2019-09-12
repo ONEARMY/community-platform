@@ -26,7 +26,6 @@ import { Link } from './Link.field'
 import { timestampToYear } from 'src/utils/helpers'
 import { Icon } from 'src/components/Icons'
 import { toJS } from 'mobx'
-import { ILocation } from 'src/components/LocationSearch/LocationSearch'
 
 interface IFormValues extends Partial<IUser> {
   // form values are simply subset of user profile fields

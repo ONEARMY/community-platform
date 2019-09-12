@@ -10,6 +10,7 @@ import { Input } from '../Form/elements'
 import { Observable, fromEvent, Subscription } from 'rxjs'
 import { debounceTime, map } from 'rxjs/operators'
 import './LocationSearch.css'
+import { ILocation } from 'src/models/common.models'
 
 interface IProps {
   placeholder: string
@@ -160,17 +161,4 @@ interface IAlgoliaSuggestion extends ILocation {
     | 'trainStation'
     | 'townhall'
     | 'airport'
-}
-export interface ILocation {
-  name: string
-  country: string
-  countryCode: string
-  administrative: string
-  latlng: ILatLng
-  postcode: string
-  value: string
-}
-interface ILatLng {
-  lat: number
-  lng: number
 }

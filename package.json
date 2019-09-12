@@ -207,8 +207,8 @@
       "node"
     ],
     "watchPlugins": [
-      "C:\\Apps\\chrismclarke\\_forks\\create-react-app\\2019-02-12\\node_modules\\jest-watch-typeahead\\filename.js",
-      "C:\\Apps\\chrismclarke\\_forks\\create-react-app\\2019-02-12\\node_modules\\jest-watch-typeahead\\testname.js"
+      "<rootDir>/node_modules/jest-watch-typeahead/filename.js",
+      "<rootDir>/node_modules/jest-watch-typeahead/testname.js"
     ]
   },
   "babel": {

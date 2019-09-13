@@ -58,6 +58,7 @@ const FlagSelectContainer = styled(Flex)`
 const YearBox = styled(Box)`
   ${inputStyles}
   cursor: pointer;
+  height: 40px;
 `
 
 const HideShowBox = styled(Box)`

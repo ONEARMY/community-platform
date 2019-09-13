@@ -50,7 +50,12 @@ class Link extends Component<IProps, IState> {
           style={{ width: '160px', marginRight: '8px' }}
         />
         <Field name={`${link}.url`} component={InputField} placeholder="Link" />
-        <Button icon={'delete'} onClick={() => this.toggleDeleteModal()} />
+        <Button
+          icon={'delete'}
+          variant={'tertiary'}
+          onClick={() => this.toggleDeleteModal()}
+          ml={'10px'}
+        />
         {this.state.showDeleteModal && (
           <Modal onDidDismiss={() => this.toggleDeleteModal()}>
             <Text>Are you sure you want to delete this link?</Text>

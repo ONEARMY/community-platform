@@ -102,7 +102,6 @@ export class UserMapPinEdit extends React.Component<IProps, IState> {
           Your map pin
         </Heading>
         <div style={{ position: 'relative', zIndex: 2 }}>
-          LocationSearch
           <LocationSearch onChange={v => this.onLocationChange(v)} />
         </div>
         {/* wrap both above and below in positioned div to ensure location search box appears above map */}

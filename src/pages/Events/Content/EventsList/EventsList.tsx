@@ -45,6 +45,7 @@ export class EventsList extends React.Component<any> {
                     this.props.eventStore.updateSelectedTags(tags)
                   }
                   category="event"
+                  styleVariant="filter"
                 />
               </Box>
               <Box width={0.5} ml={2} className="location-search-list">

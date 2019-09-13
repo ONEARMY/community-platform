@@ -8,10 +8,8 @@ import { ImportDHForm } from './content/ImportDH.form'
 import { Button } from 'src/components/Button'
 import { PostingGuidelines } from './content/PostingGuidelines'
 import Heading from 'src/components/Heading'
-import Text from 'src/components/Text'
 import styled from 'styled-components'
 import { TextNotification } from 'src/components/Notification/TextNotification'
-import { UserMapPinEdit } from './content/UserMapPinEdit'
 import { ProfileDelete } from './content/ProfileDelete'
 
 interface IProps {
@@ -99,9 +97,9 @@ export class UserSettings extends React.Component<IProps, IState> {
                 flexDirection="column"
               >
                 <Heading small mb={3}>
-                  Intro
+                  Import profile from davehakkens.nl
                 </Heading>
-                <Text mb={3}>{this.state.user.userName}</Text>
+                {/* <Text mb={3}>{this.state.user.userName}</Text> */}
                 <ImportDHForm {...readOnly} />
               </Flex>
               <Flex

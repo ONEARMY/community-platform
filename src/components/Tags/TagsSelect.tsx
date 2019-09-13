@@ -4,14 +4,15 @@ import { TagsStore } from 'src/stores/Tags/tags.store'
 import { ISelectedTags, ITag, TagCategory } from 'src/models/tags.model'
 import { FieldRenderProps } from 'react-final-form'
 import Select from 'react-select'
-import { SelectStyles } from '../Form/Select.field'
+import { SelectStyles, FilterStyles } from '../Form/Select.field'
 import { FieldContainer } from '../Form/elements'
 
 // we include props from react-final-form fields so it can be used as a custom field component
-interface IProps extends FieldRenderProps<any, any> {
+export interface IProps extends FieldRenderProps<any, any> {
   value?: ISelectedTags
   onChange: (val: ISelectedTags) => void
   category: TagCategory | undefined
+  styleVariant: 'selector' | 'filter'
 }
 interface IState {
   selectedTags: string[]
@@ -51,10 +52,11 @@ class TagsSelect extends React.Component<IProps, IState> {
 
   public render() {
     const { categoryTags } = this.injectedProps.tagsStore
+    const { styleVariant } = this.props
     return (
       <FieldContainer>
         <Select
-          styles={SelectStyles}
+          styles={styleVariant === 'selector' ? SelectStyles : FilterStyles}
           isMulti
           options={categoryTags}
           value={this._getSelected(categoryTags)}
@@ -103,4 +105,5 @@ TagsSelect.defaultProps = {
   meta: {},
   value: {},
   category: undefined,
+  styleVariant: 'selector',
 }

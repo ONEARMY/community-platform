@@ -4,7 +4,7 @@ interface IFormElement {
   invalid?: boolean
 }
 export const inputStyles = ({ invalid }: IFormElement) => css`
-  border: 1px solid ${invalid ? theme.colors.error : theme.colors.black};
+  border: 1px solid ${invalid ? theme.colors.error : 'transparent'};
   border-radius: 5px;
   font-family: 'Inter', Arial, sans-serif;
   font-size: ${theme.fontSizes[1] + 'px'};

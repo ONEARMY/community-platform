@@ -26,8 +26,7 @@ export const SelectStyles: Partial<Styles> = {
   container: (provided, state) => ({
     ...provided,
     fontSize: theme.fontSizes[1] + 'px',
-    marginBottom: theme.space[2] + 'px',
-    fontFamily: "'Inter', Arial, sans-serif",
+    fontFamily: '"Varela Round", Arial, sans-serif',
   }),
   control: (provided, state) => ({
     ...provided,
@@ -70,6 +69,62 @@ export const SelectStyles: Partial<Styles> = {
     backgroundColor: '#e2edf7',
     padding: '2px',
     border: '1px solid #c2d4e4',
+    color: '#61646b',
+  }),
+
+  indicatorSeparator: (provided, state) => ({
+    ...provided,
+    display: 'none',
+  }),
+}
+
+export const FilterStyles: Partial<Styles> = {
+  container: (provided, state) => ({
+    ...provided,
+    fontSize: theme.fontSizes[1] + 'px',
+    fontFamily: '"Varela Round", Arial, sans-serif',
+    border: '2px solid black',
+    borderRadius: '5px',
+  }),
+  control: (provided, state) => ({
+    ...provided,
+    backgroundColor: 'white',
+    minHeight: '40px',
+    boxShadow: 'none',
+    ':hover': {
+      border: '1px solid #83ceeb',
+    },
+    ':focus': {
+      border: '1px solid #83ceeb',
+    },
+  }),
+
+  option: (provided, state) => ({
+    ...provided,
+    backgroundColor: 'white',
+    boxShadow: 'none',
+    ':hover': {
+      outline: 'none',
+      backgroundColor: '#e2edf7',
+      color: 'black',
+    },
+  }),
+
+  menu: (provided, state) => ({
+    ...provided,
+    border: '2px solid black',
+    boxShadow: 'none',
+    backgroundColor: 'white',
+    ':hover': {
+      border: '2px solid black',
+    },
+  }),
+
+  multiValue: (provided, state) => ({
+    ...provided,
+    backgroundColor: '#e2edf7',
+    padding: '2px',
+    border: '1px solid black',
     color: '#61646b',
   }),
 

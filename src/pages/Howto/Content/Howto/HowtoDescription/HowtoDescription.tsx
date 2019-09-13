@@ -33,12 +33,11 @@ const HowToCard = styled(Flex)`
   overflow: hidden;
 `
 
-const BreadcrumbBox = styled(Box)`
+const BreadcrumbBox = styled(Flex)`
   padding: 6px 10px;
   border-radius: 5px;
   background-color: #e2edf7;
   color: #61646b;
-  display: inline-block;
   font-size: 13px;
 `
 
@@ -134,7 +133,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
       >
         <Flex px={4} py={4} flexDirection={'column'} width={[1, 1, 1 / 2]}>
           <Flex justifyContent={'space-between'}>
-            <BreadcrumbBox>
+            <BreadcrumbBox alignItems={'center'}>
               <BreadcrumbLink to={'/how-to'}>Back</BreadcrumbLink>
             </BreadcrumbBox>
             {/* Check if logged in user is the creator of the how-to OR a super-admin */}

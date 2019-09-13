@@ -56,6 +56,7 @@ export class HowtoList extends React.Component<any, IState> {
             <TagsSelect
               onChange={tags => this.props.howtoStore.updateSelectedTags(tags)}
               category="how-to"
+              styleVariant="filter"
             />
           </Flex>
           <AuthWrapper>

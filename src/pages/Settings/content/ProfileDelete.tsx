@@ -32,7 +32,7 @@ export class ProfileDelete extends React.Component<IProps, IState> {
       <>
         <Button
           icon="delete"
-          variant="light"
+          variant="tertiary"
           mt={3}
           onClick={() => this.setState({ showDeleteDialog: true })}
         >

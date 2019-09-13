@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Flex, Box } from 'rebass'
+import { Flex } from 'rebass'
 // TODO add loader (and remove this material-ui dep)
 import { Link } from 'src/components/Links'
 import TagsSelect from 'src/components/Tags/TagsSelect'
@@ -7,12 +7,11 @@ import TagsSelect from 'src/components/Tags/TagsSelect'
 import { inject, observer } from 'mobx-react'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import { Button } from 'src/components/Button'
-import { IHowto } from 'src/models/howto.models'
+import { IHowtoDB } from 'src/models/howto.models'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import HowToCard from 'src/components/HowToCard/HowToCard'
 import Heading from 'src/components/Heading'
-import Text from 'src/components/Text'
 
 interface InjectedProps {
   howtoStore?: HowtoStore
@@ -78,7 +77,7 @@ export class HowtoList extends React.Component<any, IState> {
             </Flex>
           ) : (
             <Flex flexWrap="wrap" mx={-4}>
-              {filteredHowtos.map((howto: IHowto) => (
+              {filteredHowtos.map((howto: IHowtoDB) => (
                 <Flex key={howto._id} px={4} py={4} width={[1, 1 / 2, 1 / 3]}>
                   <HowToCard howto={howto} />
                 </Flex>

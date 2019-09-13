@@ -151,7 +151,6 @@ export class UserStore {
     return auth.signOut()
   }
 
-
   public async deleteUser(reauthPw: string) {
     // as delete operation is sensitive requires user to revalidate credentials first
     const authUser = auth.currentUser as firebase.User
@@ -171,7 +170,6 @@ export class UserStore {
       throw error
     }
   }
-
 
   public async createUserProfile(fields: Partial<IUser> = {}) {
     const authUser = auth.currentUser as firebase.User

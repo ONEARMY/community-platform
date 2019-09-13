@@ -2,6 +2,7 @@ import React from 'react'
 import { Image, Card, Flex } from 'rebass'
 import { IUploadedFileMeta } from 'src/stores/storage'
 import Lightbox from 'react-image-lightbox'
+import Text from 'src/components/Text'
 import styled from 'styled-components'
 
 interface IProps {
@@ -16,8 +17,29 @@ interface IState {
   imgIndex: number
 }
 
+const ThumbCard = styled(Card)`
+  padding: 5px;
+  overflow: hidden;
+  transition: 0.2s ease-in-out;
+  &:hover {
+    transform: translateY(-5px);
+  }
+`
+
+const ThumbImage = styled(Image)`
+  object-fit: cover;
+  width: 100px;
+  height: 67px;
+  border: 1px solid #ececec;
+  border-radius: 5px;
+`
+
 const ImageWithPointer = styled(Image)`
   cursor: pointer;
+  width: 100%;
+  height: 450px;
+  object-fit: cover;
+  border-radius: 0px 8px 0px 5px;
 `
 
 export default class ImageGallery extends React.PureComponent<IProps, IState> {
@@ -58,33 +80,31 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
 
   render() {
     const imageNumber = this.props.images.length
+    const { caption } = this.props
     console.log((this.state.imgIndex + 1) % this.state.imagesList.length)
     return this.state.activeImage ? (
-      <Flex flexDirection="column" alignItems="center">
-        <ImageWithPointer
-          width={[1, 1, 0.5]}
-          px={1}
-          pb={4}
-          src={this.state.activeImage.downloadUrl}
-          onClick={() => {
-            this.triggerLightbox()
-          }}
-        />
-        <Flex flexWrap={'wrap'}>
+      <Flex flexDirection={'column'}>
+        <Flex width={1}>
+          <ImageWithPointer
+            width={1}
+            src={this.state.activeImage.downloadUrl}
+            onClick={() => {
+              this.triggerLightbox()
+            }}
+          />
+        </Flex>
+        <Flex flexWrap={'wrap'} width={1} mx={[2, 2, '-5px']}>
           {imageNumber > 1
             ? this.props.images.map((image: any, index: number) => (
-                <Card
-                  p={1}
+                <ThumbCard
+                  mb={3}
+                  mt={4}
                   opacity={image === this.state.activeImage ? 1.0 : 0.5}
                   onClick={() => this.setActive(image)}
                   key={index}
                 >
-                  <Image
-                    height={[50, 100, 200]}
-                    src={image.downloadUrl}
-                    key={index}
-                  />
-                </Card>
+                  <ThumbImage src={image.downloadUrl} key={index} />
+                </ThumbCard>
               ))
             : null}
         </Flex>

@@ -1,8 +1,10 @@
 import * as React from 'react'
 import Icon, { availableGlyphs } from '../Icons'
-import { FlexContainer } from '../Layout/FlexContainer'
+import { Flex } from 'rebass'
 import Text from '../Text'
 import { IUploadedFileMeta } from 'src/stores/storage'
+import styled from 'styled-components'
+import theme from 'src/themes/styled.theme'
 
 interface IProps {
   file: File | IUploadedFileMeta
@@ -10,19 +12,26 @@ interface IProps {
   size: string
 }
 
+const FileFlex = styled(Flex)`
+  border: 2px solid black;
+  border-radius: 5px;
+  background-color: ${theme.colors.yellow};
+  color: black;
+`
+
 export const FileDetails = (props: IProps) => (
-  <FlexContainer
+  <FileFlex
     p={2}
-    m={0}
     mb={1}
     justifyContent="space-between"
     alignItems="center"
-    width="300px"
+    flexDirection={'row'}
+    width={'300px'}
   >
-    <Icon size={24} glyph={props.glyph} marginRight="4px" />
-    <Text small clipped={true} flex={1}>
+    <Icon size={24} glyph={props.glyph} mr={3} />
+    <Text small clipped={true} flex={1} mr={3}>
       {props.file.name}
     </Text>
     <Text small>{props.size}</Text>
-  </FlexContainer>
+  </FileFlex>
 )

@@ -2,9 +2,9 @@ import * as React from 'react'
 import { Modal } from 'src/components/Modal/Modal'
 import { Button } from 'src/components/Button'
 import Text from 'src/components/Text'
-import { FlexContainer } from 'src/components/Layout/FlexContainer'
 import { Form, Field } from 'react-final-form'
 import { InputField } from 'src/components/Form/Fields'
+import Flex from 'src/components/Flex'
 
 interface IState {
   showDeleteDialog: boolean
@@ -51,7 +51,7 @@ export class ProfileDelete extends React.Component<IProps, IState> {
                       component={InputField}
                       type="password"
                     />
-                    <FlexContainer p={0}>
+                    <Flex p={0}>
                       <Button
                         style={{ marginLeft: 'auto' }}
                         onClick={() => this.onModalDismiss({})}
@@ -65,7 +65,7 @@ export class ProfileDelete extends React.Component<IProps, IState> {
                       >
                         Delete
                       </Button>
-                    </FlexContainer>
+                    </Flex>
                   </form>
                 )
               }}

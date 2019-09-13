@@ -5,7 +5,7 @@ import { FullMetadata } from '@firebase/storage-types'
 import { ProgressBar } from './elements'
 import { Button } from '../Button'
 import { IGlyphs } from '../Icons'
-import { FlexContainer } from '../Layout/FlexContainer'
+import { Flex } from 'rebass'
 /*
 This component takes a folder storage path and uploads files to firebase storage
 onUploadSucess allows URLs of completed uploads to be passed back to parent component
@@ -132,9 +132,9 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
             />
           </div>
         </Button>
-        <FlexContainer p={0} mt={3}>
+        <Flex p={0} mt={3}>
           {this.renderProgressBar()}
-        </FlexContainer>
+        </Flex>
       </>
     )
   }

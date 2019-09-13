@@ -1,8 +1,6 @@
 import * as React from 'react'
-import { toJS } from 'mobx'
 import debounce from 'debounce'
-import L from 'leaflet'
-import { Map, TileLayer } from 'react-leaflet'
+import { Map, TileLayer, ZoomControl } from 'react-leaflet'
 
 import 'leaflet/dist/leaflet.css'
 import './index.css'
@@ -70,8 +68,8 @@ class MapView extends React.Component<IProps, IState> {
         className="markercluster-map"
         center={[center.lat, center.lng]}
         zoom={zoom}
-        maxZoom={18}
-        style={{ height: '100%', zIndex: 1 }}
+        maxZoom={11}
+        style={{ height: '100%' }}
         onMove={this.updateBoundingBox}
       >
         <TileLayer

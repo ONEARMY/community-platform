@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Icon, { IGlyphs } from '../Icons'
 import Text from '../Text'
-import { FlexContainer } from '../Layout/FlexContainer'
+import { Flex } from 'rebass'
 import { FadeInOut } from '../Animations/FadeInOut'
 
 /*  
@@ -47,10 +47,10 @@ export class TextNotification extends React.Component<IProps, IState> {
     const { text, icon } = this.props
     return (
       <FadeInOut show={this.state.show}>
-        <FlexContainer p={0} mt={2} alignItems="center" bg="none">
+        <Flex p={0} mt={2} alignItems="center" bg="none">
           {icon && <Icon glyph={icon} />}
           <Text>{text}</Text>
-        </FlexContainer>
+        </Flex>
       </FadeInOut>
     )
   }

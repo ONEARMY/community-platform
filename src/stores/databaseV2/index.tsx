@@ -86,16 +86,16 @@ class CollectionReference {
     await cacheDB.setBulkDocs(this.endpoint, dbDocs)
   }
 
-  async getWhere(
+  async getWhere<T extends DBDoc>(
     field: string,
     operator: DBQueryWhereOperator,
     value: DBQueryWhereValue,
   ) {
     const { serverDB } = this.clients
-    const docs = await serverDB.queryCollection(this.endpoint, {
+    const docs = (await serverDB.queryCollection(this.endpoint, {
       where: { field, operator, value },
-    })
-    return docs.length > 0 ? true : false
+    })) as T[]
+    return docs
   }
 
   private async _getCacheLastModified() {

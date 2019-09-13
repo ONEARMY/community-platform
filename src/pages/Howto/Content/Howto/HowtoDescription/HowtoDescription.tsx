@@ -1,7 +1,7 @@
 import React from 'react'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import differenceInDays from 'date-fns/difference_in_days'
-import { IHowto } from 'src/models/howto.models'
+import { IHowtoDB } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import { Link } from 'src/components/Links'
@@ -17,7 +17,7 @@ import { IUser } from 'src/models/user.models'
 import { isAllowToEditContent } from 'src/utils/helpers'
 
 interface IProps {
-  howto: IHowto
+  howto: IHowtoDB
   loggedInUser: IUser | undefined
 }
 

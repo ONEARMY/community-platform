@@ -8,13 +8,14 @@ import { InputField } from 'src/components/Form/Fields'
 import { Button } from 'src/components/Button'
 import { EventStore } from 'src/stores/Events/events.store'
 import Heading from 'src/components/Heading'
-import { FlexContainer } from 'src/components/Layout/FlexContainer'
-import { BoxContainer } from 'src/components/Layout/BoxContainer'
+import Flex from 'src/components/Flex'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 import { inject } from 'mobx-react'
 import { PostingGuidelines } from './PostingGuidelines'
 import { IEvent, IEventFormInput } from 'src/models/events.models'
 import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
+import styled from 'styled-components'
+import theme from 'src/themes/styled.theme'
 
 interface IState {
   formValues: IEventFormInput
@@ -28,6 +29,15 @@ interface IInjectedProps extends IProps {
 
 // validation - return undefined if no error (i.e. valid)
 const required = (value: any) => (value ? undefined : 'Required')
+
+const FormContainer = styled.form`
+  width: 100%;
+`
+
+const Label = styled.label`
+  font-size: ${theme.fontSizes[2] + 'px'};
+  margin-bottom: ${theme.space[2] + 'px'};
+`
 
 @inject('eventStore')
 export class EventsCreate extends React.Component<IProps, IState> {
@@ -75,73 +85,125 @@ export class EventsCreate extends React.Component<IProps, IState> {
         render={({ submitting, values, invalid, errors, handleSubmit }) => {
           const disabled = invalid || submitting
           return (
-            <FlexContainer m={'0'} p={'0'} bg={'inherit'} flexWrap="wrap">
-              <BoxContainer bg="inherit" p={'0'} width={[1, 1, 2 / 3]}>
-                {/* using prevent default as sometimes submit triggered unintentionally */}
-                <form onSubmit={e => e.preventDefault()}>
+            <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
+              <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} mt={4}>
+                <FormContainer onSubmit={e => e.preventDefault()}>
                   {/* How To Info */}
-                  <BoxContainer p={3}>
-                    <Heading small bold>
-                      List your event
-                    </Heading>
+                  <Flex flexDirection={'column'}>
+                    <Flex card mediumRadius bg={'softblue'} px={3} py={2}>
+                      <Heading medium>Create an event</Heading>
+                    </Flex>
+                    <Flex
+                      card
+                      mediumRadius
+                      bg={'white'}
+                      mt={5}
+                      p={4}
+                      flexWrap="wrap"
+                      flexDirection="column"
+                    >
+                      <Flex
+                        flexDirection={'column'}
+                        mb={3}
+                        width={[1, 1, 2 / 3]}
+                      >
+                        <Label htmlFor="title">Title of the event *</Label>
+                        <Field
+                          id="title"
+                          name="title"
+                          validate={value => this.validateTitle(value)}
+                          validateFields={[]}
+                          component={InputField}
+                          placeholder="Title of your event"
+                        />
+                      </Flex>
+                      <Flex
+                        mx={-2}
+                        width={1}
+                        flexDirection={['column', 'column', 'row']}
+                      >
+                        <Flex flexDirection={'column'} mb={3} px={2} width={1}>
+                          <Label htmlFor="location">
+                            When is your event taking place? *
+                          </Label>
+                          <Field
+                            name="date"
+                            validateFields={[]}
+                            validate={required}
+                            component={InputField}
+                            type="date"
+                          />
+                        </Flex>
+                        <Flex flexDirection={'column'} mb={3} px={2} width={1}>
+                          <Label htmlFor="location">
+                            In which city is the event taking place? *
+                          </Label>
+                          <Field
+                            id="location"
+                            name="location"
+                            className="location-search-create"
+                            validateFields={[]}
+                            validate={(value: any) =>
+                              value.hasOwnProperty('latlng')
+                                ? undefined
+                                : 'Required'
+                            }
+                            component={LocationSearchField}
+                          />
+                        </Flex>
+                      </Flex>
+                      <Flex
+                        mx={-2}
+                        width={1}
+                        flexDirection={['column', 'column', 'row']}
+                      >
+                        <Flex flexDirection={'column'} mb={3} px={2} width={1}>
+                          <Label htmlFor="location">
+                            Select tags for your event *
+                          </Label>
+                          <Field
+                            name="tags"
+                            component={TagsSelectField}
+                            category="event"
+                          />
+                        </Flex>
+                        <Flex flexDirection={'column'} mb={3} px={2} width={1}>
+                          <Label htmlFor="location">Link to your event *</Label>
+                          <Field
+                            name="url"
+                            validateFields={[]}
+                            validate={value => this.validateUrl(value)}
+                            component={InputField}
+                            placeholder="URL to offsite link (Facebook, Meetup, etc)"
+                          />
+                        </Flex>
+                      </Flex>
+                    </Flex>
+                  </Flex>
+                </FormContainer>
+              </Flex>
 
-                    <Field
-                      name="title"
-                      validate={value => this.validateTitle(value)}
-                      validateFields={[]}
-                      component={InputField}
-                      placeholder="Title of your event"
-                    />
-                    <Field
-                      name="tags"
-                      component={TagsSelectField}
-                      category="event"
-                    />
-                    <Field
-                      name="location"
-                      validateFields={[]}
-                      validate={(value: any) =>
-                        value.hasOwnProperty('latlng') ? undefined : 'Required'
-                      }
-                      component={LocationSearchField}
-                    />
-                    <Field
-                      name="date"
-                      validateFields={[]}
-                      validate={required}
-                      component={InputField}
-                      type="date"
-                    />
-                    <Field
-                      name="url"
-                      validateFields={[]}
-                      validate={value => this.validateUrl(value)}
-                      component={InputField}
-                      placeholder="URL to offsite link (Facebook, Meetup, etc)"
-                    />
-                  </BoxContainer>
-                </form>
-              </BoxContainer>
               {/* post guidelines container */}
-              <BoxContainer
+              <Flex
+                flexDirection={'column'}
                 width={[1, 1, 1 / 3]}
                 height={'100%'}
                 bg="inherit"
-                p={0}
-                pl={2}
+                px={2}
+                mt={4}
               >
                 <PostingGuidelines />
                 <Button
                   onClick={() => handleSubmit()}
                   width={1}
                   mt={3}
-                  variant={disabled ? 'disabled' : 'secondary'}
+                  variant={disabled ? 'primary' : 'primary'}
                   disabled={submitting || invalid}
                 >
                   Publish
                 </Button>
-              </BoxContainer>
-            </FlexContainer>
+              </Flex>
+            </Flex>
           )
         }}
       />

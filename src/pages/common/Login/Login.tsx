@@ -7,7 +7,13 @@ import { inject, observer } from 'mobx-react'
 import { LoginForm } from './Login.form'
 import { SignUpForm } from './SignUp.form'
 import { ResetPWForm } from './ResetPW.form'
-import { BoxContainer } from 'src/components/Layout/BoxContainer'
+import { Box } from 'rebass'
+import { display, DisplayProps } from 'styled-system'
+import styled from 'styled-components'
+
+const ButtonSign = styled(Button)<DisplayProps>`
+  ${display}
+`
 
 interface IProps {
   userStore?: UserStore
@@ -79,7 +85,11 @@ export class LoginComponent extends React.Component<IProps, IState> {
     const user = this.injected.userStore.user
     return (
       <>
-        <Button
+        <ButtonSign
+          variant="secondary"
+          display={['none', 'none', 'flex']}
+          small
+          mr={2}
           onClick={() =>
             this.setState({
               showLoginModal: !this.state.showLoginModal,
@@ -89,18 +99,23 @@ export class LoginComponent extends React.Component<IProps, IState> {
             })
           }
         >
-          Sign up
-        </Button>
-        <Button variant="outline" onClick={this.toggleModal}>
-          Log in
-        </Button>
+          Login
+        </ButtonSign>
+        <ButtonSign
+          display={['none', 'none', 'flex']}
+          variant="tertiary"
+          small
+          onClick={this.toggleModal}
+        >
+          Join
+        </ButtonSign>
         <Modal
           aria-labelledby="user-login-modal"
           aria-describedby="click to show user login"
           open={this.state.showLoginModal && !user}
           onClose={this.toggleModal}
         >
-          <BoxContainer width={350} mx="auto" mt={5}>
+          <Box width={350} mx="auto" mt={5}>
             {this.state.showLoginForm && (
               <LoginForm
                 onChange={e => this.handleChange(e)}
@@ -136,7 +151,7 @@ export class LoginComponent extends React.Component<IProps, IState> {
                 preloadValues={this.state.formValues}
               />
             )}
-          </BoxContainer>
+          </Box>
         </Modal>
       </>
     )

@@ -109,6 +109,22 @@ export class Database {
     }
     return meta
   }
+  // update set of meta fields applied to all docs
+  public static updateDocMeta(collectionPath: IDBEndpoint, doc?: IDbDoc) {
+    const user = auth().currentUser
+    const meta: IDbDoc = {
+      _created: doc ? doc._created : new Date().toISOString(),
+      _deleted: false,
+      _id: doc ? doc._id : this.generateDocId(collectionPath),
+      _modified: new Date().toISOString(),
+      _createdBy: doc
+        ? doc._createdBy
+        : user
+        ? (user.displayName as string)
+        : 'anonymous',
+    }
+    return meta
+  }
 
   /****************************************************************************** *
         Helper Methods

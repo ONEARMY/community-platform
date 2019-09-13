@@ -9,18 +9,22 @@ import { ALGOLIA_PLACES_CONFIG } from 'src/config/config'
 import { Input } from '../Form/elements'
 import { Observable, fromEvent, Subscription } from 'rxjs'
 import { debounceTime, map } from 'rxjs/operators'
-import './LocationSearch.css'
+import styled, { css } from 'styled-components'
 import { ILocation } from 'src/models/common.models'
 
 interface IProps {
   placeholder: string
   debounceTime: number
   onChange: (selected: ILocation) => void
-  onClear: () => void
+  onClear?: () => void
 }
 interface IState {
   debouncedInputValue: string
 }
+
+const AlgoliaResults = styled.input`
+  display: none;
+`
 
 export class LocationSearch extends React.Component<IProps, IState> {
   public static defaultProps: Partial<IProps>
@@ -46,7 +50,9 @@ export class LocationSearch extends React.Component<IProps, IState> {
     this.places.on('change', (selected: IAlgoliaResponse) =>
       this.handlePlaceSelectChange(selected),
     )
-    this.places.on('clear', () => this.props.onClear())
+    this.places.on('clear', () =>
+      this.props.onClear ? this.props.onClear() : false,
+    )
     this.subscribeToInputChanges()
   }
 
@@ -96,13 +102,12 @@ export class LocationSearch extends React.Component<IProps, IState> {
           ref={this.userInputRef}
         />
         {/* the second input takes debounced value from the first input and binds to algolia search  */}
-        <input
+        <AlgoliaResults
           type="search"
           id="address-input"
           value={this.state.debouncedInputValue}
           ref={this.placesInputRef}
           readOnly
-          style={{ display: 'none' }}
         />
       </>
     )

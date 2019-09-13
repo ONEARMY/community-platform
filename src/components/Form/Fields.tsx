@@ -1,5 +1,10 @@
 import * as React from 'react'
-import { TextAreaStyled, Input, TextAreaDisabled } from './elements'
+import {
+  TextAreaStyled,
+  Input,
+  TextAreaDisabled,
+  ErrorMessage,
+} from './elements'
 import { FieldRenderProps } from 'react-final-form'
 import Calendar, { CalendarProps } from 'react-calendar'
 
@@ -17,9 +22,10 @@ type YearPickerProps = IFieldProps & CalendarProps
 
 export const InputField = ({ input, meta, ...rest }: IFieldProps) => (
   <>
-    <Input {...input} {...rest} />
-    {/* CC - removed clunky error reporting until better solution implemented */}
-    {/* {meta.error && meta.touched && <span>{meta.error}</span>} */}
+    <Input invalid={meta.error && meta.touched} {...input} {...rest} />
+    {meta.error && meta.touched ? (
+      <ErrorMessage>{meta.error}</ErrorMessage>
+    ) : null}
   </>
 )
 
@@ -28,18 +34,20 @@ export const TextAreaField = ({
   meta,
   disabled,
   ...rest
-}: IFieldProps) => (
-  <>
-    {disabled ? (
-      // want disabled textarea to just render as styled div to remove scrollbars
-      <TextAreaDisabled>{input.value}</TextAreaDisabled>
-    ) : (
-      <TextAreaStyled {...input} {...rest} />
-    )}
-
-    {/* {meta.error && meta.touched && <span>{meta.error}</span>} */}
-  </>
-)
+}: IFieldProps) =>
+  disabled ? (
+    // want disabled textarea to just render as styled div to remove scrollbars
+    <TextAreaDisabled>{input.value}</TextAreaDisabled>
+  ) : (
+    <>
+      <TextAreaStyled
+        invalid={meta.error && meta.touched}
+        {...input}
+        {...rest}
+      />
+      {meta.error && meta.touched && <ErrorMessage>{meta.error}</ErrorMessage>}
+    </>
+  )
 
 export const YearPicker = ({ input, meta, ...rest }: YearPickerProps) => (
   <>
@@ -53,7 +61,6 @@ export const YearPicker = ({ input, meta, ...rest }: YearPickerProps) => (
         input.onChange(v)
       }}
     />
-
-    {/* {meta.error && meta.touched && <span>{meta.error}</span>} */}
+    {/* meta.error && meta.touched && <ErrorMessage>{meta.error}</ErrorMessage> */}
   </>
 )

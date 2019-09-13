@@ -25,5 +25,6 @@ export const LocationSearchField = ({
       }
       input.onBlur()
     }}
+    placeholder="Search for a location *"
   />
 )

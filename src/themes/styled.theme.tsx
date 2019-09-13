@@ -1,21 +1,18 @@
+import { darken, lighten } from 'polished'
 // use enum to specify list of possible colors for typing
 export enum colors {
   white = 'white',
-  black = 'black',
-  blue = '#89a3d4',
-  darkgrey = '#333333',
-  lightgrey = '#f6f6f6',
-  grey = '#dddddd',
-  grey2 = '#9b9b9b',
-  grey3 = '#E4E4E4',
-  grey4 = '#E9E9E9',
-  greyStroke = '#AEAEAE',
-  green = '#88e3c7',
-  yellow = '#ffe495',
-  error = '#f44336',
-  background = '#f6f6f6',
-  primary = 'black',
-  secondary = '#FF9900',
+  black = '#1b1b1b',
+  yellow = '#fee77b',
+  blue = '#83ceeb',
+  red = '#eb1b1f',
+  softblue = '#e2edf7',
+  bluetag = '#5683b0',
+  grey = '#61646b',
+  error = 'red',
+  background = '#f4f6f7',
+  primary = yellow,
+  secondary = blue,
 }
 
 export type ButtonVariants =
@@ -27,38 +24,111 @@ export type ButtonVariants =
   | 'light'
 
 const buttons = {
-  height: '40px',
   primary: {
-    color: colors.primary,
-    backgroundColor: colors.white,
+    fontFamily: '"Varela Round", Arial, sans-serif',
+    border: '2px solid ' + colors.black,
+    color: colors.black,
+    backgroundColor: colors.primary,
+    transition: '.2s ease-in-out',
+    '&:hover': {
+      backgroundColor: darken(0.08, colors.primary),
+    },
+    '&[disabled]': {
+      opacity: 0.5,
+    },
+    '&[disabled]:hover': {
+      backgroundColor: colors.primary,
+    },
   },
   secondary: {
-    color: colors.white,
-    backgroundColor: colors.secondary,
+    fontFamily: '"Varela Round", Arial, sans-serif',
+    border: '2px solid ' + colors.black,
+    color: colors.black,
+    display: 'flex',
+    backgroundColor: colors.softblue,
+    transition: '.2s ease-in-out',
+    '&:hover': {
+      backgroundColor: colors.white,
+    },
+    '&[disabled]': {
+      opacity: 0.5,
+    },
+    '&[disabled]:hover': {
+      backgroundColor: colors.softblue,
+    },
   },
+  tertiary: {
+    fontFamily: '"Varela Round", Arial, sans-serif',
+    border: '2px solid ' + colors.black,
+    color: colors.black,
+    display: 'flex',
+    backgroundColor: colors.white,
+    transition: '.2s ease-in-out',
+    '&:hover': {
+      backgroundColor: colors.red,
+    },
+    '&[disabled]': {
+      opacity: 0.5,
+    },
+    '&[disabled]:hover': {
+      backgroundColor: colors.white,
+    },
+  },
+
   outline: {
+    fontFamily: '"Varela Round", Arial, sans-serif',
+    border: '2px solid ' + colors.black,
     color: colors.black,
-    border: '1px solid ' + colors.greyStroke,
-    backgroundColor: 'white',
+    backgroundColor: colors.white,
+    transition: '.2s ease-in-out',
+    display: 'flex',
+    alignItems: 'center',
+    width: 'fit-content',
+    height: 'fit-content',
+    '&:hover': {
+      backgroundColor: lighten(0.02, colors.softblue),
+    },
   },
-  disabled: {
-    color: colors.grey,
-    backgroundColor: colors.black,
-    opacity: 0.3,
-  },
-  dark: {
-    color: colors.white,
-    backgroundColor: colors.black,
-  },
-  light: {
-    backgroundColor: colors.lightgrey,
-    color: colors.black,
+  imageInput: {
+    border: '2px dashed #e0e0e0',
+    color: '#e0e0e0',
+    backgroundColor: 'transparent',
   },
 }
 
-const space = [0, 4, 8, 16, 32, 64, 128]
+const space = [
+  0,
+  5,
+  10,
+  15,
+  20,
+  25,
+  30,
+  35,
+  40,
+  45,
+  50,
+  55,
+  60,
+  65,
+  70,
+  75,
+  80,
+  85,
+  90,
+  95,
+  100,
+  105,
+  110,
+  115,
+  120,
+  125,
+  130,
+  135,
+  140,
+]
 const radii = space
-const fontSizes = [10, 12, 15, 18, 24, 32, 40, 56, 72]
+const fontSizes = [10, 12, 14, 18, 22, 30, 38, 42, 46, 50, 58, 66, 74]
 const breakpoints = ['32em', '48em', '64em']
 // standard widths: 512px, 768px, 1024px
 const maxContainerWidth = 1280

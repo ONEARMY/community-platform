@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { BoxContainer } from '../Layout/BoxContainer'
+import { Box, Flex } from 'rebass'
 import { Button } from '../Button'
 import Lightbox from 'react-image-lightbox'
 import 'react-image-lightbox/style.css'
@@ -98,7 +98,7 @@ export class ImageInput extends React.Component<IProps, IState> {
     // if at least one image present, hide the 'choose image' button and replace with smaller button
     const imgPreviewMode = inputFiles.length > 0
     return (
-      <BoxContainer p={0}>
+      <Box p={0}>
         <>
           <div
             style={{
@@ -107,11 +107,15 @@ export class ImageInput extends React.Component<IProps, IState> {
               flexDirection: 'column',
               justifyContent: 'center',
               height: '230px',
+              alignItems: 'center',
+              backgroundColor: '#e0e0e0',
+              borderRadius: '5px',
               // ideally width should fill container around 300px for 4:3
             }}
           >
             <Button
-              variant="light"
+              small
+              variant="outline"
               onClick={() => this.triggerFileUploaderClick()}
               icon="image"
             >
@@ -127,29 +131,32 @@ export class ImageInput extends React.Component<IProps, IState> {
               onChange={e => this.handleFileInput(e.target.files)}
             />
           </div>
-          {inputFiles.map((file, index) => {
-            return (
-              <ImageConverter
-                key={file.name}
-                file={file}
-                onImgConverted={meta =>
-                  this.handleConvertedFileChange(meta, index)
-                }
-                onImgClicked={meta => this.showImgLightbox(meta)}
-              />
-            )
-          })}
-          {imgPreviewMode && (
-            <Button
-              onClick={() => this.triggerFileUploaderClick()}
-              ml="auto"
-              icon="image"
-              variant="light"
-              width={1}
-            >
-              Choose Images
-            </Button>
-          )}
+          <Flex mx={-1}>
+            {inputFiles.map((file, index) => {
+              return (
+                <ImageConverter
+                  key={file.name}
+                  file={file}
+                  onImgConverted={meta =>
+                    this.handleConvertedFileChange(meta, index)
+                  }
+                  onImgClicked={meta => this.showImgLightbox(meta)}
+                />
+              )
+            })}
+            {imgPreviewMode && (
+              <Flex width={1 / 4} px={1}>
+                <Button
+                  large
+                  onClick={() => this.triggerFileUploaderClick()}
+                  ml="auto"
+                  icon="image"
+                  variant="imageInput"
+                  width={1}
+                />
+              </Flex>
+            )}
+          </Flex>
 
           {openLightbox && (
             <Lightbox
@@ -158,7 +165,7 @@ export class ImageInput extends React.Component<IProps, IState> {
             />
           )}
         </>
-      </BoxContainer>
+      </Box>
     )
   }
 }

@@ -20,22 +20,20 @@ class EventsPageClass extends React.Component<IProps, any> {
   }
 
   public render() {
-    const pastEvents = this.props.eventStore!.pastEvents
+    // const pastEvents = this.props.eventStore!.pastEvents
     return (
-      <div id="EventsPage">
-        <Switch>
-          <Route
-            exact
-            path="/events"
-            render={props => <EventsList {...props} />}
-          />
-          <AuthRoute
-            path="/events/create"
-            component={EventsCreate}
-            redirectPath="/events"
-          />
-        </Switch>
-      </div>
+      <Switch>
+        <Route
+          exact
+          path="/events"
+          render={props => <EventsList {...props} />}
+        />
+        <AuthRoute
+          path="/events/create"
+          component={EventsCreate}
+          redirectPath="/events"
+        />
+      </Switch>
     )
   }
 }

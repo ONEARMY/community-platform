@@ -96,12 +96,15 @@ export class DHImport extends React.Component<IProps, IState> {
     return (
       <>
         <Button
+          small
           disabled={disabled}
           onClick={() => this.importProfileFromDH()}
-          variant={disabled ? 'disabled' : 'outline'}
+          variant={disabled ? 'tertiary' : 'tertiary'}
           ml={2}
+          mb={2}
+          height={'40px'}
         >
-          Import profile from davehakkens.nl
+          Import
         </Button>
         <Text color="error">{this.state.errMsg}</Text>
         <TextNotification

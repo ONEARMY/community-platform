@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { observer, inject } from 'mobx-react'
 import Heading from 'src/components/Heading'
-import { BoxContainer } from 'src/components/Layout/BoxContainer'
+import { Box } from 'rebass'
 import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
 import { MapsStore } from 'src/stores/Maps/maps.store'
 import { UserStore } from 'src/stores/User/user.store'
@@ -97,7 +97,7 @@ export class UserMapPinEdit extends React.Component<IProps, IState> {
   render() {
     const pin = this.state.userPin
     return (
-      <BoxContainer id="your-map-pin" mt={4}>
+      <Box id="your-map-pin" mt={4}>
         <Heading small bold>
           Your map pin
         </Heading>
@@ -117,7 +117,7 @@ export class UserMapPinEdit extends React.Component<IProps, IState> {
             // onPinClicked={() => this.getActivePinDetail()}
           />
         </div>
-      </BoxContainer>
+      </Box>
     )
   }
 }

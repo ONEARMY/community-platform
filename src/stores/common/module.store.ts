@@ -1,14 +1,21 @@
 import { BehaviorSubject, Subscription } from 'rxjs'
-import { Database } from '../database'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import isUrl from 'is-url'
 import { ISelectedTags } from 'src/models/tags.model'
 import { IDBEndpoint, ILocation } from 'src/models/common.models'
 import { includesAll } from 'src/utils/filters'
+import { RootStore } from '..'
+import { DBEndpoint } from '../databaseV2/types'
 
-/*  The module store contains common methods used across modules that access specfic
-    collections on the database
-*/
+/**
+ * The module store is used to share methods and data between other stores, including
+ * `db` - the common database
+ * `activeUser` - the user store user
+ * As well as data validation and filtering methods
+ *
+ * @param basePath - By providing a basepath the documents at that collection endpoint
+ * are automatically subscribed to, and available via `allDocs$`
+ */
 
 export class ModuleStore {
   allDocs$ = new BehaviorSubject<any[]>([])
@@ -18,8 +25,16 @@ export class ModuleStore {
 
   // when a module store is initiated automatically load the docs in the collection
   // this can be subscribed to in individual stores
-  constructor(public basePath: IDBEndpoint) {
+  constructor(public basePath: IDBEndpoint, private rootStore: RootStore) {
     this.getCollection(basePath)
+  }
+
+  // use getters for root store bindings as will not be available during constructor method
+  get db() {
+    return this.rootStore.dbV2
+  }
+  get activeUser() {
+    return this.rootStore.stores.userStore.user
   }
 
   /****************************************************************************
@@ -28,14 +43,14 @@ export class ModuleStore {
 
   // when accessing a collection want to call the database getCollection method which
   // efficiently checks the cache first and emits any subsequent updates
-  public getCollection(path: IDBEndpoint) {
+  public getCollection(path: DBEndpoint) {
     this.allDocs$.next([])
     this.activeCollectionSubscription.unsubscribe()
-    this.activeCollectionSubscription = Database.getCollection(path).subscribe(
-      data => {
+    this.activeCollectionSubscription = this.db
+      .collection(path)
+      .stream(data => {
         this.allDocs$.next(data)
-      },
-    )
+      })
     return this.activeCollectionSubscription
   }
 
@@ -58,7 +73,12 @@ export class ModuleStore {
 
   public isSlugUnique = async (slug: string, endpoint: IDBEndpoint) => {
     try {
-      await Database.checkSlugUnique(endpoint, slug)
+      const matches = await this.db
+        .collection(endpoint)
+        .getWhere('slug', '==', slug)
+      return false
+      // TODO - Pending code merge
+      // return matches.length > 0
     } catch (e) {
       return 'Titles must be unique, please try being more specific'
     }

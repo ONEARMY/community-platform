@@ -1,21 +1,16 @@
 import { observable, computed } from 'mobx'
 import { IEventFormInput, IEventDB, IEvent } from 'src/models/events.models'
 import { ModuleStore } from '../common/module.store'
-import { DatabaseV2 } from '../databaseV2'
 import Filters from 'src/utils/filters'
 import { ISelectedTags } from 'src/models/tags.model'
 import { RootStore } from '..'
 import { ILocation } from 'src/models/common.models'
 import { stripSpecialCharacters } from 'src/utils/helpers'
-import { UserStore } from '../User/user.store'
 import { IUser } from 'src/models/user.models'
 
 export class EventStore extends ModuleStore {
-  db: DatabaseV2
-  userStore: UserStore
-  constructor(private rootStore: RootStore) {
-    super('v2_events')
-    this.db = rootStore.dbV2
+  constructor(rootStore: RootStore) {
+    super('v2_events', rootStore)
     this.allDocs$.subscribe((docs: IEventDB[]) => {
       this.allEvents = docs.sort((a, b) => (a.date > b.date ? 1 : -1))
     })
@@ -80,7 +75,7 @@ export class EventStore extends ModuleStore {
   }
 
   public async uploadEvent(values: IEventFormInput) {
-    const user = this.rootStore.stores.userStore.user as IUser
+    const user = this.activeUser as IUser
     try {
       // add event meta fields and format date
       const event: IEvent = {

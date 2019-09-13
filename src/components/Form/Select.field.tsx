@@ -85,6 +85,7 @@ export const FilterStyles: Partial<Styles> = {
     fontFamily: '"Varela Round", Arial, sans-serif',
     border: '2px solid black',
     borderRadius: '5px',
+    color: 'black',
   }),
   control: (provided, state) => ({
     ...provided,
@@ -100,6 +101,7 @@ export const FilterStyles: Partial<Styles> = {
   }),
 
   option: (provided, state) => ({
+    color: 'black',
     ...provided,
     backgroundColor: 'white',
     boxShadow: 'none',

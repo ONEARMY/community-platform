@@ -13,6 +13,7 @@ export interface IProps extends FieldRenderProps<any, any> {
   onChange: (val: ISelectedTags) => void
   category: TagCategory | undefined
   styleVariant: 'selector' | 'filter'
+  placeholder: string
 }
 interface IState {
   selectedTags: string[]
@@ -63,7 +64,7 @@ class TagsSelect extends React.Component<IProps, IState> {
           getOptionLabel={(tag: ITag) => tag.label}
           getOptionValue={(tag: ITag) => tag._id}
           onChange={values => this.onSelectedTagsChanged(values as ITag[])}
-          placeholder="Select tags - 4 maximum"
+          placeholder={this.props.placeholder}
         />
       </FieldContainer>
     )
@@ -106,4 +107,5 @@ TagsSelect.defaultProps = {
   value: {},
   category: undefined,
   styleVariant: 'selector',
+  placeholder: 'Select tags - 4 maximum',
 }

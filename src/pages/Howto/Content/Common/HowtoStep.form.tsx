@@ -128,7 +128,7 @@ class HowtoStep extends Component<IProps, IState> {
             name={`${step}.text`}
             placeholder="Description of this step"
             component={TextAreaField}
-            style={{ resize: 'vertical', height: '100%' }}
+            style={{ resize: 'vertical', height: '300px' }}
             validate={required}
             validateFields={[]}
           />

@@ -91,8 +91,7 @@ export class Howto extends React.Component<
   public async componentWillMount() {
     const slug = this.props.match.params.slug
     const doc = await this.injected.howtoStore.getDocBySlug(slug)
-    const loggedInUser = this.injected.howtoStore.rootStore.stores.userStore
-      .user!
+    const loggedInUser = this.injected.howtoStore.activeUser
     this.setState({
       howto: doc,
       isLoading: false,

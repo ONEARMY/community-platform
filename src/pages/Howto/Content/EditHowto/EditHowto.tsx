@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
-import { IHowto, IHowtoDB } from 'src/models/howto.models'
+import { IHowtoDB } from 'src/models/howto.models'
 import { Redirect } from 'react-router'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import { inject } from 'mobx-react'
@@ -37,8 +37,7 @@ export class EditHowto extends React.Component<IProps, IState> {
     }
   }
   public async componentWillMount() {
-    const loggedInUser = this.injected.howtoStore.rootStore.stores.userStore
-      .user!
+    const loggedInUser = this.injected.howtoStore.activeUser
     if (this.injected.howtoStore.activeHowto! !== undefined) {
       this.setState({
         formValues: toJS(this.injected.howtoStore.activeHowto) as IHowtoDB,

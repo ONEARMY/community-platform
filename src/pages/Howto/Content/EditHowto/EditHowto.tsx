@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
-import { IHowto } from 'src/models/howto.models'
+import { IHowto, IHowtoDB } from 'src/models/howto.models'
 import { Redirect } from 'react-router'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import { inject } from 'mobx-react'
@@ -12,7 +12,7 @@ import { IUser } from 'src/models/user.models'
 import { isAllowToEditContent } from 'src/utils/helpers'
 
 interface IState {
-  formValues: IHowto
+  formValues: IHowtoDB
   formSaved: boolean
   isLoading: boolean
   _toDocsList: boolean
@@ -29,7 +29,7 @@ export class EditHowto extends React.Component<IProps, IState> {
   constructor(props: any) {
     super(props)
     this.state = {
-      formValues: {} as IHowto,
+      formValues: {} as IHowtoDB,
       formSaved: false,
       _toDocsList: false,
       isLoading: true,
@@ -41,7 +41,7 @@ export class EditHowto extends React.Component<IProps, IState> {
       .user!
     if (this.injected.howtoStore.activeHowto! !== undefined) {
       this.setState({
-        formValues: toJS(this.injected.howtoStore.activeHowto) as IHowto,
+        formValues: toJS(this.injected.howtoStore.activeHowto) as IHowtoDB,
         isLoading: false,
         loggedInUser: loggedInUser ? loggedInUser : undefined,
       })
@@ -49,7 +49,7 @@ export class EditHowto extends React.Component<IProps, IState> {
       const slug = this.props.match.params.slug
       const doc = await this.injected.howtoStore.getDocBySlug(slug)
       this.setState({
-        formValues: doc as IHowto,
+        formValues: doc as IHowtoDB,
         isLoading: false,
         loggedInUser: loggedInUser ? loggedInUser : undefined,
       })
@@ -63,24 +63,21 @@ export class EditHowto extends React.Component<IProps, IState> {
     return this.injected.howtoStore
   }
 
-  public onSubmit = async (formValues: IHowto) => {
+  public onSubmit = async (formValues: IHowtoDB) => {
     this.setState({ showSubmitModal: true })
     console.log('onSubmit edit howto', formValues)
 
-    await this.store.uploadHowTo(
-      formValues,
-      this.injected.howtoStore.activeHowto!._id,
-      true,
-    )
+    await this.store.uploadHowTo(formValues)
   }
 
   public render() {
+    console.log('edit', this.state)
     const { formValues, isLoading, loggedInUser } = this.state
     if (formValues && !isLoading) {
       if (loggedInUser && isAllowToEditContent(formValues, loggedInUser)) {
         return (
           <HowtoForm
-            onSubmit={v => this.onSubmit(v as IHowto)}
+            onSubmit={v => this.onSubmit(v as IHowtoDB)}
             formValues={formValues}
             parentType="edit"
             {...this.props}

@@ -5,7 +5,7 @@ import Flex from 'src/components/Flex'
 import { Link } from 'src/components/Links'
 import styled from 'styled-components'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
-import { IHowto } from '../../models/howto.models'
+import { IHowtoDB } from '../../models/howto.models'
 import Heading from 'src/components/Heading'
 
 const HowToImage = styled(Image)`
@@ -16,7 +16,7 @@ const HowToImage = styled(Image)`
 `
 
 interface IProps {
-  howto: IHowto
+  howto: IHowtoDB
 }
 
 export const HowToCard = (props: IProps) => (

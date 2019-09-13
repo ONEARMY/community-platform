@@ -25,8 +25,10 @@ export class ModuleStore {
 
   // when a module store is initiated automatically load the docs in the collection
   // this can be subscribed to in individual stores
-  constructor(public basePath: IDBEndpoint, private rootStore: RootStore) {
-    this.getCollection(basePath)
+  constructor(private rootStore: RootStore, basePath?: IDBEndpoint) {
+    if (basePath) {
+      this.getCollection(basePath)
+    }
   }
 
   // use getters for root store bindings as will not be available during constructor method

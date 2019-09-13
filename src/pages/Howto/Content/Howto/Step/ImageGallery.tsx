@@ -81,7 +81,6 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
   render() {
     const imageNumber = this.props.images.length
     const { caption } = this.props
-    console.log((this.state.imgIndex + 1) % this.state.imagesList.length)
     return this.state.activeImage ? (
       <Flex flexDirection={'column'}>
         <Flex width={1}>

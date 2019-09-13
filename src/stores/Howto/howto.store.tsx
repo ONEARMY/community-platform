@@ -62,9 +62,10 @@ export class HowtoStore extends ModuleStore {
     this.selectedTags = tagKey
   }
 
-  public async uploadHowTo(values: IHowtoFormInput) {
-    // create a new placeholder doc and get it's id
-    const dbRef = this.db.collection('v2_howtos').doc()
+  // upload a new or update an existing how-to
+  public async uploadHowTo(values: IHowtoFormInput | IHowtoDB) {
+    // create a reference either to the existing document (if editing) or a new document if creating
+    const dbRef = this.db.collection('v2_howtos').doc((values as IHowtoDB)._id)
     const id = dbRef.id
     const user = this.rootStore.stores.userStore.user as IUser
     try {

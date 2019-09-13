@@ -163,6 +163,12 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             <TimeNeededBox mr={4}>{howto.time}</TimeNeededBox>
             <DifficultyLevelBox>{howto.difficulty_level}</DifficultyLevelBox>
           </Flex>
+          <Flex mt={4}>
+            {howto.tags &&
+              Object.keys(howto.tags).map(tag => {
+                return <TagDisplay key={tag} tagKey={tag} />
+              })}
+          </Flex>
           <Flex mt={6} flexDirection={'column'}>
             {howto.files.map(file => (
               <FileInfo allowDownload file={file} key={file.name} />

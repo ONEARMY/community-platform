@@ -1,6 +1,6 @@
 import * as React from 'react'
 import Flex from 'src/components/Flex'
-import { RouteComponentProps } from 'react-router'
+import { RouteComponentProps, Redirect, withRouter } from 'react-router'
 import Heading from 'src/components/Heading'
 import { Button } from 'src/components/Button'
 import Text from 'src/components/Text'
@@ -50,7 +50,7 @@ const required = (value: any) => (value ? undefined : 'Required')
 
 @inject('userStore')
 @observer
-export class SignInPage extends React.Component<IProps, IState> {
+class SignInPage extends React.Component<IProps, IState> {
   static defaultProps: Partial<IProps>
   constructor(props: IProps) {
     super(props)
@@ -149,7 +149,6 @@ export class SignInPage extends React.Component<IProps, IState> {
                           <Field
                             name="email"
                             type="email"
-                            id="email"
                             component={InputField}
                             validate={required}
                           />
@@ -161,11 +160,11 @@ export class SignInPage extends React.Component<IProps, IState> {
                           <Field
                             name="password"
                             type="password"
-                            id="password"
                             component={InputField}
                             validate={required}
                           />
                         </Flex>
+                        <Text color={'red'}>{this.state.errorMsg}</Text>
                         <Flex mb={3} justifyContent={'space-between'}>
                           <Text small color={'grey'} mt={2}>
                             <Link to={'/sign-up'}>Don't have an account?</Link>
@@ -197,3 +196,5 @@ export class SignInPage extends React.Component<IProps, IState> {
     )
   }
 }
+
+export default withRouter(SignInPage)

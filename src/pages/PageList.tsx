@@ -9,7 +9,7 @@ import { User } from './User/User'
 import { SignUpPage } from './SignUp/SignUp'
 import { SignUpMessagePage } from './SignUp/SignUpMessage'
 import { ResendSignUpMessagePage } from './SignUp/ResendSignUpMessage'
-import { SignInPage } from './SignIn/SignIn'
+import SignInPage from './SignIn/SignIn'
 import { ForgotPasswordPage } from './Password/ForgotPassword'
 import { ForgotPasswordMessagePage } from './Password/ForgotPasswordMessage'
 

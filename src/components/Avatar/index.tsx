@@ -4,10 +4,6 @@ import { Image, ImageProps } from 'rebass'
 import Icon from 'src/components/Icons'
 import { inject, observer } from 'mobx-react'
 import { UserStore, getUserAvatar } from 'src/stores/User/user.store'
-import {
-  notificationSubscribe,
-  notificationUnsubscribeAll,
-} from 'src/stores/Notifications/notifications.service'
 
 interface IProps extends ImageProps {
   width?: string
@@ -29,7 +25,6 @@ export class Avatar extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {}
-    this.getAvatar(this.props.userName)
   }
   get injected() {
     return this.props as IInjected
@@ -38,14 +33,7 @@ export class Avatar extends React.Component<IProps, IState> {
   // subscribe/unsubscribe from specific user profile message when
   // user updates their avatar (same url so by default will now be aware of change)
   componentDidMount() {
-    notificationSubscribe('Profile.Avatar.Updated', () =>
-      this.setState({
-        showFallback: false,
-      }),
-    )
-  }
-  componentWillUnmount() {
-    notificationUnsubscribeAll()
+    this.getAvatar(this.props.userName)
   }
 
   async getAvatar(userName: string) {
@@ -55,15 +43,17 @@ export class Avatar extends React.Component<IProps, IState> {
   }
 
   render() {
+    const { width, borderRadius } = this.props
+    const { showFallback, avatarUrl } = this.state
     return (
       <>
-        {this.state.showFallback && <Icon glyph={'account-circle'} />}
-        {!this.state.showFallback && this.state.avatarUrl && (
+        {showFallback && <Icon glyph={'account-circle'} size={50} />}
+        {!showFallback && avatarUrl && (
           <Image
             className="avatar"
-            width={this.props.width ? this.props.width : 50}
-            borderRadius={this.props.borderRadius ? this.props.borderRadius : 4}
-            src={this.state.avatarUrl}
+            width={width ? width : 40}
+            borderRadius={borderRadius ? borderRadius : 5}
+            src={avatarUrl}
             onError={() => {
               // if user image doesn't exist show fallback image instead
               this.setState({ showFallback: true })

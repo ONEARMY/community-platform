@@ -9,7 +9,7 @@ import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import Text from 'src/components/Text'
 import { Flex } from 'rebass'
-import ProfileAvatar from './ProfilAvatar'
+import { Avatar } from 'src/components/Avatar'
 
 interface IState {
   moreMenuAnchor: any
@@ -70,7 +70,7 @@ export default class Profile extends React.Component<IProps, IState> {
         {user ? (
           <>
             <Flex onClick={this.openProfileMenu} ml={1}>
-              <ProfileAvatar />
+              <Avatar userName={user.userName} />
             </Flex>
             <Menu
               open={profileMenuAnchor ? true : false}

@@ -63,6 +63,7 @@ class CollectionReference<T> {
       async (obs: Observer<(T & DBDoc)[]>) => {
         // 1. Emit cached collection
         const cached = await cacheDB.getCollection<T>(endpoint)
+        console.log('cached', cached)
         obs.next(cached)
         if (cached.length === 0) {
           // 2. If no cache, populate using large query db
@@ -74,6 +75,7 @@ class CollectionReference<T> {
         }
         // 3. get any newer docs from regular server db, merge with cache and emit
         const latest = await this._getCacheLastModified()
+        console.log('subcribing to updates', latest)
         serverDB.streamCollection!(endpoint, {
           orderBy: '_modified',
           order: 'asc',

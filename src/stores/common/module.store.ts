@@ -19,15 +19,13 @@ import { DBEndpoint } from '../databaseV2/types'
 
 export class ModuleStore {
   allDocs$ = new BehaviorSubject<any[]>([])
-  activeDoc$ = new BehaviorSubject<any>(null)
-  private activeDocSubscription = new Subscription()
   private activeCollectionSubscription = new Subscription()
 
   // when a module store is initiated automatically load the docs in the collection
   // this can be subscribed to in individual stores
   constructor(private rootStore: RootStore, basePath?: IDBEndpoint) {
     if (basePath) {
-      this.getCollection(basePath)
+      this._subscribeToCollection(basePath)
     }
   }
 
@@ -45,28 +43,16 @@ export class ModuleStore {
 
   // when accessing a collection want to call the database getCollection method which
   // efficiently checks the cache first and emits any subsequent updates
-  public getCollection(path: DBEndpoint) {
+  private _subscribeToCollection(endpoint: DBEndpoint) {
+    console.log('getting collection', endpoint)
     this.allDocs$.next([])
     this.activeCollectionSubscription.unsubscribe()
     this.activeCollectionSubscription = this.db
-      .collection(path)
+      .collection(endpoint)
       .stream(data => {
+        console.log(`[${data.length}] [${endpoint}] docs received`)
         this.allDocs$.next(data)
       })
-    return this.activeCollectionSubscription
-  }
-
-  // find a doc within the existing persisted collection via key-value match
-  // optionally specify a subcollection to load on change
-  public setActiveDoc(key: string, value: string) {
-    // first emit undefined to clear any old records
-    // use undefined instead of null to keep consistent with later find method
-    this.activeDoc$.next(undefined)
-    this.activeDocSubscription.unsubscribe()
-    this.activeDocSubscription = this.allDocs$.subscribe(docs => {
-      const doc = docs.find(d => d[key] === value)
-      this.activeDoc$.next(doc)
-    })
   }
 
   /****************************************************************************

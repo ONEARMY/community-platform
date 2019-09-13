@@ -10,6 +10,7 @@ import { ResetPWForm } from './ResetPW.form'
 import { Box } from 'rebass'
 import { display, DisplayProps } from 'styled-system'
 import styled from 'styled-components'
+import { Link } from 'src/components/Links'
 
 const ButtonSign = styled(Button)<DisplayProps>`
   ${display}
@@ -85,30 +86,34 @@ export class LoginComponent extends React.Component<IProps, IState> {
     const user = this.injected.userStore.user
     return (
       <>
-        <ButtonSign
-          variant="secondary"
-          display={['none', 'none', 'flex']}
-          small
-          mr={2}
-          onClick={() =>
-            this.setState({
-              showLoginModal: !this.state.showLoginModal,
-              showResetPWForm: false,
-              showLoginForm: false,
-              showSignUpForm: true,
-            })
-          }
-        >
-          Login
-        </ButtonSign>
-        <ButtonSign
-          display={['none', 'none', 'flex']}
-          variant="tertiary"
-          small
-          onClick={this.toggleModal}
-        >
-          Join
-        </ButtonSign>
+        <Link to={'sign-in'}>
+          <ButtonSign
+            variant="secondary"
+            display={['none', 'none', 'flex']}
+            small
+            mr={2}
+            // onClick={() =>
+            //   this.setState({
+            //     showLoginModal: !this.state.showLoginModal,
+            //     showResetPWForm: false,
+            //     showLoginForm: false,
+            //     showSignUpForm: true,
+            //   })
+            // }
+          >
+            Login
+          </ButtonSign>
+        </Link>
+        <Link to={'/sign-up'}>
+          <ButtonSign
+            display={['none', 'none', 'flex']}
+            variant="secondary"
+            small
+            // onClick={this.toggleModal}
+          >
+            Join
+          </ButtonSign>
+        </Link>
         <Modal
           aria-labelledby="user-login-modal"
           aria-describedby="click to show user login"

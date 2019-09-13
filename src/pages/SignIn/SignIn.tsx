@@ -1,6 +1,6 @@
 import * as React from 'react'
 import Flex from 'src/components/Flex'
-import { RouteComponentProps, Redirect, withRouter } from 'react-router'
+import { RouteComponentProps, withRouter } from 'react-router'
 import Heading from 'src/components/Heading'
 import { Button } from 'src/components/Button'
 import Text from 'src/components/Text'

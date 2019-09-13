@@ -133,12 +133,13 @@ class HowtoStep extends Component<IProps, IState> {
             validateFields={[]}
           />
         </Flex>
-        {/* right */}
         <Flex flexDirection="column">
           <Label htmlFor={`${step}.text`}>
             Upload image(s) for this step *
           </Label>
-          {images.length >= 1 && !editStepImgs ? (
+          {images.length > 0 &&
+          images[0].downloadUrl !== undefined &&
+          !editStepImgs ? (
             <Flex alignItems={'center'} justifyContent={'center'}>
               {images.map(image => {
                 return (

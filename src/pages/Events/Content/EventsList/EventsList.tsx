@@ -54,6 +54,7 @@ export class EventsList extends React.Component<any> {
                     this.props.eventStore.updateSelectedLocation(v)
                   }
                   onClear={() => this.props.eventStore.clearLocationSearch()}
+                  styleVariant="filter"
                 />
               </Box>
             </Flex>

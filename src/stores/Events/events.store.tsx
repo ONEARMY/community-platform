@@ -10,7 +10,7 @@ import { IUser } from 'src/models/user.models'
 
 export class EventStore extends ModuleStore {
   constructor(rootStore: RootStore) {
-    super('v2_events', rootStore)
+    super(rootStore, 'v2_events')
     this.allDocs$.subscribe((docs: IEventDB[]) => {
       this.allEvents = docs.sort((a, b) => (a.date > b.date ? 1 : -1))
     })

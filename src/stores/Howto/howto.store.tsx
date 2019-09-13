@@ -11,10 +11,7 @@ import { Storage, IUploadedFileMeta } from '../storage'
 import { ModuleStore } from '../common/module.store'
 import { ISelectedTags } from 'src/models/tags.model'
 import { RootStore } from '..'
-import { DatabaseV2 } from '../databaseV2'
 import { IUser } from 'src/models/user.models'
-import { includesAll } from 'src/utils/filters'
-import { IDbDoc } from 'src/models/common.models'
 
 export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
@@ -26,25 +23,21 @@ export class HowtoStore extends ModuleStore {
   public selectedTags: ISelectedTags
   @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
-  rootStore: RootStore
-  db: DatabaseV2
   constructor(rootStore: RootStore) {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
-    super('v2_howtos')
+    super(rootStore, 'v2_howtos')
     this.allDocs$.subscribe(docs => {
       this.allHowtos = docs as IHowtoDB[]
     })
-    this.rootStore = rootStore
-    this.db = rootStore.dbV2
     this.selectedTags = {}
   }
 
   @action
   public async getDocBySlug(slug: string) {
     const collection = await this.db
-      .collection('v2_howtos')
-      .getWhere<IHowtoDB>('slug', '==', slug)
+      .collection<IHowto>('v2_howtos')
+      .getWhere('slug', '==', slug)
     const activeHowto = collection.length > 0 ? collection[0] : undefined
     this.activeHowto = activeHowto
     return activeHowto
@@ -65,9 +58,11 @@ export class HowtoStore extends ModuleStore {
   // upload a new or update an existing how-to
   public async uploadHowTo(values: IHowtoFormInput | IHowtoDB) {
     // create a reference either to the existing document (if editing) or a new document if creating
-    const dbRef = this.db.collection('v2_howtos').doc((values as IHowtoDB)._id)
+    const dbRef = this.db
+      .collection<IHowto>('v2_howtos')
+      .doc((values as IHowtoDB)._id)
     const id = dbRef.id
-    const user = this.rootStore.stores.userStore.user as IUser
+    const user = this.activeUser as IUser
     try {
       // upload any pending images, avoid trying to re-upload images previously saved
       // if cover already uploaded stored as object not array

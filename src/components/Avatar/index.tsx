@@ -3,7 +3,7 @@ import React from 'react'
 import { Image, ImageProps } from 'rebass'
 import Icon from 'src/components/Icons'
 import { inject, observer } from 'mobx-react'
-import { UserStore } from 'src/stores/User/user.store'
+import { UserStore, getUserAvatar } from 'src/stores/User/user.store'
 import {
   notificationSubscribe,
   notificationUnsubscribeAll,
@@ -29,7 +29,7 @@ export class Avatar extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {}
-    this.getUserAvatar(this.props.userName)
+    this.getAvatar(this.props.userName)
   }
   get injected() {
     return this.props as IInjected
@@ -48,8 +48,9 @@ export class Avatar extends React.Component<IProps, IState> {
     notificationUnsubscribeAll()
   }
 
-  async getUserAvatar(userName: string) {
-    const url = await this.injected.userStore.getUserAvatar(userName)
+  async getAvatar(userName: string) {
+    const url = getUserAvatar(userName)
+    console.log('avatar', url)
     this.setState({ avatarUrl: url })
   }
 

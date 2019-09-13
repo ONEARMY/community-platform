@@ -12,7 +12,7 @@ import {
   IMapPinDetail,
   IMapPinWithType,
 } from 'src/models/maps.models'
-import { IUser } from 'src/models/user.models'
+import { IUserDB } from 'src/models/user.models'
 import { generatePinFilters } from 'src/mocks/maps.mock'
 import { ILocation } from 'src/models/common.models'
 
@@ -43,7 +43,7 @@ export class UserMapPinEdit extends React.Component<IProps, IState> {
     return this.props as IInjectedProps
   }
   get user() {
-    return this.injected.userStore.user as IUser
+    return this.injected.userStore.activeUser as IUserDB
   }
   // NIT - semi duplication of maps.store code could be refactored
   // small function to change string pinType into proper type (without accumulation method)

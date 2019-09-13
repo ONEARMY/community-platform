@@ -5,11 +5,9 @@ import { TagsStore } from './Tags/tags.store'
 import { PlatformStore } from './Platform/platform.store'
 import { EventStore } from './Events/events.store'
 import { MapsStore } from './Maps/maps.store'
-import { Database } from './database'
 import { DatabaseV2 } from './databaseV2'
 
 export class RootStore {
-  db = new Database()
   dbV2 = new DatabaseV2()
   stores: IStores
   constructor() {

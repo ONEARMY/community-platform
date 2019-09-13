@@ -1,20 +1,31 @@
 import { observable, action, computed } from 'mobx'
-import { afs } from '../../utils/firebase'
 import { RootStore } from '..'
+import { ModuleStore } from '../common/module.store'
+import { DBDoc } from '../databaseV2/types'
 
+// example interface for the structure of data expected
 interface IExampleDoc {
   savedNumber: number
 }
+// additional type used as a reminder that data that is populated in the db also contains
+// additional metadata fields such as `_id` and `_modified` fields
+type IExampleDocDB = IExampleDoc & DBDoc
 
-export class TemplateStore {
+/**
+ * An example store used to provide observable data and actions.
+ * By extending the ModuleStore a number of common methods and properties are made available,
+ * including the current `activeUser` and the global database, or `db` objects
+ */
+export class TemplateStore extends ModuleStore {
   constructor(rootStore: RootStore) {
+    super(rootStore)
     //
   }
   // observables are data variables that can be subscribed to and change over time
   @observable
   public randomNumber: number
-  public exampleDoc: IExampleDoc
-  public exampleCollection: IExampleDoc[]
+  public exampleDoc: IExampleDocDB
+  public exampleCollection: IExampleDocDB[]
 
   // actions change observables
   @action
@@ -27,14 +38,21 @@ export class TemplateStore {
   // example getting a document from the main database at a given endpoint path
   @action
   public async dbDocRequest() {
-    const ref = await afs.doc('_Demo/example1').get()
-    this.exampleDoc = ref.data() as IExampleDoc
+    const doc = await this.db
+      // optional - specify <IExampleDocDB> to assert the types expected from the database return
+      .collection<IExampleDocDB>('v2_tags')
+      .doc('myDoc')
+      .get()
+    this.exampleDoc = doc as IExampleDocDB
   }
-  // example getting a collection of documents from the main database at a given endpoint path
+  // example of getting an entire collection of documents and listening to live updates on the collection
   @action
   public async dbCollectionRequest() {
-    const ref = await afs.collection('_Demo').get()
-    this.exampleCollection = ref.docs.map(doc => doc.data() as IExampleDoc)
+    const docs$ = await this.db
+      .collection<IExampleDoc>('v2_tags')
+      .stream(docs => {
+        this.exampleCollection = docs
+      })
   }
 }
 

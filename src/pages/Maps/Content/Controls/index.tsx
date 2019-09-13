@@ -9,6 +9,7 @@ import { GroupingFilter } from './GroupingFilter'
 
 import { IPinType, EntityType } from 'src/models/maps.models'
 import { HashLink } from 'react-router-hash-link'
+import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
 interface IProps {
   availableFilters: Array<IPinType>
@@ -74,15 +75,17 @@ class Controls extends React.Component<IProps> {
           />
         ))}
         <FlexSpacer />
-        <HashLink
-          smooth
-          to={{
-            pathname: `/settings`,
-            hash: '#your-map-pin',
-          }}
-        >
-          <Button variant={'primary'}>My pin</Button>
-        </HashLink>
+        <AuthWrapper>
+          <HashLink
+            smooth
+            to={{
+              pathname: `/settings`,
+              hash: '#your-map-pin',
+            }}
+          >
+            <Button variant={'primary'}>My pin</Button>
+          </HashLink>
+        </AuthWrapper>
       </MapFlexBar>
     )
   }

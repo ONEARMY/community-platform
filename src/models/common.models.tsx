@@ -1,11 +1,7 @@
-// by default all documents should be populated with the following fields
-export interface IDbDoc {
-  _id: string
-  _created: ISODateString
-  _modified: ISODateString
-  _deleted: boolean
-  _createdBy: userId
-}
+import { DBDoc } from '../stores/databaseV2/types'
+
+// re-export the database dbDoc to make it easier to import elsewhere
+export type DBDoc = DBDoc
 
 // A reminder that dates should be saved in the ISOString format
 // i.e. new Date().toISOString() => 2011-10-05T14:48:00.000Z
@@ -28,7 +24,7 @@ export type IDBEndpoint =
  ***************************************************************************/
 type IDBEndpointV1 = 'howtosV1' | 'users' | 'tagsV1' | 'eventsV1' | 'mapPinsV1'
 
-// interface IDbDocV1 {
+// interface DBDocV1 {
 //   _id: string
 //   _created: firestore.Timestamp
 //   _modified: firestore.Timestamp

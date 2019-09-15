@@ -1,4 +1,4 @@
-import { IDBEndpoint, IDbDoc } from 'src/models/common.models'
+import { IDBEndpoint, DBDoc } from 'src/models/common.models'
 import { afs } from 'src/utils/firebase'
 import { DBQueryOptions, AbstractDBClient } from '../types'
 import { Observable, Observer } from 'rxjs'
@@ -15,15 +15,15 @@ export class FirestoreClient implements AbstractDBClient {
       .collection(endpoint)
       .doc(docId)
       .get()
-    return doc.exists ? (doc.data() as T & IDbDoc) : undefined
+    return doc.exists ? (doc.data() as T & DBDoc) : undefined
   }
 
-  async setDoc(endpoint: IDBEndpoint, doc: IDbDoc) {
+  async setDoc(endpoint: IDBEndpoint, doc: DBDoc) {
     console.log('setting doc', endpoint, doc._id)
     return db.doc(`${endpoint}/${doc._id}`).set(doc)
   }
 
-  async setBulkDocs(endpoint: IDBEndpoint, docs: IDbDoc[]) {
+  async setBulkDocs(endpoint: IDBEndpoint, docs: DBDoc[]) {
     const batch = db.batch()
     docs.forEach(d => {
       const ref = db.collection(endpoint).doc(d._id)
@@ -34,7 +34,7 @@ export class FirestoreClient implements AbstractDBClient {
   // get a collection with optional value to query _modified field
   async getCollection<T>(endpoint: IDBEndpoint) {
     const snapshot = await db.collection(endpoint).get()
-    return snapshot.empty ? [] : snapshot.docs.map(d => d.data() as T & IDbDoc)
+    return snapshot.empty ? [] : snapshot.docs.map(d => d.data() as T & DBDoc)
   }
 
   async queryCollection<T>(endpoint: IDBEndpoint, queryOpts: DBQueryOptions) {

@@ -1,5 +1,5 @@
 import { firebaseAdmin } from './admin'
-import { IDbDoc, IDBEndpoint } from '../models'
+import { DBDoc, IDBEndpoint } from '../models'
 
 export const db = firebaseAdmin.firestore()
 
@@ -25,5 +25,5 @@ export const getCollection = (endpoint: IDBEndpoint) =>
     .collection(endpoint)
     .get()
     .then(snapshot => {
-      return snapshot.empty ? [] : snapshot.docs.map(d => d.data() as IDbDoc)
+      return snapshot.empty ? [] : snapshot.docs.map(d => d.data() as DBDoc)
     })

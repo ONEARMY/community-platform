@@ -38,9 +38,7 @@ const user = {
 }
 const academy = {
   path: '/academy',
-  component: (
-    <ExternalEmbed src="https://onearmy.github.io/docs-demo/docs/intro" />
-  ),
+  component: <ExternalEmbed src="https://onearmy.github.io/academy/intro" />,
   title: 'Academy',
   description: 'Demo external page embed',
   fullPageWidth: true,

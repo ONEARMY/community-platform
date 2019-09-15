@@ -75,9 +75,10 @@ if (siteVariant === 'production') {
     applicationID: e.REACT_APP_ALGOLIA_PLACES_APP_ID as string,
     searchOnlyAPIKey: e.REACT_APP_ALGOLIA_PLACES_API_KEY as string,
   }
-  // disable console logs
-  // tslint:disable no-empty
-  console.log = () => {}
+  // // disable console logs
+  // // tslint:disable no-empty
+  console.log('production environment', firebaseConfig)
+  // console.log = () => {}
 }
 
 /*********************************************************************************************** /

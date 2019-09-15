@@ -121,7 +121,10 @@
     "test": "node scripts/test.js --env=jsdom",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "analyze": "npm run build -- --stats & npx webpack-bundle-analyzer ./build/bundle-stats.json"
+    "analyze": "npm run build -- --stats & npx webpack-bundle-analyzer ./build/bundle-stats.json",
+    "prod:serve": "npm run prod:copy && npm run build && npm run prod:restore && firebase serve",
+    "prod:copy": "cp .env .env-default && cp ./.env-prod ./.env",
+    "prod:restore": "cp .env-default .env && rm .env-default"
   },
   "eslintConfig": {},
   "browserslist": [

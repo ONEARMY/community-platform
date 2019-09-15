@@ -24,8 +24,15 @@ export class RealtimeDBClient implements AbstractDBClient {
   }
 
   async getCollection<T>(endpoint: IDBEndpoint) {
-    const snap = await db.ref(endpoint).once('value')
-    return snap.exists && snap.val() ? Object.values<T & DBDoc>(snap.val()) : []
+    try {
+      const snap = await db.ref(endpoint).once('value')
+      return snap.exists && snap.val()
+        ? Object.values<T & DBDoc>(snap.val())
+        : []
+    } catch (error) {
+      // if endpoint doesn't exist return empty
+      return []
+    }
   }
 
   async queryCollection() {

@@ -4,13 +4,10 @@ import { TemplateStore } from './_Template/template.store'
 import { TagsStore } from './Tags/tags.store'
 import { PlatformStore } from './Platform/platform.store'
 import { EventStore } from './Events/events.store'
-import { DiscussionsStore } from './Discussions/discussions.store'
 import { MapsStore } from './Maps/maps.store'
-import { Database } from './database'
 import { DatabaseV2 } from './databaseV2'
 
 export class RootStore {
-  db = new Database()
   dbV2 = new DatabaseV2()
   stores: IStores
   constructor() {
@@ -29,7 +26,6 @@ const stores = (rootStore: RootStore) => {
     tagsStore: new TagsStore(rootStore),
     platformStore: new PlatformStore(rootStore),
     eventStore: new EventStore(rootStore),
-    discussionsStore: new DiscussionsStore(rootStore),
     mapsStore: new MapsStore(rootStore),
   }
 }
@@ -41,6 +37,5 @@ export interface IStores {
   tagsStore: TagsStore
   platformStore: PlatformStore
   eventStore: EventStore
-  discussionsStore: DiscussionsStore
   mapsStore: MapsStore
 }

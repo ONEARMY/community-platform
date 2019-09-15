@@ -1,13 +1,17 @@
 import * as React from 'react'
 import { HowtoPage } from './Howto/Howto'
 import { SettingsPage } from './Settings'
-import { FeedbackPage } from './Feedback/Feedback'
 import { SITE } from 'src/config/config'
-import { DiscussionsPage } from './Discussions'
 import { EventsPage } from './Events/Events'
 import { AdminPage } from './admin/Admin'
 import { MapsPage } from './Maps/Maps'
 import { User } from './User/User'
+import { SignUpMessagePage } from './SignUp/SignUpMessage'
+import { ResendSignUpMessagePage } from './SignUp/ResendSignUpMessage'
+import SignUpPage from './SignUp/SignUp'
+import SignInPage from './SignIn/SignIn'
+import { ForgotPasswordPage } from './Password/ForgotPassword'
+import { ForgotPasswordMessagePage } from './Password/ForgotPasswordMessage'
 
 export interface IPageMeta {
   path: string
@@ -36,18 +40,6 @@ const user = {
   title: 'User profile',
   description: 'User profile',
 }
-const feedback = {
-  path: '/feedback',
-  component: <FeedbackPage />,
-  title: 'Feedback',
-  description: 'Let us know what you think!',
-}
-const discussions = {
-  path: '/discussions',
-  component: <DiscussionsPage />,
-  title: 'Discussions',
-  description: '',
-}
 const events = {
   path: '/events',
   component: <EventsPage />,
@@ -68,6 +60,48 @@ const admin = {
   description: '',
 }
 
+const signup = {
+  path: '/sign-up',
+  component: <SignUpPage />,
+  title: 'Sign Up',
+  description: '',
+}
+
+const signin = {
+  path: '/sign-in',
+  component: <SignInPage />,
+  title: 'Sign In',
+  description: '',
+}
+
+const signupmessage = {
+  path: '/sign-up-message',
+  component: <SignUpMessagePage />,
+  title: 'Sign Up Message',
+  description: '',
+}
+
+const resendsignupmessage = {
+  path: '/resend-sign-up-message',
+  component: <ResendSignUpMessagePage />,
+  title: 'Resend Sign Up Message',
+  description: '',
+}
+
+const forgotpassword = {
+  path: '/forgot-password',
+  component: <ForgotPasswordPage />,
+  title: 'Forgot Password',
+  description: '',
+}
+
+const forgotpasswordmessage = {
+  path: '/forgot-password-message',
+  component: <ForgotPasswordMessagePage />,
+  title: 'Forgot Password Message',
+  description: '',
+}
+
 // community pages (various pages hidden on production build)
 const devCommunityPages = [howTo, events, maps]
 const prodCommunityPages = [howTo, events, maps]
@@ -83,4 +117,12 @@ export const COMMUNITY_PAGES: IPageMeta[] = communityPages
 export const COMMUNITY_PAGES_MORE: IPageMeta[] = communityPagesMore
 export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [settings]
 export const ADMIN_PAGES: IPageMeta[] = [admin]
-export const NO_HEADER_PAGES: IPageMeta[] = [user]
+export const NO_HEADER_PAGES: IPageMeta[] = [
+  user,
+  signup,
+  signupmessage,
+  resendsignupmessage,
+  signin,
+  forgotpassword,
+  forgotpasswordmessage,
+]

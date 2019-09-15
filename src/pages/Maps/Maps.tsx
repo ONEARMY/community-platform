@@ -4,10 +4,11 @@ import { withRouter, Route, Switch } from 'react-router'
 
 import { MapsStore } from 'src/stores/Maps/maps.store'
 import { MapView, Controls } from './Content'
+import { Box } from 'rebass'
 
 import './styles.css'
 
-import { IMapPin, IPinType, ILatLng } from 'src/models/maps.models'
+import { ILatLng } from 'src/models/maps.models'
 
 interface IProps {
   mapsStore: MapsStore
@@ -41,7 +42,7 @@ class MapsPageClass extends React.Component<IProps, IState> {
   private setCenter(location) {
     this.setState({
       center: location.latlng as ILatLng,
-      zoom: 11,
+      zoom: 8,
     })
   }
 
@@ -57,7 +58,11 @@ class MapsPageClass extends React.Component<IProps, IState> {
 
     return (
       // the calculation for the height is kind of hacky for now, will set properly on final mockups
-      <div id="mapPage" style={{ height: 'calc(100vh - 158px)' }}>
+      <Box
+        id="mapPage"
+        style={{ height: 'calc(100vh - 60px)' }}
+        mx={[-2, -3, -4]}
+      >
         <Switch>
           <Route
             exact
@@ -86,7 +91,7 @@ class MapsPageClass extends React.Component<IProps, IState> {
             )}
           />
         </Switch>
-      </div>
+      </Box>
     )
   }
 }

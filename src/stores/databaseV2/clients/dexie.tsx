@@ -1,4 +1,4 @@
-import { IDBEndpoint, IDbDoc } from 'src/models/common.models'
+import { IDBEndpoint, DBDoc } from 'src/models/common.models'
 import Dexie from 'dexie'
 import { DBQueryOptions, DBQueryWhereOptions, AbstractDBClient } from '../types'
 import { DB_API_VERSION, DB_QUERY_DEFAULTS } from '../utils/db.utils'
@@ -14,16 +14,16 @@ export class DexieClient implements AbstractDBClient {
    *  Main Methods - taken from abstract class
    ***********************************************************************/
   getDoc<T>(endpoint: IDBEndpoint, docId: string) {
-    return db.table<T & IDbDoc>(endpoint).get(docId)
+    return db.table<T & DBDoc>(endpoint).get(docId)
   }
-  setDoc(endpoint: IDBEndpoint, doc: IDbDoc) {
+  setDoc(endpoint: IDBEndpoint, doc: DBDoc) {
     return db.table(endpoint).put(doc)
   }
-  setBulkDocs(endpoint: IDBEndpoint, docs: IDbDoc[]) {
+  setBulkDocs(endpoint: IDBEndpoint, docs: DBDoc[]) {
     return db.table(endpoint).bulkPut(docs)
   }
   getCollection<T>(endpoint: IDBEndpoint) {
-    return db.table<T & IDbDoc>(endpoint).toArray()
+    return db.table<T & DBDoc>(endpoint).toArray()
   }
   queryCollection<T>(endpoint: IDBEndpoint, queryOpts: DBQueryOptions) {
     return this._processQuery<T>(endpoint, queryOpts)
@@ -34,7 +34,7 @@ export class DexieClient implements AbstractDBClient {
    ***********************************************************************/
   getLatestDoc<T>(endpoint: IDBEndpoint) {
     return db
-      .table<T & IDbDoc>(endpoint)
+      .table<T & DBDoc>(endpoint)
       .orderBy('_modified')
       .last()
   }
@@ -85,7 +85,6 @@ type IDexieSchema = { [key in IDBEndpoint]: string }
 const DEFAULT_SCHEMA = '_id,_modified'
 
 const DEXIE_SCHEMA: IDexieSchema = {
-  v2_discussions: DEFAULT_SCHEMA,
   v2_events: `${DEFAULT_SCHEMA},slug`,
   v2_howtos: `${DEFAULT_SCHEMA},slug`,
   v2_mappins: DEFAULT_SCHEMA,

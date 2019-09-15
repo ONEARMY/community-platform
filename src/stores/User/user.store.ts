@@ -1,30 +1,36 @@
 import { observable, action } from 'mobx'
-import { Database } from '../database'
-import { functions } from 'src/utils/firebase'
-import { IUser } from 'src/models/user.models'
-import { IFirebaseUser, auth, afs, EmailAuthProvider } from 'src/utils/firebase'
+import { IUser, IUserDB } from 'src/models/user.models'
+import {
+  IFirebaseUser,
+  auth,
+  EmailAuthProvider,
+  functions,
+} from 'src/utils/firebase'
 import { Storage } from '../storage'
 import { notificationPublish } from '../Notifications/notifications.service'
 import { RootStore } from '..'
+import { loginWithDHCredentials } from 'src/hacks/DaveHakkensNL.hacks'
+import { ModuleStore } from '../common/module.store'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
 */
 
-export class UserStore {
+export class UserStore extends ModuleStore {
   private authUnsubscribe: firebase.Unsubscribe
   @observable
-  public user: IUser | undefined
+  public user: IUserDB | undefined
 
   @observable
   public authUser: firebase.User | null
 
   @action
-  public updateUser(user?: IUser) {
+  public updateUser(user?: IUserDB) {
     this.user = user
     console.log('user updated', user)
   }
   constructor(rootStore: RootStore) {
+    super(rootStore)
     this._listenToAuthStateChanges()
   }
 
@@ -44,39 +50,57 @@ export class UserStore {
         photoURL: authReq.user.photoURL,
       })
       // populate db user profile and resume auth listener
-      await this._createUserProfile(userName)
+      await this.createUserProfile()
       this._listenToAuthStateChanges()
     }
   }
 
-  public async login(email: string, password: string) {
-    return auth.signInWithEmailAndPassword(email, password)
+  public async login(provider: string, email: string, password: string) {
+    switch (provider) {
+      // custom login methods for DH site
+      case 'DH':
+        // unsubscribe from changes as otherwise they will fire in the middle of updating
+        this._unsubscribeFromAuthStateChanges()
+        await loginWithDHCredentials(email, password, this)
+        this._listenToAuthStateChanges()
+
+      default:
+        return auth.signInWithEmailAndPassword(email, password)
+    }
   }
 
   // handle user sign in, when firebase authenticates wnat to also fetch user document from the database
   public async userSignedIn(user: IFirebaseUser | null) {
-    let userMeta: IUser | null = null
+    console.log('user signed in', user)
     if (user) {
       // legacy user formats did not save names so get profile via email - this option be removed in later version
       // (assumes migration strategy and check)
-      userMeta = user.displayName
+      const userMeta = user.displayName
         ? await this.getUserProfile(user.displayName)
         : await this.getUserProfile(user.email as string)
       if (userMeta) {
         this.updateUser(userMeta)
+      } else {
+        this.createUserProfile()
       }
     }
   }
 
   public async getUserProfile(userName: string) {
-    const ref = await afs.doc(`v2_users/${userName}`).get()
-    return ref.exists ? (ref.data() as IUser) : null
+    console.log('getting user profile', userName)
+    return this.db
+      .collection<IUser>('v2_users')
+      .doc(userName)
+      .get()
   }
 
   public async updateUserProfile(values: Partial<IUser>) {
-    const user = this.user as IUser
+    const user = this.user as IUserDB
     const update = { ...user, ...values }
-    await Database.setDoc(`v2_users/${user.userName}`, update)
+    await this.db
+      .collection('v2_users')
+      .doc(user.userName)
+      .set(update)
     this.updateUser(update)
   }
 
@@ -84,11 +108,6 @@ export class UserStore {
     if (this.authUser) {
       return this.authUser.sendEmailVerification()
     }
-  }
-  // take the username and return matching avatar url (includes undefined.jpg match if no user)
-  public async getUserAvatar(userName: string | undefined) {
-    const url = Storage.getPublicDownloadUrl(`avatars/${userName}.jpg`)
-    return url
   }
 
   public async updateUserAvatar() {
@@ -131,16 +150,47 @@ export class UserStore {
     return auth.signOut()
   }
 
-  private async _createUserProfile(userName: string) {
+  public async deleteUser(reauthPw: string) {
+    // as delete operation is sensitive requires user to revalidate credentials first
     const authUser = auth.currentUser as firebase.User
+    const credential = EmailAuthProvider.credential(
+      authUser.email as string,
+      reauthPw,
+    )
+    try {
+      await authUser.reauthenticateAndRetrieveDataWithCredential(credential)
+      const user = this.user as IUser
+      await this.db
+        .collection('v2_users')
+        .doc(user.userName)
+        .delete()
+      await authUser.delete()
+      // TODO - delete user avatar
+      // TODO - show deleted notification
+    } catch (error) {
+      // TODO show notification if invalid credential
+      throw error
+    }
+  }
+
+  public async createUserProfile(fields: Partial<IUser> = {}) {
+    const authUser = auth.currentUser as firebase.User
+    const userName = authUser.displayName as string
+    const dbRef = this.db.collection<IUser>('v2_users').doc(userName)
+    console.log('creating user profile', userName)
+    if (!userName) {
+      throw new Error('No Username Provided')
+    }
     const user: IUser = {
-      ...Database.generateDocMeta('v2_users', userName),
       _authID: authUser.uid,
       userName,
       verified: false,
+      ...fields,
     }
-    await Database.setDoc(`v2_users${userName}`, user)
-    this.updateUser(user)
+    // update db
+    await dbRef.set(user)
+    // retrieve from db (to also include generated meta)
+    return dbRef.get()
   }
 
   // use firebase auth to listen to change to signed in user
@@ -149,6 +199,7 @@ export class UserStore {
   // to authUnsubscribe variable for use later
   private _listenToAuthStateChanges() {
     this.authUnsubscribe = auth.onAuthStateChanged(authUser => {
+      console.log('auth user changed', authUser)
       this.authUser = authUser
       if (authUser) {
         this.userSignedIn(authUser)
@@ -161,4 +212,12 @@ export class UserStore {
   private _unsubscribeFromAuthStateChanges() {
     this.authUnsubscribe()
   }
+}
+
+/***********************************************************************************************
+ *    Additional Utils - available without store injection
+ **********************************************************************************************/
+// take the username and return matching avatar url (includes undefined.jpg match if no user)
+export const getUserAvatar = (userName: string | undefined) => {
+  return Storage.getPublicDownloadUrl(`avatars/${userName}.jpg`)
 }

@@ -1,16 +1,18 @@
 import * as React from 'react'
 import { Portal } from 'react-portal'
+import { Box } from 'rebass'
 import styled from 'styled-components'
 
 interface IProps {
   // provide onDidDismiss function to enable backdrop click dismiss
-  onDidDismiss?: () => void
+  onDidDismiss: (data?: any) => void
+  height?: number
 }
 interface IState {
   isOpen: boolean
 }
 
-const ModalBackdrop = styled.div`
+const ModalBackdrop = styled(Box)`
   position: fixed;
   top: 0;
   left: 0;
@@ -19,7 +21,7 @@ const ModalBackdrop = styled.div`
   z-index: 9;
   background: rgba(0, 0, 0, 0.4);
 `
-const ModalContent = styled.div`
+const ModalContent = styled(Box)`
   display: block;
   padding: 16px;
   display: flex;
@@ -27,7 +29,6 @@ const ModalContent = styled.div`
   justify-content: space-between;
   width: 300px;
   max-width: 100%;
-  height: 200px;
   max-height: 100%;
   position: fixed;
   z-index: 10;
@@ -35,7 +36,8 @@ const ModalContent = styled.div`
   top: 50%;
   transform: translate(-50%, -50%);
   background: white;
-  box-shadow: 0 0 100px 10px rgba(0, 0, 0, 0.4);
+  border: 2px solid black;
+  border-radius: 10px;
 `
 export class Modal extends React.Component<IProps, IState> {
   constructor(props: IProps) {
@@ -51,13 +53,19 @@ export class Modal extends React.Component<IProps, IState> {
 
   render() {
     const isOpen = this.state
+    const { height, children } = this.props
     return (
       isOpen && (
         <Portal id="portal">
           <ModalBackdrop id="ModalBackdrop" onClick={() => this.dismiss()} />
-          <ModalContent id="ModalContent">{this.props.children}</ModalContent>
+          <ModalContent id="ModalContent" style={height ? { height } : {}}>
+            {children}
+          </ModalContent>
         </Portal>
       )
     )
+  }
+  static defaultProps: IProps = {
+    onDidDismiss: () => null,
   }
 }

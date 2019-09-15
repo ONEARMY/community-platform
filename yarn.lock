@@ -986,39 +986,6 @@
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
-"@devexpress/dx-core@1.11.1":
-  version "1.11.1"
-  resolved "https://registry.yarnpkg.com/@devexpress/dx-core/-/dx-core-1.11.1.tgz#c15f6abde60cfedb741312f1fbac3107298f5c6b"
-  integrity sha512-C8Y2Ed9qqIV2QnihRYktEIK1ZZauOABVFMCUHK2+NUpkP33Gi+S92vazZAki/os0Yy5pUqhgFV8xCTKDraoQ4A==
-
-"@devexpress/dx-grid-core@1.11.1", "@devexpress/dx-grid-core@^1.10.1":
-  version "1.11.1"
-  resolved "https://registry.yarnpkg.com/@devexpress/dx-grid-core/-/dx-grid-core-1.11.1.tgz#e0839a75afd052a6853401a722d073e5e1dac8ce"
-  integrity sha512-9WpxgtY2W15PU6TSb1Xwv2yScdUAJzBMRMLpw7K+xK1Uqunfzpl/amCok3FyzNR782BJJdxzU1SXt1uCRNqGNg==
-
-"@devexpress/dx-react-core@^1.10.1":
-  version "1.11.1"
-  resolved "https://registry.yarnpkg.com/@devexpress/dx-react-core/-/dx-react-core-1.11.1.tgz#afbcffdb6df4762c9f9ed3cadc36d1dcce874a38"
-  integrity sha512-R/NDWi0btjdfoiPlG9VyOb72c+3KoRelaVH7uxQs1uLtT2l/2lBBmEsEknUbT/JMhz1pnPndMWpE63ZAmQ7E+Q==
-  dependencies:
-    "@devexpress/dx-core" "1.11.1"
-    prop-types "^15.7.2"
-
-"@devexpress/dx-react-grid-material-ui@^1.10.1":
-  version "1.11.1"
-  resolved "https://registry.yarnpkg.com/@devexpress/dx-react-grid-material-ui/-/dx-react-grid-material-ui-1.11.1.tgz#0a353050e46c488eff4417f40c6eb6d95f40f15f"
-  integrity sha512-OINq+IfbI3MsK07fYP5EIQmTD0Mhc/W3NqF3rPTX6Iv9VnaJx+ku00Xtw3cFDT2EUNgPrYQXNEb2v2+DhGhWsA==
-  dependencies:
-    classnames "^2.2.6"
-    prop-types "^15.7.2"
-
-"@devexpress/dx-react-grid@^1.10.1":
-  version "1.11.1"
-  resolved "https://registry.yarnpkg.com/@devexpress/dx-react-grid/-/dx-react-grid-1.11.1.tgz#3266ad6ebb3c0bb44c4e21ad6834ea5eea882572"
-  integrity sha512-Yq/fXgFlqj+GaISF/xpH6wZNoENPGEiRiPjUGas8Lx/uj46UemHdRnZ/bayfBTb88WfbVDZHw4asxD/8YnTYqg==
-  dependencies:
-    "@devexpress/dx-grid-core" "1.11.1"
-
 "@emotion/babel-utils@^0.6.4":
   version "0.6.10"
   resolved "https://registry.yarnpkg.com/@emotion/babel-utils/-/babel-utils-0.6.10.tgz#83dbf3dfa933fae9fc566e54fbb45f14674c6ccc"
@@ -1352,14 +1319,6 @@
     react-transition-group "^2.2.1"
     recompose "0.28.0 - 0.30.0"
     warning "^4.0.1"
-
-"@material-ui/icons@3.0.2":
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/@material-ui/icons/-/icons-3.0.2.tgz#d67a6dd1ec8312d3a88ec97944a63daeef24fe10"
-  integrity sha512-QY/3gJnObZQ3O/e6WjH+0ah2M3MOgLOzCy8HTUoUx9B6dDrS18vP7Ycw3qrDEKlB6q1KNxy6CZHm5FCauWGy2g==
-  dependencies:
-    "@babel/runtime" "^7.2.0"
-    recompose "0.28.0 - 0.30.0"
 
 "@material-ui/utils@^3.0.0-alpha.1":
   version "3.0.0-alpha.3"
@@ -7639,6 +7598,11 @@ firebase@5.8.1:
     "@firebase/polyfill" "0.3.5"
     "@firebase/storage" "0.2.7"
 
+flag-icon-css@^3.2.1:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/flag-icon-css/-/flag-icon-css-3.3.0.tgz#7772461e4480d3d86da5962f02120a2825688433"
+  integrity sha512-u5lCGVExrJJRykNGd//ZrBU5Bkt0LTZJFSuG+Az/pwcHgzDeFwomwFbsgVtI1aJd6ysyHsx+5UGrA+nhSGd4yw==
+
 flat-cache@^1.2.1:
   version "1.3.4"
   resolved "https://registry.yarnpkg.com/flat-cache/-/flat-cache-1.3.4.tgz#2c2ef77525cc2929007dfffa1dd314aa9c9dee6f"
@@ -12398,7 +12362,7 @@ point-in-polygon@1.0.1:
   resolved "https://registry.yarnpkg.com/point-in-polygon/-/point-in-polygon-1.0.1.tgz#d59b64e8fee41c49458aac82b56718c5957b2af7"
   integrity sha1-1Ztk6P7kHElFiqyCtWcYxZV7Kvc=
 
-polished@^3.3.1:
+polished@^3.3.1, polished@^3.4.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/polished/-/polished-3.4.1.tgz#1eb5597ec1792206365635811d465751f5cbf71c"
   integrity sha512-GflTnlP5rrpDoigjczEkS6Ye7NDA4sFvAnlr5hSDrEvjiVj97Xzev3hZlLi3UB27fpxyTS9rWU64VzVLWkG+mg==
@@ -13744,6 +13708,15 @@ react-firebase-file-uploader@2.4.2:
   integrity sha512-+oevsz/MH2LdS3tx9iImB4X1gehD3LWPv/KPxLVtd6jh4mwuEyC1/rTo7EWmr39NmoDTO2hI9pHPNOhE5K6iwQ==
   dependencies:
     uuid "^3.2.1"
+
+react-flag-icon-css@^1.0.25:
+  version "1.0.25"
+  resolved "https://registry.yarnpkg.com/react-flag-icon-css/-/react-flag-icon-css-1.0.25.tgz#ac2e99f635ce333c210f593576f12908db8bf3ba"
+  integrity sha512-UJll3zpmbZvkwZvu4HI00iGF8ya4OdFzMR5k3cAluIwdHn8l5cB3CPYt+hw0tt7fLKaYIfncxNEO/qTtvBw2qw==
+  dependencies:
+    classnames "^2.2.6"
+    flag-icon-css "^3.2.1"
+    prop-types "^15.6.2"
 
 react-flags-select@^1.1.10:
   version "1.1.10"

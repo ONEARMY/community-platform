@@ -91,7 +91,7 @@ class GroupingFilter extends React.Component<IProps, IState> {
         hasSelectAll={false}
         ItemRenderer={ItemRenderer}
         style={{
-          maxWidth: '250px',
+          maxWidth: '200px',
           width: '100%',
         }}
       />

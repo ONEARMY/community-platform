@@ -1,14 +1,21 @@
-import { IEvent } from 'src/models/events.models'
+import { IEventFormInput } from 'src/models/events.models'
 
-const INITIAL_VALUES: Partial<IEvent> = {
+const INITIAL_VALUES: IEventFormInput = {
+  title: '',
+  date: '',
+  url: '',
   tags: {},
   location: {
-    address: '',
     name: '',
     country: '',
     countryCode: '',
-    lat: 0,
-    lng: 0,
+    administrative: '',
+    latlng: {
+      lat: 0,
+      lng: 0,
+    },
+    postcode: '',
+    value: '',
   },
 }
 

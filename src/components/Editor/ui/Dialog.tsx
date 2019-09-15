@@ -2,8 +2,32 @@ import React, { useState, FunctionComponent } from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import theme from 'src/themes/styled.theme'
+import { DialogActions } from '@material-ui/core'
+import { Button } from 'src/components/Button'
+import styled from 'styled-components'
 import { TEXT } from '../common'
-import { CancelButton, ConfirmButton, DialogButtons } from './elements.js'
+
+const DialogText = styled(DialogTitle)`
+  width: 600px;
+  border-radius: 0 !important;
+`
+
+const DialogButtons = styled(DialogActions)`
+  padding: 10px;
+  justify-content: center !important;
+`
+
+const CancelButton = styled(Button)`
+  width: 112px;
+  height: 60px;
+`
+const ConfirmButton = styled(Button)`
+  background-color: ${props =>
+    props.disabled ? theme.colors.grey : theme.colors.blue};
+  width: 112px;
+  height: 60px;
+`
 
 interface IFormDialog {
   onCancel: () => void

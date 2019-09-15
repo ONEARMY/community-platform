@@ -1,19 +1,18 @@
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
-
-import { withRouter } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
-import { BoxContainer } from 'src/components/Layout/BoxContainer'
 import { IUser, ILink } from 'src/models/user.models'
 import { UserStore } from 'src/stores/User/user.store'
 import Heading from 'src/components/Heading'
-import { Flex, Box, Link } from 'rebass'
+import { Box, Link, Image } from 'rebass'
 import { Avatar } from 'src/components/Avatar'
 import Text from 'src/components/Text'
-import LinearProgress from '@material-ui/core/LinearProgress'
 import styled from 'styled-components'
-import theme from 'src/themes/styled.theme'
 import Icon from 'src/components/Icons'
+import Flex from 'src/components/Flex'
+import { littleRadius } from '../../../../components/Flex/index'
+import { background } from 'styled-system'
+import FlagIconEvents from 'src/components/Icons/FlagIcon/FlagIcon'
 
 interface IRouterCustomParams {
   id: string
@@ -28,14 +27,27 @@ interface IState {
 }
 
 const Circle = styled(Flex)`
-  border-radius: ${theme.radii[4] + 'px'};
+  border-radius: 50%;
   align-items: center;
   justify-content: center;
   width: 40px;
   height: 40px;
 `
 
-@(withRouter as any)
+const ProfileImage = styled(Image)`
+  width: 100%;
+  height: 450px;
+  object-fit: cover;
+  border-radius: 8px 8px 0px 0px;
+`
+
+const BadgeImage = styled(Image)`
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 2px solid black;
+`
+
 @inject('userStore')
 @observer
 export class UserPage extends React.Component<
@@ -148,8 +160,8 @@ export class UserPage extends React.Component<
     const { user, isLoading } = this.state
     if (user) {
       return (
-        <BoxContainer>
-          <Avatar userName={user.userName} width="120px" borderRadius={5} />
+        <Box>
+          {/* <Avatar userName={user.userName} width="120px" borderRadius={5} /> */}
           <Heading large color={'black'} my={3}>
             {user.userName}
           </Heading>
@@ -186,10 +198,18 @@ export class UserPage extends React.Component<
               {this.renderLinks(user.links)}
             </Box>
           ) : null}
-        </BoxContainer>
+        </Box>
       )
     } else {
-      return isLoading ? <LinearProgress /> : <div>user not found</div>
+      return isLoading ? (
+        <Flex>
+          <Heading txtcenter width={1}>
+            loading...
+          </Heading>
+        </Flex>
+      ) : (
+        <div>user not found</div>
+      )
     }
   }
 }

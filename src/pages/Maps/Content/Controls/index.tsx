@@ -3,12 +3,13 @@ import styled from 'styled-components'
 
 import { Button } from 'src/components/Button'
 import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
-import { FlexContainer } from 'src/components/Layout/FlexContainer'
+import { Flex } from 'rebass'
 
 import { GroupingFilter } from './GroupingFilter'
 
 import { IPinType, EntityType } from 'src/models/maps.models'
 import { HashLink } from 'react-router-hash-link'
+import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
 interface IProps {
   availableFilters: Array<IPinType>
@@ -19,6 +20,16 @@ interface IProps {
 const SearchWrapper = styled.div`
   width: 300px;
   height: 45px;
+`
+
+const MapFlexBar = styled(Flex)`
+  max-width: 1280px;
+  position: absolute;
+  top: 25px;
+  width: 100%;
+  z-index: 99999;
+  left: 50%;
+  transform: translateX(-50%);
 `
 
 const FlexSpacer = styled.div`
@@ -45,16 +56,7 @@ class Controls extends React.Component<IProps> {
     )
 
     return (
-      <FlexContainer
-        style={{
-          width: '80%',
-          position: 'absolute',
-          left: '10%',
-          borderRadius: '5px',
-          zIndex: 2,
-          marginTop: '30px',
-        }}
-      >
+      <MapFlexBar px={[2, 3, 4]} py={1}>
         <SearchWrapper>
           <LocationSearch
             onChange={location => {
@@ -73,16 +75,18 @@ class Controls extends React.Component<IProps> {
           />
         ))}
         <FlexSpacer />
-        <HashLink
-          smooth
-          to={{
-            pathname: `/settings`,
-            hash: '#your-map-pin',
-          }}
-        >
-          <Button variant="outline">My Pin</Button>
-        </HashLink>
-      </FlexContainer>
+        <AuthWrapper>
+          <HashLink
+            smooth
+            to={{
+              pathname: `/settings`,
+              hash: '#your-map-pin',
+            }}
+          >
+            <Button variant={'primary'}>My pin</Button>
+          </HashLink>
+        </AuthWrapper>
+      </MapFlexBar>
     )
   }
 }

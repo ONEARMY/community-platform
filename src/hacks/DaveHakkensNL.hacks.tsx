@@ -2,12 +2,12 @@
     in 'hacks' folder as not part of core platform and could later be moved out entirely
 */
 import * as React from 'react'
-import { functions } from 'src/utils/firebase'
 import { IUser } from 'src/models/user.models'
 import { Button } from 'src/components/Button'
 import { UserStore } from 'src/stores/User/user.store'
 import Text from 'src/components/Text'
 import { TextNotification } from 'src/components/Notification/TextNotification'
+import { IFirebaseUser, auth, functions } from 'src/utils/firebase'
 
 interface IProps {
   mention_name: string
@@ -17,6 +17,34 @@ interface IState {
   isImporting: boolean
   errMsg?: string
   showImportSuccess?: boolean
+}
+
+export const loginWithDHCredentials = async (
+  email: string,
+  password: string,
+  store: UserStore,
+) => {
+  // unsubscribe from changes as otherwise they will fire in the middle of updating
+  const result = await functions.httpsCallable('DHSite_login')({
+    email,
+    password,
+  })
+  await auth.signInWithCustomToken(result.data)
+  const user = auth.currentUser as IFirebaseUser
+  // on first login only uid present so populate firebase auth data and db profile
+  if (!user.email) {
+    const tokenResult = await user.getIdTokenResult()
+    const claims = tokenResult.claims
+    await user.updateEmail(claims.email)
+    await user.updateProfile({
+      displayName: claims.DHSite_mention_name,
+      photoURL: null,
+    })
+    await store.createUserProfile({
+      DHSite_id: claims.DHSite_id,
+      DHSite_mention_name: claims.DHSite_mention_name,
+    })
+  }
 }
 
 export class DHImport extends React.Component<IProps, IState> {
@@ -68,12 +96,15 @@ export class DHImport extends React.Component<IProps, IState> {
     return (
       <>
         <Button
+          small
           disabled={disabled}
           onClick={() => this.importProfileFromDH()}
-          variant={disabled ? 'disabled' : 'outline'}
+          variant={disabled ? 'tertiary' : 'tertiary'}
           ml={2}
+          mb={2}
+          height={'40px'}
         >
-          Import profile from davehakkens.nl
+          Import
         </Button>
         <Text color="error">{this.state.errMsg}</Text>
         <TextNotification
@@ -145,12 +176,12 @@ export interface IBPMember {
     self: [
       {
         href: string
-      }
+      },
     ]
     collection: [
       {
         href: string
-      }
+      },
     ]
   }
 }

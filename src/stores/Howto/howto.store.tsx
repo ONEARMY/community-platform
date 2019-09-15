@@ -4,46 +4,40 @@ import {
   IHowtoFormInput,
   IHowToStepFormInput,
   IHowtoStep,
+  IHowtoDB,
 } from 'src/models/howto.models'
-import { Database } from 'src/stores/database'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
-import { Storage } from '../storage'
+import { Storage, IUploadedFileMeta } from '../storage'
 import { ModuleStore } from '../common/module.store'
 import { ISelectedTags } from 'src/models/tags.model'
 import { RootStore } from '..'
-import { includesAll } from 'src/utils/filters'
+import { IUser } from 'src/models/user.models'
 
 export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
   @observable
-  public activeHowto: IHowto | undefined
+  public activeHowto: IHowtoDB | undefined
   @observable
-  public allHowtos: IHowto[]
+  public allHowtos: IHowtoDB[]
   @observable
   public selectedTags: ISelectedTags
   @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
-  rootStore: RootStore
-
   constructor(rootStore: RootStore) {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
-    super('v2_howtos')
+    super(rootStore, 'v2_howtos')
     this.allDocs$.subscribe(docs => {
-      this.allHowtos = docs as IHowto[]
+      this.allHowtos = docs as IHowtoDB[]
     })
-    this.rootStore = rootStore
     this.selectedTags = {}
   }
 
   @action
   public async getDocBySlug(slug: string) {
-    const collection = await Database.queryCollection<IHowto>(
-      'v2_howtos',
-      'slug',
-      '==',
-      slug,
-    )
+    const collection = await this.db
+      .collection<IHowto>('v2_howtos')
+      .getWhere('slug', '==', slug)
     const activeHowto = collection.length > 0 ? collection[0] : undefined
     this.activeHowto = activeHowto
     return activeHowto
@@ -54,32 +48,28 @@ export class HowtoStore extends ModuleStore {
   }
 
   @computed get filteredHowtos() {
-    const selectedTagsArr = Object.keys(this.selectedTags)
-    return selectedTagsArr.length > 0
-      ? this.allHowtos.filter(howto => {
-          const tags = howto.tags ? Object.keys(howto.tags) : null
-          return tags ? includesAll(selectedTagsArr, tags) : false
-        })
-      : this.allHowtos
+    return this.filterCollectionByTags(this.allHowtos, this.selectedTags)
   }
 
   public updateSelectedTags(tagKey: ISelectedTags) {
     this.selectedTags = tagKey
   }
 
-  public generateID = () => {
-    return Database.generateDocId('v2_howtos')
-  }
-
-  public async uploadHowTo(values: IHowtoFormInput, id: string) {
-    console.log('uploading how-to', id)
-    console.log('values', values)
+  // upload a new or update an existing how-to
+  public async uploadHowTo(values: IHowtoFormInput | IHowtoDB) {
+    // create a reference either to the existing document (if editing) or a new document if creating
+    const dbRef = this.db
+      .collection<IHowto>('v2_howtos')
+      .doc((values as IHowtoDB)._id)
+    const id = dbRef.id
+    const user = this.activeUser as IUser
     try {
-      // upload images
-      const processedCover = await this.uploadHowToFile(
-        values.cover_image[0],
-        id,
-      )
+      // upload any pending images, avoid trying to re-upload images previously saved
+      // if cover already uploaded stored as object not array
+      // file and step image re-uploads handled in uploadFile script
+      const processedCover = Array.isArray(values.cover_image)
+        ? await this.uploadHowToFile(values.cover_image[0], id)
+        : (values.cover_image as IUploadedFileMeta)
       this.updateUploadStatus('Cover')
       const processedSteps = await this.processSteps(values.steps, id)
       this.updateUploadStatus('Step Images')
@@ -90,23 +80,22 @@ export class HowtoStore extends ModuleStore {
       )
       this.updateUploadStatus('Files')
       // populate DB
-      const meta = Database.generateDocMeta('v2_howtos', id)
       // redefine howTo based on processing done above (should match stronger typing)
       const howTo: IHowto = {
         ...values,
+        _createdBy: user.userName,
         cover_image: processedCover,
         steps: processedSteps,
         files: processedFiles,
-        ...meta,
       }
       console.log('populating database', howTo)
-      this.updateDatabase(howTo)
+      // set the database document
+      await dbRef.set(howTo)
       this.updateUploadStatus('Database')
       // complete
       this.updateUploadStatus('Complete')
       console.log('post added')
-      this.activeHowto = howTo
-      return howTo
+      this.activeHowto = await dbRef.get()
     } catch (error) {
       console.log('error', error)
       throw new Error(error.message)
@@ -118,6 +107,7 @@ export class HowtoStore extends ModuleStore {
     // NOTE - outer loop could be a map and done in parallel but for loop easier to manage
     const stepsWithImgMeta: IHowtoStep[] = []
     for (const step of steps) {
+      // determine any new images to upload
       const stepImages = step.images as IConvertedFileMeta[]
       const imgMeta = await this.uploadHowToBatch(stepImages, id)
       step.images = imgMeta
@@ -126,8 +116,16 @@ export class HowtoStore extends ModuleStore {
     return stepsWithImgMeta
   }
 
-  private uploadHowToFile(file: File | IConvertedFileMeta, id: string) {
+  private uploadHowToFile(
+    file: File | IConvertedFileMeta | IUploadedFileMeta,
+    id: string,
+  ) {
     console.log('uploading file', file)
+    // if already uploaded (e.g. editing but not replaced), skip
+    if (file.hasOwnProperty('downloadUrl')) {
+      console.log('file already uploaded, skipping')
+      return file as IUploadedFileMeta
+    }
     // switch between converted file meta or standard file input
     let data: File | Blob = file as File
     if (file.hasOwnProperty('photoData')) {
@@ -150,10 +148,6 @@ export class HowtoStore extends ModuleStore {
       return this.uploadHowToFile(file, id)
     })
     return Promise.all(promises)
-  }
-
-  private updateDatabase(howTo: IHowto) {
-    return Database.setDoc(`v2_howtos/${howTo._id}`, howTo)
   }
 }
 

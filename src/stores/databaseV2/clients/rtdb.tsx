@@ -1,4 +1,4 @@
-import { IDBEndpoint, IDbDoc } from 'src/models/common.models'
+import { IDBEndpoint, DBDoc } from 'src/models/common.models'
 import { rtdb } from 'src/utils/firebase'
 import { AbstractDBClient } from '../types'
 
@@ -13,21 +13,26 @@ export class RealtimeDBClient implements AbstractDBClient {
     return snap.exists ? (snap.val() as T) : undefined
   }
 
-  async setDoc(endpoint: IDBEndpoint, doc: IDbDoc) {
+  async setDoc(endpoint: IDBEndpoint, doc: DBDoc) {
     return db.ref(`${endpoint}/${doc._id}`).set(doc)
   }
 
-  async setBulkDocs(endpoint: IDBEndpoint, docs: IDbDoc[]) {
+  async setBulkDocs(endpoint: IDBEndpoint, docs: DBDoc[]) {
     const updates = {}
     docs.forEach(d => (updates[d._id] = d))
     return db.ref(`/${endpoint}`).update(updates)
   }
 
   async getCollection<T>(endpoint: IDBEndpoint) {
-    const snap = await db.ref(endpoint).once('value')
-    return snap.exists && snap.val()
-      ? Object.values<T & IDbDoc>(snap.val())
-      : []
+    try {
+      const snap = await db.ref(endpoint).once('value')
+      return snap.exists && snap.val()
+        ? Object.values<T & DBDoc>(snap.val())
+        : []
+    } catch (error) {
+      // if endpoint doesn't exist return empty
+      return []
+    }
   }
 
   async queryCollection() {

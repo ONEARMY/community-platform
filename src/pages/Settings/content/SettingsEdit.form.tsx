@@ -4,6 +4,7 @@ import arrayMutators from 'final-form-arrays'
 import Heading from 'src/components/Heading'
 import { IUser } from 'src/models/user.models'
 import Text from 'src/components/Text'
+import Flex from 'src/components/Flex'
 import {
   InputField,
   TextAreaField,
@@ -15,8 +16,7 @@ import { FlagSelector } from 'src/components/Form/Select.field'
 import { UserStore } from 'src/stores/User/user.store'
 import { Button } from 'src/components/Button'
 import { observer, inject } from 'mobx-react'
-import { Flex, Box } from 'rebass'
-import { BoxContainer } from 'src/components/Layout/BoxContainer'
+import { Box } from 'rebass'
 import { getCountryCode } from 'src/utils/helpers'
 import 'react-flags-select/scss/react-flags-select.scss'
 import styled from 'styled-components'
@@ -26,6 +26,7 @@ import { Link } from './Link.field'
 import { timestampToYear } from 'src/utils/helpers'
 import { Icon } from 'src/components/Icons'
 import { toJS } from 'mobx'
+import { UserMapPinEdit } from './UserMapPinEdit'
 
 interface IFormValues extends Partial<IUser> {
   // form values are simply subset of user profile fields
@@ -57,6 +58,7 @@ const FlagSelectContainer = styled(Flex)`
 const YearBox = styled(Box)`
   ${inputStyles}
   cursor: pointer;
+  height: 40px;
 `
 
 const HideShowBox = styled(Box)`
@@ -129,8 +131,16 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
               {/* NOTE - need to put submit method on form to prevent
               default post request */}
               <form id="userProfileForm" onSubmit={handleSubmit}>
-                <BoxContainer mt={4}>
-                  <Heading small bold>
+                <Flex
+                  card
+                  mediumRadius
+                  bg={'white'}
+                  mt={5}
+                  p={4}
+                  flexWrap="wrap"
+                  flexDirection="column"
+                >
+                  <Heading small mb={3}>
                     Your infos
                   </Heading>
                   <Flex width={1 / 2} flexWrap={'wrap'}>
@@ -216,15 +226,18 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
                       )}
                     </FieldArray>
                   </HideShowBox>
-                  <Text width={1} mt={2} medium>
-                    About Me
-                  </Text>
-                  <Field
-                    name="about"
-                    component={TextAreaField}
-                    placeholder="About"
-                  />
-                </BoxContainer>
+                </Flex>
+                <Flex
+                  card
+                  mediumRadius
+                  bg={'white'}
+                  mt={5}
+                  p={4}
+                  flexWrap="wrap"
+                  flexDirection="column"
+                >
+                  <UserMapPinEdit />
+                </Flex>
               </form>
               {/* Map update separate to rest of form */}
             </>

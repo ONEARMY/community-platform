@@ -2,7 +2,7 @@
 // import { IDBEndpoint } from '@OAModels/common.models'
 import * as rtdb from './realtimeDB'
 import * as firestore from './firestoreDB'
-import { IDBEndpoint, IDbDoc } from '../models'
+import { IDBEndpoint, DBDoc } from '../models'
 
 /*  Functions in this folder are used to sync data between firestore and firebase realtime databases
     The reason for this is to allow large collections to be 'cached' for cheap retrieval
@@ -36,7 +36,7 @@ export const sync = async (endpoint: IDBEndpoint) => {
   const existing = await rtdb.get(endpoint)
   const latest =
     existing && Object.keys(existing).length > 1
-      ? Object.values<IDbDoc>(existing).sort((a, b) => _sortByModified(a, b))[0]
+      ? Object.values<DBDoc>(existing).sort((a, b) => _sortByModified(a, b))[0]
           ._modified
       : ''
 
@@ -51,7 +51,7 @@ export const sync = async (endpoint: IDBEndpoint) => {
   return json
 }
 
-function _sortByModified(a: IDbDoc, b: IDbDoc) {
+function _sortByModified(a: DBDoc, b: DBDoc) {
   return a._modified > b._modified ? -1 : 1
 }
 

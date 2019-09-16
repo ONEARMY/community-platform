@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { observer, inject } from 'mobx-react'
 import Heading from 'src/components/Heading'
-import { BoxContainer } from 'src/components/Layout/BoxContainer'
+import { Box } from 'rebass'
 import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
 import { MapsStore } from 'src/stores/Maps/maps.store'
 import { UserStore } from 'src/stores/User/user.store'
@@ -12,7 +12,7 @@ import {
   IMapPinDetail,
   IMapPinWithType,
 } from 'src/models/maps.models'
-import { IUser } from 'src/models/user.models'
+import { IUserDB } from 'src/models/user.models'
 import { generatePinFilters } from 'src/mocks/maps.mock'
 import { ILocation } from 'src/models/common.models'
 
@@ -43,7 +43,7 @@ export class UserMapPinEdit extends React.Component<IProps, IState> {
     return this.props as IInjectedProps
   }
   get user() {
-    return this.injected.userStore.user as IUser
+    return this.injected.userStore.activeUser as IUserDB
   }
   // NIT - semi duplication of maps.store code could be refactored
   // small function to change string pinType into proper type (without accumulation method)
@@ -97,12 +97,11 @@ export class UserMapPinEdit extends React.Component<IProps, IState> {
   render() {
     const pin = this.state.userPin
     return (
-      <BoxContainer id="your-map-pin" mt={4}>
+      <Box id="your-map-pin" mt={4}>
         <Heading small bold>
           Your map pin
         </Heading>
         <div style={{ position: 'relative', zIndex: 2 }}>
-          LocationSearch
           <LocationSearch onChange={v => this.onLocationChange(v)} />
         </div>
         {/* wrap both above and below in positioned div to ensure location search box appears above map */}
@@ -117,7 +116,7 @@ export class UserMapPinEdit extends React.Component<IProps, IState> {
             // onPinClicked={() => this.getActivePinDetail()}
           />
         </div>
-      </BoxContainer>
+      </Box>
     )
   }
 }

@@ -1,16 +1,21 @@
 import { ISelectedTags } from './tags.model'
-import { IDbDoc } from './common.models'
+import { DBDoc } from './common.models'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { IUploadedFileMeta } from 'src/stores/storage'
 
 // By default all how-to form input fields come as strings
 // The IHowto interface can imposes the correct formats on fields
 // Additionally convert from local filemeta to uploaded filemeta
-export interface IHowto extends IHowtoFormInput, IDbDoc {
+export interface IHowto extends IHowtoFormInput {
+  _createdBy: string
   cover_image: IUploadedFileMeta
   files: IUploadedFileMeta[]
   steps: IHowtoStep[]
 }
+/**
+ * Howtos retrieved from the database also include metadata such as _id, _created and _modified
+ */
+export type IHowtoDB = IHowto & DBDoc
 
 export interface IHowtoStep extends IHowToStepFormInput {
   // *** NOTE - adding an '_animationKey' field to track when specific array element removed for

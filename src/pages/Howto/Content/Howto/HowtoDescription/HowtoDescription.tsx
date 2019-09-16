@@ -1,23 +1,115 @@
 import React from 'react'
-import { TagDisplay } from 'src/components/Tags/TagDisplay/TagDisplay'
+import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import differenceInDays from 'date-fns/difference_in_days'
-import { IHowto } from 'src/models/howto.models'
+import { IHowtoDB } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
-import { Box, Flex } from 'rebass'
-import Icon from 'src/components/Icons'
+import { Link } from 'src/components/Links'
+import { Box, Flex, Image } from 'rebass'
 import styled from 'styled-components'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
+import ArrowLeft from 'src/assets/icons/icon-arrow.svg'
+import Steps from 'src/assets/icons/icon-steps.svg'
+import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
+import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
+import { Button } from 'src/components/Button'
+import { IUser } from 'src/models/user.models'
+import { isAllowToEditContent } from 'src/utils/helpers'
 
 interface IProps {
-  howto: IHowto
+  howto: IHowtoDB
+  loggedInUser: IUser | undefined
 }
 
-export const CoverImg = styled.img`
+export const CoverImg = styled(Image)`
   object-fit: cover;
-  max-height: 360px;
-  max-width: 600px;
   width: 100%;
+  height: 450px;
+`
+
+const HowToCard = styled(Flex)`
+  border-radius: 10px;
+  border: 2px solid black;
+  overflow: hidden;
+`
+
+const BreadcrumbBox = styled(Flex)`
+  padding: 6px 10px;
+  border-radius: 5px;
+  background-color: #e2edf7;
+  color: #61646b;
+  font-size: 13px;
+`
+
+const BreadcrumbLink = styled(Link)`
+  color: #61646b;
+  padding-left: 10px;
+  position: relative;
+
+  &:before {
+    content: '';
+    background-image: url(${ArrowLeft});
+    width: 5px;
+    height: 8px;
+    background-repeat: no-repeat;
+    position: absolute;
+    left: 0px;
+    bottom: 4px;
+  }
+`
+
+const StepsBox = styled(Box)`
+  padding-left: 30px;
+  position: relative;
+  font-size: 12px;
+
+  &:before {
+    content: '';
+    background-image: url(${Steps});
+    width: 22px;
+    height: 15px;
+    background-repeat: no-repeat;
+    position: absolute;
+    left: 0px;
+    bottom: 50%;
+    transform: translateY(50%);
+  }
+`
+
+const TimeNeededBox = styled(Box)`
+  padding-left: 30px;
+  position: relative;
+  font-size: 12px;
+
+  &:before {
+    content: '';
+    background-image: url(${TimeNeeded});
+    width: 22px;
+    height: 22px;
+    background-repeat: no-repeat;
+    position: absolute;
+    left: 0px;
+    bottom: 50%;
+    transform: translateY(50%);
+  }
+`
+
+const DifficultyLevelBox = styled(Box)`
+  padding-left: 25px;
+  position: relative;
+  font-size: 12px;
+
+  &:before {
+    content: '';
+    background-image: url(${DifficultyLevel});
+    width: 22px;
+    height: 22px;
+    background-repeat: no-repeat;
+    position: absolute;
+    left: 0px;
+    bottom: 50%;
+    transform: translateY(50%);
+  }
 `
 
 export default class HowtoDescription extends React.PureComponent<IProps, any> {
@@ -31,61 +123,62 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
   }
 
   public render() {
-    const { howto } = this.props
+    const { howto, loggedInUser } = this.props
+
     return (
-      <Flex id="description">
-        <Box width={[1, 1 / 2]}>
-          <Text fontSize={1} mt={2} mb={3} color={'grey2'} p={1}>
-            by&nbsp;
-            <Text inline bold color={'black'}>
-              {howto._createdBy}
-            </Text>
+      <HowToCard
+        bg={'white'}
+        flexDirection={['column-reverse', 'column-reverse', 'row']}
+        mt={4}
+      >
+        <Flex px={4} py={4} flexDirection={'column'} width={[1, 1, 1 / 2]}>
+          <Flex justifyContent={'space-between'}>
+            <BreadcrumbBox alignItems={'center'}>
+              <BreadcrumbLink to={'/how-to'}>Back</BreadcrumbLink>
+            </BreadcrumbBox>
+            {/* Check if logged in user is the creator of the how-to OR a super-admin */}
+            {loggedInUser &&
+              (isAllowToEditContent(howto, loggedInUser) && (
+                <Link to={'/how-to/' + this.props.howto.slug + '/edit'}>
+                  <Button variant={'primary'}>Edit</Button>
+                </Link>
+              ))}
+          </Flex>
+          <Text capitalize auxiliary mt={3} mb={2}>
+            By {howto._createdBy}
             &nbsp;|&nbsp;
-            <Text inline color={'darkgrey'}>
+            <Text inline color={'grey'}>
               {this.durationSincePosted(new Date(howto._created))}
             </Text>
           </Text>
-          <Heading large>{howto.title}</Heading>
-          <Box my={3}>
-            {howto.tags &&
-              Object.keys(howto.tags).map(k => (
-                <TagDisplay tagKey={k} key={k} />
-              ))}
-          </Box>
-          <Text large preLine>
+          <Heading medium mt={2} mb={1}>
+            {howto.title}
+          </Heading>
+          <Text preLine paragraph>
             {howto.description}
           </Text>
 
-          <Flex width={1 / 2} my={3}>
-            <Box width={1 / 3}>
-              <Icon glyph={'step'} mr={2} verticalAlign={'bottom'} />
-              {howto.steps.length} steps
-            </Box>
-            <Box width={1 / 3}>
-              <Icon glyph={'time'} mr={2} verticalAlign={'bottom'} />
-              {howto.time}
-            </Box>
-            <Box width={1 / 3}>
-              <Icon glyph={'difficulty'} mr={2} verticalAlign={'bottom'} />
-              {howto.difficulty_level}
-            </Box>
+          <Flex mt={6} mb={2}>
+            <StepsBox mr={4}>{howto.steps.length} steps</StepsBox>
+            <TimeNeededBox mr={4}>{howto.time}</TimeNeededBox>
+            <DifficultyLevelBox>{howto.difficulty_level}</DifficultyLevelBox>
           </Flex>
-          {howto.files.length > 0 && (
-              <Text>
-                <b>Files : </b>
-              </Text>
-            ) &&
-            howto.files.map(file => (
+          <Flex mt={4}>
+            {howto.tags &&
+              Object.keys(howto.tags).map(tag => {
+                return <TagDisplay key={tag} tagKey={tag} />
+              })}
+          </Flex>
+          <Flex mt={6} flexDirection={'column'}>
+            {howto.files.map(file => (
               <FileInfo allowDownload file={file} key={file.name} />
             ))}
-        </Box>
-        <Flex justifyContent={'end'} width={[1 / 2]}>
-          <Box>
-            <CoverImg src={howto.cover_image.downloadUrl} alt="how-to cover" />
-            <Text pt={2}>{howto.caption}</Text>
-          </Box>
+          </Flex>
         </Flex>
-      </Flex>
+        <Flex justifyContent={'end'} width={[1, 1, 1 / 2]}>
+          <CoverImg src={howto.cover_image.downloadUrl} alt="how-to cover" />
+        </Flex>
+      </HowToCard>
     )
   }
 }

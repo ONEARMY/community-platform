@@ -1,37 +1,28 @@
-import { observable, computed, action, toJS } from 'mobx'
-import {
-  insideBoundingBox,
-  getBoundingBox,
-  createLocation,
-  LatLng,
-  BoundingBox,
-} from 'geolocation-utils'
+import { observable, action, toJS } from 'mobx'
+import { insideBoundingBox, getBoundingBox, LatLng } from 'geolocation-utils'
 
 import {
   IMapPin,
   IPinType,
   IMapPinDetail,
-  ILatLng,
   IBoundingBox,
   EntityType,
   IMapPinWithType,
 } from 'src/models/maps.models'
 import { generatePinFilters, generatePins } from 'src/mocks/maps.mock'
-import { IUser } from 'src/models/user.models'
+import { IUserDB } from 'src/models/user.models'
 import { IDBEndpoint } from 'src/models/common.models'
 import { RootStore } from '..'
-import { DatabaseV2 } from '../databaseV2'
 import { Subscription } from 'rxjs'
+import { ModuleStore } from '../common/module.store'
+import { getUserAvatar } from '../User/user.store'
 
-export class MapsStore {
+export class MapsStore extends ModuleStore {
   mapEndpoint: IDBEndpoint = 'v2_mappins'
   availablePinFilters = generatePinFilters()
-  db: DatabaseV2
-  rootStore: RootStore
   mapPins$: Subscription
   constructor(rootStore: RootStore) {
-    this.rootStore = rootStore
-    this.db = rootStore.dbV2
+    super(rootStore)
   }
   @observable
   public mapBoundingBox: IBoundingBox = {
@@ -84,7 +75,7 @@ export class MapsStore {
     // TODO: make the function accept a bounding box to reduce load from DB
     // TODO: stream will force repeated recalculation of all pins on any update,
     // really inefficient, should either remove stream or find way just to process new
-    this.mapPins$ = this.db.collection('v2_mappins').stream<IMapPin>(pins => {
+    this.mapPins$ = this.db.collection<IMapPin>('v2_mappins').stream(pins => {
       this.processDBMapPins(pins)
     })
   }
@@ -122,7 +113,7 @@ export class MapsStore {
   // get base pin geo information
   public async getPin(id: string) {
     const pin = await this.db
-      .collection('v2_mappins')
+      .collection<IMapPin>('v2_mappins')
       .doc(id)
       .get()
     return pin as IMapPin
@@ -171,13 +162,9 @@ export class MapsStore {
 
   // return subset of profile info used when displaying map pins
   private async getUserProfilePin(username: string) {
-    const u = (await this.rootStore.stores.userStore.getUserProfile(
-      username,
-    )) as IUser
+    const u = (await this.activeUser) as IUserDB
     console.log('user profile retrieved', u)
-    const avatar = await this.rootStore.stores.userStore.getUserAvatar(
-      u.userName,
-    )
+    const avatar = getUserAvatar(u.userName)
     return {
       heroImageUrl: avatar,
       lastActive: u._lastActive ? u._lastActive : u._modified,

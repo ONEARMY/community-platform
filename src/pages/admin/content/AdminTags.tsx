@@ -25,13 +25,13 @@ export class AdminTags extends React.Component<IProps, IState> {
   }
 
   async uploadTags() {
-    this.setState({ disabled: true })
-    try {
-      await this.props.tagsStore!.uploadTagsMockToDatabase()
-      this.setState({ msg: 'Tags Uploaded Successfully' })
-    } catch (error) {
-      this.setState({ disabled: false, msg: 'Error: See console' })
-    }
+    // this.setState({ disabled: true })
+    // try {
+    //   await this.props.tagsStore!.uploadTagsMockToDatabase()
+    //   this.setState({ msg: 'Tags Uploaded Successfully' })
+    // } catch (error) {
+    //   this.setState({ disabled: false, msg: 'Error: See console' })
+    // }
   }
   public render() {
     return (

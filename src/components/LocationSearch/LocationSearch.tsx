@@ -9,17 +9,33 @@ import { ALGOLIA_PLACES_CONFIG } from 'src/config/config'
 import { Input } from '../Form/elements'
 import { Observable, fromEvent, Subscription } from 'rxjs'
 import { debounceTime, map } from 'rxjs/operators'
-import './LocationSearch.css'
+import styled from 'styled-components'
 import { ILocation } from 'src/models/common.models'
 
 interface IProps {
   placeholder: string
   debounceTime: number
   onChange: (selected: ILocation) => void
-  onClear: () => void
+  onClear?: () => void
+  styleVariant?: 'filter' | 'field'
 }
 interface IState {
   debouncedInputValue: string
+}
+
+const AlgoliaResults = styled.input`
+  display: none;
+`
+
+const FilterStyle = {
+  background: 'white',
+  border: '2px solid black',
+  height: '44px',
+  display: 'flex',
+}
+
+const SelectorStyle = {
+  marginBottom: 0,
 }
 
 export class LocationSearch extends React.Component<IProps, IState> {
@@ -46,7 +62,9 @@ export class LocationSearch extends React.Component<IProps, IState> {
     this.places.on('change', (selected: IAlgoliaResponse) =>
       this.handlePlaceSelectChange(selected),
     )
-    this.places.on('clear', () => this.props.onClear())
+    this.places.on('clear', () =>
+      this.props.onClear ? this.props.onClear() : false,
+    )
     this.subscribeToInputChanges()
   }
 
@@ -87,22 +105,22 @@ export class LocationSearch extends React.Component<IProps, IState> {
   }
 
   render() {
+    const { styleVariant } = this.props
     return (
       <>
         {/* the first input uses our styled input component and has ref to subscribe to value changes */}
         <Input
           placeholder={this.props.placeholder}
-          style={{ marginBottom: 0 }}
+          style={styleVariant === 'filter' ? FilterStyle : SelectorStyle}
           ref={this.userInputRef}
         />
         {/* the second input takes debounced value from the first input and binds to algolia search  */}
-        <input
+        <AlgoliaResults
           type="search"
           id="address-input"
           value={this.state.debouncedInputValue}
           ref={this.placesInputRef}
           readOnly
-          style={{ display: 'none' }}
         />
       </>
     )
@@ -112,6 +130,7 @@ LocationSearch.defaultProps = {
   placeholder: 'Search for a location',
   debounceTime: 500,
   onChange: () => null,
+  styleVariant: 'field',
 }
 
 /*****************************************************************

@@ -6,7 +6,7 @@ import InputLabel from '@material-ui/core/InputLabel'
 import Input from '@material-ui/core/Input'
 import { Link } from 'src/components/Links'
 import { colors } from 'src/themes/styled.theme'
-import { FlexContainer } from 'src/components/Layout/FlexContainer'
+import { Flex } from 'src/components/Flex'
 import { UserStore } from 'src/stores/User/user.store'
 import { Form } from 'react-final-form'
 import Heading from 'src/components/Heading'
@@ -139,7 +139,7 @@ export class LoginForm extends React.Component<IProps, IState> {
                     onChange={e => this.handleChange(e)}
                   />
                 </FormControl>
-                <FlexContainer
+                <Flex
                   justifyContent="flex-end"
                   p={0}
                   alignItems="center"
@@ -153,7 +153,7 @@ export class LoginForm extends React.Component<IProps, IState> {
                   >
                     Forgot password?
                   </Link>
-                </FlexContainer>
+                </Flex>
                 <Button
                   width={1}
                   variant={disabled ? 'disabled' : 'dark'}
@@ -164,11 +164,7 @@ export class LoginForm extends React.Component<IProps, IState> {
                 >
                   Log in
                 </Button>
-                <FlexContainer
-                  justifyContent="flex-end"
-                  p={0}
-                  alignItems="baseline"
-                >
+                <Flex justifyContent="flex-end" p={0} alignItems="baseline">
                   <Typography variant="caption">
                     Don't have an account?
                   </Typography>
@@ -180,7 +176,7 @@ export class LoginForm extends React.Component<IProps, IState> {
                   >
                     Sign Up!
                   </Link>
-                </FlexContainer>
+                </Flex>
                 <Typography color="error" variant="caption">
                   {this.state.errorMsg}
                 </Typography>

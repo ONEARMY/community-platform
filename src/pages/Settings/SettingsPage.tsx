@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { BoxContainer } from 'src/components/Layout/BoxContainer'
-import { FlexContainer } from 'src/components/Layout/FlexContainer'
+import Flex from 'src/components/Flex'
 import { IUser } from 'src/models/user.models'
 import { UserStore } from 'src/stores/User/user.store'
 import { SettingsEditForm } from './content/SettingsEdit.form'
@@ -9,11 +8,8 @@ import { ImportDHForm } from './content/ImportDH.form'
 import { Button } from 'src/components/Button'
 import { PostingGuidelines } from './content/PostingGuidelines'
 import Heading from 'src/components/Heading'
+import styled from 'styled-components'
 import { TextNotification } from 'src/components/Notification/TextNotification'
-import { Flex } from 'rebass'
-import { Avatar } from 'src/components/Avatar'
-import Text from 'src/components/Text'
-import { UserMapPinEdit } from './content/UserMapPinEdit'
 import { ProfileDelete } from './content/ProfileDelete'
 
 interface IProps {
@@ -26,6 +22,10 @@ interface IState {
   showNotification: boolean
   showDeleteDialog?: boolean
 }
+
+const FormContainer = styled.div`
+  width: 100%;
+`
 export class UserSettings extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
@@ -44,37 +44,95 @@ export class UserSettings extends React.Component<IProps, IState> {
     const readOnly = !this.state.editMode
 
     return (
-      <FlexContainer m={'0'} bg={'inherit'} flexWrap="wrap">
-        <BoxContainer bg={'inherit'} p={'0'} width={[1, 1, 2 / 3]}>
-          <BoxContainer mb={2}>
-            <Heading small bold>
-              Your details
-            </Heading>
-            <Flex alignItems={'center'}>
-              <Avatar userName={this.state.user.userName} width="60px" />
-              <Text inline bold ml={3}>
-                {this.state.user.userName}
-              </Text>
-            </Flex>
-            {/* TODO - add avatar edit form */}
-            {/* TODO - add email verification resend button (if user email not verified) */}
-            <ChangePasswordForm
-              {...readOnly}
-              userStore={this.props.userStore}
-            />
-            <ImportDHForm {...readOnly} />
-          </BoxContainer>
+      <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
+        <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} my={4}>
+          <FormContainer>
+            {/* How To Info */}
+            <Flex flexDirection={'column'}>
+              <Flex card mediumRadius bg={'softblue'} px={3} py={2}>
+                <Heading medium>Edit profile</Heading>
+              </Flex>
+              <Flex
+                card
+                mediumRadius
+                bg={'white'}
+                mt={5}
+                flexWrap="wrap"
+                flexDirection="column"
+              >
+                <Heading small arrowDown p={4}>
+                  Focus
+                </Heading>
+              </Flex>
+              <Flex
+                card
+                mediumRadius
+                bg={'white'}
+                mt={5}
+                p={4}
+                flexWrap="wrap"
+                flexDirection="column"
+              >
+                <Heading small>Workspace</Heading>
+              </Flex>
+              <Flex
+                card
+                mediumRadius
+                bg={'white'}
+                mt={5}
+                p={4}
+                flexWrap="wrap"
+                flexDirection="column"
+              >
+                <Heading small>Info</Heading>
+              </Flex>
 
-          <SettingsEditForm onProfileSave={() => this.showSaveNotification()} />
-          <UserMapPinEdit />
-        </BoxContainer>
+              <Flex
+                card
+                mediumRadius
+                bg={'white'}
+                mt={5}
+                p={4}
+                flexWrap="wrap"
+                flexDirection="column"
+              >
+                <Heading small mb={3}>
+                  Import profile from davehakkens.nl
+                </Heading>
+                {/* <Text mb={3}>{this.state.user.userName}</Text> */}
+                <ImportDHForm {...readOnly} />
+              </Flex>
+              <Flex
+                card
+                mediumRadius
+                bg={'white'}
+                mt={5}
+                p={4}
+                flexWrap="wrap"
+                flexDirection="column"
+              >
+                <Heading small mb={3}>
+                  Account settings
+                </Heading>
+                <ChangePasswordForm
+                  {...readOnly}
+                  userStore={this.props.userStore}
+                />
+              </Flex>
+              <SettingsEditForm
+                onProfileSave={() => this.showSaveNotification()}
+              />
+            </Flex>
+          </FormContainer>
+        </Flex>
         {/* post guidelines container */}
-        <BoxContainer
+        <Flex
+          flexDirection={'column'}
           width={[1, 1, 1 / 3]}
           height={'100%'}
           bg="inherit"
-          p={0}
-          pl={2}
+          px={2}
+          mt={4}
         >
           <PostingGuidelines />
           <Button
@@ -86,10 +144,10 @@ export class UserSettings extends React.Component<IProps, IState> {
             }}
             width={1}
             mt={3}
-            variant={'secondary'}
+            variant={'primary'}
             type="submit"
           >
-            save profile
+            Save profile
           </Button>
           <div style={{ float: 'right' }}>
             <TextNotification
@@ -98,11 +156,11 @@ export class UserSettings extends React.Component<IProps, IState> {
               show={this.state.showNotification}
             />
           </div>
-        </BoxContainer>
+        </Flex>
         <ProfileDelete
           onConfirmation={reauthPw => this.deleteProfile(reauthPw)}
         />
-      </FlexContainer>
+      </Flex>
     )
   }
 }

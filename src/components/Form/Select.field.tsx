@@ -5,7 +5,8 @@ import { Props as SelectProps } from 'react-select/lib/Select'
 import { Styles } from 'react-select/lib/styles'
 import theme from 'src/themes/styled.theme'
 import { getCountryName } from 'src/utils/helpers'
-import { FlexContainer } from '../Layout/FlexContainer'
+import { background } from 'styled-system'
+import { Flex } from 'src/components/Flex'
 import { ErrorMessage, FieldContainer } from './elements'
 import { IFieldProps } from './Fields'
 
@@ -24,11 +25,114 @@ interface ISelectFieldProps extends IFieldProps, SelectProps {
 export const SelectStyles: Partial<Styles> = {
   container: (provided, state) => ({
     ...provided,
-    fontSize: theme.fontSizes[2] + 'px',
+    fontSize: theme.fontSizes[1] + 'px',
+    fontFamily: '"Varela Round", Arial, sans-serif',
   }),
   control: (provided, state) => ({
     ...provided,
-    border: 'none',
+    border: '1px solid #dce4e5',
+    backgroundColor: theme.colors.background,
+    minHeight: '40px',
+    boxShadow: 'none',
+    ':focus': {
+      border: '1px solid #83ceeb',
+      outline: 'none',
+    },
+    ':hover': {
+      border: '1px solid #83ceeb',
+    },
+  }),
+
+  option: (provided, state) => ({
+    ...provided,
+    backgroundColor: theme.colors.background,
+    boxShadow: 'none',
+    ':hover': {
+      outline: 'none',
+      backgroundColor: 'white',
+      color: 'black',
+    },
+  }),
+
+  menu: (provided, state) => ({
+    ...provided,
+    border: '1px solid #dce4e5',
+    boxShadow: 'none',
+    backgroundColor: theme.colors.background,
+    ':hover': {
+      border: '1px solid #dce4e5',
+    },
+  }),
+
+  multiValue: (provided, state) => ({
+    ...provided,
+    backgroundColor: '#e2edf7',
+    padding: '2px',
+    border: '1px solid #c2d4e4',
+    color: '#61646b',
+  }),
+
+  indicatorSeparator: (provided, state) => ({
+    ...provided,
+    display: 'none',
+  }),
+}
+
+export const FilterStyles: Partial<Styles> = {
+  container: (provided, state) => ({
+    ...provided,
+    fontSize: theme.fontSizes[1] + 'px',
+    fontFamily: '"Varela Round", Arial, sans-serif',
+    border: '2px solid black',
+    borderRadius: '5px',
+    color: 'black',
+  }),
+  control: (provided, state) => ({
+    ...provided,
+    backgroundColor: 'white',
+    minHeight: '40px',
+    boxShadow: 'none',
+    ':hover': {
+      border: '1px solid #83ceeb',
+    },
+    ':focus': {
+      border: '1px solid #83ceeb',
+    },
+  }),
+
+  option: (provided, state) => ({
+    color: 'black',
+    ...provided,
+    backgroundColor: 'white',
+    boxShadow: 'none',
+    ':hover': {
+      outline: 'none',
+      backgroundColor: '#e2edf7',
+      color: 'black',
+    },
+  }),
+
+  menu: (provided, state) => ({
+    ...provided,
+    border: '2px solid black',
+    boxShadow: 'none',
+    backgroundColor: 'white',
+    ':hover': {
+      border: '2px solid black',
+    },
+  }),
+
+  multiValue: (provided, state) => ({
+    ...provided,
+    backgroundColor: '#e2edf7',
+    padding: '2px',
+    border: '1px solid black',
+    color: '#61646b',
+  }),
+
+  indicatorSeparator: (provided, state) => ({
+    ...provided,
+    display: 'none',
   }),
 }
 
@@ -64,7 +168,7 @@ const defaultProps: Partial<ISelectFieldProps> = {
 }
 export const SelectField = ({ input, meta, ...rest }: ISelectFieldProps) => (
   // note, we first use a div container so that default styles can be applied
-  <FlexContainer p={0} flexWrap="wrap">
+  <Flex p={0} flexWrap="wrap">
     <FieldContainer invalid={meta.error && meta.touched} style={rest.style}>
       <Select
         styles={SelectStyles}
@@ -79,7 +183,7 @@ export const SelectField = ({ input, meta, ...rest }: ISelectFieldProps) => (
       />
     </FieldContainer>
     {meta.error && meta.touched && <ErrorMessage>{meta.error}</ErrorMessage>}
-  </FlexContainer>
+  </Flex>
 )
 
 export const FlagSelector = ({ input, meta, ...rest }: ISelectFieldProps) => (

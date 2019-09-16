@@ -1,34 +1,34 @@
 import React from 'react'
-import { CommunityHeader } from './CommunityHeader/CommunityHeader'
-import { PublicHeader } from './PublicHeader/PublicHeader'
+import { Flex } from 'rebass'
+import styled from 'styled-components'
+import theme from 'src/themes/styled.theme'
+import Profile from 'src/pages/common/Header/Profile/Profile'
+import MenuDesktop from 'src/components/Menu/MenuDesktop'
+import MenuMobile from 'src/components/Menu/MenuMobile'
+import Logo from 'src/components/Logo/Logo'
 
-interface IState {
-  auth: boolean
-  anchorEl: any
-  isLoggedIn?: boolean
-}
+const FlexHeader = styled(Flex)`
+  height: 60px;
+  background-color: ${theme.colors.white};
+  justify-content: space-between;
+  align-items: center;
+`
 
-interface IProps {
-  variant: 'community' | 'public'
-  title: string
-  description: string
-}
-
-export class Header extends React.Component<IProps, IState> {
-  constructor(props) {
-    super(props)
-  }
-
+export class Header extends React.Component {
   render() {
-    const { title, description } = this.props
     return (
-      <div id="header">
-        {this.props.variant === 'community' ? (
-          <CommunityHeader {...{ title, description }} />
-        ) : (
-          <PublicHeader />
-        )}
-      </div>
+      <>
+        <FlexHeader>
+          <Flex>
+            <Logo />
+          </Flex>
+          <Flex mr={[2, 3, 4]}>
+            <MenuDesktop />
+            <MenuMobile />
+            <Profile />
+          </Flex>
+        </FlexHeader>
+      </>
     )
   }
 }

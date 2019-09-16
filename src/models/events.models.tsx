@@ -1,5 +1,5 @@
 import { ISelectedTags } from './tags.model'
-import { IDbDoc, ISODateString } from './common.models'
+import { DBDoc, ISODateString } from './common.models'
 import { ILocation } from 'src/models/common.models'
 
 export interface IEvent extends IEventFormInput {
@@ -11,7 +11,7 @@ export interface IEvent extends IEventFormInput {
   // type: string
   // image: string
 }
-export type IEventDB = IEvent & IDbDoc
+export type IEventDB = IEvent & DBDoc
 
 export interface IEventFilters {
   project: string

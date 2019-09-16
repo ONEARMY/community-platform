@@ -1,6 +1,4 @@
-import { ISODateString } from './common.models'
-import { ILocation } from './common.models'
-import { DBDoc } from 'src/stores/databaseV2/types'
+import { ISODateString, ILocation, DBDoc } from './common.models'
 
 export interface IUserState {
   user?: IUser

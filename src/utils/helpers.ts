@@ -1,7 +1,7 @@
 import countries from 'react-flags-select/lib/countries.js'
 import { IHowto } from 'src/models/howto.models'
 import { IUser } from 'src/models/user.models'
-import { IDbDoc } from 'src/models/common.models'
+import { DBDoc } from 'src/models/common.models'
 
 // remove special characters from string, also replacing spaces with dashes
 export const stripSpecialCharacters = (text?: string) => {
@@ -51,10 +51,10 @@ export const isEmail = (email: string) => {
   return re.test(email)
 }
 
-export const isAllowToEditContent = (doc: IDbDoc, user: IUser) => {
+export const isAllowToEditContent = (doc: IEditableDoc, user: IUser) => {
   if (
     (user.userRoles && user.userRoles.includes('super-admin')) ||
-    doc._createdBy === user.userName
+    (doc._createdBy && doc._createdBy === user.userName)
   ) {
     return true
   } else {
@@ -75,4 +75,9 @@ export const getCountryName = (countryCode: string | undefined) => {
   } else {
     return countryCode
   }
+}
+
+// ensure docs passed to edit check contain _createdBy field
+interface IEditableDoc extends DBDoc {
+  _createdBy: string
 }

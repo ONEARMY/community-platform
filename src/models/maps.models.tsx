@@ -1,4 +1,4 @@
-import { IDbDoc, ISODateString } from './common.models'
+import { DBDoc, ISODateString } from './common.models'
 
 interface IMapPinBase {
   _id: string

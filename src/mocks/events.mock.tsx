@@ -50,6 +50,7 @@ export const EVENTS: IEvent[] = [
     slug: 'open-workshop-and-free-lunch---brighton',
     tags: {},
     url: 'http://fakeurl.com',
+    _createdBy: 'exampleUser',
   },
   {
     title: 'Beach Clean in Brighton',
@@ -59,6 +60,7 @@ export const EVENTS: IEvent[] = [
     slug: 'open-workshop-and-free-lunch---brighton',
     tags: {},
     url: 'http://fakeurl.com',
+    _createdBy: 'exampleUser',
   },
 ]
 

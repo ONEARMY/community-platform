@@ -1,13 +1,12 @@
-import { IDbDoc } from 'src/models/common.models'
+import { DBDoc } from 'src/models/common.models'
 
 // helper methods used in generation of mock db data
 export const MOCK_DB_META = (id?: string) => {
   const d1 = randomDate(new Date(2012, 0, 1), new Date())
   const d2 = randomDate(d1, new Date())
-  const meta: IDbDoc = {
+  const meta: DBDoc = {
     _created: d1.toISOString(),
     _modified: d2.toISOString(),
-    _createdBy: 'MockUser',
     _deleted: false,
     _id: id ? id : randomID(),
   }

@@ -60,6 +60,8 @@ class SignInPage extends React.Component<IProps, IState> {
         email: props.preloadValues ? props.preloadValues.email : '',
         password: props.preloadValues ? props.preloadValues.password : '',
       },
+      // TODO remove initialization of authProvider state when DH login will be fixed
+      authProvider: AUTH_PROVIDERS[1],
     }
   }
 

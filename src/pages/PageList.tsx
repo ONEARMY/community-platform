@@ -6,6 +6,7 @@ import { EventsPage } from './Events/Events'
 import { AdminPage } from './admin/Admin'
 import { MapsPage } from './Maps/Maps'
 import { User } from './User/User'
+import { ExternalEmbed } from 'src/components/ExternalEmbed/ExternalEmbed'
 import { SignUpMessagePage } from './SignUp/SignUpMessage'
 import { ResendSignUpMessagePage } from './SignUp/ResendSignUpMessage'
 import SignUpPage from './SignUp/SignUp'
@@ -20,6 +21,7 @@ export interface IPageMeta {
   description: string
   exact?: boolean
   fullPageWidth?: boolean
+  customStyles?: React.CSSProperties
 }
 
 const howTo = {
@@ -39,6 +41,13 @@ const user = {
   component: <User />,
   title: 'User profile',
   description: 'User profile',
+}
+const academy = {
+  path: '/academy',
+  component: <ExternalEmbed src="https://onearmy.github.io/academy/intro" />,
+  title: 'Academy',
+  description: 'Demo external page embed',
+  customStyles: { position: 'absolute', height: '100%', width: '100%' },
 }
 const events = {
   path: '/events',
@@ -103,7 +112,7 @@ const forgotpasswordmessage = {
 }
 
 // community pages (various pages hidden on production build)
-const devCommunityPages = [howTo, events, maps]
+const devCommunityPages = [howTo, events, maps, academy]
 const prodCommunityPages = [howTo, events, maps]
 const communityPages =
   SITE === 'production' ? prodCommunityPages : devCommunityPages

@@ -18,12 +18,11 @@ type InnerContainerProps = MaxWidthProps &
   }
 
 const InnerContainer = styled(Box)<InnerContainerProps>`
-  ${space}
-  ${width}
   ${props => (props.ignoreMaxWidth ? 'max-width: inherit;' : maxWidth)}
   margin: ${p => (p.ignoreMaxWidth ? 0 : undefined)};
   padding: ${p => (p.ignoreMaxWidth ? 0 : undefined)};
   position: relative;
+  height: 100%;
 `
 interface IProps extends FlexProps {
   ignoreMaxWidth?: boolean

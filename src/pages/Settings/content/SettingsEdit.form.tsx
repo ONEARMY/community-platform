@@ -5,17 +5,11 @@ import Heading from 'src/components/Heading'
 import { IUser } from 'src/models/user.models'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
-import {
-  InputField,
-  TextAreaField,
-  YearPicker,
-} from 'src/components/Form/Fields'
+import { InputField, YearPicker } from 'src/components/Form/Fields'
 import Switch from '@material-ui/core/Switch'
 import { inputStyles } from 'src/components/Form/elements'
 import { FlagSelector } from 'src/components/Form/Select.field'
-import { UserStore } from 'src/stores/User/user.store'
 import { Button } from 'src/components/Button'
-import { observer, inject } from 'mobx-react'
 import { Box } from 'rebass'
 import { getCountryCode } from 'src/utils/helpers'
 import 'react-flags-select/scss/react-flags-select.scss'
@@ -25,20 +19,11 @@ import { FieldArray } from 'react-final-form-arrays'
 import { Link } from './Link.field'
 import { timestampToYear } from 'src/utils/helpers'
 import { Icon } from 'src/components/Icons'
-import { toJS } from 'mobx'
-import { UserMapPinEdit } from './UserMapPinEdit'
 
-interface IFormValues extends Partial<IUser> {
-  // form values are simply subset of user profile fields
-}
 interface IProps {
-  onProfileSave: () => void
-}
-interface IInjectedProps extends IProps {
-  userStore: UserStore
+  user: IUser
 }
 interface IState {
-  formValues: IFormValues
   readOnly: boolean
   isSaving?: boolean
   showYearSelector?: boolean
@@ -66,38 +51,20 @@ const HideShowBox = styled(Box)`
   pointer-events: ${props => (props.disabled ? undefined : 'none')};
 `
 
-// we inject the userstore here instead of passing down as would have to pass
-// from Profile -> UserProfile -> ProfileEditForm which is less reliable
-// could use contextAPI but as we have mobx feels easier
-@inject('userStore')
-@observer
 export class SettingsEditForm extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
-    const user = this.injected.userStore.user
+
     this.state = {
-      formValues: user ? user : {},
       readOnly: true,
       showYearSelector: false,
-      showComLinks: user && user.links ? true : false,
+      showComLinks: props.user && props.user.links ? true : false,
     }
     this.changeComLinkSwitch = this.changeComLinkSwitch.bind(this)
   }
 
   public changeComLinkSwitch() {
     this.setState({ showComLinks: !this.state.showComLinks })
-  }
-
-  get injected() {
-    return this.props as IInjectedProps
-  }
-
-  public async saveProfile(values: IFormValues) {
-    console.log('profile values :', values)
-    this.props.onProfileSave()
-
-    await this.injected.userStore.updateUserProfile(values)
-    this.setState({ readOnly: true, showNotification: true })
   }
 
   public displayYear(dateOrTmstp) {
@@ -111,139 +78,102 @@ export class SettingsEditForm extends React.Component<IProps, IState> {
   }
 
   render() {
-    const user = this.injected.userStore.user
-    // Need to convert mobx observable user object into a Javasrcipt structure using toJS fn
-    // to allow final-form-array to display the initial values
-    const initialFormValues = toJS(user)
-
-    return user ? (
-      <Form
-        // submission managed by button and state above
-        onSubmit={values => this.saveProfile(values)}
-        initialValues={initialFormValues}
-        validateOnBlur
-        mutators={{
-          ...arrayMutators,
-        }}
-        render={({ handleSubmit, submitting, values }) => {
-          return (
-            <>
-              {/* NOTE - need to put submit method on form to prevent
-              default post request */}
-              <form id="userProfileForm" onSubmit={handleSubmit}>
-                <Flex
-                  card
-                  mediumRadius
-                  bg={'white'}
-                  mt={5}
-                  p={4}
-                  flexWrap="wrap"
-                  flexDirection="column"
+    const { user } = this.props
+    return (
+      <Flex
+        card
+        mediumRadius
+        bg={'white'}
+        mt={5}
+        p={4}
+        flexWrap="wrap"
+        flexDirection="column"
+      >
+        <Heading small mb={3}>
+          Your infos
+        </Heading>
+        <Flex width={1 / 2} flexWrap={'wrap'}>
+          <Field
+            name="userName"
+            component={InputField}
+            placeholder="User Name"
+          />
+          <FlagSelectContainer width={1} alignItems="center">
+            <Field
+              name="country"
+              component={FlagSelector}
+              searchable={true}
+              defaultCountry={getCountryCode(user.country)}
+            />
+          </FlagSelectContainer>
+          <Text width={1} mt={2} medium>
+            Birth year :
+          </Text>
+          <YearBox
+            width={1}
+            onClick={() => {
+              this.setState({
+                showYearSelector: !this.state.showYearSelector,
+              })
+            }}
+          >
+            <Icon glyph={'arrow-down'} />
+            <Text inline ml={2}>
+              {user.year ? this.displayYear(user.year) : 'Choose a date'}
+            </Text>
+          </YearBox>
+          {this.state.showYearSelector && (
+            <Field
+              name="year"
+              component={YearPicker}
+              onChange={year => {
+                user.year = year
+                this.setState({ showYearSelector: false })
+              }}
+            />
+          )}
+        </Flex>
+        <Flex wrap={'nowrap'} alignItems={'center'} width={1}>
+          <Text medium>
+            Do you want to add communication links (Facebook, Discord, Slack,
+            Email ?)
+          </Text>
+          <Switch
+            checked={this.state.showComLinks}
+            onChange={this.changeComLinkSwitch}
+          />
+        </Flex>
+        <HideShowBox disabled={this.state.showComLinks}>
+          <FieldArray name="links">
+            {({ fields }) => (
+              <>
+                {fields.map((name, index: number) => (
+                  <Link
+                    key={index}
+                    link={name}
+                    index={index}
+                    onDelete={(fieldIndex: number) => {
+                      fields.remove(fieldIndex)
+                    }}
+                  />
+                ))}
+                <Button
+                  my={2}
+                  variant="outline"
+                  onClick={() => {
+                    fields.push({
+                      label: '',
+                      url: '',
+                    })
+                  }}
                 >
-                  <Heading small mb={3}>
-                    Your infos
-                  </Heading>
-                  <Flex width={1 / 2} flexWrap={'wrap'}>
-                    <Field
-                      name="userName"
-                      component={InputField}
-                      placeholder="User Name"
-                    />
-                    <FlagSelectContainer width={1} alignItems="center">
-                      <Field
-                        name="country"
-                        component={FlagSelector}
-                        searchable={true}
-                        defaultCountry={getCountryCode(user.country)}
-                      />
-                    </FlagSelectContainer>
-                    <Text width={1} mt={2} medium>
-                      Birth year :
-                    </Text>
-                    <YearBox
-                      width={1}
-                      onClick={() => {
-                        this.setState({
-                          showYearSelector: !this.state.showYearSelector,
-                        })
-                      }}
-                    >
-                      <Icon glyph={'arrow-down'} />
-                      <Text inline ml={2}>
-                        {user.year
-                          ? this.displayYear(user.year)
-                          : 'Choose a date'}
-                      </Text>
-                    </YearBox>
-                    {this.state.showYearSelector && (
-                      <Field
-                        name="year"
-                        component={YearPicker}
-                        onChange={year => {
-                          user.year = year
-                          this.setState({ showYearSelector: false })
-                        }}
-                      />
-                    )}
-                  </Flex>
-                  <Flex wrap={'nowrap'} alignItems={'center'} width={1}>
-                    <Text medium>
-                      Do you want to add communication links (Facebook, Discord,
-                      Slack, Email ?)
-                    </Text>
-                    <Switch
-                      checked={this.state.showComLinks}
-                      onChange={this.changeComLinkSwitch}
-                    />
-                  </Flex>
-                  <HideShowBox disabled={this.state.showComLinks}>
-                    <FieldArray name="links">
-                      {({ fields }) => (
-                        <>
-                          {fields.map((name, index: number) => (
-                            <Link
-                              key={index}
-                              link={name}
-                              index={index}
-                              onDelete={(fieldIndex: number) => {
-                                fields.remove(fieldIndex)
-                              }}
-                            />
-                          ))}
-                          <Button
-                            my={2}
-                            variant="outline"
-                            onClick={() => {
-                              fields.push({
-                                label: '',
-                                url: '',
-                              })
-                            }}
-                          >
-                            add another
-                          </Button>
-                        </>
-                      )}
-                    </FieldArray>
-                  </HideShowBox>
-                </Flex>
-                <Flex
-                  card
-                  mediumRadius
-                  bg={'white'}
-                  mt={5}
-                  p={4}
-                  flexWrap="wrap"
-                  flexDirection="column"
-                >
-                  <UserMapPinEdit />
-                </Flex>
-              </form>
-              {/* Map update separate to rest of form */}
-            </>
-          )
-        }}
-      />
-    ) : null
+                  add another
+                </Button>
+              </>
+            )}
+          </FieldArray>
+        </HideShowBox>
+      </Flex>
+    )
   }
 }

@@ -43,7 +43,7 @@ export class SignUpMessagePage extends React.Component {
             flexWrap="wrap"
             flexDirection="column"
           >
-            <Heading small arrowDown py={4} width={1}>
+            <Heading small py={4} width={1}>
               Sign up successful
             </Heading>
             <Flex flexDirection={'column'} mb={3}>

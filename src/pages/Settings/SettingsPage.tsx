@@ -60,7 +60,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                 flexWrap="wrap"
                 flexDirection="column"
               >
-                <Heading small arrowDown p={4}>
+                <Heading small p={4}>
                   Focus
                 </Heading>
               </Flex>

@@ -141,7 +141,7 @@ class SignInPage extends React.Component<IProps, IState> {
                     {/* Login Form */}
                     {this.state.authProvider && (
                       <>
-                        <Heading small arrowDown py={4} width={1}>
+                        <Heading small py={4} width={1}>
                           Log in to your account
                         </Heading>
                         <Flex flexDirection={'column'} mb={3}>

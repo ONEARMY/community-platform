@@ -4,9 +4,10 @@ import { IUser } from 'src/models/user.models'
 import { UserStore } from 'src/stores/User/user.store'
 import { observer, inject } from 'mobx-react'
 import { toJS } from 'mobx'
-import { SettingsEditForm } from './content/SettingsEdit.form'
-import { ChangePasswordForm } from './content/ChangePassword.form'
-import { ImportDHForm } from './content/ImportDH.form'
+import { SettingsEditForm } from './content/formSections/SettingsEdit.form'
+import { ChangePasswordForm } from './content/formSections/ChangePassword.form'
+import { ImportDHForm } from './content/formSections/ImportDH.form'
+import { FocusSection } from './content/formSections/Focus.section'
 import { Button } from 'src/components/Button'
 import { PostingGuidelines } from './content/PostingGuidelines'
 import Heading from 'src/components/Heading'
@@ -16,15 +17,9 @@ import styled from 'styled-components'
 import { TextNotification } from 'src/components/Notification/TextNotification'
 import { ProfileDelete } from './content/ProfileDelete'
 import { Box, Image } from 'rebass'
-import { InputField } from 'src/components/Form/Fields'
 import { Form, Field } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
-import { UserMapPinEdit } from './content/UserMapPinEdit'
-import CollectionBadge from 'src/assets/images/badges/pt-collection-point.jpg'
-import MemberBadge from 'src/assets/images/badges/pt-member.jpg'
-import MachineBadge from 'src/assets/images/badges/pt-machine-shop.jpg'
-import WorkspaceBadge from 'src/assets/images/badges/pt-workspace.jpg'
-import LocalComBadge from 'src/assets/images/badges/pt-local-community.jpg'
+import { UserMapPinSection } from './content/formSections/MapPin.section'
 
 interface IFormValues extends Partial<IUser> {
   // form values are simply subset of user profile fields
@@ -47,31 +42,6 @@ interface IState {
 
 const FormContainer = styled.form`
   width: 100%;
-`
-
-const Label = styled.label`
-  margin: 10px;
-  /* padding: 0 10px; */
-  &:has(input:checked) {
-    background-color: grey;
-  }
-`
-
-const CustomInput = styled(Field)`
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-  & + img {
-    cursor: pointer;
-  }
-  &:checked + img {
-    opacity: 1;
-  }
-`
-
-const ImgOp = styled(Image)`
-  opacity: 0.5;
 `
 
 @inject('userStore')
@@ -132,131 +102,9 @@ export class UserSettings extends React.Component<IProps, IState> {
                     <Flex card mediumRadius bg={'softblue'} px={3} py={2}>
                       <Heading medium>Edit profile</Heading>
                     </Flex>
-                    <Flex
-                      card
-                      mediumRadius
-                      bg={'white'}
-                      mt={5}
-                      flexWrap="wrap"
-                      flexDirection="column"
-                    >
-                      <Heading small p={4}>
-                        Focus
-                      </Heading>
-                      <Box px={4}>
-                        <Text regular my={4}>
-                          What is your main Precious Plastic activity?
-                        </Text>
-                        <Flex wrap="nowrap">
-                          <Label>
-                            <CustomInput
-                              id="pt-workspace"
-                              value="pt-workspace"
-                              name="title"
-                              type="radio"
-                              validateFields={[]}
-                              component={InputField}
-                              checked={
-                                this.state.profileType === 'pt-workspace'
-                              }
-                              onChange={v => {
-                                this.setState({
-                                  profileType: v.target.value,
-                                })
-                              }}
-                            />
-                            <ImgOp px={3} src={WorkspaceBadge} />
-                            <Text my={1} txtcenter small>
-                              I run a workspace
-                            </Text>
-                          </Label>
-                          <Label htmlFor="pt-community">
-                            <CustomInput
-                              id="pt-community"
-                              value="pt-community"
-                              name="title"
-                              type="radio"
-                              validateFields={[]}
-                              component={InputField}
-                              checked={
-                                this.state.profileType === 'pt-community'
-                              }
-                              onChange={v => {
-                                this.setState({
-                                  profileType: v.target.value,
-                                })
-                              }}
-                            />
-                            <ImgOp px={3} src={LocalComBadge} />
-                            <Text my={1} txtcenter small>
-                              I run a local community
-                            </Text>
-                          </Label>
-                          <Label htmlFor="pt-collection">
-                            <CustomInput
-                              id="pt-collection"
-                              value="pt-collection"
-                              name="title"
-                              type="radio"
-                              validateFields={[]}
-                              component={InputField}
-                              checked={
-                                this.state.profileType === 'pt-collection'
-                              }
-                              onChange={v => {
-                                this.setState({
-                                  profileType: v.target.value,
-                                })
-                              }}
-                            />
-                            <ImgOp px={3} src={CollectionBadge} />
-                            <Text my={1} txtcenter small>
-                              I collect & sort plastic
-                            </Text>
-                          </Label>
-                          <Label htmlFor="pt-machine">
-                            <CustomInput
-                              id="pt-machine"
-                              value="pt-machine"
-                              name="title"
-                              type="radio"
-                              validateFields={[]}
-                              component={InputField}
-                              checked={this.state.profileType === 'pt-machine'}
-                              onChange={v => {
-                                this.setState({
-                                  profileType: v.target.value,
-                                })
-                              }}
-                            />
-                            <ImgOp px={3} src={MachineBadge} />
-                            <Text my={1} txtcenter small>
-                              I build machines
-                            </Text>
-                          </Label>
-                          <Label htmlFor="pt-member">
-                            <CustomInput
-                              id="pt-member"
-                              value="pt-member"
-                              name="title"
-                              type="radio"
-                              validateFields={[]}
-                              component={InputField}
-                              checked={this.state.profileType === 'pt-member'}
-                              onChange={v => {
-                                this.setState({
-                                  profileType: v.target.value,
-                                })
-                              }}
-                            />
-                            <ImgOp px={3} src={MemberBadge} />
-                            <Text my={1} txtcenter small>
-                              I am a member
-                            </Text>
-                          </Label>
-                        </Flex>
-                      </Box>
-                    </Flex>
+                    <FocusSection
+                      onInputChange={v => this.setState({ profileType: v })}
+                    />
                     <Flex
                       card
                       mediumRadius
@@ -313,17 +161,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                       /> */}
                     </Flex>
                     <SettingsEditForm user={user} />
-                    <Flex
-                      card
-                      mediumRadius
-                      bg={'white'}
-                      mt={5}
-                      p={4}
-                      flexWrap="wrap"
-                      flexDirection="column"
-                    >
-                      <UserMapPinEdit />
-                    </Flex>
+                    <UserMapPinSection />
                   </Flex>
                 </FormContainer>
               </Flex>

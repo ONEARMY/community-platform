@@ -24,9 +24,9 @@ interface IProps {
 }
 
 const Label = styled.label`
-font-size: ${theme.fontSizes[2] + 'px'}
-margin-bottom: ${theme.space[2] + 'px'}
-display: block;
+  font-size: ${theme.fontSizes[2] + 'px'};
+  margin-bottom: ${theme.space[2] + 'px'};
+  display: block;
 `
 
 export class ChangePasswordForm extends React.Component<IProps, IState> {

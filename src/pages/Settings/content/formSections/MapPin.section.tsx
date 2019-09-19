@@ -15,6 +15,7 @@ import {
 import { IUserDB } from 'src/models/user.models'
 import { generatePinFilters } from 'src/mocks/maps.mock'
 import { ILocation } from 'src/models/common.models'
+import Flex from 'src/components/Flex'
 
 interface IProps {}
 interface IInjectedProps extends IProps {
@@ -30,7 +31,7 @@ const DEFAULT_PIN_TYPE: string = 'member'
 
 @inject('mapsStore', 'userStore')
 @observer
-export class UserMapPinEdit extends React.Component<IProps, IState> {
+export class UserMapPinSection extends React.Component<IProps, IState> {
   pinFilters = generatePinFilters()
   constructor(props: IProps) {
     super(props)
@@ -97,26 +98,36 @@ export class UserMapPinEdit extends React.Component<IProps, IState> {
   render() {
     const pin = this.state.userPin
     return (
-      <Box id="your-map-pin" mt={4}>
-        <Heading small bold>
-          Your map pin
-        </Heading>
-        <div style={{ position: 'relative', zIndex: 2 }}>
-          <LocationSearch onChange={v => this.onLocationChange(v)} />
-        </div>
-        {/* wrap both above and below in positioned div to ensure location search box appears above map */}
-        <div style={{ height: '300px', position: 'relative', zIndex: 1 }}>
-          <MapView
-            zoom={pin ? 13 : 2}
-            center={pin ? pin.location : undefined}
-            pins={this.mapPins}
-            filters={this.pinFilters}
-            // TODO - popup not currently shown as doesn't update correctly
-            // activePinDetail={this.state.activePinDetail}
-            // onPinClicked={() => this.getActivePinDetail()}
-          />
-        </div>
-      </Box>
+      <Flex
+        card
+        mediumRadius
+        bg={'white'}
+        mt={5}
+        p={4}
+        flexWrap="wrap"
+        flexDirection="column"
+      >
+        <Box id="your-map-pin" mt={4}>
+          <Heading small bold>
+            Your map pin
+          </Heading>
+          <div style={{ position: 'relative', zIndex: 2 }}>
+            <LocationSearch onChange={v => this.onLocationChange(v)} />
+          </div>
+          {/* wrap both above and below in positioned div to ensure location search box appears above map */}
+          <div style={{ height: '300px', position: 'relative', zIndex: 1 }}>
+            <MapView
+              zoom={pin ? 13 : 2}
+              center={pin ? pin.location : undefined}
+              pins={this.mapPins}
+              filters={this.pinFilters}
+              // TODO - popup not currently shown as doesn't update correctly
+              // activePinDetail={this.state.activePinDetail}
+              // onPinClicked={() => this.getActivePinDetail()}
+            />
+          </div>
+        </Box>
+      </Flex>
     )
   }
 }

@@ -8,6 +8,7 @@ import { SettingsEditForm } from './content/formSections/SettingsEdit.form'
 import { ChangePasswordForm } from './content/formSections/ChangePassword.form'
 import { ImportDHForm } from './content/formSections/ImportDH.form'
 import { FocusSection } from './content/formSections/Focus.section'
+import { WorkspaceSection } from './content/formSections/Workspace.section'
 import { Button } from 'src/components/Button'
 import { PostingGuidelines } from './content/PostingGuidelines'
 import Heading from 'src/components/Heading'
@@ -78,6 +79,7 @@ export class UserSettings extends React.Component<IProps, IState> {
 
   render() {
     const user = this.injected.userStore.user
+    const { profileType } = this.state
     const readOnly = !this.state.editMode
     // Need to convert mobx observable user object into a Javasrcipt structure using toJS fn
     // to allow final-form-array to display the initial values
@@ -105,28 +107,18 @@ export class UserSettings extends React.Component<IProps, IState> {
                     <FocusSection
                       onInputChange={v => this.setState({ profileType: v })}
                     />
-                    <Flex
-                      card
-                      mediumRadius
-                      bg={'white'}
-                      mt={5}
-                      p={4}
-                      flexWrap="wrap"
-                      flexDirection="column"
-                    >
-                      <Heading small>Workspace</Heading>
-                    </Flex>
-                    <Flex
-                      card
-                      mediumRadius
-                      bg={'white'}
-                      mt={5}
-                      p={4}
-                      flexWrap="wrap"
-                      flexDirection="column"
-                    >
-                      <Heading small>Info</Heading>
-                    </Flex>
+                    {profileType === 'pt-workspace' && (
+                      <>
+                        <WorkspaceSection />
+                        <SettingsEditForm user={user} />
+                        <UserMapPinSection />
+                      </>
+                    )}
+                    {profileType === 'pt-member' && (
+                      <>
+                        <SettingsEditForm user={user} />
+                      </>
+                    )}
 
                     <Flex
                       card
@@ -160,8 +152,6 @@ export class UserSettings extends React.Component<IProps, IState> {
                         userStore={this.props.userStore}
                       /> */}
                     </Flex>
-                    <SettingsEditForm user={user} />
-                    <UserMapPinSection />
                   </Flex>
                 </FormContainer>
               </Flex>

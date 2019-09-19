@@ -42,6 +42,7 @@ interface IState {
   user: IUser
   showNotification: boolean
   showDeleteDialog?: boolean
+  profileType?: string
 }
 
 const FormContainer = styled.form`
@@ -49,11 +50,29 @@ const FormContainer = styled.form`
 `
 
 const Label = styled.label`
-  display: block;
   margin: 10px;
+  /* padding: 0 10px; */
+  &:has(input:checked) {
+    background-color: grey;
+  }
 `
 
-const InputStyles = { position: 'absolute', opacity: 0, width: 0, height: 0 }
+const CustomInput = styled(Field)`
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  & + img {
+    cursor: pointer;
+  }
+  &:checked + img {
+    opacity: 1;
+  }
+`
+
+const ImgOp = styled(Image)`
+  opacity: 0.5;
+`
 
 @inject('userStore')
 @observer
@@ -125,74 +144,115 @@ export class UserSettings extends React.Component<IProps, IState> {
                         Focus
                       </Heading>
                       <Box px={4}>
-                        <Text regular m={4}>
+                        <Text regular my={4}>
                           What is your main Precious Plastic activity?
                         </Text>
                         <Flex wrap="nowrap">
-                          <Label htmlFor="pt-workspace">
-                            <Field
+                          <Label>
+                            <CustomInput
                               id="pt-workspace"
+                              value="pt-workspace"
                               name="title"
                               type="radio"
-                              // validate={value => this.validateTitle(value)}
                               validateFields={[]}
                               component={InputField}
-                              style={InputStyles}
+                              checked={
+                                this.state.profileType === 'pt-workspace'
+                              }
+                              onChange={v => {
+                                this.setState({
+                                  profileType: v.target.value,
+                                })
+                              }}
                             />
-                            <Image src={WorkspaceBadge} />
-                            <Text small>I run a workspace</Text>
+                            <ImgOp px={3} src={WorkspaceBadge} />
+                            <Text my={1} txtcenter small>
+                              I run a workspace
+                            </Text>
                           </Label>
                           <Label htmlFor="pt-community">
-                            <Field
+                            <CustomInput
                               id="pt-community"
+                              value="pt-community"
                               name="title"
                               type="radio"
-                              // validate={value => this.validateTitle(value)}
                               validateFields={[]}
                               component={InputField}
-                              style={InputStyles}
+                              checked={
+                                this.state.profileType === 'pt-community'
+                              }
+                              onChange={v => {
+                                this.setState({
+                                  profileType: v.target.value,
+                                })
+                              }}
                             />
-                            <Image src={LocalComBadge} />
-                            <Text small>I run a local community</Text>
+                            <ImgOp px={3} src={LocalComBadge} />
+                            <Text my={1} txtcenter small>
+                              I run a local community
+                            </Text>
                           </Label>
                           <Label htmlFor="pt-collection">
-                            <Field
+                            <CustomInput
                               id="pt-collection"
+                              value="pt-collection"
                               name="title"
                               type="radio"
-                              // validate={value => this.validateTitle(value)}
                               validateFields={[]}
                               component={InputField}
-                              style={InputStyles}
+                              checked={
+                                this.state.profileType === 'pt-collection'
+                              }
+                              onChange={v => {
+                                this.setState({
+                                  profileType: v.target.value,
+                                })
+                              }}
                             />
-                            <Image src={CollectionBadge} />
-                            <Text small>I collect & sort plastic</Text>
+                            <ImgOp px={3} src={CollectionBadge} />
+                            <Text my={1} txtcenter small>
+                              I collect & sort plastic
+                            </Text>
                           </Label>
                           <Label htmlFor="pt-machine">
-                            <Field
+                            <CustomInput
                               id="pt-machine"
+                              value="pt-machine"
                               name="title"
                               type="radio"
-                              // validate={value => this.validateTitle(value)}
                               validateFields={[]}
                               component={InputField}
-                              style={InputStyles}
+                              checked={this.state.profileType === 'pt-machine'}
+                              onChange={v => {
+                                this.setState({
+                                  profileType: v.target.value,
+                                })
+                              }}
                             />
-                            <Image src={MachineBadge} />
-                            <Text small>I build machines</Text>
+                            <ImgOp px={3} src={MachineBadge} />
+                            <Text my={1} txtcenter small>
+                              I build machines
+                            </Text>
                           </Label>
                           <Label htmlFor="pt-member">
-                            <Field
+                            <CustomInput
                               id="pt-member"
+                              value="pt-member"
                               name="title"
                               type="radio"
-                              // validate={value => this.validateTitle(value)}
                               validateFields={[]}
                               component={InputField}
-                              style={InputStyles}
+                              checked={this.state.profileType === 'pt-member'}
+                              onChange={v => {
+                                this.setState({
+                                  profileType: v.target.value,
+                                })
+                              }}
                             />
-                            <Image src={MemberBadge} />
-                            <Text small>I am a member</Text>
+                            <ImgOp px={3} src={MemberBadge} />
+                            <Text my={1} txtcenter small>
+                              I am a member
+                            </Text>
                           </Label>
                         </Flex>
                       </Box>
@@ -233,7 +293,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                         Import profile from davehakkens.nl
                       </Heading>
                       {/* <Text mb={3}>{this.state.user.userName}</Text> */}
-                      <ImportDHForm {...readOnly} />
+                      {/* <ImportDHForm {...readOnly} /> */}
                     </Flex>
                     <Flex
                       card
@@ -247,10 +307,10 @@ export class UserSettings extends React.Component<IProps, IState> {
                       <Heading small mb={3}>
                         Account settings
                       </Heading>
-                      <ChangePasswordForm
+                      {/* <ChangePasswordForm
                         {...readOnly}
                         userStore={this.props.userStore}
-                      />
+                      /> */}
                     </Flex>
                     <SettingsEditForm user={user} />
                     <Flex

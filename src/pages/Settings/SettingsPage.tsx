@@ -15,11 +15,16 @@ import Text from 'src/components/Text'
 import styled from 'styled-components'
 import { TextNotification } from 'src/components/Notification/TextNotification'
 import { ProfileDelete } from './content/ProfileDelete'
-import { Box } from 'rebass'
+import { Box, Image } from 'rebass'
 import { InputField } from 'src/components/Form/Fields'
 import { Form, Field } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import { UserMapPinEdit } from './content/UserMapPinEdit'
+import CollectionBadge from 'src/assets/images/badges/pt-collection-point.jpg'
+import MemberBadge from 'src/assets/images/badges/pt-member.jpg'
+import MachineBadge from 'src/assets/images/badges/pt-machine-shop.jpg'
+import WorkspaceBadge from 'src/assets/images/badges/pt-workspace.jpg'
+import LocalComBadge from 'src/assets/images/badges/pt-local-community.jpg'
 
 interface IFormValues extends Partial<IUser> {
   // form values are simply subset of user profile fields
@@ -45,7 +50,10 @@ const FormContainer = styled.form`
 
 const Label = styled.label`
   display: block;
+  margin: 10px;
 `
+
+const InputStyles = { position: 'absolute', opacity: 0, width: 0, height: 0 }
 
 @inject('userStore')
 @observer
@@ -117,56 +125,75 @@ export class UserSettings extends React.Component<IProps, IState> {
                         Focus
                       </Heading>
                       <Box px={4}>
-                        <Text regular>
+                        <Text regular m={4}>
                           What is your main Precious Plastic activity?
                         </Text>
                         <Flex wrap="nowrap">
-                          <Field
-                            id="pt-workspace"
-                            name="title"
-                            type="radio"
-                            // validate={value => this.validateTitle(value)}
-                            validateFields={[]}
-                            component={InputField}
-                            placeholder="Title of your event"
-                          />
-                          {/* <Label for="pt-workspace" /> */}
-                          <Field
-                            id="pt-community"
-                            name="title"
-                            type="radio"
-                            // validate={value => this.validateTitle(value)}
-                            validateFields={[]}
-                            component={InputField}
-                            placeholder="Title of your event"
-                          />
-                          <Field
-                            id="pt-collection"
-                            name="title"
-                            type="radio"
-                            // validate={value => this.validateTitle(value)}
-                            validateFields={[]}
-                            component={InputField}
-                            placeholder="Title of your event"
-                          />
-                          <Field
-                            id="pt-machine"
-                            name="title"
-                            type="radio"
-                            // validate={value => this.validateTitle(value)}
-                            validateFields={[]}
-                            component={InputField}
-                            placeholder="Title of your event"
-                          />
-                          <Field
-                            id="pt-member"
-                            name="title"
-                            type="radio"
-                            // validate={value => this.validateTitle(value)}
-                            validateFields={[]}
-                            component={InputField}
-                            placeholder="Title of your event"
-                          />
+                          <Label htmlFor="pt-workspace">
+                            <Field
+                              id="pt-workspace"
+                              name="title"
+                              type="radio"
+                              // validate={value => this.validateTitle(value)}
+                              validateFields={[]}
+                              component={InputField}
+                              style={InputStyles}
+                            />
+                            <Image src={WorkspaceBadge} />
+                            <Text small>I run a workspace</Text>
+                          </Label>
+                          <Label htmlFor="pt-community">
+                            <Field
+                              id="pt-community"
+                              name="title"
+                              type="radio"
+                              // validate={value => this.validateTitle(value)}
+                              validateFields={[]}
+                              component={InputField}
+                              style={InputStyles}
+                            />
+                            <Image src={LocalComBadge} />
+                            <Text small>I run a local community</Text>
+                          </Label>
+                          <Label htmlFor="pt-collection">
+                            <Field
+                              id="pt-collection"
+                              name="title"
+                              type="radio"
+                              // validate={value => this.validateTitle(value)}
+                              validateFields={[]}
+                              component={InputField}
+                              style={InputStyles}
+                            />
+                            <Image src={CollectionBadge} />
+                            <Text small>I collect & sort plastic</Text>
+                          </Label>
+                          <Label htmlFor="pt-machine">
+                            <Field
+                              id="pt-machine"
+                              name="title"
+                              type="radio"
+                              // validate={value => this.validateTitle(value)}
+                              validateFields={[]}
+                              component={InputField}
+                              style={InputStyles}
+                            />
+                            <Image src={MachineBadge} />
+                            <Text small>I build machines</Text>
+                          </Label>
+                          <Label htmlFor="pt-member">
+                            <Field
+                              id="pt-member"
+                              name="title"
+                              type="radio"
+                              // validate={value => this.validateTitle(value)}
+                              validateFields={[]}
+                              component={InputField}
+                              style={InputStyles}
+                            />
+                            <Image src={MemberBadge} />
+                            <Text small>I am a member</Text>
+                          </Label>
                         </Flex>
                       </Box>
                     </Flex>

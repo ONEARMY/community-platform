@@ -9,6 +9,7 @@ import { ChangePasswordForm } from './content/formSections/ChangePassword.form'
 import { ImportDHForm } from './content/formSections/ImportDH.form'
 import { FocusSection } from './content/formSections/Focus.section'
 import { WorkspaceSection } from './content/formSections/Workspace.section'
+import { CollectionSection } from './content/formSections/Collection.section'
 import { Button } from 'src/components/Button'
 import { PostingGuidelines } from './content/PostingGuidelines'
 import Heading from 'src/components/Heading'
@@ -119,7 +120,10 @@ export class UserSettings extends React.Component<IProps, IState> {
                       </>
                     )}
                     {profileType === undefined && (
-                      <UserInfosSection user={user} />
+                      <>
+                        <CollectionSection />
+                        <UserInfosSection user={user} />
+                      </>
                     )}
 
                     <Flex

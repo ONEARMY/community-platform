@@ -3,11 +3,9 @@ import * as React from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
-import { Box, Image } from 'rebass'
-import styled from 'styled-components'
-
+import { Box } from 'rebass'
+import { RadioInputWImg, Label, ImgOp } from './elements'
 import { InputField } from 'src/components/Form/Fields'
-import { Field } from 'react-final-form'
 
 // assets
 import CollectionBadge from 'src/assets/images/badges/pt-collection-point.jpg'
@@ -22,31 +20,6 @@ interface IProps {
 interface IState {
   checkedFocusValue?: string
 }
-
-const Label = styled.label`
-  margin: 10px;
-  /* padding: 0 10px; */
-  &:has(input:checked) {
-    background-color: grey;
-  }
-`
-
-const CustomInput = styled(Field)`
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-  & + img {
-    cursor: pointer;
-  }
-  &:checked + img {
-    opacity: 1;
-  }
-`
-
-const ImgOp = styled(Image)`
-  opacity: 0.5;
-`
 
 export class FocusSection extends React.Component<IProps, IState> {
   constructor(props: IProps) {
@@ -78,7 +51,7 @@ export class FocusSection extends React.Component<IProps, IState> {
           </Text>
           <Flex wrap="nowrap">
             <Label>
-              <CustomInput
+              <RadioInputWImg
                 id="pt-workspace"
                 value="pt-workspace"
                 name="title"
@@ -94,7 +67,7 @@ export class FocusSection extends React.Component<IProps, IState> {
               </Text>
             </Label>
             <Label htmlFor="pt-community">
-              <CustomInput
+              <RadioInputWImg
                 id="pt-community"
                 value="pt-community"
                 name="title"
@@ -110,7 +83,7 @@ export class FocusSection extends React.Component<IProps, IState> {
               </Text>
             </Label>
             <Label htmlFor="pt-collection">
-              <CustomInput
+              <RadioInputWImg
                 id="pt-collection"
                 value="pt-collection"
                 name="title"
@@ -126,7 +99,7 @@ export class FocusSection extends React.Component<IProps, IState> {
               </Text>
             </Label>
             <Label htmlFor="pt-machine">
-              <CustomInput
+              <RadioInputWImg
                 id="pt-machine"
                 value="pt-machine"
                 name="title"
@@ -142,7 +115,7 @@ export class FocusSection extends React.Component<IProps, IState> {
               </Text>
             </Label>
             <Label htmlFor="pt-member">
-              <CustomInput
+              <RadioInputWImg
                 id="pt-member"
                 value="pt-member"
                 name="title"

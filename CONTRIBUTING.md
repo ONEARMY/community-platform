@@ -37,6 +37,10 @@ Our backend contains microservices in Node and is based on Firebase's Firestore 
 
 You can find useful links to learn more about these technologies [in the resources section](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--resources).
 
+### Automated testing
+
+The project uses [Jest](https://jestjs.io/) to unit Test and [Cypress](https://www.cypress.io/) to write End-to-end tests.
+
 ## 📟 &nbsp; Getting started
 
 - Fork the repository
@@ -48,6 +52,9 @@ You can find useful links to learn more about these technologies [in the resourc
 
 - Run the dev server
   `yarn start`
+
+- Run the end-to-end tests
+  `yarn e2e`
 
 ### Additional commands
 
@@ -72,6 +79,8 @@ When a group of issues have been resolved a pull request to the master branch sh
 ## 🏠 &nbsp; Project Structure
 
 - **`scripts`** & **`config`** : contains build-related scripts and configuration files. Usually, you don't need to touch them.
+
+- **`cypress`** : contains the test automation of End-to-end tests.
 
 - **`functions`** : contains the backend firebase related functions.
 
@@ -139,3 +148,5 @@ We ask this so that we can better understand how you might fit in with the rest 
 
 - https://www.robinwieruch.de/complete-firebase-authentication-react-tutorial/
   Example using Firebase auth with React and linking Redux state
+
+- https://testautomationu.applitools.com/cypress-tutorial/ Complete tutorial about the test automation tool Cypress

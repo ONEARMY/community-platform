@@ -4,7 +4,7 @@ import { IUser } from 'src/models/user.models'
 import { UserStore } from 'src/stores/User/user.store'
 import { observer, inject } from 'mobx-react'
 import { toJS } from 'mobx'
-import { SettingsEditForm } from './content/formSections/SettingsEdit.form'
+import { UserInfosSection } from './content/formSections/UserInfos.section'
 import { ChangePasswordForm } from './content/formSections/ChangePassword.form'
 import { ImportDHForm } from './content/formSections/ImportDH.form'
 import { FocusSection } from './content/formSections/Focus.section'
@@ -17,8 +17,7 @@ import Text from 'src/components/Text'
 import styled from 'styled-components'
 import { TextNotification } from 'src/components/Notification/TextNotification'
 import { ProfileDelete } from './content/ProfileDelete'
-import { Box, Image } from 'rebass'
-import { Form, Field } from 'react-final-form'
+import { Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import { UserMapPinSection } from './content/formSections/MapPin.section'
 
@@ -110,13 +109,13 @@ export class UserSettings extends React.Component<IProps, IState> {
                     {profileType === 'pt-workspace' && (
                       <>
                         <WorkspaceSection />
-                        <SettingsEditForm user={user} />
+                        <UserInfosSection user={user} />
                         <UserMapPinSection />
                       </>
                     )}
                     {profileType === 'pt-member' && (
                       <>
-                        <SettingsEditForm user={user} />
+                        <UserInfosSection user={user} />
                       </>
                     )}
 

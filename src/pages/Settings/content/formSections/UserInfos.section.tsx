@@ -51,7 +51,7 @@ const HideShowBox = styled(Box)`
   pointer-events: ${props => (props.disabled ? undefined : 'none')};
 `
 
-export class SettingsEditForm extends React.Component<IProps, IState> {
+export class UserInfosSection extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
 

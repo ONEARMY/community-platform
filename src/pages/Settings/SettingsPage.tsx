@@ -118,6 +118,9 @@ export class UserSettings extends React.Component<IProps, IState> {
                         <UserInfosSection user={user} />
                       </>
                     )}
+                    {profileType === undefined && (
+                      <UserInfosSection user={user} />
+                    )}
 
                     <Flex
                       card

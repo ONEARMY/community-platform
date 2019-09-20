@@ -6,7 +6,6 @@ import { IUser } from 'src/models/user.models'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
 import { InputField, YearPicker } from 'src/components/Form/Fields'
-import Switch from '@material-ui/core/Switch'
 import { inputStyles } from 'src/components/Form/elements'
 import { FlagSelector } from 'src/components/Form/Select.field'
 import { Button } from 'src/components/Button'
@@ -19,6 +18,7 @@ import { FieldArray } from 'react-final-form-arrays'
 import { Link } from './Link.field'
 import { timestampToYear } from 'src/utils/helpers'
 import { Icon } from 'src/components/Icons'
+import { ImageInputField } from 'src/components/Form/ImageInput.field'
 
 interface IProps {
   user: IUser
@@ -44,11 +44,6 @@ const YearBox = styled(Box)`
   ${inputStyles}
   cursor: pointer;
   height: 40px;
-`
-
-const HideShowBox = styled(Box)`
-  opacity: ${props => (props.disabled ? 1 : 0.5)};
-  pointer-events: ${props => (props.disabled ? undefined : 'none')};
 `
 
 export class UserInfosSection extends React.Component<IProps, IState> {
@@ -92,12 +87,18 @@ export class UserInfosSection extends React.Component<IProps, IState> {
         <Heading small mb={3}>
           Infos
         </Heading>
-        <Flex width={1 / 2} flexWrap={'wrap'}>
+        <Flex flexWrap={'wrap'}>
+          <Text my={2} medium>
+            User / workspace username *
+          </Text>
           <Field
             name="userName"
             component={InputField}
-            placeholder="User Name"
+            placeholder="Pick a unique username"
           />
+          <Text mb={2} mt={7} medium>
+            Where are you based? *
+          </Text>
           <FlagSelectContainer width={1} alignItems="center">
             <Field
               name="country"
@@ -106,7 +107,53 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               defaultCountry={getCountryCode(user.country)}
             />
           </FlagSelectContainer>
-          <Text width={1} mt={2} medium>
+          <Text mb={2} mt={7} medium>
+            Description *
+          </Text>
+          <Field
+            name="about"
+            component={InputField}
+            placeholder="Describe in details what you do and who you are."
+          />
+          <Text mb={2} mt={7} medium>
+            Cover Image *
+          </Text>
+          {/* TODO display existing images on edit */}
+          {/* {userimages.length > 0 &&
+            images[0].downloadUrl !== undefined &&
+            !editStepImgs ? (
+              <Flex alignItems={'center'} justifyContent={'center'}>
+              {images.map(image => {
+                return (
+                  <Flex
+                  flexWrap={'nowrap'}
+                  px={1}
+                  width={1 / 4}
+                  key={image.name}
+                  >
+                  <ImageWithOpacity src={image.downloadUrl} />
+                  </Flex>
+                  )
+                })}
+                <AbsoluteBtn
+                icon={'delete'}
+                variant={'tertiary'}
+                onClick={() =>
+                  this.setState({
+                    editStepImgs: !editStepImgs,
+                  })
+                }
+                />
+                </Flex>
+              ) : ( */}
+          <Field
+            style={{ width: '100%' }}
+            name={`coverImages`}
+            component={ImageInputField}
+            multi
+          />
+          {/* )} */}
+          {/* <Text width={1} mt={2} medium>
             Birth year :
           </Text>
           <YearBox
@@ -131,48 +178,41 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                 this.setState({ showYearSelector: false })
               }}
             />
-          )}
+          )} */}
         </Flex>
         <Flex wrap={'nowrap'} alignItems={'center'} width={1}>
-          <Text medium>
-            Do you want to add communication links (Facebook, Discord, Slack,
-            Email ?)
+          <Text mb={2} mt={7} medium>
+            Contacts & links *
           </Text>
-          <Switch
-            checked={this.state.showComLinks}
-            onChange={this.changeComLinkSwitch}
-          />
         </Flex>
-        <HideShowBox disabled={this.state.showComLinks}>
-          <FieldArray name="links">
-            {({ fields }) => (
-              <>
-                {fields.map((name, index: number) => (
-                  <Link
-                    key={index}
-                    link={name}
-                    index={index}
-                    onDelete={(fieldIndex: number) => {
-                      fields.remove(fieldIndex)
-                    }}
-                  />
-                ))}
-                <Button
-                  my={2}
-                  variant="outline"
-                  onClick={() => {
-                    fields.push({
-                      label: '',
-                      url: '',
-                    })
+        <FieldArray name="links">
+          {({ fields }) => (
+            <>
+              {fields.map((name, index: number) => (
+                <Link
+                  key={index}
+                  link={name}
+                  index={index}
+                  onDelete={(fieldIndex: number) => {
+                    fields.remove(fieldIndex)
                   }}
-                >
-                  add another
-                </Button>
-              </>
-            )}
-          </FieldArray>
-        </HideShowBox>
+                />
+              ))}
+              <Button
+                my={2}
+                variant="outline"
+                onClick={() => {
+                  fields.push({
+                    label: '',
+                    url: '',
+                  })
+                }}
+              >
+                add more
+              </Button>
+            </>
+          )}
+        </FieldArray>
       </Flex>
     )
   }

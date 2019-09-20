@@ -1,5 +1,3 @@
-/// <reference types="Cypress" />
-
 export class HowToPage {
   navigate() {
     cy.visit('/how-to')

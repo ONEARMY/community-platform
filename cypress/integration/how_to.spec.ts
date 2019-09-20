@@ -1,5 +1,3 @@
-/// <reference types="Cypress" />
-
 import { HowToPage } from '../page-objects/how-to-page'
 
 context('how-to', () => {

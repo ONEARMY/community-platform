@@ -1,5 +1,3 @@
-/// <reference types="Cypress" />
-
 import { MapPage } from '../page-objects/map-page'
 
 context('map', () => {

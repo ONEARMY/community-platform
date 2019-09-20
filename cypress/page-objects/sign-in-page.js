@@ -2,6 +2,6 @@
 
 export class SignInPage {
   navigate() {
-    cy.visit('https://dev.onearmy.world/sign-in')
+    cy.visit('/sign-in')
   }
 }

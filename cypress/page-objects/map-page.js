@@ -2,7 +2,7 @@
 
 export class MapPage {
   navigate() {
-    cy.visit('https://dev.onearmy.world/map')
+    cy.visit('/map')
   }
 
   searchCity() {

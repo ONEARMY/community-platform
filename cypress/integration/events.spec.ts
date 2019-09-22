@@ -1,7 +1,8 @@
-import {EventsPage } from '../page-objects/events-page'
-context('how-to', () => {
-  const eventsPage = new EventsPage()
+import { EventsPage } from '../page-objects/events-page'
+
+context('events', () => {
   it('should navigate without login', () => {
-    eventsPage.navigate()
+    cy.visit('/events')
+    const eventsPage = new EventsPage()
   })
 })

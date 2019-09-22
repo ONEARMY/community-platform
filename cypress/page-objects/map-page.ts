@@ -1,9 +1,5 @@
-/// <reference types="Cypress" />
-
 export class MapPage {
-  navigate() {
-    cy.visit('/map')
-  }
+  constructor() {}
 
   searchCity() {
     cy.get('#mapPage').within(() => {

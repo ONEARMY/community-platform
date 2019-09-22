@@ -1,6 +1,5 @@
 export class EventsPage {
-  navigate() {
-    cy.visit('/events')
+  constructor() {
     cy.contains('Precious Plastic events from around the world')
   }
 }

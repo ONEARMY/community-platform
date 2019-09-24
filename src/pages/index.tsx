@@ -6,6 +6,7 @@ import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import Header from './common/Header/Header'
 import DevHelpers from 'src/components/DevHelpers/DevHelpers'
 import Main from 'src/pages/common/Layout/Main'
+import { Button } from 'src/components/Button'
 import {
   COMMUNITY_PAGES,
   COMMUNITY_PAGES_PROFILE,
@@ -14,20 +15,11 @@ import {
   NO_HEADER_PAGES,
 } from './PageList'
 import { Link } from 'rebass'
-import styled from 'styled-components'
 
 interface IState {
   singlePageMode: boolean
   displayPageComponent?: any
 }
-
-const FeedbackBtn = styled(Link)`
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  padding: 8px;
-  border-radius: 4px;
-`
 
 export class Routes extends React.Component<any, IState> {
   constructor(props: any) {
@@ -60,10 +52,7 @@ export class Routes extends React.Component<any, IState> {
                   render={props => (
                     <React.Fragment>
                       <Header />
-                      <Main
-                        ignoreMaxWidth={page.fullPageWidth}
-                        style={page.customStyles}
-                      >
+                      <Main style={page.customStyles}>
                         <>{page.component}</>
                       </Main>
                     </React.Fragment>
@@ -77,14 +66,17 @@ export class Routes extends React.Component<any, IState> {
             </Switch>
           </ScrollToTop>
         </BrowserRouter>
-        <FeedbackBtn
-          bg={'yellow'}
-          color={'black'}
+        <Link
           target="_blank"
-          href={'https://preciousplastic.typeform.com/to/tO6uDw'}
+          href="https://preciousplastic.typeform.com/to/tO6uDw"
         >
-          Have a feedback ?
-        </FeedbackBtn>
+          <Button
+            sx={{ position: 'fixed', bottom: '30px', right: '30px' }}
+            variant="primary"
+          >
+            Have a feedback ?
+          </Button>
+        </Link>
       </div>
     )
   }

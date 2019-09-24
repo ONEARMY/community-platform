@@ -5,7 +5,6 @@ import theme from 'src/themes/styled.theme'
 import { Flex } from 'rebass'
 import styled from 'styled-components'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
-import { display, DisplayProps } from 'styled-system'
 
 const MenuLink = styled(NavLink).attrs(({ name }) => ({
   activeClassName: 'current',
@@ -38,18 +37,14 @@ const MenuLink = styled(NavLink).attrs(({ name }) => ({
   }
 `
 
-const FlexDesktopWrapper = styled(Flex)<DisplayProps>`
-  ${display}
-`
-
 export class DesktopMenu extends React.Component {
   render() {
     return (
       <>
-        <FlexDesktopWrapper
+        <Flex
           alignItems={'center'}
           px={2}
-          display={['none', 'none', 'flex']}
+          sx={{ display: ['none', 'none', 'flex'] }}
         >
           {COMMUNITY_PAGES.map(page => (
             <Flex key={page.path}>
@@ -58,7 +53,7 @@ export class DesktopMenu extends React.Component {
               </MenuLink>
             </Flex>
           ))}
-        </FlexDesktopWrapper>
+        </Flex>
       </>
     )
   }

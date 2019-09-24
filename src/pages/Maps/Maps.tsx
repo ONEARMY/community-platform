@@ -60,8 +60,8 @@ class MapsPageClass extends React.Component<IProps, IState> {
       // the calculation for the height is kind of hacky for now, will set properly on final mockups
       <Box
         id="mapPage"
-        style={{ height: 'calc(100vh - 60px)' }}
-        mx={[-2, -3, -4]}
+        sx={{ height: 'calc(100vh - 60px)' }}
+        // mx={[-2, -3, -4]}
       >
         <Switch>
           <Route

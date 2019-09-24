@@ -60,7 +60,7 @@ const maps = {
   component: <MapsPage />,
   title: 'Map',
   description: 'Welcome to the Map',
-  fullPageWidth: true,
+  customStyles: { margin: '0', padding: '0', width: '100vw' },
 }
 const admin = {
   path: '/admin',

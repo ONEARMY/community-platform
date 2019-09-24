@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image } from 'rebass'
+import { Image } from 'rebass/styled-components'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
 import { Link } from 'src/components/Links'

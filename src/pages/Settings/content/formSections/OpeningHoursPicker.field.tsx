@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { COM_TYPE_MOCKS } from 'src/mocks/Selectors'
+import { WEEK_DAYS, OPENING_HOURS } from 'src/mocks/Selectors'
 import { Field } from 'react-final-form'
 import { InputField } from 'src/components/Form/Fields'
 import { Button } from 'src/components/Button'
@@ -9,7 +9,7 @@ import Flex from 'src/components/Flex'
 import { SelectField } from 'src/components/Form/Select.field'
 
 interface IProps {
-  link: string
+  openingHoursValues?: string
   index: number
   onDelete: (index: number) => void
 }
@@ -21,7 +21,7 @@ interface IState {
 // validation - return undefined if no error (i.e. valid)
 const required = (value: any) => (value ? undefined : 'Required')
 
-class Link extends Component<IProps, IState> {
+export class OpeningHoursPicker extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
@@ -39,17 +39,30 @@ class Link extends Component<IProps, IState> {
   }
 
   render() {
-    const { link, index } = this.props
+    const { openingHoursValues, index } = this.props
     return (
-      <Flex key={index}>
+      <Flex key={index} alignItems="center">
         <Field
-          name={`${link}.label`}
-          options={COM_TYPE_MOCKS}
+          name={`${openingHoursValues}.day`}
+          options={WEEK_DAYS}
           component={SelectField}
-          placeholder="type"
-          style={{ width: '160px', marginRight: '8px' }}
+          placeholder="Select day"
+          style={{ width: '160px', marginRight: '8px', marginBottom: 0 }}
         />
-        <Field name={`${link}.url`} component={InputField} placeholder="Link" />
+        <Field
+          name={`${openingHoursValues}.from_hour`}
+          options={OPENING_HOURS}
+          component={SelectField}
+          placeholder="from"
+          style={{ width: '160px', marginRight: '8px', marginBottom: 0 }}
+        />
+        <Field
+          name={`${openingHoursValues}.to_hour`}
+          options={OPENING_HOURS}
+          component={SelectField}
+          placeholder="to"
+          style={{ width: '160px', marginBottom: 0 }}
+        />
         <Button
           icon={'delete'}
           variant={'tertiary'}
@@ -58,7 +71,7 @@ class Link extends Component<IProps, IState> {
         />
         {this.state.showDeleteModal && (
           <Modal onDidDismiss={() => this.toggleDeleteModal()}>
-            <Text>Are you sure you want to delete this link?</Text>
+            <Text>Are you sure you want to delete this schedule ?</Text>
             <Flex p={0} mx={-1} justifyContent="flex-end">
               <Flex px={1}>
                 <Button
@@ -85,5 +98,3 @@ class Link extends Component<IProps, IState> {
     )
   }
 }
-
-export { Link }

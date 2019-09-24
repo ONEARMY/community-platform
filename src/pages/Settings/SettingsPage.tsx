@@ -121,8 +121,10 @@ export class UserSettings extends React.Component<IProps, IState> {
                     )}
                     {profileType === undefined && (
                       <>
+                        <WorkspaceSection />
                         <CollectionSection />
                         <UserInfosSection user={user} />
+                        <UserMapPinSection />
                       </>
                     )}
 

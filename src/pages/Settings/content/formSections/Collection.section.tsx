@@ -6,6 +6,7 @@ import Text from 'src/components/Text'
 import { Box } from 'rebass'
 import { RadioInputWImg, Label, ImgOp } from './elements'
 import { InputField } from 'src/components/Form/Fields'
+import { OpeningHoursPicker } from './OpeningHoursPicker.field'
 
 // assets
 import Pet from 'src/assets/images/plastic-types/pet.jpg'
@@ -15,6 +16,8 @@ import Hdpe from 'src/assets/images/plastic-types/hdpe.jpg'
 import Ldpe from 'src/assets/images/plastic-types/ldpe.jpg'
 import Other from 'src/assets/images/plastic-types/other.jpg'
 import Pvc from 'src/assets/images/plastic-types/pvc.jpg'
+import { FieldArray } from 'react-final-form-arrays'
+import { Button } from 'src/components/Button'
 
 interface IProps {}
 interface IState {
@@ -41,9 +44,38 @@ export class CollectionSection extends React.Component<IProps, IState> {
           Collection
         </Heading>
         <Box px={4}>
-          <Text regular my={4}>
-            Opening time *
-          </Text>
+          <Flex wrap={'nowrap'} alignItems={'center'} width={1}>
+            <Text regular my={4}>
+              Opening time *
+            </Text>
+          </Flex>
+          <FieldArray name="links">
+            {({ fields }) => (
+              <>
+                {fields.map((name, index: number) => (
+                  <OpeningHoursPicker
+                    key={index}
+                    index={index}
+                    onDelete={(fieldIndex: number) => {
+                      fields.remove(fieldIndex)
+                    }}
+                  />
+                ))}
+                <Button
+                  my={2}
+                  variant="outline"
+                  onClick={() => {
+                    fields.push({
+                      label: '',
+                      url: '',
+                    })
+                  }}
+                >
+                  add opening day
+                </Button>
+              </>
+            )}
+          </FieldArray>
           <Text regular my={4}>
             Plastic types accepted *
           </Text>

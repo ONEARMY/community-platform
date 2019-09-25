@@ -87,16 +87,17 @@ const buttons = {
     border: '2px solid ' + colors.black,
     color: colors.black,
     display: 'flex',
-    backgroundColor: colors.softblue,
+    bg: colors.softblue,
     transition: '.2s ease-in-out',
     '&:hover': {
-      backgroundColor: colors.white,
+      bg: colors.white,
+      cursor: 'pointer',
     },
     '&[disabled]': {
       opacity: 0.5,
     },
     '&[disabled]:hover': {
-      backgroundColor: colors.softblue,
+      bg: colors.softblue,
     },
     borderRadius: radii[1] + 'px',
   },
@@ -105,16 +106,17 @@ const buttons = {
     border: '2px solid ' + colors.black,
     color: colors.black,
     display: 'flex',
-    backgroundColor: colors.white,
+    bg: colors.white,
     transition: '.2s ease-in-out',
     '&:hover': {
-      backgroundColor: colors.red,
+      bg: colors.red,
+      cursor: 'pointer',
     },
     '&[disabled]': {
       opacity: 0.5,
     },
     '&[disabled]:hover': {
-      backgroundColor: colors.white,
+      bg: colors.white,
     },
     borderRadius: radii[1] + 'px',
   },

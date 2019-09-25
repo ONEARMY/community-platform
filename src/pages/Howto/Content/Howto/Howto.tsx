@@ -18,6 +18,7 @@ import WhiteBubble1 from 'src/assets/images/white-bubble_1.svg'
 import WhiteBubble2 from 'src/assets/images/white-bubble_2.svg'
 import WhiteBubble3 from 'src/assets/images/white-bubble_3.svg'
 import { IUser } from 'src/models/user.models'
+import { Link } from 'src/components/Links'
 
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
@@ -117,10 +118,10 @@ export class Howto extends React.Component<
               <br />
               Nice one!
             </Text>
-            <Flex justifyContent={'center'}>
-              <Button variant={'secondary'} px={3} mt={5}>
-                Back
-              </Button>
+            <Flex justifyContent={'center'} mt={2}>
+              <Link to={'/how-to/'}>
+                <Button variant={'secondary'}>Back</Button>
+              </Link>
             </Flex>
           </MoreBox>
         </>

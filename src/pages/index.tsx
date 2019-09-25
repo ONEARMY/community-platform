@@ -52,7 +52,10 @@ export class Routes extends React.Component<any, IState> {
                   render={props => (
                     <React.Fragment>
                       <Header />
-                      <Main style={page.customStyles}>
+                      <Main
+                        customStyles={page.customStyles}
+                        ignoreMaxWidth={page.fullPageWidth}
+                      >
                         <>{page.component}</>
                       </Main>
                     </React.Fragment>

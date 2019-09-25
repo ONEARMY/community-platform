@@ -6,111 +6,42 @@ import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import { Link } from 'src/components/Links'
 import { Box, Flex, Image } from 'rebass'
-import styled from 'styled-components'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
-import ArrowLeft from 'src/assets/icons/icon-arrow.svg'
-import Steps from 'src/assets/icons/icon-steps.svg'
+import StepsIcon from 'src/assets/icons/icon-steps.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
 import { Button } from 'src/components/Button'
 import { IUser } from 'src/models/user.models'
 import { isAllowToEditContent } from 'src/utils/helpers'
+import theme from 'src/themes/styled.theme'
 
 interface IProps {
   howto: IHowtoDB
   loggedInUser: IUser | undefined
 }
 
-export const CoverImg = styled(Image)`
-  object-fit: cover;
-  width: 100%;
-  height: 450px;
-`
-
-const HowToCard = styled(Flex)`
-  border-radius: 10px;
-  border: 2px solid black;
-  overflow: hidden;
-`
-
-const BreadcrumbBox = styled(Flex)`
-  padding: 6px 10px;
-  border-radius: 5px;
-  background-color: #e2edf7;
-  color: #61646b;
-  font-size: 13px;
-`
-
-const BreadcrumbLink = styled(Link)`
-  color: #61646b;
-  padding-left: 10px;
-  position: relative;
-
-  &:before {
-    content: '';
-    background-image: url(${ArrowLeft});
-    width: 5px;
-    height: 8px;
-    background-repeat: no-repeat;
-    position: absolute;
-    left: 0px;
-    bottom: 4px;
-  }
-`
-
-const StepsBox = styled(Box)`
-  padding-left: 30px;
-  position: relative;
-  font-size: 12px;
-
-  &:before {
-    content: '';
-    background-image: url(${Steps});
-    width: 22px;
-    height: 15px;
-    background-repeat: no-repeat;
-    position: absolute;
-    left: 0px;
-    bottom: 50%;
-    transform: translateY(50%);
-  }
-`
-
-const TimeNeededBox = styled(Box)`
-  padding-left: 30px;
-  position: relative;
-  font-size: 12px;
-
-  &:before {
-    content: '';
-    background-image: url(${TimeNeeded});
-    width: 22px;
-    height: 22px;
-    background-repeat: no-repeat;
-    position: absolute;
-    left: 0px;
-    bottom: 50%;
-    transform: translateY(50%);
-  }
-`
-
-const DifficultyLevelBox = styled(Box)`
-  padding-left: 25px;
-  position: relative;
-  font-size: 12px;
-
-  &:before {
-    content: '';
-    background-image: url(${DifficultyLevel});
-    width: 22px;
-    height: 22px;
-    background-repeat: no-repeat;
-    position: absolute;
-    left: 0px;
-    bottom: 50%;
-    transform: translateY(50%);
-  }
-`
+const ElWithBeforeIcon = props => (
+  <Box
+    mr={4}
+    pl="30px"
+    sx={{
+      position: 'relative',
+      '::before': {
+        content: "''",
+        backgroundImage: 'url(' + props.IconUrl + ')',
+        width: '22px',
+        height: props.height ? props.height : '22px',
+        backgroundRepeat: 'no-repeat',
+        position: 'absolute',
+        left: '0',
+        bottom: '50%',
+        transform: 'translateY(50%)',
+      },
+    }}
+  >
+    {props.children}
+  </Box>
+)
 
 export default class HowtoDescription extends React.PureComponent<IProps, any> {
   constructor(props: IProps) {
@@ -126,16 +57,24 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
     const { howto, loggedInUser } = this.props
 
     return (
-      <HowToCard
-        bg={'white'}
-        flexDirection={['column-reverse', 'column-reverse', 'row']}
-        mt={4}
+      <Flex
+        className="howto-description-container"
+        sx={{
+          borderRadius: theme.radii[2] + 'px',
+          bg: 'white',
+          borderColor: theme.colors.black,
+          borderStyle: 'solid',
+          borderWidth: '2px',
+          overflow: 'hidden',
+          flexDirection: ['column-reverse', 'column-reverse', 'row'],
+          mt: 4,
+        }}
       >
         <Flex px={4} py={4} flexDirection={'column'} width={[1, 1, 1 / 2]}>
           <Flex justifyContent={'space-between'}>
-            <BreadcrumbBox alignItems={'center'}>
-              <BreadcrumbLink to={'/how-to'}>Back</BreadcrumbLink>
-            </BreadcrumbBox>
+            <Link to={'/how-to/'}>
+              <Button variant={'secondary'}>Back</Button>
+            </Link>
             {/* Check if logged in user is the creator of the how-to OR a super-admin */}
             {loggedInUser &&
               (isAllowToEditContent(howto, loggedInUser) && (
@@ -158,10 +97,16 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             {howto.description}
           </Text>
 
-          <Flex mt={6} mb={2}>
-            <StepsBox mr={4}>{howto.steps.length} steps</StepsBox>
-            <TimeNeededBox mr={4}>{howto.time}</TimeNeededBox>
-            <DifficultyLevelBox>{howto.difficulty_level}</DifficultyLevelBox>
+          <Flex mt={4} mb={2}>
+            <ElWithBeforeIcon IconUrl={StepsIcon} height="15px">
+              {howto.steps.length} steps
+            </ElWithBeforeIcon>
+            <ElWithBeforeIcon IconUrl={TimeNeeded}>
+              {howto.time}
+            </ElWithBeforeIcon>
+            <ElWithBeforeIcon IconUrl={DifficultyLevel}>
+              {howto.difficulty_level}
+            </ElWithBeforeIcon>
           </Flex>
           <Flex mt={4}>
             {howto.tags &&
@@ -169,16 +114,22 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
                 return <TagDisplay key={tag} tagKey={tag} />
               })}
           </Flex>
-          <Flex mt={6} flexDirection={'column'}>
-            {howto.files.map(file => (
-              <FileInfo allowDownload file={file} key={file.name} />
-            ))}
-          </Flex>
+          {howto.files && (
+            <Flex mt={3} flexDirection={'column'}>
+              {howto.files.map(file => (
+                <FileInfo allowDownload file={file} key={file.name} />
+              ))}
+            </Flex>
+          )}
         </Flex>
         <Flex justifyContent={'end'} width={[1, 1, 1 / 2]}>
-          <CoverImg src={howto.cover_image.downloadUrl} alt="how-to cover" />
+          <Image
+            sx={{ objectFit: 'cover', width: '100%', height: '450px' }}
+            src={howto.cover_image.downloadUrl}
+            alt="how-to cover"
+          />
         </Flex>
-      </HowToCard>
+      </Flex>
     )
   }
 }

@@ -61,6 +61,9 @@ The project uses [Jest](https://jestjs.io/) to unit Test and [Cypress](https://w
 - Run the component documentation
   `yarn storybook`
 
+- Open the Cypress Test Runner
+  `yarn e2e-open`
+
 We use [BrowserStack](https://www.browserstack.com/) to test our platform on multiple devices and browsers.
 Note: Builds are currently tested on Chrome/Firefox. If your browser is not
 supported, then consider contributing.

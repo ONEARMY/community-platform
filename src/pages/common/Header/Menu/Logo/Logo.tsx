@@ -30,7 +30,7 @@ const LogoContainer = styled(Flex)`
   }
 `
 
-export class Header extends React.Component {
+export class Logo extends React.Component {
   render() {
     return (
       <>
@@ -57,4 +57,4 @@ export class Header extends React.Component {
   }
 }
 
-export default Header
+export default Logo

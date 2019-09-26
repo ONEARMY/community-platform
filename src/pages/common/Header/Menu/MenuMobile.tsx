@@ -8,7 +8,7 @@ export class MenuMobile extends React.Component {
   render() {
     return (
       <>
-        <Flex alignItems={'center'} sx={{ display: ['flex', 'flex', 'none'] }}>
+        <Flex alignItems={'center'}>
           <div>MOBILE</div>
         </Flex>
       </>

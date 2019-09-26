@@ -17,6 +17,7 @@ const Main = (props: IProps) => (
       sx={
         !props.ignoreMaxWidth
           ? {
+              // Base css for all the pages, except Map & Academy
               position: 'relative',
               maxWidth: theme.maxContainerWidth,
               px: [2, 3, 4],

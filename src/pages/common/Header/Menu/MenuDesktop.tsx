@@ -2,7 +2,7 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { COMMUNITY_PAGES } from 'src/pages/PageList'
 import theme from 'src/themes/styled.theme'
-import { Flex } from 'rebass'
+import { Flex } from 'rebass/styled-components'
 import styled from 'styled-components'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
 
@@ -37,15 +37,11 @@ const MenuLink = styled(NavLink).attrs(({ name }) => ({
   }
 `
 
-export class DesktopMenu extends React.Component {
+export class MenuDesktop extends React.Component {
   render() {
     return (
       <>
-        <Flex
-          alignItems={'center'}
-          px={2}
-          sx={{ display: ['none', 'none', 'flex'] }}
-        >
+        <Flex alignItems={'center'}>
           {COMMUNITY_PAGES.map(page => (
             <Flex key={page.path}>
               <MenuLink to={page.path}>
@@ -59,4 +55,4 @@ export class DesktopMenu extends React.Component {
   }
 }
 
-export default DesktopMenu
+export default MenuDesktop

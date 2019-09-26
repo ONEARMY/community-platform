@@ -147,7 +147,7 @@ export class UserPage extends React.Component<
     if (user) {
       return (
         <Box>
-          <Avatar userName={user.userName} width="120px" borderRadius={5} />
+          <Avatar userName={user.userName} width="120px" />
           <Heading large color={'black'} my={3}>
             {user.userName}
           </Heading>

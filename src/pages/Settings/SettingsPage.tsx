@@ -8,6 +8,7 @@ import { UserInfosSection } from './content/formSections/UserInfos.section'
 import { ChangePasswordForm } from './content/formSections/ChangePassword.form'
 import { ImportDHForm } from './content/formSections/ImportDH.form'
 import { FocusSection } from './content/formSections/Focus.section'
+import { ExpertiseSection } from './content/formSections/Expertise.section'
 import { WorkspaceSection } from './content/formSections/Workspace.section'
 import { CollectionSection } from './content/formSections/Collection.section'
 import { Button } from 'src/components/Button'
@@ -122,6 +123,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                     {profileType === undefined && (
                       <>
                         <WorkspaceSection />
+                        <ExpertiseSection />
                         <CollectionSection />
                         <UserInfosSection user={user} />
                         <UserMapPinSection />

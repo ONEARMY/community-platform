@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, Card, Flex } from 'rebass'
+import { Image, Card, Flex } from 'rebass/styled-components'
 import { IUploadedFileMeta } from 'src/stores/storage'
 import Lightbox from 'react-image-lightbox'
 import Text from 'src/components/Text'

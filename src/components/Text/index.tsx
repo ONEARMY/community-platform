@@ -1,6 +1,9 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import { Text as RebassText, TextProps as RebassTextProps } from 'rebass'
+import {
+  Text as RebassText,
+  TextProps as RebassTextProps,
+} from 'rebass/styled-components'
 import theme from 'src/themes/styled.theme'
 
 export interface ITextProps {

@@ -43,7 +43,7 @@ export class Avatar extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { width, borderRadius } = this.props
+    const { width } = this.props
     const { showFallback, avatarUrl } = this.state
     return (
       <>
@@ -52,7 +52,7 @@ export class Avatar extends React.Component<IProps, IState> {
           <Image
             className="avatar"
             width={width ? width : 40}
-            borderRadius={borderRadius ? borderRadius : 5}
+            sx={{ borderRadius: '25px' }}
             src={avatarUrl}
             onError={() => {
               // if user image doesn't exist show fallback image instead

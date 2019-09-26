@@ -74,15 +74,6 @@ const Label = styled.label`
   margin-bottom: ${theme.space[2] + 'px'};
   display: block;
 `
-
-const AbsoluteBtn = styled(Button)`
-  position: absolute;
-`
-
-const ImageWithOpacity = styled(Image)`
-  opacity: 0.5;
-`
-
 // validation - return undefined if no error (i.e. valid)
 const required = (value: any) => (value ? undefined : 'Required')
 
@@ -140,7 +131,13 @@ export class HowtoForm extends React.Component<IProps, IState> {
                 <form id="howtoForm" onSubmit={handleSubmit}>
                   {/* How To Info */}
                   <Flex flexDirection={'column'}>
-                    <Flex card mediumRadius bg={'softblue'} px={3} py={2}>
+                    <Flex
+                      card
+                      mediumRadius
+                      bg={theme.colors.softblue}
+                      px={3}
+                      py={2}
+                    >
                       <Heading medium>
                         {this.props.parentType === 'create' ? (
                           <span>Create</span>
@@ -291,12 +288,14 @@ export class HowtoForm extends React.Component<IProps, IState> {
                               justifyContent={'center'}
                               flexDirection={'column'}
                             >
-                              <ImageWithOpacity
+                              <Image
+                                sx={{ opacity: 0.5 }}
                                 src={formValues.cover_image.downloadUrl}
                               />
-                              <AbsoluteBtn
+                              <Button
                                 icon={'delete'}
                                 variant={'tertiary'}
+                                sx={{ position: 'absolute' }}
                                 onClick={() =>
                                   this.setState({
                                     editCoverImg: !editCoverImg,

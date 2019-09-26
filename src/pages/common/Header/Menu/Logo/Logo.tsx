@@ -1,9 +1,10 @@
 import React from 'react'
 import theme from 'src/themes/styled.theme'
-import { Link, Flex, Image } from 'rebass'
+import { Link, Flex, Image } from 'rebass/styled-components'
 import styled from 'styled-components'
 import LogoImage from 'src/assets/images/logo.svg'
 import LogoBackground from 'src/assets/images/logo-background.svg'
+import Text from 'src/components/Text'
 
 const LogoContainer = styled(Flex)`
   height: 60px;
@@ -29,50 +30,31 @@ const LogoContainer = styled(Flex)`
   }
 `
 
-const LogoLink = styled(Link)`
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  color: black;
-`
-
-const LogoImageContainer = styled(Flex)`
-  width: 45px;
-  height: 45px;
-
-  @media only screen and (max-width: ${theme.breakpoints[1]}) {
-    width: 35px;
-    height: 35px;
-  }
-`
-
-const LogoTitle = styled.h1`
-  font-size: 17px;
-  font-weight: 400;
-  margin: 0px 0px 0px 15px;
-  width: 130px;
-
-  @media only screen and (max-width: ${theme.breakpoints[1]}) {
-    margin: 0px 0px 0px 10px;
-    font-size: 16px;
-  }
-`
-
-export class Header extends React.Component {
+export class Logo extends React.Component {
   render() {
     return (
       <>
         <LogoContainer>
-          <LogoLink ml={[2, 3, 4]} href="/">
-            <LogoImageContainer>
+          <Link
+            sx={{ zIndex: 9999, display: 'flex', alignItems: 'center' }}
+            color="black"
+            ml={[2, 3, 4]}
+            href="/"
+          >
+            <Flex
+              sx={{
+                width: ['35px', '45px', '45px'],
+                height: ['35px', '45px', '45px'],
+              }}
+            >
               <Image src={LogoImage} />
-            </LogoImageContainer>
-            <LogoTitle>Precious Plastic</LogoTitle>
-          </LogoLink>
+            </Flex>
+            <Text ml={2}>Precious Plastic</Text>
+          </Link>
         </LogoContainer>
       </>
     )
   }
 }
 
-export default Header
+export default Logo

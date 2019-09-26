@@ -3,8 +3,8 @@ import * as React from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
-import { Box } from 'rebass'
-import { RadioInputWImg, Label, ImgOp } from './elements'
+import { Box, Image } from 'rebass'
+import { RadioInputWImg, Label } from './elements'
 import { InputField } from 'src/components/Form/Fields'
 
 // assets
@@ -61,7 +61,7 @@ export class FocusSection extends React.Component<IProps, IState> {
                 checked={this.state.checkedFocusValue === 'pt-workspace'}
                 onChange={v => this.onInputChange(v.target.value)}
               />
-              <ImgOp px={3} src={WorkspaceBadge} />
+              <Image px={3} src={WorkspaceBadge} />
               <Text my={1} txtcenter small>
                 I run a workspace
               </Text>
@@ -77,7 +77,7 @@ export class FocusSection extends React.Component<IProps, IState> {
                 checked={this.state.checkedFocusValue === 'pt-community'}
                 onChange={v => this.onInputChange(v.target.value)}
               />
-              <ImgOp px={3} src={LocalComBadge} />
+              <Image px={3} src={LocalComBadge} />
               <Text my={1} txtcenter small>
                 I run a local community
               </Text>
@@ -93,7 +93,7 @@ export class FocusSection extends React.Component<IProps, IState> {
                 checked={this.state.checkedFocusValue === 'pt-collection'}
                 onChange={v => this.onInputChange(v.target.value)}
               />
-              <ImgOp px={3} src={CollectionBadge} />
+              <Image px={3} src={CollectionBadge} />
               <Text my={1} txtcenter small>
                 I collect & sort plastic
               </Text>
@@ -109,7 +109,7 @@ export class FocusSection extends React.Component<IProps, IState> {
                 checked={this.state.checkedFocusValue === 'pt-machine'}
                 onChange={v => this.onInputChange(v.target.value)}
               />
-              <ImgOp px={3} src={MachineBadge} />
+              <Image px={3} src={MachineBadge} />
               <Text my={1} txtcenter small>
                 I build machines
               </Text>
@@ -125,7 +125,7 @@ export class FocusSection extends React.Component<IProps, IState> {
                 checked={this.state.checkedFocusValue === 'pt-member'}
                 onChange={v => this.onInputChange(v.target.value)}
               />
-              <ImgOp px={3} src={MemberBadge} />
+              <Image px={3} src={MemberBadge} />
               <Text my={1} txtcenter small>
                 I am a member
               </Text>

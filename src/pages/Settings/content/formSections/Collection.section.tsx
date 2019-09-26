@@ -3,8 +3,8 @@ import * as React from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
-import { Box } from 'rebass'
-import { RadioInputWImg, Label, ImgOp } from './elements'
+import { Box, Image } from 'rebass'
+import { RadioInputWImg, Label } from './elements'
 import { InputField } from 'src/components/Form/Fields'
 import { OpeningHoursPicker } from './OpeningHoursPicker.field'
 
@@ -91,7 +91,7 @@ export class CollectionSection extends React.Component<IProps, IState> {
                 checked={this.state.checkedFocusValue === 'col-pt-1'}
                 // onChange={v => this.onInputChange(v.target.value)}
               />
-              <ImgOp px={3} src={Pet} />
+              <Image px={3} src={Pet} />
             </Label>
             <Label htmlFor="col-pt-2">
               <RadioInputWImg
@@ -104,7 +104,7 @@ export class CollectionSection extends React.Component<IProps, IState> {
                 checked={this.state.checkedFocusValue === 'col-pt-2'}
                 // onChange={v => this.onInputChange(v.target.value)}
               />
-              <ImgOp px={3} src={Hdpe} />
+              <Image px={3} src={Hdpe} />
             </Label>
             <Label htmlFor="col-pt-3">
               <RadioInputWImg
@@ -117,7 +117,7 @@ export class CollectionSection extends React.Component<IProps, IState> {
                 checked={this.state.checkedFocusValue === 'col-pt-3'}
                 // onChange={v => this.onInputChange(v.target.value)}
               />
-              <ImgOp px={3} src={Pvc} />
+              <Image px={3} src={Pvc} />
             </Label>
             <Label htmlFor="col-pt-4">
               <RadioInputWImg
@@ -130,7 +130,7 @@ export class CollectionSection extends React.Component<IProps, IState> {
                 checked={this.state.checkedFocusValue === 'col-pt-4'}
                 // onChange={v => this.onInputChange(v.target.value)}
               />
-              <ImgOp px={3} src={Ldpe} />
+              <Image px={3} src={Ldpe} />
             </Label>
             <Label htmlFor="col-pt-5">
               <RadioInputWImg
@@ -143,7 +143,7 @@ export class CollectionSection extends React.Component<IProps, IState> {
                 checked={this.state.checkedFocusValue === 'col-pt-5'}
                 // onChange={v => this.onInputChange(v.target.value)}
               />
-              <ImgOp px={3} src={PP} />
+              <Image px={3} src={PP} />
             </Label>
             <Label htmlFor="col-pt-6">
               <RadioInputWImg
@@ -156,7 +156,7 @@ export class CollectionSection extends React.Component<IProps, IState> {
                 checked={this.state.checkedFocusValue === 'col-pt-6'}
                 // onChange={v => this.onInputChange(v.target.value)}
               />
-              <ImgOp px={3} src={PS} />
+              <Image px={3} src={PS} />
             </Label>
             <Label htmlFor="col-pt-7">
               <RadioInputWImg
@@ -169,7 +169,7 @@ export class CollectionSection extends React.Component<IProps, IState> {
                 checked={this.state.checkedFocusValue === 'col-pt-7'}
                 // onChange={v => this.onInputChange(v.target.value)}
               />
-              <ImgOp px={3} src={Other} />
+              <Image px={3} src={Other} />
             </Label>
           </Flex>
         </Box>

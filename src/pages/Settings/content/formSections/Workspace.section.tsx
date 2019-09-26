@@ -3,8 +3,8 @@ import * as React from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
-import { Box } from 'rebass'
-import { RadioInputWImg, Label, ImgOp } from './elements'
+import { Box, Image } from 'rebass'
+import { RadioInputWImg, Label } from './elements'
 import { InputField } from 'src/components/Form/Fields'
 
 // assets
@@ -54,7 +54,7 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
                 checked={this.state.checkedFocusValue === 'wt-shredder'}
                 // onChange={v => this.onInputChange(v.target.value)}
               />
-              <ImgOp px={3} src={Shredder} />
+              <Image px={3} src={Shredder} />
               <Text my={1} txtcenter medium>
                 Shredder
               </Text>
@@ -73,7 +73,7 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
                 checked={this.state.checkedFocusValue === 'wt-sheetpress'}
                 // onChange={v => this.onInputChange(v.target.value)}
               />
-              <ImgOp px={3} src={Sheetpress} />
+              <Image px={3} src={Sheetpress} />
               <Text my={1} txtcenter medium>
                 Sheetpress
               </Text>
@@ -92,7 +92,7 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
                 checked={this.state.checkedFocusValue === 'wt-extrusion'}
                 // onChange={v => this.onInputChange(v.target.value)}
               />
-              <ImgOp px={3} src={Extrusion} />
+              <Image px={3} src={Extrusion} />
               <Text my={1} txtcenter medium>
                 Extrusion
               </Text>
@@ -111,7 +111,7 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
                 checked={this.state.checkedFocusValue === 'wt-injection'}
                 // onChange={v => this.onInputChange(v.target.value)}
               />
-              <ImgOp px={3} src={Injection} />
+              <Image px={3} src={Injection} />
               <Text my={1} txtcenter medium>
                 Injection
               </Text>
@@ -130,7 +130,7 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
                 checked={this.state.checkedFocusValue === 'wt-mix'}
                 // onChange={v => this.onInputChange(v.target.value)}
               />
-              <ImgOp px={3} src={Mix} />
+              <Image px={3} src={Mix} />
               <Text my={1} txtcenter medium>
                 Mix
               </Text>

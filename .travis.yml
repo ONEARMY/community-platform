@@ -7,11 +7,17 @@ cache: yarn
 addons:
   chrome: stable
 
+env:
+  # Tell jest to run without non-interactive mode
+  CI=true
+
 # add the current github branch as an environment variable
 before_script:
   - export REACT_APP_BRANCH=$TRAVIS_BRANCH
   - echo "REACT_APP_BRANCH=$REACT_APP_BRANCH"
 script:
+  - yarn test
+  - yarn cy:ci
   - npm run build
 
 # install firebase cli and set firebase project ci token from environment

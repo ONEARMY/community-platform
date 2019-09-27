@@ -105,7 +105,7 @@ export const TAGS_MOCK: ITag[] = [
     label: 'sorting',
     categories: ['how-to'],
   },
-  // events
+  // EVENTS
   {
     ...MOCK_DB_META('1zfteiFXNDbDnlE3Incg'),
     image: '',
@@ -159,5 +159,36 @@ export const TAGS_MOCK: ITag[] = [
     image: '',
     label: 'protest',
     categories: ['event'],
+  },
+  // PROFILE EXPERTISE
+  {
+    ...MOCK_DB_META(),
+    image: '',
+    label: 'Electronics',
+    categories: ['profile-expertise'],
+  },
+  {
+    ...MOCK_DB_META(),
+    image: '',
+    label: 'Machining',
+    categories: ['profile-expertise'],
+  },
+  {
+    ...MOCK_DB_META(),
+    image: '',
+    label: 'Welding',
+    categories: ['profile-expertise'],
+  },
+  {
+    ...MOCK_DB_META(),
+    image: '',
+    label: 'Assembling',
+    categories: ['profile-expertise'],
+  },
+  {
+    ...MOCK_DB_META(),
+    image: '',
+    label: 'Mould making',
+    categories: ['profile-expertise'],
   },
 ]

@@ -9,6 +9,13 @@ export interface ILink {
   url: string
 }
 
+export type ProfileType =
+  | 'pt-member'
+  | 'pt-workspace'
+  | 'pt-community'
+  | 'pt-collection'
+  | 'pt-machine'
+
 // IUser retains most of the fields from legacy users (omitting passwords),
 // and has a few additional fields. Note 'email' is excluded
 // _uid is unique/fixed identifier

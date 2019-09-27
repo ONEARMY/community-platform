@@ -44,13 +44,11 @@ export class ModuleStore {
   // when accessing a collection want to call the database getCollection method which
   // efficiently checks the cache first and emits any subsequent updates
   private _subscribeToCollection(endpoint: DBEndpoint) {
-    console.log('getting collection', endpoint)
     this.allDocs$.next([])
     this.activeCollectionSubscription.unsubscribe()
     this.activeCollectionSubscription = this.db
       .collection(endpoint)
       .stream(data => {
-        console.log(`[${data.length}] [${endpoint}] docs received`)
         this.allDocs$.next(data)
       })
   }

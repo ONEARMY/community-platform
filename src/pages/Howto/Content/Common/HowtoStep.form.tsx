@@ -32,14 +32,6 @@ const Label = styled.label`
   margin-bottom: ${theme.space[2] + 'px'};
 `
 
-const AbsoluteBtn = styled(Button)`
-  position: absolute;
-`
-
-const ImageWithOpacity = styled(Image)`
-  opacity: 0.5;
-`
-
 class HowtoStep extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
@@ -149,13 +141,14 @@ class HowtoStep extends Component<IProps, IState> {
                     width={1 / 4}
                     key={image.name}
                   >
-                    <ImageWithOpacity src={image.downloadUrl} />
+                    <Image sx={{ opacity: 0.5 }} src={image.downloadUrl} />
                   </Flex>
                 )
               })}
-              <AbsoluteBtn
+              <Button
                 icon={'delete'}
                 variant={'tertiary'}
+                sx={{ position: 'absolute' }}
                 onClick={() =>
                   this.setState({
                     editStepImgs: !editStepImgs,

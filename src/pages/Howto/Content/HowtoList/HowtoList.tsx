@@ -43,7 +43,7 @@ export class HowtoList extends React.Component<any, IState> {
     return (
       <>
         <Flex py={26}>
-          <Heading medium bold txtcenter width={1}>
+          <Heading medium bold txtcenter width={1} my={20}>
             Learn & share how to recycle, make and hack plastic
           </Heading>
         </Flex>

@@ -2,6 +2,7 @@ import * as React from 'react'
 import { observer, inject } from 'mobx-react'
 import Heading from 'src/components/Heading'
 import { Box } from 'rebass'
+import { FlexSectionContainer } from './elements'
 import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
 import { MapsStore } from 'src/stores/Maps/maps.store'
 import { UserStore } from 'src/stores/User/user.store'
@@ -98,19 +99,9 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
   render() {
     const pin = this.state.userPin
     return (
-      <Flex
-        card
-        mediumRadius
-        bg={'white'}
-        mt={5}
-        p={4}
-        flexWrap="wrap"
-        flexDirection="column"
-      >
-        <Box id="your-map-pin" mt={4}>
-          <Heading small bold>
-            Your map pin
-          </Heading>
+      <FlexSectionContainer>
+        <Heading small>Your map pin</Heading>
+        <Box id="your-map-pin" my={4}>
           <div style={{ position: 'relative', zIndex: 2 }}>
             <LocationSearch onChange={v => this.onLocationChange(v)} />
           </div>
@@ -127,7 +118,7 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
             />
           </div>
         </Box>
-      </Flex>
+      </FlexSectionContainer>
     )
   }
 }

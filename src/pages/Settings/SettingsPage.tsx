@@ -14,7 +14,6 @@ import { CollectionSection } from './content/formSections/Collection.section'
 import { Button } from 'src/components/Button'
 import { PostingGuidelines } from './content/PostingGuidelines'
 import Heading from 'src/components/Heading'
-import Text from 'src/components/Text'
 
 import styled from 'styled-components'
 import { TextNotification } from 'src/components/Notification/TextNotification'
@@ -22,6 +21,8 @@ import { ProfileDelete } from './content/ProfileDelete'
 import { Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import { UserMapPinSection } from './content/formSections/MapPin.section'
+import theme from 'src/themes/styled.theme'
+import { ProfileType } from 'src/models/user.models'
 
 interface IFormValues extends Partial<IUser> {
   // form values are simply subset of user profile fields
@@ -33,13 +34,14 @@ interface IProps {
 interface IInjectedProps extends IProps {
   userStore: UserStore
 }
+
 interface IState {
   editMode: boolean
   formValues: IFormValues
   user: IUser
   showNotification: boolean
   showDeleteDialog?: boolean
-  profileType?: string
+  profileType?: ProfileType
 }
 
 const FormContainer = styled.form`
@@ -102,7 +104,13 @@ export class UserSettings extends React.Component<IProps, IState> {
                 <FormContainer>
                   {/* How To Info */}
                   <Flex flexDirection={'column'}>
-                    <Flex card mediumRadius bg={'softblue'} px={3} py={2}>
+                    <Flex
+                      card
+                      mediumRadius
+                      bg={theme.colors.softblue}
+                      px={3}
+                      py={2}
+                    >
                       <Heading medium>Edit profile</Heading>
                     </Flex>
                     <FocusSection
@@ -110,8 +118,30 @@ export class UserSettings extends React.Component<IProps, IState> {
                     />
                     {profileType === 'pt-workspace' && (
                       <>
-                        <WorkspaceSection />
+                        <WorkspaceSection onInputChange={v => console.log(v)} />
                         <UserInfosSection user={user} />
+                        <UserMapPinSection />
+                      </>
+                    )}
+                    {profileType === 'pt-collection' && (
+                      <>
+                        <UserInfosSection user={user} />
+                        <CollectionSection
+                          onInputChange={v => console.log(v)}
+                        />
+                        <UserMapPinSection />
+                      </>
+                    )}
+                    {profileType === 'pt-community' && (
+                      <>
+                        <UserInfosSection user={user} />
+                        <UserMapPinSection />
+                      </>
+                    )}
+                    {profileType === 'pt-machine' && (
+                      <>
+                        <UserInfosSection user={user} />
+                        <ExpertiseSection />
                         <UserMapPinSection />
                       </>
                     )}
@@ -120,17 +150,9 @@ export class UserSettings extends React.Component<IProps, IState> {
                         <UserInfosSection user={user} />
                       </>
                     )}
-                    {profileType === undefined && (
-                      <>
-                        <WorkspaceSection />
-                        <ExpertiseSection />
-                        <CollectionSection />
-                        <UserInfosSection user={user} />
-                        <UserMapPinSection />
-                      </>
-                    )}
+                    {profileType === undefined && <></>}
 
-                    <Flex
+                    {/* <Flex
                       card
                       mediumRadius
                       bg={'white'}
@@ -139,11 +161,11 @@ export class UserSettings extends React.Component<IProps, IState> {
                       flexWrap="wrap"
                       flexDirection="column"
                     >
-                      <Heading small mb={3}>
+                      <Heading small>
                         Import profile from davehakkens.nl
                       </Heading>
-                      {/* <Text mb={3}>{this.state.user.userName}</Text> */}
-                      {/* <ImportDHForm {...readOnly} /> */}
+                      <Text mb={3}>{this.state.user.userName}</Text>
+                       <ImportDHForm {...readOnly} />
                     </Flex>
                     <Flex
                       card
@@ -154,14 +176,12 @@ export class UserSettings extends React.Component<IProps, IState> {
                       flexWrap="wrap"
                       flexDirection="column"
                     >
-                      <Heading small mb={3}>
-                        Account settings
-                      </Heading>
-                      {/* <ChangePasswordForm
+                      <Heading small>Account settings</Heading>
+                       <ChangePasswordForm
                         {...readOnly}
                         userStore={this.props.userStore}
-                      /> */}
-                    </Flex>
+                      /> 
+                    </Flex>*/}
                   </Flex>
                 </FormContainer>
               </Flex>

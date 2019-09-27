@@ -41,7 +41,7 @@ export class OpeningHoursPicker extends React.Component<IProps, IState> {
   render() {
     const { openingHoursValues, index } = this.props
     return (
-      <Flex key={index} alignItems="center">
+      <Flex key={index} alignItems="center" my={1}>
         <Field
           name={`${openingHoursValues}.day`}
           options={WEEK_DAYS}
@@ -53,14 +53,14 @@ export class OpeningHoursPicker extends React.Component<IProps, IState> {
           name={`${openingHoursValues}.from_hour`}
           options={OPENING_HOURS}
           component={SelectField}
-          placeholder="from"
+          placeholder="from --:-- AM"
           style={{ width: '160px', marginRight: '8px', marginBottom: 0 }}
         />
         <Field
           name={`${openingHoursValues}.to_hour`}
           options={OPENING_HOURS}
           component={SelectField}
-          placeholder="to"
+          placeholder="to --:-- PM"
           style={{ width: '160px', marginBottom: 0 }}
         />
         <Button

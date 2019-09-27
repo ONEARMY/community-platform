@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Form, Field } from 'react-final-form'
-import arrayMutators from 'final-form-arrays'
+import { Field } from 'react-final-form'
 import Heading from 'src/components/Heading'
 import { IUser } from 'src/models/user.models'
 import Text from 'src/components/Text'
@@ -17,8 +16,8 @@ import theme from 'src/themes/styled.theme'
 import { FieldArray } from 'react-final-form-arrays'
 import { Link } from './Link.field'
 import { timestampToYear } from 'src/utils/helpers'
-import { Icon } from 'src/components/Icons'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
+import { FlexSectionContainer } from './elements'
 
 interface IProps {
   user: IUser
@@ -75,20 +74,12 @@ export class UserInfosSection extends React.Component<IProps, IState> {
   render() {
     const { user } = this.props
     return (
-      <Flex
-        card
-        mediumRadius
-        bg={'white'}
-        mt={5}
-        p={4}
-        flexWrap="wrap"
-        flexDirection="column"
-      >
-        <Heading small mb={3}>
+      <FlexSectionContainer>
+        <Heading small bold>
           Infos
         </Heading>
         <Flex flexWrap={'wrap'}>
-          <Text my={2} medium>
+          <Text my={4} medium>
             User / workspace username *
           </Text>
           <Field
@@ -213,7 +204,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             </>
           )}
         </FieldArray>
-      </Flex>
+      </FlexSectionContainer>
     )
   }
 }

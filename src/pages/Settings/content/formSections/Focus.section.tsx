@@ -4,7 +4,7 @@ import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import { Box, Image } from 'rebass'
-import { RadioInputWImg, Label } from './elements'
+import { HiddenInput, Label, FlexSectionContainer } from './elements'
 import { InputField } from 'src/components/Form/Fields'
 
 // assets
@@ -13,9 +13,12 @@ import MemberBadge from 'src/assets/images/badges/pt-member.jpg'
 import MachineBadge from 'src/assets/images/badges/pt-machine-shop.jpg'
 import WorkspaceBadge from 'src/assets/images/badges/pt-workspace.jpg'
 import LocalComBadge from 'src/assets/images/badges/pt-local-community.jpg'
+import { Link } from 'src/components/Links'
+import { Button } from 'src/components/Button'
+import { ProfileType } from 'src/models/user.models'
 
 interface IProps {
-  onInputChange: (inputValue: string) => void
+  onInputChange: (inputValue: ProfileType) => void
 }
 interface IState {
   checkedFocusValue?: string
@@ -27,31 +30,29 @@ export class FocusSection extends React.Component<IProps, IState> {
     this.state = {}
   }
 
-  public onInputChange(value: string) {
+  public onInputChange(value: ProfileType) {
     this.setState({ checkedFocusValue: value })
     this.props.onInputChange(value)
   }
 
   render() {
     return (
-      <Flex
-        card
-        mediumRadius
-        bg={'white'}
-        mt={5}
-        flexWrap="wrap"
-        flexDirection="column"
-      >
-        <Heading small p={4}>
-          Focus
-        </Heading>
-        <Box px={4}>
+      <FlexSectionContainer>
+        <Heading small>Focus</Heading>
+        <Box>
           <Text regular my={4}>
             What is your main Precious Plastic activity?
           </Text>
           <Flex wrap="nowrap">
-            <Label>
-              <RadioInputWImg
+            <Label
+              htmlFor="pt-workspace"
+              className={
+                this.state.checkedFocusValue === 'pt-workspace'
+                  ? 'selected'
+                  : undefined
+              }
+            >
+              <HiddenInput
                 id="pt-workspace"
                 value="pt-workspace"
                 name="title"
@@ -62,12 +63,19 @@ export class FocusSection extends React.Component<IProps, IState> {
                 onChange={v => this.onInputChange(v.target.value)}
               />
               <Image px={3} src={WorkspaceBadge} />
-              <Text my={1} txtcenter small>
+              <Text px={1} my={1} txtcenter small>
                 I run a workspace
               </Text>
             </Label>
-            <Label htmlFor="pt-community">
-              <RadioInputWImg
+            <Label
+              htmlFor="pt-community"
+              className={
+                this.state.checkedFocusValue === 'pt-community'
+                  ? 'selected'
+                  : undefined
+              }
+            >
+              <HiddenInput
                 id="pt-community"
                 value="pt-community"
                 name="title"
@@ -78,12 +86,19 @@ export class FocusSection extends React.Component<IProps, IState> {
                 onChange={v => this.onInputChange(v.target.value)}
               />
               <Image px={3} src={LocalComBadge} />
-              <Text my={1} txtcenter small>
+              <Text px={1} my={1} txtcenter small>
                 I run a local community
               </Text>
             </Label>
-            <Label htmlFor="pt-collection">
-              <RadioInputWImg
+            <Label
+              htmlFor="pt-collection"
+              className={
+                this.state.checkedFocusValue === 'pt-collection'
+                  ? 'selected'
+                  : undefined
+              }
+            >
+              <HiddenInput
                 id="pt-collection"
                 value="pt-collection"
                 name="title"
@@ -94,12 +109,19 @@ export class FocusSection extends React.Component<IProps, IState> {
                 onChange={v => this.onInputChange(v.target.value)}
               />
               <Image px={3} src={CollectionBadge} />
-              <Text my={1} txtcenter small>
+              <Text px={1} my={1} txtcenter small>
                 I collect & sort plastic
               </Text>
             </Label>
-            <Label htmlFor="pt-machine">
-              <RadioInputWImg
+            <Label
+              htmlFor="pt-machine"
+              className={
+                this.state.checkedFocusValue === 'pt-machine'
+                  ? 'selected'
+                  : undefined
+              }
+            >
+              <HiddenInput
                 id="pt-machine"
                 value="pt-machine"
                 name="title"
@@ -110,12 +132,19 @@ export class FocusSection extends React.Component<IProps, IState> {
                 onChange={v => this.onInputChange(v.target.value)}
               />
               <Image px={3} src={MachineBadge} />
-              <Text my={1} txtcenter small>
+              <Text px={1} my={1} txtcenter small>
                 I build machines
               </Text>
             </Label>
-            <Label htmlFor="pt-member">
-              <RadioInputWImg
+            <Label
+              htmlFor="pt-member"
+              className={
+                this.state.checkedFocusValue === 'pt-member'
+                  ? 'selected'
+                  : undefined
+              }
+            >
+              <HiddenInput
                 id="pt-member"
                 value="pt-member"
                 name="title"
@@ -126,13 +155,21 @@ export class FocusSection extends React.Component<IProps, IState> {
                 onChange={v => this.onInputChange(v.target.value)}
               />
               <Image px={3} src={MemberBadge} />
-              <Text my={1} txtcenter small>
+              <Text px={1} my={1} txtcenter small>
                 I am a member
               </Text>
             </Label>
           </Flex>
+          <Flex flexWrap="wrap" alignItems="center" mt={4}>
+            <Text>Not sure about your focus ?</Text>
+            <Link to={'/academy'}>
+              <Button ml={2} variant="outline">
+                Go to starter kits
+              </Button>
+            </Link>
+          </Flex>
         </Box>
-      </Flex>
+      </FlexSectionContainer>
     )
   }
 }

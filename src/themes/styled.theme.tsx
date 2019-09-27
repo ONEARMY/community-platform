@@ -1,4 +1,3 @@
-import { lighten } from 'polished'
 import { color } from '@storybook/addon-knobs'
 // use enum to specify list of possible colors for typing
 export const colors = {
@@ -10,6 +9,7 @@ export const colors = {
   softblue: '#e2edf7',
   bluetag: '#5683b0',
   grey: '#61646b',
+  green: '#00c3a9',
   error: 'red',
   background: '#f4f6f7',
 }
@@ -132,7 +132,8 @@ const buttons = {
     width: 'fit-content',
     height: 'fit-content',
     '&:hover': {
-      backgroundColor: lighten(0.02, colors.softblue),
+      backgroundColor: colors.softblue,
+      cursor: 'pointer',
     },
     borderRadius: radii[1] + 'px',
   },

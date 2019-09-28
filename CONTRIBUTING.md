@@ -54,7 +54,7 @@ The project uses [Jest](https://jestjs.io/) to unit Test and [Cypress](https://w
   `yarn start`
 
 - Run the end-to-end tests
-  `yarn e2e`
+  `yarn cy:ci`
 
 ### Additional commands
 
@@ -62,7 +62,7 @@ The project uses [Jest](https://jestjs.io/) to unit Test and [Cypress](https://w
   `yarn storybook`
 
 - Open the Cypress Test Runner
-  `yarn e2e-open`
+  `yarn cy:open`
 
 We use [BrowserStack](https://www.browserstack.com/) to test our platform on multiple devices and browsers.
 Note: Builds are currently tested on Chrome/Firefox. If your browser is not

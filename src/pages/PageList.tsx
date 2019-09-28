@@ -13,6 +13,7 @@ import SignUpPage from './SignUp/SignUp'
 import SignInPage from './SignIn/SignIn'
 import { ForgotPasswordPage } from './Password/ForgotPassword'
 import { ForgotPasswordMessagePage } from './Password/ForgotPasswordMessage'
+import { CSSObject } from '@styled-system/css'
 
 export interface IPageMeta {
   path: string
@@ -21,7 +22,7 @@ export interface IPageMeta {
   description: string
   exact?: boolean
   fullPageWidth?: boolean
-  customStyles?: React.CSSProperties
+  customStyles?: CSSObject
 }
 
 const howTo = {
@@ -48,6 +49,7 @@ const academy = {
   title: 'Academy',
   description: 'Demo external page embed',
   customStyles: { position: 'absolute', height: '100%', width: '100%' },
+  fullPageWidth: true,
 }
 const events = {
   path: '/events',
@@ -60,6 +62,12 @@ const maps = {
   component: <MapsPage />,
   title: 'Map',
   description: 'Welcome to the Map',
+  customStyles: {
+    position: 'relative',
+    margin: '0',
+    padding: '0',
+    width: '100vw',
+  },
   fullPageWidth: true,
 }
 const admin = {

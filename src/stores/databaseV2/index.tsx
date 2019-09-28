@@ -75,7 +75,6 @@ class CollectionReference<T> {
         }
         // 3. get any newer docs from regular server db, merge with cache and emit
         const latest = await this._getCacheLastModified()
-        console.log('subcribing to updates', latest)
         serverDB.streamCollection!(endpoint, {
           orderBy: '_modified',
           order: 'asc',

@@ -5,7 +5,6 @@ import { Props as SelectProps } from 'react-select/lib/Select'
 import { Styles } from 'react-select/lib/styles'
 import theme from 'src/themes/styled.theme'
 import { getCountryName } from 'src/utils/helpers'
-import { background } from 'styled-system'
 import { Flex } from 'src/components/Flex'
 import { ErrorMessage, FieldContainer } from './elements'
 import { IFieldProps } from './Fields'
@@ -35,11 +34,11 @@ export const SelectStyles: Partial<Styles> = {
     minHeight: '40px',
     boxShadow: 'none',
     ':focus': {
-      border: '1px solid #83ceeb',
+      border: '1px solid ' + theme.colors.blue,
       outline: 'none',
     },
     ':hover': {
-      border: '1px solid #83ceeb',
+      border: '1px solid ' + theme.colors.blue,
     },
   }),
 
@@ -47,6 +46,7 @@ export const SelectStyles: Partial<Styles> = {
     ...provided,
     backgroundColor: theme.colors.background,
     boxShadow: 'none',
+    color: 'black',
     ':hover': {
       outline: 'none',
       backgroundColor: 'white',
@@ -66,10 +66,10 @@ export const SelectStyles: Partial<Styles> = {
 
   multiValue: (provided, state) => ({
     ...provided,
-    backgroundColor: '#e2edf7',
+    backgroundColor: theme.colors.softblue,
     padding: '2px',
     border: '1px solid #c2d4e4',
-    color: '#61646b',
+    color: theme.colors.grey,
   }),
 
   indicatorSeparator: (provided, state) => ({
@@ -93,10 +93,10 @@ export const FilterStyles: Partial<Styles> = {
     minHeight: '40px',
     boxShadow: 'none',
     ':hover': {
-      border: '1px solid #83ceeb',
+      border: '1px solid ' + theme.colors.blue,
     },
     ':focus': {
-      border: '1px solid #83ceeb',
+      border: '1px solid ' + theme.colors.blue,
     },
   }),
 
@@ -107,7 +107,7 @@ export const FilterStyles: Partial<Styles> = {
     boxShadow: 'none',
     ':hover': {
       outline: 'none',
-      backgroundColor: '#e2edf7',
+      backgroundColor: theme.colors.softblue,
       color: 'black',
     },
   }),
@@ -124,10 +124,10 @@ export const FilterStyles: Partial<Styles> = {
 
   multiValue: (provided, state) => ({
     ...provided,
-    backgroundColor: '#e2edf7',
+    backgroundColor: theme.colors.softblue,
     padding: '2px',
     border: '1px solid black',
-    color: '#61646b',
+    color: theme.colors.grey,
   }),
 
   indicatorSeparator: (provided, state) => ({

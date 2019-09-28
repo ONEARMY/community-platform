@@ -134,6 +134,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
         decorators={[this.calculatedFields]}
         render={({ submitting, values, invalid, errors, handleSubmit }) => {
           const disabled = invalid || submitting
+          console.log('values', values)
           return (
             <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
               <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} mt={4}>
@@ -305,13 +306,15 @@ export class HowtoForm extends React.Component<IProps, IState> {
                               />
                             </Flex>
                           ) : (
-                            <Field
-                              id="cover_image"
-                              name="cover_image"
-                              validate={required}
-                              validateFields={[]}
-                              component={ImageInputField}
-                            />
+                            <div style={{ height: '230px' }}>
+                              <Field
+                                id="cover_image"
+                                name="cover_image"
+                                validate={required}
+                                validateFields={[]}
+                                component={ImageInputField}
+                              />
+                            </div>
                           )}
 
                           <Text small color={'grey'} mt={2}>
@@ -338,6 +341,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                             <AnimationContainer
                               key={fields.value[index]._animationKey}
                             >
+                              {console.log('fields', fields)}
                               <HowtoStep
                                 key={fields.value[index]._animationKey}
                                 step={name}

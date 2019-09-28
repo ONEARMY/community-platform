@@ -7,12 +7,14 @@ export enum colors {
   blue = '#83ceeb',
   red = '#eb1b1f',
   softblue = '#e2edf7',
+
   bluetag = '#5683b0',
   grey = '#61646b',
   error = 'red',
   background = '#f4f6f7',
   primary = yellow,
   secondary = blue,
+  lightGrey = '#e0e0e0',
 }
 
 export type ButtonVariants =

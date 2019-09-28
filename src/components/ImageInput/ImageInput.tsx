@@ -3,7 +3,20 @@ import { Box, Flex } from 'rebass'
 import { Button } from '../Button'
 import Lightbox from 'react-image-lightbox'
 import 'react-image-lightbox/style.css'
+import Dropzone from 'react-dropzone'
+import theme from 'src/themes/styled.theme'
 import { ImageConverter } from './ImageConverter'
+
+import styled from 'styled-components'
+
+interface IUploadImageOverlayIProps {
+  isHovering: boolean
+}
+
+interface ITitleProps {
+  readonly onMouseEnter: object | null
+  hasImage: boolean
+}
 
 /*
     This component takes multiple imageusing filepicker and resized clientside
@@ -14,6 +27,8 @@ import { ImageConverter } from './ImageConverter'
 interface IProps {
   onFilesChange?: (fileMeta: IConvertedFileMeta[]) => void
   multi?: boolean
+  canDelete?: boolean
+  hasText?: boolean
 }
 
 export interface IConvertedFileMeta {
@@ -32,37 +47,58 @@ interface IState {
   inputFiles: File[]
   lightboxImg?: IConvertedFileMeta
   openLightbox?: boolean
+  isHovering: boolean
 }
 
+const UploadImageWrapper = styled.div<ITitleProps>`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* width: 100%;
+  min-height: 230px;
+  height: 230px; */
+  height: 100%;
+  width: 100%;
+  border: 2px dashed ${theme.colors.lightGrey};
+  border-radius: ${theme.space[1]}px;
+  background-color: ${theme.colors.white};
+
+  ${props =>
+    props.hasImage &&
+    `
+    border: none;
+  `}
+`
+
+const UploadImageOverlay = styled.div<IUploadImageOverlayIProps>`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 300ms ease-in;
+  border-radius: ${theme.space[1]}px;
+
+  ${(props: IUploadImageOverlayIProps) =>
+    props.isHovering &&
+    `
+    visibility: visible;
+    opacity: 1;
+  `}
+`
+
 export class ImageInput extends React.Component<IProps, IState> {
-  private fileInputRef = React.createRef<HTMLInputElement>()
+  // private fileInputRef = React.createRef<HTMLInputElement>()
 
   constructor(props: IProps) {
     super(props)
-    this.state = { inputFiles: [], convertedFiles: [] }
-  }
-
-  get inputFiles() {
-    const filesRef = this.fileInputRef.current as HTMLInputElement
-    const files = filesRef.files
-    return files ? Array.from(files) : []
-  }
-
-  // on mount add listener to automatically convert images on file pick
-  componentDidMount() {
-    const inputRef = this.fileInputRef.current as HTMLInputElement
-    inputRef.addEventListener(
-      'change',
-      e => {
-        this.setState({ inputFiles: this.inputFiles })
-      },
-      false,
-    )
-  }
-
-  public triggerFileUploaderClick() {
-    const inputRef = this.fileInputRef.current as HTMLInputElement
-    inputRef.click()
+    this.state = {
+      inputFiles: [],
+      convertedFiles: [],
+      isHovering: false,
+    }
   }
 
   public handleConvertedFileChange(file: IConvertedFileMeta, index: number) {
@@ -86,54 +122,68 @@ export class ImageInput extends React.Component<IProps, IState> {
     })
   }
 
-  public handleFileInput(files: FileList | null) {
-    this.setState(() => ({
-      imgDelivered: false,
+  public toggleImageOverlay = () => {
+    const { inputFiles } = this.state
+    if (inputFiles && inputFiles.length === 0) {
+      return
+    }
+
+    this.setState((prevState: Readonly<IState>) => ({
+      isHovering: !prevState.isHovering,
     }))
   }
 
   render() {
-    const { inputFiles, openLightbox, lightboxImg, imgDelivered } = this.state
+    const {
+      inputFiles,
+      openLightbox,
+      lightboxImg,
+      imgDelivered,
+      isHovering,
+    } = this.state
+    const { canDelete } = this.props
     // if at least one image present, hide the 'choose image' button and replace with smaller button
     const imgPreviewMode = inputFiles.length > 0
+
+    console.log('inputFiles', inputFiles, canDelete, this.props)
+
+    const hasImage = inputFiles && inputFiles.length > 0
+
     return (
-      <Box p={0}>
-        <>
-          <div
-            style={{
-              opacity: imgPreviewMode ? 0 : 1, // prevent FOUC when image appears
-              display: imgDelivered ? 'none' : 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              height: '230px',
-              alignItems: 'center',
-              backgroundColor: '#e0e0e0',
-              borderRadius: '5px',
-              // ideally width should fill container around 300px for 4:3
-            }}
-          >
-            <Button
-              small
-              variant="outline"
-              onClick={() => this.triggerFileUploaderClick()}
-              icon="image"
-            >
-              {this.props.multi ? 'Choose Image(s)' : 'Choose Image'}
-            </Button>
-            <input
-              type="file"
-              name="pic"
-              accept="image/jpeg,image/png"
-              multiple={this.props.multi}
-              ref={this.fileInputRef}
-              style={{ display: 'none' }}
-              onChange={e => {
-                this.handleFileInput(e.target.files)
+      <Box p={0} style={{ height: '100%' }}>
+        <UploadImageWrapper
+          hasImage={hasImage}
+          onMouseEnter={this.toggleImageOverlay}
+          onMouseLeave={this.toggleImageOverlay}
+        >
+          {inputFiles.length === 0 && (
+            <Dropzone
+              multiple={false}
+              onDrop={filesToUpload => {
+                console.log(filesToUpload)
+                const files = filesToUpload ? Array.from(filesToUpload) : []
+
+                this.setState({ inputFiles: files })
               }}
-            />
-          </div>
-          <Flex mx={-1}>
-            {inputFiles.map((file, index) => {
+            >
+              {({ getRootProps, getInputProps }) => (
+                <div {...getRootProps()}>
+                  <input {...getInputProps()} />
+                  <Button
+                    small
+                    variant="outline"
+                    icon="image"
+                    hasText={this.props.hasText}
+                  >
+                    {this.props.multi ? 'Choose Image(s)' : 'Choose Image'}
+                  </Button>
+                </div>
+              )}
+            </Dropzone>
+          )}
+
+          {hasImage &&
+            inputFiles.map((file, index) => {
               return (
                 <ImageConverter
                   key={file.name}
@@ -145,27 +195,76 @@ export class ImageInput extends React.Component<IProps, IState> {
                 />
               )
             })}
-            {imgPreviewMode && (
-              <Flex width={1 / 4} px={1}>
-                <Button
-                  large
-                  onClick={() => this.triggerFileUploaderClick()}
-                  ml="auto"
-                  icon="image"
-                  variant="imageInput"
-                  width={1}
-                />
-              </Flex>
-            )}
-          </Flex>
 
-          {openLightbox && (
-            <Lightbox
-              mainSrc={lightboxImg!.objectUrl}
-              onCloseRequest={() => this.setState({ openLightbox: false })}
-            />
-          )}
-        </>
+          <UploadImageOverlay isHovering={isHovering}>
+            {!canDelete ? (
+              <Dropzone
+                multiple={false}
+                onDrop={filesToUpload => {
+                  console.log(filesToUpload)
+                  const files = filesToUpload ? Array.from(filesToUpload) : []
+
+                  this.setState({ inputFiles: files })
+                }}
+              >
+                {({ getRootProps, getInputProps }) => (
+                  <div
+                    style={{
+                      display: 'flex',
+                      height: '100%',
+                      width: '100%',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                    {...getRootProps()}
+                  >
+                    <input {...getInputProps()} />
+                    <Button
+                      small
+                      variant="outline"
+                      icon="image"
+                      hasText={this.props.hasText}
+                    >
+                      Replace image
+                    </Button>
+                  </div>
+                )}
+              </Dropzone>
+            ) : (
+              <div
+                style={{
+                  display: 'flex',
+                  height: '100%',
+                  width: '100%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Button
+                  small
+                  variant="outline"
+                  icon="delete"
+                  onClick={() =>
+                    this.setState({
+                      inputFiles: [],
+                      isHovering: false,
+                    })
+                  }
+                  hasText={this.props.hasText}
+                >
+                  Delete
+                </Button>
+              </div>
+            )}
+          </UploadImageOverlay>
+        </UploadImageWrapper>
+
+        {openLightbox && (
+          <Lightbox
+            mainSrc={lightboxImg!.objectUrl}
+            onCloseRequest={() => this.setState({ openLightbox: false })}
+          />
+        )}
       </Box>
     )
   }

@@ -164,7 +164,45 @@ class HowtoStep extends Component<IProps, IState> {
               />
             </Flex>
           ) : (
-            <Field name={`${step}.images`} component={ImageInputField} multi />
+            <>
+              <div
+                style={{
+                  display: 'flex',
+                }}
+              >
+                <div
+                  style={{ height: '100px', width: '150px', marginRight: 10 }}
+                >
+                  <Field
+                    canDelete
+                    hasText={false}
+                    variant="small"
+                    name={`${step}.images`}
+                    component={ImageInputField}
+                  />
+                </div>
+                <div
+                  style={{ height: '100px', width: '150px', marginRight: 10 }}
+                >
+                  <Field
+                    canDelete
+                    hasText={false}
+                    variant="small"
+                    name={`${step}.images`}
+                    component={ImageInputField}
+                  />
+                </div>
+                <div style={{ height: '100px', width: '150px' }}>
+                  <Field
+                    canDelete
+                    hasText={false}
+                    variant="small"
+                    name={`${step}.images`}
+                    component={ImageInputField}
+                  />
+                </div>
+              </div>
+            </>
           )}
         </Flex>
         <Flex mt={2}>

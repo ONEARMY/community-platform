@@ -44,8 +44,9 @@ export const TextAreaDisabled = styled.div`
 export const FieldContainer = styled.div<IFormElement>`
   width: 100%;
   ${inputStyles};
-  border: 'none';
+  border: 0;
   padding: 0;
+  height: 100%;
 `
 export const ErrorMessage = styled.span`
   position: relative;

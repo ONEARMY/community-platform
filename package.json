@@ -79,6 +79,7 @@
     "react-calendar": "^2.19.0",
     "react-dev-utils": "^7.0.3",
     "react-dom": "16.8.4",
+    "react-dropzone": "^10.1.9",
     "react-final-form": "6.3.0",
     "react-final-form-arrays": "^3.1.1",
     "react-firebase-file-uploader": "2.4.2",

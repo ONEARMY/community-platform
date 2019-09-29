@@ -4,29 +4,14 @@ import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import { Box } from 'rebass'
-import { Label, HiddenInput, FlexSectionContainer } from './elements'
-import { InputField } from 'src/components/Form/Fields'
-import theme from 'src/themes/styled.theme'
+import { FlexSectionContainer } from './elements'
+import { FieldArray } from 'react-final-form-arrays'
+import { MACHINE_BUILDER_XP } from 'src/mocks/user_pp.mock'
+import { CustomCheckbox } from './CustomCheckbox.field'
 
-interface IProps {}
-interface IState {
-  checkedFocusValue?: string
-}
-
-const CustomSelectBtn = props => (
-  <Box
-    sx={{
-      margin: '10px',
-    }}
-  >
-    {props.children}
-  </Box>
-)
-
-export class ExpertiseSection extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+export class ExpertiseSection extends React.Component<any, any> {
+  constructor(props: any) {
     super(props)
-    this.state = {}
   }
 
   render() {
@@ -38,83 +23,36 @@ export class ExpertiseSection extends React.Component<IProps, IState> {
             What are you specialised in ? *
           </Text>
           <Flex wrap="nowrap">
-            <Label
-              htmlFor="exp-electronics"
-              className={
-                this.state.checkedFocusValue === 'exp-electronics'
-                  ? 'selected'
-                  : undefined
-              }
-            >
-              <HiddenInput
-                id="exp-electronics"
-                value="exp-electronics"
-                name="title"
-                type="checkbox"
-                component={InputField}
-                checked={this.state.checkedFocusValue === 'exp-electronics'}
-                // onChange={v => this.onInputChange(v.target.value)}
-              />
-              <CustomSelectBtn>
-                <Text medium>Electronics</Text>
-              </CustomSelectBtn>
-            </Label>
-            <Label htmlFor="exp-machining">
-              <HiddenInput
-                id="exp-machining"
-                value="exp-machining"
-                name="title"
-                type="checkbox"
-                component={InputField}
-                checked={this.state.checkedFocusValue === 'exp-machining'}
-                // onChange={v => this.onInputChange(v.target.value)}
-              />
-              <CustomSelectBtn>
-                <Text medium>Machining</Text>
-              </CustomSelectBtn>
-            </Label>
-            <Label htmlFor="exp-welding">
-              <HiddenInput
-                id="exp-welding"
-                value="exp-welding"
-                name="title"
-                type="checkbox"
-                component={InputField}
-                checked={this.state.checkedFocusValue === 'exp-welding'}
-                // onChange={v => this.onInputChange(v.target.value)}
-              />
-              <CustomSelectBtn>
-                <Text medium>Welding</Text>
-              </CustomSelectBtn>
-            </Label>
-            <Label htmlFor="exp-assembling">
-              <HiddenInput
-                id="exp-assembling"
-                value="exp-assembling"
-                name="title"
-                type="checkbox"
-                component={InputField}
-                checked={this.state.checkedFocusValue === 'exp-assembling'}
-                // onChange={v => this.onInputChange(v.target.value)}
-              />
-              <CustomSelectBtn>
-                <Text medium>Assembling</Text>
-              </CustomSelectBtn>
-            </Label>
-            <Label htmlFor="exp-mould-making">
-              <HiddenInput
-                id="exp-mould-making"
-                value="exp-mould-making"
-                name="title"
-                type="checkbox"
-                component={InputField}
-                checked={this.state.checkedFocusValue === 'exp-mould-making'}
-                // onChange={v => this.onInputChange(v.target.value)}
-              />
-              <CustomSelectBtn>
-                <Text medium>Mould-making</Text>
-              </CustomSelectBtn>
-            </Label>
+            <FieldArray name="machineBuilderXp">
+              {({ fields }) => (
+                <>
+                  {MACHINE_BUILDER_XP.map((xp, index: number) => (
+                    <CustomCheckbox
+                      key={index}
+                      value={xp.label}
+                      index={index}
+                      isSelected={
+                        fields.value ? fields.value.includes(xp.label) : false
+                      }
+                      onChange={() => {
+                        if (fields.value && fields.value.length !== 0) {
+                          if (fields.value.includes(xp.label)) {
+                            fields.value.map((value, selectedValIndex) => {
+                              fields.remove(selectedValIndex - 1)
+                            })
+                          } else {
+                            fields.push(xp.label)
+                          }
+                        } else {
+                          fields.push(xp.label)
+                        }
+                      }}
+                      btnLabel={xp.label}
+                    />
+                  ))}
+                </>
+              )}
+            </FieldArray>
           </Flex>
         </Box>
       </FlexSectionContainer>

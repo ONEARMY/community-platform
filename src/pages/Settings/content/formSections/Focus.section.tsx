@@ -55,7 +55,7 @@ export class FocusSection extends React.Component<IProps, IState> {
               <HiddenInput
                 id="pt-workspace"
                 value="pt-workspace"
-                name="title"
+                name="profileType"
                 type="radio"
                 validateFields={[]}
                 component={InputField}
@@ -78,7 +78,7 @@ export class FocusSection extends React.Component<IProps, IState> {
               <HiddenInput
                 id="pt-community"
                 value="pt-community"
-                name="title"
+                name="profileType"
                 type="radio"
                 validateFields={[]}
                 component={InputField}
@@ -101,7 +101,7 @@ export class FocusSection extends React.Component<IProps, IState> {
               <HiddenInput
                 id="pt-collection"
                 value="pt-collection"
-                name="title"
+                name="profileType"
                 type="radio"
                 validateFields={[]}
                 component={InputField}
@@ -124,7 +124,7 @@ export class FocusSection extends React.Component<IProps, IState> {
               <HiddenInput
                 id="pt-machine"
                 value="pt-machine"
-                name="title"
+                name="profileType"
                 type="radio"
                 validateFields={[]}
                 component={InputField}
@@ -147,7 +147,7 @@ export class FocusSection extends React.Component<IProps, IState> {
               <HiddenInput
                 id="pt-member"
                 value="pt-member"
-                name="title"
+                name="profileType"
                 type="radio"
                 validateFields={[]}
                 component={InputField}

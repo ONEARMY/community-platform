@@ -52,7 +52,7 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
               <HiddenInput
                 id="wt-shredder"
                 value="wt-shredder"
-                name="title"
+                name="workspaceType"
                 type="radio"
                 validateFields={[]}
                 component={InputField}
@@ -80,7 +80,7 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
               <HiddenInput
                 id="wt-sheetpress"
                 value="wt-sheetpress"
-                name="title"
+                name="workspaceType"
                 type="radio"
                 validateFields={[]}
                 component={InputField}
@@ -108,7 +108,7 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
               <HiddenInput
                 id="wt-extrusion"
                 value="wt-extrusion"
-                name="title"
+                name="workspaceType"
                 type="radio"
                 validateFields={[]}
                 component={InputField}
@@ -134,7 +134,7 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
               <HiddenInput
                 id="wt-injection"
                 value="wt-injection"
-                name="title"
+                name="workspaceType"
                 type="radio"
                 validateFields={[]}
                 component={InputField}
@@ -160,7 +160,7 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
               <HiddenInput
                 id="wt-mix"
                 value="wt-mix"
-                name="title"
+                name="workspaceType"
                 type="radio"
                 validateFields={[]}
                 component={InputField}

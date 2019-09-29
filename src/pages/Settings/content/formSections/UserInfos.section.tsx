@@ -4,7 +4,11 @@ import Heading from 'src/components/Heading'
 import { IUser } from 'src/models/user.models'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
-import { InputField, YearPicker } from 'src/components/Form/Fields'
+import {
+  InputField,
+  YearPicker,
+  TextAreaField,
+} from 'src/components/Form/Fields'
 import { inputStyles } from 'src/components/Form/elements'
 import { FlagSelector } from 'src/components/Form/Select.field'
 import { Button } from 'src/components/Button'
@@ -103,7 +107,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
           </Text>
           <Field
             name="about"
-            component={InputField}
+            component={TextAreaField}
             placeholder="Describe in details what you do and who you are."
           />
           <Text mb={2} mt={7} medium>

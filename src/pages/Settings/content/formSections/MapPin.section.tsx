@@ -3,7 +3,7 @@ import { observer, inject } from 'mobx-react'
 import Heading from 'src/components/Heading'
 import { Field } from 'react-final-form'
 import Text from 'src/components/Text'
-import { InputField, YearPicker } from 'src/components/Form/Fields'
+import { TextAreaField } from 'src/components/Form/Fields'
 import { Box } from 'rebass'
 import { FlexSectionContainer } from './elements'
 import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
@@ -109,7 +109,7 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
           </Text>
           <Field
             name="map_pin_descr"
-            component={InputField}
+            component={TextAreaField}
             placeholder="We are shredding plastic in Plymouth, UK."
           />
           <Text mb={2} mt={4} medium>

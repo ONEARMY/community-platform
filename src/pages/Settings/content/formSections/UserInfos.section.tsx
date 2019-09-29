@@ -4,11 +4,7 @@ import Heading from 'src/components/Heading'
 import { IUser } from 'src/models/user.models'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
-import {
-  InputField,
-  YearPicker,
-  TextAreaField,
-} from 'src/components/Form/Fields'
+import { InputField, TextAreaField } from 'src/components/Form/Fields'
 import { inputStyles } from 'src/components/Form/elements'
 import { FlagSelector } from 'src/components/Form/Select.field'
 import { Button } from 'src/components/Button'
@@ -147,33 +143,6 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             component={ImageInputField}
             multi
           />
-          {/* )} */}
-          {/* <Text width={1} mt={2} medium>
-            Birth year :
-          </Text>
-          <YearBox
-            width={1}
-            onClick={() => {
-              this.setState({
-                showYearSelector: !this.state.showYearSelector,
-              })
-            }}
-          >
-            <Icon glyph={'arrow-down'} />
-            <Text inline ml={2}>
-              {user.year ? this.displayYear(user.year) : 'Choose a date'}
-            </Text>
-          </YearBox>
-          {this.state.showYearSelector && (
-            <Field
-              name="year"
-              component={YearPicker}
-              onChange={year => {
-                user.year = year
-                this.setState({ showYearSelector: false })
-              }}
-            />
-          )} */}
         </Flex>
         <Flex wrap={'nowrap'} alignItems={'center'} width={1}>
           <Text mb={2} mt={7} medium>

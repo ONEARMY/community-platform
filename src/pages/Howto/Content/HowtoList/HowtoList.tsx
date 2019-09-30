@@ -87,8 +87,8 @@ export class HowtoList extends React.Component<any, IState> {
             </Flex>
           )}
           <Flex justifyContent={'center'} mt={20}>
-            <Link to={'#'}>
-              <Button variant={'secondary'}>More how-tos</Button>
+            <Link to={'#'} style={{visibility:'hidden'}}>
+              <Button variant={'secondary'} data-cy={'more-how-tos'}>More how-tos</Button>
             </Link>
           </Flex>
           <MoreContainer m={'0 auto'} pt={60} pb={90}>

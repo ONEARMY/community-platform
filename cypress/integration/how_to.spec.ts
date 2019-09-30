@@ -1,4 +1,4 @@
-context('[How To]', () => {
+describe('[How To]', () => {
   const SKIP_TIMEOUT = {timeout: 300};
   beforeEach(() => {
     cy.visit('/how-to')

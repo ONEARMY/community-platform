@@ -1,4 +1,8 @@
-import { IUserPP, IProfileType } from 'src/models/user_pp.models'
+import {
+  IUserPP,
+  IProfileType,
+  IWorkspaceType,
+} from 'src/models/user_pp.models'
 import { MOCK_DB_META } from './db.mock'
 import { IPlasticType, IMAchineBuilderXp } from 'src/models/user_pp.models'
 
@@ -17,6 +21,13 @@ import MemberBadge from 'src/assets/images/badges/pt-member.jpg'
 import MachineBadge from 'src/assets/images/badges/pt-machine-shop.jpg'
 import WorkspaceBadge from 'src/assets/images/badges/pt-workspace.jpg'
 import LocalComBadge from 'src/assets/images/badges/pt-local-community.jpg'
+
+// assets workspaceType
+import Extrusion from 'src/assets/images/workspace-focus/extrusion.jpg'
+import Injection from 'src/assets/images/workspace-focus/injection.jpg'
+import Mix from 'src/assets/images/workspace-focus/mix.jpg'
+import Sheetpress from 'src/assets/images/workspace-focus/sheetpress.jpg'
+import Shredder from 'src/assets/images/workspace-focus/shredder.jpg'
 
 export const MOCK_USER_PP: IUserPP = {
   verified: true,
@@ -152,5 +163,38 @@ export const PROFILE_TYPES: IProfileType[] = [
     label: 'collection-point',
     textLabel: 'I collect & sort plastic',
     imageSrc: CollectionBadge,
+  },
+]
+
+export const WORKSPACE_TYPES: IWorkspaceType[] = [
+  {
+    label: 'shredder',
+    textLabel: 'shredder',
+    subText: 'Shredding plastic waste into flakes',
+    imageSrc: Shredder,
+  },
+  {
+    label: 'sheetpress',
+    textLabel: 'Sheetpress',
+    subText: 'Making recycled plastic sheets',
+    imageSrc: Sheetpress,
+  },
+  {
+    label: 'extrusion',
+    textLabel: 'Extrusion',
+    subText: 'Extruding plastic into beams or products',
+    imageSrc: Extrusion,
+  },
+  {
+    label: 'injection',
+    textLabel: 'Injection',
+    subText: 'Making small productions of goods',
+    imageSrc: Injection,
+  },
+  {
+    label: 'mix',
+    textLabel: 'Mix',
+    subText: 'Running a workspace with multiple machines and goals',
+    imageSrc: Mix,
   },
 ]

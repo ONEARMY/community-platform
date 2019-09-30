@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { InputField } from 'src/components/Form/Fields'
 import { Label, HiddenInput } from '../elements'
-import { Image } from 'rebass'
+import { Image, Flex } from 'rebass'
 import Text from 'src/components/Text'
 import { ProfileTypeLabel } from 'src/models/user_pp.models'
 
@@ -13,6 +13,7 @@ interface IProps {
   imageSrc?: string
   btnLabel?: string
   textLabel?: string
+  subText?: string
   name: string
 }
 interface IState {
@@ -37,6 +38,7 @@ class CustomRadioField extends Component<IProps, IState> {
       isSelected,
       btnLabel,
       textLabel,
+      subText,
       name,
     } = this.props
     return (
@@ -62,6 +64,13 @@ class CustomRadioField extends Component<IProps, IState> {
           <Text px={1} my={1} txtcenter small>
             {textLabel}
           </Text>
+        )}
+        {subText && (
+          <Flex alignItems="center" flexWrap="nowrap">
+            <Text my={1} txtcenter small>
+              {subText}
+            </Text>
+          </Flex>
         )}
       </Label>
     )

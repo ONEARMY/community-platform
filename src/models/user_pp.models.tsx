@@ -44,6 +44,12 @@ export interface IProfileType {
   imageSrc?: string
   textLabel?: string
 }
+export interface IWorkspaceType {
+  label: WorkspaceType
+  imageSrc?: string
+  textLabel?: string
+  subText?: string
+}
 
 export interface IMAchineBuilderXp {
   label: MachineBuilderXpLabel

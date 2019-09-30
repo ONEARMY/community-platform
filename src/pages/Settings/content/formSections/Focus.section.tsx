@@ -10,7 +10,7 @@ import { Link } from 'src/components/Links'
 import { Button } from 'src/components/Button'
 import { ProfileTypeLabel } from 'src/models/user_pp.models'
 import { PROFILE_TYPES } from 'src/mocks/user_pp.mock'
-import { CustomRadioField } from './CustomRadio.field'
+import { CustomRadioField } from './Fields/CustomRadio.field'
 
 interface IProps {
   onInputChange: (inputValue: ProfileTypeLabel) => void

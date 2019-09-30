@@ -1,16 +1,19 @@
 import React, { Component } from 'react'
 import { InputField } from 'src/components/Form/Fields'
-import { Label, HiddenInput } from './elements'
+import { Label, HiddenInput } from '../elements'
 import { Image } from 'rebass'
 import Text from 'src/components/Text'
+import { ProfileTypeLabel } from 'src/models/user_pp.models'
 
 interface IProps {
   value: string
   index: number
-  onChange: (index: number) => void
+  onChange: (value: ProfileTypeLabel) => void
   isSelected: boolean
   imageSrc?: string
   btnLabel?: string
+  textLabel?: string
+  name: string
 }
 interface IState {
   showDeleteModal: boolean
@@ -19,7 +22,7 @@ interface IState {
 // validation - return undefined if no error (i.e. valid)
 const required = (value: any) => (value ? undefined : 'Required')
 
-class CustomCheckbox extends Component<IProps, IState> {
+class CustomRadioField extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
@@ -28,16 +31,26 @@ class CustomCheckbox extends Component<IProps, IState> {
   }
 
   render() {
-    const { value, index, imageSrc, isSelected, btnLabel } = this.props
+    const {
+      value,
+      imageSrc,
+      isSelected,
+      btnLabel,
+      textLabel,
+      name,
+    } = this.props
     return (
       <Label htmlFor={value} className={isSelected ? 'selected' : undefined}>
         <HiddenInput
           id={value}
-          name={value}
-          type="checkbox"
+          name={name}
+          value={value}
+          type="radio"
           component={InputField}
           checked={isSelected}
-          onChange={() => this.props.onChange(index)}
+          onChange={v => {
+            this.props.onChange(v.target.value)
+          }}
         />
         {imageSrc && <Image px={3} src={imageSrc} />}
         {btnLabel && (
@@ -45,9 +58,14 @@ class CustomCheckbox extends Component<IProps, IState> {
             {btnLabel}
           </Text>
         )}
+        {textLabel && (
+          <Text px={1} my={1} txtcenter small>
+            {textLabel}
+          </Text>
+        )}
       </Label>
     )
   }
 }
 
-export { CustomCheckbox }
+export { CustomRadioField }

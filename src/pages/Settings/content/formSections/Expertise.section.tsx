@@ -7,7 +7,7 @@ import { Box } from 'rebass'
 import { FlexSectionContainer } from './elements'
 import { FieldArray } from 'react-final-form-arrays'
 import { MACHINE_BUILDER_XP } from 'src/mocks/user_pp.mock'
-import { CustomCheckbox } from './CustomCheckbox.field'
+import { CustomCheckbox } from './Fields/CustomCheckbox.field'
 
 export class ExpertiseSection extends React.Component<any, any> {
   constructor(props: any) {

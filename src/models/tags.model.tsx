@@ -20,4 +20,4 @@ export interface ITag extends DBDoc {
   image: string
 }
 
-export type TagCategory = 'how-to' | 'event'
+export type TagCategory = 'how-to' | 'event' | 'profile-expertise'

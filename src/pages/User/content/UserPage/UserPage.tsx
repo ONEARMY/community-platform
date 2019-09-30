@@ -34,20 +34,6 @@ const Circle = styled(Flex)`
   height: 40px;
 `
 
-const ProfileImage = styled(Image)`
-  width: 100%;
-  height: 450px;
-  object-fit: cover;
-  border-radius: 8px 8px 0px 0px;
-`
-
-const BadgeImage = styled(Image)`
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  border: 2px solid black;
-`
-
 @inject('userStore')
 @observer
 export class UserPage extends React.Component<
@@ -161,7 +147,7 @@ export class UserPage extends React.Component<
     if (user) {
       return (
         <Box>
-          {/* <Avatar userName={user.userName} width="120px" borderRadius={5} /> */}
+          <Avatar userName={user.userName} width="120px" />
           <Heading large color={'black'} my={3}>
             {user.userName}
           </Heading>
@@ -184,14 +170,14 @@ export class UserPage extends React.Component<
             )}
           </Flex>
           <Text lineHeight={2}>{user.about}</Text>
-          {/* {user.location && (
+          {user.location && (
             <Flex alignItems={'center'}>
               <Icon size={25} glyph={'location-on'} />
               <Heading small m={3}>
                 {user.location.value}
               </Heading>
             </Flex>
-          )} */}
+          )}
           {user.links ? (
             <Box mt={4}>
               <Heading large>My Links</Heading>

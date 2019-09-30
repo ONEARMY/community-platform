@@ -39,7 +39,7 @@ export class ForgotPasswordMessagePage extends React.Component {
             flexWrap="wrap"
             flexDirection="column"
           >
-            <Heading small arrowDown py={4} width={1}>
+            <Heading small py={4} width={1}>
               Check your email
             </Heading>
             <Flex flexDirection={'column'} mb={3}>

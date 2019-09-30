@@ -27,7 +27,6 @@ export class UserStore extends ModuleStore {
   @action
   public updateUser(user?: IUserDB) {
     this.user = user
-    console.log('user updated', user)
   }
   constructor(rootStore: RootStore) {
     super(rootStore)
@@ -71,7 +70,6 @@ export class UserStore extends ModuleStore {
 
   // handle user sign in, when firebase authenticates wnat to also fetch user document from the database
   public async userSignedIn(user: IFirebaseUser | null) {
-    console.log('user signed in', user)
     if (user) {
       // legacy user formats did not save names so get profile via email - this option be removed in later version
       // (assumes migration strategy and check)
@@ -87,7 +85,6 @@ export class UserStore extends ModuleStore {
   }
 
   public async getUserProfile(userName: string) {
-    console.log('getting user profile', userName)
     return this.db
       .collection<IUser>('v2_users')
       .doc(userName)
@@ -199,7 +196,6 @@ export class UserStore extends ModuleStore {
   // to authUnsubscribe variable for use later
   private _listenToAuthStateChanges() {
     this.authUnsubscribe = auth.onAuthStateChanged(authUser => {
-      console.log('auth user changed', authUser)
       this.authUser = authUser
       if (authUser) {
         this.userSignedIn(authUser)

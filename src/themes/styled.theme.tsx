@@ -1,20 +1,18 @@
-import { darken, lighten } from 'polished'
+import { color } from '@storybook/addon-knobs'
 // use enum to specify list of possible colors for typing
-export enum colors {
-  white = 'white',
-  black = '#1b1b1b',
-  yellow = '#fee77b',
-  blue = '#83ceeb',
-  red = '#eb1b1f',
-  softblue = '#e2edf7',
-
-  bluetag = '#5683b0',
-  grey = '#61646b',
-  error = 'red',
-  background = '#f4f6f7',
-  primary = yellow,
-  secondary = blue,
-  lightGrey = '#e0e0e0',
+export const colors = {
+  white: 'white',
+  black: '#1b1b1b',
+  yellow: { base: '#fee77b', hover: '#ffde45' },
+  blue: '#83ceeb',
+  red: '#eb1b1f',
+  softblue: '#e2edf7',
+  bluetag: '#5683b0',
+  grey: '#61646b',
+  green: '#00c3a9',
+  error: 'red',
+  background: '#f4f6f7',
+  lightGrey: '#e0e0e0',
 }
 
 export type ButtonVariants =
@@ -24,79 +22,6 @@ export type ButtonVariants =
   | 'disabled'
   | 'dark'
   | 'light'
-
-const buttons = {
-  primary: {
-    fontFamily: '"Varela Round", Arial, sans-serif',
-    border: '2px solid ' + colors.black,
-    color: colors.black,
-    backgroundColor: colors.primary,
-    transition: '.2s ease-in-out',
-    '&:hover': {
-      backgroundColor: darken(0.08, colors.primary),
-    },
-    '&[disabled]': {
-      opacity: 0.5,
-    },
-    '&[disabled]:hover': {
-      backgroundColor: colors.primary,
-    },
-  },
-  secondary: {
-    fontFamily: '"Varela Round", Arial, sans-serif',
-    border: '2px solid ' + colors.black,
-    color: colors.black,
-    display: 'flex',
-    backgroundColor: colors.softblue,
-    transition: '.2s ease-in-out',
-    '&:hover': {
-      backgroundColor: colors.white,
-    },
-    '&[disabled]': {
-      opacity: 0.5,
-    },
-    '&[disabled]:hover': {
-      backgroundColor: colors.softblue,
-    },
-  },
-  tertiary: {
-    fontFamily: '"Varela Round", Arial, sans-serif',
-    border: '2px solid ' + colors.black,
-    color: colors.black,
-    display: 'flex',
-    backgroundColor: colors.white,
-    transition: '.2s ease-in-out',
-    '&:hover': {
-      backgroundColor: colors.red,
-    },
-    '&[disabled]': {
-      opacity: 0.5,
-    },
-    '&[disabled]:hover': {
-      backgroundColor: colors.white,
-    },
-  },
-
-  outline: {
-    fontFamily: '"Varela Round", Arial, sans-serif',
-    border: '2px solid ' + colors.black,
-    color: colors.black,
-    backgroundColor: colors.white,
-    transition: '.2s ease-in-out',
-    display: 'flex',
-    alignItems: 'center',
-    width: 'fit-content',
-    height: 'fit-content',
-    '&:hover': {
-      backgroundColor: lighten(0.02, colors.softblue),
-    },
-  },
-  imageInput: {
-    border: '2px dashed #e0e0e0',
-    color: '#e0e0e0',
-    backgroundColor: 'transparent',
-  },
-}
 
 const space = [
   0,
@@ -137,6 +62,88 @@ const maxContainerWidth = 1280
 const regular = 400
 const bold = 600
 // cc - assume standard image widths are 4:3, however not clearly defined
+
+const buttons = {
+  primary: {
+    fontFamily: '"Varela Round", Arial, sans-serif',
+    border: '2px solid ' + colors.black,
+    color: colors.black,
+    bg: colors.yellow.base,
+    transition: '.2s ease-in-out',
+    '&:hover': {
+      bg: colors.yellow.hover,
+      cursor: 'pointer',
+    },
+    '&[disabled]': {
+      opacity: 0.5,
+      cursor: 'not-allowed',
+    },
+    '&[disabled]:hover': {
+      bg: colors.yellow.base,
+    },
+    borderRadius: radii[1] + 'px',
+  },
+  secondary: {
+    fontFamily: '"Varela Round", Arial, sans-serif',
+    border: '2px solid ' + colors.black,
+    color: colors.black,
+    display: 'flex',
+    bg: colors.softblue,
+    transition: '.2s ease-in-out',
+    '&:hover': {
+      bg: colors.white,
+      cursor: 'pointer',
+    },
+    '&[disabled]': {
+      opacity: 0.5,
+    },
+    '&[disabled]:hover': {
+      bg: colors.softblue,
+    },
+    borderRadius: radii[1] + 'px',
+  },
+  tertiary: {
+    fontFamily: '"Varela Round", Arial, sans-serif',
+    border: '2px solid ' + colors.black,
+    color: colors.black,
+    display: 'flex',
+    bg: colors.white,
+    transition: '.2s ease-in-out',
+    '&:hover': {
+      bg: colors.red,
+      cursor: 'pointer',
+    },
+    '&[disabled]': {
+      opacity: 0.5,
+    },
+    '&[disabled]:hover': {
+      bg: colors.white,
+    },
+    borderRadius: radii[1] + 'px',
+  },
+
+  outline: {
+    fontFamily: '"Varela Round", Arial, sans-serif',
+    border: '2px solid ' + colors.black,
+    color: colors.black,
+    backgroundColor: colors.white,
+    transition: '.2s ease-in-out',
+    display: 'flex',
+    alignItems: 'center',
+    width: 'fit-content',
+    height: 'fit-content',
+    '&:hover': {
+      backgroundColor: colors.softblue,
+      cursor: 'pointer',
+    },
+    borderRadius: radii[1] + 'px',
+  },
+  imageInput: {
+    border: '2px dashed #e0e0e0',
+    color: '#e0e0e0',
+    backgroundColor: 'transparent',
+  },
+}
 
 export default {
   colors,

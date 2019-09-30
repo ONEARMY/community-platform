@@ -145,8 +145,6 @@ export class ImageInput extends React.Component<IProps, IState> {
     // if at least one image present, hide the 'choose image' button and replace with smaller button
     const imgPreviewMode = inputFiles.length > 0
 
-    console.log('inputFiles', inputFiles, canDelete, this.props)
-
     const hasImage = inputFiles && inputFiles.length > 0
 
     return (
@@ -160,7 +158,6 @@ export class ImageInput extends React.Component<IProps, IState> {
             <Dropzone
               multiple={false}
               onDrop={filesToUpload => {
-                console.log(filesToUpload)
                 const files = filesToUpload ? Array.from(filesToUpload) : []
 
                 this.setState({ inputFiles: files })

@@ -117,7 +117,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                     flexWrap="wrap"
                     flexDirection="column"
                   >
-                    <Heading small arrowDown py={4} width={1}>
+                    <Heading small py={4} width={1}>
                       Create an account
                     </Heading>
                     <Flex flexDirection={'column'} mb={3} width={[1, 1, 2 / 3]}>

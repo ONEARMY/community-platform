@@ -38,7 +38,9 @@ export class ExpertiseSection extends React.Component<any, any> {
                         if (fields.value && fields.value.length !== 0) {
                           if (fields.value.includes(xp.label)) {
                             fields.value.map((value, selectedValIndex) => {
-                              fields.remove(selectedValIndex - 1)
+                              if (value === xp.label) {
+                                fields.remove(selectedValIndex)
+                              }
                             })
                           } else {
                             fields.push(xp.label)

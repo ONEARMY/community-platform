@@ -81,7 +81,9 @@ export class CollectionSection extends React.Component<IProps, IState> {
                         if (fields.value && fields.value.length !== 0) {
                           if (fields.value.includes(plastic.label)) {
                             fields.value.map((value, selectedValIndex) => {
-                              fields.remove(selectedValIndex)
+                              if (value === plastic.label) {
+                                fields.remove(selectedValIndex)
+                              }
                             })
                           } else {
                             fields.push(plastic.label)

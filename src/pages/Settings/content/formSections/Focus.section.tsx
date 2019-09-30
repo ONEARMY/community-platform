@@ -6,6 +6,9 @@ import Text from 'src/components/Text'
 import { Box, Image } from 'rebass'
 import { HiddenInput, Label, FlexSectionContainer } from './elements'
 import { InputField } from 'src/components/Form/Fields'
+import { Link } from 'src/components/Links'
+import { Button } from 'src/components/Button'
+import { ProfileType } from 'src/models/user.models'
 
 // assets
 import CollectionBadge from 'src/assets/images/badges/pt-collection-point.jpg'
@@ -13,9 +16,6 @@ import MemberBadge from 'src/assets/images/badges/pt-member.jpg'
 import MachineBadge from 'src/assets/images/badges/pt-machine-shop.jpg'
 import WorkspaceBadge from 'src/assets/images/badges/pt-workspace.jpg'
 import LocalComBadge from 'src/assets/images/badges/pt-local-community.jpg'
-import { Link } from 'src/components/Links'
-import { Button } from 'src/components/Button'
-import { ProfileType } from 'src/models/user.models'
 
 interface IProps {
   onInputChange: (inputValue: ProfileType) => void

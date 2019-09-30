@@ -21,7 +21,7 @@ import { Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import { UserMapPinSection } from './content/formSections/MapPin.section'
 import theme from 'src/themes/styled.theme'
-import { ProfileType } from 'src/models/user_pp.models'
+import { ProfileTypeLabel } from 'src/models/user_pp.models'
 
 interface IFormValues extends Partial<IUserPP> {
   // form values are simply subset of user profile fields
@@ -40,7 +40,7 @@ interface IState {
   user: IUserPP
   showNotification: boolean
   showDeleteDialog?: boolean
-  profileType?: ProfileType
+  profileType?: ProfileTypeLabel
 }
 
 @inject('userStore')

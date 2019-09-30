@@ -19,7 +19,7 @@ export type MachineBuilderXpLabel =
   | 'assembling'
   | 'mould-making'
 
-export type ProfileType =
+export type ProfileTypeLabel =
   | 'member'
   | 'workspace'
   | 'community-builder'
@@ -39,6 +39,12 @@ export interface IPlasticType {
   imageSrc?: string
 }
 
+export interface IProfileType {
+  label: ProfileTypeLabel
+  imageSrc?: string
+  textLabel?: string
+}
+
 export interface IMAchineBuilderXp {
   label: MachineBuilderXpLabel
 }
@@ -54,7 +60,7 @@ export interface IOpeningHours {
 }
 
 export interface IUserPP extends IUser {
-  profileType?: ProfileType
+  profileType?: ProfileTypeLabel
   workspaceType?: WorkspaceType
   coverImages?: IUploadedFileMeta[] | IConvertedFileMeta[]
   links?: ILink[]

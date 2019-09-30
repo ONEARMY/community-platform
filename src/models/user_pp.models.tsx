@@ -62,6 +62,8 @@ export interface IUserPP extends IUser {
   openingHours?: IOpeningHours[]
   collectedPlasticTypes?: IPlasticType[]
   machineBuilderXp?: IMAchineBuilderXp[]
+  isExpert?: boolean
+  isV4Member?: boolean
 }
 
 export type IUserPPDB = IUserPP & DBDoc

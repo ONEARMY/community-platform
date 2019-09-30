@@ -11,7 +11,6 @@ interface IProps {
   onChange: (value: ProfileTypeLabel) => void
   isSelected: boolean
   imageSrc?: string
-  btnLabel?: string
   textLabel?: string
   subText?: string
   name: string
@@ -32,15 +31,7 @@ class CustomRadioField extends Component<IProps, IState> {
   }
 
   render() {
-    const {
-      value,
-      imageSrc,
-      isSelected,
-      btnLabel,
-      textLabel,
-      subText,
-      name,
-    } = this.props
+    const { value, imageSrc, isSelected, textLabel, subText, name } = this.props
     return (
       <Label htmlFor={value} className={isSelected ? 'selected' : undefined}>
         <HiddenInput
@@ -55,11 +46,6 @@ class CustomRadioField extends Component<IProps, IState> {
           }}
         />
         {imageSrc && <Image px={3} src={imageSrc} />}
-        {btnLabel && (
-          <Text medium m="10px">
-            {btnLabel}
-          </Text>
-        )}
         {textLabel && (
           <Text px={1} my={1} txtcenter small>
             {textLabel}

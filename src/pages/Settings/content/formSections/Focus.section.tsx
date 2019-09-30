@@ -25,8 +25,6 @@ export class FocusSection extends React.Component<IProps, IState> {
   }
 
   public onInputChange(value: ProfileTypeLabel) {
-    console.log('value', value)
-
     this.setState({ checkedFocusValue: value })
     this.props.onInputChange(value)
   }

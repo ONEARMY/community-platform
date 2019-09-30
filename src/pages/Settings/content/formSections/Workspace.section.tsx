@@ -42,21 +42,21 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
           </Text>
           <Flex wrap="nowrap">
             <Label
-              htmlFor="wt-shredder"
+              htmlFor="shredder"
               className={
-                this.state.checkedFocusValue === 'wt-shredder'
+                this.state.checkedFocusValue === 'shredder'
                   ? 'selected'
                   : undefined
               }
             >
               <HiddenInput
-                id="wt-shredder"
-                value="wt-shredder"
+                id="shredder"
+                value="shredder"
                 name="workspaceType"
                 type="radio"
                 validateFields={[]}
                 component={InputField}
-                checked={this.state.checkedFocusValue === 'wt-shredder'}
+                checked={this.state.checkedFocusValue === 'shredder'}
                 onChange={v => this.onInputChange(v.target.value)}
               />
               <Image px={3} src={Shredder} />
@@ -70,21 +70,21 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
               </Flex>
             </Label>
             <Label
-              htmlFor="wt-sheetpress"
+              htmlFor="sheetpress"
               className={
-                this.state.checkedFocusValue === 'wt-sheetpress'
+                this.state.checkedFocusValue === 'sheetpress'
                   ? 'selected'
                   : undefined
               }
             >
               <HiddenInput
-                id="wt-sheetpress"
-                value="wt-sheetpress"
+                id="sheetpress"
+                value="sheetpress"
                 name="workspaceType"
                 type="radio"
                 validateFields={[]}
                 component={InputField}
-                checked={this.state.checkedFocusValue === 'wt-sheetpress'}
+                checked={this.state.checkedFocusValue === 'sheetpress'}
                 onChange={v => this.onInputChange(v.target.value)}
               />
               <Image px={3} src={Sheetpress} />
@@ -98,21 +98,21 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
               </Flex>
             </Label>
             <Label
-              htmlFor="wt-extrusion"
+              htmlFor="extrusion"
               className={
-                this.state.checkedFocusValue === 'wt-extrusion'
+                this.state.checkedFocusValue === 'extrusion'
                   ? 'selected'
                   : undefined
               }
             >
               <HiddenInput
-                id="wt-extrusion"
-                value="wt-extrusion"
+                id="extrusion"
+                value="extrusion"
                 name="workspaceType"
                 type="radio"
                 validateFields={[]}
                 component={InputField}
-                checked={this.state.checkedFocusValue === 'wt-extrusion'}
+                checked={this.state.checkedFocusValue === 'extrusion'}
                 onChange={v => this.onInputChange(v.target.value)}
               />
               <Image px={3} src={Extrusion} />
@@ -124,21 +124,21 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
               </Text>
             </Label>
             <Label
-              htmlFor="wt-injection"
+              htmlFor="injection"
               className={
-                this.state.checkedFocusValue === 'wt-injection'
+                this.state.checkedFocusValue === 'injection'
                   ? 'selected'
                   : undefined
               }
             >
               <HiddenInput
-                id="wt-injection"
-                value="wt-injection"
+                id="injection"
+                value="injection"
                 name="workspaceType"
                 type="radio"
                 validateFields={[]}
                 component={InputField}
-                checked={this.state.checkedFocusValue === 'wt-injection'}
+                checked={this.state.checkedFocusValue === 'injection'}
                 onChange={v => this.onInputChange(v.target.value)}
               />
               <Image px={3} src={Injection} />
@@ -150,21 +150,19 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
               </Text>
             </Label>
             <Label
-              htmlFor="wt-mix"
+              htmlFor="mix"
               className={
-                this.state.checkedFocusValue === 'wt-mix'
-                  ? 'selected'
-                  : undefined
+                this.state.checkedFocusValue === 'mix' ? 'selected' : undefined
               }
             >
               <HiddenInput
-                id="wt-mix"
-                value="wt-mix"
+                id="mix"
+                value="mix"
                 name="workspaceType"
                 type="radio"
                 validateFields={[]}
                 component={InputField}
-                checked={this.state.checkedFocusValue === 'wt-mix'}
+                checked={this.state.checkedFocusValue === 'mix'}
                 onChange={v => this.onInputChange(v.target.value)}
               />
               <Image px={3} src={Mix} />

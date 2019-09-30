@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Field } from 'react-final-form'
 import Heading from 'src/components/Heading'
-import { IUser } from 'src/models/user.models'
+import { IUserPP } from 'src/models/user_pp.models'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
@@ -17,7 +17,7 @@ import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { FlexSectionContainer } from './elements'
 
 interface IProps {
-  user: IUser
+  user: IUserPP
 }
 interface IState {
   readOnly: boolean

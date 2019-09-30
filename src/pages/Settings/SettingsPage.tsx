@@ -1,6 +1,6 @@
 import * as React from 'react'
 import Flex from 'src/components/Flex'
-import { IUser } from 'src/models/user.models'
+import { IUserPP } from 'src/models/user_pp.models'
 import { UserStore } from 'src/stores/User/user.store'
 import { observer, inject } from 'mobx-react'
 import { toJS } from 'mobx'
@@ -15,20 +15,19 @@ import { Button } from 'src/components/Button'
 import { PostingGuidelines } from './content/PostingGuidelines'
 import Heading from 'src/components/Heading'
 
-import styled from 'styled-components'
 import { TextNotification } from 'src/components/Notification/TextNotification'
 import { ProfileDelete } from './content/ProfileDelete'
 import { Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import { UserMapPinSection } from './content/formSections/MapPin.section'
 import theme from 'src/themes/styled.theme'
-import { ProfileType } from 'src/models/user.models'
+import { ProfileType } from 'src/models/user_pp.models'
 
-interface IFormValues extends Partial<IUser> {
+interface IFormValues extends Partial<IUserPP> {
   // form values are simply subset of user profile fields
 }
 interface IProps {
-  user: IUser
+  user: IUserPP
   userStore: UserStore
 }
 interface IInjectedProps extends IProps {
@@ -38,15 +37,11 @@ interface IInjectedProps extends IProps {
 interface IState {
   editMode: boolean
   formValues: IFormValues
-  user: IUser
+  user: IUserPP
   showNotification: boolean
   showDeleteDialog?: boolean
   profileType?: ProfileType
 }
-
-const FormContainer = styled.form`
-  width: 100%;
-`
 
 @inject('userStore')
 @observer
@@ -101,7 +96,7 @@ export class UserSettings extends React.Component<IProps, IState> {
           return (
             <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
               <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} my={4}>
-                <FormContainer>
+                <form id="userProfileForm" onSubmit={handleSubmit}>
                   {/* How To Info */}
                   <Flex flexDirection={'column'}>
                     <Flex
@@ -116,14 +111,14 @@ export class UserSettings extends React.Component<IProps, IState> {
                     <FocusSection
                       onInputChange={v => this.setState({ profileType: v })}
                     />
-                    {profileType === 'pt-workspace' && (
+                    {profileType === 'workspace' && (
                       <>
                         <WorkspaceSection onInputChange={v => console.log(v)} />
                         <UserInfosSection user={user} />
                         <UserMapPinSection />
                       </>
                     )}
-                    {profileType === 'pt-collection' && (
+                    {profileType === 'collection-point' && (
                       <>
                         <UserInfosSection user={user} />
                         <CollectionSection
@@ -132,20 +127,20 @@ export class UserSettings extends React.Component<IProps, IState> {
                         <UserMapPinSection />
                       </>
                     )}
-                    {profileType === 'pt-community' && (
+                    {profileType === 'community-builder' && (
                       <>
                         <UserInfosSection user={user} />
                         <UserMapPinSection />
                       </>
                     )}
-                    {profileType === 'pt-machine' && (
+                    {profileType === 'machine-builder' && (
                       <>
                         <UserInfosSection user={user} />
                         <ExpertiseSection />
                         <UserMapPinSection />
                       </>
                     )}
-                    {profileType === 'pt-member' && (
+                    {profileType === 'member' && (
                       <>
                         <UserInfosSection user={user} />
                       </>
@@ -183,7 +178,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                       /> 
                     </Flex>*/}
                   </Flex>
-                </FormContainer>
+                </form>
               </Flex>
               {/* post guidelines container */}
               <Flex

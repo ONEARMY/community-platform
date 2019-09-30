@@ -8,7 +8,7 @@ import { HiddenInput, Label, FlexSectionContainer } from './elements'
 import { InputField } from 'src/components/Form/Fields'
 import { Link } from 'src/components/Links'
 import { Button } from 'src/components/Button'
-import { ProfileType } from 'src/models/user.models'
+import { ProfileType } from 'src/models/user_pp.models'
 
 // assets
 import CollectionBadge from 'src/assets/images/badges/pt-collection-point.jpg'
@@ -45,21 +45,21 @@ export class FocusSection extends React.Component<IProps, IState> {
           </Text>
           <Flex wrap="nowrap">
             <Label
-              htmlFor="pt-workspace"
+              htmlFor="workspace"
               className={
-                this.state.checkedFocusValue === 'pt-workspace'
+                this.state.checkedFocusValue === 'workspace'
                   ? 'selected'
                   : undefined
               }
             >
               <HiddenInput
-                id="pt-workspace"
-                value="pt-workspace"
+                id="workspace"
+                value="workspace"
                 name="profileType"
                 type="radio"
                 validateFields={[]}
                 component={InputField}
-                checked={this.state.checkedFocusValue === 'pt-workspace'}
+                checked={this.state.checkedFocusValue === 'workspace'}
                 onChange={v => this.onInputChange(v.target.value)}
               />
               <Image px={3} src={WorkspaceBadge} />
@@ -68,21 +68,21 @@ export class FocusSection extends React.Component<IProps, IState> {
               </Text>
             </Label>
             <Label
-              htmlFor="pt-community"
+              htmlFor="community-builder"
               className={
-                this.state.checkedFocusValue === 'pt-community'
+                this.state.checkedFocusValue === 'community-builder'
                   ? 'selected'
                   : undefined
               }
             >
               <HiddenInput
-                id="pt-community"
-                value="pt-community"
+                id="community-builder"
+                value="community-builder"
                 name="profileType"
                 type="radio"
                 validateFields={[]}
                 component={InputField}
-                checked={this.state.checkedFocusValue === 'pt-community'}
+                checked={this.state.checkedFocusValue === 'community-builder'}
                 onChange={v => this.onInputChange(v.target.value)}
               />
               <Image px={3} src={LocalComBadge} />
@@ -91,21 +91,21 @@ export class FocusSection extends React.Component<IProps, IState> {
               </Text>
             </Label>
             <Label
-              htmlFor="pt-collection"
+              htmlFor="collection-point"
               className={
-                this.state.checkedFocusValue === 'pt-collection'
+                this.state.checkedFocusValue === 'collection-point'
                   ? 'selected'
                   : undefined
               }
             >
               <HiddenInput
-                id="pt-collection"
-                value="pt-collection"
+                id="collection-point"
+                value="collection-point"
                 name="profileType"
                 type="radio"
                 validateFields={[]}
                 component={InputField}
-                checked={this.state.checkedFocusValue === 'pt-collection'}
+                checked={this.state.checkedFocusValue === 'collection-point'}
                 onChange={v => this.onInputChange(v.target.value)}
               />
               <Image px={3} src={CollectionBadge} />
@@ -114,21 +114,21 @@ export class FocusSection extends React.Component<IProps, IState> {
               </Text>
             </Label>
             <Label
-              htmlFor="pt-machine"
+              htmlFor="machine-builder"
               className={
-                this.state.checkedFocusValue === 'pt-machine'
+                this.state.checkedFocusValue === 'machine-builder'
                   ? 'selected'
                   : undefined
               }
             >
               <HiddenInput
-                id="pt-machine"
-                value="pt-machine"
+                id="machine-builder"
+                value="machine-builder"
                 name="profileType"
                 type="radio"
                 validateFields={[]}
                 component={InputField}
-                checked={this.state.checkedFocusValue === 'pt-machine'}
+                checked={this.state.checkedFocusValue === 'machine-builder'}
                 onChange={v => this.onInputChange(v.target.value)}
               />
               <Image px={3} src={MachineBadge} />
@@ -137,21 +137,21 @@ export class FocusSection extends React.Component<IProps, IState> {
               </Text>
             </Label>
             <Label
-              htmlFor="pt-member"
+              htmlFor="member"
               className={
-                this.state.checkedFocusValue === 'pt-member'
+                this.state.checkedFocusValue === 'member'
                   ? 'selected'
                   : undefined
               }
             >
               <HiddenInput
-                id="pt-member"
-                value="pt-member"
+                id="member"
+                value="member"
                 name="profileType"
                 type="radio"
                 validateFields={[]}
                 component={InputField}
-                checked={this.state.checkedFocusValue === 'pt-member'}
+                checked={this.state.checkedFocusValue === 'member'}
                 onChange={v => this.onInputChange(v.target.value)}
               />
               <Image px={3} src={MemberBadge} />

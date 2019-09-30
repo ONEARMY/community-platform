@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 import { inject, observer } from 'mobx-react'
-import { IUser, ILink } from 'src/models/user.models'
+import { IUserPP, ILink } from 'src/models/user_pp.models'
 import { UserStore } from 'src/stores/User/user.store'
 import Heading from 'src/components/Heading'
 import { Box, Link, Image } from 'rebass'
@@ -22,7 +22,7 @@ interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
 }
 
 interface IState {
-  user?: IUser
+  user?: IUserPP
   isLoading: boolean
 }
 

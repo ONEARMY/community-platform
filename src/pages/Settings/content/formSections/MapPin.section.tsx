@@ -108,7 +108,7 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
             Short description of your pin *
           </Text>
           <Field
-            name="map_pin_descr"
+            name="mapPinDescription"
             component={TextAreaField}
             placeholder="We are shredding plastic in Plymouth, UK."
           />

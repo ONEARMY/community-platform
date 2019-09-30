@@ -1,5 +1,6 @@
 import { observable, action } from 'mobx'
 import { IUser, IUserDB } from 'src/models/user.models'
+import { IUserPP, IUserPPDB } from 'src/models/user_pp.models'
 import {
   IFirebaseUser,
   auth,
@@ -19,13 +20,13 @@ The user store listens to login events through the firebase api and exposes logg
 export class UserStore extends ModuleStore {
   private authUnsubscribe: firebase.Unsubscribe
   @observable
-  public user: IUserDB | undefined
+  public user: IUserPPDB | undefined
 
   @observable
   public authUser: firebase.User | null
 
   @action
-  public updateUser(user?: IUserDB) {
+  public updateUser(user?: IUserPPDB) {
     this.user = user
   }
   constructor(rootStore: RootStore) {
@@ -91,8 +92,8 @@ export class UserStore extends ModuleStore {
       .get()
   }
 
-  public async updateUserProfile(values: Partial<IUser>) {
-    const user = this.user as IUserDB
+  public async updateUserProfile(values: Partial<IUserPP>) {
+    const user = this.user as IUserPPDB
     const update = { ...user, ...values }
     await this.db
       .collection('v2_users')

@@ -50,8 +50,9 @@ export class CollectionSection extends React.Component<IProps, IState> {
                   variant="outline"
                   onClick={() => {
                     fields.push({
-                      label: '',
-                      url: '',
+                      day: '',
+                      openFrom: '',
+                      openTo: '',
                     })
                   }}
                 >

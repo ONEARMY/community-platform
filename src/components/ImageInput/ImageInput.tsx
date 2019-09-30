@@ -46,11 +46,8 @@ const AlignCenterWrapper = styled.div`
   width: 100%;
 `
 
-const UploadImageWrapper = styled.div<ITitleProps>`
+const UploadImageWrapper = styled(AlignCenterWrapper)<ITitleProps>`
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   height: 100%;
   width: 100%;
   border: 2px dashed ${theme.colors.lightGrey};
@@ -64,8 +61,13 @@ const UploadImageWrapper = styled.div<ITitleProps>`
   `}
 `
 
-const UploadImageOverlay = styled.div<IUploadImageOverlayIProps>`
+const UploadImageOverlay = styled(AlignCenterWrapper)<
+  IUploadImageOverlayIProps
+>`
   position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.2);
@@ -123,32 +125,6 @@ export class ImageInput extends React.Component<IProps, IState> {
           onMouseEnter={this.toggleImageOverlay}
           onMouseLeave={this.toggleImageOverlay}
         >
-          {inputFiles.length === 0 && (
-            <Dropzone
-              accept="image/*"
-              multiple={false}
-              onDrop={filesToUpload => {
-                const files = filesToUpload ? Array.from(filesToUpload) : []
-
-                this.setState({ inputFiles: files })
-              }}
-            >
-              {({ getRootProps, getInputProps }) => (
-                <div {...getRootProps()}>
-                  <input {...getInputProps()} />
-                  <Button
-                    small
-                    variant="outline"
-                    icon="image"
-                    hasText={this.props.hasText}
-                  >
-                    {this.props.multi ? 'Choose Image(s)' : 'Choose Image'}
-                  </Button>
-                </div>
-              )}
-            </Dropzone>
-          )}
-
           {hasUploadedImg &&
             inputFiles.map((file, index) => {
               return (
@@ -162,40 +138,52 @@ export class ImageInput extends React.Component<IProps, IState> {
               )
             })}
 
-          <UploadImageOverlay isHovering={isHovering}>
-            {canDelete && (
-              <AlignCenterWrapper>
-                <Button
-                  small
-                  variant="outline"
-                  icon="delete"
-                  onClick={() =>
-                    this.setState({
-                      inputFiles: [],
-                      isHovering: false,
-                    })
-                  }
-                  hasText={this.props.hasText}
-                >
-                  Delete
-                </Button>
-              </AlignCenterWrapper>
-            )}
+          <Dropzone
+            accept="image/*"
+            multiple={false}
+            onDrop={filesToUpload => {
+              const files = filesToUpload ? Array.from(filesToUpload) : []
+              this.setState({ inputFiles: filesToUpload })
+            }}
+          >
+            {({ getRootProps, getInputProps }) => (
+              <div {...getRootProps()}>
+                <input {...getInputProps()} />
 
-            {!canDelete && (
-              <Dropzone
-                accept="image/*"
-                multiple={false}
-                onDrop={filesToUpload => {
-                  console.log(filesToUpload)
-                  const files = filesToUpload ? Array.from(filesToUpload) : []
+                {!hasUploadedImg && (
+                  <Button
+                    small
+                    variant="outline"
+                    icon="image"
+                    hasText={this.props.hasText}
+                  >
+                    {this.props.multi ? 'Choose Image(s)' : 'Choose Image'}
+                  </Button>
+                )}
 
-                  this.setState({ inputFiles: files })
-                }}
-              >
-                {({ getRootProps, getInputProps }) => (
-                  <AlignCenterWrapper {...getRootProps()}>
-                    <input {...getInputProps()} />
+                <UploadImageOverlay isHovering={isHovering}>
+                  {canDelete && (
+                    <AlignCenterWrapper>
+                      <Button
+                        small
+                        variant="outline"
+                        icon="delete"
+                        onClick={event => {
+                          // Stop it firing the dropzone dialog
+                          event.stopPropagation()
+                          this.setState({
+                            inputFiles: [],
+                            isHovering: false,
+                          })
+                        }}
+                        hasText={this.props.hasText}
+                      >
+                        Delete
+                      </Button>
+                    </AlignCenterWrapper>
+                  )}
+
+                  {!canDelete && (
                     <Button
                       small
                       variant="outline"
@@ -204,11 +192,11 @@ export class ImageInput extends React.Component<IProps, IState> {
                     >
                       Replace image
                     </Button>
-                  </AlignCenterWrapper>
-                )}
-              </Dropzone>
+                  )}
+                </UploadImageOverlay>
+              </div>
             )}
-          </UploadImageOverlay>
+          </Dropzone>
         </UploadImageWrapper>
       </Box>
     )

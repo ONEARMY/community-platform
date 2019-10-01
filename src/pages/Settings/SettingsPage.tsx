@@ -63,8 +63,8 @@ export class UserSettings extends React.Component<IProps, IState> {
   public async saveProfile(values: IFormValues) {
     const formValuesConcat = { ...this.state.customFormValues, ...values }
     console.log('profile values :', formValuesConcat)
-    // await this.injected.userStore.updateUserProfile(values)
-    // this.setState({ showNotification: true })
+    await this.injected.userStore.updateUserProfile(formValuesConcat)
+    this.setState({ showNotification: true })
   }
 
   public showSaveNotification() {
@@ -109,6 +109,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                       <Heading medium>Edit profile</Heading>
                     </Flex>
                     <FocusSection
+                      user={user}
                       onInputChange={v =>
                         this.setState({
                           customFormValues: {
@@ -121,6 +122,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                     {customFormValues.profileType === 'workspace' && (
                       <>
                         <WorkspaceSection
+                          user={user}
                           onInputChange={v =>
                             this.setState({
                               customFormValues: {

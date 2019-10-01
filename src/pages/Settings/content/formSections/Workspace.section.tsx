@@ -7,10 +7,11 @@ import { Box } from 'rebass'
 import { FlexSectionContainer } from './elements'
 import { WORKSPACE_TYPES } from 'src/mocks/user_pp.mock'
 import { CustomRadioField } from './Fields/CustomRadio.field'
-import { WorkspaceType } from 'src/models/user_pp.models'
+import { WorkspaceType, IUserPP } from 'src/models/user_pp.models'
 
 interface IProps {
   onInputChange: (inputValue: WorkspaceType) => void
+  user: IUserPP
 }
 interface IState {
   checkedFocusValue?: string
@@ -19,7 +20,11 @@ interface IState {
 export class WorkspaceSection extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
-    this.state = {}
+    this.state = {
+      checkedFocusValue: this.props.user.workspaceType
+        ? this.props.user.workspaceType
+        : undefined,
+    }
   }
 
   public onInputChange(value: WorkspaceType) {
@@ -28,6 +33,7 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
   }
 
   render() {
+    const { user } = this.props
     return (
       <FlexSectionContainer>
         <Heading small>Workspace</Heading>

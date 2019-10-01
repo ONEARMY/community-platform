@@ -7,12 +7,13 @@ import { Box } from 'rebass'
 import { FlexSectionContainer } from './elements'
 import { Link } from 'src/components/Links'
 import { Button } from 'src/components/Button'
-import { ProfileTypeLabel } from 'src/models/user_pp.models'
+import { ProfileTypeLabel, IUserPP } from 'src/models/user_pp.models'
 import { PROFILE_TYPES } from 'src/mocks/user_pp.mock'
 import { CustomRadioField } from './Fields/CustomRadio.field'
 
 interface IProps {
   onInputChange: (inputValue: ProfileTypeLabel) => void
+  user: IUserPP
 }
 interface IState {
   checkedFocusValue?: string
@@ -21,7 +22,11 @@ interface IState {
 export class FocusSection extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
-    this.state = {}
+    this.state = {
+      checkedFocusValue: this.props.user.profileType
+        ? this.props.user.profileType
+        : undefined,
+    }
   }
 
   public onInputChange(value: ProfileTypeLabel) {

@@ -34,6 +34,7 @@ class CustomCheckbox extends Component<IProps, IState> {
         <HiddenInput
           id={value}
           name={value}
+          value={value}
           type="checkbox"
           component={InputField}
           checked={isSelected}

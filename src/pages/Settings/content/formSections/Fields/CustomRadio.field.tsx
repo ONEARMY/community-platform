@@ -7,8 +7,7 @@ import { ProfileTypeLabel } from 'src/models/user_pp.models'
 
 interface IProps {
   value: string
-  index: number
-  onChange: (value: ProfileTypeLabel) => void
+  onChange: (value: string) => void
   isSelected: boolean
   imageSrc?: string
   textLabel?: string

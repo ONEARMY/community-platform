@@ -7,9 +7,10 @@ import { Box } from 'rebass'
 import { FlexSectionContainer } from './elements'
 import { WORKSPACE_TYPES } from 'src/mocks/user_pp.mock'
 import { CustomRadioField } from './Fields/CustomRadio.field'
+import { WorkspaceType } from 'src/models/user_pp.models'
 
 interface IProps {
-  onInputChange: (inputValue: string) => void
+  onInputChange: (inputValue: WorkspaceType) => void
 }
 interface IState {
   checkedFocusValue?: string
@@ -21,7 +22,7 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
     this.state = {}
   }
 
-  public onInputChange(value: string) {
+  public onInputChange(value: WorkspaceType) {
     this.setState({ checkedFocusValue: value })
     this.props.onInputChange(value)
   }
@@ -40,9 +41,8 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
                 key={index}
                 value={workspace.label}
                 name="workspaceType"
-                index={index}
                 isSelected={this.state.checkedFocusValue === workspace.label}
-                onChange={v => this.onInputChange(v)}
+                onChange={v => this.onInputChange(v as WorkspaceType)}
                 imageSrc={workspace.imageSrc}
                 textLabel={workspace.textLabel}
                 subText={workspace.subText}

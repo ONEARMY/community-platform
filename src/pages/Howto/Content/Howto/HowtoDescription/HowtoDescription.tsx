@@ -80,7 +80,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             {loggedInUser &&
               (isAllowToEditContent(howto, loggedInUser) && (
                 <Link to={'/how-to/' + this.props.howto.slug + '/edit'}>
-                  <Button variant={'primary'}>Edit</Button>
+                  <Button variant={'primary'} data-cy={'edit'}>Edit</Button>
                 </Link>
               ))}
           </Flex>

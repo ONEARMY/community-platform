@@ -43,17 +43,20 @@ describe('[How To]', () => {
 
     describe('[By any user]', () => {
       it('[See all info]', () => {
+        cy.log('Edit button is not available')
+        cy.get('[data-cy=edit]').should('not.exist')
+
         cy.log('How-to has basic info')
-        cy.get('[data-cy=how-to-basis]').then(($basisInfo) => {
-          expect($basisInfo).to.contain('By testuser', 'Author')
-          expect($basisInfo).to.contain('My awesome how-to', 'Title')
-          expect($basisInfo).to.contain('An intro goes here', 'Description')
-          expect($basisInfo).to.contain('2 steps', 'No. of Steps')
-          expect($basisInfo).to.contain('1-2 weeks', 'Duration')
-          expect($basisInfo).to.contain('Medium', 'Difficulty')
-          expect($basisInfo).to.contain('injection', 'Tag')
-          expect($basisInfo).to.contain('sorting', 'Tag')
-          expect($basisInfo.find('img[alt="how-to cover"]')).to.have.attr('src').match(coverFileRegex)
+        cy.get('[data-cy=how-to-basis]').then(($summary) => {
+          expect($summary).to.contain('By testuser', 'Author')
+          expect($summary).to.contain('My awesome how-to', 'Title')
+          expect($summary).to.contain('An intro goes here', 'Description')
+          expect($summary).to.contain('2 steps', 'No. of Steps')
+          expect($summary).to.contain('1-2 weeks', 'Duration')
+          expect($summary).to.contain('Medium', 'Difficulty')
+          expect($summary).to.contain('injection', 'Tag')
+          expect($summary).to.contain('sorting', 'Tag')
+          expect($summary.find('img[alt="how-to cover"]')).to.have.attr('src').match(coverFileRegex)
         })
 
         cy.log('Attachments are opened in new tabs')

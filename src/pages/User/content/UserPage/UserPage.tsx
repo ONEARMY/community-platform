@@ -173,9 +173,9 @@ export class UserPage extends React.Component<
           {user.location && (
             <Flex alignItems={'center'}>
               <Icon size={25} glyph={'location-on'} />
-              <Heading small m={3}>
+              {/* <Heading small m={3}>
                 {user.location.value}
-              </Heading>
+              </Heading> */}
             </Flex>
           )}
           {user.links ? (

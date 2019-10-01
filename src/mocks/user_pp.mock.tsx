@@ -222,11 +222,11 @@ export const MOCK_USER_COMMUNITY: IUserPP = {
   ],
   isExpert: false,
   isV4Member: true,
-  location: {
-    address: 'Eindhoven, Noord-Brabant, The Netherlands',
-    lat: 51.4393,
-    lng: 5.47863,
-  },
+  // location: {
+  //   address: 'Eindhoven, Noord-Brabant, The Netherlands',
+  //   lat: 51.4393,
+  //   lng: 5.47863,
+  // },
 }
 export const MOCK_USER_MACHINE: IUserPP = {
   verified: true,
@@ -274,11 +274,11 @@ export const MOCK_USER_MACHINE: IUserPP = {
   ],
   isExpert: true,
   isV4Member: false,
-  location: {
-    address: 'Dallas, Texas, USA',
-    lat: 51.4393,
-    lng: 5.47863,
-  },
+  // location: {
+  //   address: 'Dallas, Texas, USA',
+  //   lat: 51.4393,
+  //   lng: 5.47863,
+  // },
 }
 
 export const PLASTIC_TYPES: IPlasticType[] = [

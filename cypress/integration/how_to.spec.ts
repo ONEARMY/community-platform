@@ -8,9 +8,12 @@ describe('[How To]', () => {
       cy.visit('/how-to')
     })
 
-    it('[By any user]', () => {
+    it('[By everyone]', () => {
       cy.log('No tag is selected')
       cy.get('[data-cy=tag-select]').get('.data-cy__multi-value__label').should('not.exist')
+
+      cy.log('The Create button is unavailable')
+      cy.get('[data-cy=create]').should('not.exist')
 
       cy.log('More How-tos button is hidden')
       cy.get('[data-cy=more-how-tos]', SKIP_TIMEOUT).should('be.hidden')
@@ -34,14 +37,14 @@ describe('[How To]', () => {
     })
   })
 
-  describe('[How-to details]', () => {
+  describe('[Read a How-to]', () => {
     const attachment1 = { url: 'Web_1133.pdf' }
     const attachment2 = { url: 'web.pdf' }
     beforeEach(() => {
       cy.visit(howtoUrl)
     })
 
-    describe('[By any user]', () => {
+    describe('[By everyone]', () => {
       it('[See all info]', () => {
         cy.log('Edit button is not available')
         cy.get('[data-cy=edit]').should('not.exist')

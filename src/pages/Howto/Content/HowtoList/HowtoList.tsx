@@ -63,7 +63,7 @@ export class HowtoList extends React.Component<any, IState> {
           <AuthWrapper>
             <Flex justifyContent={['flex-end', 'flex-end', 'auto']}>
               <Link to={'/how-to/create'} mb={[3, 3, 0]}>
-                <Button variant={'primary'} translateY>
+                <Button variant={'primary'} translateY data-cy={'create'}>
                   Create a How-to
                 </Button>
               </Link>

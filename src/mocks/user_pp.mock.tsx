@@ -29,7 +29,7 @@ import Mix from 'src/assets/images/workspace-focus/mix.jpg'
 import Sheetpress from 'src/assets/images/workspace-focus/sheetpress.jpg'
 import Shredder from 'src/assets/images/workspace-focus/shredder.jpg'
 
-export const MOCK_USER_PP: IUserPP = {
+export const MOCK_USER_WORKSPACE: IUserPP = {
   verified: true,
   userName: 'chris-m-clarke',
   about:
@@ -80,6 +80,205 @@ export const MOCK_USER_PP: IUserPP = {
   mapPinDescription: 'This is a description to display on the map user card',
   isExpert: true,
   isV4Member: false,
+}
+export const MOCK_USER_COLLECTION: IUserPP = {
+  verified: true,
+  userName: 'collection-username',
+  about: 'We are collecting plastic in city center',
+  ...MOCK_DB_META(),
+  _authID: '123',
+  country: 'Netherlands',
+  profileType: 'collection-point',
+  coverImages: [
+    {
+      contentType: 'image/jpeg',
+      downloadUrl:
+        'https://firebasestorage.googleapis.com/v0/b/precious-plastics-v4-dev.appspot.com/o/uploads%2FhowtosV1%2FcWngQOnxxD3r3oI8TKx8%2FScreen%20Shot%202019-03-16%20at%2020.40.36.png?alt=media&token=51ac3516-064c-4f1d-ac2b-4460ee9f3500',
+      fullPath:
+        'uploads/howtosV1/cWngQOnxxD3r3oI8TKx8/Screen Shot 2019-03-16 at 20.40.36.png',
+      name: 'Screen Shot 2019-03-16 at 20.40.36.png',
+      size: 209068,
+      timeCreated: '2019-05-08T12:28:27.318Z',
+      type: 'image/jpeg',
+      updated: '2019-05-08T12:28:27.318Z',
+    },
+    {
+      contentType: 'image/jpeg',
+      downloadUrl:
+        'https://firebasestorage.googleapis.com/v0/b/precious-plastics-v4-dev.appspot.com/o/uploads%2FhowtosV1%2FcWngQOnxxD3r3oI8TKx8%2FScreen%20Shot%202019-03-16%20at%2020.40.36.png?alt=media&token=51ac3516-064c-4f1d-ac2b-4460ee9f3500',
+      fullPath:
+        'uploads/howtosV1/cWngQOnxxD3r3oI8TKx8/Screen Shot 2019-03-16 at 20.40.36.png',
+      name: 'Screen Shot 2019-03-16 at 20.40.36.png',
+      size: 209068,
+      timeCreated: '2019-05-08T12:28:27.318Z',
+      type: 'image/jpeg',
+      updated: '2019-05-08T12:28:27.318Z',
+    },
+  ],
+  links: [
+    {
+      label: 'instagram',
+      url: 'https://www.instagram.com/realpreciousplastic/',
+    },
+    {
+      label: 'facebook',
+      url: 'https://www.facebook.com/preciousplastic/',
+    },
+  ],
+  mapPinDescription: 'Collecting plastic',
+  isExpert: false,
+  isV4Member: true,
+}
+export const MOCK_USER_MEMBER: IUserPP = {
+  verified: true,
+  userName: 'member-username',
+  about: "I'm just a member of this community that share knowledge",
+  ...MOCK_DB_META(),
+  _authID: '123',
+  country: 'Netherlands',
+  profileType: 'member',
+  coverImages: [
+    {
+      contentType: 'image/jpeg',
+      downloadUrl:
+        'https://firebasestorage.googleapis.com/v0/b/precious-plastics-v4-dev.appspot.com/o/uploads%2FhowtosV1%2FcWngQOnxxD3r3oI8TKx8%2FScreen%20Shot%202019-03-16%20at%2020.40.36.png?alt=media&token=51ac3516-064c-4f1d-ac2b-4460ee9f3500',
+      fullPath:
+        'uploads/howtosV1/cWngQOnxxD3r3oI8TKx8/Screen Shot 2019-03-16 at 20.40.36.png',
+      name: 'Screen Shot 2019-03-16 at 20.40.36.png',
+      size: 209068,
+      timeCreated: '2019-05-08T12:28:27.318Z',
+      type: 'image/jpeg',
+      updated: '2019-05-08T12:28:27.318Z',
+    },
+    {
+      contentType: 'image/jpeg',
+      downloadUrl:
+        'https://firebasestorage.googleapis.com/v0/b/precious-plastics-v4-dev.appspot.com/o/uploads%2FhowtosV1%2FcWngQOnxxD3r3oI8TKx8%2FScreen%20Shot%202019-03-16%20at%2020.40.36.png?alt=media&token=51ac3516-064c-4f1d-ac2b-4460ee9f3500',
+      fullPath:
+        'uploads/howtosV1/cWngQOnxxD3r3oI8TKx8/Screen Shot 2019-03-16 at 20.40.36.png',
+      name: 'Screen Shot 2019-03-16 at 20.40.36.png',
+      size: 209068,
+      timeCreated: '2019-05-08T12:28:27.318Z',
+      type: 'image/jpeg',
+      updated: '2019-05-08T12:28:27.318Z',
+    },
+  ],
+  links: [
+    {
+      label: 'instagram',
+      url: 'https://www.instagram.com/realpreciousplastic/',
+    },
+    {
+      label: 'facebook',
+      url: 'https://www.facebook.com/preciousplastic/',
+    },
+  ],
+  isExpert: false,
+  isV4Member: false,
+}
+export const MOCK_USER_COMMUNITY: IUserPP = {
+  verified: true,
+  userName: 'community-username',
+  about: 'We are building a local community to fight plastic waste',
+  ...MOCK_DB_META(),
+  _authID: '123',
+  country: 'Kenya',
+  profileType: 'community-builder',
+  coverImages: [
+    {
+      contentType: 'image/jpeg',
+      downloadUrl:
+        'https://firebasestorage.googleapis.com/v0/b/precious-plastics-v4-dev.appspot.com/o/uploads%2FhowtosV1%2FcWngQOnxxD3r3oI8TKx8%2FScreen%20Shot%202019-03-16%20at%2020.40.36.png?alt=media&token=51ac3516-064c-4f1d-ac2b-4460ee9f3500',
+      fullPath:
+        'uploads/howtosV1/cWngQOnxxD3r3oI8TKx8/Screen Shot 2019-03-16 at 20.40.36.png',
+      name: 'Screen Shot 2019-03-16 at 20.40.36.png',
+      size: 209068,
+      timeCreated: '2019-05-08T12:28:27.318Z',
+      type: 'image/jpeg',
+      updated: '2019-05-08T12:28:27.318Z',
+    },
+    {
+      contentType: 'image/jpeg',
+      downloadUrl:
+        'https://firebasestorage.googleapis.com/v0/b/precious-plastics-v4-dev.appspot.com/o/uploads%2FhowtosV1%2FcWngQOnxxD3r3oI8TKx8%2FScreen%20Shot%202019-03-16%20at%2020.40.36.png?alt=media&token=51ac3516-064c-4f1d-ac2b-4460ee9f3500',
+      fullPath:
+        'uploads/howtosV1/cWngQOnxxD3r3oI8TKx8/Screen Shot 2019-03-16 at 20.40.36.png',
+      name: 'Screen Shot 2019-03-16 at 20.40.36.png',
+      size: 209068,
+      timeCreated: '2019-05-08T12:28:27.318Z',
+      type: 'image/jpeg',
+      updated: '2019-05-08T12:28:27.318Z',
+    },
+  ],
+  links: [
+    {
+      label: 'instagram',
+      url: 'https://www.instagram.com/realpreciousplastic/',
+    },
+    {
+      label: 'facebook',
+      url: 'https://www.facebook.com/preciousplastic/',
+    },
+  ],
+  isExpert: false,
+  isV4Member: true,
+  location: {
+    address: 'Eindhoven, Noord-Brabant, The Netherlands',
+    lat: 51.4393,
+    lng: 5.47863,
+  },
+}
+export const MOCK_USER_MACHINE: IUserPP = {
+  verified: true,
+  userName: 'community-username',
+  about: 'We are building machine to recycle plastic',
+  ...MOCK_DB_META(),
+  _authID: '123',
+  country: 'USA',
+  profileType: 'machine-builder',
+  coverImages: [
+    {
+      contentType: 'image/jpeg',
+      downloadUrl:
+        'https://firebasestorage.googleapis.com/v0/b/precious-plastics-v4-dev.appspot.com/o/uploads%2FhowtosV1%2FcWngQOnxxD3r3oI8TKx8%2FScreen%20Shot%202019-03-16%20at%2020.40.36.png?alt=media&token=51ac3516-064c-4f1d-ac2b-4460ee9f3500',
+      fullPath:
+        'uploads/howtosV1/cWngQOnxxD3r3oI8TKx8/Screen Shot 2019-03-16 at 20.40.36.png',
+      name: 'Screen Shot 2019-03-16 at 20.40.36.png',
+      size: 209068,
+      timeCreated: '2019-05-08T12:28:27.318Z',
+      type: 'image/jpeg',
+      updated: '2019-05-08T12:28:27.318Z',
+    },
+    {
+      contentType: 'image/jpeg',
+      downloadUrl:
+        'https://firebasestorage.googleapis.com/v0/b/precious-plastics-v4-dev.appspot.com/o/uploads%2FhowtosV1%2FcWngQOnxxD3r3oI8TKx8%2FScreen%20Shot%202019-03-16%20at%2020.40.36.png?alt=media&token=51ac3516-064c-4f1d-ac2b-4460ee9f3500',
+      fullPath:
+        'uploads/howtosV1/cWngQOnxxD3r3oI8TKx8/Screen Shot 2019-03-16 at 20.40.36.png',
+      name: 'Screen Shot 2019-03-16 at 20.40.36.png',
+      size: 209068,
+      timeCreated: '2019-05-08T12:28:27.318Z',
+      type: 'image/jpeg',
+      updated: '2019-05-08T12:28:27.318Z',
+    },
+  ],
+  links: [
+    {
+      label: 'instagram',
+      url: 'https://www.instagram.com/realpreciousplastic/',
+    },
+    {
+      label: 'facebook',
+      url: 'https://www.facebook.com/preciousplastic/',
+    },
+  ],
+  isExpert: true,
+  isV4Member: false,
+  location: {
+    address: 'Dallas, Texas, USA',
+    lat: 51.4393,
+    lng: 5.47863,
+  },
 }
 
 export const PLASTIC_TYPES: IPlasticType[] = [

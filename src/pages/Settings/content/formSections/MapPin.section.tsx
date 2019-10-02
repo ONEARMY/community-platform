@@ -1,6 +1,9 @@
 import * as React from 'react'
 import { observer, inject } from 'mobx-react'
 import Heading from 'src/components/Heading'
+import { Field } from 'react-final-form'
+import Text from 'src/components/Text'
+import { TextAreaField } from 'src/components/Form/Fields'
 import { Box } from 'rebass'
 import { FlexSectionContainer } from './elements'
 import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
@@ -16,7 +19,6 @@ import {
 import { IUserDB } from 'src/models/user.models'
 import { generatePinFilters } from 'src/mocks/maps.mock'
 import { ILocation } from 'src/models/common.models'
-import Flex from 'src/components/Flex'
 
 interface IProps {}
 interface IInjectedProps extends IProps {
@@ -101,7 +103,18 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
     return (
       <FlexSectionContainer>
         <Heading small>Your map pin</Heading>
-        <Box id="your-map-pin" my={4}>
+        <Box id="your-map-pin">
+          <Text mb={2} mt={4} medium>
+            Short description of your pin *
+          </Text>
+          <Field
+            name="mapPinDescription"
+            component={TextAreaField}
+            placeholder="We are shredding plastic in Plymouth, UK."
+          />
+          <Text mb={2} mt={4} medium>
+            Your workspace address
+          </Text>
           <div style={{ position: 'relative', zIndex: 2 }}>
             <LocationSearch onChange={v => this.onLocationChange(v)} />
           </div>

@@ -6,6 +6,8 @@ import { IDBEndpoint, ILocation } from 'src/models/common.models'
 import { includesAll } from 'src/utils/filters'
 import { RootStore } from '..'
 import { DBEndpoint } from '../databaseV2/types'
+import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
+import { IUploadedFileMeta, Storage } from '../storage'
 
 /**
  * The module store is used to share methods and data between other stores, including
@@ -108,6 +110,42 @@ export class ModuleStore {
     return collection.filter(obj => {
       return obj.location.name === selectedLocation.name
     })
+  }
+
+  public uploadFileToCollection(
+    file: File | IConvertedFileMeta | IUploadedFileMeta,
+    collection: string,
+    id: string,
+  ) {
+    console.log('uploading file', file)
+    // if already uploaded (e.g. editing but not replaced), skip
+    if (file.hasOwnProperty('downloadUrl')) {
+      console.log('file already uploaded, skipping')
+      return file as IUploadedFileMeta
+    }
+    // switch between converted file meta or standard file input
+    let data: File | Blob = file as File
+    if (file.hasOwnProperty('photoData')) {
+      file = file as IConvertedFileMeta
+      data = file.photoData
+    }
+    return Storage.uploadFile(
+      `uploads/${collection}/${id}`,
+      file.name,
+      data,
+      file.type,
+    )
+  }
+
+  public async uploadCollectionBatch(
+    files: (File | IConvertedFileMeta)[],
+    collection: string,
+    id: string,
+  ) {
+    const promises = files.map(async file => {
+      return this.uploadFileToCollection(file, collection, id)
+    })
+    return Promise.all(promises)
   }
 }
 

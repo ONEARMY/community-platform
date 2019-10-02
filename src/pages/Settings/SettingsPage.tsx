@@ -1,6 +1,6 @@
 import * as React from 'react'
 import Flex from 'src/components/Flex'
-import { IUser } from 'src/models/user.models'
+import { IUserPP } from 'src/models/user_pp.models'
 import { UserStore } from 'src/stores/User/user.store'
 import { observer, inject } from 'mobx-react'
 import { toJS } from 'mobx'
@@ -15,20 +15,19 @@ import { Button } from 'src/components/Button'
 import { PostingGuidelines } from './content/PostingGuidelines'
 import Heading from 'src/components/Heading'
 
-import styled from 'styled-components'
 import { TextNotification } from 'src/components/Notification/TextNotification'
 import { ProfileDelete } from './content/ProfileDelete'
 import { Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import { UserMapPinSection } from './content/formSections/MapPin.section'
 import theme from 'src/themes/styled.theme'
-import { ProfileType } from 'src/models/user.models'
+import { ProfileTypeLabel } from 'src/models/user_pp.models'
 
-interface IFormValues extends Partial<IUser> {
+interface IFormValues extends Partial<IUserPP> {
   // form values are simply subset of user profile fields
 }
 interface IProps {
-  user: IUser
+  user: IUserPP
   userStore: UserStore
 }
 interface IInjectedProps extends IProps {
@@ -37,16 +36,11 @@ interface IInjectedProps extends IProps {
 
 interface IState {
   editMode: boolean
-  formValues: IFormValues
-  user: IUser
+  customFormValues: IFormValues
+  user: IUserPP
   showNotification: boolean
   showDeleteDialog?: boolean
-  profileType?: ProfileType
 }
-
-const FormContainer = styled.form`
-  width: 100%;
-`
 
 @inject('userStore')
 @observer
@@ -56,7 +50,7 @@ export class UserSettings extends React.Component<IProps, IState> {
     const user = this.injected.userStore.user
     this.state = {
       editMode: false,
-      formValues: user ? user : {},
+      customFormValues: user ? user : {},
       showNotification: false,
       user: props.user,
     }
@@ -67,8 +61,9 @@ export class UserSettings extends React.Component<IProps, IState> {
   }
 
   public async saveProfile(values: IFormValues) {
-    console.log('profile values :', values)
-    await this.injected.userStore.updateUserProfile(values)
+    const formValuesConcat = { ...this.state.customFormValues, ...values }
+    console.log('profile values :', formValuesConcat)
+    await this.injected.userStore.updateUserProfile(formValuesConcat)
     this.setState({ showNotification: true })
   }
 
@@ -82,7 +77,7 @@ export class UserSettings extends React.Component<IProps, IState> {
 
   render() {
     const user = this.injected.userStore.user
-    const { profileType } = this.state
+    const { customFormValues } = this.state
     const readOnly = !this.state.editMode
     // Need to convert mobx observable user object into a Javasrcipt structure using toJS fn
     // to allow final-form-array to display the initial values
@@ -101,7 +96,7 @@ export class UserSettings extends React.Component<IProps, IState> {
           return (
             <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
               <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} my={4}>
-                <FormContainer>
+                <form id="userProfileForm" onSubmit={handleSubmit}>
                   {/* How To Info */}
                   <Flex flexDirection={'column'}>
                     <Flex
@@ -114,16 +109,34 @@ export class UserSettings extends React.Component<IProps, IState> {
                       <Heading medium>Edit profile</Heading>
                     </Flex>
                     <FocusSection
-                      onInputChange={v => this.setState({ profileType: v })}
+                      user={user}
+                      onInputChange={v =>
+                        this.setState({
+                          customFormValues: {
+                            ...this.state.customFormValues,
+                            profileType: v,
+                          },
+                        })
+                      }
                     />
-                    {profileType === 'pt-workspace' && (
+                    {customFormValues.profileType === 'workspace' && (
                       <>
-                        <WorkspaceSection onInputChange={v => console.log(v)} />
+                        <WorkspaceSection
+                          user={user}
+                          onInputChange={v =>
+                            this.setState({
+                              customFormValues: {
+                                ...this.state.customFormValues,
+                                workspaceType: v,
+                              },
+                            })
+                          }
+                        />
                         <UserInfosSection user={user} />
                         <UserMapPinSection />
                       </>
                     )}
-                    {profileType === 'pt-collection' && (
+                    {customFormValues.profileType === 'collection-point' && (
                       <>
                         <UserInfosSection user={user} />
                         <CollectionSection
@@ -132,25 +145,25 @@ export class UserSettings extends React.Component<IProps, IState> {
                         <UserMapPinSection />
                       </>
                     )}
-                    {profileType === 'pt-community' && (
+                    {customFormValues.profileType === 'community-builder' && (
                       <>
                         <UserInfosSection user={user} />
                         <UserMapPinSection />
                       </>
                     )}
-                    {profileType === 'pt-machine' && (
+                    {customFormValues.profileType === 'machine-builder' && (
                       <>
                         <UserInfosSection user={user} />
                         <ExpertiseSection />
                         <UserMapPinSection />
                       </>
                     )}
-                    {profileType === 'pt-member' && (
+                    {customFormValues.profileType === 'member' && (
                       <>
                         <UserInfosSection user={user} />
                       </>
                     )}
-                    {profileType === undefined && <></>}
+                    {customFormValues.profileType === undefined && <></>}
 
                     {/* <Flex
                       card
@@ -183,7 +196,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                       /> 
                     </Flex>*/}
                   </Flex>
-                </FormContainer>
+                </form>
               </Flex>
               {/* post guidelines container */}
               <Flex

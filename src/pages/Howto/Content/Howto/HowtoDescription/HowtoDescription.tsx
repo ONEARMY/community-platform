@@ -14,34 +14,12 @@ import { Button } from 'src/components/Button'
 import { IUser } from 'src/models/user.models'
 import { isAllowToEditContent } from 'src/utils/helpers'
 import theme from 'src/themes/styled.theme'
+import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 
 interface IProps {
   howto: IHowtoDB
   loggedInUser: IUser | undefined
 }
-
-const ElWithBeforeIcon = props => (
-  <Box
-    mr={4}
-    pl="30px"
-    sx={{
-      position: 'relative',
-      '::before': {
-        content: "''",
-        backgroundImage: 'url(' + props.IconUrl + ')',
-        width: '22px',
-        height: props.height ? props.height : '22px',
-        backgroundRepeat: 'no-repeat',
-        position: 'absolute',
-        left: '0',
-        bottom: '50%',
-        transform: 'translateY(50%)',
-      },
-    }}
-  >
-    {props.children}
-  </Box>
-)
 
 export default class HowtoDescription extends React.PureComponent<IProps, any> {
   constructor(props: IProps) {

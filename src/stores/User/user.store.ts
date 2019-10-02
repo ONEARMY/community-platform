@@ -12,10 +12,13 @@ import { notificationPublish } from '../Notifications/notifications.service'
 import { RootStore } from '..'
 import { loginWithDHCredentials } from 'src/hacks/DaveHakkensNL.hacks'
 import { ModuleStore } from '../common/module.store'
+import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
 */
+
+const COLLECTION_NAME = 'v2_users'
 
 export class UserStore extends ModuleStore {
   private authUnsubscribe: firebase.Unsubscribe
@@ -87,16 +90,28 @@ export class UserStore extends ModuleStore {
 
   public async getUserProfile(userName: string) {
     return this.db
-      .collection<IUser>('v2_users')
+      .collection<IUser>(COLLECTION_NAME)
       .doc(userName)
       .get()
   }
 
   public async updateUserProfile(values: Partial<IUserPP>) {
+    const dbRef = this.db
+      .collection<IUserPP>(COLLECTION_NAME)
+      .doc((values as IUserDB)._id)
+    const id = dbRef.id
     const user = this.user as IUserPPDB
+    if (values.coverImages) {
+      const processedImages = await this.uploadCollectionBatch(
+        values.coverImages as IConvertedFileMeta[],
+        COLLECTION_NAME,
+        id,
+      )
+      values = { ...values, coverImages: processedImages }
+    }
     const update = { ...user, ...values }
     await this.db
-      .collection('v2_users')
+      .collection(COLLECTION_NAME)
       .doc(user.userName)
       .set(update)
     this.updateUser(update)
@@ -159,7 +174,7 @@ export class UserStore extends ModuleStore {
       await authUser.reauthenticateAndRetrieveDataWithCredential(credential)
       const user = this.user as IUser
       await this.db
-        .collection('v2_users')
+        .collection(COLLECTION_NAME)
         .doc(user.userName)
         .delete()
       await authUser.delete()
@@ -174,7 +189,7 @@ export class UserStore extends ModuleStore {
   public async createUserProfile(fields: Partial<IUser> = {}) {
     const authUser = auth.currentUser as firebase.User
     const userName = authUser.displayName as string
-    const dbRef = this.db.collection<IUser>('v2_users').doc(userName)
+    const dbRef = this.db.collection<IUser>(COLLECTION_NAME).doc(userName)
     console.log('creating user profile', userName)
     if (!userName) {
       throw new Error('No Username Provided')

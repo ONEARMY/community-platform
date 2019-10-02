@@ -6,6 +6,7 @@
 # testing
 /coverage
 cypress/videos
+cypress/coverage
 
 # production
 /build

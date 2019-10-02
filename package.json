@@ -96,6 +96,7 @@
     "rebass": "4.0.6",
     "resolve": "1.10.0",
     "sass-loader": "7.1.0",
+    "start-server-and-test": "^1.10.2",
     "style-loader": "0.23.1",
     "styled-components": "4.1.3",
     "styled-system": "^4.0.0",
@@ -117,14 +118,15 @@
     "prettier": "prettier \"**/*.+(js|jsx|json|yml|yaml|css|less|scss|ts|tsx|md|graphql|mdx)\"",
     "validate": "npm run lint && npm run prettier -- --list-different",
     "test": "node scripts/test.js --env=jsdom",
-    "e2e": "yarn run cypress run",
-    "e2e-open": "yarn run cypress open",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "analyze": "npm run build -- --stats & npx webpack-bundle-analyzer ./build/bundle-stats.json",
     "prod:serve": "npm run prod:copy && npm run build && npm run prod:restore && firebase serve",
     "prod:copy": "cp .env .env-default && cp ./.env-prod ./.env",
-    "prod:restore": "cp .env-default .env && rm .env-default"
+    "prod:restore": "cp .env-default .env && rm .env-default",
+    "cy:run": "yarn run cypress run",
+    "cy:open": "yarn run cypress open",
+    "cy:ci": "start-server-and-test start http://localhost:3000 cy:run"
   },
   "eslintConfig": {},
   "browserslist": [

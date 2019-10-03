@@ -32,6 +32,12 @@ const Label = styled.label`
   margin-bottom: ${theme.space[2] + 'px'};
 `
 
+const ImageFieldContainer = props => (
+  <Box height="100px" width="150px" mr={10}>
+    {props.children}
+  </Box>
+)
+
 class HowtoStep extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
@@ -158,7 +164,7 @@ class HowtoStep extends Component<IProps, IState> {
             </Flex>
           ) : (
             <Flex>
-              <Box height="100px" width="150px" mr={10}>
+              <ImageFieldContainer>
                 <Field
                   canDelete
                   hasText={false}
@@ -166,8 +172,8 @@ class HowtoStep extends Component<IProps, IState> {
                   name={`${step}.images`}
                   component={ImageInputField}
                 />
-              </Box>
-              <Box height="100px" width="150px" mr={10}>
+              </ImageFieldContainer>
+              <ImageFieldContainer>
                 <Field
                   canDelete
                   hasText={false}
@@ -175,8 +181,8 @@ class HowtoStep extends Component<IProps, IState> {
                   name={`${step}.images`}
                   component={ImageInputField}
                 />
-              </Box>
-              <Box height="100px" width="150px" mr={10}>
+              </ImageFieldContainer>
+              <ImageFieldContainer>
                 <Field
                   canDelete
                   hasText={false}
@@ -184,7 +190,7 @@ class HowtoStep extends Component<IProps, IState> {
                   name={`${step}.images`}
                   component={ImageInputField}
                 />
-              </Box>
+              </ImageFieldContainer>
             </Flex>
           )}
         </Flex>

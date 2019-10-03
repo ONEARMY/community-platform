@@ -157,37 +157,35 @@ class HowtoStep extends Component<IProps, IState> {
               />
             </Flex>
           ) : (
-            <>
-              <Flex>
-                <Box height="100px" width="150px" mr={10}>
-                  <Field
-                    canDelete
-                    hasText={false}
-                    variant="small"
-                    name={`${step}.images`}
-                    component={ImageInputField}
-                  />
-                </Box>
-                <Box height="100px" width="150px" mr={10}>
-                  <Field
-                    canDelete
-                    hasText={false}
-                    variant="small"
-                    name={`${step}.images`}
-                    component={ImageInputField}
-                  />
-                </Box>
-                <Box height="100px" width="150px" mr={10}>
-                  <Field
-                    canDelete
-                    hasText={false}
-                    variant="small"
-                    name={`${step}.images`}
-                    component={ImageInputField}
-                  />
-                </Box>
-              </Flex>
-            </>
+            <Flex>
+              <Box height="100px" width="150px" mr={10}>
+                <Field
+                  canDelete
+                  hasText={false}
+                  variant="small"
+                  name={`${step}.images`}
+                  component={ImageInputField}
+                />
+              </Box>
+              <Box height="100px" width="150px" mr={10}>
+                <Field
+                  canDelete
+                  hasText={false}
+                  variant="small"
+                  name={`${step}.images`}
+                  component={ImageInputField}
+                />
+              </Box>
+              <Box height="100px" width="150px" mr={10}>
+                <Field
+                  canDelete
+                  hasText={false}
+                  variant="small"
+                  name={`${step}.images`}
+                  component={ImageInputField}
+                />
+              </Box>
+            </Flex>
           )}
         </Flex>
         <Flex mt={2}>

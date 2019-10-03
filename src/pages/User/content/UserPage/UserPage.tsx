@@ -1,12 +1,17 @@
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 import { inject, observer } from 'mobx-react'
-import { IUserPP, ILink, IMAchineBuilderXp } from 'src/models/user_pp.models'
+import {
+  IUserPP,
+  ILink,
+  IMAchineBuilderXp,
+  IOpeningHours,
+  PlasticTypeLabel,
+} from 'src/models/user_pp.models'
+import { PROFILE_TYPES } from 'src/mocks/user_pp.mock'
 import { UserStore } from 'src/stores/User/user.store'
 import Heading from 'src/components/Heading'
 import { Box, Link, Image } from 'rebass'
-import { Avatar } from 'src/components/Avatar'
-import Text from 'src/components/Text'
 import Slider from 'react-slick'
 import styled from 'styled-components'
 import Icon from 'src/components/Icons'
@@ -15,8 +20,6 @@ import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 
 import theme from 'src/themes/styled.theme'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
-import { littleRadius } from '../../../../components/Flex/index'
-import { background } from 'styled-system'
 import FlagIconEvents from 'src/components/Icons/FlagIcon/FlagIcon'
 
 // Highlights
@@ -27,11 +30,7 @@ import WorkspaceHighlight from 'src/assets/images/highlights/highlight-workspace
 import MemberHighlight from 'src/assets/images/highlights/highlight-member.svg'
 
 // assets profileType
-import CollectionBadge from 'src/assets/images/badges/pt-collection-point.svg'
 import MemberBadge from 'src/assets/images/badges/pt-member.svg'
-import MachineBadge from 'src/assets/images/badges/pt-machine-shop.svg'
-import WorkspaceBadge from 'src/assets/images/badges/pt-workspace.svg'
-import LocalComBadge from 'src/assets/images/badges/pt-local-community.svg'
 
 // Plastic types
 import HDPEIcon from 'src/assets/images/plastic-types/hdpe.svg'
@@ -51,162 +50,10 @@ import BazarIcon from 'src/assets/icons/icon-bazar.svg'
 import SocialIcon from 'src/assets/icons/icon-social-media.svg'
 import IconForum from 'src/assets/icons/icon-forum.svg'
 import IconWebsite from 'src/assets/icons/icon-website.svg'
+import RedirectIcon from 'src/assets/icons/link-target-blank.svg'
+
 import { IUploadedFileMeta } from 'src/stores/storage'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
-
-const MOCK_PROFILE_TYPES = [
-  {
-    label: 'workspace',
-    textLabel: 'I run a workspace',
-    imageSrc: WorkspaceBadge,
-    highlightSrc: WorkspaceHighlight,
-  },
-  {
-    label: 'member',
-    textLabel: 'I am a member',
-    imageSrc: MemberBadge,
-    highlightSrc: MemberHighlight,
-  },
-  {
-    label: 'machine-builder',
-    textLabel: 'I build machines',
-    imageSrc: MachineBadge,
-    highlightSrc: MachineHighlight,
-  },
-  {
-    label: 'community-builder',
-    textLabel: 'I run a local community',
-    imageSrc: LocalComBadge,
-    highlightSrc: LocalCommunityHighlight,
-  },
-  {
-    label: 'collection-point',
-    textLabel: 'I collect & sort plastic',
-    imageSrc: CollectionBadge,
-    highlightSrc: CollectionHighlight,
-  },
-]
-
-const MOCK_WORKSPACE_TYPES = [
-  {
-    label: 'shredder',
-    textLabel: 'shredder',
-    subText: 'Shredding plastic waste into flakes',
-    imageSrc: '',
-  },
-  {
-    label: 'sheetpress',
-    textLabel: 'Sheetpress',
-    subText: 'Making recycled plastic sheets',
-    imageSrc: '',
-  },
-  {
-    label: 'extrusion',
-    textLabel: 'Extrusion',
-    subText: 'Extruding plastic into beams or products',
-    imageSrc: '',
-  },
-  {
-    label: 'injection',
-    textLabel: 'Injection',
-    subText: 'Making small productions of goods',
-    imageSrc: '',
-  },
-  {
-    label: 'mix',
-    textLabel: 'Mix',
-    subText: 'Running a workspace with multiple machines and goals',
-    imageSrc: '',
-  },
-]
-
-const MOCK_PROPS = {
-  userName: 'chris-m-clarke',
-  about:
-    "Description of user profile, it's a nice workspace where we build products out of recycled plastic",
-  country: '',
-  profileType:
-    MOCK_WORKSPACE_TYPES[
-      Math.floor(Math.random() * MOCK_WORKSPACE_TYPES.length)
-    ].label,
-  workspaceType:
-    MOCK_PROFILE_TYPES[Math.floor(Math.random() * MOCK_PROFILE_TYPES.length)]
-      .label,
-  coverImages: [
-    {
-      contentType: 'image/jpeg',
-      downloadUrl:
-        'https://uploads-ssl.webflow.com/5d41aacc625e7f69441ddaff/5d4986d7c03a642fe243f86d_IMG_20181030_110139.jpg',
-      fullPath:
-        'uploads/howtosV1/cWngQOnxxD3r3oI8TKx8/Screen Shot 2019-03-16 at 20.40.36.png',
-      name: 'Screen Shot 2019-03-16 at 20.40.36.png',
-      size: 209068,
-      timeCreated: '2019-05-08T12:28:27.318Z',
-      type: 'image/jpeg',
-      updated: '2019-05-08T12:28:27.318Z',
-    },
-    {
-      contentType: 'image/jpeg',
-      downloadUrl:
-        'https://firebasestorage.googleapis.com/v0/b/precious-plastics-v4-dev.appspot.com/o/uploads%2FhowtosV1%2FcWngQOnxxD3r3oI8TKx8%2FScreen%20Shot%202019-03-16%20at%2020.40.36.png?alt=media&token=51ac3516-064c-4f1d-ac2b-4460ee9f3500',
-      fullPath:
-        'uploads/howtosV1/cWngQOnxxD3r3oI8TKx8/Screen Shot 2019-03-16 at 20.40.36.png',
-      name: 'Screen Shot 2019-03-16 at 20.40.36.png',
-      size: 209068,
-      timeCreated: '2019-05-08T12:28:27.318Z',
-      type: 'image/jpeg',
-      updated: '2019-05-08T12:28:27.318Z',
-    },
-  ],
-  links: [
-    {
-      label: 'discord',
-      url: 'https://www.facebook.com/preciousplastic/',
-    },
-    {
-      label: 'forum',
-      url: 'https://www.instagram.com/realpreciousplastic/',
-    },
-    {
-      label: 'website',
-      url: 'https://www.facebook.com/preciousplastic/',
-    },
-    {
-      label: 'social',
-      url: 'https://www.facebook.com/preciousplastic/',
-    },
-    {
-      label: 'bazar',
-      url: 'https://www.facebook.com/preciousplastic/',
-    },
-  ],
-  mapPinDescription: 'This is a description to display on the map user card',
-  isExpert: true,
-  isV4Member: true,
-  location: {
-    countryCode: 'gb',
-  },
-  openingHours: [
-    { day: 'Mon', openFrom: '10:00', openTo: '18:00' },
-    { day: 'Tue', openFrom: '10:00', openTo: '18:00' },
-  ],
-  collectedPlasticTypes: [
-    { label: 'pet', number: '1' },
-    { label: 'hdpe', number: '2' },
-    { label: 'pvc', number: '3' },
-    { label: 'ldpe', number: '4' },
-    { label: 'pp', number: '5' },
-    { label: 'ps', number: '6' },
-    { label: 'other', number: '7' },
-  ],
-  machineBuilderXp: [
-    { label: 'electronics' },
-    { label: 'machining' },
-    { label: 'welding' },
-    { label: 'assembling' },
-    { label: 'mould-making' },
-  ],
-}
 
 interface IRouterCustomParams {
   id: string
@@ -218,16 +65,6 @@ interface IBackgroundImageProps {
 
 interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
   userStore: UserStore
-}
-
-interface IPlasticTypes {
-  label: string
-}
-
-interface IOpeningHours {
-  day: string
-  openFrom: string
-  openTo: string
 }
 
 interface IState {
@@ -299,17 +136,13 @@ const UserContactInfo = styled.div`
   }
 `
 
-const UserContactInfoItem = styled(Flex)``
-
-const UserContactInfoItemIcon = styled.div``
-
-const UserContactInfoItemLink = styled.a``
-
 const MobileBadge = styled.div`
   position: relative;
-  max-width: 150px;
+  max-width: 120px;
+  margin-bottom: 20px;
 
-  @media only screen and (min-width: ${theme.breakpoints[1]}) {
+  @media only screen and (min-width: ${theme.breakpoints[2]}) {
+    max-width: 150px;
     margin-top: -50%;
     margin-left: auto;
     margin-right: auto;
@@ -321,7 +154,7 @@ const CommitmentBox = styled.div`
   border-radius: 10px;
   padding: 20px;
   background-color: ${theme.colors.background};
-  margin-top: 20px;
+  margin-bottom: 20px;
 `
 
 const CommitmentBoxItem = styled.div`
@@ -337,6 +170,7 @@ const ProfileWrapper = styled(Box)`
   margin-bottom: 40px; */
   border: 2px solid black;
   border-radius: 10px;
+  overflow: hidden;
 `
 
 const ProfileWrapperCarousel = styled.div``
@@ -369,7 +203,6 @@ const ProfileContentWrapper = styled(Flex)`
 `
 
 const ProfileContent = styled(Box)``
-
 const ProfileSidebar = styled(Box)``
 
 const SliderImage = styled.div`
@@ -387,7 +220,7 @@ const SliderImage = styled.div`
   `}
 
 
-  @media only screen and (min-width: ${theme.breakpoints[1]}) {
+  @media only screen and (min-width: ${theme.breakpoints[2]}) {
     height: 500px;
   }
 `
@@ -402,8 +235,6 @@ const MachineExperienceTab = styled.div`
   background-color: ${theme.colors.background};
   margin-right: 10px;
 `
-
-const DesktopBadge = styled.div``
 
 @inject('userStore')
 @observer
@@ -426,8 +257,6 @@ export class UserPage extends React.Component<
 
   public async componentWillMount() {
     const userid = this.props.match.params.id
-
-    console.log('USER STORE', this.injected.userStore)
 
     const userData = await this.injected.userStore.getUserProfile(userid)
     console.log('userData', userData)
@@ -513,22 +342,32 @@ export class UserPage extends React.Component<
             </ElWithBeforeIcon>
           )
         default:
-          return null
+          return (
+            <ElWithBeforeIcon
+              key="link-other"
+              IconUrl={RedirectIcon}
+              height="25px"
+            >
+              <Link ml={2} color={'black'} href={link.url} target="_blank">
+                {link.label}
+              </Link>
+            </ElWithBeforeIcon>
+          )
       }
     })
   }
 
-  public renderCommitmentBox() {
+  public renderCommitmentBox(isExpert?: boolean, isV4Member?: boolean) {
     return (
       <CommitmentBox>
-        {MOCK_PROPS.isExpert && (
+        {isExpert && (
           <CommitmentBoxItem>
             <ElWithBeforeIcon IconUrl={ExpertIcon} height="25px">
               Expert
             </ElWithBeforeIcon>
           </CommitmentBoxItem>
         )}
-        {MOCK_PROPS.isV4Member && (
+        {isV4Member && (
           <CommitmentBoxItem>
             <ElWithBeforeIcon IconUrl={V4MemberIcon}>
               V4 Member
@@ -545,23 +384,42 @@ export class UserPage extends React.Component<
     )
   }
 
-  public findWorkspaceType(workspaceType?: string) {
-    if (!workspaceType) {
-      return WorkspaceBadge
-    }
-
-    const profileTypeObj = MOCK_PROFILE_TYPES.find(
-      type => type.label === workspaceType,
-    )
-
-    if (profileTypeObj) {
-      return profileTypeObj
+  public findWordspaceHighlight(workspaceType?: string): string {
+    switch (workspaceType) {
+      case 'workspace':
+        return WorkspaceHighlight
+      case 'member':
+        return MemberHighlight
+      case 'machine-builder':
+        return MachineHighlight
+      case 'community-builder':
+        return LocalCommunityHighlight
+      case 'collection-point':
+        return CollectionHighlight
+      default:
+        return MemberHighlight
     }
   }
 
-  public renderPlasticTypes(plasticTypes: Array<IPlasticTypes>) {
-    function renderIcon(label: string) {
-      switch (label) {
+  public findWorkspaceBadge(workspaceType?: string): string {
+    if (!workspaceType) {
+      return MemberBadge
+    }
+
+    const foundProfileTypeObj = PROFILE_TYPES.find(
+      type => type.label === workspaceType,
+    )
+
+    if (foundProfileTypeObj && foundProfileTypeObj.imageSrc) {
+      return foundProfileTypeObj.imageSrc
+    }
+
+    return MemberBadge
+  }
+
+  public renderPlasticTypes(plasticTypes: Array<PlasticTypeLabel>) {
+    function renderIcon(type: string) {
+      switch (type) {
         case 'hdpe':
           return <Image src={HDPEIcon} />
         case 'ldpe':
@@ -587,8 +445,8 @@ export class UserPage extends React.Component<
         <Flex flexWrap="wrap">
           {plasticTypes.map(plasticType => {
             return (
-              <PlasticType key={plasticType.label}>
-                {renderIcon(plasticType.label)}
+              <PlasticType key={plasticType}>
+                {renderIcon(plasticType)}
               </PlasticType>
             )
           })}
@@ -658,56 +516,46 @@ export class UserPage extends React.Component<
       ),
     }
 
-    const workspaceMapping = {
-      extrusion: {
-        title: 'Extrusion ',
-      },
+    const workspaceBadgeSrc = this.findWorkspaceBadge(user.profileType)
+    const workspaceHighlightSrc = this.findWordspaceHighlight(user.profileType)
+
+    let coverImage = [
+      <SliderImage
+        key="default-image"
+        bgImg="https://uploads-ssl.webflow.com/5d41aacc625e7f69441ddaff/5d4986d7c03a642fe243f86d_IMG_20181030_110139.jpg"
+      />,
+    ]
+
+    if (user.coverImages && user.coverImages.length > 0) {
+      const coverImages: Array<IConvertedFileMeta | IUploadedFileMeta> =
+        user.coverImages
+      coverImage = coverImages.map(
+        (image: IConvertedFileMeta | IUploadedFileMeta) => {
+          if ('downloadUrl' in image) {
+            return <SliderImage key={image.name} bgImg={image.downloadUrl} />
+          }
+
+          return <SliderImage key={image.name} bgImg={image.objectUrl} />
+        },
+      )
     }
-
-    console.log('USER', user)
-
-    const workspaceImgUrl = this.findWorkspaceType(user.profileType)
-
-    console.log('workspaceImgUrl', workspaceImgUrl)
-
-    const coverImage = (
-      <SliderImage bgImg="https://uploads-ssl.webflow.com/5d41aacc625e7f69441ddaff/5d4986d7c03a642fe243f86d_IMG_20181030_110139.jpg" />
-    )
-
-    // if(user.coverImages && user.coverImages.length > 0) {
-    //   const coverImages: Array<IConvertedFileMeta|IUploadedFileMeta> = user.coverImages;
-    //   coverImages.map((image)=> {
-    //     if (image.objectUrl) {
-
-    //     } else {
-
-    //     }
-    //   })
-    //   // coverImage = (
-    //   //   <>
-    //   //     {user.coverImages.map(() => {
-    //   //       return (<div>TEST</div>)
-    //   //     })}
-    //   //   </>
-    //   // )
-    // }
 
     return (
       <ProfileWrapper mt={4} mb={6}>
         <ProfileWrapperCarousel>
           <Slider {...settings}>{coverImage}</Slider>
         </ProfileWrapperCarousel>
-        <ProfileContentWrapper mt={['-122px', '-122px', 0]} px={4} py={4}>
-          <ProfileContent width={['100%', '100%', '80%']}>
+        <ProfileContentWrapper mt={['-122px', '-122px', 0]} px={[2, 4]} py={4}>
+          <Box width={['100%', '100%', '80%']}>
             <Box sx={{ display: ['block', 'block', 'none'] }}>
               <MobileBadge>
-                <Image src={workspaceImgUrl.imageSrc} />
+                <Image src={workspaceBadgeSrc} />
               </MobileBadge>
             </Box>
 
-            <UserCategory bgImg={workspaceImgUrl.highlightSrc}>
+            <UserCategory bgImg={workspaceHighlightSrc}>
               <Heading small bold width={1}>
-                {capitalizeFirstLetter(user.profileType || 'PP')}
+                {capitalizeFirstLetter(user.profileType || 'member')}
               </Heading>
             </UserCategory>
 
@@ -715,24 +563,24 @@ export class UserPage extends React.Component<
               <Heading medium bold color={'black'} my={3} mr={2}>
                 {capitalizeFirstLetter(user.userName)}
               </Heading>
-              <FlagIconEvents code={MOCK_PROPS.location.countryCode} />
+              {user.location && (
+                <FlagIconEvents code={user.location.countryCode} />
+              )}
             </UserName>
 
-            <UserDescription>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Suspendisse varius enim in eros elementum tristique. Duis cursus,
-              mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam
-              libero vitae erat. Aenean faucibus nibh et justo cursus id rutrum
-              lorem imperdiet. Nunc ut sem vitae risus tristique posuere.
-            </UserDescription>
+            <Box sx={{ display: ['block', 'none'] }}>
+              {this.renderCommitmentBox(user.isExpert, user.isV4Member)}
+            </Box>
+
+            {user.about && <UserDescription>{user.about}</UserDescription>}
 
             {user.profileType === 'collection-point' &&
               user.collectedPlasticTypes &&
-              this.renderPlasticTypes(MOCK_PROPS.collectedPlasticTypes)}
+              this.renderPlasticTypes(user.collectedPlasticTypes)}
 
             {user.profileType === 'collection-point' &&
-              user.collectedPlasticTypes &&
-              this.renderOpeningHours(MOCK_PROPS.openingHours)}
+              user.openingHours &&
+              this.renderOpeningHours(user.openingHours)}
 
             {user.profileType === 'machine-builder' &&
               user.machineBuilderXp &&
@@ -744,20 +592,16 @@ export class UserPage extends React.Component<
                 {this.renderLinks(user.links)}
               </UserContactInfo>
             )}
-
-            <Box sx={{ display: ['block', 'none'] }}>
-              {this.renderCommitmentBox()}
-            </Box>
-          </ProfileContent>
-          <ProfileSidebar
+          </Box>
+          <Box
             width={['100%', '100%', '20%']}
             sx={{ display: ['none', 'none', 'block'] }}
           >
             <MobileBadge>
-              <Image src={workspaceImgUrl.imageSrc} />
+              <Image src={workspaceBadgeSrc} />
             </MobileBadge>
-            {this.renderCommitmentBox()}
-          </ProfileSidebar>
+            {this.renderCommitmentBox(user.isExpert, user.isV4Member)}
+          </Box>
         </ProfileContentWrapper>
       </ProfileWrapper>
     )

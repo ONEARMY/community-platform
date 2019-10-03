@@ -1,7 +1,10 @@
 {
   "linters": {
-    "*.{ts,tsx}": [
-      "tslint --project tsconfig.json --config tslint.json"
+    "src/**/*.{ts,tsx}": [
+        "tslint --project tsconfig.json --config tslint.json"
+      ],
+    "cypress/**/*.{ts,tsx}": [
+      "tslint --project cypress/tsconfig.json --config tslint.json"
     ],
     "*.{js,jsx}": [
       "eslint"

@@ -11,6 +11,7 @@ interface IProps {
   isSelected: boolean
   imageSrc?: string
   btnLabel?: string
+  fullWidth?: boolean
 }
 interface IState {
   showDeleteModal: boolean
@@ -28,9 +29,24 @@ class CustomCheckbox extends Component<IProps, IState> {
   }
 
   render() {
-    const { value, index, imageSrc, isSelected, btnLabel } = this.props
+    const {
+      value,
+      index,
+      imageSrc,
+      isSelected,
+      btnLabel,
+      fullWidth,
+    } = this.props
+    const classNames: Array<string> = []
+    if (isSelected) {
+      classNames.push('selected')
+    }
+    if (fullWidth) {
+      classNames.push('full-width')
+    }
+
     return (
-      <Label htmlFor={value} className={isSelected ? 'selected' : undefined}>
+      <Label htmlFor={value} className={classNames.join(' ')}>
         <HiddenInput
           id={value}
           name={value}
@@ -40,7 +56,7 @@ class CustomCheckbox extends Component<IProps, IState> {
           checked={isSelected}
           onChange={() => this.props.onChange(index)}
         />
-        {imageSrc && <Image px={3} src={imageSrc} />}
+        {imageSrc && <Image px={3} src={imageSrc} height="100%" />}
         {btnLabel && (
           <Text medium m="10px">
             {btnLabel}

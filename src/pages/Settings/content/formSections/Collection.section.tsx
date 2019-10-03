@@ -72,6 +72,7 @@ export class CollectionSection extends React.Component<IProps, IState> {
                   {PLASTIC_TYPES.map((plastic, index: number) => (
                     <CustomCheckbox
                       key={index}
+                      fullWidth
                       value={plastic.label}
                       index={index}
                       isSelected={

@@ -12,6 +12,7 @@ import { HashLink } from 'react-router-hash-link'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
 interface IProps {
+  map: any
   availableFilters: Array<IPinType>
   onFilterChange: (grouping: EntityType, filters: Array<IPinType>) => void
   onLocationChange: (selectedLocation) => void
@@ -56,7 +57,13 @@ class Controls extends React.Component<IProps> {
     )
 
     return (
-      <MapFlexBar px={[2, 3, 4]} py={1}>
+      <MapFlexBar
+        px={[2, 3, 4]}
+        py={1}
+        onClick={() => {
+          // this.props.map.current.leafletElement.closePopup()
+        }}
+      >
         <SearchWrapper>
           <LocationSearch
             onChange={location => {
@@ -69,9 +76,10 @@ class Controls extends React.Component<IProps> {
             key={grouping}
             entityType={grouping}
             items={groupedFilters[grouping]}
-            onChange={options =>
+            onChange={options => {
               this.props.onFilterChange(grouping as EntityType, options)
-            }
+              this.props.map.current.leafletElement.closePopup()
+            }}
           />
         ))}
         <FlexSpacer />

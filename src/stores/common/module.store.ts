@@ -35,8 +35,13 @@ export class ModuleStore {
   get db() {
     return this.rootStore.dbV2
   }
+
   get activeUser() {
     return this.rootStore.stores.userStore.user
+  }
+
+  get userStore() {
+    return this.rootStore.stores.userStore
   }
 
   /****************************************************************************

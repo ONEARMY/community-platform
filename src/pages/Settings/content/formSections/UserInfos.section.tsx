@@ -15,6 +15,8 @@ import { FieldArray } from 'react-final-form-arrays'
 import { Link } from './Fields/Link.field'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { FlexSectionContainer } from './elements'
+import { Box, Image } from 'rebass'
+import { IUploadedFileMeta } from 'src/stores/storage'
 
 interface IProps {
   user: IUserPP
@@ -24,6 +26,7 @@ interface IState {
   isSaving?: boolean
   showNotification?: boolean
   showComLinks?: boolean
+  editCoverImages: boolean
 }
 
 // validation - return undefined if no error (i.e. valid)
@@ -42,6 +45,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
     this.state = {
       readOnly: true,
       showComLinks: props.user && props.user.links ? true : false,
+      editCoverImages: false,
     }
     this.changeComLinkSwitch = this.changeComLinkSwitch.bind(this)
   }
@@ -52,6 +56,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
 
   render() {
     const { user } = this.props
+    const { editCoverImages } = this.state
     return (
       <FlexSectionContainer>
         <Heading small bold>
@@ -88,40 +93,44 @@ export class UserInfosSection extends React.Component<IProps, IState> {
           <Text mb={2} mt={7} medium>
             Cover Image *
           </Text>
-          {/* TODO display existing images on edit */}
-          {/* {userimages.length > 0 &&
-            images[0].downloadUrl !== undefined &&
-            !editStepImgs ? (
-              <Flex alignItems={'center'} justifyContent={'center'}>
-              {images.map(image => {
+          {user.coverImages &&
+          user.coverImages[0] !== undefined &&
+          !editCoverImages ? (
+            <Flex alignItems={'center'} justifyContent={'center'}>
+              {(user.coverImages as Array<IUploadedFileMeta>).map(image => {
                 return (
                   <Flex
-                  flexWrap={'nowrap'}
-                  px={1}
-                  width={1 / 4}
-                  key={image.name}
+                    flexWrap={'nowrap'}
+                    px={1}
+                    width={1 / 4}
+                    key={image.name}
                   >
-                  <ImageWithOpacity src={image.downloadUrl} />
+                    <Image sx={{ opacity: 0.5 }} src={image.downloadUrl} />
                   </Flex>
-                  )
-                })}
-                <AbsoluteBtn
+                )
+              })}
+              <Button
                 icon={'delete'}
                 variant={'tertiary'}
+                sx={{ position: 'absolute' }}
                 onClick={() =>
                   this.setState({
-                    editStepImgs: !editStepImgs,
+                    editCoverImages: !editCoverImages,
                   })
                 }
-                />
-                </Flex>
-              ) : ( */}
-          <Field
-            style={{ width: '100%' }}
-            name={`coverImages`}
-            component={ImageInputField}
-            multi
-          />
+              />
+            </Flex>
+          ) : (
+            <Box height="100px" width="150px" mr={10}>
+              <Field
+                canDelete
+                hasText={false}
+                variant="small"
+                name={`coverImages`}
+                component={ImageInputField}
+              />
+            </Box>
+          )}
         </Flex>
         <Flex wrap={'nowrap'} alignItems={'center'} width={1}>
           <Text mb={2} mt={7} medium>

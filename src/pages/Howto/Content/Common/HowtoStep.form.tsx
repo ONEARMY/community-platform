@@ -22,7 +22,7 @@ interface IProps {
 interface IState {
   showDeleteModal: boolean
   _toDocsList: boolean
-  editStepImgs: boolean
+  editStepImgIndex?: number
 }
 
 const required = (value: any) => (value ? undefined : 'Required')
@@ -44,7 +44,6 @@ class HowtoStep extends Component<IProps, IState> {
     this.state = {
       showDeleteModal: false,
       _toDocsList: false,
-      editStepImgs: false,
     }
   }
 
@@ -58,7 +57,8 @@ class HowtoStep extends Component<IProps, IState> {
 
   render() {
     const { step, index, images } = this.props
-    const { editStepImgs } = this.state
+    const { editStepImgIndex } = this.state
+    console.log('images', images)
 
     return (
       // NOTE - animation parent container in CreateHowTo
@@ -131,77 +131,60 @@ class HowtoStep extends Component<IProps, IState> {
             validateFields={[]}
           />
         </Flex>
-        <Flex flexDirection="column">
-          <Label htmlFor={`${step}.text`}>
-            Upload image(s) for this step *
-          </Label>
-          {images.length > 0 &&
-          images[0].downloadUrl !== undefined &&
-          !editStepImgs ? (
-            <Flex alignItems={'center'} justifyContent={'center'}>
-              {images.map(image => {
-                return (
-                  <Flex
-                    flexWrap={'nowrap'}
-                    px={1}
-                    width={1 / 4}
-                    key={image.name}
-                  >
-                    <Image sx={{ opacity: 0.5 }} src={image.downloadUrl} />
-                  </Flex>
-                )
-              })}
-              <Button
-                icon={'delete'}
-                variant={'tertiary'}
-                sx={{ position: 'absolute' }}
-                onClick={() =>
-                  this.setState({
-                    editStepImgs: !editStepImgs,
-                  })
-                }
-              />
-            </Flex>
-          ) : (
-            <Flex>
-              <ImageFieldContainer>
-                <Field
-                  canDelete
-                  hasText={false}
-                  variant="small"
-                  name={`${step}.images`}
-                  component={ImageInputField}
-                />
-              </ImageFieldContainer>
-              <ImageFieldContainer>
-                <Field
-                  canDelete
-                  hasText={false}
-                  variant="small"
-                  name={`${step}.images`}
-                  component={ImageInputField}
-                />
-              </ImageFieldContainer>
-              <ImageFieldContainer>
-                <Field
-                  canDelete
-                  hasText={false}
-                  variant="small"
-                  name={`${step}.images`}
-                  component={ImageInputField}
-                />
-              </ImageFieldContainer>
-            </Flex>
-          )}
-        </Flex>
-        <Flex mt={2}>
-          <Field
-            name={`${step}.caption`}
-            component={InputField}
-            placeholder="Insert Caption"
-          />
+        <Label htmlFor={`${step}.text`}>Upload image(s) for this step *</Label>
+
+        <Flex flexWrap="nowrap">
+          {[...Array(3)].map((image, i) => (
+            <>
+              {images[i] &&
+              images[i].downloadUrl !== undefined &&
+              editStepImgIndex !== i ? (
+                <Flex
+                  alignItems="center"
+                  justifyContent="center"
+                  width="150px"
+                  height="100px"
+                  mx={1}
+                  key={images[i].timeCreated}
+                >
+                  <Image sx={{ opacity: 0.5 }} src={images[i].downloadUrl} />
+                  <Button
+                    icon={'delete'}
+                    variant={'tertiary'}
+                    sx={{ position: 'absolute' }}
+                    onClick={() =>
+                      this.setState({
+                        editStepImgIndex: i,
+                      })
+                    }
+                  />
+                </Flex>
+              ) : (
+                <ImageFieldContainer key={i}>
+                  <Field
+                    canDelete
+                    hasText={false}
+                    variant="small"
+                    name={`${step}.images`}
+                    component={ImageInputField}
+                    validateFields={[]}
+                  />
+                </ImageFieldContainer>
+              )}
+            </>
+          ))}
         </Flex>
       </Flex>
+
+      /* // </Flex>
+        // <Flex mt={2}>
+        //   <Field
+        //     name={`${step}.caption`}
+        //     component={InputField}
+        //     placeholder="Insert Caption"
+        //   />
+        // </Flex>
+      // </Flex> */
     )
   }
 }

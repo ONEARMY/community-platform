@@ -11,7 +11,6 @@ export const inputStyles = ({ invalid }: IFormElement) => css`
   background: ${theme.colors.background};
   width: 100%;
   box-sizing: border-box;
-  margin-bottom: 10px;
 
   &:disabled {
     border: none;

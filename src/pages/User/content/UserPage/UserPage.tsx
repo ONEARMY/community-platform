@@ -1,14 +1,13 @@
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 import { inject, observer } from 'mobx-react'
-import Slider from 'react-slick'
-
-import { IUser, ILink } from 'src/models/user.models'
+import { IUserPP, ILink, IMAchineBuilderXp } from 'src/models/user_pp.models'
 import { UserStore } from 'src/stores/User/user.store'
 import Heading from 'src/components/Heading'
 import { Box, Link, Image } from 'rebass'
 import { Avatar } from 'src/components/Avatar'
 import Text from 'src/components/Text'
+import Slider from 'react-slick'
 import styled from 'styled-components'
 import Icon from 'src/components/Icons'
 import Flex from 'src/components/Flex'
@@ -32,7 +31,7 @@ import CollectionBadge from 'src/assets/images/badges/pt-collection-point.svg'
 import MemberBadge from 'src/assets/images/badges/pt-member.svg'
 import MachineBadge from 'src/assets/images/badges/pt-machine-shop.svg'
 import WorkspaceBadge from 'src/assets/images/badges/pt-workspace.svg'
-import LocalComBadge from 'src/assets/images/badges/pt-community-point.svg'
+import LocalComBadge from 'src/assets/images/badges/pt-local-community.svg'
 
 // Plastic types
 import HDPEIcon from 'src/assets/images/plastic-types/hdpe.svg'
@@ -52,6 +51,8 @@ import BazarIcon from 'src/assets/icons/icon-bazar.svg'
 import SocialIcon from 'src/assets/icons/icon-social-media.svg'
 import IconForum from 'src/assets/icons/icon-forum.svg'
 import IconWebsite from 'src/assets/icons/icon-website.svg'
+import { IUploadedFileMeta } from 'src/stores/storage'
+import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 
 const MOCK_PROFILE_TYPES = [
   {
@@ -229,12 +230,8 @@ interface IOpeningHours {
   openTo: string
 }
 
-interface IMachineBuilderXp {
-  label: string
-}
-
 interface IState {
-  user?: IUser
+  user?: IUserPP
   isLoading: boolean
 }
 
@@ -548,7 +545,11 @@ export class UserPage extends React.Component<
     )
   }
 
-  public findWorkspaceType(workspaceType: string) {
+  public findWorkspaceType(workspaceType?: string) {
+    if (!workspaceType) {
+      return WorkspaceBadge
+    }
+
     const profileTypeObj = MOCK_PROFILE_TYPES.find(
       type => type.label === workspaceType,
     )
@@ -556,8 +557,6 @@ export class UserPage extends React.Component<
     if (profileTypeObj) {
       return profileTypeObj
     }
-
-    return WorkspaceBadge
   }
 
   public renderPlasticTypes(plasticTypes: Array<IPlasticTypes>) {
@@ -613,14 +612,14 @@ export class UserPage extends React.Component<
     )
   }
 
-  public renderMachineBuilderXp(machineBuilderXp: Array<IMachineBuilderXp>) {
+  public renderMachineBuilderXp(machineBuilderXp: Array<IMAchineBuilderXp>) {
     return (
       <>
         <h4>We offer the following services:</h4>
-        {machineBuilderXp.map(machineExperience => {
+        {machineBuilderXp.map((machineExperience, index) => {
           return (
-            <MachineExperienceTab key={machineExperience.label}>
-              {machineExperience.label}
+            <MachineExperienceTab key={`machineXp-${index}`}>
+              {machineExperience}
             </MachineExperienceTab>
           )
         })}
@@ -667,20 +666,36 @@ export class UserPage extends React.Component<
 
     console.log('USER', user)
 
-    const workspaceImgUrl = this.findWorkspaceType(MOCK_PROPS.workspaceType)
+    const workspaceImgUrl = this.findWorkspaceType(user.profileType)
 
     console.log('workspaceImgUrl', workspaceImgUrl)
+
+    const coverImage = (
+      <SliderImage bgImg="https://uploads-ssl.webflow.com/5d41aacc625e7f69441ddaff/5d4986d7c03a642fe243f86d_IMG_20181030_110139.jpg" />
+    )
+
+    // if(user.coverImages && user.coverImages.length > 0) {
+    //   const coverImages: Array<IConvertedFileMeta|IUploadedFileMeta> = user.coverImages;
+    //   coverImages.map((image)=> {
+    //     if (image.objectUrl) {
+
+    //     } else {
+
+    //     }
+    //   })
+    //   // coverImage = (
+    //   //   <>
+    //   //     {user.coverImages.map(() => {
+    //   //       return (<div>TEST</div>)
+    //   //     })}
+    //   //   </>
+    //   // )
+    // }
 
     return (
       <ProfileWrapper mt={4} mb={6}>
         <ProfileWrapperCarousel>
-          <Slider {...settings}>
-            {MOCK_PROPS.coverImages.map((image, index) => {
-              return (
-                <SliderImage key={`slide-${index}`} bgImg={image.downloadUrl} />
-              )
-            })}
-          </Slider>
+          <Slider {...settings}>{coverImage}</Slider>
         </ProfileWrapperCarousel>
         <ProfileContentWrapper mt={['-122px', '-122px', 0]} px={4} py={4}>
           <ProfileContent width={['100%', '100%', '80%']}>
@@ -692,7 +707,7 @@ export class UserPage extends React.Component<
 
             <UserCategory bgImg={workspaceImgUrl.highlightSrc}>
               <Heading small bold width={1}>
-                {capitalizeFirstLetter(MOCK_PROPS.workspaceType)}
+                {capitalizeFirstLetter(user.profileType || 'PP')}
               </Heading>
             </UserCategory>
 
@@ -711,22 +726,22 @@ export class UserPage extends React.Component<
               lorem imperdiet. Nunc ut sem vitae risus tristique posuere.
             </UserDescription>
 
-            {MOCK_PROPS.workspaceType === 'collection-point' &&
-              MOCK_PROPS.collectedPlasticTypes &&
+            {user.profileType === 'collection-point' &&
+              user.collectedPlasticTypes &&
               this.renderPlasticTypes(MOCK_PROPS.collectedPlasticTypes)}
 
-            {MOCK_PROPS.workspaceType === 'collection-point' &&
-              MOCK_PROPS.collectedPlasticTypes &&
+            {user.profileType === 'collection-point' &&
+              user.collectedPlasticTypes &&
               this.renderOpeningHours(MOCK_PROPS.openingHours)}
 
-            {MOCK_PROPS.workspaceType === 'machine-builder' &&
-              MOCK_PROPS.machineBuilderXp &&
-              this.renderMachineBuilderXp(MOCK_PROPS.machineBuilderXp)}
+            {user.profileType === 'machine-builder' &&
+              user.machineBuilderXp &&
+              this.renderMachineBuilderXp(user.machineBuilderXp)}
 
-            {MOCK_PROPS.links && (
+            {user.links && (
               <UserContactInfo>
                 <h3>Contact &amp; Links</h3>
-                {this.renderLinks(MOCK_PROPS.links)}
+                {this.renderLinks(user.links)}
               </UserContactInfo>
             )}
 

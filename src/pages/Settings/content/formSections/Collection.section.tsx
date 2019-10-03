@@ -4,37 +4,23 @@ import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import { Box, Image } from 'rebass'
-import { HiddenInput, Label, FlexSectionContainer } from './elements'
-import { InputField } from 'src/components/Form/Fields'
+import { FlexSectionContainer } from './elements'
 import { OpeningHoursPicker } from './OpeningHoursPicker.field'
 
-// assets
-import Pet from 'src/assets/images/plastic-types/pet.svg'
-import PP from 'src/assets/images/plastic-types/pp.svg'
-import PS from 'src/assets/images/plastic-types/ps.svg'
-import Hdpe from 'src/assets/images/plastic-types/hdpe.svg'
-import Ldpe from 'src/assets/images/plastic-types/ldpe.svg'
-import Other from 'src/assets/images/plastic-types/other.svg'
-import Pvc from 'src/assets/images/plastic-types/pvc.svg'
 import { FieldArray } from 'react-final-form-arrays'
 import { Button } from 'src/components/Button'
+import { CustomCheckbox } from './Fields/CustomCheckbox.field'
+import { PLASTIC_TYPES } from 'src/mocks/user_pp.mock'
 
 interface IProps {
   onInputChange: (inputValue: string) => void
 }
-interface IState {
-  checkedFocusValue?: string
-}
+
+interface IState {}
 
 export class CollectionSection extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
-    this.state = {}
-  }
-
-  public onInputChange(value: string) {
-    this.setState({ checkedFocusValue: value })
-    this.props.onInputChange(value)
   }
 
   render() {
@@ -47,12 +33,13 @@ export class CollectionSection extends React.Component<IProps, IState> {
               Opening time *
             </Text>
           </Flex>
-          <FieldArray name="links">
+          <FieldArray name="openingHours">
             {({ fields }) => (
               <>
                 {fields.map((name, index: number) => (
                   <OpeningHoursPicker
                     key={index}
+                    openingHoursValues={name}
                     index={index}
                     onDelete={(fieldIndex: number) => {
                       fields.remove(fieldIndex)
@@ -64,8 +51,9 @@ export class CollectionSection extends React.Component<IProps, IState> {
                   variant="outline"
                   onClick={() => {
                     fields.push({
-                      label: '',
-                      url: '',
+                      day: '',
+                      openFrom: '',
+                      openTo: '',
                     })
                   }}
                 >
@@ -78,139 +66,40 @@ export class CollectionSection extends React.Component<IProps, IState> {
             Plastic types accepted *
           </Text>
           <Flex wrap="nowrap">
-            <Label
-              htmlFor="col-pt-1"
-              className={
-                this.state.checkedFocusValue === 'col-pt-1'
-                  ? 'selected'
-                  : undefined
-              }
-            >
-              <HiddenInput
-                id="col-pt-1"
-                value="col-pt-1"
-                name="title"
-                type="radio"
-                component={InputField}
-                checked={this.state.checkedFocusValue === 'col-pt-1'}
-                onChange={v => this.onInputChange(v.target.value)}
-              />
-              <Image px={3} src={Pet} />
-            </Label>
-            <Label
-              htmlFor="col-pt-2"
-              className={
-                this.state.checkedFocusValue === 'col-pt-2'
-                  ? 'selected'
-                  : undefined
-              }
-            >
-              <HiddenInput
-                id="col-pt-2"
-                value="col-pt-2"
-                name="title"
-                type="radio"
-                component={InputField}
-                checked={this.state.checkedFocusValue === 'col-pt-2'}
-                onChange={v => this.onInputChange(v.target.value)}
-              />
-              <Image px={3} src={Hdpe} />
-            </Label>
-            <Label
-              htmlFor="col-pt-3"
-              className={
-                this.state.checkedFocusValue === 'col-pt-3'
-                  ? 'selected'
-                  : undefined
-              }
-            >
-              <HiddenInput
-                id="col-pt-3"
-                value="col-pt-3"
-                name="title"
-                type="radio"
-                component={InputField}
-                checked={this.state.checkedFocusValue === 'col-pt-3'}
-                onChange={v => this.onInputChange(v.target.value)}
-              />
-              <Image px={3} src={Pvc} />
-            </Label>
-            <Label
-              htmlFor="col-pt-4"
-              className={
-                this.state.checkedFocusValue === 'col-pt-4'
-                  ? 'selected'
-                  : undefined
-              }
-            >
-              <HiddenInput
-                id="col-pt-4"
-                value="col-pt-4"
-                name="title"
-                type="radio"
-                component={InputField}
-                checked={this.state.checkedFocusValue === 'col-pt-4'}
-                onChange={v => this.onInputChange(v.target.value)}
-              />
-              <Image px={3} src={Ldpe} />
-            </Label>
-            <Label
-              htmlFor="col-pt-5"
-              className={
-                this.state.checkedFocusValue === 'col-pt-5'
-                  ? 'selected'
-                  : undefined
-              }
-            >
-              <HiddenInput
-                id="col-pt-5"
-                value="col-pt-5"
-                name="title"
-                type="radio"
-                component={InputField}
-                checked={this.state.checkedFocusValue === 'col-pt-5'}
-                onChange={v => this.onInputChange(v.target.value)}
-              />
-              <Image px={3} src={PP} />
-            </Label>
-            <Label
-              htmlFor="col-pt-6"
-              className={
-                this.state.checkedFocusValue === 'col-pt-6'
-                  ? 'selected'
-                  : undefined
-              }
-            >
-              <HiddenInput
-                id="col-pt-6"
-                value="col-pt-6"
-                name="title"
-                type="radio"
-                component={InputField}
-                checked={this.state.checkedFocusValue === 'col-pt-6'}
-                onChange={v => this.onInputChange(v.target.value)}
-              />
-              <Image px={3} src={PS} />
-            </Label>
-            <Label
-              htmlFor="col-pt-7"
-              className={
-                this.state.checkedFocusValue === 'col-pt-7'
-                  ? 'selected'
-                  : undefined
-              }
-            >
-              <HiddenInput
-                id="col-pt-7"
-                value="col-pt-7"
-                name="title"
-                type="radio"
-                component={InputField}
-                checked={this.state.checkedFocusValue === 'col-pt-7'}
-                onChange={v => this.onInputChange(v.target.value)}
-              />
-              <Image px={3} src={Other} />
-            </Label>
+            <FieldArray name="collectedPlasticTypes">
+              {({ fields }) => (
+                <>
+                  {PLASTIC_TYPES.map((plastic, index: number) => (
+                    <CustomCheckbox
+                      key={index}
+                      value={plastic.label}
+                      index={index}
+                      isSelected={
+                        fields.value
+                          ? fields.value.includes(plastic.label)
+                          : false
+                      }
+                      onChange={() => {
+                        if (fields.value && fields.value.length !== 0) {
+                          if (fields.value.includes(plastic.label)) {
+                            fields.value.map((value, selectedValIndex) => {
+                              if (value === plastic.label) {
+                                fields.remove(selectedValIndex)
+                              }
+                            })
+                          } else {
+                            fields.push(plastic.label)
+                          }
+                        } else {
+                          fields.push(plastic.label)
+                        }
+                      }}
+                      imageSrc={plastic.imageSrc}
+                    />
+                  ))}
+                </>
+              )}
+            </FieldArray>
           </Flex>
         </Box>
       </FlexSectionContainer>

@@ -7,11 +7,13 @@ import {
   IHowtoDB,
 } from 'src/models/howto.models'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
-import { Storage, IUploadedFileMeta } from '../storage'
+import { IUploadedFileMeta } from '../storage'
 import { ModuleStore } from '../common/module.store'
 import { ISelectedTags } from 'src/models/tags.model'
 import { RootStore } from '..'
 import { IUser } from 'src/models/user.models'
+
+const COLLECTION_NAME = 'v2_howtos'
 
 export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
@@ -26,7 +28,7 @@ export class HowtoStore extends ModuleStore {
   constructor(rootStore: RootStore) {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
-    super(rootStore, 'v2_howtos')
+    super(rootStore, COLLECTION_NAME)
     this.allDocs$.subscribe(docs => {
       this.allHowtos = docs as IHowtoDB[]
     })
@@ -36,7 +38,7 @@ export class HowtoStore extends ModuleStore {
   @action
   public async getDocBySlug(slug: string) {
     const collection = await this.db
-      .collection<IHowto>('v2_howtos')
+      .collection<IHowto>(COLLECTION_NAME)
       .getWhere('slug', '==', slug)
     const activeHowto = collection.length > 0 ? collection[0] : undefined
     this.activeHowto = activeHowto
@@ -59,7 +61,7 @@ export class HowtoStore extends ModuleStore {
   public async uploadHowTo(values: IHowtoFormInput | IHowtoDB) {
     // create a reference either to the existing document (if editing) or a new document if creating
     const dbRef = this.db
-      .collection<IHowto>('v2_howtos')
+      .collection<IHowto>(COLLECTION_NAME)
       .doc((values as IHowtoDB)._id)
     const id = dbRef.id
     const user = this.activeUser as IUser
@@ -68,14 +70,19 @@ export class HowtoStore extends ModuleStore {
       // if cover already uploaded stored as object not array
       // file and step image re-uploads handled in uploadFile script
       const processedCover = Array.isArray(values.cover_image)
-        ? await this.uploadHowToFile(values.cover_image[0], id)
+        ? await this.uploadFileToCollection(
+            values.cover_image[0],
+            COLLECTION_NAME,
+            id,
+          )
         : (values.cover_image as IUploadedFileMeta)
       this.updateUploadStatus('Cover')
       const processedSteps = await this.processSteps(values.steps, id)
       this.updateUploadStatus('Step Images')
       // upload files
-      const processedFiles = await this.uploadHowToBatch(
+      const processedFiles = await this.uploadCollectionBatch(
         values.files as File[],
+        COLLECTION_NAME,
         id,
       )
       this.updateUploadStatus('Files')
@@ -109,48 +116,17 @@ export class HowtoStore extends ModuleStore {
     for (const step of steps) {
       // determine any new images to upload
       const stepImages = step.images as IConvertedFileMeta[]
-      const imgMeta = await this.uploadHowToBatch(stepImages, id)
+      const imgMeta = await this.uploadCollectionBatch(
+        stepImages,
+        COLLECTION_NAME,
+        id,
+      )
       step.images = imgMeta
       stepsWithImgMeta.push({ ...step, images: imgMeta })
     }
     return stepsWithImgMeta
   }
-
-  private uploadHowToFile(
-    file: File | IConvertedFileMeta | IUploadedFileMeta,
-    id: string,
-  ) {
-    console.log('uploading file', file)
-    // if already uploaded (e.g. editing but not replaced), skip
-    if (file.hasOwnProperty('downloadUrl')) {
-      console.log('file already uploaded, skipping')
-      return file as IUploadedFileMeta
-    }
-    // switch between converted file meta or standard file input
-    let data: File | Blob = file as File
-    if (file.hasOwnProperty('photoData')) {
-      file = file as IConvertedFileMeta
-      data = file.photoData
-    }
-    return Storage.uploadFile(
-      `uploads/v2_howtos/${id}`,
-      file.name,
-      data,
-      file.type,
-    )
-  }
-
-  private async uploadHowToBatch(
-    files: (File | IConvertedFileMeta)[],
-    id: string,
-  ) {
-    const promises = files.map(async file => {
-      return this.uploadHowToFile(file, id)
-    })
-    return Promise.all(promises)
-  }
 }
-
 interface IHowToUploadStatus {
   Cover: boolean
   Files: boolean

@@ -1,31 +1,27 @@
 import * as React from 'react'
 import { Field } from 'react-final-form'
 import Heading from 'src/components/Heading'
-import { IUser } from 'src/models/user.models'
+import { IUserPP } from 'src/models/user_pp.models'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
-import { InputField, YearPicker } from 'src/components/Form/Fields'
-import { inputStyles } from 'src/components/Form/elements'
+import { InputField, TextAreaField } from 'src/components/Form/Fields'
 import { FlagSelector } from 'src/components/Form/Select.field'
 import { Button } from 'src/components/Button'
-import { Box } from 'rebass'
 import { getCountryCode } from 'src/utils/helpers'
 import 'react-flags-select/scss/react-flags-select.scss'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
 import { FieldArray } from 'react-final-form-arrays'
-import { Link } from './Link.field'
-import { timestampToYear } from 'src/utils/helpers'
+import { Link } from './Fields/Link.field'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { FlexSectionContainer } from './elements'
 
 interface IProps {
-  user: IUser
+  user: IUserPP
 }
 interface IState {
   readOnly: boolean
   isSaving?: boolean
-  showYearSelector?: boolean
   showNotification?: boolean
   showComLinks?: boolean
 }
@@ -39,19 +35,12 @@ const FlagSelectContainer = styled(Flex)`
   height: 40px;
 `
 
-const YearBox = styled(Box)`
-  ${inputStyles}
-  cursor: pointer;
-  height: 40px;
-`
-
 export class UserInfosSection extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
 
     this.state = {
       readOnly: true,
-      showYearSelector: false,
       showComLinks: props.user && props.user.links ? true : false,
     }
     this.changeComLinkSwitch = this.changeComLinkSwitch.bind(this)
@@ -59,16 +48,6 @@ export class UserInfosSection extends React.Component<IProps, IState> {
 
   public changeComLinkSwitch() {
     this.setState({ showComLinks: !this.state.showComLinks })
-  }
-
-  public displayYear(dateOrTmstp) {
-    // if date comes from db, it will be formated in firebase.Timestamp whereas if it comes from calendar (user modifications) it's a Date object
-    // this fn check the type of the date and return a year in format YYYY
-    if (dateOrTmstp instanceof Date && !isNaN(dateOrTmstp.valueOf())) {
-      return dateOrTmstp.getFullYear()
-    } else {
-      return timestampToYear(dateOrTmstp.seconds)
-    }
   }
 
   render() {
@@ -103,7 +82,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
           </Text>
           <Field
             name="about"
-            component={InputField}
+            component={TextAreaField}
             placeholder="Describe in details what you do and who you are."
           />
           <Text mb={2} mt={7} medium>
@@ -143,33 +122,6 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             component={ImageInputField}
             multi
           />
-          {/* )} */}
-          {/* <Text width={1} mt={2} medium>
-            Birth year :
-          </Text>
-          <YearBox
-            width={1}
-            onClick={() => {
-              this.setState({
-                showYearSelector: !this.state.showYearSelector,
-              })
-            }}
-          >
-            <Icon glyph={'arrow-down'} />
-            <Text inline ml={2}>
-              {user.year ? this.displayYear(user.year) : 'Choose a date'}
-            </Text>
-          </YearBox>
-          {this.state.showYearSelector && (
-            <Field
-              name="year"
-              component={YearPicker}
-              onChange={year => {
-                user.year = year
-                this.setState({ showYearSelector: false })
-              }}
-            />
-          )} */}
         </Flex>
         <Flex wrap={'nowrap'} alignItems={'center'} width={1}>
           <Text mb={2} mt={7} medium>

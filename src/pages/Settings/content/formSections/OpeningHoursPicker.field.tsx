@@ -50,14 +50,14 @@ export class OpeningHoursPicker extends React.Component<IProps, IState> {
           style={{ width: '160px', marginRight: '8px', marginBottom: 0 }}
         />
         <Field
-          name={`${openingHoursValues}.from_hour`}
+          name={`${openingHoursValues}.openFrom`}
           options={OPENING_HOURS}
           component={SelectField}
           placeholder="from --:-- AM"
           style={{ width: '160px', marginRight: '8px', marginBottom: 0 }}
         />
         <Field
-          name={`${openingHoursValues}.to_hour`}
+          name={`${openingHoursValues}.openTo`}
           options={OPENING_HOURS}
           component={SelectField}
           placeholder="to --:-- PM"

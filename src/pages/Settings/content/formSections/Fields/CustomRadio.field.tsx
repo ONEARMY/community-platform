@@ -61,7 +61,7 @@ class CustomRadioField extends Component<IProps, IState> {
             this.props.onChange(v.target.value)
           }}
         />
-        {imageSrc && <Image px={3} src={imageSrc} />}
+        {imageSrc && <Image px={3} src={imageSrc} width="100%" />}
         {textLabel && (
           <Text px={1} my={1} txtcenter small>
             {textLabel}

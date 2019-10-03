@@ -19,10 +19,6 @@ export const Label = styled.label`
   }
   &.full-width {
     flex: 1;
-
-    img {
-      width: 100%;
-    }
   }
 `
 

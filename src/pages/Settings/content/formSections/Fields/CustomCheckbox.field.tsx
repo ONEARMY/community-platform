@@ -56,7 +56,7 @@ class CustomCheckbox extends Component<IProps, IState> {
           checked={isSelected}
           onChange={() => this.props.onChange(index)}
         />
-        {imageSrc && <Image px={3} src={imageSrc} height="100%" />}
+        {imageSrc && <Image px={3} src={imageSrc} width="100%" />}
         {btnLabel && (
           <Text medium m="10px">
             {btnLabel}

@@ -158,14 +158,8 @@ class HowtoStep extends Component<IProps, IState> {
             </Flex>
           ) : (
             <>
-              <div
-                style={{
-                  display: 'flex',
-                }}
-              >
-                <div
-                  style={{ height: '100px', width: '150px', marginRight: 10 }}
-                >
+              <Flex>
+                <Box height="100px" width="150px" mr={10}>
                   <Field
                     canDelete
                     hasText={false}
@@ -173,10 +167,8 @@ class HowtoStep extends Component<IProps, IState> {
                     name={`${step}.images`}
                     component={ImageInputField}
                   />
-                </div>
-                <div
-                  style={{ height: '100px', width: '150px', marginRight: 10 }}
-                >
+                </Box>
+                <Box height="100px" width="150px" mr={10}>
                   <Field
                     canDelete
                     hasText={false}
@@ -184,8 +176,8 @@ class HowtoStep extends Component<IProps, IState> {
                     name={`${step}.images`}
                     component={ImageInputField}
                   />
-                </div>
-                <div style={{ height: '100px', width: '150px' }}>
+                </Box>
+                <Box height="100px" width="150px" mr={10}>
                   <Field
                     canDelete
                     hasText={false}
@@ -193,8 +185,8 @@ class HowtoStep extends Component<IProps, IState> {
                     name={`${step}.images`}
                     component={ImageInputField}
                   />
-                </div>
-              </div>
+                </Box>
+              </Flex>
             </>
           )}
         </Flex>

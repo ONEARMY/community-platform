@@ -54,6 +54,7 @@ import RedirectIcon from 'src/assets/icons/link-target-blank.svg'
 
 import { IUploadedFileMeta } from 'src/stores/storage'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
+import { getCountryCode } from 'src/utils/helpers'
 
 interface IRouterCustomParams {
   id: string
@@ -73,14 +74,6 @@ interface IState {
 }
 
 interface IProps {}
-
-const Circle = styled(Flex)`
-  border-radius: 50%;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-`
 
 const UserCategory = styled.div`
   position: relative;
@@ -112,7 +105,7 @@ const UserName = styled(Flex)``
 
 const UserDescription = styled.p`
   color: ${theme.colors.grey};
-
+  white-space: pre-line;
   margin-top: 0px;
   margin-bottom: 20px;
 
@@ -332,7 +325,7 @@ export class UserPage extends React.Component<
         case 'other':
           return (
             <ElWithBeforeIcon
-              key="link-other"
+              key={'link-other' + index}
               IconUrl={OtherIcon}
               height="25px"
             >
@@ -344,7 +337,7 @@ export class UserPage extends React.Component<
         default:
           return (
             <ElWithBeforeIcon
-              key="link-other"
+              key={'link-other' + index}
               IconUrl={RedirectIcon}
               height="25px"
             >

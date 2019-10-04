@@ -12,7 +12,7 @@ interface IProps {
 }
 
 export const HowToCard = (props: IProps) => (
-  <Flex card mediumRadius mediumScale bg={'white'} width={1}>
+  <Flex card mediumRadius mediumScale bg={'white'} width={1} data-cy={'card'}>
     <Link
       to={`/how-to/${encodeURIComponent(props.howto.slug)}`}
       key={props.howto._id}

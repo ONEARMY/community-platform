@@ -23,6 +23,7 @@ export default class Step extends React.PureComponent<IProps> {
     return (
       <>
         <Flex
+          data-cy={'step'}
           mx={[0, 0, -2]}
           mt={9}
           flexDirection={['column', 'column', 'row']}

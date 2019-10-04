@@ -65,7 +65,7 @@ export class CollectionSection extends React.Component<IProps, IState> {
           <Text regular my={4}>
             Plastic types accepted *
           </Text>
-          <Flex wrap="nowrap">
+          <Flex wrap="nowrap" my="10px">
             <FieldArray name="collectedPlasticTypes">
               {({ fields }) => (
                 <>

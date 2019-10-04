@@ -41,7 +41,7 @@ export class MenuDesktop extends React.Component {
   render() {
     return (
       <>
-        <Flex alignItems={'center'} sx={{ display: ['flex', 'none'] }}>
+        <Flex alignItems={'center'}>
           {COMMUNITY_PAGES.map(page => (
             <Flex key={page.path}>
               <MenuLink to={page.path}>

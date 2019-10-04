@@ -126,6 +126,7 @@
     "prod:copy": "cp .env .env-default && cp ./.env-prod ./.env",
     "prod:restore": "cp .env-default .env && rm .env-default",
     "cy:run": "yarn run cypress run",
+    "cy:run:debug": "DEBUG=cypress:* yarn run cypress run",
     "cy:open": "yarn run cypress open",
     "cy:ci": "start-server-and-test start http://localhost:3000 cy:run"
   },

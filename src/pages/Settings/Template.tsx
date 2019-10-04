@@ -1,6 +1,5 @@
 import { IUserPP } from 'src/models/user_pp.models'
-
-const INITIAL_VALUES: Partial<IUserPP> = {
+export const INITIAL_VALUES: Partial<IUserPP> = {
   links: [
     {
       label: '',
@@ -14,8 +13,4 @@ const INITIAL_VALUES: Partial<IUserPP> = {
       openTo: '',
     },
   ],
-}
-
-export default {
-  INITIAL_VALUES,
 }

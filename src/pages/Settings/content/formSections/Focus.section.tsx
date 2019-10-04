@@ -46,6 +46,7 @@ export class FocusSection extends React.Component<IProps, IState> {
             {PROFILE_TYPES.map((profile, index: number) => (
               <CustomRadioField
                 key={index}
+                fullWidth
                 value={profile.label}
                 name="profileType"
                 isSelected={this.state.checkedFocusValue === profile.label}

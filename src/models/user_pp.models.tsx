@@ -72,7 +72,7 @@ export interface IUserPP extends IUser {
   links?: ILink[]
   mapPinDescription?: string
   openingHours?: IOpeningHours[]
-  collectedPlasticTypes?: IPlasticType[]
+  collectedPlasticTypes?: PlasticTypeLabel[]
   machineBuilderXp?: IMAchineBuilderXp[]
   isExpert?: boolean
   isV4Member?: boolean

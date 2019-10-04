@@ -5,7 +5,7 @@ import Text, { ITextProps } from 'src/components/Text'
 import { HeadingProps as RebassHeadingProps } from 'rebass'
 
 export const large = (props: ITextProps) =>
-  props.medium ? { fontSize: theme.fontSizes[6] } : null
+  props.large ? { fontSize: theme.fontSizes[6] } : null
 export const medium = (props: ITextProps) =>
   props.medium ? { fontSize: theme.fontSizes[5] } : null
 export const small = (props: ITextProps) =>

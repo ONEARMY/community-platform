@@ -17,6 +17,9 @@ export const Label = styled.label`
     background-color: ${theme.colors.background};
     border: 1px solid ${theme.colors.green};
   }
+  &.full-width {
+    flex: 1;
+  }
 `
 
 export const HiddenInput = styled(Field)`

@@ -7,20 +7,20 @@ import { MOCK_DB_META } from './db.mock'
 import { IPlasticType, IMAchineBuilderXp } from 'src/models/user_pp.models'
 
 // assets plasticType
-import Pet from 'src/assets/images/plastic-types/pet.jpg'
-import PP from 'src/assets/images/plastic-types/pp.jpg'
-import PS from 'src/assets/images/plastic-types/ps.jpg'
-import Hdpe from 'src/assets/images/plastic-types/hdpe.jpg'
-import Ldpe from 'src/assets/images/plastic-types/ldpe.jpg'
-import Other from 'src/assets/images/plastic-types/other.jpg'
-import Pvc from 'src/assets/images/plastic-types/pvc.jpg'
+import Pet from 'src/assets/images/plastic-types/pet.svg'
+import PP from 'src/assets/images/plastic-types/pp.svg'
+import PS from 'src/assets/images/plastic-types/ps.svg'
+import Hdpe from 'src/assets/images/plastic-types/hdpe.svg'
+import Ldpe from 'src/assets/images/plastic-types/ldpe.svg'
+import Other from 'src/assets/images/plastic-types/other.svg'
+import Pvc from 'src/assets/images/plastic-types/pvc.svg'
 
 // assets profileType
-import CollectionBadge from 'src/assets/images/badges/pt-collection-point.jpg'
-import MemberBadge from 'src/assets/images/badges/pt-member.jpg'
-import MachineBadge from 'src/assets/images/badges/pt-machine-shop.jpg'
-import WorkspaceBadge from 'src/assets/images/badges/pt-workspace.jpg'
-import LocalComBadge from 'src/assets/images/badges/pt-local-community.jpg'
+import CollectionBadge from 'src/assets/images/badges/pt-collection-point.svg'
+import MemberBadge from 'src/assets/images/badges/pt-member.svg'
+import MachineBadge from 'src/assets/images/badges/pt-machine-shop.svg'
+import WorkspaceBadge from 'src/assets/images/badges/pt-workspace.svg'
+import LocalComBadge from 'src/assets/images/badges/pt-local-community.svg'
 
 // assets workspaceType
 import Extrusion from 'src/assets/images/workspace-focus/extrusion.jpg'

@@ -7,6 +7,14 @@ import {
   SpaceProps,
 } from 'styled-system'
 
+import EventsIcon from 'src/assets/icons/icon-events.svg'
+import ExpertIcon from 'src/assets/icons/icon-expert.svg'
+import HowToCountIcon from 'src/assets/icons/icon-how-to.svg'
+import V4MemberIcon from 'src/assets/icons/icon-v4-member.svg'
+import DiscordIcon from 'src/assets/icons/icon-discord.svg'
+import BazarIcon from 'src/assets/icons/icon-bazar.svg'
+import SocialIcon from 'src/assets/icons/icon-social-media.svg'
+
 import {
   MdFileDownload,
   MdAdd,
@@ -28,6 +36,8 @@ import {
   MdArrowForward,
   MdLocationOn,
   MdMail,
+  MdChevronLeft,
+  MdChevronRight,
 } from 'react-icons/md'
 import {
   GoCloudUpload,
@@ -87,8 +97,12 @@ export type availableGlyphs =
   | 'slack'
   | 'discord'
   | 'email'
+  | 'chevron-left'
+  | 'chevron-right'
 
 export type IGlyphs = { [k in availableGlyphs]: JSX.Element }
+
+const DiscordIconComp = () => <img src={DiscordIcon} />
 
 export const glyphs: IGlyphs = {
   download: <MdFileDownload />,
@@ -119,8 +133,10 @@ export const glyphs: IGlyphs = {
   facebook: <FaFacebookF />,
   instagram: <FaInstagram />,
   slack: <FaSlack />,
-  discord: <FaDiscord />,
+  discord: <DiscordIconComp />,
   email: <MdMail />,
+  'chevron-left': <MdChevronLeft />,
+  'chevron-right': <MdChevronRight />,
 }
 
 type WrapperProps = IProps & VerticalAlignProps & SpaceProps

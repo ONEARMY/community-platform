@@ -6,6 +6,7 @@ import Text from 'src/components/Text'
 import { Box, Image } from 'rebass'
 import { FlexSectionContainer } from './elements'
 import { OpeningHoursPicker } from './OpeningHoursPicker.field'
+
 import { FieldArray } from 'react-final-form-arrays'
 import { Button } from 'src/components/Button'
 import { CustomCheckbox } from './Fields/CustomCheckbox.field'
@@ -64,13 +65,14 @@ export class CollectionSection extends React.Component<IProps, IState> {
           <Text regular my={4}>
             Plastic types accepted *
           </Text>
-          <Flex wrap="nowrap">
+          <Flex wrap="nowrap" my="10px">
             <FieldArray name="collectedPlasticTypes">
               {({ fields }) => (
                 <>
                   {PLASTIC_TYPES.map((plastic, index: number) => (
                     <CustomCheckbox
                       key={index}
+                      fullWidth
                       value={plastic.label}
                       index={index}
                       isSelected={

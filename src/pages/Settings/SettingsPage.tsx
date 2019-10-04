@@ -21,9 +21,9 @@ import { Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import { UserMapPinSection } from './content/formSections/MapPin.section'
 import theme from 'src/themes/styled.theme'
-import { ProfileTypeLabel } from 'src/models/user_pp.models'
+import { INITIAL_VALUES } from './Template'
 
-interface IFormValues extends Partial<IUserPP> {
+export interface IFormValues extends Partial<IUserPP> {
   // form values are simply subset of user profile fields
 }
 interface IProps {
@@ -60,7 +60,7 @@ export class UserSettings extends React.Component<IProps, IState> {
     return this.props as IInjectedProps
   }
 
-  public async saveProfile(values: IFormValues) {
+  public async saveProfile(values: any) {
     const formValuesConcat = { ...this.state.customFormValues, ...values }
     console.log('profile values :', formValuesConcat)
     await this.injected.userStore.updateUserProfile(formValuesConcat)
@@ -76,12 +76,14 @@ export class UserSettings extends React.Component<IProps, IState> {
   }
 
   render() {
-    const user = this.injected.userStore.user
+    const user = this.injected.userStore.user!
     const { customFormValues } = this.state
     const readOnly = !this.state.editMode
     // Need to convert mobx observable user object into a Javasrcipt structure using toJS fn
     // to allow final-form-array to display the initial values
-    const initialFormValues = toJS(user)
+    const initialFormValues = user.profileType
+      ? toJS(user)
+      : { ...toJS(user), ...INITIAL_VALUES }
 
     return user ? (
       <Form
@@ -96,7 +98,11 @@ export class UserSettings extends React.Component<IProps, IState> {
           return (
             <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
               <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} my={4}>
-                <form id="userProfileForm" onSubmit={handleSubmit}>
+                <form
+                  id="userProfileForm"
+                  onSubmit={handleSubmit}
+                  style={{ width: '100%' }}
+                >
                   {/* How To Info */}
                   <Flex flexDirection={'column'}>
                     <Flex
@@ -133,7 +139,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           }
                         />
                         <UserInfosSection user={user} />
-                        <UserMapPinSection />
+                        <UserMapPinSection user={user} />
                       </>
                     )}
                     {customFormValues.profileType === 'collection-point' && (
@@ -142,20 +148,20 @@ export class UserSettings extends React.Component<IProps, IState> {
                         <CollectionSection
                           onInputChange={v => console.log(v)}
                         />
-                        <UserMapPinSection />
+                        <UserMapPinSection user={user} />
                       </>
                     )}
                     {customFormValues.profileType === 'community-builder' && (
                       <>
                         <UserInfosSection user={user} />
-                        <UserMapPinSection />
+                        <UserMapPinSection user={user} />
                       </>
                     )}
                     {customFormValues.profileType === 'machine-builder' && (
                       <>
                         <UserInfosSection user={user} />
                         <ExpertiseSection />
-                        <UserMapPinSection />
+                        <UserMapPinSection user={user} />
                       </>
                     )}
                     {customFormValues.profileType === 'member' && (

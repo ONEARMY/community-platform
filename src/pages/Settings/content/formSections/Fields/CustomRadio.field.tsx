@@ -13,6 +13,7 @@ interface IProps {
   textLabel?: string
   subText?: string
   name: string
+  fullWidth?: boolean
 }
 interface IState {
   showDeleteModal: boolean
@@ -30,9 +31,25 @@ class CustomRadioField extends Component<IProps, IState> {
   }
 
   render() {
-    const { value, imageSrc, isSelected, textLabel, subText, name } = this.props
+    const {
+      value,
+      imageSrc,
+      isSelected,
+      textLabel,
+      subText,
+      name,
+      fullWidth,
+    } = this.props
+    const classNames: Array<string> = []
+    if (isSelected) {
+      classNames.push('selected')
+    }
+    if (fullWidth) {
+      classNames.push('full-width')
+    }
+
     return (
-      <Label htmlFor={value} className={isSelected ? 'selected' : undefined}>
+      <Label htmlFor={value} className={classNames.join(' ')}>
         <HiddenInput
           id={value}
           name={name}
@@ -44,7 +61,7 @@ class CustomRadioField extends Component<IProps, IState> {
             this.props.onChange(v.target.value)
           }}
         />
-        {imageSrc && <Image px={3} src={imageSrc} />}
+        {imageSrc && <Image px={3} src={imageSrc} width="100%" />}
         {textLabel && (
           <Text px={1} my={1} txtcenter small>
             {textLabel}

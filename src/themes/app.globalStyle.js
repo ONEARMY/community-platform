@@ -1,5 +1,8 @@
 import { createGlobalStyle } from 'styled-components'
 import theme from 'src/themes/styled.theme'
+// Import css files for Slick-slider
+// import "../../node_modules/slick-carousel/slick/slick.css";
+// import "../../node_modules/slick-carousel/slick/slick-theme.css";
 
 export const GlobalStyle = createGlobalStyle`
 
@@ -25,6 +28,33 @@ export const GlobalStyle = createGlobalStyle`
 
   * {
     box-sizing: border-box;
+  }
+
+  .slick-prev,
+  .slick-next {
+    position: absolute;
+    top: 50%;
+    z-index: 100;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+
+  .slick-next {
+    left: auto;
+    right: 0;
+  }
+
+  .slick-prev {
+    left: 0;
+    right: auto;
+    
+  }
+
+  .slick-track {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
   }
 
   /***** Fix for Algolia search Icon *******/

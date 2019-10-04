@@ -139,7 +139,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           }
                         />
                         <UserInfosSection user={user} />
-                        <UserMapPinSection />
+                        <UserMapPinSection user={user} />
                       </>
                     )}
                     {customFormValues.profileType === 'collection-point' && (
@@ -148,20 +148,20 @@ export class UserSettings extends React.Component<IProps, IState> {
                         <CollectionSection
                           onInputChange={v => console.log(v)}
                         />
-                        <UserMapPinSection />
+                        <UserMapPinSection user={user} />
                       </>
                     )}
                     {customFormValues.profileType === 'community-builder' && (
                       <>
                         <UserInfosSection user={user} />
-                        <UserMapPinSection />
+                        <UserMapPinSection user={user} />
                       </>
                     )}
                     {customFormValues.profileType === 'machine-builder' && (
                       <>
                         <UserInfosSection user={user} />
                         <ExpertiseSection />
-                        <UserMapPinSection />
+                        <UserMapPinSection user={user} />
                       </>
                     )}
                     {customFormValues.profileType === 'member' && (

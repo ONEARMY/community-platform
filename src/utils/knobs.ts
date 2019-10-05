@@ -1,4 +1,4 @@
-import { withKnobs, text, boolean, number, color } from '@storybook/addon-knobs'
+import { array, text, boolean, number, color } from '@storybook/addon-knobs'
 
 const isColor = (strColor: string): boolean => {
   const style = new Option().style
@@ -8,31 +8,38 @@ const isColor = (strColor: string): boolean => {
   return test1 === true || test2 === true
 }
 
-export const knobsFactory = (element, name = 'props') => {
+export const knobsFactory = (
+  element: any,
+  name: string = 'props',
+  parent: string = '',
+) => {
   if (Array.isArray(element)) {
-    return element
+    return array(name, element, ', ')
   }
 
   if (typeof element === 'string') {
     if (isColor(element)) {
-      return color(name, element)
+      return color(name, element, parent)
     }
-    return text(name, element)
+    return text(name, element, parent)
   }
 
   if (typeof element === 'number') {
-    return number(name, element)
+    return number(name, element, {}, parent)
   }
 
   if (typeof element === 'boolean') {
-    return boolean(name, element)
+    return boolean(name, element, parent)
   }
 
   const keys = Object.keys(element)
 
   if (keys.length > 0) {
     return keys.reduce((accum, current) => {
-      return { ...accum, [current]: knobsFactory(element[current], current) }
+      return {
+        ...accum,
+        [current]: knobsFactory(element[current], current, name),
+      }
     }, {})
   }
 

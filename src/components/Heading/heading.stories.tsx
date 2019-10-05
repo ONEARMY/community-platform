@@ -23,16 +23,28 @@ stories.addParameters({
 })
 
 stories.add('default Heading', () => (
+  <Heading>
+    {text(
+      'text',
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit architecto ad inventore animi consequatur deserunt eaque eos excepturi, aliquam iusto placeat quam numquam debitis vel eligendi? A earum voluptates vel!',
+    )}
+  </Heading>
+))
+
+stories.add('playground Heading', () => (
   <Heading
     {...knobsFactory({
-      theme,
       large: true,
       medium: false,
       small: false,
       clipped: false,
       color: 'black',
+      theme,
     })}
   >
-    {text('text', 'Lorem ipsum dolor sit.')}
+    {text(
+      'text',
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit architecto ad inventore animi consequatur deserunt eaque eos excepturi, aliquam iusto placeat quam numquam debitis vel eligendi? A earum voluptates vel!',
+    )}
   </Heading>
 ))

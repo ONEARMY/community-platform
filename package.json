@@ -1,6 +1,6 @@
 {
-  "name": "one-army-world",
-  "version": "0.6.1",
+  "name": "precious-plastic-community-plateform",
+  "version": "0.7.0",
   "private": true,
   "dependencies": {
     "@babel/core": "7.2.2",

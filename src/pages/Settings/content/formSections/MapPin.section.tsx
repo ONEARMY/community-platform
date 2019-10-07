@@ -145,7 +145,7 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
                     ? [user.location.latlng.lat, user.location.latlng.lng]
                     : [lat, lng]
                 }
-                zoom={zoom}
+                zoom={user.location ? zoom : 1.5}
                 zoomControl={false}
                 style={{
                   height: '300px',
@@ -157,18 +157,19 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
                   attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <Marker
-                  position={
-                    user.location && user.location.latlng
-                      ? [user.location.latlng.lat, user.location.latlng.lng]
-                      : [lat, lng]
-                  }
-                  icon={customMarker}
-                >
-                  <Popup maxWidth={225} minWidth={225}>
-                    Add more content here later
-                  </Popup>
-                </Marker>
+                {user.location && user.location.latlng && (
+                  <Marker
+                    position={[
+                      user.location.latlng.lat,
+                      user.location.latlng.lng,
+                    ]}
+                    icon={customMarker}
+                  >
+                    <Popup maxWidth={225} minWidth={225}>
+                      My adress
+                    </Popup>
+                  </Marker>
+                )}
               </Map>
             </Box>
           ) : (

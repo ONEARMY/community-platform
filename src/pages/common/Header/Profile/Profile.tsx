@@ -79,6 +79,11 @@ export default class Profile extends React.Component<IProps, IState> {
               <ClickAwayListener onClickAway={this.closeProfileMenu}>
                 <>
                   <Text bold>{user.userName}</Text>
+                  <MenuItem onClick={this.closeProfileMenu}>
+                    <NavLink to={'/u/' + user.userName}>
+                      <Flex>Profile</Flex>
+                    </NavLink>
+                  </MenuItem>
                   {COMMUNITY_PAGES_PROFILE.map(page => (
                     <MenuItem onClick={this.closeProfileMenu} key={page.path}>
                       <NavLink to={page.path}>

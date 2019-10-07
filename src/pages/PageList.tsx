@@ -40,8 +40,8 @@ const settings = {
 const user = {
   path: '/u',
   component: <User />,
-  title: 'User profile',
-  description: 'User profile',
+  title: 'Profile',
+  description: 'Profile',
 }
 const academy = {
   path: '/academy',
@@ -121,7 +121,7 @@ const forgotpasswordmessage = {
 
 // community pages (various pages hidden on production build)
 const devCommunityPages = [howTo, events, maps, academy]
-const prodCommunityPages = [howTo, events, maps]
+const prodCommunityPages = [howTo, events]
 const communityPages =
   SITE === 'production' ? prodCommunityPages : devCommunityPages
 // community 'more' dropdown pages (various pages hidden on production build)

@@ -22,6 +22,7 @@ import arrayMutators from 'final-form-arrays'
 import { UserMapPinSection } from './content/formSections/MapPin.section'
 import theme from 'src/themes/styled.theme'
 import { INITIAL_VALUES } from './Template'
+import { Box } from 'rebass'
 
 export interface IFormValues extends Partial<IUserPP> {
   // form values are simply subset of user profile fields
@@ -213,30 +214,32 @@ export class UserSettings extends React.Component<IProps, IState> {
                 px={2}
                 mt={4}
               >
-                <PostingGuidelines />
-                <Button
-                  onClick={() => {
-                    const form = document.getElementById('userProfileForm')
-                    if (typeof form !== 'undefined' && form !== null) {
-                      form.dispatchEvent(
-                        new Event('submit', { cancelable: true }),
-                      )
-                    }
-                  }}
-                  width={1}
-                  mt={3}
-                  variant={'primary'}
-                  type="submit"
-                >
-                  Save profile
-                </Button>
-                <div style={{ float: 'right' }}>
-                  <TextNotification
-                    text="profile saved"
-                    icon="check"
-                    show={this.state.showNotification}
-                  />
-                </div>
+                <Box sx={{ position: 'fixed', maxWidth: '400px' }}>
+                  <PostingGuidelines />
+                  <Button
+                    onClick={() => {
+                      const form = document.getElementById('userProfileForm')
+                      if (typeof form !== 'undefined' && form !== null) {
+                        form.dispatchEvent(
+                          new Event('submit', { cancelable: true }),
+                        )
+                      }
+                    }}
+                    width={1}
+                    mt={3}
+                    variant={'primary'}
+                    type="submit"
+                  >
+                    Save profile
+                  </Button>
+                  <div style={{ float: 'right' }}>
+                    <TextNotification
+                      text="profile saved"
+                      icon="check"
+                      show={this.state.showNotification}
+                    />
+                  </div>
+                </Box>
               </Flex>
               <ProfileDelete
                 onConfirmation={reauthPw => this.deleteProfile(reauthPw)}

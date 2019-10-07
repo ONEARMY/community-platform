@@ -12,7 +12,10 @@ import { ExpertiseSection } from './content/formSections/Expertise.section'
 import { WorkspaceSection } from './content/formSections/Workspace.section'
 import { CollectionSection } from './content/formSections/Collection.section'
 import { Button } from 'src/components/Button'
-import { PostingGuidelines } from './content/PostingGuidelines'
+import {
+  CreateProfileGuidelines,
+  EditProfileGuidelines,
+} from './content/PostingGuidelines'
 import Heading from 'src/components/Heading'
 
 import { TextNotification } from 'src/components/Notification/TextNotification'
@@ -112,7 +115,11 @@ export class UserSettings extends React.Component<IProps, IState> {
                       px={3}
                       py={2}
                     >
-                      <Heading medium>Edit profile</Heading>
+                      {!user.profileType ? (
+                        <Heading medium>Create profile</Heading>
+                      ) : (
+                        <Heading medium>Edit profile</Heading>
+                      )}
                     </Flex>
                     <FocusSection
                       user={user}
@@ -215,7 +222,11 @@ export class UserSettings extends React.Component<IProps, IState> {
                 mt={4}
               >
                 <Box sx={{ position: 'fixed', maxWidth: '400px' }}>
-                  <PostingGuidelines />
+                  {!user.profileType ? (
+                    <CreateProfileGuidelines />
+                  ) : (
+                    <EditProfileGuidelines />
+                  )}
                   <Button
                     onClick={() => {
                       const form = document.getElementById('userProfileForm')

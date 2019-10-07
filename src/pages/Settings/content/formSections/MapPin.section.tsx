@@ -15,9 +15,11 @@ import { generatePinFilters } from 'src/mocks/maps.mock'
 import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
 import { IUserPP } from 'src/models/user_pp.models'
 import { Button } from 'src/components/Button'
+import { ILocation } from 'src/models/common.models'
 
 interface IProps {
   user: IUserPP
+  onInputChange: (v: ILocation) => void
 }
 // interface IInjectedProps extends IProps {
 //   mapsStore: MapsStore
@@ -39,6 +41,9 @@ const customMarker = L.icon({
 
 // const DEFAULT_PIN_TYPE: string = 'member'
 
+// validation - return undefined if no error (i.e. valid)
+const required = (value: any) => (value ? undefined : 'Required')
+
 @inject('mapsStore', 'userStore')
 @observer
 export class UserMapPinSection extends React.Component<IProps, IState> {
@@ -47,9 +52,11 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
     super(props)
     this.state = {
       editAddress: false,
-      lat: 51.4416,
-      lng: 5.4697,
-      zoom: 8,
+      lat:
+        props.user && props.user.location ? props.user.location.latlng.lat : 0,
+      lng:
+        props.user && props.user.location ? props.user.location.latlng.lng : 0,
+      zoom: props.user && props.user.location ? 15 : 1.5,
       isOpen: props.user && !props.user.profileType,
     }
   }
@@ -116,6 +123,7 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
             name="mapPinDescription"
             component={TextAreaField}
             placeholder="We are shredding plastic in Plymouth, UK."
+            validate={required}
           />
           {!user.location || editAddress ? (
             <Box>
@@ -127,14 +135,16 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
               </div> */}
               <Field
                 name={'location'}
-                customChange={v =>
+                customChange={v => {
                   this.setState({
                     lat: v.latlng.lat,
                     lng: v.latlng.lng,
-                    zoom: 15,
+                    zoom: 14,
                   })
-                }
+                  this.props.onInputChange(v)
+                }}
                 component={LocationSearchField}
+                validate={required}
               />
 
               {/* wrap both above and below in positioned div to ensure location search box appears above map
@@ -150,12 +160,8 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
                 />
               </div> */}
               <Map
-                center={
-                  user.location
-                    ? [user.location.latlng.lat, user.location.latlng.lng]
-                    : [lat, lng]
-                }
-                zoom={user.location ? zoom : 1.5}
+                center={[lat, lng]}
+                zoom={zoom}
                 zoomControl={false}
                 style={{
                   height: '300px',
@@ -167,27 +173,19 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
                   attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                {user.location && user.location.latlng && (
-                  <Marker
-                    position={[
-                      user.location.latlng.lat,
-                      user.location.latlng.lng,
-                    ]}
-                    icon={customMarker}
-                  >
-                    <Popup maxWidth={225} minWidth={225}>
-                      My adress
-                    </Popup>
-                  </Marker>
-                )}
+                <Marker position={[lat, lng]} icon={customMarker}>
+                  <Popup maxWidth={225} minWidth={225}>
+                    This adress will be shown on my profile
+                  </Popup>
+                </Marker>
               </Map>
             </Box>
           ) : (
-            <Flex flexWrap="nowrap">
+            <Box>
               <Text mb={2} mt={4} medium>
                 Your workspace address is :
               </Text>
-              <Text mb={2} mt={4} medium>
+              <Text mb={2} my={4} medium>
                 {user.location.value}
               </Text>
               <Button
@@ -196,7 +194,7 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
               >
                 Change address
               </Button>
-            </Flex>
+            </Box>
           )}
         </Box>
       </FlexSectionContainer>

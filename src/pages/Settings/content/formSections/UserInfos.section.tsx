@@ -79,6 +79,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               name="userName"
               component={InputField}
               placeholder="Pick a unique username"
+              validate={required}
             />
             <Text mb={2} mt={7} medium>
               Where are you based? *
@@ -98,6 +99,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               name="about"
               component={TextAreaField}
               placeholder="Describe in details what you do and who you are."
+              validate={required}
             />
             <Text mb={2} mt={7} medium>
               Cover Image *
@@ -135,6 +137,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                 style={{ width: '100%' }}
                 name={`coverImages`}
                 component={ImageInputField}
+                validate={required}
                 multi
               />
             )}

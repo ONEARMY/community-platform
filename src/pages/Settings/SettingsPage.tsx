@@ -26,6 +26,7 @@ import { UserMapPinSection } from './content/formSections/MapPin.section'
 import theme from 'src/themes/styled.theme'
 import { INITIAL_VALUES } from './Template'
 import { Box } from 'rebass'
+import { ILocation } from 'src/models/common.models'
 
 export interface IFormValues extends Partial<IUserPP> {
   // form values are simply subset of user profile fields
@@ -76,6 +77,14 @@ export class UserSettings extends React.Component<IProps, IState> {
 
   public deleteProfile(reauthPw: string) {
     this.props.userStore.deleteUser(reauthPw)
+  }
+  public updateLocation(l: ILocation) {
+    this.setState({
+      customFormValues: {
+        ...this.state.customFormValues,
+        location: l,
+      },
+    })
   }
 
   render() {
@@ -146,7 +155,10 @@ export class UserSettings extends React.Component<IProps, IState> {
                           }
                         />
                         <UserInfosSection user={user} />
-                        <UserMapPinSection user={user} />
+                        <UserMapPinSection
+                          onInputChange={v => this.updateLocation(v)}
+                          user={user}
+                        />
                       </>
                     )}
                     {customFormValues.profileType === 'collection-point' && (
@@ -156,20 +168,29 @@ export class UserSettings extends React.Component<IProps, IState> {
                           onInputChange={v => console.log(v)}
                           user={user}
                         />
-                        <UserMapPinSection user={user} />
+                        <UserMapPinSection
+                          onInputChange={v => this.updateLocation(v)}
+                          user={user}
+                        />
                       </>
                     )}
                     {customFormValues.profileType === 'community-builder' && (
                       <>
                         <UserInfosSection user={user} />
-                        <UserMapPinSection user={user} />
+                        <UserMapPinSection
+                          onInputChange={v => this.updateLocation(v)}
+                          user={user}
+                        />
                       </>
                     )}
                     {customFormValues.profileType === 'machine-builder' && (
                       <>
                         <UserInfosSection user={user} />
                         <ExpertiseSection user={user} />
-                        <UserMapPinSection user={user} />
+                        <UserMapPinSection
+                          onInputChange={v => this.updateLocation(v)}
+                          user={user}
+                        />
                       </>
                     )}
                     {customFormValues.profileType === 'member' && (
@@ -238,8 +259,11 @@ export class UserSettings extends React.Component<IProps, IState> {
                     }}
                     width={1}
                     mt={3}
-                    variant={'primary'}
+                    variant={disabled ? 'primary' : 'primary'}
                     type="submit"
+                    disabled={
+                      !customFormValues.profileType || submitting || invalid
+                    }
                   >
                     Save profile
                   </Button>

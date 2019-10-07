@@ -5,12 +5,12 @@ import { UserStore } from 'src/stores/User/user.store'
 import { observer, inject } from 'mobx-react'
 import { toJS } from 'mobx'
 import { UserInfosSection } from './content/formSections/UserInfos.section'
-import { ChangePasswordForm } from './content/formSections/ChangePassword.form'
 import { ImportDHForm } from './content/formSections/ImportDH.form'
 import { FocusSection } from './content/formSections/Focus.section'
 import { ExpertiseSection } from './content/formSections/Expertise.section'
 import { WorkspaceSection } from './content/formSections/Workspace.section'
 import { CollectionSection } from './content/formSections/Collection.section'
+import { AccountSettingsSection } from './content/formSections/AccountSettings.section'
 import { Button } from 'src/components/Button'
 import {
   CreateProfileGuidelines,
@@ -19,7 +19,6 @@ import {
 import Heading from 'src/components/Heading'
 
 import { TextNotification } from 'src/components/Notification/TextNotification'
-import { ProfileDelete } from './content/ProfileDelete'
 import { Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import { UserMapPinSection } from './content/formSections/MapPin.section'
@@ -74,10 +73,6 @@ export class UserSettings extends React.Component<IProps, IState> {
   public showSaveNotification() {
     this.setState({ showNotification: true })
   }
-
-  public deleteProfile(reauthPw: string) {
-    this.props.userStore.deleteUser(reauthPw)
-  }
   public updateLocation(l: ILocation) {
     this.setState({
       customFormValues: {
@@ -110,128 +105,96 @@ export class UserSettings extends React.Component<IProps, IState> {
           return (
             <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
               <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} my={4}>
-                <form
-                  id="userProfileForm"
-                  onSubmit={handleSubmit}
-                  style={{ width: '100%' }}
-                >
-                  {/* How To Info */}
-                  <Flex flexDirection={'column'}>
-                    <Flex
-                      card
-                      mediumRadius
-                      bg={theme.colors.softblue}
-                      px={3}
-                      py={2}
-                    >
-                      {!user.profileType ? (
-                        <Heading medium>Create profile</Heading>
-                      ) : (
-                        <Heading medium>Edit profile</Heading>
+                <Box width="100%">
+                  <form id="userProfileForm" onSubmit={handleSubmit}>
+                    {/* How To Info */}
+                    <Flex flexDirection={'column'}>
+                      <Flex
+                        card
+                        mediumRadius
+                        bg={theme.colors.softblue}
+                        px={3}
+                        py={2}
+                      >
+                        {!user.profileType ? (
+                          <Heading medium>Create profile</Heading>
+                        ) : (
+                          <Heading medium>Edit profile</Heading>
+                        )}
+                      </Flex>
+                      <FocusSection
+                        user={user}
+                        onInputChange={v =>
+                          this.setState({
+                            customFormValues: {
+                              ...this.state.customFormValues,
+                              profileType: v,
+                            },
+                          })
+                        }
+                      />
+                      {customFormValues.profileType === 'workspace' && (
+                        <>
+                          <WorkspaceSection
+                            user={user}
+                            onInputChange={v =>
+                              this.setState({
+                                customFormValues: {
+                                  ...this.state.customFormValues,
+                                  workspaceType: v,
+                                },
+                              })
+                            }
+                          />
+                          <UserInfosSection user={user} />
+                          <UserMapPinSection
+                            onInputChange={v => this.updateLocation(v)}
+                            user={user}
+                          />
+                        </>
                       )}
+                      {customFormValues.profileType === 'collection-point' && (
+                        <>
+                          <UserInfosSection user={user} />
+                          <CollectionSection
+                            onInputChange={v => console.log(v)}
+                            user={user}
+                          />
+                          <UserMapPinSection
+                            onInputChange={v => this.updateLocation(v)}
+                            user={user}
+                          />
+                        </>
+                      )}
+                      {customFormValues.profileType === 'community-builder' && (
+                        <>
+                          <UserInfosSection user={user} />
+                          <UserMapPinSection
+                            onInputChange={v => this.updateLocation(v)}
+                            user={user}
+                          />
+                        </>
+                      )}
+                      {customFormValues.profileType === 'machine-builder' && (
+                        <>
+                          <UserInfosSection user={user} />
+                          <ExpertiseSection user={user} />
+                          <UserMapPinSection
+                            onInputChange={v => this.updateLocation(v)}
+                            user={user}
+                          />
+                        </>
+                      )}
+                      {customFormValues.profileType === 'member' && (
+                        <>
+                          <UserInfosSection user={user} />
+                        </>
+                      )}
+                      {customFormValues.profileType === undefined && <></>}
                     </Flex>
-                    <FocusSection
-                      user={user}
-                      onInputChange={v =>
-                        this.setState({
-                          customFormValues: {
-                            ...this.state.customFormValues,
-                            profileType: v,
-                          },
-                        })
-                      }
-                    />
-                    {customFormValues.profileType === 'workspace' && (
-                      <>
-                        <WorkspaceSection
-                          user={user}
-                          onInputChange={v =>
-                            this.setState({
-                              customFormValues: {
-                                ...this.state.customFormValues,
-                                workspaceType: v,
-                              },
-                            })
-                          }
-                        />
-                        <UserInfosSection user={user} />
-                        <UserMapPinSection
-                          onInputChange={v => this.updateLocation(v)}
-                          user={user}
-                        />
-                      </>
-                    )}
-                    {customFormValues.profileType === 'collection-point' && (
-                      <>
-                        <UserInfosSection user={user} />
-                        <CollectionSection
-                          onInputChange={v => console.log(v)}
-                          user={user}
-                        />
-                        <UserMapPinSection
-                          onInputChange={v => this.updateLocation(v)}
-                          user={user}
-                        />
-                      </>
-                    )}
-                    {customFormValues.profileType === 'community-builder' && (
-                      <>
-                        <UserInfosSection user={user} />
-                        <UserMapPinSection
-                          onInputChange={v => this.updateLocation(v)}
-                          user={user}
-                        />
-                      </>
-                    )}
-                    {customFormValues.profileType === 'machine-builder' && (
-                      <>
-                        <UserInfosSection user={user} />
-                        <ExpertiseSection user={user} />
-                        <UserMapPinSection
-                          onInputChange={v => this.updateLocation(v)}
-                          user={user}
-                        />
-                      </>
-                    )}
-                    {customFormValues.profileType === 'member' && (
-                      <>
-                        <UserInfosSection user={user} />
-                      </>
-                    )}
-                    {customFormValues.profileType === undefined && <></>}
-
-                    {/* <Flex
-                      card
-                      mediumRadius
-                      bg={'white'}
-                      mt={5}
-                      p={4}
-                      flexWrap="wrap"
-                      flexDirection="column"
-                    >
-                      <Heading small>
-                        Import profile from davehakkens.nl
-                      </Heading>
-                      <Text mb={3}>{this.state.user.userName}</Text>
-                       <ImportDHForm {...readOnly} />
-                    </Flex>
-                    <Flex
-                      card
-                      mediumRadius
-                      bg={'white'}
-                      mt={5}
-                      p={4}
-                      flexWrap="wrap"
-                      flexDirection="column"
-                    >
-                      <Heading small>Account settings</Heading>
-                       <ChangePasswordForm
-                        {...readOnly}
-                        userStore={this.props.userStore}
-                      /> 
-                    </Flex>*/}
-                  </Flex>
-                </form>
+                  </form>
+                  <AccountSettingsSection />
+                </Box>
               </Flex>
               {/* post guidelines container */}
               <Flex
@@ -276,9 +239,6 @@ export class UserSettings extends React.Component<IProps, IState> {
                   </div>
                 </Box>
               </Flex>
-              <ProfileDelete
-                onConfirmation={reauthPw => this.deleteProfile(reauthPw)}
-              />
             </Flex>
           )
         }}

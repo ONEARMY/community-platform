@@ -4,7 +4,7 @@ import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import { Box } from 'rebass'
-import { FlexSectionContainer } from './elements'
+import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { Link } from 'src/components/Links'
 import { Button } from 'src/components/Button'
 import { ProfileTypeLabel, IUserPP } from 'src/models/user_pp.models'
@@ -17,6 +17,7 @@ interface IProps {
 }
 interface IState {
   checkedFocusValue?: string
+  isOpen: boolean
 }
 
 export class FocusSection extends React.Component<IProps, IState> {
@@ -26,6 +27,7 @@ export class FocusSection extends React.Component<IProps, IState> {
       checkedFocusValue: this.props.user.profileType
         ? this.props.user.profileType
         : undefined,
+      isOpen: props.user && !props.user.profileType,
     }
   }
 
@@ -35,10 +37,19 @@ export class FocusSection extends React.Component<IProps, IState> {
   }
 
   render() {
+    const { isOpen } = this.state
     return (
       <FlexSectionContainer>
-        <Heading small>Focus</Heading>
-        <Box>
+        <Flex justifyContent="space-between">
+          <Heading small>Focus</Heading>
+          <ArrowIsSectionOpen
+            onClick={() => {
+              this.setState({ isOpen: !isOpen })
+            }}
+            isOpen={isOpen}
+          />
+        </Flex>
+        <Box sx={{ display: isOpen ? 'block' : 'none' }}>
           <Text regular my={4}>
             What is your main Precious Plastic activity?
           </Text>

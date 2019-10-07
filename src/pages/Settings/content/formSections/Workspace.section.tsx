@@ -4,7 +4,7 @@ import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import { Box } from 'rebass'
-import { FlexSectionContainer } from './elements'
+import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { WORKSPACE_TYPES } from 'src/mocks/user_pp.mock'
 import { CustomRadioField } from './Fields/CustomRadio.field'
 import { WorkspaceType, IUserPP } from 'src/models/user_pp.models'
@@ -15,6 +15,7 @@ interface IProps {
 }
 interface IState {
   checkedFocusValue?: string
+  isOpen?: boolean
 }
 
 export class WorkspaceSection extends React.Component<IProps, IState> {
@@ -24,6 +25,7 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
       checkedFocusValue: this.props.user.workspaceType
         ? this.props.user.workspaceType
         : undefined,
+      isOpen: props.user && !props.user.profileType,
     }
   }
 
@@ -34,10 +36,19 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
 
   render() {
     const { user } = this.props
+    const { isOpen } = this.state
     return (
       <FlexSectionContainer>
-        <Heading small>Workspace</Heading>
-        <Box>
+        <Flex justifyContent="space-between">
+          <Heading small>Workspace</Heading>
+          <ArrowIsSectionOpen
+            onClick={() => {
+              this.setState({ isOpen: !isOpen })
+            }}
+            isOpen={isOpen}
+          />
+        </Flex>
+        <Box sx={{ display: isOpen ? 'block' : 'none' }}>
           <Text regular my={4}>
             What kind of Precious Plastic workspace do you run?
           </Text>

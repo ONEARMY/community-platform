@@ -579,7 +579,7 @@ export class UserPage extends React.Component<
               user.machineBuilderXp &&
               this.renderMachineBuilderXp(user.machineBuilderXp)}
 
-            {user.links && (
+            {user.links && user.links.length > 0 && (
               <UserContactInfo>
                 <h3>Contact &amp; Links</h3>
                 {this.renderLinks(user.links)}

@@ -62,8 +62,7 @@ export class UserSettings extends React.Component<IProps, IState> {
   }
 
   public async saveProfile(values: any) {
-    const formValuesConcat = { ...this.state.customFormValues, ...values }
-    console.log('profile values :', formValuesConcat)
+    const formValuesConcat = { ...values, ...this.state.customFormValues }
     await this.injected.userStore.updateUserProfile(formValuesConcat)
     this.setState({ showNotification: true })
   }

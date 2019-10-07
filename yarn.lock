@@ -1624,9 +1624,9 @@
   integrity sha512-1dVNHT76Uu5N3eJNTYcvxee+jzX4Z9lfciqRRHCU27ihbUcYi+iSc2iml5Ke1LXe1SyJCLA0+14Jh4tXJgOppA==
 
 "@hapi/hoek@8.x.x":
-  version "8.2.4"
-  resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-8.2.4.tgz#684a14f4ca35d46f44abc87dfc696e5e4fe8a020"
-  integrity sha512-Ze5SDNt325yZvNO7s5C4fXDscjJ6dcqLFXJQ/M7dZRQCewuDj2iDUuBi6jLQt+APbW9RjjVEvLr35FXuOEqjow==
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-8.3.0.tgz#2b9db1cd00f3891005c77b3a8d608b88a6d0aa4d"
+  integrity sha512-C0QL9bmgUXTSuf8nDeGrpMjtJG7tPUr8wG6/wxPbP62tGwCwQtdMSJYfESowmY4P3Hn593f+8OzNY5bckcu/LQ==
 
 "@hapi/joi@^15.0.3":
   version "15.1.1"
@@ -1639,9 +1639,9 @@
     "@hapi/topo" "3.x.x"
 
 "@hapi/topo@3.x.x":
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/@hapi/topo/-/topo-3.1.4.tgz#42e2fe36f593d90ad258a08b582be128c141c45d"
-  integrity sha512-aVWQTOI9wBD6zawmOr6f+tdEIxQC8JXfQVLTjgGe8YEStAWGn/GNNVTobKJhbWKveQj2RyYF3oYbO9SC8/eOCA==
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/@hapi/topo/-/topo-3.1.5.tgz#3baea17e456530edad69a75c3fc7cde97dd6d331"
+  integrity sha512-bi9m1jrui9LlvtVdLaHv0DqeOoe+I8dep+nEcTgW6XxJHL3xArQcilYz3tIp0cRC4gWlsVtABK7vNKg4jzEmAA==
   dependencies:
     "@hapi/hoek" "8.x.x"
 
@@ -5069,15 +5069,20 @@ bluebird@3.5.0:
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.0.tgz#791420d7f551eea2897453a8a77653f96606d67c"
   integrity sha1-eRQg1/VR7qKJdFOop3ZT+WYG1nw=
 
-bluebird@3.5.5, bluebird@^3.3.5, bluebird@^3.5.1, bluebird@^3.5.5:
-  version "3.5.5"
-  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.5.tgz#a8d0afd73251effbbd5fe384a77d73003c17a71f"
-  integrity sha512-5am6HnnfN+urzt4yfg7IgTbotDjIT/u8AJpEt0sIU9FtXfVeezXAPKswrG+xKUCOYAINpSdgZVDU6QFh+cuH3w==
+bluebird@3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.7.0.tgz#56a6a886e03f6ae577cffedeb524f8f2450293cf"
+  integrity sha512-aBQ1FxIa7kSWCcmKHlcHFlT2jt6J/l4FzC7KcPELkOJOsPOb/bccdhmIrKDfXhwFrmc7vDoDrrepFvGqjyXGJg==
 
 bluebird@^2.9.33:
   version "2.11.0"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-2.11.0.tgz#534b9033c022c9579c56ba3b3e5a5caafbb650e1"
   integrity sha1-U0uQM8AiyVecVro7Plpcqvu2UOE=
+
+bluebird@^3.3.5, bluebird@^3.5.1, bluebird@^3.5.5:
+  version "3.5.5"
+  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.5.tgz#a8d0afd73251effbbd5fe384a77d73003c17a71f"
+  integrity sha512-5am6HnnfN+urzt4yfg7IgTbotDjIT/u8AJpEt0sIU9FtXfVeezXAPKswrG+xKUCOYAINpSdgZVDU6QFh+cuH3w==
 
 bn.js@^4.0.0, bn.js@^4.1.0, bn.js@^4.1.1, bn.js@^4.4.0:
   version "4.11.8"
@@ -7693,10 +7698,10 @@ execa@0.10.0, execa@^0.10.0:
     signal-exit "^3.0.0"
     strip-eof "^1.0.0"
 
-execa@2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/execa/-/execa-2.0.4.tgz#2f5cc589c81db316628627004ea4e37b93391d8e"
-  integrity sha512-VcQfhuGD51vQUQtKIq2fjGDLDbL6N1DTQVpYzxZ7LPIXw3HqTuIz6uxRmpV1qf8i31LHf2kjiaGI+GdHwRgbnQ==
+execa@2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/execa/-/execa-2.0.5.tgz#5be3e2ea7e61bd038da5a0e11dc6ab2097357f2f"
+  integrity sha512-SwmwZZyJjflcqLSgllk4EQlMLst2p9muyzwNugKGFlpAz6rZ7M+s2nBR97GAq4Vzjwx2y9rcMcmqzojwN+xwNA==
   dependencies:
     cross-spawn "^6.0.5"
     get-stream "^5.0.0"
@@ -16202,15 +16207,15 @@ staged-git-files@1.1.2:
   resolved "https://registry.yarnpkg.com/staged-git-files/-/staged-git-files-1.1.2.tgz#4326d33886dc9ecfa29a6193bf511ba90a46454b"
   integrity sha512-0Eyrk6uXW6tg9PYkhi/V/J4zHp33aNyi2hOCmhFLqLTIhbgqWn5jlSzI+IU0VqrZq6+DbHcabQl/WP6P3BG0QA==
 
-start-server-and-test@^1.10.2:
-  version "1.10.2"
-  resolved "https://registry.yarnpkg.com/start-server-and-test/-/start-server-and-test-1.10.2.tgz#31ecb54c6d6375b119840ece9bb6bfffdb8bc50e"
-  integrity sha512-CDJGFi+qlE4KFh7QgDRz51rKn30XGpWRVRuyuuA43tZw5BEh/mkusr7aHqvT0q19xtgChYXW/uhgOq817sb+7w==
+start-server-and-test@^1.10.4:
+  version "1.10.4"
+  resolved "https://registry.yarnpkg.com/start-server-and-test/-/start-server-and-test-1.10.4.tgz#f6cc79e129bd578f6745037d5b5207584f5592c1"
+  integrity sha512-Oi1YzmHzDSRMA4cwVrewZbVYoAcWeXdB73H5kutQex3cVhS8Thlwj8d4lXTp7hq1nXarIC91kCNMI17/78u/sQ==
   dependencies:
-    bluebird "3.5.5"
+    bluebird "3.7.0"
     check-more-types "2.24.0"
     debug "4.1.1"
-    execa "2.0.4"
+    execa "2.0.5"
     lazy-ass "1.6.0"
     ps-tree "1.2.0"
     wait-on "3.3.0"

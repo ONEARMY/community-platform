@@ -2,17 +2,13 @@ import * as firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/database'
 import 'firebase/firestore'
-import cypress from 'cypress'
 
-const projectId = 'precious-plastics-v4-dev'
-const apiKey = 'AIzaSyChVNSMiYxCkbGd9C95aChr9GxRJtW6NRA'
 const fbConfig = {
-  apiKey,
-  authDomain: `${projectId}.firebaseapp.com`,
-  databaseURL: `https://${projectId}.firebaseio.com`,
-  projectId: `${projectId}`,
-  storageBucket: `${projectId}.appspot.com`,
-  messagingSenderId: '174193431763',
+  apiKey: 'AIzaSyDAxS_7M780mI3_tlwnAvpbaqRsQPlmp64',
+  authDomain: 'onearmy-test-ci.firebaseapp.com',
+  databaseURL: 'https://onearmy-test-ci.firebaseio.com',
+  projectId: 'onearmy-test',
+  storageBucket: 'onearmy-test-ci.appspot.com'
 }
 firebase.initializeApp(fbConfig)
 

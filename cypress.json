@@ -1,5 +1,5 @@
 {
-  "baseUrl": "http://localhost:3000",
+  "baseUrl": "http://localhost:3456",
   "defaultCommandTimeout_comment": "Increase to 15s to make sure a page is completely loaded.",
   "defaultCommandTimeout": 15000,
   "watchForFileChanges": true,

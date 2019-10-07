@@ -54,7 +54,10 @@ The project uses [Jest](https://jestjs.io/) to unit Test and [Cypress](https://w
   `yarn start`
 
 - Run the end-to-end tests
-  `yarn cy:ci`
+  `yarn cy:run`
+
+Please note that the e2e testing environment has its own firebase resources which are different to development. In order
+to start the app with the testing firebase, use this command `yarn start:ci`
 
 ### Additional commands
 

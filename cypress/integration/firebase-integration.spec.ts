@@ -1,10 +1,11 @@
 describe('FireBase + Cypress', () => {
   it('should logout and login', () => {
+
     cy.visit('/how-to')
     cy.logout()
     cy.get('[data-cy=create]').should('not.exist')
 
-    cy.login('test1234@test.com', '12345678')
+    cy.login('howto_reader@test.com', 'test1234')
     cy.get('[data-cy=create]').should('be.visible')
 
     cy.logout()

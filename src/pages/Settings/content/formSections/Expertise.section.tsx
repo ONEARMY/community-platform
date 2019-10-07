@@ -4,21 +4,38 @@ import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import { Box } from 'rebass'
-import { FlexSectionContainer } from './elements'
+import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { FieldArray } from 'react-final-form-arrays'
 import { MACHINE_BUILDER_XP } from 'src/mocks/user_pp.mock'
 import { CustomCheckbox } from './Fields/CustomCheckbox.field'
+import { IUserPP } from 'src/models/user_pp.models'
 
-export class ExpertiseSection extends React.Component<any, any> {
+interface IProps {
+  user: IUserPP
+}
+
+export class ExpertiseSection extends React.Component<IProps, any> {
   constructor(props: any) {
     super(props)
+    this.state = {
+      isOpen: props.user && !props.user.profileType,
+    }
   }
 
   render() {
+    const { isOpen } = this.state
     return (
       <FlexSectionContainer>
-        <Heading small>Expertise</Heading>
-        <Box>
+        <Flex justifyContent="space-between">
+          <Heading small>Expertise</Heading>
+          <ArrowIsSectionOpen
+            onClick={() => {
+              this.setState({ isOpen: !isOpen })
+            }}
+            isOpen={isOpen}
+          />
+        </Flex>
+        <Box sx={{ display: isOpen ? 'block' : 'none' }}>
           <Text regular my={4}>
             What are you specialised in ? *
           </Text>

@@ -14,11 +14,11 @@ import theme from 'src/themes/styled.theme'
 import { FieldArray } from 'react-final-form-arrays'
 import { Link } from './Fields/Link.field'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
-import { FlexSectionContainer } from './elements'
-import { Image } from 'rebass'
+import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
+import { Image, Box } from 'rebass'
 
 interface IProps {
-  user: any | IUserPP
+  user: IUserPP | any
 }
 interface IState {
   readOnly: boolean
@@ -26,6 +26,7 @@ interface IState {
   showNotification?: boolean
   showComLinks?: boolean
   editCoverImgs?: boolean
+  isOpen?: boolean
 }
 
 // validation - return undefined if no error (i.e. valid)
@@ -45,6 +46,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
       readOnly: true,
       showComLinks: props.user && props.user.links ? true : false,
       editCoverImgs: props.user && props.user.coverImages ? true : false,
+      isOpen: props.user && !props.user.profileType,
     }
     this.changeComLinkSwitch = this.changeComLinkSwitch.bind(this)
   }
@@ -55,114 +57,122 @@ export class UserInfosSection extends React.Component<IProps, IState> {
 
   render() {
     const { user } = this.props
-    const { editCoverImgs } = this.state
+    const { editCoverImgs, isOpen } = this.state
 
     return (
       <FlexSectionContainer>
-        <Heading small bold>
-          Infos
-        </Heading>
-        <Flex flexWrap={'wrap'}>
-          <Text my={4} medium>
-            User / workspace username *
-          </Text>
-          <Field
-            name="userName"
-            component={InputField}
-            placeholder="Pick a unique username"
+        <Flex justifyContent="space-between">
+          <Heading small>Infos</Heading>
+          <ArrowIsSectionOpen
+            onClick={() => {
+              this.setState({ isOpen: !isOpen })
+            }}
+            isOpen={isOpen}
           />
-          <Text mb={2} mt={7} medium>
-            Where are you based? *
-          </Text>
-          <FlagSelectContainer width={1} alignItems="center">
+        </Flex>
+        <Box sx={{ display: isOpen ? 'block' : 'none' }}>
+          <Flex flexWrap={'wrap'}>
+            <Text my={4} medium>
+              User / workspace username *
+            </Text>
             <Field
-              name="country"
-              component={FlagSelector}
-              searchable={true}
-              defaultCountry={getCountryCode(user.country)}
+              name="userName"
+              component={InputField}
+              placeholder="Pick a unique username"
             />
-          </FlagSelectContainer>
-          <Text mb={2} mt={7} medium>
-            Description *
-          </Text>
-          <Field
-            name="about"
-            component={TextAreaField}
-            placeholder="Describe in details what you do and who you are."
-          />
-          <Text mb={2} mt={7} medium>
-            Cover Image *
-          </Text>
-          {user.coverImages &&
-          user.coverImages.length > 0 &&
-          user.coverImages[0].downloadUrl !== undefined &&
-          editCoverImgs ? (
-            <Flex alignItems={'center'} justifyContent={'center'}>
-              {user.coverImages.map(image => {
-                return (
-                  <Flex
-                    flexWrap={'nowrap'}
-                    px={1}
-                    width={1 / 4}
-                    key={image.name}
-                  >
-                    <Image sx={{ opacity: 0.5 }} src={image.downloadUrl} />
-                  </Flex>
-                )
-              })}
-              <Button
-                icon={'delete'}
-                variant={'tertiary'}
-                sx={{ position: 'absolute' }}
-                onClick={() =>
-                  this.setState({
-                    editCoverImgs: !editCoverImgs,
-                  })
-                }
+            <Text mb={2} mt={7} medium>
+              Where are you based? *
+            </Text>
+            <FlagSelectContainer width={1} alignItems="center">
+              <Field
+                name="country"
+                component={FlagSelector}
+                searchable={true}
+                defaultCountry={getCountryCode(user.country)}
               />
-            </Flex>
-          ) : (
+            </FlagSelectContainer>
+            <Text mb={2} mt={7} medium>
+              Description *
+            </Text>
             <Field
-              style={{ width: '100%' }}
-              name={`coverImages`}
-              component={ImageInputField}
-              multi
+              name="about"
+              component={TextAreaField}
+              placeholder="Describe in details what you do and who you are."
             />
-          )}
-        </Flex>
-        <Flex wrap={'nowrap'} alignItems={'center'} width={1}>
-          <Text mb={2} mt={7} medium>
-            Contacts & links *
-          </Text>
-        </Flex>
-        <FieldArray name="links">
-          {({ fields }) => (
-            <>
-              {fields.map((name, index: number) => (
-                <Link
-                  key={index}
-                  link={name}
-                  index={index}
-                  onDelete={(fieldIndex: number) => {
-                    fields.remove(fieldIndex)
-                  }}
+            <Text mb={2} mt={7} medium>
+              Cover Image *
+            </Text>
+            {user.coverImages &&
+            user.coverImages.length > 0 &&
+            user.coverImages[0].downloadUrl !== undefined &&
+            editCoverImgs ? (
+              <Flex alignItems={'center'} justifyContent={'center'}>
+                {user.coverImages.map(image => {
+                  return (
+                    <Flex
+                      flexWrap={'nowrap'}
+                      px={1}
+                      width={1 / 4}
+                      key={image.name}
+                    >
+                      <Image sx={{ opacity: 0.5 }} src={image.downloadUrl} />
+                    </Flex>
+                  )
+                })}
+                <Button
+                  icon={'delete'}
+                  variant={'tertiary'}
+                  sx={{ position: 'absolute' }}
+                  onClick={() =>
+                    this.setState({
+                      editCoverImgs: !editCoverImgs,
+                    })
+                  }
                 />
-              ))}
-              <Button
-                my={2}
-                variant="outline"
-                onClick={() => {
-                  fields.push({
-                    label: '',
-                    url: '',
-                  })
-                }}
-              >
-                add link
-              </Button>
-            </>
-          )}
-        </FieldArray>
+              </Flex>
+            ) : (
+              <Field
+                style={{ width: '100%' }}
+                name={`coverImages`}
+                component={ImageInputField}
+                multi
+              />
+            )}
+          </Flex>
+          <Flex wrap={'nowrap'} alignItems={'center'} width={1}>
+            <Text mb={2} mt={7} medium>
+              Contacts & links *
+            </Text>
+          </Flex>
+          <FieldArray name="links">
+            {({ fields }) => (
+              <>
+                {fields.map((name, index: number) => (
+                  <Link
+                    key={index}
+                    link={name}
+                    index={index}
+                    onDelete={(fieldIndex: number) => {
+                      fields.remove(fieldIndex)
+                    }}
+                  />
+                ))}
+                <Button
+                  my={2}
+                  variant="outline"
+                  onClick={() => {
+                    fields.push({
+                      label: '',
+                      url: '',
+                    })
+                  }}
+                >
+                  add link
+                </Button>
+              </>
+            )}
+          </FieldArray>
+        </Box>
       </FlexSectionContainer>
     )
   }

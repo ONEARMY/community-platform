@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import { Field } from 'react-final-form'
 import theme from 'src/themes/styled.theme'
 import Flex from 'src/components/Flex'
+import { Box } from 'rebass'
+import Icon from 'src/components/Icons'
 
 export const Label = styled.label`
   margin: 5px;
@@ -35,10 +37,26 @@ export const FlexSectionContainer = props => (
     mediumRadius
     bg={'white'}
     p={4}
-    my={4}
+    mt={4}
     flexWrap="wrap"
     flexDirection="column"
   >
     {props.children}
   </Flex>
+)
+
+export const ArrowIsSectionOpen = props => (
+  <Box
+    height="20px"
+    sx={{
+      transform: props.isOpen ? 'rotate(180deg)' : null,
+      transformOrigin: 'center',
+      ':hover': {
+        cursor: 'pointer',
+      },
+    }}
+    {...props}
+  >
+    <Icon size="20" glyph="arrow-full-down" />
+  </Box>
 )

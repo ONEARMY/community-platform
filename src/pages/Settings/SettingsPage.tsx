@@ -147,6 +147,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                         <UserInfosSection user={user} />
                         <CollectionSection
                           onInputChange={v => console.log(v)}
+                          user={user}
                         />
                         <UserMapPinSection user={user} />
                       </>
@@ -160,7 +161,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                     {customFormValues.profileType === 'machine-builder' && (
                       <>
                         <UserInfosSection user={user} />
-                        <ExpertiseSection />
+                        <ExpertiseSection user={user} />
                         <UserMapPinSection user={user} />
                       </>
                     )}

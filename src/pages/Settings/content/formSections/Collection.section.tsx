@@ -4,30 +4,46 @@ import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import { Box, Image } from 'rebass'
-import { FlexSectionContainer } from './elements'
-import { OpeningHoursPicker } from './OpeningHoursPicker.field'
+import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
+import { OpeningHoursPicker } from './Fields/OpeningHoursPicker.field'
 
 import { FieldArray } from 'react-final-form-arrays'
 import { Button } from 'src/components/Button'
 import { CustomCheckbox } from './Fields/CustomCheckbox.field'
 import { PLASTIC_TYPES } from 'src/mocks/user_pp.mock'
+import { IUserPP } from 'src/models/user_pp.models'
 
 interface IProps {
   onInputChange: (inputValue: string) => void
+  user: IUserPP
 }
 
-interface IState {}
+interface IState {
+  isOpen: boolean
+}
 
 export class CollectionSection extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
+    this.state = {
+      isOpen: props.user && !props.user.profileType,
+    }
   }
 
   render() {
+    const { isOpen } = this.state
     return (
       <FlexSectionContainer>
-        <Heading small>Collection</Heading>
-        <Box>
+        <Flex justifyContent="space-between">
+          <Heading small>Collection</Heading>
+          <ArrowIsSectionOpen
+            onClick={() => {
+              this.setState({ isOpen: !isOpen })
+            }}
+            isOpen={isOpen}
+          />
+        </Flex>
+        <Box sx={{ display: isOpen ? 'block' : 'none' }}>
           <Flex wrap={'nowrap'} alignItems={'center'} width={1}>
             <Text regular my={4}>
               Opening time *

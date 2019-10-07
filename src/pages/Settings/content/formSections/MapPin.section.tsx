@@ -5,7 +5,7 @@ import { Field } from 'react-final-form'
 import Text from 'src/components/Text'
 import { TextAreaField } from 'src/components/Form/Fields'
 import { Box, Flex } from 'rebass'
-import { FlexSectionContainer } from './elements'
+import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { MapsStore } from 'src/stores/Maps/maps.store'
 import { UserStore } from 'src/stores/User/user.store'
 import { Map, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet'
@@ -28,6 +28,7 @@ interface IState {
   lat: number
   lng: number
   zoom: number
+  isOpen?: boolean
 }
 
 const customMarker = L.icon({
@@ -49,6 +50,7 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
       lat: 51.4416,
       lng: 5.4697,
       zoom: 8,
+      isOpen: props.user && !props.user.profileType,
     }
   }
 
@@ -92,13 +94,21 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
 
   render() {
     const { user } = this.props
-    const { lat, lng, zoom, editAddress } = this.state
+    const { lat, lng, zoom, editAddress, isOpen } = this.state
     console.log('user pin ', user.location)
 
     return (
       <FlexSectionContainer>
-        <Heading small>Your map pin</Heading>
-        <Box id="your-map-pin">
+        <Flex justifyContent="space-between">
+          <Heading small>Your map pin</Heading>
+          <ArrowIsSectionOpen
+            onClick={() => {
+              this.setState({ isOpen: !isOpen })
+            }}
+            isOpen={isOpen}
+          />
+        </Flex>
+        <Box sx={{ display: isOpen ? 'block' : 'none' }}>
           <Text mb={2} mt={4} medium>
             Short description of your pin *
           </Text>

@@ -10,6 +10,7 @@ import { Button } from 'src/components/Button'
 import { ProfileTypeLabel, IUserPP } from 'src/models/user_pp.models'
 import { PROFILE_TYPES } from 'src/mocks/user_pp.mock'
 import { CustomRadioField } from './Fields/CustomRadio.field'
+import Icon from 'src/components/Icons'
 
 interface IProps {
   onInputChange: (inputValue: ProfileTypeLabel) => void
@@ -17,7 +18,14 @@ interface IProps {
 }
 interface IState {
   checkedFocusValue?: string
+  isOpen: boolean
 }
+
+const ArrowSection = props => (
+  <Box height="20px" {...props}>
+    <Icon size="20" glyph="arrow-full-down" />
+  </Box>
+)
 
 export class FocusSection extends React.Component<IProps, IState> {
   constructor(props: IProps) {
@@ -26,6 +34,7 @@ export class FocusSection extends React.Component<IProps, IState> {
       checkedFocusValue: this.props.user.profileType
         ? this.props.user.profileType
         : undefined,
+      isOpen: false,
     }
   }
 
@@ -35,10 +44,26 @@ export class FocusSection extends React.Component<IProps, IState> {
   }
 
   render() {
+    const { isOpen } = this.state
     return (
       <FlexSectionContainer>
-        <Heading small>Focus</Heading>
-        <Box>
+        <Flex justifyContent="space-between">
+          <Heading small>Focus</Heading>
+          <ArrowSection
+            sx={{
+              transform: isOpen ? 'rotate(180deg)' : null,
+              transformOrigin: 'center',
+              ':hover': {
+                cursor: 'pointer',
+              },
+            }}
+            onClick={() => {
+              console.log('click')
+              this.setState({ isOpen: !isOpen })
+            }}
+          />
+        </Flex>
+        <Box sx={{ display: isOpen ? 'block' : 'none' }}>
           <Text regular my={4}>
             What is your main Precious Plastic activity?
           </Text>

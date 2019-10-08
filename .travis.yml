@@ -17,7 +17,9 @@ before_script:
   - echo "REACT_APP_BRANCH=$REACT_APP_BRANCH"
 script:
   - yarn test
-  - yarn cy:ci
+  - if [ $REACT_APP_BRANCH != 'production' ];
+    then yarn cy:ci;
+    fi
   - npm run build
 
 # install firebase cli and set firebase project ci token from environment

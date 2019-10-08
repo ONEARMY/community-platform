@@ -7,7 +7,7 @@ const fbConfig = {
   apiKey: 'AIzaSyDAxS_7M780mI3_tlwnAvpbaqRsQPlmp64',
   authDomain: 'onearmy-test-ci.firebaseapp.com',
   databaseURL: 'https://onearmy-test-ci.firebaseio.com',
-  projectId: 'onearmy-test',
+  projectId: 'onearmy-test-ci',
   storageBucket: 'onearmy-test-ci.appspot.com'
 }
 firebase.initializeApp(fbConfig)

@@ -85,6 +85,7 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
       <Flex flexDirection={'column'}>
         <Flex width={1}>
           <ImageWithPointer
+            data-cy={'active-image'}
             width={1}
             src={this.state.activeImage.downloadUrl}
             onClick={() => {
@@ -96,6 +97,7 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
           {imageNumber > 1
             ? this.props.images.map((image: any, index: number) => (
                 <ThumbCard
+                  data-cy={'thumbnail'}
                   mb={3}
                   mt={4}
                   opacity={image === this.state.activeImage ? 1.0 : 0.5}

@@ -169,6 +169,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                             <Field
                               id="title"
                               name="title"
+                              data-cy={'title'}
                               validateFields={[]}
                               validate={value =>
                                 this.props.parentType === 'create'
@@ -199,6 +200,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                               validateFields={[]}
                               options={TIME_OPTIONS}
                               component={SelectField}
+                              data-cy={'time-select'}
                               placeholder="How much time? *"
                             />
                           </Flex>
@@ -210,6 +212,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                               px={1}
                               id="difficulty_level"
                               name="difficulty_level"
+                              data-cy={'difficulty-select'}
                               validate={required}
                               validateFields={[]}
                               component={SelectField}
@@ -224,6 +227,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                             <Field
                               id="description"
                               name="description"
+                              data-cy={'description'}
                               validate={required}
                               validateFields={[]}
                               component={TextAreaField}

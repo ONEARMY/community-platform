@@ -169,7 +169,7 @@ const defaultProps: Partial<ISelectFieldProps> = {
 export const SelectField = ({ input, meta, ...rest }: ISelectFieldProps) => (
   // note, we first use a div container so that default styles can be applied
   <Flex p={0} flexWrap="wrap">
-    <FieldContainer invalid={meta.error && meta.touched} style={rest.style}>
+    <FieldContainer invalid={meta.error && meta.touched} style={rest.style} data-cy={rest['data-cy']}>
       <Select
         styles={SelectStyles}
         onChange={v => {
@@ -178,6 +178,7 @@ export const SelectField = ({ input, meta, ...rest }: ISelectFieldProps) => (
         onBlur={input.onBlur}
         onFocus={input.onFocus}
         value={getValueForSelect(rest.options, input.value)}
+        classNamePrefix={'data-cy'}
         {...defaultProps}
         {...rest}
       />

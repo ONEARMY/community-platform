@@ -1,0 +1,38 @@
+[
+  {
+    "_authID": "YhBD7LB22EXsHz40sTSENWUSa9u1",
+    "_id": "howto_creator",
+    "userName": "howto_creator",
+    "_deleted": false,
+    "_created": "2018-01-24T14:46:42.038Z",
+    "_modified": "2018-01-24T14:46:42.038Z",
+    "verified": true
+  },
+  {
+    "_authID": "dU5sofScHpV09c8NWA834YCQq0S2",
+    "_id": "howto_editor",
+    "userName": "howto_editor",
+    "_deleted": false,
+    "_created": "2018-01-24T14:46:42.038Z",
+    "_modified": "2018-01-24T14:46:42.038Z",
+    "verified": true
+  },
+  {
+    "_authID": "v888t7UA7RMUvirqvUPT0vvc8en1",
+    "_id": "howto_reader",
+    "userName": "howto_reader",
+    "_deleted": false,
+    "_created": "2018-01-24T14:46:42.038Z",
+    "_modified": "2018-01-24T14:46:42.038Z",
+    "verified": true
+  },
+  {
+    "_authID": "0P7VMVVdhkUQjvYG3gYewwPtJ7i1",
+    "_id": "tag_creator",
+    "userName": "tag_creator",
+    "_deleted": false,
+    "_created": "2018-01-24T14:46:42.038Z",
+    "_modified": "2018-01-24T14:46:42.038Z",
+    "verified": true
+  }
+]

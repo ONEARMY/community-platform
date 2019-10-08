@@ -140,19 +140,6 @@ describe('[How To]', () => {
       })
     })
 
-    it('[By Owner]', () => {
-      cy.visit('/how-to')
-      cy.logout()
-      cy.login('howto_creator@test.com', 'test1234')
-      cy.visit(specificHowtoUrl)
-
-      cy.log('Edit button should be available')
-      cy.get('[data-cy=edit]')
-        .click()
-        .url().should('include', '/how-to/make-an-interlocking-brick/edit')
-
-    })
-
   })
 
   describe('[Create a how-to]', () => {

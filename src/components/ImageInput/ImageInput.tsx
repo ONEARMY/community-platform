@@ -41,6 +41,7 @@ export class ImageInput extends React.Component<IProps, IState> {
     super(props)
     this.state = { inputFiles: [], convertedFiles: [] }
   }
+
   get inputFiles() {
     const filesRef = this.fileInputRef.current as HTMLInputElement
     const files = filesRef.files
@@ -59,12 +60,6 @@ export class ImageInput extends React.Component<IProps, IState> {
     )
   }
 
-  public triggerCallback() {
-    if (this.props.onFilesChange) {
-      this.props.onFilesChange(this.state.convertedFiles)
-    }
-  }
-
   public triggerFileUploaderClick() {
     const inputRef = this.fileInputRef.current as HTMLInputElement
     inputRef.click()
@@ -72,12 +67,16 @@ export class ImageInput extends React.Component<IProps, IState> {
 
   public handleConvertedFileChange(file: IConvertedFileMeta, index: number) {
     const { convertedFiles } = this.state
-    convertedFiles[index] = file
+    const updatedCovertedFiles = convertedFiles.concat(file)
+
     this.setState(() => ({
-      convertedFiles,
+      convertedFiles: updatedCovertedFiles,
       imgDelivered: true,
     }))
-    this.triggerCallback()
+
+    if (this.props.onFilesChange) {
+      this.props.onFilesChange(updatedCovertedFiles)
+    }
   }
 
   public showImgLightbox(file: IConvertedFileMeta) {
@@ -128,7 +127,9 @@ export class ImageInput extends React.Component<IProps, IState> {
               multiple={this.props.multi}
               ref={this.fileInputRef}
               style={{ display: 'none' }}
-              onChange={e => this.handleFileInput(e.target.files)}
+              onChange={e => {
+                this.handleFileInput(e.target.files)
+              }}
             />
           </div>
           <Flex mx={-1}>

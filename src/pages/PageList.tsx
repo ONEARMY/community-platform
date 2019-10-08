@@ -13,6 +13,7 @@ import SignUpPage from './SignUp/SignUp'
 import SignInPage from './SignIn/SignIn'
 import { ForgotPasswordPage } from './Password/ForgotPassword'
 import { ForgotPasswordMessagePage } from './Password/ForgotPasswordMessage'
+import { CSSObject } from '@styled-system/css'
 
 export interface IPageMeta {
   path: string
@@ -21,7 +22,7 @@ export interface IPageMeta {
   description: string
   exact?: boolean
   fullPageWidth?: boolean
-  customStyles?: React.CSSProperties
+  customStyles?: CSSObject
 }
 
 const howTo = {
@@ -39,8 +40,8 @@ const settings = {
 const user = {
   path: '/u',
   component: <User />,
-  title: 'User profile',
-  description: 'User profile',
+  title: 'Profile',
+  description: 'Profile',
 }
 const academy = {
   path: '/academy',
@@ -48,6 +49,7 @@ const academy = {
   title: 'Academy',
   description: 'Demo external page embed',
   customStyles: { position: 'absolute', height: '100%', width: '100%' },
+  fullPageWidth: true,
 }
 const events = {
   path: '/events',
@@ -60,6 +62,12 @@ const maps = {
   component: <MapsPage />,
   title: 'Map',
   description: 'Welcome to the Map',
+  customStyles: {
+    position: 'relative',
+    margin: '0',
+    padding: '0',
+    width: '100vw',
+  },
   fullPageWidth: true,
 }
 const admin = {
@@ -113,7 +121,7 @@ const forgotpasswordmessage = {
 
 // community pages (various pages hidden on production build)
 const devCommunityPages = [howTo, events, maps, academy]
-const prodCommunityPages = [howTo, events, maps]
+const prodCommunityPages = [howTo, events]
 const communityPages =
   SITE === 'production' ? prodCommunityPages : devCommunityPages
 // community 'more' dropdown pages (various pages hidden on production build)

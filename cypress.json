@@ -1,0 +1,14 @@
+{
+  "baseUrl": "http://localhost:3000",
+  "defaultCommandTimeout_comment": "Increase to 15s to make sure a page is completely loaded.",
+  "defaultCommandTimeout": 15000,
+  "watchForFileChanges": true,
+  "chromeWebSecurity": false,
+  "video_comment": "Disable video records to improve test execution as it's not worth",
+  "video": false,
+  "reporter": "junit",
+  "reporterOptions": {
+    "mochaFile": "cypress/coverage/out-[hash].xml"
+  },
+  "supportFile": "cypress/support/index.ts"
+}

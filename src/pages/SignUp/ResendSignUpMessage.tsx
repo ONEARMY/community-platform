@@ -77,7 +77,7 @@ export class ResendSignUpMessagePage extends React.Component<IProps, IState> {
                   flexWrap="wrap"
                   flexDirection="column"
                 >
-                  <Heading small arrowDown py={4} width={1}>
+                  <Heading small py={4} width={1}>
                     Resend email
                   </Heading>
                   <Flex flexDirection={'column'} mb={3}>

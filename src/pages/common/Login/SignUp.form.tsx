@@ -24,6 +24,10 @@ interface IProps {
   userStore: UserStore
   preloadValues?: any
 }
+/************** Notes on 10/1/19 : *******************/
+/************** DEPPRECATED *******************/
+/************** Login and Sign in is now handled in src/pages/SignIn and src/pages/SignUp */
+/************** Keeping this component to implement reset password and then will delete */
 
 export class SignUpForm extends React.Component<IProps, IState> {
   constructor(props: IProps) {

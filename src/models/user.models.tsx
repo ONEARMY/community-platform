@@ -3,12 +3,6 @@ import { ISODateString, ILocation, DBDoc } from './common.models'
 export interface IUserState {
   user?: IUser
 }
-
-export interface ILink {
-  label: string
-  url: string
-}
-
 // IUser retains most of the fields from legacy users (omitting passwords),
 // and has a few additional fields. Note 'email' is excluded
 // _uid is unique/fixed identifier
@@ -28,7 +22,6 @@ export interface IUser {
   DHSite_id?: number
   DHSite_mention_name?: string
   country?: string
-  links?: ILink[]
   location?: ILocation
   year?: ISODateString
 }

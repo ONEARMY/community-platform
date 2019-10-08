@@ -26,7 +26,7 @@ import { stripSpecialCharacters } from 'src/utils/helpers'
 import { PostingGuidelines } from './PostingGuidelines'
 import theme from 'src/themes/styled.theme'
 import { DIFFICULTY_OPTIONS, TIME_OPTIONS } from './FormSettings'
-import { Image } from 'rebass'
+import { Image, Box } from 'rebass'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
 
 interface IState {
@@ -74,15 +74,6 @@ const Label = styled.label`
   margin-bottom: ${theme.space[2] + 'px'};
   display: block;
 `
-
-const AbsoluteBtn = styled(Button)`
-  position: absolute;
-`
-
-const ImageWithOpacity = styled(Image)`
-  opacity: 0.5;
-`
-
 // validation - return undefined if no error (i.e. valid)
 const required = (value: any) => (value ? undefined : 'Required')
 
@@ -140,7 +131,13 @@ export class HowtoForm extends React.Component<IProps, IState> {
                 <form id="howtoForm" onSubmit={handleSubmit}>
                   {/* How To Info */}
                   <Flex flexDirection={'column'}>
-                    <Flex card mediumRadius bg={'softblue'} px={3} py={2}>
+                    <Flex
+                      card
+                      mediumRadius
+                      bg={theme.colors.softblue}
+                      px={3}
+                      py={2}
+                    >
                       <Heading medium>
                         {this.props.parentType === 'create' ? (
                           <span>Create</span>
@@ -291,12 +288,14 @@ export class HowtoForm extends React.Component<IProps, IState> {
                               justifyContent={'center'}
                               flexDirection={'column'}
                             >
-                              <ImageWithOpacity
+                              <Image
+                                sx={{ opacity: 0.5 }}
                                 src={formValues.cover_image.downloadUrl}
                               />
-                              <AbsoluteBtn
+                              <Button
                                 icon={'delete'}
                                 variant={'tertiary'}
+                                sx={{ position: 'absolute' }}
                                 onClick={() =>
                                   this.setState({
                                     editCoverImg: !editCoverImg,
@@ -403,28 +402,30 @@ export class HowtoForm extends React.Component<IProps, IState> {
                 px={2}
                 mt={4}
               >
-                <PostingGuidelines />
-                <Button
-                  onClick={() => {
-                    const form = document.getElementById('howtoForm')
-                    if (typeof form !== 'undefined' && form !== null) {
-                      form.dispatchEvent(
-                        new Event('submit', { cancelable: true }),
-                      )
-                    }
-                  }}
-                  width={1}
-                  mt={3}
-                  variant={disabled ? 'primary' : 'primary'}
-                  type="submit"
-                  disabled={submitting || invalid}
-                >
-                  {this.props.parentType === 'create' ? (
-                    <span>Publish</span>
-                  ) : (
-                    <span>Save changes</span>
-                  )}{' '}
-                </Button>
+                <Box sx={{ position: 'fixed', maxWidth: '400px' }}>
+                  <PostingGuidelines />
+                  <Button
+                    onClick={() => {
+                      const form = document.getElementById('howtoForm')
+                      if (typeof form !== 'undefined' && form !== null) {
+                        form.dispatchEvent(
+                          new Event('submit', { cancelable: true }),
+                        )
+                      }
+                    }}
+                    width={1}
+                    mt={3}
+                    variant={disabled ? 'primary' : 'primary'}
+                    type="submit"
+                    disabled={submitting || invalid}
+                  >
+                    {this.props.parentType === 'create' ? (
+                      <span>Publish</span>
+                    ) : (
+                      <span>Save changes</span>
+                    )}{' '}
+                  </Button>
+                </Box>
               </Flex>
             </Flex>
           )

@@ -39,7 +39,7 @@ export class ImageConverter extends React.Component<IProps, IState> {
     super(props)
     this.state = {
       compressionOptions: {
-        maxWidth: imageSizes.low,
+        maxWidth: imageSizes.normal,
         quality: 0.75,
       },
     } as IState

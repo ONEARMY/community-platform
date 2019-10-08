@@ -33,11 +33,11 @@ export class EventsList extends React.Component<any> {
       return (
         <>
           <Flex py={26}>
-            <Heading medium txtcenter bold width={1}>
+            <Heading medium txtcenter bold width={1} my={20}>
               Precious Plastic events from around the world
             </Heading>
           </Flex>
-          <Flex justifyContent={'space-between'} mb={8}>
+          <Flex justifyContent={'space-between'}>
             <Flex flexWrap={'nowrap'} width={[1, 1, 0.5]}>
               <Box width={0.5}>
                 <TagsSelect

@@ -27,6 +27,11 @@ export const arrayToJson = (arr: any[], keyField: string) => {
   return json
 }
 
+// Take a string and capitalises the first letter
+// hello world => Hello world
+export const capitalizeFirstLetter = (str: string) =>
+  str.charAt(0).toUpperCase() + str.slice(1)
+
 /************************************************************************
  *              Date Methods
  ***********************************************************************/

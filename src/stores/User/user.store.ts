@@ -1,5 +1,6 @@
 import { observable, action } from 'mobx'
 import { IUser, IUserDB } from 'src/models/user.models'
+import { IUserPP, IUserPPDB } from 'src/models/user_pp.models'
 import {
   IFirebaseUser,
   auth,
@@ -11,23 +12,25 @@ import { notificationPublish } from '../Notifications/notifications.service'
 import { RootStore } from '..'
 import { loginWithDHCredentials } from 'src/hacks/DaveHakkensNL.hacks'
 import { ModuleStore } from '../common/module.store'
+import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
 */
 
+const COLLECTION_NAME = 'v2_users'
+
 export class UserStore extends ModuleStore {
   private authUnsubscribe: firebase.Unsubscribe
   @observable
-  public user: IUserDB | undefined
+  public user: IUserPPDB | undefined
 
   @observable
   public authUser: firebase.User | null
 
   @action
-  public updateUser(user?: IUserDB) {
+  public updateUser(user?: IUserPPDB) {
     this.user = user
-    console.log('user updated', user)
   }
   constructor(rootStore: RootStore) {
     super(rootStore)
@@ -71,7 +74,6 @@ export class UserStore extends ModuleStore {
 
   // handle user sign in, when firebase authenticates wnat to also fetch user document from the database
   public async userSignedIn(user: IFirebaseUser | null) {
-    console.log('user signed in', user)
     if (user) {
       // legacy user formats did not save names so get profile via email - this option be removed in later version
       // (assumes migration strategy and check)
@@ -87,18 +89,29 @@ export class UserStore extends ModuleStore {
   }
 
   public async getUserProfile(userName: string) {
-    console.log('getting user profile', userName)
     return this.db
-      .collection<IUser>('v2_users')
+      .collection<IUser>(COLLECTION_NAME)
       .doc(userName)
       .get()
   }
 
-  public async updateUserProfile(values: Partial<IUser>) {
-    const user = this.user as IUserDB
+  public async updateUserProfile(values: Partial<IUserPP>) {
+    const dbRef = this.db
+      .collection<IUserPP>(COLLECTION_NAME)
+      .doc((values as IUserDB)._id)
+    const id = dbRef.id
+    const user = this.user as IUserPPDB
+    if (values.coverImages) {
+      const processedImages = await this.uploadCollectionBatch(
+        values.coverImages as IConvertedFileMeta[],
+        COLLECTION_NAME,
+        id,
+      )
+      values = { ...values, coverImages: processedImages }
+    }
     const update = { ...user, ...values }
     await this.db
-      .collection('v2_users')
+      .collection(COLLECTION_NAME)
       .doc(user.userName)
       .set(update)
     this.updateUser(update)
@@ -161,7 +174,7 @@ export class UserStore extends ModuleStore {
       await authUser.reauthenticateAndRetrieveDataWithCredential(credential)
       const user = this.user as IUser
       await this.db
-        .collection('v2_users')
+        .collection(COLLECTION_NAME)
         .doc(user.userName)
         .delete()
       await authUser.delete()
@@ -176,7 +189,7 @@ export class UserStore extends ModuleStore {
   public async createUserProfile(fields: Partial<IUser> = {}) {
     const authUser = auth.currentUser as firebase.User
     const userName = authUser.displayName as string
-    const dbRef = this.db.collection<IUser>('v2_users').doc(userName)
+    const dbRef = this.db.collection<IUser>(COLLECTION_NAME).doc(userName)
     console.log('creating user profile', userName)
     if (!userName) {
       throw new Error('No Username Provided')
@@ -199,7 +212,6 @@ export class UserStore extends ModuleStore {
   // to authUnsubscribe variable for use later
   private _listenToAuthStateChanges() {
     this.authUnsubscribe = auth.onAuthStateChanged(authUser => {
-      console.log('auth user changed', authUser)
       this.authUser = authUser
       if (authUser) {
         this.userSignedIn(authUser)

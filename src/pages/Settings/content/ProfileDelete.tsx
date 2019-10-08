@@ -62,6 +62,7 @@ export class ProfileDelete extends React.Component<IProps, IState> {
                       <Button
                         type="submit"
                         variant="tertiary"
+                        ml={1}
                         disabled={values.password ? false : true}
                       >
                         Delete

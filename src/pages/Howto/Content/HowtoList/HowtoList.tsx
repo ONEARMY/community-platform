@@ -43,7 +43,7 @@ export class HowtoList extends React.Component<any, IState> {
     return (
       <>
         <Flex py={26}>
-          <Heading medium bold txtcenter width={1}>
+          <Heading medium bold txtcenter width={1} my={20}>
             Learn & share how to recycle, make and hack plastic
           </Heading>
         </Flex>
@@ -63,7 +63,7 @@ export class HowtoList extends React.Component<any, IState> {
           <AuthWrapper>
             <Flex justifyContent={['flex-end', 'flex-end', 'auto']}>
               <Link to={'/how-to/create'} mb={[3, 3, 0]}>
-                <Button variant={'primary'} translateY>
+                <Button variant={'primary'} translateY data-cy={'create'}>
                   Create a How-to
                 </Button>
               </Link>
@@ -87,8 +87,8 @@ export class HowtoList extends React.Component<any, IState> {
             </Flex>
           )}
           <Flex justifyContent={'center'} mt={20}>
-            <Link to={'#'}>
-              <Button variant={'secondary'}>More how-tos</Button>
+            <Link to={'#'} style={{visibility:'hidden'}}>
+              <Button variant={'secondary'} data-cy={'more-how-tos'}>More how-tos</Button>
             </Link>
           </Flex>
           <MoreContainer m={'0 auto'} pt={60} pb={90}>

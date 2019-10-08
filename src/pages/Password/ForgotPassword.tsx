@@ -77,7 +77,7 @@ export class ForgotPasswordPage extends React.Component<IProps, IState> {
                   flexWrap="wrap"
                   flexDirection="column"
                 >
-                  <Heading small arrowDown py={4} width={1}>
+                  <Heading small py={4} width={1}>
                     Reset your password
                   </Heading>
                   <Flex flexDirection={'column'} mb={3}>

@@ -1,26 +1,24 @@
-const path = require('path')
-
-module.exports = {
-  module: {
-    rules: [
+module.exports = ({
+  config
+}) => {
+  config.module.rules.push({
+    test: /\.(ts|tsx)$/,
+    use: [{
+        loader: require.resolve('babel-loader'),
+        options: {
+          presets: [
+            ['react-app', {
+              flow: false,
+              typescript: true
+            }]
+          ],
+        },
+      },
       {
-        test: /\.(ts|tsx)$/,
-        //include: path.resolve(__dirname, '../src'),
-        use: [
-          {
-            loader: require.resolve('babel-loader'),
-            options: {
-              presets: [['react-app', { flow: false, typescript: true }]],
-            },
-          },
-          {
-            loader: require.resolve('react-docgen-typescript-loader'),
-          },
-        ],
+        loader: require.resolve('react-docgen-typescript-loader'),
       },
     ],
-  },
-  resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx'],
-  },
-}
+  });
+  config.resolve.extensions.push('.ts', '.tsx', '.js', '.jsx');
+  return config;
+};

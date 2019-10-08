@@ -1,27 +1,27 @@
 export const COM_TYPE_MOCKS = [
   {
-    value: 'email',
-    label: 'email',
-  },
-  {
-    value: 'slack',
-    label: 'slack',
-  },
-  {
     value: 'discord',
     label: 'discord',
   },
   {
-    value: 'instagram',
-    label: 'instagram',
+    value: 'forum',
+    label: 'forum',
   },
   {
-    value: 'facebook',
-    label: 'facebook',
+    value: 'website',
+    label: 'website',
   },
   {
-    value: 'other',
-    label: 'other',
+    value: 'social-media',
+    label: 'social media',
+  },
+  {
+    value: 'bazar',
+    label: 'bazar',
+  },
+  {
+    value: 'email',
+    label: 'email',
   },
 ]
 

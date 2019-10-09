@@ -2,6 +2,9 @@ import * as firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/database'
 import 'firebase/firestore'
+import 'cypress-file-upload';
+import { Firestore } from './firestore'
+
 
 const fbConfig = {
   apiKey: 'AIzaSyDAxS_7M780mI3_tlwnAvpbaqRsQPlmp64',
@@ -11,29 +14,33 @@ const fbConfig = {
   storageBucket: 'onearmy-test-ci.appspot.com'
 }
 firebase.initializeApp(fbConfig)
+/**
+ * Clear all caches before any test is executed
+ */
+firebase.firestore().clearPersistence().then(() => console.log('Firestore cache cleared ...'))
+const deleteAppCacheReq = window.indexedDB.deleteDatabase('OneArmyCache')
+deleteAppCacheReq.onsuccess = () => console.log('App cache cleared ...')
+
 
 declare global {
   namespace Cypress {
     // tslint:disable-next-line:interface-name
     interface Chainable {
-      firestore(): Promise<firebase.firestore.Firestore>
 
-      login(
-        username: string,
-        password: string,
-      ): Promise<firebase.auth.UserCredential>
+      login(username: string, password: string,): Promise<firebase.auth.UserCredential>
 
       logout(): Promise<void>
+
+      deleteDocuments(collectionName: string, fieldPath: string, opStr: any, value: string) : Promise<void>
     }
   }
 }
 
-const attachCustomCommands = (
-  Cypress,
-  { auth, firestore }: typeof firebase,
-) => {
+const attachCustomCommands = (Cypress, fb: typeof firebase) => {
   let currentUser: null | firebase.User = null
-  auth().onAuthStateChanged(user => {
+  const firestore = new Firestore(fb.firestore())
+
+  fb.auth().onAuthStateChanged(user => {
     currentUser = user
   })
 
@@ -44,7 +51,7 @@ const attachCustomCommands = (
         return { email, password }
       },
     })
-    return auth().signInWithEmailAndPassword(email, password)
+    return fb.auth().signInWithEmailAndPassword(email, password)
   })
 
   Cypress.Commands.add('logout', () => {
@@ -55,12 +62,19 @@ const attachCustomCommands = (
         return { currentUser: userInfo }
       },
     })
-    return auth().signOut()
+    return fb.auth().signOut()
   })
 
-  Cypress.Commands.add('firestore', () => {
-    return firestore()
+  Cypress.Commands.add('deleteDocuments', (collectionName: string, fieldPath: string, opStr: any, value: string) => {
+    Cypress.log({
+      displayName: 'deleteDocuments',
+      consoleProps: () => {
+        return { collectionName, fieldPath, opStr, value }
+      },
+    })
+    return firestore.deleteDocuments(collectionName, fieldPath, opStr, value)
   })
+
 }
 
 attachCustomCommands(Cypress, firebase)

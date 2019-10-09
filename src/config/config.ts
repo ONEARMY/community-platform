@@ -13,14 +13,7 @@ https://javebratt.com/hide-firebase-api/
 /*********************************************************************************************** /
                                         Dev/Staging
 /********************************************************************************************** */
-let firebaseConfig: IFirebaseConfig = {
-  apiKey: 'AIzaSyChVNSMiYxCkbGd9C95aChr9GxRJtW6NRA',
-  authDomain: 'precious-plastics-v4-dev.firebaseapp.com',
-  databaseURL: 'https://precious-plastics-v4-dev.firebaseio.com',
-  messagingSenderId: '174193431763',
-  projectId: 'precious-plastics-v4-dev',
-  storageBucket: 'precious-plastics-v4-dev.appspot.com',
-}
+
 let sentryConfig: ISentryConfig = {
   dsn: 'https://8c1f7eb4892e48b18956af087bdfa3ac@sentry.io/1399729',
 }
@@ -42,12 +35,24 @@ const e = process.env
 const branch = e.REACT_APP_BRANCH as string
 // as both dev.onearmy.world and onearmy.world are production builds we can't use process.env to distinguish
 // will be set to one of 'localhost', 'staging' or 'production'
-const siteVariant: siteVariants =
-  branch === 'production'
-    ? 'production'
-    : branch === 'master'
-    ? 'staging'
-    : 'localhost'
+
+function getSiteVariant(gitBranch: string, env: typeof process.env):siteVariants {
+
+  if (env.SITE_VARIANT === 'test-ci') {
+    return 'test-ci'
+  }
+  switch (gitBranch) {
+    case 'production':
+      return 'production'
+    case 'master':
+      return 'staging'
+    default:
+      return 'localhost'
+  }
+}
+
+const siteVariant = getSiteVariant(branch, e)
+
 /*********************************************************************************************** /
                                         Production
 /********************************************************************************************** */
@@ -55,14 +60,6 @@ const siteVariant: siteVariants =
 // production config is passed as environment variables during CI build.
 if (siteVariant === 'production') {
   // note, technically not required as supplied directly to firebase config() method during build
-  firebaseConfig = {
-    apiKey: e.REACT_APP_FIREBASE_API_KEY as string,
-    authDomain: e.REACT_APP_FIREBASE_AUTH_DOMAIN as string,
-    databaseURL: e.REACT_APP_FIREBASE_DATABASE_URL as string,
-    messagingSenderId: e.REACT_APP_FIREBASE_MESSAGING_SENDER_ID as string,
-    projectId: e.REACT_APP_FIREBASE_PROJECT_ID as string,
-    storageBucket: e.REACT_APP_FIREBASE_STORAGE_BUCKET as string,
-  }
   sentryConfig = {
     dsn: e.REACT_APP_SENTRY_DSN as string,
   }
@@ -80,12 +77,47 @@ if (siteVariant === 'production') {
   console.log = () => {}
 }
 
+
+const firebaseConfigs: {[variant in siteVariants]: IFirebaseConfig} = {
+  'localhost': {
+    apiKey: 'AIzaSyChVNSMiYxCkbGd9C95aChr9GxRJtW6NRA',
+    authDomain: 'precious-plastics-v4-dev.firebaseapp.com',
+    databaseURL: 'https://precious-plastics-v4-dev.firebaseio.com',
+    messagingSenderId: '174193431763',
+    projectId: 'precious-plastics-v4-dev',
+    storageBucket: 'precious-plastics-v4-dev.appspot.com',
+  },
+  'test-ci': {
+    apiKey: 'AIzaSyDAxS_7M780mI3_tlwnAvpbaqRsQPlmp64',
+    authDomain: 'onearmy-test-ci.firebaseapp.com',
+    databaseURL: 'https://onearmy-test-ci.firebaseio.com',
+    projectId: 'onearmy-test-ci',
+    storageBucket: 'onearmy-test-ci.appspot.com',
+    messagingSenderId: '174193431763',
+  },
+  'staging': {
+    apiKey: 'AIzaSyChVNSMiYxCkbGd9C95aChr9GxRJtW6NRA',
+    authDomain: 'precious-plastics-v4-dev.firebaseapp.com',
+    databaseURL: 'https://precious-plastics-v4-dev.firebaseio.com',
+    messagingSenderId: '174193431763',
+    projectId: 'precious-plastics-v4-dev',
+    storageBucket: 'precious-plastics-v4-dev.appspot.com',
+  },
+  'production': {
+    apiKey: e.REACT_APP_FIREBASE_API_KEY as string,
+    authDomain: e.REACT_APP_FIREBASE_AUTH_DOMAIN as string,
+    databaseURL: e.REACT_APP_FIREBASE_DATABASE_URL as string,
+    messagingSenderId: e.REACT_APP_FIREBASE_MESSAGING_SENDER_ID as string,
+    projectId: e.REACT_APP_FIREBASE_PROJECT_ID as string,
+    storageBucket: e.REACT_APP_FIREBASE_STORAGE_BUCKET as string,
+  },
+}
 /*********************************************************************************************** /
                                         Exports
 /********************************************************************************************** */
 
 export const SITE = siteVariant
-export const FIREBASE_CONFIG = firebaseConfig
+export const FIREBASE_CONFIG = firebaseConfigs[siteVariant]
 export const ALGOLIA_SEARCH_CONFIG = algoliaSearchConfig
 export const ALGOLIA_PLACES_CONFIG = algoliaPlacesConfig
 export const SENTRY_CONFIG = sentryConfig
@@ -110,4 +142,5 @@ interface IAlgoliaConfig {
   searchOnlyAPIKey: string
   applicationID: string
 }
-type siteVariants = 'localhost' | 'staging' | 'production'
+type siteVariants = 'localhost' | 'test-ci' | 'staging' | 'production'
+

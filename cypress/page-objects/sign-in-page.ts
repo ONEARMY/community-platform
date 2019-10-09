@@ -7,8 +7,8 @@ export class SignInPage {
   }
 
   login() {
-    cy.get('input[name="email"]').type('test1234@test.com')
-    cy.get('input[name="password"]').type('12345678')
+    cy.get('input[name="email"]').type('howto_reader@test.com')
+    cy.get('input[name="password"]').type('test1234')
     cy.get('button[type="submit"]').click()
     return new HowToPage()
   }

@@ -1,7 +1,11 @@
+import FileData = Cypress.FileData
+
 describe('[How To]', () => {
+  const SKIP_TIMEOUT = { timeout: 300 }
 
-  const SKIP_TIMEOUT = {timeout: 300};
-
+  before(() => {
+    return cy.deleteDocuments('v2_howtos', 'title', '==', 'Create a how-to test')
+  })
 
   describe('[List how-tos]', () => {
     const howtoUrl = '/how-to/make-glasslike-beams'
@@ -22,7 +26,8 @@ describe('[How To]', () => {
       cy.get('[data-cy=more-how-tos]', SKIP_TIMEOUT).should('be.hidden')
 
       cy.log('All how-tos are shown')
-      cy.get('[data-cy=card]').its('length').should('be.gte', 7)
+      const totalHowtos = 7
+      cy.get('[data-cy=card]').its('length').should('be.eq', totalHowtos)
 
       cy.log('How-to cards has basic info')
       cy.get(`[data-cy=card] > a[href="${howtoUrl}"]`, SKIP_TIMEOUT)
@@ -119,7 +124,7 @@ describe('[How To]', () => {
           expect($step).to.contain(`more for a partition or the wall`, 'Description')
           cy.log('Step image is updated on thumbnail click')
           cy.get('[data-cy="active-image"]').should('have.attr', 'src').and('match', pic1Regex)
-          cy.get('[data-cy=thumbnail]').eq(2).click()
+          cy.get('[data-cy=thumbnail]:eq(2)').click()
           cy.get('[data-cy="active-image"]').should('have.attr', 'src').and('match', pic3Regex)
         })
 
@@ -127,14 +132,14 @@ describe('[How To]', () => {
 
       it('[Not interested and go back]', () => {
         cy.visit(specificHowtoUrl)
-        cy.get('[data-cy="go-back"]').eq(0).as('topBackButton')
+        cy.get('[data-cy="go-back"]:eq(0)').as('topBackButton')
           .click()
           .url().should('include', '/how-to')
       })
 
       it('[Finish reading and go back]', () => {
         cy.visit(specificHowtoUrl)
-        cy.get('[data-cy="go-back"]').eq(1).as('bottomBackButton')
+        cy.get('[data-cy="go-back"]:eq(1)').as('bottomBackButton')
           .click()
           .url().should('include', '/how-to')
       })
@@ -143,7 +148,7 @@ describe('[How To]', () => {
   })
 
   describe('[Create a how-to]', () => {
-    it('[By Anonymous]',() => {
+    it('[By Anonymous]', () => {
       cy.log('Get redirected to /how-to when trying to create')
       cy.visit('/how-to')
       cy.logout()
@@ -151,13 +156,14 @@ describe('[How To]', () => {
         .url().should('not.include', '/create')
 
     })
-    it('[By Authenticated]',() => {
+
+    it('[By Authenticated]', () => {
       cy.visit('/how-to')
       cy.login('howto_creator@test.com', 'test1234')
       cy.get('[data-cy=create]').click()
 
       cy.log('Fill up the intro')
-      cy.get('[data-cy=title').type('Create a how-to test')
+      cy.get('[data-cy=intro-title').type('Create a how-to test')
       cy.get('[data-cy=tag-select]').click()
       cy.get('.data-cy__menu').contains('howto_testing').click()
 
@@ -166,9 +172,57 @@ describe('[How To]', () => {
 
       cy.get('[data-cy=difficulty-select]').click()
       cy.get('.data-cy__menu').contains('Medium').click()
-      cy.get('[data-cy=description]').type('After creating, the how-to will be deleted')
+      cy.get('[data-cy=intro-description]').type('After creating, the how-to will be deleted')
+      cy.get('[data-cy=intro-caption]').type('Intro caption goes here ...')
 
-      // cy.fixture('images/howto/cover.png').as('cover')
+      cy.log('Upload a cover for the intro')
+      const introPic = 'images/howto-intro.jpg'
+      cy.fixture(introPic).then(fileContent => {
+        cy.get('[data-cy=intro-cover]').find(':file').upload({
+          fileContent,
+          fileName: introPic,
+          mimeType: 'image/jpg',
+        })
+      })
+
+      cy.log('Add steps')
+      cy.get('[data-cy=step]').its('length').should('be.eq', 3)
+      cy.get('button[data-cy=add-step]').click()
+      cy.get('[data-cy=step]').its('length').should('be.eq', 4)
+
+      cy.get('[data-cy=delete-step]').each(($el) => {
+        $el.trigger('click')
+        cy.get('[data-cy=confirm]:visible').click()
+      })
+      cy.get('[data-cy=step]:visible').its('length').should('be.eq', 1)
+
+      cy.log('Fill up a step info')
+      cy.get('[data-cy=step]:eq(0)').within($firstStep => {
+        cy.wrap($firstStep).contains('Step 1').should('be.exist')
+        cy.get('[data-cy=step-title]').type('First step is easy')
+        cy.get('[data-cy=step-description]').type('Description for the first step')
+        cy.get('[data-cy=step-caption]').type('What a step caption')
+        cy.get('[data-cy=delete-step]').should('not.exist')
+      })
+      cy.log('Upload pics for a step')
+      const picNames = ['images/howto-step-pic1.jpg', 'images/howto-step-pic2.jpg']
+      Cypress.Promise.all(picNames.map(fileName => {
+        return new Cypress.Promise(resolve => {
+          return cy.fixture(fileName).then(fileContent => {
+            resolve({ fileName, fileContent })
+          })
+        })
+      })).then((files: any[]) => {
+        const fileData: FileData[] = files.map(f => {
+          return { fileName: f.fileName, fileContent: f.fileContent, mimeType: 'image/jpg' }
+        })
+        cy.get('[data-cy=step]:visible').find(':file').upload(fileData)
+      })
+      cy.get('[data-cy=submit]').click()
+      cy.wait(6000)
+      cy.get('[data-cy=view-howto]').click()
+        .url().should('include', '/how-to/create-a-howto-test')
+      cy.get('[data-cy=how-to-basis]').contains('Create a how-to test').its('length').should('be.eq', 1)
     })
   })
 })

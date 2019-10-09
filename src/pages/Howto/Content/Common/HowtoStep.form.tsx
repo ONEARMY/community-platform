@@ -57,6 +57,7 @@ class HowtoStep extends Component<IProps, IState> {
     return (
       // NOTE - animation parent container in CreateHowTo
       <Flex
+        data-cy={'step'}
         mt={5}
         p={3}
         key={index}
@@ -71,6 +72,7 @@ class HowtoStep extends Component<IProps, IState> {
           </Heading>
           {index >= 1 && (
             <Button
+              data-cy={'delete-step'}
               small
               variant={'tertiary'}
               icon="delete"
@@ -92,6 +94,7 @@ class HowtoStep extends Component<IProps, IState> {
                 </Flex>
                 <Flex px={1}>
                   <Button
+                    data-cy={'confirm'}
                     small
                     variant={'tertiary'}
                     onClick={() => this.confirmDelete()}
@@ -108,6 +111,7 @@ class HowtoStep extends Component<IProps, IState> {
           <Label htmlFor={`${step}.title`}>Title of this step *</Label>
           <Field
             name={`${step}.title`}
+            data-cy={'step-title'}
             component={InputField}
             placeholder="Title of this step"
             validate={required}
@@ -119,6 +123,7 @@ class HowtoStep extends Component<IProps, IState> {
           <Field
             name={`${step}.text`}
             placeholder="Description of this step"
+            data-cy={'step-description'}
             component={TextAreaField}
             style={{ resize: 'vertical', height: '300px' }}
             validate={required}
@@ -163,6 +168,7 @@ class HowtoStep extends Component<IProps, IState> {
         <Flex mt={2}>
           <Field
             name={`${step}.caption`}
+            data-cy={'step-caption'}
             component={InputField}
             placeholder="Insert Caption"
           />

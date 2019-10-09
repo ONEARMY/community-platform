@@ -169,7 +169,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                             <Field
                               id="title"
                               name="title"
-                              data-cy={'title'}
+                              data-cy={'intro-title'}
                               validateFields={[]}
                               validate={value =>
                                 this.props.parentType === 'create'
@@ -227,7 +227,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                             <Field
                               id="description"
                               name="description"
-                              data-cy={'description'}
+                              data-cy={'intro-description'}
                               validate={required}
                               validateFields={[]}
                               component={TextAreaField}
@@ -284,7 +284,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                         </Flex>
 
                         {/* Right side */}
-                        <Flex px={2} flex={[1, 1, 3]} flexDirection={'column'}>
+                        <Flex px={2} flex={[1, 1, 3]} flexDirection={'column'} data-cy={'intro-cover'}>
                           <Label htmlFor="cover_image">Cover image *</Label>
                           {formValues.cover_image && !editCoverImg ? (
                             <Flex
@@ -323,6 +323,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                           <Flex mt={2}>
                             <Field
                               name="caption"
+                              data-cy={'intro-caption'}
                               component={InputField}
                               placeholder="Insert Caption"
                             />
@@ -356,6 +357,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                         <Flex>
                           <Button
                             icon={'add'}
+                            data-cy={'add-step'}
                             mx="auto"
                             my={20}
                             variant="secondary"
@@ -384,11 +386,16 @@ export class HowtoForm extends React.Component<IProps, IState> {
                     <>
                       <HowToSubmitStatus />
                       <Button
+                        data-cy={submitting ? '': 'view-howto'}
                         mt={3}
                         variant={submitting ? 'disabled' : 'outline'}
                         icon="arrow-forward"
-                        onClick={() =>
-                          this.props.history.push('/how-to/' + values.slug)
+                        onClick={() => {
+                            if (submitting) {
+                              return
+                            }
+                            this.props.history.push('/how-to/' + values.slug)
+                          }
                         }
                       >
                         View How-To
@@ -409,6 +416,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                 <Box sx={{ position: 'fixed', maxWidth: '400px' }}>
                   <PostingGuidelines />
                   <Button
+                    data-cy={'submit'}
                     onClick={() => {
                       const form = document.getElementById('howtoForm')
                       if (typeof form !== 'undefined' && form !== null) {

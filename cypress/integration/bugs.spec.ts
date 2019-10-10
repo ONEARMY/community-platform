@@ -7,4 +7,12 @@ describe('[Bugs]', () => {
       expect($card).to.contain('extrusion')
     })
   })
+
+  it.skip('[638]', () => {
+    cy.logout()
+    cy.visit('/how-to/set-up-devsite-to-help-coding')
+    cy.log('Go to the login page')
+    cy.get('button').contains('Login').click()
+    cy.get('div').contains('Welcome back homie').should('be.exist')
+  })
 })

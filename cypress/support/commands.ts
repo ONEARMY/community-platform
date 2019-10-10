@@ -32,6 +32,8 @@ declare global {
       logout(): Promise<void>
 
       deleteDocuments(collectionName: string, fieldPath: string, opStr: any, value: string) : Promise<void>
+
+      step(message: string)
     }
   }
 }
@@ -73,6 +75,13 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
       },
     })
     return firestore.deleteDocuments(collectionName, fieldPath, opStr, value)
+  })
+
+  Cypress.Commands.add('step', (message: string) => {
+    Cypress.log({
+      displayName: 'step',
+      message: `**${message}**`
+    })
   })
 
 }

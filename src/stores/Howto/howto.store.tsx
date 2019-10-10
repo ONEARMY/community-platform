@@ -122,7 +122,16 @@ export class HowtoStore extends ModuleStore {
         id,
       )
       step.images = imgMeta
-      stepsWithImgMeta.push({ ...step, images: imgMeta })
+      stepsWithImgMeta.push({
+        ...step,
+        images: imgMeta.map(f => {
+          if (f === undefined) {
+            return null
+          }
+
+          return f
+        }),
+      })
     }
     return stepsWithImgMeta
   }

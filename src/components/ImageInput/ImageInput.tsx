@@ -1,9 +1,10 @@
 import * as React from 'react'
-import { Box, Flex } from 'rebass'
+import { Box, Flex, Image } from 'rebass'
 import { Button } from '../Button'
 import Lightbox from 'react-image-lightbox'
 import 'react-image-lightbox/style.css'
 import { ImageConverter } from './ImageConverter'
+import { IUploadedFileMeta } from 'src/stores/storage'
 
 /*
     This component takes multiple imageusing filepicker and resized clientside
@@ -14,6 +15,7 @@ import { ImageConverter } from './ImageConverter'
 interface IProps {
   onFilesChange?: (fileMeta: IConvertedFileMeta[]) => void
   multi?: boolean
+  src?: IUploadedFileMeta
 }
 
 export interface IConvertedFileMeta {
@@ -65,14 +67,25 @@ export class ImageInput extends React.Component<IProps, IState> {
     inputRef.click()
   }
 
-  public handleConvertedFileChange(file: IConvertedFileMeta, index: number) {
-    const { convertedFiles } = this.state
-    const updatedCovertedFiles = convertedFiles.concat(file)
+  public handleConvertedFileChange(
+    isMulti: boolean,
+    file: IConvertedFileMeta,
+    index: number,
+  ) {
+    let updatedCovertedFiles: Array<any> | any = []
 
-    this.setState(() => ({
+    if (isMulti) {
+      updatedCovertedFiles = this.state.convertedFiles.concat(file)
+    } else {
+      updatedCovertedFiles = file
+    }
+
+    this.setState({
       convertedFiles: updatedCovertedFiles,
       imgDelivered: true,
-    }))
+    })
+
+    console.log(this.state)
 
     if (this.props.onFilesChange) {
       this.props.onFilesChange(updatedCovertedFiles)
@@ -95,7 +108,9 @@ export class ImageInput extends React.Component<IProps, IState> {
   render() {
     const { inputFiles, openLightbox, lightboxImg, imgDelivered } = this.state
     // if at least one image present, hide the 'choose image' button and replace with smaller button
-    const imgPreviewMode = inputFiles.length > 0
+    const imgPreviewMode = inputFiles.length > 0 || this.props.src
+    const useImageSrc = this.props.src && this.state.inputFiles.length === 0
+
     return (
       <Box p={0}>
         <>
@@ -133,18 +148,26 @@ export class ImageInput extends React.Component<IProps, IState> {
             />
           </div>
           <Flex mx={-1}>
-            {inputFiles.map((file, index) => {
-              return (
-                <ImageConverter
-                  key={file.name}
-                  file={file}
-                  onImgConverted={meta =>
-                    this.handleConvertedFileChange(meta, index)
-                  }
-                  onImgClicked={meta => this.showImgLightbox(meta)}
-                />
-              )
-            })}
+            {useImageSrc && this.props.src && (
+              <Image src={this.props.src.downloadUrl} />
+            )}
+            {!useImageSrc &&
+              inputFiles.map((file, index) => {
+                return (
+                  <ImageConverter
+                    key={file.name}
+                    file={file}
+                    onImgConverted={meta =>
+                      this.handleConvertedFileChange(
+                        this.props.multi === true,
+                        meta,
+                        index,
+                      )
+                    }
+                    onImgClicked={meta => this.showImgLightbox(meta)}
+                  />
+                )
+              })}
             {imgPreviewMode && (
               <Flex width={1 / 4} px={1}>
                 <Button

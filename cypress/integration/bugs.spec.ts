@@ -15,4 +15,15 @@ describe('[Bugs]', () => {
     cy.get('button').contains('Login').click()
     cy.get('div').contains('Welcome back homie').should('be.exist')
   })
+
+  it.skip('[639]', () => {
+    cy.visit('/how-to')
+    cy.get('[data-cy=tag-select]').click()
+    cy.get('.data-cy__menu').contains('extrusion').click()
+    cy.get('[data-cy=tag-select]').click()
+    cy.get('.data-cy__menu').contains('howto_testing').click()
+
+    cy.get('div').contains('loading...').should('not.exist')
+  })
+
 })

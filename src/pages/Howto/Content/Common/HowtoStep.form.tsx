@@ -134,36 +134,24 @@ class HowtoStep extends Component<IProps, IState> {
           <Label htmlFor={`${step}.text`}>
             Upload image(s) for this step *
           </Label>
-          {images.length > 0 &&
-          images[0].downloadUrl !== undefined &&
-          !editStepImgs ? (
-            <Flex alignItems={'center'} justifyContent={'center'}>
-              {images.map(image => {
-                return (
-                  <Flex
-                    flexWrap={'nowrap'}
-                    px={1}
-                    width={1 / 4}
-                    key={image.name}
-                  >
-                    <Image sx={{ opacity: 0.5 }} src={image.downloadUrl} />
-                  </Flex>
-                )
-              })}
-              <Button
-                icon={'delete'}
-                variant={'tertiary'}
-                sx={{ position: 'absolute' }}
-                onClick={() =>
-                  this.setState({
-                    editStepImgs: !editStepImgs,
-                  })
-                }
-              />
-            </Flex>
-          ) : (
-            <Field name={`${step}.images`} component={ImageInputField} multi />
-          )}
+
+          <code>{JSON.stringify(images)}</code>
+
+          <Field
+            name={`${step}.images[0]`}
+            src={images[0]}
+            component={ImageInputField}
+          />
+          <Field
+            name={`${step}.images[1]`}
+            src={images[1]}
+            component={ImageInputField}
+          />
+          <Field
+            name={`${step}.images[2]`}
+            src={images[2]}
+            component={ImageInputField}
+          />
         </Flex>
         <Flex mt={2}>
           <Field

@@ -9,7 +9,7 @@ import { IUploadedFileMeta } from 'src/stores/storage'
 export interface IHowto extends IHowtoFormInput {
   _createdBy: string
   cover_image: IUploadedFileMeta
-  files: IUploadedFileMeta[]
+  files: Array<IUploadedFileMeta | File | null>
   steps: IHowtoStep[]
 }
 /**
@@ -19,7 +19,7 @@ export type IHowtoDB = IHowto & DBDoc
 
 export interface IHowtoStep extends IHowToStepFormInput {
   // *** NOTE - adding an '_animationKey' field to track when specific array element removed for
-  images: IUploadedFileMeta[]
+  images: Array<IUploadedFileMeta | null>
   title: string
   text: string
   caption?: string
@@ -27,7 +27,7 @@ export interface IHowtoStep extends IHowToStepFormInput {
 }
 
 export interface IHowToStepFormInput {
-  images: IUploadedFileMeta[] | IConvertedFileMeta[]
+  images: Array<IUploadedFileMeta | IConvertedFileMeta | null>
   title: string
   text: string
   caption?: string
@@ -41,7 +41,7 @@ export interface IHowtoFormInput {
   description: string
   difficulty_level: 'Easy' | 'Medium' | 'Hard' | 'Very Hard'
   time: string
-  files: IUploadedFileMeta[] | File[]
+  files: Array<IUploadedFileMeta | File | null>
   steps: IHowToStepFormInput[]
   slug: string
   // note, tags will remain optional as if populated {} will be stripped by db (firestore)

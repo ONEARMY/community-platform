@@ -97,15 +97,7 @@ export class LoginComponent extends React.Component<IProps, IState> {
             display={['none', 'none', 'flex']}
             small
             mr={2}
-            // onClick={() =>
-            //   this.setState({
-            //     showLoginModal: !this.state.showLoginModal,
-            //     showResetPWForm: false,
-            //     showLoginForm: false,
-            //     showSignUpForm: true,
-            //   })
-            // }
-            data-cy={'login'}
+            data-cy="sign-in-button"
           >
             Login
           </ButtonSign>

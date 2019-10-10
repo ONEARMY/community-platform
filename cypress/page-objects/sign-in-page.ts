@@ -2,6 +2,9 @@ import { HowToPage } from '../page-objects/how-to-page'
 
 export class SignInPage {
   constructor() {
+    this.checkLoaded()
+  }
+  checkLoaded() {
     cy.contains('Welcome back homie')
     cy.contains('Log in to your account')
   }

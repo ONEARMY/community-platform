@@ -176,14 +176,7 @@ describe('[How To]', () => {
       cy.get('[data-cy=intro-caption]').type('Intro caption goes here ...')
 
       cy.step('Upload a cover for the intro')
-      const introPic = 'images/howto-intro.jpg'
-      cy.fixture(introPic).then(fileContent => {
-        cy.get('[data-cy=intro-cover]').find(':file').upload({
-          fileContent,
-          fileName: introPic,
-          mimeType: 'image/jpg',
-        })
-      })
+      cy.get('[data-cy=intro-cover]').find(':file').uploadFiles('images/howto-intro.jpg')
 
       cy.step('Add steps')
       cy.get('[data-cy=step]').its('length').should('be.eq', 3)
@@ -205,19 +198,8 @@ describe('[How To]', () => {
         cy.get('[data-cy=delete-step]').should('not.exist')
       })
       cy.step('Upload pics for a step')
-      const picNames = ['images/howto-step-pic1.jpg', 'images/howto-step-pic2.jpg']
-      Cypress.Promise.all(picNames.map(fileName => {
-        return new Cypress.Promise(resolve => {
-          return cy.fixture(fileName).then(fileContent => {
-            resolve({ fileName, fileContent })
-          })
-        })
-      })).then((files: any[]) => {
-        const fileData: FileData[] = files.map(f => {
-          return { fileName: f.fileName, fileContent: f.fileContent, mimeType: 'image/jpg' }
-        })
-        cy.get('[data-cy=step]:visible').find(':file').upload(fileData)
-      })
+      cy.get('[data-cy=step]:visible').find(':file').uploadFiles(['images/howto-step-pic1.jpg', 'images/howto-step-pic2.jpg'])
+
       cy.get('[data-cy=submit]').click()
       cy.wait(6000)
       cy.get('[data-cy=view-howto]').click()
@@ -225,4 +207,5 @@ describe('[How To]', () => {
       cy.get('[data-cy=how-to-basis]').contains('Create a how-to test').its('length').should('be.eq', 1)
     })
   })
+
 })

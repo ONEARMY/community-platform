@@ -1,3 +1,5 @@
+import { Page } from '../utils/test-utils'
+
 describe('[Bugs]', () => {
   it.skip('[636]', () => {
     cy.visit('/how-to')
@@ -48,6 +50,14 @@ describe('[Bugs]', () => {
     cy.get('[data-cy=password').type('wrong_password')
     cy.get('[data-cy=submit').click()
     cy.get('div[color=red]').contains(`Incorrect password`)
+  })
+
+  it.skip('[651]', () => {
+    cy.visit('/how-to')
+    cy.login('howto_reader@test.com', 'test1234')
+    cy.step('Redirect to home page when visiting /sign-in')
+    cy.visit('/sign-in')
+      .url().should('include', Page.HOME_PAGE)
   })
 
   it.skip('[646]', () => {

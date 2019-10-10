@@ -37,9 +37,6 @@ Our backend contains microservices in Node and is based on Firebase's Firestore 
 
 You can find useful links to learn more about these technologies [in the resources section](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--resources).
 
-### Automated testing
-
-The project uses [Jest](https://jestjs.io/) to unit Test and [Cypress](https://www.cypress.io/) to write End-to-end tests.
 
 ## 📟 &nbsp; Getting started
 
@@ -81,6 +78,34 @@ We've also labeled some of the issues with `Good-first-issue` to help you get st
 When you start working on an issue, comment on it or if your are a registered contributor assign yourself to let us know so we avoid working on something twice. The comment should include a mention to @mattia-io (our project lead).
 
 When a group of issues have been resolved a pull request to the master branch should be made, where it will undergo a quick review and test. It is expected that the developer will have done thorough testing themselves first, this helps make sure most pull requests get merged quickly.
+
+## 🐛 &nbsp; Cypress-reproducible Bug
+Bugs accompanied with Cyypress tests aim to help contributors reproduce them quickly and eliminate miscommunication between reporters 
+and contributors. Contributors need [a very basic understanding about Cypress](https://docs.cypress.io/guides/getting-started/writing-your-first-test.html#Add-a-test-file)
+ to get started (less than 20 mins of reading). You can skip the tutorial if you're already familiar with to Cypress
+
+The typical workflow for fixing a bug:
+
+- Create your own branch off the branch **bugs**
+`$ git checkout -b your_branch bugs`
+
+- Start the app in the testing environment. If you haven't installed any dependency for the app yet, please run `yarn` before proceeding
+`$ yarn start:ci`
+
+- Open Cypress dashboard
+`$ yarn cy:open`
+
+- On the dashboard, start the bug tests by clicking onto `bug.spec.ts`. Most of the time, you may want to execute the test of a particular bug. To do that, find your bug by its github issue ID in `bugs.spec.ts` and 
+replace `it` with `it.only`. For example:`it('[636]', () ...` => `it.only('[636]', () ...`
+
+## 🐛 &nbsp; Testing Setup
+
+Due to the current architecture which lets web clients talk to Firebase services directly, we decided it's end-to-end testing 
+done by Cypress. That means all Cypress tests are executed against a dedicated firebase project which is different to development and staging. Hence, you 
+notice data in testing are completely different to what you see when developing. In addition, the testing app starts at the port
+`localhost:3456` which all tests are run against.
+
+To start the app in the testing mode, use `$ yarn start:ci`. It's only recommended when you write tests or fix bugs that are reported with Cypress tests. For development, please stick to the default app `$ yarn start`  
 
 ## 🏠 &nbsp; Project Structure
 

@@ -91,7 +91,7 @@
     "react-router": "^5.0.0",
     "react-router-breadcrumbs-hoc": "^3.2.0",
     "react-router-dom": "^5.0.0",
-    "react-router-hash-link ": "^1.2.1",
+    "react-router-hash-link": "^1.2.1",
     "react-select": "^2.4.3",
     "react-slick": "^0.25.2",
     "rebass": "4.0.6",

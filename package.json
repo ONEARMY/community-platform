@@ -125,8 +125,9 @@
     "prod:copy": "cp .env .env-default && cp ./.env-prod ./.env",
     "prod:restore": "cp .env-default .env && rm .env-default",
     "start:ci": "SITE_VARIANT=test-ci PORT=3456 npm run start",
-    "cy:run": "server-test start:ci http://localhost:3456 'cypress run'",
     "cy:open": "npx cypress open",
+    "cy:run": "npx cypress run",
+    "cy:ci": "server-test start:ci http://localhost:3456 cy:run",
     "cy:run:debug": "DEBUG=cypress:* cy:run"
   },
   "eslintConfig": {},

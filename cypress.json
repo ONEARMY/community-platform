@@ -10,5 +10,6 @@
   "reporterOptions": {
     "mochaFile": "cypress/coverage/out-[hash].xml"
   },
-  "supportFile": "cypress/support/index.ts"
+  "supportFile": "cypress/support/index.ts",
+  "projectId": "4s5zgo"
 }

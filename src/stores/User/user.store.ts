@@ -215,6 +215,9 @@ export class UserStore extends ModuleStore {
       this.authUser = authUser
       if (authUser) {
         this.userSignedIn(authUser)
+        if (!authUser.emailVerified) {
+          this.sendEmailVerification()
+        }
       } else {
         this.updateUser(undefined)
       }

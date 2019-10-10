@@ -35,6 +35,19 @@ describe('[Bugs]', () => {
       .url().should('include', '/lost-password')
   })
 
+  it.skip('[649]', () => {
+    cy.step('Wrong email and wrong password')
+    cy.visit('/sign-in')
+    cy.get('[data-cy=email').type('wrong_email@test.com')
+    cy.get('[data-cy=email').type('anything')
+    cy.get('div[color=red]').contains(`Incorrect email`)
+
+    cy.step('Correct email and wrong password')
+    cy.get('[data-cy=email').type('howto_reader@test.com')
+    cy.get('[data-cy=email').type('wrong_password')
+    cy.get('div[color=red]').contains(`Incorrect password`)
+  })
+
   it.skip('[646]', () => {
     cy.deleteDocuments('v2_howtos', 'title', '==', 'Create a how-to test')
 

@@ -144,7 +144,22 @@ describe('[How To]', () => {
           .url().should('include', '/how-to')
       })
     })
+    it('[By Authenticated]', () => {
+      cy.log('Open a how-to as anonymous')
+      cy.visit(specificHowtoUrl)
 
+      cy.log('Login')
+      cy.get('[data-cy=login]').click()
+      cy.get('[data-cy=email]').type('howto_creator@test.com')
+      cy.get('[data-cy=password]').type('test1234')
+      cy.get('[data-cy=submit]').click()
+        .url().should('include', '/how-to')
+
+      cy.log('The Edit button is available')
+      cy.visit(specificHowtoUrl)
+      cy.get('[data-cy=edit]').should('be.exist')
+
+    })
   })
 
   describe('[Create a how-to]', () => {

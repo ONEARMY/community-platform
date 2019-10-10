@@ -171,10 +171,10 @@ class SignInPage extends React.Component<IProps, IState> {
                         <Text color={'red'}>{this.state.errorMsg}</Text>
                         <Flex mb={3} justifyContent={'space-between'}>
                           <Text small color={'grey'} mt={2}>
-                            <Link to={'/sign-up'}>Don't have an account?</Link>
+                            <Link to={'/sign-up'} data-cy={"no-account"}>Don't have an account?</Link>
                           </Text>
                           <Text small color={'grey'} mt={2}>
-                            <Link to="#">Lost password?</Link>
+                            <Link to="#" data-cy={"lost-password"}>Lost password?</Link>
                           </Text>
                         </Flex>
 

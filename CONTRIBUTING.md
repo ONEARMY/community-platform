@@ -80,7 +80,7 @@ When you start working on an issue, comment on it or if your are a registered co
 When a group of issues have been resolved a pull request to the master branch should be made, where it will undergo a quick review and test. It is expected that the developer will have done thorough testing themselves first, this helps make sure most pull requests get merged quickly.
 
 ## 🐛 &nbsp; Cypress-reproducible Bug
-Bugs accompanied with Cyypress tests aim to help contributors reproduce them quickly and eliminate miscommunication between reporters 
+Bugs accompanied with Cypress tests aim to help contributors reproduce them quickly and eliminate miscommunication between reporters 
 and contributors. Contributors need [a very basic understanding about Cypress](https://docs.cypress.io/guides/getting-started/writing-your-first-test.html#Add-a-test-file)
  to get started (less than 20 mins of reading). You can skip the tutorial if you're already familiar with to Cypress
 

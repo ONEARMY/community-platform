@@ -144,7 +144,7 @@ describe('[How To]', () => {
           .url().should('include', '/how-to')
       })
     })
-    it('[By Authenticated]', () => {
+    it.skip('[By Authenticated]', () => {
       cy.log('Open a how-to as anonymous')
       cy.visit(specificHowtoUrl)
 
@@ -158,7 +158,6 @@ describe('[How To]', () => {
       cy.log('The Edit button is available')
       cy.visit(specificHowtoUrl)
       cy.get('[data-cy=edit]').should('be.exist')
-
     })
   })
 

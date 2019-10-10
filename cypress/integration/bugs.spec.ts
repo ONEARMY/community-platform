@@ -28,6 +28,13 @@ describe('[Bugs]', () => {
     cy.get('div').contains('How-to Guidelines').should('be.exist')
   })
 
+  it.skip('[648]', () => {
+    cy.step('Go to the Lost Password page')
+    cy.visit('/sign-in')
+    cy.get('[data-cy=lost-password]').click()
+      .url().should('include', '/lost-password')
+  })
+
   it.skip('[646]', () => {
     cy.deleteDocuments('v2_howtos', 'title', '==', 'Create a how-to test')
 

@@ -68,7 +68,3 @@ const attachCustomCommands = (
 }
 
 attachCustomCommands(Cypress, firebase)
-// ensure the platform is loaded before starting any tests
-beforeEach(() => {
-  cy.visit('/', { timeout: 300000 })
-})

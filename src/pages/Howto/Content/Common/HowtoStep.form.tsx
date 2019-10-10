@@ -130,28 +130,32 @@ class HowtoStep extends Component<IProps, IState> {
             validateFields={[]}
           />
         </Flex>
-        <Flex flexDirection="column">
-          <Label htmlFor={`${step}.text`}>
-            Upload image(s) for this step *
-          </Label>
+        <Label htmlFor={`${step}.text`}>Upload image(s) for this step *</Label>
 
-          <code>{JSON.stringify(images)}</code>
+        <code>{JSON.stringify(images)}</code>
 
-          <Field
-            name={`${step}.images[0]`}
-            src={images[0]}
-            component={ImageInputField}
-          />
-          <Field
-            name={`${step}.images[1]`}
-            src={images[1]}
-            component={ImageInputField}
-          />
-          <Field
-            name={`${step}.images[2]`}
-            src={images[2]}
-            component={ImageInputField}
-          />
+        <Flex>
+          <Box width="150px" height="100px">
+            <Field
+              name={`${step}.images[0]`}
+              src={images[0]}
+              component={ImageInputField}
+            />
+          </Box>
+          <Box width="150px" height="100px">
+            <Field
+              name={`${step}.images[1]`}
+              src={images[1]}
+              component={ImageInputField}
+            />
+          </Box>
+          <Box width="150px" height="100px">
+            <Field
+              name={`${step}.images[2]`}
+              src={images[2]}
+              component={ImageInputField}
+            />
+          </Box>
         </Flex>
         <Flex mt={2}>
           <Field

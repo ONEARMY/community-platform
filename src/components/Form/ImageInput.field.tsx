@@ -10,8 +10,9 @@ export const ImageInputField = ({ input, meta, ...rest }: IFieldProps) => (
         {...rest}
         // as validation happens on blur also want to artificially trigger when values change
         // (no native blur event)
-        onFilesChange={files => {
-          input.onChange(files)
+        onFilesChange={file => {
+          console.log('UPLOADED', file)
+          input.onChange(file)
           input.onBlur()
         }}
       />

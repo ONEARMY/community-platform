@@ -36,7 +36,7 @@ export interface IHowToStepFormInput {
 
 export interface IHowtoFormInput {
   // NOTE cover image input starts as convertedFileMeta but is transformed on upload
-  cover_image: IUploadedFileMeta | IConvertedFileMeta[]
+  cover_image: IUploadedFileMeta | IConvertedFileMeta
   title: string
   description: string
   difficulty_level: 'Easy' | 'Medium' | 'Hard' | 'Very Hard'

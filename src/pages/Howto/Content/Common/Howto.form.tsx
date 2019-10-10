@@ -125,6 +125,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
         decorators={[this.calculatedFields]}
         render={({ submitting, values, invalid, errors, handleSubmit }) => {
           const disabled = invalid || submitting
+          console.log('VALUES', JSON.stringify(values, null, 2))
           return (
             <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
               <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} mt={4}>
@@ -291,7 +292,8 @@ export class HowtoForm extends React.Component<IProps, IState> {
                           data-cy={'intro-cover'}
                         >
                           <Label htmlFor="cover_image">Cover image *</Label>
-                          {formValues.cover_image && !editCoverImg ? (
+                          <Box height="230px">
+                            {/* {formValues.cover_image && !editCoverImg ? (
                             <Flex
                               alignItems={'center'}
                               justifyContent={'center'}
@@ -321,7 +323,15 @@ export class HowtoForm extends React.Component<IProps, IState> {
                               component={ImageInputField}
                               multi={true}
                             />
-                          )}
+                          )} */}
+                            <Field
+                              id="cover_image"
+                              name="cover_image"
+                              src={formValues.cover_image}
+                              component={ImageInputField}
+                              multi={false}
+                            />
+                          </Box>
 
                           <Text small color={'grey'} mt={2}>
                             This image should be landscape. We advise 1280x960px

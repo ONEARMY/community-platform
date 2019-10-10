@@ -75,6 +75,7 @@
     "react-app-polyfill": "^0.2.1",
     "react-dev-utils": "^7.0.3",
     "react-dom": "16.8.4",
+    "react-dropzone": "^10.1.10",
     "react-final-form": "6.3.0",
     "react-final-form-arrays": "^3.1.1",
     "react-firebase-file-uploader": "2.4.2",

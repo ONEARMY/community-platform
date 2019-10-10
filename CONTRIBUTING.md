@@ -50,7 +50,7 @@ You can find useful links to learn more about these technologies [in the resourc
   `yarn start`
 
 - Run the end-to-end tests
-  `yarn cy:ci`
+  `yarn cy:test`
 
 ### Additional commands
 

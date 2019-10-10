@@ -168,7 +168,6 @@
     "prettier": "^1.16.4",
     "react-docgen-typescript-loader": "^3.0.1",
     "sass-loader": "7.1.0",
-    "server-test": "^1.1.2",
     "start-server-and-test": "^1.10.4",
     "storybook": "^1.0.0",
     "tslint": "5.7.0",

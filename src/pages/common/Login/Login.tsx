@@ -91,7 +91,7 @@ export class LoginComponent extends React.Component<IProps, IState> {
     const user = this.injected.userStore.user
     return (
       <>
-        <Link to={'sign-in'}>
+        <Link to={'/sign-in'}>
           <ButtonSign
             variant="secondary"
             display={['none', 'none', 'flex']}
@@ -105,6 +105,7 @@ export class LoginComponent extends React.Component<IProps, IState> {
             //     showSignUpForm: true,
             //   })
             // }
+            data-cy={'login'}
           >
             Login
           </ButtonSign>

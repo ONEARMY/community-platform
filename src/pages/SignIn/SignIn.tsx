@@ -151,6 +151,7 @@ class SignInPage extends React.Component<IProps, IState> {
                           <Field
                             name="email"
                             type="email"
+                            data-cy={'email'}
                             component={InputField}
                             validate={required}
                           />
@@ -162,6 +163,7 @@ class SignInPage extends React.Component<IProps, IState> {
                           <Field
                             name="password"
                             type="password"
+                            data-cy={'password'}
                             component={InputField}
                             validate={required}
                           />
@@ -178,6 +180,7 @@ class SignInPage extends React.Component<IProps, IState> {
 
                         <Flex>
                           <Button
+                            data-cy={'submit'}
                             width={1}
                             variant={'primary'}
                             disabled={submitting || invalid}

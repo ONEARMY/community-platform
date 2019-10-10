@@ -12,6 +12,144 @@ import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
 import { IHowtoStep } from 'src/models/howto.models'
 import { IUploadedFileMeta } from 'src/stores/storage'
+import arrayMutators from 'final-form-arrays'
+import { FieldArray } from 'react-final-form-arrays'
+import { ImageInput } from 'src/components/ImageInput/ImageInput'
+
+// interface IProps2 {
+//   name?: string
+//   value: any
+//   onChange: (files: Array<any>) => void
+//   disabled?: boolean
+//   children?: React.ReactNode
+//   index?: number
+// }
+
+// interface IState2 {
+//   inputValues: Array<any>
+// }
+
+// class ImageInputFieldWrapper extends Component<IProps2, IState2> {
+//   constructor(props) {
+//     super(props)
+
+//     this.state = {
+//       inputValues: [],
+//     }
+//   }
+
+//   componentDidMount() {
+//     // console.log('ImageInputFieldWrapper.props', this.props)
+//     if (this.props.value.length > 0) {
+//       this.setState({
+//         inputValues: this.props.value,
+//       })
+//     }
+//   }
+
+//   componentDidUpdate(prevProps, prevState) {}
+
+//   public updateObjectInArray = (array, action) => {
+//     return array.map((item, index) => {
+//       if (index !== action.index) {
+//         // This isn't the item we care about - keep it as-is
+//         return item
+//       }
+
+//       // Otherwise, this is the one we want - return an updated value
+//       return {
+//         ...item,
+//         ...action.item,
+//       }
+//     })
+//   }
+
+//   public updateFile = file => {
+//     const filesToUpdate = this.state.inputValues
+//     const updatedFilesArray = this.updateObjectInArray(this.state.inputValues, {
+//       index: filesToUpdate.indexOf(file),
+//       file,
+//     })
+//     this.setState(
+//       {
+//         inputValues: updatedFilesArray,
+//       },
+//       () => this.props.onChange(updatedFilesArray),
+//     )
+//   }
+
+//   public removeFile = file => {
+//     const newFiles = this.state.inputValues
+//     newFiles.splice(newFiles.indexOf(file), 1)
+//     // console.log('newFiles', newFiles)
+//     this.setState(
+//       {
+//         inputValues: newFiles,
+//       },
+//       () => this.props.onChange(this.state.inputValues),
+//     )
+//   }
+
+//   public handleInputChange = (value: any, index: number) => {
+//     this.setState(prevState => {
+//       const updatedArray = prevState.inputValues
+//       updatedArray[index] = value
+
+//       return {
+//         ...prevState,
+//         inputValues: updatedArray,
+//       }
+//     })
+
+//     this.props.onChange(this.state.inputValues)
+//   }
+
+//   render() {
+//     console.log('inoutVals', this.state.inputValues)
+
+//     let firstImage = null
+//     if (this.state.inputValues.length >= 1) {
+//       firstImage = this.state.inputValues[0]
+//     }
+
+//     console.log('first', firstImage)
+
+//     return (
+//       <Flex>
+//         {/* //   <pre>
+//       //     <code>{JSON.stringify(this.state.inputValues, null, 2)}</code>
+//       //   </pre> */}
+//         <ImageFieldContainer>
+//           <ImageInput
+//             canDelete
+//             onFilesChange={file => this.handleInputChange(file, 0)}
+//             onDelete={file => this.removeFile(file)}
+//             value={firstImage}
+//             hasText={false}
+//           />
+//         </ImageFieldContainer>
+//         <ImageFieldContainer>
+//           <ImageInput
+//             canDelete
+//             onFilesChange={file => this.handleInputChange(file, 1)}
+//             onDelete={file => this.removeFile(file)}
+//             value={null}
+//             hasText={false}
+//           />
+//         </ImageFieldContainer>
+//         <ImageFieldContainer>
+//           <ImageInput
+//             canDelete
+//             onFilesChange={file => this.handleInputChange(file, 2)}
+//             onDelete={file => this.removeFile(file)}
+//             value={null}
+//             hasText={false}
+//           />
+//         </ImageFieldContainer>
+//       </Flex>
+//     )
+//   }
+// }
 
 interface IProps {
   step: any | IHowtoStep
@@ -58,7 +196,8 @@ class HowtoStep extends Component<IProps, IState> {
   render() {
     const { step, index, images } = this.props
     const { editStepImgIndex } = this.state
-    console.log('images', images)
+    // console.log('step', step)
+    // console.log('images', images)
 
     return (
       // NOTE - animation parent container in CreateHowTo
@@ -134,45 +273,62 @@ class HowtoStep extends Component<IProps, IState> {
         <Label htmlFor={`${step}.text`}>Upload image(s) for this step *</Label>
 
         <Flex flexWrap="nowrap">
-          {[...Array(3)].map((image, i) => (
-            <>
-              {images[i] &&
-              images[i].downloadUrl !== undefined &&
-              editStepImgIndex !== i ? (
-                <Flex
-                  alignItems="center"
-                  justifyContent="center"
-                  width="150px"
-                  height="100px"
-                  mx={1}
-                  key={images[i].timeCreated}
-                >
-                  <Image sx={{ opacity: 0.5 }} src={images[i].downloadUrl} />
-                  <Button
-                    icon={'delete'}
-                    variant={'tertiary'}
-                    sx={{ position: 'absolute' }}
-                    onClick={() =>
-                      this.setState({
-                        editStepImgIndex: i,
-                      })
-                    }
-                  />
-                </Flex>
-              ) : (
+          {/* <Field name={`${step}.images`}>
+            {props => (
+              <div>
+                <ImageStepUpload
+                  name={props.input.name}
+                  value={props.input.value}
+                  onChange={props.input.onChange}
+                />
+              </div>
+            )}
+          </Field> */}
+
+          <ImageFieldContainer>
+            <Field
+              canDelete
+              hasText={false}
+              variant="small"
+              name={`${step}.img1`}
+              component={ImageInputField}
+            />
+          </ImageFieldContainer>
+
+          {/* <Field name={`${step}.images`}>
+            {props => (
+              <div>
+                <ImageInputFieldWrapper
+                  value={props.input.value}
+                  onChange={files => {
+                    console.log('PROPS', props)
+                    // console.log('TELL THE FORM', files)
+                    return props.input.onChange(files)
+                  }}
+                />
+              </div>
+            )}
+          </Field> */}
+
+          {/* <ImageFieldContainer>
+          <ImageInput
+            value={null}
+            onFilesChange={(files) => console.log('INPUT', files)}
+          />
+          </ImageFieldContainer> */}
+
+          {/* {[...Array(3)].map((image, i) => (
                 <ImageFieldContainer key={i}>
-                  <Field
-                    canDelete
-                    hasText={false}
-                    variant="small"
-                    name={`${step}.images`}
-                    component={ImageInputField}
-                    validateFields={[]}
-                  />
-                </ImageFieldContainer>
-              )}
-            </>
-          ))}
+                <Field
+                  canDelete
+                  hasText={false}
+                  variant="small"
+                  name={`${step}.images`}
+                  component={ImageInputField}
+                  validateFields={[]}
+                />
+              </ImageFieldContainer>
+          ))} */}
         </Flex>
       </Flex>
 

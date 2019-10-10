@@ -5,6 +5,7 @@ import { FieldContainer, ErrorMessage } from './elements'
 
 export const ImageInputField = ({ input, meta, ...rest }: IFieldProps) => (
   <>
+    {console.log('ImageInputField', input, meta, rest)}
     <FieldContainer invalid={meta.touched && meta.error}>
       <ImageInput
         {...rest}
@@ -14,6 +15,7 @@ export const ImageInputField = ({ input, meta, ...rest }: IFieldProps) => (
           input.onChange(file)
           input.onBlur()
         }}
+        value={null}
       />
     </FieldContainer>
     {meta.error && meta.touched && <ErrorMessage>{meta.error}</ErrorMessage>}

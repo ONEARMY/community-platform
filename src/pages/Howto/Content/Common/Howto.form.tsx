@@ -125,6 +125,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
         decorators={[this.calculatedFields]}
         render={({ submitting, values, invalid, errors, handleSubmit }) => {
           const disabled = invalid || submitting
+          console.log('VALUES', values)
           return (
             <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
               <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} mt={4}>

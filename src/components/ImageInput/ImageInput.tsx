@@ -1,11 +1,29 @@
 import * as React from 'react'
-import { Box } from 'rebass'
+import { Box, Image } from 'rebass'
 import { Button } from '../Button'
 import Dropzone from 'react-dropzone'
 import theme from 'src/themes/styled.theme'
 import { ImageConverter } from './ImageConverter'
+import { IUploadedFileMeta } from 'src/stores/storage'
 
 import styled from 'styled-components'
+
+interface IState {
+  isHovering: boolean
+  fileToUpload: File | IUploadedFileMeta | null
+}
+
+interface IProps {
+  onFilesChange: (
+    fileMeta: File | IUploadedFileMeta | IConvertedFileMeta,
+  ) => void
+  multi?: boolean
+  canDelete?: boolean
+  hasText?: boolean
+  value: File | IUploadedFileMeta | null
+  index?: number
+  onDelete?: (fileMeta: File | IUploadedFileMeta | IConvertedFileMeta) => void
+}
 
 interface IUploadImageOverlayIProps {
   isHovering: boolean
@@ -16,13 +34,6 @@ interface ITitleProps {
   hasUploadedImg: boolean
 }
 
-interface IProps {
-  onFilesChange?: (fileMeta: IConvertedFileMeta[]) => void
-  multi?: boolean
-  canDelete?: boolean
-  hasText?: boolean
-}
-
 export interface IConvertedFileMeta {
   startSize: string
   endSize: string
@@ -31,11 +42,6 @@ export interface IConvertedFileMeta {
   objectUrl: string
   name: string
   type: string
-}
-
-interface IState {
-  inputFiles: File[]
-  isHovering: boolean
 }
 
 const AlignCenterWrapper = styled.div`
@@ -88,20 +94,38 @@ export class ImageInput extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
-      inputFiles: [],
+      fileToUpload: null,
       isHovering: false,
     }
   }
 
-  public handleConvertedFileChange(file: IConvertedFileMeta, index: number) {
+  componentDidMount() {
+    console.log('value', this.props.value)
+    if (this.props.value) {
+      this.setState({
+        fileToUpload: this.props.value,
+      })
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    console.log('prev props', prevProps, this.props)
+    if (prevProps.value !== this.props.value) {
+      this.setState({
+        fileToUpload: this.props.value,
+      })
+    }
+  }
+
+  public handleConvertedFileChange(file: IConvertedFileMeta) {
     if (this.props.onFilesChange) {
-      this.props.onFilesChange([file])
+      this.props.onFilesChange(file)
     }
   }
 
   public toggleImageOverlay = () => {
-    const { inputFiles } = this.state
-    if (inputFiles && inputFiles.length === 0) {
+    const { fileToUpload } = this.state
+    if (!fileToUpload) {
       // If there is no image selected/uploaded
       // Don't toggle it.
       return
@@ -112,20 +136,46 @@ export class ImageInput extends React.Component<IProps, IState> {
     }))
   }
 
+  public renderImage(file: File | IUploadedFileMeta) {
+    console.log('file', file)
+    let imagePreview
+
+    // For compressed image preview File
+    if (file instanceof File) {
+      const fileObj = file as File
+      imagePreview = (
+        <ImageConverter
+          key={fileObj.name}
+          file={fileObj}
+          onImgConverted={meta => this.handleConvertedFileChange(meta)}
+        />
+      )
+    }
+
+    // For the photo coming from the API
+    if (!(file instanceof File) && file) {
+      const fileObj = file as IUploadedFileMeta
+      imagePreview = <Image src={fileObj.downloadUrl} />
+    }
+
+    return imagePreview
+  }
+
   render() {
-    const { inputFiles, isHovering } = this.state
+    const { fileToUpload, isHovering } = this.state
     const { canDelete } = this.props
 
-    const hasUploadedImg = inputFiles && inputFiles.length > 0
+    const hasUploadedImg = !!fileToUpload
 
     return (
       <Box p={0} style={{ height: '100%' }}>
         <Dropzone
           accept="image/*"
           multiple={false}
-          onDrop={filesToUpload => {
-            const files = filesToUpload ? Array.from(filesToUpload) : []
-            this.setState({ inputFiles: filesToUpload })
+          onDrop={(files: Array<File>) => {
+            // const files = filesToUpload ? Array.from(filesToUpload) : []
+            this.setState({ fileToUpload: files[0] })
+            // this.handleConvertedFileChange(fileToUpload[0])
           }}
         >
           {({ getRootProps, getInputProps }) => (
@@ -135,7 +185,7 @@ export class ImageInput extends React.Component<IProps, IState> {
               onMouseLeave={this.toggleImageOverlay}
               {...getRootProps()}
             >
-              {hasUploadedImg &&
+              {/* {hasUploadedImg &&
                 inputFiles.map((file, index) => {
                   return (
                     <ImageConverter
@@ -146,7 +196,9 @@ export class ImageInput extends React.Component<IProps, IState> {
                       }
                     />
                   )
-                })}
+                })} */}
+
+              {fileToUpload && this.renderImage(fileToUpload)}
 
               <input {...getInputProps()} />
 
@@ -162,7 +214,7 @@ export class ImageInput extends React.Component<IProps, IState> {
               )}
 
               <UploadImageOverlay isHovering={isHovering}>
-                {canDelete && (
+                {canDelete && fileToUpload && (
                   <AlignCenterWrapper>
                     <Button
                       small
@@ -171,8 +223,13 @@ export class ImageInput extends React.Component<IProps, IState> {
                       onClick={event => {
                         // Stop it firing the dropzone dialog
                         event.stopPropagation()
+
+                        if (this.props.onDelete) {
+                          this.props.onDelete(fileToUpload)
+                        }
+
                         this.setState({
-                          inputFiles: [],
+                          fileToUpload: null,
                           isHovering: false,
                         })
                       }}

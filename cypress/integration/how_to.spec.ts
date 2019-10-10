@@ -144,7 +144,7 @@ describe('[How To]', () => {
           .url().should('include', '/how-to')
       })
     })
-    it.only('[By Authenticated]', () => {
+    it('[By Authenticated]', () => {
       cy.log('Open a how-to as anonymous')
       cy.visit(specificHowtoUrl)
 

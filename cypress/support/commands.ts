@@ -32,6 +32,10 @@ declare global {
       logout(): Promise<void>
 
       deleteDocuments(collectionName: string, fieldPath: string, opStr: any, value: string) : Promise<void>
+
+      step(message: string)
+
+      uploadFiles(filePath: string | string[])
     }
   }
 }
@@ -75,6 +79,43 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
     return firestore.deleteDocuments(collectionName, fieldPath, opStr, value)
   })
 
+  Cypress.Commands.add('step', (message: string) => {
+    Cypress.log({
+      displayName: 'step',
+      message: `**${message}**`
+    })
+  })
+
+  const resolveMimeType = (filePath: string) => {
+    const mimeTypeMapping  = [
+      ['.jpg', 'image/jpg'],
+      ['.png', 'image/png'],
+    ]
+    const [_, mimeType]: any = mimeTypeMapping.find(([ext]) => filePath.endsWith(ext))
+    if (!mimeType) {
+      throw new Error(`Please define the mime type for ${filePath} here!`)
+    }
+    return mimeType
+  }
+  Cypress.Commands.add('uploadFiles', {prevSubject: 'element'}, ($inputElement, filePath: string | string[]) => {
+    const filePaths: string[] = []
+    if (typeof filePath === 'string') {
+      filePaths.push(filePath)
+    } else {
+      filePaths.push(...filePath)
+    }
+    const getContentReqs = filePaths.map(path => {
+      return new Cypress.Promise(resolve => {
+        return cy.fixture(path).then(fileContent => {
+          resolve({ fileName: path, mimeType: resolveMimeType(path), fileContent })
+        })
+      })
+    })
+
+    Cypress.Promise.all(getContentReqs).then((fileData: FileData[]) => {
+      cy.wrap($inputElement).upload(fileData)
+    })
+  })
 }
 
 attachCustomCommands(Cypress, firebase)

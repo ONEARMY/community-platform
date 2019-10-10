@@ -125,8 +125,10 @@
     "prod:copy": "cp .env .env-default && cp ./.env-prod ./.env",
     "prod:restore": "cp .env-default .env && rm .env-default",
     "start:ci": "cross-env SITE_VARIANT=test-ci PORT=3456 npm run start",
-    "cy:run": "start-test start:ci 3456 cy:record",
-    "cy:record": "cypress run --record --key 62585f33-d688-47b7-acb3-6d1dca832065",
+    "cy:test": "start-test start:ci 3456 cy:run",
+    "cy:test:record": "start-test start:ci 3456 cy:run:record",
+    "cy:run": "cypress run",
+    "cy:run:record": "cypress run --record --key 62585f33-d688-47b7-acb3-6d1dca832065",
     "cy:open": "npx cypress open",
     "cy:run:debug": "DEBUG=cypress:* cy:run"
   },

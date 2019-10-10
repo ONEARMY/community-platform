@@ -37,6 +37,7 @@ Our backend contains microservices in Node and is based on Firebase's Firestore 
 
 You can find useful links to learn more about these technologies [in the resources section](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--resources).
 
+### Testing
 
 ## 📟 &nbsp; Getting started
 
@@ -53,9 +54,6 @@ You can find useful links to learn more about these technologies [in the resourc
 - Run the end-to-end tests
   `yarn cy:run`
 
-Please note that the e2e testing environment has its own firebase resources which are different to development. In order
-to start the app with the testing firebase, use this command `yarn start:ci`
-
 ### Additional commands
 
 - Run the component documentation
@@ -63,6 +61,8 @@ to start the app with the testing firebase, use this command `yarn start:ci`
 
 - Open the Cypress Test Runner
   `yarn cy:open`
+
+We use [Cypress](https://www.cypress.io/) to carry out end-to-end testing. For more information about how to setup, use and add tests refer to the sections in the [Testing Setup Wiki](https://github.com/ONEARMY/community-platform/wiki/Testing-Setup).
 
 We use [BrowserStack](https://www.browserstack.com/) to test our platform on multiple devices and browsers.
 Note: Builds are currently tested on Chrome/Firefox. If your browser is not
@@ -74,40 +74,12 @@ Issues are tracked on GitHub. Use the labels to filter them to your needs and/or
 Anybody can create an issue or feature request, but be sure to use our templates if you want your voice to be heard.
 Some issues are collated to form modules which are the parent of each section of the platform. Modules are then split into **pages** and finally **components**. You can navigate through them by filtering with the labels `Type:Module` and `Type:Pages`. Having a look at **module** and **pages** issues is the best way to get a clear overview of the ongoing work on it.
 
+Additionally if you have identified a bug you may want to write a test to make it easily reproducible (and less likely to arise in the future). You can find more information to do this in the [Testing Bugs Wiki](https://github.com/ONEARMY/community-platform/wiki/Testing---Bugs)
+
 We've also labeled some of the issues with `Good-first-issue` to help you get started quickly.
 When you start working on an issue, comment on it or if your are a registered contributor assign yourself to let us know so we avoid working on something twice. The comment should include a mention to @mattia-io (our project lead).
 
 When a group of issues have been resolved a pull request to the master branch should be made, where it will undergo a quick review and test. It is expected that the developer will have done thorough testing themselves first, this helps make sure most pull requests get merged quickly.
-
-## 🐛 &nbsp; Cypress-reproducible Bug
-Bugs accompanied with Cypress tests aim to help contributors reproduce them quickly and eliminate miscommunication between reporters 
-and contributors. Contributors need [a very basic understanding about Cypress](https://docs.cypress.io/guides/getting-started/writing-your-first-test.html#Add-a-test-file)
- to get started (less than 20 mins of reading). You can skip the tutorial if you're already familiar with to Cypress
-
-The typical workflow for fixing a bug:
-
-- Create your own branch off the branch **bugs**
-`$ git checkout -b your_branch bugs`
-
-- Start the app in the testing environment. If you haven't installed any dependency for the app yet, please run `yarn` before proceeding
-`$ yarn start:ci`
-
-- Open Cypress dashboard
-`$ yarn cy:open`
-
-- On the dashboard, start the bug tests by clicking onto `bug.spec.ts`. You will see no test found because all bug tests are skipped by default. 
-Open the `bug.spec.ts` file with a text editor, find your bug with its github issue ID and replace `it.skip` with `it`.
-Come back to Cypress dashboard and see how the bug is reproduce.
-For example: `it.skip('[636]', ...` => `it('[636]', ()...`
-
-## 🐛 &nbsp; Testing Setup
-
-Due to the current architecture which lets web clients talk to Firebase services directly, we decided it's end-to-end testing 
-done by Cypress. That means all Cypress tests are executed against a dedicated firebase project which is different to development and staging. Hence, you 
-notice data in testing are completely different to what you see when developing. In addition, the testing app starts at the port
-`localhost:3456` which all tests are run against.
-
-To start the app in the testing mode, use `$ yarn start:ci`. It's only recommended when you write tests or fix bugs that are reported with Cypress tests. For development, please stick to the default app `$ yarn start`  
 
 ## 🏠 &nbsp; Project Structure
 

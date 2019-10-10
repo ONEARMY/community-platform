@@ -15334,7 +15334,7 @@ request-promise-native@^1.0.5:
     stealthy-require "^1.1.1"
     tough-cookie "^2.3.3"
 
-request@2.88.0, request@>=2.55, request@^2.87.0, request@^2.88.0:
+request@2.88.0, request@>=2.55, request@^2.81.0, request@^2.87.0, request@^2.88.0:
   version "2.88.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.88.0.tgz#9c2fca4f7d35b592efe57c7f0a55e81052124fef"
   integrity sha512-NAqBSrijGLZdM0WZNsInLJpkJokL72XYjUpnB0iwsRgxh7dB6COrHnTBNwN0E+lHDAJzu7kLAkDeY08z2/A0hg==
@@ -15772,6 +15772,13 @@ serve-static@1.14.1:
     escape-html "~1.0.3"
     parseurl "~1.3.3"
     send "0.17.1"
+
+server-test@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/server-test/-/server-test-1.1.2.tgz#2e8b32b0477ab57a34bc57b8318fff85cee64cd0"
+  integrity sha1-LosysEd6tXo0vFe4MY//hc7mTNA=
+  dependencies:
+    request "^2.81.0"
 
 set-blocking@^2.0.0, set-blocking@~2.0.0:
   version "2.0.0"

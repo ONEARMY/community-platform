@@ -55,7 +55,7 @@ class TagsSelect extends React.Component<IProps, IState> {
     const { categoryTags } = this.injectedProps.tagsStore
     const { styleVariant } = this.props
     return (
-      <FieldContainer>
+      <FieldContainer data-cy={'tag-select'}>
         <Select
           styles={styleVariant === 'selector' ? SelectStyles : FilterStyles}
           isMulti
@@ -65,6 +65,8 @@ class TagsSelect extends React.Component<IProps, IState> {
           getOptionValue={(tag: ITag) => tag._id}
           onChange={values => this.onSelectedTagsChanged(values as ITag[])}
           placeholder={this.props.placeholder}
+          classNamePrefix={'data-cy'}
+
         />
       </FieldContainer>
     )

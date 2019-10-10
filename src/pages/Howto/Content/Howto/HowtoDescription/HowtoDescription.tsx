@@ -58,6 +58,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
 
     return (
       <Flex
+        data-cy={'how-to-basis'}
         className="howto-description-container"
         sx={{
           borderRadius: theme.radii[2] + 'px',
@@ -73,13 +74,13 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
         <Flex px={4} py={4} flexDirection={'column'} width={[1, 1, 1 / 2]}>
           <Flex justifyContent={'space-between'}>
             <Link to={'/how-to/'}>
-              <Button variant={'secondary'}>Back</Button>
+              <Button variant={'secondary'} data-cy={'go-back'}>Back</Button>
             </Link>
             {/* Check if logged in user is the creator of the how-to OR a super-admin */}
             {loggedInUser &&
               (isAllowToEditContent(howto, loggedInUser) && (
                 <Link to={'/how-to/' + this.props.howto.slug + '/edit'}>
-                  <Button variant={'primary'}>Edit</Button>
+                  <Button variant={'primary'} data-cy={'edit'}>Edit</Button>
                 </Link>
               ))}
           </Flex>

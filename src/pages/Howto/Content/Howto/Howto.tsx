@@ -120,7 +120,7 @@ export class Howto extends React.Component<
             </Text>
             <Flex justifyContent={'center'} mt={2}>
               <Link to={'/how-to/'}>
-                <Button variant={'secondary'}>Back</Button>
+                <Button variant={'secondary'} data-cy={'go-back'}>Back</Button>
               </Link>
             </Flex>
           </MoreBox>

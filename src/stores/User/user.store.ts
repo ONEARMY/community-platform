@@ -54,7 +54,8 @@ export class UserStore extends ModuleStore {
       })
       // populate db user profile and resume auth listener
       await this.createUserProfile()
-      this._listenToAuthStateChanges()
+      // when checking auth state change also send confirmation email
+      this._listenToAuthStateChanges(true)
     }
   }
 
@@ -210,11 +211,15 @@ export class UserStore extends ModuleStore {
   // on sign in want to load user profile
   // strange implementation return the unsubscribe object on subscription, so stored
   // to authUnsubscribe variable for use later
-  private _listenToAuthStateChanges() {
+  private _listenToAuthStateChanges(checkEmailVerification = false) {
     this.authUnsubscribe = auth.onAuthStateChanged(authUser => {
       this.authUser = authUser
       if (authUser) {
         this.userSignedIn(authUser)
+        // send verification email if not verified and after first sign-up only
+        if (!authUser.emailVerified && checkEmailVerification) {
+          this.sendEmailVerification()
+        }
       } else {
         this.updateUser(undefined)
       }

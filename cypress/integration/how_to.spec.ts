@@ -1,8 +1,12 @@
-import FileData = Cypress.FileData
+import { HowToPage } from '../page-objects/how-to-page'
+import { stripSpecialCharacters } from '../../src/utils/helpers'
 
 describe('[How To]', () => {
   const SKIP_TIMEOUT = { timeout: 300 }
-
+  // TODO - replace with generated title from once deletion method in place
+  // const title = `[CI-TEST]-${new Date().toISOString()}`
+  const title = 'Create a how-to test'
+  const slug = stripSpecialCharacters(title).toLowerCase()
   before(() => {
     return cy.deleteDocuments(
       'v2_howtos',
@@ -10,6 +14,42 @@ describe('[How To]', () => {
       '==',
       'Create a how-to test',
     )
+  })
+
+  // creates a new how-to and tests newly-created how-to succesfully loaded
+  describe('Create new how-to', () => {
+    it('[By Anonymous] - block', () => {
+      cy.step('Get redirected to /how-to when trying to create')
+      cy.visit('/how-to')
+      cy.logout()
+      cy.visit('/how-to/create')
+        .url()
+        .should('not.include', '/create')
+    })
+    it('[By Authenticated] - allow', () => {
+      const howTo = new HowToPage()
+      howTo.create(title)
+      cy.url({ timeout: 100000 }).should('include', `/how-to/${slug}`)
+    })
+  })
+
+  describe('Delete how-to', () => {
+    // TODO
+  })
+
+  describe('Prevent duplicate how-to', () => {
+    it('Duplicate howto prevented [658]', () => {
+      cy.deleteDocuments('v2_howtos', 'title', '==', 'Create a how-to test')
+      const howTo = new HowToPage()
+      // try creating with same title as known
+      howTo.goToCreatePage()
+      cy.get('[data-cy=intro-title]')
+        .type('Make glass-like beams')
+        .blur({ force: true })
+      cy.contains(
+        'Titles must be unique, please try being more specific',
+      ).should('exist')
+    })
   })
 
   describe('[List how-tos]', () => {
@@ -30,10 +70,11 @@ describe('[How To]', () => {
       cy.get('[data-cy=more-how-tos]', SKIP_TIMEOUT).should('be.hidden')
 
       cy.step('All how-tos are shown')
-      const totalHowtos = 7
+      // note - in case deletion hasn't worked correctly total can be higher
+      const minHowTos = 7
       cy.get('[data-cy=card]')
         .its('length')
-        .should('be.eq', totalHowtos)
+        .should('be.gte', minHowTos)
 
       cy.step('How-to cards has basic info')
       cy.get(`[data-cy=card] > a[href="${howtoUrl}"]`, SKIP_TIMEOUT).then(
@@ -212,97 +253,6 @@ describe('[How To]', () => {
       cy.log('The Edit button is available')
       cy.visit(specificHowtoUrl)
       cy.get('[data-cy=edit]').should('be.exist')
-    })
-  })
-
-  describe('[Create a how-to]', () => {
-    it('[By Anonymous]', () => {
-      cy.step('Get redirected to /how-to when trying to create')
-      cy.visit('/how-to')
-      cy.logout()
-      cy.visit('/how-to/create')
-        .url()
-        .should('not.include', '/create')
-    })
-
-    it('[By Authenticated]', () => {
-      cy.visit('/how-to')
-      cy.login('howto_creator@test.com', 'test1234')
-      cy.get('[data-cy=create]').click()
-
-      cy.step('Fill up the intro')
-      cy.get('[data-cy=intro-title').type('Create a how-to test')
-      cy.get('[data-cy=tag-select]').click()
-      cy.get('.data-cy__menu')
-        .contains('howto_testing')
-        .click()
-
-      cy.get('[data-cy=time-select]').click()
-      cy.get('.data-cy__menu')
-        .contains('1-2 weeks')
-        .click()
-
-      cy.get('[data-cy=difficulty-select]').click()
-      cy.get('.data-cy__menu')
-        .contains('Medium')
-        .click()
-      cy.get('[data-cy=intro-description]').type(
-        'After creating, the how-to will be deleted',
-      )
-      cy.get('[data-cy=intro-caption]').type('Intro caption goes here ...')
-
-      cy.step('Upload a cover for the intro')
-      cy.get('[data-cy=intro-cover]')
-        .find(':file')
-        .uploadFiles('images/howto-intro.jpg')
-
-      cy.step('Add steps')
-      cy.get('[data-cy=step]')
-        .its('length')
-        .should('be.eq', 3)
-      cy.get('button[data-cy=add-step]').click()
-      cy.get('[data-cy=step]')
-        .its('length')
-        .should('be.eq', 4)
-
-      cy.get('[data-cy=delete-step]').each($el => {
-        $el.trigger('click')
-        cy.get('[data-cy=confirm]:visible').click()
-      })
-      cy.get('[data-cy=step]:visible')
-        .its('length')
-        .should('be.eq', 1)
-
-      cy.step('Fill up a step info')
-      cy.get('[data-cy=step]:eq(0)').within($firstStep => {
-        cy.wrap($firstStep)
-          .contains('Step 1')
-          .should('be.exist')
-        cy.get('[data-cy=step-title]').type('First step is easy')
-        cy.get('[data-cy=step-description]').type(
-          'Description for the first step',
-        )
-        cy.get('[data-cy=step-caption]').type('What a step caption')
-        cy.get('[data-cy=delete-step]').should('not.exist')
-      })
-      cy.step('Upload pics for a step')
-      cy.get('[data-cy=step]:visible')
-        .find(':file')
-        .uploadFiles([
-          'images/howto-step-pic1.jpg',
-          'images/howto-step-pic2.jpg',
-        ])
-
-      cy.get('[data-cy=submit]').click()
-      cy.wait(6000)
-      cy.get('[data-cy=view-howto]')
-        .click()
-        .url()
-        .should('include', '/how-to/create-a-howto-test')
-      cy.get('[data-cy=how-to-basis]')
-        .contains('Create a how-to test')
-        .its('length')
-        .should('be.eq', 1)
     })
   })
 })

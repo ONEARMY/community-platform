@@ -95,8 +95,10 @@ The typical workflow for fixing a bug:
 - Open Cypress dashboard
 `$ yarn cy:open`
 
-- On the dashboard, start the bug tests by clicking onto `bug.spec.ts`. Most of the time, you may want to execute the test of a particular bug. To do that, find your bug by its github issue ID in `bugs.spec.ts` and 
-replace `it` with `it.only`. For example:`it('[636]', () ...` => `it.only('[636]', () ...`
+- On the dashboard, start the bug tests by clicking onto `bug.spec.ts`. You will see no test found because all bug tests are skipped by default. 
+Open the `bug.spec.ts` file with a text editor, find your bug with its github issue ID and replace `it.skip` with `it`.
+Come back to Cypress dashboard and see how the bug is reproduce.
+For example: `it.skip('[636]', ...` => `it('[636]', ()...`
 
 ## 🐛 &nbsp; Testing Setup
 

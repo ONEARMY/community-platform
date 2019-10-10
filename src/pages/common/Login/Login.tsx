@@ -105,6 +105,7 @@ export class LoginComponent extends React.Component<IProps, IState> {
             //     showSignUpForm: true,
             //   })
             // }
+            data-cy={'login'}
           >
             Login
           </ButtonSign>

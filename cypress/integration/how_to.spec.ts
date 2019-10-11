@@ -1,15 +1,10 @@
-import FileData = Cypress.FileData
+import { HowToPage } from '../page-objects/how-to-page'
 
 describe('[How To]', () => {
   const SKIP_TIMEOUT = { timeout: 300 }
-
+  const title = 'Create a how-to test'
   before(() => {
-    return cy.deleteDocuments(
-      'v2_howtos',
-      'title',
-      '==',
-      'Create a how-to test',
-    )
+    cy.deleteDocuments('v2_howtos', 'title', '==', 'Create a how-to test')
   })
 
   describe('[List how-tos]', () => {
@@ -30,10 +25,10 @@ describe('[How To]', () => {
       cy.get('[data-cy=more-how-tos]', SKIP_TIMEOUT).should('be.hidden')
 
       cy.step('All how-tos are shown')
-      const totalHowtos = 7
+      const totalHowTo = 7
       cy.get('[data-cy=card]')
         .its('length')
-        .should('be.eq', totalHowtos)
+        .should('be.eq', totalHowTo)
 
       cy.step('How-to cards has basic info')
       cy.get(`[data-cy=card] > a[href="${howtoUrl}"]`, SKIP_TIMEOUT).then(
@@ -80,19 +75,12 @@ describe('[How To]', () => {
         .should('be.eq', 4)
 
       cy.step('Type and select a tag')
-      cy.get('.data-cy__input')
-        .get('input')
-        .type('injec')
-      cy.get('.data-cy__menu')
-        .contains('injection')
-        .click()
-      cy.get('[data-cy=card]')
-        .its('length')
-        .should('be.eq', 1)
+      cy.get('.data-cy__input').get('input').type('injec')
+      cy.get('.data-cy__menu').contains('injection').click()
+      cy.get('[data-cy=card]').its('length').should('be.eq', 1)
 
       cy.step('Remove a tag')
-      cy.get('.data-cy__multi-value__label')
-        .contains('injection')
+      cy.get('.data-cy__multi-value__label').contains('injection')
         .parent()
         .find('.data-cy__multi-value__remove')
         .click()
@@ -196,23 +184,6 @@ describe('[How To]', () => {
           .should('include', '/how-to')
       })
     })
-    it.skip('[By Authenticated]', () => {
-      cy.log('Open a how-to as anonymous')
-      cy.visit(specificHowtoUrl)
-
-      cy.log('Login')
-      cy.get('[data-cy=sign-in-button]').click()
-      cy.get('[data-cy=email]').type('howto_creator@test.com')
-      cy.get('[data-cy=password]').type('test1234')
-      cy.get('[data-cy=submit]')
-        .click()
-        .url()
-        .should('include', '/how-to')
-
-      cy.log('The Edit button is available')
-      cy.visit(specificHowtoUrl)
-      cy.get('[data-cy=edit]').should('be.exist')
-    })
   })
 
   describe('[Create a how-to]', () => {
@@ -228,85 +199,10 @@ describe('[How To]', () => {
         .contains('How-to Guidelines')
         .should('be.exist')
     })
-
     it('[By Authenticated]', () => {
-      cy.visit('/how-to')
-      cy.login('howto_creator@test.com', 'test1234')
-      cy.get('[data-cy=create]').click()
-
-      cy.step('Fill up the intro')
-      cy.get('[data-cy=intro-title').type('Create a how-to test')
-      cy.get('[data-cy=tag-select]').click()
-      cy.get('.data-cy__menu')
-        .contains('howto_testing')
-        .click()
-
-      cy.get('[data-cy=time-select]').click()
-      cy.get('.data-cy__menu')
-        .contains('1-2 weeks')
-        .click()
-
-      cy.get('[data-cy=difficulty-select]').click()
-      cy.get('.data-cy__menu')
-        .contains('Medium')
-        .click()
-      cy.get('[data-cy=intro-description]').type(
-        'After creating, the how-to will be deleted',
-      )
-      cy.get('[data-cy=intro-caption]').type('Intro caption goes here ...')
-
-      cy.step('Upload a cover for the intro')
-      cy.get('[data-cy=intro-cover]')
-        .find(':file')
-        .uploadFiles('images/howto-intro.jpg')
-
-      cy.step('Add steps')
-      cy.get('[data-cy=step]')
-        .its('length')
-        .should('be.eq', 3)
-      cy.get('button[data-cy=add-step]').click()
-      cy.get('[data-cy=step]')
-        .its('length')
-        .should('be.eq', 4)
-
-      cy.get('[data-cy=delete-step]').each($el => {
-        $el.trigger('click')
-        cy.get('[data-cy=confirm]:visible').click()
-      })
-      cy.get('[data-cy=step]:visible')
-        .its('length')
-        .should('be.eq', 1)
-
-      cy.step('Fill up a step info')
-      cy.get('[data-cy=step]:eq(0)').within($firstStep => {
-        cy.wrap($firstStep)
-          .contains('Step 1')
-          .should('be.exist')
-        cy.get('[data-cy=step-title]').type('First step is easy')
-        cy.get('[data-cy=step-description]').type(
-          'Description for the first step',
-        )
-        cy.get('[data-cy=step-caption]').type('What a step caption')
-        cy.get('[data-cy=delete-step]').should('not.exist')
-      })
-      cy.step('Upload pics for a step')
-      cy.get('[data-cy=step]:visible')
-        .find(':file')
-        .uploadFiles([
-          'images/howto-step-pic1.jpg',
-          'images/howto-step-pic2.jpg',
-        ])
-
-      cy.get('[data-cy=submit]').click()
-      cy.wait(6000)
-      cy.get('[data-cy=view-howto]')
-        .click()
-        .url()
-        .should('include', '/how-to/create-a-howto-test')
-      cy.get('[data-cy=how-to-basis]')
-        .contains('Create a how-to test')
-        .its('length')
-        .should('be.eq', 1)
+      const howTo = new HowToPage()
+      howTo.create(title)
+      cy.url().should('include', `/how-to/create-a-howto-test`)
     })
   })
 })

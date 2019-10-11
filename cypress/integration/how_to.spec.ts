@@ -95,6 +95,16 @@ describe('[How To]', () => {
       cy.get('[data-cy=card]')
         .its('length')
         .should('be.gte', 7)
+
+      cy.step('Show a message when there is no more how-tos')
+      cy.visit('/how-to')
+      cy.get('[data-cy=tag-select]').click()
+      cy.get('.data-cy__menu').contains('extrusion').click()
+      cy.get('[data-cy=tag-select]').click()
+      cy.get('.data-cy__menu').contains('howto_testing').click()
+      cy.get('div')
+        .contains('No how-tos to show')
+        .should('be.visible')
     })
   })
 

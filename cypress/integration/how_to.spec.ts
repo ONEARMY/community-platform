@@ -7,22 +7,6 @@ describe('[How To]', () => {
     cy.deleteDocuments('v2_howtos', 'title', '==', 'Create a how-to test')
   })
 
-  describe('[Create a how-to]', () => {
-    it('[By Anonymous]', () => {
-      cy.step('Get redirected to /how-to when trying to create')
-      cy.visit('/how-to')
-      cy.logout()
-      cy.visit('/how-to/create')
-        .url()
-        .should('not.include', '/create')
-    })
-    it('[By Authenticated]', () => {
-      const howTo = new HowToPage()
-      howTo.create(title)
-      cy.url().should('include', `/how-to/create-a-howto-test`)
-    })
-  })
-
   describe('[List how-tos]', () => {
     const howtoUrl = '/how-to/make-glasslike-beams'
     const coverFileRegex = /howto-beams-glass-0-3.jpg/
@@ -199,6 +183,22 @@ describe('[How To]', () => {
           .url()
           .should('include', '/how-to')
       })
+    })
+  })
+
+  describe('[Create a how-to]', () => {
+    it('[By Anonymous]', () => {
+      cy.step('Get redirected to /how-to when trying to create')
+      cy.visit('/how-to')
+      cy.logout()
+      cy.visit('/how-to/create')
+        .url()
+        .should('not.include', '/create')
+    })
+    it('[By Authenticated]', () => {
+      const howTo = new HowToPage()
+      howTo.create(title)
+      cy.url().should('include', `/how-to/create-a-howto-test`)
     })
   })
 })

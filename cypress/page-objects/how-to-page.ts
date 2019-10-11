@@ -34,12 +34,8 @@ export class HowToPage {
     cy.get('[data-cy=intro-title]').type('Make glass-like beams').blur({ force: true })
     cy.contains('Titles must be unique, please try being more specific',).should('exist')
 
-    cy.get('[data-cy=intro-title]')
-      .type('Make glass-like beams')
-      .blur({ force: true })
-    cy.contains('Titles must be unique, please try being more specific',).should('exist')
     cy.step('Fill up the intro')
-    cy.get('[data-cy=intro-title').type(title)
+    cy.get('[data-cy=intro-title').clear().type(title)
     cy.get('[data-cy=tag-select]').click()
     cy.get('.data-cy__menu')
       .contains('howto_testing')

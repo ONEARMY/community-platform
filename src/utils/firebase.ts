@@ -10,9 +10,9 @@ import { FIREBASE_CONFIG } from 'src/config/config'
 
 // initialise with config settings, additional firestore config to support future changes
 firebase.initializeApp(FIREBASE_CONFIG)
-firebase.firestore()
 // NOTE - offline persistance disabled as handled separately with Dexie
 
+// firebase.firestore()
 // .enablePersistence({ experimentalTabSynchronization: true })
 // .catch(err => console.error('could not persist firestore', err))
 

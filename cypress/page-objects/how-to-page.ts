@@ -30,6 +30,10 @@ export class HowToPage {
   }
 
   fillIntro(title: string) {
+    cy.step('Warn if title is identical with the existing ones')
+    cy.get('[data-cy=intro-title]').type('Make glass-like beams').blur({ force: true })
+    cy.contains('Titles must be unique, please try being more specific',).should('exist')
+
     cy.get('[data-cy=intro-title]')
       .type('Make glass-like beams')
       .blur({ force: true })

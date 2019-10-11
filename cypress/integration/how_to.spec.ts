@@ -23,17 +23,6 @@ describe('[How To]', () => {
     })
   })
 
-  describe('Prevent duplicate how-to', () => {
-    it('Duplicate howto prevented [658]', () => {
-      const howTo = new HowToPage()
-      howTo.goToCreatePage()
-      cy.get('[data-cy=intro-title]')
-        .type('Make glass-like beams')
-        .blur({ force: true })
-      cy.contains('Titles must be unique, please try being more specific',).should('exist')
-    })
-  })
-
   describe('[List how-tos]', () => {
     const howtoUrl = '/how-to/make-glasslike-beams'
     const coverFileRegex = /howto-beams-glass-0-3.jpg/

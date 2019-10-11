@@ -21,12 +21,15 @@ interface IState {
 @inject('mapsStore')
 @observer
 class MapsPageClass extends React.Component<IProps, IState> {
+  map: any
+
   constructor(props: any) {
     super(props)
     this.state = {
       center: { lat: 51.0, lng: 19.0 },
-      zoom: 4,
+      zoom: 3,
     }
+    this.map = React.createRef()
   }
 
   public async componentDidMount() {
@@ -35,7 +38,6 @@ class MapsPageClass extends React.Component<IProps, IState> {
   }
 
   public async componentWillUnmount() {
-    console.log('map pins unmount')
     this.props.mapsStore.removeSubscriptions()
   }
 
@@ -48,12 +50,11 @@ class MapsPageClass extends React.Component<IProps, IState> {
 
   public render() {
     const {
-      mapPins,
+      filteredPins,
       availablePinFilters,
       activePinFilters,
       pinDetail,
     } = this.props.mapsStore
-
     const { center, zoom } = this.state
 
     return (
@@ -66,6 +67,7 @@ class MapsPageClass extends React.Component<IProps, IState> {
             render={props => (
               <>
                 <Controls
+                  map={this.map}
                   availableFilters={availablePinFilters}
                   onFilterChange={(grouping, filters) =>
                     this.props.mapsStore.setActivePinFilters(grouping, filters)
@@ -73,7 +75,8 @@ class MapsPageClass extends React.Component<IProps, IState> {
                   onLocationChange={location => this.setCenter(location)}
                 />
                 <MapView
-                  pins={mapPins}
+                  map={this.map}
+                  pins={filteredPins}
                   filters={activePinFilters}
                   onBoundingBoxChange={boundingBox =>
                     this.props.mapsStore.setMapBoundingBox(boundingBox)

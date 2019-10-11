@@ -1,3 +1,4 @@
+
 export class HowToPage {
   constructor() {
     cy.visit('/how-to')
@@ -13,14 +14,12 @@ export class HowToPage {
     this.goToCreatePage()
     this.fillForm(title)
 
-    cy.get('[data-cy=submit]', { timeout: 100000 })
+    cy.get('[data-cy=submit]')
       .should('not.be.disabled')
       .click()
-      .then(() => {
-        cy.wait(2000).then(() => {
-          cy.get('[data-cy=view-howto]').click()
-        })
-      })
+
+    cy.wait(6000)
+    cy.get('[data-cy=view-howto]').click()
   }
 
   fillForm(title: string) {
@@ -31,6 +30,10 @@ export class HowToPage {
   }
 
   fillIntro(title: string) {
+    cy.get('[data-cy=intro-title]')
+      .type('Make glass-like beams')
+      .blur({ force: true })
+    cy.contains('Titles must be unique, please try being more specific',).should('exist')
     cy.step('Fill up the intro')
     cy.get('[data-cy=intro-title').type(title)
     cy.get('[data-cy=tag-select]').click()

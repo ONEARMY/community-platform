@@ -1,24 +1,14 @@
 import { HowToPage } from '../page-objects/how-to-page'
-import { stripSpecialCharacters } from '../../src/utils/helpers'
 
 describe('[How To]', () => {
   const SKIP_TIMEOUT = { timeout: 300 }
-  // TODO - replace with generated title from once deletion method in place
-  // const title = `[CI-TEST]-${new Date().toISOString()}`
   const title = 'Create a how-to test'
-  const slug = stripSpecialCharacters(title).toLowerCase()
   before(() => {
-    return cy.deleteDocuments(
-      'v2_howtos',
-      'title',
-      '==',
-      'Create a how-to test',
-    )
+    cy.deleteDocuments('v2_howtos', 'title', '==', 'Create a how-to test')
   })
 
-  // creates a new how-to and tests newly-created how-to succesfully loaded
-  describe('Create new how-to', () => {
-    it('[By Anonymous] - block', () => {
+  describe('[Create a how-to]', () => {
+    it('[By Anonymous]', () => {
       cy.step('Get redirected to /how-to when trying to create')
       cy.visit('/how-to')
       cy.logout()
@@ -26,29 +16,21 @@ describe('[How To]', () => {
         .url()
         .should('not.include', '/create')
     })
-    it('[By Authenticated] - allow', () => {
+    it('[By Authenticated]', () => {
       const howTo = new HowToPage()
       howTo.create(title)
-      cy.url({ timeout: 100000 }).should('include', `/how-to/${slug}`)
+      cy.url().should('include', `/how-to/create-a-howto-test`)
     })
-  })
-
-  describe('Delete how-to', () => {
-    // TODO
   })
 
   describe('Prevent duplicate how-to', () => {
     it('Duplicate howto prevented [658]', () => {
-      cy.deleteDocuments('v2_howtos', 'title', '==', 'Create a how-to test')
       const howTo = new HowToPage()
-      // try creating with same title as known
       howTo.goToCreatePage()
       cy.get('[data-cy=intro-title]')
         .type('Make glass-like beams')
         .blur({ force: true })
-      cy.contains(
-        'Titles must be unique, please try being more specific',
-      ).should('exist')
+      cy.contains('Titles must be unique, please try being more specific',).should('exist')
     })
   })
 
@@ -121,19 +103,12 @@ describe('[How To]', () => {
         .should('be.eq', 4)
 
       cy.step('Type and select a tag')
-      cy.get('.data-cy__input')
-        .get('input')
-        .type('injec')
-      cy.get('.data-cy__menu')
-        .contains('injection')
-        .click()
-      cy.get('[data-cy=card]')
-        .its('length')
-        .should('be.eq', 1)
+      cy.get('.data-cy__input').get('input').type('injec')
+      cy.get('.data-cy__menu').contains('injection').click()
+      cy.get('[data-cy=card]').its('length').should('be.eq', 1)
 
       cy.step('Remove a tag')
-      cy.get('.data-cy__multi-value__label')
-        .contains('injection')
+      cy.get('.data-cy__multi-value__label').contains('injection')
         .parent()
         .find('.data-cy__multi-value__remove')
         .click()
@@ -236,23 +211,6 @@ describe('[How To]', () => {
           .url()
           .should('include', '/how-to')
       })
-    })
-    it.skip('[By Authenticated]', () => {
-      cy.log('Open a how-to as anonymous')
-      cy.visit(specificHowtoUrl)
-
-      cy.log('Login')
-      cy.get('[data-cy=sign-in-button]').click()
-      cy.get('[data-cy=email]').type('howto_creator@test.com')
-      cy.get('[data-cy=password]').type('test1234')
-      cy.get('[data-cy=submit]')
-        .click()
-        .url()
-        .should('include', '/how-to')
-
-      cy.log('The Edit button is available')
-      cy.visit(specificHowtoUrl)
-      cy.get('[data-cy=edit]').should('be.exist')
     })
   })
 })

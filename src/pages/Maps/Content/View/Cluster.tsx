@@ -13,7 +13,10 @@ interface IProps {
   onPinClick: (pin: IPinType) => void
 }
 
-export const Clusters: React.SFC<IProps> = ({ pins, onPinClick }) => {
+export const Clusters: React.FunctionComponent<IProps> = ({
+  pins,
+  onPinClick,
+}) => {
   const entities = pins.reduce(
     (accumulator, pin) => {
       const { grouping } = pin.pinType
@@ -31,9 +34,14 @@ export const Clusters: React.SFC<IProps> = ({ pins, onPinClick }) => {
       {Object.keys(entities).map(key => {
         return (
           <MarkerClusterGroup
-            iconCreateFunction={createClusterIcon(key)}
+            iconCreateFunction={createClusterIcon(
+              key,
+              entities[key],
+              pins.length,
+            )} // entities.individual.length + entities.place.length)}
             key={key}
-            maxClusterRadius={60}
+            showCoverageOnHover={false}
+            spiderfyOnMaxZoom={false}
           >
             {entities[key].map(pin => (
               <Marker

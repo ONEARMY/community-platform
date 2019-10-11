@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import MultiSelect from '@khanacademy/react-multi-select'
+import MultiSelect, { Option } from '@khanacademy/react-multi-select'
 import './GroupingFilter.css'
+import { Box } from 'rebass'
+import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
+import { lineHeight } from 'styled-system'
 
 interface IProps {
   items: Array<any>
@@ -10,6 +13,7 @@ interface IProps {
 }
 
 interface IState {
+  initialItems: Array<any>
   selectedItems: Array<string>
 }
 
@@ -41,18 +45,33 @@ const ItemCounter = styled.span<ItemCounterProps>`
 
 const ItemRenderer = ({ checked, option, onClick }) => {
   return (
-    <span>
-      <input
-        type="checkbox"
-        onChange={onClick}
-        checked={checked}
-        tabIndex={-1}
-      />
-      <ItemCounter grouping={option.value.grouping}>
-        {option.value.count}
-      </ItemCounter>
-      <ItemLabel>{option.label}</ItemLabel>
-    </span>
+    <div
+      onClick={evt => {
+        evt.preventDefault()
+        evt.stopPropagation()
+        onClick(option.value)
+      }}
+    >
+      <ElWithBeforeIcon
+        IconUrl={option.icon}
+        ticked={checked}
+        contain={true}
+        width="30px"
+        height="30px"
+      >
+        <h4
+          style={{
+            fontSize: '14px',
+            lineHeight: '24px',
+            margin: '0 0 0 10px',
+            paddingTop: '2px',
+            paddingBottom: '2px',
+          }}
+        >
+          {option.label}
+        </h4>
+      </ElWithBeforeIcon>
+    </div>
   )
 }
 
@@ -60,24 +79,36 @@ class GroupingFilter extends React.Component<IProps, IState> {
   constructor(props) {
     super(props)
     this.state = {
-      selectedItems: props.items,
+      initialItems: this.asOptions(props.items),
+      selectedItems: [],
     }
   }
 
-  handleChange(selectedItems) {
+  handleChange(selectedItems: Array<string>) {
     if (this.props.onChange) {
       this.props.onChange(selectedItems)
     }
+
     this.setState({ selectedItems })
   }
 
+  asOptions(items: Array<any>): Array<any> {
+    return items
+      .filter(item => {
+        return item.name !== 'member'
+      })
+      .map(item => ({
+        label: item.displayName,
+        value: item.name,
+        icon: item.icon,
+      }))
+  }
+
   render() {
-    const { selectedItems } = this.state
     const { items, entityType } = this.props
-    const options = items.map(item => ({
-      label: item.displayName,
-      value: item,
-    }))
+    const options = this.asOptions(items)
+    const selectedItems = this.state.selectedItems
+
     return (
       <MultiSelect
         options={options}
@@ -85,9 +116,9 @@ class GroupingFilter extends React.Component<IProps, IState> {
         selectAllLabel="Select All"
         disableSearch={true}
         onSelectedChanged={selected => this.handleChange(selected)}
-        valueRenderer={() =>
-          entityType === 'place' ? 'Workplaces' : 'Members'
-        }
+        valueRenderer={() => {
+          return entityType === 'place' ? 'Workplaces' : 'Members'
+        }}
         hasSelectAll={false}
         ItemRenderer={ItemRenderer}
         style={{

@@ -34,7 +34,10 @@ export class MapsStore extends ModuleStore {
   public activePinFilters: Array<IPinType> = []
 
   @observable
-  public mapPins: Array<IMapPinWithType> = []
+  private mapPins: Array<IMapPinWithType> = []
+
+  @observable
+  public filteredPins: Array<IMapPinWithType> = []
 
   @action
   private processDBMapPins(pins: IMapPin[]) {
@@ -42,6 +45,8 @@ export class MapsStore extends ModuleStore {
       this.mapPins = []
       return
     }
+
+    console.debug('processDBMapPins', pins)
 
     const filterMap = this.availablePinFilters.reduce(
       (accumulator, current) => {
@@ -51,11 +56,17 @@ export class MapsStore extends ModuleStore {
       {} as Record<string, IPinType>,
     )
 
-    this.mapPins = pins.map(({ _id, location, pinType }) => ({
-      _id,
-      location,
-      pinType: filterMap[pinType],
-    }))
+    this.mapPins = pins.map(
+      ({ _id, location, pinType, profileType, workspaceType }) => ({
+        _id,
+        location,
+        pinType: filterMap[pinType],
+        profileType,
+        workspaceType,
+      }),
+    )
+
+    this.filteredPins = this.mapPins
   }
 
   // Caching pinDetails in a map to reduce database calls. We don't want to cache
@@ -88,14 +99,25 @@ export class MapsStore extends ModuleStore {
   }
 
   @action
-  public async setActivePinFilters(
-    grouping: EntityType,
-    filters: Array<IPinType>,
-  ) {
-    const newFilters = this.activePinFilters.filter(
-      filter => filter.grouping !== grouping,
-    )
-    this.activePinFilters = newFilters.concat(filters)
+  public async setActivePinFilters(grouping: EntityType, filters: Array<any>) {
+    if (filters.length === 0) {
+      this.filteredPins = this.mapPins
+      return
+    }
+
+    const mapPins = this.mapPins.filter(pin => {
+      if (pin.workspaceType && filters.indexOf(pin.workspaceType) > -1) {
+        return true
+      }
+
+      if (pin.pinType.name && filters.indexOf(pin.pinType.name) > -1) {
+        return true
+      }
+
+      return false
+    })
+
+    this.filteredPins = mapPins
   }
 
   @action
@@ -104,7 +126,8 @@ export class MapsStore extends ModuleStore {
       // get from db if not already in cache. note map ids match with user ids
       const pinDetail = await this.getUserProfilePin(pin._id)
       this.pinDetailCache.set(pin._id, { ...pin, ...pinDetail })
-      return this.getPinDetails(pin)
+      const foundPinDetails = this.getPinDetails(pin)
+      return foundPinDetails
     }
     this.pinDetail = this.pinDetailCache.get(pin._id)
     return toJS(this.pinDetail as IMapPinDetail)
@@ -122,7 +145,7 @@ export class MapsStore extends ModuleStore {
   // add new pin or update existing
   public async setPin(pin: IMapPin) {
     // generate standard doc meta
-    console.log('setting pin', pin)
+    console.debug('setting pin', pin)
     return this.db
       .collection('v2_mappins')
       .doc(pin._id)
@@ -162,11 +185,28 @@ export class MapsStore extends ModuleStore {
 
   // return subset of profile info used when displaying map pins
   private async getUserProfilePin(username: string) {
-    const u = (await this.activeUser) as IUserDB
-    console.log('user profile retrieved', u)
-    const avatar = getUserAvatar(u.userName)
+    const u: any = await this.userStore.getUserProfile(username)
+
+    if (!u) {
+      return {
+        heroImageUrl: '',
+        lastActive: '',
+        profilePicUrl: '',
+        shortDescription: '',
+        name: username,
+        profileUrl: `${location.origin}/u/${username}`,
+      }
+    }
+
+    console.debug('user profile retrieved', u)
+    const avatar = getUserAvatar(username)
+    let heroImageUrl = ''
+    if (u.coverImages && u.coverImages.length > 0) {
+      heroImageUrl = u.coverImages[0].downloadUrl
+    }
+
     return {
-      heroImageUrl: avatar,
+      heroImageUrl,
       lastActive: u._lastActive ? u._lastActive : u._modified,
       profilePicUrl: avatar,
       shortDescription: u.about ? u.about : '',

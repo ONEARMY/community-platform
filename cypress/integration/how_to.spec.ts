@@ -263,6 +263,13 @@ describe('[How To]', () => {
         .url().should('include', `/how-to/create-a-howto-test`)
     })
 
+    it('[By Anonymous]', () => {
+      cy.step('Get redirected to /how-to when trying to create')
+      cy.logout()
+      cy.visit('/how-to/create')
+      cy.get('div').contains('Please login to access this page')
+    })
+
   })
 
 })

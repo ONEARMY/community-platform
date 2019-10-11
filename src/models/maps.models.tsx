@@ -1,10 +1,14 @@
 import { DBDoc, ISODateString } from './common.models'
+import { WorkspaceType, ProfileTypeLabel } from './user_pp.models'
 
 interface IMapPinBase {
   _id: string
   location: ILatLng & {
     address: string
   }
+
+  workspaceType?: WorkspaceType
+  profileType?: ProfileTypeLabel
 }
 export interface IMapPin extends IMapPinBase {
   pinType: string
@@ -39,6 +43,7 @@ export interface IPinType {
   grouping: EntityType
   icon: string
   count: number
+  visible?: boolean
 }
 
 export type EntityType = 'individual' | 'place'

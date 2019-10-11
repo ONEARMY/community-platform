@@ -1,7 +1,12 @@
 .multi-select {
   width: 100%;
-  max-width: 225px;
+  max-width: 307px;
   margin-left: 20px;
+  border: 2px solid #1b1b1b;
+  border-radius: 5px;
+  outline: none;
+  font-size: 14px;
+  color: #1b1b1b;
 }
 
 .multi-select .dropdown-heading {

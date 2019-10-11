@@ -216,13 +216,17 @@ describe('[How To]', () => {
   })
 
   describe('[Create a how-to]', () => {
-    it('[By Anonymous]', () => {
-      cy.step('Get redirected to /how-to when trying to create')
+    it('[By Authenticated]', () => {
       cy.visit('/how-to')
       cy.logout()
+      cy.login('howto_creator@test.com', 'test1234')
+      cy.log('Open the create-how-to page with its url')
       cy.visit('/how-to/create')
         .url()
-        .should('not.include', '/create')
+        .should('include', '/how-to/create')
+      cy.get('div')
+        .contains('How-to Guidelines')
+        .should('be.exist')
     })
 
     it('[By Authenticated]', () => {

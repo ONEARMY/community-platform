@@ -39,7 +39,7 @@ export class HowtoList extends React.Component<any, IState> {
   }
 
   public render() {
-    const { filteredHowtos } = this.props.howtoStore
+    const { filteredHowtos, selectedTags } = this.props.howtoStore
     return (
       <>
         <Flex py={26}>
@@ -74,7 +74,9 @@ export class HowtoList extends React.Component<any, IState> {
           {filteredHowtos.length === 0 ? (
             <Flex>
               <Heading auxiliary txtcenter width={1}>
-                loading...
+                {Object.keys(selectedTags).length === 0
+                  ? 'Loading...'
+                  : 'No how-tos to show'}
               </Heading>
             </Flex>
           ) : (
@@ -87,8 +89,10 @@ export class HowtoList extends React.Component<any, IState> {
             </Flex>
           )}
           <Flex justifyContent={'center'} mt={20}>
-            <Link to={'#'} style={{visibility:'hidden'}}>
-              <Button variant={'secondary'} data-cy={'more-how-tos'}>More how-tos</Button>
+            <Link to={'#'} style={{ visibility: 'hidden' }}>
+              <Button variant={'secondary'} data-cy={'more-how-tos'}>
+                More how-tos
+              </Button>
             </Link>
           </Flex>
           <MoreContainer m={'0 auto'} pt={60} pb={90}>

@@ -41,11 +41,10 @@ describe('[How To]', () => {
       cy.get('[data-cy=more-how-tos]', SKIP_TIMEOUT).should('be.hidden')
 
       cy.step('All how-tos are shown')
-      // note - in case deletion hasn't worked correctly total can be higher
-      const minHowTos = 7
+      const totalHowTo = 7
       cy.get('[data-cy=card]')
         .its('length')
-        .should('be.gte', minHowTos)
+        .should('be.eq', totalHowTo)
 
       cy.step('How-to cards has basic info')
       cy.get(`[data-cy=card] > a[href="${howtoUrl}"]`, SKIP_TIMEOUT).then(

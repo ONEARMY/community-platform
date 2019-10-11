@@ -41,6 +41,14 @@ describe('[How To]', () => {
         },
       )
 
+      cy.step('Tags shown on how-to load')
+      cy.get('[data-cy=card]')
+        .contains('Create an extruded lamp')
+        .within($card => {
+          expect($card).to.contain('product')
+          expect($card).to.contain('extrusion')
+        })
+
       cy.step(`Open how-to details when click on a how-to ${howtoUrl}`)
       cy.get(`[data-cy=card] > a[href="${howtoUrl}"]`, SKIP_TIMEOUT).click()
       cy.url().should('include', howtoUrl)
@@ -75,12 +83,19 @@ describe('[How To]', () => {
         .should('be.eq', 4)
 
       cy.step('Type and select a tag')
-      cy.get('.data-cy__input').get('input').type('injec')
-      cy.get('.data-cy__menu').contains('injection').click()
-      cy.get('[data-cy=card]').its('length').should('be.eq', 1)
+      cy.get('.data-cy__input')
+        .get('input')
+        .type('injec')
+      cy.get('.data-cy__menu')
+        .contains('injection')
+        .click()
+      cy.get('[data-cy=card]')
+        .its('length')
+        .should('be.eq', 1)
 
       cy.step('Remove a tag')
-      cy.get('.data-cy__multi-value__label').contains('injection')
+      cy.get('.data-cy__multi-value__label')
+        .contains('injection')
         .parent()
         .find('.data-cy__multi-value__remove')
         .click()

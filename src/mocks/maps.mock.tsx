@@ -6,10 +6,10 @@ import {
   EntityType,
 } from 'src/models/maps.models'
 import { MOCK_DB_META } from './db.mock'
-import logo from "src/assets/images/logo.svg"
-import communityBuilder from "src/assets/icons/map-community.svg"
-import machineShop from "src/assets/icons/map-machine.svg"
-import collectionPoint from "src/assets/icons/map-collection.svg"
+import logo from 'src/assets/images/logo.svg'
+import communityBuilder from 'src/assets/icons/map-community.svg'
+import machineShop from 'src/assets/icons/map-machine.svg'
+import collectionPoint from 'src/assets/icons/map-collection.svg'
 
 export const generatePins = (count: number): Array<IMapPin> => {
   const filters = generatePinFilters()
@@ -49,7 +49,7 @@ export const generatePinDetails = (pin: IMapPin): IMapPinDetail => {
 }
 
 export const generatePinFilters = (): Array<IPinType> => {
-  return [  
+  return [
     {
       grouping: 'place' as EntityType,
       displayName: 'Extruder',
@@ -91,7 +91,7 @@ export const generatePinFilters = (): Array<IPinType> => {
       name: 'member',
       icon: collectionPoint,
       count: 0,
-      visible: false
+      visible: false,
     },
     {
       grouping: 'individual' as EntityType,

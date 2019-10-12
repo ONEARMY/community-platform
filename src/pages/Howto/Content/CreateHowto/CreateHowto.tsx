@@ -66,7 +66,7 @@ class CreateHowto extends React.Component<IProps, IState> {
       </Switch>
     ) : (
       <Flex justifyContent="center" mt="40px">
-        <Text regular> You can only access this page if you are logged in</Text>
+        <Text regular>Please login to access this page</Text>
       </Flex>
     )
   }

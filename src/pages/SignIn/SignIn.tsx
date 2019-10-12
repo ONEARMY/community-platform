@@ -9,8 +9,10 @@ import { InputField } from 'src/components/Form/Fields'
 import { inject, observer } from 'mobx-react'
 import { Form, Field } from 'react-final-form'
 import { UserStore } from 'src/stores/User/user.store'
-import { TextNotification } from 'src/components/Notification/TextNotification'
-import { IGlyphs } from 'src/components/Icons'
+import {
+  TextNotification,
+  ITextNotificationProps,
+} from 'src/components/Notification/TextNotification'
 
 interface IFormValues {
   email: string
@@ -21,9 +23,7 @@ interface IState {
   errorMsg?: string
   disabled?: boolean
   authProvider?: IAuthProvider
-  showNotification?: boolean
-  notificationText?: string
-  notificationIcon?: keyof IGlyphs
+  notificationProps?: ITextNotificationProps
 }
 interface IProps extends RouteComponentProps<any> {
   onChange?: (e: React.FormEvent<any>) => void
@@ -82,27 +82,30 @@ class SignInPage extends React.Component<IProps, IState> {
   }
 
   async resetPasword(inputEmail: string) {
-    const notificationText = inputEmail
-      ? 'Reset link sent'
-      : 'No email provided'
-    const notificationIcon: keyof IGlyphs = inputEmail ? 'email' : 'close'
-    this.setState({
-      showNotification: true,
-      notificationText,
-      notificationIcon,
-    })
-    setTimeout(() => {
-      this.setState({ showNotification: false })
-    }, 5000)
-    // wait till after animation to actually send
-    if (inputEmail) {
+    try {
       await this.props.userStore!.sendPasswordResetEmail(inputEmail)
+      this.setState({
+        notificationProps: {
+          show: true,
+          text: 'Reset email sent',
+          icon: 'email',
+          type: 'confirmation',
+        },
+      })
+    } catch (error) {
+      this.setState({
+        notificationProps: {
+          show: true,
+          text: error.code,
+          icon: 'close',
+          type: 'error',
+        },
+      })
     }
   }
 
   public render() {
-    const auth = this.state.authProvider
-    const store = this.props.userStore!
+    const { authProvider, notificationProps } = this.state
     return (
       <Form
         onSubmit={v => this.onLoginSubmit(v as IFormValues)}
@@ -145,7 +148,7 @@ class SignInPage extends React.Component<IProps, IState> {
                       flexWrap="wrap"
                       flexDirection="column"
                     >
-                      {/* Auth Provider Select */}
+                      {/* PauthProvider Provider Select */}
                       {!this.state.authProvider && (
                         <>
                           <Text mb={3} mt={3}>
@@ -172,7 +175,7 @@ class SignInPage extends React.Component<IProps, IState> {
                           </Heading>
                           <Flex flexDirection={'column'} mb={3}>
                             <Text as={'label'} small htmlFor="title">
-                              {auth!.inputLabel}
+                              {authProvider!.inputLabel}
                             </Text>
                             <Field
                               name="email"
@@ -209,11 +212,7 @@ class SignInPage extends React.Component<IProps, IState> {
                               >
                                 Lost password?
                               </Link>
-                              <TextNotification
-                                show={this.state.showNotification}
-                                text={this.state.notificationText}
-                                icon={this.state.notificationIcon}
-                              />
+                              <TextNotification {...notificationProps} />
                             </Text>
                           </Flex>
 

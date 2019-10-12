@@ -26,6 +26,7 @@ export class TextNotification extends React.Component<
   ITextNotificationProps,
   IState
 > {
+  timerHandle: number
   constructor(props: ITextNotificationProps) {
     super(props)
     this.state = { show: props.show }
@@ -51,10 +52,21 @@ export class TextNotification extends React.Component<
   componentDidMount() {
     this.triggerNotificationHide()
   }
+  // in case component unmounted before hide timeout trigger,
+  // clear the timeout now to prevent state update on unmounted component
+  componentWillUnmount() {
+    if (this.timerHandle) {
+      clearTimeout(this.timerHandle)
+      this.timerHandle = 0
+    }
+  }
 
   triggerNotificationHide() {
-    setTimeout(() => {
-      this.setState({ show: false })
+    this.timerHandle = setTimeout(() => {
+      if (this.timerHandle && this.timerHandle > 0) {
+        this.setState({ show: false })
+        this.timerHandle = 0
+      }
     }, this.props.duration)
   }
 

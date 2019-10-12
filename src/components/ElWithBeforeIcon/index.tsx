@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react'
 import { Box } from 'rebass'
-import checkmarkIcon from "src/assets/icons/icon-checkmark.svg"
+import checkmarkIcon from 'src/assets/icons/icon-checkmark.svg'
 
 interface IProps {
   IconUrl: JSX.Element
@@ -16,14 +16,13 @@ export const ElWithBeforeIcon: FunctionComponent<IProps> = ({
   width,
   children,
   ticked,
-  contain
+  contain,
 }) => {
-  let after: any;
+  let after: any
   if (ticked) {
     after = {
       content: "''",
-      backgroundImage:
-        `url("${checkmarkIcon}")`,
+      backgroundImage: `url("${checkmarkIcon}")`,
       width: width || '22px',
       height: height || '22px',
       backgroundRepeat: 'no-repeat',
@@ -35,29 +34,30 @@ export const ElWithBeforeIcon: FunctionComponent<IProps> = ({
   }
 
   return (
-  <Box
-    mr={4}
-    pl="30px"
-    sx={{
-      position: 'relative',
-      '::before': {
-        content: "''",
-        backgroundImage: `url("${IconUrl}")`,
-        backgroundSize: contain ? "contain" : "initial",
-        width: width || '22px',
-        height: height || '22px',
-        backgroundRepeat: 'no-repeat',
-        position: 'absolute',
-        left: '0',
-        bottom: '50%',
-        transform: 'translateY(50%)',
-      },
-      marginRight: 0,
-      '::after': after,
-    }}
-  >
-    {children}
-  </Box>
-)}
+    <Box
+      mr={4}
+      pl="30px"
+      sx={{
+        position: 'relative',
+        '::before': {
+          content: "''",
+          backgroundImage: `url("${IconUrl}")`,
+          backgroundSize: contain ? 'contain' : 'initial',
+          width: width || '22px',
+          height: height || '22px',
+          backgroundRepeat: 'no-repeat',
+          position: 'absolute',
+          left: '0',
+          bottom: '50%',
+          transform: 'translateY(50%)',
+        },
+        marginRight: 0,
+        '::after': after,
+      }}
+    >
+      {children}
+    </Box>
+  )
+}
 
 export default ElWithBeforeIcon

@@ -16,6 +16,8 @@ interface InjectedProps {
   eventStore: EventStore
 }
 
+const filterArrayDuplicates = (array: string[]) => Array.from(new Set(array))
+
 @inject('eventStore')
 @observer
 export class EventsList extends React.Component<any> {
@@ -29,6 +31,17 @@ export class EventsList extends React.Component<any> {
 
   public render() {
     const { filteredEvents } = this.injected.eventStore
+
+    // use only those tags that return results
+    const usedTags: string[] = []
+    // get tags from all upcoming events
+    this.injected.eventStore.upcomingEvents.map(
+      event =>
+        event.tags &&
+        Object.keys(event.tags).forEach(tag => usedTags.push(tag)),
+    )
+    const uniqueUsedTags = filterArrayDuplicates(usedTags)
+
     if (filteredEvents) {
       return (
         <>
@@ -46,6 +59,7 @@ export class EventsList extends React.Component<any> {
                   }
                   category="event"
                   styleVariant="filter"
+                  selectTagsFrom={uniqueUsedTags}
                 />
               </Box>
               <Box width={0.5} ml={2} className="location-search-list">

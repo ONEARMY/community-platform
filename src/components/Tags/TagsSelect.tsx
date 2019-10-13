@@ -14,6 +14,7 @@ export interface IProps extends FieldRenderProps<any, any> {
   category: TagCategory | undefined
   styleVariant: 'selector' | 'filter'
   placeholder: string
+  selectTagsFrom?: string[]
 }
 interface IState {
   selectedTags: string[]
@@ -52,7 +53,13 @@ class TagsSelect extends React.Component<IProps, IState> {
   }
 
   public render() {
-    const { categoryTags } = this.injectedProps.tagsStore
+    let { categoryTags } = this.injectedProps.tagsStore
+    const relevantTags = this.injectedProps.selectTagsFrom
+
+    if (relevantTags) {
+      categoryTags = categoryTags.filter(tag => relevantTags.includes(tag._id))
+    }
+
     const { styleVariant } = this.props
     return (
       <FieldContainer data-cy={'tag-select'}>
@@ -66,7 +73,6 @@ class TagsSelect extends React.Component<IProps, IState> {
           onChange={values => this.onSelectedTagsChanged(values as ITag[])}
           placeholder={this.props.placeholder}
           classNamePrefix={'data-cy'}
-
         />
       </FieldContainer>
     )

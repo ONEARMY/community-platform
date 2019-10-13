@@ -39,6 +39,14 @@ describe('[How To]', () => {
         },
       )
 
+      cy.step('Tags shown on how-to load')
+      cy.get('[data-cy=card]')
+        .contains('Create an extruded lamp')
+        .within($card => {
+          expect($card).to.contain('product')
+          expect($card).to.contain('extrusion')
+        })
+
       cy.step(`Open how-to details when click on a how-to ${howtoUrl}`)
       cy.get(`[data-cy=card] > a[href="${howtoUrl}"]`, SKIP_TIMEOUT).click()
       cy.url().should('include', howtoUrl)

@@ -11,6 +11,7 @@ import { Observable, fromEvent, Subscription } from 'rxjs'
 import { debounceTime, map } from 'rxjs/operators'
 import styled from 'styled-components'
 import { ILocation } from 'src/models/common.models'
+import searchIcon from 'src/assets/icons/icon-search.svg'
 
 interface IProps {
   placeholder: string
@@ -36,6 +37,13 @@ const FilterStyle = {
 
 const SelectorStyle = {
   marginBottom: 0,
+  background: 'white',
+  border: '2px solid black',
+  height: '45px',
+  display: 'flex',
+  '::after': {
+    background: `url("${searchIcon}")`,
+  },
 }
 
 export class LocationSearch extends React.Component<IProps, IState> {

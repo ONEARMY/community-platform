@@ -18,9 +18,14 @@ interface IProps {
   map: any
 }
 
-const HeroImage = styled(Image)`
+const HeroImage = styled.div<{ src: string }>`
   width: 100%;
-  height: 120x;
+  background-image: url("${props => props.src}");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-color: lightgrey;
+  height: 120px;
   object-fit: cover;
 `
 
@@ -52,17 +57,12 @@ export class Popup extends React.Component<IProps> {
     this.popup = React.createRef()
   }
 
-  public componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps) {
     if (this.props.pinDetail === undefined) {
       return
     }
 
-    if (
-      prevProps.pinDetail === undefined ||
-      prevProps.pinDetail._id !== this.props.pinDetail!._id
-    ) {
-      this.setPinLocation(this.props.pinDetail)
-    }
+    this.setPinLocation(this.props.pinDetail)
   }
 
   private setPinLocation(pin) {
@@ -83,6 +83,12 @@ export class Popup extends React.Component<IProps> {
     shortDescription,
     lastActive,
   }) {
+    let lastActiveText: string = 'a long time'
+
+    if (lastActive) {
+      lastActiveText = distanceInWords(lastActive, new Date())
+    }
+
     return (
       <>
         <HeroImage src={heroImageUrl} />
@@ -98,9 +104,7 @@ export class Popup extends React.Component<IProps> {
           <Text auxiliary small clipped mb={2}>
             {shortDescription}
           </Text>
-          <LastOnline>
-            last active {distanceInWords(lastActive, new Date())} ago
-          </LastOnline>
+          <LastOnline>last active {lastActiveText} ago</LastOnline>
         </Flex>
       </>
     )

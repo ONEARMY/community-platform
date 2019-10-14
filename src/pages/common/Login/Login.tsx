@@ -91,20 +91,13 @@ export class LoginComponent extends React.Component<IProps, IState> {
     const user = this.injected.userStore.user
     return (
       <>
-        <Link to={'sign-in'}>
+        <Link to={'/sign-in'}>
           <ButtonSign
             variant="secondary"
             display={['none', 'none', 'flex']}
             small
             mr={2}
-            // onClick={() =>
-            //   this.setState({
-            //     showLoginModal: !this.state.showLoginModal,
-            //     showResetPWForm: false,
-            //     showLoginForm: false,
-            //     showSignUpForm: true,
-            //   })
-            // }
+            data-cy="sign-in-button"
           >
             Login
           </ButtonSign>

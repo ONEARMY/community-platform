@@ -37,10 +37,6 @@ Our backend contains microservices in Node and is based on Firebase's Firestore 
 
 You can find useful links to learn more about these technologies [in the resources section](https://github.com/OneArmyWorld/onearmy/blob/master/CONTRIBUTING.md#--resources).
 
-### Automated testing
-
-The project uses [Jest](https://jestjs.io/) to unit Test and [Cypress](https://www.cypress.io/) to write End-to-end tests.
-
 ## 📟 &nbsp; Getting started
 
 - Fork the repository
@@ -54,10 +50,7 @@ The project uses [Jest](https://jestjs.io/) to unit Test and [Cypress](https://w
   `yarn start`
 
 - Run the end-to-end tests
-  `yarn cy:run`
-
-Please note that the e2e testing environment has its own firebase resources which are different to development. In order
-to start the app with the testing firebase, use this command `yarn start:ci`
+  `yarn cy:test`
 
 ### Additional commands
 
@@ -66,6 +59,8 @@ to start the app with the testing firebase, use this command `yarn start:ci`
 
 - Open the Cypress Test Runner
   `yarn cy:open`
+
+We use [Cypress](https://www.cypress.io/) to carry out end-to-end testing. For more information about how to setup, use and add tests refer to the sections in the [Testing Setup Wiki](https://github.com/ONEARMY/community-platform/wiki/Testing-Setup).
 
 We use [BrowserStack](https://www.browserstack.com/) to test our platform on multiple devices and browsers.
 Note: Builds are currently tested on Chrome/Firefox. If your browser is not
@@ -76,6 +71,8 @@ supported, then consider contributing.
 Issues are tracked on GitHub. Use the labels to filter them to your needs and/or skills.
 Anybody can create an issue or feature request, but be sure to use our templates if you want your voice to be heard.
 Some issues are collated to form modules which are the parent of each section of the platform. Modules are then split into **pages** and finally **components**. You can navigate through them by filtering with the labels `Type:Module` and `Type:Pages`. Having a look at **module** and **pages** issues is the best way to get a clear overview of the ongoing work on it.
+
+Additionally if you have identified a bug you may want to write a test to make it easily reproducible (and less likely to arise in the future). You can find more information to do this in the [Testing Bugs Wiki](https://github.com/ONEARMY/community-platform/wiki/Testing---Bugs)
 
 We've also labeled some of the issues with `Good-first-issue` to help you get started quickly.
 When you start working on an issue, comment on it or if your are a registered contributor assign yourself to let us know so we avoid working on something twice. The comment should include a mention to @mattia-io (our project lead).

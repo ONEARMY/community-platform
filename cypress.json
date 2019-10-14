@@ -11,5 +11,7 @@
     "mochaFile": "cypress/coverage/out-[hash].xml"
   },
   "supportFile": "cypress/support/index.ts",
-  "projectId": "4s5zgo"
+  "projectId": "4s5zgo",
+  "viewportWidth": 1000,
+  "viewportHeight": 1000
 }

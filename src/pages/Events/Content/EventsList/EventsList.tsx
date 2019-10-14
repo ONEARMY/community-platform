@@ -91,14 +91,22 @@ export class EventsList extends React.Component<any, IState> {
           <React.Fragment>
             <>
               {filteredEvents.length === 0 ? null : (
-                // THIS IS TO BE TESTED AND UNCOMMENTED ONCE #670 IS MERGED
-                // ( // if there are no events to show, there will be no tags to select
+                /* THIS IS TO BE TESTED AND UNCOMMENTED ONCE #670 IS MERGED
+                    CASES COVERED:        
+                    IF no events/how-tos, THEN
+                          IF tags exist and no selected tags, it's loading
+                          IF tags exist and selected tags, no how-tos to show
+                          IF tags don't exist, no how-tos to show
+                */
+
+                // (
                 //   <Flex flexWrap={'wrap'} flexDirection="column">
                 //     <Heading auxiliary txtcenter width={1}>
                 //     {
                 //       uniqueUsedTags.length === 0
-                //     ? 'No events to show'
-                //     : 'Loading...'}
+                //     ? 'No events to show' : (Object.keys(selectedTags).length === 0
+                //        ? 'Loading...' : 'No how-tos to show')
+                // }
                 //     </Heading>
                 //   </Flex>
                 // )

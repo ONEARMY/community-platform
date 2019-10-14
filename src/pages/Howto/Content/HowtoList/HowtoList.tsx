@@ -74,7 +74,8 @@ export class HowtoList extends React.Component<any, IState> {
           {filteredHowtos.length === 0 ? (
             <Flex>
               <Heading auxiliary txtcenter width={1}>
-                {Object.keys(selectedTags).length === 0
+                {// NOTE: assumes there's always one how-to
+                Object.keys(selectedTags).length === 0
                   ? 'Loading...'
                   : 'No how-tos to show'}
               </Heading>

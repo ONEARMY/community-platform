@@ -11,7 +11,6 @@ import TagsSelect from 'src/components/Tags/TagsSelect'
 import { inject, observer } from 'mobx-react'
 import { EventStore } from 'src/stores/Events/events.store'
 import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
-// import { ISelectedTags } from 'src/models/tags.model'
 
 interface InjectedProps {
   eventStore: EventStore
@@ -19,7 +18,6 @@ interface InjectedProps {
 
 interface IState {
   eventsOffset: number
-  // selectedTags: ISelectedTags
 }
 
 const getLimitedEvents = (start: number, end: number, array: IEventDB[]) =>
@@ -33,7 +31,6 @@ export class EventsList extends React.Component<any, IState> {
     super(props),
       (this.state = {
         eventsOffset: 0,
-        // selectedTags: {}
       })
   }
 
@@ -94,14 +91,14 @@ export class EventsList extends React.Component<any, IState> {
           <React.Fragment>
             <>
               {filteredEvents.length === 0 ? null : (
-                // THIS AND ALL THE OTHER COMMENTS IN THIS FILE ARE TO BE UNCOMMENTED ONCE #670 IS MERGED
-                // (
+                // THIS IS TO BE TESTED AND UNCOMMENTED ONCE #670 IS MERGED
+                // ( // if there are no events to show, there will be no tags to select
                 //   <Flex flexWrap={'wrap'} flexDirection="column">
                 //     <Heading auxiliary txtcenter width={1}>
-                //     {// NOTE: assumes there's always one event
-                //       Object.keys(this.state.selectedTags).length === 0
-                //     ? 'Loading...'
-                //     : 'No events to show'}
+                //     {
+                //       uniqueUsedTags.length === 0
+                //     ? 'No events to show'
+                //     : 'Loading...'}
                 //     </Heading>
                 //   </Flex>
                 // )

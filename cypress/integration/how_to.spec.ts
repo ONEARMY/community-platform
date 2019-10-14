@@ -30,12 +30,13 @@ describe('[How To]', () => {
 
       cy.step('How-to cards has basic info')
       cy.get(`[data-cy=card] > a[href="${howtoUrl}"]`).within(() => {
-          cy.contains('Make glass-like beams').should('be.exist')
-          cy.contains('By howto_creator').should('be.exist')
-          cy.get('img').should('have.attr', 'src').and('match', coverFileRegex)
-          cy.contains('extrusion').should('be.exist')
-        }
-      )
+        cy.contains('Make glass-like beams').should('be.exist')
+        cy.contains('By howto_creator').should('be.exist')
+        cy.get('img')
+          .should('have.attr', 'src')
+          .and('match', coverFileRegex)
+        cy.contains('extrusion').should('be.exist')
+      })
 
       cy.step(`Open how-to details when click on a how-to ${howtoUrl}`)
       cy.get(`[data-cy=card] > a[href="${howtoUrl}"]`, SKIP_TIMEOUT).click()
@@ -305,5 +306,15 @@ describe('[How To]', () => {
       cy.visit('/how-to/create')
       cy.get('div').contains('Please login to access this page')
     })
+  })
+
+  describe('[Delete a how-to]', () => {
+    // TODO - CC 2019-10-14
+    // Currently no method in app to delete how-to, but expect one to be created
+  })
+
+  // Housekeeping - clear up previously created how-to
+  after(() => {
+    cy.deleteDocuments('v2_howtos', 'title', '==', 'Create a how-to test')
   })
 })

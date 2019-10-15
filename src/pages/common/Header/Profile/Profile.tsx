@@ -72,26 +72,26 @@ export default class Profile extends React.Component<IProps, IState> {
             <Flex onClick={this.openProfileMenu} ml={1}>
               <Avatar userName={user.userName} />
             </Flex>
-            <Menu
+            <Menu data-cy={'user-menu-list'}
               open={profileMenuAnchor ? true : false}
               anchorEl={profileMenuAnchor}
             >
               <ClickAwayListener onClickAway={this.closeProfileMenu}>
                 <>
                   <Text bold>{user.userName}</Text>
-                  <MenuItem onClick={this.closeProfileMenu}>
+                  <MenuItem onClick={this.closeProfileMenu} data-cy={'menu-item'}>
                     <NavLink to={'/u/' + user.userName}>
                       <Flex>Profile</Flex>
                     </NavLink>
                   </MenuItem>
                   {COMMUNITY_PAGES_PROFILE.map(page => (
-                    <MenuItem onClick={this.closeProfileMenu} key={page.path}>
+                    <MenuItem onClick={this.closeProfileMenu} key={page.path} data-cy={'menu-item'}>
                       <NavLink to={page.path}>
                         <Flex>{page.title}</Flex>
                       </NavLink>
                     </MenuItem>
                   ))}
-                  <MenuItem onClick={() => this.logout()}>Logout</MenuItem>
+                  <MenuItem onClick={() => this.logout()} data-cy={'menu-item'}>Logout</MenuItem>
                 </>
               </ClickAwayListener>
             </Menu>

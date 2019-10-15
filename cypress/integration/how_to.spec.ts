@@ -1,14 +1,11 @@
 describe('[How To]', () => {
   const SKIP_TIMEOUT = { timeout: 300 }
 
-  before(() => {
-    cy.deleteDocuments('v2_howtos', 'title', '==', 'Create a how-to test')
-  })
-
   describe('[List how-tos]', () => {
     const howtoUrl = '/how-to/make-glasslike-beams'
     const coverFileRegex = /howto-beams-glass-0-3.jpg/
     beforeEach(() => {
+      cy.deleteDocuments('v2_howtos', 'title', '==', 'Create a how-to test')
       cy.visit('/how-to')
       cy.logout()
     })
@@ -55,6 +52,7 @@ describe('[How To]', () => {
 
   describe('[Filter with Tag]', () => {
     beforeEach(() => {
+      cy.deleteDocuments('v2_howtos', 'title', '==', 'Create a how-to test')
       cy.visit('/how-to')
       cy.logout()
     })
@@ -250,6 +248,8 @@ describe('[How To]', () => {
     }
 
     it('[By Authenticated]', () => {
+      cy.deleteDocuments('v2_howtos', 'title', '==', 'Create a how-to test')
+
       cy.login('howto_creator@test.com', 'test1234')
       cy.step('Access the create-how-to page with its url')
       cy.visit('/how-to/create')
@@ -306,15 +306,5 @@ describe('[How To]', () => {
       cy.visit('/how-to/create')
       cy.get('div').contains('Please login to access this page')
     })
-  })
-
-  describe('[Delete a how-to]', () => {
-    // TODO - CC 2019-10-14
-    // Currently no method in app to delete how-to, but expect one to be created
-  })
-
-  // Housekeeping - clear up previously created how-to
-  after(() => {
-    cy.deleteDocuments('v2_howtos', 'title', '==', 'Create a how-to test')
   })
 })

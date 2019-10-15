@@ -2,6 +2,17 @@ import { Page } from '../utils/test-utils'
 
 describe('[Bugs]', () => {
 
+  it('[685]', () => {
+    cy.visit('/how-to')
+    cy.login('howto_reader@test.com', 'test1234')
+    cy.visit('/settings')
+
+    cy.toggleUserMenuOn()
+    cy.get('[data-cy=menu-item]').contains('Logout').click()
+
+    cy.url().should('include', '/how-to')
+  })
+
   it.skip('[684]', () => {
     cy.visit('/sign-in')
     cy.step('Lost Password sent a reset link')

@@ -253,6 +253,13 @@ describe('[How To]', () => {
       cy.login('howto_creator@test.com', 'test1234')
       cy.step('Access the create-how-to page with its url')
       cy.visit('/how-to/create')
+      cy.step('Warn if title is identical with the existing ones')
+      cy.get('[data-cy=intro-title]')
+        .type('Make glass-like beams')
+        .blur({ force: true })
+      cy.contains(
+        'Titles must be unique, please try being more specific',
+      ).should('exist')
       cy.step('Fill up the intro')
       cy.get('[data-cy=intro-title')
         .clear()

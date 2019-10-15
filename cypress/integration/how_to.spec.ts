@@ -30,12 +30,13 @@ describe('[How To]', () => {
 
       cy.step('How-to cards has basic info')
       cy.get(`[data-cy=card] > a[href="${howtoUrl}"]`).within(() => {
-          cy.contains('Make glass-like beams').should('be.exist')
-          cy.contains('By howto_creator').should('be.exist')
-          cy.get('img').should('have.attr', 'src').and('match', coverFileRegex)
-          cy.contains('extrusion').should('be.exist')
-        }
-      )
+        cy.contains('Make glass-like beams').should('be.exist')
+        cy.contains('By howto_creator').should('be.exist')
+        cy.get('img')
+          .should('have.attr', 'src')
+          .and('match', coverFileRegex)
+        cy.contains('extrusion').should('be.exist')
+      })
 
       cy.step(`Open how-to details when click on a how-to ${howtoUrl}`)
       cy.get(`[data-cy=card] > a[href="${howtoUrl}"]`, SKIP_TIMEOUT).click()
@@ -252,15 +253,6 @@ describe('[How To]', () => {
       cy.login('howto_creator@test.com', 'test1234')
       cy.step('Access the create-how-to page with its url')
       cy.visit('/how-to/create')
-
-      cy.step('Warn if title is identical with the existing ones')
-      cy.get('[data-cy=intro-title]')
-        .type('Make glass-like beams')
-        .blur({ force: true })
-      cy.contains(
-        'Titles must be unique, please try being more specific',
-      ).should('exist')
-
       cy.step('Fill up the intro')
       cy.get('[data-cy=intro-title')
         .clear()
@@ -291,8 +283,6 @@ describe('[How To]', () => {
       deleteStep(3)
 
       cy.get('[data-cy=submit]').click()
-
-      cy.wait(6000)
       cy.get('[data-cy=view-howto]')
         .click()
         .url()
@@ -304,6 +294,27 @@ describe('[How To]', () => {
       cy.logout()
       cy.visit('/how-to/create')
       cy.get('div').contains('Please login to access this page')
+    })
+  })
+
+  describe('[Edit a how-to]', () => {
+    it('[By Owner]', () => {
+      cy.login('howto_creator@test.com', 'test1234')
+      cy.step('Access the how-to page with its url')
+      cy.visit('/how-to/create-a-howto-test')
+      cy.step('Edit button is available')
+      cy.get('[data-cy=edit]')
+        .should('exist')
+        .click()
+      cy.step('Make Edits')
+      cy.get('[data-cy=intro-description]')
+        .clear()
+        .type('This how-to has been edited')
+      cy.get('[data-cy=submit]').click()
+      cy.step('View Edits')
+      cy.get('[data-cy=view-howto]').click()
+      cy.get('[data-cy=how-to-basis]')
+      cy.get('div').contains('This how-to has been edited')
     })
   })
 })

@@ -2,7 +2,7 @@ import { Page } from '../utils/test-utils'
 
 describe('[Bugs]', () => {
 
-  it('[685]', () => {
+  it.skip('[685]', () => {
     cy.visit('/how-to')
     cy.login('howto_reader@test.com', 'test1234')
     cy.visit('/settings')

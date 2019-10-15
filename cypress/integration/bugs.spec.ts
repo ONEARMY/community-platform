@@ -2,6 +2,13 @@ import { Page } from '../utils/test-utils'
 
 describe('[Bugs]', () => {
 
+  it('[676]', () => {
+    cy.visit('/how-to/unknown-anything')
+    cy.contains(`The page you were looking for was moved or doesn't exist`).should('be.exist')
+    cy.get('a').contains('Home').click()
+      .url().should('include', Page.HOME_PAGE)
+  })
+
   it.skip('[649]', () => {
     cy.step('Wrong email and wrong password')
     cy.visit('/sign-in')

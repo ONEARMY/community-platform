@@ -14,7 +14,7 @@ export interface IProps extends FieldRenderProps<any, any> {
   category: TagCategory | undefined
   styleVariant: 'selector' | 'filter'
   placeholder: string
-  showOnlyRelevantTags?: any
+  relevantTagsItems?: ICollectionWithTags[]
 }
 interface IState {
   selectedTags: string[]
@@ -23,7 +23,9 @@ interface InjectedProps extends IProps {
   tagsStore: TagsStore
 }
 
-const filterArrayDuplicates = (array: string[]) => Array.from(new Set(array))
+interface ICollectionWithTags {
+  tags?: ISelectedTags
+}
 
 @inject('tagsStore')
 @observer
@@ -56,11 +58,13 @@ class TagsSelect extends React.Component<IProps, IState> {
 
   public render() {
     let { categoryTags } = this.injectedProps.tagsStore
-    const relevantTags = this.injectedProps.showOnlyRelevantTags
+    const relevantTagsItems = this.injectedProps.relevantTagsItems
 
-    if (relevantTags) {
-      const result = this._filterRelevantTags(relevantTags)
-      categoryTags = categoryTags.filter(tag => result.includes(tag._id))
+    if (relevantTagsItems) {
+      const tagCounts = this._getTagCounts(relevantTagsItems)
+      categoryTags = categoryTags.filter(tag =>
+        Object.keys(tagCounts).includes(tag._id),
+      )
     }
 
     const { styleVariant } = this.props
@@ -97,16 +101,18 @@ class TagsSelect extends React.Component<IProps, IState> {
   }
 
   // we want to display only those tags that return results, meaning they are used by how-tos, events, etc
-  private _filterRelevantTags(items: any) {
-    const usedTags: string[] = []
+  private _getTagCounts(items: ICollectionWithTags[]) {
+    const tagCounts: { [key: string]: number } = {}
 
     items.map(
       item =>
-        item.tags && Object.keys(item.tags).forEach(tag => usedTags.push(tag)),
+        item.tags &&
+        Object.keys(item.tags).forEach(
+          tag => (tagCounts[tag] = (tagCounts[tag] || 0) + 1),
+        ),
     )
-    const uniqueUsedTags = filterArrayDuplicates(usedTags)
 
-    return uniqueUsedTags
+    return tagCounts
   }
 }
 

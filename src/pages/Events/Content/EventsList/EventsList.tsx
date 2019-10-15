@@ -49,7 +49,7 @@ export class EventsList extends React.Component<any> {
                   }
                   category="event"
                   styleVariant="filter"
-                  showOnlyRelevantTags={upcomingEvents}
+                  relevantTagsItems={upcomingEvents}
                 />
               </Box>
               <Box width={0.5} ml={2} className="location-search-list">

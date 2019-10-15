@@ -45,20 +45,41 @@ describe('[Events]', () => {
   })
 
   describe('[Filter Events]', () => {
-    it('[By Everyone]', () => {
-
+    beforeEach(() => {
+      cy.visit('/events')
+      cy.logout()
     })
-  })
-
-  describe('[Filter by Location]', () => {
     it('[By Everyone]', () => {
-      cy.step('Select the Location')
-      // - Select the text box, Search for a Location
-      // - Type a location incompletely
-      // - Select the desired location from the suggestion list
-      // - Check if only relevant events are shown
-      // - Remove the location
-      // - Expet all events are shown again"
+      cy.step('Select a tag in the dropdown list')
+      cy.get('[data-cy=tag-select]').click()
+      cy.get('.data-cy__menu').contains('workshop').click()
+      cy.get('[data-cy=card').its('length').should('eq', 3)
+
+      cy.step('Type and select a tag')
+      cy.get('.data-cy__input').find('input').type('scree')
+      cy.get('.data-cy__menu').contains('screening').click()
+      cy.get('[data-cy=card').its('length').should('eq', 2)
+
+      cy.step('Remove a tag')
+      cy.get('.data-cy__multi-value__label').contains('screening')
+        .parent()
+        .find('.data-cy__multi-value__remove')
+        .click()
+      cy.get('[data-cy=card]').its('length').should('be.eq', 3)
+
+      cy.step('Remove all tags')
+      cy.get('.data-cy__clear-indicator').click()
+      cy.get('.data-cy__multi-value__label').should('not.exist')
+      cy.get('[data-cy=card]').its('length').should('be.eq', 5)
+
+      cy.step('Filter by location')
+      cy.get('[data-cy=location]').find('input:eq(0)').type('Suraba')
+      cy.get('[data-cy=location]').find('span').contains('Surabaya').click()
+      cy.get('[data-cy=card]').its('length').should('be.eq', 2)
+
+      cy.step('Clear location')
+      cy.get('[data-cy=location]').find('input:eq(0)').clear().wait(500)
+      cy.get('[data-cy=card]').its('length').should('be.eq', 5)
     })
   })
 

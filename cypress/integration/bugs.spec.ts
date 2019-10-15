@@ -2,6 +2,13 @@ import { Page } from '../utils/test-utils'
 
 describe('[Bugs]', () => {
 
+  it.skip('[679]', () => {
+    cy.step('Ask users to login before creating an event')
+    cy.logout()
+    cy.visit('/events/create')
+    cy.get('div').contains('Please login to access this page')
+  })
+
   it.skip('[676]', () => {
     cy.visit('/how-to/unknown-anything')
     cy.contains(`The page you were looking for was moved or doesn't exist`).should('be.exist')

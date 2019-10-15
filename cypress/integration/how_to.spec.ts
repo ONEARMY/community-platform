@@ -300,7 +300,7 @@ describe('[How To]', () => {
     })
 
     it('[By Anonymous]', () => {
-      cy.step('Get redirected to /how-to when trying to create')
+      cy.step('Ask users to login before creating an how-to')
       cy.logout()
       cy.visit('/how-to/create')
       cy.get('div').contains('Please login to access this page')

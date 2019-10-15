@@ -84,11 +84,6 @@ describe('[Events]', () => {
   })
 
   describe('[Create an event]', () => {
-    it('[By Anonymous]', () => {
-      cy.visit('/events/create')
-        .url()
-        .should('not.include', '/create')
-    })
 
     it.skip('[By Authenticated]', () => {
       cy.visit('/events')

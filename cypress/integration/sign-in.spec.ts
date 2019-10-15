@@ -25,13 +25,6 @@ describe('[Sign in]', () => {
     cy.get('[data-cy=lost-password]').click()
     cy.get('[data-cy=notification-error]').should('be.visible')
 
-    cy.step('Lost Password sent a reset link')
-    cy.get('[data-cy=email]')
-      .clear()
-      .type('howto_reader@test.com')
-    cy.get('[data-cy=lost-password]').click()
-    cy.get('[data-cy=notification-confirmation]').should('be.visible')
-
     cy.step('Login with correct credentials')
     cy.get('[data-cy=email]')
       .clear()

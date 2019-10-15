@@ -2,6 +2,16 @@ import { Page } from '../utils/test-utils'
 
 describe('[Bugs]', () => {
 
+  it.skip('[684]', () => {
+    cy.visit('/sign-in')
+    cy.step('Lost Password sent a reset link')
+    cy.get('[data-cy=email]')
+      .clear()
+      .type('howto_reader@test.com')
+    cy.get('[data-cy=lost-password]').click()
+    cy.get('[data-cy=notification-confirmation]').should('be.visible')
+  })
+
   it.skip('[679]', () => {
     cy.step('Ask users to login before creating an event')
     cy.logout()

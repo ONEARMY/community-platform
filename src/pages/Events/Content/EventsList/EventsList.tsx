@@ -61,7 +61,9 @@ export class EventsList extends React.Component<any> {
             <Flex>
               <AuthWrapper>
                 <Link to={'/events/create'}>
-                  <Button variant="primary">Create an event</Button>
+                  <Button variant="primary" data-cy={'create'}>
+                    Create an event
+                  </Button>
                 </Link>
               </AuthWrapper>
             </Flex>

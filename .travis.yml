@@ -17,9 +17,7 @@ before_script:
   - echo "REACT_APP_BRANCH=$REACT_APP_BRANCH"
 script:
   - yarn test
-  # TEMP Disable record until OSS licence given (2019-10-12)
-  # - yarn cy:test:record
-  - yarn cy:test
+  - yarn cy:test:record
   - npm run build
 
 # install firebase cli and set firebase project ci token from environment

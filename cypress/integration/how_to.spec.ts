@@ -29,14 +29,12 @@ describe('[How To]', () => {
         .should('be.eq', totalHowTo)
 
       cy.step('How-to cards has basic info')
-      cy.get(`[data-cy=card] > a[href="${howtoUrl}"]`, SKIP_TIMEOUT).then(
-        $card => {
-          expect($card).to.contain('Make glass-like beams')
-          expect($card).to.contain('By howto_creator')
-          expect($card.find('img'))
-            .to.have.attr('src')
-            .match(coverFileRegex)
-        },
+      cy.get(`[data-cy=card] > a[href="${howtoUrl}"]`).within(() => {
+          cy.contains('Make glass-like beams').should('be.exist')
+          cy.contains('By howto_creator').should('be.exist')
+          cy.get('img').should('have.attr', 'src').and('match', coverFileRegex)
+          cy.contains('extrusion').should('be.exist')
+        }
       )
 
       cy.step(`Open how-to details when click on a how-to ${howtoUrl}`)

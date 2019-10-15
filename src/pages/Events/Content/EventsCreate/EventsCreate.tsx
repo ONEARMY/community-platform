@@ -133,6 +133,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                         <Field
                           id="title"
                           name="title"
+                          data-cy="title"
                           validate={value => this.validateTitle(value)}
                           validateFields={[]}
                           component={InputField}
@@ -152,6 +153,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             className="datepicker"
                             name="date"
                             type="date"
+                            data-cy="date"
                             dateFormat="yyyy/MM/dd"
                             validate={required}
                             selected={this.state.selectedDate}
@@ -196,6 +198,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                           <Label htmlFor="location">Link to your event *</Label>
                           <Field
                             name="url"
+                            data-cy="url"
                             validateFields={[]}
                             validate={value => this.validateUrl(value)}
                             component={InputField}

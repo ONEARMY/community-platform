@@ -68,7 +68,7 @@ export default class Profile extends React.Component<IProps, IState> {
     return (
       <>
         {user ? (
-          <>
+          <div data-cy={'user-menu'}>
             <Flex onClick={this.openProfileMenu} ml={1}>
               <Avatar userName={user.userName} />
             </Flex>
@@ -95,7 +95,7 @@ export default class Profile extends React.Component<IProps, IState> {
                 </>
               </ClickAwayListener>
             </Menu>
-          </>
+          </div>
         ) : (
           <LoginComponent />
         )}

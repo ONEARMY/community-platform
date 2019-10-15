@@ -3,14 +3,12 @@ describe('[Events]', () => {
   beforeEach(() => {
     cy.log(`Today as **${today}**`)
     cy.clock(Cypress.moment.utc(today).valueOf(), ['Date'])
+    cy.deleteDocuments('v2_events', 'title', '==', 'Create a test event')
+    cy.visit('/events')
+    cy.logout()
   })
 
   describe('[List events]', () => {
-    beforeEach(() => {
-      cy.visit('/events')
-      cy.logout()
-    })
-
     it('[By Everyone]', () => {
       cy.step('The Create button is unavailable')
       cy.get('[data-cy=create]').should('not.exist')
@@ -40,15 +38,10 @@ describe('[Events]', () => {
         .click()
         .url()
         .should('include', '/events/create')
-
     })
   })
 
   describe('[Filter Events]', () => {
-    beforeEach(() => {
-      cy.visit('/events')
-      cy.logout()
-    })
     it('[By Everyone]', () => {
       cy.step('Select a tag in the dropdown list')
       cy.get('[data-cy=tag-select]').click()
@@ -84,47 +77,27 @@ describe('[Events]', () => {
   })
 
   describe('[Create an event]', () => {
-
-    it.skip('[By Authenticated]', () => {
-      cy.visit('/events')
+    it('[By Authenticated]', () => {
       cy.login('event_creator@test.com', 'test1234')
       cy.get('[data-cy=create]').click()
 
-      cy.step('Fill up the intro')
-      cy.get('[data-cy=title]').type('Create an Event test')
-      const todaysDate = Cypress.moment().format('YYYY-MM-DD')
-      cy.get('[data-cy=date]').type(todaysDate)
-      cy.get('[data-cy=location]').type('Rio de Janeiro, Brazil')
-      cy.get('.ap-name')
-        .contains('Rio')
-        .click()
+      cy.step('Fill up mandatory info')
+      cy.get('[data-cy=title]').type('Create a test event')
+      cy.get('[data-cy=date]').type(Cypress.moment('2019-08-20').format('YYYY-MM-DD'))
+      cy.get('[data-cy=tag-select]').click()
+      cy.get('.data-cy__menu').contains('event_testing').click()
+
+      cy.get('[data-cy=location]').find('input:eq(0)').type('Atucucho')
+      cy.get('[data-cy=location]').find('div').contains('Atucucho').click()
       cy.get('[data-cy=tag-select]').click()
       cy.get('[data-cy=url]').type('https://www.meetup.com/pt-BR/cities/br/rio_de_janeiro/')
-      cy.get('Publish').click()
-    })
-  })
 
-  describe('[Edit an event]', () => {
-    it('[By Anonymous]', () => {
-      cy.visit('/events')
-      // ...
-    })
+      cy.step('Publish the event')
+      cy.get('[data-cy=title]').focus()
+      cy.get('[data-cy=submit]').click()
 
-    it('[By Authenticated]', () => {
-      cy.visit('/events')
-      // ...
-    })
-  })
-
-  describe('[Read an event]', () => {
-    it('[By Anonymous]', () => {
-      cy.visit('/events')
-      // ...
-    })
-
-    it('[By Authenticated]', () => {
-      cy.visit('/events')
-      // ...
+      cy.step('The new event is shown in /events')
+      cy.get('[data-cy=card]').contains('Create a test event').should('be.exist')
     })
   })
 })

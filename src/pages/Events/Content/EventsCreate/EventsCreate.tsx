@@ -202,6 +202,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                   mt={3}
                   variant={disabled ? 'primary' : 'primary'}
                   disabled={submitting || invalid}
+                  data-cy={'submit'}
                 >
                   Publish
                 </Button>

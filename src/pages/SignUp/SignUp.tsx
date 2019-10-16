@@ -125,6 +125,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                         Username, personal or workspace
                       </Label>
                       <Field
+                        data-cy={'username'}
                         name="userName"
                         type="userName"
                         component={InputField}
@@ -137,6 +138,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                         Email, personal or workspace
                       </Label>
                       <Field
+                        data-cy={'email'}
                         name="email"
                         type="email"
                         component={InputField}
@@ -147,6 +149,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                     <Flex flexDirection={'column'} mb={3} width={[1, 1, 2 / 3]}>
                       <Label htmlFor="password">Password</Label>
                       <Field
+                        data-cy={'password'}
                         name="password"
                         type="password"
                         component={InputField}
@@ -156,13 +159,14 @@ class SignUpPage extends React.Component<IProps, IState> {
                     <Flex flexDirection={'column'} mb={3} width={[1, 1, 2 / 3]}>
                       <Label htmlFor="confirm-password">Confirm Password</Label>
                       <Field
+                        data-cy={'confirm-password'}
                         name="confirm-password"
                         type="password"
                         component={InputField}
                         validate={required}
                       />
                     </Flex>
-                    <Text color={'red'}>{this.state.errorMsg}</Text>
+                    <Text color={'red'} data-cy={'error-msg'}>{this.state.errorMsg}</Text>
                     <Flex mb={3} justifyContent={'space-between'}>
                       <Text small color={'grey'} mt={2}>
                         Already have an account ?
@@ -172,6 +176,7 @@ class SignUpPage extends React.Component<IProps, IState> {
 
                     <Flex>
                       <Button
+                        data-cy={'submit'}
                         width={1}
                         variant={'primary'}
                         disabled={disabled}

@@ -1,6 +1,15 @@
 import { Page } from '../utils/test-utils'
 
 describe('[Bugs]', () => {
+  it.skip('[693]', () => {
+    cy.step('Redirect authenticated users to Home Page')
+    cy.visit('/how-to')
+    cy.login('howto_reader@test.com', 'test1234')
+    cy.wait(3000)
+
+    cy.visit('/sign-up')
+      .url().should('include', Page.HOME_PAGE)
+  })
   it.skip('[692]', () => {
     cy.step('Edit button should be available to resource owner')
     cy.visit('/how-to')

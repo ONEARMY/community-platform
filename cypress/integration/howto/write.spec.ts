@@ -24,14 +24,17 @@ describe('[How To]', () => {
     const stepIndex = stepNumber - 1
     cy.step(`Filling step ${stepNumber}`)
     cy.get(`[data-cy=step_${stepIndex}]:visible`)
-      .within(() => {
+      .within(($step) => {
         cy.get('[data-cy=step-title]').clear().type(`Step ${stepNumber} is easy`)
         cy.get('[data-cy=step-description]').clear().type(`Description for step ${stepNumber}`)
         cy.get('[data-cy=step-caption]').clear().type('What a step caption')
-        cy.step('Upload pics for a step')
-        cy.get('[data-cy=delete-step-img]').each($deleteButton => {
-          cy.wrap($deleteButton).click()
-        })
+        cy.step('Uploading pics')
+        const hasExistingPics = Cypress.$($step).find('[data-cy=delete-step-img]').length > 0
+        if (hasExistingPics) {
+          cy.wrap($step).find('[data-cy=delete-step-img]').each($deleteButton => {
+            cy.wrap($deleteButton).click()
+          })
+        }
         cy.get(':file').uploadFiles([
           'images/howto-step-pic1.jpg',
           'images/howto-step-pic2.jpg',

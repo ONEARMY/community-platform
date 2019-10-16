@@ -2,7 +2,6 @@ import * as React from 'react'
 import { Box, Flex, Image } from 'rebass'
 import styled from 'styled-components'
 import { Button } from '../Button'
-import Lightbox from 'react-image-lightbox'
 import 'react-image-lightbox/style.css'
 import { ImageConverter } from './ImageConverter'
 import { IUploadedFileMeta } from 'src/stores/storage'
@@ -115,29 +114,11 @@ export class ImageInput extends React.Component<IProps, IState> {
     return files ? Array.from(files) : []
   }
 
-  // on mount add listener to automatically convert images on file pick
-  componentDidMount() {
-    // const inputRef = this.fileInputRef.current as HTMLInputElement
-    // inputRef.addEventListener(
-    //   'change',
-    //   e => {
-    //     this.setState({ inputFiles: this.inputFiles })
-    //   },
-    //   false,
-    // )
-  }
-
-  // public triggerFileUploaderClick() {
-  //   const inputRef = this.fileInputRef.current as HTMLInputElement
-  //   inputRef.click()
-  // }
-
   public handleConvertedFileChange(
     isMulti: boolean,
     file: IConvertedFileMeta,
     index: number,
   ) {
-    console.log('handleConvertedFileChange', file)
     let updatedCovertedFiles: Array<any> | any = []
 
     if (isMulti) {
@@ -150,9 +131,6 @@ export class ImageInput extends React.Component<IProps, IState> {
       convertedFiles: updatedCovertedFiles,
       imgDelivered: true,
     })
-
-    console.log(this.state)
-    console.log('updatedCovertedFiles', updatedCovertedFiles)
 
     if (this.props.onFilesChange) {
       this.props.onFilesChange(updatedCovertedFiles)
@@ -171,20 +149,10 @@ export class ImageInput extends React.Component<IProps, IState> {
   }
 
   render() {
-    const {
-      inputFiles,
-      openLightbox,
-      lightboxImg,
-      imgDelivered,
-      isHovering,
-    } = this.state
+    const { inputFiles, isHovering } = this.state
     // if at least one image present, hide the 'choose image' button and replace with smaller button
     const imgPreviewMode = inputFiles.length > 0 || this.props.src
     const useImageSrc = this.props.src && this.state.inputFiles.length === 0
-
-    console.log('inputFiles', inputFiles)
-    console.log('imgPreviewMode', imgPreviewMode)
-    console.log('useImageSrc', useImageSrc)
 
     return (
       <Box p={0} height="100%">
@@ -262,9 +230,6 @@ export class ImageInput extends React.Component<IProps, IState> {
                     Replace image
                   </Button>
                 )}
-
-                {/* canDelete?: boolean
-  hasText?: boolean */}
               </UploadImageOverlay>
             </ImageInputWrapper>
           )}

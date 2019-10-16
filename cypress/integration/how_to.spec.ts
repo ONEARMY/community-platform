@@ -121,6 +121,10 @@ describe('[How To]', () => {
     const specificHowtoUrl = '/how-to/make-an-interlocking-brick'
     const coverFileRegex = /brick-12-1.jpg/
 
+    beforeEach(() => {
+
+    })
+
     describe('[By Everyone]', () => {
       it('[See all info]', () => {
         cy.visit(specificHowtoUrl)
@@ -181,18 +185,15 @@ describe('[How To]', () => {
             .should('have.attr', 'src')
             .and('match', pic3Regex)
         })
-      })
 
-      it('[Not interested and go back]', () => {
-        cy.visit(specificHowtoUrl)
+        cy.step('Back button at top takes users to /how-to')
         cy.get('[data-cy="go-back"]:eq(0)')
           .as('topBackButton')
           .click()
           .url()
           .should('include', '/how-to')
-      })
 
-      it('[Finish reading and go back]', () => {
+        cy.step('Back button at bottom takes users to /how-to')
         cy.visit(specificHowtoUrl)
         cy.get('[data-cy="go-back"]:eq(1)')
           .as('bottomBackButton')
@@ -200,6 +201,27 @@ describe('[How To]', () => {
           .url()
           .should('include', '/how-to')
       })
+    })
+
+    it('[By Authenticated}', () => {
+      cy.step('Edit button is unavailable to non-resource owners')
+      cy.visit('/how-to')
+      cy.logout()
+      cy.completeLogin('howto_reader@test.com', 'test1234')
+
+      cy.visit(specificHowtoUrl)
+      cy.get('[data-cy=edit]').should('not.exist')
+    })
+
+    it('[By Owner]', () => {
+      cy.step('Edit button is available to the owner')
+      cy.visit('/how-to')
+      cy.logout()
+      cy.completeLogin('howto_creator@test.com', 'test1234')
+
+      cy.visit(specificHowtoUrl)
+      cy.get('[data-cy=edit]').click()
+        .url().should('include', `${specificHowtoUrl}/edit`)
     })
   })
 

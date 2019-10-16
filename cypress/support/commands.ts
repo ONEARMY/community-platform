@@ -33,6 +33,16 @@ declare global {
         password: string,
       ): Promise<firebase.auth.UserCredential>
 
+      /**
+       * Login and wait for the page to load completely with user info.
+       * Some buttons are not shown in Cypress test after cy.login. This is a workaround for this problem.
+       * Please use login whenever possible.
+       * @deprecated
+       * @param username
+       * @param password
+       */
+      completeLogin(username: string, password: string): Promise<void>
+
       logout(): Promise<void>
 
       deleteDocuments(
@@ -56,6 +66,7 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
   let currentUser: null | firebase.User = null
   const firestore = new Firestore(fb.firestore())
 
+
   fb.auth().onAuthStateChanged(user => {
     currentUser = user
   })
@@ -67,7 +78,19 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
         return { email, password }
       },
     })
-    return fb.auth().signInWithEmailAndPassword(email, password)
+    fb.auth().signInWithEmailAndPassword(email, password)
+  })
+
+  Cypress.Commands.add('completeLogin', (email, password) => {
+    Cypress.log({
+      displayName: 'login',
+      consoleProps: () => {
+        return { email, password }
+      },
+    })
+    fb.auth().signInWithEmailAndPassword(email, password)
+    const isPageLoadedAfterLogin = () => cy.get('[data-cy=user-menu]').find('path').should('be.exist')
+    isPageLoadedAfterLogin()
   })
 
   Cypress.Commands.add('logout', () => {

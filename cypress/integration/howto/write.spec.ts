@@ -29,6 +29,9 @@ describe('[How To]', () => {
         cy.get('[data-cy=step-description]').clear().type(`Description for step ${stepNumber}`)
         cy.get('[data-cy=step-caption]').clear().type('What a step caption')
         cy.step('Upload pics for a step')
+        cy.get('[data-cy=delete-step-img]').each($deleteButton => {
+          cy.wrap($deleteButton).click()
+        })
         cy.get(':file').uploadFiles([
           'images/howto-step-pic1.jpg',
           'images/howto-step-pic2.jpg',
@@ -138,11 +141,20 @@ describe('[How To]', () => {
       cy.get('[data-cy=intro-cover]').find('button[data-cy=delete]').click()
       cy.get('[data-cy=intro-cover]').find(':file').uploadFiles('images/howto-intro.jpg')
 
-      // fillStep(1)
+
       deleteStep(5)
       deleteStep(4)
-      deleteStep(3)
       deleteStep(2)
+      fillStep(1)
+      fillStep(2)
+
+      cy.get('[data-cy=submit]').click()
+
+      cy.step('Open the updated how-to')
+      cy.wait(6000)
+      cy.get('[data-cy=view-howto]').click()
+        .url().should('include', '/how-to/this-is-an-edit-test')
+      cy.get('[data-cy=how-to-basis]').contains('This is an edit test')
     })
   })
 })

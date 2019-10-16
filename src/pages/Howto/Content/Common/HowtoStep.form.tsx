@@ -151,6 +151,7 @@ class HowtoStep extends Component<IProps, IState> {
                 )
               })}
               <Button
+                data-cy={'delete-step-img'}
                 icon={'delete'}
                 variant={'tertiary'}
                 sx={{ position: 'absolute' }}

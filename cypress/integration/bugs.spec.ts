@@ -1,6 +1,13 @@
 import { Page } from '../utils/test-utils'
 
 describe('[Bugs]', () => {
+  it.skip('[692]', () => {
+    cy.step('Edit button should be available to resource owner')
+    cy.visit('/how-to')
+    cy.login('howto_creator@test.com', 'test1234')
+    cy.visit('/how-to/make-glasslike-beams')
+    cy.get('[data-cy=edit]').should('be.visible')
+  })
 
   it.skip('[688]', () => {
     const editUrl = '/how-to/set-up-devsite-to-help-coding/edit'

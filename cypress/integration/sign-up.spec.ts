@@ -41,8 +41,7 @@ describe('[Sign-up]', () => {
     cy.get('[data-cy=email]').type(email)
     cy.get('[data-cy=password]').type(password)
     cy.get('[data-cy=submit').click()
-    cy.toggleUserMenuOn()
-    cy.get('[data-cy=menu-item]').contains(username).should('be.visible')
+    cy.get('[data-cy=Login').should('not.exist')
   })
 
 })

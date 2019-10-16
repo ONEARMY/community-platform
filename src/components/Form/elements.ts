@@ -45,7 +45,7 @@ export const FieldContainer = styled.div<IFormElement>`
   height: 100%;
   width: 100%;
   ${inputStyles};
-  border: 'none';
+  border: none;
   padding: 0;
 `
 export const ErrorMessage = styled.span`

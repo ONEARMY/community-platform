@@ -25,15 +25,13 @@ interface IProps {
   activePinDetail?: IMapPin | IMapPinDetail
   center: ILatLng
   zoom: number
+  map: any
 }
 interface IState {}
 
 class MapView extends React.Component<IProps, IState> {
-  private map
-
   constructor(props) {
     super(props)
-    this.map = React.createRef()
     this.updateBoundingBox = debounce(this.updateBoundingBox.bind(this), 1000)
   }
 
@@ -43,8 +41,8 @@ class MapView extends React.Component<IProps, IState> {
 
   private updateBoundingBox() {
     // Note - sometimes throws (current undefined). Workaround
-    if (this.map && this.map.current) {
-      const boundingBox = this.map.current.leafletElement.getBounds()
+    if (this.props.map && this.props.map.current) {
+      const boundingBox = this.props.map.current.leafletElement.getBounds()
       const newBoundingBox: IBoundingBox = {
         topLeft: boundingBox._northEast,
         bottomRight: boundingBox._southWest,
@@ -59,16 +57,14 @@ class MapView extends React.Component<IProps, IState> {
 
   public render() {
     const { center, zoom, filters, pins, activePinDetail } = this.props
-    const mapFilters = filters.map(filter => filter.name)
-    const mapPins = pins.filter(pin => mapFilters.includes(pin.pinType.name))
 
     return (
       <Map
-        ref={this.map}
+        ref={this.props.map}
         className="markercluster-map"
         center={[center.lat, center.lng]}
         zoom={zoom}
-        maxZoom={11}
+        maxZoom={18}
         style={{ height: '100%' }}
         onMove={this.updateBoundingBox}
       >
@@ -76,11 +72,12 @@ class MapView extends React.Component<IProps, IState> {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
-        <Clusters pins={mapPins} onPinClick={pin => this.pinClicked(pin)} />
-        <Popup map={this.map} pinDetail={activePinDetail} />
+        <Clusters pins={pins} onPinClick={pin => this.pinClicked(pin)} />
+        <Popup map={this.props.map} pinDetail={activePinDetail} />
       </Map>
     )
   }
+
   static defaultProps: Partial<IProps> = {
     onBoundingBoxChange: () => null,
     onPinClicked: () => null,

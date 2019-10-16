@@ -6,6 +6,10 @@ import {
   EntityType,
 } from 'src/models/maps.models'
 import { MOCK_DB_META } from './db.mock'
+import logo from 'src/assets/images/logo.svg'
+import communityBuilder from 'src/assets/icons/map-community.svg'
+import machineShop from 'src/assets/icons/map-machine.svg'
+import collectionPoint from 'src/assets/icons/map-collection.svg'
 
 export const generatePins = (count: number): Array<IMapPin> => {
   const filters = generatePinFilters()
@@ -50,56 +54,64 @@ export const generatePinFilters = (): Array<IPinType> => {
       grouping: 'place' as EntityType,
       displayName: 'Extruder',
       name: 'extruder',
-      icon: 'E',
+      icon: logo,
       count: 0,
     },
     {
       grouping: 'place' as EntityType,
       displayName: 'Injection',
       name: 'injecter',
-      icon: 'I',
+      icon: logo,
       count: 0,
     },
     {
       grouping: 'place' as EntityType,
       displayName: 'Shredder',
       name: 'shredder',
-      icon: 'S',
+      icon: logo,
       count: 0,
     },
     {
       grouping: 'place' as EntityType,
       displayName: 'Sheet Press',
-      name: 'sheetPresser',
-      icon: 'P',
+      name: 'sheetpress',
+      icon: logo,
       count: 0,
     },
     {
       grouping: 'place' as EntityType,
       displayName: 'R & D / Lab',
       name: 'lab',
-      icon: 'R',
-      count: 0,
-    },
-    {
-      grouping: 'individual' as EntityType,
-      displayName: 'Community Builder',
-      name: 'communityBuilder',
-      icon: 'C',
+      icon: logo,
       count: 0,
     },
     {
       grouping: 'individual' as EntityType,
       displayName: 'Member',
       name: 'member',
-      icon: '',
+      icon: collectionPoint,
+      count: 0,
+      visible: false,
+    },
+    {
+      grouping: 'individual' as EntityType,
+      displayName: 'Collection Point',
+      name: 'collection-point',
+      icon: collectionPoint,
       count: 0,
     },
     {
       grouping: 'individual' as EntityType,
-      displayName: 'Machine Builder',
-      name: 'machineBuilder',
-      icon: 'M',
+      displayName: 'Machine Shop',
+      name: 'machine-builder',
+      icon: machineShop,
+      count: 0,
+    },
+    {
+      grouping: 'individual' as EntityType,
+      displayName: 'Community Point',
+      name: 'community-builder',
+      icon: communityBuilder,
       count: 0,
     },
   ]

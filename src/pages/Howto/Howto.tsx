@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Route, Switch, withRouter } from 'react-router-dom'
 import { Howto } from './Content/Howto/Howto'
-import { CreateHowto } from './Content/CreateHowto/CreateHowto'
+import CreateHowto from './Content/CreateHowto/CreateHowto'
 import { EditHowto } from './Content/EditHowto/EditHowto'
 import { HowtoList } from './Content/HowtoList/HowtoList'
 import { AuthRoute } from '../common/AuthRoute'
@@ -20,8 +20,7 @@ class HowtoPageClass extends React.Component<any, any> {
             path="/how-to"
             render={props => <HowtoList {...props} />}
           />
-          {/* auth route only renders for logged in users */}
-          <AuthRoute
+          <Route
             path="/how-to/create"
             component={CreateHowto}
             redirectPath="/how-to"

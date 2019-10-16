@@ -1,6 +1,19 @@
-import { Page } from '../utils/test-utils'
+import { generatedId, Page } from '../utils/test-utils'
 
 describe('[Bugs]', () => {
+  it.skip('[694]', () => {
+    const username = `signup_gen_${generatedId(5)}`
+    const email = `${username}@test.com`
+    cy.visit('/sign-up')
+    cy.get('[data-cy=username]').clear().type(username)
+    cy.get('[data-cy=email]').clear().type(email)
+    cy.get('[data-cy=password]').clear().type('anything')
+    cy.get('[data-cy=confirm-password]').clear().type('clearly_different')
+    cy.get('[data-cy=submit]').click()
+
+    cy.get('[data-cy=error-msg]').contains('Password & Confirm Password must be the same').should('be.exist')
+  })
+
   it.skip('[693]', () => {
     cy.step('Redirect authenticated users to Home Page')
     cy.visit('/how-to')

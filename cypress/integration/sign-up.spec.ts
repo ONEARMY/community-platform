@@ -1,16 +1,7 @@
-import { Page } from '../utils/test-utils'
+import { Page, generatedId } from '../utils/test-utils'
 
 describe('[Sign-up]', () => {
-  const makeId = (length: number) => {
-    let result           = '';
-    const characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    for ( let i = 0; i < length; i++ ) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
-  }
-  const username = `signup_gen_${makeId(5)}`
+  const username = `signup_gen_${generatedId(5)}`
   const email = `${username}@test.com`
   const password = `test1234`
 

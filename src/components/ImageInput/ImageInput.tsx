@@ -114,11 +114,7 @@ export class ImageInput extends React.Component<IProps, IState> {
     return files ? Array.from(files) : []
   }
 
-  public handleConvertedFileChange(
-    isMulti: boolean,
-    file: IConvertedFileMeta,
-    index: number,
-  ) {
+  public handleConvertedFileChange(isMulti: boolean, file: IConvertedFileMeta) {
     let updatedCovertedFiles: Array<any> | any = []
 
     if (isMulti) {
@@ -184,7 +180,6 @@ export class ImageInput extends React.Component<IProps, IState> {
                         this.handleConvertedFileChange(
                           this.props.multi === true,
                           meta,
-                          index,
                         )
                       }
                     />

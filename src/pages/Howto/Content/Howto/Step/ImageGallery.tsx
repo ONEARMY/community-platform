@@ -77,7 +77,6 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
 
   render() {
     const images = this.state.images
-    console.log('ImageGallery:render', images)
     const imageNumber = images.length
     const { caption } = this.props
     return this.state.activeImage ? (

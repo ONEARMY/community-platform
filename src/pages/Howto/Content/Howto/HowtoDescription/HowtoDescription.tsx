@@ -97,11 +97,15 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
                 return <TagDisplay key={tag} tagKey={tag} />
               })}
           </Flex>
-          {howto.files && (
+          {howto.files && howto.files.length > 0 && (
             <Flex mt={3} flexDirection={'column'}>
-              {/* {howto.files.map(file => ( */}
-              {/* <FileInfo allowDownload file={file} key={file.name} /> */}
-              {/* ))} */}
+              {howto.files.map((file, index) => (
+                <FileInfo
+                  allowDownload
+                  file={file}
+                  key={file ? file.name : `file-${index}`}
+                />
+              ))}
             </Flex>
           )}
         </Flex>

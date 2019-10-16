@@ -69,7 +69,6 @@ export class HowtoStore extends ModuleStore {
       // upload any pending images, avoid trying to re-upload images previously saved
       // if cover already uploaded stored as object not array
       // file and step image re-uploads handled in uploadFile script
-      console.log('IS ARRAY', Array.isArray(values.cover_image))
       let processedCover
       if (!values.cover_image.hasOwnProperty('downloadUrl')) {
         processedCover = await this.uploadFileToCollection(

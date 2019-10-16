@@ -151,8 +151,6 @@ export class ModuleStore {
     collection: string,
     id: string,
   ) {
-    console.log('uploadCollectionBatch', files)
-
     const promises = files.map(async file => {
       return this.uploadFileToCollection(file, collection, id)
     })

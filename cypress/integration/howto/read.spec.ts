@@ -1,14 +1,11 @@
 describe('[How To]', () => {
   const SKIP_TIMEOUT = { timeout: 300 }
 
-  before(() => {
-    cy.deleteDocuments('v2_howtos', 'title', '==', 'Create a how-to test')
-  })
-
   describe('[List how-tos]', () => {
     const howtoUrl = '/how-to/make-glasslike-beams'
     const coverFileRegex = /howto-beams-glass-0-3.jpg/
     beforeEach(() => {
+      cy.deleteDocuments('v2_howtos', 'title', '==', 'Create a how-to test')
       cy.visit('/how-to')
       cy.logout()
     })
@@ -30,12 +27,13 @@ describe('[How To]', () => {
 
       cy.step('How-to cards has basic info')
       cy.get(`[data-cy=card] > a[href="${howtoUrl}"]`).within(() => {
-          cy.contains('Make glass-like beams').should('be.exist')
-          cy.contains('By howto_creator').should('be.exist')
-          cy.get('img').should('have.attr', 'src').and('match', coverFileRegex)
-          cy.contains('extrusion').should('be.exist')
-        }
-      )
+        cy.contains('Make glass-like beams').should('be.exist')
+        cy.contains('By howto_creator').should('be.exist')
+        cy.get('img')
+          .should('have.attr', 'src')
+          .and('match', coverFileRegex)
+        cy.contains('extrusion').should('be.exist')
+      })
 
       cy.step(`Open how-to details when click on a how-to ${howtoUrl}`)
       cy.get(`[data-cy=card] > a[href="${howtoUrl}"]`, SKIP_TIMEOUT).click()
@@ -54,6 +52,7 @@ describe('[How To]', () => {
 
   describe('[Filter with Tag]', () => {
     beforeEach(() => {
+      cy.deleteDocuments('v2_howtos', 'title', '==', 'Create a how-to test')
       cy.visit('/how-to')
       cy.logout()
     })
@@ -120,10 +119,6 @@ describe('[How To]', () => {
   describe('[Read a How-to]', () => {
     const specificHowtoUrl = '/how-to/make-an-interlocking-brick'
     const coverFileRegex = /brick-12-1.jpg/
-
-    beforeEach(() => {
-
-    })
 
     describe('[By Everyone]', () => {
       it('[See all info]', () => {

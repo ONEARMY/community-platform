@@ -46,14 +46,9 @@ describe('[How To]', () => {
     cy.get('[data-cy=confirm]').click()
   }
 
-
-  before(() => {
-    cy.deleteDocuments('v2_howtos', 'title', '==', 'Create a how-to test')
-  })
-
   describe('[Create a how-to]', () => {
-
     it('[By Authenticated]', () => {
+      cy.deleteDocuments('v2_howtos', 'title', '==', 'Create a how-to test')
       cy.login('howto_creator@test.com', 'test1234')
       cy.step('Access the create-how-to page with its url')
       cy.visit('/how-to/create')

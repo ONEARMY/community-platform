@@ -69,6 +69,9 @@ interface IProps {
   onFilesChange: (fileMeta: IConvertedFileMeta[] | null) => void
   multi?: boolean
   src?: IUploadedFileMeta
+  hasText?: boolean
+  replaceImage?: boolean
+  canDelete?: boolean
 }
 
 export interface IConvertedFileMeta {
@@ -157,11 +160,11 @@ export class ImageInput extends React.Component<IProps, IState> {
   }
 
   public toggleImageOverlay = () => {
-    if (this.state.inputFiles.length === 0) {
-      // If there is no image selected/uploaded
-      // Don't toggle it.
+    const imgPreviewMode = this.state.inputFiles.length > 0 || this.props.src
+    if (!imgPreviewMode) {
       return
     }
+
     this.setState((prevState: Readonly<IState>) => ({
       isHovering: !prevState.isHovering,
     }))
@@ -202,6 +205,7 @@ export class ImageInput extends React.Component<IProps, IState> {
               {useImageSrc && this.props.src && (
                 <Image src={this.props.src.downloadUrl} />
               )}
+
               {!useImageSrc &&
                 inputFiles.map((file, index) => {
                   return (
@@ -218,6 +222,7 @@ export class ImageInput extends React.Component<IProps, IState> {
                     />
                   )
                 })}
+
               {!useImageSrc && !imgPreviewMode && (
                 <Button small variant="outline" icon="image">
                   {this.props.multi ? 'Choose Image(s)' : 'Choose Image'}
@@ -225,25 +230,41 @@ export class ImageInput extends React.Component<IProps, IState> {
               )}
 
               <UploadImageOverlay isHovering={isHovering}>
-                <Button
-                  small
-                  variant="outline"
-                  icon="delete"
-                  onClick={event => {
-                    event.stopPropagation()
-                    if (imgPreviewMode) {
-                      this.props.onFilesChange(null)
-                    }
+                {this.props.canDelete && imgPreviewMode && (
+                  <Button
+                    small
+                    variant="outline"
+                    icon="delete"
+                    onClick={event => {
+                      event.stopPropagation()
+                      if (imgPreviewMode) {
+                        this.props.onFilesChange(null)
+                      }
 
-                    this.setState({
-                      inputFiles: [],
-                      convertedFiles: [],
-                      isHovering: false,
-                    })
-                  }}
-                >
-                  Delete
-                </Button>
+                      this.setState({
+                        inputFiles: [],
+                        convertedFiles: [],
+                        isHovering: false,
+                      })
+                    }}
+                  >
+                    Delete
+                  </Button>
+                )}
+
+                {!this.props.canDelete && (
+                  <Button
+                    small
+                    variant="outline"
+                    icon="image"
+                    hasText={this.props.hasText}
+                  >
+                    Replace image
+                  </Button>
+                )}
+
+                {/* canDelete?: boolean
+  hasText?: boolean */}
               </UploadImageOverlay>
             </ImageInputWrapper>
           )}

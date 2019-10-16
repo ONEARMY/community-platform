@@ -13,6 +13,12 @@ import theme from 'src/themes/styled.theme'
 import { IHowtoStep } from 'src/models/howto.models'
 import { IUploadedFileMeta } from 'src/stores/storage'
 
+const ImageInputFieldWrapper = styled.div`
+  width: 150px;
+  height: 100px;
+  margin-right: 10px;
+`
+
 interface IProps {
   step: any | IHowtoStep
   index: number
@@ -132,30 +138,34 @@ class HowtoStep extends Component<IProps, IState> {
         </Flex>
         <Label htmlFor={`${step}.text`}>Upload image(s) for this step *</Label>
 
-        <code>{JSON.stringify(images)}</code>
-
         <Flex>
-          <Box width="150px" height="100px">
+          <ImageInputFieldWrapper>
             <Field
+              canDelete
+              hasText={false}
               name={`${step}.images[0]`}
               src={images[0]}
               component={ImageInputField}
             />
-          </Box>
-          <Box width="150px" height="100px">
+          </ImageInputFieldWrapper>
+          <ImageInputFieldWrapper>
             <Field
+              canDelete
+              hasText={false}
               name={`${step}.images[1]`}
               src={images[1]}
               component={ImageInputField}
             />
-          </Box>
-          <Box width="150px" height="100px">
+          </ImageInputFieldWrapper>
+          <ImageInputFieldWrapper>
             <Field
+              canDelete
+              hasText={false}
               name={`${step}.images[2]`}
               src={images[2]}
               component={ImageInputField}
             />
-          </Box>
+          </ImageInputFieldWrapper>
         </Flex>
         <Flex mt={2}>
           <Field

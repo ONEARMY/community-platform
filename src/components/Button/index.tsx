@@ -17,6 +17,7 @@ export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
   small?: boolean
   medium?: boolean
   large?: boolean
+  hasText?: boolean
 }
 export const small = (props: IBtnProps) =>
   props.small
@@ -64,7 +65,7 @@ const BaseButton = styled(RebassButton)`
 export const Button = (props: BtnProps) => (
   <BaseButton {...props}>
     {props.icon && <Icon glyph={props.icon} marginRight="4px" />}
-    <Text>{props.children}</Text>
+    {props.hasText && <Text>{props.children}</Text>}
   </BaseButton>
 )
 

@@ -329,4 +329,30 @@ describe('[How To]', () => {
       cy.get('div').contains('Please login to access this page')
     })
   })
+
+  describe('[Edit a how-to]', () => {
+    const editHowtoUrl = '/how-to/set-up-devsite-to-help-coding/edit'
+    it('[By Anonymous]', () => {
+      cy.step('Redirect to Home Page after visiting an url')
+      cy.logout()
+      cy.visit(editHowtoUrl)
+      cy.url().should('not.include', editHowtoUrl)
+    })
+
+    it('[By Authenticated]', () => {
+      cy.visit('/how-to')
+      cy.login('howto_creator@test.com', 'test1234')
+
+      cy.visit(editHowtoUrl)
+      cy.url().should('not.include', editHowtoUrl)
+    })
+
+    it('[By Owner]', () => {
+      cy.logout()
+      cy.visit('/how-to')
+      cy.login('howto_editor@test.com', 'test1234')
+      cy.visit(editHowtoUrl)
+      cy.get('[data-cy=submit]').contains('Save Changes').should('be.exist')
+    })
+  })
 })

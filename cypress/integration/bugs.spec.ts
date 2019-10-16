@@ -2,6 +2,15 @@ import { Page } from '../utils/test-utils'
 
 describe('[Bugs]', () => {
 
+  it.skip('[688]', () => {
+    const editUrl = '/how-to/set-up-devsite-to-help-coding/edit'
+    cy.visit('/how-to')
+    cy.completeLogin('howto_editor@test.com', 'test1234')
+    cy.visit(editUrl)
+    cy.get('[data-cy=submit]').contains('Save Changes').should('be.exist')
+    cy.url().should('include', editUrl)
+  })
+
   it.skip('[686]', () => {
     cy.deleteDocuments('v2_events', 'title', '==', 'Create a test event')
     cy.visit('/events')

@@ -129,11 +129,11 @@ describe('[Bugs]', () => {
       .uploadFiles('images/howto-intro.jpg')
 
     cy.step('Add steps')
-    cy.get('[data-cy=step]')
+    cy.get('[data-cy^=step_]')
       .its('length')
       .should('be.eq', 3)
     cy.get('button[data-cy=add-step]').click()
-    cy.get('[data-cy=step]')
+    cy.get('[data-cy^=step_]')
       .its('length')
       .should('be.eq', 4)
 
@@ -141,12 +141,12 @@ describe('[Bugs]', () => {
       $el.trigger('click')
       cy.get('[data-cy=confirm]:visible').click()
     })
-    cy.get('[data-cy=step]:visible')
+    cy.get('[data-cy^=step_]:visible')
       .its('length')
       .should('be.eq', 1)
 
     cy.step('Fill up a step info')
-    cy.get('[data-cy=step]:eq(0)').within($firstStep => {
+    cy.get('[data-cy=step_0]').within($firstStep => {
       cy.wrap($firstStep)
         .contains('Step 1')
         .should('be.exist')
@@ -158,8 +158,7 @@ describe('[Bugs]', () => {
       cy.get('[data-cy=delete-step]').should('not.exist')
     })
     cy.step('Upload pics for a step')
-    cy.get('[data-cy=step]:visible')
-      .find(':file')
+    cy.get(':file')
       .uploadFiles(['images/howto-step-pic1.jpg', 'images/howto-step-pic2.jpg'])
 
     cy.get('[data-cy=submit]').click()

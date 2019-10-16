@@ -1,53 +1,54 @@
 describe('[How To]', () => {
 
+  const selectTimeDuration = (duration: '<1 week'| '1-2 weeks' | '3-4 weeks') => {
+    cy.get('[data-cy=time-select]').click()
+    cy.get('.data-cy__menu')
+      .contains(duration)
+      .click()
+  }
+  const selectDifficultLevel = (difficultLevel: 'Easy' | 'Medium' | 'Hard' | 'Very Hard') => {
+    cy.get('[data-cy=difficulty-select]').click()
+    cy.get('.data-cy__menu')
+      .contains(difficultLevel)
+      .click()
+  }
+
+  const selectTag = (tag: string) => {
+    cy.get('[data-cy=tag-select]').click()
+    cy.get('.data-cy__menu')
+      .contains(tag)
+      .click()
+  }
+
+  const fillStep = (stepNumber: number) => {
+    const stepIndex = stepNumber - 1
+    cy.step(`Filling step ${stepNumber}`)
+    cy.get(`[data-cy=step_${stepIndex}]:visible`)
+      .within(() => {
+        cy.get('[data-cy=step-title]').clear().type(`Step ${stepNumber} is easy`)
+        cy.get('[data-cy=step-description]').clear().type(`Description for step ${stepNumber}`)
+        cy.get('[data-cy=step-caption]').clear().type('What a step caption')
+        cy.step('Upload pics for a step')
+        cy.get(':file').uploadFiles([
+          'images/howto-step-pic1.jpg',
+          'images/howto-step-pic2.jpg',
+        ])
+      })
+  }
+
+  const deleteStep = (stepNumber: number) => {
+    const stepIndex = stepNumber - 1
+    cy.step(`Deleting step [${stepNumber}]`)
+    cy.get(`[data-cy=step_${stepIndex}]:visible`).find('[data-cy=delete-step]').click()
+    cy.get('[data-cy=confirm]').click()
+  }
+
+
   before(() => {
     cy.deleteDocuments('v2_howtos', 'title', '==', 'Create a how-to test')
   })
 
   describe('[Create a how-to]', () => {
-    const fillStep = (stepNumber: number) => {
-      const stepIndex = stepNumber - 1
-      cy.step(`Filling step ${stepNumber}`)
-      cy.get('[data-cy=step]')
-        .eq(stepIndex)
-        // carry out actions within the step matched above
-        .within($step => {
-          cy.get('[data-cy=step-title]').type(`Step ${stepNumber} is easy`)
-          cy.get('[data-cy=step-description]').type(
-            `Description for step ${stepNumber}`,
-          )
-          cy.get('[data-cy=step-caption]').type('What a step caption')
-          cy.step('Upload pics for a step')
-          cy.get(':file').uploadFiles([
-            'images/howto-step-pic1.jpg',
-            'images/howto-step-pic2.jpg',
-          ])
-        })
-    }
-
-    /**
-     * Delete a given step number. Checks the total number of steps before and after
-     * deletion, expecting number to decrease by 1
-     * @param stepNumber - the number as indicated in the step title (>=1)
-     */
-    const deleteStep = (stepNumber: number) => {
-      const stepIndex = stepNumber - 1
-      cy.step(`Deleting step [${stepNumber}]`)
-      cy.get('[data-cy=step]:visible').then(oldSteps => {
-        cy.get('[data-cy=step]')
-          .eq(stepIndex)
-          .within($step => {
-            cy.get('[data-cy=delete-step]').click()
-          })
-        cy.get('[data-cy=confirm]')
-          .click()
-          .then(() => {
-            cy.get('[data-cy=step]:visible').then(newSteps => {
-              expect(newSteps.length).to.eq(oldSteps.length - 1)
-            })
-          })
-      })
-    }
 
     it('[By Authenticated]', () => {
       cy.login('howto_creator@test.com', 'test1234')
@@ -66,18 +67,10 @@ describe('[How To]', () => {
       cy.get('[data-cy=intro-title')
         .clear()
         .type('Create a how-to test')
-      cy.get('[data-cy=tag-select]').click()
-      cy.get('.data-cy__menu')
-        .contains('howto_testing')
-        .click()
-      cy.get('[data-cy=time-select]').click()
-      cy.get('.data-cy__menu')
-        .contains('1-2 weeks')
-        .click()
-      cy.get('[data-cy=difficulty-select]').click()
-      cy.get('.data-cy__menu')
-        .contains('Medium')
-        .click()
+      selectTag('howto_testing')
+      selectTimeDuration('1-2 weeks')
+      selectDifficultLevel('Medium')
+
       cy.get('[data-cy=intro-description]').type(
         'After creating, the how-to will be deleted',
       )
@@ -135,8 +128,21 @@ describe('[How To]', () => {
 
       cy.step('Update the intro')
       cy.get('[data-cy=intro-title]').clear().type('This is an edit test')
-      cy.get('[data-cy=tag-select]').click()
-      cy.get('.data-cy__menu').contains('howto_testing').click()
+      selectTag('howto_testing')
+      selectTimeDuration('3-4 weeks')
+      selectDifficultLevel('Hard')
+      cy.get('[data-cy=intro-description]').clear().type('After editing, all changes are reverted')
+      cy.get('[data-cy=intro-caption]').clear().type('Caption edited!')
+
+      cy.step('Update a new cover for the intro')
+      cy.get('[data-cy=intro-cover]').find('button[data-cy=delete]').click()
+      cy.get('[data-cy=intro-cover]').find(':file').uploadFiles('images/howto-intro.jpg')
+
+      // fillStep(1)
+      deleteStep(5)
+      deleteStep(4)
+      deleteStep(3)
+      deleteStep(2)
     })
   })
 })

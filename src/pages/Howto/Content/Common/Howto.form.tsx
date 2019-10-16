@@ -300,6 +300,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                                 icon={'delete'}
                                 variant={'tertiary'}
                                 sx={{ position: 'absolute' }}
+                                data-cy={'delete'}
                                 onClick={() =>
                                   this.setState({
                                     editCoverImg: !editCoverImg,

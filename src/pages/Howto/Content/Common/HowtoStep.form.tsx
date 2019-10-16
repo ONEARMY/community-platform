@@ -57,7 +57,7 @@ class HowtoStep extends Component<IProps, IState> {
     return (
       // NOTE - animation parent container in CreateHowTo
       <Flex
-        data-cy={'step'}
+        data-cy={`step_${index}`}
         mt={5}
         p={3}
         key={index}

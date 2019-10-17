@@ -106,9 +106,9 @@ export const EventCard = (props: IProps) => (
       </Text>
     </Flex>
     <Flex
-      flexWrap={'nowrap'}
-      alignItems={'center'}
-      flex={'1'}
+      flexWrap="wrap"
+      alignItems="center"
+      flex="1"
       order={[4, 4, 4]}
       mb={[2, 2, 0]}
     >

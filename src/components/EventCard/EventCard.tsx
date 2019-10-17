@@ -70,7 +70,7 @@ export const EventCard = (props: IProps) => (
           textAlign={'center'}
           width={['auto', 'auto', 1]}
         >
-          {getMonth(new Date(props.event.date))}
+          {getMonth(new Date(props.event.date), 'short')}
         </Text>
       </Flex>
     </Flex>
@@ -106,9 +106,10 @@ export const EventCard = (props: IProps) => (
       </Text>
     </Flex>
     <Flex
-      flexWrap="wrap"
-      alignItems="center"
       flex="1"
+      alignItems="flex-start"
+      justifyContent="center"
+      flexDirection="column"
       order={[4, 4, 4]}
       mb={[2, 2, 0]}
     >

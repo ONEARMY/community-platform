@@ -70,5 +70,68 @@
     ],
     "image": "",
     "label": "mould"
+  },
+
+
+  {
+    "_created": "2018-09-12T19:13:01.768Z",
+    "_createdBy": "tag_creator",
+    "_deleted": false,
+    "_id": "1zfteiFXNDbDnlE3Incg",
+    "_modified": "2019-03-17T18:52:50.469Z",
+    "categories": [
+      "event"
+    ],
+    "image": "",
+    "label": "event_testing"
+  },
+  {
+    "_created": "2015-02-23T23:04:03.609Z",
+    "_createdBy": "tag_creator",
+    "_deleted": false,
+    "_id": "5nXtB6mHdffDurEDLt6Q",
+    "_modified": "2017-01-19T07:07:12.730Z",
+    "categories": [
+      "event"
+    ],
+    "image": "",
+    "label": "screening"
+  },
+  {
+    "_created": "2014-01-30T01:24:05.344Z",
+    "_createdBy": "tag_creator",
+    "_deleted": false,
+    "_id": "7yhssOmZqiihTBXK2cxU",
+    "_modified": "2019-05-25T06:26:54.068Z",
+    "categories": [
+      "event"
+    ],
+    "image": "",
+    "label": "brainstorm"
+  },
+
+  {
+    "_created": "2017-11-20T05:58:20.458Z",
+    "_createdBy": "tag_creator",
+    "_deleted": false,
+    "_id": "T7bZy8OhN7K4OWJ09wSX",
+    "_modified": "2018-07-29T04:34:49.982Z",
+    "categories": [
+      "event"
+    ],
+    "image": "",
+    "label": "exhibition"
+  },
+  {
+    "_created": "2012-05-17T17:08:03.110Z",
+    "_createdBy": "tag_creator",
+    "_deleted": false,
+    "_id": "kVSRJqFt52hi8RHW5wjb",
+    "_modified": "2018-02-09T17:07:11.943Z",
+    "categories": [
+      "event"
+    ],
+    "image": "",
+    "label": "workshop"
   }
 ]

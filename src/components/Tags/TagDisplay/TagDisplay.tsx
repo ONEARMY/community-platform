@@ -1,11 +1,7 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 import { TagsStore } from 'src/stores/Tags/tags.store'
-import { ITag } from 'src/models/tags.model'
-import { Box } from 'rebass'
 import Text from 'src/components/Text'
-
-import theme from 'src/themes/styled.theme'
 import Styled from 'styled-components'
 
 /*
@@ -14,9 +10,6 @@ and renders the tag label.
 */
 interface IProps {
   tagKey: string
-}
-interface IState {
-  tag: ITag
 }
 interface InjectedProps extends IProps {
   tagsStore: TagsStore
@@ -38,7 +31,7 @@ const TagContainer = Styled(Text)`
 
 @inject('tagsStore')
 @observer
-export default class TagDisplay extends React.Component<IProps, IState> {
+export default class TagDisplay extends React.Component<IProps> {
   constructor(props: any) {
     super(props)
   }
@@ -46,15 +39,9 @@ export default class TagDisplay extends React.Component<IProps, IState> {
     return this.props as InjectedProps
   }
 
-  public componentWillMount() {
-    const activeTag = this.injectedProps.tagsStore.allTagsByKey[
-      this.props.tagKey
-    ]
-    this.setState({ tag: activeTag })
-  }
-
   public render() {
-    const { tag } = this.state
+    const tag = this.injectedProps.tagsStore.allTagsByKey[this.props.tagKey]
+
     return tag ? (
       <TagContainer tags mr={2}>
         {tag.label}

@@ -27,6 +27,33 @@
     "verified": true
   },
   {
+    "_authID": "5UXRly49EOXtIXmKjPfSU5UpeI73",
+    "_id": "event_creator",
+    "userName": "event_creator",
+    "_deleted": false,
+    "_created": "2018-01-24T14:46:42.038Z",
+    "_modified": "2018-01-24T14:46:42.038Z",
+    "verified": true
+  },
+  {
+    "_authID": "8T4FMZ0dOdQbBaHuFYcvc0A3rDt2",
+    "_id": "event_editor",
+    "userName": "event_editor",
+    "_deleted": false,
+    "_created": "2018-01-24T14:46:42.038Z",
+    "_modified": "2018-01-24T14:46:42.038Z",
+    "verified": true
+  },
+  {
+    "_authID": "4WFI4CEFXuTtoB1b2rl16AlGCey1",
+    "_id": "event_reader",
+    "userName": "event_reader",
+    "_deleted": false,
+    "_created": "2018-01-24T14:46:42.038Z",
+    "_modified": "2018-01-24T14:46:42.038Z",
+    "verified": true
+  },
+  {
     "_authID": "0P7VMVVdhkUQjvYG3gYewwPtJ7i1",
     "_id": "tag_creator",
     "userName": "tag_creator",

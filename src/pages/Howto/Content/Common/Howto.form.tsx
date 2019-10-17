@@ -292,43 +292,11 @@ export class HowtoForm extends React.Component<IProps, IState> {
                         >
                           <Label htmlFor="cover_image">Cover image *</Label>
                           <Box height="230px">
-                            {/* {formValues.cover_image && !editCoverImg ? (
-                            <Flex
-                              alignItems={'center'}
-                              justifyContent={'center'}
-                              flexDirection={'column'}
-                            >
-                              <Image
-                                sx={{ opacity: 0.5 }}
-                                src={formValues.cover_image.downloadUrl}
-                              />
-                              <Button
-                                icon={'delete'}
-                                variant={'tertiary'}
-                                sx={{ position: 'absolute' }}
-                                onClick={() =>
-                                  this.setState({
-                                    editCoverImg: !editCoverImg,
-                                  })
-                                }
-                              />
-                            </Flex>
-                          ) : (
-                            <Field
-                              id="cover_image"
-                              name="cover_image"
-                              validate={required}
-                              validateFields={[]}
-                              component={ImageInputField}
-                              multi={true}
-                            />
-                          )} */}
                             <Field
                               id="cover_image"
                               name="cover_image"
                               src={formValues.cover_image}
                               component={ImageInputField}
-                              multi={false}
                             />
                           </Box>
 

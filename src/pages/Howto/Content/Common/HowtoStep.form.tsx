@@ -138,7 +138,7 @@ class HowtoStep extends Component<IProps, IState> {
         </Flex>
         <Label htmlFor={`${step}.text`}>Upload image(s) for this step *</Label>
 
-        <Flex>
+        <Flex flexDirection={['column', 'row']} alignItems="center">
           <ImageInputFieldWrapper>
             <Field
               canDelete

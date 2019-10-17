@@ -22,6 +22,7 @@ const AlignCenterWrapper = styled.div`
   justify-content: center;
   height: 100%;
   width: 100%;
+  overflow: hidden;
 `
 
 const ImageInputWrapper = styled(AlignCenterWrapper)<ITitleProps>`
@@ -66,7 +67,6 @@ const UploadImageOverlay = styled(AlignCenterWrapper)<
 
 interface IProps {
   onFilesChange: (fileMeta: IConvertedFileMeta[] | null) => void
-  multi?: boolean
   src?: IUploadedFileMeta
   hasText?: boolean
   replaceImage?: boolean
@@ -114,15 +114,9 @@ export class ImageInput extends React.Component<IProps, IState> {
     return files ? Array.from(files) : []
   }
 
-  public handleConvertedFileChange(isMulti: boolean, file: IConvertedFileMeta) {
+  public handleConvertedFileChange(file: IConvertedFileMeta) {
     let updatedCovertedFiles: Array<any> | any = []
-
-    if (isMulti) {
-      updatedCovertedFiles = this.state.convertedFiles.concat(file)
-    } else {
-      updatedCovertedFiles = file
-    }
-
+    updatedCovertedFiles = file
     this.setState({
       convertedFiles: updatedCovertedFiles,
       imgDelivered: true,
@@ -177,10 +171,7 @@ export class ImageInput extends React.Component<IProps, IState> {
                       key={file.name}
                       file={file}
                       onImgConverted={meta =>
-                        this.handleConvertedFileChange(
-                          this.props.multi === true,
-                          meta,
-                        )
+                        this.handleConvertedFileChange(meta)
                       }
                     />
                   )
@@ -188,7 +179,7 @@ export class ImageInput extends React.Component<IProps, IState> {
 
               {!useImageSrc && !imgPreviewMode && (
                 <Button small variant="outline" icon="image">
-                  {this.props.multi ? 'Choose Image(s)' : 'Choose Image'}
+                  Upload Image
                 </Button>
               )}
 
@@ -216,12 +207,7 @@ export class ImageInput extends React.Component<IProps, IState> {
                 )}
 
                 {!this.props.canDelete && (
-                  <Button
-                    small
-                    variant="outline"
-                    icon="image"
-                    hasText={this.props.hasText}
-                  >
+                  <Button small variant="outline" icon="image">
                     Replace image
                   </Button>
                 )}

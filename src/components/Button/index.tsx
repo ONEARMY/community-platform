@@ -65,7 +65,7 @@ const BaseButton = styled(RebassButton)`
 export const Button = (props: BtnProps) => (
   <BaseButton {...props}>
     {props.icon && <Icon glyph={props.icon} marginRight="4px" />}
-    {props.hasText && <Text>{props.children}</Text>}
+    <Text>{props.children}</Text>
   </BaseButton>
 )
 

@@ -11,8 +11,7 @@ import { InputField } from 'src/components/Form/Fields'
 import { inject, observer } from 'mobx-react'
 import { UserStore } from 'src/stores/User/user.store'
 import { RouteComponentProps, withRouter } from 'react-router'
-import * as Yup from 'yup'
-import { string } from 'prop-types'
+import { string, object, ref } from 'yup'
 
 const Label = styled.label`
   font-size: ${theme.fontSizes[2] + 'px'};
@@ -82,17 +81,17 @@ class SignUpPage extends React.Component<IProps, IState> {
       <Form
         onSubmit={v => this.onSignupSubmit(v as IFormValues)}
         validate={async (values: any) => {
-          const validationSchema = Yup.object({
-            userName: Yup.string()
+          const validationSchema = object({
+            userName: string()
               .min(2, 'Too short')
               .required('Required'),
-            email: Yup.string()
+            email: string()
               .email('Invalid email')
               .required('Required'),
-            password: Yup.string().required('Password is required'),
-            'confirm-password': Yup.string()
+            password: string().required('Password is required'),
+            'confirm-password': string()
               .oneOf(
-                [Yup.ref('password'), null],
+                [ref('password'), null],
                 'Your new password does not match',
               )
               .required('Password confirm is required'),
@@ -102,7 +101,7 @@ class SignUpPage extends React.Component<IProps, IState> {
             await validationSchema.validate(values, { abortEarly: false })
           } catch (err) {
             const errors = err.inner.reduce(
-              (acc, error) => ({
+              (acc: object, error) => ({
                 ...acc,
                 [error.path]: error.message,
               }),

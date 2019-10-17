@@ -115,10 +115,9 @@ export class LocationSearch extends React.Component<IProps, IState> {
   render() {
     const { styleVariant } = this.props
     return (
-      <>
+      <div data-cy={'location'}>
         {/* the first input uses our styled input component and has ref to subscribe to value changes */}
         <Input
-          data-cy="location"
           placeholder={this.props.placeholder}
           style={styleVariant === 'filter' ? FilterStyle : SelectorStyle}
           ref={this.userInputRef}
@@ -131,7 +130,7 @@ export class LocationSearch extends React.Component<IProps, IState> {
           ref={this.placesInputRef}
           readOnly
         />
-      </>
+      </div>
     )
   }
 }

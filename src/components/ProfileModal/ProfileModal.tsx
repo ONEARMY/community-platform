@@ -79,7 +79,7 @@ export class ProfileModal extends React.Component<IProps> {
   render() {
     const { username } = this.props
     return (
-      <ModalContainer>
+      <ModalContainer data-cy={'user-menu-list'}>
         <ModalContent>
           <Flex>
             <ModalLink to={'/u/' + username}>

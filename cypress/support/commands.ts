@@ -45,6 +45,9 @@ declare global {
       step(message: string)
 
       uploadFiles(filePath: string | string[])
+
+      toggleUserMenuOn() : Promise<void>
+      toggleUserMenuOff() : Promise<void>
     }
   }
 }
@@ -135,6 +138,17 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
       })
     },
   )
+
+  Cypress.Commands.add('toggleUserMenuOn', () => {
+    Cypress.log({ displayName: 'OPEN_USER_MENU'})
+    cy.get('[data-cy=user-menu]').find('path').should('be.exist')
+    cy.get('[data-cy=user-menu]').click()
+  })
+
+  Cypress.Commands.add('toggleUserMenuOff', () => {
+    Cypress.log({ displayName: 'CLOSE_USER_MENU'})
+    cy.get('[data-cy=header]').click({force: true})
+  })
 }
 
 attachCustomCommands(Cypress, firebase)

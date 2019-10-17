@@ -98,7 +98,7 @@ describe('[How To]', () => {
       cy.get('.data-cy__multi-value__label').should('not.exist')
       cy.get('[data-cy=card]')
         .its('length')
-        .should('be.gte', 7)
+        .should('be.eq', 7)
 
       cy.step('Show a message when there is no more how-tos')
       cy.visit('/how-to')
@@ -291,6 +291,7 @@ describe('[How To]', () => {
       fillStep(2)
       deleteStep(3)
 
+      cy.get('[data-cy=header]').click({ force: true })
       cy.get('[data-cy=submit]').click()
 
       cy.wait(6000)
@@ -301,7 +302,7 @@ describe('[How To]', () => {
     })
 
     it('[By Anonymous]', () => {
-      cy.step('Get redirected to /how-to when trying to create')
+      cy.step('Ask users to login before creating an how-to')
       cy.logout()
       cy.visit('/how-to/create')
       cy.get('div').contains('Please login to access this page')

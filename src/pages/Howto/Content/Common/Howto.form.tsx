@@ -26,14 +26,13 @@ import { stripSpecialCharacters } from 'src/utils/helpers'
 import { PostingGuidelines } from './PostingGuidelines'
 import theme from 'src/themes/styled.theme'
 import { DIFFICULTY_OPTIONS, TIME_OPTIONS } from './FormSettings'
-import { Image, Box } from 'rebass'
+import { Box } from 'rebass'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
 
 interface IState {
   formSaved: boolean
   _toDocsList: boolean
   showSubmitModal?: boolean
-  editCoverImg?: boolean
   fileEditMode?: boolean
 }
 interface IProps extends RouteComponentProps<any> {
@@ -85,7 +84,6 @@ export class HowtoForm extends React.Component<IProps, IState> {
     this.state = {
       formSaved: false,
       _toDocsList: false,
-      editCoverImg: false,
       fileEditMode: false,
     }
   }
@@ -110,7 +108,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
   })
   public render() {
     const { formValues, parentType } = this.props
-    const { editCoverImg, fileEditMode } = this.state
+    const { fileEditMode } = this.state
     return (
       <Form
         onSubmit={v => {

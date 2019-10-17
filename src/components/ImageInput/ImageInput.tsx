@@ -68,7 +68,6 @@ const UploadImageOverlay = styled(AlignCenterWrapper)<
 interface IProps {
   onFilesChange: (fileMeta: IConvertedFileMeta[] | null) => void
   src?: IUploadedFileMeta
-  hasText?: boolean
   replaceImage?: boolean
   canDelete?: boolean
 }

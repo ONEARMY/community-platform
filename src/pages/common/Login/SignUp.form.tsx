@@ -77,6 +77,8 @@ export class SignUpForm extends React.Component<IProps, IState> {
     return user && !user._deleted ? false : true
   }
 
+  // public validateForm =
+
   public render = () => {
     const {
       email,
@@ -84,12 +86,16 @@ export class SignUpForm extends React.Component<IProps, IState> {
       userName,
       passwordConfirmation,
     } = this.state.formValues
+
     const disabled =
       this.state.disabled ||
       email === '' ||
       password === '' ||
       passwordConfirmation !== password ||
       userName === ''
+
+    console.log('FORM', JSON.stringify(this.state, null, 2))
+
     return (
       <Form
         onSubmit={e => this.signUpSubmit(e as any)}

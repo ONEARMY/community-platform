@@ -5,7 +5,7 @@ import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
 import { NavLink } from 'react-router-dom'
-import Flex from '../Flex'
+import Flex from 'src/components/Flex'
 import theme from 'src/themes/styled.theme'
 
 interface IProps {
@@ -33,7 +33,6 @@ const ModalContent = styled(Box)`
   background: white;
   border: 2px solid black;
   border-radius: 5px;
-  // height: 100%;
 `
 
 const ModalLink = styled(NavLink).attrs(({ name }) => ({
@@ -44,22 +43,22 @@ const ModalLink = styled(NavLink).attrs(({ name }) => ({
   flex-direction: column;
   color: #000;
   padding: 10px 30px 10px 30px;
-  text-align: left
+  text-align: left;
   width: 100%;
   max-width: 100%;
   max-height: 100%;
   &:focus div {
-    color: ${theme.colors.blue}
+    color: ${theme.colors.blue};
   }
   &:hover {
-    background-color: ${theme.colors.background}
+    background-color: ${theme.colors.background};
   }
-  &:active div{
-    color: ${theme.colors.blue}
+  &:active div {
+    color: ${theme.colors.blue};
   }
   &.current {
-    background-color: #fff
-    color: ${theme.colors.blue}
+    background-color: #fff;
+    color: ${theme.colors.blue};
   }
 `
 @inject('userStore')
@@ -80,8 +79,8 @@ export class ProfileModal extends React.Component<IProps> {
   render() {
     const { username } = this.props
     return (
-      <ModalContainer id="ModalContainer">
-        <ModalContent id="ModalContent">
+      <ModalContainer>
+        <ModalContent>
           <Flex>
             <ModalLink to={'/u/' + username}>
               <Flex>Profile</Flex>
@@ -96,7 +95,7 @@ export class ProfileModal extends React.Component<IProps> {
           </Flex>
           <Flex>
             <ModalLink onClick={() => this.logout()} to={'/how-to'}>
-              <Flex style={{ color: 'rgba(27,27,27,0.5' }}>Log out</Flex>
+              <Flex color="rgba(27,27,27,0.5)">Log out</Flex>
             </ModalLink>
           </Flex>
         </ModalContent>

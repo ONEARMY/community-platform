@@ -8,7 +8,7 @@ import { Avatar } from 'src/components/Avatar'
 import { ProfileModal } from 'src/components/ProfileModal/ProfileModal'
 
 interface IState {
-  showDeleteModal: boolean
+  showProfileModal: boolean
 }
 
 interface IProps {}
@@ -23,29 +23,32 @@ export default class Profile extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
-      showDeleteModal: false,
+      showProfileModal: false,
     }
   }
   get injected() {
     return this.props as IInjectedProps
   }
 
-  toggleDeleteModal() {
-    this.setState({ showDeleteModal: !this.state.showDeleteModal })
+  toggleProfileModal() {
+    this.setState({ showProfileModal: !this.state.showProfileModal })
   }
 
   render() {
     const user = this.injected.userStore.user
+    const { showProfileModal } = this.state
     return (
       <>
         {user ? (
           <>
-            <Flex onClick={() => this.toggleDeleteModal()} ml={1}>
+            <Flex onClick={() => this.toggleProfileModal()} ml={1}>
               <Avatar userName={user.userName} />
             </Flex>
             <Flex>
-              {this.state.showDeleteModal && (
-                <ClickAwayListener onClickAway={() => this.toggleDeleteModal()}>
+              {showProfileModal && (
+                <ClickAwayListener
+                  onClickAway={() => this.toggleProfileModal()}
+                >
                   <ProfileModal username={user.userName} />
                 </ClickAwayListener>
               )}

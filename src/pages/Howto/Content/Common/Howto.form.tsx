@@ -284,21 +284,38 @@ export class HowtoForm extends React.Component<IProps, IState> {
                         </Flex>
 
                         {/* Right side */}
-                        <Flex
-                          px={2}
-                          flex={[1, 1, 3]}
-                          flexDirection={'column'}
-                          data-cy={'intro-cover'}
-                        >
+                        <Flex px={2} flex={[1, 1, 3]} flexDirection={'column'} data-cy={'intro-cover'}>
                           <Label htmlFor="cover_image">Cover image *</Label>
-                          <Box height="230px">
+                          {formValues.cover_image && !editCoverImg ? (
+                            <Flex
+                              alignItems={'center'}
+                              justifyContent={'center'}
+                              flexDirection={'column'}
+                            >
+                              <Image
+                                sx={{ opacity: 0.5 }}
+                                src={formValues.cover_image.downloadUrl}
+                              />
+                              <Button
+                                icon={'delete'}
+                                variant={'tertiary'}
+                                sx={{ position: 'absolute' }}
+                                onClick={() =>
+                                  this.setState({
+                                    editCoverImg: !editCoverImg,
+                                  })
+                                }
+                              />
+                            </Flex>
+                          ) : (
                             <Field
                               id="cover_image"
                               name="cover_image"
-                              src={formValues.cover_image}
+                              validate={required}
+                              validateFields={[]}
                               component={ImageInputField}
                             />
-                          </Box>
+                          )}
 
                           <Text small color={'grey'} mt={2}>
                             This image should be landscape. We advise 1280x960px
@@ -369,16 +386,17 @@ export class HowtoForm extends React.Component<IProps, IState> {
                     <>
                       <HowToSubmitStatus />
                       <Button
-                        data-cy={submitting ? '' : 'view-howto'}
+                        data-cy={submitting ? '': 'view-howto'}
                         mt={3}
                         variant={submitting ? 'disabled' : 'outline'}
                         icon="arrow-forward"
                         onClick={() => {
-                          if (submitting) {
-                            return
+                            if (submitting) {
+                              return
+                            }
+                            this.props.history.push('/how-to/' + values.slug)
                           }
-                          this.props.history.push('/how-to/' + values.slug)
-                        }}
+                        }
                       >
                         View How-To
                       </Button>

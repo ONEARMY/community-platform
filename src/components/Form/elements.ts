@@ -42,7 +42,6 @@ export const TextAreaDisabled = styled.div`
 
 // generic container used for some custom component fields
 export const FieldContainer = styled.div<IFormElement>`
-  height: 100%;
   width: 100%;
   ${inputStyles};
   border: none;

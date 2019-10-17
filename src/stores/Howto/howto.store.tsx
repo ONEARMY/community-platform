@@ -69,17 +69,13 @@ export class HowtoStore extends ModuleStore {
       // upload any pending images, avoid trying to re-upload images previously saved
       // if cover already uploaded stored as object not array
       // file and step image re-uploads handled in uploadFile script
-      let processedCover
-      if (!values.cover_image.hasOwnProperty('downloadUrl')) {
-        processedCover = await this.uploadFileToCollection(
-          values.cover_image,
-          COLLECTION_NAME,
-          id,
-        )
-      } else {
-        processedCover = values.cover_image as IUploadedFileMeta
-      }
-
+      const processedCover = Array.isArray(values.cover_image)
+        ? await this.uploadFileToCollection(
+            values.cover_image[0],
+            COLLECTION_NAME,
+            id,
+          )
+        : (values.cover_image as IUploadedFileMeta)
       this.updateUploadStatus('Cover')
       const processedSteps = await this.processSteps(values.steps, id)
       this.updateUploadStatus('Step Images')
@@ -126,16 +122,7 @@ export class HowtoStore extends ModuleStore {
         id,
       )
       step.images = imgMeta
-      stepsWithImgMeta.push({
-        ...step,
-        images: imgMeta.map(f => {
-          if (f === undefined) {
-            return null
-          }
-
-          return f
-        }),
-      })
+      stepsWithImgMeta.push({ ...step, images: imgMeta })
     }
     return stepsWithImgMeta
   }

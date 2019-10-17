@@ -100,14 +100,13 @@ class SignUpPage extends React.Component<IProps, IState> {
           try {
             await validationSchema.validate(values, { abortEarly: false })
           } catch (err) {
-            const errors = err.inner.reduce(
+            return err.inner.reduce(
               (acc: object, error) => ({
                 ...acc,
                 [error.path]: error.message,
               }),
               {},
             )
-            return errors
           }
         }}
         render={({ submitting, values, invalid, handleSubmit }) => {

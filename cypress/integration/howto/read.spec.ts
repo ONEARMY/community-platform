@@ -201,7 +201,6 @@ describe('[How To]', () => {
     it('[By Authenticated}', () => {
       cy.step('Edit button is unavailable to non-resource owners')
       cy.visit('/how-to')
-      cy.logout()
       cy.completeLogin('howto_reader@test.com', 'test1234')
 
       cy.visit(specificHowtoUrl)
@@ -211,8 +210,8 @@ describe('[How To]', () => {
     it('[By Owner]', () => {
       cy.step('Edit button is available to the owner')
       cy.visit('/how-to')
-      cy.logout()
       cy.completeLogin('howto_creator@test.com', 'test1234')
+      cy.wait(3000)
 
       cy.visit(specificHowtoUrl)
       cy.get('[data-cy=edit]').click()

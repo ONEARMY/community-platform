@@ -131,7 +131,7 @@ export const EventCard = (props: IProps) => (
         mr={1}
         width={1}
       >
-        <Text auxiliary width={1}>
+        <Text auxiliary width={1} txtRight>
           Go to event
         </Text>
       </GoToEventLink>

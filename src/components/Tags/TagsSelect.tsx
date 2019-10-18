@@ -55,7 +55,7 @@ class TagsSelect extends React.Component<IProps, IState> {
     const { categoryTags } = this.injectedProps.tagsStore
     const { styleVariant } = this.props
     return (
-      <FieldContainer data-cy={'tag-select'}>
+      <FieldContainer data-cy="tag-select">
         <Select
           styles={styleVariant === 'selector' ? SelectStyles : FilterStyles}
           isMulti

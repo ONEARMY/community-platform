@@ -180,7 +180,7 @@ class SignInPage extends React.Component<IProps, IState> {
                             <Field
                               name="email"
                               type="email"
-                              data-cy={'email'}
+                              data-cy="email"
                               component={InputField}
                               validate={required}
                             />
@@ -192,7 +192,7 @@ class SignInPage extends React.Component<IProps, IState> {
                             <Field
                               name="password"
                               type="password"
-                              data-cy={'password'}
+                              data-cy="password"
                               component={InputField}
                               validate={required}
                             />
@@ -200,14 +200,14 @@ class SignInPage extends React.Component<IProps, IState> {
                           <Text color={'red'}>{this.state.errorMsg}</Text>
                           <Flex mb={3} justifyContent={'space-between'}>
                             <Text small color={'grey'} mt={2}>
-                              <Link to={'/sign-up'} data-cy={'no-account'}>
+                              <Link to={'/sign-up'} data-cy="no-account">
                                 Don't have an account?
                               </Link>
                             </Text>
                             <Text small color={'grey'} mt={2}>
                               <Link
                                 to="#"
-                                data-cy={'lost-password'}
+                                data-cy="lost-password"
                                 onClick={() => this.resetPasword(values.email)}
                               >
                                 Lost password?
@@ -218,7 +218,7 @@ class SignInPage extends React.Component<IProps, IState> {
 
                           <Flex>
                             <Button
-                              data-cy={'submit'}
+                              data-cy="submit"
                               width={1}
                               variant={'primary'}
                               disabled={submitting || invalid}

@@ -61,7 +61,7 @@ export class EventsList extends React.Component<any> {
             <Flex>
               <AuthWrapper>
                 <Link to={'/events/create'}>
-                  <Button variant="primary" data-cy={'create'}>
+                  <Button variant="primary" data-cy="create">
                     Create an event
                   </Button>
                 </Link>
@@ -79,7 +79,7 @@ export class EventsList extends React.Component<any> {
               )}
               <Flex justifyContent={'center'} mt={20}>
                 <Link to={'#'} style={{ visibility: 'hidden' }}>
-                  <Button variant={'secondary'} data-cy={'more-events'}>More Events</Button>
+                  <Button variant={'secondary'} data-cy="more-events">More Events</Button>
                 </Link>
               </Flex>
               <MoreContainer m={'0 auto'} pt={60} pb={90}>

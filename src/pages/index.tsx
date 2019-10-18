@@ -72,7 +72,7 @@ export class Routes extends React.Component<any, IState> {
         <Link
           target="_blank"
           href="https://preciousplastic.typeform.com/to/tO6uDw"
-          data-cy={'feedback'}
+          data-cy="feedback"
         >
           <Button
             sx={{ position: 'fixed', bottom: '30px', right: '30px' }}

@@ -57,7 +57,7 @@ class HowtoStep extends Component<IProps, IState> {
     return (
       // NOTE - animation parent container in CreateHowTo
       <Flex
-        data-cy={'step'}
+        data-cy={`step_${index}`}
         mt={5}
         p={3}
         key={index}
@@ -151,6 +151,7 @@ class HowtoStep extends Component<IProps, IState> {
                 )
               })}
               <Button
+                data-cy={'delete-step-img'}
                 icon={'delete'}
                 variant={'tertiary'}
                 sx={{ position: 'absolute' }}

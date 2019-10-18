@@ -1,6 +1,22 @@
 import { Page } from '../utils/test-utils'
 
 describe('[Bugs]', () => {
+  it.skip('[692]', () => {
+    cy.step('Edit button should be available to resource owner')
+    cy.visit('/how-to')
+    cy.login('howto_creator@test.com', 'test1234')
+    cy.visit('/how-to/make-glasslike-beams')
+    cy.get('[data-cy=edit]').should('be.visible')
+  })
+
+  it.skip('[688]', () => {
+    const editUrl = '/how-to/set-up-devsite-to-help-coding/edit'
+    cy.visit('/how-to')
+    cy.completeLogin('howto_editor@test.com', 'test1234')
+    cy.visit(editUrl)
+    cy.get('[data-cy=submit]').contains('Save Changes').should('be.exist')
+    cy.url().should('include', editUrl)
+  })
 
   it.skip('[686]', () => {
     cy.deleteDocuments('v2_events', 'title', '==', 'Create a test event')
@@ -120,11 +136,11 @@ describe('[Bugs]', () => {
       .uploadFiles('images/howto-intro.jpg')
 
     cy.step('Add steps')
-    cy.get('[data-cy=step]')
+    cy.get('[data-cy^=step_]')
       .its('length')
       .should('be.eq', 3)
     cy.get('button[data-cy=add-step]').click()
-    cy.get('[data-cy=step]')
+    cy.get('[data-cy^=step_]')
       .its('length')
       .should('be.eq', 4)
 
@@ -132,12 +148,12 @@ describe('[Bugs]', () => {
       $el.trigger('click')
       cy.get('[data-cy=confirm]:visible').click()
     })
-    cy.get('[data-cy=step]:visible')
+    cy.get('[data-cy^=step_]:visible')
       .its('length')
       .should('be.eq', 1)
 
     cy.step('Fill up a step info')
-    cy.get('[data-cy=step]:eq(0)').within($firstStep => {
+    cy.get('[data-cy=step_0]').within($firstStep => {
       cy.wrap($firstStep)
         .contains('Step 1')
         .should('be.exist')
@@ -149,8 +165,7 @@ describe('[Bugs]', () => {
       cy.get('[data-cy=delete-step]').should('not.exist')
     })
     cy.step('Upload pics for a step')
-    cy.get('[data-cy=step]:visible')
-      .find(':file')
+    cy.get(':file')
       .uploadFiles(['images/howto-step-pic1.jpg', 'images/howto-step-pic2.jpg'])
 
     cy.get('[data-cy=submit]').click()

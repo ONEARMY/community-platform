@@ -98,6 +98,7 @@ export class LoginComponent extends React.Component<IProps, IState> {
             small
             mr={2}
             data-cy="login"
+            style={{ fontWeight: 'bold' }}
           >
             Login
           </ButtonSign>
@@ -105,7 +106,7 @@ export class LoginComponent extends React.Component<IProps, IState> {
         <Link to={'/sign-up'}>
           <ButtonSign
             display={['none', 'none', 'flex']}
-            variant="secondary"
+            variant="colorful"
             small
             // onClick={this.toggleModal}
             data-cy="join"

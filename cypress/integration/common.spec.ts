@@ -77,7 +77,7 @@ describe('[Common]', () =>{
       cy.step('Logout the session')
       cy.step('Logout')
       cy.toggleUserMenuOn()
-      cy.get('[data-cy=menu-item]').contains('Logout').click()
+      cy.get('[data-cy=menu-item]').contains('Log out').click()
       cy.get('[data-cy=login]').should('be.visible')
       cy.get('[data-cy=join]').should('be.visible')
     })

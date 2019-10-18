@@ -85,7 +85,7 @@ describe('[How To]', () => {
       fillStep(2)
       deleteStep(3)
 
-      cy.get('[data-cy=header]').click({ force: true})
+      cy.screenClick()
       cy.get('[data-cy=submit]').click()
 
       cy.wait(6000)

@@ -94,7 +94,7 @@ describe('[Events]', () => {
       cy.get('[data-cy=url]').type('https://www.meetup.com/pt-BR/cities/br/rio_de_janeiro/')
 
       cy.step('Publish the event')
-      cy.get('[data-cy=header]').click({ force: true})
+      cy.screenClick()
       cy.get('[data-cy=submit]').click()
 
       cy.step('The new event is shown in /events')

@@ -83,7 +83,8 @@ describe('[Events]', () => {
 
       cy.step('Fill up mandatory info')
       cy.get('[data-cy=title]').type('Create a test event')
-      cy.get('[data-cy=date]').type(Cypress.moment('2019-08-20').format('YYYY-MM-DD'))
+      cy.get('[data-cy=date]').find('input').click()
+      cy.get('.react-datepicker').find('div[role=option]').contains('20').click()
       cy.get('[data-cy=tag-select]').click()
       cy.get('.data-cy__menu').contains('event_testing').click()
 

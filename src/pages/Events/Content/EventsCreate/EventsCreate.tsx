@@ -145,7 +145,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                         width={1}
                         flexDirection={['column', 'column', 'row']}
                       >
-                        <Flex flexDirection={'column'} mb={3} px={2} width={1}>
+                        <Flex flexDirection={'column'} mb={3} px={2} width={1} data-cy="date">
                           <Label htmlFor="location">
                             When is your event taking place? *
                           </Label>
@@ -153,7 +153,6 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             className="datepicker"
                             name="date"
                             type="date"
-                            data-cy="date"
                             dateFormat="yyyy/MM/dd"
                             validate={required}
                             selected={this.state.selectedDate}
@@ -227,7 +226,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                   mt={3}
                   variant={disabled ? 'primary' : 'primary'}
                   disabled={submitting || invalid}
-                  data-cy={'submit'}
+                  data-cy="submit"
                 >
                   Publish
                 </Button>

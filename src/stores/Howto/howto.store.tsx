@@ -29,8 +29,8 @@ export class HowtoStore extends ModuleStore {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
     super(rootStore, COLLECTION_NAME)
-    this.allDocs$.subscribe(docs => {
-      this.allHowtos = docs as IHowtoDB[]
+    this.allDocs$.subscribe((docs: IHowtoDB[]) => {
+      this.allHowtos = docs.sort((a, b) => (a._modified < b._modified ? 1 : -1))
     })
     this.selectedTags = {}
   }

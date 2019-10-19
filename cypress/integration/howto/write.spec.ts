@@ -159,6 +159,63 @@ describe('[How To]', () => {
 
   describe('[Edit a how-to]', () => {
     const editHowtoUrl = '/how-to/set-up-devsite-to-help-coding/edit'
+    const expected = {
+      '_createdBy': 'howto_editor',
+      '_deleted': false,
+      'caption': 'Caption edited!',
+      'description': 'After editing, all changes are reverted',
+      'difficulty_level': 'Hard',
+      'files': [],
+      'slug': 'this-is-an-edit-test',
+      'tags': { 'jUtS7pVbv7DXoQyV13RR': true },
+      'time': '3-4 weeks',
+      'title': 'This is an edit test',
+      'cover_image': {
+        'contentType': 'image/jpeg',
+        'name': 'howto-intro.jpg',
+        'size': 19897,
+        'type': 'image/jpeg',
+      },
+      'steps': [{
+        '_animationKey': 'unique1',
+        'caption': 'What a step caption',
+        'images': [{
+          'contentType': 'image/jpeg',
+          'name': 'howto-step-pic1.jpg',
+          'size': 19410,
+          'type': 'image/jpeg',
+        }, {
+          'contentType': 'image/jpeg',
+          'name': 'howto-step-pic2.jpg',
+          'size': 20009,
+          'type': 'image/jpeg',
+        }],
+        'text': 'Description for step 1',
+        'title': 'Step 1 is easy',
+      }, {
+        '_animationKey': 'unique3',
+        'caption': 'What a step caption',
+        'images': [{
+          'contentType': 'image/jpeg',
+          'name': '3.1.jpg',
+          'size': 141803,
+          'type': 'image/jpeg',
+        }, {
+          'contentType': 'image/jpeg',
+          'name': '3.2.jpg',
+          'size': 211619,
+          'type': 'image/jpeg',
+        }, {
+          'contentType': 'image/jpeg',
+          'name': '3.4.jpg',
+          'size': 71309,
+          'type': 'image/jpeg',
+        }],
+        'text': 'Description for step 2',
+        'title': 'Step 2 is easy',
+      }],
+    }
+    
     it('[By Anonymous]', () => {
       cy.step('Redirect to Home Page after visiting an url')
       cy.logout()
@@ -184,12 +241,12 @@ describe('[How To]', () => {
       cy.get('[data-cy=edit]').click()
 
       cy.step('Update the intro')
-      cy.get('[data-cy=intro-title]').clear().type('This is an edit test')
+      cy.get('[data-cy=intro-title]').clear().type(expected.title)
       selectTag('howto_testing')
-      selectTimeDuration('3-4 weeks')
-      selectDifficultLevel('Hard')
-      cy.get('[data-cy=intro-description]').clear().type('After editing, all changes are reverted')
-      cy.get('[data-cy=intro-caption]').clear().type('Caption edited!')
+      selectTimeDuration(expected.time as Duration)
+      selectDifficultLevel(expected.difficulty_level as Difficulty)
+      cy.get('[data-cy=intro-description]').clear().type(expected.description)
+      cy.get('[data-cy=intro-caption]').clear().type(expected.caption)
 
       cy.step('Update a new cover for the intro')
       cy.get('[data-cy=intro-cover]').find('button[data-cy=delete]').click()
@@ -199,9 +256,13 @@ describe('[How To]', () => {
       deleteStep(5)
       deleteStep(4)
       deleteStep(2)
-      // TODO
-      // fillStep(1)
-      // fillStep(2)
+
+      expected.steps.forEach((step, index) => {
+        fillStep(index + 1, step.title, step.text, step.caption, [
+          'images/howto-step-pic1.jpg',
+          'images/howto-step-pic2.jpg',
+        ])
+      })
 
       cy.get('[data-cy=submit]').click()
 
@@ -210,6 +271,7 @@ describe('[How To]', () => {
       cy.get('[data-cy=view-howto]').click()
         .url().should('include', '/how-to/this-is-an-edit-test')
       cy.get('[data-cy=how-to-basis]').contains('This is an edit test')
+      cy.queryDocuments('v2_howtos', 'title', '==', 'This is an edit test').should('eqHowto', expected)
     })
   })
 })

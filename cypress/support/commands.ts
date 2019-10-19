@@ -52,6 +52,13 @@ declare global {
         value: string,
       ): Promise<void>
 
+      queryDocuments(
+        collectionName: string,
+        fieldPath: string,
+        opStr: any,
+        value: string,
+      ): Chainable<any>
+
       step(message: string)
 
       uploadFiles(filePath: string | string[])
@@ -103,6 +110,19 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
     })
     return fb.auth().signOut()
   })
+
+  Cypress.Commands.add(
+    'queryDocuments',
+    (collectionName: string, fieldPath: string, opStr: any, value: string) => {
+      Cypress.log({
+        displayName: 'queryDocuments',
+        consoleProps: () => {
+          return { collectionName, fieldPath, opStr, value }
+        },
+      })
+      return firestore.queryDocuments(collectionName, fieldPath, opStr, value)
+    },
+  )
 
   Cypress.Commands.add(
     'deleteDocuments',

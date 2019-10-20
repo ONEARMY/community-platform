@@ -56,6 +56,7 @@ export const EventCard = (props: IProps) => (
           fontSize={[2, 2, 5]}
           textAlign={'center'}
           width={['auto', 'auto', 1]}
+          data-cy="day"
         >
           {getDay(new Date(props.event.date))}
         </Text>

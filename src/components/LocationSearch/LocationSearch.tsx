@@ -112,6 +112,12 @@ export class LocationSearch extends React.Component<IProps, IState> {
     this.props.onChange(_resultToLocation(selected))
   }
 
+  resetInputAndPanel() {
+    this.userInputRef.current.value = ''
+    this.handleInputChange('')
+    this.places.close()
+  }
+
   render() {
     const { styleVariant } = this.props
     return (
@@ -121,6 +127,7 @@ export class LocationSearch extends React.Component<IProps, IState> {
           placeholder={this.props.placeholder}
           style={styleVariant === 'filter' ? FilterStyle : SelectorStyle}
           ref={this.userInputRef}
+          onBlur={() => this.resetInputAndPanel()}
         />
         {/* the second input takes debounced value from the first input and binds to algolia search  */}
         <AlgoliaResults

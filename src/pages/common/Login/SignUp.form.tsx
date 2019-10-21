@@ -90,6 +90,7 @@ export class SignUpForm extends React.Component<IProps, IState> {
       password === '' ||
       passwordConfirmation !== password ||
       userName === ''
+
     return (
       <Form
         onSubmit={e => this.signUpSubmit(e as any)}

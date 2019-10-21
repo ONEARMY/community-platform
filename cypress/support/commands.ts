@@ -65,6 +65,11 @@ declare global {
 
       toggleUserMenuOn() : Promise<void>
       toggleUserMenuOff() : Promise<void>
+
+      /**
+       * Trigger form validation
+       */
+      screenClick() : Promise<void>
     }
   }
 }
@@ -191,6 +196,10 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
   Cypress.Commands.add('toggleUserMenuOff', () => {
     Cypress.log({ displayName: 'CLOSE_USER_MENU'})
     cy.get('[data-cy=header]').click({force: true})
+  })
+
+  Cypress.Commands.add('screenClick', () => {
+    cy.get('[data-cy=header]').click({ force: true})
   })
 }
 

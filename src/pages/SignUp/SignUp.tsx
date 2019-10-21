@@ -11,6 +11,7 @@ import { InputField } from 'src/components/Form/Fields'
 import { inject, observer } from 'mobx-react'
 import { UserStore } from 'src/stores/User/user.store'
 import { RouteComponentProps, withRouter } from 'react-router'
+import { string, object, ref } from 'yup'
 
 const Label = styled.label`
   font-size: ${theme.fontSizes[2] + 'px'};
@@ -79,6 +80,35 @@ class SignUpPage extends React.Component<IProps, IState> {
     return (
       <Form
         onSubmit={v => this.onSignupSubmit(v as IFormValues)}
+        validate={async (values: any) => {
+          const validationSchema = object({
+            userName: string()
+              .min(2, 'Too short')
+              .required('Required'),
+            email: string()
+              .email('Invalid email')
+              .required('Required'),
+            password: string().required('Password is required'),
+            'confirm-password': string()
+              .oneOf(
+                [ref('password'), null],
+                'Your new password does not match',
+              )
+              .required('Password confirm is required'),
+          })
+
+          try {
+            await validationSchema.validate(values, { abortEarly: false })
+          } catch (err) {
+            return err.inner.reduce(
+              (acc: object, error) => ({
+                ...acc,
+                [error.path]: error.message,
+              }),
+              {},
+            )
+          }
+        }}
         render={({ submitting, values, invalid, handleSubmit }) => {
           const disabled = invalid || submitting
           return (
@@ -122,7 +152,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                     </Heading>
                     <Flex flexDirection={'column'} mb={3} width={[1, 1, 2 / 3]}>
                       <Label htmlFor="userName">
-                        Username, personal or workspace
+                        Username, personal or workspace*
                       </Label>
                       <Field
                         data-cy="username"
@@ -135,7 +165,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                     </Flex>
                     <Flex flexDirection={'column'} mb={3} width={[1, 1, 2 / 3]}>
                       <Label htmlFor="email">
-                        Email, personal or workspace
+                        Email, personal or workspace*
                       </Label>
                       <Field
                         data-cy="email"
@@ -147,7 +177,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                       />
                     </Flex>
                     <Flex flexDirection={'column'} mb={3} width={[1, 1, 2 / 3]}>
-                      <Label htmlFor="password">Password</Label>
+                      <Label htmlFor="password">Password*</Label>
                       <Field
                         data-cy="password"
                         name="password"
@@ -157,7 +187,9 @@ class SignUpPage extends React.Component<IProps, IState> {
                       />
                     </Flex>
                     <Flex flexDirection={'column'} mb={3} width={[1, 1, 2 / 3]}>
-                      <Label htmlFor="confirm-password">Confirm Password</Label>
+                      <Label htmlFor="confirm-password">
+                        Confirm Password*
+                      </Label>
                       <Field
                         data-cy="confirm-password"
                         name="confirm-password"

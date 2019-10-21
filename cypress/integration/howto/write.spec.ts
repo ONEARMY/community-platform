@@ -139,8 +139,7 @@ describe('[How To]', () => {
       cy.screenClick()
       cy.get('[data-cy=submit]').click()
 
-      cy.wait(6000)
-      cy.get('[data-cy=view-howto]')
+      cy.get('[data-cy=view-howto]:enabled')
         .click()
         .url()
         .should('include', `/how-to/create-a-howto-test`)
@@ -267,8 +266,8 @@ describe('[How To]', () => {
       cy.get('[data-cy=submit]').click()
 
       cy.step('Open the updated how-to')
-      cy.wait(6000)
-      cy.get('[data-cy=view-howto]').click()
+
+      cy.get('[data-cy=view-howto]:enabled').click()
         .url().should('include', '/how-to/this-is-an-edit-test')
       cy.get('[data-cy=how-to-basis]').contains('This is an edit test')
       cy.queryDocuments('v2_howtos', 'title', '==', 'This is an edit test').should('eqHowto', expected)

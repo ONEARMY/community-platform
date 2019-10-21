@@ -143,6 +143,26 @@ const buttons = {
     color: '#e0e0e0',
     backgroundColor: 'transparent',
   },
+  colorful: {
+    fontFamily: '"Varela Round", Arial, sans-serif',
+    border: '2px solid ' + colors.black,
+    color: colors.black,
+    display: 'flex',
+    bg: colors.white,
+    transition: '.2s ease-in-out',
+    '&:hover': {
+      bg: colors.yellow.base,
+      cursor: 'pointer',
+    },
+    '&[disabled]': {
+      opacity: 0.5,
+      cursor: 'not-allowed',
+    },
+    '&[disabled]:hover': {
+      bg: colors.yellow.base,
+    },
+    borderRadius: radii[1] + 'px',
+  },
 }
 
 export default {

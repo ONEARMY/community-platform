@@ -1,0 +1,22 @@
+.datepicker {
+  border: 1px solid transparent;
+  border-radius: 5px;
+  font-family: 'Inter', Arial, sans-serif;
+  font-size: 12px;
+  background: #f4f6f7;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  height: 40px;
+  padding: 10px;
+}
+
+.datepicker:focus {
+  border-color: #83ceeb;
+  outline: none;
+}
+
+.datepicker:disabled {
+  border: none;
+  color: #1b1b1b;
+}

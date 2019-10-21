@@ -73,6 +73,7 @@
     "query-string": "^6.2.0",
     "react": "16.8.4",
     "react-app-polyfill": "^0.2.1",
+    "react-datepicker": "^2.9.6",
     "react-dev-utils": "^7.0.3",
     "react-dom": "16.8.4",
     "react-final-form": "6.3.0",
@@ -108,7 +109,8 @@
     "webpack-dev-server": "3.1.14",
     "webpack-manifest-plugin": "2.0.4",
     "wordpress-hash-node": "^1.0.0",
-    "workbox-webpack-plugin": "3.6.3"
+    "workbox-webpack-plugin": "3.6.3",
+    "yup": "^0.27.0"
   },
   "scripts": {
     "start": "node scripts/start.js",
@@ -160,6 +162,7 @@
     "@types/storybook__addon-info": "^4.1.0",
     "@types/storybook__addon-knobs": "^4.0.1",
     "@types/storybook__react": "^4.0.1",
+    "chai-subset": "^1.6.0",
     "cross-env": "^6.0.3",
     "cypress": "^3.4.1",
     "cypress-file-upload": "^3.3.4",

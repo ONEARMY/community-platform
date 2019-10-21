@@ -311,6 +311,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                                 />
                                 <Button
                                   icon={'delete'}
+                                  data-cy="delete"
                                   variant={'tertiary'}
                                   sx={{ position: 'absolute' }}
                                   onClick={() =>

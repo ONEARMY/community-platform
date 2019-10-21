@@ -22,7 +22,7 @@ describe('[Events]', () => {
       cy.step(`Basic info of an event is shown`)
       cy.get('[data-cy=card]:has(:contains(SURA BAYA Exhibition))').within(() => {
         cy.contains('18').should('be.exist')
-        cy.contains('August').should('be.exist')
+        cy.contains('Aug').should('be.exist')
         cy.contains('SURA BAYA Exhibition').should('be.exist')
         cy.contains('By event_creator').should('be.exist')
         cy.contains('Surabaya').should('be.exist')

@@ -16,6 +16,8 @@ interface InjectedProps {
   eventStore: EventStore
 }
 
+const filterArrayDuplicates = (array: string[]) => Array.from(new Set(array))
+
 @inject('eventStore')
 @observer
 export class EventsList extends React.Component<any> {
@@ -28,7 +30,8 @@ export class EventsList extends React.Component<any> {
   }
 
   public render() {
-    const { filteredEvents } = this.injected.eventStore
+    const { filteredEvents, upcomingEvents } = this.injected.eventStore
+
     if (filteredEvents) {
       return (
         <>
@@ -46,6 +49,7 @@ export class EventsList extends React.Component<any> {
                   }
                   category="event"
                   styleVariant="filter"
+                  relevantTagsItems={upcomingEvents}
                 />
               </Box>
               <Box width={0.5} ml={2} className="location-search-list">

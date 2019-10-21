@@ -161,6 +161,7 @@
     "@types/storybook__addon-info": "^4.1.0",
     "@types/storybook__addon-knobs": "^4.0.1",
     "@types/storybook__react": "^4.0.1",
+    "chai-subset": "^1.6.0",
     "cross-env": "^6.0.3",
     "cypress": "^3.4.1",
     "cypress-file-upload": "^3.3.4",

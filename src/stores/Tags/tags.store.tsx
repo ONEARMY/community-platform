@@ -26,6 +26,13 @@ export class TagsStore extends ModuleStore {
     })
   }
 
+  public saveTag(tag: Partial<ITag>) {
+    return this.db
+      .collection('v2_tags')
+      .doc(tag._id)
+      .set(tag)
+  }
+
   private _filterTags() {
     let tags = [...this.allTags]
     if (this.activeCategory) {

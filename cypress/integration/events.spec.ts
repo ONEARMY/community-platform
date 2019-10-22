@@ -41,7 +41,7 @@ describe('[Events]', () => {
     })
   })
 
-  describe.only('[Filter Events]', () => {
+  describe('[Filter Events]', () => {
     it('[By Everyone]', () => {
       cy.step('Select a tag in the dropdown list')
       cy.get('[data-cy=tag-select]').click()

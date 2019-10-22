@@ -58,6 +58,7 @@ export class HowtoList extends React.Component<any, IState> {
               category="how-to"
               styleVariant="filter"
               placeholder="Filter How-tos by tag"
+              relevantTagsItems={filteredHowtos}
             />
           </Flex>
           <AuthWrapper>

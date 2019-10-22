@@ -146,6 +146,7 @@ export class LocationSearch extends React.Component<IProps, IState> {
             placeholder={this.props.placeholder}
             style={styleVariant === 'filter' ? FilterStyle : SelectorStyle}
             ref={this.userInputRef}
+            onBlur={() => this.places.close()}
           />
         </span>
         {/* the second input takes debounced value from the first input and binds to algolia search  */}

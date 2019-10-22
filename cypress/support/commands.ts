@@ -52,12 +52,24 @@ declare global {
         value: string,
       ): Promise<void>
 
+      queryDocuments(
+        collectionName: string,
+        fieldPath: string,
+        opStr: any,
+        value: string,
+      ): Chainable<any>
+
       step(message: string)
 
       uploadFiles(filePath: string | string[])
 
       toggleUserMenuOn() : Promise<void>
       toggleUserMenuOff() : Promise<void>
+
+      /**
+       * Trigger form validation
+       */
+      screenClick() : Promise<void>
     }
   }
 }
@@ -103,6 +115,19 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
     })
     return fb.auth().signOut()
   })
+
+  Cypress.Commands.add(
+    'queryDocuments',
+    (collectionName: string, fieldPath: string, opStr: any, value: string) => {
+      Cypress.log({
+        displayName: 'queryDocuments',
+        consoleProps: () => {
+          return { collectionName, fieldPath, opStr, value }
+        },
+      })
+      return firestore.queryDocuments(collectionName, fieldPath, opStr, value)
+    },
+  )
 
   Cypress.Commands.add(
     'deleteDocuments',
@@ -171,6 +196,10 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
   Cypress.Commands.add('toggleUserMenuOff', () => {
     Cypress.log({ displayName: 'CLOSE_USER_MENU'})
     cy.get('[data-cy=header]').click({force: true})
+  })
+
+  Cypress.Commands.add('screenClick', () => {
+    cy.get('[data-cy=header]').click({ force: true})
   })
 }
 

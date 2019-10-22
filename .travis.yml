@@ -4,6 +4,10 @@ node_js:
 dist: trusty
 sudo: false
 cache: yarn
+branches:
+  only:
+    - master
+    - production
 addons:
   chrome: stable
 

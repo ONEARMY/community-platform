@@ -10,11 +10,7 @@ import { ResetPWForm } from './ResetPW.form'
 import { Box } from 'rebass'
 import { display, DisplayProps } from 'styled-system'
 import styled from 'styled-components'
-import { Link } from 'src/components/Links'
-
-const ButtonSign = styled(Button)<DisplayProps>`
-  ${display}
-`
+import AccountButtons from './AccountButtons'
 
 interface IProps {
   userStore?: UserStore
@@ -91,29 +87,13 @@ export class LoginComponent extends React.Component<IProps, IState> {
     const user = this.injected.userStore.user
     return (
       <>
-        <Link to={'/sign-in'}>
-          <ButtonSign
-            variant="secondary"
-            display={['none', 'none', 'flex']}
-            small
-            mr={2}
-            data-cy="login"
-            style={{ fontWeight: 'bold' }}
-          >
-            Login
-          </ButtonSign>
-        </Link>
-        <Link to={'/sign-up'}>
-          <ButtonSign
-            display={['none', 'none', 'flex']}
-            variant="colorful"
-            small
-            // onClick={this.toggleModal}
-            data-cy="join"
-          >
-            Join
-          </ButtonSign>
-        </Link>
+        <AccountButtons
+          link={'/sign-in'}
+          text="Login"
+          variant="secondary"
+          style={{ fontWeight: 'bold', marginRight: 2 }}
+        />
+        <AccountButtons link={'/sign-up'} text="Join" variant="colorful" />
         <Modal
           aria-labelledby="user-login-modal"
           aria-describedby="click to show user login"

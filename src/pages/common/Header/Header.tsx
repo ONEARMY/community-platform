@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import Profile from 'src/pages/common/Header/Profile/Profile'
 import MenuDesktop from 'src/pages/common/Header/Menu/MenuDesktop'
 import MenuMobile from 'src/pages/common/Header/Menu/MenuMobile'
+import MenuMobilePanel from 'src/pages/common/Header/Menu/MenuMobilePanel'
 import Logo from 'src/pages/common/Header/Menu/Logo/Logo'
 import theme from 'src/themes/styled.theme'
 
@@ -49,6 +50,7 @@ export class Header extends React.Component {
         <MobileMenuWrapper className="menu-mobile">
           <MenuMobile />
         </MobileMenuWrapper>
+        <MenuMobilePanel />
       </Flex>
     )
   }

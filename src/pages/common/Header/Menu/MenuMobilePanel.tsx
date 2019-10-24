@@ -5,8 +5,12 @@ import theme from 'src/themes/styled.theme'
 import styled from 'styled-components'
 import { Flex } from 'rebass'
 import { Box } from 'rebass'
+import { Image, ImageProps } from 'rebass'
+import Text from 'src/components/Text'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
 import AccountButtons from '../../Login/AccountButtons'
+import ImageTargetBlank from 'src/assets/icons/link-target-blank.svg'
+import { LinkTargetBlank } from 'src/components/Links/LinkTargetBlank/LinkTargetBlank'
 
 const PanelContainer = styled(Box)`
   width: 100%;
@@ -45,8 +49,13 @@ const PanelMenu = styled(Box)`
 `
 
 const PanelItem = styled(Box)`
-  width: 100%;
+  // width: 100%;
   padding: ${theme.space[4]}px 0px;
+`
+
+const PanelButton = styled(Box)`
+  // width: 100%;
+  padding: ${theme.space[1]}px 0px;
 `
 
 const MenuLink = styled(NavLink).attrs(({ name }) => ({
@@ -93,20 +102,46 @@ export class MenuMobilePanel extends React.Component {
                 </MenuLink>
               </PanelItem>
             ))}
-            <PanelItem>
+            <PanelButton>
               <AccountButtons
                 link={'/sign-in'}
                 text="Login"
                 variant="secondary"
-                style={{ fontWeight: 'bold', marginRight: 2 }}
+                style={{
+                  fontWeight: 'bold',
+                  marginRight: 2,
+                  display: 'inline-block',
+                  width: 100,
+                }}
+                isMobile={true}
               />
-            </PanelItem>
-            <PanelItem>
+            </PanelButton>
+            <PanelButton>
               <AccountButtons
                 link={'/sign-up'}
                 text="Join"
                 variant="colorful"
+                isMobile={true}
+                style={{ display: 'inline-block', width: 100 }}
               />
+            </PanelButton>
+            <PanelItem>
+              <MenuLink to={'/bazar'} data-cy="page-link">
+                <div>Bazar</div>
+              </MenuLink>
+            </PanelItem>
+            <PanelItem>
+              <LinkTargetBlank
+                target="_blank"
+                href={'/bazar'}
+                color={'black'}
+                mr={1}
+                width={1}
+              >
+                <Text auxiliary width={1}>
+                  Global Site
+                </Text>
+              </LinkTargetBlank>
             </PanelItem>
           </PanelMenu>
         </PanelContainer>

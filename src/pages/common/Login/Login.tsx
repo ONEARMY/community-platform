@@ -8,6 +8,7 @@ import { LoginForm } from './Login.form'
 import { SignUpForm } from './SignUp.form'
 import { ResetPWForm } from './ResetPW.form'
 import { Box } from 'rebass'
+import theme from 'src/themes/styled.theme'
 import { display, DisplayProps } from 'styled-system'
 import styled from 'styled-components'
 import AccountButtons from './AccountButtons'
@@ -91,7 +92,7 @@ export class LoginComponent extends React.Component<IProps, IState> {
           link={'/sign-in'}
           text="Login"
           variant="secondary"
-          style={{ fontWeight: 'bold', marginRight: 2 }}
+          style={{ fontWeight: 'bold', marginRight: theme.radii[2] }}
         />
         <AccountButtons link={'/sign-up'} text="Join" variant="colorful" />
         <Modal

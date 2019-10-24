@@ -151,9 +151,10 @@ export class ModuleStore {
     collection: string,
     id: string,
   ) {
-    const promises = files.map(async file => {
-      return this.uploadFileToCollection(file, collection, id)
-    })
+    const promises = files
+      .filter(file => file !== null)
+      .map(async file => this.uploadFileToCollection(file, collection, id))
+
     return Promise.all(promises)
   }
 }

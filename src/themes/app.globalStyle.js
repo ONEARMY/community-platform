@@ -58,7 +58,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   /***** Fix for Algolia search Icon *******/
-  .ap-input-icon {
+  .ap-icon-pin {
     display: none;
   }
 `

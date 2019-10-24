@@ -33,6 +33,7 @@ const FilterStyle = {
   border: '2px solid black',
   height: '44px',
   display: 'flex',
+  marginBottom: 0,
 }
 
 const SelectorStyle = {
@@ -112,16 +113,42 @@ export class LocationSearch extends React.Component<IProps, IState> {
     this.props.onChange(_resultToLocation(selected))
   }
 
+  resetInputAndClosePanel() {
+    this.userInputRef.current.value = ''
+    this.handleInputChange('')
+    this.places.close()
+  }
+
   render() {
     const { styleVariant } = this.props
+    const closeButton: any = document.getElementsByClassName('ap-icon-clear')
+    // move the 'x' close button in the DOM from the second (hidden) to the first input
+    for (let btn of closeButton) {
+      const locationField = btn.closest('#location-panel').firstElementChild
+        .firstElementChild
+      if (locationField) {
+        locationField.after(btn)
+      }
+      btn.onclick = this.resetInputAndClosePanel.bind(this)
+    }
+
     return (
-      <div data-cy="location">
+      <div data-cy="location" id="location-panel">
         {/* the first input uses our styled input component and has ref to subscribe to value changes */}
-        <Input
-          placeholder={this.props.placeholder}
-          style={styleVariant === 'filter' ? FilterStyle : SelectorStyle}
-          ref={this.userInputRef}
-        />
+        <span
+          style={{
+            position: 'relative',
+            display: 'inline-block',
+            width: '100%',
+          }}
+        >
+          <Input
+            placeholder={this.props.placeholder}
+            style={styleVariant === 'filter' ? FilterStyle : SelectorStyle}
+            ref={this.userInputRef}
+            onBlur={() => this.places.close()}
+          />
+        </span>
         {/* the second input takes debounced value from the first input and binds to algolia search  */}
         <AlgoliaResults
           type="search"

@@ -71,7 +71,7 @@ export const EventCard = (props: IProps) => (
           textAlign={'center'}
           width={['auto', 'auto', 1]}
         >
-          {getMonth(new Date(props.event.date))}
+          {getMonth(new Date(props.event.date), 'short')}
         </Text>
       </Flex>
     </Flex>
@@ -107,9 +107,10 @@ export const EventCard = (props: IProps) => (
       </Text>
     </Flex>
     <Flex
-      flexWrap={'nowrap'}
-      alignItems={'center'}
-      flex={'1'}
+      flex="1"
+      alignItems="flex-start"
+      justifyContent="center"
+      flexDirection="column"
       order={[4, 4, 4]}
       mb={[2, 2, 0]}
     >
@@ -131,7 +132,7 @@ export const EventCard = (props: IProps) => (
         mr={1}
         width={1}
       >
-        <Text auxiliary width={1}>
+        <Text auxiliary width={1} txtRight>
           Go to event
         </Text>
       </GoToEventLink>

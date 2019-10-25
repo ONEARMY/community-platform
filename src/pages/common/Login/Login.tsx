@@ -92,9 +92,18 @@ export class LoginComponent extends React.Component<IProps, IState> {
           link={'/sign-in'}
           text="Login"
           variant="secondary"
-          style={{ fontWeight: 'bold', marginRight: theme.radii[2] }}
+          style={{
+            fontWeight: 'bold',
+            marginRight: theme.radii[2],
+            fontSize: theme.fontSizes[2],
+          }}
         />
-        <AccountButtons link={'/sign-up'} text="Join" variant="colorful" />
+        <AccountButtons
+          link={'/sign-up'}
+          text="Join"
+          variant="colorful"
+          style={{ fontSize: theme.fontSizes[2] }}
+        />
         <Modal
           aria-labelledby="user-login-modal"
           aria-describedby="click to show user login"

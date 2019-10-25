@@ -34,24 +34,28 @@ const DesktopMenuWrapper = styled(Flex)`
 export class Header extends React.Component {
   render() {
     return (
-      <Flex
-        data-cy="header"
-        bg="white"
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <Flex>
-          <Logo />
+      <>
+        <Flex
+          data-cy="header"
+          bg="white"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Flex>
+            <Logo />
+          </Flex>
+          <DesktopMenuWrapper className="menu-desktop" px={2}>
+            <MenuDesktop />
+            <Profile />
+          </DesktopMenuWrapper>
+          <MobileMenuWrapper className="menu-mobile">
+            <MenuMobile />
+          </MobileMenuWrapper>
         </Flex>
-        <DesktopMenuWrapper className="menu-desktop" px={2}>
-          <MenuDesktop />
-          <Profile />
-        </DesktopMenuWrapper>
-        <MobileMenuWrapper className="menu-mobile">
-          <MenuMobile />
+        <MobileMenuWrapper>
+          <MenuMobilePanel />
         </MobileMenuWrapper>
-        <MenuMobilePanel />
-      </Flex>
+      </>
     )
   }
 }

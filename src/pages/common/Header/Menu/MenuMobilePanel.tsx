@@ -11,6 +11,7 @@ import MenuCurrent from 'src/assets/images/menu-current.svg'
 import AccountButtons from '../../Login/AccountButtons'
 import ImageTargetBlank from 'src/assets/icons/link-target-blank.svg'
 import { LinkTargetBlank } from 'src/components/Links/LinkTargetBlank/LinkTargetBlank'
+import { themeGet } from 'styled-system'
 
 const PanelContainer = styled(Box)`
   width: 100%;
@@ -40,7 +41,7 @@ const PanelMenu = styled(Box)`
   align-items: center;
   display: block !important;
   position: absolute;
-  top: 100%;
+  // top: 100%;
   left: 0;
   right: 0;
   text-align: center;
@@ -55,7 +56,8 @@ const PanelItem = styled(Box)`
 
 const PanelButton = styled(Box)`
   // width: 100%;
-  padding: ${theme.space[1]}px 0px;
+  padding-top: ${theme.space[1]}px;
+  padding-bottom: ${theme.space[2]}px;
 `
 
 const MenuLink = styled(NavLink).attrs(({ name }) => ({
@@ -78,6 +80,7 @@ const MenuLink = styled(NavLink).attrs(({ name }) => ({
       height: 20px;
       display: block;
       position: absolute;
+      bottom: -16px;
       background-position: 50% 70%;
       background-image: url(${MenuCurrent});
       z-index: 0;
@@ -88,7 +91,11 @@ const MenuLink = styled(NavLink).attrs(({ name }) => ({
     }
   }
 `
-
+const LinkTargetContainer = styled(Box)`
+  border-top: 1px solid #ababac;
+  border-bottom: 1px solid #ababac;
+  margin-top: 5px;
+`
 export class MenuMobilePanel extends React.Component {
   render() {
     return (
@@ -112,6 +119,7 @@ export class MenuMobilePanel extends React.Component {
                   marginRight: 2,
                   display: 'inline-block',
                   width: 100,
+                  fontSize: theme.fontSizes[1],
                 }}
                 isMobile={true}
               />
@@ -122,27 +130,39 @@ export class MenuMobilePanel extends React.Component {
                 text="Join"
                 variant="colorful"
                 isMobile={true}
-                style={{ display: 'inline-block', width: 100 }}
+                style={{
+                  display: 'inline-block',
+                  width: 100,
+                  fontSize: theme.fontSizes[1],
+                }}
               />
             </PanelButton>
-            <PanelItem>
-              <MenuLink to={'/bazar'} data-cy="page-link">
-                <div>Bazar</div>
-              </MenuLink>
-            </PanelItem>
-            <PanelItem>
-              <LinkTargetBlank
-                target="_blank"
-                href={'/bazar'}
-                color={'black'}
-                mr={1}
-                width={1}
-              >
-                <Text auxiliary width={1}>
+            <LinkTargetContainer>
+              <PanelItem>
+                <LinkTargetBlank
+                  target="_blank"
+                  href={'/bazar'}
+                  style={{
+                    color: theme.colors.silver,
+                    fontSize: theme.fontSizes[2],
+                  }}
+                >
+                  Bazar
+                </LinkTargetBlank>
+              </PanelItem>
+              <PanelItem>
+                <LinkTargetBlank
+                  target="_blank"
+                  href={'/global-site'}
+                  style={{
+                    color: theme.colors.silver,
+                    fontSize: theme.fontSizes[2],
+                  }}
+                >
                   Global Site
-                </Text>
-              </LinkTargetBlank>
-            </PanelItem>
+                </LinkTargetBlank>
+              </PanelItem>
+            </LinkTargetContainer>
           </PanelMenu>
         </PanelContainer>
       </>

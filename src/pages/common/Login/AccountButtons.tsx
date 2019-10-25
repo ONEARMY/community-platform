@@ -8,7 +8,7 @@ import { Button } from 'src/components/Button'
 import { display, DisplayProps } from 'styled-system'
 
 const ButtonSign = styled(Button)<DisplayProps>`
-  ${display}
+  ${display},
 `
 interface IProps {
   link: string
@@ -31,7 +31,7 @@ export class AccountButtons extends React.Component<IProps> {
                 : ['none', 'none', 'flex']
             }
             {...(this.props.isMobile === true
-              ? { small: true }
+              ? { large: true }
               : { medium: true })}
             data-cy={this.props.text.toLowerCase()}
             style={this.props.style}

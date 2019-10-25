@@ -4,15 +4,13 @@ import { COMMUNITY_PAGES } from 'src/pages/PageList'
 import theme from 'src/themes/styled.theme'
 import { Flex } from 'rebass'
 
-export class MenuMobile extends React.Component {
+interface IProps {
+  onClick?: () => void
+}
+
+export class MenuMobile extends React.Component<IProps> {
   render() {
-    return (
-      <>
-        <Flex alignItems={'center'}>
-          <div>MOBILE</div>
-        </Flex>
-      </>
-    )
+    return <></>
   }
 }
 // https://www.npmjs.com/package/react-hamburger-menu

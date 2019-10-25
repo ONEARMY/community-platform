@@ -36,7 +36,7 @@ export class Logo extends React.Component {
       <>
         <LogoContainer>
           <Link
-            sx={{ zIndex: 9999, display: 'flex', alignItems: 'center' }}
+            sx={{ zIndex: 1000, display: 'flex', alignItems: 'center' }}
             color="black"
             ml={[2, 3, 4]}
             href="/"

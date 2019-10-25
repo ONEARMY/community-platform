@@ -27,17 +27,8 @@ const PanelContainer = styled(Box)`
 
 const PanelMenu = styled(Box)`
   background-color: #fff;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: end;
-  -webkit-justify-content: flex-end;
-  -ms-flex-pack: end;
   justify-content: flex-end;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  -ms-flex-align: center;
   align-items: center;
   display: block !important;
   position: absolute;
@@ -51,7 +42,7 @@ const PanelMenu = styled(Box)`
 
 const PanelItem = styled(Box)`
   // width: 100%;
-  padding: ${theme.space[4]}px 0px;
+  padding: ${theme.space[3]}px 0px;
 `
 
 const PanelButton = styled(Box)`
@@ -103,8 +94,8 @@ export class MenuMobilePanel extends React.Component {
         <PanelContainer>
           <PanelMenu>
             {COMMUNITY_PAGES.map(page => (
-              <PanelItem>
-                <MenuLink to={page.path} data-cy="page-link" key={page.path}>
+              <PanelItem key={page.path}>
+                <MenuLink to={page.path} data-cy="page-link">
                   <div>{page.title}</div>
                 </MenuLink>
               </PanelItem>

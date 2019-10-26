@@ -82,6 +82,7 @@
     "react-flag-icon-css": "^1.0.25",
     "react-flags-select": "^1.1.10",
     "react-ga": "^2.5.7",
+    "react-hamburger-menu": "^1.1.1",
     "react-icons": "^3.2.2",
     "react-image-lightbox": "^5.1.0",
     "react-leaflet": "^2.1.4",

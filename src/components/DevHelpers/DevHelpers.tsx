@@ -9,7 +9,15 @@ import theme from 'src/themes/styled.theme'
 const DevHelpers = () => (
   <>
     {SITE !== 'production' && <DevTools />}
-    <Text bg={'black'} color={'white'} width={1} py={2} medium txtcenter>
+    <Text
+      bg={'black'}
+      color={'white'}
+      width={1}
+      py={2}
+      medium
+      txtcenter
+      style={{ zIndex: 1000, position: 'relative' }}
+    >
       This is the alpha version (v{VERSION}) of onearmy platform,{' '}
       <Link
         color={theme.colors.blue}

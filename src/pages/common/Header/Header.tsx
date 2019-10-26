@@ -1,16 +1,16 @@
 import React from 'react'
 import { Flex } from 'rebass/styled-components'
 import styled from 'styled-components'
-import Profile from 'src/pages/common/Header/Profile/Profile'
+import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
 import MenuDesktop from 'src/pages/common/Header/Menu/MenuDesktop'
-import MenuMobile from 'src/pages/common/Header/Menu/MenuMobile'
-import MenuMobilePanel from 'src/pages/common/Header/Menu/MenuMobilePanel'
+import MenuMobilePanel from 'src/pages/common/Header/Menu/MenuMobile/MenuMobilePanel'
 import posed, { PoseGroup } from 'react-pose'
 import Logo from 'src/pages/common/Header/Menu/Logo/Logo'
 import theme from 'src/themes/styled.theme'
+import HamburgerMenu from 'react-hamburger-menu'
 
 interface IState {
-  showMobilePanel: boolean
+  isMobilePanelOpen: boolean
 }
 
 const MobileMenuWrapper = styled(Flex)`
@@ -36,44 +36,32 @@ const DesktopMenuWrapper = styled(Flex)`
   }
 `
 
+const AnimationContainer = posed.div({
+  enter: {
+    duration: 200,
+    position: 'relative',
+    top: '0',
+  },
+  exit: {
+    duration: 200,
+    position: 'relative',
+    top: '-100%',
+  },
+})
+
 export class Header extends React.Component<any, IState> {
   constructor(props: any) {
     super(props)
     this.state = {
-      showMobilePanel: false,
+      isMobilePanelOpen: false,
     }
   }
 
   toggleMobilePanel() {
-    this.setState({ showMobilePanel: !this.state.showMobilePanel })
+    this.setState({ isMobilePanelOpen: !this.state.isMobilePanelOpen })
   }
 
   render() {
-    const top = this.state.showMobilePanel ? '0' : '-100%'
-
-    const AnimationContainer = posed.div({
-      // use flip pose to prevent default spring action on list item removed
-      flip: {
-        transition: {
-          // type: 'tween',
-          // ease: 'linear',
-        },
-      },
-      // use a pre-enter pose as otherwise default will be the exit state and so will animate
-      // horizontally as well
-
-      enter: {
-        duration: 200,
-        position: 'relative',
-        top: '0',
-      },
-      exit: {
-        position: 'relative',
-        top: '-100%',
-        duration: 200,
-      },
-    })
-
     return (
       <>
         <Flex
@@ -88,25 +76,28 @@ export class Header extends React.Component<any, IState> {
           </Flex>
           <DesktopMenuWrapper className="menu-desktop" px={2}>
             <MenuDesktop />
-            <Profile />
+            <Profile isMobile={false} />
           </DesktopMenuWrapper>
           <MobileMenuWrapper className="menu-mobile">
-            <Flex
-              alignItems={'center'}
-              onClick={() => {
-                this.toggleMobilePanel()
-                console.log('hi', this.state.showMobilePanel)
-              }}
-            >
-              <div>MOBILE</div>
+            <Flex px={5}>
+              <HamburgerMenu
+                isOpen={this.state.isMobilePanelOpen}
+                menuClicked={() => this.toggleMobilePanel()}
+                width={18}
+                height={15}
+                strokeWidth={1}
+                rotate={0}
+                color="black"
+                borderRadius={0}
+                animationDuration={0.3}
+              />
             </Flex>
           </MobileMenuWrapper>
         </Flex>
         <PoseGroup>
-          {this.state.showMobilePanel && (
+          {this.state.isMobilePanelOpen && (
             <AnimationContainer key={'mobilePanelContainer'}>
               <MobileMenuWrapper>
-                {console.log('hi', this.state.showMobilePanel)}
                 <MenuMobilePanel />
               </MobileMenuWrapper>
             </AnimationContainer>

@@ -1,17 +1,13 @@
 import * as React from 'react'
 import Modal from '@material-ui/core/Modal'
 import { auth } from 'src/utils/firebase'
-import { Button } from 'src/components/Button'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import { LoginForm } from './Login.form'
 import { SignUpForm } from './SignUp.form'
 import { ResetPWForm } from './ResetPW.form'
 import { Box } from 'rebass'
-import theme from 'src/themes/styled.theme'
-import { display, DisplayProps } from 'styled-system'
-import styled from 'styled-components'
-import AccountButtons from './AccountButtons'
+import ProfileButtons from '../Header/Menu/Profile/ProfileButtons'
 
 interface IProps {
   userStore?: UserStore
@@ -88,22 +84,7 @@ export class LoginComponent extends React.Component<IProps, IState> {
     const user = this.injected.userStore.user
     return (
       <>
-        <AccountButtons
-          link={'/sign-in'}
-          text="Login"
-          variant="secondary"
-          style={{
-            fontWeight: 'bold',
-            marginRight: theme.radii[2],
-            fontSize: theme.fontSizes[2],
-          }}
-        />
-        <AccountButtons
-          link={'/sign-up'}
-          text="Join"
-          variant="colorful"
-          style={{ fontSize: theme.fontSizes[2] }}
-        />
+        <ProfileButtons isMobile={false} />
         <Modal
           aria-labelledby="user-login-modal"
           aria-describedby="click to show user login"

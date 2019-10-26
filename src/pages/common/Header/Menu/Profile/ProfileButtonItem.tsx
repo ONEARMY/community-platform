@@ -1,8 +1,5 @@
 import React from 'react'
-import theme from 'src/themes/styled.theme'
 import styled from 'styled-components'
-import { Flex } from 'rebass'
-import { Box } from 'rebass'
 import { Link } from 'src/components/Links'
 import { Button } from 'src/components/Button'
 import { display, DisplayProps } from 'styled-system'
@@ -18,7 +15,7 @@ interface IProps {
   isMobile?: boolean
 }
 
-export class AccountButtons extends React.Component<IProps> {
+export class ProfileButtonItem extends React.Component<IProps> {
   render() {
     return (
       <>
@@ -44,4 +41,4 @@ export class AccountButtons extends React.Component<IProps> {
   }
 }
 
-export default AccountButtons
+export default ProfileButtonItem

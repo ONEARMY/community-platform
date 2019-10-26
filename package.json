@@ -10,6 +10,7 @@
     "@sentry/browser": "^4.6.3",
     "@svgr/webpack": "4.1.0",
     "@types/dompurify": "^0.0.32",
+    "@types/react-hamburger-menu": "^0.0.3",
     "@types/rebass": "4",
     "@types/styled-components": "4.0",
     "@types/styled-system": "^3.2.2",

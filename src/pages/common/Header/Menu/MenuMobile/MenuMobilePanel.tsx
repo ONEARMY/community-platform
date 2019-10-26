@@ -12,9 +12,7 @@ const PanelContainer = styled(Box)`
   position: absolute;
   left: 0;
   right: 0;
-  //   overflow: hidden;
   display: block;
-  //   top: 100%;
   z-index: 900;
   height: 100%;
 `
@@ -26,7 +24,6 @@ const PanelMenu = styled(Box)`
   align-items: center;
   display: block !important;
   position: absolute;
-  // top: 100%;
   left: 0;
   right: 0;
   text-align: center;

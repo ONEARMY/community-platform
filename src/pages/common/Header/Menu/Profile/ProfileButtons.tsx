@@ -9,7 +9,6 @@ interface IProps {
 }
 
 const PanelButton = styled(Box)`
-  // width: 100%;
   padding-top: ${theme.space[1]}px;
   padding-bottom: ${theme.space[2]}px;
 `

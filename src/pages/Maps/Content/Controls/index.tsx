@@ -28,7 +28,7 @@ const MapFlexBar = styled(Flex)`
   position: absolute;
   top: 25px;
   width: 100%;
-  z-index: 99999;
+  z-index: 1000;
   left: 50%;
   transform: translateX(-50%);
 `

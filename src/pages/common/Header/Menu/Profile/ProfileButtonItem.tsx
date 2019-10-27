@@ -3,9 +3,12 @@ import styled from 'styled-components'
 import { Link } from 'src/components/Links'
 import { Button } from 'src/components/Button'
 import { display, DisplayProps } from 'styled-system'
+import { observer, inject } from 'mobx-react'
+import { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
 
 const ButtonSign = styled(Button)<DisplayProps>`
-  ${display},
+  ${display};
+  cursor: pointer;
 `
 interface IProps {
   link: string
@@ -15,12 +18,29 @@ interface IProps {
   isMobile?: boolean
 }
 
+interface IProps {}
+
+interface IInjectedProps extends IProps {
+  mobileMenuStore: MobileMenuStore
+}
+
+@inject('mobileMenuStore')
+@observer
 export class ProfileButtonItem extends React.Component<IProps> {
+  constructor(props: any) {
+    super(props)
+  }
+
+  get injected() {
+    return this.props as IInjectedProps
+  }
   render() {
+    const menu = this.injected.mobileMenuStore
     return (
       <>
         <Link to={this.props.link}>
           <ButtonSign
+            onClick={() => this.props.isMobile && menu.toggleMobilePanel()}
             variant={this.props.variant}
             display={
               this.props.isMobile === true

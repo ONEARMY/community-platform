@@ -8,9 +8,13 @@ import posed, { PoseGroup } from 'react-pose'
 import Logo from 'src/pages/common/Header/Menu/Logo/Logo'
 import theme from 'src/themes/styled.theme'
 import HamburgerMenu from 'react-hamburger-menu'
+import { observer, inject } from 'mobx-react'
+import { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
 
-interface IState {
-  isMobilePanelOpen: boolean
+interface IProps {}
+
+interface IInjectedProps extends IProps {
+  mobileMenuStore: MobileMenuStore
 }
 
 const MobileMenuWrapper = styled(Flex)`
@@ -38,30 +42,30 @@ const DesktopMenuWrapper = styled(Flex)`
 
 const AnimationContainer = posed.div({
   enter: {
-    duration: 200,
+    duration: 250,
     position: 'relative',
     top: '0',
   },
   exit: {
-    duration: 200,
+    duration: 250,
     position: 'relative',
     top: '-100%',
   },
 })
 
-export class Header extends React.Component<any, IState> {
+@inject('mobileMenuStore')
+@observer
+export class Header extends React.Component<IProps> {
   constructor(props: any) {
     super(props)
-    this.state = {
-      isMobilePanelOpen: false,
-    }
   }
 
-  toggleMobilePanel() {
-    this.setState({ isMobilePanelOpen: !this.state.isMobilePanelOpen })
+  get injected() {
+    return this.props as IInjectedProps
   }
 
   render() {
+    const menu = this.injected.mobileMenuStore
     return (
       <>
         <Flex
@@ -69,10 +73,12 @@ export class Header extends React.Component<any, IState> {
           bg="white"
           justifyContent="space-between"
           alignItems="center"
-          sx={{ zIndex: 1000, position: 'relative' }}
+          pl={[4, 4, 0]}
+          pr={[4, 4, 0]}
+          sx={{ zIndex: 9999, position: 'relative' }}
         >
           <Flex>
-            <Logo />
+            <Logo isMobile={true} />
           </Flex>
           <DesktopMenuWrapper className="menu-desktop" px={2}>
             <MenuDesktop />
@@ -81,8 +87,8 @@ export class Header extends React.Component<any, IState> {
           <MobileMenuWrapper className="menu-mobile">
             <Flex px={5}>
               <HamburgerMenu
-                isOpen={this.state.isMobilePanelOpen}
-                menuClicked={() => this.toggleMobilePanel()}
+                isOpen={menu.showMobilePanel || false}
+                menuClicked={() => menu.toggleMobilePanel()}
                 width={18}
                 height={15}
                 strokeWidth={1}
@@ -95,7 +101,7 @@ export class Header extends React.Component<any, IState> {
           </MobileMenuWrapper>
         </Flex>
         <PoseGroup>
-          {this.state.isMobilePanelOpen && (
+          {menu.showMobilePanel && (
             <AnimationContainer key={'mobilePanelContainer'}>
               <MobileMenuWrapper>
                 <MenuMobilePanel />

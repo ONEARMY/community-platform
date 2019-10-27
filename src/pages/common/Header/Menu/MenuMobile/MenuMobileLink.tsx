@@ -4,10 +4,18 @@ import styled from 'styled-components'
 import { Box } from 'rebass'
 import { NavLink } from 'react-router-dom'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
+import { observer, inject } from 'mobx-react'
+import { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
 
 interface IProps {
   path: string
   content: string
+  style?: React.CSSProperties
+  onClick?: () => void
+}
+
+interface IInjectedProps extends IProps {
+  mobileMenuStore: MobileMenuStore
 }
 
 const PanelItem = styled(Box)`
@@ -20,7 +28,7 @@ const MenuLink = styled(NavLink).attrs(({ name }) => ({
   color: ${'black'};
   font-size: ${theme.fontSizes[2]}px;
   position: relative;
-  > div {
+  > span {
     z-index: 1;
     position: relative;
     &:hover {
@@ -34,7 +42,7 @@ const MenuLink = styled(NavLink).attrs(({ name }) => ({
       height: 20px;
       display: block;
       position: absolute;
-      bottom: -16px;
+      bottom: -5px;
       background-position: 50% 70%;
       background-image: url(${MenuCurrent});
       z-index: 0;
@@ -45,17 +53,33 @@ const MenuLink = styled(NavLink).attrs(({ name }) => ({
     }
   }
 `
-
-export class AccountButtons extends React.Component<IProps> {
+@inject('mobileMenuStore')
+@observer
+export class MenuMobileLink extends React.Component<IProps> {
   constructor(props: IProps) {
     super(props)
   }
+
+  get injected() {
+    return this.props as IInjectedProps
+  }
+
   render() {
+    const menu = this.injected.mobileMenuStore
     return (
       <>
-        <PanelItem>
-          <MenuLink to={this.props.path} data-cy="page-link">
-            <div>{this.props.content}</div>
+        <PanelItem data-cy="mobile-menu-item">
+          <MenuLink
+            to={this.props.path}
+            onClick={() => {
+              menu.toggleMobilePanel()
+              if (this.props.onClick) {
+                this.props.onClick()
+              }
+            }}
+            style={this.props.style}
+          >
+            <span>{this.props.content}</span>
           </MenuLink>
         </PanelItem>
       </>
@@ -63,4 +87,4 @@ export class AccountButtons extends React.Component<IProps> {
   }
 }
 
-export default AccountButtons
+export default MenuMobileLink

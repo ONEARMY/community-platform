@@ -9,8 +9,11 @@ import { ProfileModal } from 'src/components/ProfileModal/ProfileModal'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
 import { Box } from 'rebass'
-import MenuMobileLinkItem from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLinkItem'
+import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
 import ProfileButtons from './ProfileButtons'
+import { MenuMobileLinkContainer } from '../MenuMobile/MenuMobilePanel'
+import { PanelItem } from '../MenuMobile/MenuMobilePanel'
+import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
 
 interface IState {
   showProfileModal: boolean
@@ -24,9 +27,6 @@ interface IInjectedProps extends IProps {
   userStore: UserStore
 }
 
-const PanelItem = styled(Box)`
-  padding: ${theme.space[3]}px 0px;
-`
 @inject('userStore')
 @observer
 export default class Profile extends React.Component<IProps, IState> {
@@ -44,6 +44,10 @@ export default class Profile extends React.Component<IProps, IState> {
     this.setState({ showProfileModal: !this.state.showProfileModal })
   }
 
+  logout() {
+    this.injected.userStore.logout()
+  }
+
   render() {
     const user = this.injected.userStore.user
     const { showProfileModal } = this.state
@@ -51,10 +55,27 @@ export default class Profile extends React.Component<IProps, IState> {
       <>
         {user ? (
           this.props.isMobile ? (
-            <MenuMobileLinkItem
-              path={'/u/' + user.userName}
-              content={'My profile'}
-            />
+            <MenuMobileLinkContainer style={{ borderBottom: 'none' }}>
+              <MenuMobileLink
+                path={'/u/' + user.userName}
+                content={'Profile'}
+              />
+              {COMMUNITY_PAGES_PROFILE.map(page => (
+                <MenuMobileLink
+                  path={page.path}
+                  key={page.path}
+                  content={page.title}
+                />
+              ))}
+              <MenuMobileLink
+                path={'how-to'}
+                content={'Log out'}
+                style={{ color: theme.colors.silver }}
+                onClick={() => {
+                  this.logout()
+                }}
+              />
+            </MenuMobileLinkContainer>
           ) : (
             <div data-cy="user-menu">
               <Flex onClick={() => this.toggleProfileModal()} ml={1}>
@@ -75,6 +96,7 @@ export default class Profile extends React.Component<IProps, IState> {
           <ProfileButtons isMobile={true} />
         ) : (
           // once LoginComponent is removed, this will become more readable
+          // with just changing the isMobile boolean
           <LoginComponent />
         )}
       </>

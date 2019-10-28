@@ -71,7 +71,7 @@ describe('[Events]', () => {
       cy.get('[data-cy=card]').its('length').should('be.eq', 2)
 
       cy.step('Clear location')
-      cy.get('[data-cy=location]').find('input:eq(0)').clear().wait(500)
+      cy.get('button.ap-icon-clear').click()
       cy.get('[data-cy=card]').its('length').should('be.eq', 5)
     })
   })

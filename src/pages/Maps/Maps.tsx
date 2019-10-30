@@ -11,7 +11,6 @@ import './styles.css'
 import { ILatLng } from 'src/models/maps.models'
 import { GetLocation } from 'src/utils/geolocation'
 import { Map } from 'react-leaflet'
-import { ILocation } from 'src/models/common.models'
 
 interface IProps {
   mapsStore: MapsStore

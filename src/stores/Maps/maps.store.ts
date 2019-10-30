@@ -1,29 +1,28 @@
 import { observable, action, toJS } from 'mobx'
-import {
-  insideBoundingBox,
-  getBoundingBox,
-  LatLng,
-  BoundingBox,
-} from 'geolocation-utils'
+import { insideBoundingBox, LatLng, BoundingBox } from 'geolocation-utils'
 
 import {
   IMapPin,
   IPinType,
   IMapPinDetail,
   IBoundingBox,
-  EntityType,
   IMapPinWithType,
+  IPinGrouping,
 } from 'src/models/maps.models'
-import { generatePinFilters } from 'src/mocks/maps.mock'
 import { IDBEndpoint } from 'src/models/common.models'
 import { RootStore } from '..'
 import { Subscription } from 'rxjs'
 import { ModuleStore } from '../common/module.store'
 import { getUserAvatar } from '../User/user.store'
+import { MAP_GROUPINGS } from './maps.groupings'
+import { generatePins } from 'src/mocks/maps.mock'
+
+// TODO - remove mock pins from store once integration complete
+const MOCK_PINS = generatePins(250)
 
 export class MapsStore extends ModuleStore {
   mapEndpoint: IDBEndpoint = 'v2_mappins'
-  availablePinFilters = generatePinFilters()
+  availablePinFilters = MAP_GROUPINGS
   mapPins$: Subscription
   constructor(rootStore: RootStore) {
     super(rootStore)
@@ -51,6 +50,9 @@ export class MapsStore extends ModuleStore {
       },
       {} as Record<string, IPinType>,
     )
+
+    // TODO - remove mock pins when integrated
+    pins = [...MOCK_PINS, ...pins]
 
     this.mapPins = pins.map(
       ({ _id, location, pinType, profileType, workspaceType }) => ({
@@ -90,12 +92,15 @@ export class MapsStore extends ModuleStore {
   @action
   public async retrievePinFilters() {
     // TODO: get from database
-    this.availablePinFilters = await generatePinFilters()
+    this.availablePinFilters = MAP_GROUPINGS
     this.activePinFilters = this.availablePinFilters.map(filter => filter)
   }
 
   @action
-  public async setActivePinFilters(grouping: EntityType, filters: Array<any>) {
+  public async setActivePinFilters(
+    grouping: IPinGrouping,
+    filters: Array<any>,
+  ) {
     if (filters.length === 0) {
       this.filteredPins = this.mapPins
       return
@@ -126,6 +131,7 @@ export class MapsStore extends ModuleStore {
       return foundPinDetails
     }
     this.pinDetail = this.pinDetailCache.get(pin._id)
+    console.log('pin detail', toJS(this.pinDetail))
     return toJS(this.pinDetail as IMapPinDetail)
   }
 

@@ -6,16 +6,14 @@ import Text from 'src/components/Text'
 import { TextAreaField } from 'src/components/Form/Fields'
 import { Box, Flex } from 'rebass'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
-import { MapsStore } from 'src/stores/Maps/maps.store'
-import { UserStore } from 'src/stores/User/user.store'
 import { Map, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { generatePinFilters } from 'src/mocks/maps.mock'
 import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
 import { IUserPP } from 'src/models/user_pp.models'
 import { Button } from 'src/components/Button'
 import { ILocation } from 'src/models/common.models'
+import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 
 interface IProps {
   user: IUserPP
@@ -47,7 +45,7 @@ const required = (value: any) => (value ? undefined : 'Required')
 @inject('mapsStore', 'userStore')
 @observer
 export class UserMapPinSection extends React.Component<IProps, IState> {
-  pinFilters = generatePinFilters()
+  pinFilters = MAP_GROUPINGS
   constructor(props: IProps) {
     super(props)
     this.state = {

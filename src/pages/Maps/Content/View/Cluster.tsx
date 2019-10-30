@@ -6,7 +6,7 @@ import 'react-leaflet-markercluster/dist/styles.min.css'
 
 import { createClusterIcon, createMarkerIcon } from './Sprites'
 
-import { IPinType, EntityType, IMapPinWithType } from 'src/models/maps.models'
+import { IPinType, IMapPinWithType, IPinGrouping } from 'src/models/maps.models'
 
 interface IProps {
   pins: Array<IMapPinWithType>
@@ -26,7 +26,7 @@ export const Clusters: React.FunctionComponent<IProps> = ({
       accumulator[grouping].push(pin)
       return accumulator
     },
-    {} as Record<EntityType, Array<IMapPinWithType>>,
+    {} as Record<IPinGrouping, Array<IMapPinWithType>>,
   )
 
   return (

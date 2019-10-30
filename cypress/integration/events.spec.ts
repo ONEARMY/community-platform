@@ -1,21 +1,14 @@
 describe('[Events]', () => {
-
-  before(() => {
-    cy.deleteDocuments('v2_events', 'title', '==', 'Create an Event test')
-    const today = '2019-08-15'
+  const today = '2019-08-15'
+  beforeEach(() => {
     cy.log(`Today as **${today}**`)
     cy.clock(Cypress.moment.utc(today).valueOf(), ['Date'])
-  })
-
-  beforeEach(() => {
+    cy.deleteDocuments('v2_events', 'title', '==', 'Create a test event')
     cy.visit('/events')
     cy.logout()
   })
 
   describe('[List events]', () => {
-    // const howtoUrl = '/how-to/make-glasslike-beams'
-    // const coverFileRegex = /howto-beams-glass-0-3.jpg/
-
     it('[By Everyone]', () => {
       cy.step('The Create button is unavailable')
       cy.get('[data-cy=create]').should('not.exist')
@@ -23,15 +16,19 @@ describe('[Events]', () => {
       cy.step('Upcoming events are shown')
       cy.get('[data-cy=card]').its('length').should('be.eq', 5)
 
-      cy.step('No tag is selected')
-      // - Create button is unavailable
-      // - No tag is selected
-      // - No location is inputted
-      // - More Events button is hidden
-      // - Some latest events are shown
-      // - The summary of an event is shown, including: date, title, organizer, location and tag
-      // - Click on the event's button
-      // - Check if it takes users to the event's page in a new tab"
+      cy.step('Move Events button is hidden')
+      cy.get('button').contains('More Events').should('not.visible')
+
+      cy.step(`Basic info of an event is shown`)
+      cy.get('[data-cy=card]:has(:contains(SURA BAYA Exhibition))').within(() => {
+        cy.contains('18').should('be.exist')
+        cy.contains('Aug').should('be.exist')
+        cy.contains('SURA BAYA Exhibition').should('be.exist')
+        cy.contains('By event_creator').should('be.exist')
+        cy.contains('Surabaya').should('be.exist')
+        cy.contains('exhibition').should('be.exist')
+        cy.get('a[target=_blank]').should('have.attr', 'href').and('eq', 'https://www.instagram.com/p/B1N6zVUjj0M/')
+      })
     })
 
     it('[By Authenticated]', () => {
@@ -41,79 +38,67 @@ describe('[Events]', () => {
         .click()
         .url()
         .should('include', '/events/create')
-
     })
   })
 
-  describe('[Filter with Tag]', () => {
+  describe('[Filter Events]', () => {
     it('[By Everyone]', () => {
-      cy.step('Select a tag')
-      // - Select a tag on the dropdown list
-      // - Check if only relevant events are shown
-      // - Remove the selected tag
-      // - Expect all events are shown again"
-    })
-  })
+      cy.step('Select a tag in the dropdown list')
+      cy.get('[data-cy=tag-select]').click()
+      cy.get('.data-cy__menu').contains('workshop').click()
+      cy.get('[data-cy=card').its('length').should('eq', 3)
 
-  describe('[Filter by Location]', () => {
-    it('[By Everyone]', () => {
-      cy.step('Select the Location')
-      // - Select the text box, Search for a Location
-      // - Type a location incompletely
-      // - Select the desired location from the suggestion list
-      // - Check if only relevant events are shown
-      // - Remove the location
-      // - Expet all events are shown again"
+      cy.step('Type and select a tag')
+      cy.get('.data-cy__input').find('input').type('scree')
+      cy.get('.data-cy__menu').contains('screening').click()
+      cy.get('[data-cy=card').its('length').should('eq', 2)
+
+      cy.step('Remove a tag')
+      cy.get('.data-cy__multi-value__label').contains('screening')
+        .parent()
+        .find('.data-cy__multi-value__remove')
+        .click()
+      cy.get('[data-cy=card]').its('length').should('be.eq', 3)
+
+      cy.step('Remove all tags')
+      cy.get('.data-cy__clear-indicator').click()
+      cy.get('.data-cy__multi-value__label').should('not.exist')
+      cy.get('[data-cy=card]').its('length').should('be.eq', 5)
+
+      cy.step('Filter by location')
+      cy.get('[data-cy=location]').find('input:eq(0)').type('Suraba')
+      cy.get('[data-cy=location]').find('span').contains('Surabaya').click()
+      cy.get('[data-cy=card]').its('length').should('be.eq', 2)
+
+      cy.step('Clear location')
+      cy.get('button.ap-icon-clear').click()
+      cy.get('[data-cy=card]').its('length').should('be.eq', 5)
     })
   })
 
   describe('[Create an event]', () => {
-    it('[By Anonymous]', () => {
-      cy.visit('/events/create')
-        .url()
-        .should('not.include', '/create')
-    })
-
-    it.skip('[By Authenticated]', () => {
-      cy.visit('/events')
+    it('[By Authenticated]', () => {
       cy.login('event_creator@test.com', 'test1234')
       cy.get('[data-cy=create]').click()
 
-      cy.step('Fill up the intro')
-      cy.get('[data-cy=title]').type('Create an Event test')
-      const todaysDate = Cypress.moment().format('YYYY-MM-DD')
-      cy.get('[data-cy=date]').type(todaysDate)
-      cy.get('[data-cy=location]').type('Rio de Janeiro, Brazil')
-      cy.get('.ap-name')
-        .contains('Rio')
-        .click()
+      cy.step('Fill up mandatory info')
+      cy.get('[data-cy=title]').type('Create a test event')
+      cy.get('[data-cy=date]').find('input').click()
+      cy.get('.react-datepicker').find('div[role=option]').contains('20').click()
+      cy.get('[data-cy=tag-select]').click()
+      cy.get('.data-cy__menu').contains('event_testing').click()
+
+      cy.get('[data-cy=location]').find('input:eq(0)').type('Atucucho')
+      cy.get('[data-cy=location]').find('div').contains('Atucucho').click()
       cy.get('[data-cy=tag-select]').click()
       cy.get('[data-cy=url]').type('https://www.meetup.com/pt-BR/cities/br/rio_de_janeiro/')
-      cy.get('Publish').click()
-    })
-  })
 
-  describe('[Edit an event]', () => {
-    it('[By Anonymous]', () => {
-      cy.visit('/events')
-      // ...
-    })
+      cy.step('Publish the event')
+      cy.screenClick()
+      cy.get('[data-cy=submit]').click()
 
-    it('[By Authenticated]', () => {
-      cy.visit('/events')
-      // ...
-    })
-  })
-
-  describe('[Read an event]', () => {
-    it('[By Anonymous]', () => {
-      cy.visit('/events')
-      // ...
-    })
-
-    it('[By Authenticated]', () => {
-      cy.visit('/events')
-      // ...
+      cy.step('The new event is shown in /events')
+      cy.get('[data-cy=card]').contains('Create a test event').should('be.exist')
     })
   })
 })

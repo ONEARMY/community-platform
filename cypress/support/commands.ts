@@ -33,6 +33,16 @@ declare global {
         password: string,
       ): Promise<firebase.auth.UserCredential>
 
+      /**
+       * Login and wait for the page to load completely with user info.
+       * Some buttons are not shown in Cypress test after cy.login. This is a workaround for this problem.
+       * Please use login whenever possible.
+       * @deprecated
+       * @param username
+       * @param password
+       */
+      completeLogin(username: string, password: string): Promise<void>
+
       logout(): Promise<void>
 
       deleteDocuments(
@@ -42,9 +52,24 @@ declare global {
         value: string,
       ): Promise<void>
 
+      queryDocuments(
+        collectionName: string,
+        fieldPath: string,
+        opStr: any,
+        value: string,
+      ): Chainable<any>
+
       step(message: string)
 
       uploadFiles(filePath: string | string[])
+
+      toggleUserMenuOn() : Promise<void>
+      toggleUserMenuOff() : Promise<void>
+
+      /**
+       * Trigger form validation
+       */
+      screenClick() : Promise<void>
     }
   }
 }
@@ -52,6 +77,7 @@ declare global {
 const attachCustomCommands = (Cypress, fb: typeof firebase) => {
   let currentUser: null | firebase.User = null
   const firestore = new Firestore(fb.firestore())
+
 
   fb.auth().onAuthStateChanged(user => {
     currentUser = user
@@ -64,7 +90,19 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
         return { email, password }
       },
     })
-    return fb.auth().signInWithEmailAndPassword(email, password)
+    fb.auth().signInWithEmailAndPassword(email, password)
+  })
+
+  Cypress.Commands.add('completeLogin', (email, password) => {
+    Cypress.log({
+      displayName: 'login',
+      consoleProps: () => {
+        return { email, password }
+      },
+    })
+    fb.auth().signInWithEmailAndPassword(email, password)
+    const isPageLoadedAfterLogin = () => cy.get('[data-cy=user-menu]').find('path').should('be.exist')
+    isPageLoadedAfterLogin()
   })
 
   Cypress.Commands.add('logout', () => {
@@ -77,6 +115,19 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
     })
     return fb.auth().signOut()
   })
+
+  Cypress.Commands.add(
+    'queryDocuments',
+    (collectionName: string, fieldPath: string, opStr: any, value: string) => {
+      Cypress.log({
+        displayName: 'queryDocuments',
+        consoleProps: () => {
+          return { collectionName, fieldPath, opStr, value }
+        },
+      })
+      return firestore.queryDocuments(collectionName, fieldPath, opStr, value)
+    },
+  )
 
   Cypress.Commands.add(
     'deleteDocuments',
@@ -135,6 +186,21 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
       })
     },
   )
+
+  Cypress.Commands.add('toggleUserMenuOn', () => {
+    Cypress.log({ displayName: 'OPEN_USER_MENU'})
+    cy.get('[data-cy=user-menu]').find('path').should('be.exist')
+    cy.get('[data-cy=user-menu]').click()
+  })
+
+  Cypress.Commands.add('toggleUserMenuOff', () => {
+    Cypress.log({ displayName: 'CLOSE_USER_MENU'})
+    cy.get('[data-cy=header]').click({force: true})
+  })
+
+  Cypress.Commands.add('screenClick', () => {
+    cy.get('[data-cy=header]').click({ force: true})
+  })
 }
 
 attachCustomCommands(Cypress, firebase)

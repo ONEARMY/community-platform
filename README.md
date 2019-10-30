@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/OneArmyWorld/onearmy.svg?branch=master)](https://travis-ci.org/OneArmyWorld/onearmy)
+[![Build Status](https://travis-ci.org/ONEARMY/community-platform.svg?branch=master)](https://travis-ci.org/ONEARMY/community-platform)
 [![style: styled-components](https://img.shields.io/badge/style-%F0%9F%92%85%20styled--components-orange.svg?colorB=daa357&colorA=db748e)](https://github.com/styled-components/styled-components)
 
 # 🌍 &nbsp; Onearmy

@@ -4,14 +4,25 @@ import { TagsStore } from 'src/stores/Tags/tags.store'
 import { Button } from 'src/components/Button'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
+import { Box } from 'rebass'
+import Flex from 'src/components/Flex'
+import { ITag, TagCategory } from 'src/models/tags.model'
+import { Modal } from 'src/components/Modal/Modal'
+// Import React Table
+import ReactTable from 'react-table'
+import 'react-table/react-table.css'
+import { Input } from 'src/components/Form/elements'
+import Select from 'react-select'
 
 // we include props from react-final-form fields so it can be used as a custom field component
 interface IProps {
   tagsStore?: TagsStore
 }
 interface IState {
-  disabled: boolean
+  updating?: boolean
   msg?: string
+  tagForm: Partial<ITag>
+  showEditor?: boolean
 }
 
 @inject('tagsStore')
@@ -19,33 +30,146 @@ interface IState {
 export class AdminTags extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
-    this.state = {
-      disabled: false,
-    }
+    this.state = { tagForm: {} }
   }
 
-  async uploadTags() {
-    // this.setState({ disabled: true })
-    // try {
-    //   await this.props.tagsStore!.uploadTagsMockToDatabase()
-    //   this.setState({ msg: 'Tags Uploaded Successfully' })
-    // } catch (error) {
-    //   this.setState({ disabled: false, msg: 'Error: See console' })
-    // }
+  saveEditor = async () => {
+    this.setState({ updating: true })
+    await this.props.tagsStore!.saveTag(this.state.tagForm)
+    this.setState({ updating: false, showEditor: false })
   }
+  showEditor = (tag: Partial<ITag>) => {
+    this.setState({
+      showEditor: true,
+      tagForm: { ...tag },
+    })
+  }
+
+  handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const patch = { [e.target.name]: e.target.value }
+    this.setState({
+      tagForm: { ...this.state.tagForm, ...patch },
+    })
+  }
+
+  onSelectedTagsChanged(values: ITagCategorySelect[]) {
+    this.setState({
+      tagForm: { ...this.state.tagForm, categories: values.map(v => v.value) },
+    })
+  }
+
   public render() {
+    const { allTags } = this.props.tagsStore!
+    const { tagForm, showEditor, updating, msg } = this.state
+
     return (
-      <>
-        <Heading small>Tags Admin</Heading>
-        <Button
-          disabled={this.state.disabled}
-          variant={this.state.disabled ? 'disabled' : 'dark'}
-          onClick={() => this.uploadTags()}
-        >
-          Populate Tags from Mock
-        </Button>
-        <Text mt={2}>{this.state.msg}</Text>
-      </>
+      <Box mt={4}>
+        <Flex>
+          <Heading small flex={1}>
+            Tags Admin
+          </Heading>
+          <Button onClick={() => this.showEditor(NEW_TAG)}>Add Tag</Button>
+        </Flex>
+
+        <Box my={3} bg={'white'} p={2}>
+          <ReactTable
+            data={allTags}
+            columns={TAG_TABLE_COLUMNS}
+            className="-highlight"
+            defaultPageSize={Math.min(allTags.length, 20)}
+            showPageSizeOptions={false}
+            getTdProps={(state, rowInfo) => {
+              return {
+                onClick: () => {
+                  this.showEditor(rowInfo.original)
+                },
+              }
+            }}
+          />
+        </Box>
+
+        {showEditor && (
+          <Modal>
+            <Box mb={3} bg={'white'} p={2}>
+              {tagForm._id && <Text>_id: {tagForm._id}</Text>}
+              <Input
+                type="text"
+                name="label"
+                placeholder="Label"
+                value={tagForm.label}
+                onChange={this.handleFormChange}
+              />
+              <Select
+                isMulti
+                options={TAG_CATEGORIES}
+                value={this._getSelected()}
+                onChange={values => this.onSelectedTagsChanged(values)}
+              />
+              {msg && <Text color="red">{msg}</Text>}
+              <Flex mt={3}>
+                <Button
+                  mr={2}
+                  onClick={() => this.setState({ showEditor: false })}
+                  variant={'secondary'}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={this.saveEditor}
+                  disabled={
+                    !tagForm.label ||
+                    tagForm.categories!.length === 0 ||
+                    updating
+                  }
+                >
+                  Save
+                </Button>
+              </Flex>
+            </Box>
+          </Modal>
+        )}
+      </Box>
     )
   }
+
+  private _getSelected() {
+    const selected = this.state.tagForm.categories
+      ? this.state.tagForm.categories
+      : []
+    return TAG_CATEGORIES.filter(tag => selected.includes(tag.value))
+  }
+}
+
+const TAG_TABLE_COLUMNS: { [key: string]: keyof ITag }[] = [
+  {
+    Header: '_id',
+    accessor: '_id',
+  },
+  {
+    Header: 'label',
+    accessor: 'label',
+  },
+  {
+    Header: 'categories',
+    accessor: 'categories',
+  },
+]
+// TODO - currently all hard-coded, would be good to allow custom categories and organisation
+const TAG_CATEGORIES: ITagCategorySelect[] = [
+  {
+    label: 'how-to',
+    value: 'how-to',
+  },
+  {
+    label: 'event',
+    value: 'event',
+  },
+]
+const NEW_TAG: Partial<ITag> = {
+  label: '',
+  categories: [],
+}
+interface ITagCategorySelect {
+  label: string
+  value: TagCategory
 }

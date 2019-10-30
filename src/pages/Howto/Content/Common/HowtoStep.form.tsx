@@ -13,12 +13,6 @@ import theme from 'src/themes/styled.theme'
 import { IHowtoStep } from 'src/models/howto.models'
 import { IUploadedFileMeta } from 'src/stores/storage'
 
-const ImageInputFieldWrapper = styled.div`
-  width: 150px;
-  height: 100px;
-  margin-right: 10px;
-`
-
 interface IProps {
   step: any | IHowtoStep
   index: number
@@ -63,7 +57,7 @@ class HowtoStep extends Component<IProps, IState> {
     return (
       // NOTE - animation parent container in CreateHowTo
       <Flex
-        data-cy={'step'}
+        data-cy={`step_${index}`}
         mt={5}
         p={3}
         key={index}
@@ -78,7 +72,7 @@ class HowtoStep extends Component<IProps, IState> {
           </Heading>
           {index >= 1 && (
             <Button
-              data-cy={'delete-step'}
+              data-cy="delete-step"
               small
               variant={'tertiary'}
               icon="delete"
@@ -100,7 +94,7 @@ class HowtoStep extends Component<IProps, IState> {
                 </Flex>
                 <Flex px={1}>
                   <Button
-                    data-cy={'confirm'}
+                    data-cy="confirm"
                     small
                     variant={'tertiary'}
                     onClick={() => this.confirmDelete()}
@@ -117,7 +111,7 @@ class HowtoStep extends Component<IProps, IState> {
           <Label htmlFor={`${step}.title`}>Title of this step *</Label>
           <Field
             name={`${step}.title`}
-            data-cy={'step-title'}
+            data-cy="step-title"
             component={InputField}
             placeholder="Title of this step"
             validate={required}
@@ -129,48 +123,53 @@ class HowtoStep extends Component<IProps, IState> {
           <Field
             name={`${step}.text`}
             placeholder="Description of this step"
-            data-cy={'step-description'}
+            data-cy="step-description"
             component={TextAreaField}
             style={{ resize: 'vertical', height: '300px' }}
             validate={required}
             validateFields={[]}
           />
         </Flex>
-        <Label htmlFor={`${step}.text`}>Upload image(s) for this step *</Label>
-
-        <Flex flexDirection={['column', 'row']} alignItems="center">
-          <ImageInputFieldWrapper>
-            <Field
-              canDelete
-              hasText={false}
-              name={`${step}.images[0]`}
-              src={images[0]}
-              component={ImageInputField}
-            />
-          </ImageInputFieldWrapper>
-          <ImageInputFieldWrapper>
-            <Field
-              canDelete
-              hasText={false}
-              name={`${step}.images[1]`}
-              src={images[1]}
-              component={ImageInputField}
-            />
-          </ImageInputFieldWrapper>
-          <ImageInputFieldWrapper>
-            <Field
-              canDelete
-              hasText={false}
-              name={`${step}.images[2]`}
-              src={images[2]}
-              component={ImageInputField}
-            />
-          </ImageInputFieldWrapper>
+        <Flex flexDirection="column">
+          <Label htmlFor={`${step}.text`}>
+            Upload image(s) for this step *
+          </Label>
+          {images.length > 0 &&
+          images[0].downloadUrl !== undefined &&
+          !editStepImgs ? (
+            <Flex alignItems={'center'} justifyContent={'center'}>
+              {images.map(image => {
+                return (
+                  <Flex
+                    flexWrap={'nowrap'}
+                    px={1}
+                    width={1 / 4}
+                    key={image.name}
+                  >
+                    <Image sx={{ opacity: 0.5 }} src={image.downloadUrl} />
+                  </Flex>
+                )
+              })}
+              <Button
+                data-cy="delete-step-img"
+                icon={'delete'}
+                variant={'tertiary'}
+                sx={{ position: 'absolute' }}
+                onClick={() =>
+                  this.setState({
+                    editStepImgs: !editStepImgs,
+                  })
+                }
+              />
+            </Flex>
+          ) : (
+            <Field name={`${step}.images`} component={ImageInputField} multi />
+          )}
         </Flex>
         <Flex mt={2}>
           <Field
             name={`${step}.caption`}
-            data-cy={'step-caption'}
+            data-cy="step-caption"
             component={InputField}
             placeholder="Insert Caption"
           />

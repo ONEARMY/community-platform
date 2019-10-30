@@ -58,12 +58,13 @@ export class HowtoList extends React.Component<any, IState> {
               category="how-to"
               styleVariant="filter"
               placeholder="Filter How-tos by tag"
+              relevantTagsItems={filteredHowtos}
             />
           </Flex>
           <AuthWrapper>
             <Flex justifyContent={['flex-end', 'flex-end', 'auto']}>
               <Link to={'/how-to/create'} mb={[3, 3, 0]}>
-                <Button variant={'primary'} translateY data-cy={'create'}>
+                <Button variant={'primary'} translateY data-cy="create">
                   Create a How-to
                 </Button>
               </Link>
@@ -90,7 +91,7 @@ export class HowtoList extends React.Component<any, IState> {
           )}
           <Flex justifyContent={'center'} mt={20}>
             <Link to={'#'} style={{ visibility: 'hidden' }}>
-              <Button variant={'secondary'} data-cy={'more-how-tos'}>
+              <Button variant={'secondary'} data-cy="more-how-tos">
                 More how-tos
               </Button>
             </Link>

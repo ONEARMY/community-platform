@@ -40,9 +40,9 @@ export const timestampToYear = (timestamp: number) => {
   return date.getFullYear()
 }
 
-export const getMonth = (d: Date) => {
+export const getMonth = (d: Date, monthType: string = 'long') => {
   // use ECMAScript Internationalization API to return month
-  return `${d.toLocaleString('en-us', { month: 'long' })}`
+  return `${d.toLocaleString('en-us', { month: monthType })}`
 }
 export const getDay = (d: Date) => {
   return `${d.getDate()}`
@@ -57,8 +57,10 @@ export const isEmail = (email: string) => {
 }
 
 export const isAllowToEditContent = (doc: IEditableDoc, user: IUser) => {
+  const roles = user.userRoles ? user.userRoles : []
   if (
-    (user.userRoles && user.userRoles.includes('super-admin')) ||
+    roles.includes('admin') ||
+    roles.includes('super-admin') ||
     (doc._createdBy && doc._createdBy === user.userName)
   ) {
     return true

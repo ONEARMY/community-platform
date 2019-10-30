@@ -10,6 +10,21 @@ export class Firestore {
   constructor(firestore: firebase.firestore.Firestore) {
     this.db = firestore
   }
+  queryDocuments = (collectionName: string, fieldPath: string, opStr: any, value: string): Promise<any> | Promise<any[]> => {
+    return this.db.collection(collectionName).where(fieldPath, opStr, value).get()
+      .then(snapshot => {
+          const result: any[] = []
+          if (snapshot.empty) {
+            return result
+          }
+          snapshot.forEach(doc => result.push(doc.data()))
+          if (result.length === 1) {
+            return result[0]
+          }
+          return result
+        }
+      )
+  };
 
   deleteDocuments = (collectionName: string, fieldPath: string, opStr: any, value: string) => {
     const query = this.db.collection(collectionName).where(fieldPath, opStr, value).limit(Firestore.MAX_BATCH_SIZE);

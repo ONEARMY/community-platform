@@ -40,7 +40,7 @@ export default class Profile extends React.Component<IProps, IState> {
     return (
       <>
         {user ? (
-          <>
+          <div data-cy="user-menu">
             <Flex onClick={() => this.toggleProfileModal()} ml={1}>
               <Avatar userName={user.userName} />
             </Flex>
@@ -53,7 +53,7 @@ export default class Profile extends React.Component<IProps, IState> {
                 </ClickAwayListener>
               )}
             </Flex>
-          </>
+          </div>
         ) : (
           <LoginComponent />
         )}

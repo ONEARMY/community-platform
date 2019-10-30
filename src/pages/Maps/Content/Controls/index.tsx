@@ -10,12 +10,14 @@ import { GroupingFilter } from './GroupingFilter'
 import { IPinType, EntityType } from 'src/models/maps.models'
 import { HashLink } from 'react-router-hash-link'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { Map } from 'react-leaflet'
+import { ILocation } from 'src/models/common.models'
 
 interface IProps {
-  map: any
+  mapRef: React.RefObject<Map>
   availableFilters: Array<IPinType>
   onFilterChange: (grouping: EntityType, filters: Array<IPinType>) => void
-  onLocationChange: (selectedLocation) => void
+  onLocationChange: (selectedLocation: ILocation) => void
 }
 
 const SearchWrapper = styled.div`
@@ -66,7 +68,7 @@ class Controls extends React.Component<IProps> {
       >
         <SearchWrapper>
           <LocationSearch
-            onChange={location => {
+            onChange={(location: ILocation) => {
               this.props.onLocationChange(location)
             }}
           />
@@ -78,7 +80,7 @@ class Controls extends React.Component<IProps> {
             items={groupedFilters[grouping]}
             onChange={options => {
               this.props.onFilterChange(grouping as EntityType, options)
-              this.props.map.current.leafletElement.closePopup()
+              this.props.mapRef.current!.leafletElement.closePopup()
             }}
           />
         ))}

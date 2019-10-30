@@ -25,27 +25,24 @@ interface IProps {
   activePinDetail?: IMapPin | IMapPinDetail
   center: ILatLng
   zoom: number
-  map: any
+  mapRef: React.RefObject<Map>
 }
 interface IState {}
 
 class MapView extends React.Component<IProps, IState> {
-  constructor(props) {
+  constructor(props: IProps) {
     super(props)
-    this.updateBoundingBox = debounce(this.updateBoundingBox.bind(this), 1000)
+    this.handleMove = debounce(this.handleMove, 1000)
   }
 
-  public componentDidMount() {
-    this.updateBoundingBox()
-  }
-
-  private updateBoundingBox() {
-    // Note - sometimes throws (current undefined). Workaround
-    if (this.props.map && this.props.map.current) {
-      const boundingBox = this.props.map.current.leafletElement.getBounds()
+  // on move end want to calculate current bounding box and notify parent
+  // so that pins can be displayed as required
+  private handleMove = () => {
+    if (this.props.mapRef.current) {
+      const boundingBox = this.props.mapRef.current.leafletElement.getBounds()
       const newBoundingBox: IBoundingBox = {
-        topLeft: boundingBox._northEast,
-        bottomRight: boundingBox._southWest,
+        topLeft: boundingBox.getNorthWest(),
+        bottomRight: boundingBox.getSouthEast(),
       }
       this.props.onBoundingBoxChange(newBoundingBox)
     }
@@ -57,23 +54,22 @@ class MapView extends React.Component<IProps, IState> {
 
   public render() {
     const { center, zoom, filters, pins, activePinDetail } = this.props
-
     return (
       <Map
-        ref={this.props.map}
+        ref={this.props.mapRef}
         className="markercluster-map"
         center={[center.lat, center.lng]}
         zoom={zoom}
         maxZoom={18}
         style={{ height: '100%' }}
-        onMove={this.updateBoundingBox}
+        onmove={this.handleMove}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
         <Clusters pins={pins} onPinClick={pin => this.pinClicked(pin)} />
-        <Popup map={this.props.map} pinDetail={activePinDetail} />
+        <Popup map={this.props.mapRef} pinDetail={activePinDetail} />
       </Map>
     )
   }

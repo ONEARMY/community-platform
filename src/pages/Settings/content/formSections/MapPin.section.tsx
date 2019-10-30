@@ -147,18 +147,6 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
                 validate={required}
               />
 
-              {/* wrap both above and below in positioned div to ensure location search box appears above map
-              <div style={{ height: '300px', position: 'relative', zIndex: 1 }}>
-                <MapView
-                  zoom={location ? 13 : 2}
-                  center={location ? location.latlng : undefined}
-                  pins={this.mapPins}
-                  filters={this.pinFilters}
-                  TODO - popup not currently shown as doesn't update correctly
-                  activePinDetail={this.state.activePinDetail}
-                  onPinClicked={() => this.getActivePinDetail()}
-                />
-              </div> */}
               <Map
                 center={[lat, lng]}
                 zoom={zoom}

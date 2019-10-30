@@ -1,5 +1,10 @@
 import { observable, action, toJS } from 'mobx'
-import { insideBoundingBox, getBoundingBox, LatLng } from 'geolocation-utils'
+import {
+  insideBoundingBox,
+  getBoundingBox,
+  LatLng,
+  BoundingBox,
+} from 'geolocation-utils'
 
 import {
   IMapPin,
@@ -9,8 +14,7 @@ import {
   EntityType,
   IMapPinWithType,
 } from 'src/models/maps.models'
-import { generatePinFilters, generatePins } from 'src/mocks/maps.mock'
-import { IUserDB } from 'src/models/user.models'
+import { generatePinFilters } from 'src/mocks/maps.mock'
 import { IDBEndpoint } from 'src/models/common.models'
 import { RootStore } from '..'
 import { Subscription } from 'rxjs'
@@ -23,11 +27,6 @@ export class MapsStore extends ModuleStore {
   mapPins$: Subscription
   constructor(rootStore: RootStore) {
     super(rootStore)
-  }
-  @observable
-  public mapBoundingBox: IBoundingBox = {
-    topLeft: { lat: -90, lng: -180 },
-    bottomRight: { lat: 90, lng: 180 },
   }
 
   @observable
@@ -45,9 +44,6 @@ export class MapsStore extends ModuleStore {
       this.mapPins = []
       return
     }
-
-    console.debug('processDBMapPins', pins)
-
     const filterMap = this.availablePinFilters.reduce(
       (accumulator, current) => {
         accumulator[current.name] = current
@@ -77,17 +73,17 @@ export class MapsStore extends ModuleStore {
 
   @action
   public setMapBoundingBox(boundingBox: IBoundingBox) {
-    this.mapBoundingBox = boundingBox
-    this.recalculatePinCounts()
+    this.recalculatePinCounts(boundingBox)
   }
 
   @action
   public async retrieveMapPins() {
     // TODO: make the function accept a bounding box to reduce load from DB
-    // TODO: stream will force repeated recalculation of all pins on any update,
-    // really inefficient, should either remove stream or find way just to process new
     this.mapPins$ = this.db.collection<IMapPin>('v2_mappins').stream(pins => {
-      this.processDBMapPins(pins)
+      // TODO - make more efficient by tracking only new pins received and updating
+      if (pins.length !== this.mapPins.length) {
+        this.processDBMapPins(pins)
+      }
     })
   }
 
@@ -153,18 +149,12 @@ export class MapsStore extends ModuleStore {
   }
 
   public removeSubscriptions() {
-    this.mapPins$.unsubscribe()
+    if (this.mapPins$) {
+      this.mapPins$.unsubscribe()
+    }
   }
 
-  private recalculatePinCounts() {
-    const boundingBox = getBoundingBox(
-      [
-        this.mapBoundingBox.topLeft as LatLng,
-        this.mapBoundingBox.bottomRight as LatLng,
-      ],
-      0,
-    )
-
+  private recalculatePinCounts(boundingBox: BoundingBox) {
     const pinTypeMap = this.availablePinFilters.reduce(
       (accumulator, current) => {
         current.count = 0
@@ -186,7 +176,6 @@ export class MapsStore extends ModuleStore {
   // return subset of profile info used when displaying map pins
   private async getUserProfilePin(username: string) {
     const u: any = await this.userStore.getUserProfile(username)
-
     if (!u) {
       return {
         heroImageUrl: '',
@@ -197,8 +186,6 @@ export class MapsStore extends ModuleStore {
         profileUrl: `${location.origin}/u/${username}`,
       }
     }
-
-    console.debug('user profile retrieved', u)
     const avatar = getUserAvatar(username)
     let heroImageUrl = ''
     if (u.coverImages && u.coverImages.length > 0) {

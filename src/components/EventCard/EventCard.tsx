@@ -5,7 +5,6 @@ import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import FlagIconEvents from 'src/components/Icons/FlagIcon/FlagIcon'
 import { IEvent } from '../../models/events.models'
 import { getMonth, getDay } from 'src/utils/helpers'
-import Heading from 'src/components/Heading'
 import { LinkTargetBlank } from '../Links/LinkTargetBlank/LinkTargetBlank'
 
 interface IProps {
@@ -105,13 +104,7 @@ export const EventCard = (props: IProps) => (
       flex={'1'}
       order={[5, 5, 5]}
     >
-      <LinkTargetBlank
-        target="_blank"
-        href={props.event.url}
-        color={'black'}
-        mr={1}
-        width={1}
-      >
+      <LinkTargetBlank href={props.event.url} color={'black'} mr={1} width={1}>
         <Text auxiliary width={1} txtRight>
           Go to event
         </Text>

@@ -72,7 +72,7 @@ export const paragraph = (props: ITextProps) =>
     ? {
         fontFamily: '"Inter", Helvetica Neue, Arial, sans-serif;',
         fontSize: '16px',
-        color: '#61646b',
+        color: theme.colors.grey,
       }
     : null
 

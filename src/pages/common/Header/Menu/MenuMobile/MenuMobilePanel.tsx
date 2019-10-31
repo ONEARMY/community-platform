@@ -6,6 +6,7 @@ import { Box } from 'rebass'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
 import MenuMobileExternalLink from './MenuMobileExternalLink'
+import { BAZAR_URL, GLOBAL_SITE_URL } from 'src/utils/urls'
 
 const PanelContainer = styled(Box)`
   width: 100%;
@@ -39,6 +40,7 @@ export const MenuMobileLinkContainer = styled(Box)`
   border-bottom: 1px solid #ababac;
   margin-top: 5px;
 `
+
 export class MenuMobilePanel extends React.Component {
   render() {
     return (
@@ -54,10 +56,10 @@ export class MenuMobilePanel extends React.Component {
             ))}
             <Profile isMobile={true} />
             <MenuMobileLinkContainer>
-              <MenuMobileExternalLink content={'Bazar'} href={'/bazar'} />
+              <MenuMobileExternalLink content={'Bazar'} href={BAZAR_URL} />
               <MenuMobileExternalLink
                 content={'Global Site'}
-                href={'/global-site'}
+                href={GLOBAL_SITE_URL}
               />
             </MenuMobileLinkContainer>
           </PanelMenu>

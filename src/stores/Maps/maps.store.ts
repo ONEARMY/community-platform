@@ -15,10 +15,10 @@ import { Subscription } from 'rxjs'
 import { ModuleStore } from '../common/module.store'
 import { getUserAvatar } from '../User/user.store'
 import { MAP_GROUPINGS } from './maps.groupings'
-import { generatePins } from 'src/mocks/maps.mock'
+import { generatePins, generatePinDetails } from 'src/mocks/maps.mock'
 
 // TODO - remove mock pins from store once integration complete
-// const MOCK_PINS = generatePins(250)
+const IS_MOCK = true
 
 export class MapsStore extends ModuleStore {
   mapEndpoint: IDBEndpoint = 'v2_mappins'
@@ -55,7 +55,11 @@ export class MapsStore extends ModuleStore {
     )
 
     // TODO - remove mock pins when integrated
-    // pins = [...MOCK_PINS, ...pins]
+    if (IS_MOCK) {
+      {
+        pins = [...generatePins(250), ...pins]
+      }
+    }
 
     this.mapPins = pins.map(
       ({ _id, location, pinType, profileType, workspaceType }) => ({
@@ -66,7 +70,6 @@ export class MapsStore extends ModuleStore {
         workspaceType,
       }),
     )
-
     this.filteredPins = this.mapPins
   }
 
@@ -127,7 +130,11 @@ export class MapsStore extends ModuleStore {
   public async setActivePin(pin?: IMapPin) {
     this.activePin = pin
     if (pin) {
-      const pinDetail = await this.getUserProfilePin(pin._id)
+      const pinDetail = IS_MOCK
+        ? generatePinDetails(pin)
+        : await this.getUserProfilePin(pin._id)
+      console.log('active pin', pin)
+      console.log('pin detail', pinDetail)
       this.activePin = { ...pin, ...pinDetail }
     }
   }

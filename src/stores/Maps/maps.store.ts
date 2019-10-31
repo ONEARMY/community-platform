@@ -18,7 +18,7 @@ import { MAP_GROUPINGS } from './maps.groupings'
 import { generatePins } from 'src/mocks/maps.mock'
 
 // TODO - remove mock pins from store once integration complete
-const MOCK_PINS = generatePins(250)
+// const MOCK_PINS = generatePins(250)
 
 export class MapsStore extends ModuleStore {
   mapEndpoint: IDBEndpoint = 'v2_mappins'
@@ -55,7 +55,7 @@ export class MapsStore extends ModuleStore {
     )
 
     // TODO - remove mock pins when integrated
-    pins = [...MOCK_PINS, ...pins]
+    // pins = [...MOCK_PINS, ...pins]
 
     this.mapPins = pins.map(
       ({ _id, location, pinType, profileType, workspaceType }) => ({

@@ -36,13 +36,14 @@ class MapsPageClass extends React.Component<IProps, IState> {
   }
 
   public async componentDidMount() {
+    this.promptUserLocation()
     this.props.mapsStore.retrieveMapPins()
     this.props.mapsStore.retrievePinFilters()
-    this.promptUserLocation()
   }
 
   public async componentWillUnmount() {
     this.props.mapsStore.removeSubscriptions()
+    this.props.mapsStore.setActivePin(undefined)
   }
 
   private async promptUserLocation() {
@@ -70,7 +71,6 @@ class MapsPageClass extends React.Component<IProps, IState> {
       filteredPins,
       availablePinFilters,
       activePinFilters,
-      pinDetail,
     } = this.props.mapsStore
     const { center, zoom } = this.state
     return (
@@ -97,8 +97,6 @@ class MapsPageClass extends React.Component<IProps, IState> {
                   onBoundingBoxChange={boundingBox =>
                     this.props.mapsStore.setMapBoundingBox(boundingBox)
                   }
-                  onPinClicked={pin => this.props.mapsStore.getPinDetails(pin)}
-                  activePinDetail={pinDetail}
                   center={center}
                   zoom={zoom}
                 />

@@ -32,6 +32,9 @@ export class MapsStore extends ModuleStore {
   public activePinFilters: Array<IPinType> = []
 
   @observable
+  public activePin: IMapPin | IMapPinDetail | undefined = undefined
+
+  @observable
   private mapPins: Array<IMapPinWithType> = []
 
   @observable
@@ -66,12 +69,6 @@ export class MapsStore extends ModuleStore {
 
     this.filteredPins = this.mapPins
   }
-
-  // Caching pinDetails in a map to reduce database calls. We don't want to cache
-  //  this using firebase since this data could change over time
-  private pinDetailCache: Map<string, IMapPinDetail> = new Map()
-  @observable
-  public pinDetail: IMapPinDetail | undefined = undefined
 
   @action
   public setMapBoundingBox(boundingBox: IBoundingBox) {
@@ -121,18 +118,18 @@ export class MapsStore extends ModuleStore {
     this.filteredPins = mapPins
   }
 
+  /**
+   * Set the location and id of current active pin, and automatically
+   * generate full pin details from database
+   * @param pin - map pin meta containing location and id for detail lookup
+   */
   @action
-  public async getPinDetails(pin: IMapPin): Promise<IMapPinDetail> {
-    if (!this.pinDetailCache.has(pin._id)) {
-      // get from db if not already in cache. note map ids match with user ids
+  public async setActivePin(pin?: IMapPin) {
+    this.activePin = pin
+    if (pin) {
       const pinDetail = await this.getUserProfilePin(pin._id)
-      this.pinDetailCache.set(pin._id, { ...pin, ...pinDetail })
-      const foundPinDetails = this.getPinDetails(pin)
-      return foundPinDetails
+      this.activePin = { ...pin, ...pinDetail }
     }
-    this.pinDetail = this.pinDetailCache.get(pin._id)
-    console.log('pin detail', toJS(this.pinDetail))
-    return toJS(this.pinDetail as IMapPinDetail)
   }
 
   // get base pin geo information

@@ -16,23 +16,33 @@ import {
   IPinType,
   IMapPinWithType,
 } from 'src/models/maps.models'
+import { inject, observer } from 'mobx-react'
+import { MapsStore } from 'src/stores/Maps/maps.store'
 
 interface IProps {
   pins: Array<IMapPinWithType>
   filters: Array<IPinType>
   onBoundingBoxChange: (boundingBox: IBoundingBox) => void
   onPinClicked: (pin: IMapPin) => void
-  activePinDetail?: IMapPin | IMapPinDetail
+  activePinDetail?: IMapPinDetail
   center: ILatLng
   zoom: number
   mapRef: React.RefObject<Map>
 }
-interface IState {}
+interface IInjectedProps extends IProps {
+  mapsStore: MapsStore
+}
 
-class MapView extends React.Component<IProps, IState> {
+@inject('mapsStore')
+@observer
+class MapView extends React.Component<IProps> {
   constructor(props: IProps) {
     super(props)
     this.handleMove = debounce(this.handleMove, 1000)
+  }
+
+  get injected() {
+    return this.props as IInjectedProps
   }
 
   // on move end want to calculate current bounding box and notify parent
@@ -48,12 +58,13 @@ class MapView extends React.Component<IProps, IState> {
     }
   }
 
-  private pinClicked(pin) {
-    this.props.onPinClicked(pin)
+  private pinClicked(pin: IMapPin) {
+    this.injected.mapsStore.setActivePin(pin)
   }
 
   public render() {
-    const { center, zoom, filters, pins, activePinDetail } = this.props
+    const { center, zoom, pins } = this.props
+    const { activePin } = this.injected.mapsStore
     return (
       <Map
         ref={this.props.mapRef}
@@ -63,13 +74,14 @@ class MapView extends React.Component<IProps, IState> {
         maxZoom={18}
         style={{ height: '100%' }}
         onmove={this.handleMove}
+        onresize={() => console.log('resize called')}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
         <Clusters pins={pins} onPinClick={pin => this.pinClicked(pin)} />
-        <Popup map={this.props.mapRef} pinDetail={activePinDetail} />
+        {activePin && <Popup activePin={activePin} map={this.props.mapRef} />}
       </Map>
     )
   }

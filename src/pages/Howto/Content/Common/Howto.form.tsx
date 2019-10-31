@@ -267,7 +267,6 @@ export class HowtoForm extends React.Component<IProps, IState> {
                                     />
                                   ))}
                                   <Button
-                                    small
                                     variant={'tertiary'}
                                     icon="delete"
                                     onClick={() =>
@@ -376,7 +375,6 @@ export class HowtoForm extends React.Component<IProps, IState> {
                               mx="auto"
                               my={20}
                               variant="secondary"
-                              medium
                               onClick={() => {
                                 fields.push({
                                   title: '',

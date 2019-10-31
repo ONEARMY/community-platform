@@ -73,7 +73,6 @@ class HowtoStep extends Component<IProps, IState> {
           {index >= 1 && (
             <Button
               data-cy="delete-step"
-              small
               variant={'tertiary'}
               icon="delete"
               onClick={() => this.toggleDeleteModal()}
@@ -85,7 +84,6 @@ class HowtoStep extends Component<IProps, IState> {
               <Flex mt={3} p={0} mx={-1} justifyContent="flex-end">
                 <Flex px={1}>
                   <Button
-                    small
                     variant={'outline'}
                     onClick={() => this.toggleDeleteModal()}
                   >
@@ -95,7 +93,6 @@ class HowtoStep extends Component<IProps, IState> {
                 <Flex px={1}>
                   <Button
                     data-cy="confirm"
-                    small
                     variant={'tertiary'}
                     onClick={() => this.confirmDelete()}
                   >

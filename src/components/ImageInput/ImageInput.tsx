@@ -113,7 +113,6 @@ export class ImageInput extends React.Component<IProps, IState> {
             }}
           >
             <Button
-              small
               variant="outline"
               onClick={() => this.triggerFileUploaderClick()}
               icon="image"
@@ -148,7 +147,6 @@ export class ImageInput extends React.Component<IProps, IState> {
             {imgPreviewMode && (
               <Flex width={1 / 4} px={1}>
                 <Button
-                  large
                   onClick={() => this.triggerFileUploaderClick()}
                   ml="auto"
                   icon="image"

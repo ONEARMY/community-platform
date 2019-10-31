@@ -52,6 +52,12 @@ declare global {
         value: string,
       ): Promise<void>
 
+      updateDocument(
+        collectionName: string,
+        docId: string,
+        docData: any,
+      ): Promise<void>
+
       queryDocuments(
         collectionName: string,
         fieldPath: string,
@@ -63,13 +69,13 @@ declare global {
 
       uploadFiles(filePath: string | string[])
 
-      toggleUserMenuOn() : Promise<void>
-      toggleUserMenuOff() : Promise<void>
+      toggleUserMenuOn(): Promise<void>
+      toggleUserMenuOff(): Promise<void>
 
       /**
        * Trigger form validation
        */
-      screenClick() : Promise<void>
+      screenClick(): Promise<void>
     }
   }
 }
@@ -77,6 +83,7 @@ declare global {
 const attachCustomCommands = (Cypress, fb: typeof firebase) => {
   let currentUser: null | firebase.User = null
   const firestore = new Firestore(fb.firestore())
+
 
 
   fb.auth().onAuthStateChanged(user => {
@@ -101,7 +108,11 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
       },
     })
     fb.auth().signInWithEmailAndPassword(email, password)
-    const isPageLoadedAfterLogin = () => cy.get('[data-cy=user-menu]').find('path').should('be.exist')
+    const isPageLoadedAfterLogin = () =>
+      cy
+        .get('[data-cy=user-menu]')
+        .find('path')
+        .should('be.exist')
     isPageLoadedAfterLogin()
   })
 
@@ -139,6 +150,20 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
         },
       })
       return firestore.deleteDocuments(collectionName, fieldPath, opStr, value)
+    },
+  )
+
+  Cypress.Commands.add(
+    'updateDocument',
+    (collectionName: string, docId: string, docData: any) => {
+      Cypress.log({
+        displayName: 'updateDocument',
+        consoleProps: () => {
+          return { collectionName, docId, docData }
+        },
+      })
+
+      return firestore.updateDocument(collectionName, docId, docData)
     },
   )
 
@@ -188,18 +213,20 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
   )
 
   Cypress.Commands.add('toggleUserMenuOn', () => {
-    Cypress.log({ displayName: 'OPEN_USER_MENU'})
-    cy.get('[data-cy=user-menu]').find('path').should('be.exist')
+    Cypress.log({ displayName: 'OPEN_USER_MENU' })
+    cy.get('[data-cy=user-menu]')
+      .find('path')
+      .should('be.exist')
     cy.get('[data-cy=user-menu]').click()
   })
 
   Cypress.Commands.add('toggleUserMenuOff', () => {
-    Cypress.log({ displayName: 'CLOSE_USER_MENU'})
-    cy.get('[data-cy=header]').click({force: true})
+    Cypress.log({ displayName: 'CLOSE_USER_MENU' })
+    cy.get('[data-cy=header]').click({ force: true })
   })
 
   Cypress.Commands.add('screenClick', () => {
-    cy.get('[data-cy=header]').click({ force: true})
+    cy.get('[data-cy=header]').click({ force: true })
   })
 }
 

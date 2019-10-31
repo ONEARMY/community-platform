@@ -103,7 +103,6 @@ export class Popup extends React.Component<IProps> {
 
   public render() {
     const { activePin } = this.props
-    console.log('render', { ...activePin })
     const content = (activePin as IMapPinDetail).name
       ? this.renderContent(activePin as IMapPinDetail)
       : this.renderLoading()

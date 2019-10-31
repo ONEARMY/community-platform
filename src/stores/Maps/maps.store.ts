@@ -133,8 +133,6 @@ export class MapsStore extends ModuleStore {
       const pinDetail = IS_MOCK
         ? generatePinDetails(pin)
         : await this.getUserProfilePin(pin._id)
-      console.log('active pin', pin)
-      console.log('pin detail', pinDetail)
       this.activePin = { ...pin, ...pinDetail }
     }
   }
@@ -151,7 +149,6 @@ export class MapsStore extends ModuleStore {
   // add new pin or update existing
   public async setPin(pin: IMapPin) {
     // generate standard doc meta
-    console.debug('setting pin', pin)
     return this.db
       .collection('v2_mappins')
       .doc(pin._id)

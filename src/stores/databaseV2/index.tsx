@@ -63,13 +63,13 @@ class CollectionReference<T> {
       async (obs: Observer<(T & DBDoc)[]>) => {
         // 1. Emit cached collection
         const cached = await cacheDB.getCollection<T>(endpoint)
-        console.log('cached ' + endpoint, cached)
+        console.debug('cached ' + endpoint, cached)
         obs.next(cached)
         if (cached.length === 0) {
           // 2. If no cache, populate using large query db
-          console.log('getting server cache')
+          console.debug('getting server cache')
           const serverCache = await serverCacheDB.getCollection<T>(endpoint)
-          console.log('serverCache', serverCache)
+          console.debug('serverCache', serverCache)
           await cacheDB.setBulkDocs(endpoint, serverCache)
           obs.next(serverCache)
         }

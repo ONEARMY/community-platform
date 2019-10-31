@@ -14,6 +14,7 @@ interface IProps {
   subText?: string
   name: string
   fullWidth?: boolean
+  'data-cy'?: string
 }
 interface IState {
   showDeleteModal: boolean
@@ -39,7 +40,9 @@ class CustomRadioField extends Component<IProps, IState> {
       subText,
       name,
       fullWidth,
+      'data-cy': dataCy,
     } = this.props
+
     const classNames: Array<string> = []
     if (isSelected) {
       classNames.push('selected')
@@ -49,7 +52,7 @@ class CustomRadioField extends Component<IProps, IState> {
     }
 
     return (
-      <Label htmlFor={value} className={classNames.join(' ')}>
+      <Label htmlFor={value} className={classNames.join(' ')} data-cy={dataCy}>
         <HiddenInput
           id={value}
           name={name}

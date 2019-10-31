@@ -102,7 +102,6 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
   render() {
     const { user } = this.props
     const { lat, lng, zoom, editAddress, isOpen } = this.state
-    console.log('user pin ', user.location)
 
     return (
       <FlexSectionContainer>
@@ -120,6 +119,7 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
             Short description of your pin *
           </Text>
           <Field
+            data-cy="pin-description"
             name="mapPinDescription"
             component={TextAreaField}
             placeholder="We are shredding plastic in Plymouth, UK."

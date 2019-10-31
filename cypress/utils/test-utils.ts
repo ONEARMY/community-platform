@@ -1,5 +1,8 @@
 export enum Page {
   HOME_PAGE = '/how-to',
+  ACADEMY = '/academy',
+  EVENTS = '/events',
+  SETTINGS = '/settings',
 }
 
 export const generatedId = (length: number) => {

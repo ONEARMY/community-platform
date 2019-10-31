@@ -13,6 +13,12 @@ const fbConfig = {
   projectId: 'onearmy-test-ci',
   storageBucket: 'onearmy-test-ci.appspot.com',
 }
+
+export enum UserMenuItem {
+  Profile = 'Profile',
+  Settings = 'Settings',
+  LogOut = 'Log out',
+}
 firebase.initializeApp(fbConfig)
 /**
  * Clear all caches before any test is executed
@@ -41,9 +47,9 @@ declare global {
        * @param username
        * @param password
        */
-      completeLogin(username: string, password: string): Promise<void>
+      completeLogin(username: string, password: string): Chainable<void>
 
-      logout(): Promise<void>
+      logout(): Chainable<void>
 
       deleteDocuments(
         collectionName: string,
@@ -69,13 +75,15 @@ declare global {
 
       uploadFiles(filePath: string | string[])
 
-      toggleUserMenuOn(): Promise<void>
-      toggleUserMenuOff(): Promise<void>
+      toggleUserMenuOn(): Chainable<void>
+      toggleUserMenuOff(): Chainable<void>
 
       /**
        * Trigger form validation
        */
-      screenClick(): Promise<void>
+      screenClick(): Chainable<void>
+
+      clickMenuItem(menuItem: UserMenuItem): Chainable<void>
     }
   }
 }
@@ -83,8 +91,6 @@ declare global {
 const attachCustomCommands = (Cypress, fb: typeof firebase) => {
   let currentUser: null | firebase.User = null
   const firestore = new Firestore(fb.firestore())
-
-
 
   fb.auth().onAuthStateChanged(user => {
     currentUser = user
@@ -225,9 +231,21 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
     cy.get('[data-cy=header]').click({ force: true })
   })
 
+  Cypress.Commands.add('clickMenuItem', (menuItem: UserMenuItem) => {
+    Cypress.log({
+      displayName: 'CLICK_MENU_ITEM',
+      consoleProps: () => {
+        return { menuItem }
+      },
+    })
+    cy.toggleUserMenuOn()
+    cy.get('[data-cy=menu-item]').contains(menuItem).click()
+  })
+
   Cypress.Commands.add('screenClick', () => {
     cy.get('[data-cy=header]').click({ force: true })
   })
+
 }
 
 attachCustomCommands(Cypress, firebase)

@@ -1,6 +1,4 @@
 import styled from 'styled-components'
-import { Link as ExternalLink, Button } from 'rebass'
-import ImageTargetBlank from 'src/assets/icons/link-target-blank.svg'
 import React from 'react'
 import theme from 'src/themes/styled.theme'
 import { Box } from 'rebass'
@@ -40,7 +38,6 @@ export class MenuMobileExternalLink extends React.Component<IProps> {
         <PanelItem data-cy="mobile-menu-item">
           <LinkTargetBlank
             onClick={() => menu.toggleMobilePanel()}
-            target="_blank"
             id={id}
             href={this.props.href}
             style={{ color: theme.colors.silver, fontSize: theme.fontSizes[2] }}

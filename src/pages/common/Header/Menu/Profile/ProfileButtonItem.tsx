@@ -43,11 +43,11 @@ export class ProfileButtonItem extends React.Component<IProps> {
             onClick={() => this.props.isMobile && menu.toggleMobilePanel()}
             variant={this.props.variant}
             display={
-              this.props.isMobile === true
+              this.props.isMobile
                 ? ['flex', 'flex', 'none']
                 : ['none', 'none', 'flex']
             }
-            {...(this.props.isMobile === true
+            {...(this.props.isMobile
               ? { large: true }
               : { medium: true })}
             data-cy={this.props.text.toLowerCase()}

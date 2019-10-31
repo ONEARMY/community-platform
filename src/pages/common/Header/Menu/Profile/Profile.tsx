@@ -44,10 +44,6 @@ export default class Profile extends React.Component<IProps, IState> {
     this.setState({ showProfileModal: !this.state.showProfileModal })
   }
 
-  logout() {
-    this.injected.userStore.logout()
-  }
-
   render() {
     const user = this.injected.userStore.user
     const { showProfileModal } = this.state
@@ -71,9 +67,7 @@ export default class Profile extends React.Component<IProps, IState> {
                 path={'how-to'}
                 content={'Log out'}
                 style={{ color: theme.colors.silver }}
-                onClick={() => {
-                  this.logout()
-                }}
+                onClick={() => this.injected.userStore.logout()}
               />
             </MenuMobileLinkContainer>
           ) : (

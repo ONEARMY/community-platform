@@ -7,6 +7,7 @@ import { EventStore } from './Events/events.store'
 import { MapsStore } from './Maps/maps.store'
 import { DatabaseV2 } from './databaseV2'
 import { MobileMenuStore } from './MobileMenu/mobilemenu.store'
+import { AdminStore } from './Admin/admin.store'
 
 export class RootStore {
   dbV2 = new DatabaseV2()
@@ -29,6 +30,7 @@ const stores = (rootStore: RootStore) => {
     mobileMenuStore: new MobileMenuStore(rootStore),
     eventStore: new EventStore(rootStore),
     mapsStore: new MapsStore(rootStore),
+    adminStore: new AdminStore(rootStore),
   }
 }
 
@@ -41,4 +43,5 @@ export interface IStores {
   mobileMenuStore: MobileMenuStore
   eventStore: EventStore
   mapsStore: MapsStore
+  adminStore: AdminStore
 }

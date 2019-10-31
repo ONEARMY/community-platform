@@ -27,4 +27,4 @@ export interface IUser {
 }
 export type IUserDB = IUser & DBDoc
 
-export type UserRole = 'super-admin' | 'subscriber'
+export type UserRole = 'super-admin' | 'subscriber' | 'admin'

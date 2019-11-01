@@ -5,7 +5,7 @@ import { IUploadedFileMeta } from 'src/stores/storage'
 import { FileDetails } from './FileDetails'
 
 interface IProps {
-  file: File | IUploadedFileMeta
+  file: File | IUploadedFileMeta | null
   allowDownload?: boolean
 }
 interface IState {
@@ -17,8 +17,8 @@ export class FileInfo extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
-      glyph: this.getGlyph(props.file.type),
-      size: bytesToSize(props.file.size),
+      glyph: props.file ? this.getGlyph(props.file.type) : 'image',
+      size: props.file ? bytesToSize(props.file.size) : '0',
     }
   }
 
@@ -38,6 +38,11 @@ export class FileInfo extends React.Component<IProps, IState> {
     const { file, allowDownload } = this.props
     const { glyph, size } = this.state
     const meta = file as IUploadedFileMeta
+
+    if (!file) {
+      return null
+    }
+
     return (
       <>
         {allowDownload && meta.downloadUrl ? (

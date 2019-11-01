@@ -23,9 +23,7 @@ export const zIndex = {
   modalBackdrop: 9,
   modalContent: 10,
   slickArrows: 100,
-  modalContainer: 900,
-  modalContainerInner: 900,
-  modalLink: 900,
+  modalProfile: 900,
   logoContainer: 999,
   mapFlexBar: 99999,
 }

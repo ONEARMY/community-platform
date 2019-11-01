@@ -24,11 +24,11 @@ const ModalContainer = styled(Box)`
   position: absolute;
   right: 10px;
   top: 60px;
-  z-index: ${zIndex.modalContainer};
+  z-index: ${zIndex.modalProfile};
   height: 100%;
 `
 const ModalContainerInner = styled(Box)`
-  z-index: ${zIndex.modalContainerInner};
+  z-index: ${zIndex.modalProfile};
   position: relative;
   background: white;
   border: 2px solid black;
@@ -38,7 +38,7 @@ const ModalContainerInner = styled(Box)`
 const ModalLink = styled(NavLink).attrs(({ name }) => ({
   activeClassName: 'current',
 }))`
-  z-index: ${zIndex.modalLink};
+  z-index: ${zIndex.modalProfile};
   display: flex;
   flex-direction: column;
   color: #000;

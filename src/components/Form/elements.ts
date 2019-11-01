@@ -1,7 +1,9 @@
 import styled, { css } from 'styled-components'
 import theme from 'src/themes/styled.theme'
+import DatePicker from 'react-datepicker'
 interface IFormElement {
   invalid?: boolean
+  customChange?: (location) => void
 }
 export const inputStyles = ({ invalid }: IFormElement) => css`
   border: 1px solid ${invalid ? theme.colors.error : 'transparent'};
@@ -25,6 +27,12 @@ export const inputStyles = ({ invalid }: IFormElement) => css`
 `
 
 export const Input = styled.input<IFormElement>`
+  ${inputStyles};
+  height: 40px;
+  padding: 10px;
+`
+
+export const StyledDatePicker = styled(DatePicker)`
   ${inputStyles};
   height: 40px;
   padding: 10px;

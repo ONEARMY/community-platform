@@ -17,6 +17,7 @@ export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
   small?: boolean
   medium?: boolean
   large?: boolean
+  hasText?: boolean
 }
 export const small = (props: IBtnProps) =>
   props.small

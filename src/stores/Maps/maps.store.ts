@@ -1,37 +1,38 @@
 import { observable, action, toJS } from 'mobx'
-import { insideBoundingBox, getBoundingBox, LatLng } from 'geolocation-utils'
+import { insideBoundingBox, LatLng, BoundingBox } from 'geolocation-utils'
 
 import {
   IMapPin,
   IPinType,
   IMapPinDetail,
   IBoundingBox,
-  EntityType,
   IMapPinWithType,
+  IPinGrouping,
 } from 'src/models/maps.models'
-import { generatePinFilters, generatePins } from 'src/mocks/maps.mock'
-import { IUserDB } from 'src/models/user.models'
 import { IDBEndpoint } from 'src/models/common.models'
 import { RootStore } from '..'
 import { Subscription } from 'rxjs'
 import { ModuleStore } from '../common/module.store'
 import { getUserAvatar } from '../User/user.store'
+import { MAP_GROUPINGS } from './maps.groupings'
+import { generatePins, generatePinDetails } from 'src/mocks/maps.mock'
+
+// TODO - remove mock pins from store once integration complete
+const IS_MOCK = true
 
 export class MapsStore extends ModuleStore {
   mapEndpoint: IDBEndpoint = 'v2_mappins'
-  availablePinFilters = generatePinFilters()
+  availablePinFilters = MAP_GROUPINGS
   mapPins$: Subscription
   constructor(rootStore: RootStore) {
     super(rootStore)
   }
-  @observable
-  public mapBoundingBox: IBoundingBox = {
-    topLeft: { lat: -90, lng: -180 },
-    bottomRight: { lat: 90, lng: 180 },
-  }
 
   @observable
   public activePinFilters: Array<IPinType> = []
+
+  @observable
+  public activePin: IMapPin | IMapPinDetail | undefined = undefined
 
   @observable
   private mapPins: Array<IMapPinWithType> = []
@@ -45,9 +46,6 @@ export class MapsStore extends ModuleStore {
       this.mapPins = []
       return
     }
-
-    console.debug('processDBMapPins', pins)
-
     const filterMap = this.availablePinFilters.reduce(
       (accumulator, current) => {
         accumulator[current.name] = current
@@ -55,6 +53,13 @@ export class MapsStore extends ModuleStore {
       },
       {} as Record<string, IPinType>,
     )
+
+    // TODO - remove mock pins when integrated
+    if (IS_MOCK) {
+      {
+        pins = [...generatePins(250), ...pins]
+      }
+    }
 
     this.mapPins = pins.map(
       ({ _id, location, pinType, profileType, workspaceType }) => ({
@@ -65,41 +70,37 @@ export class MapsStore extends ModuleStore {
         workspaceType,
       }),
     )
-
     this.filteredPins = this.mapPins
   }
 
-  // Caching pinDetails in a map to reduce database calls. We don't want to cache
-  //  this using firebase since this data could change over time
-  private pinDetailCache: Map<string, IMapPinDetail> = new Map()
-  @observable
-  public pinDetail: IMapPinDetail | undefined = undefined
-
   @action
   public setMapBoundingBox(boundingBox: IBoundingBox) {
-    this.mapBoundingBox = boundingBox
-    this.recalculatePinCounts()
+    this.recalculatePinCounts(boundingBox)
   }
 
   @action
   public async retrieveMapPins() {
     // TODO: make the function accept a bounding box to reduce load from DB
-    // TODO: stream will force repeated recalculation of all pins on any update,
-    // really inefficient, should either remove stream or find way just to process new
     this.mapPins$ = this.db.collection<IMapPin>('v2_mappins').stream(pins => {
-      this.processDBMapPins(pins)
+      // TODO - make more efficient by tracking only new pins received and updating
+      if (pins.length !== this.mapPins.length) {
+        this.processDBMapPins(pins)
+      }
     })
   }
 
   @action
   public async retrievePinFilters() {
     // TODO: get from database
-    this.availablePinFilters = await generatePinFilters()
+    this.availablePinFilters = MAP_GROUPINGS
     this.activePinFilters = this.availablePinFilters.map(filter => filter)
   }
 
   @action
-  public async setActivePinFilters(grouping: EntityType, filters: Array<any>) {
+  public async setActivePinFilters(
+    grouping: IPinGrouping,
+    filters: Array<any>,
+  ) {
     if (filters.length === 0) {
       this.filteredPins = this.mapPins
       return
@@ -120,17 +121,20 @@ export class MapsStore extends ModuleStore {
     this.filteredPins = mapPins
   }
 
+  /**
+   * Set the location and id of current active pin, and automatically
+   * generate full pin details from database
+   * @param pin - map pin meta containing location and id for detail lookup
+   */
   @action
-  public async getPinDetails(pin: IMapPin): Promise<IMapPinDetail> {
-    if (!this.pinDetailCache.has(pin._id)) {
-      // get from db if not already in cache. note map ids match with user ids
-      const pinDetail = await this.getUserProfilePin(pin._id)
-      this.pinDetailCache.set(pin._id, { ...pin, ...pinDetail })
-      const foundPinDetails = this.getPinDetails(pin)
-      return foundPinDetails
+  public async setActivePin(pin?: IMapPin) {
+    this.activePin = pin
+    if (pin) {
+      const pinDetail = IS_MOCK
+        ? generatePinDetails(pin)
+        : await this.getUserProfilePin(pin._id)
+      this.activePin = { ...pin, ...pinDetail }
     }
-    this.pinDetail = this.pinDetailCache.get(pin._id)
-    return toJS(this.pinDetail as IMapPinDetail)
   }
 
   // get base pin geo information
@@ -145,7 +149,6 @@ export class MapsStore extends ModuleStore {
   // add new pin or update existing
   public async setPin(pin: IMapPin) {
     // generate standard doc meta
-    console.debug('setting pin', pin)
     return this.db
       .collection('v2_mappins')
       .doc(pin._id)
@@ -153,18 +156,12 @@ export class MapsStore extends ModuleStore {
   }
 
   public removeSubscriptions() {
-    this.mapPins$.unsubscribe()
+    if (this.mapPins$) {
+      this.mapPins$.unsubscribe()
+    }
   }
 
-  private recalculatePinCounts() {
-    const boundingBox = getBoundingBox(
-      [
-        this.mapBoundingBox.topLeft as LatLng,
-        this.mapBoundingBox.bottomRight as LatLng,
-      ],
-      0,
-    )
-
+  private recalculatePinCounts(boundingBox: BoundingBox) {
     const pinTypeMap = this.availablePinFilters.reduce(
       (accumulator, current) => {
         current.count = 0
@@ -186,7 +183,6 @@ export class MapsStore extends ModuleStore {
   // return subset of profile info used when displaying map pins
   private async getUserProfilePin(username: string) {
     const u: any = await this.userStore.getUserProfile(username)
-
     if (!u) {
       return {
         heroImageUrl: '',
@@ -197,8 +193,6 @@ export class MapsStore extends ModuleStore {
         profileUrl: `${location.origin}/u/${username}`,
       }
     }
-
-    console.debug('user profile retrieved', u)
     const avatar = getUserAvatar(username)
     let heroImageUrl = ''
     if (u.coverImages && u.coverImages.length > 0) {

@@ -7,15 +7,22 @@ import { Flex } from 'rebass'
 
 import { GroupingFilter } from './GroupingFilter'
 
-import { IPinType, EntityType } from 'src/models/maps.models'
+import { IPinType, IPinGrouping } from 'src/models/maps.models'
 import { HashLink } from 'react-router-hash-link'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { Map } from 'react-leaflet'
+import { ILocation } from 'src/models/common.models'
+import { inject } from 'mobx-react'
+import { MapsStore } from 'src/stores/Maps/maps.store'
 
 interface IProps {
-  map: any
+  mapRef: React.RefObject<Map>
   availableFilters: Array<IPinType>
-  onFilterChange: (grouping: EntityType, filters: Array<IPinType>) => void
-  onLocationChange: (selectedLocation) => void
+  onFilterChange: (grouping: IPinGrouping, filters: Array<IPinType>) => void
+  onLocationChange: (selectedLocation: ILocation) => void
+}
+interface IInjectedProps extends IProps {
+  mapsStore: MapsStore
 }
 
 const SearchWrapper = styled.div`
@@ -28,7 +35,7 @@ const MapFlexBar = styled(Flex)`
   position: absolute;
   top: 25px;
   width: 100%;
-  z-index: 99999;
+  z-index: 3;
   left: 50%;
   transform: translateX(-50%);
 `
@@ -36,10 +43,13 @@ const MapFlexBar = styled(Flex)`
 const FlexSpacer = styled.div`
   flex: 1;
 `
-
+@inject('mapsStore')
 class Controls extends React.Component<IProps> {
   constructor(props) {
     super(props)
+  }
+  get injected() {
+    return this.props as IInjectedProps
   }
 
   public render() {
@@ -53,20 +63,22 @@ class Controls extends React.Component<IProps> {
         accumulator[grouping].push(current)
         return accumulator
       },
-      {} as Record<EntityType, Array<IPinType>>,
+      {} as Record<IPinGrouping, Array<IPinType>>,
     )
 
     return (
       <MapFlexBar
-        px={[2, 3, 4]}
+        data-cy="map-controls"
+        ml="50px"
         py={1}
         onClick={() => {
-          // this.props.map.current.leafletElement.closePopup()
+          // close any active popup on click
+          this.injected.mapsStore.setActivePin(undefined)
         }}
       >
         <SearchWrapper>
           <LocationSearch
-            onChange={location => {
+            onChange={(location: ILocation) => {
               this.props.onLocationChange(location)
             }}
           />
@@ -77,8 +89,7 @@ class Controls extends React.Component<IProps> {
             entityType={grouping}
             items={groupedFilters[grouping]}
             onChange={options => {
-              this.props.onFilterChange(grouping as EntityType, options)
-              this.props.map.current.leafletElement.closePopup()
+              this.props.onFilterChange(grouping as IPinGrouping, options)
             }}
           />
         ))}

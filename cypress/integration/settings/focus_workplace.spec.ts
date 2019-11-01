@@ -99,11 +99,17 @@ describe('[Settings]', () => {
 
       cy.step('Update Contact Links')
       cy.get('[data-cy=select-link-0]').click()
-      cy.get('[data-cy=select-link-0]').contains('email').click()
-      cy.get('[data-cy=input-link-0]').type(`${freshSettings.userName}@test.com`)
+      cy.get('[data-cy=select-link-0]')
+        .contains('email')
+        .click()
+      cy.get('[data-cy=input-link-0]').type(
+        `${freshSettings.userName}@test.com`,
+      )
       cy.get('[data-cy=add-link]').click()
       cy.get('[data-cy=select-link-1]').click()
-      cy.get('[data-cy=select-link-1]').contains('website').click()
+      cy.get('[data-cy=select-link-1]')
+        .contains('website')
+        .click()
       cy.get('[data-cy=input-link-1]').type(`www.${freshSettings.userName}.com`)
 
       cy.step('Update Map section')

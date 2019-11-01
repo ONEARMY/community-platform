@@ -85,7 +85,11 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             <Text mb={2} mt={7} medium>
               Where are you based? *
             </Text>
-            <FlagSelectContainer width={1} alignItems="center" data-cy="country">
+            <FlagSelectContainer
+              width={1}
+              alignItems="center"
+              data-cy="country"
+            >
               <Field
                 name="country"
                 component={FlagSelector}

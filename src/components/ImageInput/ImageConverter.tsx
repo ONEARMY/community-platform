@@ -23,10 +23,11 @@ const imageSizes = {
 }
 
 const PreviewImage = styled(Flex)`
+  height: 100%;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  height: 100px;
+  height: 100%;
   width: 100%;
   border-radius: 5px;
   border: 1px solid #ececec;
@@ -86,17 +87,19 @@ export class ImageConverter extends React.Component<IProps, IState> {
   render() {
     const { convertedFile } = this.state
 
-    return convertedFile ? (
-      <Flex px={1} width={1 / 4}>
-        <PreviewImage
-          style={{
-            backgroundImage: `url(${convertedFile.objectUrl})`,
-          }}
-          id="preview"
-          onClick={() => this.props.onImgClicked(convertedFile)}
-        />
-      </Flex>
-    ) : null
+    if (!convertedFile) {
+      return null
+    }
+
+    return (
+      <PreviewImage
+        style={{
+          backgroundImage: `url(${convertedFile.objectUrl})`,
+        }}
+        id="preview"
+        onClick={() => this.props.onImgClicked(convertedFile)}
+      />
+    )
   }
 }
 ImageConverter.defaultProps = {

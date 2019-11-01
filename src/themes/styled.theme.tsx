@@ -13,6 +13,7 @@ export const colors = {
   green: '#00c3a9',
   error: 'red',
   background: '#f4f6f7',
+  silver: '#c0c0c0',
 }
 
 export type ButtonVariants =

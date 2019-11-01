@@ -1,3 +1,5 @@
+import { UserMenuItem } from '../support/commands'
+
 describe('[Common]', () =>{
   it('[Default Page]', () => {
     cy.step('The home page is /how-to')
@@ -65,19 +67,16 @@ describe('[Common]', () =>{
       cy.get('[data-cy=user-menu-list]').should('not.exist')
 
       cy.step('Go to Profile')
-      cy.toggleUserMenuOn()
-      cy.get('[data-cy=menu-item]').contains('Profile').click()
+      cy.clickMenuItem(UserMenuItem.Profile)
       cy.url().should('include', `/u/${username}`)
 
       cy.step('Go to Settings')
-      cy.toggleUserMenuOn()
-      cy.get('[data-cy=menu-item]').contains('Settings').click()
+      cy.clickMenuItem(UserMenuItem.Settings)
       cy.url().should('include', 'settings')
 
       cy.step('Logout the session')
       cy.step('Logout')
-      cy.toggleUserMenuOn()
-      cy.get('[data-cy=menu-item]').contains('Log out').click()
+      cy.clickMenuItem(UserMenuItem.LogOut)
       cy.get('[data-cy=login]').should('be.visible')
       cy.get('[data-cy=join]').should('be.visible')
     })

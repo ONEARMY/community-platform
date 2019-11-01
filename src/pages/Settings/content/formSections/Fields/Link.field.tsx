@@ -43,14 +43,16 @@ class Link extends Component<IProps, IState> {
     return (
       <Flex key={index}>
         <Field
+          data-cy={`select-link-${index}`}
           name={`${link}.label`}
           options={COM_TYPE_MOCKS}
           component={SelectField}
           placeholder="type"
           style={{ width: '160px', marginRight: '8px' }}
         />
-        <Field name={`${link}.url`} component={InputField} placeholder="Link" />
+        <Field data-cy={`input-link-${index}`} name={`${link}.url`} component={InputField} placeholder="Link" />
         <Button
+          data-cy={`delete-link-${index}`}
           icon={'delete'}
           variant={'tertiary'}
           onClick={() => this.toggleDeleteModal()}

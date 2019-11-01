@@ -212,6 +212,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                     <EditProfileGuidelines />
                   )}
                   <Button
+                    data-cy="save"
                     onClick={() => {
                       const form = document.getElementById('userProfileForm')
                       if (typeof form !== 'undefined' && form !== null) {

@@ -47,9 +47,7 @@ export class ProfileButtonItem extends React.Component<IProps> {
                 ? ['flex', 'flex', 'none']
                 : ['none', 'none', 'flex']
             }
-            {...(this.props.isMobile
-              ? { large: true }
-              : { medium: true })}
+            {...(this.props.isMobile ? { large: true } : { medium: true })}
             data-cy={this.props.text.toLowerCase()}
             style={this.props.style}
           >

@@ -6,6 +6,7 @@ import LogoImage from 'src/assets/images/logo.svg'
 import MobileLogoImage from 'src/assets/images/logo-mobile.svg'
 import LogoBackground from 'src/assets/images/logo-background.svg'
 import Text from 'src/components/Text'
+import { zIndex } from 'src/themes/styled.theme'
 
 interface IProps {
   isMobile?: boolean
@@ -16,7 +17,18 @@ const LogoContainer = styled(Flex)`
   width: 200px;
   align-items: center;
   position: relative;
-
+  &:before {
+    content: '';
+    position: absolute;
+    background-image: url(${LogoBackground});
+    width: 250px;
+    height: 70px;
+    z-index: ${zIndex.logoContainer};
+    background-size: contain;
+    background-repeat: no-repeat;
+    top: 0;
+    left: 0px;
+  }
   @media only screen and (max-width: ${theme.breakpoints[1]}) {
     &:before {
       left: -50px;

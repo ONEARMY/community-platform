@@ -156,7 +156,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                         card
                         mediumRadius
                         bg={'white'}
-                        mt={5}
+                        mt={3}
                         p={4}
                         flexWrap="wrap"
                         flexDirection="column"
@@ -269,7 +269,6 @@ export class HowtoForm extends React.Component<IProps, IState> {
                                     />
                                   ))}
                                   <Button
-                                    small
                                     variant={'tertiary'}
                                     icon="delete"
                                     onClick={() =>

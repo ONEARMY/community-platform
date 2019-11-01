@@ -22,22 +22,21 @@ export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
 export const small = (props: IBtnProps) =>
   props.small
     ? {
-        padding: '8px 10px',
-        fontSize: '12px',
+        padding: '4px 10px!important',
       }
     : null
 
 export const medium = (props: IBtnProps) =>
   props.medium
     ? {
-        padding: '10px',
+        padding: '6px 12px!important',
       }
     : null
 
 export const large = (props: IBtnProps) =>
   props.large
     ? {
-        padding: '10px',
+        padding: '8px 14px!important',
       }
     : null
 

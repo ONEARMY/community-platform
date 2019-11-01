@@ -239,13 +239,14 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
       },
     })
     cy.toggleUserMenuOn()
-    cy.get('[data-cy=menu-item]').contains(menuItem).click()
+    cy.get('[data-cy=menu-item]')
+      .contains(menuItem)
+      .click()
   })
 
   Cypress.Commands.add('screenClick', () => {
     cy.get('[data-cy=header]').click({ force: true })
   })
-
 }
 
 attachCustomCommands(Cypress, firebase)

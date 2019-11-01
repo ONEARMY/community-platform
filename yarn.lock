@@ -2546,6 +2546,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-hamburger-menu@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@types/react-hamburger-menu/-/react-hamburger-menu-0.0.3.tgz#f956f8e3b0eb45e57c85ad3b22c2f968b8798612"
+  integrity sha512-JScOY0iQxK0H8Y/DjFxhM2FOnDTp5h+V2BFgaSQOzWmREtQkD1elikV7du3OcVQ0CLScgpnlpIrY0XGfP+d/2g==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-leaflet@^1.1.6":
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/@types/react-leaflet/-/react-leaflet-1.9.0.tgz#3d702b8ad1e38c25e2b5ecdf79fa53c7705cc2da"
@@ -14664,6 +14671,11 @@ react-ga@^2.5.7:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/react-ga/-/react-ga-2.6.0.tgz#c3fe830ead2ad25117e1d33280d9698de9b28496"
   integrity sha512-GWHBWZDFjDGMkIk1LzroIn0mNTygKw3adXuqvGvheFZvlbpqMPbHsQsTdQBIxRRdXGQM/Zq+dQLRPKbwIHMTaw==
+
+react-hamburger-menu@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-hamburger-menu/-/react-hamburger-menu-1.1.1.tgz#36fb5d38b55f3babb472f94f8cc3640345bfa9ae"
+  integrity sha512-uBmRe8UTmmNsuqKx/Z4H9SnWEa7Wok0ZAzvtfrLgTY2NimLI3lvaPUP/i8q2rfIHfP2gH9u8ltP+YunCHciHdQ==
 
 react-helmet-async@^1.0.2:
   version "1.0.2"

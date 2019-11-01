@@ -75,7 +75,6 @@ export class OpeningHoursPicker extends React.Component<IProps, IState> {
             <Flex p={0} mx={-1} justifyContent="flex-end">
               <Flex px={1}>
                 <Button
-                  small
                   variant={'outline'}
                   onClick={() => this.toggleDeleteModal()}
                 >
@@ -84,7 +83,6 @@ export class OpeningHoursPicker extends React.Component<IProps, IState> {
               </Flex>
               <Flex px={1}>
                 <Button
-                  small
                   variant={'tertiary'}
                   onClick={() => this.confirmDelete()}
                 >

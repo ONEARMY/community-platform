@@ -6,7 +6,7 @@ import { inject, observer } from 'mobx-react'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
 import { NavLink } from 'react-router-dom'
 import Flex from 'src/components/Flex'
-import theme from 'src/themes/styled.theme'
+import theme, { zIndex } from 'src/themes/styled.theme'
 
 interface IProps {
   username: string
@@ -24,11 +24,11 @@ const ModalContainer = styled(Box)`
   position: absolute;
   right: 10px;
   top: 60px;
-  z-index: 900;
+  z-index: ${zIndex.modalContainer};
   height: 100%;
 `
-const ModalContent = styled(Box)`
-  z-index: 900;
+const ModalContainerInner = styled(Box)`
+  z-index: ${zIndex.modalContainerInner};
   position: relative;
   background: white;
   border: 2px solid black;
@@ -38,7 +38,7 @@ const ModalContent = styled(Box)`
 const ModalLink = styled(NavLink).attrs(({ name }) => ({
   activeClassName: 'current',
 }))`
-  z-index: 900;
+  z-index: ${zIndex.modalLink};
   display: flex;
   flex-direction: column;
   color: #000;
@@ -80,7 +80,7 @@ export class ProfileModal extends React.Component<IProps> {
     const { username } = this.props
     return (
       <ModalContainer data-cy="user-menu-list">
-        <ModalContent>
+        <ModalContainerInner>
           <Flex>
             <ModalLink to={'/u/' + username} data-cy="menu-item">
               <Flex>Profile</Flex>
@@ -94,11 +94,15 @@ export class ProfileModal extends React.Component<IProps> {
             ))}
           </Flex>
           <Flex>
-            <ModalLink onClick={() => this.logout()} to={'/how-to'} data-cy="menu-item">
+            <ModalLink
+              onClick={() => this.logout()}
+              to={'/how-to'}
+              data-cy="menu-item"
+            >
               <Flex color="rgba(27,27,27,0.5)">Log out</Flex>
             </ModalLink>
           </Flex>
-        </ModalContent>
+        </ModalContainerInner>
       </ModalContainer>
     )
   }

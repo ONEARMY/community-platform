@@ -12,6 +12,7 @@ import { HashLink } from 'react-router-hash-link'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { Map } from 'react-leaflet'
 import { ILocation } from 'src/models/common.models'
+import { zIndex } from 'src/themes/styled.theme'
 
 interface IProps {
   mapRef: React.RefObject<Map>
@@ -30,7 +31,7 @@ const MapFlexBar = styled(Flex)`
   position: absolute;
   top: 25px;
   width: 100%;
-  z-index: 99999;
+  z-index: ${zIndex.mapFlexBar};
   left: 50%;
   transform: translateX(-50%);
 `

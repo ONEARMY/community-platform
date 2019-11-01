@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import LogoImage from 'src/assets/images/logo.svg'
 import LogoBackground from 'src/assets/images/logo-background.svg'
 import Text from 'src/components/Text'
+import { zIndex } from 'src/themes/styled.theme'
 
 const LogoContainer = styled(Flex)`
   height: 60px;
@@ -17,7 +18,7 @@ const LogoContainer = styled(Flex)`
     background-image: url(${LogoBackground});
     width: 250px;
     height: 70px;
-    z-index: 999;
+    z-index: ${zIndex.logoContainer};
     background-size: contain;
     background-repeat: no-repeat;
     top: 0;

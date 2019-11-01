@@ -9,6 +9,7 @@ import ImageTargetBlank from 'src/assets/icons/link-target-blank.svg'
 import { IEvent } from '../../models/events.models'
 import { getMonth, getDay } from 'src/utils/helpers'
 import Heading from 'src/components/Heading'
+import { zIndex } from 'src/themes/styled.theme'
 
 const GoToEventLink = styled(ExternalLink)`
   padding-right: 30px;
@@ -18,7 +19,7 @@ const GoToEventLink = styled(ExternalLink)`
     background-image: url(${ImageTargetBlank});
     width: 20px;
     height: 20px;
-    z-index: 0;
+    z-index: ${zIndex.level};
     background-size: contain;
     background-repeat: no-repeat;
     position: absolute;

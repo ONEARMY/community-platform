@@ -17,6 +17,7 @@ import styled from 'styled-components'
 import Icon from 'src/components/Icons'
 import Flex from 'src/components/Flex'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
+import { zIndex } from 'src/themes/styled.theme'
 
 import theme from 'src/themes/styled.theme'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
@@ -78,7 +79,7 @@ interface IProps {}
 const UserCategory = styled.div`
   position: relative;
   display: inline-block;
-  z-index: 1;
+  z-index: ${zIndex.level};
 
   &:after {
     content: '';
@@ -87,7 +88,7 @@ const UserCategory = styled.div`
     position: absolute;
     top: 0;
 
-    z-index: -1;
+    z-index: ${zIndex.behind};
     background-repeat: no-repeat;
     background-size: contain;
     left: 0;

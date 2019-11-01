@@ -34,7 +34,7 @@ interface IState {
 const customMarker = L.icon({
   iconUrl: require('src/assets/icons/map-marker.png'),
   iconSize: [20, 28],
-  iconAnchor: [20, 56],
+  iconAnchor: [10, 28],
 })
 
 // const DEFAULT_PIN_TYPE: string = 'member'

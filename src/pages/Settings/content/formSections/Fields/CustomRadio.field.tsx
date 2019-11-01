@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import { InputField } from 'src/components/Form/Fields'
 import { Label, HiddenInput } from '../elements'
 import { Image, Flex } from 'rebass'
 import Text from 'src/components/Text'
-import { ProfileTypeLabel } from 'src/models/user_pp.models'
+import { HiddenInputField } from 'src/components/Form/Fields'
 
 interface IProps {
   value: string
@@ -14,13 +13,14 @@ interface IProps {
   subText?: string
   name: string
   fullWidth?: boolean
+  required?: boolean
 }
 interface IState {
   showDeleteModal: boolean
 }
 
 // validation - return undefined if no error (i.e. valid)
-const required = (value: any) => (value ? undefined : 'Required')
+const isRequired = (value: any) => (value ? undefined : 'Required')
 
 class CustomRadioField extends Component<IProps, IState> {
   constructor(props: IProps) {
@@ -39,6 +39,7 @@ class CustomRadioField extends Component<IProps, IState> {
       subText,
       name,
       fullWidth,
+      required,
     } = this.props
     const classNames: Array<string> = []
     if (isSelected) {
@@ -55,8 +56,9 @@ class CustomRadioField extends Component<IProps, IState> {
           name={name}
           value={value}
           type="radio"
-          component={InputField}
+          component={HiddenInputField}
           checked={isSelected}
+          validate={required ? isRequired : undefined}
           onChange={v => {
             this.props.onChange(v.target.value)
           }}

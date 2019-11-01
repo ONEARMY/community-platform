@@ -44,6 +44,8 @@ interface IState {
   user: IUserPP
   showNotification: boolean
   showDeleteDialog?: boolean
+  isFocusSelected: boolean
+  isWTSelected: boolean
 }
 
 @inject('userStore')
@@ -57,6 +59,8 @@ export class UserSettings extends React.Component<IProps, IState> {
       customFormValues: user ? user : {},
       showNotification: false,
       user: props.user,
+      isFocusSelected: user ? true : false,
+      isWTSelected: true,
     }
   }
 
@@ -81,10 +85,18 @@ export class UserSettings extends React.Component<IProps, IState> {
       },
     })
   }
+  public checkSubmitErrors() {
+    if (!this.state.customFormValues.profileType) {
+      this.setState({ isFocusSelected: false })
+    }
+    if (!this.state.customFormValues.workspaceType) {
+      this.setState({ isWTSelected: false })
+    }
+  }
 
   render() {
     const user = this.injected.userStore.user!
-    const { customFormValues } = this.state
+    const { customFormValues, isFocusSelected, isWTSelected } = this.state
     const readOnly = !this.state.editMode
     // Need to convert mobx observable user object into a Javasrcipt structure using toJS fn
     // to allow final-form-array to display the initial values
@@ -124,14 +136,16 @@ export class UserSettings extends React.Component<IProps, IState> {
                       </Flex>
                       <FocusSection
                         user={user}
-                        onInputChange={v =>
+                        onInputChange={v => {
                           this.setState({
                             customFormValues: {
                               ...this.state.customFormValues,
                               profileType: v,
                             },
+                            isFocusSelected: true,
                           })
-                        }
+                        }}
+                        showSubmitErrors={!isFocusSelected}
                       />
                       {customFormValues.profileType === 'workspace' && (
                         <>
@@ -143,8 +157,10 @@ export class UserSettings extends React.Component<IProps, IState> {
                                   ...this.state.customFormValues,
                                   workspaceType: v,
                                 },
+                                isWTSelected: true,
                               })
                             }
+                            showSubmitErrors={!isWTSelected}
                           />
                           <UserInfosSection user={user} />
                           <UserMapPinSection
@@ -218,15 +234,14 @@ export class UserSettings extends React.Component<IProps, IState> {
                         form.dispatchEvent(
                           new Event('submit', { cancelable: true }),
                         )
+                        this.checkSubmitErrors()
                       }
                     }}
                     width={1}
                     mt={3}
-                    variant={disabled ? 'primary' : 'primary'}
+                    variant={'primary'}
                     type="submit"
-                    disabled={
-                      !customFormValues.profileType || submitting || invalid
-                    }
+                    disabled={submitting}
                   >
                     Save profile
                   </Button>

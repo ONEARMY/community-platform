@@ -8,10 +8,12 @@ import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { WORKSPACE_TYPES } from 'src/mocks/user_pp.mock'
 import { CustomRadioField } from './Fields/CustomRadio.field'
 import { WorkspaceType, IUserPP } from 'src/models/user_pp.models'
+import theme from 'src/themes/styled.theme'
 
 interface IProps {
   onInputChange: (inputValue: WorkspaceType) => void
   user: IUserPP
+  showSubmitErrors: boolean
 }
 interface IState {
   checkedFocusValue?: string
@@ -37,6 +39,7 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
   render() {
     const { user } = this.props
     const { isOpen } = this.state
+    const { showSubmitErrors } = this.props
     return (
       <FlexSectionContainer>
         <Flex justifyContent="space-between">
@@ -66,6 +69,11 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
               />
             ))}
           </Flex>
+          {showSubmitErrors && (
+            <Text color={theme.colors.red}>
+              Please select your workspace type
+            </Text>
+          )}
         </Box>
       </FlexSectionContainer>
     )

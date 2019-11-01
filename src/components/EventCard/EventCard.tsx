@@ -1,32 +1,11 @@
 import React from 'react'
-import { Link as ExternalLink, Button } from 'rebass'
 import Flex from 'src/components/Flex'
 import Text from 'src/components/Text'
-import styled from 'styled-components'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import FlagIconEvents from 'src/components/Icons/FlagIcon/FlagIcon'
-import ImageTargetBlank from 'src/assets/icons/link-target-blank.svg'
 import { IEvent } from '../../models/events.models'
 import { getMonth, getDay } from 'src/utils/helpers'
-import Heading from 'src/components/Heading'
-import { zIndex } from 'src/themes/styled.theme'
-
-const GoToEventLink = styled(ExternalLink)`
-  padding-right: 30px;
-  position: relative;
-  &:after {
-    content: '';
-    background-image: url(${ImageTargetBlank});
-    width: 20px;
-    height: 20px;
-    z-index: ${zIndex.level};
-    background-size: contain;
-    background-repeat: no-repeat;
-    position: absolute;
-    top: -5px;
-    right: 0px;
-  }
-`
+import { LinkTargetBlank } from '../Links/LinkTargetBlank/LinkTargetBlank'
 
 interface IProps {
   event: IEvent
@@ -125,17 +104,11 @@ export const EventCard = (props: IProps) => (
       flex={'1'}
       order={[5, 5, 5]}
     >
-      <GoToEventLink
-        target="_blank"
-        href={props.event.url}
-        color={'black'}
-        mr={1}
-        width={1}
-      >
+      <LinkTargetBlank href={props.event.url} color={'black'} mr={1} width={1}>
         <Text auxiliary width={1} txtRight>
           Go to event
         </Text>
-      </GoToEventLink>
+      </LinkTargetBlank>
     </Flex>
   </Flex>
 )

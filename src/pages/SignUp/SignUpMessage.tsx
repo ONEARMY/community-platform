@@ -65,7 +65,7 @@ export class SignUpMessagePage extends React.Component {
           </Flex>
           <Flex mt={3} justifyContent={'flex-end'}>
             <Link to={'/'}>
-              <Button variant="secondary" small data-cy="home">
+              <Button variant="secondary" data-cy="home">
                 Home
               </Button>
             </Link>

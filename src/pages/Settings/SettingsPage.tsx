@@ -124,14 +124,14 @@ export class UserSettings extends React.Component<IProps, IState> {
                       </Flex>
                       <FocusSection
                         user={user}
-                        onInputChange={v =>
+                        onInputChange={v => {
                           this.setState({
                             customFormValues: {
                               ...this.state.customFormValues,
                               profileType: v,
                             },
                           })
-                        }
+                        }}
                       />
                       {customFormValues.profileType === 'workspace' && (
                         <>
@@ -212,6 +212,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                     <EditProfileGuidelines />
                   )}
                   <Button
+                    data-cy="save"
                     onClick={() => {
                       const form = document.getElementById('userProfileForm')
                       if (typeof form !== 'undefined' && form !== null) {
@@ -222,11 +223,9 @@ export class UserSettings extends React.Component<IProps, IState> {
                     }}
                     width={1}
                     mt={3}
-                    variant={disabled ? 'primary' : 'primary'}
+                    variant={'primary'}
                     type="submit"
-                    disabled={
-                      !customFormValues.profileType || submitting || invalid
-                    }
+                    disabled={submitting}
                   >
                     Save profile
                   </Button>

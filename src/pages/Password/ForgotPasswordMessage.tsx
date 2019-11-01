@@ -55,9 +55,7 @@ export class ForgotPasswordMessagePage extends React.Component {
             </Flex>
           </Flex>
           <Flex mt={3} justifyContent={'flex-end'}>
-            <Button variant="tertiary" small>
-              Close
-            </Button>
+            <Button variant="tertiary">Close</Button>
           </Flex>
         </Flex>
       </Flex>

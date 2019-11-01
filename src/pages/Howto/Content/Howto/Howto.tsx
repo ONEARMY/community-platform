@@ -42,7 +42,7 @@ const MoreBox = styled(Box)`
     background-image: url(${WhiteBubble0});
     width: 100%;
     height: 100%;
-    z-index: ${zIndex.back};
+    z-index: ${zIndex.behind};
     background-size: contain;
     background-repeat: no-repeat;
     position: absolute;

@@ -13,12 +13,17 @@ import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { Map } from 'react-leaflet'
 import { ILocation } from 'src/models/common.models'
 import { zIndex } from 'src/themes/styled.theme'
+import { inject } from 'mobx-react'
+import { MapsStore } from 'src/stores/Maps/maps.store'
 
 interface IProps {
   mapRef: React.RefObject<Map>
   availableFilters: Array<IPinType>
   onFilterChange: (grouping: IPinGrouping, filters: Array<IPinType>) => void
   onLocationChange: (selectedLocation: ILocation) => void
+}
+interface IInjectedProps extends IProps {
+  mapsStore: MapsStore
 }
 
 const SearchWrapper = styled.div`
@@ -39,10 +44,13 @@ const MapFlexBar = styled(Flex)`
 const FlexSpacer = styled.div`
   flex: 1;
 `
-
+@inject('mapsStore')
 class Controls extends React.Component<IProps> {
   constructor(props) {
     super(props)
+  }
+  get injected() {
+    return this.props as IInjectedProps
   }
 
   public render() {
@@ -61,10 +69,12 @@ class Controls extends React.Component<IProps> {
 
     return (
       <MapFlexBar
-        px={[2, 3, 4]}
+        data-cy="map-controls"
+        ml="50px"
         py={1}
         onClick={() => {
-          // this.props.map.current.leafletElement.closePopup()
+          // close any active popup on click
+          this.injected.mapsStore.setActivePin(undefined)
         }}
       >
         <SearchWrapper>
@@ -81,7 +91,6 @@ class Controls extends React.Component<IProps> {
             items={groupedFilters[grouping]}
             onChange={options => {
               this.props.onFilterChange(grouping as IPinGrouping, options)
-              this.props.mapRef.current!.leafletElement.closePopup()
             }}
           />
         ))}

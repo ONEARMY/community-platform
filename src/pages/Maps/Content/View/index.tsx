@@ -72,9 +72,8 @@ class MapView extends React.Component<IProps> {
         center={[center.lat, center.lng]}
         zoom={zoom}
         maxZoom={18}
-        style={{ height: '100%' }}
+        style={{ height: '100%', zIndex: 0 }}
         onmove={this.handleMove}
-        onresize={() => console.log('resize called')}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

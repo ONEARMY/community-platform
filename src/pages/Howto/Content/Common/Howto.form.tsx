@@ -422,7 +422,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                       mt={3}
                       variant={disabled ? 'primary' : 'primary'}
                       type="submit"
-                      disabled={submitting || invalid}
+                      disabled={submitting}
                     >
                       {this.props.parentType === 'create' ? (
                         <span>Publish</span>

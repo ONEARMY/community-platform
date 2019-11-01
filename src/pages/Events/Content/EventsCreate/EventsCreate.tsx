@@ -4,7 +4,7 @@ import { Form, Field } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import TEMPLATE from './Template'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
-import { InputField } from 'src/components/Form/Fields'
+import { InputField, DatePickerField } from 'src/components/Form/Fields'
 import { Button } from 'src/components/Button'
 import { EventStore } from 'src/stores/Events/events.store'
 import Heading from 'src/components/Heading'
@@ -16,9 +16,6 @@ import { IEvent, IEventFormInput } from 'src/models/events.models'
 import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
-import './EventsCreate.css'
 
 interface IState {
   formValues: IEventFormInput
@@ -77,7 +74,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
     return this.store.validateUrl(value)
   }
 
-  handleChange = (date: any) => {
+  public handleChange = (date: any) => {
     this.setState({
       selectedDate: date,
     })
@@ -112,7 +109,13 @@ export class EventsCreate extends React.Component<IProps, IState> {
                 <FormContainer onSubmit={e => e.preventDefault()}>
                   {/* How To Info */}
                   <Flex flexDirection={'column'}>
-                    <Flex card mediumRadius bg={'softblue'} px={3} py={2}>
+                    <Flex
+                      card
+                      mediumRadius
+                      bg={theme.colors.softblue}
+                      px={3}
+                      py={2}
+                    >
                       <Heading medium>Create an event</Heading>
                     </Flex>
                     <Flex
@@ -145,18 +148,25 @@ export class EventsCreate extends React.Component<IProps, IState> {
                         width={1}
                         flexDirection={['column', 'column', 'row']}
                       >
-                        <Flex flexDirection={'column'} mb={3} px={2} width={1} data-cy="date">
+                        <Flex
+                          flexDirection={'column'}
+                          mb={3}
+                          px={2}
+                          width={1}
+                          data-cy="date"
+                        >
                           <Label htmlFor="location">
                             When is your event taking place? *
                           </Label>
-                          <DatePicker
+                          <Field
                             className="datepicker"
+                            component={DatePickerField}
                             name="date"
                             type="date"
                             dateFormat="yyyy/MM/dd"
                             validate={required}
                             selected={this.state.selectedDate}
-                            onChange={this.handleChange}
+                            customChange={date => this.handleChange(date)}
                             placeholderText="yyyy/mm/dd"
                           />
                         </Flex>
@@ -224,8 +234,8 @@ export class EventsCreate extends React.Component<IProps, IState> {
                   onClick={() => handleSubmit()}
                   width={1}
                   mt={3}
-                  variant={disabled ? 'primary' : 'primary'}
-                  disabled={submitting || invalid}
+                  variant={'primary'}
+                  disabled={submitting}
                   data-cy="submit"
                 >
                   Publish

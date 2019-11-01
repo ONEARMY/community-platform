@@ -11,9 +11,9 @@ interface IProps {
 }
 
 interface IState {
-  activeImage: IUploadedFileMeta
+  activeImage: IUploadedFileMeta | null
   showLightbox: boolean
-  imagesList: string[]
+  images: Array<IUploadedFileMeta>
   imgIndex: number
 }
 
@@ -46,29 +46,26 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
   constructor(props) {
     super(props)
     this.state = {
-      activeImage: this.props.images[0],
+      activeImage: null,
       showLightbox: false,
-      imagesList: [],
+      images: [],
       imgIndex: 0,
     }
   }
 
   componentWillMount() {
-    this.setState({ imagesList: this.objectToList(this.props.images) })
+    const images = this.props.images.filter(img => img !== null)
+    const activeImage = images.length > 0 ? images[0] : null
+    this.setState({
+      activeImage,
+      images,
+    })
   }
 
   setActive = image => {
     this.setState({
       activeImage: image,
     })
-  }
-
-  public objectToList(images: IUploadedFileMeta[]) {
-    let arrayLIst: string[] = []
-    images.map(image => {
-      arrayLIst.push(image.downloadUrl)
-    })
-    return arrayLIst
   }
 
   triggerLightbox = (): void =>
@@ -79,7 +76,8 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
     })
 
   render() {
-    const imageNumber = this.props.images.length
+    const images = this.state.images
+    const imageNumber = images.length
     const { caption } = this.props
     return this.state.activeImage ? (
       <Flex flexDirection={'column'}>
@@ -95,7 +93,7 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
         </Flex>
         <Flex flexWrap={'wrap'} width={1} mx={[2, 2, '-5px']}>
           {imageNumber > 1
-            ? this.props.images.map((image: any, index: number) => (
+            ? images.map((image: any, index: number) => (
                 <ThumbCard
                   data-cy="thumbnail"
                   mb={3}
@@ -112,30 +110,29 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
 
         {this.state.showLightbox && (
           <Lightbox
-            mainSrc={this.state.imagesList[this.state.imgIndex]}
+            mainSrc={this.state.images[this.state.imgIndex].downloadUrl}
             imageCaption={this.props.caption}
             nextSrc={
-              this.state.imagesList[
-                (this.state.imgIndex + 1) % this.state.imagesList.length
-              ]
+              this.state.images[
+                (this.state.imgIndex + 1) % this.state.images.length
+              ].downloadUrl
             }
             prevSrc={
-              this.state.imagesList[
-                (this.state.imgIndex + this.state.imagesList.length - 1) %
-                  this.state.imagesList.length
-              ]
+              this.state.images[
+                (this.state.imgIndex + this.state.images.length - 1) %
+                  this.state.images.length
+              ].downloadUrl
             }
             onMovePrevRequest={() => {
               this.setState({
                 imgIndex:
-                  (this.state.imgIndex + this.state.imagesList.length - 1) %
-                  this.state.imagesList.length,
+                  (this.state.imgIndex + this.state.images.length - 1) %
+                  this.state.images.length,
               })
             }}
             onMoveNextRequest={() =>
               this.setState({
-                imgIndex:
-                  (this.state.imgIndex + 1) % this.state.imagesList.length,
+                imgIndex: (this.state.imgIndex + 1) % this.state.images.length,
               })
             }
             onCloseRequest={() => this.triggerLightbox()}

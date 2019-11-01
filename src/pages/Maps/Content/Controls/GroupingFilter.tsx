@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import MultiSelect, { Option } from '@khanacademy/react-multi-select'
 import './GroupingFilter.css'
-import { Box } from 'rebass'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
-import { lineHeight } from 'styled-system'
 
 interface IProps {
   items: Array<any>
@@ -108,7 +106,6 @@ class GroupingFilter extends React.Component<IProps, IState> {
     const { items, entityType } = this.props
     const options = this.asOptions(items)
     const selectedItems = this.state.selectedItems
-
     return (
       <MultiSelect
         options={options}
@@ -116,8 +113,13 @@ class GroupingFilter extends React.Component<IProps, IState> {
         selectAllLabel="Select All"
         disableSearch={true}
         onSelectedChanged={selected => this.handleChange(selected)}
-        valueRenderer={() => {
-          return entityType === 'place' ? 'Workplaces' : 'Members'
+        valueRenderer={values => {
+          // controls label display, use default when values selected or title when none
+          return values.length > 0
+            ? null
+            : entityType === 'place'
+            ? 'Workplaces'
+            : 'Members'
         }}
         hasSelectAll={false}
         ItemRenderer={ItemRenderer}

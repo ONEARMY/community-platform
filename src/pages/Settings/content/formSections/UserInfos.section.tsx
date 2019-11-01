@@ -76,6 +76,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               User / workspace username *
             </Text>
             <Field
+              data-cy="username"
               name="userName"
               component={InputField}
               placeholder="Pick a unique username"
@@ -84,7 +85,11 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             <Text mb={2} mt={7} medium>
               Where are you based? *
             </Text>
-            <FlagSelectContainer width={1} alignItems="center">
+            <FlagSelectContainer
+              width={1}
+              alignItems="center"
+              data-cy="country"
+            >
               <Field
                 name="country"
                 component={FlagSelector}
@@ -96,6 +101,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               Description *
             </Text>
             <Field
+              data-cy="info-description"
               name="about"
               component={TextAreaField}
               placeholder="Describe in details what you do and who you are."
@@ -134,6 +140,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               </Flex>
             ) : (
               <Field
+                data-cy={'cover-images'}
                 style={{ width: '100%' }}
                 name={`coverImages`}
                 component={ImageInputField}
@@ -161,6 +168,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                   />
                 ))}
                 <Button
+                  data-cy="add-link"
                   my={2}
                   variant="outline"
                   onClick={() => {

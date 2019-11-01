@@ -40,10 +40,10 @@ export interface IBoundingBox {
 export interface IPinType {
   displayName: string
   name: string
-  grouping: EntityType
+  grouping: IPinGrouping
   icon: string
   count: number
   visible?: boolean
 }
 
-export type EntityType = 'individual' | 'place'
+export type IPinGrouping = 'individual' | 'place'

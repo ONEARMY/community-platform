@@ -79,7 +79,7 @@ interface IProps {}
 const UserCategory = styled.div`
   position: relative;
   display: inline-block;
-  z-index: ${zIndex.level};
+  z-index: ${zIndex.default};
 
   &:after {
     content: '';

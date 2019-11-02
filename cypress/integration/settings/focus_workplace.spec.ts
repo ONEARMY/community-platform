@@ -13,7 +13,7 @@ interface Link {
    * Start from 0
    */
   index: number,
-  type: 'email' | 'website' | 'discord' | 'bazar' | 'forum'
+  type: 'email' | 'website' | 'discord' | 'bazar' | 'forum' | 'social media'
   url: string
 }
 
@@ -254,6 +254,83 @@ describe('[Settings]', () => {
       cy.step('Update Contact Links')
       addContactLink({index: 0, type: 'forum', url: `www.${freshSettings.userName}-forum.org`})
       setMapPin({description: 'Fun, vibrant and full of amazing people', searchKeyword: 'london', locationName: 'London'})
+
+      cy.get('[data-cy=save]').click().wait(3000)
+    })
+  })
+  
+  describe('Focus Plastic Collection Point', () => {
+    const freshSettings = {
+      _authID: 'uxupeYR7glagQyhBy8q0blr0chd2',
+      _id: 'settings_plastic_new',
+      userName: 'settings_plastic_new',
+      _deleted: false,
+      verified: true,
+    }
+    interface OpeningTime {
+      index: number
+      day: string,
+      from: string,
+      to: string
+    }
+    const selectOption = (selector:string, selectedValue: string) => {
+      cy.get(selector).click()
+      cy.get('.data-cy__menu').contains(selectedValue).click()
+    }
+
+    const addOpeningTime = (openingTime: OpeningTime) => {
+      if (openingTime.index > 0) {
+        cy.get('[data-cy=add-opening-time]').click()
+      }
+      selectOption(`[data-cy=opening-time-day-${openingTime.index}]`, openingTime.day)
+      selectOption(`[data-cy=opening-time-from-${openingTime.index}]`, openingTime.from)
+      selectOption(`[data-cy=opening-time-to-${openingTime.index}]`, openingTime.to)
+    }
+
+    const deleteOpeningTime = (index: number, confirmed: boolean) => {
+      cy.get(`[data-cy=delete-opening-time-${index}]`).click()
+      if (confirmed) {
+        cy.get('[data-cy=confirm-delete]').click()
+      } else {
+        cy.get('[data-cy=cancel-delete]').click()
+      }
+    }
+
+    it.only('[Edit a new profile]', () => {
+      cy.visit(Page.EVENTS)
+      cy.updateDocument(
+        DbCollectionName.v2_users,
+        freshSettings.userName,
+        freshSettings,
+      )
+      cy.login('settings_plastic_new@test.com', 'test1234')
+      cy.step('Go to User Settings')
+      cy.clickMenuItem(UserMenuItem.Settings)
+      selectFocus('collection-point')
+
+      setInfo({username: freshSettings.userName, country: 'Japan', description: `We accept plastic currencies: Bottle, Nylon Bags, Plastic Lids/Straws`, coverImages: [
+          'images/profile-cover-1.jpg',
+          'images/profile-cover-2.jpg'
+        ]})
+
+      cy.step('Update Contact Links')
+      addContactLink({index: 0, type: 'social media', url: `www.facebook.com/${freshSettings.userName}`})
+      addContactLink({index: 1, type: 'social media', url: `www.twitter.com/${freshSettings.userName}`})
+
+      cy.step('Update Collection section')
+      addOpeningTime({index: 0, day: 'Monday', from: '09:00 AM', to: '06:00 PM'})
+      addOpeningTime({index: 1, day: 'Tuesday', from: '09:00 AM', to: '06:00 PM'})
+      addOpeningTime({index: 2, day: 'Wednesday', from: '09:00 AM', to: '06:00 PM'})
+      addOpeningTime({index: 3, day: 'Friday', from: '09:00 AM', to: '06:00 PM'})
+      deleteOpeningTime(0, false)
+      deleteOpeningTime(1, true)
+
+
+      cy.get('[data-cy=plastic-hdpe]').click()
+      cy.get('[data-cy=plastic-pvc]').click()
+      cy.get('[data-cy=plastic-other]').click()
+
+      setMapPin({description: 'Feed us plastic!', searchKeyword: 'Kyoto', locationName: 'Maizuru'})
 
       cy.get('[data-cy=save]').click().wait(3000)
     })

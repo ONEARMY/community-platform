@@ -43,6 +43,7 @@ export class OpeningHoursPicker extends React.Component<IProps, IState> {
     return (
       <Flex key={index} alignItems="center" my={1}>
         <Field
+          data-cy={`opening-time-day-${index}`}
           name={`${openingHoursValues}.day`}
           options={WEEK_DAYS}
           component={SelectField}
@@ -50,6 +51,7 @@ export class OpeningHoursPicker extends React.Component<IProps, IState> {
           style={{ width: '160px', marginRight: '8px', marginBottom: 0 }}
         />
         <Field
+          data-cy={`opening-time-from-${index}`}
           name={`${openingHoursValues}.openFrom`}
           options={OPENING_HOURS}
           component={SelectField}
@@ -57,6 +59,7 @@ export class OpeningHoursPicker extends React.Component<IProps, IState> {
           style={{ width: '160px', marginRight: '8px', marginBottom: 0 }}
         />
         <Field
+          data-cy={`opening-time-to-${index}`}
           name={`${openingHoursValues}.openTo`}
           options={OPENING_HOURS}
           component={SelectField}
@@ -64,6 +67,7 @@ export class OpeningHoursPicker extends React.Component<IProps, IState> {
           style={{ width: '160px', marginBottom: 0 }}
         />
         <Button
+          data-cy={`delete-opening-time-${index}`}
           icon={'delete'}
           variant={'tertiary'}
           onClick={() => this.toggleDeleteModal()}
@@ -75,6 +79,7 @@ export class OpeningHoursPicker extends React.Component<IProps, IState> {
             <Flex p={0} mx={-1} justifyContent="flex-end">
               <Flex px={1}>
                 <Button
+                  data-cy={'cancel-delete'}
                   variant={'outline'}
                   onClick={() => this.toggleDeleteModal()}
                 >
@@ -83,6 +88,7 @@ export class OpeningHoursPicker extends React.Component<IProps, IState> {
               </Flex>
               <Flex px={1}>
                 <Button
+                  data-cy={'confirm-delete'}
                   variant={'tertiary'}
                   onClick={() => this.confirmDelete()}
                 >

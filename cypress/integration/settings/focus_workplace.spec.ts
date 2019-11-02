@@ -13,7 +13,7 @@ interface Link {
    * Start from 0
    */
   index: number,
-  type: 'email' | 'website' | 'discord'
+  type: 'email' | 'website' | 'discord' | 'bazar' | 'forum'
   url: string
 }
 
@@ -157,12 +157,12 @@ describe('[Settings]', () => {
 
   })
   describe('[Focus Member]', () => {
-    const freshSettings =   {
-      "_authID": "pbx4jStD8sNj4OEZTg4AegLTl6E3",
-      "_id": "settings_member_new",
-      "userName": "settings_member_new",
-      "_deleted": false,
-      "verified": true
+    const freshSettings = {
+      _authID: 'pbx4jStD8sNj4OEZTg4AegLTl6E3',
+      _id: 'settings_member_new',
+      userName: 'settings_member_new',
+      _deleted: false,
+      verified: true,
     }
     it('[Edit a new profile]', () => {
       cy.visit(Page.EVENTS)
@@ -217,11 +217,45 @@ describe('[Settings]', () => {
       cy.get('[data-cy=welding]').click()
 
       cy.step('Update Contact Links')
-      addContactLink({index: 0, type: 'email', url: `${freshSettings.userName}@test.com`})
+      addContactLink({index: 0, type: 'bazar', url: `${freshSettings.userName}@test.com`})
       setMapPin({description: 'Informative workshop on machines every week', searchKeyword: 'singapo', locationName: 'Singapore'})
 
       cy.get('[data-cy=save]').click().wait(3000)
     })
 
+  })
+  
+  describe('[Focus Community Builder]', () => {
+    const freshSettings = {
+      _authID: 'vWAbQvq21UbvhGldakIy1x4FpeF2',
+      _id: 'settings_community_new',
+      userName: 'settings_community_new',
+      _deleted: false,
+      verified: true,
+    }
+    
+    it('[Edit a new profile]', () => {
+      cy.visit(Page.EVENTS)
+      cy.updateDocument(
+        DbCollectionName.v2_users,
+        freshSettings.userName,
+        freshSettings,
+      )
+      cy.login('settings_community_new@test.com', 'test1234')
+      cy.step('Go to User Settings')
+      cy.clickMenuItem(UserMenuItem.Settings)
+      selectFocus('community-builder')
+
+      setInfo({username: freshSettings.userName, country: 'United Kingdom', description: `An enthusiastic community that makes the world greener!`, coverImages: [
+          'images/profile-cover-1.jpg',
+          'images/profile-cover-2.jpg'
+        ]})
+
+      cy.step('Update Contact Links')
+      addContactLink({index: 0, type: 'forum', url: `www.${freshSettings.userName}-forum.org`})
+      setMapPin({description: 'Fun, vibrant and full of amazing people', searchKeyword: 'london', locationName: 'London'})
+
+      cy.get('[data-cy=save]').click().wait(3000)
+    })
   })
 })

@@ -12,6 +12,7 @@ interface IProps {
   imageSrc?: string
   btnLabel?: string
   fullWidth?: boolean
+  'data-cy'?: string
 }
 interface IState {
   showDeleteModal: boolean
@@ -36,6 +37,7 @@ class CustomCheckbox extends Component<IProps, IState> {
       isSelected,
       btnLabel,
       fullWidth,
+      'data-cy': dataCy,
     } = this.props
     const classNames: Array<string> = []
     if (isSelected) {
@@ -46,7 +48,7 @@ class CustomCheckbox extends Component<IProps, IState> {
     }
 
     return (
-      <Label htmlFor={value} className={classNames.join(' ')}>
+      <Label htmlFor={value} className={classNames.join(' ')} data-cy={dataCy}>
         <HiddenInput
           id={value}
           name={value}

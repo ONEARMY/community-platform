@@ -17,6 +17,12 @@ interface Link {
   url: string
 }
 
+interface MapPin {
+  description: string
+  searchKeyword: string
+  locationName: string
+}
+
 describe('[Settings]', () => {
   const selectFocus = (focus: string) => {
     cy.get(`[data-cy=${focus}]`).click()
@@ -30,6 +36,12 @@ describe('[Settings]', () => {
     cy.get('[data-cy=country]').contains(info.country).click()
     cy.get('[data-cy=info-description').clear().type(info.description)
     cy.get('[data-cy=cover-images]').find(':file').uploadFiles(info.coverImages)
+  }
+  const setMapPin = (mapPin: MapPin) => {
+    cy.step('Update Map section')
+    cy.get('[data-cy=pin-description]').type(mapPin.description)
+    cy.get('[data-cy=location]').find(':text').type(mapPin.searchKeyword)
+    cy.get('[data-cy=location]').contains(mapPin.locationName).click()
   }
 
   const addContactLink = (link: Link) => {
@@ -50,8 +62,6 @@ describe('[Settings]', () => {
       _id: 'settings_workplace_new',
       userName: 'settings_workplace_new',
       _deleted: false,
-      _created: '2018-01-24T14:46:42.038Z',
-      _modified: '2018-01-24T14:46:42.038Z',
       verified: true,
     }
 
@@ -137,10 +147,7 @@ describe('[Settings]', () => {
       addContactLink({index: 0, type: 'email', url: `${freshSettings.userName}@test.com`})
       addContactLink({index: 1, type: 'website', url: `www.${freshSettings.userName}.com`})
 
-      cy.step('Update Map section')
-      cy.get('[data-cy=pin-description]').type(expected.mapPinDescription)
-      cy.get('[data-cy=location]').find(':text').type('ohio')
-      cy.get('[data-cy=location]').contains('Columbus').click()
+      setMapPin({description: expected.mapPinDescription, searchKeyword: 'ohio', locationName: expected.location.name})
 
       cy.get('[data-cy=save]').click().wait(3000)
 
@@ -155,11 +162,9 @@ describe('[Settings]', () => {
       "_id": "settings_member_new",
       "userName": "settings_member_new",
       "_deleted": false,
-      "_created": "2018-01-24T14:46:42.038Z",
-      "_modified": "2018-01-24T14:46:42.038Z",
       "verified": true
     }
-    it.only('[Edit a new profile]', () => {
+    it('[Edit a new profile]', () => {
       cy.visit(Page.EVENTS)
       cy.updateDocument(
         DbCollectionName.v2_users,
@@ -177,6 +182,43 @@ describe('[Settings]', () => {
         ]})
       cy.step('Update Contact Links')
       addContactLink({index: 0, type: 'email', url: `${freshSettings.userName}@test.com`})
+
+      cy.get('[data-cy=save]').click().wait(3000)
+    })
+
+  })
+
+  describe('[Focus Machine Builder]', () => {
+    const freshSettings =     {
+      "_authID": "wwtBAo7TrkSQ9nAaBN3D93I1sCM2",
+      "_id": "settings_machine_new",
+      "userName": "settings_machine_new",
+      "_deleted": false,
+      "verified": true
+    }
+    it('[Edit a new profile]', () => {
+      cy.visit(Page.EVENTS)
+      cy.updateDocument(
+        DbCollectionName.v2_users,
+        freshSettings.userName,
+        freshSettings,
+      )
+      cy.login('settings_machine_new@test.com', 'test1234')
+      cy.step('Go to User Settings')
+      cy.clickMenuItem(UserMenuItem.Settings)
+      selectFocus('machine-builder')
+
+      setInfo({username: freshSettings.userName, country: 'Singapore', description: `We're mechanics and our jobs are making machines`, coverImages: [
+          'images/profile-cover-1.jpg'
+        ]})
+
+      cy.step('Choose Expertise')
+      cy.get('[data-cy=electronics]').click()
+      cy.get('[data-cy=welding]').click()
+
+      cy.step('Update Contact Links')
+      addContactLink({index: 0, type: 'email', url: `${freshSettings.userName}@test.com`})
+      setMapPin({description: 'Informative workshop on machines every week', searchKeyword: 'singapo', locationName: 'Singapore'})
 
       cy.get('[data-cy=save]').click().wait(3000)
     })

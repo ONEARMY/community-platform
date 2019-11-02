@@ -1,5 +1,5 @@
-import { DbCollectionName, Page } from '../../utils/test-utils'
-import { UserMenuItem } from '../../support/commands'
+import { DbCollectionName, Page } from '../utils/test-utils'
+import { UserMenuItem } from '../support/commands'
 
 interface Info  {
   username: string,

@@ -1,7 +1,49 @@
 import { DbCollectionName, Page } from '../../utils/test-utils'
 import { UserMenuItem } from '../../support/commands'
 
+interface Info  {
+  username: string,
+  country: string
+  description: string,
+  coverImages: string[]
+}
+
+interface Link {
+  /**
+   * Start from 0
+   */
+  index: number,
+  type: 'email' | 'website' | 'discord'
+  url: string
+}
+
 describe('[Settings]', () => {
+  const selectFocus = (focus: string) => {
+    cy.get(`[data-cy=${focus}]`).click()
+  }
+
+  const setInfo = (info : Info)=> {
+    cy.step('Update Info section')
+    cy.get('[data-cy=username').clear().type(info.username)
+    cy.get('[data-cy=country]').find('.flag-select').click()
+    cy.get('[data-cy=country]').find(':text').type(info.country.substring(0, info.country.length - 2))
+    cy.get('[data-cy=country]').contains(info.country).click()
+    cy.get('[data-cy=info-description').clear().type(info.description)
+    cy.get('[data-cy=cover-images]').find(':file').uploadFiles(info.coverImages)
+  }
+
+  const addContactLink = (link: Link) => {
+    if (link.index > 0) {
+      cy.get('[data-cy=add-link]').click()
+    }
+
+    cy.get(`[data-cy=select-link-${link.index}]`).click()
+    cy.get(`[data-cy=select-link-${link.index}]`)
+      .contains(link.type)
+      .click()
+    cy.get(`[data-cy=input-link-${link.index}]`).type(link.url)
+  }
+
   describe('[Focus Workplace]', () => {
     const freshSettings = {
       _authID: 'l9N5HFHzSjQvtP9g9MyFnPpkFmM2',
@@ -83,34 +125,17 @@ describe('[Settings]', () => {
       cy.login('settings_workplace_new@test.com', 'test1234')
       cy.step('Go to User Settings')
       cy.clickMenuItem(UserMenuItem.Settings)
-      cy.get(`[data-cy=${expected.profileType}]`).click()
+      selectFocus(expected.profileType)
       cy.get(`[data-cy=${expected.workspaceType}]`).click()
 
-      cy.step('Update Info section')
-      cy.get('[data-cy=username').clear().type(freshSettings.userName)
-      cy.get('[data-cy=country]').find('.flag-select').click()
-      cy.get('[data-cy=country]').find(':text').type('United')
-      cy.get('[data-cy=country]').contains(expected.country).click()
-      cy.get('[data-cy=info-description').clear().type(expected.about)
-      cy.get('[data-cy=cover-images]').get(':file').uploadFiles([
-        'images/profile-cover-1.jpg',
-        'images/profile-cover-2.jpg',
-      ])
+      setInfo({username: expected.userName, country: expected.country, description: expected.about, coverImages: [
+          'images/profile-cover-1.jpg',
+          'images/profile-cover-2.jpg',
+        ]})
 
       cy.step('Update Contact Links')
-      cy.get('[data-cy=select-link-0]').click()
-      cy.get('[data-cy=select-link-0]')
-        .contains('email')
-        .click()
-      cy.get('[data-cy=input-link-0]').type(
-        `${freshSettings.userName}@test.com`,
-      )
-      cy.get('[data-cy=add-link]').click()
-      cy.get('[data-cy=select-link-1]').click()
-      cy.get('[data-cy=select-link-1]')
-        .contains('website')
-        .click()
-      cy.get('[data-cy=input-link-1]').type(`www.${freshSettings.userName}.com`)
+      addContactLink({index: 0, type: 'email', url: `${freshSettings.userName}@test.com`})
+      addContactLink({index: 1, type: 'website', url: `www.${freshSettings.userName}.com`})
 
       cy.step('Update Map section')
       cy.get('[data-cy=pin-description]').type(expected.mapPinDescription)
@@ -121,6 +146,39 @@ describe('[Settings]', () => {
 
       cy.step('Verify if all changes were saved correctly')
       cy.queryDocuments(DbCollectionName.v2_users, 'userName', '==', expected.userName).should('eqSettings', expected)
+    })
+
+  })
+  describe('[Focus Member]', () => {
+    const freshSettings =   {
+      "_authID": "pbx4jStD8sNj4OEZTg4AegLTl6E3",
+      "_id": "settings_member_new",
+      "userName": "settings_member_new",
+      "_deleted": false,
+      "_created": "2018-01-24T14:46:42.038Z",
+      "_modified": "2018-01-24T14:46:42.038Z",
+      "verified": true
+    }
+    it.only('[Edit a new profile]', () => {
+      cy.visit(Page.EVENTS)
+      cy.updateDocument(
+        DbCollectionName.v2_users,
+        freshSettings.userName,
+        freshSettings,
+      )
+      cy.login('settings_member_new@test.com', 'test1234')
+      cy.step('Go to User Settings')
+      cy.clickMenuItem(UserMenuItem.Settings)
+      selectFocus('member')
+
+      setInfo({username: freshSettings.userName, country: 'Poland', description: `I'm a very active member`, coverImages: [
+          'images/profile-cover-1.jpg',
+          'images/profile-cover-2.jpg',
+        ]})
+      cy.step('Update Contact Links')
+      addContactLink({index: 0, type: 'email', url: `${freshSettings.userName}@test.com`})
+
+      cy.get('[data-cy=save]').click().wait(3000)
     })
 
   })

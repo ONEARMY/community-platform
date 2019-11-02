@@ -296,7 +296,7 @@ describe('[Settings]', () => {
       }
     }
 
-    it.only('[Edit a new profile]', () => {
+    it('[Edit a new profile]', () => {
       cy.visit(Page.EVENTS)
       cy.updateDocument(
         DbCollectionName.v2_users,

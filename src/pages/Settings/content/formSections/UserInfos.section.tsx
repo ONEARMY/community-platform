@@ -37,6 +37,11 @@ const FlagSelectContainer = styled(Flex)`
   border-radius: 4px;
   height: 40px;
 `
+const ImageInputFieldWrapper = styled.div`
+  width: 150px;
+  height: 100px;
+  margin-right: 10px;
+`
 
 export class UserInfosSection extends React.Component<IProps, IState> {
   constructor(props: IProps) {
@@ -107,47 +112,20 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               placeholder="Describe in details what you do and who you are."
               validate={required}
             />
-            <Text mb={2} mt={7} medium>
+            <Text mb={2} mt={7} width="100%" medium>
               Cover Image *
             </Text>
-            {user.coverImages &&
-            user.coverImages.length > 0 &&
-            user.coverImages[0].downloadUrl !== undefined &&
-            editCoverImgs ? (
-              <Flex alignItems={'center'} justifyContent={'center'}>
-                {user.coverImages.map(image => {
-                  return (
-                    <Flex
-                      flexWrap={'nowrap'}
-                      px={1}
-                      width={1 / 4}
-                      key={image.name}
-                    >
-                      <Image sx={{ opacity: 0.5 }} src={image.downloadUrl} />
-                    </Flex>
-                  )
-                })}
-                <Button
-                  icon={'delete'}
-                  variant={'tertiary'}
-                  sx={{ position: 'absolute' }}
-                  onClick={() =>
-                    this.setState({
-                      editCoverImgs: !editCoverImgs,
-                    })
-                  }
-                />
-              </Flex>
-            ) : (
+            <ImageInputFieldWrapper>
               <Field
                 data-cy={'cover-images'}
-                style={{ width: '100%' }}
-                name={`coverImages`}
-                component={ImageInputField}
+                canDelete
+                hasText={false}
+                name="coverImages"
+                src={user ? user.coverImages : ''}
                 validate={required}
-                multi
+                component={ImageInputField}
               />
-            )}
+            </ImageInputFieldWrapper>
           </Flex>
           <Flex wrap={'nowrap'} alignItems={'center'} width={1}>
             <Text mb={2} mt={7} medium>

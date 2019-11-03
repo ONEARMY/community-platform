@@ -1,0 +1,17 @@
+import { action } from '@storybook/addon-actions'
+import { Story, Meta } from '@storybook/addon-docs/blocks'
+import { Button } from './index.tsx'
+
+<Meta title="MDX|Button" component={Button} />
+
+# Hello Docs
+
+Welcome to the future of Storybook!
+
+<Story name="hello">
+  <Button onClick={action('clicked')}>Hello button!</Button>
+</Story>
+
+<Story name="with emoji">
+  <Button onClick={action('clicked')}>🤘🚀💯</Button>
+</Story>

@@ -13,13 +13,27 @@ import { Button } from './index.tsx'
 
 # Buttons
 
-<Preview>
-  <Story name="Default Button">
-    <Button disabled={boolean('Disabled', false)} onClick={action('onClick')}>
-      {text('Label', 'Button Text')}
-    </Button>
-  </Story>
-</Preview>
+Below you will be able to see how to use and configure a `Button` component:
+
+<Story name="Default Button">
+  <Button
+    disabled={boolean('Disabled', false)}
+    small={boolean('Small', false)}
+    medium={boolean('Medium', false)}
+    large={boolean('Large', false)}
+    hasText={boolean('Has Text?', true)}
+    variant={text('Variant', 'primary')}
+    icon={text('Icon', '')}
+    onClick={action('onClick')}
+  >
+    {text('Label', 'Button Text')}
+  </Button>
+</Story>
+
+<br />
+<br />
+
+## Enabled/Disabled
 
 A button can be enabled or disabled setting the prop `disabled`:
 
@@ -32,36 +46,44 @@ A button can be enabled or disabled setting the prop `disabled`:
   </Story>
 </Preview>
 
-There is an option to use `variant: outline` button:
+## Variants
+
+We can configure a `Button` to be `primary` (default), `secondary` or `outline`:
 
 <Preview>
-  <Story name="Outlined">
-    <Button variant={'outline'}>Outlined Button</Button>
+  <Story name="Primary">
+    <Button variant={'primary'}>Primary</Button>
+  </Story>
+  <Story name="Secondary">
+    <Button variant={'secondary'}>Secondary</Button>
+  </Story>
+  <Story name="Outline">
+    <Button variant={'outline'}>Outline</Button>
   </Story>
 </Preview>
 
 ## Icons
 
-You can add an icon to the button by setting the `icon` prop:
+You can add an icon to the button by setting the `icon` prop, for example:
 
 <Preview>
   <Story name="With Icon">
-    <Button icon={text('Icon', 'add')}>Add Icon</Button>
+    <Button icon={'add'}>Add Icon</Button>
   </Story>
+  <Button icon={'email'}>Send Email</Button>
+  <Button icon={'close'}>Close Me</Button>
+  <Button icon={'arrow-back'}>Go Back</Button>
+  <Button icon={'lock'}>Lock This</Button>
 </Preview>
 
 ## Sizes
 
-Buttons can be of different sizes:
+Buttons can be of different sizes by setting `small|medium|large` props to true:
 
 <Preview>
-  <Story name="Size: Small">
-    <Button small={true}>Small</Button>
+  <Story name="Sizes">
+    <Button small={true}>Small Button</Button>
   </Story>
-  <Story name="Size: Medium">
-    <Button medium={true}>Medium</Button>
-  </Story>
-  <Story name="Size: Large">
-    <Button large={true}>Large</Button>
-  </Story>
+  <Button medium={true}>Medium Button</Button>
+  <Button large={true}>Large Button</Button>
 </Preview>

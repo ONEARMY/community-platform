@@ -1,17 +1,67 @@
 import { action } from '@storybook/addon-actions'
-import { Story, Meta } from '@storybook/addon-docs/blocks'
+import { withKnobs, text, boolean } from '@storybook/addon-knobs'
+import {
+  Story,
+  Meta,
+  Preview,
+  Props,
+  Description,
+} from '@storybook/addon-docs/blocks'
 import { Button } from './index.tsx'
 
-<Meta title="MDX|Button" component={Button} />
+<Meta title="Components|Button" component={Button} decorators={[withKnobs]} />
 
-# Hello Docs
+# Buttons
 
-Welcome to the future of Storybook!
+<Preview>
+  <Story name="Default Button">
+    <Button disabled={boolean('Disabled', false)} onClick={action('onClick')}>
+      {text('Label', 'Button Text')}
+    </Button>
+  </Story>
+</Preview>
 
-<Story name="hello">
-  <Button onClick={action('clicked')}>Hello button!</Button>
-</Story>
+A button can be enabled or disabled setting the prop `disabled`:
 
-<Story name="with emoji">
-  <Button onClick={action('clicked')}>🤘🚀💯</Button>
-</Story>
+<Preview>
+  <Story name="Enabled Button">
+    <Button disabled={false}>I am Enabled</Button>
+  </Story>
+  <Story name="Disabled Button">
+    <Button disabled={true}>I am Disabled</Button>
+  </Story>
+</Preview>
+
+There is an option to use `variant: outline` button:
+
+<Preview>
+  <Story name="Outlined">
+    <Button variant={'outline'}>Outlined Button</Button>
+  </Story>
+</Preview>
+
+## Icons
+
+You can add an icon to the button by setting the `icon` prop:
+
+<Preview>
+  <Story name="With Icon">
+    <Button icon={text('Icon', 'add')}>Add Icon</Button>
+  </Story>
+</Preview>
+
+## Sizes
+
+Buttons can be of different sizes:
+
+<Preview>
+  <Story name="Size: Small">
+    <Button small={true}>Small</Button>
+  </Story>
+  <Story name="Size: Medium">
+    <Button medium={true}>Medium</Button>
+  </Story>
+  <Story name="Size: Large">
+    <Button large={true}>Large</Button>
+  </Story>
+</Preview>

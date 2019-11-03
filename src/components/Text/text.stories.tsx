@@ -37,7 +37,7 @@ const sortedProps = Object.keys(defaultProps)
 
 stories.addDecorator(withKnobs)
 
-stories.addDecorator(withInfo)
+// stories.addDecorator(withInfo)
 stories.addParameters({
   info: {
     inline: true,

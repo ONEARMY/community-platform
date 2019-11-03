@@ -14,7 +14,7 @@ const stories = storiesOf('UI/Heading', module)
 
 stories.addDecorator(withKnobs)
 
-stories.addDecorator(withInfo)
+// stories.addDecorator(withInfo)
 stories.addParameters({
   info: {
     inline: true,

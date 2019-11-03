@@ -108,9 +108,7 @@ export class ForgotPasswordPage extends React.Component<IProps, IState> {
                   </Flex>
                 </Flex>
                 <Flex mt={3} justifyContent={'flex-end'}>
-                  <Button variant="tertiary" small>
-                    Close
-                  </Button>
+                  <Button variant="tertiary">Close</Button>
                 </Flex>
               </Flex>
             </Flex>

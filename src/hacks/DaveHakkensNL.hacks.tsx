@@ -96,7 +96,6 @@ export class DHImport extends React.Component<IProps, IState> {
     return (
       <>
         <Button
-          small
           disabled={disabled}
           onClick={() => this.importProfileFromDH()}
           variant={disabled ? 'tertiary' : 'tertiary'}

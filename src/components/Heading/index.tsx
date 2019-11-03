@@ -2,7 +2,7 @@ import * as React from 'react'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
 import Text, { ITextProps } from 'src/components/Text'
-import { HeadingProps as RebassHeadingProps } from 'rebass'
+import { HeadingProps as RebassHeadingProps } from 'rebass/styled-components'
 
 export const large = (props: ITextProps) =>
   props.large ? { fontSize: theme.fontSizes[6] } : null

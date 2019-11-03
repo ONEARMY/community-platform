@@ -58,6 +58,7 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
           <Flex wrap="nowrap">
             {WORKSPACE_TYPES.map((workspace, index: number) => (
               <CustomRadioField
+                data-cy={workspace.label}
                 key={index}
                 value={workspace.label}
                 name="workspaceType"

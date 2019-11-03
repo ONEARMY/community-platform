@@ -17,6 +17,7 @@ export interface IFieldProps extends FieldProps {
   // additional fields intending to pass down
   disabled?: boolean
   children?: React.ReactNode
+  'data-cy'?: string
 }
 
 interface IDatePickerFieldProps extends IFieldProps {

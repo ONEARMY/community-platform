@@ -116,7 +116,6 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
                     />
                   </Flex>
                   <Button
-                    small
                     type="submit"
                     disabled={disabled}
                     variant={disabled ? 'primary' : 'primary'}

@@ -59,6 +59,7 @@ export class FocusSection extends React.Component<IProps, IState> {
           <Flex wrap="nowrap">
             {PROFILE_TYPES.map((profile, index: number) => (
               <CustomRadioField
+                data-cy={profile.label}
                 key={index}
                 fullWidth
                 value={profile.label}
@@ -74,7 +75,7 @@ export class FocusSection extends React.Component<IProps, IState> {
           <Flex flexWrap="wrap" alignItems="center" mt={4}>
             <Text>Not sure about your focus ?</Text>
             <Link to={'/academy'}>
-              <Button ml={2} variant="outline">
+              <Button ml={2} variant="outline" data-cy="go-to">
                 Go to starter kits
               </Button>
             </Link>

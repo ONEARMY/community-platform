@@ -1,12 +1,14 @@
 import React from 'react'
-import { Flex, Box, FlexProps, SxProps } from 'rebass'
+import { Flex, Box, FlexProps } from 'rebass/styled-components'
 import theme from 'src/themes/styled.theme'
 import { CSSObject } from '@styled-system/css'
 
-interface IProps extends FlexProps {
+interface ILayoutProps {
   ignoreMaxWidth?: boolean
   customStyles?: CSSObject
 }
+
+type IProps = FlexProps & ILayoutProps
 
 const Main = (props: IProps) => (
   <Flex {...props} flexDirection="column">

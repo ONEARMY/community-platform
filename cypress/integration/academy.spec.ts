@@ -1,10 +1,14 @@
+import { Page } from '../utils/test-utils'
+
 describe('[Academy]', () => {
   describe('[List instructions]', () => {
     it('[By Everyone]', () => {
-      cy.visit('/academy')
+      cy.visit(Page.ACADEMY)
       cy.step('Load instructions from another github repo')
       const githubDoc = 'https://onearmy.github.io/academy/intro'
-      cy.get('iframe').should('have.attr', 'src').and('equal', githubDoc)
+      cy.get('iframe')
+        .should('have.attr', 'src')
+        .and('equal', githubDoc)
     })
   })
 })

@@ -13,6 +13,19 @@ export const colors = {
   green: '#00c3a9',
   error: 'red',
   background: '#f4f6f7',
+  silver: '#c0c0c0',
+}
+
+export const zIndex = {
+  behind: -1,
+  level: 0,
+  default: 1,
+  modalBackdrop: 9,
+  modalContent: 10,
+  slickArrows: 100,
+  modalProfile: 900,
+  logoContainer: 999,
+  mapFlexBar: 99999,
 }
 
 export type ButtonVariants =
@@ -175,4 +188,5 @@ export default {
   maxContainerWidth,
   regular,
   bold,
+  zIndex,
 }

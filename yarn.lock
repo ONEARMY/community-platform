@@ -2478,6 +2478,13 @@
     csstype "^2.0.0"
     indefinite-observable "^1.0.1"
 
+"@types/leaflet.markercluster@*":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@types/leaflet.markercluster/-/leaflet.markercluster-1.4.0.tgz#76be909e3d91150e2ef3ad4fcf7268caa92b6d9e"
+  integrity sha512-ctCkUvknqzt+6eLOhZK7ta+G6WQ9wkTeFvOw1KhWYoPY/ZuzLD+QUg1Umnw7yzMNA+L00ne3cmTk/xmVNkRSLQ==
+  dependencies:
+    "@types/leaflet" "*"
+
 "@types/leaflet@*":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@types/leaflet/-/leaflet-1.5.0.tgz#a401eb9ec9e1c0c340454660f54962f29f048b7d"
@@ -2544,6 +2551,23 @@
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.8.4.tgz#7fb7ba368857c7aa0f4e4511c4710ca2c5a12a88"
   integrity sha512-eIRpEW73DCzPIMaNBDP5pPIpK1KXyZwNgfxiVagb5iGiz6da+9A5hslSX6GAQKdO7SayVCS/Fr2kjqprgAvkfA==
   dependencies:
+    "@types/react" "*"
+
+"@types/react-leaflet-markercluster@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@types/react-leaflet-markercluster/-/react-leaflet-markercluster-2.0.0.tgz#ac8274b0cd68823ee0e87c7fdb29bbcf02d62879"
+  integrity sha512-Q3JUQcg9Ey28xtPOrVp6XZHtLf6LTyOsYY96niSa6QgSMGn6Lm0/y/cQYTs24JG+74i2VEFF+pfJ9AYy2+GnwA==
+  dependencies:
+    "@types/leaflet" "*"
+    "@types/leaflet.markercluster" "*"
+    "@types/react-leaflet" "*"
+
+"@types/react-leaflet@*":
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/@types/react-leaflet/-/react-leaflet-2.5.0.tgz#7d99d4eb985f752c65603d72f86ae6e18b2de213"
+  integrity sha512-oS0rVwRLnTK0WbvLYqQaZoUw7CBHBe3Z4yop4GxbzX3DVYroo9fQQNzowmxASD0TExSXn1DLNGm7EywgC3zkPg==
+  dependencies:
+    "@types/leaflet" "*"
     "@types/react" "*"
 
 "@types/react-leaflet@^1.1.6":

@@ -15,9 +15,9 @@ const fbConfig = {
 }
 
 export enum UserMenuItem {
-  Profile = 'Profile',
-  Settings = 'Settings',
-  LogOut = 'Log out',
+  Profile = 0,
+  Settings = 1,
+  LogOut = 2,
 }
 firebase.initializeApp(fbConfig)
 /**
@@ -213,7 +213,7 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
       },
     })
     cy.toggleUserMenuOn()
-    cy.get('[data-cy=menu-item]').contains(menuItem).click()
+    cy.get(`[data-cy=menu-item]:eq(${menuItem})`).click()
   })
 
   Cypress.Commands.add('screenClick', () => {

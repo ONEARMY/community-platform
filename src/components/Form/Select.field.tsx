@@ -192,16 +192,23 @@ export const SelectField = ({ input, meta, ...rest }: ISelectFieldProps) => (
 )
 
 export const FlagSelector = ({ input, meta, ...rest }: ISelectFieldProps) => (
-  <>
-    <ReactFlagsSelect
-      onSelect={v => {
-        input.onChange(getCountryName(v))
-      }}
-      onBlur={input.onBlur}
-      onFocus={input.onFocus}
-      {...defaultProps}
-      {...rest}
-    />
-    {/* meta.error && meta.touched && <ErrorMessage>{meta.error}</ErrorMessage> */}
-  </>
+  <Flex p={0} flexWrap="wrap">
+    <FieldContainer
+      invalid={meta.error && meta.touched}
+      data-cy={rest['data-cy']}
+    >
+      <ReactFlagsSelect
+        onSelect={v => {
+          input.onChange(getCountryName(v))
+        }}
+        onBlur={input.onBlur}
+        onFocus={input.onFocus}
+        {...defaultProps}
+        {...rest}
+      />
+    </FieldContainer>
+    {meta.error && meta.touched && (
+      <ErrorMessage style={{ bottom: '-10px' }}>{meta.error}</ErrorMessage>
+    )}
+  </Flex>
 )

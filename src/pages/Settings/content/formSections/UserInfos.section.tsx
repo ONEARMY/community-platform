@@ -39,6 +39,7 @@ const FlagSelectContainer = styled(Flex)`
   border: 1px solid ${theme.colors.black};
   border-radius: 4px;
   height: 40px;
+  background-color: ${theme.colors.background};
 `
 const ImageInputFieldWrapper = styled.div`
   width: 150px;
@@ -103,6 +104,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                 name="country"
                 component={FlagSelector}
                 searchable={true}
+                validate={required}
                 defaultCountry={getCountryCode(user.country)}
               />
             </FlagSelectContainer>

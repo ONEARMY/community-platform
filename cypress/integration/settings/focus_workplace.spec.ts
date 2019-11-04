@@ -74,7 +74,7 @@ describe('[Settings]', () => {
     }
 
     it('[Editing a new Profile]', () => {
-      cy.visit(Page.EVENTS, {timeout: 60000})
+      cy.visit('/')
       cy.updateDocument(
         DbCollectionName.v2_users,
         freshSettings.userName,

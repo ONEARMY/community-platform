@@ -5,7 +5,6 @@ import { UserStore } from 'src/stores/User/user.store'
 import { observer, inject } from 'mobx-react'
 import { toJS } from 'mobx'
 import { UserInfosSection } from './content/formSections/UserInfos.section'
-import { ImportDHForm } from './content/formSections/ImportDH.form'
 import { FocusSection } from './content/formSections/Focus.section'
 import { ExpertiseSection } from './content/formSections/Expertise.section'
 import { WorkspaceSection } from './content/formSections/Workspace.section'
@@ -40,7 +39,6 @@ interface IInjectedProps extends IProps {
 }
 
 interface IState {
-  editMode: boolean
   customFormValues: IFormValues
   user: IUserPP
   showNotification: boolean
@@ -56,7 +54,6 @@ export class UserSettings extends React.Component<IProps, IState> {
     super(props)
     const user = this.injected.userStore.user
     this.state = {
-      editMode: false,
       customFormValues: user ? user : {},
       showNotification: false,
       user: props.user,
@@ -109,7 +106,6 @@ export class UserSettings extends React.Component<IProps, IState> {
   render() {
     const user = this.injected.userStore.user!
     const { customFormValues, isFocusSelected, isWTSelected } = this.state
-    const readOnly = !this.state.editMode
     // Need to convert mobx observable user object into a Javasrcipt structure using toJS fn
     // to allow final-form-array to display the initial values
     const initialFormValues = user.profileType
@@ -191,7 +187,11 @@ export class UserSettings extends React.Component<IProps, IState> {
                             user={user}
                           />
                           <CollectionSection
-                            onInputChange={v => console.log(v)}
+                            required={
+                              values.collectedPlasticTypes
+                                ? values.collectedPlasticTypes.length === 0
+                                : true
+                            }
                             user={user}
                           />
                           <UserMapPinSection
@@ -218,7 +218,14 @@ export class UserSettings extends React.Component<IProps, IState> {
                             onCoverImgChange={v => this.onCoverImgChange(v)}
                             user={user}
                           />
-                          <ExpertiseSection user={user} />
+                          <ExpertiseSection
+                            required={
+                              values.machineBuilderXp
+                                ? values.machineBuilderXp.length === 0
+                                : true
+                            }
+                            user={user}
+                          />
                           <UserMapPinSection
                             onInputChange={v => this.updateLocation(v)}
                             user={user}

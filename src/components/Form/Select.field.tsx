@@ -168,7 +168,7 @@ const defaultProps: Partial<ISelectFieldProps> = {
 }
 export const SelectField = ({ input, meta, ...rest }: ISelectFieldProps) => (
   // note, we first use a div container so that default styles can be applied
-  <Flex p={0} flexWrap="wrap">
+  <Flex p={0} flexWrap="nowrap">
     <FieldContainer
       invalid={meta.error && meta.touched}
       style={rest.style}

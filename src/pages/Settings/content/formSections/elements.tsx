@@ -38,7 +38,7 @@ export const FlexSectionContainer = props => (
     bg={'white'}
     p={4}
     mt={4}
-    flexWrap="wrap"
+    flexWrap="nowrap"
     flexDirection="column"
   >
     {props.children}

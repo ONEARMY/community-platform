@@ -128,7 +128,7 @@
     "prod:copy": "cp .env .env-default && cp ./.env-prod ./.env",
     "prod:restore": "cp .env-default .env && rm .env-default",
     "start:ci": "cross-env SITE_VARIANT=test-ci PORT=3456 npm run start",
-    "cy:run": "cross-env TZ='Europe/London' cypress run --spec 'cypress/integration/settings/focus_workplace.spec.ts'",
+    "cy:run": "cross-env TZ='Europe/London' cypress run",
     "cy:open": "cross-env TZ='Europe/London' npx cypress open",
     "cy:test": "start-test start:ci 3456 cy:run",
     "cy:test:record": "start-test start:ci 3456 cy:run:record",

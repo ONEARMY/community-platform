@@ -15,8 +15,7 @@ import { FieldArray } from 'react-final-form-arrays'
 import { Link } from './Fields/Link.field'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
-import { Image, Box } from 'rebass'
-import { toJS } from 'mobx'
+import { Box } from 'rebass'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 
 interface IProps {
@@ -28,7 +27,6 @@ interface IState {
   isSaving?: boolean
   showNotification?: boolean
   showComLinks?: boolean
-  editCoverImgs?: boolean
   isOpen?: boolean
 }
 
@@ -41,12 +39,6 @@ const FlagSelectContainer = styled(Flex)`
   height: 40px;
   background-color: ${theme.colors.background};
 `
-const ImageInputFieldWrapper = styled.div`
-  width: 150px;
-  height: 100px;
-  margin-right: 10px;
-  overflow: hidden;
-`
 
 export class UserInfosSection extends React.Component<IProps, IState> {
   constructor(props: IProps) {
@@ -55,7 +47,6 @@ export class UserInfosSection extends React.Component<IProps, IState> {
     this.state = {
       readOnly: true,
       showComLinks: props.user && props.user.links ? true : false,
-      editCoverImgs: props.user && props.user.coverImages ? true : false,
       isOpen: props.user && !props.user.profileType,
     }
     this.changeComLinkSwitch = this.changeComLinkSwitch.bind(this)
@@ -67,7 +58,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
 
   render() {
     const { user } = this.props
-    const { editCoverImgs, isOpen } = this.state
+    const { isOpen } = this.state
 
     return (
       <FlexSectionContainer>
@@ -121,15 +112,14 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             <Text mb={2} mt={7} width="100%" medium>
               Cover Image *
             </Text>
-            <ImageInputFieldWrapper>
-              <Field
-                id="cover_image"
-                name="coverImages"
-                src={user.coverImages ? user.coverImages[0] : null}
-                component={ImageInputField}
-                customChange={v => this.props.onCoverImgChange(v)}
-              />
-            </ImageInputFieldWrapper>
+            <Field
+              id="cover_image"
+              name="coverImages"
+              validate={required}
+              src={user.coverImages ? user.coverImages[0] : null}
+              component={ImageInputField}
+              customChange={v => this.props.onCoverImgChange(v)}
+            />
           </Flex>
           <Flex wrap={'nowrap'} alignItems={'center'} width={1}>
             <Text mb={2} mt={7} medium>

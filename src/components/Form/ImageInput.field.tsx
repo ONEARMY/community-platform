@@ -17,7 +17,11 @@ export const ImageInputField = ({
   ...rest
 }: IExtendedFieldProps) => (
   <>
-    <FieldContainer invalid={meta.touched && meta.error} data-cy={dataCy}>
+    <FieldContainer
+      style={{ height: '100px', width: '150px', overflow: 'hidden' }}
+      invalid={meta.touched && meta.error}
+      data-cy={dataCy}
+    >
       <ImageInput
         {...rest}
         // as validation happens on blur also want to artificially trigger when values change

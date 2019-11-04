@@ -1,14 +1,5 @@
-import { observable, action, toJS } from 'mobx'
-import { insideBoundingBox, LatLng, BoundingBox } from 'geolocation-utils'
-
-import {
-  IMapPin,
-  IPinType,
-  IMapPinDetail,
-  IBoundingBox,
-  IMapPinWithType,
-  IPinGrouping,
-} from 'src/models/maps.models'
+import { observable, action } from 'mobx'
+import { IMapPin, IBoundingBox, IMapGrouping } from 'src/models/maps.models'
 import { IDBEndpoint } from 'src/models/common.models'
 import { RootStore } from '..'
 import { Subscription } from 'rxjs'
@@ -16,66 +7,48 @@ import { ModuleStore } from '../common/module.store'
 import { getUserAvatar } from '../User/user.store'
 import { MAP_GROUPINGS } from './maps.groupings'
 import { generatePins, generatePinDetails } from 'src/mocks/maps.mock'
+import { IUserPP } from 'src/models/user_pp.models'
 
-// TODO - remove mock pins from store once integration complete
+// NOTE - toggle below variable to use larger mock dataset
 const IS_MOCK = true
+const MOCK_PINS = generatePins(250)
 
 export class MapsStore extends ModuleStore {
   mapEndpoint: IDBEndpoint = 'v2_mappins'
-  availablePinFilters = MAP_GROUPINGS
   mapPins$: Subscription
   constructor(rootStore: RootStore) {
     super(rootStore)
   }
 
   @observable
-  public activePinFilters: Array<IPinType> = []
+  public activePinFilters: Array<IMapGrouping> = []
 
   @observable
-  public activePin: IMapPin | IMapPinDetail | undefined = undefined
+  public activePin: IMapPin | undefined = undefined
 
   @observable
-  private mapPins: Array<IMapPinWithType> = []
+  private mapPins: Array<IMapPin> = []
 
   @observable
-  public filteredPins: Array<IMapPinWithType> = []
+  public filteredPins: Array<IMapPin> = []
 
   @action
   private processDBMapPins(pins: IMapPin[]) {
-    if (pins.length === 0 || this.availablePinFilters.length === 0) {
+    if (pins.length === 0) {
       this.mapPins = []
       return
     }
-    const filterMap = this.availablePinFilters.reduce(
-      (accumulator, current) => {
-        accumulator[current.name] = current
-        return accumulator
-      },
-      {} as Record<string, IPinType>,
-    )
 
-    // TODO - remove mock pins when integrated
     if (IS_MOCK) {
-      {
-        pins = [...generatePins(250), ...pins]
-      }
+      pins = MOCK_PINS
     }
-
-    this.mapPins = pins.map(
-      ({ _id, location, pinType, profileType, workspaceType }) => ({
-        _id,
-        location,
-        pinType: filterMap[pinType],
-        profileType,
-        workspaceType,
-      }),
-    )
+    this.mapPins = pins
     this.filteredPins = this.mapPins
   }
 
   @action
   public setMapBoundingBox(boundingBox: IBoundingBox) {
-    this.recalculatePinCounts(boundingBox)
+    // this.recalculatePinCounts(boundingBox)
   }
 
   @action
@@ -92,32 +65,24 @@ export class MapsStore extends ModuleStore {
   @action
   public async retrievePinFilters() {
     // TODO: get from database
-    this.availablePinFilters = MAP_GROUPINGS
-    this.activePinFilters = this.availablePinFilters.map(filter => filter)
+    this.activePinFilters = MAP_GROUPINGS
   }
 
   @action
-  public async setActivePinFilters(
-    grouping: IPinGrouping,
-    filters: Array<any>,
-  ) {
+  public async setActivePinFilters(filters: Array<string>) {
+    console.log('set active filters', filters)
     if (filters.length === 0) {
       this.filteredPins = this.mapPins
       return
     }
 
+    // filter pins to include matched pin type or other filters
     const mapPins = this.mapPins.filter(pin => {
-      if (pin.workspaceType && filters.indexOf(pin.workspaceType) > -1) {
-        return true
-      }
-
-      if (pin.pinType.name && filters.indexOf(pin.pinType.name) > -1) {
-        return true
-      }
-
-      return false
+      return (
+        filters.includes(pin.type) ||
+        (pin.data && filters.includes(pin.data.workspaceType))
+      )
     })
-
     this.filteredPins = mapPins
   }
 
@@ -155,29 +120,25 @@ export class MapsStore extends ModuleStore {
       .set(pin)
   }
 
+  public async setUserPin(user: IUserPP) {
+    const pin: IMapPin = {
+      _id: user.userName,
+      location: user.location!.latlng,
+      type: user.profileType ? user.profileType : 'member',
+    }
+    if (user.workspaceType) {
+      pin.data = { workspaceType: user.workspaceType }
+    }
+    await this.db
+      .collection<IMapPin>('v2_mappins')
+      .doc(pin._id)
+      .set(pin)
+  }
+
   public removeSubscriptions() {
     if (this.mapPins$) {
       this.mapPins$.unsubscribe()
     }
-  }
-
-  private recalculatePinCounts(boundingBox: BoundingBox) {
-    const pinTypeMap = this.availablePinFilters.reduce(
-      (accumulator, current) => {
-        current.count = 0
-        if (accumulator[current.name] === undefined) {
-          accumulator[current.name] = current
-        }
-        return accumulator
-      },
-      {} as Record<string, IPinType>,
-    )
-
-    this.mapPins.forEach(pin => {
-      if (insideBoundingBox(pin.location as LatLng, boundingBox)) {
-        pinTypeMap[pin.pinType.name].count++
-      }
-    })
   }
 
   // return subset of profile info used when displaying map pins
@@ -209,3 +170,30 @@ export class MapsStore extends ModuleStore {
     }
   }
 }
+
+/**********************************************************************************
+ *  Deprecated - CC - 2019/11/04
+ *
+ * The code below was previously used to help calculate the number of pins currently
+ * within view, however not fully implemented. It is retained in case this behaviour
+ * is wanted in the future
+ *********************************************************************************/
+
+// private recalculatePinCounts(boundingBox: BoundingBox) {
+//   const pinTypeMap = this.availablePinFilters.reduce(
+//     (accumulator, current) => {
+//       current.count = 0
+//       if (accumulator[current.type] === undefined) {
+//         accumulator[current.type] = current
+//       }
+//       return accumulator
+//     },
+//     {} as Record<string, IPinType>,
+//   )
+
+//   this.mapPins.forEach(pin => {
+//     if (insideBoundingBox(pin.location as LatLng, boundingBox)) {
+//       pinTypeMap[pin.type].count++
+//     }
+//   })
+// }

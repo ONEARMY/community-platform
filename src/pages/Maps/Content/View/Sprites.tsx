@@ -1,7 +1,8 @@
 import L, { MarkerCluster } from 'leaflet'
 import './sprites.css'
-import { IMapPinWithType } from 'src/models/maps.models'
+import { IMapPin } from 'src/models/maps.models'
 import clusterIcon from 'src/assets/icons/map-cluster.svg'
+import { MAP_ICONS } from 'src/stores/Maps/maps.groupings'
 
 /**
  * Generate custom cluster icon, including style formatting, size, image etc.
@@ -28,10 +29,13 @@ export const createClusterIcon = (opts?: any) => {
   }
 }
 
-export const createMarkerIcon = (pin: IMapPinWithType) => {
-  const { grouping, icon } = pin.pinType
+export const createMarkerIcon = (pin: IMapPin) => {
+  const icon = MAP_ICONS[pin.type]
+  if (!pin.type) {
+    console.log('NO TYPE', pin)
+  }
   return L.divIcon({
-    className: `icon-marker-${grouping}`,
+    className: `icon-marker icon-${pin.type}`,
     html: `<img src="${icon}" />`,
     iconSize: L.point(38, 38, true),
   })

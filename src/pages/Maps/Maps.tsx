@@ -11,6 +11,7 @@ import './styles.css'
 import { ILatLng } from 'src/models/maps.models'
 import { GetLocation } from 'src/utils/geolocation'
 import { Map } from 'react-leaflet'
+import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 
 interface IProps {
   mapsStore: MapsStore
@@ -67,11 +68,7 @@ class MapsPageClass extends React.Component<IProps, IState> {
   }
 
   public render() {
-    const {
-      filteredPins,
-      availablePinFilters,
-      activePinFilters,
-    } = this.props.mapsStore
+    const { filteredPins, activePinFilters } = this.props.mapsStore
     const { center, zoom } = this.state
     return (
       // the calculation for the height is kind of hacky for now, will set properly on final mockups
@@ -84,10 +81,10 @@ class MapsPageClass extends React.Component<IProps, IState> {
               <>
                 <Controls
                   mapRef={this.mapRef}
-                  availableFilters={availablePinFilters}
-                  onFilterChange={(grouping, filters) =>
-                    this.props.mapsStore.setActivePinFilters(grouping, filters)
-                  }
+                  availableFilters={MAP_GROUPINGS}
+                  onFilterChange={selected => {
+                    this.props.mapsStore.setActivePinFilters(selected)
+                  }}
                   onLocationChange={location => this.setCenter(location.latlng)}
                 />
                 <MapView

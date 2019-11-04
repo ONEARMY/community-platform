@@ -1,16 +1,9 @@
-.icon-marker-place {
+.icon-marker {
   line-height: 26px;
   text-align: center;
   color: white;
   padding-left: 1px;
-}
-
-.icon-marker-individual {
   border-radius: 50%;
-  line-height: 26px;
-  text-align: center;
-  color: white;
-  padding-left: 1px;
 }
 
 .icon-cluster-text {

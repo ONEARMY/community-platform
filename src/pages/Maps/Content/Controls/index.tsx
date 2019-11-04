@@ -7,7 +7,7 @@ import { Flex } from 'rebass'
 
 import { GroupingFilter } from './GroupingFilter'
 
-import { IPinType, IPinGrouping } from 'src/models/maps.models'
+import { IPinGrouping, IMapGrouping, IMapPinType } from 'src/models/maps.models'
 import { HashLink } from 'react-router-hash-link'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { Map } from 'react-leaflet'
@@ -18,8 +18,8 @@ import { MapsStore } from 'src/stores/Maps/maps.store'
 
 interface IProps {
   mapRef: React.RefObject<Map>
-  availableFilters: Array<IPinType>
-  onFilterChange: (grouping: IPinGrouping, filters: Array<IPinType>) => void
+  availableFilters: Array<IMapGrouping>
+  onFilterChange: (selected: Array<IMapPinType>) => void
   onLocationChange: (selectedLocation: ILocation) => void
 }
 interface IInjectedProps extends IProps {
@@ -64,7 +64,7 @@ class Controls extends React.Component<IProps> {
         accumulator[grouping].push(current)
         return accumulator
       },
-      {} as Record<IPinGrouping, Array<IPinType>>,
+      {} as Record<IPinGrouping, Array<IMapGrouping>>,
     )
 
     return (
@@ -89,8 +89,8 @@ class Controls extends React.Component<IProps> {
             key={grouping}
             entityType={grouping}
             items={groupedFilters[grouping]}
-            onChange={options => {
-              this.props.onFilterChange(grouping as IPinGrouping, options)
+            onChange={selected => {
+              this.props.onFilterChange(selected as IMapPinType[])
             }}
           />
         ))}

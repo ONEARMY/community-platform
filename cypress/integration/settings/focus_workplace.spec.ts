@@ -74,6 +74,7 @@ describe('[Settings]', () => {
     }
 
     it('[Editing a new Profile]', () => {
+      cy.logout()
       cy.visit('/')
       cy.updateDocument(
         DbCollectionName.v2_users,

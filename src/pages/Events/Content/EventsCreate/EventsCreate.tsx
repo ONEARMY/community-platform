@@ -179,11 +179,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             name="location"
                             className="location-search-create"
                             validateFields={[]}
-                            validate={(value: any) =>
-                              value.hasOwnProperty('latlng')
-                                ? undefined
-                                : 'Required'
-                            }
+                            validate={required}
                             component={LocationSearchField}
                           />
                         </Flex>

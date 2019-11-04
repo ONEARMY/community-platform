@@ -126,11 +126,8 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
           {!user.location || editAddress ? (
             <Box>
               <Text mb={2} mt={4} medium>
-                Your workspace address
+                Your workspace address *
               </Text>
-              {/* <div style={{ position: 'relative', zIndex: 2 }}>
-                <LocationSearch onChange={v => this.onLocationChange(v)} />
-              </div> */}
               <Field
                 name={'location'}
                 customChange={v => {

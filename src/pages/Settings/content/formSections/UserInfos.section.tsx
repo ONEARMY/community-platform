@@ -112,14 +112,16 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             <Text mb={2} mt={7} width="100%" medium>
               Cover Image *
             </Text>
-            <Field
-              id="cover_image"
-              name="coverImages"
-              validate={required}
-              src={user.coverImages ? user.coverImages[0] : null}
-              component={ImageInputField}
-              customChange={v => this.props.onCoverImgChange(v)}
-            />
+            <Box height="100px" width="150px">
+              <Field
+                id="cover_image"
+                name="coverImages"
+                validate={required}
+                src={user.coverImages ? user.coverImages[0] : null}
+                component={ImageInputField}
+                customChange={v => this.props.onCoverImgChange(v)}
+              />
+            </Box>
           </Flex>
           <Flex wrap={'nowrap'} alignItems={'center'} width={1}>
             <Text mb={2} mt={7} medium>

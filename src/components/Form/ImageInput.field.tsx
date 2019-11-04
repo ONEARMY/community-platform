@@ -18,7 +18,7 @@ export const ImageInputField = ({
 }: IExtendedFieldProps) => (
   <>
     <FieldContainer
-      style={{ height: '100px', width: '150px', overflow: 'hidden' }}
+      style={{ height: '100%', width: '100%', overflow: 'hidden' }}
       invalid={meta.touched && meta.error}
       data-cy={dataCy}
     >

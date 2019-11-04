@@ -303,12 +303,13 @@ export class HowtoForm extends React.Component<IProps, IState> {
                               <Field
                                 id="cover_image"
                                 name="cover_image"
+                                validate={required}
                                 src={formValues.cover_image}
                                 component={ImageInputField}
                               />
                             </Box>
 
-                            <Text small color={'grey'} mt={2}>
+                            <Text small color={'grey'} mt={4}>
                               This image should be landscape. We advise
                               1280x960px
                             </Text>

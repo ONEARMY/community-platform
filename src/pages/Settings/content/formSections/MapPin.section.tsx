@@ -97,7 +97,6 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
                   this.props.onInputChange(v)
                 }}
                 component={LocationSearchField}
-                validate={required}
               />
               {showSubmitErrors && (
                 <Text small color={theme.colors.red} mb="5px">

@@ -194,7 +194,6 @@ export class ImageInput extends React.Component<IProps, IState> {
                       if (imgPreviewMode) {
                         this.props.onFilesChange(null)
                       }
-
                       this.setState({
                         inputFiles: [],
                         convertedFiles: [],

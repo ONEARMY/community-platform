@@ -26,6 +26,7 @@ import theme from 'src/themes/styled.theme'
 import { INITIAL_VALUES } from './Template'
 import { Box } from 'rebass'
 import { ILocation } from 'src/models/common.models'
+import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 
 export interface IFormValues extends Partial<IUserPP> {
   // form values are simply subset of user profile fields
@@ -82,6 +83,17 @@ export class UserSettings extends React.Component<IProps, IState> {
       customFormValues: {
         ...this.state.customFormValues,
         location: l,
+      },
+    })
+  }
+  public onCoverImgChange(v: IConvertedFileMeta) {
+    // TODO always use an array of coverImages (will do when allow multiple cover images)
+    const coverImagesArray: IConvertedFileMeta[] = []
+    coverImagesArray.push(v)
+    this.setState({
+      customFormValues: {
+        ...this.state.customFormValues,
+        coverImages: coverImagesArray,
       },
     })
   }
@@ -162,7 +174,10 @@ export class UserSettings extends React.Component<IProps, IState> {
                             }
                             showSubmitErrors={!isWTSelected}
                           />
-                          <UserInfosSection user={user} />
+                          <UserInfosSection
+                            onCoverImgChange={v => this.onCoverImgChange(v)}
+                            user={user}
+                          />
                           <UserMapPinSection
                             onInputChange={v => this.updateLocation(v)}
                             user={user}
@@ -171,7 +186,10 @@ export class UserSettings extends React.Component<IProps, IState> {
                       )}
                       {customFormValues.profileType === 'collection-point' && (
                         <>
-                          <UserInfosSection user={user} />
+                          <UserInfosSection
+                            onCoverImgChange={v => this.onCoverImgChange(v)}
+                            user={user}
+                          />
                           <CollectionSection
                             onInputChange={v => console.log(v)}
                             user={user}
@@ -184,7 +202,10 @@ export class UserSettings extends React.Component<IProps, IState> {
                       )}
                       {customFormValues.profileType === 'community-builder' && (
                         <>
-                          <UserInfosSection user={user} />
+                          <UserInfosSection
+                            onCoverImgChange={v => this.onCoverImgChange(v)}
+                            user={user}
+                          />
                           <UserMapPinSection
                             onInputChange={v => this.updateLocation(v)}
                             user={user}
@@ -193,7 +214,10 @@ export class UserSettings extends React.Component<IProps, IState> {
                       )}
                       {customFormValues.profileType === 'machine-builder' && (
                         <>
-                          <UserInfosSection user={user} />
+                          <UserInfosSection
+                            onCoverImgChange={v => this.onCoverImgChange(v)}
+                            user={user}
+                          />
                           <ExpertiseSection user={user} />
                           <UserMapPinSection
                             onInputChange={v => this.updateLocation(v)}
@@ -203,7 +227,10 @@ export class UserSettings extends React.Component<IProps, IState> {
                       )}
                       {customFormValues.profileType === 'member' && (
                         <>
-                          <UserInfosSection user={user} />
+                          <UserInfosSection
+                            onCoverImgChange={v => this.onCoverImgChange(v)}
+                            user={user}
+                          />
                         </>
                       )}
                       {customFormValues.profileType === undefined && <></>}
@@ -230,12 +257,19 @@ export class UserSettings extends React.Component<IProps, IState> {
                   <Button
                     data-cy="save"
                     onClick={() => {
-                      const form = document.getElementById('userProfileForm')
-                      if (typeof form !== 'undefined' && form !== null) {
-                        form.dispatchEvent(
-                          new Event('submit', { cancelable: true }),
-                        )
+                      if (
+                        !customFormValues.profileType ||
+                        (customFormValues.profileType === 'workspace' &&
+                          !customFormValues.workspaceType)
+                      ) {
                         this.checkSubmitErrors()
+                      } else {
+                        const form = document.getElementById('userProfileForm')
+                        if (typeof form !== 'undefined' && form !== null) {
+                          form.dispatchEvent(
+                            new Event('submit', { cancelable: true }),
+                          )
+                        }
                       }
                     }}
                     width={1}

@@ -3,12 +3,19 @@ import { ImageInput } from '../ImageInput/ImageInput'
 import { IFieldProps } from './Fields'
 import { FieldContainer, ErrorMessage } from './elements'
 
+interface IExtendedFieldProps extends IFieldProps {
+  // add additional onChange style method to respond more directly to value changes
+  // without need for react-final-form listener
+  customChange?: (location) => void
+}
+
 export const ImageInputField = ({
   input,
   meta,
   'data-cy': dataCy,
+  customChange,
   ...rest
-}: IFieldProps) => (
+}: IExtendedFieldProps) => (
   <>
     <FieldContainer invalid={meta.touched && meta.error} data-cy={dataCy}>
       <ImageInput
@@ -17,6 +24,9 @@ export const ImageInputField = ({
         // (no native blur event)
         onFilesChange={file => {
           input.onChange(file)
+          if (customChange) {
+            customChange(file)
+          }
           input.onBlur()
         }}
       />

@@ -16,9 +16,12 @@ import { Link } from './Fields/Link.field'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { Image, Box } from 'rebass'
+import { toJS } from 'mobx'
+import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 
 interface IProps {
   user: IUserPP | any
+  onCoverImgChange: (v: IConvertedFileMeta) => void
 }
 interface IState {
   readOnly: boolean
@@ -41,6 +44,7 @@ const ImageInputFieldWrapper = styled.div`
   width: 150px;
   height: 100px;
   margin-right: 10px;
+  overflow: hidden;
 `
 
 export class UserInfosSection extends React.Component<IProps, IState> {
@@ -117,13 +121,11 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             </Text>
             <ImageInputFieldWrapper>
               <Field
-                data-cy={'cover-images'}
-                canDelete
-                hasText={false}
+                id="cover_image"
                 name="coverImages"
-                src={user ? user.coverImages : ''}
-                validate={required}
+                src={user.coverImages ? user.coverImages[0] : null}
                 component={ImageInputField}
+                customChange={v => this.props.onCoverImgChange(v)}
               />
             </ImageInputFieldWrapper>
           </Flex>

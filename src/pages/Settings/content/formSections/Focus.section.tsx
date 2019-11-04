@@ -66,7 +66,6 @@ export class FocusSection extends React.Component<IProps, IState> {
                 name="profileType"
                 isSelected={checkedFocusValue === profile.label}
                 onChange={v => this.onInputChange(v as ProfileTypeLabel)}
-                required
                 imageSrc={profile.imageSrc}
                 textLabel={profile.textLabel}
               />

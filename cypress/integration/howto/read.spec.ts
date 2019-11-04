@@ -195,7 +195,7 @@ describe('[How To]', () => {
       cy.step('Edit button is available to the owner')
       cy.visit(specificHowtoUrl)
       cy.login('howto_creator@test.com', 'test1234')
-      cy.get('[data-cy=edit]')
+      cy.get('[data-cy=edit]', {timeout: 2000})
         .click()
         .url()
         .should('include', `${specificHowtoUrl}/edit`)

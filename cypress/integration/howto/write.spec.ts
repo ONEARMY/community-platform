@@ -214,10 +214,14 @@ describe('[How To]', () => {
         'title': 'Step 2 is easy',
       }],
     }
+
+    beforeEach(() => {
+      cy.logout()
+    })
+
     
     it('[By Anonymous]', () => {
       cy.step('Redirect to Home Page after visiting an url')
-      cy.logout()
       cy.visit(editHowtoUrl)
       cy.url().should('not.include', editHowtoUrl)
     })
@@ -225,13 +229,11 @@ describe('[How To]', () => {
     it('[By Authenticated]', () => {
       cy.visit('/how-to')
       cy.login('howto_creator@test.com', 'test1234')
-
       cy.visit(editHowtoUrl)
       cy.url().should('not.include', editHowtoUrl)
     })
 
     it('[By Owner]', () => {
-      cy.logout()
       cy.login('howto_editor@test.com', 'test1234')
       cy.step('Go to Edit mode')
       cy.visit(editHowtoUrl)

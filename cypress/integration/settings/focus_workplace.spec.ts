@@ -2,17 +2,6 @@ import { DbCollectionName, Page } from '../../utils/test-utils'
 import { UserMenuItem } from '../../support/commands'
 
 describe('[Settings]', () => {
-  it('[Visit google]', () => {
-    cy.visit('www.google.com')
-    cy.wait(60000)
-  })
-  it('[Visit Howto]', () => {
-    cy.visit(Page.HOME_PAGE)
-  })
-  it('[Visit Event]', () => {
-    cy.visit(Page.EVENTS)
-  })
-
   describe('[Focus Workplace]', () => {
     const freshSettings = {
       _authID: 'l9N5HFHzSjQvtP9g9MyFnPpkFmM2',
@@ -122,7 +111,7 @@ describe('[Settings]', () => {
       cy.get('[data-cy=location]').find(':text').type('ohio')
       cy.get('[data-cy=location]').contains('Columbus').click()
 
-      cy.get('[data-cy=save]').click().wait(3000)
+      cy.get('[data-cy=save]').click().wait(6000)
 
       cy.step('Verify if all changes were saved correctly')
       cy.queryDocuments(DbCollectionName.v2_users, 'userName', '==', expected.userName).should('eqSettings', expected)

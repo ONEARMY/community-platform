@@ -74,9 +74,8 @@ const MoreBox = styled(Box)`
 `
 
 
-@inject('howtoStore')
-@inject('userStore')
-@observer(['userStore'])
+@inject('howtoStore', 'userStore')
+@observer
 export class Howto extends React.Component<
   RouteComponentProps<IRouterCustomParams>,
   IState

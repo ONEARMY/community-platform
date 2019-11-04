@@ -45,6 +45,7 @@ interface IState {
   showDeleteDialog?: boolean
   isFocusSelected: boolean
   isWTSelected: boolean
+  isLocationSelected: boolean
 }
 
 @inject('userStore')
@@ -58,6 +59,7 @@ export class UserSettings extends React.Component<IProps, IState> {
       showNotification: false,
       user: props.user,
       isFocusSelected: user ? true : false,
+      isLocationSelected: user ? user.location !== undefined : false,
       isWTSelected: true,
     }
   }
@@ -81,6 +83,7 @@ export class UserSettings extends React.Component<IProps, IState> {
         ...this.state.customFormValues,
         location: l,
       },
+      isLocationSelected: true,
     })
   }
   public onCoverImgChange(v: IConvertedFileMeta) {
@@ -101,11 +104,22 @@ export class UserSettings extends React.Component<IProps, IState> {
     if (!this.state.customFormValues.workspaceType) {
       this.setState({ isWTSelected: false })
     }
+    if (
+      this.state.customFormValues.profileType !== 'member' &&
+      !this.state.customFormValues.location
+    ) {
+      this.setState({ isLocationSelected: false })
+    }
   }
 
   render() {
     const user = this.injected.userStore.user!
-    const { customFormValues, isFocusSelected, isWTSelected } = this.state
+    const {
+      customFormValues,
+      isFocusSelected,
+      isWTSelected,
+      isLocationSelected,
+    } = this.state
     // Need to convert mobx observable user object into a Javasrcipt structure using toJS fn
     // to allow final-form-array to display the initial values
     const initialFormValues = user.profileType
@@ -176,6 +190,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           <UserMapPinSection
                             onInputChange={v => this.updateLocation(v)}
                             user={user}
+                            showSubmitErrors={!isLocationSelected}
                           />
                         </>
                       )}
@@ -196,6 +211,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           <UserMapPinSection
                             onInputChange={v => this.updateLocation(v)}
                             user={user}
+                            showSubmitErrors={!isLocationSelected}
                           />
                         </>
                       )}
@@ -208,6 +224,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           <UserMapPinSection
                             onInputChange={v => this.updateLocation(v)}
                             user={user}
+                            showSubmitErrors={!isLocationSelected}
                           />
                         </>
                       )}
@@ -228,6 +245,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           <UserMapPinSection
                             onInputChange={v => this.updateLocation(v)}
                             user={user}
+                            showSubmitErrors={!isLocationSelected}
                           />
                         </>
                       )}

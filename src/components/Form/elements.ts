@@ -13,7 +13,6 @@ export const inputStyles = ({ invalid }: IFormElement) => css`
   background: ${theme.colors.background};
   width: 100%;
   box-sizing: border-box;
-  margin-bottom: 10px;
 
   &:disabled {
     border: none;
@@ -58,7 +57,6 @@ export const FieldContainer = styled.div<IFormElement>`
 `
 export const ErrorMessage = styled.span`
   position: relative;
-  bottom: ${theme.space[2]}px;
   color: ${theme.colors.error};
   font-size: ${theme.fontSizes[0]}px;
   height: ${theme.space[0]};

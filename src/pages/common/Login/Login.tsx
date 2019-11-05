@@ -1,20 +1,13 @@
 import * as React from 'react'
 import Modal from '@material-ui/core/Modal'
 import { auth } from 'src/utils/firebase'
-import { Button } from 'src/components/Button'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import { LoginForm } from './Login.form'
 import { SignUpForm } from './SignUp.form'
 import { ResetPWForm } from './ResetPW.form'
 import { Box } from 'rebass'
-import { display, DisplayProps } from 'styled-system'
-import styled from 'styled-components'
-import { Link } from 'src/components/Links'
-
-const ButtonSign = styled(Button)<DisplayProps>`
-  ${display}
-`
+import ProfileButtons from '../Header/Menu/Profile/ProfileButtons'
 
 interface IProps {
   userStore?: UserStore
@@ -91,29 +84,7 @@ export class LoginComponent extends React.Component<IProps, IState> {
     const user = this.injected.userStore.user
     return (
       <>
-        <Link to={'/sign-in'}>
-          <ButtonSign
-            variant="secondary"
-            display={['none', 'none', 'flex']}
-            small
-            mr={2}
-            data-cy="login"
-            style={{ fontWeight: 'bold' }}
-          >
-            Login
-          </ButtonSign>
-        </Link>
-        <Link to={'/sign-up'}>
-          <ButtonSign
-            display={['none', 'none', 'flex']}
-            variant="colorful"
-            small
-            // onClick={this.toggleModal}
-            data-cy="join"
-          >
-            Join
-          </ButtonSign>
-        </Link>
+        <ProfileButtons isMobile={false} />
         <Modal
           aria-labelledby="user-login-modal"
           aria-describedby="click to show user login"

@@ -6,25 +6,21 @@ import Text from 'src/components/Text'
 import { TextAreaField } from 'src/components/Form/Fields'
 import { Box, Flex } from 'rebass'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
-import { MapsStore } from 'src/stores/Maps/maps.store'
-import { UserStore } from 'src/stores/User/user.store'
 import { Map, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { generatePinFilters } from 'src/mocks/maps.mock'
 import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
 import { IUserPP } from 'src/models/user_pp.models'
 import { Button } from 'src/components/Button'
 import { ILocation } from 'src/models/common.models'
+import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
+import theme from 'src/themes/styled.theme'
 
 interface IProps {
   user: IUserPP
   onInputChange: (v: ILocation) => void
+  showSubmitErrors: boolean
 }
-// interface IInjectedProps extends IProps {
-//   mapsStore: MapsStore
-//   userStore: UserStore
-// }
 interface IState {
   editAddress: boolean
   lat: number
@@ -36,10 +32,8 @@ interface IState {
 const customMarker = L.icon({
   iconUrl: require('src/assets/icons/map-marker.png'),
   iconSize: [20, 28],
-  iconAnchor: [20, 56],
+  iconAnchor: [10, 28],
 })
-
-// const DEFAULT_PIN_TYPE: string = 'member'
 
 // validation - return undefined if no error (i.e. valid)
 const required = (value: any) => (value ? undefined : 'Required')
@@ -47,7 +41,7 @@ const required = (value: any) => (value ? undefined : 'Required')
 @inject('mapsStore', 'userStore')
 @observer
 export class UserMapPinSection extends React.Component<IProps, IState> {
-  pinFilters = generatePinFilters()
+  pinFilters = MAP_GROUPINGS
   constructor(props: IProps) {
     super(props)
     this.state = {
@@ -61,46 +55,8 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
     }
   }
 
-  // update map preview and automatically save pin on location change
-  // private onLocationChange(location: ILocation) {
-  //   const pin = this.generateUserPin(location)
-  //   this.setState({
-  //     userPin: pin,
-  //   })
-  //   this.saveUserPin()
-  // }
-
-  // Map pin only stores a small amount of user data (id, address)
-  // Rest is pulled from user profile, and kept independent of map pin datapoint
-  // So that data only needs to be kept fresh in one place (i.e. not have user.location in profile)
-  // private generateUserPin(location: ILocation): IMapPin {
-  //   const { lat, lng } = location.latlng
-  //   const address = location.value
-  //   return {
-  //     location: { lat, lng, address },
-  //     // TODO - give proper options for pin type and pass
-  //     pinType: DEFAULT_PIN_TYPE,
-  //     _id: this.user._id,
-  //   }
-  // }
-
-  // load existing user pin from database (used on first load)
-  // private async loadUserPin() {
-  //   const userPin = await this.injected.mapsStore.getPin(this.user.userName)
-  //   // console.log('user pin', userPin)
-  //   this.setState({ userPin })
-  // }
-
-  // convert database pin type (string) to pin with enhanced pinType meta
-  // private setPinTypeMeta(pin: IMapPin): IMapPinWithType {
-  //   return {
-  //     ...pin,
-  //     pinType: this.pinFilters.find(p => p.name === pin.pinType) as IPinType,
-  //   }
-  // }
-
   render() {
-    const { user } = this.props
+    const { user, showSubmitErrors } = this.props
     const { lat, lng, zoom, editAddress, isOpen } = this.state
 
     return (
@@ -128,11 +84,8 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
           {!user.location || editAddress ? (
             <Box>
               <Text mb={2} mt={4} medium>
-                Your workspace address
+                Your workspace address *
               </Text>
-              {/* <div style={{ position: 'relative', zIndex: 2 }}>
-                <LocationSearch onChange={v => this.onLocationChange(v)} />
-              </div> */}
               <Field
                 name={'location'}
                 customChange={v => {
@@ -144,21 +97,13 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
                   this.props.onInputChange(v)
                 }}
                 component={LocationSearchField}
-                validate={required}
               />
+              {showSubmitErrors && (
+                <Text small color={theme.colors.red} mb="5px">
+                  Please select your location
+                </Text>
+              )}
 
-              {/* wrap both above and below in positioned div to ensure location search box appears above map
-              <div style={{ height: '300px', position: 'relative', zIndex: 1 }}>
-                <MapView
-                  zoom={location ? 13 : 2}
-                  center={location ? location.latlng : undefined}
-                  pins={this.mapPins}
-                  filters={this.pinFilters}
-                  TODO - popup not currently shown as doesn't update correctly
-                  activePinDetail={this.state.activePinDetail}
-                  onPinClicked={() => this.getActivePinDetail()}
-                />
-              </div> */}
               <Map
                 center={[lat, lng]}
                 zoom={zoom}
@@ -175,7 +120,7 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
                 />
                 <Marker position={[lat, lng]} icon={customMarker}>
                   <Popup maxWidth={225} minWidth={225}>
-                    This adress will be shown on my profile
+                    This adress will be shown on the map
                   </Popup>
                 </Marker>
               </Map>

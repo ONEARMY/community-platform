@@ -3,20 +3,34 @@ import { ImageInput } from '../ImageInput/ImageInput'
 import { IFieldProps } from './Fields'
 import { FieldContainer, ErrorMessage } from './elements'
 
+interface IExtendedFieldProps extends IFieldProps {
+  // add additional onChange style method to respond more directly to value changes
+  // without need for react-final-form listener
+  customChange?: (location) => void
+}
+
 export const ImageInputField = ({
   input,
   meta,
   'data-cy': dataCy,
+  customChange,
   ...rest
-}: IFieldProps) => (
+}: IExtendedFieldProps) => (
   <>
-    <FieldContainer invalid={meta.touched && meta.error} data-cy={dataCy}>
+    <FieldContainer
+      style={{ height: '100%', width: '100%', overflow: 'hidden' }}
+      invalid={meta.touched && meta.error}
+      data-cy={dataCy}
+    >
       <ImageInput
         {...rest}
         // as validation happens on blur also want to artificially trigger when values change
         // (no native blur event)
-        onFilesChange={files => {
-          input.onChange(files)
+        onFilesChange={file => {
+          input.onChange(file)
+          if (customChange) {
+            customChange(file)
+          }
           input.onBlur()
         }}
       />

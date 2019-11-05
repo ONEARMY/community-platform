@@ -27,6 +27,7 @@ import { DIFFICULTY_OPTIONS, TIME_OPTIONS } from './FormSettings'
 import { Image, Box } from 'rebass'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import { HowToSubmitStatus } from './SubmitStatus'
+import { Modal } from 'src/components/Modal/Modal'
 
 interface IState {
   formSaved: boolean
@@ -85,6 +86,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
       _toDocsList: false,
       editCoverImg: false,
       fileEditMode: false,
+      showSubmitModal: false,
     }
   }
 
@@ -154,7 +156,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                         card
                         mediumRadius
                         bg={'white'}
-                        mt={5}
+                        mt={3}
                         p={4}
                         flexWrap="wrap"
                         flexDirection="column"
@@ -267,7 +269,6 @@ export class HowtoForm extends React.Component<IProps, IState> {
                                     />
                                   ))}
                                   <Button
-                                    small
                                     variant={'tertiary'}
                                     icon="delete"
                                     onClick={() =>
@@ -290,55 +291,32 @@ export class HowtoForm extends React.Component<IProps, IState> {
                               )}
                             </Flex>
                           </Flex>
-
                           {/* Right side */}
                           <Flex
                             px={2}
                             flex={[1, 1, 3]}
                             flexDirection={'column'}
-                            data-cy="intro-cover"
+                            data-cy={'intro-cover'}
                           >
                             <Label htmlFor="cover_image">Cover image *</Label>
-                            {formValues.cover_image && !editCoverImg ? (
-                              <Flex
-                                alignItems={'center'}
-                                justifyContent={'center'}
-                                flexDirection={'column'}
-                              >
-                                <Image
-                                  sx={{ opacity: 0.5 }}
-                                  src={formValues.cover_image.downloadUrl}
-                                />
-                                <Button
-                                  icon={'delete'}
-                                  data-cy="delete"
-                                  variant={'tertiary'}
-                                  sx={{ position: 'absolute' }}
-                                  onClick={() =>
-                                    this.setState({
-                                      editCoverImg: !editCoverImg,
-                                    })
-                                  }
-                                />
-                              </Flex>
-                            ) : (
+                            <Box height="230px">
                               <Field
                                 id="cover_image"
                                 name="cover_image"
                                 validate={required}
-                                validateFields={[]}
+                                src={formValues.cover_image}
                                 component={ImageInputField}
                               />
-                            )}
+                            </Box>
 
-                            <Text small color={'grey'} mt={2}>
+                            <Text small color={'grey'} mt={4}>
                               This image should be landscape. We advise
                               1280x960px
                             </Text>
                             <Flex mt={2}>
                               <Field
                                 name="caption"
-                                data-cy="intro-caption"
+                                data-cy={'intro-caption'}
                                 component={InputField}
                                 placeholder="Insert Caption"
                               />
@@ -346,57 +324,77 @@ export class HowtoForm extends React.Component<IProps, IState> {
                           </Flex>
                         </Flex>
                       </Flex>
-                    </Flex>
 
-                    {/* Steps Info */}
-                    <FieldArray name="steps">
-                      {({ fields }) => (
-                        <>
-                          <PoseGroup preEnterPose="preEnter">
-                            {fields.map((name, index: number) => (
-                              <AnimationContainer
-                                key={fields.value[index]._animationKey}
-                              >
-                                <HowtoStep
+                      {/* Steps Info */}
+                      <FieldArray name="steps">
+                        {({ fields }) => (
+                          <>
+                            <PoseGroup preEnterPose="preEnter">
+                              {fields.map((name, index: number) => (
+                                <AnimationContainer
                                   key={fields.value[index]._animationKey}
-                                  step={name}
-                                  index={index}
-                                  images={fields.value[index].images}
-                                  onDelete={(fieldIndex: number) => {
-                                    fields.remove(fieldIndex)
-                                  }}
-                                />
-                              </AnimationContainer>
-                            ))}
-                          </PoseGroup>
-                          <Flex>
-                            <Button
-                              icon={'add'}
-                              data-cy="add-step"
-                              mx="auto"
-                              my={20}
-                              variant="secondary"
-                              medium
-                              onClick={() => {
-                                fields.push({
-                                  title: '',
-                                  text: '',
-                                  images: [],
-                                  // HACK - need unique key, this is a rough method to generate form random numbers
-                                  _animationKey: `unique${Math.random()
-                                    .toString(36)
-                                    .substring(7)}`,
-                                })
-                              }}
-                            >
-                              Add step
-                            </Button>
-                          </Flex>
-                        </>
-                      )}
-                    </FieldArray>
+                                >
+                                  <HowtoStep
+                                    key={fields.value[index]._animationKey}
+                                    step={name}
+                                    index={index}
+                                    images={fields.value[index].images}
+                                    onDelete={(fieldIndex: number) => {
+                                      fields.remove(fieldIndex)
+                                    }}
+                                  />
+                                </AnimationContainer>
+                              ))}
+                            </PoseGroup>
+                            <Flex>
+                              <Button
+                                icon={'add'}
+                                data-cy={'add-step'}
+                                mx="auto"
+                                my={20}
+                                variant="secondary"
+                                medium
+                                onClick={() => {
+                                  fields.push({
+                                    title: '',
+                                    text: '',
+                                    images: [],
+                                    // HACK - need unique key, this is a rough method to generate form random numbers
+                                    _animationKey: `unique${Math.random()
+                                      .toString(36)
+                                      .substring(7)}`,
+                                  })
+                                }}
+                              >
+                                Add step
+                              </Button>
+                            </Flex>
+                          </>
+                        )}
+                      </FieldArray>
+                    </Flex>
                   </form>
                 </Flex>
+                {this.state.showSubmitModal && (
+                  <Modal>
+                    <>
+                      <Button
+                        data-cy={submitting ? '' : 'view-howto'}
+                        mt={3}
+                        variant={submitting ? 'disabled' : 'outline'}
+                        icon="arrow-forward"
+                        onClick={() => {
+                          if (submitting) {
+                            return
+                          }
+                          this.props.history.push('/how-to/' + values.slug)
+                        }}
+                      >
+                        View How-To
+                      </Button>
+                    </>
+                  </Modal>
+                )}
                 {/* post guidelines container */}
                 <Flex
                   flexDirection={'column'}
@@ -409,7 +407,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                   <Box sx={{ position: 'fixed', maxWidth: '400px' }}>
                     <PostingGuidelines />
                     <Button
-                      data-cy="submit"
+                      data-cy={'submit'}
                       onClick={() => {
                         const form = document.getElementById('howtoForm')
                         if (typeof form !== 'undefined' && form !== null) {
@@ -422,7 +420,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                       mt={3}
                       variant={disabled ? 'primary' : 'primary'}
                       type="submit"
-                      disabled={submitting || invalid}
+                      disabled={submitting}
                     >
                       {this.props.parentType === 'create' ? (
                         <span>Publish</span>

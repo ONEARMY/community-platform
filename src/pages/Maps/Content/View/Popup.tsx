@@ -1,21 +1,29 @@
-import React, { RefObject } from 'react'
+import React from 'react'
 import L from 'leaflet'
-import { Image } from 'rebass'
 import Flex from 'src/components/Flex'
-import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
-import { Popup as LeafletPopup } from 'react-leaflet'
+import { Popup as LeafletPopup, Map } from 'react-leaflet'
 import styled from 'styled-components'
 import { distanceInWords } from 'date-fns'
 
-import { IMapPin, IMapPinDetail } from 'src/models/maps.models'
+import {
+  IMapPin,
+  IMapPinWithDetail,
+  IMapPinDetail,
+} from 'src/models/maps.models'
 
 import './popup.css'
 import { Link } from 'src/components/Links'
+import { inject } from 'mobx-react'
+import { MapsStore } from 'src/stores/Maps/maps.store'
+import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 
 interface IProps {
-  pinDetail?: IMapPin | IMapPinDetail
-  map: any
+  activePin: IMapPin | IMapPinWithDetail
+  map: React.RefObject<Map>
+}
+interface IInjectedProps extends IProps {
+  mapsStore: MapsStore
 }
 
 const HeroImage = styled.div<{ src: string }>`
@@ -29,72 +37,58 @@ const HeroImage = styled.div<{ src: string }>`
   object-fit: cover;
 `
 
-interface IPinTypeDotProps {
-  type: string
-}
-const PinTypeDot = styled.div<IPinTypeDotProps>`
-  background-color: ${p => (p.type === 'place' ? 'red' : 'blue')};
-  display: inline-block;
-  border-radius: ${p => (p.type === 'place' ? '0%' : '50%')};
-  line-height: 25px;
-  text-align: center;
-  color: white;
-  width: 25px;
-  height: 25px;
-`
-
 const LastOnline = styled.div`
   margin: 7px 2px;
   color: grey;
   font-size: 0.6rem;
 `
 
+@inject('mapsStore')
 export class Popup extends React.Component<IProps> {
-  private popup
-
-  constructor(props) {
+  leafletRef: React.RefObject<LeafletPopup> = React.createRef()
+  constructor(props: IProps) {
     super(props)
-    this.popup = React.createRef()
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.pinDetail === undefined) {
-      return
+  get injected() {
+    return this.props as IInjectedProps
+  }
+
+  componentWillReceiveProps() {
+    this.openPopup()
+  }
+
+  // HACK - as popup is created dynamically want to be able to trigger
+  // open on props change
+  public openPopup() {
+    if (this.leafletRef.current) {
+      this.leafletRef.current.leafletElement.openOn(
+        this.props.map.current!.leafletElement,
+      )
     }
-
-    this.setPinLocation(this.props.pinDetail)
-  }
-
-  private setPinLocation(pin) {
-    this.popup.current.leafletElement
-      .setLatLng([pin.location.lat, pin.location.lng])
-      .openOn(this.props.map.current.leafletElement)
   }
 
   private renderLoading() {
     return 'loading'
   }
 
-  private renderContent({
-    heroImageUrl,
-    profilePicUrl,
-    name,
-    pinType,
-    shortDescription,
-    lastActive,
-  }) {
-    let lastActiveText: string = 'a long time'
-
-    if (lastActive) {
-      lastActiveText = distanceInWords(lastActive, new Date())
-    }
-
+  private renderContent(pin: IMapPinWithDetail) {
+    const group = MAP_GROUPINGS.find(g => {
+      return pin.subType
+        ? g.subType === pin.subType && g.type === pin.type
+        : g.type === pin.type
+    })
+    const { lastActive, heroImageUrl, shortDescription, name } = pin.detail
+    const lastActiveText = lastActive
+      ? distanceInWords(lastActive, new Date())
+      : 'a long time'
+    console.log('detail', pin.detail)
     return (
       <>
         <HeroImage src={heroImageUrl} />
         <Flex flexDirection={'column'} px={2} py={2}>
           <Text tags mb={2}>
-            {pinType.displayName}
+            {group ? group.displayName : pin.type}
           </Text>
           <Link to={'u/' + name}>
             <Text medium mb={1}>
@@ -111,20 +105,19 @@ export class Popup extends React.Component<IProps> {
   }
 
   public render() {
-    const { pinDetail } = this.props
-
-    const content =
-      pinDetail !== undefined && (pinDetail as IMapPinDetail).name
-        ? this.renderContent(pinDetail as IMapPinDetail)
-        : this.renderLoading()
+    console.log('popup render', this.props.activePin)
+    const activePin = this.props.activePin as IMapPinWithDetail
+    const content = activePin.detail
+      ? this.renderContent(activePin)
+      : this.renderLoading()
 
     return (
       <LeafletPopup
-        ref={this.popup}
-        position={[0, 0]}
+        ref={this.leafletRef}
+        position={[activePin.location.lat, activePin.location.lng]}
         offset={new L.Point(2, -10)}
         closeButton={false}
-        className={this.props.pinDetail !== undefined ? '' : 'closed'}
+        className={activePin !== undefined ? '' : 'closed'}
         minWidth={230}
         maxWidth={230}
       >

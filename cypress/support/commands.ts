@@ -143,7 +143,7 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
         },
       })
       return firestore.updateDocument(collectionName, docId, docData)
-       
+
     },
   )
 
@@ -219,7 +219,6 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
   Cypress.Commands.add('screenClick', () => {
     cy.get('[data-cy=header]').click({ force: true })
   })
-
 }
 
 attachCustomCommands(Cypress, firebase)

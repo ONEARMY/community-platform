@@ -63,13 +63,13 @@ class CollectionReference<T> {
       async (obs: Observer<(T & DBDoc)[]>) => {
         // 1. Emit cached collection
         const cached = await cacheDB.getCollection<T>(endpoint)
-        console.log('cached ' + endpoint, cached)
+        console.debug('cached ' + endpoint, cached)
         obs.next(cached)
         if (cached.length === 0) {
           // 2. If no cache, populate using large query db
-          console.log('getting server cache')
+          console.debug('getting server cache')
           const serverCache = await serverCacheDB.getCollection<T>(endpoint)
-          console.log('serverCache', serverCache)
+          console.debug('serverCache', serverCache)
           await cacheDB.setBulkDocs(endpoint, serverCache)
           obs.next(serverCache)
         }
@@ -190,7 +190,7 @@ class DocReference<T> {
    * If contains metadata fields (e.g. `_id`)
    * then this will be used instead of generated id
    */
-  async set(data: any) {
+  async set(data: T) {
     const { serverDB, cacheDB } = this.clients
     const dbDoc: DBDoc = this._setDocMeta(data)
     await serverDB.setDoc(this.endpoint, dbDoc)
@@ -204,7 +204,7 @@ class DocReference<T> {
    * to delete docs from their cache.
    */
   async delete() {
-    return this.set({ _deleted: true })
+    return this.set({ _deleted: true } as any)
   }
 
   batchDoc(data: any) {

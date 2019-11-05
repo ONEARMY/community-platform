@@ -67,7 +67,7 @@ export interface IOpeningHours {
 
 export interface IUserPP extends IUser {
   profileType?: ProfileTypeLabel
-  workspaceType?: WorkspaceType
+  workspaceType?: WorkspaceType | null
   coverImages?: IUploadedFileMeta[] | IConvertedFileMeta[]
   links?: ILink[]
   mapPinDescription?: string

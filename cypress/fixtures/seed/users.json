@@ -70,5 +70,41 @@
     "_created": "2018-01-24T14:46:42.038Z",
     "_modified": "2018-01-24T14:46:42.038Z",
     "verified": true
+  },
+  {
+    "_authID": "pbx4jStD8sNj4OEZTg4AegLTl6E3",
+    "_id": "settings_member_new",
+    "userName": "settings_member_new",
+    "_deleted": false,
+    "_created": "2018-01-24T14:46:42.038Z",
+    "_modified": "2018-01-24T14:46:42.038Z",
+    "verified": true
+  },
+  {
+    "_authID": "wwtBAo7TrkSQ9nAaBN3D93I1sCM2",
+    "_id": "settings_machine_new",
+    "userName": "settings_machine_new",
+    "_deleted": false,
+    "_created": "2018-01-24T14:46:42.038Z",
+    "_modified": "2018-01-24T14:46:42.038Z",
+    "verified": true
+  },
+  {
+    "_authID": "vWAbQvq21UbvhGldakIy1x4FpeF2",
+    "_id": "settings_community_new",
+    "userName": "settings_community_new",
+    "_deleted": false,
+    "_created": "2018-01-24T14:46:42.038Z",
+    "_modified": "2018-01-24T14:46:42.038Z",
+    "verified": true
+  },
+  {
+    "_authID": "uxupeYR7glagQyhBy8q0blr0chd2",
+    "_id": "settings_plastic_new",
+    "userName": "settings_plastic_new",
+    "_deleted": false,
+    "_created": "2018-01-24T14:46:42.038Z",
+    "_modified": "2018-01-24T14:46:42.038Z",
+    "verified": true
   }
 ]

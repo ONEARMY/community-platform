@@ -9,6 +9,9 @@ import { Box } from 'rebass'
 import './styles.css'
 
 import { ILatLng } from 'src/models/maps.models'
+import { GetLocation } from 'src/utils/geolocation'
+import { Map } from 'react-leaflet'
+import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 
 interface IProps {
   mapsStore: MapsStore
@@ -21,7 +24,7 @@ interface IState {
 @inject('mapsStore')
 @observer
 class MapsPageClass extends React.Component<IProps, IState> {
-  map: any
+  mapRef: React.RefObject<Map>
 
   constructor(props: any) {
     super(props)
@@ -29,34 +32,44 @@ class MapsPageClass extends React.Component<IProps, IState> {
       center: { lat: 51.0, lng: 19.0 },
       zoom: 3,
     }
-    this.map = React.createRef()
+
+    this.mapRef = React.createRef()
   }
 
   public async componentDidMount() {
+    this.promptUserLocation()
     this.props.mapsStore.retrieveMapPins()
     this.props.mapsStore.retrievePinFilters()
   }
 
   public async componentWillUnmount() {
     this.props.mapsStore.removeSubscriptions()
+    this.props.mapsStore.setActivePin(undefined)
   }
 
-  private setCenter(location) {
+  private async promptUserLocation() {
+    try {
+      const position = await GetLocation()
+      this.setCenter({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      })
+    } catch (error) {
+      console.error(error)
+      // do nothing if location cannot be retrieved
+    }
+  }
+
+  private setCenter(latlng: ILatLng) {
     this.setState({
-      center: location.latlng as ILatLng,
+      center: latlng as ILatLng,
       zoom: 8,
     })
   }
 
   public render() {
-    const {
-      filteredPins,
-      availablePinFilters,
-      activePinFilters,
-      pinDetail,
-    } = this.props.mapsStore
+    const { filteredPins, activePinFilters } = this.props.mapsStore
     const { center, zoom } = this.state
-
     return (
       // the calculation for the height is kind of hacky for now, will set properly on final mockups
       <Box id="mapPage" sx={{ height: 'calc(100vh - 60px)' }}>
@@ -67,22 +80,20 @@ class MapsPageClass extends React.Component<IProps, IState> {
             render={props => (
               <>
                 <Controls
-                  map={this.map}
-                  availableFilters={availablePinFilters}
-                  onFilterChange={(grouping, filters) =>
-                    this.props.mapsStore.setActivePinFilters(grouping, filters)
-                  }
-                  onLocationChange={location => this.setCenter(location)}
+                  mapRef={this.mapRef}
+                  availableFilters={MAP_GROUPINGS}
+                  onFilterChange={selected => {
+                    this.props.mapsStore.setActivePinFilters(selected)
+                  }}
+                  onLocationChange={location => this.setCenter(location.latlng)}
                 />
                 <MapView
-                  map={this.map}
+                  mapRef={this.mapRef}
                   pins={filteredPins}
                   filters={activePinFilters}
                   onBoundingBoxChange={boundingBox =>
                     this.props.mapsStore.setMapBoundingBox(boundingBox)
                   }
-                  onPinClicked={pin => this.props.mapsStore.getPinDetails(pin)}
-                  activePinDetail={pinDetail}
                   center={center}
                   zoom={zoom}
                 />

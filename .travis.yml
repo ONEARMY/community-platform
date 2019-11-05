@@ -16,8 +16,8 @@ before_script:
   - export REACT_APP_BRANCH=$TRAVIS_BRANCH
   - echo "REACT_APP_BRANCH=$REACT_APP_BRANCH"
 script:
-  - yarn test
-  - yarn cy:test:record
+  # - yarn test
+  # - yarn cy:test:record
   - npm run build
 
 # install firebase cli and set firebase project ci token from environment

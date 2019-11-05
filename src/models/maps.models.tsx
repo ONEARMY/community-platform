@@ -1,24 +1,37 @@
-import { DBDoc, ISODateString } from './common.models'
+import { ISODateString } from './common.models'
 import { WorkspaceType, ProfileTypeLabel } from './user_pp.models'
 
-interface IMapPinBase {
+/**
+ * Map pins keep minimal information required for pin display.
+ * @param _id - The id that will be used to pull pin details
+ * currently this is a user profile id
+ * @param type - Pin type icon to use - currently mapped to profile types
+ * @param subtype - currently used for workspacetype filtering
+ */
+
+export type IMapPinType = ProfileTypeLabel
+export type IMapPinSubtype = WorkspaceType
+
+/**
+ * Map pins have a `type` which correspond to icon
+ * They can also optionally have a subtype for additional filtering
+ */
+export interface IMapPin {
   _id: string
-  location: ILatLng & {
-    address: string
-  }
-
-  workspaceType?: WorkspaceType
-  profileType?: ProfileTypeLabel
-}
-export interface IMapPin extends IMapPinBase {
-  pinType: string
+  type: IMapPinType
+  location: ILatLng
+  subType?: IMapPinSubtype
 }
 
-export interface IMapPinWithType extends IMapPinBase {
-  pinType: IPinType
+/**
+ * @param detail - by default details are pulled on pin open, using
+ * the pin _id param as the user profile ID required for lookup
+ */
+export interface IMapPinWithDetail extends IMapPin {
+  detail: IMapPinDetail
 }
 
-export interface IMapPinDetail extends IMapPin {
+export interface IMapPinDetail {
   name: string
   shortDescription: string
   lastActive: ISODateString
@@ -37,13 +50,14 @@ export interface IBoundingBox {
   bottomRight: ILatLng
 }
 
-export interface IPinType {
-  displayName: string
-  name: string
-  grouping: EntityType
-  icon: string
-  count: number
-  visible?: boolean
-}
+export type IPinGrouping = 'individual' | 'place'
 
-export type EntityType = 'individual' | 'place'
+export interface IMapGrouping {
+  _count?: number
+  grouping: IPinGrouping
+  displayName: string
+  type: IMapPinType
+  subType?: IMapPinSubtype
+  icon: string
+  hidden?: boolean
+}

@@ -1,0 +1,89 @@
+import { action } from '@storybook/addon-actions'
+import { withKnobs, text, boolean } from '@storybook/addon-knobs'
+import {
+  Story,
+  Meta,
+  Preview,
+  Props,
+  Description,
+} from '@storybook/addon-docs/blocks'
+import { Button } from './index.tsx'
+
+<Meta title="Components|Button" component={Button} decorators={[withKnobs]} />
+
+# Buttons
+
+Below you will be able to see how to use and configure a `Button` component:
+
+<Story name="Default Button">
+  <Button
+    disabled={boolean('Disabled', false)}
+    small={boolean('Small', false)}
+    medium={boolean('Medium', false)}
+    large={boolean('Large', false)}
+    hasText={boolean('Has Text?', true)}
+    variant={text('Variant', 'primary')}
+    icon={text('Icon', '')}
+    onClick={action('onClick')}
+  >
+    {text('Label', 'Button Text')}
+  </Button>
+</Story>
+
+<br />
+<br />
+
+## Enabled/Disabled
+
+A button can be enabled or disabled setting the prop `disabled`:
+
+<Preview>
+  <Story name="Enabled Button">
+    <Button disabled={false}>I am Enabled</Button>
+  </Story>
+  <Story name="Disabled Button">
+    <Button disabled={true}>I am Disabled</Button>
+  </Story>
+</Preview>
+
+## Variants
+
+We can configure a `Button` to be `primary` (default), `secondary` or `outline`:
+
+<Preview>
+  <Story name="Primary">
+    <Button variant={'primary'}>Primary</Button>
+  </Story>
+  <Story name="Secondary">
+    <Button variant={'secondary'}>Secondary</Button>
+  </Story>
+  <Story name="Outline">
+    <Button variant={'outline'}>Outline</Button>
+  </Story>
+</Preview>
+
+## Icons
+
+You can add an icon to the button by setting the `icon` prop, for example:
+
+<Preview>
+  <Story name="With Icon">
+    <Button icon={'add'}>Add Icon</Button>
+  </Story>
+  <Button icon={'email'}>Send Email</Button>
+  <Button icon={'close'}>Close Me</Button>
+  <Button icon={'arrow-back'}>Go Back</Button>
+  <Button icon={'lock'}>Lock This</Button>
+</Preview>
+
+## Sizes
+
+Buttons can be of different sizes by setting `small|medium|large` props to true:
+
+<Preview>
+  <Story name="Sizes">
+    <Button small={true}>Small Button</Button>
+  </Story>
+  <Button medium={true}>Medium Button</Button>
+  <Button large={true}>Large Button</Button>
+</Preview>

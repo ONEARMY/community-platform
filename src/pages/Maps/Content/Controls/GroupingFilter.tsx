@@ -2,14 +2,13 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import MultiSelect, { Option } from '@khanacademy/react-multi-select'
 import './GroupingFilter.css'
-import { Box } from 'rebass'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
-import { lineHeight } from 'styled-system'
+import { IMapGrouping } from 'src/models/maps.models'
 
 interface IProps {
-  items: Array<any>
+  items: Array<IMapGrouping>
   entityType: string
-  onChange?: (selectedItems) => void
+  onChange?: (selectedItems: string[]) => void
 }
 
 interface IState {
@@ -76,7 +75,7 @@ const ItemRenderer = ({ checked, option, onClick }) => {
 }
 
 class GroupingFilter extends React.Component<IProps, IState> {
-  constructor(props) {
+  constructor(props: IProps) {
     super(props)
     this.state = {
       initialItems: this.asOptions(props.items),
@@ -85,21 +84,20 @@ class GroupingFilter extends React.Component<IProps, IState> {
   }
 
   handleChange(selectedItems: Array<string>) {
+    this.setState({ selectedItems })
     if (this.props.onChange) {
       this.props.onChange(selectedItems)
     }
-
-    this.setState({ selectedItems })
   }
 
-  asOptions(items: Array<any>): Array<any> {
+  asOptions(items: Array<IMapGrouping>) {
     return items
       .filter(item => {
-        return item.name !== 'member'
+        return !item.hidden
       })
       .map(item => ({
         label: item.displayName,
-        value: item.name,
+        value: item.subType ? item.subType : item.type,
         icon: item.icon,
       }))
   }
@@ -108,7 +106,6 @@ class GroupingFilter extends React.Component<IProps, IState> {
     const { items, entityType } = this.props
     const options = this.asOptions(items)
     const selectedItems = this.state.selectedItems
-
     return (
       <MultiSelect
         options={options}
@@ -116,14 +113,20 @@ class GroupingFilter extends React.Component<IProps, IState> {
         selectAllLabel="Select All"
         disableSearch={true}
         onSelectedChanged={selected => this.handleChange(selected)}
-        valueRenderer={() => {
-          return entityType === 'place' ? 'Workplaces' : 'Members'
+        valueRenderer={values => {
+          // controls label display, use default when values selected or title when none
+          return values.length > 0
+            ? null
+            : entityType === 'place'
+            ? 'Workspaces'
+            : 'Members'
         }}
         hasSelectAll={false}
         ItemRenderer={ItemRenderer}
         style={{
           maxWidth: '200px',
           width: '100%',
+          margin: '5px 0',
         }}
       />
     )

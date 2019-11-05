@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Portal } from 'react-portal'
 import { Box } from 'rebass'
 import styled from 'styled-components'
+import { zIndex } from 'src/themes/styled.theme'
 
 interface IProps {
   // provide onDidDismiss function to enable backdrop click dismiss
@@ -18,7 +19,7 @@ const ModalBackdrop = styled(Box)`
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 9;
+  z-index: ${zIndex.modalBackdrop};
   background: rgba(0, 0, 0, 0.4);
 `
 const ModalContent = styled(Box)`
@@ -31,7 +32,7 @@ const ModalContent = styled(Box)`
   max-width: 100%;
   max-height: 100%;
   position: fixed;
-  z-index: 10;
+  z-index: ${zIndex.modalContent};
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);

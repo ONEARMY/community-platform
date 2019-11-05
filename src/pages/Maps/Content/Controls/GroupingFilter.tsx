@@ -118,7 +118,7 @@ class GroupingFilter extends React.Component<IProps, IState> {
           return values.length > 0
             ? null
             : entityType === 'place'
-            ? 'Workplaces'
+            ? 'Workspaces'
             : 'Members'
         }}
         hasSelectAll={false}
@@ -126,6 +126,7 @@ class GroupingFilter extends React.Component<IProps, IState> {
         style={{
           maxWidth: '200px',
           width: '100%',
+          margin: '5px 0',
         }}
       />
     )

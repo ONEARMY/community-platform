@@ -27,8 +27,9 @@ interface IInjectedProps extends IProps {
 }
 
 const SearchWrapper = styled.div`
-  width: 300px;
+  width: 308px;
   height: 45px;
+  margin: 5px 0 0 20px;
 `
 
 const MapFlexBar = styled(Flex)`
@@ -70,8 +71,10 @@ class Controls extends React.Component<IProps> {
     return (
       <MapFlexBar
         data-cy="map-controls"
-        ml="50px"
-        py={1}
+        ml={['0', '50px', '50px']}
+        py={[0, 1, 1]}
+        flexDirection={['column-reverse', 'column-reverse', 'row']}
+        alignItems={['center', 'stretch', 'stretch']}
         onClick={() => {
           // close any active popup on click
           this.injected.mapsStore.setActivePin(undefined)
@@ -103,7 +106,12 @@ class Controls extends React.Component<IProps> {
               hash: '#your-map-pin',
             }}
           >
-            <Button variant={'primary'}>My pin</Button>
+            <Button
+              sx={{ display: ['none', 'block', 'block'] }}
+              variant={'primary'}
+            >
+              My pin
+            </Button>
           </HashLink>
         </AuthWrapper>
       </MapFlexBar>

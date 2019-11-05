@@ -25,7 +25,8 @@ export const zIndex = {
   slickArrows: 100,
   modalProfile: 900,
   logoContainer: 999,
-  mapFlexBar: 99999,
+  mapFlexBar: 2000,
+  menuMobile: 3000,
 }
 
 export type ButtonVariants =

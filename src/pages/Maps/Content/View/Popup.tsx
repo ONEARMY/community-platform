@@ -6,15 +6,20 @@ import { Popup as LeafletPopup, Map } from 'react-leaflet'
 import styled from 'styled-components'
 import { distanceInWords } from 'date-fns'
 
-import { IMapPin, IMapPinDetail } from 'src/models/maps.models'
+import {
+  IMapPin,
+  IMapPinWithDetail,
+  IMapPinDetail,
+} from 'src/models/maps.models'
 
 import './popup.css'
 import { Link } from 'src/components/Links'
 import { inject } from 'mobx-react'
 import { MapsStore } from 'src/stores/Maps/maps.store'
+import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 
 interface IProps {
-  activePin: IMapPin | IMapPinDetail
+  activePin: IMapPin | IMapPinWithDetail
   map: React.RefObject<Map>
 }
 interface IInjectedProps extends IProps {
@@ -67,25 +72,23 @@ export class Popup extends React.Component<IProps> {
     return 'loading'
   }
 
-  private renderContent({
-    heroImageUrl,
-    name,
-    pinType,
-    shortDescription,
-    lastActive,
-  }) {
-    let lastActiveText: string = 'a long time'
-
-    if (lastActive) {
-      lastActiveText = distanceInWords(lastActive, new Date())
-    }
-
+  private renderContent(pin: IMapPinWithDetail) {
+    const group = MAP_GROUPINGS.find(g => {
+      return pin.subType
+        ? g.subType === pin.subType && g.type === pin.type
+        : g.type === pin.type
+    })
+    const { lastActive, heroImageUrl, shortDescription, name } = pin.detail
+    const lastActiveText = lastActive
+      ? distanceInWords(lastActive, new Date())
+      : 'a long time'
+    console.log('detail', pin.detail)
     return (
       <>
         <HeroImage src={heroImageUrl} />
         <Flex flexDirection={'column'} px={2} py={2}>
           <Text tags mb={2}>
-            {pinType.displayName}
+            {group ? group.displayName : pin.type}
           </Text>
           <Link to={'u/' + name}>
             <Text medium mb={1}>
@@ -102,9 +105,10 @@ export class Popup extends React.Component<IProps> {
   }
 
   public render() {
-    const { activePin } = this.props
-    const content = (activePin as IMapPinDetail).name
-      ? this.renderContent(activePin as IMapPinDetail)
+    console.log('popup render', this.props.activePin)
+    const activePin = this.props.activePin as IMapPinWithDetail
+    const content = activePin.detail
+      ? this.renderContent(activePin)
       : this.renderLoading()
 
     return (

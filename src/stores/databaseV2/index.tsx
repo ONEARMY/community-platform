@@ -190,7 +190,7 @@ class DocReference<T> {
    * If contains metadata fields (e.g. `_id`)
    * then this will be used instead of generated id
    */
-  async set(data: any) {
+  async set(data: T) {
     const { serverDB, cacheDB } = this.clients
     const dbDoc: DBDoc = this._setDocMeta(data)
     await serverDB.setDoc(this.endpoint, dbDoc)
@@ -204,7 +204,7 @@ class DocReference<T> {
    * to delete docs from their cache.
    */
   async delete() {
-    return this.set({ _deleted: true })
+    return this.set({ _deleted: true } as any)
   }
 
   batchDoc(data: any) {

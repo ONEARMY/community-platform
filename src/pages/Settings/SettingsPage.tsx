@@ -162,6 +162,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                             customFormValues: {
                               ...this.state.customFormValues,
                               profileType: v,
+                              workspaceType: null,
                             },
                             isFocusSelected: true,
                           })

@@ -1,0 +1,71 @@
+import { withKnobs, text, boolean } from '@storybook/addon-knobs'
+import { PropsTable } from '@storybook/components'
+import { Story, Meta, Preview } from '@storybook/addon-docs/blocks'
+import Heading from './index.tsx'
+
+<Meta title="Components|Heading" component={Heading} decorators={[withKnobs]} />
+
+# Headings
+
+A `Heading` component basically receives one of the props `small`, `medium` or `large`:
+
+<Preview isColumn={true}>
+  <Story name="Small Heading">
+    <Heading small={true}>Lorem ipsum dolor sit amet</Heading>
+  </Story>
+  <Story name="Medium Heading">
+    <Heading medium={true}>Lorem ipsum dolor sit amet</Heading>
+  </Story>
+  <Story name="Large Heading">
+    <Heading large={true}>Lorem ipsum dolor sit amet</Heading>
+  </Story>
+</Preview>
+
+<br />
+<br />
+
+## Other Props
+
+Props that can be applied to the `Heading` component:
+
+<Story name="Default Heading" parameters={{ docs: { disable: true } }}>
+  <Heading
+    small={boolean('small', false)}
+    medium={boolean('medium', true)}
+    large={boolean('large', false)}
+    clipped={boolean('clipped', false)}
+    color={text('color', 'black')}
+  >
+    Lorem ipsum dolor sit amet.
+  </Heading>
+</Story>
+
+<PropsTable
+  rows={[
+    {
+      name: 'small',
+      defaultValue: false,
+      description: 'Sets a small font-size.',
+    },
+    {
+      name: 'medium',
+      defaultValue: false,
+      description: 'Sets a medium small font-size.',
+    },
+    {
+      name: 'large',
+      defaultValue: false,
+      description: 'Sets a large small font-size.',
+    },
+    {
+      name: 'clipped',
+      defaultValue: false,
+      description: 'Adds ellipsis while preventing text overflow.',
+    },
+    {
+      name: 'color',
+      defaultValue: 'black',
+      description: 'Font color.',
+    },
+  ]}
+/>

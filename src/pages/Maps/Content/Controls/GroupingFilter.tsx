@@ -90,14 +90,14 @@ class GroupingFilter extends React.Component<IProps, IState> {
     }
   }
 
-  asOptions(items: Array<IMapGrouping>): Array<any> {
+  asOptions(items: Array<IMapGrouping>) {
     return items
       .filter(item => {
         return !item.hidden
       })
       .map(item => ({
         label: item.displayName,
-        value: item.type,
+        value: item.subType ? item.subType : item.type,
         icon: item.icon,
       }))
   }

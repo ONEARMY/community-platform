@@ -73,7 +73,11 @@ export class Popup extends React.Component<IProps> {
   }
 
   private renderContent(pin: IMapPinWithDetail) {
-    const group = MAP_GROUPINGS.find(g => g.type === pin.type)
+    const group = MAP_GROUPINGS.find(g => {
+      return pin.subType
+        ? g.subType === pin.subType && g.type === pin.type
+        : g.type === pin.type
+    })
     const { lastActive, heroImageUrl, shortDescription, name } = pin.detail
     const lastActiveText = lastActive
       ? distanceInWords(lastActive, new Date())
@@ -101,6 +105,7 @@ export class Popup extends React.Component<IProps> {
   }
 
   public render() {
+    console.log('popup render', this.props.activePin)
     const activePin = this.props.activePin as IMapPinWithDetail
     const content = activePin.detail
       ? this.renderContent(activePin)

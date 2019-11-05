@@ -6,19 +6,21 @@ import { WorkspaceType, ProfileTypeLabel } from './user_pp.models'
  * @param _id - The id that will be used to pull pin details
  * currently this is a user profile id
  * @param type - Pin type icon to use - currently mapped to profile types
- * @param data - Any additional data required, currently
- * used for workspacetype filtering
+ * @param subtype - currently used for workspacetype filtering
  */
 
-export type IMapPinType = ProfileTypeLabel | WorkspaceType
+export type IMapPinType = ProfileTypeLabel
+export type IMapPinSubtype = WorkspaceType
 
+/**
+ * Map pins have a `type` which correspond to icon
+ * They can also optionally have a subtype for additional filtering
+ */
 export interface IMapPin {
   _id: string
   type: IMapPinType
   location: ILatLng
-  data?: {
-    workspaceType: WorkspaceType
-  }
+  subType?: IMapPinSubtype
 }
 
 /**
@@ -55,6 +57,7 @@ export interface IMapGrouping {
   grouping: IPinGrouping
   displayName: string
   type: IMapPinType
+  subType?: IMapPinSubtype
   icon: string
   hidden?: boolean
 }

@@ -11,11 +11,6 @@ export const MAP_ICONS: { [key in IMapPinType]: string } = {
   'machine-builder': LogoMachine,
   member: LogoMember,
   workspace: LogoWorkspace,
-  extrusion: LogoWorkspace,
-  injection: LogoWorkspace,
-  mix: LogoWorkspace,
-  sheetpress: LogoWorkspace,
-  shredder: LogoWorkspace,
 }
 
 // grouping used (icons will be generated from type in method below)
@@ -23,31 +18,36 @@ const GROUPINGS: IMapGrouping[] = [
   {
     grouping: 'place',
     displayName: 'Extruder',
-    type: 'extrusion',
+    type: 'workspace',
+    subType: 'extrusion',
     icon: '',
   },
   {
     grouping: 'place',
     displayName: 'Injection',
-    type: 'injection',
+    type: 'workspace',
+    subType: 'injection',
     icon: '',
   },
   {
     grouping: 'place',
     displayName: 'Shredder',
-    type: 'shredder',
+    type: 'workspace',
+    subType: 'shredder',
     icon: '',
   },
   {
     grouping: 'place',
     displayName: 'Sheet Press',
-    type: 'sheetpress',
+    type: 'workspace',
+    subType: 'sheetpress',
     icon: '',
   },
   {
     grouping: 'place',
     displayName: 'Mix',
-    type: 'mix',
+    type: 'workspace',
+    subType: 'mix',
     icon: '',
   },
 

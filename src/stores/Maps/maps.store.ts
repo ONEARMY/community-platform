@@ -1,5 +1,11 @@
 import { observable, action } from 'mobx'
-import { IMapPin, IBoundingBox, IMapGrouping } from 'src/models/maps.models'
+import {
+  IMapPin,
+  IBoundingBox,
+  IMapGrouping,
+  IMapPinWithDetail,
+  IMapPinDetail,
+} from 'src/models/maps.models'
 import { IDBEndpoint } from 'src/models/common.models'
 import { RootStore } from '..'
 import { Subscription } from 'rxjs'
@@ -8,9 +14,10 @@ import { getUserAvatar } from '../User/user.store'
 import { MAP_GROUPINGS } from './maps.groupings'
 import { generatePins, generatePinDetails } from 'src/mocks/maps.mock'
 import { IUserPP } from 'src/models/user_pp.models'
+import { IUploadedFileMeta } from '../storage'
 
 // NOTE - toggle below variable to use larger mock dataset
-const IS_MOCK = true
+const IS_MOCK = false
 const MOCK_PINS = generatePins(250)
 
 export class MapsStore extends ModuleStore {
@@ -24,7 +31,7 @@ export class MapsStore extends ModuleStore {
   public activePinFilters: Array<IMapGrouping> = []
 
   @observable
-  public activePin: IMapPin | undefined = undefined
+  public activePin: IMapPin | IMapPinWithDetail | undefined = undefined
 
   @observable
   private mapPins: Array<IMapPin> = []
@@ -38,6 +45,11 @@ export class MapsStore extends ModuleStore {
       this.mapPins = []
       return
     }
+    // HACK - CC - 2019/11/04 changed pins api, so any old mappins will break
+    // this filters out. In future should run an upgrade script (easier once deployed)
+    pins = pins.filter(p => {
+      return p.type
+    })
 
     if (IS_MOCK) {
       pins = MOCK_PINS
@@ -70,18 +82,16 @@ export class MapsStore extends ModuleStore {
 
   @action
   public async setActivePinFilters(filters: Array<string>) {
-    console.log('set active filters', filters)
     if (filters.length === 0) {
       this.filteredPins = this.mapPins
       return
     }
 
-    // filter pins to include matched pin type or other filters
+    // filter pins to include matched pin type or subtype
     const mapPins = this.mapPins.filter(pin => {
-      return (
-        filters.includes(pin.type) ||
-        (pin.data && filters.includes(pin.data.workspaceType))
-      )
+      return pin.subType
+        ? filters.includes(pin.subType)
+        : filters.includes(pin.type)
     })
     this.filteredPins = mapPins
   }
@@ -90,15 +100,16 @@ export class MapsStore extends ModuleStore {
    * Set the location and id of current active pin, and automatically
    * generate full pin details from database
    * @param pin - map pin meta containing location and id for detail lookup
+   * set undefined to remove any active popup
    */
   @action
   public async setActivePin(pin?: IMapPin) {
     this.activePin = pin
     if (pin) {
-      const pinDetail = IS_MOCK
+      const detail: IMapPinDetail = IS_MOCK
         ? generatePinDetails(pin)
         : await this.getUserProfilePin(pin._id)
-      this.activePin = { ...pin, ...pinDetail }
+      this.activePin = { ...pin, detail }
     }
   }
 
@@ -127,8 +138,9 @@ export class MapsStore extends ModuleStore {
       type: user.profileType ? user.profileType : 'member',
     }
     if (user.workspaceType) {
-      pin.data = { workspaceType: user.workspaceType }
+      pin.subType = user.workspaceType
     }
+    console.log('setting user pin', pin)
     await this.db
       .collection<IMapPin>('v2_mappins')
       .doc(pin._id)
@@ -142,8 +154,8 @@ export class MapsStore extends ModuleStore {
   }
 
   // return subset of profile info used when displaying map pins
-  private async getUserProfilePin(username: string) {
-    const u: any = await this.userStore.getUserProfile(username)
+  private async getUserProfilePin(username: string): Promise<IMapPinDetail> {
+    const u = await this.userStore.getUserProfile(username)
     if (!u) {
       return {
         heroImageUrl: '',
@@ -157,7 +169,7 @@ export class MapsStore extends ModuleStore {
     const avatar = getUserAvatar(username)
     let heroImageUrl = ''
     if (u.coverImages && u.coverImages.length > 0) {
-      heroImageUrl = u.coverImages[0].downloadUrl
+      heroImageUrl = (u.coverImages[0] as IUploadedFileMeta).downloadUrl
     }
 
     return {

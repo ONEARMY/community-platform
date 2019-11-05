@@ -1,5 +1,9 @@
 import { loremIpsum } from 'lorem-ipsum'
-import { IMapPin, IMapPinWithDetail } from 'src/models/maps.models'
+import {
+  IMapPin,
+  IMapPinWithDetail,
+  IMapPinDetail,
+} from 'src/models/maps.models'
 import { MOCK_DB_META } from './db.mock'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 
@@ -21,22 +25,19 @@ export const generatePins = (count: number): Array<IMapPin> => {
   return newPins
 }
 
-export const generatePinDetails = (pin: IMapPin): IMapPinWithDetail => {
+export const generatePinDetails = (pin: IMapPin): IMapPinDetail => {
   const randomDate = new Date()
   randomDate.setSeconds(randomDate.getSeconds() - Math.random() * 10000)
   const lastActive = randomDate.toISOString()
   return {
-    ...pin,
-    detail: {
-      name: loremIpsum({ count: 2, units: 'words' })
-        .split(' ')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' '),
-      shortDescription: loremIpsum({ count: 2, units: 'sentences' }),
-      lastActive,
-      profilePicUrl: 'https://picsum.photos/50/50',
-      profileUrl: '/testing',
-      heroImageUrl: `https://picsum.photos/seed/${lastActive}/285/175`,
-    },
+    name: loremIpsum({ count: 2, units: 'words' })
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' '),
+    shortDescription: loremIpsum({ count: 2, units: 'sentences' }),
+    lastActive,
+    profilePicUrl: 'https://picsum.photos/50/50',
+    profileUrl: '/testing',
+    heroImageUrl: `https://picsum.photos/seed/${lastActive}/285/175`,
   }
 }

@@ -16,6 +16,7 @@ interface IProps {
   onInputChange: (inputValue: ProfileTypeLabel) => void
   user: IUserPP
   showSubmitErrors: boolean
+  isSelected: boolean
 }
 interface IState {
   checkedFocusValue?: string
@@ -40,7 +41,7 @@ export class FocusSection extends React.Component<IProps, IState> {
 
   render() {
     const { isOpen, checkedFocusValue } = this.state
-    const { showSubmitErrors } = this.props
+    const { showSubmitErrors, isSelected } = this.props
     return (
       <FlexSectionContainer>
         <Flex justifyContent="space-between">
@@ -64,7 +65,7 @@ export class FocusSection extends React.Component<IProps, IState> {
                 fullWidth
                 value={profile.label}
                 name="profileType"
-                isSelected={checkedFocusValue === profile.label}
+                isSelected={checkedFocusValue === profile.label && isSelected}
                 onChange={v => this.onInputChange(v as ProfileTypeLabel)}
                 imageSrc={profile.imageSrc}
                 textLabel={profile.textLabel}

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import Flex from 'src/components/Flex'
-import { IUserPP } from 'src/models/user_pp.models'
+import { IUserPP, IProfileType } from 'src/models/user_pp.models'
 import { UserStore } from 'src/stores/User/user.store'
 import { observer, inject } from 'mobx-react'
 import { toJS } from 'mobx'
@@ -16,7 +16,8 @@ import {
   EditProfileGuidelines,
 } from './content/PostingGuidelines'
 import Heading from 'src/components/Heading'
-
+import Text from 'src/components/Text'
+import { Modal } from 'src/components/Modal/Modal'
 import { TextNotification } from 'src/components/Notification/TextNotification'
 import { Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
@@ -47,6 +48,7 @@ interface IState {
   isFocusSelected: boolean
   isWTSelected: boolean
   isLocationSelected: boolean
+  showResetFocusModal: boolean
 }
 
 @inject('userStore')
@@ -67,6 +69,7 @@ export class UserSettings extends React.Component<IProps, IState> {
       isFocusSelected: user ? true : false,
       isLocationSelected: user ? user.location !== undefined : false,
       isWTSelected: true,
+      showResetFocusModal: false,
     }
   }
 
@@ -104,14 +107,22 @@ export class UserSettings extends React.Component<IProps, IState> {
     })
   }
   public onFocusChange(v) {
-    this.setState({
-      customFormValues: {
-        ...this.state.customFormValues,
-        profileType: v,
-        workspaceType: null,
-      },
-      isFocusSelected: true,
-    })
+    if (this.state.initialFormValues.profileType) {
+      this.setState({
+        showResetFocusModal: true,
+        customFormValues: {
+          profileType: v,
+        },
+      })
+    } else {
+      this.setState({
+        initialFormValues: {
+          ...this.state.initialFormValues,
+          profileType: v,
+        },
+        isFocusSelected: true,
+      })
+    }
   }
   public onWorkspaceTypeChange(v) {
     this.setState({
@@ -136,6 +147,25 @@ export class UserSettings extends React.Component<IProps, IState> {
       this.setState({ isLocationSelected: false })
     }
   }
+  public onModalDismiss(confirmed: boolean) {
+    if (confirmed) {
+      this.setState({
+        initialFormValues: {
+          ...this.state.initialFormValues,
+          ...INITIAL_VALUES,
+        },
+        showResetFocusModal: false,
+        isFocusSelected: false,
+      })
+    } else {
+      this.setState({
+        initialFormValues: {
+          profileType: this.state.initialFormValues.profileType,
+        },
+        showResetFocusModal: false,
+      })
+    }
+  }
 
   render() {
     const user = this.injected.userStore.user
@@ -144,6 +174,7 @@ export class UserSettings extends React.Component<IProps, IState> {
       isFocusSelected,
       isWTSelected,
       isLocationSelected,
+      showResetFocusModal,
     } = this.state
 
     return user ? (
@@ -178,6 +209,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                       <FocusSection
                         user={user}
                         onInputChange={v => this.onFocusChange(v)}
+                        isSelected={isFocusSelected}
                         showSubmitErrors={!isFocusSelected}
                       />
                       {initialFormValues.profileType === 'workspace' && (
@@ -318,6 +350,28 @@ export class UserSettings extends React.Component<IProps, IState> {
                   </div>
                 </Box>
               </Flex>
+              {showResetFocusModal && (
+                <Modal onDidDismiss={confirm => this.onModalDismiss(confirm)}>
+                  <Text>
+                    Your are about to change your focus, this will reset your
+                    profile informations
+                  </Text>
+                  <Button
+                    style={{ marginLeft: 'auto' }}
+                    variant="secondary"
+                    onClick={() => this.onModalDismiss(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={() => this.onModalDismiss(true)}
+                    variant="tertiary"
+                    ml={1}
+                  >
+                    Yes, change focus
+                  </Button>
+                </Modal>
+              )}
             </Flex>
           )
         }}

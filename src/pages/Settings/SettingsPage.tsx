@@ -148,23 +148,25 @@ export class UserSettings extends React.Component<IProps, IState> {
     }
   }
   public onModalDismiss(confirmed: boolean) {
+    // TODO reset totally the profile if confirmed
     if (confirmed) {
       this.setState({
-        initialFormValues: {
-          ...this.state.initialFormValues,
-          ...INITIAL_VALUES,
-        },
+        // initialFormValues: {
+        //   ...this.state.initialFormValues,
+        //   ...INITIAL_VALUES,
+        // },
         showResetFocusModal: false,
-        isFocusSelected: false,
-      })
-    } else {
-      this.setState({
-        initialFormValues: {
-          profileType: this.state.initialFormValues.profileType,
-        },
-        showResetFocusModal: false,
+        // isFocusSelected: false,
       })
     }
+    // else {
+    //   this.setState({
+    //     initialFormValues: {
+    //       profileType: this.state.initialFormValues.profileType,
+    //     },
+    //     showResetFocusModal: false,
+    //   })
+    // }
   }
 
   render() {
@@ -296,6 +298,25 @@ export class UserSettings extends React.Component<IProps, IState> {
                       )}
                       {initialFormValues.profileType === undefined && <></>}
                     </Flex>
+                    {showResetFocusModal && (
+                      <Modal
+                        onDidDismiss={confirm => this.onModalDismiss(confirm)}
+                      >
+                        <Text>
+                          You already have set a focus. Wait for the next update
+                          to allow focus change, or create a new profile.
+                        </Text>
+                        <Button
+                          onClick={() => {
+                            this.onModalDismiss(true)
+                          }}
+                          variant="primary"
+                          ml={1}
+                        >
+                          Yes, change focus
+                        </Button>
+                      </Modal>
+                    )}
                   </form>
                   <AccountSettingsSection />
                 </Box>
@@ -346,32 +367,15 @@ export class UserSettings extends React.Component<IProps, IState> {
                       text="profile saved"
                       icon="check"
                       show={this.state.showNotification}
+                      hideNotificationCb={() =>
+                        this.setState({
+                          showNotification: false,
+                        })
+                      }
                     />
                   </div>
                 </Box>
               </Flex>
-              {showResetFocusModal && (
-                <Modal onDidDismiss={confirm => this.onModalDismiss(confirm)}>
-                  <Text>
-                    Your are about to change your focus, this will reset your
-                    profile informations
-                  </Text>
-                  <Button
-                    style={{ marginLeft: 'auto' }}
-                    variant="secondary"
-                    onClick={() => this.onModalDismiss(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    onClick={() => this.onModalDismiss(true)}
-                    variant="tertiary"
-                    ml={1}
-                  >
-                    Yes, change focus
-                  </Button>
-                </Modal>
-              )}
             </Flex>
           )
         }}

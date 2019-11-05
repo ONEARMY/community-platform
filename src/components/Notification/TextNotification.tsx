@@ -20,6 +20,7 @@ export interface ITextNotificationProps {
   type?: 'error' | 'confirmation' | 'warning' | 'info'
   duration?: number
   icon?: keyof IGlyphs
+  hideNotificationCb?: () => void
 }
 
 export class TextNotification extends React.Component<
@@ -68,6 +69,9 @@ export class TextNotification extends React.Component<
         this.timerHandle = 0
       }
     }, this.props.duration)
+    if (this.props.hideNotificationCb) {
+      this.props.hideNotificationCb()
+    }
   }
 
   render() {

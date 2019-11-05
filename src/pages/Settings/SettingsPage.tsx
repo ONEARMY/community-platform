@@ -312,23 +312,25 @@ export class UserSettings extends React.Component<IProps, IState> {
                           Change your focus will reset your previous profile, do
                           you confirm ?
                         </Text>
-                        <Button
-                          onClick={() => {
-                            this.onModalDismiss(false)
-                          }}
-                          variant="secondary"
-                        >
-                          cancel
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            this.onModalDismiss(true)
-                          }}
-                          variant="tertiary"
-                          ml={1}
-                        >
-                          Yes I confirm
-                        </Button>
+                        <Flex>
+                          <Button
+                            onClick={() => {
+                              this.onModalDismiss(false)
+                            }}
+                            variant="secondary"
+                          >
+                            cancel
+                          </Button>
+                          <Button
+                            onClick={() => {
+                              this.onModalDismiss(true)
+                            }}
+                            variant="tertiary"
+                            ml={1}
+                          >
+                            Yes I confirm
+                          </Button>
+                        </Flex>
                       </Modal>
                     )}
                   </form>

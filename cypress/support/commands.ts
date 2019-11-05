@@ -169,7 +169,7 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
         },
       })
 
-      return firestore.updateDocument(collectionName, docId, docData)
+      firestore.updateDocument(collectionName, docId, docData)
     },
   )
 

@@ -64,6 +64,7 @@ export class CollectionSection extends React.Component<IProps, IState> {
                   />
                 ))}
                 <Button
+                  data-cy="add-opening-time"
                   my={2}
                   variant="outline"
                   onClick={() => {
@@ -88,6 +89,7 @@ export class CollectionSection extends React.Component<IProps, IState> {
                 <>
                   {PLASTIC_TYPES.map((plastic, index: number) => (
                     <CustomCheckbox
+                      data-cy={`plastic-${plastic.label}`}
                       key={index}
                       fullWidth
                       value={plastic.label}

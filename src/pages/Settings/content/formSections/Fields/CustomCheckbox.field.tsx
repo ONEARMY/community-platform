@@ -12,6 +12,7 @@ interface IProps {
   imageSrc?: string
   btnLabel?: string
   fullWidth?: boolean
+  'data-cy'?: string
   required?: boolean
 }
 interface IState {
@@ -37,6 +38,7 @@ class CustomCheckbox extends Component<IProps, IState> {
       isSelected,
       btnLabel,
       fullWidth,
+      'data-cy': dataCy,
       required,
     } = this.props
     const classNames: Array<string> = []
@@ -48,7 +50,7 @@ class CustomCheckbox extends Component<IProps, IState> {
     }
 
     return (
-      <Label htmlFor={value} className={classNames.join(' ')}>
+      <Label htmlFor={value} className={classNames.join(' ')} data-cy={dataCy}>
         <HiddenInput
           name={value}
           id={value}

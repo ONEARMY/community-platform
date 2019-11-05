@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { InputField } from 'src/components/Form/Fields'
+import { HiddenInputField } from 'src/components/Form/Fields'
 import { Label, HiddenInput } from '../elements'
 import { Image } from 'rebass'
 import Text from 'src/components/Text'
@@ -12,13 +12,14 @@ interface IProps {
   imageSrc?: string
   btnLabel?: string
   fullWidth?: boolean
+  required?: boolean
 }
 interface IState {
   showDeleteModal: boolean
 }
 
 // validation - return undefined if no error (i.e. valid)
-const required = (value: any) => (value ? undefined : 'Required')
+const isRequired = (value: any) => (value ? undefined : 'Required')
 
 class CustomCheckbox extends Component<IProps, IState> {
   constructor(props: IProps) {
@@ -36,6 +37,7 @@ class CustomCheckbox extends Component<IProps, IState> {
       isSelected,
       btnLabel,
       fullWidth,
+      required,
     } = this.props
     const classNames: Array<string> = []
     if (isSelected) {
@@ -48,13 +50,14 @@ class CustomCheckbox extends Component<IProps, IState> {
     return (
       <Label htmlFor={value} className={classNames.join(' ')}>
         <HiddenInput
-          id={value}
           name={value}
+          id={value}
           value={value}
-          type="checkbox"
-          component={InputField}
-          checked={isSelected}
           onChange={() => this.props.onChange(index)}
+          checked={isSelected}
+          validate={required ? isRequired : undefined}
+          type="checkbox"
+          component={HiddenInputField}
         />
         {imageSrc && <Image px={3} src={imageSrc} width="100%" />}
         {btnLabel && (

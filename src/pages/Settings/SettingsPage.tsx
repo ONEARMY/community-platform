@@ -313,7 +313,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           variant="primary"
                           ml={1}
                         >
-                          Yes, change focus
+                          Ok
                         </Button>
                       </Modal>
                     )}

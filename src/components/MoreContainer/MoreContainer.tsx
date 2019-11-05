@@ -1,12 +1,11 @@
 import React from 'react'
-import { Flex, Box, Text, Button } from 'rebass'
+import { Box, BoxProps, Text } from 'rebass/styled-components'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
 import WhiteBubble0 from 'src/assets/images/white-bubble_0.svg'
 import WhiteBubble1 from 'src/assets/images/white-bubble_1.svg'
 import WhiteBubble2 from 'src/assets/images/white-bubble_2.svg'
 import WhiteBubble3 from 'src/assets/images/white-bubble_3.svg'
-import { BoxProps } from 'rebass'
 import { zIndex } from 'src/themes/styled.theme'
 
 const MoreModalContainer = styled(Box)`

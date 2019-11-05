@@ -7,7 +7,7 @@ import {
 import theme from 'src/themes/styled.theme'
 import Text from 'src/components/Text'
 import styled from 'styled-components'
-import { IBtnProps } from './index'
+// import { IBtnProps } from './index'
 
 // extend to allow any default button props (e.g. onClick) to also be passed
 export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {

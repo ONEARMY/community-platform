@@ -7,7 +7,6 @@ describe('[How To]', () => {
     beforeEach(() => {
       cy.deleteDocuments('v2_howtos', 'title', '==', 'Create a how-to test')
       cy.visit('/how-to')
-      cy.logout()
     })
     it('[By Everyone]', () => {
       cy.step('No tag is selected')
@@ -99,7 +98,6 @@ describe('[How To]', () => {
       cy.get('[data-cy=card]')
         .its('length')
         .should('be.eq', 7)
-
     })
   })
 
@@ -187,22 +185,19 @@ describe('[How To]', () => {
 
     it('[By Authenticated}', () => {
       cy.step('Edit button is unavailable to non-resource owners')
-      cy.visit('/how-to')
-      cy.completeLogin('howto_reader@test.com', 'test1234')
-
+      cy.login('howto_reader@test.com', 'test1234')
       cy.visit(specificHowtoUrl)
       cy.get('[data-cy=edit]').should('not.exist')
     })
 
     it('[By Owner]', () => {
       cy.step('Edit button is available to the owner')
-      cy.visit('/how-to')
-      cy.completeLogin('howto_creator@test.com', 'test1234')
-      cy.wait(3000)
-
       cy.visit(specificHowtoUrl)
-      cy.get('[data-cy=edit]').click()
-        .url().should('include', `${specificHowtoUrl}/edit`)
+      cy.login('howto_creator@test.com', 'test1234')
+      cy.get('[data-cy=edit]')
+        .click()
+        .url()
+        .should('include', `${specificHowtoUrl}/edit`)
     })
   })
 })

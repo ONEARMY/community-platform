@@ -232,9 +232,7 @@ describe('[How To]', () => {
 
     it('[By Owner]', () => {
       cy.logout()
-      cy.visit('/how-to')
-      cy.completeLogin('howto_editor@test.com', 'test1234')
-      cy.wait(3000)
+      cy.login('howto_editor@test.com', 'test1234')
       cy.step('Go to Edit mode')
       cy.visit(editHowtoUrl)
       cy.get('[data-cy=edit]').click()

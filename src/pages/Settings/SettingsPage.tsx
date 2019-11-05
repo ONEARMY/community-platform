@@ -1,6 +1,6 @@
 import * as React from 'react'
 import Flex from 'src/components/Flex'
-import { IUserPP } from 'src/models/user_pp.models'
+import { IUserPP, IProfileType } from 'src/models/user_pp.models'
 import { UserStore } from 'src/stores/User/user.store'
 import { observer, inject } from 'mobx-react'
 import { toJS } from 'mobx'
@@ -16,7 +16,8 @@ import {
   EditProfileGuidelines,
 } from './content/PostingGuidelines'
 import Heading from 'src/components/Heading'
-
+import Text from 'src/components/Text'
+import { Modal } from 'src/components/Modal/Modal'
 import { TextNotification } from 'src/components/Notification/TextNotification'
 import { Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
@@ -39,13 +40,15 @@ interface IInjectedProps extends IProps {
 }
 
 interface IState {
-  customFormValues: IFormValues
+  customFormValues: Partial<IFormValues>
+  initialFormValues: IFormValues
   user: IUserPP
   showNotification: boolean
   showDeleteDialog?: boolean
   isFocusSelected: boolean
   isWTSelected: boolean
   isLocationSelected: boolean
+  showResetFocusModal: boolean
 }
 
 @inject('userStore')
@@ -54,13 +57,19 @@ export class UserSettings extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     const user = this.injected.userStore.user
+    const initValues =
+      user && user.profileType
+        ? toJS(user)
+        : { ...toJS(user), ...INITIAL_VALUES }
     this.state = {
-      customFormValues: user ? user : {},
+      initialFormValues: initValues,
+      customFormValues: {},
       showNotification: false,
       user: props.user,
       isFocusSelected: user ? true : false,
       isLocationSelected: user ? user.location !== undefined : false,
       isWTSelected: true,
+      showResetFocusModal: false,
     }
   }
 
@@ -97,6 +106,33 @@ export class UserSettings extends React.Component<IProps, IState> {
       },
     })
   }
+  public onFocusChange(v) {
+    if (this.state.initialFormValues.profileType) {
+      this.setState({
+        showResetFocusModal: true,
+        customFormValues: {
+          profileType: v,
+        },
+      })
+    } else {
+      this.setState({
+        initialFormValues: {
+          ...this.state.initialFormValues,
+          profileType: v,
+        },
+        isFocusSelected: true,
+      })
+    }
+  }
+  public onWorkspaceTypeChange(v) {
+    this.setState({
+      customFormValues: {
+        ...this.state.customFormValues,
+        workspaceType: v,
+      },
+      isWTSelected: true,
+    })
+  }
   public checkSubmitErrors() {
     if (!this.state.customFormValues.profileType) {
       this.setState({ isFocusSelected: false })
@@ -111,20 +147,37 @@ export class UserSettings extends React.Component<IProps, IState> {
       this.setState({ isLocationSelected: false })
     }
   }
+  public onModalDismiss(confirmed: boolean) {
+    // TODO reset totally the profile if confirmed
+    if (confirmed) {
+      this.setState({
+        // initialFormValues: {
+        //   ...this.state.initialFormValues,
+        //   ...INITIAL_VALUES,
+        // },
+        showResetFocusModal: false,
+        // isFocusSelected: false,
+      })
+    }
+    // else {
+    //   this.setState({
+    //     initialFormValues: {
+    //       profileType: this.state.initialFormValues.profileType,
+    //     },
+    //     showResetFocusModal: false,
+    //   })
+    // }
+  }
 
   render() {
-    const user = this.injected.userStore.user!
+    const user = this.injected.userStore.user
     const {
-      customFormValues,
+      initialFormValues,
       isFocusSelected,
       isWTSelected,
       isLocationSelected,
+      showResetFocusModal,
     } = this.state
-    // Need to convert mobx observable user object into a Javasrcipt structure using toJS fn
-    // to allow final-form-array to display the initial values
-    const initialFormValues = user.profileType
-      ? toJS(user)
-      : { ...toJS(user), ...INITIAL_VALUES }
 
     return user ? (
       <Form
@@ -157,31 +210,15 @@ export class UserSettings extends React.Component<IProps, IState> {
                       </Flex>
                       <FocusSection
                         user={user}
-                        onInputChange={v => {
-                          this.setState({
-                            customFormValues: {
-                              ...this.state.customFormValues,
-                              profileType: v,
-                              workspaceType: null,
-                            },
-                            isFocusSelected: true,
-                          })
-                        }}
+                        onInputChange={v => this.onFocusChange(v)}
+                        isSelected={isFocusSelected}
                         showSubmitErrors={!isFocusSelected}
                       />
-                      {customFormValues.profileType === 'workspace' && (
+                      {initialFormValues.profileType === 'workspace' && (
                         <>
                           <WorkspaceSection
                             user={user}
-                            onInputChange={v =>
-                              this.setState({
-                                customFormValues: {
-                                  ...this.state.customFormValues,
-                                  workspaceType: v,
-                                },
-                                isWTSelected: true,
-                              })
-                            }
+                            onInputChange={v => this.onWorkspaceTypeChange(v)}
                             showSubmitErrors={!isWTSelected}
                           />
                           <UserInfosSection
@@ -195,7 +232,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           />
                         </>
                       )}
-                      {customFormValues.profileType === 'collection-point' && (
+                      {initialFormValues.profileType === 'collection-point' && (
                         <>
                           <UserInfosSection
                             onCoverImgChange={v => this.onCoverImgChange(v)}
@@ -216,7 +253,8 @@ export class UserSettings extends React.Component<IProps, IState> {
                           />
                         </>
                       )}
-                      {customFormValues.profileType === 'community-builder' && (
+                      {initialFormValues.profileType ===
+                        'community-builder' && (
                         <>
                           <UserInfosSection
                             onCoverImgChange={v => this.onCoverImgChange(v)}
@@ -229,7 +267,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           />
                         </>
                       )}
-                      {customFormValues.profileType === 'machine-builder' && (
+                      {initialFormValues.profileType === 'machine-builder' && (
                         <>
                           <UserInfosSection
                             onCoverImgChange={v => this.onCoverImgChange(v)}
@@ -250,7 +288,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           />
                         </>
                       )}
-                      {customFormValues.profileType === 'member' && (
+                      {initialFormValues.profileType === 'member' && (
                         <>
                           <UserInfosSection
                             onCoverImgChange={v => this.onCoverImgChange(v)}
@@ -258,8 +296,27 @@ export class UserSettings extends React.Component<IProps, IState> {
                           />
                         </>
                       )}
-                      {customFormValues.profileType === undefined && <></>}
+                      {initialFormValues.profileType === undefined && <></>}
                     </Flex>
+                    {showResetFocusModal && (
+                      <Modal
+                        onDidDismiss={confirm => this.onModalDismiss(confirm)}
+                      >
+                        <Text>
+                          You already have set a focus. Wait for the next update
+                          to allow focus change, or create a new profile.
+                        </Text>
+                        <Button
+                          onClick={() => {
+                            this.onModalDismiss(true)
+                          }}
+                          variant="primary"
+                          ml={1}
+                        >
+                          Ok
+                        </Button>
+                      </Modal>
+                    )}
                   </form>
                   <AccountSettingsSection />
                 </Box>
@@ -283,9 +340,9 @@ export class UserSettings extends React.Component<IProps, IState> {
                     data-cy="save"
                     onClick={() => {
                       if (
-                        !customFormValues.profileType ||
-                        (customFormValues.profileType === 'workspace' &&
-                          !customFormValues.workspaceType)
+                        !initialFormValues.profileType ||
+                        (initialFormValues.profileType === 'workspace' &&
+                          !initialFormValues.workspaceType)
                       ) {
                         this.checkSubmitErrors()
                       } else {
@@ -310,6 +367,11 @@ export class UserSettings extends React.Component<IProps, IState> {
                       text="profile saved"
                       icon="check"
                       show={this.state.showNotification}
+                      hideNotificationCb={() =>
+                        this.setState({
+                          showNotification: false,
+                        })
+                      }
                     />
                   </div>
                 </Box>

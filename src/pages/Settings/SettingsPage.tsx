@@ -39,7 +39,8 @@ interface IInjectedProps extends IProps {
 }
 
 interface IState {
-  customFormValues: IFormValues
+  customFormValues: Partial<IFormValues>
+  initialFormValues: IFormValues
   user: IUserPP
   showNotification: boolean
   showDeleteDialog?: boolean
@@ -54,8 +55,13 @@ export class UserSettings extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     const user = this.injected.userStore.user
+    const initValues =
+      user && user.profileType
+        ? toJS(user)
+        : { ...toJS(user), ...INITIAL_VALUES }
     this.state = {
-      customFormValues: user ? user : {},
+      initialFormValues: initValues,
+      customFormValues: {},
       showNotification: false,
       user: props.user,
       isFocusSelected: user ? true : false,
@@ -97,6 +103,25 @@ export class UserSettings extends React.Component<IProps, IState> {
       },
     })
   }
+  public onFocusChange(v) {
+    this.setState({
+      customFormValues: {
+        ...this.state.customFormValues,
+        profileType: v,
+        workspaceType: null,
+      },
+      isFocusSelected: true,
+    })
+  }
+  public onWorkspaceTypeChange(v) {
+    this.setState({
+      customFormValues: {
+        ...this.state.customFormValues,
+        workspaceType: v,
+      },
+      isWTSelected: true,
+    })
+  }
   public checkSubmitErrors() {
     if (!this.state.customFormValues.profileType) {
       this.setState({ isFocusSelected: false })
@@ -113,18 +138,13 @@ export class UserSettings extends React.Component<IProps, IState> {
   }
 
   render() {
-    const user = this.injected.userStore.user!
+    const user = this.injected.userStore.user
     const {
-      customFormValues,
+      initialFormValues,
       isFocusSelected,
       isWTSelected,
       isLocationSelected,
     } = this.state
-    // Need to convert mobx observable user object into a Javasrcipt structure using toJS fn
-    // to allow final-form-array to display the initial values
-    const initialFormValues = user.profileType
-      ? toJS(user)
-      : { ...toJS(user), ...INITIAL_VALUES }
 
     return user ? (
       <Form
@@ -157,31 +177,14 @@ export class UserSettings extends React.Component<IProps, IState> {
                       </Flex>
                       <FocusSection
                         user={user}
-                        onInputChange={v => {
-                          this.setState({
-                            customFormValues: {
-                              ...this.state.customFormValues,
-                              profileType: v,
-                              workspaceType: null,
-                            },
-                            isFocusSelected: true,
-                          })
-                        }}
+                        onInputChange={v => this.onFocusChange(v)}
                         showSubmitErrors={!isFocusSelected}
                       />
-                      {customFormValues.profileType === 'workspace' && (
+                      {initialFormValues.profileType === 'workspace' && (
                         <>
                           <WorkspaceSection
                             user={user}
-                            onInputChange={v =>
-                              this.setState({
-                                customFormValues: {
-                                  ...this.state.customFormValues,
-                                  workspaceType: v,
-                                },
-                                isWTSelected: true,
-                              })
-                            }
+                            onInputChange={v => this.onWorkspaceTypeChange(v)}
                             showSubmitErrors={!isWTSelected}
                           />
                           <UserInfosSection
@@ -195,7 +198,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           />
                         </>
                       )}
-                      {customFormValues.profileType === 'collection-point' && (
+                      {initialFormValues.profileType === 'collection-point' && (
                         <>
                           <UserInfosSection
                             onCoverImgChange={v => this.onCoverImgChange(v)}
@@ -216,7 +219,8 @@ export class UserSettings extends React.Component<IProps, IState> {
                           />
                         </>
                       )}
-                      {customFormValues.profileType === 'community-builder' && (
+                      {initialFormValues.profileType ===
+                        'community-builder' && (
                         <>
                           <UserInfosSection
                             onCoverImgChange={v => this.onCoverImgChange(v)}
@@ -229,7 +233,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           />
                         </>
                       )}
-                      {customFormValues.profileType === 'machine-builder' && (
+                      {initialFormValues.profileType === 'machine-builder' && (
                         <>
                           <UserInfosSection
                             onCoverImgChange={v => this.onCoverImgChange(v)}
@@ -250,7 +254,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           />
                         </>
                       )}
-                      {customFormValues.profileType === 'member' && (
+                      {initialFormValues.profileType === 'member' && (
                         <>
                           <UserInfosSection
                             onCoverImgChange={v => this.onCoverImgChange(v)}
@@ -258,7 +262,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           />
                         </>
                       )}
-                      {customFormValues.profileType === undefined && <></>}
+                      {initialFormValues.profileType === undefined && <></>}
                     </Flex>
                   </form>
                   <AccountSettingsSection />
@@ -283,9 +287,9 @@ export class UserSettings extends React.Component<IProps, IState> {
                     data-cy="save"
                     onClick={() => {
                       if (
-                        !customFormValues.profileType ||
-                        (customFormValues.profileType === 'workspace' &&
-                          !customFormValues.workspaceType)
+                        !initialFormValues.profileType ||
+                        (initialFormValues.profileType === 'workspace' &&
+                          !initialFormValues.workspaceType)
                       ) {
                         this.checkSubmitErrors()
                       } else {

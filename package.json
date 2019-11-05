@@ -162,6 +162,7 @@
     "@types/react": "16.8.4",
     "@types/react-dom": "16.8.4",
     "@types/react-leaflet": "^1.1.6",
+    "@types/react-leaflet-markercluster": "^2.0.0",
     "@types/react-router-dom": "4.3.1",
     "@types/react-select": "^2.0.17",
     "@types/react-slick": "0.23.2",
@@ -172,11 +173,8 @@
     "@types/storybook__react": "^4.0.1",
     "chai-subset": "^1.6.0",
     "cross-env": "^6.0.3",
-
     "cypress": "^3.6.0",
-
     "awesome-typescript-loader": "^5.2.1",
-
     "cypress-file-upload": "^3.3.4",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.8.0",

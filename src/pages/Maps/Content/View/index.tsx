@@ -10,21 +10,18 @@ import { Popup } from './Popup'
 
 import {
   IMapPin,
-  IMapPinDetail,
   ILatLng,
   IBoundingBox,
-  IPinType,
-  IMapPinWithType,
+  IMapGrouping,
 } from 'src/models/maps.models'
 import { inject, observer } from 'mobx-react'
 import { MapsStore } from 'src/stores/Maps/maps.store'
 
 interface IProps {
-  pins: Array<IMapPinWithType>
-  filters: Array<IPinType>
+  pins: Array<IMapPin>
+  filters: Array<IMapGrouping>
   onBoundingBoxChange: (boundingBox: IBoundingBox) => void
   onPinClicked: (pin: IMapPin) => void
-  activePinDetail?: IMapPinDetail
   center: ILatLng
   zoom: number
   mapRef: React.RefObject<Map>

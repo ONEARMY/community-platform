@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Field } from 'react-final-form'
 import { TextAreaField, InputField } from 'src/components/Form/Fields'
-import { Box, Image } from 'rebass'
 import Heading from 'src/components/Heading'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import Flex from 'src/components/Flex'
@@ -28,7 +27,6 @@ interface IProps {
 interface IState {
   showDeleteModal: boolean
   _toDocsList: boolean
-  editStepImgs: boolean
 }
 
 const required = (value: any) => (value ? undefined : 'Required')
@@ -44,7 +42,6 @@ class HowtoStep extends Component<IProps, IState> {
     this.state = {
       showDeleteModal: false,
       _toDocsList: false,
-      editStepImgs: false,
     }
   }
 
@@ -58,7 +55,6 @@ class HowtoStep extends Component<IProps, IState> {
 
   render() {
     const { step, index, images } = this.props
-    const { editStepImgs } = this.state
 
     return (
       // NOTE - animation parent container in CreateHowTo

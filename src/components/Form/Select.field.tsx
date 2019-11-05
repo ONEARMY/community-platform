@@ -168,40 +168,49 @@ const defaultProps: Partial<ISelectFieldProps> = {
 }
 export const SelectField = ({ input, meta, ...rest }: ISelectFieldProps) => (
   // note, we first use a div container so that default styles can be applied
+  <>
+    <Flex p={0} flexWrap="nowrap">
+      <FieldContainer
+        invalid={meta.error && meta.touched}
+        style={rest.style}
+        data-cy={rest['data-cy']}
+      >
+        <Select
+          styles={SelectStyles}
+          onChange={v => {
+            input.onChange(getValueFromSelect(v as any))
+          }}
+          onBlur={input.onBlur}
+          onFocus={input.onFocus}
+          value={getValueForSelect(rest.options, input.value)}
+          classNamePrefix={'data-cy'}
+          {...defaultProps}
+          {...rest}
+        />
+      </FieldContainer>
+    </Flex>
+    {meta.error && meta.touched && <ErrorMessage>{meta.error}</ErrorMessage>}
+  </>
+)
+
+export const FlagSelector = ({ input, meta, ...rest }: ISelectFieldProps) => (
   <Flex p={0} flexWrap="wrap">
     <FieldContainer
       invalid={meta.error && meta.touched}
-      style={rest.style}
       data-cy={rest['data-cy']}
     >
-      <Select
-        styles={SelectStyles}
-        onChange={v => {
-          input.onChange(getValueFromSelect(v as any))
+      <ReactFlagsSelect
+        onSelect={v => {
+          input.onChange(getCountryName(v))
         }}
         onBlur={input.onBlur}
         onFocus={input.onFocus}
-        value={getValueForSelect(rest.options, input.value)}
-        classNamePrefix={'data-cy'}
         {...defaultProps}
         {...rest}
       />
     </FieldContainer>
-    {meta.error && meta.touched && <ErrorMessage>{meta.error}</ErrorMessage>}
+    {meta.error && meta.touched && (
+      <ErrorMessage style={{ bottom: '-10px' }}>{meta.error}</ErrorMessage>
+    )}
   </Flex>
-)
-
-export const FlagSelector = ({ input, meta, ...rest }: ISelectFieldProps) => (
-  <>
-    <ReactFlagsSelect
-      onSelect={v => {
-        input.onChange(getCountryName(v))
-      }}
-      onBlur={input.onBlur}
-      onFocus={input.onFocus}
-      {...defaultProps}
-      {...rest}
-    />
-    {/* meta.error && meta.touched && <ErrorMessage>{meta.error}</ErrorMessage> */}
-  </>
 )

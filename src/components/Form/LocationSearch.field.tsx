@@ -16,6 +16,7 @@ export const LocationSearchField = ({
 }: IExtendedFieldProps) => (
   <LocationSearch
     {...rest}
+    {...input}
     onChange={location => {
       // as validation happens on blur also want to artificially trigger when values change
       // (no native blur event)
@@ -25,6 +26,6 @@ export const LocationSearchField = ({
       }
       input.onBlur()
     }}
-    placeholder="Search for a location *"
+    placeholder="Search for a location"
   />
 )

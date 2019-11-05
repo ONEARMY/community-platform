@@ -15,17 +15,18 @@ import { FieldArray } from 'react-final-form-arrays'
 import { Link } from './Fields/Link.field'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
-import { Image, Box } from 'rebass'
+import { Box } from 'rebass'
+import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 
 interface IProps {
   user: IUserPP | any
+  onCoverImgChange: (v: IConvertedFileMeta) => void
 }
 interface IState {
   readOnly: boolean
   isSaving?: boolean
   showNotification?: boolean
   showComLinks?: boolean
-  editCoverImgs?: boolean
   isOpen?: boolean
 }
 
@@ -36,6 +37,7 @@ const FlagSelectContainer = styled(Flex)`
   border: 1px solid ${theme.colors.black};
   border-radius: 4px;
   height: 40px;
+  background-color: ${theme.colors.background};
 `
 
 export class UserInfosSection extends React.Component<IProps, IState> {
@@ -45,7 +47,6 @@ export class UserInfosSection extends React.Component<IProps, IState> {
     this.state = {
       readOnly: true,
       showComLinks: props.user && props.user.links ? true : false,
-      editCoverImgs: props.user && props.user.coverImages ? true : false,
       isOpen: props.user && !props.user.profileType,
     }
     this.changeComLinkSwitch = this.changeComLinkSwitch.bind(this)
@@ -57,7 +58,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
 
   render() {
     const { user } = this.props
-    const { editCoverImgs, isOpen } = this.state
+    const { isOpen } = this.state
 
     return (
       <FlexSectionContainer>
@@ -94,6 +95,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                 name="country"
                 component={FlagSelector}
                 searchable={true}
+                validate={required}
                 defaultCountry={getCountryCode(user.country)}
               />
             </FlagSelectContainer>
@@ -107,47 +109,19 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               placeholder="Describe in details what you do and who you are."
               validate={required}
             />
-            <Text mb={2} mt={7} medium>
+            <Text mb={2} mt={7} width="100%" medium>
               Cover Image *
             </Text>
-            {user.coverImages &&
-            user.coverImages.length > 0 &&
-            user.coverImages[0].downloadUrl !== undefined &&
-            editCoverImgs ? (
-              <Flex alignItems={'center'} justifyContent={'center'}>
-                {user.coverImages.map(image => {
-                  return (
-                    <Flex
-                      flexWrap={'nowrap'}
-                      px={1}
-                      width={1 / 4}
-                      key={image.name}
-                    >
-                      <Image sx={{ opacity: 0.5 }} src={image.downloadUrl} />
-                    </Flex>
-                  )
-                })}
-                <Button
-                  icon={'delete'}
-                  variant={'tertiary'}
-                  sx={{ position: 'absolute' }}
-                  onClick={() =>
-                    this.setState({
-                      editCoverImgs: !editCoverImgs,
-                    })
-                  }
-                />
-              </Flex>
-            ) : (
+            <Box height="100px" width="150px">
               <Field
-                data-cy={'cover-images'}
-                style={{ width: '100%' }}
-                name={`coverImages`}
-                component={ImageInputField}
+                id="cover_image"
+                name="coverImages"
                 validate={required}
-                multi
+                src={user.coverImages ? user.coverImages[0] : null}
+                component={ImageInputField}
+                customChange={v => this.props.onCoverImgChange(v)}
               />
-            )}
+            </Box>
           </Flex>
           <Flex wrap={'nowrap'} alignItems={'center'} width={1}>
             <Text mb={2} mt={7} medium>

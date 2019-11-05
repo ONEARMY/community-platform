@@ -7,7 +7,7 @@ import { Flex } from 'rebass'
 
 import { GroupingFilter } from './GroupingFilter'
 
-import { IPinType, IPinGrouping } from 'src/models/maps.models'
+import { IPinGrouping, IMapGrouping, IMapPinType } from 'src/models/maps.models'
 import { HashLink } from 'react-router-hash-link'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { Map } from 'react-leaflet'
@@ -18,8 +18,8 @@ import { MapsStore } from 'src/stores/Maps/maps.store'
 
 interface IProps {
   mapRef: React.RefObject<Map>
-  availableFilters: Array<IPinType>
-  onFilterChange: (grouping: IPinGrouping, filters: Array<IPinType>) => void
+  availableFilters: Array<IMapGrouping>
+  onFilterChange: (selected: Array<IMapPinType>) => void
   onLocationChange: (selectedLocation: ILocation) => void
 }
 interface IInjectedProps extends IProps {
@@ -27,8 +27,9 @@ interface IInjectedProps extends IProps {
 }
 
 const SearchWrapper = styled.div`
-  width: 300px;
+  width: 308px;
   height: 45px;
+  margin: 5px 0 0 20px;
 `
 
 const MapFlexBar = styled(Flex)`
@@ -64,14 +65,16 @@ class Controls extends React.Component<IProps> {
         accumulator[grouping].push(current)
         return accumulator
       },
-      {} as Record<IPinGrouping, Array<IPinType>>,
+      {} as Record<IPinGrouping, Array<IMapGrouping>>,
     )
 
     return (
       <MapFlexBar
         data-cy="map-controls"
-        ml="50px"
-        py={1}
+        ml={['0', '50px', '50px']}
+        py={[0, 1, 1]}
+        flexDirection={['column-reverse', 'column-reverse', 'row']}
+        alignItems={['center', 'stretch', 'stretch']}
         onClick={() => {
           // close any active popup on click
           this.injected.mapsStore.setActivePin(undefined)
@@ -82,6 +85,7 @@ class Controls extends React.Component<IProps> {
             onChange={(location: ILocation) => {
               this.props.onLocationChange(location)
             }}
+            styleVariant="filter"
           />
         </SearchWrapper>
         {Object.keys(groupedFilters).map(grouping => (
@@ -89,8 +93,8 @@ class Controls extends React.Component<IProps> {
             key={grouping}
             entityType={grouping}
             items={groupedFilters[grouping]}
-            onChange={options => {
-              this.props.onFilterChange(grouping as IPinGrouping, options)
+            onChange={selected => {
+              this.props.onFilterChange(selected as IMapPinType[])
             }}
           />
         ))}
@@ -103,7 +107,12 @@ class Controls extends React.Component<IProps> {
               hash: '#your-map-pin',
             }}
           >
-            <Button variant={'primary'}>My pin</Button>
+            <Button
+              sx={{ display: ['none', 'block', 'block'] }}
+              variant={'primary'}
+            >
+              My pin
+            </Button>
           </HashLink>
         </AuthWrapper>
       </MapFlexBar>

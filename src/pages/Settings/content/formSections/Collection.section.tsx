@@ -3,7 +3,7 @@ import * as React from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
-import { Box, Image } from 'rebass'
+import { Box } from 'rebass'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { OpeningHoursPicker } from './Fields/OpeningHoursPicker.field'
 
@@ -14,8 +14,8 @@ import { PLASTIC_TYPES } from 'src/mocks/user_pp.mock'
 import { IUserPP } from 'src/models/user_pp.models'
 
 interface IProps {
-  onInputChange: (inputValue: string) => void
   user: IUserPP
+  required: boolean
 }
 
 interface IState {
@@ -32,6 +32,7 @@ export class CollectionSection extends React.Component<IProps, IState> {
 
   render() {
     const { isOpen } = this.state
+    const { required } = this.props
     return (
       <FlexSectionContainer>
         <Flex justifyContent="space-between">
@@ -120,6 +121,9 @@ export class CollectionSection extends React.Component<IProps, IState> {
               )}
             </FieldArray>
           </Flex>
+          {required && (
+            <Text color="red">Choose at least one plastic type </Text>
+          )}
         </Box>
       </FlexSectionContainer>
     )

@@ -1,5 +1,9 @@
 import { loremIpsum } from 'lorem-ipsum'
-import { IMapPin, IMapPinDetail } from 'src/models/maps.models'
+import {
+  IMapPin,
+  IMapPinWithDetail,
+  IMapPinDetail,
+} from 'src/models/maps.models'
 import { MOCK_DB_META } from './db.mock'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 
@@ -12,11 +16,10 @@ export const generatePins = (count: number): Array<IMapPin> => {
     newPins.push({
       ...MOCK_DB_META(),
       location: {
-        address: 'testing',
         lat: 51 + (Math.random() * 1000 - 500) / 500,
         lng: 0 + (Math.random() * 1000 - 500) / 250,
       },
-      pinType: pinType.name,
+      type: pinType.type,
     })
   }
   return newPins
@@ -27,7 +30,6 @@ export const generatePinDetails = (pin: IMapPin): IMapPinDetail => {
   randomDate.setSeconds(randomDate.getSeconds() - Math.random() * 10000)
   const lastActive = randomDate.toISOString()
   return {
-    ...pin,
     name: loremIpsum({ count: 2, units: 'words' })
       .split(' ')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))

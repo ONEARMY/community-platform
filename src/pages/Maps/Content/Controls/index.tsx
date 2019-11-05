@@ -85,6 +85,7 @@ class Controls extends React.Component<IProps> {
             onChange={(location: ILocation) => {
               this.props.onLocationChange(location)
             }}
+            styleVariant="filter"
           />
         </SearchWrapper>
         {Object.keys(groupedFilters).map(grouping => (

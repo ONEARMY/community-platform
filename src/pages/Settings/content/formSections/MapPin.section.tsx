@@ -14,15 +14,13 @@ import { IUserPP } from 'src/models/user_pp.models'
 import { Button } from 'src/components/Button'
 import { ILocation } from 'src/models/common.models'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
+import theme from 'src/themes/styled.theme'
 
 interface IProps {
   user: IUserPP
   onInputChange: (v: ILocation) => void
+  showSubmitErrors: boolean
 }
-// interface IInjectedProps extends IProps {
-//   mapsStore: MapsStore
-//   userStore: UserStore
-// }
 interface IState {
   editAddress: boolean
   lat: number
@@ -36,8 +34,6 @@ const customMarker = L.icon({
   iconSize: [20, 28],
   iconAnchor: [10, 28],
 })
-
-// const DEFAULT_PIN_TYPE: string = 'member'
 
 // validation - return undefined if no error (i.e. valid)
 const required = (value: any) => (value ? undefined : 'Required')
@@ -60,7 +56,7 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { user } = this.props
+    const { user, showSubmitErrors } = this.props
     const { lat, lng, zoom, editAddress, isOpen } = this.state
 
     return (
@@ -88,7 +84,7 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
           {!user.location || editAddress ? (
             <Box>
               <Text mb={2} mt={4} medium>
-                Your workspace address
+                Your workspace address *
               </Text>
               <Field
                 name={'location'}
@@ -101,8 +97,12 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
                   this.props.onInputChange(v)
                 }}
                 component={LocationSearchField}
-                validate={required}
               />
+              {showSubmitErrors && (
+                <Text small color={theme.colors.red} mb="5px">
+                  Please select your location
+                </Text>
+              )}
 
               <Map
                 center={[lat, lng]}
@@ -120,7 +120,7 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
                 />
                 <Marker position={[lat, lng]} icon={customMarker}>
                   <Popup maxWidth={225} minWidth={225}>
-                    This adress will be shown on my profile
+                    This adress will be shown on the map
                   </Popup>
                 </Marker>
               </Map>

@@ -39,7 +39,7 @@ const FilterStyle = {
 const SelectorStyle = {
   marginBottom: 0,
   background: 'white',
-  border: '2px solid black',
+  border: '1px solid black',
   height: '45px',
   display: 'flex',
   '::after': {

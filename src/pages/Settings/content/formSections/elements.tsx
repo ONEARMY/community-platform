@@ -1,10 +1,10 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import { Field } from 'react-final-form'
 import theme from 'src/themes/styled.theme'
 import Flex from 'src/components/Flex'
 import { Box } from 'rebass'
 import Icon from 'src/components/Icons'
+import { Field } from 'react-final-form'
 
 export const Label = styled.label`
   margin: 5px;
@@ -38,7 +38,7 @@ export const FlexSectionContainer = props => (
     bg={'white'}
     p={4}
     mt={4}
-    flexWrap="wrap"
+    flexWrap="nowrap"
     flexDirection="column"
   >
     {props.children}

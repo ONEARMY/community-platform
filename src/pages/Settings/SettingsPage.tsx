@@ -5,7 +5,6 @@ import { UserStore } from 'src/stores/User/user.store'
 import { observer, inject } from 'mobx-react'
 import { toJS } from 'mobx'
 import { UserInfosSection } from './content/formSections/UserInfos.section'
-import { ImportDHForm } from './content/formSections/ImportDH.form'
 import { FocusSection } from './content/formSections/Focus.section'
 import { ExpertiseSection } from './content/formSections/Expertise.section'
 import { WorkspaceSection } from './content/formSections/Workspace.section'
@@ -26,6 +25,7 @@ import theme from 'src/themes/styled.theme'
 import { INITIAL_VALUES } from './Template'
 import { Box } from 'rebass'
 import { ILocation } from 'src/models/common.models'
+import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 
 export interface IFormValues extends Partial<IUserPP> {
   // form values are simply subset of user profile fields
@@ -39,11 +39,13 @@ interface IInjectedProps extends IProps {
 }
 
 interface IState {
-  editMode: boolean
   customFormValues: IFormValues
   user: IUserPP
   showNotification: boolean
   showDeleteDialog?: boolean
+  isFocusSelected: boolean
+  isWTSelected: boolean
+  isLocationSelected: boolean
 }
 
 @inject('userStore')
@@ -53,10 +55,12 @@ export class UserSettings extends React.Component<IProps, IState> {
     super(props)
     const user = this.injected.userStore.user
     this.state = {
-      editMode: false,
       customFormValues: user ? user : {},
       showNotification: false,
       user: props.user,
+      isFocusSelected: user ? true : false,
+      isLocationSelected: user ? user.location !== undefined : false,
+      isWTSelected: true,
     }
   }
 
@@ -79,13 +83,43 @@ export class UserSettings extends React.Component<IProps, IState> {
         ...this.state.customFormValues,
         location: l,
       },
+      isLocationSelected: true,
     })
+  }
+  public onCoverImgChange(v: IConvertedFileMeta) {
+    // TODO always use an array of coverImages (will do when allow multiple cover images)
+    const coverImagesArray: IConvertedFileMeta[] = []
+    coverImagesArray.push(v)
+    this.setState({
+      customFormValues: {
+        ...this.state.customFormValues,
+        coverImages: coverImagesArray,
+      },
+    })
+  }
+  public checkSubmitErrors() {
+    if (!this.state.customFormValues.profileType) {
+      this.setState({ isFocusSelected: false })
+    }
+    if (!this.state.customFormValues.workspaceType) {
+      this.setState({ isWTSelected: false })
+    }
+    if (
+      this.state.customFormValues.profileType !== 'member' &&
+      !this.state.customFormValues.location
+    ) {
+      this.setState({ isLocationSelected: false })
+    }
   }
 
   render() {
     const user = this.injected.userStore.user!
-    const { customFormValues } = this.state
-    const readOnly = !this.state.editMode
+    const {
+      customFormValues,
+      isFocusSelected,
+      isWTSelected,
+      isLocationSelected,
+    } = this.state
     // Need to convert mobx observable user object into a Javasrcipt structure using toJS fn
     // to allow final-form-array to display the initial values
     const initialFormValues = user.profileType
@@ -101,7 +135,6 @@ export class UserSettings extends React.Component<IProps, IState> {
         }}
         validateOnBlur
         render={({ submitting, values, invalid, errors, handleSubmit }) => {
-          const disabled = invalid || submitting
           return (
             <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
               <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} my={4}>
@@ -131,8 +164,10 @@ export class UserSettings extends React.Component<IProps, IState> {
                               profileType: v,
                               workspaceType: null,
                             },
+                            isFocusSelected: true,
                           })
                         }}
+                        showSubmitErrors={!isFocusSelected}
                       />
                       {customFormValues.profileType === 'workspace' && (
                         <>
@@ -144,51 +179,83 @@ export class UserSettings extends React.Component<IProps, IState> {
                                   ...this.state.customFormValues,
                                   workspaceType: v,
                                 },
+                                isWTSelected: true,
                               })
                             }
+                            showSubmitErrors={!isWTSelected}
                           />
-                          <UserInfosSection user={user} />
+                          <UserInfosSection
+                            onCoverImgChange={v => this.onCoverImgChange(v)}
+                            user={user}
+                          />
                           <UserMapPinSection
                             onInputChange={v => this.updateLocation(v)}
                             user={user}
+                            showSubmitErrors={!isLocationSelected}
                           />
                         </>
                       )}
                       {customFormValues.profileType === 'collection-point' && (
                         <>
-                          <UserInfosSection user={user} />
+                          <UserInfosSection
+                            onCoverImgChange={v => this.onCoverImgChange(v)}
+                            user={user}
+                          />
                           <CollectionSection
-                            onInputChange={v => console.log(v)}
+                            required={
+                              values.collectedPlasticTypes
+                                ? values.collectedPlasticTypes.length === 0
+                                : true
+                            }
                             user={user}
                           />
                           <UserMapPinSection
                             onInputChange={v => this.updateLocation(v)}
                             user={user}
+                            showSubmitErrors={!isLocationSelected}
                           />
                         </>
                       )}
                       {customFormValues.profileType === 'community-builder' && (
                         <>
-                          <UserInfosSection user={user} />
+                          <UserInfosSection
+                            onCoverImgChange={v => this.onCoverImgChange(v)}
+                            user={user}
+                          />
                           <UserMapPinSection
                             onInputChange={v => this.updateLocation(v)}
                             user={user}
+                            showSubmitErrors={!isLocationSelected}
                           />
                         </>
                       )}
                       {customFormValues.profileType === 'machine-builder' && (
                         <>
-                          <UserInfosSection user={user} />
-                          <ExpertiseSection user={user} />
+                          <UserInfosSection
+                            onCoverImgChange={v => this.onCoverImgChange(v)}
+                            user={user}
+                          />
+                          <ExpertiseSection
+                            required={
+                              values.machineBuilderXp
+                                ? values.machineBuilderXp.length === 0
+                                : true
+                            }
+                            user={user}
+                          />
                           <UserMapPinSection
                             onInputChange={v => this.updateLocation(v)}
                             user={user}
+                            showSubmitErrors={!isLocationSelected}
                           />
                         </>
                       )}
                       {customFormValues.profileType === 'member' && (
                         <>
-                          <UserInfosSection user={user} />
+                          <UserInfosSection
+                            onCoverImgChange={v => this.onCoverImgChange(v)}
+                            user={user}
+                          />
                         </>
                       )}
                       {customFormValues.profileType === undefined && <></>}
@@ -215,11 +282,19 @@ export class UserSettings extends React.Component<IProps, IState> {
                   <Button
                     data-cy="save"
                     onClick={() => {
-                      const form = document.getElementById('userProfileForm')
-                      if (typeof form !== 'undefined' && form !== null) {
-                        form.dispatchEvent(
-                          new Event('submit', { cancelable: true }),
-                        )
+                      if (
+                        !customFormValues.profileType ||
+                        (customFormValues.profileType === 'workspace' &&
+                          !customFormValues.workspaceType)
+                      ) {
+                        this.checkSubmitErrors()
+                      } else {
+                        const form = document.getElementById('userProfileForm')
+                        if (typeof form !== 'undefined' && form !== null) {
+                          form.dispatchEvent(
+                            new Event('submit', { cancelable: true }),
+                          )
+                        }
                       }
                     }}
                     width={1}

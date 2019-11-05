@@ -12,6 +12,7 @@ import { IUserPP } from 'src/models/user_pp.models'
 
 interface IProps {
   user: IUserPP
+  required: boolean
 }
 
 export class ExpertiseSection extends React.Component<IProps, any> {
@@ -24,6 +25,7 @@ export class ExpertiseSection extends React.Component<IProps, any> {
 
   render() {
     const { isOpen } = this.state
+    const { required } = this.props
     return (
       <FlexSectionContainer>
         <Flex justifyContent="space-between">
@@ -73,6 +75,7 @@ export class ExpertiseSection extends React.Component<IProps, any> {
               )}
             </FieldArray>
           </Flex>
+          {required && <Text color="red">Choose at least one expertise </Text>}
         </Box>
       </FlexSectionContainer>
     )

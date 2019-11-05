@@ -5,6 +5,7 @@ import theme from 'src/themes/styled.theme'
 import { Flex } from 'rebass/styled-components'
 import styled from 'styled-components'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
+import { zIndex } from 'src/themes/styled.theme'
 
 const MenuLink = styled(NavLink).attrs(({ name }) => ({
   activeClassName: 'current',
@@ -13,7 +14,7 @@ const MenuLink = styled(NavLink).attrs(({ name }) => ({
   color: ${'black'};
   position: relative;
   > div {
-    z-index: 1;
+    z-index: ${zIndex.default};
     position: relative;
     &:hover {
       opacity: 0.7;
@@ -28,7 +29,7 @@ const MenuLink = styled(NavLink).attrs(({ name }) => ({
       position: absolute;
       bottom: -6px;
       background-image: url(${MenuCurrent});
-      z-index: 0;
+      z-index: ${zIndex.level};
       background-repeat: no-repeat;
       background-size: contain;
       left: 50%;
@@ -44,7 +45,7 @@ export class MenuDesktop extends React.Component {
         <Flex alignItems={'center'}>
           {COMMUNITY_PAGES.map(page => (
             <Flex key={page.path}>
-              <MenuLink to={page.path}>
+              <MenuLink to={page.path} data-cy="page-link">
                 <Flex>{page.title}</Flex>
               </MenuLink>
             </Flex>

@@ -4,7 +4,7 @@ import { Form, Field } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import TEMPLATE from './Template'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
-import { InputField } from 'src/components/Form/Fields'
+import { InputField, DatePickerField } from 'src/components/Form/Fields'
 import { Button } from 'src/components/Button'
 import { EventStore } from 'src/stores/Events/events.store'
 import Heading from 'src/components/Heading'
@@ -21,6 +21,7 @@ interface IState {
   formValues: IEventFormInput
   formSaved: boolean
   showSubmitModal?: boolean
+  selectedDate: any
 }
 interface IProps extends RouteComponentProps<any> {}
 interface IInjectedProps extends IProps {
@@ -48,6 +49,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
     this.state = {
       formValues: { ...TEMPLATE.INITIAL_VALUES },
       formSaved: false,
+      selectedDate: null,
     }
   }
 
@@ -72,11 +74,28 @@ export class EventsCreate extends React.Component<IProps, IState> {
     return this.store.validateUrl(value)
   }
 
+  public handleChange = (date: any) => {
+    this.setState({
+      selectedDate: date,
+    })
+  }
+
   public render() {
     const { formValues } = this.state
     return (
       <Form
-        onSubmit={v => this.onSubmit(v as IEventFormInput)}
+        onSubmit={v => {
+          const datepickerDate = this.state.selectedDate
+          // convert from Date type to yyyy/mm/dd string and back into local timezone
+          const convert = new Date(
+            datepickerDate.getTime() -
+              datepickerDate.getTimezoneOffset() * 60000,
+          )
+            .toISOString()
+            .substring(0, 10)
+          v.date = convert
+          this.onSubmit(v as IEventFormInput)
+        }}
         initialValues={formValues}
         mutators={{
           ...arrayMutators,
@@ -90,7 +109,13 @@ export class EventsCreate extends React.Component<IProps, IState> {
                 <FormContainer onSubmit={e => e.preventDefault()}>
                   {/* How To Info */}
                   <Flex flexDirection={'column'}>
-                    <Flex card mediumRadius bg={'softblue'} px={3} py={2}>
+                    <Flex
+                      card
+                      mediumRadius
+                      bg={theme.colors.softblue}
+                      px={3}
+                      py={2}
+                    >
                       <Heading medium>Create an event</Heading>
                     </Flex>
                     <Flex
@@ -111,6 +136,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                         <Field
                           id="title"
                           name="title"
+                          data-cy="title"
                           validate={value => this.validateTitle(value)}
                           validateFields={[]}
                           component={InputField}
@@ -122,16 +148,26 @@ export class EventsCreate extends React.Component<IProps, IState> {
                         width={1}
                         flexDirection={['column', 'column', 'row']}
                       >
-                        <Flex flexDirection={'column'} mb={3} px={2} width={1}>
+                        <Flex
+                          flexDirection={'column'}
+                          mb={3}
+                          px={2}
+                          width={1}
+                          data-cy="date"
+                        >
                           <Label htmlFor="location">
                             When is your event taking place? *
                           </Label>
                           <Field
+                            className="datepicker"
+                            component={DatePickerField}
                             name="date"
-                            validateFields={[]}
-                            validate={required}
-                            component={InputField}
                             type="date"
+                            dateFormat="yyyy/MM/dd"
+                            validate={required}
+                            selected={this.state.selectedDate}
+                            customChange={date => this.handleChange(date)}
+                            placeholderText="yyyy/mm/dd"
                           />
                         </Flex>
                         <Flex flexDirection={'column'} mb={3} px={2} width={1}>
@@ -143,11 +179,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             name="location"
                             className="location-search-create"
                             validateFields={[]}
-                            validate={(value: any) =>
-                              value.hasOwnProperty('latlng')
-                                ? undefined
-                                : 'Required'
-                            }
+                            validate={required}
                             component={LocationSearchField}
                           />
                         </Flex>
@@ -171,6 +203,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                           <Label htmlFor="location">Link to your event *</Label>
                           <Field
                             name="url"
+                            data-cy="url"
                             validateFields={[]}
                             validate={value => this.validateUrl(value)}
                             component={InputField}
@@ -197,8 +230,9 @@ export class EventsCreate extends React.Component<IProps, IState> {
                   onClick={() => handleSubmit()}
                   width={1}
                   mt={3}
-                  variant={disabled ? 'primary' : 'primary'}
-                  disabled={submitting || invalid}
+                  variant={'primary'}
+                  disabled={submitting}
+                  data-cy="submit"
                 >
                   Publish
                 </Button>

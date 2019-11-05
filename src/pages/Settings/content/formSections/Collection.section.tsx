@@ -3,7 +3,7 @@ import * as React from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
-import { Box, Image } from 'rebass'
+import { Box } from 'rebass'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { OpeningHoursPicker } from './Fields/OpeningHoursPicker.field'
 
@@ -12,10 +12,11 @@ import { Button } from 'src/components/Button'
 import { CustomCheckbox } from './Fields/CustomCheckbox.field'
 import { PLASTIC_TYPES } from 'src/mocks/user_pp.mock'
 import { IUserPP } from 'src/models/user_pp.models'
+import { IFormValues } from '../../SettingsPage'
 
 interface IProps {
-  onInputChange: (inputValue: string) => void
-  user: IUserPP
+  initialFormValues: IFormValues
+  required: boolean
 }
 
 interface IState {
@@ -26,12 +27,13 @@ export class CollectionSection extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
-      isOpen: props.user && !props.user.profileType,
+      isOpen: true,
     }
   }
 
   render() {
     const { isOpen } = this.state
+    const { required } = this.props
     return (
       <FlexSectionContainer>
         <Flex justifyContent="space-between">
@@ -63,6 +65,7 @@ export class CollectionSection extends React.Component<IProps, IState> {
                   />
                 ))}
                 <Button
+                  data-cy="add-opening-time"
                   my={2}
                   variant="outline"
                   onClick={() => {
@@ -87,6 +90,7 @@ export class CollectionSection extends React.Component<IProps, IState> {
                 <>
                   {PLASTIC_TYPES.map((plastic, index: number) => (
                     <CustomCheckbox
+                      data-cy={`plastic-${plastic.label}`}
                       key={index}
                       fullWidth
                       value={plastic.label}
@@ -118,6 +122,9 @@ export class CollectionSection extends React.Component<IProps, IState> {
               )}
             </FieldArray>
           </Flex>
+          {required && (
+            <Text color="red">Choose at least one plastic type </Text>
+          )}
         </Box>
       </FlexSectionContainer>
     )

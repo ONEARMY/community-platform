@@ -14,12 +14,17 @@ export interface IProps extends FieldRenderProps<any, any> {
   category: TagCategory | undefined
   styleVariant: 'selector' | 'filter'
   placeholder: string
+  relevantTagsItems?: ICollectionWithTags[]
 }
 interface IState {
   selectedTags: string[]
 }
 interface InjectedProps extends IProps {
   tagsStore: TagsStore
+}
+
+interface ICollectionWithTags {
+  tags?: ISelectedTags
 }
 
 @inject('tagsStore')
@@ -52,10 +57,19 @@ class TagsSelect extends React.Component<IProps, IState> {
   }
 
   public render() {
-    const { categoryTags } = this.injectedProps.tagsStore
+    let { categoryTags } = this.injectedProps.tagsStore
+    const relevantTagsItems = this.injectedProps.relevantTagsItems
+
+    if (relevantTagsItems) {
+      const tagCounts = this._getTagCounts(relevantTagsItems)
+      categoryTags = categoryTags.filter(tag =>
+        Object.keys(tagCounts).includes(tag._id),
+      )
+    }
+
     const { styleVariant } = this.props
     return (
-      <FieldContainer data-cy={'tag-select'}>
+      <FieldContainer data-cy="tag-select">
         <Select
           styles={styleVariant === 'selector' ? SelectStyles : FilterStyles}
           isMulti
@@ -66,7 +80,6 @@ class TagsSelect extends React.Component<IProps, IState> {
           onChange={values => this.onSelectedTagsChanged(values as ITag[])}
           placeholder={this.props.placeholder}
           classNamePrefix={'data-cy'}
-
         />
       </FieldContainer>
     )
@@ -85,6 +98,21 @@ class TagsSelect extends React.Component<IProps, IState> {
     const selectedJson = {}
     arr.forEach(el => (selectedJson[el] = true))
     return selectedJson
+  }
+
+  // we want to display only those tags that return results, meaning they are used by how-tos, events, etc
+  private _getTagCounts(items: ICollectionWithTags[]) {
+    const tagCounts: { [key: string]: number } = {}
+
+    items.map(
+      item =>
+        item.tags &&
+        Object.keys(item.tags).forEach(
+          tag => (tagCounts[tag] = (tagCounts[tag] || 0) + 1),
+        ),
+    )
+
+    return tagCounts
   }
 }
 

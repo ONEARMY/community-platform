@@ -4,8 +4,10 @@ import {
   Input,
   TextAreaDisabled,
   ErrorMessage,
+  StyledDatePicker,
 } from './elements'
 import { FieldRenderProps } from 'react-final-form'
+import 'react-datepicker/dist/react-datepicker.css'
 
 // any props can be passed to field and down to child component
 // input and meta props come from react field render props and will be
@@ -15,6 +17,11 @@ export interface IFieldProps extends FieldProps {
   // additional fields intending to pass down
   disabled?: boolean
   children?: React.ReactNode
+  'data-cy'?: string
+}
+
+interface IDatePickerFieldProps extends IFieldProps {
+  customChange?: (location) => void
 }
 
 export const InputField = ({ input, meta, ...rest }: IFieldProps) => (
@@ -23,6 +30,34 @@ export const InputField = ({ input, meta, ...rest }: IFieldProps) => (
     {meta.error && meta.touched ? (
       <ErrorMessage>{meta.error}</ErrorMessage>
     ) : null}
+  </>
+)
+export const DatePickerField = ({
+  input,
+  meta,
+  customChange,
+  ...rest
+}: IDatePickerFieldProps) => (
+  <>
+    <StyledDatePicker
+      invalid={meta.error && meta.touched}
+      {...input}
+      {...rest}
+      onChange={date => {
+        input.onChange(date)
+        if (customChange) {
+          customChange(date)
+        }
+      }}
+    />
+    {meta.error && meta.touched ? (
+      <ErrorMessage>{meta.error}</ErrorMessage>
+    ) : null}
+  </>
+)
+export const HiddenInputField = ({ input, meta, ...rest }: IFieldProps) => (
+  <>
+    <Input invalid={meta.error && meta.touched} {...input} {...rest} />
   </>
 )
 

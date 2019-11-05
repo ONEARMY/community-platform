@@ -5,7 +5,7 @@ import { withKnobs, select } from '@storybook/addon-knobs'
 
 import Icon, { glyphs, IGlyphs } from './'
 
-import { wInfo } from '../../../.storybook/wInfo'
+// import { wInfo } from '../../../.storybook/wInfo'
 
 const stories = storiesOf('UI/Icons', module)
 stories.addDecorator(withKnobs)
@@ -18,14 +18,14 @@ const sizes = {
   XLarge: 64,
 }
 
-Object.keys(glyphs).map(glyph =>
-  stories.add(
-    glyph,
-    wInfo()(() => (
-      <Icon
-        glyph={glyph as keyof IGlyphs}
-        size={select('Size', sizes, 32, 'iconSizes')}
-      />
-    )),
-  ),
-)
+// Object.keys(glyphs).map(glyph =>
+// stories.add(
+//   glyph,
+// wInfo()(() => (
+//   <Icon
+//     glyph={glyph as keyof IGlyphs}
+//     size={select('Size', sizes, 32, 'iconSizes')}
+//   />
+// )),
+// ),
+// )

@@ -20,10 +20,11 @@ const FlexStepNumber = styled(Flex)`
 
 export default class Step extends React.PureComponent<IProps> {
   render() {
+    const { stepindex } = this.props
     return (
       <>
         <Flex
-          data-cy={'step'}
+          data-cy={`step_${stepindex}`}
           mx={[0, 0, -2]}
           mt={9}
           flexDirection={['column', 'column', 'row']}

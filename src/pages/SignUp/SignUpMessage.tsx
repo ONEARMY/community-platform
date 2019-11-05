@@ -6,6 +6,7 @@ import theme from 'src/themes/styled.theme'
 import { Button } from 'src/components/Button'
 import Text from 'src/components/Text'
 import { Link } from 'src/components/Links'
+import { Link as ExternalLink } from 'rebass'
 
 const Label = styled.label`
  font-size: ${theme.fontSizes[2] + 'px'}
@@ -26,10 +27,8 @@ export class SignUpMessagePage extends React.Component {
         mb={3}
       >
         <Flex flexDirection={'column'} width={1}>
-          <Flex card mediumRadius bg={'softblue'} px={3} py={2} width={1}>
-            <Heading medium width={1}>
-              Sent
-            </Heading>
+          <Flex card mediumRadius bg={theme.colors.softblue} px={3} py={2}>
+            <Heading medium>Sent</Heading>
           </Flex>
           <Flex
             card
@@ -52,13 +51,21 @@ export class SignUpMessagePage extends React.Component {
                 profile.
               </Text>
               <Text small color={'grey'} mt={2}>
-                Didn't receive the email? <Link to="#">Resend</Link>.
+                Didn't receive the email?{' '}
+                <ExternalLink
+                  color={theme.colors.grey}
+                  sx={{ textDecoration: 'underline' }}
+                  href="mailto:platform@onearmy.world?subject=Email%20confirmation%20failed%20community-platform"
+                >
+                  Let us know
+                </ExternalLink>
+                .
               </Text>
             </Flex>
           </Flex>
           <Flex mt={3} justifyContent={'flex-end'}>
             <Link to={'/'}>
-              <Button variant="secondary" small>
+              <Button variant="secondary" data-cy="home">
                 Home
               </Button>
             </Link>

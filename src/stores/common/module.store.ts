@@ -35,8 +35,17 @@ export class ModuleStore {
   get db() {
     return this.rootStore.dbV2
   }
+
   get activeUser() {
     return this.rootStore.stores.userStore.user
+  }
+
+  get userStore() {
+    return this.rootStore.stores.userStore
+  }
+
+  get mapsStore() {
+    return this.rootStore.stores.mapsStore
   }
 
   /****************************************************************************
@@ -59,27 +68,31 @@ export class ModuleStore {
    *            Data Validation Methods
    * **************************************************************************/
 
-  public isSlugUnique = async (slug: string, endpoint: IDBEndpoint) => {
-    try {
-      const matches = await this.db
-        .collection(endpoint)
-        .getWhere('slug', '==', slug)
-      return false
-      // TODO - Pending code merge
-      // return matches.length > 0
-    } catch (e) {
-      return 'Titles must be unique, please try being more specific'
-    }
+  public checkIsUnique = async (
+    endpoint: IDBEndpoint,
+    field: string,
+    value: string,
+  ) => {
+    const matches = await this.db
+      .collection(endpoint)
+      .getWhere(field, '==', value)
+    return matches.length > 0 ? false : true
   }
 
-  public validateTitle = async (value: any, endpoint: IDBEndpoint) => {
-    if (value) {
-      const error = this.isSlugUnique(
-        stripSpecialCharacters(value).toLowerCase(),
-        endpoint,
-      )
-      return error
+  /** Validator method to pass to react-final-form. Takes a given title,
+   *  converts to corresponding slug and checks uniqueness.
+   *  NOTE - return value represents the error, so FALSE actually means valid
+   * @param value
+   */
+  public validateTitle = async (title: string, endpoint: IDBEndpoint) => {
+    if (title) {
+      const slug = stripSpecialCharacters(title).toLowerCase()
+      const unique = await this.checkIsUnique('v2_howtos', 'slug', slug)
+      return unique
+        ? false
+        : 'Titles must be unique, please try being more specific'
     } else {
+      // if no title submitted, simply return message to say that it is required
       return 'Required'
     }
   }

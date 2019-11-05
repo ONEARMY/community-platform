@@ -1,0 +1,110 @@
+[
+  {
+    "_authID": "YhBD7LB22EXsHz40sTSENWUSa9u1",
+    "_id": "howto_creator",
+    "userName": "howto_creator",
+    "_deleted": false,
+    "_created": "2018-01-24T14:46:42.038Z",
+    "_modified": "2018-01-24T14:46:42.038Z",
+    "verified": true
+  },
+  {
+    "_authID": "dU5sofScHpV09c8NWA834YCQq0S2",
+    "_id": "howto_editor",
+    "userName": "howto_editor",
+    "_deleted": false,
+    "_created": "2018-01-24T14:46:42.038Z",
+    "_modified": "2018-01-24T14:46:42.038Z",
+    "verified": true
+  },
+  {
+    "_authID": "v888t7UA7RMUvirqvUPT0vvc8en1",
+    "_id": "howto_reader",
+    "userName": "howto_reader",
+    "_deleted": false,
+    "_created": "2018-01-24T14:46:42.038Z",
+    "_modified": "2018-01-24T14:46:42.038Z",
+    "verified": true
+  },
+  {
+    "_authID": "5UXRly49EOXtIXmKjPfSU5UpeI73",
+    "_id": "event_creator",
+    "userName": "event_creator",
+    "_deleted": false,
+    "_created": "2018-01-24T14:46:42.038Z",
+    "_modified": "2018-01-24T14:46:42.038Z",
+    "verified": true
+  },
+  {
+    "_authID": "8T4FMZ0dOdQbBaHuFYcvc0A3rDt2",
+    "_id": "event_editor",
+    "userName": "event_editor",
+    "_deleted": false,
+    "_created": "2018-01-24T14:46:42.038Z",
+    "_modified": "2018-01-24T14:46:42.038Z",
+    "verified": true
+  },
+  {
+    "_authID": "4WFI4CEFXuTtoB1b2rl16AlGCey1",
+    "_id": "event_reader",
+    "userName": "event_reader",
+    "_deleted": false,
+    "_created": "2018-01-24T14:46:42.038Z",
+    "_modified": "2018-01-24T14:46:42.038Z",
+    "verified": true
+  },
+  {
+    "_authID": "0P7VMVVdhkUQjvYG3gYewwPtJ7i1",
+    "_id": "tag_creator",
+    "userName": "tag_creator",
+    "_deleted": false,
+    "_created": "2018-01-24T14:46:42.038Z",
+    "_modified": "2018-01-24T14:46:42.038Z",
+    "verified": true
+  },
+  {
+    "_authID": "l9N5HFHzSjQvtP9g9MyFnPpkFmM2",
+    "_id": "settings_workplace_new",
+    "userName": "settings_workplace_new",
+    "_deleted": false,
+    "_created": "2018-01-24T14:46:42.038Z",
+    "_modified": "2018-01-24T14:46:42.038Z",
+    "verified": true
+  },
+  {
+    "_authID": "pbx4jStD8sNj4OEZTg4AegLTl6E3",
+    "_id": "settings_member_new",
+    "userName": "settings_member_new",
+    "_deleted": false,
+    "_created": "2018-01-24T14:46:42.038Z",
+    "_modified": "2018-01-24T14:46:42.038Z",
+    "verified": true
+  },
+  {
+    "_authID": "wwtBAo7TrkSQ9nAaBN3D93I1sCM2",
+    "_id": "settings_machine_new",
+    "userName": "settings_machine_new",
+    "_deleted": false,
+    "_created": "2018-01-24T14:46:42.038Z",
+    "_modified": "2018-01-24T14:46:42.038Z",
+    "verified": true
+  },
+  {
+    "_authID": "vWAbQvq21UbvhGldakIy1x4FpeF2",
+    "_id": "settings_community_new",
+    "userName": "settings_community_new",
+    "_deleted": false,
+    "_created": "2018-01-24T14:46:42.038Z",
+    "_modified": "2018-01-24T14:46:42.038Z",
+    "verified": true
+  },
+  {
+    "_authID": "uxupeYR7glagQyhBy8q0blr0chd2",
+    "_id": "settings_plastic_new",
+    "userName": "settings_plastic_new",
+    "_deleted": false,
+    "_created": "2018-01-24T14:46:42.038Z",
+    "_modified": "2018-01-24T14:46:42.038Z",
+    "verified": true
+  }
+]

@@ -10,77 +10,78 @@ import { Popup } from './Popup'
 
 import {
   IMapPin,
-  IMapPinDetail,
   ILatLng,
   IBoundingBox,
-  IPinType,
-  IMapPinWithType,
+  IMapGrouping,
 } from 'src/models/maps.models'
+import { inject, observer } from 'mobx-react'
+import { MapsStore } from 'src/stores/Maps/maps.store'
 
 interface IProps {
-  pins: Array<IMapPinWithType>
-  filters: Array<IPinType>
+  pins: Array<IMapPin>
+  filters: Array<IMapGrouping>
   onBoundingBoxChange: (boundingBox: IBoundingBox) => void
   onPinClicked: (pin: IMapPin) => void
-  activePinDetail?: IMapPin | IMapPinDetail
   center: ILatLng
   zoom: number
+  mapRef: React.RefObject<Map>
 }
-interface IState {}
+interface IInjectedProps extends IProps {
+  mapsStore: MapsStore
+}
 
-class MapView extends React.Component<IProps, IState> {
-  private map
-
-  constructor(props) {
+@inject('mapsStore')
+@observer
+class MapView extends React.Component<IProps> {
+  constructor(props: IProps) {
     super(props)
-    this.map = React.createRef()
-    this.updateBoundingBox = debounce(this.updateBoundingBox.bind(this), 1000)
+    this.handleMove = debounce(this.handleMove, 1000)
   }
 
-  public componentDidMount() {
-    this.updateBoundingBox()
+  get injected() {
+    return this.props as IInjectedProps
   }
 
-  private updateBoundingBox() {
-    // Note - sometimes throws (current undefined). Workaround
-    if (this.map && this.map.current) {
-      const boundingBox = this.map.current.leafletElement.getBounds()
+  // on move end want to calculate current bounding box and notify parent
+  // so that pins can be displayed as required
+  private handleMove = () => {
+    if (this.props.mapRef.current) {
+      const boundingBox = this.props.mapRef.current.leafletElement.getBounds()
       const newBoundingBox: IBoundingBox = {
-        topLeft: boundingBox._northEast,
-        bottomRight: boundingBox._southWest,
+        topLeft: boundingBox.getNorthWest(),
+        bottomRight: boundingBox.getSouthEast(),
       }
       this.props.onBoundingBoxChange(newBoundingBox)
     }
   }
 
-  private pinClicked(pin) {
-    this.props.onPinClicked(pin)
+  private pinClicked(pin: IMapPin) {
+    this.injected.mapsStore.setActivePin(pin)
   }
 
   public render() {
-    const { center, zoom, filters, pins, activePinDetail } = this.props
-    const mapFilters = filters.map(filter => filter.name)
-    const mapPins = pins.filter(pin => mapFilters.includes(pin.pinType.name))
-
+    const { center, zoom, pins } = this.props
+    const { activePin } = this.injected.mapsStore
     return (
       <Map
-        ref={this.map}
+        ref={this.props.mapRef}
         className="markercluster-map"
         center={[center.lat, center.lng]}
         zoom={zoom}
-        maxZoom={11}
-        style={{ height: '100%' }}
-        onMove={this.updateBoundingBox}
+        maxZoom={18}
+        style={{ height: '100%', zIndex: 0 }}
+        onmove={this.handleMove}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
-        <Clusters pins={mapPins} onPinClick={pin => this.pinClicked(pin)} />
-        <Popup map={this.map} pinDetail={activePinDetail} />
+        <Clusters pins={pins} onPinClick={pin => this.pinClicked(pin)} />
+        {activePin && <Popup activePin={activePin} map={this.props.mapRef} />}
       </Map>
     )
   }
+
   static defaultProps: Partial<IProps> = {
     onBoundingBoxChange: () => null,
     onPinClicked: () => null,

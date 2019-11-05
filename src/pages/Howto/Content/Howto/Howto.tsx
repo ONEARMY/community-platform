@@ -2,7 +2,7 @@ import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 // TODO add loader (and remove this material-ui dep)
 import Heading from 'src/components/Heading'
-import { inject } from 'mobx-react'
+import { inject, observer } from 'mobx-react'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
 import Step from './Step/Step'
@@ -17,8 +17,8 @@ import WhiteBubble0 from 'src/assets/images/white-bubble_0.svg'
 import WhiteBubble1 from 'src/assets/images/white-bubble_1.svg'
 import WhiteBubble2 from 'src/assets/images/white-bubble_2.svg'
 import WhiteBubble3 from 'src/assets/images/white-bubble_3.svg'
-import { IUser } from 'src/models/user.models'
 import { Link } from 'src/components/Links'
+import { zIndex } from 'src/themes/styled.theme'
 
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
@@ -32,7 +32,6 @@ interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
 interface IState {
   howto?: IHowtoDB
   isLoading: boolean
-  loggedInUser: IUser | undefined
 }
 const MoreBox = styled(Box)`
   position: relative;
@@ -41,7 +40,7 @@ const MoreBox = styled(Box)`
     background-image: url(${WhiteBubble0});
     width: 100%;
     height: 100%;
-    z-index: -1;
+    z-index: ${zIndex.behind};
     background-size: contain;
     background-repeat: no-repeat;
     position: absolute;
@@ -72,6 +71,7 @@ const MoreBox = styled(Box)`
 `
 
 @inject('howtoStore')
+@observer
 export class Howto extends React.Component<
   RouteComponentProps<IRouterCustomParams>,
   IState
@@ -81,7 +81,6 @@ export class Howto extends React.Component<
     this.state = {
       howto: undefined,
       isLoading: true,
-      loggedInUser: undefined,
     }
   }
   // workaround used later so that userStore can be called in render method when not existing on
@@ -92,16 +91,15 @@ export class Howto extends React.Component<
   public async componentWillMount() {
     const slug = this.props.match.params.slug
     const doc = await this.injected.howtoStore.getDocBySlug(slug)
-    const loggedInUser = this.injected.howtoStore.activeUser
     this.setState({
       howto: doc,
       isLoading: false,
-      loggedInUser: loggedInUser ? loggedInUser : undefined,
     })
   }
 
   public render() {
-    const { howto, isLoading, loggedInUser } = this.state
+    const { howto, isLoading } = this.state
+    const loggedInUser = this.injected.howtoStore.activeUser
     if (howto) {
       return (
         <>
@@ -120,7 +118,9 @@ export class Howto extends React.Component<
             </Text>
             <Flex justifyContent={'center'} mt={2}>
               <Link to={'/how-to/'}>
-                <Button variant={'secondary'} data-cy={'go-back'}>Back</Button>
+                <Button variant={'secondary'} data-cy="go-back">
+                  Back
+                </Button>
               </Link>
             </Flex>
           </MoreBox>

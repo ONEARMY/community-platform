@@ -9,21 +9,24 @@ import { FieldArray } from 'react-final-form-arrays'
 import { MACHINE_BUILDER_XP } from 'src/mocks/user_pp.mock'
 import { CustomCheckbox } from './Fields/CustomCheckbox.field'
 import { IUserPP } from 'src/models/user_pp.models'
+import { IFormValues } from '../../SettingsPage'
 
 interface IProps {
-  user: IUserPP
+  initialFormValues: IFormValues
+  required: boolean
 }
 
 export class ExpertiseSection extends React.Component<IProps, any> {
   constructor(props: any) {
     super(props)
     this.state = {
-      isOpen: props.user && !props.user.profileType,
+      isOpen: true,
     }
   }
 
   render() {
     const { isOpen } = this.state
+    const { required } = this.props
     return (
       <FlexSectionContainer>
         <Flex justifyContent="space-between">
@@ -45,6 +48,7 @@ export class ExpertiseSection extends React.Component<IProps, any> {
                 <>
                   {MACHINE_BUILDER_XP.map((xp, index: number) => (
                     <CustomCheckbox
+                      data-cy={xp.label}
                       key={index}
                       value={xp.label}
                       index={index}
@@ -73,6 +77,7 @@ export class ExpertiseSection extends React.Component<IProps, any> {
               )}
             </FieldArray>
           </Flex>
+          {required && <Text color="red">Choose at least one expertise </Text>}
         </Box>
       </FlexSectionContainer>
     )

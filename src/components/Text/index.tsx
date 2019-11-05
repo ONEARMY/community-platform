@@ -13,6 +13,7 @@ export interface ITextProps {
   txtcenter?: boolean
   capitalize?: boolean
   bold?: boolean
+  txtRight?: boolean
 
   large?: boolean
   medium?: boolean
@@ -41,6 +42,9 @@ export const inline = (props: ITextProps) =>
 export const txtcenter = (props: ITextProps) =>
   props.txtcenter ? { textAlign: 'center' } : null
 
+export const txtRight = (props: ITextProps) =>
+  props.txtRight ? { textAlign: 'right' } : null
+
 export const regular = (props: ITextProps) =>
   props.regular ? { fontWeight: 400 } : null
 
@@ -68,7 +72,7 @@ export const paragraph = (props: ITextProps) =>
     ? {
         fontFamily: '"Inter", Helvetica Neue, Arial, sans-serif;',
         fontSize: '16px',
-        color: '#61646b',
+        color: theme.colors.grey,
       }
     : null
 
@@ -104,6 +108,7 @@ export const BaseText = styled(RebassText)`
 	${tags}
 	${auxiliary}
 	${paragraph}
+  ${txtRight}
 `
 
 type TextProps = ITextProps & RebassTextProps

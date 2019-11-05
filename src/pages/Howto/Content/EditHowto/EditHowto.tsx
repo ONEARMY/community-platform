@@ -62,13 +62,6 @@ export class EditHowto extends React.Component<IProps, IState> {
     return this.injected.howtoStore
   }
 
-  public onSubmit = async (formValues: IHowtoDB) => {
-    this.setState({ showSubmitModal: true })
-    console.log('onSubmit edit howto', formValues)
-
-    await this.store.uploadHowTo(formValues)
-  }
-
   public render() {
     console.log('edit', this.state)
     const { formValues, isLoading, loggedInUser } = this.state
@@ -76,7 +69,6 @@ export class EditHowto extends React.Component<IProps, IState> {
       if (loggedInUser && isAllowToEditContent(formValues, loggedInUser)) {
         return (
           <HowtoForm
-            onSubmit={v => this.onSubmit(v as IHowtoDB)}
             formValues={formValues}
             parentType="edit"
             {...this.props}

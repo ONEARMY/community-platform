@@ -13,6 +13,20 @@ export const colors = {
   green: '#00c3a9',
   error: 'red',
   background: '#f4f6f7',
+  silver: '#c0c0c0',
+}
+
+export const zIndex = {
+  behind: -1,
+  level: 0,
+  default: 1,
+  modalBackdrop: 9,
+  modalContent: 10,
+  slickArrows: 100,
+  modalProfile: 900,
+  logoContainer: 999,
+  mapFlexBar: 2000,
+  menuMobile: 3000,
 }
 
 export type ButtonVariants =
@@ -143,6 +157,26 @@ const buttons = {
     color: '#e0e0e0',
     backgroundColor: 'transparent',
   },
+  colorful: {
+    fontFamily: '"Varela Round", Arial, sans-serif',
+    border: '2px solid ' + colors.black,
+    color: colors.black,
+    display: 'flex',
+    bg: colors.white,
+    transition: '.2s ease-in-out',
+    '&:hover': {
+      bg: colors.yellow.base,
+      cursor: 'pointer',
+    },
+    '&[disabled]': {
+      opacity: 0.5,
+      cursor: 'not-allowed',
+    },
+    '&[disabled]:hover': {
+      bg: colors.yellow.base,
+    },
+    borderRadius: radii[1] + 'px',
+  },
 }
 
 export default {
@@ -155,4 +189,5 @@ export default {
   maxContainerWidth,
   regular,
   bold,
+  zIndex,
 }

@@ -1,7 +1,9 @@
 import styled, { css } from 'styled-components'
 import theme from 'src/themes/styled.theme'
+import DatePicker from 'react-datepicker'
 interface IFormElement {
   invalid?: boolean
+  customChange?: (location) => void
 }
 export const inputStyles = ({ invalid }: IFormElement) => css`
   border: 1px solid ${invalid ? theme.colors.error : 'transparent'};
@@ -11,7 +13,6 @@ export const inputStyles = ({ invalid }: IFormElement) => css`
   background: ${theme.colors.background};
   width: 100%;
   box-sizing: border-box;
-  margin-bottom: 10px;
 
   &:disabled {
     border: none;
@@ -30,6 +31,12 @@ export const Input = styled.input<IFormElement>`
   padding: 10px;
 `
 
+export const StyledDatePicker = styled(DatePicker)`
+  ${inputStyles};
+  height: 40px;
+  padding: 10px;
+`
+
 export const TextAreaStyled = styled.textarea<IFormElement>`
   ${inputStyles};
   padding: 10px;
@@ -42,14 +49,14 @@ export const TextAreaDisabled = styled.div`
 
 // generic container used for some custom component fields
 export const FieldContainer = styled.div<IFormElement>`
+  height: 100%;
   width: 100%;
   ${inputStyles};
-  border: 'none';
+  border: none;
   padding: 0;
 `
 export const ErrorMessage = styled.span`
   position: relative;
-  bottom: ${theme.space[2]}px;
   color: ${theme.colors.error};
   font-size: ${theme.fontSizes[0]}px;
   height: ${theme.space[0]};

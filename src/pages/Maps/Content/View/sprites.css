@@ -1,33 +1,15 @@
-.icon-cluster-place {
-  background-color: #ff6666;
-  line-height: 36px;
-  text-align: center;
-  font-size: 13px;
-  color: white;
-}
-
-.icon-cluster-individual {
-  background-color: #6666ff;
-  line-height: 36px;
-  border-radius: 50%;
-  text-align: center;
-  font-size: 13px;
-  color: white;
-}
-
-.icon-marker-place {
-  background-color: red;
+.icon-marker {
   line-height: 26px;
   text-align: center;
   color: white;
   padding-left: 1px;
+  border-radius: 50%;
 }
 
-.icon-marker-individual {
-  border-radius: 50%;
-  background-color: blue;
-  line-height: 26px;
+.icon-cluster-text {
+  position: absolute;
+  left: 0;
   text-align: center;
-  color: white;
-  padding-left: 1px;
+  width: 100%;
+  height: 100%;
 }

@@ -7,19 +7,29 @@ import { Flex } from 'rebass'
 
 import { GroupingFilter } from './GroupingFilter'
 
-import { IPinType, EntityType } from 'src/models/maps.models'
+import { IPinGrouping, IMapGrouping, IMapPinType } from 'src/models/maps.models'
 import { HashLink } from 'react-router-hash-link'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { Map } from 'react-leaflet'
+import { ILocation } from 'src/models/common.models'
+import { zIndex } from 'src/themes/styled.theme'
+import { inject } from 'mobx-react'
+import { MapsStore } from 'src/stores/Maps/maps.store'
 
 interface IProps {
-  availableFilters: Array<IPinType>
-  onFilterChange: (grouping: EntityType, filters: Array<IPinType>) => void
-  onLocationChange: (selectedLocation) => void
+  mapRef: React.RefObject<Map>
+  availableFilters: Array<IMapGrouping>
+  onFilterChange: (selected: Array<IMapPinType>) => void
+  onLocationChange: (selectedLocation: ILocation) => void
+}
+interface IInjectedProps extends IProps {
+  mapsStore: MapsStore
 }
 
 const SearchWrapper = styled.div`
-  width: 300px;
+  width: 308px;
   height: 45px;
+  margin: 5px 0 0 20px;
 `
 
 const MapFlexBar = styled(Flex)`
@@ -27,7 +37,7 @@ const MapFlexBar = styled(Flex)`
   position: absolute;
   top: 25px;
   width: 100%;
-  z-index: 99999;
+  z-index: ${zIndex.mapFlexBar};
   left: 50%;
   transform: translateX(-50%);
 `
@@ -35,10 +45,13 @@ const MapFlexBar = styled(Flex)`
 const FlexSpacer = styled.div`
   flex: 1;
 `
-
+@inject('mapsStore')
 class Controls extends React.Component<IProps> {
   constructor(props) {
     super(props)
+  }
+  get injected() {
+    return this.props as IInjectedProps
   }
 
   public render() {
@@ -52,16 +65,27 @@ class Controls extends React.Component<IProps> {
         accumulator[grouping].push(current)
         return accumulator
       },
-      {} as Record<EntityType, Array<IPinType>>,
+      {} as Record<IPinGrouping, Array<IMapGrouping>>,
     )
 
     return (
-      <MapFlexBar px={[2, 3, 4]} py={1}>
+      <MapFlexBar
+        data-cy="map-controls"
+        ml={['0', '50px', '50px']}
+        py={[0, 1, 1]}
+        flexDirection={['column-reverse', 'column-reverse', 'row']}
+        alignItems={['center', 'stretch', 'stretch']}
+        onClick={() => {
+          // close any active popup on click
+          this.injected.mapsStore.setActivePin(undefined)
+        }}
+      >
         <SearchWrapper>
           <LocationSearch
-            onChange={location => {
+            onChange={(location: ILocation) => {
               this.props.onLocationChange(location)
             }}
+            styleVariant="filter"
           />
         </SearchWrapper>
         {Object.keys(groupedFilters).map(grouping => (
@@ -69,9 +93,9 @@ class Controls extends React.Component<IProps> {
             key={grouping}
             entityType={grouping}
             items={groupedFilters[grouping]}
-            onChange={options =>
-              this.props.onFilterChange(grouping as EntityType, options)
-            }
+            onChange={selected => {
+              this.props.onFilterChange(selected as IMapPinType[])
+            }}
           />
         ))}
         <FlexSpacer />
@@ -83,7 +107,12 @@ class Controls extends React.Component<IProps> {
               hash: '#your-map-pin',
             }}
           >
-            <Button variant={'primary'}>My pin</Button>
+            <Button
+              sx={{ display: ['none', 'block', 'block'] }}
+              variant={'primary'}
+            >
+              My pin
+            </Button>
           </HashLink>
         </AuthWrapper>
       </MapFlexBar>

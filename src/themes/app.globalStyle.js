@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
-import theme from 'src/themes/styled.theme'
+import theme, { zIndex } from 'src/themes/styled.theme'
 // Import css files for Slick-slider
 // import "../../node_modules/slick-carousel/slick/slick.css";
 // import "../../node_modules/slick-carousel/slick/slick-theme.css";
@@ -34,7 +34,7 @@ export const GlobalStyle = createGlobalStyle`
   .slick-next {
     position: absolute;
     top: 50%;
-    z-index: 100;
+    z-index: ${zIndex.slickArrows};
     transform: translateY(-50%);
     cursor: pointer;
   }
@@ -58,7 +58,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   /***** Fix for Algolia search Icon *******/
-  .ap-input-icon {
+  .ap-icon-pin {
     display: none;
   }
 `

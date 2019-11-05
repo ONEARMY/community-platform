@@ -13,6 +13,12 @@ const fbConfig = {
   projectId: 'onearmy-test-ci',
   storageBucket: 'onearmy-test-ci.appspot.com',
 }
+
+export enum UserMenuItem {
+  Profile = 'Profile',
+  Settings = 'Settings',
+  LogOut = 'Log out',
+}
 firebase.initializeApp(fbConfig)
 /**
  * Clear all caches before any test is executed
@@ -33,13 +39,29 @@ declare global {
         password: string,
       ): Promise<firebase.auth.UserCredential>
 
-      logout(): Promise<void>
+      /**
+       * Login and wait for the page to load completely with user info.
+       * Some buttons are not shown in Cypress test after cy.login. This is a workaround for this problem.
+       * Please use login whenever possible.
+       * @deprecated
+       * @param username
+       * @param password
+       */
+      completeLogin(username: string, password: string): Chainable<void>
+
+      logout(): Chainable<void>
 
       deleteDocuments(
         collectionName: string,
         fieldPath: string,
         opStr: any,
         value: string,
+      ): Promise<void>
+
+      updateDocument(
+        collectionName: string,
+        docId: string,
+        docData: any,
       ): Promise<void>
 
       queryDocuments(
@@ -53,13 +75,15 @@ declare global {
 
       uploadFiles(filePath: string | string[])
 
-      toggleUserMenuOn() : Promise<void>
-      toggleUserMenuOff() : Promise<void>
+      toggleUserMenuOn(): Chainable<void>
+      toggleUserMenuOff(): Chainable<void>
 
       /**
        * Trigger form validation
        */
-      screenClick() : Promise<void>
+      screenClick(): Chainable<void>
+
+      clickMenuItem(menuItem: UserMenuItem): Chainable<void>
     }
   }
 }
@@ -67,7 +91,6 @@ declare global {
 const attachCustomCommands = (Cypress, fb: typeof firebase) => {
   let currentUser: null | firebase.User = null
   const firestore = new Firestore(fb.firestore())
-
 
   fb.auth().onAuthStateChanged(user => {
     currentUser = user
@@ -81,6 +104,22 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
       },
     })
     fb.auth().signInWithEmailAndPassword(email, password)
+  })
+
+  Cypress.Commands.add('completeLogin', (email, password) => {
+    Cypress.log({
+      displayName: 'login',
+      consoleProps: () => {
+        return { email, password }
+      },
+    })
+    fb.auth().signInWithEmailAndPassword(email, password)
+    const isPageLoadedAfterLogin = () =>
+      cy
+        .get('[data-cy=user-menu]')
+        .find('path')
+        .should('be.exist')
+    isPageLoadedAfterLogin()
   })
 
   Cypress.Commands.add('logout', () => {
@@ -117,6 +156,20 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
         },
       })
       return firestore.deleteDocuments(collectionName, fieldPath, opStr, value)
+    },
+  )
+
+  Cypress.Commands.add(
+    'updateDocument',
+    (collectionName: string, docId: string, docData: any) => {
+      Cypress.log({
+        displayName: 'updateDocument',
+        consoleProps: () => {
+          return { collectionName, docId, docData }
+        },
+      })
+
+      return firestore.updateDocument(collectionName, docId, docData)
     },
   )
 
@@ -166,18 +219,33 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
   )
 
   Cypress.Commands.add('toggleUserMenuOn', () => {
-    Cypress.log({ displayName: 'OPEN_USER_MENU'})
-    cy.get('[data-cy=user-menu]').find('path').should('be.exist')
+    Cypress.log({ displayName: 'OPEN_USER_MENU' })
+    cy.get('[data-cy=user-menu]')
+      .find('path')
+      .should('be.exist')
     cy.get('[data-cy=user-menu]').click()
   })
 
   Cypress.Commands.add('toggleUserMenuOff', () => {
-    Cypress.log({ displayName: 'CLOSE_USER_MENU'})
-    cy.get('[data-cy=header]').click({force: true})
+    Cypress.log({ displayName: 'CLOSE_USER_MENU' })
+    cy.get('[data-cy=header]').click({ force: true })
+  })
+
+  Cypress.Commands.add('clickMenuItem', (menuItem: UserMenuItem) => {
+    Cypress.log({
+      displayName: 'CLICK_MENU_ITEM',
+      consoleProps: () => {
+        return { menuItem }
+      },
+    })
+    cy.toggleUserMenuOn()
+    cy.get('[data-cy=menu-item]')
+      .contains(menuItem)
+      .click()
   })
 
   Cypress.Commands.add('screenClick', () => {
-    cy.get('[data-cy=header]').click({ force: true})
+    cy.get('[data-cy=header]').click({ force: true })
   })
 }
 

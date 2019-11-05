@@ -10,10 +10,12 @@ import { Button } from 'src/components/Button'
 import { ProfileTypeLabel, IUserPP } from 'src/models/user_pp.models'
 import { PROFILE_TYPES } from 'src/mocks/user_pp.mock'
 import { CustomRadioField } from './Fields/CustomRadio.field'
+import theme from 'src/themes/styled.theme'
 
 interface IProps {
   onInputChange: (inputValue: ProfileTypeLabel) => void
   user: IUserPP
+  showSubmitErrors: boolean
 }
 interface IState {
   checkedFocusValue?: string
@@ -37,7 +39,8 @@ export class FocusSection extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { isOpen } = this.state
+    const { isOpen, checkedFocusValue } = this.state
+    const { showSubmitErrors } = this.props
     return (
       <FlexSectionContainer>
         <Flex justifyContent="space-between">
@@ -56,11 +59,12 @@ export class FocusSection extends React.Component<IProps, IState> {
           <Flex wrap="nowrap">
             {PROFILE_TYPES.map((profile, index: number) => (
               <CustomRadioField
+                data-cy={profile.label}
                 key={index}
                 fullWidth
                 value={profile.label}
                 name="profileType"
-                isSelected={this.state.checkedFocusValue === profile.label}
+                isSelected={checkedFocusValue === profile.label}
                 onChange={v => this.onInputChange(v as ProfileTypeLabel)}
                 imageSrc={profile.imageSrc}
                 textLabel={profile.textLabel}
@@ -70,11 +74,14 @@ export class FocusSection extends React.Component<IProps, IState> {
           <Flex flexWrap="wrap" alignItems="center" mt={4}>
             <Text>Not sure about your focus ?</Text>
             <Link to={'/academy'}>
-              <Button ml={2} variant="outline">
+              <Button ml={2} variant="outline" data-cy="go-to">
                 Go to starter kits
               </Button>
             </Link>
           </Flex>
+          {showSubmitErrors && (
+            <Text color={theme.colors.red}>Please select a focus</Text>
+          )}
         </Box>
       </FlexSectionContainer>
     )

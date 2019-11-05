@@ -7,7 +7,7 @@ import {
 import theme from 'src/themes/styled.theme'
 import Text from 'src/components/Text'
 import styled from 'styled-components'
-import { IBtnProps } from './index'
+// import { IBtnProps } from './index'
 
 // extend to allow any default button props (e.g. onClick) to also be passed
 export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
@@ -17,26 +17,26 @@ export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
   small?: boolean
   medium?: boolean
   large?: boolean
+  hasText?: boolean
 }
 export const small = (props: IBtnProps) =>
   props.small
     ? {
-        padding: '8px 10px',
-        fontSize: '12px',
+        padding: '4px 10px!important',
       }
     : null
 
 export const medium = (props: IBtnProps) =>
   props.medium
     ? {
-        padding: '10px',
+        padding: '6px 12px!important',
       }
     : null
 
 export const large = (props: IBtnProps) =>
   props.large
     ? {
-        padding: '10px',
+        padding: '8px 14px!important',
       }
     : null
 

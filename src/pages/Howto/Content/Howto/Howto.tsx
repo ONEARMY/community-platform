@@ -20,6 +20,7 @@ import WhiteBubble3 from 'src/assets/images/white-bubble_3.svg'
 import { IUser } from 'src/models/user.models'
 import { Link } from 'src/components/Links'
 import { UserStore } from '../../../../stores/User/user.store'
+import { zIndex } from 'src/themes/styled.theme'
 
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
@@ -28,7 +29,7 @@ interface IRouterCustomParams {
   slug: string
 }
 interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
-  howtoStore: HowtoStore,
+  howtoStore: HowtoStore
   userStore: UserStore
 }
 interface IState {
@@ -43,7 +44,7 @@ const MoreBox = styled(Box)`
     background-image: url(${WhiteBubble0});
     width: 100%;
     height: 100%;
-    z-index: -1;
+    z-index: ${zIndex.behind};
     background-size: contain;
     background-repeat: no-repeat;
     position: absolute;
@@ -72,7 +73,6 @@ const MoreBox = styled(Box)`
     }
   }
 `
-
 
 @inject('howtoStore')
 @inject('userStore')
@@ -124,7 +124,9 @@ export class Howto extends React.Component<
             </Text>
             <Flex justifyContent={'center'} mt={2}>
               <Link to={'/how-to/'}>
-                <Button variant={'secondary'} data-cy="go-back">Back</Button>
+                <Button variant={'secondary'} data-cy="go-back">
+                  Back
+                </Button>
               </Link>
             </Flex>
           </MoreBox>

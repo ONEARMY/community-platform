@@ -103,7 +103,7 @@ export class AdminTags extends React.Component<IProps, IState> {
                 isMulti
                 options={TAG_CATEGORIES}
                 value={this._getSelected()}
-                onChange={values => this.onSelectedTagsChanged(values)}
+                onChange={values => this.onSelectedTagsChanged(values as any)}
               />
               {msg && <Text color="red">{msg}</Text>}
               <Flex mt={3}>

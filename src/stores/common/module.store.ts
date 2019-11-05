@@ -44,6 +44,10 @@ export class ModuleStore {
     return this.rootStore.stores.userStore
   }
 
+  get mapsStore() {
+    return this.rootStore.stores.mapsStore
+  }
+
   /****************************************************************************
    *            Database Management Methods
    * **************************************************************************/

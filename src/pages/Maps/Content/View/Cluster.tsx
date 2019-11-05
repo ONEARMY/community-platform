@@ -6,27 +6,28 @@ import 'react-leaflet-markercluster/dist/styles.min.css'
 
 import { createClusterIcon, createMarkerIcon } from './Sprites'
 
-import { IPinType, EntityType, IMapPinWithType } from 'src/models/maps.models'
+import { IPinGrouping, IMapPin } from 'src/models/maps.models'
 
 interface IProps {
-  pins: Array<IMapPinWithType>
-  onPinClick: (pin: IPinType) => void
+  pins: Array<IMapPin>
+  onPinClick: (pin: IMapPin) => void
 }
 
 export const Clusters: React.FunctionComponent<IProps> = ({
   pins,
   onPinClick,
+  children,
 }) => {
   const entities = pins.reduce(
     (accumulator, pin) => {
-      const { grouping } = pin.pinType
+      const grouping = pin.type
       if (!accumulator.hasOwnProperty(grouping)) {
         accumulator[grouping] = []
       }
       accumulator[grouping].push(pin)
       return accumulator
     },
-    {} as Record<EntityType, Array<IMapPinWithType>>,
+    {} as Record<IPinGrouping, Array<IMapPin>>,
   )
 
   return (
@@ -34,14 +35,13 @@ export const Clusters: React.FunctionComponent<IProps> = ({
       {Object.keys(entities).map(key => {
         return (
           <MarkerClusterGroup
-            iconCreateFunction={createClusterIcon(
-              key,
-              entities[key],
-              pins.length,
-            )} // entities.individual.length + entities.place.length)}
+            iconCreateFunction={createClusterIcon({ key })}
             key={key}
-            showCoverageOnHover={false}
-            spiderfyOnMaxZoom={false}
+            showCoverageOnHover={true}
+            spiderfyOnMaxZoom={true}
+            maxClusterRadius={(zoomLevel: number) => {
+              return 60 + zoomLevel * 5
+            }}
           >
             {entities[key].map(pin => (
               <Marker

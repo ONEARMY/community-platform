@@ -17,9 +17,7 @@ import WhiteBubble0 from 'src/assets/images/white-bubble_0.svg'
 import WhiteBubble1 from 'src/assets/images/white-bubble_1.svg'
 import WhiteBubble2 from 'src/assets/images/white-bubble_2.svg'
 import WhiteBubble3 from 'src/assets/images/white-bubble_3.svg'
-import { IUser } from 'src/models/user.models'
 import { Link } from 'src/components/Links'
-import { UserStore } from '../../../../stores/User/user.store'
 import { zIndex } from 'src/themes/styled.theme'
 
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
@@ -30,12 +28,10 @@ interface IRouterCustomParams {
 }
 interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
   howtoStore: HowtoStore
-  userStore: UserStore
 }
 interface IState {
   howto?: IHowtoDB
   isLoading: boolean
-  loggedInUser: IUser | undefined
 }
 const MoreBox = styled(Box)`
   position: relative;
@@ -75,8 +71,7 @@ const MoreBox = styled(Box)`
 `
 
 @inject('howtoStore')
-@inject('userStore')
-@observer(['userStore'])
+@observer
 export class Howto extends React.Component<
   RouteComponentProps<IRouterCustomParams>,
   IState
@@ -86,7 +81,6 @@ export class Howto extends React.Component<
     this.state = {
       howto: undefined,
       isLoading: true,
-      loggedInUser: undefined,
     }
   }
   // workaround used later so that userStore can be called in render method when not existing on
@@ -105,7 +99,7 @@ export class Howto extends React.Component<
 
   public render() {
     const { howto, isLoading } = this.state
-    const loggedInUser = this.injected.userStore.user
+    const loggedInUser = this.injected.howtoStore.activeUser
     if (howto) {
       return (
         <>

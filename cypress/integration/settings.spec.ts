@@ -5,7 +5,7 @@ interface Info  {
   username: string,
   country: string
   description: string,
-  coverImages: string[]
+  coverImage: string
 }
 
 interface Link {
@@ -35,13 +35,14 @@ describe('[Settings]', () => {
     cy.get('[data-cy=country]').find(':text').type(info.country.substring(0, info.country.length - 2))
     cy.get('[data-cy=country]').contains(info.country).click()
     cy.get('[data-cy=info-description').clear().type(info.description)
-    cy.get('[data-cy=cover-images]').find(':file').uploadFiles(info.coverImages)
+    cy.get('[data-cy=cover-image]').find(':file').uploadFiles(info.coverImage)
   }
   const setMapPin = (mapPin: MapPin) => {
     cy.step('Update Map section')
     cy.get('[data-cy=pin-description]').type(mapPin.description)
     cy.get('[data-cy=location]').find(':text').type(mapPin.searchKeyword)
-    cy.get('[data-cy=location]').contains(mapPin.locationName).click()
+    cy.get('[data-cy=location]').find('.ap-suggestion:eq(0)').click()
+    cy.get('[data-cy=location]').find('input').should('have.value', mapPin.locationName)
   }
 
   const addContactLink = (link: Link) => {
@@ -79,15 +80,7 @@ describe('[Settings]', () => {
           name: 'profile-cover-1.jpg',
           size: 18987,
           type: 'image/jpeg',
-        },
-        {
-          contentType: 'image/jpeg',
-          fullPath:
-            'uploads/v2_users/settings_workplace_new/images/profile-cover-2.jpg',
-          name: 'profile-cover-2.jpg',
-          size: 20619,
-          type: 'image/jpeg',
-        },
+        }
       ],
       links: [
         {
@@ -139,16 +132,13 @@ describe('[Settings]', () => {
       selectFocus(expected.profileType)
       cy.get(`[data-cy=${expected.workspaceType}]`).click()
 
-      setInfo({username: expected.userName, country: expected.country, description: expected.about, coverImages: [
-          'images/profile-cover-1.jpg',
-          'images/profile-cover-2.jpg',
-        ]})
+      setInfo({username: expected.userName, country: expected.country, description: expected.about, coverImage: 'images/profile-cover-1.jpg'})
 
       cy.step('Update Contact Links')
       addContactLink({index: 0, type: 'email', url: `${freshSettings.userName}@test.com`})
       addContactLink({index: 1, type: 'website', url: `www.${freshSettings.userName}.com`})
 
-      setMapPin({description: expected.mapPinDescription, searchKeyword: 'ohio', locationName: expected.location.name})
+      setMapPin({description: expected.mapPinDescription, searchKeyword: 'ohio', locationName: expected.location.value})
 
       cy.get('[data-cy=save]').click().wait(3000)
 
@@ -166,21 +156,25 @@ describe('[Settings]', () => {
       verified: true,
     }
     it('[Edit a new profile]', () => {
-      cy.visit(Page.EVENTS)
+      cy.logout()
       cy.updateDocument(
         DbCollectionName.v2_users,
         freshSettings.userName,
         freshSettings,
       )
+      cy.visit(Page.EVENTS)
+
       cy.login('settings_member_new@test.com', 'test1234')
       cy.step('Go to User Settings')
       cy.clickMenuItem(UserMenuItem.Settings)
       selectFocus('member')
 
-      setInfo({username: freshSettings.userName, country: 'Poland', description: `I'm a very active member`, coverImages: [
-          'images/profile-cover-1.jpg',
-          'images/profile-cover-2.jpg',
-        ]})
+      setInfo({
+        username: freshSettings.userName,
+        country: 'Poland',
+        description: `I'm a very active member`,
+        coverImage: 'images/profile-cover-1.jpg',
+      })
       cy.step('Update Contact Links')
       addContactLink({index: 0, type: 'email', url: `${freshSettings.userName}@test.com`})
 
@@ -198,20 +192,25 @@ describe('[Settings]', () => {
       "verified": true
     }
     it('[Edit a new profile]', () => {
-      cy.visit(Page.EVENTS)
+      cy.logout()
       cy.updateDocument(
         DbCollectionName.v2_users,
         freshSettings.userName,
         freshSettings,
       )
+      cy.visit(Page.EVENTS)
+
       cy.login('settings_machine_new@test.com', 'test1234')
       cy.step('Go to User Settings')
       cy.clickMenuItem(UserMenuItem.Settings)
       selectFocus('machine-builder')
 
-      setInfo({username: freshSettings.userName, country: 'Singapore', description: `We're mechanics and our jobs are making machines`, coverImages: [
-          'images/profile-cover-1.jpg'
-        ]})
+      setInfo({
+        username: freshSettings.userName,
+        country: 'Singapore',
+        description: `We're mechanics and our jobs are making machines`,
+        coverImage: 'images/profile-cover-1.jpg',
+      })
 
       cy.step('Choose Expertise')
       cy.get('[data-cy=electronics]').click()
@@ -219,7 +218,7 @@ describe('[Settings]', () => {
 
       cy.step('Update Contact Links')
       addContactLink({index: 0, type: 'bazar', url: `${freshSettings.userName}@test.com`})
-      setMapPin({description: 'Informative workshop on machines every week', searchKeyword: 'singapo', locationName: 'Singapore'})
+      setMapPin({description: 'Informative workshop on machines every week', searchKeyword: 'singapo', locationName: 'Singapore, Central Singapore, Singapore'})
 
       cy.get('[data-cy=save]').click().wait(3000)
     })
@@ -236,25 +235,29 @@ describe('[Settings]', () => {
     }
     
     it('[Edit a new profile]', () => {
-      cy.visit(Page.EVENTS)
+      cy.logout()
       cy.updateDocument(
         DbCollectionName.v2_users,
         freshSettings.userName,
         freshSettings,
       )
+      cy.visit(Page.EVENTS)
+
       cy.login('settings_community_new@test.com', 'test1234')
       cy.step('Go to User Settings')
       cy.clickMenuItem(UserMenuItem.Settings)
       selectFocus('community-builder')
 
-      setInfo({username: freshSettings.userName, country: 'United Kingdom', description: `An enthusiastic community that makes the world greener!`, coverImages: [
-          'images/profile-cover-1.jpg',
-          'images/profile-cover-2.jpg'
-        ]})
+      setInfo({
+        username: freshSettings.userName,
+        country: 'United Kingdom',
+        description: `An enthusiastic community that makes the world greener!`,
+        coverImage: 'images/profile-cover-1.jpg',
+      })
 
       cy.step('Update Contact Links')
       addContactLink({index: 0, type: 'forum', url: `www.${freshSettings.userName}-forum.org`})
-      setMapPin({description: 'Fun, vibrant and full of amazing people', searchKeyword: 'london', locationName: 'London'})
+      setMapPin({description: 'Fun, vibrant and full of amazing people', searchKeyword: 'london', locationName: 'City of London, England, United Kingdom'})
 
       cy.get('[data-cy=save]').click().wait(3000)
     })
@@ -298,21 +301,24 @@ describe('[Settings]', () => {
     }
 
     it('[Edit a new profile]', () => {
-      cy.visit(Page.EVENTS)
+      cy.logout()
       cy.updateDocument(
         DbCollectionName.v2_users,
         freshSettings.userName,
         freshSettings,
       )
+      cy.visit(Page.EVENTS)
       cy.login('settings_plastic_new@test.com', 'test1234')
       cy.step('Go to User Settings')
       cy.clickMenuItem(UserMenuItem.Settings)
       selectFocus('collection-point')
 
-      setInfo({username: freshSettings.userName, country: 'Japan', description: `We accept plastic currencies: Bottle, Nylon Bags, Plastic Lids/Straws`, coverImages: [
-          'images/profile-cover-1.jpg',
-          'images/profile-cover-2.jpg'
-        ]})
+      setInfo({
+        username: freshSettings.userName,
+        country: 'Malaysia',
+        description: `We accept plastic currencies: Bottle, Nylon Bags, Plastic Lids/Straws`,
+        coverImage: 'images/profile-cover-1.jpg',
+      })
 
       cy.step('Update Contact Links')
       addContactLink({index: 0, type: 'social media', url: `www.facebook.com/${freshSettings.userName}`})
@@ -331,7 +337,7 @@ describe('[Settings]', () => {
       cy.get('[data-cy=plastic-pvc]').click()
       cy.get('[data-cy=plastic-other]').click()
 
-      setMapPin({description: 'Feed us plastic!', searchKeyword: 'Kyoto', locationName: 'Maizuru'})
+      setMapPin({description: 'Feed us plastic!', searchKeyword: 'Malacca', locationName: 'Malacca, Melaka, Malaysia'})
 
       cy.get('[data-cy=save]').click().wait(3000)
     })

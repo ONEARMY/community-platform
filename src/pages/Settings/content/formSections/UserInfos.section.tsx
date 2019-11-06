@@ -112,7 +112,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             <Text mb={2} mt={7} width="100%" medium>
               Cover Image *
             </Text>
-            <Box height="100px" width="150px">
+            <Box height="100px" width="150px" data-cy="cover-image">
               <Field
                 id="cover_image"
                 name="coverImages"

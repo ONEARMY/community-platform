@@ -15,9 +15,9 @@ const fbConfig = {
 }
 
 export enum UserMenuItem {
-  Profile = 'Profile',
-  Settings = 'Settings',
-  LogOut = 'Log out',
+  Profile = 0,
+  Settings = 1,
+  LogOut = 2,
 }
 firebase.initializeApp(fbConfig)
 /**
@@ -38,16 +38,6 @@ declare global {
         username: string,
         password: string,
       ): Promise<firebase.auth.UserCredential>
-
-      /**
-       * Login and wait for the page to load completely with user info.
-       * Some buttons are not shown in Cypress test after cy.login. This is a workaround for this problem.
-       * Please use login whenever possible.
-       * @deprecated
-       * @param username
-       * @param password
-       */
-      completeLogin(username: string, password: string): Chainable<void>
 
       logout(): Chainable<void>
 
@@ -106,22 +96,6 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
     fb.auth().signInWithEmailAndPassword(email, password)
   })
 
-  Cypress.Commands.add('completeLogin', (email, password) => {
-    Cypress.log({
-      displayName: 'login',
-      consoleProps: () => {
-        return { email, password }
-      },
-    })
-    fb.auth().signInWithEmailAndPassword(email, password)
-    const isPageLoadedAfterLogin = () =>
-      cy
-        .get('[data-cy=user-menu]')
-        .find('path')
-        .should('be.exist')
-    isPageLoadedAfterLogin()
-  })
-
   Cypress.Commands.add('logout', () => {
     const userInfo = currentUser ? currentUser.email : 'Not login yet - Skipped'
     Cypress.log({
@@ -168,8 +142,8 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
           return { collectionName, docId, docData }
         },
       })
+      return firestore.updateDocument(collectionName, docId, docData)
 
-      firestore.updateDocument(collectionName, docId, docData)
     },
   )
 
@@ -239,9 +213,7 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
       },
     })
     cy.toggleUserMenuOn()
-    cy.get('[data-cy=menu-item]')
-      .contains(menuItem)
-      .click()
+    cy.get(`[data-cy=menu-item]:eq(${menuItem})`).click()
   })
 
   Cypress.Commands.add('screenClick', () => {

@@ -104,11 +104,12 @@ describe('[How To]', () => {
   describe('[Read a How-to]', () => {
     const specificHowtoUrl = '/how-to/make-an-interlocking-brick'
     const coverFileRegex = /brick-12-1.jpg/
-
+    beforeEach(() => {
+      cy.logout()
+    })
     describe('[By Everyone]', () => {
       it('[See all info]', () => {
         cy.visit(specificHowtoUrl)
-        cy.logout()
         cy.step('Edit button is not available')
         cy.get('[data-cy=edit]').should('not.exist')
 

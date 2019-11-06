@@ -46,12 +46,14 @@ describe('[How To]', () => {
         Cypress.$($step).find('[data-cy=delete-step-img]').length > 0
       if (hasExistingPics) {
         cy.wrap($step)
-          .find('[data-cy=delete-step-img]')
+          .find('[data-cy=delete-image]')
           .each($deleteButton => {
             cy.wrap($deleteButton).click()
           })
       }
-      cy.get(':file').uploadFiles(images)
+      images.forEach((image, index) => {
+        cy.get(`[data-cy=step-image-${index}]`).find(':file').uploadFiles([image])
+      })
     })
   }
 
@@ -284,7 +286,7 @@ describe('[How To]', () => {
 
       cy.step('Update a new cover for the intro')
       cy.get('[data-cy=intro-cover]')
-        .find('button[data-cy=delete]')
+        .find('button[data-cy=replace-image]')
         .click()
       cy.get('[data-cy=intro-cover]')
         .find(':file')

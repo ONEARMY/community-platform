@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { RouteComponentProps } from 'react-router'
+import { RouteComponentProps, Prompt } from 'react-router'
 import { Form, Field } from 'react-final-form'
 import styled from 'styled-components'
 import { FieldArray } from 'react-final-form-arrays'
@@ -19,7 +19,7 @@ import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { FileInputField } from 'src/components/Form/FileInput.field'
 import posed, { PoseGroup } from 'react-pose'
-import { inject } from 'mobx-react'
+import { inject, observer } from 'mobx-react'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import { PostingGuidelines } from './PostingGuidelines'
 import theme from 'src/themes/styled.theme'
@@ -27,7 +27,6 @@ import { DIFFICULTY_OPTIONS, TIME_OPTIONS } from './FormSettings'
 import { Image, Box } from 'rebass'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import { HowToSubmitStatus } from './SubmitStatus'
-import { Modal } from 'src/components/Modal/Modal'
 
 interface IState {
   formSaved: boolean
@@ -77,6 +76,7 @@ const Label = styled.label`
 const required = (value: any) => (value ? undefined : 'Required')
 
 @inject('howtoStore')
+@observer
 export class HowtoForm extends React.Component<IProps, IState> {
   uploadRefs: { [key: string]: UploadedFile | null } = {}
   constructor(props: any) {
@@ -114,10 +114,16 @@ export class HowtoForm extends React.Component<IProps, IState> {
   })
   public render() {
     const { formValues, parentType } = this.props
-    const { editCoverImg, fileEditMode } = this.state
+    const { fileEditMode } = this.state
     return (
       <>
         <HowToSubmitStatus {...this.props} />
+        <Prompt
+          when={!this.injected.howtoStore.uploadStatus.Complete}
+          message={
+            'You have unsaved changes. Are you sure you want to leave this page?'
+          }
+        />
         <Form
           onSubmit={v => {
             this.onSubmit(v as IHowtoFormInput)

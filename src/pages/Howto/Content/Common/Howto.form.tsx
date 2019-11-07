@@ -114,10 +114,18 @@ export class HowtoForm extends React.Component<IProps, IState> {
   })
   public render() {
     const { formValues, parentType } = this.props
-    const { fileEditMode } = this.state
+    const { fileEditMode, showSubmitModal } = this.state
     return (
       <>
-        <HowToSubmitStatus {...this.props} />
+        {showSubmitModal && (
+          <HowToSubmitStatus
+            {...this.props}
+            onClose={() => {
+              this.setState({ showSubmitModal: false })
+              this.injected.howtoStore.resetUploadStatus()
+            }}
+          />
+        )}
         <Prompt
           when={!this.injected.howtoStore.uploadStatus.Complete}
           message={
@@ -400,6 +408,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                           form.dispatchEvent(
                             new Event('submit', { cancelable: true }),
                           )
+                          this.setState({ showSubmitModal: true })
                         }
                       }}
                       width={1}

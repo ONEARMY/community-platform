@@ -10,7 +10,9 @@ import Text from 'src/components/Text'
 import { Box } from 'rebass'
 import { RouteComponentProps } from 'react-router'
 
-interface IProps extends RouteComponentProps<any> {}
+interface IProps extends RouteComponentProps<any> {
+  onClose: () => void
+}
 interface IInjected extends IProps {
   howtoStore: HowtoStore
 }
@@ -54,6 +56,7 @@ export class HowToSubmitStatus extends React.Component<IProps> {
             this.props.history.push(
               '/how-to/' + this.injected.howtoStore.activeHowto!.slug,
             )
+            this.props.onClose()
           }}
         >
           View How-To

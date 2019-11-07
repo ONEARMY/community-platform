@@ -285,9 +285,7 @@ describe('[How To]', () => {
         .type(expected.caption)
 
       cy.step('Update a new cover for the intro')
-      cy.get('[data-cy=intro-cover]')
-        .find('button[data-cy=replace-image]')
-        .click()
+
       cy.get('[data-cy=intro-cover]')
         .find(':file')
         .uploadFiles('images/howto-intro.jpg')

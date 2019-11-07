@@ -119,7 +119,9 @@ export class UserStore extends ModuleStore {
     // Update user map pin
     // TODO - pattern back and forth from user to map not ideal
     // should try to refactor and possibly generate map pins in backend
-    await this.mapsStore.setUserPin(update)
+    if (values.location) {
+      await this.mapsStore.setUserPin(update)
+    }
   }
 
   public async sendEmailVerification() {

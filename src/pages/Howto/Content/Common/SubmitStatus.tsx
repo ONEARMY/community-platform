@@ -51,6 +51,7 @@ export class HowToSubmitStatus extends React.Component<IProps> {
           variant={!uploadStatus.Complete ? 'disabled' : 'outline'}
           icon="arrow-forward"
           onClick={() => {
+            this.injected.howtoStore.resetUploadStatus()
             this.props.history.push(
               '/how-to/' + this.injected.howtoStore.activeHowto!.slug,
             )

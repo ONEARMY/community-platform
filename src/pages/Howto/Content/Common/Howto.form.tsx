@@ -375,26 +375,6 @@ export class HowtoForm extends React.Component<IProps, IState> {
                     </Flex>
                   </form>
                 </Flex>
-                {this.state.showSubmitModal && (
-                  <Modal>
-                    <>
-                      <Button
-                        data-cy={submitting ? '' : 'view-howto'}
-                        mt={3}
-                        variant={submitting ? 'disabled' : 'outline'}
-                        icon="arrow-forward"
-                        onClick={() => {
-                          if (submitting) {
-                            return
-                          }
-                          this.props.history.push('/how-to/' + values.slug)
-                        }}
-                      >
-                        View How-To
-                      </Button>
-                    </>
-                  </Modal>
-                )}
                 {/* post guidelines container */}
                 <Flex
                   flexDirection={'column'}

@@ -113,7 +113,7 @@ class SignInPage extends React.Component<IProps, IState> {
           const disabled = invalid || submitting
           return (
             <>
-              <form onSubmit={handleSubmit}>
+              <form data-cy="login-form" onSubmit={handleSubmit}>
                 <Flex
                   bg="inherit"
                   px={2}

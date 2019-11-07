@@ -126,12 +126,13 @@ describe('[Settings]', () => {
     }
 
     it('[Editing a new Profile]', () => {
-      cy.visit(Page.EVENTS)
+      cy.logout()
       cy.updateDocument(
         DbCollectionName.v2_users,
         freshSettings.userName,
         freshSettings,
       )
+      cy.visit(Page.EVENTS)
       cy.login('settings_workplace_new@test.com', 'test1234')
       cy.step('Go to User Settings')
       cy.clickMenuItem(UserMenuItem.Settings)

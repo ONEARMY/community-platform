@@ -79,6 +79,12 @@ export class UserSettings extends React.Component<IProps, IState> {
 
   public async saveProfile(values: any) {
     const formValuesConcat = { ...values, ...this.state.customFormValues }
+    // Remove undefined values from obj before sending to firebase
+    Object.keys(formValuesConcat).forEach(key => {
+      if (formValuesConcat[key] === undefined) {
+        delete formValuesConcat[key]
+      }
+    })
     await this.injected.userStore.updateUserProfile(formValuesConcat)
     this.setState({ showNotification: true })
   }
@@ -110,9 +116,7 @@ export class UserSettings extends React.Component<IProps, IState> {
     if (this.state.initialFormValues.profileType) {
       this.setState({
         showResetFocusModal: true,
-        customFormValues: {
-          profileType: v,
-        },
+        isFocusSelected: true,
       })
     } else {
       this.setState({
@@ -126,47 +130,48 @@ export class UserSettings extends React.Component<IProps, IState> {
   }
   public onWorkspaceTypeChange(v) {
     this.setState({
-      customFormValues: {
-        ...this.state.customFormValues,
+      initialFormValues: {
+        ...this.state.initialFormValues,
         workspaceType: v,
       },
       isWTSelected: true,
     })
   }
   public checkSubmitErrors() {
-    if (!this.state.customFormValues.profileType) {
+    if (!this.state.initialFormValues.profileType) {
       this.setState({ isFocusSelected: false })
     }
-    if (!this.state.customFormValues.workspaceType) {
+    if (!this.state.initialFormValues.workspaceType) {
       this.setState({ isWTSelected: false })
     }
     if (
-      this.state.customFormValues.profileType !== 'member' &&
-      !this.state.customFormValues.location
+      this.state.initialFormValues.profileType !== 'member' &&
+      !this.state.initialFormValues.location
     ) {
       this.setState({ isLocationSelected: false })
     }
   }
   public onModalDismiss(confirmed: boolean) {
-    // TODO reset totally the profile if confirmed
     if (confirmed) {
+      // Reset the profile values to INITIAL_VALUES
+      // but keep userRoles, verified and userName
       this.setState({
-        // initialFormValues: {
-        //   ...this.state.initialFormValues,
-        //   ...INITIAL_VALUES,
-        // },
+        initialFormValues: {
+          ...INITIAL_VALUES,
+          ...this.injected.userStore.user!.userRoles,
+          verified: this.injected.userStore.user!.verified,
+          userName: this.injected.userStore.user!.userName,
+        },
         showResetFocusModal: false,
-        // isFocusSelected: false,
+        isFocusSelected: false,
+        isWTSelected: false,
+      })
+    } else {
+      this.setState({
+        showResetFocusModal: false,
+        isFocusSelected: true,
       })
     }
-    // else {
-    //   this.setState({
-    //     initialFormValues: {
-    //       profileType: this.state.initialFormValues.profileType,
-    //     },
-    //     showResetFocusModal: false,
-    //   })
-    // }
   }
 
   render() {
@@ -209,7 +214,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                         )}
                       </Flex>
                       <FocusSection
-                        user={user}
+                        initialFormValues={initialFormValues}
                         onInputChange={v => this.onFocusChange(v)}
                         isSelected={isFocusSelected}
                         showSubmitErrors={!isFocusSelected}
@@ -217,17 +222,18 @@ export class UserSettings extends React.Component<IProps, IState> {
                       {initialFormValues.profileType === 'workspace' && (
                         <>
                           <WorkspaceSection
-                            user={user}
+                            initialFormValues={initialFormValues}
                             onInputChange={v => this.onWorkspaceTypeChange(v)}
+                            isSelected={isWTSelected}
                             showSubmitErrors={!isWTSelected}
                           />
                           <UserInfosSection
                             onCoverImgChange={v => this.onCoverImgChange(v)}
-                            user={user}
+                            initialFormValues={initialFormValues}
                           />
                           <UserMapPinSection
                             onInputChange={v => this.updateLocation(v)}
-                            user={user}
+                            initialFormValues={initialFormValues}
                             showSubmitErrors={!isLocationSelected}
                           />
                         </>
@@ -236,7 +242,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                         <>
                           <UserInfosSection
                             onCoverImgChange={v => this.onCoverImgChange(v)}
-                            user={user}
+                            initialFormValues={initialFormValues}
                           />
                           <CollectionSection
                             required={
@@ -244,11 +250,11 @@ export class UserSettings extends React.Component<IProps, IState> {
                                 ? values.collectedPlasticTypes.length === 0
                                 : true
                             }
-                            user={user}
+                            initialFormValues={initialFormValues}
                           />
                           <UserMapPinSection
                             onInputChange={v => this.updateLocation(v)}
-                            user={user}
+                            initialFormValues={initialFormValues}
                             showSubmitErrors={!isLocationSelected}
                           />
                         </>
@@ -258,11 +264,11 @@ export class UserSettings extends React.Component<IProps, IState> {
                         <>
                           <UserInfosSection
                             onCoverImgChange={v => this.onCoverImgChange(v)}
-                            user={user}
+                            initialFormValues={initialFormValues}
                           />
                           <UserMapPinSection
                             onInputChange={v => this.updateLocation(v)}
-                            user={user}
+                            initialFormValues={initialFormValues}
                             showSubmitErrors={!isLocationSelected}
                           />
                         </>
@@ -271,7 +277,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                         <>
                           <UserInfosSection
                             onCoverImgChange={v => this.onCoverImgChange(v)}
-                            user={user}
+                            initialFormValues={initialFormValues}
                           />
                           <ExpertiseSection
                             required={
@@ -279,11 +285,11 @@ export class UserSettings extends React.Component<IProps, IState> {
                                 ? values.machineBuilderXp.length === 0
                                 : true
                             }
-                            user={user}
+                            initialFormValues={initialFormValues}
                           />
                           <UserMapPinSection
                             onInputChange={v => this.updateLocation(v)}
-                            user={user}
+                            initialFormValues={initialFormValues}
                             showSubmitErrors={!isLocationSelected}
                           />
                         </>
@@ -292,7 +298,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                         <>
                           <UserInfosSection
                             onCoverImgChange={v => this.onCoverImgChange(v)}
-                            user={user}
+                            initialFormValues={initialFormValues}
                           />
                         </>
                       )}
@@ -302,19 +308,29 @@ export class UserSettings extends React.Component<IProps, IState> {
                       <Modal
                         onDidDismiss={confirm => this.onModalDismiss(confirm)}
                       >
-                        <Text>
-                          You already have set a focus. Wait for the next update
-                          to allow focus change, or create a new profile.
+                        <Text my="10px">
+                          Change your focus will reset your previous profile, do
+                          you confirm ?
                         </Text>
-                        <Button
-                          onClick={() => {
-                            this.onModalDismiss(true)
-                          }}
-                          variant="primary"
-                          ml={1}
-                        >
-                          Ok
-                        </Button>
+                        <Flex>
+                          <Button
+                            onClick={() => {
+                              this.onModalDismiss(false)
+                            }}
+                            variant="secondary"
+                          >
+                            cancel
+                          </Button>
+                          <Button
+                            onClick={() => {
+                              this.onModalDismiss(true)
+                            }}
+                            variant="tertiary"
+                            ml={1}
+                          >
+                            Yes I confirm
+                          </Button>
+                        </Flex>
                       </Modal>
                     )}
                   </form>

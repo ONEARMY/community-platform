@@ -9,11 +9,13 @@ import { WORKSPACE_TYPES } from 'src/mocks/user_pp.mock'
 import { CustomRadioField } from './Fields/CustomRadio.field'
 import { WorkspaceType, IUserPP } from 'src/models/user_pp.models'
 import theme from 'src/themes/styled.theme'
+import { IFormValues } from '../../SettingsPage'
 
 interface IProps {
   onInputChange: (inputValue: WorkspaceType) => void
-  user: IUserPP
+  initialFormValues: IFormValues
   showSubmitErrors: boolean
+  isSelected: boolean
 }
 interface IState {
   checkedFocusValue?: string
@@ -24,10 +26,10 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
-      checkedFocusValue: this.props.user.workspaceType
-        ? this.props.user.workspaceType
+      checkedFocusValue: this.props.initialFormValues.workspaceType
+        ? this.props.initialFormValues.workspaceType
         : undefined,
-      isOpen: props.user && !props.user.profileType,
+      isOpen: true,
     }
   }
 
@@ -37,9 +39,9 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { user } = this.props
+    const { initialFormValues } = this.props
     const { isOpen } = this.state
-    const { showSubmitErrors } = this.props
+    const { showSubmitErrors, isSelected } = this.props
     return (
       <FlexSectionContainer>
         <Flex justifyContent="space-between">
@@ -62,7 +64,9 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
                 key={index}
                 value={workspace.label}
                 name="workspaceType"
-                isSelected={this.state.checkedFocusValue === workspace.label}
+                isSelected={
+                  this.state.checkedFocusValue === workspace.label && isSelected
+                }
                 onChange={v => this.onInputChange(v as WorkspaceType)}
                 imageSrc={workspace.imageSrc}
                 textLabel={workspace.textLabel}

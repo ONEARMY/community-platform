@@ -17,9 +17,10 @@ import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { Box } from 'rebass'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
+import { IFormValues } from '../../SettingsPage'
 
 interface IProps {
-  user: IUserPP | any
+  initialFormValues: IFormValues | any
   onCoverImgChange: (v: IConvertedFileMeta) => void
 }
 interface IState {
@@ -46,8 +47,9 @@ export class UserInfosSection extends React.Component<IProps, IState> {
 
     this.state = {
       readOnly: true,
-      showComLinks: props.user && props.user.links ? true : false,
-      isOpen: props.user && !props.user.profileType,
+      showComLinks:
+        props.initialFormValues && props.initialFormValues.links ? true : false,
+      isOpen: true,
     }
     this.changeComLinkSwitch = this.changeComLinkSwitch.bind(this)
   }
@@ -57,7 +59,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { user } = this.props
+    const { initialFormValues } = this.props
     const { isOpen } = this.state
 
     return (
@@ -96,7 +98,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                 component={FlagSelector}
                 searchable={true}
                 validate={required}
-                defaultCountry={getCountryCode(user.country)}
+                defaultCountry={getCountryCode(initialFormValues.country)}
               />
             </FlagSelectContainer>
             <Text mb={2} mt={7} medium>
@@ -117,7 +119,11 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                 id="cover_image"
                 name="coverImages"
                 validate={required}
-                src={user.coverImages ? user.coverImages[0] : null}
+                src={
+                  initialFormValues.coverImages
+                    ? initialFormValues.coverImages[0]
+                    : null
+                }
                 component={ImageInputField}
                 customChange={v => this.props.onCoverImgChange(v)}
               />

@@ -12,9 +12,10 @@ import { Button } from 'src/components/Button'
 import { CustomCheckbox } from './Fields/CustomCheckbox.field'
 import { PLASTIC_TYPES } from 'src/mocks/user_pp.mock'
 import { IUserPP } from 'src/models/user_pp.models'
+import { IFormValues } from '../../SettingsPage'
 
 interface IProps {
-  user: IUserPP
+  initialFormValues: IFormValues
   required: boolean
 }
 
@@ -26,7 +27,7 @@ export class CollectionSection extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
-      isOpen: props.user && !props.user.profileType,
+      isOpen: true,
     }
   }
 

@@ -15,9 +15,10 @@ import { Button } from 'src/components/Button'
 import { ILocation } from 'src/models/common.models'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import theme from 'src/themes/styled.theme'
+import { IFormValues } from '../../SettingsPage'
 
 interface IProps {
-  user: IUserPP
+  initialFormValues: IFormValues
   onInputChange: (v: ILocation) => void
   showSubmitErrors: boolean
 }
@@ -47,16 +48,21 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
     this.state = {
       editAddress: false,
       lat:
-        props.user && props.user.location ? props.user.location.latlng.lat : 0,
+        props.initialFormValues && props.initialFormValues.location
+          ? props.initialFormValues.location.latlng.lat
+          : 0,
       lng:
-        props.user && props.user.location ? props.user.location.latlng.lng : 0,
-      zoom: props.user && props.user.location ? 15 : 1.5,
-      isOpen: props.user && !props.user.profileType,
+        props.initialFormValues && props.initialFormValues.location
+          ? props.initialFormValues.location.latlng.lng
+          : 0,
+      zoom:
+        props.initialFormValues && props.initialFormValues.location ? 15 : 1.5,
+      isOpen: true,
     }
   }
 
   render() {
-    const { user, showSubmitErrors } = this.props
+    const { initialFormValues, showSubmitErrors } = this.props
     const { lat, lng, zoom, editAddress, isOpen } = this.state
 
     return (
@@ -81,7 +87,7 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
             placeholder="We are shredding plastic in Plymouth, UK."
             validate={required}
           />
-          {!user.location || editAddress ? (
+          {!initialFormValues.location || editAddress ? (
             <Box>
               <Text mb={2} mt={4} medium>
                 Your workspace address *
@@ -131,7 +137,7 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
                 Your workspace address is :
               </Text>
               <Text mb={2} my={4} medium>
-                {user.location.value}
+                {initialFormValues.location.value}
               </Text>
               <Button
                 variant="secondary"

@@ -114,10 +114,15 @@ export class HowtoForm extends React.Component<IProps, IState> {
   })
   public render() {
     const { formValues, parentType } = this.props
-    const { editCoverImg, fileEditMode } = this.state
+    const { fileEditMode, showSubmitModal } = this.state
     return (
       <>
-        <HowToSubmitStatus {...this.props} />
+        {showSubmitModal && (
+          <HowToSubmitStatus
+            {...this.props}
+            onClose={() => this.setState({ showSubmitModal: false })}
+          />
+        )}
         <Form
           onSubmit={v => {
             this.onSubmit(v as IHowtoFormInput)
@@ -375,26 +380,6 @@ export class HowtoForm extends React.Component<IProps, IState> {
                     </Flex>
                   </form>
                 </Flex>
-                {this.state.showSubmitModal && (
-                  <Modal>
-                    <>
-                      <Button
-                        data-cy={submitting ? '' : 'view-howto'}
-                        mt={3}
-                        variant={submitting ? 'disabled' : 'outline'}
-                        icon="arrow-forward"
-                        onClick={() => {
-                          if (submitting) {
-                            return
-                          }
-                          this.props.history.push('/how-to/' + values.slug)
-                        }}
-                      >
-                        View How-To
-                      </Button>
-                    </>
-                  </Modal>
-                )}
                 {/* post guidelines container */}
                 <Flex
                   flexDirection={'column'}
@@ -414,6 +399,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                           form.dispatchEvent(
                             new Event('submit', { cancelable: true }),
                           )
+                          this.setState({ showSubmitModal: true })
                         }
                       }}
                       width={1}

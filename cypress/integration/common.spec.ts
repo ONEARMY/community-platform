@@ -26,7 +26,10 @@ describe('[Common]', () => {
     cy.step('Feedback button opens the survey in a new tab')
     cy.get('a[data-cy=feedback][target=_blank]')
       .should('have.attr', 'href')
-      .and('eq', 'https://preciousplastic.typeform.com/to/tO6uDw')
+      .and(
+        'eq',
+        'https://docs.google.com/forms/d/e/1FAIpQLSd3nevXb6iewap1lkFPWQxyerLsndcRkocv4QXIL3iLIyzazA/viewform?usp=pp_url&entry.1856170488=',
+      )
 
     cy.step('Go to Events page')
     cy.get('[data-cy=page-link]')

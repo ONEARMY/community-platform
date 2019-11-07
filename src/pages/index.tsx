@@ -71,7 +71,7 @@ export class Routes extends React.Component<any, IState> {
         </BrowserRouter>
         <Link
           target="_blank"
-          href="https://preciousplastic.typeform.com/to/tO6uDw"
+          href="https://docs.google.com/forms/d/e/1FAIpQLSd3nevXb6iewap1lkFPWQxyerLsndcRkocv4QXIL3iLIyzazA/viewform?usp=pp_url&entry.1856170488="
           data-cy="feedback"
         >
           <Button

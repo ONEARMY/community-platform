@@ -6,6 +6,10 @@ sudo: false
 cache: yarn
 addons:
   chrome: stable
+branches:
+  only:
+    - master
+    - production
 
 env:
   # Tell jest to run without non-interactive mode

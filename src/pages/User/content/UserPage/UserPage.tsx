@@ -516,7 +516,7 @@ export class UserPage extends React.Component<
     let coverImage = [
       <SliderImage
         key="default-image"
-        bgImg="https://uploads-ssl.webflow.com/5d41aacc625e7f69441ddaff/5d4986d7c03a642fe243f86d_IMG_20181030_110139.jpg"
+        bgImg="https://i.ibb.co/zhkxbb9/no-image.jpg"
       />,
     ]
 

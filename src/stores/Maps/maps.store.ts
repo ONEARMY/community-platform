@@ -176,7 +176,7 @@ export class MapsStore extends ModuleStore {
       heroImageUrl,
       lastActive: u._lastActive ? u._lastActive : u._modified,
       profilePicUrl: avatar,
-      shortDescription: u.about ? u.about : '',
+      shortDescription: u.mapPinDescription ? u.mapPinDescription : '',
       name: u.userName,
       profileUrl: `${location.origin}/u/${u.userName}`,
     }

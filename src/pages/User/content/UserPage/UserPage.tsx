@@ -562,9 +562,9 @@ export class UserPage extends React.Component<
               )}
             </UserName>
 
-            <Box sx={{ display: ['block', 'none'] }}>
+            {/* <Box sx={{ display: ['block', 'none'] }}>
               {this.renderCommitmentBox(user.isExpert, user.isV4Member)}
-            </Box>
+            </Box> */}
 
             {user.about && <UserDescription>{user.about}</UserDescription>}
 
@@ -594,7 +594,7 @@ export class UserPage extends React.Component<
             <MobileBadge>
               <Image src={workspaceBadgeSrc} />
             </MobileBadge>
-            {this.renderCommitmentBox(user.isExpert, user.isV4Member)}
+            {/* {this.renderCommitmentBox(user.isExpert, user.isV4Member)} */}
           </Box>
         </ProfileContentWrapper>
       </ProfileWrapper>

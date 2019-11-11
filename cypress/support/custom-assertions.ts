@@ -1,6 +1,6 @@
 import { IHowto, IHowtoStep } from '../../src/models/howto.models'
 import chaiSubset from 'chai-subset'
-import { IUserPPDB } from '../../src/models/user_pp.models'
+import { IUserPPDB, ProfileTypeLabel } from '../../src/models/user_pp.models'
 
 
 declare global {
@@ -39,20 +39,44 @@ const eqHowtoStep = (chaiObj, utils) => {
 
 
 const eqSettings = (chaiObj, utils) => {
-  function compare(this: any, expected: any, index: number) {
-    const subject: IUserPPDB = this._obj
+  type Assert<S,E> = (subject: S, expected: E) => void
+  class ChainAssert<S, E> {
+    asserts: Assert<S,E>[] = []
+    constructor(... asserts: Assert<S,E>[]) {
+      this.asserts.push(...asserts)
+    }
+    assert: Assert<S,E> = (subject: S, expected: E) => {
+      this.asserts.forEach(assert=> assert(subject, expected))
+    }
+  }
+  const basicInfoAssert: Assert<IUserPPDB, any> = (subject, expected) => {
     const {_authID, _deleted, _id, about, country, profileType, userName, verified, workspaceType} = expected
     expect(subject, 'Basic Info').to.containSubset({_authID, _deleted, _id, userName, verified, profileType, workspaceType, about, country})
-    const { links, location, mapPinDescription, openingHours} = expected
-    expect(subject.links, 'Links').to.containSubset(links)
-    expect(subject.location, 'Location').to.containSubset(location)
-    expect(subject.mapPinDescription, 'Map Pin Description').to.containSubset(mapPinDescription)
-    expect(subject.openingHours, 'Opening Hours').to.containSubset(openingHours)
+  }
+  const linkAssert: Assert<IUserPPDB, any> = (subject, expected) => expect(subject.links, 'Links').to.containSubset(expected.links)
+  const coverImageAssert: Assert<IUserPPDB, any> = (subject, expected) => expect(subject.coverImages, 'CoverImages').to.containSubset(expected.coverImages)
+  const locationAssert: Assert<IUserPPDB, any> = (subject, expected) => {
+    expect(subject.location, 'Location').to.containSubset(expected.location)
+    expect(subject.mapPinDescription, 'MapPinDescription').to.containSubset(expected.mapPinDescription)
+  }
+  const machineExpertiseAssert: Assert<IUserPPDB, any> = (subject, expected) => expect(subject.machineBuilderXp, 'MachineBuilderXp').to.containSubset(expected.machineBuilderXp)
+  const openingHoursAssert: Assert<IUserPPDB, any> = (subject, expected) => expect(subject.openingHours, 'OpeningHours').to.containSubset(expected.openingHours)
+  const plasticTypeAssert: Assert<IUserPPDB, any> =  (subject, expected) => expect(subject.collectedPlasticTypes, 'CollectedPlasticTypes').to.containSubset(expected.collectedPlasticTypes)
+
+  const assertMap: { [key in ProfileTypeLabel]: ChainAssert<IUserPPDB, any> } = {
+    workspace: new ChainAssert<IUserPPDB, any>(basicInfoAssert, coverImageAssert, linkAssert, locationAssert),
+    member: new ChainAssert<IUserPPDB, any>(basicInfoAssert, coverImageAssert, linkAssert),
+    'machine-builder': new ChainAssert<IUserPPDB, any>(basicInfoAssert, coverImageAssert, linkAssert, locationAssert, machineExpertiseAssert),
+    'community-builder': new ChainAssert<IUserPPDB, any>(basicInfoAssert, coverImageAssert, linkAssert, locationAssert),
+    'collection-point': new ChainAssert<IUserPPDB, any>(basicInfoAssert, coverImageAssert, linkAssert, locationAssert, openingHoursAssert, plasticTypeAssert),
+  }
+
+  function compare(this: any, expected: any, index: number) {
+    assertMap[expected.profileType].assert(this._obj, expected)
   }
 
   chaiObj.Assertion.addMethod('eqSettings', compare)
 }
-
 chai.use(eqHowto);
 chai.use(eqHowtoStep);
 chai.use(eqSettings);

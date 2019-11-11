@@ -41,7 +41,7 @@ class Link extends Component<IProps, IState> {
   render() {
     const { link, index } = this.props
     return (
-      <Flex key={index}>
+      <Flex key={index} my="5px">
         <Field
           data-cy={`select-link-${index}`}
           name={`${link}.label`}

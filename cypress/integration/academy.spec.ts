@@ -1,6 +1,9 @@
 import { Page } from '../utils/test-utils'
 
 describe('[Academy]', () => {
+  it('Wait for the app to be ready', () => {
+    cy.wait(60000)
+  })
   describe('[List instructions]', () => {
     it('[By Everyone]', () => {
       cy.visit(Page.ACADEMY)

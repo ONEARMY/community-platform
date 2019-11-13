@@ -46,12 +46,14 @@ describe('[How To]', () => {
         Cypress.$($step).find('[data-cy=delete-step-img]').length > 0
       if (hasExistingPics) {
         cy.wrap($step)
-          .find('[data-cy=delete-step-img]')
+          .find('[data-cy=delete-image]')
           .each($deleteButton => {
             cy.wrap($deleteButton).click()
           })
       }
-      cy.get(':file').uploadFiles(images)
+      images.forEach((image, index) => {
+        cy.get(`[data-cy=step-image-${index}]`).find(':file').uploadFiles([image])
+      })
     })
   }
 
@@ -244,9 +246,13 @@ describe('[How To]', () => {
       ],
     }
 
+    beforeEach(() => {
+      cy.logout()
+    })
+
+
     it('[By Anonymous]', () => {
       cy.step('Redirect to Home Page after visiting an url')
-      cy.logout()
       cy.visit(editHowtoUrl)
       cy.url().should('not.include', editHowtoUrl)
     })
@@ -254,13 +260,11 @@ describe('[How To]', () => {
     it('[By Authenticated]', () => {
       cy.visit('/how-to')
       cy.login('howto_creator@test.com', 'test1234')
-
       cy.visit(editHowtoUrl)
       cy.url().should('not.include', editHowtoUrl)
     })
 
     it('[By Owner]', () => {
-      cy.logout()
       cy.login('howto_editor@test.com', 'test1234')
       cy.step('Go to Edit mode')
       cy.visit(editHowtoUrl)
@@ -281,9 +285,7 @@ describe('[How To]', () => {
         .type(expected.caption)
 
       cy.step('Update a new cover for the intro')
-      cy.get('[data-cy=intro-cover]')
-        .find('button[data-cy=delete]')
-        .click()
+
       cy.get('[data-cy=intro-cover]')
         .find(':file')
         .uploadFiles('images/howto-intro.jpg')

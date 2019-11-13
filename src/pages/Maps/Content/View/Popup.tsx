@@ -5,6 +5,7 @@ import Text from 'src/components/Text'
 import { Popup as LeafletPopup, Map } from 'react-leaflet'
 import styled from 'styled-components'
 import { distanceInWords } from 'date-fns'
+import { MAP_ICONS } from 'src/stores/Maps/maps.groupings'
 
 import {
   IMapPin,
@@ -26,12 +27,8 @@ interface IInjectedProps extends IProps {
   mapsStore: MapsStore
 }
 
-const HeroImage = styled.div<{ src: string }>`
+const HeroImage = styled.img`
   width: 100%;
-  background-image: url("${props => props.src}");
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
   background-color: lightgrey;
   height: 120px;
   object-fit: cover;
@@ -83,9 +80,15 @@ export class Popup extends React.Component<IProps> {
       ? distanceInWords(lastActive, new Date())
       : 'a long time'
     console.log('detail', pin.detail)
+
+    function addFallbackSrc(ev: any) {
+      const icon = MAP_ICONS[pin.type]
+      ev.target.src = icon
+    }
+
     return (
       <>
-        <HeroImage src={heroImageUrl} />
+        <HeroImage src={heroImageUrl} onError={addFallbackSrc} />
         <Flex flexDirection={'column'} px={2} py={2}>
           <Text tags mb={2}>
             {group ? group.displayName : pin.type}

@@ -1,6 +1,6 @@
 {
   "name": "precious-plastic-community-plateform",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "private": true,
   "dependencies": {
     "@babel/core": "7.2.2",
@@ -136,7 +136,7 @@
     "cy:open": "cross-env TZ='Europe/London' npx cypress open",
     "cy:test": "start-test start:ci 3456 cy:run",
     "cy:test:record": "start-test start:ci 3456 cy:run:record",
-    "cy:run:record": "npm run cy:run --record --key 62585f33-d688-47b7-acb3-6d1dca832065",
+    "cy:run:record": "npm run cy:run -- --record --key 62585f33-d688-47b7-acb3-6d1dca832065",
     "cy:run:debug": "DEBUG=cypress:* cy:run"
   },
   "eslintConfig": {},

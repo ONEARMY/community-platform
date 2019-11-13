@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { RouteComponentProps } from 'react-router'
+import { RouteComponentProps, Prompt } from 'react-router'
 import { Form, Field } from 'react-final-form'
 import styled from 'styled-components'
 import { FieldArray } from 'react-final-form-arrays'
@@ -19,7 +19,7 @@ import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { FileInputField } from 'src/components/Form/FileInput.field'
 import posed, { PoseGroup } from 'react-pose'
-import { inject } from 'mobx-react'
+import { inject, observer } from 'mobx-react'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import { PostingGuidelines } from './PostingGuidelines'
 import theme from 'src/themes/styled.theme'
@@ -27,7 +27,6 @@ import { DIFFICULTY_OPTIONS, TIME_OPTIONS } from './FormSettings'
 import { Image, Box } from 'rebass'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import { HowToSubmitStatus } from './SubmitStatus'
-import { Modal } from 'src/components/Modal/Modal'
 
 interface IState {
   formSaved: boolean
@@ -77,6 +76,7 @@ const Label = styled.label`
 const required = (value: any) => (value ? undefined : 'Required')
 
 @inject('howtoStore')
+@observer
 export class HowtoForm extends React.Component<IProps, IState> {
   uploadRefs: { [key: string]: UploadedFile | null } = {}
   constructor(props: any) {
@@ -114,10 +114,24 @@ export class HowtoForm extends React.Component<IProps, IState> {
   })
   public render() {
     const { formValues, parentType } = this.props
-    const { editCoverImg, fileEditMode } = this.state
+    const { fileEditMode, showSubmitModal } = this.state
     return (
       <>
-        <HowToSubmitStatus {...this.props} />
+        {showSubmitModal && (
+          <HowToSubmitStatus
+            {...this.props}
+            onClose={() => {
+              this.setState({ showSubmitModal: false })
+              this.injected.howtoStore.resetUploadStatus()
+            }}
+          />
+        )}
+        <Prompt
+          when={!this.injected.howtoStore.uploadStatus.Complete}
+          message={
+            'You have unsaved changes. Are you sure you want to leave this page?'
+          }
+        />
         <Form
           onSubmit={v => {
             this.onSubmit(v as IHowtoFormInput)
@@ -375,26 +389,6 @@ export class HowtoForm extends React.Component<IProps, IState> {
                     </Flex>
                   </form>
                 </Flex>
-                {this.state.showSubmitModal && (
-                  <Modal>
-                    <>
-                      <Button
-                        data-cy={submitting ? '' : 'view-howto'}
-                        mt={3}
-                        variant={submitting ? 'disabled' : 'outline'}
-                        icon="arrow-forward"
-                        onClick={() => {
-                          if (submitting) {
-                            return
-                          }
-                          this.props.history.push('/how-to/' + values.slug)
-                        }}
-                      >
-                        View How-To
-                      </Button>
-                    </>
-                  </Modal>
-                )}
                 {/* post guidelines container */}
                 <Flex
                   flexDirection={'column'}
@@ -414,6 +408,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                           form.dispatchEvent(
                             new Event('submit', { cancelable: true }),
                           )
+                          this.setState({ showSubmitModal: true })
                         }
                       }}
                       width={1}

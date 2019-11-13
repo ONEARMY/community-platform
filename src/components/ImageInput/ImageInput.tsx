@@ -186,6 +186,7 @@ export class ImageInput extends React.Component<IProps, IState> {
               <UploadImageOverlay isHovering={isHovering}>
                 {this.props.canDelete && imgPreviewMode && (
                   <Button
+                    data-cy="delete-image"
                     small
                     variant="outline"
                     icon="delete"
@@ -206,7 +207,7 @@ export class ImageInput extends React.Component<IProps, IState> {
                 )}
 
                 {!this.props.canDelete && (
-                  <Button small variant="outline" icon="image">
+                  <Button small variant="outline" icon="image" data-cy="replace-image">
                     Replace image
                   </Button>
                 )}

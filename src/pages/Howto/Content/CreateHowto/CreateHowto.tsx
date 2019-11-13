@@ -10,7 +10,6 @@ import { UserStore } from 'src/stores/User/user.store'
 import { IUser } from 'src/models/user.models'
 import { Text } from 'src/components/Text'
 import { Flex } from 'rebass'
-import { HowToSubmitStatus } from '../Common/SubmitStatus'
 
 interface IState {
   formValues: IHowtoFormInput

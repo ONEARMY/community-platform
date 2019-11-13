@@ -49,6 +49,11 @@ export class HowtoStore extends ModuleStore {
     this.uploadStatus[update] = true
   }
 
+  @action
+  public resetUploadStatus() {
+    this.uploadStatus = getInitialUploadStatus()
+  }
+
   @computed get filteredHowtos() {
     return this.filterCollectionByTags(this.allHowtos, this.selectedTags)
   }

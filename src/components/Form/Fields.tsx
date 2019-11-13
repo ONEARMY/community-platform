@@ -48,6 +48,7 @@ export const DatePickerField = ({
         if (customChange) {
           customChange(date)
         }
+        input.onBlur()
       }}
     />
     {meta.error && meta.touched ? (

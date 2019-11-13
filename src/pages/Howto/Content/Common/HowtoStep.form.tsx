@@ -132,7 +132,7 @@ class HowtoStep extends Component<IProps, IState> {
         <Label htmlFor={`${step}.text`}>Upload image(s) for this step *</Label>
 
         <Flex flexDirection={['column', 'row']} alignItems="center">
-          <ImageInputFieldWrapper>
+          <ImageInputFieldWrapper data-cy="step-image-0">
             <Field
               canDelete
               hasText={false}
@@ -141,7 +141,7 @@ class HowtoStep extends Component<IProps, IState> {
               component={ImageInputField}
             />
           </ImageInputFieldWrapper>
-          <ImageInputFieldWrapper>
+          <ImageInputFieldWrapper data-cy="step-image-1">
             <Field
               canDelete
               hasText={false}
@@ -150,7 +150,7 @@ class HowtoStep extends Component<IProps, IState> {
               component={ImageInputField}
             />
           </ImageInputFieldWrapper>
-          <ImageInputFieldWrapper>
+          <ImageInputFieldWrapper data-cy="step-image-2">
             <Field
               canDelete
               hasText={false}

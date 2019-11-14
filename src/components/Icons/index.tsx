@@ -172,7 +172,19 @@ export class Icon extends Component<WrapperProps> {
     super(props)
   }
   public render() {
-    const { size = 16, glyph } = this.props
+    const { glyph } = this.props
+
+    const sizeMap = {
+      xs: 8,
+      sm: 16,
+      md: 32,
+      lg: 48,
+      xl: 64,
+    }
+
+    let { size } = this.props
+    size = Number.isInteger(size) ? size : sizeMap[size]
+    size = size || 16
 
     return (
       <IconWrapper

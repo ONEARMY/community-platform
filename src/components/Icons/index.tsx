@@ -155,6 +155,12 @@ const IconWrapper = styled<WrapperProps, 'div'>('div')`
   color: ${props => (props.color ? `${props.color}` : 'inherit')};
   ${verticalAlign}
   ${space}
+
+  ${props =>
+    props.onClick &&
+    `
+    cursor: pointer;
+  `}
 `
 
 const Glyph = ({ glyph = '' }: IGlyphProps) => {

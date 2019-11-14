@@ -133,7 +133,7 @@ class SignInPage extends React.Component<IProps, IState> {
                       width={1}
                     >
                       <Heading medium width={1}>
-                        Welcome back homie
+                        Welcome back
                       </Heading>
                     </Flex>
                     <Flex

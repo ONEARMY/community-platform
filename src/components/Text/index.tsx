@@ -19,8 +19,10 @@ export interface ITextProps {
   medium?: boolean
   small?: boolean
   superSmall?: boolean
+
   // keyof colors returns full object prototype, include typeof for just named keys (i.e. color list)
   color?: keyof typeof theme.colors
+
   // clip forces text to fill max 1 line and add '...' for overflow
   clipped?: boolean
   preLine?: boolean
@@ -29,94 +31,109 @@ export interface ITextProps {
   paragraph?: boolean
 }
 
-export const uppercase = props =>
-  props.uppercase
-    ? {
-        textTransform: 'uppercase',
-      }
-    : null
-
-export const capitalize = props =>
-  props.capitalize
-    ? {
-        textTransform: 'capitalize',
-      }
-    : null
-
-export const inline = (props: ITextProps) =>
-  props.inline ? { display: 'inline-block' } : null
-
-export const txtcenter = (props: ITextProps) =>
-  props.txtcenter ? { textAlign: 'center' } : null
-
-export const txtRight = (props: ITextProps) =>
-  props.txtRight ? { textAlign: 'right' } : null
-
-export const regular = (props: ITextProps) =>
-  props.regular ? { fontWeight: 400 } : null
-
-export const bold = (props: ITextProps) =>
-  props.bold ? { fontWeight: 600 } : null
-
-export const large = (props: ITextProps) =>
-  props.large ? { fontSize: theme.fontSizes[3] } : null
-
-export const tags = (props: ITextProps) =>
-  props.tags ? { fontSize: '12px', color: theme.colors.blue } : null
-
-// TODO : change auxiliary & paragaph prop to theme variant
-export const auxiliary = (props: ITextProps) =>
-  props.auxiliary
-    ? {
-        fontFamily: '"Inter", Helvetica Neue, Arial, sans-serif;',
-        fontSize: '12px',
-        color: '#686868',
-      }
-    : null
-
-export const paragraph = (props: ITextProps) =>
-  props.paragraph
-    ? {
-        fontFamily: '"Inter", Helvetica Neue, Arial, sans-serif;',
-        fontSize: '16px',
-        color: theme.colors.grey,
-      }
-    : null
-
-export const medium = (props: ITextProps) =>
-  props.medium ? { fontSize: theme.fontSizes[2] } : null
-
-export const small = (props: ITextProps) =>
-  props.small ? { fontSize: theme.fontSizes[1] } : null
-
-export const superSmall = (props: ITextProps) =>
-  props.superSmall ? { fontSize: theme.fontSizes[0] } : null
-
-export const clipped = (props: ITextProps) =>
-  props.clipped
-    ? { whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }
-    : null
-
-export const preLine = (props: ITextProps) =>
-  props.preLine ? { whiteSpace: 'pre-line' } : null
-
 export const BaseText = styled(RebassText)`
-  ${inline}
-  ${uppercase}
-  ${capitalize}
-  ${regular}
-  ${bold}
-	${txtcenter}
-  ${large}
-  ${medium}
-  ${small}
-  ${superSmall}
-  ${clipped}
-	${preLine}
-	${tags}
-	${auxiliary}
-	${paragraph}
-  ${txtRight}
+  ${props =>
+    props.inline &&
+    `
+    display: 'inline-block';
+  `}
+
+  ${props =>
+    props.txtcenter &&
+    `
+    textAlign: 'center';
+  `}
+
+  ${props =>
+    props.txtRight &&
+    `
+    textAlign: 'right';
+  `}
+
+  ${props =>
+    props.superSmall &&
+    `
+    font-size: ${theme.fontSizes[0]};
+  `}
+
+  ${props =>
+    props.small &&
+    `
+    font-size: ${theme.fontSizes[1]};
+  `}
+
+  ${props =>
+    props.medium &&
+    `
+    font-size: ${theme.fontSizes[2]};
+  `}
+
+  ${props =>
+    props.large &&
+    `
+    font-size: ${theme.fontSizes[3]};
+  `}
+
+  ${props =>
+    props.regular &&
+    `
+    font-weight: 400;
+  `}
+
+  ${props =>
+    props.bold &&
+    `
+    font-weight: 600;
+  `}
+
+  ${props =>
+    props.uppercase &&
+    `
+    text-transform: uppercase;
+  `}
+
+  ${props =>
+    props.capitalize &&
+    `
+    text-transform: capitalize;
+  `}
+
+  ${props =>
+    props.tags &&
+    `
+    font-size: 12px;
+    color: ${theme.colors.blue};
+  `}
+
+  ${props =>
+    props.auxiliary &&
+    `
+    font-family: "Inter", Helvetica Neue, Arial, sans-serif;
+    font-size: 12px;
+    color: #686868;
+  `}
+
+  ${props =>
+    props.paragraph &&
+    `
+    font-family: "Inter", Helvetica Neue, Arial, sans-serif;
+    font-size: 16px;
+    color: ${theme.colors.grey};
+  `}
+
+  ${props =>
+    props.clipped &&
+    `
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  `}
+
+  ${props =>
+    props.preLine &&
+    `
+     white-space: pre-line;
+  `}
 `
 
 type TextProps = ITextProps & RebassTextProps

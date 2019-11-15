@@ -549,6 +549,8 @@ export class UserPage extends React.Component<
 
             <UserCategory bgImg={workspaceHighlightSrc}>
               <Heading small bold width={1}>
+                {user.workspaceType &&
+                  `${capitalizeFirstLetter(user.workspaceType)} `}
                 {capitalizeFirstLetter(user.profileType || 'member')}
               </Heading>
             </UserCategory>

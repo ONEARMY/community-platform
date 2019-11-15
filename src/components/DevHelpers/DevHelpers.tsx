@@ -10,7 +10,7 @@ const DevHelpers = () => (
   <>
     {SITE !== 'production' && <DevTools />}
     <Text
-      bg={'black'}
+      bg={theme.colors.red2}
       color={'white'}
       width={1}
       py={2}
@@ -18,16 +18,16 @@ const DevHelpers = () => (
       txtcenter
       style={{ zIndex: 9999, position: 'relative' }}
     >
-      This is the alpha version (v{VERSION}) of onearmy platform,{' '}
+      You have early access to this platform !{' '}
       <Link
         color={theme.colors.blue}
         target="_blank"
-        href="https://build.onearmy.world"
+        href="https://github.com/ONEARMY/community-platform"
       >
-        click here
+        (v{VERSION})
       </Link>{' '}
-      to help building it. /!\ This site is for development purposes, do not
-      share private information
+      Official launch is on 7th Jan 2020. Don’t share any of its contents yet.
+      We trust you :)
     </Text>
   </>
 )

@@ -7,6 +7,7 @@ export const colors = {
   yellow: { base: '#fee77b', hover: '#ffde45' },
   blue: '#83ceeb',
   red: '#eb1b1f',
+  red2: '#f58d8e',
   softblue: '#e2edf7',
   bluetag: '#5683b0',
   grey: '#61646b',

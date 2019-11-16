@@ -4,10 +4,13 @@ import { Image, ImageProps } from 'rebass'
 import Icon from 'src/components/Icons'
 import { inject, observer } from 'mobx-react'
 import { UserStore, getUserAvatar } from 'src/stores/User/user.store'
+import { ProfileTypeLabel, IProfileType } from 'src/models/user_pp.models'
+import { UserPage } from 'src/pages/User/content/UserPage/UserPage'
 
 interface IProps extends ImageProps {
   width?: string
   userName: string
+  // profileType: ProfileTypeLabel
 }
 
 interface IInjected extends IProps {
@@ -16,6 +19,7 @@ interface IInjected extends IProps {
 
 interface IState {
   avatarUrl?: string
+  fallbackBadge?: IProfileType
   showFallback?: boolean
 }
 
@@ -36,6 +40,10 @@ export class Avatar extends React.Component<IProps, IState> {
     this.getAvatar(this.props.userName)
   }
 
+  // async getFallbackBadge() {
+  //   findWorkspaceBadge
+  // }
+
   async getAvatar(userName: string) {
     const url = getUserAvatar(userName)
     console.log('avatar', url)
@@ -47,19 +55,16 @@ export class Avatar extends React.Component<IProps, IState> {
     const { showFallback, avatarUrl } = this.state
     return (
       <>
-        {showFallback && <Icon glyph={'account-circle'} size={50} />}
-        {!showFallback && avatarUrl && (
-          <Image
-            className="avatar"
-            width={width ? width : 40}
-            sx={{ borderRadius: '25px' }}
-            src={avatarUrl}
-            onError={() => {
-              // if user image doesn't exist show fallback image instead
-              this.setState({ showFallback: true })
-            }}
-          />
-        )}
+        {/* {showFallback && <Icon glyph={'account-circle'} size={50} />} */}
+        {/* {!showFallback && avatarUrl && ( */}
+        <Image
+          className="avatar"
+          width={width ? width : 40}
+          sx={{ borderRadius: '25px' }}
+          src={avatarUrl}
+          // onError={}
+        />
+        {/* )} */}
       </>
     )
   }

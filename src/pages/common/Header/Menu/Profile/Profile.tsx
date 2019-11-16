@@ -73,7 +73,10 @@ export default class Profile extends React.Component<IProps, IState> {
           ) : (
             <div data-cy="user-menu">
               <Flex onClick={() => this.toggleProfileModal()} ml={1}>
-                <Avatar userName={user.userName} />
+                <Avatar
+                  userName={user.userName}
+                  // profileType={user.profileType}
+                />
               </Flex>
               <Flex>
                 {showProfileModal && (

@@ -1,16 +1,15 @@
 import React from 'react'
 
 import { Image, ImageProps } from 'rebass'
-import Icon from 'src/components/Icons'
 import { inject, observer } from 'mobx-react'
 import { UserStore, getUserAvatar } from 'src/stores/User/user.store'
 import { ProfileTypeLabel, IProfileType } from 'src/models/user_pp.models'
-import { UserPage } from 'src/pages/User/content/UserPage/UserPage'
+import Workspace from 'src/pages/User/workspace/Workspace'
 
 interface IProps extends ImageProps {
   width?: string
   userName: string
-  // profileType: ProfileTypeLabel
+  profileType?: ProfileTypeLabel
 }
 
 interface IInjected extends IProps {
@@ -19,7 +18,7 @@ interface IInjected extends IProps {
 
 interface IState {
   avatarUrl?: string
-  fallbackBadge?: IProfileType
+  fallbackBadge?: string
   showFallback?: boolean
 }
 
@@ -38,11 +37,13 @@ export class Avatar extends React.Component<IProps, IState> {
   // user updates their avatar (same url so by default will now be aware of change)
   componentDidMount() {
     this.getAvatar(this.props.userName)
+    this.getFallbackImage(this.props.profileType)
   }
 
-  // async getFallbackBadge() {
-  //   findWorkspaceBadge
-  // }
+  async getFallbackImage(type?: ProfileTypeLabel) {
+    const img = Workspace.findWorkspaceBadge(type, true)
+    this.setState({ fallbackBadge: img })
+  }
 
   async getAvatar(userName: string) {
     const url = getUserAvatar(userName)
@@ -52,19 +53,22 @@ export class Avatar extends React.Component<IProps, IState> {
 
   render() {
     const { width } = this.props
-    const { showFallback, avatarUrl } = this.state
+    const { avatarUrl, fallbackBadge } = this.state
+
+    const addFallbackSrc = (ev: any) => {
+      ev.target.src = fallbackBadge
+    }
+
     return (
       <>
-        {/* {showFallback && <Icon glyph={'account-circle'} size={50} />} */}
-        {/* {!showFallback && avatarUrl && ( */}
         <Image
           className="avatar"
           width={width ? width : 40}
+          height={width ? width : 40}
           sx={{ borderRadius: '25px' }}
           src={avatarUrl}
-          // onError={}
+          onError={addFallbackSrc}
         />
-        {/* )} */}
       </>
     )
   }

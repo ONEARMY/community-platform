@@ -6,13 +6,10 @@ import { inject, observer } from 'mobx-react'
 import Flex from 'src/components/Flex'
 import { Avatar } from 'src/components/Avatar'
 import { ProfileModal } from 'src/components/ProfileModal/ProfileModal'
-import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
-import { Box } from 'rebass'
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
 import ProfileButtons from './ProfileButtons'
 import { MenuMobileLinkContainer } from '../MenuMobile/MenuMobilePanel'
-import { PanelItem } from '../MenuMobile/MenuMobilePanel'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
 
 interface IState {
@@ -75,7 +72,7 @@ export default class Profile extends React.Component<IProps, IState> {
               <Flex onClick={() => this.toggleProfileModal()} ml={1}>
                 <Avatar
                   userName={user.userName}
-                  // profileType={user.profileType}
+                  profileType={user.profileType}
                 />
               </Flex>
               <Flex>

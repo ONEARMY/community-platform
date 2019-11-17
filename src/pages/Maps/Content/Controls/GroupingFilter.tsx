@@ -119,7 +119,7 @@ class GroupingFilter extends React.Component<IProps, IState> {
             ? null
             : entityType === 'place'
             ? 'Workspaces'
-            : 'Members'
+            : 'Others'
         }}
         hasSelectAll={false}
         ItemRenderer={ItemRenderer}

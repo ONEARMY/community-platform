@@ -62,10 +62,10 @@ interface IGlyphProps {
 
 interface IProps {
   glyph: keyof IGlyphs
-  size?: number | string
+  size?: any
   marginRight?: string
   color?: string
-  OnClick?: () => void
+  onClick?: () => void
 }
 export type availableGlyphs =
   | 'download'
@@ -183,7 +183,8 @@ export class Icon extends Component<WrapperProps> {
     }
 
     let { size } = this.props
-    size = Number.isInteger(size) ? size : sizeMap[size]
+    const isSizeNumeric = size - parseFloat(size) + 1 >= 0
+    size = isSizeNumeric ? size : sizeMap[size]
     size = size || 16
 
     return (

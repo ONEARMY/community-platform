@@ -62,10 +62,10 @@ interface IGlyphProps {
 
 interface IProps {
   glyph: keyof IGlyphs
-  size?: number | string
+  size?: any
   marginRight?: string
   color?: string
-  OnClick?: () => void
+  onClick?: () => void
 }
 export type availableGlyphs =
   | 'download'
@@ -155,6 +155,12 @@ const IconWrapper = styled<WrapperProps, 'div'>('div')`
   color: ${props => (props.color ? `${props.color}` : 'inherit')};
   ${verticalAlign}
   ${space}
+
+  ${props =>
+    props.onClick &&
+    `
+    cursor: pointer;
+  `}
 `
 
 const Glyph = ({ glyph = '' }: IGlyphProps) => {
@@ -166,7 +172,20 @@ export class Icon extends Component<WrapperProps> {
     super(props)
   }
   public render() {
-    const { size = 16, glyph } = this.props
+    const { glyph } = this.props
+
+    const sizeMap = {
+      xs: 8,
+      sm: 16,
+      md: 32,
+      lg: 48,
+      xl: 64,
+    }
+
+    let { size } = this.props
+    const isSizeNumeric = size - parseFloat(size) + 1 >= 0
+    size = isSizeNumeric ? size : sizeMap[size]
+    size = size || 16
 
     return (
       <IconWrapper

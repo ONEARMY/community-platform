@@ -36,6 +36,13 @@ export const uppercase = props =>
       }
     : null
 
+export const capitalize = props =>
+  props.capitalize
+    ? {
+        textTransform: 'capitalize',
+      }
+    : null
+
 export const inline = (props: ITextProps) =>
   props.inline ? { display: 'inline-block' } : null
 
@@ -96,6 +103,7 @@ export const preLine = (props: ITextProps) =>
 export const BaseText = styled(RebassText)`
   ${inline}
   ${uppercase}
+  ${capitalize}
   ${regular}
   ${bold}
 	${txtcenter}

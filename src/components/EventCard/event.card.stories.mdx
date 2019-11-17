@@ -1,0 +1,77 @@
+import { withKnobs, text } from '@storybook/addon-knobs'
+import { PropsTable } from '@storybook/components'
+import { Story, Meta, Preview } from '@storybook/addon-docs/blocks'
+import { EventCard } from './EventCard.tsx'
+
+<Meta
+  title="Components|EventCard"
+  component={EventCard}
+  decorators={[withKnobs]}
+/>
+
+# Event Cards
+
+Below you will be able to see how to use and configure a `EventCard` component:
+
+<Preview>
+  <Story name="Default Event Card">
+    <EventCard
+      event={{
+        _createdBy: text('Created By', 'John Doe'),
+        slug: 'event-slug',
+        url: text('URL', ''),
+        date: Date.now(),
+        title: text('Title', 'Lighten the Black Sea'),
+        location: {
+          name: text('Location Name', 'Odessa'),
+          countryCode: text('Country Code', 'UKR'),
+        },
+      }}
+    />
+  </Story>
+</Preview>
+
+<br />
+<br />
+
+## Props
+
+The `EventCard` component receives an `event` prop, an object containing the fields below:
+
+<PropsTable
+  rows={[
+    {
+      name: '_createdBy',
+      description: 'Name of the creator of the event.',
+    },
+    {
+      name: 'slug',
+      description: 'Event slug. Used as the key to render the react component.',
+    },
+    {
+      name: 'url',
+      required: true,
+      description: 'Url to where the "Go to event" link will take the user.',
+    },
+    {
+      name: 'date',
+      required: true,
+      description: 'Date object. Date in which the event will occur.',
+    },
+    {
+      name: 'title',
+      required: true,
+      description: 'Event title.',
+    },
+    {
+      name: 'location.name',
+      required: true,
+      description: 'Location where the event will take place',
+    },
+    {
+      name: 'location.countryCode',
+      required: true,
+      description: 'Country code',
+    },
+  ]}
+/>

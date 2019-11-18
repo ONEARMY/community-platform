@@ -40,7 +40,7 @@ export class Avatar extends React.Component<IProps, IState> {
     this.getFallbackImage(this.props.profileType)
   }
 
-  async getFallbackImage(type?: ProfileTypeLabel) {
+  getFallbackImage(type?: ProfileTypeLabel) {
     const img = Workspace.findWorkspaceBadge(type, true)
     this.setState({ fallbackBadge: img })
   }

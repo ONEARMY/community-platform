@@ -17,37 +17,6 @@ const LogoContainer = styled(Flex)`
   width: 200px;
   align-items: center;
   position: relative;
-  &:before {
-    content: '';
-    position: absolute;
-    background-image: url(${LogoBackground});
-    width: 250px;
-    height: 70px;
-    z-index: ${zIndex.logoContainer};
-    background-size: contain;
-    background-repeat: no-repeat;
-    top: 0;
-    left: 0px;
-  }
-  @media only screen and (max-width: ${theme.breakpoints[1]}) {
-    &:before {
-      left: -50px;
-    }
-  }
-  @media only screen and (min-width: ${theme.breakpoints[1]}) {
-    &:before {
-      content: '';
-      position: absolute;
-      background-image: url(${LogoBackground});
-      width: 250px;
-      height: 70px;
-      z-index: 999;
-      background-size: contain;
-      background-repeat: no-repeat;
-      top: 0;
-      left: 0px;
-    }
-  }
 `
 
 export class Logo extends React.Component<IProps> {

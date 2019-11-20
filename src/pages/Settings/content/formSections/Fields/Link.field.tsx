@@ -7,6 +7,7 @@ import { Modal } from 'src/components/Modal/Modal'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
 import { SelectField } from 'src/components/Form/Select.field'
+import { validateUrl, addProtocol } from 'src/utils/validators'
 
 interface IProps {
   link: string
@@ -17,9 +18,6 @@ interface IState {
   showDeleteModal: boolean
   _toDocsList: boolean
 }
-
-// validation - return undefined if no error (i.e. valid)
-const required = (value: any) => (value ? undefined : 'Required')
 
 class Link extends Component<IProps, IState> {
   constructor(props: IProps) {
@@ -53,8 +51,11 @@ class Link extends Component<IProps, IState> {
         <Field
           data-cy={`input-link-${index}`}
           name={`${link}.url`}
+          // validate={value => validateUrl(value)}
+          validateFields={[]}
           component={InputField}
           placeholder="Link"
+          onBlur={addProtocol}
         />
         <Button
           data-cy={`delete-link-${index}`}

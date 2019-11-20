@@ -48,7 +48,7 @@ export class FileInfo extends React.Component<IProps, IState> {
       <>
         {allowDownload && meta.downloadUrl ? (
           <Link
-            href={meta.downloadUrl}
+            to={meta.downloadUrl}
             target="_blank"
             download={file.name}
             sx={{ width: '300px' }}

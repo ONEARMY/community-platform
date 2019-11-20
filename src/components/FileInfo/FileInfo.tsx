@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { availableGlyphs } from '../Icons'
 import { bytesToSize } from '../ImageInput/ImageInput'
-import { Link } from 'src/components/Links'
 import { IUploadedFileMeta } from 'src/stores/storage'
 import { FileDetails } from './FileDetails'
 
@@ -47,14 +46,14 @@ export class FileInfo extends React.Component<IProps, IState> {
     return (
       <>
         {allowDownload && meta.downloadUrl ? (
-          <Link
-            to={meta.downloadUrl}
+          <a
+            href={meta.downloadUrl}
             target="_blank"
             download={file.name}
-            sx={{ width: '300px' }}
+            style={{ width: '300px' }}
           >
             <FileDetails file={file} glyph={glyph} size={size} />
-          </Link>
+          </a>
         ) : (
           <FileDetails file={file} glyph={glyph} size={size} />
         )}

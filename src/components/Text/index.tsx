@@ -31,7 +31,7 @@ export interface ITextProps {
   paragraph?: boolean
 }
 
-export const BaseText = styled(RebassText)`
+export const BaseText = styled(RebassText)<ITextProps>`
   ${props =>
     props.inline &&
     `

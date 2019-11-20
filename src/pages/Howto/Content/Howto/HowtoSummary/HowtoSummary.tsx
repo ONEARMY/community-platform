@@ -7,7 +7,6 @@ import { Container } from './elements'
 import { IHowtoStep } from 'src/models/howto.models'
 import { ListItem, ListItemText } from '@material-ui/core'
 import Text from 'src/components/Text'
-import { uppercase } from '../../../../../components/Text/index'
 
 interface IProps {
   steps: IHowtoStep[]

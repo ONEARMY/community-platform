@@ -15,8 +15,6 @@ interface IProps {
 }
 
 const LogoContainer = styled(Flex)`
-  /* height: 60px;
-  width: 200px; */
   align-items: center;
   position: relative;
   padding: 10px 0;

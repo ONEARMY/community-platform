@@ -4,6 +4,8 @@ import { Link, Flex, Image } from 'rebass/styled-components'
 import styled from 'styled-components'
 import LogoImage from 'src/assets/images/logo.svg'
 import MobileLogoImage from 'src/assets/images/logo-mobile.svg'
+
+import PPLogo from 'src/assets/images/precious-plastic-logo-official.svg'
 import LogoBackground from 'src/assets/images/logo-background.svg'
 import Text from 'src/components/Text'
 import { zIndex } from 'src/themes/styled.theme'
@@ -13,10 +15,16 @@ interface IProps {
 }
 
 const LogoContainer = styled(Flex)`
-  height: 60px;
-  width: 200px;
+  /* height: 60px;
+  width: 200px; */
   align-items: center;
   position: relative;
+  padding: 10px 0;
+
+  @media only screen and (min-width: ${theme.breakpoints[1]}) {
+    margin-bottom: -50px;
+    padding: 0;
+  }
 `
 
 export class Logo extends React.Component<IProps> {
@@ -35,17 +43,21 @@ export class Logo extends React.Component<IProps> {
           >
             <Flex
               sx={{
-                width: ['50px', '50px', '45px'],
-                height: ['50px', '50px', '45px'],
+                width: ['50px', '50px', '100px'],
+                height: ['50px', '50px', '100px'],
               }}
             >
               <Image
-                src={this.props.isMobile ? MobileLogoImage : LogoImage}
-                width={50}
-                height={50}
+                src={PPLogo}
+                width={[50, 50, 100]}
+                height={[50, 50, 100]}
               />
             </Flex>
-            <Text ml={2} display={['none', 'none', 'block']}>
+            <Text
+              className="sr-only"
+              ml={2}
+              display={['none', 'none', 'block']}
+            >
               Precious Plastic
             </Text>
           </Link>

@@ -309,8 +309,8 @@ export class UserSettings extends React.Component<IProps, IState> {
                         onDidDismiss={confirm => this.onModalDismiss(confirm)}
                       >
                         <Text my="10px">
-                          Change your focus will reset your previous profile, do
-                          you confirm ?
+                          Changing your focus will reset your previous profile,
+                          do you confirm?
                         </Text>
                         <Flex>
                           <Button
@@ -319,7 +319,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                             }}
                             variant="secondary"
                           >
-                            cancel
+                            Cancel
                           </Button>
                           <Button
                             onClick={() => {

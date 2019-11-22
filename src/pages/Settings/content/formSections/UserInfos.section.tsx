@@ -18,10 +18,12 @@ import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { Box } from 'rebass'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { IFormValues } from '../../SettingsPage'
+import { Mutator } from 'final-form'
 
 interface IProps {
   initialFormValues: IFormValues | any
   onCoverImgChange: (v: IConvertedFileMeta) => void
+  mutator: { [key: string]: Mutator }
 }
 interface IState {
   readOnly: boolean
@@ -142,6 +144,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                     key={index}
                     link={name}
                     index={index}
+                    mutator={this.props.mutator}
                     onDelete={(fieldIndex: number) => {
                       fields.remove(fieldIndex)
                     }}

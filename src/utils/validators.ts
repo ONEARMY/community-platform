@@ -1,5 +1,4 @@
 import isUrl from 'is-url'
-
 /****************************************************************************
  *            General Validation Methods
  * **************************************************************************/
@@ -10,10 +9,15 @@ const validateUrl = async (value: any) => {
   return value ? (isUrl(value) ? undefined : 'Invalid url') : 'Required'
 }
 
-const addProtocol = (ev: any) => {
-  const val = ev.target.value
-  console.log('addprot ', val, ' ', ev.target.initialValue)
-  ev.target.initialValue = val.indexOf('://') === -1 ? 'http://' + val : val
+/****************************************************************************
+ *            FORM MUTATORS
+ * **************************************************************************/
+
+const addProtocol = (args, state, { changeValue }) => {
+  console.log('s ', state)
+  console.log('n ', name)
+  // val.indexOf('://') === -1 ? `http://${val}` : val
+  changeValue(state, 'hi', () => 'mm')
 }
 
 export { validateUrl, addProtocol }

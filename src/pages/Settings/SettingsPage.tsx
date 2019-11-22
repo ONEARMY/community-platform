@@ -239,7 +239,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           <UserInfosSection
                             onCoverImgChange={v => this.onCoverImgChange(v)}
                             initialFormValues={initialFormValues}
-                            mutator={mutators}
+                            mutators={mutators}
                           />
                           <UserMapPinSection
                             onInputChange={v => this.updateLocation(v)}
@@ -253,7 +253,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           <UserInfosSection
                             onCoverImgChange={v => this.onCoverImgChange(v)}
                             initialFormValues={initialFormValues}
-                            mutator={mutators}
+                            mutators={mutators}
                           />
                           <CollectionSection
                             required={
@@ -276,7 +276,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           <UserInfosSection
                             onCoverImgChange={v => this.onCoverImgChange(v)}
                             initialFormValues={initialFormValues}
-                            mutator={mutators}
+                            mutators={mutators}
                           />
                           <UserMapPinSection
                             onInputChange={v => this.updateLocation(v)}
@@ -290,7 +290,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           <UserInfosSection
                             onCoverImgChange={v => this.onCoverImgChange(v)}
                             initialFormValues={initialFormValues}
-                            mutator={mutators}
+                            mutators={mutators}
                           />
                           <ExpertiseSection
                             required={
@@ -312,7 +312,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           <UserInfosSection
                             onCoverImgChange={v => this.onCoverImgChange(v)}
                             initialFormValues={initialFormValues}
-                            mutator={mutators}
+                            mutators={mutators}
                           />
                         </>
                       )}

@@ -7,12 +7,12 @@ import { Modal } from 'src/components/Modal/Modal'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
 import { SelectField } from 'src/components/Form/Select.field'
-import { Mutator } from 'final-form'
+import { validateUrl } from 'src/utils/validators'
 
 interface IProps {
   link: string
   index: number
-  mutator?: { [key: string]: Mutator }
+  mutators?: { [key: string]: (...args: any[]) => any }
   onDelete: (index: number) => void
 }
 interface IState {
@@ -52,11 +52,14 @@ class Link extends Component<IProps, IState> {
         <Field
           data-cy={`input-link-${index}`}
           name={`${link}.url`}
-          // validate={value => validateUrl(value)}
-          // validateFields={[]}
+          validate={value => validateUrl(value)}
+          validateFields={[]}
           component={InputField}
           placeholder="Link"
-          onBlur={this.props.mutator && this.props.mutator.addProtocol}
+          onBlur={e =>
+            this.props.mutators &&
+            this.props.mutators.addProtocol(e.target.name)
+          }
         />
         <Button
           data-cy={`delete-link-${index}`}

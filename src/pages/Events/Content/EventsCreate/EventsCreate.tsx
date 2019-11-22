@@ -96,9 +96,17 @@ export class EventsCreate extends React.Component<IProps, IState> {
         initialValues={formValues}
         mutators={{
           ...arrayMutators,
+          addProtocol,
         }}
         validateOnBlur
-        render={({ submitting, values, invalid, errors, handleSubmit }) => {
+        render={({
+          form: { mutators },
+          submitting,
+          values,
+          invalid,
+          errors,
+          handleSubmit,
+        }) => {
           const disabled = invalid || submitting
           return (
             <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
@@ -205,7 +213,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             validate={value => validateUrl(value)}
                             component={InputField}
                             placeholder="URL to offsite link (Facebook, Meetup, etc)"
-                            onBlur={addProtocol}
+                            onBlur={e => mutators.addProtocol(e.target.name)}
                           />
                         </Flex>
                       </Flex>

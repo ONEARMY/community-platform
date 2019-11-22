@@ -23,7 +23,7 @@ import { Mutator } from 'final-form'
 interface IProps {
   initialFormValues: IFormValues | any
   onCoverImgChange: (v: IConvertedFileMeta) => void
-  mutator: { [key: string]: Mutator }
+  mutators: { [key: string]: (...args: any[]) => any }
 }
 interface IState {
   readOnly: boolean
@@ -144,7 +144,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                     key={index}
                     link={name}
                     index={index}
-                    mutator={this.props.mutator}
+                    mutators={this.props.mutators}
                     onDelete={(fieldIndex: number) => {
                       fields.remove(fieldIndex)
                     }}

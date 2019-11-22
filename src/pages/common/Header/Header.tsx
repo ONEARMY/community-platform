@@ -76,6 +76,7 @@ export class Header extends React.Component<IProps> {
           pl={[4, 4, 0]}
           pr={[4, 4, 0]}
           sx={{ zIndex: 9999, position: 'relative' }}
+          height={[null, null, 80]}
         >
           <Flex>
             <Logo isMobile={true} />

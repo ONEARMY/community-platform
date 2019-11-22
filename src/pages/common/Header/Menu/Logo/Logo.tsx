@@ -2,13 +2,9 @@ import React from 'react'
 import theme from 'src/themes/styled.theme'
 import { Link, Flex, Image } from 'rebass/styled-components'
 import styled from 'styled-components'
-import LogoImage from 'src/assets/images/logo.svg'
-import MobileLogoImage from 'src/assets/images/logo-mobile.svg'
 
 import PPLogo from 'src/assets/images/precious-plastic-logo-official.svg'
-import LogoBackground from 'src/assets/images/logo-background.svg'
 import Text from 'src/components/Text'
-import { zIndex } from 'src/themes/styled.theme'
 
 interface IProps {
   isMobile?: boolean

@@ -5,7 +5,7 @@ import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import { Box } from 'rebass'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
-import { Link } from 'src/components/Links'
+import { Link } from 'rebass'
 import { Button } from 'src/components/Button'
 import { ProfileTypeLabel, IUserPP } from 'src/models/user_pp.models'
 import { PROFILE_TYPES } from 'src/mocks/user_pp.mock'
@@ -75,9 +75,12 @@ export class FocusSection extends React.Component<IProps, IState> {
           </Flex>
           <Flex flexWrap="wrap" alignItems="center" mt={4}>
             <Text>Not sure about your focus ?</Text>
-            <Link to={'/academy'}>
+            <Link
+              href="https://drive.google.com/open?id=1fXTtBbzgCO0EL6G9__aixwqc-Euqgqnd"
+              target="_blank"
+            >
               <Button ml={2} variant="outline" data-cy="go-to">
-                Go to starter kits
+                Checkout our guidelines
               </Button>
             </Link>
           </Flex>

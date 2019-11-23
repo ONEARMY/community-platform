@@ -7,6 +7,7 @@ import { Modal } from 'src/components/Modal/Modal'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
 import { SelectField } from 'src/components/Form/Select.field'
+import { required } from 'src/utils/validators'
 
 interface IProps {
   openingHoursValues?: string
@@ -17,9 +18,6 @@ interface IState {
   showDeleteModal: boolean
   _toDocsList: boolean
 }
-
-// validation - return undefined if no error (i.e. valid)
-const required = (value: any) => (value ? undefined : 'Required')
 
 export class OpeningHoursPicker extends React.Component<IProps, IState> {
   constructor(props: IProps) {

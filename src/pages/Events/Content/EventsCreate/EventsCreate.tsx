@@ -16,7 +16,7 @@ import { IEvent, IEventFormInput } from 'src/models/events.models'
 import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
-import { validateUrl, addProtocol } from 'src/utils/validators'
+import { validateUrl, addProtocol, required } from 'src/utils/validators'
 
 interface IState {
   formValues: IEventFormInput
@@ -28,9 +28,6 @@ interface IProps extends RouteComponentProps<any> {}
 interface IInjectedProps extends IProps {
   eventStore: EventStore
 }
-
-// validation - return undefined if no error (i.e. valid)
-const required = (value: any) => (value ? undefined : 'Required')
 
 const FormContainer = styled.form`
   width: 100%;

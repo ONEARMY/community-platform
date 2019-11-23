@@ -13,6 +13,7 @@ import {
   TextNotification,
   ITextNotificationProps,
 } from 'src/components/Notification/TextNotification'
+import { required } from 'src/utils/validators'
 
 interface IFormValues {
   email: string
@@ -49,9 +50,6 @@ const AUTH_PROVIDERS: IAuthProvider[] = [
     inputLabel: 'Email Address',
   },
 ]
-
-// validation - return undefined if no error (i.e. valid)
-const required = (value: any) => (value ? undefined : 'Required')
 
 @inject('userStore')
 @observer

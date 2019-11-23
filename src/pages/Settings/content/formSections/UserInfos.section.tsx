@@ -19,6 +19,7 @@ import { Box } from 'rebass'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { IFormValues } from '../../SettingsPage'
 import { Mutator } from 'final-form'
+import { required } from 'src/utils/validators'
 
 interface IProps {
   initialFormValues: IFormValues | any
@@ -32,9 +33,6 @@ interface IState {
   showComLinks?: boolean
   isOpen?: boolean
 }
-
-// validation - return undefined if no error (i.e. valid)
-const required = (value: any) => (value ? undefined : 'Required')
 
 const FlagSelectContainer = styled(Flex)`
   border: 1px solid ${theme.colors.black};
@@ -142,6 +140,11 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                 {fields.map((name, index: number) => (
                   <Link
                     key={index}
+                    initialType={
+                      initialFormValues.links[index]
+                        ? initialFormValues.links[index].label
+                        : undefined
+                    }
                     link={name}
                     index={index}
                     mutators={this.props.mutators}

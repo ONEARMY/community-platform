@@ -7,17 +7,19 @@ import { Modal } from 'src/components/Modal/Modal'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
 import { SelectField } from 'src/components/Form/Select.field'
-import { validateUrl } from 'src/utils/validators'
+import { validateUrl, validateEmail, required } from 'src/utils/validators'
 
 interface IProps {
   link: string
   index: number
   mutators?: { [key: string]: (...args: any[]) => any }
+  initialType?: string
   onDelete: (index: number) => void
 }
 interface IState {
   showDeleteModal: boolean
   _toDocsList: boolean
+  linkType?: string
 }
 
 class Link extends Component<IProps, IState> {
@@ -26,6 +28,7 @@ class Link extends Component<IProps, IState> {
     this.state = {
       showDeleteModal: false,
       _toDocsList: false,
+      linkType: this.props.initialType ? this.props.initialType : '',
     }
   }
 
@@ -37,6 +40,47 @@ class Link extends Component<IProps, IState> {
     this.props.onDelete(this.props.index)
   }
 
+  public mutatorsDependingOnType(e) {
+    switch (this.state.linkType) {
+      case 'social-media':
+        return (
+          this.props.mutators && this.props.mutators.addProtocol(e.target.name)
+        )
+      case 'bazar':
+        return (
+          this.props.mutators && this.props.mutators.addProtocol(e.target.name)
+        )
+      case 'website':
+        return (
+          this.props.mutators && this.props.mutators.addProtocol(e.target.name)
+        )
+      case 'forum':
+        return (
+          this.props.mutators && this.props.mutators.addProtocol(e.target.name)
+        )
+      default:
+        break
+    }
+  }
+  public validateDependingOnType(e) {
+    console.log('validateDependingOnType')
+
+    switch (this.state.linkType) {
+      case 'email':
+        return validateEmail(e)
+      case 'forum':
+        return validateUrl(e)
+      case 'website':
+        return validateUrl(e)
+      case 'social-media':
+        return validateUrl(e)
+      case 'bazar':
+        return validateUrl(e)
+      default:
+        return required(e)
+    }
+  }
+
   render() {
     const { link, index } = this.props
     return (
@@ -46,20 +90,20 @@ class Link extends Component<IProps, IState> {
           name={`${link}.label`}
           options={COM_TYPE_MOCKS}
           component={SelectField}
+          onCustomChange={v => {
+            this.setState({ linkType: v })
+          }}
           placeholder="type"
           style={{ width: '160px', marginRight: '8px' }}
         />
         <Field
           data-cy={`input-link-${index}`}
           name={`${link}.url`}
-          validate={value => validateUrl(value)}
+          validate={value => this.validateDependingOnType(value)}
           validateFields={[]}
           component={InputField}
           placeholder="Link"
-          onBlur={e =>
-            this.props.mutators &&
-            this.props.mutators.addProtocol(e.target.name)
-          }
+          onBlur={e => this.mutatorsDependingOnType(e)}
         />
         <Button
           data-cy={`delete-link-${index}`}

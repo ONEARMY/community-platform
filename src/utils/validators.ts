@@ -3,8 +3,21 @@ import isUrl from 'is-url'
  *            General Validation Methods
  * **************************************************************************/
 
+const required = (value: any) => (value ? undefined : 'Required')
+
 const validateUrl = async (value: any) => {
   return value ? (isUrl(value) ? undefined : 'Invalid url') : 'Required'
+}
+
+const validateEmail = (value: string) => {
+  console.log('isEmail', isEmail(value))
+
+  return value ? (isEmail(value) ? undefined : 'Invalid email') : 'Required'
+}
+
+const isEmail = (email: string) => {
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  return re.test(String(email).toLowerCase())
 }
 
 /****************************************************************************
@@ -19,4 +32,4 @@ const addProtocol = ([name], state, { changeValue }) => {
   )
 }
 
-export { validateUrl, addProtocol }
+export { validateUrl, validateEmail, required, addProtocol }

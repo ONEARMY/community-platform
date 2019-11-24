@@ -3,6 +3,7 @@ import { availableGlyphs } from '../Icons'
 import { bytesToSize } from '../ImageInput/ImageInput'
 import { IUploadedFileMeta } from 'src/stores/storage'
 import { FileDetails } from './FileDetails'
+import styled from 'styled-components'
 
 interface IProps {
   file: File | IUploadedFileMeta | null
@@ -12,6 +13,10 @@ interface IState {
   glyph: availableGlyphs
   size: string
 }
+
+const FileContainer = styled.a`
+  width: 300px;
+`
 
 export class FileInfo extends React.Component<IProps, IState> {
   constructor(props: IProps) {
@@ -46,14 +51,13 @@ export class FileInfo extends React.Component<IProps, IState> {
     return (
       <>
         {allowDownload && meta.downloadUrl ? (
-          <a
+          <FileContainer
             href={meta.downloadUrl}
             target="_blank"
             download={file.name}
-            style={{ width: '300px' }}
           >
             <FileDetails file={file} glyph={glyph} size={size} />
-          </a>
+          </FileContainer>
         ) : (
           <FileDetails file={file} glyph={glyph} size={size} />
         )}

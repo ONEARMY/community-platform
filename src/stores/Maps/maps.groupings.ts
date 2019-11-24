@@ -1,17 +1,5 @@
-import { IMapGrouping, IMapPinType } from 'src/models/maps.models'
-import LogoWorkspace from 'src/assets/icons/map-workspace.svg'
-import LogoCollection from 'src/assets/icons/map-collection.svg'
-import LogoMember from 'src/assets/icons/map-member.svg'
-import LogoMachine from 'src/assets/icons/map-machine.svg'
-import LogoCommunity from 'src/assets/icons/map-community.svg'
-
-export const MAP_ICONS: { [key in IMapPinType]: string } = {
-  'collection-point': LogoCollection,
-  'community-builder': LogoCommunity,
-  'machine-builder': LogoMachine,
-  member: LogoMember,
-  workspace: LogoWorkspace,
-}
+import { IMapGrouping } from 'src/models/maps.models'
+import Workspace from 'src/pages/User/workspace/Workspace'
 
 // grouping used (icons will be generated from type in method below)
 const GROUPINGS: IMapGrouping[] = [
@@ -81,5 +69,5 @@ const GROUPINGS: IMapGrouping[] = [
 // merge groupings with icons above for export
 export const MAP_GROUPINGS = GROUPINGS.map(g => ({
   ...g,
-  icon: MAP_ICONS[g.type],
+  icon: Workspace.findWorkspaceBadge(g.type, true),
 }))

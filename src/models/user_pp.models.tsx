@@ -42,6 +42,7 @@ export interface IPlasticType {
 export interface IProfileType {
   label: ProfileTypeLabel
   imageSrc?: string
+  cleanImageSrc?: string
   textLabel?: string
 }
 export interface IWorkspaceType {

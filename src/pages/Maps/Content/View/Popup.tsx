@@ -5,7 +5,6 @@ import Text from 'src/components/Text'
 import { Popup as LeafletPopup, Map } from 'react-leaflet'
 import styled from 'styled-components'
 import { distanceInWords } from 'date-fns'
-import { MAP_ICONS } from 'src/stores/Maps/maps.groupings'
 
 import {
   IMapPin,
@@ -18,6 +17,7 @@ import { Link } from 'src/components/Links'
 import { inject } from 'mobx-react'
 import { MapsStore } from 'src/stores/Maps/maps.store'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
+import Workspace from 'src/pages/User/workspace/Workspace'
 
 interface IProps {
   activePin: IMapPin | IMapPinWithDetail
@@ -82,7 +82,7 @@ export class Popup extends React.Component<IProps> {
     console.log('detail', pin.detail)
 
     function addFallbackSrc(ev: any) {
-      const icon = MAP_ICONS[pin.type]
+      const icon = Workspace.findWorkspaceBadge(pin.type, true)
       ev.target.src = icon
     }
 

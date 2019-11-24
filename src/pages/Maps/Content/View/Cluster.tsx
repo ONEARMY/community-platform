@@ -37,10 +37,12 @@ export const Clusters: React.FunctionComponent<IProps> = ({
           <MarkerClusterGroup
             iconCreateFunction={createClusterIcon({ key })}
             key={key}
-            showCoverageOnHover={true}
+            showCoverageOnHover={false}
             spiderfyOnMaxZoom={true}
+            // in pixels, radius a cluster can cover
+            // max zoom level 18
             maxClusterRadius={(zoomLevel: number) => {
-              return 60 + zoomLevel * 5
+              return 90 - 5 * zoomLevel
             }}
           >
             {entities[key].map(pin => (

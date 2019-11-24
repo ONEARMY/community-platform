@@ -1,22 +1,18 @@
 import React from 'react'
 
 import { Image, ImageProps } from 'rebass'
-import Icon from 'src/components/Icons'
 import { inject, observer } from 'mobx-react'
-import { UserStore, getUserAvatar } from 'src/stores/User/user.store'
+import { ProfileTypeLabel } from 'src/models/user_pp.models'
+import Workspace from 'src/pages/User/workspace/Workspace'
 
 interface IProps extends ImageProps {
   width?: string
   userName: string
-}
-
-interface IInjected extends IProps {
-  userStore: UserStore
+  profileType?: ProfileTypeLabel
 }
 
 interface IState {
-  avatarUrl?: string
-  showFallback?: boolean
+  badgeProfileType?: string
 }
 
 @inject('userStore')
@@ -26,40 +22,30 @@ export class Avatar extends React.Component<IProps, IState> {
     super(props)
     this.state = {}
   }
-  get injected() {
-    return this.props as IInjected
-  }
 
   // subscribe/unsubscribe from specific user profile message when
   // user updates their avatar (same url so by default will now be aware of change)
   componentDidMount() {
-    this.getAvatar(this.props.userName)
+    this.getProfileTypeBadge(this.props.profileType)
   }
 
-  async getAvatar(userName: string) {
-    const url = getUserAvatar(userName)
-    console.log('avatar', url)
-    this.setState({ avatarUrl: url })
+  public getProfileTypeBadge(type?: ProfileTypeLabel) {
+    const img = Workspace.findWorkspaceBadge(type, true)
+    this.setState({ badgeProfileType: img })
   }
-
   render() {
     const { width } = this.props
-    const { showFallback, avatarUrl } = this.state
+    const { badgeProfileType } = this.state
+
     return (
       <>
-        {showFallback && <Icon glyph={'account-circle'} size={50} />}
-        {!showFallback && avatarUrl && (
-          <Image
-            className="avatar"
-            width={width ? width : 40}
-            sx={{ borderRadius: '25px' }}
-            src={avatarUrl}
-            onError={() => {
-              // if user image doesn't exist show fallback image instead
-              this.setState({ showFallback: true })
-            }}
-          />
-        )}
+        <Image
+          className="avatar"
+          width={width ? width : 40}
+          height={width ? width : 40}
+          sx={{ borderRadius: '25px' }}
+          src={badgeProfileType}
+        />
       </>
     )
   }

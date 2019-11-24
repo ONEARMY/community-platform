@@ -2,7 +2,7 @@ import L, { MarkerCluster } from 'leaflet'
 import './sprites.css'
 import { IMapPin } from 'src/models/maps.models'
 import clusterIcon from 'src/assets/icons/map-cluster.svg'
-import { MAP_ICONS } from 'src/stores/Maps/maps.groupings'
+import Workspace from 'src/pages/User/workspace/Workspace'
 
 /**
  * Generate custom cluster icon, including style formatting, size, image etc.
@@ -30,7 +30,7 @@ export const createClusterIcon = (opts?: any) => {
 }
 
 export const createMarkerIcon = (pin: IMapPin) => {
-  const icon = MAP_ICONS[pin.type]
+  const icon = Workspace.findWorkspaceBadge(pin.type, true)
   if (!pin.type) {
     console.log('NO TYPE', pin)
   }

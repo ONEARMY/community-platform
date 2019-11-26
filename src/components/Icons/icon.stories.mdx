@@ -1,0 +1,92 @@
+import { action } from '@storybook/addon-actions'
+import { withKnobs, text, boolean } from '@storybook/addon-knobs'
+import { Story, Meta, Preview } from '@storybook/addon-docs/blocks'
+import { PropsTable } from '@storybook/components'
+import { Icon, glyphs } from './index.tsx'
+
+<Meta title="Components|Icon" component={Icon} decorators={[withKnobs]} />
+
+# Icon
+
+Below you will be able to see how to use and configure a `Icon` component:
+
+<Preview>
+  <Story name="Default Icon">
+    <Icon
+      glyph={text('glyph', 'download')}
+      size={text('size', 'md')}
+      onClick={action('onClick')}
+      color={text('color', '')}
+    />
+  </Story>
+</Preview>
+
+## Sizes
+
+You can use one of the pre-determined size constants: `xs`, `sm`, `md`, `lg` and `xl` or simply set the prop `size` to an integer value.
+
+<Preview>
+  <Story name="Icon Sizes">
+    {[
+      <Icon glyph={'download'} size={'xl'} marginRight={'10px'} />,
+      <Icon glyph={'download'} size={'lg'} marginRight={'10px'} />,
+      <Icon glyph={'download'} size={'md'} marginRight={'10px'} />,
+      <Icon glyph={'download'} size={'sm'} marginRight={'10px'} />,
+      <Icon glyph={'download'} size={'xs'} marginRight={'10px'} />,
+    ]}
+  </Story>
+</Preview>
+
+## Available glyphs
+
+<Preview>
+  <Story name="Available Glyphs">
+    {Object.keys(glyphs).map(x => (
+      <Icon glyph={x} size={32} marginRight={'10px'} />
+    ))}
+  </Story>
+</Preview>
+
+<div>
+  {Object.keys(glyphs).map(x => (
+    <span>{x}, </span>
+  ))}
+</div>
+
+<br />
+<br />
+
+## Setting an icon color:
+
+You can simply set any valid css color to the prop `color`:
+
+<Preview>
+  <Story name="Icon Color">
+    {[
+      <Icon
+        glyph={'download'}
+        size={'lg'}
+        marginRight={'10px'}
+        color={'#37ecba'}
+      />,
+      <Icon
+        glyph={'download'}
+        size={'lg'}
+        marginRight={'10px'}
+        color={'#47d5b9'}
+      />,
+      <Icon
+        glyph={'download'}
+        size={'lg'}
+        marginRight={'10px'}
+        color={'#57c1c5'}
+      />,
+      <Icon
+        glyph={'download'}
+        size={'lg'}
+        marginRight={'10px'}
+        color={'#72afd3'}
+      />,
+    ]}
+  </Story>
+</Preview>

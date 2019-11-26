@@ -143,7 +143,6 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
         },
       })
       return firestore.updateDocument(collectionName, docId, docData)
-
     },
   )
 
@@ -194,9 +193,7 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
 
   Cypress.Commands.add('toggleUserMenuOn', () => {
     Cypress.log({ displayName: 'OPEN_USER_MENU' })
-    cy.get('[data-cy=user-menu]')
-      .find('path')
-      .should('be.exist')
+    cy.get('[data-cy=user-menu]').should('be.exist')
     cy.get('[data-cy=user-menu]').click()
   })
 

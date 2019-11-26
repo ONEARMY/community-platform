@@ -1,0 +1,172 @@
+import { action } from '@storybook/addon-actions'
+import { withKnobs, text, boolean } from '@storybook/addon-knobs'
+import { Story, Meta, Preview } from '@storybook/addon-docs/blocks'
+import { PropsTable } from '@storybook/components'
+import { Text } from './index.tsx'
+
+<Meta title="Components|Text" component={Text} decorators={[withKnobs]} />
+
+# Text
+
+Below you will be able to see how to use and configure a `Text` component:
+
+<Preview>
+  <Story name="Default Text">
+    <Text
+      uppercase={boolean('uppercase', false)}
+      capitalize={boolean('capitalize', false)}
+      superSmall={boolean('superSmall', false)}
+      small={boolean('small', false)}
+      medium={boolean('medium', false)}
+      regular={boolean('regular', true)}
+      large={boolean('large', false)}
+      bold={boolean('bold', false)}
+      tags={boolean('tags', false)}
+      auxiliary={boolean('auxiliary', false)}
+      paragraph={boolean('paragraph', false)}
+      clipped={boolean('clipped', false)}
+      preLine={boolean('preLine', false)}
+      txtcenter={boolean('txtcenter', false)}
+      txtRight={boolean('txtRight', false)}
+    >
+      {text('Content', 'The quick brown fox jumped over the lazy dog.')}
+    </Text>
+  </Story>
+</Preview>
+
+<br />
+<br />
+
+## Props
+
+The `Text` component can receive the following props:
+
+<PropsTable
+  rows={[
+    {
+      name: 'uppercase',
+      defaultValue: false,
+      description: 'Uppercases the text.',
+    },
+    {
+      name: 'capitalize',
+      defaultValue: false,
+      description: 'Capitalizes every word.',
+    },
+    {
+      name: 'superSmall',
+      defaultValue: false,
+      description: 'Sets a super small font-size.',
+    },
+    {
+      name: 'small',
+      defaultValue: false,
+      description: 'Sets a small font-size.',
+    },
+    {
+      name: 'medium',
+      defaultValue: false,
+      description: 'Sets a medium small font-size.',
+    },
+    {
+      name: 'regular',
+      defaultValue: false,
+      description: 'The normal/default font-size.',
+    },
+    {
+      name: 'large',
+      defaultValue: false,
+      description: 'Sets a large small font-size.',
+    },
+    { name: 'bold', defaultValue: false, description: 'Bolds the text.' },
+    { name: 'tags', defaultValue: false, description: 'Pre-defined style.' },
+    {
+      name: 'auxiliary',
+      defaultValue: false,
+      description: 'Pre-defined style.',
+    },
+    {
+      name: 'paragraph',
+      defaultValue: false,
+      description: 'Pre-defined style.',
+    },
+    {
+      name: 'clipped',
+      defaultValue: false,
+      description: 'Adds ellipsis while preventing text overflow.',
+    },
+    { name: 'preLine', defaultValue: false, description: 'Country code' },
+    {
+      name: 'txtcenter',
+      defaultValue: false,
+      description: 'Centers the text within its container.',
+    },
+    {
+      name: 'txtRight',
+      defaultValue: false,
+      description: 'Aligns-right the text within its container.',
+    },
+  ]}
+/>
+
+## Capitalization
+
+There are a few props to deal with text capitalization: `capitalize`, `uppercase`:
+
+<Preview isColumn={true}>
+  <Story name="Capitalized">
+    <Text capitalize={true}>my content is all lowercase.</Text>
+  </Story>
+  <Story name="Uppercase">
+    <Text uppercase={true}>my content is all lowercase.</Text>
+  </Story>
+</Preview>
+
+## Sizes
+
+There are a few props to deal with text sizes: `superSmall`, `small`, `medium`, `regular` and `large`:
+
+<Preview isColumn={true}>
+  <Story name="Super Small Text">
+    <Text superSmall={true}>The quick brown fox jumped over the lazy dog.</Text>
+  </Story>
+  <Story name="Small Text">
+    <Text small={true}>The quick brown fox jumped over the lazy dog.</Text>
+  </Story>
+  <Story name="Medium Text">
+    <Text medium={true}>The quick brown fox jumped over the lazy dog.</Text>
+  </Story>
+  <Story name="Regular Text">
+    <Text regular={true}>The quick brown fox jumped over the lazy dog.</Text>
+  </Story>
+  <Story name="Large Text">
+    <Text large={true}>The quick brown fox jumped over the lazy dog.</Text>
+  </Story>
+</Preview>
+
+Or you can set the prop `fontSize` yourself:
+
+<Preview>
+  <Story name="Font Size">
+    <Text fontSize={30}>The quick brown fox jumped over the lazy dog.</Text>
+  </Story>
+</Preview>
+
+## Pre-defined styles
+
+You can configure `Text` components to use some pre-defined styles: `auxiliary`, `tags`, `paragraph` and/or `bold`:
+
+<Preview isColumn={true}>
+  <Story name="Auxiliary-style Text">
+    <Text auxiliary={true}>The quick brown fox jumped over the lazy dog.</Text>
+  </Story>
+  <Story name="Tags-style Text">
+    <Text tags={true}>The quick brown fox jumped over the lazy dog.</Text>
+  </Story>
+  <Story name="Paragraph-style Text">
+    <Text paragraph={true}>The quick brown fox jumped over the lazy dog.</Text>
+  </Story>
+  <Story name="Bold Text">
+    <Text bold={true}>The quick brown fox jumped over the lazy dog.</Text>
+  </Story>
+</Preview>

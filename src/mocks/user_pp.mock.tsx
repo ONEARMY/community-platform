@@ -21,6 +21,11 @@ import MemberBadge from 'src/assets/images/badges/pt-member.svg'
 import MachineBadge from 'src/assets/images/badges/pt-machine-shop.svg'
 import WorkspaceBadge from 'src/assets/images/badges/pt-workspace.svg'
 import LocalComBadge from 'src/assets/images/badges/pt-local-community.svg'
+import LogoWorkspace from 'src/assets/icons/map-workspace.svg'
+import LogoCollection from 'src/assets/icons/map-collection.svg'
+import LogoMember from 'src/assets/icons/map-member.svg'
+import LogoMachine from 'src/assets/icons/map-machine.svg'
+import LogoCommunity from 'src/assets/icons/map-community.svg'
 
 // assets workspaceType
 import Extrusion from 'src/assets/images/workspace-focus/extrusion.jpg'
@@ -342,26 +347,31 @@ export const PROFILE_TYPES: IProfileType[] = [
     label: 'workspace',
     textLabel: 'I run a workspace',
     imageSrc: WorkspaceBadge,
+    cleanImageSrc: LogoWorkspace,
   },
   {
     label: 'member',
     textLabel: 'I am a member',
     imageSrc: MemberBadge,
+    cleanImageSrc: LogoMember,
   },
   {
     label: 'machine-builder',
     textLabel: 'I build machines',
     imageSrc: MachineBadge,
+    cleanImageSrc: LogoMachine,
   },
   {
     label: 'community-builder',
     textLabel: 'I run a local community',
     imageSrc: LocalComBadge,
+    cleanImageSrc: LogoCommunity,
   },
   {
     label: 'collection-point',
     textLabel: 'I collect & sort plastic',
     imageSrc: CollectionBadge,
+    cleanImageSrc: LogoCollection,
   },
 ]
 

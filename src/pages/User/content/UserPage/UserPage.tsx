@@ -8,7 +8,7 @@ import {
   IOpeningHours,
   PlasticTypeLabel,
 } from 'src/models/user_pp.models'
-import { PROFILE_TYPES } from 'src/mocks/user_pp.mock'
+
 import { UserStore } from 'src/stores/User/user.store'
 import Heading from 'src/components/Heading'
 import { Box, Link, Image } from 'rebass'
@@ -18,20 +18,11 @@ import Icon from 'src/components/Icons'
 import Flex from 'src/components/Flex'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import { zIndex } from 'src/themes/styled.theme'
+import Workspace from 'src/pages/User/workspace/Workspace'
 
 import theme from 'src/themes/styled.theme'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 import FlagIconEvents from 'src/components/Icons/FlagIcon/FlagIcon'
-
-// Highlights
-import CollectionHighlight from 'src/assets/images/highlights/highlight-collection-point.svg'
-import LocalCommunityHighlight from 'src/assets/images/highlights/highlight-local-community.svg'
-import MachineHighlight from 'src/assets/images/highlights/highlight-machine-shop.svg'
-import WorkspaceHighlight from 'src/assets/images/highlights/highlight-workspace.svg'
-import MemberHighlight from 'src/assets/images/highlights/highlight-member.svg'
-
-// assets profileType
-import MemberBadge from 'src/assets/images/badges/pt-member.svg'
 
 // Plastic types
 import HDPEIcon from 'src/assets/images/plastic-types/hdpe.svg'
@@ -378,39 +369,6 @@ export class UserPage extends React.Component<
     )
   }
 
-  public findWordspaceHighlight(workspaceType?: string): string {
-    switch (workspaceType) {
-      case 'workspace':
-        return WorkspaceHighlight
-      case 'member':
-        return MemberHighlight
-      case 'machine-builder':
-        return MachineHighlight
-      case 'community-builder':
-        return LocalCommunityHighlight
-      case 'collection-point':
-        return CollectionHighlight
-      default:
-        return MemberHighlight
-    }
-  }
-
-  public findWorkspaceBadge(workspaceType?: string): string {
-    if (!workspaceType) {
-      return MemberBadge
-    }
-
-    const foundProfileTypeObj = PROFILE_TYPES.find(
-      type => type.label === workspaceType,
-    )
-
-    if (foundProfileTypeObj && foundProfileTypeObj.imageSrc) {
-      return foundProfileTypeObj.imageSrc
-    }
-
-    return MemberBadge
-  }
-
   public renderPlasticTypes(plasticTypes: Array<PlasticTypeLabel>) {
     function renderIcon(type: string) {
       switch (type) {
@@ -510,8 +468,10 @@ export class UserPage extends React.Component<
       ),
     }
 
-    const workspaceBadgeSrc = this.findWorkspaceBadge(user.profileType)
-    const workspaceHighlightSrc = this.findWordspaceHighlight(user.profileType)
+    const workspaceBadgeSrc = Workspace.findWorkspaceBadge(user.profileType)
+    const workspaceHighlightSrc = Workspace.findWordspaceHighlight(
+      user.profileType,
+    )
 
     let coverImage = [
       <SliderImage
@@ -549,6 +509,8 @@ export class UserPage extends React.Component<
 
             <UserCategory bgImg={workspaceHighlightSrc}>
               <Heading small bold width={1}>
+                {user.workspaceType &&
+                  `${capitalizeFirstLetter(user.workspaceType)} `}
                 {capitalizeFirstLetter(user.profileType || 'member')}
               </Heading>
             </UserCategory>

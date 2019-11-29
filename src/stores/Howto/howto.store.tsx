@@ -126,10 +126,9 @@ export class HowtoStore extends ModuleStore {
     const stepsWithImgMeta: IHowtoStep[] = []
     for (const step of steps) {
       // determine any new images to upload
-      const stepImages = step.images as IConvertedFileMeta[]
-      if (!stepImages[0]) {
-        stepImages.shift()
-      }
+      const stepImages = (step.images as IConvertedFileMeta[]).filter(
+        img => !!img,
+      )
       const imgMeta = await this.uploadCollectionBatch(
         stepImages,
         COLLECTION_NAME,

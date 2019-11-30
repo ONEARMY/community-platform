@@ -1,15 +1,23 @@
 import { IDBEndpoint, DBDoc } from 'src/models/common.models'
 import Dexie from 'dexie'
 import { DBQueryOptions, DBQueryWhereOptions, AbstractDBClient } from '../types'
-import { DB_API_VERSION, DB_QUERY_DEFAULTS } from '../utils/db.utils'
+import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
 
-const db = new Dexie('OneArmyCache')
+/**
+ * Update the cache number either when making changes to db architecture
+ * or busting cache on db. This is used as the Dexie version number, see:
+ * https://dexie.org/docs/Tutorial/Design#database-versioning
+ */
+const DB_CACHE_NUMBER = 20191130
+const CACHE_DB_NAME = 'OneArmyCache'
+const db = new Dexie(CACHE_DB_NAME)
 
 export class DexieClient implements AbstractDBClient {
   constructor() {
-    // initialise the database with versioning and schema
-    db.version(DB_API_VERSION).stores(DEXIE_SCHEMA)
+    this._addErrorHandler()
+    this._dbInit(DB_CACHE_NUMBER, DEXIE_SCHEMA)
   }
+
   /************************************************************************
    *  Main Methods - taken from abstract class
    ***********************************************************************/
@@ -72,6 +80,46 @@ export class DexieClient implements AbstractDBClient {
       default:
         throw new Error('mapping has not been created for dexie query')
     }
+  }
+
+  /************************************************************************
+   *  Initialisation and error handling - specific only to dexie
+   ***********************************************************************/
+
+  /**
+   * By default errors from Dexie during initialisation are thrown globally
+   * Catch case where new DB defined and old definition removed, delete old
+   * db and just start with new clean version
+   *
+   * NOTE - to avoid these errors legacy db caches need to be defined
+   * with corresponding upgrade functions (see below method TODO)
+   */
+  private _addErrorHandler() {
+    window.addEventListener('unhandledrejection', async err => {
+      if (err.reason && err.reason.name) {
+        switch (err.reason.name) {
+          case Dexie.errnames.OpenFailed:
+            await Dexie.delete(CACHE_DB_NAME).catch(() => location.reload())
+            return location.reload()
+          default:
+            throw err
+        }
+      }
+    })
+  }
+  /**
+   * initialise the database with versioning and schema
+   * @param version - Version number used to handle changes
+   * to db architecture or cache-busting.
+   * See https://dexie.org/docs/Tutorial/Design#database-versioning
+   * @param schema - Database schema for corresponding version
+   *
+   * NOTE - default behaviour is to clear old db on update to allow cache busting
+   * TODO - allow specification of upgrade functions for incremental upgrades instead
+   * of cache-busting
+   */
+  private _dbInit(version: number, schema: { [key: string]: string | null }) {
+    db.version(version).stores(schema)
   }
 }
 /************************************************************************

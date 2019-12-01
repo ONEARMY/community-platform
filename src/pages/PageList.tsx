@@ -14,6 +14,7 @@ import SignInPage from './SignIn/SignIn'
 import { ForgotPasswordPage } from './Password/ForgotPassword'
 import { ForgotPasswordMessagePage } from './Password/ForgotPasswordMessage'
 import { CSSObject } from '@styled-system/css'
+import { Route } from 'react-router'
 
 export interface IPageMeta {
   path: string
@@ -45,7 +46,17 @@ const user = {
 }
 const academy = {
   path: '/academy',
-  component: <ExternalEmbed src="https://onearmy.github.io/academy/intro" />,
+  component: (
+    <Route
+      render={props => (
+        // NOTE - for embed to work github.io site also must host at same path, i.e. /academy
+        <ExternalEmbed
+          src={`https://onearmy.github.io${props.location.pathname}`}
+          {...props}
+        />
+      )}
+    />
+  ),
   title: 'Academy',
   description: 'Demo external page embed',
   customStyles: { position: 'absolute', height: '100%', width: '100%' },

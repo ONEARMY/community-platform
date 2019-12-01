@@ -2,8 +2,8 @@ import * as React from 'react'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
-
-// TODO Make a PostingGuidelines component that take the related page as prop
+import { Link } from 'rebass'
+import theme from 'src/themes/styled.theme'
 
 export const EditProfileGuidelines = () => (
   <Flex card mediumRadius flexDirection={'column'} bg="white" p={4}>
@@ -11,10 +11,33 @@ export const EditProfileGuidelines = () => (
       Edit tips
     </Heading>
     <Text auxiliary mb={1}>
-      1. Changing your Focus will reset your Profile information and pictures.
+      1. Have a quick look at our{' '}
+      <Link
+        color={theme.colors.blue}
+        target="_blank"
+        href="https://drive.google.com/open?id=1fXTtBbzgCO0EL6G9__aixwqc-Euqgqnd"
+      >
+        profile guidelines.
+      </Link>
     </Text>
     <Text auxiliary mb={1}>
-      2. Edit where needed and click save below.
+      2. Choose your focus.
+    </Text>
+    <Text auxiliary mb={1}>
+      3. Fill in nice text, image and details.
+    </Text>
+    <Text auxiliary mb={1}>
+      4. You can edit & share again later.
+    </Text>
+    <Text auxiliary mb={1}>
+      5. If something doesn't work,{' '}
+      <Link
+        color={theme.colors.softblue}
+        target="_blank"
+        href="https://discord.gg/Dw9x8r"
+      >
+        let us know.
+      </Link>
     </Text>
   </Flex>
 )
@@ -24,18 +47,33 @@ export const CreateProfileGuidelines = () => (
       Profile tips
     </Heading>
     <Text auxiliary mb={1}>
-      1. Focusing on one task will make you excel at recycling plastic.
+      1. Have a quick look at our{' '}
+      <Link
+        color={theme.colors.blue}
+        target="_blank"
+        href="https://drive.google.com/open?id=1fXTtBbzgCO0EL6G9__aixwqc-Euqgqnd"
+      >
+        profile guidelines.
+      </Link>
     </Text>
     <Text auxiliary mb={1}>
-      2. Workspaces, Local Communities, Collection Points and Machine Shops will
-      have to be approved. Make sure to upload relevant pictures.
+      2. Choose your focus.
     </Text>
     <Text auxiliary mb={1}>
-      3. Choose your primary contact method so people can connect with you.
+      3. Fill in nice text, image and details.
     </Text>
     <Text auxiliary mb={1}>
-      4. Workspaces, Local Communities, Collection Points and Machine Shops
-      automatically get a pin on the map.
+      4. You can edit & share again later.
+    </Text>
+    <Text auxiliary mb={1}>
+      5. If something doesn't work,{' '}
+      <Link
+        color={theme.colors.blue}
+        target="_blank"
+        href="https://discord.gg/Dw9x8r"
+      >
+        let us know.
+      </Link>
     </Text>
   </Flex>
 )

@@ -17,6 +17,7 @@ interface ISelectFieldProps extends IFieldProps, SelectProps {
   options?: ISelectOption[]
   placeholder?: string
   style?: React.CSSProperties
+  onCustomChange?: (value) => void
 }
 
 // TODO - better bind the above input styles to the react-select component
@@ -166,7 +167,12 @@ const defaultProps: Partial<ISelectFieldProps> = {
   getOptionValue: (option: ISelectOption) => option.value,
   options: [],
 }
-export const SelectField = ({ input, meta, ...rest }: ISelectFieldProps) => (
+export const SelectField = ({
+  input,
+  meta,
+  onCustomChange,
+  ...rest
+}: ISelectFieldProps) => (
   // note, we first use a div container so that default styles can be applied
   <>
     <Flex p={0} flexWrap="nowrap">
@@ -179,6 +185,9 @@ export const SelectField = ({ input, meta, ...rest }: ISelectFieldProps) => (
           styles={SelectStyles}
           onChange={v => {
             input.onChange(getValueFromSelect(v as any))
+            if (onCustomChange) {
+              onCustomChange(getValueFromSelect(v as any))
+            }
           }}
           onBlur={input.onBlur}
           onFocus={input.onFocus}

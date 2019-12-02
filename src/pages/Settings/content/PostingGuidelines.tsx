@@ -34,7 +34,7 @@ export const EditProfileGuidelines = () => (
       <Link
         color={theme.colors.softblue}
         target="_blank"
-        href="https://discord.gg/Dw9x8r"
+        href="https://discord.gg/XFKuEWc"
       >
         let us know.
       </Link>

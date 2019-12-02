@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { Field } from 'react-final-form'
 import Heading from 'src/components/Heading'
-import { IUserPP } from 'src/models/user_pp.models'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
@@ -18,10 +17,12 @@ import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { Box } from 'rebass'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { IFormValues } from '../../SettingsPage'
+import { required } from 'src/utils/validators'
 
 interface IProps {
   initialFormValues: IFormValues | any
   onCoverImgChange: (v: IConvertedFileMeta) => void
+  mutators: { [key: string]: (...args: any[]) => any }
 }
 interface IState {
   readOnly: boolean
@@ -30,9 +31,6 @@ interface IState {
   showComLinks?: boolean
   isOpen?: boolean
 }
-
-// validation - return undefined if no error (i.e. valid)
-const required = (value: any) => (value ? undefined : 'Required')
 
 const FlagSelectContainer = styled(Flex)`
   border: 1px solid ${theme.colors.black};
@@ -140,8 +138,14 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                 {fields.map((name, index: number) => (
                   <Link
                     key={index}
+                    initialType={
+                      initialFormValues.links[index]
+                        ? initialFormValues.links[index].label
+                        : undefined
+                    }
                     link={name}
                     index={index}
+                    mutators={this.props.mutators}
                     onDelete={(fieldIndex: number) => {
                       fields.remove(fieldIndex)
                     }}

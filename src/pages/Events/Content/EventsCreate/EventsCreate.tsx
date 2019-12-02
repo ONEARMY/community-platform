@@ -16,6 +16,7 @@ import { IEvent, IEventFormInput } from 'src/models/events.models'
 import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
+import { validateUrl, addProtocol, required } from 'src/utils/validators'
 
 interface IState {
   formValues: IEventFormInput
@@ -27,9 +28,6 @@ interface IProps extends RouteComponentProps<any> {}
 interface IInjectedProps extends IProps {
   eventStore: EventStore
 }
-
-// validation - return undefined if no error (i.e. valid)
-const required = (value: any) => (value ? undefined : 'Required')
 
 const FormContainer = styled.form`
   width: 100%;
@@ -70,10 +68,6 @@ export class EventsCreate extends React.Component<IProps, IState> {
     return this.store.validateTitle(value, 'v2_events')
   }
 
-  public validateUrl = async (value: any) => {
-    return this.store.validateUrl(value)
-  }
-
   public handleChange = (date: any) => {
     this.setState({
       selectedDate: date,
@@ -99,9 +93,17 @@ export class EventsCreate extends React.Component<IProps, IState> {
         initialValues={formValues}
         mutators={{
           ...arrayMutators,
+          addProtocol,
         }}
         validateOnBlur
-        render={({ submitting, values, invalid, errors, handleSubmit }) => {
+        render={({
+          form: { mutators },
+          submitting,
+          values,
+          invalid,
+          errors,
+          handleSubmit,
+        }) => {
           const disabled = invalid || submitting
           return (
             <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
@@ -205,9 +207,10 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             name="url"
                             data-cy="url"
                             validateFields={[]}
-                            validate={value => this.validateUrl(value)}
+                            validate={value => validateUrl(value)}
                             component={InputField}
                             placeholder="URL to offsite link (Facebook, Meetup, etc)"
+                            onBlur={e => mutators.addProtocol(e.target.name)}
                           />
                         </Flex>
                       </Flex>

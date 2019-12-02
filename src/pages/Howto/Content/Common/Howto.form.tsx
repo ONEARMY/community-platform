@@ -27,6 +27,7 @@ import { DIFFICULTY_OPTIONS, TIME_OPTIONS } from './FormSettings'
 import { Image, Box } from 'rebass'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import { HowToSubmitStatus } from './SubmitStatus'
+import { required } from 'src/utils/validators'
 
 interface IState {
   formSaved: boolean
@@ -72,8 +73,6 @@ const Label = styled.label`
   margin-bottom: ${theme.space[2] + 'px'};
   display: block;
 `
-// validation - return undefined if no error (i.e. valid)
-const required = (value: any) => (value ? undefined : 'Required')
 
 @inject('howtoStore')
 @observer

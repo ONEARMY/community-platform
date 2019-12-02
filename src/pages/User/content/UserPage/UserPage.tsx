@@ -35,6 +35,7 @@ import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 
 import EventsIcon from 'src/assets/icons/icon-events.svg'
 import ExpertIcon from 'src/assets/icons/icon-expert.svg'
+import IconEmail from 'src/assets/icons/icon-email.svg'
 import HowToCountIcon from 'src/assets/icons/icon-how-to.svg'
 import V4MemberIcon from 'src/assets/icons/icon-v4-member.svg'
 import DiscordIcon from 'src/assets/icons/icon-discord.svg'
@@ -278,7 +279,24 @@ export class UserPage extends React.Component<
               </Link>
             </ElWithBeforeIcon>
           )
-        case 'social':
+        case 'email':
+          return (
+            <ElWithBeforeIcon
+              key="link-email"
+              IconUrl={IconEmail}
+              height="25px"
+            >
+              <Link
+                ml={2}
+                color={'black'}
+                href={'mailto:' + link.url}
+                target="_blank"
+              >
+                {capitalizeFirstLetter(link.label)}
+              </Link>
+            </ElWithBeforeIcon>
+          )
+        case 'social-media':
           return (
             <ElWithBeforeIcon
               key="link-social"
@@ -309,32 +327,13 @@ export class UserPage extends React.Component<
               IconUrl={DiscordIcon}
               height="25px"
             >
-              <Link ml={2} color={'black'} href={link.url} target="_blank">
-                {capitalizeFirstLetter(link.label)}
-              </Link>
-            </ElWithBeforeIcon>
-          )
-        case 'other':
-          return (
-            <ElWithBeforeIcon
-              key={'link-other' + index}
-              IconUrl={OtherIcon}
-              height="25px"
-            >
-              <Link ml={2} color={'black'} href={link.url} target="_blank">
-                {capitalizeFirstLetter(link.label)}
-              </Link>
-            </ElWithBeforeIcon>
-          )
-        default:
-          return (
-            <ElWithBeforeIcon
-              key={'link-other' + index}
-              IconUrl={RedirectIcon}
-              height="25px"
-            >
-              <Link ml={2} color={'black'} href={link.url} target="_blank">
-                {link.label}
+              <Link
+                ml={2}
+                color={'black'}
+                href="https://discord.gg/XFKuEWc"
+                target="_blank"
+              >
+                {link.url}
               </Link>
             </ElWithBeforeIcon>
           )

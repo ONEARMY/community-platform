@@ -16,6 +16,7 @@ import { ILocation } from 'src/models/common.models'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import theme from 'src/themes/styled.theme'
 import { IFormValues } from '../../SettingsPage'
+import { required } from 'src/utils/validators'
 
 interface IProps {
   initialFormValues: IFormValues
@@ -35,9 +36,6 @@ const customMarker = L.icon({
   iconSize: [20, 28],
   iconAnchor: [10, 28],
 })
-
-// validation - return undefined if no error (i.e. valid)
-const required = (value: any) => (value ? undefined : 'Required')
 
 @inject('mapsStore', 'userStore')
 @observer

@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { Field } from 'react-final-form'
 import Heading from 'src/components/Heading'
-import { IUserPP } from 'src/models/user_pp.models'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
@@ -18,7 +17,6 @@ import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { Box } from 'rebass'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { IFormValues } from '../../SettingsPage'
-import { Mutator } from 'final-form'
 import { required } from 'src/utils/validators'
 
 interface IProps {

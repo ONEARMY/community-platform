@@ -63,8 +63,6 @@ class Link extends Component<IProps, IState> {
     }
   }
   public validateDependingOnType(e) {
-    console.log('validateDependingOnType')
-
     switch (this.state.linkType) {
       case 'email':
         return validateEmail(e)
@@ -100,7 +98,6 @@ class Link extends Component<IProps, IState> {
           data-cy={`input-link-${index}`}
           name={`${link}.url`}
           validate={value => this.validateDependingOnType(value)}
-          validateFields={[]}
           component={InputField}
           placeholder="Link"
           onBlur={e => this.mutatorsDependingOnType(e)}

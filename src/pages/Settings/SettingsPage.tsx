@@ -27,7 +27,7 @@ import { INITIAL_VALUES } from './Template'
 import { Box } from 'rebass'
 import { ILocation } from 'src/models/common.models'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
-import { validateUrl, addProtocol } from 'src/utils/validators'
+import { addProtocol } from 'src/utils/validators'
 
 export interface IFormValues extends Partial<IUserPP> {
   // form values are simply subset of user profile fields

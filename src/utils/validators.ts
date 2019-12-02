@@ -5,7 +5,7 @@ import isUrl from 'is-url'
 
 const required = (value: any) => (value ? undefined : 'Required')
 
-const validateUrl = async (value: any) => {
+const validateUrl = (value: any) => {
   if (value) {
     return isUrl(value) ? undefined : 'Invalid url'
   }
@@ -13,7 +13,6 @@ const validateUrl = async (value: any) => {
 }
 
 const validateEmail = (value: string) => {
-  console.log('isEmail', isEmail(value))
   if (value) {
     return isEmail(value) ? undefined : 'Invalid email'
   }

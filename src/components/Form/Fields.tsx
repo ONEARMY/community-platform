@@ -18,19 +18,30 @@ export interface IFieldProps extends FieldProps {
   disabled?: boolean
   children?: React.ReactNode
   'data-cy'?: string
+  customOnBlur?: (event) => void
 }
 
 interface IDatePickerFieldProps extends IFieldProps {
   customChange?: (location) => void
 }
 
-export const InputField = ({ input, meta, ...rest }: IFieldProps) => (
+export const InputField = ({
+  input,
+  meta,
+  customOnBlur,
+  ...rest
+}: IFieldProps) => (
   <>
     <Input
       invalid={meta.error && meta.touched}
       {...input}
       {...rest}
-      onBlur={e => input.onBlur(e)}
+      onBlur={e => {
+        if (customOnBlur) {
+          customOnBlur(e)
+        }
+        input.onBlur()
+      }}
     />
     {meta.error && meta.touched ? (
       <ErrorMessage>{meta.error}</ErrorMessage>

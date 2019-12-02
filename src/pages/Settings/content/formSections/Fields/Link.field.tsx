@@ -98,9 +98,12 @@ class Link extends Component<IProps, IState> {
           data-cy={`input-link-${index}`}
           name={`${link}.url`}
           validate={value => this.validateDependingOnType(value)}
+          validateFields={[]}
           component={InputField}
           placeholder="Link"
-          onBlur={e => this.mutatorsDependingOnType(e)}
+          customOnBlur={e => {
+            this.mutatorsDependingOnType(e)
+          }}
         />
         <Button
           data-cy={`delete-link-${index}`}

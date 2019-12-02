@@ -19,7 +19,6 @@ export class FirestoreClient implements AbstractDBClient {
   }
 
   async setDoc(endpoint: IDBEndpoint, doc: DBDoc) {
-    console.log('setting doc', endpoint, doc._id)
     return db.doc(`${endpoint}/${doc._id}`).set(doc)
   }
 
@@ -69,12 +68,14 @@ export class FirestoreClient implements AbstractDBClient {
   private _generateQueryRef(endpoint: IDBEndpoint, queryOpts: DBQueryOptions) {
     const query = { ...DB_QUERY_DEFAULTS, ...queryOpts }
     const { limit, orderBy, order, where } = query
-    const { field, operator, value } = where!
     const baseRef = db.collection(endpoint)
     const limitRef = limit ? baseRef.limit(limit) : baseRef
-    // if using where query ignore orderBy parameters to avoid need for composite indexes?
-    return where
-      ? limitRef.where(field, operator, value)
-      : limitRef.orderBy(field ? field : orderBy!, order!)
+    // if using where query ignore orderBy parameters to avoid need for composite indexes
+    if (where) {
+      const { field, operator, value } = where
+      return limitRef.where(field, operator, value)
+    } else {
+      return limitRef.orderBy(orderBy!, order!)
+    }
   }
 }

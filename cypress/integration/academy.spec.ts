@@ -8,7 +8,7 @@ describe('[Academy]', () => {
     it('[By Everyone]', () => {
       cy.visit(Page.ACADEMY)
       cy.step('Load instructions from another github repo')
-      const githubDoc = 'https://onearmy.github.io/academy/intro'
+      const githubDoc = 'https://onearmy.github.io/academy'
       cy.get('iframe')
         .should('have.attr', 'src')
         .and('equal', githubDoc)

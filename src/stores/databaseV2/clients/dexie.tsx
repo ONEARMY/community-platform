@@ -14,8 +14,7 @@ const db = new Dexie(CACHE_DB_NAME)
 
 export class DexieClient implements AbstractDBClient {
   constructor() {
-    this._addErrorHandler()
-    this._dbInit(DB_CACHE_NUMBER, DEXIE_SCHEMA)
+    this._init()
   }
 
   /************************************************************************
@@ -86,27 +85,28 @@ export class DexieClient implements AbstractDBClient {
    *  Initialisation and error handling - specific only to dexie
    ***********************************************************************/
 
-  /**
-   * By default errors from Dexie during initialisation are thrown globally
-   * Catch case where new DB defined and old definition removed, delete old
-   * db and just start with new clean version
-   *
-   * NOTE - to avoid these errors legacy db caches need to be defined
-   * with corresponding upgrade functions (see below method TODO)
-   */
-  private _addErrorHandler() {
-    window.addEventListener('unhandledrejection', async err => {
-      if (err.reason && err.reason.name) {
-        switch (err.reason.name) {
-          case Dexie.errnames.OpenFailed:
-            await Dexie.delete(CACHE_DB_NAME).catch(() => location.reload())
-            return location.reload()
-          default:
-            throw err
+  private _init() {
+    this._dbInit(DB_CACHE_NUMBER, DEXIE_SCHEMA)
+    // test open db, catch errors for upgrade version not defined or
+    // idb not supported
+    db.open().catch(async err => {
+      console.error(err)
+      // NOTE - invalid state error suggests dexie not supported, so
+      // try reloading with cachedb disabled (see db index for implementation)
+      if (err.name === Dexie.errnames.InvalidState) {
+        if (err.inner.name === Dexie.errnames.InvalidState) {
+          location.replace(location.href + '?no-cache')
         }
+      }
+      // NOTE - upgrade error can be avoided by defining legacy db caches
+      // with corresponding upgrade functions (see below method TODO)
+      if (err.name === Dexie.errnames.Upgrade) {
+        await Dexie.delete(CACHE_DB_NAME).catch(() => location.reload())
+        return location.reload()
       }
     })
   }
+
   /**
    * initialise the database with versioning and schema
    * @param version - Version number used to handle changes

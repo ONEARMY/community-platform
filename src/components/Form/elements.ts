@@ -60,4 +60,5 @@ export const ErrorMessage = styled.span`
   color: ${theme.colors.error};
   font-size: ${theme.fontSizes[0]}px;
   height: ${theme.space[0]};
+  margin: 2px;
 `

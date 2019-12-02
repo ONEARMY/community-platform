@@ -107,7 +107,7 @@ describe('[Settings]', () => {
         },
         {
           label: 'website',
-          url: 'www.settings_workplace_new.com',
+          url: 'http://www.settings_workplace_new.com',
         },
       ],
       location: {
@@ -189,7 +189,7 @@ describe('[Settings]', () => {
       _deleted: false,
       verified: true,
     }
-    
+
     const expected = {
       _authID: 'pbx4jStD8sNj4OEZTg4AegLTl6E3',
       _deleted: false,
@@ -264,7 +264,7 @@ describe('[Settings]', () => {
       _deleted: false,
       verified: true,
     }
-    
+
     const expected = {
       _authID: 'wwtBAo7TrkSQ9nAaBN3D93I1sCM2',
       _deleted: false,
@@ -287,7 +287,7 @@ describe('[Settings]', () => {
       links: [
         {
           label: 'bazar',
-          url: 'settings_machine_new@test.com',
+          url: 'http://settings_machine_bazarlink.com',
         },
       ],
       location: {
@@ -305,7 +305,7 @@ describe('[Settings]', () => {
       mapPinDescription: 'Informative workshop on machines every week',
       machineBuilderXp: ['electronics', 'welding'],
     }
-    
+
     it('[Edit a new profile]', () => {
       cy.logout()
       cy.updateDocument(
@@ -335,7 +335,7 @@ describe('[Settings]', () => {
       addContactLink({
         index: 0,
         type: 'bazar',
-        url: `${freshSettings.userName}@test.com`,
+        url: `http://settings_machine_bazarlink.com`,
       })
       setMapPin({
         description: expected.mapPinDescription,
@@ -364,7 +364,7 @@ describe('[Settings]', () => {
       _deleted: false,
       verified: true,
     }
-    
+
     const expected = {
       _authID: 'vWAbQvq21UbvhGldakIy1x4FpeF2',
       _deleted: false,
@@ -388,7 +388,7 @@ describe('[Settings]', () => {
       links: [
         {
           label: 'forum',
-          url: 'www.settings_community_new-forum.org',
+          url: 'http://www.settings_community_new-forum.org',
         },
       ],
       location: {
@@ -402,9 +402,9 @@ describe('[Settings]', () => {
         name: 'City of London',
         postcode: 'EC1A',
         value: 'City of London, England, United Kingdom',
-      }
+      },
     }
-    
+
     it('[Edit a new profile]', () => {
       cy.logout()
       cy.updateDocument(
@@ -431,10 +431,21 @@ describe('[Settings]', () => {
         addContactLink({ index, type: 'forum', url: link.url }),
       )
 
-      setMapPin({description: expected.mapPinDescription, searchKeyword: 'london', locationName: expected.location.value})
+      setMapPin({
+        description: expected.mapPinDescription,
+        searchKeyword: 'london',
+        locationName: expected.location.value,
+      })
 
-      cy.get('[data-cy=save]').click().wait(3000)
-      cy.queryDocuments(DbCollectionName.v2_users, 'userName', '==', expected.userName).should('eqSettings', expected)
+      cy.get('[data-cy=save]')
+        .click()
+        .wait(3000)
+      cy.queryDocuments(
+        DbCollectionName.v2_users,
+        'userName',
+        '==',
+        expected.userName,
+      ).should('eqSettings', expected)
     })
   })
 
@@ -446,7 +457,7 @@ describe('[Settings]', () => {
       _deleted: false,
       verified: true,
     }
-    
+
     const expected = {
       _authID: 'uxupeYR7glagQyhBy8q0blr0chd2',
       _deleted: false,
@@ -470,11 +481,11 @@ describe('[Settings]', () => {
       links: [
         {
           label: 'social-media',
-          url: 'www.facebook.com/settings_plastic_new',
+          url: 'http://www.facebook.com/settings_plastic_new',
         },
         {
           label: 'social-media',
-          url: 'www.twitter.com/settings_plastic_new',
+          url: 'http://www.twitter.com/settings_plastic_new',
         },
       ],
       location: {
@@ -623,7 +634,12 @@ describe('[Settings]', () => {
       cy.get('[data-cy=save]')
         .click()
         .wait(3000)
-      cy.queryDocuments(DbCollectionName.v2_users, 'userName', '==', expected.userName).should('eqSettings', expected)
+      cy.queryDocuments(
+        DbCollectionName.v2_users,
+        'userName',
+        '==',
+        expected.userName,
+      ).should('eqSettings', expected)
     })
   })
 })

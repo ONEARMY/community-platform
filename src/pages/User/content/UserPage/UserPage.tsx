@@ -286,7 +286,12 @@ export class UserPage extends React.Component<
               IconUrl={IconEmail}
               height="25px"
             >
-              <Link ml={2} color={'black'} href={link.url} target="_blank">
+              <Link
+                ml={2}
+                color={'black'}
+                href={'mailto:' + link.url}
+                target="_blank"
+              >
                 {capitalizeFirstLetter(link.label)}
               </Link>
             </ElWithBeforeIcon>
@@ -329,30 +334,6 @@ export class UserPage extends React.Component<
                 target="_blank"
               >
                 {link.url}
-              </Link>
-            </ElWithBeforeIcon>
-          )
-        case 'other':
-          return (
-            <ElWithBeforeIcon
-              key={'link-other' + index}
-              IconUrl={OtherIcon}
-              height="25px"
-            >
-              <Link ml={2} color={'black'} href={link.url} target="_blank">
-                {capitalizeFirstLetter(link.label)}
-              </Link>
-            </ElWithBeforeIcon>
-          )
-        default:
-          return (
-            <ElWithBeforeIcon
-              key={'link-other' + index}
-              IconUrl={RedirectIcon}
-              height="25px"
-            >
-              <Link ml={2} color={'black'} href={link.url} target="_blank">
-                {link.label}
               </Link>
             </ElWithBeforeIcon>
           )

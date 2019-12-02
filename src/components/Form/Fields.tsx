@@ -26,7 +26,12 @@ interface IDatePickerFieldProps extends IFieldProps {
 
 export const InputField = ({ input, meta, ...rest }: IFieldProps) => (
   <>
-    <Input invalid={meta.error && meta.touched} {...input} {...rest} />
+    <Input
+      invalid={meta.error && meta.touched}
+      {...input}
+      {...rest}
+      onBlur={e => input.onBlur(e)}
+    />
     {meta.error && meta.touched ? (
       <ErrorMessage>{meta.error}</ErrorMessage>
     ) : null}

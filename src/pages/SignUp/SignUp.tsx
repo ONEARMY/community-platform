@@ -12,6 +12,7 @@ import { inject, observer } from 'mobx-react'
 import { UserStore } from 'src/stores/User/user.store'
 import { RouteComponentProps, withRouter } from 'react-router'
 import { string, object, ref } from 'yup'
+import { required } from 'src/utils/validators'
 
 const Label = styled.label`
   font-size: ${theme.fontSizes[2] + 'px'};
@@ -35,9 +36,6 @@ interface IProps extends RouteComponentProps<any> {
   userStore?: UserStore
   preloadValues?: any
 }
-
-// validation - return undefined if no error (i.e. valid)
-const required = (value: any) => (value ? undefined : 'Required')
 
 @inject('userStore')
 @observer
@@ -198,7 +196,9 @@ class SignUpPage extends React.Component<IProps, IState> {
                         validate={required}
                       />
                     </Flex>
-                    <Text color={'red'} data-cy="error-msg">{this.state.errorMsg}</Text>
+                    <Text color={'red'} data-cy="error-msg">
+                      {this.state.errorMsg}
+                    </Text>
                     <Flex mb={3} justifyContent={'space-between'}>
                       <Text small color={'grey'} mt={2}>
                         Already have an account ?

@@ -42,7 +42,7 @@ export const Clusters: React.FunctionComponent<IProps> = ({
             // in pixels, radius a cluster can cover
             // max zoom level 18
             maxClusterRadius={(zoomLevel: number) => {
-              return 90 - 5 * zoomLevel
+              return 30 - 5 * zoomLevel
             }}
           >
             {entities[key].map(pin => (

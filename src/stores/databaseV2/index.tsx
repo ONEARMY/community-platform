@@ -28,10 +28,19 @@ export class DatabaseV2 implements AbstractDatabase {
     return new CollectionReference<T>(endpoint, this._clients)
   }
 
+  /**
+   * By default 3 databases are provided (cache, server, server-cache)
+   * Additionally, a 'no-idb' search param can be provided to disable
+   * cache-db entirely (triggered from dexie if not supported)
+   */
   private _getDefaultClients = (): DBClients => {
+    const serverDB = new FirestoreClient()
+    const cacheDB = location.search.includes('no-cache')
+      ? serverDB
+      : new DexieClient()
     return {
-      cacheDB: new DexieClient(),
-      serverDB: new FirestoreClient(),
+      cacheDB,
+      serverDB,
       serverCacheDB: new RealtimeDBClient(),
     }
   }
@@ -136,7 +145,7 @@ class CollectionReference<T> {
       order: 'desc',
       limit: 1,
     })
-    return latest.length > 0 ? latest[0]._modified : ''
+    return latest && latest.length > 0 ? latest[0]._modified : ''
   }
 }
 

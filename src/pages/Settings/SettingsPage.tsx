@@ -27,6 +27,7 @@ import { INITIAL_VALUES } from './Template'
 import { Box } from 'rebass'
 import { ILocation } from 'src/models/common.models'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
+import { addProtocol } from 'src/utils/validators'
 
 export interface IFormValues extends Partial<IUserPP> {
   // form values are simply subset of user profile fields
@@ -190,9 +191,17 @@ export class UserSettings extends React.Component<IProps, IState> {
         initialValues={initialFormValues}
         mutators={{
           ...arrayMutators,
+          addProtocol,
         }}
         validateOnBlur
-        render={({ submitting, values, invalid, errors, handleSubmit }) => {
+        render={({
+          form: { mutators },
+          submitting,
+          values,
+          invalid,
+          errors,
+          handleSubmit,
+        }) => {
           return (
             <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
               <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} my={4}>
@@ -230,6 +239,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           <UserInfosSection
                             onCoverImgChange={v => this.onCoverImgChange(v)}
                             initialFormValues={initialFormValues}
+                            mutators={mutators}
                           />
                           <UserMapPinSection
                             onInputChange={v => this.updateLocation(v)}
@@ -243,6 +253,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           <UserInfosSection
                             onCoverImgChange={v => this.onCoverImgChange(v)}
                             initialFormValues={initialFormValues}
+                            mutators={mutators}
                           />
                           <CollectionSection
                             required={
@@ -265,6 +276,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           <UserInfosSection
                             onCoverImgChange={v => this.onCoverImgChange(v)}
                             initialFormValues={initialFormValues}
+                            mutators={mutators}
                           />
                           <UserMapPinSection
                             onInputChange={v => this.updateLocation(v)}
@@ -278,6 +290,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           <UserInfosSection
                             onCoverImgChange={v => this.onCoverImgChange(v)}
                             initialFormValues={initialFormValues}
+                            mutators={mutators}
                           />
                           <ExpertiseSection
                             required={
@@ -299,6 +312,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           <UserInfosSection
                             onCoverImgChange={v => this.onCoverImgChange(v)}
                             initialFormValues={initialFormValues}
+                            mutators={mutators}
                           />
                         </>
                       )}
@@ -309,8 +323,8 @@ export class UserSettings extends React.Component<IProps, IState> {
                         onDidDismiss={confirm => this.onModalDismiss(confirm)}
                       >
                         <Text my="10px">
-                          Change your focus will reset your previous profile, do
-                          you confirm ?
+                          Changing your focus will reset your previous profile,
+                          do you confirm?
                         </Text>
                         <Flex>
                           <Button
@@ -319,7 +333,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                             }}
                             variant="secondary"
                           >
-                            cancel
+                            Cancel
                           </Button>
                           <Button
                             onClick={() => {

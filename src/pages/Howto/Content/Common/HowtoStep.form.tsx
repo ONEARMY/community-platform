@@ -11,6 +11,7 @@ import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
 import { IHowtoStep } from 'src/models/howto.models'
 import { IUploadedFileMeta } from 'src/stores/storage'
+import { required } from 'src/utils/validators'
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;
@@ -28,8 +29,6 @@ interface IState {
   showDeleteModal: boolean
   _toDocsList: boolean
 }
-
-const required = (value: any) => (value ? undefined : 'Required')
 
 const Label = styled.label`
   font-size: ${theme.fontSizes[2] + 'px'};

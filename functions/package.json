@@ -26,7 +26,8 @@
     "google-auth-library": "^2.0.1",
     "googleapis": "^35.0.0",
     "log-update": "^3.2.0",
-    "sharp": "^0.22.1"
+    "request": "^2.88.0",
+    "sharp": "^0.23.3"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",

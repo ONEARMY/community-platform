@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
-import { withRouter, Route, Switch } from 'react-router'
+import { RouteComponentProps, withRouter, Route, Switch } from 'react-router'
 
 import { MapsStore } from 'src/stores/Maps/maps.store'
 import { MapView, Controls } from './Content'
@@ -13,7 +13,7 @@ import { GetLocation } from 'src/utils/geolocation'
 import { Map } from 'react-leaflet'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 
-interface IProps {
+interface IProps extends RouteComponentProps<any> {
   mapsStore: MapsStore
 }
 interface IState {
@@ -70,6 +70,17 @@ class MapsPageClass extends React.Component<IProps, IState> {
   public render() {
     const { filteredPins, activePinFilters } = this.props.mapsStore
     const { center, zoom } = this.state
+    const show = this.props.location.hash.substr(1)
+    this.props.mapsStore.getPin(show).then(result => {
+      this.props.mapsStore.setActivePin(result)
+      /*
+      //TODO: center Map on pin
+      console.log(result.location);
+      let location = {latlng: result.location};
+//      this.setCenter=(result.location);
+      this.setCenter=(location.latlng);
+*/
+    })
     return (
       // the calculation for the height is kind of hacky for now, will set properly on final mockups
       <Box id="mapPage" sx={{ height: 'calc(100vh - 60px)' }}>

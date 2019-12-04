@@ -8,6 +8,7 @@ const c = config() as configVars
 // strip additional character escapes (\\n -> \n)
 c.service.private_key = c.service.private_key.replace(/\\n/g, '\n')
 
+export const CONFIG = c
 export const SERVICE_ACCOUNT_CONFIG = c.service
 export const ANALYTICS_CONFIG = c.analytics
 /************** Interfaces ************** */
@@ -27,10 +28,14 @@ interface IAnalytics {
   tracking_code: string
   view_id: string
 }
+interface IIntergrations {
+  slack_webhook: string
+}
 
 interface configVars {
   service: IServiceAccount
   analytics: IAnalytics
+  integrations: IIntergrations
 }
 
 // if passing complex config variables, may want to

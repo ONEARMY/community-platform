@@ -13,16 +13,13 @@ export const notifyNewPin = functions.firestore
     const info = snapshot.data()
     const id = info._id
     const type = info.type
-    const subType = info.subType
     const loc = info.location
     //  console.log(info);
     request.post(
       SLACK_WEBHOOK_URL,
       {
         json: {
-          text: `${prefix}New ${subType} ${type} from ${id},
-           You can find it on google maps (yeh yeh i know its coming soon straight to the Precious Plastic Map) 
-           https://google.com/maps/@${loc.lat},${loc.lng},14z`,
+          text: `📍 *New ${type}* pin from ${id}. \n Location here (soon our own map) https://google.com/maps/@${loc.lat},${loc.lng},14z`,
         },
       },
       (err, res) => {
@@ -47,8 +44,8 @@ export const notifyNewHowTo = functions.firestore
       SLACK_WEBHOOK_URL,
       {
         json: {
-          text: `${prefix}Fuck Ya!! New How To ${title} by ${user}
-            check it out @ https://community.preciousplastic.com/how-to/${slug}`,
+          text: `📓 Yeah! New How To "* ${title} *" by ${user}
+            check it out: https://community.preciousplastic.com/how-to/${slug}`,
         },
       },
       (err, res) => {
@@ -73,7 +70,7 @@ export const notifyNewEvent = functions.firestore
       SLACK_WEBHOOK_URL,
       {
         json: {
-          text: `${prefix}Jeej new event in ${location} by ${user} posted here:
+          text: `📅 Jeej new event in *${location}* by ${user} posted here:
             ${url}`,
         },
       },

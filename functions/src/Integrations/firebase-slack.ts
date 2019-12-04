@@ -2,9 +2,9 @@ import { CONFIG } from '../config/config'
 import * as functions from 'firebase-functions'
 import * as request from 'request'
 
-const project = CONFIG.service.project_id
-// add prefix to dev site
-const prefix = project === 'precious-plastics-v4-dev' ? '[DEV] ' : ''
+const SITE_URL = CONFIG.deployment.site_url
+// e.g. https://dev.onearmy.world or https://community.preciousplastic.com
+
 const SLACK_WEBHOOK_URL = CONFIG.integrations.slack_webhook
 
 export const notifyNewPin = functions.firestore
@@ -45,7 +45,7 @@ export const notifyNewHowTo = functions.firestore
       {
         json: {
           text: `📓 Yeah! New How To "* ${title} *" by ${user}
-            check it out: https://community.preciousplastic.com/how-to/${slug}`,
+            check it out: ${SITE_URL}/how-to/${slug}`,
         },
       },
       (err, res) => {

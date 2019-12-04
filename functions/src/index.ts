@@ -1,7 +1,7 @@
 import { api } from './exports/api'
 import { weeklyTasks, dailyTasks } from './exports/tasks'
 import { DH_Exports } from './DaveHakkensNL'
-import * as Integrations from './Integrations'
+import * as Integrations from './Integrations/firebase-slack'
 
 // the following endpoints are exposed for use by various triggers
 // see individual files for more informaiton

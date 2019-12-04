@@ -31,11 +31,15 @@ interface IAnalytics {
 interface IIntergrations {
   slack_webhook: string
 }
+interface IDeployment {
+  site_url: string
+}
 
 interface configVars {
   service: IServiceAccount
   analytics: IAnalytics
   integrations: IIntergrations
+  deployment: IDeployment
 }
 
 // if passing complex config variables, may want to

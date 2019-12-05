@@ -37,9 +37,17 @@ class MapsPageClass extends React.Component<IProps, IState> {
   }
 
   public async componentDidMount() {
-    this.promptUserLocation()
     this.props.mapsStore.retrieveMapPins()
     this.props.mapsStore.retrievePinFilters()
+    if (!this.showPinFromURL()) {
+      this.promptUserLocation()
+    }
+  }
+
+  public async componentDidUpdate(prevProps) {
+    if (this.props.location.hash !== prevProps.location.hash) {
+      this.showPinFromURL()
+    }
   }
 
   public async componentWillUnmount() {
@@ -67,20 +75,26 @@ class MapsPageClass extends React.Component<IProps, IState> {
     })
   }
 
+  private showPinFromURL() {
+    const pinId = this.props.location.hash.substr(1)
+    if (pinId.length > 0) {
+      this.props.mapsStore.getPin(pinId).then(pin => {
+        if (typeof pin !== 'undefined') {
+          this.props.mapsStore.setActivePin(pin)
+          this.setCenter(pin.location)
+        } else {
+          // Should we do something in case we couldn't find requested pin?
+        }
+      })
+      return true
+    } else {
+      return false
+    }
+  }
+
   public render() {
     const { filteredPins, activePinFilters } = this.props.mapsStore
     const { center, zoom } = this.state
-    const show = this.props.location.hash.substr(1)
-    this.props.mapsStore.getPin(show).then(result => {
-      this.props.mapsStore.setActivePin(result)
-      /*
-      //TODO: center Map on pin
-      console.log(result.location);
-      let location = {latlng: result.location};
-//      this.setCenter=(result.location);
-      this.setCenter=(location.latlng);
-*/
-    })
     return (
       // the calculation for the height is kind of hacky for now, will set properly on final mockups
       <Box id="mapPage" sx={{ height: 'calc(100vh - 60px)' }}>

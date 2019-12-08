@@ -28,7 +28,14 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
 
   public durationSincePosted(postDate: Date) {
     const daysSince: number = differenceInDays(new Date(), new Date(postDate))
-    return `${daysSince} days ago`
+    switch (daysSince) {
+      case 0:
+        return 'today'
+      case 1:
+        return `${daysSince} day ago`
+      default:
+        return `${daysSince} days ago`
+    }
   }
 
   public render() {

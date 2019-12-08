@@ -73,7 +73,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
                 </Link>
               ))}
           </Flex>
-          <Text capitalize auxiliary mt={3} mb={2}>
+          <Text auxiliary mt={3} mb={2}>
             By {howto._createdBy}
             &nbsp;|&nbsp;
             <Text inline color={'grey'}>

@@ -11,10 +11,7 @@ import { WorkspaceSection } from './content/formSections/Workspace.section'
 import { CollectionSection } from './content/formSections/Collection.section'
 import { AccountSettingsSection } from './content/formSections/AccountSettings.section'
 import { Button } from 'src/components/Button'
-import {
-  CreateProfileGuidelines,
-  EditProfileGuidelines,
-} from './content/PostingGuidelines'
+import { ProfileGuidelines } from './content/PostingGuidelines'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import { Modal } from 'src/components/Modal/Modal'
@@ -204,10 +201,16 @@ export class UserSettings extends React.Component<IProps, IState> {
         }) => {
           return (
             <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
-              <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} my={4}>
+              <Flex
+                width={[1, 1, 2 / 3]}
+                sx={{
+                  my: 4,
+                  bg: 'inherit',
+                  px: 2,
+                }}
+              >
                 <Box width="100%">
                   <form id="userProfileForm" onSubmit={handleSubmit}>
-                    {/* How To Info */}
                     <Flex flexDirection={'column'}>
                       <Flex
                         card
@@ -222,6 +225,14 @@ export class UserSettings extends React.Component<IProps, IState> {
                           <Heading medium>Edit profile</Heading>
                         )}
                       </Flex>
+                      <Box
+                        sx={{
+                          display: ['block', 'block', 'none'],
+                          mt: 3,
+                        }}
+                      >
+                        <ProfileGuidelines />
+                      </Box>
                       <FocusSection
                         initialFormValues={initialFormValues}
                         onInputChange={v => this.onFocusChange(v)}
@@ -351,21 +362,26 @@ export class UserSettings extends React.Component<IProps, IState> {
                   <AccountSettingsSection />
                 </Box>
               </Flex>
-              {/* post guidelines container */}
+              {/* desktop guidelines container */}
               <Flex
-                flexDirection={'column'}
                 width={[1, 1, 1 / 3]}
-                height={'100%'}
-                bg="inherit"
-                px={2}
-                mt={4}
+                sx={{
+                  flexDirection: 'column',
+                  bg: 'inherit',
+                  px: 2,
+                  height: '100%',
+                  mt: [0, 0, 4],
+                }}
               >
-                <Box sx={{ position: 'fixed', maxWidth: '400px' }}>
-                  {!user.profileType ? (
-                    <CreateProfileGuidelines />
-                  ) : (
-                    <EditProfileGuidelines />
-                  )}
+                <Box
+                  sx={{
+                    position: ['relative', 'relative', 'fixed'],
+                    maxWidth: ['100%', '100%', '400px'],
+                  }}
+                >
+                  <Box sx={{ display: ['none', 'none', 'block'] }}>
+                    <ProfileGuidelines />
+                  </Box>
                   <Button
                     data-cy="save"
                     onClick={() => {
@@ -385,7 +401,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                       }
                     }}
                     width={1}
-                    mt={3}
+                    my={3}
                     variant={'primary'}
                     type="submit"
                     disabled={submitting}

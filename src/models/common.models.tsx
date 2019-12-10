@@ -18,6 +18,13 @@ export type IDBEndpoint =
   | 'v2_events'
   | 'v2_mappins'
 
+// Types for moderation status
+export type ModerationStatus =
+  | 'draft'
+  | 'awaiting-moderation'
+  | 'rejected'
+  | 'accepted'
+
 /************************************************************************
  *  Deprecates - legacy interfaces used. Currently retained to troubleshoot
  *  upgrades, can remove once database working in production site

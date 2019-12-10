@@ -1,9 +1,5 @@
-import { ISODateString } from './common.models'
-import {
-  WorkspaceType,
-  ProfileTypeLabel,
-  ModerationStatus,
-} from './user_pp.models'
+import { ISODateString, ModerationStatus } from './common.models'
+import { WorkspaceType, ProfileTypeLabel } from './user_pp.models'
 
 /**
  * Map pins keep minimal information required for pin display.

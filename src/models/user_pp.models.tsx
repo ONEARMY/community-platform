@@ -33,12 +33,6 @@ export type WorkspaceType =
   | 'injection'
   | 'mix'
 
-export type ModerationStatus =
-  | 'draft'
-  | 'awaiting-moderation'
-  | 'rejected'
-  | 'accepted'
-
 export interface IPlasticType {
   label: PlasticTypeLabel
   number: string

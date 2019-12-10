@@ -1,5 +1,6 @@
 import countries from 'react-flags-select/lib/countries.js'
 import { IHowto } from 'src/models/howto.models'
+import { IMapPin } from 'src/models/maps.models'
 import { IUser } from 'src/models/user.models'
 import { DBDoc } from 'src/models/common.models'
 
@@ -56,16 +57,36 @@ export const isEmail = (email: string) => {
   return re.test(email)
 }
 
+export const hasAdminRights = (user?: IUser) => {
+  if (!user) {
+    return false
+  }
+  const roles = user.userRoles ? user.userRoles : []
+  if (roles.includes('admin') || roles.includes('super-admin')) {
+    return true
+  } else {
+    return false
+  }
+}
+
 export const isAllowToEditContent = (doc: IEditableDoc, user?: IUser) => {
   if (!user) {
-    return false;
+    return false
   }
-  const roles =  user.userRoles ? user.userRoles : []
+  const roles = user.userRoles ? user.userRoles : []
   if (
     roles.includes('admin') ||
     roles.includes('super-admin') ||
     (doc._createdBy && doc._createdBy === user.userName)
   ) {
+    return true
+  } else {
+    return false
+  }
+}
+
+export const isAllowToPin = (pin: IMapPin, user?: IUser) => {
+  if (hasAdminRights(user) || (pin._id && user && pin._id === user.userName)) {
     return true
   } else {
     return false

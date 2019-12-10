@@ -16,8 +16,9 @@ import {
 } from 'src/models/maps.models'
 import { inject, observer } from 'mobx-react'
 import { MapsStore } from 'src/stores/Maps/maps.store'
+import { RouteComponentProps } from 'react-router'
 
-interface IProps {
+interface IProps extends RouteComponentProps<any> {
   pins: Array<IMapPin>
   filters: Array<IMapGrouping>
   onBoundingBoxChange: (boundingBox: IBoundingBox) => void
@@ -56,7 +57,8 @@ class MapView extends React.Component<IProps> {
   }
 
   private pinClicked(pin: IMapPin) {
-    this.injected.mapsStore.setActivePin(pin)
+    this.props.history.push('/map#' + pin._id)
+    //    this.injected.mapsStore.setActivePin(pin)
   }
 
   public render() {
@@ -77,7 +79,9 @@ class MapView extends React.Component<IProps> {
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
         <Clusters pins={pins} onPinClick={pin => this.pinClicked(pin)} />
-        {activePin && <Popup activePin={activePin} map={this.props.mapRef} />}
+        {activePin && this.injected.mapsStore.canSeePin(activePin) && (
+          <Popup activePin={activePin} map={this.props.mapRef} />
+        )}
       </Map>
     )
   }

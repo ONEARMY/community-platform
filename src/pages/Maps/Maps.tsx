@@ -9,6 +9,7 @@ import { Box } from 'rebass'
 import './styles.css'
 
 import { ILatLng } from 'src/models/maps.models'
+import { IUser } from 'src/models/user.models'
 import { GetLocation } from 'src/utils/geolocation'
 import { Map } from 'react-leaflet'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
@@ -19,6 +20,7 @@ interface IProps extends RouteComponentProps<any> {
 interface IState {
   center: ILatLng
   zoom: number
+  firstLoad: boolean
 }
 
 @inject('mapsStore')
@@ -31,6 +33,7 @@ class MapsPageClass extends React.Component<IProps, IState> {
     this.state = {
       center: { lat: 51.0, lng: 19.0 },
       zoom: 3,
+      firstLoad: true,
     }
 
     this.mapRef = React.createRef()
@@ -72,6 +75,7 @@ class MapsPageClass extends React.Component<IProps, IState> {
     this.setState({
       center: latlng as ILatLng,
       zoom: 8,
+      firstLoad: false,
     })
   }
 
@@ -81,7 +85,9 @@ class MapsPageClass extends React.Component<IProps, IState> {
       this.props.mapsStore.getPin(pinId).then(pin => {
         if (typeof pin !== 'undefined') {
           this.props.mapsStore.setActivePin(pin)
-          this.setCenter(pin.location)
+          if (this.state.firstLoad) {
+            this.setCenter(pin.location)
+          }
         } else {
           // Should we do something in case we couldn't find requested pin?
         }
@@ -121,6 +127,7 @@ class MapsPageClass extends React.Component<IProps, IState> {
                   }
                   center={center}
                   zoom={zoom}
+                  history={this.props.history}
                 />
               </>
             )}

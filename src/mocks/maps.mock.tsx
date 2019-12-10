@@ -20,6 +20,7 @@ export const generatePins = (count: number): Array<IMapPin> => {
         lng: 0 + (Math.random() * 1000 - 500) / 250,
       },
       type: pinType.type,
+      moderation: 'awaiting-moderation',
     })
   }
   return newPins

@@ -4,6 +4,8 @@ import { IMapPin } from 'src/models/maps.models'
 import clusterIcon from 'src/assets/icons/map-cluster.svg'
 import Workspace from 'src/pages/User/workspace/Workspace'
 
+import AwaitingModerationHighlight from 'src/assets/icons/map-unpproved-pin.svg'
+
 /**
  * Generate custom cluster icon, including style formatting, size, image etc.
  * @param opts - optional parameters could be passed from parent,
@@ -30,7 +32,10 @@ export const createClusterIcon = (opts?: any) => {
 }
 
 export const createMarkerIcon = (pin: IMapPin) => {
-  const icon = Workspace.findWorkspaceBadge(pin.type, true)
+  const icon =
+    pin.moderation === 'accepted'
+      ? Workspace.findWorkspaceBadge(pin.type, true)
+      : AwaitingModerationHighlight
   if (!pin.type) {
     console.log('NO TYPE', pin)
   }

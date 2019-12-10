@@ -1,5 +1,9 @@
 import { ISODateString } from './common.models'
-import { WorkspaceType, ProfileTypeLabel } from './user_pp.models'
+import {
+  WorkspaceType,
+  ProfileTypeLabel,
+  ModerationStatus,
+} from './user_pp.models'
 
 /**
  * Map pins keep minimal information required for pin display.
@@ -11,6 +15,7 @@ import { WorkspaceType, ProfileTypeLabel } from './user_pp.models'
 
 export type IMapPinType = ProfileTypeLabel
 export type IMapPinSubtype = WorkspaceType
+export type IMapPinModeration = ModerationStatus
 
 /**
  * Map pins have a `type` which correspond to icon
@@ -21,6 +26,7 @@ export interface IMapPin {
   type: IMapPinType
   location: ILatLng
   subType?: IMapPinSubtype
+  moderation: IMapPinModeration
 }
 
 /**

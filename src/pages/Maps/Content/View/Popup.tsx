@@ -2,6 +2,7 @@ import React from 'react'
 import L from 'leaflet'
 import Flex from 'src/components/Flex'
 import Text from 'src/components/Text'
+import { Button } from 'src/components/Button'
 import { Popup as LeafletPopup, Map } from 'react-leaflet'
 import styled from 'styled-components'
 import { distanceInWords } from 'date-fns'
@@ -51,8 +52,21 @@ export class Popup extends React.Component<IProps> {
     return this.props as IInjectedProps
   }
 
+  get store() {
+    return this.injected.mapsStore
+  }
+
   componentWillReceiveProps() {
     this.openPopup()
+  }
+
+  private acceptPin = async (accepted: boolean) => {
+    const pin = this.props.activePin as IMapPin
+    pin.moderation = accepted ? 'accepted' : 'rejected'
+    await this.store.moderatePin(pin)
+    if (!accepted) {
+      this.injected.mapsStore.setActivePin(undefined)
+    }
   }
 
   // HACK - as popup is created dynamically want to be able to trigger
@@ -79,7 +93,11 @@ export class Popup extends React.Component<IProps> {
     const lastActiveText = lastActive
       ? distanceInWords(lastActive, new Date())
       : 'a long time'
-    console.log('detail', pin.detail)
+    //    console.log('detail', pin.detail)
+    const moderationStatus =
+      pin.moderation !== 'rejected'
+        ? 'This pin is awaiting moderation, will be shown on general map once accepted'
+        : 'This pin has been rejected, wont show on general map'
 
     function addFallbackSrc(ev: any) {
       const icon = Workspace.findWorkspaceBadge(pin.type, true)
@@ -102,6 +120,38 @@ export class Popup extends React.Component<IProps> {
             {shortDescription}
           </Text>
           <LastOnline>last active {lastActiveText} ago</LastOnline>
+          {pin.moderation !== 'accepted' && (
+            <Text
+              auxiliary
+              small
+              mb={2}
+              highlight
+              critical={pin.moderation === 'rejected'}
+            >
+              {moderationStatus}
+            </Text>
+          )}
+          {this.store.needsModeration(pin) && (
+            <Flex
+              flexDirection={'row'}
+              px={9}
+              py={1}
+              justifyContent={'space-around'}
+            >
+              <Button
+                data-cy={'accept'}
+                variant={'primary'}
+                icon="check"
+                onClick={() => this.acceptPin(true)}
+              />
+              <Button
+                data-cy="reject-pin"
+                variant={'tertiary'}
+                icon="delete"
+                onClick={() => this.acceptPin(false)}
+              />
+            </Flex>
+          )}
         </Flex>
       </>
     )

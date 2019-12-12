@@ -15,8 +15,9 @@ import { ILocation } from 'src/models/common.models'
 import { zIndex } from 'src/themes/styled.theme'
 import { inject } from 'mobx-react'
 import { MapsStore } from 'src/stores/Maps/maps.store'
+import { RouteComponentProps } from 'react-router'
 
-interface IProps {
+interface IProps extends RouteComponentProps<any> {
   mapRef: React.RefObject<Map>
   availableFilters: Array<IMapGrouping>
   onFilterChange: (selected: Array<IMapPinType>) => void
@@ -78,6 +79,7 @@ class Controls extends React.Component<IProps> {
         onClick={() => {
           // close any active popup on click
           this.injected.mapsStore.setActivePin(undefined)
+          this.props.history.push('/map')
         }}
       >
         <SearchWrapper>

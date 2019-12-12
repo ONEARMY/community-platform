@@ -2,7 +2,7 @@ import countries from 'react-flags-select/lib/countries.js'
 import { IHowto } from 'src/models/howto.models'
 import { IMapPin } from 'src/models/maps.models'
 import { IUser } from 'src/models/user.models'
-import { DBDoc } from 'src/models/common.models'
+import { DBDoc, IModerable } from 'src/models/common.models'
 
 // remove special characters from string, also replacing spaces with dashes
 export const stripSpecialCharacters = (text?: string) => {
@@ -67,6 +67,13 @@ export const hasAdminRights = (user?: IUser) => {
   } else {
     return false
   }
+}
+
+export const needsModeration = (doc: IModerable, user?: IUser) => {
+  if (!hasAdminRights(user)) {
+    return false
+  }
+  return doc.moderation !== 'accepted'
 }
 
 export const isAllowToEditContent = (doc: IEditableDoc, user?: IUser) => {

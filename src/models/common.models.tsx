@@ -25,6 +25,12 @@ export type ModerationStatus =
   | 'rejected'
   | 'accepted'
 
+export interface IModerable {
+  moderation: ModerationStatus
+  _createdBy?: string
+  _id?: string
+}
+
 /************************************************************************
  *  Deprecates - legacy interfaces used. Currently retained to troubleshoot
  *  upgrades, can remove once database working in production site

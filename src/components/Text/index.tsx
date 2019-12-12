@@ -29,6 +29,7 @@ export interface ITextProps {
   paragraph?: boolean
   highlight?: boolean
   critical?: boolean
+  dashed?: boolean
 }
 
 export const uppercase = props =>
@@ -108,14 +109,18 @@ export const highlight = (props: ITextProps) =>
         background: theme.colors.yellow.base,
         padding: '7px',
         borderRadius: '5px',
-        fontWeight: 'bold',
-        border: '1px dashed',
       }
     : null
 export const critical = (props: ITextProps) =>
   props.critical
     ? {
         color: theme.colors.red,
+      }
+    : null
+export const dashed = (props: ITextProps) =>
+  props.dashed
+    ? {
+        border: '1px dashed',
       }
     : null
 
@@ -138,6 +143,7 @@ export const BaseText = styled(RebassText)`
   ${txtRight}
   ${highlight}
   ${critical}
+  ${dashed}
 `
 
 type TextProps = ITextProps & RebassTextProps

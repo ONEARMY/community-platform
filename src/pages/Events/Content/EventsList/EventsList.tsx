@@ -29,9 +29,17 @@ export class EventsList extends React.Component<any> {
     return this.props as InjectedProps
   }
 
+  get store() {
+    return this.injected.eventStore
+  }
+
+  private moderateEvent = async (event: IEvent, accepted: boolean) => {
+    event.moderation = accepted ? 'accepted' : 'rejected'
+    await this.store.moderateEvent(event)
+  }
+
   public render() {
     const { filteredEvents, upcomingEvents } = this.injected.eventStore
-
     if (filteredEvents) {
       return (
         <>
@@ -77,13 +85,20 @@ export class EventsList extends React.Component<any> {
               {filteredEvents.length === 0 ? null : ( // *** TODO - indicate whether no upcoming events or data still just loading
                 <Flex flexWrap={'wrap'} flexDirection="column">
                   {filteredEvents.map((event: IEventDB) => (
-                    <EventCard key={event._id} event={event} />
+                    <EventCard
+                      key={event._id}
+                      event={event}
+                      needsModeration={this.store.needsModeration(event)}
+                      moderateEvent={this.moderateEvent}
+                    />
                   ))}
                 </Flex>
               )}
               <Flex justifyContent={'center'} mt={20}>
                 <Link to={'#'} style={{ visibility: 'hidden' }}>
-                  <Button variant={'secondary'} data-cy="more-events">More Events</Button>
+                  <Button variant={'secondary'} data-cy="more-events">
+                    More Events
+                  </Button>
                 </Link>
               </Flex>
               <MoreContainer m={'0 auto'} pt={60} pb={90}>

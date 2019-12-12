@@ -60,7 +60,7 @@ export class Popup extends React.Component<IProps> {
     this.openPopup()
   }
 
-  private acceptPin = async (accepted: boolean) => {
+  private moderatePin = async (accepted: boolean) => {
     const pin = this.props.activePin as IMapPin
     pin.moderation = accepted ? 'accepted' : 'rejected'
     await this.store.moderatePin(pin)
@@ -124,8 +124,10 @@ export class Popup extends React.Component<IProps> {
             <Text
               auxiliary
               small
+              bold
               mb={2}
               highlight
+              dashed
               critical={pin.moderation === 'rejected'}
             >
               {moderationStatus}
@@ -134,21 +136,25 @@ export class Popup extends React.Component<IProps> {
           {this.store.needsModeration(pin) && (
             <Flex
               flexDirection={'row'}
-              px={9}
+              px={10}
               py={1}
               justifyContent={'space-around'}
             >
               <Button
+                small
                 data-cy={'accept'}
                 variant={'primary'}
                 icon="check"
-                onClick={() => this.acceptPin(true)}
+                onClick={() => this.moderatePin(true)}
+                sx={{ height: '30px' }}
               />
               <Button
+                small
                 data-cy="reject-pin"
                 variant={'tertiary'}
                 icon="delete"
-                onClick={() => this.acceptPin(false)}
+                onClick={() => this.moderatePin(false)}
+                sx={{ height: '30px' }}
               />
             </Flex>
           )}

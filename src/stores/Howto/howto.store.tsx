@@ -12,6 +12,7 @@ import { ModuleStore } from '../common/module.store'
 import { ISelectedTags } from 'src/models/tags.model'
 import { RootStore } from '..'
 import { IUser } from 'src/models/user.models'
+import { hasAdminRights, needsModeration } from 'src/utils/helpers'
 
 const COLLECTION_NAME = 'v2_howtos'
 
@@ -55,11 +56,38 @@ export class HowtoStore extends ModuleStore {
   }
 
   @computed get filteredHowtos() {
-    return this.filterCollectionByTags(this.allHowtos, this.selectedTags)
+    const howtos = this.filterCollectionByTags(
+      this.allHowtos,
+      this.selectedTags,
+    )
+    // HACK - ARH - 2019/12/11 filter unaccepted howtos, should be done serverside
+    const activeUser = this.activeUser
+    const isAdmin = hasAdminRights(activeUser)
+    return howtos.filter(howto => {
+      return (
+        howto.moderation === 'accepted' ||
+        (activeUser && howto._createdBy === activeUser.userName) ||
+        (isAdmin &&
+          (howto.moderation !== 'draft' && howto.moderation !== 'rejected'))
+      )
+    })
   }
 
   public updateSelectedTags(tagKey: ISelectedTags) {
     this.selectedTags = tagKey
+  }
+
+  // Moderate Howto
+  public async moderateHowto(howto: IHowto) {
+    if (!hasAdminRights(this.activeUser)) {
+      return false
+    }
+    const doc = this.db.collection(COLLECTION_NAME).doc(howto._id)
+    return doc.set(howto)
+  }
+
+  public needsModeration(howto: IHowto) {
+    return needsModeration(howto, this.activeUser)
   }
 
   // upload a new or update an existing how-to
@@ -105,6 +133,9 @@ export class HowtoStore extends ModuleStore {
         cover_image: processedCover,
         steps: processedSteps,
         files: processedFiles,
+        moderation: values.moderation
+          ? values.moderation
+          : 'awaiting-moderation',
       }
       console.log('populating database', howTo)
       // set the database document

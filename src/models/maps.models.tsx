@@ -1,4 +1,4 @@
-import { ISODateString, ModerationStatus } from './common.models'
+import { ISODateString, IModerable } from './common.models'
 import { WorkspaceType, ProfileTypeLabel } from './user_pp.models'
 
 /**
@@ -11,18 +11,16 @@ import { WorkspaceType, ProfileTypeLabel } from './user_pp.models'
 
 export type IMapPinType = ProfileTypeLabel
 export type IMapPinSubtype = WorkspaceType
-export type IMapPinModeration = ModerationStatus
 
 /**
  * Map pins have a `type` which correspond to icon
  * They can also optionally have a subtype for additional filtering
  */
-export interface IMapPin {
+export interface IMapPin extends IModerable {
   _id: string
   type: IMapPinType
   location: ILatLng
   subType?: IMapPinSubtype
-  moderation: IMapPinModeration
 }
 
 /**

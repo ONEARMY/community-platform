@@ -35,7 +35,7 @@ interface IState {
   showSubmitModal?: boolean
   editCoverImg?: boolean
   fileEditMode?: boolean
-  draft: boolean
+  draft?: boolean
 }
 interface IProps extends RouteComponentProps<any> {
   formValues: any
@@ -87,23 +87,27 @@ export class HowtoForm extends React.Component<IProps, IState> {
       editCoverImg: false,
       fileEditMode: false,
       showSubmitModal: false,
-      draft: props.moderation === 'draft',
     }
   }
 
   private trySubmitForm = (draft: boolean) => {
-    this.setState({ draft }, () => {
-      // Save requested draft value into state and then trigger form submit
-      const form = document.getElementById('howtoForm')
-      if (typeof form !== 'undefined' && form !== null) {
-        form.dispatchEvent(new Event('submit', { cancelable: true }))
-        this.setState({ showSubmitModal: true })
-      }
-    })
+    this.setState({ draft: draft})
+    const form = document.getElementById('howtoForm')
+    if (typeof form !== 'undefined' && form !== null) {
+      console.log(draft);
+      form.dispatchEvent(
+        new Event('submit', { cancelable: true }),
+      )
+      this.setState({ showSubmitModal: true, draft: draft})
+    }
   }
   public onSubmit = async (formValues: IHowtoFormInput) => {
-    formValues.moderation = this.state.draft ? 'draft' : 'awaiting-moderation'
+    console.log('\n\nState:');
+    console.log(this.state.draft);
+    formValues.moderation = this.state.draft ? 'draft' : 'awaiting-moderation';
+    console.log(formValues.moderation);
     await this.store.uploadHowTo(formValues)
+    console.log(this.state.draft);
   }
 
   get injected() {
@@ -420,13 +424,9 @@ export class HowtoForm extends React.Component<IProps, IState> {
                       variant={disabled ? 'secondary' : 'secondary'}
                       type="submit"
                       disabled={submitting}
-                      sx={{ display: 'block' }}
+                      sx={{margin:'auto'}}
                     >
-                      {formValues.moderation === 'draft' ? (
-                        <span>Save to draft</span>
-                      ) : (
-                        <span>Revert to draft</span>
-                      )}{' '}
+                      <span>Save to draft</span>
                     </Button>
                     <Button
                       data-cy={'submit'}

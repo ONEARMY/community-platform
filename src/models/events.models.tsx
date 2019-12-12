@@ -1,8 +1,8 @@
 import { ISelectedTags } from './tags.model'
-import { DBDoc, ISODateString } from './common.models'
+import { DBDoc, ISODateString, IModerable } from './common.models'
 import { ILocation } from 'src/models/common.models'
 
-export interface IEvent extends IEventFormInput {
+export interface IEvent extends IEventFormInput, IModerable {
   _createdBy: string
   slug: string
   date: ISODateString

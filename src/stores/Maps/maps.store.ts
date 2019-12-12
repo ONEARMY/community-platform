@@ -16,7 +16,11 @@ import { generatePins, generatePinDetails } from 'src/mocks/maps.mock'
 import { IUserPP } from 'src/models/user_pp.models'
 import { IUploadedFileMeta } from '../storage'
 import { IUser } from 'src/models/user.models'
-import { hasAdminRights, isAllowToPin } from 'src/utils/helpers'
+import {
+  hasAdminRights,
+  needsModeration,
+  isAllowToPin,
+} from 'src/utils/helpers'
 
 // NOTE - toggle below variable to use larger mock dataset
 const IS_MOCK = false
@@ -49,17 +53,15 @@ export class MapsStore extends ModuleStore {
     }
     // HACK - CC - 2019/11/04 changed pins api, so any old mappins will break
     // this filters out. In future should run an upgrade script (easier once deployed)
-    pins = pins.filter(p => {
-      return p.type
-    })
     // HACK - ARH - 2019/12/09 filter unaccepted pins, should be done serverside
     const activeUser = this.activeUser
-    const isAdmin = hasAdminRights(this.activeUser)
+    const isAdmin = hasAdminRights(activeUser)
     pins = pins.filter(p => {
       return (
-        p.moderation === 'accepted' ||
-        (activeUser && p._id === activeUser.userName) ||
-        (isAdmin && p.moderation !== 'rejected')
+        p.type &&
+        (p.moderation === 'accepted' ||
+          (activeUser && p._id === activeUser.userName) ||
+          (isAdmin && p.moderation !== 'rejected'))
       )
     })
     if (IS_MOCK) {
@@ -158,7 +160,7 @@ export class MapsStore extends ModuleStore {
       .set(pin)
   }
 
-  // moderate pin
+  // Moderate Pin
   public async moderatePin(pin: IMapPin) {
     if (!hasAdminRights(this.activeUser)) {
       return false
@@ -166,10 +168,7 @@ export class MapsStore extends ModuleStore {
     this.setPin(pin)
   }
   public needsModeration(pin: IMapPin) {
-    if (!hasAdminRights(this.activeUser)) {
-      return false
-    }
-    return pin.moderation !== 'accepted'
+    return needsModeration(pin, this.activeUser)
   }
   public canSeePin(pin: IMapPin) {
     return pin.moderation === 'accepted' || isAllowToPin(pin, this.activeUser)

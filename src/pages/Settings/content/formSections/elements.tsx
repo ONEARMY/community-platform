@@ -6,23 +6,30 @@ import { Box } from 'rebass'
 import Icon from 'src/components/Icons'
 import { Field } from 'react-final-form'
 
-export const Label = styled.label`
-  margin: 5px;
-  padding: 10px 0;
-  border-radius: 5px;
-  border: 1px solid ${theme.colors.background};
-  &:hover {
-    background-color: ${theme.colors.background};
-    cursor: pointer;
-  }
-  &.selected {
-    background-color: ${theme.colors.background};
-    border: 1px solid ${theme.colors.green};
-  }
-  &.full-width {
-    flex: 1;
-  }
-`
+export const Label = props => (
+  <Flex
+    as="label"
+    flexDirection={['row', 'row', 'column']}
+    width="100%"
+    sx={{
+      m: '5px',
+      p: '10px 0',
+      borderRadius: '5px',
+      border: `${theme.colors.background}`,
+      ':hover': {
+        backgroundColor: `${theme.colors.background}`,
+        cursor: 'pointer',
+      },
+      '&.selected': {
+        backgroundColor: `${theme.colors.background}`,
+        border: '1px solid ' + `${theme.colors.green}`,
+      },
+    }}
+    {...props}
+  >
+    {props.children}
+  </Flex>
+)
 
 export const HiddenInput = styled(Field)`
   position: absolute;

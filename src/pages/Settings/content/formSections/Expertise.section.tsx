@@ -42,7 +42,7 @@ export class ExpertiseSection extends React.Component<IProps, any> {
           <Text regular my={4}>
             What are you specialised in ? *
           </Text>
-          <Flex wrap="nowrap">
+          <Flex flexWrap={['wrap', 'wrap', 'nowrap']}>
             <FieldArray name="machineBuilderXp">
               {({ fields }) => (
                 <>

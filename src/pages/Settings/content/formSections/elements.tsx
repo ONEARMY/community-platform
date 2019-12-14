@@ -10,7 +10,6 @@ export const Label = props => (
   <Flex
     as="label"
     flexDirection={['row', 'row', 'column']}
-    width="100%"
     sx={{
       m: '5px',
       p: '10px 0',

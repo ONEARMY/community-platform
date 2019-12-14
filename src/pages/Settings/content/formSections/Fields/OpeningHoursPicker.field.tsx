@@ -38,47 +38,58 @@ export class OpeningHoursPicker extends React.Component<IProps, IState> {
 
   render() {
     const { openingHoursValues, index } = this.props
+    const DeleteButton = props => (
+      <Button
+        data-cy={`delete-opening-time-${index}`}
+        icon={'delete'}
+        variant={'tertiary'}
+        onClick={() => this.toggleDeleteModal()}
+        ml={'10px'}
+        height="40px"
+        {...props}
+      />
+    )
     return (
       <Flex
         key={index}
         alignItems="center"
-        flexDirection={['column', 'row']}
+        flexWrap={['wrap', 'wrap', 'nowrap']}
         my={1}
       >
-        <Field
-          data-cy={`opening-time-day-${index}`}
-          name={`${openingHoursValues}.day`}
-          options={WEEK_DAYS}
-          component={SelectField}
-          validate={required}
-          placeholder="Select day"
-          style={{ width: '160px', marginRight: '8px', marginBottom: 0 }}
-        />
-        <Field
-          data-cy={`opening-time-from-${index}`}
-          name={`${openingHoursValues}.openFrom`}
-          options={OPENING_HOURS}
-          component={SelectField}
-          placeholder="from --:-- AM"
-          validate={required}
-          style={{ width: '160px', marginRight: '8px', marginBottom: 0 }}
-        />
-        <Field
-          data-cy={`opening-time-to-${index}`}
-          name={`${openingHoursValues}.openTo`}
-          options={OPENING_HOURS}
-          component={SelectField}
-          placeholder="to --:-- PM"
-          validate={required}
-          style={{ width: '160px', marginBottom: 0 }}
-        />
-        <Button
-          data-cy={`delete-opening-time-${index}`}
-          icon={'delete'}
-          variant={'tertiary'}
-          onClick={() => this.toggleDeleteModal()}
-          ml={'10px'}
-        />
+        <Flex mb={1}>
+          <Field
+            data-cy={`opening-time-day-${index}`}
+            name={`${openingHoursValues}.day`}
+            options={WEEK_DAYS}
+            component={SelectField}
+            validate={required}
+            placeholder="Select day"
+            style={{ width: '160px', marginRight: '8px', marginBottom: 0 }}
+          />
+          <DeleteButton sx={{ display: ['block', 'block', 'none'] }} />
+        </Flex>
+        <Flex>
+          <Field
+            data-cy={`opening-time-from-${index}`}
+            name={`${openingHoursValues}.openFrom`}
+            options={OPENING_HOURS}
+            component={SelectField}
+            placeholder="from --:-- AM"
+            validate={required}
+            style={{ width: '160px', marginRight: '8px', marginBottom: 0 }}
+          />
+          <Field
+            data-cy={`opening-time-to-${index}`}
+            name={`${openingHoursValues}.openTo`}
+            options={OPENING_HOURS}
+            component={SelectField}
+            placeholder="to --:-- PM"
+            validate={required}
+            style={{ width: '160px', marginBottom: 0 }}
+          />
+        </Flex>
+
+        <DeleteButton sx={{ display: ['none', 'none', 'block'] }} />
         {this.state.showDeleteModal && (
           <Modal onDidDismiss={() => this.toggleDeleteModal()}>
             <Text>Are you sure you want to delete this schedule ?</Text>

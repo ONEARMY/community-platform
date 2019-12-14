@@ -58,6 +58,7 @@ class CustomRadioField extends Component<IProps, IState> {
         htmlFor={value}
         className={classNames.join(' ')}
         data-cy={dataCy}
+        width={'100%'}
       >
         <HiddenInput
           id={value}

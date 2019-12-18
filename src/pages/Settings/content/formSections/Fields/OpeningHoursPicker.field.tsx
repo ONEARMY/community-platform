@@ -29,6 +29,8 @@ export class OpeningHoursPicker extends React.Component<IProps, IState> {
   }
 
   toggleDeleteModal() {
+    console.log('toggleDeleteModal', this.state.showDeleteModal)
+
     this.setState({ showDeleteModal: !this.state.showDeleteModal })
   }
   confirmDelete() {
@@ -38,21 +40,10 @@ export class OpeningHoursPicker extends React.Component<IProps, IState> {
 
   render() {
     const { openingHoursValues, index } = this.props
-    const DeleteButton = props => (
-      <Button
-        data-cy={`delete-opening-time-${index}`}
-        icon={'delete'}
-        variant={'tertiary'}
-        onClick={() => this.toggleDeleteModal()}
-        ml={'10px'}
-        height="40px"
-        {...props}
-      />
-    )
     return (
       <Flex
         key={index}
-        alignItems="center"
+        alignItems="flex-start"
         flexWrap={['wrap', 'wrap', 'nowrap']}
         my={1}
       >
@@ -66,7 +57,14 @@ export class OpeningHoursPicker extends React.Component<IProps, IState> {
             placeholder="Select day"
             style={{ width: '160px', marginRight: '8px', marginBottom: 0 }}
           />
-          <DeleteButton sx={{ display: ['block', 'block', 'none'] }} />
+          <Button
+            icon={'delete'}
+            variant={'tertiary'}
+            ml={'10px'}
+            height="40px"
+            sx={{ display: ['block', 'block', 'none'] }}
+            onClick={() => this.toggleDeleteModal()}
+          />
         </Flex>
         <Flex>
           <Field
@@ -88,8 +86,15 @@ export class OpeningHoursPicker extends React.Component<IProps, IState> {
             style={{ width: '160px', marginBottom: 0 }}
           />
         </Flex>
-
-        <DeleteButton sx={{ display: ['none', 'none', 'block'] }} />
+        <Button
+          icon={'delete'}
+          variant={'tertiary'}
+          ml={'10px'}
+          height="40px"
+          data-cy={`delete-opening-time-${index}-desk`}
+          sx={{ display: ['none', 'none', 'block'] }}
+          onClick={() => this.toggleDeleteModal()}
+        />
         {this.state.showDeleteModal && (
           <Modal onDidDismiss={() => this.toggleDeleteModal()}>
             <Text>Are you sure you want to delete this schedule ?</Text>

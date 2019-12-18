@@ -53,7 +53,13 @@ class CustomRadioField extends Component<IProps, IState> {
     }
 
     return (
-      <Label htmlFor={value} className={classNames.join(' ')} data-cy={dataCy}>
+      <Label
+        alignItems={'center'}
+        htmlFor={value}
+        className={classNames.join(' ')}
+        data-cy={dataCy}
+        width={'100%'}
+      >
         <HiddenInput
           id={value}
           name={name}
@@ -66,19 +72,32 @@ class CustomRadioField extends Component<IProps, IState> {
             this.props.onChange(v.target.value)
           }}
         />
-        {imageSrc && <Image px={3} src={imageSrc} width="100%" />}
-        {textLabel && (
-          <Text px={1} my={1} txtcenter small>
-            {textLabel}
-          </Text>
+        {imageSrc && (
+          <Image px={3} src={imageSrc} width={['100px', '100px', '100%']} />
         )}
-        {subText && (
-          <Flex alignItems="center" flexWrap="nowrap">
+        <Flex
+          alignItems="center"
+          flexWrap="nowrap"
+          flexDirection="column"
+          px={1}
+        >
+          {textLabel && (
+            <Text
+              px={1}
+              my={1}
+              txtcenter
+              small
+              sx={{ fontWeight: ['bold', 'bold', 'inherit'] }}
+            >
+              {textLabel}
+            </Text>
+          )}
+          {subText && (
             <Text my={1} txtcenter small>
               {subText}
             </Text>
-          </Flex>
-        )}
+          )}
+        </Flex>
       </Label>
     )
   }

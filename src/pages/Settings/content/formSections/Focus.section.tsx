@@ -58,12 +58,11 @@ export class FocusSection extends React.Component<IProps, IState> {
           <Text regular my={4}>
             What is your main Precious Plastic activity?
           </Text>
-          <Flex wrap="nowrap">
+          <Flex flexWrap={['wrap', 'wrap', 'nowrap']}>
             {PROFILE_TYPES.map((profile, index: number) => (
               <CustomRadioField
                 data-cy={profile.label}
                 key={index}
-                fullWidth
                 value={profile.label}
                 name="profileType"
                 isSelected={checkedFocusValue === profile.label && isSelected}
@@ -74,12 +73,12 @@ export class FocusSection extends React.Component<IProps, IState> {
             ))}
           </Flex>
           <Flex flexWrap="wrap" alignItems="center" mt={4}>
-            <Text>Not sure about your focus ?</Text>
+            <Text my={2}>Not sure about your focus ?</Text>
             <Link
               href="https://drive.google.com/open?id=1fXTtBbzgCO0EL6G9__aixwqc-Euqgqnd"
               target="_blank"
             >
-              <Button ml={2} variant="outline" data-cy="go-to">
+              <Button ml={[1, 2, 2]} variant="outline" data-cy="go-to">
                 Checkout our guidelines
               </Button>
             </Link>

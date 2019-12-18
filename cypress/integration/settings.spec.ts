@@ -449,7 +449,7 @@ describe('[Settings]', () => {
     })
   })
 
-  describe('Focus Plastic Collection Point', () => {
+  describe.only('Focus Plastic Collection Point', () => {
     const freshSettings = {
       _authID: 'uxupeYR7glagQyhBy8q0blr0chd2',
       _id: 'settings_plastic_new',
@@ -553,7 +553,8 @@ describe('[Settings]', () => {
     }
 
     const deleteOpeningTime = (index: number, confirmed: boolean) => {
-      cy.get(`[data-cy=delete-opening-time-${index}]`).click()
+      cy.viewport('macbook-13')
+      cy.get(`[data-cy=delete-opening-time-${index}-desk]`).click()
       if (confirmed) {
         cy.get('[data-cy=confirm-delete]').click()
       } else {

@@ -13,6 +13,11 @@ export const stripSpecialCharacters = (text?: string) => {
     : ''
 }
 
+// remove dashes with spaces
+export const replaceDashesWithSpaces = (str?: string) => {
+  return str ? str.replace(/-/g, ' ') : ''
+}
+
 // take an array of objects and convert to an single object, using a unique key
 // that already exists in the array element, i.e.
 // [{id:'abc',val:'hello'},{id:'def',val:'world'}] = > {abc:{id:abc,val:'hello}, def:{id:'def',val:'world'}}
@@ -58,9 +63,9 @@ export const isEmail = (email: string) => {
 
 export const isAllowToEditContent = (doc: IEditableDoc, user?: IUser) => {
   if (!user) {
-    return false;
+    return false
   }
-  const roles =  user.userRoles ? user.userRoles : []
+  const roles = user.userRoles ? user.userRoles : []
   if (
     roles.includes('admin') ||
     roles.includes('super-admin') ||

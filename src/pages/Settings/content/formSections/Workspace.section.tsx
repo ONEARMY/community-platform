@@ -57,7 +57,7 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
           <Text regular my={4}>
             What kind of Precious Plastic workspace do you run?
           </Text>
-          <Flex wrap="nowrap">
+          <Flex flexWrap={['wrap', 'wrap', 'nowrap']}>
             {WORKSPACE_TYPES.map((workspace, index: number) => (
               <CustomRadioField
                 data-cy={workspace.label}

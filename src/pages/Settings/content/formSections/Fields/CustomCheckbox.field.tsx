@@ -50,7 +50,12 @@ class CustomCheckbox extends Component<IProps, IState> {
     }
 
     return (
-      <Label htmlFor={value} className={classNames.join(' ')} data-cy={dataCy}>
+      <Label
+        htmlFor={value}
+        width={['inherit', 'inherit', '100%']}
+        className={classNames.join(' ')}
+        data-cy={dataCy}
+      >
         <HiddenInput
           name={value}
           id={value}
@@ -61,7 +66,9 @@ class CustomCheckbox extends Component<IProps, IState> {
           type="checkbox"
           component={HiddenInputField}
         />
-        {imageSrc && <Image px={3} src={imageSrc} width="100%" />}
+        {imageSrc && (
+          <Image px={3} src={imageSrc} width={['70px', '70px', '100%']} />
+        )}
         {btnLabel && (
           <Text medium m="10px">
             {btnLabel}

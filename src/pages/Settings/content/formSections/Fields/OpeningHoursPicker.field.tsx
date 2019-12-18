@@ -29,8 +29,6 @@ export class OpeningHoursPicker extends React.Component<IProps, IState> {
   }
 
   toggleDeleteModal() {
-    console.log('toggleDeleteModal', this.state.showDeleteModal)
-
     this.setState({ showDeleteModal: !this.state.showDeleteModal })
   }
   confirmDelete() {

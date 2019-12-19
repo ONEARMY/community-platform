@@ -34,7 +34,7 @@ export default class Step extends React.PureComponent<IProps> {
               card
               mediumRadius
               justifyContent={'center'}
-              py={4}
+              py={3}
               px={4}
               bg={'white'}
               width={1}

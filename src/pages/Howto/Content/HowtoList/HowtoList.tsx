@@ -103,7 +103,7 @@ export class HowtoList extends React.Component<any, IState> {
               <AuthWrapper>
                 <Link to={'/how-to/create'}>
                   <Button variant="primary" mt={30}>
-                    Create a howto
+                    Create a how-to
                   </Button>
                 </Link>
               </AuthWrapper>

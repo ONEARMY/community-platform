@@ -95,25 +95,24 @@ class Controls extends React.Component<IProps> {
               }}
             />
           ))}
-        </Flex>
-        <Box ml={['0', '50px']}>
-          <AuthWrapper>
-            <HashLink
-              smooth
-              to={{
-                pathname: `/settings`,
-                hash: '#your-map-pin',
-              }}
-            >
-              <Button
-                sx={{ display: ['none', 'block', 'block'] }}
-                variant={'primary'}
+          <Box
+            ml={['0', '50px']}
+            mt="5px"
+            sx={{ display: ['none', 'none', 'none', 'block'] }}
+          >
+            <AuthWrapper>
+              <HashLink
+                smooth
+                to={{
+                  pathname: `/settings`,
+                  hash: '#your-map-pin',
+                }}
               >
-                My pin
-              </Button>
-            </HashLink>
-          </AuthWrapper>
-        </Box>
+                <Button variant={'primary'}>My pin</Button>
+              </HashLink>
+            </AuthWrapper>
+          </Box>
+        </Flex>
       </MapFlexBar>
     )
   }

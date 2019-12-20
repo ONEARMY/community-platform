@@ -3,7 +3,8 @@ import styled from 'styled-components'
 
 import { Button } from 'src/components/Button'
 import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
-import { Flex, Box } from 'rebass'
+import { Flex, Box } from 'rebass/styled-components'
+import filterIcon from 'src/assets/icons/icon-filters-mobile.png'
 
 import { GroupingFilter } from './GroupingFilter'
 
@@ -15,6 +16,7 @@ import { ILocation } from 'src/models/common.models'
 import { zIndex } from 'src/themes/styled.theme'
 import { inject } from 'mobx-react'
 import { MapsStore } from 'src/stores/Maps/maps.store'
+import Icon from 'src/components/Icons'
 
 interface IProps {
   mapRef: React.RefObject<Map>
@@ -25,12 +27,6 @@ interface IProps {
 interface IInjectedProps extends IProps {
   mapsStore: MapsStore
 }
-
-const SearchWrapper = styled.div`
-  width: 308px;
-  height: 45px;
-  margin: 5px 0 0 20px;
-`
 
 const MapFlexBar = styled(Flex)`
   max-width: 1280px;
@@ -76,14 +72,20 @@ class Controls extends React.Component<IProps> {
           this.injected.mapsStore.setActivePin(undefined)
         }}
       >
-        <SearchWrapper>
+        <Box
+          sx={{
+            width: ['95%', '308px', '308px'],
+            height: '45px',
+            m: [0, '5px 0 0 20px'],
+          }}
+        >
           <LocationSearch
             onChange={(location: ILocation) => {
               this.props.onLocationChange(location)
             }}
             styleVariant="filter"
           />
-        </SearchWrapper>
+        </Box>
         <Flex>
           {Object.keys(groupedFilters).map(grouping => (
             <GroupingFilter
@@ -112,6 +114,15 @@ class Controls extends React.Component<IProps> {
               </HashLink>
             </AuthWrapper>
           </Box>
+        </Flex>
+        <Flex width="95%" sx={{ display: ['flex', 'none', 'none'], mt: '5px' }}>
+          <Button width="100%" sx={{ display: 'block' }} variant="outline">
+            Filters{' '}
+            <img
+              src={filterIcon}
+              style={{ width: '18px', marginLeft: '5px' }}
+            />
+          </Button>
         </Flex>
       </MapFlexBar>
     )

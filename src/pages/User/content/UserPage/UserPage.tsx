@@ -46,11 +46,9 @@ import BazarIcon from 'src/assets/icons/icon-bazar.svg'
 import SocialIcon from 'src/assets/icons/icon-social-media.svg'
 import IconForum from 'src/assets/icons/icon-forum.svg'
 import IconWebsite from 'src/assets/icons/icon-website.svg'
-import RedirectIcon from 'src/assets/icons/link-target-blank.svg'
 
 import { IUploadedFileMeta } from 'src/stores/storage'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
-import { getCountryCode } from 'src/utils/helpers'
 
 interface IRouterCustomParams {
   id: string

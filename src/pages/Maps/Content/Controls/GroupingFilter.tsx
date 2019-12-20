@@ -82,7 +82,7 @@ class GroupingFilter extends React.Component<IProps, IState> {
     const options = this.asOptions(items)
     const selectedItems = this.state.selectedItems
     return (
-      <Box width="300px" ml="5px">
+      <Box width="300px" ml="5px" sx={{ display: ['none', 'block', 'block'] }}>
         <MultiSelect
           options={options}
           selected={selectedItems}

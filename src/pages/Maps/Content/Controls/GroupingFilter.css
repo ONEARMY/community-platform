@@ -1,7 +1,6 @@
 .multi-select {
   width: 100%;
   max-width: 307px;
-  margin-left: 20px;
   margin-top: 5px;
   border: 2px solid #1b1b1b;
   border-radius: 5px;
@@ -11,9 +10,16 @@
 }
 
 .multi-select .dropdown-heading {
-  height: 45px !important;
+  height: 40px !important;
 }
 
 .multi-select .dropdown-heading-value {
-  line-height: 45px !important;
+  line-height: 42px !important;
+}
+.dropdown-heading {
+  border-style: unset !important;
+  border-color: black transparent transparent !important;
+}
+.dropdown-heading-dropdown-arrow span {
+  border-color: black transparent transparent !important;
 }

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { Button } from 'src/components/Button'
 import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
-import { Flex } from 'rebass'
+import { Flex, Box } from 'rebass'
 
 import { GroupingFilter } from './GroupingFilter'
 
@@ -41,10 +41,6 @@ const MapFlexBar = styled(Flex)`
   left: 50%;
   transform: translateX(-50%);
 `
-
-const FlexSpacer = styled.div`
-  flex: 1;
-`
 @inject('mapsStore')
 class Controls extends React.Component<IProps> {
   constructor(props) {
@@ -71,10 +67,10 @@ class Controls extends React.Component<IProps> {
     return (
       <MapFlexBar
         data-cy="map-controls"
-        ml={['0', '50px', '50px']}
+        ml={['0', '0', '0', '50px']}
         py={[0, 1, 1]}
-        flexDirection={['column-reverse', 'column-reverse', 'row']}
-        alignItems={['center', 'stretch', 'stretch']}
+        flexDirection={['column', 'column', 'column', 'row']}
+        alignItems={'center'}
         onClick={() => {
           // close any active popup on click
           this.injected.mapsStore.setActivePin(undefined)
@@ -88,33 +84,36 @@ class Controls extends React.Component<IProps> {
             styleVariant="filter"
           />
         </SearchWrapper>
-        {Object.keys(groupedFilters).map(grouping => (
-          <GroupingFilter
-            key={grouping}
-            entityType={grouping}
-            items={groupedFilters[grouping]}
-            onChange={selected => {
-              this.props.onFilterChange(selected as IMapPinType[])
-            }}
-          />
-        ))}
-        <FlexSpacer />
-        <AuthWrapper>
-          <HashLink
-            smooth
-            to={{
-              pathname: `/settings`,
-              hash: '#your-map-pin',
-            }}
-          >
-            <Button
-              sx={{ display: ['none', 'block', 'block'] }}
-              variant={'primary'}
+        <Flex>
+          {Object.keys(groupedFilters).map(grouping => (
+            <GroupingFilter
+              key={grouping}
+              entityType={grouping}
+              items={groupedFilters[grouping]}
+              onChange={selected => {
+                this.props.onFilterChange(selected as IMapPinType[])
+              }}
+            />
+          ))}
+        </Flex>
+        <Box ml={['0', '50px']}>
+          <AuthWrapper>
+            <HashLink
+              smooth
+              to={{
+                pathname: `/settings`,
+                hash: '#your-map-pin',
+              }}
             >
-              My pin
-            </Button>
-          </HashLink>
-        </AuthWrapper>
+              <Button
+                sx={{ display: ['none', 'block', 'block'] }}
+                variant={'primary'}
+              >
+                My pin
+              </Button>
+            </HashLink>
+          </AuthWrapper>
+        </Box>
       </MapFlexBar>
     )
   }

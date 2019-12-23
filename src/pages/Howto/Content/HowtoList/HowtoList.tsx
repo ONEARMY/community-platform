@@ -52,7 +52,7 @@ export class HowtoList extends React.Component<any, IState> {
           justifyContent={'space-between'}
           flexDirection={['column', 'column', 'row']}
         >
-          <Flex width={[1, 1, 0.2]} mb="10px">
+          <Flex width={[1, 1, 0.2]} mb={['10px', '10px', 0]}>
             <TagsSelect
               onChange={tags => this.props.howtoStore.updateSelectedTags(tags)}
               category="how-to"

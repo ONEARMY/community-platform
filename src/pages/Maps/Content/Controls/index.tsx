@@ -5,6 +5,7 @@ import { Button } from 'src/components/Button'
 import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
 import { Flex, Box } from 'rebass/styled-components'
 import filterIcon from 'src/assets/icons/icon-filters-mobile.png'
+import { Modal } from 'src/components/Modal/Modal'
 
 import { GroupingFilter } from './GroupingFilter'
 
@@ -16,6 +17,7 @@ import { ILocation } from 'src/models/common.models'
 import { zIndex } from 'src/themes/styled.theme'
 import { inject } from 'mobx-react'
 import { MapsStore } from 'src/stores/Maps/maps.store'
+import { Text } from 'src/components/Text'
 import Icon from 'src/components/Icons'
 
 interface IProps {
@@ -23,6 +25,9 @@ interface IProps {
   availableFilters: Array<IMapGrouping>
   onFilterChange: (selected: Array<IMapPinType>) => void
   onLocationChange: (selectedLocation: ILocation) => void
+}
+interface IState {
+  showFiltersMobile: boolean
 }
 interface IInjectedProps extends IProps {
   mapsStore: MapsStore
@@ -38,16 +43,24 @@ const MapFlexBar = styled(Flex)`
   transform: translateX(-50%);
 `
 @inject('mapsStore')
-class Controls extends React.Component<IProps> {
+class Controls extends React.Component<IProps, IState> {
   constructor(props) {
     super(props)
+    this.state = {
+      showFiltersMobile: false,
+    }
   }
   get injected() {
     return this.props as IInjectedProps
   }
 
+  handleFilterMobileModal() {
+    this.setState({ showFiltersMobile: !this.state.showFiltersMobile })
+  }
+
   public render() {
     const { availableFilters } = this.props
+    const { showFiltersMobile } = this.state
     const groupedFilters = availableFilters.reduce(
       (accumulator, current) => {
         const { grouping } = current
@@ -116,7 +129,12 @@ class Controls extends React.Component<IProps> {
           </Box>
         </Flex>
         <Flex width="95%" sx={{ display: ['flex', 'none', 'none'], mt: '5px' }}>
-          <Button width="100%" sx={{ display: 'block' }} variant="outline">
+          <Button
+            width="100%"
+            sx={{ display: 'block' }}
+            variant="outline"
+            onClick={() => this.handleFilterMobileModal()}
+          >
             Filters{' '}
             <img
               src={filterIcon}
@@ -124,6 +142,21 @@ class Controls extends React.Component<IProps> {
             />
           </Button>
         </Flex>
+        {showFiltersMobile && (
+          <Modal onDidDismiss={() => this.handleFilterMobileModal()}>
+            <Text>Select filters</Text>
+            <Flex p={0} mx={-1} justifyContent="flex-end">
+              <Flex px={1}>
+                <Button
+                  variant={'outline'}
+                  onClick={() => this.handleFilterMobileModal()}
+                >
+                  Cancel
+                </Button>
+              </Flex>
+            </Flex>
+          </Modal>
+        )}
       </MapFlexBar>
     )
   }

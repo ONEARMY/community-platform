@@ -21,13 +21,13 @@ export const zIndex = {
   behind: -1,
   level: 0,
   default: 1,
-  modalBackdrop: 9,
-  modalContent: 10,
   slickArrows: 100,
   modalProfile: 900,
   logoContainer: 999,
   mapFlexBar: 2000,
-  menuMobile: 3000,
+  header: 3000,
+  modalBackdrop: 4000,
+  modalContent: 5000,
 }
 
 export type ButtonVariants =

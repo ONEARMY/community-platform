@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import MultiSelect, { Option } from '@khanacademy/react-multi-select'
+import MultiSelect from '@khanacademy/react-multi-select'
 import './GroupingFilter.css'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import { IMapGrouping } from 'src/models/maps.models'
+import { Box } from 'rebass'
 
 interface IProps {
   items: Array<IMapGrouping>
@@ -15,32 +16,6 @@ interface IState {
   initialItems: Array<any>
   selectedItems: Array<string>
 }
-
-const ItemLabel = styled.span`
-  display: inline-block;
-  vertical-align: middle;
-  cursor: default;
-  padding: 2px 8px;
-`
-
-interface ItemCounterProps {
-  grouping: string
-}
-
-const ItemCounter = styled.span<ItemCounterProps>`
-  border-radius: ${p => (p.grouping === 'individual' ? '50%' : '0%')};
-  background-color: ${p =>
-    p.grouping === 'individual' ? '#6666FF' : '#FF6666'};
-  display: inline-block;
-  vertical-align: middle;
-  width: 20px;
-  height: 20px;
-  line-height: 20px;
-  font-size: 0.65rem;
-  text-align: center;
-  color: white;
-  margin-left: 5px;
-`
 
 const ItemRenderer = ({ checked, option, onClick }) => {
   return (
@@ -74,7 +49,7 @@ const ItemRenderer = ({ checked, option, onClick }) => {
   )
 }
 
-class GroupingFilter extends React.Component<IProps, IState> {
+class GroupingFilterDesktop extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
@@ -107,30 +82,27 @@ class GroupingFilter extends React.Component<IProps, IState> {
     const options = this.asOptions(items)
     const selectedItems = this.state.selectedItems
     return (
-      <MultiSelect
-        options={options}
-        selected={selectedItems}
-        selectAllLabel="Select All"
-        disableSearch={true}
-        onSelectedChanged={selected => this.handleChange(selected)}
-        valueRenderer={values => {
-          // controls label display, use default when values selected or title when none
-          return values.length > 0
-            ? null
-            : entityType === 'place'
-            ? 'Workspaces'
-            : 'Others'
-        }}
-        hasSelectAll={false}
-        ItemRenderer={ItemRenderer}
-        style={{
-          maxWidth: '200px',
-          width: '100%',
-          margin: '5px 0',
-        }}
-      />
+      <Box width="300px" ml="5px" sx={{ display: ['none', 'block', 'block'] }}>
+        <MultiSelect
+          options={options}
+          selected={selectedItems}
+          selectAllLabel="Select All"
+          disableSearch={true}
+          onSelectedChanged={selected => this.handleChange(selected)}
+          valueRenderer={values => {
+            // controls label display, use default when values selected or title when none
+            return values.length > 0
+              ? null
+              : entityType === 'place'
+              ? 'Workspaces'
+              : 'Others'
+          }}
+          hasSelectAll={false}
+          ItemRenderer={ItemRenderer}
+        />
+      </Box>
     )
   }
 }
 
-export { GroupingFilter }
+export { GroupingFilterDesktop }

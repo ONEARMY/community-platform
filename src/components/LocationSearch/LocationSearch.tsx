@@ -30,6 +30,8 @@ const AlgoliaResults = styled.input`
 
 const FilterStyle = {
   background: 'white',
+  fontFamily: 'Varela Round',
+  fontSize: '14px',
   border: '2px solid black',
   height: '44px',
   display: 'flex',
@@ -39,6 +41,8 @@ const FilterStyle = {
 const SelectorStyle = {
   marginBottom: 0,
   background: 'white',
+  fontFamily: 'Varela Round',
+  fontSize: '14px',
   border: '1px solid black',
   height: '45px',
   display: 'flex',

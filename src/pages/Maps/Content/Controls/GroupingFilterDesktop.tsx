@@ -49,7 +49,7 @@ const ItemRenderer = ({ checked, option, onClick }) => {
   )
 }
 
-class GroupingFilter extends React.Component<IProps, IState> {
+class GroupingFilterDesktop extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
@@ -105,4 +105,4 @@ class GroupingFilter extends React.Component<IProps, IState> {
   }
 }
 
-export { GroupingFilter }
+export { GroupingFilterDesktop }

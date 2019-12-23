@@ -3,11 +3,13 @@ import styled from 'styled-components'
 
 import { Button } from 'src/components/Button'
 import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
-import { Flex, Box } from 'rebass/styled-components'
+import { Flex, Box, Image } from 'rebass/styled-components'
 import filterIcon from 'src/assets/icons/icon-filters-mobile.png'
+import crossClose from 'src/assets/icons/cross-close.svg'
 import { Modal } from 'src/components/Modal/Modal'
 
-import { GroupingFilter } from './GroupingFilter'
+import { GroupingFilterDesktop } from './GroupingFilterDesktop'
+import { GroupingFilterMobile } from './GroupingFilterMobile'
 
 import { IPinGrouping, IMapGrouping, IMapPinType } from 'src/models/maps.models'
 import { HashLink } from 'react-router-hash-link'
@@ -18,7 +20,6 @@ import { zIndex } from 'src/themes/styled.theme'
 import { inject } from 'mobx-react'
 import { MapsStore } from 'src/stores/Maps/maps.store'
 import { Text } from 'src/components/Text'
-import Icon from 'src/components/Icons'
 
 interface IProps {
   mapRef: React.RefObject<Map>
@@ -28,6 +29,7 @@ interface IProps {
 }
 interface IState {
   showFiltersMobile: boolean
+  filtersSelected: Array<string>
 }
 interface IInjectedProps extends IProps {
   mapsStore: MapsStore
@@ -48,6 +50,7 @@ class Controls extends React.Component<IProps, IState> {
     super(props)
     this.state = {
       showFiltersMobile: false,
+      filtersSelected: [],
     }
   }
   get injected() {
@@ -60,7 +63,7 @@ class Controls extends React.Component<IProps, IState> {
 
   public render() {
     const { availableFilters } = this.props
-    const { showFiltersMobile } = this.state
+    const { showFiltersMobile, filtersSelected } = this.state
     const groupedFilters = availableFilters.reduce(
       (accumulator, current) => {
         const { grouping } = current
@@ -101,7 +104,7 @@ class Controls extends React.Component<IProps, IState> {
         </Box>
         <Flex>
           {Object.keys(groupedFilters).map(grouping => (
-            <GroupingFilter
+            <GroupingFilterDesktop
               key={grouping}
               entityType={grouping}
               items={groupedFilters[grouping]}
@@ -135,7 +138,10 @@ class Controls extends React.Component<IProps, IState> {
             variant="outline"
             onClick={() => this.handleFilterMobileModal()}
           >
-            Filters{' '}
+            Filters
+            {filtersSelected.length > 0 && (
+              <span> ({filtersSelected.length})</span>
+            )}
             <img
               src={filterIcon}
               style={{ width: '18px', marginLeft: '5px' }}
@@ -144,17 +150,27 @@ class Controls extends React.Component<IProps, IState> {
         </Flex>
         {showFiltersMobile && (
           <Modal onDidDismiss={() => this.handleFilterMobileModal()}>
-            <Text>Select filters</Text>
-            <Flex p={0} mx={-1} justifyContent="flex-end">
-              <Flex px={1}>
-                <Button
-                  variant={'outline'}
-                  onClick={() => this.handleFilterMobileModal()}
-                >
-                  Cancel
-                </Button>
-              </Flex>
+            <Flex p={0} mx={-1} justifyContent="space-between">
+              <Text bold>Select filters</Text>
+              <Image
+                width="25px"
+                src={crossClose}
+                alt="cross-close"
+                onClick={() => this.handleFilterMobileModal()}
+              />
             </Flex>
+            {Object.keys(groupedFilters).map(grouping => (
+              <GroupingFilterMobile
+                key={grouping}
+                entityType={grouping}
+                items={groupedFilters[grouping]}
+                selectedItems={filtersSelected}
+                onChange={selected => {
+                  this.props.onFilterChange(selected as IMapPinType[])
+                  this.setState({ filtersSelected: selected })
+                }}
+              />
+            ))}
           </Modal>
         )}
       </MapFlexBar>

@@ -41,6 +41,13 @@ class MapView extends React.Component<IProps> {
   get injected() {
     return this.props as IInjectedProps
   }
+  componentDidMount() {
+    if (this.props.mapRef.current) {
+      return this.props.mapRef.current.leafletElement.zoomControl.setPosition(
+        'bottomleft',
+      )
+    }
+  }
 
   // on move end want to calculate current bounding box and notify parent
   // so that pins can be displayed as required

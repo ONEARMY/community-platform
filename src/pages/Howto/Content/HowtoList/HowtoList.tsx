@@ -50,9 +50,9 @@ export class HowtoList extends React.Component<any, IState> {
         <Flex
           flexWrap={'nowrap'}
           justifyContent={'space-between'}
-          flexDirection={['column-reverse', 'column-reverse', 'row']}
+          flexDirection={['column', 'column', 'row']}
         >
-          <Flex width={[1, 1, 0.2]}>
+          <Flex width={[1, 1, 0.2]} mb="10px">
             <TagsSelect
               onChange={tags => this.props.howtoStore.updateSelectedTags(tags)}
               category="how-to"
@@ -63,8 +63,13 @@ export class HowtoList extends React.Component<any, IState> {
           </Flex>
           <AuthWrapper>
             <Flex justifyContent={['flex-end', 'flex-end', 'auto']}>
-              <Link to={'/how-to/create'} mb={[3, 3, 0]}>
-                <Button variant={'primary'} translateY data-cy="create">
+              <Link width="100%" to={'/how-to/create'} mb={[3, 3, 0]}>
+                <Button
+                  width="100%"
+                  variant={'primary'}
+                  translateY
+                  data-cy="create"
+                >
                   Create a How-to
                 </Button>
               </Link>

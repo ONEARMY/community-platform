@@ -40,9 +40,18 @@ export class EventsList extends React.Component<any> {
               Precious Plastic events from around the world
             </Heading>
           </Flex>
-          <Flex justifyContent={'space-between'}>
-            <Flex flexWrap={'nowrap'} width={[1, 1, 0.5]}>
-              <Box width={0.5}>
+          <Flex
+            flexWrap={'nowrap'}
+            justifyContent={'space-between'}
+            flexDirection={['column', 'column', 'row']}
+            mb={['20px', 0]}
+          >
+            <Flex
+              flexWrap={'nowrap'}
+              flexDirection={['column-reverse', 'column-reverse', 'row']}
+              width={[1, 1, 0.5]}
+            >
+              <Box width={[1, 1, 0.5]} mb={['10px', '10px', 0]}>
                 <TagsSelect
                   onChange={tags =>
                     this.props.eventStore.updateSelectedTags(tags)
@@ -52,7 +61,13 @@ export class EventsList extends React.Component<any> {
                   relevantTagsItems={upcomingEvents}
                 />
               </Box>
-              <Box width={0.5} ml={2} className="location-search-list">
+              <Box
+                width={[1, 1, 0.5]}
+                height="44px"
+                ml={[0, 0, 2]}
+                mb={['10px', '10px', 0]}
+                className="location-search-list"
+              >
                 <LocationSearch
                   onChange={v =>
                     this.props.eventStore.updateSelectedLocation(v)
@@ -64,11 +79,16 @@ export class EventsList extends React.Component<any> {
             </Flex>
             <Flex>
               <AuthWrapper>
-                <Link to={'/events/create'}>
-                  <Button variant="primary" data-cy="create">
-                    Create an event
-                  </Button>
-                </Link>
+                <Flex
+                  justifyContent={['flex-end', 'flex-end', 'auto']}
+                  width="100%"
+                >
+                  <Link width="100%" to={'/events/create'}>
+                    <Button width="100%" variant="primary" data-cy="create">
+                      Create an event
+                    </Button>
+                  </Link>
+                </Flex>
               </AuthWrapper>
             </Flex>
           </Flex>
@@ -83,7 +103,9 @@ export class EventsList extends React.Component<any> {
               )}
               <Flex justifyContent={'center'} mt={20}>
                 <Link to={'#'} style={{ visibility: 'hidden' }}>
-                  <Button variant={'secondary'} data-cy="more-events">More Events</Button>
+                  <Button variant={'secondary'} data-cy="more-events">
+                    More Events
+                  </Button>
                 </Link>
               </Flex>
               <MoreContainer m={'0 auto'} pt={60} pb={90}>

@@ -25,7 +25,7 @@ interface ISelectFieldProps extends IFieldProps, SelectProps {
 export const SelectStyles: Partial<Styles> = {
   container: (provided, state) => ({
     ...provided,
-    fontSize: theme.fontSizes[1] + 'px',
+    fontSize: theme.fontSizes[2] + 'px',
     fontFamily: '"Varela Round", Arial, sans-serif',
   }),
   control: (provided, state) => ({
@@ -82,7 +82,7 @@ export const SelectStyles: Partial<Styles> = {
 export const FilterStyles: Partial<Styles> = {
   container: (provided, state) => ({
     ...provided,
-    fontSize: theme.fontSizes[1] + 'px',
+    fontSize: theme.fontSizes[2] + 'px',
     fontFamily: '"Varela Round", Arial, sans-serif',
     border: '2px solid black',
     borderRadius: '5px',

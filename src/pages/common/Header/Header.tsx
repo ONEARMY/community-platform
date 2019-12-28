@@ -75,7 +75,7 @@ export class Header extends React.Component<IProps> {
           alignItems="center"
           pl={[4, 4, 0]}
           pr={[4, 4, 0]}
-          sx={{ zIndex: 9999, position: 'relative' }}
+          sx={{ zIndex: theme.zIndex.header, position: 'relative' }}
           height={[null, null, 80]}
         >
           <Flex>

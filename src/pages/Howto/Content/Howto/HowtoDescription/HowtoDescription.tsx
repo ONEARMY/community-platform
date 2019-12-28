@@ -31,7 +31,14 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
 
   public durationSincePosted(postDate: Date) {
     const daysSince: number = differenceInDays(new Date(), new Date(postDate))
-    return `${daysSince} days ago`
+    switch (daysSince) {
+      case 0:
+        return 'today'
+      case 1:
+        return `${daysSince} day ago`
+      default:
+        return `${daysSince} days ago`
+    }
   }
 
   public render() {
@@ -87,7 +94,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
                 </Link>
               ))}
           </Flex>
-          <Text capitalize auxiliary mt={3} mb={2}>
+          <Text auxiliary mt={3} mb={2}>
             By {howto._createdBy}
             &nbsp;|&nbsp;
             <Text inline color={'grey'}>

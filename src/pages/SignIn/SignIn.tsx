@@ -118,7 +118,7 @@ class SignInPage extends React.Component<IProps, IState> {
                   width={1}
                   css={{ maxWidth: '620px' }}
                   mx={'auto'}
-                  mt={20}
+                  mt={['20px', '100px']}
                   mb={3}
                 >
                   <Flex flexDirection={'column'} width={1}>

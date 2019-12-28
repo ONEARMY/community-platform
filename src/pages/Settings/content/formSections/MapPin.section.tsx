@@ -66,7 +66,9 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
     return (
       <FlexSectionContainer>
         <Flex justifyContent="space-between">
-          <Heading small>Your map pin</Heading>
+          <Heading small id="your-map-pin">
+            Your map pin
+          </Heading>
           <ArrowIsSectionOpen
             onClick={() => {
               this.setState({ isOpen: !isOpen })

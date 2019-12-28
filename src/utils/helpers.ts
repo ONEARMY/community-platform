@@ -14,6 +14,11 @@ export const stripSpecialCharacters = (text?: string) => {
     : ''
 }
 
+// remove dashes with spaces
+export const replaceDashesWithSpaces = (str?: string) => {
+  return str ? str.replace(/-/g, ' ') : ''
+}
+
 // take an array of objects and convert to an single object, using a unique key
 // that already exists in the array element, i.e.
 // [{id:'abc',val:'hello'},{id:'def',val:'world'}] = > {abc:{id:abc,val:'hello}, def:{id:'def',val:'world'}}
@@ -61,7 +66,9 @@ export const hasAdminRights = (user?: IUser) => {
   if (!user) {
     return false
   }
-  const roles = user.userRoles ? user.userRoles : []
+  const roles =
+    user.userRoles && Array.isArray(user.userRoles) ? user.userRoles : []
+
   if (roles.includes('admin') || roles.includes('super-admin')) {
     return true
   } else {

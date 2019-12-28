@@ -16,7 +16,7 @@ const DevHelpers = () => (
       py={2}
       medium
       txtcenter
-      style={{ zIndex: 9999, position: 'relative' }}
+      style={{ zIndex: theme.zIndex.header, position: 'relative' }}
     >
       You have early access to this platform !{' '}
       <Link

@@ -21,7 +21,10 @@ import { zIndex } from 'src/themes/styled.theme'
 import Workspace from 'src/pages/User/workspace/Workspace'
 
 import theme from 'src/themes/styled.theme'
-import { capitalizeFirstLetter } from 'src/utils/helpers'
+import {
+  capitalizeFirstLetter,
+  replaceDashesWithSpaces,
+} from 'src/utils/helpers'
 import FlagIconEvents from 'src/components/Icons/FlagIcon/FlagIcon'
 
 // Plastic types
@@ -43,11 +46,9 @@ import BazarIcon from 'src/assets/icons/icon-bazar.svg'
 import SocialIcon from 'src/assets/icons/icon-social-media.svg'
 import IconForum from 'src/assets/icons/icon-forum.svg'
 import IconWebsite from 'src/assets/icons/icon-website.svg'
-import RedirectIcon from 'src/assets/icons/link-target-blank.svg'
 
 import { IUploadedFileMeta } from 'src/stores/storage'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
-import { getCountryCode } from 'src/utils/helpers'
 
 interface IRouterCustomParams {
   id: string
@@ -507,10 +508,10 @@ export class UserPage extends React.Component<
             </Box>
 
             <UserCategory bgImg={workspaceHighlightSrc}>
-              <Heading small bold width={1}>
+              <Heading small bold width={1} capitalize>
                 {user.workspaceType &&
-                  `${capitalizeFirstLetter(user.workspaceType)} `}
-                {capitalizeFirstLetter(user.profileType || 'member')}
+                  `${replaceDashesWithSpaces(user.workspaceType)} `}
+                {replaceDashesWithSpaces(user.profileType || 'member')}
               </Heading>
             </UserCategory>
 

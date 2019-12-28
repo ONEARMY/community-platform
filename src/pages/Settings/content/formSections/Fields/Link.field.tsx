@@ -81,19 +81,38 @@ class Link extends Component<IProps, IState> {
 
   render() {
     const { link, index } = this.props
+    const DeleteButton = props => (
+      <Button
+        data-cy={`delete-link-${index}`}
+        icon={'delete'}
+        variant={'tertiary'}
+        onClick={() => this.toggleDeleteModal()}
+        ml={'10px'}
+        {...props}
+      />
+    )
     return (
-      <Flex key={index} my="5px">
-        <Field
-          data-cy={`select-link-${index}`}
-          name={`${link}.label`}
-          options={COM_TYPE_MOCKS}
-          component={SelectField}
-          onCustomChange={v => {
-            this.setState({ linkType: v })
-          }}
-          placeholder="type"
-          style={{ width: '160px', marginRight: '8px' }}
-        />
+      <Flex
+        key={index}
+        my={['10px', '10px', '5px']}
+        flexDirection={['column', 'column', 'row']}
+      >
+        <Flex mb={[1, 1, 0]}>
+          <Field
+            data-cy={`select-link-${index}`}
+            name={`${link}.label`}
+            options={COM_TYPE_MOCKS}
+            component={SelectField}
+            onCustomChange={v => {
+              this.setState({ linkType: v })
+            }}
+            placeholder="type"
+            style={{ width: '160px', height: '40px', marginRight: '8px' }}
+          />
+          <DeleteButton
+            sx={{ display: ['block', 'block', 'none'], height: '40px' }}
+          />
+        </Flex>
         <Field
           data-cy={`input-link-${index}`}
           name={`${link}.url`}
@@ -105,12 +124,8 @@ class Link extends Component<IProps, IState> {
             this.mutatorsDependingOnType(e)
           }}
         />
-        <Button
-          data-cy={`delete-link-${index}`}
-          icon={'delete'}
-          variant={'tertiary'}
-          onClick={() => this.toggleDeleteModal()}
-          ml={'10px'}
+        <DeleteButton
+          sx={{ display: ['none', 'none', 'block'], height: '40px' }}
         />
         {this.state.showDeleteModal && (
           <Modal onDidDismiss={() => this.toggleDeleteModal()}>

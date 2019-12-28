@@ -64,12 +64,14 @@ export class HowtoStore extends ModuleStore {
     const activeUser = this.activeUser
     const isAdmin = hasAdminRights(activeUser)
     return howtos.filter(howto => {
-      return (
-        howto.moderation === 'accepted' ||
-        (activeUser && howto._createdBy === activeUser.userName) ||
-        (isAdmin &&
-          (howto.moderation !== 'draft' && howto.moderation !== 'rejected'))
-      )
+      const isHowToAccepted = howto.moderation === 'accepted'
+      const wasCreatedByUser =
+        activeUser && howto._createdBy === activeUser.userName
+      const isAdminAndAccepted =
+        isAdmin &&
+        (howto.moderation !== 'draft' && howto.moderation !== 'rejected')
+
+      return isHowToAccepted || wasCreatedByUser || isAdminAndAccepted
     })
   }
 

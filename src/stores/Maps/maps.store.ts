@@ -57,12 +57,10 @@ export class MapsStore extends ModuleStore {
     const activeUser = this.activeUser
     const isAdmin = hasAdminRights(activeUser)
     pins = pins.filter(p => {
-      return (
-        p.type &&
-        (p.moderation === 'accepted' ||
-          (activeUser && p._id === activeUser.userName) ||
-          (isAdmin && p.moderation !== 'rejected'))
-      )
+      const isPinAccepted = p.moderation === 'accepted'
+      const wasCreatedByUser = activeUser && p._id === activeUser.userName
+      const isAdminAndAccepted = isAdmin && p.moderation !== 'rejected'
+      return p.type && (isPinAccepted || wasCreatedByUser || isAdminAndAccepted)
     })
     if (IS_MOCK) {
       pins = MOCK_PINS

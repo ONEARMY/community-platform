@@ -61,6 +61,19 @@ export const isEmail = (email: string) => {
   return re.test(email)
 }
 
+export const hasAdminRights = (user?: IUser) => {
+  if (!user) {
+    return false
+  }
+  const roles =
+    user.userRoles && Array.isArray(user.userRoles) ? user.userRoles : []
+
+  if (roles.includes('admin') || roles.includes('super-admin')) {
+    return true
+  } else {
+    return false
+  }
+}
 export const isAllowToEditContent = (doc: IEditableDoc, user?: IUser) => {
   if (!user) {
     return false

@@ -1,12 +1,12 @@
 import { ISelectedTags } from './tags.model'
-import { DBDoc } from './common.models'
+import { DBDoc, IModerable } from './common.models'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { IUploadedFileMeta } from 'src/stores/storage'
 
 // By default all how-to form input fields come as strings
 // The IHowto interface can imposes the correct formats on fields
 // Additionally convert from local filemeta to uploaded filemeta
-export interface IHowto extends IHowtoFormInput {
+export interface IHowto extends IHowtoFormInput, IModerable {
   _createdBy: string
   cover_image: IUploadedFileMeta
   files: Array<IUploadedFileMeta | File | null>
@@ -34,7 +34,7 @@ export interface IHowToStepFormInput {
   _animationKey?: string
 }
 
-export interface IHowtoFormInput {
+export interface IHowtoFormInput extends IModerable {
   // NOTE cover image input starts as convertedFileMeta but is transformed on upload
   cover_image: IUploadedFileMeta | IConvertedFileMeta
   title: string

@@ -1,7 +1,8 @@
 import countries from 'react-flags-select/lib/countries.js'
 import { IHowto } from 'src/models/howto.models'
+import { IMapPin } from 'src/models/maps.models'
 import { IUser } from 'src/models/user.models'
-import { DBDoc } from 'src/models/common.models'
+import { DBDoc, IModerable } from 'src/models/common.models'
 
 // remove special characters from string, also replacing spaces with dashes
 export const stripSpecialCharacters = (text?: string) => {
@@ -74,6 +75,14 @@ export const hasAdminRights = (user?: IUser) => {
     return false
   }
 }
+
+export const needsModeration = (doc: IModerable, user?: IUser) => {
+  if (!hasAdminRights(user)) {
+    return false
+  }
+  return doc.moderation !== 'accepted'
+}
+
 export const isAllowToEditContent = (doc: IEditableDoc, user?: IUser) => {
   if (!user) {
     return false
@@ -84,6 +93,14 @@ export const isAllowToEditContent = (doc: IEditableDoc, user?: IUser) => {
     roles.includes('super-admin') ||
     (doc._createdBy && doc._createdBy === user.userName)
   ) {
+    return true
+  } else {
+    return false
+  }
+}
+
+export const isAllowToPin = (pin: IMapPin, user?: IUser) => {
+  if (hasAdminRights(user) || (pin._id && user && pin._id === user.userName)) {
     return true
   } else {
     return false

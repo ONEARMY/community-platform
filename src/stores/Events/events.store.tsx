@@ -5,7 +5,11 @@ import Filters from 'src/utils/filters'
 import { ISelectedTags } from 'src/models/tags.model'
 import { RootStore } from '..'
 import { ILocation } from 'src/models/common.models'
-import { stripSpecialCharacters } from 'src/utils/helpers'
+import {
+  stripSpecialCharacters,
+  hasAdminRights,
+  needsModeration,
+} from 'src/utils/helpers'
 import { IUser } from 'src/models/user.models'
 
 export class EventStore extends ModuleStore {
@@ -27,9 +31,18 @@ export class EventStore extends ModuleStore {
   @observable
   public selectedLocation: ILocation
   @computed get upcomingEvents() {
+    // HACK - ARH - 2019/12/11 filter unaccepted events, should be done serverside
+    const activeUser = this.activeUser
+    const isAdmin = hasAdminRights(activeUser)
+
     return this.allEvents.filter(event => {
       // dates saved as yyyy-mm-dd string so convert to date object for comparison
-      return Filters.newerThan(event.date, 'yesterday')
+      return (
+        Filters.newerThan(event.date, 'yesterday') &&
+        (event.moderation === 'accepted' ||
+          (activeUser && event._createdBy === activeUser.userName) ||
+          (isAdmin && event.moderation !== 'rejected'))
+      )
     })
   }
   @computed get pastEvents() {
@@ -74,6 +87,19 @@ export class EventStore extends ModuleStore {
     }
   }
 
+  // Moderate Event
+  public async moderateEvent(event: IEvent) {
+    if (!hasAdminRights(this.activeUser)) {
+      return false
+    }
+    const doc = this.db.collection('v2_events').doc(event._id)
+    return doc.set(event)
+  }
+
+  public needsModeration(event: IEvent) {
+    return needsModeration(event, this.activeUser)
+  }
+
   public async uploadEvent(values: IEventFormInput) {
     const user = this.activeUser as IUser
     try {
@@ -83,6 +109,7 @@ export class EventStore extends ModuleStore {
         date: new Date(Date.parse(values.date as string)).toISOString(),
         slug: stripSpecialCharacters(values.title),
         _createdBy: user.userName,
+        moderation: 'awaiting-moderation',
       }
       const doc = this.db.collection('v2_events').doc()
       return doc.set(event)

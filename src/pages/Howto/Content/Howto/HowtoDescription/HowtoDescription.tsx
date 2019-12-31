@@ -4,6 +4,7 @@ import differenceInDays from 'date-fns/difference_in_days'
 import { IHowtoDB } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
+import ModerationStatusText from 'src/components/ModerationStatusText'
 import { Link } from 'src/components/Links'
 import { Box, Flex, Image } from 'rebass'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
@@ -19,6 +20,8 @@ import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 interface IProps {
   howto: IHowtoDB
   loggedInUser: IUser | undefined
+  needsModeration: boolean
+  moderateHowto: (accepted: boolean) => void
 }
 
 export default class HowtoDescription extends React.PureComponent<IProps, any> {
@@ -63,6 +66,24 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
                 Back
               </Button>
             </Link>
+            {/* Check if pin should be moderated */}
+            {this.props.needsModeration && (
+              <Flex justifyContent={'space-between'}>
+                <Button
+                  data-cy={'accept'}
+                  variant={'primary'}
+                  icon="check"
+                  mr={1}
+                  onClick={() => this.props.moderateHowto(true)}
+                />
+                <Button
+                  data-cy="reject-howto"
+                  variant={'tertiary'}
+                  icon="delete"
+                  onClick={() => this.props.moderateHowto(false)}
+                />
+              </Flex>
+            )}
             {/* Check if logged in user is the creator of the how-to OR a super-admin */}
             {loggedInUser &&
               (isAllowToEditContent(howto, loggedInUser) && (
@@ -116,12 +137,19 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             </Flex>
           )}
         </Flex>
-        <Flex justifyContent={'end'} width={[1, 1, 1 / 2]}>
+        <Flex
+          justifyContent={'end'}
+          width={[1, 1, 1 / 2]}
+          sx={{ position: 'relative' }}
+        >
           <Image
             sx={{ objectFit: 'cover', width: '100%', height: '450px' }}
             src={howto.cover_image.downloadUrl}
             alt="how-to cover"
           />
+          {howto.moderation !== 'accepted' && (
+            <ModerationStatusText howto={howto} top={'0px'} />
+          )}
         </Flex>
       </Flex>
     )

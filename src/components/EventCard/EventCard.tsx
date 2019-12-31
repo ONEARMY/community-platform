@@ -1,6 +1,8 @@
 import React from 'react'
 import Flex from 'src/components/Flex'
+import ModerationStatusText from 'src/components/ModerationStatusText'
 import Text from 'src/components/Text'
+import { Button } from 'src/components/Button'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import FlagIconEvents from 'src/components/Icons/FlagIcon/FlagIcon'
 import { IEvent } from '../../models/events.models'
@@ -9,6 +11,8 @@ import { LinkTargetBlank } from '../Links/LinkTargetBlank/LinkTargetBlank'
 
 interface IProps {
   event: IEvent
+  needsModeration: boolean
+  moderateEvent: (event: IEvent, accepted: boolean) => void
 }
 
 export const EventCard = (props: IProps) => (
@@ -23,8 +27,13 @@ export const EventCard = (props: IProps) => (
     flex={1}
     key={props.event.slug}
     flexDirection={['column', 'column', 'initial']}
+    sx={{ position: 'relative' }}
     data-cy="card"
   >
+    {props.event.moderation !== 'accepted' && (
+      <ModerationStatusText event={props.event} top={'0px'} />
+    )}
+
     <Flex flexWrap={'wrap'} flex={'1'} mb={[1, 1, 0]} order={[1, 1, 1]}>
       <Flex
         alignItems={['center', 'center', 'center']}
@@ -98,6 +107,33 @@ export const EventCard = (props: IProps) => (
           return <TagDisplay key={tag} tagKey={tag} />
         })}
     </Flex>
+    {props.needsModeration && (
+      <Flex
+        flexWrap={'nowrap'}
+        flexDirection={'row'}
+        alignItems={'center'}
+        ml={2}
+        order={[5, 5, 5]}
+      >
+        <Button
+          small
+          data-cy={'accept'}
+          variant={'primary'}
+          icon="check"
+          mr={1}
+          sx={{ height: '30px' }}
+          onClick={() => props.moderateEvent(props.event, true)}
+        />
+        <Button
+          small
+          data-cy="reject-pin"
+          variant={'tertiary'}
+          icon="delete"
+          sx={{ height: '30px' }}
+          onClick={() => props.moderateEvent(props.event, false)}
+        />
+      </Flex>
+    )}
     <Flex
       flexWrap={'nowrap'}
       alignItems={'center'}

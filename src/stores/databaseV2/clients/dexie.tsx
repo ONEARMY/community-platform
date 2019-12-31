@@ -8,7 +8,7 @@ import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
  * or busting cache on db. This is used as the Dexie version number, see:
  * https://dexie.org/docs/Tutorial/Design#database-versioning
  */
-const DB_CACHE_NUMBER = 20191228
+const DB_CACHE_NUMBER = 20191130
 const CACHE_DB_NAME = 'OneArmyCache'
 const db = new Dexie(CACHE_DB_NAME)
 

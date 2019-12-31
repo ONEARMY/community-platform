@@ -77,7 +77,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
                   onClick={() => this.props.moderateHowto(true)}
                 />
                 <Button
-                  data-cy="reject-pin"
+                  data-cy="reject-howto"
                   variant={'tertiary'}
                   icon="delete"
                   onClick={() => this.props.moderateHowto(false)}

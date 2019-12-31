@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx'
+import { observable, action, computed, toJS } from 'mobx'
 import {
   IHowto,
   IHowtoFormInput,
@@ -89,7 +89,7 @@ export class HowtoStore extends ModuleStore {
   }
 
   public needsModeration(howto: IHowto) {
-    return needsModeration(howto, this.activeUser)
+    return needsModeration(howto, toJS(this.activeUser))
   }
 
   // upload a new or update an existing how-to

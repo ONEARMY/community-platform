@@ -19,7 +19,7 @@ describe('[How To]', () => {
       cy.get('[data-cy=more-how-tos]', SKIP_TIMEOUT).should('be.hidden')
 
       cy.step('All how-tos are shown')
-      const totalHowTo = 7
+      const totalHowTo = 6
       cy.get('[data-cy=card]')
         .its('length')
         .should('be.eq', totalHowTo)
@@ -97,7 +97,7 @@ describe('[How To]', () => {
       cy.get('.data-cy__multi-value__label').should('not.exist')
       cy.get('[data-cy=card]')
         .its('length')
-        .should('be.eq', 7)
+        .should('be.eq', 6)
     })
   })
 

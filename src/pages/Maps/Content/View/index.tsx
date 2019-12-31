@@ -80,6 +80,10 @@ class MapView extends React.Component<IProps> {
         maxZoom={18}
         style={{ height: '100%', zIndex: 0 }}
         onmove={this.handleMove}
+        onclick={e => {
+          this.injected.mapsStore.setActivePin(undefined)
+          this.props.history.push('/map')
+        }}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

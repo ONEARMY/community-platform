@@ -117,6 +117,9 @@ class MapsPageClass extends React.Component<IProps, IState> {
                     this.props.mapsStore.setActivePinFilters(selected)
                   }}
                   onLocationChange={location => this.setCenter(location.latlng)}
+                  location={this.props.location}
+                  match={this.props.match}
+                  history={this.props.history}
                 />
                 <MapView
                   mapRef={this.mapRef}

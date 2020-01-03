@@ -103,7 +103,9 @@ export class HowtoList extends React.Component<any, IState> {
           </Flex>
           <MoreContainer m={'0 auto'} pt={60} pb={90}>
             <Flex alignItems={'center'} flexDirection={'column'} mt={5}>
-              <Heading medium>Inspire the Precious Plastic world.</Heading>
+              <Heading medium sx={{ textAlign: 'center' }}>
+                Inspire the Precious Plastic world.
+              </Heading>
               <Heading medium>Share your how-to!</Heading>
               <AuthWrapper>
                 <Link to={'/how-to/create'}>

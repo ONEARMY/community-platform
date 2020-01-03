@@ -19,6 +19,7 @@ import Flex from 'src/components/Flex'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import { zIndex } from 'src/themes/styled.theme'
 import Workspace from 'src/pages/User/workspace/Workspace'
+import { Text } from 'src/components/Text'
 
 import theme from 'src/themes/styled.theme'
 import {
@@ -92,24 +93,6 @@ const UserCategory = styled.div`
       `
       background-image: url(${props.bgImg});
     `}
-  }
-`
-
-const UserName = styled(Flex)``
-
-const UserDescription = styled.p`
-  color: ${theme.colors.grey};
-  white-space: pre-line;
-  margin-top: 0px;
-  margin-bottom: 20px;
-
-  display: block;
-  color: ${theme.colors.grey};
-  font-size: 16px;
-  line-height: 28px;
-
-  @media only screen and (min-width: ${theme.breakpoints[1]}) {
-    width: 80%;
   }
 `
 
@@ -515,20 +498,31 @@ export class UserPage extends React.Component<
               </Heading>
             </UserCategory>
 
-            <UserName alignItems="center">
+            <Flex alignItems="center">
               <Heading medium bold color={'black'} my={3} mr={2}>
                 {capitalizeFirstLetter(user.userName)}
               </Heading>
               {user.location && (
                 <FlagIconEvents code={user.location.countryCode} />
               )}
-            </UserName>
+            </Flex>
 
             {/* <Box sx={{ display: ['block', 'none'] }}>
               {this.renderCommitmentBox(user.isExpert, user.isV4Member)}
             </Box> */}
 
-            {user.about && <UserDescription>{user.about}</UserDescription>}
+            {user.about && (
+              <Text
+                preLine
+                paragraph
+                mt="0"
+                mb="20px"
+                color={theme.colors.grey}
+                width={['80%', '100%']}
+              >
+                {user.about}
+              </Text>
+            )}
 
             {user.profileType === 'collection-point' &&
               user.collectedPlasticTypes &&

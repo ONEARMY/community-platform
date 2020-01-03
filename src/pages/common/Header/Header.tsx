@@ -86,7 +86,7 @@ export class Header extends React.Component<IProps> {
             <Profile isMobile={false} />
           </DesktopMenuWrapper>
           <MobileMenuWrapper className="menu-mobile">
-            <Flex px={5}>
+            <Flex pl={5}>
               <HamburgerMenu
                 isOpen={menu.showMobilePanel || false}
                 menuClicked={() => menu.toggleMobilePanel()}

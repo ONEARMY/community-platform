@@ -111,7 +111,13 @@ export const isAllowToPin = (pin: IMapPin, user?: IUser) => {
  *             Country code to country name converters
  ***********************************************************************/
 export const getCountryCode = (countryName: string | undefined) => {
-  return Object.keys(countries).find(key => countries[key] === countryName)
+  let countryCode = Object.keys(countries).find(
+    key => countries[key] === countryName,
+  )
+  if (countryCode !== undefined) {
+    countryCode = countryCode.toLowerCase()
+  }
+  return countryCode
 }
 
 export const getCountryName = (countryCode: string | undefined) => {

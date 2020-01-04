@@ -83,22 +83,26 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               placeholder="Pick a unique username"
               validate={required}
             />
-            <Text mb={2} mt={7} medium>
-              Where are you based? *
-            </Text>
-            <FlagSelectContainer
-              width={1}
-              alignItems="center"
-              data-cy="country"
-            >
-              <Field
-                name="country"
-                component={FlagSelector}
-                searchable={true}
-                validate={required}
-                defaultCountry={getCountryCode(initialFormValues.country)}
-              />
-            </FlagSelectContainer>
+            {initialFormValues.profileType === 'member' && (
+              <Text mb={2} mt={7} medium>
+                Where are you based? *
+              </Text>
+            )}
+            {initialFormValues.profileType === 'member' && (
+              <FlagSelectContainer
+                width={1}
+                alignItems="center"
+                data-cy="country"
+              >
+                <Field
+                  name="country"
+                  component={FlagSelector}
+                  searchable={true}
+                  validate={required}
+                  defaultCountry={getCountryCode(initialFormValues.country)}
+                />
+              </FlagSelectContainer>
+            )}
             <Text mb={2} mt={7} medium>
               Description *
             </Text>

@@ -87,7 +87,8 @@ export const isAllowToEditContent = (doc: IEditableDoc, user?: IUser) => {
   if (!user) {
     return false
   }
-  const roles = user.userRoles ? user.userRoles : []
+  const roles =
+    user.userRoles && Array.isArray(user.userRoles) ? user.userRoles : []
   if (
     roles.includes('admin') ||
     roles.includes('super-admin') ||

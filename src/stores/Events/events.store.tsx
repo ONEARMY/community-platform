@@ -1,4 +1,4 @@
-import { observable, computed } from 'mobx'
+import { observable, computed, toJS } from 'mobx'
 import { IEventFormInput, IEventDB, IEvent } from 'src/models/events.models'
 import { ModuleStore } from '../common/module.store'
 import Filters from 'src/utils/filters'
@@ -97,7 +97,7 @@ export class EventStore extends ModuleStore {
   }
 
   public needsModeration(event: IEvent) {
-    return needsModeration(event, this.activeUser)
+    return needsModeration(event, toJS(this.activeUser))
   }
 
   public async uploadEvent(values: IEventFormInput) {

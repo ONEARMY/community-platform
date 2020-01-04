@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx'
+import { observable, action, toJS } from 'mobx'
 import {
   IMapPin,
   IBoundingBox,
@@ -166,7 +166,7 @@ export class MapsStore extends ModuleStore {
     this.setPin(pin)
   }
   public needsModeration(pin: IMapPin) {
-    return needsModeration(pin, this.activeUser)
+    return needsModeration(pin, toJS(this.activeUser))
   }
   public canSeePin(pin: IMapPin) {
     return pin.moderation === 'accepted' || isAllowToPin(pin, this.activeUser)

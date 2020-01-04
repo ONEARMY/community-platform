@@ -69,14 +69,14 @@ export interface IOpeningHours {
 export interface IUserPP extends IUser {
   profileType?: ProfileTypeLabel
   workspaceType?: WorkspaceType | null
-  coverImages?: IUploadedFileMeta[] | IConvertedFileMeta[]
+  coverImages?: IUploadedFileMeta[] | IConvertedFileMeta[] | null
   links?: ILink[]
-  mapPinDescription?: string
+  mapPinDescription?: string | null
   openingHours?: IOpeningHours[]
-  collectedPlasticTypes?: PlasticTypeLabel[]
-  machineBuilderXp?: IMAchineBuilderXp[]
-  isExpert?: boolean
-  isV4Member?: boolean
+  collectedPlasticTypes?: PlasticTypeLabel[] | null
+  machineBuilderXp?: IMAchineBuilderXp[] | null
+  isExpert?: boolean | null
+  isV4Member?: boolean | null
 }
 
 export type IUserPPDB = IUserPP & DBDoc

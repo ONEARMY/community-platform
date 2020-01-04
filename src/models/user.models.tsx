@@ -18,11 +18,11 @@ export interface IUser {
   // avatar:string
   verified: boolean
   userRoles?: UserRole[]
-  about?: string
+  about?: string | null
   DHSite_id?: number
   DHSite_mention_name?: string
-  country?: string
-  location?: ILocation
+  country?: string | null
+  location?: ILocation | null
   year?: ISODateString
 }
 export type IUserDB = IUser & DBDoc

@@ -19,6 +19,7 @@ import WhiteBubble2 from 'src/assets/images/white-bubble_2.svg'
 import WhiteBubble3 from 'src/assets/images/white-bubble_3.svg'
 import { Link } from 'src/components/Links'
 import { zIndex } from 'src/themes/styled.theme'
+import { Loader } from 'src/components/Loader'
 
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
@@ -150,13 +151,11 @@ export class Howto extends React.Component<
       )
     } else {
       return isLoading ? (
-        <Flex>
-          <Heading auxiliary txtcenter width={1}>
-            loading...
-          </Heading>
-        </Flex>
+        <Loader />
       ) : (
-        <div>How-to not found</div>
+        <Text txtcenter mt="50px" width={1}>
+          How-to not found
+        </Text>
       )
     }
   }

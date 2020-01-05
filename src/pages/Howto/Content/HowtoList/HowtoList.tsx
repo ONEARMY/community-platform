@@ -12,6 +12,7 @@ import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import HowToCard from 'src/components/HowToCard/HowToCard'
 import Heading from 'src/components/Heading'
+import { Loader } from 'src/components/Loader'
 
 interface InjectedProps {
   howtoStore?: HowtoStore
@@ -80,9 +81,11 @@ export class HowtoList extends React.Component<any, IState> {
           {filteredHowtos.length === 0 ? (
             <Flex>
               <Heading auxiliary txtcenter width={1}>
-                {Object.keys(selectedTags).length === 0
-                  ? 'Loading...'
-                  : 'No how-tos to show'}
+                {Object.keys(selectedTags).length === 0 ? (
+                  <Loader />
+                ) : (
+                  'No how-tos to show'
+                )}
               </Heading>
             </Flex>
           ) : (

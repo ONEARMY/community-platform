@@ -1,11 +1,10 @@
 import countries from 'react-flags-select/lib/countries.js'
-import { IHowto } from 'src/models/howto.models'
 import { IMapPin } from 'src/models/maps.models'
 import { IUser } from 'src/models/user.models'
 import { DBDoc, IModerable } from 'src/models/common.models'
 
 // remove special characters from string, also replacing spaces with dashes
-export const stripSpecialCharacters = (text?: string) => {
+export const stripSpecialCharacters = (text: string) => {
   return text
     ? text
         .replace(/[`~!@#$%^&*()_|+\-=÷¿?;:'",.<>\{\}\[\]\\\/]/gi, '')
@@ -14,8 +13,13 @@ export const stripSpecialCharacters = (text?: string) => {
     : ''
 }
 
+// convert to lower case and remove any special characters
+export const formatLowerNoSpecial = (text: string) => {
+  return stripSpecialCharacters(text).toLowerCase()
+}
+
 // remove dashes with spaces
-export const replaceDashesWithSpaces = (str?: string) => {
+export const replaceDashesWithSpaces = (str: string) => {
   return str ? str.replace(/-/g, ' ') : ''
 }
 

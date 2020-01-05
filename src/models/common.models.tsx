@@ -19,14 +19,14 @@ export type IDBEndpoint =
   | 'v3_mappins'
 
 // Types for moderation status
-export type ModerationStatus =
+export type IModerationStatus =
   | 'draft'
   | 'awaiting-moderation'
   | 'rejected'
   | 'accepted'
 
 export interface IModerable {
-  moderation: ModerationStatus
+  moderation: IModerationStatus
   _createdBy?: string
   _id?: string
 }

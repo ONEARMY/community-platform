@@ -13,6 +13,7 @@ import { RootStore } from '..'
 import { loginWithDHCredentials } from 'src/hacks/DaveHakkensNL.hacks'
 import { ModuleStore } from '../common/module.store'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
+import { formatLowerNoSpecial } from 'src/utils/helpers'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
@@ -41,7 +42,7 @@ export class UserStore extends ModuleStore {
   public async registerNewUser(
     email: string,
     password: string,
-    userName: string,
+    displayName: string,
   ) {
     // stop auto detect of login as will pick up with incomplete information during registration
     this._unsubscribeFromAuthStateChanges()
@@ -49,7 +50,7 @@ export class UserStore extends ModuleStore {
     // once registered populate auth profile displayname with the chosen username
     if (authReq.user) {
       await authReq.user.updateProfile({
-        displayName: userName,
+        displayName,
         photoURL: authReq.user.photoURL,
       })
       // populate db user profile and resume auth listener
@@ -195,7 +196,8 @@ export class UserStore extends ModuleStore {
 
   public async createUserProfile(fields: Partial<IUser> = {}) {
     const authUser = auth.currentUser as firebase.User
-    const userName = authUser.displayName as string
+    const displayName = authUser.displayName as string
+    const userName = formatLowerNoSpecial(displayName)
     const dbRef = this.db.collection<IUser>(COLLECTION_NAME).doc(userName)
     console.log('creating user profile', userName)
     if (!userName) {
@@ -203,7 +205,9 @@ export class UserStore extends ModuleStore {
     }
     const user: IUser = {
       _authID: authUser.uid,
+      displayName,
       userName,
+      moderation: 'awaiting-moderation',
       verified: false,
       ...fields,
     }

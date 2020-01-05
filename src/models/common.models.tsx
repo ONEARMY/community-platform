@@ -12,11 +12,11 @@ export type ISODateString = string
 type userId = string
 
 export type IDBEndpoint =
-  | 'v2_howtos'
-  | 'v2_users'
-  | 'v2_tags'
-  | 'v2_events'
-  | 'v2_mappins'
+  | 'v3_howtos'
+  | 'v3_users'
+  | 'v3_tags'
+  | 'v3_events'
+  | 'v3_mappins'
 
 // Types for moderation status
 export type ModerationStatus =

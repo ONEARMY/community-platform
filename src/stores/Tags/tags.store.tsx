@@ -18,7 +18,7 @@ export class TagsStore extends ModuleStore {
   }
 
   constructor(rootStore: RootStore) {
-    super(rootStore, 'v2_tags')
+    super(rootStore, 'v3_tags')
     this.allDocs$.subscribe((docs: ITag[]) => {
       this.allTags = docs.sort((a, b) => (a.label > b.label ? 1 : -1))
       this.allTagsByKey = arrayToJson(docs, '_id')
@@ -28,7 +28,7 @@ export class TagsStore extends ModuleStore {
 
   public saveTag(tag: Partial<ITag>) {
     return this.db
-      .collection('v2_tags')
+      .collection('v3_tags')
       .doc(tag._id)
       .set(tag)
   }

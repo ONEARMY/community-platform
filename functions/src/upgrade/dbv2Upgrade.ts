@@ -48,13 +48,13 @@ const upgradeDBEndpoint = async (endpoint: IDBEndpointV2) => {
 function upgrade(doc: any, endpoint: IDBEndpointV2) {
   switch (endpoint) {
     case 'v2_events':
-      return { ...doc, moderation: 'awaiting-moderation' }
+      return { ...doc, moderation: 'accepted' }
     case 'v2_howtos':
-      return { ...doc, moderation: 'awaiting-moderation' }
+      return { ...doc, moderation: 'accepted' }
     case 'v2_mappins':
-      return { ...doc, moderation: 'awaiting-moderation' }
+      return { ...doc, moderation: 'accepted' }
     case 'v2_users':
-      return { ...doc, moderation: 'awaiting-moderation' }
+      return { ...doc, moderation: 'accepted' }
     default:
       return doc
   }

@@ -119,8 +119,8 @@ export type ISODateString = string
  */
 
 export type DBEndpoint =
-  | 'v2_howtos'
-  | 'v2_users'
-  | 'v2_tags'
-  | 'v2_events'
-  | 'v2_mappins'
+  | 'v3_howtos'
+  | 'v3_users'
+  | 'v3_tags'
+  | 'v3_events'
+  | 'v3_mappins'

@@ -25,6 +25,7 @@ import { Box } from 'rebass'
 import { ILocation } from 'src/models/common.models'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { addProtocol } from 'src/utils/validators'
+import { Prompt } from 'react-router'
 
 export interface IFormValues extends Partial<IUserPP> {
   // form values are simply subset of user profile fields
@@ -201,6 +202,12 @@ export class UserSettings extends React.Component<IProps, IState> {
         }) => {
           return (
             <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
+              <Prompt
+                when={!this.injected.userStore.updateStatus.Complete}
+                message={
+                  'You have unsaved changes. Are you sure you want to leave this page?'
+                }
+              />
               <Flex
                 width={[1, 1, 2 / 3]}
                 sx={{

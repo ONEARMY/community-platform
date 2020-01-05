@@ -28,10 +28,19 @@ export class UserStore extends ModuleStore {
   @observable
   public authUser: firebase.User | null
 
+  @observable
+  public updateStatus: IUserUpdateStatus = getInitialUpdateStatus()
+
   @action
   public updateUser(user?: IUserPPDB) {
     this.user = user
   }
+
+  @action
+  public updateUpdateStatus(update: keyof IUserUpdateStatus) {
+    this.updateStatus[update] = true
+  }
+
   constructor(rootStore: RootStore) {
     super(rootStore)
     this._listenToAuthStateChanges()
@@ -97,6 +106,7 @@ export class UserStore extends ModuleStore {
   }
 
   public async updateUserProfile(values: Partial<IUserPP>) {
+    this.updateUpdateStatus('Start')
     const dbRef = this.db
       .collection<IUserPP>(COLLECTION_NAME)
       .doc((values as IUserDB)._id)
@@ -122,6 +132,7 @@ export class UserStore extends ModuleStore {
     if (values.location) {
       await this.mapsStore.setUserPin(update)
     }
+    this.updateUpdateStatus('Complete')
   }
 
   public async sendEmailVerification() {
@@ -235,6 +246,19 @@ export class UserStore extends ModuleStore {
   private _unsubscribeFromAuthStateChanges() {
     this.authUnsubscribe()
   }
+}
+
+interface IUserUpdateStatus {
+  Start: boolean
+  Complete: boolean
+}
+
+function getInitialUpdateStatus() {
+  const status: IUserUpdateStatus = {
+    Start: false,
+    Complete: false,
+  }
+  return status
 }
 
 /***********************************************************************************************

@@ -28,6 +28,8 @@ import { Image, Box } from 'rebass'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import { HowToSubmitStatus } from './SubmitStatus'
 import { required } from 'src/utils/validators'
+import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
+import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 
 interface IState {
   formSaved: boolean
@@ -172,6 +174,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                         bg={theme.colors.softblue}
                         px={3}
                         py={2}
+                        alignItems="center"
                       >
                         <Heading medium>
                           {this.props.parentType === 'create' ? (
@@ -179,8 +182,14 @@ export class HowtoForm extends React.Component<IProps, IState> {
                           ) : (
                             <span>Edit</span>
                           )}{' '}
-                          your How-To
+                          a How-To
                         </Heading>
+                        <Box ml="15px">
+                          <ElWithBeforeIcon
+                            IconUrl={IconHeaderHowto}
+                            height="20px"
+                          />
+                        </Box>
                       </Flex>
                       <Box
                         sx={{ mt: '20px', display: ['block', 'block', 'none'] }}

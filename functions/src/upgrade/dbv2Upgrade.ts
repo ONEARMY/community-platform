@@ -36,9 +36,9 @@ const upgradeDBEndpoint = async (endpoint: IDBEndpointV2) => {
   // remove deleted docs and upgrade
   const v3Docs = docs.filter(d => !d._deleted).map(d => upgrade(d, endpoint))
   const v2Endpoint = mappings[endpoint]
-  v3Docs.forEach(v2Doc => {
-    const ref = db.doc(`${v2Endpoint}/${v2Doc._id}`)
-    batch.set(ref, v2Doc)
+  v3Docs.forEach(doc => {
+    const ref = db.doc(`${v2Endpoint}/${doc._id}`)
+    batch.set(ref, doc)
   })
   console.log(`|${endpoint}|: upgrade ready`)
   await batch.commit()
@@ -48,16 +48,46 @@ const upgradeDBEndpoint = async (endpoint: IDBEndpointV2) => {
 function upgrade(doc: any, endpoint: IDBEndpointV2) {
   switch (endpoint) {
     case 'v2_events':
-      return { ...doc, moderation: 'accepted' }
+      return {
+        ...doc,
+        moderation: 'accepted',
+        _createdBy: formatLowerNoSpecial(doc._createdBy),
+      }
     case 'v2_howtos':
-      return { ...doc, moderation: 'accepted' }
+      return {
+        ...doc,
+        moderation: 'accepted',
+        _createdBy: formatLowerNoSpecial(doc._createdBy),
+      }
     case 'v2_mappins':
-      return { ...doc, moderation: 'accepted' }
+      return {
+        ...doc,
+        moderation: 'accepted',
+        _createdBy: formatLowerNoSpecial(doc._createdBy),
+      }
     case 'v2_users':
-      return { ...doc, moderation: 'accepted' }
+      return {
+        ...doc,
+        moderation: 'accepted',
+        _createdBy: formatLowerNoSpecial(doc._createdBy),
+        _id: formatLowerNoSpecial(doc._id),
+        displayName: doc.userName || doc._id || 'NA',
+        userName: formatLowerNoSpecial(doc.userName),
+      }
     default:
       return doc
   }
+}
+
+// convert to lower case and remove any special characters
+const formatLowerNoSpecial = (text: string = 'NA') => {
+  return text
+    ? text
+        .replace(/[`~!@#$%^&*()_|+\-=÷¿?;:'",.<>\{\}\[\]\\\/]/gi, '')
+        .split(' ')
+        .join('-')
+        .toLowerCase()
+    : ''
 }
 
 type IDBEndpointV2 =

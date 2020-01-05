@@ -85,11 +85,9 @@ const eqSettings = (chaiObj, utils) => {
       _deleted,
       _id,
       about,
-      country,
       profileType,
       userName,
       verified,
-      workspaceType,
     } = expected
     expect(subject, 'Basic Info').to.containSubset({
       _authID,
@@ -98,7 +96,27 @@ const eqSettings = (chaiObj, utils) => {
       userName,
       verified,
       profileType,
-      workspaceType,
+      about,
+    })
+  }
+  const basicMemberInfoAssert: Assert<IUserPPDB, any> = (subject, expected) => {
+    const {
+      _authID,
+      _deleted,
+      _id,
+      about,
+      country,
+      profileType,
+      userName,
+      verified,
+    } = expected
+    expect(subject, 'Basic Info').to.containSubset({
+      _authID,
+      _deleted,
+      _id,
+      userName,
+      verified,
+      profileType,
       about,
       country,
     })
@@ -115,6 +133,10 @@ const eqSettings = (chaiObj, utils) => {
       expected.mapPinDescription,
     )
   }
+  const workspaceAssert: Assert<IUserPPDB, any> = (subject, expected) =>
+    expect(subject.workspaceType, 'workspaceType').to.containSubset(
+      expected.workspaceType,
+    )
   const machineExpertiseAssert: Assert<IUserPPDB, any> = (subject, expected) =>
     expect(subject.machineBuilderXp, 'MachineBuilderXp').to.containSubset(
       expected.machineBuilderXp,
@@ -133,13 +155,14 @@ const eqSettings = (chaiObj, utils) => {
     [key in ProfileTypeLabel]: ChainAssert<IUserPPDB, any>
   } = {
     workspace: new ChainAssert<IUserPPDB, any>(
+      workspaceAssert,
       basicInfoAssert,
       coverImageAssert,
       linkAssert,
       locationAssert,
     ),
     member: new ChainAssert<IUserPPDB, any>(
-      basicInfoAssert,
+      basicMemberInfoAssert,
       coverImageAssert,
       linkAssert,
     ),

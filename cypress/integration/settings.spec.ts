@@ -3,7 +3,7 @@ import { UserMenuItem } from '../support/commands'
 
 interface Info {
   username: string
-  country: string
+  country?: string
   description: string
   coverImage: string
 }
@@ -33,15 +33,17 @@ describe('[Settings]', () => {
     cy.get('[data-cy=username')
       .clear()
       .type(info.username)
-    cy.get('[data-cy=country]')
-      .find('.flag-select')
-      .click()
-    cy.get('[data-cy=country]')
-      .find(':text')
-      .type(info.country.substring(0, info.country.length - 2))
-    cy.get('[data-cy=country]')
-      .contains(info.country)
-      .click()
+    if (info.country) {
+      cy.get('[data-cy=country]')
+        .find('.flag-select')
+        .click()
+      cy.get('[data-cy=country]')
+        .find(':text')
+        .type(info.country.substring(0, info.country.length - 2))
+      cy.get('[data-cy=country]')
+        .contains(info.country)
+        .click()
+    }
     cy.get('[data-cy=info-description')
       .clear()
       .type(info.description)
@@ -74,7 +76,6 @@ describe('[Settings]', () => {
       .click()
     cy.get(`[data-cy=input-link-${link.index}]`).type(link.url)
   }
-
   describe('[Focus Workplace]', () => {
     const freshSettings = {
       _authID: 'l9N5HFHzSjQvtP9g9MyFnPpkFmM2',
@@ -89,7 +90,6 @@ describe('[Settings]', () => {
       _deleted: false,
       _id: 'settings_workplace_new',
       about: 'We have some space to run a workplace',
-      country: 'United States',
       coverImages: [
         {
           contentType: 'image/jpeg',
@@ -145,7 +145,6 @@ describe('[Settings]', () => {
 
       setInfo({
         username: expected.userName,
-        country: expected.country,
         description: expected.about,
         coverImage: 'images/profile-cover-1.jpg',
       })
@@ -270,7 +269,6 @@ describe('[Settings]', () => {
       _deleted: false,
       _id: 'settings_machine_new',
       about: "We're mechanics and our jobs are making machines",
-      country: 'Singapore',
       profileType: 'machine-builder',
       userName: 'settings_machine_new',
       verified: true,
@@ -322,7 +320,6 @@ describe('[Settings]', () => {
 
       setInfo({
         username: expected.userName,
-        country: expected.country,
         description: expected.about,
         coverImage: 'images/profile-cover-1.jpg',
       })
@@ -370,7 +367,6 @@ describe('[Settings]', () => {
       _deleted: false,
       _id: 'settings_community_new',
       about: 'An enthusiastic community that makes the world greener!',
-      country: 'United Kingdom',
       mapPinDescription: 'Fun, vibrant and full of amazing people',
       profileType: 'community-builder',
       userName: 'settings_community_new',
@@ -421,7 +417,6 @@ describe('[Settings]', () => {
 
       setInfo({
         username: expected.userName,
-        country: expected.country,
         description: expected.about,
         coverImage: 'images/profile-cover-1.jpg',
       })
@@ -449,7 +444,7 @@ describe('[Settings]', () => {
     })
   })
 
-  describe.only('Focus Plastic Collection Point', () => {
+  describe('Focus Plastic Collection Point', () => {
     const freshSettings = {
       _authID: 'uxupeYR7glagQyhBy8q0blr0chd2',
       _id: 'settings_plastic_new',
@@ -464,7 +459,6 @@ describe('[Settings]', () => {
       _id: 'settings_plastic_new',
       about:
         'We accept plastic currencies: Bottle, Nylon Bags, Plastic Lids/Straws',
-      country: 'Malaysia',
       profileType: 'collection-point',
       userName: 'settings_plastic_new',
       verified: true,
@@ -577,7 +571,6 @@ describe('[Settings]', () => {
 
       setInfo({
         username: expected.userName,
-        country: expected.country,
         description: expected.about,
         coverImage: 'images/profile-cover-1.jpg',
       })

@@ -344,16 +344,16 @@ export const MACHINE_BUILDER_XP: IMAchineBuilderXp[] = [
 
 export const PROFILE_TYPES: IProfileType[] = [
   {
-    label: 'workspace',
-    textLabel: 'I run a workspace',
-    imageSrc: WorkspaceBadge,
-    cleanImageSrc: LogoWorkspace,
-  },
-  {
     label: 'member',
     textLabel: 'I am a member',
     imageSrc: MemberBadge,
     cleanImageSrc: LogoMember,
+  },
+  {
+    label: 'workspace',
+    textLabel: 'I run a workspace',
+    imageSrc: WorkspaceBadge,
+    cleanImageSrc: LogoWorkspace,
   },
   {
     label: 'machine-builder',

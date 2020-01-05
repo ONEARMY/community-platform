@@ -32,7 +32,7 @@ export class Logo extends React.Component<IProps> {
           <Link
             sx={{ zIndex: 1000, display: 'flex', alignItems: 'center' }}
             color="black"
-            ml={[2, 3, 4]}
+            ml={[0, 4]}
             href="/"
           >
             <Flex

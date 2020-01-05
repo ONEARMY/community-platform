@@ -422,7 +422,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                       disabled={submitting}
                       sx={{ display: 'block' }}
                     >
-                      {formValues.moderation === 'draft' ? (
+                      {formValues.moderation !== 'draft' ? (
                         <span>Save to draft</span>
                       ) : (
                         <span>Revert to draft</span>

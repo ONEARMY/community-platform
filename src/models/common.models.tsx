@@ -1,7 +1,7 @@
-import { DBDoc } from '../stores/databaseV2/types'
+import { DBDoc as DBDocImport } from '../stores/databaseV2/types'
 
 // re-export the database dbDoc to make it easier to import elsewhere
-export type DBDoc = DBDoc
+export type DBDoc = DBDocImport
 
 // A reminder that dates should be saved in the ISOString format
 // i.e. new Date().toISOString() => 2011-10-05T14:48:00.000Z
@@ -30,20 +30,6 @@ export interface IModerable {
   _createdBy?: string
   _id?: string
 }
-
-/************************************************************************
- *  Deprecates - legacy interfaces used. Currently retained to troubleshoot
- *  upgrades, can remove once database working in production site
- ***************************************************************************/
-type IDBEndpointV1 = 'howtosV1' | 'users' | 'tagsV1' | 'eventsV1' | 'mapPinsV1'
-
-// interface DBDocV1 {
-//   _id: string
-//   _created: firestore.Timestamp
-//   _modified: firestore.Timestamp
-//   _deleted: boolean
-//   _createdBy: userId
-// }
 
 /*****************************************************************
  *            Algolia Locations

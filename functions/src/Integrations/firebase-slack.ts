@@ -44,7 +44,7 @@ export const notifyNewHowTo = functions.firestore
       SLACK_WEBHOOK_URL,
       {
         json: {
-          text: `📓 Yeah! New How To "* ${title} *" by ${user}
+          text: `📓 Yeah! New How To *${title}* by ${user}
             check it out: ${SITE_URL}/how-to/${slug}`,
         },
       },

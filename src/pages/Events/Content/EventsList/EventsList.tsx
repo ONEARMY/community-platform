@@ -123,7 +123,9 @@ export class EventsList extends React.Component<any> {
               </Flex>
               <MoreContainer m={'0 auto'} pt={60} pb={90}>
                 <Flex alignItems={'center'} flexDirection={'column'} mt={5}>
-                  <Heading medium>Connect with a likeminded community.</Heading>
+                  <Heading medium sx={{ textAlign: 'center' }}>
+                    Connect with a likeminded community.
+                  </Heading>
                   <Heading medium>All around the planet.</Heading>
                   <AuthWrapper>
                     <Link to={'/events/create'}>

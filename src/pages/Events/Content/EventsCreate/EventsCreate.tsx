@@ -8,6 +8,7 @@ import { InputField, DatePickerField } from 'src/components/Form/Fields'
 import { Button } from 'src/components/Button'
 import { EventStore } from 'src/stores/Events/events.store'
 import Heading from 'src/components/Heading'
+import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 import { inject } from 'mobx-react'
@@ -17,12 +18,14 @@ import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
 import { validateUrl, addProtocol, required } from 'src/utils/validators'
+import { Box } from 'rebass'
 
 interface IState {
   formValues: IEventFormInput
   formSaved: boolean
   showSubmitModal?: boolean
   selectedDate: any
+  isLocationSelected?: boolean
 }
 interface IProps extends RouteComponentProps<any> {}
 interface IInjectedProps extends IProps {
@@ -75,7 +78,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
   }
 
   public render() {
-    const { formValues } = this.state
+    const { formValues, isLocationSelected } = this.state
     return (
       <Form
         onSubmit={v => {
@@ -120,6 +123,11 @@ export class EventsCreate extends React.Component<IProps, IState> {
                     >
                       <Heading medium>Create an event</Heading>
                     </Flex>
+                    <Box
+                      sx={{ mt: '20px', display: ['block', 'block', 'none'] }}
+                    >
+                      <PostingGuidelines />
+                    </Box>
                     <Flex
                       card
                       mediumRadius
@@ -182,8 +190,19 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             className="location-search-create"
                             validateFields={[]}
                             validate={required}
+                            customChange={v => {
+                              this.setState({
+                                isLocationSelected: true,
+                              })
+                            }}
                             component={LocationSearchField}
                           />
+                          {isLocationSelected !== undefined &&
+                            !isLocationSelected && (
+                              <Text small color={theme.colors.red} mb="5px">
+                                Select a location for your event
+                              </Text>
+                            )}
                         </Flex>
                       </Flex>
                       <Flex
@@ -210,7 +229,9 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             validate={value => validateUrl(value)}
                             component={InputField}
                             placeholder="URL to offsite link (Facebook, Meetup, etc)"
-                            onBlur={e => mutators.addProtocol(e.target.name)}
+                            customOnBlur={e =>
+                              mutators.addProtocol(e.target.name)
+                            }
                           />
                         </Flex>
                       </Flex>
@@ -228,14 +249,23 @@ export class EventsCreate extends React.Component<IProps, IState> {
                 px={2}
                 mt={4}
               >
-                <PostingGuidelines />
+                <Box sx={{ display: ['none', 'none', 'block'] }}>
+                  <PostingGuidelines />
+                </Box>
                 <Button
-                  onClick={() => handleSubmit()}
+                  onClick={() => {
+                    if (isLocationSelected) {
+                      handleSubmit()
+                    } else {
+                      this.setState({ isLocationSelected: false })
+                    }
+                  }}
                   width={1}
                   mt={3}
                   variant={'primary'}
                   disabled={submitting}
                   data-cy="submit"
+                  sx={{ mb: ['40px', '40px', 0] }}
                 >
                   Publish
                 </Button>

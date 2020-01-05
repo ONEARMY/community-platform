@@ -16,6 +16,7 @@ interface IState {
 
 const FileContainer = styled.a`
   width: 300px;
+  margin: 3px 3px;
 `
 
 export class FileInfo extends React.Component<IProps, IState> {

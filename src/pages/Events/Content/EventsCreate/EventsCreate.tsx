@@ -229,7 +229,9 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             validate={value => validateUrl(value)}
                             component={InputField}
                             placeholder="URL to offsite link (Facebook, Meetup, etc)"
-                            onBlur={e => mutators.addProtocol(e.target.name)}
+                            customOnBlur={e =>
+                              mutators.addProtocol(e.target.name)
+                            }
                           />
                         </Flex>
                       </Flex>

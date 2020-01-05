@@ -22,8 +22,5 @@ export const PostingGuidelines = () => (
     <Text auxiliary mb={1}>
       4. Reach an army of likeminded people :)
     </Text>
-    <Text auxiliary mb={1}>
-      5. For each steps try to use an image.
-    </Text>
   </Flex>
 )

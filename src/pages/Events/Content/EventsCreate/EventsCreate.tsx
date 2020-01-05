@@ -17,6 +17,7 @@ import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
 import { validateUrl, addProtocol, required } from 'src/utils/validators'
+import { Box } from 'rebass'
 
 interface IState {
   formValues: IEventFormInput
@@ -120,6 +121,11 @@ export class EventsCreate extends React.Component<IProps, IState> {
                     >
                       <Heading medium>Create an event</Heading>
                     </Flex>
+                    <Box
+                      sx={{ mt: '20px', display: ['block', 'block', 'none'] }}
+                    >
+                      <PostingGuidelines />
+                    </Box>
                     <Flex
                       card
                       mediumRadius
@@ -228,7 +234,9 @@ export class EventsCreate extends React.Component<IProps, IState> {
                 px={2}
                 mt={4}
               >
-                <PostingGuidelines />
+                <Box sx={{ display: ['none', 'none', 'block'] }}>
+                  <PostingGuidelines />
+                </Box>
                 <Button
                   onClick={() => handleSubmit()}
                   width={1}
@@ -236,6 +244,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                   variant={'primary'}
                   disabled={submitting}
                   data-cy="submit"
+                  sx={{ mb: ['40px', '40px', 0] }}
                 >
                   Publish
                 </Button>

@@ -82,7 +82,7 @@ function upgrade(doc: any, endpoint: IDBEndpointV2) {
  *  Imported functions - note, direct import not working so copied from src
  ******************************************************************************/
 // remove special characters from string, also replacing spaces with dashes
-const stripNonAlphaNumericOrDash = (text: string) => {
+const stripSpecialCharacters = (text: string) => {
   return text
     ? text
         .split(' ')
@@ -93,7 +93,7 @@ const stripNonAlphaNumericOrDash = (text: string) => {
 
 // convert to lower case and remove any special characters
 const formatLowerNoSpecial = (text: string) => {
-  return stripNonAlphaNumericOrDash(text).toLowerCase()
+  return stripSpecialCharacters(text).toLowerCase()
 }
 
 /*****************************************************************************

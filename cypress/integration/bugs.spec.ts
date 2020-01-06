@@ -8,7 +8,8 @@ describe('[Bugs]', () => {
     cy.wait(3000)
 
     cy.visit('/sign-up')
-      .url().should('include', Page.HOME_PAGE)
+      .url()
+      .should('include', Page.HOME_PAGE)
   })
   it.skip('[692]', () => {
     cy.step('Edit button should be available to resource owner')
@@ -23,12 +24,14 @@ describe('[Bugs]', () => {
     cy.visit('/how-to')
     cy.completeLogin('howto_editor@test.com', 'test1234')
     cy.visit(editUrl)
-    cy.get('[data-cy=submit]').contains('Save Changes').should('be.exist')
+    cy.get('[data-cy=submit]')
+      .contains('Save Changes')
+      .should('be.exist')
     cy.url().should('include', editUrl)
   })
 
   it.skip('[686]', () => {
-    cy.deleteDocuments('v2_events', 'title', '==', 'Create a test event')
+    cy.deleteDocuments('v3_events', 'title', '==', 'Create a test event')
     cy.visit('/events')
 
     cy.login('event_creator@test.com', 'test1234')
@@ -36,20 +39,33 @@ describe('[Bugs]', () => {
 
     cy.step('Fill up mandatory info')
     cy.get('[data-cy=title]').type('Create a test event')
-    cy.get('[data-cy=date]').type(Cypress.moment('2019-08-20').format('YYYY-MM-DD'))
+    cy.get('[data-cy=date]').type(
+      Cypress.moment('2019-08-20').format('YYYY-MM-DD'),
+    )
     cy.get('[data-cy=tag-select]').click()
-    cy.get('.data-cy__menu').contains('event_testing').click()
+    cy.get('.data-cy__menu')
+      .contains('event_testing')
+      .click()
 
-    cy.get('[data-cy=location]').find('input:eq(0)').type('Atucucho')
-    cy.get('[data-cy=location]').find('div').contains('Atucucho').click()
+    cy.get('[data-cy=location]')
+      .find('input:eq(0)')
+      .type('Atucucho')
+    cy.get('[data-cy=location]')
+      .find('div')
+      .contains('Atucucho')
+      .click()
     cy.get('[data-cy=tag-select]').click()
-    cy.get('[data-cy=url]').type('https://www.meetup.com/pt-BR/cities/br/rio_de_janeiro/')
+    cy.get('[data-cy=url]').type(
+      'https://www.meetup.com/pt-BR/cities/br/rio_de_janeiro/',
+    )
 
     cy.step('Publish the event')
     cy.get('[data-cy=submit]').click()
 
     cy.step('The new event is shown in /events')
-    cy.get('[data-cy=card]').contains('Create a test event').should('be.exist')
+    cy.get('[data-cy=card]')
+      .contains('Create a test event')
+      .should('be.exist')
   })
 
   it.skip('[685]', () => {
@@ -58,7 +74,9 @@ describe('[Bugs]', () => {
     cy.visit('/settings')
 
     cy.toggleUserMenuOn()
-    cy.get('[data-cy=menu-item]').contains('Logout').click()
+    cy.get('[data-cy=menu-item]')
+      .contains('Logout')
+      .click()
 
     cy.url().should('include', '/how-to')
   })
@@ -82,9 +100,14 @@ describe('[Bugs]', () => {
 
   it.skip('[676]', () => {
     cy.visit('/how-to/unknown-anything')
-    cy.contains(`The page you were looking for was moved or doesn't exist`).should('be.exist')
-    cy.get('a').contains('Home').click()
-      .url().should('include', Page.HOME_PAGE)
+    cy.contains(
+      `The page you were looking for was moved or doesn't exist`,
+    ).should('be.exist')
+    cy.get('a')
+      .contains('Home')
+      .click()
+      .url()
+      .should('include', Page.HOME_PAGE)
   })
 
   it.skip('[649]', () => {
@@ -110,5 +133,4 @@ describe('[Bugs]', () => {
       .url()
       .should('include', Page.HOME_PAGE)
   })
-
 })

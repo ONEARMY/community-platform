@@ -87,7 +87,7 @@ export class ModuleStore {
   public validateTitle = async (title: string, endpoint: IDBEndpoint) => {
     if (title) {
       const slug = stripSpecialCharacters(title).toLowerCase()
-      const unique = await this.checkIsUnique('v2_howtos', 'slug', slug)
+      const unique = await this.checkIsUnique('v3_howtos', 'slug', slug)
       return unique
         ? false
         : 'Titles must be unique, please try being more specific'

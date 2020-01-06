@@ -94,7 +94,7 @@ describe('[Settings]', () => {
         {
           contentType: 'image/jpeg',
           fullPath:
-            'uploads/v2_users/settings_workplace_new/images/profile-cover-1.jpg',
+            'uploads/v3_users/settings_workplace_new/images/profile-cover-1.jpg',
           name: 'profile-cover-1.jpg',
           size: 18987,
           type: 'image/jpeg',
@@ -132,7 +132,7 @@ describe('[Settings]', () => {
     it('[Editing a new Profile]', () => {
       cy.logout()
       cy.updateDocument(
-        DbCollectionName.v2_users,
+        DbCollectionName.v3_users,
         freshSettings.userName,
         freshSettings,
       )
@@ -173,7 +173,7 @@ describe('[Settings]', () => {
 
       cy.step('Verify if all changes were saved correctly')
       cy.queryDocuments(
-        DbCollectionName.v2_users,
+        DbCollectionName.v3_users,
         'userName',
         '==',
         expected.userName,
@@ -202,7 +202,7 @@ describe('[Settings]', () => {
         {
           contentType: 'image/jpeg',
           fullPath:
-            'uploads/v2_users/settings_member_new/images/profile-cover-1.jpg',
+            'uploads/v3_users/settings_member_new/images/profile-cover-1.jpg',
           name: 'profile-cover-1.jpg',
           size: 18987,
           type: 'image/jpeg',
@@ -218,7 +218,7 @@ describe('[Settings]', () => {
     it('[Edit a new profile]', () => {
       cy.logout()
       cy.updateDocument(
-        DbCollectionName.v2_users,
+        DbCollectionName.v3_users,
         freshSettings.userName,
         freshSettings,
       )
@@ -247,7 +247,7 @@ describe('[Settings]', () => {
         .wait(3000)
 
       cy.queryDocuments(
-        DbCollectionName.v2_users,
+        DbCollectionName.v3_users,
         'userName',
         '==',
         expected.userName,
@@ -276,7 +276,7 @@ describe('[Settings]', () => {
         {
           contentType: 'image/jpeg',
           fullPath:
-            'uploads/v2_users/settings_machine_new/images/profile-cover-1.jpg',
+            'uploads/v3_users/settings_machine_new/images/profile-cover-1.jpg',
           name: 'profile-cover-1.jpg',
           size: 18987,
           type: 'image/jpeg',
@@ -307,7 +307,7 @@ describe('[Settings]', () => {
     it('[Edit a new profile]', () => {
       cy.logout()
       cy.updateDocument(
-        DbCollectionName.v2_users,
+        DbCollectionName.v3_users,
         freshSettings.userName,
         freshSettings,
       )
@@ -345,7 +345,7 @@ describe('[Settings]', () => {
         .wait(3000)
 
       cy.queryDocuments(
-        DbCollectionName.v2_users,
+        DbCollectionName.v3_users,
         'userName',
         '==',
         expected.userName,
@@ -375,7 +375,7 @@ describe('[Settings]', () => {
         {
           contentType: 'image/jpeg',
           fullPath:
-            'uploads/v2_users/settings_community_new/images/profile-cover-1.jpg',
+            'uploads/v3_users/settings_community_new/images/profile-cover-1.jpg',
           name: 'profile-cover-1.jpg',
           size: 18987,
           type: 'image/jpeg',
@@ -404,7 +404,7 @@ describe('[Settings]', () => {
     it('[Edit a new profile]', () => {
       cy.logout()
       cy.updateDocument(
-        DbCollectionName.v2_users,
+        DbCollectionName.v3_users,
         freshSettings.userName,
         freshSettings,
       )
@@ -436,7 +436,7 @@ describe('[Settings]', () => {
         .click()
         .wait(3000)
       cy.queryDocuments(
-        DbCollectionName.v2_users,
+        DbCollectionName.v3_users,
         'userName',
         '==',
         expected.userName,
@@ -466,7 +466,7 @@ describe('[Settings]', () => {
         {
           contentType: 'image/jpeg',
           fullPath:
-            'uploads/v2_users/settings_plastic_new/images/profile-cover-1.jpg',
+            'uploads/v3_users/settings_plastic_new/images/profile-cover-1.jpg',
           name: 'profile-cover-1.jpg',
           size: 18987,
           type: 'image/jpeg',
@@ -559,7 +559,7 @@ describe('[Settings]', () => {
     it('[Edit a new profile]', () => {
       cy.logout()
       cy.updateDocument(
-        DbCollectionName.v2_users,
+        DbCollectionName.v3_users,
         freshSettings.userName,
         freshSettings,
       )
@@ -629,7 +629,7 @@ describe('[Settings]', () => {
         .click()
         .wait(3000)
       cy.queryDocuments(
-        DbCollectionName.v2_users,
+        DbCollectionName.v3_users,
         'userName',
         '==',
         expected.userName,

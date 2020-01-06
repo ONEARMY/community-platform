@@ -14,7 +14,7 @@ import { IUser } from 'src/models/user.models'
 
 export class EventStore extends ModuleStore {
   constructor(rootStore: RootStore) {
-    super(rootStore, 'v2_events')
+    super(rootStore, 'v3_events')
     this.allDocs$.subscribe((docs: IEventDB[]) => {
       this.allEvents = docs.sort((a, b) => (a.date > b.date ? 1 : -1))
     })
@@ -92,7 +92,7 @@ export class EventStore extends ModuleStore {
     if (!hasAdminRights(this.activeUser)) {
       return false
     }
-    const doc = this.db.collection('v2_events').doc(event._id)
+    const doc = this.db.collection('v3_events').doc(event._id)
     return doc.set(event)
   }
 
@@ -111,7 +111,7 @@ export class EventStore extends ModuleStore {
         _createdBy: user.userName,
         moderation: 'awaiting-moderation',
       }
-      const doc = this.db.collection('v2_events').doc()
+      const doc = this.db.collection('v3_events').doc()
       return doc.set(event)
     } catch (error) {
       throw Error

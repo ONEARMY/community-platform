@@ -32,7 +32,7 @@ export class AdminStore extends ModuleStore {
    *  User Admin
    *********************************************************************************/
   public async addUserRole(username: string, role: UserRole) {
-    const userRef = this.db.collection<IUser>('v2_users').doc(username)
+    const userRef = this.db.collection<IUser>('v3_users').doc(username)
     const user = await userRef.get('server')
     if (!user) {
       throw new Error(`user with username [${username}] does not exist`)
@@ -46,7 +46,7 @@ export class AdminStore extends ModuleStore {
   }
 
   public async removeUserRole(username: string, role: UserRole) {
-    const userRef = this.db.collection<IUser>('v2_users').doc(username)
+    const userRef = this.db.collection<IUser>('v3_users').doc(username)
     const user = await userRef.get('server')
     if (!user) {
       throw new Error(`user with username [${username}] does not exist`)
@@ -61,7 +61,7 @@ export class AdminStore extends ModuleStore {
 
   private async _getUsersByRole(role: UserRole) {
     return this.db
-      .collection<IUser>('v2_users')
+      .collection<IUser>('v3_users')
       .getWhere('userRoles', 'array-contains', role)
   }
 }

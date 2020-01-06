@@ -4,6 +4,8 @@ import { MOCK_DB_META } from './db.mock'
 export const MOCK_USER: IUser = {
   verified: true,
   userName: 'chris-m-clarke',
+  displayName: 'chris-m-clarke',
+  moderation: 'accepted',
   ...MOCK_DB_META(),
   _authID: '123',
   DHSite_id: 70134,

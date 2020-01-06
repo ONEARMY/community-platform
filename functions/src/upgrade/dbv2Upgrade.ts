@@ -48,25 +48,26 @@ function upgrade(doc: any, endpoint: IDBEndpointV2) {
     case 'v2_events':
       return {
         ...doc,
-        moderation: 'accepted',
+        moderation: doc.moderation ? doc.moderation : 'accepted',
         _createdBy: formatLowerNoSpecial(doc._createdBy),
       }
     case 'v2_howtos':
       return {
         ...doc,
-        moderation: 'accepted',
+        moderation: doc.moderation ? doc.moderation : 'accepted',
         _createdBy: formatLowerNoSpecial(doc._createdBy),
       }
     case 'v2_mappins':
       return {
         ...doc,
-        moderation: 'accepted',
+        _id: formatLowerNoSpecial(doc._id),
+        moderation: doc.moderation ? doc.moderation : 'accepted',
         _createdBy: formatLowerNoSpecial(doc._createdBy),
       }
     case 'v2_users':
       return {
         ...doc,
-        moderation: 'accepted',
+        moderation: doc.moderation ? doc.moderation : 'accepted',
         _createdBy: formatLowerNoSpecial(doc._createdBy),
         _id: formatLowerNoSpecial(doc._id),
         displayName: doc.userName || doc._id || 'NA',
@@ -81,18 +82,18 @@ function upgrade(doc: any, endpoint: IDBEndpointV2) {
  *  Imported functions - note, direct import not working so copied from src
  ******************************************************************************/
 // remove special characters from string, also replacing spaces with dashes
-const stripSpecialCharacters = (text: string) => {
+const stripNonAlphaNumericOrDash = (text: string) => {
   return text
     ? text
-        .replace(/[`~!@#$%^&*()_|+\-=÷¿?;:'",.<>\{\}\[\]\\\/]/gi, '')
         .split(' ')
         .join('-')
+        .replace(/[^a-zA-Z0-9_-]/gi, '')
     : ''
 }
 
 // convert to lower case and remove any special characters
 const formatLowerNoSpecial = (text: string) => {
-  return stripSpecialCharacters(text).toLowerCase()
+  return stripNonAlphaNumericOrDash(text).toLowerCase()
 }
 
 /*****************************************************************************

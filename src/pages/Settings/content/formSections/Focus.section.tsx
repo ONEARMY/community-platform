@@ -79,7 +79,7 @@ export class FocusSection extends React.Component<IProps, IState> {
               target="_blank"
             >
               <Button ml={[1, 2, 2]} variant="outline" data-cy="go-to">
-                Checkout our guidelines
+                Check out our guidelines
               </Button>
             </Link>
           </Flex>

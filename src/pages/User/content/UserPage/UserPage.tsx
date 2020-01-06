@@ -496,6 +496,8 @@ export class UserPage extends React.Component<
                   `${replaceDashesWithSpaces(user.workspaceType)} `}
                 {user.profileType === 'community-builder'
                   ? 'Community Point'
+                  : user.profileType === 'machine-builder'
+                  ? 'Machine Shop'
                   : replaceDashesWithSpaces(user.profileType || 'member')}
               </Heading>
             </UserCategory>

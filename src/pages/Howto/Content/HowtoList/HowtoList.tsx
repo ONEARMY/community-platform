@@ -45,7 +45,7 @@ export class HowtoList extends React.Component<any, IState> {
       <>
         <Flex py={26}>
           <Heading medium bold txtcenter width={1} my={20}>
-            Learn & share how to recycle, make and hack plastic
+            Learn & share how to recycle, build and work with plastic
           </Heading>
         </Flex>
         <Flex

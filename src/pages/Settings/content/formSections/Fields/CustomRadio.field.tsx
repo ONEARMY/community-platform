@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Label, HiddenInput } from '../elements'
-import { Image, Flex } from 'rebass'
+import { Image, Flex, Box } from 'rebass'
 import Text from 'src/components/Text'
 import { HiddenInputField } from 'src/components/Form/Fields'
 
@@ -80,23 +80,28 @@ class CustomRadioField extends Component<IProps, IState> {
           flexWrap="nowrap"
           flexDirection="column"
           px={1}
+          height={['inherit', 'inherit', '100%']}
         >
-          {textLabel && (
-            <Text
-              px={1}
-              my={1}
-              txtcenter
-              small
-              sx={{ fontWeight: ['bold', 'bold', 'inherit'] }}
-            >
-              {textLabel}
-            </Text>
-          )}
-          {subText && (
-            <Text my={1} txtcenter small>
-              {subText}
-            </Text>
-          )}
+          <Box mt="auto">
+            {textLabel && (
+              <Text
+                px={1}
+                my={1}
+                small
+                sx={{
+                  fontWeight: ['bold', 'bold', 'inherit'],
+                  textAlign: ['left', 'left', 'center'],
+                }}
+              >
+                {textLabel}
+              </Text>
+            )}
+            {subText && (
+              <Text my={1} txtcenter small>
+                {subText}
+              </Text>
+            )}
+          </Box>
         </Flex>
       </Label>
     )

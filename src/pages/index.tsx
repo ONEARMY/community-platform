@@ -39,7 +39,7 @@ export class Routes extends React.Component<any, IState> {
     // platform into other sites. The first case is direct nav
     return (
       <div>
-        <DevHelpers />
+        {/* <DevHelpers /> */}
         <BrowserRouter>
           {/* on page change scroll to top */}
           <ScrollToTop>

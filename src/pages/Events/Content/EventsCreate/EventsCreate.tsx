@@ -19,6 +19,8 @@ import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
 import { validateUrl, addProtocol, required } from 'src/utils/validators'
 import { Box } from 'rebass'
+import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
+import IconHeaderEvents from 'src/assets/images/header-section/events-header-icon.svg'
 
 interface IState {
   formValues: IEventFormInput
@@ -120,8 +122,15 @@ export class EventsCreate extends React.Component<IProps, IState> {
                       bg={theme.colors.softblue}
                       px={3}
                       py={2}
+                      alignItems="center"
                     >
                       <Heading medium>Create an event</Heading>
+                      <Box ml="15px">
+                        <ElWithBeforeIcon
+                          IconUrl={IconHeaderEvents}
+                          height="20px"
+                        />
+                      </Box>
                     </Flex>
                     <Box
                       sx={{ mt: '20px', display: ['block', 'block', 'none'] }}

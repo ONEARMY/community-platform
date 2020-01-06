@@ -29,11 +29,11 @@ import LogoMachine from 'src/assets/icons/map-machine.svg'
 import LogoCommunity from 'src/assets/icons/map-community.svg'
 
 // assets workspaceType
-import Extrusion from 'src/assets/images/workspace-focus/extrusion.jpg'
-import Injection from 'src/assets/images/workspace-focus/injection.jpg'
-import Mix from 'src/assets/images/workspace-focus/mix.jpg'
-import Sheetpress from 'src/assets/images/workspace-focus/sheetpress.jpg'
-import Shredder from 'src/assets/images/workspace-focus/shredder.jpg'
+import Extrusion from 'src/assets/images/workspace-focus/extrusion.png'
+import Injection from 'src/assets/images/workspace-focus/injection.png'
+import Mix from 'src/assets/images/workspace-focus/mix.png'
+import Sheetpress from 'src/assets/images/workspace-focus/sheetpress.png'
+import Shredder from 'src/assets/images/workspace-focus/shredder.png'
 
 export const MOCK_USER_WORKSPACE: IUserPP = {
   ...MOCK_USER,
@@ -382,7 +382,7 @@ export const PROFILE_TYPES: IProfileType[] = [
 export const WORKSPACE_TYPES: IWorkspaceType[] = [
   {
     label: 'shredder',
-    textLabel: 'shredder',
+    textLabel: 'Shredder',
     subText: 'Shredding plastic waste into flakes',
     imageSrc: Shredder,
   },

@@ -48,9 +48,11 @@ import BazarIcon from 'src/assets/icons/icon-bazar.svg'
 import SocialIcon from 'src/assets/icons/icon-social-media.svg'
 import IconForum from 'src/assets/icons/icon-forum.svg'
 import IconWebsite from 'src/assets/icons/icon-website.svg'
+import PPLogo from 'src/assets/images/precious-plastic-logo-official.svg'
 
 import { IUploadedFileMeta } from 'src/stores/storage'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
+import { Loader } from 'src/components/Loader'
 
 interface IRouterCustomParams {
   id: string
@@ -230,7 +232,6 @@ export class UserPage extends React.Component<
     const userid = this.props.match.params.id
 
     const userData = await this.injected.userStore.getUserProfile(userid)
-    console.log('userData', userData)
     this.setState({
       user: userData ? userData : undefined,
       isLoading: false,
@@ -425,17 +426,15 @@ export class UserPage extends React.Component<
     const { user, isLoading } = this.state
 
     if (isLoading) {
-      return (
-        <Flex>
-          <Heading txtcenter width={1}>
-            loading...
-          </Heading>
-        </Flex>
-      )
+      return <Loader />
     }
 
     if (!user) {
-      return <div>user not found</div>
+      return (
+        <Text txtcenter mt="50px" width={1}>
+          User not found
+        </Text>
+      )
     }
 
     const settings = {
@@ -497,6 +496,8 @@ export class UserPage extends React.Component<
                   `${replaceDashesWithSpaces(user.workspaceType)} `}
                 {user.profileType === 'community-builder'
                   ? 'Community Point'
+                  : user.profileType === 'machine-builder'
+                  ? 'Machine Shop'
                   : replaceDashesWithSpaces(user.profileType || 'member')}
               </Heading>
             </UserCategory>

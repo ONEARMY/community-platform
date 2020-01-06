@@ -81,7 +81,7 @@ export class HowtoStore extends ModuleStore {
 
   // Moderate Howto
   public async moderateHowto(howto: IHowto) {
-    if (!hasAdminRights(this.activeUser)) {
+    if (!hasAdminRights(toJS(this.activeUser))) {
       return false
     }
     const doc = this.db.collection(COLLECTION_NAME).doc(howto._id)

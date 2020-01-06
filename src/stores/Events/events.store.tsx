@@ -89,7 +89,7 @@ export class EventStore extends ModuleStore {
 
   // Moderate Event
   public async moderateEvent(event: IEvent) {
-    if (!hasAdminRights(this.activeUser)) {
+    if (!hasAdminRights(toJS(this.activeUser))) {
       return false
     }
     const doc = this.db.collection('v3_events').doc(event._id)

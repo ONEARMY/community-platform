@@ -160,7 +160,7 @@ export class MapsStore extends ModuleStore {
 
   // Moderate Pin
   public async moderatePin(pin: IMapPin) {
-    if (!hasAdminRights(this.activeUser)) {
+    if (!hasAdminRights(toJS(this.activeUser))) {
       return false
     }
     this.setPin(pin)

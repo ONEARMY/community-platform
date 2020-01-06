@@ -205,7 +205,7 @@ export class UserSettings extends React.Component<IProps, IState> {
               <Prompt
                 when={!this.injected.userStore.updateStatus.Complete}
                 message={
-                  'You have unsaved changes. Are you sure you want to leave this page?'
+                  'You are leaving this page without saving. Do you want to continue ?'
                 }
               />
               <Flex

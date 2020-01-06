@@ -5,13 +5,13 @@ import * as request from 'request'
 const SITE_URL = CONFIG.deployment.site_url
 // e.g. https://dev.onearmy.world or https://community.preciousplastic.com
 
-const SLACK_WEBHOOK_URL = CONFIG.integrations.slack_webhook
+const DISCORD_WEBHOOK_URL = CONFIG.integrations.discord_webhook
 
-export const notifyNewPin = functions.firestore
+export const notifyPinAccepted = functions.firestore
   .document('v2_mappins/{pinId}')
   .onWrite((change, context) => {
     const info = change.after.exists ? change.after.data() : null;
-    if(info === null || info.moderation !== 'awaiting-moderation'){
+    if(info === null || info.moderation !== 'accepted'){
       return
     }
 
@@ -20,10 +20,10 @@ export const notifyNewPin = functions.firestore
     const loc = info.location
     //  console.log(info);
     request.post(
-      SLACK_WEBHOOK_URL,
+      DISCORD_WEBHOOK_URL,
       {
         json: {
-          text: `📍 *New ${type}* pin from ${id} awaiting moderation. \n Location here ${SITE_URL}/map/#${id}`,
+          content: `📍 *New ${type}* pin from ${id}. \n Location here ${SITE_URL}/map/#${id}`,
         },
       },
       (err, res) => {
@@ -36,11 +36,11 @@ export const notifyNewPin = functions.firestore
       },
     )
   })
-export const notifyNewHowTo = functions.firestore
+export const notifyHowToAccepted = functions.firestore
   .document('v2_howtos/{id}')
   .onWrite((change, context) => {
     const info = change.after.exists ? change.after.data() : null;
-    if(info === null || info.moderation !== 'awaiting-moderation'){
+    if(info === null || info.moderation !== 'accepted'){
       return
     }
 
@@ -49,10 +49,10 @@ export const notifyNewHowTo = functions.firestore
     const slug = info.slug
     //  console.log(info);
     request.post(
-      SLACK_WEBHOOK_URL,
+      DISCORD_WEBHOOK_URL,
       {
         json: {
-          text: `📓 Yeah! New How To *${title}* by ${user} awaiting moderation,
+          content: `📓 Yeah! New How To "* ${title} *" by ${user}
             check it out: ${SITE_URL}/how-to/${slug}`,
         },
       },
@@ -66,11 +66,11 @@ export const notifyNewHowTo = functions.firestore
       },
     )
   })
-export const notifyNewEvent = functions.firestore
+export const notifyEventAccepted = functions.firestore
   .document('v2_events/{id}')
   .onWrite((change, context) => {
     const info = change.after.exists ? change.after.data() : null;
-    if(info === null || info.moderation !== 'awaiting-moderation'){
+    if(info === null || info.moderation !== 'accepted'){
       return
     }
 
@@ -79,10 +79,10 @@ export const notifyNewEvent = functions.firestore
     const location = info.location.country
     console.info(info)
     request.post(
-      SLACK_WEBHOOK_URL,
+      DISCORD_WEBHOOK_URL,
       {
         json: {
-          text: `📅 Jeej new event in *${location}* by ${user} awaiting moderation, posted here:
+          content: `📅 Jeej new event in *${location}* by ${user} posted here:
             ${url}`,
         },
       },

@@ -4,7 +4,7 @@ import { IUser } from 'src/models/user.models'
 import { DBDoc, IModerable } from 'src/models/common.models'
 
 // remove special characters from string, also replacing spaces with dashes
-const stripSpecialCharacters = (text: string) => {
+export const stripSpecialCharacters = (text: string) => {
   return text
     ? text
         .split(' ')

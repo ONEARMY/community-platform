@@ -72,7 +72,10 @@ export class FileInput extends React.Component<IProps, IState> {
                 onClick={() => this.toggleModal()}
                 icon="upload"
                 variant="outline"
-              />
+                mb={1}
+              >
+                Add Files (.zip)
+              </Button>
               {this.filesArray.map(file => (
                 <FileInfo key={file.name} file={file} />
               ))}

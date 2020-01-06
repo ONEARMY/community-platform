@@ -126,7 +126,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
               })}
           </Flex>
           {howto.files && howto.files.length > 0 && (
-            <Flex mt={3} flexDirection={'column'}>
+            <Flex className="file-container" mt={3} flexDirection={'column'}>
               {howto.files.map((file, index) => (
                 <FileInfo
                   allowDownload

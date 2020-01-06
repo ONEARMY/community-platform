@@ -1,18 +1,18 @@
 import { IUserPP } from 'src/models/user_pp.models'
 export const INITIAL_VALUES: Partial<IUserPP> = {
   profileType: undefined,
-  workspaceType: undefined,
-  coverImages: undefined,
+  workspaceType: null,
+  coverImages: null,
   links: [
     {
       label: '',
       url: '',
     },
   ],
-  mapPinDescription: undefined,
-  location: undefined,
-  about: undefined,
-  country: undefined,
+  mapPinDescription: null,
+  location: null,
+  about: null,
+  country: null,
   openingHours: [
     {
       day: '',
@@ -20,8 +20,8 @@ export const INITIAL_VALUES: Partial<IUserPP> = {
       openTo: '',
     },
   ],
-  collectedPlasticTypes: undefined,
-  machineBuilderXp: undefined,
-  isExpert: undefined,
-  isV4Member: undefined,
+  collectedPlasticTypes: null,
+  machineBuilderXp: null,
+  isExpert: null,
+  isV4Member: null,
 }

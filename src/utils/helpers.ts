@@ -87,7 +87,8 @@ export const isAllowToEditContent = (doc: IEditableDoc, user?: IUser) => {
   if (!user) {
     return false
   }
-  const roles = user.userRoles ? user.userRoles : []
+  const roles =
+    user.userRoles && Array.isArray(user.userRoles) ? user.userRoles : []
   if (
     roles.includes('admin') ||
     roles.includes('super-admin') ||
@@ -111,7 +112,13 @@ export const isAllowToPin = (pin: IMapPin, user?: IUser) => {
  *             Country code to country name converters
  ***********************************************************************/
 export const getCountryCode = (countryName: string | undefined) => {
-  return Object.keys(countries).find(key => countries[key] === countryName)
+  let countryCode = Object.keys(countries).find(
+    key => countries[key] === countryName,
+  )
+  if (countryCode !== undefined) {
+    countryCode = countryCode.toLowerCase()
+  }
+  return countryCode
 }
 
 export const getCountryName = (countryCode: string | undefined) => {

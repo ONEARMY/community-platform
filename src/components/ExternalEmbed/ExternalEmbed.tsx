@@ -40,16 +40,19 @@ export class ExternalEmbed extends React.Component<IProps, IState> {
 
   /**
    * Custom method to allow communication from Iframe to parent via postmessage
-   * Currently configured to receive the pathname of the onearmy github academy page
-   * and use to update the relative url on the parent router.
    */
   handlePostmessageFromIframe = (e: MessageEvent) => {
     // only allow messages from specific sites (academy dev and live)
     if (
       ['http://localhost:3001', 'https://onearmy.github.io'].includes(e.origin)
     ) {
+      // communicate url changes, update navbar
       if (e.data && e.data.pathname) {
         this.props.history.push(e.data.pathname)
+      }
+      // communicate a href link clicks, open link in new tab
+      if (e.data && e.data.linkClick) {
+        window.open(e.data.linkClick, '_blank')
       }
     }
   }

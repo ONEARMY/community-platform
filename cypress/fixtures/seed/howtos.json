@@ -2,6 +2,7 @@
   {
     "_created": "2019-09-18T14:49:54.311Z",
     "_createdBy": "howto_creator",
+    "moderation": "accepted",
     "_deleted": false,
     "_id": "2XnZ8QCPx4QAfmy0w8Sc",
     "_modified": "2019-09-18T21:53:33.211Z",
@@ -246,6 +247,7 @@
   {
     "_created": "2019-07-08T07:24:24.456Z",
     "_createdBy": "howto_editor",
+    "moderation": "accepted",
     "_deleted": false,
     "_id": "DBgbCKle7h4CcNxeUP2V",
     "_modified": "2019-09-16T17:54:19.978Z",
@@ -371,13 +373,16 @@
         "title": "Have fun 🤙"
       }
     ],
-    "tags": {},
+    "tags": {
+      "DJN99ErXz8FHy035YdMO": true
+    },
     "time": "< 1 week",
     "title": "Set up dev-site to help coding!"
   },
   {
     "_created": "2019-05-22T16:27:27.010Z",
     "_createdBy": "howto_creator",
+    "moderation": "accepted",
     "_deleted": false,
     "_id": "DUjTZCQJ6OmSMkEYdZ6f",
     "_modified": "2019-10-04T14:02:46.083Z",
@@ -801,6 +806,7 @@
     "_created": "2019-06-25T16:58:35.426Z",
     "_createdBy": "howto_creator",
     "_deleted": false,
+    "moderation": "accepted",
     "_id": "EmJEqraybHdZpkRu6FdB",
     "_modified": "2019-09-18T16:27:34.697Z",
     "cover_image": {
@@ -1027,6 +1033,7 @@
     "_created": "2019-06-21T10:42:50.592Z",
     "_createdBy": "howto_creator",
     "_deleted": false,
+    "moderation": "accepted",
     "_id": "fUBiAC99ciXpvPcfJ0Fk",
     "_modified": "2019-09-27T10:28:06.541Z",
     "cover_image": {
@@ -1431,6 +1438,7 @@
     "_created": "2019-10-01T20:49:43.452Z",
     "_createdBy": "howto_creator",
     "_deleted": false,
+    "moderation": "accepted",
     "_id": "me5Bq0wq5FdoJUY8gELN",
     "_modified": "2019-09-30T18:27:57.570Z",
     "cover_image": {
@@ -1737,6 +1745,7 @@
     "_created": "2019-06-26T14:58:44.067Z",
     "_createdBy": "howto_creator",
     "_deleted": false,
+    "moderation": "accepted",
     "_id": "oIVF73weEIlVJQYfolcg",
     "_modified": "2019-09-27T13:52:31.679Z",
     "cover_image": {

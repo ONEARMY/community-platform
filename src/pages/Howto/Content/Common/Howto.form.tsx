@@ -28,6 +28,8 @@ import { Image, Box } from 'rebass'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import { HowToSubmitStatus } from './SubmitStatus'
 import { required } from 'src/utils/validators'
+import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
+import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 
 interface IState {
   formSaved: boolean
@@ -35,6 +37,7 @@ interface IState {
   showSubmitModal?: boolean
   editCoverImg?: boolean
   fileEditMode?: boolean
+  draft: boolean
 }
 interface IProps extends RouteComponentProps<any> {
   formValues: any
@@ -68,6 +71,10 @@ const AnimationContainer = posed.div({
   },
 })
 
+const FormContainer = styled.form`
+  width: 100%;
+`
+
 const Label = styled.label`
   font-size: ${theme.fontSizes[2] + 'px'};
   margin-bottom: ${theme.space[2] + 'px'};
@@ -86,10 +93,22 @@ export class HowtoForm extends React.Component<IProps, IState> {
       editCoverImg: false,
       fileEditMode: false,
       showSubmitModal: false,
+      draft: props.moderation === 'draft',
     }
   }
 
+  private trySubmitForm = (draft: boolean) => {
+    this.setState({ draft }, () => {
+      // Save requested draft value into state and then trigger form submit
+      const form = document.getElementById('howtoForm')
+      if (typeof form !== 'undefined' && form !== null) {
+        form.dispatchEvent(new Event('submit', { cancelable: true }))
+        this.setState({ showSubmitModal: true })
+      }
+    })
+  }
   public onSubmit = async (formValues: IHowtoFormInput) => {
+    formValues.moderation = this.state.draft ? 'draft' : 'awaiting-moderation'
     await this.store.uploadHowTo(formValues)
   }
 
@@ -101,7 +120,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
   }
 
   public validateTitle = async (value: any) => {
-    return this.store.validateTitle(value, 'v2_howtos')
+    return this.store.validateTitle(value, 'v3_howtos')
   }
 
   // automatically generate the slug when the title changes
@@ -146,7 +165,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
             return (
               <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
                 <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} mt={4}>
-                  <form id="howtoForm" onSubmit={handleSubmit}>
+                  <FormContainer id="howtoForm" onSubmit={handleSubmit}>
                     {/* How To Info */}
                     <Flex flexDirection={'column'}>
                       <Flex
@@ -155,6 +174,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                         bg={theme.colors.softblue}
                         px={3}
                         py={2}
+                        alignItems="center"
                       >
                         <Heading medium>
                           {this.props.parentType === 'create' ? (
@@ -162,9 +182,20 @@ export class HowtoForm extends React.Component<IProps, IState> {
                           ) : (
                             <span>Edit</span>
                           )}{' '}
-                          your How-To
+                          a How-To
                         </Heading>
+                        <Box ml="15px">
+                          <ElWithBeforeIcon
+                            IconUrl={IconHeaderHowto}
+                            height="20px"
+                          />
+                        </Box>
                       </Flex>
+                      <Box
+                        sx={{ mt: '20px', display: ['block', 'block', 'none'] }}
+                      >
+                        <PostingGuidelines />
+                      </Box>
                       <Flex
                         card
                         mediumRadius
@@ -364,7 +395,8 @@ export class HowtoForm extends React.Component<IProps, IState> {
                                 icon={'add'}
                                 data-cy={'add-step'}
                                 mx="auto"
-                                my={20}
+                                mt={[10, 10, 20]}
+                                mb={[5, 5, 20]}
                                 variant="secondary"
                                 medium
                                 onClick={() => {
@@ -386,7 +418,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                         )}
                       </FieldArray>
                     </Flex>
-                  </form>
+                  </FormContainer>
                 </Flex>
                 {/* post guidelines container */}
                 <Flex
@@ -395,32 +427,44 @@ export class HowtoForm extends React.Component<IProps, IState> {
                   height={'100%'}
                   bg="inherit"
                   px={2}
-                  mt={4}
+                  mt={[0, 0, 4]}
                 >
-                  <Box sx={{ position: 'fixed', maxWidth: '400px' }}>
-                    <PostingGuidelines />
+                  <Box
+                    sx={{
+                      position: ['relative', 'relative', 'fixed'],
+                      maxWidth: ['inherit', 'inherit', '400px'],
+                    }}
+                  >
+                    <Box sx={{ display: ['none', 'none', 'block'] }}>
+                      <PostingGuidelines />
+                    </Box>
+                    <Button
+                      data-cy={'draft'}
+                      onClick={() => this.trySubmitForm(true)}
+                      width={1}
+                      mt={[0, 0, 3]}
+                      variant={disabled ? 'secondary' : 'secondary'}
+                      type="submit"
+                      disabled={submitting}
+                      sx={{ display: 'block' }}
+                    >
+                      {formValues.moderation !== 'draft' ? (
+                        <span>Save to draft</span>
+                      ) : (
+                        <span>Revert to draft</span>
+                      )}{' '}
+                    </Button>
                     <Button
                       data-cy={'submit'}
-                      onClick={() => {
-                        const form = document.getElementById('howtoForm')
-                        if (typeof form !== 'undefined' && form !== null) {
-                          form.dispatchEvent(
-                            new Event('submit', { cancelable: true }),
-                          )
-                          this.setState({ showSubmitModal: true })
-                        }
-                      }}
+                      onClick={() => this.trySubmitForm(false)}
                       width={1}
                       mt={3}
                       variant={disabled ? 'primary' : 'primary'}
                       type="submit"
                       disabled={submitting}
+                      sx={{ mb: ['40px', '40px', 0] }}
                     >
-                      {this.props.parentType === 'create' ? (
-                        <span>Publish</span>
-                      ) : (
-                        <span>Save changes</span>
-                      )}{' '}
+                      <span>Publish</span>
                     </Button>
                   </Box>
                 </Flex>

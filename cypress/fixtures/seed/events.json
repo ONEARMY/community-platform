@@ -2,6 +2,7 @@
   {
     "_created": "2019-08-16T12:49:06.375Z",
     "_createdBy": "event_creator",
+    "moderation": "accepted",
     "_deleted": false,
     "_id": "wplDwcw2hJTbdUAkalr2",
     "_modified": "2019-08-16T12:49:06.376Z",
@@ -28,6 +29,7 @@
   {
     "_created": "2019-09-25T12:46:26.760Z",
     "_createdBy": "event_creator",
+    "moderation": "accepted",
     "_deleted": false,
     "_id": "odYAvCl3ttKzNX5fD7dU",
     "_modified": "2019-09-25T12:46:26.760Z",
@@ -56,6 +58,7 @@
   {
     "_created": "2019-06-12T09:03:03.063Z",
     "_createdBy": "event_creator",
+    "moderation": "accepted",
     "_deleted": false,
     "_id": "gIHxGTkm1Xg6lrETaBYh",
     "_modified": "2019-06-12T09:03:03.064Z",
@@ -82,6 +85,7 @@
   {
     "_created": "2019-10-02T09:12:00.140Z",
     "_createdBy": "event_editor",
+    "moderation": "accepted",
     "_deleted": false,
     "_id": "fAdkK3XCiXu3Ax0SvzAM",
     "_modified": "2019-10-02T09:12:00.140Z",
@@ -109,6 +113,7 @@
   {
     "_created": "2019-06-12T08:55:30.259Z",
     "_createdBy": "event_creator",
+    "moderation": "accepted",
     "_deleted": false,
     "_id": "0fehOdR0UUWfugVZJtCQ",
     "_modified": "2019-06-12T08:55:30.260Z",
@@ -136,6 +141,7 @@
   {
     "_created": "2019-09-16T10:27:12.360Z",
     "_createdBy": "event_creator",
+    "moderation": "accepted",
     "_deleted": false,
     "_id": "S2jMqSAstyvxdUijZfiU",
     "_modified": "2019-09-16T10:27:12.360Z",
@@ -153,15 +159,14 @@
       "value": "Surabaya, Jawa Timur, Indonesia"
     },
     "slug": "WarpSby--Plastic-Recycling-Workshop",
-    "tags": {
-
-    },
+    "tags": {},
     "title": "Warp.Sby - Plastic Recycling Workshop",
     "url": "https://www.instagram.com/p/B1uoadnnHr8/"
   },
   {
     "_created": "2019-06-14T07:36:56.629Z",
     "_createdBy": "event_creator",
+    "moderation": "accepted",
     "_deleted": false,
     "_id": "Xu4aJuf8dfJLh7K2polj",
     "_modified": "2019-06-14T07:36:56.630Z",

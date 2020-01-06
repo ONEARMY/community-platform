@@ -39,7 +39,7 @@ export class Routes extends React.Component<any, IState> {
     // platform into other sites. The first case is direct nav
     return (
       <div>
-        <DevHelpers />
+        {/* <DevHelpers /> */}
         <BrowserRouter>
           {/* on page change scroll to top */}
           <ScrollToTop>
@@ -73,6 +73,7 @@ export class Routes extends React.Component<any, IState> {
           target="_blank"
           href="https://docs.google.com/forms/d/e/1FAIpQLSd3nevXb6iewap1lkFPWQxyerLsndcRkocv4QXIL3iLIyzazA/viewform?usp=pp_url&entry.1856170488="
           data-cy="feedback"
+          sx={{ display: ['none', 'none', 'block'] }}
         >
           <Button
             sx={{ position: 'fixed', bottom: '30px', right: '30px' }}

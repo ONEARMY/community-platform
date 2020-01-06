@@ -4,7 +4,7 @@ import Heading from 'src/components/Heading'
 import { Field } from 'react-final-form'
 import Text from 'src/components/Text'
 import { TextAreaField } from 'src/components/Form/Fields'
-import { Box, Flex } from 'rebass'
+import { Box, Flex, Link } from 'rebass'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { Map, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet'
 import L from 'leaflet'
@@ -66,7 +66,9 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
     return (
       <FlexSectionContainer>
         <Flex justifyContent="space-between">
-          <Heading small>Your map pin</Heading>
+          <Heading small id="your-map-pin">
+            Your map pin
+          </Heading>
           <ArrowIsSectionOpen
             onClick={() => {
               this.setState({ isOpen: !isOpen })
@@ -145,6 +147,26 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
               </Button>
             </Box>
           )}
+          <Box
+            bg={theme.colors.softblue}
+            mt={2}
+            p={2}
+            sx={{ borderRadius: '3px' }}
+          >
+            <Text small>
+              We are aware that location search may result in an inaccurate
+              position of your pin. If it happend, choose the closest location
+              to you. Pro tip : you can write your precise address in your
+              profile description & help find a fix{' '}
+              <Link
+                href="https://github.com/ONEARMY/community-platform/issues/739"
+                target="_blank"
+                sx={{ color: 'black', textDecoration: 'underline' }}
+              >
+                here.
+              </Link>
+            </Text>
+          </Box>
         </Box>
       </FlexSectionContainer>
     )

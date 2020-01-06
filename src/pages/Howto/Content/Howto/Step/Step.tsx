@@ -58,7 +58,7 @@ export default class Step extends React.PureComponent<IProps> {
                 {this.props.step.title}
               </Heading>
               <Box>
-                <Text preLine mt={3} color={'grey'}>
+                <Text preLine paragraph mt={3} color={'grey'}>
                   <Linkify>{this.props.step.text}</Linkify>
                 </Text>
               </Box>

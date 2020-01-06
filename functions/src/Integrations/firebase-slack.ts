@@ -2,13 +2,13 @@ import { CONFIG } from '../config/config'
 import * as functions from 'firebase-functions'
 import * as request from 'request'
 
-const project = CONFIG.service.project_id
-// add prefix to dev site
-const prefix = project === 'precious-plastics-v4-dev' ? '[DEV] ' : ''
+const SITE_URL = CONFIG.deployment.site_url
+// e.g. https://dev.onearmy.world or https://community.preciousplastic.com
+
 const SLACK_WEBHOOK_URL = CONFIG.integrations.slack_webhook
 
 export const notifyNewPin = functions.firestore
-  .document('v2_mappins/{pinId}')
+  .document('v3_mappins/{pinId}')
   .onCreate((snapshot, context) => {
     const info = snapshot.data()
     const id = info._id
@@ -33,7 +33,7 @@ export const notifyNewPin = functions.firestore
     )
   })
 export const notifyNewHowTo = functions.firestore
-  .document('v2_howtos/{id}')
+  .document('v3_howtos/{id}')
   .onCreate((snapshot, context) => {
     const info = snapshot.data()
     const user = info._createdBy
@@ -44,8 +44,8 @@ export const notifyNewHowTo = functions.firestore
       SLACK_WEBHOOK_URL,
       {
         json: {
-          text: `📓 Yeah! New How To "* ${title} *" by ${user}
-            check it out: https://community.preciousplastic.com/how-to/${slug}`,
+          text: `📓 Yeah! New How To *${title}* by ${user}
+            check it out: ${SITE_URL}/how-to/${slug}`,
         },
       },
       (err, res) => {
@@ -59,7 +59,7 @@ export const notifyNewHowTo = functions.firestore
     )
   })
 export const notifyNewEvent = functions.firestore
-  .document('v2_events/{id}')
+  .document('v3_events/{id}')
   .onCreate((snapshot, context) => {
     const info = snapshot.data()
     const user = info._createdBy

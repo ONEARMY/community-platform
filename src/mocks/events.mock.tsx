@@ -51,6 +51,7 @@ export const EVENTS: IEvent[] = [
     tags: {},
     url: 'http://fakeurl.com',
     _createdBy: 'exampleUser',
+    moderation: 'awaiting-moderation',
   },
   {
     title: 'Beach Clean in Brighton',
@@ -61,6 +62,18 @@ export const EVENTS: IEvent[] = [
     tags: {},
     url: 'http://fakeurl.com',
     _createdBy: 'exampleUser',
+    moderation: 'rejected',
+  },
+  {
+    title: 'Beach Clean in Tel Aviv',
+    location: MOCK_LOCATION(2),
+    ...MOCK_DB_META('event2'),
+    date: new Date('Friday, January 2, 2015 12:59 AM').toISOString(),
+    slug: 'open-workshop-and-free-lunch---brighton',
+    tags: {},
+    url: 'http://fakeurl.com',
+    _createdBy: 'exampleUser',
+    moderation: 'accepted',
   },
 ]
 

@@ -12,6 +12,7 @@ import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import HowToCard from 'src/components/HowToCard/HowToCard'
 import Heading from 'src/components/Heading'
+import { Loader } from 'src/components/Loader'
 
 interface InjectedProps {
   howtoStore?: HowtoStore
@@ -44,15 +45,15 @@ export class HowtoList extends React.Component<any, IState> {
       <>
         <Flex py={26}>
           <Heading medium bold txtcenter width={1} my={20}>
-            Learn & share how to recycle, make and hack plastic
+            Learn & share how to recycle, build and work with plastic
           </Heading>
         </Flex>
         <Flex
           flexWrap={'nowrap'}
           justifyContent={'space-between'}
-          flexDirection={['column-reverse', 'column-reverse', 'row']}
+          flexDirection={['column', 'column', 'row']}
         >
-          <Flex width={[1, 1, 0.2]}>
+          <Flex width={[1, 1, 0.2]} mb={['10px', '10px', 0]}>
             <TagsSelect
               onChange={tags => this.props.howtoStore.updateSelectedTags(tags)}
               category="how-to"
@@ -63,8 +64,13 @@ export class HowtoList extends React.Component<any, IState> {
           </Flex>
           <AuthWrapper>
             <Flex justifyContent={['flex-end', 'flex-end', 'auto']}>
-              <Link to={'/how-to/create'} mb={[3, 3, 0]}>
-                <Button variant={'primary'} translateY data-cy="create">
+              <Link width="100%" to={'/how-to/create'} mb={[3, 3, 0]}>
+                <Button
+                  width="100%"
+                  variant={'primary'}
+                  translateY
+                  data-cy="create"
+                >
                   Create a How-to
                 </Button>
               </Link>
@@ -75,9 +81,11 @@ export class HowtoList extends React.Component<any, IState> {
           {filteredHowtos.length === 0 ? (
             <Flex>
               <Heading auxiliary txtcenter width={1}>
-                {Object.keys(selectedTags).length === 0
-                  ? 'Loading...'
-                  : 'No how-tos to show'}
+                {Object.keys(selectedTags).length === 0 ? (
+                  <Loader />
+                ) : (
+                  'No how-tos to show'
+                )}
               </Heading>
             </Flex>
           ) : (
@@ -98,12 +106,14 @@ export class HowtoList extends React.Component<any, IState> {
           </Flex>
           <MoreContainer m={'0 auto'} pt={60} pb={90}>
             <Flex alignItems={'center'} flexDirection={'column'} mt={5}>
-              <Heading medium>Inspire the Precious Plastic world.</Heading>
+              <Heading medium sx={{ textAlign: 'center' }}>
+                Inspire the Precious Plastic world.
+              </Heading>
               <Heading medium>Share your how-to!</Heading>
               <AuthWrapper>
                 <Link to={'/how-to/create'}>
                   <Button variant="primary" mt={30}>
-                    Create a howto
+                    Create a how-to
                   </Button>
                 </Link>
               </AuthWrapper>

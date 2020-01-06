@@ -14,12 +14,12 @@ import { IDBEndpoint, DBDoc } from '../models'
 */
 
 const endpoints: IDBEndpoint[] = [
-  'v2_events',
-  'v2_howtos',
-  'v2_mappins',
-  'v2_tags',
+  'v3_events',
+  'v3_howtos',
+  'v3_mappins',
+  'v3_tags',
   // NOTE - do not want to keep list of sync'd users
-  // 'v2_users',
+  // 'v3_users',
 ]
 
 export const syncAll = async () => {
@@ -56,7 +56,7 @@ function _sortByModified(a: DBDoc, b: DBDoc) {
 }
 
 export const test = async () => {
-  const endpoint: IDBEndpoint = 'v2_howtos'
+  const endpoint: IDBEndpoint = 'v3_howtos'
   const data = await rtdb.get(endpoint)
   return Object.values(data)
 }

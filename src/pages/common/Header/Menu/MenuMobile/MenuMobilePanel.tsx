@@ -14,7 +14,7 @@ const PanelContainer = styled(Box)`
   left: 0;
   right: 0;
   display: block;
-  z-index: ${theme.zIndex.menuMobile};
+  z-index: ${theme.zIndex.header};
   height: 100%;
 `
 

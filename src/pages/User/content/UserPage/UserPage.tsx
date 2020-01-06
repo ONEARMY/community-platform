@@ -19,9 +19,14 @@ import Flex from 'src/components/Flex'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import { zIndex } from 'src/themes/styled.theme'
 import Workspace from 'src/pages/User/workspace/Workspace'
+import { Text } from 'src/components/Text'
 
 import theme from 'src/themes/styled.theme'
-import { capitalizeFirstLetter } from 'src/utils/helpers'
+import {
+  capitalizeFirstLetter,
+  replaceDashesWithSpaces,
+  getCountryCode,
+} from 'src/utils/helpers'
 import FlagIconEvents from 'src/components/Icons/FlagIcon/FlagIcon'
 
 // Plastic types
@@ -43,11 +48,11 @@ import BazarIcon from 'src/assets/icons/icon-bazar.svg'
 import SocialIcon from 'src/assets/icons/icon-social-media.svg'
 import IconForum from 'src/assets/icons/icon-forum.svg'
 import IconWebsite from 'src/assets/icons/icon-website.svg'
-import RedirectIcon from 'src/assets/icons/link-target-blank.svg'
+import PPLogo from 'src/assets/images/precious-plastic-logo-official.svg'
 
 import { IUploadedFileMeta } from 'src/stores/storage'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
-import { getCountryCode } from 'src/utils/helpers'
+import { Loader } from 'src/components/Loader'
 
 interface IRouterCustomParams {
   id: string
@@ -91,24 +96,6 @@ const UserCategory = styled.div`
       `
       background-image: url(${props.bgImg});
     `}
-  }
-`
-
-const UserName = styled(Flex)``
-
-const UserDescription = styled.p`
-  color: ${theme.colors.grey};
-  white-space: pre-line;
-  margin-top: 0px;
-  margin-bottom: 20px;
-
-  display: block;
-  color: ${theme.colors.grey};
-  font-size: 16px;
-  line-height: 28px;
-
-  @media only screen and (min-width: ${theme.breakpoints[1]}) {
-    width: 80%;
   }
 `
 
@@ -245,7 +232,6 @@ export class UserPage extends React.Component<
     const userid = this.props.match.params.id
 
     const userData = await this.injected.userStore.getUserProfile(userid)
-    console.log('userData', userData)
     this.setState({
       user: userData ? userData : undefined,
       isLoading: false,
@@ -440,17 +426,15 @@ export class UserPage extends React.Component<
     const { user, isLoading } = this.state
 
     if (isLoading) {
-      return (
-        <Flex>
-          <Heading txtcenter width={1}>
-            loading...
-          </Heading>
-        </Flex>
-      )
+      return <Loader />
     }
 
     if (!user) {
-      return <div>user not found</div>
+      return (
+        <Text txtcenter mt="50px" width={1}>
+          User not found
+        </Text>
+      )
     }
 
     const settings = {
@@ -507,27 +491,46 @@ export class UserPage extends React.Component<
             </Box>
 
             <UserCategory bgImg={workspaceHighlightSrc}>
-              <Heading small bold width={1}>
+              <Heading small bold width={1} capitalize>
                 {user.workspaceType &&
-                  `${capitalizeFirstLetter(user.workspaceType)} `}
-                {capitalizeFirstLetter(user.profileType || 'member')}
+                  `${replaceDashesWithSpaces(user.workspaceType)} `}
+                {user.profileType === 'community-builder'
+                  ? 'Community Point'
+                  : user.profileType === 'machine-builder'
+                  ? 'Machine Shop'
+                  : replaceDashesWithSpaces(user.profileType || 'member')}
               </Heading>
             </UserCategory>
 
-            <UserName alignItems="center">
+            <Flex alignItems="center">
               <Heading medium bold color={'black'} my={3} mr={2}>
-                {capitalizeFirstLetter(user.userName)}
+                {user.displayName}
               </Heading>
-              {user.location && (
+              {user.location ? (
                 <FlagIconEvents code={user.location.countryCode} />
+              ) : (
+                user.country && (
+                  <FlagIconEvents code={getCountryCode(user.country)} />
+                )
               )}
-            </UserName>
+            </Flex>
 
             {/* <Box sx={{ display: ['block', 'none'] }}>
               {this.renderCommitmentBox(user.isExpert, user.isV4Member)}
             </Box> */}
 
-            {user.about && <UserDescription>{user.about}</UserDescription>}
+            {user.about && (
+              <Text
+                preLine
+                paragraph
+                mt="0"
+                mb="20px"
+                color={theme.colors.grey}
+                width={['80%', '100%']}
+              >
+                {user.about}
+              </Text>
+            )}
 
             {user.profileType === 'collection-point' &&
               user.collectedPlasticTypes &&

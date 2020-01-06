@@ -23,7 +23,8 @@
     "array-type": false,
     "no-reference": false,
     "member-ordering": false,
-    "no-empty-interface": false
+    "no-empty-interface": false,
+    "variable-name": false
   },
   "defaultSeverity": "warning"
 }

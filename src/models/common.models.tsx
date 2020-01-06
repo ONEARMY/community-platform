@@ -1,7 +1,7 @@
-import { DBDoc } from '../stores/databaseV2/types'
+import { DBDoc as DBDocImport } from '../stores/databaseV2/types'
 
 // re-export the database dbDoc to make it easier to import elsewhere
-export type DBDoc = DBDoc
+export type DBDoc = DBDocImport
 
 // A reminder that dates should be saved in the ISOString format
 // i.e. new Date().toISOString() => 2011-10-05T14:48:00.000Z
@@ -12,25 +12,24 @@ export type ISODateString = string
 type userId = string
 
 export type IDBEndpoint =
-  | 'v2_howtos'
-  | 'v2_users'
-  | 'v2_tags'
-  | 'v2_events'
-  | 'v2_mappins'
+  | 'v3_howtos'
+  | 'v3_users'
+  | 'v3_tags'
+  | 'v3_events'
+  | 'v3_mappins'
 
-/************************************************************************
- *  Deprecates - legacy interfaces used. Currently retained to troubleshoot
- *  upgrades, can remove once database working in production site
- ***************************************************************************/
-type IDBEndpointV1 = 'howtosV1' | 'users' | 'tagsV1' | 'eventsV1' | 'mapPinsV1'
+// Types for moderation status
+export type IModerationStatus =
+  | 'draft'
+  | 'awaiting-moderation'
+  | 'rejected'
+  | 'accepted'
 
-// interface DBDocV1 {
-//   _id: string
-//   _created: firestore.Timestamp
-//   _modified: firestore.Timestamp
-//   _deleted: boolean
-//   _createdBy: userId
-// }
+export interface IModerable {
+  moderation: IModerationStatus
+  _createdBy?: string
+  _id?: string
+}
 
 /*****************************************************************
  *            Algolia Locations

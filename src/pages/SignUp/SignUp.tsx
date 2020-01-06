@@ -13,6 +13,8 @@ import { UserStore } from 'src/stores/User/user.store'
 import { RouteComponentProps, withRouter } from 'react-router'
 import { string, object, ref } from 'yup'
 import { required } from 'src/utils/validators'
+import { formatLowerNoSpecial } from 'src/utils/helpers'
+import { IUser } from 'src/models/user.models'
 
 const Label = styled.label`
   font-size: ${theme.fontSizes[2] + 'px'};
@@ -24,7 +26,7 @@ interface IFormValues {
   email: string
   password: string
   passwordConfirmation: string
-  userName: string
+  displayName: string
 }
 interface IState {
   formValues: IFormValues
@@ -47,7 +49,7 @@ class SignUpPage extends React.Component<IProps, IState> {
         email: '',
         password: '',
         passwordConfirmation: '',
-        userName: '',
+        displayName: '',
       },
     }
   }
@@ -58,14 +60,19 @@ class SignUpPage extends React.Component<IProps, IState> {
   }
 
   async onSignupSubmit(v: IFormValues) {
-    const { email, password, userName } = v
+    const { email, password, displayName } = v
+    const userName = formatLowerNoSpecial(displayName as string)
     try {
       if (await this.checkUserNameUnique(userName)) {
-        await this.props.userStore!.registerNewUser(email, password, userName)
+        await this.props.userStore!.registerNewUser(
+          email,
+          password,
+          displayName,
+        )
         this.props.history.push('/sign-up-message')
       } else {
         this.setState({
-          errorMsg: 'That username is already taken',
+          errorMsg: 'That display name is already taken',
           disabled: false,
         })
       }
@@ -80,7 +87,7 @@ class SignUpPage extends React.Component<IProps, IState> {
         onSubmit={v => this.onSignupSubmit(v as IFormValues)}
         validate={async (values: any) => {
           const validationSchema = object({
-            userName: string()
+            displayName: string()
               .min(2, 'Too short')
               .required('Required'),
             email: string()
@@ -149,15 +156,15 @@ class SignUpPage extends React.Component<IProps, IState> {
                       Create an account
                     </Heading>
                     <Flex flexDirection={'column'} mb={3} width={[1, 1, 2 / 3]}>
-                      <Label htmlFor="userName">
-                        Username, personal or workspace*
+                      <Label htmlFor="displayName">
+                        Display Name, personal or workspace*
                       </Label>
                       <Field
                         data-cy="username"
-                        name="userName"
+                        name="displayName"
                         type="userName"
                         component={InputField}
-                        placeholder="Pick a unique username"
+                        placeholder="Pick a unique name"
                         validate={required}
                       />
                     </Flex>

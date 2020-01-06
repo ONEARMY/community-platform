@@ -6,10 +6,10 @@ import { HowtoStore } from 'src/stores/Howto/howto.store'
 import { inject } from 'mobx-react'
 import { toJS } from 'mobx'
 import { HowtoForm } from 'src/pages/Howto/Content/Common/Howto.form'
-import { Flex } from 'rebass'
-import Heading from 'src/components/Heading'
+import Text from 'src/components/Text'
 import { IUser } from 'src/models/user.models'
 import { isAllowToEditContent } from 'src/utils/helpers'
+import { Loader } from 'src/components/Loader'
 
 interface IState {
   formValues: IHowtoDB
@@ -79,13 +79,11 @@ export class EditHowto extends React.Component<IProps, IState> {
       }
     } else {
       return isLoading ? (
-        <Flex>
-          <Heading auxiliary txtcenter width={1}>
-            loading...
-          </Heading>
-        </Flex>
+        <Loader />
       ) : (
-        <div>How-to not found</div>
+        <Text txtcenter mt="50px" width={1}>
+          How-to not found
+        </Text>
       )
     }
   }

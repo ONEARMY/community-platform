@@ -5,7 +5,7 @@ import Workspace from 'src/pages/User/workspace/Workspace'
 const GROUPINGS: IMapGrouping[] = [
   {
     grouping: 'place',
-    displayName: 'Extruder',
+    displayName: 'Extrusion',
     type: 'workspace',
     subType: 'extrusion',
     icon: '',
@@ -26,7 +26,7 @@ const GROUPINGS: IMapGrouping[] = [
   },
   {
     grouping: 'place',
-    displayName: 'Sheet Press',
+    displayName: 'Sheetpress',
     type: 'workspace',
     subType: 'sheetpress',
     icon: '',

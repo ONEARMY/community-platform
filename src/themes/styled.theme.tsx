@@ -21,13 +21,13 @@ export const zIndex = {
   behind: -1,
   level: 0,
   default: 1,
-  modalBackdrop: 9,
-  modalContent: 10,
   slickArrows: 100,
   modalProfile: 900,
   logoContainer: 999,
   mapFlexBar: 2000,
-  menuMobile: 3000,
+  header: 3000,
+  modalBackdrop: 4000,
+  modalContent: 5000,
 }
 
 export type ButtonVariants =
@@ -71,7 +71,7 @@ const space = [
 ]
 const radii = space
 const fontSizes = [10, 12, 14, 18, 22, 30, 38, 42, 46, 50, 58, 66, 74]
-const breakpoints = ['32em', '48em', '64em']
+const breakpoints = ['40em', '52em', '70em']
 // standard widths: 512px, 768px, 1024px
 const maxContainerWidth = 1280
 const regular = 400

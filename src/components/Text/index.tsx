@@ -27,6 +27,9 @@ export interface ITextProps {
   tags?: boolean
   auxiliary?: boolean
   paragraph?: boolean
+  highlight?: boolean
+  critical?: boolean
+  dashed?: boolean
 }
 
 export const uppercase = props =>
@@ -100,6 +103,27 @@ export const clipped = (props: ITextProps) =>
 export const preLine = (props: ITextProps) =>
   props.preLine ? { whiteSpace: 'pre-line' } : null
 
+export const highlight = (props: ITextProps) =>
+  props.highlight
+    ? {
+        background: theme.colors.yellow.base,
+        padding: '7px',
+        borderRadius: '5px',
+      }
+    : null
+export const critical = (props: ITextProps) =>
+  props.critical
+    ? {
+        color: theme.colors.red,
+      }
+    : null
+export const dashed = (props: ITextProps) =>
+  props.dashed
+    ? {
+        border: '1px dashed',
+      }
+    : null
+
 export const BaseText = styled(RebassText)`
   ${inline}
   ${uppercase}
@@ -117,6 +141,9 @@ export const BaseText = styled(RebassText)`
 	${auxiliary}
 	${paragraph}
   ${txtRight}
+  ${highlight}
+  ${critical}
+  ${dashed}
 `
 
 type TextProps = ITextProps & RebassTextProps

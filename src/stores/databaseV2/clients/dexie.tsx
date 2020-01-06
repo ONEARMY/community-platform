@@ -8,7 +8,7 @@ import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
  * or busting cache on db. This is used as the Dexie version number, see:
  * https://dexie.org/docs/Tutorial/Design#database-versioning
  */
-const DB_CACHE_NUMBER = 20191130
+const DB_CACHE_NUMBER = 20200106
 const CACHE_DB_NAME = 'OneArmyCache'
 const db = new Dexie(CACHE_DB_NAME)
 
@@ -133,9 +133,9 @@ type IDexieSchema = { [key in IDBEndpoint]: string }
 const DEFAULT_SCHEMA = '_id,_modified'
 
 const DEXIE_SCHEMA: IDexieSchema = {
-  v2_events: `${DEFAULT_SCHEMA},slug`,
-  v2_howtos: `${DEFAULT_SCHEMA},slug`,
-  v2_mappins: DEFAULT_SCHEMA,
-  v2_tags: DEFAULT_SCHEMA,
-  v2_users: DEFAULT_SCHEMA,
+  v3_events: `${DEFAULT_SCHEMA},slug`,
+  v3_howtos: `${DEFAULT_SCHEMA},slug`,
+  v3_mappins: DEFAULT_SCHEMA,
+  v3_tags: DEFAULT_SCHEMA,
+  v3_users: DEFAULT_SCHEMA,
 }

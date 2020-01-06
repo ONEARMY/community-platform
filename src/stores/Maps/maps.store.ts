@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx'
+import { observable, action, toJS } from 'mobx'
 import {
   IMapPin,
   IBoundingBox,
@@ -15,13 +15,19 @@ import { MAP_GROUPINGS } from './maps.groupings'
 import { generatePins, generatePinDetails } from 'src/mocks/maps.mock'
 import { IUserPP } from 'src/models/user_pp.models'
 import { IUploadedFileMeta } from '../storage'
+import { IUser } from 'src/models/user.models'
+import {
+  hasAdminRights,
+  needsModeration,
+  isAllowToPin,
+} from 'src/utils/helpers'
 
 // NOTE - toggle below variable to use larger mock dataset
 const IS_MOCK = false
 const MOCK_PINS = generatePins(250)
 
 export class MapsStore extends ModuleStore {
-  mapEndpoint: IDBEndpoint = 'v2_mappins'
+  mapEndpoint: IDBEndpoint = 'v3_mappins'
   mapPins$: Subscription
   constructor(rootStore: RootStore) {
     super(rootStore)
@@ -47,10 +53,15 @@ export class MapsStore extends ModuleStore {
     }
     // HACK - CC - 2019/11/04 changed pins api, so any old mappins will break
     // this filters out. In future should run an upgrade script (easier once deployed)
+    // HACK - ARH - 2019/12/09 filter unaccepted pins, should be done serverside
+    const activeUser = this.activeUser
+    const isAdmin = hasAdminRights(activeUser)
     pins = pins.filter(p => {
-      return p.type
+      const isPinAccepted = p.moderation === 'accepted'
+      const wasCreatedByUser = activeUser && p._id === activeUser.userName
+      const isAdminAndAccepted = isAdmin && p.moderation !== 'rejected'
+      return p.type && (isPinAccepted || wasCreatedByUser || isAdminAndAccepted)
     })
-
     if (IS_MOCK) {
       pins = MOCK_PINS
     }
@@ -66,7 +77,14 @@ export class MapsStore extends ModuleStore {
   @action
   public async retrieveMapPins() {
     // TODO: make the function accept a bounding box to reduce load from DB
-    this.mapPins$ = this.db.collection<IMapPin>('v2_mappins').stream(pins => {
+    /*
+       TODO: unaccepted pins should be filtered in DB, before reaching the client
+             It would need to modifiy:
+              - stream in stores/databaseV2/clients/firestore.tsx
+              - streamCollection in stores/databaseV2/clients/firestore.tsx
+             to support where clause.
+    */
+    this.mapPins$ = this.db.collection<IMapPin>('v3_mappins').stream(pins => {
       // TODO - make more efficient by tracking only new pins received and updating
       if (pins.length !== this.mapPins.length) {
         this.processDBMapPins(pins)
@@ -116,19 +134,42 @@ export class MapsStore extends ModuleStore {
   // get base pin geo information
   public async getPin(id: string) {
     const pin = await this.db
-      .collection<IMapPin>('v2_mappins')
+      .collection<IMapPin>('v3_mappins')
       .doc(id)
       .get()
+    /*
+    // Doesn't work on page load: activeUser is not populated ...
+    if(pin && (pin.moderation!='accepted' && !hasAdminRights(this.activeUser))){
+      return undefined
+    }
+*/
     return pin as IMapPin
   }
 
   // add new pin or update existing
   public async setPin(pin: IMapPin) {
     // generate standard doc meta
+    if (!isAllowToPin(pin, this.activeUser)) {
+      return false
+    }
     return this.db
-      .collection('v2_mappins')
+      .collection('v3_mappins')
       .doc(pin._id)
       .set(pin)
+  }
+
+  // Moderate Pin
+  public async moderatePin(pin: IMapPin) {
+    if (!hasAdminRights(toJS(this.activeUser))) {
+      return false
+    }
+    this.setPin(pin)
+  }
+  public needsModeration(pin: IMapPin) {
+    return needsModeration(pin, toJS(this.activeUser))
+  }
+  public canSeePin(pin: IMapPin) {
+    return pin.moderation === 'accepted' || isAllowToPin(pin, this.activeUser)
   }
 
   public async setUserPin(user: IUserPP) {
@@ -136,13 +177,15 @@ export class MapsStore extends ModuleStore {
       _id: user.userName,
       location: user.location!.latlng,
       type: user.profileType ? user.profileType : 'member',
+      // TODO: keep moderation status ... ' Should we being duplicating info ¿?(user/pin)'
+      moderation: 'awaiting-moderation',
     }
     if (user.workspaceType) {
       pin.subType = user.workspaceType
     }
     console.log('setting user pin', pin)
     await this.db
-      .collection<IMapPin>('v2_mappins')
+      .collection<IMapPin>('v3_mappins')
       .doc(pin._id)
       .set(pin)
   }

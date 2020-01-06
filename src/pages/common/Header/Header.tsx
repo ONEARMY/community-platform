@@ -75,7 +75,7 @@ export class Header extends React.Component<IProps> {
           alignItems="center"
           pl={[4, 4, 0]}
           pr={[4, 4, 0]}
-          sx={{ zIndex: 9999, position: 'relative' }}
+          sx={{ zIndex: theme.zIndex.header, position: 'relative' }}
           height={[null, null, 80]}
         >
           <Flex>
@@ -86,7 +86,7 @@ export class Header extends React.Component<IProps> {
             <Profile isMobile={false} />
           </DesktopMenuWrapper>
           <MobileMenuWrapper className="menu-mobile">
-            <Flex px={5}>
+            <Flex pl={5}>
               <HamburgerMenu
                 isOpen={menu.showMobilePanel || false}
                 menuClicked={() => menu.toggleMobilePanel()}

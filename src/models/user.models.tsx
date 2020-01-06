@@ -1,4 +1,9 @@
-import { ISODateString, ILocation, DBDoc } from './common.models'
+import {
+  ISODateString,
+  ILocation,
+  DBDoc,
+  IModerationStatus,
+} from './common.models'
 
 export interface IUserState {
   user?: IUser
@@ -14,15 +19,17 @@ export interface IUser {
   // userName is same as legacy 'mention_name', e.g. @my-name. It will also be the doc _id and
   // firebase auth displayName property
   userName: string
+  displayName: string
+  moderation: IModerationStatus
   // note, user avatar url is taken direct from userName so no longer populated here
   // avatar:string
   verified: boolean
   userRoles?: UserRole[]
-  about?: string
+  about?: string | null
   DHSite_id?: number
   DHSite_mention_name?: string
-  country?: string
-  location?: ILocation
+  country?: string | null
+  location?: ILocation | null
   year?: ISODateString
 }
 export type IUserDB = IUser & DBDoc

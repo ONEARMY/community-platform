@@ -19,6 +19,7 @@ import WhiteBubble2 from 'src/assets/images/white-bubble_2.svg'
 import WhiteBubble3 from 'src/assets/images/white-bubble_3.svg'
 import { Link } from 'src/components/Links'
 import { zIndex } from 'src/themes/styled.theme'
+import { Loader } from 'src/components/Loader'
 
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
@@ -88,6 +89,23 @@ export class Howto extends React.Component<
     return this.props as InjectedProps
   }
 
+  get store() {
+    return this.injected.howtoStore
+  }
+
+  private moderateHowto = async (accepted: boolean) => {
+    const howto = this.state.howto
+    if (!howto) {
+      return false
+    }
+    howto.moderation = accepted ? 'accepted' : 'rejected'
+    await this.store.moderateHowto(howto)
+    this.setState({
+      howto,
+      isLoading: this.state.isLoading,
+    })
+  }
+
   public async componentWillMount() {
     const slug = this.props.match.params.slug
     const doc = await this.injected.howtoStore.getDocBySlug(slug)
@@ -103,7 +121,12 @@ export class Howto extends React.Component<
     if (howto) {
       return (
         <>
-          <HowtoDescription howto={howto} loggedInUser={loggedInUser} />
+          <HowtoDescription
+            howto={howto}
+            loggedInUser={loggedInUser}
+            needsModeration={this.store.needsModeration(howto)}
+            moderateHowto={this.moderateHowto}
+          />
           {/* <HowtoSummary steps={howto.steps} howToSlug={howto.slug} /> */}
           <Box mt={9}>
             {howto.steps.map((step: any, index: number) => (
@@ -128,13 +151,11 @@ export class Howto extends React.Component<
       )
     } else {
       return isLoading ? (
-        <Flex>
-          <Heading auxiliary txtcenter width={1}>
-            loading...
-          </Heading>
-        </Flex>
+        <Loader />
       ) : (
-        <div>How-to not found</div>
+        <Text txtcenter mt="50px" width={1}>
+          How-to not found
+        </Text>
       )
     }
   }

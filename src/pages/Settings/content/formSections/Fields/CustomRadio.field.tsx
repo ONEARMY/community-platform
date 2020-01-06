@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Label, HiddenInput } from '../elements'
-import { Image, Flex } from 'rebass'
+import { Image, Flex, Box } from 'rebass'
 import Text from 'src/components/Text'
 import { HiddenInputField } from 'src/components/Form/Fields'
 
@@ -53,7 +53,13 @@ class CustomRadioField extends Component<IProps, IState> {
     }
 
     return (
-      <Label htmlFor={value} className={classNames.join(' ')} data-cy={dataCy}>
+      <Label
+        alignItems={'center'}
+        htmlFor={value}
+        className={classNames.join(' ')}
+        data-cy={dataCy}
+        width={'100%'}
+      >
         <HiddenInput
           id={value}
           name={name}
@@ -66,19 +72,37 @@ class CustomRadioField extends Component<IProps, IState> {
             this.props.onChange(v.target.value)
           }}
         />
-        {imageSrc && <Image px={3} src={imageSrc} width="100%" />}
-        {textLabel && (
-          <Text px={1} my={1} txtcenter small>
-            {textLabel}
-          </Text>
+        {imageSrc && (
+          <Image px={3} src={imageSrc} width={['100px', '100px', '100%']} />
         )}
-        {subText && (
-          <Flex alignItems="center" flexWrap="nowrap">
-            <Text my={1} txtcenter small>
-              {subText}
-            </Text>
-          </Flex>
-        )}
+        <Flex
+          alignItems="center"
+          flexWrap="nowrap"
+          flexDirection="column"
+          px={1}
+          height={['inherit', 'inherit', '100%']}
+        >
+          <Box mt="auto">
+            {textLabel && (
+              <Text
+                px={1}
+                my={1}
+                small
+                sx={{
+                  fontWeight: ['bold', 'bold', 'inherit'],
+                  textAlign: ['left', 'left', 'center'],
+                }}
+              >
+                {textLabel}
+              </Text>
+            )}
+            {subText && (
+              <Text my={1} txtcenter small>
+                {subText}
+              </Text>
+            )}
+          </Box>
+        </Flex>
       </Label>
     )
   }

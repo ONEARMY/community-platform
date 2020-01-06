@@ -2,6 +2,7 @@ import React from 'react'
 import { Image } from 'rebass/styled-components'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
+import ModerationStatusText from 'src/components/ModerationStatusText'
 import { Link } from 'src/components/Links'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { IHowtoDB } from '../../models/howto.models'
@@ -12,7 +13,18 @@ interface IProps {
 }
 
 export const HowToCard = (props: IProps) => (
-  <Flex card mediumRadius mediumScale bg={'white'} width={1} data-cy="card">
+  <Flex
+    card
+    mediumRadius
+    mediumScale
+    bg={'white'}
+    width={1}
+    data-cy="card"
+    sx={{ position: 'relative' }}
+  >
+    {props.howto.moderation !== 'accepted' && (
+      <ModerationStatusText howto={props.howto} top={'62%'} />
+    )}
     <Link
       to={`/how-to/${encodeURIComponent(props.howto.slug)}`}
       key={props.howto._id}

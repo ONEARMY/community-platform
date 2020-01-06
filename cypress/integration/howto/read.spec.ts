@@ -5,7 +5,7 @@ describe('[How To]', () => {
     const howtoUrl = '/how-to/make-glasslike-beams'
     const coverFileRegex = /howto-beams-glass-0-3.jpg/
     beforeEach(() => {
-      cy.deleteDocuments('v2_howtos', 'title', '==', 'Create a how-to test')
+      cy.deleteDocuments('v3_howtos', 'title', '==', 'Create a how-to test')
       cy.visit('/how-to')
     })
     it('[By Everyone]', () => {
@@ -19,7 +19,7 @@ describe('[How To]', () => {
       cy.get('[data-cy=more-how-tos]', SKIP_TIMEOUT).should('be.hidden')
 
       cy.step('All how-tos are shown')
-      const totalHowTo = 7
+      const totalHowTo = 6
       cy.get('[data-cy=card]')
         .its('length')
         .should('be.eq', totalHowTo)
@@ -51,7 +51,7 @@ describe('[How To]', () => {
 
   describe('[Filter with Tag]', () => {
     beforeEach(() => {
-      cy.deleteDocuments('v2_howtos', 'title', '==', 'Create a how-to test')
+      cy.deleteDocuments('v3_howtos', 'title', '==', 'Create a how-to test')
       cy.visit('/how-to')
       cy.logout()
     })
@@ -97,7 +97,7 @@ describe('[How To]', () => {
       cy.get('.data-cy__multi-value__label').should('not.exist')
       cy.get('[data-cy=card]')
         .its('length')
-        .should('be.eq', 7)
+        .should('be.eq', 6)
     })
   })
 

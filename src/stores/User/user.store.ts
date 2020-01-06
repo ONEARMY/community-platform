@@ -13,12 +13,13 @@ import { RootStore } from '..'
 import { loginWithDHCredentials } from 'src/hacks/DaveHakkensNL.hacks'
 import { ModuleStore } from '../common/module.store'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
+import { formatLowerNoSpecial } from 'src/utils/helpers'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
 */
 
-const COLLECTION_NAME = 'v2_users'
+const COLLECTION_NAME = 'v3_users'
 
 export class UserStore extends ModuleStore {
   private authUnsubscribe: firebase.Unsubscribe
@@ -28,10 +29,19 @@ export class UserStore extends ModuleStore {
   @observable
   public authUser: firebase.User | null
 
+  @observable
+  public updateStatus: IUserUpdateStatus = getInitialUpdateStatus()
+
   @action
   public updateUser(user?: IUserPPDB) {
     this.user = user
   }
+
+  @action
+  public updateUpdateStatus(update: keyof IUserUpdateStatus) {
+    this.updateStatus[update] = true
+  }
+
   constructor(rootStore: RootStore) {
     super(rootStore)
     this._listenToAuthStateChanges()
@@ -41,7 +51,7 @@ export class UserStore extends ModuleStore {
   public async registerNewUser(
     email: string,
     password: string,
-    userName: string,
+    displayName: string,
   ) {
     // stop auto detect of login as will pick up with incomplete information during registration
     this._unsubscribeFromAuthStateChanges()
@@ -49,7 +59,7 @@ export class UserStore extends ModuleStore {
     // once registered populate auth profile displayname with the chosen username
     if (authReq.user) {
       await authReq.user.updateProfile({
-        displayName: userName,
+        displayName,
         photoURL: authReq.user.photoURL,
       })
       // populate db user profile and resume auth listener
@@ -97,6 +107,7 @@ export class UserStore extends ModuleStore {
   }
 
   public async updateUserProfile(values: Partial<IUserPP>) {
+    this.updateUpdateStatus('Start')
     const dbRef = this.db
       .collection<IUserPP>(COLLECTION_NAME)
       .doc((values as IUserDB)._id)
@@ -122,6 +133,7 @@ export class UserStore extends ModuleStore {
     if (values.location) {
       await this.mapsStore.setUserPin(update)
     }
+    this.updateUpdateStatus('Complete')
   }
 
   public async sendEmailVerification() {
@@ -195,7 +207,8 @@ export class UserStore extends ModuleStore {
 
   public async createUserProfile(fields: Partial<IUser> = {}) {
     const authUser = auth.currentUser as firebase.User
-    const userName = authUser.displayName as string
+    const displayName = authUser.displayName as string
+    const userName = formatLowerNoSpecial(displayName)
     const dbRef = this.db.collection<IUser>(COLLECTION_NAME).doc(userName)
     console.log('creating user profile', userName)
     if (!userName) {
@@ -203,7 +216,9 @@ export class UserStore extends ModuleStore {
     }
     const user: IUser = {
       _authID: authUser.uid,
+      displayName,
       userName,
+      moderation: 'awaiting-moderation',
       verified: false,
       ...fields,
     }
@@ -235,6 +250,19 @@ export class UserStore extends ModuleStore {
   private _unsubscribeFromAuthStateChanges() {
     this.authUnsubscribe()
   }
+}
+
+interface IUserUpdateStatus {
+  Start: boolean
+  Complete: boolean
+}
+
+function getInitialUpdateStatus() {
+  const status: IUserUpdateStatus = {
+    Start: false,
+    Complete: false,
+  }
+  return status
 }
 
 /***********************************************************************************************

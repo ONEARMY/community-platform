@@ -106,7 +106,7 @@ class CollectionReference<T> {
   /**
    * Set multiple docs in a collection in batch.
    * NOTE - to set an individual doc a reference to that doc should be generated instead
-   * i.e. `db.collection('v2_users').doc('myUsername').set(data)`
+   * i.e. `db.collection('v3_users').doc('myUsername').set(data)`
    * @param docs - The collection of docs to set
    */
   async set(docs: any[]) {

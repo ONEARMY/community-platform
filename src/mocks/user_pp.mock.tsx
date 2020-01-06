@@ -4,6 +4,7 @@ import {
   IWorkspaceType,
 } from 'src/models/user_pp.models'
 import { MOCK_DB_META } from './db.mock'
+import { MOCK_USER } from './user.mock'
 import { IPlasticType, IMAchineBuilderXp } from 'src/models/user_pp.models'
 
 // assets plasticType
@@ -35,15 +36,10 @@ import Sheetpress from 'src/assets/images/workspace-focus/sheetpress.png'
 import Shredder from 'src/assets/images/workspace-focus/shredder.png'
 
 export const MOCK_USER_WORKSPACE: IUserPP = {
-  verified: true,
-  userName: 'chris-m-clarke',
+  ...MOCK_USER,
+  userName: 'workspace-username',
   about:
     "Description of user profile, it's a nice workspace where we build products out of recycled plastic",
-  ...MOCK_DB_META(),
-  _authID: '123',
-  DHSite_id: 70134,
-  DHSite_mention_name: 'chris-m-clarke',
-  country: '',
   profileType: 'workspace',
   workspaceType: 'extrusion',
   coverImages: [
@@ -94,6 +90,8 @@ export const MOCK_USER_COLLECTION: IUserPP = {
   _authID: '123',
   country: 'Netherlands',
   profileType: 'collection-point',
+  moderation: 'accepted',
+  displayName: 'collection-username',
   coverImages: [
     {
       contentType: 'image/jpeg',
@@ -142,6 +140,8 @@ export const MOCK_USER_MEMBER: IUserPP = {
   _authID: '123',
   country: 'Netherlands',
   profileType: 'member',
+  moderation: 'accepted',
+  displayName: 'member-username',
   coverImages: [
     {
       contentType: 'image/jpeg',
@@ -189,6 +189,8 @@ export const MOCK_USER_COMMUNITY: IUserPP = {
   _authID: '123',
   country: 'Kenya',
   profileType: 'community-builder',
+  moderation: 'accepted',
+  displayName: 'community-username',
   coverImages: [
     {
       contentType: 'image/jpeg',
@@ -241,6 +243,8 @@ export const MOCK_USER_MACHINE: IUserPP = {
   _authID: '123',
   country: 'USA',
   profileType: 'machine-builder',
+  moderation: 'accepted',
+  displayName: 'collection-username',
   coverImages: [
     {
       contentType: 'image/jpeg',

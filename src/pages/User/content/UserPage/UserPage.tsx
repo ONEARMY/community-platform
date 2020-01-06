@@ -504,7 +504,7 @@ export class UserPage extends React.Component<
 
             <Flex alignItems="center">
               <Heading medium bold color={'black'} my={3} mr={2}>
-                {capitalizeFirstLetter(user.userName)}
+                {user.displayName}
               </Heading>
               {user.location ? (
                 <FlagIconEvents code={user.location.countryCode} />

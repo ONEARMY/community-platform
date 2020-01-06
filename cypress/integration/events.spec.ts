@@ -3,7 +3,7 @@ describe('[Events]', () => {
   beforeEach(() => {
     cy.log(`Today as **${today}**`)
     cy.clock(Cypress.moment.utc(today).valueOf(), ['Date'])
-    cy.deleteDocuments('v2_events', 'title', '==', 'Create a test event')
+    cy.deleteDocuments('v3_events', 'title', '==', 'Create a test event')
     cy.visit('/events')
     cy.logout()
   })

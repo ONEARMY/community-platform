@@ -92,6 +92,8 @@ export class UserStore extends ModuleStore {
   // TODO
   // this is a bit messy due to legacy users having mismatched firebase data and ids
   // should resolve all users so that a single lookup is successful
+  // to fix a script should be run to update all firebase_auth display names to correct format
+  // which could then be used as a single lookup
   public async getUserProfile(_authID: string) {
     const lookup = await this.db
       .collection<IUserPP>(COLLECTION_NAME)

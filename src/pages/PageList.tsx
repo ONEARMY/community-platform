@@ -132,7 +132,7 @@ const forgotpasswordmessage = {
 
 // community pages (various pages hidden on production build)
 const devCommunityPages = [howTo, maps, events, academy]
-const prodCommunityPages = [howTo, maps, events]
+const prodCommunityPages = [howTo, maps, events, academy]
 const communityPages =
   SITE === 'production' ? prodCommunityPages : devCommunityPages
 // community 'more' dropdown pages (various pages hidden on production build)

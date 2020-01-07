@@ -79,7 +79,7 @@ export class Routes extends React.Component<any, IState> {
             sx={{ position: 'fixed', bottom: '30px', right: '30px' }}
             variant="primary"
           >
-            Have a feedback ?
+            Have feedback ?
           </Button>
         </Link>
       </div>

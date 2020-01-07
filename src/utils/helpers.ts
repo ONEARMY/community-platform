@@ -2,7 +2,7 @@ import countries from 'react-flags-select/lib/countries.js'
 import { IMapPin } from 'src/models/maps.models'
 import { IUser } from 'src/models/user.models'
 import { DBDoc, IModerable } from 'src/models/common.models'
-import { toJS } from 'mobx'
+import { toJS, isObservableObject } from 'mobx'
 
 // remove special characters from string, also replacing spaces with dashes
 export const stripSpecialCharacters = (text: string) => {
@@ -71,6 +71,10 @@ export const hasAdminRights = (user?: IUser) => {
   if (!user) {
     return false
   }
+  if (isObservableObject(user)) {
+    user = toJS(user)
+  }
+
   const roles =
     user.userRoles && Array.isArray(user.userRoles) ? user.userRoles : []
 

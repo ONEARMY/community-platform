@@ -86,11 +86,10 @@ export class UserStore extends ModuleStore {
   // handle user sign in, when firebase authenticates wnat to also fetch user document from the database
   public async userSignedIn(user: IFirebaseUser | null) {
     if (user) {
+      console.log('user signed in', user)
       // legacy user formats did not save names so get profile via email - this option be removed in later version
       // (assumes migration strategy and check)
-      const userMeta = user.displayName
-        ? await this.getUserProfile(user.displayName)
-        : await this.getUserProfile(user.email as string)
+      const userMeta = await this.getUserProfile(user.uid)
       if (userMeta) {
         this.updateUser(userMeta)
       } else {
@@ -99,11 +98,22 @@ export class UserStore extends ModuleStore {
     }
   }
 
-  public async getUserProfile(userName: string) {
-    return this.db
+  // TODO
+  // this is a bit messy due to legacy users having mismatched firebase data and ids
+  // should resolve all users so that a single lookup is successful
+  // to fix a script should be run to update all firebase_auth display names to correct format
+  // which could then be used as a single lookup
+  public async getUserProfile(_authID: string) {
+    const lookup = await this.db
       .collection<IUserPP>(COLLECTION_NAME)
-      .doc(userName)
-      .get()
+      .getWhere('_authID', '==', _authID)
+    if (lookup.length === 1) {
+      return lookup[0]
+    }
+    const lookup2 = await this.db
+      .collection<IUserPP>(COLLECTION_NAME)
+      .getWhere('_id', '==', _authID)
+    return lookup2[0]
   }
 
   public async updateUserProfile(values: Partial<IUserPP>) {

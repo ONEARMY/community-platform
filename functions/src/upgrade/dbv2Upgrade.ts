@@ -67,8 +67,6 @@ function upgrade(doc: any, endpoint: IDBEndpointV2) {
     case 'v2_users':
       return {
         ...doc,
-        moderation: doc.moderation ? doc.moderation : 'accepted',
-        _createdBy: formatLowerNoSpecial(doc._createdBy),
         _id: formatLowerNoSpecial(doc._id),
         displayName: doc.userName || doc._id || 'NA',
         userName: formatLowerNoSpecial(doc.userName),

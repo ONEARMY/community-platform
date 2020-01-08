@@ -1,34 +1,12 @@
-import * as firebase from 'firebase/app'
-import 'firebase/auth'
-import 'firebase/database'
-import 'firebase/firestore'
 import 'cypress-file-upload'
-import { Firestore } from './firestore'
+import { Firestore, Auth } from './db/firebase'
 import FileData = Cypress.FileData
-
-const fbConfig = {
-  apiKey: 'AIzaSyDAxS_7M780mI3_tlwnAvpbaqRsQPlmp64',
-  authDomain: 'onearmy-test-ci.firebaseapp.com',
-  databaseURL: 'https://onearmy-test-ci.firebaseio.com',
-  projectId: 'onearmy-test-ci',
-  storageBucket: 'onearmy-test-ci.appspot.com',
-}
 
 export enum UserMenuItem {
   Profile = 0,
   Settings = 1,
   LogOut = 2,
 }
-firebase.initializeApp(fbConfig)
-/**
- * Clear all caches before any test is executed
- */
-firebase
-  .firestore()
-  .clearPersistence()
-  .then(() => console.log('Firestore cache cleared ...'))
-const deleteAppCacheReq = window.indexedDB.deleteDatabase('OneArmyCache')
-deleteAppCacheReq.onsuccess = () => console.log('App cache cleared ...')
 
 declare global {
   namespace Cypress {
@@ -78,11 +56,11 @@ declare global {
   }
 }
 
-const attachCustomCommands = (Cypress, fb: typeof firebase) => {
+const attachCustomCommands = Cypress => {
   let currentUser: null | firebase.User = null
-  const firestore = new Firestore(fb.firestore())
+  const firestore = Firestore
 
-  fb.auth().onAuthStateChanged(user => {
+  Auth.onAuthStateChanged(user => {
     currentUser = user
   })
 
@@ -93,7 +71,7 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
         return { email, password }
       },
     })
-    fb.auth().signInWithEmailAndPassword(email, password)
+    Auth.signInWithEmailAndPassword(email, password)
   })
 
   Cypress.Commands.add('logout', () => {
@@ -104,7 +82,7 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
         return { currentUser: userInfo }
       },
     })
-    return fb.auth().signOut()
+    return Auth.signOut()
   })
 
   Cypress.Commands.add(
@@ -218,4 +196,4 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
   })
 }
 
-attachCustomCommands(Cypress, firebase)
+attachCustomCommands(Cypress)

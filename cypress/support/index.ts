@@ -1,4 +1,3 @@
-import './commands'
 // ***********************************************************
 // This example support/index.js is processed and
 // loaded automatically before your test files.
@@ -17,5 +16,6 @@ import './commands'
 // Import commands.js using ES2015 syntax:
 import './commands'
 import './custom-assertions'
+import './hooks'
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

@@ -5,7 +5,7 @@ describe('[How To]', () => {
     const howtoUrl = '/how-to/make-glasslike-beams'
     const coverFileRegex = /howto-beams-glass-0-3.jpg/
     beforeEach(() => {
-      cy.deleteDocuments('v3_howtos', 'title', '==', 'Create a how-to test')
+      cy.deleteDocuments('howtos', 'title', '==', 'Create a how-to test')
       cy.visit('/how-to')
     })
     it('[By Everyone]', () => {
@@ -51,7 +51,7 @@ describe('[How To]', () => {
 
   describe('[Filter with Tag]', () => {
     beforeEach(() => {
-      cy.deleteDocuments('v3_howtos', 'title', '==', 'Create a how-to test')
+      cy.deleteDocuments('howtos', 'title', '==', 'Create a how-to test')
       cy.visit('/how-to')
       cy.logout()
     })

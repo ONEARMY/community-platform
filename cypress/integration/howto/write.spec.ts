@@ -120,7 +120,7 @@ describe('[How To]', () => {
     }
 
     it('[By Authenticated]', () => {
-      cy.deleteDocuments('v3_howtos', 'title', '==', expected.title)
+      cy.deleteDocuments('howtos', 'title', '==', expected.title)
       cy.login('howto_creator@test.com', 'test1234')
       cy.step('Access the create-how-to page with its url')
       cy.visit('/how-to/create')
@@ -165,7 +165,7 @@ describe('[How To]', () => {
         .should('include', `/how-to/create-a-howto-test`)
 
       cy.step('Howto was created correctly')
-      cy.queryDocuments('v3_howtos', 'title', '==', expected.title).should(
+      cy.queryDocuments('howtos', 'title', '==', expected.title).should(
         'eqHowto',
         expected,
       )
@@ -311,12 +311,10 @@ describe('[How To]', () => {
         .url()
         .should('include', '/how-to/this-is-an-edit-test')
       cy.get('[data-cy=how-to-basis]').contains('This is an edit test')
-      cy.queryDocuments(
-        'v3_howtos',
-        'title',
-        '==',
-        'This is an edit test',
-      ).should('eqHowto', expected)
+      cy.queryDocuments('howtos', 'title', '==', 'This is an edit test').should(
+        'eqHowto',
+        expected,
+      )
     })
   })
 })

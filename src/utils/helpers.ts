@@ -86,7 +86,7 @@ export const hasAdminRights = (user?: IUser) => {
 }
 
 export const needsModeration = (doc: IModerable, user?: IUser) => {
-  if (!hasAdminRights(toJS(user))) {
+  if (!hasAdminRights(user)) {
     return false
   }
   return doc.moderation !== 'accepted'
@@ -95,6 +95,9 @@ export const needsModeration = (doc: IModerable, user?: IUser) => {
 export const isAllowToEditContent = (doc: IEditableDoc, user?: IUser) => {
   if (!user) {
     return false
+  }
+  if (isObservableObject(user)) {
+    user = toJS(user)
   }
   const roles =
     user.userRoles && Array.isArray(user.userRoles) ? user.userRoles : []

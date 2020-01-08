@@ -1,110 +1,354 @@
-[
-  {
-    "_authID": "YhBD7LB22EXsHz40sTSENWUSa9u1",
-    "_id": "howto_creator",
-    "userName": "howto_creator",
-    "_deleted": false,
-    "_created": "2018-01-24T14:46:42.038Z",
-    "_modified": "2018-01-24T14:46:42.038Z",
-    "verified": true
-  },
-  {
-    "_authID": "dU5sofScHpV09c8NWA834YCQq0S2",
-    "_id": "howto_editor",
-    "userName": "howto_editor",
-    "_deleted": false,
-    "_created": "2018-01-24T14:46:42.038Z",
-    "_modified": "2018-01-24T14:46:42.038Z",
-    "verified": true
-  },
-  {
-    "_authID": "v888t7UA7RMUvirqvUPT0vvc8en1",
-    "_id": "howto_reader",
-    "userName": "howto_reader",
-    "_deleted": false,
-    "_created": "2018-01-24T14:46:42.038Z",
-    "_modified": "2018-01-24T14:46:42.038Z",
-    "verified": true
-  },
-  {
+{
+  "event_creator": {
+    "verified": false,
+    "_modified": "2020-01-07T12:07:05.988Z",
     "_authID": "5UXRly49EOXtIXmKjPfSU5UpeI73",
+    "_created": "2020-01-07T12:07:05.988Z",
+    "displayName": "event_creator",
     "_id": "event_creator",
+    "_deleted": false,
     "userName": "event_creator",
-    "_deleted": false,
-    "_created": "2018-01-24T14:46:42.038Z",
-    "_modified": "2018-01-24T14:46:42.038Z",
-    "verified": true
+    "moderation": "awaiting-moderation"
   },
-  {
-    "_authID": "8T4FMZ0dOdQbBaHuFYcvc0A3rDt2",
-    "_id": "event_editor",
+  "event_editor": {
+    "_deleted": false,
     "userName": "event_editor",
-    "_deleted": false,
-    "_created": "2018-01-24T14:46:42.038Z",
-    "_modified": "2018-01-24T14:46:42.038Z",
-    "verified": true
+    "verified": false,
+    "_modified": "2019-12-30T11:39:42.784Z",
+    "_authID": "8T4FMZ0dOdQbBaHuFYcvc0A3rDt2",
+    "displayName": "event_editor",
+    "_created": "2019-12-30T11:39:42.784Z",
+    "_id": "event_editor"
   },
-  {
-    "_authID": "4WFI4CEFXuTtoB1b2rl16AlGCey1",
+  "event_reader": {
     "_id": "event_reader",
+    "_deleted": false,
     "userName": "event_reader",
-    "_deleted": false,
-    "_created": "2018-01-24T14:46:42.038Z",
-    "_modified": "2018-01-24T14:46:42.038Z",
-    "verified": true
+    "moderation": "awaiting-moderation",
+    "verified": false,
+    "_modified": "2019-08-15T00:00:00.000Z",
+    "_authID": "4WFI4CEFXuTtoB1b2rl16AlGCey1",
+    "_created": "2019-08-15T00:00:00.000Z",
+    "displayName": "event_reader"
   },
-  {
-    "_authID": "0P7VMVVdhkUQjvYG3gYewwPtJ7i1",
-    "_id": "tag_creator",
-    "userName": "tag_creator",
+  "howto_creator": {
     "_deleted": false,
-    "_created": "2018-01-24T14:46:42.038Z",
-    "_modified": "2018-01-24T14:46:42.038Z",
-    "verified": true
+    "userName": "howto_creator",
+    "moderation": "awaiting-moderation",
+    "verified": false,
+    "_modified": "2020-01-07T15:46:00.297Z",
+    "_authID": "YhBD7LB22EXsHz40sTSENWUSa9u1",
+    "_created": "2020-01-07T15:46:00.297Z",
+    "displayName": "howto_creator",
+    "_id": "howto_creator"
   },
-  {
-    "_authID": "l9N5HFHzSjQvtP9g9MyFnPpkFmM2",
-    "_id": "settings_workplace_new",
-    "userName": "settings_workplace_new",
+  "howto_editor": {
+    "_id": "howto_editor",
     "_deleted": false,
-    "_created": "2018-01-24T14:46:42.038Z",
-    "_modified": "2018-01-24T14:46:42.038Z",
-    "verified": true
+    "userName": "howto_editor",
+    "moderation": "awaiting-moderation",
+    "verified": false,
+    "_modified": "2020-01-07T12:12:41.566Z",
+    "_authID": "dU5sofScHpV09c8NWA834YCQq0S2",
+    "displayName": "howto_editor",
+    "_created": "2020-01-07T12:12:41.566Z"
   },
-  {
-    "_authID": "pbx4jStD8sNj4OEZTg4AegLTl6E3",
-    "_id": "settings_member_new",
-    "userName": "settings_member_new",
+  "howto_reader": {
+    "verified": false,
+    "_modified": "2020-01-07T19:54:49.860Z",
+    "_authID": "v888t7UA7RMUvirqvUPT0vvc8en1",
+    "_created": "2020-01-07T19:54:49.860Z",
+    "displayName": "howto_reader",
+    "_id": "howto_reader",
     "_deleted": false,
-    "_created": "2018-01-24T14:46:42.038Z",
-    "_modified": "2018-01-24T14:46:42.038Z",
-    "verified": true
+    "userName": "howto_reader",
+    "moderation": "awaiting-moderation"
   },
-  {
-    "_authID": "wwtBAo7TrkSQ9nAaBN3D93I1sCM2",
-    "_id": "settings_machine_new",
-    "userName": "settings_machine_new",
-    "_deleted": false,
-    "_created": "2018-01-24T14:46:42.038Z",
-    "_modified": "2018-01-24T14:46:42.038Z",
-    "verified": true
-  },
-  {
-    "_authID": "vWAbQvq21UbvhGldakIy1x4FpeF2",
+  "settings_community_new": {
     "_id": "settings_community_new",
+    "profileType": "community-builder",
+    "coverImages": [
+      {
+        "size": 18987,
+        "downloadUrl": "https://firebasestorage.googleapis.com/v0/b/onearmy-test-ci.appspot.com/o/uploads%2Fv3_users%2Fsettings_community_new%2Fimages%2Fprofile-cover-1.jpg?alt=media&token=e78b61e9-98c0-4278-8015-05eca945da3c",
+        "contentType": "image/jpeg",
+        "timeCreated": "2020-01-07T12:15:08.667Z",
+        "name": "profile-cover-1.jpg",
+        "fullPath": "uploads/v3_users/settings_community_new/images/profile-cover-1.jpg",
+        "type": "image/jpeg",
+        "updated": "2020-01-07T12:15:08.667Z"
+      }
+    ],
+    "isExpert": null,
+    "collectedPlasticTypes": null,
+    "openingHours": [
+      {
+        "day": "",
+        "openTo": "",
+        "openFrom": ""
+      }
+    ],
+    "location": {
+      "value": "City of London, England, United Kingdom",
+      "latlng": {
+        "lat": 51.5073,
+        "lng": -0.127647
+      },
+      "administrative": "England",
+      "postcode": "EC1A",
+      "countryCode": "gb",
+      "country": "United Kingdom",
+      "name": "City of London"
+    },
+    "verified": true,
+    "_modified": "2020-01-07T12:15:08.726Z",
+    "_created": "2020-01-07T12:15:08.726Z",
+    "displayName": "settings_community_new",
+    "isV4Member": null,
+    "_deleted": false,
+    "workspaceType": null,
+    "country": null,
     "userName": "settings_community_new",
-    "_deleted": false,
-    "_created": "2018-01-24T14:46:42.038Z",
-    "_modified": "2018-01-24T14:46:42.038Z",
-    "verified": true
+    "links": [
+      {
+        "url": "http://www.settings_community_new-forum.org",
+        "label": "forum"
+      }
+    ],
+    "mapPinDescription": "Fun, vibrant and full of amazing people",
+    "machineBuilderXp": null,
+    "_authID": "vWAbQvq21UbvhGldakIy1x4FpeF2",
+    "about": "An enthusiastic community that makes the world greener!"
   },
-  {
-    "_authID": "uxupeYR7glagQyhBy8q0blr0chd2",
-    "_id": "settings_plastic_new",
-    "userName": "settings_plastic_new",
+  "settings_machine_new": {
+    "collectedPlasticTypes": null,
+    "location": {
+      "country": "Singapore",
+      "name": "Singapore",
+      "value": "Singapore, Central Singapore, Singapore",
+      "latlng": {
+        "lat": 1.29048,
+        "lng": 103.852
+      },
+      "administrative": "Central Singapore",
+      "postcode": "178957",
+      "countryCode": "sg"
+    },
+    "openingHours": [
+      {
+        "openFrom": "",
+        "day": "",
+        "openTo": ""
+      }
+    ],
+    "verified": true,
+    "_modified": "2020-01-07T12:14:50.354Z",
+    "_created": "2020-01-07T12:14:50.354Z",
+    "displayName": "settings_machine_new",
+    "isV4Member": null,
     "_deleted": false,
-    "_created": "2018-01-24T14:46:42.038Z",
-    "_modified": "2018-01-24T14:46:42.038Z",
-    "verified": true
+    "workspaceType": null,
+    "country": null,
+    "userName": "settings_machine_new",
+    "links": [
+      {
+        "url": "http://settings_machine_bazarlink.com",
+        "label": "bazar"
+      }
+    ],
+    "mapPinDescription": "Informative workshop on machines every week",
+    "machineBuilderXp": ["electronics", "welding"],
+    "_authID": "wwtBAo7TrkSQ9nAaBN3D93I1sCM2",
+    "about": "We're mechanics and our jobs are making machines",
+    "_id": "settings_machine_new",
+    "profileType": "machine-builder",
+    "coverImages": [
+      {
+        "timeCreated": "2020-01-07T12:14:50.082Z",
+        "name": "profile-cover-1.jpg",
+        "fullPath": "uploads/v3_users/settings_machine_new/images/profile-cover-1.jpg",
+        "type": "image/jpeg",
+        "updated": "2020-01-07T12:14:50.082Z",
+        "size": 18987,
+        "downloadUrl": "https://firebasestorage.googleapis.com/v0/b/onearmy-test-ci.appspot.com/o/uploads%2Fv3_users%2Fsettings_machine_new%2Fimages%2Fprofile-cover-1.jpg?alt=media&token=6e939211-d090-474f-aa00-8eac3b1c6cee",
+        "contentType": "image/jpeg"
+      }
+    ],
+    "isExpert": null
+  },
+  "settings_member_new": {
+    "isV4Member": null,
+    "_deleted": false,
+    "workspaceType": null,
+    "country": "Poland",
+    "userName": "settings_member_new",
+    "links": [
+      {
+        "url": "settings_member_new@test.com",
+        "label": "email"
+      }
+    ],
+    "mapPinDescription": null,
+    "machineBuilderXp": null,
+    "_authID": "pbx4jStD8sNj4OEZTg4AegLTl6E3",
+    "about": "I'm a very active member",
+    "_id": "settings_member_new",
+    "profileType": "member",
+    "coverImages": [
+      {
+        "downloadUrl": "https://firebasestorage.googleapis.com/v0/b/onearmy-test-ci.appspot.com/o/uploads%2Fv3_users%2Fsettings_member_new%2Fimages%2Fprofile-cover-1.jpg?alt=media&token=6a7154c8-22f2-44e3-ab76-a10cb59d17cb",
+        "contentType": "image/jpeg",
+        "timeCreated": "2020-01-07T12:14:29.769Z",
+        "name": "profile-cover-1.jpg",
+        "fullPath": "uploads/v3_users/settings_member_new/images/profile-cover-1.jpg",
+        "type": "image/jpeg",
+        "updated": "2020-01-07T12:14:29.769Z",
+        "size": 18987
+      }
+    ],
+    "isExpert": null,
+    "collectedPlasticTypes": null,
+    "openingHours": [
+      {
+        "openFrom": "",
+        "day": "",
+        "openTo": ""
+      }
+    ],
+    "location": null,
+    "verified": true,
+    "_modified": "2020-01-07T12:14:30.030Z",
+    "_created": "2020-01-07T12:14:30.030Z",
+    "displayName": "settings_member_new"
+  },
+  "settings_plastic_new": {
+    "collectedPlasticTypes": ["hdpe", "pvc", "other"],
+    "openingHours": [
+      {
+        "openTo": "06:00 PM",
+        "openFrom": "09:00 AM",
+        "day": "Monday"
+      },
+      {
+        "openFrom": "09:00 AM",
+        "day": "Wednesday",
+        "openTo": "06:00 PM"
+      },
+      {
+        "openTo": "06:00 PM",
+        "openFrom": "09:00 AM",
+        "day": "Friday"
+      }
+    ],
+    "location": {
+      "postcode": "75000",
+      "countryCode": "my",
+      "country": "Malaysia",
+      "name": "Malacca",
+      "value": "Malacca, Melaka, Malaysia",
+      "latlng": {
+        "lat": 2.19082,
+        "lng": 102.256
+      },
+      "administrative": "Melaka"
+    },
+    "verified": true,
+    "_modified": "2020-01-07T12:15:42.218Z",
+    "_created": "2020-01-07T12:15:42.218Z",
+    "displayName": "settings_plastic_new",
+    "isV4Member": null,
+    "_deleted": false,
+    "workspaceType": null,
+    "country": null,
+    "userName": "settings_plastic_new",
+    "links": [
+      {
+        "url": "http://www.facebook.com/settings_plastic_new",
+        "label": "social-media"
+      },
+      {
+        "url": "http://www.twitter.com/settings_plastic_new",
+        "label": "social-media"
+      }
+    ],
+    "mapPinDescription": "Feed us plastic!",
+    "machineBuilderXp": null,
+    "_authID": "uxupeYR7glagQyhBy8q0blr0chd2",
+    "about": "We accept plastic currencies: Bottle, Nylon Bags, Plastic Lids/Straws",
+    "_id": "settings_plastic_new",
+    "profileType": "collection-point",
+    "coverImages": [
+      {
+        "updated": "2020-01-07T12:15:42.116Z",
+        "size": 18987,
+        "downloadUrl": "https://firebasestorage.googleapis.com/v0/b/onearmy-test-ci.appspot.com/o/uploads%2Fv3_users%2Fsettings_plastic_new%2Fimages%2Fprofile-cover-1.jpg?alt=media&token=59d77f56-138b-41be-aea2-c62cd55af54b",
+        "contentType": "image/jpeg",
+        "timeCreated": "2020-01-07T12:15:42.116Z",
+        "name": "profile-cover-1.jpg",
+        "fullPath": "uploads/v3_users/settings_plastic_new/images/profile-cover-1.jpg",
+        "type": "image/jpeg"
+      }
+    ],
+    "isExpert": null
+  },
+  "settings_workplace_new": {
+    "openingHours": [
+      {
+        "openFrom": "",
+        "day": "",
+        "openTo": ""
+      }
+    ],
+    "location": {
+      "postcode": "43085",
+      "countryCode": "us",
+      "country": "United States of America",
+      "name": "Columbus",
+      "value": "Columbus, Ohio, United States of America",
+      "latlng": {
+        "lat": 39.9623,
+        "lng": -83.0007
+      },
+      "administrative": "Ohio"
+    },
+    "verified": true,
+    "_modified": "2020-01-07T12:14:15.081Z",
+    "_created": "2020-01-07T12:14:15.081Z",
+    "displayName": "settings_workplace_new",
+    "isV4Member": null,
+    "_deleted": false,
+    "workspaceType": "shredder",
+    "country": null,
+    "userName": "settings_workplace_new",
+    "links": [
+      {
+        "url": "settings_workplace_new@test.com",
+        "label": "email"
+      },
+      {
+        "url": "http://www.settings_workplace_new.com",
+        "label": "website"
+      }
+    ],
+    "mapPinDescription": "Come in & let's make cool stuff out of plastic!",
+    "machineBuilderXp": null,
+    "_authID": "l9N5HFHzSjQvtP9g9MyFnPpkFmM2",
+    "about": "We have some space to run a workplace",
+    "_id": "settings_workplace_new",
+    "profileType": "workspace",
+    "coverImages": [
+      {
+        "timeCreated": "2020-01-07T12:14:14.737Z",
+        "name": "profile-cover-1.jpg",
+        "fullPath": "uploads/v3_users/settings_workplace_new/images/profile-cover-1.jpg",
+        "type": "image/jpeg",
+        "updated": "2020-01-07T12:14:14.737Z",
+        "size": 18987,
+        "downloadUrl": "https://firebasestorage.googleapis.com/v0/b/onearmy-test-ci.appspot.com/o/uploads%2Fv3_users%2Fsettings_workplace_new%2Fimages%2Fprofile-cover-1.jpg?alt=media&token=4e2254f4-1964-4ba1-8583-90797788328f",
+        "contentType": "image/jpeg"
+      }
+    ],
+    "isExpert": null,
+    "collectedPlasticTypes": null
   }
-]
+}

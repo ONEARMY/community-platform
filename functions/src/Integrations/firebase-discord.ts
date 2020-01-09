@@ -8,10 +8,10 @@ const SITE_URL = CONFIG.deployment.site_url
 const DISCORD_WEBHOOK_URL = CONFIG.integrations.discord_webhook
 
 export const notifyPinAccepted = functions.firestore
-  .document('v2_mappins/{pinId}')
+  .document('v3_mappins/{pinId}')
   .onWrite((change, context) => {
-    const info = change.after.exists ? change.after.data() : null;
-    if(info === null || info.moderation !== 'accepted'){
+    const info = change.after.exists ? change.after.data() : null
+    if (info === null || info.moderation !== 'accepted') {
       return
     }
 
@@ -37,17 +37,16 @@ export const notifyPinAccepted = functions.firestore
     )
   })
 export const notifyHowToAccepted = functions.firestore
-  .document('v2_howtos/{id}')
+  .document('v3_howtos/{id}')
   .onWrite((change, context) => {
-    const info = change.after.exists ? change.after.data() : null;
-    if(info === null || info.moderation !== 'accepted'){
+    const info = change.after.exists ? change.after.data() : null
+    if (info === null || info.moderation !== 'accepted') {
       return
     }
 
     const user = info._createdBy
     const title = info.title
     const slug = info.slug
-    //  console.log(info);
     request.post(
       DISCORD_WEBHOOK_URL,
       {
@@ -67,10 +66,10 @@ export const notifyHowToAccepted = functions.firestore
     )
   })
 export const notifyEventAccepted = functions.firestore
-  .document('v2_events/{id}')
+  .document('v3_events/{id}')
   .onWrite((change, context) => {
-    const info = change.after.exists ? change.after.data() : null;
-    if(info === null || info.moderation !== 'accepted'){
+    const info = change.after.exists ? change.after.data() : null
+    if (info === null || info.moderation !== 'accepted') {
       return
     }
 

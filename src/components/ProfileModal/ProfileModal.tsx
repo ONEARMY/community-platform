@@ -82,13 +82,17 @@ export class ProfileModal extends React.Component<IProps> {
       <ModalContainer data-cy="user-menu-list">
         <ModalContainerInner>
           <Flex>
-            <ModalLink to={'/u/' + username} data-cy="menu-item">
+            <ModalLink to={'/u/' + username} data-cy="menu-Profile">
               <Flex>Profile</Flex>
             </ModalLink>
           </Flex>
           <Flex>
             {COMMUNITY_PAGES_PROFILE.map(page => (
-              <ModalLink key={page.path} to={page.path} data-cy="menu-item">
+              <ModalLink
+                key={page.path}
+                to={page.path}
+                data-cy={`menu-${page.title}`}
+              >
                 <Flex>{page.title}</Flex>
               </ModalLink>
             ))}
@@ -96,8 +100,8 @@ export class ProfileModal extends React.Component<IProps> {
           <Flex>
             <ModalLink
               onClick={() => this.logout()}
-              to={'/how-to'}
-              data-cy="menu-item"
+              to={location.pathname}
+              data-cy="menu-Logout"
             >
               <Flex color="rgba(27,27,27,0.5)">Log out</Flex>
             </ModalLink>

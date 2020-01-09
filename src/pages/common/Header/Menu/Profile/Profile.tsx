@@ -61,7 +61,7 @@ export default class Profile extends React.Component<IProps, IState> {
                 />
               ))}
               <MenuMobileLink
-                path={'how-to'}
+                path={location.pathname}
                 content={'Log out'}
                 style={{ color: theme.colors.silver }}
                 onClick={() => this.injected.userStore.logout()}

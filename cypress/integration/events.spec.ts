@@ -2,7 +2,7 @@ describe('[Events]', () => {
   const today = '2019-08-15'
   beforeEach(() => {
     cy.clock(Cypress.moment.utc(today).valueOf(), ['Date'])
-    cy.deleteDocuments('events', 'title', '==', 'Create a test event')
+    // cy.deleteDocuments('events', 'title', '==', 'Create a test event')
     cy.visit('/events')
     cy.logout()
   })
@@ -13,9 +13,9 @@ describe('[Events]', () => {
       cy.get('[data-cy=create]').should('not.exist')
 
       cy.step('Upcoming events are shown')
-      cy.get('[data-cy=card]')
+      cy.get('[data-cy=card]', { timeout: 10000 })
         .its('length')
-        .should('be.eq', 5)
+        .should('be.eq', 7)
 
       cy.step('Move Events button is hidden')
       cy.get('button')
@@ -28,9 +28,8 @@ describe('[Events]', () => {
           cy.contains('18').should('be.exist')
           cy.contains('Aug').should('be.exist')
           cy.contains('SURA BAYA Exhibition').should('be.exist')
-          cy.contains('By eventcreator').should('be.exist')
+          cy.contains('By event_creator').should('be.exist')
           cy.contains('Surabaya').should('be.exist')
-          cy.contains('exhibition').should('be.exist')
           cy.get('a[target=_blank]')
             .should('have.attr', 'href')
             .and('eq', 'https://www.instagram.com/p/B1N6zVUjj0M/')

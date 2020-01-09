@@ -1,4 +1,4 @@
-import firebase from 'firebase/app'
+import firebase, { auth } from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 import Query = firebase.firestore.Query
@@ -13,8 +13,9 @@ const fbConfig = {
 }
 firebase.initializeApp(fbConfig)
 const db = firebase.firestore()
-// db.clearPersistence()
-
+// firestore is already configured to not persist,
+// set for auth also to keep cache clean
+auth().setPersistence(auth.Auth.Persistence.NONE)
 type PromiseCallback = (val?: any) => void
 
 const MAX_BATCH_SIZE = 500
@@ -25,7 +26,6 @@ const prefix = 'v3_'
 
 class FirestoreDB {
   seedDB = () => {
-    console.log('seeding')
     const dbWrites = Object.keys(SEED_DATA).map(key => {
       return this.addDocuments(key, SEED_DATA[key])
     })

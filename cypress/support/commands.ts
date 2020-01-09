@@ -3,9 +3,9 @@ import { Firestore, Auth } from './db/firebase'
 import FileData = Cypress.FileData
 
 export enum UserMenuItem {
-  Profile = 0,
-  Settings = 1,
-  LogOut = 2,
+  Profile = 'Profile',
+  Settings = 'Settings',
+  LogOut = 'Logout',
 }
 
 declare global {
@@ -64,6 +64,12 @@ const attachCustomCommands = Cypress => {
     currentUser = user
   })
 
+  /**
+   * Login and logout commands use the sytem interface to log a user in or out
+   * @remark - we tried directly hooking into afauth, however this appeared to be less
+   * reliable as execution could take place too fast for platform to keep up with.
+   * It also highlighted additional navigation that could take place during login sequence
+   */
   Cypress.Commands.add('login', (email, password) => {
     Cypress.log({
       displayName: 'login',
@@ -71,7 +77,19 @@ const attachCustomCommands = Cypress => {
         return { email, password }
       },
     })
-    Auth.signInWithEmailAndPassword(email, password)
+    if (!currentUser) {
+      cy.get('[data-cy=login]').click()
+      cy.get('[data-cy=email]')
+        .clear()
+        .type('howto_reader@test.com')
+      cy.get('[data-cy=password]')
+        .clear()
+        .type('test1234')
+      cy.get('[data-cy=submit')
+        .should('not.be.disabled')
+        .click()
+      cy.get('[data-cy=user-menu]', { timeout: 10000 }).should('exist')
+    }
   })
 
   Cypress.Commands.add('logout', () => {
@@ -82,7 +100,11 @@ const attachCustomCommands = Cypress => {
         return { currentUser: userInfo }
       },
     })
-    return Auth.signOut()
+    if (currentUser) {
+      cy.get('[data-cy=user-menu]').click()
+      cy.get('[data-cy=menu-logout]').click()
+      cy.get('[data-cy=login]').should('exist')
+    }
   })
 
   Cypress.Commands.add(
@@ -188,7 +210,7 @@ const attachCustomCommands = Cypress => {
       },
     })
     cy.toggleUserMenuOn()
-    cy.get(`[data-cy=menu-item]:eq(${menuItem})`).click()
+    cy.get(`[data-cy=menu-${menuItem}]`).click()
   })
 
   Cypress.Commands.add('screenClick', () => {

@@ -13,9 +13,6 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
-// Import commands.js using ES2015 syntax:
+import './hooks'
 import './commands'
 import './custom-assertions'
-import './hooks'
-// Alternatively you can use CommonJS syntax:
-// require('./commands')

@@ -7,7 +7,7 @@ import users from './users.json'
 /**
  * Seed data is used to populate a common initial state
  * Individual datasets can be found in the corresponding json files
- * NOTE - they are in object format instead of array to allow easier
+ * @remark they are in object format instead of array to allow easier
  * import/export using scripts for firebase
  */
 export const SEED_DATA = {

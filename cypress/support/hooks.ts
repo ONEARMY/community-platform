@@ -7,9 +7,10 @@ import { Firestore } from './db/firebase'
  * wait to custom command
  */
 before(() => {
-  cy.wrap('Initialising Database').then({ timeout: 200000 }, doc => {
+  cy.wrap('Initialising Database').then({ timeout: 20000 }, doc => {
     return new Cypress.Promise(resolve => {
       initialiseDB().then(() => {
+        cy.log('DB Initialised')
         resolve(null)
       })
     })
@@ -23,6 +24,7 @@ after(() => {
   cy.wrap('Clearing Database').then({ timeout: 20000 }, doc => {
     return new Cypress.Promise(async (resolve, reject) => {
       await Firestore.clearDB()
+      // await clearDexieCache()
       resolve()
     })
   })

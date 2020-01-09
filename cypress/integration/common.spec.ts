@@ -63,8 +63,8 @@ describe('[Common]', () => {
   describe('[User Menu]', () => {
     it('[By Anonymous]', () => {
       cy.step('Login and Join buttons are available')
-      cy.visit('/how-to')
       cy.logout()
+      cy.visit('/how-to')
       cy.get('[data-cy=login]').should('be.visible')
       cy.get('[data-cy=join]').should('be.visible')
       cy.get('[data-cy=user-menu]').should('not.exist')
@@ -75,7 +75,7 @@ describe('[Common]', () => {
       cy.visit('/how-to')
       cy.step('Login and Join buttons are unavailable to logged-in users')
       cy.login(`${username}@test.com`, 'test1234')
-      cy.get('[data-cy=login]').should('not.exist')
+      cy.get('[data-cy=login]', { timeout: 20000 }).should('not.exist')
       cy.get('[data-cy=join]').should('not.exist')
 
       cy.step('User Menu is toggle')

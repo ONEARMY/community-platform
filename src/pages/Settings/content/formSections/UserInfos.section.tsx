@@ -78,7 +78,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             </Text>
             <Field
               data-cy="username"
-              name="userName"
+              name="displayName"
               component={InputField}
               placeholder="Pick a unique username"
               validate={required}

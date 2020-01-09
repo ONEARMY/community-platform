@@ -5,7 +5,7 @@ describe('[How To]', () => {
     const howtoUrl = '/how-to/make-glasslike-beams'
     const coverFileRegex = /howto-beams-glass-0-3.jpg/
     beforeEach(() => {
-      cy.deleteDocuments('v2_howtos', 'title', '==', 'Create a how-to test')
+      cy.deleteDocuments('v3_howtos', 'title', '==', 'Create a how-to test')
       cy.visit('/how-to')
     })
     it('[By Everyone]', () => {
@@ -27,7 +27,7 @@ describe('[How To]', () => {
       cy.step('How-to cards has basic info')
       cy.get(`[data-cy=card] > a[href="${howtoUrl}"]`).within(() => {
         cy.contains('Make glass-like beams').should('be.exist')
-        cy.contains('By howto_creator').should('be.exist')
+        cy.contains('By howtocreator').should('be.exist')
         cy.get('img')
           .should('have.attr', 'src')
           .and('match', coverFileRegex)
@@ -51,7 +51,7 @@ describe('[How To]', () => {
 
   describe('[Filter with Tag]', () => {
     beforeEach(() => {
-      cy.deleteDocuments('v2_howtos', 'title', '==', 'Create a how-to test')
+      cy.deleteDocuments('v3_howtos', 'title', '==', 'Create a how-to test')
       cy.visit('/how-to')
       cy.logout()
     })
@@ -115,7 +115,7 @@ describe('[How To]', () => {
 
         cy.step('How-to has basic info')
         cy.get('[data-cy=how-to-basis]').then($summary => {
-          expect($summary).to.contain('By howto_creator', 'Author')
+          expect($summary).to.contain('By howtocreator', 'Author')
           expect($summary).to.contain('Make an interlocking brick', 'Title')
           expect($summary).to.contain(
             'show you how to make a brick using the injection machine',

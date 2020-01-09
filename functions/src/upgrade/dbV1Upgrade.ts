@@ -12,7 +12,7 @@ const mappings: DBMapping = {
   users: 'v2_users',
 }
 
-export const upgradeDBAll = async () => {
+export const upgradeV1DB = async () => {
   const promises = Object.keys(mappings).map(async endpoint => {
     const upgradedDocs = await upgradeDBEndpoint(endpoint)
     return upgradedDocs

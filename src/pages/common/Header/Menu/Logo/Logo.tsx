@@ -5,6 +5,7 @@ import styled from 'styled-components'
 
 import PPLogo from 'src/assets/images/precious-plastic-logo-official.svg'
 import Text from 'src/components/Text'
+import { VERSION } from 'src/config/config'
 
 interface IProps {
   isMobile?: boolean
@@ -45,6 +46,7 @@ export class Logo extends React.Component<IProps> {
                 src={PPLogo}
                 width={[50, 50, 100]}
                 height={[50, 50, 100]}
+                alt={'PP Logo v' + VERSION}
               />
             </Flex>
             <Text

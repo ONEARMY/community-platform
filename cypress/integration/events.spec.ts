@@ -3,7 +3,7 @@ describe('[Events]', () => {
   beforeEach(() => {
     cy.log(`Today as **${today}**`)
     cy.clock(Cypress.moment.utc(today).valueOf(), ['Date'])
-    cy.deleteDocuments('v2_events', 'title', '==', 'Create a test event')
+    cy.deleteDocuments('v3_events', 'title', '==', 'Create a test event')
     cy.visit('/events')
     cy.logout()
   })
@@ -29,7 +29,7 @@ describe('[Events]', () => {
           cy.contains('18').should('be.exist')
           cy.contains('Aug').should('be.exist')
           cy.contains('SURA BAYA Exhibition').should('be.exist')
-          cy.contains('By event_creator').should('be.exist')
+          cy.contains('By eventcreator').should('be.exist')
           cy.contains('Surabaya').should('be.exist')
           cy.contains('exhibition').should('be.exist')
           cy.get('a[target=_blank]')

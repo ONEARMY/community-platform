@@ -14,7 +14,7 @@ import { RootStore } from '..'
 import { IUser } from 'src/models/user.models'
 import { hasAdminRights, needsModeration } from 'src/utils/helpers'
 
-const COLLECTION_NAME = 'v2_howtos'
+const COLLECTION_NAME = 'v3_howtos'
 
 export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
@@ -81,7 +81,7 @@ export class HowtoStore extends ModuleStore {
 
   // Moderate Howto
   public async moderateHowto(howto: IHowto) {
-    if (!hasAdminRights(this.activeUser)) {
+    if (!hasAdminRights(toJS(this.activeUser))) {
       return false
     }
     const doc = this.db.collection(COLLECTION_NAME).doc(howto._id)

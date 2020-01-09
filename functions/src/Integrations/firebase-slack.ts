@@ -8,10 +8,10 @@ const SITE_URL = CONFIG.deployment.site_url
 const SLACK_WEBHOOK_URL = CONFIG.integrations.slack_webhook
 
 export const notifyNewPin = functions.firestore
-  .document('v2_mappins/{pinId}')
+  .document('v3_mappins/{pinId}')
   .onWrite((change, context) => {
-    const info = change.after.exists ? change.after.data() : null;
-    if(info === null || info.moderation !== 'awaiting-moderation'){
+    const info = change.after.exists ? change.after.data() : null
+    if (info === null || info.moderation !== 'awaiting-moderation') {
       return
     }
 
@@ -37,10 +37,10 @@ export const notifyNewPin = functions.firestore
     )
   })
 export const notifyNewHowTo = functions.firestore
-  .document('v2_howtos/{id}')
+  .document('v3_howtos/{id}')
   .onWrite((change, context) => {
-    const info = change.after.exists ? change.after.data() : null;
-    if(info === null || info.moderation !== 'awaiting-moderation'){
+    const info = change.after.exists ? change.after.data() : null
+    if (info === null || info.moderation !== 'awaiting-moderation') {
       return
     }
 
@@ -67,10 +67,10 @@ export const notifyNewHowTo = functions.firestore
     )
   })
 export const notifyNewEvent = functions.firestore
-  .document('v2_events/{id}')
+  .document('v3_events/{id}')
   .onWrite((change, context) => {
-    const info = change.after.exists ? change.after.data() : null;
-    if(info === null || info.moderation !== 'awaiting-moderation'){
+    const info = change.after.exists ? change.after.data() : null
+    if (info === null || info.moderation !== 'awaiting-moderation') {
       return
     }
 

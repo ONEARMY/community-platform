@@ -13,12 +13,13 @@ import { RootStore } from '..'
 import { loginWithDHCredentials } from 'src/hacks/DaveHakkensNL.hacks'
 import { ModuleStore } from '../common/module.store'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
+import { formatLowerNoSpecial } from 'src/utils/helpers'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
 */
 
-const COLLECTION_NAME = 'v2_users'
+const COLLECTION_NAME = 'v3_users'
 
 export class UserStore extends ModuleStore {
   private authUnsubscribe: firebase.Unsubscribe
@@ -28,10 +29,19 @@ export class UserStore extends ModuleStore {
   @observable
   public authUser: firebase.User | null
 
+  @observable
+  public updateStatus: IUserUpdateStatus = getInitialUpdateStatus()
+
   @action
   public updateUser(user?: IUserPPDB) {
     this.user = user
   }
+
+  @action
+  public updateUpdateStatus(update: keyof IUserUpdateStatus) {
+    this.updateStatus[update] = true
+  }
+
   constructor(rootStore: RootStore) {
     super(rootStore)
     this._listenToAuthStateChanges()
@@ -41,7 +51,7 @@ export class UserStore extends ModuleStore {
   public async registerNewUser(
     email: string,
     password: string,
-    userName: string,
+    displayName: string,
   ) {
     // stop auto detect of login as will pick up with incomplete information during registration
     this._unsubscribeFromAuthStateChanges()
@@ -49,7 +59,7 @@ export class UserStore extends ModuleStore {
     // once registered populate auth profile displayname with the chosen username
     if (authReq.user) {
       await authReq.user.updateProfile({
-        displayName: userName,
+        displayName,
         photoURL: authReq.user.photoURL,
       })
       // populate db user profile and resume auth listener
@@ -76,11 +86,10 @@ export class UserStore extends ModuleStore {
   // handle user sign in, when firebase authenticates wnat to also fetch user document from the database
   public async userSignedIn(user: IFirebaseUser | null) {
     if (user) {
+      console.log('user signed in', user)
       // legacy user formats did not save names so get profile via email - this option be removed in later version
       // (assumes migration strategy and check)
-      const userMeta = user.displayName
-        ? await this.getUserProfile(user.displayName)
-        : await this.getUserProfile(user.email as string)
+      const userMeta = await this.getUserProfile(user.uid)
       if (userMeta) {
         this.updateUser(userMeta)
       } else {
@@ -89,14 +98,26 @@ export class UserStore extends ModuleStore {
     }
   }
 
-  public async getUserProfile(userName: string) {
-    return this.db
+  // TODO
+  // this is a bit messy due to legacy users having mismatched firebase data and ids
+  // should resolve all users so that a single lookup is successful
+  // to fix a script should be run to update all firebase_auth display names to correct format
+  // which could then be used as a single lookup
+  public async getUserProfile(_authID: string) {
+    const lookup = await this.db
       .collection<IUserPP>(COLLECTION_NAME)
-      .doc(userName)
-      .get()
+      .getWhere('_authID', '==', _authID)
+    if (lookup.length === 1) {
+      return lookup[0]
+    }
+    const lookup2 = await this.db
+      .collection<IUserPP>(COLLECTION_NAME)
+      .getWhere('_id', '==', _authID)
+    return lookup2[0]
   }
 
   public async updateUserProfile(values: Partial<IUserPP>) {
+    this.updateUpdateStatus('Start')
     const dbRef = this.db
       .collection<IUserPP>(COLLECTION_NAME)
       .doc((values as IUserDB)._id)
@@ -122,6 +143,7 @@ export class UserStore extends ModuleStore {
     if (values.location) {
       await this.mapsStore.setUserPin(update)
     }
+    this.updateUpdateStatus('Complete')
   }
 
   public async sendEmailVerification() {
@@ -195,7 +217,8 @@ export class UserStore extends ModuleStore {
 
   public async createUserProfile(fields: Partial<IUser> = {}) {
     const authUser = auth.currentUser as firebase.User
-    const userName = authUser.displayName as string
+    const displayName = authUser.displayName as string
+    const userName = formatLowerNoSpecial(displayName)
     const dbRef = this.db.collection<IUser>(COLLECTION_NAME).doc(userName)
     console.log('creating user profile', userName)
     if (!userName) {
@@ -203,7 +226,9 @@ export class UserStore extends ModuleStore {
     }
     const user: IUser = {
       _authID: authUser.uid,
+      displayName,
       userName,
+      moderation: 'awaiting-moderation',
       verified: false,
       ...fields,
     }
@@ -235,6 +260,19 @@ export class UserStore extends ModuleStore {
   private _unsubscribeFromAuthStateChanges() {
     this.authUnsubscribe()
   }
+}
+
+interface IUserUpdateStatus {
+  Start: boolean
+  Complete: boolean
+}
+
+function getInitialUpdateStatus() {
+  const status: IUserUpdateStatus = {
+    Start: false,
+    Complete: false,
+  }
+  return status
 }
 
 /***********************************************************************************************

@@ -17,5 +17,5 @@ export const generatedId = (length: number) => {
 }
 
 export enum DbCollectionName {
-  v2_users = 'v2_users',
+  v3_users = 'v3_users',
 }

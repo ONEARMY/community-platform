@@ -11,17 +11,15 @@ export const notifyPinAccepted = functions.firestore
   .document('v3_mappins/{pinId}')
   .onWrite(async (change, context) => {
     const info = change.after.exists ? change.after.data() : null
-    console.log('info', info)
     if (info === null || info.moderation !== 'accepted') {
       return
     }
-    const { id, type } = info
-    console.log('update', id, type, DISCORD_WEBHOOK_URL)
+    const { _id, type } = info
     await axios
       .post(DISCORD_WEBHOOK_URL, {
-        content: `📍 *New ${type}* pin from ${id}. \n Location here ${SITE_URL}/map/#${id}`,
+        content: `📍 *New ${type}* pin from ${_id}. \n Location here ${SITE_URL}/map/#${_id}`,
       })
-      .then(handleResponse)
+      .then(handleResponse, handleErr)
       .catch(handleErr)
   })
 
@@ -38,7 +36,7 @@ export const notifyHowToAccepted = functions.firestore
         content: `📓 Yeah! New How To "* ${title} *" by ${_createdBy}
             check it out: ${SITE_URL}/how-to/${slug}`,
       })
-      .then(handleResponse)
+      .then(handleResponse, handleErr)
       .catch(handleErr)
   })
 
@@ -57,7 +55,7 @@ export const notifyEventAccepted = functions.firestore
         content: `📅 Jeej new event in *${location}* by ${user} posted here:
             ${url}`,
       })
-      .then(handleResponse)
+      .then(handleResponse, handleErr)
       .catch(handleErr)
   })
 

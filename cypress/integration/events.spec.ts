@@ -1,8 +1,7 @@
 describe('[Events]', () => {
-  const today = '2019-08-15'
+  const today = new Date().toISOString().substring(0, 10)
   beforeEach(() => {
     cy.clock(Cypress.moment.utc(today).valueOf(), ['Date'])
-    // cy.deleteDocuments('events', 'title', '==', 'Create a test event')
     cy.visit('/events')
     cy.logout()
   })
@@ -107,7 +106,7 @@ describe('[Events]', () => {
   })
 
   describe('[Create an event]', () => {
-    it('[By Authenticated]', () => {
+    it.only('[By Authenticated]', () => {
       cy.login('event_creator@test.com', 'test1234')
       cy.get('[data-cy=create]').click()
 
@@ -117,8 +116,9 @@ describe('[Events]', () => {
         .find('input')
         .click()
       cy.get('.react-datepicker')
-        .find('div[role=option]')
-        .contains('20')
+        .get('button.react-datepicker__navigation--next')
+        .click()
+        .get('div.react-datepicker__day--001')
         .click()
       cy.get('[data-cy=tag-select]').click()
       cy.get('.data-cy__menu')

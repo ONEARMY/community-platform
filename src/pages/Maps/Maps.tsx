@@ -89,7 +89,7 @@ class MapsPageClass extends React.Component<IProps, IState> {
             this.setCenter(pin.location)
           }
         } else {
-          // Should we do something in case we couldn't find requested pin?
+          // TODO - handle pin not found
         }
       })
       return true

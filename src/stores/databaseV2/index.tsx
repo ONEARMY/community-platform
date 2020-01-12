@@ -174,11 +174,10 @@ class DocReference<T> {
       const cachedDoc = await cacheDB.getDoc<T>(this.endpoint, this.id)
       return cachedDoc ? cachedDoc : this.get('server')
     } else {
-      // 2. get server docs, add to cache and return
+      // 2. get server docs and return
+      // Note - do not cache after retrieval as could interfere with collection get
+      // in case where doc retrieved before rest of collection get called
       const serverDoc = await serverDB.getDoc<T>(this.endpoint, this.id)
-      if (serverDoc) {
-        await cacheDB.setDoc(this.endpoint, serverDoc)
-      }
       return serverDoc
     }
   }

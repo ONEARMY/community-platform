@@ -5,7 +5,9 @@
     "tags": {
       "kVSRJqFt52hi8RHW5wjb": true,
       "7yhssOmZqiihTBXK2cxU": true,
-      "5nXtB6mHdffDurEDLt6Q": true
+      "5nXtB6mHdffDurEDLt6Q": true,
+      "dibcwRYbQVzfQfmSkg5x": true,
+      "q1mMA0Xz3K5oix4r6grC": true
     },
     "title": "Precious Plastic Meetup",
     "location": {
@@ -31,7 +33,9 @@
   "cmxCkCR73kDvvHcCedaL": {
     "moderation": "accepted",
     "_createdBy": "event_creator",
-    "tags": {},
+    "tags": {
+      "dibcwRYbQVzfQfmSkg5x": true
+    },
     "title": "Warp.Sby - Plastic Recycling Workshop",
     "location": {
       "administrative": "Jawa Timur",

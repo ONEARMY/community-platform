@@ -56,9 +56,9 @@ describe('[Events]', () => {
         .click()
       cy.get('[data-cy=card')
         .its('length')
-        .should('eq', 3)
+        .should('eq', 2)
 
-      cy.step('Type and select a tag')
+      cy.step('Type and select second tag')
       cy.get('.data-cy__input')
         .find('input')
         .type('scree')
@@ -67,7 +67,7 @@ describe('[Events]', () => {
         .click()
       cy.get('[data-cy=card')
         .its('length')
-        .should('eq', 2)
+        .should('eq', 1)
 
       cy.step('Remove a tag')
       cy.get('.data-cy__multi-value__label')
@@ -77,14 +77,14 @@ describe('[Events]', () => {
         .click()
       cy.get('[data-cy=card]')
         .its('length')
-        .should('be.eq', 3)
+        .should('be.eq', 2)
 
       cy.step('Remove all tags')
       cy.get('.data-cy__clear-indicator').click()
       cy.get('.data-cy__multi-value__label').should('not.exist')
       cy.get('[data-cy=card]')
         .its('length')
-        .should('be.eq', 5)
+        .should('be.eq', 7)
 
       cy.step('Filter by location')
       cy.get('[data-cy=location]')
@@ -102,7 +102,7 @@ describe('[Events]', () => {
       cy.get('button.ap-icon-clear').click()
       cy.get('[data-cy=card]')
         .its('length')
-        .should('be.eq', 5)
+        .should('be.eq', 7)
     })
   })
 

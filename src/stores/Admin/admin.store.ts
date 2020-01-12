@@ -25,7 +25,6 @@ export class AdminStore extends ModuleStore {
   private async _init() {
     this.admins = await this._getUsersByRole('admin')
     this.superAdmins = await this._getUsersByRole('admin')
-    console.log('tags', this.tags)
   }
 
   /*********************************************************************************

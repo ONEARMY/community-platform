@@ -8,7 +8,8 @@ import { Firestore } from './db/firebase'
  */
 before(() => {
   cy.wrap('Initialising Database').then({ timeout: 20000 }, doc => {
-    cy.visit('/')
+    // large initial timeout in case server slow to respond
+    cy.visit('/', { timeout: 60000 })
     return new Cypress.Promise(resolve => {
       initialiseDB().then(() => {
         cy.log('DB Initialised')

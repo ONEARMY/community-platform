@@ -36,8 +36,10 @@ const branch = e.REACT_APP_BRANCH as string
 // as both dev.onearmy.world and onearmy.world are production builds we can't use process.env to distinguish
 // will be set to one of 'localhost', 'staging' or 'production'
 
-function getSiteVariant(gitBranch: string, env: typeof process.env):siteVariants {
-
+function getSiteVariant(
+  gitBranch: string,
+  env: typeof process.env,
+): siteVariants {
   if (env.SITE_VARIANT === 'test-ci') {
     return 'test-ci'
   }
@@ -77,9 +79,8 @@ if (siteVariant === 'production') {
   console.log = () => {}
 }
 
-
-const firebaseConfigs: {[variant in siteVariants]: IFirebaseConfig} = {
-  'localhost': {
+const firebaseConfigs: { [variant in siteVariants]: IFirebaseConfig } = {
+  localhost: {
     apiKey: 'AIzaSyChVNSMiYxCkbGd9C95aChr9GxRJtW6NRA',
     authDomain: 'precious-plastics-v4-dev.firebaseapp.com',
     databaseURL: 'https://precious-plastics-v4-dev.firebaseio.com',
@@ -95,7 +96,7 @@ const firebaseConfigs: {[variant in siteVariants]: IFirebaseConfig} = {
     storageBucket: 'onearmy-test-ci.appspot.com',
     messagingSenderId: '174193431763',
   },
-  'staging': {
+  staging: {
     apiKey: 'AIzaSyChVNSMiYxCkbGd9C95aChr9GxRJtW6NRA',
     authDomain: 'precious-plastics-v4-dev.firebaseapp.com',
     databaseURL: 'https://precious-plastics-v4-dev.firebaseio.com',
@@ -103,7 +104,7 @@ const firebaseConfigs: {[variant in siteVariants]: IFirebaseConfig} = {
     projectId: 'precious-plastics-v4-dev',
     storageBucket: 'precious-plastics-v4-dev.appspot.com',
   },
-  'production': {
+  production: {
     apiKey: e.REACT_APP_FIREBASE_API_KEY as string,
     authDomain: e.REACT_APP_FIREBASE_AUTH_DOMAIN as string,
     databaseURL: e.REACT_APP_FIREBASE_DATABASE_URL as string,
@@ -123,6 +124,9 @@ export const ALGOLIA_PLACES_CONFIG = algoliaPlacesConfig
 export const SENTRY_CONFIG = sentryConfig
 // tslint:disable no-var-requires
 export const VERSION = require('../../package.json').version
+export const GOOGLE_ANALYTICS_CONFIG = {
+  trackingCode: process.env.GA_ID || 'UA-134522498-4',
+}
 
 /*********************************************************************************************** /
                                         Interfaces
@@ -143,4 +147,3 @@ interface IAlgoliaConfig {
   applicationID: string
 }
 type siteVariants = 'localhost' | 'test-ci' | 'staging' | 'production'
-

@@ -126,6 +126,7 @@
     "prettier": "prettier \"**/*.+(js|jsx|json|yml|yaml|css|less|scss|ts|tsx|md|graphql|mdx)\"",
     "validate": "npm run lint && npm run prettier -- --list-different",
     "test": "node scripts/test.js --env=jsdom",
+    "test:ci": "npm run cy:test:ci",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "analyze": "npm run build -- --stats & npx webpack-bundle-analyzer ./build/bundle-stats.json",
@@ -135,7 +136,8 @@
     "start:ci": "cross-env SITE_VARIANT=test-ci PORT=3456 npm run start",
     "cy:run": "cross-env TZ='Europe/London' cypress run",
     "cy:open": "cross-env TZ='Europe/London' npx cypress open",
-    "cy:test": "start-test start:ci 3456 cy:run",
+    "cy:test": "start-test start:ci 3456 cy:open",
+    "cy:test:ci": "start-test start:ci 3456 cy:run:record",
     "cy:test:record": "start-test start:ci 3456 cy:run:record",
     "cy:run:record": "npm run cy:run -- --record --key 62585f33-d688-47b7-acb3-6d1dca832065",
     "cy:run:debug": "DEBUG=cypress:* cy:run"

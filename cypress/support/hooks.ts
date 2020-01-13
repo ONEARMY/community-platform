@@ -7,17 +7,20 @@ import { Firestore } from './db/firebase'
  * wait to custom command
  */
 before(() => {
-  cy.wrap('Initialising Database').then({ timeout: 20000 }, doc => {
-    // large initial timeout in case server slow to respond
-    cy.visit('/', { timeout: 60000 })
-    return new Cypress.Promise(resolve => {
-      initialiseDB().then(() => {
-        cy.log('DB Initialised')
-        cy.reload()
-        resolve(null)
+  cy.wrap('Initialising Database', { timeout: 60000 }).then(
+    { timeout: 60000 },
+    doc => {
+      // large initial timeout in case server slow to respond
+      cy.visit('/', { timeout: 60000 })
+      return new Cypress.Promise(resolve => {
+        initialiseDB().then(() => {
+          cy.log('DB Initialised')
+          cy.reload()
+          resolve(null)
+        })
       })
-    })
-  })
+    },
+  )
 })
 /**
  * After all tests have completed delete all the documents that have

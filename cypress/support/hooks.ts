@@ -8,9 +8,11 @@ import { Firestore } from './db/firebase'
  */
 before(() => {
   cy.wrap('Initialising Database').then({ timeout: 20000 }, doc => {
+    cy.visit('/')
     return new Cypress.Promise(resolve => {
       initialiseDB().then(() => {
         cy.log('DB Initialised')
+        cy.reload()
         resolve(null)
       })
     })
@@ -36,8 +38,12 @@ async function initialiseDB() {
  * wrapper for indexeddb to clear Dexie
  */
 function clearDexieCache() {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     const deleteAppCacheReq = window.indexedDB.deleteDatabase('OneArmyCache')
-    deleteAppCacheReq.onsuccess = () => resolve()
+    deleteAppCacheReq.onsuccess = () => resolve(null)
+    deleteAppCacheReq.onerror = err => {
+      console.error(err)
+      resolve(null)
+    }
   })
 }

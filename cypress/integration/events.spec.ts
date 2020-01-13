@@ -106,7 +106,7 @@ describe('[Events]', () => {
   })
 
   describe('[Create an event]', () => {
-    it.only('[By Authenticated]', () => {
+    it('[By Authenticated]', () => {
       cy.login('event_creator@test.com', 'test1234')
       cy.get('[data-cy=create]').click()
 

@@ -105,6 +105,7 @@ const attachCustomCommands = Cypress => {
       cy.get('[data-cy=user-menu]').click()
       cy.get('[data-cy=menu-Logout]').click()
       cy.get('[data-cy=login]').should('exist')
+      currentUser = null
     }
   })
 

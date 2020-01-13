@@ -9,9 +9,6 @@ interface Info {
 }
 
 interface ILink {
-  /**
-   * Start from 0
-   */
   index: number
   type: 'email' | 'website' | 'discord' | 'bazar' | 'forum' | 'social media'
   url: string
@@ -24,6 +21,11 @@ interface IMapPin {
 }
 
 describe('[Settings]', () => {
+  beforeEach(() => {
+    cy.visit('/')
+    cy.logout()
+  })
+
   const selectFocus = (focus: string) => {
     cy.get(`[data-cy=${focus}]`).click()
   }
@@ -39,6 +41,7 @@ describe('[Settings]', () => {
         .click()
       cy.get('[data-cy=country]')
         .find(':text')
+        .clear()
         .type(info.country.substring(0, info.country.length - 2))
       cy.get('[data-cy=country]')
         .contains(info.country)
@@ -53,9 +56,12 @@ describe('[Settings]', () => {
   }
   const setMapPin = (mapPin: IMapPin) => {
     cy.step('Update Map section')
-    cy.get('[data-cy=pin-description]').type(mapPin.description)
+    cy.get('[data-cy=pin-description]')
+      .clear()
+      .type(mapPin.description)
     cy.get('[data-cy=location]')
       .find(':text')
+      .clear()
       .type(mapPin.searchKeyword)
     cy.get('[data-cy=location]')
       .find('.ap-suggestion:eq(0)')
@@ -71,10 +77,12 @@ describe('[Settings]', () => {
     }
 
     cy.get(`[data-cy=select-link-${link.index}]`).click()
-    cy.get(`[data-cy=select-link-${link.index}]`)
+    cy.get('div.data-cy__menu-list')
       .contains(link.type)
       .click()
-    cy.get(`[data-cy=input-link-${link.index}]`).type(link.url)
+    cy.get(`[data-cy=input-link-${link.index}]`)
+      .clear()
+      .type(link.url)
   }
   describe('[Focus Workplace]', () => {
     const freshSettings = {
@@ -130,13 +138,6 @@ describe('[Settings]', () => {
     }
 
     it('[Editing a new Profile]', () => {
-      cy.logout()
-      cy.updateDocument(
-        DbCollectionName.users,
-        freshSettings.userName,
-        freshSettings,
-      )
-      cy.visit(Page.EVENTS)
       cy.login('settings_workplace_new@test.com', 'test1234')
       cy.step('Go to User Settings')
       cy.clickMenuItem(UserMenuItem.Settings)
@@ -167,10 +168,9 @@ describe('[Settings]', () => {
         locationName: expected.location.value,
       })
 
-      cy.get('[data-cy=save]')
-        .click()
-        .wait(3000)
-
+      cy.get('[data-cy=save]').click()
+      cy.wait(500)
+      cy.get('[data-cy=save]').should('not.be.disabled')
       cy.step('Verify if all changes were saved correctly')
       cy.queryDocuments(
         DbCollectionName.users,
@@ -202,7 +202,7 @@ describe('[Settings]', () => {
         {
           contentType: 'image/jpeg',
           fullPath:
-            'uploads/users/settings_member_new/images/profile-cover-1.jpg',
+            'uploads/v3_users/settings_member_new/images/profile-cover-1.jpg',
           name: 'profile-cover-1.jpg',
           size: 18987,
           type: 'image/jpeg',
@@ -216,14 +216,6 @@ describe('[Settings]', () => {
       ],
     }
     it('[Edit a new profile]', () => {
-      cy.logout()
-      cy.updateDocument(
-        DbCollectionName.users,
-        freshSettings.userName,
-        freshSettings,
-      )
-      cy.visit(Page.EVENTS)
-
       cy.login('settings_member_new@test.com', 'test1234')
       cy.step('Go to User Settings')
       cy.clickMenuItem(UserMenuItem.Settings)
@@ -242,10 +234,9 @@ describe('[Settings]', () => {
         url: `${freshSettings.userName}@test.com`,
       })
 
-      cy.get('[data-cy=save]')
-        .click()
-        .wait(3000)
-
+      cy.get('[data-cy=save]').click()
+      cy.wait(500)
+      cy.get('[data-cy=save]').should('not.be.disabled')
       cy.queryDocuments(
         DbCollectionName.users,
         'userName',
@@ -256,14 +247,6 @@ describe('[Settings]', () => {
   })
 
   describe('[Focus Machine Builder]', () => {
-    const freshSettings = {
-      _authID: 'wwtBAo7TrkSQ9nAaBN3D93I1sCM2',
-      _id: 'settings_machine_new',
-      userName: 'settings_machine_new',
-      _deleted: false,
-      verified: true,
-    }
-
     const expected = {
       _authID: 'wwtBAo7TrkSQ9nAaBN3D93I1sCM2',
       _deleted: false,
@@ -276,7 +259,7 @@ describe('[Settings]', () => {
         {
           contentType: 'image/jpeg',
           fullPath:
-            'uploads/users/settings_machine_new/images/profile-cover-1.jpg',
+            'uploads/v3_users/settings_machine_new/images/profile-cover-1.jpg',
           name: 'profile-cover-1.jpg',
           size: 18987,
           type: 'image/jpeg',
@@ -305,14 +288,6 @@ describe('[Settings]', () => {
     }
 
     it('[Edit a new profile]', () => {
-      cy.logout()
-      cy.updateDocument(
-        DbCollectionName.users,
-        freshSettings.userName,
-        freshSettings,
-      )
-      cy.visit(Page.EVENTS)
-
       cy.login('settings_machine_new@test.com', 'test1234')
       cy.step('Go to User Settings')
       cy.clickMenuItem(UserMenuItem.Settings)
@@ -340,10 +315,9 @@ describe('[Settings]', () => {
         locationName: expected.location.value,
       })
 
-      cy.get('[data-cy=save]')
-        .click()
-        .wait(3000)
-
+      cy.get('[data-cy=save]').click()
+      cy.wait(500)
+      cy.get('[data-cy=save]').should('not.be.disabled')
       cy.queryDocuments(
         DbCollectionName.users,
         'userName',
@@ -354,14 +328,6 @@ describe('[Settings]', () => {
   })
 
   describe('[Focus Community Builder]', () => {
-    const freshSettings = {
-      _authID: 'vWAbQvq21UbvhGldakIy1x4FpeF2',
-      _id: 'settings_community_new',
-      userName: 'settings_community_new',
-      _deleted: false,
-      verified: true,
-    }
-
     const expected = {
       _authID: 'vWAbQvq21UbvhGldakIy1x4FpeF2',
       _deleted: false,
@@ -402,14 +368,6 @@ describe('[Settings]', () => {
     }
 
     it('[Edit a new profile]', () => {
-      cy.logout()
-      cy.updateDocument(
-        DbCollectionName.users,
-        freshSettings.userName,
-        freshSettings,
-      )
-      cy.visit(Page.EVENTS)
-
       cy.login('settings_community_new@test.com', 'test1234')
       cy.step('Go to User Settings')
       cy.clickMenuItem(UserMenuItem.Settings)
@@ -428,13 +386,13 @@ describe('[Settings]', () => {
 
       setMapPin({
         description: expected.mapPinDescription,
-        searchKeyword: 'london',
+        searchKeyword: 'london, city of',
         locationName: expected.location.value,
       })
 
-      cy.get('[data-cy=save]')
-        .click()
-        .wait(3000)
+      cy.get('[data-cy=save]').click()
+      cy.wait(500)
+      cy.get('[data-cy=save]').should('not.be.disabled')
       cy.queryDocuments(
         DbCollectionName.users,
         'userName',
@@ -557,13 +515,6 @@ describe('[Settings]', () => {
     }
 
     it('[Edit a new profile]', () => {
-      cy.logout()
-      cy.updateDocument(
-        DbCollectionName.users,
-        freshSettings.userName,
-        freshSettings,
-      )
-      cy.visit(Page.EVENTS)
       cy.login('settings_plastic_new@test.com', 'test1234')
       cy.step('Go to User Settings')
       cy.clickMenuItem(UserMenuItem.Settings)
@@ -625,9 +576,9 @@ describe('[Settings]', () => {
         locationName: expected.location.value,
       })
 
-      cy.get('[data-cy=save]')
-        .click()
-        .wait(3000)
+      cy.get('[data-cy=save]').click()
+      cy.wait(500)
+      cy.get('[data-cy=save]').should('not.be.disabled')
       cy.queryDocuments(
         DbCollectionName.users,
         'userName',

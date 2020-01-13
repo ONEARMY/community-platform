@@ -1,4 +1,8 @@
 describe('[How To]', () => {
+  beforeEach(() => {
+    cy.visit('/how-to')
+    cy.logout()
+  })
   type Duration = '<1 week' | '1-2 weeks' | '3-4 weeks'
   type Difficulty = 'Easy' | 'Medium' | 'Hard' | 'Very Hard'
 
@@ -77,10 +81,10 @@ describe('[How To]', () => {
       difficulty_level: 'Medium',
       time: '1-2 weeks',
       title: 'Create a how-to test',
-      slug: 'create-a-howto-test',
+      slug: 'create-a-how-to-test',
       files: [],
       tags: {
-        jUtS7pVbv7DXoQyV13RR: true,
+        EOVeOZaKKw1UJkDIf3c3: true,
       },
       cover_image: {
         contentType: 'image/jpeg',
@@ -120,7 +124,6 @@ describe('[How To]', () => {
     }
 
     it('[By Authenticated]', () => {
-      cy.deleteDocuments('howtos', 'title', '==', expected.title)
       cy.login('howto_creator@test.com', 'test1234')
       cy.step('Access the create-how-to page with its url')
       cy.visit('/how-to/create')
@@ -162,7 +165,7 @@ describe('[How To]', () => {
       cy.get('[data-cy=view-howto]:enabled')
         .click()
         .url()
-        .should('include', `/how-to/create-a-howto-test`)
+        .should('include', `/how-to/create-a-how-to-test`)
 
       cy.step('Howto was created correctly')
       cy.queryDocuments('howtos', 'title', '==', expected.title).should(
@@ -173,7 +176,6 @@ describe('[How To]', () => {
 
     it('[By Anonymous]', () => {
       cy.step('Ask users to login before creating an how-to')
-      cy.logout()
       cy.visit('/how-to/create')
       cy.get('div').contains('Please login to access this page')
     })
@@ -189,7 +191,7 @@ describe('[How To]', () => {
       difficulty_level: 'Hard',
       files: [],
       slug: 'this-is-an-edit-test',
-      tags: { jUtS7pVbv7DXoQyV13RR: true },
+      tags: { EOVeOZaKKw1UJkDIf3c3: true },
       time: '3-4 weeks',
       title: 'This is an edit test',
       cover_image: {
@@ -248,10 +250,6 @@ describe('[How To]', () => {
       ],
     }
 
-    beforeEach(() => {
-      cy.logout()
-    })
-
     it('[By Anonymous]', () => {
       cy.step('Redirect to Home Page after visiting an url')
       cy.visit(editHowtoUrl)
@@ -266,11 +264,10 @@ describe('[How To]', () => {
     })
 
     it('[By Owner]', () => {
+      cy.visit(editHowtoUrl)
       cy.login('howto_editor@test.com', 'test1234')
       cy.step('Go to Edit mode')
-      cy.visit(editHowtoUrl)
       cy.get('[data-cy=edit]').click()
-
       cy.step('Update the intro')
       cy.get('[data-cy=intro-title]')
         .clear()

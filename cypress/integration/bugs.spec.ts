@@ -19,7 +19,7 @@ describe('[Bugs]', () => {
   //   cy.step('Edit button should be available to resource owner')
   //   cy.visit('/how-to')
   //   cy.login('howto_creator@test.com', 'test1234')
-  //   cy.visit('/how-to/make-glasslike-beams')
+  //   cy.visit('/how-to/make-glass-like-beams')
   //   cy.get('[data-cy=edit]').should('be.visible')
   // })
 

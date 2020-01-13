@@ -132,103 +132,7 @@
     "_modified": "2019-09-16T17:54:19.978Z",
     "_created": "2019-07-08T07:24:24.456Z"
   },
-  "DBgbCKle7h4CcNxeUP2V": {
-    "difficulty_level": "Hard",
-    "files": [],
-    "steps": [
-      {
-        "title": "Step 1 is easy",
-        "images": [
-          {
-            "updated": "2020-01-06T19:08:51.257Z",
-            "size": 19410,
-            "downloadUrl": "https://firebasestorage.googleapis.com/v0/b/onearmy-test-ci.appspot.com/o/uploads%2Fv2_howtos%2FDBgbCKle7h4CcNxeUP2V%2Fimages%2Fhowto-step-pic1.jpg?alt=media&token=10edcf25-cc3c-4f2f-91be-249739e1faca",
-            "contentType": "image/jpeg",
-            "timeCreated": "2020-01-06T19:08:51.257Z",
-            "name": "howto-step-pic1.jpg",
-            "fullPath": "uploads/v2_howtos/DBgbCKle7h4CcNxeUP2V/images/howto-step-pic1.jpg",
-            "type": "image/jpeg"
-          },
-          {
-            "contentType": "image/jpeg",
-            "timeCreated": "2020-01-06T19:08:51.193Z",
-            "name": "howto-step-pic2.jpg",
-            "fullPath": "uploads/v2_howtos/DBgbCKle7h4CcNxeUP2V/images/howto-step-pic2.jpg",
-            "type": "image/jpeg",
-            "updated": "2020-01-06T19:08:51.193Z",
-            "size": 20009,
-            "downloadUrl": "https://firebasestorage.googleapis.com/v0/b/onearmy-test-ci.appspot.com/o/uploads%2Fv2_howtos%2FDBgbCKle7h4CcNxeUP2V%2Fimages%2Fhowto-step-pic2.jpg?alt=media&token=19a11fcc-529d-4700-956c-e645b06082bc"
-          }
-        ],
-        "text": "Description for step 1",
-        "_animationKey": "unique1",
-        "caption": "What a step caption"
-      },
-      {
-        "title": "Step 2 is easy",
-        "images": [
-          {
-            "contentType": "image/jpeg",
-            "timeCreated": "2019-07-08T07:24:20.832Z",
-            "name": "3.1.jpg",
-            "fullPath": "uploads/howtosV1/DBgbCKle7h4CcNxeUP2V/3.1.jpg",
-            "type": "image/jpeg",
-            "updated": "2019-07-08T07:24:20.832Z",
-            "size": 141803,
-            "downloadUrl": "https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2FhowtosV1%2FDBgbCKle7h4CcNxeUP2V%2F3.1.jpg?alt=media&token=69e01478-9f25-40ea-837c-fa18ed649adc"
-          },
-          {
-            "contentType": "image/jpeg",
-            "timeCreated": "2019-07-08T07:24:20.992Z",
-            "name": "3.2.jpg",
-            "fullPath": "uploads/howtosV1/DBgbCKle7h4CcNxeUP2V/3.2.jpg",
-            "type": "image/jpeg",
-            "updated": "2019-07-08T07:24:20.992Z",
-            "size": 211619,
-            "downloadUrl": "https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2FhowtosV1%2FDBgbCKle7h4CcNxeUP2V%2F3.2.jpg?alt=media&token=d5f459a3-f21c-4d9d-a760-e2195a6025cb"
-          },
-          {
-            "type": "image/jpeg",
-            "updated": "2019-07-08T07:24:20.899Z",
-            "size": 71309,
-            "downloadUrl": "https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2FhowtosV1%2FDBgbCKle7h4CcNxeUP2V%2F3.4.jpg?alt=media&token=691eb20f-1a32-42cf-a536-5b2caaa21b45",
-            "contentType": "image/jpeg",
-            "timeCreated": "2019-07-08T07:24:20.899Z",
-            "name": "3.4.jpg",
-            "fullPath": "uploads/howtosV1/DBgbCKle7h4CcNxeUP2V/3.4.jpg"
-          }
-        ],
-        "text": "Description for step 2",
-        "_animationKey": "unique3",
-        "caption": "What a step caption"
-      }
-    ],
-    "moderation": "awaiting-moderation",
-    "caption": "Caption edited!",
-    "id": "DBgbCKle7h4CcNxeUP2V",
-    "_createdBy": "howto_editor",
-    "tags": {
-      "jUtS7pVbv7DXoQyV13RR": true
-    },
-    "title": "This is an edit test",
-    "_modified": "2020-01-06T19:08:51.721Z",
-    "_created": "2019-07-08T07:24:24.456Z",
-    "slug": "this-is-an-edit-test",
-    "_deleted": false,
-    "time": "3-4 weeks",
-    "description": "After editing, all changes are reverted",
-    "cover_image": {
-      "timeCreated": "2020-01-06T19:08:50.210Z",
-      "name": "howto-intro.jpg",
-      "fullPath": "uploads/v2_howtos/DBgbCKle7h4CcNxeUP2V/images/howto-intro.jpg",
-      "type": "image/jpeg",
-      "updated": "2020-01-06T19:08:50.210Z",
-      "size": 19897,
-      "downloadUrl": "https://firebasestorage.googleapis.com/v0/b/onearmy-test-ci.appspot.com/o/uploads%2Fv2_howtos%2FDBgbCKle7h4CcNxeUP2V%2Fimages%2Fhowto-intro.jpg?alt=media&token=37bda9a1-5ab4-42ef-bfb5-2d1be232fdac",
-      "contentType": "image/jpeg"
-    },
-    "_id": "DBgbCKle7h4CcNxeUP2V"
-  },
+
   "I6qwynw8c9AqnpYupZnp": {
     "difficulty_level": "Medium",
     "files": [],
@@ -2308,7 +2212,7 @@
     "title": "Make glass-like beams",
     "_modified": "2019-09-18T21:53:33.211Z",
     "_created": "2019-09-18T14:49:54.311Z",
-    "slug": "make-glasslike-beams",
+    "slug": "make-glass-like-beams",
     "_deleted": false,
     "time": "< 1 week"
   },

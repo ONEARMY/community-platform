@@ -1,8 +1,9 @@
 describe('[How To]', () => {
   const SKIP_TIMEOUT = { timeout: 300 }
+  const totalHowTo = 7
 
   describe('[List how-tos]', () => {
-    const howtoUrl = '/how-to/make-glasslike-beams'
+    const howtoUrl = '/how-to/make-glass-like-beams'
     const coverFileRegex = /howto-beams-glass-0-3.jpg/
     beforeEach(() => {
       cy.visit('/how-to')
@@ -18,7 +19,7 @@ describe('[How To]', () => {
       cy.get('[data-cy=more-how-tos]', SKIP_TIMEOUT).should('be.hidden')
 
       cy.step('All how-tos are shown')
-      const totalHowTo = 7
+
       cy.get('[data-cy=card]')
         .its('length')
         .should('be.eq', totalHowTo)
@@ -95,7 +96,7 @@ describe('[How To]', () => {
       cy.get('.data-cy__multi-value__label').should('not.exist')
       cy.get('[data-cy=card]')
         .its('length')
-        .should('be.eq', 7)
+        .should('be.eq', totalHowTo)
     })
   })
 

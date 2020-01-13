@@ -5,7 +5,6 @@ describe('[How To]', () => {
     const howtoUrl = '/how-to/make-glasslike-beams'
     const coverFileRegex = /howto-beams-glass-0-3.jpg/
     beforeEach(() => {
-      cy.deleteDocuments('howtos', 'title', '==', 'Create a how-to test')
       cy.visit('/how-to')
     })
     it('[By Everyone]', () => {
@@ -19,7 +18,7 @@ describe('[How To]', () => {
       cy.get('[data-cy=more-how-tos]', SKIP_TIMEOUT).should('be.hidden')
 
       cy.step('All how-tos are shown')
-      const totalHowTo = 6
+      const totalHowTo = 7
       cy.get('[data-cy=card]')
         .its('length')
         .should('be.eq', totalHowTo)
@@ -27,7 +26,7 @@ describe('[How To]', () => {
       cy.step('How-to cards has basic info')
       cy.get(`[data-cy=card] > a[href="${howtoUrl}"]`).within(() => {
         cy.contains('Make glass-like beams').should('be.exist')
-        cy.contains('By howtocreator').should('be.exist')
+        cy.contains('By howto_creator').should('be.exist')
         cy.get('img')
           .should('have.attr', 'src')
           .and('match', coverFileRegex)
@@ -51,7 +50,6 @@ describe('[How To]', () => {
 
   describe('[Filter with Tag]', () => {
     beforeEach(() => {
-      cy.deleteDocuments('howtos', 'title', '==', 'Create a how-to test')
       cy.visit('/how-to')
       cy.logout()
     })
@@ -66,7 +64,7 @@ describe('[How To]', () => {
         .should('be.exist')
       cy.get('[data-cy=card]')
         .its('length')
-        .should('be.eq', 4)
+        .should('be.eq', 3)
 
       cy.step('Type and select a tag')
       cy.get('.data-cy__input')
@@ -77,7 +75,7 @@ describe('[How To]', () => {
         .click()
       cy.get('[data-cy=card]')
         .its('length')
-        .should('be.eq', 1)
+        .should('be.eq', 2)
 
       cy.step('Remove a tag')
       cy.get('.data-cy__multi-value__label')
@@ -90,14 +88,14 @@ describe('[How To]', () => {
         .should('not.exist')
       cy.get('[data-cy=card]')
         .its('length')
-        .should('be.eq', 4)
+        .should('be.eq', 3)
 
       cy.step('Remove all tags')
       cy.get('.data-cy__clear-indicator').click()
       cy.get('.data-cy__multi-value__label').should('not.exist')
       cy.get('[data-cy=card]')
         .its('length')
-        .should('be.eq', 6)
+        .should('be.eq', 7)
     })
   })
 
@@ -105,6 +103,7 @@ describe('[How To]', () => {
     const specificHowtoUrl = '/how-to/make-an-interlocking-brick'
     const coverFileRegex = /brick-12-1.jpg/
     beforeEach(() => {
+      cy.visit('/how-to')
       cy.logout()
     })
     describe('[By Everyone]', () => {
@@ -115,7 +114,7 @@ describe('[How To]', () => {
 
         cy.step('How-to has basic info')
         cy.get('[data-cy=how-to-basis]').then($summary => {
-          expect($summary).to.contain('By howtocreator', 'Author')
+          expect($summary).to.contain('By howto_creator', 'Author')
           expect($summary).to.contain('Make an interlocking brick', 'Title')
           expect($summary).to.contain(
             'show you how to make a brick using the injection machine',

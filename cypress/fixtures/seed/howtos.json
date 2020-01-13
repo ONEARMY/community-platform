@@ -988,7 +988,9 @@
     ],
     "moderation": "accepted",
     "_createdBy": "howto_creator",
-    "tags": {},
+    "tags": {
+      "36hWyk3OckrLSH1ehdIE": true
+    },
     "id": "oIVF73weEIlVJQYfolcg",
     "title": "Make a raincoat with plastic bags",
     "_modified": "2019-09-27T13:52:31.679Z",
@@ -1424,7 +1426,8 @@
     "_createdBy": "howto_creator",
     "tags": {
       "Cdg3VhG5Yv9BjBEDMcH8": true,
-      "xEfoXujd49MgXTnMg7wj": true
+      "xEfoXujd49MgXTnMg7wj": true,
+      "Wk6RnHHFfKSiI71BlM8r": true
     },
     "id": "DUjTZCQJ6OmSMkEYdZ6f",
     "title": "Make a handplane (simple mould)",
@@ -2060,8 +2063,8 @@
     "id": "EmJEqraybHdZpkRu6FdB",
     "_createdBy": "howto_creator",
     "tags": {
-      "Cdg3VhG5Yv9BjBEDMcH8": true,
-      "kuJqlMsnpfr5VR4BZ1ML": true
+      "36hWyk3OckrLSH1ehdIE": true,
+      "Wk6RnHHFfKSiI71BlM8r": true
     }
   },
   "cmMzzlQP00fCckYIeL2e": {
@@ -2300,7 +2303,7 @@
     "moderation": "accepted",
     "_createdBy": "howto_creator",
     "tags": {
-      "DJN99ErXz8FHy035YdMO": true
+      "g2rhzzwstNhU62CUs9ak": true
     },
     "title": "Make glass-like beams",
     "_modified": "2019-09-18T21:53:33.211Z",
@@ -2570,9 +2573,8 @@
     "id": "me5Bq0wq5FdoJUY8gELN",
     "_createdBy": "howto_creator",
     "tags": {
-      "xEfoXujd49MgXTnMg7wj": true,
-      "Cdg3VhG5Yv9BjBEDMcH8": true,
-      "JVpo3tdEqbk8G787hAZH": true
+      "36hWyk3OckrLSH1ehdIE": true,
+      "Wk6RnHHFfKSiI71BlM8r": true
     },
     "title": "Make an interlocking brick",
     "_modified": "2019-09-30T18:27:57.570Z",

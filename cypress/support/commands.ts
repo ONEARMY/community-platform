@@ -70,7 +70,7 @@ const attachCustomCommands = Cypress => {
    * reliable as execution could take place too fast for platform to keep up with.
    * It also highlighted additional navigation that could take place during login sequence
    */
-  Cypress.Commands.add('login', (email, password) => {
+  Cypress.Commands.add('login', (email: string, password: string) => {
     Cypress.log({
       displayName: 'login',
       consoleProps: () => {
@@ -81,10 +81,10 @@ const attachCustomCommands = Cypress => {
       cy.get('[data-cy=login]').click()
       cy.get('[data-cy=email]')
         .clear()
-        .type('howto_reader@test.com')
+        .type(email)
       cy.get('[data-cy=password]')
         .clear()
-        .type('test1234')
+        .type(password)
       cy.get('[data-cy=submit')
         .should('not.be.disabled')
         .click()
@@ -94,10 +94,11 @@ const attachCustomCommands = Cypress => {
 
   Cypress.Commands.add('logout', () => {
     const userInfo = currentUser ? currentUser.email : 'Not login yet - Skipped'
+
     Cypress.log({
       displayName: 'logout',
       consoleProps: () => {
-        return { currentUser: userInfo }
+        return { userInfo }
       },
     })
     if (currentUser) {

@@ -32,6 +32,8 @@ declare global {
         docData: any,
       ): Promise<void>
 
+      deleteCurrentUser(): Promise<void>
+
       queryDocuments(
         collectionName: string,
         fieldPath: string,
@@ -88,7 +90,7 @@ const attachCustomCommands = Cypress => {
       cy.get('[data-cy=submit')
         .should('not.be.disabled')
         .click()
-      cy.get('[data-cy=user-menu]', { timeout: 10000 }).should('exist')
+      cy.get('[data-cy=user-menu]')
     }
   })
 
@@ -107,6 +109,25 @@ const attachCustomCommands = Cypress => {
       cy.get('[data-cy=login]').should('exist')
       currentUser = null
     }
+  })
+  Cypress.Commands.add('deleteCurrentUser', () => {
+    return new Cypress.Promise((resolve, reject) => {
+      const user = Auth.currentUser
+      if (user) {
+        user.reload().then(() => {
+          user
+            .delete()
+            .then(() => {
+              resolve(null)
+            })
+            .catch(err => {
+              reject(err)
+            })
+        })
+      } else {
+        resolve()
+      }
+    })
   })
 
   Cypress.Commands.add(

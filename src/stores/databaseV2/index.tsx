@@ -135,10 +135,16 @@ class CollectionReference<T> {
     operator: DBQueryWhereOperator,
     value: DBQueryWhereValue,
   ) {
-    const { serverDB } = this.clients
-    const docs = await serverDB.queryCollection<T>(this.endpoint, {
+    const { serverDB, cacheDB } = this.clients
+    let docs = await serverDB.queryCollection<T>(this.endpoint, {
       where: { field, operator, value },
     })
+    // if not found on live try find on cached (might be offline)
+    if (docs.length === 0) {
+      docs = await cacheDB.queryCollection<T>(this.endpoint, {
+        where: { field, operator, value },
+      })
+    }
     return docs
   }
 

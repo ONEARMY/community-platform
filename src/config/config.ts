@@ -125,7 +125,7 @@ export const SENTRY_CONFIG = sentryConfig
 // tslint:disable no-var-requires
 export const VERSION = require('../../package.json').version
 export const GOOGLE_ANALYTICS_CONFIG = {
-  trackingCode: process.env.GA_TRACKING_ID,
+  trackingCode: process.env.REACT_APP_GA_TRACKING_ID,
 }
 
 /*********************************************************************************************** /

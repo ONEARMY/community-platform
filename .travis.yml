@@ -10,8 +10,6 @@ branches:
   only:
     - master
     - production
-    - fix/v3-tests
-
 env:
   # Tell jest to run without non-interactive mode
   CI=true

@@ -68,7 +68,8 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
    * available via the window object.
    * @remark - note, we don't bind the reverse (full cypress firebase inherited by platform)
    * as node and web handle objects differently, and throw errors when trying to save to firestore
-   * (web strips __proto__ but node keeps, resulting in error)
+   * (web strips __proto__ but node keeps, resulting in error). We could however pass just the auth
+   * down to child using Cypress.env
    */
   Cypress.Commands.add('login', (email: string, password: string) => {
     Cypress.log({
@@ -104,18 +105,13 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
       const childFB = win.firebaseInstance as typeof firebase
       const Auth = childFB.auth()
       return new Cypress.Promise((resolve, reject) => {
-        const user = Auth.currentUser
-        if (user) {
-          user
+        if (Auth.currentUser) {
+          Auth.currentUser
             .delete()
-            .then(() => {
-              resolve(null)
-            })
-            .catch(err => {
-              reject(err)
-            })
+            .then(resolve)
+            .catch(reject)
         } else {
-          resolve()
+          resolve(null)
         }
       })
     })

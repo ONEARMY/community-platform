@@ -1,24 +1,23 @@
 import { Firestore } from './db/firebase'
 
 /**
- * Before all tests begin initialise database. This clears the browser
- * cache and seeds the database from the fixtures json
+ * Before all tests begin seed the database. CY runs this before all specs.
+ * Note, cy also automatically will clear browser caches.
+ * https://docs.cypress.io/api/commands/clearlocalstorage.html
  * @remark - verbose syntax as no easy way to apply longer timeout
  * wait to custom command
  */
+
 before(() => {
-  cy.wrap('Initialising Database').then(doc => {
+  cy.wrap('Initialising Database').then({ timeout: 60000 }, doc => {
     // large initial timeout in case server slow to respond
-    return new Cypress.Promise(resolve => {
-      cy.visit('/', { timeout: 60000 })
-      initialiseDB().then(() => {
-        cy.log('DB Initialised')
-        cy.reload()
-        resolve(null)
-      })
+    return new Cypress.Promise(async resolve => {
+      await Firestore.seedDB()
+      resolve(null)
     })
   })
 })
+
 /**
  * After all tests have completed delete all the documents that have
  * been added to the database
@@ -31,20 +30,3 @@ after(() => {
     })
   })
 })
-async function initialiseDB() {
-  await clearDexieCache()
-  await Firestore.seedDB()
-}
-/**
- * wrapper for indexeddb to clear Dexie
- */
-function clearDexieCache() {
-  return new Promise((resolve, reject) => {
-    const deleteAppCacheReq = window.indexedDB.deleteDatabase('OneArmyCache')
-    deleteAppCacheReq.onsuccess = () => resolve(null)
-    deleteAppCacheReq.onerror = err => {
-      console.error(err)
-      resolve(null)
-    }
-  })
-}

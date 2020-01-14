@@ -133,14 +133,14 @@ describe('[Events]', () => {
         .contains('Atucucho')
         .click()
       cy.get('[data-cy=tag-select]').click()
-      cy.get('[data-cy=url]').type(
-        'https://www.meetup.com/pt-BR/cities/br/rio_de_janeiro/',
-      )
+      cy.get('[data-cy=url]')
+        .type('https://www.meetup.com/pt-BR/cities/br/rio_de_janeiro/')
+        .blur()
 
       cy.step('Publish the event')
-      cy.screenClick()
-      cy.get('[data-cy=submit]').click()
-
+      cy.get('[data-cy=submit]')
+        .should('not.be.disabled')
+        .click()
       cy.step('The new event is shown in /events')
       cy.get('[data-cy=card]')
         .contains('Create a test event')

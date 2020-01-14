@@ -1,6 +1,6 @@
 {
   "baseUrl": "http://localhost:3456",
-  "defaultCommandTimeout": 6000,
+  "defaultCommandTimeout": 10000,
   "responseTimeout": 10000,
   "watchForFileChanges": true,
   "chromeWebSecurity": false,

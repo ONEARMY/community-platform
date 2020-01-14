@@ -70,7 +70,5 @@ describe('[Sign-up]', () => {
   after(() => {
     cy.log('clearing user from auth')
     cy.deleteCurrentUser()
-    cy.visit('/')
-    cy.get('[data-cy=login]')
   })
 })

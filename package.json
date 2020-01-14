@@ -18,7 +18,7 @@
     "prod:serve": "npm run prod:copy && npm run build && npm run prod:restore && firebase serve",
     "prod:copy": "cp .env .env-default && cp ./.env-prod ./.env",
     "prod:restore": "cp .env-default .env && rm .env-default",
-    "start:ci": "cross-env SITE_VARIANT=test-ci PORT=3456 npm run start",
+    "start:ci": "cross-env SITE_VARIANT=test-ci BROWSER=none PORT=3456 npm run start",
     "cy:run": "cross-env TZ='Europe/London' cypress run",
     "cy:open": "cross-env TZ='Europe/London' npx cypress open",
     "cy:test": "start-test start:ci 3456 cy:open",

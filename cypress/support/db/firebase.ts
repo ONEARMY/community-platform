@@ -1,6 +1,10 @@
-import firebase, { auth } from 'firebase/app'
+import firebase from 'firebase/app'
+export { default as firebase } from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
+import 'firebase/storage'
+import 'firebase/functions'
+import 'firebase/database'
 import Query = firebase.firestore.Query
 import { generatedId } from '../../utils/test-utils'
 import { SEED_DATA } from '../../fixtures/seed'
@@ -13,9 +17,6 @@ const fbConfig = {
 }
 firebase.initializeApp(fbConfig)
 const db = firebase.firestore()
-// firestore is already configured to not persist,
-// set for auth also to keep cache clean
-auth().setPersistence(auth.Auth.Persistence.NONE)
 type PromiseCallback = (val?: any) => void
 
 const MAX_BATCH_SIZE = 500

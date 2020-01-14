@@ -1,5 +1,5 @@
 import 'cypress-file-upload'
-import { Firestore, Auth } from './db/firebase'
+import { Firestore, Auth as AuthNative, firebase } from './db/firebase'
 import FileData = Cypress.FileData
 
 export enum UserMenuItem {
@@ -58,19 +58,17 @@ declare global {
   }
 }
 
-const attachCustomCommands = Cypress => {
-  let currentUser: null | firebase.User = null
+const attachCustomCommands = (Cypress: Cypress.Cypress) => {
   const firestore = Firestore
-
-  Auth.onAuthStateChanged(user => {
-    currentUser = user
-  })
-
   /**
    * Login and logout commands use the sytem interface to log a user in or out
-   * @remark - we tried directly hooking into afauth, however this appeared to be less
-   * reliable as execution could take place too fast for platform to keep up with.
-   * It also highlighted additional navigation that could take place during login sequence
+   * @remark - we want to hook directly into firebase auth, however there are 2 instances
+   * running on the parent (cypress/node) and child (platform/web) instances
+   * Therefore an extra method has been added in the platform to make it's instance
+   * available via the window object.
+   * @remark - note, we don't bind the reverse (full cypress firebase inherited by platform)
+   * as node and web handle objects differently, and throw errors when trying to save to firestore
+   * (web strips __proto__ but node keeps, resulting in error)
    */
   Cypress.Commands.add('login', (email: string, password: string) => {
     Cypress.log({
@@ -79,42 +77,35 @@ const attachCustomCommands = Cypress => {
         return { email, password }
       },
     })
-    if (!currentUser) {
-      cy.get('[data-cy=login]').click()
-      cy.get('[data-cy=email]')
-        .clear()
-        .type(email)
-      cy.get('[data-cy=password]')
-        .clear()
-        .type(password)
-      cy.get('[data-cy=submit')
-        .should('not.be.disabled')
-        .click()
-      cy.get('[data-cy=user-menu]')
-    }
+    cy.window().then((win: any) => {
+      const childFB = win.firebaseInstance as typeof firebase
+      const Auth = childFB.auth()
+      return new Cypress.Promise((resolve, reject) => {
+        Auth.signInWithEmailAndPassword(email, password)
+          .then(resolve)
+          .catch(reject)
+      })
+    })
   })
 
   Cypress.Commands.add('logout', () => {
-    const userInfo = currentUser ? currentUser.email : 'Not login yet - Skipped'
-
-    Cypress.log({
-      displayName: 'logout',
-      consoleProps: () => {
-        return { userInfo }
-      },
+    cy.window().then((win: any) => {
+      const childFB = win.firebaseInstance as typeof firebase
+      const Auth = childFB.auth()
+      return new Cypress.Promise((resolve, reject) => {
+        Auth.signOut()
+          .then(resolve)
+          .catch(reject)
+      })
     })
-    if (currentUser) {
-      cy.get('[data-cy=user-menu]').click()
-      cy.get('[data-cy=menu-Logout]').click()
-      cy.get('[data-cy=login]').should('exist')
-      currentUser = null
-    }
   })
   Cypress.Commands.add('deleteCurrentUser', () => {
-    return new Cypress.Promise((resolve, reject) => {
-      const user = Auth.currentUser
-      if (user) {
-        user.reload().then(() => {
+    cy.window().then((win: any) => {
+      const childFB = win.firebaseInstance as typeof firebase
+      const Auth = childFB.auth()
+      return new Cypress.Promise((resolve, reject) => {
+        const user = Auth.currentUser
+        if (user) {
           user
             .delete()
             .then(() => {
@@ -123,10 +114,10 @@ const attachCustomCommands = Cypress => {
             .catch(err => {
               reject(err)
             })
-        })
-      } else {
-        resolve()
-      }
+        } else {
+          resolve()
+        }
+      })
     })
   })
 
@@ -172,7 +163,7 @@ const attachCustomCommands = Cypress => {
   Cypress.Commands.add('step', (message: string) => {
     Cypress.log({
       displayName: 'step',
-      message: `**${message}**`,
+      message: [`**${message}**`],
     })
   })
 
@@ -208,7 +199,8 @@ const attachCustomCommands = Cypress => {
         })
       })
 
-      Cypress.Promise.all(getContentReqs).then((fileData: FileData[]) => {
+      Cypress.Promise.all(getContentReqs).then(data => {
+        const fileData = data as FileData[]
         cy.wrap($inputElement).upload(fileData)
       })
     },

@@ -557,8 +557,34 @@ module.exports = function(webpackEnv) {
       // the HTML & assets that are part of the Webpack build.
       isEnvProduction &&
         new WorkboxWebpackPlugin.GenerateSW({
+          cacheId: 'oa',
           clientsClaim: true,
           skipWaiting: true,
+          // NOTE 2020-01-14 CC - Add support to cache firebase storage and map tiles
+          runtimeCaching: [
+            {
+              urlPattern: /.*\.(?:png|gif|jpg|jpeg|webp|svg).*/gi,
+              handler: 'cacheFirst',
+              options: {
+                cacheName: 'oa-images',
+                fetchOptions: {
+                  credentials: 'same-origin',
+                  mode: 'cors',
+                },
+                backgroundSync: {
+                  name: 'oa-images-background',
+                  options: {
+                    maxRetentionTime: 60 * 24,
+                  },
+                },
+                expiration: {
+                  maxAgeSeconds: 60 * 24 * 7 * 30,
+                  maxEntries: 1000,
+                },
+              },
+            },
+          ],
+          // end update 2020-01-14
           exclude: [/\.map$/, /asset-manifest\.json$/],
           importWorkboxFrom: 'cdn',
           navigateFallback: publicUrl + '/index.html',

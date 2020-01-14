@@ -2,7 +2,6 @@ import { Page } from '../utils/test-utils'
 
 describe('[Sign in]', () => {
   it('[By Anonymous]', () => {
-    cy.logout()
     cy.step('Go to the sign-up page')
     cy.visit('/sign-in')
     cy.get('a[data-cy=no-account]')

@@ -55,9 +55,8 @@ describe('[Sign-up]', () => {
     cy.get('div')
       .contains('Sign up successful')
       .should('be.visible')
-
-    cy.step('Go back to Home')
     cy.step('Login with the new user')
+    cy.visit('/')
     cy.logout()
     cy.wait(1000)
     cy.get('[data-cy=login]').click()

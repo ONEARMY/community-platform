@@ -147,6 +147,7 @@ class CollectionReference<T> {
           where: { field, operator, value },
         })
       } catch (error) {
+        console.error(error)
         // at least we can say we tried...
       }
     }

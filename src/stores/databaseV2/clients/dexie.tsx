@@ -47,21 +47,30 @@ export class DexieClient implements AbstractDBClient {
   }
 
   // mapping to generate firebase query from standard db queryOpts
-  private async _processQuery<T>(
+  private _processQuery<T>(
     endpoint: IDBEndpoint,
     queryOpts: DBQueryOptions,
-  ) {
-    const query = { ...DB_QUERY_DEFAULTS, ...queryOpts }
-    const { limit, orderBy, order, where } = query
-    // all queries sent with a common list of conditions
-    const table = db.table<T>(endpoint)
-    const filtered = where
-      ? this._generateQueryWhereRef(table, where)
-      : table.toCollection()
-    const directed = order === 'desc' ? filtered.reverse() : filtered
-    // as sortBy is a manual operation specify all other criteria first
-    const sorted = await directed.sortBy(orderBy!)
-    return limit ? sorted.slice(0, limit) : sorted
+  ): Promise<(T & DBDoc)[]> {
+    return new Promise((resolve, reject) => {
+      const query = { ...DB_QUERY_DEFAULTS, ...queryOpts }
+      const { limit, orderBy, order, where } = query
+      // all queries sent with a common list of conditions
+      const table = db.table<T>(endpoint)
+      const filtered = where
+        ? this._generateQueryWhereRef(table, where)
+        : table.toCollection()
+      const directed = order === 'desc' ? filtered.reverse() : filtered
+      // as sortBy is a manual operation specify all other criteria first
+      directed
+        .sortBy(orderBy!)
+        .then(sorted => {
+          resolve(limit ? (sorted.slice(0, limit) as any) : sorted)
+        })
+        // error will be thrown if index doesn't exist, simply pass up the chain
+        .catch(err => {
+          reject(err)
+        })
+    })
   }
 
   private _generateQueryWhereRef<T>(
@@ -77,7 +86,10 @@ export class DexieClient implements AbstractDBClient {
       case '>':
         return ref.where(field).below(value)
       default:
-        throw new Error('mapping has not been created for dexie query')
+        console.error('no dexie query mapping for ' + operator)
+        throw new Error(
+          'mapping has not been created for dexie query: ' + operator,
+        )
     }
   }
 

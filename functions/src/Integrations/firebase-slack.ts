@@ -23,7 +23,7 @@ export const notifyNewPin = functions.firestore
       SLACK_WEBHOOK_URL,
       {
         json: {
-          text: `📍 *New ${type}* pin from ${id} awaiting moderation. \n Location here ${SITE_URL}/map/#${id}`,
+          text: `📍 *New ${type}* pin from _${id}_ awaiting moderation. \n Location here ${SITE_URL}/map/#${id}`,
         },
       },
       (err, res) => {
@@ -52,7 +52,7 @@ export const notifyNewHowTo = functions.firestore
       SLACK_WEBHOOK_URL,
       {
         json: {
-          text: `📓 Yeah! New How To *${title}* by ${user} awaiting moderation,
+          text: `📓 Yeah! New How To *${title}* by _${user}_ awaiting moderation,
             check it out: ${SITE_URL}/how-to/${slug}`,
         },
       },
@@ -82,7 +82,7 @@ export const notifyNewEvent = functions.firestore
       SLACK_WEBHOOK_URL,
       {
         json: {
-          text: `📅 Jeej new event in *${location}* by ${user} awaiting moderation, posted here:
+          text: `📅 Jeej new event in *${location}* by _${user}_ awaiting moderation, posted here:
             ${url}`,
         },
       },

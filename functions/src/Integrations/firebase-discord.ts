@@ -33,7 +33,7 @@ export const notifyHowToAccepted = functions.firestore
     const { _createdBy, title, slug } = info
     await axios
       .post(DISCORD_WEBHOOK_URL, {
-        content: `📓 Yeah! New How To "* ${title} *" by ${_createdBy}
+        content: `📓 Yeah! New How To **${title}** by *${_createdBy}*
             check it out: ${SITE_URL}/how-to/${slug}`,
       })
       .then(handleResponse, handleErr)
@@ -52,7 +52,7 @@ export const notifyEventAccepted = functions.firestore
     const location = info.location.country
     await axios
       .post(DISCORD_WEBHOOK_URL, {
-        content: `📅 Jeej new event in *${location}* by ${user} posted here:
+        content: `📅 Jeej new event in **${location}** by *${user}* posted here:
             ${url}`,
       })
       .then(handleResponse, handleErr)

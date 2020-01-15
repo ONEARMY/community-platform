@@ -1,19 +1,19 @@
 import React from 'react'
 import ReactGA from 'react-ga'
-import { SITE, GOOGLE_ANALYTICS_CONFIG } from 'src/config/config'
+import { GA_TRACKING_ID } from 'src/config/config'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 
-class Analytics extends React.Component<RouteComponentProps> {
+class GoogleAnalytics extends React.Component<RouteComponentProps> {
   constructor(props: RouteComponentProps) {
     super(props)
 
-    if (SITE === 'production' && GOOGLE_ANALYTICS_CONFIG.trackingCode) {
-      ReactGA.initialize(GOOGLE_ANALYTICS_CONFIG.trackingCode, { debug: true })
+    if (GA_TRACKING_ID) {
+      ReactGA.initialize(GA_TRACKING_ID, { debug: true })
     }
   }
 
   componentDidMount() {
-    if (SITE === 'production' && GOOGLE_ANALYTICS_CONFIG.trackingCode) {
+    if (GA_TRACKING_ID) {
       this.sendPageView(this.props.history.location)
       this.props.history.listen(this.sendPageView)
     }
@@ -29,4 +29,4 @@ class Analytics extends React.Component<RouteComponentProps> {
   }
 }
 
-export default withRouter(Analytics)
+export default withRouter(GoogleAnalytics)

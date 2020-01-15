@@ -1,7 +1,7 @@
 /* tslint:disable:no-eval */
 import * as React from 'react'
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom'
-import Analytics from 'src/components/Analytics'
+import GoogleAnalytics from 'src/components/GoogleAnalytics'
 import { NotFoundPage } from './NotFound/NotFound'
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import Header from './common/Header/Header'
@@ -42,7 +42,7 @@ export class Routes extends React.Component<any, IState> {
       <div>
         {/* <DevHelpers /> */}
         <BrowserRouter>
-          <Analytics />
+          <GoogleAnalytics />
           {/* on page change scroll to top */}
           <ScrollToTop>
             <Switch>

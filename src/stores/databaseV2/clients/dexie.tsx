@@ -51,7 +51,7 @@ export class DexieClient implements AbstractDBClient {
     endpoint: IDBEndpoint,
     queryOpts: DBQueryOptions,
   ) {
-    const query = { ...DB_QUERY_DEFAULTS, queryOpts }
+    const query = { ...DB_QUERY_DEFAULTS, ...queryOpts }
     const { limit, orderBy, order, where } = query
     // all queries sent with a common list of conditions
     const table = db.table<T>(endpoint)

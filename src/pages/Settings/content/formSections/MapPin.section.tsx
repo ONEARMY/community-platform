@@ -142,6 +142,7 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
               <Button
                 variant="secondary"
                 onClick={() => this.setState({ editAddress: !editAddress })}
+                data-cy="change-address"
               >
                 Change address
               </Button>

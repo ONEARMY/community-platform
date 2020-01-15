@@ -7,6 +7,7 @@
     "watch": "./node_modules/.bin/tsc --watch",
     "copyDevConfig": "firebase functions:config:get > .runtimeconfig.json",
     "copyDevConfigWin": "firebase functions:config:get | ac .runtimeconfig.json",
+    "db:backup:local": "firestore-export -a service.json -b backup.json -p",
     "serve": "concurrently --kill-others \"npm run watch\" \"firebase emulators:start\"",
     "shell": "npm run build && firebase functions:shell",
     "deploy:dev": "firebase use default && firebase deploy --only functions",

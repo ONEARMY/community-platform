@@ -1,34 +1,12 @@
-import * as firebase from 'firebase/app'
-import 'firebase/auth'
-import 'firebase/database'
-import 'firebase/firestore'
 import 'cypress-file-upload'
-import { Firestore } from './firestore'
+import { Firestore, Auth as AuthNative, firebase } from './db/firebase'
 import FileData = Cypress.FileData
 
-const fbConfig = {
-  apiKey: 'AIzaSyDAxS_7M780mI3_tlwnAvpbaqRsQPlmp64',
-  authDomain: 'onearmy-test-ci.firebaseapp.com',
-  databaseURL: 'https://onearmy-test-ci.firebaseio.com',
-  projectId: 'onearmy-test-ci',
-  storageBucket: 'onearmy-test-ci.appspot.com',
-}
-
 export enum UserMenuItem {
-  Profile = 0,
-  Settings = 1,
-  LogOut = 2,
+  Profile = 'Profile',
+  Settings = 'Settings',
+  LogOut = 'Logout',
 }
-firebase.initializeApp(fbConfig)
-/**
- * Clear all caches before any test is executed
- */
-firebase
-  .firestore()
-  .clearPersistence()
-  .then(() => console.log('Firestore cache cleared ...'))
-const deleteAppCacheReq = window.indexedDB.deleteDatabase('OneArmyCache')
-deleteAppCacheReq.onsuccess = () => console.log('App cache cleared ...')
 
 declare global {
   namespace Cypress {
@@ -54,6 +32,8 @@ declare global {
         docData: any,
       ): Promise<void>
 
+      deleteCurrentUser(): Promise<void>
+
       queryDocuments(
         collectionName: string,
         fieldPath: string,
@@ -78,33 +58,63 @@ declare global {
   }
 }
 
-const attachCustomCommands = (Cypress, fb: typeof firebase) => {
-  let currentUser: null | firebase.User = null
-  const firestore = new Firestore(fb.firestore())
-
-  fb.auth().onAuthStateChanged(user => {
-    currentUser = user
-  })
-
-  Cypress.Commands.add('login', (email, password) => {
+const attachCustomCommands = (Cypress: Cypress.Cypress) => {
+  const firestore = Firestore
+  /**
+   * Login and logout commands use the sytem interface to log a user in or out
+   * @remark - we want to hook directly into firebase auth, however there are 2 instances
+   * running on the parent (cypress/node) and child (platform/web) instances
+   * Therefore an extra method has been added in the platform to make it's instance
+   * available via the window object.
+   * @remark - note, we don't bind the reverse (full cypress firebase inherited by platform)
+   * as node and web handle objects differently, and throw errors when trying to save to firestore
+   * (web strips __proto__ but node keeps, resulting in error). We could however pass just the auth
+   * down to child using Cypress.env
+   */
+  Cypress.Commands.add('login', (email: string, password: string) => {
     Cypress.log({
       displayName: 'login',
       consoleProps: () => {
         return { email, password }
       },
     })
-    fb.auth().signInWithEmailAndPassword(email, password)
+    cy.window().then((win: any) => {
+      const childFB = win.firebaseInstance as typeof firebase
+      const Auth = childFB.auth()
+      return new Cypress.Promise((resolve, reject) => {
+        Auth.signInWithEmailAndPassword(email, password)
+          .then(resolve)
+          .catch(reject)
+      })
+    })
   })
 
   Cypress.Commands.add('logout', () => {
-    const userInfo = currentUser ? currentUser.email : 'Not login yet - Skipped'
-    Cypress.log({
-      displayName: 'logout',
-      consoleProps: () => {
-        return { currentUser: userInfo }
-      },
+    cy.window().then((win: any) => {
+      const childFB = win.firebaseInstance as typeof firebase
+      const Auth = childFB.auth()
+      return new Cypress.Promise((resolve, reject) => {
+        Auth.signOut()
+          .then(resolve)
+          .catch(reject)
+      })
     })
-    return fb.auth().signOut()
+  })
+  Cypress.Commands.add('deleteCurrentUser', () => {
+    cy.window().then((win: any) => {
+      const childFB = win.firebaseInstance as typeof firebase
+      const Auth = childFB.auth()
+      return new Cypress.Promise((resolve, reject) => {
+        if (Auth.currentUser) {
+          Auth.currentUser
+            .delete()
+            .then(resolve)
+            .catch(reject)
+        } else {
+          resolve(null)
+        }
+      })
+    })
   })
 
   Cypress.Commands.add(
@@ -149,7 +159,7 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
   Cypress.Commands.add('step', (message: string) => {
     Cypress.log({
       displayName: 'step',
-      message: `**${message}**`,
+      message: [`**${message}**`],
     })
   })
 
@@ -185,7 +195,8 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
         })
       })
 
-      Cypress.Promise.all(getContentReqs).then((fileData: FileData[]) => {
+      Cypress.Promise.all(getContentReqs).then(data => {
+        const fileData = data as FileData[]
         cy.wrap($inputElement).upload(fileData)
       })
     },
@@ -210,7 +221,7 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
       },
     })
     cy.toggleUserMenuOn()
-    cy.get(`[data-cy=menu-item]:eq(${menuItem})`).click()
+    cy.get(`[data-cy=menu-${menuItem}]`).click()
   })
 
   Cypress.Commands.add('screenClick', () => {
@@ -218,4 +229,4 @@ const attachCustomCommands = (Cypress, fb: typeof firebase) => {
   })
 }
 
-attachCustomCommands(Cypress, firebase)
+attachCustomCommands(Cypress)

@@ -2,7 +2,6 @@ import { Page } from '../utils/test-utils'
 
 describe('[Sign in]', () => {
   it('[By Anonymous]', () => {
-    cy.logout()
     cy.step('Go to the sign-up page')
     cy.visit('/sign-in')
     cy.get('a[data-cy=no-account]')
@@ -32,9 +31,7 @@ describe('[Sign in]', () => {
     cy.get('[data-cy=password]')
       .clear()
       .type('test1234')
-    cy.get('[data-cy=login-form]')
-      .submit()
-      .url()
-      .should('include', Page.HOME_PAGE)
+    cy.get('[data-cy=login-form]').submit()
+    cy.get('[data-cy=user-menu]')
   })
 })

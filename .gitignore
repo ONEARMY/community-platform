@@ -9,6 +9,9 @@ cypress/videos
 cypress/coverage
 cypress/screenshots
 cypress/fixtures/seed/*.rej
+cypress/build
+functions/service.json
+functions/backup.json
 
 # production
 /build
@@ -30,6 +33,5 @@ yarn-error.log*
 /.idea
 functions/firebase-debug.log
 .env-*
-
 
 

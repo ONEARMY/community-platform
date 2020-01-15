@@ -73,7 +73,7 @@ class SignInPage extends React.Component<IProps, IState> {
     const provider = (this.state.authProvider as IAuthProvider).provider
     try {
       await this.props.userStore!.login(provider, v.email, v.password)
-      this.props.history.push('/')
+      this.props.history.goBack()
     } catch (error) {
       this.setState({ errorMsg: error.message, disabled: false })
     }

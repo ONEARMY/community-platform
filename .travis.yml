@@ -10,7 +10,6 @@ branches:
   only:
     - master
     - production
-
 env:
   # Tell jest to run without non-interactive mode
   CI=true
@@ -20,9 +19,8 @@ before_script:
   - export REACT_APP_BRANCH=$TRAVIS_BRANCH
   - echo "REACT_APP_BRANCH=$REACT_APP_BRANCH"
 script:
-  #  - yarn test
-  #  - yarn cy:test:record
   - npm run build
+  - npm run test:ci
 
 # install firebase cli and set firebase project ci token from environment
 before_deploy:

@@ -140,10 +140,16 @@ class CollectionReference<T> {
       where: { field, operator, value },
     })
     // if not found on live try find on cached (might be offline)
+    // use catch as not all endpoints are cached or some might not be indexed
     if (docs.length === 0) {
-      docs = await cacheDB.queryCollection<T>(this.endpoint, {
-        where: { field, operator, value },
-      })
+      try {
+        docs = await cacheDB.queryCollection<T>(this.endpoint, {
+          where: { field, operator, value },
+        })
+      } catch (error) {
+        console.error(error)
+        // at least we can say we tried...
+      }
     }
     return docs
   }

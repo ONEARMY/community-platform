@@ -66,24 +66,24 @@ class CollectionReference<T> {
    * This is triggered with the full set of documents (existing + update)
    */
   stream(onUpdate: (value: (T & DBDoc)[]) => void) {
+    const totals: any = {}
     const { cacheDB, serverDB, serverCacheDB } = this.clients
     const endpoint = this.endpoint
     const observer: Observable<(T & DBDoc)[]> = Observable.create(
       async (obs: Observer<(T & DBDoc)[]>) => {
         // 1. Emit cached collection
         const cached = await cacheDB.getCollection<T>(endpoint)
-        console.debug('cached ' + endpoint, cached)
+        totals.cached = cached.length
         obs.next(cached)
         if (cached.length === 0) {
           // 2. If no cache, populate using large query db
-          console.debug('getting server cache')
           const serverCache = await serverCacheDB.getCollection<T>(endpoint)
-          console.debug('serverCache', serverCache)
+          totals.serverCache = serverCache.length
           await cacheDB.setBulkDocs(endpoint, serverCache)
           obs.next(serverCache)
         }
         // 3. get any newer docs from regular server db, merge with cache and emit
-        const latest = await this._getCacheLastModified()
+        const latest = await this._getCacheLastModified(endpoint)
         serverDB.streamCollection!(endpoint, {
           orderBy: '_modified',
           order: 'asc',
@@ -93,8 +93,12 @@ class CollectionReference<T> {
             value: latest,
           },
         }).subscribe(async updates => {
+          totals.live = updates.length
           await cacheDB.setBulkDocs(endpoint, updates)
           const allDocs = await cacheDB.getCollection<T>(endpoint)
+          console.group(`[${endpoint}] docs retrieved`)
+          console.table(totals)
+          console.groupEnd()
           obs.next(allDocs)
         })
       },
@@ -131,16 +135,28 @@ class CollectionReference<T> {
     operator: DBQueryWhereOperator,
     value: DBQueryWhereValue,
   ) {
-    const { serverDB } = this.clients
-    const docs = await serverDB.queryCollection<T>(this.endpoint, {
+    const { serverDB, cacheDB } = this.clients
+    let docs = await serverDB.queryCollection<T>(this.endpoint, {
       where: { field, operator, value },
     })
+    // if not found on live try find on cached (might be offline)
+    // use catch as not all endpoints are cached or some might not be indexed
+    if (docs.length === 0) {
+      try {
+        docs = await cacheDB.queryCollection<T>(this.endpoint, {
+          where: { field, operator, value },
+        })
+      } catch (error) {
+        console.error(error)
+        // at least we can say we tried...
+      }
+    }
     return docs
   }
 
-  private async _getCacheLastModified() {
+  private async _getCacheLastModified(endpoint: DBEndpoint) {
     const { cacheDB } = this.clients
-    const latest = await cacheDB.queryCollection(this.endpoint, {
+    const latest = await cacheDB.queryCollection(endpoint, {
       orderBy: '_modified',
       order: 'desc',
       limit: 1,
@@ -174,11 +190,10 @@ class DocReference<T> {
       const cachedDoc = await cacheDB.getDoc<T>(this.endpoint, this.id)
       return cachedDoc ? cachedDoc : this.get('server')
     } else {
-      // 2. get server docs, add to cache and return
+      // 2. get server docs and return
+      // Note - do not cache after retrieval as could interfere with collection get
+      // in case where doc retrieved before rest of collection get called
       const serverDoc = await serverDB.getDoc<T>(this.endpoint, this.id)
-      if (serverDoc) {
-        await cacheDB.setDoc(this.endpoint, serverDoc)
-      }
       return serverDoc
     }
   }

@@ -8,8 +8,22 @@ import { Link } from 'react-router-dom'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
 import { Box } from 'rebass'
+import { inject, observer } from 'mobx-react'
+import { AdminStore } from 'src/stores/Admin/admin.store'
 
-class AdminPageClass extends React.Component<null, null> {
+interface IProps {}
+interface IInjectedProps extends IProps {
+  adminStore: AdminStore
+}
+@inject('adminStore')
+@observer
+class AdminPageClass extends React.Component<IProps, any> {
+  componentDidMount() {
+    this.injected.adminStore.init()
+  }
+  get injected() {
+    return this.props as IInjectedProps
+  }
   public render() {
     return (
       <div id="AdminPage">

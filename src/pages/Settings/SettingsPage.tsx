@@ -417,6 +417,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                   </Button>
                   <div style={{ float: 'right' }}>
                     <TextNotification
+                      data-cy="profile-saved"
                       text="profile saved"
                       icon="check"
                       show={this.state.showNotification}

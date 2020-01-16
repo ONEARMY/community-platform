@@ -1,4 +1,3 @@
-import './commands'
 // ***********************************************************
 // This example support/index.js is processed and
 // loaded automatically before your test files.
@@ -14,8 +13,6 @@ import './commands'
 // https://on.cypress.io/configuration
 // ***********************************************************
 
-// Import commands.js using ES2015 syntax:
+import './hooks'
 import './commands'
 import './custom-assertions'
-// Alternatively you can use CommonJS syntax:
-// require('./commands')

@@ -9,8 +9,12 @@ const SLACK_WEBHOOK_URL = CONFIG.integrations.slack_webhook
 
 export const notifyNewPin = functions.firestore
   .document('v3_mappins/{pinId}')
-  .onCreate((snapshot, context) => {
-    const info = snapshot.data()
+  .onWrite((change, context) => {
+    const info = change.after.exists ? change.after.data() : null
+    if (info === null || info.moderation !== 'awaiting-moderation') {
+      return
+    }
+
     const id = info._id
     const type = info.type
     const loc = info.location
@@ -19,7 +23,7 @@ export const notifyNewPin = functions.firestore
       SLACK_WEBHOOK_URL,
       {
         json: {
-          text: `📍 *New ${type}* pin from ${id}. \n Location here (soon our own map) https://google.com/maps/@${loc.lat},${loc.lng},14z`,
+          text: `📍 *New ${type}* pin from _${id}_ awaiting moderation. \n Location here ${SITE_URL}/map/#${id}`,
         },
       },
       (err, res) => {
@@ -34,8 +38,12 @@ export const notifyNewPin = functions.firestore
   })
 export const notifyNewHowTo = functions.firestore
   .document('v3_howtos/{id}')
-  .onCreate((snapshot, context) => {
-    const info = snapshot.data()
+  .onWrite((change, context) => {
+    const info = change.after.exists ? change.after.data() : null
+    if (info === null || info.moderation !== 'awaiting-moderation') {
+      return
+    }
+
     const user = info._createdBy
     const title = info.title
     const slug = info.slug
@@ -44,7 +52,7 @@ export const notifyNewHowTo = functions.firestore
       SLACK_WEBHOOK_URL,
       {
         json: {
-          text: `📓 Yeah! New How To *${title}* by ${user}
+          text: `📓 Yeah! New How To *${title}* by _${user}_ awaiting moderation,
             check it out: ${SITE_URL}/how-to/${slug}`,
         },
       },
@@ -60,8 +68,12 @@ export const notifyNewHowTo = functions.firestore
   })
 export const notifyNewEvent = functions.firestore
   .document('v3_events/{id}')
-  .onCreate((snapshot, context) => {
-    const info = snapshot.data()
+  .onWrite((change, context) => {
+    const info = change.after.exists ? change.after.data() : null
+    if (info === null || info.moderation !== 'awaiting-moderation') {
+      return
+    }
+
     const user = info._createdBy
     const url = info.url
     const location = info.location.country
@@ -70,7 +82,7 @@ export const notifyNewEvent = functions.firestore
       SLACK_WEBHOOK_URL,
       {
         json: {
-          text: `📅 Jeej new event in *${location}* by ${user} posted here:
+          text: `📅 Jeej new event in *${location}* by _${user}_ awaiting moderation, posted here:
             ${url}`,
         },
       },

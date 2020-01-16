@@ -1,10 +1,10 @@
 import { IDBEndpoint, DBDoc } from 'src/models/common.models'
-import { afs } from 'src/utils/firebase'
+import { firestore } from 'src/utils/firebase'
 import { DBQueryOptions, AbstractDBClient } from '../types'
 import { Observable, Observer } from 'rxjs'
 import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
 
-const db = afs
+const db = firestore
 
 export class FirestoreClient implements AbstractDBClient {
   /************************************************************************

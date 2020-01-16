@@ -18,19 +18,16 @@ export class AdminStore extends ModuleStore {
   public tags: ITag[] = []
   constructor(rootStore: RootStore) {
     super(rootStore)
-    this._init()
-  }
-
-  @action
-  private async _init() {
-    this.admins = await this._getUsersByRole('admin')
-    this.superAdmins = await this._getUsersByRole('admin')
-    console.log('tags', this.tags)
   }
 
   /*********************************************************************************
    *  User Admin
    *********************************************************************************/
+  @action
+  public async init() {
+    this.admins = await this._getUsersByRole('admin')
+    this.superAdmins = await this._getUsersByRole('admin')
+  }
   public async addUserRole(username: string, role: UserRole) {
     const userRef = this.db.collection<IUser>('v3_users').doc(username)
     const user = await userRef.get('server')
@@ -41,7 +38,7 @@ export class AdminStore extends ModuleStore {
     if (!userRoles.includes(role)) {
       userRoles.push(role)
       await userRef.set({ ...user, userRoles })
-      this._init()
+      this.init()
     }
   }
 
@@ -55,7 +52,7 @@ export class AdminStore extends ModuleStore {
     if (userRoles.includes(role)) {
       userRoles.splice(userRoles.indexOf(role), 1)
       await userRef.set({ ...user, userRoles })
-      this._init()
+      this.init()
     }
   }
 

@@ -1,4 +1,4 @@
-import * as firebase from 'firebase/app'
+import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/auth'
 import 'firebase/storage'
@@ -10,11 +10,17 @@ import { FIREBASE_CONFIG } from 'src/config/config'
 
 // initialise with config settings, additional firestore config to support future changes
 firebase.initializeApp(FIREBASE_CONFIG)
+// if using cypress, pass firebase to windows for direct use
+const w = window as any
+if (w.Cypress) {
+  firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE)
+  w.firebaseInstance = firebase
+}
 
 // note, if also testing backend functions the emulated version can be accessed below
 // firebase.functions().useFunctionsEmulator('http://localhost:5001')
 // export firebase endpoints to be accessed by other functions
-export const afs = firebase.firestore()
+export const firestore = firebase.firestore()
 export const rtdb = firebase.database()
 export const storage = firebase.storage()
 export const auth = firebase.auth()

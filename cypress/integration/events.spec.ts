@@ -1,9 +1,7 @@
 describe('[Events]', () => {
-  const today = '2019-08-15'
+  const today = new Date().toISOString().substring(0, 10)
   beforeEach(() => {
-    cy.log(`Today as **${today}**`)
     cy.clock(Cypress.moment.utc(today).valueOf(), ['Date'])
-    cy.deleteDocuments('v3_events', 'title', '==', 'Create a test event')
     cy.visit('/events')
     cy.logout()
   })
@@ -14,9 +12,9 @@ describe('[Events]', () => {
       cy.get('[data-cy=create]').should('not.exist')
 
       cy.step('Upcoming events are shown')
-      cy.get('[data-cy=card]')
+      cy.get('[data-cy=card]', { timeout: 10000 })
         .its('length')
-        .should('be.eq', 5)
+        .should('be.eq', 7)
 
       cy.step('Move Events button is hidden')
       cy.get('button')
@@ -29,9 +27,8 @@ describe('[Events]', () => {
           cy.contains('18').should('be.exist')
           cy.contains('Aug').should('be.exist')
           cy.contains('SURA BAYA Exhibition').should('be.exist')
-          cy.contains('By eventcreator').should('be.exist')
+          cy.contains('By event_creator').should('be.exist')
           cy.contains('Surabaya').should('be.exist')
-          cy.contains('exhibition').should('be.exist')
           cy.get('a[target=_blank]')
             .should('have.attr', 'href')
             .and('eq', 'https://www.instagram.com/p/B1N6zVUjj0M/')
@@ -58,9 +55,9 @@ describe('[Events]', () => {
         .click()
       cy.get('[data-cy=card')
         .its('length')
-        .should('eq', 3)
+        .should('eq', 2)
 
-      cy.step('Type and select a tag')
+      cy.step('Type and select second tag')
       cy.get('.data-cy__input')
         .find('input')
         .type('scree')
@@ -69,7 +66,7 @@ describe('[Events]', () => {
         .click()
       cy.get('[data-cy=card')
         .its('length')
-        .should('eq', 2)
+        .should('eq', 1)
 
       cy.step('Remove a tag')
       cy.get('.data-cy__multi-value__label')
@@ -79,14 +76,14 @@ describe('[Events]', () => {
         .click()
       cy.get('[data-cy=card]')
         .its('length')
-        .should('be.eq', 3)
+        .should('be.eq', 2)
 
       cy.step('Remove all tags')
       cy.get('.data-cy__clear-indicator').click()
       cy.get('.data-cy__multi-value__label').should('not.exist')
       cy.get('[data-cy=card]')
         .its('length')
-        .should('be.eq', 5)
+        .should('be.eq', 7)
 
       cy.step('Filter by location')
       cy.get('[data-cy=location]')
@@ -104,7 +101,7 @@ describe('[Events]', () => {
       cy.get('button.ap-icon-clear').click()
       cy.get('[data-cy=card]')
         .its('length')
-        .should('be.eq', 5)
+        .should('be.eq', 7)
     })
   })
 
@@ -119,8 +116,9 @@ describe('[Events]', () => {
         .find('input')
         .click()
       cy.get('.react-datepicker')
-        .find('div[role=option]')
-        .contains('20')
+        .get('button.react-datepicker__navigation--next')
+        .click()
+        .get('div.react-datepicker__day--001')
         .click()
       cy.get('[data-cy=tag-select]').click()
       cy.get('.data-cy__menu')
@@ -135,14 +133,14 @@ describe('[Events]', () => {
         .contains('Atucucho')
         .click()
       cy.get('[data-cy=tag-select]').click()
-      cy.get('[data-cy=url]').type(
-        'https://www.meetup.com/pt-BR/cities/br/rio_de_janeiro/',
-      )
+      cy.get('[data-cy=url]')
+        .type('https://www.meetup.com/pt-BR/cities/br/rio_de_janeiro/')
+        .blur()
 
       cy.step('Publish the event')
-      cy.screenClick()
-      cy.get('[data-cy=submit]').click()
-
+      cy.get('[data-cy=submit]')
+        .should('not.be.disabled')
+        .click()
       cy.step('The new event is shown in /events')
       cy.get('[data-cy=card]')
         .contains('Create a test event')

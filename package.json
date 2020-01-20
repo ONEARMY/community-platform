@@ -15,9 +15,6 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "analyze": "npm run build -- --stats & npx webpack-bundle-analyzer ./build/bundle-stats.json",
-    "prod:serve": "npm run prod:copy && npm run build && npm run prod:restore && firebase serve",
-    "prod:copy": "cp .env .env-default && cp ./.env-prod ./.env",
-    "prod:restore": "cp .env-default .env && rm .env-default",
     "start:ci": "cross-env SITE_VARIANT=test-ci BROWSER=none PORT=3456 npm run start",
     "cy:run": "cross-env TZ='Europe/London' cypress run",
     "cy:open": "cross-env TZ='Europe/London' npx cypress open",
@@ -189,7 +186,7 @@
     "webpack": "4.28.3",
     "webpack-dev-server": "3.1.14",
     "webpack-manifest-plugin": "2.0.4",
-    "workbox-webpack-plugin": "3.6.3"
+    "workbox-webpack-plugin": "4.3.1"
   },
   "resolutions": {
     "@types/react": "16.8.4"

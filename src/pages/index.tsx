@@ -13,6 +13,7 @@ import {
   COMMUNITY_PAGES_MORE,
   ADMIN_PAGES,
   NO_HEADER_PAGES,
+  POLICY_PAGES,
 } from './PageList'
 import { Link } from 'rebass'
 
@@ -33,6 +34,7 @@ export class Routes extends React.Component<any, IState> {
       ...COMMUNITY_PAGES_MORE,
       ...ADMIN_PAGES,
       ...NO_HEADER_PAGES,
+      ...POLICY_PAGES,
     ]
     // we are rendering different pages and navigation dependent on whether the user has navigated directly to view the
     // entire site, or just one page of it via subdomains. This is so we can effectively integrate just parts of this

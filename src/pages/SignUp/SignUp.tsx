@@ -11,7 +11,7 @@ import { InputField } from 'src/components/Form/Fields'
 import { inject, observer } from 'mobx-react'
 import { UserStore } from 'src/stores/User/user.store'
 import { RouteComponentProps, withRouter } from 'react-router'
-import { string, object, ref } from 'yup'
+import { string, object, ref, bool } from 'yup'
 import { required } from 'src/utils/validators'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
 import { IUser } from 'src/models/user.models'
@@ -27,6 +27,7 @@ interface IFormValues {
   password: string
   passwordConfirmation: string
   displayName: string
+  consent: boolean
 }
 interface IState {
   formValues: IFormValues
@@ -50,6 +51,7 @@ class SignUpPage extends React.Component<IProps, IState> {
         password: '',
         passwordConfirmation: '',
         displayName: '',
+        consent: false,
       },
     }
   }
@@ -100,6 +102,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                 'Your new password does not match',
               )
               .required('Password confirm is required'),
+            consent: bool().oneOf([true], 'Consent is required'),
           })
 
           try {
@@ -202,6 +205,25 @@ class SignUpPage extends React.Component<IProps, IState> {
                         component={InputField}
                         validate={required}
                       />
+                    </Flex>
+                    <Flex mb={3} mt={2} width={[1, 1, 2 / 3]}>
+                      <Field
+                        data-cy="consent"
+                        name="consent"
+                        type="checkbox"
+                        component="input"
+                        validate={required}
+                      />
+                      <Label htmlFor="consent">
+                        I agree to the{' '}
+                        <a href="/terms" target="_blank" rel="nofollow">
+                          Terms of Service
+                        </a>
+                        <span> and </span>
+                        <a href="/privacy" target="_blank" rel="nofollow">
+                          Privacy Policy
+                        </a>
+                      </Label>
                     </Flex>
                     <Text color={'red'} data-cy="error-msg">
                       {this.state.errorMsg}

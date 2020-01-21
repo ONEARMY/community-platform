@@ -15,6 +15,8 @@ import { ForgotPasswordPage } from './Password/ForgotPassword'
 import { ForgotPasswordMessagePage } from './Password/ForgotPasswordMessage'
 import { CSSObject } from '@styled-system/css'
 import { Route } from 'react-router'
+import { PrivacyPolicy } from './policy/privacy'
+import { TermsPolicy } from './policy/terms'
 
 export interface IPageMeta {
   path: string
@@ -59,8 +61,6 @@ const academy = {
   ),
   title: 'Academy',
   description: 'Demo external page embed',
-  customStyles: { position: 'absolute', height: '100%', width: '100%' },
-  fullPageWidth: true,
 }
 const events = {
   path: '/events',
@@ -129,6 +129,18 @@ const forgotpasswordmessage = {
   title: 'Forgot Password Message',
   description: '',
 }
+const privacyPolicy = {
+  path: '/privacy',
+  component: <PrivacyPolicy />,
+  title: 'Privacy Policy',
+  description: '',
+}
+const termsPolicy = {
+  path: '/terms',
+  component: <TermsPolicy />,
+  title: 'Terms of Use',
+  description: '',
+}
 
 // community pages (various pages hidden on production build)
 const devCommunityPages = [howTo, maps, events, academy]
@@ -145,6 +157,7 @@ export const COMMUNITY_PAGES: IPageMeta[] = communityPages
 export const COMMUNITY_PAGES_MORE: IPageMeta[] = communityPagesMore
 export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [settings]
 export const ADMIN_PAGES: IPageMeta[] = [admin]
+export const POLICY_PAGES: IPageMeta[] = [privacyPolicy, termsPolicy]
 export const NO_HEADER_PAGES: IPageMeta[] = [
   user,
   signup,

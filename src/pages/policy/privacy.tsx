@@ -151,7 +151,7 @@ export class PrivacyPolicy extends React.PureComponent {
         </p>
         <p>
           If you have any questions or suggestions about our Privacy Policy, do
-          not hesitate to contact us at hello@onearmy.world.
+          not hesitate to contact us at platform@onearmy.world.
         </p>
       </>
     )

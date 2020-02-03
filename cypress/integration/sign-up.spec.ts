@@ -31,6 +31,7 @@ describe('[Sign-up]', () => {
     cy.get('[data-cy=confirm-password]')
       .clear()
       .type(password)
+    cy.get('[data-cy=consent]').click()
     cy.get('[data-cy=submit]').click()
     cy.get('[data-cy=error-msg]')
       .contains('That display name is already taken')

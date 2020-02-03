@@ -129,7 +129,7 @@ As an open-source project most of our decisions up till now have been guided by 
 
 ## 🤝 &nbsp; Joining the team
 
-We are always open to have more people involved. If you would like to contribute more often, we would love to welcome you to the team. Just [send a quick email](mailto:hello@onearmy.world?subject=Developers%20Call%20To%20Arms), introducing yourself and outline:
+We are always open to have more people involved. If you would like to contribute more often, we would love to welcome you to the team. Just [send a quick email](mailto:platform@onearmy.world?subject=Developers%20Call%20To%20Arms), introducing yourself and outline:
 
 1. Your experience working with the technologies listed above
 2. How much time you feel you can dedicate to the project

@@ -1,6 +1,7 @@
 /* tslint:disable:no-eval */
 import * as React from 'react'
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom'
+import GoogleAnalytics from 'src/components/GoogleAnalytics'
 import { NotFoundPage } from './NotFound/NotFound'
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import Header from './common/Header/Header'
@@ -13,6 +14,7 @@ import {
   COMMUNITY_PAGES_MORE,
   ADMIN_PAGES,
   NO_HEADER_PAGES,
+  POLICY_PAGES,
 } from './PageList'
 import { Link } from 'rebass'
 
@@ -33,6 +35,7 @@ export class Routes extends React.Component<any, IState> {
       ...COMMUNITY_PAGES_MORE,
       ...ADMIN_PAGES,
       ...NO_HEADER_PAGES,
+      ...POLICY_PAGES,
     ]
     // we are rendering different pages and navigation dependent on whether the user has navigated directly to view the
     // entire site, or just one page of it via subdomains. This is so we can effectively integrate just parts of this
@@ -41,6 +44,7 @@ export class Routes extends React.Component<any, IState> {
       <div>
         {/* <DevHelpers /> */}
         <BrowserRouter>
+          <GoogleAnalytics />
           {/* on page change scroll to top */}
           <ScrollToTop>
             <Switch>

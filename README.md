@@ -26,7 +26,9 @@ Society and the environment are kind of screwed 💩 in many ways. We think free
 ## 🤝 &nbsp; Contributions
 
 Contributions, issues and feature requests are very welcome.
-Please make sure to read the [Contributing Guide](/CONTRIBUTING.md) before making a pull request.
+Please make sure to read the [Contributing Guide](/CONTRIBUTING.md) before making a pull request. 
+
+It also covers lots of handy additional information such as setting up a local server, or finding [good first issues](https://github.com/ONEARMY/community-platform/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aopen+label%3A%22Good+first+issue%22++label%3A%22Help+wanted%22+) to work on
 
 ## 🌟 &nbsp; Core Team
 

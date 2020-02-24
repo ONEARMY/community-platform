@@ -93,7 +93,7 @@ export class UserStore extends ModuleStore {
       if (userMeta) {
         this.updateUser(userMeta)
       } else {
-        this.createUserProfile()
+        throw new Error(`could not find user profile [${user.uid}]`)
       }
     }
   }

@@ -52,6 +52,7 @@ export default class Step extends React.PureComponent<IProps> {
             flex={9}
             width={1}
             flexDirection={['column', 'column', 'row']}
+            overflow={'hidden'}
           >
             <Flex width={[1, 1, 4 / 9]} py={4} px={4} flexDirection={'column'}>
               <Heading medium mb={0}>

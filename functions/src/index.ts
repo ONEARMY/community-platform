@@ -4,6 +4,7 @@ import { DH_Exports } from './DaveHakkensNL'
 import * as IntegrationsSlack from './Integrations/firebase-slack'
 import * as IntegrationsDiscord from './Integrations/firebase-discord'
 import { FirebaseUserBackup } from './Integrations/firebase-userBackup'
+import * as IntegrationsEmail from './Integrations/firebase-email'
 
 // the following endpoints are exposed for use by various triggers
 // see individual files for more informaiton
@@ -20,3 +21,4 @@ exports.notifyPinAccepted = IntegrationsDiscord.notifyPinAccepted
 exports.notifyHowToAccepted = IntegrationsDiscord.notifyHowToAccepted
 exports.notifyEventAccepted = IntegrationsDiscord.notifyEventAccepted
 exports.firebaseUserBackup = FirebaseUserBackup
+exports.emailNotificationDemo = IntegrationsEmail.notifyEmailDemo

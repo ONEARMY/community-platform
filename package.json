@@ -1,6 +1,6 @@
 {
-  "name": "precious-plastic-community-plateform",
-  "version": "1.0.1",
+  "name": "precious-plastic-community-platform",
+  "version": "1.0.3",
   "private": true,
   "scripts": {
     "start": "node scripts/start.js",

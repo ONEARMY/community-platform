@@ -1,6 +1,6 @@
 import React from 'react'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
-import differenceInDays from 'date-fns/difference_in_days'
+import { format } from 'date-fns'
 import { IHowtoDB } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
@@ -29,16 +29,13 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
     super(props)
   }
 
-  public durationSincePosted(postDate: Date) {
-    const daysSince: number = differenceInDays(new Date(), new Date(postDate))
-    switch (daysSince) {
-      case 0:
-        return 'today'
-      case 1:
-        return `${daysSince} day ago`
-      default:
-        return `${daysSince} days ago`
-    }
+  private createdByText(howto: IHowtoDB): string {
+    return (
+      'By ' +
+      howto._createdBy +
+      ' ' +
+      format(new Date(howto._created), 'DD-MM-YYYY')
+    )
   }
 
   public render() {
@@ -95,11 +92,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
               ))}
           </Flex>
           <Text auxiliary mt={3} mb={2}>
-            By {howto._createdBy}
-            &nbsp;|&nbsp;
-            <Text inline color={'grey'}>
-              {this.durationSincePosted(new Date(howto._created))}
-            </Text>
+            {this.createdByText(howto)}
           </Text>
           <Heading medium mt={2} mb={1}>
             {howto.title}

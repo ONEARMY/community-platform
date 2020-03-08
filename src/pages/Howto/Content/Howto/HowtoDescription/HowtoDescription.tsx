@@ -38,6 +38,10 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
     )
   }
 
+  private lastEditText(howto: IHowtoDB): string {
+    return 'Last edit: ' + format(new Date(howto._modified), 'DD-MM-YYYY')
+  }
+
   public render() {
     const { howto, loggedInUser } = this.props
 
@@ -91,8 +95,11 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
                 </Link>
               ))}
           </Flex>
-          <Text auxiliary mt={3} mb={2}>
+          <Text small mt={4}>
             {this.createdByText(howto)}
+          </Text>
+          <Text auxiliary mt={1} mb={2}>
+            {this.lastEditText(howto)}
           </Text>
           <Heading medium mt={2} mb={1}>
             {howto.title}

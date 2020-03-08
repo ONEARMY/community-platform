@@ -95,8 +95,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
               ))}
           </Flex>
           <Text auxiliary mt={3} mb={2}>
-            By&nbsp;
-            <Link to={'/u/' + howto._createdBy}>{howto._createdBy}</Link>
+            By <Link to={'/u/' + howto._createdBy}>{howto._createdBy}</Link>
             &nbsp;|&nbsp;
             <Text inline color={'grey'}>
               {this.durationSincePosted(new Date(howto._created))}

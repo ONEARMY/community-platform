@@ -4,7 +4,6 @@ describe('[How To]', () => {
 
   describe('[List how-tos]', () => {
     const howtoUrl = '/how-to/make-glass-like-beams'
-    const howtoCreator = '/u/howto_creator'
     const coverFileRegex = /howto-beams-glass-0-3.jpg/
     beforeEach(() => {
       cy.visit('/how-to')
@@ -28,7 +27,7 @@ describe('[How To]', () => {
       cy.step('How-to cards has basic info')
       cy.get(`[data-cy=card] > a[href="${howtoUrl}"]`).within(() => {
         cy.contains('Make glass-like beams').should('be.exist')
-        cy.contains(`By a[href="${howtoCreator}"]`).should('be.exist')
+        cy.contains('By howto_creator').should('be.exist')
         cy.get('img')
           .should('have.attr', 'src')
           .and('match', coverFileRegex)

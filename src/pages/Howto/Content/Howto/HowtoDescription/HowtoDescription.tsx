@@ -95,17 +95,24 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
                 </Link>
               ))}
           </Flex>
-          <Text small mt={4}>
-            {this.createdByText(howto)}
-          </Text>
-          <Text auxiliary mt={1} mb={2}>
-            {this.lastEditText(howto)}
-          </Text>
-          <Heading medium mt={2} mb={1}>
-            {howto.title}
-          </Heading>
-          <Text preLine paragraph>
-            {howto.description}
+          <Text auxiliary mt={3} mb={2}>
+            By{' '}
+            <Link
+              sx={{ textDecoration: 'underline', color: 'inherit' }}
+              to={'/u/' + howto._createdBy}
+            >
+              {this.createdByText(howto)}
+            </Link>
+            &nbsp;|&nbsp;
+            <Text auxiliary mt={1} mb={2}>
+              {this.lastEditText(howto)}
+            </Text>
+            <Heading medium mt={2} mb={1}>
+              {howto.title}
+            </Heading>
+            <Text preLine paragraph>
+              {howto.description}
+            </Text>
           </Text>
 
           <Flex mt={4} mb={2}>

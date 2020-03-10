@@ -1,6 +1,6 @@
 import React from 'react'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
-import differenceInDays from 'date-fns/difference_in_days'
+import { format } from 'date-fns'
 import { IHowtoDB } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
@@ -29,15 +29,17 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
     super(props)
   }
 
-  public durationSincePosted(postDate: Date) {
-    const daysSince: number = differenceInDays(new Date(), new Date(postDate))
-    switch (daysSince) {
-      case 0:
-        return 'today'
-      case 1:
-        return `${daysSince} day ago`
-      default:
-        return `${daysSince} days ago`
+  private dateCreatedByText(howto: IHowtoDB): string {
+    return format(new Date(howto._created), 'DD-MM-YYYY')
+  }
+
+  private dateLastEditText(howto: IHowtoDB): string {
+    const lastModifiedDate = format(new Date(howto._modified), 'DD-MM-YYYY')
+    const creationDate = format(new Date(howto._created), 'DD-MM-YYYY')
+    if (lastModifiedDate !== creationDate) {
+      return 'Last edit: ' + format(new Date(howto._modified), 'DD-MM-YYYY')
+    } else {
+      return ''
     }
   }
 
@@ -97,21 +99,24 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
           <Text auxiliary mt={3} mb={2}>
             By{' '}
             <Link
-              sx={{ textDecoration: 'underline', color: 'inherit' }}
+              sx={{
+                textDecoration: 'underline',
+                color: 'inherit',
+              }}
               to={'/u/' + howto._createdBy}
             >
               {howto._createdBy}
-            </Link>
-            &nbsp;|&nbsp;
-            <Text inline color={'grey'}>
-              {this.durationSincePosted(new Date(howto._created))}
+            </Link>{' '}
+            <Text inline> {this.dateCreatedByText(howto)}</Text>
+            <Text auxiliary sx={{ color: '#b7b5b5 !important' }} mt={1} mb={2}>
+              {this.dateLastEditText(howto)}
             </Text>
-          </Text>
-          <Heading medium mt={2} mb={1}>
-            {howto.title}
-          </Heading>
-          <Text preLine paragraph>
-            {howto.description}
+            <Heading medium mt={2} mb={1}>
+              {howto.title}
+            </Heading>
+            <Text preLine paragraph>
+              {howto.description}
+            </Text>
           </Text>
 
           <Flex mt={4} mb={2}>
@@ -149,7 +154,11 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
           sx={{ position: 'relative' }}
         >
           <Image
-            sx={{ objectFit: 'cover', width: '100%', height: '450px' }}
+            sx={{
+              objectFit: 'cover',
+              width: '100%',
+              height: '450px',
+            }}
             src={howto.cover_image.downloadUrl}
             alt="how-to cover"
           />

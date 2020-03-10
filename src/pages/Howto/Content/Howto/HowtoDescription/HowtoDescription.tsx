@@ -29,17 +29,18 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
     super(props)
   }
 
-  private createdByText(howto: IHowtoDB): string {
-    return (
-      'By ' +
-      howto._createdBy +
-      ' ' +
-      format(new Date(howto._created), 'DD-MM-YYYY')
-    )
+  private dateCreatedByText(howto: IHowtoDB): string {
+    return format(new Date(howto._created), 'DD-MM-YYYY')
   }
 
-  private lastEditText(howto: IHowtoDB): string {
-    return 'Last edit: ' + format(new Date(howto._modified), 'DD-MM-YYYY')
+  private dateLastEditText(howto: IHowtoDB): string {
+    const lastModifiedDate = format(new Date(howto._modified), 'DD-MM-YYYY')
+    const creationDate = format(new Date(howto._created), 'DD-MM-YYYY')
+    if (lastModifiedDate !== creationDate) {
+      return 'Last edit: ' + format(new Date(howto._modified), 'DD-MM-YYYY')
+    } else {
+      return ''
+    }
   }
 
   public render() {
@@ -98,14 +99,17 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
           <Text auxiliary mt={3} mb={2}>
             By{' '}
             <Link
-              sx={{ textDecoration: 'underline', color: 'inherit' }}
+              sx={{
+                textDecoration: 'underline',
+                color: 'inherit',
+              }}
               to={'/u/' + howto._createdBy}
             >
-              {this.createdByText(howto)}
-            </Link>
-            &nbsp;|&nbsp;
-            <Text auxiliary mt={1} mb={2}>
-              {this.lastEditText(howto)}
+              {howto._createdBy}
+            </Link>{' '}
+            <Text inline> {this.dateCreatedByText(howto)}</Text>
+            <Text auxiliary sx={{ color: '#b7b5b5 !important' }} mt={1} mb={2}>
+              {this.dateLastEditText(howto)}
             </Text>
             <Heading medium mt={2} mb={1}>
               {howto.title}
@@ -150,7 +154,11 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
           sx={{ position: 'relative' }}
         >
           <Image
-            sx={{ objectFit: 'cover', width: '100%', height: '450px' }}
+            sx={{
+              objectFit: 'cover',
+              width: '100%',
+              height: '450px',
+            }}
             src={howto.cover_image.downloadUrl}
             alt="how-to cover"
           />

@@ -73,7 +73,7 @@ export class Routes extends React.Component<any, IState> {
             </Switch>
           </ScrollToTop>
         </BrowserRouter>
-        <Link
+        {/* <Link
           target="_blank"
           href="https://docs.google.com/forms/d/e/1FAIpQLSd3nevXb6iewap1lkFPWQxyerLsndcRkocv4QXIL3iLIyzazA/viewform?usp=pp_url&entry.1856170488="
           data-cy="feedback"
@@ -84,6 +84,24 @@ export class Routes extends React.Component<any, IState> {
             variant="primary"
           >
             Have feedback ?
+          </Button>
+        </Link> */}
+        <Link
+          target="_blank"
+          href="https://preciousplastic.com/survey"
+          sx={{ display: ['none', 'none', 'block'] }}
+        >
+          <Button
+            sx={{
+              position: 'fixed',
+              bottom: '30px',
+              left: '50%',
+              transform: 'translate(-50%, 0)',
+            }}
+            variant="primary"
+          >
+            <b>How big is our Impact ? </b>Help us find out! (Only until 20th
+            March!) →
           </Button>
         </Link>
       </div>

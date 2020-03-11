@@ -23,41 +23,41 @@ describe('[Common]', () => {
 
   it('[Page Navigation]', () => {
     cy.visit('/how-to')
-    cy.step('Feedback button opens the survey in a new tab')
-    cy.get('a[data-cy=feedback][target=_blank]')
-      .should('have.attr', 'href')
-      .and(
-        'eq',
-        'https://docs.google.com/forms/d/e/1FAIpQLSd3nevXb6iewap1lkFPWQxyerLsndcRkocv4QXIL3iLIyzazA/viewform?usp=pp_url&entry.1856170488=',
-      )
+    // cy.step('Feedback button opens the survey in a new tab')
+    // cy.get('a[data-cy=feedback][target=_blank]')
+    //   .should('have.attr', 'href')
+    //   .and(
+    //     'eq',
+    //     'https://docs.google.com/forms/d/e/1FAIpQLSd3nevXb6iewap1lkFPWQxyerLsndcRkocv4QXIL3iLIyzazA/viewform?usp=pp_url&entry.1856170488=',
+    //   )
 
     cy.step('Go to Events page')
     cy.get('[data-cy=page-link]')
       .contains('Events')
       .click()
     cy.url().should('include', '/events')
-    cy.get('[data-cy=feedback] > button').should('be.visible')
+    // cy.get('[data-cy=feedback] > button').should('be.visible')
 
     cy.step('Go to Map page')
     cy.get('[data-cy=page-link]')
       .contains('Map')
       .click()
     cy.url().should('include', '/map')
-    cy.get('[data-cy=feedback] > button').should('be.visible')
+    // cy.get('[data-cy=feedback] > button').should('be.visible')
 
     cy.step('Go to Academy page')
     cy.get('[data-cy=page-link]')
       .contains('Academy')
       .click()
     cy.url().should('include', '/academy')
-    cy.get('[data-cy=feedback] > button').should('be.visible')
+    // cy.get('[data-cy=feedback] > button').should('be.visible')
 
     cy.step('Go to How-to page')
     cy.get('[data-cy=page-link]')
       .contains('How-to')
       .click()
     cy.url().should('include', '/how-to')
-    cy.get('[data-cy=feedback] > button').should('be.visible')
+    // cy.get('[data-cy=feedback] > button').should('be.visible')
   })
 
   describe('[User Menu]', () => {

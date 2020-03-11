@@ -7,7 +7,7 @@ const USERS_ENDPOINT: IDBEndpoint = 'v3_users'
  * Nests revision as subcollection of original document,
  * labeled by previous _modified timestamp
  */
-export const FirestoreUserRevisions = functions.firestore
+export const FirebaseUserBackup = functions.firestore
   .document(`${USERS_ENDPOINT}/{username}`)
   .onUpdate((change, context) => {
     const { before, after } = change

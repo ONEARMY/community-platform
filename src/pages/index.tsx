@@ -89,7 +89,6 @@ export class Routes extends React.Component<any, IState> {
         <Link
           target="_blank"
           href="https://preciousplastic.com/survey"
-          data-cy="feedback"
           sx={{ display: ['none', 'none', 'block'] }}
         >
           <Button

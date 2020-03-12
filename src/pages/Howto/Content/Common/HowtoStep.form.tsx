@@ -159,14 +159,6 @@ class HowtoStep extends Component<IProps, IState> {
             />
           </ImageInputFieldWrapper>
         </Flex>
-        <Flex mt={2}>
-          <Field
-            name={`${step}.caption`}
-            data-cy="step-caption"
-            component={InputField}
-            placeholder="Insert Caption"
-          />
-        </Flex>
       </Flex>
     )
   }

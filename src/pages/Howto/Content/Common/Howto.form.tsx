@@ -357,14 +357,6 @@ export class HowtoForm extends React.Component<IProps, IState> {
                               This image should be landscape. We advise
                               1280x960px
                             </Text>
-                            <Flex mt={2}>
-                              <Field
-                                name="caption"
-                                data-cy={'intro-caption'}
-                                component={InputField}
-                                placeholder="Insert Caption"
-                              />
-                            </Flex>
                           </Flex>
                         </Flex>
                       </Flex>

@@ -2002,7 +2002,6 @@
         ],
         "text": "Alright so before starting, here some basics to check out and prepare first.\n\nFor this technique you will need:\nMachines: Shredder (or already shredded plastic), Extrusion machine, Oven\nTools: Scissors / Knife, Pliers, Weighing scales and two containers, Silicone oil, Clamps, Spanner\nMaterials: Polystyrene and pigment\n\nIf you haven't extruded beams before, learn more in the How-to \"Make a mould for beams\".\n(https://community.preciousplastic.com/how-to/make-a-mould-for-extruding-beams)",
         "_animationKey": "unique1",
-        "caption": "",
         "title": "Get ready"
       },
       {
@@ -2020,7 +2019,6 @@
         ],
         "text": "When melting plastic, bad fumes can be released. In order to work safer, make sure to use a breathing mask with ABEK filters to prevent inhaling possibly toxic fumes. Special attention on plastics like PS (polystyrene) and PVC. Also when handling with heated elements and plastic we recommend to wear working gloves.\n\nRecommended safety equipment: ABEK mask, gloves and glasses",
         "_animationKey": "unique2",
-        "caption": "",
         "title": "Stay safe"
       },
       {
@@ -2038,8 +2036,7 @@
           }
         ],
         "text": "Selecting the right material is crucial when it comes to aesthetics. What properties does the material have, what colour is it? \nAs PS stays transparent in the recycling process, it has the perfect quality to make a light. Collect your clean PS, which is typically found in old CD and cassette cases. Make sure to shred enough, the required amount will vary depending on the size of your mould.",
-        "_animationKey": "unique3",
-        "caption": ""
+        "_animationKey": "unique3"
       },
       {
         "text": "Now we use pigment to add colour to the transparent polystyrene. You can find it online (search for 'pigment for polystyrene'), but do check out if you can find it in a local shop. Using pigment has the advantage that it keeps the translucency of your material. If you only have access to coloured PS plastic, you will probably not get the same effect (unless the plastic is also translucent), so this will need some testing.\n Start by cutting one pellet of pigment into smaller pieces. The pigment we use (___) has a really strong affect so you only need a small amount to mix with.",

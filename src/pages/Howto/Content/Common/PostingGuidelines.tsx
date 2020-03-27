@@ -2,6 +2,8 @@ import * as React from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
+import { Link } from 'rebass'
+import theme from 'src/themes/styled.theme'
 
 export const PostingGuidelines = () => (
   <Flex card mediumRadius flexDirection={'column'} bg="white" p={4}>
@@ -9,19 +11,38 @@ export const PostingGuidelines = () => (
       How-to Guidelines
     </Heading>
     <Text auxiliary mb={1}>
-      1. Titles are powerful. Choose wisely.
+      How does it work?
     </Text>
     <Text auxiliary mb={1}>
-      2. Use tags, that's how we stay organised.
+      1. Choose what you want to share 🙌
     </Text>
     <Text auxiliary mb={1}>
-      3. Upload minimum 3 steps.
+      2. Read{' '}
+      <Link
+        color={theme.colors.blue}
+        target="_blank"
+        href="https://community.preciousplastic.com/academy/create/howto"
+      >
+        our guidelines!
+      </Link>
     </Text>
     <Text auxiliary mb={1}>
-      4. Try to keep it short but informative.
+      3. Prepare your text & images.
     </Text>
     <Text auxiliary mb={1}>
-      5. For each steps try to use an image.
+      4. Create your How-to.
+    </Text>
+    <Text auxiliary mb={1}>
+      5. Click on “Publish”.
+    </Text>
+    <Text auxiliary mb={1}>
+      6. We will either send you feedback, or
+    </Text>
+    <Text auxiliary mb={1}>
+      7. Approve if everything is okay :)
+    </Text>
+    <Text auxiliary mb={1}>
+      8. Be proud :)
     </Text>
   </Flex>
 )

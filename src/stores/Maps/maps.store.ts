@@ -163,6 +163,9 @@ export class MapsStore extends ModuleStore {
     if (!hasAdminRights(this.activeUser)) {
       return false
     }
+    if (pin.moderation === 'accepted') {
+      pin.hasBeenAccepted = true
+    }
     this.setPin(pin)
   }
   public needsModeration(pin: IMapPin) {
@@ -177,7 +180,6 @@ export class MapsStore extends ModuleStore {
       _id: user.userName,
       location: user.location!.latlng,
       type: user.profileType ? user.profileType : 'member',
-      // TODO: keep moderation status ... ' Should we being duplicating info ¿?(user/pin)'
       moderation: 'awaiting-moderation',
     }
     if (user.workspaceType) {

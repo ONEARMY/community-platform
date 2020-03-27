@@ -27,6 +27,7 @@ export type IModerationStatus =
 
 export interface IModerable {
   moderation: IModerationStatus
+  hasBeenAccepted?: boolean
   _createdBy?: string
   _id?: string
 }

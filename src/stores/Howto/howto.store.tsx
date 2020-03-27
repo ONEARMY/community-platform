@@ -31,7 +31,7 @@ export class HowtoStore extends ModuleStore {
     // the given endpoint and emits changes as data is retrieved from cache and live collection
     super(rootStore, COLLECTION_NAME)
     this.allDocs$.subscribe((docs: IHowtoDB[]) => {
-      this.allHowtos = docs.sort((a, b) => (a._modified < b._modified ? 1 : -1))
+      this.allHowtos = docs.sort((a, b) => (a._created < b._created ? 1 : -1))
     })
     this.selectedTags = {}
   }

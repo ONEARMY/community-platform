@@ -11,7 +11,9 @@ export const notifyNewPin = functions.firestore
   .document('v3_mappins/{pinId}')
   .onWrite((change, context) => {
     const info = change.after.exists ? change.after.data() : null
-    if (info === null || info.moderation !== 'awaiting-moderation') {
+    const prevInfo = change.before.exists ? change.before.data() : null
+    const prevModeration = (prevInfo !== null) ? prevInfo.moderation : null;
+    if (info === null || info.moderation !== 'awaiting-moderation' || prevModeration === 'awaiting-moderation') {
       return
     }
 

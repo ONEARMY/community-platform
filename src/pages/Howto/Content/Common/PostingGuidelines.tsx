@@ -21,7 +21,7 @@ export const PostingGuidelines = () => (
       <Link
         color={theme.colors.blue}
         target="_blank"
-        href="https://community.preciousplastic.com/academy/create/howto"
+        href="/academy/create/howto"
       >
         our guidelines!
       </Link>

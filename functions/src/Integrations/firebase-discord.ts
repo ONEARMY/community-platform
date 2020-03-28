@@ -12,7 +12,8 @@ export const notifyPinAccepted = functions.firestore
   .onWrite(async (change, context) => {
     const info = change.after.exists ? change.after.data() : null
     const prevInfo = change.before.exists ? change.before.data() : null
-    const beenAccepted = (prevInfo !== null) ? prevInfo.hasBeenAccepted : null;
+    const beenAccepted =
+      prevInfo !== null ? prevInfo.moderation === 'accepted' : null
     if (info === null || info.moderation !== 'accepted' || beenAccepted) {
       return
     }

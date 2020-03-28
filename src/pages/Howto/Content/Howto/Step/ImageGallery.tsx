@@ -7,7 +7,6 @@ import styled from 'styled-components'
 
 interface IProps {
   images: IUploadedFileMeta[]
-  caption?: string
 }
 
 interface IState {
@@ -77,7 +76,6 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
   render() {
     const images = this.state.images
     const imageNumber = images.length
-    const { caption } = this.props
     return this.state.activeImage ? (
       <Flex flexDirection={'column'}>
         <Flex width={1}>
@@ -110,7 +108,6 @@ export default class ImageGallery extends React.PureComponent<IProps, IState> {
         {this.state.showLightbox && (
           <Lightbox
             mainSrc={this.state.images[this.state.imgIndex].downloadUrl}
-            imageCaption={this.props.caption}
             nextSrc={
               this.state.images[
                 (this.state.imgIndex + 1) % this.state.images.length

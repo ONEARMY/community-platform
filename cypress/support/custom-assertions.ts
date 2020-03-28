@@ -18,7 +18,6 @@ const eqHowto = (chaiObj, utils) => {
     const {
       _createdBy,
       _deleted,
-      caption,
       description,
       difficulty_level,
       slug,
@@ -29,7 +28,6 @@ const eqHowto = (chaiObj, utils) => {
     expect(subject, 'Basic info').to.containSubset({
       _createdBy,
       _deleted,
-      caption,
       description,
       difficulty_level,
       slug,
@@ -53,10 +51,9 @@ const eqHowto = (chaiObj, utils) => {
 const eqHowtoStep = (chaiObj, utils) => {
   function compare(this: any, expected: any, index: number) {
     const subject: IHowtoStep = this._obj
-    const { _animationKey, caption, text, title } = expected
+    const { _animationKey, text, title } = expected
     expect(subject, `Step ${index} with info`).to.containSubset({
       _animationKey,
-      caption,
       text,
       title,
     })

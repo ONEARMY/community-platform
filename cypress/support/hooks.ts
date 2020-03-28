@@ -9,6 +9,8 @@ import { Firestore } from './db/firebase'
  */
 
 before(() => {
+  indexedDB.deleteDatabase('OneArmyCache')
+  cy.clearLocalStorage()
   cy.wrap('Initialising Database').then({ timeout: 60000 }, doc => {
     // large initial timeout in case server slow to respond
     return new Cypress.Promise(async resolve => {

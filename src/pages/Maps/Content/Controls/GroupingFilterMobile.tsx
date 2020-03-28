@@ -3,6 +3,8 @@ import Text from 'src/components/Text'
 import { IMapGrouping } from 'src/models/maps.models'
 import checkmarkIcon from 'src/assets/icons/icon-checkmark.svg'
 import { Flex, Image } from 'rebass'
+import { inject } from 'mobx-react'
+import { MapsStore } from 'src/stores/Maps/maps.store'
 
 interface IProps {
   items: Array<IMapGrouping>
@@ -14,13 +16,21 @@ interface IProps {
 interface IState {
   initialItems: Array<any>
 }
+interface IInjectedProps extends IProps {
+  mapsStore: MapsStore
+}
 
+@inject('mapsStore')
 class GroupingFilterMobile extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
       initialItems: this.asOptions(props.items),
     }
+  }
+
+  get injected() {
+    return this.props as IInjectedProps
   }
 
   addOrRemove = (array, item) => {
@@ -52,6 +62,9 @@ class GroupingFilterMobile extends React.Component<IProps, IState> {
         label: item.displayName,
         value: item.subType ? item.subType : item.type,
         icon: item.icon,
+        number: this.injected.mapsStore.getPinsNumberByFilterType(
+          item.subType ? item.subType.split(' ') : item.type.split(' '),
+        ),
       }))
   }
 
@@ -80,7 +93,7 @@ class GroupingFilterMobile extends React.Component<IProps, IState> {
             <Flex alignItems="center">
               <Image width="30px" src={filter.icon} />
               <Text medium ml="10px">
-                {filter.label}
+                {filter.label} ({filter.number})
               </Text>
             </Flex>
             {selectedItems.includes(filter.value) && (

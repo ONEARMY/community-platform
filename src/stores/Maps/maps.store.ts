@@ -182,7 +182,6 @@ export class MapsStore extends ModuleStore {
       _id: user.userName,
       location: user.location!.latlng,
       type: user.profileType ? user.profileType : 'member',
-      // TODO: keep moderation status ... ' Should we being duplicating info ¿?(user/pin)'
       moderation: 'awaiting-moderation',
     }
     if (user.workspaceType) {

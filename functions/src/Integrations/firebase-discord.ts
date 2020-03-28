@@ -11,7 +11,10 @@ export const notifyPinAccepted = functions.firestore
   .document('v3_mappins/{pinId}')
   .onWrite(async (change, context) => {
     const info = change.after.exists ? change.after.data() : null
-    if (info === null || info.moderation !== 'accepted') {
+    const prevInfo = change.before.exists ? change.before.data() : null
+    const beenAccepted =
+      prevInfo !== null ? prevInfo.moderation === 'accepted' : null
+    if (info === null || info.moderation !== 'accepted' || beenAccepted) {
       return
     }
     const { _id, type } = info

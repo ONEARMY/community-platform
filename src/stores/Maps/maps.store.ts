@@ -105,13 +105,18 @@ export class MapsStore extends ModuleStore {
       return
     }
 
+    const mapPins = this.filterMapPinsByType(filters)
+    this.filteredPins = mapPins
+  }
+
+  private filterMapPinsByType(filters: Array<string>) {
     // filter pins to include matched pin type or subtype
-    const mapPins = this.mapPins.filter(pin => {
+    const filteredMapPins = this.mapPins.filter(pin => {
       return pin.subType
         ? filters.includes(pin.subType)
         : filters.includes(pin.type)
     })
-    this.filteredPins = mapPins
+    return filteredMapPins
   }
 
   /**
@@ -177,7 +182,6 @@ export class MapsStore extends ModuleStore {
       _id: user.userName,
       location: user.location!.latlng,
       type: user.profileType ? user.profileType : 'member',
-      // TODO: keep moderation status ... ' Should we being duplicating info ¿?(user/pin)'
       moderation: 'awaiting-moderation',
     }
     if (user.workspaceType) {
@@ -223,6 +227,11 @@ export class MapsStore extends ModuleStore {
       name: u.userName,
       profileUrl: `${location.origin}/u/${u.userName}`,
     }
+  }
+  @action
+  public getPinsNumberByFilterType(filter: Array<string>) {
+    const pinsNumber = this.filterMapPinsByType(filter)
+    return pinsNumber.length
   }
 }
 

@@ -22,7 +22,6 @@ export interface IHowtoStep extends IHowToStepFormInput {
   images: Array<IUploadedFileMeta | null>
   title: string
   text: string
-  caption?: string
   _animationKey?: string
 }
 
@@ -30,7 +29,6 @@ export interface IHowToStepFormInput {
   images: Array<IUploadedFileMeta | IConvertedFileMeta | null>
   title: string
   text: string
-  caption?: string
   _animationKey?: string
 }
 
@@ -46,5 +44,4 @@ export interface IHowtoFormInput extends IModerable {
   slug: string
   // note, tags will remain optional as if populated {} will be stripped by db (firestore)
   tags?: ISelectedTags
-  caption?: string
 }

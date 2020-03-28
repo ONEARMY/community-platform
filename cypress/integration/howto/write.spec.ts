@@ -30,7 +30,6 @@ describe('[How To]', () => {
     stepNumber: number,
     title: string,
     description: string,
-    caption: string,
     images: string[],
   ) => {
     const stepIndex = stepNumber - 1
@@ -42,9 +41,6 @@ describe('[How To]', () => {
       cy.get('[data-cy=step-description]')
         .clear()
         .type(`Description for step ${stepNumber}`)
-      cy.get('[data-cy=step-caption]')
-        .clear()
-        .type('What a step caption')
       cy.step('Uploading pics')
       const hasExistingPics =
         Cypress.$($step).find('[data-cy=delete-step-img]').length > 0
@@ -76,7 +72,6 @@ describe('[How To]', () => {
     const expected = {
       _createdBy: 'howto_creator',
       _deleted: false,
-      caption: 'Intro caption goes here ...',
       description: 'After creating, the how-to will be deleted',
       difficulty_level: 'Medium',
       time: '1-2 weeks',
@@ -95,7 +90,6 @@ describe('[How To]', () => {
       steps: [
         {
           _animationKey: 'unique1',
-          caption: 'What a step caption',
           images: [
             {
               contentType: 'image/jpeg',
@@ -115,7 +109,6 @@ describe('[How To]', () => {
         },
         {
           _animationKey: 'unique2',
-          caption: 'What a step caption',
           images: [],
           text: 'Description for step 2',
           title: 'Step 2 is easy',
@@ -144,14 +137,13 @@ describe('[How To]', () => {
       selectDifficultLevel(expected.difficulty_level as Difficulty)
 
       cy.get('[data-cy=intro-description]').type(expected.description)
-      cy.get('[data-cy=intro-caption]').type(expected.caption)
       cy.step('Upload a cover for the intro')
       cy.get('[data-cy=intro-cover]')
         .find(':file')
         .uploadFiles('images/howto-intro.jpg')
 
       expected.steps.forEach((step, index) => {
-        fillStep(index + 1, step.title, step.text, step.caption, [
+        fillStep(index + 1, step.title, step.text, [
           'images/howto-step-pic1.jpg',
           'images/howto-step-pic2.jpg',
         ])
@@ -185,7 +177,6 @@ describe('[How To]', () => {
     const expected = {
       _createdBy: 'howto_editor',
       _deleted: false,
-      caption: 'Caption edited!',
       description: 'After editing, all changes are reverted',
       difficulty_level: 'Hard',
       files: [],
@@ -202,7 +193,6 @@ describe('[How To]', () => {
       steps: [
         {
           _animationKey: 'unique1',
-          caption: 'What a step caption',
           images: [
             {
               contentType: 'image/jpeg',
@@ -222,7 +212,6 @@ describe('[How To]', () => {
         },
         {
           _animationKey: 'unique3',
-          caption: 'What a step caption',
           images: [
             {
               contentType: 'image/jpeg',
@@ -277,9 +266,6 @@ describe('[How To]', () => {
       cy.get('[data-cy=intro-description]')
         .clear()
         .type(expected.description)
-      cy.get('[data-cy=intro-caption]')
-        .clear()
-        .type(expected.caption)
 
       cy.step('Update a new cover for the intro')
 
@@ -292,7 +278,7 @@ describe('[How To]', () => {
       deleteStep(2)
 
       expected.steps.forEach((step, index) => {
-        fillStep(index + 1, step.title, step.text, step.caption, [
+        fillStep(index + 1, step.title, step.text, [
           'images/howto-step-pic1.jpg',
           'images/howto-step-pic2.jpg',
         ])

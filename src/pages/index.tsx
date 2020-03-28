@@ -75,7 +75,7 @@ export class Routes extends React.Component<any, IState> {
         </BrowserRouter>
         <Link
           target="_blank"
-          href="https://docs.google.com/forms/d/e/1FAIpQLSd3nevXb6iewap1lkFPWQxyerLsndcRkocv4QXIL3iLIyzazA/viewform?usp=pp_url&entry.1856170488="
+          href="https://discordapp.com/invite/cGZ5hKP"
           data-cy="feedback"
           sx={{ display: ['none', 'none', 'block'] }}
         >
@@ -83,7 +83,7 @@ export class Routes extends React.Component<any, IState> {
             sx={{ position: 'fixed', bottom: '30px', right: '30px' }}
             variant="primary"
           >
-            Have feedback ?
+            #Feedback? Join our chat 💬
           </Button>
         </Link>
       </div>

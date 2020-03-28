@@ -9,7 +9,6 @@ import { Firestore } from './db/firebase'
  */
 
 before(() => {
-  indexedDB.deleteDatabase('firebaseLocalStorageDb')
   indexedDB.deleteDatabase('OneArmyCache')
   cy.clearLocalStorage('CLear local storage and indexDB')
   cy.wrap('Initialising Database').then({ timeout: 60000 }, doc => {

@@ -35,7 +35,7 @@ const Label = styled.label`
   margin-bottom: ${theme.space[2] + 'px'};
 `
 
-class HowtoStep extends Component<IProps, IState> {
+class HowtoStep extends React.PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
@@ -50,6 +50,21 @@ class HowtoStep extends Component<IProps, IState> {
   confirmDelete() {
     this.toggleDeleteModal()
     this.props.onDelete(this.props.index)
+  }
+  /**
+   * Ensure either url or images included (not both), and any url formatted correctly
+   */
+  validateMedia(videoUrl: string) {
+    const { images } = { ...this.props }
+    if (videoUrl) {
+      if (images[0]) {
+        return 'Do not include both images and video'
+      }
+      return videoUrl.includes('https://www.youtube.com/watch?v=')
+        ? null
+        : 'Please provide a valid YouTube Url'
+    }
+    return images[0] ? null : 'Include either images or a video'
   }
 
   render() {
@@ -129,8 +144,7 @@ class HowtoStep extends Component<IProps, IState> {
           />
         </Flex>
         <Label htmlFor={`${step}.text`}>Upload image(s) for this step *</Label>
-
-        <Flex flexDirection={['column', 'row']} alignItems="center">
+        <Flex flexDirection={['column', 'row']} alignItems="center" mb={3}>
           <ImageInputFieldWrapper data-cy="step-image-0">
             <Field
               canDelete
@@ -158,6 +172,17 @@ class HowtoStep extends Component<IProps, IState> {
               component={ImageInputField}
             />
           </ImageInputFieldWrapper>
+        </Flex>
+        <Flex flexDirection="column" mb={3}>
+          <Label htmlFor={`${step}.videoUrl`}>Or embed a YouTube video*</Label>
+          <Field
+            name={`${step}.videoUrl`}
+            data-cy="step-videoUrl"
+            component={InputField}
+            placeholder="https://youtube.com/watch?v="
+            validate={url => this.validateMedia(url)}
+            validateFields={[]}
+          />
         </Flex>
       </Flex>
     )

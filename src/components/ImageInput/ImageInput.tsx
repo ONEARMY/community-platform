@@ -12,10 +12,6 @@ interface ITitleProps {
   hasUploadedImg: boolean
 }
 
-interface IUploadImageOverlayIProps {
-  isHovering: boolean
-}
-
 const AlignCenterWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -36,9 +32,7 @@ const ImageInputWrapper = styled(AlignCenterWrapper)<ITitleProps>`
   cursor: pointer;
 `
 
-const UploadImageOverlay = styled(AlignCenterWrapper)<
-  IUploadImageOverlayIProps
->`
+const UploadImageOverlay = styled(AlignCenterWrapper)`
   position: absolute;
   top: 0;
   left: 0;
@@ -46,17 +40,14 @@ const UploadImageOverlay = styled(AlignCenterWrapper)<
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.2);
-  visibility: hidden;
-  opacity: 0;
+  opacity:0;
+  visibility:hidden
   transition: opacity 300ms ease-in;
   border-radius: ${theme.space[1]}px;
-
-  ${(props: IUploadImageOverlayIProps) =>
-    props.isHovering &&
-    `
+  ${ImageInputWrapper}:hover & {
     visibility: visible;
     opacity: 1;
-  `}
+  }
 `
 
 /*
@@ -89,10 +80,9 @@ interface IState {
   inputFiles: File[]
   lightboxImg?: IConvertedFileMeta
   openLightbox?: boolean
-  isHovering: boolean
 }
 
-export class ImageInput extends React.Component<IProps, IState> {
+export class ImageInput extends React.PureComponent<IProps, IState> {
   private fileInputRef = React.createRef<HTMLInputElement>()
 
   constructor(props: IProps) {
@@ -100,7 +90,6 @@ export class ImageInput extends React.Component<IProps, IState> {
     this.state = {
       inputFiles: [],
       convertedFiles: [],
-      isHovering: false,
     }
   }
 
@@ -132,14 +121,10 @@ export class ImageInput extends React.Component<IProps, IState> {
     if (!imgPreviewMode) {
       return
     }
-
-    this.setState((prevState: Readonly<IState>) => ({
-      isHovering: !prevState.isHovering,
-    }))
   }
 
   render() {
-    const { inputFiles, isHovering } = this.state
+    const { inputFiles } = this.state
     // if at least one image present, hide the 'choose image' button and replace with smaller button
     const imgPreviewMode = inputFiles.length > 0 || this.props.src
     const useImageSrc = this.props.src && this.state.inputFiles.length === 0
@@ -183,7 +168,7 @@ export class ImageInput extends React.Component<IProps, IState> {
                 </Button>
               )}
 
-              <UploadImageOverlay isHovering={isHovering}>
+              <UploadImageOverlay>
                 {this.props.canDelete && imgPreviewMode && (
                   <Button
                     data-cy="delete-image"
@@ -198,7 +183,6 @@ export class ImageInput extends React.Component<IProps, IState> {
                       this.setState({
                         inputFiles: [],
                         convertedFiles: [],
-                        isHovering: false,
                       })
                     }}
                   >
@@ -207,7 +191,12 @@ export class ImageInput extends React.Component<IProps, IState> {
                 )}
 
                 {!this.props.canDelete && (
-                  <Button small variant="outline" icon="image" data-cy="replace-image">
+                  <Button
+                    small
+                    variant="outline"
+                    icon="image"
+                    data-cy="replace-image"
+                  >
                     Replace image
                   </Button>
                 )}

@@ -33,6 +33,7 @@ describe('[How To]', () => {
     images: string[],
   ) => {
     const stepIndex = stepNumber - 1
+    console.log('stepIndex', stepIndex)
     cy.step(`Filling step ${stepNumber}`)
     cy.get(`[data-cy=step_${stepIndex}]:visible`).within($step => {
       cy.get('[data-cy=step-title]')
@@ -41,21 +42,28 @@ describe('[How To]', () => {
       cy.get('[data-cy=step-description]')
         .clear()
         .type(`Description for step ${stepNumber}`)
-      cy.step('Uploading pics')
-      const hasExistingPics =
-        Cypress.$($step).find('[data-cy=delete-step-img]').length > 0
-      if (hasExistingPics) {
-        cy.wrap($step)
-          .find('[data-cy=delete-image]')
-          .each($deleteButton => {
-            cy.wrap($deleteButton).click()
-          })
+      if (stepIndex === 1) {
+        cy.step('Adding Video Url')
+        cy.get('[data-cy=step-videoUrl]')
+          .clear()
+          .type('https://www.youtube.com/watch?v=Os7dREQ00l4')
+      } else {
+        cy.step('Uploading pics')
+        const hasExistingPics =
+          Cypress.$($step).find('[data-cy=delete-step-img]').length > 0
+        if (hasExistingPics) {
+          cy.wrap($step)
+            .find('[data-cy=delete-image]')
+            .each($deleteButton => {
+              cy.wrap($deleteButton).click()
+            })
+        }
+        images.forEach((image, index) => {
+          cy.get(`[data-cy=step-image-${index}]`)
+            .find(':file')
+            .uploadFiles([image])
+        })
       }
-      images.forEach((image, index) => {
-        cy.get(`[data-cy=step-image-${index}]`)
-          .find(':file')
-          .uploadFiles([image])
-      })
     })
   }
 

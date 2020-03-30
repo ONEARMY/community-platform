@@ -60,9 +60,9 @@ class HowtoStep extends React.PureComponent<IProps, IState> {
       if (images[0]) {
         return 'Do not include both images and video'
       }
-      return videoUrl.includes('https://www.youtube.com/watch?v=')
-        ? null
-        : 'Please provide a valid YouTube Url'
+      const ytRegex = new RegExp(/(youtu\.be\/|youtube\.com\/watch\?v=)/gi)
+      const urlValid = ytRegex.test(videoUrl)
+      return urlValid ? null : 'Please provide a valid YouTube Url'
     }
     return images[0] ? null : 'Include either images or a video'
   }

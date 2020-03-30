@@ -78,12 +78,15 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
         </Flex>
         <Box sx={{ display: isOpen ? 'block' : 'none' }}>
           <Text mb={2} mt={4} medium>
-            Short description of your pin *
+            Short description of your pin (max. 70 characters) *
           </Text>
           <Field
             data-cy="pin-description"
             name="mapPinDescription"
             component={TextAreaField}
+            maxLength="70"
+            style={{ height: 'inherit' }}
+            rows="1"
             placeholder="We are shredding plastic in Plymouth, UK."
             validate={required}
           />

@@ -89,7 +89,11 @@ export class Popup extends React.Component<IProps> {
         ? g.subType === pin.subType && g.type === pin.type
         : g.type === pin.type
     })
-    const { lastActive, heroImageUrl, shortDescription, name } = pin.detail
+    let { lastActive, heroImageUrl, shortDescription, name } = pin.detail
+    const description =
+      shortDescription.length > 70
+        ? shortDescription.substr(0, 70) + '...'
+        : shortDescription
     const lastActiveText = lastActive
       ? distanceInWords(lastActive, new Date())
       : 'a long time'
@@ -116,8 +120,8 @@ export class Popup extends React.Component<IProps> {
               {name}
             </Text>
           </Link>
-          <Text auxiliary small clipped mb={2}>
-            {shortDescription}
+          <Text small mb={2}>
+            {description}
           </Text>
           <LastOnline>last active {lastActiveText} ago</LastOnline>
           {pin.moderation !== 'accepted' && (

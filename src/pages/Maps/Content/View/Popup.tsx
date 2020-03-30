@@ -89,7 +89,7 @@ export class Popup extends React.Component<IProps> {
         ? g.subType === pin.subType && g.type === pin.type
         : g.type === pin.type
     })
-    let { lastActive, heroImageUrl, shortDescription, name } = pin.detail
+    const { lastActive, heroImageUrl, shortDescription, name } = pin.detail
     const description =
       shortDescription.length > 70
         ? shortDescription.substr(0, 70) + '...'
@@ -120,7 +120,7 @@ export class Popup extends React.Component<IProps> {
               {name}
             </Text>
           </Link>
-          <Text small mb={2}>
+          <Text small mb={2} style={{ wordBreak: 'break-word' }}>
             {description}
           </Text>
           <LastOnline>last active {lastActiveText} ago</LastOnline>

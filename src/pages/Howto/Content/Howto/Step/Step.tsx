@@ -67,7 +67,11 @@ export default class Step extends React.PureComponent<IProps> {
             </Flex>
             <Flex width={[1, 1, 5 / 9]}>
               {step.videoUrl ? (
-                <ReactPlayer controls url={step.videoUrl} />
+                <ReactPlayer
+                  data-cy="video-embed"
+                  controls
+                  url={step.videoUrl}
+                />
               ) : (
                 <ImageGallery images={step.images as IUploadedFileMeta[]} />
               )}

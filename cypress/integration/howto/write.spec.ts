@@ -31,6 +31,7 @@ describe('[How To]', () => {
     title: string,
     description: string,
     images: string[],
+    videoUrl?: string,
   ) => {
     const stepIndex = stepNumber - 1
     console.log('stepIndex', stepIndex)
@@ -42,11 +43,11 @@ describe('[How To]', () => {
       cy.get('[data-cy=step-description]')
         .clear()
         .type(`Description for step ${stepNumber}`)
-      if (stepIndex === 1) {
+      if (videoUrl) {
         cy.step('Adding Video Url')
         cy.get('[data-cy=step-videoUrl]')
           .clear()
-          .type('https://www.youtube.com/watch?v=Os7dREQ00l4')
+          .type(videoUrl)
       } else {
         cy.step('Uploading pics')
         const hasExistingPics =
@@ -150,11 +151,16 @@ describe('[How To]', () => {
         .find(':file')
         .uploadFiles('images/howto-intro.jpg')
 
-      expected.steps.forEach((step, index) => {
-        fillStep(index + 1, step.title, step.text, [
-          'images/howto-step-pic1.jpg',
-          'images/howto-step-pic2.jpg',
-        ])
+      expected.steps.forEach((step, i) => {
+        const videoUrl =
+          i === 1 ? 'https://www.youtube.com/watch?v=Os7dREQ00l4' : undefined
+        fillStep(
+          i + 1,
+          step.title,
+          step.text,
+          ['images/howto-step-pic1.jpg', 'images/howto-step-pic2.jpg'],
+          videoUrl,
+        )
       })
       deleteStep(3)
 

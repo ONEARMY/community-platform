@@ -20,6 +20,7 @@ export type IHowtoDB = IHowto & DBDoc
 export interface IHowtoStep extends IHowToStepFormInput {
   // *** NOTE - adding an '_animationKey' field to track when specific array element removed for
   images: Array<IUploadedFileMeta | null>
+  videoUrl?: string
   title: string
   text: string
   _animationKey?: string

@@ -2214,6 +2214,14 @@
     "time": "< 1 week"
   },
   "gPpPDEvfNT9a6w5FWzaj": {
+    "moderation": "accepted",
+    "id": "me5Bq0wq5FdoJUY8gELN",
+    "_createdBy": "howto_creator",
+    "tags": {
+      "36hWyk3OckrLSH1ehdIE": true,
+      "Wk6RnHHFfKSiI71BlM8r": true
+    },
+    "title": "Make an interlocking brick",
     "steps": [
       {
         "images": [
@@ -2234,19 +2242,9 @@
       },
       {
         "title": "Idea and first drawing",
-        "images": [
-          {
-            "timeCreated": "2019-09-27T15:03:51.356Z",
-            "name": "howto-bope brick-2.jpg",
-            "fullPath": "uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-2.jpg",
-            "type": "image/jpeg",
-            "updated": "2019-09-27T15:03:51.356Z",
-            "size": 32393,
-            "downloadUrl": "https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-2.jpg?alt=media&token=79b1ef96-ceab-4fc1-a5ed-67edf15046b8",
-            "contentType": "image/jpeg"
-          }
-        ],
-        "text": "We wanted to develop a product that can have many functions. So we decided to figure out a shape that can be adapted or compliment one another to get a variety of uses. Finally we decided to draw a curved shape. The idea of this shape is to be attached to each other like a Lego. You can use this design as a plant pot or connect it as a partition and build a wall. ",
+        "images": [],
+        "videoUrl": "https://www.youtube.com/watch?v=Os7dREQ00l4&t=5s",
+        "text": "We wanted to develop a product that can have many functions. So we decided to figure out a shape that can be adapted or compliment one another to get a variety of uses. Finally we decided to draw a curved shape. The idea of this shape is to be attached to each other like a Lego. You can use this design as a plant pot or connect it as a partition and build a wall. Why not check out this super cool video?",
         "_animationKey": "unique2"
       },
       {
@@ -2470,14 +2468,7 @@
         "_animationKey": "uniquec9kbu"
       }
     ],
-    "moderation": "accepted",
-    "id": "me5Bq0wq5FdoJUY8gELN",
-    "_createdBy": "howto_creator",
-    "tags": {
-      "36hWyk3OckrLSH1ehdIE": true,
-      "Wk6RnHHFfKSiI71BlM8r": true
-    },
-    "title": "Make an interlocking brick",
+
     "_modified": "2019-09-30T18:27:57.570Z",
     "_created": "2019-10-01T20:49:43.452Z",
     "slug": "make-an-interlocking-brick",

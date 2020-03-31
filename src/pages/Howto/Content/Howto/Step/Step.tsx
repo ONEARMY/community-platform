@@ -1,5 +1,6 @@
 import React from 'react'
 import Linkify from 'react-linkify'
+import ReactPlayer from 'react-player'
 import { IHowtoStep } from 'src/models/howto.models'
 import { Box } from 'rebass'
 import Flex from 'src/components/Flex'
@@ -20,7 +21,7 @@ const FlexStepNumber = styled(Flex)`
 
 export default class Step extends React.PureComponent<IProps> {
   render() {
-    const { stepindex } = this.props
+    const { stepindex, step } = this.props
     return (
       <>
         <Flex
@@ -40,7 +41,7 @@ export default class Step extends React.PureComponent<IProps> {
               width={1}
             >
               <Heading medium mb={0}>
-                {this.props.stepindex + 1}
+                {stepindex + 1}
               </Heading>
             </FlexStepNumber>
           </Flex>
@@ -56,18 +57,24 @@ export default class Step extends React.PureComponent<IProps> {
           >
             <Flex width={[1, 1, 4 / 9]} py={4} px={4} flexDirection={'column'}>
               <Heading medium mb={0}>
-                {this.props.step.title}
+                {step.title}
               </Heading>
               <Box>
                 <Text preLine paragraph mt={3} color={'grey'}>
-                  <Linkify>{this.props.step.text}</Linkify>
+                  <Linkify>{step.text}</Linkify>
                 </Text>
               </Box>
             </Flex>
             <Flex width={[1, 1, 5 / 9]}>
-              <ImageGallery
-                images={this.props.step.images as IUploadedFileMeta[]}
-              />
+              {step.videoUrl ? (
+                <ReactPlayer
+                  data-cy="video-embed"
+                  controls
+                  url={step.videoUrl}
+                />
+              ) : (
+                <ImageGallery images={step.images as IUploadedFileMeta[]} />
+              )}
             </Flex>
           </Flex>
         </Flex>

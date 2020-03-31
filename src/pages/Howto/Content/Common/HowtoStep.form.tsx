@@ -121,8 +121,8 @@ class HowtoStep extends Component<IProps, IState> {
           <Label htmlFor={`${step}.text`}>Description of this step *</Label>
           <Field
             name={`${step}.text`}
-            placeholder="Explain what you are doing in this step. if it gets to long break it into 2 steps (max 400 characters)"
-            maxLength="400"
+            placeholder="Explain what you are doing in this step. if it gets to long break it into 2 steps (max 700 characters)"
+            maxLength="700"
             data-cy="step-description"
             component={TextAreaField}
             style={{ resize: 'vertical', height: '300px' }}

@@ -288,8 +288,8 @@ export class HowtoForm extends React.Component<IProps, IState> {
                                   flex: 1,
                                   minHeight: '150px',
                                 }}
-                                maxLength="700"
-                                placeholder="Introduction to your How-To (max 700 characters)"
+                                maxLength="400"
+                                placeholder="Introduction to your How-To (max 400 characters)"
                               />
                             </Flex>
                             <Label htmlFor="description">

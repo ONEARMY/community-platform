@@ -126,7 +126,8 @@ class HowtoStep extends React.PureComponent<IProps, IState> {
             name={`${step}.title`}
             data-cy="step-title"
             component={InputField}
-            placeholder="Title of this step"
+            placeholder="Title of this step (max 30 characters)"
+            maxLength="30"
             validate={required}
             validateFields={[]}
           />
@@ -135,7 +136,8 @@ class HowtoStep extends React.PureComponent<IProps, IState> {
           <Label htmlFor={`${step}.text`}>Description of this step *</Label>
           <Field
             name={`${step}.text`}
-            placeholder="Description of this step"
+            placeholder="Explain what you are doing in this step. if it gets to long break it into 2 steps (max 700 characters)"
+            maxLength="700"
             data-cy="step-description"
             component={TextAreaField}
             style={{ resize: 'vertical', height: '300px' }}

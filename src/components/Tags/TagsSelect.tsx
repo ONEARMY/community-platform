@@ -137,5 +137,5 @@ TagsSelect.defaultProps = {
   value: {},
   category: undefined,
   styleVariant: 'selector',
-  placeholder: 'Select tags - 4 maximum',
+  placeholder: 'Select tags (max 4)',
 }

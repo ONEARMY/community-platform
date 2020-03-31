@@ -100,14 +100,21 @@ export class UserSettings extends React.Component<IProps, IState> {
       isLocationSelected: true,
     })
   }
-  public onCoverImgChange(v: IConvertedFileMeta) {
+  public replaceAt(array, index, value) {
+    const ret = array.slice(0)
+    ret[index] = value
+    return ret
+  }
+  public onCoverImgChange(v: IConvertedFileMeta, i: number) {
     // TODO always use an array of coverImages (will do when allow multiple cover images)
-    const coverImagesArray: IConvertedFileMeta[] = []
-    coverImagesArray.push(v)
+    const coverImagesArray = this.state.initialFormValues.coverImages
+      ? this.state.initialFormValues.coverImages
+      : []
+    // coverImagesArray.push(v)
     this.setState({
       customFormValues: {
         ...this.state.customFormValues,
-        coverImages: coverImagesArray,
+        coverImages: this.replaceAt(coverImagesArray, i, v),
       },
     })
   }
@@ -255,7 +262,9 @@ export class UserSettings extends React.Component<IProps, IState> {
                             showSubmitErrors={!isWTSelected}
                           />
                           <UserInfosSection
-                            onCoverImgChange={v => this.onCoverImgChange(v)}
+                            onCoverImgChange={(v, i) =>
+                              this.onCoverImgChange(v, i)
+                            }
                             initialFormValues={initialFormValues}
                             mutators={mutators}
                           />
@@ -269,7 +278,9 @@ export class UserSettings extends React.Component<IProps, IState> {
                       {initialFormValues.profileType === 'collection-point' && (
                         <>
                           <UserInfosSection
-                            onCoverImgChange={v => this.onCoverImgChange(v)}
+                            onCoverImgChange={(v, i) =>
+                              this.onCoverImgChange(v, i)
+                            }
                             initialFormValues={initialFormValues}
                             mutators={mutators}
                           />
@@ -292,7 +303,9 @@ export class UserSettings extends React.Component<IProps, IState> {
                         'community-builder' && (
                         <>
                           <UserInfosSection
-                            onCoverImgChange={v => this.onCoverImgChange(v)}
+                            onCoverImgChange={(v, i) =>
+                              this.onCoverImgChange(v, i)
+                            }
                             initialFormValues={initialFormValues}
                             mutators={mutators}
                           />
@@ -306,7 +319,9 @@ export class UserSettings extends React.Component<IProps, IState> {
                       {initialFormValues.profileType === 'machine-builder' && (
                         <>
                           <UserInfosSection
-                            onCoverImgChange={v => this.onCoverImgChange(v)}
+                            onCoverImgChange={(v, i) =>
+                              this.onCoverImgChange(v, i)
+                            }
                             initialFormValues={initialFormValues}
                             mutators={mutators}
                           />
@@ -328,7 +343,9 @@ export class UserSettings extends React.Component<IProps, IState> {
                       {initialFormValues.profileType === 'member' && (
                         <>
                           <UserInfosSection
-                            onCoverImgChange={v => this.onCoverImgChange(v)}
+                            onCoverImgChange={(v, i) =>
+                              this.onCoverImgChange(v, i)
+                            }
                             initialFormValues={initialFormValues}
                             mutators={mutators}
                           />

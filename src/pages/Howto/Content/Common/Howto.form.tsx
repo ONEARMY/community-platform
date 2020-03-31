@@ -83,7 +83,7 @@ const Label = styled.label`
 
 @inject('howtoStore')
 @observer
-export class HowtoForm extends React.PureComponent<IProps, IState> {
+export class HowtoForm extends React.Component<IProps, IState> {
   uploadRefs: { [key: string]: UploadedFile | null } = {}
   constructor(props: any) {
     super(props)

@@ -123,20 +123,12 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               Cover Image *
             </Text>
             <Box height="100px" width="150px" m="10px" data-cy="cover-image">
-              {/* <Field
-                  canDelete
-                  hasText={false}
-                  name={`${step}.images[0]`}
-                  src={images[0]}
-                  component={ImageInputField}
-                /> */}
               <Field
                 canDelete
                 hasText={false}
                 id="cover_image-1"
                 data-cy="cover_image-1"
                 name="coverImages[0]"
-                validate={required}
                 src={
                   initialFormValues.coverImages
                     ? initialFormValues.coverImages[0]

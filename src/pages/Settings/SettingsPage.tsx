@@ -26,6 +26,7 @@ import { ILocation } from 'src/models/common.models'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { addProtocol } from 'src/utils/validators'
 import { Prompt } from 'react-router'
+import { IUploadedFileMeta } from 'src/stores/storage'
 
 export interface IFormValues extends Partial<IUserPP> {
   // form values are simply subset of user profile fields
@@ -106,15 +107,38 @@ export class UserSettings extends React.Component<IProps, IState> {
     return ret
   }
   public onCoverImgChange(v: IConvertedFileMeta, i: number) {
-    // TODO always use an array of coverImages (will do when allow multiple cover images)
-    const coverImagesArray = this.state.initialFormValues.coverImages
-      ? this.state.initialFormValues.coverImages
-      : []
-    // coverImagesArray.push(v)
+    // Use existing array of images if exist & not empty or use empty array
+    let coverImagesArray =
+      Array.isArray(this.state.initialFormValues.coverImages) &&
+      this.state.initialFormValues.coverImages.length
+        ? this.state.initialFormValues.coverImages
+        : []
+    // If value is null || undefined && coverImagesArray exist
+    // We want to remove the element from coverImagesArray at given index (delete image)
+    if (
+      (v === null || v === undefined) &&
+      (Array.isArray(coverImagesArray) && coverImagesArray.length)
+    ) {
+      coverImagesArray.splice(i, 1)
+    } else {
+      // If array already exist && there is already an image at this index
+      if (
+        Array.isArray(coverImagesArray) &&
+        coverImagesArray.length &&
+        Array.isArray(coverImagesArray[i])
+      ) {
+        // Then replace at given index
+        coverImagesArray = this.replaceAt(coverImagesArray, i, v)
+      } else {
+        // Or just push value at the end of array
+        coverImagesArray.push(v as any)
+      }
+    }
+
     this.setState({
       customFormValues: {
         ...this.state.customFormValues,
-        coverImages: this.replaceAt(coverImagesArray, i, v),
+        coverImages: coverImagesArray,
       },
     })
   }

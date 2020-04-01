@@ -107,12 +107,20 @@ export class UserSettings extends React.Component<IProps, IState> {
     return ret
   }
   public onCoverImgChange(v: IConvertedFileMeta, i: number) {
-    // Use existing array of images if exist & not empty or use empty array
+    const isInitialValueEmpty =
+      !Array.isArray(this.state.initialFormValues.coverImages) ||
+      this.state.initialFormValues.coverImages.length === 0
+    const isCustomValueEmpty =
+      !Array.isArray(this.state.customFormValues.coverImages) ||
+      this.state.customFormValues.coverImages.length === 0
+
+    // Use empty array if no cover image yet - otherwise use existing cover
     let coverImagesArray =
-      Array.isArray(this.state.initialFormValues.coverImages) &&
-      this.state.initialFormValues.coverImages.length
+      isInitialValueEmpty && isCustomValueEmpty
+        ? []
+        : isCustomValueEmpty
         ? this.state.initialFormValues.coverImages
-        : []
+        : this.state.customFormValues.coverImages
     // If value is null || undefined && coverImagesArray exist
     // We want to remove the element from coverImagesArray at given index (delete image)
     if (
@@ -131,7 +139,9 @@ export class UserSettings extends React.Component<IProps, IState> {
         coverImagesArray = this.replaceAt(coverImagesArray, i, v)
       } else {
         // Or just push value at the end of array
-        coverImagesArray.push(v as any)
+        if (coverImagesArray) {
+          coverImagesArray.push(v as any)
+        }
       }
     }
 

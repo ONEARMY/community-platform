@@ -358,8 +358,8 @@ describe('[Settings]', () => {
         country: 'United Kingdom',
         countryCode: 'gb',
         latlng: {
-          lat: 51.5073,
-          lng: -0.127647,
+          lat: 51.5156,
+          lng: -0.092,
         },
         name: 'City of London',
         postcode: 'EC1A',

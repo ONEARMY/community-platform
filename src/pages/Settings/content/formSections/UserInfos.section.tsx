@@ -21,7 +21,7 @@ import { required } from 'src/utils/validators'
 
 interface IProps {
   initialFormValues: IFormValues | any
-  onCoverImgChange: (v: IConvertedFileMeta) => void
+  onCoverImgChange: (v: IConvertedFileMeta, i: number) => void
   mutators: { [key: string]: (...args: any[]) => any }
 }
 interface IState {
@@ -31,6 +31,12 @@ interface IState {
   showComLinks?: boolean
   isOpen?: boolean
 }
+
+const ImageInputFieldWrapper = styled.div`
+  width: 150px;
+  height: 100px;
+  margin-right: 10px;
+`
 
 const FlagSelectContainer = styled(Flex)`
   border: 1px solid ${theme.colors.black};
@@ -116,10 +122,20 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             <Text mb={2} mt={7} width="100%" medium>
               Cover Image *
             </Text>
-            <Box height="100px" width="150px" data-cy="cover-image">
+            <Box height="100px" width="150px" m="10px" data-cy="cover-image">
+              {/* <Field
+                  canDelete
+                  hasText={false}
+                  name={`${step}.images[0]`}
+                  src={images[0]}
+                  component={ImageInputField}
+                /> */}
               <Field
-                id="cover_image"
-                name="coverImages"
+                canDelete
+                hasText={false}
+                id="cover_image-1"
+                data-cy="cover_image-1"
+                name="coverImages[0]"
                 validate={required}
                 src={
                   initialFormValues.coverImages
@@ -127,7 +143,55 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                     : null
                 }
                 component={ImageInputField}
-                customChange={v => this.props.onCoverImgChange(v)}
+                customChange={v => this.props.onCoverImgChange(v, 0)}
+              />
+            </Box>
+            <Box height="100px" width="150px" m="10px" data-cy="cover-image">
+              <Field
+                canDelete
+                hasText={false}
+                id="cover_image-2"
+                data-cy="cover_image-2"
+                name="coverImages[1]"
+                src={
+                  initialFormValues.coverImages
+                    ? initialFormValues.coverImages[1]
+                    : null
+                }
+                component={ImageInputField}
+                customChange={v => this.props.onCoverImgChange(v, 1)}
+              />
+            </Box>
+            <Box height="100px" width="150px" m="10px" data-cy="cover-image">
+              <Field
+                canDelete
+                hasText={false}
+                id="cover_image-3"
+                data-cy="cover_image-3"
+                name="coverImages[2]"
+                src={
+                  initialFormValues.coverImages
+                    ? initialFormValues.coverImages[2]
+                    : null
+                }
+                component={ImageInputField}
+                customChange={v => this.props.onCoverImgChange(v, 2)}
+              />
+            </Box>
+            <Box height="100px" width="150px" m="10px" data-cy="cover-image">
+              <Field
+                canDelete
+                hasText={false}
+                id="cover_image-4"
+                data-cy="cover_image-4"
+                name="coverImages[3]"
+                src={
+                  initialFormValues.coverImages
+                    ? initialFormValues.coverImages[3]
+                    : null
+                }
+                component={ImageInputField}
+                customChange={v => this.props.onCoverImgChange(v, 3)}
               />
             </Box>
           </Flex>

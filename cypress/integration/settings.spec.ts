@@ -50,7 +50,7 @@ describe('[Settings]', () => {
     cy.get('[data-cy=info-description')
       .clear()
       .type(info.description)
-    cy.get('[data-cy=cover-image]')
+    cy.get('[data-cy=cover_image-1]')
       .find(':file')
       .uploadFiles(info.coverImage)
   }

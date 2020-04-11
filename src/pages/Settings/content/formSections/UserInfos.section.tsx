@@ -205,6 +205,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                     }
                     link={name}
                     index={index}
+                    hideDelete={!index}
                     mutators={this.props.mutators}
                     onDelete={(fieldIndex: number) => {
                       fields.remove(fieldIndex)
@@ -222,7 +223,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                     })
                   }}
                 >
-                  add link
+                  Add link
                 </Button>
               </>
             )}

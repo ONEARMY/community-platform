@@ -61,6 +61,14 @@ export class UserSettings extends React.Component<IProps, IState> {
       user && user.profileType
         ? toJS(user)
         : { ...toJS(user), ...INITIAL_VALUES }
+    if (!initValues.links || (initValues.links && !initValues.links.length)) {
+      initValues.links = [
+        {
+          label: '',
+          url: '',
+        },
+      ]
+    }
     this.state = {
       initialFormValues: initValues,
       customFormValues: {},

@@ -14,6 +14,7 @@ interface IProps {
   index: number
   mutators?: { [key: string]: (...args: any[]) => any }
   initialType?: string
+  hideDelete?: boolean
   onDelete: (index: number) => void
 }
 interface IState {
@@ -80,7 +81,7 @@ class Link extends Component<IProps, IState> {
   }
 
   render() {
-    const { link, index } = this.props
+    const { link, index, hideDelete } = this.props
     const DeleteButton = props => (
       <Button
         data-cy={`delete-link-${index}`}
@@ -106,12 +107,16 @@ class Link extends Component<IProps, IState> {
             onCustomChange={v => {
               this.setState({ linkType: v })
             }}
-            placeholder="type"
+            placeholder="Type"
             style={{ width: '160px', height: '40px', marginRight: '8px' }}
           />
-          <DeleteButton
-            sx={{ display: ['block', 'block', 'none'], height: '40px' }}
-          />
+          {!hideDelete ? (
+            <DeleteButton
+              sx={{ display: ['block', 'block', 'none'], height: '40px' }}
+            />
+          ) : (
+            <></>
+          )}
         </Flex>
         <Field
           data-cy={`input-link-${index}`}

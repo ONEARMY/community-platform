@@ -126,8 +126,8 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               <Field
                 canDelete
                 hasText={false}
-                id="cover_image-1"
-                data-cy="cover_image-1"
+                id="coverImages[0]"
+                data-cy="coverImages[0]"
                 name="coverImages[0]"
                 src={
                   initialFormValues.coverImages
@@ -142,8 +142,8 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               <Field
                 canDelete
                 hasText={false}
-                id="cover_image-2"
-                data-cy="cover_image-2"
+                id="coverImages[1]"
+                data-cy="coverImages[1]"
                 name="coverImages[1]"
                 src={
                   initialFormValues.coverImages
@@ -158,8 +158,8 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               <Field
                 canDelete
                 hasText={false}
-                id="cover_image-3"
-                data-cy="cover_image-3"
+                id="coverImages[2]"
+                data-cy="coverImages[2]"
                 name="coverImages[2]"
                 src={
                   initialFormValues.coverImages
@@ -174,8 +174,8 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               <Field
                 canDelete
                 hasText={false}
-                id="cover_image-4"
-                data-cy="cover_image-4"
+                id="coverImages[3]"
+                data-cy="coverImages[3]"
                 name="coverImages[3]"
                 src={
                   initialFormValues.coverImages

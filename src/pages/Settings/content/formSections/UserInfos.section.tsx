@@ -127,7 +127,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                 canDelete
                 hasText={false}
                 id="coverImages[0]"
-                data-cy="coverImages[0]"
+                data-cy="coverImages0"
                 name="coverImages[0]"
                 src={
                   initialFormValues.coverImages

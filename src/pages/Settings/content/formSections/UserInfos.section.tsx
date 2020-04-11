@@ -186,6 +186,22 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                 customChange={v => this.props.onCoverImgChange(v, 3)}
               />
             </Box>
+            <Box
+              bg={theme.colors.softblue}
+              mt={2}
+              p={2}
+              width={1}
+              sx={{ borderRadius: '3px' }}
+            >
+              <Text small>
+                The cover images are shown in your profile and helps us evaluate
+                your account.
+              </Text>
+              <Text small>
+                Make sure the first image shows your space. Best size is
+                1920x1080.
+              </Text>
+            </Box>
           </Flex>
           <Flex wrap={'nowrap'} alignItems={'center'} width={1}>
             <Text mb={2} mt={7} medium>

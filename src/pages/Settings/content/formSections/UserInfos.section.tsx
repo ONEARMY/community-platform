@@ -116,7 +116,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               data-cy="info-description"
               name="about"
               component={TextAreaField}
-              placeholder="Describe in details what you do and who you are."
+              placeholder="Describe in details what you do and who you are. Write in English otherwise your profile won't be approved."
               validate={required}
             />
             <Text mb={2} mt={7} width="100%" medium>

@@ -126,8 +126,8 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               <Field
                 canDelete
                 hasText={false}
-                id="cover_image-1"
-                data-cy="cover_image-1"
+                id="coverImages[0]"
+                data-cy="coverImages0"
                 name="coverImages[0]"
                 src={
                   initialFormValues.coverImages
@@ -142,8 +142,8 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               <Field
                 canDelete
                 hasText={false}
-                id="cover_image-2"
-                data-cy="cover_image-2"
+                id="coverImages[1]"
+                data-cy="coverImages[1]"
                 name="coverImages[1]"
                 src={
                   initialFormValues.coverImages
@@ -158,8 +158,8 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               <Field
                 canDelete
                 hasText={false}
-                id="cover_image-3"
-                data-cy="cover_image-3"
+                id="coverImages[2]"
+                data-cy="coverImages[2]"
                 name="coverImages[2]"
                 src={
                   initialFormValues.coverImages
@@ -174,8 +174,8 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               <Field
                 canDelete
                 hasText={false}
-                id="cover_image-4"
-                data-cy="cover_image-4"
+                id="coverImages[3]"
+                data-cy="coverImages[3]"
                 name="coverImages[3]"
                 src={
                   initialFormValues.coverImages
@@ -185,6 +185,22 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                 component={ImageInputField}
                 customChange={v => this.props.onCoverImgChange(v, 3)}
               />
+            </Box>
+            <Box
+              bg={theme.colors.softblue}
+              mt={2}
+              p={2}
+              width={1}
+              sx={{ borderRadius: '3px' }}
+            >
+              <Text small>
+                The cover images are shown in your profile and helps us evaluate
+                your account.
+              </Text>
+              <Text small>
+                Make sure the first image shows your space. Best size is
+                1920x1080.
+              </Text>
             </Box>
           </Flex>
           <Flex wrap={'nowrap'} alignItems={'center'} width={1}>

@@ -1,5 +1,6 @@
-import { DbCollectionName, Page } from '../utils/test-utils'
+import { DbCollectionName } from '../utils/test-utils'
 import { UserMenuItem } from '../support/commands'
+import { IUserPP } from 'src/models/user_pp.models'
 
 interface Info {
   username: string
@@ -8,17 +9,12 @@ interface Info {
   coverImage: string
 }
 
-interface ILink {
-  index: number
-  type: 'email' | 'website' | 'discord' | 'bazar' | 'forum' | 'social media'
-  url: string
-}
-
 interface IMapPin {
   description: string
   searchKeyword: string
   locationName: string
 }
+type ILink = IUserPP['links'][0] & { index: number }
 
 describe('[Settings]', () => {
   beforeEach(() => {

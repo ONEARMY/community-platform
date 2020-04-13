@@ -7,6 +7,7 @@ const MESSAGES = {
   'auth/argument-error': 'Please provide a valid email',
   'Reset email sent': 'Reset email sent, check your inbox/spam',
   'auth/invalid-email': `That email address doesn't quite look right`,
+  'profile saved': 'Profile Saved',
 }
 
 /**

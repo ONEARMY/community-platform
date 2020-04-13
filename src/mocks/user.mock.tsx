@@ -11,4 +11,6 @@ export const MOCK_USER: IUser = {
   DHSite_id: 70134,
   DHSite_mention_name: 'chris-m-clarke',
   country: '',
+  coverImages: [],
+  links: [],
 }

@@ -123,22 +123,17 @@ export const isAllowToPin = (pin: IMapPin, user?: IUser) => {
 /************************************************************************
  *             Country code to country name converters
  ***********************************************************************/
-export const getCountryCode = (countryName: string | undefined) => {
+export const getCountryCode = (countryName: string) => {
   let countryCode = Object.keys(countries).find(
     key => countries[key] === countryName,
   )
-  if (countryCode !== undefined) {
-    countryCode = countryCode.toLowerCase()
-  }
-  return countryCode
+  return countryCode ? countryCode.toLowerCase() : undefined
 }
 
-export const getCountryName = (countryCode: string | undefined) => {
-  if (countries.hasOwnProperty(countryCode)) {
-    return countries[countryCode]
-  } else {
-    return countryCode
-  }
+export const getCountryName = (countryCode: string) => {
+  return countries.hasOwnProperty(countryCode)
+    ? countries[countryCode]
+    : countryCode
 }
 
 // ensure docs passed to edit check contain _createdBy field

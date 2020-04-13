@@ -11,11 +11,10 @@ import { ProfileTypeLabel, IUserPP } from 'src/models/user_pp.models'
 import { PROFILE_TYPES } from 'src/mocks/user_pp.mock'
 import { CustomRadioField } from './Fields/CustomRadio.field'
 import theme from 'src/themes/styled.theme'
-import { IFormValues } from '../../SettingsPage'
 
 interface IProps {
   onInputChange: (inputValue: ProfileTypeLabel) => void
-  initialFormValues: IFormValues
+  formValues: IUserPP
   showSubmitErrors: boolean
   isSelected: boolean
 }
@@ -28,8 +27,8 @@ export class FocusSection extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
-      checkedFocusValue: this.props.initialFormValues.profileType
-        ? this.props.initialFormValues.profileType
+      checkedFocusValue: this.props.formValues.profileType
+        ? this.props.formValues.profileType
         : undefined,
       isOpen: true,
     }

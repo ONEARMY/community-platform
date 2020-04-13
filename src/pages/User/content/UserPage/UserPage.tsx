@@ -3,7 +3,6 @@ import { RouteComponentProps } from 'react-router'
 import { inject, observer } from 'mobx-react'
 import {
   IUserPP,
-  ILink,
   IMAchineBuilderXp,
   IOpeningHours,
   PlasticTypeLabel,
@@ -48,11 +47,11 @@ import BazarIcon from 'src/assets/icons/icon-bazar.svg'
 import SocialIcon from 'src/assets/icons/icon-social-media.svg'
 import IconForum from 'src/assets/icons/icon-forum.svg'
 import IconWebsite from 'src/assets/icons/icon-website.svg'
-import PPLogo from 'src/assets/images/precious-plastic-logo-official.svg'
 
 import { IUploadedFileMeta } from 'src/stores/storage'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { Loader } from 'src/components/Loader'
+import { IUser } from 'src/models/user.models'
 
 interface IRouterCustomParams {
   id: string
@@ -238,8 +237,8 @@ export class UserPage extends React.Component<
     })
   }
 
-  public renderLinks(links: ILink[]) {
-    return links.map((link: ILink, index) => {
+  public renderLinks(links: IUser['links']) {
+    return links.map((link, index) => {
       switch (link.label) {
         case 'forum':
           return (

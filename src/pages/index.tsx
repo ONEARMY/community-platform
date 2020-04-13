@@ -5,7 +5,6 @@ import GoogleAnalytics from 'src/components/GoogleAnalytics'
 import { NotFoundPage } from './NotFound/NotFound'
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import Header from './common/Header/Header'
-import DevHelpers from 'src/components/DevHelpers/DevHelpers'
 import Main from 'src/pages/common/Layout/Main'
 import { Button } from 'src/components/Button'
 import {

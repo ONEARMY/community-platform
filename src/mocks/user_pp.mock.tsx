@@ -70,17 +70,20 @@ export const MOCK_USER_WORKSPACE: IUserPP = {
   ],
   links: [
     {
-      label: 'instagram',
+      type: 'instagram',
       url: 'https://www.instagram.com/realpreciousplastic/',
     },
     {
-      label: 'facebook',
+      type: 'facebook',
       url: 'https://www.facebook.com/preciousplastic/',
     },
   ],
   mapPinDescription: 'This is a description to display on the map user card',
   isExpert: true,
   isV4Member: false,
+  openingHours: [],
+  collectedPlasticTypes: [],
+  machineBuilderXp: [],
 }
 export const MOCK_USER_COLLECTION: IUserPP = {
   verified: true,
@@ -120,17 +123,20 @@ export const MOCK_USER_COLLECTION: IUserPP = {
   ],
   links: [
     {
-      label: 'instagram',
+      type: 'instagram',
       url: 'https://www.instagram.com/realpreciousplastic/',
     },
     {
-      label: 'facebook',
+      type: 'facebook',
       url: 'https://www.facebook.com/preciousplastic/',
     },
   ],
   mapPinDescription: 'Collecting plastic',
   isExpert: false,
   isV4Member: true,
+  openingHours: [],
+  collectedPlasticTypes: [],
+  machineBuilderXp: [],
 }
 export const MOCK_USER_MEMBER: IUserPP = {
   verified: true,
@@ -170,16 +176,19 @@ export const MOCK_USER_MEMBER: IUserPP = {
   ],
   links: [
     {
-      label: 'instagram',
+      type: 'instagram',
       url: 'https://www.instagram.com/realpreciousplastic/',
     },
     {
-      label: 'facebook',
+      type: 'facebook',
       url: 'https://www.facebook.com/preciousplastic/',
     },
   ],
   isExpert: false,
   isV4Member: false,
+  openingHours: [],
+  collectedPlasticTypes: [],
+  machineBuilderXp: [],
 }
 export const MOCK_USER_COMMUNITY: IUserPP = {
   verified: true,
@@ -219,21 +228,21 @@ export const MOCK_USER_COMMUNITY: IUserPP = {
   ],
   links: [
     {
-      label: 'instagram',
+      type: 'instagram',
       url: 'https://www.instagram.com/realpreciousplastic/',
     },
     {
-      label: 'facebook',
+      type: 'facebook',
       url: 'https://www.facebook.com/preciousplastic/',
     },
   ],
+  workspaceType: 'mix',
+  mapPinDescription: null,
   isExpert: false,
   isV4Member: true,
-  // location: {
-  //   address: 'Eindhoven, Noord-Brabant, The Netherlands',
-  //   lat: 51.4393,
-  //   lng: 5.47863,
-  // },
+  openingHours: [],
+  collectedPlasticTypes: [],
+  machineBuilderXp: [],
 }
 export const MOCK_USER_MACHINE: IUserPP = {
   verified: true,
@@ -273,21 +282,21 @@ export const MOCK_USER_MACHINE: IUserPP = {
   ],
   links: [
     {
-      label: 'instagram',
+      type: 'instagram',
       url: 'https://www.instagram.com/realpreciousplastic/',
     },
     {
-      label: 'facebook',
+      type: 'facebook',
       url: 'https://www.facebook.com/preciousplastic/',
     },
   ],
+  workspaceType: 'mix',
+  mapPinDescription: null,
   isExpert: true,
   isV4Member: false,
-  // location: {
-  //   address: 'Dallas, Texas, USA',
-  //   lat: 51.4393,
-  //   lng: 5.47863,
-  // },
+  openingHours: [],
+  collectedPlasticTypes: [],
+  machineBuilderXp: [],
 }
 
 export const PLASTIC_TYPES: IPlasticType[] = [

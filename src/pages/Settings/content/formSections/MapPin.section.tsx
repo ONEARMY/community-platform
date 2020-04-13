@@ -15,11 +15,10 @@ import { Button } from 'src/components/Button'
 import { ILocation } from 'src/models/common.models'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import theme from 'src/themes/styled.theme'
-import { IFormValues } from '../../SettingsPage'
 import { required } from 'src/utils/validators'
 
 interface IProps {
-  initialFormValues: IFormValues
+  formValues: IUserPP
   onInputChange: (v: ILocation) => void
   showSubmitErrors: boolean
 }
@@ -43,24 +42,18 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
   pinFilters = MAP_GROUPINGS
   constructor(props: IProps) {
     super(props)
+    const { formValues } = this.props
     this.state = {
       editAddress: false,
-      lat:
-        props.initialFormValues && props.initialFormValues.location
-          ? props.initialFormValues.location.latlng.lat
-          : 0,
-      lng:
-        props.initialFormValues && props.initialFormValues.location
-          ? props.initialFormValues.location.latlng.lng
-          : 0,
-      zoom:
-        props.initialFormValues && props.initialFormValues.location ? 15 : 1.5,
+      lat: formValues.location ? formValues.location.latlng.lat : 0,
+      lng: formValues.location ? formValues.location.latlng.lng : 0,
+      zoom: formValues.location ? 15 : 1.5,
       isOpen: true,
     }
   }
 
   render() {
-    const { initialFormValues, showSubmitErrors } = this.props
+    const { formValues, showSubmitErrors } = this.props
     const { lat, lng, zoom, editAddress, isOpen } = this.state
 
     return (
@@ -90,7 +83,7 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
             placeholder="Short description of your pin (max 70 characters)"
             validate={required}
           />
-          {!initialFormValues.location || editAddress ? (
+          {!formValues.location || editAddress ? (
             <Box>
               <Text mb={2} mt={4} medium>
                 Your workspace address *
@@ -140,7 +133,7 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
                 Your workspace address is :
               </Text>
               <Text mb={2} my={4} medium>
-                {initialFormValues.location.value}
+                {formValues.location.value}
               </Text>
               <Button
                 variant="secondary"

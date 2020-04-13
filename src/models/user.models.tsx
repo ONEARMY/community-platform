@@ -4,6 +4,8 @@ import {
   DBDoc,
   IModerationStatus,
 } from './common.models'
+import { IUploadedFileMeta } from 'src/stores/storage'
+import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 
 export interface IUserState {
   user?: IUser
@@ -24,6 +26,8 @@ export interface IUser {
   // note, user avatar url is taken direct from userName so no longer populated here
   // avatar:string
   verified: boolean
+  coverImages: IUploadedFileMeta[] | IConvertedFileMeta[]
+  links: IExternalLink[]
   userRoles?: UserRole[]
   about?: string | null
   DHSite_id?: number
@@ -32,6 +36,21 @@ export interface IUser {
   location?: ILocation | null
   year?: ISODateString
 }
+
+interface IExternalLink {
+  label?: string
+  url: string
+  type:
+    | 'email'
+    | 'website'
+    | 'discord'
+    | 'bazar'
+    | 'forum'
+    | 'social media'
+    | 'facebook'
+    | 'instagram'
+}
+
 export type IUserDB = IUser & DBDoc
 
 export type UserRole = 'super-admin' | 'subscriber' | 'admin'

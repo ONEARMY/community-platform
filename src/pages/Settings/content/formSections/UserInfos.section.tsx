@@ -16,11 +16,11 @@ import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { Box } from 'rebass'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
-import { IFormValues } from '../../SettingsPage'
 import { required } from 'src/utils/validators'
+import { IUserPP } from 'src/models/user_pp.models'
 
 interface IProps {
-  initialFormValues: IFormValues | any
+  formValues: IUserPP
   onCoverImgChange: (v: IConvertedFileMeta, i: number) => void
   mutators: { [key: string]: (...args: any[]) => any }
 }
@@ -31,12 +31,6 @@ interface IState {
   showComLinks?: boolean
   isOpen?: boolean
 }
-
-const ImageInputFieldWrapper = styled.div`
-  width: 150px;
-  height: 100px;
-  margin-right: 10px;
-`
 
 const FlagSelectContainer = styled(Flex)`
   border: 1px solid ${theme.colors.black};
@@ -51,8 +45,6 @@ export class UserInfosSection extends React.Component<IProps, IState> {
 
     this.state = {
       readOnly: true,
-      showComLinks:
-        props.initialFormValues && props.initialFormValues.links ? true : false,
       isOpen: true,
     }
     this.changeComLinkSwitch = this.changeComLinkSwitch.bind(this)
@@ -63,7 +55,8 @@ export class UserInfosSection extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { initialFormValues } = this.props
+    const { formValues } = this.props
+    let { profileType, country, links, coverImages } = formValues
     const { isOpen } = this.state
 
     return (
@@ -89,12 +82,12 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               placeholder="Pick a unique username"
               validate={required}
             />
-            {initialFormValues.profileType === 'member' && (
+            {profileType === 'member' && (
               <Text mb={2} mt={7} medium>
                 Where are you based? *
               </Text>
             )}
-            {initialFormValues.profileType === 'member' && (
+            {profileType === 'member' && country && (
               <FlagSelectContainer
                 width={1}
                 alignItems="center"
@@ -105,7 +98,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                   component={FlagSelector}
                   searchable={true}
                   validate={required}
-                  defaultCountry={getCountryCode(initialFormValues.country)}
+                  defaultCountry={getCountryCode(country)}
                 />
               </FlagSelectContainer>
             )}
@@ -122,70 +115,26 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             <Text mb={2} mt={7} width="100%" medium>
               Cover Image *
             </Text>
-            <Box height="100px" width="150px" m="10px" data-cy="cover-image">
-              <Field
-                canDelete
-                hasText={false}
-                id="coverImages[0]"
-                data-cy="coverImages0"
-                name="coverImages[0]"
-                src={
-                  initialFormValues.coverImages
-                    ? initialFormValues.coverImages[0]
-                    : null
-                }
-                component={ImageInputField}
-                customChange={v => this.props.onCoverImgChange(v, 0)}
-              />
-            </Box>
-            <Box height="100px" width="150px" m="10px" data-cy="cover-image">
-              <Field
-                canDelete
-                hasText={false}
-                id="coverImages[1]"
-                data-cy="coverImages[1]"
-                name="coverImages[1]"
-                src={
-                  initialFormValues.coverImages
-                    ? initialFormValues.coverImages[1]
-                    : null
-                }
-                component={ImageInputField}
-                customChange={v => this.props.onCoverImgChange(v, 1)}
-              />
-            </Box>
-            <Box height="100px" width="150px" m="10px" data-cy="cover-image">
-              <Field
-                canDelete
-                hasText={false}
-                id="coverImages[2]"
-                data-cy="coverImages[2]"
-                name="coverImages[2]"
-                src={
-                  initialFormValues.coverImages
-                    ? initialFormValues.coverImages[2]
-                    : null
-                }
-                component={ImageInputField}
-                customChange={v => this.props.onCoverImgChange(v, 2)}
-              />
-            </Box>
-            <Box height="100px" width="150px" m="10px" data-cy="cover-image">
-              <Field
-                canDelete
-                hasText={false}
-                id="coverImages[3]"
-                data-cy="coverImages[3]"
-                name="coverImages[3]"
-                src={
-                  initialFormValues.coverImages
-                    ? initialFormValues.coverImages[3]
-                    : null
-                }
-                component={ImageInputField}
-                customChange={v => this.props.onCoverImgChange(v, 3)}
-              />
-            </Box>
+            {[0, 1, 2, 3].map(i => (
+              <Box
+                key={coverImages[i] ? coverImages[i].name : i}
+                height="100px"
+                width="150px"
+                m="10px"
+                data-cy="cover-image"
+              >
+                <Field
+                  canDelete
+                  hasText={false}
+                  id={`coverImages[${i}]`}
+                  data-cy={`coverImages[${i}]`}
+                  name={`coverImages[${i}]`}
+                  src={coverImages ? coverImages[i] : null}
+                  component={ImageInputField}
+                  customChange={v => this.props.onCoverImgChange(v, i)}
+                />
+              </Box>
+            ))}
             <Box
               bg={theme.colors.softblue}
               mt={2}
@@ -208,41 +157,41 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               Contacts & links *
             </Text>
           </Flex>
-          <FieldArray name="links">
-            {({ fields }) => (
-              <>
-                {fields.map((name, index: number) => (
-                  <Link
-                    key={index}
-                    initialType={
-                      initialFormValues.links[index]
-                        ? initialFormValues.links[index].label
-                        : undefined
-                    }
-                    link={name}
-                    index={index}
-                    mutators={this.props.mutators}
-                    onDelete={(fieldIndex: number) => {
-                      fields.remove(fieldIndex)
+          {links && (
+            <FieldArray name="links">
+              {({ fields }) => (
+                <>
+                  {fields.map((name, index: number) => (
+                    <Link
+                      key={index}
+                      initialType={
+                        links![index] ? links![index].label : undefined
+                      }
+                      link={name}
+                      index={index}
+                      mutators={this.props.mutators}
+                      onDelete={(fieldIndex: number) => {
+                        fields.remove(fieldIndex)
+                      }}
+                    />
+                  ))}
+                  <Button
+                    data-cy="add-link"
+                    my={2}
+                    variant="outline"
+                    onClick={() => {
+                      fields.push({
+                        label: '',
+                        url: '',
+                      })
                     }}
-                  />
-                ))}
-                <Button
-                  data-cy="add-link"
-                  my={2}
-                  variant="outline"
-                  onClick={() => {
-                    fields.push({
-                      label: '',
-                      url: '',
-                    })
-                  }}
-                >
-                  add link
-                </Button>
-              </>
-            )}
-          </FieldArray>
+                  >
+                    add link
+                  </Button>
+                </>
+              )}
+            </FieldArray>
+          )}
         </Box>
       </FlexSectionContainer>
     )

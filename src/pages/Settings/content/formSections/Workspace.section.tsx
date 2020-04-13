@@ -9,11 +9,10 @@ import { WORKSPACE_TYPES } from 'src/mocks/user_pp.mock'
 import { CustomRadioField } from './Fields/CustomRadio.field'
 import { WorkspaceType, IUserPP } from 'src/models/user_pp.models'
 import theme from 'src/themes/styled.theme'
-import { IFormValues } from '../../SettingsPage'
 
 interface IProps {
   onInputChange: (inputValue: WorkspaceType) => void
-  initialFormValues: IFormValues
+  formValues: IUserPP
   showSubmitErrors: boolean
   isSelected: boolean
 }
@@ -26,8 +25,8 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
-      checkedFocusValue: this.props.initialFormValues.workspaceType
-        ? this.props.initialFormValues.workspaceType
+      checkedFocusValue: this.props.formValues.workspaceType
+        ? this.props.formValues.workspaceType
         : undefined,
       isOpen: true,
     }
@@ -39,7 +38,6 @@ export class WorkspaceSection extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { initialFormValues } = this.props
     const { isOpen } = this.state
     const { showSubmitErrors, isSelected } = this.props
     return (

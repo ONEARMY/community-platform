@@ -92,7 +92,7 @@ export class UserStore extends ModuleStore {
       const userMeta = await this.getUserProfile(user.uid)
       if (userMeta) {
         this.updateUser(userMeta)
-        console.log('user', this.user)
+        console.log('userMeta', userMeta)
       } else {
         throw new Error(`could not find user profile [${user.uid}]`)
       }

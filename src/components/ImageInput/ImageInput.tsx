@@ -51,17 +51,24 @@ const UploadImageOverlay = styled(AlignCenterWrapper)`
 `
 
 /*
-    This component takes multiple imageusing filepicker and resized clientside
+    This component takes multiple image using filepicker and resized clientside
     Note, typings not available for client-compress so find full options here:
     https://github.com/davejm/client-compress
 */
 
 interface IProps {
-  onFilesChange: (fileMeta: IConvertedFileMeta[] | null) => void
-  src?: IUploadedFileMeta
+  // if multiple sends array, otherwise single object (or null on delete)
+  onFilesChange: (
+    fileMeta: IConvertedFileMeta[] | IConvertedFileMeta | null,
+  ) => void
+  imageSrc?: string
   hasText?: boolean
   replaceImage?: boolean
   canDelete?: boolean
+  multiple?: boolean
+}
+const defaultProps: IProps = {
+  onFilesChange: () => null,
 }
 
 export interface IConvertedFileMeta {
@@ -76,13 +83,14 @@ export interface IConvertedFileMeta {
 
 interface IState {
   convertedFiles: IConvertedFileMeta[]
-  imgDelivered?: boolean
   inputFiles: File[]
   lightboxImg?: IConvertedFileMeta
   openLightbox?: boolean
 }
 
 export class ImageInput extends React.PureComponent<IProps, IState> {
+  static defaultProps = defaultProps
+
   private fileInputRef = React.createRef<HTMLInputElement>()
 
   constructor(props: IProps) {
@@ -103,51 +111,47 @@ export class ImageInput extends React.PureComponent<IProps, IState> {
     return files ? Array.from(files) : []
   }
 
-  public handleConvertedFileChange(file: IConvertedFileMeta) {
-    let updatedCovertedFiles: Array<any> | any = []
-    updatedCovertedFiles = file
+  public handleConvertedFileChange(file: IConvertedFileMeta, index: number) {
+    const { convertedFiles } = this.state
+    convertedFiles[index] = file
     this.setState({
-      convertedFiles: updatedCovertedFiles,
-      imgDelivered: true,
+      convertedFiles,
     })
-
-    if (this.props.onFilesChange) {
-      this.props.onFilesChange(updatedCovertedFiles)
-    }
+    const value = this.props.multiple ? convertedFiles : convertedFiles[0]
+    this.props.onFilesChange(value)
   }
 
-  public toggleImageOverlay = () => {
-    const imgPreviewMode = this.state.inputFiles.length > 0 || this.props.src
-    if (!imgPreviewMode) {
-      return
-    }
+  public handleImageDelete(event: Event) {
+    event.stopPropagation()
+    this.setState({
+      inputFiles: [],
+      convertedFiles: [],
+    })
+    this.props.onFilesChange(null)
   }
 
   render() {
     const { inputFiles } = this.state
+    const { imageSrc, multiple } = this.props
     // if at least one image present, hide the 'choose image' button and replace with smaller button
-    const imgPreviewMode = inputFiles.length > 0 || this.props.src
-    const useImageSrc = this.props.src && this.state.inputFiles.length === 0
+    const imgPreviewMode = inputFiles.length > 0 || imageSrc
+    const useImageSrc = imageSrc && this.state.inputFiles.length === 0
 
     return (
       <Box p={0} height="100%">
         <Dropzone
           accept="image/*"
-          multiple={false}
+          multiple={multiple}
           onDrop={this.handleFileUpload}
         >
           {({ getRootProps, getInputProps }) => (
             <ImageInputWrapper
               hasUploadedImg={!!imgPreviewMode}
-              onMouseEnter={this.toggleImageOverlay}
-              onMouseLeave={this.toggleImageOverlay}
               {...getRootProps()}
             >
               <input {...getInputProps()} />
 
-              {useImageSrc && this.props.src && (
-                <Image src={this.props.src.downloadUrl} />
-              )}
+              {imageSrc && <Image src={imageSrc} />}
 
               {!useImageSrc &&
                 inputFiles.map((file, index) => {
@@ -156,7 +160,7 @@ export class ImageInput extends React.PureComponent<IProps, IState> {
                       key={file.name}
                       file={file}
                       onImgConverted={meta =>
-                        this.handleConvertedFileChange(meta)
+                        this.handleConvertedFileChange(meta, index)
                       }
                     />
                   )
@@ -175,16 +179,7 @@ export class ImageInput extends React.PureComponent<IProps, IState> {
                     small
                     variant="outline"
                     icon="delete"
-                    onClick={event => {
-                      event.stopPropagation()
-                      if (imgPreviewMode) {
-                        this.props.onFilesChange(null)
-                      }
-                      this.setState({
-                        inputFiles: [],
-                        convertedFiles: [],
-                      })
-                    }}
+                    onClick={event => this.handleImageDelete(event)}
                   >
                     Delete
                   </Button>

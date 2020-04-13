@@ -12,8 +12,6 @@ import { AccountSettingsSection } from './content/formSections/AccountSettings.s
 import { Button } from 'src/components/Button'
 import { ProfileGuidelines } from './content/PostingGuidelines'
 import Heading from 'src/components/Heading'
-import Text from 'src/components/Text'
-import { Modal } from 'src/components/Modal/Modal'
 import { TextNotification } from 'src/components/Notification/TextNotification'
 import { Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
@@ -22,10 +20,8 @@ import theme from 'src/themes/styled.theme'
 import INITIAL_VALUES from './Template'
 import { Box } from 'rebass'
 import { ILocation } from 'src/models/common.models'
-import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { addProtocol } from 'src/utils/validators'
 import { Prompt } from 'react-router'
-import { IUser } from 'src/models/user.models'
 
 interface IProps {}
 
@@ -62,16 +58,20 @@ export class UserSettings extends React.Component<IProps, IState> {
     return this.props as IInjectedProps
   }
 
-  public async saveProfile(values: any) {
-    const formValuesConcat = { ...this.state.formValues, ...values }
+  public async saveProfile(values: IUserPP) {
+    // remove empty images
+    values.coverImages = (values.coverImages as any[]).filter(cover =>
+      cover ? true : false,
+    )
     // Remove undefined values from obj before sending to firebase
-    Object.keys(formValuesConcat).forEach(key => {
-      if (formValuesConcat[key] === undefined) {
-        delete formValuesConcat[key]
+    Object.keys(values).forEach(key => {
+      if (values[key] === undefined) {
+        delete values[key]
       }
     })
-    await this.injected.userStore.updateUserProfile(formValuesConcat)
-    this.setState({ showNotification: true })
+    console.log('values', values)
+    await this.injected.userStore.updateUserProfile(values)
+    this.setState({ showNotification: true, formValues: values })
   }
 
   public showSaveNotification() {
@@ -86,31 +86,7 @@ export class UserSettings extends React.Component<IProps, IState> {
       isLocationSelected: true,
     })
   }
-  public replaceAt(array: any[], index, value) {
-    const ret = array.slice(0)
-    ret[index] = value
-    return ret
-  }
-  public onCoverImgChange(v: IConvertedFileMeta, i: number) {
-    console.log('cover image change', v, i)
-    const { coverImages } = this.state.formValues
-    // Use empty array if no cover image yet - otherwise use existing cover
-    let coverImagesArray: any[] = coverImages ? coverImages : []
-    // Delete image if v null/undefined, otherwise add/overwrite image
-    if (!v) {
-      // coverImagesArray = coverImagesArray.filter((_, j) => j !== i)
-      coverImagesArray = coverImagesArray.slice(i, 1)
-    } else {
-      coverImagesArray[i] = v
-    }
-    console.log('coverImagesArray', coverImagesArray)
-    this.setState({
-      formValues: {
-        ...this.state.formValues,
-        coverImages: coverImagesArray,
-      },
-    })
-  }
+
   public onFocusChange(v: IUserPP['profileType']) {
     this.setState({
       formValues: {
@@ -140,7 +116,6 @@ export class UserSettings extends React.Component<IProps, IState> {
   render() {
     const user = this.injected.userStore.user
     const { formValues, isLocationSelected } = this.state
-    console.log('render', formValues.profileType)
     return (
       user && (
         <Form
@@ -242,9 +217,6 @@ export class UserSettings extends React.Component<IProps, IState> {
                           />
                         )}
                         <UserInfosSection
-                          onCoverImgChange={(v, i) =>
-                            this.onCoverImgChange(v, i)
-                          }
                           formValues={formValues}
                           mutators={mutators}
                         />

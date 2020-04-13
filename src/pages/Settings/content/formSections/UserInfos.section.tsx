@@ -12,24 +12,23 @@ import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
 import { FieldArray } from 'react-final-form-arrays'
 import { Link } from './Fields/Link.field'
-import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { Box } from 'rebass'
-import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { required } from 'src/utils/validators'
 import { IUserPP } from 'src/models/user_pp.models'
+import { IUploadedFileMeta } from 'src/stores/storage'
+import { ImageInputField } from 'src/components/Form/ImageInput.field'
 
 interface IProps {
   formValues: IUserPP
-  onCoverImgChange: (v: IConvertedFileMeta, i: number) => void
   mutators: { [key: string]: (...args: any[]) => any }
 }
 interface IState {
   readOnly: boolean
   isSaving?: boolean
   showNotification?: boolean
-  showComLinks?: boolean
   isOpen?: boolean
+  coverImages: IUserPP['coverImages']
 }
 
 const FlagSelectContainer = styled(Flex)`
@@ -42,21 +41,21 @@ const FlagSelectContainer = styled(Flex)`
 export class UserInfosSection extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
-
+    const { coverImages } = this.props.formValues
     this.state = {
       readOnly: true,
       isOpen: true,
+      // Ensure 4 placeholders for image upload
+      coverImages: new Array(4)
+        .fill(null)
+        .map((_, i) => (coverImages[i] ? coverImages[i] : null)) as any[],
     }
-    this.changeComLinkSwitch = this.changeComLinkSwitch.bind(this)
-  }
-
-  public changeComLinkSwitch() {
-    this.setState({ showComLinks: !this.state.showComLinks })
   }
 
   render() {
     const { formValues } = this.props
-    let { profileType, country, links, coverImages } = formValues
+    let { profileType, country, links } = formValues
+    const { coverImages } = this.state
     const { isOpen } = this.state
 
     return (
@@ -115,26 +114,35 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             <Text mb={2} mt={7} width="100%" medium>
               Cover Image *
             </Text>
-            {[0, 1, 2, 3].map(i => (
-              <Box
-                key={coverImages[i] ? coverImages[i].name : i}
-                height="100px"
-                width="150px"
-                m="10px"
-                data-cy="cover-image"
-              >
-                <Field
-                  canDelete
-                  hasText={false}
-                  id={`coverImages[${i}]`}
-                  data-cy={`coverImages[${i}]`}
-                  name={`coverImages[${i}]`}
-                  src={coverImages ? coverImages[i] : null}
-                  component={ImageInputField}
-                  customChange={v => this.props.onCoverImgChange(v, i)}
-                />
-              </Box>
-            ))}
+            <FieldArray name="coverImages" initialValue={coverImages}>
+              {({ fields }) => (
+                <>
+                  {fields.map((name, i: number) => (
+                    <Box
+                      key={name}
+                      height="100px"
+                      width="150px"
+                      m="10px"
+                      data-cy="cover-image"
+                    >
+                      <Field
+                        canDelete
+                        hasText={false}
+                        name={`coverImages[${i}]`}
+                        data-cy={`coverImages[${i}]`}
+                        imageSrc={
+                          coverImages[i]
+                            ? (coverImages[i] as IUploadedFileMeta).downloadUrl
+                            : undefined
+                        }
+                        component={ImageInputField}
+                      />
+                    </Box>
+                  ))}
+                </>
+              )}
+            </FieldArray>
+
             <Box
               bg={theme.colors.softblue}
               mt={2}

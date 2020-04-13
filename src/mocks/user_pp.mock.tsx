@@ -70,11 +70,11 @@ export const MOCK_USER_WORKSPACE: IUserPP = {
   ],
   links: [
     {
-      type: 'instagram',
+      label: 'instagram',
       url: 'https://www.instagram.com/realpreciousplastic/',
     },
     {
-      type: 'facebook',
+      label: 'facebook',
       url: 'https://www.facebook.com/preciousplastic/',
     },
   ],
@@ -123,11 +123,11 @@ export const MOCK_USER_COLLECTION: IUserPP = {
   ],
   links: [
     {
-      type: 'instagram',
+      label: 'instagram',
       url: 'https://www.instagram.com/realpreciousplastic/',
     },
     {
-      type: 'facebook',
+      label: 'facebook',
       url: 'https://www.facebook.com/preciousplastic/',
     },
   ],
@@ -176,11 +176,11 @@ export const MOCK_USER_MEMBER: IUserPP = {
   ],
   links: [
     {
-      type: 'instagram',
+      label: 'instagram',
       url: 'https://www.instagram.com/realpreciousplastic/',
     },
     {
-      type: 'facebook',
+      label: 'facebook',
       url: 'https://www.facebook.com/preciousplastic/',
     },
   ],
@@ -228,11 +228,11 @@ export const MOCK_USER_COMMUNITY: IUserPP = {
   ],
   links: [
     {
-      type: 'instagram',
+      label: 'instagram',
       url: 'https://www.instagram.com/realpreciousplastic/',
     },
     {
-      type: 'facebook',
+      label: 'facebook',
       url: 'https://www.facebook.com/preciousplastic/',
     },
   ],
@@ -282,11 +282,11 @@ export const MOCK_USER_MACHINE: IUserPP = {
   ],
   links: [
     {
-      type: 'instagram',
+      label: 'instagram',
       url: 'https://www.instagram.com/realpreciousplastic/',
     },
     {
-      type: 'facebook',
+      label: 'facebook',
       url: 'https://www.facebook.com/preciousplastic/',
     },
   ],

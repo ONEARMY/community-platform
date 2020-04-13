@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { COM_TYPE_MOCKS } from 'src/mocks/Selectors'
-import { Field } from 'react-final-form'
-import { InputField } from 'src/components/Form/Fields'
+import { Field, FieldRenderProps } from 'react-final-form'
+import { InputField, IFieldProps } from 'src/components/Form/Fields'
 import { Button } from 'src/components/Button'
 import { Modal } from 'src/components/Modal/Modal'
 import Text from 'src/components/Text'
@@ -10,11 +10,11 @@ import { SelectField } from 'src/components/Form/Select.field'
 import { validateUrl, validateEmail, required } from 'src/utils/validators'
 
 interface IProps {
-  link: string
+  name: string
   index: number
-  mutators?: { [key: string]: (...args: any[]) => any }
   initialType?: string
-  onDelete: (index: number) => void
+  onDelete: () => void
+  'data-cy'?: string
 }
 interface IState {
   showDeleteModal: boolean
@@ -22,7 +22,7 @@ interface IState {
   linkType?: string
 }
 
-class Link extends Component<IProps, IState> {
+export class ProfileLinkField extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
@@ -37,31 +37,9 @@ class Link extends Component<IProps, IState> {
   }
   confirmDelete() {
     this.toggleDeleteModal()
-    this.props.onDelete(this.props.index)
+    this.props.onDelete()
   }
 
-  public mutatorsDependingOnType(e) {
-    switch (this.state.linkType) {
-      case 'social-media':
-        return (
-          this.props.mutators && this.props.mutators.addProtocol(e.target.name)
-        )
-      case 'bazar':
-        return (
-          this.props.mutators && this.props.mutators.addProtocol(e.target.name)
-        )
-      case 'website':
-        return (
-          this.props.mutators && this.props.mutators.addProtocol(e.target.name)
-        )
-      case 'forum':
-        return (
-          this.props.mutators && this.props.mutators.addProtocol(e.target.name)
-        )
-      default:
-        break
-    }
-  }
   public validateDependingOnType(e) {
     switch (this.state.linkType) {
       case 'email':
@@ -80,7 +58,7 @@ class Link extends Component<IProps, IState> {
   }
 
   render() {
-    const { link, index } = this.props
+    const { index, name } = this.props
     const DeleteButton = props => (
       <Button
         data-cy={`delete-link-${index}`}
@@ -93,19 +71,15 @@ class Link extends Component<IProps, IState> {
     )
     return (
       <Flex
-        key={index}
         my={['10px', '10px', '5px']}
         flexDirection={['column', 'column', 'row']}
       >
         <Flex mb={[1, 1, 0]}>
           <Field
             data-cy={`select-link-${index}`}
-            name={`${link}.label`}
+            name={`${name}.label`}
             options={COM_TYPE_MOCKS}
             component={SelectField}
-            onCustomChange={v => {
-              this.setState({ linkType: v })
-            }}
             placeholder="type"
             style={{ width: '160px', height: '40px', marginRight: '8px' }}
           />
@@ -115,14 +89,11 @@ class Link extends Component<IProps, IState> {
         </Flex>
         <Field
           data-cy={`input-link-${index}`}
-          name={`${link}.url`}
+          name={`${name}.url`}
           validate={value => this.validateDependingOnType(value)}
           validateFields={[]}
           component={InputField}
           placeholder="Link"
-          customOnBlur={e => {
-            this.mutatorsDependingOnType(e)
-          }}
         />
         <DeleteButton
           sx={{ display: ['none', 'none', 'block'], height: '40px' }}
@@ -154,5 +125,3 @@ class Link extends Component<IProps, IState> {
     )
   }
 }
-
-export { Link }

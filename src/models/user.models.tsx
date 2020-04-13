@@ -39,15 +39,14 @@ export interface IUser {
 }
 
 interface IExternalLink {
-  label?: string
   url: string
-  type:
+  label:
     | 'email'
     | 'website'
     | 'discord'
     | 'bazar'
     | 'forum'
-    | 'social media'
+    | 'social-media'
     | 'facebook'
     | 'instagram'
 }

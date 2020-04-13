@@ -11,7 +11,7 @@ import 'react-flags-select/scss/react-flags-select.scss'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
 import { FieldArray } from 'react-final-form-arrays'
-import { Link } from './Fields/Link.field'
+import { ProfileLinkField } from './Fields/Link.field'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { Box } from 'rebass'
 import { required } from 'src/utils/validators'
@@ -29,7 +29,10 @@ interface IState {
   showNotification?: boolean
   isOpen?: boolean
   coverImages: IUserPP['coverImages']
+  links: IUserPP['links']
 }
+// type for single element in coverImages array
+type ICoverImage = IUserPP['coverImages'][0]
 
 const FlagSelectContainer = styled(Flex)`
   border: 1px solid ${theme.colors.black};
@@ -41,7 +44,7 @@ const FlagSelectContainer = styled(Flex)`
 export class UserInfosSection extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
-    const { coverImages } = this.props.formValues
+    const { coverImages, links } = this.props.formValues
     this.state = {
       readOnly: true,
       isOpen: true,
@@ -49,15 +52,24 @@ export class UserInfosSection extends React.Component<IProps, IState> {
       coverImages: new Array(4)
         .fill(null)
         .map((_, i) => (coverImages[i] ? coverImages[i] : null)) as any[],
+      // Set links as new array to prevent mobx interference
+      links: [...links],
     }
+  }
+  /**
+   * Keep local state in track with any cover image changes
+   */
+  handleCoverImageChange(value: ICoverImage, i: number) {
+    const covers: any[] = [...this.state.coverImages]
+    covers[i] = value
+    this.setState({ coverImages: covers })
   }
 
   render() {
     const { formValues } = this.props
-    let { profileType, country, links } = formValues
-    const { coverImages } = this.state
+    let { profileType, country } = formValues
+    const { coverImages, links } = this.state
     const { isOpen } = this.state
-
     return (
       <FlexSectionContainer>
         <Flex justifyContent="space-between">
@@ -135,6 +147,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                             ? (coverImages[i] as IUploadedFileMeta).downloadUrl
                             : undefined
                         }
+                        customChange={v => this.handleCoverImageChange(v, i)}
                         component={ImageInputField}
                       />
                     </Box>
@@ -160,38 +173,33 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               </Text>
             </Box>
           </Flex>
-          <Flex wrap={'nowrap'} alignItems={'center'} width={1}>
-            <Text mb={2} mt={7} medium>
-              Contacts & links *
-            </Text>
-          </Flex>
-          {links && (
-            <FieldArray name="links">
-              {({ fields }) => (
+
+          <>
+            <Flex wrap={'nowrap'} alignItems={'center'} width={1}>
+              <Text mb={2} mt={7} medium>
+                Contacts & links *
+              </Text>
+            </Flex>
+            <FieldArray name="links" initialValue={links}>
+              {({ fields, meta }) => (
                 <>
-                  {fields.map((name, index: number) => (
-                    <Link
-                      key={index}
-                      initialType={
-                        links![index] ? links![index].label : undefined
-                      }
-                      link={name}
-                      index={index}
-                      mutators={this.props.mutators}
-                      onDelete={(fieldIndex: number) => {
-                        fields.remove(fieldIndex)
+                  {fields.map((name, i: number) => (
+                    <ProfileLinkField
+                      key={name}
+                      name={`links[${i}]`}
+                      onDelete={() => {
+                        fields.remove(i)
                       }}
+                      index={i}
                     />
                   ))}
                   <Button
+                    type="button"
                     data-cy="add-link"
                     my={2}
                     variant="outline"
-                    onClick={() => {
-                      fields.push({
-                        label: '',
-                        url: '',
-                      })
+                    onClick={(e: React.MouseEvent) => {
+                      fields.push({} as any)
                     }}
                   >
                     add link
@@ -199,7 +207,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                 </>
               )}
             </FieldArray>
-          )}
+          </>
         </Box>
       </FlexSectionContainer>
     )

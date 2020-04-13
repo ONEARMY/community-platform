@@ -88,7 +88,7 @@ interface IState {
   openLightbox?: boolean
 }
 
-export class ImageInput extends React.PureComponent<IProps, IState> {
+export class ImageInput extends React.Component<IProps, IState> {
   static defaultProps = defaultProps
 
   private fileInputRef = React.createRef<HTMLInputElement>()
@@ -136,7 +136,6 @@ export class ImageInput extends React.PureComponent<IProps, IState> {
     // if at least one image present, hide the 'choose image' button and replace with smaller button
     const imgPreviewMode = inputFiles.length > 0 || imageSrc
     const useImageSrc = imageSrc && this.state.inputFiles.length === 0
-
     return (
       <Box p={0} height="100%">
         <Dropzone

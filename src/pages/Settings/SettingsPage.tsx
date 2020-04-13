@@ -69,7 +69,6 @@ export class UserSettings extends React.Component<IProps, IState> {
         delete values[key]
       }
     })
-    console.log('values', values)
     await this.injected.userStore.updateUserProfile(values)
     this.setState({ showNotification: true, formValues: values })
   }
@@ -96,7 +95,6 @@ export class UserSettings extends React.Component<IProps, IState> {
     })
   }
   public onWorkspaceTypeChange(v: IUserPP['workspaceType']) {
-    console.log('workspace changed', v)
     this.setState({
       formValues: {
         ...this.state.formValues,

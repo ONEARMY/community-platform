@@ -23,7 +23,7 @@ interface IProps {
   showSubmitErrors: boolean
 }
 interface IState {
-  editAddress: boolean
+  showAddressEdit: boolean
   lat: number
   lng: number
   zoom: number
@@ -44,7 +44,7 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
     super(props)
     const { formValues } = this.props
     this.state = {
-      editAddress: false,
+      showAddressEdit: formValues.location ? false : true,
       lat: formValues.location ? formValues.location.latlng.lat : 0,
       lng: formValues.location ? formValues.location.latlng.lng : 0,
       zoom: formValues.location ? 15 : 1.5,
@@ -54,7 +54,7 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
 
   render() {
     const { formValues, showSubmitErrors } = this.props
-    const { lat, lng, zoom, editAddress, isOpen } = this.state
+    const { lat, lng, zoom, showAddressEdit, isOpen } = this.state
 
     return (
       <FlexSectionContainer>
@@ -83,7 +83,7 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
             placeholder="Short description of your pin (max 70 characters)"
             validate={required}
           />
-          {!formValues.location || editAddress ? (
+          {showAddressEdit ? (
             <Box>
               <Text mb={2} mt={4} medium>
                 Your workspace address *
@@ -96,7 +96,6 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
                     lng: v.latlng.lng,
                     zoom: 14,
                   })
-                  this.props.onInputChange(v)
                 }}
                 component={LocationSearchField}
               />
@@ -122,7 +121,7 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
                 />
                 <Marker position={[lat, lng]} icon={customMarker}>
                   <Popup maxWidth={225} minWidth={225}>
-                    This adress will be shown on the map
+                    This address will be shown on the map
                   </Popup>
                 </Marker>
               </Map>
@@ -132,12 +131,12 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
               <Text mb={2} mt={4} medium>
                 Your workspace address is :
               </Text>
-              <Text mb={2} my={4} medium>
-                {formValues.location.value}
+              <Text mb={2} my={4} medium data-cy="location-value">
+                {formValues.location!.value}
               </Text>
               <Button
                 variant="secondary"
-                onClick={() => this.setState({ editAddress: !editAddress })}
+                onClick={() => this.setState({ showAddressEdit: true })}
                 data-cy="change-address"
               >
                 Change address

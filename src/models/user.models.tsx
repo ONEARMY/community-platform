@@ -46,7 +46,7 @@ interface IExternalLink {
     | 'discord'
     | 'bazar'
     | 'forum'
-    | 'social-media'
+    | 'social media'
     | 'facebook'
     | 'instagram'
 }

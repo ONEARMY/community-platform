@@ -281,7 +281,7 @@ export class UserPage extends React.Component<
               </Link>
             </ElWithBeforeIcon>
           )
-        case 'social-media':
+        case 'social media':
           return (
             <ElWithBeforeIcon
               key="link-social"

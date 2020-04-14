@@ -13,7 +13,7 @@ import { Button } from 'src/components/Button'
 import { ProfileGuidelines } from './content/PostingGuidelines'
 import Heading from 'src/components/Heading'
 import { TextNotification } from 'src/components/Notification/TextNotification'
-import { Form } from 'react-final-form'
+import { Form, Field } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import { UserMapPinSection } from './content/formSections/MapPin.section'
 import theme from 'src/themes/styled.theme'
@@ -52,7 +52,10 @@ export class UserSettings extends React.Component<IProps, IState> {
       coverImages: new Array(4)
         .fill(null)
         .map((v, i) => (user!.coverImages[i] ? user!.coverImages[i] : v)),
+      // Hack(y) - ensure at least one link field available
+      links: user!.links.length > 0 ? user!.links : [{} as any],
     }
+    console.log('formValues', formValues)
     this.state = {
       formValues,
       showNotification: false,
@@ -92,22 +95,6 @@ export class UserSettings extends React.Component<IProps, IState> {
     })
   }
 
-  public onFocusChange(v: IUserPP['profileType']) {
-    this.setState({
-      formValues: {
-        ...this.state.formValues,
-        profileType: v,
-      },
-    })
-  }
-  public onWorkspaceTypeChange(v: IUserPP['workspaceType']) {
-    this.setState({
-      formValues: {
-        ...this.state.formValues,
-        workspaceType: v,
-      },
-    })
-  }
   public checkSubmitErrors() {
     if (
       this.state.formValues.profileType !== 'member' &&
@@ -176,52 +163,41 @@ export class UserSettings extends React.Component<IProps, IState> {
                         >
                           <ProfileGuidelines />
                         </Box>
-                        <FocusSection
-                          formValues={formValues}
-                          onInputChange={v => this.onFocusChange(v)}
-                          isSelected={!!formValues.workspaceType}
-                          showSubmitErrors={!formValues.workspaceType}
-                        />
+                        {/* Note - for fields without fieldwrapper can just render via props method and bind to input */}
+                        <FocusSection />
                         {/* Specific profile type fields */}
-                        {formValues.profileType === 'workspace' && (
-                          <WorkspaceSection
-                            formValues={formValues}
-                            onInputChange={v => this.onWorkspaceTypeChange(v)}
-                            isSelected={!!formValues.workspaceType}
-                            showSubmitErrors={!formValues.workspaceType}
-                          />
+                        {values.profileType === 'workspace' && (
+                          <WorkspaceSection />
                         )}
-                        {formValues.profileType === 'collection-point' && (
+                        {values.profileType === 'collection-point' && (
                           <CollectionSection
                             required={
                               values.collectedPlasticTypes
                                 ? values.collectedPlasticTypes.length === 0
                                 : true
                             }
-                            formValues={formValues}
+                            formValues={values}
                           />
                         )}
-
-                        {formValues.profileType === 'machine-builder' && (
+                        {values.profileType === 'machine-builder' && (
                           <ExpertiseSection
                             required={
                               values.machineBuilderXp
                                 ? values.machineBuilderXp.length === 0
                                 : true
                             }
-                            formValues={formValues}
                           />
                         )}
                         {/* General fields */}
-                        {formValues.profileType !== 'member' && (
+                        {values.profileType !== 'member' && (
                           <UserMapPinSection
                             onInputChange={v => this.updateLocation(v)}
-                            formValues={formValues}
+                            formValues={values}
                             showSubmitErrors={!isLocationSelected}
                           />
                         )}
                         <UserInfosSection
-                          formValues={formValues}
+                          formValues={values}
                           mutators={mutators}
                         />
                       </Flex>

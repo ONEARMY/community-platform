@@ -48,7 +48,7 @@ export class ProfileLinkField extends Component<IProps, IState> {
         return validateUrl(e)
       case 'website':
         return validateUrl(e)
-      case 'social-media':
+      case 'social media':
         return validateUrl(e)
       case 'bazar':
         return validateUrl(e)

@@ -9,24 +9,16 @@ import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { Map, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
-import { IUserPP } from 'src/models/user_pp.models'
 import { Button } from 'src/components/Button'
-import { ILocation } from 'src/models/common.models'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import theme from 'src/themes/styled.theme'
 import { required } from 'src/utils/validators'
+import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
+import { IUserPP } from 'src/models/user_pp.models'
+import { ILocation } from 'src/models/common.models'
 
-interface IProps {
-  formValues: IUserPP
-  onInputChange: (v: ILocation) => void
-  showSubmitErrors: boolean
-}
 interface IState {
   showAddressEdit: boolean
-  lat: number
-  lng: number
-  zoom: number
   isOpen?: boolean
 }
 
@@ -38,23 +30,18 @@ const customMarker = L.icon({
 
 @inject('mapsStore', 'userStore')
 @observer
-export class UserMapPinSection extends React.Component<IProps, IState> {
+export class UserMapPinSection extends React.Component<{}, IState> {
   pinFilters = MAP_GROUPINGS
-  constructor(props: IProps) {
+  constructor(props) {
     super(props)
-    const { formValues } = this.props
     this.state = {
-      showAddressEdit: formValues.location ? false : true,
-      lat: formValues.location ? formValues.location.latlng.lat : 0,
-      lng: formValues.location ? formValues.location.latlng.lng : 0,
-      zoom: formValues.location ? 15 : 1.5,
+      showAddressEdit: true,
       isOpen: true,
     }
   }
 
   render() {
-    const { formValues, showSubmitErrors } = this.props
-    const { lat, lng, zoom, showAddressEdit, isOpen } = this.state
+    const { showAddressEdit, isOpen } = this.state
 
     return (
       <FlexSectionContainer>
@@ -83,86 +70,96 @@ export class UserMapPinSection extends React.Component<IProps, IState> {
             placeholder="Short description of your pin (max 70 characters)"
             validate={required}
           />
-          {showAddressEdit ? (
-            <Box>
-              <Text mb={2} mt={4} medium>
-                Your workspace address *
-              </Text>
-              <Field
-                name={'location'}
-                customChange={v => {
-                  this.setState({
-                    lat: v.latlng.lat,
-                    lng: v.latlng.lng,
-                    zoom: 14,
-                  })
-                }}
-                component={LocationSearchField}
-              />
-              {showSubmitErrors && (
-                <Text small color={theme.colors.red} mb="5px">
-                  Please select your location
-                </Text>
-              )}
+          <Field
+            name={'location'}
+            render={props => {
+              const { value } = props.input
+              const defaultLocation = { latlng: { lat: 0, lng: 0 } }
+              const location: ILocation = value ? value : defaultLocation
+              const { lat, lng } = location.latlng
+              const zoom = value ? 15 : 1.5
+              return (
+                <>
+                  {showAddressEdit ? (
+                    <Box>
+                      <Text mb={2} mt={4} medium>
+                        Your workspace address *
+                      </Text>
+                      <LocationSearch
+                        onChange={v => {
+                          props.input.onChange(v)
+                          props.input.onBlur()
+                        }}
+                      />
+                      {props.meta.invalid && (
+                        <Text small color={theme.colors.red} mb="5px">
+                          Please select your location
+                        </Text>
+                      )}
 
-              <Map
-                center={[lat, lng]}
-                zoom={zoom}
-                zoomControl={false}
-                style={{
-                  height: '300px',
-                  zIndex: 1,
-                }}
-              >
-                <ZoomControl position="topright" />
-                <TileLayer
-                  attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <Marker position={[lat, lng]} icon={customMarker}>
-                  <Popup maxWidth={225} minWidth={225}>
-                    This address will be shown on the map
-                  </Popup>
-                </Marker>
-              </Map>
-            </Box>
-          ) : (
-            <Box>
-              <Text mb={2} mt={4} medium>
-                Your workspace address is :
-              </Text>
-              <Text mb={2} my={4} medium data-cy="location-value">
-                {formValues.location!.value}
-              </Text>
-              <Button
-                variant="secondary"
-                onClick={() => this.setState({ showAddressEdit: true })}
-                data-cy="change-address"
-              >
-                Change address
-              </Button>
-            </Box>
-          )}
-          <Box
-            bg={theme.colors.softblue}
-            mt={2}
-            p={2}
-            sx={{ borderRadius: '3px' }}
-          >
-            <Text small>
-              We are aware that location search may result in an inaccurate
-              position of your pin. If it happend, choose the closest location
-              to you. Pro tip : you can write your precise address in your
-              profile description & help find a fix{' '}
-              <Link
-                href="https://github.com/ONEARMY/community-platform/issues/739"
-                target="_blank"
-                sx={{ color: 'black', textDecoration: 'underline' }}
-              >
-                here.
-              </Link>
-            </Text>
-          </Box>
+                      <Map
+                        center={[lat, lng]}
+                        zoom={zoom}
+                        zoomControl={false}
+                        style={{
+                          height: '300px',
+                          zIndex: 1,
+                        }}
+                      >
+                        <ZoomControl position="topright" />
+                        <TileLayer
+                          attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        />
+                        <Marker position={[lat, lng]} icon={customMarker}>
+                          <Popup maxWidth={225} minWidth={225}>
+                            This address will be shown on the map
+                          </Popup>
+                        </Marker>
+                      </Map>
+                    </Box>
+                  ) : (
+                    <Box>
+                      <Text mb={2} mt={4} medium>
+                        Your workspace address is :
+                      </Text>
+                      <Text mb={2} my={4} medium data-cy="location-value">
+                        {location.value}
+                      </Text>
+                      <Button
+                        variant="secondary"
+                        onClick={() => this.setState({ showAddressEdit: true })}
+                        data-cy="change-address"
+                      >
+                        Change address
+                      </Button>
+                    </Box>
+                  )}
+                  <Box
+                    bg={theme.colors.softblue}
+                    mt={2}
+                    p={2}
+                    sx={{ borderRadius: '3px' }}
+                  >
+                    <Text small>
+                      We are aware that location search may result in an
+                      inaccurate position of your pin. If it happend, choose the
+                      closest location to you. Pro tip : you can write your
+                      precise address in your profile description & help find a
+                      fix{' '}
+                      <Link
+                        href="https://github.com/ONEARMY/community-platform/issues/739"
+                        target="_blank"
+                        sx={{ color: 'black', textDecoration: 'underline' }}
+                      >
+                        here.
+                      </Link>
+                    </Text>
+                  </Box>
+                </>
+              )
+            }}
+          />
         </Box>
       </FlexSectionContainer>
     )

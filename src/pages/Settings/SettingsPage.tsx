@@ -23,6 +23,7 @@ import { ILocation } from 'src/models/common.models'
 import { addProtocol } from 'src/utils/validators'
 import { Prompt } from 'react-router'
 import { toJS } from 'mobx'
+import { IUser } from 'src/models/user.models'
 
 interface IProps {}
 
@@ -34,7 +35,6 @@ interface IState {
   formValues: IUserPP
   showNotification: boolean
   showDeleteDialog?: boolean
-  isLocationSelected: boolean
 }
 
 @inject('userStore')
@@ -42,24 +42,28 @@ interface IState {
 export class UserSettings extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
-    const user = this.injected.userStore.user
+    const user = this.injected.userStore.user as IUserPP
+
     // ensure user form includes all user fields (merge any legacy user with correct format)
-    const formValues: IUserPP = {
+    const baseValues: IUserPP = {
       ...INITIAL_VALUES,
       // use toJS to avoid mobx monitoring of modified fields (e.g. out of bound arrays on link push)
       ...toJS(user),
-      // Hack(y) - ensure there are 4 cover image slots available
+    }
+    const { coverImages, openingHours, links, location } = baseValues
+    // replace empty arrays with placeholders for filling forms
+    const formValues: IUserPP = {
+      ...baseValues,
       coverImages: new Array(4)
         .fill(null)
-        .map((v, i) => (user!.coverImages[i] ? user!.coverImages[i] : v)),
-      // Hack(y) - ensure at least one link field available
-      links: user!.links.length > 0 ? user!.links : [{} as any],
+        .map((v, i) => (coverImages[i] ? coverImages[i] : v)),
+      links: links.length > 0 ? links : [{} as any],
+      openingHours: openingHours!.length > 0 ? openingHours : [{} as any],
     }
     console.log('formValues', formValues)
     this.state = {
       formValues,
       showNotification: false,
-      isLocationSelected: user ? user.location !== undefined : false,
     }
   }
 
@@ -85,28 +89,14 @@ export class UserSettings extends React.Component<IProps, IState> {
   public showSaveNotification() {
     this.setState({ showNotification: true })
   }
-  public updateLocation(l: ILocation) {
-    this.setState({
-      formValues: {
-        ...this.state.formValues,
-        location: l,
-      },
-      isLocationSelected: true,
-    })
-  }
 
   public checkSubmitErrors() {
-    if (
-      this.state.formValues.profileType !== 'member' &&
-      !this.state.formValues.location
-    ) {
-      this.setState({ isLocationSelected: false })
-    }
+    // TODO
   }
 
   render() {
     const user = this.injected.userStore.user
-    const { formValues, isLocationSelected } = this.state
+    const { formValues } = this.state
     return (
       user && (
         <Form
@@ -190,11 +180,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                         )}
                         {/* General fields */}
                         {values.profileType !== 'member' && (
-                          <UserMapPinSection
-                            onInputChange={v => this.updateLocation(v)}
-                            formValues={values}
-                            showSubmitErrors={!isLocationSelected}
-                          />
+                          <UserMapPinSection />
                         )}
                         <UserInfosSection
                           formValues={values}

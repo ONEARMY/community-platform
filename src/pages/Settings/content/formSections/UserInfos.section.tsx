@@ -16,7 +16,6 @@ import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { Box } from 'rebass'
 import { required } from 'src/utils/validators'
 import { IUserPP } from 'src/models/user_pp.models'
-import { IUploadedFileMeta } from 'src/stores/storage'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 
 interface IProps {
@@ -28,11 +27,7 @@ interface IState {
   isSaving?: boolean
   showNotification?: boolean
   isOpen?: boolean
-  coverImages: IUserPP['coverImages']
-  links: IUserPP['links']
 }
-// type for single element in coverImages array
-type ICoverImage = IUserPP['coverImages'][0]
 
 const FlagSelectContainer = styled(Flex)`
   border: 1px solid ${theme.colors.black};
@@ -44,31 +39,15 @@ const FlagSelectContainer = styled(Flex)`
 export class UserInfosSection extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
-    const { coverImages, links } = this.props.formValues
     this.state = {
       readOnly: true,
       isOpen: true,
-      // Ensure 4 placeholders for image upload
-      coverImages: new Array(4)
-        .fill(null)
-        .map((_, i) => (coverImages[i] ? coverImages[i] : null)) as any[],
-      // Set links as new array to prevent mobx interference
-      links: [...links],
     }
-  }
-  /**
-   * Keep local state in track with any cover image changes
-   */
-  handleCoverImageChange(value: ICoverImage, i: number) {
-    const covers: any[] = [...this.state.coverImages]
-    covers[i] = value
-    this.setState({ coverImages: covers })
   }
 
   render() {
     const { formValues } = this.props
-    let { profileType, country } = formValues
-    const { coverImages, links } = this.state
+    let { profileType, country, links, coverImages } = formValues
     const { isOpen } = this.state
     return (
       <FlexSectionContainer>
@@ -127,33 +106,34 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               Cover Image *
             </Text>
             <FieldArray name="coverImages" initialValue={coverImages}>
-              {({ fields }) => (
-                <>
-                  {fields.map((name, i: number) => (
-                    <Box
-                      key={name}
-                      height="100px"
-                      width="150px"
-                      m="10px"
-                      data-cy="cover-image"
-                    >
-                      <Field
-                        canDelete
-                        hasText={false}
-                        name={`coverImages[${i}]`}
-                        data-cy={`coverImages[${i}]`}
-                        imageSrc={
-                          coverImages[i]
-                            ? (coverImages[i] as IUploadedFileMeta).downloadUrl
-                            : undefined
-                        }
-                        customChange={v => this.handleCoverImageChange(v, i)}
-                        component={ImageInputField}
-                      />
-                    </Box>
-                  ))}
-                </>
-              )}
+              {({ fields }) => {
+                return (
+                  <>
+                    {fields.map((name, index: number) => (
+                      <Box
+                        key={name}
+                        height="100px"
+                        width="150px"
+                        m="10px"
+                        data-cy="cover-image"
+                      >
+                        <Field
+                          canDelete
+                          hasText={false}
+                          name={name}
+                          data-cy={`coverImages-${index}`}
+                          component={ImageInputField}
+                          imageSrc={
+                            fields.value[index]
+                              ? (fields.value[index] as any).downloadUrl
+                              : null
+                          }
+                        />
+                      </Box>
+                    ))}
+                  </>
+                )
+              }}
             </FieldArray>
 
             <Box
@@ -181,12 +161,12 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               </Text>
             </Flex>
             <FieldArray name="links" initialValue={links}>
-              {({ fields, meta }) => (
+              {({ fields }) => (
                 <>
                   {fields.map((name, i: number) => (
                     <ProfileLinkField
                       key={name}
-                      name={`links[${i}]`}
+                      name={name}
                       onDelete={() => {
                         fields.remove(i)
                       }}

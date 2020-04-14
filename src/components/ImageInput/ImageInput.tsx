@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { Button } from '../Button'
 import 'react-image-lightbox/style.css'
 import { ImageConverter } from './ImageConverter'
-import { IUploadedFileMeta } from 'src/stores/storage'
 import theme from 'src/themes/styled.theme'
 import Dropzone from 'react-dropzone'
 

@@ -22,6 +22,7 @@ import { Box } from 'rebass'
 import { ILocation } from 'src/models/common.models'
 import { addProtocol } from 'src/utils/validators'
 import { Prompt } from 'react-router'
+import { toJS } from 'mobx'
 
 interface IProps {}
 
@@ -45,7 +46,12 @@ export class UserSettings extends React.Component<IProps, IState> {
     // ensure user form includes all user fields (merge any legacy user with correct format)
     const formValues: IUserPP = {
       ...INITIAL_VALUES,
-      ...user,
+      // use toJS to avoid mobx monitoring of modified fields (e.g. out of bound arrays on link push)
+      ...toJS(user),
+      // Hack(y) - ensure there are 4 cover image slots available
+      coverImages: new Array(4)
+        .fill(null)
+        .map((v, i) => (user!.coverImages[i] ? user!.coverImages[i] : v)),
     }
     this.state = {
       formValues,

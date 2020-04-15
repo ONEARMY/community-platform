@@ -509,7 +509,7 @@ describe('[Settings]', () => {
       }
     }
 
-    it.only('[Edit a new profile]', () => {
+    it('[Edit a new profile]', () => {
       cy.login('settings_plastic_new@test.com', 'test1234')
       cy.step('Go to User Settings')
       cy.clickMenuItem(UserMenuItem.Settings)
@@ -525,12 +525,12 @@ describe('[Settings]', () => {
       addContactLink({
         index: 0,
         label: 'social media',
-        url: `www.facebook.com/${freshSettings.userName}`,
+        url: `http://www.facebook.com/${freshSettings.userName}`,
       })
       addContactLink({
         index: 1,
         label: 'social media',
-        url: `www.twitter.com/${freshSettings.userName}`,
+        url: `http://www.twitter.com/${freshSettings.userName}`,
       })
 
       cy.step('Update Collection section')
@@ -573,7 +573,6 @@ describe('[Settings]', () => {
       cy.get('[data-cy=save]').click()
       cy.wait(500)
       cy.get('[data-cy=save]').should('not.be.disabled')
-      cy.wait(50000)
       cy.queryDocuments(
         DbCollectionName.users,
         'userName',

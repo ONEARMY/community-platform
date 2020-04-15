@@ -78,6 +78,7 @@ describe('[Settings]', () => {
     cy.get(`[data-cy=input-link-${link.index}]`)
       .clear()
       .type(link.url)
+      .blur()
   }
   describe('[Focus Workplace]', () => {
     const freshSettings = {
@@ -206,7 +207,7 @@ describe('[Settings]', () => {
       links: [
         {
           label: 'email',
-          url: 'settings_member_new@test.com',
+          url: `${freshSettings.userName}@test.com`,
         },
       ],
     }

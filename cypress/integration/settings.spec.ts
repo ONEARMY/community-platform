@@ -1,6 +1,6 @@
 import { DbCollectionName } from '../utils/test-utils'
 import { UserMenuItem } from '../support/commands'
-import { IUserPP } from 'src/models/user_pp.models'
+import { IUser } from 'src/models/user.models'
 
 interface Info {
   username: string
@@ -14,7 +14,7 @@ interface IMapPin {
   searchKeyword: string
   locationName: string
 }
-type ILink = IUserPP['links'][0] & { index: number }
+type ILink = IUser['links'][0] & { index: number }
 
 describe('[Settings]', () => {
   beforeEach(() => {

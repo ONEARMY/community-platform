@@ -13,17 +13,16 @@ import { Button } from 'src/components/Button'
 import { ProfileGuidelines } from './content/PostingGuidelines'
 import Heading from 'src/components/Heading'
 import { TextNotification } from 'src/components/Notification/TextNotification'
-import { Form, Field } from 'react-final-form'
+import { Form } from 'react-final-form'
+import { ARRAY_ERROR, FORM_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'
 import { UserMapPinSection } from './content/formSections/MapPin.section'
 import theme from 'src/themes/styled.theme'
 import INITIAL_VALUES from './Template'
 import { Box } from 'rebass'
-import { ILocation } from 'src/models/common.models'
 import { addProtocol } from 'src/utils/validators'
 import { Prompt } from 'react-router'
 import { toJS } from 'mobx'
-import { IUser } from 'src/models/user.models'
 
 interface IProps {}
 
@@ -33,7 +32,7 @@ interface IInjectedProps extends IProps {
 
 interface IState {
   formValues: IUserPP
-  showNotification: boolean
+  notification: { message: string; icon: string; show: boolean }
   showDeleteDialog?: boolean
 }
 
@@ -50,7 +49,7 @@ export class UserSettings extends React.Component<IProps, IState> {
       // use toJS to avoid mobx monitoring of modified fields (e.g. out of bound arrays on link push)
       ...toJS(user),
     }
-    const { coverImages, openingHours, links, location } = baseValues
+    const { coverImages, openingHours, links } = baseValues
     // replace empty arrays with placeholders for filling forms
     const formValues: IUserPP = {
       ...baseValues,
@@ -60,10 +59,9 @@ export class UserSettings extends React.Component<IProps, IState> {
       links: links.length > 0 ? links : [{} as any],
       openingHours: openingHours!.length > 0 ? openingHours : [{} as any],
     }
-    console.log('formValues', formValues)
     this.state = {
       formValues,
-      showNotification: false,
+      notification: { message: '', icon: '', show: false },
     }
   }
 
@@ -71,47 +69,78 @@ export class UserSettings extends React.Component<IProps, IState> {
     return this.props as IInjectedProps
   }
 
-  public async saveProfile(values: IUserPP) {
+  public async saveProfile(values: IUserPP, cb?) {
     // remove empty images
     values.coverImages = (values.coverImages as any[]).filter(cover =>
       cover ? true : false,
     )
-    // Remove undefined values from obj before sending to firebase
+    // // Remove undefined values from obj before sending to firebase
     Object.keys(values).forEach(key => {
       if (values[key] === undefined) {
         delete values[key]
       }
     })
-    await this.injected.userStore.updateUserProfile(values)
-    this.setState({ showNotification: true, formValues: values })
+    // Submit, show notification update and return any errors to form
+    try {
+      await this.injected.userStore.updateUserProfile(values)
+      this.setState({
+        notification: { message: 'Profile Saved', icon: 'check', show: true },
+      })
+      return {}
+    } catch (error) {
+      this.setState({
+        notification: { message: 'Save Failed', icon: 'close', show: true },
+      })
+      return { [FORM_ERROR]: 'Save Failed' }
+    }
   }
 
-  public showSaveNotification() {
-    this.setState({ showNotification: true })
-  }
-
-  public checkSubmitErrors() {
-    // TODO
+  /**
+   * Check for additional erros not caught by standard validation
+   * Return any errors as json object
+   */
+  public validateForm(v: IUserPP) {
+    const errors: any = {}
+    // must have at least 1 cover (awkard react final form array format)
+    if (!v.coverImages[0]) {
+      errors.coverImages = []
+      errors.coverImages[ARRAY_ERROR] = 'Must have at least one cover image'
+    }
+    if (!v.links[0]) {
+      errors.links = []
+      errors.links[ARRAY_ERROR] = 'Must have at least one link'
+    }
+    return errors
   }
 
   render() {
     const user = this.injected.userStore.user
-    const { formValues } = this.state
+    const { formValues, notification } = this.state
     return (
       user && (
         <Form
-          onSubmit={v => this.saveProfile(v)}
+          onSubmit={v =>
+            // return any errors (or success) on submit
+            this.saveProfile(v).then(res => {
+              return res
+            })
+          }
           initialValues={formValues}
+          validate={v => this.validateForm(v)}
           mutators={{
             ...arrayMutators,
             addProtocol,
           }}
           validateOnBlur
           render={({
-            form: { mutators },
+            form,
             submitting,
             values,
             handleSubmit,
+            submitError,
+            valid,
+            errors,
+            ...rest
           }) => {
             return (
               <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
@@ -184,7 +213,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                         )}
                         <UserInfosSection
                           formValues={values}
-                          mutators={mutators}
+                          mutators={form.mutators}
                         />
                       </Flex>
                     </form>
@@ -213,41 +242,42 @@ export class UserSettings extends React.Component<IProps, IState> {
                     </Box>
                     <Button
                       data-cy="save"
+                      title={
+                        rest.invalid
+                          ? `Errors: ${Object.keys(errors)}`
+                          : 'Submit'
+                      }
                       onClick={() => {
-                        if (
-                          !formValues.profileType ||
-                          (formValues.profileType === 'workspace' &&
-                            !formValues.workspaceType)
-                        ) {
-                          this.checkSubmitErrors()
-                        } else {
-                          const form = document.getElementById(
-                            'userProfileForm',
+                        // workaround for issues described:
+                        // https://github.com/final-form/react-final-form/blob/master/docs/faq.md#how-can-i-trigger-a-submit-from-outside-my-form
+                        const formEl = document.getElementById(
+                          'userProfileForm',
+                        )
+                        if (typeof formEl !== 'undefined' && formEl !== null) {
+                          formEl.dispatchEvent(
+                            new Event('submit', { cancelable: true }),
                           )
-                          if (typeof form !== 'undefined' && form !== null) {
-                            form.dispatchEvent(
-                              new Event('submit', { cancelable: true }),
-                            )
-                          }
                         }
                       }}
                       width={1}
                       my={3}
                       variant={'primary'}
                       type="submit"
-                      disabled={submitting}
+                      // disable button when form invalid or during submit.
+                      // ensure enabled after submit error
+                      disabled={submitError ? false : !valid || submitting}
                     >
                       Save profile
                     </Button>
                     <div style={{ float: 'right' }}>
                       <TextNotification
                         data-cy="profile-saved"
-                        text="profile saved"
-                        icon="check"
-                        show={this.state.showNotification}
+                        text={notification.message}
+                        icon={submitError ? 'close' : 'check'}
+                        show={notification.show}
                         hideNotificationCb={() =>
                           this.setState({
-                            showNotification: false,
+                            notification: { ...notification, show: false },
                           })
                         }
                       />

@@ -14,7 +14,6 @@ import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import theme from 'src/themes/styled.theme'
 import { required } from 'src/utils/validators'
 import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
-import { IUserPP } from 'src/models/user_pp.models'
 import { ILocation } from 'src/models/common.models'
 
 interface IState {

@@ -7,7 +7,7 @@ import { Box } from 'rebass'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { WORKSPACE_TYPES } from 'src/mocks/user_pp.mock'
 import { CustomRadioField } from './Fields/CustomRadio.field'
-import { WorkspaceType, IUserPP } from 'src/models/user_pp.models'
+import { required } from 'src/utils/validators'
 import theme from 'src/themes/styled.theme'
 import { Field } from 'react-final-form'
 
@@ -25,6 +25,8 @@ export class WorkspaceSection extends React.Component<{}, IState> {
     return (
       <Field
         name="workspaceType"
+        validate={required}
+        validateFields={[]}
         render={props => (
           <FlexSectionContainer>
             <Flex justifyContent="space-between">
@@ -55,7 +57,7 @@ export class WorkspaceSection extends React.Component<{}, IState> {
                   />
                 ))}
               </Flex>
-              {props.meta.error && (
+              {props.meta.touched && props.meta.error && (
                 <Text color={theme.colors.red}>
                   Please select your workspace type
                 </Text>

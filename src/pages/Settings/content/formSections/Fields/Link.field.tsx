@@ -81,6 +81,8 @@ export class ProfileLinkField extends Component<IProps, IState> {
             options={COM_TYPE_MOCKS}
             component={SelectField}
             placeholder="type"
+            validation={required}
+            validateFields={[]}
             style={{ width: '160px', height: '40px', marginRight: '8px' }}
           />
           <DeleteButton

@@ -71,6 +71,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               component={InputField}
               placeholder="Pick a unique username"
               validate={required}
+              validateFields={[]}
             />
             {profileType === 'member' && (
               <Text mb={2} mt={7} medium>
@@ -88,6 +89,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                   component={FlagSelector}
                   searchable={true}
                   validate={required}
+                  validateFields={[]}
                   defaultCountry={getCountryCode(country)}
                 />
               </FlagSelectContainer>
@@ -101,6 +103,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               component={TextAreaField}
               placeholder="Describe in details what you do and who you are. Write in English otherwise your profile won't be approved."
               validate={required}
+              validateFields={[]}
             />
             <Text mb={2} mt={7} width="100%" medium>
               Cover Image *
@@ -121,6 +124,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                           canDelete
                           hasText={false}
                           name={name}
+                          validateFields={[]}
                           data-cy={`coverImages-${index}`}
                           component={ImageInputField}
                           imageSrc={
@@ -178,7 +182,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                     data-cy="add-link"
                     my={2}
                     variant="outline"
-                    onClick={(e: React.MouseEvent) => {
+                    onClick={() => {
                       fields.push({} as any)
                     }}
                   >

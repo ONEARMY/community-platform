@@ -62,7 +62,9 @@ describe('[Settings]', () => {
     cy.get('[data-cy=location-search]')
       .find('.ap-suggestion:eq(0)')
       .click()
-    cy.get('[data-cy=location-value]').contains(mapPin.locationName)
+    cy.get('[data-cy=location-search]')
+      .find('input')
+      .should('have.value', mapPin.locationName)
   }
 
   const addContactLink = (link: ILink) => {
@@ -568,10 +570,10 @@ describe('[Settings]', () => {
         searchKeyword: 'Malacca',
         locationName: expected.location.value,
       })
-      cy.wait(50000)
       cy.get('[data-cy=save]').click()
       cy.wait(500)
       cy.get('[data-cy=save]').should('not.be.disabled')
+      cy.wait(50000)
       cy.queryDocuments(
         DbCollectionName.users,
         'userName',

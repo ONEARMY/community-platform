@@ -68,6 +68,7 @@ export class UserMapPinSection extends React.Component<{}, IState> {
             rows="1"
             placeholder="Short description of your pin (max 70 characters)"
             validate={required}
+            validateFields={[]}
           />
           <Field
             name={'location'}

@@ -69,20 +69,22 @@ export class UserSettings extends React.Component<IProps, IState> {
     return this.props as IInjectedProps
   }
 
-  public async saveProfile(values: IUserPP, cb?) {
+  public async saveProfile(values: IUserPP) {
+    // use a copy of values to allow manipulsation without re-render
+    const vals = { ...values }
     // remove empty images
-    values.coverImages = (values.coverImages as any[]).filter(cover =>
+    vals.coverImages = (vals.coverImages as any[]).filter(cover =>
       cover ? true : false,
     )
-    // // Remove undefined values from obj before sending to firebase
-    Object.keys(values).forEach(key => {
-      if (values[key] === undefined) {
-        delete values[key]
+    // // Remove undefined vals from obj before sending to firebase
+    Object.keys(vals).forEach(key => {
+      if (vals[key] === undefined) {
+        delete vals[key]
       }
     })
     // Submit, show notification update and return any errors to form
     try {
-      await this.injected.userStore.updateUserProfile(values)
+      await this.injected.userStore.updateUserProfile(vals)
       this.setState({
         notification: { message: 'Profile Saved', icon: 'check', show: true },
       })
@@ -100,6 +102,7 @@ export class UserSettings extends React.Component<IProps, IState> {
    * Return any errors as json object
    */
   public validateForm(v: IUserPP) {
+    console.count('validating form')
     const errors: any = {}
     // must have at least 1 cover (awkard react final form array format)
     if (!v.coverImages[0]) {
@@ -114,6 +117,7 @@ export class UserSettings extends React.Component<IProps, IState> {
   }
 
   render() {
+    console.count('[render] settings page')
     const user = this.injected.userStore.user
     const { formValues, notification } = this.state
     return (

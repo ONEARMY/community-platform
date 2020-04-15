@@ -106,11 +106,11 @@ describe('[Settings]', () => {
       links: [
         {
           label: 'email',
-          url: 'settings_workplace_new@test.com',
+          url: `${freshSettings.userName}@test.com`,
         },
         {
           label: 'website',
-          url: 'http://www.settings_workplace_new.com',
+          url: `http://www.${freshSettings.userName}.com`,
         },
       ],
       location: {

@@ -214,7 +214,7 @@ describe('[Settings]', () => {
         },
       ],
     }
-    it.only('[Edit a new profile]', () => {
+    it('[Edit a new profile]', () => {
       cy.login('settings_member_new@test.com', 'test1234')
       cy.step('Go to User Settings')
       cy.clickMenuItem(UserMenuItem.Settings)
@@ -286,7 +286,7 @@ describe('[Settings]', () => {
       machineBuilderXp: ['electronics', 'welding'],
     }
 
-    it('[Edit a new profile]', () => {
+    it.only('[Edit a new profile]', () => {
       cy.login('settings_machine_new@test.com', 'test1234')
       cy.step('Go to User Settings')
       cy.clickMenuItem(UserMenuItem.Settings)
@@ -322,7 +322,12 @@ describe('[Settings]', () => {
         'userName',
         '==',
         expected.userName,
-      ).should('eqSettings', expected)
+        // debug version - wrap to allow full log of result and expected
+      ).should(doc => {
+        cy.log('doc', JSON.stringify(doc))
+        cy.log('expected', JSON.stringify(expected))
+        cy.wrap(doc).should('eqSettings', expected)
+      })
     })
   })
 

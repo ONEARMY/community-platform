@@ -120,22 +120,6 @@ export const isAllowToPin = (pin: IMapPin, user?: IUser) => {
   }
 }
 
-/************************************************************************
- *             Country code to country name converters
- ***********************************************************************/
-export const getCountryCode = (countryName: string | null | undefined) => {
-  const countryCode = Object.keys(countries).find(
-    key => countries[key] === countryName,
-  )
-  return countryCode ? countryCode.toUpperCase() : undefined
-}
-
-export const getCountryName = (countryCode: string) => {
-  return countries.hasOwnProperty(countryCode)
-    ? countries[countryCode]
-    : countryCode
-}
-
 // ensure docs passed to edit check contain _createdBy field
 interface IEditableDoc extends DBDoc {
   _createdBy: string

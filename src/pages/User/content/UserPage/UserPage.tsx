@@ -24,7 +24,6 @@ import theme from 'src/themes/styled.theme'
 import {
   capitalizeFirstLetter,
   replaceDashesWithSpaces,
-  getCountryCode,
 } from 'src/utils/helpers'
 import FlagIconEvents from 'src/components/Icons/FlagIcon/FlagIcon'
 
@@ -509,9 +508,7 @@ export class UserPage extends React.Component<
                 <FlagIconEvents code={user.location.countryCode} />
               ) : (
                 user.country && (
-                  <FlagIconEvents
-                    code={getCountryCode(user.country)!.toLowerCase()}
-                  />
+                  <FlagIconEvents code={user.country.toLowerCase()} />
                 )
               )}
             </Flex>

@@ -4,9 +4,8 @@ import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
-import { FlagSelector } from 'src/components/Form/Select.field'
+import { FlagSelectField } from 'src/components/Form/FlagSelect'
 import { Button } from 'src/components/Button'
-import { getCountryCode } from 'src/utils/helpers'
 import 'react-flags-select/scss/react-flags-select.scss'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
@@ -48,7 +47,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
 
   render() {
     const { formValues } = this.props
-    const { profileType, links, coverImages, country } = formValues
+    const { profileType, links, coverImages } = formValues
     const { isOpen } = this.state
     return (
       <FlexSectionContainer>
@@ -74,27 +73,27 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               validate={required}
               validateFields={[]}
             />
-            {profileType === 'member' && !formValues.location && (
-              <Text mb={2} mt={7} medium>
-                Where are you based? *
-              </Text>
+            {profileType === 'member' && (
+              <>
+                <Text mb={2} mt={7} medium>
+                  Where are you based? *
+                </Text>
+                <FlagSelectContainer
+                  width={1}
+                  alignItems="center"
+                  data-cy="country"
+                >
+                  <Field
+                    name="country"
+                    component={FlagSelectField}
+                    searchable={true}
+                    validate={required}
+                    validateFields={[]}
+                  />
+                </FlagSelectContainer>
+              </>
             )}
-            {profileType === 'member' && !formValues.location && (
-              <FlagSelectContainer
-                width={1}
-                alignItems="center"
-                data-cy="country"
-              >
-                <Field
-                  name="country"
-                  component={FlagSelector}
-                  searchable={true}
-                  validate={required}
-                  validateFields={[]}
-                  defaultCountry={getCountryCode(country)}
-                />
-              </FlagSelectContainer>
-            )}
+
             <Text mb={2} mt={7} medium>
               Description *
             </Text>
@@ -111,7 +110,6 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             </Text>
             <FieldArray name="coverImages" initialValue={coverImages}>
               {({ fields, meta }) => {
-                console.log('meta', meta)
                 return (
                   <>
                     {fields.map((name, index: number) => (

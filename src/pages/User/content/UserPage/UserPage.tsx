@@ -509,7 +509,9 @@ export class UserPage extends React.Component<
                 <FlagIconEvents code={user.location.countryCode} />
               ) : (
                 user.country && (
-                  <FlagIconEvents code={getCountryCode(user.country)} />
+                  <FlagIconEvents
+                    code={getCountryCode(user.country)!.toLowerCase()}
+                  />
                 )
               )}
             </Flex>

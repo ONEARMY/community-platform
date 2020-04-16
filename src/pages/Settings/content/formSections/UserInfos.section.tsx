@@ -47,7 +47,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
 
   render() {
     const { formValues } = this.props
-    let { profileType, country, links, coverImages } = formValues
+    const { profileType, links, coverImages, country } = formValues
     const { isOpen } = this.state
     return (
       <FlexSectionContainer>
@@ -73,12 +73,12 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               validate={required}
               validateFields={[]}
             />
-            {profileType === 'member' && (
+            {profileType === 'member' && !formValues.location && (
               <Text mb={2} mt={7} medium>
                 Where are you based? *
               </Text>
             )}
-            {profileType === 'member' && country && (
+            {profileType === 'member' && !formValues.location && (
               <FlagSelectContainer
                 width={1}
                 alignItems="center"

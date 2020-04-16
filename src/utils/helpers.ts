@@ -1,4 +1,3 @@
-import countries from 'react-flags-select/lib/countries.js'
 import { IMapPin } from 'src/models/maps.models'
 import { IUser } from 'src/models/user.models'
 import { DBDoc, IModerable } from 'src/models/common.models'

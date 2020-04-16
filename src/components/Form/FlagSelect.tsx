@@ -9,7 +9,7 @@ export const FlagSelectField = ({ input, meta, ...rest }: IFieldProps) => (
     <FieldContainer invalid={meta.error && meta.touched}>
       <ReactFlagsSelect
         data-cy="flag-select"
-        defaultCountry={input.value}
+        defaultCountry={'input.value'}
         onSelect={v => {
           input.onChange(v)
           input.onBlur()

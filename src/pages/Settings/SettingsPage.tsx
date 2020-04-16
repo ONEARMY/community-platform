@@ -102,7 +102,6 @@ export class UserSettings extends React.Component<IProps, IState> {
    * Return any errors as json object
    */
   public validateForm(v: IUserPP) {
-    console.count('validating form')
     const errors: any = {}
     // must have at least 1 cover (awkard react final form array format)
     if (!v.coverImages[0]) {

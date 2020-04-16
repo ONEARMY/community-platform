@@ -17,6 +17,7 @@ import { Box } from 'rebass'
 import { required } from 'src/utils/validators'
 import { IUserPP } from 'src/models/user_pp.models'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
+import { ErrorMessage } from 'src/components/Form/elements'
 
 interface IProps {
   formValues: IUserPP
@@ -109,7 +110,8 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               Cover Image *
             </Text>
             <FieldArray name="coverImages" initialValue={coverImages}>
-              {({ fields }) => {
+              {({ fields, meta }) => {
+                console.log('meta', meta)
                 return (
                   <>
                     {fields.map((name, index: number) => (
@@ -135,6 +137,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                         />
                       </Box>
                     ))}
+                    {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
                   </>
                 )
               }}

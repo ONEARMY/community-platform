@@ -70,7 +70,7 @@ export class AdminStore extends ModuleStore {
       return email
     } catch (error) {
       console.error(error)
-      throw new Error(`unable to get user email - ${error.message}`)
+      return `unable to get user email - ${error.message}`
     }
   }
 

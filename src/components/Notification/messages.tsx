@@ -15,7 +15,7 @@ const MESSAGES = {
  * This can either be a status code or full message (depending on how saved above)
  */
 export const getFriendlyMessage = (systemMessage: string) => {
-  const friendlyMessage = MESSAGES[systemMessage]
+  const friendlyMessage = MESSAGES[systemMessage.toLowerCase()]
   if (!friendlyMessage) {
     console.log(
       `%c No friendly message for [${systemMessage}] \n Maybe you should add one?`,

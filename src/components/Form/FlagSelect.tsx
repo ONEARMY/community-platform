@@ -8,7 +8,7 @@ export const FlagSelectField = ({ input, meta, ...rest }: IFieldProps) => (
   <Flex p={0} flexWrap="wrap">
     <FieldContainer invalid={meta.error && meta.touched}>
       <ReactFlagsSelect
-        data-cy="flag-select"
+        searchable={true}
         defaultCountry={'input.value'}
         onSelect={v => {
           input.onChange(v)

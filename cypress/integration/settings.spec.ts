@@ -38,9 +38,10 @@ describe('[Settings]', () => {
       cy.get('[data-cy=country]')
         .find(':text')
         .clear()
-        .type(info.country.substring(0, info.country.length - 2))
-      cy.get('[data-cy=country]')
-        .contains(info.country)
+        .type(info.country)
+      cy.get('[data-cy=country')
+        .find('.flag-option')
+        .first()
         .click()
     }
     cy.get('[data-cy=info-description')
@@ -190,7 +191,9 @@ describe('[Settings]', () => {
       _deleted: false,
       _id: 'settings_member_new',
       about: "I'm a very active member",
-      country: 'Poland',
+      // note - flag-picker returns country code but displays labels,
+      // so tests will only work for countries that code start same as label
+      country: 'AU',
       profileType: 'member',
       userName: 'settings_member_new',
       verified: true,
@@ -211,7 +214,7 @@ describe('[Settings]', () => {
         },
       ],
     }
-    it('[Edit a new profile]', () => {
+    it.only('[Edit a new profile]', () => {
       cy.login('settings_member_new@test.com', 'test1234')
       cy.step('Go to User Settings')
       cy.clickMenuItem(UserMenuItem.Settings)

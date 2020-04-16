@@ -79,6 +79,8 @@ describe('[Settings]', () => {
     cy.get(`[data-cy=input-link-${link.index}]`)
       .clear()
       .type(link.url)
+      // bug - case where not all letters typed
+      .wait(50)
       .blur()
   }
   describe('[Focus Workplace]', () => {
@@ -286,7 +288,7 @@ describe('[Settings]', () => {
       machineBuilderXp: ['electronics', 'welding'],
     }
 
-    it.only('[Edit a new profile]', () => {
+    it('[Edit a new profile]', () => {
       cy.login('settings_machine_new@test.com', 'test1234')
       cy.step('Go to User Settings')
       cy.clickMenuItem(UserMenuItem.Settings)

@@ -116,7 +116,6 @@ export class UserSettings extends React.Component<IProps, IState> {
   }
 
   render() {
-    console.count('[render] settings page')
     const user = this.injected.userStore.user
     const { formValues, notification } = this.state
     return (

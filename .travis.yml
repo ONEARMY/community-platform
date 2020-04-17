@@ -20,13 +20,9 @@ branches:
     - master
     - production
 env:
-  - CI_BROWSER=chrome
-  - CI_BROWSER=firefox
   # cy - use firefox in headless mode for CI
   - global:
       - MOZ_HEADLESS=1
-      - CI_NODE=0
-      - CI_NODE=1
 install:
   - yarn install --frozen-lockfile --silent
 # add the current github branch as an environment variable
@@ -52,10 +48,20 @@ jobs:
   include:
     # set chrome and firefox tests to run in parallel (single machine, 4 threads)
     - stage: test
-      before_script:
-        - echo "CI_BROWSER=$CI_BROWSER CI_NODE=$CI_NODE"
       env:
-        - STAGE_NAME=2x-chrome
+        - STAGE_NAME=2x-chrome-a
+        - STAGE_BROWSER=chrome
+    - stage: test
+      env:
+        - STAGE_NAME=2x-chrome-a
+        - STAGE_BROWSER=chrome
+    - stage: test
+      env:
+        - STAGE_NAME=2x-chrome-b
+        - STAGE_BROWSER=chrome
+    - stage: test
+      env:
+        - STAGE_NAME=2x-chrome-b
         - STAGE_BROWSER=chrome
       <<: *defaults
 ##############################################################################

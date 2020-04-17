@@ -3,6 +3,7 @@ node_js:
   - '10'
 dist: trusty
 cache:
+  # cache both yarn (.cache) and npm (for global installs)
   yarn: true
   directories:
     - ~/.cache
@@ -19,10 +20,11 @@ branches:
     - master
     - production
 env:
-  # Tell jest to run without non-interactive mode
-  - CI=true
+  # Cypress - assign multiple browsers to spin up multiple machines, use firefox (headless) and chrome
   - global:
       - MOZ_HEADLESS=1
+  - CI_BROWSER=chrome
+  - CI_BROWSER=firefox
 install:
   - yarn install --frozen-lockfile --silent
 # add the current github branch as an environment variable
@@ -36,41 +38,31 @@ before_script:
 # jobs (which creates a parallel travis matrix that cypress can hook into)
 defaults: &defaults
   script:
-    - echo "group=$STAGE_NAME browser=$STAGE_BROWSER"
+    - echo "group=$STAGE_NAME browser=$CI_BROWSER"
     - npm run start:ci &
-    - $(npm bin)/cypress run --record --key=62585f33-d688-47b7-acb3-6d1dca832065 --parallel --browser $STAGE_BROWSER --group $STAGE_NAME
+    - $(npm bin)/cypress run --record --key=62585f33-d688-47b7-acb3-6d1dca832065 --parallel --browser $CI_BROWSER --group $STAGE_NAME --ci-build-id $TRAVIS_BUILD_ID
     # to kill all background jobs (like "npm start &")
     - kill $(jobs -p) || true
 
 jobs:
   include:
-    # we have multiple jobs to execute using just a single stage
-    # but we can pass group name via environment variable to Cypress test runner
+    # set chrome and firefox tests to run in parallel (single machine, 4 threads)
     - stage: test
       env:
-        - STAGE_NAME=1x-electron
-      <<: *defaults
-    # run tests in parallel by including several test jobs with same name variable
-    - stage: test
-      env:
-        - STAGE_NAME=2x-chrome
-        - STAGE_BROWSER=chrome
+        - STAGE_NAME=4x-$CI_BROWSER
       <<: *defaults
     - stage: test
       env:
-        - STAGE_NAME=2x-chrome
-        - STAGE_BROWSER=chrome
+        - STAGE_NAME=4x-$CI_BROWSER
       <<: *defaults
     # separate set of tests for firefox
     - stage: test
       env:
-        - STAGE_NAME=2x-firefox
-        - STAGE_BROWSER=firefox
+        - STAGE_NAME=4x-$CI_BROWSER
       <<: *defaults
     - stage: test
       env:
-        - STAGE_NAME=2x-firefox
-        - STAGE_BROWSER=firefox
+        - STAGE_NAME=4x-$CI_BROWSER
       <<: *defaults
 ##############################################################################
 

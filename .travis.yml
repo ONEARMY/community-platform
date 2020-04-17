@@ -42,8 +42,7 @@ before_script:
 defaults: &defaults
   script:
     - echo "group=$STAGE_NAME browser=$STAGE_BROWSER node=$CY_NODE"
-    - npm run start:ci &
-    - $(npm bin)/cypress run --record --key=62585f33-d688-47b7-acb3-6d1dca832065 --parallel --browser $STAGE_BROWSER --group $STAGE_NAME --ci-build-id $TRAVIS_BUILD_ID
+    - start-server-and-test start:ci http-get://localhost:3456 "$(npm bin)/cypress run --record --key=62585f33-d688-47b7-acb3-6d1dca832065 --parallel --browser $STAGE_BROWSER --group $STAGE_NAME --ci-build-id $TRAVIS_BUILD_ID"
     # to kill all background jobs (like "npm start &")
     - kill $(jobs -p) || true
 

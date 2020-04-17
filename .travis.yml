@@ -10,7 +10,7 @@ cache:
     - ~/.cache
 addons:
   chrome: stable
-  firefox: stable
+  firefox: latest
   apt:
     packages:
       # Required for cypress parallel tests
@@ -39,8 +39,7 @@ defaults: &defaults
     #   ## print all Travis environment variables for debugging
     - $(npm bin)/print-env TRAVIS
     - npm run start:ci &
-    - npm run cypress run --record --key 62585f33-d688-47b7-acb3-6d1dca832065 --parallel --group $STAGE_NAME
-    # after all tests finish running we need
+    - cypress run --record --key 62585f33-d688-47b7-acb3-6d1dca832065 --parallel --group $STAGE_NAME
     # to kill all background jobs (like "npm start &")
     - kill $(jobs -p) || true
 

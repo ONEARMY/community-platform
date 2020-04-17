@@ -2,12 +2,11 @@ language: node_js
 node_js:
   - '10'
 dist: trusty
-sudo: false
 cache:
   yarn: true
   directories:
-    # Cypress binary
     - ~/.cache
+    - ~/.npm
 addons:
   chrome: stable
   firefox: latest
@@ -24,7 +23,8 @@ env:
   - CI=true
   - global:
       - MOZ_HEADLESS=1
-
+install:
+  - yarn install --frozen-lockfile --silent
 # add the current github branch as an environment variable
 before_script:
   - export REACT_APP_BRANCH=$TRAVIS_BRANCH
@@ -38,7 +38,7 @@ defaults: &defaults
   script:
     - echo "group=$STAGE_NAME browser=$STAGE_BROWSER"
     - npm run start:ci &
-    - cypress run --record --key=62585f33-d688-47b7-acb3-6d1dca832065 --parallel --browser $STAGE_BROWSER --group $STAGE_NAME
+    - $(npm bin)/cypress run --record --key=62585f33-d688-47b7-acb3-6d1dca832065 --parallel --browser $STAGE_BROWSER --group $STAGE_NAME
     # to kill all background jobs (like "npm start &")
     - kill $(jobs -p) || true
 

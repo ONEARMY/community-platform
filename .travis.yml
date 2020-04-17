@@ -22,11 +22,15 @@ branches:
 env:
   # cy - use firefox in headless mode for CI
   - global:
+      - DEBUG=True
       - MOZ_HEADLESS=1
+      - MATRIX_VAR=1
+      - MATRIX_VAR=2
 install:
   - yarn install --frozen-lockfile --silent
 # add the current github branch as an environment variable
 before_script:
+  - echo "MATRIX=$MATRIX_VAR"
   - export REACT_APP_BRANCH=$TRAVIS_BRANCH
   - echo "REACT_APP_BRANCH=$REACT_APP_BRANCH"
 
@@ -51,14 +55,17 @@ jobs:
       env:
         - STAGE_NAME=2x-chrome-a
         - STAGE_BROWSER=chrome
+      <<: *defaults
     - stage: test
       env:
         - STAGE_NAME=2x-chrome-a
         - STAGE_BROWSER=chrome
+      <<: *defaults
     - stage: test
       env:
         - STAGE_NAME=2x-chrome-b
         - STAGE_BROWSER=chrome
+      <<: *defaults
     - stage: test
       env:
         - STAGE_NAME=2x-chrome-b

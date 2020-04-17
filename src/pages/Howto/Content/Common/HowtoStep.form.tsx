@@ -24,6 +24,7 @@ interface IProps {
   index: number
   images: IUploadedFileMeta[]
   onDelete: (index: number) => void
+  moveStep: (indexfrom: number, indexTo: number) => void
 }
 interface IState {
   showDeleteModal: boolean
@@ -86,6 +87,22 @@ class HowtoStep extends React.PureComponent<IProps, IState> {
           <Heading small flex={1} mb={3}>
             Step {index + 1}
           </Heading>
+          {index >= 1 && (
+            <Button
+              data-cy="move-step"
+              variant={'secondary'}
+              icon="arrow-full-down"
+              sx={{ rotate: '180deg' }}
+              onClick={() => this.props.moveStep(index, index - 1)}
+            />
+          )}
+          <Button
+            data-cy="move-step"
+            variant={'secondary'}
+            icon="arrow-full-down"
+            sx={{ mx: '5px' }}
+            onClick={() => this.props.moveStep(index, index + 1)}
+          />
           {index >= 1 && (
             <Button
               data-cy="delete-step"

@@ -10,6 +10,7 @@ cache:
     - ~/.cache
 addons:
   chrome: stable
+  firefox: stable
   apt:
     packages:
       # Required for cypress parallel tests
@@ -20,7 +21,9 @@ branches:
     - production
 env:
   # Tell jest to run without non-interactive mode
-  CI=true
+  - CI=true
+  - global:
+      - MOZ_HEADLESS=1
 
 # add the current github branch as an environment variable
 before_script:
@@ -36,7 +39,7 @@ defaults: &defaults
     #   ## print all Travis environment variables for debugging
     - $(npm bin)/print-env TRAVIS
     - npm run start:ci &
-    - npm run cy:run -- --record --key 62585f33-d688-47b7-acb3-6d1dca832065 --parallel --group $STAGE_NAME
+    - npm run cypress run --record --key 62585f33-d688-47b7-acb3-6d1dca832065 --parallel --group $STAGE_NAME
     # after all tests finish running we need
     # to kill all background jobs (like "npm start &")
     - kill $(jobs -p) || true

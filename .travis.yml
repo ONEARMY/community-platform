@@ -20,11 +20,13 @@ branches:
     - master
     - production
 env:
-  # Cypress - assign multiple browsers to spin up multiple machines, use firefox (headless) and chrome
+  - CY_NODE=0
+  - CY_NODE=1
+  - CY_NODE=2
+  - CY_NODE=3
+  # cy - use firefox in headless mode for CI
   - global:
       - MOZ_HEADLESS=1
-  - CI_BROWSER=chrome
-  - CI_BROWSER=firefox
 install:
   - yarn install --frozen-lockfile --silent
 # add the current github branch as an environment variable
@@ -36,11 +38,12 @@ before_script:
 # Cypress E2E Tests (parallel)
 # create a default script that will allow cypress tests to be triggered from
 # jobs (which creates a parallel travis matrix that cypress can hook into)
+# Note - depending on server load these may/may not always actually run in parallel
 defaults: &defaults
   script:
-    - echo "group=$STAGE_NAME browser=$CI_BROWSER"
+    - echo "group=$STAGE_NAME browser=$STAGE_BROWSER node=$CY_NODE"
     - npm run start:ci &
-    - $(npm bin)/cypress run --record --key=62585f33-d688-47b7-acb3-6d1dca832065 --parallel --browser $CI_BROWSER --group $STAGE_NAME --ci-build-id $TRAVIS_BUILD_ID
+    - $(npm bin)/cypress run --record --key=62585f33-d688-47b7-acb3-6d1dca832065 --parallel --browser $STAGE_BROWSER --group $STAGE_NAME --ci-build-id $TRAVIS_BUILD_ID
     # to kill all background jobs (like "npm start &")
     - kill $(jobs -p) || true
 
@@ -49,20 +52,24 @@ jobs:
     # set chrome and firefox tests to run in parallel (single machine, 4 threads)
     - stage: test
       env:
-        - STAGE_NAME=4x-$CI_BROWSER
+        - STAGE_NAME=2x-chrome
+        - STAGE_BROWSER=chrome
       <<: *defaults
     - stage: test
       env:
-        - STAGE_NAME=4x-$CI_BROWSER
+        - STAGE_NAME=2x-chrome
+        - STAGE_BROWSER=chrome
       <<: *defaults
     # separate set of tests for firefox
     - stage: test
       env:
-        - STAGE_NAME=4x-$CI_BROWSER
+        - STAGE_NAME=2x-firefox
+        - STAGE_BROWSER=firefox
       <<: *defaults
     - stage: test
       env:
-        - STAGE_NAME=4x-$CI_BROWSER
+        - STAGE_NAME=2x-firefox
+        - STAGE_BROWSER=firefox
       <<: *defaults
 ##############################################################################
 

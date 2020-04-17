@@ -62,7 +62,7 @@ describe('[How To]', () => {
         images.forEach((image, index) => {
           cy.get(`[data-cy=step-image-${index}]`)
             .find(':file')
-            .uploadFiles([image])
+            .attachFile(image)
         })
       }
     })
@@ -149,7 +149,7 @@ describe('[How To]', () => {
       cy.step('Upload a cover for the intro')
       cy.get('[data-cy=intro-cover]')
         .find(':file')
-        .uploadFiles('images/howto-intro.jpg')
+        .attachFile('images/howto-intro.jpg')
 
       expected.steps.forEach((step, i) => {
         const videoUrl =
@@ -285,7 +285,7 @@ describe('[How To]', () => {
 
       cy.get('[data-cy=intro-cover]')
         .find(':file')
-        .uploadFiles('images/howto-intro.jpg')
+        .attachFile('images/howto-intro.jpg')
 
       deleteStep(5)
       deleteStep(4)

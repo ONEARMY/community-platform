@@ -121,8 +121,9 @@ const eqSettings = (chaiObj, utils) => {
   const linkAssert: Assert<IUserPPDB, any> = (subject, expected) =>
     expect(subject.links, 'Links').to.containSubset(expected.links)
   const coverImageAssert: Assert<IUserPPDB, any> = (subject, expected) =>
-    expect(subject.coverImages, 'CoverImages').to.containSubset(
-      expected.coverImages,
+    // only test length as uploaded images get new url and meta
+    expect(subject.coverImages, 'CoverImages').to.have.same.length(
+      expected.coverImages.length,
     )
   const locationAssert: Assert<IUserPPDB, any> = (subject, expected) => {
     expect(subject.location, 'Location').to.containSubset(expected.location)

@@ -143,7 +143,7 @@
     "chai-subset": "^1.6.0",
     "cross-env": "^6.0.3",
     "cypress": "4.4.0",
-    "cypress-file-upload": "3.5.3",
+    "cypress-file-upload": "4.0.6",
     "cypress-plugin-retries": "^1.5.2",
     "dotenv": "6.0.0",
     "dotenv-expand": "4.2.0",

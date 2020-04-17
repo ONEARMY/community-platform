@@ -79,9 +79,6 @@ describe('[Settings]', () => {
     cy.get(`[data-cy=input-link-${link.index}]`)
       .clear()
       .type(link.url)
-      // bug - case where not all letters typed
-      .wait(50)
-      .blur()
   }
   describe('[Focus Workplace]', () => {
     const freshSettings = {

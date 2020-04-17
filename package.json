@@ -20,7 +20,7 @@
     "cy:open": "cross-env TZ='Europe/London' npx cypress open",
     "cy:test": "start-test start:ci 3456 cy:open",
     "cy:test:ci": "start-test start:ci http-get://localhost:3456 cy:run:record",
-    "cy:run:record": "npm run cy:run -- --record --key 62585f33-d688-47b7-acb3-6d1dca832065 --parallel",
+    "cy:run:record": "npm run cy:run -- --record --key 62585f33-d688-47b7-acb3-6d1dca832065 --parallel --group $STAGE_NAME",
     "cy:run:debug": "DEBUG=cypress:* cy:run"
   },
   "eslintConfig": {},

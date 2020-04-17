@@ -39,10 +39,10 @@ before_script:
 # Note - depending on server load these may/may not always actually run in parallel
 defaults: &defaults
   script:
-    - echo "group=$STAGE_NAME browser=$STAGE_BROWSER"
+    - echo "group=$CI_GROUP browser=$CI_BROWSER"
     # A bit ugly to look at, but this starts the platform server with ci environment variables,
     # waits until it's fully responsive, and then executes cypress tests for a given browser and parallel node
-    - start-server-and-test start:ci http-get://localhost:3456 "$(npm bin)/cypress run --record --key=62585f33-d688-47b7-acb3-6d1dca832065 --parallel --browser $STAGE_BROWSER --group $STAGE_NAME --ci-build-id $TRAVIS_BUILD_ID"
+    - start-server-and-test start:ci http-get://localhost:3456 "$(npm bin)/cypress run --record --key=62585f33-d688-47b7-acb3-6d1dca832065 --parallel --browser $CI_BROWSER --group $CI_GROUP --ci-build-id $TRAVIS_BUILD_ID"
     # to kill all background jobs (like "npm start &")
     - kill $(jobs -p) || true
 
@@ -51,23 +51,27 @@ jobs:
     # set chrome and firefox tests to run in parallel (single machine, 4 threads)
     - stage: test
       env:
-        - STAGE_NAME=2x-chrome-a
-        - STAGE_BROWSER=chrome
+        - CI_GROUP=2x-chrome
+        - CI_BROWSER=chrome
+        - CI_NODE=0
       <<: *defaults
     - stage: test
       env:
-        - STAGE_NAME=2x-chrome-a
-        - STAGE_BROWSER=chrome
+        - CI_GROUP=2x-chrome
+        - CI_BROWSER=chrome
+        - CI_NODE=1
       <<: *defaults
     - stage: test
       env:
-        - STAGE_NAME=2x-chrome-b
-        - STAGE_BROWSER=chrome
+        - CI_GROUP=2x-firefox
+        - CI_BROWSER=firefox
+        - CI_NODE=0
       <<: *defaults
     - stage: test
       env:
-        - STAGE_NAME=2x-chrome-b
-        - STAGE_BROWSER=chrome
+        - CI_GROUP=2x-firefox
+        - CI_BROWSER=firefox
+        - CI_NODE=1
       <<: *defaults
 ##############################################################################
 

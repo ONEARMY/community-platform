@@ -272,7 +272,7 @@ describe('[Settings]', () => {
         },
       ],
       location: {
-        administrative: 'Central Singapore',
+        administrative: null,
         country: 'Singapore',
         countryCode: 'sg',
         latlng: {
@@ -281,7 +281,7 @@ describe('[Settings]', () => {
         },
         name: 'Singapore',
         postcode: '178957',
-        value: 'Singapore, Central Singapore, Singapore',
+        value: 'Singapore, Singapore',
       },
       mapPinDescription: 'Informative workshop on machines every week',
       machineBuilderXp: ['electronics', 'welding'],

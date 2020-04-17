@@ -20,10 +20,9 @@ branches:
     - master
     - production
 env:
-  - CY_NODE=0
-  - CY_NODE=1
-  - CY_NODE=2
-  - CY_NODE=3
+  - matrix:
+      - CI_BROWSER=chrome
+      - CI_BROWSER=firefox
   # cy - use firefox in headless mode for CI
   - global:
       - MOZ_HEADLESS=1
@@ -52,29 +51,27 @@ jobs:
   include:
     # set chrome and firefox tests to run in parallel (single machine, 4 threads)
     - stage: test
+      before_script: echo "CI_BROWSER=$CI_BROWSER"
       env:
         - STAGE_NAME=2x-chrome
         - STAGE_BROWSER=chrome
-        - CY_NODE="$CY_NODE"
       <<: *defaults
     - stage: test
+      before_script: echo "CI_BROWSER=$CI_BROWSER"
       env:
         - STAGE_NAME=2x-chrome
         - STAGE_BROWSER=chrome
-        - CY_NODE="$CY_NODE"
       <<: *defaults
     # separate set of tests for firefox
     - stage: test
       env:
         - STAGE_NAME=2x-firefox
         - STAGE_BROWSER=firefox
-        - CY_NODE="$CY_NODE"
       <<: *defaults
     - stage: test
       env:
         - STAGE_NAME=2x-firefox
         - STAGE_BROWSER=firefox
-        - CY_NODE="$CY_NODE"
       <<: *defaults
 ##############################################################################
 

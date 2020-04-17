@@ -13,9 +13,9 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "analyze": "npm run build -- --stats & npx webpack-bundle-analyzer ./build/bundle-stats.json",
-    "test": "start-test start:ci 3456 cy:open",
+    "test": "start-test start:ci http-get://localhost:3456 cy:open",
     "start:ci": "cross-env SITE_VARIANT=test-ci BROWSER=none PORT=3456 npm run start",
-    "cy:open": "cross-env TZ='Europe/London' npx cypress open --browser chrome"
+    "cy:open": "npx cypress open --browser chrome"
   },
   "eslintConfig": {},
   "browserslist": [
@@ -143,7 +143,7 @@
     "chai-subset": "^1.6.0",
     "cross-env": "^6.0.3",
     "cypress": "4.4.0",
-    "cypress-file-upload": "4.0.6",
+    "cypress-file-upload": "3.5.3",
     "cypress-plugin-retries": "^1.5.2",
     "dotenv": "6.0.0",
     "dotenv-expand": "4.2.0",

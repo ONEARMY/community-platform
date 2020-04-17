@@ -32,23 +32,25 @@ before_script:
   - export REACT_APP_BRANCH=$TRAVIS_BRANCH
   - echo "REACT_APP_BRANCH=$REACT_APP_BRANCH"
 
-##############################################################################
-# Cypress E2E Tests (parallel)
-# create a default script that will allow cypress tests to be triggered from
-# jobs (which creates a parallel travis matrix that cypress can hook into)
-# Note - depending on server load these may/may not always actually run in parallel
+###############################################################################################################
+# E2E Tests (cypress)
+###############################################################################################################
+# create a default script to be triggered from jobs
+# see https://docs.travis-ci.com/user/build-matrix/#job-uniqueness-and-duplicate-jobs
 defaults: &defaults
   script:
     - echo "group=$CI_GROUP browser=$CI_BROWSER"
+    - export TZ=UTC
     # A bit ugly to look at, but this starts the platform server with ci environment variables,
     # waits until it's fully responsive, and then executes cypress tests for a given browser and parallel node
+    # see https://docs.cypress.io/guides/guides/parallelization.html
     - start-server-and-test start:ci http-get://localhost:3456 "$(npm bin)/cypress run --record --key=62585f33-d688-47b7-acb3-6d1dca832065 --parallel --browser $CI_BROWSER --group $CI_GROUP --ci-build-id $TRAVIS_BUILD_ID"
     # to kill all background jobs (like "npm start &")
     - kill $(jobs -p) || true
-
+# Jobs run in parallel, so split chrome and firefox tests running each across 2 machines.
+# CI_NODE var just ensures job env unique (otherwise won't run), others are passed to default script
 jobs:
   include:
-    # set chrome and firefox tests to run in parallel (single machine, 4 threads)
     - stage: test
       env:
         - CI_GROUP=2x-chrome
@@ -73,8 +75,9 @@ jobs:
         - CI_BROWSER=firefox
         - CI_NODE=1
       <<: *defaults
-##############################################################################
-
+###############################################################################################################
+# Deployment (firebase)
+###############################################################################################################
 # install firebase cli and set firebase project ci token from environment
 before_deploy:
   - npm run build

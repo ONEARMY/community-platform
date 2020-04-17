@@ -20,11 +20,6 @@ branches:
     - master
     - production
 env:
-  - matrix:
-      - CI_BROWSER=chrome CI_GROUP=2x-chrome-a
-      - CI_BROWSER=chrome CI_GROUP=2x-chrome-a
-      - CI_BROWSER=chrome CI_GROUP=2x-chrome-b
-      - CI_BROWSER=chrome CI_GROUP=2x-chrome-b
   # cy - use firefox in headless mode for CI
   - global:
       - DEBUG=True
@@ -42,14 +37,38 @@ before_script:
 # create a default script that will allow cypress tests to be triggered from
 # jobs (which creates a parallel travis matrix that cypress can hook into)
 # Note - depending on server load these may/may not always actually run in parallel
-script:
-  - echo "group=$CI_GROUP browser=$CI_BROWSER"
-  # A bit ugly to look at, but this starts the platform server with ci environment variables,
-  # waits until it's fully responsive, and then executes cypress tests for a given browser and parallel node
-  - start-server-and-test start:ci http-get://localhost:3456 "$(npm bin)/cypress run --record --key=62585f33-d688-47b7-acb3-6d1dca832065 --parallel --browser $CI_BROWSER --group $CI_GROUP --ci-build-id $TRAVIS_BUILD_ID"
-  # to kill all background jobs (like "npm start &")
-  - kill $(jobs -p) || true
+defaults: &defaults
+  script:
+    - echo "group=$STAGE_NAME browser=$STAGE_BROWSER"
+    # A bit ugly to look at, but this starts the platform server with ci environment variables,
+    # waits until it's fully responsive, and then executes cypress tests for a given browser and parallel node
+    - start-server-and-test start:ci http-get://localhost:3456 "$(npm bin)/cypress run --record --key=62585f33-d688-47b7-acb3-6d1dca832065 --parallel --browser $STAGE_BROWSER --group $STAGE_NAME --ci-build-id $TRAVIS_BUILD_ID"
+    # to kill all background jobs (like "npm start &")
+    - kill $(jobs -p) || true
 
+jobs:
+  include:
+    # set chrome and firefox tests to run in parallel (single machine, 4 threads)
+    - stage: test
+      env:
+        - STAGE_NAME=2x-chrome-a
+        - STAGE_BROWSER=chrome
+      <<: *defaults
+    - stage: test
+      env:
+        - STAGE_NAME=2x-chrome-a
+        - STAGE_BROWSER=chrome
+      <<: *defaults
+    - stage: test
+      env:
+        - STAGE_NAME=2x-chrome-b
+        - STAGE_BROWSER=chrome
+      <<: *defaults
+    - stage: test
+      env:
+        - STAGE_NAME=2x-chrome-b
+        - STAGE_BROWSER=chrome
+      <<: *defaults
 ##############################################################################
 
 # install firebase cli and set firebase project ci token from environment

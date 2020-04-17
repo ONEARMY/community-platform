@@ -42,6 +42,8 @@ before_script:
 defaults: &defaults
   script:
     - echo "group=$STAGE_NAME browser=$STAGE_BROWSER node=$CY_NODE"
+    # A bit ugly to look at, but this starts the platform server with ci environment variables,
+    # waits until it's fully responsive, and then executes cypress tests for a given browser and parallel node
     - start-server-and-test start:ci http-get://localhost:3456 "$(npm bin)/cypress run --record --key=62585f33-d688-47b7-acb3-6d1dca832065 --parallel --browser $STAGE_BROWSER --group $STAGE_NAME --ci-build-id $TRAVIS_BUILD_ID"
     # to kill all background jobs (like "npm start &")
     - kill $(jobs -p) || true
@@ -53,22 +55,26 @@ jobs:
       env:
         - STAGE_NAME=2x-chrome
         - STAGE_BROWSER=chrome
+        - CY_NODE="$CY_NODE"
       <<: *defaults
     - stage: test
       env:
         - STAGE_NAME=2x-chrome
         - STAGE_BROWSER=chrome
+        - CY_NODE="$CY_NODE"
       <<: *defaults
     # separate set of tests for firefox
     - stage: test
       env:
         - STAGE_NAME=2x-firefox
         - STAGE_BROWSER=firefox
+        - CY_NODE="$CY_NODE"
       <<: *defaults
     - stage: test
       env:
         - STAGE_NAME=2x-firefox
         - STAGE_BROWSER=firefox
+        - CY_NODE="$CY_NODE"
       <<: *defaults
 ##############################################################################
 

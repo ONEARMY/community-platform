@@ -27,7 +27,7 @@ export class WorkspaceSection extends React.Component<{}, IState> {
         name="workspaceType"
         validate={required}
         validateFields={[]}
-        render={props => (
+        render={({ input, meta }) => (
           <FlexSectionContainer>
             <Flex justifyContent="space-between">
               <Heading small>Workspace</Heading>
@@ -49,15 +49,18 @@ export class WorkspaceSection extends React.Component<{}, IState> {
                     key={index}
                     value={workspace.label}
                     name="workspaceType"
-                    isSelected={workspace.label === props.input.value}
-                    onChange={v => props.input.onChange(v)}
+                    isSelected={workspace.label === input.value}
+                    onChange={v => {
+                      input.onChange(v)
+                      input.onBlur()
+                    }}
                     imageSrc={workspace.imageSrc}
                     textLabel={workspace.textLabel}
                     subText={workspace.subText}
                   />
                 ))}
               </Flex>
-              {props.meta.touched && props.meta.error && (
+              {meta.touched && meta.error && (
                 <Text color={theme.colors.red}>
                   Please select your workspace type
                 </Text>

@@ -44,7 +44,7 @@ defaults: &defaults
     # A bit ugly to look at, but this starts the platform server with ci environment variables,
     # waits until it's fully responsive, and then executes cypress tests for a given browser and parallel node
     # see https://docs.cypress.io/guides/guides/parallelization.html
-    - start-server-and-test start:ci http-get://localhost:3456 "$(npm bin)/cypress run --record --key=62585f33-d688-47b7-acb3-6d1dca832065 --parallel --browser $CI_BROWSER --group $CI_GROUP --ci-build-id $TRAVIS_BUILD_ID"
+    - npm run test ci
     # to kill all background jobs (like "npm start &")
     - kill $(jobs -p) || true
 # Jobs run in parallel, so split chrome and firefox tests running each across 2 machines.

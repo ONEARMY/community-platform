@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
+    "test": "node scripts/test.e2e.js",
     "functions": "cd functions && npm run --",
     "lint": "tslint --project tsconfig.json --config tslint.json",
     "format": "npm run prettier -- --write",
@@ -12,10 +13,7 @@
     "validate": "npm run lint && npm run prettier -- --list-different",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "analyze": "npm run build -- --stats & npx webpack-bundle-analyzer ./build/bundle-stats.json",
-    "test": "start-test start:ci http-get://localhost:3456 cy:open",
-    "start:ci": "cross-env SITE_VARIANT=test-ci BROWSER=none PORT=3456 npm run start",
-    "cy:open": "npx cypress open --browser chrome"
+    "analyze": "npm run build -- --stats & npx webpack-bundle-analyzer ./build/bundle-stats.json"
   },
   "eslintConfig": {},
   "browserslist": [

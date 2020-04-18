@@ -7,7 +7,7 @@
       "tslint --project cypress/tsconfig.json --config tslint.json"
     ],
     "*.{js,jsx}": [
-      "eslint"
+      "tslint"
     ],
     "*.+(js|jsx|json|yml|yaml|css|less|scss|ts|tsx|md|graphql|mdx)": [
       "prettier --write",

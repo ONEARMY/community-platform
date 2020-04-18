@@ -69,10 +69,6 @@ export class EventsCreate extends React.Component<IProps, IState> {
     this.props.history.push('/events')
   }
 
-  public validateTitle = async (value: any) => {
-    return this.store.validateTitle(value, 'v3_events')
-  }
-
   public handleChange = (date: any) => {
     this.setState({
       selectedDate: date,
@@ -156,7 +152,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                           id="title"
                           name="title"
                           data-cy="title"
-                          validate={value => this.validateTitle(value)}
+                          validate={required}
                           validateFields={[]}
                           component={InputField}
                           maxLength="140"

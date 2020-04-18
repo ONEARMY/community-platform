@@ -6,13 +6,31 @@ import { RealtimeDBClient } from './clients/rtdb'
 import {
   AbstractDatabase,
   DBClients,
-  DBEndpoint,
   DBDoc,
   DBQueryWhereOperator,
   DBQueryWhereValue,
 } from './types'
-import { Observable, Observer } from 'rxjs'
 
+import { Observable, Observer } from 'rxjs'
+import { DB_PREFIX } from './config'
+
+/**
+ * Consts and Types
+ * A few additional exports are provided to help ensure type safety.
+ * @remark - list required to populate db schema in dexie
+ * @remark - Mapping required to allow custom prefix for any of the endpoints
+ */
+const endpoints = ['howtos', 'users', 'tags', 'events', 'mappins'] as const
+export type DBEndpoint = typeof endpoints[number]
+const mappedEndpoints = {} as { [key in DBEndpoint]: string }
+endpoints.forEach(
+  endpoint => (mappedEndpoints[endpoint] = `${DB_PREFIX}${endpoint}`),
+)
+export const DBEndpoints = mappedEndpoints
+
+/**
+ * Main Database class
+ */
 export class DatabaseV2 implements AbstractDatabase {
   private _clients: DBClients
   constructor(clients?: DBClients) {
@@ -25,7 +43,9 @@ export class DatabaseV2 implements AbstractDatabase {
    * @param endpoint - the name of the collection as found in the database
    */
   collection<T>(endpoint: DBEndpoint) {
-    return new CollectionReference<T>(endpoint, this._clients)
+    // use mapped endpoint to allow custom db endpoint prefixes
+    const mappedEndpoint = DBEndpoints[endpoint]
+    return new CollectionReference<T>(mappedEndpoint, this._clients)
   }
 
   /**
@@ -47,7 +67,7 @@ export class DatabaseV2 implements AbstractDatabase {
 }
 
 class CollectionReference<T> {
-  constructor(private endpoint: DBEndpoint, private clients: DBClients) {}
+  constructor(private endpoint: string, private clients: DBClients) {}
 
   /**
    * Provide a reference to a document to perform operations, such as getting or setting data
@@ -110,7 +130,7 @@ class CollectionReference<T> {
   /**
    * Set multiple docs in a collection in batch.
    * NOTE - to set an individual doc a reference to that doc should be generated instead
-   * i.e. `db.collection('v3_users').doc('myUsername').set(data)`
+   * i.e. `db.collection('users').doc('myUsername').set(data)`
    * @param docs - The collection of docs to set
    */
   async set(docs: any[]) {
@@ -154,7 +174,7 @@ class CollectionReference<T> {
     return docs
   }
 
-  private async _getCacheLastModified(endpoint: DBEndpoint) {
+  private async _getCacheLastModified(endpoint: string) {
     const { cacheDB } = this.clients
     const latest = await cacheDB.queryCollection(endpoint, {
       orderBy: '_modified',
@@ -168,7 +188,7 @@ class CollectionReference<T> {
 class DocReference<T> {
   public id: string
   constructor(
-    private endpoint: DBEndpoint,
+    private endpoint: string,
     docID: string = '_generate',
     private clients: DBClients,
   ) {

@@ -14,7 +14,7 @@ import { RootStore } from '..'
 import { IUser } from 'src/models/user.models'
 import { hasAdminRights, needsModeration } from 'src/utils/helpers'
 
-const COLLECTION_NAME = 'v3_howtos'
+const COLLECTION_NAME = 'howtos'
 
 export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed

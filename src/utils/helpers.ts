@@ -1,4 +1,3 @@
-import countries from 'react-flags-select/lib/countries.js'
 import { IMapPin } from 'src/models/maps.models'
 import { IUser } from 'src/models/user.models'
 import { DBDoc, IModerable } from 'src/models/common.models'
@@ -117,27 +116,6 @@ export const isAllowToPin = (pin: IMapPin, user?: IUser) => {
     return true
   } else {
     return false
-  }
-}
-
-/************************************************************************
- *             Country code to country name converters
- ***********************************************************************/
-export const getCountryCode = (countryName: string | undefined) => {
-  let countryCode = Object.keys(countries).find(
-    key => countries[key] === countryName,
-  )
-  if (countryCode !== undefined) {
-    countryCode = countryCode.toLowerCase()
-  }
-  return countryCode
-}
-
-export const getCountryName = (countryCode: string | undefined) => {
-  if (countries.hasOwnProperty(countryCode)) {
-    return countries[countryCode]
-  } else {
-    return countryCode
   }
 }
 

@@ -12,10 +12,9 @@ import { Button } from 'src/components/Button'
 import { CustomCheckbox } from './Fields/CustomCheckbox.field'
 import { PLASTIC_TYPES } from 'src/mocks/user_pp.mock'
 import { IUserPP } from 'src/models/user_pp.models'
-import { IFormValues } from '../../SettingsPage'
 
 interface IProps {
-  initialFormValues: IFormValues
+  formValues: IUserPP
   required: boolean
 }
 

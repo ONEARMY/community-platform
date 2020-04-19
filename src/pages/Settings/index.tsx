@@ -25,17 +25,7 @@ export class SettingsPage extends React.Component<IProps> {
     return currentUser ? (
       <Switch>
         {/* own profile settings */}
-        <Route
-          exact
-          path="/settings"
-          render={props => (
-            <UserSettings
-              {...props}
-              user={currentUser}
-              userStore={this.injected.userStore}
-            />
-          )}
-        />
+        <Route exact path="/settings" render={() => <UserSettings />} />
       </Switch>
     ) : (
       <Flex justifyContent="center" mt="40px">

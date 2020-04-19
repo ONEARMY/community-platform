@@ -8,11 +8,8 @@ import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { FieldArray } from 'react-final-form-arrays'
 import { MACHINE_BUILDER_XP } from 'src/mocks/user_pp.mock'
 import { CustomCheckbox } from './Fields/CustomCheckbox.field'
-import { IUserPP } from 'src/models/user_pp.models'
-import { IFormValues } from '../../SettingsPage'
 
 interface IProps {
-  initialFormValues: IFormValues
   required: boolean
 }
 

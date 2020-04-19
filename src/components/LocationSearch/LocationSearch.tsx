@@ -127,7 +127,7 @@ export class LocationSearch extends React.Component<IProps, IState> {
     const { styleVariant } = this.props
     const closeButton: any = document.getElementsByClassName('ap-icon-clear')
     // move the 'x' close button in the DOM from the second (hidden) to the first input
-    for (let btn of closeButton) {
+    for (const btn of closeButton) {
       const locationField = btn.closest('#location-panel').firstElementChild
         .firstElementChild
       if (locationField) {
@@ -137,7 +137,7 @@ export class LocationSearch extends React.Component<IProps, IState> {
     }
 
     return (
-      <div data-cy="location" id="location-panel">
+      <div data-cy="location-search" id="location-panel">
         {/* the first input uses our styled input component and has ref to subscribe to value changes */}
         <span
           style={{

@@ -3,7 +3,6 @@ import { RouteComponentProps } from 'react-router'
 import { inject, observer } from 'mobx-react'
 import {
   IUserPP,
-  ILink,
   IMAchineBuilderXp,
   IOpeningHours,
   PlasticTypeLabel,
@@ -25,7 +24,6 @@ import theme from 'src/themes/styled.theme'
 import {
   capitalizeFirstLetter,
   replaceDashesWithSpaces,
-  getCountryCode,
 } from 'src/utils/helpers'
 import FlagIconEvents from 'src/components/Icons/FlagIcon/FlagIcon'
 
@@ -48,11 +46,11 @@ import BazarIcon from 'src/assets/icons/icon-bazar.svg'
 import SocialIcon from 'src/assets/icons/icon-social-media.svg'
 import IconForum from 'src/assets/icons/icon-forum.svg'
 import IconWebsite from 'src/assets/icons/icon-website.svg'
-import PPLogo from 'src/assets/images/precious-plastic-logo-official.svg'
 
 import { IUploadedFileMeta } from 'src/stores/storage'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { Loader } from 'src/components/Loader'
+import { IUser } from 'src/models/user.models'
 
 interface IRouterCustomParams {
   id: string
@@ -238,8 +236,8 @@ export class UserPage extends React.Component<
     })
   }
 
-  public renderLinks(links: ILink[]) {
-    return links.map((link: ILink, index) => {
+  public renderLinks(links: IUser['links']) {
+    return links.map((link, index) => {
       switch (link.label) {
         case 'forum':
           return (
@@ -282,7 +280,7 @@ export class UserPage extends React.Component<
               </Link>
             </ElWithBeforeIcon>
           )
-        case 'social-media':
+        case 'social media':
           return (
             <ElWithBeforeIcon
               key="link-social"
@@ -510,7 +508,7 @@ export class UserPage extends React.Component<
                 <FlagIconEvents code={user.location.countryCode} />
               ) : (
                 user.country && (
-                  <FlagIconEvents code={getCountryCode(user.country)} />
+                  <FlagIconEvents code={user.country.toLowerCase()} />
                 )
               )}
             </Flex>

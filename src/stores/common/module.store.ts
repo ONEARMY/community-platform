@@ -125,7 +125,7 @@ export class ModuleStore {
     })
   }
 
-  public uploadFileToCollection(
+  public async uploadFileToCollection(
     file: File | IConvertedFileMeta | IUploadedFileMeta,
     collection: string,
     id: string,

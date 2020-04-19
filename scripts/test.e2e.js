@@ -1,6 +1,11 @@
-// Custom script to start cypress dev server
 const child = require('child_process')
 const e2eEnv = require('dotenv').config({ path: `${process.cwd()}/.env.e2e` })
+
+// Prevent errors being silently ignored
+process.on('unhandledRejection', err => {
+  console.error('There was an uncaught error', err)
+  process.exit(1)
+})
 /**
  * When running e2e tests with cypress we need to first get the server up and running
  * before launching the test suite. Additionally we will pass a random DB_PREFIX variable

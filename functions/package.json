@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "lint": "tslint --project tsconfig.json",
-    "build": "tsc",
+    "build": "tsc -b",
     "watch": "./node_modules/.bin/tsc --watch",
     "copyDevConfig": "firebase functions:config:get > .runtimeconfig.json",
     "copyDevConfigWin": "firebase functions:config:get | ac .runtimeconfig.json",
@@ -39,7 +39,7 @@
     "@types/sharp": "^0.22.1",
     "concurrently": "^4.1.1",
     "tslint": "^5.12.0",
-    "typescript": "^3.2.2"
+    "typescript": "^3.7.4"
   },
   "engines": {
     "node": "10"

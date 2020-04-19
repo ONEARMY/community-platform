@@ -15,6 +15,7 @@ functions/backup.json
 
 # production
 /build
+/lib
 
 # misc
 .DS_Store

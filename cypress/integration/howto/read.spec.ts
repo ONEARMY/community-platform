@@ -169,9 +169,13 @@ describe('[How To]', () => {
         })
 
         cy.step('Video embed exists')
-        cy.get('[data-cy="video-embed"]')
-          .find('iframe')
-          .should(iframe => expect(iframe.contents().find('video')).to.exist)
+        cy.get('[data-cy="video-embed"]').within(() => {
+          cy.get('iframe')
+            .should('have.attr', 'src')
+            .and('include', 'youtube')
+        })
+        // This fails in firefox due to cross security, simply check url
+        // .should(iframe => expect(iframe.contents().find('video')).to.exist)
         cy.step('Back button at top takes users to /how-to')
         cy.get('[data-cy="go-back"]:eq(0)')
           .as('topBackButton')

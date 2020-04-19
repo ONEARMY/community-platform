@@ -24,8 +24,8 @@ async function main() {
   child.spawnSync(
     `npx start-test "${appStart}" "${waitForStart}" "${testStart}"`,
     {
-      stdio: 'inherit',
       shell: true,
+      stdio: 'inherit',
     },
   )
 }
@@ -38,7 +38,7 @@ main()
  */
 function getCypressEnv(sharedEnv) {
   return {
-    ...e2eEnv,
+    ...e2eEnv.parsed,
     runtime: sharedEnv.replace(/ /g, ','),
   }
 }

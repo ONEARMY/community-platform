@@ -7,12 +7,15 @@
     "sourceMap": true,
     "target": "es6",
     "jsx": "react",
-    "typeRoots": ["node_modules/@types"],
-    "baseUrl": "./",
+    "typeRoots": ["./node_modules/@types"],
+    "baseUrl": ".",
     "paths": {
-      "@OAModels/*": ["../src/models/*"]
+      "@OAModels/*": ["../src/models/*"],
+      "src/*": ["../src/*"],
+      "functions/*": ["./*"]
     },
     "skipLibCheck": true
   },
-  "include": ["src/**/*.ts", "spec/**/*.ts"]
+  "references": [{ "path": "../src" }],
+  "include": ["src/**/*"]
 }

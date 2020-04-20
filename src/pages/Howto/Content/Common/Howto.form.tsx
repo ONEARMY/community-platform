@@ -373,6 +373,9 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                     key={fields.value[index]._animationKey}
                                     step={name}
                                     index={index}
+                                    moveStep={(from, to) => {
+                                      fields.move(from, to)
+                                    }}
                                     images={fields.value[index].images}
                                     onDelete={(fieldIndex: number) => {
                                       fields.remove(fieldIndex)

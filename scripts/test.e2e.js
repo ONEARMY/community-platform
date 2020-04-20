@@ -30,7 +30,7 @@ async function main() {
     `npx start-test "${appStart}" "${waitForStart}" "${testStart}"`,
     {
       shell: true,
-      stdio: ['inherit'],
+      stdio: 'inherit',
     },
   )
   // as stderr stdio inherited (above) need to manually set exit code on fail

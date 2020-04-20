@@ -33,10 +33,9 @@ async function main() {
       stdio: ['inherit'],
     },
   )
-  console.log('test complete')
-  console.log(spawn)
   // as stderr stdio inherited (above) need to manually set exit code on fail
   if (spawn.status === 1) {
+    console.error(spawn.stderr.toString())
     process.exitCode = 1
   }
 }

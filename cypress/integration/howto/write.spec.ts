@@ -141,6 +141,7 @@ describe('[How To]', () => {
       cy.get('[data-cy=intro-title')
         .clear()
         .type('Create a how-to test')
+        .blur({ force: true })
       selectTag('howto_testing')
       selectTimeDuration(expected.time as Duration)
       selectDifficultLevel(expected.difficulty_level as Difficulty)

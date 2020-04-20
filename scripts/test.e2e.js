@@ -24,20 +24,19 @@ async function main() {
   const waitForStart = 'http-get://localhost:3456'
   const testStart = isCi
     ? //   TODO - cypress specific environment to be moved to other environment
-      `npx cypress run --record --env ${cyEnv.runtime} --key=${cyEnv.CYPRESS_KEY} --parallel --browser $CI_BROWSER --group $CI_GROUP --ci-build-id $TRAVIS_BUILD_ID`
+      `npx cypress run --record --env ${cyEnv.runtime} --key=${cyEnv.CYPRESS_KEY} --parallel --headless --browser $CI_BROWSER --group $CI_GROUP --ci-build-id $TRAVIS_BUILD_ID`
     : `npx cypress open --browser chrome --env ${cyEnv.runtime}`
   const spawn = child.spawnSync(
     `npx start-test "${appStart}" "${waitForStart}" "${testStart}"`,
     {
       shell: true,
-      // pipe errors, otherwise inherit stdio
-      stdio: ['inherit', 'inherit', 'pipe'],
+      stdio: ['inherit', 'inherit', 'inherit'],
     },
   )
   console.log(spawn)
-  console.log('test errors:', spawn.error.toString())
-  if (spawn.error) {
-    console.log('test failed error', spawn.error)
+  console.log('test errors:', spawn.stderr)
+  if (spawn.stderr) {
+    console.log('test failed error', spawn.stderr.toString())
     process.exitCode = 1
   }
 }

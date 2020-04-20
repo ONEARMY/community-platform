@@ -30,13 +30,13 @@ async function main() {
     `npx start-test "${appStart}" "${waitForStart}" "${testStart}"`,
     {
       shell: true,
-      stdio: ['inherit', 'inherit', 'inherit'],
+      stdio: ['inherit'],
     },
   )
   console.log('test complete')
   console.log(spawn)
-  if (spawn.stderr || spawn.exitCode === 1) {
-    console.log('test failed error', spawn.stderr.toString())
+  // as stderr stdio inherited (above) need to manually set exit code on fail
+  if (spawn.status === 1) {
     process.exitCode = 1
   }
 }

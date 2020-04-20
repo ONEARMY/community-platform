@@ -4,7 +4,7 @@ const e2eEnv = require('dotenv').config({ path: `${process.cwd()}/.env.e2e` })
 // Prevent errors being silently ignored
 process.on('unhandledRejection', err => {
   console.error('There was an uncaught error', err)
-  process.exit(1)
+  process.exitCode = 1
 })
 /**
  * When running e2e tests with cypress we need to first get the server up and running
@@ -26,13 +26,18 @@ async function main() {
     ? //   TODO - cypress specific environment to be moved to other environment
       `npx cypress run --record --env ${cyEnv.runtime} --key=${cyEnv.CYPRESS_KEY} --parallel --browser $CI_BROWSER --group $CI_GROUP --ci-build-id $TRAVIS_BUILD_ID`
     : `npx cypress open --browser chrome --env ${cyEnv.runtime}`
-  child.spawnSync(
+  const spawn = child.spawnSync(
     `npx start-test "${appStart}" "${waitForStart}" "${testStart}"`,
     {
       shell: true,
-      stdio: 'inherit',
+      // pipe errors, otherwise inherit stdio
+      stdio: ['inherit', 'inherit', 'pipe'],
     },
   )
+  if (spawn.error) {
+    console.log('test failed error', spawn.error)
+    process.exitCode = 1
+  }
 }
 main()
 

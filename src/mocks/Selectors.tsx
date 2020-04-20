@@ -12,7 +12,7 @@ export const COM_TYPE_MOCKS = [
     label: 'website',
   },
   {
-    value: 'social-media',
+    value: 'social media',
     label: 'social media',
   },
   {

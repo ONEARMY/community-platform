@@ -1,10 +1,8 @@
 import * as React from 'react'
-import ReactFlagsSelect from 'react-flags-select'
 import Select from 'react-select'
 import { Props as SelectProps } from 'react-select/lib/Select'
 import { Styles } from 'react-select/lib/styles'
 import theme from 'src/themes/styled.theme'
-import { getCountryName } from 'src/utils/helpers'
 import { Flex } from 'src/components/Flex'
 import { ErrorMessage, FieldContainer } from './elements'
 import { IFieldProps } from './Fields'
@@ -200,26 +198,4 @@ export const SelectField = ({
     </Flex>
     {meta.error && meta.touched && <ErrorMessage>{meta.error}</ErrorMessage>}
   </>
-)
-
-export const FlagSelector = ({ input, meta, ...rest }: ISelectFieldProps) => (
-  <Flex p={0} flexWrap="wrap">
-    <FieldContainer
-      invalid={meta.error && meta.touched}
-      data-cy={rest['data-cy']}
-    >
-      <ReactFlagsSelect
-        onSelect={v => {
-          input.onChange(getCountryName(v))
-        }}
-        onBlur={input.onBlur}
-        onFocus={input.onFocus}
-        {...defaultProps}
-        {...rest}
-      />
-    </FieldContainer>
-    {meta.error && meta.touched && (
-      <ErrorMessage style={{ bottom: '-10px' }}>{meta.error}</ErrorMessage>
-    )}
-  </Flex>
 )

@@ -5,7 +5,7 @@ export const TemplateMock: ITemplateData[] = [
   {
     id: 1,
     message: { message: 'hello', read: true, type: 'short' },
-    _createdBy: MOCK_USER,
+    _createdBy: MOCK_USER.userName,
     _created: new Date(),
     _modified: new Date(),
   },

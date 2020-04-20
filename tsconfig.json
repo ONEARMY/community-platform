@@ -13,12 +13,14 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
     "jsx": "preserve",
     "noImplicitAny": false,
     "strictPropertyInitialization": false,
     "experimentalDecorators": true,
-    "typeRoots": ["./node_modules/@types", "./types"]
+    "typeRoots": ["./node_modules/@types", "./types"],
+    "composite": true,
+    "declaration": true,
+    "outDir": "./lib"
   },
   "include": ["src", "types"],
   "exclude": [

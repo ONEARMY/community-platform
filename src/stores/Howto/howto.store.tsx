@@ -131,7 +131,7 @@ export class HowtoStore extends ModuleStore {
       // redefine howTo based on processing done above (should match stronger typing)
       const howTo: IHowto = {
         ...values,
-        _createdBy: user.userName,
+        _createdBy: values._createdBy ? values._createdBy : user.userName,
         cover_image: processedCover,
         steps: processedSteps,
         files: processedFiles,

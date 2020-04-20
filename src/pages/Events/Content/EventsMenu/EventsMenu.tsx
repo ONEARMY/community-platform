@@ -22,14 +22,12 @@ export class EventsMenu extends React.Component<any, IState> {
     super(props)
     // initial state
     this.state = { filters: Mocks.EVENT_FILTERS, timePeriod: 'weekend' }
-    console.log('state', this.state)
   }
 
   public filtersUpdated(e: React.ChangeEvent<HTMLSelectElement>) {
     const filters = { ...this.state.filters }
     filters[e.target.name] = e.target.value
     this.setState({ filters })
-    console.log('state', this.state)
   }
 
   public updateEventType(type) {

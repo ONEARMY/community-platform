@@ -1,5 +1,6 @@
-import { DbCollectionName, Page } from '../utils/test-utils'
+import { DbCollectionName } from '../utils/test-utils'
 import { UserMenuItem } from '../support/commands'
+import { IUser } from 'src/models/user.models'
 
 interface Info {
   username: string
@@ -8,17 +9,12 @@ interface Info {
   coverImage: string
 }
 
-interface ILink {
-  index: number
-  type: 'email' | 'website' | 'discord' | 'bazar' | 'forum' | 'social media'
-  url: string
-}
-
 interface IMapPin {
   description: string
   searchKeyword: string
   locationName: string
 }
+type ILink = IUser['links'][0] & { index: number }
 
 describe('[Settings]', () => {
   beforeEach(() => {
@@ -42,15 +38,16 @@ describe('[Settings]', () => {
       cy.get('[data-cy=country]')
         .find(':text')
         .clear()
-        .type(info.country.substring(0, info.country.length - 2))
-      cy.get('[data-cy=country]')
-        .contains(info.country)
+        .type(info.country)
+      cy.get('[data-cy=country')
+        .find('.flag-option')
+        .first()
         .click()
     }
     cy.get('[data-cy=info-description')
       .clear()
       .type(info.description)
-    cy.get('[data-cy=coverImages0]')
+    cy.get('[data-cy=coverImages-0]')
       .find(':file')
       .uploadFiles(info.coverImage)
   }
@@ -59,14 +56,14 @@ describe('[Settings]', () => {
     cy.get('[data-cy=pin-description]')
       .clear()
       .type(mapPin.description)
-    cy.get('[data-cy=location]')
+    cy.get('[data-cy=location-search]')
       .find(':text')
       .clear()
       .type(mapPin.searchKeyword)
-    cy.get('[data-cy=location]')
+    cy.get('[data-cy=location-search]')
       .find('.ap-suggestion:eq(0)')
       .click()
-    cy.get('[data-cy=location]')
+    cy.get('[data-cy=location-search]')
       .find('input')
       .should('have.value', mapPin.locationName)
   }
@@ -75,10 +72,9 @@ describe('[Settings]', () => {
     if (link.index > 0) {
       cy.get('[data-cy=add-link]').click()
     }
-
     cy.get(`[data-cy=select-link-${link.index}]`).click()
     cy.get('div.data-cy__menu-list')
-      .contains(link.type)
+      .contains(link.label)
       .click()
     cy.get(`[data-cy=input-link-${link.index}]`)
       .clear()
@@ -111,11 +107,11 @@ describe('[Settings]', () => {
       links: [
         {
           label: 'email',
-          url: 'settings_workplace_new@test.com',
+          url: `${freshSettings.userName}@test.com`,
         },
         {
           label: 'website',
-          url: 'http://www.settings_workplace_new.com',
+          url: `http://www.${freshSettings.userName}.com`,
         },
       ],
       location: {
@@ -153,13 +149,13 @@ describe('[Settings]', () => {
       cy.step('Update Contact Links')
       addContactLink({
         index: 0,
-        type: 'email',
+        label: 'email',
         url: `${freshSettings.userName}@test.com`,
       })
       addContactLink({
         index: 1,
-        type: 'website',
-        url: `www.${freshSettings.userName}.com`,
+        label: 'website',
+        url: `http://www.${freshSettings.userName}.com`,
       })
 
       setMapPin({
@@ -194,7 +190,9 @@ describe('[Settings]', () => {
       _deleted: false,
       _id: 'settings_member_new',
       about: "I'm a very active member",
-      country: 'Poland',
+      // note - flag-picker returns country code but displays labels,
+      // so tests will only work for countries that code start same as label
+      country: 'AU',
       profileType: 'member',
       userName: 'settings_member_new',
       verified: true,
@@ -211,7 +209,7 @@ describe('[Settings]', () => {
       links: [
         {
           label: 'email',
-          url: 'settings_member_new@test.com',
+          url: `${freshSettings.userName}@test.com`,
         },
       ],
     }
@@ -230,7 +228,7 @@ describe('[Settings]', () => {
       cy.step('Update Contact Links')
       addContactLink({
         index: 0,
-        type: 'email',
+        label: 'email',
         url: `${freshSettings.userName}@test.com`,
       })
 
@@ -306,7 +304,7 @@ describe('[Settings]', () => {
       cy.step('Update Contact Links')
       addContactLink({
         index: 0,
-        type: 'bazar',
+        label: 'bazar',
         url: `http://settings_machine_bazarlink.com`,
       })
       setMapPin({
@@ -323,7 +321,12 @@ describe('[Settings]', () => {
         'userName',
         '==',
         expected.userName,
-      ).should('eqSettings', expected)
+        // debug version - wrap to allow full log of result and expected
+      ).should(doc => {
+        cy.log('doc', JSON.stringify(doc))
+        cy.log('expected', JSON.stringify(expected))
+        cy.wrap(doc).should('eqSettings', expected)
+      })
     })
   })
 
@@ -381,7 +384,7 @@ describe('[Settings]', () => {
 
       cy.step('Update Contact Links')
       expected.links.forEach((link, index) =>
-        addContactLink({ index, type: 'forum', url: link.url }),
+        addContactLink({ index, label: 'forum', url: link.url }),
       )
 
       setMapPin({
@@ -432,11 +435,11 @@ describe('[Settings]', () => {
       ],
       links: [
         {
-          label: 'social-media',
+          label: 'social media',
           url: 'http://www.facebook.com/settings_plastic_new',
         },
         {
-          label: 'social-media',
+          label: 'social media',
           url: 'http://www.twitter.com/settings_plastic_new',
         },
       ],
@@ -529,13 +532,13 @@ describe('[Settings]', () => {
       cy.step('Update Contact Links')
       addContactLink({
         index: 0,
-        type: 'social media',
-        url: `www.facebook.com/${freshSettings.userName}`,
+        label: 'social media',
+        url: `http://www.facebook.com/${freshSettings.userName}`,
       })
       addContactLink({
         index: 1,
-        type: 'social media',
-        url: `www.twitter.com/${freshSettings.userName}`,
+        label: 'social media',
+        url: `http://www.twitter.com/${freshSettings.userName}`,
       })
 
       cy.step('Update Collection section')
@@ -575,7 +578,6 @@ describe('[Settings]', () => {
         searchKeyword: 'Malacca',
         locationName: expected.location.value,
       })
-
       cy.get('[data-cy=save]').click()
       cy.wait(500)
       cy.get('[data-cy=save]').should('not.be.disabled')

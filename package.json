@@ -1,6 +1,6 @@
 {
   "name": "precious-plastic-community-platform",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": true,
   "scripts": {
     "start": "node scripts/start.js",
@@ -20,7 +20,7 @@
     "cy:open": "cross-env TZ='Europe/London' npx cypress open",
     "cy:test": "start-test start:ci 3456 cy:open",
     "cy:test:ci": "start-test start:ci http-get://localhost:3456 cy:run:record",
-    "cy:run:record": "npm run cy:run -- --record --key 62585f33-d688-47b7-acb3-6d1dca832065",
+    "cy:run:record": "npm run cy:run -- --record --key 62585f33-d688-47b7-acb3-6d1dca832065 --parallel",
     "cy:run:debug": "DEBUG=cypress:* cy:run"
   },
   "eslintConfig": {},
@@ -150,6 +150,7 @@
     "cross-env": "^6.0.3",
     "cypress": "3.8.1",
     "cypress-file-upload": "^3.3.4",
+    "cypress-plugin-retries": "^1.5.2",
     "dotenv": "6.0.0",
     "dotenv-expand": "4.2.0",
     "enzyme": "^3.8.0",

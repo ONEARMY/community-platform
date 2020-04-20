@@ -63,6 +63,7 @@ class CustomCheckbox extends Component<IProps, IState> {
           onChange={() => this.props.onChange(index)}
           checked={isSelected}
           validate={required ? isRequired : undefined}
+          validateFields={[]}
           type="checkbox"
           component={HiddenInputField}
         />

@@ -1,7 +1,7 @@
 const child = require('child_process')
 const e2eEnv = require('dotenv').config({ path: `${process.cwd()}/.env.e2e` })
 
-// Prevent errors being silently ignored
+// Prevent unhandled errors being silently ignored
 process.on('unhandledRejection', err => {
   console.error('There was an uncaught error', err)
   process.exitCode = 1
@@ -30,15 +30,10 @@ async function main() {
     `npx start-test "${appStart}" "${waitForStart}" "${testStart}"`,
     {
       shell: true,
-      stdio: ['inherit', 'inherit', 'pipe'],
+      stdio: ['inherit', 'inherit', 'inherit'],
     },
   )
-  console.log('test complete')
-  console.log(spawn)
-  if (spawn.stderr) {
-    console.log(spawn.stderr.toString())
-  }
-  // take the stderr piped above throw error on fail
+  // errors inherited by stdio above don't cause exit, so handle now
   if (spawn.status === 1) {
     process.exitCode = 1
   }

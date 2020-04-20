@@ -13,14 +13,13 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react",
     "noImplicitAny": false,
     "strictPropertyInitialization": false,
     "experimentalDecorators": true,
     "typeRoots": ["./node_modules/@types", "./types"],
-    "composite": true,
     "declaration": true,
-    "outDir": "./lib"
+    "noEmit": true
   },
   "include": ["src", "types"],
   "exclude": [

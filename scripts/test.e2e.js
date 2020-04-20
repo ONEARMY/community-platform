@@ -35,6 +35,9 @@ async function main() {
   )
   console.log('test complete')
   console.log(spawn)
+  if (spawn.stderr) {
+    console.log(spawn.stderr.toString())
+  }
   // take the stderr piped above throw error on fail
   if (spawn.status === 1) {
     process.exitCode = 1

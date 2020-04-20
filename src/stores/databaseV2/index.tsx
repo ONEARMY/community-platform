@@ -55,7 +55,7 @@ export class DatabaseV2 implements AbstractDatabase {
    */
   private _getDefaultClients = (): DBClients => {
     const serverDB = new FirestoreClient()
-    const cacheDB = location.search.includes('no-cache')
+    const cacheDB = window.location.search.includes('no-cache')
       ? serverDB
       : new DexieClient()
     return {

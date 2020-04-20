@@ -45,7 +45,7 @@ export class SWUpdateNotification extends React.Component<IProps, IState> {
             key="reload"
             color="secondary"
             size="small"
-            onClick={() => location.reload()}
+            onClick={() => window.location.reload()}
           >
             Reload
           </Button>,

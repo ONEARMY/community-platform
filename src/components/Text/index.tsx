@@ -19,8 +19,7 @@ export interface ITextProps {
   medium?: boolean
   small?: boolean
   superSmall?: boolean
-  // keyof colors returns full object prototype, include typeof for just named keys (i.e. color list)
-  color?: keyof typeof theme.colors
+  color?: string
   // clip forces text to fill max 1 line and add '...' for overflow
   clipped?: boolean
   preLine?: boolean
@@ -150,7 +149,7 @@ type TextProps = ITextProps & RebassTextProps
 
 // TODO - incorporate custom css into rebass props to allow things like below to be passed
 export const Text = (props: TextProps) => (
-  <BaseText {...props}>{props.children}</BaseText>
+  <BaseText {...(props as any)}>{props.children}</BaseText>
 )
 
 export default Text

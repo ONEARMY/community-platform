@@ -187,8 +187,8 @@ export const SelectField = ({
               onCustomChange(getValueFromSelect(v as any))
             }
           }}
-          onBlur={input.onBlur}
-          onFocus={input.onFocus}
+          onBlur={input.onBlur as any}
+          onFocus={input.onFocus as any}
           value={getValueForSelect(rest.options, input.value)}
           classNamePrefix={'data-cy'}
           {...defaultProps}

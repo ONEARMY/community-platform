@@ -3,6 +3,7 @@ import { RootStore } from '..'
 import { action, observable } from 'mobx'
 import { IUser, UserRole } from 'src/models/user.models'
 import { ITag } from 'src/models/tags.model'
+import { functions } from 'src/utils/firebase'
 
 /*********************************************************************************
  *  The admin store contains methods for updating user permissions.
@@ -53,6 +54,23 @@ export class AdminStore extends ModuleStore {
       userRoles.splice(userRoles.indexOf(role), 1)
       await userRef.set({ ...user, userRoles })
       this.init()
+    }
+  }
+
+  /**
+   * Make call to backend function to retrieve user email from auth provider
+   * (as it is not stored in the database)
+   */
+  public async getUserEmail(user: IUser) {
+    try {
+      const res = await functions.httpsCallable('adminGetUserEmail')({
+        uid: user._authID,
+      })
+      const email = res.data
+      return email
+    } catch (error) {
+      console.error(error)
+      return `unable to get user email - ${error.message}`
     }
   }
 

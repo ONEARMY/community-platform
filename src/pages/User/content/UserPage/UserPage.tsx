@@ -50,7 +50,12 @@ import IconWebsite from 'src/assets/icons/icon-website.svg'
 import { IUploadedFileMeta } from 'src/stores/storage'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { Loader } from 'src/components/Loader'
+
+import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { AdminContact } from 'src/components/AdminContact/AdminContact'
+
 import { IUser } from 'src/models/user.models'
+
 
 interface IRouterCustomParams {
   id: string
@@ -548,6 +553,11 @@ export class UserPage extends React.Component<
                 {this.renderLinks(user.links)}
               </UserContactInfo>
             )}
+            <AuthWrapper roleRequired={'admin'}>
+              <Box mt={3}>
+                <AdminContact user={user} />
+              </Box>
+            </AuthWrapper>
           </Box>
           <Box
             width={['100%', '100%', '20%']}

@@ -34,6 +34,8 @@ async function main() {
       stdio: ['inherit', 'inherit', 'pipe'],
     },
   )
+  console.log(spawn)
+  console.log('test errors:', spawn.error.toString())
   if (spawn.error) {
     console.log('test failed error', spawn.error)
     process.exitCode = 1

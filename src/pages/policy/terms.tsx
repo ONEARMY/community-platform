@@ -14,7 +14,7 @@ export class TermsPolicy extends React.PureComponent<any> {
           <a
             href="https://github.com/ONEARMY/community-platform/blob/master/LICENSE"
             target="_blank"
-            rel="nofollow"
+            rel="noopener noreferrer"
           >
             GitHub
           </a>
@@ -109,6 +109,7 @@ export class TermsPolicy extends React.PureComponent<any> {
           <a
             href="https://app-privacy-policy-generator.firebaseapp.com/"
             target="_blank"
+            rel="noopener noreferrer"
           >
             platform Privacy Policy Generator
           </a>

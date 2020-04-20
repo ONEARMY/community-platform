@@ -1,6 +1,5 @@
 import 'cypress-file-upload'
-import { Firestore, Auth as AuthNative, firebase } from './db/firebase'
-import FileData = Cypress.FileData
+import { Firestore, firebase } from './db/firebase'
 
 export enum UserMenuItem {
   Profile = 'Profile',
@@ -162,17 +161,6 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
       message: [`**${message}**`],
     })
   })
-
-  const resolveMimeType = (filePath: string) => {
-    const mimeTypeMapping = [['.jpg', 'image/jpg'], ['.png', 'image/png']]
-    const [_, mimeType]: any = mimeTypeMapping.find(([ext]) =>
-      filePath.endsWith(ext),
-    )
-    if (!mimeType) {
-      throw new Error(`Please define the mime type for ${filePath} here!`)
-    }
-    return mimeType
-  }
 
   Cypress.Commands.add('toggleUserMenuOn', () => {
     Cypress.log({ displayName: 'OPEN_USER_MENU' })

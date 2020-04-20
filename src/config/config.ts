@@ -75,6 +75,7 @@ if (siteVariant === 'production') {
     searchOnlyAPIKey: e.REACT_APP_ALGOLIA_PLACES_API_KEY as string,
   }
   // disable console logs
+  // eslint-disable-next-line
   console.log = () => {}
 }
 

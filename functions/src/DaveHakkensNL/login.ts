@@ -1,7 +1,6 @@
 const endpoint = 'https://davehakkens.nl/wp-json/aam/v1/authenticate'
 import axios from 'axios'
 import { firebaseAdmin } from '../Firebase/admin'
-// tslint:disable no-implicit-dependencies
 import { IUser } from '@OAModels/user.models'
 
 export const DHLogin = async (username: string, password: string) => {

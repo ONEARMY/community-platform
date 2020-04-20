@@ -1,8 +1,8 @@
 import { Page } from '../utils/test-utils'
 
 describe('[Bugs]', () => {
-  it('default test', () => {
-    expect(true).to.eq(true)
+  it.only('default test', () => {
+    expect(true).to.eq(false)
   })
 
   // it('[693]', () => {

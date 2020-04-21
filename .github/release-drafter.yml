@@ -1,4 +1,4 @@
-name-template: 'v$NEXT_PATCH_VERSION 🌈'
+name-template: 'v$NEXT_PATCH_VERSION - {Give it a name}'
 tag-template: 'v$NEXT_PATCH_VERSION'
 categories:
   - title: '🚀 Features'

@@ -9,6 +9,7 @@ _Select relevant_
 ## Checklist
 
 - [ ] - Latest `master` branch merged
+- [ ] - PR title descriptive (can be used in release notes)
 - [ ] - Passes Tests
 
 ## Description

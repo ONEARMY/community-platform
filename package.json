@@ -3,13 +3,14 @@
   "version": "1.1.0",
   "private": true,
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx src --color",
     "lint:fix": "npm run lint -- --fix",
+    "serve": "npx serve -s build",
     "test": "node scripts/test.e2e.js",
-    "test:unit": "react-scripts test --env=jsdom",
+    "test:unit": "react-app-rewired test --env=jsdom",
     "storybook": "start-storybook -p 6006",
     "storybook:build": "build-storybook",
     "analyze": "npx cra-bundle-analyzer && npx open-cli build/report.html"
@@ -144,6 +145,7 @@
     "mobx-react-devtools": "^6.0.3",
     "node-sass": "^4.13.1",
     "prettier": "^1.16.4",
+    "react-app-rewired": "^2.1.5",
     "react-scripts": "3.4.1",
     "start-server-and-test": "^1.11.0",
     "typescript": "^3.7.4"

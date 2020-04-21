@@ -70,7 +70,6 @@ export class LocationSearch extends React.Component<IProps, IState> {
       appId: ALGOLIA_PLACES_CONFIG.applicationID,
       apiKey: ALGOLIA_PLACES_CONFIG.searchOnlyAPIKey,
       container: this.placesInputRef.current,
-      style: false,
     }).configure({ useDeviceLocation: false })
     // add custom handler when place selected from list
     this.places.on('change', (selected: IAlgoliaResponse) =>

@@ -2,7 +2,7 @@ import * as functions from 'firebase-functions'
 import { IDBEndpoint } from '../models'
 import { db } from '..//Firebase/firestoreDB'
 
-const USER_ENDPOINT: IDBEndpoint = 'v3_users'
+const USER_ENDPOINT: IDBEndpoint = 'v3_users' as any
 
 /**
  * Example function to show how an automated email can be triggered

@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions'
 import { DBDoc, IDBEndpoint } from '../models'
-const USERS_ENDPOINT: IDBEndpoint = 'v3_users'
+const USERS_ENDPOINT: IDBEndpoint = 'v3_users' as any
 
 /**
  * Automatically create user revision on update

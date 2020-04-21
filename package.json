@@ -12,7 +12,7 @@
     "test:unit": "react-scripts test --env=jsdom",
     "storybook": "start-storybook -p 6006",
     "storybook:build": "build-storybook",
-    "analyze": "npm run build -- --stats & npx webpack-bundle-analyzer ./build/bundle-stats.json"
+    "analyze": "npx cra-bundle-analyzer && npx open-cli build/report.html"
   },
   "husky": {
     "hooks": {
@@ -130,6 +130,7 @@
     "@typescript-eslint/eslint-plugin": "^2.29.0",
     "@typescript-eslint/parser": "^2.29.0",
     "chai-subset": "^1.6.0",
+    "cra-bundle-analyzer": "^0.0.3",
     "cross-env": "^6.0.3",
     "cypress": "4.4.0",
     "cypress-file-upload": "4.0.6",

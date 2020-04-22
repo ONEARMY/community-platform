@@ -35,8 +35,9 @@ const eqHowto = (chaiObj, utils) => {
       title,
       tags,
     })
-    expect(subject.cover_image, 'Cover images').to.containSubset(
-      expected.cover_image,
+    // note, full cover image meta won't match as uploaded image meta changes
+    expect(subject.cover_image.name, 'Cover images').to.eq(
+      expected.cover_image.name,
     )
 
     expected.steps.forEach((step, index) => {
@@ -57,8 +58,9 @@ const eqHowtoStep = (chaiObj, utils) => {
       text,
       title,
     })
-    expect(subject.images, `Step ${index} with images`).to.containSubset(
-      expected.images,
+    // note, image meta won't match as uploaded image meta changes
+    expect(subject.images.length, `Step ${index} with images`).to.eq(
+      expected.images.length,
     )
   }
 
@@ -121,8 +123,9 @@ const eqSettings = (chaiObj, utils) => {
   const linkAssert: Assert<IUserPPDB, any> = (subject, expected) =>
     expect(subject.links, 'Links').to.containSubset(expected.links)
   const coverImageAssert: Assert<IUserPPDB, any> = (subject, expected) =>
-    expect(subject.coverImages, 'CoverImages').to.containSubset(
-      expected.coverImages,
+    // only test length as uploaded images get new url and meta
+    expect(subject.coverImages, 'CoverImages').to.have.same.length(
+      expected.coverImages.length,
     )
   const locationAssert: Assert<IUserPPDB, any> = (subject, expected) => {
     expect(subject.location, 'Location').to.containSubset(expected.location)

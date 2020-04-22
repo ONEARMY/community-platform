@@ -68,6 +68,7 @@ interface IProps {
 }
 const defaultProps: IProps = {
   onFilesChange: () => null,
+  multiple: false,
 }
 
 export interface IConvertedFileMeta {

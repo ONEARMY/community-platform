@@ -91,8 +91,8 @@ class HowtoStep extends React.PureComponent<IProps, IState> {
             <Button
               data-cy="move-step"
               variant={'secondary'}
-              icon="arrow-full-down"
-              sx={{ rotate: '180deg' }}
+              icon="arrow-full-up"
+              sx={{ mx: '5px' }}
               onClick={() => this.props.moveStep(index, index - 1)}
             />
           )}

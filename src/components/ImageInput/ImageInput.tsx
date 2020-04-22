@@ -67,7 +67,6 @@ interface IProps {
   // TODO - add preview method for case when multiple images uploaded (if being used)
   value?: IInputValue | IMultipleInputValue
   hasText?: boolean
-  replaceImage?: boolean
   multiple?: boolean
 }
 const defaultProps: IProps = {

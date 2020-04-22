@@ -104,7 +104,6 @@ export class ImageInput extends React.Component<IProps, IState> {
       convertedFiles: [],
       uploadedFiles: this._getUploadedFiles(props.value),
     }
-    console.log('state', this.state)
   }
 
   public handleFileUpload = (filesToUpload: Array<File>) => {

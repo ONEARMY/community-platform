@@ -121,17 +121,11 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                         data-cy="cover-image"
                       >
                         <Field
-                          canDelete
                           hasText={false}
                           name={name}
                           validateFields={[]}
                           data-cy={`coverImages-${index}`}
                           component={ImageInputField}
-                          imageSrc={
-                            fields.value[index]
-                              ? (fields.value[index] as any).downloadUrl
-                              : null
-                          }
                         />
                       </Box>
                     ))}

@@ -1,11 +1,12 @@
 import * as React from 'react'
-import { Box, Flex, Image } from 'rebass'
+import { Box, Image } from 'rebass'
 import styled from 'styled-components'
 import { Button } from '../Button'
 import 'react-image-lightbox/style.css'
 import { ImageConverter } from './ImageConverter'
 import theme from 'src/themes/styled.theme'
 import Dropzone from 'react-dropzone'
+import { IUploadedFileMeta } from 'src/stores/storage'
 
 interface ITitleProps {
   hasUploadedImg: boolean
@@ -54,16 +55,19 @@ const UploadImageOverlay = styled(AlignCenterWrapper)`
     Note, typings not available for client-compress so find full options here:
     https://github.com/davejm/client-compress
 */
+// Input can either come from uploaded or local converted meta
+type IInputValue = IUploadedFileMeta | IUploadedFileMeta
+type IMultipleInputValue = (IConvertedFileMeta | IUploadedFileMeta)[]
 
 interface IProps {
   // if multiple sends array, otherwise single object (or null on delete)
   onFilesChange: (
     fileMeta: IConvertedFileMeta[] | IConvertedFileMeta | null,
   ) => void
-  imageSrc?: string
+  // TODO - add preview method for case when multiple images uploaded (if being used)
+  value?: IInputValue | IMultipleInputValue
   hasText?: boolean
   replaceImage?: boolean
-  canDelete?: boolean
   multiple?: boolean
 }
 const defaultProps: IProps = {
@@ -83,6 +87,7 @@ export interface IConvertedFileMeta {
 
 interface IState {
   convertedFiles: IConvertedFileMeta[]
+  uploadedFiles: IUploadedFileMeta[]
   inputFiles: File[]
   lightboxImg?: IConvertedFileMeta
   openLightbox?: boolean
@@ -98,7 +103,9 @@ export class ImageInput extends React.Component<IProps, IState> {
     this.state = {
       inputFiles: [],
       convertedFiles: [],
+      uploadedFiles: this._getUploadedFiles(props.value),
     }
+    console.log('state', this.state)
   }
 
   public handleFileUpload = (filesToUpload: Array<File>) => {
@@ -109,6 +116,17 @@ export class ImageInput extends React.Component<IProps, IState> {
     const filesRef = this.fileInputRef.current as HTMLInputElement
     const files = filesRef.files
     return files ? Array.from(files) : []
+  }
+
+  /**
+   * As input can be both array or single object and either uploaded or converted meta,
+   * require extra function to separate out to handle preview of previously uploaded
+   */
+  private _getUploadedFiles(value: IProps['value'] = []) {
+    const valArray = Array.isArray(value) ? value : [value]
+    return valArray.filter(v =>
+      v.hasOwnProperty('downloadUrl'),
+    ) as IUploadedFileMeta[]
   }
 
   public handleConvertedFileChange(file: IConvertedFileMeta, index: number) {
@@ -122,20 +140,25 @@ export class ImageInput extends React.Component<IProps, IState> {
   }
 
   public handleImageDelete(event: Event) {
+    // TODO - handle case where a server image is deleted (remove from server)
     event.stopPropagation()
     this.setState({
       inputFiles: [],
       convertedFiles: [],
+      uploadedFiles: [],
     })
     this.props.onFilesChange(null)
   }
 
   render() {
-    const { inputFiles } = this.state
-    const { imageSrc, multiple } = this.props
+    const { inputFiles, uploadedFiles } = this.state
+    const { multiple } = this.props
+    const showUploadedImg = uploadedFiles.length > 0
+    const hasImages = uploadedFiles.length > 0 || inputFiles.length > 0
+
     // if at least one image present, hide the 'choose image' button and replace with smaller button
-    const imgPreviewMode = inputFiles.length > 0 || imageSrc
-    const useImageSrc = imageSrc && this.state.inputFiles.length === 0
+    // const imgPreviewMode = inputFiles.length > 0 || imageSrc
+    // const useImageSrc = imageSrc && this.state.inputFiles.length === 0
     return (
       <Box p={0} height="100%">
         <Dropzone
@@ -145,14 +168,14 @@ export class ImageInput extends React.Component<IProps, IState> {
         >
           {({ getRootProps, getInputProps }) => (
             <ImageInputWrapper
-              hasUploadedImg={!!imgPreviewMode}
+              hasUploadedImg={showUploadedImg}
               {...getRootProps()}
             >
               <input {...getInputProps()} />
 
-              {imageSrc && <Image src={imageSrc} />}
+              {showUploadedImg && <Image src={uploadedFiles[0].downloadUrl} />}
 
-              {!useImageSrc &&
+              {!showUploadedImg &&
                 inputFiles.map((file, index) => {
                   return (
                     <ImageConverter
@@ -164,15 +187,14 @@ export class ImageInput extends React.Component<IProps, IState> {
                     />
                   )
                 })}
-
-              {!useImageSrc && !imgPreviewMode && (
+              {!hasImages && (
                 <Button small variant="outline" icon="image">
                   Upload Image
                 </Button>
               )}
 
-              <UploadImageOverlay>
-                {this.props.canDelete && imgPreviewMode && (
+              {hasImages && (
+                <UploadImageOverlay>
                   <Button
                     data-cy="delete-image"
                     small
@@ -182,19 +204,8 @@ export class ImageInput extends React.Component<IProps, IState> {
                   >
                     Delete
                   </Button>
-                )}
-
-                {!this.props.canDelete && (
-                  <Button
-                    small
-                    variant="outline"
-                    icon="image"
-                    data-cy="replace-image"
-                  >
-                    Replace image
-                  </Button>
-                )}
-              </UploadImageOverlay>
+                </UploadImageOverlay>
+              )}
             </ImageInputWrapper>
           )}
         </Dropzone>

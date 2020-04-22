@@ -347,7 +347,6 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 id="cover_image"
                                 name="cover_image"
                                 validate={required}
-                                src={formValues.cover_image}
                                 component={ImageInputField}
                               />
                             </Box>

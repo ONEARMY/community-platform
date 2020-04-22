@@ -374,7 +374,9 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                     step={name}
                                     index={index}
                                     moveStep={(from, to) => {
-                                      fields.move(from, to)
+                                      if (to !== fields.length) {
+                                        fields.move(from, to)
+                                      }
                                     }}
                                     images={fields.value[index].images}
                                     onDelete={(fieldIndex: number) => {

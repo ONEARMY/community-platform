@@ -13,6 +13,7 @@ import {
   MdCheck,
   MdArrowBack,
   MdArrowDownward,
+  MdArrowUpward,
   MdKeyboardArrowDown,
   MdMailOutline,
   MdNotifications,
@@ -60,6 +61,7 @@ export type availableGlyphs =
   | 'check'
   | 'arrow-back'
   | 'arrow-full-down'
+  | 'arrow-full-up'
   | 'arrow-forward'
   | 'arrow-down'
   | 'mail-outline'
@@ -97,6 +99,7 @@ export const glyphs: IGlyphs = {
   'arrow-back': <MdArrowBack />,
   'arrow-forward': <MdArrowForward />,
   'arrow-full-down': <MdArrowDownward />,
+  'arrow-full-up': <MdArrowUpward />,
   'arrow-down': <MdKeyboardArrowDown />,
   'mail-outline': <MdMailOutline />,
   notifications: <MdNotifications />,

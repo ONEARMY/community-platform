@@ -168,6 +168,10 @@ describe('[How To]', () => {
             .and('match', pic3Regex)
         })
 
+        cy.step('Video embed exists')
+        cy.get('[data-cy="video-embed"]')
+          .find('iframe')
+          .should(iframe => expect(iframe.contents().find('video')).to.exist)
         cy.step('Back button at top takes users to /how-to')
         cy.get('[data-cy="go-back"]:eq(0)')
           .as('topBackButton')

@@ -51,10 +51,10 @@ describe('[Bugs]', () => {
   //     .contains('event_testing')
   //     .click()
 
-  //   cy.get('[data-cy=location]')
+  //   cy.get('[data-cy=location-search]')
   //     .find('input:eq(0)')
   //     .type('Atucucho')
-  //   cy.get('[data-cy=location]')
+  //   cy.get('[data-cy=location-search]')
   //     .find('div')
   //     .contains('Atucucho')
   //     .click()

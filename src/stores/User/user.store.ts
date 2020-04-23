@@ -92,6 +92,7 @@ export class UserStore extends ModuleStore {
       const userMeta = await this.getUserProfile(user.uid)
       if (userMeta) {
         this.updateUser(userMeta)
+        console.log('userMeta', userMeta)
       } else {
         throw new Error(`could not find user profile [${user.uid}]`)
       }
@@ -225,6 +226,7 @@ export class UserStore extends ModuleStore {
       throw new Error('No Username Provided')
     }
     const user: IUser = {
+      ...USER_BASE,
       _authID: authUser.uid,
       displayName,
       userName,
@@ -281,4 +283,11 @@ function getInitialUpdateStatus() {
 // take the username and return matching avatar url (includes undefined.jpg match if no user)
 export const getUserAvatar = (userName: string | undefined) => {
   return Storage.getPublicDownloadUrl(`avatars/${userName}.jpg`)
+}
+
+const USER_BASE = {
+  coverImages: [],
+  links: [],
+  moderation: 'awaiting-moderation',
+  verified: false,
 }

@@ -159,7 +159,8 @@ export class EventsCreate extends React.Component<IProps, IState> {
                           validate={value => this.validateTitle(value)}
                           validateFields={[]}
                           component={InputField}
-                          placeholder="Title of your event"
+                          maxLength="140"
+                          placeholder="Title of your event (max 140 characters)"
                         />
                       </Flex>
                       <Flex

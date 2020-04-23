@@ -3,9 +3,17 @@ node_js:
   - '10'
 dist: trusty
 sudo: false
-cache: yarn
+cache:
+  yarn: true
+  directories:
+    # Cypress binary
+    - ~/.cache
 addons:
   chrome: stable
+  apt:
+    packages:
+      # Required for cypress parallel tests
+      - libgconf-2-4
 branches:
   only:
     - master

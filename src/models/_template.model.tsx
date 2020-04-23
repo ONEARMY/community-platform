@@ -3,7 +3,7 @@ import { IUser } from './user.models'
 export interface ITemplateData {
   id: number
   message: ITemplateMessage
-  _createdBy?: IUser
+  _createdBy?: IUser['userName']
   _created: Date
   _modified: Date
 }

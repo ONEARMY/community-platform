@@ -81,6 +81,9 @@ export const MOCK_USER_WORKSPACE: IUserPP = {
   mapPinDescription: 'This is a description to display on the map user card',
   isExpert: true,
   isV4Member: false,
+  openingHours: [],
+  collectedPlasticTypes: [],
+  machineBuilderXp: [],
 }
 export const MOCK_USER_COLLECTION: IUserPP = {
   verified: true,
@@ -131,6 +134,9 @@ export const MOCK_USER_COLLECTION: IUserPP = {
   mapPinDescription: 'Collecting plastic',
   isExpert: false,
   isV4Member: true,
+  openingHours: [],
+  collectedPlasticTypes: [],
+  machineBuilderXp: [],
 }
 export const MOCK_USER_MEMBER: IUserPP = {
   verified: true,
@@ -180,6 +186,9 @@ export const MOCK_USER_MEMBER: IUserPP = {
   ],
   isExpert: false,
   isV4Member: false,
+  openingHours: [],
+  collectedPlasticTypes: [],
+  machineBuilderXp: [],
 }
 export const MOCK_USER_COMMUNITY: IUserPP = {
   verified: true,
@@ -227,13 +236,13 @@ export const MOCK_USER_COMMUNITY: IUserPP = {
       url: 'https://www.facebook.com/preciousplastic/',
     },
   ],
+  workspaceType: 'mix',
+  mapPinDescription: null,
   isExpert: false,
   isV4Member: true,
-  // location: {
-  //   address: 'Eindhoven, Noord-Brabant, The Netherlands',
-  //   lat: 51.4393,
-  //   lng: 5.47863,
-  // },
+  openingHours: [],
+  collectedPlasticTypes: [],
+  machineBuilderXp: [],
 }
 export const MOCK_USER_MACHINE: IUserPP = {
   verified: true,
@@ -281,13 +290,13 @@ export const MOCK_USER_MACHINE: IUserPP = {
       url: 'https://www.facebook.com/preciousplastic/',
     },
   ],
+  workspaceType: 'mix',
+  mapPinDescription: null,
   isExpert: true,
   isV4Member: false,
-  // location: {
-  //   address: 'Dallas, Texas, USA',
-  //   lat: 51.4393,
-  //   lng: 5.47863,
-  // },
+  openingHours: [],
+  collectedPlasticTypes: [],
+  machineBuilderXp: [],
 }
 
 export const PLASTIC_TYPES: IPlasticType[] = [

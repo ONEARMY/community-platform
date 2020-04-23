@@ -24,6 +24,7 @@ interface IProps {
   index: number
   images: IUploadedFileMeta[]
   onDelete: (index: number) => void
+  moveStep: (indexfrom: number, indexTo: number) => void
 }
 interface IState {
   showDeleteModal: boolean
@@ -35,7 +36,7 @@ const Label = styled.label`
   margin-bottom: ${theme.space[2] + 'px'};
 `
 
-class HowtoStep extends Component<IProps, IState> {
+class HowtoStep extends React.PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
@@ -51,9 +52,24 @@ class HowtoStep extends Component<IProps, IState> {
     this.toggleDeleteModal()
     this.props.onDelete(this.props.index)
   }
+  /**
+   * Ensure either url or images included (not both), and any url formatted correctly
+   */
+  validateMedia(videoUrl: string) {
+    const { images } = { ...this.props }
+    if (videoUrl) {
+      if (images[0]) {
+        return 'Do not include both images and video'
+      }
+      const ytRegex = new RegExp(/(youtu\.be\/|youtube\.com\/watch\?v=)/gi)
+      const urlValid = ytRegex.test(videoUrl)
+      return urlValid ? null : 'Please provide a valid YouTube Url'
+    }
+    return images[0] ? null : 'Include either images or a video'
+  }
 
   render() {
-    const { step, index, images } = this.props
+    const { step, index } = this.props
 
     return (
       // NOTE - animation parent container in CreateHowTo
@@ -71,6 +87,22 @@ class HowtoStep extends Component<IProps, IState> {
           <Heading small flex={1} mb={3}>
             Step {index + 1}
           </Heading>
+          {index >= 1 && (
+            <Button
+              data-cy="move-step"
+              variant={'secondary'}
+              icon="arrow-full-up"
+              sx={{ mx: '5px' }}
+              onClick={() => this.props.moveStep(index, index - 1)}
+            />
+          )}
+          <Button
+            data-cy="move-step"
+            variant={'secondary'}
+            icon="arrow-full-down"
+            sx={{ mx: '5px' }}
+            onClick={() => this.props.moveStep(index, index + 1)}
+          />
           {index >= 1 && (
             <Button
               data-cy="delete-step"
@@ -111,7 +143,8 @@ class HowtoStep extends Component<IProps, IState> {
             name={`${step}.title`}
             data-cy="step-title"
             component={InputField}
-            placeholder="Title of this step"
+            placeholder="Title of this step (max 30 characters)"
+            maxLength="30"
             validate={required}
             validateFields={[]}
           />
@@ -120,7 +153,8 @@ class HowtoStep extends Component<IProps, IState> {
           <Label htmlFor={`${step}.text`}>Description of this step *</Label>
           <Field
             name={`${step}.text`}
-            placeholder="Description of this step"
+            placeholder="Explain what you are doing in this step. if it gets to long break it into 2 steps (max 700 characters)"
+            maxLength="700"
             data-cy="step-description"
             component={TextAreaField}
             style={{ resize: 'vertical', height: '300px' }}
@@ -129,35 +163,39 @@ class HowtoStep extends Component<IProps, IState> {
           />
         </Flex>
         <Label htmlFor={`${step}.text`}>Upload image(s) for this step *</Label>
-
-        <Flex flexDirection={['column', 'row']} alignItems="center">
+        <Flex flexDirection={['column', 'row']} alignItems="center" mb={3}>
           <ImageInputFieldWrapper data-cy="step-image-0">
             <Field
-              canDelete
               hasText={false}
               name={`${step}.images[0]`}
-              src={images[0]}
               component={ImageInputField}
             />
           </ImageInputFieldWrapper>
           <ImageInputFieldWrapper data-cy="step-image-1">
             <Field
-              canDelete
               hasText={false}
               name={`${step}.images[1]`}
-              src={images[1]}
               component={ImageInputField}
             />
           </ImageInputFieldWrapper>
           <ImageInputFieldWrapper data-cy="step-image-2">
             <Field
-              canDelete
               hasText={false}
               name={`${step}.images[2]`}
-              src={images[2]}
               component={ImageInputField}
             />
           </ImageInputFieldWrapper>
+        </Flex>
+        <Flex flexDirection="column" mb={3}>
+          <Label htmlFor={`${step}.videoUrl`}>Or embed a YouTube video*</Label>
+          <Field
+            name={`${step}.videoUrl`}
+            data-cy="step-videoUrl"
+            component={InputField}
+            placeholder="https://youtube.com/watch?v="
+            validate={url => this.validateMedia(url)}
+            validateFields={[]}
+          />
         </Flex>
       </Flex>
     )

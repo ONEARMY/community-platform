@@ -31,8 +31,10 @@ describe('[How To]', () => {
     title: string,
     description: string,
     images: string[],
+    videoUrl?: string,
   ) => {
     const stepIndex = stepNumber - 1
+    console.log('stepIndex', stepIndex)
     cy.step(`Filling step ${stepNumber}`)
     cy.get(`[data-cy=step_${stepIndex}]:visible`).within($step => {
       cy.get('[data-cy=step-title]')
@@ -41,21 +43,28 @@ describe('[How To]', () => {
       cy.get('[data-cy=step-description]')
         .clear()
         .type(`Description for step ${stepNumber}`)
-      cy.step('Uploading pics')
-      const hasExistingPics =
-        Cypress.$($step).find('[data-cy=delete-step-img]').length > 0
-      if (hasExistingPics) {
-        cy.wrap($step)
-          .find('[data-cy=delete-image]')
-          .each($deleteButton => {
-            cy.wrap($deleteButton).click()
-          })
+      if (videoUrl) {
+        cy.step('Adding Video Url')
+        cy.get('[data-cy=step-videoUrl]')
+          .clear()
+          .type(videoUrl)
+      } else {
+        cy.step('Uploading pics')
+        const hasExistingPics =
+          Cypress.$($step).find('[data-cy=delete-step-img]').length > 0
+        if (hasExistingPics) {
+          cy.wrap($step)
+            .find('[data-cy=delete-image]')
+            .each($deleteButton => {
+              cy.wrap($deleteButton).click()
+            })
+        }
+        images.forEach((image, index) => {
+          cy.get(`[data-cy=step-image-${index}]`)
+            .find(':file')
+            .uploadFiles([image])
+        })
       }
-      images.forEach((image, index) => {
-        cy.get(`[data-cy=step-image-${index}]`)
-          .find(':file')
-          .uploadFiles([image])
-      })
     })
   }
 
@@ -142,11 +151,16 @@ describe('[How To]', () => {
         .find(':file')
         .uploadFiles('images/howto-intro.jpg')
 
-      expected.steps.forEach((step, index) => {
-        fillStep(index + 1, step.title, step.text, [
-          'images/howto-step-pic1.jpg',
-          'images/howto-step-pic2.jpg',
-        ])
+      expected.steps.forEach((step, i) => {
+        const videoUrl =
+          i === 1 ? 'https://www.youtube.com/watch?v=Os7dREQ00l4' : undefined
+        fillStep(
+          i + 1,
+          step.title,
+          step.text,
+          ['images/howto-step-pic1.jpg', 'images/howto-step-pic2.jpg'],
+          videoUrl,
+        )
       })
       deleteStep(3)
 

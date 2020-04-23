@@ -52,6 +52,7 @@ export class OpeningHoursPicker extends React.Component<IProps, IState> {
             options={WEEK_DAYS}
             component={SelectField}
             validate={required}
+            validateFields={[]}
             placeholder="Select day"
             style={{ width: '160px', marginRight: '8px', marginBottom: 0 }}
           />
@@ -72,6 +73,7 @@ export class OpeningHoursPicker extends React.Component<IProps, IState> {
             component={SelectField}
             placeholder="from --:-- AM"
             validate={required}
+            validateFields={[]}
             style={{ width: '160px', marginRight: '8px', marginBottom: 0 }}
           />
           <Field
@@ -81,6 +83,7 @@ export class OpeningHoursPicker extends React.Component<IProps, IState> {
             component={SelectField}
             placeholder="to --:-- PM"
             validate={required}
+            validateFields={[]}
             style={{ width: '160px', marginBottom: 0 }}
           />
         </Flex>

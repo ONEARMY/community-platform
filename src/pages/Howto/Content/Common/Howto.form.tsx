@@ -83,7 +83,7 @@ const Label = styled.label`
 
 @inject('howtoStore')
 @observer
-export class HowtoForm extends React.Component<IProps, IState> {
+export class HowtoForm extends React.PureComponent<IProps, IState> {
   uploadRefs: { [key: string]: UploadedFile | null } = {}
   constructor(props: any) {
     super(props)
@@ -229,14 +229,12 @@ export class HowtoForm extends React.Component<IProps, IState> {
                                     : false
                                 }
                                 component={InputField}
-                                placeholder="Make a chair from...
-                            "
+                                maxLength="50"
+                                placeholder="Make a chair from.. (max 50 characters)"
                               />
                             </Flex>
                             <Flex flexDirection={'column'} mb={3}>
-                              <Label>
-                                Select tags for your How-to (max 4) *
-                              </Label>
+                              <Label>Select tags for your How-to*</Label>
                               <Field
                                 name="tags"
                                 component={TagsSelectField}
@@ -255,7 +253,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                                 options={TIME_OPTIONS}
                                 component={SelectField}
                                 data-cy="time-select"
-                                placeholder="How much time? *"
+                                placeholder="How much time?"
                               />
                             </Flex>
                             <Flex flexDirection={'column'} mb={3}>
@@ -271,7 +269,7 @@ export class HowtoForm extends React.Component<IProps, IState> {
                                 validateFields={[]}
                                 component={SelectField}
                                 options={DIFFICULTY_OPTIONS}
-                                placeholder="How hard is it? *"
+                                placeholder="How hard is it?"
                               />
                             </Flex>
                             <Flex flexDirection={'column'} mb={3}>
@@ -290,7 +288,8 @@ export class HowtoForm extends React.Component<IProps, IState> {
                                   flex: 1,
                                   minHeight: '150px',
                                 }}
-                                placeholder="Introduction to your How-To, keep it to 100 words please! *"
+                                maxLength="400"
+                                placeholder="Introduction to your How-To (max 400 characters)"
                               />
                             </Flex>
                             <Label htmlFor="description">
@@ -348,7 +347,6 @@ export class HowtoForm extends React.Component<IProps, IState> {
                                 id="cover_image"
                                 name="cover_image"
                                 validate={required}
-                                src={formValues.cover_image}
                                 component={ImageInputField}
                               />
                             </Box>
@@ -374,6 +372,11 @@ export class HowtoForm extends React.Component<IProps, IState> {
                                     key={fields.value[index]._animationKey}
                                     step={name}
                                     index={index}
+                                    moveStep={(from, to) => {
+                                      if (to !== fields.length) {
+                                        fields.move(from, to)
+                                      }
+                                    }}
                                     images={fields.value[index].images}
                                     onDelete={(fieldIndex: number) => {
                                       fields.remove(fieldIndex)

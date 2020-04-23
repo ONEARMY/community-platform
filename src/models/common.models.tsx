@@ -1,4 +1,4 @@
-import { DBDoc as DBDocImport } from '../stores/databaseV2/types'
+import { DBDoc as DBDocImport } from 'src/stores/databaseV2/types'
 
 // re-export the database dbDoc to make it easier to import elsewhere
 export type DBDoc = DBDocImport

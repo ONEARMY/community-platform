@@ -47,6 +47,7 @@ export class Logo extends React.Component<IProps> {
                 width={[50, 50, 100]}
                 height={[50, 50, 100]}
                 alt={'PP Logo v' + VERSION}
+                title={'PP Logo v' + VERSION}
               />
             </Flex>
             <Text

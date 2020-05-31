@@ -347,7 +347,6 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 id="cover_image"
                                 name="cover_image"
                                 validate={required}
-                                src={formValues.cover_image}
                                 component={ImageInputField}
                               />
                             </Box>
@@ -374,7 +373,9 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                     step={name}
                                     index={index}
                                     moveStep={(from, to) => {
-                                      fields.move(from, to)
+                                      if (to !== fields.length) {
+                                        fields.move(from, to)
+                                      }
                                     }}
                                     images={fields.value[index].images}
                                     onDelete={(fieldIndex: number) => {

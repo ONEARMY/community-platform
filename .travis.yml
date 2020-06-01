@@ -1,7 +1,7 @@
 language: node_js
 node_js:
   - '10'
-dist: trusty
+dist: xenial
 cache:
   # cache both yarn (.cache) and npm (for global installs)
   yarn: true

@@ -72,8 +72,8 @@ export class VirtualizedFlex extends React.Component<IProps, IState> {
         rowIndex={0}
       >
         <Flex key={key} style={style}>
-          {row.map((rowData: any[], i: number) => (
-            <Box style={{ flex: 1 }} key={key + i}>
+          {row.map((rowData: any, i: number) => (
+            <Box key={key + i} width={[1, 1 / 2, 1 / 3]}>
               {renderItem(rowData)}
             </Box>
           ))}

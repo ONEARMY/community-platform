@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { Flex } from 'rebass'
+import { List, WindowScroller } from 'react-virtualized'
 // TODO add loader (and remove this material-ui dep)
 import { Link } from 'src/components/Links'
 import TagsSelect from 'src/components/Tags/TagsSelect'
@@ -13,6 +14,7 @@ import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import HowToCard from 'src/components/HowToCard/HowToCard'
 import Heading from 'src/components/Heading'
 import { Loader } from 'src/components/Loader'
+import themes from 'src/themes/styled.theme'
 
 interface InjectedProps {
   howtoStore?: HowtoStore
@@ -21,6 +23,11 @@ interface InjectedProps {
 interface IState {
   isLoading: boolean
 }
+
+const breakpointsInPX = themes.breakpoints.map(
+  // From em string to px number
+  breakpoint => Number(breakpoint.replace('em', '')) * 16,
+)
 
 // First we use the @inject decorator to bind to the howtoStore state
 @inject('howtoStore')
@@ -37,6 +44,52 @@ export class HowtoList extends React.Component<any, IState> {
   }
   get injected() {
     return this.props as InjectedProps
+  }
+
+  /**
+   * Split Howtos into chunks depending on the current window width.
+   * This determines how many Howtos are displayed in one row. For small screen
+   * the function won´t split the arrays, as there can only be one Howto displayed in every row
+   */
+  get filteredHowtoChunks(): IHowtoDB[] | IHowtoDB[][] {
+    const { filteredHowtos } = this.props.howtoStore
+    const windowWidth = window.innerWidth
+    let chunk = 1
+    if (windowWidth > breakpointsInPX[0] && windowWidth <= breakpointsInPX[1]) {
+      chunk = 2
+    } else if (windowWidth > breakpointsInPX[1]) {
+      chunk = 3
+    }
+    const howToChunks: IHowtoDB[][] = []
+    let i = 0
+    let j = 0
+    if (chunk > 1) {
+      for (i = 0, j = filteredHowtos.length; i < j; i += chunk) {
+        howToChunks.push(filteredHowtos.slice(i, i + chunk))
+      }
+      return howToChunks
+    } else {
+      return filteredHowtos
+    }
+  }
+
+  rowRenderer(chunks: IHowtoDB[][] | IHowtoDB[], { index, key, style }) {
+    const row: IHowtoDB[] | IHowtoDB = chunks[index]
+    return (
+      <Flex key={key} style={style}>
+        {Array.isArray(row) ? (
+          row.map((howto: IHowtoDB) => (
+            <Flex key={howto._id} px={4} py={4} width={[1, 1 / 2, 1 / 3]}>
+              <HowToCard howto={howto} />
+            </Flex>
+          ))
+        ) : (
+          <Flex key={row._id} px={4} py={4} width={[1, 1 / 2, 1 / 3]}>
+            <HowToCard howto={row} />
+          </Flex>
+        )}
+      </Flex>
+    )
   }
 
   public render() {
@@ -90,11 +143,23 @@ export class HowtoList extends React.Component<any, IState> {
             </Flex>
           ) : (
             <Flex flexWrap="wrap" mx={-4}>
-              {filteredHowtos.map((howto: IHowtoDB) => (
-                <Flex key={howto._id} px={4} py={4} width={[1, 1 / 2, 1 / 3]}>
-                  <HowToCard howto={howto} />
-                </Flex>
-              ))}
+              <WindowScroller>
+                {({ height, isScrolling, onChildScroll, scrollTop }) => (
+                  <List
+                    autoHeight
+                    height={height}
+                    width={window.innerWidth}
+                    isScrolling={isScrolling}
+                    onScroll={onChildScroll}
+                    scrollTop={scrollTop}
+                    rowCount={this.filteredHowtoChunks.length}
+                    rowHeight={410}
+                    rowRenderer={data =>
+                      this.rowRenderer(this.filteredHowtoChunks, data)
+                    }
+                  />
+                )}
+              </WindowScroller>
             </Flex>
           )}
           <Flex justifyContent={'center'} mt={20}>

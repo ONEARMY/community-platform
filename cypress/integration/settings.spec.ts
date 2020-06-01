@@ -49,7 +49,7 @@ describe('[Settings]', () => {
       .type(info.description)
     cy.get('[data-cy=coverImages-0]')
       .find(':file')
-      .uploadFiles(info.coverImage)
+      .attachFile(info.coverImage)
   }
   const setMapPin = (mapPin: IMapPin) => {
     cy.step('Update Map section')

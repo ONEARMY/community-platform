@@ -56,7 +56,6 @@ import { AdminContact } from 'src/components/AdminContact/AdminContact'
 
 import { IUser } from 'src/models/user.models'
 
-
 interface IRouterCustomParams {
   id: string
 }

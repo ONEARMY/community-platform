@@ -43,7 +43,7 @@ declare global {
 
       step(message: string)
 
-      uploadFiles(filePath: string | string[])
+      attachFile(filePath: string)
 
       toggleUserMenuOn(): Chainable<void>
       toggleUserMenuOff(): Chainable<void>
@@ -173,34 +173,6 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
     }
     return mimeType
   }
-  Cypress.Commands.add(
-    'uploadFiles',
-    { prevSubject: 'element' },
-    ($inputElement, filePath: string | string[]) => {
-      const filePaths: string[] = []
-      if (typeof filePath === 'string') {
-        filePaths.push(filePath)
-      } else {
-        filePaths.push(...filePath)
-      }
-      const getContentReqs = filePaths.map(path => {
-        return new Cypress.Promise(resolve => {
-          return cy.fixture(path).then(fileContent => {
-            resolve({
-              fileName: path,
-              mimeType: resolveMimeType(path),
-              fileContent,
-            })
-          })
-        })
-      })
-
-      Cypress.Promise.all(getContentReqs).then(data => {
-        const fileData = data as FileData[]
-        cy.wrap($inputElement).upload(fileData)
-      })
-    },
-  )
 
   Cypress.Commands.add('toggleUserMenuOn', () => {
     Cypress.log({ displayName: 'OPEN_USER_MENU' })

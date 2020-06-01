@@ -19,7 +19,7 @@ import { formatLowerNoSpecial } from 'src/utils/helpers'
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
 */
 
-const COLLECTION_NAME = 'v3_users'
+const COLLECTION_NAME = 'users'
 
 export class UserStore extends ModuleStore {
   private authUnsubscribe: firebase.Unsubscribe

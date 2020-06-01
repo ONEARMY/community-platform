@@ -62,7 +62,7 @@ describe('[How To]', () => {
         images.forEach((image, index) => {
           cy.get(`[data-cy=step-image-${index}]`)
             .find(':file')
-            .uploadFiles([image])
+            .attachFile(image)
         })
       }
     })
@@ -141,6 +141,7 @@ describe('[How To]', () => {
       cy.get('[data-cy=intro-title')
         .clear()
         .type('Create a how-to test')
+        .blur({ force: true })
       selectTag('howto_testing')
       selectTimeDuration(expected.time as Duration)
       selectDifficultLevel(expected.difficulty_level as Difficulty)
@@ -149,7 +150,7 @@ describe('[How To]', () => {
       cy.step('Upload a cover for the intro')
       cy.get('[data-cy=intro-cover]')
         .find(':file')
-        .uploadFiles('images/howto-intro.jpg')
+        .attachFile('images/howto-intro.jpg')
 
       expected.steps.forEach((step, i) => {
         const videoUrl =
@@ -283,13 +284,19 @@ describe('[How To]', () => {
 
       cy.step('Update a new cover for the intro')
 
-      cy.get('[data-cy=intro-cover]')
+      cy.get('[data-cy="intro-cover"]')
+        .find('[data-cy="delete-image"]')
+        .click({ force: true })
+
+      cy.get('[data-cy="intro-cover"]')
         .find(':file')
-        .uploadFiles('images/howto-intro.jpg')
+        .attachFile('images/howto-intro.jpg')
 
       deleteStep(5)
       deleteStep(4)
       deleteStep(2)
+      // wait for delete animations to complete
+      cy.wait(1000)
 
       expected.steps.forEach((step, index) => {
         fillStep(index + 1, step.title, step.text, [

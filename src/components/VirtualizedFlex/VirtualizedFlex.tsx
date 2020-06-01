@@ -15,8 +15,9 @@ interface IProps {
   widthBreakpoints: number[]
 }
 interface IState {
-  totalColumns?: number
-  dataRows?: any[][]
+  totalColumns: number
+  data: any[]
+  dataRows: any[][]
 }
 
 // User a measurement cache to dynamically calculate dynamic row heights based on content
@@ -33,22 +34,24 @@ const cache = new CellMeasurerCache({
 export class VirtualizedFlex extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
-    this.state = {}
+    this.state = { data: [], dataRows: [], totalColumns: -1 }
   }
-  componentDidMount() {
-    this.generateRowData()
+
+  componentWillReceiveProps(props: IProps) {
+    this.generateRowData(props)
   }
 
   /**
    * Split data into rows and columns depending on breakpoints
-   * Only re-render if the total number of columns has changed
    */
-  generateRowData() {
-    const previousColumns = this.state.totalColumns
-    const { data, widthBreakpoints } = this.props
+  generateRowData(props: IProps) {
+    const oldColumns = this.state.totalColumns
+    const oldData = this.state.data
+    const { widthBreakpoints, data } = props
     const currentWidth = window.innerWidth
     const totalColumns = this._calcTotalColumns(currentWidth, widthBreakpoints)
-    if (previousColumns !== totalColumns) {
+    // only re-render when data or columns have changed
+    if (oldColumns !== totalColumns || oldData.length !== data.length) {
       const dataRows = this._dataToRows(data, totalColumns)
       this.setState({ totalColumns, dataRows })
     }
@@ -105,8 +108,8 @@ export class VirtualizedFlex extends React.Component<IProps, IState> {
 
   render() {
     const { dataRows } = this.state
-    return dataRows ? (
-      <WindowScroller onResize={() => this.generateRowData()}>
+    return dataRows.length > 0 ? (
+      <WindowScroller onResize={() => this.generateRowData(this.props)}>
         {({ onChildScroll, isScrolling, height, width, scrollTop }) => (
           <List
             autoHeight

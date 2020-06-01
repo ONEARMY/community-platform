@@ -64,7 +64,6 @@ export class HowtoList extends React.Component<any, IState> {
   }
 
   rowRenderer(row: IHowtoDB[][], { index, key, style }) {
-    console.log('render row', index)
     const howtos: IHowtoDB[] = row[index]
     return (
       <Flex key={key} style={style}>
@@ -136,7 +135,7 @@ export class HowtoList extends React.Component<any, IState> {
                     width={window.innerWidth}
                     rowCount={filteredHowtoRows.length}
                     rowHeight={410}
-                    overscanRowCount={3}
+                    overscanRowCount={2}
                     rowRenderer={data =>
                       this.rowRenderer(filteredHowtoRows, data)
                     }

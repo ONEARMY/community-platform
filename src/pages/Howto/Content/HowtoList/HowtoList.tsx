@@ -50,7 +50,7 @@ export class HowtoList extends React.Component<any, IState> {
    * Divide howtos into rows and columns for display
    * (required for virtualized list)
    */
-  filterHowtoRows(howtos: IHowtoDB[]): IHowtoDB[][] {
+  getFilteredHowtoRows(howtos: IHowtoDB[]): IHowtoDB[][] {
     const { innerWidth } = window
     const totalColumns = [0, ...breakpointsInPX, Infinity].findIndex(
       width => innerWidth < width,
@@ -79,7 +79,7 @@ export class HowtoList extends React.Component<any, IState> {
 
   public render() {
     const { filteredHowtos, selectedTags } = this.props.howtoStore
-    const filteredHowtoRows = this.filterHowtoRows(filteredHowtos)
+    const filteredHowtoRows = this.getFilteredHowtoRows(filteredHowtos)
     return (
       <>
         <Flex py={26}>

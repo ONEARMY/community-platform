@@ -1,20 +1,16 @@
 import * as React from 'react'
-import { Flex } from 'rebass'
-import { List, WindowScroller } from 'react-virtualized'
-// TODO add loader (and remove this material-ui dep)
+import { Flex, Box } from 'rebass'
 import { Link } from 'src/components/Links'
 import TagsSelect from 'src/components/Tags/TagsSelect'
-
 import { inject, observer } from 'mobx-react'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import { Button } from 'src/components/Button'
-import { IHowtoDB } from 'src/models/howto.models'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import HowToCard from 'src/components/HowToCard/HowToCard'
 import Heading from 'src/components/Heading'
 import { Loader } from 'src/components/Loader'
-import themes from 'src/themes/styled.theme'
+import { VirtualizedFlex } from 'src/components/VirtualizedFlex/VirtualizedFlex'
 
 interface InjectedProps {
   howtoStore?: HowtoStore
@@ -22,12 +18,8 @@ interface InjectedProps {
 
 interface IState {
   isLoading: boolean
+  // totalHowtoColumns: number
 }
-
-const breakpointsInPX = themes.breakpoints.map(
-  // From em string to px number
-  breakpoint => Number(breakpoint.replace('em', '')) * 16,
-)
 
 // First we use the @inject decorator to bind to the howtoStore state
 @inject('howtoStore')
@@ -46,39 +38,8 @@ export class HowtoList extends React.Component<any, IState> {
     return this.props as InjectedProps
   }
 
-  /**
-   * Divide howtos into rows and columns for display
-   * (required for virtualized list)
-   */
-  getFilteredHowtoRows(howtos: IHowtoDB[]): IHowtoDB[][] {
-    const { innerWidth } = window
-    const totalColumns = [0, ...breakpointsInPX, Infinity].findIndex(
-      width => innerWidth < width,
-    )
-    const totalRows = Math.ceil(howtos.length / totalColumns)
-    const rows: IHowtoDB[][] = []
-    for (let i = 0; i < totalRows; i++) {
-      rows.push(howtos.slice(totalColumns * i, totalColumns * (i + 1)))
-    }
-    return rows
-  }
-
-  rowRenderer(row: IHowtoDB[][], { index, key, style }) {
-    const howtos: IHowtoDB[] = row[index]
-    return (
-      <Flex key={key} style={style}>
-        {howtos.map((howto: IHowtoDB) => (
-          <Flex key={howto._id} px={4} py={4} width={[1, 1 / 2, 1 / 3]}>
-            <HowToCard howto={howto} />
-          </Flex>
-        ))}
-      </Flex>
-    )
-  }
-
   public render() {
     const { filteredHowtos, selectedTags } = this.props.howtoStore
-    const filteredHowtoRows = this.getFilteredHowtoRows(filteredHowtos)
     return (
       <>
         <Flex py={26}>
@@ -127,22 +88,15 @@ export class HowtoList extends React.Component<any, IState> {
               </Heading>
             </Flex>
           ) : (
-            <Flex flexWrap="wrap" mx={-4}>
-              <WindowScroller>
-                {({ ...props }) => (
-                  <List
-                    autoHeight
-                    width={window.innerWidth}
-                    rowCount={filteredHowtoRows.length}
-                    rowHeight={410}
-                    overscanRowCount={2}
-                    rowRenderer={data =>
-                      this.rowRenderer(filteredHowtoRows, data)
-                    }
-                    {...props}
-                  />
+            <Flex justifyContent={'center'} mx={-4}>
+              <VirtualizedFlex
+                data={filteredHowtos}
+                renderItem={data => (
+                  <Box px={4} py={4}>
+                    <HowToCard howto={data} />
+                  </Box>
                 )}
-              </WindowScroller>
+              />
             </Flex>
           )}
           <Flex justifyContent={'center'} mt={20}>

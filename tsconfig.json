@@ -22,7 +22,7 @@
     "declaration": true,
     "outDir": "./lib"
   },
-  "include": ["src", "types"],
+  "include": ["src/**/*", "types"],
   "exclude": [
     "node_modules",
     "build",

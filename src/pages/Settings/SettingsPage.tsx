@@ -20,7 +20,6 @@ import { UserMapPinSection } from './content/formSections/MapPin.section'
 import theme from 'src/themes/styled.theme'
 import INITIAL_VALUES from './Template'
 import { Box } from 'rebass'
-import { addProtocol } from 'src/utils/validators'
 import { Prompt } from 'react-router'
 import { toJS } from 'mobx'
 
@@ -131,7 +130,6 @@ export class UserSettings extends React.Component<IProps, IState> {
           validate={v => this.validateForm(v)}
           mutators={{
             ...arrayMutators,
-            addProtocol,
           }}
           validateOnBlur
           render={({

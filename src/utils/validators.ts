@@ -37,7 +37,7 @@ const addProtocolMutator = ([name], state, { changeValue }) => {
  * E.g. https://instagram.com/my-username
  */
 const ensureExternalUrl = (url: string) =>
-  typeof url === 'string' && url.indexOf('://') === -1 ? `https://${url}` : url
+  typeof url === 'string' && url.indexOf('://') === -1 ? `http://${url}` : url
 
 export {
   validateUrl,

@@ -224,33 +224,33 @@ export class UserPage extends React.Component<
       isLoading: false,
     })
   }
-
-  public renderCommitmentBox(isExpert?: boolean, isV4Member?: boolean) {
-    return (
-      <CommitmentBox>
-        {isExpert && (
-          <CommitmentBoxItem>
-            <ElWithBeforeIcon IconUrl={ExpertIcon} height="25px">
-              Expert
-            </ElWithBeforeIcon>
-          </CommitmentBoxItem>
-        )}
-        {isV4Member && (
-          <CommitmentBoxItem>
-            <ElWithBeforeIcon IconUrl={V4MemberIcon}>
-              V4 Member
-            </ElWithBeforeIcon>
-          </CommitmentBoxItem>
-        )}
-        <CommitmentBoxItem>
-          <ElWithBeforeIcon IconUrl={EventsIcon}>0</ElWithBeforeIcon>
-        </CommitmentBoxItem>
-        <CommitmentBoxItem>
-          <ElWithBeforeIcon IconUrl={HowToCountIcon}>0</ElWithBeforeIcon>
-        </CommitmentBoxItem>
-      </CommitmentBox>
-    )
-  }
+  // Comment on 6.05.20 by BG : renderCommitmentBox commented for now, will be reused with #974
+  // public renderCommitmentBox(isExpert?: boolean, isV4Member?: boolean) {
+  //   return (
+  //     <CommitmentBox>
+  //       {isExpert && (
+  //         <CommitmentBoxItem>
+  //           <ElWithBeforeIcon IconUrl={ExpertIcon} height="25px">
+  //             Expert
+  //           </ElWithBeforeIcon>
+  //         </CommitmentBoxItem>
+  //       )}
+  //       {isV4Member && (
+  //         <CommitmentBoxItem>
+  //           <ElWithBeforeIcon IconUrl={V4MemberIcon}>
+  //             V4 Member
+  //           </ElWithBeforeIcon>
+  //         </CommitmentBoxItem>
+  //       )}
+  //       <CommitmentBoxItem>
+  //         <ElWithBeforeIcon IconUrl={EventsIcon}>0</ElWithBeforeIcon>
+  //       </CommitmentBoxItem>
+  //       <CommitmentBoxItem>
+  //         <ElWithBeforeIcon IconUrl={HowToCountIcon}>0</ElWithBeforeIcon>
+  //       </CommitmentBoxItem>
+  //     </CommitmentBox>
+  //   )
+  // }
 
   public renderPlasticTypes(plasticTypes: Array<PlasticTypeLabel>) {
     function renderIcon(type: string) {

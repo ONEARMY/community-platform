@@ -105,7 +105,7 @@ export class ProfileLinkField extends Component<IProps, IState> {
             component={SelectField}
             onCustomChange={(linkType: string) => this.setState({ linkType })}
             placeholder="type"
-            validation={required}
+            validate={required}
             validateFields={[]}
             style={{ width: '160px', height: '40px', marginRight: '8px' }}
           />

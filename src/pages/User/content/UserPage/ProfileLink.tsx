@@ -49,7 +49,7 @@ const ProfileLink = (props: IProps) => {
   return (
     <ElWithBeforeIcon IconUrl={ProfileLinkIcon(link)}>
       <Link ml={2} color={'black'} href={rewriteUrl(link)} target="_blank">
-        {capitalizeFirstLetter(link.label)}
+        {link.label && capitalizeFirstLetter(link.label)}
       </Link>
     </ElWithBeforeIcon>
   )

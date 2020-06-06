@@ -60,7 +60,7 @@ jobs:
     # Test - Run 4 test stages in parallel
     # TODO - possibly create a single build before test and use for tests and deploy
     # (might be tricky: https://docs.travis-ci.com/user/build-stages/#data-persistence-between-stages-and-jobs)
-    - name: Test
+    - stage: Test
       env:
         - CI_GROUP=2x-chrome
         - CI_BROWSER=chrome
@@ -83,13 +83,13 @@ jobs:
       <<: *_test_defaults
     # Note, Travis jobs combined with regular stage scripts below
     # Deploy - Firebase deployment to dev/prod depending on branch
-    - name: Deploy Dev
+    - stage: Deploy Dev
       if: branch = master
       script:
         # Note - syntax different from above as merging into array instead of creating key:value
         - *_predeploy_defaults
         - bash scripts/deploy.dev.sh
-    - name: Deploy Production
+    - stage: Deploy Production
       if: branch = production
       script:
         - *_predeploy_defaults

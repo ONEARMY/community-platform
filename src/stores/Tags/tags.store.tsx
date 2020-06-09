@@ -18,8 +18,9 @@ export class TagsStore extends ModuleStore {
   }
 
   constructor(rootStore: RootStore) {
-    super(rootStore, 'v3_tags')
+    super(rootStore, 'tags')
     this.allDocs$.subscribe((docs: ITag[]) => {
+      console.log('tags docs', docs)
       this.allTags = docs.sort((a, b) => (a.label > b.label ? 1 : -1))
       this.allTagsByKey = arrayToJson(docs, '_id')
       this._filterTags()
@@ -28,13 +29,14 @@ export class TagsStore extends ModuleStore {
 
   public saveTag(tag: Partial<ITag>) {
     return this.db
-      .collection('v3_tags')
+      .collection('tags')
       .doc(tag._id)
       .set(tag)
   }
 
   private _filterTags() {
     let tags = [...this.allTags]
+    console.log('filter tags', tags)
     if (this.activeCategory) {
       tags = tags.filter(tag =>
         tag.categories.includes(this.activeCategory as TagCategory),

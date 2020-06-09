@@ -2,6 +2,7 @@ import { IDBEndpoint, DBDoc } from 'src/models/common.models'
 import Dexie from 'dexie'
 import { DBQueryOptions, DBQueryWhereOptions, AbstractDBClient } from '../types'
 import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
+import { DB_PREFIX } from '../config'
 
 /**
  * Update the cache number either when making changes to db architecture
@@ -144,10 +145,20 @@ type IDexieSchema = { [key in IDBEndpoint]: string }
 // by default _id will serve as primary key and additional index created on _modified for faster querying
 const DEFAULT_SCHEMA = '_id,_modified'
 
-const DEXIE_SCHEMA: IDexieSchema = {
-  v3_events: `${DEFAULT_SCHEMA},slug`,
-  v3_howtos: `${DEFAULT_SCHEMA},slug`,
-  v3_mappins: DEFAULT_SCHEMA,
-  v3_tags: DEFAULT_SCHEMA,
-  v3_users: DEFAULT_SCHEMA,
+const SCHEMA_BASE: IDexieSchema = {
+  events: `${DEFAULT_SCHEMA},slug`,
+  howtos: `${DEFAULT_SCHEMA},slug`,
+  mappins: DEFAULT_SCHEMA,
+  tags: DEFAULT_SCHEMA,
+  users: DEFAULT_SCHEMA,
 }
+// Ensure dexie also handles any prefixed database schema
+const MAPPED_SCHEMA = {} as IDexieSchema
+console.log('db_prefix', DB_PREFIX)
+Object.keys(SCHEMA_BASE).forEach(
+  endpoint =>
+    (MAPPED_SCHEMA[`${DB_PREFIX}${endpoint}` as IDBEndpoint] =
+      SCHEMA_BASE[endpoint]),
+)
+const DEXIE_SCHEMA = MAPPED_SCHEMA
+console.log('schema', DEXIE_SCHEMA)

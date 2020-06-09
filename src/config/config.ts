@@ -40,7 +40,7 @@ function getSiteVariant(
   gitBranch: string,
   env: typeof process.env,
 ): siteVariants {
-  if (env.SITE_VARIANT === 'test-ci') {
+  if (env.REACT_APP_SITE_VARIANT === 'test-ci') {
     return 'test-ci'
   }
   switch (gitBranch) {

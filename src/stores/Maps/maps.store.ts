@@ -25,9 +25,8 @@ import {
 // NOTE - toggle below variable to use larger mock dataset
 const IS_MOCK = false
 const MOCK_PINS = generatePins(250)
-
+const COLLECTION_NAME: IDBEndpoint = 'mappins'
 export class MapsStore extends ModuleStore {
-  mapEndpoint: IDBEndpoint = 'v3_mappins'
   mapPins$: Subscription
   constructor(rootStore: RootStore) {
     super(rootStore)
@@ -84,12 +83,14 @@ export class MapsStore extends ModuleStore {
               - streamCollection in stores/databaseV2/clients/firestore.tsx
              to support where clause.
     */
-    this.mapPins$ = this.db.collection<IMapPin>('v3_mappins').stream(pins => {
-      // TODO - make more efficient by tracking only new pins received and updating
-      if (pins.length !== this.mapPins.length) {
-        this.processDBMapPins(pins)
-      }
-    })
+    this.mapPins$ = this.db
+      .collection<IMapPin>(COLLECTION_NAME)
+      .stream(pins => {
+        // TODO - make more efficient by tracking only new pins received and updating
+        if (pins.length !== this.mapPins.length) {
+          this.processDBMapPins(pins)
+        }
+      })
   }
 
   @action
@@ -139,7 +140,7 @@ export class MapsStore extends ModuleStore {
   // get base pin geo information
   public async getPin(id: string) {
     const pin = await this.db
-      .collection<IMapPin>('v3_mappins')
+      .collection<IMapPin>(COLLECTION_NAME)
       .doc(id)
       .get()
     /*
@@ -158,7 +159,7 @@ export class MapsStore extends ModuleStore {
       return false
     }
     return this.db
-      .collection('v3_mappins')
+      .collection(COLLECTION_NAME)
       .doc(pin._id)
       .set(pin)
   }
@@ -189,7 +190,7 @@ export class MapsStore extends ModuleStore {
     }
     console.log('setting user pin', pin)
     await this.db
-      .collection<IMapPin>('v3_mappins')
+      .collection<IMapPin>(COLLECTION_NAME)
       .doc(pin._id)
       .set(pin)
   }

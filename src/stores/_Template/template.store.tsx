@@ -40,7 +40,7 @@ export class TemplateStore extends ModuleStore {
   public async dbDocRequest() {
     const doc = await this.db
       // optional - specify <IExampleDocDB> to assert the types expected from the database return
-      .collection<IExampleDocDB>('v3_tags')
+      .collection<IExampleDocDB>('tags')
       .doc('myDoc')
       .get()
     this.exampleDoc = doc as IExampleDocDB
@@ -48,11 +48,9 @@ export class TemplateStore extends ModuleStore {
   // example of getting an entire collection of documents and listening to live updates on the collection
   @action
   public async dbCollectionRequest() {
-    const docs$ = await this.db
-      .collection<IExampleDoc>('v3_tags')
-      .stream(docs => {
-        this.exampleCollection = docs
-      })
+    const docs$ = await this.db.collection<IExampleDoc>('tags').stream(docs => {
+      this.exampleCollection = docs
+    })
   }
 }
 

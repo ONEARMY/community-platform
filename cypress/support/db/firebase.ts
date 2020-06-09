@@ -6,7 +6,6 @@ import 'firebase/storage'
 import 'firebase/functions'
 import 'firebase/database'
 import Query = firebase.firestore.Query
-import { generatedId } from '../../utils/test-utils'
 import { SEED_DATA } from '../../fixtures/seed'
 const fbConfig = {
   apiKey: 'AIzaSyDAxS_7M780mI3_tlwnAvpbaqRsQPlmp64',
@@ -15,15 +14,16 @@ const fbConfig = {
   projectId: 'onearmy-test-ci',
   storageBucket: 'onearmy-test-ci.appspot.com',
 }
+
 firebase.initializeApp(fbConfig)
 const db = firebase.firestore()
 type PromiseCallback = (val?: any) => void
-
 const MAX_BATCH_SIZE = 500
-// TODO - let custom prefix be generated and shared with
-// platform to allow better parallel testing
-// const prefix = generatedId(5)
-const prefix = 'v3_'
+
+console.log('cypress env', Cypress.env())
+// Use prefix to allow parallel testing with different seed data
+// (prevents one test suite deleting the data of another)
+const prefix = Cypress.env('REACT_APP_DB_PREFIX')
 
 class FirestoreDB {
   seedDB = () => {

@@ -5,7 +5,6 @@ import { ISelectedTags } from 'src/models/tags.model'
 import { IDBEndpoint, ILocation } from 'src/models/common.models'
 import { includesAll } from 'src/utils/filters'
 import { RootStore } from '..'
-import { DBEndpoint } from '../databaseV2/types'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { IUploadedFileMeta, Storage } from '../storage'
 
@@ -54,7 +53,7 @@ export class ModuleStore {
 
   // when accessing a collection want to call the database getCollection method which
   // efficiently checks the cache first and emits any subsequent updates
-  private _subscribeToCollection(endpoint: DBEndpoint) {
+  private _subscribeToCollection(endpoint: IDBEndpoint) {
     this.allDocs$.next([])
     this.activeCollectionSubscription.unsubscribe()
     this.activeCollectionSubscription = this.db
@@ -82,12 +81,14 @@ export class ModuleStore {
   /** Validator method to pass to react-final-form. Takes a given title,
    *  converts to corresponding slug and checks uniqueness.
    *  NOTE - return value represents the error, so FALSE actually means valid
-   * @param value
    */
-  public validateTitle = async (title: string, endpoint: IDBEndpoint) => {
+  public validateTitleForSlug = async (
+    title: string,
+    endpoint: IDBEndpoint,
+  ) => {
     if (title) {
       const slug = stripSpecialCharacters(title).toLowerCase()
-      const unique = await this.checkIsUnique('v3_howtos', 'slug', slug)
+      const unique = await this.checkIsUnique(endpoint, 'slug', slug)
       return unique
         ? false
         : 'Titles must be unique, please try being more specific'

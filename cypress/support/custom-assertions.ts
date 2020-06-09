@@ -36,10 +36,11 @@ const eqHowto = (chaiObj, utils) => {
       tags,
     })
     // note, full cover image meta won't match as uploaded image meta changes
-    // note 2, Not working currently but fixed with PR #952 and should be uncommented
-    // expect(subject.cover_image.name, 'Cover images').to.eq(
-    //   expected.cover_image.name,
-    // )
+
+    expect(subject.cover_image.name, 'Cover images').to.eq(
+      expected.cover_image.name,
+    )
+
 
     expected.steps.forEach((step, index) => {
       expect(subject.steps[index], `Have step ${index}`).to.eqHowtoStep(

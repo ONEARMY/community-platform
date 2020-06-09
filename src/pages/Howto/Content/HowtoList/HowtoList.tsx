@@ -1,18 +1,16 @@
 import * as React from 'react'
-import { Flex } from 'rebass'
-// TODO add loader (and remove this material-ui dep)
+import { Flex, Box } from 'rebass'
 import { Link } from 'src/components/Links'
 import TagsSelect from 'src/components/Tags/TagsSelect'
-
 import { inject, observer } from 'mobx-react'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import { Button } from 'src/components/Button'
-import { IHowtoDB } from 'src/models/howto.models'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import HowToCard from 'src/components/HowToCard/HowToCard'
 import Heading from 'src/components/Heading'
 import { Loader } from 'src/components/Loader'
+import { VirtualizedFlex } from 'src/components/VirtualizedFlex/VirtualizedFlex'
 
 interface InjectedProps {
   howtoStore?: HowtoStore
@@ -20,6 +18,7 @@ interface InjectedProps {
 
 interface IState {
   isLoading: boolean
+  // totalHowtoColumns: number
 }
 
 // First we use the @inject decorator to bind to the howtoStore state
@@ -89,12 +88,15 @@ export class HowtoList extends React.Component<any, IState> {
               </Heading>
             </Flex>
           ) : (
-            <Flex flexWrap="wrap" mx={-4}>
-              {filteredHowtos.map((howto: IHowtoDB) => (
-                <Flex key={howto._id} px={4} py={4} width={[1, 1 / 2, 1 / 3]}>
-                  <HowToCard howto={howto} />
-                </Flex>
-              ))}
+            <Flex justifyContent={'center'} mx={-4}>
+              <VirtualizedFlex
+                data={filteredHowtos}
+                renderItem={data => (
+                  <Box px={4} py={4}>
+                    <HowToCard howto={data} />
+                  </Box>
+                )}
+              />
             </Flex>
           )}
           <Flex justifyContent={'center'} mt={20}>

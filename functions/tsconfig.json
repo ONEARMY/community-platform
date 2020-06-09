@@ -10,9 +10,7 @@
     "typeRoots": ["./node_modules/@types"],
     "baseUrl": ".",
     "paths": {
-      "@OAModels/*": ["../src/models/*"],
       "src/*": ["../src/*"],
-      "functions/*": ["./*"]
     },
     "skipLibCheck": true
   },

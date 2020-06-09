@@ -120,7 +120,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
   }
 
   public validateTitle = async (value: any) => {
-    return this.store.validateTitle(value, 'v3_howtos')
+    return this.store.validateTitleForSlug(value, 'howtos')
   }
 
   // automatically generate the slug when the title changes

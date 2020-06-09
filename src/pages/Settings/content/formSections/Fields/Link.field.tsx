@@ -48,8 +48,6 @@ export class ProfileLinkField extends Component<IProps, IState> {
   // e.g. only a username is given for a bazar link
   public formatLink(link: string) {
     switch (this.state.linkType) {
-      case 'discord':
-        return ensureExternalUrl(link)
       case 'forum':
         return ensureExternalUrl(link)
       case 'website':

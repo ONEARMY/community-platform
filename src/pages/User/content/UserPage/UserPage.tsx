@@ -10,7 +10,7 @@ import {
 
 import { UserStore } from 'src/stores/User/user.store'
 import Heading from 'src/components/Heading'
-import { Box, Link, Image } from 'rebass'
+import { Box, Image } from 'rebass'
 import Slider from 'react-slick'
 import styled from 'styled-components'
 import Icon from 'src/components/Icons'
@@ -21,10 +21,7 @@ import Workspace from 'src/pages/User/workspace/Workspace'
 import { Text } from 'src/components/Text'
 
 import theme from 'src/themes/styled.theme'
-import {
-  capitalizeFirstLetter,
-  replaceDashesWithSpaces,
-} from 'src/utils/helpers'
+import { replaceDashesWithSpaces } from 'src/utils/helpers'
 import FlagIconEvents from 'src/components/Icons/FlagIcon/FlagIcon'
 
 // Plastic types
@@ -38,14 +35,8 @@ import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 
 import EventsIcon from 'src/assets/icons/icon-events.svg'
 import ExpertIcon from 'src/assets/icons/icon-expert.svg'
-import IconEmail from 'src/assets/icons/icon-email.svg'
 import HowToCountIcon from 'src/assets/icons/icon-how-to.svg'
 import V4MemberIcon from 'src/assets/icons/icon-v4-member.svg'
-import DiscordIcon from 'src/assets/icons/icon-discord.svg'
-import BazarIcon from 'src/assets/icons/icon-bazar.svg'
-import SocialIcon from 'src/assets/icons/icon-social-media.svg'
-import IconForum from 'src/assets/icons/icon-forum.svg'
-import IconWebsite from 'src/assets/icons/icon-website.svg'
 
 import { IUploadedFileMeta } from 'src/stores/storage'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
@@ -53,8 +44,7 @@ import { Loader } from 'src/components/Loader'
 
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { AdminContact } from 'src/components/AdminContact/AdminContact'
-
-import { IUser } from 'src/models/user.models'
+import ProfileLink from './ProfileLink'
 
 interface IRouterCustomParams {
   id: string
@@ -174,11 +164,7 @@ const ProfileContentWrapper = styled(Flex)`
   @media only screen and (min-width: ${theme.breakpoints[1]}) {
       margin-top: 0;
   } */
-
 `
-
-const ProfileContent = styled(Box)``
-const ProfileSidebar = styled(Box)``
 
 const SliderImage = styled.div`
   background-size: cover;
@@ -232,129 +218,39 @@ export class UserPage extends React.Component<
 
   public async componentWillMount() {
     const userid = this.props.match.params.id
-
     const userData = await this.injected.userStore.getUserProfile(userid)
     this.setState({
       user: userData ? userData : undefined,
       isLoading: false,
     })
   }
-
-  public renderLinks(links: IUser['links']) {
-    return links.map((link, index) => {
-      switch (link.label) {
-        case 'forum':
-          return (
-            <ElWithBeforeIcon
-              key="link-forum"
-              IconUrl={IconForum}
-              height="25px"
-            >
-              <Link ml={2} color={'black'} href={link.url} target="_blank">
-                {capitalizeFirstLetter(link.label)}
-              </Link>
-            </ElWithBeforeIcon>
-          )
-        case 'website':
-          return (
-            <ElWithBeforeIcon
-              key="link-website"
-              IconUrl={IconWebsite}
-              height="25px"
-            >
-              <Link ml={2} color={'black'} href={link.url} target="_blank">
-                {capitalizeFirstLetter(link.label)}
-              </Link>
-            </ElWithBeforeIcon>
-          )
-        case 'email':
-          return (
-            <ElWithBeforeIcon
-              key="link-email"
-              IconUrl={IconEmail}
-              height="25px"
-            >
-              <Link
-                ml={2}
-                color={'black'}
-                href={'mailto:' + link.url}
-                target="_blank"
-              >
-                {capitalizeFirstLetter(link.label)}
-              </Link>
-            </ElWithBeforeIcon>
-          )
-        case 'social media':
-          return (
-            <ElWithBeforeIcon
-              key="link-social"
-              IconUrl={SocialIcon}
-              height="25px"
-            >
-              <Link ml={2} color={'black'} href={link.url} target="_blank">
-                {capitalizeFirstLetter(link.label)}
-              </Link>
-            </ElWithBeforeIcon>
-          )
-        case 'bazar':
-          return (
-            <ElWithBeforeIcon
-              key="link-bazar"
-              IconUrl={BazarIcon}
-              height="25px"
-            >
-              <Link ml={2} color={'black'} href={link.url} target="_blank">
-                {capitalizeFirstLetter(link.label)}
-              </Link>
-            </ElWithBeforeIcon>
-          )
-        case 'discord':
-          return (
-            <ElWithBeforeIcon
-              key="link-discord"
-              IconUrl={DiscordIcon}
-              height="25px"
-            >
-              <Link
-                ml={2}
-                color={'black'}
-                href="https://discord.gg/XFKuEWc"
-                target="_blank"
-              >
-                {link.url}
-              </Link>
-            </ElWithBeforeIcon>
-          )
-      }
-    })
-  }
-
-  public renderCommitmentBox(isExpert?: boolean, isV4Member?: boolean) {
-    return (
-      <CommitmentBox>
-        {isExpert && (
-          <CommitmentBoxItem>
-            <ElWithBeforeIcon IconUrl={ExpertIcon} height="25px">
-              Expert
-            </ElWithBeforeIcon>
-          </CommitmentBoxItem>
-        )}
-        {isV4Member && (
-          <CommitmentBoxItem>
-            <ElWithBeforeIcon IconUrl={V4MemberIcon}>
-              V4 Member
-            </ElWithBeforeIcon>
-          </CommitmentBoxItem>
-        )}
-        <CommitmentBoxItem>
-          <ElWithBeforeIcon IconUrl={EventsIcon}>0</ElWithBeforeIcon>
-        </CommitmentBoxItem>
-        <CommitmentBoxItem>
-          <ElWithBeforeIcon IconUrl={HowToCountIcon}>0</ElWithBeforeIcon>
-        </CommitmentBoxItem>
-      </CommitmentBox>
-    )
-  }
+  // Comment on 6.05.20 by BG : renderCommitmentBox commented for now, will be reused with #974
+  // public renderCommitmentBox(isExpert?: boolean, isV4Member?: boolean) {
+  //   return (
+  //     <CommitmentBox>
+  //       {isExpert && (
+  //         <CommitmentBoxItem>
+  //           <ElWithBeforeIcon IconUrl={ExpertIcon} height="25px">
+  //             Expert
+  //           </ElWithBeforeIcon>
+  //         </CommitmentBoxItem>
+  //       )}
+  //       {isV4Member && (
+  //         <CommitmentBoxItem>
+  //           <ElWithBeforeIcon IconUrl={V4MemberIcon}>
+  //             V4 Member
+  //           </ElWithBeforeIcon>
+  //         </CommitmentBoxItem>
+  //       )}
+  //       <CommitmentBoxItem>
+  //         <ElWithBeforeIcon IconUrl={EventsIcon}>0</ElWithBeforeIcon>
+  //       </CommitmentBoxItem>
+  //       <CommitmentBoxItem>
+  //         <ElWithBeforeIcon IconUrl={HowToCountIcon}>0</ElWithBeforeIcon>
+  //       </CommitmentBoxItem>
+  //     </CommitmentBox>
+  //   )
+  // }
 
   public renderPlasticTypes(plasticTypes: Array<PlasticTypeLabel>) {
     function renderIcon(type: string) {
@@ -424,13 +320,29 @@ export class UserPage extends React.Component<
     )
   }
 
+  public renderProfileTypeName(user: IUserPP) {
+    const profileTypeNames: { [key in IUserPP['profileType']]: string } = {
+      'collection-point': 'Collection Point',
+      'community-builder': 'Community Point',
+      'machine-builder': 'Machine Builder',
+      member: 'Member',
+      workspace: 'Workspace',
+    }
+    return (
+      <Heading small bold width={1} capitalize>
+        {user.profileType === 'machine-builder' &&
+          `${replaceDashesWithSpaces(user.workspaceType!)} `}
+        {profileTypeNames[user.profileType]}
+      </Heading>
+    )
+  }
+
   public render() {
     const { user, isLoading } = this.state
-
+    console.log('render', user)
     if (isLoading) {
       return <Loader />
     }
-
     if (!user) {
       return (
         <Text txtcenter mt="50px" width={1}>
@@ -438,33 +350,16 @@ export class UserPage extends React.Component<
         </Text>
       )
     }
-
-    const settings = {
-      dots: false,
-      speed: 500,
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      adaptiveHeight: false,
-      nextArrow: (
-        <Icon glyph="chevron-right" color="#fff" size={60} marginRight="4px" />
-      ),
-      prevArrow: (
-        <Icon glyph="chevron-left" color="#fff" size={60} marginRight="4px" />
-      ),
-    }
-
     const workspaceBadgeSrc = Workspace.findWorkspaceBadge(user.profileType)
     const workspaceHighlightSrc = Workspace.findWordspaceHighlight(
       user.profileType,
     )
-
     let coverImage = [
       <SliderImage
         key="default-image"
         bgImg="https://i.ibb.co/zhkxbb9/no-image.jpg"
       />,
     ]
-
     if (user.coverImages && user.coverImages.length > 0) {
       const coverImages: Array<IConvertedFileMeta | IUploadedFileMeta> =
         user.coverImages
@@ -482,7 +377,7 @@ export class UserPage extends React.Component<
     return (
       <ProfileWrapper mt={4} mb={6}>
         <ProfileWrapperCarousel>
-          <Slider {...settings}>{coverImage}</Slider>
+          <Slider {...sliderSettings}>{coverImage}</Slider>
         </ProfileWrapperCarousel>
         <ProfileContentWrapper mt={['-122px', '-122px', 0]} px={[2, 4]} py={4}>
           <Box width={['100%', '100%', '80%']}>
@@ -493,15 +388,7 @@ export class UserPage extends React.Component<
             </Box>
 
             <UserCategory bgImg={workspaceHighlightSrc}>
-              <Heading small bold width={1} capitalize>
-                {user.workspaceType &&
-                  `${replaceDashesWithSpaces(user.workspaceType)} `}
-                {user.profileType === 'community-builder'
-                  ? 'Community Point'
-                  : user.profileType === 'machine-builder'
-                  ? 'Machine Shop'
-                  : replaceDashesWithSpaces(user.profileType || 'member')}
-              </Heading>
+              {this.renderProfileTypeName(user)}
             </UserCategory>
 
             <Flex alignItems="center">
@@ -516,11 +403,6 @@ export class UserPage extends React.Component<
                 )
               )}
             </Flex>
-
-            {/* <Box sx={{ display: ['block', 'none'] }}>
-              {this.renderCommitmentBox(user.isExpert, user.isV4Member)}
-            </Box> */}
-
             {user.about && (
               <Text
                 preLine
@@ -549,7 +431,9 @@ export class UserPage extends React.Component<
             {user.links && user.links.length > 0 && (
               <UserContactInfo>
                 <h3>Contact &amp; Links</h3>
-                {this.renderLinks(user.links)}
+                {user.links.map((link, i) => (
+                  <ProfileLink link={link} key={'Link-' + i} />
+                ))}
               </UserContactInfo>
             )}
             <AuthWrapper roleRequired={'admin'}>
@@ -565,10 +449,23 @@ export class UserPage extends React.Component<
             <MobileBadge>
               <Image src={workspaceBadgeSrc} />
             </MobileBadge>
-            {/* {this.renderCommitmentBox(user.isExpert, user.isV4Member)} */}
           </Box>
         </ProfileContentWrapper>
       </ProfileWrapper>
     )
   }
+}
+
+const sliderSettings = {
+  dots: false,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  adaptiveHeight: false,
+  nextArrow: (
+    <Icon glyph="chevron-right" color="#fff" size={60} marginRight="4px" />
+  ),
+  prevArrow: (
+    <Icon glyph="chevron-left" color="#fff" size={60} marginRight="4px" />
+  ),
 }

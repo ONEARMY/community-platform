@@ -29,12 +29,20 @@ const isEmail = (email: string) => {
  *            FORM MUTATORS
  * **************************************************************************/
 
-const addProtocol = ([name], state, { changeValue }) => {
-  changeValue(state, name, (val: string) =>
-    typeof val === 'string' && val.indexOf('://') === -1
-      ? `http://${val}`
-      : val,
-  )
+const addProtocolMutator = ([name], state, { changeValue }) => {
+  changeValue(state, name, (val: string) => ensureExternalUrl(val))
 }
+/**
+ * Used for user input links, ensure url has http/https protocol as required for external linking,
+ * E.g. https://instagram.com/my-username
+ */
+const ensureExternalUrl = (url: string) =>
+  typeof url === 'string' && url.indexOf('://') === -1 ? `https://${url}` : url
 
-export { validateUrl, validateEmail, required, addProtocol }
+export {
+  validateUrl,
+  validateEmail,
+  required,
+  addProtocolMutator,
+  ensureExternalUrl,
+}

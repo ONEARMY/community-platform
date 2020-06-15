@@ -150,6 +150,7 @@
     "react-app-rewired": "^2.1.5",
     "react-scripts": "3.4.1",
     "start-server-and-test": "^1.11.0",
+    "ts-loader": "^7.0.5",
     "typescript": "^3.7.4"
   }
 }

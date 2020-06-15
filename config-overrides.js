@@ -1,5 +1,8 @@
 /*
     Custom overrides for default create-react-app build
+    Automatically read by react-app-rewired scripts
+
+    Overrides:
     - Add custom service worker behaviour
 */
 //eslint-disable-next-line

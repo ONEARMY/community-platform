@@ -30,8 +30,6 @@
     "webpack",
     "jest",
     "src/setupTests.ts",
-    "config/*.js",
-    "config/jest/*.js",
     "functions-cron",
     "functions",
     "src/utils/UserMigration",

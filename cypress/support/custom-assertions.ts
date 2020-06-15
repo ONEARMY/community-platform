@@ -36,9 +36,11 @@ const eqHowto = (chaiObj, utils) => {
       tags,
     })
     // note, full cover image meta won't match as uploaded image meta changes
+
     expect(subject.cover_image.name, 'Cover images').to.eq(
       expected.cover_image.name,
     )
+
 
     expected.steps.forEach((step, index) => {
       expect(subject.steps[index], `Have step ${index}`).to.eqHowtoStep(
@@ -121,7 +123,7 @@ const eqSettings = (chaiObj, utils) => {
     })
   }
   const linkAssert: Assert<IUserPPDB, any> = (subject, expected) =>
-    expect(subject.links, 'Links').to.containSubset(expected.links)
+    expect(subject.links.length, 'Links').to.eq(expected.links.length)
   const coverImageAssert: Assert<IUserPPDB, any> = (subject, expected) =>
     // only test length as uploaded images get new url and meta
     expect(subject.coverImages, 'CoverImages').to.have.same.length(

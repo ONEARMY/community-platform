@@ -69,7 +69,7 @@ class HowtoStep extends React.PureComponent<IProps, IState> {
   }
 
   render() {
-    const { step, index, images } = this.props
+    const { step, index } = this.props
 
     return (
       // NOTE - animation parent container in CreateHowTo
@@ -91,8 +91,8 @@ class HowtoStep extends React.PureComponent<IProps, IState> {
             <Button
               data-cy="move-step"
               variant={'secondary'}
-              icon="arrow-full-down"
-              sx={{ rotate: '180deg' }}
+              icon="arrow-full-up"
+              sx={{ mx: '5px' }}
               onClick={() => this.props.moveStep(index, index - 1)}
             />
           )}
@@ -166,28 +166,22 @@ class HowtoStep extends React.PureComponent<IProps, IState> {
         <Flex flexDirection={['column', 'row']} alignItems="center" mb={3}>
           <ImageInputFieldWrapper data-cy="step-image-0">
             <Field
-              canDelete
               hasText={false}
               name={`${step}.images[0]`}
-              src={images[0]}
               component={ImageInputField}
             />
           </ImageInputFieldWrapper>
           <ImageInputFieldWrapper data-cy="step-image-1">
             <Field
-              canDelete
               hasText={false}
               name={`${step}.images[1]`}
-              src={images[1]}
               component={ImageInputField}
             />
           </ImageInputFieldWrapper>
           <ImageInputFieldWrapper data-cy="step-image-2">
             <Field
-              canDelete
               hasText={false}
               name={`${step}.images[2]`}
-              src={images[2]}
               component={ImageInputField}
             />
           </ImageInputFieldWrapper>

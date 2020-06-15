@@ -284,13 +284,19 @@ describe('[How To]', () => {
 
       cy.step('Update a new cover for the intro')
 
-      cy.get('[data-cy=intro-cover]')
+      cy.get('[data-cy="intro-cover"]')
+        .find('[data-cy="delete-image"]')
+        .click({ force: true })
+
+      cy.get('[data-cy="intro-cover"]')
         .find(':file')
         .attachFile('images/howto-intro.jpg')
 
       deleteStep(5)
       deleteStep(4)
       deleteStep(2)
+      // wait for delete animations to complete
+      cy.wait(1000)
 
       expected.steps.forEach((step, index) => {
         fillStep(index + 1, step.title, step.text, [

@@ -17,7 +17,7 @@ import { IEvent, IEventFormInput } from 'src/models/events.models'
 import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
-import { validateUrl, addProtocol, required } from 'src/utils/validators'
+import { validateUrl, addProtocolMutator, required } from 'src/utils/validators'
 import { Box } from 'rebass'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import IconHeaderEvents from 'src/assets/images/header-section/events-header-icon.svg'
@@ -29,7 +29,7 @@ interface IState {
   selectedDate: any
   isLocationSelected?: boolean
 }
-interface IProps extends RouteComponentProps<any> {}
+type IProps = RouteComponentProps<any>
 interface IInjectedProps extends IProps {
   eventStore: EventStore
 }
@@ -94,7 +94,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
         initialValues={formValues}
         mutators={{
           ...arrayMutators,
-          addProtocol,
+          addProtocolMutator,
         }}
         validateOnBlur
         render={({
@@ -235,7 +235,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             component={InputField}
                             placeholder="URL to offsite link (Facebook, Meetup, etc)"
                             customOnBlur={e =>
-                              mutators.addProtocol(e.target.name)
+                              mutators.addProtocolMutator(e.target.name)
                             }
                           />
                         </Flex>

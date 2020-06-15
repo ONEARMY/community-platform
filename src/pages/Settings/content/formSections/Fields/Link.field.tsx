@@ -7,7 +7,12 @@ import { Modal } from 'src/components/Modal/Modal'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
 import { SelectField } from 'src/components/Form/Select.field'
-import { validateUrl, validateEmail, required } from 'src/utils/validators'
+import {
+  validateUrl,
+  validateEmail,
+  required,
+  ensureExternalUrl,
+} from 'src/utils/validators'
 
 interface IProps {
   name: string
@@ -38,6 +43,22 @@ export class ProfileLinkField extends Component<IProps, IState> {
   confirmDelete() {
     this.toggleDeleteModal()
     this.props.onDelete()
+  }
+  // TODO - we might want to add more formatting for cases where,
+  // e.g. only a username is given for a bazar link
+  public formatLink(link: string) {
+    switch (this.state.linkType) {
+      case 'forum':
+        return ensureExternalUrl(link)
+      case 'website':
+        return ensureExternalUrl(link)
+      case 'social media':
+        return ensureExternalUrl(link)
+      case 'bazar':
+        return ensureExternalUrl(link)
+      default:
+        return link
+    }
   }
 
   public validateDependingOnType(e) {
@@ -80,8 +101,9 @@ export class ProfileLinkField extends Component<IProps, IState> {
             name={`${name}.label`}
             options={COM_TYPE_MOCKS}
             component={SelectField}
+            onCustomChange={(linkType: string) => this.setState({ linkType })}
             placeholder="type"
-            validation={required}
+            validate={required}
             validateFields={[]}
             style={{ width: '160px', height: '40px', marginRight: '8px' }}
           />
@@ -96,6 +118,8 @@ export class ProfileLinkField extends Component<IProps, IState> {
           validateFields={[]}
           component={InputField}
           placeholder="Link"
+          format={v => this.formatLink(v)}
+          formatOnBlur={true}
         />
         <DeleteButton
           sx={{ display: ['none', 'none', 'block'], height: '40px' }}

@@ -32,10 +32,18 @@ export class HowToSubmitStatus extends React.Component<IProps> {
     const uploadStatus = this.injected.howtoStore.uploadStatus
     return uploadStatus.Start ? (
       <Modal>
-        <Heading medium textAlign="center">
-          Uploading How To
-        </Heading>
-        <Box margin="auto" p={0}>
+        <Flex justifyContent="space-between">
+          <Heading small textAlign="center">
+            Uploading How To
+          </Heading>
+          <Icon
+            glyph={'close'}
+            onClick={() => {
+              this.props.onClose()
+            }}
+          />
+        </Flex>
+        <Box margin="15px 0" p={0}>
           {Object.keys(uploadStatus).map(key => (
             <Flex p={0} alignItems="center" key={key}>
               <Icon
@@ -48,7 +56,6 @@ export class HowToSubmitStatus extends React.Component<IProps> {
         </Box>
         <Button
           data-cy={uploadStatus.Complete ? 'view-howto' : ''}
-          mt={3}
           disabled={!uploadStatus.Complete}
           variant={!uploadStatus.Complete ? 'disabled' : 'outline'}
           icon="arrow-forward"

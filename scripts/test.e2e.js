@@ -1,4 +1,4 @@
-import child from 'child_process'
+const child = require('child_process')
 const e2eEnv = require('dotenv').config({ path: `${process.cwd()}/.env.e2e` })
 
 // Prevent unhandled errors being silently ignored
@@ -53,11 +53,11 @@ function getCypressEnv(sharedEnv) {
 }
 
 function randomString(length) {
-  const result = ''
+  let result = ''
   const characters =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
   const charactersLength = characters.length
-  for (const i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength))
   }
   return result

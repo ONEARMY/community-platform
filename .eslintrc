@@ -29,6 +29,7 @@
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-empty-interface": "warn",
     "react/prop-types": "off",
-    "react/no-unknown-property": "warn"
+    "react/no-unknown-property": "warn",
+    "@typescript-eslint/no-var-requires":"off"
   }
 }

@@ -1,8 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
 import theme, { zIndex } from 'src/themes/styled.theme'
-// Import css files for Slick-slider
-// import "../../node_modules/slick-carousel/slick/slick.css";
-// import "../../node_modules/slick-carousel/slick/slick-theme.css";
 
 export const GlobalStyle = createGlobalStyle`
 

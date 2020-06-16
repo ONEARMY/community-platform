@@ -21,12 +21,23 @@ import { IUploadedFileMeta, Storage } from '../storage'
 export class ModuleStore {
   allDocs$ = new BehaviorSubject<any[]>([])
   private activeCollectionSubscription = new Subscription()
+  isInitialized = false
 
   // when a module store is initiated automatically load the docs in the collection
   // this can be subscribed to in individual stores
-  constructor(private rootStore: RootStore, basePath?: IDBEndpoint) {
-    if (basePath) {
-      this._subscribeToCollection(basePath)
+  constructor(private rootStore: RootStore, private basePath?: IDBEndpoint) {}
+
+  /**
+   * By default all stores are injected and made available on first app load.
+   * In order to avoid loading all data immediately, include an init function that can
+   * be called from a specific page load instead.
+   */
+  init() {
+    if (!this.isInitialized) {
+      if (this.basePath) {
+        this._subscribeToCollection(this.basePath)
+        this.isInitialized = true
+      }
     }
   }
 

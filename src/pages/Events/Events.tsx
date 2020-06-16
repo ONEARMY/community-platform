@@ -4,11 +4,11 @@ import { EventStore } from 'src/stores/Events/events.store'
 import { EventsCreate } from './Content/EventsCreate/EventsCreate'
 import { EventsList } from './Content/EventsList/EventsList'
 
-import { withRouter, Switch, Route } from 'react-router'
+import { withRouter, Switch, Route, RouteComponentProps } from 'react-router'
 import { AuthRoute } from '../common/AuthRoute'
 
 // see similar implementation in 'how-to' page for more detailed commenting
-interface IProps {
+interface IProps extends RouteComponentProps {
   eventStore?: EventStore
 }
 
@@ -17,6 +17,7 @@ interface IProps {
 class EventsPage extends React.Component<IProps, any> {
   constructor(props: any) {
     super(props)
+    this.props.eventStore!.init()
   }
 
   public render() {
@@ -37,4 +38,4 @@ class EventsPage extends React.Component<IProps, any> {
     )
   }
 }
-export default withRouter(EventsPage as any)
+export default withRouter(EventsPage)

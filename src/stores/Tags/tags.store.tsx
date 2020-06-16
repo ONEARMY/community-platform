@@ -19,6 +19,8 @@ export class TagsStore extends ModuleStore {
 
   constructor(rootStore: RootStore) {
     super(rootStore, 'tags')
+    // call init immediately for tags so they are available to all pages
+    super.init()
     this.allDocs$.subscribe((docs: ITag[]) => {
       console.log('tags docs', docs)
       this.allTags = docs.sort((a, b) => (a.label > b.label ? 1 : -1))

@@ -76,6 +76,7 @@
     "react-hamburger-menu": "^1.1.1",
     "react-icons": "^3.2.2",
     "react-image-lightbox": "^5.1.0",
+    "react-lazy-load-image-component": "^1.5.0-beta.0",
     "react-leaflet": "^2.5.0",
     "react-leaflet-markercluster": "^2.0.0-rc3",
     "react-linkify": "^0.2.2",

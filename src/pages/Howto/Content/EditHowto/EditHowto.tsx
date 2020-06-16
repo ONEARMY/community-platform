@@ -19,13 +19,13 @@ interface IState {
   showSubmitModal?: boolean
   loggedInUser?: IUser | undefined
 }
-interface IProps extends RouteComponentProps<any> {}
+type IProps = RouteComponentProps<any>
 interface IInjectedProps extends IProps {
   howtoStore: HowtoStore
 }
 
 @inject('howtoStore')
-export class EditHowto extends React.Component<IProps, IState> {
+class EditHowto extends React.Component<IProps, IState> {
   constructor(props: any) {
     super(props)
     this.state = {
@@ -88,3 +88,4 @@ export class EditHowto extends React.Component<IProps, IState> {
     }
   }
 }
+export default EditHowto

@@ -1,16 +1,17 @@
-import * as React from 'react'
+import React, { Suspense, lazy } from 'react'
 import {
   Route,
   Switch,
   withRouter,
   RouteComponentProps,
 } from 'react-router-dom'
-import { Howto } from './Content/Howto/Howto'
-import CreateHowto from './Content/CreateHowto/CreateHowto'
-import { EditHowto } from './Content/EditHowto/EditHowto'
-import { HowtoList } from './Content/HowtoList/HowtoList'
 import { inject } from 'mobx-react'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
+import { HowtoList } from './Content/HowtoList/HowtoList'
+import { Howto } from './Content/Howto/Howto'
+// lazy load editor pages
+const CreateHowto = lazy(() => import('./Content/CreateHowto/CreateHowto'))
+const EditHowto = lazy(() => import('./Content/EditHowto/EditHowto'))
 
 interface IProps extends RouteComponentProps {
   howtoStore?: HowtoStore
@@ -25,7 +26,7 @@ class HowtoPage extends React.Component<IProps, any> {
 
   public render() {
     return (
-      <div>
+      <Suspense fallback={<div></div>}>
         <Switch>
           <Route
             exact
@@ -47,7 +48,7 @@ class HowtoPage extends React.Component<IProps, any> {
             render={props => <EditHowto {...props} />}
           />
         </Switch>
-      </div>
+      </Suspense>
     )
   }
 }

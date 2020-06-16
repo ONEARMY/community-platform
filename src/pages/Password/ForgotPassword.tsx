@@ -1,11 +1,9 @@
-import * as React from 'react'
+import React from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
 import { Button } from 'src/components/Button'
-import Text from 'src/components/Text'
-import { Link } from 'src/components/Links'
 import { Form, Field } from 'react-final-form'
 import { InputField } from 'src/components/Form/Fields'
 
@@ -28,7 +26,7 @@ interface IProps {
   preloadValues?: any
 }
 
-export class ForgotPasswordPage extends React.Component<IProps, IState> {
+class ForgotPasswordPage extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
@@ -118,3 +116,4 @@ export class ForgotPasswordPage extends React.Component<IProps, IState> {
     )
   }
 }
+export default ForgotPasswordPage

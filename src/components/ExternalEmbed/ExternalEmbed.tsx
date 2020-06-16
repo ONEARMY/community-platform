@@ -17,7 +17,7 @@ interface IState {
   src: string
 }
 
-export class ExternalEmbed extends React.Component<IProps, IState> {
+class ExternalEmbed extends React.Component<IProps, IState> {
   constructor(props) {
     super(props)
     this.state = {
@@ -77,3 +77,4 @@ export class ExternalEmbed extends React.Component<IProps, IState> {
     )
   }
 }
+export default ExternalEmbed

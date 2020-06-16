@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { inject, observer } from 'mobx-react'
 import { EventStore } from 'src/stores/Events/events.store'
 import { EventsCreate } from './Content/EventsCreate/EventsCreate'
@@ -14,7 +14,7 @@ interface IProps {
 
 @inject('eventStore')
 @observer
-class EventsPageClass extends React.Component<IProps, any> {
+class EventsPage extends React.Component<IProps, any> {
   constructor(props: any) {
     super(props)
   }
@@ -37,4 +37,4 @@ class EventsPageClass extends React.Component<IProps, any> {
     )
   }
 }
-export const EventsPage = withRouter(EventsPageClass as any)
+export default withRouter(EventsPage as any)

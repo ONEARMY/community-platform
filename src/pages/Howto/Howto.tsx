@@ -4,9 +4,8 @@ import { Howto } from './Content/Howto/Howto'
 import CreateHowto from './Content/CreateHowto/CreateHowto'
 import { EditHowto } from './Content/EditHowto/EditHowto'
 import { HowtoList } from './Content/HowtoList/HowtoList'
-import { AuthRoute } from '../common/AuthRoute'
 
-class HowtoPageClass extends React.Component<any, any> {
+class HowtoPage extends React.Component<any, any> {
   constructor(props: any) {
     super(props)
   }
@@ -39,4 +38,4 @@ class HowtoPageClass extends React.Component<any, any> {
     )
   }
 }
-export const HowtoPage = withRouter(HowtoPageClass as any)
+export default withRouter(HowtoPage)

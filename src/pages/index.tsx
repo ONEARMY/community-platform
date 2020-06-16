@@ -1,5 +1,5 @@
 /* tslint:disable:no-eval */
-import * as React from 'react'
+import React, { Suspense } from 'react'
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom'
 import GoogleAnalytics from 'src/components/GoogleAnalytics'
 import { NotFoundPage } from './NotFound/NotFound'
@@ -46,30 +46,37 @@ export class Routes extends React.Component<any, IState> {
           <GoogleAnalytics />
           {/* on page change scroll to top */}
           <ScrollToTop>
-            <Switch>
-              {pages.map(page => (
+            {/* TODO - add better loading fallback */}
+            <Suspense fallback={<div></div>}>
+              <Switch>
+                {pages.map(page => (
+                  <Route
+                    exact={page.exact}
+                    path={page.path}
+                    key={page.path}
+                    render={props => (
+                      <React.Fragment>
+                        <Header />
+                        <Main
+                          customStyles={page.customStyles}
+                          ignoreMaxWidth={page.fullPageWidth}
+                        >
+                          <>{page.component}</>
+                        </Main>
+                      </React.Fragment>
+                    )}
+                  />
+                ))}
+                <Route component={NotFoundPage} />
+              </Switch>
+              <Switch>
                 <Route
-                  exact={page.exact}
-                  path={page.path}
-                  key={page.path}
-                  render={props => (
-                    <React.Fragment>
-                      <Header />
-                      <Main
-                        customStyles={page.customStyles}
-                        ignoreMaxWidth={page.fullPageWidth}
-                      >
-                        <>{page.component}</>
-                      </Main>
-                    </React.Fragment>
-                  )}
+                  exact
+                  path="/"
+                  render={() => <Redirect to="/how-to" />}
                 />
-              ))}
-              <Route component={NotFoundPage} />
-            </Switch>
-            <Switch>
-              <Route exact path="/" render={() => <Redirect to="/how-to" />} />
-            </Switch>
+              </Switch>
+            </Suspense>
           </ScrollToTop>
         </BrowserRouter>
         <Link

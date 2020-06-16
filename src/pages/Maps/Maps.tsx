@@ -25,7 +25,7 @@ interface IState {
 
 @inject('mapsStore')
 @observer
-class MapsPageClass extends React.Component<IProps, IState> {
+class MapsPage extends React.Component<IProps, IState> {
   mapRef: React.RefObject<Map>
 
   constructor(props: any) {
@@ -141,4 +141,4 @@ class MapsPageClass extends React.Component<IProps, IState> {
   }
 }
 
-export const MapsPage = withRouter(MapsPageClass as any)
+export default withRouter(MapsPage as any)

@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Route, Switch, withRouter } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
 import { UserStore } from 'src/stores/User/user.store'
@@ -12,7 +12,7 @@ interface IProps {
 @(withRouter as any)
 @inject('userStore')
 @observer
-export class User extends React.Component<IProps, any> {
+class UserPageRoutes extends React.Component<IProps, any> {
   constructor(props: IProps) {
     super(props)
   }
@@ -25,3 +25,4 @@ export class User extends React.Component<IProps, any> {
     )
   }
 }
+export default UserPageRoutes

@@ -15,7 +15,7 @@ interface IProps {}
 @(withRouter as any)
 @inject('userStore')
 @observer
-export class SettingsPage extends React.Component<IProps> {
+class SettingsPage extends React.Component<IProps> {
   get injected() {
     return this.props as InjectedProps
   }
@@ -37,3 +37,4 @@ export class SettingsPage extends React.Component<IProps> {
     )
   }
 }
+export default SettingsPage

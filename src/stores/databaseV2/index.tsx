@@ -1,5 +1,3 @@
-// tslint:disable max-classes-per-file
-// tslint:disable variable-name
 import { DexieClient } from './clients/dexie'
 import { FirestoreClient } from './clients/firestore'
 import { RealtimeDBClient } from './clients/rtdb'

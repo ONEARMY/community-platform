@@ -9,7 +9,6 @@ export enum UserMenuItem {
 
 declare global {
   namespace Cypress {
-    // tslint:disable-next-line:interface-name
     interface Chainable {
       login(
         username: string,

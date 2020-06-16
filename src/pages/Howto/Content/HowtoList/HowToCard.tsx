@@ -1,11 +1,11 @@
 import React from 'react'
-import { Image } from 'rebass/styled-components'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
 import ModerationStatusText from 'src/components/ModerationStatusText'
 import { Link } from 'src/components/Links'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
-import { IHowtoDB } from '../../models/howto.models'
+import { IHowtoDB } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
 
 interface IProps {
@@ -31,13 +31,14 @@ export const HowToCard = (props: IProps) => (
       width={1}
     >
       <Flex width="1" fontSize={'0px'}>
-        <Image
-          sx={{
+        <LazyLoadImage
+          style={{
             width: '100%',
             height: 'calc(((350px) / 3) * 2)',
             borderRadius: '8px 8px 0px 0px',
             objectFit: 'cover',
           }}
+          threshold={500}
           src={props.howto.cover_image.downloadUrl}
         />
       </Flex>

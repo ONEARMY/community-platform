@@ -70,7 +70,7 @@ export class LocationSearch extends React.Component<IProps, IState> {
       appId: ALGOLIA_PLACES_CONFIG.applicationID,
       apiKey: ALGOLIA_PLACES_CONFIG.searchOnlyAPIKey,
       container: this.placesInputRef.current,
-    }).configure({ style: false, useDeviceLocation: false })
+    }).configure({ useDeviceLocation: false })
     // add custom handler when place selected from list
     this.places.on('change', (selected: IAlgoliaResponse) =>
       this.handlePlaceSelectChange(selected),
@@ -88,9 +88,9 @@ export class LocationSearch extends React.Component<IProps, IState> {
 
   // when user changes input want to debounce and pass to places input
   subscribeToInputChanges() {
-    const observable: Observable<
-      React.ChangeEvent<HTMLInputElement>
-    > = fromEvent(this.userInputRef.current, 'keyup')
+    const observable: Observable<React.ChangeEvent<
+      HTMLInputElement
+    >> = fromEvent(this.userInputRef.current, 'keyup')
     this.inputValue$ = observable
       .pipe(
         map(e => e.currentTarget.value),

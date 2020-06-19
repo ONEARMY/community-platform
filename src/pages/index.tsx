@@ -1,4 +1,3 @@
-/* tslint:disable:no-eval */
 import * as React from 'react'
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom'
 import GoogleAnalytics from 'src/components/GoogleAnalytics'

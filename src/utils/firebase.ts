@@ -28,4 +28,4 @@ export const functions = firebase.functions()
 export const EmailAuthProvider = firebase.auth.EmailAuthProvider
 
 // want to also expose the default firebase user
-export interface IFirebaseUser extends firebase.User {}
+export type IFirebaseUser = firebase.User

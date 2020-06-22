@@ -3,9 +3,11 @@ import { inject, observer } from 'mobx-react'
 import { TagsStore } from 'src/stores/Tags/tags.store'
 import { ISelectedTags, ITag, TagCategory } from 'src/models/tags.model'
 import { FieldRenderProps } from 'react-final-form'
-import Select from 'react-select'
+import Select, { components } from 'react-select'
+import ArrowSelectIcon from '../../assets/icons/icon-arrow-select.svg'
 import { SelectStyles, FilterStyles } from '../Form/Select.field'
 import { FieldContainer } from '../Form/elements'
+import { Image } from 'rebass'
 
 // we include props from react-final-form fields so it can be used as a custom field component
 export interface IProps extends FieldRenderProps<any, any> {
@@ -26,6 +28,14 @@ interface InjectedProps extends IProps {
 interface ICollectionWithTags {
   tags?: ISelectedTags
 }
+
+// https://github.com/JedWatson/react-select/issues/685#issuecomment-420213835
+const TagsSelectIndicator = props =>
+  components.DropdownIndicator && (
+    <components.DropdownIndicator {...props}>
+      <Image src={ArrowSelectIcon} sx={{ width: '12px' }} />
+    </components.DropdownIndicator>
+  )
 
 @inject('tagsStore')
 @observer
@@ -71,6 +81,7 @@ class TagsSelect extends React.Component<IProps, IState> {
     return (
       <FieldContainer data-cy="tag-select">
         <Select
+          components={{ DropdownIndicator: TagsSelectIndicator }}
           styles={styleVariant === 'selector' ? SelectStyles : FilterStyles}
           isMulti
           options={categoryTags}

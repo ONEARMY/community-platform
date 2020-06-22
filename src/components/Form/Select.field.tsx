@@ -98,10 +98,13 @@ export const FilterStyles: Partial<Styles> = {
       border: '1px solid ' + theme.colors.blue,
     },
   }),
-
-  option: (provided, state) => ({
-    color: 'black',
+  placeholder: (provided, state) => ({
     ...provided,
+    color: 'black',
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    color: 'black',
     backgroundColor: 'white',
     boxShadow: 'none',
     ':hover': {

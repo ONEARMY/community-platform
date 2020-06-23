@@ -81,7 +81,11 @@ class TagsSelect extends React.Component<IProps, IState> {
     return (
       <FieldContainer data-cy="tag-select">
         <Select
-          components={{ DropdownIndicator: TagsSelectIndicator }}
+          components={
+            styleVariant === 'selector'
+              ? {}
+              : { DropdownIndicator: TagsSelectIndicator }
+          }
           styles={styleVariant === 'selector' ? SelectStyles : FilterStyles}
           isMulti
           options={categoryTags}

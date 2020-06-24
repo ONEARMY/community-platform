@@ -6,6 +6,7 @@ import theme from 'src/themes/styled.theme'
 import { Flex } from 'src/components/Flex'
 import { ErrorMessage, FieldContainer } from './elements'
 import { IFieldProps } from './Fields'
+import { DropdownIndicator } from '../DropdownIndicator'
 
 interface ISelectOption {
   value: string
@@ -74,6 +75,14 @@ export const SelectStyles: Partial<Styles> = {
   indicatorSeparator: (provided, state) => ({
     ...provided,
     display: 'none',
+  }),
+
+  dropdownIndicator: (provided, state) => ({
+    ...provided,
+    ':hover': {
+      opacity: state.isFocused ? 1 : 0.5,
+    },
+    opacity: state.isFocused ? 1 : 0.3,
   }),
 }
 
@@ -168,6 +177,7 @@ const defaultProps: Partial<ISelectFieldProps> = {
   getOptionValue: (option: ISelectOption) => option.value,
   options: [],
 }
+
 export const SelectField = ({
   input,
   meta,
@@ -194,6 +204,7 @@ export const SelectField = ({
           onFocus={input.onFocus as any}
           value={getValueForSelect(rest.options, input.value)}
           classNamePrefix={'data-cy'}
+          components={{ DropdownIndicator }}
           {...defaultProps}
           {...rest}
         />

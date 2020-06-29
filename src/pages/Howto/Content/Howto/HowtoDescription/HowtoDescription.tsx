@@ -37,7 +37,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
     const lastModifiedDate = format(new Date(howto._modified), 'DD-MM-YYYY')
     const creationDate = format(new Date(howto._created), 'DD-MM-YYYY')
     if (lastModifiedDate !== creationDate) {
-      return 'Last edit: ' + format(new Date(howto._modified), 'DD-MM-YYYY')
+      return 'Last edit on ' + format(new Date(howto._modified), 'DD-MM-YYYY')
     } else {
       return ''
     }
@@ -87,27 +87,28 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
               </Flex>
             )}
             {/* Check if logged in user is the creator of the how-to OR a super-admin */}
-            {loggedInUser &&
-              (isAllowToEditContent(howto, loggedInUser) && (
-                <Link to={'/how-to/' + this.props.howto.slug + '/edit'}>
-                  <Button variant={'primary'} data-cy={'edit'}>
-                    Edit
-                  </Button>
-                </Link>
-              ))}
+            {loggedInUser && isAllowToEditContent(howto, loggedInUser) && (
+              <Link to={'/how-to/' + this.props.howto.slug + '/edit'}>
+                <Button variant={'primary'} data-cy={'edit'}>
+                  Edit
+                </Button>
+              </Link>
+            )}
           </Flex>
-          <Text auxiliary mt={3} mb={2}>
-            By{' '}
-            <Link
-              sx={{
-                textDecoration: 'underline',
-                color: 'inherit',
-              }}
-              to={'/u/' + howto._createdBy}
-            >
-              {howto._createdBy}
-            </Link>{' '}
-            <Text inline> {this.dateCreatedByText(howto)}</Text>
+          <Box mt={3} mb={2}>
+            <Text inline auxiliary>
+              By{' '}
+              <Link
+                sx={{
+                  textDecoration: 'underline',
+                  color: 'inherit',
+                }}
+                to={'/u/' + howto._createdBy}
+              >
+                {howto._createdBy}
+              </Link>{' '}
+              | Published on {this.dateCreatedByText(howto)}
+            </Text>
             <Text auxiliary sx={{ color: '#b7b5b5 !important' }} mt={1} mb={2}>
               {this.dateLastEditText(howto)}
             </Text>
@@ -117,7 +118,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             <Text preLine paragraph>
               {howto.description}
             </Text>
-          </Text>
+          </Box>
 
           <Flex mt={4} mb={2}>
             <ElWithBeforeIcon IconUrl={StepsIcon} height="15px">
@@ -156,8 +157,8 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
           <Image
             sx={{
               objectFit: 'cover',
-              width: '100%',
-              height: '450px',
+              width: 'auto',
+              height: '100%',
             }}
             src={howto.cover_image.downloadUrl}
             alt="how-to cover"

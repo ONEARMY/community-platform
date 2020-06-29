@@ -28,8 +28,8 @@ export class FileInfo extends React.Component<IProps, IState> {
     }
   }
 
-  getGlyph(filetype: string) {
-    let glyph: availableGlyphs = 'image'
+  getGlyph(filetype: string): availableGlyphs {
+    let glyph: availableGlyphs = 'download-cloud'
     switch (filetype) {
       case 'application/pdf':
         glyph = 'pdf'

@@ -16,6 +16,7 @@ import { IUser } from 'src/models/user.models'
 import { isAllowToEditContent } from 'src/utils/helpers'
 import theme from 'src/themes/styled.theme'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
+import ArrowIcon from 'src/assets/icons/icon-arrow.svg'
 
 interface IProps {
   howto: IHowtoDB
@@ -64,8 +65,14 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
         <Flex px={4} py={4} flexDirection={'column'} width={[1, 1, 1 / 2]}>
           <Flex justifyContent={'space-between'}>
             <Link to={'/how-to/'}>
-              <Button variant={'secondary'} data-cy={'go-back'}>
-                Back
+              <Button variant="subtle" fontSize="14px" data-cy="go-back">
+                <Flex>
+                  <Image
+                    sx={{ width: '6px', marginRight: '5px' }}
+                    src={ArrowIcon}
+                  />
+                  Back
+                </Flex>
               </Button>
             </Link>
             {/* Check if pin should be moderated */}

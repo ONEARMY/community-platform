@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { format } from 'date-fns'
 import { IHowtoDB } from 'src/models/howto.models'
@@ -16,7 +16,7 @@ import { IUser } from 'src/models/user.models'
 import { isAllowToEditContent } from 'src/utils/helpers'
 import theme from 'src/themes/styled.theme'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
-import ArrowIcon from 'src/assets/icons/icon-arrow.svg'
+import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 
 interface IProps {
   howto: IHowtoDB
@@ -68,10 +68,10 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
               <Button variant="subtle" fontSize="14px" data-cy="go-back">
                 <Flex>
                   <Image
-                    sx={{ width: '6px', marginRight: '5px' }}
+                    sx={{ width: '10px', marginRight: '4px', rotate: '90deg' }}
                     src={ArrowIcon}
                   />
-                  Back
+                  <Text>Back</Text>
                 </Flex>
               </Button>
             </Link>

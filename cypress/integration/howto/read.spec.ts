@@ -42,8 +42,9 @@ describe('[How To]', () => {
       cy.get('[data-cy=create]')
         .click()
         .url()
-        .should('include', '/how-to/create')
+        
     })
+   
   })
 
   describe('[Filter with Tag]', () => {

@@ -67,7 +67,7 @@ export class Routes extends React.Component<any, IState> {
               <Route component={NotFoundPage} />
             </Switch>
             <Switch>
-              <Route exact path="/" render={() => <Redirect to="/how-to" />} />
+              <Route exact path="/" render={() => <Redirect to="/academy" />} />
             </Switch>
           </ScrollToTop>
         </BrowserRouter>

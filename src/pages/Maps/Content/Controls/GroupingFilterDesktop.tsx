@@ -35,8 +35,8 @@ const ItemRenderer = ({ checked, option, onClick }) => {
         IconUrl={option.icon}
         ticked={checked}
         contain={true}
-        width="30px"
-        height="30px"
+        width="20px"
+        height="20px"
       >
         <h4
           style={{

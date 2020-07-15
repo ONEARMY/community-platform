@@ -98,7 +98,7 @@ class Controls extends React.Component<IProps, IState> {
             onChange={(location: ILocation) => {
               this.props.onLocationChange(location)
             }}
-            styleVariant="filter"
+            styleVariant="mapinput"
           />
         </Box>
         <Flex>

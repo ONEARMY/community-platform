@@ -6,7 +6,7 @@
 import React from 'react'
 import AlgoliaPlaces from 'places.js'
 import { ALGOLIA_PLACES_CONFIG } from 'src/config/config'
-import { Input } from '../Form/elements'
+import { Input, BlackPlaceholderInput } from '../Form/elements'
 import { Observable, fromEvent, Subscription } from 'rxjs'
 import { debounceTime, map } from 'rxjs/operators'
 import styled from 'styled-components'
@@ -18,7 +18,7 @@ interface IProps {
   debounceTime: number
   onChange: (selected: ILocation) => void
   onClear?: () => void
-  styleVariant?: 'filter' | 'field'
+  styleVariant?: 'filter' | 'field' | 'mapinput'
 }
 interface IState {
   debouncedInputValue: string
@@ -146,12 +146,25 @@ export class LocationSearch extends React.Component<IProps, IState> {
             width: '100%',
           }}
         >
-          <Input
-            placeholder={this.props.placeholder}
-            style={styleVariant === 'filter' ? FilterStyle : SelectorStyle}
-            ref={this.userInputRef}
-            onBlur={() => this.places.close()}
-          />
+          {/* Placeholder cannot be changed with inline notation (e.g. FilterStyle or SelectStyle)
+            So created a new Styled component 
+        */}
+          {styleVariant !== 'mapinput' && (
+            <Input
+              placeholder={this.props.placeholder}
+              style={styleVariant === 'filter' ? FilterStyle : SelectorStyle}
+              ref={this.userInputRef}
+              onBlur={() => this.places.close()}
+            />
+          )}
+          {styleVariant === 'mapinput' && (
+            <BlackPlaceholderInput
+              placeholder={this.props.placeholder}
+              style={FilterStyle}
+              ref={this.userInputRef}
+              onBlur={() => this.places.close()}
+            />
+          )}
         </span>
         {/* the second input takes debounced value from the first input and binds to algolia search  */}
         <AlgoliaResults

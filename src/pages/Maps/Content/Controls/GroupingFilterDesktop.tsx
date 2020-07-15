@@ -106,7 +106,7 @@ class GroupingFilterDesktop extends React.Component<IProps, IState> {
             return values.length > 0
               ? null
               : entityType === 'place'
-              ? 'Workspaces'
+              ? 'All Workspaces'
               : 'Others'
           }}
           hasSelectAll={false}

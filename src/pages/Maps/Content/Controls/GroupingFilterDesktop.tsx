@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import styled from 'styled-components'
+import React from 'react'
 import MultiSelect from '@khanacademy/react-multi-select'
 import './GroupingFilter.css'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'

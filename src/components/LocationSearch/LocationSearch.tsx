@@ -146,7 +146,7 @@ export class LocationSearch extends React.Component<IProps, IState> {
             width: '100%',
           }}
         >
-          {/* Placeholder cannot be changed with inline notation (e.g. FilterStyle or SelectStyle)
+          {/* Placeholder cannot be changed with inline notation (e.g.in FilterStyle or SelectStyle)
             So created a new Styled component 
         */}
           {styleVariant !== 'mapinput' && (

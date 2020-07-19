@@ -13,9 +13,8 @@ import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
 import { Button } from 'src/components/Button'
 import { IUser } from 'src/models/user.models'
-import { isAllowToEditContent } from 'src/utils/helpers'
+import { isAllowToEditContent, emStringToPx } from 'src/utils/helpers'
 import theme from 'src/themes/styled.theme'
-import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 
 interface IProps {
@@ -47,6 +46,8 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
   public render() {
     const { howto, loggedInUser } = this.props
 
+    const iconFlexDirection =
+      emStringToPx(theme.breakpoints[0]) > window.innerWidth ? 'column' : 'row'
     return (
       <Flex
         data-cy="how-to-basis"
@@ -127,16 +128,19 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             </Text>
           </Box>
 
-          <Flex mt={4} mb={2}>
-            <ElWithBeforeIcon IconUrl={StepsIcon} height="15px">
+          <Flex mt="4">
+            <Flex mr="4" flexDirection={iconFlexDirection}>
+              <Image src={StepsIcon} height="1em" mr="2" mb="2" />
               {howto.steps.length} steps
-            </ElWithBeforeIcon>
-            <ElWithBeforeIcon IconUrl={TimeNeeded}>
+            </Flex>
+            <Flex mr="4" flexDirection={iconFlexDirection}>
+              <Image src={TimeNeeded} height="1em" mr="2" mb="2" />
               {howto.time}
-            </ElWithBeforeIcon>
-            <ElWithBeforeIcon IconUrl={DifficultyLevel}>
+            </Flex>
+            <Flex mr="4" flexDirection={iconFlexDirection}>
+              <Image src={DifficultyLevel} height="1em" mr="2" mb="2" />
               {howto.difficulty_level}
-            </ElWithBeforeIcon>
+            </Flex>
           </Flex>
           <Flex mt={4}>
             {howto.tags &&

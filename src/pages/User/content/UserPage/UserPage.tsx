@@ -19,6 +19,7 @@ import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import { zIndex } from 'src/themes/styled.theme'
 import Workspace from 'src/pages/User/workspace/Workspace'
 import { Text } from 'src/components/Text'
+import { Link } from 'src/components/Links'
 
 import theme from 'src/themes/styled.theme'
 import { replaceDashesWithSpaces } from 'src/utils/helpers'
@@ -114,7 +115,8 @@ const MobileBadge = styled.div`
   }
 `
 
-const CommitmentBox = styled.div`
+const UserStatsBox = styled.div`
+  margin-top: 15px;
   border: 2px solid black;
   border-radius: 10px;
   padding: 20px;
@@ -122,7 +124,7 @@ const CommitmentBox = styled.div`
   margin-bottom: 20px;
 `
 
-const CommitmentBoxItem = styled.div`
+const UserStatsBoxItem = styled.div`
   margin-top: 15px;
 
   &:first-child {
@@ -225,32 +227,40 @@ export class UserPage extends React.Component<
     })
   }
   // Comment on 6.05.20 by BG : renderCommitmentBox commented for now, will be reused with #974
-  // public renderCommitmentBox(isExpert?: boolean, isV4Member?: boolean) {
-  //   return (
-  //     <CommitmentBox>
-  //       {isExpert && (
-  //         <CommitmentBoxItem>
-  //           <ElWithBeforeIcon IconUrl={ExpertIcon} height="25px">
-  //             Expert
-  //           </ElWithBeforeIcon>
-  //         </CommitmentBoxItem>
-  //       )}
-  //       {isV4Member && (
-  //         <CommitmentBoxItem>
-  //           <ElWithBeforeIcon IconUrl={V4MemberIcon}>
-  //             V4 Member
-  //           </ElWithBeforeIcon>
-  //         </CommitmentBoxItem>
-  //       )}
-  //       <CommitmentBoxItem>
-  //         <ElWithBeforeIcon IconUrl={EventsIcon}>0</ElWithBeforeIcon>
-  //       </CommitmentBoxItem>
-  //       <CommitmentBoxItem>
-  //         <ElWithBeforeIcon IconUrl={HowToCountIcon}>0</ElWithBeforeIcon>
-  //       </CommitmentBoxItem>
-  //     </CommitmentBox>
-  //   )
-  // }
+  public renderUserStatsBox(user: IUserPP) {
+    console.log('user.location', user.location)
+
+    return (
+      <UserStatsBox>
+        {/* {isExpert && (
+          <UserStatsBoxItem>
+            <ElWithBeforeIcon IconUrl={ExpertIcon} height="25px">
+              Expert
+            </ElWithBeforeIcon>
+          </UserStatsBoxItem>
+        )} */}
+        <Link to={'/map/#' + user.userName}>
+          <UserStatsBoxItem>
+            <Icon glyph="location-on"></Icon>
+            <span> {user.location?.country}</span>
+          </UserStatsBoxItem>
+        </Link>
+        {/* {isV4Member && (
+          <UserStatsBoxItem>
+            <ElWithBeforeIcon IconUrl={V4MemberIcon}>
+              V4 Member
+            </ElWithBeforeIcon>
+          </UserStatsBoxItem>
+         )} */}
+        <UserStatsBoxItem>
+          <ElWithBeforeIcon IconUrl={EventsIcon}>0</ElWithBeforeIcon>
+        </UserStatsBoxItem>
+        <UserStatsBoxItem>
+          <ElWithBeforeIcon IconUrl={HowToCountIcon}>0</ElWithBeforeIcon>
+        </UserStatsBoxItem>
+      </UserStatsBox>
+    )
+  }
 
   public renderPlasticTypes(plasticTypes: Array<PlasticTypeLabel>) {
     function renderIcon(type: string) {
@@ -373,6 +383,8 @@ export class UserPage extends React.Component<
         },
       )
     }
+    // TODO check if user exist and have created how-to or events
+    const shouldRenderUserStatsBox = user && user.location ? true : false
 
     return (
       <ProfileWrapper mt={4} mb={6}>
@@ -448,6 +460,8 @@ export class UserPage extends React.Component<
           >
             <MobileBadge>
               <Image src={workspaceBadgeSrc} />
+
+              {shouldRenderUserStatsBox && this.renderUserStatsBox(user)}
             </MobileBadge>
           </Box>
         </ProfileContentWrapper>

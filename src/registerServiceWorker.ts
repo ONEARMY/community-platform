@@ -1,4 +1,3 @@
-// tslint:disable:no-console
 // In production, we register a service worker to serve assets from local cache.
 
 // This lets the app load faster on subsequent visits in production, and gives
@@ -21,6 +20,7 @@ const isLocalhost = Boolean(
 const register = (onUpdateCallback?: () => any) => {
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
+    console.log('public url', process.env.PUBLIC_URL)
     const publicUrl = new URL(
       process.env.PUBLIC_URL!,
       window.location.toString(),

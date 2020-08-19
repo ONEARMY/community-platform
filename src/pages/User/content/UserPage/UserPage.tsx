@@ -392,9 +392,6 @@ export class UserPage extends React.Component<
             </UserCategory>
 
             <Flex alignItems="center">
-              <Heading medium bold color={'black'} my={3} mr={2}>
-                {user.displayName}
-              </Heading>
               {user.location ? (
                 <FlagIconEvents code={user.location.countryCode} />
               ) : (
@@ -402,6 +399,9 @@ export class UserPage extends React.Component<
                   <FlagIconEvents code={user.country.toLowerCase()} />
                 )
               )}
+              <Heading medium bold color={'black'} my={3} ml={2}>
+                {user.displayName}
+              </Heading>
             </Flex>
             {user.about && (
               <Text

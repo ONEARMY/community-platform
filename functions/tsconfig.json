@@ -14,6 +14,6 @@
     },
     "skipLibCheck": true
   },
-  "references": [{ "path": "../src" }],
+  "references": [{ "path": "../tsconfig.shared.json" }],
   "include": ["src/**/*"]
 }

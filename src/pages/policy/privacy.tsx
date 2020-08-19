@@ -49,7 +49,11 @@ export class PrivacyPolicy extends React.PureComponent {
           </p>
           <ul>
             <li>
-              <a href="https://policies.google.com/privacy" target="_blank">
+              <a
+                href="https://policies.google.com/privacy"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Google Analytics
               </a>
             </li>

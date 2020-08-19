@@ -123,3 +123,6 @@ export const isAllowToPin = (pin: IMapPin, user?: IUser) => {
 interface IEditableDoc extends DBDoc {
   _createdBy: string
 }
+
+// Convert theme em string to px number
+export const emStringToPx = width => Number(width.replace('em', '')) * 16

@@ -45,7 +45,7 @@ _test_defaults: &_test_defaults
     # A bit ugly to look into, but this starts the platform server with ci environment variables,
     # waits until it's fully responsive, and then executes cypress tests for a given browser and parallel node
     # see https://docs.cypress.io/guides/guides/parallelization.html
-    - npm run test ci
+    # - npm run test ci
     # to kill all background jobs (like "npm start &")
     - kill $(jobs -p) || true
 # Create common predeploy steps which can be included as part of other deploy scripts (data not persisted between jobs otherwise)

@@ -18,7 +18,7 @@
     "strictPropertyInitialization": false,
     "experimentalDecorators": true,
     "typeRoots": ["./node_modules/@types", "./types"],
-    "declaration": false,
+    "declaration": true,
     "noEmit": true
   },
   "include": ["src/**/*", "types"],

@@ -4,7 +4,6 @@ import { Howto } from './Content/Howto/Howto'
 import CreateHowto from './Content/CreateHowto/CreateHowto'
 import { EditHowto } from './Content/EditHowto/EditHowto'
 import { HowtoList } from './Content/HowtoList/HowtoList'
-import { AuthRoute } from '../common/AuthRoute'
 
 class HowtoPageClass extends React.Component<any, any> {
   // eslint-disable-next-line
@@ -40,4 +39,4 @@ class HowtoPageClass extends React.Component<any, any> {
     )
   }
 }
-export const HowtoPage = withRouter(HowtoPageClass as any)
+export const HowtoPage: any = withRouter(HowtoPageClass as any)

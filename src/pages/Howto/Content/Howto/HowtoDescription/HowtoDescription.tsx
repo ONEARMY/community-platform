@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React from 'react'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { format } from 'date-fns'
 import { IHowtoDB } from 'src/models/howto.models'
@@ -25,6 +25,7 @@ interface IProps {
 }
 
 export default class HowtoDescription extends React.PureComponent<IProps, any> {
+  // eslint-disable-next-line
   constructor(props: IProps) {
     super(props)
   }

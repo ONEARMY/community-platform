@@ -1,9 +1,5 @@
 import { loremIpsum } from 'lorem-ipsum'
-import {
-  IMapPin,
-  IMapPinWithDetail,
-  IMapPinDetail,
-} from 'src/models/maps.models'
+import { IMapPin, IMapPinDetail } from 'src/models/maps.models'
 import { MOCK_DB_META } from './db.mock'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 

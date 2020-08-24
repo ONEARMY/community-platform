@@ -64,6 +64,7 @@ const ModalLink = styled(NavLink).attrs(({ name }) => ({
 @inject('userStore')
 @observer
 export class ProfileModal extends React.Component<IProps> {
+  // eslint-disable-next-line
   constructor(props: IProps) {
     super(props)
   }

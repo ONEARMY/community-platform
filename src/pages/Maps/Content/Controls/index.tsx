@@ -143,6 +143,7 @@ class Controls extends React.Component<IProps, IState> {
             )}
             <img
               src={filterIcon}
+              alt="icon"
               style={{ width: '18px', marginLeft: '5px' }}
             />
           </Button>

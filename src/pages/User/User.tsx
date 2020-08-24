@@ -13,6 +13,7 @@ interface IProps {
 @inject('userStore')
 @observer
 export class User extends React.Component<IProps, any> {
+  // eslint-disable-next-line
   constructor(props: IProps) {
     super(props)
   }

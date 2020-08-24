@@ -55,6 +55,7 @@ export class ExpertiseSection extends React.Component<IProps, any> {
                       onChange={() => {
                         if (fields.value && fields.value.length !== 0) {
                           if (fields.value.includes(xp.label)) {
+                            // eslint-disable-next-line
                             fields.value.map((value, selectedValIndex) => {
                               if (value === xp.label) {
                                 fields.remove(selectedValIndex)

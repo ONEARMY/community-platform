@@ -25,6 +25,7 @@ const RotatingLogo = styled(Image)`
 `
 
 export class Loader extends React.Component<IProps> {
+  // eslint-disable-next-line
   constructor(props: any) {
     super(props)
   }

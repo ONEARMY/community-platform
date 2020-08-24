@@ -9,6 +9,7 @@ import { Box } from 'rebass'
 import './styles.css'
 
 import { ILatLng } from 'src/models/maps.models'
+import { IUser } from 'src/models/user.models'
 import { GetLocation } from 'src/utils/geolocation'
 import { Map } from 'react-leaflet'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
@@ -140,4 +141,4 @@ class MapsPageClass extends React.Component<IProps, IState> {
   }
 }
 
-export const MapsPage: any = withRouter(MapsPageClass as any)
+export const MapsPage = withRouter(MapsPageClass as any)

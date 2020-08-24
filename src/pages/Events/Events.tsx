@@ -37,4 +37,4 @@ class EventsPageClass extends React.Component<IProps, any> {
     )
   }
 }
-export const EventsPage: any = withRouter(EventsPageClass as any)
+export const EventsPage = withRouter(EventsPageClass as any)

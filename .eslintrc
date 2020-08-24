@@ -13,6 +13,14 @@
       "version": "detect"
     }
   },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "modules": true
+    }
+  },
   "rules": {
     "prettier/prettier": "warn",
     "@typescript-eslint/no-inferrable-types": "off",

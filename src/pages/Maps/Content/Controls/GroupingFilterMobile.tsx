@@ -76,7 +76,7 @@ class GroupingFilterMobile extends React.Component<IProps, IState> {
     return (
       <Flex flexDirection="column">
         <Text medium py="10px">
-          {entityType === 'place' ? 'All Workspaces' : 'Others'}
+          {entityType === 'place' ? 'Workspaces' : 'Others'}
         </Text>
         {options.map(filter => (
           <Flex

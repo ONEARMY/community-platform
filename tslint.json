@@ -1,0 +1,30 @@
+{
+  "extends": ["tslint-config-prettier"],
+  "linterOptions": {
+    "exclude": [
+      "config/**/*.js",
+      "node_modules/**/*.ts",
+      "coverage/lcov-report/*.js",
+      "*.json",
+      "**/*.json",
+      "src/assets/userReportInit.js"
+    ]
+  },
+  "rules": {
+    "ordered-imports": false,
+    "object-literal-sort-keys": false,
+    "no-console": false,
+    "jsx-no-lambda": false,
+    "jsx-boolean-value": false,
+    "no-empty": true,
+    "no-any": false,
+    "prefer-const": true,
+    "member-access": false,
+    "array-type": false,
+    "no-reference": false,
+    "member-ordering": false,
+    "no-empty-interface": false,
+    "variable-name": false
+  },
+  "defaultSeverity": "warning"
+}

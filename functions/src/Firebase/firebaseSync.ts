@@ -1,3 +1,4 @@
+// tslint:disable no-implicit-dependencies
 // import { IDBEndpoint } from '@OAModels/common.models'
 import * as rtdb from './realtimeDB'
 import * as firestore from './firestoreDB'

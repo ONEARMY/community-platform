@@ -8,7 +8,6 @@ import {
   CellMeasurer,
   ListRowProps,
 } from 'react-virtualized'
-import { emStringToPx } from 'src/utils/helpers'
 
 interface IProps {
   data: any[]
@@ -91,7 +90,7 @@ export class VirtualizedFlex extends React.Component<IProps, IState> {
    */
   private _dataToRows(data: any[], columns: number) {
     const totalRows = Math.ceil(data.length / columns)
-    const rows: typeof data[] = []
+    const rows: (typeof data)[] = []
     for (let i = 0; i < totalRows; i++) {
       rows.push(data.slice(columns * i, columns * (i + 1)))
     }
@@ -131,7 +130,10 @@ export class VirtualizedFlex extends React.Component<IProps, IState> {
   }
 
   static defaultProps: IProps = {
-    widthBreakpoints: themes.breakpoints.map(emStringToPx),
+    widthBreakpoints: themes.breakpoints.map(
+      // Convert theme em string to px number
+      width => Number(width.replace('em', '')) * 16,
+    ),
     data: [],
     renderItem: data => <div>RenderItem {data}</div>,
   }

@@ -75,7 +75,7 @@ if (siteVariant === 'production') {
     searchOnlyAPIKey: e.REACT_APP_ALGOLIA_PLACES_API_KEY as string,
   }
   // disable console logs
-  // eslint-disable-next-line
+  // tslint:disable no-empty
   console.log = () => {}
 }
 
@@ -122,6 +122,7 @@ export const FIREBASE_CONFIG = firebaseConfigs[siteVariant]
 export const ALGOLIA_SEARCH_CONFIG = algoliaSearchConfig
 export const ALGOLIA_PLACES_CONFIG = algoliaPlacesConfig
 export const SENTRY_CONFIG = sentryConfig
+// tslint:disable no-var-requires
 export const VERSION = require('../../package.json').version
 export const GA_TRACKING_ID = process.env.REACT_APP_GA_TRACKING_ID
 

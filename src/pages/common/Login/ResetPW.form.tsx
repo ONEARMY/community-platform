@@ -42,8 +42,8 @@ export class ResetPWForm extends React.Component<IProps, IState> {
   // track change internally for validation and emit to parent for processing
   handleChange(e: React.FormEvent<any>) {
     const nextValues = { ...this.state.formValues }
-    nextValues[e.currentTarget.id] = e.currentTarget.value
-    this.setState({ formValues: nextValues })
+    ;(nextValues[e.currentTarget.id] = e.currentTarget.value),
+      this.setState({ formValues: nextValues })
     this.props.onChange(e)
   }
 

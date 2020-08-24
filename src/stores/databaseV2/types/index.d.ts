@@ -1,3 +1,4 @@
+// tslint:disable interface-name max-classes-per-file
 /**
  * The summary section should be brief. On a documentation web site,
  * it will be shown on a page that lists summaries for many different
@@ -56,7 +57,7 @@ export interface DBClients {
 }
 
 export abstract class AbstractDBClient {
-  getDoc<T>(endpoint: string, docId: string): Promise<(T & DBDoc) | undefined>
+  getDoc<T>(endpoint: string, docId: string): Promise<T & DBDoc | undefined>
 
   setDoc(endpoint: string, doc: any): Promise<void>
 

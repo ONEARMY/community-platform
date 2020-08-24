@@ -76,8 +76,8 @@ export class LoginComponent extends React.Component<IProps, IState> {
   // (e.g. to retain the email typed when moving to forgot pw)
   public handleChange = (e: React.FormEvent<any>) => {
     const nextValues = { ...this.state.formValues }
-    nextValues[e.currentTarget.id] = e.currentTarget.value
-    this.setState({ formValues: nextValues })
+    ;(nextValues[e.currentTarget.id] = e.currentTarget.value),
+      this.setState({ formValues: nextValues })
   }
 
   public render() {

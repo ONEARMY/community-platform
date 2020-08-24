@@ -1,3 +1,5 @@
+// tslint:disable max-classes-per-file
+// tslint:disable variable-name
 import { DexieClient } from './clients/dexie'
 import { FirestoreClient } from './clients/firestore'
 import { RealtimeDBClient } from './clients/rtdb'
@@ -53,7 +55,7 @@ export class DatabaseV2 implements AbstractDatabase {
    */
   private _getDefaultClients = (): DBClients => {
     const serverDB = new FirestoreClient()
-    const cacheDB = window.location.search.includes('no-cache')
+    const cacheDB = location.search.includes('no-cache')
       ? serverDB
       : new DexieClient()
     return {

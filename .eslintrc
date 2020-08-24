@@ -1,6 +1,5 @@
-// https://www.robertcooper.me/using-eslint-and-prettier-in-a-typescript-project
-
 {
+<<<<<<< HEAD
   "parser": "@typescript-eslint/parser",
   "extends": [
     "plugin:react/recommended", // Uses the recommended rules from @eslint-plugin-react

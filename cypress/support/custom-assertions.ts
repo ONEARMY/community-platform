@@ -4,6 +4,7 @@ import { IUserPPDB, ProfileTypeLabel } from '../../src/models/user_pp.models'
 
 declare global {
   namespace Chai {
+    // tslint:disable-next-line:interface-name
     interface Assertion {
       containSubset(expect: any): any
       eqHowtoStep(expect: any, index: number)
@@ -39,7 +40,6 @@ const eqHowto = (chaiObj, utils) => {
     expect(subject.cover_image.name, 'Cover images').to.eq(
       expected.cover_image.name,
     )
-
 
     expected.steps.forEach((step, index) => {
       expect(subject.steps[index], `Have step ${index}`).to.eqHowtoStep(

@@ -1,3 +1,4 @@
+// tslint:disable interface-name max-classes-per-file
 /**
  * The summary section should be brief. On a documentation web site,
  * it will be shown on a page that lists summaries for many different

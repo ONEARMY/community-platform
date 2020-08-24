@@ -101,7 +101,7 @@ export class ProfileModal extends React.Component<IProps> {
           <Flex>
             <ModalLink
               onClick={() => this.logout()}
-              to={window.location.pathname}
+              to={location.pathname}
               data-cy="menu-Logout"
             >
               <Flex color="rgba(27,27,27,0.5)">Log out</Flex>

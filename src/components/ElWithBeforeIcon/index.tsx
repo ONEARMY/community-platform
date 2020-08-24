@@ -3,7 +3,7 @@ import { Box } from 'rebass'
 import checkmarkIcon from 'src/assets/icons/icon-checkmark.svg'
 
 interface IProps {
-  IconUrl: JSX.Element | string
+  IconUrl: JSX.Element
   height?: string
   width?: string
   ticked?: boolean

@@ -13,9 +13,9 @@ import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
 import { Button } from 'src/components/Button'
 import { IUser } from 'src/models/user.models'
-import { isAllowToEditContent, emStringToPx } from 'src/utils/helpers'
+import { isAllowToEditContent } from 'src/utils/helpers'
 import theme from 'src/themes/styled.theme'
-import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
+import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 
 interface IProps {
   howto: IHowtoDB
@@ -38,7 +38,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
     const lastModifiedDate = format(new Date(howto._modified), 'DD-MM-YYYY')
     const creationDate = format(new Date(howto._created), 'DD-MM-YYYY')
     if (lastModifiedDate !== creationDate) {
-      return 'Last edit on ' + format(new Date(howto._modified), 'DD-MM-YYYY')
+      return 'Last edit: ' + format(new Date(howto._modified), 'DD-MM-YYYY')
     } else {
       return ''
     }
@@ -47,8 +47,6 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
   public render() {
     const { howto, loggedInUser } = this.props
 
-    const iconFlexDirection =
-      emStringToPx(theme.breakpoints[0]) > window.innerWidth ? 'column' : 'row'
     return (
       <Flex
         data-cy="how-to-basis"
@@ -67,14 +65,8 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
         <Flex px={4} py={4} flexDirection={'column'} width={[1, 1, 1 / 2]}>
           <Flex justifyContent={'space-between'}>
             <Link to={'/how-to/'}>
-              <Button variant="subtle" fontSize="14px" data-cy="go-back">
-                <Flex>
-                  <Image
-                    sx={{ width: '10px', marginRight: '4px', rotate: '90deg' }}
-                    src={ArrowIcon}
-                  />
-                  <Text>Back</Text>
-                </Flex>
+              <Button variant={'secondary'} data-cy={'go-back'}>
+                Back
               </Button>
             </Link>
             {/* Check if pin should be moderated */}
@@ -104,20 +96,18 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
               </Link>
             )}
           </Flex>
-          <Box mt={3} mb={2}>
-            <Text inline auxiliary>
-              By{' '}
-              <Link
-                sx={{
-                  textDecoration: 'underline',
-                  color: 'inherit',
-                }}
-                to={'/u/' + howto._createdBy}
-              >
-                {howto._createdBy}
-              </Link>{' '}
-              | Published on {this.dateCreatedByText(howto)}
-            </Text>
+          <Text auxiliary mt={3} mb={2}>
+            By{' '}
+            <Link
+              sx={{
+                textDecoration: 'underline',
+                color: 'inherit',
+              }}
+              to={'/u/' + howto._createdBy}
+            >
+              {howto._createdBy}
+            </Link>{' '}
+            <Text inline> {this.dateCreatedByText(howto)}</Text>
             <Text auxiliary sx={{ color: '#b7b5b5 !important' }} mt={1} mb={2}>
               {this.dateLastEditText(howto)}
             </Text>
@@ -127,21 +117,18 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             <Text preLine paragraph>
               {howto.description}
             </Text>
-          </Box>
+          </Text>
 
-          <Flex mt="4">
-            <Flex mr="4" flexDirection={iconFlexDirection}>
-              <Image src={StepsIcon} height="1em" mr="2" mb="2" />
+          <Flex mt={4} mb={2}>
+            <ElWithBeforeIcon IconUrl={StepsIcon} height="15px">
               {howto.steps.length} steps
-            </Flex>
-            <Flex mr="4" flexDirection={iconFlexDirection}>
-              <Image src={TimeNeeded} height="1em" mr="2" mb="2" />
+            </ElWithBeforeIcon>
+            <ElWithBeforeIcon IconUrl={TimeNeeded}>
               {howto.time}
-            </Flex>
-            <Flex mr="4" flexDirection={iconFlexDirection}>
-              <Image src={DifficultyLevel} height="1em" mr="2" mb="2" />
+            </ElWithBeforeIcon>
+            <ElWithBeforeIcon IconUrl={DifficultyLevel}>
               {howto.difficulty_level}
-            </Flex>
+            </ElWithBeforeIcon>
           </Flex>
           <Flex mt={4}>
             {howto.tags &&
@@ -169,8 +156,8 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
           <Image
             sx={{
               objectFit: 'cover',
-              width: 'auto',
-              height: '100%',
+              width: '100%',
+              height: '450px',
             }}
             src={howto.cover_image.downloadUrl}
             alt="how-to cover"

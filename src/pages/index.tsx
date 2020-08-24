@@ -1,3 +1,4 @@
+/* tslint:disable:no-eval */
 import * as React from 'react'
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom'
 import GoogleAnalytics from 'src/components/GoogleAnalytics'
@@ -68,7 +69,7 @@ export class Routes extends React.Component<any, IState> {
               <Route component={NotFoundPage} />
             </Switch>
             <Switch>
-              <Route exact path="/" render={() => <Redirect to="/academy" />} />
+              <Route exact path="/" render={() => <Redirect to="/how-to" />} />
             </Switch>
           </ScrollToTop>
         </BrowserRouter>

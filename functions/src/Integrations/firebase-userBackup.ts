@@ -1,6 +1,8 @@
 import * as functions from 'firebase-functions'
 import { DBDoc, IDBEndpoint } from '../models'
-const USERS_ENDPOINT: IDBEndpoint = 'v3_users' as any
+
+// TODO - fix links to main repo and handle with prefix_endpoint type checking
+const USERS_ENDPOINT = 'v3_users'
 
 /**
  * Automatically create user revision on update

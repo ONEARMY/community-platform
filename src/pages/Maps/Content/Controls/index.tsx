@@ -65,20 +65,23 @@ class Controls extends React.Component<IProps, IState> {
   public render() {
     const { availableFilters } = this.props
     const { showFiltersMobile, filtersSelected } = this.state
-    const groupedFilters = availableFilters.reduce((accumulator, current) => {
-      const { grouping } = current
-      if (accumulator[grouping] === undefined) {
-        accumulator[grouping] = []
-      }
-      accumulator[grouping].push(current)
-      return accumulator
-    }, {} as Record<IPinGrouping, Array<IMapGrouping>>)
+    const groupedFilters = availableFilters.reduce(
+      (accumulator, current) => {
+        const { grouping } = current
+        if (accumulator[grouping] === undefined) {
+          accumulator[grouping] = []
+        }
+        accumulator[grouping].push(current)
+        return accumulator
+      },
+      {} as Record<IPinGrouping, Array<IMapGrouping>>,
+    )
 
     return (
       <MapFlexBar
         data-cy="map-controls"
         ml={['0', '0', '0', '50px']}
-        py={[0, 1, 0]}
+        py={[0, 1, 1]}
         flexDirection={['column', 'column', 'column', 'row']}
         alignItems={'center'}
         onClick={() => {
@@ -98,7 +101,7 @@ class Controls extends React.Component<IProps, IState> {
             onChange={(location: ILocation) => {
               this.props.onLocationChange(location)
             }}
-            styleVariant="mapinput"
+            styleVariant="filter"
           />
         </Box>
         <Flex>

@@ -1,5 +1,6 @@
 import * as React from 'react'
 import styled from 'styled-components'
+import theme from 'src/themes/styled.theme'
 import {
   Flex as RebassFlex,
   FlexProps as RebassFlexProps,
@@ -61,7 +62,7 @@ export const BaseFlex = styled(RebassFlex)`
 
 // TODO - incorporate custom css into rebass props to allow things like below to be passed
 export const Flex = (props: FlexProps) => (
-  <BaseFlex {...(props as any)}>{props.children}</BaseFlex>
+  <BaseFlex {...props}>{props.children}</BaseFlex>
 )
 
 export default Flex

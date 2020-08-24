@@ -108,6 +108,7 @@ class SignInPage extends React.Component<IProps, IState> {
       <Form
         onSubmit={v => this.onLoginSubmit(v as IFormValues)}
         render={({ submitting, values, invalid, handleSubmit }) => {
+          // eslint-disable-next-line
           const disabled = invalid || submitting
           return (
             <>

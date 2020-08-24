@@ -6,6 +6,7 @@ import { EditHowto } from './Content/EditHowto/EditHowto'
 import { HowtoList } from './Content/HowtoList/HowtoList'
 
 class HowtoPageClass extends React.Component<any, any> {
+  // eslint-disable-next-line
   constructor(props: any) {
     super(props)
   }

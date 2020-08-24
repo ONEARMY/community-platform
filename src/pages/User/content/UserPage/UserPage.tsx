@@ -15,7 +15,7 @@ import Slider from 'react-slick'
 import styled from 'styled-components'
 import Icon from 'src/components/Icons'
 import Flex from 'src/components/Flex'
-import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
+// import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import { zIndex } from 'src/themes/styled.theme'
 import Workspace from 'src/pages/User/workspace/Workspace'
 import { Text } from 'src/components/Text'
@@ -33,10 +33,10 @@ import PPIcon from 'src/assets/images/plastic-types/pp.svg'
 import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 
-import EventsIcon from 'src/assets/icons/icon-events.svg'
-import ExpertIcon from 'src/assets/icons/icon-expert.svg'
-import HowToCountIcon from 'src/assets/icons/icon-how-to.svg'
-import V4MemberIcon from 'src/assets/icons/icon-v4-member.svg'
+// import EventsIcon from 'src/assets/icons/icon-events.svg'
+// import ExpertIcon from 'src/assets/icons/icon-expert.svg'
+// import HowToCountIcon from 'src/assets/icons/icon-how-to.svg'
+// import V4MemberIcon from 'src/assets/icons/icon-v4-member.svg'
 
 import { IUploadedFileMeta } from 'src/stores/storage'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
@@ -114,21 +114,21 @@ const MobileBadge = styled.div`
   }
 `
 
-const CommitmentBox = styled.div`
-  border: 2px solid black;
-  border-radius: 10px;
-  padding: 20px;
-  background-color: ${theme.colors.background};
-  margin-bottom: 20px;
-`
+// const CommitmentBox = styled.div`
+//   border: 2px solid black;
+//   border-radius: 10px;
+//   padding: 20px;
+//   background-color: ${theme.colors.background};
+//   margin-bottom: 20px;
+// `
 
-const CommitmentBoxItem = styled.div`
-  margin-top: 15px;
+// const CommitmentBoxItem = styled.div`
+//   margin-top: 15px;
 
-  &:first-child {
-    margin-top: 0;
-  }
-`
+//   &:first-child {
+//     margin-top: 0;
+//   }
+// `
 
 const ProfileWrapper = styled(Box)`
   /* margin-top: 40px;

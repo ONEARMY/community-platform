@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Flex, Box } from 'rebass'
-import { Button } from '../Button'
+import { Flex } from 'rebass'
 import * as clientCompress from 'client-compress'
 import { IConvertedFileMeta, bytesToSize } from './ImageInput'
 import styled from 'styled-components'

@@ -9,6 +9,7 @@ status of service workers
 type ISWStatus = 'updated' | null
 
 export class PlatformStore {
+  // eslint-disable-next-line
   constructor(rootStore: RootStore) {
     //
   }

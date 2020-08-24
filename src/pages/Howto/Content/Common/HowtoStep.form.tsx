@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Field } from 'react-final-form'
 import { TextAreaField, InputField } from 'src/components/Form/Fields'
 import Heading from 'src/components/Heading'

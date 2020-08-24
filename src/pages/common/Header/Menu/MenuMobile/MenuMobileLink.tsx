@@ -56,6 +56,7 @@ const MenuLink = styled(NavLink).attrs(({ name }) => ({
 @inject('mobileMenuStore')
 @observer
 export class MenuMobileLink extends React.Component<IProps> {
+  // eslint-disable-next-line
   constructor(props: IProps) {
     super(props)
   }

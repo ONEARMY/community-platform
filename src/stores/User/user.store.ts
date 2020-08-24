@@ -77,7 +77,7 @@ export class UserStore extends ModuleStore {
         this._unsubscribeFromAuthStateChanges()
         await loginWithDHCredentials(email, password, this)
         this._listenToAuthStateChanges()
-
+      // eslint-disable-next-line
       default:
         return auth.signInWithEmailAndPassword(email, password)
     }

@@ -224,6 +224,7 @@ class DocReference<T> {
   async stream() {
     // TODO - if deemed useful by the platform
     throw new Error('stream method does not currently exist for docs')
+    // eslint-disable-next-line
     return
   }
 

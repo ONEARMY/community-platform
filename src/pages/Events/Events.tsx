@@ -15,6 +15,7 @@ interface IProps {
 @inject('eventStore')
 @observer
 class EventsPageClass extends React.Component<IProps, any> {
+  // eslint-disable-next-line
   constructor(props: any) {
     super(props)
   }

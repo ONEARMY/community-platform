@@ -11,7 +11,10 @@ export const PostingGuidelines = () => (
       How does it work?
     </Heading>
     <Text auxiliary mb={1}>
-      1. Choose what you want to share 🙌
+      1. Choose what you want to share{' '}
+      <span role="img" aria-label="raised-hand">
+        🙌
+      </span>
     </Text>
     <Text auxiliary mb={1}>
       2. Read{' '}
@@ -20,26 +23,44 @@ export const PostingGuidelines = () => (
         target="_blank"
         href="/academy/create/howto"
       >
-        our guidelines 🤓
+        our guidelines{' '}
+        <span role="img" aria-label="nerd-face">
+          🤓
+        </span>
       </Link>
     </Text>
     <Text auxiliary mb={1}>
-      3. Prepare your text & images 🗄️
+      3. Prepare your text & images{' '}
+      <span role="img" aria-label="archive-box">
+        🗄️
+      </span>
     </Text>
     <Text auxiliary mb={1}>
-      4. Create your How-to ✍️
+      4. Create your How-to{' '}
+      <span role="img" aria-label="writing-hand">
+        ✍️
+      </span>
     </Text>
     <Text auxiliary mb={1}>
-      5. Click on “Publish” 🖱️
+      5. Click on “Publish”{' '}
+      <span role="img" aria-label="mouse">
+        🖱️
+      </span>
     </Text>
     <Text auxiliary mb={1}>
       6. We will either send you feedback, or
     </Text>
     <Text auxiliary mb={1}>
-      7. Approve if everything is okay ✅
+      7. Approve if everything is okay{' '}
+      <span role="img" aria-label="tick-validate">
+        ✅
+      </span>
     </Text>
     <Text auxiliary mb={1}>
-      8. Be proud 🙂
+      8. Be proud{' '}
+      <span role="img" aria-label="simple-smile">
+        🙂
+      </span>
     </Text>
   </Flex>
 )

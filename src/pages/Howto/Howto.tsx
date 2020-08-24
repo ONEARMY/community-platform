@@ -7,6 +7,7 @@ import { HowtoList } from './Content/HowtoList/HowtoList'
 import { AuthRoute } from '../common/AuthRoute'
 
 class HowtoPageClass extends React.Component<any, any> {
+  // eslint-disable-next-line
   constructor(props: any) {
     super(props)
   }

@@ -25,6 +25,7 @@ interface IProps {
 }
 
 export default class HowtoDescription extends React.PureComponent<IProps, any> {
+  // eslint-disable-next-line
   constructor(props: IProps) {
     super(props)
   }
@@ -87,14 +88,13 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
               </Flex>
             )}
             {/* Check if logged in user is the creator of the how-to OR a super-admin */}
-            {loggedInUser &&
-              (isAllowToEditContent(howto, loggedInUser) && (
-                <Link to={'/how-to/' + this.props.howto.slug + '/edit'}>
-                  <Button variant={'primary'} data-cy={'edit'}>
-                    Edit
-                  </Button>
-                </Link>
-              ))}
+            {loggedInUser && isAllowToEditContent(howto, loggedInUser) && (
+              <Link to={'/how-to/' + this.props.howto.slug + '/edit'}>
+                <Button variant={'primary'} data-cy={'edit'}>
+                  Edit
+                </Button>
+              </Link>
+            )}
           </Flex>
           <Text auxiliary mt={3} mb={2}>
             By{' '}

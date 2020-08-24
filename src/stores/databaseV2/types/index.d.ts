@@ -57,7 +57,7 @@ export interface DBClients {
 }
 
 export abstract class AbstractDBClient {
-  getDoc<T>(endpoint: string, docId: string): Promise<T & DBDoc | undefined>
+  getDoc<T>(endpoint: string, docId: string): Promise<(T & DBDoc) | undefined>
 
   setDoc(endpoint: string, doc: any): Promise<void>
 

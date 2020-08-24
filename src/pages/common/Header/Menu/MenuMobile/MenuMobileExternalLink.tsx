@@ -21,6 +21,7 @@ const PanelItem = styled(Box)`
 @inject('mobileMenuStore')
 @observer
 export class MenuMobileExternalLink extends React.Component<IProps> {
+  // eslint-disable-next-line
   constructor(props: IProps) {
     super(props)
   }

@@ -153,6 +153,7 @@ const Glyph = ({ glyph = '' }: IGlyphProps) => {
 }
 
 export class Icon extends Component<WrapperProps> {
+  // eslint-disable-next-line
   constructor(props: WrapperProps) {
     super(props)
   }

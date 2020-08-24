@@ -19,7 +19,7 @@ export const BaseHeading = styled(Text)`
 type IHeadingProps = ITextProps & RebassHeadingProps
 
 const Heading = (props: IHeadingProps) => (
-  <BaseHeading {...(props as any)}>{props.children}</BaseHeading>
+  <BaseHeading {...props}>{props.children}</BaseHeading>
 )
 
 Heading.defaultProps = {

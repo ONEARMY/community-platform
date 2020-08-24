@@ -29,7 +29,7 @@ interface IState {
   selectedDate: any
   isLocationSelected?: boolean
 }
-type IProps = RouteComponentProps<any>
+interface IProps extends RouteComponentProps<any> {}
 interface IInjectedProps extends IProps {
   eventStore: EventStore
 }
@@ -105,6 +105,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
           errors,
           handleSubmit,
         }) => {
+          const disabled = invalid || submitting
           return (
             <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
               <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} mt={4}>

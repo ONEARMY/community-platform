@@ -6,7 +6,6 @@ import theme from 'src/themes/styled.theme'
 import { Flex } from 'src/components/Flex'
 import { ErrorMessage, FieldContainer } from './elements'
 import { IFieldProps } from './Fields'
-import { DropdownIndicator } from '../DropdownIndicator'
 
 interface ISelectOption {
   value: string
@@ -76,14 +75,6 @@ export const SelectStyles: Partial<Styles> = {
     ...provided,
     display: 'none',
   }),
-
-  dropdownIndicator: (provided, state) => ({
-    ...provided,
-    ':hover': {
-      opacity: state.isFocused ? 1 : 0.5,
-    },
-    opacity: state.isFocused ? 1 : 0.3,
-  }),
 }
 
 export const FilterStyles: Partial<Styles> = {
@@ -107,13 +98,10 @@ export const FilterStyles: Partial<Styles> = {
       border: '1px solid ' + theme.colors.blue,
     },
   }),
-  placeholder: (provided, state) => ({
-    ...provided,
-    color: 'black',
-  }),
+
   option: (provided, state) => ({
-    ...provided,
     color: 'black',
+    ...provided,
     backgroundColor: 'white',
     boxShadow: 'none',
     ':hover': {
@@ -177,7 +165,6 @@ const defaultProps: Partial<ISelectFieldProps> = {
   getOptionValue: (option: ISelectOption) => option.value,
   options: [],
 }
-
 export const SelectField = ({
   input,
   meta,
@@ -200,11 +187,10 @@ export const SelectField = ({
               onCustomChange(getValueFromSelect(v as any))
             }
           }}
-          onBlur={input.onBlur as any}
-          onFocus={input.onFocus as any}
+          onBlur={input.onBlur}
+          onFocus={input.onFocus}
           value={getValueForSelect(rest.options, input.value)}
           classNamePrefix={'data-cy'}
-          components={{ DropdownIndicator }}
           {...defaultProps}
           {...rest}
         />

@@ -2,8 +2,8 @@ import * as functions from 'firebase-functions'
 import { IDBEndpoint } from '../models'
 import { db } from '../Firebase/firestoreDB'
 
-const USER_ENDPOINT: IDBEndpoint = 'v3_users' as any
 // TODO - fix links to main repo and handle with prefix_endpoint type checking
+const USER_ENDPOINT = 'v3_users'
 
 /**
  * Example function to show how an automated email can be triggered

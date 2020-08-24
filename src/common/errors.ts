@@ -8,7 +8,6 @@ export const log = {
 }
 export const Level = Sentry.Severity
 export const initErrorHandler = () => {
-  const { location } = window
   if (
     location.search.indexOf('noSentry=true') !== -1 ||
     location.hostname === 'localhost'

@@ -11,7 +11,7 @@ interface ILayoutProps {
 type IProps = FlexProps & ILayoutProps
 
 const Main = (props: IProps) => (
-  <Flex {...(props as any)} flexDirection="column">
+  <Flex {...props} flexDirection="column">
     <Box
       width="100%"
       className="main-container"

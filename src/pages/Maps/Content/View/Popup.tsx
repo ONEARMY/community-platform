@@ -115,7 +115,7 @@ export class Popup extends React.Component<IProps> {
           <Text tags mb={2}>
             {group ? group.displayName : pin.type}
           </Text>
-          <Link to={'/u/' + name}>
+          <Link to={'u/' + name}>
             <Text medium mb={1}>
               {name}
             </Text>

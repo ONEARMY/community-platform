@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import styled from 'styled-components'
+import React from 'react'
 import MultiSelect from '@khanacademy/react-multi-select'
 import './GroupingFilter.css'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
@@ -35,8 +34,8 @@ const ItemRenderer = ({ checked, option, onClick }) => {
         IconUrl={option.icon}
         ticked={checked}
         contain={true}
-        width="30px"
-        height="30px"
+        width="20px"
+        height="20px"
       >
         <h4
           style={{
@@ -106,7 +105,7 @@ class GroupingFilterDesktop extends React.Component<IProps, IState> {
             return values.length > 0
               ? null
               : entityType === 'place'
-              ? 'Workspaces'
+              ? 'All Workspaces'
               : 'Others'
           }}
           hasSelectAll={false}

@@ -82,15 +82,15 @@ jobs:
         - CI_NODE=1
       <<: *_test_defaults
     # Note, Travis jobs combined with regular stage scripts below
-    # Deploy - Firebase deployment to dev/prod depending on branch
+    # Deploy - Firebase deployment to dev/prod depending on branch on push (not PR)
     - stage: Deploy Dev
-      if: branch = master
+      if: branch = master AND type = push
       script:
         # Note - syntax different from above as merging into array instead of creating key:value
         - *_predeploy_defaults
         - bash scripts/deploy.dev.sh
     - stage: Deploy Production
-      if: branch = production
+      if: branch = production AND type = push
       script:
         - *_predeploy_defaults
         - bash scripts/deploy.prod.sh

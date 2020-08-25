@@ -6,6 +6,7 @@ import { FieldRenderProps } from 'react-final-form'
 import Select from 'react-select'
 import { SelectStyles, FilterStyles } from '../Form/Select.field'
 import { FieldContainer } from '../Form/elements'
+import { DropdownIndicator } from '../DropdownIndicator'
 
 // we include props from react-final-form fields so it can be used as a custom field component
 export interface IProps extends FieldRenderProps<any, any> {
@@ -71,6 +72,7 @@ class TagsSelect extends React.Component<IProps, IState> {
     return (
       <FieldContainer data-cy="tag-select">
         <Select
+          components={{ DropdownIndicator }}
           styles={styleVariant === 'selector' ? SelectStyles : FilterStyles}
           isMulti
           options={categoryTags}

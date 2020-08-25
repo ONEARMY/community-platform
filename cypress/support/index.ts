@@ -12,7 +12,6 @@
 // You can read more here:
 // https://on.cypress.io/configuration
 // ***********************************************************
-// tslint:disable-next-line
 require('cypress-plugin-retries')
 import './hooks'
 import './commands'

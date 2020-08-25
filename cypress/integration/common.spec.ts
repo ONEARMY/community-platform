@@ -2,10 +2,10 @@ import { UserMenuItem } from '../support/commands'
 
 describe('[Common]', () => {
   it('[Default Page]', () => {
-    cy.step('The home page is /how-to')
+    cy.step('The home page is /academy')
     cy.visit('/')
       .url()
-      .should('include', '/how-to')
+      .should('include', '/academy')
   })
 
   it('[Not-Found Page]', () => {

@@ -36,7 +36,6 @@ const newerThan = (chosenDate: dateType, compareToDate: dateType) => {
  ***********************************************************************/
 export default { olderThan, newerThan }
 
-// tslint:disable variable-name
 /************************************************************************
  *              Helper Methods
  ***********************************************************************/

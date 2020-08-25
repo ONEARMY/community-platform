@@ -40,7 +40,7 @@ describe('[Settings]', () => {
         .clear()
         .type(info.country)
       cy.get('[data-cy=country')
-        .find('.flag-option')
+        .find('li')
         .first()
         .click()
     }

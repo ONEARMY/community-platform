@@ -45,10 +45,7 @@ const MoreModalContainer = styled(Box)`
 `
 
 export const MoreContainer = (props: BoxProps) => (
-  <MoreModalContainer {...props}>
-    {/* <MoreText color={'black'}>{props.text}</MoreText> */}
-    {props.children}
-  </MoreModalContainer>
+  <MoreModalContainer {...(props as any)}>{props.children}</MoreModalContainer>
 )
 
 export default MoreContainer

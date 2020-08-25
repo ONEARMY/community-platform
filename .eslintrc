@@ -1,5 +1,6 @@
+// https://www.robertcooper.me/using-eslint-and-prettier-in-a-typescript-project
+
 {
-<<<<<<< HEAD
   "parser": "@typescript-eslint/parser",
   "extends": [
     "plugin:react/recommended", // Uses the recommended rules from @eslint-plugin-react
@@ -10,14 +11,6 @@
   "settings": {
     "react": {
       "version": "detect"
-    }
-  },
-  "parserOptions": {
-    "ecmaVersion": 6,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true,
-      "modules": true
     }
   },
   "rules": {

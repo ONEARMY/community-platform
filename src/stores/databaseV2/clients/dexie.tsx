@@ -99,6 +99,7 @@ export class DexieClient implements AbstractDBClient {
    ***********************************************************************/
 
   private _init() {
+    const { location } = window
     this._dbInit(DB_CACHE_NUMBER, DEXIE_SCHEMA)
     // test open db, catch errors for upgrade version not defined or
     // idb not supported

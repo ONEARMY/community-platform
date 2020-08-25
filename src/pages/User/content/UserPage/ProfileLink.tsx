@@ -31,7 +31,7 @@ const rewriteUrl = (link: IProps['link']) => {
 
 const ProfileLinkIcon = (link: IProps['link']) => {
   const { label } = link
-  const icons: { [key in IProps['link']['label']]: JSX.Element } = {
+  const icons: { [key in IProps['link']['label']]: JSX.Element | string } = {
     forum: IconForum,
     website: IconWebsite,
     email: IconEmail,

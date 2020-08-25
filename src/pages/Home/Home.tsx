@@ -28,4 +28,4 @@ class HomePageClass extends React.Component<IState, any> {
   }
 }
 
-export const HomePage = withRouter(HomePageClass as any)
+export const HomePage: any = withRouter(HomePageClass as any)

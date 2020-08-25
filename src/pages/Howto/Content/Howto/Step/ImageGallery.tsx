@@ -1,8 +1,7 @@
 import React from 'react'
-import { Image, Card, Flex } from 'rebass/styled-components'
+import { Image, Card, Flex, CardProps } from 'rebass/styled-components'
 import { IUploadedFileMeta } from 'src/stores/storage'
 import Lightbox from 'react-image-lightbox'
-import Text from 'src/components/Text'
 import styled from 'styled-components'
 
 interface IProps {
@@ -16,7 +15,7 @@ interface IState {
   imgIndex: number
 }
 
-const ThumbCard = styled(Card)`
+const ThumbCard = styled<CardProps & React.ComponentProps<any>>(Card)`
   padding: 5px;
   overflow: hidden;
   transition: 0.2s ease-in-out;

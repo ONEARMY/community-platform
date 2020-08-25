@@ -42,6 +42,7 @@ import {
 import { FaSignal, FaFacebookF, FaSlack, FaInstagram } from 'react-icons/fa'
 import { IconContext } from 'react-icons'
 import SVGs from './svgs'
+import { DownloadIcon } from './DownloadIcon'
 
 interface IGlyphProps {
   glyph: string
@@ -56,6 +57,7 @@ interface IProps {
 }
 export type availableGlyphs =
   | 'download'
+  | 'download-cloud'
   | 'upload'
   | 'add'
   | 'check'
@@ -93,6 +95,7 @@ export type IGlyphs = { [k in availableGlyphs]: JSX.Element }
 
 export const glyphs: IGlyphs = {
   download: <MdFileDownload />,
+  'download-cloud': <DownloadIcon />,
   upload: <GoCloudUpload />,
   add: <MdAdd />,
   check: <MdCheck />,

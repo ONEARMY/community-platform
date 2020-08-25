@@ -15,7 +15,6 @@ import { MAP_GROUPINGS } from './maps.groupings'
 import { generatePins, generatePinDetails } from 'src/mocks/maps.mock'
 import { IUserPP } from 'src/models/user_pp.models'
 import { IUploadedFileMeta } from '../storage'
-import { IUser } from 'src/models/user.models'
 import {
   hasAdminRights,
   needsModeration,
@@ -212,7 +211,7 @@ export class MapsStore extends ModuleStore {
         profilePicUrl: '',
         shortDescription: '',
         name: username,
-        profileUrl: `${location.origin}/u/${username}`,
+        profileUrl: `${window.location.origin}/u/${username}`,
       }
     }
     const avatar = getUserAvatar(username)
@@ -227,7 +226,7 @@ export class MapsStore extends ModuleStore {
       profilePicUrl: avatar,
       shortDescription: u.mapPinDescription ? u.mapPinDescription : '',
       name: u.userName,
-      profileUrl: `${location.origin}/u/${u.userName}`,
+      profileUrl: `${window.location.origin}/u/${u.userName}`,
     }
   }
   @action

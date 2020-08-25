@@ -8,6 +8,7 @@ import {
   CellMeasurer,
   ListRowProps,
 } from 'react-virtualized'
+import { emStringToPx } from 'src/utils/helpers'
 
 interface IProps {
   data: any[]
@@ -130,10 +131,7 @@ export class VirtualizedFlex extends React.Component<IProps, IState> {
   }
 
   static defaultProps: IProps = {
-    widthBreakpoints: themes.breakpoints.map(
-      // Convert theme em string to px number
-      width => Number(width.replace('em', '')) * 16,
-    ),
+    widthBreakpoints: themes.breakpoints.map(emStringToPx),
     data: [],
     renderItem: data => <div>RenderItem {data}</div>,
   }

@@ -15,6 +15,7 @@ interface IProps {
 @inject('eventStore')
 @observer
 class EventsPageClass extends React.Component<IProps, any> {
+  // eslint-disable-next-line
   constructor(props: any) {
     super(props)
   }
@@ -37,4 +38,4 @@ class EventsPageClass extends React.Component<IProps, any> {
     )
   }
 }
-export const EventsPage = withRouter(EventsPageClass as any)
+export const EventsPage: any = withRouter(EventsPageClass as any)

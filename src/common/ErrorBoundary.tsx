@@ -20,6 +20,7 @@ export default class extends React.Component<any, any> {
   render() {
     if (this.state.error) {
       // render fallback UI
+      // eslint-disable-next-line
       return <a onClick={() => Sentry.showReportDialog()}>Report feedback</a>
     } else {
       // when there's not an error, render children untouched

@@ -17,6 +17,7 @@ export class AdminStore extends ModuleStore {
   public superAdmins: IUser[] = []
   @observable
   public tags: ITag[] = []
+  // eslint-disable-next-line
   constructor(rootStore: RootStore) {
     super(rootStore)
   }

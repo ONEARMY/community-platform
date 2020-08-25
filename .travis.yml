@@ -90,8 +90,7 @@ jobs:
         - *_predeploy_defaults
         - bash scripts/deploy.dev.sh
     - stage: Deploy Production
-      # Note BG 19/08/20 - removing AND type = push because production deploy is only from PR
-      if: branch = production
+      if: branch = production AND type = push
       script:
         - *_predeploy_defaults
         - bash scripts/deploy.prod.sh

@@ -14,7 +14,6 @@ import { RouteComponentProps, withRouter } from 'react-router'
 import { string, object, ref, bool } from 'yup'
 import { required } from 'src/utils/validators'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
-import { IUser } from 'src/models/user.models'
 
 const Label = styled.label`
   font-size: ${theme.fontSizes[2] + 'px'};

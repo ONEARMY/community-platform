@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from 'react'
 import { IHowto } from '../../models/howto.models'
 import { IEvent } from 'src/models/events.models'
-import { Box } from 'rebass'
 import Text from 'src/components/Text'
 
 interface IProps {
@@ -35,6 +34,7 @@ export const ModerationStatusText: FunctionComponent<IProps> = ({
   switch (status) {
     case 'accepted':
       return null
+      // eslint-disable-next-line
       break
     case 'rejected':
       text = 'howto' === type ? 'Needs to improve to be accepted' : 'Rejected'

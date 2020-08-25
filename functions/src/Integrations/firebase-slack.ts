@@ -16,6 +16,9 @@ export const notifyNewPin = functions.firestore
     if (info === null || info.moderation !== 'awaiting-moderation' || prevModeration === 'awaiting-moderation') {
       return
     }
+    if (prevModeration === 'accepted' && info.moderation !== 'awaiting-moderation'){ // If edited after being accepted keep it accepted and avoid message #1008
+      return change.after.ref.parent.child('moderation').set('accepted');
+    }
 
     const id = info._id
     const type = info.type
@@ -42,8 +45,13 @@ export const notifyNewHowTo = functions.firestore
   .document('v3_howtos/{id}')
   .onWrite((change, context) => {
     const info = change.after.exists ? change.after.data() : null
+    const prevInfo = change.before.exists ? change.before.data() : null
+    const prevModeration = (prevInfo !== null) ? prevInfo.moderation : null;
     if (info === null || info.moderation !== 'awaiting-moderation') {
       return
+    }
+    if (prevModeration === 'accepted' && info.moderation !== 'awaiting-moderation'){ // If edited after being accepted keep it accepted and avoid message #1008
+      return change.after.ref.parent.child('moderation').set('accepted');
     }
 
     const user = info._createdBy

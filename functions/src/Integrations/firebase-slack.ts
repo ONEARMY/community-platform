@@ -18,6 +18,7 @@ export const notifyNewPin = functions.firestore
     }
     if (prevModeration === 'accepted' && info.moderation === 'awaiting-moderation'){ // If edited after being accepted keep it accepted and avoid message #1008
       return change.after.ref.set({
+        previouslyAccepted: true,
         moderation: 'accepted'
       }, {merge: true});
     }
@@ -57,6 +58,7 @@ export const notifyNewHowTo = functions.firestore
     }
     if (prevModeration === 'accepted' && info.moderation === 'awaiting-moderation'){ // If edited after being accepted keep it accepted and avoid message #1008
       return change.after.ref.set({
+        previouslyAccepted: true,
         moderation: 'accepted'
       }, {merge: true});
     }

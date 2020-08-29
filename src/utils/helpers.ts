@@ -62,6 +62,7 @@ export const getDay = (d: Date) => {
  *             Validators
  ***********************************************************************/
 export const isEmail = (email: string) => {
+  // eslint-disable-next-line
   const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   return re.test(email)
 }
@@ -123,3 +124,6 @@ export const isAllowToPin = (pin: IMapPin, user?: IUser) => {
 interface IEditableDoc extends DBDoc {
   _createdBy: string
 }
+
+// Convert theme em string to px number
+export const emStringToPx = width => Number(width.replace('em', '')) * 16

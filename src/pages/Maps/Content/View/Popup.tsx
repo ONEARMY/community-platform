@@ -7,11 +7,7 @@ import { Popup as LeafletPopup, Map } from 'react-leaflet'
 import styled from 'styled-components'
 import { distanceInWords } from 'date-fns'
 
-import {
-  IMapPin,
-  IMapPinWithDetail,
-  IMapPinDetail,
-} from 'src/models/maps.models'
+import { IMapPin, IMapPinWithDetail } from 'src/models/maps.models'
 
 import './popup.css'
 import { Link } from 'src/components/Links'
@@ -44,6 +40,7 @@ const LastOnline = styled.div`
 @inject('mapsStore')
 export class Popup extends React.Component<IProps> {
   leafletRef: React.RefObject<LeafletPopup> = React.createRef()
+  // eslint-disable-next-line
   constructor(props: IProps) {
     super(props)
   }
@@ -115,7 +112,7 @@ export class Popup extends React.Component<IProps> {
           <Text tags mb={2}>
             {group ? group.displayName : pin.type}
           </Text>
-          <Link to={'u/' + name}>
+          <Link to={'/u/' + name}>
             <Text medium mb={1}>
               {name}
             </Text>

@@ -4,8 +4,6 @@ import Heading from 'src/components/Heading'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
 import { Button } from 'src/components/Button'
-import Text from 'src/components/Text'
-import { Link } from 'src/components/Links'
 import { Form, Field } from 'react-final-form'
 import { InputField } from 'src/components/Form/Fields'
 

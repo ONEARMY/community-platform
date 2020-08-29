@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, BoxProps, Text } from 'rebass/styled-components'
+import { Box, BoxProps } from 'rebass/styled-components'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
 import WhiteBubble0 from 'src/assets/images/white-bubble_0.svg'
@@ -42,14 +42,6 @@ const MoreModalContainer = styled(Box)`
       background-image: url(${WhiteBubble3});
     }
   }
-`
-
-const MoreText = styled(Text)`
-  text-align: center;
-  font-size: 26px;
-
-  margin: 0 auto;
-  padding: 0px 20px;
 `
 
 export const MoreContainer = (props: BoxProps) => (

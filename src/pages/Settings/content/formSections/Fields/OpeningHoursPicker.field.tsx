@@ -1,7 +1,6 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { WEEK_DAYS, OPENING_HOURS } from 'src/mocks/Selectors'
 import { Field } from 'react-final-form'
-import { InputField } from 'src/components/Form/Fields'
 import { Button } from 'src/components/Button'
 import { Modal } from 'src/components/Modal/Modal'
 import Text from 'src/components/Text'

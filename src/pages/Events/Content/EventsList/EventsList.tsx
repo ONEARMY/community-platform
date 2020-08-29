@@ -2,7 +2,7 @@ import * as React from 'react'
 import { IEvent, IEventDB } from 'src/models/events.models'
 import { Button } from 'src/components/Button'
 import { Link } from 'src/components/Links'
-import { Flex, Link as ExternalLink, Box } from 'rebass'
+import { Flex, Box } from 'rebass'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import Heading from 'src/components/Heading'
@@ -16,11 +16,12 @@ interface InjectedProps {
   eventStore: EventStore
 }
 
-const filterArrayDuplicates = (array: string[]) => Array.from(new Set(array))
+// const filterArrayDuplicates = (array: string[]) => Array.from(new Set(array))
 
 @inject('eventStore')
 @observer
 export class EventsList extends React.Component<any> {
+  // eslint-disable-next-line
   constructor(props: any) {
     super(props)
   }

@@ -22,6 +22,7 @@ interface IState {
 }
 
 export class Routes extends React.Component<any, IState> {
+  // eslint-disable-next-line
   constructor(props: any) {
     super(props)
   }
@@ -67,7 +68,7 @@ export class Routes extends React.Component<any, IState> {
               <Route component={NotFoundPage} />
             </Switch>
             <Switch>
-              <Route exact path="/" render={() => <Redirect to="/how-to" />} />
+              <Route exact path="/" render={() => <Redirect to="/academy" />} />
             </Switch>
           </ScrollToTop>
         </BrowserRouter>
@@ -81,7 +82,10 @@ export class Routes extends React.Component<any, IState> {
             sx={{ position: 'fixed', bottom: '30px', right: '30px' }}
             variant="primary"
           >
-            #Feedback? Join our chat 💬
+            #Feedback? Join our chat{' '}
+            <span role="img" aria-label="talk-bubble">
+              💬
+            </span>
           </Button>
         </Link>
       </div>

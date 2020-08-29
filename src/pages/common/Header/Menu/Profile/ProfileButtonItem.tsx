@@ -27,6 +27,7 @@ interface IInjectedProps extends IProps {
 @inject('mobileMenuStore')
 @observer
 export class ProfileButtonItem extends React.Component<IProps> {
+  // eslint-disable-next-line
   constructor(props: any) {
     super(props)
   }

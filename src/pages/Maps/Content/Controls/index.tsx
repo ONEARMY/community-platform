@@ -65,23 +65,20 @@ class Controls extends React.Component<IProps, IState> {
   public render() {
     const { availableFilters } = this.props
     const { showFiltersMobile, filtersSelected } = this.state
-    const groupedFilters = availableFilters.reduce(
-      (accumulator, current) => {
-        const { grouping } = current
-        if (accumulator[grouping] === undefined) {
-          accumulator[grouping] = []
-        }
-        accumulator[grouping].push(current)
-        return accumulator
-      },
-      {} as Record<IPinGrouping, Array<IMapGrouping>>,
-    )
+    const groupedFilters = availableFilters.reduce((accumulator, current) => {
+      const { grouping } = current
+      if (accumulator[grouping] === undefined) {
+        accumulator[grouping] = []
+      }
+      accumulator[grouping].push(current)
+      return accumulator
+    }, {} as Record<IPinGrouping, Array<IMapGrouping>>)
 
     return (
       <MapFlexBar
         data-cy="map-controls"
         ml={['0', '0', '0', '50px']}
-        py={[0, 1, 1]}
+        py={[0, 1, 0]}
         flexDirection={['column', 'column', 'column', 'row']}
         alignItems={'center'}
         onClick={() => {
@@ -101,7 +98,7 @@ class Controls extends React.Component<IProps, IState> {
             onChange={(location: ILocation) => {
               this.props.onLocationChange(location)
             }}
-            styleVariant="filter"
+            styleVariant="mapinput"
           />
         </Box>
         <Flex>
@@ -146,6 +143,7 @@ class Controls extends React.Component<IProps, IState> {
             )}
             <img
               src={filterIcon}
+              alt="icon"
               style={{ width: '18px', marginLeft: '5px' }}
             />
           </Button>

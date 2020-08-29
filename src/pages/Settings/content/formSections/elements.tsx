@@ -21,6 +21,7 @@ export const Label = props => (
       },
       '&.selected': {
         backgroundColor: `${theme.colors.background}`,
+        // eslint-disable-next-line
         border: '1px solid ' + `${theme.colors.green}`,
       },
     }}

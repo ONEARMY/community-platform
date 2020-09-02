@@ -56,6 +56,7 @@ const AnimationContainer = posed.div({
 @inject('mobileMenuStore')
 @observer
 export class Header extends React.Component<IProps> {
+  // eslint-disable-next-line
   constructor(props: any) {
     super(props)
   }

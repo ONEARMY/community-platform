@@ -40,7 +40,6 @@ const eqHowto = (chaiObj, utils) => {
       expected.cover_image.name,
     )
 
-
     expected.steps.forEach((step, index) => {
       expect(subject.steps[index], `Have step ${index}`).to.eqHowtoStep(
         step,

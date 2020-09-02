@@ -66,4 +66,4 @@ class AdminPageClass extends React.Component<IProps, any> {
     )
   }
 }
-export const AdminPage = withRouter(AdminPageClass as any)
+export const AdminPage: any = withRouter(AdminPageClass as any)

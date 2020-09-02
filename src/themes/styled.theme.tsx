@@ -1,5 +1,3 @@
-import { color } from '@storybook/addon-knobs'
-
 // use enum to specify list of possible colors for typing
 export const colors = {
   white: 'white',

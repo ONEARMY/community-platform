@@ -37,6 +37,7 @@ export class RealtimeDBClient implements AbstractDBClient {
 
   async queryCollection() {
     throw new Error('queries not available on this database')
+    // eslint-disable-next-line
     return []
   }
 

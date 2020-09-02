@@ -35,9 +35,9 @@ import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 
 import EventsIcon from 'src/assets/icons/icon-events.svg'
-import ExpertIcon from 'src/assets/icons/icon-expert.svg'
+// import ExpertIcon from 'src/assets/icons/icon-expert.svg'
 import HowToCountIcon from 'src/assets/icons/icon-how-to.svg'
-import V4MemberIcon from 'src/assets/icons/icon-v4-member.svg'
+// import V4MemberIcon from 'src/assets/icons/icon-v4-member.svg'
 
 import { IUploadedFileMeta } from 'src/stores/storage'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'

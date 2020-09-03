@@ -63,6 +63,7 @@ export class TextNotification extends React.Component<
   }
 
   triggerNotificationHide() {
+    clearTimeout(this.timerHandle)
     this.timerHandle = setTimeout(() => {
       if (this.timerHandle && this.timerHandle > 0) {
         this.setState({ show: false })

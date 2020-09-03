@@ -211,7 +211,17 @@ class SignInPage extends React.Component<IProps, IState> {
                               >
                                 Lost password?
                               </Link>
-                              <TextNotification {...notificationProps} />
+                              <TextNotification
+                                {...notificationProps}
+                                hideNotificationCb={() =>
+                                  this.setState({
+                                    notificationProps: {
+                                      ...notificationProps,
+                                      show: false,
+                                    },
+                                  })
+                                }
+                              />
                             </Text>
                           </Flex>
 

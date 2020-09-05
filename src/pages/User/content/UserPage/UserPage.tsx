@@ -228,7 +228,9 @@ export class UserPage extends React.Component<
   }
   // Comment on 6.05.20 by BG : renderCommitmentBox commented for now, will be reused with #974
   public renderUserStatsBox(user: IUserPP) {
-    console.log('user.location', user.location)
+    if (!user._stats) {
+      user._stats = { howToCount: 0, eventCount: 0 }
+    }
 
     return (
       <UserStatsBox>
@@ -239,12 +241,14 @@ export class UserPage extends React.Component<
             </ElWithBeforeIcon>
           </UserStatsBoxItem>
         )} */}
-        <Link to={'/map/#' + user.userName}>
-          <UserStatsBoxItem>
-            <Icon glyph="location-on"></Icon>
-            <span> {user.location?.country}</span>
-          </UserStatsBoxItem>
-        </Link>
+        {user.location && (
+          <Link to={'/map/#' + user.userName}>
+            <UserStatsBoxItem>
+              <Icon glyph="location-on"></Icon>
+              <span> {user.location?.country}</span>
+            </UserStatsBoxItem>
+          </Link>
+        )}
         {/* {isV4Member && (
           <UserStatsBoxItem>
             <ElWithBeforeIcon IconUrl={V4MemberIcon}>
@@ -252,12 +256,20 @@ export class UserPage extends React.Component<
             </ElWithBeforeIcon>
           </UserStatsBoxItem>
          )} */}
-        <UserStatsBoxItem>
-          <ElWithBeforeIcon IconUrl={EventsIcon}>0</ElWithBeforeIcon>
-        </UserStatsBoxItem>
-        <UserStatsBoxItem>
-          <ElWithBeforeIcon IconUrl={HowToCountIcon}>0</ElWithBeforeIcon>
-        </UserStatsBoxItem>
+        {user._stats.eventCount > 0 && (
+          <UserStatsBoxItem>
+            <ElWithBeforeIcon IconUrl={EventsIcon}>
+              {user._stats.eventCount}
+            </ElWithBeforeIcon>
+          </UserStatsBoxItem>
+        )}
+        {user._stats.howToCount > 0 && (
+          <UserStatsBoxItem>
+            <ElWithBeforeIcon IconUrl={HowToCountIcon}>
+              {user._stats.howToCount}
+            </ElWithBeforeIcon>
+          </UserStatsBoxItem>
+        )}
       </UserStatsBox>
     )
   }
@@ -384,7 +396,12 @@ export class UserPage extends React.Component<
       )
     }
     // TODO check if user exist and have created how-to or events
-    const shouldRenderUserStatsBox = user && user.location ? true : false
+    const shouldRenderUserStatsBox =
+      user &&
+      (user.location ||
+        (user._stats && (user._stats.howToCount || user._stats.eventCount)))
+        ? true
+        : false
 
     return (
       <ProfileWrapper mt={4} mb={6}>

@@ -36,6 +36,7 @@ export interface IUser {
   country?: string | null
   location?: ILocation | null
   year?: ISODateString
+  _stats?: IUserStats
 }
 
 interface IExternalLink {
@@ -49,6 +50,11 @@ interface IExternalLink {
     | 'social media'
     | 'facebook'
     | 'instagram'
+}
+
+interface IUserStats {
+  howToCount: number
+  eventCount: number
 }
 
 export type IUserDB = IUser & DBDoc

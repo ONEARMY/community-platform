@@ -5,6 +5,7 @@ import * as IntegrationsSlack from './Integrations/firebase-slack'
 import * as IntegrationsDiscord from './Integrations/firebase-discord'
 import { FirebaseUserBackup } from './Integrations/firebase-userBackup'
 import * as IntegrationsEmail from './Integrations/firebase-email'
+import * as UserStats from './Integrations/user-stats'
 import * as Admin from './admin'
 
 // the following endpoints are exposed for use by various triggers
@@ -23,6 +24,8 @@ exports.notifyHowToAccepted = IntegrationsDiscord.notifyHowToAccepted
 exports.notifyEventAccepted = IntegrationsDiscord.notifyEventAccepted
 exports.firebaseUserBackup = FirebaseUserBackup
 exports.emailNotificationDemo = IntegrationsEmail.notifyEmailDemo
+exports.countEvents = UserStats.countEvents
+exports.countHowTos = UserStats.countHowTos
 // CC Note, 2020-04-40
 // folder-based naming conventions should be encourage from now on
 exports.adminGetUserEmail = Admin.getUserEmail

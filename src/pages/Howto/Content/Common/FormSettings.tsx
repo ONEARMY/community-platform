@@ -5,7 +5,6 @@ const makeEntry = (value: string, label?: string) => {
 export const TIME_OPTIONS = [
   makeEntry('< 1 hour'),
   makeEntry('< 5 hours'),
-  makeEntry('< 10 hours'),
   makeEntry('< 1 day'),
   makeEntry('< 1 week'),
   makeEntry('1-2 weeks'),

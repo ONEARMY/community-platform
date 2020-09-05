@@ -45,4 +45,6 @@ export interface IHowtoFormInput extends IModerable {
   slug: string
   // note, tags will remain optional as if populated {} will be stripped by db (firestore)
   tags?: ISelectedTags
+  // Added to be able to recover on eddit by admin
+  _creatorCountry?: string
 }

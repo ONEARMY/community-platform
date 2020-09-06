@@ -242,7 +242,7 @@ export class UserPage extends React.Component<
           </UserStatsBoxItem>
         )} */}
         {user.location && (
-          <Link to={'/map/#' + user.userName}>
+          <Link color={'black'} to={'/map/#' + user.userName}>
             <UserStatsBoxItem>
               <Icon glyph="location-on"></Icon>
               <span> {user.location?.country}</span>

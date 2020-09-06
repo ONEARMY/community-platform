@@ -94,7 +94,9 @@ export class UserStore extends ModuleStore {
         this.updateUser(userMeta)
         console.log('userMeta', userMeta)
       } else {
-        throw new Error(`could not find user profile [${user.uid}]`)
+        throw new Error(
+          `could not find user profile [${user.uid} - ${user.email} - ${user.metadata}]`,
+        )
       }
     }
   }

@@ -119,7 +119,7 @@ const UserStatsBox = styled.div`
   margin-top: 15px;
   border: 2px solid black;
   border-radius: 10px;
-  padding: 20px;
+  padding: 10px;
   background-color: ${theme.colors.background};
   margin-bottom: 20px;
 `
@@ -259,14 +259,14 @@ export class UserPage extends React.Component<
         {user._stats.eventCount > 0 && (
           <UserStatsBoxItem>
             <ElWithBeforeIcon IconUrl={EventsIcon}>
-              {user._stats.eventCount}
+              How-to: {user._stats.eventCount}
             </ElWithBeforeIcon>
           </UserStatsBoxItem>
         )}
         {user._stats.howToCount > 0 && (
           <UserStatsBoxItem>
             <ElWithBeforeIcon IconUrl={HowToCountIcon}>
-              {user._stats.howToCount}
+              Events: {user._stats.howToCount}
             </ElWithBeforeIcon>
           </UserStatsBoxItem>
         )}

@@ -256,17 +256,17 @@ export class UserPage extends React.Component<
             </ElWithBeforeIcon>
           </UserStatsBoxItem>
          )} */}
-        {user._stats.eventCount > 0 && (
+        {user._stats.howToCount > 0 && (
           <UserStatsBoxItem>
-            <ElWithBeforeIcon IconUrl={EventsIcon}>
-              How-to: {user._stats.eventCount}
+            <ElWithBeforeIcon IconUrl={HowToCountIcon} mr={2}>
+              How-to: {user._stats.howToCount}
             </ElWithBeforeIcon>
           </UserStatsBoxItem>
         )}
-        {user._stats.howToCount > 0 && (
+        {user._stats.eventCount > 0 && (
           <UserStatsBoxItem>
-            <ElWithBeforeIcon IconUrl={HowToCountIcon}>
-              Events: {user._stats.howToCount}
+            <ElWithBeforeIcon IconUrl={EventsIcon} mr={2}>
+              Events: {user._stats.eventCount}
             </ElWithBeforeIcon>
           </UserStatsBoxItem>
         )}

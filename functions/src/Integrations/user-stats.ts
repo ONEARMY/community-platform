@@ -36,7 +36,7 @@ function updateStats(change, collection, target){
 
   console.log('Update ', collection, ' delta: ', delta )
 
-  return userStatsRef.doc(info._createdBy).update({'_stats':{
+  return userStatsRef.doc(info._createdBy).update({'stats':{
     [target]: admin.firestore.FieldValue.increment(delta)
   }}).catch(e => {
     console.log(e);
@@ -58,7 +58,7 @@ function computeUserStats(owner){
       count++;
     });
     console.log('Accepted howtos for', owner ,',count: ', count);
-    userStatsRef.doc(owner).set({'_stats':{
+    userStatsRef.doc(owner).set({'stats':{
       howToCount: count
     }}, {merge: true});
     return null
@@ -72,7 +72,7 @@ function computeUserStats(owner){
       count++;
     });
     console.log('Accepted events for', owner ,',count: ', count);
-    userStatsRef.doc(owner).set({'_stats':{
+    userStatsRef.doc(owner).set({'stats':{
       eventCount: count
     }}, {merge: true});
     return null

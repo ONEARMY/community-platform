@@ -170,7 +170,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             sx={{
               objectFit: 'cover',
               width: 'auto',
-              height: '100%',
+              height: ['100%', '450px'],
             }}
             src={howto.cover_image.downloadUrl}
             alt="how-to cover"

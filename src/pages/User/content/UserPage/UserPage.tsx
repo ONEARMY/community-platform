@@ -126,6 +126,8 @@ const UserStatsBox = styled.div`
 
 const UserStatsBoxItem = styled.div`
   margin-top: 15px;
+  display: flex;
+  align-items: center;
 
   &:first-child {
     margin-top: 0;
@@ -244,8 +246,8 @@ export class UserPage extends React.Component<
         {user.location && (
           <Link color={'black'} to={'/map/#' + user.userName}>
             <UserStatsBoxItem>
-              <Icon glyph="location-on"></Icon>
-              <span> {user.location?.country}</span>
+              <Icon glyph="location-on" size="25"></Icon>
+              <Box ml="5px">{user.location?.country}</Box>
             </UserStatsBoxItem>
           </Link>
         )}
@@ -258,16 +260,14 @@ export class UserPage extends React.Component<
          )} */}
         {user.stats.howToCount > 0 && (
           <UserStatsBoxItem>
-            <ElWithBeforeIcon IconUrl={HowToCountIcon} mr={2}>
-              How-to: {user.stats.howToCount}
-            </ElWithBeforeIcon>
+            <ElWithBeforeIcon IconUrl={HowToCountIcon} />
+            How-to: {user.stats.howToCount}
           </UserStatsBoxItem>
         )}
         {user.stats.eventCount > 0 && (
           <UserStatsBoxItem>
-            <ElWithBeforeIcon IconUrl={EventsIcon} mr={2}>
-              Events: {user.stats.eventCount}
-            </ElWithBeforeIcon>
+            <ElWithBeforeIcon IconUrl={EventsIcon} />
+            Events: {user.stats.eventCount}
           </UserStatsBoxItem>
         )}
       </UserStatsBox>

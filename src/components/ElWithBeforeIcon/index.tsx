@@ -8,7 +8,6 @@ interface IProps {
   width?: string
   ticked?: boolean
   contain?: boolean
-  mr?: number
 }
 
 export const ElWithBeforeIcon: FunctionComponent<IProps> = ({
@@ -18,7 +17,6 @@ export const ElWithBeforeIcon: FunctionComponent<IProps> = ({
   children,
   ticked,
   contain,
-  mr,
 }) => {
   let after: any
   if (ticked) {
@@ -37,7 +35,6 @@ export const ElWithBeforeIcon: FunctionComponent<IProps> = ({
 
   return (
     <Box
-      mr={mr || 4}
       pl="30px"
       sx={{
         position: 'relative',

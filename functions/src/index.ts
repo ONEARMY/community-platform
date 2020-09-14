@@ -3,6 +3,7 @@ import { weeklyTasks, dailyTasks } from './exports/tasks'
 import { DH_Exports } from './DaveHakkensNL'
 import * as IntegrationsSlack from './Integrations/firebase-slack'
 import * as IntegrationsDiscord from './Integrations/firebase-discord'
+import * as UserTriggers from './Integrations/user-triggers'
 import { FirebaseUserBackup } from './Integrations/firebase-userBackup'
 import * as IntegrationsEmail from './Integrations/firebase-email'
 import * as Admin from './admin'
@@ -21,6 +22,7 @@ exports.notifyNewEvent = IntegrationsSlack.notifyNewEvent
 exports.notifyPinAccepted = IntegrationsDiscord.notifyPinAccepted
 exports.notifyHowToAccepted = IntegrationsDiscord.notifyHowToAccepted
 exports.notifyEventAccepted = IntegrationsDiscord.notifyEventAccepted
+exports.handleUserChanges = UserTriggers.handleUserChanges
 exports.firebaseUserBackup = FirebaseUserBackup
 exports.emailNotificationDemo = IntegrationsEmail.notifyEmailDemo
 // CC Note, 2020-04-40

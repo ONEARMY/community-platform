@@ -5,24 +5,20 @@ import { db } from '../Firebase/firestoreDB'
 export const countHowTos = functions.firestore
   .document('v3_howtos/{id}')
   .onWrite(async (change, context) => {
-
-    updateStats(change, 'v3_howtos', 'howToCount')
-
+    updateStats(change, 'howToCount')
   })
 
 export const countEvents = functions.firestore
   .document('v3_events/{id}')
   .onWrite(async (change, context) => {
-
-    updateStats(change, 'v3_events', 'eventCount')
-
+    updateStats(change, 'eventCount')
   })
 
-function updateStats(change, collection, target){
+async function updateStats(change, target){
 
   const info = change.after.exists ? change.after.data() : null
   const prevInfo = change.before.exists ? change.before.data() : null
-  const userStatsRef = db.collection('v3_users/');
+  const userStatsRef = db.collection('v3_users/')
 
   let delta = 0
 
@@ -34,48 +30,63 @@ function updateStats(change, collection, target){
     return null
   }
 
-  console.log('Update ', collection, ' delta: ', delta )
+  console.log('Update ', info._createdBy, ' ', target, ' delta: ', delta )
 
-  return userStatsRef.doc(info._createdBy).update({'stats':{
-    [target]: admin.firestore.FieldValue.increment(delta)
-  }}).catch(e => {
-    console.log(e);
-    // In case stats for user are inexistent we compute from all his records, Only triggers if no user exist (new Collection)
-    // computeUserStats(info._createdBy)
-  })
+  let user = await userStatsRef.doc(info._createdBy).get();
+  let stats = null;
+  if(user && user.exists){
+    if(!user.stats){
+      console.log('No previous stats for ', user.id ,' -> compute'),
+      stats = await computeUserStats(info._createdBy);
+      console.log(user._id, ': ', stats);
+    }else{
+      stats = user.stats;
+      if (!(target in user.stats)) stats[target] = 0;
+    }
+    if(stats){
+      user.ref.update({
+        stats: stats
+      }, {merge: true}).then(() =>{
+        return true
+      }).catch(e => {
+        console.log('Could not update user stats, error: ', e);
+      });
+    }
+  }else{
+    console.log('Fatal(updateStats): user not found for ', target, ': ', info._createdBy)
+  }
+  return false
 }
 
 // Compute one user stats
-function computeUserStats(owner){
+async function computeUserStats(owner){
+  console.log("Calculando para ", owner);
 
-  const userStatsRef = db.collection('v3_users/')
-
-  db.collection('v3_howtos').where("_createdBy", "==", owner).where("moderation", "==", "accepted")
-  .get()
-  .then(querySnapshot => {
-    let count = 0;
-    querySnapshot.forEach(doc => {
-      count++;
+  stats = {};
+  try {
+    stats.howToCount = await db.collection('v3_howtos').where("_createdBy", "==", owner).where("moderation", "==", "accepted")
+      .get()
+      .then(querySnapshot => {
+        let count = 0;
+        querySnapshot.forEach(doc => {
+          count++;
+        });
+        return count
     });
-    console.log('Accepted howtos for', owner ,',count: ', count);
-    userStatsRef.doc(owner).set({'stats':{
-      howToCount: count
-    }}, {merge: true});
-    return null
-  }).catch(() => null);
 
-  db.collection('v3_events').where("_createdBy", "==", owner).where("moderation", "==", "accepted")
-  .get()
-  .then(querySnapshot => {
-    let count = 0;
-    querySnapshot.forEach(doc => {
-      count++;
+    stats.eventCount = await db.collection('v3_events').where("_createdBy", "==", owner).where("moderation", "==", "accepted")
+      .get()
+      .then(querySnapshot => {
+        let count = 0;
+        querySnapshot.forEach(doc => {
+          count++;
+        });
+        return count
     });
-    console.log('Accepted events for', owner ,',count: ', count);
-    userStatsRef.doc(owner).set({'stats':{
-      eventCount: count
-    }}, {merge: true});
-    return null
-  }).catch(() => null);
+
+    return stats
+  } catch(e) {
+    console.log('Error compute:',e)
+  }
+  return null
 }
-

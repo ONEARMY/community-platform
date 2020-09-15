@@ -140,7 +140,7 @@ export class HowtoStore extends ModuleStore {
           ? values.moderation
           : 'awaiting-moderation',
         // Avoid replacing user flag on admin edit
-        _creatorCountry:
+        creatorCountry:
           (values._createdBy && values._createdBy === user.userName) ||
           !values._createdBy
             ? user.location
@@ -148,8 +148,8 @@ export class HowtoStore extends ModuleStore {
               : user.country
               ? user.country.toLowerCase()
               : ''
-            : values._creatorCountry
-            ? values._creatorCountry
+            : values.creatorCountry
+            ? values.creatorCountry
             : '',
       }
       console.log('populating database', howTo)

@@ -107,8 +107,8 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
           </Flex>
           <Box mt={3} mb={2}>
             <Flex alignItems="center">
-              {howto._creatorCountry && (
-                <FlagIconEvents code={howto._creatorCountry} />
+              {howto.creatorCountry && (
+                <FlagIconEvents code={howto.creatorCountry} />
               )}
               <Text inline auxiliary my={2} ml={1}>
                 By{' '}

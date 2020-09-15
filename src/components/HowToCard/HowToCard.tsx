@@ -46,8 +46,8 @@ export const HowToCard = (props: IProps) => (
           {props.howto.title}
         </Heading>
         <Flex alignItems="center">
-          {props.howto._creatorCountry && (
-            <FlagIconEvents code={props.howto._creatorCountry} />
+          {props.howto.creatorCountry && (
+            <FlagIconEvents code={props.howto.creatorCountry} />
           )}
           <Text auxiliary my={2} ml={1}>
             By {props.howto._createdBy}

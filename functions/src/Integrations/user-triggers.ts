@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions'
 import { db } from '../Firebase/firestoreDB'
 
-export handleUserChanges = functions.firestore
+export const handleUserChanges = functions.firestore
   .document('v3_users/{id}')
   .onWrite(async (change, context) => {
 

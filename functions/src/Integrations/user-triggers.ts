@@ -31,7 +31,7 @@ async function updateHowTosCountry(userId, country){
   if(querySnapshot){
     querySnapshot.forEach(doc => {
       console.log('Updating howTo ', doc.data()._id, 'to', country);
-      doc.ref.update({'_creatorCountry': country}).then( () => {
+      doc.ref.update({'creatorCountry': country}).then( () => {
         console.log("Document successfully updated!");
         return true
       }).catch( error => {

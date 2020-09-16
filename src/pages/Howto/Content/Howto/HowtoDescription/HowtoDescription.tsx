@@ -16,6 +16,7 @@ import { IUser } from 'src/models/user.models'
 import { isAllowToEditContent, emStringToPx } from 'src/utils/helpers'
 import theme from 'src/themes/styled.theme'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
+import FlagIconEvents from 'src/components/Icons/FlagIcon/FlagIcon'
 
 interface IProps {
   howto: IHowtoDB
@@ -105,19 +106,24 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             )}
           </Flex>
           <Box mt={3} mb={2}>
-            <Text inline auxiliary>
-              By{' '}
-              <Link
-                sx={{
-                  textDecoration: 'underline',
-                  color: 'inherit',
-                }}
-                to={'/u/' + howto._createdBy}
-              >
-                {howto._createdBy}
-              </Link>{' '}
-              | Published on {this.dateCreatedByText(howto)}
-            </Text>
+            <Flex alignItems="center">
+              {howto.creatorCountry && (
+                <FlagIconEvents code={howto.creatorCountry} />
+              )}
+              <Text inline auxiliary my={2} ml={1}>
+                By{' '}
+                <Link
+                  sx={{
+                    textDecoration: 'underline',
+                    color: 'inherit',
+                  }}
+                  to={'/u/' + howto._createdBy}
+                >
+                  {howto._createdBy}
+                </Link>{' '}
+                | Published on {this.dateCreatedByText(howto)}
+              </Text>
+            </Flex>
             <Text auxiliary sx={{ color: '#b7b5b5 !important' }} mt={1} mb={2}>
               {this.dateLastEditText(howto)}
             </Text>
@@ -170,7 +176,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             sx={{
               objectFit: 'cover',
               width: 'auto',
-              height: '100%',
+              height: ['100%', '450px'],
             }}
             src={howto.cover_image.downloadUrl}
             alt="how-to cover"

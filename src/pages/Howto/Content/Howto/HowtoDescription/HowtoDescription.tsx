@@ -71,7 +71,11 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
               <Button variant="subtle" fontSize="14px" data-cy="go-back">
                 <Flex>
                   <Image
-                    sx={{ width: '10px', marginRight: '4px', rotate: '90deg' }}
+                    sx={{
+                      width: '10px',
+                      marginRight: '4px',
+                      transform: 'rotate(90deg)',
+                    }}
                     src={ArrowIcon}
                   />
                   <Text>Back</Text>

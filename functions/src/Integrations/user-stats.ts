@@ -49,11 +49,11 @@ async function updateStats(change, target){
       }, {merge: true}).then(() =>{
         return true
       }).catch(e => {
-        console.log('Could not update user stats, error: ', e);
+        console.error('Could not update user stats, error: ', e);
       });
     }
   }else{
-    console.log('Fatal(updateStats): user not found for ', target, ': ', info._createdBy)
+    console.error('Fatal(updateStats): user not found for ', target, ': ', info._createdBy)
   }
   return false
 }
@@ -86,7 +86,7 @@ async function computeUserStats(owner){
 
     return stats
   } catch(e) {
-    console.log('Error compute:',e)
+    console.error('Error compute:',e)
   }
   return null
 }

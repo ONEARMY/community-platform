@@ -4,6 +4,7 @@ import { Link } from 'src/components/Links'
 import TagsSelect from 'src/components/Tags/TagsSelect'
 import { inject, observer } from 'mobx-react'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
+import { UserStore } from 'src/stores/User/user.store'
 import { Button } from 'src/components/Button'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
@@ -14,6 +15,7 @@ import { VirtualizedFlex } from 'src/components/VirtualizedFlex/VirtualizedFlex'
 
 interface InjectedProps {
   howtoStore?: HowtoStore
+  userStore?: UserStore
 }
 
 interface IState {
@@ -22,7 +24,7 @@ interface IState {
 }
 
 // First we use the @inject decorator to bind to the howtoStore state
-@inject('howtoStore')
+@inject('howtoStore', 'userStore')
 // Then we can use the observer component decorator to automatically tracks observables and re-renders on change
 // (note 1, use ! to tell typescript that the store will exist (it's an injected prop))
 // (note 2, mobx seems to behave more consistently when observables are referenced outside of render methods)
@@ -61,20 +63,22 @@ export class HowtoList extends React.Component<any, IState> {
               relevantTagsItems={filteredHowtos}
             />
           </Flex>
-          <AuthWrapper>
-            <Flex justifyContent={['flex-end', 'flex-end', 'auto']}>
-              <Link width="100%" to={'/how-to/create'} mb={[3, 3, 0]}>
-                <Button
-                  width="100%"
-                  variant={'primary'}
-                  translateY
-                  data-cy="create"
-                >
-                  Create a How-to
-                </Button>
-              </Link>
-            </Flex>
-          </AuthWrapper>
+          <Flex justifyContent={['flex-end', 'flex-end', 'auto']}>
+            <Link
+              width="100%"
+              to={this.props.userStore!.user ? '/how-to/create' : 'sign-up'}
+              mb={[3, 3, 0]}
+            >
+              <Button
+                width="100%"
+                variant={'primary'}
+                translateY
+                data-cy="create"
+              >
+                Create a How-to
+              </Button>
+            </Link>
+          </Flex>
         </Flex>
         <React.Fragment>
           {filteredHowtos.length === 0 ? (

@@ -15,10 +15,11 @@ import Slider from 'react-slick'
 import styled from 'styled-components'
 import Icon from 'src/components/Icons'
 import Flex from 'src/components/Flex'
-// import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
+import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import { zIndex } from 'src/themes/styled.theme'
 import Workspace from 'src/pages/User/workspace/Workspace'
 import { Text } from 'src/components/Text'
+import { Link } from 'src/components/Links'
 
 import theme from 'src/themes/styled.theme'
 import { replaceDashesWithSpaces } from 'src/utils/helpers'
@@ -33,9 +34,9 @@ import PPIcon from 'src/assets/images/plastic-types/pp.svg'
 import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 
-// import EventsIcon from 'src/assets/icons/icon-events.svg'
+import EventsIcon from 'src/assets/icons/icon-events.svg'
 // import ExpertIcon from 'src/assets/icons/icon-expert.svg'
-// import HowToCountIcon from 'src/assets/icons/icon-how-to.svg'
+import HowToCountIcon from 'src/assets/icons/icon-how-to.svg'
 // import V4MemberIcon from 'src/assets/icons/icon-v4-member.svg'
 
 import { IUploadedFileMeta } from 'src/stores/storage'
@@ -114,21 +115,24 @@ const MobileBadge = styled.div`
   }
 `
 
-// const CommitmentBox = styled.div`
-//   border: 2px solid black;
-//   border-radius: 10px;
-//   padding: 20px;
-//   background-color: ${theme.colors.background};
-//   margin-bottom: 20px;
-// `
+const UserStatsBox = styled.div`
+  margin-top: 15px;
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: ${theme.colors.background};
+  margin-bottom: 20px;
+`
 
-// const CommitmentBoxItem = styled.div`
-//   margin-top: 15px;
+const UserStatsBoxItem = styled.div`
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
 
-//   &:first-child {
-//     margin-top: 0;
-//   }
-// `
+  &:first-child {
+    margin-top: 0;
+  }
+`
 
 const ProfileWrapper = styled(Box)`
   /* margin-top: 40px;
@@ -225,32 +229,50 @@ export class UserPage extends React.Component<
     })
   }
   // Comment on 6.05.20 by BG : renderCommitmentBox commented for now, will be reused with #974
-  // public renderCommitmentBox(isExpert?: boolean, isV4Member?: boolean) {
-  //   return (
-  //     <CommitmentBox>
-  //       {isExpert && (
-  //         <CommitmentBoxItem>
-  //           <ElWithBeforeIcon IconUrl={ExpertIcon} height="25px">
-  //             Expert
-  //           </ElWithBeforeIcon>
-  //         </CommitmentBoxItem>
-  //       )}
-  //       {isV4Member && (
-  //         <CommitmentBoxItem>
-  //           <ElWithBeforeIcon IconUrl={V4MemberIcon}>
-  //             V4 Member
-  //           </ElWithBeforeIcon>
-  //         </CommitmentBoxItem>
-  //       )}
-  //       <CommitmentBoxItem>
-  //         <ElWithBeforeIcon IconUrl={EventsIcon}>0</ElWithBeforeIcon>
-  //       </CommitmentBoxItem>
-  //       <CommitmentBoxItem>
-  //         <ElWithBeforeIcon IconUrl={HowToCountIcon}>0</ElWithBeforeIcon>
-  //       </CommitmentBoxItem>
-  //     </CommitmentBox>
-  //   )
-  // }
+  public renderUserStatsBox(user: IUserPP) {
+    if (!user.stats) {
+      user.stats = { howToCount: 0, eventCount: 0 }
+    }
+
+    return (
+      <UserStatsBox>
+        {/* {isExpert && (
+          <UserStatsBoxItem>
+            <ElWithBeforeIcon IconUrl={ExpertIcon} height="25px">
+              Expert
+            </ElWithBeforeIcon>
+          </UserStatsBoxItem>
+        )} */}
+        {user.location && (
+          <Link color={'black'} to={'/map/#' + user.userName}>
+            <UserStatsBoxItem>
+              <Icon glyph="location-on" size="25"></Icon>
+              <Box ml="5px">{user.location?.country}</Box>
+            </UserStatsBoxItem>
+          </Link>
+        )}
+        {/* {isV4Member && (
+          <UserStatsBoxItem>
+            <ElWithBeforeIcon IconUrl={V4MemberIcon}>
+              V4 Member
+            </ElWithBeforeIcon>
+          </UserStatsBoxItem>
+         )} */}
+        {user.stats.howToCount > 0 && (
+          <UserStatsBoxItem>
+            <ElWithBeforeIcon IconUrl={HowToCountIcon} />
+            How-to: {user.stats.howToCount}
+          </UserStatsBoxItem>
+        )}
+        {user.stats.eventCount > 0 && (
+          <UserStatsBoxItem>
+            <ElWithBeforeIcon IconUrl={EventsIcon} />
+            Events: {user.stats.eventCount}
+          </UserStatsBoxItem>
+        )}
+      </UserStatsBox>
+    )
+  }
 
   public renderPlasticTypes(plasticTypes: Array<PlasticTypeLabel>) {
     function renderIcon(type: string) {
@@ -373,6 +395,13 @@ export class UserPage extends React.Component<
         },
       )
     }
+    // TODO check if user exist and have created how-to or events
+    const shouldRenderUserStatsBox =
+      user &&
+      (user.location ||
+        (user.stats && (user.stats.howToCount || user.stats.eventCount)))
+        ? true
+        : false
 
     return (
       <ProfileWrapper mt={4} mb={6}>
@@ -448,6 +477,8 @@ export class UserPage extends React.Component<
           >
             <MobileBadge>
               <Image src={workspaceBadgeSrc} />
+
+              {shouldRenderUserStatsBox && this.renderUserStatsBox(user)}
             </MobileBadge>
           </Box>
         </ProfileContentWrapper>

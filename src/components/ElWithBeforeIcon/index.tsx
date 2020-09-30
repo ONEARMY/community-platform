@@ -35,7 +35,6 @@ export const ElWithBeforeIcon: FunctionComponent<IProps> = ({
 
   return (
     <Box
-      mr={4}
       pl="30px"
       sx={{
         position: 'relative',

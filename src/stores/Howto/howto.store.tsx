@@ -69,7 +69,8 @@ export class HowtoStore extends ModuleStore {
         activeUser && howto._createdBy === activeUser.userName
       const isAdminAndAccepted =
         isAdmin &&
-        (howto.moderation !== 'draft' && howto.moderation !== 'rejected')
+        howto.moderation !== 'draft' &&
+        howto.moderation !== 'rejected'
 
       return isHowToAccepted || wasCreatedByUser || isAdminAndAccepted
     })
@@ -138,6 +139,18 @@ export class HowtoStore extends ModuleStore {
         moderation: values.moderation
           ? values.moderation
           : 'awaiting-moderation',
+        // Avoid replacing user flag on admin edit
+        creatorCountry:
+          (values._createdBy && values._createdBy === user.userName) ||
+          !values._createdBy
+            ? user.location
+              ? user.location.countryCode
+              : user.country
+              ? user.country.toLowerCase()
+              : ''
+            : values.creatorCountry
+            ? values.creatorCountry
+            : '',
       }
       console.log('populating database', howTo)
       // set the database document

@@ -15,7 +15,10 @@ export const notifyPinAccepted = functions.firestore
     const beenAccepted =
       prevInfo !== null ? prevInfo.moderation === 'accepted' : null
     if (info === null || info.moderation !== 'accepted' || beenAccepted) {
-      return
+      return null
+    }
+    if (info.previouslyAccepted) { // Skip after edition of previously accepted
+      return null
     }
     const { _id, type } = info
     await axios
@@ -34,7 +37,10 @@ export const notifyHowToAccepted = functions.firestore
     const beenAccepted =
       prevInfo !== null ? prevInfo.moderation === 'accepted' : null
     if (info === null || info.moderation !== 'accepted' || beenAccepted) {
-      return
+      return null
+    }
+    if (info.previouslyAccepted) { // Skip after edition of previously accepted
+      return null
     }
     const { _createdBy, title, slug } = info
     await axios
@@ -51,7 +57,7 @@ export const notifyEventAccepted = functions.firestore
   .onWrite(async (change, context) => {
     const info = change.after.exists ? change.after.data() : null
     if (info === null || info.moderation !== 'accepted') {
-      return
+      return null
     }
     const user = info._createdBy
     const url = info.url

@@ -97,7 +97,7 @@ export class EventsList extends React.Component<any> {
                   width="100%"
                   to={this.props.userStore!.user ? '/events/create' : 'sign-up'}
                 >
-                  <Button width="100%" variant="primary" data-cy="create">
+                  <Button width="100%" variant="primary" data-cy="create-event">
                     Create an event
                   </Button>
                 </Link>

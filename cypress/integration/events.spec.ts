@@ -8,9 +8,6 @@ describe('[Events]', () => {
 
   describe('[List events]', () => {
     it('[By Everyone]', () => {
-      cy.step('The Create button is unavailable')
-      cy.get('[data-cy=create]').should('not.exist')
-
       cy.step('Upcoming events are shown')
       cy.get('[data-cy=card]', { timeout: 10000 })
         .its('length')
@@ -39,10 +36,9 @@ describe('[Events]', () => {
     it('[By Authenticated]', () => {
       cy.login('event_reader@test.com', 'test1234')
       cy.step('Create button is available')
-      cy.get('[data-cy=create]')
+      cy.get('[data-cy=create-event]')
         .click()
         .url()
-        .should('include', '/events/create')
     })
   })
 
@@ -108,7 +104,8 @@ describe('[Events]', () => {
   describe('[Create an event]', () => {
     it('[By Authenticated]', () => {
       cy.login('event_creator@test.com', 'test1234')
-      cy.get('[data-cy=create]').click()
+      cy.wait(2000)
+      cy.get('[data-cy=create-event]').click()
 
       cy.step('Fill up mandatory info')
       cy.get('[data-cy=title]').type('Create a test event')

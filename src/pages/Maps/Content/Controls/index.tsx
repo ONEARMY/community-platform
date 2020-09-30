@@ -12,13 +12,14 @@ import { GroupingFilterDesktop } from './GroupingFilterDesktop'
 import { GroupingFilterMobile } from './GroupingFilterMobile'
 
 import { IPinGrouping, IMapGrouping, IMapPinType } from 'src/models/maps.models'
-import { HashLink } from 'react-router-hash-link'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+// import { HashLink } from 'react-router-hash-link'
+import { Link } from 'src/components/Links'
 import { Map } from 'react-leaflet'
 import { ILocation } from 'src/models/common.models'
 import { zIndex } from 'src/themes/styled.theme'
 import { inject } from 'mobx-react'
 import { MapsStore } from 'src/stores/Maps/maps.store'
+import { UserStore } from 'src/stores/User/user.store'
 import { Text } from 'src/components/Text'
 import { RouteComponentProps } from 'react-router'
 
@@ -34,6 +35,7 @@ interface IState {
 }
 interface IInjectedProps extends IProps {
   mapsStore: MapsStore
+  userStore?: UserStore
 }
 
 const MapFlexBar = styled(Flex)`
@@ -45,8 +47,8 @@ const MapFlexBar = styled(Flex)`
   left: 50%;
   transform: translateX(-50%);
 `
-@inject('mapsStore')
-class Controls extends React.Component<IProps, IState> {
+@inject('mapsStore', 'userStore')
+class Controls extends React.Component<any, IState> {
   constructor(props) {
     super(props)
     this.state = {
@@ -117,17 +119,18 @@ class Controls extends React.Component<IProps, IState> {
             mt="5px"
             sx={{ display: ['none', 'none', 'none', 'block'] }}
           >
-            <AuthWrapper>
-              <HashLink
-                smooth
-                to={{
-                  pathname: `/settings`,
-                  hash: '#your-map-pin',
-                }}
-              >
-                <Button variant={'primary'}>My pin</Button>
-              </HashLink>
-            </AuthWrapper>
+            <Link
+              to={
+                this.props.userStore!.user
+                  ? {
+                      pathname: `/settings`,
+                      hash: '#your-map-pin',
+                    }
+                  : { pathname: '/sign-up' }
+              }
+            >
+              <Button variant={'primary'}>My pin</Button>
+            </Link>
           </Box>
         </Flex>
         <Flex width="95%" sx={{ display: ['flex', 'none', 'none'], mt: '5px' }}>

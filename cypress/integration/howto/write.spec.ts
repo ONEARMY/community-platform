@@ -127,6 +127,7 @@ describe('[How To]', () => {
 
     it('[By Authenticated]', () => {
       cy.login('howto_creator@test.com', 'test1234')
+      cy.wait(2000)
       cy.step('Access the create-how-to')
       cy.get('[data-cy=create]').click()
       cy.step('Warn if title is identical with the existing ones')

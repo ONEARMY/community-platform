@@ -66,6 +66,8 @@ class SignInPage extends React.Component<IProps, IState> {
       // TODO remove initialization of authProvider state when DH login will be fixed
       authProvider: AUTH_PROVIDERS[1],
     }
+
+    this.hideNotification = this.hideNotification.bind(this)
   }
 
   async onLoginSubmit(v: IFormValues) {
@@ -100,6 +102,15 @@ class SignInPage extends React.Component<IProps, IState> {
         },
       })
     }
+  }
+
+  hideNotification = () => {
+    this.setState({
+      notificationProps: {
+        ...this.state.notificationProps,
+        show: false,
+      },
+    })
   }
 
   public render() {
@@ -211,7 +222,10 @@ class SignInPage extends React.Component<IProps, IState> {
                               >
                                 Lost password?
                               </Link>
-                              <TextNotification {...notificationProps} />
+                              <TextNotification
+                                {...notificationProps}
+                                hideNotificationCb={this.hideNotification}
+                              />
                             </Text>
                           </Flex>
 

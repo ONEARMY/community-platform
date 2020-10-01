@@ -1,37 +1,20 @@
+const makeEntry = (value: string, label?: string) => {
+  return { value, label: label || value }
+}
+
 export const TIME_OPTIONS = [
-  {
-    value: '< 1 week',
-    label: '< 1 week',
-  },
-  {
-    value: '1-2 weeks',
-    label: '1-2 weeks',
-  },
-  {
-    value: '3-4 weeks',
-    label: '3-4 weeks',
-  },
-  {
-    value: '1+ months',
-    label: '1+ months',
-  },
+  makeEntry('< 1 hour'),
+  makeEntry('< 5 hours'),
+  makeEntry('< 1 day'),
+  makeEntry('< 1 week'),
+  makeEntry('1-2 weeks'),
+  makeEntry('3-4 weeks'),
+  makeEntry('1+ months'),
 ]
 
 export const DIFFICULTY_OPTIONS = [
-  {
-    value: 'Easy',
-    label: 'Easy',
-  },
-  {
-    value: 'Medium',
-    label: 'Medium',
-  },
-  {
-    value: 'Hard',
-    label: 'Hard',
-  },
-  {
-    value: 'Very Hard',
-    label: 'Very Hard',
-  },
+  makeEntry('Easy'),
+  makeEntry('Medium'),
+  makeEntry('Hard'),
+  makeEntry('Very Hard'),
 ]

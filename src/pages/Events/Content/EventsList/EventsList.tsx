@@ -3,22 +3,24 @@ import { IEvent, IEventDB } from 'src/models/events.models'
 import { Button } from 'src/components/Button'
 import { Link } from 'src/components/Links'
 import { Flex, Box } from 'rebass'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import Heading from 'src/components/Heading'
 import EventCard from 'src/components/EventCard/EventCard'
 import TagsSelect from 'src/components/Tags/TagsSelect'
 import { inject, observer } from 'mobx-react'
 import { EventStore } from 'src/stores/Events/events.store'
+import { UserStore } from 'src/stores/User/user.store'
+
 import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
 
 interface InjectedProps {
   eventStore: EventStore
+  userStore?: UserStore
 }
 
 // const filterArrayDuplicates = (array: string[]) => Array.from(new Set(array))
 
-@inject('eventStore')
+@inject('eventStore', 'userStore')
 @observer
 export class EventsList extends React.Component<any> {
   // eslint-disable-next-line
@@ -87,18 +89,19 @@ export class EventsList extends React.Component<any> {
               </Box>
             </Flex>
             <Flex>
-              <AuthWrapper>
-                <Flex
-                  justifyContent={['flex-end', 'flex-end', 'auto']}
+              <Flex
+                justifyContent={['flex-end', 'flex-end', 'auto']}
+                width="100%"
+              >
+                <Link
                   width="100%"
+                  to={this.props.userStore!.user ? '/events/create' : 'sign-up'}
                 >
-                  <Link width="100%" to={'/events/create'}>
-                    <Button width="100%" variant="primary" data-cy="create">
-                      Create an event
-                    </Button>
-                  </Link>
-                </Flex>
-              </AuthWrapper>
+                  <Button width="100%" variant="primary" data-cy="create-event">
+                    Create an event
+                  </Button>
+                </Link>
+              </Flex>
             </Flex>
           </Flex>
           <React.Fragment>
@@ -128,13 +131,15 @@ export class EventsList extends React.Component<any> {
                     Connect with a likeminded community.
                   </Heading>
                   <Heading medium>All around the planet.</Heading>
-                  <AuthWrapper>
-                    <Link to={'/events/create'}>
-                      <Button variant="primary" mt={30}>
-                        Create an event
-                      </Button>
-                    </Link>
-                  </AuthWrapper>
+                  <Link
+                    to={
+                      this.props.userStore!.user ? '/events/create' : 'sign-up'
+                    }
+                  >
+                    <Button variant="primary" mt={30}>
+                      Create an event
+                    </Button>
+                  </Link>
                 </Flex>
               </MoreContainer>
             </>

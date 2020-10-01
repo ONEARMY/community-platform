@@ -12,9 +12,6 @@ describe('[How To]', () => {
       cy.step('No tag is selected')
       cy.get('.data-cy__multi-value__label').should('not.exist')
 
-      cy.step('The Create button is unavailable')
-      cy.get('[data-cy=create]').should('not.exist')
-
       cy.step('More How-tos button is hidden')
       cy.get('[data-cy=more-how-tos]', SKIP_TIMEOUT).should('be.hidden')
 
@@ -45,8 +42,9 @@ describe('[How To]', () => {
       cy.get('[data-cy=create]')
         .click()
         .url()
-        .should('include', '/how-to/create')
+        
     })
+   
   })
 
   describe('[Filter with Tag]', () => {

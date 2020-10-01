@@ -4,6 +4,7 @@ import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
 import ModerationStatusText from 'src/components/ModerationStatusText'
 import { Link } from 'src/components/Links'
+import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { IHowtoDB } from '../../models/howto.models'
 import Heading from 'src/components/Heading'
@@ -11,7 +12,6 @@ import Heading from 'src/components/Heading'
 interface IProps {
   howto: IHowtoDB
 }
-
 export const HowToCard = (props: IProps) => (
   <Flex
     card
@@ -45,7 +45,14 @@ export const HowToCard = (props: IProps) => (
         <Heading small clipped color={'black'}>
           {props.howto.title}
         </Heading>
-        <Text auxiliary>By {props.howto._createdBy}</Text>
+        <Flex alignItems="center">
+          {props.howto.creatorCountry && (
+            <FlagIconHowTos code={props.howto.creatorCountry} />
+          )}
+          <Text auxiliary my={2} ml={1}>
+            By {props.howto._createdBy}
+          </Text>
+        </Flex>
         <Flex mt={4}>
           {props.howto.tags &&
             Object.keys(props.howto.tags).map(tag => {

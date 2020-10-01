@@ -13,11 +13,17 @@ export const notifyNewPin = functions.firestore
     const info = change.after.exists ? change.after.data() : null
     const prevInfo = change.before.exists ? change.before.data() : null
     const prevModeration = (prevInfo !== null) ? prevInfo.moderation : null;
-    if (info === null || info.moderation !== 'awaiting-moderation' || prevModeration === 'awaiting-moderation') {
-      return
+    if (prevModeration === info.moderation){ // Avoid infinite loop
+      return null
     }
-    if (prevModeration === 'accepted' && info.moderation !== 'awaiting-moderation'){ // If edited after being accepted keep it accepted and avoid message #1008
-      return change.after.ref.parent.child('moderation').set('accepted');
+    if (prevModeration === 'accepted' && info.moderation === 'awaiting-moderation'){ // If edited after being accepted keep it accepted and avoid message #1008
+      return change.after.ref.set({
+        previouslyAccepted: true,
+        moderation: 'accepted'
+      }, {merge: true});
+    }
+    if (info === null || info.moderation !== 'awaiting-moderation' || prevModeration === 'awaiting-moderation') {
+      return null
     }
 
     const id = info._id
@@ -47,11 +53,17 @@ export const notifyNewHowTo = functions.firestore
     const info = change.after.exists ? change.after.data() : null
     const prevInfo = change.before.exists ? change.before.data() : null
     const prevModeration = (prevInfo !== null) ? prevInfo.moderation : null;
-    if (info === null || info.moderation !== 'awaiting-moderation') {
-      return
+    if (prevModeration === info.moderation){ // Avoid infinite loop
+      return null
     }
-    if (prevModeration === 'accepted' && info.moderation !== 'awaiting-moderation'){ // If edited after being accepted keep it accepted and avoid message #1008
-      return change.after.ref.parent.child('moderation').set('accepted');
+    if (prevModeration === 'accepted' && info.moderation === 'awaiting-moderation'){ // If edited after being accepted keep it accepted and avoid message #1008
+      return change.after.ref.set({
+        previouslyAccepted: true,
+        moderation: 'accepted'
+      }, {merge: true});
+    }
+    if (info === null || info.moderation !== 'awaiting-moderation') {
+      return null
     }
 
     const user = info._createdBy
@@ -81,7 +93,7 @@ export const notifyNewEvent = functions.firestore
   .onWrite((change, context) => {
     const info = change.after.exists ? change.after.data() : null
     if (info === null || info.moderation !== 'awaiting-moderation') {
-      return
+      return null
     }
 
     const user = info._createdBy

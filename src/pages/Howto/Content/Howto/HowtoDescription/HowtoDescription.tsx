@@ -16,7 +16,7 @@ import { IUser } from 'src/models/user.models'
 import { isAllowToEditContent, emStringToPx } from 'src/utils/helpers'
 import theme from 'src/themes/styled.theme'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
-import FlagIconEvents from 'src/components/Icons/FlagIcon/FlagIcon'
+import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
 
 interface IProps {
   howto: IHowtoDB
@@ -71,7 +71,11 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
               <Button variant="subtle" fontSize="14px" data-cy="go-back">
                 <Flex>
                   <Image
-                    sx={{ width: '10px', marginRight: '4px', rotate: '90deg' }}
+                    sx={{
+                      width: '10px',
+                      marginRight: '4px',
+                      transform: 'rotate(90deg)',
+                    }}
                     src={ArrowIcon}
                   />
                   <Text>Back</Text>
@@ -108,7 +112,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
           <Box mt={3} mb={2}>
             <Flex alignItems="center">
               {howto.creatorCountry && (
-                <FlagIconEvents code={howto.creatorCountry} />
+                <FlagIconHowTos code={howto.creatorCountry} />
               )}
               <Text inline auxiliary my={2} ml={1}>
                 By{' '}

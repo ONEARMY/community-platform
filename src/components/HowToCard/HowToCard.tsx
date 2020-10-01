@@ -4,7 +4,7 @@ import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
 import ModerationStatusText from 'src/components/ModerationStatusText'
 import { Link } from 'src/components/Links'
-import FlagIconEvents from 'src/components/Icons/FlagIcon/FlagIcon'
+import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { IHowtoDB } from '../../models/howto.models'
 import Heading from 'src/components/Heading'
@@ -47,7 +47,7 @@ export const HowToCard = (props: IProps) => (
         </Heading>
         <Flex alignItems="center">
           {props.howto.creatorCountry && (
-            <FlagIconEvents code={props.howto.creatorCountry} />
+            <FlagIconHowTos code={props.howto.creatorCountry} />
           )}
           <Text auxiliary my={2} ml={1}>
             By {props.howto._createdBy}

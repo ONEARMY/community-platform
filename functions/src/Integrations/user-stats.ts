@@ -35,13 +35,14 @@ async function updateStats(change, target){
   let user = await userStatsRef.doc(info._createdBy).get();
   let stats = null;
   if(user && user.exists){
-    if(!user.stats){
+    if(!user.data().stats){
       console.log('No previous stats for ', user.id ,' -> compute'),
       stats = await computeUserStats(info._createdBy);
-      console.log(user._id, ': ', stats);
+      console.log(user.id, ': ', stats);
     }else{
-      stats = user.stats;
-      if (!(target in user.stats)) stats[target] = 0;
+      stats = user.data().stats;
+      if (!(target in stats)) stats[target] = delta > 0 ? delta : 0;
+      else  stats[target] += delta;
     }
     if(stats){
       user.ref.update({

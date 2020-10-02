@@ -44,7 +44,7 @@ async function updateStats(change, target) {
   const user: any = await userStatsRef.doc(info._createdBy).get()
   let stats = null
   if (user && user.exists) {
-    if(!user.data().stats || (!(target in user.data().stats) && delta<0 ) ){
+    if (!user.data().stats || (!(target in user.data().stats) && delta<0 ) ){
       console.log('No previous stats for ' + user.id + ' -> compute')
       stats = await computeUserStats(info._createdBy)
       console.log(user.id, ': ', stats)

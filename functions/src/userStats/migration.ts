@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions'
 import { IUserDB, IHowtoDB, IEventDB, DB_ENDPOINTS } from '../models'
-import { db, getCollection, getDoc } from '../Firebase/firestoreDB'
+import { db, getCollection } from '../Firebase/firestoreDB'
 
 /**
  * One-off script to migrate legacy content to new format
@@ -26,7 +26,7 @@ export const migrateUserStats = functions.https.onCall(
     // const allUsers: IUserDB[] = await getCollection('v3_users' as any)
     // console.log(`migrating [${allUsers.length}] users`)
     const batch = db.batch()
-    const results = { updated: [], skipped: [] }
+    const operations = { updated: [], skipped: [] }
     for (const userId of usersToUpdate) {
       const ref = db.collection(DB_ENDPOINTS.users).doc(userId)
       const userDoc = (await ref.get()).data()
@@ -38,17 +38,21 @@ export const migrateUserStats = functions.https.onCall(
           },
           _modified: new Date().toISOString(),
         }
-        results.updated.push({ ...update, _id: userId })
+        operations.updated.push({ ...update, _id: userId })
         batch.update(ref, update)
       } else {
-        results.skipped.push({ _id: userId })
+        operations.skipped.push({ _id: userId })
         console.error('cannot find user', userId)
       }
     }
     if (data.write) {
       await batch.commit()
     }
-    return { write: data.write, results }
+    return {
+      _write: data.write,
+      operations,
+      meta: { allHowtosByUser, allHowtos, allEventsByUser, allEvents },
+    }
     /**
      * No longer required - chunking writes
      */
@@ -64,7 +68,6 @@ export const migrateUserStats = functions.https.onCall(
     //     await _sleep(1000)
     //   }
     // }
-
   },
 )
 

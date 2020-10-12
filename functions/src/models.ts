@@ -16,14 +16,14 @@ export {
  * however importing directly isn't very well supported for constants
  * (to fix with future migration to lerna or similar module system)
  *
- * Therefore these need to be kept manually in sync with src/stores/databaseV2/index.ts
+ * Therefore these need to be kept manually in sync with src/stores/databaseV2/endpoints.ts
  **************************************************************************************/
 const DB_PREFIX = ''
 export const DB_ENDPOINTS = {
   howtos: `${DB_PREFIX}v3_howtos`,
   users: `${DB_PREFIX}v3_users`,
   tags: `${DB_PREFIX}v3_tags`,
-  events: `${DB_PREFIX}v3_tags`,
+  events: `${DB_PREFIX}v3_events`,
   mappins: `${DB_PREFIX}v3_mappins`,
 }
 

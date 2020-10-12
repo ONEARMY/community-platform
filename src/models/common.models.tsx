@@ -1,8 +1,8 @@
 // re-imports and re-exports
 import { DBDoc as DBDocImport } from '../stores/databaseV2/types'
 export type DBDoc = DBDocImport
-export { DB_ENDPOINTS } from '../stores/databaseV2'
-import { DBEndpoint } from '../stores/databaseV2'
+import { DBEndpoint } from '../stores/databaseV2/endpoints'
+export { DB_ENDPOINTS } from '../stores/databaseV2/endpoints'
 export type IDBEndpoint = DBEndpoint
 
 // A reminder that dates should be saved in the ISOString format

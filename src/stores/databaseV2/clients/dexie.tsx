@@ -2,7 +2,7 @@ import { IDBEndpoint, DBDoc } from 'src/models/common.models'
 import Dexie from 'dexie'
 import { DBQueryOptions, DBQueryWhereOptions, AbstractDBClient } from '../types'
 import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
-import { DB_ENDPOINTS } from '..'
+import { DB_ENDPOINTS } from '../endpoints'
 
 /**
  * Update the cache number either when making changes to db architecture

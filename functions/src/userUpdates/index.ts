@@ -9,7 +9,7 @@ import { IUserDB, IDBDocChange, DB_ENDPOINTS } from '../models'
  * - update howTo creator flag on change
  *********************************************************************/
 export const handleUserUpdates = functions.firestore
-  .document(DB_ENDPOINTS.users)
+  .document(`${DB_ENDPOINTS.users}/{id}`)
   .onUpdate(async (change, context) => {
     await processCountryUpdates(change)
   })

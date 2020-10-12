@@ -1,7 +1,10 @@
 import * as functions from 'firebase-functions'
 import { db } from '../Firebase/firestoreDB'
 
-export const handleUserChanges = functions.firestore
+/**
+ * TODO - make a one-off migration script instead of doc write
+ */
+const handleUserChanges = functions.firestore
   .document('v3_users/{id}')
   .onWrite(async (change, context) => {
     const info = change.after.exists ? change.after.data() : null

@@ -53,8 +53,8 @@ interface IExternalLink {
 }
 
 interface IUserStats {
-  howToCount: number
-  eventCount: number
+  userCreatedHowtos: number
+  userCreatedEvents: number
 }
 
 export type IUserDB = IUser & DBDoc

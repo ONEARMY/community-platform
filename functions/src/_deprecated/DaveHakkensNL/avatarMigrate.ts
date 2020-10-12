@@ -1,9 +1,9 @@
 import {
   getStorageFileMeta,
   uploadLocalFileToStorage,
-} from '../Firebase/storage'
-import { resizeLocalImage } from '../Utils/image.utils'
-import { downloadFileToTemp, IFileWriteMeta } from '../Utils/file.utils'
+} from '../../Firebase/storage'
+import { resizeLocalImage } from '../../Utils/image.utils'
+import { downloadFileToTemp, IFileWriteMeta } from '../../Utils/file.utils'
 
 export const migrateAvatar = async (imgUrl: string, userId: string) => {
   // download

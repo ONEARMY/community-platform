@@ -1,7 +1,7 @@
 const endpoint = 'https://davehakkens.nl/wp-json/aam/v1/authenticate'
 import axios from 'axios'
-import { firebaseAdmin } from '../Firebase/admin'
-import { IUser } from '../models'
+import { firebaseAdmin } from '../../Firebase/admin'
+import { IUser } from '../../models'
 
 export const DHLogin = async (username: string, password: string) => {
   const dhJWT = await DHGetJWTToken(username, password)

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { BPMember } from './BPMember.model'
-import * as db from '../Firebase/realtimeDB'
+import * as db from '../../Firebase/realtimeDB'
 const endpoint = 'https://davehakkens.nl/wp-json/buddypress/v1/members'
 
 /************ Exported Functions ****************************************************

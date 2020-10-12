@@ -25,6 +25,9 @@ export const migrateUserStats = functions.https.onCall(
       }
       // TODO - add location updates
       return user
+      // TODO - add timestamp updates (if required)
+
+      // TODO - add default stats to new user creation (not this file but just to remember)
     })
     // split updates into chunks with sleep between commits to comply with firebase max writes
     // https://firebase.google.com/docs/firestore/quotas#writes_and_transactions

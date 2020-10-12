@@ -231,7 +231,7 @@ export class UserPage extends React.Component<
   // Comment on 6.05.20 by BG : renderCommitmentBox commented for now, will be reused with #974
   public renderUserStatsBox(user: IUserPP) {
     if (!user.stats) {
-      user.stats = { howToCount: 0, eventCount: 0 }
+      user.stats = { userCreatedEvents: 0, userCreatedHowtos: 0 }
     }
 
     return (
@@ -258,16 +258,16 @@ export class UserPage extends React.Component<
             </ElWithBeforeIcon>
           </UserStatsBoxItem>
          )} */}
-        {user.stats.howToCount > 0 && (
+        {user.stats.userCreatedHowtos > 0 && (
           <UserStatsBoxItem>
             <ElWithBeforeIcon IconUrl={HowToCountIcon} />
-            How-to: {user.stats.howToCount}
+            How-to: {user.stats.userCreatedHowtos}
           </UserStatsBoxItem>
         )}
-        {user.stats.eventCount > 0 && (
+        {user.stats.userCreatedEvents > 0 && (
           <UserStatsBoxItem>
             <ElWithBeforeIcon IconUrl={EventsIcon} />
-            Events: {user.stats.eventCount}
+            Events: {user.stats.userCreatedEvents}
           </UserStatsBoxItem>
         )}
       </UserStatsBox>
@@ -399,7 +399,8 @@ export class UserPage extends React.Component<
     const shouldRenderUserStatsBox =
       user &&
       (user.location ||
-        (user.stats && (user.stats.howToCount || user.stats.eventCount)))
+        (user.stats &&
+          (user.stats.userCreatedHowtos || user.stats.userCreatedEvents)))
         ? true
         : false
 

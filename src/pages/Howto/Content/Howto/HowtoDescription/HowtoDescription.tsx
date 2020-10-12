@@ -53,6 +53,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
     return (
       <Flex
         data-cy="how-to-basis"
+        data-id={howto._id}
         className="howto-description-container"
         sx={{
           borderRadius: theme.radii[2] + 'px',

@@ -36,7 +36,7 @@ export const DB_ENDPOINTS = {
   howtos: `${DB_PREFIX}v3_howtos`,
   users: `${DB_PREFIX}users__rev20201012`,
   tags: `${DB_PREFIX}v3_tags`,
-  events: `${DB_PREFIX}v3_tags`,
+  events: `${DB_PREFIX}v3_events`,
   mappins: `${DB_PREFIX}v3_mappins`,
 }
 export type DBEndpoint = keyof typeof DB_ENDPOINTS

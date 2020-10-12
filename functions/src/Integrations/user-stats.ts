@@ -44,13 +44,14 @@ async function updateStats(change, target) {
   const user: any = await userStatsRef.doc(info._createdBy).get()
   let stats = null
   if (user && user.exists) {
-    if (!user.stats) {
+    if (!user.data().stats || (!(target in user.data().stats) && delta<0 ) ){
       console.log('No previous stats for ' + user.id + ' -> compute')
       stats = await computeUserStats(info._createdBy)
-      console.log(user._id, ': ', stats)
+      console.log(user.id, ': ', stats)
     } else {
-      stats = user.stats
-      if (!(target in user.stats)) stats[target] = 0
+      stats = user.data().stats;
+      if (!(target in stats)) stats[target] = delta > 0 ? delta : 0;  // Should never happen
+      stats[target] += delta;
     }
     if (stats) {
       user.ref
@@ -82,33 +83,23 @@ async function updateStats(change, target) {
 async function computeUserStats(owner) {
   console.log('Calculando para ', owner)
 
-  const stats: any = {}
   try {
-    stats.howToCount = await db
+    const snapshotHowTos: any = await db
       .collection('v3_howtos')
       .where('_createdBy', '==', owner)
       .where('moderation', '==', 'accepted')
-      .get()
-      .then(querySnapshot => {
-        let count = 0
-        querySnapshot.forEach(doc => {
-          count++
-        })
-        return count
-      })
+      .get();
 
-    stats.eventCount = await db
+    const snapshotEvents: any = await db
       .collection('v3_events')
       .where('_createdBy', '==', owner)
       .where('moderation', '==', 'accepted')
-      .get()
-      .then(querySnapshot => {
-        let count = 0
-        querySnapshot.forEach(doc => {
-          count++
-        })
-        return count
-      })
+      .get();
+
+    const stats: any = {
+        howToCount : snapshotHowTos ? snapshotHowTos.size : 0,
+        eventCount : snapshotEvents ? snapshotEvents.size : 0
+    };
 
     return stats
   } catch (e) {

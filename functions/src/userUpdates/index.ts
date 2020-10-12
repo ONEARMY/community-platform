@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions'
 import { db } from '../Firebase/firestoreDB'
-import { IUserDB, IDBDocChange } from '../models'
+import { IUserDB, IDBDocChange, DB_ENDPOINTS } from '../models'
 
 /*********************************************************************
  * Side-effects to be carried out on various user updates, namely:
@@ -9,7 +9,7 @@ import { IUserDB, IDBDocChange } from '../models'
  * - update howTo creator flag on change
  *********************************************************************/
 export const handleUserUpdates = functions.firestore
-  .document('v3_users/{id}')
+  .document(DB_ENDPOINTS.users)
   .onUpdate(async (change, context) => {
     await processCountryUpdates(change)
   })
@@ -39,7 +39,7 @@ async function updateHowTosCountry(
   console.log('Update ', userId, ' moved to :', country)
 
   const querySnapshot = await db
-    .collection('v3_howtos')
+    .collection(DB_ENDPOINTS.howtos)
     .where('_createdBy', '==', userId)
     .get()
 

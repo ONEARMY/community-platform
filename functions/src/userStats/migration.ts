@@ -1,5 +1,5 @@
 import * as functions from 'firebase-functions'
-import { DB_PREFIX, IUserDB, IHowtoDB, IEventDB } from '../models'
+import { IUserDB, IHowtoDB, IEventDB, DB_ENDPOINTS } from '../models'
 import { db } from '../Firebase/firestoreDB'
 
 /**
@@ -11,11 +11,12 @@ export const migrateUserStats = functions.https.onCall(
   async (data, context) => {
     // Calculate how many events and howtos have been created by each user,
     // and populate to a user.stats object accordingly
-    const allEvents = await db.collection(`${DB_PREFIX}_events`).get()
+    const allEvents = await db.collection(DB_ENDPOINTS.events).get()
     const allEventsByUser = calcUserEventCounts(allEvents.docs as any[])
-    const allHowtos = await db.collection(`${DB_PREFIX}_howtos`).get()
+    const allHowtos = await db.collection(DB_ENDPOINTS.howtos).get()
     const allHowtosByUser = calcUserHowtoCounts(allHowtos.docs as any[])
-    const allUsers = await db.collection(`${DB_PREFIX}_users`).get()
+    // use hardcoded endpoint as this has now been updated in models to reflect new revision
+    const allUsers = await db.collection('v3_users').get()
     const userMigration = allUsers.docs.map(d => {
       const user = d.data() as IUserDB
       user.stats = {
@@ -33,7 +34,7 @@ export const migrateUserStats = functions.https.onCall(
     for (const chunk of writeChunks) {
       const batch = db.batch()
       chunk.forEach(user =>
-        batch.update(db.collection('v4_users').doc(user._id), user),
+        batch.update(db.collection(DB_ENDPOINTS.users).doc(user._id), user),
       )
       await batch.commit()
       await _sleep(1000)

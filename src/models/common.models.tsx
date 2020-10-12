@@ -1,17 +1,14 @@
+// re-imports and re-exports
 import { DBDoc as DBDocImport } from '../stores/databaseV2/types'
-import { DBEndpoint } from '../stores/databaseV2/'
-import { DB_PREFIX as DB_PREFIX_IMPORT } from '../stores/databaseV2/config'
+export type DBDoc = DBDocImport
+export { DB_ENDPOINTS } from '../stores/databaseV2'
+import { DBEndpoint } from '../stores/databaseV2'
+export type IDBEndpoint = DBEndpoint
 
 // A reminder that dates should be saved in the ISOString format
 // i.e. new Date().toISOString() => 2011-10-05T14:48:00.000Z
 // This is more consistent than others and allows better querying
 export type ISODateString = string
-
-// Simply re-exported main database endpoints for convenience
-// and re-import into functions
-export type IDBEndpoint = DBEndpoint
-export const DB_PREFIX = DB_PREFIX_IMPORT
-export type DBDoc = DBDocImport
 
 // Types for moderation status
 export type IModerationStatus =

@@ -1,7 +1,7 @@
 // import { IDBEndpoint } from '@OAModels/common.models'
 import * as rtdb from './realtimeDB'
 import * as firestore from './firestoreDB'
-import { IDBEndpoint, DBDoc, DB_PREFIX } from '../models'
+import { DBDoc, DB_ENDPOINTS } from '../models'
 
 /*  Functions in this folder are used to sync data between firestore and firebase realtime databases
     The reason for this is to allow large collections to be 'cached' for cheap retrieval
@@ -12,16 +12,8 @@ import { IDBEndpoint, DBDoc, DB_PREFIX } from '../models'
     https://github.com/OneArmyWorld/onearmy/wiki/Backend-Database
 */
 
-// List of endpoints to use during sync operations, mapped to have correct prefix
-// TODO - ideally want better way of setting DB_PREFIX globally as opposed to just from frontend
-const endpoints: IDBEndpoint[] = [
-  'events',
-  'howtos',
-  'mappins',
-  'tags',
-  // NOTE - do not want to keep list of sync'd users
-  // 'users',
-].map(e => `${DB_PREFIX}${e}` as IDBEndpoint)
+// List of endpoints to use during sync operations, taken from common db mapping
+const endpoints = Object.values(DB_ENDPOINTS)
 
 export const syncAll = async () => {
   const promises = endpoints.map(async endpoint => await sync(endpoint))
@@ -33,7 +25,7 @@ export const syncAll = async () => {
 
 // for given endpoint, query rtdb for all records, determin latest,
 // query firestore for newer records, add to rtdb
-export const sync = async (endpoint: IDBEndpoint) => {
+export const sync = async (endpoint: string) => {
   const existing = await rtdb.get(endpoint)
   const latest =
     existing && Object.keys(existing).length > 1
@@ -54,10 +46,4 @@ export const sync = async (endpoint: IDBEndpoint) => {
 
 function _sortByModified(a: DBDoc, b: DBDoc) {
   return a._modified > b._modified ? -1 : 1
-}
-
-export const test = async () => {
-  const endpoint: IDBEndpoint = 'howtos'
-  const data = await rtdb.get(endpoint)
-  return Object.values(data)
 }

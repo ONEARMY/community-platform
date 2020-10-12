@@ -1,6 +1,7 @@
 import * as functions from 'firebase-functions'
 import { db } from '../Firebase/firestoreDB'
 import { IUserDB, IDBDocChange } from '../models'
+import { DBEndpoints } from 'src/stores/databaseV2'
 export * from './migration'
 
 /**
@@ -14,13 +15,13 @@ export * from './migration'
  * Triggered functions
  ********************************************************************/
 export const countHowTos = functions.firestore
-  .document('v3_howtos/{id}')
+  .document(`${DBEndpoints.howtos}/{id}`)
   .onWrite(async (change, context) => {
     await updateStats(change, 'userCreatedHowtos')
   })
 
 export const countEvents = functions.firestore
-  .document('v3_events/{id}')
+  .document(`${DBEndpoints.events}/{id}`)
   .onWrite(async (change, context) => {
     await updateStats(change, 'userCreatedEvents')
   })
@@ -34,9 +35,11 @@ async function updateStats(
 ) {
   const info = change.after.exists ? change.after.data() : null
   const prevInfo = change.before.exists ? change.before.data() : null
-  const userStatsRef = db.collection('v3_users/')
   const delta = calculateStatsChange(info, prevInfo)
-  const userDoc = await userStatsRef.doc(info._createdBy).get()
+  const userDoc = await db
+    .collection(DBEndpoints.users)
+    .doc(info._createdBy)
+    .get()
   // only update if a user exists and stats have changed
   if (userDoc.exists && delta !== 0) {
     console.log('Update ', info._createdBy, ' ', target, ' delta: ', delta)

@@ -2,7 +2,7 @@ import { IDBEndpoint, DBDoc } from 'src/models/common.models'
 import Dexie from 'dexie'
 import { DBQueryOptions, DBQueryWhereOptions, AbstractDBClient } from '../types'
 import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
-import { DB_PREFIX } from '../config'
+import { DB_ENDPOINTS } from '..'
 
 /**
  * Update the cache number either when making changes to db architecture
@@ -155,10 +155,9 @@ const SCHEMA_BASE: IDexieSchema = {
 }
 // Ensure dexie also handles any prefixed database schema
 const MAPPED_SCHEMA = {} as IDexieSchema
-console.log('db_prefix', DB_PREFIX)
 Object.keys(SCHEMA_BASE).forEach(
   endpoint =>
-    (MAPPED_SCHEMA[`${DB_PREFIX}${endpoint}` as IDBEndpoint] =
+    (MAPPED_SCHEMA[DB_ENDPOINTS[endpoint] as IDBEndpoint] =
       SCHEMA_BASE[endpoint]),
 )
 const DEXIE_SCHEMA = MAPPED_SCHEMA

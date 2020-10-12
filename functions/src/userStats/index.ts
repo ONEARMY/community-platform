@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions'
 import { db } from '../Firebase/firestoreDB'
-import { IUserDB } from '../models'
+import { IUserDB, IDBDocChange } from '../models'
 export * from './migration'
 
 /**
@@ -29,7 +29,7 @@ export const countEvents = functions.firestore
  * Helper functions
  ********************************************************************/
 async function updateStats(
-  change: functions.Change<FirebaseFirestore.DocumentSnapshot>,
+  change: IDBDocChange,
   target: keyof IUserDB['stats'],
 ) {
   const info = change.after.exists ? change.after.data() : null

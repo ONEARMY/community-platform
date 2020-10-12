@@ -16,17 +16,15 @@ export const migrateUserStats = functions.https.onCall(
     const allHowtos = await db.collection(`${DB_PREFIX}_howtos`).get()
     const allHowtosByUser = calcUserHowtoCounts(allHowtos.docs as any[])
     const allUsers = await db.collection(`${DB_PREFIX}_users`).get()
-
     const userMigration = allUsers.docs.map(d => {
       const user = d.data() as IUserDB
       user.stats = {
         userCreatedEvents: allEventsByUser[user._id] || 0,
         userCreatedHowtos: allHowtosByUser[user._id] || 0,
       }
-      // TODO - add location updates
+      // skip updating timestamps as writing to new endpoint
+      // user._modified = new Date().toISOString()
       return user
-      // TODO - add timestamp updates (if required)
-
       // TODO - add default stats to new user creation (not this file but just to remember)
     })
     // split updates into chunks with sleep between commits to comply with firebase max writes
@@ -57,6 +55,7 @@ function calcUserHowtoCounts(howtos: IHowtoDB[]) {
     allHowTosByUser[createdBy]++
   })
   console.log('allHowTosByUser', allHowTosByUser)
+  return allHowTosByUser
 }
 /**
  * Create a hashmap all events with a count of users
@@ -68,6 +67,7 @@ function calcUserEventCounts(events: IEventDB[]) {
     allEventsByUser[createdBy] = allEventsByUser[createdBy] || 0
     allEventsByUser[createdBy]++
   })
+  return allEventsByUser
 }
 /**
  * Take a given array length n and split into an array of arrays, each with a maximum

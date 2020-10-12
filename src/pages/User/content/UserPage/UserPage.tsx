@@ -230,11 +230,15 @@ export class UserPage extends React.Component<
   }
   // Comment on 6.05.20 by BG : renderCommitmentBox commented for now, will be reused with #974
   public renderUserStatsBox(user: IUserPP) {
-    if (!user.stats) {
-      user.stats = { userCreatedEvents: {}, userCreatedHowtos: {} }
+    let howtoCount = 0
+    let eventCount = 0
+    try {
+      howtoCount = Object.keys(user.stats!.userCreatedHowtos).length
+      eventCount = Object.keys(user.stats!.userCreatedEvents).length
+    } catch (error) {
+      // Comment on 12.10.20 by CC: would be nice if user stats had their own display to make conditional
+      // logic easier, but for now will just use a try-catch to also fix cases broken on dev during migration attempts
     }
-    const howtoCount = Object.keys(user.stats.userCreatedHowtos).length
-    const eventCount = Object.keys(user.stats.userCreatedEvents).length
 
     return (
       <UserStatsBox>

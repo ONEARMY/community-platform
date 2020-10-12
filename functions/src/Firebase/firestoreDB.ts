@@ -25,8 +25,21 @@ export const getLatestDoc = async (endpoint: IDBEndpoint, orderBy: string) => {
     .get()
   return col.docs[0]
 }
-export const getDoc = (path: string) => db.doc(path)
-export const getCollection = <T>(endpoint: IDBEndpoint) => {
+export const getDoc = async <T=any>(
+  endpoint: IDBEndpoint,
+  docId: string,
+): Promise<T> => {
+  const mapping = DB_ENDPOINTS[endpoint] || endpoint
+  console.log(`mapping [${endpoint}] -> [${mapping}]`)
+  return db
+    .collection(mapping)
+    .doc(docId)
+    .get()
+    .then(res => {
+      return res.data() as T
+    })
+}
+export const getCollection = async <T>(endpoint: IDBEndpoint) => {
   const mapping = DB_ENDPOINTS[endpoint] || endpoint
   console.log(`mapping [${endpoint}] -> [${mapping}]`)
   return db

@@ -1,6 +1,12 @@
 import * as functions from 'firebase-functions'
-import { db } from '../Firebase/firestoreDB'
-import { IUserDB, IDBDocChange, DB_ENDPOINTS } from '../models'
+import { db, getDoc } from '../Firebase/firestoreDB'
+import {
+  IUserDB,
+  IDBDocChange,
+  DB_ENDPOINTS,
+  IHowtoDB,
+  IEventDB,
+} from '../models'
 export * from './migration'
 
 /**
@@ -28,44 +34,37 @@ export const countEvents = functions.firestore
 /********************************************************************
  * Helper functions
  ********************************************************************/
+/**
+ * When a moderation status changes (including first created or deleted)
+ * update user stats to reflect content they have created
+ */
 async function updateStats(
   change: IDBDocChange,
   target: keyof IUserDB['stats'],
 ) {
-  const info = change.after.exists ? change.after.data() : null
-  const prevInfo = change.before.exists ? change.before.data() : null
-  const delta = calculateStatsChange(info, prevInfo)
-  const userDoc = await db
-    .collection(DB_ENDPOINTS.users)
-    .doc(info._createdBy)
-    .get()
-  // only update if a user exists and stats have changed
-  if (userDoc.exists && delta !== 0) {
-    console.log('Update ', info._createdBy, ' ', target, ' delta: ', delta)
-    const user = userDoc.data() as IUserDB
-    if (!user.stats[target]) {
-      user.stats[target] = 0
+  const after: IHowtoDB | IEventDB = change.after.data() || ({} as any)
+  const before: IHowtoDB | IEventDB = change.before.data() || ({} as any)
+  if (after.moderation !== before.moderation) {
+    const userDoc = await db
+      .collection(DB_ENDPOINTS.users)
+      .doc(after._createdBy)
+      .get()
+    // only update if a user exists and stats have changed
+    if (userDoc.exists) {
+      const user = userDoc.data() as IUserDB
+      user.stats = user.stats || {
+        userCreatedEvents: {},
+        userCreatedHowtos: {},
+      }
+      user.stats[target] = {
+        ...user.stats[target],
+        [after._id]: after.moderation,
+      }
+      await userDoc.ref.set(user, { merge: true })
+    } else {
+      throw new Error(
+        'could not find user to update stats: ' + after._createdBy,
+      )
     }
-    user.stats[target] += delta
-    await userDoc.ref.set(user, { merge: true })
   }
-}
-
-/**
- * Determine the change to a users stat counts given the updated howto or event
- */
-function calculateStatsChange(
-  info: FirebaseFirestore.DocumentData = {},
-  prevInfo: FirebaseFirestore.DocumentData = {},
-) {
-  let delta = 0
-  if (info.moderation === 'accepted' && prevInfo.Moderation !== 'accepted') {
-    // Increment if now accepted and previously different
-    delta = 1
-  }
-  if (prevInfo.moderation === 'accepted' && info.moderation !== 'accepted') {
-    // Decrement if previously accepted and now erased or moderation changed
-    delta = -1
-  }
-  return delta
 }

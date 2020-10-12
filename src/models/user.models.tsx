@@ -52,9 +52,12 @@ interface IExternalLink {
     | 'instagram'
 }
 
+/**
+ * Track the ids and moderation status as summary for user stats
+ */
 interface IUserStats {
-  userCreatedHowtos: number
-  userCreatedEvents: number
+  userCreatedHowtos: { [id: string]: IModerationStatus }
+  userCreatedEvents: { [id: string]: IModerationStatus }
 }
 
 export type IUserDB = IUser & DBDoc

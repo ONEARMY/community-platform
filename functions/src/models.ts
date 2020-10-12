@@ -21,7 +21,7 @@ export {
 const DB_PREFIX = ''
 export const DB_ENDPOINTS = {
   howtos: `${DB_PREFIX}v3_howtos`,
-  users: `${DB_PREFIX}users__rev20201012`,
+  users: `${DB_PREFIX}v3_users`,
   tags: `${DB_PREFIX}v3_tags`,
   events: `${DB_PREFIX}v3_tags`,
   mappins: `${DB_PREFIX}v3_mappins`,

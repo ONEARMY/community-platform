@@ -1,5 +1,4 @@
-// React apps populate a process variable, however it might not always be accessible outside
-// (e.g. cypress will instead use it's own env to populate a prefix)
+// React apps populate a process variable, however it might not always be accessible outside (e.g. cypress)
 const e = process ? process.env : ({} as any)
 /**
  * A prefix can be used to simplify large-scale schema changes or multisite hosting

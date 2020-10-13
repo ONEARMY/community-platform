@@ -80,7 +80,7 @@ If making changes across the entire DB it is likely that backend functions will 
 A couple tips to help implementing:
 
 1. Create backups of all the collection points potentially affected.
-(note, you will need admin access to the project, and initialise using `gcloud init`)
+(note, you will need admin access to the project, and initialise using gcloud. Confirm access via `gcloud config list` and select project via `gcloud init`)
 ```
 gcloud firestore export gs://[BUCKET_NAME] --collection-ids=[COLLECTION_ID_1],[COLLECTION_ID_2]
 ```

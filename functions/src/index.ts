@@ -19,8 +19,6 @@ exports.notifyPinAccepted = IntegrationsDiscord.notifyPinAccepted
 exports.notifyHowToAccepted = IntegrationsDiscord.notifyHowToAccepted
 exports.notifyEventAccepted = IntegrationsDiscord.notifyEventAccepted
 exports.emailNotificationDemo = IntegrationsEmail.notifyEmailDemo
-// TODO - migrate function should be removed after complete
-exports.userStatsMigrate = UserStats.migrateUserStats
 exports.userStatsCountEvents = UserStats.countEvents
 exports.userStatsCountHowTos = UserStats.countHowTos
 exports.userUpdates = UserUpdates.handleUserUpdates

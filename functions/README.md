@@ -80,6 +80,7 @@ If making changes across the entire DB it is likely that backend functions will 
 A couple tips to help implementing:
 
 1. Create backups of all the collection points potentially affected.
+(note, you will need admin access to the project, and initialise using `gcloud init`)
 ```
 gcloud firestore export gs://[BUCKET_NAME] --collection-ids=[COLLECTION_ID_1],[COLLECTION_ID_2]
 ```
@@ -87,9 +88,14 @@ E.g. for the staging server, updating howtos and events:
 ```
 gcloud firestore export gs://precious-plastics-v4-dev-exports/2020-10-12 --collection-ids=v3_howtos,v3_events
 ```
+Or production
+```
+gcloud firestore export gs://onearmyworld-exports/2020-10-12_manual_backup --collection-ids=v3_events,v3_howtos,v3_mappings,v3_tags,v3_users
+```
+(note - whilst the full database can be backed up without specifying collection ids, this makes it harder to re-import a single collection)
 For more info see https://firebase.google.com/docs/firestore/manage-data/export-import#export_specific_collections
 
-2. For any data that you want to be reflected immediately, also change the `modified` field so that user caches will update as required
+1. For any data that you want to be reflected immediately, also change the `modified` field so that user caches will update as required
 
-3. If less confident or making large scale changes, consider populating to a new db endpoint, e.g. `v4_howtos`
+2. If less confident or making large scale changes, consider populating to a new db endpoint, e.g. `v4_howtos`
 (this will need to also be updated in the models for both functions and frontend)

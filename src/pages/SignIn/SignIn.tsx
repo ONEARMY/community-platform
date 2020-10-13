@@ -13,6 +13,7 @@ import {
   TextNotification,
   ITextNotificationProps,
 } from 'src/components/Notification/TextNotification'
+import { getFriendlyMessage } from 'src/utils/helpers'
 import { required } from 'src/utils/validators'
 
 interface IFormValues {
@@ -77,7 +78,8 @@ class SignInPage extends React.Component<IProps, IState> {
       await this.props.userStore!.login(provider, v.email, v.password)
       this.props.history.goBack()
     } catch (error) {
-      this.setState({ errorMsg: error.message, disabled: false })
+      const friendlyErrorMessage = getFriendlyMessage(error.code)
+      this.setState({ errorMsg: friendlyErrorMessage, disabled: false })
     }
   }
 

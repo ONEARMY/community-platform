@@ -6,7 +6,6 @@ Add/change schedule from `./functions-cron/appengine/cron.yaml`
 import * as functions from 'firebase-functions'
 import { BackupDatabase } from '../Firebase/databaseBackup'
 import * as FirebaseSync from '../Firebase/firebaseSync'
-import { updateDHUserIds } from '../DaveHakkensNL/dataMigrate'
 
 export const weeklyTasks = functions.pubsub
   .topic('weekly-tick')

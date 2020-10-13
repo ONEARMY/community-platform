@@ -114,21 +114,6 @@ describe('[Bugs]', () => {
   //     .should('include', Page.HOME_PAGE)
   // })
 
-  // it('[649]', () => {
-  //   cy.step('Wrong email and wrong password')
-  //   cy.visit('/sign-in')
-  //   cy.get('[data-cy=email').type('wrong_email@test.com')
-  //   cy.get('[data-cy=password').type('anything')
-  //   cy.get('[data-cy=submit').click()
-  //   cy.get('div[color=red]').contains(`Incorrect email`)
-
-  //   cy.step('Correct email and wrong password')
-  //   cy.get('[data-cy=email').type('howto_reader@test.com')
-  //   cy.get('[data-cy=password').type('wrong_password')
-  //   cy.get('[data-cy=submit').click()
-  //   cy.get('div[color=red]').contains(`Incorrect password`)
-  // })
-
   // it('[651]', () => {
   //   cy.visit('/how-to')
   //   cy.login('howto_reader@test.com', 'test1234')

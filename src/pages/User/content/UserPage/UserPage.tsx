@@ -230,8 +230,14 @@ export class UserPage extends React.Component<
   }
   // Comment on 6.05.20 by BG : renderCommitmentBox commented for now, will be reused with #974
   public renderUserStatsBox(user: IUserPP) {
-    if (!user.stats) {
-      user.stats = { howToCount: 0, eventCount: 0 }
+    let howtoCount = 0
+    let eventCount = 0
+    try {
+      howtoCount = Object.keys(user.stats!.userCreatedHowtos).length
+      eventCount = Object.keys(user.stats!.userCreatedEvents).length
+    } catch (error) {
+      // Comment on 12.10.20 by CC: would be nice if user stats had their own display to make conditional
+      // logic easier, but for now will just use a try-catch to also fix cases broken on dev during migration attempts
     }
 
     return (
@@ -258,16 +264,16 @@ export class UserPage extends React.Component<
             </ElWithBeforeIcon>
           </UserStatsBoxItem>
          )} */}
-        {user.stats.howToCount > 0 && (
+        {howtoCount > 0 && (
           <UserStatsBoxItem>
             <ElWithBeforeIcon IconUrl={HowToCountIcon} />
-            How-to: {user.stats.howToCount}
+            How-to: {howtoCount}
           </UserStatsBoxItem>
         )}
-        {user.stats.eventCount > 0 && (
+        {eventCount > 0 && (
           <UserStatsBoxItem>
             <ElWithBeforeIcon IconUrl={EventsIcon} />
-            Events: {user.stats.eventCount}
+            Events: {eventCount}
           </UserStatsBoxItem>
         )}
       </UserStatsBox>
@@ -399,7 +405,8 @@ export class UserPage extends React.Component<
     const shouldRenderUserStatsBox =
       user &&
       (user.location ||
-        (user.stats && (user.stats.howToCount || user.stats.eventCount)))
+        (user.stats &&
+          (user.stats.userCreatedHowtos || user.stats.userCreatedEvents)))
         ? true
         : false
 

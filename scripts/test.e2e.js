@@ -1,5 +1,6 @@
 const child = require('child_process')
 const e2eEnv = require('dotenv').config({ path: `${process.cwd()}/.env.e2e` })
+const fs = require('fs')
 
 // Prevent unhandled errors being silently ignored
 process.on('unhandledRejection', err => {
@@ -19,6 +20,11 @@ async function main() {
   const isCi = process.argv[2] === 'ci'
   const DB_PREFIX = `${randomString(5)}_`
   const sharedEnv = `REACT_APP_DB_PREFIX=${DB_PREFIX} REACT_APP_SITE_VARIANT=test-ci`
+  // copy endpoints for use in testing
+  fs.copyFileSync(
+    'src/stores/databaseV2/endpoints.ts',
+    'cypress/support/db/endpoints.ts',
+  )
   const cyEnv = getCypressEnv(sharedEnv)
   const appStart = `cross-env ${sharedEnv} BROWSER=none PORT=3456 npm run start`
   const waitForStart = 'http-get://localhost:3456'

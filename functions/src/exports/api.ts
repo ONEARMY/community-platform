@@ -45,4 +45,4 @@ app.all('*', async (req, res, next) => {
   }
 })
 
-export const api = functions.https.onRequest(app)
+export const api = functions.https.onRequest(app as any)

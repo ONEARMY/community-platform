@@ -1,9 +1,6 @@
 import * as functions from 'firebase-functions'
-import { IDBEndpoint } from '../models'
+import { DB_ENDPOINTS } from '../models'
 import { db } from '../Firebase/firestoreDB'
-
-const USER_ENDPOINT: IDBEndpoint = 'v3_users' as any
-// TODO - fix links to main repo and handle with prefix_endpoint type checking
 
 /**
  * Example function to show how an automated email can be triggered
@@ -11,7 +8,7 @@ const USER_ENDPOINT: IDBEndpoint = 'v3_users' as any
  * https://github.com/ONEARMY/community-platform/issues/883
  */
 export const notifyEmailDemo = functions.firestore
-  .document(`${USER_ENDPOINT}/precious-plastic`)
+  .document(`${DB_ENDPOINTS.users}/precious-plastic`)
   .onWrite(async (change, context) => {
     return db.collection('mail').add({
       to: 'chris.m.clarke@live.co.uk',

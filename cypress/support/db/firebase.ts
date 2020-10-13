@@ -7,6 +7,7 @@ import 'firebase/functions'
 import 'firebase/database'
 import Query = firebase.firestore.Query
 import { SEED_DATA } from '../../fixtures/seed'
+import { DB_ENDPOINTS } from './endpoints'
 const fbConfig = {
   apiKey: 'AIzaSyDAxS_7M780mI3_tlwnAvpbaqRsQPlmp64',
   authDomain: 'onearmy-test-ci.firebaseapp.com',
@@ -46,8 +47,9 @@ class FirestoreDB {
     opStr: any,
     value: string,
   ): Promise<any> | Promise<any[]> => {
+    const mapping = DB_ENDPOINTS[collectionName] || collectionName
     return db
-      .collection(`${prefix}${collectionName}`)
+      .collection(`${prefix}${mapping}`)
       .where(fieldPath, opStr, value)
       .get()
       .then(snapshot => {
@@ -63,8 +65,9 @@ class FirestoreDB {
       })
   }
   addDocuments = (collectionName: string, docs: any[]) => {
+    const mapping = DB_ENDPOINTS[collectionName] || collectionName
     const batch = db.batch()
-    const col = db.collection(`${prefix}${collectionName}`)
+    const col = db.collection(`${prefix}${mapping}`)
     docs.forEach(doc => {
       const ref = col.doc(doc._id)
       batch.set(ref, doc)
@@ -72,8 +75,9 @@ class FirestoreDB {
     return batch.commit()
   }
   deleteAll = async (collectionName: string) => {
+    const mapping = DB_ENDPOINTS[collectionName] || collectionName
     const batch = db.batch()
-    const col = db.collection(`${prefix}${collectionName}`)
+    const col = db.collection(`${prefix}${mapping}`)
     const docs = await col.get()
     docs.forEach(d => {
       batch.delete(col.doc(d.id))
@@ -87,8 +91,9 @@ class FirestoreDB {
     opStr: any,
     value: string,
   ) => {
+    const mapping = DB_ENDPOINTS[collectionName] || collectionName
     const query = db
-      .collection(`${prefix}${collectionName}`)
+      .collection(`${prefix}${mapping}`)
       .where(fieldPath, opStr, value)
       .limit(MAX_BATCH_SIZE)
     return new Promise((resolve, reject) => {
@@ -133,8 +138,9 @@ class FirestoreDB {
   }
 
   updateDocument = (collectionName: string, docId: string, docData: any) => {
+    const mapping = DB_ENDPOINTS[collectionName] || collectionName
     return db
-      .collection(`${prefix}${collectionName}`)
+      .collection(`${prefix}${mapping}`)
       .doc(docId)
       .set(docData)
   }

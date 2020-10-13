@@ -10,21 +10,7 @@ import {
 } from './types'
 
 import { Observable, Observer } from 'rxjs'
-import { DB_PREFIX } from './config'
-
-/**
- * Consts and Types
- * A few additional exports are provided to help ensure type safety.
- * @remark - list required to populate db schema in dexie
- * @remark - Mapping required to allow custom prefix for any of the endpoints
- */
-const endpoints = ['howtos', 'users', 'tags', 'events', 'mappins'] as const
-export type DBEndpoint = typeof endpoints[number]
-const mappedEndpoints = {} as { [key in DBEndpoint]: string }
-endpoints.forEach(
-  endpoint => (mappedEndpoints[endpoint] = `${DB_PREFIX}${endpoint}`),
-)
-export const DBEndpoints = mappedEndpoints
+import { DBEndpoint, DB_ENDPOINTS } from './endpoints'
 
 /**
  * Main Database class
@@ -42,7 +28,7 @@ export class DatabaseV2 implements AbstractDatabase {
    */
   collection<T>(endpoint: DBEndpoint) {
     // use mapped endpoint to allow custom db endpoint prefixes
-    const mappedEndpoint = DBEndpoints[endpoint]
+    const mappedEndpoint = DB_ENDPOINTS[endpoint]
     return new CollectionReference<T>(mappedEndpoint, this._clients)
   }
 

@@ -12,3 +12,4 @@ lib/
 .runtimeconfig.json
 
 ./firebase-debug.log
+*.log

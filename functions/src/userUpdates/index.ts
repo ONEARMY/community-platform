@@ -47,7 +47,10 @@ async function updateHowTosCountry(
     querySnapshot.forEach(doc => {
       console.log('Updating howTo ', doc.data()._id, 'to', country)
       doc.ref
-        .update({ creatorCountry: country })
+        .update({
+          creatorCountry: country,
+          _modified: new Date().toISOString(),
+        })
         .then(() => {
           console.log('Document successfully updated!')
           return true

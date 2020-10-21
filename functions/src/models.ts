@@ -25,6 +25,6 @@ export const DB_ENDPOINTS = {
   tags: `${DB_PREFIX}v3_tags`,
   events: `${DB_PREFIX}v3_events`,
   mappins: `${DB_PREFIX}v3_mappins`,
+  research: `${DB_PREFIX}research_rev20201020`,
 }
-
 export type IDBDocChange = functions.Change<FirebaseFirestore.DocumentSnapshot>

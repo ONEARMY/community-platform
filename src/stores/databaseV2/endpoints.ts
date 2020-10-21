@@ -24,6 +24,7 @@ export const DB_ENDPOINTS = {
   tags: `${DB_PREFIX}v3_tags`,
   events: `${DB_PREFIX}v3_events`,
   mappins: `${DB_PREFIX}v3_mappins`,
+  research: `${DB_PREFIX}research_rev20201020`,
 }
 export type DBEndpoint = keyof typeof DB_ENDPOINTS
 // legacy - want to use upper case naming convention but keep alternate until all code migrated

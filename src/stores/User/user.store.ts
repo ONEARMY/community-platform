@@ -10,7 +10,6 @@ import {
 import { Storage } from '../storage'
 import { notificationPublish } from '../Notifications/notifications.service'
 import { RootStore } from '..'
-import { loginWithDHCredentials } from 'src/hacks/DaveHakkensNL.hacks'
 import { ModuleStore } from '../common/module.store'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
@@ -71,12 +70,6 @@ export class UserStore extends ModuleStore {
 
   public async login(provider: string, email: string, password: string) {
     switch (provider) {
-      // custom login methods for DH site
-      case 'DH':
-        // unsubscribe from changes as otherwise they will fire in the middle of updating
-        this._unsubscribeFromAuthStateChanges()
-        await loginWithDHCredentials(email, password, this)
-        this._listenToAuthStateChanges()
       // eslint-disable-next-line
       default:
         return auth.signInWithEmailAndPassword(email, password)

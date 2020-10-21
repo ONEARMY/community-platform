@@ -41,11 +41,6 @@ interface IAuthProvider {
 
 const AUTH_PROVIDERS: IAuthProvider[] = [
   {
-    provider: 'DH',
-    buttonLabel: 'Dave Hakkens',
-    inputLabel: 'davehakkens.nl Username',
-  },
-  {
     provider: 'Firebase',
     buttonLabel: 'Email / Password',
     inputLabel: 'Email Address',

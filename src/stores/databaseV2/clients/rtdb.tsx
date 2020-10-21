@@ -40,6 +40,9 @@ export class RealtimeDBClient implements AbstractDBClient {
     // eslint-disable-next-line
     return []
   }
+  deleteDoc(endpoint: IDBEndpoint, docId: string) {
+    return db.ref(`${endpoint}/${docId}`).remove()
+  }
 
   /************************************************************************
    *  Additional Methods - specific only to firebase realtime DB

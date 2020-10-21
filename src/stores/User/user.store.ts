@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 import { IUser, IUserDB } from 'src/models/user.models'
 import { IUserPP, IUserPPDB } from 'src/models/user_pp.models'
 import {
@@ -10,7 +10,6 @@ import {
 import { Storage } from '../storage'
 import { notificationPublish } from '../Notifications/notifications.service'
 import { RootStore } from '..'
-import { loginWithDHCredentials } from 'src/hacks/DaveHakkensNL.hacks'
 import { ModuleStore } from '../common/module.store'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
@@ -44,6 +43,7 @@ export class UserStore extends ModuleStore {
 
   constructor(rootStore: RootStore) {
     super(rootStore)
+    makeObservable(this)
     this._listenToAuthStateChanges()
   }
 

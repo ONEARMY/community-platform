@@ -8,6 +8,7 @@ import { RootStore } from '..'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { IUploadedFileMeta, Storage } from '../storage'
 import { useCommonStores } from 'src'
+import { makeObservable } from 'mobx'
 
 /**
  * The module store is used to share methods and data between other stores, including
@@ -26,6 +27,7 @@ export class ModuleStore {
   // when a module store is initiated automatically load the docs in the collection
   // this can be subscribed to in individual stores
   constructor(private rootStore: RootStore, basePath?: IDBEndpoint) {
+    makeObservable(this)
     if (!rootStore) {
       this.rootStore = useCommonStores()
     }

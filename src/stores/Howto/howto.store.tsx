@@ -1,4 +1,4 @@
-import { observable, action, computed, toJS } from 'mobx'
+import { observable, action, computed, toJS, makeObservable } from 'mobx'
 import {
   IHowto,
   IHowtoFormInput,
@@ -30,6 +30,7 @@ export class HowtoStore extends ModuleStore {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
     super(rootStore, COLLECTION_NAME)
+    makeObservable(this)
     this.allDocs$.subscribe((docs: IHowtoDB[]) => {
       this.allHowtos = docs.sort((a, b) => (a._created < b._created ? 1 : -1))
     })

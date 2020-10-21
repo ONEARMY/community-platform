@@ -79,10 +79,8 @@ class CollectionReference<T> {
         const cached = await cacheDB.getCollection<T>(endpoint)
         totals.cached = cached.length
         obs.next(cached)
-        let useServerCache = false
         if (cached.length === 0) {
           // 2. If no cache, populate using large query db
-          useServerCache = true
           const serverCache = await serverCacheDB.getCollection<T>(endpoint)
           totals.serverCache = serverCache.length
           await cacheDB.setBulkDocs(endpoint, serverCache)

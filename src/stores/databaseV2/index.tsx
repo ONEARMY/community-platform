@@ -1,4 +1,3 @@
-import { startOfYesterday } from 'date-fns'
 import { DexieClient } from './clients/dexie'
 import { FirestoreClient } from './clients/firestore'
 import { RealtimeDBClient } from './clients/rtdb'
@@ -110,10 +109,7 @@ class CollectionReference<T> {
         })
         // 4. Check for any document deletes, and remove as appropriate
         // Assume archive will have been checked after last updated record sync
-        // Or, if first sync since the cache was last updated (daily)
-        const lastArchive = useServerCache
-          ? startOfYesterday().toISOString()
-          : latest
+        const lastArchive = latest
         serverDB.streamCollection!(`_archived/${endpoint}/summary`, {
           order: 'asc',
           where: { field: '_archived', operator: '>', value: lastArchive },
@@ -122,8 +118,9 @@ class CollectionReference<T> {
           for (const docId of archiveIds) {
             try {
               cacheDB.deleteDoc(endpoint, docId)
+            } catch (error) {
               // might already be deleted so ignore error
-            } catch (error) {}
+            }
           }
           const allDocs = await cacheDB.getCollection<T>(endpoint)
           obs.next(allDocs)
@@ -257,7 +254,7 @@ class DocReference<T> {
    * TODO - let a user restore their own archived docs
    */
   async delete() {
-    const { serverDB } = this.clients
+    const { serverDB, serverCacheDB } = this.clients
     const doc = (await this.get()) as any
     await serverDB.setDoc(`_archived/${this.endpoint}/summary`, {
       _archived: new Date().toISOString(),
@@ -266,7 +263,7 @@ class DocReference<T> {
     })
     await serverDB.setDoc(`_archived/${this.endpoint}/docs`, doc)
     await serverDB.deleteDoc(this.endpoint, this.id)
-    // note - cachedb will be deleted via sync mechanism
+    await serverCacheDB.deleteDoc(this.endpoint, this.id)
   }
 
   batchDoc(data: any) {

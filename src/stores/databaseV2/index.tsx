@@ -257,7 +257,7 @@ class DocReference<T> {
    * TODO - let a user restore their own archived docs
    */
   async delete() {
-    const { cacheDB, serverDB } = this.clients
+    const { serverDB } = this.clients
     const doc = (await this.get()) as any
     await serverDB.setDoc(`_archived/${this.endpoint}/summary`, {
       _archived: new Date().toISOString(),
@@ -265,8 +265,8 @@ class DocReference<T> {
       _createdBy: doc._createdBy || null,
     })
     await serverDB.setDoc(`_archived/${this.endpoint}/docs`, doc)
-    await cacheDB.deleteDoc(this.endpoint, this.id)
     await serverDB.deleteDoc(this.endpoint, this.id)
+    // note - cachedb will be deleted via sync mechanism
   }
 
   batchDoc(data: any) {

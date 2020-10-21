@@ -1,14 +1,8 @@
 import { observable, action } from 'mobx'
 import { IUser, IUserDB } from 'src/models/user.models'
 import { IUserPP, IUserPPDB } from 'src/models/user_pp.models'
-import {
-  IFirebaseUser,
-  auth,
-  EmailAuthProvider,
-  functions,
-} from 'src/utils/firebase'
+import { IFirebaseUser, auth, EmailAuthProvider } from 'src/utils/firebase'
 import { Storage } from '../storage'
-import { notificationPublish } from '../Notifications/notifications.service'
 import { RootStore } from '..'
 import { ModuleStore } from '../common/module.store'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
@@ -151,22 +145,6 @@ export class UserStore extends ModuleStore {
   public async updateUserAvatar() {
     console.log('updating user avatar')
     // *** TODO -
-  }
-
-  // during DHSite migration want to copy existing BP avatar to server
-  public async setUserAvatarFromUrl(url: string) {
-    console.log('setting user avatar', url)
-    try {
-      await functions.httpsCallable('DHSite_migrateAvatar')({
-        avatarUrl: url,
-        user: this.user ? this.user._id : null,
-      })
-      // use pubsub to let avatar component know new avatar available
-      console.log('publishing message')
-      notificationPublish('Profile.Avatar.Updated')
-    } catch (error) {
-      console.log('error', error)
-    }
   }
 
   public async changeUserPassword(oldPassword: string, newPassword: string) {

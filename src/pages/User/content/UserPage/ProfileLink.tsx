@@ -35,7 +35,7 @@ const ProfileLinkIcon = (link: IProps['link']) => {
     forum: IconForum,
     website: IconWebsite,
     email: IconEmail,
-    'social media': IconSocial,
+    'social-media': IconSocial,
     bazar: IconBazar,
     discord: IconDiscord,
     facebook: IconSocial,

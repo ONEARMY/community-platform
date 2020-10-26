@@ -128,6 +128,7 @@ class Controls extends React.Component<any, IState> {
                     }
                   : { pathname: '/sign-up' }
               }
+              onClick={e => (window.location.href = e.currentTarget.href)}
             >
               <Button variant={'primary'}>My pin</Button>
             </Link>

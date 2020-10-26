@@ -35,13 +35,13 @@ const ProfileLinkIcon = (link: IProps['link']) => {
     forum: IconForum,
     website: IconWebsite,
     email: IconEmail,
-    'social-media': IconSocial,
+    'social media': IconSocial,
     bazar: IconBazar,
     discord: IconDiscord,
     facebook: IconSocial,
     instagram: IconSocial,
   }
-  return icons[label]
+  return icons[label.replace('-', ' ')]
 }
 
 const ProfileLink = (props: IProps) => {

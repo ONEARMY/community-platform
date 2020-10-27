@@ -1,6 +1,7 @@
 import * as React from 'react'
 import Flex from 'src/components/Flex'
 import { RouteComponentProps, withRouter } from 'react-router'
+import { Redirect } from 'react-router'
 import Heading from 'src/components/Heading'
 import { Button } from 'src/components/Button'
 import Text from 'src/components/Text'
@@ -117,6 +118,10 @@ class SignInPage extends React.Component<IProps, IState> {
 
   public render() {
     const { authProvider, notificationProps } = this.state
+    if (this.props.userStore!.user) {
+      // User logged in
+      return <Redirect to={'/'} />
+    }
     return (
       <Form
         onSubmit={v => this.onLoginSubmit(v as IFormValues)}

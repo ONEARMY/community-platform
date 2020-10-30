@@ -12,7 +12,7 @@ import { GroupingFilterDesktop } from './GroupingFilterDesktop'
 import { GroupingFilterMobile } from './GroupingFilterMobile'
 
 import { IPinGrouping, IMapGrouping, IMapPinType } from 'src/models/maps.models'
-import { Link } from 'src/components/Links'
+import { HashLink as Link } from 'react-router-hash-link'
 import { Map } from 'react-leaflet'
 import { ILocation } from 'src/models/common.models'
 import { zIndex } from 'src/themes/styled.theme'

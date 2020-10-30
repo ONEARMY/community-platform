@@ -41,7 +41,7 @@ const ProfileLinkIcon = (link: IProps['link']) => {
     facebook: IconSocial,
     instagram: IconSocial,
   }
-  return icons[label]
+  return icons[label.replace('-', ' ')]
 }
 
 const ProfileLink = (props: IProps) => {

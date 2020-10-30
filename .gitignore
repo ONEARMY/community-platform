@@ -30,6 +30,7 @@ yarn-debug.log*
 yarn-error.log*
 .vscode
 .firebase/
+*.log
 
 # IntelliJ
 /.idea

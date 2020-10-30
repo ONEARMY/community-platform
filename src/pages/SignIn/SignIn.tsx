@@ -40,18 +40,13 @@ interface IAuthProvider {
   inputLabel: string
 }
 
-const AUTH_PROVIDERS: IAuthProvider[] = [
-  {
-    provider: 'DH',
-    buttonLabel: 'Dave Hakkens',
-    inputLabel: 'davehakkens.nl Username',
-  },
-  {
+const AUTH_PROVIDERS: { [provider: string]: IAuthProvider } = {
+  firebase: {
     provider: 'Firebase',
     buttonLabel: 'Email / Password',
     inputLabel: 'Email Address',
   },
-]
+}
 
 @inject('userStore')
 @observer
@@ -65,8 +60,7 @@ class SignInPage extends React.Component<IProps, IState> {
         email: props.preloadValues ? props.preloadValues.email : '',
         password: props.preloadValues ? props.preloadValues.password : '',
       },
-      // TODO remove initialization of authProvider state when DH login will be fixed
-      authProvider: AUTH_PROVIDERS[1],
+      authProvider: AUTH_PROVIDERS.firebase,
     }
 
     this.hideNotification = this.hideNotification.bind(this)
@@ -171,7 +165,7 @@ class SignInPage extends React.Component<IProps, IState> {
                           <Text mb={3} mt={3}>
                             Login with :
                           </Text>
-                          {AUTH_PROVIDERS.map(p => (
+                          {Object.values(AUTH_PROVIDERS).map(p => (
                             <Button
                               width={1}
                               key={p.provider}

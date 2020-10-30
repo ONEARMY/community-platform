@@ -1,6 +1,5 @@
 import React from 'react'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
-import { LoginComponent } from 'src/pages/common/Login/Login'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import Flex from 'src/components/Flex'
@@ -86,12 +85,8 @@ export default class Profile extends React.Component<IProps, IState> {
               </Flex>
             </div>
           )
-        ) : this.props.isMobile ? (
-          <ProfileButtons isMobile={true} />
         ) : (
-          // once LoginComponent is removed, this will become more readable
-          // with just changing the isMobile boolean
-          <LoginComponent />
+          <ProfileButtons isMobile={this.props.isMobile} />
         )}
       </>
     )

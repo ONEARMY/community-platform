@@ -401,7 +401,6 @@ export class UserPage extends React.Component<
         },
       )
     }
-    // TODO check if user exist and have created how-to or events
     const shouldRenderUserStatsBox =
       user &&
       (user.location ||

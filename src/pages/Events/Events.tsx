@@ -3,9 +3,7 @@ import { inject, observer } from 'mobx-react'
 import { EventStore } from 'src/stores/Events/events.store'
 import { EventsCreate } from './Content/EventsCreate/EventsCreate'
 import { EventsList } from './Content/EventsList/EventsList'
-
 import { withRouter, Switch, Route } from 'react-router'
-import { AuthRoute } from '../common/AuthRoute'
 
 // see similar implementation in 'how-to' page for more detailed commenting
 interface IProps {
@@ -29,7 +27,7 @@ class EventsPageClass extends React.Component<IProps, any> {
           path="/events"
           render={props => <EventsList {...props} />}
         />
-        <AuthRoute
+        <Route
           path="/events/create"
           component={EventsCreate}
           redirectPath="/events"

@@ -95,12 +95,13 @@ describe('[Bugs]', () => {
   //   cy.get('[data-cy=notification-confirmation]').should('be.visible')
   // })
 
-  // it('[679]', () => {
-  //   cy.step('Ask users to login before creating an event')
-  //   cy.logout()
-  //   cy.visit('/events/create')
-  //   cy.get('div').contains('Please login to access this page')
-  // })
+   it('[679]', () => {
+     cy.visit('/how-to')
+     cy.step('Ask users to login before creating an event')
+     cy.logout()
+     cy.visit('/events/create')
+     cy.get('div').contains('Please login to access this page')
+   })
 
   // it('[676]', () => {
   //   cy.visit('/how-to/unknown-anything')

@@ -21,6 +21,8 @@ import { validateUrl, addProtocolMutator, required } from 'src/utils/validators'
 import { Box } from 'rebass'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import IconHeaderEvents from 'src/assets/images/header-section/events-header-icon.svg'
+import { IUser } from 'src/models/user.models'
+import { UserStore } from 'src/stores/User/user.store'
 
 interface IState {
   formValues: IEventFormInput
@@ -32,6 +34,7 @@ interface IState {
 type IProps = RouteComponentProps<any>
 interface IInjectedProps extends IProps {
   eventStore: EventStore
+  userStore: UserStore
 }
 
 const FormContainer = styled.form`
@@ -43,7 +46,7 @@ const Label = styled.label`
   margin-bottom: ${theme.space[2] + 'px'};
 `
 
-@inject('eventStore')
+@inject('eventStore', 'userStore')
 export class EventsCreate extends React.Component<IProps, IState> {
   uploadRefs: { [key: string]: UploadedFile | null } = {}
   constructor(props: any) {
@@ -77,7 +80,8 @@ export class EventsCreate extends React.Component<IProps, IState> {
 
   public render() {
     const { formValues, isLocationSelected } = this.state
-    return (
+    const currentUser = this.injected.userStore.user as IUser
+    return currentUser ? (
       <Form
         onSubmit={v => {
           const datepickerDate = this.state.selectedDate
@@ -279,6 +283,10 @@ export class EventsCreate extends React.Component<IProps, IState> {
           )
         }}
       />
+    ) : (
+      <Flex justifyContent="center" mt="40px">
+        <Text regular>Please login to access this page</Text>
+      </Flex>
     )
   }
 }

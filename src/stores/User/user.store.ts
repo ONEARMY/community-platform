@@ -23,6 +23,9 @@ export class UserStore extends ModuleStore {
   public authUser: firebase.User | null
 
   @observable
+  public userUpdated: boolean = false /** to know if user's data are ready ! */
+
+  @observable
   public updateStatus: IUserUpdateStatus = getInitialUpdateStatus()
 
   @action
@@ -85,6 +88,7 @@ export class UserStore extends ModuleStore {
           `could not find user profile [${user.uid} - ${user.email} - ${user.metadata}]`,
         )
       }
+      this.userUpdated = true
     }
   }
 
@@ -228,6 +232,7 @@ export class UserStore extends ModuleStore {
         }
       } else {
         this.updateUser(undefined)
+        this.userUpdated = true
       }
     })
   }

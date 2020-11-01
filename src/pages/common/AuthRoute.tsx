@@ -37,6 +37,9 @@ export class AuthRoute extends React.Component<IProps, IState> {
 
   render() {
     // user ! to let typescript know property will exist (injected) instead of additional getter method
+    if (!this.props.userStore!.userUpdated) {
+      return <p>Loading...</p>
+    }
     const isAuthenticated = this.isUserAuthenticated()
     const { component: Component, redirectPath, ...rest } = this.props
     return (

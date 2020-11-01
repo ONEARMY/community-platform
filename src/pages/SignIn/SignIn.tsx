@@ -112,6 +112,9 @@ class SignInPage extends React.Component<IProps, IState> {
 
   public render() {
     const { authProvider, notificationProps } = this.state
+    if (!this.props.userStore!.userUpdated) {
+      return <p>Loading...</p>
+    }
     if (this.props.userStore!.user) {
       // User logged in
       return <Redirect to={'/'} />

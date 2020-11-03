@@ -8,7 +8,10 @@ import createDecorator from 'final-form-calculate'
 import { IHowtoFormInput } from 'src/models/howto.models'
 import Text from 'src/components/Text'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
-import { InputField, TextAreaField } from 'src/components/Form/Fields'
+import {
+  FormattedInputField,
+  FormattedTextAreaField,
+} from 'src/components/Form/Fields'
 import { SelectField } from 'src/components/Form/Select.field'
 import { HowtoStep } from './HowtoStep.form'
 import { Button } from 'src/components/Button'
@@ -228,7 +231,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                     ? this.validateTitle(value)
                                     : false
                                 }
-                                component={InputField}
+                                component={FormattedInputField}
                                 maxLength="50"
                                 placeholder="Make a chair from.. (max 50 characters)"
                               />
@@ -282,7 +285,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 data-cy="intro-description"
                                 validate={required}
                                 validateFields={[]}
-                                component={TextAreaField}
+                                component={FormattedTextAreaField}
                                 style={{
                                   resize: 'none',
                                   flex: 1,

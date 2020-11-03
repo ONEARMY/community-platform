@@ -8,6 +8,7 @@ import {
 } from './elements'
 import { FieldRenderProps } from 'react-final-form'
 import 'react-datepicker/dist/react-datepicker.css'
+import { capitalizeFirstLetter } from 'src/utils/helpers'
 
 // any props can be passed to field and down to child component
 // input and meta props come from react field render props and will be
@@ -25,6 +26,9 @@ interface IDatePickerFieldProps extends IFieldProps {
   customChange?: (location) => void
 }
 
+const toCapitalizedFirstletterInput = e => {
+  e.target.value = capitalizeFirstLetter(e.target.value)
+}
 export const InputField = ({
   input,
   meta,
@@ -42,6 +46,30 @@ export const InputField = ({
         }
         input.onBlur()
       }}
+    />
+    {meta.error && meta.touched ? (
+      <ErrorMessage>{meta.error}</ErrorMessage>
+    ) : null}
+  </>
+)
+export const FormattedInputField = ({
+  input,
+  meta,
+  customOnBlur,
+  ...rest
+}: IFieldProps) => (
+  <>
+    <Input
+      invalid={meta.error && meta.touched}
+      {...input}
+      {...rest}
+      onBlur={e => {
+        if (customOnBlur) {
+          customOnBlur(e)
+        }
+        input.onBlur()
+      }}
+      onInput={toCapitalizedFirstletterInput}
     />
     {meta.error && meta.touched ? (
       <ErrorMessage>{meta.error}</ErrorMessage>
@@ -93,6 +121,27 @@ export const TextAreaField = ({
         invalid={meta.error && meta.touched}
         {...input}
         {...rest}
+      />
+      {meta.error && meta.touched && <ErrorMessage>{meta.error}</ErrorMessage>}
+    </>
+  )
+
+export const FormattedTextAreaField = ({
+  input,
+  meta,
+  disabled,
+  ...rest
+}: IFieldProps) =>
+  disabled ? (
+    // want disabled textarea to just render as styled div to remove scrollbars
+    <TextAreaDisabled>{input.value}</TextAreaDisabled>
+  ) : (
+    <>
+      <TextAreaStyled
+        invalid={meta.error && meta.touched}
+        {...input}
+        {...rest}
+        onInput={toCapitalizedFirstletterInput}
       />
       {meta.error && meta.touched && <ErrorMessage>{meta.error}</ErrorMessage>}
     </>

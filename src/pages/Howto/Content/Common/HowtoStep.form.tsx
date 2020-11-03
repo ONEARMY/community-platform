@@ -1,6 +1,10 @@
 import React from 'react'
 import { Field } from 'react-final-form'
-import { TextAreaField, InputField } from 'src/components/Form/Fields'
+import {
+  FormattedTextAreaField,
+  FormattedInputField,
+  InputField,
+} from 'src/components/Form/Fields'
 import Heading from 'src/components/Heading'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import Flex from 'src/components/Flex'
@@ -142,7 +146,7 @@ class HowtoStep extends React.PureComponent<IProps, IState> {
           <Field
             name={`${step}.title`}
             data-cy="step-title"
-            component={InputField}
+            component={FormattedInputField}
             placeholder="Title of this step (max 30 characters)"
             maxLength="30"
             validate={required}
@@ -156,7 +160,7 @@ class HowtoStep extends React.PureComponent<IProps, IState> {
             placeholder="Explain what you are doing in this step. if it gets to long break it into 2 steps (max 700 characters)"
             maxLength="700"
             data-cy="step-description"
-            component={TextAreaField}
+            component={FormattedTextAreaField}
             style={{ resize: 'vertical', height: '300px' }}
             validate={required}
             validateFields={[]}

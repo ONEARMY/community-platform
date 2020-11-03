@@ -4,7 +4,11 @@ import { Form, Field } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import TEMPLATE from './Template'
 import { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
-import { InputField, DatePickerField } from 'src/components/Form/Fields'
+import {
+  FormattedInputField,
+  InputField,
+  DatePickerField,
+} from 'src/components/Form/Fields'
 import { Button } from 'src/components/Button'
 import { EventStore } from 'src/stores/Events/events.store'
 import Heading from 'src/components/Heading'
@@ -153,7 +157,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                           data-cy="title"
                           validate={required}
                           validateFields={[]}
-                          component={InputField}
+                          component={FormattedInputField}
                           maxLength="140"
                           placeholder="Title of your event (max 140 characters)"
                         />

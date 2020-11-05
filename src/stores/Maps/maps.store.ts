@@ -59,7 +59,11 @@ export class MapsStore extends ModuleStore {
       const isPinAccepted = p.moderation === 'accepted'
       const wasCreatedByUser = activeUser && p._id === activeUser.userName
       const isAdminAndAccepted = isAdmin && p.moderation !== 'rejected'
-      return p.type && (isPinAccepted || wasCreatedByUser || isAdminAndAccepted)
+      return (
+        p.type &&
+        p.type !== 'member' &&
+        (isPinAccepted || wasCreatedByUser || isAdminAndAccepted)
+      )
     })
     if (IS_MOCK) {
       pins = MOCK_PINS

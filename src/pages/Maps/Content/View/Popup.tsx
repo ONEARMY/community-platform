@@ -107,59 +107,59 @@ export class Popup extends React.Component<IProps> {
 
     return (
       <>
-        <HeroImage src={heroImageUrl} onError={addFallbackSrc} />
-        <Flex flexDirection={'column'} px={2} py={2}>
-          <Text tags mb={2}>
-            {group ? group.displayName : pin.type}
-          </Text>
-          <Link to={'/u/' + name}>
+        <Link to={'/u/' + name}>
+          <HeroImage src={heroImageUrl} onError={addFallbackSrc} />
+          <Flex flexDirection={'column'} px={2} py={2}>
+            <Text tags mb={2}>
+              {group ? group.displayName : pin.type}
+            </Text>
             <Text medium mb={1}>
               {name}
             </Text>
-          </Link>
-          <Text small mb={2} style={{ wordBreak: 'break-word' }}>
-            {description}
-          </Text>
-          <LastOnline>last active {lastActiveText} ago</LastOnline>
-          {pin.moderation !== 'accepted' && (
-            <Text
-              auxiliary
-              small
-              bold
-              mb={2}
-              highlight
-              dashed
-              critical={pin.moderation === 'rejected'}
-            >
-              {moderationStatus}
+            <Text small mb={2} style={{ wordBreak: 'break-word' }}>
+              {description}
             </Text>
-          )}
-          {this.store.needsModeration(pin) && (
-            <Flex
-              flexDirection={'row'}
-              px={10}
-              py={1}
-              justifyContent={'space-around'}
-            >
-              <Button
+            <LastOnline>Last active {lastActiveText} ago</LastOnline>
+            {pin.moderation !== 'accepted' && (
+              <Text
+                auxiliary
                 small
-                data-cy={'accept'}
-                variant={'primary'}
-                icon="check"
-                onClick={() => this.moderatePin(true)}
-                sx={{ height: '30px' }}
-              />
-              <Button
-                small
-                data-cy="reject-pin"
-                variant={'tertiary'}
-                icon="delete"
-                onClick={() => this.moderatePin(false)}
-                sx={{ height: '30px' }}
-              />
-            </Flex>
-          )}
-        </Flex>
+                bold
+                mb={2}
+                highlight
+                dashed
+                critical={pin.moderation === 'rejected'}
+              >
+                {moderationStatus}
+              </Text>
+            )}
+            {this.store.needsModeration(pin) && (
+              <Flex
+                flexDirection={'row'}
+                px={10}
+                py={1}
+                justifyContent={'space-around'}
+              >
+                <Button
+                  small
+                  data-cy={'accept'}
+                  variant={'primary'}
+                  icon="check"
+                  onClick={() => this.moderatePin(true)}
+                  sx={{ height: '30px' }}
+                />
+                <Button
+                  small
+                  data-cy="reject-pin"
+                  variant={'tertiary'}
+                  icon="delete"
+                  onClick={() => this.moderatePin(false)}
+                  sx={{ height: '30px' }}
+                />
+              </Flex>
+            )}
+          </Flex>
+        </Link>
       </>
     )
   }

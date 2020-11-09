@@ -1,6 +1,7 @@
 import React from 'react'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { format } from 'date-fns'
+import { FaStar, FaRegStar } from 'react-icons/fa'
 import { IHowtoDB } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
@@ -67,7 +68,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
         }}
       >
         <Flex px={4} py={4} flexDirection={'column'} width={[1, 1, 1 / 2]}>
-          <Flex justifyContent={'space-between'}>
+          <Flex>
             <Link to={'/how-to/'}>
               <Button variant="subtle" fontSize="14px" data-cy="go-back">
                 <Flex>
@@ -83,6 +84,12 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
                 </Flex>
               </Button>
             </Link>
+            <Button variant="subtle" fontSize="14px" data-cy="go-back" ml="8px">
+              <Flex>
+                {true ? <FaStar /> : <FaRegStar />}
+                <Text ml={1}>Useful {10}</Text>
+              </Flex>
+            </Button>
             {/* Check if pin should be moderated */}
             {this.props.needsModeration && (
               <Flex justifyContent={'space-between'}>

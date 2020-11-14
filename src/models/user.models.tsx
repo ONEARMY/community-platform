@@ -58,6 +58,7 @@ interface IExternalLink {
 interface IUserStats {
   userCreatedHowtos: { [id: string]: IModerationStatus }
   userCreatedEvents: { [id: string]: IModerationStatus }
+  usefUlHowTos: string[]
 }
 
 export type IUserDB = IUser & DBDoc

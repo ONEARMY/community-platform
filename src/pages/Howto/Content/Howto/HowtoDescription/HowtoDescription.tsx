@@ -68,7 +68,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
         }}
       >
         <Flex px={4} py={4} flexDirection={'column'} width={[1, 1, 1 / 2]}>
-          <Flex>
+          <Flex justifyContent="space-between" flexWrap="wrap">
             <Link to={'/how-to/'}>
               <Button variant="subtle" fontSize="14px" data-cy="go-back">
                 <Flex>
@@ -84,12 +84,19 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
                 </Flex>
               </Button>
             </Link>
-            <Button variant="subtle" fontSize="14px" data-cy="go-back" ml="8px">
-              <Flex>
-                {true ? <FaStar /> : <FaRegStar />}
-                <Text ml={1}>Useful {10}</Text>
-              </Flex>
-            </Button>
+            <Box style={{ flexGrow: 1 }}>
+              <Button
+                variant="subtle"
+                fontSize="14px"
+                ml="8px"
+                backgroundColor="#f5ede2"
+              >
+                <Flex>
+                  {true ? <FaStar /> : <FaRegStar />}
+                  <Text ml={1}>Useful {10}</Text>
+                </Flex>
+              </Button>
+            </Box>
             {/* Check if pin should be moderated */}
             {this.props.needsModeration && (
               <Flex justifyContent={'space-between'}>

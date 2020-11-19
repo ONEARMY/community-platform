@@ -35,6 +35,8 @@ export const migrateUserStats = functions.https.onCall(
           stats: {
             userCreatedEvents: allEventsByUser[userId] || {},
             userCreatedHowtos: allHowtosByUser[userId] || {},
+            //TODO
+            usefulHowTos: [],
           },
           _modified: new Date().toISOString(),
         }

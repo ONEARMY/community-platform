@@ -134,6 +134,8 @@ export class HowtoStore extends ModuleStore {
         ...values,
         _createdBy: values._createdBy ? values._createdBy : user.userName,
         cover_image: processedCover,
+        // TODO
+        usefulCount: 0,
         steps: processedSteps,
         files: processedFiles,
         moderation: values.moderation

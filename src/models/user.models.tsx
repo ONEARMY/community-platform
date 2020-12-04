@@ -37,6 +37,7 @@ export interface IUser {
   location?: ILocation | null
   year?: ISODateString
   stats?: IUserStats
+  usefulHowTos?: string[]
 }
 
 interface IExternalLink {
@@ -58,7 +59,6 @@ interface IExternalLink {
 interface IUserStats {
   userCreatedHowtos: { [id: string]: IModerationStatus }
   userCreatedEvents: { [id: string]: IModerationStatus }
-  usefulHowTos: string[]
 }
 
 export type IUserDB = IUser & DBDoc

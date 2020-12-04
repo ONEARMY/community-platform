@@ -13,4 +13,5 @@ export const MOCK_USER: IUser = {
   country: '',
   coverImages: [],
   links: [],
+  usefulHowTos: [],
 }

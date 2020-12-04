@@ -137,6 +137,7 @@ export const MOCK_USER_COLLECTION: IUserPP = {
   openingHours: [],
   collectedPlasticTypes: [],
   machineBuilderXp: [],
+  usefulHowTos: [],
 }
 export const MOCK_USER_MEMBER: IUserPP = {
   verified: true,
@@ -189,6 +190,7 @@ export const MOCK_USER_MEMBER: IUserPP = {
   openingHours: [],
   collectedPlasticTypes: [],
   machineBuilderXp: [],
+  usefulHowTos: [],
 }
 export const MOCK_USER_COMMUNITY: IUserPP = {
   verified: true,
@@ -243,6 +245,7 @@ export const MOCK_USER_COMMUNITY: IUserPP = {
   openingHours: [],
   collectedPlasticTypes: [],
   machineBuilderXp: [],
+  usefulHowTos: [],
 }
 export const MOCK_USER_MACHINE: IUserPP = {
   verified: true,
@@ -297,6 +300,7 @@ export const MOCK_USER_MACHINE: IUserPP = {
   openingHours: [],
   collectedPlasticTypes: [],
   machineBuilderXp: [],
+  usefulHowTos: [],
 }
 
 export const PLASTIC_TYPES: IPlasticType[] = [

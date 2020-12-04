@@ -21,6 +21,7 @@ import { zIndex } from 'src/themes/styled.theme'
 import { Loader } from 'src/components/Loader'
 import { Route } from 'react-router-dom'
 import { NotFoundPage } from '../../../NotFound/NotFound'
+import { UserStore } from 'src/stores/User/user.store'
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
 // We can't directly provide the store as a prop though, and later user a get method to define it
@@ -29,6 +30,7 @@ interface IRouterCustomParams {
 }
 interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
   howtoStore: HowtoStore
+  userStore: UserStore
 }
 interface IState {
   howto?: IHowtoDB
@@ -71,7 +73,7 @@ const MoreBox = styled(Box)`
   }
 `
 
-@inject('howtoStore')
+@inject('howtoStore', 'userStore')
 @observer
 export class Howto extends React.Component<
   RouteComponentProps<IRouterCustomParams>,
@@ -80,7 +82,6 @@ export class Howto extends React.Component<
   constructor(props: any) {
     super(props)
     this.state = {
-      howto: undefined,
       isLoading: true,
     }
   }
@@ -94,30 +95,48 @@ export class Howto extends React.Component<
   }
 
   private moderateHowto = async (accepted: boolean) => {
-    const howto = this.state.howto
-    if (!howto) {
-      return false
+    const _howto = this.store.activeHowto
+    if (_howto) {
+      _howto.moderation = accepted ? 'accepted' : 'rejected'
+      await this.store.moderateHowto(_howto)
     }
-    howto.moderation = accepted ? 'accepted' : 'rejected'
-    await this.store.moderateHowto(howto)
     this.setState({
-      howto,
-      isLoading: this.state.isLoading,
+      isLoading: this.state.isLoading, // Why?
     })
+  }
+
+  private onUsefulClick = async () => {
+    if (this.store.activeHowto) {
+      let count = this.store.activeHowto.usefulCount
+      const usefulHowTos =
+        this.injected.userStore.activeUser &&
+        this.injected.userStore.activeUser.usefulHowTos
+          ? this.injected.userStore.activeUser.usefulHowTos
+          : []
+      if (this.store.isActiveHowToUseful) {
+        count--
+        usefulHowTos.splice(usefulHowTos.indexOf(this.store.activeHowto._id), 1)
+      } else {
+        count++
+        usefulHowTos.push(this.store.activeHowto._id)
+      }
+      await this.injected.userStore.updateUsefulHowTos(usefulHowTos)
+      await this.store.updateUsefulCount(count)
+    }
   }
 
   public async componentWillMount() {
     const slug = this.props.match.params.slug
-    const doc = await this.injected.howtoStore.getDocBySlug(slug)
+    await this.store.getDocBySlug(slug)
     this.setState({
-      howto: doc,
       isLoading: false,
     })
   }
 
   public render() {
-    const { howto, isLoading } = this.state
-    const loggedInUser = this.injected.howtoStore.activeUser
+    const { isLoading } = this.state
+    const loggedInUser = this.injected.userStore.activeUser
+    const howto = this.store.activeHowto
     if (howto) {
       return (
         <>
@@ -126,6 +145,7 @@ export class Howto extends React.Component<
             loggedInUser={loggedInUser}
             needsModeration={this.store.needsModeration(howto)}
             moderateHowto={this.moderateHowto}
+            onUsefulClick={this.onUsefulClick}
           />
           {/* <HowtoSummary steps={howto.steps} howToSlug={howto.slug} /> */}
           <Box mt={9}>

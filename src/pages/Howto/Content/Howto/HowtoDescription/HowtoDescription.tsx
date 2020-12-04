@@ -24,6 +24,7 @@ interface IProps {
   loggedInUser: IUser | undefined
   needsModeration: boolean
   moderateHowto: (accepted: boolean) => void
+  onUsefulClick: () => void
 }
 
 export default class HowtoDescription extends React.PureComponent<IProps, any> {
@@ -88,12 +89,18 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
               <Button
                 variant="subtle"
                 fontSize="14px"
+                onClick={this.props.onUsefulClick}
                 ml="8px"
                 backgroundColor="#f5ede2"
               >
                 <Flex>
                   {true ? <FaStar /> : <FaRegStar />}
-                  <Text ml={1}>Useful {10}</Text>
+                  <Text ml={1}>
+                    Useful{' '}
+                    {this.props.howto.usefulCount
+                      ? this.props.howto.usefulCount
+                      : 0}
+                  </Text>
                 </Flex>
               </Button>
             </Box>

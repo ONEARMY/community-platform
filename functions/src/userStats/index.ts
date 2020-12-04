@@ -55,7 +55,6 @@ async function updateStats(
       user.stats = user.stats || {
         userCreatedEvents: {},
         userCreatedHowtos: {},
-        usefulHowTos: [],
       }
       if (target === 'userCreatedEvents' || target === 'userCreatedHowtos')
         user.stats[target] = {

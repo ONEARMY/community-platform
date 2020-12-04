@@ -107,8 +107,10 @@ export class Howto extends React.Component<
 
   private onUsefulClick = async () => {
     if (this.store.activeHowto) {
-      let count = this.store.activeHowto.usefulCount
-      const usefulHowTos =
+      let count: number = this.store.activeHowto.usefulCount
+        ? this.store.activeHowto.usefulCount
+        : 0
+      const usefulHowTos: string[] =
         this.injected.userStore.activeUser &&
         this.injected.userStore.activeUser.usefulHowTos
           ? this.injected.userStore.activeUser.usefulHowTos
@@ -144,6 +146,7 @@ export class Howto extends React.Component<
             howto={howto}
             loggedInUser={loggedInUser}
             needsModeration={this.store.needsModeration(howto)}
+            isUseful={this.store.isActiveHowToUseful}
             moderateHowto={this.moderateHowto}
             onUsefulClick={this.onUsefulClick}
           />

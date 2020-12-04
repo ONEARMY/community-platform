@@ -199,7 +199,7 @@ export class HowtoStore extends ModuleStore {
 
   @action
   public async updateUsefulCount(usefulCount: number) {
-    if (!!this.activeHowto) {
+    if (!!this.activeHowto && this.activeUser) {
       this.activeHowto = { ...this.activeHowto, usefulCount }
       await this.db
         .collection(COLLECTION_NAME)

@@ -23,9 +23,43 @@ interface IProps {
   howto: IHowtoDB
   loggedInUser: IUser | undefined
   needsModeration: boolean
+  isUseful: boolean
   moderateHowto: (accepted: boolean) => void
   onUsefulClick: () => void
 }
+
+const UsefulWrapper = ({
+  isLoggedIn,
+  onClick,
+  children,
+}: {
+  isLoggedIn: boolean
+  onClick: () => void
+  children: React.ReactChild
+}) =>
+  isLoggedIn ? (
+    <Button
+      variant="subtle"
+      fontSize="14px"
+      onClick={onClick}
+      ml="8px"
+      backgroundColor="#f5ede2"
+    >
+      {children}
+    </Button>
+  ) : (
+    <Box
+      variant="subtle"
+      p={[15, 10]}
+      sx={{ borderRadius: '5px' }}
+      display="inline-block"
+      fontSize="14px"
+      ml="8px"
+      backgroundColor="#f5ede2"
+    >
+      {children}
+    </Box>
+  )
 
 export default class HowtoDescription extends React.PureComponent<IProps, any> {
   // eslint-disable-next-line
@@ -86,15 +120,12 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
               </Button>
             </Link>
             <Box style={{ flexGrow: 1 }}>
-              <Button
-                variant="subtle"
-                fontSize="14px"
+              <UsefulWrapper
+                isLoggedIn={!!this.props.loggedInUser}
                 onClick={this.props.onUsefulClick}
-                ml="8px"
-                backgroundColor="#f5ede2"
               >
                 <Flex>
-                  {true ? <FaStar /> : <FaRegStar />}
+                  {this.props.isUseful ? <FaStar /> : <FaRegStar />}
                   <Text ml={1}>
                     Useful{' '}
                     {this.props.howto.usefulCount
@@ -102,7 +133,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
                       : 0}
                   </Text>
                 </Flex>
-              </Button>
+              </UsefulWrapper>
             </Box>
             {/* Check if pin should be moderated */}
             {this.props.needsModeration && (

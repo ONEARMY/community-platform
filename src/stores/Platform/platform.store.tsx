@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 import { RootStore } from '..'
 
 /*
@@ -11,7 +11,7 @@ type ISWStatus = 'updated' | null
 export class PlatformStore {
   // eslint-disable-next-line
   constructor(rootStore: RootStore) {
-    //
+    makeObservable(this)
   }
   @observable
   public serviceWorkerStatus: ISWStatus

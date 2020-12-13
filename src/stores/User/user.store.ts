@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 import { IUser, IUserDB } from 'src/models/user.models'
 import { IUserPP, IUserPPDB } from 'src/models/user_pp.models'
 import { IFirebaseUser, auth, EmailAuthProvider } from 'src/utils/firebase'
@@ -37,6 +37,7 @@ export class UserStore extends ModuleStore {
 
   constructor(rootStore: RootStore) {
     super(rootStore)
+    makeObservable(this)
     this._listenToAuthStateChanges()
   }
 

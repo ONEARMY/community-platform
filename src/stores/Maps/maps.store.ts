@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 import {
   IMapPin,
   IBoundingBox,
@@ -30,6 +30,7 @@ export class MapsStore extends ModuleStore {
   // eslint-disable-next-line
   constructor(rootStore: RootStore) {
     super(rootStore)
+    makeObservable(this)
   }
 
   @observable

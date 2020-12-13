@@ -1,6 +1,6 @@
 import { ModuleStore } from '../common/module.store'
 import { RootStore } from '..'
-import { action, observable } from 'mobx'
+import { action, observable, makeObservable } from 'mobx'
 import { IUser, UserRole } from 'src/models/user.models'
 import { ITag } from 'src/models/tags.model'
 import { functions } from 'src/utils/firebase'
@@ -20,6 +20,7 @@ export class AdminStore extends ModuleStore {
   // eslint-disable-next-line
   constructor(rootStore: RootStore) {
     super(rootStore)
+    makeObservable(this)
   }
 
   /*********************************************************************************

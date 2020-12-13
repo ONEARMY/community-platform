@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 import { ITag, TagCategory } from 'src/models/tags.model'
 import { arrayToJson } from 'src/utils/helpers'
 import { ModuleStore } from '../common/module.store'
@@ -19,6 +19,7 @@ export class TagsStore extends ModuleStore {
 
   constructor(rootStore: RootStore) {
     super(rootStore, 'tags')
+    makeObservable(this)
     this.allDocs$.subscribe((docs: ITag[]) => {
       console.log('tags docs', docs)
       this.allTags = docs.sort((a, b) => (a.label > b.label ? 1 : -1))

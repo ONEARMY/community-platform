@@ -1,11 +1,11 @@
 import * as React from 'react'
 import Text from 'src/components/Text'
-import { IResearchItemDB } from '../research.models'
+import { IResearch } from '../research.models'
 import { ResearchStoreContext } from '../research.store'
 import { Button } from 'src/components/Button'
 
 interface IProps {
-  item: IResearchItemDB
+  item: IResearch.ItemDB
 }
 
 export const ResearchListItem = (props: IProps) => {

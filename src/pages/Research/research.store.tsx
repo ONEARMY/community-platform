@@ -1,17 +1,17 @@
 import { observable, makeObservable } from 'mobx'
-import { IResearchItem, IResearchItemDB } from './research.models'
+import { IResearch } from './research.models'
 import { ModuleStore } from 'src/stores/common/module.store'
 import { createContext, useContext } from 'react'
 
 export class ResearchStore extends ModuleStore {
-  @observable public activeResearchItem: IResearchItemDB | undefined
-  @observable public allResearchItems: IResearchItemDB[] = []
+  @observable public activeResearchItem: IResearch.ItemDB | undefined
+  @observable public allResearchItems: IResearch.ItemDB[] = []
 
   constructor() {
     super(null as any, 'research')
     makeObservable(this)
 
-    this.allDocs$.subscribe((docs: IResearchItemDB[]) => {
+    this.allDocs$.subscribe((docs: IResearch.ItemDB[]) => {
       console.log('docs', docs)
       this.allResearchItems = docs.sort((a, b) =>
         a._created < b._created ? 1 : -1,
@@ -19,10 +19,10 @@ export class ResearchStore extends ModuleStore {
     })
   }
 
-  public createResearchItem(item: IResearchItem) {
+  public createResearchItem(item: IResearch.Item) {
     console.log('create research item', this.db)
     this.db
-      .collection('research')
+      .collection<IResearch.Item>('research')
       .doc()
       .set(item)
   }

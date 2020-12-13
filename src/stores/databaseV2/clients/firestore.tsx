@@ -41,6 +41,12 @@ export class FirestoreClient implements AbstractDBClient {
     const data = await ref.get()
     return data.empty ? [] : data.docs.map(doc => doc.data() as T)
   }
+  deleteDoc(endpoint: IDBEndpoint, docId: string) {
+    return db
+      .collection(endpoint)
+      .doc(docId)
+      .delete()
+  }
 
   /************************************************************************
    *  Additional Methods - specific only to firestore

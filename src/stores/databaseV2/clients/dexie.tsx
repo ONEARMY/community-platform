@@ -36,6 +36,9 @@ export class DexieClient implements AbstractDBClient {
   queryCollection<T>(endpoint: IDBEndpoint, queryOpts: DBQueryOptions) {
     return this._processQuery<T>(endpoint, queryOpts)
   }
+  deleteDoc(endpoint: IDBEndpoint, docId: string) {
+    return db.table(endpoint).delete(docId)
+  }
 
   /************************************************************************
    *  Additional Methods - specific only to dexie

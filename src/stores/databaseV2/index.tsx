@@ -105,6 +105,24 @@ class CollectionReference<T> {
           console.groupEnd()
           obs.next(allDocs)
         })
+        // 4. Check for any document deletes, and remove as appropriate
+        // Assume archive will have been checked after last updated record sync
+        const lastArchive = latest
+        serverDB.streamCollection!(`_archived/${endpoint}/summary`, {
+          order: 'asc',
+          where: { field: '_archived', operator: '>', value: lastArchive },
+        }).subscribe(async docs => {
+          const archiveIds = docs.map(d => d._id)
+          for (const docId of archiveIds) {
+            try {
+              cacheDB.deleteDoc(endpoint, docId)
+            } catch (error) {
+              // might already be deleted so ignore error
+            }
+          }
+          const allDocs = await cacheDB.getCollection<T>(endpoint)
+          obs.next(allDocs)
+        })
       },
     )
     const subscription = observer.subscribe(value => onUpdate(value))
@@ -227,13 +245,23 @@ class DocReference<T> {
   }
 
   /**
-   * Documents are artificially deleted by replacing all contents with basic metadata and
-   * `_deleted:true` property. This is so that other users can also sync the doc with their cache
-   * TODO - schedule server permanent delete and find more elegant solution to notify users
-   * to delete docs from their cache.
+   * Documents are artificially deleted by moving to an `_archived` collection, with separate entries
+   * for a metadata summary and the raw doc. This is required so that other users can sync deleted docs
+   * and delete from their own caches accordingly.
+   * TODO - add rules to restrict access to archive full docs, and schedule for permanent deletion
+   * TODO - let a user restore their own archived docs
    */
   async delete() {
-    return this.set({ _deleted: true } as any)
+    const { serverDB, serverCacheDB } = this.clients
+    const doc = (await this.get()) as any
+    await serverDB.setDoc(`_archived/${this.endpoint}/summary`, {
+      _archived: new Date().toISOString(),
+      _id: this.id,
+      _createdBy: doc._createdBy || null,
+    })
+    await serverDB.setDoc(`_archived/${this.endpoint}/docs`, doc)
+    await serverDB.deleteDoc(this.endpoint, this.id)
+    await serverCacheDB.deleteDoc(this.endpoint, this.id)
   }
 
   batchDoc(data: any) {

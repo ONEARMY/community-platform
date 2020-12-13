@@ -7,6 +7,7 @@ import { Button } from 'src/components/Button'
 import { observer } from 'mobx-react'
 import { Box } from 'rebass'
 import { MOCK_RESEARCH_ITEMS } from '../research.mocks'
+import { Link } from 'src/components/Links'
 
 export const ResearchList = observer(() => {
   const store = React.useContext(ResearchStoreContext)
@@ -14,7 +15,9 @@ export const ResearchList = observer(() => {
     <>
       <Text>Research List</Text>
       {store.allResearchItems.map(item => (
-        <ResearchListItem key={item._id} item={item} />
+        <Link key={item._id} to={'research/' + item.slug}>
+          <ResearchListItem item={item} />
+        </Link>
       ))}
       <Box mt={3}>
         <Button

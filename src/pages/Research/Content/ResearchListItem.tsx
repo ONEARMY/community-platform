@@ -1,17 +1,16 @@
 import * as React from 'react'
 import Text from 'src/components/Text'
-import { IResearch } from '../research.models'
 import { ResearchStoreContext } from '../research.store'
 import { Button } from 'src/components/Button'
+import { IResearch } from '../research.models'
 
 interface IProps {
   item: IResearch.ItemDB
 }
 
 export const ResearchListItem = (props: IProps) => {
-  console.log('props', props)
-  const { item } = props
   const store = React.useContext(ResearchStoreContext)
+  const { item } = props
   return (
     <>
       <Text>{item.slug}</Text>

@@ -4,8 +4,8 @@ import { ModuleStore } from 'src/stores/common/module.store'
 import { createContext, useContext } from 'react'
 
 export class ResearchStore extends ModuleStore {
-  @observable public activeResearchItem: IResearch.ItemDB | undefined
   @observable public allResearchItems: IResearch.ItemDB[] = []
+  @observable public activeResearchItem: IResearch.ItemDB | undefined
 
   constructor() {
     super(null as any, 'research')
@@ -17,6 +17,13 @@ export class ResearchStore extends ModuleStore {
         a._created < b._created ? 1 : -1,
       )
     })
+  }
+  public async setActiveResearchItem(slug: string) {
+    const collection = await this.db
+      .collection<IResearch.ItemDB>('research')
+      .getWhere('slug', '==', slug)
+    const researchItem = collection.length > 0 ? collection[0] : undefined
+    this.activeResearchItem = researchItem
   }
 
   public createResearchItem(item: IResearch.Item) {

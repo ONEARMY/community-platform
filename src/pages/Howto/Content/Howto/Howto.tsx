@@ -19,7 +19,8 @@ import WhiteBubble3 from 'src/assets/images/white-bubble_3.svg'
 import { Link } from 'src/components/Links'
 import { zIndex } from 'src/themes/styled.theme'
 import { Loader } from 'src/components/Loader'
-
+import { Route } from 'react-router-dom'
+import { NotFoundPage } from '../../../NotFound/NotFound'
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
 // We can't directly provide the store as a prop though, and later user a get method to define it
@@ -149,13 +150,7 @@ export class Howto extends React.Component<
         </>
       )
     } else {
-      return isLoading ? (
-        <Loader />
-      ) : (
-        <Text txtcenter mt="50px" width={1}>
-          How-to not found
-        </Text>
-      )
+      return isLoading ? <Loader /> : <Route component={NotFoundPage} />
     }
   }
 }

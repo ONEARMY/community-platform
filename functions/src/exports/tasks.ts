@@ -19,6 +19,5 @@ export const dailyTasks = functions.pubsub
   .topic('daily-tick')
   .onPublish(async (message, context) => {
     console.log('daily tick', message, context)
-    // await updateDHUserIds()
     await FirebaseSync.syncAll()
   })

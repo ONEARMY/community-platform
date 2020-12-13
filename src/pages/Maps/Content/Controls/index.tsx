@@ -12,8 +12,7 @@ import { GroupingFilterDesktop } from './GroupingFilterDesktop'
 import { GroupingFilterMobile } from './GroupingFilterMobile'
 
 import { IPinGrouping, IMapGrouping, IMapPinType } from 'src/models/maps.models'
-// import { HashLink } from 'react-router-hash-link'
-import { Link } from 'src/components/Links'
+import { HashLink as Link } from 'react-router-hash-link'
 import { Map } from 'react-leaflet'
 import { ILocation } from 'src/models/common.models'
 import { zIndex } from 'src/themes/styled.theme'
@@ -48,8 +47,8 @@ const MapFlexBar = styled(Flex)`
   transform: translateX(-50%);
 `
 @inject('mapsStore', 'userStore')
-class Controls extends React.Component<any, IState> {
-  constructor(props) {
+class Controls extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
     super(props)
     this.state = {
       showFiltersMobile: false,
@@ -121,13 +120,15 @@ class Controls extends React.Component<any, IState> {
           >
             <Link
               to={
-                this.props.userStore!.user
+                this.injected.userStore!.user
                   ? {
                       pathname: `/settings`,
                       hash: '#your-map-pin',
                     }
                   : { pathname: '/sign-up' }
               }
+              // the map underneath also redirects, so prevent it from doing so
+              onClick={e => e.stopPropagation()}
             >
               <Button variant={'primary'}>My pin</Button>
             </Link>

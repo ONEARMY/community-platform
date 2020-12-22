@@ -272,6 +272,24 @@ describe('[How To]', () => {
       cy.login('howto_editor@test.com', 'test1234')
       cy.step('Go to Edit mode')
       cy.get('[data-cy=edit]').click()
+
+      cy.step('Warn if title is identical with the existing ones')
+      cy.get('[data-cy=intro-title]')
+        .focus()
+        .blur({ force: true })
+      cy.wait(1000)
+      cy.contains(
+        'Titles must be unique, please try being more specific',
+      ).should('not.exist')
+
+      cy.get('[data-cy=intro-title]')
+        .clear()
+        .type('Make glass-like beams')
+        .blur({ force: true })
+      cy.contains(
+        'Titles must be unique, please try being more specific',
+      ).should('exist')
+
       cy.step('Update the intro')
       cy.get('[data-cy=intro-title]')
         .clear()

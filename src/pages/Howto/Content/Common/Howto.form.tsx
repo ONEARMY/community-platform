@@ -32,6 +32,9 @@ import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { COMPARISONS } from './Comparisons'
 
+const CONFIRM_DIALOG_MSG =
+  'You have unsaved changes. Are you sure you want to leave this page?'
+
 interface IState {
   formSaved: boolean
   _toDocsList: boolean
@@ -82,6 +85,11 @@ const Label = styled.label`
   display: block;
 `
 
+const beforeUnload = function(e) {
+  e.preventDefault()
+  e.returnValue = CONFIRM_DIALOG_MSG
+}
+
 @inject('howtoStore')
 @observer
 export class HowtoForm extends React.PureComponent<IProps, IState> {
@@ -131,6 +139,21 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
       slug: title => stripSpecialCharacters(title).toLowerCase(),
     },
   })
+
+  // Display a confirmation dialog when leaving the page outside the React Router
+  private unloadDecorator(form) {
+    return form.subscribe(
+      ({ dirty }) => {
+        if (dirty && !this.store.uploadStatus.Complete) {
+          window.addEventListener('beforeunload', beforeUnload, false)
+          return
+        }
+        window.removeEventListener('beforeunload', beforeUnload, false)
+      },
+      { dirty: true },
+    )
+  }
+
   public render() {
     const { formValues, parentType } = this.props
     const { fileEditMode, showSubmitModal } = this.state
@@ -154,7 +177,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
             ...arrayMutators,
           }}
           validateOnBlur
-          decorators={[this.calculatedFields]}
+          decorators={[this.calculatedFields, this.unloadDecorator.bind(this)]}
           render={({ submitting, values, dirty, errors, handleSubmit }) => {
             return (
               <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
@@ -163,7 +186,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                     when={
                       !this.injected.howtoStore.uploadStatus.Complete && dirty
                     }
-                    message="You have unsaved changes. Are you sure you want to leave this page?"
+                    message={CONFIRM_DIALOG_MSG}
                   />
                   <FormContainer id="howtoForm" onSubmit={handleSubmit}>
                     {/* How To Info */}

@@ -15,12 +15,12 @@ The user store listens to login events through the firebase api and exposes logg
 const COLLECTION_NAME = 'users'
 
 export class UserStore extends ModuleStore {
-  private authUnsubscribe: firebase.Unsubscribe
+  private authUnsubscribe: firebase.default.Unsubscribe
   @observable
   public user: IUserPPDB | undefined
 
   @observable
-  public authUser: firebase.User | null
+  public authUser: firebase.default.User | null
 
   @observable
   public updateStatus: IUserUpdateStatus = getInitialUpdateStatus()
@@ -150,7 +150,7 @@ export class UserStore extends ModuleStore {
 
   public async changeUserPassword(oldPassword: string, newPassword: string) {
     // *** TODO - (see code in change pw component and move here)
-    const user = this.authUser as firebase.User
+    const user = this.authUser as firebase.default.User
     const credentials = EmailAuthProvider.credential(
       user.email as string,
       oldPassword,
@@ -169,7 +169,7 @@ export class UserStore extends ModuleStore {
 
   public async deleteUser(reauthPw: string) {
     // as delete operation is sensitive requires user to revalidate credentials first
-    const authUser = auth.currentUser as firebase.User
+    const authUser = auth.currentUser as firebase.default.User
     const credential = EmailAuthProvider.credential(
       authUser.email as string,
       reauthPw,
@@ -191,7 +191,7 @@ export class UserStore extends ModuleStore {
   }
 
   public async createUserProfile(fields: Partial<IUser> = {}) {
-    const authUser = auth.currentUser as firebase.User
+    const authUser = auth.currentUser as firebase.default.User
     const displayName = authUser.displayName as string
     const userName = formatLowerNoSpecial(displayName)
     const dbRef = this.db.collection<IUser>(COLLECTION_NAME).doc(userName)

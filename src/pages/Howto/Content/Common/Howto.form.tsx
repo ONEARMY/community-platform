@@ -129,7 +129,9 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
   }
 
   public validateTitle = async (value: any) => {
-    return this.store.validateTitleForSlug(value, 'howtos')
+    const originalId =
+      this.props.parentType === 'edit' ? this.props.formValues._id : undefined
+    return this.store.validateTitleForSlug(value, 'howtos', originalId)
   }
 
   // automatically generate the slug when the title changes
@@ -246,11 +248,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 name="title"
                                 data-cy="intro-title"
                                 validateFields={[]}
-                                validate={value =>
-                                  this.props.parentType === 'create'
-                                    ? this.validateTitle(value)
-                                    : false
-                                }
+                                validate={this.validateTitle}
                                 isEqual={COMPARISONS.textInput}
                                 component={InputField}
                                 maxLength="50"

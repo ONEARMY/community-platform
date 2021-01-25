@@ -2,6 +2,7 @@
   "projects": {
     "default": "precious-plastics-v4-dev",
     "production": "onearmyworld",
-    "ci": "onearmy-test-ci"
+    "ci": "onearmy-test-ci",
+    "next": "onearmy-next"
   }
 }

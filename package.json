@@ -133,6 +133,7 @@
     "@typescript-eslint/eslint-plugin": "^2.29.0",
     "@typescript-eslint/parser": "^2.29.0",
     "chai-subset": "^1.6.0",
+    "chalk": "^4.1.0",
     "cra-bundle-analyzer": "^0.0.3",
     "cross-env": "^6.0.3",
     "cypress": "4.4.0",

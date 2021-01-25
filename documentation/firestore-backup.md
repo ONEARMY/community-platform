@@ -8,10 +8,12 @@ In order to fully backup the platform there are 3 areas that need to be backed u
    Use in interactive export tool to create a backup of the database. If planning to analyse in bigquery then individual collections should be specified, otherwise exporting the entire database would be recommended
    ![](images/firestore-backup-1.png)
 
+   The backup can be made to the existing `onearmyworld-exports` bucket, or a personal storage bucket. Exports should be named in a consistent way:
+   
    The backup can also be downloaded using the [gsutil](https://cloud.google.com/storage/docs/gsutil) tool
-
+   
    ```
-      gsutil cp -r gs://onearmyworld-exports/name-of-backup ./my-local-backup-folder
+   gsutil cp -r gs://onearmyworld-exports/name-of-backup ./my-local-backup-folder
    ```
 
 2. Firebase Storage

@@ -57,7 +57,7 @@ const COLLECTION_IDS = ['events', 'howtos', 'mappins', 'tags', 'users']
 function main() {
   setupServiceAccount(SERVICE_ACCOUNT_JSON_PATH)
   // Functions can contain firestore triggered functions, so remove to avoid triggering on data import/export
-  deleteFirebaseFunctions(TARGET_PROJECT)
+  deleteFirebaseFunctions(TARGET_PROJECT, TARGET_PROJECT_ALIAS)
   // Import/export operations merge data by default so need to first delete existing data
   wipeTargetFirestoreDB(TARGET_PROJECT_ALIAS)
   exportFirestoreData(SOURCE_PROJECT, EXPORT_TARGET, COLLECTION_IDS)
@@ -86,8 +86,9 @@ function setupServiceAccount(serviceAccountJsonPath: string) {
 }
 
 /** delete all functions (no native disable method) */
-function deleteFirebaseFunctions(projectId: string) {
+function deleteFirebaseFunctions(projectId: string, projectAlias: string) {
   cli(`gcloud config set project ${projectId}`)
+  cli(`firebase use ${projectAlias}`)
   console.log(chalk.green(`[${projectId}] Disabling firebase functions`))
   // when calling the function list command pipe the result so it can be used here
   // firebase has no native function list method so use gcloud
@@ -98,11 +99,9 @@ function deleteFirebaseFunctions(projectId: string) {
 }
 
 /** forcefully deletes all collections and subcollections in the target project*/
-function wipeTargetFirestoreDB(targetProjectAlias: string) {
-  cli(`firebase use ${targetProjectAlias}`)
-  console.log(
-    chalk.green(`[Firebase Alias: ${targetProjectAlias}] Wiping firestore`),
-  )
+function wipeTargetFirestoreDB(projectAlias: string) {
+  cli(`firebase use ${projectAlias}`)
+  console.log(chalk.green(`[Firebase Alias: ${projectAlias}] Wiping firestore`))
   cli(`firebase firestore:delete --all-collections --yes`)
 }
 
@@ -140,11 +139,9 @@ function importFirestoreData(
 }
 
 /** call the firebase deploy method to deploy the target project functions */
-function redeployFirebaseFunctions(targetProjectAlias: string) {
-  cli(`firebase use ${targetProjectAlias}`)
-  console.log(
-    chalk.green(`[Firebase Alias: ${targetProjectAlias}] Deploying functions`),
-  )
+function redeployFirebaseFunctions(projectAlias: string) {
+  cli(`firebase use ${projectAlias}`)
+  console.log(chalk.green(`Firebase [${projectAlias}] Deploying functions`))
   cli(`firebase deploy --only functions`)
 }
 

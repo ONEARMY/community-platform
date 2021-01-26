@@ -50,7 +50,7 @@ const COLLECTION_IDS = ['events', 'howtos', 'mappins', 'tags', 'users']
  * 
  * Example execution
  * ```
- * ts-node --project scripts/tsconfig.json scripts/maintenance/firebase-project-migrate.ts 
+   ts-node --project scripts/tsconfig.json scripts/maintenance/reset-staging-site.ts 
    ```
    Also available as a github action in the /.github/reset-staging-site.yml
  */
@@ -79,7 +79,9 @@ main()
 
 /** log into a pre-configured service account using credentials stored in local json file */
 function setupServiceAccount(serviceAccountJsonPath: string) {
-  console.log(chalk.green(`Activating gcloud service account`))
+  // add credentials path to environment to allow firebase to proceed without login
+  process.env.GOOGLE_APPLICATION_CREDENTIALS = serviceAccountJsonPath
+  // authorise gcloud using same service account
   cli(
     `gcloud auth activate-service-account --key-file=${serviceAccountJsonPath}`,
   )

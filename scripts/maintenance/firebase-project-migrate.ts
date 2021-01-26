@@ -1,14 +1,28 @@
-import { spawnSync } from 'child_process'
+import { spawnSync, SpawnSyncOptions } from 'child_process'
 import chalk from 'chalk'
 
+/***********************************************************************************
+ * Constants
+ ************************************************************************************/
+/** Gcloud/Firebase project to copy data from */
 const SOURCE_PROJECT = 'onearmyworld'
+/** Gcloud/Firebase project to copy data to */
 const TARGET_PROJECT = 'onearmy-next'
+/** Target project as referred to when using firebase cli (e.g. `firebase projects list`) */
 const TARGET_PROJECT_ALIAS = 'next'
+/** Intermediate storage bucket used to  */
 const STORAGE_BUCKET = 'onearmyworld-exports'
+/** Path to a service account file that will be used for operations */
+const SERVICE_ACCOUNT_JSON_PATH =
+  'environments/onearmy-migrator-service-account.json'
+/** Timestamp suffix that will be appended to exports (e.g. 2021-01-26T07:50) */
 const timestamp = new Date().toISOString().substring(0, 16)
+/** Storage path that will be used to store the exported data */
 const EXPORT_TARGET = `${STORAGE_BUCKET}/${timestamp}`
+// Specify collections and subcollections for export
+// (can export all without setting collectionIds, but some legacy data not required)
+// e.g. 'v3_users','v3_events' and 'revisions' subcollection */
 const DB_PREFIX = 'v3'
-/** e.g. 'v3_users','v3_events' and 'revisions' subcollection */
 const COLLECTION_IDS = ['events', 'howtos', 'mappins', 'tags', 'users']
   .map(id => `${DB_PREFIX}_${id}`)
   .concat('revisions')
@@ -20,31 +34,43 @@ const COLLECTION_IDS = ['events', 'howtos', 'mappins', 'tags', 'users']
  *
  * This function will backup a firebase firestore database locally
  * https://cloud.google.com/firestore/docs/manage-data/move-data
+ * 
+ * It uses a combination of firebase scripts and gcloud scripts to achieve this
  *
  * Prerequisites
  * - gcloud installed locally
  * - gsutil running locally
  * - firebase cli installed locally
+ * - service worker setup with following permissions:
+ *      - read access to source project (basic viewer role)
+ *      - admin access to storage bucket used (storage admin role)
+ *      - 
  * 
- * Recommended
- * - Delete/disable any firestore functions that trigger on resource creation (there will be lots triggered!)
+ * Recommendations
+ * - disable write-access to source project (if want to ensure perfect clone)
  * 
  * Example execution
  * ```
  * ts-node --project scripts/tsconfig.json scripts/maintenance/firebase-project-migrate.ts 
    ```
+   Also available as a github action in the /.github/reset-staging-site.yml
  */
 function main() {
-  setupServiceAccount()
+  setupServiceAccount(SERVICE_ACCOUNT_JSON_PATH)
+  // Functions can contain firestore triggered functions, so remove to avoid triggering on data import/export
+  deleteFirebaseFunctions(TARGET_PROJECT)
+  // Import/export operations merge data by default so need to first delete existing data
   wipeTargetFirestoreDB(TARGET_PROJECT_ALIAS)
   exportFirestoreData(SOURCE_PROJECT, EXPORT_TARGET, COLLECTION_IDS)
   importFirestoreData(TARGET_PROJECT, EXPORT_TARGET, COLLECTION_IDS)
+  redeployFirebaseFunctions(TARGET_PROJECT_ALIAS)
 
   /****************************** TODOs *******************************************
    * - export/import users - https://firebase.google.com/docs/cli/auth
    * - export/import storage (only required if planning to test storage deletion)
    * - export/import rtdb
    * - download exported file ()
+   * - redeploy firebase functions when scripts fail or are interrupted
    *
    ********************************************************************************/
 
@@ -52,13 +78,33 @@ function main() {
 }
 main()
 
-function setupServiceAccount() {
-  console.log('setup service account')
-  const serviceAccountJsonPath =
-    'environments/onearmy-migrator-service-account.json'
+/** log into a pre-configured service account using credentials stored in local json file */
+function setupServiceAccount(serviceAccountJsonPath: string) {
+  console.log(chalk.green(`Activating gcloud service account`))
   cli(
     `gcloud auth activate-service-account --key-file=${serviceAccountJsonPath}`,
   )
+}
+
+/** delete all functions (no native disable method) */
+function deleteFirebaseFunctions(projectId: string) {
+  cli(`gcloud config set project ${projectId}`)
+  console.log(chalk.green(`[${projectId}] Disabling firebase functions`))
+  // when calling the function list command pipe the result so it can be used here
+  // firebase has no native function list method so use gcloud
+  const res = cli(`gcloud functions list --format="json"`, 'pipe')
+  const functionsJson = JSON.parse(String(res.stdout))
+  const functionsList = functionsJson.map((v: any) => v.entryPoint).join(' ')
+  cli(`firebase functions:delete ${functionsList} --force`)
+}
+
+/** forcefully deletes all collections and subcollections in the target project*/
+function wipeTargetFirestoreDB(targetProjectAlias: string) {
+  cli(`firebase use ${targetProjectAlias}`)
+  console.log(
+    chalk.green(`[Firebase Alias: ${targetProjectAlias}] Wiping firestore`),
+  )
+  cli(`firebase firestore:delete --all-collections --yes`)
 }
 
 /** Export specific collection list from firestore database to a storage object */
@@ -74,7 +120,7 @@ function exportFirestoreData(
   )
 }
 
-// import
+/** Import data from a previously exported storage path into a target project*/
 function importFirestoreData(
   projectId: string,
   storagePath: string,
@@ -94,26 +140,30 @@ function importFirestoreData(
   )
 }
 
-/**
- * Delete all collections in a target firebase project
- */
-function wipeTargetFirestoreDB(targetProjectAlias: string) {
+/** call the firebase deploy method to deploy the target project functions */
+function redeployFirebaseFunctions(targetProjectAlias: string) {
   cli(`firebase use ${targetProjectAlias}`)
   console.log(
-    chalk.green(
-      `[Firebase Alias: ${targetProjectAlias}] Wiping firestore data`,
-    ),
+    chalk.green(`[Firebase Alias: ${targetProjectAlias}] Deploying functions`),
   )
-  cli(`firebase firestore:delete --all-collections --yes`)
+  cli(`firebase deploy --only functions`)
 }
 
-/** wrapper to call local commands */
-function cli(command: string) {
+/**
+ * wrapper to call local commands on the cli
+ * @param command - specify command to pass to the console
+ * @param stdio - override default options.stdio if requiring
+ * */
+function cli(command: string, stdio?: SpawnSyncOptions['stdio']) {
   const child = spawnSync(command, {
     shell: true,
-    stdio: ['inherit', 'inherit', 'pipe'],
+    // default behaviour will show stdin/stdout in the console but pipe
+    // errors to allow local error handling
+    //                stdin      stdout    stderror
+    stdio: stdio || ['inherit', 'inherit', 'pipe'],
   })
   // many commands from gcloud and gsutil output information to stderr even if successful
+  // so only exit with error code in some cases
   // https://github.com/GoogleCloudPlatform/gsutil/issues/526
   if (child.stderr) {
     const msg = String(child.stderr)
@@ -125,4 +175,5 @@ function cli(command: string) {
       console.log(msg)
     }
   }
+  return child
 }

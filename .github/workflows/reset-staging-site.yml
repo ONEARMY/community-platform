@@ -19,7 +19,7 @@ jobs:
       - name: Set up Cloud SDK
         uses:
           google-github-actions/setup-gcloud@master
-          # skipping setting a service account here as we'll manually configure it later
+          # skipping setting a service account here as we'll load from json during script
       - name: Setup Cache
         uses: actions/cache@v2
         with:
@@ -33,16 +33,7 @@ jobs:
         run: echo $ONEARMY_MIGRATOR_SERVICE_ACCOUNT_JSON > config/onearmy-migrator-service-account.json
         env:
           ONEARMY_MIGRATOR_SERVICE_ACCOUNT_JSON: ${{secrets.ONEARMY_MIGRATOR_SERVICE_ACCOUNT_JSON}}
-      - name: Disable existing firebase functions
-        # List all functions availble to gcloud, write to file and read as a list for deletion
-        run: |
-          echo $(gcloud functions list --format="value(entryPoint)") > functionsList.txt
-          functionsList=$(echo $(cat functionsList.txt))
-          echo deleting: $functionsList
-          firebase functions:delete $(echo $functionsList) --force
       - name: Run db migration script
         run: ts-node --project scripts/tsconfig.json scripts/maintenance/firebase-project-migrate.ts
-      - name: Redeploy firebase functions
-        run: firebase deploy --only functions
         # TODO - run any migration functions (maybe better elsewhere...)
         # gcloud functions call migrate --data '{"version":"1.3.0"}'

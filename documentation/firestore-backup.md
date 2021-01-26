@@ -9,9 +9,9 @@ In order to fully backup the platform there are 3 areas that need to be backed u
    ![](images/firestore-backup-1.png)
 
    The backup can be made to the existing `onearmyworld-exports` bucket, or a personal storage bucket. Exports should be named in a consistent way:
-   
+
    The backup can also be downloaded using the [gsutil](https://cloud.google.com/storage/docs/gsutil) tool
-   
+
    ```
    gsutil cp -r gs://onearmyworld-exports/name-of-backup ./my-local-backup-folder
    ```
@@ -36,4 +36,24 @@ In order to fully backup the platform there are 3 areas that need to be backed u
 
 ```
 
+```
+
+## Service worker
+
+- activate required api: https://console.cloud.google.com/apis/api/cloudresourcemanager.googleapis.com
+- creating
+- permissions (easiest to assign as viewer for source, and datastore import/export target)
+  - Source firestore - viewer
+  - Target firestore - viewer, datastore import/export
+  - Storage bucket - storage admin
+- https://cloud.google.com/firestore/docs/security/iam#roles
+- https://cloud.google.com/iam/docs/granting-changing-revoking-access
+- - Check
+
+```
+gcloud projects list
+```
+
+```
+gcloud auth list
 ```

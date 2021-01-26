@@ -43,7 +43,7 @@ const COLLECTION_IDS = ['events', 'howtos', 'mappins', 'tags', 'users']
  * - service worker setup with following permissions:
  *      - read access to source project (basic viewer role)
  *      - admin access to storage bucket used (storage admin role)
- *      - 
+ *      - admin access to target firebase datastore and functions
  * 
  * Recommendations
  * - disable write-access to source project (if want to ensure perfect clone)
@@ -56,11 +56,11 @@ const COLLECTION_IDS = ['events', 'howtos', 'mappins', 'tags', 'users']
  */
 function main() {
   setupServiceAccount(SERVICE_ACCOUNT_JSON_PATH)
+  exportFirestoreData(SOURCE_PROJECT, EXPORT_TARGET, COLLECTION_IDS)
   // Functions can contain firestore triggered functions, so remove to avoid triggering on data import/export
   deleteFirebaseFunctions(TARGET_PROJECT, TARGET_PROJECT_ALIAS)
-  // Import/export operations merge data by default so need to first delete existing data
+  // Import operations merge data by default so need to first delete existing data
   wipeTargetFirestoreDB(TARGET_PROJECT_ALIAS)
-  exportFirestoreData(SOURCE_PROJECT, EXPORT_TARGET, COLLECTION_IDS)
   importFirestoreData(TARGET_PROJECT, EXPORT_TARGET, COLLECTION_IDS)
   redeployFirebaseFunctions(TARGET_PROJECT_ALIAS)
 

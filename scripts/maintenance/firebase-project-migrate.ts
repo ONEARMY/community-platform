@@ -25,23 +25,41 @@ const COLLECTION_IDS = ['events', 'howtos', 'mappins', 'tags', 'users']
  * - gcloud installed locally
  * - gsutil running locally
  * - firebase cli installed locally
+ * 
+ * Recommended
+ * - Delete/disable any firestore functions that trigger on resource creation (there will be lots triggered!)
+ * 
+ * Example execution
+ * ```
+ * ts-node --project scripts/tsconfig.json scripts/maintenance/firebase-project-migrate.ts 
+   ```
  */
 function main() {
+  setupServiceAccount()
   wipeTargetFirestoreDB(TARGET_PROJECT_ALIAS)
   exportFirestoreData(SOURCE_PROJECT, EXPORT_TARGET, COLLECTION_IDS)
   importFirestoreData(TARGET_PROJECT, EXPORT_TARGET, COLLECTION_IDS)
 
-  // TODO
-  // export/import users
-  // export/import storage
-  // export/import rtdb
-  // dl locally
+  /****************************** TODOs *******************************************
+   * - export/import users - https://firebase.google.com/docs/cli/auth
+   * - export/import storage (only required if planning to test storage deletion)
+   * - export/import rtdb
+   * - download exported file ()
+   *
+   ********************************************************************************/
 
-  // export source firestore
-  // copy storage bucket objects (-m parallel, -r recursive)
-  // gsutil -m cp -r gs://<bucket-myapp-name> gs://<bucket-myapp-dev-name>
+  // localhost reset cache button
 }
 main()
+
+function setupServiceAccount() {
+  console.log('setup service account')
+  const serviceAccountJsonPath =
+    'environments/onearmy-migrator-service-account.json'
+  cli(
+    `gcloud auth activate-service-account --key-file=${serviceAccountJsonPath}`,
+  )
+}
 
 /** Export specific collection list from firestore database to a storage object */
 function exportFirestoreData(
@@ -86,7 +104,7 @@ function wipeTargetFirestoreDB(targetProjectAlias: string) {
       `[Firebase Alias: ${targetProjectAlias}] Wiping firestore data`,
     ),
   )
-  cli(`firebase firestore:delete --all-collections`)
+  cli(`firebase firestore:delete --all-collections --yes`)
 }
 
 /** wrapper to call local commands */

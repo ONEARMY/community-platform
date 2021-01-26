@@ -2,9 +2,9 @@
 # For more info see the script file (/scripts/maintenance/reset-staging-site)
 name: Reset Staging Site
 on:
-  push:
-    branches:
-      - feat/dev-backups
+  # Run weekly on a Sunday at 02:00
+  schedule:
+    - cron: '0 0 * * SUN'
   # Allow the script to be triggered directly from GitHub
   workflow_dispatch:
 jobs:
@@ -36,5 +36,3 @@ jobs:
           ONEARMY_MIGRATOR_SERVICE_ACCOUNT_JSON: ${{secrets.ONEARMY_MIGRATOR_SERVICE_ACCOUNT_JSON}}
       - name: Run db migration script
         run: ts-node --project scripts/tsconfig.json scripts/maintenance/reset-staging-site.ts
-        # TODO - run any migration functions (maybe better elsewhere...)
-        # gcloud functions call migrate --data '{"version":"1.3.0"}'

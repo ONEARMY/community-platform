@@ -97,7 +97,9 @@ function deleteFirebaseFunctions(projectId: string, projectAlias: string) {
   const res = cli(`gcloud functions list --format="json"`, 'pipe')
   const functionsJson = JSON.parse(String(res.stdout))
   const functionsList = functionsJson.map((v: any) => v.entryPoint).join(' ')
-  cli(`firebase functions:delete ${functionsList} --force`)
+  if (functionsList.length > 0) {
+    cli(`firebase functions:delete ${functionsList} --force`)
+  }
 }
 
 /** forcefully deletes all collections and subcollections in the target project*/

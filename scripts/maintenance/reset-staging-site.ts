@@ -13,14 +13,13 @@ const TARGET_PROJECT_ALIAS = 'next'
 /** Intermediate storage bucket used to  */
 const STORAGE_BUCKET = 'onearmyworld-exports'
 /** Path to a service account file that will be used for operations */
-const SERVICE_ACCOUNT_JSON_PATH =
-  'environments/onearmy-migrator-service-account.json'
+const SERVICE_ACCOUNT_JSON_PATH = 'config/onearmy-migrator-service-account.json'
 /** Timestamp suffix that will be appended to exports (e.g. 2021-01-26T07:50) */
 const timestamp = new Date().toISOString().substring(0, 16)
 /** Storage path that will be used to store the exported data */
 const EXPORT_TARGET = `${STORAGE_BUCKET}/${timestamp}`
 // Specify collections and subcollections for export
-// (can export all without setting collectionIds, but some legacy data not required)
+// (can export all without setting collectionIds, but some data might be sensitive or not required. Also allows import into bigquery)
 // e.g. 'v3_users','v3_events' and 'revisions' subcollection */
 const DB_PREFIX = 'v3'
 const COLLECTION_IDS = ['events', 'howtos', 'mappins', 'tags', 'users']

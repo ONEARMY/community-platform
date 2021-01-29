@@ -14,7 +14,8 @@ import {
   NO_HEADER_PAGES,
   POLICY_PAGES,
 } from './PageList'
-import { Link } from 'rebass'
+import { Link, Flex } from 'rebass'
+import DevSiteHeader from 'src/components/DevSiteHeader/DevSiteHeader'
 
 interface IState {
   singlePageMode: boolean
@@ -40,8 +41,7 @@ export class Routes extends React.Component<any, IState> {
     // entire site, or just one page of it via subdomains. This is so we can effectively integrate just parts of this
     // platform into other sites. The first case is direct nav
     return (
-      <div>
-        {/* <DevHelpers /> */}
+      <Flex height={'100vh'} flexDirection="column" data-cy="page-container">
         <BrowserRouter>
           <GoogleAnalytics />
           {/* on page change scroll to top */}
@@ -54,8 +54,11 @@ export class Routes extends React.Component<any, IState> {
                   key={page.path}
                   render={props => (
                     <React.Fragment>
+                      <DevSiteHeader />
                       <Header />
                       <Main
+                        data-cy="main-layout-container"
+                        style={{ flex: 1 }}
                         customStyles={page.customStyles}
                         ignoreMaxWidth={page.fullPageWidth}
                       >
@@ -88,7 +91,7 @@ export class Routes extends React.Component<any, IState> {
             </span>
           </Button>
         </Link>
-      </div>
+      </Flex>
     )
   }
 }

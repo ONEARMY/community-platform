@@ -1,0 +1,38 @@
+# Action to allow trigger of the firebase project migration script, used to reset the staging site
+# For more info see the script file (/scripts/maintenance/reset-staging-site)
+name: Reset Staging Site
+on:
+  # Run weekly on a Sunday at 02:00
+  schedule:
+    - cron: '0 0 * * SUN'
+  # Allow the script to be triggered directly from GitHub
+  workflow_dispatch:
+jobs:
+  deploy:
+    name: Reset Staging Site
+    runs-on: ubuntu-18.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Set up Cloud SDK
+        uses:
+          google-github-actions/setup-gcloud@master
+          # skipping setting a service account here as we'll load from json during script
+      - name: Setup Cache
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Install npm dependencies
+        run: yarn install
+      - name: Install global dependencies
+        run: npm i -g firebase-tools ts-node
+      - name: Populate service account json
+        run: echo $ONEARMY_MIGRATOR_SERVICE_ACCOUNT_JSON > config/onearmy-migrator-service-account.json
+        env:
+          ONEARMY_MIGRATOR_SERVICE_ACCOUNT_JSON: ${{secrets.ONEARMY_MIGRATOR_SERVICE_ACCOUNT_JSON}}
+      - name: Run db migration script
+        run: ts-node --project scripts/tsconfig.json scripts/maintenance/reset-staging-site.ts

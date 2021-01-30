@@ -1,12 +1,12 @@
 import * as Sentry from '@sentry/browser'
 import { SENTRY_CONFIG } from '../config/config'
 
-export const log = {
+export const logToSentry = {
   message: Sentry.captureMessage,
   event: Sentry.captureEvent,
   exception: Sentry.captureException,
 }
-export const Level = Sentry.Severity
+const Level = Sentry.Severity
 export const initErrorHandler = () => {
   const { location } = window
   if (

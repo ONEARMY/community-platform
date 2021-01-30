@@ -19,13 +19,13 @@ export * from './migration'
 /********************************************************************
  * Triggered functions
  ********************************************************************/
-export const countHowTos = functions.firestore
+exports.userStatsCountHowTos = functions.firestore
   .document(`${DB_ENDPOINTS.howtos}/{id}`)
   .onWrite(async (change, context) => {
     await updateStats(change, 'userCreatedHowtos')
   })
 
-export const countEvents = functions.firestore
+exports.userStatsCountEvents = functions.firestore
   .document(`${DB_ENDPOINTS.events}/{id}`)
   .onWrite(async (change, context) => {
     await updateStats(change, 'userCreatedEvents')

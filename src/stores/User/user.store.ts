@@ -7,6 +7,7 @@ import { RootStore } from '..'
 import { ModuleStore } from '../common/module.store'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
+import { logToSentry } from 'src/common/errors'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
@@ -15,12 +16,12 @@ The user store listens to login events through the firebase api and exposes logg
 const COLLECTION_NAME = 'users'
 
 export class UserStore extends ModuleStore {
-  private authUnsubscribe: firebase.Unsubscribe
+  private authUnsubscribe: firebase.default.Unsubscribe
   @observable
   public user: IUserPPDB | undefined
 
   @observable
-  public authUser: firebase.User | null
+  public authUser: firebase.default.User | null
 
   @observable
   public updateStatus: IUserUpdateStatus = getInitialUpdateStatus()
@@ -82,9 +83,15 @@ export class UserStore extends ModuleStore {
         this.updateUser(userMeta)
         console.log('userMeta', userMeta)
       } else {
-        throw new Error(
-          `could not find user profile [${user.uid} - ${user.email} - ${user.metadata}]`,
+        // user profile not found, either it has been deleted or not migrated correctly from legacy format
+        // create a new profile to use for now and make a log to the error handler in case required
+        logToSentry.message(
+          `Could not find user profile [${user.uid} - ${user.email} - ${user.metadata}]. New profile created instead`,
         )
+        await this.createUserProfile()
+        // throw new Error(
+        //   `could not find user profile [${user.uid} - ${user.email} - ${user.metadata}]`,
+        // )
       }
     }
   }
@@ -150,7 +157,7 @@ export class UserStore extends ModuleStore {
 
   public async changeUserPassword(oldPassword: string, newPassword: string) {
     // *** TODO - (see code in change pw component and move here)
-    const user = this.authUser as firebase.User
+    const user = this.authUser as firebase.default.User
     const credentials = EmailAuthProvider.credential(
       user.email as string,
       oldPassword,
@@ -169,7 +176,7 @@ export class UserStore extends ModuleStore {
 
   public async deleteUser(reauthPw: string) {
     // as delete operation is sensitive requires user to revalidate credentials first
-    const authUser = auth.currentUser as firebase.User
+    const authUser = auth.currentUser as firebase.default.User
     const credential = EmailAuthProvider.credential(
       authUser.email as string,
       reauthPw,
@@ -191,7 +198,7 @@ export class UserStore extends ModuleStore {
   }
 
   public async createUserProfile(fields: Partial<IUser> = {}) {
-    const authUser = auth.currentUser as firebase.User
+    const authUser = auth.currentUser as firebase.default.User
     const displayName = authUser.displayName as string
     const userName = formatLowerNoSpecial(displayName)
     const dbRef = this.db.collection<IUser>(COLLECTION_NAME).doc(userName)

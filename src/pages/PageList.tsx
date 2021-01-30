@@ -63,9 +63,7 @@ const academy = {
   title: 'Academy',
   description: 'Demo external page embed',
   customStyles: {
-    position: 'absolute',
-    height: 'calc(100% - 85px)',
-    width: '100%',
+    flex: 1,
   },
   fullPageWidth: true,
 }

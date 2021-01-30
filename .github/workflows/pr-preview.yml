@@ -1,0 +1,36 @@
+# Create and deploy a build on all pull requests
+name: PR Preview
+on:
+  pull_request:
+    # Only create a preview if changes have been made to the main src code or backend functions
+    paths:
+      - 'src/**'
+      - 'functions/**'
+jobs:
+  build_and_preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Cache
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Install npm dependencies
+        run: yarn install
+      - name: Build for Preview
+        run: npm run build
+        env:
+          # currently some linting fails when CI mode enabled (warnings become errors)
+          # disable until fully resolved
+          CI: false
+          # specify the 'preview' site variant to populate the relevant firebase config
+          REACT_APP_SITE_VARIANT: preview
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          # the details of the service account need to be populated to github secrets
+          # these must match the target projectId account
+          firebaseServiceAccount: '${{ secrets.ONEARMY_NEXT_FIREBASE_SERVICE_ACCOUNT }}'
+          expires: 30d
+          projectId: onearmy-next

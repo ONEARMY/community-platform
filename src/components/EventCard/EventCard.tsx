@@ -29,6 +29,7 @@ export const EventCard = (props: IProps) => (
     flexDirection={['column', 'column', 'initial']}
     sx={{ position: 'relative' }}
     data-cy="card"
+    data-eventId={props.event._id}
   >
     {props.event.moderation !== 'accepted' && (
       <ModerationStatusText event={props.event} top={'0px'} />

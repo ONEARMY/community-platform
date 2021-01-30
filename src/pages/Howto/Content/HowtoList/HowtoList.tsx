@@ -92,7 +92,11 @@ export class HowtoList extends React.Component<any, IState> {
               </Heading>
             </Flex>
           ) : (
-            <Flex justifyContent={'center'} mx={-4}>
+            <Flex
+              justifyContent={'center'}
+              mx={-4}
+              data-cy="howtolist-flex-container"
+            >
               <VirtualizedFlex
                 data={filteredHowtos}
                 renderItem={data => (

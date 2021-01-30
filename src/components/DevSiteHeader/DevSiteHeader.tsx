@@ -26,7 +26,7 @@ const DevSiteHeader = () => (
           This is a dev version of the platform
         </Text>
         <Flex data-cy="devSiteSelectContainer" alignItems="center">
-          <Text color={'white'} medium mr="1">
+          <Text color={'white'} medium mr="1" title={SITE}>
             Site:
           </Text>
           <Box width="130px">

@@ -29,7 +29,8 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          # use existing service account that has limited access to onearmy-next site
-          firebaseServiceAccount: '${{ secrets.ONEARMY_MIGRATOR_SERVICE_ACCOUNT_JSON }}'
+          # the details of the service account need to be populated to github secrets
+          # these must match the target projectId account
+          firebaseServiceAccount: '${{ secrets.ONEARMY_NEXT_FIREBASE_SERVICE_ACCOUNT }}'
           expires: 30d
           projectId: onearmy-next

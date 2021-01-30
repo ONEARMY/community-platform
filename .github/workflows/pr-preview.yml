@@ -6,9 +6,6 @@ on:
     paths:
       - 'src/**'
       - 'functions/**'
-  push:
-    branches:
-      - feat/dev-backups
 jobs:
   build_and_preview:
     runs-on: ubuntu-latest

@@ -13,6 +13,7 @@
     "test:unit": "react-app-rewired test --env=jsdom",
     "storybook": "start-storybook -p 6006",
     "storybook:build": "build-storybook",
+    "docs": "cd documentation && npm run start",
     "analyze": "npx cra-bundle-analyzer && npx open-cli build/report.html"
   },
   "husky": {

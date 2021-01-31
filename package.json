@@ -111,6 +111,7 @@
     "@testing-library/user-event": "^7.1.2",
     "@types/dompurify": "^0.0.32",
     "@types/flux-standard-action": "1.1.0",
+    "@types/jest": "^26.0.20",
     "@types/node": "10.11.0",
     "@types/pubsub-js": "^1.5.18",
     "@types/react": "^16.9.34",

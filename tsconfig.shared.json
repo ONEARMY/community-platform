@@ -5,6 +5,7 @@
     "composite": true,
     "noEmit": false,
     "outDir": "./build/types",
-    "emitDeclarationOnly": true
+    "emitDeclarationOnly": true,
+    "types": ["jest"]
   }
 }

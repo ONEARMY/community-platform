@@ -1,11 +1,11 @@
 import * as React from 'react'
-import * as ReactDOM from 'react-dom'
 import { fireEvent, render, wait } from '@testing-library/react'
 import { NavLink } from 'react-router-dom'
 import { Provider } from 'mobx-react'
 import { BrowserRouter } from 'react-router-dom'
 
 import { HowtoForm } from './Howto.form'
+declare const window: any
 
 describe('Howto form', function() {
   let howtoStore
@@ -50,12 +50,17 @@ describe('Howto form', function() {
 
   it('should not show the confirm dialog', async function() {
     let renderResult
+    const navProps: any = {}
     await wait(() => {
       renderResult = render(
         <Provider howtoStore={howtoStore} tagsStore={tagsStore}>
           <BrowserRouter>
             <NavLink to="/how-to">Test link</NavLink>
-            <HowtoForm formValues={formValues} parentType={parentType} />
+            <HowtoForm
+              formValues={formValues}
+              parentType={parentType}
+              {...navProps}
+            />
           </BrowserRouter>
         </Provider>,
       )
@@ -75,12 +80,17 @@ describe('Howto form', function() {
 
   it('should show the confirm dialog, title change', async function() {
     let renderResult
+    const navProps: any = {}
     await wait(() => {
       renderResult = render(
         <Provider howtoStore={howtoStore} tagsStore={tagsStore}>
           <BrowserRouter>
             <NavLink to="/how-to">Test link</NavLink>
-            <HowtoForm formValues={formValues} parentType={parentType} />
+            <HowtoForm
+              formValues={formValues}
+              parentType={parentType}
+              {...navProps}
+            />
           </BrowserRouter>
         </Provider>,
       )

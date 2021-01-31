@@ -198,28 +198,10 @@ export class HowtoStore extends ModuleStore {
     return stepsWithImgMeta
   }
 
-  @action
-  public async updateUsefulCount(usefulCount: number) {
-    if (!!this.activeHowto && this.activeUser) {
-      this.activeHowto = { ...this.activeHowto, usefulCount }
-      await this.db
-        .collection(COLLECTION_NAME)
-        .doc(this.activeHowto._id)
-        .set(this.activeHowto)
-    }
-  }
-
   get isActiveHowToUseful(): boolean {
-    const activeUser = this.activeUser
-    if (
-      activeUser &&
-      activeUser.usefulHowTos &&
-      activeUser.usefulHowTos.length &&
-      this.activeHowto
-    ) {
-      return activeUser.usefulHowTos.includes(this.activeHowto._id)
-    }
-    return false
+    const howtoId = this.activeHowto!._id
+    const userVotedHowtos = this.activeUser?.votedUsefulHowtos || {}
+    return userVotedHowtos[howtoId]
   }
 }
 

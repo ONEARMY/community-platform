@@ -56,6 +56,7 @@ const UsefulWrapper = ({
       fontSize="14px"
       ml="8px"
       backgroundColor="#f5ede2"
+      title="You must be logged in to vote"
     >
       {children}
     </Box>
@@ -128,9 +129,13 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
                   {this.props.isUseful ? <FaStar /> : <FaRegStar />}
                   <Text ml={1}>
                     Useful{' '}
-                    {this.props.howto.usefulCount
+                    {/* CC 2021-01-31 - syncing count to user currently results in too many db reads
+                    so currently we will not show this field (updated on server, but change not sync'd) 
+                    In future likely should add subscription to live data on howto open
+                    */}
+                    {/* {this.props.howto.usefulCount
                       ? this.props.howto.usefulCount
-                      : 0}
+                      : 0} */}
                   </Text>
                 </Flex>
               </UsefulWrapper>

@@ -101,30 +101,12 @@ export class Howto extends React.Component<
       await this.store.moderateHowto(_howto)
     }
     this.setState({
-      isLoading: this.state.isLoading, // Why?
+      isLoading: this.state.isLoading, // Why? || 20201-01-31 CC - yeah, why??
     })
   }
 
-  private onUsefulClick = async () => {
-    if (this.store.activeHowto) {
-      let count: number = this.store.activeHowto.usefulCount
-        ? this.store.activeHowto.usefulCount
-        : 0
-      const usefulHowTos: string[] =
-        this.injected.userStore.activeUser &&
-        this.injected.userStore.activeUser.usefulHowTos
-          ? this.injected.userStore.activeUser.usefulHowTos
-          : []
-      if (this.store.isActiveHowToUseful) {
-        count--
-        usefulHowTos.splice(usefulHowTos.indexOf(this.store.activeHowto._id), 1)
-      } else {
-        count++
-        usefulHowTos.push(this.store.activeHowto._id)
-      }
-      await this.injected.userStore.updateUsefulHowTos(usefulHowTos)
-      await this.store.updateUsefulCount(count)
-    }
+  private onUsefulClick = async (howtoId: string) => {
+    await this.injected.userStore.updateUsefulHowTos(howtoId)
   }
 
   public async componentWillMount() {
@@ -148,7 +130,7 @@ export class Howto extends React.Component<
             needsModeration={this.store.needsModeration(howto)}
             isUseful={this.store.isActiveHowToUseful}
             moderateHowto={this.moderateHowto}
-            onUsefulClick={this.onUsefulClick}
+            onUsefulClick={() => this.onUsefulClick(howto._id)}
           />
           {/* <HowtoSummary steps={howto.steps} howToSlug={howto.slug} /> */}
           <Box mt={9}>

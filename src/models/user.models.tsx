@@ -37,6 +37,7 @@ export interface IUser {
   location?: ILocation | null
   year?: ISODateString
   stats?: IUserStats
+  usefulHowTos?: string[]
 }
 
 interface IExternalLink {

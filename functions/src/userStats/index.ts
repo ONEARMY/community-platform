@@ -56,10 +56,11 @@ async function updateStats(
         userCreatedEvents: {},
         userCreatedHowtos: {},
       }
-      user.stats[target] = {
-        ...user.stats[target],
-        [after._id]: after.moderation,
-      }
+      if (target === 'userCreatedEvents' || target === 'userCreatedHowtos')
+        user.stats[target] = {
+          ...user.stats[target],
+          [after._id]: after.moderation,
+        }
       await userDoc.ref.set(user, { merge: true })
     } else {
       throw new Error(

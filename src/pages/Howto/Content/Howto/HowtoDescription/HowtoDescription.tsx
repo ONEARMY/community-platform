@@ -1,6 +1,7 @@
 import React from 'react'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { format } from 'date-fns'
+import { FaStar, FaRegStar } from 'react-icons/fa'
 import { IHowtoDB } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
@@ -22,8 +23,43 @@ interface IProps {
   howto: IHowtoDB
   loggedInUser: IUser | undefined
   needsModeration: boolean
+  isUseful: boolean
   moderateHowto: (accepted: boolean) => void
+  onUsefulClick: () => void
 }
+
+const UsefulWrapper = ({
+  isLoggedIn,
+  onClick,
+  children,
+}: {
+  isLoggedIn: boolean
+  onClick: () => void
+  children: React.ReactChild
+}) =>
+  isLoggedIn ? (
+    <Button
+      variant="subtle"
+      fontSize="14px"
+      onClick={onClick}
+      ml="8px"
+      backgroundColor="#f5ede2"
+    >
+      {children}
+    </Button>
+  ) : (
+    <Box
+      variant="subtle"
+      p={[15, 10]}
+      sx={{ borderRadius: '5px' }}
+      display="inline-block"
+      fontSize="14px"
+      ml="8px"
+      backgroundColor="#f5ede2"
+    >
+      {children}
+    </Box>
+  )
 
 export default class HowtoDescription extends React.PureComponent<IProps, any> {
   // eslint-disable-next-line
@@ -67,7 +103,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
         }}
       >
         <Flex px={4} py={4} flexDirection={'column'} width={[1, 1, 1 / 2]}>
-          <Flex justifyContent={'space-between'}>
+          <Flex justifyContent="space-between" flexWrap="wrap">
             <Link to={'/how-to/'}>
               <Button variant="subtle" fontSize="14px" data-cy="go-back">
                 <Flex>
@@ -83,6 +119,22 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
                 </Flex>
               </Button>
             </Link>
+            <Box style={{ flexGrow: 1 }}>
+              <UsefulWrapper
+                isLoggedIn={!!this.props.loggedInUser}
+                onClick={this.props.onUsefulClick}
+              >
+                <Flex>
+                  {this.props.isUseful ? <FaStar /> : <FaRegStar />}
+                  <Text ml={1}>
+                    Useful{' '}
+                    {this.props.howto.usefulCount
+                      ? this.props.howto.usefulCount
+                      : 0}
+                  </Text>
+                </Flex>
+              </UsefulWrapper>
+            </Box>
             {/* Check if pin should be moderated */}
             {this.props.needsModeration && (
               <Flex justifyContent={'space-between'}>

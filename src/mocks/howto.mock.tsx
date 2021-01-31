@@ -16,6 +16,7 @@ export const HOWTO_MOCK: IHowto[] = [
   {
     cover_image: exampleUploadImage,
     title: 'How-To 1',
+    usefulCount: 0,
     slug: 'how-to-1',
     description: 'this is a great description 1',
     difficulty_level: 'Hard',
@@ -43,6 +44,7 @@ export const HOWTO_MOCK: IHowto[] = [
     cover_image: exampleUploadImage,
     title: 'How-to 2',
     slug: 'how-to-2',
+    usefulCount: 42,
     description: 'this is a great description 2',
     difficulty_level: 'Hard',
     time: '30 hours',
@@ -69,6 +71,7 @@ export const HOWTO_MOCK: IHowto[] = [
     cover_image: exampleUploadImage,
     title: 'How-to 3',
     slug: 'how-to-3',
+    usefulCount: 3,
     description: 'this is a great description 3',
     difficulty_level: 'Hard',
     time: '30 days',

@@ -213,12 +213,24 @@ export class UserStore extends ModuleStore {
       userName,
       moderation: 'awaiting-moderation',
       verified: false,
+      usefulHowTos: [],
       ...fields,
     }
     // update db
     await dbRef.set(user)
     // retrieve from db (to also include generated meta)
     return dbRef.get()
+  }
+
+  @action
+  public async updateUsefulHowTos(usefulHowTos) {
+    if (this.user) {
+      this.user.usefulHowTos = usefulHowTos
+      this.db
+        .collection(COLLECTION_NAME)
+        .doc(this.user._id)
+        .set(this.user)
+    }
   }
 
   // use firebase auth to listen to change to signed in user

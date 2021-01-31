@@ -11,6 +11,7 @@ export interface IHowto extends IHowtoFormInput, IModerable {
   cover_image: IUploadedFileMeta
   files: Array<IUploadedFileMeta | File | null>
   steps: IHowtoStep[]
+  usefulCount: number
 }
 /**
  * Howtos retrieved from the database also include metadata such as _id, _created and _modified

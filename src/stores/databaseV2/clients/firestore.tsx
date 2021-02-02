@@ -64,6 +64,17 @@ export class FirestoreClient implements AbstractDBClient {
     )
     return observer
   }
+  streamDoc<T>(endpoint: IDBEndpoint) {
+    const ref = db.doc(endpoint)
+    const observer: Observable<T> = Observable.create(
+      async (obs: Observer<T>) => {
+        ref.onSnapshot(snap => {
+          obs.next(snap.data() as T)
+        })
+      },
+    )
+    return observer
+  }
 
   // create a blank doc to generate an id
   generateFirestoreDocID(endpoint: IDBEndpoint) {

@@ -11,12 +11,15 @@ export interface IHowto extends IHowtoFormInput, IModerable {
   cover_image: IUploadedFileMeta
   files: Array<IUploadedFileMeta | File | null>
   steps: IHowtoStep[]
-  usefulCount: number
 }
 /**
  * Howtos retrieved from the database also include metadata such as _id, _created and _modified
  */
 export type IHowtoDB = IHowto & DBDoc
+
+export type IHowtoStats = {
+  votedUsefulCount: number
+}
 
 export interface IHowtoStep extends IHowToStepFormInput {
   // *** NOTE - adding an '_animationKey' field to track when specific array element removed for

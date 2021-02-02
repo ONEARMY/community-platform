@@ -2,7 +2,7 @@ import React from 'react'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { format } from 'date-fns'
 import { FaStar, FaRegStar } from 'react-icons/fa'
-import { IHowtoDB } from 'src/models/howto.models'
+import { IHowtoDB, IHowtoStats } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import ModerationStatusText from 'src/components/ModerationStatusText'
@@ -21,6 +21,7 @@ import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
 
 interface IProps {
   howto: IHowtoDB
+  howtoStats?: IHowtoStats
   loggedInUser: IUser | undefined
   needsModeration: boolean
   isUseful: boolean
@@ -133,9 +134,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
                     so currently we will not show this field (updated on server, but change not sync'd) 
                     In future likely should add subscription to live data on howto open
                     */}
-                    {/* {this.props.howto.usefulCount
-                      ? this.props.howto.usefulCount
-                      : 0} */}
+                    {this.props.howtoStats?.votedUsefulCount || ''}
                   </Text>
                 </Flex>
               </UsefulWrapper>

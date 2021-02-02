@@ -1,10 +1,12 @@
 import { observable, action, computed, toJS, makeObservable } from 'mobx'
+import { Subscription } from 'rxjs'
 import {
   IHowto,
   IHowtoFormInput,
   IHowToStepFormInput,
   IHowtoStep,
   IHowtoDB,
+  IHowtoStats,
 } from 'src/models/howto.models'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { IUploadedFileMeta } from '../storage'
@@ -26,6 +28,8 @@ export class HowtoStore extends ModuleStore {
   public selectedTags: ISelectedTags
   @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
+  @observable howtoStats: IHowtoStats | undefined
+  private howtoStats$: Subscription
   constructor(rootStore: RootStore) {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
@@ -38,13 +42,31 @@ export class HowtoStore extends ModuleStore {
   }
 
   @action
-  public async getDocBySlug(slug: string) {
+  public async setActiveHowtoBySlug(slug: string) {
     const collection = await this.db
       .collection<IHowto>(COLLECTION_NAME)
       .getWhere('slug', '==', slug)
     const activeHowto = collection.length > 0 ? collection[0] : undefined
     this.activeHowto = activeHowto
+    // load howto stats which are stored in a separate subcollection
+    this.loadHowtoStats(activeHowto?._id)
+
     return activeHowto
+  }
+  @action
+  public async loadHowtoStats(id?: string) {
+    this.howtoStats = undefined
+    if (id) {
+      const ref = this.db
+        .collection<IHowtoStats>('howtos')
+        .doc(`${id}/stats/all`)
+      if (this.howtoStats) {
+        this.howtoStats$.unsubscribe()
+      }
+      this.howtoStats$ = ref.stream().subscribe(stats => {
+        this.howtoStats = stats as any
+      })
+    }
   }
   @action
   public updateUploadStatus(update: keyof IHowToUploadStatus) {
@@ -135,8 +157,6 @@ export class HowtoStore extends ModuleStore {
         ...values,
         _createdBy: values._createdBy ? values._createdBy : user.userName,
         cover_image: processedCover,
-        // TODO
-        usefulCount: 0,
         steps: processedSteps,
         files: processedFiles,
         moderation: values.moderation

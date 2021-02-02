@@ -109,32 +109,38 @@ export class Howto extends React.Component<
     await this.injected.userStore.updateUsefulHowTos(howtoId)
   }
 
-  public async componentWillMount() {
+  public async componentDidMount() {
     const slug = this.props.match.params.slug
-    await this.store.getDocBySlug(slug)
+    await this.store.setActiveHowtoBySlug(slug)
     this.setState({
       isLoading: false,
     })
+  }
+  public componentWillUnmount() {
+    // remove live subscription to howto stats
+    this.store.loadHowtoStats()
   }
 
   public render() {
     const { isLoading } = this.state
     const loggedInUser = this.injected.userStore.activeUser
-    const howto = this.store.activeHowto
-    if (howto) {
+    const { activeHowto, howtoStats } = this.store
+    console.log('stats', howtoStats)
+    if (activeHowto) {
       return (
         <>
           <HowtoDescription
-            howto={howto}
+            howto={activeHowto}
+            howtoStats={howtoStats}
             loggedInUser={loggedInUser}
-            needsModeration={this.store.needsModeration(howto)}
+            needsModeration={this.store.needsModeration(activeHowto)}
             isUseful={this.store.isActiveHowToUseful}
             moderateHowto={this.moderateHowto}
-            onUsefulClick={() => this.onUsefulClick(howto._id)}
+            onUsefulClick={() => this.onUsefulClick(activeHowto._id)}
           />
           {/* <HowtoSummary steps={howto.steps} howToSlug={howto.slug} /> */}
           <Box mt={9}>
-            {howto.steps.map((step: any, index: number) => (
+            {activeHowto.steps.map((step: any, index: number) => (
               <Step step={step} key={index} stepindex={index} />
             ))}
           </Box>

@@ -9,7 +9,7 @@ import { DB_ENDPOINTS } from '../endpoints'
  * or busting cache on db. This is used as the Dexie version number, see:
  * https://dexie.org/docs/Tutorial/Design#database-versioning
  */
-const DB_CACHE_NUMBER = 20201021
+const DB_CACHE_NUMBER = 20210130
 const CACHE_DB_NAME = 'OneArmyCache'
 const db = new Dexie(CACHE_DB_NAME)
 

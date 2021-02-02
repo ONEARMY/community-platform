@@ -221,13 +221,21 @@ class DocReference<T> {
   }
 
   /**
-   * NOT CURRENTLY IN USE
+   *  Stream live updates from a server (where supported)
+   *  Just returns the doc when not supported
    */
-  async stream() {
-    // TODO - if deemed useful by the platform
-    throw new Error('stream method does not currently exist for docs')
-    // eslint-disable-next-line
-    return
+  stream(): Observable<DBDoc> {
+    const { serverDB } = this.clients
+    if (serverDB.streamDoc) {
+      return serverDB.streamDoc<T>(`${this.endpoint}/${this.id}`)
+    } else {
+      return new Observable<DBDoc>(subscriber => {
+        this.get('server').then(res => {
+          subscriber.next(res)
+          subscriber.complete()
+        })
+      })
+    }
   }
 
   /**

@@ -1,4 +1,4 @@
-import { observable, action, makeObservable } from 'mobx'
+import { observable, action, makeObservable, toJS } from 'mobx'
 import { IUser, IUserDB } from 'src/models/user.models'
 import { IUserPP, IUserPPDB } from 'src/models/user_pp.models'
 import { IFirebaseUser, auth, EmailAuthProvider } from 'src/utils/firebase'
@@ -129,7 +129,8 @@ export class UserStore extends ModuleStore {
       )
       values = { ...values, coverImages: processedImages }
     }
-    const update = { ...user, ...values }
+    // sometimes mobx has issues with de-serialising obseverables so try to force it using toJS
+    const update = { ...toJS(user), ...toJS(values) }
     await this.db
       .collection(COLLECTION_NAME)
       .doc(user.userName)
@@ -213,12 +214,24 @@ export class UserStore extends ModuleStore {
       userName,
       moderation: 'awaiting-moderation',
       verified: false,
+      votedUsefulHowtos: {},
       ...fields,
     }
     // update db
     await dbRef.set(user)
     // retrieve from db (to also include generated meta)
     return dbRef.get()
+  }
+
+  @action
+  public async updateUsefulHowTos(howtoId: string) {
+    if (this.user) {
+      // toggle entry on user votedUsefulHowtos to either vote or unvote a howto
+      // this will updated the main howto via backend `updateUserVoteStats` function
+      const votedUsefulHowtos = toJS(this.user.votedUsefulHowtos) || {}
+      votedUsefulHowtos[howtoId] = !votedUsefulHowtos[howtoId]
+      await this.updateUserProfile({ votedUsefulHowtos })
+    }
   }
 
   // use firebase auth to listen to change to signed in user

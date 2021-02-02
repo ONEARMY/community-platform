@@ -74,6 +74,8 @@ export abstract class AbstractDBClient {
     queryOpts?: DBQueryOptions,
   ): Observable<(T & DBDoc)[]>
 
+  streamDoc?<T>(endpoint: string): Observable<T & DBDoc>
+
   deleteDoc(endpoint: string, docId: string): Promise<void>
 }
 

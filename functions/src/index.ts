@@ -13,7 +13,7 @@ exports.dailyTasks = dailyTasks
 // export all integration functions as a single group
 exports.integrations = require('./Integrations')
 // export all userStats functions as a single group
-exports.userStats = require('./userStats')
+exports.stats = require('./stats')
 
 exports.userUpdates = UserUpdates.handleUserUpdates
 // CC Note, 2020-04-40

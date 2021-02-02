@@ -8,6 +8,7 @@ import {
   IHowtoDB,
   IEventDB,
 } from '../models'
+import { IHowtoStats } from 'src/models'
 export * from './migration'
 
 /**
@@ -32,10 +33,10 @@ exports.userStatsCountEvents = functions.firestore
     await updateContentCounterStats(change, 'userCreatedEvents')
   })
 
-exports.userStatsCountsVotes = functions.firestore
+exports.howtoStatsCountVotes = functions.firestore
   .document(`${DB_ENDPOINTS.users}/{id}`)
   .onWrite(async (change, context) => {
-    await updateUserVoteStats(change)
+    await updateHowtoVoteStats(change)
   })
 
 /********************************************************************
@@ -82,7 +83,7 @@ async function updateContentCounterStats(
  * where they track howtos that they have marked as useful, and update the specific counter
  * on the howto to reflect the change
  */
-async function updateUserVoteStats(change: IDBDocChange) {
+async function updateHowtoVoteStats(change: IDBDocChange) {
   // as a user may not have voted before so make sure to handle empty case also
   // also will be triggered on user creation so handle case where user does not exist before
   const votedBefore = (change.before.data() as IUserDB)?.votedUsefulHowtos || {}
@@ -93,11 +94,17 @@ async function updateUserVoteStats(change: IDBDocChange) {
       // both true and false values are stored (to make it easier to unvote)
       // so increment counter by +/-1 depending on updated value using firebase increment utility
       const counterChange = votedAfter[howtoId] ? 1 : -1
-      const update: Partial<IHowtoDB> = {
-        usefulCount: admin.firestore.FieldValue.increment(counterChange) as any,
+      const update: Partial<IHowtoStats> = {
+        votedUsefulCount: admin.firestore.FieldValue.increment(
+          counterChange,
+        ) as any,
       }
-      const howtoRef = db.collection(DB_ENDPOINTS.howtos).doc(howtoId)
-      await howtoRef.set(update, { merge: true })
+      const howtoStatsRef = db
+        .collection(DB_ENDPOINTS.howtos)
+        .doc(howtoId)
+        .collection('stats')
+        .doc('all')
+      await howtoStatsRef.set(update, { merge: true })
     }
   })
   await Promise.all(updates)

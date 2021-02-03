@@ -18,6 +18,8 @@ import { isAllowToEditContent, emStringToPx } from 'src/utils/helpers'
 import theme from 'src/themes/styled.theme'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
+import ReactTooltip from 'react-tooltip'
+import styled from 'styled-components'
 
 interface IProps {
   howto: IHowtoDB
@@ -29,6 +31,10 @@ interface IProps {
   onUsefulClick: () => void
 }
 
+const StyledTooltip = styled(ReactTooltip)`
+  opacity: 1 !important;
+`
+
 const UsefulWrapper = ({
   isLoggedIn,
   onClick,
@@ -37,31 +43,29 @@ const UsefulWrapper = ({
   isLoggedIn: boolean
   onClick: () => void
   children: React.ReactChild
-}) =>
-  isLoggedIn ? (
+}) => (
+  <>
     <Button
+      data-tip={
+        isLoggedIn ? undefined : 'You must be logged in to mark as useful.'
+      }
       variant="subtle"
       fontSize="14px"
-      onClick={onClick}
+      onClick={isLoggedIn ? onClick : undefined}
       ml="8px"
       backgroundColor="#f5ede2"
     >
       {children}
     </Button>
-  ) : (
-    <Box
-      variant="subtle"
-      p={[15, 10]}
-      sx={{ borderRadius: '5px' }}
-      display="inline-block"
-      fontSize="14px"
-      ml="8px"
-      backgroundColor="#f5ede2"
-      title="You must be logged in to vote"
-    >
-      {children}
-    </Box>
-  )
+    {!isLoggedIn && (
+      <StyledTooltip
+        event="click focus"
+        eventOff="mouseleave blur"
+        effect="solid"
+      />
+    )}
+  </>
+)
 
 export default class HowtoDescription extends React.PureComponent<IProps, any> {
   // eslint-disable-next-line

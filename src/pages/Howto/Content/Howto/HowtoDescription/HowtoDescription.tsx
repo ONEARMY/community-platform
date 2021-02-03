@@ -18,8 +18,8 @@ import { isAllowToEditContent, emStringToPx } from 'src/utils/helpers'
 import theme from 'src/themes/styled.theme'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
-import ReactTooltip from 'react-tooltip'
-import styled from 'styled-components'
+import Tooltip from 'src/components/Tooltip'
+import { useHistory } from 'react-router'
 
 interface IProps {
   howto: IHowtoDB
@@ -31,10 +31,6 @@ interface IProps {
   onUsefulClick: () => void
 }
 
-const StyledTooltip = styled(ReactTooltip)`
-  opacity: 1 !important;
-`
-
 const UsefulWrapper = ({
   isLoggedIn,
   onClick,
@@ -43,29 +39,25 @@ const UsefulWrapper = ({
   isLoggedIn: boolean
   onClick: () => void
   children: React.ReactChild
-}) => (
-  <>
-    <Button
-      data-tip={
-        isLoggedIn ? undefined : 'You must be logged in to mark as useful.'
-      }
-      variant="subtle"
-      fontSize="14px"
-      onClick={isLoggedIn ? onClick : undefined}
-      ml="8px"
-      backgroundColor="#f5ede2"
-    >
-      {children}
-    </Button>
-    {!isLoggedIn && (
-      <StyledTooltip
-        event="click focus"
-        eventOff="mouseleave blur"
-        effect="solid"
-      />
-    )}
-  </>
-)
+}) => {
+  const history = useHistory()
+
+  return (
+    <>
+      <Button
+        data-tip={isLoggedIn ? undefined : 'log in to use this'}
+        variant="subtle"
+        fontSize="14px"
+        onClick={isLoggedIn ? onClick : () => history.push('/sign-in')}
+        ml="8px"
+        backgroundColor="#f5ede2"
+      >
+        {children}
+      </Button>
+      {!isLoggedIn && <Tooltip />}
+    </>
+  )
+}
 
 export default class HowtoDescription extends React.PureComponent<IProps, any> {
   // eslint-disable-next-line

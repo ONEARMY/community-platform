@@ -18,6 +18,8 @@ import { isAllowToEditContent, emStringToPx } from 'src/utils/helpers'
 import theme from 'src/themes/styled.theme'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
+import Tooltip from 'src/components/Tooltip'
+import { useHistory } from 'react-router'
 
 interface IProps {
   howto: IHowtoDB
@@ -37,31 +39,25 @@ const UsefulWrapper = ({
   isLoggedIn: boolean
   onClick: () => void
   children: React.ReactChild
-}) =>
-  isLoggedIn ? (
-    <Button
-      variant="subtle"
-      fontSize="14px"
-      onClick={onClick}
-      ml="8px"
-      backgroundColor="#f5ede2"
-    >
-      {children}
-    </Button>
-  ) : (
-    <Box
-      variant="subtle"
-      p={[15, 10]}
-      sx={{ borderRadius: '5px' }}
-      display="inline-block"
-      fontSize="14px"
-      ml="8px"
-      backgroundColor="#f5ede2"
-      title="You must be logged in to vote"
-    >
-      {children}
-    </Box>
+}) => {
+  const history = useHistory()
+
+  return (
+    <>
+      <Button
+        data-tip={isLoggedIn ? undefined : 'log in to use this'}
+        variant="subtle"
+        fontSize="14px"
+        onClick={isLoggedIn ? onClick : () => history.push('/sign-in')}
+        ml="8px"
+        backgroundColor="#f5ede2"
+      >
+        {children}
+      </Button>
+      {!isLoggedIn && <Tooltip />}
+    </>
   )
+}
 
 export default class HowtoDescription extends React.PureComponent<IProps, any> {
   // eslint-disable-next-line

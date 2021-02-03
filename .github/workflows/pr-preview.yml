@@ -1,7 +1,8 @@
 # Create and deploy a build on all pull requests
 name: PR Preview
 on:
-  pull_request:
+  # use pull_request_target so that secrets accessible from fork
+  pull_request_target:
     # Only create a preview if changes have been made to the main src code or backend functions
     paths:
       - 'src/**'

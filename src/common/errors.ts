@@ -6,7 +6,7 @@ export const logToSentry = {
   event: Sentry.captureEvent,
   exception: Sentry.captureException,
 }
-const Level = Sentry.Severity
+
 export const initErrorHandler = () => {
   const { location } = window
   if (

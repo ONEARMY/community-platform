@@ -11,7 +11,7 @@ export const ResearchItemDetail = (props: IProps) => {
   React.useEffect(() => {
     const { slug } = props
     store.setActiveResearchItem(slug)
-  }, [])
+  }, [props, store])
   const item = store.activeResearchItem
   return item ? (
     <>

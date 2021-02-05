@@ -1,5 +1,6 @@
 import { observable, action, computed, toJS, makeObservable } from 'mobx'
 import { Subscription } from 'rxjs'
+import Fuse from 'fuse.js'
 import {
   IHowto,
   IHowtoFormInput,
@@ -17,6 +18,12 @@ import { IUser } from 'src/models/user.models'
 import { hasAdminRights, needsModeration } from 'src/utils/helpers'
 
 const COLLECTION_NAME = 'howtos'
+const HOWTO_SEARCH_WEIGHTS = [
+  { name: 'title', weight: 0.5 },
+  { name: 'description', weight: 0.3 },
+  { name: 'steps.title', weight: 0.15 },
+  { name: 'steps.text', weight: 0.05 },
+]
 
 export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
@@ -26,6 +33,8 @@ export class HowtoStore extends ModuleStore {
   public allHowtos: IHowtoDB[]
   @observable
   public selectedTags: ISelectedTags
+  @observable
+  public searchValue: string
   @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
   @observable howtoStats: IHowtoStats | undefined
@@ -86,7 +95,7 @@ export class HowtoStore extends ModuleStore {
     // HACK - ARH - 2019/12/11 filter unaccepted howtos, should be done serverside
     const activeUser = this.activeUser
     const isAdmin = hasAdminRights(activeUser)
-    return howtos.filter(howto => {
+    const validHowtos = howtos.filter(howto => {
       const isHowToAccepted = howto.moderation === 'accepted'
       const wasCreatedByUser =
         activeUser && howto._createdBy === activeUser.userName
@@ -97,6 +106,22 @@ export class HowtoStore extends ModuleStore {
 
       return isHowToAccepted || wasCreatedByUser || isAdminAndAccepted
     })
+
+    // If user searched, filter remaining howtos by the search query with Fuse
+    if (!this.searchValue) {
+      return validHowtos
+    } else {
+      const fuse = new Fuse(validHowtos, {
+        keys: HOWTO_SEARCH_WEIGHTS,
+      })
+
+      // Currently Fuse returns objects containing the search items, hence the need to map. https://github.com/krisk/Fuse/issues/532
+      return fuse.search(this.searchValue).map(v => v.item)
+    }
+  }
+
+  public updateSearchValue(query: string) {
+    this.searchValue = query
   }
 
   public updateSelectedTags(tagKey: ISelectedTags) {

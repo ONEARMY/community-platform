@@ -40,4 +40,9 @@
     'color': 'D7C0A1',
     'description': 'Code reviewed, pending update to changes requested',
   },
+  {
+    'name': 'Review allow-preview ✅',
+    'color': 'FFF',
+    'description': 'Has received manual check for malicious code and can be safely built for preview',
+  },
 ]

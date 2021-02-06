@@ -3,15 +3,25 @@ name: PR Preview
 on:
   # use pull_request_target so that secrets accessible from fork
   pull_request_target:
+    # Only trigger if labels have been assigned (preventing automatic build from forks)
+    types: [labeled]
     # Only create a preview if changes have been made to the main src code or backend functions
     paths:
       - 'src/**'
       - 'functions/**'
 jobs:
   build_and_preview:
+    # NOTE - as we are going to check out and build from forks we also need to add manual
+    # check that malicious code has not been inserted. This is handled by manually labelling the PR
+    # https://securitylab.github.com/research/github-actions-preventing-pwn-requests
+    if: contains(github.event.pull_request.labels.*.name, 'Review allow-preview ✅')
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
+        with:
+          # pull the repo from the pull request source, not the default local repo
+          ref: ${{ github.event.pull_request.head.sha }}
       - name: Setup Cache
         uses: actions/cache@v2
         with:

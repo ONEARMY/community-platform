@@ -20,8 +20,9 @@ import { hasAdminRights, needsModeration } from 'src/utils/helpers'
 const COLLECTION_NAME = 'howtos'
 const HOWTO_SEARCH_WEIGHTS = [
   { name: 'title', weight: 0.5 },
-  { name: 'description', weight: 0.3 },
-  { name: 'steps.title', weight: 0.15 },
+  { name: 'description', weight: 0.2 },
+  { name: '_createdBy', weight: 0.15 },
+  { name: 'steps.title', weight: 0.1 },
   { name: 'steps.text', weight: 0.05 },
 ]
 

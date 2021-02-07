@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { Provider, MobXProviderContext } from 'mobx-react'
+import { Provider } from 'mobx-react'
 
 import { ThemeProvider } from 'styled-components'
 import styledTheme from 'src/themes/styled.theme'

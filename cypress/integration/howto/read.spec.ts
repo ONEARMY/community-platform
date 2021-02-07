@@ -42,9 +42,7 @@ describe('[How To]', () => {
       cy.get('[data-cy=create]')
         .click()
         .url()
-        
     })
-   
   })
 
   describe('[Filter with Tag]', () => {
@@ -68,6 +66,7 @@ describe('[How To]', () => {
       cy.step('Type and select a tag')
       cy.get('.data-cy__input')
         .get('input')
+        .first()
         .type('injec')
       cy.get('.data-cy__menu')
         .contains('injection')

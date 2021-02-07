@@ -12,6 +12,7 @@ import HowToCard from 'src/components/HowToCard/HowToCard'
 import Heading from 'src/components/Heading'
 import { Loader } from 'src/components/Loader'
 import { VirtualizedFlex } from 'src/components/VirtualizedFlex/VirtualizedFlex'
+import SearchInput from 'src/components/SearchInput'
 
 interface InjectedProps {
   howtoStore?: HowtoStore
@@ -42,6 +43,7 @@ export class HowtoList extends React.Component<any, IState> {
 
   public render() {
     const { filteredHowtos, selectedTags } = this.props.howtoStore
+
     return (
       <>
         <Flex py={26}>
@@ -61,6 +63,12 @@ export class HowtoList extends React.Component<any, IState> {
               styleVariant="filter"
               placeholder="Filter by tags"
               relevantTagsItems={filteredHowtos}
+            />
+          </Flex>
+          <Flex ml={[0, 0, '8px']} mr={[0, 0, 'auto']} mb={['10px', '10px', 0]}>
+            <SearchInput
+              placeholder="Search for a how-to"
+              onChange={value => this.props.howtoStore.updateSearchValue(value)}
             />
           </Flex>
           <Flex justifyContent={['flex-end', 'flex-end', 'auto']}>

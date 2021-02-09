@@ -24,6 +24,20 @@ interface IState {
   // totalHowtoColumns: number
 }
 
+// Update query params for search and tags
+const updateQueryParams = (url: string, key: string, val: string) => {
+  const newUrl = new URL(url)
+  const urlParams = new URLSearchParams(newUrl.search)
+  if (val) {
+    urlParams.set(key, val)
+  } else {
+    urlParams.delete(key)
+  }
+  newUrl.search = urlParams.toString()
+
+  window.history.pushState({ path: newUrl.toString() }, '', newUrl.toString())
+}
+
 // First we use the @inject decorator to bind to the howtoStore state
 @inject('howtoStore', 'userStore')
 // Then we can use the observer component decorator to automatically tracks observables and re-renders on change
@@ -35,6 +49,24 @@ export class HowtoList extends React.Component<any, IState> {
     super(props)
     this.state = {
       isLoading: true,
+    }
+    if (props.location.search) {
+      const searchParams = new URLSearchParams(props.location.search)
+
+      const tagQuery = searchParams.get('tags')?.toString()
+      if (tagQuery) {
+        const tags = {}
+        tagQuery.split(',').forEach(tag => {
+          tags[tag] = true
+        })
+
+        this.props.howtoStore.updateSelectedTags(tags)
+      }
+
+      const searchQuery = searchParams.get('search')?.toString()
+      if (searchQuery) {
+        this.props.howtoStore.updateSearchValue(searchQuery)
+      }
     }
   }
   get injected() {
@@ -58,7 +90,15 @@ export class HowtoList extends React.Component<any, IState> {
         >
           <Flex width={[1, 1, 0.2]} mb={['10px', '10px', 0]}>
             <TagsSelect
-              onChange={tags => this.props.howtoStore.updateSelectedTags(tags)}
+              value={selectedTags}
+              onChange={tags => {
+                updateQueryParams(
+                  window.location.href,
+                  'tags',
+                  Object.keys(tags).join(','),
+                )
+                this.props.howtoStore.updateSelectedTags(tags)
+              }}
               category="how-to"
               styleVariant="filter"
               placeholder="Filter by tags"
@@ -67,8 +107,12 @@ export class HowtoList extends React.Component<any, IState> {
           </Flex>
           <Flex ml={[0, 0, '8px']} mr={[0, 0, 'auto']} mb={['10px', '10px', 0]}>
             <SearchInput
+              value={this.props.howtoStore.searchValue}
               placeholder="Search for a how-to"
-              onChange={value => this.props.howtoStore.updateSearchValue(value)}
+              onChange={value => {
+                updateQueryParams(window.location.href, 'search', value)
+                this.props.howtoStore.updateSearchValue(value)
+              }}
             />
           </Flex>
           <Flex justifyContent={['flex-end', 'flex-end', 'auto']}>

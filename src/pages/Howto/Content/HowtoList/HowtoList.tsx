@@ -74,7 +74,7 @@ export class HowtoList extends React.Component<any, IState> {
   }
 
   public render() {
-    const { filteredHowtos, selectedTags } = this.props.howtoStore
+    const { filteredHowtos, selectedTags, searchValue } = this.props.howtoStore
 
     return (
       <>
@@ -107,7 +107,7 @@ export class HowtoList extends React.Component<any, IState> {
           </Flex>
           <Flex ml={[0, 0, '8px']} mr={[0, 0, 'auto']} mb={['10px', '10px', 0]}>
             <SearchInput
-              value={this.props.howtoStore.searchValue}
+              value={searchValue}
               placeholder="Search for a how-to"
               onChange={value => {
                 updateQueryParams(window.location.href, 'search', value)
@@ -136,7 +136,8 @@ export class HowtoList extends React.Component<any, IState> {
           {filteredHowtos.length === 0 ? (
             <Flex>
               <Heading auxiliary txtcenter width={1}>
-                {Object.keys(selectedTags).length === 0 ? (
+                {Object.keys(selectedTags).length === 0 &&
+                searchValue.length === 0 ? (
                   <Loader />
                 ) : (
                   'No how-tos to show'

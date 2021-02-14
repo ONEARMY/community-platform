@@ -23,7 +23,7 @@ import { useHistory } from 'react-router'
 
 interface IProps {
   howto: IHowtoDB
-  howtoStats?: IHowtoStats
+  votedUsefulCount: number
   loggedInUser: IUser | undefined
   needsModeration: boolean
   isUseful: boolean
@@ -130,7 +130,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
                     so currently we will not show this field (updated on server, but change not sync'd) 
                     In future likely should add subscription to live data on howto open
                     */}
-                    {this.props.howtoStats?.votedUsefulCount || ''}
+                    {this.props.votedUsefulCount || ''}
                   </Text>
                 </Flex>
               </UsefulWrapper>

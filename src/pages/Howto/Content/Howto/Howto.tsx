@@ -35,6 +35,7 @@ interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
 interface IState {
   howto?: IHowtoDB
   isLoading: boolean
+  changedIsUseful?: boolean
 }
 const MoreBox = styled(Box)`
   position: relative;
@@ -94,18 +95,32 @@ export class Howto extends React.Component<
     return this.injected.howtoStore
   }
 
+  get localIsUseful(): boolean {
+    return typeof this.state.changedIsUseful === 'undefined'
+      ? this.store.isActiveHowToUseful
+      : this.state.changedIsUseful
+  }
+
+  get localVotedUsefulCount(): number {
+    if (this.store.howtoStats) {
+      return this.state.changedIsUseful
+        ? this.store.howtoStats.votedUsefulCount + 1
+        : this.store.howtoStats.votedUsefulCount
+    }
+    return Number(!!this.localIsUseful)
+  }
+
   private moderateHowto = async (accepted: boolean) => {
     const _howto = this.store.activeHowto
     if (_howto) {
       _howto.moderation = accepted ? 'accepted' : 'rejected'
       await this.store.moderateHowto(_howto)
     }
-    this.setState({
-      isLoading: this.state.isLoading, // Why? || 20201-01-31 CC - yeah, why??
-    })
   }
 
   private onUsefulClick = async (howtoId: string) => {
+    this.setState({ changedIsUseful: !this.localIsUseful })
+    // Fire & forget
     await this.injected.userStore.updateUsefulHowTos(howtoId)
   }
 
@@ -116,25 +131,20 @@ export class Howto extends React.Component<
       isLoading: false,
     })
   }
-  public componentWillUnmount() {
-    // remove live subscription to howto stats
-    this.store.loadHowtoStats()
-  }
 
   public render() {
     const { isLoading } = this.state
     const loggedInUser = this.injected.userStore.activeUser
-    const { activeHowto, howtoStats } = this.store
-    console.log('stats', howtoStats)
+    const { activeHowto } = this.store
     if (activeHowto) {
       return (
         <>
           <HowtoDescription
             howto={activeHowto}
-            howtoStats={howtoStats}
+            votedUsefulCount={this.localVotedUsefulCount}
             loggedInUser={loggedInUser}
             needsModeration={this.store.needsModeration(activeHowto)}
-            isUseful={this.store.isActiveHowToUseful}
+            isUseful={this.localIsUseful}
             moderateHowto={this.moderateHowto}
             onUsefulClick={() => this.onUsefulClick(activeHowto._id)}
           />

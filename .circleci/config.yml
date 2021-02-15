@@ -46,7 +46,7 @@ jobs:
       - *install_yarn
       - *save_yarn_cache
   # Run cypress e2e tests on chrome
-  test_e2e_chrome:
+  test_e2e:
     docker: *docker
     environment: *environment
     parallelism: 2

@@ -28,9 +28,12 @@ async function main() {
   const cyEnv = getCypressEnv(sharedEnv)
   const appStart = `cross-env ${sharedEnv} BROWSER=none PORT=3456 npm run start`
   const waitForStart = 'http-get://localhost:3456'
+  // keep compatibility with both circleci and travisci builds - note, could pass as env variable instead
+  const ciBuildId =
+    process.env.CIRCLE_WORKFLOW_ID || process.env.TRAVIS_BUILD_ID
   const testStart = isCi
     ? //   TODO - cypress specific environment to be moved to other environment
-      `npx cypress run --record --env ${cyEnv.runtime} --key=${cyEnv.CYPRESS_KEY} --parallel --headless --browser $CI_BROWSER --group $CI_GROUP --ci-build-id $CI_BUILD_ID`
+      `npx cypress run --record --env ${cyEnv.runtime} --key=${cyEnv.CYPRESS_KEY} --parallel --headless --browser $CI_BROWSER --group $CI_GROUP --ci-build-id ${ciBuildId}`
     : `npx cypress open --browser chrome --env ${cyEnv.runtime}`
   const spawn = child.spawnSync(
     `npx start-test "${appStart}" "${waitForStart}" "${testStart}"`,

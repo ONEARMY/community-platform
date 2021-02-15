@@ -18,6 +18,7 @@ process.on('unhandledRejection', err => {
  */
 async function main() {
   const isCi = process.argv[2] === 'ci'
+  console.log('ci?', isCi, process.argv)
   const DB_PREFIX = `${randomString(5)}_`
   const sharedEnv = `REACT_APP_DB_PREFIX=${DB_PREFIX} REACT_APP_SITE_VARIANT=test-ci`
   // copy endpoints for use in testing

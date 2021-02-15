@@ -61,7 +61,7 @@ jobs:
       - *install_packages
       - *save_yarn_cache
       - run:
-          name: Test-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
+          # name: Test-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           command: npm run test ci
           # environment:
           #   CI_BROWSER: << matrix.CI_BROWSER >>

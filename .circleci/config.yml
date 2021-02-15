@@ -41,13 +41,13 @@ aliases:
 ######################################################################################################
 jobs:
   # Prepare node module caches so that future tasks run more quickly
-  # setup:
-  #   docker: *docker
-  #   steps:
-  #     - checkout
-  #     - *restore_yarn_cache
-  #     - *install_packages
-  #     - *save_yarn_cache
+  setup:
+    docker: *docker
+    steps:
+      - checkout
+      - *restore_yarn_cache
+      - *install_packages
+      - *save_yarn_cache
   # Run cypress e2e tests on chrome and firefox
   test_e2e:
     docker:
@@ -66,7 +66,7 @@ jobs:
       - *install_packages
       - *save_yarn_cache
       - run:
-          # assign build id from existing workflow id and run test
+          # assign build id from existing workflow id (circle ci doesn't support interpolation for env) and run test
           command: |
             echo 'export CI_BUILD_ID=$CIRCLE_WORKFLOW_ID' >> $BASH_ENV
             npm run test ci
@@ -103,7 +103,7 @@ workflows:
   build_and_test:
     # by default jobs will run concurrently, so specify requires if want to run sequentially
     jobs:
-      - setup
+      # - setup
       - test_e2e:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           matrix:
@@ -112,35 +112,8 @@ workflows:
               CI_BROWSER: ['chrome']
               # CI_NODE: [1, 2]
               # CI_BROWSER: ['chrome', 'firefox']
-          requires:
-            - setup
-      - build:
-          requires:
-            - test_e2e
-#   # Publishes on a cron schedule
-#   publish_preleases_nightly:
-#     unless: << pipeline.parameters.prerelease_commit_sha >>
-#     triggers:
-#       - schedule:
-#           # At 10 minutes past 16:00 on Mon, Tue, Wed, Thu, and Fri
-#           cron: "10 16 * * 1,2,3,4,5"
-#           filters:
-#             branches:
-#               only:
-#                 - master
-#     jobs:
-#       - setup
-#       - publish_prerelease:
-#           name: Publish to Next channel
-#           requires:
-#             - setup
-#           commit_sha: master
-#           release_channel: stable
-#           dist_tag: next
-#       - publish_prerelease:
-#           name: Publish to Experimental channel
-#           requires:
-#             - setup
-#           commit_sha: master
-#           release_channel: experimental
-#           dist_tag: experimental
+          # requires:
+          #   - setup
+      # - build:
+      #     requires:
+      #       - test_e2e

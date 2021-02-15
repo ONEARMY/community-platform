@@ -41,13 +41,13 @@ aliases:
 ######################################################################################################
 jobs:
   # Prepare node module caches so that future tasks run more quickly
-  setup:
-    docker: *docker
-    steps:
-      - checkout
-      - *restore_yarn_cache
-      - *install_packages
-      - *save_yarn_cache
+  # setup:
+  #   docker: *docker
+  #   steps:
+  #     - checkout
+  #     - *restore_yarn_cache
+  #     - *install_packages
+  #     - *save_yarn_cache
   # Run cypress e2e tests on chrome and firefox
   test_e2e:
     docker:
@@ -66,12 +66,14 @@ jobs:
       - *install_packages
       - *save_yarn_cache
       - run:
-          command: npm run test ci
+          # assign build id from existing workflow id and run test
+          command: |
+            echo 'export CI_BUILD_ID=$CIRCLE_WORKFLOW_ID' >> $BASH_ENV
+            npm run test ci
           environment:
             CI_BROWSER: << parameters.CI_BROWSER >>
             CI_NODE: << parameters.CI_NODE >>
             CI_GROUP: 2x-<< parameters.CI_BROWSER >>
-            CI_BUILD_ID: ${CIRCLE_WORKFLOW_ID}
 
   # Create a production build
   build:

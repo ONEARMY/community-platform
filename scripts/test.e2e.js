@@ -14,7 +14,7 @@ process.on('unhandledRejection', err => {
  * to work with (and avoid parallel tests accidentally overwriting each other).
  *
  * @argument ci - specify if running in ci (e.g. travis) to run and record
- * @example npm run test:e2e ci
+ * @example npm run test ci
  */
 async function main() {
   const isCi = process.argv[2] === 'ci'

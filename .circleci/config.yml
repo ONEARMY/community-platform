@@ -66,7 +66,8 @@ jobs:
       - *install_packages
       - *save_yarn_cache
       - run:
-          # assign build id from existing workflow id (circle ci doesn't support interpolation for env) and run test
+          command: npm run build
+      - run:
           command: npm run test ci
           environment:
             CI_BROWSER: << parameters.CI_BROWSER >>
@@ -84,11 +85,10 @@ jobs:
       - *save_yarn_cache
       - run:
           command: npm run build
-      # - persist_to_workspace:
-      #     root: .
-      #     paths:
-      #       - package.json
-      #       - build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build
       # - store_artifacts:
       #     path: build
       #     destination: build

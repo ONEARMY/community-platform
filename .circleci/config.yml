@@ -72,7 +72,7 @@ jobs:
             CI_BROWSER: << parameters.CI_BROWSER >>
             CI_NODE: << parameters.CI_NODE >>
             CI_GROUP: 2x-<< parameters.CI_BROWSER >>
-            CI_BUILD_ID: << pipeline.id >>
+            CI_BUILD_ID: $CIRCLE_WORKFLOW_ID
 
   # Create a production build
   build:

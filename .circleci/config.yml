@@ -51,13 +51,9 @@ jobs:
   # Run cypress e2e tests on chrome
   test_e2e:
     docker:
-      - image: cypress/base:12
+      - image: cypress/included:6.4.0
         environment:
           TERM: xterm
-    matrix:
-      parameters:
-        CI_NODE: [1, 2]
-        CI_BROWSER: ['chrome', 'firefox']
     environment:
       CI_BROWSER: << matrix.CI_BROWSER >>
       CI_NODE: << matrix.CI_NODE >>
@@ -101,6 +97,10 @@ workflows:
     jobs:
       - setup
       - test_e2e:
+          matrix:
+            parameters:
+              CI_NODE: [1, 2]
+              CI_BROWSER: ['chrome', 'firefox']
           requires:
             - setup
       - build:

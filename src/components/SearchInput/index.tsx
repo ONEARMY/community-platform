@@ -4,6 +4,7 @@ import { Input } from '../Form/elements'
 interface IProps {
   placeholder: string
   onChange: (value: string) => void
+  value?: string
 }
 
 const style = {
@@ -16,10 +17,16 @@ const style = {
   marginBottom: 0,
 }
 
-const SearchInput: React.FC<IProps> = ({ placeholder, onChange, ...props }) => {
+const SearchInput: React.FC<IProps> = ({
+  placeholder,
+  onChange,
+  value,
+  ...props
+}) => {
   return (
     <Input
       placeholder={placeholder}
+      value={value}
       onChange={e => onChange(e.target.value)}
       style={style}
       {...props}

@@ -50,10 +50,11 @@ jobs:
       - *save_yarn_cache
   # Run cypress e2e tests on chrome and firefox
   test_e2e:
-    docker:
-      - image: cypress/included:6.4.0
-        environment:
-          TERM: xterm
+    docker: *docker
+    # docker:
+    #   - image: cypress/included:6.4.0
+    #     environment:
+    #       TERM: xterm
     parallelism: 2
     parameters:
       CI_NODE:
@@ -64,9 +65,9 @@ jobs:
       - checkout
       - *restore_yarn_cache
       - *install_packages
-      - *save_yarn_cache
       - run:
-          command: npm run build
+          command: npm i -g cypress@6.4.0
+      - *save_yarn_cache
       - run:
           command: npm run test ci
           environment:

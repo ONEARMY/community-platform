@@ -57,7 +57,7 @@ jobs:
     parallelism: 2
     parameters:
       CI_NODE:
-        type: string
+        type: integer
       CI_BROWSER:
         type: string
     steps:

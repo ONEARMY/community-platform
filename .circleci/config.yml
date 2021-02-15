@@ -1,10 +1,15 @@
 version: 2.1
 
+######################################################################################################
+#  Orbs - preconfigured environments for running specific jobs
+######################################################################################################
 orbs:
   # node: circleci/node@4.1.0
   cypress: cypress-io/cypress@1
 
-# define snippets that will be reused
+######################################################################################################
+#  Aliases - code snippets that can be included inline in any other markup
+######################################################################################################
 aliases:
   # use a base image running node v12 with chrome/firefox browsers preinstalled
   - &docker
@@ -12,7 +17,6 @@ aliases:
     # ensure local timezone set to UTC
   - &environment
     TZ: /usr/share/zoneinfo/UTC
-
     # These can also be created as commands, but slighly tidier to just use inline
     # restore/install/save can all be done with a single circle-ci orb, but less flexible and breaks intellisense
   - &restore_yarn_cache
@@ -25,7 +29,7 @@ aliases:
         - yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
         - yarn-packages-v1-{{ .Branch }}-
         - yarn-packages-v1-
-  - &install_yarn
+  - &install_packages
     run:
       name: Install Packages
       command: yarn --frozen-lockfile --cache-folder ~/.cache/yarn
@@ -35,6 +39,9 @@ aliases:
         - ~/.cache/yarn
       key: yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
 
+######################################################################################################
+#  Jobs - Independently specified lists of tasks and environments for execution
+######################################################################################################
 jobs:
   # Prepare node module caches so that future tasks run more quickly
   setup:
@@ -43,7 +50,7 @@ jobs:
     steps:
       - checkout
       - *restore_yarn_cache
-      - *install_yarn
+      - *install_packages
       - *save_yarn_cache
   # Run cypress e2e tests on chrome
   test_e2e:
@@ -53,7 +60,9 @@ jobs:
     steps:
       - checkout
       - *restore_yarn_cache
-      - *install_yarn
+      - *install_packages
+      - run:
+          command: yarn global add cypress@6.4.0
       - *save_yarn_cache
       - run:
           command: npm run test ci
@@ -61,14 +70,6 @@ jobs:
             CI_GROUP: << matrix.CI_NODE >>x-<< matrix.CI_BROWSER >>
             CI_BROWSER: << matrix.CI_BROWSER >>
             CI_NODE: << matrix.CI_NODE >>
-      - cypress/run:
-          start: npm start
-          wait-on: 'http://localhost:4200'
-          executor: cypress/browsers-chrome69
-          record: false
-          parallel: true
-          parallelism: 4
-          group: 4x-chrome
 
   # Create a production build
   build:
@@ -78,7 +79,7 @@ jobs:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - checkout
       - *restore_yarn_cache
-      - *install_yarn
+      - *install_packages
       - *save_yarn_cache
       - run:
           command: npm run build
@@ -91,7 +92,9 @@ jobs:
       #     path: build
       #     destination: build
 
-# This describes the main order of job executions
+######################################################################################################
+#  Workflows - Collections of jobs to define overall processes
+######################################################################################################
 workflows:
   version: 2
   build_and_test:

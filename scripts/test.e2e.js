@@ -31,21 +31,29 @@ async function main() {
   // keep compatibility with both circleci and travisci builds - note, could pass as env variable instead
   const ciBuildId =
     process.env.CIRCLE_WORKFLOW_ID || process.env.TRAVIS_BUILD_ID
+
   const testStart = isCi
-    ? //   TODO - cypress specific environment to be moved to other environment
-      `npx cypress run --record --env ${cyEnv.runtime} --key=${cyEnv.CYPRESS_KEY} --parallel --headless --browser $CI_BROWSER --group $CI_GROUP --ci-build-id ${ciBuildId}`
+    ? `npx cypress run --record --env ${cyEnv.runtime} --key=${cyEnv.CYPRESS_KEY} --parallel --headless --browser $CI_BROWSER --group $CI_GROUP --ci-build-id ${ciBuildId}`
     : `npx cypress open --browser chrome --env ${cyEnv.runtime}`
-  const spawn = child.spawnSync(
-    `npx start-test "${appStart}" "${waitForStart}" "${testStart}"`,
-    {
-      shell: true,
-      stdio: ['inherit', 'inherit', 'inherit'],
-    },
-  )
-  // errors inherited by stdio above don't cause exit, so handle now
-  if (spawn.status === 1) {
-    process.exitCode = 1
+
+  if (isCi) {
+    // build
+    child.spawnSync('npm run build')
+    // serve & test
+    child.spawnSync(`npx concurrently "npx serve build -l 3456" ${testStart}`)
   }
+
+  // const spawn = child.spawnSync(
+  //   `npx start-test "${appStart}" "${waitForStart}" "${testStart}"`,
+  //   {
+  //     shell: true,
+  //     stdio: ['inherit', 'inherit', 'inherit'],
+  //   },
+  // )
+  // // errors inherited by stdio above don't cause exit, so handle now
+  // if (spawn.status === 1) {
+  //   process.exitCode = 1
+  // }
 }
 main()
 

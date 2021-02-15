@@ -14,9 +14,6 @@ aliases:
   # use a base image running node v12 with chrome/firefox browsers preinstalled
   - &docker
     - image: circleci/node:12-browsers
-    # ensure local timezone set to UTC
-  - &environment
-    TZ: /usr/share/zoneinfo/UTC
     # These can also be created as commands, but slighly tidier to just use inline
     # restore/install/save can all be done with a single circle-ci orb, but less flexible and breaks intellisense
   - &restore_yarn_cache
@@ -46,7 +43,6 @@ jobs:
   # Prepare node module caches so that future tasks run more quickly
   setup:
     docker: *docker
-    environment: *environment
     steps:
       - checkout
       - *restore_yarn_cache
@@ -54,31 +50,30 @@ jobs:
       - *save_yarn_cache
   # Run cypress e2e tests on chrome
   test_e2e:
-    docker: *docker
-    environment: *environment
+    docker:
+      - image: cypress/base:12
+        environment:
+          TERM: xterm
+    matrix:
+      parameters:
+        CI_NODE: [1, 2]
+        CI_BROWSER: ['chrome', 'firefox']
+    environment:
+      CI_BROWSER: << matrix.CI_BROWSER >>
+      CI_NODE: << matrix.CI_NODE >>
     parallelism: 2
     steps:
       - checkout
       - *restore_yarn_cache
       - *install_packages
-      - run:
-          command: yarn global add cypress@6.4.0
       - *save_yarn_cache
       - run:
           name: Test-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           command: npm run test ci
-          environment:
-            CI_BROWSER: << matrix.CI_BROWSER >>
-            CI_NODE: << matrix.CI_NODE >>
-    matrix:
-      parameters:
-        CI_NODE: [1, 2]
-        CI_BROWSER: ['chrome', 'firefox']
 
   # Create a production build
   build:
     docker: *docker
-    environment: *environment
     steps:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - checkout

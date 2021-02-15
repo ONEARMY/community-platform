@@ -66,13 +66,12 @@ jobs:
       - *install_packages
       - *save_yarn_cache
       - run:
-          # name: Test-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           command: npm run test ci
           environment:
             CI_BROWSER: << parameters.CI_BROWSER >>
             CI_NODE: << parameters.CI_NODE >>
             CI_GROUP: 2x-<< parameters.CI_BROWSER >>
-            CI_BUILD_ID: << $CIRCLE_WORKFLOW_ID >>
+            CI_BUILD_ID: ${CIRCLE_WORKFLOW_ID}
 
   # Create a production build
   build:
@@ -107,8 +106,10 @@ workflows:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           matrix:
             parameters:
-              CI_NODE: [1, 2]
-              CI_BROWSER: ['chrome', 'firefox']
+              CI_NODE: [1]
+              CI_BROWSER: ['chrome']
+              # CI_NODE: [1, 2]
+              # CI_BROWSER: ['chrome', 'firefox']
           requires:
             - setup
       - build:

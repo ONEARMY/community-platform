@@ -4,8 +4,8 @@ version: 2.1
 #  Orbs - preconfigured environments for running specific jobs
 ######################################################################################################
 # orbs:
-  # node: circleci/node@4.1.0
-  # cypress: cypress-io/cypress@1
+# node: circleci/node@4.1.0
+# cypress: cypress-io/cypress@1
 
 ######################################################################################################
 #  Aliases - code snippets that can be included inline in any other markup
@@ -55,6 +55,11 @@ jobs:
         environment:
           TERM: xterm
     parallelism: 2
+    parameters:
+      CI_NODE:
+        type: string
+      CI_BROWSER:
+        type: string
     steps:
       - checkout
       - *restore_yarn_cache
@@ -63,9 +68,9 @@ jobs:
       - run:
           # name: Test-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           command: npm run test ci
-          # environment:
-          #   CI_BROWSER: << matrix.CI_BROWSER >>
-          #   CI_NODE: << matrix.CI_NODE >>
+          environment:
+            CI_BROWSER: << parameters.CI_BROWSER >>
+            CI_NODE: << parameters.CI_NODE >>
 
   # Create a production build
   build:
@@ -97,6 +102,7 @@ workflows:
     jobs:
       - setup
       - test_e2e:
+          name: tests-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           matrix:
             parameters:
               CI_NODE: [1, 2]

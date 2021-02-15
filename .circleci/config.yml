@@ -66,7 +66,7 @@ jobs:
       - *restore_yarn_cache
       - *install_packages
       - run:
-          command: npm i -g cypress@6.4.0
+          command: yarn global add cypress@6.4.0
       - *save_yarn_cache
       - run:
           command: npm run test ci

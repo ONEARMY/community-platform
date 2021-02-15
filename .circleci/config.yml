@@ -1,7 +1,8 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@4.1.0
+  # node: circleci/node@4.1.0
+  cypress: cypress-io/cypress@1
 
 # define snippets that will be reused
 aliases:
@@ -13,6 +14,7 @@ aliases:
     TZ: /usr/share/zoneinfo/UTC
 
     # These can also be created as commands, but slighly tidier to just use inline
+    # restore/install/save can all be done with a single circle-ci orb, but less flexible and breaks intellisense
   - &restore_yarn_cache
     restore_cache:
       name: Restore yarn cache
@@ -33,9 +35,8 @@ aliases:
         - ~/.cache/yarn
       key: yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
 
-  - &TEST_PARALLELISM 4
-
 jobs:
+  # Prepare node module caches so that future tasks run more quickly
   setup:
     docker: *docker
     environment: *environment
@@ -44,13 +45,38 @@ jobs:
       - *restore_yarn_cache
       - *install_yarn
       - *save_yarn_cache
+  # Run cypress e2e tests on chrome
+  test_e2e_chrome:
+    docker: *docker
+    environment: *environment
+    parallelism: 2
+    steps:
+      - checkout
+      - *restore_yarn_cache
+      - *install_yarn
+      - *save_yarn_cache
+      - run:
+          command: npm run test ci
+          environment:
+            CI_GROUP: << matrix.CI_NODE >>x-<< matrix.CI_BROWSER >>
+            CI_BROWSER: << matrix.CI_BROWSER >>
+            CI_NODE: << matrix.CI_NODE >>
+      - cypress/run:
+          start: npm start
+          wait-on: 'http://localhost:4200'
+          executor: cypress/browsers-chrome69
+          record: false
+          parallel: true
+          parallelism: 4
+          group: 4x-chrome
+
+  # Create a production build
   build:
     docker: *docker
     environment: *environment
     steps:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - checkout
-      # restore/install/save can all be done with a single circle-ci orb, but less flexible and breaks intellisense
       - *restore_yarn_cache
       - *install_yarn
       - *save_yarn_cache
@@ -72,9 +98,16 @@ workflows:
     # by default jobs will run concurrently, so specify requires if want to run sequentially
     jobs:
       - setup
-      - build:
+      - test_e2e:
           requires:
             - setup
+          matrix:
+            parameters:
+              CI_NODE: [1, 2]
+              CI_BROWSER: ['chrome', 'firefox']
+      - build:
+          requires:
+            - test_e2e
 #   RELEASE_CHANNEL_stable_yarn_build:
 #     docker: *docker
 #     environment: *environment
@@ -102,48 +135,6 @@ workflows:
 #             - react-native
 #             - dist
 #             - sizes/*.json
-
-#   yarn_build:
-#     docker: *docker
-#     environment: *environment
-#     parallelism: 20
-#     steps:
-#       - checkout
-#       - run: yarn workspaces info | head -n -1 > workspace_info.txt
-#       - *restore_node_modules
-#       - run:
-#           environment:
-#             RELEASE_CHANNEL: experimental
-#           command: |
-#             ./scripts/circleci/add_build_info_json.sh
-#             ./scripts/circleci/update_package_versions.sh
-#             yarn build
-#       - run: echo "experimental" >> build/RELEASE_CHANNEL
-#       - persist_to_workspace:
-#           root: build
-#           paths:
-#             - RELEASE_CHANNEL
-#             - facebook-www
-#             - facebook-react-native
-#             - facebook-relay
-#             - node_modules
-#             - react-native
-#             - dist
-#             - sizes/*.json
-
-#   yarn_build_combined:
-#     docker: *docker
-#     environment: *environment
-#     parallelism: 40
-#     steps:
-#       - checkout
-#       - run: yarn workspaces info | head -n -1 > workspace_info.txt
-#       - *restore_node_modules
-#       - run: yarn build-combined
-#       - persist_to_workspace:
-#           root: .
-#           paths:
-#             - build2
 
 #   get_base_build:
 #     docker: *docker

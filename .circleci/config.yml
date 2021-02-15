@@ -3,9 +3,9 @@ version: 2.1
 ######################################################################################################
 #  Orbs - preconfigured environments for running specific jobs
 ######################################################################################################
-orbs:
+# orbs:
   # node: circleci/node@4.1.0
-  cypress: cypress-io/cypress@1
+  # cypress: cypress-io/cypress@1
 
 ######################################################################################################
 #  Aliases - code snippets that can be included inline in any other markup
@@ -48,13 +48,12 @@ jobs:
       - *restore_yarn_cache
       - *install_packages
       - *save_yarn_cache
-  # Run cypress e2e tests on chrome
+  # Run cypress e2e tests on chrome and firefox
   test_e2e:
     docker:
       - image: cypress/included:6.4.0
         environment:
           TERM: xterm
-
     parallelism: 2
     steps:
       - checkout
@@ -64,9 +63,9 @@ jobs:
       - run:
           name: Test-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           command: npm run test ci
-          environment:
-            CI_BROWSER: << matrix.CI_BROWSER >>
-            CI_NODE: << matrix.CI_NODE >>
+          # environment:
+          #   CI_BROWSER: << matrix.CI_BROWSER >>
+          #   CI_NODE: << matrix.CI_NODE >>
 
   # Create a production build
   build:

@@ -26,7 +26,7 @@ async function main() {
     'cypress/support/db/endpoints.ts',
   )
   const cyEnv = getCypressEnv(sharedEnv)
-  const appStart = `cross-env ${sharedEnv} BROWSER=none PORT=3456 npm run start`
+  const appStart = `cross-env ${sharedEnv}npm run start`
   const waitForStart = 'http-get://localhost:3456'
   // keep compatibility with both circleci and travisci builds - note, could pass as env variable instead
   const ciBuildId =
@@ -38,9 +38,15 @@ async function main() {
 
   if (isCi) {
     // build
-    child.spawnSync('npm run build')
+    child.spawnSync(`cross-env ${sharedEnv} npm run build`, {
+      shell: true,
+      stdio: ['inherit', 'inherit', 'inherit'],
+    })
     // serve & test
-    child.spawnSync(`npx concurrently "npx serve build -l 3456" ${testStart}`)
+    child.spawnSync(`npx concurrently "npx serve build -l 3456" ${testStart}`, {
+      shell: true,
+      stdio: ['inherit', 'inherit', 'inherit'],
+    })
   }
 
   // const spawn = child.spawnSync(

@@ -66,7 +66,8 @@ jobs:
       - *restore_yarn_cache
       - *install_packages
       - run:
-          command: yarn global add cypress@6.4.0
+          # install dependencies that will be called via npx
+          command: yarn global add cypress@6.4.0 concurrently serve
       - *save_yarn_cache
       - run:
           command: npm run test ci

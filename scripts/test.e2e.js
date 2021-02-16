@@ -1,6 +1,7 @@
 const child = require('child_process')
 const e2eEnv = require('dotenv').config({ path: `${process.cwd()}/.env.e2e` })
 const fs = require('fs')
+const waitOn = require('wait-on')
 
 // Prevent unhandled errors being silently ignored
 process.on('unhandledRejection', err => {
@@ -14,10 +15,12 @@ process.on('unhandledRejection', err => {
  * to work with (and avoid parallel tests accidentally overwriting each other).
  *
  * @argument ci - specify if running in ci (e.g. travis/circleci) to run and record
- * @example npm run test ci
+ * @argument prod - specify to use a production build instead of local development server
+ * @example npm run test ci prod
  */
 async function main() {
-  const isCi = process.argv[2] === 'ci'
+  const isCi = process.argv.includes('ci')
+  const useProductionBuild = process.argv.includes('prod')
   const DB_PREFIX = `${randomString(5)}_`
   // we want both cypress and the build to use some of the same build configuration, so define and share
   const sharedEnv = `REACT_APP_DB_PREFIX=${DB_PREFIX} REACT_APP_SITE_VARIANT=test-ci`
@@ -27,36 +30,73 @@ async function main() {
     'cypress/support/db/endpoints.ts',
   )
   const cyEnv = getCypressEnv(sharedEnv)
-  const { CI_GROUP, CI_BROWSER } = process.env
+  const CI_BROWSER = process.env.CI_BROWSER || 'chrome'
+  const CI_GROUP = process.env.CI_GROUP || '1x-chrome'
   // keep compatibility with both circleci and travisci builds - note, could pass as env variable instead
   const buildId = process.env.CIRCLE_WORKFLOW_ID || process.env.TRAVIS_BUILD_ID
-  const serverStart = `npx serve build -l 3456`
-  const testStart = isCi
+  // main testing command, depending on whether running on ci machine or interactive local
+  const testCMD = isCi
     ? `cypress run --record --env ${cyEnv.runtime} --key=${cyEnv.CYPRESS_KEY} --parallel --headless --browser ${CI_BROWSER} --group ${CI_GROUP} --ci-build-id ${buildId}`
-    : `npx cypress open --browser chrome --env ${cyEnv.runtime}`
+    : `npx cypress@6.4.0 open --browser chrome --env ${cyEnv.runtime}`
 
-  if (isCi) {
-    // build and test - we could run against `npm run start` non prod server, but to
-    // avoid slow start issues create and serve a production build for testing
-    child.spawnSync(`cross-env ${sharedEnv} npm run build`, {
-      shell: true,
-      stdio: ['inherit', 'inherit', 'pipe'],
-    })
-    // serve & test
-    const spawn = child.spawnSync(
-      `npx concurrently "${serverStart}" "${testStart}"`,
-      {
-        shell: true,
-        stdio: ['inherit', 'inherit', 'pipe'],
-      },
-    )
-    // errors inherited by stdio above don't cause exit, so handle now
-    if (spawn.status === 1) {
-      process.exitCode = 1
-    }
+  await startAppServer(sharedEnv, useProductionBuild)
+  console.log(isCi ? 'Start tests' : 'Opening cypress for manual testing')
+  const spawn = child.spawnSync(`cross-env FORCE_COLOR=1 ${testCMD}`, {
+    shell: true,
+    stdio: ['inherit', 'inherit', 'pipe'],
+  })
+  if (spawn.status === 1) {
+    process.exitCode = 1
   }
 }
 main()
+
+/** We need to ensure the platform is up and running before starting tests
+ * There are npm packages like start-server-and-test but they seem to have flaky
+ * performance in some environments (https://github.com/bahmutov/start-server-and-test/issues/250).
+ * Instead manually track via child spawns
+ *
+ * @param prod - When production specified a production build will be generated and served instead
+ * of using development npm run start server
+ */
+async function startAppServer(buildEnv, prod = false) {
+  // by default spawns will not respect colours used in stdio, so try to force
+  const crossEnvArgs = `${buildEnv} FORCE_COLOR=1`
+  let serverCmd = `cross-env ${crossEnvArgs} BROWSER=none PORT=3456 npm run start`
+  if (prod) {
+    child.spawnSync(`cross-env ${crossEnvArgs} npm run build`, {
+      shell: true,
+      stdio: ['inherit', 'inherit', 'pipe'],
+    })
+    // when serving locally make sure all routes are redirected to index
+    const opts = { rewrites: [{ source: '/**', destination: '/index.html' }] }
+    fs.writeFileSync('build/serve.json', JSON.stringify(opts))
+    serverCmd = `npx serve build -l 3456`
+  }
+  // as the spawn will not terminate create non-async, and just listen to and handle messages
+  // from the methods
+  const spawn = child.spawn(serverCmd, {
+    shell: true,
+    stdio: ['pipe', 'pipe', 'inherit'],
+  })
+
+  spawn.stdout.on('data', d => {
+    const msg = d.toString('utf8')
+    console.log(msg)
+    // throw typescript build errors
+    if (msg.includes('Failed to compile')) {
+      // the server will still be running after compile failure (waiting for changes),
+      // so give time for any other messages to come through before exiting manually
+      setTimeout(() => {
+        process.exit(1)
+      }, 2000)
+    }
+  })
+  // do not end function until server responsive on port 3456
+  // give up if not reponsive after 5 minutes (assume uncaught error somewhere)
+  const timeout = 5 * 60 * 1000
+  await waitOn({ resources: ['http-get://localhost:3456'], timeout })
+}
 
 /**
  * when passing an environment to cypress we will require a mix of both runtime

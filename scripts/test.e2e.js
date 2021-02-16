@@ -31,8 +31,8 @@ async function main() {
   const buildId = process.env.CIRCLE_WORKFLOW_ID || process.env.TRAVIS_BUILD_ID
 
   const testStart = isCi
-    ? `cypress run --record --env ${cyEnv.runtime} --key=${cyEnv.CYPRESS_KEY} --parallel --headless --browser $CI_BROWSER --group $CI_GROUP --ci-build-id ${buildId}`
-    : `cypress open --browser chrome --env ${cyEnv.runtime}`
+    ? `npx cypress run --record --env ${cyEnv.runtime} --key=${cyEnv.CYPRESS_KEY} --parallel --headless --browser $CI_BROWSER --group $CI_GROUP --ci-build-id ${buildId}`
+    : `npx cypress open --browser chrome --env ${cyEnv.runtime}`
 
   if (isCi) {
     // build with test env settings
@@ -42,7 +42,7 @@ async function main() {
     })
     // serve & test
     const spawn = child.spawnSync(
-      `concurrently "serve build -l 3456" ${testStart}`,
+      `concurrently "npx serve build -l 3456" ${testStart}`,
       {
         shell: true,
         stdio: ['inherit', 'inherit', 'inherit'],

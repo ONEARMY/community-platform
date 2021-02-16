@@ -37,6 +37,20 @@ aliases:
       key: yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
 
 ######################################################################################################
+#  Commands - Reusable collections of steps
+######################################################################################################
+commands:
+  setup_repo:
+    description: checkout repo and install packages
+    # no parameters currently used, but could be specified here to use within steps
+    parameters: {}
+    steps:
+      - checkout
+      - *restore_yarn_cache
+      - *install_packages
+      - *save_yarn_cache
+
+######################################################################################################
 #  Jobs - Independently specified lists of tasks and environments for execution
 ######################################################################################################
 jobs:
@@ -45,10 +59,7 @@ jobs:
   setup:
     docker: *docker
     steps:
-      - checkout
-      - *restore_yarn_cache
-      - *install_packages
-      - *save_yarn_cache
+      - setup_repo
 
   # Create a production build
   # NOTE - not currently used in test workflow as different build_env required for each machine
@@ -61,10 +72,7 @@ jobs:
         default: ''
     steps:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
-      - checkout
-      - *restore_yarn_cache
-      - *install_packages
-      - *save_yarn_cache
+      - setup_repo
       - run:
           command: cross-env << parameters.BUILD_ENV >> npm run build
       - persist_to_workspace:
@@ -78,7 +86,7 @@ jobs:
       - image: cypress/included:6.4.0
         environment:
           TERM: xterm
-    # build matrix will run 4 parallel builds handled by cypress, so don't need to specify more here 
+    # build matrix will run 4 parallel builds handled by cypress, so don't need to specify more here
     parallelism: 1
     parameters:
       CI_NODE:
@@ -86,10 +94,7 @@ jobs:
       CI_BROWSER:
         type: string
     steps:
-      - checkout
-      - *restore_yarn_cache
-      - *install_packages
-      - *save_yarn_cache
+      - setup_repo
       - run:
           command: npm run test ci
           environment:

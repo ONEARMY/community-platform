@@ -63,12 +63,14 @@ main()
  * and own e2e env. The runtime env is passed as comma-separated list and will
  * be made available via Cypress.env()
  */
-const getCypressEnv = sharedEnv => ({
-  ...e2eEnv.parsed,
-  runtime: sharedEnv.replace(/ /g, ','),
-})
+function getCypressEnv(sharedEnv) {
+  return {
+    ...e2eEnv.parsed,
+    runtime: sharedEnv.replace(/ /g, ','),
+  }
+}
 
-const randomString = length => {
+function randomString(length) {
   let result = ''
   const characters =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'

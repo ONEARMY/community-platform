@@ -78,7 +78,8 @@ jobs:
       - image: cypress/included:6.4.0
         environment:
           TERM: xterm
-    parallelism: 4
+    # build matrix will run 4 parallel builds handled by cypress, so don't need to specify more here 
+    parallelism: 1
     parameters:
       CI_NODE:
         type: integer

@@ -29,27 +29,37 @@ async function main() {
     'src/stores/databaseV2/endpoints.ts',
     'cypress/support/db/endpoints.ts',
   )
-  const cyEnv = getCypressEnv(sharedEnv)
-  const CI_BROWSER = process.env.CI_BROWSER || 'chrome'
-  const CI_GROUP = process.env.CI_GROUP || '1x-chrome'
-  // keep compatibility with both circleci and travisci builds - note, could pass as env variable instead
-  const buildId = process.env.CIRCLE_WORKFLOW_ID || process.env.TRAVIS_BUILD_ID
-  // main testing command, depending on whether running on ci machine or interactive local
-  const testCMD = isCi
-    ? `cypress run --record --env ${cyEnv.runtime} --key=${cyEnv.CYPRESS_KEY} --parallel --headless --browser ${CI_BROWSER} --group ${CI_GROUP} --ci-build-id ${buildId}`
-    : `npx cypress@6.4.0 open --browser chrome --env ${cyEnv.runtime}`
 
   await startAppServer(sharedEnv, useProductionBuild)
+  runTests(sharedEnv, isCi)
+}
+main()
+// .then(() => console.log('complete'))
+// .catch(err => {
+//   console.error(err)
+// })
+
+function runTests(sharedEnv, isCi) {
   console.log(isCi ? 'Start tests' : 'Opening cypress for manual testing')
+  const e = process.env
+  const cyEnv = getCypressEnv(sharedEnv)
+  const CI_BROWSER = e.CI_BROWSER || 'chrome'
+  const CI_GROUP = e.CI_GROUP || '1x-chrome'
+  // keep compatibility with both circleci and travisci builds - note, could pass as env variable instead
+  const buildId = e.CIRCLE_WORKFLOW_ID || e.TRAVIS_BUILD_ID || randomString(8)
+
+  // main testing command, depending on whether running on ci machine or interactive local
+  const testCMD = isCi
+    ? `npx cypress run --record --env ${cyEnv.runtime} --key=${cyEnv.CYPRESS_KEY} --parallel --headless --browser ${CI_BROWSER} --group ${CI_GROUP} --ci-build-id ${buildId}`
+    : `npx cypress@6.4.0 open --browser chrome --env ${cyEnv.runtime}`
+
   const spawn = child.spawnSync(`cross-env FORCE_COLOR=1 ${testCMD}`, {
     shell: true,
     stdio: ['inherit', 'inherit', 'pipe'],
   })
-  if (spawn.status === 1) {
-    process.exitCode = 1
-  }
+  console.log('testing complete with exit code', spawn.status)
+  process.exit(spawn.status)
 }
-main()
 
 /** We need to ensure the platform is up and running before starting tests
  * There are npm packages like start-server-and-test but they seem to have flaky

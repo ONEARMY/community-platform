@@ -29,7 +29,7 @@ async function main() {
   const cyEnv = getCypressEnv(sharedEnv)
   // keep compatibility with both circleci and travisci builds - note, could pass as env variable instead
   const buildId = process.env.CIRCLE_WORKFLOW_ID || process.env.TRAVIS_BUILD_ID
-
+  const serverStart = `npx serve build -l 3456`
   const testStart = isCi
     ? `npx cypress run --record --env ${cyEnv.runtime} --key=${cyEnv.CYPRESS_KEY} --parallel --headless --browser $CI_BROWSER --group $CI_GROUP --ci-build-id ${buildId}`
     : `npx cypress open --browser chrome --env ${cyEnv.runtime}`
@@ -40,12 +40,13 @@ async function main() {
       shell: true,
       stdio: ['inherit', 'inherit', 'inherit'],
     })
+    console.log('build stage complete', testStart)
     // serve & test
     const spawn = child.spawnSync(
-      `concurrently "npx serve build -l 3456" ${testStart}`,
+      `npx concurrently ${serverStart} ${testStart}`,
       {
         shell: true,
-        stdio: ['inherit', 'inherit', 'inherit'],
+        stdio: ['inherit', 'inherit', 'pipe'],
       },
     )
     if (spawn.status === 1) {

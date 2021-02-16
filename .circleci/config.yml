@@ -41,6 +41,7 @@ aliases:
 ######################################################################################################
 jobs:
   # Prepare node module caches so that future tasks run more quickly
+  # NOTE - not currently used as we only have one workflow
   setup:
     docker: *docker
     steps:
@@ -48,14 +49,36 @@ jobs:
       - *restore_yarn_cache
       - *install_packages
       - *save_yarn_cache
+
+  # Create a production build
+  # NOTE - not currently used in test workflow as different build_env required for each machine
+  build:
+    docker: *docker
+    parameters:
+      # optional environment variables to set during build process
+      BUILD_ENV:
+        type: string
+        default: ''
+    steps:
+      # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
+      - checkout
+      - *restore_yarn_cache
+      - *install_packages
+      - *save_yarn_cache
+      - run:
+          command: cross-env << parameters.BUILD_ENV >> npm run build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build
+
   # Run cypress e2e tests on chrome and firefox
   test_e2e:
-    docker: *docker
-    # docker:
-    #   - image: cypress/included:6.4.0
-    #     environment:
-    #       TERM: xterm
-    parallelism: 2
+    docker:
+      - image: cypress/included:6.4.0
+        environment:
+          TERM: xterm
+    parallelism: 4
     parameters:
       CI_NODE:
         type: integer
@@ -65,9 +88,6 @@ jobs:
       - checkout
       - *restore_yarn_cache
       - *install_packages
-      - run:
-          # install dependencies that will be called via npx
-          command: yarn global add cypress@6.4.0 concurrently serve
       - *save_yarn_cache
       - run:
           command: npm run test ci
@@ -75,25 +95,6 @@ jobs:
             CI_BROWSER: << parameters.CI_BROWSER >>
             CI_NODE: << parameters.CI_NODE >>
             CI_GROUP: 2x-<< parameters.CI_BROWSER >>
-
-  # Create a production build
-  build:
-    docker: *docker
-    steps:
-      # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
-      - checkout
-      - *restore_yarn_cache
-      - *install_packages
-      - *save_yarn_cache
-      - run:
-          command: npm run build
-      - persist_to_workspace:
-          root: .
-          paths:
-            - build
-      # - store_artifacts:
-      #     path: build
-      #     destination: build
 
 ######################################################################################################
 #  Workflows - Collections of jobs to define overall processes
@@ -103,17 +104,13 @@ workflows:
   build_and_test:
     # by default jobs will run concurrently, so specify requires if want to run sequentially
     jobs:
-      # - setup
+      # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - test_e2e:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           matrix:
             parameters:
-              CI_NODE: [1]
-              CI_BROWSER: ['chrome']
-              # CI_NODE: [1, 2]
-              # CI_BROWSER: ['chrome', 'firefox']
-          # requires:
-          #   - setup
+              CI_NODE: [1, 2]
+              CI_BROWSER: ['chrome', 'firefox']
       # - build:
       #     requires:
       #       - test_e2e

@@ -13,7 +13,7 @@ process.on('unhandledRejection', err => {
  * to both the tests and platform which will provide a unique set seed data on the db
  * to work with (and avoid parallel tests accidentally overwriting each other).
  *
- * @argument ci - specify if running in ci (e.g. travis) to run and record
+ * @argument ci - specify if running in ci (e.g. travis/circleci) to run and record
  * @example npm run test ci
  */
 async function main() {
@@ -27,35 +27,34 @@ async function main() {
     'cypress/support/db/endpoints.ts',
   )
   const cyEnv = getCypressEnv(sharedEnv)
-  // keep compatibility with both circleci and travisci builds - note, could pass as env variable instead
   const { CI_GROUP, CI_BROWSER } = process.env
+  // keep compatibility with both circleci and travisci builds - note, could pass as env variable instead
   const buildId = process.env.CIRCLE_WORKFLOW_ID || process.env.TRAVIS_BUILD_ID
   const serverStart = `npx serve build -l 3456`
   const testStart = isCi
-    ? `npx cypress run --record --env ${cyEnv.runtime} --key=${cyEnv.CYPRESS_KEY} --parallel --headless --browser ${CI_BROWSER} --group ${CI_GROUP} --ci-build-id ${buildId}`
+    ? `cypress run --record --env ${cyEnv.runtime} --key=${cyEnv.CYPRESS_KEY} --parallel --headless --browser ${CI_BROWSER} --group ${CI_GROUP} --ci-build-id ${buildId}`
     : `npx cypress open --browser chrome --env ${cyEnv.runtime}`
 
   if (isCi) {
-    // build with test env settings
+    // build and test - we could run against `npm run start` non prod server, but to
+    // avoid slow start issues create and serve a production build for testing
     child.spawnSync(`cross-env ${sharedEnv} npm run build`, {
       shell: true,
-      stdio: ['inherit', 'inherit', 'inherit'],
+      stdio: ['inherit', 'inherit', 'pipe'],
     })
-    console.log('build stage complete', testStart)
     // serve & test
     const spawn = child.spawnSync(
-      'npx',
-      ['concurrently', `"${serverStart}"`, `"${testStart}"`],
+      `npx concurrently "${serverStart}" "${testStart}"`,
       {
         shell: true,
         stdio: ['inherit', 'inherit', 'pipe'],
       },
     )
+    // errors inherited by stdio above don't cause exit, so handle now
     if (spawn.status === 1) {
       process.exitCode = 1
     }
   }
-  // // errors inherited by stdio above don't cause exit, so handle now
 }
 main()
 
@@ -64,14 +63,12 @@ main()
  * and own e2e env. The runtime env is passed as comma-separated list and will
  * be made available via Cypress.env()
  */
-function getCypressEnv(sharedEnv) {
-  return {
-    ...e2eEnv.parsed,
-    runtime: sharedEnv.replace(/ /g, ','),
-  }
-}
+const getCypressEnv = sharedEnv => ({
+  ...e2eEnv.parsed,
+  runtime: sharedEnv.replace(/ /g, ','),
+})
 
-function randomString(length) {
+const randomString = length => {
   let result = ''
   const characters =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'

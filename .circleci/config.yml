@@ -43,7 +43,7 @@ commands:
   setup_repo:
     description: checkout repo and install packages
     # no parameters currently used, but could be specified here to use within steps
-    parameters: {}
+    # parameters: 
     steps:
       - checkout
       - *restore_yarn_cache

@@ -15,7 +15,8 @@
   "projectId": "4s5zgo",
   "viewportWidth": 1000,
   "viewportHeight": 1000,
-  "env": {
-    "RETRIES": 2
+  "retries": {
+    "runMode": 2
+
   }
 }

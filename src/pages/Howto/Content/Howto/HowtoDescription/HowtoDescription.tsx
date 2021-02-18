@@ -1,7 +1,6 @@
 import React from 'react'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { format } from 'date-fns'
-import { FaStar, FaRegStar } from 'react-icons/fa'
 import { IHowtoDB, IHowtoStats } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
@@ -20,6 +19,7 @@ import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
 import Tooltip from 'src/components/Tooltip'
 import { useHistory } from 'react-router'
+import { availableGlyphs } from 'src/components/Icons'
 
 interface IProps {
   howto: IHowtoDB
@@ -35,9 +35,11 @@ const UsefulWrapper = ({
   isLoggedIn,
   onClick,
   children,
+  icon,
 }: {
   isLoggedIn: boolean
   onClick: () => void
+  icon: availableGlyphs
   children: React.ReactChild
 }) => {
   const history = useHistory()
@@ -51,6 +53,7 @@ const UsefulWrapper = ({
         onClick={isLoggedIn ? onClick : () => history.push('/sign-in')}
         ml="8px"
         backgroundColor="#f5ede2"
+        icon={icon}
       >
         {children}
       </Button>
@@ -121,9 +124,9 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
               <UsefulWrapper
                 isLoggedIn={!!this.props.loggedInUser}
                 onClick={this.props.onUsefulClick}
+                icon={this.props.isUseful ? 'star-active' : 'star'}
               >
                 <Flex>
-                  {this.props.isUseful ? <FaStar /> : <FaRegStar />}
                   <Text ml={1}>
                     Useful{' '}
                     {/* CC 2021-01-31 - syncing count to user currently results in too many db reads

@@ -65,14 +65,11 @@ export class HowtoStore extends ModuleStore {
   }
   @action
   public async loadHowtoStats(id?: string) {
-    this.howtoStats = undefined
-    if (id) {
+    if (id && !this.howtoStats) {
       const ref = this.db
         .collection<IHowtoStats>('howtos')
         .doc(`${id}/stats/all`)
-      if (!this.howtoStats) {
-        this.howtoStats = await ref.get('server')
-      }
+      this.howtoStats = await ref.get('server')
     }
   }
   @action

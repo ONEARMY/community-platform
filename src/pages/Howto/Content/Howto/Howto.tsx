@@ -95,17 +95,31 @@ export class Howto extends React.Component<
     return this.injected.howtoStore
   }
 
+  /**
+   * Local reference to the users count. Avoids waiting for sucessfull server response (fire & forget)
+   */
   get localIsUseful(): boolean {
     return typeof this.state.changedIsUseful === 'undefined'
       ? this.store.isActiveHowToUseful
       : this.state.changedIsUseful
   }
 
+  /**
+   * Local count for useful votes. Avoids firebase subscrubtion.
+   */
   get localVotedUsefulCount(): number {
     if (this.store.howtoStats) {
-      return this.state.changedIsUseful
-        ? this.store.howtoStats.votedUsefulCount + 1
-        : this.store.howtoStats.votedUsefulCount
+      // If the user has changed the 'useful' preference locally
+      // & it differs to the stored preference the count should increase/decrease by 1
+      if (
+        typeof this.state.changedIsUseful !== 'undefined' &&
+        this.state.changedIsUseful !== this.store.isActiveHowToUseful
+      ) {
+        return this.state.changedIsUseful
+          ? this.store.howtoStats.votedUsefulCount + 1
+          : this.store.howtoStats.votedUsefulCount - 1
+      }
+      return this.store.howtoStats.votedUsefulCount
     }
     return Number(!!this.localIsUseful)
   }

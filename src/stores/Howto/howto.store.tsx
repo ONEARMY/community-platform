@@ -59,7 +59,7 @@ export class HowtoStore extends ModuleStore {
     const activeHowto = collection.length > 0 ? collection[0] : undefined
     this.activeHowto = activeHowto
     // load howto stats which are stored in a separate subcollection
-    this.loadHowtoStats(activeHowto?._id)
+    await this.loadHowtoStats(activeHowto?._id)
 
     return activeHowto
   }
@@ -70,12 +70,9 @@ export class HowtoStore extends ModuleStore {
       const ref = this.db
         .collection<IHowtoStats>('howtos')
         .doc(`${id}/stats/all`)
-      if (this.howtoStats) {
-        this.howtoStats$.unsubscribe()
+      if (!this.howtoStats) {
+        this.howtoStats = await ref.get('server')
       }
-      this.howtoStats$ = ref.stream().subscribe(stats => {
-        this.howtoStats = stats as any
-      })
     }
   }
   @action

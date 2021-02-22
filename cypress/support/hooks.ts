@@ -18,6 +18,11 @@ before(() => {
       resolve(null)
     })
   })
+  // ensure platform has passed firebase instance data
+  cy.visit('/howto')
+  cy.window()
+    .its('firebaseInstance')
+    .should('exist')
 })
 
 /**
@@ -32,3 +37,14 @@ after(() => {
     })
   })
 })
+
+// TODO - if running production builds locally may also need to remove service workers between runs
+function clearServiceWorkers(w: Window) {
+  if (w.navigator && navigator.serviceWorker) {
+    navigator.serviceWorker.getRegistrations().then(registrations => {
+      registrations.forEach(registration => {
+        registration.unregister()
+      })
+    })
+  }
+}

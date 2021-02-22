@@ -21,10 +21,10 @@ const db = firebase.firestore()
 type PromiseCallback = (val?: any) => void
 const MAX_BATCH_SIZE = 500
 
-console.log('cypress env', Cypress.env())
 // Use prefix to allow parallel testing with different seed data
 // (prevents one test suite deleting the data of another)
-const prefix = Cypress.env('REACT_APP_DB_PREFIX')
+console.log('Cypress.env', Cypress.env())
+const prefix = Cypress.env('DB_PREFIX')
 
 class FirestoreDB {
   seedDB = () => {

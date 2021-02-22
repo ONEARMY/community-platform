@@ -95,35 +95,6 @@ export class Howto extends React.Component<
     return this.injected.howtoStore
   }
 
-  /**
-   * Local reference to the users count. Avoids waiting for sucessfull server response (fire & forget)
-   */
-  get localIsUseful(): boolean {
-    return typeof this.state.changedIsUseful === 'undefined'
-      ? this.store.isActiveHowToUseful
-      : this.state.changedIsUseful
-  }
-
-  /**
-   * Local count for useful votes. Avoids firebase subscrubtion.
-   */
-  get localVotedUsefulCount(): number {
-    if (this.store.howtoStats) {
-      // If the user has changed the 'useful' preference locally
-      // & it differs to the stored preference the count should increase/decrease by 1
-      if (
-        typeof this.state.changedIsUseful !== 'undefined' &&
-        this.state.changedIsUseful !== this.store.isActiveHowToUseful
-      ) {
-        return this.state.changedIsUseful
-          ? this.store.howtoStats.votedUsefulCount + 1
-          : this.store.howtoStats.votedUsefulCount - 1
-      }
-      return this.store.howtoStats.votedUsefulCount
-    }
-    return Number(!!this.localIsUseful)
-  }
-
   private moderateHowto = async (accepted: boolean) => {
     const _howto = this.store.activeHowto
     if (_howto) {
@@ -133,7 +104,6 @@ export class Howto extends React.Component<
   }
 
   private onUsefulClick = async (howtoId: string) => {
-    this.setState({ changedIsUseful: !this.localIsUseful })
     // Fire & forget
     await this.injected.userStore.updateUsefulHowTos(howtoId)
   }
@@ -155,10 +125,10 @@ export class Howto extends React.Component<
         <>
           <HowtoDescription
             howto={activeHowto}
-            votedUsefulCount={this.localVotedUsefulCount}
+            votedUsefulCount={this.store.howtoStats?.votedUsefulCount}
             loggedInUser={loggedInUser}
             needsModeration={this.store.needsModeration(activeHowto)}
-            isUseful={this.localIsUseful}
+            userVotedUseful={this.store.userVotedActiveHowToUseful}
             moderateHowto={this.moderateHowto}
             onUsefulClick={() => this.onUsefulClick(activeHowto._id)}
           />

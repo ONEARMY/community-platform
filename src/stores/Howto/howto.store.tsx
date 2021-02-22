@@ -39,7 +39,6 @@ export class HowtoStore extends ModuleStore {
   @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
   @observable howtoStats: IHowtoStats | undefined
-  private howtoStats$: Subscription
   constructor(rootStore: RootStore) {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
@@ -57,6 +56,7 @@ export class HowtoStore extends ModuleStore {
       .collection<IHowto>(COLLECTION_NAME)
       .getWhere('slug', '==', slug)
     const activeHowto = collection.length > 0 ? collection[0] : undefined
+    console.log('active howto', activeHowto)
     this.activeHowto = activeHowto
     // load howto stats which are stored in a separate subcollection
     await this.loadHowtoStats(activeHowto?._id)
@@ -64,12 +64,14 @@ export class HowtoStore extends ModuleStore {
     return activeHowto
   }
   @action
-  public async loadHowtoStats(id?: string) {
+  private async loadHowtoStats(id?: string) {
     if (id && !this.howtoStats) {
       const ref = this.db
         .collection<IHowtoStats>('howtos')
         .doc(`${id}/stats/all`)
-      this.howtoStats = await ref.get('server')
+      const howtoStats = await ref.get('server')
+      console.log('howtoStats', howtoStats)
+      this.howtoStats = howtoStats
     }
   }
   @action
@@ -238,10 +240,11 @@ export class HowtoStore extends ModuleStore {
     return stepsWithImgMeta
   }
 
-  get isActiveHowToUseful(): boolean {
+  /** As users retain their own list of voted howtos lookup the current howto from the active user vote stats */
+  get userVotedActiveHowToUseful(): boolean {
     const howtoId = this.activeHowto!._id
     const userVotedHowtos = this.activeUser?.votedUsefulHowtos || {}
-    return userVotedHowtos[howtoId]
+    return userVotedHowtos[howtoId] ? true : false
   }
 }
 

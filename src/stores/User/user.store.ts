@@ -73,7 +73,10 @@ export class UserStore extends ModuleStore {
   }
 
   // handle user sign in, when firebase authenticates wnat to also fetch user document from the database
-  public async userSignedIn(user: IFirebaseUser | null) {
+  public async userSignedIn(
+    user: IFirebaseUser | null,
+    newUserCreated = false,
+  ) {
     if (user) {
       console.log('user signed in', user)
       // legacy user formats did not save names so get profile via email - this option be removed in later version
@@ -89,6 +92,10 @@ export class UserStore extends ModuleStore {
           `Could not find user profile [${user.uid} - ${user.email} - ${user.metadata}]. New profile created instead`,
         )
         await this.createUserProfile()
+        // now that a profile has been created, run this function again (use `newUserCreated` to avoid inf. loop in case not create not working correctly)
+        if (!newUserCreated) {
+          return this.userSignedIn(user, true)
+        }
         // throw new Error(
         //   `could not find user profile [${user.uid} - ${user.email} - ${user.metadata}]`,
         // )
@@ -198,7 +205,7 @@ export class UserStore extends ModuleStore {
     }
   }
 
-  public async createUserProfile(fields: Partial<IUser> = {}) {
+  private async createUserProfile(fields: Partial<IUser> = {}) {
     const authUser = auth.currentUser as firebase.default.User
     const displayName = authUser.displayName as string
     const userName = formatLowerNoSpecial(displayName)
@@ -219,8 +226,6 @@ export class UserStore extends ModuleStore {
     }
     // update db
     await dbRef.set(user)
-    // retrieve from db (to also include generated meta)
-    return dbRef.get()
   }
 
   @action

@@ -41,8 +41,6 @@ declare global {
 
       step(message: string)
 
-      attachFile(filePath: string)
-
       toggleUserMenuOn(): Chainable<void>
       toggleUserMenuOff(): Chainable<void>
 

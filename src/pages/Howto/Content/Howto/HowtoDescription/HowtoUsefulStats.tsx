@@ -44,11 +44,9 @@ export const HowtoUsefulStats = (props: IProps) => {
         }
         ml="8px"
         backgroundColor="#f5ede2"
+        icon={state.userVotedUseful ? 'star-active' : 'star'}
       >
-        <Flex>
-          {state.userVotedUseful ? <FaStar /> : <FaRegStar />}
-          <Text ml={1}>Useful {state.votedUsefulCount}</Text>
-        </Flex>
+        <Text ml={1}>Useful {state.votedUsefulCount}</Text>
       </Button>
       {!props.isLoggedIn && <Tooltip />}
     </>

@@ -90,6 +90,8 @@ export type availableGlyphs =
   | 'email'
   | 'chevron-left'
   | 'chevron-right'
+  | 'star'
+  | 'star-active'
 
 export type IGlyphs = { [k in availableGlyphs]: JSX.Element }
 
@@ -128,6 +130,8 @@ export const glyphs: IGlyphs = {
   email: <MdMail />,
   'chevron-left': <MdChevronLeft />,
   'chevron-right': <MdChevronRight />,
+  star: SVGs.star,
+  'star-active': SVGs.starActive,
 }
 
 type WrapperProps = IProps & VerticalAlignProps & SpaceProps

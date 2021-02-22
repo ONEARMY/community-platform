@@ -48,6 +48,7 @@ export class HowtoStore extends ModuleStore {
       this.allHowtos = docs.sort((a, b) => (a._created < b._created ? 1 : -1))
     })
     this.selectedTags = {}
+    this.searchValue = ''
   }
 
   @action

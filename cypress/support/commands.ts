@@ -74,9 +74,12 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
         return { email, password }
       },
     })
+    cy.window()
+      .its('firebaseInstance')
+      .should('exist')
     cy.window().then((win: any) => {
-      const childFB = win.firebaseInstance as typeof firebase
-      const Auth = childFB.auth()
+      const firebaseInstance = win.firebaseInstance as typeof firebase
+      const Auth = firebaseInstance.auth()
       return new Cypress.Promise((resolve, reject) => {
         Auth.signInWithEmailAndPassword(email, password)
           .then(resolve)

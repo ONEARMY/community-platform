@@ -53,6 +53,9 @@ export class HowtoStore extends ModuleStore {
 
   @action
   public async setActiveHowtoBySlug(slug: string) {
+    // clear any cached data and then load the new howto
+    this.activeHowto = undefined
+    this.howtoStats = undefined
     const collection = await this.db
       .collection<IHowto>(COLLECTION_NAME)
       .getWhere('slug', '==', slug)
@@ -66,7 +69,7 @@ export class HowtoStore extends ModuleStore {
   }
   @action
   private async loadHowtoStats(id?: string) {
-    if (id && !this.howtoStats) {
+    if (id) {
       const ref = this.db
         .collection<IHowtoStats>('howtos')
         .doc(`${id}/stats/all`)

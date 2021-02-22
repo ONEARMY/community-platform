@@ -3,8 +3,8 @@ name: PR Preview
 on:
   # use pull_request_target so that secrets accessible from fork
   pull_request_target:
-    # Only trigger if labels have been assigned (preventing automatic build from forks)
-    types: [labeled]
+    # Trigger when labels are changed or more commits added to a PR that contains labels
+    types: [labeled, synchronize]
     # Only create a preview if changes have been made to the main src code or backend functions
     paths:
       - 'src/**'

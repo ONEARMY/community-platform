@@ -4,7 +4,7 @@ const e = process ? process.env : ({} as any)
 
 // When running in CI (cypress), a custom prefix will be passed from the window
 // to allow use against a randomly namespaced database with seed data
-const ciEnv = (window as any).Cypress?.env()
+const ciEnv = (window as any).Cypress?.env() || {}
 
 /**
  * A prefix can be used to simplify large-scale schema changes or multisite hosting
@@ -12,10 +12,7 @@ const ciEnv = (window as any).Cypress?.env()
  * e.g. oa_
  */
 const DB_PREFIX =
-  ciEnv.REACT_APP_DB_PREFIX ||
-  e.REACT_APP_DB_PREFIX ||
-  e.REACT_APP_DB_PREFIX ||
-  ''
+  ciEnv.DB_PREFIX || e.REACT_APP_DB_PREFIX || e.REACT_APP_DB_PREFIX || ''
 
 /**
  * Mapping of generic database endpoints to specific prefixed and revisioned versions for the
@@ -36,5 +33,3 @@ export const DB_ENDPOINTS = {
   research: `${DB_PREFIX}research_rev20201020`,
 }
 export type DBEndpoint = keyof typeof DB_ENDPOINTS
-// legacy - want to use upper case naming convention but keep alternate until all code migrated
-export const DBEndpoints = DB_ENDPOINTS

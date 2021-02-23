@@ -19,7 +19,7 @@ before(() => {
     })
   })
   // ensure platform has passed firebase instance data
-  cy.visit('/howto')
+  cy.visit('how-to')
   cy.window()
     .its('firebaseInstance')
     .should('exist')

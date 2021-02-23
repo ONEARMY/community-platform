@@ -66,6 +66,9 @@ async function startAppServer() {
   // by default spawns will not respect colours used in stdio, so try to force
   const crossEnvArgs = `FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci`
   let serverCmd = `cross-env ${crossEnvArgs} BROWSER=none PORT=3456 npm run start`
+  // TODO - production builds currently fail tests as they require communication with the window object,
+  // which will not be populated correctly when loaded from a service worker. Need to change how data is shared bewteen
+  // cypress and the running platform (e.g. query params)
   if (useProductionBuild) {
     child.spawnSync(`cross-env ${crossEnvArgs} npm run build`, {
       shell: true,

@@ -89,6 +89,9 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
   })
 
   Cypress.Commands.add('logout', () => {
+    cy.window()
+      .its('firebaseInstance')
+      .should('exist')
     cy.window().then((win: any) => {
       const childFB = win.firebaseInstance as typeof firebase
       const Auth = childFB.auth()
@@ -100,6 +103,9 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
     })
   })
   Cypress.Commands.add('deleteCurrentUser', () => {
+    cy.window()
+      .its('firebaseInstance')
+      .should('exist')
     cy.window().then((win: any) => {
       const childFB = win.firebaseInstance as typeof firebase
       const Auth = childFB.auth()

@@ -96,7 +96,7 @@ jobs:
     steps:
       - setup_repo
       - run:
-          command: npm run test ci prod
+          command: npm run test ci
           environment:
             CI_BROWSER: << parameters.CI_BROWSER >>
             CI_NODE: << parameters.CI_NODE >>

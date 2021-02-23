@@ -24,7 +24,6 @@ const MAX_BATCH_SIZE = 500
 // Use prefix to allow parallel testing with different seed data
 // (prevents one test suite deleting the data of another)
 console.log('Cypress.env', Cypress.env())
-const prefix = Cypress.env('DB_PREFIX')
 
 class FirestoreDB {
   seedDB = () => {
@@ -49,7 +48,7 @@ class FirestoreDB {
   ): Promise<any> | Promise<any[]> => {
     const mapping = DB_ENDPOINTS[collectionName] || collectionName
     return db
-      .collection(`${prefix}${mapping}`)
+      .collection(`${mapping}`)
       .where(fieldPath, opStr, value)
       .get()
       .then(snapshot => {
@@ -67,7 +66,7 @@ class FirestoreDB {
   addDocuments = (collectionName: string, docs: any[]) => {
     const mapping = DB_ENDPOINTS[collectionName] || collectionName
     const batch = db.batch()
-    const col = db.collection(`${prefix}${mapping}`)
+    const col = db.collection(`${mapping}`)
     docs.forEach(doc => {
       const ref = col.doc(doc._id)
       batch.set(ref, doc)
@@ -77,7 +76,7 @@ class FirestoreDB {
   deleteAll = async (collectionName: string) => {
     const mapping = DB_ENDPOINTS[collectionName] || collectionName
     const batch = db.batch()
-    const col = db.collection(`${prefix}${mapping}`)
+    const col = db.collection(`${mapping}`)
     const docs = await col.get()
     docs.forEach(d => {
       batch.delete(col.doc(d.id))
@@ -93,7 +92,7 @@ class FirestoreDB {
   ) => {
     const mapping = DB_ENDPOINTS[collectionName] || collectionName
     const query = db
-      .collection(`${prefix}${mapping}`)
+      .collection(`${mapping}`)
       .where(fieldPath, opStr, value)
       .limit(MAX_BATCH_SIZE)
     return new Promise((resolve, reject) => {
@@ -140,7 +139,7 @@ class FirestoreDB {
   updateDocument = (collectionName: string, docId: string, docData: any) => {
     const mapping = DB_ENDPOINTS[collectionName] || collectionName
     return db
-      .collection(`${prefix}${mapping}`)
+      .collection(`${mapping}`)
       .doc(docId)
       .set(docData)
   }

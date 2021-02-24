@@ -82,10 +82,7 @@ jobs:
 
   # Run cypress e2e tests on chrome and firefox
   test_e2e:
-    docker:
-      - image: cypress/included:6.4.0
-        environment:
-          TERM: xterm
+    docker: *docker
     # build matrix will run 4 parallel builds handled by cypress, so don't need to specify more here
     parallelism: 1
     parameters:
@@ -117,7 +114,7 @@ workflows:
             parameters:
               CI_NODE: [1, 2]
               CI_BROWSER: ['chrome', 'firefox']
-      # TODO - CC 2021-02-23 - With current changes to db prefix handling, could create a single build and pass for testing 
+      # TODO - CC 2021-02-23 - With current changes to db prefix handling, could create a single build and pass for testing
       # - build:
       #     requires:
       #       - test_e2e

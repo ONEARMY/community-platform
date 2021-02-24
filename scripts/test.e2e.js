@@ -45,9 +45,10 @@ function runTests() {
   const buildId = e.CIRCLE_WORKFLOW_ID || e.TRAVIS_BUILD_ID || randomString(8)
 
   // main testing command, depending on whether running on ci machine or interactive local
+  // call with path to bin as to ensure locally installed used
   const testCMD = isCi
-    ? `npx cypress run --record --env ${CYPRESS_ENV} --key=${CYPRESS_KEY} --parallel --headless --browser ${CI_BROWSER} --group ${CI_GROUP} --ci-build-id ${buildId}`
-    : `npx cypress@6.4.0 open --browser chrome --env ${CYPRESS_ENV}`
+    ? `./node_modules/.bin/cypress run --record --env ${CYPRESS_ENV} --key=${CYPRESS_KEY} --parallel --headless --browser ${CI_BROWSER} --group ${CI_GROUP} --ci-build-id ${buildId}`
+    : `./node_modules/.bin/cypress open --browser chrome --env ${CYPRESS_ENV}`
 
   const spawn = child.spawnSync(`cross-env FORCE_COLOR=1 ${testCMD}`, {
     shell: true,

@@ -140,7 +140,7 @@
     "chai-subset": "^1.6.0",
     "cra-bundle-analyzer": "^0.0.3",
     "cross-env": "^6.0.3",
-    "cypress": "6.4.0",
+    "cypress": "6.5.0",
     "cypress-file-upload": "5.0.2",
     "dotenv": "6.0.0",
     "eslint-config-prettier": "^6.10.1",

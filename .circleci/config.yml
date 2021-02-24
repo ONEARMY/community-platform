@@ -96,7 +96,7 @@ jobs:
     steps:
       - setup_repo
       - run:
-          command: npm run test ci
+          command: npm run test ci prod
           environment:
             CI_BROWSER: << parameters.CI_BROWSER >>
             CI_NODE: << parameters.CI_NODE >>
@@ -117,6 +117,7 @@ workflows:
             parameters:
               CI_NODE: [1, 2]
               CI_BROWSER: ['chrome', 'firefox']
+      # TODO - CC 2021-02-23 - With current changes to db prefix handling, could create a single build and pass for testing 
       # - build:
       #     requires:
       #       - test_e2e

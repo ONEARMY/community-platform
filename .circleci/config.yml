@@ -96,6 +96,9 @@ jobs:
         type: string
     steps:
       - setup_repo
+      # retrieve build folder
+      - attach_workspace:
+          at: '.'
       # install testing browsers are required
       - when:
           condition:
@@ -125,13 +128,16 @@ workflows:
     # by default jobs will run concurrently, so specify requires if want to run sequentially
     jobs:
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
+      - build:
+          matrix:
+            parameters:
+              BUILD_ENV:
+                ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci CI=false']
       - test_e2e:
+          requires:
+            - 'build'
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           matrix:
             parameters:
               CI_NODE: [1, 2]
               CI_BROWSER: ['chrome', 'firefox']
-      # TODO - CC 2021-02-23 - With current changes to db prefix handling, could create a single build and pass for testing
-      # - build:
-      #     requires:
-      #       - test_e2e

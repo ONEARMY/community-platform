@@ -67,21 +67,27 @@ function runTests() {
 async function startAppServer() {
   // by default spawns will not respect colours used in stdio, so try to force
   const crossEnvArgs = `FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci REACT_APP_DB_PREFIX=${DB_PREFIX}`
+
+  // run local debug server for testing unless production build specified
   let serverCmd = `cross-env ${crossEnvArgs} BROWSER=none PORT=3456 npm run start`
 
+  // for production will instead serve from production build folder
   if (useProductionBuild) {
-    // specify ci=false to prevent throwing lint warnings as errors
-    process.env.CI = false
-    child.spawnSync(`cross-env ${crossEnvArgs} npm run build`, {
-      shell: true,
-      stdio: ['inherit', 'inherit', 'pipe'],
-    })
-    // when serving locally make sure all routes are redirected to index
+    // create local build if not running on ci (which will have build already generated)
+    if (!isCi) {
+      // specify CI=false to prevent throwing lint warnings as errors
+      child.spawnSync(`cross-env CI=false ${crossEnvArgs} npm run build`, {
+        shell: true,
+        stdio: ['inherit', 'inherit', 'pipe'],
+      })
+    }
+    // create a rewrites file for handling local server behaviour
     const opts = { rewrites: [{ source: '/**', destination: '/index.html' }] }
     fs.writeFileSync('build/serve.json', JSON.stringify(opts))
     serverCmd = `npx serve build -l 3456`
   }
 
+  /******************* Run the main commands ******************* */
   // as the spawn will not terminate create non-async, and just listen to and handle messages
   // from the methods
   const spawn = child.spawn(serverCmd, {

@@ -72,7 +72,8 @@ async function startAppServer() {
   // which will not be populated correctly when loaded from a service worker. Need to change how data is shared bewteen
   // cypress and the running platform (e.g. query params)
   if (useProductionBuild) {
-    child.spawnSync(`cross-env ${crossEnvArgs} npm run build`, {
+    // specify ci=false to prevent throwing lint warnings as errors
+    child.spawnSync(`cross-env ${crossEnvArgs} ci=false npm run build`, {
       shell: true,
       stdio: ['inherit', 'inherit', 'pipe'],
     })

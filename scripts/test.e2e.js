@@ -4,6 +4,8 @@ const fs = require('fs-extra')
 const waitOn = require('wait-on')
 
 const DB_PREFIX = `${randomString(5)}_`
+const isCi = process.argv.includes('ci')
+const useProductionBuild = process.argv.includes('prod')
 
 // Prevent unhandled errors being silently ignored
 process.on('unhandledRejection', err => {
@@ -26,14 +28,12 @@ async function main() {
     'src/stores/databaseV2/endpoints.ts',
     'cypress/support/db/endpoints.ts',
   )
-
   await startAppServer()
   runTests()
 }
 main()
 
 function runTests() {
-  const isCi = process.argv.includes('ci')
   console.log(isCi ? 'Start tests' : 'Opening cypress for manual testing')
   const e = process.env
   const { CYPRESS_KEY } = e2eEnv.parsed
@@ -65,16 +65,14 @@ function runTests() {
  *
  */
 async function startAppServer() {
-  const useProductionBuild = process.argv.includes('prod')
   // by default spawns will not respect colours used in stdio, so try to force
   const crossEnvArgs = `FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci REACT_APP_DB_PREFIX=${DB_PREFIX}`
   let serverCmd = `cross-env ${crossEnvArgs} BROWSER=none PORT=3456 npm run start`
-  // TODO - production builds currently fail tests as they require communication with the window object,
-  // which will not be populated correctly when loaded from a service worker. Need to change how data is shared bewteen
-  // cypress and the running platform (e.g. query params)
+
   if (useProductionBuild) {
     // specify ci=false to prevent throwing lint warnings as errors
-    child.spawnSync(`cross-env ${crossEnvArgs} ci=false npm run build`, {
+    process.env.CI = false
+    child.spawnSync(`cross-env ${crossEnvArgs} npm run build`, {
       shell: true,
       stdio: ['inherit', 'inherit', 'pipe'],
     })

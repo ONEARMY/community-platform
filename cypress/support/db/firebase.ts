@@ -77,7 +77,7 @@ class FirestoreDB {
     const mapping = DB_ENDPOINTS[collectionName] || collectionName
     const batch = db.batch()
     const col = db.collection(`${mapping}`)
-    const docs = await col.get()
+    const docs = (await col.get({ source: 'server' })) || []
     docs.forEach(d => {
       batch.delete(col.doc(d.id))
     })

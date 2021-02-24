@@ -32,11 +32,11 @@ beforeEach(() => {
  * been added to the database
  */
 after(() => {
-  cy.wrap('Clearing Database').then({ timeout: 20000 }, () => {
+  cy.wrap('Clearing Database').then({ timeout: 30000 }, () => {
     return new Cypress.Promise((resolve, reject) => {
       Firestore.clearDB()
-        .then(resolve)
-        .catch(reject)
+        .then(() => resolve())
+        .catch(() => resolve())
     })
   })
   cy.window().then(w => {

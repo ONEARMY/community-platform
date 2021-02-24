@@ -96,7 +96,8 @@ jobs:
     steps:
       - setup_repo
       - run:
-          command: npm run test ci prod
+          # TODO could use npm run test ci prod but requires lint fixes and more testing
+          command: npm run test ci
           environment:
             CI_BROWSER: << parameters.CI_BROWSER >>
             CI_NODE: << parameters.CI_NODE >>

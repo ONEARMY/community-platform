@@ -21,6 +21,15 @@ process.on('unhandledRejection', err => {
  * @argument ci - specify if running in ci (e.g. travis/circleci) to run and record
  * @argument prod - specify to use a production build instead of local development server
  * @example npm run test ci prod
+ *
+ * TODO: CC - 2021-02-24
+ * - The current check for window.Cypress used to specify db_prefix can fail when using
+ * cached service worker. For now service worker is disabled on port 3456, but should look
+ * for better solution
+ * (results in db prefix not specified correctly and trying to write to tables that don't exist)
+ *
+ * - DB seeding happens inbetween test suites, but really should happen before/after test
+ * scripts start and end (particularly teardown, as it won't be called if tests fail)
  */
 async function main() {
   // copy endpoints for use in testing
@@ -32,6 +41,7 @@ async function main() {
   // TODO - add db seed command here instead of using from within tests
   runTests()
   // TODO - add db teardown command here instead of using from within tests
+  // temp cli function: `firebase use ci; firebase firestore:delete --all-collections`
 }
 main()
 
@@ -68,7 +78,7 @@ function runTests() {
  */
 async function startAppServer() {
   // by default spawns will not respect colours used in stdio, so try to force
-  const crossEnvArgs = `FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci REACT_APP_DB_PREFIX=${DB_PREFIX}`
+  const crossEnvArgs = `FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci`
 
   // run local debug server for testing unless production build specified
   let serverCmd = `cross-env ${crossEnvArgs} BROWSER=none PORT=3456 npm run start`
@@ -78,7 +88,7 @@ async function startAppServer() {
     // create local build if not running on ci (which will have build already generated)
     if (!isCi) {
       // specify CI=false to prevent throwing lint warnings as errors
-      child.spawnSync(`cross-env CI=false ${crossEnvArgs} npm run build`, {
+      child.spawnSync(`cross-env ${crossEnvArgs} CI=false npm run build`, {
         shell: true,
         stdio: ['inherit', 'inherit', 'pipe'],
       })

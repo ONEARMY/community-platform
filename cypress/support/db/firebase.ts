@@ -21,10 +21,6 @@ const db = firebase.firestore()
 type PromiseCallback = (val?: any) => void
 const MAX_BATCH_SIZE = 500
 
-// Use prefix to allow parallel testing with different seed data
-// (prevents one test suite deleting the data of another)
-console.log('Cypress.env', Cypress.env())
-
 class FirestoreTestDB {
   seedDB = () => {
     const dbWrites = Object.keys(SEED_DATA).map(key => {
@@ -145,4 +141,4 @@ class FirestoreTestDB {
   }
 }
 export const Auth = firebase.auth()
-export const Firestore = new FirestoreTestDB()
+export const TestDB = new FirestoreTestDB()

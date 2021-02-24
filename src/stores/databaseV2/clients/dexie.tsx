@@ -165,7 +165,6 @@ Object.keys(SCHEMA_BASE).forEach(
       SCHEMA_BASE[endpoint]),
 )
 const DEXIE_SCHEMA = MAPPED_SCHEMA
-console.log('schema', DEXIE_SCHEMA)
 
 /*****************************************************************************
  * Schema Changelog

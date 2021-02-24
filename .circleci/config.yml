@@ -129,7 +129,7 @@ workflows:
     jobs:
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:
-          name: Create Production Build
+          name: Build Production
           matrix:
             parameters:
               BUILD_ENV:

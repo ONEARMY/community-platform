@@ -39,7 +39,6 @@ export class HowtoStore extends ModuleStore {
   @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
   @observable howtoStats: IHowtoStats | undefined
-  private howtoStats$: Subscription
   constructor(rootStore: RootStore) {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
@@ -54,29 +53,29 @@ export class HowtoStore extends ModuleStore {
 
   @action
   public async setActiveHowtoBySlug(slug: string) {
+    // clear any cached data and then load the new howto
+    this.activeHowto = undefined
+    this.howtoStats = undefined
     const collection = await this.db
       .collection<IHowto>(COLLECTION_NAME)
       .getWhere('slug', '==', slug)
     const activeHowto = collection.length > 0 ? collection[0] : undefined
+    console.log('active howto', activeHowto)
     this.activeHowto = activeHowto
     // load howto stats which are stored in a separate subcollection
-    this.loadHowtoStats(activeHowto?._id)
+    await this.loadHowtoStats(activeHowto?._id)
 
     return activeHowto
   }
   @action
-  public async loadHowtoStats(id?: string) {
-    this.howtoStats = undefined
+  private async loadHowtoStats(id?: string) {
     if (id) {
       const ref = this.db
         .collection<IHowtoStats>('howtos')
         .doc(`${id}/stats/all`)
-      if (this.howtoStats) {
-        this.howtoStats$.unsubscribe()
-      }
-      this.howtoStats$ = ref.stream().subscribe(stats => {
-        this.howtoStats = stats as any
-      })
+      const howtoStats = await ref.get('server')
+      console.log('howtoStats', howtoStats)
+      this.howtoStats = howtoStats
     }
   }
   @action
@@ -245,10 +244,11 @@ export class HowtoStore extends ModuleStore {
     return stepsWithImgMeta
   }
 
-  get isActiveHowToUseful(): boolean {
+  /** As users retain their own list of voted howtos lookup the current howto from the active user vote stats */
+  get userVotedActiveHowToUseful(): boolean {
     const howtoId = this.activeHowto!._id
     const userVotedHowtos = this.activeUser?.votedUsefulHowtos || {}
-    return userVotedHowtos[howtoId]
+    return userVotedHowtos[howtoId] ? true : false
   }
 }
 

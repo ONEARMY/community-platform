@@ -1,7 +1,7 @@
 import React from 'react'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { format } from 'date-fns'
-import { IHowtoDB, IHowtoStats } from 'src/models/howto.models'
+import { IHowtoDB } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import ModerationStatusText from 'src/components/ModerationStatusText'
@@ -17,52 +17,19 @@ import { isAllowToEditContent, emStringToPx } from 'src/utils/helpers'
 import theme from 'src/themes/styled.theme'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
-import Tooltip from 'src/components/Tooltip'
-import { useHistory } from 'react-router'
-import { availableGlyphs } from 'src/components/Icons'
+import { HowtoUsefulStats } from './HowtoUsefulStats'
 
 interface IProps {
   howto: IHowtoDB
-  howtoStats?: IHowtoStats
   loggedInUser: IUser | undefined
   needsModeration: boolean
-  isUseful: boolean
+  votedUsefulCount?: number
+  userVotedUseful: boolean
   moderateHowto: (accepted: boolean) => void
   onUsefulClick: () => void
 }
 
-const UsefulWrapper = ({
-  isLoggedIn,
-  onClick,
-  children,
-  icon,
-}: {
-  isLoggedIn: boolean
-  onClick: () => void
-  icon: availableGlyphs
-  children: React.ReactChild
-}) => {
-  const history = useHistory()
-
-  return (
-    <>
-      <Button
-        data-tip={isLoggedIn ? undefined : 'log in to use this'}
-        variant="subtle"
-        fontSize="14px"
-        onClick={isLoggedIn ? onClick : () => history.push('/sign-in')}
-        ml="8px"
-        backgroundColor="#f5ede2"
-        icon={icon}
-      >
-        {children}
-      </Button>
-      {!isLoggedIn && <Tooltip />}
-    </>
-  )
-}
-
-export default class HowtoDescription extends React.PureComponent<IProps, any> {
+export default class HowtoDescription extends React.PureComponent<IProps> {
   // eslint-disable-next-line
   constructor(props: IProps) {
     super(props)
@@ -121,22 +88,14 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
               </Button>
             </Link>
             <Box style={{ flexGrow: 1 }}>
-              <UsefulWrapper
-                isLoggedIn={!!this.props.loggedInUser}
-                onClick={this.props.onUsefulClick}
-                icon={this.props.isUseful ? 'star-active' : 'star'}
-              >
-                <Flex>
-                  <Text ml={1}>
-                    Useful{' '}
-                    {/* CC 2021-01-31 - syncing count to user currently results in too many db reads
-                    so currently we will not show this field (updated on server, but change not sync'd) 
-                    In future likely should add subscription to live data on howto open
-                    */}
-                    {this.props.howtoStats?.votedUsefulCount || ''}
-                  </Text>
-                </Flex>
-              </UsefulWrapper>
+              {this.props.votedUsefulCount && (
+                <HowtoUsefulStats
+                  votedUsefulCount={this.props.votedUsefulCount}
+                  userVotedUseful={this.props.userVotedUseful}
+                  isLoggedIn={this.props.loggedInUser ? true : false}
+                  onUsefulClick={this.props.onUsefulClick}
+                />
+              )}
             </Box>
             {/* Check if pin should be moderated */}
             {this.props.needsModeration && (

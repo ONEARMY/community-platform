@@ -99,12 +99,12 @@ jobs:
       # install testing browsers are required
       - when:
           condition:
-            equal: ['chrome', << pipeline.paramaters.CI_BROWSER >>]
+            equal: ['chrome', << paramaters.CI_BROWSER >>]
           steps:
             - browser-tools/install-chrome
       - when:
           condition:
-            equal: ['firefox', << pipeline.paramaters.CI_BROWSER >>]
+            equal: ['firefox', << paramaters.CI_BROWSER >>]
           steps:
             - browser-tools/install-firefox
       # call main testing script

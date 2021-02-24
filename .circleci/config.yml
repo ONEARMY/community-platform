@@ -23,9 +23,10 @@ aliases:
         # https://circleci.com/docs/2.0/caching/
         # when lock file changes, use increasingly general patterns to restore cache
         # NOTE - this will change if migrating to yarn v2 in the future
-        - yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
-        - yarn-packages-v1-{{ .Branch }}-
-        - yarn-packages-v1-
+        # NOTE - if changing base image or received cache permission denied may need to bump version v2->v3 or similar
+        - yarn-packages-v2-{{ .Branch }}-{{ checksum "yarn.lock" }}
+        - yarn-packages-v2-{{ .Branch }}-
+        - yarn-packages-v2-
   - &install_packages
     run:
       name: Install Packages
@@ -34,7 +35,7 @@ aliases:
     save_cache:
       paths:
         - ~/.cache/yarn
-      key: yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      key: yarn-packages-v2-{{ .Branch }}-{{ checksum "yarn.lock" }}
 
 ######################################################################################################
 #  Commands - Reusable collections of steps

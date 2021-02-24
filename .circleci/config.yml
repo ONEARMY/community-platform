@@ -96,17 +96,8 @@ jobs:
         type: string
     steps:
       - setup_repo
-      # install testing browsers are required
-      - when:
-          condition:
-            equal: ['chrome', << paramaters.CI_BROWSER >>]
-          steps:
-            - browser-tools/install-chrome
-      - when:
-          condition:
-            equal: ['firefox', << paramaters.CI_BROWSER >>]
-          steps:
-            - browser-tools/install-firefox
+      - browser-tools/install-chrome
+      - browser-tools/install-firefox
       # call main testing script
       - run:
           # TODO - CC 2021-02-24 `npm run test ci prod` a bit flaky, should be worked on and then used

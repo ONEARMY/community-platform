@@ -35,6 +35,7 @@ interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
 interface IState {
   howto?: IHowtoDB
   isLoading: boolean
+  changedIsUseful?: boolean
 }
 const MoreBox = styled(Box)`
   position: relative;
@@ -100,12 +101,10 @@ export class Howto extends React.Component<
       _howto.moderation = accepted ? 'accepted' : 'rejected'
       await this.store.moderateHowto(_howto)
     }
-    this.setState({
-      isLoading: this.state.isLoading, // Why? || 20201-01-31 CC - yeah, why??
-    })
   }
 
   private onUsefulClick = async (howtoId: string) => {
+    // Fire & forget
     await this.injected.userStore.updateUsefulHowTos(howtoId)
   }
 
@@ -116,25 +115,20 @@ export class Howto extends React.Component<
       isLoading: false,
     })
   }
-  public componentWillUnmount() {
-    // remove live subscription to howto stats
-    this.store.loadHowtoStats()
-  }
 
   public render() {
     const { isLoading } = this.state
     const loggedInUser = this.injected.userStore.activeUser
-    const { activeHowto, howtoStats } = this.store
-    console.log('stats', howtoStats)
+    const { activeHowto } = this.store
     if (activeHowto) {
       return (
         <>
           <HowtoDescription
             howto={activeHowto}
-            howtoStats={howtoStats}
+            votedUsefulCount={this.store.howtoStats?.votedUsefulCount}
             loggedInUser={loggedInUser}
             needsModeration={this.store.needsModeration(activeHowto)}
-            isUseful={this.store.isActiveHowToUseful}
+            userVotedUseful={this.store.userVotedActiveHowToUseful}
             moderateHowto={this.moderateHowto}
             onUsefulClick={() => this.onUsefulClick(activeHowto._id)}
           />

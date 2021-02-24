@@ -100,9 +100,9 @@ class CollectionReference<T> {
           totals.live = updates.length
           await cacheDB.setBulkDocs(endpoint, updates)
           const allDocs = await cacheDB.getCollection<T>(endpoint)
-          console.group(`[${endpoint}] docs retrieved`)
-          console.table(totals)
-          console.groupEnd()
+          // console.group(`[${endpoint}] docs retrieved`)
+          // console.table(totals)
+          // console.groupEnd()
           obs.next(allDocs)
         })
         // 4. Check for any document deletes, and remove as appropriate

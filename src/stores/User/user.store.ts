@@ -240,6 +240,7 @@ export class UserStore extends ModuleStore {
   // to authUnsubscribe variable for use later
   private _listenToAuthStateChanges(checkEmailVerification = false) {
     this.authUnsubscribe = auth.onAuthStateChanged(authUser => {
+      console.log('auth user changed', authUser)
       this.authUser = authUser
       if (authUser) {
         this.userSignedIn(authUser)

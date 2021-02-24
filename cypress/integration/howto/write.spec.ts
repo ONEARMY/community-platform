@@ -1,32 +1,16 @@
 describe('[How To]', () => {
   beforeEach(() => {
     cy.visit('/how-to')
-    cy.logout()
   })
   type Duration = '<1 week' | '1-2 weeks' | '3-4 weeks'
   type Difficulty = 'Easy' | 'Medium' | 'Hard' | 'Very Hard'
 
   const selectTimeDuration = (duration: Duration) => {
     cy.selectTag(duration, '[data-cy=time-select]')
-    // cy.get('[data-cy=time-select]').click()
-    // cy.get('.data-cy__menu')
-    //   .contains(duration)
-    //   .click()
   }
   const selectDifficultLevel = (difficultLevel: Difficulty) => {
     cy.selectTag(difficultLevel, '[data-cy=difficulty-select]')
-    // cy.get('[data-cy=difficulty-select]').click()
-    // cy.get('.data-cy__menu')
-    //   .contains(difficultLevel)
-    //   .click()
   }
-
-  // const selectTag = (tag: string) => {
-  //   cy.get('[data-cy=tag-select]').click()
-  //   cy.get('.data-cy__menu')
-  //     .contains(tag)
-  //     .click()
-  // }
 
   const fillStep = (
     stepNumber: number,

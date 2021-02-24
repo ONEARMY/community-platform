@@ -94,11 +94,7 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
   Cypress.Commands.add('logout', () => {
     cy.wrap('logging out').then(() => {
       return new Cypress.Promise(async (resolve, reject) => {
-        if (Auth.currentUser) {
-          Auth.signOut().then(() => resolve())
-        } else {
-          resolve()
-        }
+        Auth.signOut().then(() => resolve())
       })
     })
     cy.get('[data-cy=login]')

@@ -18,10 +18,9 @@ type ILink = IUser['links'][0] & { index: number }
 
 describe('[Settings]', () => {
   beforeEach(() => {
-    cy.visit('/')
+    cy.visit('/how-to')
     cy.logout()
   })
-
   const selectFocus = (focus: string) => {
     cy.get(`[data-cy=${focus}]`).click()
   }

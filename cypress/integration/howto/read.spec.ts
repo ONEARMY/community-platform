@@ -91,7 +91,6 @@ describe('[How To]', () => {
     const coverFileRegex = /brick-12-1.jpg/
     beforeEach(() => {
       cy.visit('/how-to')
-      cy.logout()
     })
     describe('[By Everyone]', () => {
       it('[See all info]', () => {

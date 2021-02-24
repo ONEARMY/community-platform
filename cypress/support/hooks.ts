@@ -21,15 +21,22 @@ before(() => {
   })
 })
 
+// ensure all tests start logged out and with an active page
+beforeEach(() => {
+  cy.visit('/how-to')
+  cy.logout()
+})
+
 /**
  * After all tests have completed delete all the documents that have
  * been added to the database
  */
 after(() => {
-  cy.wrap('Clearing Database').then({ timeout: 20000 }, doc => {
-    return new Cypress.Promise(async (resolve, reject) => {
-      await Firestore.clearDB()
-      resolve()
+  cy.wrap('Clearing Database').then({ timeout: 20000 }, () => {
+    return new Cypress.Promise((resolve, reject) => {
+      Firestore.clearDB()
+        .then(resolve)
+        .catch(reject)
     })
   })
   cy.window().then(w => {

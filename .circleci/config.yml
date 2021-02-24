@@ -3,9 +3,12 @@ version: 2.1
 ######################################################################################################
 #  Orbs - preconfigured environments for running specific jobs
 ######################################################################################################
-# orbs:
+
 # node: circleci/node@4.1.0
 # cypress: cypress-io/cypress@1
+orbs:
+  # for use with cimg image, to install web browsers
+  browser-tools: circleci/browser-tools@1.1.3
 
 ######################################################################################################
 #  Aliases - code snippets that can be included inline in any other markup
@@ -93,6 +96,8 @@ jobs:
         type: string
     steps:
       - setup_repo
+      - browser-tools/install-chrome
+      - browser-tools/install-firefox
       - run:
           command: npm run test ci
           environment:

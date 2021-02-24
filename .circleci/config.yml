@@ -78,7 +78,7 @@ jobs:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - setup_repo
       - run:
-          command: cross-env << parameters.BUILD_ENV >> npm run build
+          command: << parameters.BUILD_ENV >> npm run build
       - persist_to_workspace:
           root: .
           paths:

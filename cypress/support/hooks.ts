@@ -4,10 +4,11 @@ import { Firestore } from './db/firebase'
  * Before all tests begin seed the database. CY runs this before all specs.
  * Note, cy also automatically will clear browser caches.
  * https://docs.cypress.io/api/commands/clearlocalstorage.html
- * @remark - verbose syntax as no easy way to apply longer timeout
- * wait to custom command
+ *
+ * The should not be confused with beforeAll which is run before each test.
+ * Additionally any aliases created in before will not be passed to test instance,
+ * put aliases created in beforeAll will be (not currently required)
  */
-
 before(() => {
   indexedDB.deleteDatabase('OneArmyCache')
   cy.clearLocalStorage('CLear local storage and indexDB')
@@ -18,11 +19,6 @@ before(() => {
       resolve(null)
     })
   })
-  // ensure platform has passed firebase instance data
-  cy.visit('how-to')
-  cy.window()
-    .its('firebaseInstance')
-    .should('exist')
 })
 
 /**
@@ -36,15 +32,21 @@ after(() => {
       resolve()
     })
   })
-})
-
-// TODO - if running production builds locally may also need to remove service workers between runs
-function clearServiceWorkers(w: Window) {
-  if (w.navigator && navigator.serviceWorker) {
-    navigator.serviceWorker.getRegistrations().then(registrations => {
-      registrations.forEach(registration => {
-        registration.unregister()
+  cy.window().then(w => {
+    cy.wrap('Clearing service workers').then(() => {
+      return new Cypress.Promise(async resolve => {
+        // if running production builds locally may also need to remove service workers between runs
+        if (w.navigator && navigator.serviceWorker) {
+          navigator.serviceWorker.getRegistrations().then(registrations => {
+            registrations.forEach(registration => {
+              registration.unregister()
+            })
+            resolve()
+          })
+        } else {
+          resolve()
+        }
       })
     })
-  }
-}
+  })
+})

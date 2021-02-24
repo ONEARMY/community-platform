@@ -11,8 +11,7 @@ const ciEnv = (window as any).Cypress?.env() || {}
  * and allow multiple sites to use one DB (used for parallel test seed DBs)
  * e.g. oa_
  */
-const DB_PREFIX =
-  ciEnv.DB_PREFIX || e.REACT_APP_DB_PREFIX || e.REACT_APP_DB_PREFIX || ''
+const DB_PREFIX = ciEnv.DB_PREFIX || e.REACT_APP_DB_PREFIX || ''
 
 /**
  * Mapping of generic database endpoints to specific prefixed and revisioned versions for the

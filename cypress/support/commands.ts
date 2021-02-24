@@ -1,5 +1,5 @@
 import 'cypress-file-upload'
-import { Firestore, firebase } from './db/firebase'
+import { Firestore, firebase, Auth } from './db/firebase'
 
 export enum UserMenuItem {
   Profile = 'Profile',
@@ -58,14 +58,6 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
   const firestore = Firestore
   /**
    * Login and logout commands use the sytem interface to log a user in or out
-   * @remark - we want to hook directly into firebase auth, however there are 2 instances
-   * running on the parent (cypress/node) and child (platform/web) instances
-   * Therefore an extra method has been added in the platform to make it's instance
-   * available via the window object.
-   * @remark - note, we don't bind the reverse (full cypress firebase inherited by platform)
-   * as node and web handle objects differently, and throw errors when trying to save to firestore
-   * (web strips __proto__ but node keeps, resulting in error). We could however pass just the auth
-   * down to child using Cypress.env
    */
   Cypress.Commands.add('login', (email: string, password: string) => {
     Cypress.log({
@@ -74,51 +66,45 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
         return { email, password }
       },
     })
-    cy.window()
-      .its('firebaseInstance')
-      .should('exist')
-    cy.window().then((win: any) => {
-      const firebaseInstance = win.firebaseInstance as typeof firebase
-      const Auth = firebaseInstance.auth()
-      return new Cypress.Promise((resolve, reject) => {
-        Auth.signInWithEmailAndPassword(email, password)
-          .then(resolve)
-          .catch(reject)
+    cy.wrap('logging in')
+      .then(() => {
+        return new Cypress.Promise(async (resolve, reject) => {
+          Auth.signInWithEmailAndPassword(email, password)
+            .then(res => resolve(res.user))
+            .catch(reject)
+        })
       })
-    })
+      // after login ensure the auth user matches expected and user menu visable
+      .its('email')
+      .should('eq', email)
+    cy.get('[data-cy=user-menu]')
+    cy.log('user', Auth.currentUser)
   })
 
   Cypress.Commands.add('logout', () => {
-    cy.window()
-      .its('firebaseInstance')
-      .should('exist')
-    cy.window().then((win: any) => {
-      const childFB = win.firebaseInstance as typeof firebase
-      const Auth = childFB.auth()
-      return new Cypress.Promise((resolve, reject) => {
-        Auth.signOut()
-          .then(resolve)
-          .catch(reject)
+    cy.wrap('logging out').then(() => {
+      return new Cypress.Promise(async (resolve, reject) => {
+        if (Auth.currentUser) {
+          Auth.signOut().then(() => resolve())
+        } else {
+          resolve()
+        }
       })
     })
   })
   Cypress.Commands.add('deleteCurrentUser', () => {
-    cy.window()
-      .its('firebaseInstance')
-      .should('exist')
-    cy.window().then((win: any) => {
-      const childFB = win.firebaseInstance as typeof firebase
-      const Auth = childFB.auth()
-      return new Cypress.Promise((resolve, reject) => {
-        if (Auth.currentUser) {
-          Auth.currentUser
-            .delete()
-            .then(resolve)
-            .catch(reject)
-        } else {
-          resolve(null)
-        }
-      })
+    return new Cypress.Promise((resolve, reject) => {
+      if (Auth.currentUser) {
+        Auth.currentUser
+          .delete()
+          .then(() => resolve(null))
+          .catch(err => {
+            console.error(err)
+            reject(err)
+          })
+      } else {
+        resolve(null)
+      }
     })
   })
 

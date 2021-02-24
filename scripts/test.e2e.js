@@ -3,6 +3,8 @@ const e2eEnv = require('dotenv').config({ path: `${process.cwd()}/.env.e2e` })
 const fs = require('fs-extra')
 const waitOn = require('wait-on')
 
+const DB_PREFIX = `${randomString(5)}_`
+
 // Prevent unhandled errors being silently ignored
 process.on('unhandledRejection', err => {
   console.error('There was an uncaught error', err)
@@ -38,7 +40,7 @@ function runTests() {
   const CI_BROWSER = e.CI_BROWSER || 'chrome'
   const CI_GROUP = e.CI_GROUP || '1x-chrome'
   // cypress env is also shared to the platform via window.cypress
-  const CYPRESS_ENV = `DB_PREFIX=${randomString(5)}_`
+  const CYPRESS_ENV = `DB_PREFIX=${DB_PREFIX}`
   // keep compatibility with both circleci and travisci builds - note, could pass as env variable instead
   const buildId = e.CIRCLE_WORKFLOW_ID || e.TRAVIS_BUILD_ID || randomString(8)
 
@@ -64,7 +66,7 @@ function runTests() {
 async function startAppServer() {
   const useProductionBuild = process.argv.includes('prod')
   // by default spawns will not respect colours used in stdio, so try to force
-  const crossEnvArgs = `FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci`
+  const crossEnvArgs = `FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci REACT_APP_DB_PREFIX=${DB_PREFIX}`
   let serverCmd = `cross-env ${crossEnvArgs} BROWSER=none PORT=3456 npm run start`
   // TODO - production builds currently fail tests as they require communication with the window object,
   // which will not be populated correctly when loaded from a service worker. Need to change how data is shared bewteen

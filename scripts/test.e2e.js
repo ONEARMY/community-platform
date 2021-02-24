@@ -29,7 +29,9 @@ async function main() {
     'cypress/support/db/endpoints.ts',
   )
   await startAppServer()
+  // TODO - add db seed command here instead of using from within tests
   runTests()
+  // TODO - add db teardown command here instead of using from within tests
 }
 main()
 

@@ -19,11 +19,14 @@ before(() => {
       resolve(null)
     })
   })
+  // before each test suite starts visit the howto page and give time to db to load
+  // and auth state to update
+  cy.visit('/how-to')
+  cy.wait(5000)
 })
 
-// ensure all tests start logged out and with an active page
+// ensure all tests are also logged out (requires being on a page to check)
 beforeEach(() => {
-  cy.visit('/how-to')
   cy.logout()
 })
 
@@ -39,6 +42,7 @@ after(() => {
         .catch(() => resolve())
     })
   })
+  // remove service workers at end of each test set
   cy.window().then(w => {
     cy.wrap('Clearing service workers').then(() => {
       return new Cypress.Promise(async resolve => {

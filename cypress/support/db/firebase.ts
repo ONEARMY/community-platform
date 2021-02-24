@@ -25,7 +25,7 @@ const MAX_BATCH_SIZE = 500
 // (prevents one test suite deleting the data of another)
 console.log('Cypress.env', Cypress.env())
 
-class FirestoreDB {
+class FirestoreTestDB {
   seedDB = () => {
     const dbWrites = Object.keys(SEED_DATA).map(key => {
       return this.addDocuments(key, SEED_DATA[key])
@@ -145,4 +145,4 @@ class FirestoreDB {
   }
 }
 export const Auth = firebase.auth()
-export const Firestore = new FirestoreDB()
+export const Firestore = new FirestoreTestDB()

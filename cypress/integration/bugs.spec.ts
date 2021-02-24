@@ -1,5 +1,3 @@
-import { Page } from '../utils/test-utils'
-
 describe('[Bugs]', () => {
   it('default test', () => {
     expect(true).to.eq(true)

@@ -1,5 +1,6 @@
 import 'cypress-file-upload'
-import { Firestore, firebase, Auth } from './db/firebase'
+import { TestDB, firebase, Auth } from './db/firebase'
+import { deleteDB } from 'idb'
 
 export enum UserMenuItem {
   Profile = 'Profile',
@@ -10,12 +11,16 @@ export enum UserMenuItem {
 declare global {
   namespace Cypress {
     interface Chainable {
+      deleteIDB(name: string): Promise<boolean>
+      /** login with firebase credentials, optionally check ui login element updated*/
       login(
         username: string,
         password: string,
+        checkUI?: boolean,
       ): Promise<firebase.auth.UserCredential>
 
-      logout(): Chainable<void>
+      /** logout of firebase, optionally check ui login element updated*/
+      logout(checkUI?: boolean): Chainable<void>
 
       deleteDocuments(
         collectionName: string,
@@ -64,40 +69,75 @@ declare global {
 }
 
 const attachCustomCommands = (Cypress: Cypress.Cypress) => {
-  const firestore = Firestore
+  const firestore = TestDB
+  /** Delete an indexeddb - resolving true on success and false if blocked (open connections) */
+  Cypress.Commands.add('deleteIDB', (name: string) => {
+    cy.wrap('Delete Firebase IDB: ' + name)
+      .then(() => {
+        return new Cypress.Promise<boolean>(resolve => {
+          // ensure db exists first
+          ;(indexedDB as any).databases().then((names: string[]) => {
+            if (names.includes(name)) {
+              deleteDB(name, {
+                // blocked implies active connection; for now just resolve false but in the
+                // future may want to find better resolution
+                blocked: () => resolve(false),
+              })
+                .then(() => resolve(true))
+                .catch(() => resolve(false))
+            } else {
+              resolve(true)
+            }
+          })
+        })
+      })
+      .then(deleted => cy.log('deleted?', deleted))
+  })
+
   /**
    * Login and logout commands use the sytem interface to log a user in or out
    */
-  Cypress.Commands.add('login', (email: string, password: string) => {
-    Cypress.log({
-      displayName: 'login',
-      consoleProps: () => {
-        return { email, password }
-      },
-    })
-    // use a wrap statement to allow chaining onto an async function
-    cy.wrap('logging in')
-      .then(() => {
-        return new Cypress.Promise(async (resolve, reject) => {
-          Auth.signInWithEmailAndPassword(email, password)
-            .then(res => resolve(res.user))
-            .catch(reject)
-        })
+  Cypress.Commands.add(
+    'login',
+    (email: string, password: string, checkUI = true) => {
+      Cypress.log({
+        displayName: 'login',
+        consoleProps: () => {
+          return { email, password }
+        },
       })
-      // after login ensure the auth user matches expected and user menu visable
-      .its('email')
-      .should('eq', email)
-    cy.get('[data-cy=user-menu]')
-    cy.log('user', Auth.currentUser)
-  })
+      // use a wrap statement to allow chaining onto an async function
+      cy.wrap('logging in')
+        .then(() => {
+          return new Cypress.Promise((resolve, reject) => {
+            Auth.signInWithEmailAndPassword(email, password)
+              .then(res => resolve(res.user))
+              .catch(reject)
+          })
+        })
+        // after login ensure the auth user matches expected and user menu visable
+        .its('email')
+        .should('eq', email)
+      cy.wrap(checkUI ? 'check login ui' : 'skip ui check').then(() => {
+        if (checkUI) {
+          cy.get('[data-cy=user-menu]')
+        }
+      })
+      cy.log('user', Auth.currentUser)
+    },
+  )
 
-  Cypress.Commands.add('logout', () => {
+  Cypress.Commands.add('logout', (checkUI = true) => {
     cy.wrap('logging out').then(() => {
-      return new Cypress.Promise(async (resolve, reject) => {
+      return new Cypress.Promise((resolve, reject) => {
         Auth.signOut().then(() => resolve())
       })
     })
-    cy.get('[data-cy=login]')
+    cy.wrap(checkUI ? 'check logout ui' : 'skip ui check').then(() => {
+      if (checkUI) {
+        cy.get('[data-cy=login]')
+      }
+    })
   })
   Cypress.Commands.add('deleteCurrentUser', () => {
     return new Cypress.Promise((resolve, reject) => {

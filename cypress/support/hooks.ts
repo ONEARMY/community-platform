@@ -1,4 +1,5 @@
-import { Firestore } from './db/firebase'
+import { TestDB } from './db/firebase'
+import { DB_ENDPOINTS } from './db/endpoints'
 
 /**
  * Before all tests begin seed the database. CY runs this before all specs.
@@ -10,24 +11,21 @@ import { Firestore } from './db/firebase'
  * put aliases created in beforeAll will be (not currently required)
  */
 before(() => {
-  indexedDB.deleteDatabase('OneArmyCache')
-  cy.clearLocalStorage('CLear local storage and indexDB')
-  cy.wrap('Initialising Database').then({ timeout: 60000 }, doc => {
+  cy.deleteIDB('OneArmyCache')
+  cy.deleteIDB('firebaseLocalStorageDb')
+  cy.log('DB Prefix', DB_ENDPOINTS.howtos.substring(0, 5))
+  cy.wrap('DB Init').then({ timeout: 60000 }, doc => {
     // large initial timeout in case server slow to respond
     return new Cypress.Promise(async resolve => {
-      await Firestore.seedDB()
+      await TestDB.seedDB()
       resolve(null)
     })
   })
-  // before each test suite starts visit the howto page and give time to db to load
-  // and auth state to update
-  cy.visit('/how-to')
-  cy.wait(5000)
 })
 
 // ensure all tests are also logged out (requires being on a page to check)
 beforeEach(() => {
-  cy.logout()
+  cy.logout(false)
 })
 
 /**
@@ -37,12 +35,14 @@ beforeEach(() => {
 after(() => {
   cy.wrap('Clearing Database').then({ timeout: 30000 }, () => {
     return new Cypress.Promise((resolve, reject) => {
-      Firestore.clearDB()
+      TestDB.clearDB()
         .then(() => resolve())
         .catch(() => resolve())
     })
   })
   // remove service workers at end of each test set
+  // NOTE - these should not be enabled (included exception for port 3456)
+  // as can cause race condition to fail where cypress not loaded before platform started
   cy.window().then(w => {
     cy.wrap('Clearing service workers').then(() => {
       return new Cypress.Promise(async resolve => {

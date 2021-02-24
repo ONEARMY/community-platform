@@ -7,24 +7,26 @@ describe('[How To]', () => {
   type Difficulty = 'Easy' | 'Medium' | 'Hard' | 'Very Hard'
 
   const selectTimeDuration = (duration: Duration) => {
-    cy.get('[data-cy=time-select]').click()
-    cy.get('.data-cy__menu')
-      .contains(duration)
-      .click()
+    cy.selectTag(duration, '[data-cy=time-select]')
+    // cy.get('[data-cy=time-select]').click()
+    // cy.get('.data-cy__menu')
+    //   .contains(duration)
+    //   .click()
   }
   const selectDifficultLevel = (difficultLevel: Difficulty) => {
-    cy.get('[data-cy=difficulty-select]').click()
-    cy.get('.data-cy__menu')
-      .contains(difficultLevel)
-      .click()
+    cy.selectTag(difficultLevel, '[data-cy=difficulty-select]')
+    // cy.get('[data-cy=difficulty-select]').click()
+    // cy.get('.data-cy__menu')
+    //   .contains(difficultLevel)
+    //   .click()
   }
 
-  const selectTag = (tag: string) => {
-    cy.get('[data-cy=tag-select]').click()
-    cy.get('.data-cy__menu')
-      .contains(tag)
-      .click()
-  }
+  // const selectTag = (tag: string) => {
+  //   cy.get('[data-cy=tag-select]').click()
+  //   cy.get('.data-cy__menu')
+  //     .contains(tag)
+  //     .click()
+  // }
 
   const fillStep = (
     stepNumber: number,
@@ -143,7 +145,7 @@ describe('[How To]', () => {
         .clear()
         .type('Create a how-to test')
         .blur({ force: true })
-      selectTag('howto_testing')
+      cy.selectTag('howto_testing')
       selectTimeDuration(expected.time as Duration)
       selectDifficultLevel(expected.difficulty_level as Difficulty)
 
@@ -189,7 +191,7 @@ describe('[How To]', () => {
 
     it('[Warning on leaving page]', () => {
       const stub = cy.stub()
-      stub.returns(false);
+      stub.returns(false)
       cy.on('window:confirm', stub)
 
       cy.login('howto_creator@test.com', 'test1234')
@@ -200,23 +202,25 @@ describe('[How To]', () => {
         .clear()
         .type('Create a how-to test')
         .blur({ force: true })
-      cy.get('[data-cy=page-link][href*="/how-to"]').click().then(() => {
-        expect(stub.callCount).to.equal(1)
-        stub.resetHistory()
-      })
-      cy.url()
-        .should('match', /\/how-to\/create$/)
+      cy.get('[data-cy=page-link][href*="/how-to"]')
+        .click()
+        .then(() => {
+          expect(stub.callCount).to.equal(1)
+          stub.resetHistory()
+        })
+      cy.url().should('match', /\/how-to\/create$/)
 
       cy.step('Clear title input')
       cy.get('[data-cy=intro-title')
         .clear()
         .blur({ force: true })
-      cy.get('[data-cy=page-link][href*="/how-to"]').click().then(() => {
-        expect(stub.callCount).to.equal(0)
-        stub.resetHistory()
-      })
-      cy.url()
-        .should('match', /\/how-to$/)
+      cy.get('[data-cy=page-link][href*="/how-to"]')
+        .click()
+        .then(() => {
+          expect(stub.callCount).to.equal(0)
+          stub.resetHistory()
+        })
+      cy.url().should('match', /\/how-to$/)
     })
   })
 
@@ -326,7 +330,7 @@ describe('[How To]', () => {
       cy.get('[data-cy=intro-title]')
         .clear()
         .type(expected.title)
-      selectTag('howto_testing')
+      cy.selectTag('howto_testing')
       selectTimeDuration(expected.time as Duration)
       selectDifficultLevel(expected.difficulty_level as Difficulty)
       cy.get('[data-cy=intro-description]')

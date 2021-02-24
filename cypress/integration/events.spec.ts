@@ -2,16 +2,17 @@ describe('[Events]', () => {
   const today = new Date().toISOString().substring(0, 10)
   beforeEach(() => {
     cy.clock(Cypress.moment.utc(today).valueOf(), ['Date'])
+    // navigate to events page and wait for data load
     cy.visit('/events')
-    cy.logout()
+    cy.get('[data-cy=card]', { timeout: 10000 })
+      .its('length')
+      // length will be 6 with seed data or 7 with created event
+      .should('be.at.least', 6)
   })
 
   describe('[List events]', () => {
     it('[By Everyone]', () => {
       cy.step('Upcoming events are shown')
-      cy.get('[data-cy=card]', { timeout: 10000 })
-        .its('length')
-        .should('be.eq', 7)
 
       cy.step('Move Events button is hidden')
       cy.get('button')
@@ -45,21 +46,14 @@ describe('[Events]', () => {
   describe('[Filter Events]', () => {
     it('[By Everyone]', () => {
       cy.step('Select a tag in the dropdown list')
-      cy.get('[data-cy=tag-select]').click()
-      cy.get('.data-cy__menu')
-        .contains('workshop')
-        .click()
+      // ensure tags loaded
+      cy.selectTag('workshop')
       cy.get('[data-cy=card')
         .its('length')
         .should('eq', 2)
 
       cy.step('Type and select second tag')
-      cy.get('.data-cy__input')
-        .find('input')
-        .type('scree')
-      cy.get('.data-cy__menu')
-        .contains('screening')
-        .click()
+      cy.selectTag('screening')
       cy.get('[data-cy=card')
         .its('length')
         .should('eq', 1)
@@ -104,6 +98,8 @@ describe('[Events]', () => {
   describe('[Create an event]', () => {
     it('[By Authenticated]', () => {
       cy.login('event_creator@test.com', 'test1234')
+      // as click event changes depending on logged in state wait to ensure button updated
+      // TODO - better to bind attribute to button depending on logged in state to search for
       cy.wait(2000)
       cy.get('[data-cy=create-event]').click()
 
@@ -119,11 +115,7 @@ describe('[Events]', () => {
         .get('div.react-datepicker__day--001')
         .first()
         .click()
-      cy.get('[data-cy=tag-select]').click()
-      cy.get('.data-cy__menu')
-        .contains('event_testing')
-        .click()
-
+      cy.selectTag('event_testing')
       cy.get('[data-cy=location-search]')
         .find('input:eq(0)')
         .type('Atucucho')
@@ -131,7 +123,7 @@ describe('[Events]', () => {
         .find('div')
         .contains('Atucucho')
         .click()
-      cy.get('[data-cy=tag-select]').click()
+      // cy.get('[data-cy=tag-select]').click()
       cy.get('[data-cy=url]')
         .type('https://www.meetup.com/pt-BR/cities/br/rio_de_janeiro/')
         .blur()

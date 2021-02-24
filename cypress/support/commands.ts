@@ -50,6 +50,15 @@ declare global {
       screenClick(): Chainable<void>
 
       clickMenuItem(menuItem: UserMenuItem): Chainable<void>
+
+      /**
+       * Selecting options from the react-select picker can be a bit fiddly
+       * so user helper method to locate select box, type input and pick tag
+       * (if exists) https://github.com/cypress-io/cypress/issues/549
+       * @param tagname This will be typed into the input box and selected from the dropdown list
+       * @param selector Specify the selector of the react-select element
+       **/
+      selectTag(tagName: string, selector?: string): Chainable<void>
     }
   }
 }
@@ -66,6 +75,7 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
         return { email, password }
       },
     })
+    // use a wrap statement to allow chaining onto an async function
     cy.wrap('logging in')
       .then(() => {
         return new Cypress.Promise(async (resolve, reject) => {
@@ -91,6 +101,7 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
         }
       })
     })
+    cy.get('[data-cy=login]')
   })
   Cypress.Commands.add('deleteCurrentUser', () => {
     return new Cypress.Promise((resolve, reject) => {
@@ -179,6 +190,19 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
   Cypress.Commands.add('screenClick', () => {
     cy.get('[data-cy=header]').click({ force: true })
   })
+
+  Cypress.Commands.add(
+    'selectTag',
+    (tagName: string, selector = '[data-cy=tag-select]') => {
+      cy.log('select tag', tagName)
+      cy.get(`${selector} input`)
+        .click({ force: true })
+        .type(tagName, { force: true })
+        .get(`${selector} .data-cy__menu-list`)
+        .contains(tagName)
+        .click()
+    },
+  )
 }
 
 attachCustomCommands(Cypress)

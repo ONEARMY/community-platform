@@ -70,7 +70,10 @@ class TagsSelect extends React.Component<IProps, IState> {
 
     const { styleVariant } = this.props
     return (
-      <FieldContainer data-cy="tag-select">
+      <FieldContainer
+        // provide a data attribute that can be used to see if tags populated
+        data-cy={categoryTags.length > 0 ? 'tag-select' : 'tag-select-empty'}
+      >
         <Select
           components={{ DropdownIndicator }}
           styles={styleVariant === 'selector' ? SelectStyles : FilterStyles}

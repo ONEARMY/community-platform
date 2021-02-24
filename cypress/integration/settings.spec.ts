@@ -70,12 +70,12 @@ describe('[Settings]', () => {
 
   const addContactLink = (link: ILink) => {
     if (link.index > 0) {
+      // click the button to add another set of input fields
       cy.get('[data-cy=add-link]').click()
     }
-    cy.get(`[data-cy=select-link-${link.index}]`).click()
-    cy.get('div.data-cy__menu-list')
-      .contains(link.label)
-      .click()
+    // specifies the contact type, such as website or discord
+    cy.selectTag(link.label, `[data-cy=select-link-${link.index}]`)
+    // input the corresponding value
     cy.get(`[data-cy=input-link-${link.index}]`)
       .clear()
       .type(link.url)

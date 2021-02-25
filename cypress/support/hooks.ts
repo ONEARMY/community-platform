@@ -10,11 +10,20 @@ import { TestDB } from './db/firebase'
  * put aliases created in beforeAll will be (not currently required)
  */
 const DB_PREFIX = Cypress.env('DB_PREFIX')
-before(() => {
-  // 2021-02-24 - idb deletion not supported well in firefox, so just delete manually as required for now
-  // cy.deleteIDB('OneArmyCache')
-  // cy.deleteIDB('firebaseLocalStorageDb')
 
+before(() => {
+  // Add error handlers
+  // https://docs.cypress.io/api/utilities/promise.html#Rejected-test-promises-do-not-fail-tests
+  window.addEventListener('unhandledrejection', event => {
+    throw event.reason
+  })
+  Cypress.Promise.onPossiblyUnhandledRejection((error, promise) => {
+    throw error
+  })
+  // clear idb
+  cy.deleteIDB('OneArmyCache')
+  // cy.deleteIDB('firebaseLocalStorageDb')
+  // seed db
   cy.wrap('DB Init').then({ timeout: 60000 }, doc => {
     // large initial timeout in case server slow to respond
     return new Cypress.Promise(async resolve => {
@@ -25,7 +34,7 @@ before(() => {
 })
 
 beforeEach(() => {
-  // set the db_prefix variable on platform session storage
+  // set the db_prefix variable on platform session storage (cypress wipes between tests)
   cy.wrap('Setting DB Prefix').then(() => {
     cy.log('Prefix', DB_PREFIX)
     cy.window()

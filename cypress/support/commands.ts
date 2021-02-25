@@ -76,19 +76,15 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
       .then(() => {
         return new Cypress.Promise<boolean>(resolve => {
           // Ensure DB exists - NOTE - only supported in chrome
-          ;(indexedDB as any).databases().then((names: string[]) => {
-            if (names.includes(name)) {
-              deleteDB(name, {
-                // blocked implies active connection; for now just resolve false but in the
-                // future may want to find better resolution
-                blocked: () => resolve(false),
-              })
-                .then(() => resolve(true))
-                .catch(() => resolve(false))
-            } else {
-              resolve(true)
-            }
+          // ;(indexedDB as any).databases().then((names: string[]) => {
+          //   if (names.includes(name)) {
+          deleteDB(name, {
+            // blocked implies active connection; for now just resolve false but in the
+            // future may want to find better resolution
+            blocked: () => resolve(false),
           })
+            .then(() => resolve(true))
+            .catch(() => resolve(false))
         })
       })
       .then(deleted => cy.log('deleted?', deleted))

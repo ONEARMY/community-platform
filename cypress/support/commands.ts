@@ -75,7 +75,7 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
     cy.wrap('Delete Firebase IDB: ' + name)
       .then(() => {
         return new Cypress.Promise<boolean>(resolve => {
-          // ensure db exists first
+          // Ensure DB exists - NOTE - only supported in chrome
           ;(indexedDB as any).databases().then((names: string[]) => {
             if (names.includes(name)) {
               deleteDB(name, {

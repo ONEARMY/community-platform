@@ -1,5 +1,4 @@
 import { TestDB } from './db/firebase'
-import { DB_ENDPOINTS } from './db/endpoints'
 
 /**
  * Before all tests begin seed the database. CY runs this before all specs.
@@ -10,10 +9,12 @@ import { DB_ENDPOINTS } from './db/endpoints'
  * Additionally any aliases created in before will not be passed to test instance,
  * put aliases created in beforeAll will be (not currently required)
  */
+const DB_PREFIX = Cypress.env('DB_PREFIX')
 before(() => {
-  cy.deleteIDB('OneArmyCache')
-  cy.deleteIDB('firebaseLocalStorageDb')
-  cy.log('DB Prefix', DB_ENDPOINTS.howtos.substring(0, 5))
+  // 2021-02-24 - idb deletion not supported well in firefox, so just delete manually as required for now
+  // cy.deleteIDB('OneArmyCache')
+  // cy.deleteIDB('firebaseLocalStorageDb')
+
   cy.wrap('DB Init').then({ timeout: 60000 }, doc => {
     // large initial timeout in case server slow to respond
     return new Cypress.Promise(async resolve => {
@@ -23,8 +24,19 @@ before(() => {
   })
 })
 
-// ensure all tests are also logged out (requires being on a page to check)
 beforeEach(() => {
+  // set the db_prefix variable on platform session storage
+  cy.wrap('Setting DB Prefix').then(() => {
+    cy.log('Prefix', DB_PREFIX)
+    cy.window()
+      .its('sessionStorage')
+      .invoke('setItem', 'DB_PREFIX', DB_PREFIX)
+    cy.window()
+      .its('sessionStorage')
+      .invoke('getItem', 'DB_PREFIX')
+      .should('eq', DB_PREFIX)
+  })
+  // ensure all tests are also logged out (requires being on a page to check)
   cy.logout(false)
 })
 

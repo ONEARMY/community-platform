@@ -16,6 +16,13 @@ const fbConfig = {
   storageBucket: 'onearmy-test-ci.appspot.com',
 }
 
+// ensure the cypress env db prefix is also used with the mapped endpoints
+const DB_PREFIX = Cypress.env('DB_PREFIX')
+const MAPPED_ENDPOINTS = {}
+Object.keys(DB_ENDPOINTS).forEach(k => {
+  MAPPED_ENDPOINTS[k] = `${DB_PREFIX}${DB_ENDPOINTS[k]}`
+})
+
 firebase.initializeApp(fbConfig)
 const db = firebase.firestore()
 type PromiseCallback = (val?: any) => void
@@ -42,7 +49,7 @@ class FirestoreTestDB {
     opStr: any,
     value: string,
   ): Promise<any> | Promise<any[]> => {
-    const mapping = DB_ENDPOINTS[collectionName] || collectionName
+    const mapping = MAPPED_ENDPOINTS[collectionName] || collectionName
     return db
       .collection(`${mapping}`)
       .where(fieldPath, opStr, value)
@@ -60,7 +67,7 @@ class FirestoreTestDB {
       })
   }
   addDocuments = (collectionName: string, docs: any[]) => {
-    const mapping = DB_ENDPOINTS[collectionName] || collectionName
+    const mapping = MAPPED_ENDPOINTS[collectionName] || collectionName
     const batch = db.batch()
     const col = db.collection(`${mapping}`)
     docs.forEach(doc => {
@@ -70,7 +77,7 @@ class FirestoreTestDB {
     return batch.commit()
   }
   deleteAll = async (collectionName: string) => {
-    const mapping = DB_ENDPOINTS[collectionName] || collectionName
+    const mapping = MAPPED_ENDPOINTS[collectionName] || collectionName
     const batch = db.batch()
     const col = db.collection(`${mapping}`)
     const docs = (await col.get({ source: 'server' })) || []
@@ -86,7 +93,7 @@ class FirestoreTestDB {
     opStr: any,
     value: string,
   ) => {
-    const mapping = DB_ENDPOINTS[collectionName] || collectionName
+    const mapping = MAPPED_ENDPOINTS[collectionName] || collectionName
     const query = db
       .collection(`${mapping}`)
       .where(fieldPath, opStr, value)
@@ -133,7 +140,7 @@ class FirestoreTestDB {
   }
 
   updateDocument = (collectionName: string, docId: string, docData: any) => {
-    const mapping = DB_ENDPOINTS[collectionName] || collectionName
+    const mapping = MAPPED_ENDPOINTS[collectionName] || collectionName
     return db
       .collection(`${mapping}`)
       .doc(docId)

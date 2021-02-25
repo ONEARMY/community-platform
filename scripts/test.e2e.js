@@ -23,11 +23,6 @@ process.on('unhandledRejection', err => {
  * @example npm run test ci prod
  *
  * TODO: CC - 2021-02-24
- * - The current check for window.Cypress used to specify db_prefix can fail when using
- * cached service worker. For now service worker is disabled on port 3456, but should look
- * for better solution
- * (results in db prefix not specified correctly and trying to write to tables that don't exist)
- *
  * - DB seeding happens inbetween test suites, but really should happen before/after test
  * scripts start and end (particularly teardown, as it won't be called if tests fail)
  */
@@ -51,7 +46,6 @@ function runTests() {
   const { CYPRESS_KEY } = e2eEnv.parsed
   const CI_BROWSER = e.CI_BROWSER || 'chrome'
   const CI_GROUP = e.CI_GROUP || '1x-chrome'
-  // cypress env is also shared to the platform via window.cypress
   const CYPRESS_ENV = `DB_PREFIX=${DB_PREFIX}`
   // keep compatibility with both circleci and travisci builds - note, could pass as env variable instead
   const buildId = e.CIRCLE_WORKFLOW_ID || e.TRAVIS_BUILD_ID || randomString(8)

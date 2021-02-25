@@ -2,16 +2,12 @@
 // (e.g. cypress will instead use it's own env to populate a prefix)
 const e = process ? process.env : ({} as any)
 
-// When running in CI (cypress), a custom prefix will be passed from the window
-// to allow use against a randomly namespaced database with seed data
-const ciEnv = (window as any).Cypress?.env() || {}
-
 /**
  * A prefix can be used to simplify large-scale schema changes or multisite hosting
  * and allow multiple sites to use one DB (used for parallel test seed DBs)
  * e.g. oa_
  */
-const DB_PREFIX = ciEnv.DB_PREFIX || e.REACT_APP_DB_PREFIX || ''
+const DB_PREFIX = sessionStorage.DB_PREFIX || e.REACT_APP_DB_PREFIX || ''
 
 /**
  * Mapping of generic database endpoints to specific prefixed and revisioned versions for the

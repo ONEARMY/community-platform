@@ -5,8 +5,7 @@ import 'firebase/firestore'
 import 'firebase/storage'
 import 'firebase/functions'
 import 'firebase/database'
-import Query = firebase.firestore.Query
-import { SEED_DATA, DB_PREFIX } from '../../fixtures/seed'
+import { SEED_DATA } from '../../fixtures/seed'
 import { DB_ENDPOINTS } from './endpoints'
 const fbConfig = {
   apiKey: 'AIzaSyDAxS_7M780mI3_tlwnAvpbaqRsQPlmp64',
@@ -22,18 +21,18 @@ firebase.initializeApp(fbConfig)
 const db = firebase.firestore()
 
 class FirestoreTestDB {
-  seedDB = (prefix = DB_PREFIX) => {
+  seedDB = () => {
     const dbWrites = Object.keys(SEED_DATA).map(key => {
       const endpoint = DB_ENDPOINTS[key]
-      return this.addDocuments(`${prefix}${endpoint}`, SEED_DATA[key])
+      return this.addDocuments(`${endpoint}`, SEED_DATA[key])
     })
     return Promise.all(dbWrites)
   }
 
-  clearDB = (prefix = DB_PREFIX) => {
+  clearDB = () => {
     const dbDeletes = Object.keys(SEED_DATA).map(key => {
       const endpoint = DB_ENDPOINTS[key]
-      return this.deleteAll(`${prefix}${endpoint}`)
+      return this.deleteAll(`${endpoint}`)
     })
     return Promise.all(dbDeletes)
   }
@@ -43,25 +42,23 @@ class FirestoreTestDB {
     fieldPath: string,
     opStr: any,
     value: string,
-    prefix = DB_PREFIX,
-  ): Promise<any> | Promise<any[]> => {
+  ): Cypress.Chainable => {
     const endpoint = DB_ENDPOINTS[collectionName]
-    return db
-      .collection(`${prefix}${endpoint}`)
-      .where(fieldPath, opStr, value)
-      .get()
-      .then(snapshot => {
-        const result: any[] = []
-        if (snapshot.empty) {
-          return result
-        }
-        snapshot.forEach(document => result.push(document.data()))
-        if (result.length === 1) {
-          return result[0]
-        }
-        return result
+    return cy
+      .wrap(`query: ${endpoint} WHERE ${fieldPath}${opStr}${value}`)
+      .then(() => {
+        return new Cypress.Promise((resolve, reject) => {
+          db.collection(`${endpoint}`)
+            .where(fieldPath, opStr, value)
+            .get()
+            .then(snapshot => {
+              resolve(snapshot.docs.map(d => d.data()))
+            })
+            .catch(err => reject(err))
+        })
       })
   }
+
   private addDocuments = (collectionName: string, docs: any[]) => {
     const batch = db.batch()
     const col = db.collection(collectionName)

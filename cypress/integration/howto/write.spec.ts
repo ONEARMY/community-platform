@@ -161,10 +161,13 @@ describe('[How To]', () => {
         .should('include', `/how-to/create-a-how-to-test`)
 
       cy.step('Howto was created correctly')
-      cy.queryDocuments('howtos', 'title', '==', expected.title).should(
-        'eqHowto',
-        expected,
-      )
+      cy.queryDocuments('howtos', 'title', '==', expected.title).then(docs => {
+        cy.log('queryDocs', docs)
+        expect(docs.length).to.equal(1)
+        cy.wrap(null)
+          .then(() => docs[0])
+          .should('eqHowto', expected)
+      })
     })
 
     it('[By Anonymous]', () => {
@@ -353,9 +356,14 @@ describe('[How To]', () => {
         .url()
         .should('include', '/how-to/this-is-an-edit-test')
       cy.get('[data-cy=how-to-basis]').contains('This is an edit test')
-      cy.queryDocuments('howtos', 'title', '==', 'This is an edit test').should(
-        'eqHowto',
-        expected,
+      cy.queryDocuments('howtos', 'title', '==', 'This is an edit test').then(
+        docs => {
+          cy.log('queryDocs', docs)
+          expect(docs.length).to.equal(1)
+          cy.wrap(null)
+            .then(() => docs[0])
+            .should('eqHowto', expected)
+        },
       )
     })
   })

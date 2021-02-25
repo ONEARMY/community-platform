@@ -60,7 +60,7 @@ describe('[Settings]', () => {
       .clear()
       .type(mapPin.searchKeyword)
     cy.get('[data-cy=location-search]')
-      .find('.ap-suggestion:eq(0)')
+      .find('.ap-suggestion:eq(0)', { timeout: 10000 })
       .click()
     cy.get('[data-cy=location-search]')
       .find('input')
@@ -164,7 +164,7 @@ describe('[Settings]', () => {
       })
 
       cy.get('[data-cy=save]').click()
-      cy.wait(500)
+      cy.wait(2000)
       cy.get('[data-cy=save]').should('not.be.disabled')
       cy.step('Verify if all changes were saved correctly')
       cy.queryDocuments(
@@ -172,7 +172,13 @@ describe('[Settings]', () => {
         'userName',
         '==',
         expected.userName,
-      ).should('eqSettings', expected)
+      ).then(docs => {
+        cy.log('queryDocs', docs)
+        expect(docs.length).to.equal(1)
+        cy.wrap(null)
+          .then(() => docs[0])
+          .should('eqSettings', expected)
+      })
     })
   })
   describe('[Focus Member]', () => {
@@ -232,14 +238,20 @@ describe('[Settings]', () => {
       })
 
       cy.get('[data-cy=save]').click()
-      cy.wait(500)
+      cy.wait(2000)
       cy.get('[data-cy=save]').should('not.be.disabled')
       cy.queryDocuments(
         DbCollectionName.users,
         'userName',
         '==',
         expected.userName,
-      ).should('eqSettings', expected)
+      ).then(docs => {
+        cy.log('queryDocs', docs)
+        expect(docs.length).to.equal(1)
+        cy.wrap(null)
+          .then(() => docs[0])
+          .should('eqSettings', expected)
+      })
     })
   })
 
@@ -313,18 +325,19 @@ describe('[Settings]', () => {
       })
 
       cy.get('[data-cy=save]').click()
-      cy.wait(500)
+      cy.wait(2000)
       cy.get('[data-cy=save]').should('not.be.disabled')
       cy.queryDocuments(
         DbCollectionName.users,
         'userName',
         '==',
         expected.userName,
-        // debug version - wrap to allow full log of result and expected
-      ).should(doc => {
-        cy.log('doc', JSON.stringify(doc))
-        cy.log('expected', JSON.stringify(expected))
-        cy.wrap(doc).should('eqSettings', expected)
+      ).then(docs => {
+        cy.log('queryDocs', docs)
+        expect(docs.length).to.equal(1)
+        cy.wrap(null)
+          .then(() => docs[0])
+          .should('eqSettings', expected)
       })
     })
   })
@@ -393,14 +406,20 @@ describe('[Settings]', () => {
       })
 
       cy.get('[data-cy=save]').click()
-      cy.wait(500)
+      cy.wait(2000)
       cy.get('[data-cy=save]').should('not.be.disabled')
       cy.queryDocuments(
         DbCollectionName.users,
         'userName',
         '==',
         expected.userName,
-      ).should('eqSettings', expected)
+      ).then(docs => {
+        cy.log('queryDocs', docs)
+        expect(docs.length).to.equal(1)
+        cy.wrap(null)
+          .then(() => docs[0])
+          .should('eqSettings', expected)
+      })
     })
   })
 
@@ -575,14 +594,20 @@ describe('[Settings]', () => {
         locationName: expected.location.value,
       })
       cy.get('[data-cy=save]').click()
-      cy.wait(500)
+      cy.wait(2000)
       cy.get('[data-cy=save]').should('not.be.disabled')
       cy.queryDocuments(
         DbCollectionName.users,
         'userName',
         '==',
         expected.userName,
-      ).should('eqSettings', expected)
+      ).then(docs => {
+        cy.log('queryDocs', docs)
+        expect(docs.length).to.equal(1)
+        cy.wrap(null)
+          .then(() => docs[0])
+          .should('eqSettings', expected)
+      })
     })
   })
 })

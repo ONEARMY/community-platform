@@ -31,7 +31,7 @@ declare global {
         fieldPath: string,
         opStr: any,
         value: string,
-      ): Chainable<any>
+      ): Chainable<any[]>
 
       step(message: string)
 

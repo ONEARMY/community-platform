@@ -12,6 +12,8 @@ declare global {
   namespace Cypress {
     interface Chainable {
       deleteIDB(name: string): Promise<boolean>
+      clearServiceWorkers(): Promise<void>
+      setSessionStorage(key: string, value: string): Promise<void>
       /** login with firebase credentials, optionally check ui login element updated*/
       login(
         username: string,
@@ -21,19 +23,6 @@ declare global {
 
       /** logout of firebase, optionally check ui login element updated*/
       logout(checkUI?: boolean): Chainable<void>
-
-      deleteDocuments(
-        collectionName: string,
-        fieldPath: string,
-        opStr: any,
-        value: string,
-      ): Promise<void>
-
-      updateDocument(
-        collectionName: string,
-        docId: string,
-        docData: any,
-      ): Promise<void>
 
       deleteCurrentUser(): Promise<void>
 
@@ -68,6 +57,12 @@ declare global {
   }
 }
 
+/**
+ * Create custom commands that can be used within cypress chaining and namespace
+ * @remark - any called functions should be 'wrapped' in a cy.wrap('some name') statement to allow chaining
+ * @remark - async code should be wrapped in a Cypress.promise block to allow the resolved promise to be
+ * used in chained results
+ */
 const attachCustomCommands = (Cypress: Cypress.Cypress) => {
   const firestore = TestDB
   /** Delete an indexeddb - resolving true on success and false if blocked (open connections) */
@@ -88,6 +83,38 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
         })
       })
       .then(deleted => cy.log('deleted?', deleted))
+  })
+
+  Cypress.Commands.add('setSessionStorage', (key: string, value: string) => {
+    cy.wrap(`setSessionStorage - ${key}:${value}`).then(() => {
+      cy.window()
+        .its('sessionStorage')
+        .invoke('setItem', key, value)
+      cy.window()
+        .its('sessionStorage')
+        .invoke('getItem', key)
+        .should('eq', value)
+    })
+  })
+
+  Cypress.Commands.add('clearServiceWorkers', () => {
+    cy.window().then(w => {
+      cy.wrap('Clearing service workers').then(() => {
+        return new Cypress.Promise(resolve => {
+          // if running production builds locally may also need to remove service workers between runs
+          if (w.navigator && navigator.serviceWorker) {
+            navigator.serviceWorker.getRegistrations().then(registrations => {
+              registrations.forEach(registration => {
+                registration.unregister()
+              })
+              resolve()
+            })
+          } else {
+            resolve()
+          }
+        })
+      })
+    })
   })
 
   /**
@@ -161,32 +188,6 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
         },
       })
       return firestore.queryDocuments(collectionName, fieldPath, opStr, value)
-    },
-  )
-
-  Cypress.Commands.add(
-    'deleteDocuments',
-    (collectionName: string, fieldPath: string, opStr: any, value: string) => {
-      Cypress.log({
-        displayName: 'deleteDocuments',
-        consoleProps: () => {
-          return { collectionName, fieldPath, opStr, value }
-        },
-      })
-      return firestore.deleteDocuments(collectionName, fieldPath, opStr, value)
-    },
-  )
-
-  Cypress.Commands.add(
-    'updateDocument',
-    (collectionName: string, docId: string, docData: any) => {
-      Cypress.log({
-        displayName: 'updateDocument',
-        consoleProps: () => {
-          return { collectionName, docId, docData }
-        },
-      })
-      return firestore.updateDocument(collectionName, docId, docData)
     },
   )
 

@@ -6,7 +6,7 @@ import 'firebase/storage'
 import 'firebase/functions'
 import 'firebase/database'
 import Query = firebase.firestore.Query
-import { SEED_DATA } from '../../fixtures/seed'
+import { SEED_DATA, DB_PREFIX } from '../../fixtures/seed'
 import { DB_ENDPOINTS } from './endpoints'
 const fbConfig = {
   apiKey: 'AIzaSyDAxS_7M780mI3_tlwnAvpbaqRsQPlmp64',
@@ -17,28 +17,23 @@ const fbConfig = {
 }
 
 // ensure the cypress env db prefix is also used with the mapped endpoints
-const DB_PREFIX = Cypress.env('DB_PREFIX')
-const MAPPED_ENDPOINTS = {}
-Object.keys(DB_ENDPOINTS).forEach(k => {
-  MAPPED_ENDPOINTS[k] = `${DB_PREFIX}${DB_ENDPOINTS[k]}`
-})
 
 firebase.initializeApp(fbConfig)
 const db = firebase.firestore()
-type PromiseCallback = (val?: any) => void
-const MAX_BATCH_SIZE = 500
 
 class FirestoreTestDB {
-  seedDB = () => {
+  seedDB = (prefix = DB_PREFIX) => {
     const dbWrites = Object.keys(SEED_DATA).map(key => {
-      return this.addDocuments(key, SEED_DATA[key])
+      const endpoint = DB_ENDPOINTS[key]
+      return this.addDocuments(`${prefix}${endpoint}`, SEED_DATA[key])
     })
     return Promise.all(dbWrites)
   }
 
-  clearDB = () => {
+  clearDB = (prefix = DB_PREFIX) => {
     const dbDeletes = Object.keys(SEED_DATA).map(key => {
-      return this.deleteAll(key)
+      const endpoint = DB_ENDPOINTS[key]
+      return this.deleteAll(`${prefix}${endpoint}`)
     })
     return Promise.all(dbDeletes)
   }
@@ -48,10 +43,11 @@ class FirestoreTestDB {
     fieldPath: string,
     opStr: any,
     value: string,
+    prefix = DB_PREFIX,
   ): Promise<any> | Promise<any[]> => {
-    const mapping = MAPPED_ENDPOINTS[collectionName] || collectionName
+    const endpoint = DB_ENDPOINTS[collectionName]
     return db
-      .collection(`${mapping}`)
+      .collection(`${prefix}${endpoint}`)
       .where(fieldPath, opStr, value)
       .get()
       .then(snapshot => {
@@ -66,85 +62,23 @@ class FirestoreTestDB {
         return result
       })
   }
-  addDocuments = (collectionName: string, docs: any[]) => {
-    const mapping = MAPPED_ENDPOINTS[collectionName] || collectionName
+  private addDocuments = (collectionName: string, docs: any[]) => {
     const batch = db.batch()
-    const col = db.collection(`${mapping}`)
+    const col = db.collection(collectionName)
     docs.forEach(doc => {
       const ref = col.doc(doc._id)
       batch.set(ref, doc)
     })
     return batch.commit()
   }
-  deleteAll = async (collectionName: string) => {
-    const mapping = MAPPED_ENDPOINTS[collectionName] || collectionName
+  private deleteAll = async (collectionName: string) => {
     const batch = db.batch()
-    const col = db.collection(`${mapping}`)
+    const col = db.collection(collectionName)
     const docs = (await col.get({ source: 'server' })) || []
     docs.forEach(d => {
       batch.delete(col.doc(d.id))
     })
     return batch.commit()
-  }
-
-  deleteDocuments = (
-    collectionName: string,
-    fieldPath: string,
-    opStr: any,
-    value: string,
-  ) => {
-    const mapping = MAPPED_ENDPOINTS[collectionName] || collectionName
-    const query = db
-      .collection(`${mapping}`)
-      .where(fieldPath, opStr, value)
-      .limit(MAX_BATCH_SIZE)
-    return new Promise((resolve, reject) => {
-      this.deleteQueryBatch(query, MAX_BATCH_SIZE, resolve, reject)
-    })
-  }
-  deleteQueryBatch = (
-    query: Query,
-    batchSize: number,
-    resolve: PromiseCallback,
-    reject: PromiseCallback,
-  ) => {
-    query
-      .get()
-      .then(snapshot => {
-        // When there are no documents left, we are done
-        if (snapshot.size === 0) {
-          return 0
-        }
-
-        // Delete documents in a batch
-        const batch = db.batch()
-        snapshot.docs.forEach(document => {
-          batch.delete(document.ref)
-        })
-
-        return batch.commit().then(() => {
-          return snapshot.size
-        })
-      })
-      .then(numDeleted => {
-        if (numDeleted === 0) {
-          resolve()
-          return
-        }
-
-        process.nextTick(() => {
-          this.deleteQueryBatch(query, batchSize, resolve, reject)
-        })
-      })
-      .catch(reject)
-  }
-
-  updateDocument = (collectionName: string, docId: string, docData: any) => {
-    const mapping = MAPPED_ENDPOINTS[collectionName] || collectionName
-    return db
-      .collection(`${mapping}`)
-      .doc(docId)
-      .set(docData)
   }
 }
 export const Auth = firebase.auth()

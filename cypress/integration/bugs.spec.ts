@@ -32,10 +32,6 @@ describe('[Bugs]', () => {
   //   cy.url().should('include', editUrl)
   // })
 
-  // it('[686]', () => {
-  //   cy.deleteDocuments('events', 'title', '==', 'Create a test event')
-  //   cy.visit('/events')
-
   //   cy.login('event_creator@test.com', 'test1234')
   //   cy.get('[data-cy=create]').click()
 

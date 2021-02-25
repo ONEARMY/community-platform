@@ -1,4 +1,5 @@
 import { TestDB } from './db/firebase'
+import { DB_PREFIX } from '../fixtures/seed'
 
 /**
  * Before all tests begin seed the database. CY runs this before all specs.
@@ -9,8 +10,6 @@ import { TestDB } from './db/firebase'
  * Additionally any aliases created in before will not be passed to test instance,
  * put aliases created in beforeAll will be (not currently required)
  */
-const DB_PREFIX = Cypress.env('DB_PREFIX')
-
 before(() => {
   // Add error handlers
   // https://docs.cypress.io/api/utilities/promise.html#Rejected-test-promises-do-not-fail-tests
@@ -20,31 +19,25 @@ before(() => {
   Cypress.Promise.onPossiblyUnhandledRejection((error, promise) => {
     throw error
   })
+  cy.clearServiceWorkers()
   // clear idb
   cy.deleteIDB('OneArmyCache')
   // cy.deleteIDB('firebaseLocalStorageDb')
-  // seed db
-  cy.wrap('DB Init').then({ timeout: 60000 }, doc => {
+  // seed db (ensure db_prefix available for seed)
+  cy.setSessionStorage('DB_PREFIX', DB_PREFIX)
+  cy.wrap('DB Init').then({ timeout: 60000 }, () => {
     // large initial timeout in case server slow to respond
-    return new Cypress.Promise(async resolve => {
-      await TestDB.seedDB()
-      resolve(null)
+    return new Cypress.Promise((resolve, reject) => {
+      TestDB.seedDB(DB_PREFIX)
+        .then(resolve)
+        .catch(reject)
     })
   })
 })
 
 beforeEach(() => {
   // set the db_prefix variable on platform session storage (cypress wipes between tests)
-  cy.wrap('Setting DB Prefix').then(() => {
-    cy.log('Prefix', DB_PREFIX)
-    cy.window()
-      .its('sessionStorage')
-      .invoke('setItem', 'DB_PREFIX', DB_PREFIX)
-    cy.window()
-      .its('sessionStorage')
-      .invoke('getItem', 'DB_PREFIX')
-      .should('eq', DB_PREFIX)
-  })
+  cy.setSessionStorage('DB_PREFIX', DB_PREFIX)
   // ensure all tests are also logged out (requires being on a page to check)
   cy.logout(false)
 })
@@ -54,31 +47,13 @@ beforeEach(() => {
  * been added to the database
  */
 after(() => {
+  cy.clearServiceWorkers()
   cy.wrap('Clearing Database').then({ timeout: 30000 }, () => {
     return new Cypress.Promise((resolve, reject) => {
-      TestDB.clearDB()
-        .then(() => resolve())
-        .catch(() => resolve())
+      TestDB.clearDB(DB_PREFIX)
+        .then(resolve)
+        .catch(reject)
     })
   })
-  // remove service workers at end of each test set
-  // NOTE - these should not be enabled (included exception for port 3456)
-  // as can cause race condition to fail where cypress not loaded before platform started
-  cy.window().then(w => {
-    cy.wrap('Clearing service workers').then(() => {
-      return new Cypress.Promise(async resolve => {
-        // if running production builds locally may also need to remove service workers between runs
-        if (w.navigator && navigator.serviceWorker) {
-          navigator.serviceWorker.getRegistrations().then(registrations => {
-            registrations.forEach(registration => {
-              registration.unregister()
-            })
-            resolve()
-          })
-        } else {
-          resolve()
-        }
-      })
-    })
-  })
+  // remove service workers at end of test set
 })

@@ -3,7 +3,6 @@ const e2eEnv = require('dotenv').config({ path: `${process.cwd()}/.env.e2e` })
 const fs = require('fs-extra')
 const waitOn = require('wait-on')
 
-const DB_PREFIX = `${randomString(5)}_`
 const isCi = process.argv.includes('ci')
 const useProductionBuild = process.argv.includes('prod')
 
@@ -14,9 +13,7 @@ process.on('unhandledRejection', err => {
 })
 /**
  * When running e2e tests with cypress we need to first get the server up and running
- * before launching the test suite. Additionally we will pass a random DB_PREFIX variable
- * to both the tests and platform which will provide a unique set seed data on the db
- * to work with (and avoid parallel tests accidentally overwriting each other).
+ * before launching the test suite. We will seed the DB from within the test suite
  *
  * @argument ci - specify if running in ci (e.g. travis/circleci) to run and record
  * @argument prod - specify to use a production build instead of local development server
@@ -24,7 +21,9 @@ process.on('unhandledRejection', err => {
  *
  * TODO: CC - 2021-02-24
  * - DB seeding happens inbetween test suites, but really should happen before/after test
- * scripts start and end (particularly teardown, as it won't be called if tests fail)
+ * scripts start and end (particularly teardown, as it won't be called if tests fail).
+ * Possibly could be done with a Cypress.task or similar
+ * Temp cli function to wipe hanging db: `firebase use ci; firebase firestore:delete --all-collections`
  */
 async function main() {
   // copy endpoints for use in testing
@@ -33,10 +32,7 @@ async function main() {
     'cypress/support/db/endpoints.ts',
   )
   await startAppServer()
-  // TODO - add db seed command here instead of using from within tests
   runTests()
-  // TODO - add db teardown command here instead of using from within tests
-  // temp cli function: `firebase use ci; firebase firestore:delete --all-collections`
 }
 main()
 
@@ -46,7 +42,8 @@ function runTests() {
   const { CYPRESS_KEY } = e2eEnv.parsed
   const CI_BROWSER = e.CI_BROWSER || 'chrome'
   const CI_GROUP = e.CI_GROUP || '1x-chrome'
-  const CYPRESS_ENV = `DB_PREFIX=${DB_PREFIX}`
+  // not currently used, but can pass variables accessed by Cypress.env()
+  const CYPRESS_ENV = `DUMMY_VAR=1`
   // keep compatibility with both circleci and travisci builds - note, could pass as env variable instead
   const buildId = e.CIRCLE_WORKFLOW_ID || e.TRAVIS_BUILD_ID || randomString(8)
 

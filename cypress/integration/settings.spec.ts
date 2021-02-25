@@ -482,10 +482,7 @@ describe('[Settings]', () => {
       to: string
     }
     const selectOption = (selector: string, selectedValue: string) => {
-      cy.get(selector).click()
-      cy.get('.data-cy__menu')
-        .contains(selectedValue)
-        .click()
+      cy.selectTag(selectedValue, selector)
     }
 
     const addOpeningTime = (openingTime: IOpeningTime) => {

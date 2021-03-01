@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 import { RootStore } from '..'
 import { ModuleStore } from '../common/module.store'
 import { DBDoc } from '../databaseV2/types'
@@ -20,7 +20,8 @@ export class TemplateStore extends ModuleStore {
   // eslint-disable-next-line
   constructor(rootStore: RootStore) {
     super(rootStore)
-    //
+    // tell mobx to process the decorators and handle observers
+    makeObservable(this)
   }
   // observables are data variables that can be subscribed to and change over time
   @observable

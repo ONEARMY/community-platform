@@ -7,13 +7,14 @@
     "sourceMap": true,
     "target": "es6",
     "jsx": "react",
-    "typeRoots": ["./node_modules/@types"],
+    "typeRoots": ["./node_modules/@types","../node_modules/@types"],
     "baseUrl": ".",
     "paths": {
-      "src/*": ["../src/*"],
+      "src/*": ["../src/*"]
     },
-    "skipLibCheck": true
+    "skipLibCheck": true,
   },
   "references": [{ "path": "../tsconfig.shared.json" }],
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["src/**/*.test.tsx", "../src/**/*.test.tsx"]
 }

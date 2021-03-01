@@ -30,6 +30,10 @@ import { HowToSubmitStatus } from './SubmitStatus'
 import { required } from 'src/utils/validators'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
+import { COMPARISONS } from './Comparisons'
+
+const CONFIRM_DIALOG_MSG =
+  'You have unsaved changes. Are you sure you want to leave this page?'
 
 interface IState {
   formSaved: boolean
@@ -81,6 +85,11 @@ const Label = styled.label`
   display: block;
 `
 
+const beforeUnload = function(e) {
+  e.preventDefault()
+  e.returnValue = CONFIRM_DIALOG_MSG
+}
+
 @inject('howtoStore')
 @observer
 export class HowtoForm extends React.PureComponent<IProps, IState> {
@@ -120,7 +129,9 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
   }
 
   public validateTitle = async (value: any) => {
-    return this.store.validateTitleForSlug(value, 'howtos')
+    const originalId =
+      this.props.parentType === 'edit' ? this.props.formValues._id : undefined
+    return this.store.validateTitleForSlug(value, 'howtos', originalId)
   }
 
   // automatically generate the slug when the title changes
@@ -130,6 +141,21 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
       slug: title => stripSpecialCharacters(title).toLowerCase(),
     },
   })
+
+  // Display a confirmation dialog when leaving the page outside the React Router
+  private unloadDecorator(form) {
+    return form.subscribe(
+      ({ dirty }) => {
+        if (dirty && !this.store.uploadStatus.Complete) {
+          window.addEventListener('beforeunload', beforeUnload, false)
+          return
+        }
+        window.removeEventListener('beforeunload', beforeUnload, false)
+      },
+      { dirty: true },
+    )
+  }
+
   public render() {
     const { formValues, parentType } = this.props
     const { fileEditMode, showSubmitModal } = this.state
@@ -144,12 +170,6 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
             }}
           />
         )}
-        <Prompt
-          when={!this.injected.howtoStore.uploadStatus.Complete}
-          message={
-            'You have unsaved changes. Are you sure you want to leave this page?'
-          }
-        />
         <Form
           onSubmit={v => {
             this.onSubmit(v as IHowtoFormInput)
@@ -159,12 +179,17 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
             ...arrayMutators,
           }}
           validateOnBlur
-          decorators={[this.calculatedFields]}
-          render={({ submitting, values, invalid, errors, handleSubmit }) => {
-            const disabled = invalid || submitting
+          decorators={[this.calculatedFields, this.unloadDecorator.bind(this)]}
+          render={({ submitting, values, dirty, errors, handleSubmit }) => {
             return (
               <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
                 <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} mt={4}>
+                  <Prompt
+                    when={
+                      !this.injected.howtoStore.uploadStatus.Complete && dirty
+                    }
+                    message={CONFIRM_DIALOG_MSG}
+                  />
                   <FormContainer id="howtoForm" onSubmit={handleSubmit}>
                     {/* How To Info */}
                     <Flex flexDirection={'column'}>
@@ -223,11 +248,8 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 name="title"
                                 data-cy="intro-title"
                                 validateFields={[]}
-                                validate={value =>
-                                  this.props.parentType === 'create'
-                                    ? this.validateTitle(value)
-                                    : false
-                                }
+                                validate={this.validateTitle}
+                                isEqual={COMPARISONS.textInput}
                                 component={InputField}
                                 maxLength="50"
                                 placeholder="Make a chair from.. (max 50 characters)"
@@ -239,6 +261,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 name="tags"
                                 component={TagsSelectField}
                                 category="how-to"
+                                isEqual={COMPARISONS.tags}
                               />
                             </Flex>
                             <Flex flexDirection={'column'} mb={3}>
@@ -250,6 +273,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 name="time"
                                 validate={required}
                                 validateFields={[]}
+                                isEqual={COMPARISONS.textInput}
                                 options={TIME_OPTIONS}
                                 component={SelectField}
                                 data-cy="time-select"
@@ -267,6 +291,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 data-cy="difficulty-select"
                                 validate={required}
                                 validateFields={[]}
+                                isEqual={COMPARISONS.textInput}
                                 component={SelectField}
                                 options={DIFFICULTY_OPTIONS}
                                 placeholder="How hard is it?"
@@ -282,6 +307,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 data-cy="intro-description"
                                 validate={required}
                                 validateFields={[]}
+                                isEqual={COMPARISONS.textInput}
                                 component={TextAreaField}
                                 style={{
                                   resize: 'none',
@@ -347,6 +373,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 id="cover_image"
                                 name="cover_image"
                                 validate={required}
+                                isEqual={COMPARISONS.image}
                                 component={ImageInputField}
                               />
                             </Box>
@@ -360,7 +387,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                       </Flex>
 
                       {/* Steps Info */}
-                      <FieldArray name="steps">
+                      <FieldArray name="steps" isEqual={COMPARISONS.step}>
                         {({ fields }) => (
                           <>
                             <PoseGroup preEnterPose="preEnter">
@@ -438,7 +465,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                       onClick={() => this.trySubmitForm(true)}
                       width={1}
                       mt={[0, 0, 3]}
-                      variant={disabled ? 'secondary' : 'secondary'}
+                      variant="secondary"
                       type="submit"
                       disabled={submitting}
                       sx={{ display: 'block' }}
@@ -454,7 +481,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                       onClick={() => this.trySubmitForm(false)}
                       width={1}
                       mt={3}
-                      variant={disabled ? 'primary' : 'primary'}
+                      variant="primary"
                       type="submit"
                       disabled={submitting}
                       sx={{ mb: ['40px', '40px', 0] }}

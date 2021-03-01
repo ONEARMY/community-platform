@@ -33,7 +33,7 @@ It also covers lots of handy additional information such as setting up a local s
 ## 🌟 &nbsp; Core Team
 
 If needed you can [drop us a line here](mailto:platform@onearmy.world?subject=contact%20from%20github) 👋
-Or join our [Discord channel](https://discord.gg/AKuxkpx)
+Or join our [Discord channel](https://discordapp.com/invite/rnx7m4t)
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->

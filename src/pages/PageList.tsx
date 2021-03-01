@@ -17,6 +17,7 @@ import { CSSObject } from '@styled-system/css'
 import { Route } from 'react-router'
 import { PrivacyPolicy } from './policy/privacy'
 import { TermsPolicy } from './policy/terms'
+import { ResearchModule } from './Research'
 
 export interface IPageMeta {
   path: string
@@ -62,9 +63,7 @@ const academy = {
   title: 'Academy',
   description: 'Demo external page embed',
   customStyles: {
-    position: 'absolute',
-    height: 'calc(100% - 85px)',
-    width: '100%',
+    flex: 1,
   },
   fullPageWidth: true,
 }
@@ -149,7 +148,7 @@ const termsPolicy = {
 }
 
 // community pages (various pages hidden on production build)
-const devCommunityPages = [howTo, maps, events, academy]
+const devCommunityPages = [howTo, maps, events, academy, ResearchModule]
 const prodCommunityPages = [howTo, maps, events, academy]
 const communityPages =
   SITE === 'production' ? prodCommunityPages : devCommunityPages

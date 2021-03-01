@@ -9,7 +9,7 @@ import { DB_ENDPOINTS } from '../endpoints'
  * or busting cache on db. This is used as the Dexie version number, see:
  * https://dexie.org/docs/Tutorial/Design#database-versioning
  */
-const DB_CACHE_NUMBER = 20201013
+const DB_CACHE_NUMBER = 20210130
 const CACHE_DB_NAME = 'OneArmyCache'
 const db = new Dexie(CACHE_DB_NAME)
 
@@ -35,6 +35,9 @@ export class DexieClient implements AbstractDBClient {
   }
   queryCollection<T>(endpoint: IDBEndpoint, queryOpts: DBQueryOptions) {
     return this._processQuery<T>(endpoint, queryOpts)
+  }
+  deleteDoc(endpoint: IDBEndpoint, docId: string) {
+    return db.table(endpoint).delete(docId)
   }
 
   /************************************************************************
@@ -152,6 +155,7 @@ const SCHEMA_BASE: IDexieSchema = {
   mappins: DEFAULT_SCHEMA,
   tags: DEFAULT_SCHEMA,
   users: `${DEFAULT_SCHEMA},_authID`,
+  research: `${DEFAULT_SCHEMA},slug`,
 }
 // Ensure dexie also handles any prefixed database schema
 const MAPPED_SCHEMA = {} as IDexieSchema

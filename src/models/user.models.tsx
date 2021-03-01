@@ -37,6 +37,8 @@ export interface IUser {
   location?: ILocation | null
   year?: ISODateString
   stats?: IUserStats
+  /** keep a map of all howto ids that a user has voted as useful */
+  votedUsefulHowtos?: { [howtoId: string]: boolean }
 }
 
 interface IExternalLink {

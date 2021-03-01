@@ -1,19 +1,13 @@
-import { observable, action } from 'mobx'
+import { observable, action, makeObservable, toJS } from 'mobx'
 import { IUser, IUserDB } from 'src/models/user.models'
 import { IUserPP, IUserPPDB } from 'src/models/user_pp.models'
-import {
-  IFirebaseUser,
-  auth,
-  EmailAuthProvider,
-  functions,
-} from 'src/utils/firebase'
+import { IFirebaseUser, auth, EmailAuthProvider } from 'src/utils/firebase'
 import { Storage } from '../storage'
-import { notificationPublish } from '../Notifications/notifications.service'
 import { RootStore } from '..'
-import { loginWithDHCredentials } from 'src/hacks/DaveHakkensNL.hacks'
 import { ModuleStore } from '../common/module.store'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
+import { logToSentry } from 'src/common/errors'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
@@ -22,12 +16,12 @@ The user store listens to login events through the firebase api and exposes logg
 const COLLECTION_NAME = 'users'
 
 export class UserStore extends ModuleStore {
-  private authUnsubscribe: firebase.Unsubscribe
+  private authUnsubscribe: firebase.default.Unsubscribe
   @observable
   public user: IUserPPDB | undefined
 
   @observable
-  public authUser: firebase.User | null
+  public authUser: firebase.default.User | null
 
   @observable
   public updateStatus: IUserUpdateStatus = getInitialUpdateStatus()
@@ -44,6 +38,7 @@ export class UserStore extends ModuleStore {
 
   constructor(rootStore: RootStore) {
     super(rootStore)
+    makeObservable(this)
     this._listenToAuthStateChanges()
   }
 
@@ -71,12 +66,6 @@ export class UserStore extends ModuleStore {
 
   public async login(provider: string, email: string, password: string) {
     switch (provider) {
-      // custom login methods for DH site
-      case 'DH':
-        // unsubscribe from changes as otherwise they will fire in the middle of updating
-        this._unsubscribeFromAuthStateChanges()
-        await loginWithDHCredentials(email, password, this)
-        this._listenToAuthStateChanges()
       // eslint-disable-next-line
       default:
         return auth.signInWithEmailAndPassword(email, password)
@@ -84,7 +73,10 @@ export class UserStore extends ModuleStore {
   }
 
   // handle user sign in, when firebase authenticates wnat to also fetch user document from the database
-  public async userSignedIn(user: IFirebaseUser | null) {
+  public async userSignedIn(
+    user: IFirebaseUser | null,
+    newUserCreated = false,
+  ) {
     if (user) {
       console.log('user signed in', user)
       // legacy user formats did not save names so get profile via email - this option be removed in later version
@@ -94,9 +86,19 @@ export class UserStore extends ModuleStore {
         this.updateUser(userMeta)
         console.log('userMeta', userMeta)
       } else {
-        throw new Error(
-          `could not find user profile [${user.uid} - ${user.email} - ${user.metadata}]`,
+        // user profile not found, either it has been deleted or not migrated correctly from legacy format
+        // create a new profile to use for now and make a log to the error handler in case required
+        logToSentry.message(
+          `Could not find user profile [${user.uid} - ${user.email} - ${user.metadata}]. New profile created instead`,
         )
+        await this.createUserProfile()
+        // now that a profile has been created, run this function again (use `newUserCreated` to avoid inf. loop in case not create not working correctly)
+        if (!newUserCreated) {
+          return this.userSignedIn(user, true)
+        }
+        // throw new Error(
+        //   `could not find user profile [${user.uid} - ${user.email} - ${user.metadata}]`,
+        // )
       }
     }
   }
@@ -134,7 +136,8 @@ export class UserStore extends ModuleStore {
       )
       values = { ...values, coverImages: processedImages }
     }
-    const update = { ...user, ...values }
+    // sometimes mobx has issues with de-serialising obseverables so try to force it using toJS
+    const update = { ...toJS(user), ...toJS(values) }
     await this.db
       .collection(COLLECTION_NAME)
       .doc(user.userName)
@@ -160,25 +163,9 @@ export class UserStore extends ModuleStore {
     // *** TODO -
   }
 
-  // during DHSite migration want to copy existing BP avatar to server
-  public async setUserAvatarFromUrl(url: string) {
-    console.log('setting user avatar', url)
-    try {
-      await functions.httpsCallable('DHSite_migrateAvatar')({
-        avatarUrl: url,
-        user: this.user ? this.user._id : null,
-      })
-      // use pubsub to let avatar component know new avatar available
-      console.log('publishing message')
-      notificationPublish('Profile.Avatar.Updated')
-    } catch (error) {
-      console.log('error', error)
-    }
-  }
-
   public async changeUserPassword(oldPassword: string, newPassword: string) {
     // *** TODO - (see code in change pw component and move here)
-    const user = this.authUser as firebase.User
+    const user = this.authUser as firebase.default.User
     const credentials = EmailAuthProvider.credential(
       user.email as string,
       oldPassword,
@@ -197,7 +184,7 @@ export class UserStore extends ModuleStore {
 
   public async deleteUser(reauthPw: string) {
     // as delete operation is sensitive requires user to revalidate credentials first
-    const authUser = auth.currentUser as firebase.User
+    const authUser = auth.currentUser as firebase.default.User
     const credential = EmailAuthProvider.credential(
       authUser.email as string,
       reauthPw,
@@ -218,8 +205,8 @@ export class UserStore extends ModuleStore {
     }
   }
 
-  public async createUserProfile(fields: Partial<IUser> = {}) {
-    const authUser = auth.currentUser as firebase.User
+  private async createUserProfile(fields: Partial<IUser> = {}) {
+    const authUser = auth.currentUser as firebase.default.User
     const displayName = authUser.displayName as string
     const userName = formatLowerNoSpecial(displayName)
     const dbRef = this.db.collection<IUser>(COLLECTION_NAME).doc(userName)
@@ -234,12 +221,22 @@ export class UserStore extends ModuleStore {
       userName,
       moderation: 'awaiting-moderation',
       verified: false,
+      votedUsefulHowtos: {},
       ...fields,
     }
     // update db
     await dbRef.set(user)
-    // retrieve from db (to also include generated meta)
-    return dbRef.get()
+  }
+
+  @action
+  public async updateUsefulHowTos(howtoId: string) {
+    if (this.user) {
+      // toggle entry on user votedUsefulHowtos to either vote or unvote a howto
+      // this will updated the main howto via backend `updateUserVoteStats` function
+      const votedUsefulHowtos = toJS(this.user.votedUsefulHowtos) || {}
+      votedUsefulHowtos[howtoId] = !votedUsefulHowtos[howtoId]
+      await this.updateUserProfile({ votedUsefulHowtos })
+    }
   }
 
   // use firebase auth to listen to change to signed in user

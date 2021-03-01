@@ -77,7 +77,7 @@ export class Header extends React.Component<IProps> {
           pl={[4, 4, 0]}
           pr={[4, 4, 0]}
           sx={{ zIndex: theme.zIndex.header, position: 'relative' }}
-          height={[null, null, 80]}
+          minHeight={[null, null, 80]}
         >
           <Flex>
             <Logo isMobile={true} />

@@ -88,7 +88,7 @@ export default class HowtoDescription extends React.PureComponent<IProps> {
               </Button>
             </Link>
             <Box style={{ flexGrow: 1 }}>
-              {this.props.votedUsefulCount && (
+              {this.props.votedUsefulCount !== undefined && (
                 <HowtoUsefulStats
                   votedUsefulCount={this.props.votedUsefulCount}
                   userVotedUseful={this.props.userVotedUseful}

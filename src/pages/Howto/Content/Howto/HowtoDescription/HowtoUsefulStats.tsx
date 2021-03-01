@@ -1,7 +1,5 @@
 import * as React from 'react'
 import { useHistory } from 'react-router'
-import { Flex } from 'rebass'
-import { FaStar, FaRegStar } from 'react-icons/fa'
 import Text from 'src/components/Text'
 import { Button } from 'src/components/Button'
 import Tooltip from 'src/components/Tooltip'
@@ -36,6 +34,7 @@ export const HowtoUsefulStats = (props: IProps) => {
   return (
     <>
       <Button
+        data-cy="vote-useful"
         data-tip={props.isLoggedIn ? undefined : 'log in to use this'}
         variant="subtle"
         fontSize="14px"

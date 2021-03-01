@@ -1,5 +1,4 @@
 import { observable, action, computed, toJS, makeObservable } from 'mobx'
-import { Subscription } from 'rxjs'
 import Fuse from 'fuse.js'
 import {
   IHowto,
@@ -75,7 +74,7 @@ export class HowtoStore extends ModuleStore {
         .doc(`${id}/stats/all`)
       const howtoStats = await ref.get('server')
       console.log('howtoStats', howtoStats)
-      this.howtoStats = howtoStats
+      this.howtoStats = howtoStats || { votedUsefulCount: 0 }
     }
   }
   @action

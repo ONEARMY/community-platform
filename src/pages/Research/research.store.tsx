@@ -1,7 +1,7 @@
-import { observable, makeObservable } from 'mobx'
-import { IResearch } from './research.models'
-import { ModuleStore } from 'src/stores/common/module.store'
+import { makeObservable, observable } from 'mobx'
 import { createContext, useContext } from 'react'
+import { ModuleStore } from 'src/stores/common/module.store'
+import { IResearch } from '../../models/research.models'
 
 export class ResearchStore extends ModuleStore {
   @observable public allResearchItems: IResearch.ItemDB[] = []

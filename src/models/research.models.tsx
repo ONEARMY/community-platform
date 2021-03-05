@@ -11,6 +11,7 @@ export namespace IResearch {
     slug: string
     updates: Update[]
     tags: ISelectedTags
+    _createdBy: string
   }
 
   /** A research item update */

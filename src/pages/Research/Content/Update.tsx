@@ -1,3 +1,4 @@
+import { format } from 'date-fns'
 import React from 'react'
 import Linkify from 'react-linkify'
 import { Box } from 'rebass'
@@ -49,20 +50,29 @@ const Update: React.FC<IProps> = ({ update, updateIndex }) => {
           bg={'white'}
           flex={9}
           width={1}
-          flexDirection={['column', 'column', 'row']}
+          flexDirection={'column'}
           overflow={'hidden'}
         >
-          <Flex width={[1, 1, 4 / 9]} py={4} px={4} flexDirection={'column'}>
-            <Heading medium mb={0}>
-              {update.title}
-            </Heading>
+          <Flex width={1} py={4} px={4} flexDirection={'column'}>
+            <Flex width={1} flexDirection={['column', 'row', 'row']}>
+              <Heading width={[1, 3 / 4, 3 / 4]} medium mb={[2, 0, 0]}>
+                {update.title}
+              </Heading>
+              <Text
+                auxiliary
+                textAlign={['left', 'right', 'right']}
+                width={[1, 1 / 4, 1 / 4]}
+              >
+                {format(new Date(update._created), 'DD-MM-YYYY')}
+              </Text>
+            </Flex>
             <Box>
               <Text preLine paragraph mt={3} color={'grey'}>
                 <Linkify>{update.description}</Linkify>
               </Text>
             </Box>
           </Flex>
-          <Box width={[1, 1, 5 / 9]}>
+          <Box width={1}>
             <ImageGallery images={update.files as IUploadedFileMeta[]} />
           </Box>
         </Flex>

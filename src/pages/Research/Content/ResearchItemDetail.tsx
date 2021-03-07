@@ -4,7 +4,9 @@ import { useHistory } from 'react-router'
 import { Box, Flex } from 'rebass'
 import { Button } from 'src/components/Button'
 import { MOCK_UPDATES } from 'src/mocks/research.mocks'
+import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { ResearchStoreContext } from 'src/stores/Research/research.store'
+import { Loader } from '../../../components/Loader/index'
 import ResearchDescription from './ResearchDescription'
 import Update from './Update'
 
@@ -24,6 +26,11 @@ export const ResearchItemDetail = observer((props: IProps) => {
       await store.setActiveResearchItem(slug)
       setIsLoading(false)
     })()
+
+    // Reset the store's active item on component cleanup
+    return () => {
+      store.setActiveResearchItem()
+    }
   }, [props, store])
 
   const item = store.activeResearchItem
@@ -36,7 +43,7 @@ export const ResearchItemDetail = observer((props: IProps) => {
           return <Update update={update} key={update._id} updateIndex={index} />
         })}
       </Box>
-      <Flex>
+      <Flex my={4}>
         <Button
           backgroundColor="red"
           onClick={() => {
@@ -61,10 +68,8 @@ export const ResearchItemDetail = observer((props: IProps) => {
       </Flex>
     </>
   ) : isLoading ? (
-    // handle case where loading
-    <div>loading</div>
+    <Loader />
   ) : (
-    // handle case where doesn't exist
-    <div>Not Found</div>
+    <NotFoundPage />
   )
 })

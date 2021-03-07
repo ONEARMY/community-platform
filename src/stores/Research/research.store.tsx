@@ -21,12 +21,16 @@ export class ResearchStore extends ModuleStore {
     })
   }
 
-  public async setActiveResearchItem(slug: string) {
-    const collection = await this.db
-      .collection<IResearch.ItemDB>(COLLECTION_NAME)
-      .getWhere('slug', '==', slug)
-    const researchItem = collection.length > 0 ? collection[0] : undefined
-    this.activeResearchItem = researchItem
+  public async setActiveResearchItem(slug?: string) {
+    if (slug) {
+      const collection = await this.db
+        .collection<IResearch.ItemDB>(COLLECTION_NAME)
+        .getWhere('slug', '==', slug)
+      const researchItem = collection.length > 0 ? collection[0] : undefined
+      this.activeResearchItem = researchItem
+    } else {
+      this.activeResearchItem = undefined
+    }
   }
 
   public createResearchItem(item: IResearch.Item) {

@@ -46,18 +46,13 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => (
           </Heading>
         </Flex>
         <Flex alignItems="center">
-          <Text auxiliary my={2} ml={1}>
-            <Link
-              sx={{
-                color: theme.colors.blue,
-                ':hover': {
-                  textDecoration: 'underline',
-                },
-              }}
-              to={'/u/' + item._createdBy}
-            >
-              {item._createdBy}
-            </Link>
+          <Text
+            auxiliary
+            my={2}
+            ml={1}
+            color={`${theme.colors.blue} !important`}
+          >
+            {item._createdBy}
           </Text>
         </Flex>
         <Flex alignItems="center" justifyContent="space-between">

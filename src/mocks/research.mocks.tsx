@@ -35,3 +35,18 @@ export const MOCK_RESEARCH_ITEMS: IResearch.ItemDB[] = [
     _createdBy: 'Zelenew',
   },
 ]
+
+export const MOCK_UPDATES: IResearch.Update[] = [
+  {
+    title: 'Trying a small version',
+    description: `Ad minus expedita quibusdam. Amet quia recusandae quia sequi. Molestiae adipisci officia rerum officia. Itaque eveniet natus dolores et at quae non hic. Qui odio consequatur id quia quam.
+  Consequuntur possimus dolorem dignissimos beatae saepe. Ipsam nemo eos magnam sed. Recusandae modi eum dolorem autem voluptas dolor est.`,
+    files: [],
+  },
+  {
+    title: 'Melt the HDPE',
+    description: `Ad minus expedita quibusdam. Amet quia recusandae quia sequi. Molestiae adipisci officia rerum officia. Itaque eveniet natus dolores et at quae non hic. Qui odio consequatur id quia quam.
+  Consequuntur possimus dolorem dignissimos beatae saepe. Ipsam nemo eos magnam sed. Recusandae modi eum dolorem autem voluptas dolor est.`,
+    files: [],
+  },
+]

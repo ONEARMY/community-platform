@@ -1,3 +1,4 @@
+import { format } from 'date-fns'
 import React from 'react'
 import { Box } from 'rebass/styled-components'
 import Flex from 'src/components/Flex'
@@ -5,6 +6,7 @@ import Heading from 'src/components/Heading'
 import { Link } from 'src/components/Links'
 import Text from 'src/components/Text'
 import { IResearch } from 'src/models/research.models'
+import theme from 'src/themes/styled.theme'
 import styled from 'styled-components'
 
 interface IProps {
@@ -14,6 +16,11 @@ interface IProps {
 const GridBox = styled(Box)`
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
+
+  @media only screen and (max-width: ${theme.breakpoints[1]}) {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 2em 2em;
+  }
 `
 
 const ResearchListItem: React.FC<IProps> = ({ item }) => (
@@ -34,13 +41,23 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => (
     >
       <GridBox px={3} py={3}>
         <Flex alignItems="center">
-          <Heading small clipped color={'black'}>
+          <Heading small color={'black'}>
             {item.title}
           </Heading>
         </Flex>
         <Flex alignItems="center">
           <Text auxiliary my={2} ml={1}>
-            {item._createdBy}
+            <Link
+              sx={{
+                color: theme.colors.blue,
+                ':hover': {
+                  textDecoration: 'underline',
+                },
+              }}
+              to={'/u/' + item._createdBy}
+            >
+              {item._createdBy}
+            </Link>
           </Text>
         </Flex>
         <Flex alignItems="center" justifyContent="space-between">
@@ -49,7 +66,7 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => (
               ? item.updates.length + ' update'
               : item.updates.length + ' updates'}
           </Text>
-          <Text auxiliary>{item._created.slice(0, 10)}</Text>
+          <Text auxiliary>{format(new Date(item._created), 'DD-MM-YYYY')}</Text>
         </Flex>
       </GridBox>
     </Link>

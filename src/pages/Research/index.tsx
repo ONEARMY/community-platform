@@ -1,6 +1,9 @@
 import React from 'react'
+import {
+  ResearchStore,
+  ResearchStoreContext,
+} from 'src/stores/Research/research.store'
 import ResearchRoutes from './research.routes'
-import { ResearchStore, ResearchStoreContext } from './research.store'
 
 /**
  * Default export format used for integrating with the platform

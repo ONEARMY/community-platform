@@ -1,7 +1,9 @@
-import { makeObservable, observable } from 'mobx'
+import { makeObservable, observable, toJS } from 'mobx'
 import { createContext, useContext } from 'react'
 import { ModuleStore } from 'src/stores/common/module.store'
 import { IResearch } from '../../models/research.models'
+
+const COLLECTION_NAME = 'research'
 
 export class ResearchStore extends ModuleStore {
   @observable public allResearchItems: IResearch.ItemDB[] = []
@@ -18,9 +20,10 @@ export class ResearchStore extends ModuleStore {
       )
     })
   }
+
   public async setActiveResearchItem(slug: string) {
     const collection = await this.db
-      .collection<IResearch.ItemDB>('research')
+      .collection<IResearch.ItemDB>(COLLECTION_NAME)
       .getWhere('slug', '==', slug)
     const researchItem = collection.length > 0 ? collection[0] : undefined
     this.activeResearchItem = researchItem
@@ -29,10 +32,32 @@ export class ResearchStore extends ModuleStore {
   public createResearchItem(item: IResearch.Item) {
     console.log('create research item', this.db)
     this.db
-      .collection<IResearch.Item>('research')
+      .collection<IResearch.Item>(COLLECTION_NAME)
       .doc()
       .set(item)
   }
+
+  public addUpdate(item: IResearch.ItemDB, update: IResearch.Update) {
+    const updatedItem = {
+      ...toJS(item),
+      updates: [
+        ...toJS(item.updates),
+        {
+          ...update,
+          // TODO - insert metadata into the new update
+          _id: Math.random().toString(),
+          _created: new Date().toISOString(),
+          _modified: new Date().toISOString(),
+        },
+      ],
+    }
+
+    this.db
+      .collection<IResearch.Item>(COLLECTION_NAME)
+      .doc(item._id)
+      .set(updatedItem)
+  }
+
   public deleteResearchItem(id: string) {
     this.db
       .collection('research')

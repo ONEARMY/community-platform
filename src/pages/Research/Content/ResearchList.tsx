@@ -5,7 +5,7 @@ import { Button } from 'src/components/Button'
 import Heading from 'src/components/Heading'
 import ResearchListItem from 'src/components/Research/ResearchListItem'
 import { MOCK_RESEARCH_ITEMS } from 'src/mocks/research.mocks'
-import { ResearchStoreContext } from '../research.store'
+import { ResearchStoreContext } from 'src/stores/Research/research.store'
 
 export const ResearchList = observer(() => {
   const store = React.useContext(ResearchStoreContext)
@@ -19,7 +19,7 @@ export const ResearchList = observer(() => {
       {store.allResearchItems.map(item => (
         <ResearchListItem key={item._id} item={item} />
       ))}
-      <Box>
+      <Box mb={4}>
         <Button
           onClick={() =>
             store.createResearchItem(

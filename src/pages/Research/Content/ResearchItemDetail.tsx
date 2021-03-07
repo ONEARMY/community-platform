@@ -1,9 +1,12 @@
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { useHistory } from 'react-router'
+import { Box, Flex } from 'rebass'
 import { Button } from 'src/components/Button'
-import Text from 'src/components/Text'
-import { ResearchStoreContext } from '../research.store'
+import { MOCK_UPDATES } from 'src/mocks/research.mocks'
+import { ResearchStoreContext } from 'src/stores/Research/research.store'
+import ResearchDescription from './ResearchDescription'
+import Update from './Update'
 
 interface IProps {
   slug: string
@@ -27,16 +30,35 @@ export const ResearchItemDetail = observer((props: IProps) => {
 
   return item ? (
     <>
-      <Text>{item.slug}</Text>
-      <Button
-        backgroundColor="red"
-        onClick={() => {
-          store.deleteResearchItem(item._id)
-          history.push('/research')
-        }}
-      >
-        Delete
-      </Button>
+      <ResearchDescription research={item} loggedInUser={undefined} />
+      <Box mt={9}>
+        {item.updates.map((update, index) => {
+          return <Update update={update} key={update._id} updateIndex={index} />
+        })}
+      </Box>
+      <Flex>
+        <Button
+          backgroundColor="red"
+          onClick={() => {
+            store.deleteResearchItem(item._id)
+            history.push('/research')
+          }}
+        >
+          Delete
+        </Button>
+        <Button
+          ml={2}
+          onClick={() => {
+            store.addUpdate(
+              item,
+              MOCK_UPDATES[Math.floor(Math.random() * MOCK_UPDATES.length)],
+            )
+            store.setActiveResearchItem(item.slug)
+          }}
+        >
+          Add update
+        </Button>
+      </Flex>
     </>
   ) : isLoading ? (
     // handle case where loading

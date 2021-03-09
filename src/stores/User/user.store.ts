@@ -85,6 +85,12 @@ export class UserStore extends ModuleStore {
       if (userMeta) {
         this.updateUser(userMeta)
         console.log('userMeta', userMeta)
+
+        // Update last active for user
+        await this.db
+          .collection<IUserPP>(COLLECTION_NAME)
+          .doc(userMeta._id)
+          .set({ ...userMeta, _lastActive: new Date().toISOString() })
       } else {
         // user profile not found, either it has been deleted or not migrated correctly from legacy format
         // create a new profile to use for now and make a log to the error handler in case required

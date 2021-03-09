@@ -23,6 +23,7 @@
   { 'name': 'Mod: Maps 🗺', 'color': 'BFD4F2', 'description': '' },
   { 'name': 'Mod: Other ⬜️', 'color': 'BFD4F2', 'description': '' },
   { 'name': 'Mod: Profiles 👱', 'color': 'BFD4F2', 'description': '' },
+  { 'name': 'Mod: Research 🔬', 'color': 'BFD4F2', 'description': '' },
   { 'name': 'Mod: Security👮', 'color': 'BFD4F2', 'description': '' },
   { 'name': 'Module Overview 👀', 'color': 'CEF45D', 'description': '' },
   { 'name': 'Non-Dev', 'color': 'ADADAD', 'description': '' },

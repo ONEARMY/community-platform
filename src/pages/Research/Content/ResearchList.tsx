@@ -1,27 +1,33 @@
-import * as React from 'react'
-
-import Text from 'src/components/Text'
-import { ResearchListItem } from './ResearchListItem'
-import { ResearchStoreContext } from '../research.store'
-import { Button } from 'src/components/Button'
 import { observer } from 'mobx-react'
-import { Box } from 'rebass'
-import { MOCK_RESEARCH_ITEMS } from '../research.mocks'
-import { Link } from 'src/components/Links'
+import * as React from 'react'
+import { Box, Flex } from 'rebass'
+import { Button } from 'src/components/Button'
+import Heading from 'src/components/Heading'
+import ResearchListItem from 'src/components/Research/ResearchListItem'
+import { MOCK_RESEARCH_ITEMS } from 'src/mocks/research.mocks'
+import { ResearchStoreContext } from 'src/stores/Research/research.store'
 
 export const ResearchList = observer(() => {
   const store = React.useContext(ResearchStoreContext)
   return (
     <>
-      <Text>Research List</Text>
+      <Flex py={26}>
+        <Heading medium bold txtcenter width={1} my={20}>
+          Research topics. Can we...
+        </Heading>
+      </Flex>
       {store.allResearchItems.map(item => (
-        <Link key={item._id} to={'research/' + item.slug}>
-          <ResearchListItem item={item} />
-        </Link>
+        <ResearchListItem key={item._id} item={item} />
       ))}
-      <Box mt={3}>
+      <Box mb={4}>
         <Button
-          onClick={() => store.createResearchItem(MOCK_RESEARCH_ITEMS[0])}
+          onClick={() =>
+            store.createResearchItem(
+              MOCK_RESEARCH_ITEMS[
+                Math.floor(Math.random() * MOCK_RESEARCH_ITEMS.length)
+              ],
+            )
+          }
         >
           Add Research
         </Button>

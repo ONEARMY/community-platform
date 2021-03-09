@@ -11,6 +11,7 @@ export namespace IResearch {
     slug: string
     updates: Update[]
     tags: ISelectedTags
+    _createdBy: string
   }
 
   /** A research item update */
@@ -21,7 +22,8 @@ export namespace IResearch {
   }
 
   /** Research items synced from the database will contain additional metadata */
-  export type ItemDB = Item & { updates: UpdateDB[] } & DBDoc
+  // Use of Omit to override the 'updates' type to UpdateDB
+  export type ItemDB = Omit<Item, 'updates'> & { updates: UpdateDB[] } & DBDoc
 
   export type UpdateDB = Update & DBDoc
 }

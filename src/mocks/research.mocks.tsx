@@ -4,6 +4,7 @@ import { MOCK_DB_META } from './db.mock'
 export const MOCK_RESEARCH_ITEMS: IResearch.ItemDB[] = [
   {
     ...MOCK_DB_META(),
+    moderation: 'accepted',
     title: 'Make a big 244 x 122 sheetpress?',
     description: 'We want to see whether we can make a big sheetpress',
     slug: 'make-a-big-244-x-122-sheetpress',
@@ -20,6 +21,7 @@ export const MOCK_RESEARCH_ITEMS: IResearch.ItemDB[] = [
   },
   {
     ...MOCK_DB_META(),
+    moderation: 'accepted',
     title: 'Run the injection machine on Solar?',
     description: 'Run the injection machine on Solar?',
     slug: 'run-the-injection-machine-on-solar',

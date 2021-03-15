@@ -1,16 +1,11 @@
-import { DBDoc, ISelectedTags } from 'src/models'
+import { DBDoc, IModerable, ISelectedTags } from 'src/models'
 import { IUploadedFileMeta } from 'src/stores/storage'
 
 /** All typings related to the Research Module can be found here */
 export namespace IResearch {
   /** The main research item, as created by a user */
-  export interface Item {
-    title: string
-    description: string
-    /** This should be a url-safe version of the title */
-    slug: string
+  export interface Item extends FormInput {
     updates: Update[]
-    tags: ISelectedTags
     _createdBy: string
   }
 
@@ -19,6 +14,13 @@ export namespace IResearch {
     title: string
     description: string
     files: Array<IUploadedFileMeta | File | null>
+  }
+
+  export interface FormInput extends IModerable {
+    title: string
+    description: string
+    slug: string
+    tags: ISelectedTags
   }
 
   /** Research items synced from the database will contain additional metadata */

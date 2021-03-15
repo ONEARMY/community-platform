@@ -1,15 +1,16 @@
 import * as React from 'react'
 import { Route, Switch, withRouter } from 'react-router-dom'
-import { ResearchList } from './Content/ResearchList'
+import CreateResearch from './Content/CreateResearch'
 import { ResearchItemDetail } from './Content/ResearchItemDetail'
+import { ResearchList } from './Content/ResearchList'
 
 const routes = () => (
   <Switch>
     <Route exact path="/research" component={ResearchList} />
     <Route
-      exact
       path="/research/create"
-      // component={ResearchItemEditor}
+      component={CreateResearch}
+      redirectPath="/research"
     />
     <Route
       path="/research/:slug"

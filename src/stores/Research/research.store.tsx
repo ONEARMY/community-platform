@@ -1,5 +1,6 @@
-import { makeObservable, observable, toJS } from 'mobx'
+import { action, makeObservable, observable, toJS } from 'mobx'
 import { createContext, useContext } from 'react'
+import { IUser } from 'src/models'
 import { ModuleStore } from 'src/stores/common/module.store'
 import { IResearch } from '../../models/research.models'
 
@@ -8,6 +9,8 @@ const COLLECTION_NAME = 'research'
 export class ResearchStore extends ModuleStore {
   @observable public allResearchItems: IResearch.ItemDB[] = []
   @observable public activeResearchItem: IResearch.ItemDB | undefined
+  @observable
+  public uploadStatus: IResearchUploadStatus = getInitialUploadStatus()
 
   constructor() {
     super(null as any, 'research')
@@ -68,11 +71,72 @@ export class ResearchStore extends ModuleStore {
       .doc(id)
       .delete()
   }
+
+  @action
+  public updateUploadStatus(update: keyof IResearchUploadStatus) {
+    this.uploadStatus[update] = true
+  }
+
+  @action
+  public resetUploadStatus() {
+    this.uploadStatus = getInitialUploadStatus()
+  }
+
+  public async uploadResearch(values: IResearch.FormInput | IResearch.ItemDB) {
+    console.log('uploading research')
+    this.updateUploadStatus('Start')
+    // create a reference either to the existing document (if editing) or a new document if creating
+    const dbRef = this.db
+      .collection<IResearch.Item>(COLLECTION_NAME)
+      .doc((values as IResearch.ItemDB)._id)
+    const user = this.activeUser as IUser
+    try {
+      // populate DB
+      // define research
+      const research: IResearch.Item = {
+        ...values,
+        _createdBy: values._createdBy ? values._createdBy : user.userName,
+        moderation: values.moderation
+          ? values.moderation
+          : 'awaiting-moderation',
+        updates: (values as IResearch.ItemDB).updates
+          ? (values as IResearch.ItemDB).updates
+          : [],
+      }
+      console.log('populating database', research)
+      // set the database document
+      await dbRef.set(research)
+      this.updateUploadStatus('Database')
+      console.log('post added')
+      this.activeResearchItem = (await dbRef.get()) as IResearch.ItemDB
+      // complete
+      this.updateUploadStatus('Complete')
+    } catch (error) {
+      console.log('error', error)
+      throw new Error(error.message)
+    }
+  }
 }
+
+interface IResearchUploadStatus {
+  Start: boolean
+  Database: boolean
+  Complete: boolean
+}
+
+function getInitialUploadStatus() {
+  const status: IResearchUploadStatus = {
+    Start: false,
+    Database: false,
+    Complete: false,
+  }
+  return status
+}
+
 /**
  * Export an empty context object to be shared with components
  * The context will be populated with the researchStore in the module index
  * (avoids cyclic deps and ensure shared module ready)
  */
 export const ResearchStoreContext = createContext<ResearchStore>(null as any)
-export const UseResearchStore = () => useContext(ResearchStoreContext)
+export const useResearchStore = () => useContext(ResearchStoreContext)

@@ -6,7 +6,7 @@ import { Button } from 'src/components/Button'
 import { Loader } from 'src/components/Loader'
 import { MOCK_UPDATES } from 'src/mocks/research.mocks'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
-import { ResearchStoreContext } from 'src/stores/Research/research.store'
+import { useResearchStore } from 'src/stores/Research/research.store'
 import ResearchDescription from './ResearchDescription'
 import Update from './Update'
 
@@ -15,7 +15,7 @@ interface IProps {
 }
 
 export const ResearchItemDetail = observer((props: IProps) => {
-  const store = React.useContext(ResearchStoreContext)
+  const store = useResearchStore()
   const history = useHistory()
 
   const [isLoading, setIsLoading] = React.useState(true)

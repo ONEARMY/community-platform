@@ -37,7 +37,7 @@ export const ResearchItemDetail = observer((props: IProps) => {
 
   return item ? (
     <>
-      <ResearchDescription research={item} loggedInUser={undefined} />
+      <ResearchDescription research={item} loggedInUser={store.activeUser} />
       <Box mt={9}>
         {item.updates.map((update, index) => {
           return <Update update={update} key={update._id} updateIndex={index} />

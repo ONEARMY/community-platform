@@ -29,7 +29,6 @@ interface IState {
   formSaved: boolean
   _toDocsList: boolean
   showSubmitModal?: boolean
-  draft: boolean
 }
 interface IProps extends RouteComponentProps<any> {
   formValues: any
@@ -57,31 +56,29 @@ const ResearchForm = observer((props: IProps) => {
     formSaved: false,
     _toDocsList: false,
     showSubmitModal: false,
+  })
+  const [submissionHandler, setSubmissionHandler] = React.useState({
     draft: props.formValues.moderation === 'draft',
+    shouldSubmit: false,
   })
 
-  const trySubmitForm = (draft: boolean) => {
-    console.log('starting submit')
-    setState(prevState => {
-      // Save requested draft value into state and then trigger form submit
+  React.useEffect(() => {
+    if (submissionHandler.shouldSubmit) {
+      console.log('submitting', submissionHandler)
       const form = document.getElementById('researchForm')
-      let showSubmitModal = false
       if (typeof form !== 'undefined' && form !== null) {
         console.log('dispatching event')
         form.dispatchEvent(new Event('submit', { cancelable: true }))
-        showSubmitModal = true
+        setState(prevState => ({ ...prevState, showSubmitModal: true }))
       }
-      return {
-        ...prevState,
-        draft,
-        showSubmitModal,
-      }
-    })
-  }
+    }
+  }, [submissionHandler])
 
   const onSubmit = async (formValues: IResearch.FormInput) => {
     console.log('submitting')
-    formValues.moderation = state.draft ? 'draft' : 'awaiting-moderation'
+    formValues.moderation = submissionHandler.draft
+      ? 'draft'
+      : 'awaiting-moderation'
     await store.uploadResearch(formValues)
     console.log('submitted')
   }
@@ -260,7 +257,9 @@ const ResearchForm = observer((props: IProps) => {
                   </Box>
                   <Button
                     data-cy={'draft'}
-                    onClick={() => trySubmitForm(true)}
+                    onClick={() =>
+                      setSubmissionHandler({ shouldSubmit: true, draft: true })
+                    }
                     width={1}
                     mt={[0, 0, 3]}
                     variant="secondary"
@@ -276,7 +275,9 @@ const ResearchForm = observer((props: IProps) => {
                   </Button>
                   <Button
                     data-cy={'submit'}
-                    onClick={() => trySubmitForm(false)}
+                    onClick={() =>
+                      setSubmissionHandler({ shouldSubmit: true, draft: false })
+                    }
                     width={1}
                     mt={3}
                     variant="primary"

@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Route, Switch, withRouter } from 'react-router-dom'
 import CreateResearch from './Content/CreateResearch'
+import ResearchItemEditor from './Content/EditResearch'
 import { ResearchItemDetail } from './Content/ResearchItemDetail'
 import { ResearchList } from './Content/ResearchList'
 
@@ -12,16 +13,12 @@ const routes = () => (
       component={CreateResearch}
       redirectPath="/research"
     />
+    <Route exact path="/research/:slug/edit" component={ResearchItemEditor} />
     <Route
       path="/research/:slug"
       render={routeProps => (
         <ResearchItemDetail slug={routeProps.match.params.slug} />
       )}
-    />
-    <Route
-      exact
-      path="/research/:slug/edit"
-      // component={ResearchItemEditor}
     />
   </Switch>
 )

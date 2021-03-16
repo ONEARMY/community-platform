@@ -1,8 +1,16 @@
-import { action, makeObservable, observable, toJS } from 'mobx'
+import {
+  action,
+  computed,
+  makeObservable,
+  observable,
+  runInAction,
+  toJS,
+} from 'mobx'
 import { createContext, useContext } from 'react'
 import { IUser } from 'src/models'
 import { ModuleStore } from 'src/stores/common/module.store'
 import { IResearch } from '../../models/research.models'
+import { filterModerableItems } from '../../utils/helpers'
 
 const COLLECTION_NAME = 'research'
 
@@ -24,15 +32,24 @@ export class ResearchStore extends ModuleStore {
     })
   }
 
+  @computed get filteredResearches() {
+    return filterModerableItems(this.allResearchItems, this.activeUser)
+  }
+
   public async setActiveResearchItem(slug?: string) {
     if (slug) {
       const collection = await this.db
         .collection<IResearch.ItemDB>(COLLECTION_NAME)
         .getWhere('slug', '==', slug)
       const researchItem = collection.length > 0 ? collection[0] : undefined
-      this.activeResearchItem = researchItem
+      runInAction(() => {
+        this.activeResearchItem = researchItem
+      })
+      return researchItem
     } else {
-      this.activeResearchItem = undefined
+      runInAction(() => {
+        this.activeResearchItem = undefined
+      })
     }
   }
 

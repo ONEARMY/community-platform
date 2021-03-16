@@ -54,7 +54,10 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => (
               ? item.updates.length + ' update'
               : item.updates.length + ' updates'}
           </Text>
-          <Text auxiliary alignSelf="flex-start">
+          <Text
+            auxiliary
+            alignSelf={item.moderation !== 'accepted' ? 'flex-start' : 'center'}
+          >
             {format(new Date(item._created), 'DD-MM-YYYY')}
           </Text>
         </Flex>
@@ -63,7 +66,7 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => (
         <ModerationStatusText
           moderable={item}
           kind="research"
-          bottom={'0'}
+          bottom={['36px', '36px', 0]}
           color="red"
           cropBottomRight
         />

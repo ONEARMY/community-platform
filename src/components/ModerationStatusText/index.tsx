@@ -7,7 +7,7 @@ type IProps = {
   moderable: IModerable
   kind: 'event' | 'howto' | 'research'
   top?: string
-  bottom?: string
+  bottom?: string | (string | number)[]
   cropBottomRight?: boolean
 } & TextProps
 
@@ -49,7 +49,7 @@ export const ModerationStatusText: FunctionComponent<IProps> = ({
       clipped
       highlight
       critical={status === 'rejected'}
-      cropBottomRight
+      cropBottomRight={cropBottomRight}
       sx={{
         position: 'absolute',
         maxWidth: '90%',

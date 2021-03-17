@@ -9,6 +9,7 @@ import { useResearchStore } from 'src/stores/Research/research.store'
 
 export const ResearchList = observer(() => {
   const store = useResearchStore()
+  const { filteredResearches } = store
   return (
     <>
       <Flex py={26}>
@@ -16,7 +17,7 @@ export const ResearchList = observer(() => {
           Research topics. Can we...
         </Heading>
       </Flex>
-      {store.allResearchItems.map(item => (
+      {filteredResearches.map(item => (
         <ResearchListItem key={item._id} item={item} />
       ))}
       <Box mb={4}>

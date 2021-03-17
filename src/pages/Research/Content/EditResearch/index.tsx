@@ -27,18 +27,27 @@ const EditResearch = observer((props: IProps) => {
     formSaved: false,
     _toDocsList: false,
     isLoading: true,
-    loggedInUser: undefined,
+    loggedInUser: store.activeUser,
   })
 
   React.useEffect(() => {
     ;(async () => {
-      const loggedInUser = store.activeUser
+      let loggedInUser = store.activeUser
+      if (!loggedInUser) {
+        // TODO - handle the case where user is still loading
+        await new Promise<void>(resolve =>
+          setTimeout(() => {
+            loggedInUser = store.activeUser
+            resolve()
+          }, 3000),
+        )
+      }
       if (store.activeResearchItem! !== undefined) {
         setState(prevState => ({
           ...prevState,
           formValues: toJS(store.activeResearchItem) as IResearch.ItemDB,
           isLoading: false,
-          loggedInUser: loggedInUser ? loggedInUser : undefined,
+          loggedInUser,
         }))
       } else {
         const slug = props.match.params.slug
@@ -47,11 +56,11 @@ const EditResearch = observer((props: IProps) => {
           ...prevState,
           formValues: doc as IResearch.ItemDB,
           isLoading: false,
-          loggedInUser: loggedInUser ? loggedInUser : undefined,
+          loggedInUser,
         }))
       }
     })()
-  }, [])
+  }, [store, props.match.params.slug])
 
   const { formValues, isLoading, loggedInUser } = state
   if (formValues && !isLoading) {

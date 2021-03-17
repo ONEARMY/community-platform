@@ -61,7 +61,10 @@ export const capitalizeFirstLetter = (str: string) =>
 
 // Show only items which are either accepted, the user has created, or an admin can see
 // HACK - ARH - 2019/12/11 filter unaccepted howtos, should be done serverside
-export const filterModerableItems = (items: IModerable[], user?: IUser) =>
+export const filterModerableItems = <T>(
+  items: (IModerable & T)[],
+  user?: IUser,
+): T[] =>
   items.filter(item => {
     const isItemAccepted = item.moderation === 'accepted'
     const wasCreatedByUser = user && item._createdBy === user.userName

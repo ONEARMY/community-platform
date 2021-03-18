@@ -1,6 +1,7 @@
 import { format } from 'date-fns'
 import React from 'react'
 import Linkify from 'react-linkify'
+import ReactPlayer from 'react-player'
 import { Box } from 'rebass'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
@@ -72,8 +73,17 @@ const Update: React.FC<IProps> = ({ update, updateIndex }) => {
               </Text>
             </Box>
           </Flex>
-          <Box width={1}>
-            <ImageGallery images={update.files as IUploadedFileMeta[]} />
+          <Box width={[1, 1, 5 / 9]}>
+            {update.videoUrl ? (
+              <ReactPlayer
+                width="auto"
+                data-cy="video-embed"
+                controls
+                url={update.videoUrl}
+              />
+            ) : (
+              <ImageGallery images={update.images as IUploadedFileMeta[]} />
+            )}
           </Box>
         </Flex>
       </Flex>

@@ -18,7 +18,8 @@ export class ResearchStore extends ModuleStore {
   @observable public allResearchItems: IResearch.ItemDB[] = []
   @observable public activeResearchItem: IResearch.ItemDB | undefined
   @observable
-  public uploadStatus: IResearchUploadStatus = getInitialUploadStatus()
+  public researchUploadStatus: IResearchUploadStatus = getInitialResearchUploadStatus()
+  public updateUploadStatus: IUpdateUploadStatus = getInitialUpdateUploadStatus()
 
   constructor() {
     super(null as any, 'research')
@@ -61,25 +62,28 @@ export class ResearchStore extends ModuleStore {
       .set(item)
   }
 
-  public addUpdate(item: IResearch.ItemDB, update: IResearch.Update) {
-    const updatedItem = {
-      ...toJS(item),
-      updates: [
-        ...toJS(item.updates),
-        {
-          ...update,
-          // TODO - insert metadata into the new update
-          _id: Math.random().toString(),
-          _created: new Date().toISOString(),
-          _modified: new Date().toISOString(),
-        },
-      ],
-    }
+  public async addUpdate(update: IResearch.Update) {
+    const item = this.activeResearchItem
+    if (item) {
+      const updatedItem = {
+        ...toJS(item),
+        updates: [
+          ...toJS(item.updates),
+          {
+            ...update,
+            // TODO - insert metadata into the new update
+            _id: Math.random().toString(),
+            _created: new Date().toISOString(),
+            _modified: new Date().toISOString(),
+          },
+        ],
+      }
 
-    this.db
-      .collection<IResearch.Item>(COLLECTION_NAME)
-      .doc(item._id)
-      .set(updatedItem)
+      await this.db
+        .collection<IResearch.Item>(COLLECTION_NAME)
+        .doc(item._id)
+        .set(updatedItem)
+    }
   }
 
   public deleteResearchItem(id: string) {
@@ -90,18 +94,28 @@ export class ResearchStore extends ModuleStore {
   }
 
   @action
-  public updateUploadStatus(update: keyof IResearchUploadStatus) {
-    this.uploadStatus[update] = true
+  public updateResearchUploadStatus(update: keyof IResearchUploadStatus) {
+    this.researchUploadStatus[update] = true
   }
 
   @action
-  public resetUploadStatus() {
-    this.uploadStatus = getInitialUploadStatus()
+  public updateUpdateUploadStatus(update: keyof IUpdateUploadStatus) {
+    this.updateUploadStatus[update] = true
+  }
+
+  @action
+  public resetResearchUploadStatus() {
+    this.researchUploadStatus = getInitialResearchUploadStatus()
+  }
+
+  @action
+  public resetUpdateUploadStatus() {
+    this.updateUploadStatus = getInitialUpdateUploadStatus()
   }
 
   public async uploadResearch(values: IResearch.FormInput | IResearch.ItemDB) {
     console.log('uploading research')
-    this.updateUploadStatus('Start')
+    this.updateResearchUploadStatus('Start')
     // create a reference either to the existing document (if editing) or a new document if creating
     const dbRef = this.db
       .collection<IResearch.Item>(COLLECTION_NAME)
@@ -116,18 +130,16 @@ export class ResearchStore extends ModuleStore {
         moderation: values.moderation
           ? values.moderation
           : 'awaiting-moderation',
-        updates: (values as IResearch.ItemDB).updates
-          ? (values as IResearch.ItemDB).updates
-          : [],
+        updates: [],
       }
       console.log('populating database', research)
       // set the database document
       await dbRef.set(research)
-      this.updateUploadStatus('Database')
+      this.updateResearchUploadStatus('Database')
       console.log('post added')
       this.activeResearchItem = (await dbRef.get()) as IResearch.ItemDB
       // complete
-      this.updateUploadStatus('Complete')
+      this.updateResearchUploadStatus('Complete')
     } catch (error) {
       console.log('error', error)
       throw new Error(error.message)
@@ -141,13 +153,28 @@ interface IResearchUploadStatus {
   Complete: boolean
 }
 
-function getInitialUploadStatus() {
-  const status: IResearchUploadStatus = {
+interface IUpdateUploadStatus {
+  Start: boolean
+  Files: boolean
+  Database: boolean
+  Complete: boolean
+}
+
+function getInitialUpdateUploadStatus(): IUpdateUploadStatus {
+  return {
+    Start: false,
+    Files: false,
+    Database: false,
+    Complete: false,
+  }
+}
+
+function getInitialResearchUploadStatus(): IResearchUploadStatus {
+  return {
     Start: false,
     Database: false,
     Complete: false,
   }
-  return status
 }
 
 /**

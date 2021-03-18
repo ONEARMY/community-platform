@@ -2,8 +2,8 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Box, Flex } from 'rebass'
 import { Button } from 'src/components/Button'
+import { Link } from 'src/components/Links'
 import { Loader } from 'src/components/Loader'
-import { MOCK_UPDATES } from 'src/mocks/research.mocks'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { isAllowToEditContent } from 'src/utils/helpers'
@@ -44,19 +44,11 @@ export const ResearchItemDetail = observer((props: IProps) => {
       </Box>
       {store.activeUser && isAllowToEditContent(item, store.activeUser) && (
         <Flex my={4}>
-          <Button
-            large
-            ml={2}
-            onClick={() => {
-              store.addUpdate(
-                item,
-                MOCK_UPDATES[Math.floor(Math.random() * MOCK_UPDATES.length)],
-              )
-              store.setActiveResearchItem(item.slug)
-            }}
-          >
-            Add update
-          </Button>
+          <Link to={`/research/${item.slug}/new-update`} mb={[3, 3, 0]}>
+            <Button large ml={2}>
+              Add update
+            </Button>
+          </Link>
         </Flex>
       )}
     </>

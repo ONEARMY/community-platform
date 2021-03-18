@@ -13,7 +13,8 @@ export namespace IResearch {
   export interface Update {
     title: string
     description: string
-    files: Array<IUploadedFileMeta | File | null>
+    images: Array<IUploadedFileMeta | null>
+    videoUrl?: string
   }
 
   export interface FormInput extends IModerable {

@@ -1,5 +1,4 @@
 import arrayMutators from 'final-form-arrays'
-import createDecorator from 'final-form-calculate'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Field, Form } from 'react-final-form'
@@ -10,26 +9,27 @@ import { Button } from 'src/components/Button'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import Flex from 'src/components/Flex'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
-import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
+import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import Heading from 'src/components/Heading'
 import { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
+import { IUploadedFileMeta } from 'src/stores/storage'
 import theme from 'src/themes/styled.theme'
 import { COMPARISONS } from 'src/utils/comparisons'
-import { stripSpecialCharacters } from 'src/utils/helpers'
 import { required } from 'src/utils/validators'
 import styled from 'styled-components'
 import { PostingGuidelines } from './PostingGuidelines'
-import { ResearchSubmitStatus } from './SubmitStatus'
+import { UpdateSubmitStatus } from './SubmitStatus'
+
+const ImageInputFieldWrapper = styled.div`
+  width: 150px;
+  height: 100px;
+  margin-right: 10px;
+`
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'
 
-interface IState {
-  formSaved: boolean
-  _toDocsList: boolean
-  showSubmitModal?: boolean
-}
 interface IProps extends RouteComponentProps<any> {
   formValues: any
   parentType: 'create' | 'edit'
@@ -50,58 +50,27 @@ const beforeUnload = function(e) {
   e.returnValue = CONFIRM_DIALOG_MSG
 }
 
-const ResearchForm = observer((props: IProps) => {
+const UpdateForm = observer((props: IProps) => {
   const store = useResearchStore()
-  const [state, setState] = React.useState<IState>({
-    formSaved: false,
-    _toDocsList: false,
-    showSubmitModal: false,
-  })
-  const [submissionHandler, setSubmissionHandler] = React.useState({
-    draft: props.formValues.moderation === 'draft',
-    shouldSubmit: false,
-  })
+  const [showSubmitModal, setShowSubmitModal] = React.useState<boolean>(false)
 
-  React.useEffect(() => {
-    if (submissionHandler.shouldSubmit) {
-      console.log('submitting', submissionHandler)
-      const form = document.getElementById('researchForm')
-      if (typeof form !== 'undefined' && form !== null) {
-        console.log('dispatching event')
-        form.dispatchEvent(new Event('submit', { cancelable: true }))
-        setState(prevState => ({ ...prevState, showSubmitModal: true }))
-      }
+  const trySubmitForm = () => {
+    const form = document.getElementById('howtoForm')
+    if (typeof form !== 'undefined' && form !== null) {
+      form.dispatchEvent(new Event('submit', { cancelable: true }))
+      setShowSubmitModal(true)
     }
-  }, [submissionHandler])
-
-  const onSubmit = async (formValues: IResearch.FormInput) => {
-    console.log('submitting')
-    formValues.moderation = submissionHandler.draft
-      ? 'draft'
-      : 'awaiting-moderation'
-    await store.uploadResearch(formValues)
-    console.log('submitted')
   }
 
-  const validateTitle = async (value: any) => {
-    const originalId =
-      props.parentType === 'edit' ? props.formValues._id : undefined
-    return store.validateTitleForSlug(value, 'research', originalId)
+  const onSubmit = (formValues: IResearch.Update) => {
+    store.addUpdate(formValues)
   }
-
-  // automatically generate the slug when the title changes
-  const calculatedFields = createDecorator({
-    field: 'title',
-    updates: {
-      slug: title => stripSpecialCharacters(title).toLowerCase(),
-    },
-  })
 
   // Display a confirmation dialog when leaving the page outside the React Router
   const unloadDecorator = form => {
     return form.subscribe(
       ({ dirty }) => {
-        if (dirty && !store.researchUploadStatus.Complete) {
+        if (dirty && !store.updateUploadStatus.Complete) {
           window.addEventListener('beforeunload', beforeUnload, false)
           return
         }
@@ -111,37 +80,52 @@ const ResearchForm = observer((props: IProps) => {
     )
   }
 
+  /**
+   * Ensure either url or images included (not both), and any url formatted correctly
+   */
+  const validateMedia = (images: IUploadedFileMeta[], videoUrl: string) => {
+    if (videoUrl) {
+      if (images[0]) {
+        return 'Do not include both images and video'
+      }
+      const ytRegex = new RegExp(/(youtu\.be\/|youtube\.com\/watch\?v=)/gi)
+      const urlValid = ytRegex.test(videoUrl)
+      return urlValid ? null : 'Please provide a valid YouTube Url'
+    }
+    return images[0] ? null : 'Include either images or a video'
+  }
+
   return (
     <>
-      {state.showSubmitModal && (
-        <ResearchSubmitStatus
+      {showSubmitModal && (
+        <UpdateSubmitStatus
           {...props}
           onClose={() => {
-            setState(prevState => ({ ...prevState, showSubmitModal: false }))
-            store.resetResearchUploadStatus()
+            setShowSubmitModal(false)
+            store.resetUpdateUploadStatus()
           }}
         />
       )}
       <Form
         onSubmit={v => {
-          onSubmit(v as IResearch.FormInput)
+          onSubmit(v as IResearch.Update)
         }}
         initialValues={props.formValues}
         mutators={{
           ...arrayMutators,
         }}
         validateOnBlur
-        decorators={[calculatedFields, unloadDecorator]}
-        render={({ submitting, dirty, handleSubmit }) => {
+        decorators={[unloadDecorator]}
+        render={({ submitting, dirty, handleSubmit, values }) => {
           return (
             <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
               <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} mt={4}>
                 <Prompt
-                  when={!store.researchUploadStatus.Complete && dirty}
+                  when={!store.updateUploadStatus.Complete && dirty}
                   message={CONFIRM_DIALOG_MSG}
                 />
-                <FormContainer id="researchForm" onSubmit={handleSubmit}>
-                  {/* Research Info */}
+                <FormContainer id="updateForm" onSubmit={handleSubmit}>
+                  {/* Update Info */}
                   <Flex flexDirection={'column'}>
                     <Flex
                       card
@@ -153,11 +137,11 @@ const ResearchForm = observer((props: IProps) => {
                     >
                       <Heading medium>
                         {props.parentType === 'create' ? (
-                          <span>Start</span>
+                          <span>New</span>
                         ) : (
-                          <span>Edit</span>
+                          <span>Edit your</span>
                         )}{' '}
-                        your Research
+                        update
                       </Heading>
                       <Box ml="15px">
                         <ElWithBeforeIcon
@@ -183,24 +167,22 @@ const ResearchForm = observer((props: IProps) => {
                       <Flex mx={-2} flexDirection={['column', 'column', 'row']}>
                         <Flex flex={[1, 1, 4]} px={2} flexDirection="column">
                           <Flex flexDirection={'column'} mb={3}>
-                            <Label htmlFor="title">
-                              Title of your research. Can we...
-                            </Label>
+                            <Label htmlFor="title">Title of this update</Label>
                             <Field
                               id="title"
                               name="title"
                               data-cy="intro-title"
                               validateFields={[]}
-                              validate={validateTitle}
+                              validate={required}
                               isEqual={COMPARISONS.textInput}
                               component={InputField}
                               maxLength="40"
-                              placeholder="Make a chair from.. (max 40 characters)"
+                              placeholder="Title of this update (max 40 characters)"
                             />
                           </Flex>
                           <Flex flexDirection={'column'} mb={3}>
                             <Label htmlFor="description">
-                              What are you trying to find out?
+                              Description of this update
                             </Label>
                             <Field
                               id="description"
@@ -215,17 +197,73 @@ const ResearchForm = observer((props: IProps) => {
                                 flex: 1,
                                 minHeight: '150px',
                               }}
-                              maxLength="400"
-                              placeholder="Introduction to your research question. Mention what you want to do, inspiration you got, what challenges you must see etc (max 400 characters)"
+                              maxLength="700"
+                              placeholder="Explain what is happening in your research (max 700 characters)"
                             />
                           </Flex>
-                          <Flex flexDirection={'column'} mb={3}>
-                            <Label>Select tags for your Research</Label>
+                          <Label htmlFor={`images`}>
+                            Upload image(s) for this update
+                          </Label>
+                          <Flex
+                            flexDirection={['column', 'row']}
+                            alignItems="center"
+                            mb={3}
+                          >
+                            <ImageInputFieldWrapper data-cy="image-0">
+                              <Field
+                                hasText={false}
+                                name={`images[0]`}
+                                component={ImageInputField}
+                                isEqual={COMPARISONS.image}
+                              />
+                            </ImageInputFieldWrapper>
+                            <ImageInputFieldWrapper data-cy="image-1">
+                              <Field
+                                hasText={false}
+                                name={`images[1]`}
+                                component={ImageInputField}
+                                isEqual={COMPARISONS.image}
+                              />
+                            </ImageInputFieldWrapper>
+                            <ImageInputFieldWrapper data-cy="image-2">
+                              <Field
+                                hasText={false}
+                                name={`images[2]`}
+                                component={ImageInputField}
+                                isEqual={COMPARISONS.image}
+                              />
+                            </ImageInputFieldWrapper>
+                            <ImageInputFieldWrapper data-cy="image-2">
+                              <Field
+                                hasText={false}
+                                name={`images[3]`}
+                                component={ImageInputField}
+                                isEqual={COMPARISONS.image}
+                              />
+                            </ImageInputFieldWrapper>
+                            <ImageInputFieldWrapper data-cy="image-2">
+                              <Field
+                                hasText={false}
+                                name={`images[4]`}
+                                component={ImageInputField}
+                                isEqual={COMPARISONS.image}
+                              />
+                            </ImageInputFieldWrapper>
+                          </Flex>
+                          <Flex flexDirection="column" mb={3}>
+                            <Label htmlFor={`videoUrl`}>
+                              Or embed a YouTube video
+                            </Label>
                             <Field
-                              name="tags"
-                              component={TagsSelectField}
-                              category="research"
-                              isEqual={COMPARISONS.tags}
+                              name={`videoUrl`}
+                              data-cy="videoUrl"
+                              component={InputField}
+                              placeholder="https://youtube.com/watch?v="
+                              validate={url =>
+                                validateMedia(values.images, url)
+                              }
+                              validateFields={[]}
+                              isEqual={COMPARISONS.textInput}
                             />
                           </Flex>
                         </Flex>
@@ -249,32 +287,9 @@ const ResearchForm = observer((props: IProps) => {
                     maxWidth: ['inherit', 'inherit', '400px'],
                   }}
                 >
-                  <Box sx={{ display: ['none', 'none', 'block'] }}>
-                    <PostingGuidelines />
-                  </Box>
-                  <Button
-                    data-cy={'draft'}
-                    onClick={() =>
-                      setSubmissionHandler({ shouldSubmit: true, draft: true })
-                    }
-                    width={1}
-                    mt={[0, 0, 3]}
-                    variant="secondary"
-                    type="submit"
-                    disabled={submitting}
-                    sx={{ display: 'block' }}
-                  >
-                    {props.formValues.moderation !== 'draft' ? (
-                      <span>Save to draft</span>
-                    ) : (
-                      <span>Revert to draft</span>
-                    )}{' '}
-                  </Button>
                   <Button
                     data-cy={'submit'}
-                    onClick={() =>
-                      setSubmissionHandler({ shouldSubmit: true, draft: false })
-                    }
+                    onClick={trySubmitForm}
                     width={1}
                     mt={3}
                     variant="primary"
@@ -294,4 +309,4 @@ const ResearchForm = observer((props: IProps) => {
   )
 })
 
-export default ResearchForm
+export default UpdateForm

@@ -1,3 +1,4 @@
+import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { DBDoc, IModerable, ISelectedTags } from 'src/models'
 import { IUploadedFileMeta } from 'src/stores/storage'
 
@@ -13,7 +14,7 @@ export namespace IResearch {
   export interface Update {
     title: string
     description: string
-    images: Array<IUploadedFileMeta | null>
+    images: Array<IUploadedFileMeta | IConvertedFileMeta | null>
     videoUrl?: string
   }
 

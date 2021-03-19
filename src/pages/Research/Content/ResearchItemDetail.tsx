@@ -19,6 +19,14 @@ export const ResearchItemDetail = observer((props: IProps) => {
 
   const [isLoading, setIsLoading] = React.useState(true)
 
+  const moderateResearch = async (accepted: boolean) => {
+    const item = store.activeResearchItem
+    if (item) {
+      item.moderation = accepted ? 'accepted' : 'rejected'
+      await store.moderateResearch(item)
+    }
+  }
+
   React.useEffect(() => {
     ;(async () => {
       const { slug } = props
@@ -36,7 +44,12 @@ export const ResearchItemDetail = observer((props: IProps) => {
 
   return item ? (
     <>
-      <ResearchDescription research={item} loggedInUser={store.activeUser} />
+      <ResearchDescription
+        research={item}
+        loggedInUser={store.activeUser}
+        needsModeration={store.needsModeration(item)}
+        moderateResearch={moderateResearch}
+      />
       <Box mt={9}>
         {item.updates.map((update, index) => {
           return <Update update={update} key={update._id} updateIndex={index} />

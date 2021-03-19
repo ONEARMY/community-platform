@@ -7,10 +7,15 @@ import {
   toJS,
 } from 'mobx'
 import { createContext, useContext } from 'react'
+import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { IUser } from 'src/models'
+import { IResearch } from 'src/models/research.models'
 import { ModuleStore } from 'src/stores/common/module.store'
-import { IResearch } from '../../models/research.models'
-import { filterModerableItems } from '../../utils/helpers'
+import {
+  filterModerableItems,
+  hasAdminRights,
+  needsModeration,
+} from 'src/utils/helpers'
 
 const COLLECTION_NAME = 'research'
 
@@ -19,6 +24,7 @@ export class ResearchStore extends ModuleStore {
   @observable public activeResearchItem: IResearch.ItemDB | undefined
   @observable
   public researchUploadStatus: IResearchUploadStatus = getInitialResearchUploadStatus()
+  @observable
   public updateUploadStatus: IUpdateUploadStatus = getInitialUpdateUploadStatus()
 
   constructor() {
@@ -27,12 +33,14 @@ export class ResearchStore extends ModuleStore {
 
     this.allDocs$.subscribe((docs: IResearch.ItemDB[]) => {
       console.log('docs', docs)
-      this.allResearchItems = docs.sort((a, b) =>
+      const sortedItems = docs.sort((a, b) =>
         a._created < b._created ? 1 : -1,
       )
+      runInAction(() => {
+        this.allResearchItems = sortedItems
+      })
     })
   }
-
   @computed get filteredResearches() {
     return filterModerableItems(this.allResearchItems, this.activeUser)
   }
@@ -54,43 +62,23 @@ export class ResearchStore extends ModuleStore {
     }
   }
 
-  public createResearchItem(item: IResearch.Item) {
-    console.log('create research item', this.db)
-    this.db
-      .collection<IResearch.Item>(COLLECTION_NAME)
-      .doc()
-      .set(item)
-  }
-
-  public async addUpdate(update: IResearch.Update) {
-    const item = this.activeResearchItem
-    if (item) {
-      const updatedItem = {
-        ...toJS(item),
-        updates: [
-          ...toJS(item.updates),
-          {
-            ...update,
-            // TODO - insert metadata into the new update
-            _id: Math.random().toString(),
-            _created: new Date().toISOString(),
-            _modified: new Date().toISOString(),
-          },
-        ],
-      }
-
-      await this.db
-        .collection<IResearch.Item>(COLLECTION_NAME)
-        .doc(item._id)
-        .set(updatedItem)
-    }
-  }
-
   public deleteResearchItem(id: string) {
     this.db
       .collection('research')
       .doc(id)
       .delete()
+  }
+
+  public async moderateResearch(research: IResearch.ItemDB) {
+    if (!hasAdminRights(toJS(this.activeUser))) {
+      return false
+    }
+    const doc = this.db.collection(COLLECTION_NAME).doc(research._id)
+    return doc.set(research)
+  }
+
+  public needsModeration(research: IResearch.ItemDB) {
+    return needsModeration(research, toJS(this.activeUser))
   }
 
   @action
@@ -137,12 +125,68 @@ export class ResearchStore extends ModuleStore {
       await dbRef.set(research)
       this.updateResearchUploadStatus('Database')
       console.log('post added')
-      this.activeResearchItem = (await dbRef.get()) as IResearch.ItemDB
+      const newItem = (await dbRef.get()) as IResearch.ItemDB
+      runInAction(() => {
+        this.activeResearchItem = newItem
+      })
       // complete
       this.updateResearchUploadStatus('Complete')
     } catch (error) {
       console.log('error', error)
       throw new Error(error.message)
+    }
+  }
+
+  public async addUpdate(update: IResearch.Update) {
+    const item = this.activeResearchItem
+    if (item) {
+      const dbRef = this.db
+        .collection<IResearch.Item>(COLLECTION_NAME)
+        .doc(item._id)
+      const id = dbRef.id
+      this.updateUpdateUploadStatus('Start')
+      try {
+        // upload any pending images, avoid trying to re-upload images previously saved
+        // if cover already uploaded stored as object not array
+        // file and step image re-uploads handled in uploadFile script
+        const updateWithMeta: IResearch.Update = { ...update }
+        if (update.images.length > 0) {
+          const imgMeta = await this.uploadCollectionBatch(
+            update.images.filter(img => !!img) as IConvertedFileMeta[],
+            COLLECTION_NAME,
+            id,
+          )
+          updateWithMeta.images = imgMeta
+        }
+        console.log('upload images ok')
+        this.updateUpdateUploadStatus('Images')
+        // populate DB
+        const updatedItem = {
+          ...toJS(item),
+          updates: [
+            ...toJS(item.updates),
+            {
+              ...updateWithMeta,
+              // TODO - insert metadata into the new update
+              _id: Math.random().toString(),
+              _created: new Date().toISOString(),
+              _modified: new Date().toISOString(),
+            },
+          ],
+        }
+        // set the database document
+        await dbRef.set(updatedItem)
+        console.log('populate db ok')
+        this.updateUpdateUploadStatus('Database')
+        const newItem = (await dbRef.get()) as IResearch.ItemDB
+        runInAction(() => {
+          this.activeResearchItem = newItem
+        })
+        this.updateUpdateUploadStatus('Complete')
+      } catch (error) {
+        console.log('error', error)
+        throw new Error(error.message)
+      }
     }
   }
 }
@@ -153,9 +197,9 @@ interface IResearchUploadStatus {
   Complete: boolean
 }
 
-interface IUpdateUploadStatus {
+export interface IUpdateUploadStatus {
   Start: boolean
-  Files: boolean
+  Images: boolean
   Database: boolean
   Complete: boolean
 }
@@ -163,7 +207,7 @@ interface IUpdateUploadStatus {
 function getInitialUpdateUploadStatus(): IUpdateUploadStatus {
   return {
     Start: false,
-    Files: false,
+    Images: false,
     Database: false,
     Complete: false,
   }

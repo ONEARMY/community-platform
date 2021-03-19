@@ -64,10 +64,8 @@ const ResearchForm = observer((props: IProps) => {
 
   React.useEffect(() => {
     if (submissionHandler.shouldSubmit) {
-      console.log('submitting', submissionHandler)
       const form = document.getElementById('researchForm')
       if (typeof form !== 'undefined' && form !== null) {
-        console.log('dispatching event')
         form.dispatchEvent(new Event('submit', { cancelable: true }))
         setState(prevState => ({ ...prevState, showSubmitModal: true }))
       }
@@ -75,12 +73,10 @@ const ResearchForm = observer((props: IProps) => {
   }, [submissionHandler])
 
   const onSubmit = async (formValues: IResearch.FormInput) => {
-    console.log('submitting')
     formValues.moderation = submissionHandler.draft
       ? 'draft'
       : 'awaiting-moderation'
     await store.uploadResearch(formValues)
-    console.log('submitted')
   }
 
   const validateTitle = async (value: any) => {

@@ -73,7 +73,7 @@ const Update: React.FC<IProps> = ({ update, updateIndex }) => {
               </Text>
             </Box>
           </Flex>
-          <Box width={[1, 1, 5 / 9]}>
+          <Box width={1}>
             {update.videoUrl ? (
               <ReactPlayer
                 width="auto"

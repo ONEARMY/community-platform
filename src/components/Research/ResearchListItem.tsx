@@ -58,7 +58,7 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => (
             auxiliary
             alignSelf={item.moderation !== 'accepted' ? 'flex-start' : 'center'}
           >
-            {format(new Date(item._created), 'DD-MM-YYYY')}
+            {format(new Date(item._modified), 'DD-MM-YYYY')}
           </Text>
         </Flex>
       </Flex>

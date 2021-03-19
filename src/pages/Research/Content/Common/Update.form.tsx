@@ -13,7 +13,6 @@ import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import Heading from 'src/components/Heading'
 import { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import { IUploadedFileMeta } from 'src/stores/storage'
 import theme from 'src/themes/styled.theme'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { required } from 'src/utils/validators'
@@ -25,6 +24,7 @@ const ImageInputFieldWrapper = styled.div`
   width: 150px;
   height: 100px;
   margin-right: 10px;
+  margin-bottom: 6px;
 `
 
 const CONFIRM_DIALOG_MSG =
@@ -55,14 +55,14 @@ const UpdateForm = observer((props: IProps) => {
   const [showSubmitModal, setShowSubmitModal] = React.useState<boolean>(false)
 
   const trySubmitForm = () => {
-    const form = document.getElementById('howtoForm')
+    const form = document.getElementById('updateForm')
     if (typeof form !== 'undefined' && form !== null) {
       form.dispatchEvent(new Event('submit', { cancelable: true }))
-      setShowSubmitModal(true)
     }
   }
 
   const onSubmit = (formValues: IResearch.Update) => {
+    setShowSubmitModal(true)
     store.addUpdate(formValues)
   }
 
@@ -83,16 +83,17 @@ const UpdateForm = observer((props: IProps) => {
   /**
    * Ensure either url or images included (not both), and any url formatted correctly
    */
-  const validateMedia = (images: IUploadedFileMeta[], videoUrl: string) => {
+  const validateMedia = (videoUrl: string, values: any) => {
+    const images = values.images
     if (videoUrl) {
-      if (images[0]) {
+      if (images && images[0]) {
         return 'Do not include both images and video'
       }
       const ytRegex = new RegExp(/(youtu\.be\/|youtube\.com\/watch\?v=)/gi)
       const urlValid = ytRegex.test(videoUrl)
       return urlValid ? null : 'Please provide a valid YouTube Url'
     }
-    return images[0] ? null : 'Include either images or a video'
+    return images && images[0] ? null : 'Include either images or a video'
   }
 
   return (
@@ -116,9 +117,9 @@ const UpdateForm = observer((props: IProps) => {
         }}
         validateOnBlur
         decorators={[unloadDecorator]}
-        render={({ submitting, dirty, handleSubmit, values }) => {
+        render={({ submitting, dirty, handleSubmit }) => {
           return (
-            <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
+            <Flex mx={-2} mb={4} bg={'inherit'} flexWrap="wrap">
               <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} mt={4}>
                 <Prompt
                   when={!store.updateUploadStatus.Complete && dirty}
@@ -206,6 +207,7 @@ const UpdateForm = observer((props: IProps) => {
                           </Label>
                           <Flex
                             flexDirection={['column', 'row']}
+                            flexWrap="wrap"
                             alignItems="center"
                             mb={3}
                           >
@@ -215,12 +217,14 @@ const UpdateForm = observer((props: IProps) => {
                                 name={`images[0]`}
                                 component={ImageInputField}
                                 isEqual={COMPARISONS.image}
+                                validateFields={['videoUrl']}
                               />
                             </ImageInputFieldWrapper>
                             <ImageInputFieldWrapper data-cy="image-1">
                               <Field
                                 hasText={false}
                                 name={`images[1]`}
+                                validateFields={['videoUrl']}
                                 component={ImageInputField}
                                 isEqual={COMPARISONS.image}
                               />
@@ -229,22 +233,25 @@ const UpdateForm = observer((props: IProps) => {
                               <Field
                                 hasText={false}
                                 name={`images[2]`}
+                                validateFields={['videoUrl']}
                                 component={ImageInputField}
                                 isEqual={COMPARISONS.image}
                               />
                             </ImageInputFieldWrapper>
-                            <ImageInputFieldWrapper data-cy="image-2">
+                            <ImageInputFieldWrapper data-cy="image-3">
                               <Field
                                 hasText={false}
                                 name={`images[3]`}
+                                validateFields={['videoUrl']}
                                 component={ImageInputField}
                                 isEqual={COMPARISONS.image}
                               />
                             </ImageInputFieldWrapper>
-                            <ImageInputFieldWrapper data-cy="image-2">
+                            <ImageInputFieldWrapper data-cy="image-4">
                               <Field
                                 hasText={false}
                                 name={`images[4]`}
+                                validateFields={['videoUrl']}
                                 component={ImageInputField}
                                 isEqual={COMPARISONS.image}
                               />
@@ -259,8 +266,8 @@ const UpdateForm = observer((props: IProps) => {
                               data-cy="videoUrl"
                               component={InputField}
                               placeholder="https://youtube.com/watch?v="
-                              validate={url =>
-                                validateMedia(values.images, url)
+                              validate={(url, values) =>
+                                validateMedia(url, values)
                               }
                               validateFields={[]}
                               isEqual={COMPARISONS.textInput}

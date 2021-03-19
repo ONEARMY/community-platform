@@ -59,8 +59,9 @@ export const arrayToJson = (arr: any[], keyField: string) => {
 export const capitalizeFirstLetter = (str: string) =>
   str.charAt(0).toUpperCase() + str.slice(1)
 
-// Show only items which are either accepted, the user has created, or an admin can see
-// HACK - ARH - 2019/12/11 filter unaccepted howtos, should be done serverside
+/** Show only items which are either accepted, the user has created, or an admin can see
+ * HACK - ARH - 2019/12/11 filter unaccepted howtos, should be done serverside
+ */
 export const filterModerableItems = <T>(
   items: (IModerable & T)[],
   user?: IUser,

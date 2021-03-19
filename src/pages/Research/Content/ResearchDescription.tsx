@@ -15,9 +15,15 @@ import { isAllowToEditContent } from 'src/utils/helpers'
 interface IProps {
   research: IResearch.ItemDB
   loggedInUser: IUser | undefined
+  needsModeration: boolean
+  moderateResearch: (accepted: boolean) => void
 }
 
-const ResearchDescription: React.FC<IProps> = ({ research, loggedInUser }) => {
+const ResearchDescription: React.FC<IProps> = ({
+  research,
+  loggedInUser,
+  ...props
+}) => {
   const dateLastUpdateText = (research: IResearch.ItemDB): string => {
     const lastModifiedDate = format(new Date(research._modified), 'DD-MM-YYYY')
     const creationDate = format(new Date(research._created), 'DD-MM-YYYY')
@@ -61,6 +67,24 @@ const ResearchDescription: React.FC<IProps> = ({ research, loggedInUser }) => {
               </Flex>
             </Button>
           </Link>
+          {/* Check if research should be moderated */}
+          {props.needsModeration && (
+            <Flex justifyContent={'space-between'}>
+              <Button
+                data-cy={'accept'}
+                variant={'primary'}
+                icon="check"
+                mr={1}
+                onClick={() => props.moderateResearch(true)}
+              />
+              <Button
+                data-cy="reject-research"
+                variant={'tertiary'}
+                icon="delete"
+                onClick={() => props.moderateResearch(false)}
+              />
+            </Flex>
+          )}
           {/* Show edit button for the creator of the research OR a super-admin */}
           {loggedInUser && isAllowToEditContent(research, loggedInUser) && (
             <Link to={'/research/' + research.slug + '/edit'}>

@@ -8,20 +8,18 @@ import { Link } from 'src/components/Links'
 import ModerationStatusText from 'src/components/ModerationStatusText'
 import Text from 'src/components/Text'
 import { IResearch } from 'src/models/research.models'
-import { IUser } from 'src/models/user.models'
 import theme from 'src/themes/styled.theme'
-import { isAllowToEditContent } from 'src/utils/helpers'
 
 interface IProps {
   research: IResearch.ItemDB
-  loggedInUser: IUser | undefined
+  isEditable: boolean
   needsModeration: boolean
   moderateResearch: (accepted: boolean) => void
 }
 
 const ResearchDescription: React.FC<IProps> = ({
   research,
-  loggedInUser,
+  isEditable,
   ...props
 }) => {
   const dateLastUpdateText = (research: IResearch.ItemDB): string => {
@@ -86,7 +84,7 @@ const ResearchDescription: React.FC<IProps> = ({
             </Flex>
           )}
           {/* Show edit button for the creator of the research OR a super-admin */}
-          {loggedInUser && isAllowToEditContent(research, loggedInUser) && (
+          {isEditable && (
             <Link to={'/research/' + research.slug + '/edit'}>
               <Button variant={'primary'} data-cy={'edit'}>
                 Edit

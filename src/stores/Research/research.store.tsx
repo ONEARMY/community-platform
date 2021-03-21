@@ -15,6 +15,7 @@ import {
   filterModerableItems,
   hasAdminRights,
   needsModeration,
+  randomID,
 } from 'src/utils/helpers'
 
 const COLLECTION_NAME = 'research'
@@ -34,7 +35,7 @@ export class ResearchStore extends ModuleStore {
     this.allDocs$.subscribe((docs: IResearch.ItemDB[]) => {
       console.log('docs', docs)
       const sortedItems = docs.sort((a, b) =>
-        a._created < b._created ? 1 : -1,
+        a._modified < b._modified ? 1 : -1,
       )
       runInAction(() => {
         this.allResearchItems = sortedItems
@@ -109,16 +110,15 @@ export class ResearchStore extends ModuleStore {
       .collection<IResearch.Item>(COLLECTION_NAME)
       .doc((values as IResearch.ItemDB)._id)
     const user = this.activeUser as IUser
+    const updates = (await dbRef.get())?.updates || [] // save old updates when editing
     try {
       // populate DB
       // define research
       const research: IResearch.Item = {
         ...values,
         _createdBy: values._createdBy ? values._createdBy : user.userName,
-        moderation: values.moderation
-          ? values.moderation
-          : 'awaiting-moderation',
-        updates: [],
+        moderation: values.moderation ? values.moderation : 'accepted', // No moderation needed for researches for now
+        updates,
       }
       console.log('populating database', research)
       // set the database document
@@ -137,7 +137,8 @@ export class ResearchStore extends ModuleStore {
     }
   }
 
-  public async addUpdate(update: IResearch.Update) {
+  public async uploadUpdate(update: IResearch.Update | IResearch.UpdateDB) {
+    // uploads new or edits existing update
     const item = this.activeResearchItem
     if (item) {
       const dbRef = this.db
@@ -149,7 +150,7 @@ export class ResearchStore extends ModuleStore {
         // upload any pending images, avoid trying to re-upload images previously saved
         // if cover already uploaded stored as object not array
         // file and step image re-uploads handled in uploadFile script
-        const updateWithMeta: IResearch.Update = { ...update }
+        const updateWithMeta = { ...update }
         if (update.images.length > 0) {
           const imgMeta = await this.uploadCollectionBatch(
             update.images.filter(img => !!img) as IConvertedFileMeta[],
@@ -160,27 +161,47 @@ export class ResearchStore extends ModuleStore {
         }
         console.log('upload images ok')
         this.updateUpdateUploadStatus('Images')
+
         // populate DB
-        const updatedItem = {
+        const existingUpdateIndex = item.updates.findIndex(
+          upd => upd._id === (update as IResearch.UpdateDB)._id,
+        )
+        const newItem = {
           ...toJS(item),
-          updates: [
-            ...toJS(item.updates),
-            {
-              ...updateWithMeta,
-              // TODO - insert metadata into the new update
-              _id: Math.random().toString(),
-              _created: new Date().toISOString(),
-              _modified: new Date().toISOString(),
-            },
-          ],
+          updates: [...toJS(item.updates)],
         }
+        if (existingUpdateIndex === -1) {
+          // new update
+          newItem.updates.push({
+            ...updateWithMeta,
+            // TODO - insert metadata into the new update
+            _id: randomID(),
+            _created: new Date().toISOString(),
+            _modified: new Date().toISOString(),
+            _deleted: false,
+          })
+        } else {
+          // editing update
+          newItem.updates[existingUpdateIndex] = {
+            ...(updateWithMeta as IResearch.UpdateDB),
+            _modified: new Date().toISOString(),
+          }
+        }
+
+        console.log(
+          'old and new modified:',
+          (update as IResearch.UpdateDB)._modified,
+          newItem._modified,
+        )
+        console.log('created:', newItem._created)
+
         // set the database document
-        await dbRef.set(updatedItem)
+        await dbRef.set(newItem)
         console.log('populate db ok')
         this.updateUpdateUploadStatus('Database')
-        const newItem = (await dbRef.get()) as IResearch.ItemDB
+        const createdItem = (await dbRef.get()) as IResearch.ItemDB
         runInAction(() => {
-          this.activeResearchItem = newItem
+          this.activeResearchItem = createdItem
         })
         this.updateUpdateUploadStatus('Complete')
       } catch (error) {

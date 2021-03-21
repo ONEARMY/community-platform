@@ -17,7 +17,6 @@ import theme from 'src/themes/styled.theme'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { required } from 'src/utils/validators'
 import styled from 'styled-components'
-import { PostingGuidelines } from './PostingGuidelines'
 import { UpdateSubmitStatus } from './SubmitStatus'
 
 const ImageInputFieldWrapper = styled.div`
@@ -54,6 +53,12 @@ const UpdateForm = observer((props: IProps) => {
   const store = useResearchStore()
   const [showSubmitModal, setShowSubmitModal] = React.useState<boolean>(false)
 
+  React.useEffect(() => {
+    if (store.updateUploadStatus.Complete) {
+      window.removeEventListener('beforeunload', beforeUnload, false)
+    }
+  }, [store.updateUploadStatus.Complete])
+
   const trySubmitForm = () => {
     const form = document.getElementById('updateForm')
     if (typeof form !== 'undefined' && form !== null) {
@@ -63,7 +68,7 @@ const UpdateForm = observer((props: IProps) => {
 
   const onSubmit = (formValues: IResearch.Update) => {
     setShowSubmitModal(true)
-    store.addUpdate(formValues)
+    store.uploadUpdate(formValues)
   }
 
   // Display a confirmation dialog when leaving the page outside the React Router
@@ -151,11 +156,6 @@ const UpdateForm = observer((props: IProps) => {
                         />
                       </Box>
                     </Flex>
-                    <Box
-                      sx={{ mt: '20px', display: ['block', 'block', 'none'] }}
-                    >
-                      <PostingGuidelines />
-                    </Box>
                     <Flex
                       card
                       mediumRadius
@@ -279,7 +279,6 @@ const UpdateForm = observer((props: IProps) => {
                   </Flex>
                 </FormContainer>
               </Flex>
-              {/* post guidelines container */}
               <Flex
                 flexDirection={'column'}
                 width={[1, 1, 1 / 3]}
@@ -304,7 +303,9 @@ const UpdateForm = observer((props: IProps) => {
                     disabled={submitting}
                     sx={{ mb: ['40px', '40px', 0] }}
                   >
-                    <span>Publish</span>
+                    <span>
+                      {props.parentType === 'edit' ? 'Save' : 'Add update'}
+                    </span>
                   </Button>
                 </Box>
               </Flex>

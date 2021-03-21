@@ -77,6 +77,18 @@ export const filterModerableItems = <T>(
     return isItemAccepted || wasCreatedByUser || isAdminAndAccepted
   })
 
+/**
+ *  Function used to generate random ID in same manner as firestore
+ */
+export const randomID = () => {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  let autoId = ''
+  for (let i = 0; i < 20; i++) {
+    autoId += chars.charAt(Math.floor(Math.random() * chars.length))
+  }
+  return autoId
+}
+
 /************************************************************************
  *              Date Methods
  ***********************************************************************/

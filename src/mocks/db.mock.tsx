@@ -1,4 +1,5 @@
 import { DBDoc } from 'src/models/common.models'
+import { randomID } from 'src/utils/helpers'
 
 // helper methods used in generation of mock db data
 export const MOCK_DB_META = (id?: string) => {
@@ -18,14 +19,4 @@ function randomDate(start: Date, end: Date) {
   return new Date(
     start.getTime() + Math.random() * (end.getTime() - start.getTime()),
   )
-}
-
-// function used to generate random ID in same manner as firestore
-function randomID() {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  let autoId = ''
-  for (let i = 0; i < 20; i++) {
-    autoId += chars.charAt(Math.floor(Math.random() * chars.length))
-  }
-  return autoId
 }

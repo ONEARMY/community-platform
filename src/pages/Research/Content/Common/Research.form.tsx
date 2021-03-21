@@ -63,6 +63,12 @@ const ResearchForm = observer((props: IProps) => {
   })
 
   React.useEffect(() => {
+    if (store.researchUploadStatus.Complete) {
+      window.removeEventListener('beforeunload', beforeUnload, false)
+    }
+  }, [store.researchUploadStatus.Complete])
+
+  React.useEffect(() => {
     if (submissionHandler.shouldSubmit) {
       const form = document.getElementById('researchForm')
       if (typeof form !== 'undefined' && form !== null) {
@@ -73,9 +79,7 @@ const ResearchForm = observer((props: IProps) => {
   }, [submissionHandler])
 
   const onSubmit = async (formValues: IResearch.FormInput) => {
-    formValues.moderation = submissionHandler.draft
-      ? 'draft'
-      : 'awaiting-moderation'
+    formValues.moderation = submissionHandler.draft ? 'draft' : 'accepted' // No moderation for researches for now
     await store.uploadResearch(formValues)
   }
 
@@ -261,9 +265,9 @@ const ResearchForm = observer((props: IProps) => {
                     sx={{ display: 'block' }}
                   >
                     {props.formValues.moderation !== 'draft' ? (
-                      <span>Save to draft</span>
-                    ) : (
                       <span>Revert to draft</span>
+                    ) : (
+                      <span>Save to draft</span>
                     )}{' '}
                   </Button>
                   <Button

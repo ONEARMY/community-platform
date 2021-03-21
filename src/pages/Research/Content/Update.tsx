@@ -3,9 +3,11 @@ import React from 'react'
 import Linkify from 'react-linkify'
 import ReactPlayer from 'react-player'
 import { Box } from 'rebass'
+import { Button } from 'src/components/Button'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import ImageGallery from 'src/components/ImageGallery'
+import { Link } from 'src/components/Links'
 import Text from 'src/components/Text'
 import { IResearch } from 'src/models/research.models'
 import { IUploadedFileMeta } from 'src/stores/storage'
@@ -14,13 +16,20 @@ import styled from 'styled-components'
 interface IProps {
   update: IResearch.UpdateDB
   updateIndex: number
+  isEditable: boolean
+  slug: string
 }
 
 const FlexStepNumber = styled(Flex)`
   height: fit-content;
 `
 
-const Update: React.FC<IProps> = ({ update, updateIndex }) => {
+const Update: React.FC<IProps> = ({
+  update,
+  updateIndex,
+  isEditable,
+  slug,
+}) => {
   return (
     <>
       <Flex
@@ -59,13 +68,40 @@ const Update: React.FC<IProps> = ({ update, updateIndex }) => {
               <Heading width={[1, 3 / 4, 3 / 4]} medium mb={[2, 0, 0]}>
                 {update.title}
               </Heading>
-              <Text
-                auxiliary
-                textAlign={['left', 'right', 'right']}
+              <Flex
+                flexDirection={['row', 'column', 'column']}
                 width={[1, 1 / 4, 1 / 4]}
+                justifyContent="space-between"
               >
-                {format(new Date(update._created), 'DD-MM-YYYY')}
-              </Text>
+                <Flex flexDirection={['column']}>
+                  <Text auxiliary textAlign={['left', 'right', 'right']}>
+                    {'created ' +
+                      format(new Date(update._created), 'DD-MM-YYYY')}
+                  </Text>
+                  {update._created !== update._modified && (
+                    <Text auxiliary textAlign={['left', 'right', 'right']}>
+                      {'edited ' +
+                        format(new Date(update._modified), 'DD-MM-YYYY')}
+                    </Text>
+                  )}
+                </Flex>
+                {/* Show edit button for the creator of the research OR a super-admin */}
+                {isEditable && (
+                  <Link
+                    ml="auto"
+                    mt={[0, 2, 2]}
+                    to={'/research/' + slug + '/edit-update/' + update._id}
+                  >
+                    <Button
+                      size="sm"
+                      variant={'primary'}
+                      data-cy={'edit-update'}
+                    >
+                      Edit
+                    </Button>
+                  </Link>
+                )}
+              </Flex>
             </Flex>
             <Box>
               <Text preLine paragraph mt={3} color={'grey'}>

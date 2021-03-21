@@ -42,32 +42,43 @@ export const ResearchItemDetail = observer((props: IProps) => {
 
   const item = store.activeResearchItem
 
-  return item ? (
-    <>
-      <ResearchDescription
-        research={item}
-        loggedInUser={store.activeUser}
-        needsModeration={store.needsModeration(item)}
-        moderateResearch={moderateResearch}
-      />
-      <Box mt={9}>
-        {item.updates.map((update, index) => {
-          return <Update update={update} key={update._id} updateIndex={index} />
-        })}
-      </Box>
-      {store.activeUser && isAllowToEditContent(item, store.activeUser) && (
-        <Flex my={4}>
-          <Link to={`/research/${item.slug}/new-update`} mb={[3, 3, 0]}>
-            <Button large ml={2}>
-              Add update
-            </Button>
-          </Link>
-        </Flex>
-      )}
-    </>
-  ) : isLoading ? (
-    <Loader />
-  ) : (
-    <NotFoundPage />
-  )
+  if (item) {
+    const isEditable =
+      !!store.activeUser && isAllowToEditContent(item, store.activeUser)
+
+    return (
+      <>
+        <ResearchDescription
+          research={item}
+          isEditable={isEditable}
+          needsModeration={store.needsModeration(item)}
+          moderateResearch={moderateResearch}
+        />
+        <Box my={16}>
+          {item.updates.map((update, index) => {
+            return (
+              <Update
+                update={update}
+                key={update._id}
+                updateIndex={index}
+                isEditable={isEditable}
+                slug={item.slug}
+              />
+            )
+          })}
+        </Box>
+        {isEditable && (
+          <Flex my={4}>
+            <Link to={`/research/${item.slug}/new-update`} mb={[3, 3, 0]}>
+              <Button large ml={2}>
+                Add update
+              </Button>
+            </Link>
+          </Flex>
+        )}
+      </>
+    )
+  } else {
+    return isLoading ? <Loader /> : <NotFoundPage />
+  }
 })

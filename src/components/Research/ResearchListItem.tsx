@@ -3,6 +3,7 @@ import React from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import { Link } from 'src/components/Links'
+import { ModerationStatusText } from 'src/components/ModerationStatusText'
 import Text from 'src/components/Text'
 import { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
@@ -53,9 +54,23 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => (
               ? item.updates.length + ' update'
               : item.updates.length + ' updates'}
           </Text>
-          <Text auxiliary>{format(new Date(item._created), 'DD-MM-YYYY')}</Text>
+          <Text
+            auxiliary
+            alignSelf={item.moderation !== 'accepted' ? 'flex-start' : 'center'}
+          >
+            {format(new Date(item._modified), 'DD-MM-YYYY')}
+          </Text>
         </Flex>
       </Flex>
+      {item.moderation !== 'accepted' && (
+        <ModerationStatusText
+          moderable={item}
+          kind="research"
+          bottom={['36px', '36px', 0]}
+          color="red"
+          cropBottomRight
+        />
+      )}
     </Link>
   </Flex>
 )

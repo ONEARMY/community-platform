@@ -1,7 +1,7 @@
+import { isObservableObject, toJS } from 'mobx'
+import { DBDoc, IModerable } from 'src/models/common.models'
 import { IMapPin } from 'src/models/maps.models'
 import { IUser } from 'src/models/user.models'
-import { DBDoc, IModerable } from 'src/models/common.models'
-import { toJS, isObservableObject } from 'mobx'
 import MESSAGES from './messages'
 
 /**
@@ -58,6 +58,36 @@ export const arrayToJson = (arr: any[], keyField: string) => {
 // hello world => Hello world
 export const capitalizeFirstLetter = (str: string) =>
   str.charAt(0).toUpperCase() + str.slice(1)
+
+/** Show only items which are either accepted, the user has created, or an admin can see
+ * HACK - ARH - 2019/12/11 filter unaccepted howtos, should be done serverside
+ */
+export const filterModerableItems = <T>(
+  items: (IModerable & T)[],
+  user?: IUser,
+): T[] =>
+  items.filter(item => {
+    const isItemAccepted = item.moderation === 'accepted'
+    const wasCreatedByUser = user && item._createdBy === user.userName
+    const isAdminAndAccepted =
+      hasAdminRights(user) &&
+      item.moderation !== 'draft' &&
+      item.moderation !== 'rejected'
+
+    return isItemAccepted || wasCreatedByUser || isAdminAndAccepted
+  })
+
+/**
+ *  Function used to generate random ID in same manner as firestore
+ */
+export const randomID = () => {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  let autoId = ''
+  for (let i = 0; i < 20; i++) {
+    autoId += chars.charAt(Math.floor(Math.random() * chars.length))
+  }
+  return autoId
+}
 
 /************************************************************************
  *              Date Methods

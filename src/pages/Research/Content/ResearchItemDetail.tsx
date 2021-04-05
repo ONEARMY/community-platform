@@ -1,12 +1,12 @@
 import { observer } from 'mobx-react'
 import * as React from 'react'
-import { useHistory } from 'react-router'
 import { Box, Flex } from 'rebass'
 import { Button } from 'src/components/Button'
+import { Link } from 'src/components/Links'
 import { Loader } from 'src/components/Loader'
-import { MOCK_UPDATES } from 'src/mocks/research.mocks'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
-import { ResearchStoreContext } from 'src/stores/Research/research.store'
+import { useResearchStore } from 'src/stores/Research/research.store'
+import { isAllowToEditContent } from 'src/utils/helpers'
 import ResearchDescription from './ResearchDescription'
 import Update from './Update'
 
@@ -15,10 +15,17 @@ interface IProps {
 }
 
 export const ResearchItemDetail = observer((props: IProps) => {
-  const store = React.useContext(ResearchStoreContext)
-  const history = useHistory()
+  const store = useResearchStore()
 
   const [isLoading, setIsLoading] = React.useState(true)
+
+  const moderateResearch = async (accepted: boolean) => {
+    const item = store.activeResearchItem
+    if (item) {
+      item.moderation = accepted ? 'accepted' : 'rejected'
+      await store.moderateResearch(item)
+    }
+  }
 
   React.useEffect(() => {
     ;(async () => {
@@ -35,41 +42,43 @@ export const ResearchItemDetail = observer((props: IProps) => {
 
   const item = store.activeResearchItem
 
-  return item ? (
-    <>
-      <ResearchDescription research={item} loggedInUser={undefined} />
-      <Box mt={9}>
-        {item.updates.map((update, index) => {
-          return <Update update={update} key={update._id} updateIndex={index} />
-        })}
-      </Box>
-      <Flex my={4}>
-        <Button
-          backgroundColor="red"
-          onClick={() => {
-            store.deleteResearchItem(item._id)
-            history.push('/research')
-          }}
-        >
-          Delete
-        </Button>
-        <Button
-          ml={2}
-          onClick={() => {
-            store.addUpdate(
-              item,
-              MOCK_UPDATES[Math.floor(Math.random() * MOCK_UPDATES.length)],
+  if (item) {
+    const isEditable =
+      !!store.activeUser && isAllowToEditContent(item, store.activeUser)
+
+    return (
+      <>
+        <ResearchDescription
+          research={item}
+          isEditable={isEditable}
+          needsModeration={store.needsModeration(item)}
+          moderateResearch={moderateResearch}
+        />
+        <Box my={16}>
+          {item.updates.map((update, index) => {
+            return (
+              <Update
+                update={update}
+                key={update._id}
+                updateIndex={index}
+                isEditable={isEditable}
+                slug={item.slug}
+              />
             )
-            store.setActiveResearchItem(item.slug)
-          }}
-        >
-          Add update
-        </Button>
-      </Flex>
-    </>
-  ) : isLoading ? (
-    <Loader />
-  ) : (
-    <NotFoundPage />
-  )
+          })}
+        </Box>
+        {isEditable && (
+          <Flex my={4}>
+            <Link to={`/research/${item.slug}/new-update`} mb={[3, 3, 0]}>
+              <Button large ml={2}>
+                Add update
+              </Button>
+            </Link>
+          </Flex>
+        )}
+      </>
+    )
+  } else {
+    return isLoading ? <Loader /> : <NotFoundPage />
+  }
 })

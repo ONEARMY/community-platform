@@ -66,7 +66,7 @@
     "pubsub-js": "^1.7.0",
     "react": "^16.13.1",
     "react-datepicker": "^2.9.6",
-    "react-dev-utils": "^7.0.3",
+    "react-dev-utils": "^11.0.4",
     "react-dom": "^16.13.1",
     "react-dropzone": "^10.1.10",
     "react-final-form": "6.3.0",

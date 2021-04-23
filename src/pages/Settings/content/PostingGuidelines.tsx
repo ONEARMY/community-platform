@@ -11,7 +11,7 @@ export const ProfileGuidelines = () => (
       Profile tips
     </Heading>
     <Text auxiliary mb={1}>
-      1. Have a quick look at our{' '}
+      1. Have a look at our{' '}
       <Link
         color={theme.colors.blue}
         target="_blank"
@@ -24,17 +24,24 @@ export const ProfileGuidelines = () => (
       2. Choose your focus.
     </Text>
     <Text auxiliary mb={1}>
-      3. Fill in nice text, image and details.
+      3. If you want to get a pin on the map check our{' '}
+      <Link
+        color={theme.colors.blue}
+        target="_blank"
+        href="https://community.preciousplastic.com/academy/guides/community-program"
+      >
+        Community Program.
+      </Link>
     </Text>
     <Text auxiliary mb={1}>
-      4. You can edit & share again later.
+      4. Add a nice description, pics and details.
     </Text>
     <Text auxiliary mb={1}>
       5. If something doesn't work,{' '}
       <Link
         color={theme.colors.blue}
         target="_blank"
-        href="https://discord.gg/Dw9x8r"
+        href="https://discord.com/invite/SSBrzeR"
       >
         let us know.
       </Link>

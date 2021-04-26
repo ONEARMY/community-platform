@@ -12,8 +12,8 @@ import { backupUser } from './backupUser'
 export const handleUserUpdates = functions.firestore
   .document(`${DB_ENDPOINTS.users}/{id}`)
   .onUpdate(async (change, context) => {
-    await processCountryUpdates(change)
     await backupUser(change)
+    await processCountryUpdates(change)
   })
 
 async function processCountryUpdates(change: IDBDocChange) {

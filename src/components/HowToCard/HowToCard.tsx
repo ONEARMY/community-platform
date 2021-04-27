@@ -23,7 +23,11 @@ export const HowToCard = (props: IProps) => (
     sx={{ position: 'relative' }}
   >
     {props.howto.moderation !== 'accepted' && (
-      <ModerationStatusText howto={props.howto} top={'62%'} />
+      <ModerationStatusText
+        moderatedContent={props.howto}
+        contentType="howto"
+        top={'62%'}
+      />
     )}
     <Link
       to={`/how-to/${encodeURIComponent(props.howto.slug)}`}

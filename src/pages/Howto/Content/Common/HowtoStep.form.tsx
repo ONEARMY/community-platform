@@ -12,7 +12,7 @@ import theme from 'src/themes/styled.theme'
 import { IHowtoStep } from 'src/models/howto.models'
 import { IUploadedFileMeta } from 'src/stores/storage'
 import { required } from 'src/utils/validators'
-import { COMPARISONS } from './Comparisons'
+import { COMPARISONS } from 'src/utils/comparisons'
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;

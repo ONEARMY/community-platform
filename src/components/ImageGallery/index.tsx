@@ -1,7 +1,7 @@
 import React from 'react'
-import { Image, Card, Flex, CardProps } from 'rebass/styled-components'
-import { IUploadedFileMeta } from 'src/stores/storage'
 import Lightbox from 'react-image-lightbox'
+import { Card, CardProps, Flex, Image } from 'rebass/styled-components'
+import { IUploadedFileMeta } from 'src/stores/storage'
 import styled from 'styled-components'
 
 interface IProps {

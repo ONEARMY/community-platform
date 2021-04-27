@@ -16,6 +16,8 @@ export class AdminStore extends ModuleStore {
   @observable
   public superAdmins: IUser[] = []
   @observable
+  public betaTesters: IUser[] = []
+  @observable
   public tags: ITag[] = []
   // eslint-disable-next-line
   constructor(rootStore: RootStore) {
@@ -30,6 +32,7 @@ export class AdminStore extends ModuleStore {
   public async init() {
     this.admins = await this._getUsersByRole('admin')
     this.superAdmins = await this._getUsersByRole('admin')
+    this.betaTesters = await this._getUsersByRole('beta-tester')
   }
   public async addUserRole(username: string, role: UserRole) {
     const userRef = this.db.collection<IUser>('users').doc(username)

@@ -55,6 +55,20 @@ export class UserMapPinSection extends React.Component<{}, IState> {
             isOpen={isOpen}
           />
         </Flex>
+        <Box bg={theme.colors.red2} mt={2} p={3} sx={{ borderRadius: '3px' }}>
+          <Text medium>
+            In order to have your pin accepted on our map you have to collect at
+            least 6 stars in the Ally Checklist. Learn more about the{' '}
+            <Link
+              href="https://community.preciousplastic.com/academy/guides/stars"
+              target="_blank"
+              sx={{ color: 'black', textDecoration: 'underline' }}
+            >
+              Community Program
+            </Link>{' '}
+            and how you can join.
+          </Text>
+        </Box>
         <Box sx={{ display: isOpen ? 'block' : 'none' }}>
           <Text mb={2} mt={4} medium>
             Short description of your pin*

@@ -201,7 +201,11 @@ export default class HowtoDescription extends React.PureComponent<IProps> {
             alt="how-to cover"
           />
           {howto.moderation !== 'accepted' && (
-            <ModerationStatusText howto={howto} top={'0px'} />
+            <ModerationStatusText
+              moderatedContent={howto}
+              contentType="howto"
+              top={'0px'}
+            />
           )}
         </Flex>
       </Flex>

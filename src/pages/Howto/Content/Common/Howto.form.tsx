@@ -30,7 +30,7 @@ import { HowToSubmitStatus } from './SubmitStatus'
 import { required } from 'src/utils/validators'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
-import { COMPARISONS } from './Comparisons'
+import { COMPARISONS } from 'src/utils/comparisons'
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'

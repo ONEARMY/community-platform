@@ -49,11 +49,7 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => (
           justifyContent="space-between"
           width={[1, 1, 1 / 4]}
         >
-          <Text color="black">
-            {item.updates.length === 1
-              ? item.updates.length + ' update'
-              : item.updates.length + ' updates'}
-          </Text>
+          <Text color="black">{getUpdateText(item)}</Text>
           <Text
             auxiliary
             alignSelf={item.moderation !== 'accepted' ? 'flex-start' : 'center'}
@@ -73,5 +69,11 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => (
     </Link>
   </Flex>
 )
+
+const getUpdateText = (item: IResearch.ItemDB) => {
+  const count = item.updates?.length || 0
+  const text = count === 1 ? 'update' : 'updates'
+  return `${count} ${text}`
+}
 
 export default ResearchListItem

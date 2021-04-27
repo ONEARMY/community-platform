@@ -121,10 +121,9 @@ const ResearchDescription: React.FC<IProps> = ({
       </Flex>
       {research.moderation !== 'accepted' && (
         <ModerationStatusText
-          moderable={research}
-          kind="research"
+          moderatedContent={research}
+          contentType="research"
           bottom={'0'}
-          color="red"
           cropBottomRight
         />
       )}

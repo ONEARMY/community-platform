@@ -6,8 +6,10 @@ import { Flex } from 'rebass/styled-components'
 import styled from 'styled-components'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
 import { zIndex } from 'src/themes/styled.theme'
+import { inject, observer } from 'mobx-react'
+import { UserStore } from 'src/stores/User/user.store'
 
-const MenuLink = styled(NavLink).attrs(({ name }) => ({
+const MenuLink = styled(NavLink).attrs(() => ({
   activeClassName: 'current',
 }))`
   padding: 0px ${theme.space[4]}px;
@@ -37,19 +39,37 @@ const MenuLink = styled(NavLink).attrs(({ name }) => ({
     }
   }
 `
+interface IInjectedProps {
+  userStore: UserStore
+}
 
+@inject('userStore')
+@observer
 export class MenuDesktop extends React.Component {
+  get injected() {
+    return this.props as IInjectedProps
+  }
+
   render() {
+    const user = this.injected.userStore.user
+
     return (
       <>
         <Flex alignItems={'center'}>
-          {COMMUNITY_PAGES.map(page => (
-            <Flex key={page.path}>
-              <MenuLink to={page.path} data-cy="page-link">
-                <Flex>{page.title}</Flex>
-              </MenuLink>
-            </Flex>
-          ))}
+          {COMMUNITY_PAGES.map(page => {
+            const link = (
+              <Flex key={page.path}>
+                <MenuLink to={page.path} data-cy="page-link">
+                  <Flex>{page.title}</Flex>
+                </MenuLink>
+              </Flex>
+            )
+            return page.requiredRole
+              ? user && user.userRoles?.includes(page.requiredRole)
+                ? link
+                : null
+              : link
+          })}
         </Flex>
       </>
     )

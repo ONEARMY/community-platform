@@ -3,6 +3,7 @@ import {
   ResearchStore,
   ResearchStoreContext,
 } from 'src/stores/Research/research.store'
+import { AuthRoute } from '../common/AuthRoute'
 import ResearchRoutes from './research.routes'
 
 /**
@@ -15,6 +16,7 @@ export const ResearchModule = {
   component: <ResearchModuleContainer />,
   title: 'Research',
   description: 'Welcome to research',
+  requiredRole: 'beta-tester',
 }
 
 /**
@@ -23,7 +25,11 @@ export const ResearchModule = {
 function ResearchModuleContainer() {
   return (
     <ResearchStoreContext.Provider value={new ResearchStore()}>
-      <ResearchRoutes />
+      <AuthRoute
+        component={ResearchRoutes}
+        roleRequired="beta-tester"
+        redirectPath="/"
+      />
     </ResearchStoreContext.Provider>
   )
 }

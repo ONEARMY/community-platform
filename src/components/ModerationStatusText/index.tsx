@@ -1,25 +1,24 @@
 import React, { FunctionComponent } from 'react'
-import { TextProps } from 'rebass'
 import Text from 'src/components/Text'
 import { IModerable } from 'src/models'
 
 type IProps = {
-  moderable: IModerable
-  kind: 'event' | 'howto' | 'research'
+  moderatedContent: IModerable
+  contentType: 'event' | 'howto' | 'research'
   top?: string
   bottom?: string | (string | number)[]
   cropBottomRight?: boolean
-} & TextProps
+}
 
 export const ModerationStatusText: FunctionComponent<IProps> = ({
-  moderable,
-  kind,
+  moderatedContent,
+  contentType,
   top,
   bottom,
   cropBottomRight,
 }) => {
-  let status = moderable.moderation
-  if (kind === 'event') {
+  let status = moderatedContent.moderation
+  if (contentType === 'event') {
     status = 'draft' !== status ? status : 'awaiting-moderation'
   }
 
@@ -30,7 +29,8 @@ export const ModerationStatusText: FunctionComponent<IProps> = ({
       // eslint-disable-next-line
       break
     case 'rejected':
-      text = 'howto' === kind ? 'Needs to improve to be accepted' : 'Rejected'
+      text =
+        'howto' === contentType ? 'Needs to improve to be accepted' : 'Rejected'
       break
     case 'draft':
       text = 'Draft'

@@ -7,6 +7,8 @@ import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
 import MenuMobileExternalLink from './MenuMobileExternalLink'
 import { BAZAR_URL, GLOBAL_SITE_URL } from 'src/utils/urls'
+import { inject, observer } from 'mobx-react'
+import { UserStore } from 'src/stores/User/user.store'
 
 const PanelContainer = styled(Box)`
   width: 100%;
@@ -40,20 +42,38 @@ export const MenuMobileLinkContainer = styled(Box)`
   border-bottom: 1px solid #ababac;
   margin-top: 5px;
 `
+interface IInjectedProps {
+  userStore: UserStore
+}
 
+@inject('userStore')
+@observer
 export class MenuMobilePanel extends React.Component {
+  get injected() {
+    return this.props as IInjectedProps
+  }
+
   render() {
+    const user = this.injected.userStore.user
+
     return (
       <>
         <PanelContainer>
           <PanelMenu>
-            {COMMUNITY_PAGES.map(page => (
-              <MenuMobileLink
-                path={page.path}
-                content={page.title}
-                key={page.path}
-              />
-            ))}
+            {COMMUNITY_PAGES.map(page => {
+              const link = (
+                <MenuMobileLink
+                  path={page.path}
+                  content={page.title}
+                  key={page.path}
+                />
+              )
+              return page.requiredRole
+                ? user && user.userRoles?.includes(page.requiredRole)
+                  ? link
+                  : null
+                : link
+            })}
             <Profile isMobile={true} />
             <MenuMobileLinkContainer>
               <MenuMobileExternalLink content={'Bazar'} href={BAZAR_URL} />

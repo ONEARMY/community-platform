@@ -2,7 +2,8 @@ import Uppy from '@uppy/core'
 
 export const UPPY_CONFIG: Partial<Uppy.UppyOptions> = {
   restrictions: {
-    maxFileSize: 5000000,
+    // max upload file size in bytes (i.e. 50 x 1000000 => 50 MB)
+    maxFileSize: 50 * 1000000,
     maxNumberOfFiles: 5,
     minNumberOfFiles: null,
     allowedFileTypes: null,

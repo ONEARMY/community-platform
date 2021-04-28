@@ -15,6 +15,7 @@ import { inject } from 'mobx-react'
 import { MapsStore } from 'src/stores/Maps/maps.store'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import Workspace from 'src/pages/User/workspace/Workspace'
+import { ReactComponent as VerifiedBadgeIcon } from 'src/assets/icons/icon-verified-badge.svg'
 
 interface IProps {
   activePin: IMapPin | IMapPinWithDetail
@@ -86,7 +87,13 @@ export class Popup extends React.Component<IProps> {
         ? g.subType === pin.subType && g.type === pin.type
         : g.type === pin.type
     })
-    const { lastActive, heroImageUrl, shortDescription, name } = pin.detail
+    const {
+      lastActive,
+      heroImageUrl,
+      shortDescription,
+      name,
+      verifiedBadge,
+    } = pin.detail
     const description =
       shortDescription.length > 70
         ? shortDescription.substr(0, 70) + '...'
@@ -113,8 +120,15 @@ export class Popup extends React.Component<IProps> {
             <Text tags mb={2}>
               {group ? group.displayName : pin.type}
             </Text>
-            <Text medium mb={1}>
+            <Text large mb={1} display="flex">
               {name}
+              {verifiedBadge && (
+                <VerifiedBadgeIcon
+                  width="22px"
+                  height="22px"
+                  style={{ marginLeft: '5px' }}
+                />
+              )}
             </Text>
             <Text small mb={2} style={{ wordBreak: 'break-word' }}>
               {description}

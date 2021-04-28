@@ -226,7 +226,6 @@ export class UserStore extends ModuleStore {
       displayName,
       userName,
       moderation: 'awaiting-moderation',
-      verified: false,
       votedUsefulHowtos: {},
       ...fields,
     }
@@ -295,4 +294,5 @@ const USER_BASE = {
   links: [],
   moderation: 'awaiting-moderation',
   verified: false,
+  badges: { verified: false },
 }

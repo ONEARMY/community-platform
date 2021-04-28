@@ -3,6 +3,7 @@
 'Mod: HowTo 📰': src/pages/Howto/**/*
 'Mod: Events 🎉': src/pages/Events/**/*
 'Mod: Maps 🗺': src/pages/Maps/**/*
+'Mod: Research 🔬': src/pages/Research/**/*
 
 'backend': functions/**/*
 

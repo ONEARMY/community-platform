@@ -88,7 +88,7 @@ export default class HowtoDescription extends React.PureComponent<IProps> {
               </Button>
             </Link>
             <Box style={{ flexGrow: 1 }}>
-              {this.props.votedUsefulCount && (
+              {this.props.votedUsefulCount !== undefined && (
                 <HowtoUsefulStats
                   votedUsefulCount={this.props.votedUsefulCount}
                   userVotedUseful={this.props.userVotedUseful}
@@ -201,7 +201,11 @@ export default class HowtoDescription extends React.PureComponent<IProps> {
             alt="how-to cover"
           />
           {howto.moderation !== 'accepted' && (
-            <ModerationStatusText howto={howto} top={'0px'} />
+            <ModerationStatusText
+              moderatedContent={howto}
+              contentType="howto"
+              top={'0px'}
+            />
           )}
         </Flex>
       </Flex>

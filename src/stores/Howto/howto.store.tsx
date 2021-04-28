@@ -1,21 +1,24 @@
-import { observable, action, computed, toJS, makeObservable } from 'mobx'
-import { Subscription } from 'rxjs'
 import Fuse from 'fuse.js'
+import { action, computed, makeObservable, observable, toJS } from 'mobx'
+import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import {
   IHowto,
-  IHowtoFormInput,
-  IHowToStepFormInput,
-  IHowtoStep,
   IHowtoDB,
+  IHowtoFormInput,
   IHowtoStats,
+  IHowtoStep,
+  IHowToStepFormInput,
 } from 'src/models/howto.models'
-import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
-import { IUploadedFileMeta } from '../storage'
-import { ModuleStore } from '../common/module.store'
 import { ISelectedTags } from 'src/models/tags.model'
-import { RootStore } from '..'
 import { IUser } from 'src/models/user.models'
-import { hasAdminRights, needsModeration } from 'src/utils/helpers'
+import {
+  filterModerableItems,
+  hasAdminRights,
+  needsModeration,
+} from 'src/utils/helpers'
+import { RootStore } from '..'
+import { ModuleStore } from '../common/module.store'
+import { IUploadedFileMeta } from '../storage'
 
 const COLLECTION_NAME = 'howtos'
 const HOWTO_SEARCH_WEIGHTS = [
@@ -75,7 +78,7 @@ export class HowtoStore extends ModuleStore {
         .doc(`${id}/stats/all`)
       const howtoStats = await ref.get('server')
       console.log('howtoStats', howtoStats)
-      this.howtoStats = howtoStats
+      this.howtoStats = howtoStats || { votedUsefulCount: 0 }
     }
   }
   @action
@@ -94,19 +97,7 @@ export class HowtoStore extends ModuleStore {
       this.selectedTags,
     )
     // HACK - ARH - 2019/12/11 filter unaccepted howtos, should be done serverside
-    const activeUser = this.activeUser
-    const isAdmin = hasAdminRights(activeUser)
-    const validHowtos = howtos.filter(howto => {
-      const isHowToAccepted = howto.moderation === 'accepted'
-      const wasCreatedByUser =
-        activeUser && howto._createdBy === activeUser.userName
-      const isAdminAndAccepted =
-        isAdmin &&
-        howto.moderation !== 'draft' &&
-        howto.moderation !== 'rejected'
-
-      return isHowToAccepted || wasCreatedByUser || isAdminAndAccepted
-    })
+    const validHowtos = filterModerableItems(howtos, this.activeUser)
 
     // If user searched, filter remaining howtos by the search query with Fuse
     if (!this.searchValue) {

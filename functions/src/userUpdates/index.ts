@@ -1,6 +1,7 @@
 import * as functions from 'firebase-functions'
 import { db } from '../Firebase/firestoreDB'
-import { IUserDB, IDBDocChange, DB_ENDPOINTS } from '../models'
+import { DB_ENDPOINTS, IDBDocChange, IUserDB } from '../models'
+import { backupUser } from './backupUser'
 
 /*********************************************************************
  * Side-effects to be carried out on various user updates, namely:
@@ -11,6 +12,7 @@ import { IUserDB, IDBDocChange, DB_ENDPOINTS } from '../models'
 export const handleUserUpdates = functions.firestore
   .document(`${DB_ENDPOINTS.users}/{id}`)
   .onUpdate(async (change, context) => {
+    await backupUser(change)
     await processCountryUpdates(change)
   })
 

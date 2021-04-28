@@ -64,4 +64,4 @@ interface IUserStats {
 
 export type IUserDB = IUser & DBDoc
 
-export type UserRole = 'super-admin' | 'subscriber' | 'admin'
+export type UserRole = 'super-admin' | 'subscriber' | 'admin' | 'beta-tester'

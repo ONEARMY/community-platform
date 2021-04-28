@@ -18,6 +18,7 @@ import { Route } from 'react-router'
 import { PrivacyPolicy } from './policy/privacy'
 import { TermsPolicy } from './policy/terms'
 import { ResearchModule } from './Research'
+import { UserRole } from 'src/models/user.models'
 
 export interface IPageMeta {
   path: string
@@ -27,6 +28,7 @@ export interface IPageMeta {
   exact?: boolean
   fullPageWidth?: boolean
   customStyles?: CSSObject
+  requiredRole?: UserRole
 }
 
 const howTo = {
@@ -149,7 +151,7 @@ const termsPolicy = {
 
 // community pages (various pages hidden on production build)
 const devCommunityPages = [howTo, maps, events, academy, ResearchModule]
-const prodCommunityPages = [howTo, maps, events, academy]
+const prodCommunityPages = [howTo, maps, events, academy, ResearchModule]
 const communityPages =
   SITE === 'production' ? prodCommunityPages : devCommunityPages
 // community 'more' dropdown pages (various pages hidden on production build)

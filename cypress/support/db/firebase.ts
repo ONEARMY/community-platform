@@ -21,10 +21,12 @@ firebase.initializeApp(fbConfig)
 const db = firebase.firestore()
 
 class FirestoreTestDB {
-  seedDB = () => {
-    const dbWrites = Object.keys(SEED_DATA).map(key => {
-      const endpoint = DB_ENDPOINTS[key]
-      return this.addDocuments(`${endpoint}`, SEED_DATA[key])
+  seedDB = async (dbPrefix: string) => {
+    const endpoints = ensureDBPrefixes(dbPrefix, DB_ENDPOINTS)
+    const dbWrites = Object.keys(SEED_DATA).map(async key => {
+      const endpoint = endpoints[key]
+      await this.addDocuments(endpoint, SEED_DATA[key])
+      return [endpoint, SEED_DATA[key]]
     })
     return Promise.all(dbWrites)
   }
@@ -80,3 +82,19 @@ class FirestoreTestDB {
 }
 export const Auth = firebase.auth()
 export const TestDB = new FirestoreTestDB()
+
+/**
+ * During initialisation the endpoints imported from endpoints.ts might be populated before the
+ * prefix is stored in localstorage. This function ensures they start with the correct prefix
+ */
+function ensureDBPrefixes(
+  prefix: string,
+  endpoints: { [key: string]: string },
+) {
+  Object.keys(endpoints).forEach(key => {
+    if (!key.startsWith(prefix)) {
+      endpoints[key] = `${prefix}${endpoints[key]}`
+    }
+  })
+  return endpoints
+}

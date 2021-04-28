@@ -6,6 +6,7 @@ const e = process ? process.env : ({} as any)
  * A prefix can be used to simplify large-scale schema changes or multisite hosting
  * and allow multiple sites to use one DB (used for parallel test seed DBs)
  * e.g. oa_
+ * SessionStorage prefixes are used to allow test ci environments to dynamically set a db endpoint
  */
 const DB_PREFIX = sessionStorage.DB_PREFIX || e.REACT_APP_DB_PREFIX || ''
 

@@ -60,7 +60,7 @@ export class UserMapPinSection extends React.Component<{}, IState> {
             In order to have your pin accepted on our map you have to collect at
             least 6 stars in the Ally Checklist. Learn more about the{' '}
             <Link
-              href="https://community.preciousplastic.com/academy/guides/stars"
+              href="https://community.preciousplastic.com/academy/guides/community-program"
               target="_blank"
               sx={{ color: 'black', textDecoration: 'underline' }}
             >

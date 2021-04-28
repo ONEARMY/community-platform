@@ -1,7 +1,5 @@
 describe('[Events]', () => {
-  const today = new Date().toISOString().substring(0, 10)
   beforeEach(() => {
-    cy.clock(Cypress.moment.utc(today).valueOf(), ['Date'])
     // navigate to events page and wait for data load
     cy.visit('/events')
     cy.get('[data-cy=card]', { timeout: 10000 })

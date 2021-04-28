@@ -198,8 +198,8 @@ const UpdateForm = observer((props: IProps) => {
                                 flex: 1,
                                 minHeight: '150px',
                               }}
-                              maxLength="700"
-                              placeholder="Explain what is happening in your research (max 700 characters)"
+                              maxLength="1500"
+                              placeholder="Explain what is happening in your research (max 1500 characters)"
                             />
                           </Flex>
                           <Label htmlFor={`images`}>

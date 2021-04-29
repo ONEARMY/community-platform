@@ -10,12 +10,6 @@ import { FIREBASE_CONFIG } from 'src/config/config'
 
 // initialise with config settings, additional firestore config to support future changes
 firebase.initializeApp(FIREBASE_CONFIG)
-// if using cypress, pass firebase to windows for direct use
-const w = window as any
-if (w.Cypress) {
-  firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE)
-  w.firebaseInstance = firebase
-}
 
 // note, if also testing backend functions the emulated version can be accessed below
 // firebase.functions().useFunctionsEmulator('http://localhost:5001')

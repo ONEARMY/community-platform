@@ -1,5 +1,3 @@
-import { Page } from '../utils/test-utils'
-
 describe('[Bugs]', () => {
   it('default test', () => {
     expect(true).to.eq(true)
@@ -33,10 +31,6 @@ describe('[Bugs]', () => {
   //     .should('be.exist')
   //   cy.url().should('include', editUrl)
   // })
-
-  // it('[686]', () => {
-  //   cy.deleteDocuments('events', 'title', '==', 'Create a test event')
-  //   cy.visit('/events')
 
   //   cy.login('event_creator@test.com', 'test1234')
   //   cy.get('[data-cy=create]').click()

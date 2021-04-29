@@ -32,7 +32,7 @@ before(() => {
     .then({ timeout: 60000 }, () => {
       // large initial timeout in case server slow to respond
       return new Cypress.Promise((resolve, reject) => {
-        TestDB.seedDB(Cypress.env('DB_PREFIX'))
+        TestDB.seedDB()
           .then(resolve)
           .catch(reject)
       })

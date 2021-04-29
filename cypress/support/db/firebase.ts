@@ -21,8 +21,8 @@ firebase.initializeApp(fbConfig)
 const db = firebase.firestore()
 
 class FirestoreTestDB {
-  seedDB = async (dbPrefix: string) => {
-    const endpoints = ensureDBPrefixes(dbPrefix, DB_ENDPOINTS)
+  seedDB = async () => {
+    const endpoints = ensureDBPrefixes(DB_ENDPOINTS)
     const dbWrites = Object.keys(SEED_DATA).map(async key => {
       const endpoint = endpoints[key]
       await this.addDocuments(endpoint, SEED_DATA[key])
@@ -32,8 +32,9 @@ class FirestoreTestDB {
   }
 
   clearDB = () => {
+    const endpoints = ensureDBPrefixes(DB_ENDPOINTS)
     const dbDeletes = Object.keys(SEED_DATA).map(key => {
-      const endpoint = DB_ENDPOINTS[key]
+      const endpoint = endpoints[key]
       return this.deleteAll(`${endpoint}`)
     })
     return Promise.all(dbDeletes)
@@ -45,7 +46,8 @@ class FirestoreTestDB {
     opStr: any,
     value: string,
   ): Cypress.Chainable => {
-    const endpoint = DB_ENDPOINTS[collectionName]
+    const endpoints = ensureDBPrefixes(DB_ENDPOINTS)
+    const endpoint = endpoints[collectionName]
     return cy
       .wrap(`query: ${endpoint} WHERE ${fieldPath}${opStr}${value}`)
       .then(() => {
@@ -87,13 +89,11 @@ export const TestDB = new FirestoreTestDB()
  * During initialisation the endpoints imported from endpoints.ts might be populated before the
  * prefix is stored in localstorage. This function ensures they start with the correct prefix
  */
-function ensureDBPrefixes(
-  prefix: string,
-  endpoints: { [key: string]: string },
-) {
-  Object.keys(endpoints).forEach(key => {
-    if (!key.startsWith(prefix)) {
-      endpoints[key] = `${prefix}${endpoints[key]}`
+function ensureDBPrefixes(endpoints: { [key: string]: string }) {
+  const prefix = Cypress.env('DB_PREFIX')
+  Object.entries(endpoints).forEach(([key, value]) => {
+    if (!value.startsWith(prefix)) {
+      endpoints[key] = `${prefix}${value}`
     }
   })
   return endpoints

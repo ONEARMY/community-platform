@@ -24,7 +24,7 @@ const EXPORT_TARGET = `${STORAGE_BUCKET}/${timestamp}`
 const DB_PREFIX = 'v3'
 const COLLECTION_IDS = ['events', 'howtos', 'mappins', 'tags', 'users']
   .map(id => `${DB_PREFIX}_${id}`)
-  .concat('revisions')
+  .concat('revisions', 'stats')
   .join(',')
 
 /**

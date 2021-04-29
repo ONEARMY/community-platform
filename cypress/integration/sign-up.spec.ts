@@ -8,8 +8,8 @@ const authUser = {
   confirmPassword: 'test1234',
 }
 const newUser = {
-  username: `signup_gen_${generatedId(5)}`,
-  email: `signup_gen_${generatedId(5)}@test.com`,
+  username: `CI_${generatedId(5)}`,
+  email: `CI_${generatedId(5)}@test.com`,
   password: 'test1234',
   confirmPassword: 'test1234',
 }

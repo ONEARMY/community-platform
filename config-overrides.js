@@ -25,7 +25,7 @@ function swPlugin() {
     cacheId: 'oa',
     clientsClaim: true,
     skipWaiting: true,
-    // NOTE 2020-01-14 CC - Add support to cache firebase storage and map tiles
+
     runtimeCaching: [
       {
         urlPattern: new RegExp(/.*\.(?:png|gif|jpg|jpeg|webp|svg).*/gi),
@@ -69,9 +69,28 @@ function swPlugin() {
         urlPattern: new RegExp('^https://firestore\\.googleapis\\.com/'),
         handler: 'NetworkOnly',
       },
+      {
+        urlPattern: new RegExp(/.chunk./), // generated build files (contains hashing so cacheFirst should be fine)
+        handler: 'CacheFirst',
+      },
+      {
+        urlPattern: new RegExp('fonts/'),
+        handler: 'CacheFirst',
+      },
+      {
+        urlPattern: new RegExp('static/media'), // svgs and other outputs from platform build
+        handler: 'StaleWhileRevalidate',
+      },
     ],
-    // end update 2020-01-14
-    exclude: [/\.map$/, /asset-manifest\.json$/],
+    // excludes from precache (still can include runtime cache)
+    // exclude map files, manifest, images, txt (e.g. license)
+    // exclude lazy-loaded chunks
+    exclude: [
+      /\.map$/,
+      /asset-manifest\.json$/,
+      /.(?:png|jpg|jpeg|svg|txt|ico)$/,
+      /.chunk./,
+    ],
     importWorkboxFrom: 'cdn',
     navigateFallback: '/index.html',
     navigateFallbackWhitelist: [/^(?!\/__)/],

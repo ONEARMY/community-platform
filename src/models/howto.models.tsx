@@ -17,6 +17,10 @@ export interface IHowto extends IHowtoFormInput, IModerable {
  */
 export type IHowtoDB = IHowto & DBDoc
 
+export type IHowtoStats = {
+  votedUsefulCount: number
+}
+
 export interface IHowtoStep extends IHowToStepFormInput {
   // *** NOTE - adding an '_animationKey' field to track when specific array element removed for
   images: Array<IUploadedFileMeta | null>
@@ -45,4 +49,6 @@ export interface IHowtoFormInput extends IModerable {
   slug: string
   // note, tags will remain optional as if populated {} will be stripped by db (firestore)
   tags?: ISelectedTags
+  // Added to be able to recover on eddit by admin
+  creatorCountry?: string
 }

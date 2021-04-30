@@ -41,13 +41,11 @@ Note, this will require authentication for the firebase project. You can request
 and the relevant config will automatically be made available
 (viewable with command `firebase functions:config:get`)
 
-This also only works for specific triggers (namely the api endpoints). If you want to
-test a functions triggered in other ways you may first want to create an api endpoint
-for testing and later test further with the [firebase functions shell](https://firebase.google.com/docs/functions/local-emulator#install_and_configure_the_cloud_functions_shell), via command `$npm run shell`
+This also only works for specific triggers (namely the https callable functions, api endpoints). For more information see https://firebase.google.com/docs/functions/local-emulator.
 
-Additionally, the functions won't be automatically reloaded on change. This should be possible
-(easier when working with JS instead of TS), so if anybody wishes to investigate further they would
-be most welcome. Alternatively just restart the serve process on changes.
+NOTE - if running a function that requires access to the live database (and not just emulated), use `npm run serve:only:functions`, which will exclude db emulator and default to live project db 
+
+
 
 ## Handling headers and redirects
 
@@ -75,3 +73,29 @@ To view console logs and events from deployed functions request project access f
 Both production and live have small app-engine instances that run cron tasks, schedules can be seen in ../functions-cron.
 
 If changing either of these remember to deploy both to production and development servers
+
+# Using functions for data migrations
+
+If making changes across the entire DB it is likely that backend functions will be used to do so.
+A couple tips to help implementing:
+
+1. Create backups of all the collection points potentially affected.
+(note, you will need admin access to the project, and initialise using gcloud. Confirm access via `gcloud config list` and select project via `gcloud init`)
+```
+gcloud firestore export gs://[BUCKET_NAME] --collection-ids=[COLLECTION_ID_1],[COLLECTION_ID_2]
+```
+E.g. for the staging server, updating howtos and events:
+```
+gcloud firestore export gs://precious-plastics-v4-dev-exports/2020-10-12 --collection-ids=v3_howtos,v3_events
+```
+Or production
+```
+gcloud firestore export gs://onearmyworld-exports/2020-10-12_manual_backup --collection-ids=v3_events,v3_howtos,v3_mappings,v3_tags,v3_users
+```
+(note - whilst the full database can be backed up without specifying collection ids, this makes it harder to re-import a single collection)
+For more info see https://firebase.google.com/docs/firestore/manage-data/export-import#export_specific_collections
+
+1. For any data that you want to be reflected immediately, also change the `modified` field so that user caches will update as required
+
+2. If less confident or making large scale changes, consider populating to a new db endpoint, e.g. `v4_howtos`
+(this will need to also be updated in the models for both functions and frontend)

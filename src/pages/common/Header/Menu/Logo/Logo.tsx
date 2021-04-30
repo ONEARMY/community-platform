@@ -23,6 +23,7 @@ const LogoContainer = styled(Flex)`
 `
 
 export class Logo extends React.Component<IProps> {
+  // eslint-disable-next-line
   constructor(props: any) {
     super(props)
   }

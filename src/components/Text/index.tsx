@@ -1,10 +1,10 @@
 import * as React from 'react'
-import styled from 'styled-components'
 import {
   Text as RebassText,
   TextProps as RebassTextProps,
 } from 'rebass/styled-components'
 import theme from 'src/themes/styled.theme'
+import styled from 'styled-components'
 
 export interface ITextProps {
   uppercase?: boolean
@@ -29,6 +29,7 @@ export interface ITextProps {
   highlight?: boolean
   critical?: boolean
   dashed?: boolean
+  cropBottomRight?: boolean
 }
 
 export const uppercase = props =>
@@ -122,6 +123,12 @@ export const dashed = (props: ITextProps) =>
         border: '1px dashed',
       }
     : null
+export const cropBottomRight = (props: ITextProps) =>
+  props.cropBottomRight
+    ? {
+        borderBottomRightRadius: '8px',
+      }
+    : null
 
 export const BaseText = styled(RebassText)`
   ${inline}
@@ -143,6 +150,7 @@ export const BaseText = styled(RebassText)`
   ${highlight}
   ${critical}
   ${dashed}
+  ${cropBottomRight}
 `
 
 type TextProps = ITextProps & RebassTextProps

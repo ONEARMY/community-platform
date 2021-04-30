@@ -9,7 +9,7 @@ interface IState {
 }
 
 const AnimationContainer = posed.div({
-  enter: { y: -10, opacity: 1 },
+  enter: { opacity: 1 },
   exit: { y: 5, opacity: 0 },
 })
 

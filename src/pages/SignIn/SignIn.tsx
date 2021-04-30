@@ -1,6 +1,7 @@
 import * as React from 'react'
 import Flex from 'src/components/Flex'
 import { RouteComponentProps, withRouter } from 'react-router'
+import { Redirect } from 'react-router'
 import Heading from 'src/components/Heading'
 import { Button } from 'src/components/Button'
 import Text from 'src/components/Text'
@@ -13,6 +14,7 @@ import {
   TextNotification,
   ITextNotificationProps,
 } from 'src/components/Notification/TextNotification'
+import { getFriendlyMessage } from 'src/utils/helpers'
 import { required } from 'src/utils/validators'
 
 interface IFormValues {
@@ -38,18 +40,13 @@ interface IAuthProvider {
   inputLabel: string
 }
 
-const AUTH_PROVIDERS: IAuthProvider[] = [
-  {
-    provider: 'DH',
-    buttonLabel: 'Dave Hakkens',
-    inputLabel: 'davehakkens.nl Username',
-  },
-  {
+const AUTH_PROVIDERS: { [provider: string]: IAuthProvider } = {
+  firebase: {
     provider: 'Firebase',
     buttonLabel: 'Email / Password',
     inputLabel: 'Email Address',
   },
-]
+}
 
 @inject('userStore')
 @observer
@@ -63,9 +60,10 @@ class SignInPage extends React.Component<IProps, IState> {
         email: props.preloadValues ? props.preloadValues.email : '',
         password: props.preloadValues ? props.preloadValues.password : '',
       },
-      // TODO remove initialization of authProvider state when DH login will be fixed
-      authProvider: AUTH_PROVIDERS[1],
+      authProvider: AUTH_PROVIDERS.firebase,
     }
+
+    this.hideNotification = this.hideNotification.bind(this)
   }
 
   async onLoginSubmit(v: IFormValues) {
@@ -75,7 +73,8 @@ class SignInPage extends React.Component<IProps, IState> {
       await this.props.userStore!.login(provider, v.email, v.password)
       this.props.history.goBack()
     } catch (error) {
-      this.setState({ errorMsg: error.message, disabled: false })
+      const friendlyErrorMessage = getFriendlyMessage(error.code)
+      this.setState({ errorMsg: friendlyErrorMessage, disabled: false })
     }
   }
 
@@ -102,12 +101,26 @@ class SignInPage extends React.Component<IProps, IState> {
     }
   }
 
+  hideNotification = () => {
+    this.setState({
+      notificationProps: {
+        ...this.state.notificationProps,
+        show: false,
+      },
+    })
+  }
+
   public render() {
     const { authProvider, notificationProps } = this.state
+    if (this.props.userStore!.user) {
+      // User logged in
+      return <Redirect to={'/'} />
+    }
     return (
       <Form
         onSubmit={v => this.onLoginSubmit(v as IFormValues)}
         render={({ submitting, values, invalid, handleSubmit }) => {
+          // eslint-disable-next-line
           const disabled = invalid || submitting
           return (
             <>
@@ -152,7 +165,7 @@ class SignInPage extends React.Component<IProps, IState> {
                           <Text mb={3} mt={3}>
                             Login with :
                           </Text>
-                          {AUTH_PROVIDERS.map(p => (
+                          {Object.values(AUTH_PROVIDERS).map(p => (
                             <Button
                               width={1}
                               key={p.provider}
@@ -210,7 +223,10 @@ class SignInPage extends React.Component<IProps, IState> {
                               >
                                 Lost password?
                               </Link>
-                              <TextNotification {...notificationProps} />
+                              <TextNotification
+                                {...notificationProps}
+                                hideNotificationCb={this.hideNotification}
+                              />
                             </Text>
                           </Flex>
 

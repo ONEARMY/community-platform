@@ -1,7 +1,24 @@
+import { isObservableObject, toJS } from 'mobx'
+import { DBDoc, IModerable } from 'src/models/common.models'
 import { IMapPin } from 'src/models/maps.models'
 import { IUser } from 'src/models/user.models'
-import { DBDoc, IModerable } from 'src/models/common.models'
-import { toJS, isObservableObject } from 'mobx'
+import MESSAGES from './messages'
+
+/**
+ * Conversion for default error messages.
+ * @param systemMessage - the message text for lookup in the table.
+ * This can either be a status code or full message (depending on how saved above)
+ */
+export const getFriendlyMessage = (systemMessage: string) => {
+  const friendlyMessage = MESSAGES[systemMessage.toLowerCase()]
+  if (!friendlyMessage) {
+    console.log(
+      `%c No friendly message for [${systemMessage}] \n Maybe you should add one?`,
+      'background: #222; color: #bada55',
+    )
+  }
+  return friendlyMessage ? friendlyMessage : systemMessage
+}
 
 // remove special characters from string, also replacing spaces with dashes
 export const stripSpecialCharacters = (text: string) => {
@@ -42,6 +59,36 @@ export const arrayToJson = (arr: any[], keyField: string) => {
 export const capitalizeFirstLetter = (str: string) =>
   str.charAt(0).toUpperCase() + str.slice(1)
 
+/** Show only items which are either accepted, the user has created, or an admin can see
+ * HACK - ARH - 2019/12/11 filter unaccepted howtos, should be done serverside
+ */
+export const filterModerableItems = <T>(
+  items: (IModerable & T)[],
+  user?: IUser,
+): T[] =>
+  items.filter(item => {
+    const isItemAccepted = item.moderation === 'accepted'
+    const wasCreatedByUser = user && item._createdBy === user.userName
+    const isAdminAndAccepted =
+      hasAdminRights(user) &&
+      item.moderation !== 'draft' &&
+      item.moderation !== 'rejected'
+
+    return isItemAccepted || wasCreatedByUser || isAdminAndAccepted
+  })
+
+/**
+ *  Function used to generate random ID in same manner as firestore
+ */
+export const randomID = () => {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  let autoId = ''
+  for (let i = 0; i < 20; i++) {
+    autoId += chars.charAt(Math.floor(Math.random() * chars.length))
+  }
+  return autoId
+}
+
 /************************************************************************
  *              Date Methods
  ***********************************************************************/
@@ -62,6 +109,7 @@ export const getDay = (d: Date) => {
  *             Validators
  ***********************************************************************/
 export const isEmail = (email: string) => {
+  // eslint-disable-next-line
   const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   return re.test(email)
 }
@@ -123,3 +171,6 @@ export const isAllowToPin = (pin: IMapPin, user?: IUser) => {
 interface IEditableDoc extends DBDoc {
   _createdBy: string
 }
+
+// Convert theme em string to px number
+export const emStringToPx = width => Number(width.replace('em', '')) * 16

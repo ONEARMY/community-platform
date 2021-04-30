@@ -1,0 +1,144 @@
+version: 2.1
+
+######################################################################################################
+#  Orbs - preconfigured environments for running specific jobs
+######################################################################################################
+
+# node: circleci/node@4.1.0
+# cypress: cypress-io/cypress@1
+orbs:
+  # for use with cimg image, to install web browsers
+  browser-tools: circleci/browser-tools@1.1.3
+
+######################################################################################################
+#  Aliases - code snippets that can be included inline in any other markup
+######################################################################################################
+aliases:
+  # use a base image running node v12 with chrome/firefox browsers preinstalled
+  - &docker
+    - image: cimg/node:12.21-browsers
+    # These can also be created as commands, but slighly tidier to just use inline
+    # restore/install/save can all be done with a single circle-ci orb, but less flexible and breaks intellisense
+  - &restore_yarn_cache
+    restore_cache:
+      name: Restore yarn cache
+      keys:
+        # https://circleci.com/docs/2.0/caching/
+        # when lock file changes, use increasingly general patterns to restore cache
+        # NOTE - this will change if migrating to yarn v2 in the future
+        # NOTE - if changing base image or received cache permission denied may need to bump version v2->v3 or similar
+        - yarn-packages-v2-{{ .Branch }}-{{ checksum "yarn.lock" }}
+        - yarn-packages-v2-{{ .Branch }}-
+        - yarn-packages-v2-
+  - &install_packages
+    run:
+      name: Install Packages
+      command: yarn --frozen-lockfile --cache-folder ~/.cache/yarn
+  - &save_yarn_cache
+    save_cache:
+      paths:
+        - ~/.cache/yarn
+      key: yarn-packages-v2-{{ .Branch }}-{{ checksum "yarn.lock" }}
+
+######################################################################################################
+#  Commands - Reusable collections of steps
+######################################################################################################
+commands:
+  setup_repo:
+    description: checkout repo and install packages
+    # no parameters currently used, but could be specified here to use within steps
+    # parameters:
+    steps:
+      - checkout
+      - *restore_yarn_cache
+      - *install_packages
+      - *save_yarn_cache
+
+######################################################################################################
+#  Jobs - Independently specified lists of tasks and environments for execution
+######################################################################################################
+jobs:
+  # Prepare node module caches so that future tasks run more quickly
+  # NOTE - not currently used as we only have one workflow
+  setup:
+    docker: *docker
+    steps:
+      - setup_repo
+
+  # Create a production build
+  # NOTE - not currently used in test workflow as different build_env required for each machine
+  build:
+    docker: *docker
+    parameters:
+      # optional environment variables to set during build process
+      BUILD_ENV:
+        type: string
+        default: ''
+    steps:
+      # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
+      - setup_repo
+      - run:
+          command: << parameters.BUILD_ENV >> npm run build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build
+
+  # Run cypress e2e tests on chrome and firefox
+  test_e2e:
+    docker: *docker
+    # build matrix will run 4 parallel builds handled by cypress, so don't need to specify more here
+    parallelism: 1
+    parameters:
+      CI_NODE:
+        type: integer
+      CI_BROWSER:
+        type: string
+    steps:
+      - setup_repo
+      # retrieve build folder
+      - attach_workspace:
+          at: '.'
+      # install testing browsers are required
+      - when:
+          condition:
+            equal: ['chrome', << parameters.CI_BROWSER >>]
+          steps:
+            - browser-tools/install-chrome
+      - when:
+          condition:
+            equal: ['firefox', << parameters.CI_BROWSER >>]
+          steps:
+            - browser-tools/install-firefox
+      # call main testing script
+      - run:
+          # TODO - CC 2021-02-24 `npm run test ci prod` a bit flaky, should be worked on and then used
+          command: npm run test ci prod
+          environment:
+            CI_BROWSER: << parameters.CI_BROWSER >>
+            CI_NODE: << parameters.CI_NODE >>
+            CI_GROUP: 2x-<< parameters.CI_BROWSER >>
+
+######################################################################################################
+#  Workflows - Collections of jobs to define overall processes
+######################################################################################################
+workflows:
+  version: 2
+  build_and_test:
+    # by default jobs will run concurrently, so specify requires if want to run sequentially
+    jobs:
+      # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
+      - build:
+          name: Build Production
+          matrix:
+            parameters:
+              BUILD_ENV:
+                ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci CI=false']
+      - test_e2e:
+          requires:
+            - 'build'
+          name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
+          matrix:
+            parameters:
+              CI_NODE: [1, 2]
+              CI_BROWSER: ['chrome', 'firefox']

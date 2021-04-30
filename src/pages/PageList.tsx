@@ -28,6 +28,8 @@ const ForgotPasswordMessagePage = lazy(() =>
 )
 const PrivacyPolicy = lazy(() => import('./policy/privacy'))
 const TermsPolicy = lazy(() => import('./policy/terms'))
+import { ResearchModule } from './Research'
+import { UserRole } from 'src/models/user.models'
 
 export interface IPageMeta {
   path: string
@@ -37,6 +39,7 @@ export interface IPageMeta {
   exact?: boolean
   fullPageWidth?: boolean
   customStyles?: CSSObject
+  requiredRole?: UserRole
 }
 
 const howTo = {
@@ -73,9 +76,7 @@ const academy = {
   title: 'Academy',
   description: 'Demo external page embed',
   customStyles: {
-    position: 'absolute',
-    height: 'calc(100% - 85px)',
-    width: '100%',
+    flex: 1,
   },
   fullPageWidth: true,
 }
@@ -160,8 +161,8 @@ const termsPolicy = {
 }
 
 // community pages (various pages hidden on production build)
-const devCommunityPages = [howTo, maps, events, academy]
-const prodCommunityPages = [howTo, maps, events, academy]
+const devCommunityPages = [howTo, maps, events, academy, ResearchModule]
+const prodCommunityPages = [howTo, maps, events, academy, ResearchModule]
 const communityPages =
   SITE === 'production' ? prodCommunityPages : devCommunityPages
 // community 'more' dropdown pages (various pages hidden on production build)

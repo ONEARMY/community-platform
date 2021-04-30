@@ -10,7 +10,7 @@ export class RealtimeDBClient implements AbstractDBClient {
    ***********************************************************************/
   async getDoc<T>(endpoint: IDBEndpoint, docId: string) {
     const snap = await db.ref(`${endpoint}/${docId}`).once('value')
-    return snap.exists ? (snap.val() as T) : undefined
+    return snap.exists() ? (snap.val() as T) : undefined
   }
 
   async setDoc(endpoint: IDBEndpoint, doc: DBDoc) {
@@ -26,7 +26,7 @@ export class RealtimeDBClient implements AbstractDBClient {
   async getCollection<T>(endpoint: IDBEndpoint) {
     try {
       const snap = await db.ref(endpoint).once('value')
-      return snap.exists && snap.val()
+      return snap.exists() && snap.val()
         ? Object.values<T & DBDoc>(snap.val())
         : []
     } catch (error) {
@@ -37,7 +37,11 @@ export class RealtimeDBClient implements AbstractDBClient {
 
   async queryCollection() {
     throw new Error('queries not available on this database')
+    // eslint-disable-next-line
     return []
+  }
+  deleteDoc(endpoint: IDBEndpoint, docId: string) {
+    return db.ref(`${endpoint}/${docId}`).remove()
   }
 
   /************************************************************************

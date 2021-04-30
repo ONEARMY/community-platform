@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 import { RootStore } from '..'
 import { ModuleStore } from '../common/module.store'
 import { DBDoc } from '../databaseV2/types'
@@ -17,9 +17,11 @@ type IExampleDocDB = IExampleDoc & DBDoc
  * including the current `activeUser` and the global database, or `db` objects
  */
 export class TemplateStore extends ModuleStore {
+  // eslint-disable-next-line
   constructor(rootStore: RootStore) {
     super(rootStore)
-    //
+    // tell mobx to process the decorators and handle observers
+    makeObservable(this)
   }
   // observables are data variables that can be subscribed to and change over time
   @observable
@@ -48,6 +50,7 @@ export class TemplateStore extends ModuleStore {
   // example of getting an entire collection of documents and listening to live updates on the collection
   @action
   public async dbCollectionRequest() {
+    // eslint-disable-next-line
     const docs$ = await this.db.collection<IExampleDoc>('tags').stream(docs => {
       this.exampleCollection = docs
     })

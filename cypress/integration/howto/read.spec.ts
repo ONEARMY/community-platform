@@ -12,9 +12,6 @@ describe('[How To]', () => {
       cy.step('No tag is selected')
       cy.get('.data-cy__multi-value__label').should('not.exist')
 
-      cy.step('The Create button is unavailable')
-      cy.get('[data-cy=create]').should('not.exist')
-
       cy.step('More How-tos button is hidden')
       cy.get('[data-cy=more-how-tos]', SKIP_TIMEOUT).should('be.hidden')
 
@@ -45,7 +42,6 @@ describe('[How To]', () => {
       cy.get('[data-cy=create]')
         .click()
         .url()
-        .should('include', '/how-to/create')
     })
   })
 
@@ -56,24 +52,14 @@ describe('[How To]', () => {
     })
     it('[By Everyone]', () => {
       cy.step('Select a tag')
-      cy.get('[data-cy=tag-select]').click()
-      cy.get('.data-cy__menu')
-        .contains('product')
-        .click()
-      cy.get('.data-cy__multi-value__label')
-        .contains('product')
-        .should('be.exist')
+      cy.selectTag('product')
       cy.get('[data-cy=card]')
         .its('length')
         .should('be.eq', 3)
 
       cy.step('Type and select a tag')
-      cy.get('.data-cy__input')
-        .get('input')
-        .type('injec')
-      cy.get('.data-cy__menu')
-        .contains('injection')
-        .click()
+      cy.selectTag('injection')
+
       cy.get('[data-cy=card]')
         .its('length')
         .should('be.eq', 2)
@@ -105,7 +91,6 @@ describe('[How To]', () => {
     const coverFileRegex = /brick-12-1.jpg/
     beforeEach(() => {
       cy.visit('/how-to')
-      cy.logout()
     })
     describe('[By Everyone]', () => {
       it('[See all info]', () => {
@@ -116,7 +101,7 @@ describe('[How To]', () => {
         cy.step('How-to has basic info')
         cy.get('[data-cy=how-to-basis]').then($summary => {
           expect($summary).to.contain('By howto_creator', 'Author')
-          expect($summary).to.contain('Last edit:', 'Edit')
+          expect($summary).to.contain('Last edit on', 'Edit')
           expect($summary).to.contain('Make an interlocking brick', 'Title')
           expect($summary).to.contain(
             'show you how to make a brick using the injection machine',

@@ -47,6 +47,7 @@ export class ProfileLinkField extends Component<IProps, IState> {
   // TODO - we might want to add more formatting for cases where,
   // e.g. only a username is given for a bazar link
   public formatLink(link: string) {
+    link = link && link.toLowerCase()
     switch (this.state.linkType) {
       case 'forum':
         return ensureExternalUrl(link)

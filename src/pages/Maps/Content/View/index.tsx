@@ -1,6 +1,6 @@
 import * as React from 'react'
 import debounce from 'debounce'
-import { Map, TileLayer, ZoomControl } from 'react-leaflet'
+import { Map, TileLayer } from 'react-leaflet'
 
 import 'leaflet/dist/leaflet.css'
 import './index.css'

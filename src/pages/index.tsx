@@ -15,7 +15,8 @@ import {
   NO_HEADER_PAGES,
   POLICY_PAGES,
 } from './PageList'
-import { Link } from 'rebass'
+import { Link, Flex } from 'rebass'
+import DevSiteHeader from 'src/components/DevSiteHeader/DevSiteHeader'
 
 interface IState {
   singlePageMode: boolean
@@ -23,6 +24,7 @@ interface IState {
 }
 
 export class Routes extends React.Component<any, IState> {
+  // eslint-disable-next-line
   constructor(props: any) {
     super(props)
   }
@@ -40,8 +42,7 @@ export class Routes extends React.Component<any, IState> {
     // entire site, or just one page of it via subdomains. This is so we can effectively integrate just parts of this
     // platform into other sites. The first case is direct nav
     return (
-      <div>
-        {/* <DevHelpers /> */}
+      <Flex height={'100vh'} flexDirection="column" data-cy="page-container">
         <BrowserRouter>
           <GoogleAnalytics />
           {/* on page change scroll to top */}
@@ -56,8 +57,11 @@ export class Routes extends React.Component<any, IState> {
                     key={page.path}
                     render={props => (
                       <React.Fragment>
+                        <DevSiteHeader />
                         <Header />
                         <Main
+                          data-cy="main-layout-container"
+                          style={{ flex: 1 }}
                           customStyles={page.customStyles}
                           ignoreMaxWidth={page.fullPageWidth}
                         >
@@ -73,7 +77,7 @@ export class Routes extends React.Component<any, IState> {
                 <Route
                   exact
                   path="/"
-                  render={() => <Redirect to="/how-to" />}
+                  render={() => <Redirect to="/academy" />}
                 />
               </Switch>
             </Suspense>
@@ -89,10 +93,13 @@ export class Routes extends React.Component<any, IState> {
             sx={{ position: 'fixed', bottom: '30px', right: '30px' }}
             variant="primary"
           >
-            #Feedback? Join our chat 💬
+            #Feedback? Join our chat{' '}
+            <span role="img" aria-label="talk-bubble">
+              💬
+            </span>
           </Button>
         </Link>
-      </div>
+      </Flex>
     )
   }
 }

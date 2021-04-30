@@ -42,6 +42,7 @@ import {
 import { FaSignal, FaFacebookF, FaSlack, FaInstagram } from 'react-icons/fa'
 import { IconContext } from 'react-icons'
 import SVGs from './svgs'
+import { DownloadIcon } from './DownloadIcon'
 
 interface IGlyphProps {
   glyph: string
@@ -56,6 +57,7 @@ interface IProps {
 }
 export type availableGlyphs =
   | 'download'
+  | 'download-cloud'
   | 'upload'
   | 'add'
   | 'check'
@@ -88,11 +90,14 @@ export type availableGlyphs =
   | 'email'
   | 'chevron-left'
   | 'chevron-right'
+  | 'star'
+  | 'star-active'
 
 export type IGlyphs = { [k in availableGlyphs]: JSX.Element }
 
 export const glyphs: IGlyphs = {
   download: <MdFileDownload />,
+  'download-cloud': <DownloadIcon />,
   upload: <GoCloudUpload />,
   add: <MdAdd />,
   check: <MdCheck />,
@@ -125,6 +130,8 @@ export const glyphs: IGlyphs = {
   email: <MdMail />,
   'chevron-left': <MdChevronLeft />,
   'chevron-right': <MdChevronRight />,
+  star: SVGs.star,
+  'star-active': SVGs.starActive,
 }
 
 type WrapperProps = IProps & VerticalAlignProps & SpaceProps
@@ -153,6 +160,7 @@ const Glyph = ({ glyph = '' }: IGlyphProps) => {
 }
 
 export class Icon extends Component<WrapperProps> {
+  // eslint-disable-next-line
   constructor(props: WrapperProps) {
     super(props)
   }

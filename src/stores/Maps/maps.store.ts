@@ -1,4 +1,4 @@
-import { observable, action, toJS } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 import {
   IMapPin,
   IBoundingBox,
@@ -27,8 +27,10 @@ const MOCK_PINS = generatePins(250)
 const COLLECTION_NAME: IDBEndpoint = 'mappins'
 export class MapsStore extends ModuleStore {
   mapPins$: Subscription
+  // eslint-disable-next-line
   constructor(rootStore: RootStore) {
     super(rootStore)
+    makeObservable(this)
   }
 
   @observable

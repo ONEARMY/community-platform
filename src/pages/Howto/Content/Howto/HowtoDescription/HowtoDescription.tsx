@@ -13,18 +13,24 @@ import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
 import { Button } from 'src/components/Button'
 import { IUser } from 'src/models/user.models'
-import { isAllowToEditContent } from 'src/utils/helpers'
+import { isAllowToEditContent, emStringToPx } from 'src/utils/helpers'
 import theme from 'src/themes/styled.theme'
-import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
+import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
+import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
+import { HowtoUsefulStats } from './HowtoUsefulStats'
 
 interface IProps {
   howto: IHowtoDB
   loggedInUser: IUser | undefined
   needsModeration: boolean
+  votedUsefulCount?: number
+  userVotedUseful: boolean
   moderateHowto: (accepted: boolean) => void
+  onUsefulClick: () => void
 }
 
-export default class HowtoDescription extends React.PureComponent<IProps, any> {
+export default class HowtoDescription extends React.PureComponent<IProps> {
+  // eslint-disable-next-line
   constructor(props: IProps) {
     super(props)
   }
@@ -37,7 +43,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
     const lastModifiedDate = format(new Date(howto._modified), 'DD-MM-YYYY')
     const creationDate = format(new Date(howto._created), 'DD-MM-YYYY')
     if (lastModifiedDate !== creationDate) {
-      return 'Last edit: ' + format(new Date(howto._modified), 'DD-MM-YYYY')
+      return 'Last edit on ' + format(new Date(howto._modified), 'DD-MM-YYYY')
     } else {
       return ''
     }
@@ -46,9 +52,12 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
   public render() {
     const { howto, loggedInUser } = this.props
 
+    const iconFlexDirection =
+      emStringToPx(theme.breakpoints[0]) > window.innerWidth ? 'column' : 'row'
     return (
       <Flex
         data-cy="how-to-basis"
+        data-id={howto._id}
         className="howto-description-container"
         sx={{
           borderRadius: theme.radii[2] + 'px',
@@ -62,12 +71,32 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
         }}
       >
         <Flex px={4} py={4} flexDirection={'column'} width={[1, 1, 1 / 2]}>
-          <Flex justifyContent={'space-between'}>
+          <Flex justifyContent="space-between" flexWrap="wrap">
             <Link to={'/how-to/'}>
-              <Button variant={'secondary'} data-cy={'go-back'}>
-                Back
+              <Button variant="subtle" fontSize="14px" data-cy="go-back">
+                <Flex>
+                  <Image
+                    sx={{
+                      width: '10px',
+                      marginRight: '4px',
+                      transform: 'rotate(90deg)',
+                    }}
+                    src={ArrowIcon}
+                  />
+                  <Text>Back</Text>
+                </Flex>
               </Button>
             </Link>
+            <Box style={{ flexGrow: 1 }}>
+              {this.props.votedUsefulCount !== undefined && (
+                <HowtoUsefulStats
+                  votedUsefulCount={this.props.votedUsefulCount}
+                  userVotedUseful={this.props.userVotedUseful}
+                  isLoggedIn={this.props.loggedInUser ? true : false}
+                  onUsefulClick={this.props.onUsefulClick}
+                />
+              )}
+            </Box>
             {/* Check if pin should be moderated */}
             {this.props.needsModeration && (
               <Flex justifyContent={'space-between'}>
@@ -87,27 +116,33 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
               </Flex>
             )}
             {/* Check if logged in user is the creator of the how-to OR a super-admin */}
-            {loggedInUser &&
-              (isAllowToEditContent(howto, loggedInUser) && (
-                <Link to={'/how-to/' + this.props.howto.slug + '/edit'}>
-                  <Button variant={'primary'} data-cy={'edit'}>
-                    Edit
-                  </Button>
-                </Link>
-              ))}
+            {loggedInUser && isAllowToEditContent(howto, loggedInUser) && (
+              <Link to={'/how-to/' + this.props.howto.slug + '/edit'}>
+                <Button variant={'primary'} data-cy={'edit'}>
+                  Edit
+                </Button>
+              </Link>
+            )}
           </Flex>
-          <Text auxiliary mt={3} mb={2}>
-            By{' '}
-            <Link
-              sx={{
-                textDecoration: 'underline',
-                color: 'inherit',
-              }}
-              to={'/u/' + howto._createdBy}
-            >
-              {howto._createdBy}
-            </Link>{' '}
-            <Text inline> {this.dateCreatedByText(howto)}</Text>
+          <Box mt={3} mb={2}>
+            <Flex alignItems="center">
+              {howto.creatorCountry && (
+                <FlagIconHowTos code={howto.creatorCountry} />
+              )}
+              <Text inline auxiliary my={2} ml={1}>
+                By{' '}
+                <Link
+                  sx={{
+                    textDecoration: 'underline',
+                    color: 'inherit',
+                  }}
+                  to={'/u/' + howto._createdBy}
+                >
+                  {howto._createdBy}
+                </Link>{' '}
+                | Published on {this.dateCreatedByText(howto)}
+              </Text>
+            </Flex>
             <Text auxiliary sx={{ color: '#b7b5b5 !important' }} mt={1} mb={2}>
               {this.dateLastEditText(howto)}
             </Text>
@@ -117,18 +152,21 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             <Text preLine paragraph>
               {howto.description}
             </Text>
-          </Text>
+          </Box>
 
-          <Flex mt={4} mb={2}>
-            <ElWithBeforeIcon IconUrl={StepsIcon} height="15px">
+          <Flex mt="4">
+            <Flex mr="4" flexDirection={iconFlexDirection}>
+              <Image src={StepsIcon} height="1em" mr="2" mb="2" />
               {howto.steps.length} steps
-            </ElWithBeforeIcon>
-            <ElWithBeforeIcon IconUrl={TimeNeeded}>
+            </Flex>
+            <Flex mr="4" flexDirection={iconFlexDirection}>
+              <Image src={TimeNeeded} height="1em" mr="2" mb="2" />
               {howto.time}
-            </ElWithBeforeIcon>
-            <ElWithBeforeIcon IconUrl={DifficultyLevel}>
+            </Flex>
+            <Flex mr="4" flexDirection={iconFlexDirection}>
+              <Image src={DifficultyLevel} height="1em" mr="2" mb="2" />
               {howto.difficulty_level}
-            </ElWithBeforeIcon>
+            </Flex>
           </Flex>
           <Flex mt={4}>
             {howto.tags &&
@@ -156,14 +194,18 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
           <Image
             sx={{
               objectFit: 'cover',
-              width: '100%',
-              height: '450px',
+              width: 'auto',
+              height: ['100%', '450px'],
             }}
             src={howto.cover_image.downloadUrl}
             alt="how-to cover"
           />
           {howto.moderation !== 'accepted' && (
-            <ModerationStatusText howto={howto} top={'0px'} />
+            <ModerationStatusText
+              moderatedContent={howto}
+              contentType="howto"
+              top={'0px'}
+            />
           )}
         </Flex>
       </Flex>

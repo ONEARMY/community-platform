@@ -3,7 +3,7 @@ import Icon, { IGlyphs } from '../Icons'
 import Text from '../Text'
 import { Flex } from 'rebass'
 import { FadeInOut } from '../Animations/FadeInOut'
-import { getFriendlyMessage } from './messages'
+import { getFriendlyMessage } from '../../utils/helpers'
 
 /*  
     This component displays a simple text inline as a notification. 
@@ -63,6 +63,7 @@ export class TextNotification extends React.Component<
   }
 
   triggerNotificationHide() {
+    clearTimeout(this.timerHandle)
     this.timerHandle = setTimeout(() => {
       if (this.timerHandle && this.timerHandle > 0) {
         this.setState({ show: false })

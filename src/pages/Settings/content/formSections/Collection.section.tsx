@@ -102,6 +102,7 @@ export class CollectionSection extends React.Component<IProps, IState> {
                       onChange={() => {
                         if (fields.value && fields.value.length !== 0) {
                           if (fields.value.includes(plastic.label)) {
+                            // eslint-disable-next-line
                             fields.value.map((value, selectedValIndex) => {
                               if (value === plastic.label) {
                                 fields.remove(selectedValIndex)

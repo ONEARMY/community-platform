@@ -17,9 +17,11 @@ import 'src/assets/css/slick.min.css'
 import styled from 'styled-components'
 import Icon from 'src/components/Icons'
 import Flex from 'src/components/Flex'
+import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import { zIndex } from 'src/themes/styled.theme'
 import Workspace from 'src/pages/User/workspace/Workspace'
 import { Text } from 'src/components/Text'
+import { Link } from 'src/components/Links'
 
 import theme from 'src/themes/styled.theme'
 import { replaceDashesWithSpaces } from 'src/utils/helpers'
@@ -33,6 +35,11 @@ import PETIcon from 'src/assets/images/plastic-types/pet.svg'
 import PPIcon from 'src/assets/images/plastic-types/pp.svg'
 import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
+
+import EventsIcon from 'src/assets/icons/icon-events.svg'
+// import ExpertIcon from 'src/assets/icons/icon-expert.svg'
+import HowToCountIcon from 'src/assets/icons/icon-how-to.svg'
+// import V4MemberIcon from 'src/assets/icons/icon-v4-member.svg'
 
 import { IUploadedFileMeta } from 'src/stores/storage'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
@@ -110,16 +117,19 @@ const MobileBadge = styled.div`
   }
 `
 
-const CommitmentBox = styled.div`
+const UserStatsBox = styled.div`
+  margin-top: 15px;
   border: 2px solid black;
   border-radius: 10px;
-  padding: 20px;
+  padding: 10px;
   background-color: ${theme.colors.background};
   margin-bottom: 20px;
 `
 
-const CommitmentBoxItem = styled.div`
+const UserStatsBoxItem = styled.div`
   margin-top: 15px;
+  display: flex;
+  align-items: center;
 
   &:first-child {
     margin-top: 0;
@@ -221,32 +231,56 @@ export class UserPage extends React.Component<
     })
   }
   // Comment on 6.05.20 by BG : renderCommitmentBox commented for now, will be reused with #974
-  // public renderCommitmentBox(isExpert?: boolean, isV4Member?: boolean) {
-  //   return (
-  //     <CommitmentBox>
-  //       {isExpert && (
-  //         <CommitmentBoxItem>
-  //           <ElWithBeforeIcon IconUrl={ExpertIcon} height="25px">
-  //             Expert
-  //           </ElWithBeforeIcon>
-  //         </CommitmentBoxItem>
-  //       )}
-  //       {isV4Member && (
-  //         <CommitmentBoxItem>
-  //           <ElWithBeforeIcon IconUrl={V4MemberIcon}>
-  //             V4 Member
-  //           </ElWithBeforeIcon>
-  //         </CommitmentBoxItem>
-  //       )}
-  //       <CommitmentBoxItem>
-  //         <ElWithBeforeIcon IconUrl={EventsIcon}>0</ElWithBeforeIcon>
-  //       </CommitmentBoxItem>
-  //       <CommitmentBoxItem>
-  //         <ElWithBeforeIcon IconUrl={HowToCountIcon}>0</ElWithBeforeIcon>
-  //       </CommitmentBoxItem>
-  //     </CommitmentBox>
-  //   )
-  // }
+  public renderUserStatsBox(user: IUserPP) {
+    let howtoCount = 0
+    let eventCount = 0
+    try {
+      howtoCount = Object.keys(user.stats!.userCreatedHowtos).length
+      eventCount = Object.keys(user.stats!.userCreatedEvents).length
+    } catch (error) {
+      // Comment on 12.10.20 by CC: would be nice if user stats had their own display to make conditional
+      // logic easier, but for now will just use a try-catch to also fix cases broken on dev during migration attempts
+    }
+
+    return (
+      <UserStatsBox>
+        {/* {isExpert && (
+          <UserStatsBoxItem>
+            <ElWithBeforeIcon IconUrl={ExpertIcon} height="25px">
+              Expert
+            </ElWithBeforeIcon>
+          </UserStatsBoxItem>
+        )} */}
+        {user.location && (
+          <Link color={'black'} to={'/map/#' + user.userName}>
+            <UserStatsBoxItem>
+              <Icon glyph="location-on" size="25"></Icon>
+              <Box ml="5px">{user.location?.country}</Box>
+            </UserStatsBoxItem>
+          </Link>
+        )}
+        {/* {isV4Member && (
+          <UserStatsBoxItem>
+            <ElWithBeforeIcon IconUrl={V4MemberIcon}>
+              V4 Member
+            </ElWithBeforeIcon>
+          </UserStatsBoxItem>
+         )} */}
+        {howtoCount > 0 && (
+          <UserStatsBoxItem>
+            <ElWithBeforeIcon IconUrl={HowToCountIcon} />
+            How-to: {howtoCount}
+          </UserStatsBoxItem>
+        )}
+        {eventCount > 0 && (
+          <UserStatsBoxItem>
+            <ElWithBeforeIcon IconUrl={EventsIcon} />
+            Events: {eventCount}
+          </UserStatsBoxItem>
+        )}
+      </UserStatsBox>
+    )
+  }
 
   public renderPlasticTypes(plasticTypes: Array<PlasticTypeLabel>) {
     function renderIcon(type: string) {
@@ -369,6 +403,13 @@ export class UserPage extends React.Component<
         },
       )
     }
+    const shouldRenderUserStatsBox =
+      user &&
+      (user.location ||
+        (user.stats &&
+          (user.stats.userCreatedHowtos || user.stats.userCreatedEvents)))
+        ? true
+        : false
 
     return (
       <ProfileWrapper mt={4} mb={6}>
@@ -444,6 +485,8 @@ export class UserPage extends React.Component<
           >
             <MobileBadge>
               <Image src={workspaceBadgeSrc} />
+
+              {shouldRenderUserStatsBox && this.renderUserStatsBox(user)}
             </MobileBadge>
           </Box>
         </ProfileContentWrapper>

@@ -1,29 +1,15 @@
 describe('[How To]', () => {
   beforeEach(() => {
     cy.visit('/how-to')
-    cy.logout()
   })
   type Duration = '<1 week' | '1-2 weeks' | '3-4 weeks'
   type Difficulty = 'Easy' | 'Medium' | 'Hard' | 'Very Hard'
 
   const selectTimeDuration = (duration: Duration) => {
-    cy.get('[data-cy=time-select]').click()
-    cy.get('.data-cy__menu')
-      .contains(duration)
-      .click()
+    cy.selectTag(duration, '[data-cy=time-select]')
   }
   const selectDifficultLevel = (difficultLevel: Difficulty) => {
-    cy.get('[data-cy=difficulty-select]').click()
-    cy.get('.data-cy__menu')
-      .contains(difficultLevel)
-      .click()
-  }
-
-  const selectTag = (tag: string) => {
-    cy.get('[data-cy=tag-select]').click()
-    cy.get('.data-cy__menu')
-      .contains(tag)
-      .click()
+    cy.selectTag(difficultLevel, '[data-cy=difficulty-select]')
   }
 
   const fillStep = (
@@ -127,6 +113,7 @@ describe('[How To]', () => {
 
     it('[By Authenticated]', () => {
       cy.login('howto_creator@test.com', 'test1234')
+      cy.wait(2000)
       cy.step('Access the create-how-to')
       cy.get('[data-cy=create]').click()
       cy.step('Warn if title is identical with the existing ones')
@@ -142,7 +129,7 @@ describe('[How To]', () => {
         .clear()
         .type('Create a how-to test')
         .blur({ force: true })
-      selectTag('howto_testing')
+      cy.selectTag('howto_testing')
       selectTimeDuration(expected.time as Duration)
       selectDifficultLevel(expected.difficulty_level as Difficulty)
 
@@ -174,16 +161,53 @@ describe('[How To]', () => {
         .should('include', `/how-to/create-a-how-to-test`)
 
       cy.step('Howto was created correctly')
-      cy.queryDocuments('howtos', 'title', '==', expected.title).should(
-        'eqHowto',
-        expected,
-      )
+      cy.queryDocuments('howtos', 'title', '==', expected.title).then(docs => {
+        cy.log('queryDocs', docs)
+        expect(docs.length).to.equal(1)
+        cy.wrap(null)
+          .then(() => docs[0])
+          .should('eqHowto', expected)
+      })
     })
 
     it('[By Anonymous]', () => {
       cy.step('Ask users to login before creating an how-to')
       cy.visit('/how-to/create')
       cy.get('div').contains('Please login to access this page')
+    })
+
+    it('[Warning on leaving page]', () => {
+      const stub = cy.stub()
+      stub.returns(false)
+      cy.on('window:confirm', stub)
+
+      cy.login('howto_creator@test.com', 'test1234')
+      cy.wait(2000)
+      cy.step('Access the create-how-to')
+      cy.get('[data-cy=create]').click()
+      cy.get('[data-cy=intro-title')
+        .clear()
+        .type('Create a how-to test')
+        .blur({ force: true })
+      cy.get('[data-cy=page-link][href*="/how-to"]')
+        .click()
+        .then(() => {
+          expect(stub.callCount).to.equal(1)
+          stub.resetHistory()
+        })
+      cy.url().should('match', /\/how-to\/create$/)
+
+      cy.step('Clear title input')
+      cy.get('[data-cy=intro-title')
+        .clear()
+        .blur({ force: true })
+      cy.get('[data-cy=page-link][href*="/how-to"]')
+        .click()
+        .then(() => {
+          expect(stub.callCount).to.equal(0)
+          stub.resetHistory()
+        })
+      cy.url().should('match', /\/how-to$/)
     })
   })
 
@@ -271,11 +295,29 @@ describe('[How To]', () => {
       cy.login('howto_editor@test.com', 'test1234')
       cy.step('Go to Edit mode')
       cy.get('[data-cy=edit]').click()
+
+      cy.step('Warn if title is identical with the existing ones')
+      cy.get('[data-cy=intro-title]')
+        .focus()
+        .blur({ force: true })
+      cy.wait(1000)
+      cy.contains(
+        'Titles must be unique, please try being more specific',
+      ).should('not.exist')
+
+      cy.get('[data-cy=intro-title]')
+        .clear()
+        .type('Make glass-like beams')
+        .blur({ force: true })
+      cy.contains(
+        'Titles must be unique, please try being more specific',
+      ).should('exist')
+
       cy.step('Update the intro')
       cy.get('[data-cy=intro-title]')
         .clear()
         .type(expected.title)
-      selectTag('howto_testing')
+      cy.selectTag('howto_testing')
       selectTimeDuration(expected.time as Duration)
       selectDifficultLevel(expected.difficulty_level as Difficulty)
       cy.get('[data-cy=intro-description]')
@@ -314,9 +356,14 @@ describe('[How To]', () => {
         .url()
         .should('include', '/how-to/this-is-an-edit-test')
       cy.get('[data-cy=how-to-basis]').contains('This is an edit test')
-      cy.queryDocuments('howtos', 'title', '==', 'This is an edit test').should(
-        'eqHowto',
-        expected,
+      cy.queryDocuments('howtos', 'title', '==', 'This is an edit test').then(
+        docs => {
+          cy.log('queryDocs', docs)
+          expect(docs.length).to.equal(1)
+          cy.wrap(null)
+            .then(() => docs[0])
+            .should('eqHowto', expected)
+        },
       )
     })
   })

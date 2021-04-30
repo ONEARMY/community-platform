@@ -46,7 +46,7 @@ class EditHowto extends React.Component<IProps, IState> {
       })
     } else {
       const slug = this.props.match.params.slug
-      const doc = await this.injected.howtoStore.getDocBySlug(slug)
+      const doc = await this.injected.howtoStore.setActiveHowtoBySlug(slug)
       this.setState({
         formValues: doc as IHowtoDB,
         isLoading: false,

@@ -9,7 +9,6 @@ import { Box } from 'rebass'
 import './styles.css'
 
 import { ILatLng } from 'src/models/maps.models'
-import { IUser } from 'src/models/user.models'
 import { GetLocation } from 'src/utils/geolocation'
 import { Map } from 'react-leaflet'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
@@ -117,9 +116,7 @@ class MapsPage extends React.Component<IProps, IState> {
                     this.props.mapsStore.setActivePinFilters(selected)
                   }}
                   onLocationChange={location => this.setCenter(location.latlng)}
-                  location={this.props.location}
-                  match={this.props.match}
-                  history={this.props.history}
+                  {...props}
                 />
                 <MapView
                   mapRef={this.mapRef}

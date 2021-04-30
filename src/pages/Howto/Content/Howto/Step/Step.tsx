@@ -1,13 +1,13 @@
 import React from 'react'
 import Linkify from 'react-linkify'
 import ReactPlayer from 'react-player'
-import { IHowtoStep } from 'src/models/howto.models'
 import { Box } from 'rebass'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
+import ImageGallery from 'src/components/ImageGallery'
 import Text from 'src/components/Text'
+import { IHowtoStep } from 'src/models/howto.models'
 import { IUploadedFileMeta } from 'src/stores/storage'
-import ImageGallery from './ImageGallery'
 import styled from 'styled-components'
 
 interface IProps {
@@ -65,9 +65,10 @@ export default class Step extends React.PureComponent<IProps> {
                 </Text>
               </Box>
             </Flex>
-            <Flex width={[1, 1, 5 / 9]}>
+            <Box width={[1, 1, 5 / 9]}>
               {step.videoUrl ? (
                 <ReactPlayer
+                  width="auto"
                   data-cy="video-embed"
                   controls
                   url={step.videoUrl}
@@ -75,7 +76,7 @@ export default class Step extends React.PureComponent<IProps> {
               ) : (
                 <ImageGallery images={step.images as IUploadedFileMeta[]} />
               )}
-            </Flex>
+            </Box>
           </Flex>
         </Flex>
       </>

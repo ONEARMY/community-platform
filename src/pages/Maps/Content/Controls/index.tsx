@@ -12,13 +12,13 @@ import { GroupingFilterDesktop } from './GroupingFilterDesktop'
 import { GroupingFilterMobile } from './GroupingFilterMobile'
 
 import { IPinGrouping, IMapGrouping, IMapPinType } from 'src/models/maps.models'
-import { HashLink } from 'react-router-hash-link'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { HashLink as Link } from 'react-router-hash-link'
 import { Map } from 'react-leaflet'
 import { ILocation } from 'src/models/common.models'
 import { zIndex } from 'src/themes/styled.theme'
 import { inject } from 'mobx-react'
 import { MapsStore } from 'src/stores/Maps/maps.store'
+import { UserStore } from 'src/stores/User/user.store'
 import { Text } from 'src/components/Text'
 import { RouteComponentProps } from 'react-router'
 
@@ -34,6 +34,7 @@ interface IState {
 }
 interface IInjectedProps extends IProps {
   mapsStore: MapsStore
+  userStore?: UserStore
 }
 
 const MapFlexBar = styled(Flex)`
@@ -45,9 +46,9 @@ const MapFlexBar = styled(Flex)`
   left: 50%;
   transform: translateX(-50%);
 `
-@inject('mapsStore')
+@inject('mapsStore', 'userStore')
 class Controls extends React.Component<IProps, IState> {
-  constructor(props) {
+  constructor(props: IProps) {
     super(props)
     this.state = {
       showFiltersMobile: false,
@@ -65,23 +66,20 @@ class Controls extends React.Component<IProps, IState> {
   public render() {
     const { availableFilters } = this.props
     const { showFiltersMobile, filtersSelected } = this.state
-    const groupedFilters = availableFilters.reduce(
-      (accumulator, current) => {
-        const { grouping } = current
-        if (accumulator[grouping] === undefined) {
-          accumulator[grouping] = []
-        }
-        accumulator[grouping].push(current)
-        return accumulator
-      },
-      {} as Record<IPinGrouping, Array<IMapGrouping>>,
-    )
+    const groupedFilters = availableFilters.reduce((accumulator, current) => {
+      const { grouping } = current
+      if (accumulator[grouping] === undefined) {
+        accumulator[grouping] = []
+      }
+      accumulator[grouping].push(current)
+      return accumulator
+    }, {} as Record<IPinGrouping, Array<IMapGrouping>>)
 
     return (
       <MapFlexBar
         data-cy="map-controls"
         ml={['0', '0', '0', '50px']}
-        py={[0, 1, 1]}
+        py={[0, 1, 0]}
         flexDirection={['column', 'column', 'column', 'row']}
         alignItems={'center'}
         onClick={() => {
@@ -101,7 +99,7 @@ class Controls extends React.Component<IProps, IState> {
             onChange={(location: ILocation) => {
               this.props.onLocationChange(location)
             }}
-            styleVariant="filter"
+            styleVariant="mapinput"
           />
         </Box>
         <Flex>
@@ -120,17 +118,20 @@ class Controls extends React.Component<IProps, IState> {
             mt="5px"
             sx={{ display: ['none', 'none', 'none', 'block'] }}
           >
-            <AuthWrapper>
-              <HashLink
-                smooth
-                to={{
-                  pathname: `/settings`,
-                  hash: '#your-map-pin',
-                }}
-              >
-                <Button variant={'primary'}>My pin</Button>
-              </HashLink>
-            </AuthWrapper>
+            <Link
+              to={
+                this.injected.userStore!.user
+                  ? {
+                      pathname: `/settings`,
+                      hash: '#your-map-pin',
+                    }
+                  : { pathname: '/sign-up' }
+              }
+              // the map underneath also redirects, so prevent it from doing so
+              onClick={e => e.stopPropagation()}
+            >
+              <Button variant={'primary'}>My pin</Button>
+            </Link>
           </Box>
         </Flex>
         <Flex width="95%" sx={{ display: ['flex', 'none', 'none'], mt: '5px' }}>
@@ -146,6 +147,7 @@ class Controls extends React.Component<IProps, IState> {
             )}
             <img
               src={filterIcon}
+              alt="icon"
               style={{ width: '18px', marginLeft: '5px' }}
             />
           </Button>

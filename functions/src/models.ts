@@ -1,12 +1,30 @@
-// Models can be imported from the main package for use here
-// NOTE 1 - this requires adjustment main src in package.json
-// NOTE 2 - shorthand @OAModels notation defined in tsconfig
-import { IDBEndpoint, DBDoc } from '../../src/models/common.models'
-import { IUser } from '../../src/models/user.models'
-export { IDBEndpoint, DBDoc, IUser }
+import * as functions from 'firebase-functions'
 
-// TODO - handle import from src/models (currently breaks ts setup)
-// but possibly fixed by backend improvements pr
-// NOTE - types import fine as skipLib=true, but consts have issue
-const e = process.env
-export const DB_PREFIX = e.REACT_APP_DB_PREFIX ? e.REACT_APP_DB_PREFIX : 'v3_'
+// Re-export types from the main platform used in functions
+// Note - simply exporting * seems to fail so add specific exports as required
+export {
+  IEventDB,
+  IHowtoDB,
+  DBDoc,
+  IUserDB,
+  IDBEndpoint,
+} from '../../src/models'
+
+/*************************************************************************************
+ * IMPORTANT
+ * We want to ensure the same db endpoints are used in frontend and backend functions,
+ * however importing directly isn't very well supported for constants
+ * (to fix with future migration to lerna or similar module system)
+ *
+ * Therefore these need to be kept manually in sync with src/stores/databaseV2/endpoints.ts
+ **************************************************************************************/
+const DB_PREFIX = ''
+export const DB_ENDPOINTS = {
+  howtos: `${DB_PREFIX}v3_howtos`,
+  users: `${DB_PREFIX}v3_users`,
+  tags: `${DB_PREFIX}v3_tags`,
+  events: `${DB_PREFIX}v3_events`,
+  mappins: `${DB_PREFIX}v3_mappins`,
+  research: `${DB_PREFIX}research_rev20201020`,
+}
+export type IDBDocChange = functions.Change<FirebaseFirestore.DocumentSnapshot>

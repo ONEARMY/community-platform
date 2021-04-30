@@ -3,6 +3,7 @@ import { withRouter, Switch, Route } from 'react-router'
 import { AuthRoute } from '../common/AuthRoute'
 import { AdminTags } from './content/AdminTags'
 import { AdminUsers } from './content/AdminUsers'
+import { AdminBetaTesters } from './content/AdminBetaTesters'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { Link } from 'react-router-dom'
 import Text from 'src/components/Text'
@@ -10,6 +11,16 @@ import Flex from 'src/components/Flex'
 import { Box } from 'rebass'
 import { inject, observer } from 'mobx-react'
 import { AdminStore } from 'src/stores/Admin/admin.store'
+
+const ADMIN_ROUTES = [
+  { name: 'Users', slug: 'users', component: AdminUsers },
+  { name: 'Tags', slug: 'tags', component: AdminTags },
+  {
+    name: 'Beta Testers',
+    slug: 'beta-testers',
+    component: AdminBetaTesters,
+  },
+]
 
 interface IProps {}
 interface IInjectedProps extends IProps {
@@ -31,36 +42,34 @@ class AdminPage extends React.Component<IProps, any> {
           <Route
             exact
             path="/admin"
-            render={props => (
+            render={() => (
               <>
                 <Text my={3}>
                   NOTE - This content is only viewable by admins
                 </Text>
                 <AuthWrapper roleRequired="admin">
                   <Flex>
-                    <Box bg="white" p={2} m={2}>
-                      <Link to="/admin/users">Users Admin</Link>
-                    </Box>
-                    <Box bg="white" p={2} m={2}>
-                      <Link to="/admin/tags">Tags Admin</Link>
-                    </Box>
+                    {ADMIN_ROUTES.map(route => (
+                      <Box key={route.name} bg="white" p={2} m={2}>
+                        <Link to={`/admin/${route.slug}`}>
+                          {route.name} Admin
+                        </Link>
+                      </Box>
+                    ))}
                   </Flex>
                 </AuthWrapper>
               </>
             )}
           />
-          <AuthRoute
-            path="/admin/tags"
-            component={AdminTags}
-            redirectPath="/admin"
-            roleRequired="admin"
-          />
-          <AuthRoute
-            path="/admin/users"
-            component={AdminUsers}
-            redirectPath="/admin"
-            roleRequired="admin"
-          />
+          {ADMIN_ROUTES.map(route => (
+            <AuthRoute
+              key={route.name}
+              path={`/admin/${route.slug}`}
+              component={route.component}
+              redirectPath="/admin"
+              roleRequired="admin"
+            />
+          ))}
         </Switch>
       </div>
     )

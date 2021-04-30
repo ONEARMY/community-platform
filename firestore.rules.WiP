@@ -1,5 +1,6 @@
 // WiP - CC - 2020-02-24
 // As part of future security update will make better use of firestore rules, as stubbed out below
+// Note - will also need to include any legacy revisions as required
 
 service cloud.firestore {
 	// rules will apply to all docs in database

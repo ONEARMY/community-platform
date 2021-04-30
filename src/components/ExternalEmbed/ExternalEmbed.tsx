@@ -72,6 +72,7 @@ class ExternalEmbed extends React.Component<IProps, IState> {
             height: '100%',
             width: '100%',
           }}
+          title="precious plastic academy"
         />
       </div>
     )

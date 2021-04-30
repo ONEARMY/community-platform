@@ -20,7 +20,15 @@ const FlagIconEvents = styled(FlagIcon)`
     width: 25px !important;
   }
 `
+
+const FlagIconHowTos = styled(FlagIcon)`
+  border-radius: 3px;
+  background-size: cover !important;
+  height: 14px;
+  width: 21px !important;
+`
 // If you are not using css modules, write the following:
 // const FlagIcon = FlagIconFactory(React, { useCssModules: false })
 
+export { FlagIconHowTos }
 export default FlagIconEvents

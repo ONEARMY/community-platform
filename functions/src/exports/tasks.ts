@@ -6,7 +6,6 @@ Add/change schedule from `./functions-cron/appengine/cron.yaml`
 import * as functions from 'firebase-functions'
 import { BackupDatabase } from '../Firebase/databaseBackup'
 import * as FirebaseSync from '../Firebase/firebaseSync'
-import { updateDHUserIds } from '../DaveHakkensNL/dataMigrate'
 
 export const weeklyTasks = functions.pubsub
   .topic('weekly-tick')
@@ -20,6 +19,5 @@ export const dailyTasks = functions.pubsub
   .topic('daily-tick')
   .onPublish(async (message, context) => {
     console.log('daily tick', message, context)
-    // await updateDHUserIds()
     await FirebaseSync.syncAll()
   })

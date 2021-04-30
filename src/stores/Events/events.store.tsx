@@ -1,4 +1,4 @@
-import { observable, computed, toJS } from 'mobx'
+import { observable, computed, toJS, makeObservable } from 'mobx'
 import { IEventFormInput, IEventDB, IEvent } from 'src/models/events.models'
 import { ModuleStore } from '../common/module.store'
 import Filters from 'src/utils/filters'
@@ -18,6 +18,7 @@ export class EventStore extends ModuleStore {
     this.allDocs$.subscribe((docs: IEventDB[]) => {
       this.allEvents = docs.sort((a, b) => (a.date > b.date ? 1 : -1))
     })
+    makeObservable(this)
     this.selectedTags = {}
     this.initLocation()
   }

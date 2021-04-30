@@ -1,5 +1,3 @@
-import { Page } from '../utils/test-utils'
-
 describe('[Bugs]', () => {
   it('default test', () => {
     expect(true).to.eq(true)
@@ -33,10 +31,6 @@ describe('[Bugs]', () => {
   //     .should('be.exist')
   //   cy.url().should('include', editUrl)
   // })
-
-  // it('[686]', () => {
-  //   cy.deleteDocuments('events', 'title', '==', 'Create a test event')
-  //   cy.visit('/events')
 
   //   cy.login('event_creator@test.com', 'test1234')
   //   cy.get('[data-cy=create]').click()
@@ -112,21 +106,6 @@ describe('[Bugs]', () => {
   //     .click()
   //     .url()
   //     .should('include', Page.HOME_PAGE)
-  // })
-
-  // it('[649]', () => {
-  //   cy.step('Wrong email and wrong password')
-  //   cy.visit('/sign-in')
-  //   cy.get('[data-cy=email').type('wrong_email@test.com')
-  //   cy.get('[data-cy=password').type('anything')
-  //   cy.get('[data-cy=submit').click()
-  //   cy.get('div[color=red]').contains(`Incorrect email`)
-
-  //   cy.step('Correct email and wrong password')
-  //   cy.get('[data-cy=email').type('howto_reader@test.com')
-  //   cy.get('[data-cy=password').type('wrong_password')
-  //   cy.get('[data-cy=submit').click()
-  //   cy.get('div[color=red]').contains(`Incorrect password`)
   // })
 
   // it('[651]', () => {

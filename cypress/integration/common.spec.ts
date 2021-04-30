@@ -2,10 +2,10 @@ import { UserMenuItem } from '../support/commands'
 
 describe('[Common]', () => {
   it('[Default Page]', () => {
-    cy.step('The home page is /how-to')
+    cy.step('The home page is /academy')
     cy.visit('/')
       .url()
-      .should('include', '/how-to')
+      .should('include', '/academy')
   })
 
   it('[Not-Found Page]', () => {
@@ -93,7 +93,6 @@ describe('[Common]', () => {
       cy.url().should('include', 'settings')
 
       cy.step('Logout the session')
-      cy.step('Logout')
       cy.clickMenuItem(UserMenuItem.LogOut)
       cy.get('[data-cy=login]').should('be.visible')
       cy.get('[data-cy=join]').should('be.visible')

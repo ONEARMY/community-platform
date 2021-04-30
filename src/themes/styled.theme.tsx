@@ -1,5 +1,3 @@
-import { color } from '@storybook/addon-knobs'
-
 // use enum to specify list of possible colors for typing
 export const colors = {
   white: 'white',
@@ -37,6 +35,7 @@ export type ButtonVariants =
   | 'disabled'
   | 'dark'
   | 'light'
+  | 'subtle'
 
 const space = [
   0,
@@ -175,6 +174,25 @@ const buttons = {
     },
     '&[disabled]:hover': {
       bg: colors.yellow.base,
+    },
+    borderRadius: radii[1] + 'px',
+  },
+  subtle: {
+    fontFamily: '"Varela Round", Arial, sans-serif',
+    border: 'none',
+    color: colors.black,
+    display: 'flex',
+    bg: colors.softblue,
+    transition: '.2s ease-in-out',
+    '&:hover': {
+      bg: colors.white,
+      cursor: 'pointer',
+    },
+    '&[disabled]': {
+      opacity: 0.5,
+    },
+    '&[disabled]:hover': {
+      bg: colors.softblue,
     },
     borderRadius: radii[1] + 'px',
   },

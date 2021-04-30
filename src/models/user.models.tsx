@@ -36,6 +36,9 @@ export interface IUser {
   country?: string | null
   location?: ILocation | null
   year?: ISODateString
+  stats?: IUserStats
+  /** keep a map of all howto ids that a user has voted as useful */
+  votedUsefulHowtos?: { [howtoId: string]: boolean }
 }
 
 interface IExternalLink {
@@ -51,6 +54,14 @@ interface IExternalLink {
     | 'instagram'
 }
 
+/**
+ * Track the ids and moderation status as summary for user stats
+ */
+interface IUserStats {
+  userCreatedHowtos: { [id: string]: IModerationStatus }
+  userCreatedEvents: { [id: string]: IModerationStatus }
+}
+
 export type IUserDB = IUser & DBDoc
 
-export type UserRole = 'super-admin' | 'subscriber' | 'admin'
+export type UserRole = 'super-admin' | 'subscriber' | 'admin' | 'beta-tester'

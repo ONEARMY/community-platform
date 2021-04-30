@@ -29,9 +29,14 @@ export const EventCard = (props: IProps) => (
     flexDirection={['column', 'column', 'initial']}
     sx={{ position: 'relative' }}
     data-cy="card"
+    data-eventid={props.event._id}
   >
     {props.event.moderation !== 'accepted' && (
-      <ModerationStatusText event={props.event} top={'0px'} />
+      <ModerationStatusText
+        moderatedContent={props.event}
+        contentType="event"
+        top={'0px'}
+      />
     )}
 
     <Flex flexWrap={'wrap'} flex={'1'} mb={[1, 1, 0]} order={[1, 1, 1]}>

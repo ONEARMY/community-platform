@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - '10'
+  - '12'
 dist: xenial
 cache:
   # cache both yarn (.cache) and npm (for global installs)
@@ -31,6 +31,8 @@ before_script:
   - echo "MATRIX=$MATRIX_VAR"
   - export REACT_APP_BRANCH=$TRAVIS_BRANCH
   - echo "REACT_APP_BRANCH=$REACT_APP_BRANCH"
+  - export CI_BUILD_ID=$TRAVIS_BUILD_ID
+  - echo "CI_BUILD_ID=$CI_BUILD_ID"
 
 ###############################################################################################################
 # E2E Tests (cypress)

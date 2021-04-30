@@ -20,6 +20,7 @@ interface IInjected extends IProps {
 @inject('howtoStore')
 @observer
 export class HowToSubmitStatus extends React.Component<IProps> {
+  // eslint-disable-next-line
   constructor(props: IProps) {
     super(props)
   }

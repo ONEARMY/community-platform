@@ -2,14 +2,14 @@ import { IDBEndpoint, DBDoc } from 'src/models/common.models'
 import Dexie from 'dexie'
 import { DBQueryOptions, DBQueryWhereOptions, AbstractDBClient } from '../types'
 import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
-import { DB_PREFIX } from '../config'
+import { DB_ENDPOINTS } from '../endpoints'
 
 /**
  * Update the cache number either when making changes to db architecture
  * or busting cache on db. This is used as the Dexie version number, see:
  * https://dexie.org/docs/Tutorial/Design#database-versioning
  */
-const DB_CACHE_NUMBER = 20200107
+const DB_CACHE_NUMBER = 20210130
 const CACHE_DB_NAME = 'OneArmyCache'
 const db = new Dexie(CACHE_DB_NAME)
 
@@ -35,6 +35,9 @@ export class DexieClient implements AbstractDBClient {
   }
   queryCollection<T>(endpoint: IDBEndpoint, queryOpts: DBQueryOptions) {
     return this._processQuery<T>(endpoint, queryOpts)
+  }
+  deleteDoc(endpoint: IDBEndpoint, docId: string) {
+    return db.table(endpoint).delete(docId)
   }
 
   /************************************************************************
@@ -151,15 +154,33 @@ const SCHEMA_BASE: IDexieSchema = {
   howtos: `${DEFAULT_SCHEMA},slug`,
   mappins: DEFAULT_SCHEMA,
   tags: DEFAULT_SCHEMA,
-  users: DEFAULT_SCHEMA,
+  users: `${DEFAULT_SCHEMA},_authID`,
+  research: `${DEFAULT_SCHEMA},slug`,
 }
 // Ensure dexie also handles any prefixed database schema
 const MAPPED_SCHEMA = {} as IDexieSchema
-console.log('db_prefix', DB_PREFIX)
 Object.keys(SCHEMA_BASE).forEach(
   endpoint =>
-    (MAPPED_SCHEMA[`${DB_PREFIX}${endpoint}` as IDBEndpoint] =
+    (MAPPED_SCHEMA[DB_ENDPOINTS[endpoint] as IDBEndpoint] =
       SCHEMA_BASE[endpoint]),
 )
 const DEXIE_SCHEMA = MAPPED_SCHEMA
-console.log('schema', DEXIE_SCHEMA)
+
+/*****************************************************************************
+ * Schema Changelog
+ *
+ * 2020-10-13
+ * Add _authID to user indexes
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ ****************************************************************************/

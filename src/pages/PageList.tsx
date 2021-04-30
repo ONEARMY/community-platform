@@ -2,7 +2,9 @@ import React, { lazy } from 'react'
 import { SITE } from 'src/config/config'
 import { CSSObject } from '@styled-system/css'
 import { Route } from 'react-router'
+import { UserRole } from 'src/models/user.models'
 import ExternalEmbed from 'src/components/ExternalEmbed/ExternalEmbed'
+import { ResearchModule } from './Research'
 
 /**
  * Import all pages for use in lazy loading
@@ -28,8 +30,6 @@ const ForgotPasswordMessagePage = lazy(() =>
 )
 const PrivacyPolicy = lazy(() => import('./policy/privacy'))
 const TermsPolicy = lazy(() => import('./policy/terms'))
-import { ResearchModule } from './Research'
-import { UserRole } from 'src/models/user.models'
 
 export interface IPageMeta {
   path: string

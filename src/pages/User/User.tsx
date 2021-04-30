@@ -13,14 +13,11 @@ interface IProps {
 @inject('userStore')
 @observer
 class UserPageRoutes extends React.Component<IProps, any> {
-  constructor(props: IProps) {
-    super(props)
-  }
   public render() {
     return (
       <Switch>
         <Route exact path="/u/:id" render={props => <UserPage {...props} />} />
-        <Route exact path="/u" render={props => <NotFoundPage />} />
+        <Route exact path="/u" render={() => <NotFoundPage />} />
       </Switch>
     )
   }

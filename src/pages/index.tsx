@@ -48,6 +48,8 @@ export class Routes extends React.Component<any, IState> {
           {/* on page change scroll to top */}
           <ScrollToTop>
             {/* TODO - add better loading fallback */}
+            <DevSiteHeader />
+            <Header />
             <Suspense fallback={<div></div>}>
               <Switch>
                 {pages.map(page => (
@@ -57,8 +59,6 @@ export class Routes extends React.Component<any, IState> {
                     key={page.path}
                     render={props => (
                       <React.Fragment>
-                        <DevSiteHeader />
-                        <Header />
                         <Main
                           data-cy="main-layout-container"
                           style={{ flex: 1 }}

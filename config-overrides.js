@@ -74,22 +74,25 @@ function swPlugin() {
         handler: 'CacheFirst',
       },
       {
-        urlPattern: new RegExp('fonts/'),
+        urlPattern: new RegExp(/.(?:woff|woff2|ttf|eot)/gi), // fonts
         handler: 'CacheFirst',
       },
       {
         urlPattern: new RegExp('static/media'), // svgs and other outputs from platform build
         handler: 'StaleWhileRevalidate',
       },
+      {
+        urlPattern: new RegExp('favicon.ico'), // svgs and other outputs from platform build
+        handler: 'StaleWhileRevalidate',
+      },
     ],
     // excludes from precache (still can include runtime cache)
-    // exclude map files, manifest, images, txt (e.g. license)
-    // exclude lazy-loaded chunks
     exclude: [
-      /\.map$/,
+      /\.map$/, // exclude map files, manifest, images, txt (e.g. license)
       /asset-manifest\.json$/,
       /.(?:png|jpg|jpeg|svg|txt|ico)$/,
-      /.chunk./,
+      /.chunk./, // exclude lazy-loaded chunks
+      /.(?:woff|woff2|ttf|eot)/, // exclude fonts
     ],
     importWorkboxFrom: 'cdn',
     navigateFallback: '/index.html',

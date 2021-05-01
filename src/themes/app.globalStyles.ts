@@ -1,17 +1,12 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { createGlobalStyle } from 'styled-components'
 import theme, { zIndex } from 'src/themes/styled.theme'
 
-export const GlobalStyle = createGlobalStyle`
+import { GlobalFonts } from './fonts'
+// declare global styling overrides (fonts etc.)
 
-  @font-face {
-    font-family: 'Varela Round';
-    src: url('/fonts/VarelaRound-Regular.eot');
-    src: url('/fonts/VarelaRound-Regular-webfont.woff') format('woff'),
-            url('/fonts/VarelaRound-Regular-webfont.ttf') format('truetype')
-    font-weight: normal;
-    font-style: normal;
-  }
-  
+export const GlobalStyle = createGlobalStyle`
+  ${GlobalFonts}
   body {
       font-family: "Varela Round", Arial, sans-serif;
       background-color: ${theme.colors.background};

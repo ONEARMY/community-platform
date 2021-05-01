@@ -7,7 +7,7 @@ import styledTheme from 'src/themes/styled.theme'
 
 import { Routes } from './pages'
 import { RootStore } from './stores'
-import { GlobalStyle } from './themes/app.globalStyle.js'
+import { GlobalStyle } from './themes/app.globalStyles'
 
 import registerServiceWorker from './registerServiceWorker'
 import { SWUpdateNotification } from './pages/common/SWUpdateNotification/SWUpdateNotification'

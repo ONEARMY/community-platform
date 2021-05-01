@@ -159,5 +159,9 @@
     "ts-loader": "^7.0.5",
     "typescript": "^3.7.4",
     "wait-on": "^5.2.1"
+  },
+  "resolutions": {
+    "__note__": "fixes circleci issue https://github.com/facebook/create-react-app/issues/8320",
+    "terser-webpack-plugin": "4.2.3"
   }
 }

@@ -73,7 +73,7 @@ jobs:
       # optional environment variables to set during build process
       BUILD_ENV:
         type: string
-        default: ''
+        default: ""
     steps:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - setup_repo
@@ -98,16 +98,16 @@ jobs:
       - setup_repo
       # retrieve build folder
       - attach_workspace:
-          at: '.'
+          at: "."
       # install testing browsers are required
       - when:
           condition:
-            equal: ['chrome', << parameters.CI_BROWSER >>]
+            equal: ["chrome", << parameters.CI_BROWSER >>]
           steps:
             - browser-tools/install-chrome
       - when:
           condition:
-            equal: ['firefox', << parameters.CI_BROWSER >>]
+            equal: ["firefox", << parameters.CI_BROWSER >>]
           steps:
             - browser-tools/install-firefox
       # call main testing script
@@ -133,12 +133,14 @@ workflows:
           matrix:
             parameters:
               BUILD_ENV:
-                ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci CI=false']
+                ["FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci CI=false"]
+          # fix issue https://github.com/webpack-contrib/terser-webpack-plugin/issues/202#issuecomment-589634287
+          resource_class: large
       - test_e2e:
           requires:
-            - 'build'
+            - "build"
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           matrix:
             parameters:
               CI_NODE: [1, 2]
-              CI_BROWSER: ['chrome', 'firefox']
+              CI_BROWSER: ["chrome", "firefox"]

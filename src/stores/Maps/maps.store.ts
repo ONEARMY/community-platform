@@ -1,7 +1,6 @@
 import { observable, action, makeObservable } from 'mobx'
 import {
   IMapPin,
-  IBoundingBox,
   IMapGrouping,
   IMapPinWithDetail,
   IMapPinDetail,
@@ -69,10 +68,10 @@ export class MapsStore extends ModuleStore {
     this.filteredPins = this.mapPins
   }
 
-  @action
-  public setMapBoundingBox(boundingBox: IBoundingBox) {
-    // this.recalculatePinCounts(boundingBox)
-  }
+  // @action
+  // public setMapBoundingBox(boundingBox: IBoundingBox) {
+  //   // this.recalculatePinCounts(boundingBox)
+  // }
 
   @action
   public async retrieveMapPins() {

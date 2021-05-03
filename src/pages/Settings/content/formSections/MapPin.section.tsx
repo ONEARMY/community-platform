@@ -29,7 +29,7 @@ const customMarker = L.icon({
 
 @inject('mapsStore', 'userStore')
 @observer
-export class UserMapPinSection extends React.Component<{}, IState> {
+export class UserMapPinSection extends React.Component<any, IState> {
   pinFilters = MAP_GROUPINGS
   constructor(props) {
     super(props)

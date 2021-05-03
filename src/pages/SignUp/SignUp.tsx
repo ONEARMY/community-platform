@@ -108,7 +108,7 @@ class SignUpPage extends React.Component<IProps, IState> {
             await validationSchema.validate(values, { abortEarly: false })
           } catch (err) {
             return err.inner.reduce(
-              (acc: object, error) => ({
+              (acc: any, error) => ({
                 ...acc,
                 [error.path]: error.message,
               }),
@@ -116,7 +116,7 @@ class SignUpPage extends React.Component<IProps, IState> {
             )
           }
         }}
-        render={({ submitting, values, invalid, handleSubmit }) => {
+        render={({ submitting, invalid, handleSubmit }) => {
           const disabled = invalid || submitting
           return (
             <form onSubmit={handleSubmit}>

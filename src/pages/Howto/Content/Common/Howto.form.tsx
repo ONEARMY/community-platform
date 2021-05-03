@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { RouteComponentProps, Prompt } from 'react-router'
+import { RouteComponentProps } from 'react-router'
 import { Form, Field } from 'react-final-form'
 import styled from 'styled-components'
 import { FieldArray } from 'react-final-form-arrays'
@@ -31,9 +31,7 @@ import { required } from 'src/utils/validators'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { COMPARISONS } from 'src/utils/comparisons'
-
-const CONFIRM_DIALOG_MSG =
-  'You have unsaved changes. Are you sure you want to leave this page?'
+import { UnsavedChangesDialog } from 'src/components/Form/UnsavedChangesDialog'
 
 interface IState {
   formSaved: boolean
@@ -83,11 +81,6 @@ const Label = styled.label`
   margin-bottom: ${theme.space[2] + 'px'};
   display: block;
 `
-
-const beforeUnload = function(e) {
-  e.preventDefault()
-  e.returnValue = CONFIRM_DIALOG_MSG
-}
 
 @inject('howtoStore')
 @observer
@@ -147,20 +140,6 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
     },
   })
 
-  // Display a confirmation dialog when leaving the page outside the React Router
-  private unloadDecorator(form) {
-    return form.subscribe(
-      ({ dirty }) => {
-        if (dirty && !this.store.uploadStatus.Complete) {
-          window.addEventListener('beforeunload', beforeUnload, false)
-          return
-        }
-        window.removeEventListener('beforeunload', beforeUnload, false)
-      },
-      { dirty: true },
-    )
-  }
-
   public render() {
     const { formValues, parentType } = this.props
     const { fileEditMode, showSubmitModal } = this.state
@@ -184,17 +163,15 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
             ...arrayMutators,
           }}
           validateOnBlur
-          decorators={[this.calculatedFields, this.unloadDecorator.bind(this)]}
+          decorators={[this.calculatedFields]}
           render={({ submitting, values, dirty, errors, handleSubmit }) => {
             return (
               <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
+                <UnsavedChangesDialog
+                  uploadComplete={this.store.uploadStatus.Complete}
+                />
+
                 <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} mt={4}>
-                  <Prompt
-                    when={
-                      !this.injected.howtoStore.uploadStatus.Complete && dirty
-                    }
-                    message={CONFIRM_DIALOG_MSG}
-                  />
                   <FormContainer
                     ref={this.formContainerRef as any}
                     id="howtoForm"

@@ -39,7 +39,7 @@ aliases:
       # note - if moving to workspaces include paths: https://discuss.circleci.com/t/yarn-cached-install-slow/34823/2
       paths:
         - ~/.cache/yarn
-      key: yarn-packages-v3-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      key: yarn-packages-v4-{{ .Branch }}-{{ checksum "yarn.lock" }}
 
 ######################################################################################################
 #  Commands - Reusable collections of steps

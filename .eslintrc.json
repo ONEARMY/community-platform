@@ -37,6 +37,8 @@
     "react/no-unescaped-entities": "off",
     "react/jsx-no-target-blank": "warn",
     "react/display-name": "warn",
+    // as of v17 no longer required
+    "react/react-in-jsx-scope": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-empty-interface": "off",
     "react/prop-types": "off",

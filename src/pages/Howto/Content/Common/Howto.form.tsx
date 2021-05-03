@@ -41,7 +41,6 @@ interface IState {
   showSubmitModal?: boolean
   editCoverImg?: boolean
   fileEditMode?: boolean
-  draft: boolean
 }
 interface IProps extends RouteComponentProps<any> {
   formValues: any
@@ -93,7 +92,9 @@ const beforeUnload = function(e) {
 @inject('howtoStore')
 @observer
 export class HowtoForm extends React.PureComponent<IProps, IState> {
+  isDraft = false
   uploadRefs: { [key: string]: UploadedFile | null } = {}
+  formContainerRef = React.createRef<HTMLElement>()
   constructor(props: any) {
     super(props)
     this.state = {
@@ -102,22 +103,26 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
       editCoverImg: false,
       fileEditMode: false,
       showSubmitModal: false,
-      draft: props.moderation === 'draft',
     }
+    this.isDraft = props.moderation === 'draft'
   }
 
+  /** When submitting from outside the form dispatch an event from the form container ref to trigger validation */
   private trySubmitForm = (draft: boolean) => {
-    this.setState({ draft }, () => {
-      // Save requested draft value into state and then trigger form submit
-      const form = document.getElementById('howtoForm')
-      if (typeof form !== 'undefined' && form !== null) {
-        form.dispatchEvent(new Event('submit', { cancelable: true }))
-        this.setState({ showSubmitModal: true })
-      }
-    })
+    this.isDraft = draft
+    const formContainerRef = this.formContainerRef.current
+    // dispatch submit from the element
+    if (formContainerRef) {
+      // https://github.com/final-form/react-final-form/issues/878
+      formContainerRef.dispatchEvent(
+        new Event('submit', { cancelable: true, bubbles: true }),
+      )
+    }
   }
   public onSubmit = async (formValues: IHowtoFormInput) => {
-    formValues.moderation = this.state.draft ? 'draft' : 'awaiting-moderation'
+    this.setState({ showSubmitModal: true })
+    formValues.moderation = this.isDraft ? 'draft' : 'awaiting-moderation'
+    console.log('submitting form', formValues)
     await this.store.uploadHowTo(formValues)
   }
 
@@ -190,7 +195,11 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                     }
                     message={CONFIRM_DIALOG_MSG}
                   />
-                  <FormContainer id="howtoForm" onSubmit={handleSubmit}>
+                  <FormContainer
+                    ref={this.formContainerRef as any}
+                    id="howtoForm"
+                    onSubmit={handleSubmit}
+                  >
                     {/* How To Info */}
                     <Flex flexDirection={'column'}>
                       <Flex

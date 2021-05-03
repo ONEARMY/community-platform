@@ -62,7 +62,9 @@ const UpdateForm = observer((props: IProps) => {
   const trySubmitForm = () => {
     const form = document.getElementById('updateForm')
     if (typeof form !== 'undefined' && form !== null) {
-      form.dispatchEvent(new Event('submit', { cancelable: true }))
+      form.dispatchEvent(
+        new Event('submit', { cancelable: true, bubbles: true }),
+      )
     }
   }
 

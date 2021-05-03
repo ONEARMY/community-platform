@@ -255,7 +255,10 @@ export class UserSettings extends React.Component<IProps, IState> {
                         )
                         if (typeof formEl !== 'undefined' && formEl !== null) {
                           formEl.dispatchEvent(
-                            new Event('submit', { cancelable: true }),
+                            new Event('submit', {
+                              cancelable: true,
+                              bubbles: true,
+                            }),
                           )
                         }
                       }}

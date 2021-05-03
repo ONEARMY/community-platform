@@ -36,8 +36,10 @@ aliases:
       command: yarn install --immutable
   - &save_yarn_cache
     save_cache:
+      # note - if moving to workspaces include paths: https://discuss.circleci.com/t/yarn-cached-install-slow/34823/2
       paths:
         - ~/.cache/yarn
+        - node_modules
       key: yarn-packages-v3-{{ .Branch }}-{{ checksum "yarn.lock" }}
 
 ######################################################################################################

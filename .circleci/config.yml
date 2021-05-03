@@ -24,8 +24,8 @@ aliases:
       name: Restore yarn cache
       keys:
         # https://circleci.com/docs/2.0/caching/
+        # https://circleci.com/docs/2.0/yarn/
         # when lock file changes, use increasingly general patterns to restore cache
-        # NOTE - this will change if migrating to yarn v2 in the future
         # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar
         - yarn-packages-v3-{{ .Branch }}-{{ checksum "yarn.lock" }}
         - yarn-packages-v3-{{ .Branch }}-
@@ -33,7 +33,7 @@ aliases:
   - &install_packages
     run:
       name: Install Packages
-      command: yarn --frozen-lockfile --cache-folder ~/.cache/yarn
+      command: yarn install --immutable
   - &save_yarn_cache
     save_cache:
       paths:

@@ -4714,21 +4714,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:*":
+"@types/react-dom@npm:*, @types/react-dom@npm:^17.0.3":
   version: 17.0.3
   resolution: "@types/react-dom@npm:17.0.3"
   dependencies:
     "@types/react": "*"
   checksum: 9314c91a985f153591e1e74aef3d63d8b22e098069773f32745bf0733740a49802731761a46da8788a7d3dd2c21346036f12c2c24627630e5a6210b120a650e6
-  languageName: node
-  linkType: hard
-
-"@types/react-dom@npm:^16.9.8":
-  version: 16.9.12
-  resolution: "@types/react-dom@npm:16.9.12"
-  dependencies:
-    "@types/react": ^16
-  checksum: 49745de25f49e3fff8e8dbc5751b3845ab3e5f732d03d89d5818148aa2dda1b002d8ddc7dc8976684c5dd9671cdbff8c270ea9f5c05c1349f65d233aaf135f25
   languageName: node
   linkType: hard
 
@@ -4772,14 +4763,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-router-dom@npm:4.3.1":
-  version: 4.3.1
-  resolution: "@types/react-router-dom@npm:4.3.1"
+"@types/react-router-dom@npm:5.1.7":
+  version: 5.1.7
+  resolution: "@types/react-router-dom@npm:5.1.7"
   dependencies:
     "@types/history": "*"
     "@types/react": "*"
     "@types/react-router": "*"
-  checksum: 58ec6324c7227c2d772db9dc89345680ef7a86300c05cda3b87a0733de87d78912dcf1bda34e88f7470b90b22e90d59fa8bdc1f61dc21c60bfd29ab511bf9561
+  checksum: c5afe043f99cbe8e05e85db5b95b5fd724e7b00e0314b8bbc081e36c113e22fd102cd0c7a957c7ad55a55d2def91c17b07ffba45c2ac4a00cc56c5c927c93d4c
   languageName: node
   linkType: hard
 
@@ -4879,7 +4870,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^16, @types/react@npm:^16.9.53":
+"@types/react@npm:^16.9.53":
   version: 16.14.5
   resolution: "@types/react@npm:16.14.5"
   dependencies:
@@ -8756,10 +8747,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cra-bundle-analyzer@npm:^0.0.3":
-  version: 0.0.3
-  resolution: "cra-bundle-analyzer@npm:0.0.3"
+"cra-bundle-analyzer@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "cra-bundle-analyzer@npm:0.1.0"
   dependencies:
+    minimist: ^1.2.5
     progress-bar-webpack-plugin: ^2.1.0
     webpack-bundle-analyzer: ^3.6.0
   peerDependencies:
@@ -8768,7 +8760,7 @@ __metadata:
     webpack: ">=4"
   bin:
     cra-bundle-analyzer: src/index.js
-  checksum: 6c4ea13686778986fc4233f85c5602d849c6e38e72c3297e95f049112c104dacc7cee868f0c4d16b1723a23ca4a5aaa62150e1484d5d8f18ae5405f021bc94a3
+  checksum: 3c3304b253949a15a2412cf738a6c1575892fbd03ff3e58253376c238a2ea4de5b12770d59720646f894a947e4486d56b79221b0d1ab82a2153892565d8a993f
   languageName: node
   linkType: hard
 
@@ -18977,11 +18969,11 @@ fsevents@^1.2.7:
     "@types/node": ^12.0.0
     "@types/pubsub-js": ^1.5.18
     "@types/react": ^16.9.53
-    "@types/react-dom": ^16.9.8
+    "@types/react-dom": ^17.0.3
     "@types/react-hamburger-menu": ^0.0.3
     "@types/react-leaflet": ^1.1.6
     "@types/react-leaflet-markercluster": ^2.0.0
-    "@types/react-router-dom": 4.3.1
+    "@types/react-router-dom": 5.1.7
     "@types/react-select": ^2.0.17
     "@types/react-slick": 0.23.2
     "@types/react-table": ^6.8.5
@@ -19001,7 +18993,7 @@ fsevents@^1.2.7:
     "@uppy/react": ^1.0.0
     chai-subset: ^1.6.0
     client-compress: ^2.1.2
-    cra-bundle-analyzer: ^0.0.3
+    cra-bundle-analyzer: ^0.1.0
     cross-env: ^6.0.3
     cypress: 7.2.0
     cypress-file-upload: 5.0.6
@@ -19052,9 +19044,9 @@ fsevents@^1.2.7:
     react-player: ^1.15.3
     react-portal: ^4.2.0
     react-pose: ^4.0.8
-    react-router: ^5.0.0
+    react-router: ^5.2.0
     react-router-breadcrumbs-hoc: ^3.2.0
-    react-router-dom: ^5.0.0
+    react-router-dom: ^5.2.0
     react-router-hash-link: ^1.2.1
     react-scripts: 4.0.3
     react-select: ^2.4.3
@@ -20356,7 +20348,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:^5.0.0":
+"react-router-dom@npm:^5.2.0":
   version: 5.2.0
   resolution: "react-router-dom@npm:5.2.0"
   dependencies:
@@ -20385,7 +20377,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-router@npm:5.2.0, react-router@npm:^5.0.0":
+"react-router@npm:5.2.0, react-router@npm:^5.2.0":
   version: 5.2.0
   resolution: "react-router@npm:5.2.0"
   dependencies:

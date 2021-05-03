@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Route, Switch, withRouter } from 'react-router-dom'
 import { AuthRoute } from '../common/AuthRoute'
 import CreateResearch from './Content/CreateResearch'

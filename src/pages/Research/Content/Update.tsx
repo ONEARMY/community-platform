@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import React from 'react'
+import * as React from 'react';
 import Linkify from 'react-linkify'
 import ReactPlayer from 'react-player'
 import { Box } from 'rebass'

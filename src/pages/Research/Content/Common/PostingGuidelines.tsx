@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Link } from 'rebass'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'

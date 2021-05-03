@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react'
+import { FunctionComponent } from 'react';
 import Text from 'src/components/Text'
 import { IModerable } from 'src/models'
 

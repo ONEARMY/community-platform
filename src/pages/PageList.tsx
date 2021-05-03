@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { HowtoPage } from './Howto/Howto'
 import { SettingsPage } from './Settings'
 import { SITE } from 'src/config/config'

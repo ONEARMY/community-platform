@@ -1,4 +1,4 @@
-import React from 'react'
+import { Component } from 'react';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
@@ -25,7 +25,7 @@ interface IInjectedProps extends IProps {
 
 @inject('userStore')
 @observer
-export default class Profile extends React.Component<IProps, IState> {
+export default class Profile extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {

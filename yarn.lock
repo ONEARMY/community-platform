@@ -1726,7 +1726,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.11.2, @babel/runtime@npm:^7.12.1, @babel/runtime@npm:^7.12.13, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.2.0, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.4.2, @babel/runtime@npm:^7.4.4, @babel/runtime@npm:^7.4.5, @babel/runtime@npm:^7.5.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.3, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
+"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.10.0, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.11.2, @babel/runtime@npm:^7.12.1, @babel/runtime@npm:^7.12.13, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.2.0, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.4.2, @babel/runtime@npm:^7.4.4, @babel/runtime@npm:^7.5.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.3, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
   version: 7.14.0
   resolution: "@babel/runtime@npm:7.14.0"
   dependencies:
@@ -11372,7 +11372,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"final-form-arrays@npm:^3.0.1":
+"final-form-arrays@npm:^3.0.2":
   version: 3.0.2
   resolution: "final-form-arrays@npm:3.0.2"
   peerDependencies:
@@ -11381,7 +11381,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"final-form-calculate@npm:^1.3.1":
+"final-form-calculate@npm:^1.3.2":
   version: 1.3.2
   resolution: "final-form-calculate@npm:1.3.2"
   peerDependencies:
@@ -11390,12 +11390,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"final-form@npm:4.18.5":
-  version: 4.18.5
-  resolution: "final-form@npm:4.18.5"
+"final-form@npm:4.20.2":
+  version: 4.20.2
+  resolution: "final-form@npm:4.20.2"
   dependencies:
-    "@babel/runtime": ^7.3.1
-  checksum: 5660168142f8267ee88a261e938a43c87b30846cb47f2c2aa1ba6bd5b352b3ce0bc8b20036d79e02e52e104a2c9098c8e2bbaa5b3a9a358ed4bceaf0942d8192
+    "@babel/runtime": ^7.10.0
+  checksum: f3c11f7d5596441ae83f1c6571f61f1e1b5d6e0fc9194b40b533d331c84b55c98f11d621fc9173dd4f68381478fb1a8adba105637e1b9518065095a2131a2c1d
   languageName: node
   linkType: hard
 
@@ -19004,9 +19004,9 @@ fsevents@^1.2.7:
     dotenv: 6.0.0
     eslint-config-prettier: ^8.3.0
     eslint-plugin-prettier: ^3.4.0
-    final-form: 4.18.5
-    final-form-arrays: ^3.0.1
-    final-form-calculate: ^1.3.1
+    final-form: 4.20.2
+    final-form-arrays: ^3.0.2
+    final-form-calculate: ^1.3.2
     firebase: ^8.2.0
     fs-extra: 7.0.1
     fuse.js: ^6.4.6
@@ -19029,8 +19029,8 @@ fsevents@^1.2.7:
     react-dev-utils: ^11.0.4
     react-dom: ^17.0.2
     react-dropzone: ^10.1.10
-    react-final-form: 6.3.0
-    react-final-form-arrays: ^3.1.1
+    react-final-form: 6.5.3
+    react-final-form-arrays: ^3.1.3
     react-firebase-file-uploader: 2.4.4
     react-flag-icon-css: ^1.0.25
     react-flags-select: ^1.1.10
@@ -19988,7 +19988,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-final-form-arrays@npm:^3.1.1":
+"react-final-form-arrays@npm:^3.1.3":
   version: 3.1.3
   resolution: "react-final-form-arrays@npm:3.1.3"
   dependencies:
@@ -20002,16 +20002,15 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-final-form@npm:6.3.0":
-  version: 6.3.0
-  resolution: "react-final-form@npm:6.3.0"
+"react-final-form@npm:6.5.3":
+  version: 6.5.3
+  resolution: "react-final-form@npm:6.5.3"
   dependencies:
-    "@babel/runtime": ^7.4.5
-    ts-essentials: ^2.0.8
+    "@babel/runtime": ^7.12.1
   peerDependencies:
-    final-form: ^4.16.1
-    react: ^16.8.0
-  checksum: ac3ee3d1461ef3677df55a9309223617c802bbbcb77c8cfbc6e23d91974632ed782699f5159878210f159730dd9fb27bbd5c5bcff655f323101305553f2fa27d
+    final-form: ^4.20.0
+    react: ^16.8.0 || ^17.0.0
+  checksum: 6e1007e1adda1da74d6e0624398f7f04d5b31b409ef0c1c5fe1d35e1789011d0e0788932419b6b51563336fc4374c0322fd71d5794b7d15baceca01a7da74ef8
   languageName: node
   linkType: hard
 
@@ -23826,13 +23825,6 @@ resolve@^2.0.0-next.3:
   version: 1.0.4
   resolution: "ts-essentials@npm:1.0.4"
   checksum: 2e175aa3fbe98e1127eff7d088ac27fd31963387c44d543c065a331ac80cf526efd38c23d4ef2543832380bb8eb109785c6ba04098b7e1086728110278f6a3a5
-  languageName: node
-  linkType: hard
-
-"ts-essentials@npm:^2.0.8":
-  version: 2.0.12
-  resolution: "ts-essentials@npm:2.0.12"
-  checksum: 40556ad8f5f1628f3e2a2eee068791e430fb05668899f90ccec26acde3730cd27e311c34bf1ac6c963e19edeeb7be2d3130e914f9a489a986df2f8a020d38ec3
   languageName: node
   linkType: hard
 

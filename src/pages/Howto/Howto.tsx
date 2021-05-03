@@ -4,6 +4,7 @@ import { Howto } from './Content/Howto/Howto'
 import CreateHowto from './Content/CreateHowto/CreateHowto'
 import { EditHowto } from './Content/EditHowto/EditHowto'
 import { HowtoList } from './Content/HowtoList/HowtoList'
+import { AuthRoute } from '../common/AuthRoute'
 
 class HowtoPageClass extends React.Component<any, any> {
   // eslint-disable-next-line
@@ -20,7 +21,7 @@ class HowtoPageClass extends React.Component<any, any> {
             path="/how-to"
             render={props => <HowtoList {...props} />}
           />
-          <Route
+          <AuthRoute
             path="/how-to/create"
             component={CreateHowto}
             redirectPath="/how-to"

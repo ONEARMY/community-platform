@@ -4,6 +4,7 @@ import {
   IMapGrouping,
   IMapPinWithDetail,
   IMapPinDetail,
+  IBoundingBox,
 } from 'src/models/maps.models'
 import { IDBEndpoint } from 'src/models/common.models'
 import { RootStore } from '..'
@@ -68,10 +69,10 @@ export class MapsStore extends ModuleStore {
     this.filteredPins = this.mapPins
   }
 
-  // @action
-  // public setMapBoundingBox(boundingBox: IBoundingBox) {
-  //   // this.recalculatePinCounts(boundingBox)
-  // }
+  @action
+  public setMapBoundingBox(boundingBox: IBoundingBox) {
+    // this.recalculatePinCounts(boundingBox)
+  }
 
   @action
   public async retrieveMapPins() {

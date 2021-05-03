@@ -1,6 +1,7 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { Provider } from 'mobx-react'
+// import reportWebVitals from './reportWebVitals'
 
 import { ThemeProvider } from 'styled-components'
 import styledTheme from 'src/themes/styled.theme'
@@ -9,7 +10,8 @@ import { Routes } from './pages'
 import { RootStore } from './stores'
 import { GlobalStyle } from './themes/app.globalStyle.js'
 
-import registerServiceWorker from './registerServiceWorker'
+import * as serviceWorkerRegistration from './serviceWorkerRegistration'
+
 import { SWUpdateNotification } from './pages/common/SWUpdateNotification/SWUpdateNotification'
 import ErrorBoundary from './common/ErrorBoundary'
 import { initErrorHandler } from './common/errors'
@@ -49,4 +51,10 @@ const onUpdate = () => {
   rootStore.stores.platformStore.setServiceWorkerStatus('updated')
 }
 
-registerServiceWorker(onUpdate)
+serviceWorkerRegistration.register({ onUpdate })
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+
+// reportWebVitals()

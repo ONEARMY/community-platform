@@ -24,8 +24,10 @@ function swPlugin() {
   return new WorkboxWebpackPlugin.GenerateSW({
     cacheId: 'oa',
     clientsClaim: true,
-    skipWaiting: true,
-
+    // we don't want to skip waiting as this will instantly invalidate all active chunks
+    skipWaiting: false,
+    // Adapted from https://github.com/jeffposnick/create-react-app/blob/9f29f68795bbb8f51fd66d80b338f9071be062ab/packages/react-scripts/config/webpack.config.prod.js
+    dontCacheBustUrlsMatching: /\.\w{8}\./,
     runtimeCaching: [
       {
         urlPattern: new RegExp(/.*\.(?:png|gif|jpg|jpeg|webp|svg).*/gi),

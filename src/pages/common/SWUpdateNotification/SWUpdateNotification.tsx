@@ -1,21 +1,20 @@
 import * as React from 'react'
 import Snackbar from '@material-ui/core/Snackbar'
 import Button from '@material-ui/core/Button'
-import IconButton from '@material-ui/core/IconButton'
-import Icon from 'src/components/Icons'
 import { PlatformStore } from 'src/stores/Platform/platform.store'
 import { inject, observer } from 'mobx-react'
 
 /* Simple component to listen to store updates to service worker and present a
 snackbar/toast message to inform the user to reload their browser to see changes 
-bind to isOpen in parent to toggle 
+bind to isOpen in parent to toggle.
+NOTE - we do not provide a dismiss button as lazy loaded routes will fail to load if not updated
 */
-interface IState {
-  forceClose: boolean
-}
 
 interface IProps {
   platformStore?: PlatformStore
+}
+interface IState {
+  disabled: boolean
 }
 
 interface InjectedProps extends IProps {
@@ -27,14 +26,21 @@ interface InjectedProps extends IProps {
 export class SWUpdateNotification extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
-    this.state = { forceClose: false }
+    this.state = { disabled: false }
   }
   get injected() {
     return this.props as InjectedProps
   }
 
-  public handleClose = () => {
-    this.setState({ forceClose: true })
+  public activateServiceWorkder() {
+    const { registration } = this.injected.platformStore
+    if (!registration.waiting) {
+      // Just to ensure registration.waiting is available before
+      // calling postMessage()
+      return
+    }
+    this.setState({ disabled: true })
+    registration.waiting.postMessage('skipWaiting')
   }
 
   public render() {
@@ -45,27 +51,14 @@ export class SWUpdateNotification extends React.Component<IProps, IState> {
             key="reload"
             color="secondary"
             size="small"
-            onClick={() => window.location.reload()}
+            onClick={() => this.activateServiceWorkder()}
+            disabled={this.state.disabled}
           >
-            Reload
+            {this.state.disabled ? 'Updating' : 'Update'}
           </Button>,
-          <IconButton
-            key="close"
-            aria-label="Close"
-            color="inherit"
-            onClick={this.handleClose}
-          >
-            <Icon glyph={'close'} />
-          </IconButton>,
         ]}
         message={<span id="message-id">New version available</span>}
-        open={
-          this.state.forceClose
-            ? false
-            : this.injected.platformStore.serviceWorkerStatus === 'updated'
-            ? true
-            : false
-        }
+        open={this.injected.platformStore.serviceWorkerStatus === 'updated'}
       />
     )
   }

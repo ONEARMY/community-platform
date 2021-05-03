@@ -9,7 +9,7 @@ import { Routes } from './pages'
 import { RootStore } from './stores'
 import { GlobalStyle } from './themes/app.globalStyles'
 
-import registerServiceWorker from './registerServiceWorker'
+import { register } from './registerServiceWorker'
 import { SWUpdateNotification } from './pages/common/SWUpdateNotification/SWUpdateNotification'
 import ErrorBoundary from './common/ErrorBoundary'
 import { initErrorHandler } from './common/errors'
@@ -43,10 +43,16 @@ ReactDOM.render(
   document.getElementById('root') as HTMLElement,
 )
 
-// callback function updates global store when service worker registered
-const onUpdate = () => {
-  console.log('sw updated receive in index')
-  rootStore.stores.platformStore.setServiceWorkerStatus('updated')
-}
-
-registerServiceWorker(onUpdate)
+// Register service worker with callbacks
+register({
+  onSuccess: registration =>
+    rootStore.stores.platformStore.setServiceWorkerStatus(
+      'success',
+      registration,
+    ),
+  onUpdate: registration =>
+    rootStore.stores.platformStore.setServiceWorkerStatus(
+      'updated',
+      registration,
+    ),
+})

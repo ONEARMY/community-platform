@@ -31,10 +31,7 @@ class HowtoPageClass extends React.Component<any, any> {
             exact
             render={props => <Howto {...props} />}
           />
-          <Route
-            path="/how-to/:slug/edit"
-            render={props => <EditHowto {...props} />}
-          />
+          <AuthRoute path="/how-to/:slug/edit" component={EditHowto} />
         </Switch>
       </div>
     )

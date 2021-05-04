@@ -35,14 +35,13 @@ aliases:
       name: Install Packages
       command: yarn config set enableGlobalCache true && yarn install --immutable
   - &check_folders
-    check_folders:
-      name: check largest folders
-      run:
-        command: |
-          ls ~
-          ls ~/.cache
-          ls .yarn
-          du -a / | sort -n -r | head -n 200
+    run:
+      name: check folders
+      command: |
+        ls ~
+        ls ~/.cache
+        ls .yarn
+        du -a / | sort -n -r | head -n 200
   - &save_yarn_cache
     save_cache:
       # note - if moving to workspaces include paths: https://discuss.circleci.com/t/yarn-cached-install-slow/34823/2

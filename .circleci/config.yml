@@ -27,20 +27,19 @@ aliases:
         # https://circleci.com/docs/2.0/yarn/
         # when lock file changes, use increasingly general patterns to restore cache
         # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar
-        - yarn-packages-v7-{{ .Branch }}-{{ checksum "yarn.lock" }}
-        - yarn-packages-v7-{{ .Branch }}-
-        - yarn-packages-v7-
+        - yarn-packages-v8-{{ .Branch }}-{{ checksum "yarn.lock" }}
+        - yarn-packages-v8-{{ .Branch }}-
+        - yarn-packages-v8-
   - &install_packages
     run:
       name: Install Packages
       command: yarn install --immutable
+    # Example debugging commands for use troubleshooting caching (du will exit with status 141)
   - &check_folders
     run:
       name: check folders
       command: |
-        ls -a ~/.cache
         ls -a ~/project
-        ls -a ~/.yarn/berry/cache
         du -a /home | sort -n -r | head -n 500
   - &save_yarn_cache
     save_cache:
@@ -48,8 +47,10 @@ aliases:
       # depending on whether enableGlobalCache is set to true or not (and windows/linux) these paths may vary
       paths:
         # enableGlobalCache location
-        - ~/.yarn/berry/cache
-      key: yarn-packages-v7-{{ .Branch }}-{{ checksum "yarn.lock" }}
+        # - ~/.yarn/berry/cache
+        # local cache location
+        - ~/project/.yarn/cache
+      key: yarn-packages-8{{ .Branch }}-{{ checksum "yarn.lock" }}
 
 ######################################################################################################
 #  Commands - Reusable collections of steps
@@ -63,7 +64,6 @@ commands:
       - checkout
       - *restore_yarn_cache
       - *install_packages
-      - *check_folders
       - *save_yarn_cache
 
 ######################################################################################################

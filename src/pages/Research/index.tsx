@@ -24,11 +24,7 @@ export const ResearchModule = {
 function ResearchModuleContainer() {
   return (
     <ResearchStoreContext.Provider value={new ResearchStore()}>
-      <AuthRoute
-        component={ResearchRoutes}
-        roleRequired="beta-tester"
-        redirectPath="/"
-      />
+      <AuthRoute component={ResearchRoutes} roleRequired="beta-tester" />
     </ResearchStoreContext.Provider>
   )
 }

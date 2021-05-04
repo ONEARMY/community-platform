@@ -1,4 +1,4 @@
-import React from 'react'
+import { Component } from 'react';
 import MultiSelect from '@khanacademy/react-multi-select'
 import './GroupingFilter.css'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
@@ -53,7 +53,7 @@ const ItemRenderer = ({ checked, option, onClick }) => {
   )
 }
 @inject('mapsStore')
-class GroupingFilterDesktop extends React.Component<IProps, IState> {
+class GroupingFilterDesktop extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {

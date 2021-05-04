@@ -1,5 +1,3 @@
-import * as React from 'react'
-
 import loadingSVG from '../../assets/images/loading.svg'
 import starSVG from '../../assets/icons/icon-star-default.svg'
 import starActiveSVG from '../../assets/icons/icon-star-active.svg'

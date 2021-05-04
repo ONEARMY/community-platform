@@ -1,5 +1,3 @@
-import * as React from 'react'
-
 import { Link } from 'rebass'
 
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'

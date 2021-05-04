@@ -1,5 +1,3 @@
-import * as React from 'react'
-
 import { SITE } from 'src/config/config'
 import Text from 'src/components/Text'
 import theme from 'src/themes/styled.theme'

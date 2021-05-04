@@ -1,18 +1,19 @@
 import * as React from 'react'
-import { Route, Redirect, RouteProps } from 'react-router'
+import { Route, RouteProps } from 'react-router'
 import { inject, observer } from 'mobx-react'
 import { UserStore } from 'src/stores/User/user.store'
 import { UserRole } from 'src/models/user.models'
+import Text from 'src/components/Text'
+import Flex from 'src/components/Flex'
 
 /*
     This provides a <AuthRoute /> component that can be used in place of <Route /> components
-    to allow user access only if authenticated. Could also be used to direct to login and back,
-    example here: https://tylermcginnis.com/react-router-protected-routes-authentication/
+    to allow user access only if authenticated.
 */
 
 interface IProps extends RouteProps {
   userStore?: UserStore
-  redirectPath: string
+  redirectPath: string // TODO - show a link to this path if exists
   component: React.ComponentClass
   roleRequired?: UserRole
 }
@@ -38,7 +39,7 @@ export class AuthRoute extends React.Component<IProps, IState> {
   render() {
     // user ! to let typescript know property will exist (injected) instead of additional getter method
     const isAuthenticated = this.isUserAuthenticated()
-    const { component: Component, redirectPath, ...rest } = this.props
+    const { component: Component, roleRequired, ...rest } = this.props
     return (
       <Route
         {...rest}
@@ -46,12 +47,13 @@ export class AuthRoute extends React.Component<IProps, IState> {
           isAuthenticated === true ? (
             <Component {...props} />
           ) : (
-            <Redirect
-              to={{
-                pathname: redirectPath,
-                state: { from: props.location },
-              }}
-            />
+            <Flex justifyContent="center" mt="40px" data-cy="auth-route-deny">
+              <Text regular>
+                {roleRequired
+                  ? `${roleRequired} role required to access this page`
+                  : 'Please login to access this page'}
+              </Text>
+            </Flex>
           )
         }
       />

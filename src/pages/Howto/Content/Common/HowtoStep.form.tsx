@@ -1,4 +1,4 @@
-import React from 'react'
+import { PureComponent } from 'react';
 import { Field } from 'react-final-form'
 import { TextAreaField, InputField } from 'src/components/Form/Fields'
 import Heading from 'src/components/Heading'
@@ -37,7 +37,7 @@ const Label = styled.label`
   margin-bottom: ${theme.space[2] + 'px'};
 `
 
-class HowtoStep extends React.PureComponent<IProps, IState> {
+class HowtoStep extends PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {

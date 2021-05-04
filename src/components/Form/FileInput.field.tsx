@@ -1,4 +1,3 @@
-import React from 'react'
 import { IFieldProps } from './Fields'
 import { FileInput } from '../FileInput/FileInput'
 

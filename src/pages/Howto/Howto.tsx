@@ -6,6 +6,7 @@ import {
   RouteComponentProps,
 } from 'react-router-dom'
 import { inject } from 'mobx-react'
+import { AuthRoute } from '../common/AuthRoute'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import { HowtoList } from './Content/HowtoList/HowtoList'
 import { Howto } from './Content/Howto/Howto'
@@ -33,7 +34,7 @@ class HowtoPage extends React.Component<IProps, any> {
             path="/how-to"
             render={props => <HowtoList {...props} />}
           />
-          <Route
+          <AuthRoute
             path="/how-to/create"
             component={CreateHowto}
             redirectPath="/how-to"
@@ -43,10 +44,7 @@ class HowtoPage extends React.Component<IProps, any> {
             exact
             render={props => <Howto {...props} />}
           />
-          <Route
-            path="/how-to/:slug/edit"
-            render={props => <EditHowto {...props} />}
-          />
+          <AuthRoute path="/how-to/:slug/edit" component={EditHowto} />
         </Switch>
       </Suspense>
     )

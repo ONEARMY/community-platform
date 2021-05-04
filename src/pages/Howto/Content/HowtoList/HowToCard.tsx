@@ -1,4 +1,3 @@
-import React from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'

@@ -1,5 +1,6 @@
-import React, { Suspense, lazy } from 'react'
-import { Route, Switch, withRouter } from 'react-router-dom'
+import { Suspense, lazy } from 'react'
+import { AuthRoute } from '../common/AuthRoute'
+import { Switch, withRouter } from 'react-router-dom'
 const CreateResearch = lazy(() => import('./Content/CreateResearch'))
 const CreateUpdate = lazy(() => import('./Content/CreateUpdate'))
 const ResearchItemEditor = lazy(() => import('./Content/EditResearch'))
@@ -10,24 +11,37 @@ const ResearchList = lazy(() => import('./Content/ResearchList'))
 const routes = () => (
   <Suspense fallback={<div></div>}>
     <Switch>
-      <Route exact path="/research" component={ResearchList} />
-      <Route
+      <AuthRoute exact path="/research" component={ResearchList} />
+      <AuthRoute
         path="/research/create"
         component={CreateResearch}
         redirectPath="/research"
+        roleRequired="beta-tester"
       />
-      <Route exact path="/research/:slug/new-update" component={CreateUpdate} />
-      <Route exact path="/research/:slug/edit" component={ResearchItemEditor} />
-      <Route
+      <AuthRoute
+        exact
+        path="/research/:slug/new-update"
+        component={CreateUpdate}
+        roleRequired="beta-tester"
+      />
+      <AuthRoute
+        exact
+        path="/research/:slug/edit"
+        component={ResearchItemEditor}
+        roleRequired="beta-tester"
+      />
+      <AuthRoute
         exact
         path="/research/:slug/edit-update/:update"
         component={UpdateItemEditor}
+        roleRequired="beta-tester"
       />
-      <Route
+      <AuthRoute
         path="/research/:slug"
         render={routeProps => (
-          <ResearchItemDetail slug={routeProps.match.params.slug} />
+          <ResearchItemDetail slug={routeProps.match.params.slug as string} />
         )}
+        roleRequired="beta-tester"
       />
     </Switch>
   </Suspense>

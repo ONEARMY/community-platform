@@ -1,10 +1,10 @@
 import { observable, action, makeObservable } from 'mobx'
 import {
   IMapPin,
-  IBoundingBox,
   IMapGrouping,
   IMapPinWithDetail,
   IMapPinDetail,
+  IBoundingBox,
 } from 'src/models/maps.models'
 import { IDBEndpoint } from 'src/models/common.models'
 import { RootStore } from '..'

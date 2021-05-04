@@ -28,7 +28,10 @@ type Config = {
 export function register(config?: Config) {
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
-    const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href)
+    const publicUrl = new URL(
+      process.env.PUBLIC_URL as string,
+      window.location.href,
+    )
     if (publicUrl.origin !== window.location.origin) {
       // Our service worker won't work if PUBLIC_URL is on a different origin
       // from what our page is served on. This might happen if a CDN is used to
@@ -47,7 +50,8 @@ export function register(config?: Config) {
         // service worker/PWA documentation.
         navigator.serviceWorker.ready.then(() => {
           console.log(
-            '[SW] - This web app is being served cache-first by a service worker',
+            'This web app is being served cache-first by a service ' +
+              'worker. To learn more, visit https://cra.link/PWA',
           )
         })
       } else {
@@ -59,19 +63,6 @@ export function register(config?: Config) {
 }
 
 function registerValidSW(swUrl: string, config?: Config) {
-  let refreshing: boolean
-  // CC Custom code - When the user asks to refresh the UI, we'll need to reload the window
-  // Taken from https://github.com/dfabulich/service-worker-refresh-sample/blob/master/index.html
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (refreshing) return // prevent infinite refresh loop when you use "Update on Reload"
-    refreshing = true
-    console.log('[SW] - Controller loaded')
-    window.location.reload()
-  })
-  navigator.serviceWorker.addEventListener('message', event => {
-    console.log('[Sw] - message', event)
-  })
-  // Main code from cra-pwa template
   navigator.serviceWorker
     .register(swUrl)
     .then(registration => {
@@ -87,7 +78,7 @@ function registerValidSW(swUrl: string, config?: Config) {
               // but the previous service worker will still serve the older
               // content until all client tabs are closed.
               console.log(
-                '[SW] - New content is available and will be used when all ' +
+                'New content is available and will be used when all ' +
                   'tabs for this page are closed. See https://cra.link/PWA.',
               )
 
@@ -99,7 +90,7 @@ function registerValidSW(swUrl: string, config?: Config) {
               // At this point, everything has been precached.
               // It's the perfect time to display a
               // "Content is cached for offline use." message.
-              console.log('[SW] - Content is cached for offline use.')
+              console.log('Content is cached for offline use.')
 
               // Execute callback
               if (config && config.onSuccess) {
@@ -111,7 +102,7 @@ function registerValidSW(swUrl: string, config?: Config) {
       }
     })
     .catch(error => {
-      console.error('[SW] - Error during service worker registration:', error)
+      console.error('Error during service worker registration:', error)
     })
 }
 
@@ -140,7 +131,7 @@ function checkValidServiceWorker(swUrl: string, config?: Config) {
     })
     .catch(() => {
       console.log(
-        '[SW] - No internet connection found. App is running in offline mode.',
+        'No internet connection found. App is running in offline mode.',
       )
     })
 }
@@ -152,7 +143,7 @@ export function unregister() {
         registration.unregister()
       })
       .catch(error => {
-        console.error(`[SW] - `, error.message)
+        console.error(error.message)
       })
   }
 }

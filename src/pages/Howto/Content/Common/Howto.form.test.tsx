@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { fireEvent, render, wait } from '@testing-library/react'
 import { NavLink } from 'react-router-dom'
 import { Provider } from 'mobx-react'

@@ -1,4 +1,3 @@
-import * as React from 'react'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'

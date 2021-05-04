@@ -24,21 +24,33 @@ aliases:
       name: Restore yarn cache
       keys:
         # https://circleci.com/docs/2.0/caching/
+        # https://circleci.com/docs/2.0/yarn/
         # when lock file changes, use increasingly general patterns to restore cache
-        # NOTE - this will change if migrating to yarn v2 in the future
-        # NOTE - if changing base image or received cache permission denied may need to bump version v2->v3 or similar
-        - yarn-packages-v2-{{ .Branch }}-{{ checksum "yarn.lock" }}
-        - yarn-packages-v2-{{ .Branch }}-
-        - yarn-packages-v2-
+        # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
+        - yarn-packages-v8-{{ .Branch }}-{{ checksum "yarn.lock" }}
+        - yarn-packages-v8-{{ .Branch }}-
+        - yarn-packages-v8-
   - &install_packages
     run:
       name: Install Packages
-      command: yarn --frozen-lockfile --cache-folder ~/.cache/yarn
+      command: yarn install --immutable
+    # Example debugging commands for use troubleshooting caching (du will exit with status 141)
+  - &check_folders
+    run:
+      name: check folders
+      command: |
+        ls -a ~/project
+        du -a /home | sort -n -r | head -n 500
   - &save_yarn_cache
     save_cache:
+      # note - if moving to workspaces include paths: https://discuss.circleci.com/t/yarn-cached-install-slow/34823/2
+      # depending on whether enableGlobalCache is set to true or not (and windows/linux) these paths may vary
       paths:
-        - ~/.cache/yarn
-      key: yarn-packages-v2-{{ .Branch }}-{{ checksum "yarn.lock" }}
+        # global cache location
+        # - ~/.yarn/berry/cache
+        # local cache location
+        - ~/project/.yarn/cache
+      key: yarn-packages-v8-{{ .Branch }}-{{ checksum "yarn.lock" }}
 
 ######################################################################################################
 #  Commands - Reusable collections of steps

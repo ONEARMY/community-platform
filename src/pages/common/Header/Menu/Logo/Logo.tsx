@@ -1,4 +1,4 @@
-import React from 'react'
+import { Component } from 'react';
 import theme from 'src/themes/styled.theme'
 import { Link, Flex, Image } from 'rebass/styled-components'
 import styled from 'styled-components'
@@ -22,7 +22,7 @@ const LogoContainer = styled(Flex)`
   }
 `
 
-export class Logo extends React.Component<IProps> {
+export class Logo extends Component<IProps> {
   // eslint-disable-next-line
   constructor(props: any) {
     super(props)

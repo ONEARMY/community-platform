@@ -1,4 +1,3 @@
-import React from 'react'
 import { FirebaseFileUploader } from '../FirebaseFileUploader/FirebaseFileUploader'
 
 export const FirebaseFileUploaderField = ({ input, meta, ...rest }) => (

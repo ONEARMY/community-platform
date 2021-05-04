@@ -7,8 +7,8 @@ on:
     types: [labeled, synchronize]
     # Only create a preview if changes have been made to the main src code or backend functions
     paths:
-      - 'src/**'
-      - 'functions/**'
+      - "src/**"
+      - "functions/**"
 jobs:
   build_and_preview:
     # NOTE - as we are going to check out and build from forks we also need to add manual
@@ -22,13 +22,20 @@ jobs:
         with:
           # pull the repo from the pull request source, not the default local repo
           ref: ${{ github.event.pull_request.head.sha }}
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+        # Setup yarn 2 cache: https://github.com/actions/cache/blob/main/examples.md#node---yarn
       - name: Setup Cache
         uses: actions/cache@v2
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
       - name: Install npm dependencies
-        run: yarn install
+        run: yarn install --immutable
       - name: Build for Preview
         run: npm run build
         env:
@@ -39,9 +46,9 @@ jobs:
           REACT_APP_SITE_VARIANT: preview
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
           # the details of the service account need to be populated to github secrets
           # these must match the target projectId account
-          firebaseServiceAccount: '${{ secrets.ONEARMY_NEXT_FIREBASE_SERVICE_ACCOUNT }}'
+          firebaseServiceAccount: "${{ secrets.ONEARMY_NEXT_FIREBASE_SERVICE_ACCOUNT }}"
           expires: 30d
           projectId: onearmy-next

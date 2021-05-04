@@ -1,4 +1,4 @@
-import React, { lazy } from 'react'
+import { lazy } from 'react'
 import { SITE } from 'src/config/config'
 import { CSSObject } from '@styled-system/css'
 import { Route } from 'react-router'

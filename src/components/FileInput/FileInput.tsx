@@ -9,7 +9,7 @@ import { Flex } from 'rebass'
 import { FileInfo } from '../FileInfo/FileInfo'
 
 interface IUppyFiles {
-  [key: string]: Uppy.UppyFile<{}>
+  [key: string]: Uppy.UppyFile
 }
 interface IProps {
   onFilesChange?: (files: (Blob | File)[]) => void

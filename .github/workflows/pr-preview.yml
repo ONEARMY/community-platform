@@ -7,8 +7,8 @@ on:
     types: [labeled, synchronize]
     # Only create a preview if changes have been made to the main src code or backend functions
     paths:
-      - 'src/**'
-      - 'functions/**'
+      - "src/**"
+      - "functions/**"
 jobs:
   build_and_preview:
     # NOTE - as we are going to check out and build from forks we also need to add manual
@@ -25,7 +25,7 @@ jobs:
       - name: Setup Cache
         uses: actions/cache@v2
         with:
-          path: '**/node_modules'
+          path: ".yarn/cache"
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install npm dependencies
         run: yarn install
@@ -39,9 +39,9 @@ jobs:
           REACT_APP_SITE_VARIANT: preview
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
           # the details of the service account need to be populated to github secrets
           # these must match the target projectId account
-          firebaseServiceAccount: '${{ secrets.ONEARMY_NEXT_FIREBASE_SERVICE_ACCOUNT }}'
+          firebaseServiceAccount: "${{ secrets.ONEARMY_NEXT_FIREBASE_SERVICE_ACCOUNT }}"
           expires: 30d
           projectId: onearmy-next

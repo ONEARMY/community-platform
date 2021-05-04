@@ -29,11 +29,7 @@ class EventsPage extends React.Component<IProps, any> {
           path="/events"
           render={props => <EventsList {...props} />}
         />
-        <AuthRoute
-          path="/events/create"
-          component={EventsCreate}
-          redirectPath="/events"
-        />
+        <AuthRoute path="/events/create" component={EventsCreate} />
       </Switch>
     )
   }

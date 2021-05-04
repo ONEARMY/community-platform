@@ -66,7 +66,6 @@ class AdminPage extends React.Component<IProps, any> {
               key={route.name}
               path={`/admin/${route.slug}`}
               component={route.component}
-              redirectPath="/admin"
               roleRequired="admin"
             />
           ))}

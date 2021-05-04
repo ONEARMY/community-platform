@@ -11,11 +11,15 @@ const ResearchList = lazy(() => import('./Content/ResearchList'))
 const routes = () => (
   <Suspense fallback={<div></div>}>
     <Switch>
-      <AuthRoute exact path="/research" component={ResearchList} />
+      <AuthRoute
+        exact
+        path="/research"
+        component={ResearchList}
+        roleRequired="beta-tester"
+      />
       <AuthRoute
         path="/research/create"
         component={CreateResearch}
-        redirectPath="/research"
         roleRequired="beta-tester"
       />
       <AuthRoute
@@ -38,10 +42,10 @@ const routes = () => (
       />
       <AuthRoute
         path="/research/:slug"
+        roleRequired="beta-tester"
         render={routeProps => (
           <ResearchItemDetail slug={routeProps.match.params.slug as string} />
         )}
-        roleRequired="beta-tester"
       />
     </Switch>
   </Suspense>

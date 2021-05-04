@@ -1,4 +1,4 @@
-import React from 'react'
+import { Component } from 'react';
 import { NavLink } from 'react-router-dom'
 import { COMMUNITY_PAGES } from 'src/pages/PageList'
 import theme from 'src/themes/styled.theme'
@@ -45,7 +45,7 @@ interface IInjectedProps {
 
 @inject('userStore')
 @observer
-export class MenuDesktop extends React.Component {
+export class MenuDesktop extends Component {
   get injected() {
     return this.props as IInjectedProps
   }

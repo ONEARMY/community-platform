@@ -1,5 +1,3 @@
-import * as React from 'react'
-
 import { ISelectorList } from 'src/models/selectorList.models'
 
 import styled from 'styled-components'

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react';
 import { Label, HiddenInput } from '../elements'
 import { Image, Flex, Box } from 'rebass'
 import Text from 'src/components/Text'

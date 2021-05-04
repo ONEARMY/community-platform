@@ -1,4 +1,3 @@
-import React from 'react'
 import { Image } from 'rebass/styled-components'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'

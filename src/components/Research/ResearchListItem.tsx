@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import React from 'react'
+import * as React from 'react';
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import { Link } from 'src/components/Links'

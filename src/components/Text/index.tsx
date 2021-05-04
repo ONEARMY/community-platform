@@ -1,4 +1,3 @@
-import * as React from 'react'
 import {
   Text as RebassText,
   TextProps as RebassTextProps,

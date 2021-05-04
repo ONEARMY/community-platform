@@ -1,4 +1,3 @@
-import React from 'react'
 import { FieldContainer, ErrorMessage } from './elements'
 import ReactFlagsSelect from 'react-flags-select'
 import { Flex } from 'rebass'

@@ -1,4 +1,3 @@
-import React from 'react'
 import TagsSelect from '../Tags/TagsSelect'
 
 export const TagsSelectField = ({ input, meta, ...rest }) => (

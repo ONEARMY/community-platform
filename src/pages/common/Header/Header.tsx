@@ -1,4 +1,4 @@
-import React from 'react'
+import { Component } from 'react';
 import { Flex } from 'rebass/styled-components'
 import styled from 'styled-components'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
@@ -55,7 +55,7 @@ const AnimationContainer = posed.div({
 
 @inject('mobileMenuStore')
 @observer
-export class Header extends React.Component<IProps> {
+export class Header extends Component<IProps> {
   // eslint-disable-next-line
   constructor(props: any) {
     super(props)

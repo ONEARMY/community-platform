@@ -1,4 +1,4 @@
-import React from 'react'
+import { PureComponent } from 'react';
 import Lightbox from 'react-image-lightbox'
 import { Card, CardProps, Flex, Image } from 'rebass/styled-components'
 import { IUploadedFileMeta } from 'src/stores/storage'
@@ -39,7 +39,7 @@ const ImageWithPointer = styled(Image)`
   object-fit: cover;
 `
 
-export default class ImageGallery extends React.PureComponent<IProps, IState> {
+export default class ImageGallery extends PureComponent<IProps, IState> {
   constructor(props) {
     super(props)
     this.state = {

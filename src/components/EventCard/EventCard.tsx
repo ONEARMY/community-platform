@@ -1,4 +1,3 @@
-import React from 'react'
 import Flex from 'src/components/Flex'
 import ModerationStatusText from 'src/components/ModerationStatusText'
 import Text from 'src/components/Text'

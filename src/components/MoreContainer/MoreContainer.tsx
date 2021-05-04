@@ -1,4 +1,3 @@
-import React from 'react'
 import { Box, BoxProps } from 'rebass/styled-components'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'

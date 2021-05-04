@@ -155,7 +155,7 @@ describe('[How To]', () => {
       cy.screenClick()
       cy.get('[data-cy=submit]').click()
 
-      cy.get('[data-cy=view-howto]:enabled')
+      cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
         .click()
         .url()
         .should('include', `/how-to/create-a-how-to-test`)
@@ -212,6 +212,7 @@ describe('[How To]', () => {
   })
 
   describe('[Edit a how-to]', () => {
+    const howtoUrl = '/how-to/set-up-devsite-to-help-coding'
     const editHowtoUrl = '/how-to/set-up-devsite-to-help-coding/edit'
     const expected = {
       _createdBy: 'howto_editor',
@@ -278,20 +279,22 @@ describe('[How To]', () => {
     }
 
     it('[By Anonymous]', () => {
-      cy.step('Redirect to Home Page after visiting an url')
+      cy.step('Prevent anonymous access to edit howto')
       cy.visit(editHowtoUrl)
-      cy.url().should('not.include', editHowtoUrl)
+      cy.get('[data-cy=auth-route-deny]').should('be.exist')
     })
 
     it('[By Authenticated]', () => {
+      cy.step('Prevent non-owner access to edit howto')
       cy.visit('/how-to')
       cy.login('howto_creator@test.com', 'test1234')
       cy.visit(editHowtoUrl)
-      cy.url().should('not.include', editHowtoUrl)
+      // user should be redirect to how-to page
+      cy.location('pathname').should('eq', howtoUrl)
     })
 
     it('[By Owner]', () => {
-      cy.visit(editHowtoUrl)
+      cy.visit(howtoUrl)
       cy.login('howto_editor@test.com', 'test1234')
       cy.step('Go to Edit mode')
       cy.get('[data-cy=edit]').click()
@@ -351,7 +354,7 @@ describe('[How To]', () => {
 
       cy.step('Open the updated how-to')
 
-      cy.get('[data-cy=view-howto]:enabled')
+      cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
         .click()
         .url()
         .should('include', '/how-to/this-is-an-edit-test')

@@ -1,4 +1,3 @@
-import React from 'react'
 import { Flex, Box, FlexProps } from 'rebass/styled-components'
 import theme from 'src/themes/styled.theme'
 import { CSSObject } from '@styled-system/css'

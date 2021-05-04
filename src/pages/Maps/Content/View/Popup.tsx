@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react';
 import L from 'leaflet'
 import Flex from 'src/components/Flex'
 import Text from 'src/components/Text'

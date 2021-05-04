@@ -1,4 +1,4 @@
-import React from 'react'
+import { Component } from 'react';
 
 import { Image, ImageProps } from 'rebass'
 import { inject, observer } from 'mobx-react'
@@ -17,7 +17,7 @@ interface IState {
 
 @inject('userStore')
 @observer
-export class Avatar extends React.Component<IProps, IState> {
+export class Avatar extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {}

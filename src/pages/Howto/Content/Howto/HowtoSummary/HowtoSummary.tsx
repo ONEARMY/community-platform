@@ -1,4 +1,4 @@
-import React from 'react'
+import { PureComponent } from 'react';
 // TODO remove material-ui from here
 import List from '@material-ui/core/List'
 import { HashLink } from 'react-router-hash-link'
@@ -14,7 +14,7 @@ interface IProps {
   howToSlug: string
 }
 
-export default class HowtoSummary extends React.PureComponent<IProps> {
+export default class HowtoSummary extends PureComponent<IProps> {
   render() {
     return (
       <Container>

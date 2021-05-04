@@ -62,6 +62,7 @@ jobs:
     # TODO - possibly create a single build before test and use for tests and deploy
     # (might be tricky: https://docs.travis-ci.com/user/build-stages/#data-persistence-between-stages-and-jobs)
     - stage: Test
+      if: branch = master AND type = push
       env:
         - CI_GROUP=2x-chrome
         - CI_BROWSER=chrome

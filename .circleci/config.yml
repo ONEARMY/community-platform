@@ -50,6 +50,7 @@ aliases:
       paths:
         - ~/.cache/yarn
         - ~/.config/yarn/global
+        - /home/circleci/.yarn/berry/cache
         - .yarn/.cache
       key: yarn-packages-v7-{{ .Branch }}-{{ checksum "yarn.lock" }}
 

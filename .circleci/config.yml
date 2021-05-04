@@ -38,7 +38,6 @@ aliases:
     run:
       name: check folders
       command: |
-        ls -a ~
         ls -a ~/.cache
         ls -a ~/project
         ls -a ~/.yarn/berry/cache

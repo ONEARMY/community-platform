@@ -38,10 +38,11 @@ aliases:
     run:
       name: check folders
       command: |
-        ls ~
-        ls ~/.cache
-        ls .yarn
-        du -a / | sort -n -r | head -n 200
+        ls -a ~
+        ls -a ~/.cache
+        ls -a ~/project
+        ls -a .yarn
+        du -a /home | sort -n -r | head -n 500
   - &save_yarn_cache
     save_cache:
       # note - if moving to workspaces include paths: https://discuss.circleci.com/t/yarn-cached-install-slow/34823/2

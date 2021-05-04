@@ -1,12 +1,19 @@
+###############################################################################################################
+# DEPRECATED
+# Previously we used travis-ci for all builds, but now use circlci
+# Code is retained mostly for reference and will likely need updates in needed again in future
+###############################################################################################################
+
 language: node_js
 node_js:
   - "12"
 dist: xenial
 cache:
-  # cache both yarn (.cache) and npm (for global installs)
+  # cache yarn cache and cypress binary
   yarn: true
   directories:
     - ./.yarn/cache
+    - ~/.cache
 addons:
   chrome: stable
   firefox: latest
@@ -24,6 +31,8 @@ env:
       - DEBUG=True
       - MOZ_HEADLESS=1
 install:
+  # fix ENOSPC: System limit for number of file wathcers reached bug
+  - echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
   - yarn install --immutable
 # add the current github branch as an environment variable
 before_script:
@@ -40,6 +49,8 @@ before_script:
 # see https://docs.travis-ci.com/user/build-matrix/#job-uniqueness-and-duplicate-jobs
 # and https://medium.com/@tommyvn/travis-yml-dry-with-anchors-8b6a3ac1b027
 _test_defaults: &_test_defaults
+  if: (branch = master OR branch = production) AND type = push
+  # Skip tests on PRs (currently handled by circleci)
   script:
     - echo "group=$CI_GROUP browser=$CI_BROWSER"
     - export TZ=UTC
@@ -56,13 +67,13 @@ _predeploy_defaults: &_predeploy_defaults
   - export FIREBASE_TOKEN=$(if [ "$TRAVIS_BRANCH" == "production" ]; then echo "$FIREBASE_PRODUCTION_TOKEN"; else echo "$FIREBASE_STAGING_TOKEN"; fi)
 # Jobs run in parallel, so split chrome and firefox tests running each across 2 machines.
 # CI_NODE var just ensures job env unique (otherwise won't run), others are passed to default script
+
 jobs:
   include:
     # Test - Run 4 test stages in parallel
     # TODO - possibly create a single build before test and use for tests and deploy
     # (might be tricky: https://docs.travis-ci.com/user/build-stages/#data-persistence-between-stages-and-jobs)
     - stage: Test
-      if: (branch = master OR branch = production) AND type = push
       env:
         - CI_GROUP=2x-chrome
         - CI_BROWSER=chrome

@@ -9,23 +9,40 @@ import { ResearchList } from './Content/ResearchList'
 
 const routes = () => (
   <Switch>
-    <Route exact path="/research" component={ResearchList} />
+    <AuthRoute
+      exact
+      path="/research"
+      component={ResearchList}
+      roleRequired="beta-tester"
+    />
     <AuthRoute
       path="/research/create"
       component={CreateResearch}
-      redirectPath="/research"
+      roleRequired="beta-tester"
     />
-    <Route exact path="/research/:slug/new-update" component={CreateUpdate} />
-    <Route exact path="/research/:slug/edit" component={ResearchItemEditor} />
-    <Route
+    <AuthRoute
+      exact
+      path="/research/:slug/new-update"
+      component={CreateUpdate}
+      roleRequired="beta-tester"
+    />
+    <AuthRoute
+      exact
+      path="/research/:slug/edit"
+      component={ResearchItemEditor}
+      roleRequired="beta-tester"
+    />
+    <AuthRoute
       exact
       path="/research/:slug/edit-update/:update"
       component={UpdateItemEditor}
+      roleRequired="beta-tester"
     />
-    <Route
+    <AuthRoute
       path="/research/:slug"
+      roleRequired="beta-tester"
       render={routeProps => (
-        <ResearchItemDetail slug={routeProps.match.params.slug} />
+        <ResearchItemDetail slug={routeProps.match.params.slug as string} />
       )}
     />
   </Switch>

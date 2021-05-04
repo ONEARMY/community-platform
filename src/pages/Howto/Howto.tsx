@@ -21,11 +21,7 @@ class HowtoPageClass extends React.Component<any, any> {
             path="/how-to"
             render={props => <HowtoList {...props} />}
           />
-          <AuthRoute
-            path="/how-to/create"
-            component={CreateHowto}
-            redirectPath="/how-to"
-          />
+          <AuthRoute path="/how-to/create" component={CreateHowto} />
           <Route
             path="/how-to/:slug"
             exact

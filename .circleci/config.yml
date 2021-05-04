@@ -27,20 +27,22 @@ aliases:
         # https://circleci.com/docs/2.0/yarn/
         # when lock file changes, use increasingly general patterns to restore cache
         # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar
-        - yarn-packages-v6-{{ .Branch }}-{{ checksum "yarn.lock" }}
-        - yarn-packages-v6-{{ .Branch }}-
-        - yarn-packages-v6-
+        - yarn-packages-v7-{{ .Branch }}-{{ checksum "yarn.lock" }}
+        - yarn-packages-v7-{{ .Branch }}-
+        - yarn-packages-v7-
   - &install_packages
     run:
       name: Install Packages
-      command: yarn install --immutable
+      command: yarn config set enableGlobalCache true && yarn install --immutable
   - &save_yarn_cache
     save_cache:
       # note - if moving to workspaces include paths: https://discuss.circleci.com/t/yarn-cached-install-slow/34823/2
+      # depending on whether enableGlobalCache is set to true or not (and windows/linux) these paths may vary
       paths:
         - ~/.cache/yarn
+        - ~/.config/yarn/global
         - .yarn/.cache
-      key: yarn-packages-v6-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      key: yarn-packages-v7-{{ .Branch }}-{{ checksum "yarn.lock" }}
 
 ######################################################################################################
 #  Commands - Reusable collections of steps

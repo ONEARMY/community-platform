@@ -33,7 +33,7 @@ aliases:
   - &install_packages
     run:
       name: Install Packages
-      command: yarn config set enableGlobalCache true && yarn install --immutable
+      command: yarn install --immutable
   - &check_folders
     run:
       name: check folders
@@ -41,17 +41,15 @@ aliases:
         ls -a ~
         ls -a ~/.cache
         ls -a ~/project
-        ls -a .yarn
+        ls -a ~/.yarn/berry/cache
         du -a /home | sort -n -r | head -n 500
   - &save_yarn_cache
     save_cache:
       # note - if moving to workspaces include paths: https://discuss.circleci.com/t/yarn-cached-install-slow/34823/2
       # depending on whether enableGlobalCache is set to true or not (and windows/linux) these paths may vary
       paths:
-        - ~/.cache/yarn
-        - ~/.config/yarn/global
-        - /home/circleci/.yarn/berry/cache
-        - .yarn/.cache
+        # enableGlobalCache location
+        - ~/.yarn/berry/cache
       key: yarn-packages-v7-{{ .Branch }}-{{ checksum "yarn.lock" }}
 
 ######################################################################################################

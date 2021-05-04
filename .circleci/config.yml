@@ -27,9 +27,9 @@ aliases:
         # https://circleci.com/docs/2.0/yarn/
         # when lock file changes, use increasingly general patterns to restore cache
         # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar
-        - yarn-packages-v5-{{ .Branch }}-{{ checksum "yarn.lock" }}
-        - yarn-packages-v5-{{ .Branch }}-
-        - yarn-packages-v5-
+        - yarn-packages-v6-{{ .Branch }}-{{ checksum "yarn.lock" }}
+        - yarn-packages-v6-{{ .Branch }}-
+        - yarn-packages-v6-
   - &install_packages
     run:
       name: Install Packages
@@ -39,8 +39,8 @@ aliases:
       # note - if moving to workspaces include paths: https://discuss.circleci.com/t/yarn-cached-install-slow/34823/2
       paths:
         - ~/.cache/yarn
-        - ./.yarn/.cache
-      key: yarn-packages-v5-{{ .Branch }}-{{ checksum "yarn.lock" }}
+        - .yarn/.cache
+      key: yarn-packages-v6-{{ .Branch }}-{{ checksum "yarn.lock" }}
 
 ######################################################################################################
 #  Commands - Reusable collections of steps

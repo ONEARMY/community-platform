@@ -290,7 +290,7 @@ describe('[How To]', () => {
       cy.login('howto_creator@test.com', 'test1234')
       cy.visit(editHowtoUrl)
       // user should be redirect to how-to page
-      cy.url().should('eq', howtoUrl)
+      cy.location('pathname').should('eq', howtoUrl)
     })
 
     it('[By Owner]', () => {

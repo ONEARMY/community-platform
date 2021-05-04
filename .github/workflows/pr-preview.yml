@@ -22,11 +22,18 @@ jobs:
         with:
           # pull the repo from the pull request source, not the default local repo
           ref: ${{ github.event.pull_request.head.sha }}
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+        # Setup yarn 2 cache: https://github.com/actions/cache/blob/main/examples.md#node---yarn
       - name: Setup Cache
         uses: actions/cache@v2
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
-          path: ".yarn/cache"
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
       - name: Install npm dependencies
         run: yarn install
       - name: Build for Preview

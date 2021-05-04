@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
-
 import VarelaRound_woff from './VarelaRound-Regular.woff'
 import VarelaRound_ttf from './VarelaRound-Regular.ttf'
 

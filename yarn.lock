@@ -19038,6 +19038,7 @@ fsevents@^1.2.7:
     react-hamburger-menu: ^1.1.1
     react-icons: ^3.2.2
     react-image-lightbox: ^5.1.0
+    react-lazy-load-image-component: ^1.5.1
     react-leaflet: ^2.5.0
     react-leaflet-markercluster: ^2.0.0-rc3
     react-linkify: ^0.2.2
@@ -20184,6 +20185,19 @@ fsevents@^1.2.7:
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
   checksum: 3eff23f410d40ab9bc5177f147a92c7f42c356a21ecea340e0554566956d67e5e1ba56f26cc7fa22339ac3c7151744177bd6305eaa26d3cbf15f354358c9d9b6
+  languageName: node
+  linkType: hard
+
+"react-lazy-load-image-component@npm:^1.5.1":
+  version: 1.5.1
+  resolution: "react-lazy-load-image-component@npm:1.5.1"
+  dependencies:
+    lodash.debounce: ^4.0.8
+    lodash.throttle: ^4.1.1
+  peerDependencies:
+    react: ^15.x.x || ^16.x.x || ^17.x.x
+    react-dom: ^15.x.x || ^16.x.x || ^17.x.x
+  checksum: 3b5d576a82cc1233bb276c5d5cd8a4129afee42ccd64e7b69b04476d34e67cdf78d277f5272efd9a3066d50e53fb7224ffd5b5af0a680b32295114a54d91fba0
   languageName: node
   linkType: hard
 

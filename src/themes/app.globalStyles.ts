@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { createGlobalStyle } from 'styled-components'
 import theme, { zIndex } from 'src/themes/styled.theme'
 

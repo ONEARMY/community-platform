@@ -24,6 +24,8 @@ env:
       - DEBUG=True
       - MOZ_HEADLESS=1
 install:
+  # fix ENOSPC: System limit for number of file wathcers reached bug
+  - echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
   - yarn install --immutable
 # add the current github branch as an environment variable
 before_script:
@@ -58,6 +60,10 @@ _predeploy_defaults: &_predeploy_defaults
 # CI_NODE var just ensures job env unique (otherwise won't run), others are passed to default script
 jobs:
   include:
+    - stage: Build
+      if: branch = ci/travis
+      script:
+        - npm run build
     # Test - Run 4 test stages in parallel
     # TODO - possibly create a single build before test and use for tests and deploy
     # (might be tricky: https://docs.travis-ci.com/user/build-stages/#data-persistence-between-stages-and-jobs)

@@ -35,7 +35,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: Install npm dependencies
-        run: yarn install
+        run: yarn install --immutable
       - name: Build for Preview
         run: npm run build
         env:

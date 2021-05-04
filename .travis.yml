@@ -1,13 +1,12 @@
 language: node_js
 node_js:
-  - '12'
+  - "12"
 dist: xenial
 cache:
   # cache both yarn (.cache) and npm (for global installs)
   yarn: true
   directories:
-    - ~/.cache
-    - ~/.npm
+    - ./.yarn/cache
 addons:
   chrome: stable
   firefox: latest
@@ -25,7 +24,7 @@ env:
       - DEBUG=True
       - MOZ_HEADLESS=1
 install:
-  - yarn install --frozen-lockfile --silent
+  - yarn install --immutable
 # add the current github branch as an environment variable
 before_script:
   - echo "MATRIX=$MATRIX_VAR"

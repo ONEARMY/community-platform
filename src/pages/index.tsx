@@ -5,6 +5,7 @@ import GoogleAnalytics from 'src/components/GoogleAnalytics'
 import { NotFoundPage } from './NotFound/NotFound'
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import Header from './common/Header/Header'
+import { SWUpdateNotification } from 'src/pages/common/SWUpdateNotification/SWUpdateNotification'
 import Main from 'src/pages/common/Layout/Main'
 import { Button } from 'src/components/Button'
 import {
@@ -44,6 +45,7 @@ export class Routes extends React.Component<any, IState> {
     return (
       <Flex height={'100vh'} flexDirection="column" data-cy="page-container">
         <BrowserRouter>
+          <SWUpdateNotification />
           <GoogleAnalytics />
           {/* on page change scroll to top */}
           <ScrollToTop>

@@ -1,65 +1,47 @@
-import * as React from 'react'
-import Snackbar from '@material-ui/core/Snackbar'
-import Button from '@material-ui/core/Button'
-import { PlatformStore } from 'src/stores/Platform/platform.store'
-import { inject, observer } from 'mobx-react'
+import { memo, useEffect, useState } from 'react'
 
-/* Simple component to listen to store updates to service worker and present a
-snackbar/toast message to inform the user to reload their browser to see changes 
-bind to isOpen in parent to toggle.
-NOTE - we do not provide a dismiss button as lazy loaded routes will fail to load if not updated
-*/
+import * as serviceWorkerRegistration from 'src/serviceWorkerRegistration'
+import { Prompt } from 'react-router'
 
-interface IProps {
-  platformStore?: PlatformStore
-}
-interface IState {
-  disabled: boolean
-}
+/**
+ * Handle the registration and update of service worker
+ * When a new service worker is detected let it take control of the current page (skipWaiting)
+ * and refresh the page the next time the user attemps a navigation action
+ **/
 
-interface InjectedProps extends IProps {
-  platformStore: PlatformStore
-}
+export const SWUpdateNotification = memo(() => {
+  const [reloadRequired, setReloadRequired] = useState(false)
+  const [swLoaded, setSWLoaded] = useState(false)
 
-@inject('platformStore')
-@observer
-export class SWUpdateNotification extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props)
-    this.state = { disabled: false }
-  }
-  get injected() {
-    return this.props as InjectedProps
-  }
-
-  public activateServiceWorkder() {
-    const { registration } = this.injected.platformStore
-    if (!registration.waiting) {
-      // Just to ensure registration.waiting is available before
-      // calling postMessage()
-      return
+  useEffect(() => {
+    if (!swLoaded) {
+      console.log('loading sw')
+      // register service worker, activating immediately (skipWaiting) and prompt reload
+      serviceWorkerRegistration.register({
+        handleSWControlling: () => {
+          console.log('new sw controlling')
+          setReloadRequired(true)
+        },
+        handleSWWaiting: wb => wb.messageSkipWaiting(),
+      })
+      setSWLoaded(true)
     }
-    this.setState({ disabled: true })
-    registration.waiting.postMessage('skipWaiting')
-  }
+  })
 
-  public render() {
-    return (
-      <Snackbar
-        action={[
-          <Button
-            key="reload"
-            color="secondary"
-            size="small"
-            onClick={() => this.activateServiceWorkder()}
-            disabled={this.state.disabled}
-          >
-            {this.state.disabled ? 'Updating' : 'Update'}
-          </Button>,
-        ]}
-        message={<span id="message-id">New version available</span>}
-        open={this.injected.platformStore.serviceWorkerStatus === 'updated'}
+  // If a new service worker has been loaded prevent route changes (which will use old sw assets)
+  // and force a page refresh instead when the user goes to navigate
+  return (
+    <>
+      <Prompt
+        when={reloadRequired}
+        message={location => {
+          // navigate to the target page, but via window navigation to reload the service worker
+          window.location.assign(location.pathname)
+          // allow the transition to proceed as normal (don't block the location assign)
+          return true
+        }}
       />
-    )
-  }
-}
+    </>
+  )
+})
+SWUpdateNotification.displayName = 'SWUpdateNotification'

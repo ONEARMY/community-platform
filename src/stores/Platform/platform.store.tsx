@@ -23,7 +23,6 @@ export class PlatformStore {
     status: ISWStatus,
     registration: ServiceWorkerRegistration,
   ) {
-    console.log('[SW] - updated', status, registration)
     this.serviceWorkerStatus = status
     this.registration = registration
   }

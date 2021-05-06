@@ -1,4 +1,5 @@
 import React from 'react'
+import { Box, Flex, Text } from 'rebass'
 import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
 
 export interface IProps {
@@ -9,9 +10,11 @@ export interface IProps {
 }
 
 export const CommentHeader = ({ userCountry, userName, date }: IProps) => (
-  <div>
-    {userCountry && <FlagIconHowTos code={userCountry} />}
-    <span>{userName}</span>
-    <span>{date}</span>
-  </div>
+  <Flex justifyContent="space-between" alignItems="baseline">
+    <Box>
+      {userCountry && <FlagIconHowTos code={userCountry} />}
+      <span style={{ marginLeft: userCountry ? '5px' : 0 }}>{userName}</span>
+    </Box>
+    <Text fontSize={1}>{date}</Text>
+  </Flex>
 )

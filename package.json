@@ -150,7 +150,7 @@
     "idb": "^6.0.0",
     "lint-staged": "^8.1.5",
     "mobx-react-devtools": "^6.0.3",
-    "node-sass": "^4.13.1",
+    "node-sass": "^4.14.1",
     "prettier": "^1.16.4",
     "react-app-rewired": "^2.1.5",
     "react-scripts": "3.4.1",

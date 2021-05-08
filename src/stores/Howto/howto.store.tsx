@@ -149,7 +149,7 @@ export class HowtoStore extends ModuleStore {
           _created: new Date().toISOString(),
           _creatorId: user._id,
           creatorName: user.displayName,
-          creatorCountry: user.country,
+          creatorCountry: user.country?.toLowerCase(),
           text: text.trim(),
         }
 

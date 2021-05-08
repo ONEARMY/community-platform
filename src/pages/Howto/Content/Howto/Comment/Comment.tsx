@@ -4,6 +4,7 @@ import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import { IComment } from 'src/models/howto.models'
 import { Text } from 'src/components/Text/index'
+import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
 
 interface IProps {
   comment: IComment
@@ -15,6 +16,9 @@ interface IProps {
 const Comment: React.FC<IProps> = ({ comment, editable, onEdit, onDelete }) => {
   return (
     <Flex flexDirection="column">
+      {comment.creatorCountry && (
+        <FlagIconHowTos code={comment.creatorCountry} />
+      )}
       <Heading>{comment.creatorName}</Heading>
       <Text>{comment.text}</Text>
       <Text>{comment._created.slice(0, 10)}</Text>

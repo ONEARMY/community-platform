@@ -20,7 +20,7 @@ export const PostingGuidelines = () => (
       <Link
         color={theme.colors.blue}
         target="_blank"
-        href="/academy/create/research"
+        href="/academy/guides/research"
       >
         our guidelines{' '}
         <span role="img" aria-label="nerd-face">

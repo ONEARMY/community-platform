@@ -11,8 +11,9 @@ type IProps = FlexProps & ILayoutProps
 
 const Main = (props: IProps) => (
   <Flex {...(props as any)} flexDirection="column">
-    <Box
+    <Flex
       width="100%"
+      flexDirection="column"
       className="main-container"
       css={props.customStyles}
       sx={
@@ -29,7 +30,7 @@ const Main = (props: IProps) => (
       }
     >
       {props.children}
-    </Box>
+    </Flex>
   </Flex>
 )
 

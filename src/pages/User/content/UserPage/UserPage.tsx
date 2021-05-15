@@ -140,6 +140,9 @@ const ProfileWrapper = styled(Box)`
   border: 2px solid black;
   border-radius: 10px;
   overflow: hidden;
+  max-width: 1000px;
+  width: 100%;
+  align-self: center;
 `
 
 const ProfileWrapperCarousel = styled.div``

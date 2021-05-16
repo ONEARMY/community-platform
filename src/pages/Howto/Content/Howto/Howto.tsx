@@ -22,6 +22,8 @@ import { Loader } from 'src/components/Loader'
 import { Route } from 'react-router-dom'
 import { NotFoundPage } from '../../../NotFound/NotFound'
 import { UserStore } from 'src/stores/User/user.store'
+import Comment from './Comment/Comment'
+import { TextAreaStyled } from 'src/components/Form/elements'
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
 // We can't directly provide the store as a prop though, and later user a get method to define it
@@ -35,6 +37,8 @@ interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
 interface IState {
   howto?: IHowtoDB
   isLoading: boolean
+  commentValue: string
+  numVisibleComments: number
   changedIsUseful?: boolean
 }
 const MoreBox = styled(Box)`
@@ -74,6 +78,8 @@ const MoreBox = styled(Box)`
   }
 `
 
+const VISIBLE_COMMENTS_NUMBER = 5
+
 @inject('howtoStore', 'userStore')
 @observer
 export class Howto extends React.Component<
@@ -84,6 +90,8 @@ export class Howto extends React.Component<
     super(props)
     this.state = {
       isLoading: true,
+      commentValue: '',
+      numVisibleComments: VISIBLE_COMMENTS_NUMBER,
     }
   }
   // workaround used later so that userStore can be called in render method when not existing on
@@ -138,6 +146,62 @@ export class Howto extends React.Component<
               <Step step={step} key={index} stepindex={index} />
             ))}
           </Box>
+          <Box mt={9}>
+            {activeHowto.comments &&
+              activeHowto.comments
+                .slice(0, this.state.numVisibleComments)
+                .map(comment => (
+                  <Comment
+                    key={comment._id}
+                    comment={comment}
+                    editable={
+                      this.injected.userStore.activeUser?._id ===
+                      comment._creatorId
+                    }
+                    onEdit={(id: string, text: string) =>
+                      this.store.editComment(id, text)
+                    }
+                    onDelete={(id: string) => this.store.deleteComment(id)}
+                  />
+                ))}
+          </Box>
+          {activeHowto.comments &&
+            activeHowto.comments.length > this.state.numVisibleComments && (
+              <Button
+                mt={9}
+                onClick={() =>
+                  this.setState(prevState => ({
+                    numVisibleComments:
+                      prevState.numVisibleComments + VISIBLE_COMMENTS_NUMBER,
+                  }))
+                }
+              >
+                show more comments
+              </Button>
+            )}
+          {this.store.activeUser && (
+            <>
+              <Box mt={9}>
+                <TextAreaStyled
+                  style={{ backgroundColor: 'white' }}
+                  placeholder="Leave your questions or feedback..."
+                  value={this.state.commentValue}
+                  onChange={e =>
+                    this.setState({ commentValue: e.target.value })
+                  }
+                />
+              </Box>
+              <Button
+                onClick={() => {
+                  this.setState({ commentValue: '' })
+                  this.store.addComment(this.state.commentValue)
+                }}
+                disabled={!(this.state.commentValue.length > 0)}
+              >
+                Add new comment
+              </Button>
+            </>
+          )}
           <MoreBox py={20} mt={20}>
             <Text bold txtcenter fontSize={[4, 4, 5]}>
               You're done.

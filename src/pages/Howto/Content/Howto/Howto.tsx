@@ -36,8 +36,6 @@ interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
 interface IState {
   howto?: IHowtoDB
   isLoading: boolean
-  commentValue: string
-  numVisibleComments: number
   changedIsUseful?: boolean
 }
 const MoreBox = styled(Box)`
@@ -77,8 +75,6 @@ const MoreBox = styled(Box)`
   }
 `
 
-const VISIBLE_COMMENTS_NUMBER = 5
-
 @inject('howtoStore', 'userStore')
 @observer
 export class Howto extends React.Component<
@@ -90,8 +86,6 @@ export class Howto extends React.Component<
     super(props)
     this.state = {
       isLoading: true,
-      commentValue: '',
-      numVisibleComments: VISIBLE_COMMENTS_NUMBER,
     }
   }
   // workaround used later so that userStore can be called in render method when not existing on

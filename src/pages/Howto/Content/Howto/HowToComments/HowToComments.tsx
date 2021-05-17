@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Flex } from 'rebass'
+import { useCommonStores } from 'src'
 import { Button } from 'src/components/Button'
 import { Comment } from 'src/components/Comment/Comment'
 import { CommentTextArea } from 'src/components/Comment/CommentTextArea'
@@ -14,7 +15,15 @@ interface IProps {
 
 // TODO: Expect the comments as a prop from the HowTo
 export const HowToComments = ({ userName, comments }: IProps) => {
-  // TODO: Not pixel perfect centered...
+  const { stores } = useCommonStores()
+  const [moreComments, setMoreComments] = useState(1)
+
+  async function onSubmit(comment: string) {
+    await stores.howtoStore.addComment(comment)
+  }
+
+  const shownComments = moreComments * MAX_COMMENTS
+
   return (
     <Flex ml={[0, 0, 6]} mt={5} flexDirection="column" alignItems="center">
       <Flex
@@ -25,15 +34,19 @@ export const HowToComments = ({ userName, comments }: IProps) => {
       >
         {comments &&
           comments
-            .slice(0, MAX_COMMENTS)
+            .slice(0, shownComments)
             .map(comment => <Comment key={comment._id} {...comment} />)}
-        {comments && comments.length && (
-          <Button width="max-content" variant="outline">
+        {comments && comments.length > shownComments && (
+          <Button
+            width="max-content"
+            variant="outline"
+            onClick={() => setMoreComments(moreComments + 1)}
+          >
             show more comments
           </Button>
         )}
       </Flex>
-      <CommentTextArea userName={userName} />
+      <CommentTextArea userName={userName} onSubmit={onSubmit} />
     </Flex>
   )
 }

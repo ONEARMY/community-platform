@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Box, Text } from 'rebass/styled-components'
 import theme from 'src/themes/styled.theme'
@@ -6,6 +6,7 @@ import { Avatar } from '../Avatar'
 
 export interface IProps {
   userName?: string
+  onSubmit: (string) => Promise<void>
 }
 
 const TextAreaStyled = styled.textarea`
@@ -19,6 +20,10 @@ const TextAreaStyled = styled.textarea`
 
   &:focus-visible {
     outline: none;
+  }
+
+  &:disabled {
+    background-color: white;
   }
 `
 
@@ -45,17 +50,44 @@ const TextBoxStyled = styled(Box)`
   }
 `
 
-export const CommentTextArea = ({ userName }) => (
-  <BoxStyled width={2 / 3} p="3" bg={'white'}>
-    <AvatarBoxStyled>
-      <Avatar userName={userName} />
-    </AvatarBoxStyled>
-    <TextBoxStyled>
-      {userName ? (
-        <TextAreaStyled placeholder="Leave your questions or feedback..." />
-      ) : (
-        <Text height="2em">Hi there! Login to leave a comment</Text>
-      )}
-    </TextBoxStyled>
-  </BoxStyled>
-)
+export const CommentTextArea = ({ userName, onSubmit }) => {
+  const [comment, setComment] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  async function keyDown(e) {
+    if (e.key === 'Enter' && !e.shiftKey && comment.trim().length) {
+      e.preventDefault()
+      try {
+        setLoading(true)
+        await onSubmit(comment)
+        setLoading(false)
+        setComment('')
+      } catch (error) {
+        // Notify user to resend comment
+      }
+    }
+  }
+
+  return (
+    <BoxStyled width={2 / 3} p="3" bg={'white'}>
+      <AvatarBoxStyled>
+        <Avatar userName={userName} />
+      </AvatarBoxStyled>
+      <TextBoxStyled>
+        {userName ? (
+          <TextAreaStyled
+            disabled={loading}
+            value={comment}
+            onChange={event => {
+              setComment(event.target.value)
+            }}
+            placeholder="Leave your questions or feedback..."
+            onKeyDown={keyDown}
+          />
+        ) : (
+          <Text height="2em">Hi there! Login to leave a comment</Text>
+        )}
+      </TextBoxStyled>
+    </BoxStyled>
+  )
+}

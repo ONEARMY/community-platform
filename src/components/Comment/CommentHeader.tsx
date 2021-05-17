@@ -1,20 +1,22 @@
 import React from 'react'
 import { Box, Flex, Text } from 'rebass'
 import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
+import { IComment } from 'src/models'
 
-export interface IProps {
-  userCountry?: string
-  userName: string
-  // TODO: Could be number - depends on BE
-  date: string
-}
+export interface IProps extends Omit<IComment, '_id' | 'text' | '_creatorId'> {}
 
-export const CommentHeader = ({ userCountry, userName, date }: IProps) => (
+export const CommentHeader = ({
+  creatorName,
+  creatorCountry,
+  _created,
+}: IProps) => (
   <Flex justifyContent="space-between" alignItems="baseline">
     <Box>
-      {userCountry && <FlagIconHowTos code={userCountry} />}
-      <span style={{ marginLeft: userCountry ? '5px' : 0 }}>{userName}</span>
+      {creatorCountry && <FlagIconHowTos code={creatorCountry} />}
+      <span style={{ marginLeft: creatorCountry ? '5px' : 0 }}>
+        {creatorName}
+      </span>
     </Box>
-    <Text fontSize={1}>{date}</Text>
+    <Text fontSize={1}>{_created}</Text>
   </Flex>
 )

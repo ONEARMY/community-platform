@@ -1,21 +1,22 @@
 import React from 'react'
 import { Box } from 'rebass'
+import { IComment } from 'src/models'
 import { CommentHeader } from './CommentHeader'
 
-export interface IProps {
-  userCountry: string
-  userName: string
-  comment: string
-  date: string
-}
+export interface IProps extends IComment {}
 
-export const Comment = ({ userCountry, userName, date, comment }: IProps) => (
+export const Comment = ({
+  creatorName,
+  creatorCountry,
+  text,
+  _created,
+}: IProps) => (
   <Box p="3" bg={'white'} mb={4} style={{ borderRadius: '5px' }}>
     <CommentHeader
-      userCountry={userCountry}
-      userName={userName}
-      date={date}
+      creatorCountry={creatorCountry}
+      creatorName={creatorName}
+      _created={_created}
     ></CommentHeader>
-    <p>{comment}</p>
+    <p>{text}</p>
   </Box>
 )

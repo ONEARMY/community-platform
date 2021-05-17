@@ -146,7 +146,10 @@ export class Howto extends React.Component<
               <Step step={step} key={index} stepindex={index} />
             ))}
           </Box>
-          <HowToComments userName={loggedInUser?.userName} />
+          <HowToComments
+            userName={loggedInUser?.userName}
+            comments={activeHowto.comments}
+          />
           <MoreBox py={20} mt={20}>
             <Text bold txtcenter fontSize={[4, 4, 5]}>
               You're done.

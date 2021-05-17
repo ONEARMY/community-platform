@@ -38,15 +38,13 @@ export class Avatar extends Component<IProps, IState> {
     const { badgeProfileType } = this.state
 
     return (
-      <>
-        <Image
-          className="avatar"
-          width={width ? width : 40}
-          height={width ? width : 40}
-          sx={{ borderRadius: '25px' }}
-          src={badgeProfileType}
-        />
-      </>
+      <Image
+        className="avatar"
+        width={width ? width : 40}
+        height={width ? width : 40}
+        sx={{ borderRadius: '25px' }}
+        src={badgeProfileType}
+      />
     )
   }
 }

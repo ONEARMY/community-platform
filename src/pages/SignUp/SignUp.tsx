@@ -73,7 +73,7 @@ class SignUpPage extends React.Component<IProps, IState> {
         this.props.history.push('/sign-up-message')
       } else {
         this.setState({
-          errorMsg: 'That display name is already taken',
+          errorMsg: 'Woops sorry, that Username is already taken',
           disabled: false,
         })
       }
@@ -159,7 +159,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                     </Heading>
                     <Flex flexDirection={'column'} mb={3} width={[1, 1, 2 / 3]}>
                       <Label htmlFor="displayName">
-                        Display Name, personal or workspace*
+                        Username. Think carefully. You can't change this*
                       </Label>
                       <Field
                         data-cy="username"

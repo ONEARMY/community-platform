@@ -46,7 +46,7 @@ export const HowToComments = ({ userName, comments }: IProps) => {
           </Button>
         )}
       </Flex>
-      <CommentTextArea userName={userName} onSubmit={onSubmit} />
+      <CommentTextArea onSubmit={onSubmit} />
     </Flex>
   )
 }

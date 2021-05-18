@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component } from 'react'
 
 import { Image, ImageProps } from 'rebass'
 import { inject, observer } from 'mobx-react'
@@ -7,7 +7,6 @@ import Workspace from 'src/pages/User/workspace/Workspace'
 
 interface IProps extends ImageProps {
   width?: string
-  userName: string
   profileType?: ProfileTypeLabel
 }
 

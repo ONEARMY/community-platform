@@ -3,9 +3,9 @@ import styled from 'styled-components'
 import { Box, Text } from 'rebass/styled-components'
 import theme from 'src/themes/styled.theme'
 import { Avatar } from '../Avatar'
+import { useCommonStores } from 'src'
 
 export interface IProps {
-  userName?: string
   onSubmit: (string) => Promise<void>
 }
 
@@ -50,9 +50,17 @@ const TextBoxStyled = styled(Box)`
   }
 `
 
-export const CommentTextArea = ({ userName, onSubmit }) => {
+const TextStyled = styled(Text)`
+  position: absolute;
+  right: 34px;
+  bottom: 14px;
+`
+
+export const CommentTextArea = ({ onSubmit }) => {
   const [comment, setComment] = useState('')
   const [loading, setLoading] = useState(false)
+  const { stores } = useCommonStores()
+  const user = stores.userStore.activeUser
 
   async function keyDown(e) {
     if (e.key === 'Enter' && !e.shiftKey && comment.trim().length) {
@@ -71,13 +79,14 @@ export const CommentTextArea = ({ userName, onSubmit }) => {
   return (
     <BoxStyled width={2 / 3} p="3" bg={'white'}>
       <AvatarBoxStyled>
-        <Avatar userName={userName} />
+        <Avatar profileType={user?.profileType} />
       </AvatarBoxStyled>
       <TextBoxStyled>
-        {userName ? (
+        {user ? (
           <TextAreaStyled
             disabled={loading}
             value={comment}
+            maxLength={400}
             onChange={event => {
               setComment(event.target.value)
             }}
@@ -88,6 +97,7 @@ export const CommentTextArea = ({ userName, onSubmit }) => {
           <Text height="2em">Hi there! Login to leave a comment</Text>
         )}
       </TextBoxStyled>
+      <TextStyled fontSize="2">{comment.length}/400</TextStyled>
     </BoxStyled>
   )
 }

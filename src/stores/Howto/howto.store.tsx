@@ -150,7 +150,7 @@ export class HowtoStore extends ModuleStore {
           _creatorId: user._id,
           creatorName: user.displayName,
           creatorCountry: user.country?.toLowerCase(),
-          text: text.trim(),
+          text: text.slice(0, 400).trim(),
         }
 
         const updatedHowto: IHowto = {
@@ -186,7 +186,7 @@ export class HowtoStore extends ModuleStore {
           comment => comment._creatorId === user._id && comment._id === id,
         )
         if (commentIndex !== -1) {
-          comments[commentIndex].text = newText
+          comments[commentIndex].text = newText.slice(0, 400).trim()
 
           const updatedHowto: IHowto = {
             ...toJS(howto),
@@ -216,7 +216,7 @@ export class HowtoStore extends ModuleStore {
       const user = this.activeUser
       if (id && howto && user && howto.comments) {
         const comments = toJS(howto.comments).filter(
-          comment => comment._creatorId === user._id && comment._id !== id,
+          comment => !(comment._creatorId === user._id && comment._id === id),
         )
 
         const updatedHowto: IHowto = {

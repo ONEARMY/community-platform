@@ -94,7 +94,9 @@ export const CommentTextArea = ({ onSubmit }) => {
             onKeyDown={keyDown}
           />
         ) : (
-          <Text height="2em">Hi there! Login to leave a comment</Text>
+          <Text height="2em" lineHeight="2em">
+            Hi there! Login to leave a comment
+          </Text>
         )}
       </TextBoxStyled>
       {user && <TextStyled fontSize="2">{comment.length}/400</TextStyled>}

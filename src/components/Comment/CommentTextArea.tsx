@@ -52,8 +52,8 @@ const TextBoxStyled = styled(Box)`
 
 const TextStyled = styled(Text)`
   position: absolute;
-  right: 34px;
-  bottom: 14px;
+  right: 8px;
+  bottom: 6px;
 `
 
 export const CommentTextArea = ({ onSubmit }) => {
@@ -97,7 +97,7 @@ export const CommentTextArea = ({ onSubmit }) => {
           <Text height="2em">Hi there! Login to leave a comment</Text>
         )}
       </TextBoxStyled>
-      <TextStyled fontSize="2">{comment.length}/400</TextStyled>
+      {user && <TextStyled fontSize="2">{comment.length}/400</TextStyled>}
     </BoxStyled>
   )
 }

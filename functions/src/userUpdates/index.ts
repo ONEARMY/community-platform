@@ -8,7 +8,7 @@ import { backupUser } from './backupUser'
  * - create user revision history
  * - update map pin location on change
  * - update howTo creator flag on change
- * - update displayName and flag on any comments made by user
+ * - update userName and flag on any comments made by user
  *********************************************************************/
 export const handleUserUpdates = functions.firestore
   .document(`${DB_ENDPOINTS.users}/{id}`)
@@ -34,8 +34,8 @@ async function processHowToUpdates(change: IDBDocChange) {
     await updateHowTosCountry(info._id, country)
   }
 
-  const didChangeDislpayName = prevInfo.displayName !== info.displayName
-  if (didChangeCountry || didChangeDislpayName) {
+  const didChangeUserName = prevInfo.userName !== info.userName
+  if (didChangeCountry || didChangeUserName) {
     await updateHowTosComments({
       userId: info._id,
       country: didChangeCountry
@@ -43,7 +43,7 @@ async function processHowToUpdates(change: IDBDocChange) {
           ? newCountryCode
           : newCountry.toLowerCase()
         : undefined,
-      displayName: didChangeDislpayName ? info.displayName : undefined,
+      userName: didChangeUserName ? info.userName : undefined,
     })
   }
 }
@@ -88,15 +88,15 @@ async function updateHowTosCountry(
 }
 
 /**
- * Updates either `displayName` or `country` in any comments made by the user on any HowTo
+ * Updates either `userName` or `country` in any comments made by the user on any HowTo
  */
 async function updateHowTosComments({
   userId,
-  displayName,
+  userName,
   country,
 }: {
   userId: string
-  displayName?: string
+  userName?: string
   country?: string
 }) {
   console.log('Updating comments by user', userId)
@@ -115,8 +115,8 @@ async function updateHowTosComments({
             const updatedComment = {
               ...comment,
             }
-            if (displayName) {
-              updatedComment.creatorName = displayName
+            if (userName) {
+              updatedComment.creatorName = userName
             }
             if (country) {
               updatedComment.creatorCountry = country

@@ -148,7 +148,7 @@ export class HowtoStore extends ModuleStore {
           _id: randomID(),
           _created: new Date().toISOString(),
           _creatorId: user._id,
-          creatorName: user.displayName,
+          creatorName: user.userName,
           creatorCountry: user.country ? user.country.toLowerCase() : null,
           text: text.slice(0, 400).trim(),
         }

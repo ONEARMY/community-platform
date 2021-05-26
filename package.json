@@ -1,6 +1,11 @@
 {
-  "name": "precious-plastic-community-platform",
+  "name": "one-army-community-platform",
   "version": "1.5.0",
+  "workspaces": [
+    "functions",
+    "shared",
+    "packages/*"
+  ],
   "private": true,
   "scripts": {
     "start": "cross-env FAST_REFRESH=false react-scripts start",
@@ -156,7 +161,7 @@
     "react-scripts": "4.0.3",
     "start-server-and-test": "^1.11.0",
     "ts-loader": "^7.0.5",
-    "typescript": "^4.0.3",
+    "typescript": "4.2.2",
     "wait-on": "^5.2.1",
     "workbox-background-sync": "^5.1.3",
     "workbox-broadcast-update": "^5.1.3",

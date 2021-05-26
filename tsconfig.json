@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "baseUrl": ".",
     "skipLibCheck": true,
@@ -21,18 +17,18 @@
     "noImplicitAny": false,
     "strictPropertyInitialization": false,
     "experimentalDecorators": true,
-    "typeRoots": [
-      "./node_modules/@types",
-      "./types"
-    ],
+    "typeRoots": ["./node_modules/@types", "./types"],
     "declaration": true,
     "noEmit": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "___NOTE___": [
+        "Fix issue: https://github.com/microsoft/TypeScript/issues/29808"
+      ],
+      "react": ["node_modules/react/"]
+    }
   },
-  "include": [
-    "src/**/*",
-    "types"
-  ],
+  "include": ["src/**/*", "types"],
   "exclude": [
     "node_modules",
     "build",

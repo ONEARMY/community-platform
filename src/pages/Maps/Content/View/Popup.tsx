@@ -1,5 +1,6 @@
-import * as React from 'react';
+import * as React from 'react'
 import L from 'leaflet'
+import { Image } from 'rebass'
 import Flex from 'src/components/Flex'
 import Text from 'src/components/Text'
 import { Button } from 'src/components/Button'
@@ -15,7 +16,7 @@ import { inject } from 'mobx-react'
 import { MapsStore } from 'src/stores/Maps/maps.store'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import Workspace from 'src/pages/User/workspace/Workspace'
-import { ReactComponent as VerifiedBadgeIcon } from 'src/assets/icons/icon-verified-badge.svg'
+import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
 
 interface IProps {
   activePin: IMapPin | IMapPinWithDetail
@@ -123,7 +124,8 @@ export class Popup extends React.Component<IProps> {
             <Text large mb={1} display="flex">
               {name}
               {verifiedBadge && (
-                <VerifiedBadgeIcon
+                <Image
+                  src={VerifiedBadgeIcon}
                   width="22px"
                   height="22px"
                   style={{ marginLeft: '5px' }}

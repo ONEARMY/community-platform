@@ -36,7 +36,7 @@ import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 
 import EventsIcon from 'src/assets/icons/icon-events.svg'
 import HowToCountIcon from 'src/assets/icons/icon-how-to.svg'
-import { ReactComponent as VerifiedBadgeIcon } from 'src/assets/icons/icon-verified-badge.svg'
+import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
 // import V4MemberIcon from 'src/assets/icons/icon-v4-member.svg'
 
 import { IUploadedFileMeta } from 'src/stores/storage'
@@ -244,7 +244,7 @@ export class UserPage extends React.Component<
       <UserStatsBox>
         {user.badges?.verified && (
           <UserStatsBoxItem style={{ marginBottom: '15px' }}>
-            <VerifiedBadgeIcon width="22px" height="22px" />
+            <Image src={VerifiedBadgeIcon} width="22px" height="22px" />
             <Box ml="5px">Verified</Box>
           </UserStatsBoxItem>
         )}

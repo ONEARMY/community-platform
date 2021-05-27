@@ -73,6 +73,7 @@ class FirestoreTestDB {
     return batch.commit()
   }
   private deleteAll = async (collectionName: string) => {
+    cy.log(`Delete: ${collectionName}`)
     const batch = db.batch()
     const col = db.collection(collectionName)
     const docs = (await col.get({ source: 'server' })) || []

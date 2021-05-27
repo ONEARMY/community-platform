@@ -20,13 +20,7 @@
     "typeRoots": ["./node_modules/@types", "./types"],
     "declaration": true,
     "noEmit": true,
-    "noFallthroughCasesInSwitch": true,
-    "paths": {
-      "___NOTE___": [
-        "Fix issue: https://github.com/microsoft/TypeScript/issues/29808"
-      ],
-      "react": ["node_modules/react/"]
-    }
+    "noFallthroughCasesInSwitch": true
   },
   "include": ["src/**/*", "types"],
   "exclude": [

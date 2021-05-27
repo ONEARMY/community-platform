@@ -1,3 +1,5 @@
+import { generateDBEndpoints } from 'oa-shared'
+
 // React apps populate a process variable, however it might not always be accessible outside
 // (e.g. cypress will instead use it's own env to populate a prefix)
 const e = process ? process.env : ({} as any)
@@ -17,15 +19,7 @@ const DB_PREFIX = sessionStorage.DB_PREFIX || e.REACT_APP_DB_PREFIX || ''
  * ```
  * const allHowtos = await db.get(DB_ENDPOINTS.howtos)
  * ```
- * NOTE - these are a bit messy due to various migrations and changes
- * In the future all endpoints should try to just retain prefix-base-revision, e.g. oa_users_rev20201012
  */
-export const DB_ENDPOINTS = {
-  howtos: `${DB_PREFIX}v3_howtos`,
-  users: `${DB_PREFIX}v3_users`,
-  tags: `${DB_PREFIX}v3_tags`,
-  events: `${DB_PREFIX}v3_events`,
-  mappins: `${DB_PREFIX}v3_mappins`,
-  research: `${DB_PREFIX}research_rev20201020`,
-}
+export const DB_ENDPOINTS = generateDBEndpoints(DB_PREFIX)
+
 export type DBEndpoint = keyof typeof DB_ENDPOINTS

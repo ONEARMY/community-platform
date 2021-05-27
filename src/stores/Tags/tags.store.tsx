@@ -19,6 +19,8 @@ export class TagsStore extends ModuleStore {
 
   constructor(rootStore: RootStore) {
     super(rootStore, 'tags')
+    // call init immediately for tags so they are available to all pages
+    super.init()
     makeObservable(this)
     this.allDocs$.subscribe((docs: ITag[]) => {
       this.setAllTags(docs)

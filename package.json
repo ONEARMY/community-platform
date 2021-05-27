@@ -84,6 +84,7 @@
     "react-hamburger-menu": "^1.1.1",
     "react-icons": "^3.2.2",
     "react-image-lightbox": "^5.1.0",
+    "react-lazy-load-image-component": "^1.5.1",
     "react-leaflet": "^2.5.0",
     "react-leaflet-markercluster": "^2.0.0-rc3",
     "react-linkify": "^0.2.2",
@@ -104,6 +105,7 @@
     "styled-components": "4.1.3",
     "styled-system": "^4.0.0",
     "web-vitals": "^0.2.4",
+    "workbox-window": "^6.1.5",
     "yup": "^0.27.0"
   },
   "devDependencies": {
@@ -164,17 +166,18 @@
     "ts-loader": "^7.0.5",
     "typescript": "4.2.2",
     "wait-on": "^5.2.1",
-    "workbox-background-sync": "^5.1.3",
-    "workbox-broadcast-update": "^5.1.3",
-    "workbox-cacheable-response": "^5.1.3",
-    "workbox-core": "^5.1.3",
-    "workbox-expiration": "^5.1.3",
-    "workbox-google-analytics": "^5.1.3",
-    "workbox-navigation-preload": "^5.1.3",
-    "workbox-precaching": "^5.1.3",
-    "workbox-range-requests": "^5.1.3",
-    "workbox-routing": "^5.1.3",
-    "workbox-strategies": "^5.1.3",
-    "workbox-streams": "^5.1.3"
+    "workbox-background-sync": "^6.1.5",
+    "workbox-broadcast-update": "^6.1.5",
+    "workbox-cacheable-response": "^6.1.5",
+    "workbox-core": "^6.1.5",
+    "workbox-expiration": "^6.1.5",
+    "workbox-google-analytics": "^6.1.5",
+    "workbox-navigation-preload": "^6.1.5",
+    "workbox-precaching": "^6.1.5",
+    "workbox-range-requests": "^6.1.5",
+    "workbox-recipes": "^6.1.5",
+    "workbox-routing": "^6.1.5",
+    "workbox-strategies": "^6.1.5",
+    "workbox-streams": "^6.1.5"
   }
 }

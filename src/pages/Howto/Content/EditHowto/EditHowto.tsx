@@ -25,7 +25,7 @@ interface IInjectedProps extends IProps {
 }
 
 @inject('howtoStore')
-export class EditHowto extends React.Component<IProps, IState> {
+class EditHowto extends React.Component<IProps, IState> {
   constructor(props: any) {
     super(props)
     this.state = {
@@ -88,3 +88,4 @@ export class EditHowto extends React.Component<IProps, IState> {
     }
   }
 }
+export default EditHowto

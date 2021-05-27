@@ -11,7 +11,9 @@ import {
 import { UserStore } from 'src/stores/User/user.store'
 import Heading from 'src/components/Heading'
 import { Box, Image } from 'rebass'
+// import slick and styles
 import Slider from 'react-slick'
+import 'src/assets/css/slick.min.css'
 import styled from 'styled-components'
 import Icon from 'src/components/Icons'
 import Flex from 'src/components/Flex'

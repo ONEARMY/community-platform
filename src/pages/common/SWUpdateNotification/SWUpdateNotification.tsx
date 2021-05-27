@@ -1,72 +1,47 @@
-import * as React from 'react'
-import Snackbar from '@material-ui/core/Snackbar'
-import Button from '@material-ui/core/Button'
-import IconButton from '@material-ui/core/IconButton'
-import Icon from 'src/components/Icons'
-import { PlatformStore } from 'src/stores/Platform/platform.store'
-import { inject, observer } from 'mobx-react'
+import { memo, useEffect, useState } from 'react'
 
-/* Simple component to listen to store updates to service worker and present a
-snackbar/toast message to inform the user to reload their browser to see changes 
-bind to isOpen in parent to toggle 
-*/
-interface IState {
-  forceClose: boolean
-}
+import * as serviceWorkerRegistration from 'src/serviceWorkerRegistration'
+import { Prompt } from 'react-router'
 
-interface IProps {
-  platformStore?: PlatformStore
-}
+/**
+ * Handle the registration and update of service worker
+ * When a new service worker is detected let it take control of the current page (skipWaiting)
+ * and refresh the page the next time the user attemps a navigation action
+ **/
 
-interface InjectedProps extends IProps {
-  platformStore: PlatformStore
-}
+export const SWUpdateNotification = memo(() => {
+  const [reloadRequired, setReloadRequired] = useState(false)
+  const [swLoaded, setSWLoaded] = useState(false)
 
-@inject('platformStore')
-@observer
-export class SWUpdateNotification extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props)
-    this.state = { forceClose: false }
-  }
-  get injected() {
-    return this.props as InjectedProps
-  }
+  useEffect(() => {
+    if (!swLoaded) {
+      console.log('loading sw')
+      // register service worker, activating immediately (skipWaiting) and prompt reload
+      serviceWorkerRegistration.register({
+        handleSWControlling: () => {
+          console.log('new sw controlling')
+          setReloadRequired(true)
+        },
+        handleSWWaiting: wb => wb.messageSkipWaiting(),
+      })
+      setSWLoaded(true)
+    }
+  })
 
-  public handleClose = () => {
-    this.setState({ forceClose: true })
-  }
-
-  public render() {
-    return (
-      <Snackbar
-        action={[
-          <Button
-            key="reload"
-            color="secondary"
-            size="small"
-            onClick={() => window.location.reload()}
-          >
-            Reload
-          </Button>,
-          <IconButton
-            key="close"
-            aria-label="Close"
-            color="inherit"
-            onClick={this.handleClose}
-          >
-            <Icon glyph={'close'} />
-          </IconButton>,
-        ]}
-        message={<span id="message-id">New version available</span>}
-        open={
-          this.state.forceClose
-            ? false
-            : this.injected.platformStore.serviceWorkerStatus === 'updated'
-            ? true
-            : false
-        }
+  // If a new service worker has been loaded prevent route changes (which will use old sw assets)
+  // and force a page refresh instead when the user goes to navigate
+  return (
+    <>
+      <Prompt
+        when={reloadRequired}
+        message={location => {
+          // navigate to the target page, but via window navigation to reload the service worker
+          window.location.assign(location.pathname)
+          // allow the transition to proceed as normal (don't block the location assign)
+          return true
+        }}
       />
-    )
-  }
-}
+    </>
+  )
+})
+SWUpdateNotification.displayName = 'SWUpdateNotification'

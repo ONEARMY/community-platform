@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import theme from 'src/themes/styled.theme'
@@ -7,7 +7,7 @@ import Text from 'src/components/Text'
 import { Link } from 'src/components/Links'
 import { Link as ExternalLink } from 'rebass'
 
-export class SignUpMessagePage extends React.Component {
+class SignUpMessagePage extends React.Component {
   public render() {
     return (
       <Flex
@@ -68,3 +68,4 @@ export class SignUpMessagePage extends React.Component {
     )
   }
 }
+export default SignUpMessagePage

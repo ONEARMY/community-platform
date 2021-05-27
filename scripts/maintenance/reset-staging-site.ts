@@ -1,5 +1,6 @@
 import { spawnSync, SpawnSyncOptions } from 'child_process'
 import chalk from 'chalk'
+import { generateDBEndpoints } from 'oa-shared'
 
 /***********************************************************************************
  * Constants
@@ -21,9 +22,9 @@ const EXPORT_TARGET = `${STORAGE_BUCKET}/${timestamp}`
 // Specify collections and subcollections for export
 // (can export all without setting collectionIds, but some data might be sensitive or not required. Also allows import into bigquery)
 // e.g. 'v3_users','v3_events' and 'revisions' subcollection */
-const DB_PREFIX = 'v3'
-const COLLECTION_IDS = ['events', 'howtos', 'mappins', 'tags', 'users']
-  .map(id => `${DB_PREFIX}_${id}`)
+
+const DB_ENDPOINTS = generateDBEndpoints()
+const COLLECTION_IDS = Object.values(DB_ENDPOINTS)
   .concat('revisions', 'stats')
   .join(',')
 

@@ -7,8 +7,8 @@ import {
   DB_ENDPOINTS,
   IHowtoDB,
   IEventDB,
+  IHowtoStats,
 } from '../models'
-import { IHowtoStats } from 'src/models'
 export * from './migration'
 
 /**

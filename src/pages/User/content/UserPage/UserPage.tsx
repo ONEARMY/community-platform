@@ -37,8 +37,8 @@ import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 
 import EventsIcon from 'src/assets/icons/icon-events.svg'
-// import ExpertIcon from 'src/assets/icons/icon-expert.svg'
 import HowToCountIcon from 'src/assets/icons/icon-how-to.svg'
+import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
 // import V4MemberIcon from 'src/assets/icons/icon-v4-member.svg'
 
 import { IUploadedFileMeta } from 'src/stores/storage'
@@ -244,17 +244,16 @@ export class UserPage extends React.Component<
 
     return (
       <UserStatsBox>
-        {/* {isExpert && (
-          <UserStatsBoxItem>
-            <ElWithBeforeIcon IconUrl={ExpertIcon} height="25px">
-              Expert
-            </ElWithBeforeIcon>
+        {user.badges?.verified && (
+          <UserStatsBoxItem style={{ marginBottom: '15px' }}>
+            <Image src={VerifiedBadgeIcon} width="22px" height="22px" />
+            <Box ml="5px">Verified</Box>
           </UserStatsBoxItem>
-        )} */}
+        )}
         {user.location && (
           <Link color={'black'} to={'/map/#' + user.userName}>
             <UserStatsBoxItem>
-              <Icon glyph="location-on" size="25"></Icon>
+              <Icon glyph="location-on" size="22"></Icon>
               <Box ml="5px">{user.location?.country}</Box>
             </UserStatsBoxItem>
           </Link>

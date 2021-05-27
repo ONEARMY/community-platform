@@ -31,7 +31,7 @@ class FirestoreTestDB {
     return Promise.all(dbWrites)
   }
 
-  clearDB = () => {
+  clearDB = async () => {
     const endpoints = ensureDBPrefixes(DB_ENDPOINTS)
     const dbDeletes = Object.keys(SEED_DATA).map(key => {
       const endpoint = endpoints[key]

@@ -18139,6 +18139,14 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"oa-scripts@workspace:scripts":
+  version: 0.0.0-use.local
+  resolution: "oa-scripts@workspace:scripts"
+  dependencies:
+    oa-shared: 1.0.0
+  languageName: unknown
+  linkType: soft
+
 "oa-shared@1.0.0, oa-shared@workspace:shared":
   version: 0.0.0-use.local
   resolution: "oa-shared@workspace:shared"

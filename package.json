@@ -4,7 +4,8 @@
   "workspaces": [
     "functions",
     "shared",
-    "packages/*"
+    "packages/*",
+    "scripts"
   ],
   "private": true,
   "scripts": {

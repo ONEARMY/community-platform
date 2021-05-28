@@ -4815,6 +4815,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@storybook/preset-create-react-app@npm:^3.1.7":
+  version: 3.1.7
+  resolution: "@storybook/preset-create-react-app@npm:3.1.7"
+  dependencies:
+    "@pmmmwh/react-refresh-webpack-plugin": ^0.4.3
+    "@types/babel__core": ^7.1.7
+    "@types/webpack": ^4.41.13
+    babel-plugin-react-docgen: ^4.1.0
+    pnp-webpack-plugin: ^1.6.4
+    react-docgen-typescript-plugin: ^0.6.2
+    semver: ^7.3.2
+  peerDependencies:
+    "@babel/core": "*"
+    "@storybook/node-logger": "*"
+    "@storybook/react": ">=5.2"
+    react-scripts: ">=3.0.0"
+  checksum: 92089db7de67b4cb724b5074297e7b38cb9011e77cb5a367bbab1f51a9177d298ac74c357ee743d43da280791ff9978bb7196e26ea66a48de574e8908f2607a0
+  languageName: node
+  linkType: hard
+
 "@storybook/react@npm:^6.2.9":
   version: 6.2.9
   resolution: "@storybook/react@npm:6.2.9"
@@ -6289,7 +6309,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/webpack@npm:^4.41.26, @types/webpack@npm:^4.41.8":
+"@types/webpack@npm:^4.41.13, @types/webpack@npm:^4.41.26, @types/webpack@npm:^4.41.8":
   version: 4.41.29
   resolution: "@types/webpack@npm:4.41.29"
   dependencies:
@@ -7981,7 +8001,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-react-docgen@npm:^4.2.1":
+"babel-plugin-react-docgen@npm:^4.1.0, babel-plugin-react-docgen@npm:^4.2.1":
   version: 4.2.1
   resolution: "babel-plugin-react-docgen@npm:4.2.1"
   dependencies:
@@ -19269,6 +19289,7 @@ fsevents@^1.2.7:
     "@storybook/addon-essentials": ^6.2.9
     "@storybook/addon-knobs": ^6.2.9
     "@storybook/addon-links": ^6.2.9
+    "@storybook/preset-create-react-app": ^3.1.7
     "@storybook/react": ^6.2.9
     babel-loader: 8.1.0
   languageName: unknown
@@ -20328,7 +20349,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"pnp-webpack-plugin@npm:1.6.4":
+"pnp-webpack-plugin@npm:1.6.4, pnp-webpack-plugin@npm:^1.6.4":
   version: 1.6.4
   resolution: "pnp-webpack-plugin@npm:1.6.4"
   dependencies:

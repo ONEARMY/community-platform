@@ -13,7 +13,7 @@ import Update from './Update'
 
 type IProps = RouteComponentProps<{ slug: string }>
 
-export const ResearchItemDetail = observer((props: IProps) => {
+const ResearchItemDetail = observer((props: IProps) => {
   const store = useResearchStore()
 
   const [isLoading, setIsLoading] = React.useState(true)
@@ -81,3 +81,4 @@ export const ResearchItemDetail = observer((props: IProps) => {
     return isLoading ? <Loader /> : <NotFoundPage />
   }
 })
+export default ResearchItemDetail

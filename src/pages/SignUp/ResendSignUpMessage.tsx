@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import styled from 'styled-components'
@@ -26,7 +26,7 @@ interface IProps {
   preloadValues?: any
 }
 
-export class ResendSignUpMessagePage extends React.Component<IProps, IState> {
+class ResendSignUpMessagePage extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
@@ -110,3 +110,4 @@ export class ResendSignUpMessagePage extends React.Component<IProps, IState> {
     )
   }
 }
+export default ResendSignUpMessagePage

@@ -1,14 +1,8 @@
-// This optional code is used to register a service worker.
-// register() is not called by default.
+// https://developers.google.com/web/fundamentals/primers/service-workers/lifecycle#clientsclaim
 
-// This lets the app load faster on subsequent visits in production, and gives
-// it offline capabilities. However, it also means that developers (and users)
-// will only see deployed updates on subsequent visits to a page, after all the
-// existing tabs open on the page have been closed, since previously cached
-// resources are updated in the background.
+import { Workbox } from 'workbox-window'
 
-// To learn more about the benefits of this model and instructions on how to
-// opt-in, read https://cra.link/PWA
+// initial code adapted from create-react-app (v4)
 
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
@@ -20,12 +14,14 @@ const isLocalhost = Boolean(
     ),
 )
 
-type Config = {
-  onSuccess?: (registration: ServiceWorkerRegistration) => void
-  onUpdate?: (registration: ServiceWorkerRegistration) => void
+interface RegisterSWCallback {
+  /** if waiting sw will not take control until notified to do so */
+  handleSWWaiting: (wb: Workbox) => void
+  /** when sw controlling page will likely need a reload */
+  handleSWControlling: () => void
 }
 
-export function register(config?: Config) {
+export function register(callback: RegisterSWCallback) {
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(
@@ -44,69 +40,34 @@ export function register(config?: Config) {
 
       if (isLocalhost) {
         // This is running on localhost. Let's check if a service worker still exists or not.
-        checkValidServiceWorker(swUrl, config)
-
-        // Add some additional logging to localhost, pointing developers to the
-        // service worker/PWA documentation.
-        navigator.serviceWorker.ready.then(() => {
-          console.log(
-            'This web app is being served cache-first by a service ' +
-              'worker. To learn more, visit https://cra.link/PWA',
-          )
-        })
+        checkValidServiceWorker(swUrl, callback)
       } else {
         // Is not localhost. Just register service worker
-        registerValidSW(swUrl, config)
+        registerValidSW(swUrl, callback)
       }
     })
   }
 }
 
-function registerValidSW(swUrl: string, config?: Config) {
-  navigator.serviceWorker
-    .register(swUrl)
-    .then(registration => {
-      registration.onupdatefound = () => {
-        const installingWorker = registration.installing
-        if (installingWorker == null) {
-          return
-        }
-        installingWorker.onstatechange = () => {
-          if (installingWorker.state === 'installed') {
-            if (navigator.serviceWorker.controller) {
-              // At this point, the updated precached content has been fetched,
-              // but the previous service worker will still serve the older
-              // content until all client tabs are closed.
-              console.log(
-                'New content is available and will be used when all ' +
-                  'tabs for this page are closed. See https://cra.link/PWA.',
-              )
-
-              // Execute callback
-              if (config && config.onUpdate) {
-                config.onUpdate(registration)
-              }
-            } else {
-              // At this point, everything has been precached.
-              // It's the perfect time to display a
-              // "Content is cached for offline use." message.
-              console.log('Content is cached for offline use.')
-
-              // Execute callback
-              if (config && config.onSuccess) {
-                config.onSuccess(registration)
-              }
-            }
-          }
-        }
-      }
+/**
+ * Register a service worker (custom implementation)
+ * If existing service worker exists respond to waiting event
+ * adapted from https://developers.google.com/web/tools/workbox/guides/advanced-recipes
+ * alternate: https://redfin.engineering/how-to-fix-the-refresh-button-when-using-service-workers-a8e27af6df68
+ */
+function registerValidSW(swUrl: string, callback: RegisterSWCallback) {
+  const wb = new Workbox(swUrl)
+  wb.addEventListener('waiting', () => {
+    // only trigger controlling callback if previously waiting sw activated (i.e. not first ever load)
+    wb.addEventListener('controlling', () => {
+      callback.handleSWControlling()
     })
-    .catch(error => {
-      console.error('Error during service worker registration:', error)
-    })
+    callback.handleSWWaiting(wb)
+  })
+  wb.register()
 }
 
-function checkValidServiceWorker(swUrl: string, config?: Config) {
+function checkValidServiceWorker(swUrl: string, callback: RegisterSWCallback) {
   // Check if the service worker can be found. If it can't reload the page.
   fetch(swUrl, {
     headers: { 'Service-Worker': 'script' },
@@ -126,7 +87,7 @@ function checkValidServiceWorker(swUrl: string, config?: Config) {
         })
       } else {
         // Service worker found. Proceed as normal.
-        registerValidSW(swUrl, config)
+        registerValidSW(swUrl, callback)
       }
     })
     .catch(() => {

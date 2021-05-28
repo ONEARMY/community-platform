@@ -48,7 +48,7 @@ class SignUpMessagePage extends React.Component {
                 <ExternalLink
                   color={theme.colors.grey}
                   sx={{ textDecoration: 'underline' }}
-                  href="mailto:platform@onearmy.world?subject=Email%20confirmation%20failed%20community-platform"
+                  href="mailto:hello@onearmy.earth?subject=Email%20confirmation%20failed%20community-platform"
                 >
                   Let us know
                 </ExternalLink>

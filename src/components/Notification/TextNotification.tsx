@@ -3,7 +3,7 @@ import Icon, { IGlyphs } from '../Icons'
 import Text from '../Text'
 import { Flex } from 'rebass'
 import { FadeInOut } from '../Animations/FadeInOut'
-import { getFriendlyMessage } from '../../utils/helpers'
+import { getFriendlyMessage } from 'oa-shared'
 
 /*  
     This component displays a simple text inline as a notification. 

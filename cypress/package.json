@@ -1,0 +1,7 @@
+{
+  "name": "oa-e2e-cypress",
+  "version": "1.0.0",
+  "dependencies": {
+    "oa-shared": "1.0.0"
+  }
+}

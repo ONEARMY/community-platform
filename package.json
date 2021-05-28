@@ -5,7 +5,8 @@
     "functions",
     "shared",
     "packages/*",
-    "scripts"
+    "scripts",
+    "cypress"
   ],
   "private": true,
   "scripts": {

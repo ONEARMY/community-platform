@@ -1,9 +1,9 @@
 {
-  "name": "community-platform-developer-docs-help",
-  "version": "0.0.0",
+  "name": "oa-docs",
+  "version": "1.0.0",
   "private": true,
+  "__NOTE__:": "avoid hoisting in case of react/webpack conflicts",
   "installConfig": {
-    "__NOTE__:": "avoid hoisting in case of react/webpack conflicts",
     "hoistingLimits": "workspaces"
   },
   "scripts": {

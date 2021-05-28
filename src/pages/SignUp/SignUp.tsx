@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { FRIENDLY_MESSAGES } from 'oa-shared'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import styled from 'styled-components'
@@ -73,7 +74,7 @@ class SignUpPage extends React.Component<IProps, IState> {
         this.props.history.push('/sign-up-message')
       } else {
         this.setState({
-          errorMsg: 'Woops sorry, that Username is already taken',
+          errorMsg: FRIENDLY_MESSAGES['sign-up username taken'],
           disabled: false,
         })
       }

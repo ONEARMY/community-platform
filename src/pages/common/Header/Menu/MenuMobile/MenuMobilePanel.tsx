@@ -7,10 +7,6 @@ import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
 import MenuMobileExternalLink from './MenuMobileExternalLink'
 import { BAZAR_URL, GLOBAL_SITE_URL } from 'src/utils/urls'
-import { inject, observer } from 'mobx-react'
-import { UserStore } from 'src/stores/User/user.store'
-import { SITE } from 'src/config/config'
-import { AuthRoute } from 'src/pages/common/AuthRoute'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
 const PanelContainer = styled(Box)`
@@ -45,20 +41,9 @@ export const MenuMobileLinkContainer = styled(Box)`
   border-bottom: 1px solid #ababac;
   margin-top: 5px;
 `
-interface IInjectedProps {
-  userStore: UserStore
-}
 
-@inject('userStore')
-@observer
 export class MenuMobilePanel extends Component {
-  get injected() {
-    return this.props as IInjectedProps
-  }
-
   render() {
-    const user = this.injected.userStore.user
-
     return (
       <>
         <PanelContainer>

@@ -46,8 +46,8 @@
   "functions": {
     "predeploy": [
       "yarn workspace functions install",
-      "npm --prefix \"$RESOURCE_DIR\" run lint",
-      "npm --prefix \"$RESOURCE_DIR\" run build"
+      "yarn workspace functions lint",
+      "yarn workspace functions build"
     ],
     "source": "functions"
   },

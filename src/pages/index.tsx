@@ -1,4 +1,3 @@
-/* tslint:disable:no-eval */
 import React, { Suspense } from 'react'
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom'
 import GoogleAnalytics from 'src/components/GoogleAnalytics'
@@ -25,11 +24,6 @@ interface IState {
 }
 
 export class Routes extends React.Component<any, IState> {
-  // eslint-disable-next-line
-  constructor(props: any) {
-    super(props)
-  }
-
   public render() {
     const pages = [
       ...COMMUNITY_PAGES,
@@ -59,7 +53,7 @@ export class Routes extends React.Component<any, IState> {
                     exact={page.exact}
                     path={page.path}
                     key={page.path}
-                    render={props => (
+                    render={() => (
                       <React.Fragment>
                         <Main
                           data-cy="main-layout-container"

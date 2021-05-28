@@ -130,7 +130,6 @@ export class EventsMenu extends React.Component<any, IState> {
   // *** NOTE - WiP to convert named time period to specific dates
   private setDate(period: timePeriod) {
     const filters = { ...this.state.filters }
-    const from = new Date()
     // let to: Date
     switch (period) {
       case 'weekend':

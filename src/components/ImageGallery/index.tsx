@@ -1,4 +1,4 @@
-import { PureComponent } from 'react';
+import { PureComponent } from 'react'
 import Lightbox from 'react-image-lightbox'
 import { Card, CardProps, Flex, Image } from 'rebass/styled-components'
 import { IUploadedFileMeta } from 'src/stores/storage'
@@ -50,7 +50,8 @@ export default class ImageGallery extends PureComponent<IProps, IState> {
     }
   }
 
-  componentWillMount() {
+  /* eslint-disable @typescript-eslint/naming-convention*/
+  UNSAFE_componentWillMount() {
     const images = this.props.images.filter(img => img !== null)
     const activeImage = images.length > 0 ? images[0] : null
     this.setState({

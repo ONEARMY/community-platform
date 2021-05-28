@@ -97,14 +97,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
           addProtocolMutator,
         }}
         validateOnBlur
-        render={({
-          form: { mutators },
-          submitting,
-          values,
-          invalid,
-          errors,
-          handleSubmit,
-        }) => {
+        render={({ form: { mutators }, submitting, handleSubmit }) => {
           return (
             <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
               <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} mt={4}>
@@ -195,7 +188,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             className="location-search-create"
                             validateFields={[]}
                             validate={required}
-                            customChange={v => {
+                            customChange={() => {
                               this.setState({
                                 isLocationSelected: true,
                               })

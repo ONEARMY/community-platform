@@ -225,7 +225,8 @@ export class UserPage extends React.Component<
     return this.props as InjectedProps
   }
 
-  public async componentWillMount() {
+  /* eslint-disable @typescript-eslint/naming-convention*/
+  public async UNSAFE_componentWillMount() {
     const userid = this.props.match.params.id
     const userData = await this.injected.userStore.getUserProfile(userid)
     this.setState({

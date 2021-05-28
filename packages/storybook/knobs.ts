@@ -1,3 +1,7 @@
+/**
+ * TODO CC 2021-05-28 - Review if this is still useful
+ */
+
 import { array, text, boolean, number, color } from '@storybook/addon-knobs'
 
 const isColor = (strColor: string): boolean => {

@@ -1,6 +1,10 @@
 {
-  "name": "oa-e2e-cypress",
+  "name": "oa-cypress",
   "version": "1.0.0",
+  "scripts": {
+    "db:seed": "TODO",
+    "db:teardown": "TODO"
+  },
   "dependencies": {
     "cypress": "7.4.0",
     "cypress-file-upload": "5.0.7",

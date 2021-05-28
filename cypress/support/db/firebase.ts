@@ -33,9 +33,8 @@ class FirestoreTestDB {
 
   clearDB = async () => {
     const endpoints = ensureDBPrefixes(DB_ENDPOINTS)
-    const dbDeletes = Object.keys(SEED_DATA).map(key => {
-      const endpoint = endpoints[key]
-      return this.deleteAll(`${endpoint}`)
+    const dbDeletes = Object.values(endpoints).map(endpoint => {
+      return this.deleteAll(endpoint)
     })
     return Promise.all(dbDeletes)
   }
@@ -76,7 +75,7 @@ class FirestoreTestDB {
     cy.log(`Delete: ${collectionName}`)
     const batch = db.batch()
     const col = db.collection(collectionName)
-    const docs = (await col.get({ source: 'server' })) || []
+    const docs = (await col.get()) || []
     docs.forEach(d => {
       batch.delete(col.doc(d.id))
     })

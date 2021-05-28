@@ -43,9 +43,7 @@ const routes = () => (
       <AuthRoute
         path="/research/:slug"
         roleRequired="beta-tester"
-        render={routeProps => (
-          <ResearchItemDetail slug={routeProps.match.params.slug as string} />
-        )}
+        component={ResearchItemDetail}
       />
     </Switch>
   </Suspense>

@@ -3,6 +3,7 @@ import {
   ResearchStoreContext,
 } from 'src/stores/Research/research.store'
 import { AuthRoute } from '../common/AuthRoute'
+import { IPageMeta } from '../PageList'
 import ResearchRoutes from './research.routes'
 
 /**
@@ -10,7 +11,7 @@ import ResearchRoutes from './research.routes'
  * @description The research module enables users to share ongoing updates for
  * experimental projects
  */
-export const ResearchModule = {
+export const ResearchModule: IPageMeta = {
   path: '/research',
   component: <ResearchModuleContainer />,
   title: 'Research',

@@ -22,7 +22,7 @@
     "noEmit": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*", "types"],
+  "include": ["src/**/*", "types", "packages/storybook/knobs.ts"],
   "exclude": [
     "node_modules",
     "build",

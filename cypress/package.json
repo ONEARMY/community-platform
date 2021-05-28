@@ -2,6 +2,11 @@
   "name": "oa-e2e-cypress",
   "version": "1.0.0",
   "dependencies": {
+    "cypress": "7.4.0",
+    "cypress-file-upload": "5.0.7",
     "oa-shared": "1.0.0"
+  },
+  "devDependencies": {
+    "@cypress/webpack-preprocessor": "^5.7.0"
   }
 }

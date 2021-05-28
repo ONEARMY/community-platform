@@ -18,8 +18,7 @@
     "serve": "npx serve -s build",
     "test": "node scripts/test.e2e.js",
     "test:unit": "react-scripts test --env=jsdom",
-    "storybook": "start-storybook -p 6006",
-    "storybook:build": "build-storybook",
+    "storybook": "yarn workspace oa-storybook storybook",
     "docs": "cd documentation && npm run start",
     "analyze": "npx cra-bundle-analyzer && npx open-cli build/report.html"
   },
@@ -45,6 +44,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "resolutions": {
+    "__NOTE__": "2021-05-28 storybook clash: https://github.com/storybookjs/storybook/issues/6505",
+    "webpack": "4.44.2"
   },
   "dependencies": {
     "@khanacademy/react-multi-select": "^0.3.3",
@@ -73,7 +76,6 @@
     "pubsub-js": "^1.7.0",
     "react": "^17.0.2",
     "react-datepicker": "^2.9.6",
-    "react-dev-utils": "^11.0.4",
     "react-dom": "^17.0.2",
     "react-dropzone": "^10.1.10",
     "react-final-form": "6.5.3",
@@ -110,15 +112,6 @@
     "yup": "^0.32.9"
   },
   "devDependencies": {
-    "@cypress/webpack-preprocessor": "^5.7.0",
-    "@storybook/addon-actions": "^5.2.5",
-    "@storybook/addon-docs": "^5.2.5",
-    "@storybook/addon-info": "^5.2.5",
-    "@storybook/addon-knobs": "^5.2.5",
-    "@storybook/addon-links": "^5.2.5",
-    "@storybook/addons": "^5.2.5",
-    "@storybook/react": "^5.2.5",
-    "@storybook/theming": "^5.3.18",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -139,10 +132,6 @@
     "@types/react-table": "^6.8.5",
     "@types/react-virtualized": "^9.21.10",
     "@types/rebass": "4",
-    "@types/storybook__addon-actions": "^3.4.2",
-    "@types/storybook__addon-info": "^4.1.0",
-    "@types/storybook__addon-knobs": "^4.0.1",
-    "@types/storybook__react": "^4.0.1",
     "@types/styled-components": "4.0",
     "@types/styled-system": "^3.2.2",
     "@types/yup": "^0.26.27",
@@ -151,8 +140,6 @@
     "chai-subset": "^1.6.0",
     "cra-bundle-analyzer": "^0.1.0",
     "cross-env": "^6.0.3",
-    "cypress": "7.2.0",
-    "cypress-file-upload": "5.0.6",
     "dotenv": "6.0.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
@@ -163,6 +150,7 @@
     "mobx-react-devtools": "^6.0.3",
     "node-sass": "^4.13.1",
     "prettier": "^1.16.4",
+    "react-dev-utils": "^11.0.4",
     "react-scripts": "4.0.3",
     "start-server-and-test": "^1.11.0",
     "ts-loader": "^7.0.5",

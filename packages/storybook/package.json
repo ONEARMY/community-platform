@@ -1,5 +1,9 @@
 {
   "name": "oa-storybook",
+  "scripts": {
+    "start": "start-storybook -p 6006",
+    "build": "build-storybook"
+  },
   "devDependencies": {
     "@babel/core": "^7.14.3",
     "@mdx-js/react": "^1.6.22",
@@ -11,9 +15,5 @@
     "@storybook/preset-create-react-app": "^3.1.7",
     "@storybook/react": "^6.2.9",
     "babel-loader": "8.1.0"
-  },
-  "scripts": {
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
   }
 }

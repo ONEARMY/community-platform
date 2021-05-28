@@ -39,12 +39,12 @@ before(() => {
     })
     // the seeddb function returns an array of [db_key, db_data] entries
     // ensure each db_key contains the correct db prefix and is not empty
-    .each(data => {
-      cy.wrap(data).should(entry => {
-        expect(entry[0]).contains(Cypress.env('DB_PREFIX'))
-        expect(entry[1]).length.greaterThan(0)
-      })
-    })
+    // .each(data => {
+    //   cy.wrap(data).should(entry => {
+    //     expect(entry[0]).contains(Cypress.env('DB_PREFIX'))
+    //     expect(entry[1]).length.greaterThan(0)
+    //   })
+    // })
 })
 
 beforeEach(() => {

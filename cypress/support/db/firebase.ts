@@ -62,7 +62,8 @@ class FirestoreTestDB {
       })
   }
 
-  private addDocuments = (collectionName: string, docs: any[]) => {
+  private addDocuments = async (collectionName: string, docs: any[]) => {
+    cy.log(`DB Seed: ${collectionName}`)
     const batch = db.batch()
     const col = db.collection(collectionName)
     docs.forEach(doc => {
@@ -72,7 +73,7 @@ class FirestoreTestDB {
     return batch.commit()
   }
   private deleteAll = async (collectionName: string) => {
-    cy.log(`Delete: ${collectionName}`)
+    cy.log(`DB Delete: ${collectionName}`)
     const batch = db.batch()
     const col = db.collection(collectionName)
     const docs = (await col.get()) || []

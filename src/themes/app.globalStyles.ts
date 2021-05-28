@@ -1,20 +1,11 @@
 import { createGlobalStyle } from 'styled-components'
 import theme, { zIndex } from 'src/themes/styled.theme'
-// Import css files for Slick-slider
-// import "../../node_modules/slick-carousel/slick/slick.css";
-// import "../../node_modules/slick-carousel/slick/slick-theme.css";
+
+import { GlobalFonts } from './fonts'
+// declare global styling overrides (fonts etc.)
 
 export const GlobalStyle = createGlobalStyle`
-
-  @font-face {
-    font-family: 'Varela Round';
-    src: url('/fonts/VarelaRound-Regular.eot');
-    src: url('/fonts/VarelaRound-Regular-webfont.woff') format('woff'),
-            url('/fonts/VarelaRound-Regular-webfont.ttf') format('truetype')
-    font-weight: normal;
-    font-style: normal;
-  }
-  
+  ${GlobalFonts}
   body {
       font-family: "Varela Round", Arial, sans-serif;
       background-color: ${theme.colors.background};

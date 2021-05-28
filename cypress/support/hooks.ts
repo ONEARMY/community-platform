@@ -60,11 +60,12 @@ beforeEach(() => {
  */
 after(() => {
   cy.clearServiceWorkers()
-  cy.wrap('Clearing Database').then({ timeout: 30000 }, () => {
+  cy.wrap('Clear DB').then({ timeout: 30000 }, () => {
     return new Cypress.Promise((resolve, reject) => {
-      TestDB.clearDB()
-        .then(resolve)
-        .catch(reject)
+      TestDB.clearDB().then(
+        () => resolve(),
+        err => reject(err),
+      )
     })
   })
   // remove service workers at end of test set

@@ -1,11 +1,11 @@
-import * as React from 'react'
+import React from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import { Button } from 'src/components/Button'
 import Text from 'src/components/Text'
 import { Link } from 'src/components/Links'
 
-export class ForgotPasswordMessagePage extends React.Component {
+class ForgotPasswordMessagePage extends React.Component {
   public render() {
     return (
       <Flex
@@ -58,3 +58,4 @@ export class ForgotPasswordMessagePage extends React.Component {
     )
   }
 }
+export default ForgotPasswordMessagePage

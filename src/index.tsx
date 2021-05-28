@@ -8,11 +8,8 @@ import styledTheme from 'src/themes/styled.theme'
 
 import { Routes } from './pages'
 import { RootStore } from './stores'
-import { GlobalStyle } from './themes/app.globalStyle.js'
+import { GlobalStyle } from './themes/app.globalStyles'
 
-import * as serviceWorkerRegistration from './serviceWorkerRegistration'
-
-import { SWUpdateNotification } from './pages/common/SWUpdateNotification/SWUpdateNotification'
 import ErrorBoundary from './common/ErrorBoundary'
 import { initErrorHandler } from './common/errors'
 
@@ -37,21 +34,12 @@ ReactDOM.render(
         <ErrorBoundary>
           <Routes />
         </ErrorBoundary>
-        <SWUpdateNotification />
         <GlobalStyle />
       </>
     </ThemeProvider>
   </Provider>,
   document.getElementById('root') as HTMLElement,
 )
-
-// callback function updates global store when service worker registered
-const onUpdate = () => {
-  console.log('sw updated receive in index')
-  rootStore.stores.platformStore.setServiceWorkerStatus('updated')
-}
-
-serviceWorkerRegistration.register({ onUpdate })
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

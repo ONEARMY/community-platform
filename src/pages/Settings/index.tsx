@@ -1,5 +1,10 @@
 import * as React from 'react'
-import { Route, Switch, withRouter } from 'react-router-dom'
+import {
+  Route,
+  Switch,
+  withRouter,
+  RouteComponentProps,
+} from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
 import { UserStore } from 'src/stores/User/user.store'
 import { IUser } from 'src/models/user.models'
@@ -10,12 +15,11 @@ import Flex from 'src/components/Flex'
 interface InjectedProps extends IProps {
   userStore: UserStore
 }
-interface IProps {}
+type IProps = RouteComponentProps
 
-@(withRouter as any)
 @inject('userStore')
 @observer
-export class SettingsPage extends React.Component<IProps> {
+class SettingsPage extends React.Component<IProps> {
   get injected() {
     return this.props as InjectedProps
   }
@@ -37,3 +41,4 @@ export class SettingsPage extends React.Component<IProps> {
     )
   }
 }
+export default withRouter(SettingsPage)

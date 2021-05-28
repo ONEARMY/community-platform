@@ -1,6 +1,6 @@
-import * as React from 'react'
+import React from 'react'
 
-export class PrivacyPolicy extends React.PureComponent {
+class PrivacyPolicy extends React.PureComponent {
   render() {
     return (
       <>
@@ -161,3 +161,4 @@ export class PrivacyPolicy extends React.PureComponent {
     )
   }
 }
+export default PrivacyPolicy

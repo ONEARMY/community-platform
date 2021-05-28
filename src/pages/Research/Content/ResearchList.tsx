@@ -6,7 +6,7 @@ import { Link } from 'src/components/Links'
 import ResearchListItem from 'src/components/Research/ResearchListItem'
 import { useResearchStore } from 'src/stores/Research/research.store'
 
-export const ResearchList = observer(() => {
+const ResearchList = observer(() => {
   const store = useResearchStore()
   const { filteredResearches } = store
   return (
@@ -30,3 +30,4 @@ export const ResearchList = observer(() => {
     </>
   )
 })
+export default ResearchList

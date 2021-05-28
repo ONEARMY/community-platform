@@ -55,7 +55,8 @@ export class Popup extends React.Component<IProps> {
     return this.injected.mapsStore
   }
 
-  componentWillReceiveProps() {
+  /* eslint-disable @typescript-eslint/naming-convention*/
+  UNSAFE_componentWillReceiveProps() {
     this.openPopup()
   }
 

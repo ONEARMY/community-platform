@@ -6,9 +6,6 @@ import { Flex } from 'rebass/styled-components'
 import styled from 'styled-components'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
 import { zIndex } from 'src/themes/styled.theme'
-import { inject, observer } from 'mobx-react'
-import { UserStore } from 'src/stores/User/user.store'
-import { SITE } from 'src/config/config'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
 const MenuLink = styled(NavLink).attrs(() => ({
@@ -41,20 +38,9 @@ const MenuLink = styled(NavLink).attrs(() => ({
     }
   }
 `
-interface IInjectedProps {
-  userStore: UserStore
-}
 
-@inject('userStore')
-@observer
 export class MenuDesktop extends Component {
-  get injected() {
-    return this.props as IInjectedProps
-  }
-
   render() {
-    const user = this.injected.userStore.user
-
     return (
       <>
         <Flex alignItems={'center'}>

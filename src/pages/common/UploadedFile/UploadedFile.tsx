@@ -57,7 +57,12 @@ export class UploadedFile extends React.Component<IUploadedFileProps, IState> {
           // file display
           <div className="file-meta__container">
             <div className="file-meta__name">
-              <a download target="_blank" href={file.downloadUrl}>
+              <a
+                download
+                target="_blank"
+                href={file.downloadUrl}
+                rel="noreferrer"
+              >
                 {file.name}
               </a>
             </div>

@@ -37,7 +37,8 @@ export class TextNotification extends React.Component<
     type: 'info',
     text: '',
   }
-  componentWillReceiveProps(
+  /* eslint-disable @typescript-eslint/naming-convention*/
+  UNSAFE_componentWillReceiveProps(
     next: ITextNotificationProps,
     prev: ITextNotificationProps,
   ) {

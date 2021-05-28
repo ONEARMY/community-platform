@@ -1,6 +1,6 @@
 import TagsSelect from '../Tags/TagsSelect'
 
-export const TagsSelectField = ({ input, meta, ...rest }) => (
+export const TagsSelectField = ({ input, ...rest }) => (
   <TagsSelect
     {...rest}
     onChange={tags => input.onChange(tags)}

@@ -22,12 +22,12 @@ interface ISelectFieldProps extends IFieldProps, SelectProps {
 // TODO - better bind the above input styles to the react-select component
 // (currently implements its own styling with following overrides)
 export const SelectStyles: Partial<Styles> = {
-  container: (provided, state) => ({
+  container: provided => ({
     ...provided,
     fontSize: theme.fontSizes[2] + 'px',
     fontFamily: '"Varela Round", Arial, sans-serif',
   }),
-  control: (provided, state) => ({
+  control: provided => ({
     ...provided,
     border: '1px solid #dce4e5',
     backgroundColor: theme.colors.background,
@@ -42,7 +42,7 @@ export const SelectStyles: Partial<Styles> = {
     },
   }),
 
-  option: (provided, state) => ({
+  option: provided => ({
     ...provided,
     backgroundColor: theme.colors.background,
     boxShadow: 'none',
@@ -54,7 +54,7 @@ export const SelectStyles: Partial<Styles> = {
     },
   }),
 
-  menu: (provided, state) => ({
+  menu: provided => ({
     ...provided,
     border: '1px solid #dce4e5',
     boxShadow: 'none',
@@ -64,7 +64,7 @@ export const SelectStyles: Partial<Styles> = {
     },
   }),
 
-  multiValue: (provided, state) => ({
+  multiValue: provided => ({
     ...provided,
     backgroundColor: theme.colors.softblue,
     padding: '2px',
@@ -72,7 +72,7 @@ export const SelectStyles: Partial<Styles> = {
     color: theme.colors.grey,
   }),
 
-  indicatorSeparator: (provided, state) => ({
+  indicatorSeparator: provided => ({
     ...provided,
     display: 'none',
   }),
@@ -87,7 +87,7 @@ export const SelectStyles: Partial<Styles> = {
 }
 
 export const FilterStyles: Partial<Styles> = {
-  container: (provided, state) => ({
+  container: provided => ({
     ...provided,
     fontSize: theme.fontSizes[2] + 'px',
     fontFamily: '"Varela Round", Arial, sans-serif',
@@ -95,7 +95,7 @@ export const FilterStyles: Partial<Styles> = {
     borderRadius: '5px',
     color: 'black',
   }),
-  control: (provided, state) => ({
+  control: provided => ({
     ...provided,
     backgroundColor: 'white',
     minHeight: '40px',
@@ -107,11 +107,11 @@ export const FilterStyles: Partial<Styles> = {
       border: '1px solid ' + theme.colors.blue,
     },
   }),
-  placeholder: (provided, state) => ({
+  placeholder: provided => ({
     ...provided,
     color: 'black',
   }),
-  option: (provided, state) => ({
+  option: provided => ({
     ...provided,
     color: 'black',
     backgroundColor: 'white',
@@ -123,7 +123,7 @@ export const FilterStyles: Partial<Styles> = {
     },
   }),
 
-  menu: (provided, state) => ({
+  menu: provided => ({
     ...provided,
     border: '2px solid black',
     boxShadow: 'none',
@@ -133,7 +133,7 @@ export const FilterStyles: Partial<Styles> = {
     },
   }),
 
-  multiValue: (provided, state) => ({
+  multiValue: provided => ({
     ...provided,
     backgroundColor: theme.colors.softblue,
     padding: '2px',
@@ -141,7 +141,7 @@ export const FilterStyles: Partial<Styles> = {
     color: theme.colors.grey,
   }),
 
-  indicatorSeparator: (provided, state) => ({
+  indicatorSeparator: provided => ({
     ...provided,
     display: 'none',
   }),

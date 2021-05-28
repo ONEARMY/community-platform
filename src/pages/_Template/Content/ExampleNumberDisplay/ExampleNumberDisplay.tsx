@@ -17,7 +17,8 @@ export class ExampleNumberDisplay extends React.Component<IProps, IState> {
   // updating props will not trigger constructor call and state set, so
   // if that is required you can use componentWillReceiveProps to trigger
   // state changes on prop changes
-  public componentWillReceiveProps(nextProps: IProps) {
+  /* eslint-disable @typescript-eslint/naming-convention*/
+  public UNSAFE_componentWillReceiveProps(nextProps: IProps) {
     this.setState({ isLucky: this.isItLucky(nextProps.number) })
   }
 

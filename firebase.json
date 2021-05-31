@@ -45,8 +45,7 @@
   },
   "functions": {
     "predeploy": [
-      "yarn workspace functions install",
-      "yarn workspace functions lint",
+      "yarn install",
       "yarn workspace functions exec npm run build"
     ],
     "source": "functions"

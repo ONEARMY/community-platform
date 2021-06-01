@@ -1,0 +1,10 @@
+{
+  "___note___": "This config simply serves to build type declarations to allow import from src into functions",
+  "compilerOptions": {
+    "outDir": "./lib",
+    "typeRoots": ["../node_modules/@types"],
+    "composite": true,
+    "skipLibCheck": true
+  },
+  "exclude": ["../node_modules", "./lib"]
+}

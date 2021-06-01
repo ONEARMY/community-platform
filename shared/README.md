@@ -10,3 +10,6 @@ The shared workspace can be used to share functions and constants between other 
 ### Known Issues
 
 - Typescript will not be compiled. This might be resolved in the future if migrating to lerna or tweaks to tsconfig files. For now will have to just use untyped constants and functions
+
+For a more general example of workspaces working across typescript projects see:
+https://stackoverflow.com/questions/57679322/how-to-use-yarn-workspaces-with-typescript-and-out-folders

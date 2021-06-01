@@ -45,8 +45,8 @@
   },
   "functions": {
     "predeploy": [
-      "yarn install",
-      "yarn workspace functions exec npm run build"
+      "yarn tsc --build tsconfig.src-types.json",
+      "yarn tsc --build functions/tsconfig.json"
     ],
     "source": "functions"
   },

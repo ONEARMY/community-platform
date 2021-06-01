@@ -4,8 +4,12 @@
   "compilerOptions": {
     "composite": true,
     "noEmit": false,
-    "outDir": "./build/types",
+    "outDir": "./lib",
     "emitDeclarationOnly": true,
-    "types": ["jest"]
+    "types": ["jest"],
+    "rootDir": "src",
+    "paths": {
+      // fix https://github.com/microsoft/TypeScript/issues/29808
+    }
   }
 }

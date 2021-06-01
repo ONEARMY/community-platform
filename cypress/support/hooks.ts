@@ -64,8 +64,13 @@ beforeEach(() => {
  */
 after(() => {
   cy.clearServiceWorkers()
-  cy.wrap('Clear DB').then({ timeout: 30000 }, () => {
+  cy.wrap('Clear DB').then({ timeout: 120000 }, () => {
     return new Cypress.Promise((resolve, reject) => {
+      // force resolve in case of server issues (sometimes a bit flaky)
+      setTimeout(() => {
+        resolve()
+      }, 10000)
+      // clear the database
       TestDB.clearDB().then(
         () => resolve(),
         err => reject(err),

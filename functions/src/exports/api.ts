@@ -5,9 +5,9 @@ As most functions are called from triggers the api is mostly just used for testi
 ************************************************************************************/
 
 import * as functions from 'firebase-functions'
-import * as bodyParser from 'body-parser'
-import * as cors from 'cors'
-import * as express from 'express'
+import bodyParser from 'body-parser'
+import cors from 'cors'
+import express from 'express'
 
 console.log('api ready')
 const app = express()

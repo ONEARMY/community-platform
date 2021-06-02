@@ -17,7 +17,8 @@ export const notifyPinAccepted = functions.firestore
     if (info === null || info.moderation !== 'accepted' || beenAccepted) {
       return null
     }
-    if (info.previouslyAccepted) { // Skip after edition of previously accepted
+    if (info.previouslyAccepted) {
+      // Skip after edition of previously accepted
       return null
     }
     const { _id, type } = info
@@ -39,7 +40,8 @@ export const notifyHowToAccepted = functions.firestore
     if (info === null || info.moderation !== 'accepted' || beenAccepted) {
       return null
     }
-    if (info.previouslyAccepted) { // Skip after edition of previously accepted
+    if (info.previouslyAccepted) {
+      // Skip after edition of previously accepted
       return null
     }
     const { _createdBy, title, slug } = info

@@ -1,15 +1,19 @@
 {
   "compilerOptions": {
-    "lib": ["es6"],
-    "module": "commonjs",
+    "lib": ["es6", "DOM"],
+    "module": "CommonJS",
     "noImplicitAny": false,
     "outDir": "lib",
     "sourceMap": true,
+    "declaration": true,
     "target": "es6",
     "jsx": "react-jsx",
     "typeRoots": ["../node_modules/@types"],
     "baseUrl": ".",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true
   },
   "references": [
     // these (should) be compiled ahead of functions, although can break: https://github.com/microsoft/TypeScript/issues/25864#issuecomment-596217193

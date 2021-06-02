@@ -42,3 +42,4 @@ functions/firebase-debug.log
 !.yarn/versions
 .pnp.*
 
+*.tsbuildinfo

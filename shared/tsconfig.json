@@ -1,0 +1,10 @@
+{
+  // Note - this allows the shared workspace to be built and imported into other workspaces
+  "compilerOptions": {
+    "outDir": "./lib",
+    "typeRoots": ["../node_modules/@types"],
+    "composite": true,
+    "skipLibCheck": true
+  },
+  "exclude": ["../node_modules", "./lib"]
+}

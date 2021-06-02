@@ -129,23 +129,24 @@ export const cropBottomRight = (props: ITextProps) =>
       }
     : null
 
-export const BaseText = styled(RebassText)`
+// any export to fix: https://github.com/microsoft/TypeScript/issues/37597
+export const BaseText = styled(RebassText as any)`
   ${inline}
-  ${uppercase}
-  ${capitalize}
+  ${uppercase as any}
+  ${capitalize as any}
   ${regular}
   ${bold}
-	${txtcenter}
+	${txtcenter as any}
   ${large}
   ${medium}
   ${small}
   ${superSmall}
-  ${clipped}
-	${preLine}
+  ${clipped as any}
+	${preLine as any}
 	${tags}
 	${auxiliary}
 	${paragraph}
-  ${txtRight}
+  ${txtRight as any}
   ${highlight}
   ${critical}
   ${dashed}

@@ -44,11 +44,8 @@
     ]
   },
   "functions": {
-    "predeploy": [
-      "yarn install",
-      "yarn workspace functions exec npm run build"
-    ],
-    "source": "functions"
+    "predeploy": ["yarn workspace functions build"],
+    "source": "functions/dist"
   },
   "emulators": {
     "functions": {

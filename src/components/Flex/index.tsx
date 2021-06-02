@@ -49,7 +49,7 @@ export const mediumScale = (props: IFlexProps) =>
       }
     : null
 
-export const BaseFlex = styled(RebassFlex)`
+export const BaseFlex = styled(RebassFlex as any)`
   ${littleRadius}
   ${mediumRadius}
   ${largeRadius}

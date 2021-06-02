@@ -32,11 +32,11 @@ const PanelMenu = styled(Box)`
   overflow: visible;
   min-width: 200px;
 `
-export const PanelItem = styled(Box)`
+export const PanelItem = styled(Box as any)`
   padding: ${theme.space[3]}px 0px;
 `
 
-export const MenuMobileLinkContainer = styled(Box)`
+export const MenuMobileLinkContainer = styled(Box as any)`
   border-top: 1px solid #ababac;
   border-bottom: 1px solid #ababac;
   margin-top: 5px;

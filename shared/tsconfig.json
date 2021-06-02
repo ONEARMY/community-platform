@@ -1,5 +1,5 @@
 {
-  "___note___": "This config simply serves to build type declarations to allow import from src into functions",
+  // Note - this allows the shared workspace to be built and imported into other workspaces
   "compilerOptions": {
     "outDir": "./lib",
     "typeRoots": ["../node_modules/@types"],

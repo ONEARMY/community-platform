@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions'
 import { db } from '../Firebase/firestoreDB'
-import { DB_ENDPOINTS, IDBDocChange, IUserDB } from '../models'
+import { DB_ENDPOINTS, IDBDocChange, IUserDB, IHowtoDB } from '../models'
 import { backupUser } from './backupUser'
 
 /*********************************************************************
@@ -8,25 +8,43 @@ import { backupUser } from './backupUser'
  * - create user revision history
  * - update map pin location on change
  * - update howTo creator flag on change
+ * - update userName and flag on any comments made by user
  *********************************************************************/
 export const handleUserUpdates = functions.firestore
   .document(`${DB_ENDPOINTS.users}/{id}`)
   .onUpdate(async (change, context) => {
     await backupUser(change)
-    await processCountryUpdates(change)
+    await processHowToUpdates(change)
   })
 
-async function processCountryUpdates(change: IDBDocChange) {
-  const info = change.after.exists ? change.after.data() : {}
-  const prevInfo = change.before.exists ? change.before.data() : {}
+async function processHowToUpdates(change: IDBDocChange) {
+  const info: IUserDB = change.after.exists ? change.after.data() : {}
+  const prevInfo: IUserDB = change.before.exists ? change.before.data() : {}
   // optional chaining (.?.) incase does not exists
   const prevCountryCode = prevInfo.location?.countryCode
   const newCountryCode = info.location?.countryCode
   const prevCountry = prevInfo.country
   const newCountry = info.country
-  if (prevCountryCode !== newCountryCode || prevCountry !== newCountry) {
+
+  const didChangeCountry =
+    prevCountryCode !== newCountryCode || prevCountry !== newCountry
+  if (didChangeCountry) {
+    // Update country flag in user's created howTos
     const country = newCountryCode ? newCountryCode : newCountry.toLowerCase()
-    return updateHowTosCountry(info._id, country)
+    await updateHowTosCountry(info._id, country)
+  }
+
+  const didChangeUserName = prevInfo.userName !== info.userName
+  if (didChangeCountry || didChangeUserName) {
+    await updateHowTosComments({
+      userId: info._id,
+      country: didChangeCountry
+        ? newCountryCode
+          ? newCountryCode
+          : newCountry.toLowerCase()
+        : undefined,
+      userName: didChangeUserName ? info.userName : undefined,
+    })
   }
 }
 
@@ -38,7 +56,7 @@ async function updateHowTosCountry(
     console.error('Missing information to set howToCountry')
     return false
   }
-  console.log('Update ', userId, ' moved to :', country)
+  console.log('Update', userId, 'moved to :', country)
 
   const querySnapshot = await db
     .collection(DB_ENDPOINTS.howtos)
@@ -67,4 +85,55 @@ async function updateHowTosCountry(
     return false
   }
   return false
+}
+
+/**
+ * Updates either `userName` or `country` in any comments made by the user on any HowTo
+ */
+async function updateHowTosComments({
+  userId,
+  userName,
+  country,
+}: {
+  userId: string
+  userName?: string
+  country?: string
+}) {
+  console.log('Updating comments by user', userId)
+  const querySnapshot = await db
+    .collection(DB_ENDPOINTS.howtos)
+    .where('comments', 'array-contains', { _creatorId: userId })
+    .get()
+
+  let count = 0
+  if (querySnapshot) {
+    querySnapshot.forEach(doc => {
+      const howto = doc.data() as IHowtoDB
+      if (howto.comments) {
+        howto.comments.forEach(comment => {
+          if (comment._creatorId === userId) {
+            const updatedComment = {
+              ...comment,
+            }
+            if (userName) {
+              updatedComment.creatorName = userName
+            }
+            if (country) {
+              updatedComment.creatorCountry = country
+            }
+
+            doc.ref
+              .update(updatedComment)
+              .then(() => {
+                count += 1
+              })
+              .catch(error => {
+                console.error('Error updating comment: ', error)
+              })
+          }
+        })
+      }
+    })
+  }
+  console.log('Successfully updated', count, 'comments!')
 }

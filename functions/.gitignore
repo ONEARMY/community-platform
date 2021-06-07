@@ -13,3 +13,6 @@ lib/
 
 ./firebase-debug.log
 *.log
+
+!webpack.config.js
+dist

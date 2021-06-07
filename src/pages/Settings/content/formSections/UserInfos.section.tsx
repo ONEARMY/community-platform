@@ -63,7 +63,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
         <Box sx={{ display: isOpen ? 'block' : 'none' }}>
           <Flex flexWrap={'wrap'}>
             <Text my={4} medium>
-              User / workspace username *
+              Display Name *
             </Text>
             <Field
               data-cy="username"

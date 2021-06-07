@@ -1,4 +1,5 @@
 import { generatedId } from '../utils/test-utils'
+import { FRIENDLY_MESSAGES } from 'oa-shared'
 
 // existing user already created in auth system
 const authUser = {
@@ -40,7 +41,7 @@ describe('[Sign-up - existing user]', () => {
     fillSignupForm(authUser)
     cy.get('[data-cy=submit]').click()
     cy.get('[data-cy=error-msg]')
-      .contains('That display name is already taken')
+      .contains(FRIENDLY_MESSAGES['sign-up username taken'])
       .should('be.exist')
   })
   it('prevent duplicate email', () => {

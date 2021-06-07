@@ -81,6 +81,7 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
 
   public deleteUploads = async (fileInfo?: any) => {
     // WiP
+    console.log('TODO - handle delete', fileInfo)
   }
 
   // the first styled button in our template intercepts all click events so we have a manual method

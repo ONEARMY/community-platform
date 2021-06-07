@@ -11,6 +11,7 @@ export class TemplateComponent extends React.Component<IProps> {
 
   public componentDidUpdate(prevProps: IProps) {
     // component updated
+    console.log('component updated', prevProps)
   }
 
   public render() {

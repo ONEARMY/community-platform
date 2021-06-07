@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import theme from 'src/themes/styled.theme'
@@ -7,7 +7,7 @@ import Text from 'src/components/Text'
 import { Link } from 'src/components/Links'
 import { Link as ExternalLink } from 'rebass'
 
-export class SignUpMessagePage extends React.Component {
+class SignUpMessagePage extends React.Component {
   public render() {
     return (
       <Flex
@@ -48,7 +48,7 @@ export class SignUpMessagePage extends React.Component {
                 <ExternalLink
                   color={theme.colors.grey}
                   sx={{ textDecoration: 'underline' }}
-                  href="mailto:platform@onearmy.world?subject=Email%20confirmation%20failed%20community-platform"
+                  href="mailto:hello@onearmy.earth?subject=Email%20confirmation%20failed%20community-platform"
                 >
                   Let us know
                 </ExternalLink>
@@ -68,3 +68,4 @@ export class SignUpMessagePage extends React.Component {
     )
   }
 }
+export default SignUpMessagePage

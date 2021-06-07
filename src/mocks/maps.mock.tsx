@@ -22,7 +22,7 @@ export const generatePins = (count: number): Array<IMapPin> => {
   return newPins
 }
 
-export const generatePinDetails = (pin: IMapPin): IMapPinDetail => {
+export const generatePinDetails = (): IMapPinDetail => {
   const randomDate = new Date()
   randomDate.setSeconds(randomDate.getSeconds() - Math.random() * 10000)
   const lastActive = randomDate.toISOString()

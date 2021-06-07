@@ -11,7 +11,7 @@ import AwaitingModerationHighlight from 'src/assets/icons/map-unpproved-pin.svg'
  * @param opts - optional parameters could be passed from parent,
  * such as total pins. Currently none used, but retaining
  */
-export const createClusterIcon = (opts?: any) => {
+export const createClusterIcon = () => {
   return (cluster: MarkerCluster) => {
     const className = ['icon']
     let icon: any

@@ -9,7 +9,6 @@ interface IExtendedFieldProps extends IFieldProps {
 
 export const LocationSearchField = ({
   input,
-  meta,
   customChange,
   ...rest
 }: IExtendedFieldProps) => (

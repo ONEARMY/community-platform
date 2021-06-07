@@ -1,10 +1,19 @@
 {
-  "name": "one-army-functions",
+  "name": "functions",
   "version": "1.0.0",
+  "__NOTE__:": "avoid hoisting for webpack and other conflicts (should test, might be ok now)",
+  "installConfig": {
+    "hoistingLimits": "workspaces"
+  },
+  "resolutions": {
+    "webpack": "^4.46.0"
+  },
   "scripts": {
     "lint": "tslint --project tsconfig.json",
-    "build": "tsc -b",
-    "watch": "./node_modules/.bin/tsc --watch",
+    "build": "npm run compile:src && npm run webpack",
+    "watch": "yarn tsc --watch",
+    "webpack": "webpack",
+    "compile:src": "tsc --build ../tsconfig.src-types.json",
     "copyDevConfig": "firebase functions:config:get > .runtimeconfig.json",
     "copyDevConfigWin": "firebase functions:config:get | ac .runtimeconfig.json",
     "db:backup:local": "firestore-export -a service.json -b backup.json -p",
@@ -15,19 +24,21 @@
     "start": "npm run copyDevConfig && npm run serve",
     "logs": "firebase functions:log"
   },
-  "main": "./lib/index.js",
+  "main": "index.js",
   "dependencies": {
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dateformat": "^3.0.3",
     "express": "^4.17.1",
-    "firebase-admin": "^9.2.0",
-    "firebase-functions": "^3.11.0",
+    "firebase-admin": "^9.9.0",
+    "firebase-functions": "^3.14.1",
     "fs-extra": "^9.0.1",
     "google-auth-library": "^6.1.1",
     "googleapis": "^61.0.0",
     "log-update": "^4.0.0",
+    "oa-shared": "^1.0.0",
+    "one-army-community-platform": "^1.5.0",
     "request": "^2.88.2",
     "sharp": "^0.26.1"
   },
@@ -36,11 +47,22 @@
     "@types/cors": "^2.8.8",
     "@types/dateformat": "^3.0.1",
     "@types/fs-extra": "^9.0.2",
+    "@types/generate-json-webpack-plugin": "^0.3.3",
+    "@types/node": "^15.6.1",
     "@types/request": "^2.48.5",
     "@types/sharp": "^0.26.0",
+    "@types/webpack": "^4.41.29",
+    "@types/webpack-node-externals": "^2.5.1",
+    "awesome-typescript-loader": "^5.2.1",
+    "clean-webpack-plugin": "^4.0.0-alpha.0",
     "concurrently": "^5.3.0",
+    "generate-json-webpack-plugin": "^1.0.0",
+    "ts-node": "^10.0.0",
     "tslint": "^6.1.3",
-    "typescript": "^4.0.3"
+    "typescript": "4.2.2",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^4.7.0",
+    "webpack-node-externals": "^3.0.0"
   },
   "engines": {
     "node": "12"

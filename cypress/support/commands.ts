@@ -239,3 +239,9 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
 }
 
 attachCustomCommands(Cypress)
+
+/**
+ * Overwrite default logging to also output to console
+ * https://github.com/cypress-io/cypress/issues/3199
+ */
+Cypress.Commands.overwrite('log', (subject, message) => cy.task('log', message))

@@ -164,7 +164,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
           }}
           validateOnBlur
           decorators={[this.calculatedFields]}
-          render={({ submitting, values, dirty, errors, handleSubmit }) => {
+          render={({ submitting, handleSubmit }) => {
             return (
               <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
                 <UnsavedChangesDialog

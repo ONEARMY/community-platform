@@ -69,11 +69,12 @@ export class MapsStore extends ModuleStore {
     this.filteredPins = this.mapPins
   }
 
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  /** TODO CC 2021-05-28 review if still useful to keep */
   @action
   public setMapBoundingBox(boundingBox: IBoundingBox) {
     // this.recalculatePinCounts(boundingBox)
   }
-
   @action
   public async retrieveMapPins() {
     // TODO: make the function accept a bounding box to reduce load from DB
@@ -132,7 +133,7 @@ export class MapsStore extends ModuleStore {
     this.activePin = pin
     if (pin) {
       const detail: IMapPinDetail = IS_MOCK
-        ? generatePinDetails(pin)
+        ? generatePinDetails()
         : await this.getUserProfilePin(pin._id)
       this.activePin = { ...pin, detail }
     }
@@ -228,6 +229,7 @@ export class MapsStore extends ModuleStore {
       shortDescription: u.mapPinDescription ? u.mapPinDescription : '',
       name: u.userName,
       profileUrl: `${window.location.origin}/u/${u.userName}`,
+      verifiedBadge: u.badges?.verified,
     }
   }
   @action

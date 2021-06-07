@@ -25,7 +25,13 @@ export const HowToComments = ({ userName, comments }: IProps) => {
   const shownComments = moreComments * MAX_COMMENTS
 
   return (
-    <Flex ml={[0, 0, 6]} mt={5} flexDirection="column" alignItems="center">
+    <Flex
+      ml={[0, 0, 6]}
+      mt={5}
+      flexDirection="column"
+      alignItems="center"
+      data-cy="howto-comments"
+    >
       <Flex
         width={[4 / 5, 4 / 5, 2 / 3]}
         mb={4}

@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component } from 'react'
 
 import { Image, ImageProps } from 'rebass'
 import { inject, observer } from 'mobx-react'
@@ -7,7 +7,6 @@ import Workspace from 'src/pages/User/workspace/Workspace'
 
 interface IProps extends ImageProps {
   width?: string
-  userName: string
   profileType?: ProfileTypeLabel
 }
 
@@ -38,15 +37,13 @@ export class Avatar extends Component<IProps, IState> {
     const { badgeProfileType } = this.state
 
     return (
-      <>
-        <Image
-          className="avatar"
-          width={width ? width : 40}
-          height={width ? width : 40}
-          sx={{ borderRadius: '25px' }}
-          src={badgeProfileType}
-        />
-      </>
+      <Image
+        className="avatar"
+        width={width ? width : 40}
+        height={width ? width : 40}
+        sx={{ borderRadius: '25px' }}
+        src={badgeProfileType}
+      />
     )
   }
 }

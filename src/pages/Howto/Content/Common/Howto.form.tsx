@@ -48,7 +48,6 @@ interface IInjectedProps extends IProps {
   howtoStore: HowtoStore
 }
 
-// needs to be wrapped in </AnimatePresence> tag to use exit as an unmount animation
 const AnimationContainer = (props: any) => {
   const variants = {
     pre: { 

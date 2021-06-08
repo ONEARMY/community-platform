@@ -398,7 +398,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                       fields.remove(fieldIndex)
                                     }}
                                   />
-                                  </AnimationContainer>
+                                </AnimationContainer>
                               ))}
                             </AnimatePresence>
                             <Flex>

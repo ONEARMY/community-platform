@@ -2619,22 +2619,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/is-prop-valid@npm:^0.7.3":
-  version: 0.7.3
-  resolution: "@emotion/is-prop-valid@npm:0.7.3"
-  dependencies:
-    "@emotion/memoize": 0.7.1
-  checksum: 2632db5e38b1735714e6b3e7f9b868b3cdb911cecd1cd46d83d54f9f10e614a6e8944786766819f9ff11f9e5b1298b614dc2b8ba3a9749d44ea8456f1ad8edc7
-  languageName: node
-  linkType: hard
-
-"@emotion/memoize@npm:0.7.1":
-  version: 0.7.1
-  resolution: "@emotion/memoize@npm:0.7.1"
-  checksum: d0ee2e463dcd46013a575a2a3ddcc46bcc72d0d3c78289139b9f0a81510d8c1a5d8417ffdee56d23117497b8caa974060172ae896cf4bf7e22c3c214d01432a4
-  languageName: node
-  linkType: hard
-
 "@emotion/memoize@npm:0.7.4":
   version: 0.7.4
   resolution: "@emotion/memoize@npm:0.7.4"
@@ -3768,26 +3752,6 @@ __metadata:
   version: 1.0.0-next.15
   resolution: "@polka/url@npm:1.0.0-next.15"
   checksum: c2a678bdc0a46353e251fad7419f2456e7e95aac1a3814abba84291cff5ed6f9d80a1b4b59288aae6c347766d0eae8a78120dc6d063e86d54ef3ad73f621575d
-  languageName: node
-  linkType: hard
-
-"@popmotion/easing@npm:^1.0.1":
-  version: 1.0.2
-  resolution: "@popmotion/easing@npm:1.0.2"
-  checksum: f073547c00fd543a91f95e85c4ca5a507bddc23055a9681484cb89dee2637a1991db4dbaabaa54bb350c04e884b3e62535d30456753450b905b85d5e08de9c1c
-  languageName: node
-  linkType: hard
-
-"@popmotion/popcorn@npm:^0.4.4":
-  version: 0.4.4
-  resolution: "@popmotion/popcorn@npm:0.4.4"
-  dependencies:
-    "@popmotion/easing": ^1.0.1
-    framesync: ^4.0.1
-    hey-listen: ^1.0.8
-    style-value-types: ^3.1.7
-    tslib: ^1.10.0
-  checksum: 316b066a116c9a8a8d208b9c5e9b10a8f3cf20f6b6c63fa01055a5474c1af645c5e6f2bd54d5fe85c3b73967cf1ee798cdade8c95b4186c2e09247c175c743a1
   languageName: node
   linkType: hard
 
@@ -5689,13 +5653,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/invariant@npm:^2.2.29":
-  version: 2.2.34
-  resolution: "@types/invariant@npm:2.2.34"
-  checksum: d0ecc665e5c95abf1ad7263c8cc32604d6b3444cfbc97657fede7e63f3751554a4f35f72ae565d70c28184dfb8b0cd4c058eaec1af972999edfd0a81b365f74b
-  languageName: node
-  linkType: hard
-
 "@types/is-function@npm:^1.0.0":
   version: 1.0.0
   resolution: "@types/is-function@npm:1.0.0"
@@ -5858,13 +5815,6 @@ __metadata:
   version: 15.6.2
   resolution: "@types/node@npm:15.6.2"
   checksum: e65d6d4750c8bff0d7ecaba1b552118f17b163f3dae8007f6112c54bd591b7087b506c20bb03ce802dc895ef1c2565a750c5246bddab6ffa7d308c2d5f301571
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^10.0.5":
-  version: 10.17.60
-  resolution: "@types/node@npm:10.17.60"
-  checksum: af7e0b300da2b917555563d9bf770d1d07d9aa1930ec639336d5ba0a32e801e04f0291a658d0d0d77ce9f5df377c3018bf9de6416cee956bddd59de0e1b93d0f
   languageName: node
   linkType: hard
 
@@ -13204,7 +13154,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"find-cache-dir@npm:^3.0.0, find-cache-dir@npm:^3.3.1":
+"find-cache-dir@npm:^3.3.1":
   version: 3.3.1
   resolution: "find-cache-dir@npm:3.3.1"
   dependencies:
@@ -13567,15 +13517,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"framesync@npm:^4.0.0, framesync@npm:^4.0.1":
-  version: 4.1.0
-  resolution: "framesync@npm:4.1.0"
-  dependencies:
-    hey-listen: ^1.0.5
-  checksum: b2a2a06e28a4323848fd48f7c36b4bc01c203a282ec351955d931d440befdbe88dd29e6bb13b36f064e8b62986daeb6be59609ee5ab55114f711677755d5210e
-  languageName: node
-  linkType: hard
-
 "fresh@npm:0.5.2":
   version: 0.5.2
   resolution: "fresh@npm:0.5.2"
@@ -13618,17 +13559,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-extra@npm:8.1.0, fs-extra@npm:^8.1.0":
-  version: 8.1.0
-  resolution: "fs-extra@npm:8.1.0"
-  dependencies:
-    graceful-fs: ^4.2.0
-    jsonfile: ^4.0.0
-    universalify: ^0.1.0
-  checksum: 056a96d4f55ab8728b021e251175a4a6440d1edb5845e6c2e8e010019bde3e63de188a0eb99386c21c71804ca1a571cd6e08f507971f10a2bc4f4f7667720fa4
-  languageName: node
-  linkType: hard
-
 "fs-extra@npm:^0.30.0":
   version: 0.30.0
   resolution: "fs-extra@npm:0.30.0"
@@ -13639,6 +13569,17 @@ __metadata:
     path-is-absolute: ^1.0.0
     rimraf: ^2.2.8
   checksum: 2d2fb184b406f94a92fc064cf8497f11aa5a313dd5482978eba3a7c61e758d39009f3ee60d7fd20bb8af8ae9196a46a00cec0259c1185139f1ab7d8ac4fec668
+  languageName: node
+  linkType: hard
+
+"fs-extra@npm:^8.1.0":
+  version: 8.1.0
+  resolution: "fs-extra@npm:8.1.0"
+  dependencies:
+    graceful-fs: ^4.2.0
+    jsonfile: ^4.0.0
+    universalify: ^0.1.0
+  checksum: 056a96d4f55ab8728b021e251175a4a6440d1edb5845e6c2e8e010019bde3e63de188a0eb99386c21c71804ca1a571cd6e08f507971f10a2bc4f4f7667720fa4
   languageName: node
   linkType: hard
 
@@ -14718,7 +14659,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"hey-listen@npm:^1.0.5, hey-listen@npm:^1.0.8":
+"hey-listen@npm:^1.0.8":
   version: 1.0.8
   resolution: "hey-listen@npm:1.0.8"
   checksum: b9a3ed8d4851735d221a8c2ecf06fba598b0240d18e7ad46780e00af1d62471a40c65d5c6ec48b004fc86d96056cf7e3599d3ef8ee77a31df3cb9f4ce69721ce
@@ -19791,7 +19732,6 @@ fsevents@^1.2.7:
     react-linkify: ^0.2.2
     react-player: ^1.15.3
     react-portal: ^4.2.0
-    react-pose: ^4.0.8
     react-router: ^5.2.0
     react-router-breadcrumbs-hoc: ^3.2.0
     react-router-dom: ^5.2.0
@@ -20607,21 +20547,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"popmotion-pose@npm:^3.4.10":
-  version: 3.4.11
-  resolution: "popmotion-pose@npm:3.4.11"
-  dependencies:
-    "@popmotion/easing": ^1.0.1
-    hey-listen: ^1.0.5
-    popmotion: ^8.7.1
-    pose-core: ^2.1.1
-    style-value-types: ^3.0.6
-    ts-essentials: ^1.0.3
-    tslib: ^1.10.0
-  checksum: 92ef4d39bba4ff2f9c9501c0b64d4ee3d7de4d9b75fea5895c21e4125634796910672698331a17b016800dd88caaaf32635f89ef54e0c4c2a42c7aeeaec7c7cb
-  languageName: node
-  linkType: hard
-
 "popmotion@npm:9.3.6":
   version: 9.3.6
   resolution: "popmotion@npm:9.3.6"
@@ -20631,21 +20556,6 @@ fsevents@^1.2.7:
     style-value-types: 4.1.4
     tslib: ^2.1.0
   checksum: b2ff30e647e4184ddb98778294f1fa856934af389cda9a43a58ccbaaff4b29f5dfa5cbe8c446b58fdbe3e4a3757afa7690c497ad30f15c5edd47a02cb7dc9646
-  languageName: node
-  linkType: hard
-
-"popmotion@npm:^8.7.1":
-  version: 8.7.6
-  resolution: "popmotion@npm:8.7.6"
-  dependencies:
-    "@popmotion/easing": ^1.0.1
-    "@popmotion/popcorn": ^0.4.4
-    framesync: ^4.0.0
-    hey-listen: ^1.0.5
-    style-value-types: ^3.1.7
-    stylefire: ^7.0.1
-    tslib: ^1.10.0
-  checksum: 1a0484354d219332f73c9eda1ebc9b156f59c2b788a1ac0db741f44cfb982d49c0950499a1fc119d167fa2467536e63ee5e1f03552c8e561877a60b2777ec590
   languageName: node
   linkType: hard
 
@@ -20664,20 +20574,6 @@ fsevents@^1.2.7:
     debug: ^3.1.1
     mkdirp: ^0.5.5
   checksum: 906dc51482ef9336a812df0b2960119e4464c7d14b69e489bf88bbeea317175a5700712688e953b9b2a2a2de0dc28824f0cb01206c56dd8350f3798e212b5bb8
-  languageName: node
-  linkType: hard
-
-"pose-core@npm:^2.1.1":
-  version: 2.1.1
-  resolution: "pose-core@npm:2.1.1"
-  dependencies:
-    "@types/invariant": ^2.2.29
-    "@types/node": ^10.0.5
-    hey-listen: ^1.0.5
-    rollup-plugin-typescript2: ^0.25.2
-    tslib: ^1.10.0
-    typescript: ^3.7.2
-  checksum: 8cef71cd96a0de67496f69995ab1327807927e11a94d93b925e1ce36977ac0457750b9b5167ff4487bbb26334aaf04cb9d2bb162e14da4c5d1d1d13bc190e0ff
   languageName: node
   linkType: hard
 
@@ -23175,21 +23071,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-pose@npm:^4.0.8":
-  version: 4.0.10
-  resolution: "react-pose@npm:4.0.10"
-  dependencies:
-    "@emotion/is-prop-valid": ^0.7.3
-    hey-listen: ^1.0.5
-    popmotion-pose: ^3.4.10
-    tslib: ^1.10.0
-  peerDependencies:
-    react: ^16.3.2
-    react-dom: ^16.3.2
-  checksum: fa13a58a144469382345663078faba2235f6ab006026f1ac5aa9bda0d58087b8f9c191f873a575cd8f37d29a258b8283d432868cd37de8422117ee8902c83606
-  languageName: node
-  linkType: hard
-
 "react-refresh@npm:^0.8.3":
   version: 0.8.3
   resolution: "react-refresh@npm:0.8.3"
@@ -24215,15 +24096,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-resolve@1.12.0:
-  version: 1.12.0
-  resolution: "resolve@npm:1.12.0"
-  dependencies:
-    path-parse: ^1.0.6
-  checksum: 856abfdc939c637f1522cfa3260f76c4b70f6cd1b50377fe612df52d1892785b57b266a0a4351e786fd33bb51116ea57fb3a79922d469ec3e0d7749e2da090d9
-  languageName: node
-  linkType: hard
-
 resolve@1.18.1:
   version: 1.18.1
   resolution: "resolve@npm:1.18.1"
@@ -24251,15 +24123,6 @@ resolve@^2.0.0-next.3:
     is-core-module: ^2.2.0
     path-parse: ^1.0.6
   checksum: dc9529322d9ac6175e91cd909ca845f31cc2c065e0f79ca2c423499238af9c214373d6682df24ca7be4ff20561332d4fad4516f91ea6c3919853f72f869e542c
-  languageName: node
-  linkType: hard
-
-"resolve@patch:resolve@1.12.0#builtin<compat/resolve>":
-  version: 1.12.0
-  resolution: "resolve@patch:resolve@npm%3A1.12.0#builtin<compat/resolve>::version=1.12.0&hash=3388aa"
-  dependencies:
-    path-parse: ^1.0.6
-  checksum: 4ca42e21c67c1297e93529e3d3cdbc29b0d7e5accb8aa87100982ce3cc5ba85d15617dee99e558e2ffe8a2e059a1e37b0e932d7f110a42ca3855cefcbf990f4e
   languageName: node
   linkType: hard
 
@@ -24450,31 +24313,6 @@ resolve@^2.0.0-next.3:
   peerDependencies:
     rollup: ">=0.66.0 <3"
   checksum: 18ebbdc41ae13b89f033314942b104320507133ade4f865d36fc17263662686f459aea2ba7ade6eb069e8630e27fb8183f03e752d9b62f0f6a3cf8a635e71c5f
-  languageName: node
-  linkType: hard
-
-"rollup-plugin-typescript2@npm:^0.25.2":
-  version: 0.25.3
-  resolution: "rollup-plugin-typescript2@npm:0.25.3"
-  dependencies:
-    find-cache-dir: ^3.0.0
-    fs-extra: 8.1.0
-    resolve: 1.12.0
-    rollup-pluginutils: 2.8.1
-    tslib: 1.10.0
-  peerDependencies:
-    rollup: ">=1.26.3"
-    typescript: ">=2.4.0"
-  checksum: 5396ecb076bf6e4ba36b40a3b22c2cc29ee5fef5bdbe5a09f2a48dffe8cf173ddc0fc8c7d82689c170b9999a52f36a96793559fd228c3ea42047693442a1ffe2
-  languageName: node
-  linkType: hard
-
-"rollup-pluginutils@npm:2.8.1":
-  version: 2.8.1
-  resolution: "rollup-pluginutils@npm:2.8.1"
-  dependencies:
-    estree-walker: ^0.6.1
-  checksum: b17e619909edf23bba5e4deb14023a0775410620b2e9a19c7a202ba5e5dc89b83d523beedee0c686f47a30861fc335c2bf89a39ed98a8deb51e3b44b46c9af79
   languageName: node
   linkType: hard
 
@@ -26061,16 +25899,6 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"style-value-types@npm:^3.0.6, style-value-types@npm:^3.1.7":
-  version: 3.2.0
-  resolution: "style-value-types@npm:3.2.0"
-  dependencies:
-    hey-listen: ^1.0.8
-    tslib: ^1.10.0
-  checksum: 630a8011abc3c677339efc0782c12691b20b8eb616b49ad09ac49e7f1d18564489712225b501146d143b0f6eaa840caf64887b8f3ccdc9a5b0bb9bd4a60a0f0d
-  languageName: node
-  linkType: hard
-
 "styled-components@npm:^4":
   version: 4.4.1
   resolution: "styled-components@npm:4.4.1"
@@ -26113,19 +25941,6 @@ resolve@^2.0.0-next.3:
     "@styled-system/variant": ^5.1.5
     object-assign: ^4.1.1
   checksum: d19e71b3d3f7ee4f056d1290f117ac73a940ee84688bc7522e061fd0ddbf80f266fc89e4fa425c31442ce31a48bfbee3610e6ef511aa4378d579ff31af29fd0c
-  languageName: node
-  linkType: hard
-
-"stylefire@npm:^7.0.1":
-  version: 7.0.3
-  resolution: "stylefire@npm:7.0.3"
-  dependencies:
-    "@popmotion/popcorn": ^0.4.4
-    framesync: ^4.0.0
-    hey-listen: ^1.0.8
-    style-value-types: ^3.1.7
-    tslib: ^1.10.0
-  checksum: a5670e93f62cba7db642972f0f60dc8a68a479a51c7502702b71176805ac930775a389245f4f93518044ec239f50ed2a459332165092c05ab0fdb1a116a21ddc
   languageName: node
   linkType: hard
 
@@ -26857,13 +26672,6 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"ts-essentials@npm:^1.0.3":
-  version: 1.0.4
-  resolution: "ts-essentials@npm:1.0.4"
-  checksum: 2e175aa3fbe98e1127eff7d088ac27fd31963387c44d543c065a331ac80cf526efd38c23d4ef2543832380bb8eb109785c6ba04098b7e1086728110278f6a3a5
-  languageName: node
-  linkType: hard
-
 "ts-essentials@npm:^2.0.3":
   version: 2.0.12
   resolution: "ts-essentials@npm:2.0.12"
@@ -26942,14 +26750,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"tslib@npm:1.10.0":
-  version: 1.10.0
-  resolution: "tslib@npm:1.10.0"
-  checksum: d03db5b8d205cd908421bd16c53c7912b857e4cbe4a54ea2b5f7c7a22cd86317462ea1783b093a36d78a1611fa10baf51696a94bb5c1e13c818145b8954a02c9
-  languageName: node
-  linkType: hard
-
-"tslib@npm:^1.10.0, tslib@npm:^1.13.0, tslib@npm:^1.8.1, tslib@npm:^1.9.0, tslib@npm:^1.9.3":
+"tslib@npm:^1.13.0, tslib@npm:^1.8.1, tslib@npm:^1.9.0, tslib@npm:^1.9.3":
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
   checksum: f44fe7f216946b17d3e3074df3746372703cf24e9127b4c045511456e8e4bf25515fb0a1bb3937676cc305651c5d4fcb6377b0588a4c6a957e748c4c28905d17
@@ -27160,16 +26961,6 @@ typescript@4.2.4:
   languageName: node
   linkType: hard
 
-typescript@^3.7.2:
-  version: 3.9.9
-  resolution: "typescript@npm:3.9.9"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 22bbe953faa34903587f3bd8fb6c343d754745d4177e49da523a2a3b814fe5eaf60d9b23c2d401d038a08a5ac2d8094b268ba75adee840cc2358fb5a866624ab
-  languageName: node
-  linkType: hard
-
 "typescript@patch:typescript@4.2.2#builtin<compat/typescript>":
   version: 4.2.2
   resolution: "typescript@patch:typescript@npm%3A4.2.2#builtin<compat/typescript>::version=4.2.2&hash=a45b0e"
@@ -27187,16 +26978,6 @@ typescript@^3.7.2:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 3be44317593182e8ce494c114e7ad9b0bb2553a22f3085cc6da4f0a36912c20850daa9be4c898af2ab6fc8b12f430c1c9e46ac715721867cd38643f2350d3ef9
-  languageName: node
-  linkType: hard
-
-"typescript@patch:typescript@^3.7.2#builtin<compat/typescript>":
-  version: 3.9.9
-  resolution: "typescript@patch:typescript@npm%3A3.9.9#builtin<compat/typescript>::version=3.9.9&hash=a45b0e"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 05a113f2ec0d0fc3263335c230d2eb7b94d851e51b5766f63b88b611127d08782ce41132eb32b9d3d434de8340f698f7ec2f72ebb4d33c3b2976b27de1f47ace
   languageName: node
   linkType: hard
 

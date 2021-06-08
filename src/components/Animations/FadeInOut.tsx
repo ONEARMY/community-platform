@@ -15,7 +15,7 @@ const AnimationContainer = (props?: React.ReactNode) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ y: 5, opacity: 0 }}>
-       { props }
+      { props }
     </motion.div>
   )
 }

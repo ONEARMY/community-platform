@@ -392,12 +392,12 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                       if (to !== fields.length) {
                                         fields.move(from, to)
                                       }
-                                      }}
-                                      images={fields.value[index].images}
-                                      onDelete={(fieldIndex: number) => {
-                                        fields.remove(fieldIndex)
-                                      }}
-                                    />
+                                    }}
+                                    images={fields.value[index].images}
+                                    onDelete={(fieldIndex: number) => {
+                                      fields.remove(fieldIndex)
+                                    }}
+                                  />
                                   </AnimationContainer>
                               ))}
                             </AnimatePresence>

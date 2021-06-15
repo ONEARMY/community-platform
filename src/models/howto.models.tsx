@@ -9,6 +9,7 @@ import { IUploadedFileMeta } from 'src/stores/storage'
 export interface IComment {
   _id: string
   _created: string
+  _edited?: string
   _creatorId: string
   creatorName: string
   creatorCountry?: string | null

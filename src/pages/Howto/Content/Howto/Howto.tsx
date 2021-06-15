@@ -142,10 +142,7 @@ export class Howto extends React.Component<
             ))}
           </Box>
           <AuthWrapper roleRequired="beta-tester">
-            <HowToComments
-              userName={loggedInUser?.userName}
-              comments={activeHowto.comments}
-            />
+            <HowToComments comments={activeHowto.comments} />
           </AuthWrapper>
           <MoreBox py={20} mt={20}>
             <Text bold txtcenter fontSize={[4, 4, 5]}>

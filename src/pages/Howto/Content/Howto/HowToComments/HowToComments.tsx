@@ -9,12 +9,11 @@ import { IComment } from 'src/models'
 const MAX_COMMENTS = 5
 
 interface IProps {
-  userName?: string
   comments?: IComment[]
 }
 
 // TODO: Expect the comments as a prop from the HowTo
-export const HowToComments = ({ userName, comments }: IProps) => {
+export const HowToComments = ({ comments }: IProps) => {
   const { stores } = useCommonStores()
   const [moreComments, setMoreComments] = useState(1)
 

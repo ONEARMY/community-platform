@@ -71,7 +71,7 @@ export const Comment: React.FC<IProps> = ({
       )}
 
       {showEditModal && (
-        <Modal>
+        <Modal width={600}>
           <Form
             onSubmit={values => {
               console.log(values)

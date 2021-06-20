@@ -12,6 +12,7 @@ If you think something is missing, consider sending us a PR.
   - [Backend](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#backend)
 - [Getting started](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--getting-started)
 - [Issue Tracking and Management](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--issue-tracking-and-management)
+- [Development Bounties](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--dev-bounties)
 - [Project structure](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--project-structure)
 - [Branch structure](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--branch-structure)
 - [Javascript style guide](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--javascript-style-guide)
@@ -78,6 +79,9 @@ We've also labeled some of the issues with `Good-first-issue` to help you get st
 When you start working on an issue, comment on it or if your are a registered contributor assign yourself to let us know so we avoid working on something twice. The comment should include a mention to @mattia-io (our project lead).
 
 When a group of issues have been resolved a pull request to the master branch should be made, where it will undergo a quick review and test. It is expected that the developer will have done thorough testing themselves first, this helps make sure most pull requests get merged quickly.
+
+## 🤑 &nbsp; Development Bounties
+We have a small bounty system as a way of saying thanks to developers for contributiong their time and code. Find out more about it in [Bounties](./BOUNTIES.md)
 
 ## 🏠 &nbsp; Project Structure
 

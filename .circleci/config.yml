@@ -78,7 +78,7 @@ commands:
     steps:
       - run:
           name: Install Firebase Tools
-          command: yarn install -D firebase-tools
+          command: yarn add -D firebase-tools
       - run:
           name: Deploy to Firebase
           command: ./node_modules/.bin/firebase deploy --token=<< parameters.token >> -P << parameters.alias >>

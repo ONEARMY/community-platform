@@ -113,13 +113,19 @@ jobs:
           root: .
           paths:
             - build
-  deploy_dev:
+  deploy:
     docker: *docker
+    parameters:
+      # optional environment variables to set during build process
+      DEPLOY_ALIAS:
+        type: string
+        default: 'default'
     steps:
-      - setup_repo
+      - attach_workspace:
+          at: '.'
       - firebase_deploy:
           token: $FIREBASE_DEPLOY_TOKEN
-          alias: default
+          alias: << parameters.DEPLOY_ALIAS >>
 
   # Run cypress e2e tests on chrome and firefox
   test_e2e:
@@ -190,6 +196,8 @@ workflows:
           matrix:
             parameters:
               BUILD_ENV: ['CI=false'] # TODO - fix lint errors so that CI=true works
-      - deploy_dev:
+      - deploy:
+          name: Deploy to Firebase
+          DEPLOY_ALIAS: 'default'
           requires:
             - 'build'

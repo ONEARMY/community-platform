@@ -121,6 +121,7 @@ jobs:
         type: string
         default: 'default'
     steps:
+      - setup_repo   
       - attach_workspace:
           at: '.'
       - firebase_deploy:

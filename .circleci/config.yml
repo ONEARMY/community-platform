@@ -121,11 +121,11 @@ jobs:
         type: string
         default: 'default'
     steps:
-      - setup_repo   
+      - setup_repo
       - attach_workspace:
           at: '.'
       - firebase_deploy:
-          token: $FIREBASE_DEPLOY_TOKEN
+          token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
           alias: << parameters.DEPLOY_ALIAS >>
 
   # Run cypress e2e tests on chrome and firefox

@@ -1,4 +1,4 @@
-import { PureComponent } from 'react';
+import { PureComponent } from 'react'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { format } from 'date-fns'
 import { IHowtoDB } from 'src/models/howto.models'
@@ -198,6 +198,7 @@ export default class HowtoDescription extends PureComponent<IProps> {
               height: ['100%', '450px'],
             }}
             src={howto.cover_image.downloadUrl}
+            crossOrigin="use-credentials"
             alt="how-to cover"
           />
           {howto.moderation !== 'accepted' && (

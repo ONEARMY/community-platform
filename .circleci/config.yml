@@ -65,6 +65,24 @@ commands:
       - *restore_yarn_cache
       - *install_packages
       - *save_yarn_cache
+  firebase_deploy:
+    description: Deploy to Firebase
+    parameters:
+      token:
+        type: string
+        description: Firebase Deploy Token
+      alias:
+        type: string
+        default: 'default'
+        description: Firebase project alias to deploy to
+    steps:
+      - run:
+          name: Install Firebase Tools
+          command: yarn install -D firebase-tools
+      - run:
+          name: Deploy to Firebase
+          command: ./node_modules/.bin/firebase deploy --token=<< parameters.token >> -P << parameters.alias >>
+examples:
 
 ######################################################################################################
 #  Jobs - Independently specified lists of tasks and environments for execution
@@ -85,7 +103,7 @@ jobs:
       # optional environment variables to set during build process
       BUILD_ENV:
         type: string
-        default: ""
+        default: ''
     steps:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - setup_repo
@@ -95,6 +113,13 @@ jobs:
           root: .
           paths:
             - build
+  deploy_dev:
+    docker: *docker
+    steps:
+      - setup_repo
+      - firebase_deploy:
+          token: $FIREBASE_DEPLOY_TOKEN
+          alias: default
 
   # Run cypress e2e tests on chrome and firefox
   test_e2e:
@@ -110,16 +135,16 @@ jobs:
       - setup_repo
       # retrieve build folder
       - attach_workspace:
-          at: "."
+          at: '.'
       # install testing browsers are required
       - when:
           condition:
-            equal: ["chrome", << parameters.CI_BROWSER >>]
+            equal: ['chrome', << parameters.CI_BROWSER >>]
           steps:
             - browser-tools/install-chrome
       - when:
           condition:
-            equal: ["firefox", << parameters.CI_BROWSER >>]
+            equal: ['firefox', << parameters.CI_BROWSER >>]
           steps:
             - browser-tools/install-firefox
       # call main testing script
@@ -145,12 +170,16 @@ workflows:
           matrix:
             parameters:
               BUILD_ENV:
-                ["FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci CI=false"]
+                ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci CI=false']
       - test_e2e:
           requires:
-            - "build"
+            - 'build'
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           matrix:
             parameters:
               CI_NODE: [1, 2]
-              CI_BROWSER: ["chrome", "firefox"]
+              CI_BROWSER: ['chrome', 'firefox']
+  build_deploy_dev:
+    jobs:
+      - build
+      - deploy_dev

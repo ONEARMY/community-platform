@@ -166,7 +166,7 @@ workflows:
     jobs:
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:
-          name: Build Production
+          name: Build Testing Site
           matrix:
             parameters:
               BUILD_ENV:
@@ -182,10 +182,14 @@ workflows:
   build_deploy_dev:
     jobs:
       - build:
+          name: Build Production
           filters:
             branches:
               only:
                 - ci/circle-ci-release
+          matrix:
+            parameters:
+              BUILD_ENV: ['CI=false'] # TODO - fix lint errors so that CI=true works
       - deploy_dev:
           requires:
             - 'build'

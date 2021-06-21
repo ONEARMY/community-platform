@@ -181,5 +181,11 @@ workflows:
               CI_BROWSER: ['chrome', 'firefox']
   build_deploy_dev:
     jobs:
-      - build
-      - deploy_dev
+      - build:
+          filters:
+            branches:
+              only:
+                - ci/circle-ci-release
+      - deploy_dev:
+          requires:
+            - 'build'

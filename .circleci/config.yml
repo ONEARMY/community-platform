@@ -171,6 +171,7 @@ workflows:
   main_workflow:
     # by default jobs will run concurrently, so specify requires if want to run sequentially
     jobs:
+      #---------------------- Test Scripts ----------------------
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:
           name: build_test
@@ -186,6 +187,7 @@ workflows:
             parameters:
               CI_NODE: [1, 2]
               CI_BROWSER: ['chrome', 'firefox']
+      #---------------------- Release Scripts ----------------------
       - build:
           name: build_release
           requires:
@@ -197,12 +199,32 @@ workflows:
           matrix:
             parameters:
               BUILD_ENV: ['CI=false'] # TODO - fix lint errors so that CI=true works
+      - hold: 
+        # Require manual approval prior to release
+          name: approve_release
+          type: approval
+          requires:
+           - build_release   
+          filters:
+            branches:
+              only:
+                - ci/circle-ci-release
       - deploy:
           name: deploy_dev
           requires:
-            - 'build_release'
+            - 'approve_release'
           filters:
             branches:
               only:
                 - ci/circle-ci-release
           DEPLOY_ALIAS: 'default'
+      # - deploy:
+      #     name: deploy_production
+      #     requires:
+      #       - 'approve_release'
+      #     filters:
+      #       branches:
+      #         only:
+      #           - ci/circle-ci-release
+      #     DEPLOY_ALIAS: 'default'    
+

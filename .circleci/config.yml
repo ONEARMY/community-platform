@@ -168,37 +168,39 @@ jobs:
 ######################################################################################################
 workflows:
   version: 2
-  build_and_test:
+  main_workflow:
     # by default jobs will run concurrently, so specify requires if want to run sequentially
     jobs:
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:
-          name: Build Testing Site
+          name: build_test
           matrix:
             parameters:
               BUILD_ENV:
                 ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci CI=false']
       - test_e2e:
-          requires:
-            - 'build'
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
+          requires:
+            - 'build_test'
           matrix:
             parameters:
               CI_NODE: [1, 2]
               CI_BROWSER: ['chrome', 'firefox']
-  build_deploy_dev:
-    jobs:
       - build:
-          name: Build Production
+          name: build_release
+          requires:
+            - 'test_e2e'
           filters:
             branches:
               only:
                 - ci/circle-ci-release
-          matrix:
-            parameters:
-              BUILD_ENV: ['CI=false'] # TODO - fix lint errors so that CI=true works
+          BUILD_ENV: ['CI=false'] # TODO - fix lint errors so that CI=true works
       - deploy:
-          name: Deploy to Firebase
-          DEPLOY_ALIAS: 'default'
+          name: deploy_dev
           requires:
-            - 'build'
+            - 'build_release'
+          filters:
+            branches:
+              only:
+                - ci/circle-ci-release
+          DEPLOY_ALIAS: 'default'

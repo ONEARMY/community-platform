@@ -122,6 +122,9 @@ jobs:
       DEPLOY_ALIAS:
         type: string
         default: 'default'
+      NOTIFY_SLACK:
+        type: boolean
+        default: true  
     steps:
       - setup_repo
       - attach_workspace:
@@ -129,6 +132,20 @@ jobs:
       - firebase_deploy:
           token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
           alias: << parameters.DEPLOY_ALIAS >>
+      - when: 
+          condition: 
+            equal:    [true, << parameters.NOTIFY_SLACK >> ]
+          steps:
+            - slack/notify:
+                context: circle-ci-slack-context
+                event: fail
+                mentions: '@Chris Clarke'
+                template: basic_fail_1
+            - slack/notify:
+                context: circle-ci-slack-context
+                event: pass
+                template: success_tagged_deploy_1 
+      
 
   # Run cypress e2e tests on chrome and firefox
   test_e2e:
@@ -213,7 +230,7 @@ workflows:
                 - ci/circle-ci-release
       # Send a slack notification to approve the hold above (required config supplied in circleci-slack-context)
       - slack/on-hold:
-          context: circleci-slack-context
+          context: circle-ci-slack-context
           requires:
             - build_release
       - deploy:
@@ -225,6 +242,9 @@ workflows:
               only:
                 - ci/circle-ci-release
           DEPLOY_ALIAS: 'default'
+          NOTIFY_SLACK: true
+      #---------------------- Notifications ----------------------  
+       
       # - deploy:
       #     name: deploy_production
       #     requires:

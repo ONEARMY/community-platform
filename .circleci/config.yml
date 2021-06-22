@@ -192,8 +192,8 @@ workflows:
       #---------------------- Release Scripts ----------------------
       - build:
           name: build_release
-          requires:
-            - 'test_e2e'
+          # requires:
+          #   - 'test_e2e'
           filters:
             branches:
               only:

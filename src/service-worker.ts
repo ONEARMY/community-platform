@@ -88,7 +88,7 @@ registerRoute(
       ignoreSearch: true,
     },
     fetchOptions: {
-      credentials: 'include',
+      credentials: 'same-origin',
       mode: 'cors',
     },
   }),
@@ -104,7 +104,7 @@ registerRoute(
       ignoreSearch: true,
     },
     fetchOptions: {
-      credentials: 'include',
+      credentials: 'same-origin',
       mode: 'cors',
     },
   }),

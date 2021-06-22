@@ -194,7 +194,9 @@ workflows:
             branches:
               only:
                 - ci/circle-ci-release
-          BUILD_ENV: ['CI=false'] # TODO - fix lint errors so that CI=true works
+          matrix:
+            parameters:
+              BUILD_ENV: ['CI=false'] # TODO - fix lint errors so that CI=true works
       - deploy:
           name: deploy_dev
           requires:

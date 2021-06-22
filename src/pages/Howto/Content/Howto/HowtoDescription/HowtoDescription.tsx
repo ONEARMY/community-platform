@@ -198,7 +198,7 @@ export default class HowtoDescription extends PureComponent<IProps> {
               height: ['100%', '450px'],
             }}
             src={howto.cover_image.downloadUrl}
-            crossOrigin="use-credentials"
+            crossOrigin=""
             alt="how-to cover"
           />
           {howto.moderation !== 'accepted' && (

@@ -43,7 +43,7 @@ export const HowToCard = (props: IProps) => (
           }}
           threshold={500}
           src={props.howto.cover_image.downloadUrl}
-          crossOrigin="use-credentials"
+          crossOrigin=""
         />
       </Flex>
       <Flex px={3} py={3} flexDirection="column">

@@ -86,7 +86,7 @@ export default class ImageGallery extends PureComponent<IProps, IState> {
             onClick={() => {
               this.triggerLightbox()
             }}
-            crossOrigin="use-credentials"
+            crossOrigin=""
           />
         </Flex>
         <Flex flexWrap={'wrap'} width={1} mx={[2, 2, '-5px']}>
@@ -103,7 +103,7 @@ export default class ImageGallery extends PureComponent<IProps, IState> {
                   <ThumbImage
                     src={image.downloadUrl}
                     key={index}
-                    crossOrigin="use-credentials"
+                    crossOrigin=""
                   />
                 </ThumbCard>
               ))

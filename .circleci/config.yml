@@ -9,6 +9,8 @@ version: 2.1
 orbs:
   # for use with cimg image, to install web browsers
   browser-tools: circleci/browser-tools@1.1.3
+  # used to enable slack integration (required api key set in environment)
+  slack: circleci/slack@4.4.2
 
 ######################################################################################################
 #  Aliases - code snippets that can be included inline in any other markup
@@ -173,20 +175,20 @@ workflows:
     jobs:
       #---------------------- Test Scripts ----------------------
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
-      - build:
-          name: build_test
-          matrix:
-            parameters:
-              BUILD_ENV:
-                ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci CI=false']
-      - test_e2e:
-          name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
-          requires:
-            - 'build_test'
-          matrix:
-            parameters:
-              CI_NODE: [1, 2]
-              CI_BROWSER: ['chrome', 'firefox']
+      # - build:
+      #     name: build_test
+      #     matrix:
+      #       parameters:
+      #         BUILD_ENV:
+      #           ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci CI=false']
+      # - test_e2e:
+      #     name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
+      #     requires:
+      #       - 'build_test'
+      #     matrix:
+      #       parameters:
+      #         CI_NODE: [1, 2]
+      #         CI_BROWSER: ['chrome', 'firefox']
       #---------------------- Release Scripts ----------------------
       - build:
           name: build_release
@@ -199,8 +201,8 @@ workflows:
           matrix:
             parameters:
               BUILD_ENV: ['CI=false'] # TODO - fix lint errors so that CI=true works
-      - hold: 
-        # Require manual approval prior to release
+      # Require manual approval on CirclCI website prior to release        
+      - hold:  
           name: approve_release
           type: approval
           requires:
@@ -209,6 +211,11 @@ workflows:
             branches:
               only:
                 - ci/circle-ci-release
+      # Send a slack notification to approve the hold above (required config supplied in circleci-slack-context)
+      - slack/on-hold:
+          context: circleci-slack-context
+          requires:
+            - build_release
       - deploy:
           name: deploy_dev
           requires:

@@ -5,6 +5,7 @@ import { clientsClaim } from 'workbox-core'
 import { ExpirationPlugin } from 'workbox-expiration'
 import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
+import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies'
 import { BackgroundSyncPlugin } from 'workbox-background-sync'
 import { PrecacheEntry } from 'workbox-precaching/_types'
@@ -78,12 +79,16 @@ registerRoute(
       new BackgroundSyncPlugin('oa-images-background', {
         maxRetentionTime: 60 * 60 * 24,
       }),
+      // cache opaque responses in case of cors issues
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
     ],
     matchOptions: {
       ignoreSearch: true,
     },
     fetchOptions: {
-      credentials: 'same-origin',
+      credentials: 'include',
       mode: 'cors',
     },
   }),
@@ -99,7 +104,7 @@ registerRoute(
       ignoreSearch: true,
     },
     fetchOptions: {
-      credentials: 'same-origin',
+      credentials: 'include',
       mode: 'cors',
     },
   }),

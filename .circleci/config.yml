@@ -53,8 +53,10 @@ aliases:
         # local cache location
         - ~/project/.yarn/cache
       key: yarn-packages-v8-{{ .Branch }}-{{ checksum "yarn.lock" }}
+
   - &slack_deploy_approval_message
     # Message shown in slack to approve new deployment - edit in https://app.slack.com/block-kit-builder
+    # Based on: https://github.com/CircleCI-Public/slack-orb/tree/master/src/message_templates
     custom: |
             {
               "blocks": [
@@ -71,7 +73,7 @@ aliases:
                   "fields": [
                     {
                       "type": "mrkdwn",
-                      "text": "*Project*:\\n$CIRCLE_PROJECT_REPONAME"
+                      "text": "*Project*: $CIRCLE_PROJECT_REPONAME"
                     }
                   ],
                   "accessory": {
@@ -94,7 +96,58 @@ aliases:
                   ]
                 }
               ]
-            }    
+            }
+
+  - &slack_deploy_success_message
+    custom: |
+            {
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "Deploy Success :tada:",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Job*:\\n${CIRCLE_JOB}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*When*:\\n$(date +'%m/%d/%Y %T')"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Tag*:\\n$CIRCLE_TAG"
+                    }
+                  ],
+                  "accessory": {
+                    "type": "image",
+                    "image_url": "https://yt3.ggpht.com/ytc/AAUvwni_34CcLQsIhNo1d1A2zUK0pNPzipCV9oM1gvkNNw=s900-c-k-c0x00ffffff-no-rj",
+                    "alt_text": "CircleCI logo"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "Build Logs"
+                      },
+                      "url": "${CIRCLE_BUILD_URL}"
+                    }
+                  ]
+                }
+              ]
+            }        
+                           
 
 ######################################################################################################
 #  Commands - Reusable collections of steps
@@ -183,7 +236,7 @@ jobs:
                 template: basic_fail_1
             - slack/notify:
                 event: pass
-                template: success_tagged_deploy_1 
+                <<: *slack_deploy_success_message   
       
 
   # Run cypress e2e tests on chrome and firefox
@@ -231,25 +284,25 @@ workflows:
     jobs:
       #---------------------- Test Scripts ----------------------
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
-      # - build:
-      #     name: build_test
-      #     matrix:
-      #       parameters:
-      #         BUILD_ENV:
-      #           ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci CI=false']
-      # - test_e2e:
-      #     name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
-      #     requires:
-      #       - 'build_test'
-      #     matrix:
-      #       parameters:
-      #         CI_NODE: [1, 2]
-      #         CI_BROWSER: ['chrome', 'firefox']
+      - build:
+          name: build_test
+          matrix:
+            parameters:
+              BUILD_ENV:
+                ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci CI=false']
+      - test_e2e:
+          name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
+          requires:
+            - 'build_test'
+          matrix:
+            parameters:
+              CI_NODE: [1, 2]
+              CI_BROWSER: ['chrome', 'firefox']
       #---------------------- Release Scripts ----------------------
       - build:
           name: build_release
-          # requires:
-          #   - 'test_e2e'
+          requires:
+            - 'test_e2e'
           filters:
             branches:
               only:

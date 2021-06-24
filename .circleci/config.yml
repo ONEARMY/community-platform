@@ -250,8 +250,8 @@ jobs:
       - setup_repo
       - attach_workspace:
           at: '.'
-      - export_service_account:
-          run: |
+        # Save path to service account credentials as env variable (will be picked up by firebase deploy)  
+      - run: |
             echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > $PWD/service-account.json
             export GOOGLE_APPLICATION_CREDENTIALS=$PWD/service-account.json
       - firebase_deploy:

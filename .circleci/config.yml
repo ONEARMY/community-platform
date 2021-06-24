@@ -212,8 +212,9 @@ commands:
             - run:
                 name: Export application credentials
                 command: |
-                  echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > $PWD/service-account.json
-                  export GOOGLE_APPLICATION_CREDENTIALS=$PWD/service-account.json    
+                  echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > service-account.json
+                  ls
+                  export GOOGLE_APPLICATION_CREDENTIALS=service-account.json
             - run:
                 name: Deploy to Firebase
                 command: ./node_modules/.bin/firebase deploy -P << parameters.alias >>

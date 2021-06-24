@@ -340,7 +340,7 @@ workflows:
             parameters:
               CI_NODE: [1, 2]
               CI_BROWSER: ['chrome', 'firefox']
-      #---------------------- Dev Build-Release ----------------------
+      #---------------------- Dev Build-Deploy ----------------------
       - build:
           name: build_dev
           context: community-platform-dev
@@ -359,7 +359,7 @@ workflows:
           context: 
             - circle-ci-slack-context
             - community-platform-dev        
-       #---------------------- Production Build-Approve-Release ---------------------- 
+       #---------------------- Production Build-Approve-Deploy ---------------------- 
       - build:
           name: build_production
           context: community-platform-production

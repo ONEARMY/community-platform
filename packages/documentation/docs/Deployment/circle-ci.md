@@ -11,7 +11,15 @@ and storing the credentials as an environment variable (see this [Github Issue](
 ```
 GOOGLE_APPLICATION_CREDENTIALS_JSON
 ```
-If using multiple projects (e.g. staging/prodcution) these can be configured in different contexts. 
+If using multiple projects (e.g. staging/prodcution) these can be configured in different contexts.
+
+When configuring a service account the following permissions should be assigned:
+```
+Firebase Admin SDK Administrator Service Agent
+Cloud Functions Admin
+Firebase Hosting Admin
+Cloud RuntimeConfig Admin
+``` 
 
 Alternatively, a `FIREBASE_TOKEN` environment variable can be created and set (See the [Firebase Docs](https://firebase.google.com/docs/cli#cli-ci-systems)),
 however this is less preferable as the token would provide access to all a user's firebase projects
@@ -57,3 +65,13 @@ Proposed (but not currently implemented)
 ```
 LIGHTHOUSE_API_KEY
 ```
+
+## Google APIs
+To deploy from service_account the following APIs will also need to be enabled for the project:
+- [Firebase Hosting API](https://console.cloud.google.com/apis/api/firebasehosting.googleapis.com)
+
+## Functions Variables
+Additional config used in cloud functions has also been included via `firebase functions:config:set`
+E.g. `discord_webhook`, `slack_webhook`, 
+
+TODO - This requires further documentation (and possibly merging)

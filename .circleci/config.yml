@@ -338,14 +338,12 @@ workflows:
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:
           name: build_test
-          <<: *filter_only_master  # TO REMOVE BEFORE PR
           matrix:
             parameters:
               BUILD_ENV:
                 ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci CI=false']
       - test_e2e:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
-          <<: *filter_only_master  # TO REMOVE BEFORE PR
           requires:
             - 'build_test'
           matrix:
@@ -356,17 +354,17 @@ workflows:
       - build:
           name: build_dev
           context: community-platform-dev
-          # requires:
-          #   - 'test_e2e'
-          <<: *filter_only_ci_test  # TO REMOVE BEFORE PR
+          requires:
+            - 'test_e2e'
+          <<: *filter_only_master
           matrix:
             parameters:
-              BUILD_ENV: ['CI=false'] # TODO - fix lint errors so that CI=true works
+              BUILD_ENV: ['CI=false'] # TODO - fix lint errors so that default CI=true works
       - deploy:
           name: deploy_dev
           requires:
             - build_dev
-          <<: *filter_only_ci_test  # TO REMOVE BEFORE PR
+          <<: *filter_only_master
           DEPLOY_ALIAS: 'default'
           NOTIFY_SLACK: false
           context: 
@@ -378,10 +376,7 @@ workflows:
           context: community-platform-production
           requires:
             - 'test_e2e'
-          filters:
-            branches:
-              only:
-                - production
+          <<: *filter_only_production
           matrix:
             parameters:
               BUILD_ENV: ['CI=false']

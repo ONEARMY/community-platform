@@ -214,9 +214,16 @@ commands:
                 command: |
                   echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > $PWD/service-account.json
                   export GOOGLE_APPLICATION_CREDENTIALS=$PWD/service-account.json    
-      - run:
-          name: Deploy to Firebase
-          command: ./node_modules/.bin/firebase deploy --token=<< parameters.token >> -P << parameters.alias >>
+            - run:
+                name: Deploy to Firebase
+                command: ./node_modules/.bin/firebase deploy -P << parameters.alias >>
+      - when:
+          condition: 
+            not: <<parameters.use_application_credentials>>
+          steps:
+          - run:
+              name: Deploy to Firebase
+              command: ./node_modules/.bin/firebase deploy --token=<< parameters.token >> -P << parameters.alias >>  
 examples:
 
 ######################################################################################################

@@ -185,8 +185,6 @@ commands:
       - *save_yarn_cache
   firebase_deploy:
     description: Deploy to Firebase
-    environment:
-      GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GOOGLE_APPLICATION_CREDENTIALS }}
     parameters:
       token:
         type: string
@@ -247,7 +245,7 @@ jobs:
         default: 'default'
       NOTIFY_SLACK:
         type: boolean
-        default: true  
+        default: true   
     steps:
       - setup_repo
       - attach_workspace:

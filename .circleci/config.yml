@@ -211,20 +211,20 @@ commands:
           steps:
             - run:
                 name: Export application credentials
-                command: |
-                  echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > service-account.json
-                  ls
-                  export GOOGLE_APPLICATION_CREDENTIALS=service-account.json
+                command: echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > service_account.json
             - run:
                 name: Deploy to Firebase
                 command: ./node_modules/.bin/firebase deploy -P << parameters.alias >>
+                environment: 
+                  GOOGLE_APPLICATION_CREDENTIALS: service_account.json
       - when:
           condition: 
             not: <<parameters.use_application_credentials>>
           steps:
           - run:
               name: Deploy to Firebase
-              command: ./node_modules/.bin/firebase deploy --token=<< parameters.token >> -P << parameters.alias >>  
+              command: ./node_modules/.bin/firebase deploy --token=<< parameters.token >> -P << parameters.alias >>
+
 examples:
 
 ######################################################################################################
@@ -368,6 +368,7 @@ workflows:
             - build_dev
           <<: *filter_only_ci_test  # TO REMOVE BEFORE PR
           DEPLOY_ALIAS: 'default'
+          NOTIFY_SLACK: false
           context: 
             - circle-ci-slack-context
             - community-platform-dev        

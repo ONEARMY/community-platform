@@ -38,9 +38,9 @@ aliases:
         # https://circleci.com/docs/2.0/yarn/
         # when lock file changes, use increasingly general patterns to restore cache
         # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
-        - yarn-packages-v8-{{ .Branch }}-{{ checksum "yarn.lock" }}
-        - yarn-packages-v8-{{ .Branch }}-
-        - yarn-packages-v8-
+        - yarn-packages-v9-{{ .Branch }}-{{ checksum "yarn.lock" }}
+        - yarn-packages-v9-{{ .Branch }}-
+        - yarn-packages-v9-
   - &install_packages
     run:
       name: Install Packages

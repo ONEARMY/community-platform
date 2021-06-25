@@ -1,13 +1,12 @@
 version: 2.1
 ######################################################################################################
-# Pre-Requisites 
-# 
+# Pre-Requisites
+#
 # In order to use these scripts various env variables need to be set on CircleCI
 # See `packages/documentation/docs/Deployment/circle-ci.md` for more information
 #
 # For general config info see: https://circleci.com/docs/2.0/configuration-reference
 ######################################################################################################
-
 
 ######################################################################################################
 #  Orbs - preconfigured environments for running specific jobs
@@ -65,114 +64,113 @@ aliases:
 
   - &filter_only_production
     filters:
-            branches:
-              only:
-                - production
+      branches:
+        only:
+          - production
   - &filter_only_master
     filters:
-            branches:
-              only:
-                - production  
+      branches:
+        only:
+          - production
   - &filter_only_ci_test
     filters:
-            branches:
-              only:
-                - ci/circle-ci-release                                  
+      branches:
+        only:
+          - ci/circle-ci-release
 
   - &slack_custom_hold_message
     # Message shown in slack to approve new deployment - edit in https://app.slack.com/block-kit-builder
     # Based on: https://github.com/CircleCI-Public/slack-orb/tree/master/src/message_templates
     custom: |
-            {
-              "blocks": [
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": ":rocket: New Update - Ready for Launch",
-                    "emoji": true
-                  }
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Project*: $CIRCLE_PROJECT_REPONAME"
-                    }
-                  ],
-                  "accessory": {
-                    "type": "image",
-                    "image_url": "https://yt3.ggpht.com/ytc/AAUvwni_34CcLQsIhNo1d1A2zUK0pNPzipCV9oM1gvkNNw=s900-c-k-c0x00ffffff-no-rj",
-                    "alt_text": "Logo"
-                  }
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "Go To Approval"
-                      },
-                      "url": "https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}"
-                    }
-                  ]
-                }
-              ]
+      {
+        "blocks": [
+          {
+            "type": "header",
+            "text": {
+              "type": "plain_text",
+              "text": ":rocket: New Update - Ready for Launch",
+              "emoji": true
             }
+          },
+          {
+            "type": "section",
+            "fields": [
+              {
+                "type": "mrkdwn",
+                "text": "*Project*: $CIRCLE_PROJECT_REPONAME"
+              }
+            ],
+            "accessory": {
+              "type": "image",
+              "image_url": "https://yt3.ggpht.com/ytc/AAUvwni_34CcLQsIhNo1d1A2zUK0pNPzipCV9oM1gvkNNw=s900-c-k-c0x00ffffff-no-rj",
+              "alt_text": "Logo"
+            }
+          },
+          {
+            "type": "actions",
+            "elements": [
+              {
+                "type": "button",
+                "text": {
+                  "type": "plain_text",
+                  "text": "Go To Approval"
+                },
+                "url": "https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}"
+              }
+            ]
+          }
+        ]
+      }
 
   - &slack_custom_success_message
     custom: |
-            {
-              "blocks": [
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": "Deploy Success :tada:",
-                    "emoji": true
-                  }
+      {
+        "blocks": [
+          {
+            "type": "header",
+            "text": {
+              "type": "plain_text",
+              "text": "Deploy Success :tada:",
+              "emoji": true
+            }
+          },
+          {
+            "type": "section",
+            "fields": [
+              {
+                "type": "mrkdwn",
+                "text": "*Job*: ${CIRCLE_JOB}"
+              },
+              {
+                "type": "mrkdwn",
+                "text": "*When*: $(date +'%m/%d/%Y %T')"
+              },
+              {
+                "type": "mrkdwn",
+                "text": "*Tag*: $CIRCLE_TAG"
+              }
+            ],
+            "accessory": {
+              "type": "image",
+              "image_url": "https://yt3.ggpht.com/ytc/AAUvwni_34CcLQsIhNo1d1A2zUK0pNPzipCV9oM1gvkNNw=s900-c-k-c0x00ffffff-no-rj",
+              "alt_text": "CircleCI logo"
+            }
+          },
+          {
+            "type": "actions",
+            "elements": [
+              {
+                "type": "button",
+                "text": {
+                  "type": "plain_text",
+                  "text": "Build Logs"
                 },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Job*: ${CIRCLE_JOB}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*When*: $(date +'%m/%d/%Y %T')"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Tag*: $CIRCLE_TAG"
-                    }
-                  ],
-                  "accessory": {
-                    "type": "image",
-                    "image_url": "https://yt3.ggpht.com/ytc/AAUvwni_34CcLQsIhNo1d1A2zUK0pNPzipCV9oM1gvkNNw=s900-c-k-c0x00ffffff-no-rj",
-                    "alt_text": "CircleCI logo"
-                  }
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "Build Logs"
-                      },
-                      "url": "${CIRCLE_BUILD_URL}"
-                    }
-                  ]
-                }
-              ]
-            }        
-                           
+                "url": "${CIRCLE_BUILD_URL}"
+              }
+            ]
+          }
+        ]
+      }
 
 ######################################################################################################
 #  Commands - Reusable collections of steps
@@ -197,7 +195,7 @@ commands:
       use_application_credentials:
         type: boolean
         default: false
-        description: Specify if GOOGLE_APPLICATION_CREDENTIALS_JSON var used instead of firebase token 
+        description: Specify if GOOGLE_APPLICATION_CREDENTIALS_JSON var used instead of firebase token
       alias:
         type: string
         default: 'default'
@@ -215,15 +213,15 @@ commands:
             - run:
                 name: Deploy to Firebase
                 command: ./node_modules/.bin/firebase deploy -P << parameters.alias >>
-                environment: 
+                environment:
                   GOOGLE_APPLICATION_CREDENTIALS: service_account.json
       - when:
-          condition: 
+          condition:
             not: <<parameters.use_application_credentials>>
           steps:
-          - run:
-              name: Deploy to Firebase
-              command: ./node_modules/.bin/firebase deploy --token=<< parameters.token >> -P << parameters.alias >>
+            - run:
+                name: Deploy to Firebase
+                command: ./node_modules/.bin/firebase deploy --token=<< parameters.token >> -P << parameters.alias >>
 
 examples:
 
@@ -242,11 +240,6 @@ jobs:
   # NOTE - not currently used in test workflow as different build_env required for each machine
   build:
     docker: *docker
-    environment:
-      # Include env variable for tracking current branch in build
-      REACT_APP_BRANCH: $CIRCLE_BRANCH
-      # Fix memory issues during build (legacy issue, to confirm if still required)
-      NODE_OPTIONS: --max-old-space-size=4096
     parameters:
       # optional environment variables to set during build process
       BUILD_ENV:
@@ -257,6 +250,11 @@ jobs:
       - setup_repo
       - run:
           command: << parameters.BUILD_ENV >> npm run build
+          environment:
+            # Fix memory issues during build (https://github.com/facebook/create-react-app/issues/8096)
+            NODE_OPTIONS: --max-old-space-size=4096
+            # Include env variable for tracking current branch in build
+            REACT_APP_BRANCH: $CIRCLE_BRANCH
       - persist_to_workspace:
           root: .
           paths:
@@ -270,16 +268,16 @@ jobs:
         default: 'default'
       NOTIFY_SLACK:
         type: boolean
-        default: true   
+        default: true
     steps:
       - setup_repo
       - attach_workspace:
-          at: '.'            
+          at: '.'
       - firebase_deploy:
           # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
           alias: << parameters.DEPLOY_ALIAS >>
-          use_application_credentials: true 
-      - when: 
+          use_application_credentials: true
+      - when:
           condition: << parameters.NOTIFY_SLACK >>
           steps:
             - slack/notify:
@@ -288,8 +286,7 @@ jobs:
                 template: basic_fail_1
             - slack/notify:
                 event: pass
-                <<: *slack_custom_success_message   
-      
+                <<: *slack_custom_success_message
 
   # Run cypress e2e tests on chrome and firefox
   test_e2e:
@@ -367,10 +364,10 @@ workflows:
           <<: *filter_only_master
           DEPLOY_ALIAS: 'default'
           NOTIFY_SLACK: false
-          context: 
+          context:
             - circle-ci-slack-context
-            - community-platform-dev        
-       #---------------------- Production Build-Approve-Deploy ---------------------- 
+            - community-platform-dev
+        #---------------------- Production Build-Approve-Deploy ----------------------
       - build:
           name: build_production
           context: community-platform-production
@@ -380,29 +377,28 @@ workflows:
           matrix:
             parameters:
               BUILD_ENV: ['CI=false']
-      # Require manual approval on CirclCI website prior to release        
-      - hold:  
+      # Require manual approval on CirclCI website prior to release
+      - hold:
           name: approve_release
           type: approval
           requires:
-           - build_production   
-          <<: *filter_only_production 
+            - build_production
+          <<: *filter_only_production
       # Send a slack notification to approve the hold above (required config supplied in circleci-slack-context)
       - slack/on-hold:
           name: notify_slack_pending_approval
           context: circle-ci-slack-context
           requires:
             - build_production
-          <<: *filter_only_production  
-          <<: *slack_custom_hold_message  
+          <<: *filter_only_production
+          <<: *slack_custom_hold_message
       - deploy:
           name: deploy_production
           requires:
             - 'approve_release'
-          <<: *filter_only_production 
+          <<: *filter_only_production
           DEPLOY_ALIAS: 'production'
           NOTIFY_SLACK: true
-          context: 
+          context:
             - circle-ci-slack-context
-            - community-platform-production    
-      
+            - community-platform-production

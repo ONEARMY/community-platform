@@ -34,7 +34,9 @@ export const Comment: React.FC<IProps> = ({
       style={{ borderRadius: '5px' }}
     >
       <CommentHeader {...props} />
-      <p>{text}</p>
+      <Text my={2} style={{ whiteSpace: 'pre-wrap' }}>
+        {text}
+      </Text>
 
       {user && (user._id === _creatorId || hasAdminRights(user)) && (
         <Flex ml="auto">

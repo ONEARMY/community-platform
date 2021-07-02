@@ -8409,7 +8409,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"body-parser@npm:1.19.0, body-parser@npm:^1.19.0":
+"body-parser@npm:1.19.0":
   version: 1.19.0
   resolution: "body-parser@npm:1.19.0"
   dependencies:
@@ -13742,7 +13742,6 @@ fsevents@^1.2.7:
     "@types/webpack-node-externals": ^2.5.1
     awesome-typescript-loader: ^5.2.1
     axios: ^0.21.1
-    body-parser: ^1.19.0
     clean-webpack-plugin: ^4.0.0-alpha.0
     concurrently: ^5.3.0
     cors: ^2.8.5

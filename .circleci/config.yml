@@ -251,8 +251,6 @@ jobs:
       - run:
           command: << parameters.BUILD_ENV >> npm run build
           environment:
-            # Fix memory issues during build (https://github.com/facebook/create-react-app/issues/8096)
-            NODE_OPTIONS: --max-old-space-size=4096
             # Include env variable for tracking current branch in build
             REACT_APP_BRANCH: $CIRCLE_BRANCH
       - persist_to_workspace:
@@ -356,7 +354,8 @@ workflows:
           <<: *filter_only_master
           matrix:
             parameters:
-              BUILD_ENV: ['CI=false'] # TODO - fix lint errors so that default CI=true works
+              # Fix memory issues during build (https://github.com/facebook/create-react-app/issues/8096)
+              BUILD_ENV: ['CI=false', 'NODE_OPTIONS=--max-old-space-size=4096'] # TODO - fix lint errors so that default CI=true works
       - deploy:
           name: deploy_dev
           requires:
@@ -376,7 +375,7 @@ workflows:
           <<: *filter_only_production
           matrix:
             parameters:
-              BUILD_ENV: ['CI=false']
+              BUILD_ENV: ['CI=false', 'NODE_OPTIONS=--max-old-space-size=4096']
       # Require manual approval on CirclCI website prior to release
       - hold:
           name: approve_release

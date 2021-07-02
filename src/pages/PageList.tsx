@@ -163,13 +163,15 @@ const termsPolicy = {
 // community pages (various pages hidden on production build)
 const devCommunityPages = [howTo, maps, events, academy, ResearchModule]
 const prodCommunityPages = [howTo, maps, events, academy]
-const communityPages =
-  SITE === 'preview' ? prodCommunityPages : devCommunityPages
+const communityPages = ['preview', 'production'].includes(SITE)
+  ? prodCommunityPages
+  : devCommunityPages
 // community 'more' dropdown pages (various pages hidden on production build)
 const devCommunityPagesMore = []
 const prodCommunityPagesMore = []
-const communityPagesMore =
-  SITE === 'production' ? prodCommunityPagesMore : devCommunityPagesMore
+const communityPagesMore = ['preview', 'production'].includes(SITE)
+  ? prodCommunityPagesMore
+  : devCommunityPagesMore
 
 export const COMMUNITY_PAGES: IPageMeta[] = communityPages
 export const COMMUNITY_PAGES_MORE: IPageMeta[] = communityPagesMore
@@ -184,5 +186,5 @@ export const NO_HEADER_PAGES: IPageMeta[] = [
   signin,
   forgotpassword,
   forgotpasswordmessage,
-  ResearchModule // CC 2021-06-24 - Temporary - make research module accessible to all in production but hide from nav
+  ResearchModule, // CC 2021-06-24 - Temporary - make research module accessible to all in production but hide from nav
 ]

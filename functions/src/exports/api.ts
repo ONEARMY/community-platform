@@ -5,16 +5,17 @@ As most functions are called from triggers the api is mostly just used for testi
 ************************************************************************************/
 
 import * as functions from 'firebase-functions'
-import bodyParser from 'body-parser'
 import cors from 'cors'
 import express from 'express'
 
 console.log('api ready')
 const app = express()
+
 // use bodyparse to create json object from body
+app.use(express.json())
 app.use(
-  bodyParser.json({
-    limit: '1mb',
+  express.urlencoded({
+    extended: false,
   }),
 )
 // use cors
@@ -33,7 +34,6 @@ const corsOptions: cors.CorsOptions = {
 }
 // configure app to use cors by default
 app.use(cors(corsOptions))
-app.use(bodyParser.urlencoded({ extended: false }))
 app.all('*', async (req, res, next) => {
   // get the endpoint based on the request path
   const endpoint = req.path.split('/')[1]

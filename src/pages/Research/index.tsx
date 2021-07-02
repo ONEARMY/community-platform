@@ -1,3 +1,4 @@
+import { Route } from 'react-router'
 import {
   ResearchStore,
   ResearchStoreContext,
@@ -16,7 +17,7 @@ export const ResearchModule: IPageMeta = {
   component: <ResearchModuleContainer />,
   title: 'Research',
   description: 'Welcome to research',
-  requiredRole: 'beta-tester',
+  // requiredRole: 'beta-tester',
 }
 
 /**
@@ -25,7 +26,9 @@ export const ResearchModule: IPageMeta = {
 function ResearchModuleContainer() {
   return (
     <ResearchStoreContext.Provider value={new ResearchStore()}>
-      <AuthRoute component={ResearchRoutes} roleRequired="beta-tester" />
+      {/* <AuthRoute component={ResearchRoutes}      roleRequired={undefined}  /> */}
+      <Route component={ResearchRoutes}        />
+     
     </ResearchStoreContext.Provider>
   )
 }

@@ -162,9 +162,9 @@ const termsPolicy = {
 
 // community pages (various pages hidden on production build)
 const devCommunityPages = [howTo, maps, events, academy, ResearchModule]
-const prodCommunityPages = [howTo, maps, events, academy, ResearchModule]
+const prodCommunityPages = [howTo, maps, events, academy]
 const communityPages =
-  SITE === 'production' ? prodCommunityPages : devCommunityPages
+  SITE === 'preview' ? prodCommunityPages : devCommunityPages
 // community 'more' dropdown pages (various pages hidden on production build)
 const devCommunityPagesMore = []
 const prodCommunityPagesMore = []
@@ -184,4 +184,5 @@ export const NO_HEADER_PAGES: IPageMeta[] = [
   signin,
   forgotpassword,
   forgotpasswordmessage,
+  ResearchModule // CC 2021-06-24 - Temporary - make research module accessible to all in production but hide from nav
 ]

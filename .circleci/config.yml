@@ -71,7 +71,7 @@ aliases:
     filters:
       branches:
         only:
-          - production
+          - master
   - &filter_only_ci_test
     filters:
       branches:
@@ -314,7 +314,6 @@ jobs:
             - browser-tools/install-firefox
       # call main testing script
       - run:
-          # TODO - CC 2021-02-24 `npm run test ci prod` a bit flaky, should be worked on and then used
           command: npm run test ci prod
           environment:
             CI_BROWSER: << parameters.CI_BROWSER >>
@@ -336,7 +335,9 @@ workflows:
           matrix:
             parameters:
               BUILD_ENV:
-                ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci CI=false']
+                [
+                  'FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci CI=false NODE_OPTIONS=--max-old-space-size=4096',
+                ]
       - test_e2e:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           requires:
@@ -355,7 +356,8 @@ workflows:
           matrix:
             parameters:
               # Fix memory issues during build (https://github.com/facebook/create-react-app/issues/8096)
-              BUILD_ENV: ['CI=false', 'NODE_OPTIONS=--max-old-space-size=4096'] # TODO - fix lint errors so that default CI=true works
+              # TODO - fix lint errors so that default CI=true works
+              BUILD_ENV: ['CI=false NODE_OPTIONS=--max-old-space-size=4096']
       - deploy:
           name: deploy_dev
           requires:
@@ -375,7 +377,7 @@ workflows:
           <<: *filter_only_production
           matrix:
             parameters:
-              BUILD_ENV: ['CI=false', 'NODE_OPTIONS=--max-old-space-size=4096']
+              BUILD_ENV: ['CI=false NODE_OPTIONS=--max-old-space-size=4096']
       # Require manual approval on CirclCI website prior to release
       - hold:
           name: approve_release

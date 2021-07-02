@@ -31,6 +31,7 @@ export class ResearchStore extends ModuleStore {
   constructor() {
     super(null as any, 'research')
     makeObservable(this)
+    super.init()
 
     this.allDocs$.subscribe((docs: IResearch.ItemDB[]) => {
       console.log('docs', docs)

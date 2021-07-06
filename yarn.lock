@@ -20027,6 +20027,7 @@ fsevents@^1.2.7:
     mobx-react: 7.0.0
     mobx-react-devtools: ^6.0.3
     node-sass: ^4.14.1
+    oa-shared: 1.0.0
     places.js: ^1.16.4
     prettier: ^1.16.4
     pubsub-js: ^1.7.0

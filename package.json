@@ -73,6 +73,7 @@
     "lorem-ipsum": "^2.0.3",
     "mobx": "6.0.1",
     "mobx-react": "7.0.0",
+    "oa-shared": "1.0.0",
     "places.js": "^1.16.4",
     "pubsub-js": "^1.7.0",
     "react": "^17.0.2",

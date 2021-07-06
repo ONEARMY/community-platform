@@ -185,7 +185,7 @@ export class MapsStore extends ModuleStore {
       _id: user.userName,
       location: user.location!.latlng,
       type: user.profileType ? user.profileType : 'member',
-      moderation: 'awaiting-moderation',
+      moderation: 'awaiting-moderation', // NOTE - if pin previously accespted this will be updated on backend function
     }
     if (user.workspaceType) {
       pin.subType = user.workspaceType
@@ -214,6 +214,7 @@ export class MapsStore extends ModuleStore {
         shortDescription: '',
         name: username,
         profileUrl: `${window.location.origin}/u/${username}`,
+        verifiedBadge: false,
       }
     }
     const avatar = getUserAvatar(username)
@@ -229,7 +230,7 @@ export class MapsStore extends ModuleStore {
       shortDescription: u.mapPinDescription ? u.mapPinDescription : '',
       name: u.userName,
       profileUrl: `${window.location.origin}/u/${u.userName}`,
-      verifiedBadge: u.badges?.verified,
+      verifiedBadge: u.badges?.verified || false,
     }
   }
   @action

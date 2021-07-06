@@ -1,7 +1,7 @@
 import { CONFIG } from '../config/config'
 import * as functions from 'firebase-functions'
 import axios, { AxiosResponse, AxiosError } from 'axios'
-import { IMapPin } from '../../../src/models'
+import { IMapPin } from '../models'
 
 const SITE_URL = CONFIG.deployment.site_url
 // e.g. https://dev.onearmy.world or https://community.preciousplastic.com

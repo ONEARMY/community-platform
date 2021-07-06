@@ -2,9 +2,6 @@
   "name": "functions",
   "version": "1.0.0",
   "__NOTE__:": "avoid hoisting for webpack and other conflicts (should test, might be ok now)",
-  "installConfig": {
-    "hoistingLimits": "workspaces"
-  },
   "resolutions": {
     "webpack": "^4.46.0"
   },

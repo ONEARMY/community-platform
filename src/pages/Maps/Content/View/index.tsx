@@ -91,6 +91,7 @@ class MapView extends React.Component<IProps> {
         />
         <Clusters pins={pins} onPinClick={pin => this.pinClicked(pin)} />
         {activePin && this.injected.mapsStore.canSeePin(activePin) && (
+          // NOTE CC - 2021-07-06 mobx update no longer passing JS object, but observable that needs converting
           <Popup activePin={toJS(activePin)} map={this.props.mapRef} />
         )}
       </Map>

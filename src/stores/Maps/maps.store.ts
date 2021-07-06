@@ -129,14 +129,20 @@ export class MapsStore extends ModuleStore {
    * set undefined to remove any active popup
    */
   @action
-  public async setActivePin(pin?: IMapPin) {
+  public setActivePin(pin?: IMapPin | IMapPinWithDetail) {
     this.activePin = pin
-    if (pin) {
-      const detail: IMapPinDetail = IS_MOCK
-        ? generatePinDetails()
-        : await this.getUserProfilePin(pin._id)
-      this.activePin = { ...pin, detail }
+    if (pin && !pin.hasOwnProperty('detail')) {
+      return this.getPinDetail(pin)
     }
+  }
+  // call additional action when pin detail received to inform mobx correctly of update
+  private async getPinDetail(pin: IMapPin) {
+    const detail: IMapPinDetail = IS_MOCK
+      ? generatePinDetails()
+      : await this.getUserProfilePin(pin._id)
+    const pinWithDetail: IMapPinWithDetail = { ...pin, detail }
+    console.log('pin details', pinWithDetail)
+    this.setActivePin(pinWithDetail)
   }
 
   // get base pin geo information
@@ -145,12 +151,6 @@ export class MapsStore extends ModuleStore {
       .collection<IMapPin>(COLLECTION_NAME)
       .doc(id)
       .get()
-    /*
-    // Doesn't work on page load: activeUser is not populated ...
-    if(pin && (pin.moderation!='accepted' && !hasAdminRights(this.activeUser))){
-      return undefined
-    }
-*/
     return pin as IMapPin
   }
 
@@ -171,7 +171,8 @@ export class MapsStore extends ModuleStore {
     if (!hasAdminRights(this.activeUser)) {
       return false
     }
-    this.setPin(pin)
+    await this.setPin(pin)
+    this.setActivePin(pin)
   }
   public needsModeration(pin: IMapPin) {
     return needsModeration(pin, this.activeUser)

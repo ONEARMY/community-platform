@@ -17,6 +17,7 @@ import {
 import { inject, observer } from 'mobx-react'
 import { MapsStore } from 'src/stores/Maps/maps.store'
 import { RouteComponentProps } from 'react-router'
+import { toJS } from 'mobx'
 
 interface IProps extends RouteComponentProps<any> {
   pins: Array<IMapPin>
@@ -65,7 +66,6 @@ class MapView extends React.Component<IProps> {
 
   private pinClicked(pin: IMapPin) {
     this.props.history.push('/map#' + pin._id)
-    //    this.injected.mapsStore.setActivePin(pin)
   }
 
   public render() {
@@ -91,7 +91,7 @@ class MapView extends React.Component<IProps> {
         />
         <Clusters pins={pins} onPinClick={pin => this.pinClicked(pin)} />
         {activePin && this.injected.mapsStore.canSeePin(activePin) && (
-          <Popup activePin={activePin} map={this.props.mapRef} />
+          <Popup activePin={toJS(activePin)} map={this.props.mapRef} />
         )}
       </Map>
     )

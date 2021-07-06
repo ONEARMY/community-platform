@@ -61,8 +61,10 @@ export class Popup extends React.Component<IProps> {
   }
 
   private moderatePin = async (pin: IMapPin, accepted: boolean) => {
-    pin.moderation = accepted ? 'accepted' : 'rejected'
-    await this.store.moderatePin(pin)
+    await this.store.moderatePin({
+      ...pin,
+      moderation: accepted ? 'accepted' : 'rejected',
+    })
     if (!accepted) {
       this.injected.mapsStore.setActivePin(undefined)
     }
@@ -181,7 +183,6 @@ export class Popup extends React.Component<IProps> {
   }
 
   public render() {
-    console.log('popup render', this.props.activePin)
     const activePin = this.props.activePin as IMapPinWithDetail
     const content = activePin.detail
       ? this.renderContent(activePin)

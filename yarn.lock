@@ -19115,7 +19115,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"mobx-react-lite@npm:^3.0.0":
+"mobx-react-lite@npm:^3.2.0":
   version: 3.2.0
   resolution: "mobx-react-lite@npm:3.2.0"
   peerDependencies:
@@ -19130,22 +19130,27 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"mobx-react@npm:7.0.0":
-  version: 7.0.0
-  resolution: "mobx-react@npm:7.0.0"
+"mobx-react@npm:7.2.0":
+  version: 7.2.0
+  resolution: "mobx-react@npm:7.2.0"
   dependencies:
-    mobx-react-lite: ^3.0.0
+    mobx-react-lite: ^3.2.0
   peerDependencies:
-    mobx: ^6.0.0
-    react: ^16.8.0 || 16.9.0-alpha.0
-  checksum: 7e5462165060b6405e3741b3f24133a307fb01869262646376559134ce1ac07c6fdc1e74045e35c1342289747e2d10889e85473b433f50e10456cf76c3ea9377
+    mobx: ^6.1.0
+    react: ^16.8.0 || ^17
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+    react-native:
+      optional: true
+  checksum: a94418bdb1293f1a2a25fda34e263d4c6db8ceb8d0f4115ce63a93c11e708facb37d1ab0108514fd364bb92f51e8b90334bc4ce6373ee5509ffa3d74394d0ea3
   languageName: node
   linkType: hard
 
-"mobx@npm:6.0.1":
-  version: 6.0.1
-  resolution: "mobx@npm:6.0.1"
-  checksum: b0923287360a300bbb04942c9c78fd1b40674122820b18dbfbec4779dd848d7aaad5268edbfc87b56c6f29b62f078495c76a6eae6ddacc56185f0a407cbaa298
+"mobx@npm:6.3.2":
+  version: 6.3.2
+  resolution: "mobx@npm:6.3.2"
+  checksum: 1611aa8cba7b9270b67c663f1a9250da4198afc75ea2a18a920292778a2ac3027bb963885a180fafdee616796b1c2044fdb50bd1f13f4b9fe34d9685efa62f02
   languageName: node
   linkType: hard
 
@@ -20023,8 +20028,8 @@ fsevents@^1.2.7:
     leaflet.markercluster: ^1.4.1
     lint-staged: ^8.1.5
     lorem-ipsum: ^2.0.3
-    mobx: 6.0.1
-    mobx-react: 7.0.0
+    mobx: 6.3.2
+    mobx-react: 7.2.0
     mobx-react-devtools: ^6.0.3
     node-sass: ^4.14.1
     oa-shared: 1.0.0

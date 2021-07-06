@@ -1,6 +1,4 @@
-import * as React from 'react'
-
-import { SITE } from 'src/config/config'
+import { SITE, VERSION } from 'src/config/config'
 import Text from 'src/components/Text'
 import theme from 'src/themes/styled.theme'
 import { Flex, Box } from 'rebass'
@@ -23,7 +21,7 @@ const DevSiteHeader = () => (
         style={{ zIndex: 3001 }}
       >
         <Text color={'white'} medium txtcenter flex="1">
-          This is a dev version of the platform
+          This is a dev version of the platform (v{VERSION})
         </Text>
         <Flex data-cy="devSiteSelectContainer" alignItems="center">
           <Text color={'white'} medium mr="1" title={SITE}>
@@ -59,7 +57,6 @@ const setSite = async (site: string) => {
 /** Delete local,session and indexedDB storage */
 const clearCache = (reload = true) => {
   return new Promise(async resolve => {
-    console.log('clearing cache')
     localStorage.clear()
     sessionStorage.clear()
     const req = indexedDB.deleteDatabase('OneArmyCache')

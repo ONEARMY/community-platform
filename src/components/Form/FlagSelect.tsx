@@ -1,10 +1,9 @@
-import React from 'react'
 import { FieldContainer, ErrorMessage } from './elements'
 import ReactFlagsSelect from 'react-flags-select'
 import { Flex } from 'rebass'
 import { IFieldProps } from './Fields'
 
-export const FlagSelectField = ({ input, meta, ...rest }: IFieldProps) => (
+export const FlagSelectField = ({ input, meta }: IFieldProps) => (
   <Flex p={0} flexWrap="wrap">
     <FieldContainer invalid={meta.error && meta.touched}>
       <ReactFlagsSelect

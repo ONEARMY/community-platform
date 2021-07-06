@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import React from 'react'
+import * as React from 'react'
 import { Box, Flex, Image } from 'rebass'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import { Button } from 'src/components/Button'

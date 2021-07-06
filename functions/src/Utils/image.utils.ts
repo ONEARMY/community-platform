@@ -1,5 +1,5 @@
 import { join } from 'path'
-import * as sharp from 'sharp'
+import sharp from 'sharp'
 import { tmpdir } from 'os'
 import { ensureDir } from 'fs-extra'
 

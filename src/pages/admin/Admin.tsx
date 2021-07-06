@@ -28,7 +28,7 @@ interface IInjectedProps extends IProps {
 }
 @inject('adminStore')
 @observer
-class AdminPageClass extends React.Component<IProps, any> {
+class AdminPage extends React.Component<IProps, any> {
   componentDidMount() {
     this.injected.adminStore.init()
   }
@@ -66,7 +66,6 @@ class AdminPageClass extends React.Component<IProps, any> {
               key={route.name}
               path={`/admin/${route.slug}`}
               component={route.component}
-              redirectPath="/admin"
               roleRequired="admin"
             />
           ))}
@@ -75,4 +74,4 @@ class AdminPageClass extends React.Component<IProps, any> {
     )
   }
 }
-export const AdminPage: any = withRouter(AdminPageClass as any)
+export default withRouter(AdminPage as any)

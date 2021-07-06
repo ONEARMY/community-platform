@@ -52,25 +52,14 @@ describe('[How To]', () => {
     })
     it('[By Everyone]', () => {
       cy.step('Select a tag')
-      cy.get('[data-cy=tag-select]').click()
-      cy.get('.data-cy__menu')
-        .contains('product')
-        .click()
-      cy.get('.data-cy__multi-value__label')
-        .contains('product')
-        .should('be.exist')
+      cy.selectTag('product')
       cy.get('[data-cy=card]')
         .its('length')
         .should('be.eq', 3)
 
       cy.step('Type and select a tag')
-      cy.get('.data-cy__input')
-        .get('input')
-        .first()
-        .type('injec')
-      cy.get('.data-cy__menu')
-        .contains('injection')
-        .click()
+      cy.selectTag('injection')
+
       cy.get('[data-cy=card]')
         .its('length')
         .should('be.eq', 2)
@@ -102,7 +91,6 @@ describe('[How To]', () => {
     const coverFileRegex = /brick-12-1.jpg/
     beforeEach(() => {
       cy.visit('/how-to')
-      cy.logout()
     })
     describe('[By Everyone]', () => {
       it('[See all info]', () => {

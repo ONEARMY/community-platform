@@ -1,4 +1,4 @@
-import React from 'react'
+import { PureComponent } from 'react';
 import Linkify from 'react-linkify'
 import ReactPlayer from 'react-player'
 import { Box } from 'rebass'
@@ -19,7 +19,7 @@ const FlexStepNumber = styled(Flex)`
   height: fit-content;
 `
 
-export default class Step extends React.PureComponent<IProps> {
+export default class Step extends PureComponent<IProps> {
   render() {
     const { stepindex, step } = this.props
     return (

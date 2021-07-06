@@ -1,5 +1,4 @@
-import React from 'react'
-import { Flex, Box, FlexProps } from 'rebass/styled-components'
+import { Flex, FlexProps } from 'rebass/styled-components'
 import theme from 'src/themes/styled.theme'
 import { CSSObject } from '@styled-system/css'
 
@@ -12,8 +11,9 @@ type IProps = FlexProps & ILayoutProps
 
 const Main = (props: IProps) => (
   <Flex {...(props as any)} flexDirection="column">
-    <Box
+    <Flex
       width="100%"
+      flexDirection="column"
       className="main-container"
       css={props.customStyles}
       sx={
@@ -30,7 +30,7 @@ const Main = (props: IProps) => (
       }
     >
       {props.children}
-    </Box>
+    </Flex>
   </Flex>
 )
 

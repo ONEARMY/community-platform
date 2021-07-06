@@ -1,4 +1,4 @@
-import React from 'react'
+import { Component } from 'react'
 import { NavLink } from 'react-router-dom'
 import { COMMUNITY_PAGES } from 'src/pages/PageList'
 import theme from 'src/themes/styled.theme'
@@ -6,8 +6,7 @@ import { Flex } from 'rebass/styled-components'
 import styled from 'styled-components'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
 import { zIndex } from 'src/themes/styled.theme'
-import { inject, observer } from 'mobx-react'
-import { UserStore } from 'src/stores/User/user.store'
+import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
 const MenuLink = styled(NavLink).attrs(() => ({
   activeClassName: 'current',
@@ -39,20 +38,9 @@ const MenuLink = styled(NavLink).attrs(() => ({
     }
   }
 `
-interface IInjectedProps {
-  userStore: UserStore
-}
 
-@inject('userStore')
-@observer
-export class MenuDesktop extends React.Component {
-  get injected() {
-    return this.props as IInjectedProps
-  }
-
+export class MenuDesktop extends Component {
   render() {
-    const user = this.injected.userStore.user
-
     return (
       <>
         <Flex alignItems={'center'}>
@@ -64,11 +52,13 @@ export class MenuDesktop extends React.Component {
                 </MenuLink>
               </Flex>
             )
-            return page.requiredRole
-              ? user && user.userRoles?.includes(page.requiredRole)
-                ? link
-                : null
-              : link
+            return page.requiredRole ? (
+              <AuthWrapper roleRequired={page.requiredRole} key={page.path}>
+                {link}
+              </AuthWrapper>
+            ) : (
+              link
+            )
           })}
         </Flex>
       </>

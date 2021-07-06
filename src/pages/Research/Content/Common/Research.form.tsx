@@ -72,7 +72,9 @@ const ResearchForm = observer((props: IProps) => {
     if (submissionHandler.shouldSubmit) {
       const form = document.getElementById('researchForm')
       if (typeof form !== 'undefined' && form !== null) {
-        form.dispatchEvent(new Event('submit', { cancelable: true }))
+        form.dispatchEvent(
+          new Event('submit', { cancelable: true, bubbles: true }),
+        )
         setState(prevState => ({ ...prevState, showSubmitModal: true }))
       }
     }

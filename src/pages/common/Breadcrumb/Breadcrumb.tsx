@@ -1,4 +1,3 @@
-import React from 'react'
 import { Link } from 'src/components/Links'
 import withBreadcrumbs from 'react-router-breadcrumbs-hoc'
 import HowtoBreadcrumb from 'src/pages/common/Breadcrumb/HowtoBreadcrumb'

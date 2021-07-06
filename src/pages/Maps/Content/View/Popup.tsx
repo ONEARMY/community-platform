@@ -1,5 +1,6 @@
-import React from 'react'
+import * as React from 'react'
 import L from 'leaflet'
+import { Image } from 'rebass'
 import Flex from 'src/components/Flex'
 import Text from 'src/components/Text'
 import { Button } from 'src/components/Button'
@@ -15,6 +16,7 @@ import { inject } from 'mobx-react'
 import { MapsStore } from 'src/stores/Maps/maps.store'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import Workspace from 'src/pages/User/workspace/Workspace'
+import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
 
 interface IProps {
   activePin: IMapPin | IMapPinWithDetail
@@ -53,14 +55,16 @@ export class Popup extends React.Component<IProps> {
     return this.injected.mapsStore
   }
 
-  componentWillReceiveProps() {
+  /* eslint-disable @typescript-eslint/naming-convention*/
+  UNSAFE_componentWillReceiveProps() {
     this.openPopup()
   }
 
-  private moderatePin = async (accepted: boolean) => {
-    const pin = this.props.activePin as IMapPin
-    pin.moderation = accepted ? 'accepted' : 'rejected'
-    await this.store.moderatePin(pin)
+  private moderatePin = async (pin: IMapPin, accepted: boolean) => {
+    await this.store.moderatePin({
+      ...pin,
+      moderation: accepted ? 'accepted' : 'rejected',
+    })
     if (!accepted) {
       this.injected.mapsStore.setActivePin(undefined)
     }
@@ -86,7 +90,13 @@ export class Popup extends React.Component<IProps> {
         ? g.subType === pin.subType && g.type === pin.type
         : g.type === pin.type
     })
-    const { lastActive, heroImageUrl, shortDescription, name } = pin.detail
+    const {
+      lastActive,
+      heroImageUrl,
+      shortDescription,
+      name,
+      verifiedBadge,
+    } = pin.detail
     const description =
       shortDescription.length > 70
         ? shortDescription.substr(0, 70) + '...'
@@ -107,14 +117,22 @@ export class Popup extends React.Component<IProps> {
 
     return (
       <>
-        <Link to={'/u/' + name}>
+        <Link to={'/u/' + name} data-cy="map-pin-popup">
           <HeroImage src={heroImageUrl} onError={addFallbackSrc} />
           <Flex flexDirection={'column'} px={2} py={2}>
             <Text tags mb={2}>
               {group ? group.displayName : pin.type}
             </Text>
-            <Text medium mb={1}>
+            <Text large mb={1} display="flex">
               {name}
+              {verifiedBadge && (
+                <Image
+                  src={VerifiedBadgeIcon}
+                  width="22px"
+                  height="22px"
+                  style={{ marginLeft: '5px' }}
+                />
+              )}
             </Text>
             <Text small mb={2} style={{ wordBreak: 'break-word' }}>
               {description}
@@ -133,39 +151,38 @@ export class Popup extends React.Component<IProps> {
                 {moderationStatus}
               </Text>
             )}
-            {this.store.needsModeration(pin) && (
-              <Flex
-                flexDirection={'row'}
-                px={10}
-                py={1}
-                justifyContent={'space-around'}
-              >
-                <Button
-                  small
-                  data-cy={'accept'}
-                  variant={'primary'}
-                  icon="check"
-                  onClick={() => this.moderatePin(true)}
-                  sx={{ height: '30px' }}
-                />
-                <Button
-                  small
-                  data-cy="reject-pin"
-                  variant={'tertiary'}
-                  icon="delete"
-                  onClick={() => this.moderatePin(false)}
-                  sx={{ height: '30px' }}
-                />
-              </Flex>
-            )}
           </Flex>
         </Link>
+        {this.store.needsModeration(pin) && (
+          <Flex
+            flexDirection={'row'}
+            px={10}
+            py={1}
+            justifyContent={'space-around'}
+          >
+            <Button
+              small
+              data-cy={'accept'}
+              variant={'primary'}
+              icon="check"
+              onClick={() => this.moderatePin(pin, true)}
+              sx={{ height: '30px' }}
+            />
+            <Button
+              small
+              data-cy="reject-pin"
+              variant={'tertiary'}
+              icon="delete"
+              onClick={() => this.moderatePin(pin, false)}
+              sx={{ height: '30px' }}
+            />
+          </Flex>
+        )}
       </>
     )
   }
 
   public render() {
-    console.log('popup render', this.props.activePin)
     const activePin = this.props.activePin as IMapPinWithDetail
     const content = activePin.detail
       ? this.renderContent(activePin)

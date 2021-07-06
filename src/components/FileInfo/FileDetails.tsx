@@ -1,4 +1,3 @@
-import * as React from 'react'
 import Icon, { availableGlyphs } from '../Icons'
 import { Flex } from 'rebass'
 import Text from '../Text'

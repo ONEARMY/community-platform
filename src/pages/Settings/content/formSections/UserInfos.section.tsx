@@ -63,7 +63,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
         <Box sx={{ display: isOpen ? 'block' : 'none' }}>
           <Flex flexWrap={'wrap'}>
             <Text my={4} medium>
-              User / workspace username *
+              Display Name *
             </Text>
             <Field
               data-cy="username"
@@ -108,7 +108,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             <Text mb={2} mt={7} width="100%" medium>
               Cover Image *
             </Text>
-            <FieldArray name="coverImages" initialValue={coverImages}>
+            <FieldArray name="coverImages" initialValue={coverImages as any}>
               {({ fields, meta }) => {
                 return (
                   <>

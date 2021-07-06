@@ -1,4 +1,3 @@
-import React from 'react'
 import Flex from 'src/components/Flex'
 import ModerationStatusText from 'src/components/ModerationStatusText'
 import Text from 'src/components/Text'
@@ -29,7 +28,7 @@ export const EventCard = (props: IProps) => (
     flexDirection={['column', 'column', 'initial']}
     sx={{ position: 'relative' }}
     data-cy="card"
-    data-eventId={props.event._id}
+    data-eventid={props.event._id}
   >
     {props.event.moderation !== 'accepted' && (
       <ModerationStatusText

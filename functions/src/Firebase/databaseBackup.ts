@@ -1,8 +1,7 @@
 import Axios from 'axios'
-import { getAccessToken } from '../Utils/auth.utils'
 import { SERVICE_ACCOUNT_CONFIG } from '../config/config'
 import * as google from 'google-auth-library'
-import * as dateformat from 'dateformat'
+import dateformat from 'dateformat'
 
 /*  Cloud function to automatically backup the firebase database adapted from: 
     https://thatweirddeveloper.com/how-to-back-up-cloud-firestore-periodically

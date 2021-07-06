@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import styled from 'styled-components'
 import {
   verticalAlign,
@@ -136,7 +136,7 @@ export const glyphs: IGlyphs = {
 
 type WrapperProps = IProps & VerticalAlignProps & SpaceProps
 
-const IconWrapper = styled<WrapperProps, 'div'>('div')`
+const IconWrapper = styled.div<WrapperProps>`
   display: inline-block;
   flex: 0 0 ${props => (props.size ? `${props.size}px` : '32px')};
   width: ${props => (props.size ? `${props.size}px` : '32px')};

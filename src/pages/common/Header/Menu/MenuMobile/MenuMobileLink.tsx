@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import theme from 'src/themes/styled.theme'
 import styled from 'styled-components'
 import { Box } from 'rebass'
@@ -22,7 +22,7 @@ const PanelItem = styled(Box)`
   padding: ${theme.space[3]}px 0px;
 `
 
-const MenuLink = styled(NavLink).attrs(({ name }) => ({
+const MenuLink = styled(NavLink).attrs(() => ({
   activeClassName: 'current',
 }))`
   color: ${'black'};

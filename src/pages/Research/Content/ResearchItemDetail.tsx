@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react'
 import * as React from 'react'
+import { RouteComponentProps } from 'react-router'
 import { Box, Flex } from 'rebass'
 import { Button } from 'src/components/Button'
 import { Link } from 'src/components/Links'
@@ -10,11 +11,9 @@ import { isAllowToEditContent } from 'src/utils/helpers'
 import ResearchDescription from './ResearchDescription'
 import Update from './Update'
 
-interface IProps {
-  slug: string
-}
+type IProps = RouteComponentProps<{ slug: string }>
 
-export const ResearchItemDetail = observer((props: IProps) => {
+const ResearchItemDetail = observer((props: IProps) => {
   const store = useResearchStore()
 
   const [isLoading, setIsLoading] = React.useState(true)
@@ -28,8 +27,8 @@ export const ResearchItemDetail = observer((props: IProps) => {
   }
 
   React.useEffect(() => {
-    ;(async () => {
-      const { slug } = props
+    (async () => {
+      const { slug } = props.match.params
       await store.setActiveResearchItem(slug)
       setIsLoading(false)
     })()
@@ -47,7 +46,7 @@ export const ResearchItemDetail = observer((props: IProps) => {
       !!store.activeUser && isAllowToEditContent(item, store.activeUser)
 
     return (
-      <>
+      <Box maxWidth="1000px" width="100%" alignSelf="center">
         <ResearchDescription
           research={item}
           isEditable={isEditable}
@@ -76,9 +75,10 @@ export const ResearchItemDetail = observer((props: IProps) => {
             </Link>
           </Flex>
         )}
-      </>
+      </Box>
     )
   } else {
     return isLoading ? <Loader /> : <NotFoundPage />
   }
 })
+export default ResearchItemDetail

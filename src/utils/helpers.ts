@@ -2,23 +2,6 @@ import { isObservableObject, toJS } from 'mobx'
 import { DBDoc, IModerable } from 'src/models/common.models'
 import { IMapPin } from 'src/models/maps.models'
 import { IUser } from 'src/models/user.models'
-import MESSAGES from './messages'
-
-/**
- * Conversion for default error messages.
- * @param systemMessage - the message text for lookup in the table.
- * This can either be a status code or full message (depending on how saved above)
- */
-export const getFriendlyMessage = (systemMessage: string) => {
-  const friendlyMessage = MESSAGES[systemMessage.toLowerCase()]
-  if (!friendlyMessage) {
-    console.log(
-      `%c No friendly message for [${systemMessage}] \n Maybe you should add one?`,
-      'background: #222; color: #bada55',
-    )
-  }
-  return friendlyMessage ? friendlyMessage : systemMessage
-}
 
 // remove special characters from string, also replacing spaces with dashes
 export const stripSpecialCharacters = (text: string) => {
@@ -97,7 +80,7 @@ export const timestampToYear = (timestamp: number) => {
   return date.getFullYear()
 }
 
-export const getMonth = (d: Date, monthType: string = 'long') => {
+export const getMonth = (d: Date, monthType: 'long' | 'short' = 'long') => {
   // use ECMAScript Internationalization API to return month
   return `${d.toLocaleString('en-us', { month: monthType })}`
 }

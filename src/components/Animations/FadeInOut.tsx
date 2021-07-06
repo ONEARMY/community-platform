@@ -19,7 +19,8 @@ export class FadeInOut extends React.Component<IProps, IState> {
     this.state = { show: props.show }
   }
 
-  componentWillReceiveProps(props: IProps) {
+  /* eslint-disable @typescript-eslint/naming-convention*/
+  UNSAFE_componentWillReceiveProps(props: IProps) {
     this.setState({ show: props.show })
   }
 

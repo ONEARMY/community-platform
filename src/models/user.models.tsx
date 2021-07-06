@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention*/
 import {
   ISODateString,
   ILocation,
@@ -26,6 +27,7 @@ export interface IUser {
   // note, user avatar url is taken direct from userName so no longer populated here
   // avatar:string
   verified: boolean
+  badges?: IUserBadges
   // images will be in different formats if they are pending upload vs pulled from db
   coverImages: IUploadedFileMeta[] | IConvertedFileMeta[]
   links: IExternalLink[]
@@ -39,6 +41,10 @@ export interface IUser {
   stats?: IUserStats
   /** keep a map of all howto ids that a user has voted as useful */
   votedUsefulHowtos?: { [howtoId: string]: boolean }
+}
+
+interface IUserBadges {
+  verified: boolean
 }
 
 interface IExternalLink {

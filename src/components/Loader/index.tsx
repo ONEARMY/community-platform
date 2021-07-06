@@ -1,4 +1,4 @@
-import React from 'react'
+import { Component } from 'react';
 import { Flex, Image } from 'rebass/styled-components'
 import styled, { keyframes } from 'styled-components'
 
@@ -24,7 +24,7 @@ const RotatingLogo = styled(Image)`
   padding: 1rem;
 `
 
-export class Loader extends React.Component<IProps> {
+export class Loader extends Component<IProps> {
   // eslint-disable-next-line
   constructor(props: any) {
     super(props)

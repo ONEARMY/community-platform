@@ -1,0 +1,405 @@
+version: 2.1
+######################################################################################################
+# Pre-Requisites
+#
+# In order to use these scripts various env variables need to be set on CircleCI
+# See `packages/documentation/docs/Deployment/circle-ci.md` for more information
+#
+# For general config info see: https://circleci.com/docs/2.0/configuration-reference
+######################################################################################################
+
+######################################################################################################
+#  Orbs - preconfigured environments for running specific jobs
+######################################################################################################
+
+# node: circleci/node@4.1.0
+# cypress: cypress-io/cypress@1
+orbs:
+  # for use with cimg image, to install web browsers
+  browser-tools: circleci/browser-tools@1.1.3
+  # used to enable slack integration (required api key set in environment)
+  slack: circleci/slack@4.4.2
+
+######################################################################################################
+#  Aliases - code snippets that can be included inline in any other markup
+######################################################################################################
+aliases:
+  # use a base image running node v12 with chrome/firefox browsers preinstalled
+  - &docker
+    - image: cimg/node:12.21-browsers
+    # These can also be created as commands, but slighly tidier to just use inline
+    # restore/install/save can all be done with a single circle-ci orb, but less flexible and breaks intellisense
+  - &restore_yarn_cache
+    restore_cache:
+      name: Restore yarn cache
+      keys:
+        # https://circleci.com/docs/2.0/caching/
+        # https://circleci.com/docs/2.0/yarn/
+        # when lock file changes, use increasingly general patterns to restore cache (also need to change `save_cache` path)
+        # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
+        - yarn-packages-v9-{{ .Branch }}-{{ checksum "yarn.lock" }}
+        - yarn-packages-v9-{{ .Branch }}-
+        - yarn-packages-v9-
+  - &install_packages
+    run:
+      name: Install Packages
+      command: yarn install --immutable
+    # Example debugging commands for use troubleshooting caching (du will exit with status 141)
+  - &check_folders
+    run:
+      name: check folders
+      command: |
+        ls -a ~/project
+        du -a /home | sort -n -r | head -n 500
+  - &save_yarn_cache
+    save_cache:
+      # note - if moving to workspaces include paths: https://discuss.circleci.com/t/yarn-cached-install-slow/34823/2
+      # depending on whether enableGlobalCache is set to true or not (and windows/linux) these paths may vary
+      paths:
+        # global cache location
+        # - ~/.yarn/berry/cache
+        # local cache location
+        - ~/project/.yarn/cache
+      key: yarn-packages-v9-{{ .Branch }}-{{ checksum "yarn.lock" }}
+
+  - &filter_only_production
+    filters:
+      branches:
+        only:
+          - production
+  - &filter_only_master
+    filters:
+      branches:
+        only:
+          - master
+  - &filter_only_ci_test
+    filters:
+      branches:
+        only:
+          - ci/circle-ci-release
+
+  - &slack_custom_hold_message
+    # Message shown in slack to approve new deployment - edit in https://app.slack.com/block-kit-builder
+    # Based on: https://github.com/CircleCI-Public/slack-orb/tree/master/src/message_templates
+    custom: |
+      {
+        "blocks": [
+          {
+            "type": "header",
+            "text": {
+              "type": "plain_text",
+              "text": ":rocket: New Update - Ready for Launch",
+              "emoji": true
+            }
+          },
+          {
+            "type": "section",
+            "fields": [
+              {
+                "type": "mrkdwn",
+                "text": "*Project*: $CIRCLE_PROJECT_REPONAME"
+              }
+            ],
+            "accessory": {
+              "type": "image",
+              "image_url": "https://yt3.ggpht.com/ytc/AAUvwni_34CcLQsIhNo1d1A2zUK0pNPzipCV9oM1gvkNNw=s900-c-k-c0x00ffffff-no-rj",
+              "alt_text": "Logo"
+            }
+          },
+          {
+            "type": "actions",
+            "elements": [
+              {
+                "type": "button",
+                "text": {
+                  "type": "plain_text",
+                  "text": "Go To Approval"
+                },
+                "url": "https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}"
+              }
+            ]
+          }
+        ]
+      }
+
+  - &slack_custom_success_message
+    custom: |
+      {
+        "blocks": [
+          {
+            "type": "header",
+            "text": {
+              "type": "plain_text",
+              "text": "Deploy Success :tada:",
+              "emoji": true
+            }
+          },
+          {
+            "type": "section",
+            "fields": [
+              {
+                "type": "mrkdwn",
+                "text": "*Job*: ${CIRCLE_JOB}"
+              },
+              {
+                "type": "mrkdwn",
+                "text": "*When*: $(date +'%m/%d/%Y %T')"
+              },
+              {
+                "type": "mrkdwn",
+                "text": "*Tag*: $CIRCLE_TAG"
+              }
+            ],
+            "accessory": {
+              "type": "image",
+              "image_url": "https://yt3.ggpht.com/ytc/AAUvwni_34CcLQsIhNo1d1A2zUK0pNPzipCV9oM1gvkNNw=s900-c-k-c0x00ffffff-no-rj",
+              "alt_text": "CircleCI logo"
+            }
+          },
+          {
+            "type": "actions",
+            "elements": [
+              {
+                "type": "button",
+                "text": {
+                  "type": "plain_text",
+                  "text": "Build Logs"
+                },
+                "url": "${CIRCLE_BUILD_URL}"
+              }
+            ]
+          }
+        ]
+      }
+
+######################################################################################################
+#  Commands - Reusable collections of steps
+######################################################################################################
+commands:
+  setup_repo:
+    description: checkout repo and install packages
+    # no parameters currently used, but could be specified here to use within steps
+    # parameters:
+    steps:
+      - checkout
+      - *restore_yarn_cache
+      - *install_packages
+      - *save_yarn_cache
+  firebase_deploy:
+    description: Deploy to Firebase
+    parameters:
+      token:
+        type: string
+        default: ''
+        description: Firebase Deploy Token
+      use_application_credentials:
+        type: boolean
+        default: false
+        description: Specify if GOOGLE_APPLICATION_CREDENTIALS_JSON var used instead of firebase token
+      alias:
+        type: string
+        default: 'default'
+        description: Firebase project alias to deploy to
+    steps:
+      - run:
+          name: Install Firebase Tools
+          command: yarn add -D firebase-tools
+      - when:
+          condition: <<parameters.use_application_credentials>>
+          steps:
+            - run:
+                name: Export application credentials
+                command: echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > service_account.json
+            - run:
+                name: Deploy to Firebase
+                command: ./node_modules/.bin/firebase deploy -P << parameters.alias >>
+                environment:
+                  GOOGLE_APPLICATION_CREDENTIALS: service_account.json
+      - when:
+          condition:
+            not: <<parameters.use_application_credentials>>
+          steps:
+            - run:
+                name: Deploy to Firebase
+                command: ./node_modules/.bin/firebase deploy --token=<< parameters.token >> -P << parameters.alias >>
+
+examples:
+
+######################################################################################################
+#  Jobs - Independently specified lists of tasks and environments for execution
+######################################################################################################
+jobs:
+  # Prepare node module caches so that future tasks run more quickly
+  # NOTE - not currently used as we only have one workflow
+  setup:
+    docker: *docker
+    steps:
+      - setup_repo
+
+  # Create a production build
+  # NOTE - not currently used in test workflow as different build_env required for each machine
+  build:
+    docker: *docker
+    parameters:
+      # optional environment variables to set during build process
+      BUILD_ENV:
+        type: string
+        default: ''
+    steps:
+      # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
+      - setup_repo
+      - run:
+          command: << parameters.BUILD_ENV >> npm run build
+          environment:
+            # Include env variable for tracking current branch in build
+            REACT_APP_BRANCH: $CIRCLE_BRANCH
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build
+  deploy:
+    docker: *docker
+    parameters:
+      # optional environment variables to set during build process
+      DEPLOY_ALIAS:
+        type: string
+        default: 'default'
+      NOTIFY_SLACK:
+        type: boolean
+        default: true
+    steps:
+      - setup_repo
+      - attach_workspace:
+          at: '.'
+      - firebase_deploy:
+          # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
+          alias: << parameters.DEPLOY_ALIAS >>
+          use_application_credentials: true
+      - when:
+          condition: << parameters.NOTIFY_SLACK >>
+          steps:
+            - slack/notify:
+                event: fail
+                mentions: '@Chris Clarke'
+                template: basic_fail_1
+            - slack/notify:
+                event: pass
+                <<: *slack_custom_success_message
+
+  # Run cypress e2e tests on chrome and firefox
+  test_e2e:
+    docker: *docker
+    # build matrix will run 4 parallel builds handled by cypress, so don't need to specify more here
+    parallelism: 1
+    parameters:
+      CI_NODE:
+        type: integer
+      CI_BROWSER:
+        type: string
+    steps:
+      - setup_repo
+      # retrieve build folder
+      - attach_workspace:
+          at: '.'
+      # install testing browsers are required
+      - when:
+          condition:
+            equal: ['chrome', << parameters.CI_BROWSER >>]
+          steps:
+            - browser-tools/install-chrome
+      - when:
+          condition:
+            equal: ['firefox', << parameters.CI_BROWSER >>]
+          steps:
+            - browser-tools/install-firefox
+      # call main testing script
+      - run:
+          command: npm run test ci prod
+          environment:
+            CI_BROWSER: << parameters.CI_BROWSER >>
+            CI_NODE: << parameters.CI_NODE >>
+            CI_GROUP: 2x-<< parameters.CI_BROWSER >>
+
+######################################################################################################
+#  Workflows - Collections of jobs to define overall processes
+######################################################################################################
+workflows:
+  version: 2
+  main_workflow:
+    # by default jobs will run concurrently, so specify requires if want to run sequentially
+    jobs:
+      #---------------------- Test ----------------------
+      # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
+      - build:
+          name: build_test
+          matrix:
+            parameters:
+              BUILD_ENV:
+                [
+                  'FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci CI=false NODE_OPTIONS=--max-old-space-size=4096',
+                ]
+      - test_e2e:
+          name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
+          requires:
+            - 'build_test'
+          matrix:
+            parameters:
+              CI_NODE: [1, 2]
+              CI_BROWSER: ['chrome', 'firefox']
+      #---------------------- Dev Build-Deploy ----------------------
+      - build:
+          name: build_dev
+          context: community-platform-dev
+          requires:
+            - 'test_e2e'
+          <<: *filter_only_master
+          matrix:
+            parameters:
+              # Fix memory issues during build (https://github.com/facebook/create-react-app/issues/8096)
+              # TODO - fix lint errors so that default CI=true works
+              BUILD_ENV: ['CI=false NODE_OPTIONS=--max-old-space-size=4096']
+      - deploy:
+          name: deploy_dev
+          requires:
+            - build_dev
+          <<: *filter_only_master
+          DEPLOY_ALIAS: 'default'
+          NOTIFY_SLACK: false
+          context:
+            - circle-ci-slack-context
+            - community-platform-dev
+        #---------------------- Production Build-Approve-Deploy ----------------------
+      - build:
+          name: build_production
+          context: community-platform-production
+          requires:
+            - 'test_e2e'
+          <<: *filter_only_production
+          matrix:
+            parameters:
+              BUILD_ENV: ['CI=false NODE_OPTIONS=--max-old-space-size=4096']
+      # Require manual approval on CirclCI website prior to release
+      - hold:
+          name: approve_release
+          type: approval
+          requires:
+            - build_production
+          <<: *filter_only_production
+      # Send a slack notification to approve the hold above (required config supplied in circleci-slack-context)
+      - slack/on-hold:
+          name: notify_slack_pending_approval
+          context: circle-ci-slack-context
+          requires:
+            - build_production
+          <<: *filter_only_production
+          <<: *slack_custom_hold_message
+      - deploy:
+          name: deploy_production
+          requires:
+            - 'approve_release'
+          <<: *filter_only_production
+          DEPLOY_ALIAS: 'production'
+          NOTIFY_SLACK: true
+          context:
+            - circle-ci-slack-context
+            - community-platform-production

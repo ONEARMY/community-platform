@@ -31,6 +31,7 @@ export class ResearchStore extends ModuleStore {
   constructor() {
     super(null as any, 'research')
     makeObservable(this)
+    super.init()
 
     this.allDocs$.subscribe((docs: IResearch.ItemDB[]) => {
       console.log('docs', docs)
@@ -75,7 +76,7 @@ export class ResearchStore extends ModuleStore {
       return false
     }
     const doc = this.db.collection(COLLECTION_NAME).doc(research._id)
-    return doc.set(research)
+    return doc.set(toJS(research))
   }
 
   public needsModeration(research: IResearch.ItemDB) {

@@ -19,12 +19,19 @@ export class TagsStore extends ModuleStore {
 
   constructor(rootStore: RootStore) {
     super(rootStore, 'tags')
+    // call init immediately for tags so they are available to all pages
+    super.init()
     makeObservable(this)
     this.allDocs$.subscribe((docs: ITag[]) => {
-      this.allTags = docs.sort((a, b) => (a.label > b.label ? 1 : -1))
-      this.allTagsByKey = arrayToJson(docs, '_id')
-      this._filterTags()
+      this.setAllTags(docs)
     })
+  }
+
+  @action
+  private setAllTags(docs: ITag[]) {
+    this.allTags = docs.sort((a, b) => (a.label > b.label ? 1 : -1))
+    this.allTagsByKey = arrayToJson(docs, '_id')
+    this.categoryTags = this._filterTags()
   }
 
   public saveTag(tag: Partial<ITag>) {
@@ -41,6 +48,6 @@ export class TagsStore extends ModuleStore {
         tag.categories.includes(this.activeCategory as TagCategory),
       )
     }
-    this.categoryTags = [...tags]
+    return [...tags]
   }
 }

@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import React from 'react'
+import * as React from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import { Link } from 'src/components/Links'
@@ -19,7 +19,8 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => (
     mediumScale
     bg={'white'}
     width={1}
-    data-cy="card"
+    data-cy="research=list-item"
+    data-id={item._id}
     sx={{ position: 'relative' }}
     mb={3}
   >

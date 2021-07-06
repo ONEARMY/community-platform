@@ -3,7 +3,7 @@ import Icon, { IGlyphs } from '../Icons'
 import Text from '../Text'
 import { Flex } from 'rebass'
 import { FadeInOut } from '../Animations/FadeInOut'
-import { getFriendlyMessage } from '../../utils/helpers'
+import { getFriendlyMessage } from 'oa-shared'
 
 /*  
     This component displays a simple text inline as a notification. 
@@ -37,7 +37,8 @@ export class TextNotification extends React.Component<
     type: 'info',
     text: '',
   }
-  componentWillReceiveProps(
+  /* eslint-disable @typescript-eslint/naming-convention*/
+  UNSAFE_componentWillReceiveProps(
     next: ITextNotificationProps,
     prev: ITextNotificationProps,
   ) {

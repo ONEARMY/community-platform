@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-export class TermsPolicy extends React.PureComponent<any> {
+class TermsPolicy extends React.PureComponent<any> {
   render() {
     return (
       <>
@@ -118,3 +118,4 @@ export class TermsPolicy extends React.PureComponent<any> {
     )
   }
 }
+export default TermsPolicy

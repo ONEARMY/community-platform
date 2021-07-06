@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { RouteComponentProps, Prompt } from 'react-router'
+import { RouteComponentProps } from 'react-router'
 import { Form, Field } from 'react-final-form'
 import styled from 'styled-components'
 import { FieldArray } from 'react-final-form-arrays'
@@ -31,9 +31,7 @@ import { required } from 'src/utils/validators'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { COMPARISONS } from 'src/utils/comparisons'
-
-const CONFIRM_DIALOG_MSG =
-  'You have unsaved changes. Are you sure you want to leave this page?'
+import { UnsavedChangesDialog } from 'src/components/Form/UnsavedChangesDialog'
 
 interface IState {
   formSaved: boolean
@@ -41,7 +39,6 @@ interface IState {
   showSubmitModal?: boolean
   editCoverImg?: boolean
   fileEditMode?: boolean
-  draft: boolean
 }
 interface IProps extends RouteComponentProps<any> {
   formValues: any
@@ -85,15 +82,12 @@ const Label = styled.label`
   display: block;
 `
 
-const beforeUnload = function(e) {
-  e.preventDefault()
-  e.returnValue = CONFIRM_DIALOG_MSG
-}
-
 @inject('howtoStore')
 @observer
 export class HowtoForm extends React.PureComponent<IProps, IState> {
+  isDraft = false
   uploadRefs: { [key: string]: UploadedFile | null } = {}
+  formContainerRef = React.createRef<HTMLElement>()
   constructor(props: any) {
     super(props)
     this.state = {
@@ -102,22 +96,26 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
       editCoverImg: false,
       fileEditMode: false,
       showSubmitModal: false,
-      draft: props.moderation === 'draft',
     }
+    this.isDraft = props.moderation === 'draft'
   }
 
+  /** When submitting from outside the form dispatch an event from the form container ref to trigger validation */
   private trySubmitForm = (draft: boolean) => {
-    this.setState({ draft }, () => {
-      // Save requested draft value into state and then trigger form submit
-      const form = document.getElementById('howtoForm')
-      if (typeof form !== 'undefined' && form !== null) {
-        form.dispatchEvent(new Event('submit', { cancelable: true }))
-        this.setState({ showSubmitModal: true })
-      }
-    })
+    this.isDraft = draft
+    const formContainerRef = this.formContainerRef.current
+    // dispatch submit from the element
+    if (formContainerRef) {
+      // https://github.com/final-form/react-final-form/issues/878
+      formContainerRef.dispatchEvent(
+        new Event('submit', { cancelable: true, bubbles: true }),
+      )
+    }
   }
   public onSubmit = async (formValues: IHowtoFormInput) => {
-    formValues.moderation = this.state.draft ? 'draft' : 'awaiting-moderation'
+    this.setState({ showSubmitModal: true })
+    formValues.moderation = this.isDraft ? 'draft' : 'awaiting-moderation'
+    console.log('submitting form', formValues)
     await this.store.uploadHowTo(formValues)
   }
 
@@ -142,20 +140,6 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
     },
   })
 
-  // Display a confirmation dialog when leaving the page outside the React Router
-  private unloadDecorator(form) {
-    return form.subscribe(
-      ({ dirty }) => {
-        if (dirty && !this.store.uploadStatus.Complete) {
-          window.addEventListener('beforeunload', beforeUnload, false)
-          return
-        }
-        window.removeEventListener('beforeunload', beforeUnload, false)
-      },
-      { dirty: true },
-    )
-  }
-
   public render() {
     const { formValues, parentType } = this.props
     const { fileEditMode, showSubmitModal } = this.state
@@ -179,18 +163,20 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
             ...arrayMutators,
           }}
           validateOnBlur
-          decorators={[this.calculatedFields, this.unloadDecorator.bind(this)]}
-          render={({ submitting, values, dirty, errors, handleSubmit }) => {
+          decorators={[this.calculatedFields]}
+          render={({ submitting, handleSubmit }) => {
             return (
               <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
+                <UnsavedChangesDialog
+                  uploadComplete={this.store.uploadStatus.Complete}
+                />
+
                 <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} mt={4}>
-                  <Prompt
-                    when={
-                      !this.injected.howtoStore.uploadStatus.Complete && dirty
-                    }
-                    message={CONFIRM_DIALOG_MSG}
-                  />
-                  <FormContainer id="howtoForm" onSubmit={handleSubmit}>
+                  <FormContainer
+                    ref={this.formContainerRef as any}
+                    id="howtoForm"
+                    onSubmit={handleSubmit}
+                  >
                     {/* How To Info */}
                     <Flex flexDirection={'column'}>
                       <Flex

@@ -1,16 +1,15 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { Provider } from 'mobx-react'
+// import reportWebVitals from './reportWebVitals'
 
 import { ThemeProvider } from 'styled-components'
 import styledTheme from 'src/themes/styled.theme'
 
 import { Routes } from './pages'
 import { RootStore } from './stores'
-import { GlobalStyle } from './themes/app.globalStyle.js'
+import { GlobalStyle } from './themes/app.globalStyles'
 
-import registerServiceWorker from './registerServiceWorker'
-import { SWUpdateNotification } from './pages/common/SWUpdateNotification/SWUpdateNotification'
 import ErrorBoundary from './common/ErrorBoundary'
 import { initErrorHandler } from './common/errors'
 
@@ -35,7 +34,6 @@ ReactDOM.render(
         <ErrorBoundary>
           <Routes />
         </ErrorBoundary>
-        <SWUpdateNotification />
         <GlobalStyle />
       </>
     </ThemeProvider>
@@ -43,10 +41,8 @@ ReactDOM.render(
   document.getElementById('root') as HTMLElement,
 )
 
-// callback function updates global store when service worker registered
-const onUpdate = () => {
-  console.log('sw updated receive in index')
-  rootStore.stores.platformStore.setServiceWorkerStatus('updated')
-}
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 
-registerServiceWorker(onUpdate)
+// reportWebVitals()

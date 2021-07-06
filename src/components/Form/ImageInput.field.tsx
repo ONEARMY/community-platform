@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react';
 import { ImageInput } from '../ImageInput/ImageInput'
 import { ErrorMessage, FieldContainer } from './elements'
 import { IFieldProps } from './Fields'

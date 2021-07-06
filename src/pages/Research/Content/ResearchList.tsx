@@ -1,13 +1,13 @@
 import { observer } from 'mobx-react'
-import * as React from 'react'
 import { Box, Flex } from 'rebass'
+import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { Button } from 'src/components/Button'
 import Heading from 'src/components/Heading'
 import { Link } from 'src/components/Links'
 import ResearchListItem from 'src/components/Research/ResearchListItem'
 import { useResearchStore } from 'src/stores/Research/research.store'
 
-export const ResearchList = observer(() => {
+const ResearchList = observer(() => {
   const store = useResearchStore()
   const { filteredResearches } = store
   return (
@@ -25,9 +25,12 @@ export const ResearchList = observer(() => {
           to={store.activeUser ? '/research/create' : 'sign-up'}
           mb={[3, 3, 0]}
         >
-          <Button>Add Research</Button>
+          <AuthWrapper roleRequired="beta-tester">
+            <Button>Add Research</Button>
+          </AuthWrapper>
         </Link>
       </Box>
     </>
   )
 })
+export default ResearchList

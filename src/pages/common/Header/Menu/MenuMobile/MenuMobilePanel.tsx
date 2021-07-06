@@ -1,4 +1,4 @@
-import React from 'react'
+import { Component } from 'react'
 import { COMMUNITY_PAGES } from 'src/pages/PageList'
 import theme from 'src/themes/styled.theme'
 import styled from 'styled-components'
@@ -7,8 +7,7 @@ import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
 import MenuMobileExternalLink from './MenuMobileExternalLink'
 import { BAZAR_URL, GLOBAL_SITE_URL } from 'src/utils/urls'
-import { inject, observer } from 'mobx-react'
-import { UserStore } from 'src/stores/User/user.store'
+import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
 const PanelContainer = styled(Box)`
   width: 100%;
@@ -33,29 +32,18 @@ const PanelMenu = styled(Box)`
   overflow: visible;
   min-width: 200px;
 `
-export const PanelItem = styled(Box)`
+export const PanelItem = styled(Box as any)`
   padding: ${theme.space[3]}px 0px;
 `
 
-export const MenuMobileLinkContainer = styled(Box)`
+export const MenuMobileLinkContainer = styled(Box as any)`
   border-top: 1px solid #ababac;
   border-bottom: 1px solid #ababac;
   margin-top: 5px;
 `
-interface IInjectedProps {
-  userStore: UserStore
-}
 
-@inject('userStore')
-@observer
-export class MenuMobilePanel extends React.Component {
-  get injected() {
-    return this.props as IInjectedProps
-  }
-
+export class MenuMobilePanel extends Component {
   render() {
-    const user = this.injected.userStore.user
-
     return (
       <>
         <PanelContainer>
@@ -68,11 +56,13 @@ export class MenuMobilePanel extends React.Component {
                   key={page.path}
                 />
               )
-              return page.requiredRole
-                ? user && user.userRoles?.includes(page.requiredRole)
-                  ? link
-                  : null
-                : link
+              return page.requiredRole ? (
+                <AuthWrapper roleRequired={page.requiredRole} key={page.path}>
+                  {link}
+                </AuthWrapper>
+              ) : (
+                link
+              )
             })}
             <Profile isMobile={true} />
             <MenuMobileLinkContainer>

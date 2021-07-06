@@ -93,8 +93,8 @@ export class EventStore extends ModuleStore {
     if (!hasAdminRights(toJS(this.activeUser))) {
       return false
     }
-    const doc = this.db.collection('events').doc(event._id)
-    return doc.set(event)
+    const ref = this.db.collection('events').doc(event._id)
+    return ref.set(toJS(event))
   }
 
   public needsModeration(event: IEvent) {

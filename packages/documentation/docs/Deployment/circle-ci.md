@@ -16,6 +16,7 @@ If using multiple projects (e.g. staging/prodcution) these can be configured in 
 When configuring a service account the following permissions should be assigned:
 ```
 Firebase Admin SDK Administrator Service Agent
+Cloud Functions Service Agent
 Cloud Functions Admin
 Firebase Hosting Admin
 Cloud RuntimeConfig Admin

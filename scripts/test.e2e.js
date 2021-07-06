@@ -2,6 +2,7 @@ const child = require('child_process')
 const e2eEnv = require('dotenv').config({ path: `${process.cwd()}/.env.e2e` })
 const fs = require('fs-extra')
 const waitOn = require('wait-on')
+const path = require('path')
 
 const isCi = process.argv.includes('ci')
 const useProductionBuild = process.argv.includes('prod')
@@ -49,9 +50,13 @@ function runTests() {
 
   // main testing command, depending on whether running on ci machine or interactive local
   // call with path to bin as to ensure locally installed used
+  const CY_BIN_PATH = path.resolve(
+    __dirname,
+    '../cypress/node_modules/.bin/cypress',
+  )
   const testCMD = isCi
-    ? `./node_modules/.bin/cypress run --record --env ${CYPRESS_ENV} --key=${CYPRESS_KEY} --parallel --headless --browser ${CI_BROWSER} --group ${CI_GROUP} --ci-build-id ${buildId}`
-    : `./node_modules/.bin/cypress open --browser chrome --env ${CYPRESS_ENV}`
+    ? `${CY_BIN_PATH} run --record --env ${CYPRESS_ENV} --key=${CYPRESS_KEY} --parallel --headless --browser ${CI_BROWSER} --group ${CI_GROUP} --ci-build-id ${buildId}`
+    : `${CY_BIN_PATH} open --browser chrome --env ${CYPRESS_ENV}`
 
   const spawn = child.spawnSync(`cross-env FORCE_COLOR=1 ${testCMD}`, {
     shell: true,

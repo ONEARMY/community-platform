@@ -76,7 +76,7 @@ export class ResearchStore extends ModuleStore {
       return false
     }
     const doc = this.db.collection(COLLECTION_NAME).doc(research._id)
-    return doc.set(research)
+    return doc.set(toJS(research))
   }
 
   public needsModeration(research: IResearch.ItemDB) {

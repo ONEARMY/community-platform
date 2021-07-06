@@ -130,8 +130,9 @@ export class HowtoStore extends ModuleStore {
     if (!hasAdminRights(toJS(this.activeUser))) {
       return false
     }
-    const doc = this.db.collection(COLLECTION_NAME).doc(howto._id)
-    return doc.set(howto)
+    const ref = this.db.collection(COLLECTION_NAME).doc(howto._id)
+    // NOTE CC - 2021-07-06 mobx updates try write to db as observable, so need to convert toJS
+    return ref.set(toJS(howto))
   }
 
   public needsModeration(howto: IHowto) {

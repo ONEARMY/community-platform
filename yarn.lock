@@ -5828,7 +5828,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/eslint@npm:^7.2.6":
+"@types/eslint@npm:^7.2.4":
   version: 7.2.13
   resolution: "@types/eslint@npm:7.2.13"
   dependencies:
@@ -12620,20 +12620,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-webpack-plugin@npm:^2.5.2":
-  version: 2.5.4
-  resolution: "eslint-webpack-plugin@npm:2.5.4"
+"eslint-webpack-plugin@npm:2.4.1":
+  version: 2.4.1
+  resolution: "eslint-webpack-plugin@npm:2.4.1"
   dependencies:
-    "@types/eslint": ^7.2.6
+    "@types/eslint": ^7.2.4
     arrify: ^2.0.1
     jest-worker: ^26.6.2
     micromatch: ^4.0.2
-    normalize-path: ^3.0.0
     schema-utils: ^3.0.0
   peerDependencies:
     eslint: ^7.0.0
     webpack: ^4.0.0 || ^5.0.0
-  checksum: a6f7096a0c5cf9dd0ec0289df096fcd846fc2b671a4589a51c63a4387a93333168d40e813f722fc99bd7b1226d00552f073cc78d21cf747b40e475f721906552
+  checksum: 9fabe18e5314b6ed2023254b9ab14c92884d9845790b9a6b0f2c1fdeab82ff2ff742914bfc2899c469eb543f2dac2ae9a3dc0c70882e54013a5d79aecb305a3b
   languageName: node
   linkType: hard
 

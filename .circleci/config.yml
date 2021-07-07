@@ -249,10 +249,12 @@ jobs:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - setup_repo
       - run:
+          name: Set branch environment
+          command: |
+            echo 'export REACT_APP_BRANCH=$CIRCLE_BRANCH' >> $BASH_ENV
+            echo "Building branch: ${REACT_APP_BRANCH}"
+      - run:
           command: << parameters.BUILD_ENV >> npm run build
-          environment:
-            # Include env variable for tracking current branch in build
-            REACT_APP_BRANCH: $CIRCLE_BRANCH
       - persist_to_workspace:
           root: .
           paths:

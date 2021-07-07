@@ -252,8 +252,8 @@ jobs:
           name: Set branch environment
           command: |
             echo $CIRCLE_BRANCH
-            echo 'export REACT_APP_BRANCH=${CIRCLE_BRANCH}' >> $BASH_ENV
-            echo "$REACT_APP_BRANCH Build"
+            echo 'export REACT_APP_BRANCH=$CIRCLE_BRANCH' >> $BASH_ENV
+            echo $REACT_APP_BRANCH
       - run:
           command: << parameters.BUILD_ENV >> npm run build
       - persist_to_workspace:

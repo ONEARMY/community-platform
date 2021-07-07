@@ -248,11 +248,18 @@ jobs:
     steps:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - setup_repo
+      # As environment variables can only be set from strings add additional dynamic variable mappings here
+      # https://discuss.circleci.com/t/using-environment-variables-in-config-yml-not-working/14237/13
+      - run:
+          name: Set branch environment
+          command: |
+            echo 'export REACT_APP_BRANCH=${CIRCLE_BRANCH}' >> $BASH_ENV
+            echo 'export NODE_OPTIONS=--max-old-space-size=4096' >> $BASH_ENV
+      - run:
+          name: Check environment variables
+          command: echo REACT_APP_BRANCH=$REACT_APP_BRANCH NODE_OPTIONS=$NODE_OPTIONS
       - run:
           command: << parameters.BUILD_ENV >> npm run build
-          environment:
-            # Include env variable for tracking current branch in build
-            REACT_APP_BRANCH: $CIRCLE_BRANCH
       - persist_to_workspace:
           root: .
           paths:
@@ -335,9 +342,7 @@ workflows:
           matrix:
             parameters:
               BUILD_ENV:
-                [
-                  'FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci CI=false NODE_OPTIONS=--max-old-space-size=4096',
-                ]
+                ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci CI=false']
       - test_e2e:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           requires:
@@ -357,7 +362,7 @@ workflows:
             parameters:
               # Fix memory issues during build (https://github.com/facebook/create-react-app/issues/8096)
               # TODO - fix lint errors so that default CI=true works
-              BUILD_ENV: ['CI=false NODE_OPTIONS=--max-old-space-size=4096']
+              BUILD_ENV: ['CI=false']
       - deploy:
           name: deploy_dev
           requires:
@@ -377,7 +382,7 @@ workflows:
           <<: *filter_only_production
           matrix:
             parameters:
-              BUILD_ENV: ['CI=false NODE_OPTIONS=--max-old-space-size=4096']
+              BUILD_ENV: ['CI=false']
       # Require manual approval on CirclCI website prior to release
       - hold:
           name: approve_release

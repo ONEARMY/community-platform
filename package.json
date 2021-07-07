@@ -1,6 +1,6 @@
 {
   "name": "one-army-community-platform",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "workspaces": [
     "functions",
     "shared",
@@ -48,7 +48,9 @@
   "resolutions": {
     "__NOTE__": "2021-05-28 storybook clash: https://github.com/storybookjs/storybook/issues/6505",
     "webpack": "4.44.2",
-    "styled-components": "^4"
+    "styled-components": "^4",
+    "__NOTE2__": "2021-07-06 ram issues: https://github.com/facebook/create-react-app/issues/10154",
+    "react-scripts/eslint-webpack-plugin": "2.4.1"
   },
   "dependencies": {
     "@khanacademy/react-multi-select": "^0.3.3",

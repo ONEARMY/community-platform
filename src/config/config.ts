@@ -59,6 +59,7 @@ function getSiteVariant(
 }
 
 const siteVariant = getSiteVariant(branch, e)
+console.log(`[${siteVariant}] site`)
 
 /*********************************************************************************************** /
                                         Production

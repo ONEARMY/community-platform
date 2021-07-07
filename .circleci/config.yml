@@ -249,6 +249,7 @@ jobs:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - setup_repo
       # As environment variables can only be set from strings add additional dynamic variable mappings here
+      # https://discuss.circleci.com/t/using-environment-variables-in-config-yml-not-working/14237/13
       - run:
           name: Set branch environment
           command: |
@@ -256,7 +257,7 @@ jobs:
             echo 'export NODE_OPTIONS=--max-old-space-size=4096' >> $BASH_ENV
       - run:
           name: Check environment variables
-          command: echo 'REACT_APP_BRANCH=${REACT_APP_BRANCH} NODE_OPTIONS=${NODE_OPTIONS'
+          command: echo REACT_APP_BRANCH=$REACT_APP_BRANCH NODE_OPTIONS=$NODE_OPTIONS
       - run:
           command: << parameters.BUILD_ENV >> npm run build
       - persist_to_workspace:

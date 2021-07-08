@@ -12,12 +12,12 @@ const routes = () => (
   <Suspense fallback={<div></div>}>
     <Switch>
       <Route exact path="/research" component={ResearchList} />
-      <Route path="/research/:slug" component={ResearchItemDetail} />
       <AuthRoute
         path="/research/create"
         component={CreateResearch}
         roleRequired="beta-tester"
       />
+      <Route path="/research/:slug" component={ResearchItemDetail} />
       <AuthRoute
         exact
         path="/research/:slug/new-update"

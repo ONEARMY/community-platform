@@ -4,6 +4,7 @@ import { Box, Text } from 'rebass/styled-components'
 import theme from 'src/themes/styled.theme'
 import { Avatar } from '../Avatar'
 import { useCommonStores } from 'src'
+import { Link } from 'react-router-dom'
 
 export interface IProps {
   onSubmit: (string) => Promise<void>
@@ -81,7 +82,7 @@ export const CommentTextArea = ({ onChange, comment, loading }) => {
           />
         ) : (
           <Text height="2em" lineHeight="2em">
-            Hi there! Login to leave a comment
+            Hi there! <Link to="/sign-in">Login</Link> to leave a comment
           </Text>
         )}
       </TextBoxStyled>

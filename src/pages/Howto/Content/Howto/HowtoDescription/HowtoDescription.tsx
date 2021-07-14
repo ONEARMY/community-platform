@@ -195,7 +195,7 @@ export default class HowtoDescription extends PureComponent<IProps> {
             sx={{
               objectFit: 'cover',
               width: 'auto',
-              height: ['100%', '450px'],
+              height: '100%',
             }}
             src={howto.cover_image.downloadUrl}
             crossOrigin=""

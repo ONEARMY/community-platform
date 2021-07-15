@@ -5,8 +5,10 @@ import { useCommonStores } from 'src'
 import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
 import { IComment } from 'src/models'
 import { hasAdminRights } from 'src/utils/helpers'
+import { Link } from 'src/components/Links'
 
-export interface IProps extends Omit<IComment, 'text'> {}
+
+export interface IProps extends Omit<IComment, 'text'> { }
 
 export const CommentHeader = ({
   creatorName,
@@ -23,7 +25,15 @@ export const CommentHeader = ({
       <Box>
         {creatorCountry && <FlagIconHowTos code={creatorCountry} />}
         <span style={{ marginLeft: creatorCountry ? '5px' : 0 }}>
-          {creatorName}
+          <Link
+            sx={{
+              textDecoration: 'underline',
+              color: 'inherit',
+            }}
+            to={'/u/' + creatorName}
+          >
+            {creatorName}
+          </Link>
         </span>
       </Box>
       <Flex>

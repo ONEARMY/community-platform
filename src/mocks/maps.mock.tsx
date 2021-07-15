@@ -36,5 +36,6 @@ export const generatePinDetails = (): IMapPinDetail => {
     profilePicUrl: 'https://picsum.photos/50/50',
     profileUrl: '/testing',
     heroImageUrl: `https://picsum.photos/seed/${lastActive}/285/175`,
+    verifiedBadge: false,
   }
 }

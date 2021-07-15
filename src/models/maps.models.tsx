@@ -38,7 +38,7 @@ export interface IMapPinDetail {
   profilePicUrl: string
   profileUrl: string
   heroImageUrl: string
-  verifiedBadge?: boolean
+  verifiedBadge: boolean
 }
 
 export interface ILatLng {

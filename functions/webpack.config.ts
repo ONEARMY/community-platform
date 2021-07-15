@@ -102,7 +102,6 @@ function generatePackageJson() {
   })
   // remove dev and other non-essential fields
   delete json.devDependencies
-  delete json.installConfig
   delete json.resolutions
   delete json.scripts
   return json

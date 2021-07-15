@@ -129,10 +129,16 @@ export class MapsStore extends ModuleStore {
    * set undefined to remove any active popup
    */
   @action
-  public setActivePin(pin?: IMapPin | IMapPinWithDetail) {
+  public async setActivePin(pin?: IMapPin | IMapPinWithDetail) {
+    // HACK - CC - 2021-07-14 ignore hardcoded pin details, should be retrieved
+    // from profile on open instead (needs cleaning from DB)
+    if (pin && pin.hasOwnProperty('detail')) {
+      delete pin['detail']
+    }
     this.activePin = pin
-    if (pin && !pin.hasOwnProperty('detail')) {
-      return this.getPinDetail(pin)
+    if (pin) {
+      const pinWithDetail = await this.getPinDetail(pin)
+      this.activePin = pinWithDetail
     }
   }
   // call additional action when pin detail received to inform mobx correctly of update
@@ -141,8 +147,7 @@ export class MapsStore extends ModuleStore {
       ? generatePinDetails()
       : await this.getUserProfilePin(pin._id)
     const pinWithDetail: IMapPinWithDetail = { ...pin, detail }
-    console.log('pin details', pinWithDetail)
-    this.setActivePin(pinWithDetail)
+    return pinWithDetail
   }
 
   // get base pin geo information

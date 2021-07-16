@@ -13,7 +13,11 @@ import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
 import { Button } from 'src/components/Button'
 import { IUser } from 'src/models/user.models'
-import { isAllowToEditContent, emStringToPx } from 'src/utils/helpers'
+import {
+  isAllowToEditContent,
+  emStringToPx,
+  capitalizeFirstLetter,
+} from 'src/utils/helpers'
 import theme from 'src/themes/styled.theme'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
@@ -147,7 +151,8 @@ export default class HowtoDescription extends PureComponent<IProps> {
               {this.dateLastEditText(howto)}
             </Text>
             <Heading medium mt={2} mb={1}>
-              {howto.title}
+              {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
+              {capitalizeFirstLetter(howto.title)}
             </Heading>
             <Text preLine paragraph>
               {howto.description}

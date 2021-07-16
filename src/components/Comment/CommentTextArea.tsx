@@ -61,7 +61,7 @@ const TextStyled = styled(Text)`
 `
 
 const LoginTextStyled = styled(Text)`
-  padding: 1.5rem 1.5rem;
+  padding: 1.5em 1em;
 `
 
 export const CommentTextArea = ({ onChange, comment, loading }) => {

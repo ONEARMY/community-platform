@@ -4,7 +4,7 @@ import { Box, Text } from 'rebass/styled-components'
 import theme from 'src/themes/styled.theme'
 import { Avatar } from '../Avatar'
 import { useCommonStores } from 'src'
-import { Link } from 'react-router-dom'
+import { Link } from '../Links'
 
 export interface IProps {
   onSubmit: (string) => Promise<void>
@@ -60,6 +60,10 @@ const TextStyled = styled(Text)`
   bottom: 6px;
 `
 
+const LoginTextStyled = styled(Text)`
+  padding: 1.5rem 1.5rem;
+`
+
 export const CommentTextArea = ({ onChange, comment, loading }) => {
   const { stores } = useCommonStores()
   const user = stores.userStore.activeUser
@@ -81,9 +85,19 @@ export const CommentTextArea = ({ onChange, comment, loading }) => {
             placeholder="Leave your questions or feedback..."
           />
         ) : (
-          <Text height="2em" lineHeight="2em">
-            Hi there! <Link to="/sign-in">Login</Link> to leave a comment
-          </Text>
+          <LoginTextStyled>
+            Hi there!{' '}
+            <Link
+              to="/sign-in"
+              sx={{
+                textDecoration: 'underline',
+                color: 'inherit',
+              }}
+            >
+              Login
+            </Link>{' '}
+            to leave a comment
+          </LoginTextStyled>
         )}
       </TextBoxStyled>
       {user && <TextStyled fontSize="2">{comment.length}/400</TextStyled>}

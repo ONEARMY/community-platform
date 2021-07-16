@@ -146,6 +146,6 @@ interface ICompressedInfo {
   endType: 'image/jpeg'
 }
 
-type imageFormats = 'image/jpeg' | 'image/jpg' | 'image/gif' | 'image/png'
+// type imageFormats = 'image/jpeg' | 'image/jpg' | 'image/gif' | 'image/png'
 // NOTE - gifs will lose animation and png will lost transparency
 // Additional types: image/bmp, image/tiff, image/x-icon,  image/svg+xml, image/webp, image/xxx

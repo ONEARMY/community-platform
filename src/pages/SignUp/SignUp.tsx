@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { FRIENDLY_MESSAGES } from 'oa-shared'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import styled from 'styled-components'
@@ -73,7 +74,7 @@ class SignUpPage extends React.Component<IProps, IState> {
         this.props.history.push('/sign-up-message')
       } else {
         this.setState({
-          errorMsg: 'That display name is already taken',
+          errorMsg: FRIENDLY_MESSAGES['sign-up username taken'],
           disabled: false,
         })
       }
@@ -108,7 +109,7 @@ class SignUpPage extends React.Component<IProps, IState> {
             await validationSchema.validate(values, { abortEarly: false })
           } catch (err) {
             return err.inner.reduce(
-              (acc: object, error) => ({
+              (acc: any, error) => ({
                 ...acc,
                 [error.path]: error.message,
               }),
@@ -116,7 +117,7 @@ class SignUpPage extends React.Component<IProps, IState> {
             )
           }
         }}
-        render={({ submitting, values, invalid, handleSubmit }) => {
+        render={({ submitting, invalid, handleSubmit }) => {
           const disabled = invalid || submitting
           return (
             <form onSubmit={handleSubmit}>
@@ -159,7 +160,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                     </Heading>
                     <Flex flexDirection={'column'} mb={3} width={[1, 1, 2 / 3]}>
                       <Label htmlFor="displayName">
-                        Display Name, personal or workspace*
+                        Username. Think carefully. You can't change this*
                       </Label>
                       <Field
                         data-cy="username"

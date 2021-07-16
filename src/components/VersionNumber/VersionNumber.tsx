@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { VERSION } from 'src/config/config'
 import Text from 'src/components/Text'
 

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react';
 import { HiddenInputField } from 'src/components/Form/Fields'
 import { Label, HiddenInput } from '../elements'
 import { Image } from 'rebass'

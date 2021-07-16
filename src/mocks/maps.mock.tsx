@@ -22,7 +22,7 @@ export const generatePins = (count: number): Array<IMapPin> => {
   return newPins
 }
 
-export const generatePinDetails = (pin: IMapPin): IMapPinDetail => {
+export const generatePinDetails = (): IMapPinDetail => {
   const randomDate = new Date()
   randomDate.setSeconds(randomDate.getSeconds() - Math.random() * 10000)
   const lastActive = randomDate.toISOString()
@@ -36,5 +36,6 @@ export const generatePinDetails = (pin: IMapPin): IMapPinDetail => {
     profilePicUrl: 'https://picsum.photos/50/50',
     profileUrl: '/testing',
     heroImageUrl: `https://picsum.photos/seed/${lastActive}/285/175`,
+    verifiedBadge: false,
   }
 }

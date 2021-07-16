@@ -1,4 +1,4 @@
-import React from 'react'
+import { Component } from 'react'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
@@ -25,7 +25,7 @@ interface IInjectedProps extends IProps {
 
 @inject('userStore')
 @observer
-export default class Profile extends React.Component<IProps, IState> {
+export default class Profile extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
@@ -69,10 +69,7 @@ export default class Profile extends React.Component<IProps, IState> {
           ) : (
             <div data-cy="user-menu">
               <Flex onClick={() => this.toggleProfileModal()} ml={1}>
-                <Avatar
-                  userName={user.userName}
-                  profileType={user.profileType}
-                />
+                <Avatar profileType={user.profileType} />
               </Flex>
               <Flex>
                 {showProfileModal && (

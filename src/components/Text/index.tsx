@@ -1,10 +1,9 @@
-import * as React from 'react'
-import styled from 'styled-components'
 import {
   Text as RebassText,
   TextProps as RebassTextProps,
 } from 'rebass/styled-components'
 import theme from 'src/themes/styled.theme'
+import styled from 'styled-components'
 
 export interface ITextProps {
   uppercase?: boolean
@@ -29,6 +28,7 @@ export interface ITextProps {
   highlight?: boolean
   critical?: boolean
   dashed?: boolean
+  cropBottomRight?: boolean
 }
 
 export const uppercase = props =>
@@ -122,27 +122,35 @@ export const dashed = (props: ITextProps) =>
         border: '1px dashed',
       }
     : null
+export const cropBottomRight = (props: ITextProps) =>
+  props.cropBottomRight
+    ? {
+        borderBottomRightRadius: '8px',
+      }
+    : null
 
-export const BaseText = styled(RebassText)`
+// any export to fix: https://github.com/microsoft/TypeScript/issues/37597
+export const BaseText = styled(RebassText as any)`
   ${inline}
-  ${uppercase}
-  ${capitalize}
+  ${uppercase as any}
+  ${capitalize as any}
   ${regular}
   ${bold}
-	${txtcenter}
+	${txtcenter as any}
   ${large}
   ${medium}
   ${small}
   ${superSmall}
-  ${clipped}
-	${preLine}
+  ${clipped as any}
+	${preLine as any}
 	${tags}
 	${auxiliary}
 	${paragraph}
-  ${txtRight}
+  ${txtRight as any}
   ${highlight}
   ${critical}
   ${dashed}
+  ${cropBottomRight}
 `
 
 type TextProps = ITextProps & RebassTextProps

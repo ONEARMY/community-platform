@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 import { TagsStore } from 'src/stores/Tags/tags.store'
 import { ISelectedTags, ITag, TagCategory } from 'src/models/tags.model'
@@ -9,12 +9,12 @@ import { FieldContainer } from '../Form/elements'
 import { DropdownIndicator } from '../DropdownIndicator'
 
 // we include props from react-final-form fields so it can be used as a custom field component
-export interface IProps extends FieldRenderProps<any, any> {
+export interface IProps extends Partial<FieldRenderProps<any, any>> {
   value?: ISelectedTags
   onChange: (val: ISelectedTags) => void
-  category: TagCategory | undefined
-  styleVariant: 'selector' | 'filter'
-  placeholder: string
+  category?: TagCategory | undefined
+  styleVariant?: 'selector' | 'filter'
+  placeholder?: string
   relevantTagsItems?: ICollectionWithTags[]
 }
 interface IState {
@@ -30,7 +30,7 @@ interface ICollectionWithTags {
 
 @inject('tagsStore')
 @observer
-class TagsSelect extends React.Component<IProps, IState> {
+class TagsSelect extends Component<IProps, IState> {
   public static defaultProps: IProps
   constructor(props: any) {
     super(props)
@@ -43,7 +43,7 @@ class TagsSelect extends React.Component<IProps, IState> {
   // if we initialise with a value we want to update the state to reflect the selected tags
   // we repeat this additionally for input in case it is being used as input component for react-final-form field
   public componentDidMount() {
-    const propsVal = { ...this.props.value, ...this.props.input.value }
+    const propsVal = { ...this.props.value, ...this.props.input!.value }
     const selectedTags = Object.keys(propsVal)
     this.setState({ selectedTags })
     this.props.onChange(propsVal)
@@ -70,7 +70,10 @@ class TagsSelect extends React.Component<IProps, IState> {
 
     const { styleVariant } = this.props
     return (
-      <FieldContainer data-cy="tag-select">
+      <FieldContainer
+        // provide a data attribute that can be used to see if tags populated
+        data-cy={categoryTags.length > 0 ? 'tag-select' : 'tag-select-empty'}
+      >
         <Select
           components={{ DropdownIndicator }}
           styles={styleVariant === 'selector' ? SelectStyles : FilterStyles}
@@ -126,7 +129,7 @@ export default TagsSelect
 // default onChange calls the input onChange function (linked to react-final-form)
 TagsSelect.defaultProps = {
   onChange: val => {
-    TagsSelect.defaultProps.input.onChange(val)
+    TagsSelect.defaultProps.input!.onChange(val)
   },
   input: {
     name: 'tagsSelect',

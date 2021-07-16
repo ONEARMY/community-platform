@@ -3,7 +3,7 @@
   Uses 2 input components, the first to take raw user input, and debounce before
   updating the second which is bound to algolia's search autocomplete implementation
 */
-import React from 'react'
+import * as React from 'react';
 import AlgoliaPlaces from 'places.js'
 import { ALGOLIA_PLACES_CONFIG } from 'src/config/config'
 import { Input, BlackPlaceholderInput } from '../Form/elements'

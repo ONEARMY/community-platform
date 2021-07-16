@@ -93,7 +93,6 @@ describe('[Common]', () => {
       cy.url().should('include', 'settings')
 
       cy.step('Logout the session')
-      cy.step('Logout')
       cy.clickMenuItem(UserMenuItem.LogOut)
       cy.get('[data-cy=login]').should('be.visible')
       cy.get('[data-cy=join]').should('be.visible')

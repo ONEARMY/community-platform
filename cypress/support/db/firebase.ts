@@ -5,7 +5,6 @@ import 'firebase/firestore'
 import 'firebase/storage'
 import 'firebase/functions'
 import 'firebase/database'
-import Query = firebase.firestore.Query
 import { SEED_DATA } from '../../fixtures/seed'
 import { DB_ENDPOINTS } from './endpoints'
 const fbConfig = {
@@ -16,27 +15,26 @@ const fbConfig = {
   storageBucket: 'onearmy-test-ci.appspot.com',
 }
 
+// ensure the cypress env db prefix is also used with the mapped endpoints
+
 firebase.initializeApp(fbConfig)
 const db = firebase.firestore()
-type PromiseCallback = (val?: any) => void
-const MAX_BATCH_SIZE = 500
 
-console.log('cypress env', Cypress.env())
-// Use prefix to allow parallel testing with different seed data
-// (prevents one test suite deleting the data of another)
-const prefix = Cypress.env('REACT_APP_DB_PREFIX')
-
-class FirestoreDB {
-  seedDB = () => {
-    const dbWrites = Object.keys(SEED_DATA).map(key => {
-      return this.addDocuments(key, SEED_DATA[key])
+class FirestoreTestDB {
+  seedDB = async () => {
+    const endpoints = ensureDBPrefixes(DB_ENDPOINTS)
+    const dbWrites = Object.keys(SEED_DATA).map(async key => {
+      const endpoint = endpoints[key]
+      await this.addDocuments(endpoint, SEED_DATA[key])
+      return [endpoint, SEED_DATA[key]]
     })
     return Promise.all(dbWrites)
   }
 
-  clearDB = () => {
-    const dbDeletes = Object.keys(SEED_DATA).map(key => {
-      return this.deleteAll(key)
+  clearDB = async () => {
+    const endpoints = ensureDBPrefixes(DB_ENDPOINTS)
+    const dbDeletes = Object.values(endpoints).map(endpoint => {
+      return this.deleteAll(endpoint)
     })
     return Promise.all(dbDeletes)
   }
@@ -46,104 +44,58 @@ class FirestoreDB {
     fieldPath: string,
     opStr: any,
     value: string,
-  ): Promise<any> | Promise<any[]> => {
-    const mapping = DB_ENDPOINTS[collectionName] || collectionName
-    return db
-      .collection(`${prefix}${mapping}`)
-      .where(fieldPath, opStr, value)
-      .get()
-      .then(snapshot => {
-        const result: any[] = []
-        if (snapshot.empty) {
-          return result
-        }
-        snapshot.forEach(document => result.push(document.data()))
-        if (result.length === 1) {
-          return result[0]
-        }
-        return result
+  ): Cypress.Chainable => {
+    const endpoints = ensureDBPrefixes(DB_ENDPOINTS)
+    const endpoint = endpoints[collectionName]
+    return cy
+      .wrap(`query: ${endpoint} WHERE ${fieldPath}${opStr}${value}`)
+      .then(() => {
+        return new Cypress.Promise((resolve, reject) => {
+          db.collection(`${endpoint}`)
+            .where(fieldPath, opStr, value)
+            .get()
+            .then(snapshot => {
+              resolve(snapshot.docs.map(d => d.data()))
+            })
+            .catch(err => reject(err))
+        })
       })
   }
-  addDocuments = (collectionName: string, docs: any[]) => {
-    const mapping = DB_ENDPOINTS[collectionName] || collectionName
+
+  private addDocuments = async (collectionName: string, docs: any[]) => {
+    cy.log(`DB Seed: ${collectionName}`)
     const batch = db.batch()
-    const col = db.collection(`${prefix}${mapping}`)
+    const col = db.collection(collectionName)
     docs.forEach(doc => {
       const ref = col.doc(doc._id)
       batch.set(ref, doc)
     })
     return batch.commit()
   }
-  deleteAll = async (collectionName: string) => {
-    const mapping = DB_ENDPOINTS[collectionName] || collectionName
+  private deleteAll = async (collectionName: string) => {
+    cy.log(`DB Delete: ${collectionName}`)
     const batch = db.batch()
-    const col = db.collection(`${prefix}${mapping}`)
-    const docs = await col.get()
+    const col = db.collection(collectionName)
+    const docs = (await col.get()) || []
     docs.forEach(d => {
       batch.delete(col.doc(d.id))
     })
     return batch.commit()
   }
-
-  deleteDocuments = (
-    collectionName: string,
-    fieldPath: string,
-    opStr: any,
-    value: string,
-  ) => {
-    const mapping = DB_ENDPOINTS[collectionName] || collectionName
-    const query = db
-      .collection(`${prefix}${mapping}`)
-      .where(fieldPath, opStr, value)
-      .limit(MAX_BATCH_SIZE)
-    return new Promise((resolve, reject) => {
-      this.deleteQueryBatch(query, MAX_BATCH_SIZE, resolve, reject)
-    })
-  }
-  deleteQueryBatch = (
-    query: Query,
-    batchSize: number,
-    resolve: PromiseCallback,
-    reject: PromiseCallback,
-  ) => {
-    query
-      .get()
-      .then(snapshot => {
-        // When there are no documents left, we are done
-        if (snapshot.size === 0) {
-          return 0
-        }
-
-        // Delete documents in a batch
-        const batch = db.batch()
-        snapshot.docs.forEach(document => {
-          batch.delete(document.ref)
-        })
-
-        return batch.commit().then(() => {
-          return snapshot.size
-        })
-      })
-      .then(numDeleted => {
-        if (numDeleted === 0) {
-          resolve()
-          return
-        }
-
-        process.nextTick(() => {
-          this.deleteQueryBatch(query, batchSize, resolve, reject)
-        })
-      })
-      .catch(reject)
-  }
-
-  updateDocument = (collectionName: string, docId: string, docData: any) => {
-    const mapping = DB_ENDPOINTS[collectionName] || collectionName
-    return db
-      .collection(`${prefix}${mapping}`)
-      .doc(docId)
-      .set(docData)
-  }
 }
 export const Auth = firebase.auth()
-export const Firestore = new FirestoreDB()
+export const TestDB = new FirestoreTestDB()
+
+/**
+ * During initialisation the endpoints imported from endpoints.ts might be populated before the
+ * prefix is stored in localstorage. This function ensures they start with the correct prefix
+ */
+function ensureDBPrefixes(endpoints: { [key: string]: string }) {
+  const prefix = Cypress.env('DB_PREFIX')
+  Object.entries(endpoints).forEach(([key, value]) => {
+    if (!value.startsWith(prefix)) {
+      endpoints[key] = `${prefix}${value}`
+    }
+  })
+  return endpoints
+}

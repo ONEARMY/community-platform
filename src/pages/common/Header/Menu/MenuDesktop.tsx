@@ -1,4 +1,4 @@
-import React from 'react'
+import { Component } from 'react'
 import { NavLink } from 'react-router-dom'
 import { COMMUNITY_PAGES } from 'src/pages/PageList'
 import theme from 'src/themes/styled.theme'
@@ -6,8 +6,9 @@ import { Flex } from 'rebass/styled-components'
 import styled from 'styled-components'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
 import { zIndex } from 'src/themes/styled.theme'
+import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
-const MenuLink = styled(NavLink).attrs(({ name }) => ({
+const MenuLink = styled(NavLink).attrs(() => ({
   activeClassName: 'current',
 }))`
   padding: 0px ${theme.space[4]}px;
@@ -38,18 +39,27 @@ const MenuLink = styled(NavLink).attrs(({ name }) => ({
   }
 `
 
-export class MenuDesktop extends React.Component {
+export class MenuDesktop extends Component {
   render() {
     return (
       <>
         <Flex alignItems={'center'}>
-          {COMMUNITY_PAGES.map(page => (
-            <Flex key={page.path}>
-              <MenuLink to={page.path} data-cy="page-link">
-                <Flex>{page.title}</Flex>
-              </MenuLink>
-            </Flex>
-          ))}
+          {COMMUNITY_PAGES.map(page => {
+            const link = (
+              <Flex key={page.path}>
+                <MenuLink to={page.path} data-cy="page-link">
+                  <Flex>{page.title}</Flex>
+                </MenuLink>
+              </Flex>
+            )
+            return page.requiredRole ? (
+              <AuthWrapper roleRequired={page.requiredRole} key={page.path}>
+                {link}
+              </AuthWrapper>
+            ) : (
+              link
+            )
+          })}
         </Flex>
       </>
     )

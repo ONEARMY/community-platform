@@ -40,8 +40,13 @@ function getSiteVariant(
   gitBranch: string,
   env: typeof process.env,
 ): siteVariants {
+  const url = new URL(window.location.href)
+  const siteParam = url.searchParams.get('site')
   if (env.REACT_APP_SITE_VARIANT === 'test-ci') {
     return 'test-ci'
+  }
+  if (env.REACT_APP_SITE_VARIANT === 'preview' || siteParam === 'preview') {
+    return 'preview'
   }
   switch (gitBranch) {
     case 'production':
@@ -54,6 +59,7 @@ function getSiteVariant(
 }
 
 const siteVariant = getSiteVariant(branch, e)
+console.log(`[${siteVariant}] site`)
 
 /*********************************************************************************************** /
                                         Production
@@ -80,6 +86,7 @@ if (siteVariant === 'production') {
 }
 
 const firebaseConfigs: { [variant in siteVariants]: IFirebaseConfig } = {
+  /** Sandboxed dev site, all features available for interaction */
   localhost: {
     apiKey: 'AIzaSyChVNSMiYxCkbGd9C95aChr9GxRJtW6NRA',
     authDomain: 'precious-plastics-v4-dev.firebaseapp.com',
@@ -88,6 +95,17 @@ const firebaseConfigs: { [variant in siteVariants]: IFirebaseConfig } = {
     projectId: 'precious-plastics-v4-dev',
     storageBucket: 'precious-plastics-v4-dev.appspot.com',
   },
+  /** Sandboxed dev site, populated with copy of live site data (reset weekly) */
+  preview: {
+    apiKey: 'AIzaSyAWLB1xm3KaLKJhZygu4v247a9YT3dxMAs',
+    authDomain: 'onearmy-next.firebaseapp.com',
+    databaseURL: 'https://onearmy-next-default-rtdb.firebaseio.com',
+    projectId: 'onearmy-next',
+    storageBucket: 'onearmy-next.appspot.com',
+    messagingSenderId: '1063830272538',
+    appId: '1:1063830272538:web:f52f88c613babd6278efa3',
+  },
+  /** Empty site, populated and torn down during ci ops */
   'test-ci': {
     apiKey: 'AIzaSyDAxS_7M780mI3_tlwnAvpbaqRsQPlmp64',
     authDomain: 'onearmy-test-ci.firebaseapp.com',
@@ -96,6 +114,7 @@ const firebaseConfigs: { [variant in siteVariants]: IFirebaseConfig } = {
     storageBucket: 'onearmy-test-ci.appspot.com',
     messagingSenderId: '174193431763',
   },
+  /** Production/live backend with master branch frontend */
   staging: {
     apiKey: 'AIzaSyChVNSMiYxCkbGd9C95aChr9GxRJtW6NRA',
     authDomain: 'precious-plastics-v4-dev.firebaseapp.com',
@@ -104,6 +123,7 @@ const firebaseConfigs: { [variant in siteVariants]: IFirebaseConfig } = {
     projectId: 'precious-plastics-v4-dev',
     storageBucket: 'precious-plastics-v4-dev.appspot.com',
   },
+  /** Production/live backend with released frontend */
   production: {
     apiKey: e.REACT_APP_FIREBASE_API_KEY as string,
     authDomain: e.REACT_APP_FIREBASE_AUTH_DOMAIN as string,
@@ -135,6 +155,7 @@ interface IFirebaseConfig {
   projectId: string
   storageBucket: string
   messagingSenderId: string
+  appId?: string
 }
 interface ISentryConfig {
   dsn: string
@@ -143,4 +164,9 @@ interface IAlgoliaConfig {
   searchOnlyAPIKey: string
   applicationID: string
 }
-type siteVariants = 'localhost' | 'test-ci' | 'staging' | 'production'
+type siteVariants =
+  | 'localhost'
+  | 'test-ci'
+  | 'staging'
+  | 'production'
+  | 'preview'

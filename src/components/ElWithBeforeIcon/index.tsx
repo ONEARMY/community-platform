@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react'
+import { FunctionComponent } from 'react';
 import { Box } from 'rebass'
 import checkmarkIcon from 'src/assets/icons/icon-checkmark.svg'
 

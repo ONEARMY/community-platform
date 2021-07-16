@@ -1,46 +1,42 @@
-import React, { FunctionComponent } from 'react'
-import { IHowto } from '../../models/howto.models'
-import { IEvent } from 'src/models/events.models'
+import { FunctionComponent } from 'react';
 import Text from 'src/components/Text'
+import { IModerable } from 'src/models'
 
-interface IProps {
-  howto?: IHowto
-  event?: IEvent
+type IProps = {
+  moderatedContent: IModerable
+  contentType: 'event' | 'howto' | 'research'
   top?: string
+  bottom?: string | (string | number)[]
+  cropBottomRight?: boolean
 }
 
 export const ModerationStatusText: FunctionComponent<IProps> = ({
-  howto,
-  event,
+  moderatedContent,
+  contentType,
   top,
+  bottom,
+  cropBottomRight,
 }) => {
-  let type = ''
+  let status = moderatedContent.moderation
+  if (contentType === 'event') {
+    status = 'draft' !== status ? status : 'awaiting-moderation'
+  }
+
   let text = ''
-  let status = ''
-  if (!howto && !event) {
-    return null
-  }
-
-  if (howto) {
-    status = howto.moderation
-    type = 'howto'
-  }
-  if (event) {
-    status = event.moderation
-    type = 'event'
-    status = 'draft' !== status ? status : ''
-  }
-
   switch (status) {
     case 'accepted':
       return null
       // eslint-disable-next-line
       break
     case 'rejected':
-      text = 'howto' === type ? 'Needs to improve to be accepted' : 'Rejected'
+      text =
+        'howto' === contentType ? 'Needs to improve to be accepted' : 'Rejected'
       break
     case 'draft':
       text = 'Draft'
+      break
+    case 'awaiting-moderation':
+      text = 'Awaiting moderation'
       break
     default:
       text = 'Awaiting moderation'
@@ -53,11 +49,14 @@ export const ModerationStatusText: FunctionComponent<IProps> = ({
       clipped
       highlight
       critical={status === 'rejected'}
+      cropBottomRight={cropBottomRight}
       sx={{
         position: 'absolute',
         maxWidth: '90%',
+        color: 'black',
         right: '0',
         top: top ? top : 'auto',
+        bottom: bottom ? bottom : 'auto',
       }}
     >
       {text}

@@ -100,9 +100,27 @@ class CollectionReference<T> {
           totals.live = updates.length
           await cacheDB.setBulkDocs(endpoint, updates)
           const allDocs = await cacheDB.getCollection<T>(endpoint)
-          console.group(`[${endpoint}] docs retrieved`)
-          console.table(totals)
-          console.groupEnd()
+          // console.group(`[${endpoint}] docs retrieved`)
+          // console.table(totals)
+          // console.groupEnd()
+          obs.next(allDocs)
+        })
+        // 4. Check for any document deletes, and remove as appropriate
+        // Assume archive will have been checked after last updated record sync
+        const lastArchive = latest
+        serverDB.streamCollection!(`_archived/${endpoint}/summary`, {
+          order: 'asc',
+          where: { field: '_archived', operator: '>', value: lastArchive },
+        }).subscribe(async docs => {
+          const archiveIds = docs.map(d => d._id)
+          for (const docId of archiveIds) {
+            try {
+              cacheDB.deleteDoc(endpoint, docId)
+            } catch (error) {
+              // might already be deleted so ignore error
+            }
+          }
+          const allDocs = await cacheDB.getCollection<T>(endpoint)
           obs.next(allDocs)
         })
       },
@@ -203,13 +221,21 @@ class DocReference<T> {
   }
 
   /**
-   * NOT CURRENTLY IN USE
+   *  Stream live updates from a server (where supported)
+   *  Just returns the doc when not supported
    */
-  async stream() {
-    // TODO - if deemed useful by the platform
-    throw new Error('stream method does not currently exist for docs')
-    // eslint-disable-next-line
-    return
+  stream(): Observable<DBDoc> {
+    const { serverDB } = this.clients
+    if (serverDB.streamDoc) {
+      return serverDB.streamDoc<T>(`${this.endpoint}/${this.id}`)
+    } else {
+      return new Observable<DBDoc>(subscriber => {
+        this.get('server').then(res => {
+          subscriber.next(res)
+          subscriber.complete()
+        })
+      })
+    }
   }
 
   /**
@@ -227,13 +253,23 @@ class DocReference<T> {
   }
 
   /**
-   * Documents are artificially deleted by replacing all contents with basic metadata and
-   * `_deleted:true` property. This is so that other users can also sync the doc with their cache
-   * TODO - schedule server permanent delete and find more elegant solution to notify users
-   * to delete docs from their cache.
+   * Documents are artificially deleted by moving to an `_archived` collection, with separate entries
+   * for a metadata summary and the raw doc. This is required so that other users can sync deleted docs
+   * and delete from their own caches accordingly.
+   * TODO - add rules to restrict access to archive full docs, and schedule for permanent deletion
+   * TODO - let a user restore their own archived docs
    */
   async delete() {
-    return this.set({ _deleted: true } as any)
+    const { serverDB, serverCacheDB } = this.clients
+    const doc = (await this.get()) as any
+    await serverDB.setDoc(`_archived/${this.endpoint}/summary`, {
+      _archived: new Date().toISOString(),
+      _id: this.id,
+      _createdBy: doc._createdBy || null,
+    })
+    await serverDB.setDoc(`_archived/${this.endpoint}/docs`, doc)
+    await serverDB.deleteDoc(this.endpoint, this.id)
+    await serverCacheDB.deleteDoc(this.endpoint, this.id)
   }
 
   batchDoc(data: any) {

@@ -1,4 +1,4 @@
-import React from 'react'
+import { Component } from 'react';
 import { WEEK_DAYS, OPENING_HOURS } from 'src/mocks/Selectors'
 import { Field } from 'react-final-form'
 import { Button } from 'src/components/Button'
@@ -18,7 +18,7 @@ interface IState {
   _toDocsList: boolean
 }
 
-export class OpeningHoursPicker extends React.Component<IProps, IState> {
+export class OpeningHoursPicker extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {

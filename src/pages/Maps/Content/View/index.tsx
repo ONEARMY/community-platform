@@ -17,6 +17,7 @@ import {
 import { inject, observer } from 'mobx-react'
 import { MapsStore } from 'src/stores/Maps/maps.store'
 import { RouteComponentProps } from 'react-router'
+import { toJS } from 'mobx'
 
 interface IProps extends RouteComponentProps<any> {
   pins: Array<IMapPin>
@@ -63,9 +64,9 @@ class MapView extends React.Component<IProps> {
     }
   }
 
-  private pinClicked(pin: IMapPin) {
+  private async pinClicked(pin: IMapPin) {
+    await this.injected.mapsStore.setActivePin(pin)
     this.props.history.push('/map#' + pin._id)
-    //    this.injected.mapsStore.setActivePin(pin)
   }
 
   public render() {
@@ -80,7 +81,7 @@ class MapView extends React.Component<IProps> {
         maxZoom={18}
         style={{ height: '100%', zIndex: 0 }}
         onmove={this.handleMove}
-        onclick={e => {
+        onclick={() => {
           this.injected.mapsStore.setActivePin(undefined)
           this.props.history.push('/map')
         }}
@@ -91,7 +92,8 @@ class MapView extends React.Component<IProps> {
         />
         <Clusters pins={pins} onPinClick={pin => this.pinClicked(pin)} />
         {activePin && this.injected.mapsStore.canSeePin(activePin) && (
-          <Popup activePin={activePin} map={this.props.mapRef} />
+          // NOTE CC - 2021-07-06 mobx update no longer passing JS object, but observable that needs converting
+          <Popup activePin={toJS(activePin)} map={this.props.mapRef} />
         )}
       </Map>
     )

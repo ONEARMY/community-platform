@@ -1,4 +1,4 @@
-import React from 'react'
+import { PureComponent } from 'react'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { format } from 'date-fns'
 import { IHowtoDB } from 'src/models/howto.models'
@@ -17,15 +17,19 @@ import { isAllowToEditContent, emStringToPx } from 'src/utils/helpers'
 import theme from 'src/themes/styled.theme'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
+import { HowtoUsefulStats } from './HowtoUsefulStats'
 
 interface IProps {
   howto: IHowtoDB
   loggedInUser: IUser | undefined
   needsModeration: boolean
+  votedUsefulCount?: number
+  userVotedUseful: boolean
   moderateHowto: (accepted: boolean) => void
+  onUsefulClick: () => void
 }
 
-export default class HowtoDescription extends React.PureComponent<IProps, any> {
+export default class HowtoDescription extends PureComponent<IProps> {
   // eslint-disable-next-line
   constructor(props: IProps) {
     super(props)
@@ -67,7 +71,7 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
         }}
       >
         <Flex px={4} py={4} flexDirection={'column'} width={[1, 1, 1 / 2]}>
-          <Flex justifyContent={'space-between'}>
+          <Flex justifyContent="space-between" flexWrap="wrap">
             <Link to={'/how-to/'}>
               <Button variant="subtle" fontSize="14px" data-cy="go-back">
                 <Flex>
@@ -83,6 +87,16 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
                 </Flex>
               </Button>
             </Link>
+            <Box style={{ flexGrow: 1 }}>
+              {this.props.votedUsefulCount !== undefined && (
+                <HowtoUsefulStats
+                  votedUsefulCount={this.props.votedUsefulCount}
+                  userVotedUseful={this.props.userVotedUseful}
+                  isLoggedIn={this.props.loggedInUser ? true : false}
+                  onUsefulClick={this.props.onUsefulClick}
+                />
+              )}
+            </Box>
             {/* Check if pin should be moderated */}
             {this.props.needsModeration && (
               <Flex justifyContent={'space-between'}>
@@ -181,13 +195,18 @@ export default class HowtoDescription extends React.PureComponent<IProps, any> {
             sx={{
               objectFit: 'cover',
               width: 'auto',
-              height: ['100%', '450px'],
+              height: '100%',
             }}
             src={howto.cover_image.downloadUrl}
+            crossOrigin=""
             alt="how-to cover"
           />
           {howto.moderation !== 'accepted' && (
-            <ModerationStatusText howto={howto} top={'0px'} />
+            <ModerationStatusText
+              moderatedContent={howto}
+              contentType="howto"
+              top={'0px'}
+            />
           )}
         </Flex>
       </Flex>

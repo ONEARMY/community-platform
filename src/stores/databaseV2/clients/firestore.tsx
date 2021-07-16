@@ -41,6 +41,12 @@ export class FirestoreClient implements AbstractDBClient {
     const data = await ref.get()
     return data.empty ? [] : data.docs.map(doc => doc.data() as T)
   }
+  deleteDoc(endpoint: IDBEndpoint, docId: string) {
+    return db
+      .collection(endpoint)
+      .doc(docId)
+      .delete()
+  }
 
   /************************************************************************
    *  Additional Methods - specific only to firestore
@@ -53,6 +59,17 @@ export class FirestoreClient implements AbstractDBClient {
         ref.onSnapshot(snap => {
           const docs = snap.docs.map(d => d.data() as T)
           obs.next(docs)
+        })
+      },
+    )
+    return observer
+  }
+  streamDoc<T>(endpoint: IDBEndpoint) {
+    const ref = db.doc(endpoint)
+    const observer: Observable<T> = Observable.create(
+      async (obs: Observer<T>) => {
+        ref.onSnapshot(snap => {
+          obs.next(snap.data() as T)
         })
       },
     )

@@ -1,4 +1,4 @@
-import React from 'react'
+import { PureComponent } from 'react'
 // TODO remove material-ui from here
 import List from '@material-ui/core/List'
 import { HashLink } from 'react-router-hash-link'
@@ -7,14 +7,13 @@ import { Container } from './elements'
 import { IHowtoStep } from 'src/models/howto.models'
 import { ListItem, ListItemText } from '@material-ui/core'
 import Text from 'src/components/Text'
-import { uppercase } from '../../../../../components/Text/index'
 
 interface IProps {
   steps: IHowtoStep[]
   howToSlug: string
 }
 
-export default class HowtoSummary extends React.PureComponent<IProps> {
+export default class HowtoSummary extends PureComponent<IProps> {
   render() {
     return (
       <Container>

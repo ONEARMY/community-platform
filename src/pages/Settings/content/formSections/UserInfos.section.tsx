@@ -3,10 +3,7 @@ import { Field } from 'react-final-form'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
-import {
-  FormattedInputField,
-  FormattedTextAreaField,
-} from 'src/components/Form/Fields'
+import { InputField, TextAreaField } from 'src/components/Form/Fields'
 import { FlagSelectField } from 'src/components/Form/FlagSelect'
 import { Button } from 'src/components/Button'
 import 'react-flags-select/scss/react-flags-select.scss'
@@ -71,7 +68,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             <Field
               data-cy="username"
               name="displayName"
-              component={FormattedInputField}
+              component={InputField}
               placeholder="Pick a unique username"
               validate={required}
               validateFields={[]}
@@ -103,7 +100,8 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             <Field
               data-cy="info-description"
               name="about"
-              component={FormattedTextAreaField}
+              modifiers={{ capitalize: true }}
+              component={TextAreaField}
               placeholder="Describe in details what you do and who you are. Write in English otherwise your profile won't be approved."
               validate={required}
               validateFields={[]}

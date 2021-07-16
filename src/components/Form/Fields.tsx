@@ -14,6 +14,10 @@ import { capitalizeFirstLetter } from 'src/utils/helpers'
 // input and meta props come from react field render props and will be
 // picked up by typing
 type FieldProps = FieldRenderProps<any, any> & { children?: React.ReactNode }
+
+type InputModifiers = {
+  capitalize?: boolean
+}
 export interface IFieldProps extends FieldProps {
   // additional fields intending to pass down
   disabled?: boolean
@@ -26,13 +30,19 @@ interface IDatePickerFieldProps extends IFieldProps {
   customChange?: (location) => void
 }
 
-const toCapitalizedFirstletterInput = e => {
-  e.target.value = capitalizeFirstLetter(e.target.value)
+const processInputModifiers = (value: any, modifiers: InputModifiers = {}) => {
+  if (typeof value !== 'string') return value
+  if (modifiers.capitalize) {
+    value = capitalizeFirstLetter(value)
+  }
+  return value
 }
+
 export const InputField = ({
   input,
   meta,
   customOnBlur,
+  modifiers,
   ...rest
 }: IFieldProps) => (
   <>
@@ -41,10 +51,14 @@ export const InputField = ({
       {...input}
       {...rest}
       onBlur={e => {
+        if (modifiers) {
+          e.target.value = processInputModifiers(e.target.value, modifiers)
+          input.onChange(e)
+        }
         if (customOnBlur) {
           customOnBlur(e)
         }
-        input.onBlur()
+        input.onBlur(e)
       }}
     />
     {meta.error && meta.touched ? (
@@ -52,30 +66,7 @@ export const InputField = ({
     ) : null}
   </>
 )
-export const FormattedInputField = ({
-  input,
-  meta,
-  customOnBlur,
-  ...rest
-}: IFieldProps) => (
-  <>
-    <Input
-      invalid={meta.error && meta.touched}
-      {...input}
-      {...rest}
-      onBlur={e => {
-        if (customOnBlur) {
-          customOnBlur(e)
-        }
-        input.onBlur()
-      }}
-      onInput={toCapitalizedFirstletterInput}
-    />
-    {meta.error && meta.touched ? (
-      <ErrorMessage>{meta.error}</ErrorMessage>
-    ) : null}
-  </>
-)
+
 export const DatePickerField = ({
   input,
   meta,
@@ -110,6 +101,8 @@ export const TextAreaField = ({
   input,
   meta,
   disabled,
+  modifiers,
+  customOnBlur,
   ...rest
 }: IFieldProps) =>
   disabled ? (
@@ -121,27 +114,16 @@ export const TextAreaField = ({
         invalid={meta.error && meta.touched}
         {...input}
         {...rest}
-      />
-      {meta.error && meta.touched && <ErrorMessage>{meta.error}</ErrorMessage>}
-    </>
-  )
-
-export const FormattedTextAreaField = ({
-  input,
-  meta,
-  disabled,
-  ...rest
-}: IFieldProps) =>
-  disabled ? (
-    // want disabled textarea to just render as styled div to remove scrollbars
-    <TextAreaDisabled>{input.value}</TextAreaDisabled>
-  ) : (
-    <>
-      <TextAreaStyled
-        invalid={meta.error && meta.touched}
-        {...input}
-        {...rest}
-        onInput={toCapitalizedFirstletterInput}
+        onBlur={e => {
+          if (modifiers) {
+            e.target.value = processInputModifiers(e.target.value, modifiers)
+            input.onChange(e)
+          }
+          if (customOnBlur) {
+            customOnBlur(e)
+          }
+          input.onBlur()
+        }}
       />
       {meta.error && meta.touched && <ErrorMessage>{meta.error}</ErrorMessage>}
     </>

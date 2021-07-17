@@ -189,6 +189,7 @@ export class HowtoStore extends ModuleStore {
         )
         if (commentIndex !== -1) {
           comments[commentIndex].text = newText.slice(0, 400).trim()
+          comments[commentIndex]._edited = new Date().toISOString()
 
           const updatedHowto: IHowto = {
             ...toJS(howto),

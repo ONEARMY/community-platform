@@ -10,7 +10,6 @@ import styled from 'styled-components'
 const MAX_COMMENTS = 5
 
 interface IProps {
-  userName?: string
   comments?: IComment[]
 }
 

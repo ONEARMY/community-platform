@@ -7,6 +7,7 @@ import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { IHowtoDB } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
+import { capitalizeFirstLetter } from 'src/utils/helpers'
 
 interface IProps {
   howto: IHowtoDB
@@ -48,7 +49,8 @@ export const HowToCard = (props: IProps) => (
       </Flex>
       <Flex px={3} py={3} flexDirection="column">
         <Heading small clipped color={'black'}>
-          {props.howto.title}
+          {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
+          {capitalizeFirstLetter(props.howto.title)}
         </Heading>
         <Flex alignItems="center">
           {props.howto.creatorCountry && (

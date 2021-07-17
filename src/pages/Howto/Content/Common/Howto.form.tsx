@@ -50,27 +50,29 @@ interface IInjectedProps extends IProps {
 
 const AnimationContainer = (props: any) => {
   const variants = {
-    pre: { 
-      opacity: 0
+    pre: {
+      opacity: 0,
     },
     enter: {
       opacity: 1,
-      duration: .200,
-      display: "block",
+      duration: 0.2,
+      display: 'block',
     },
     post: {
-      display: "none",
-      duration: .200,
+      display: 'none',
+      duration: 0.2,
       top: '-100%',
     },
   }
   return (
-    <motion.div layout
+    <motion.div
+      layout
       initial="pre"
       animate="enter"
       exit="post"
-      variants={variants}>
-        { props.children }
+      variants={variants}
+    >
+      {props.children}
     </motion.div>
   )
 }
@@ -239,6 +241,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 validateFields={[]}
                                 validate={this.validateTitle}
                                 isEqual={COMPARISONS.textInput}
+                                modifiers={{ capitalize: true }}
                                 component={InputField}
                                 maxLength="50"
                                 placeholder="Make a chair from.. (max 50 characters)"
@@ -296,6 +299,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 data-cy="intro-description"
                                 validate={required}
                                 validateFields={[]}
+                                modifiers={{ capitalize: true }}
                                 isEqual={COMPARISONS.textInput}
                                 component={TextAreaField}
                                 style={{

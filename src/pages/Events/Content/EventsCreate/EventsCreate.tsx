@@ -146,6 +146,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                           data-cy="title"
                           validate={required}
                           validateFields={[]}
+                          modifiers={{ capitalize: true }}
                           component={InputField}
                           maxLength="140"
                           placeholder="Title of your event (max 140 characters)"

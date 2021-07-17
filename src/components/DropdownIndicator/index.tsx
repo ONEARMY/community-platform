@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { components } from 'react-select'
 import { Image } from 'rebass'
 import ArrowSelectIcon from '../../assets/icons/icon-arrow-select.svg'

@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { getFriendlyMessage } from 'oa-shared'
 import Flex from 'src/components/Flex'
 import { RouteComponentProps, withRouter } from 'react-router'
 import { Redirect } from 'react-router'
@@ -14,7 +15,6 @@ import {
   TextNotification,
   ITextNotificationProps,
 } from 'src/components/Notification/TextNotification'
-import { getFriendlyMessage } from 'src/utils/helpers'
 import { required } from 'src/utils/validators'
 
 interface IFormValues {

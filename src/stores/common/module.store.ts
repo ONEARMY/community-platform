@@ -7,6 +7,7 @@ import { includesAll } from 'src/utils/filters'
 import { RootStore } from '..'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { IUploadedFileMeta, Storage } from '../storage'
+import { useCommonStores } from 'src'
 
 /**
  * The module store is used to share methods and data between other stores, including
@@ -21,12 +22,27 @@ import { IUploadedFileMeta, Storage } from '../storage'
 export class ModuleStore {
   allDocs$ = new BehaviorSubject<any[]>([])
   private activeCollectionSubscription = new Subscription()
+  isInitialized = false
 
   // when a module store is initiated automatically load the docs in the collection
   // this can be subscribed to in individual stores
-  constructor(private rootStore: RootStore, basePath?: IDBEndpoint) {
-    if (basePath) {
-      this._subscribeToCollection(basePath)
+  constructor(private rootStore: RootStore, private basePath?: IDBEndpoint) {
+    if (!rootStore) {
+      this.rootStore = useCommonStores()
+    }
+  }
+
+  /**
+   * By default all stores are injected and made available on first app load.
+   * In order to avoid loading all data immediately, include an init function that can
+   * be called from a specific page load instead.
+   */
+  init() {
+    if (!this.isInitialized) {
+      if (this.basePath) {
+        this._subscribeToCollection(this.basePath)
+        this.isInitialized = true
+      }
     }
   }
 
@@ -71,24 +87,39 @@ export class ModuleStore {
     endpoint: IDBEndpoint,
     field: string,
     value: string,
+    originalId?: string,
   ) => {
     const matches = await this.db
       .collection(endpoint)
       .getWhere(field, '==', value)
+    if (
+      typeof originalId !== 'undefined' &&
+      matches.length === 1 &&
+      matches[0]._id === originalId
+    ) {
+      return true
+    }
     return matches.length > 0 ? false : true
   }
 
   /** Validator method to pass to react-final-form. Takes a given title,
    *  converts to corresponding slug and checks uniqueness.
+   *  Provide originalId to prevent matching against own entry.
    *  NOTE - return value represents the error, so FALSE actually means valid
    */
   public validateTitleForSlug = async (
     title: string,
     endpoint: IDBEndpoint,
+    originalId?: string,
   ) => {
     if (title) {
       const slug = stripSpecialCharacters(title).toLowerCase()
-      const unique = await this.checkIsUnique(endpoint, 'slug', slug)
+      const unique = await this.checkIsUnique(
+        endpoint,
+        'slug',
+        slug,
+        originalId,
+      )
       return unique
         ? false
         : 'Titles must be unique, please try being more specific'

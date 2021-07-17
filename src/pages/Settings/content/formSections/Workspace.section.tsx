@@ -15,7 +15,7 @@ interface IState {
   isOpen?: boolean
 }
 
-export class WorkspaceSection extends React.Component<{}, IState> {
+export class WorkspaceSection extends React.Component<any, IState> {
   state = {
     isOpen: true,
   }

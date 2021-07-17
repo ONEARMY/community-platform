@@ -19,13 +19,13 @@ interface IState {
   showSubmitModal?: boolean
   loggedInUser?: IUser | undefined
 }
-interface IProps extends RouteComponentProps<any> {}
+type IProps = RouteComponentProps<any>
 interface IInjectedProps extends IProps {
   howtoStore: HowtoStore
 }
 
 @inject('howtoStore')
-export class EditHowto extends React.Component<IProps, IState> {
+class EditHowto extends React.Component<IProps, IState> {
   constructor(props: any) {
     super(props)
     this.state = {
@@ -36,7 +36,8 @@ export class EditHowto extends React.Component<IProps, IState> {
       loggedInUser: undefined,
     }
   }
-  public async componentWillMount() {
+  /* eslint-disable @typescript-eslint/naming-convention */
+  public async UNSAFE_componentWillMount() {
     const loggedInUser = this.injected.howtoStore.activeUser
     if (this.injected.howtoStore.activeHowto! !== undefined) {
       this.setState({
@@ -46,7 +47,7 @@ export class EditHowto extends React.Component<IProps, IState> {
       })
     } else {
       const slug = this.props.match.params.slug
-      const doc = await this.injected.howtoStore.getDocBySlug(slug)
+      const doc = await this.injected.howtoStore.setActiveHowtoBySlug(slug)
       this.setState({
         formValues: doc as IHowtoDB,
         isLoading: false,
@@ -88,3 +89,4 @@ export class EditHowto extends React.Component<IProps, IState> {
     }
   }
 }
+export default EditHowto

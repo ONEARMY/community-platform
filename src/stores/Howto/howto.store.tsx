@@ -1,20 +1,35 @@
-import { observable, action, computed, toJS } from 'mobx'
+import Fuse from 'fuse.js'
+import { action, computed, makeObservable, observable, toJS } from 'mobx'
+import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import {
   IHowto,
-  IHowtoFormInput,
-  IHowToStepFormInput,
-  IHowtoStep,
   IHowtoDB,
+  IHowtoFormInput,
+  IHowtoStats,
+  IHowtoStep,
+  IHowToStepFormInput,
 } from 'src/models/howto.models'
-import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
-import { IUploadedFileMeta } from '../storage'
-import { ModuleStore } from '../common/module.store'
 import { ISelectedTags } from 'src/models/tags.model'
-import { RootStore } from '..'
 import { IUser } from 'src/models/user.models'
-import { hasAdminRights, needsModeration } from 'src/utils/helpers'
+import {
+  filterModerableItems,
+  hasAdminRights,
+  needsModeration,
+  randomID,
+} from 'src/utils/helpers'
+import { RootStore } from '..'
+import { ModuleStore } from '../common/module.store'
+import { IUploadedFileMeta } from '../storage'
+import { IComment } from 'src/models/howto.models'
 
 const COLLECTION_NAME = 'howtos'
+const HOWTO_SEARCH_WEIGHTS = [
+  { name: 'title', weight: 0.5 },
+  { name: 'description', weight: 0.2 },
+  { name: '_createdBy', weight: 0.15 },
+  { name: 'steps.title', weight: 0.1 },
+  { name: 'steps.text', weight: 0.05 },
+]
 
 export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
@@ -25,25 +40,51 @@ export class HowtoStore extends ModuleStore {
   @observable
   public selectedTags: ISelectedTags
   @observable
+  public searchValue: string
+  @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
+  @observable howtoStats: IHowtoStats | undefined
   constructor(rootStore: RootStore) {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
     super(rootStore, COLLECTION_NAME)
-    this.allDocs$.subscribe((docs: IHowtoDB[]) => {
-      this.allHowtos = docs.sort((a, b) => (a._created < b._created ? 1 : -1))
-    })
+    makeObservable(this)
+    this.allDocs$.subscribe((docs: IHowtoDB[]) => this.setAllHowtos(docs))
     this.selectedTags = {}
+    this.searchValue = ''
   }
 
   @action
-  public async getDocBySlug(slug: string) {
+  private setAllHowtos(docs: IHowtoDB[]) {
+    this.allHowtos = docs.sort((a, b) => (a._created < b._created ? 1 : -1))
+  }
+
+  @action
+  public async setActiveHowtoBySlug(slug: string) {
+    // clear any cached data and then load the new howto
+    this.activeHowto = undefined
+    this.howtoStats = undefined
     const collection = await this.db
       .collection<IHowto>(COLLECTION_NAME)
       .getWhere('slug', '==', slug)
     const activeHowto = collection.length > 0 ? collection[0] : undefined
+    console.log('active howto', activeHowto)
     this.activeHowto = activeHowto
+    // load howto stats which are stored in a separate subcollection
+    await this.loadHowtoStats(activeHowto?._id)
+
     return activeHowto
+  }
+  @action
+  private async loadHowtoStats(id?: string) {
+    if (id) {
+      const ref = this.db
+        .collection<IHowtoStats>('howtos')
+        .doc(`${id}/stats/all`)
+      const howtoStats = await ref.get('server')
+      console.log('howtoStats', howtoStats)
+      this.howtoStats = howtoStats || { votedUsefulCount: 0 }
+    }
   }
   @action
   public updateUploadStatus(update: keyof IHowToUploadStatus) {
@@ -61,19 +102,23 @@ export class HowtoStore extends ModuleStore {
       this.selectedTags,
     )
     // HACK - ARH - 2019/12/11 filter unaccepted howtos, should be done serverside
-    const activeUser = this.activeUser
-    const isAdmin = hasAdminRights(activeUser)
-    return howtos.filter(howto => {
-      const isHowToAccepted = howto.moderation === 'accepted'
-      const wasCreatedByUser =
-        activeUser && howto._createdBy === activeUser.userName
-      const isAdminAndAccepted =
-        isAdmin &&
-        howto.moderation !== 'draft' &&
-        howto.moderation !== 'rejected'
+    const validHowtos = filterModerableItems(howtos, this.activeUser)
 
-      return isHowToAccepted || wasCreatedByUser || isAdminAndAccepted
-    })
+    // If user searched, filter remaining howtos by the search query with Fuse
+    if (!this.searchValue) {
+      return validHowtos
+    } else {
+      const fuse = new Fuse(validHowtos, {
+        keys: HOWTO_SEARCH_WEIGHTS,
+      })
+
+      // Currently Fuse returns objects containing the search items, hence the need to map. https://github.com/krisk/Fuse/issues/532
+      return fuse.search(this.searchValue).map(v => v.item)
+    }
+  }
+
+  public updateSearchValue(query: string) {
+    this.searchValue = query
   }
 
   public updateSelectedTags(tagKey: ISelectedTags) {
@@ -85,12 +130,115 @@ export class HowtoStore extends ModuleStore {
     if (!hasAdminRights(toJS(this.activeUser))) {
       return false
     }
-    const doc = this.db.collection(COLLECTION_NAME).doc(howto._id)
-    return doc.set(howto)
+    const ref = this.db.collection(COLLECTION_NAME).doc(howto._id)
+    // NOTE CC - 2021-07-06 mobx updates try write to db as observable, so need to convert toJS
+    return ref.set(toJS(howto))
   }
 
   public needsModeration(howto: IHowto) {
     return needsModeration(howto, toJS(this.activeUser))
+  }
+
+  @action
+  public async addComment(text: string) {
+    try {
+      const user = this.activeUser
+      const howto = this.activeHowto
+      const comment = text.slice(0, 400).trim()
+      if (user && howto && comment) {
+        const newComment: IComment = {
+          _id: randomID(),
+          _created: new Date().toISOString(),
+          _creatorId: user._id,
+          creatorName: user.userName,
+          creatorCountry: user.country ? user.country.toLowerCase() : null,
+          text: comment,
+        }
+
+        const updatedHowto: IHowto = {
+          ...toJS(howto),
+          comments: howto.comments
+            ? [...toJS(howto.comments), newComment]
+            : [newComment],
+        }
+
+        const dbRef = this.db
+          .collection<IHowto>(COLLECTION_NAME)
+          .doc(updatedHowto._id)
+
+        await dbRef.set(updatedHowto)
+
+        // Refresh the active howto
+        this.activeHowto = await dbRef.get()
+      }
+    } catch (err) {
+      console.error(err)
+      throw new Error(err)
+    }
+  }
+
+  @action
+  public async editComment(id: string, newText: string) {
+    try {
+      const howto = this.activeHowto
+      const user = this.activeUser
+      if (id && howto && user && howto.comments) {
+        const comments = toJS(howto.comments)
+        const commentIndex = comments.findIndex(
+          comment => comment._creatorId === user._id && comment._id === id,
+        )
+        if (commentIndex !== -1) {
+          comments[commentIndex].text = newText.slice(0, 400).trim()
+
+          const updatedHowto: IHowto = {
+            ...toJS(howto),
+            comments,
+          }
+
+          const dbRef = this.db
+            .collection<IHowto>(COLLECTION_NAME)
+            .doc(updatedHowto._id)
+
+          await dbRef.set(updatedHowto)
+
+          // Refresh the active howto
+          this.activeHowto = await dbRef.get()
+        }
+      }
+    } catch (err) {
+      console.error(err)
+      throw new Error(err)
+    }
+  }
+
+  @action
+  public async deleteComment(id: string) {
+    try {
+      const howto = this.activeHowto
+      const user = this.activeUser
+      if (id && howto && user && howto.comments) {
+        const comments = toJS(howto.comments).filter(
+          comment => !(comment._creatorId === user._id && comment._id === id),
+        )
+
+        const updatedHowto: IHowto = {
+          ...toJS(howto),
+          comments,
+        }
+
+        const dbRef = this.db
+          .collection<IHowto>(COLLECTION_NAME)
+          .doc(updatedHowto._id)
+
+        await dbRef.set(updatedHowto)
+
+        // Refresh the active howto
+        this.activeHowto = await dbRef.get()
+      }
+    } catch (err) {
+      console.error(err)
+      throw new Error(err)
+    }
   }
 
   // upload a new or update an existing how-to
@@ -102,6 +250,12 @@ export class HowtoStore extends ModuleStore {
       .collection<IHowto>(COLLECTION_NAME)
       .doc((values as IHowtoDB)._id)
     const id = dbRef.id
+
+    // keep comments if doc existed previously
+    const existingDoc = await dbRef.get()
+    const comments =
+      existingDoc && existingDoc.comments ? existingDoc.comments : []
+
     const user = this.activeUser as IUser
     try {
       // upload any pending images, avoid trying to re-upload images previously saved
@@ -133,6 +287,7 @@ export class HowtoStore extends ModuleStore {
       const howTo: IHowto = {
         ...values,
         _createdBy: values._createdBy ? values._createdBy : user.userName,
+        comments,
         cover_image: processedCover,
         steps: processedSteps,
         files: processedFiles,
@@ -194,7 +349,15 @@ export class HowtoStore extends ModuleStore {
     }
     return stepsWithImgMeta
   }
+
+  /** As users retain their own list of voted howtos lookup the current howto from the active user vote stats */
+  get userVotedActiveHowToUseful(): boolean {
+    const howtoId = this.activeHowto!._id
+    const userVotedHowtos = this.activeUser?.votedUsefulHowtos || {}
+    return userVotedHowtos[howtoId] ? true : false
+  }
 }
+
 interface IHowToUploadStatus {
   Start: boolean
   Cover: boolean

@@ -1,0 +1,15 @@
+{
+  "___note___": "This config simply serves to build type declarations to allow import from src into functions",
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "noEmit": false,
+    "outDir": "./lib",
+    "emitDeclarationOnly": true,
+    "types": ["jest"],
+    "rootDir": "src",
+    "paths": {
+      // fix https://github.com/microsoft/TypeScript/issues/29808
+    }
+  }
+}

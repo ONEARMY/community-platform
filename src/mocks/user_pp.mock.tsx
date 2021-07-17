@@ -87,6 +87,7 @@ export const MOCK_USER_WORKSPACE: IUserPP = {
 }
 export const MOCK_USER_COLLECTION: IUserPP = {
   verified: true,
+  badges: { verified: true },
   userName: 'collection-username',
   about: 'We are collecting plastic in city center',
   ...MOCK_DB_META(),
@@ -137,9 +138,11 @@ export const MOCK_USER_COLLECTION: IUserPP = {
   openingHours: [],
   collectedPlasticTypes: [],
   machineBuilderXp: [],
+  votedUsefulHowtos: {},
 }
 export const MOCK_USER_MEMBER: IUserPP = {
   verified: true,
+  badges: { verified: false },
   userName: 'member-username',
   about: "I'm just a member of this community that share knowledge",
   ...MOCK_DB_META(),
@@ -189,9 +192,11 @@ export const MOCK_USER_MEMBER: IUserPP = {
   openingHours: [],
   collectedPlasticTypes: [],
   machineBuilderXp: [],
+  votedUsefulHowtos: {},
 }
 export const MOCK_USER_COMMUNITY: IUserPP = {
   verified: true,
+  badges: { verified: true },
   userName: 'community-username',
   about: 'We are building a local community to fight plastic waste',
   ...MOCK_DB_META(),
@@ -243,9 +248,11 @@ export const MOCK_USER_COMMUNITY: IUserPP = {
   openingHours: [],
   collectedPlasticTypes: [],
   machineBuilderXp: [],
+  votedUsefulHowtos: {},
 }
 export const MOCK_USER_MACHINE: IUserPP = {
   verified: true,
+  badges: { verified: true },
   userName: 'community-username',
   about: 'We are building machine to recycle plastic',
   ...MOCK_DB_META(),
@@ -297,6 +304,7 @@ export const MOCK_USER_MACHINE: IUserPP = {
   openingHours: [],
   collectedPlasticTypes: [],
   machineBuilderXp: [],
+  votedUsefulHowtos: {},
 }
 
 export const PLASTIC_TYPES: IPlasticType[] = [

@@ -8,10 +8,11 @@ import { UserStore } from 'src/stores/User/user.store'
 import { Button } from 'src/components/Button'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
-import HowToCard from 'src/components/HowToCard/HowToCard'
+import HowToCard from './HowToCard'
 import Heading from 'src/components/Heading'
 import { Loader } from 'src/components/Loader'
 import { VirtualizedFlex } from 'src/components/VirtualizedFlex/VirtualizedFlex'
+import SearchInput from 'src/components/SearchInput'
 
 interface InjectedProps {
   howtoStore?: HowtoStore
@@ -21,6 +22,20 @@ interface InjectedProps {
 interface IState {
   isLoading: boolean
   // totalHowtoColumns: number
+}
+
+// Update query params for search and tags
+const updateQueryParams = (url: string, key: string, val: string) => {
+  const newUrl = new URL(url)
+  const urlParams = new URLSearchParams(newUrl.search)
+  if (val) {
+    urlParams.set(key, val)
+  } else {
+    urlParams.delete(key)
+  }
+  newUrl.search = urlParams.toString()
+
+  window.history.pushState({ path: newUrl.toString() }, '', newUrl.toString())
 }
 
 // First we use the @inject decorator to bind to the howtoStore state
@@ -35,13 +50,32 @@ export class HowtoList extends React.Component<any, IState> {
     this.state = {
       isLoading: true,
     }
+    if (props.location.search) {
+      const searchParams = new URLSearchParams(props.location.search)
+
+      const tagQuery = searchParams.get('tags')?.toString()
+      if (tagQuery) {
+        const tags = {}
+        tagQuery.split(',').forEach(tag => {
+          tags[tag] = true
+        })
+
+        this.props.howtoStore.updateSelectedTags(tags)
+      }
+
+      const searchQuery = searchParams.get('search')?.toString()
+      if (searchQuery) {
+        this.props.howtoStore.updateSearchValue(searchQuery)
+      }
+    }
   }
   get injected() {
     return this.props as InjectedProps
   }
 
   public render() {
-    const { filteredHowtos, selectedTags } = this.props.howtoStore
+    const { filteredHowtos, selectedTags, searchValue } = this.props.howtoStore
+
     return (
       <>
         <Flex py={26}>
@@ -56,11 +90,29 @@ export class HowtoList extends React.Component<any, IState> {
         >
           <Flex width={[1, 1, 0.2]} mb={['10px', '10px', 0]}>
             <TagsSelect
-              onChange={tags => this.props.howtoStore.updateSelectedTags(tags)}
+              value={selectedTags}
+              onChange={tags => {
+                updateQueryParams(
+                  window.location.href,
+                  'tags',
+                  Object.keys(tags).join(','),
+                )
+                this.props.howtoStore.updateSelectedTags(tags)
+              }}
               category="how-to"
               styleVariant="filter"
               placeholder="Filter by tags"
               relevantTagsItems={filteredHowtos}
+            />
+          </Flex>
+          <Flex ml={[0, 0, '8px']} mr={[0, 0, 'auto']} mb={['10px', '10px', 0]}>
+            <SearchInput
+              value={searchValue}
+              placeholder="Search for a how-to"
+              onChange={value => {
+                updateQueryParams(window.location.href, 'search', value)
+                this.props.howtoStore.updateSearchValue(value)
+              }}
             />
           </Flex>
           <Flex justifyContent={['flex-end', 'flex-end', 'auto']}>
@@ -84,7 +136,8 @@ export class HowtoList extends React.Component<any, IState> {
           {filteredHowtos.length === 0 ? (
             <Flex>
               <Heading auxiliary txtcenter width={1}>
-                {Object.keys(selectedTags).length === 0 ? (
+                {Object.keys(selectedTags).length === 0 &&
+                searchValue.length === 0 ? (
                   <Loader />
                 ) : (
                   'No how-tos to show'
@@ -92,7 +145,11 @@ export class HowtoList extends React.Component<any, IState> {
               </Heading>
             </Flex>
           ) : (
-            <Flex justifyContent={'center'} mx={-4}>
+            <Flex
+              justifyContent={'center'}
+              mx={-4}
+              data-cy="howtolist-flex-container"
+            >
               <VirtualizedFlex
                 data={filteredHowtos}
                 renderItem={data => (

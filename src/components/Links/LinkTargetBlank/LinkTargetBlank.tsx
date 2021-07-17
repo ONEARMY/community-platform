@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Link } from 'rebass'
 import ImageTargetBlank from 'src/assets/icons/link-target-blank.svg'
 import { zIndex } from 'src/themes/styled.theme'

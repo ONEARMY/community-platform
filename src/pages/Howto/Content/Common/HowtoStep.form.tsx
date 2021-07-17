@@ -1,4 +1,4 @@
-import React from 'react'
+import { PureComponent } from 'react';
 import { Field } from 'react-final-form'
 import { TextAreaField, InputField } from 'src/components/Form/Fields'
 import Heading from 'src/components/Heading'
@@ -12,6 +12,7 @@ import theme from 'src/themes/styled.theme'
 import { IHowtoStep } from 'src/models/howto.models'
 import { IUploadedFileMeta } from 'src/stores/storage'
 import { required } from 'src/utils/validators'
+import { COMPARISONS } from 'src/utils/comparisons'
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;
@@ -36,7 +37,7 @@ const Label = styled.label`
   margin-bottom: ${theme.space[2] + 'px'};
 `
 
-class HowtoStep extends React.PureComponent<IProps, IState> {
+class HowtoStep extends PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
@@ -147,6 +148,7 @@ class HowtoStep extends React.PureComponent<IProps, IState> {
             maxLength="30"
             validate={required}
             validateFields={[]}
+            isEqual={COMPARISONS.textInput}
           />
         </Flex>
         <Flex flexDirection="column" mb={3}>
@@ -160,6 +162,7 @@ class HowtoStep extends React.PureComponent<IProps, IState> {
             style={{ resize: 'vertical', height: '300px' }}
             validate={required}
             validateFields={[]}
+            isEqual={COMPARISONS.textInput}
           />
         </Flex>
         <Label htmlFor={`${step}.text`}>Upload image(s) for this step *</Label>
@@ -169,6 +172,7 @@ class HowtoStep extends React.PureComponent<IProps, IState> {
               hasText={false}
               name={`${step}.images[0]`}
               component={ImageInputField}
+              isEqual={COMPARISONS.image}
             />
           </ImageInputFieldWrapper>
           <ImageInputFieldWrapper data-cy="step-image-1">
@@ -176,6 +180,7 @@ class HowtoStep extends React.PureComponent<IProps, IState> {
               hasText={false}
               name={`${step}.images[1]`}
               component={ImageInputField}
+              isEqual={COMPARISONS.image}
             />
           </ImageInputFieldWrapper>
           <ImageInputFieldWrapper data-cy="step-image-2">
@@ -183,6 +188,7 @@ class HowtoStep extends React.PureComponent<IProps, IState> {
               hasText={false}
               name={`${step}.images[2]`}
               component={ImageInputField}
+              isEqual={COMPARISONS.image}
             />
           </ImageInputFieldWrapper>
         </Flex>
@@ -195,6 +201,7 @@ class HowtoStep extends React.PureComponent<IProps, IState> {
             placeholder="https://youtube.com/watch?v="
             validate={url => this.validateMedia(url)}
             validateFields={[]}
+            isEqual={COMPARISONS.textInput}
           />
         </Flex>
       </Flex>

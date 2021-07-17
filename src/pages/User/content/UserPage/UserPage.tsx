@@ -11,7 +11,9 @@ import {
 import { UserStore } from 'src/stores/User/user.store'
 import Heading from 'src/components/Heading'
 import { Box, Image } from 'rebass'
+// import slick and styles
 import Slider from 'react-slick'
+import 'src/assets/css/slick.min.css'
 import styled from 'styled-components'
 import Icon from 'src/components/Icons'
 import Flex from 'src/components/Flex'
@@ -35,8 +37,8 @@ import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 
 import EventsIcon from 'src/assets/icons/icon-events.svg'
-// import ExpertIcon from 'src/assets/icons/icon-expert.svg'
 import HowToCountIcon from 'src/assets/icons/icon-how-to.svg'
+import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
 // import V4MemberIcon from 'src/assets/icons/icon-v4-member.svg'
 
 import { IUploadedFileMeta } from 'src/stores/storage'
@@ -140,6 +142,9 @@ const ProfileWrapper = styled(Box)`
   border: 2px solid black;
   border-radius: 10px;
   overflow: hidden;
+  max-width: 1000px;
+  width: 100%;
+  align-self: center;
 `
 
 const ProfileWrapperCarousel = styled.div``
@@ -220,7 +225,8 @@ export class UserPage extends React.Component<
     return this.props as InjectedProps
   }
 
-  public async componentWillMount() {
+  /* eslint-disable @typescript-eslint/naming-convention*/
+  public async UNSAFE_componentWillMount() {
     const userid = this.props.match.params.id
     const userData = await this.injected.userStore.getUserProfile(userid)
     this.setState({
@@ -242,17 +248,16 @@ export class UserPage extends React.Component<
 
     return (
       <UserStatsBox>
-        {/* {isExpert && (
-          <UserStatsBoxItem>
-            <ElWithBeforeIcon IconUrl={ExpertIcon} height="25px">
-              Expert
-            </ElWithBeforeIcon>
+        {user.badges?.verified && (
+          <UserStatsBoxItem style={{ marginBottom: '15px' }}>
+            <Image src={VerifiedBadgeIcon} width="22px" height="22px" />
+            <Box ml="5px">Verified</Box>
           </UserStatsBoxItem>
-        )} */}
+        )}
         {user.location && (
           <Link color={'black'} to={'/map/#' + user.userName}>
             <UserStatsBoxItem>
-              <Icon glyph="location-on" size="25"></Icon>
+              <Icon glyph="location-on" size="22"></Icon>
               <Box ml="5px">{user.location?.country}</Box>
             </UserStatsBoxItem>
           </Link>

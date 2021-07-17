@@ -35,7 +35,7 @@ const ModalContainerInner = styled(Box)`
   border-radius: 5px;
 `
 
-const ModalLink = styled(NavLink).attrs(({ name }) => ({
+const ModalLink = styled(NavLink).attrs(() => ({
   activeClassName: 'current',
 }))`
   z-index: ${zIndex.modalProfile};

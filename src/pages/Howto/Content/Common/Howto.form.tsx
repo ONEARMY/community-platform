@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { RouteComponentProps, Prompt } from 'react-router'
+import { RouteComponentProps } from 'react-router'
 import { Form, Field } from 'react-final-form'
 import styled from 'styled-components'
 import { FieldArray } from 'react-final-form-arrays'
@@ -18,7 +18,7 @@ import Flex from 'src/components/Flex'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { FileInputField } from 'src/components/Form/FileInput.field'
-import posed, { PoseGroup } from 'react-pose'
+import { motion, AnimatePresence } from 'framer-motion'
 import { inject, observer } from 'mobx-react'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import { PostingGuidelines } from './PostingGuidelines'
@@ -30,6 +30,8 @@ import { HowToSubmitStatus } from './SubmitStatus'
 import { required } from 'src/utils/validators'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
+import { COMPARISONS } from 'src/utils/comparisons'
+import { UnsavedChangesDialog } from 'src/components/Form/UnsavedChangesDialog'
 
 interface IState {
   formSaved: boolean
@@ -37,7 +39,6 @@ interface IState {
   showSubmitModal?: boolean
   editCoverImg?: boolean
   fileEditMode?: boolean
-  draft: boolean
 }
 interface IProps extends RouteComponentProps<any> {
   formValues: any
@@ -47,29 +48,32 @@ interface IInjectedProps extends IProps {
   howtoStore: HowtoStore
 }
 
-const AnimationContainer = posed.div({
-  // use flip pose to prevent default spring action on list item removed
-  flip: {
-    transition: {
-      // type: 'tween',
-      // ease: 'linear',
+const AnimationContainer = (props: any) => {
+  const variants = {
+    pre: { 
+      opacity: 0
     },
-  },
-  // use a pre-enter pose as otherwise default will be the exit state and so will animate
-  // horizontally as well
-  preEnter: {
-    opacity: 0,
-  },
-  enter: {
-    opacity: 1,
-    duration: 200,
-    applyAtStart: { display: 'block' },
-  },
-  exit: {
-    applyAtStart: { display: 'none' },
-    duration: 200,
-  },
-})
+    enter: {
+      opacity: 1,
+      duration: .200,
+      display: "block",
+    },
+    post: {
+      display: "none",
+      duration: .200,
+      top: '-100%',
+    },
+  }
+  return (
+    <motion.div layout
+      initial="pre"
+      animate="enter"
+      exit="post"
+      variants={variants}>
+        { props.children }
+    </motion.div>
+  )
+}
 
 const FormContainer = styled.form`
   width: 100%;
@@ -84,7 +88,9 @@ const Label = styled.label`
 @inject('howtoStore')
 @observer
 export class HowtoForm extends React.PureComponent<IProps, IState> {
+  isDraft = false
   uploadRefs: { [key: string]: UploadedFile | null } = {}
+  formContainerRef = React.createRef<HTMLElement>()
   constructor(props: any) {
     super(props)
     this.state = {
@@ -93,22 +99,26 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
       editCoverImg: false,
       fileEditMode: false,
       showSubmitModal: false,
-      draft: props.moderation === 'draft',
     }
+    this.isDraft = props.moderation === 'draft'
   }
 
+  /** When submitting from outside the form dispatch an event from the form container ref to trigger validation */
   private trySubmitForm = (draft: boolean) => {
-    this.setState({ draft }, () => {
-      // Save requested draft value into state and then trigger form submit
-      const form = document.getElementById('howtoForm')
-      if (typeof form !== 'undefined' && form !== null) {
-        form.dispatchEvent(new Event('submit', { cancelable: true }))
-        this.setState({ showSubmitModal: true })
-      }
-    })
+    this.isDraft = draft
+    const formContainerRef = this.formContainerRef.current
+    // dispatch submit from the element
+    if (formContainerRef) {
+      // https://github.com/final-form/react-final-form/issues/878
+      formContainerRef.dispatchEvent(
+        new Event('submit', { cancelable: true, bubbles: true }),
+      )
+    }
   }
   public onSubmit = async (formValues: IHowtoFormInput) => {
-    formValues.moderation = this.state.draft ? 'draft' : 'awaiting-moderation'
+    this.setState({ showSubmitModal: true })
+    formValues.moderation = this.isDraft ? 'draft' : 'awaiting-moderation'
+    console.log('submitting form', formValues)
     await this.store.uploadHowTo(formValues)
   }
 
@@ -120,7 +130,9 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
   }
 
   public validateTitle = async (value: any) => {
-    return this.store.validateTitleForSlug(value, 'howtos')
+    const originalId =
+      this.props.parentType === 'edit' ? this.props.formValues._id : undefined
+    return this.store.validateTitleForSlug(value, 'howtos', originalId)
   }
 
   // automatically generate the slug when the title changes
@@ -130,6 +142,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
       slug: title => stripSpecialCharacters(title).toLowerCase(),
     },
   })
+
   public render() {
     const { formValues, parentType } = this.props
     const { fileEditMode, showSubmitModal } = this.state
@@ -144,12 +157,6 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
             }}
           />
         )}
-        <Prompt
-          when={!this.injected.howtoStore.uploadStatus.Complete}
-          message={
-            'You have unsaved changes. Are you sure you want to leave this page?'
-          }
-        />
         <Form
           onSubmit={v => {
             this.onSubmit(v as IHowtoFormInput)
@@ -160,12 +167,19 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
           }}
           validateOnBlur
           decorators={[this.calculatedFields]}
-          render={({ submitting, values, invalid, errors, handleSubmit }) => {
-            const disabled = invalid || submitting
+          render={({ submitting, handleSubmit }) => {
             return (
               <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
+                <UnsavedChangesDialog
+                  uploadComplete={this.store.uploadStatus.Complete}
+                />
+
                 <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} mt={4}>
-                  <FormContainer id="howtoForm" onSubmit={handleSubmit}>
+                  <FormContainer
+                    ref={this.formContainerRef as any}
+                    id="howtoForm"
+                    onSubmit={handleSubmit}
+                  >
                     {/* How To Info */}
                     <Flex flexDirection={'column'}>
                       <Flex
@@ -223,11 +237,8 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 name="title"
                                 data-cy="intro-title"
                                 validateFields={[]}
-                                validate={value =>
-                                  this.props.parentType === 'create'
-                                    ? this.validateTitle(value)
-                                    : false
-                                }
+                                validate={this.validateTitle}
+                                isEqual={COMPARISONS.textInput}
                                 component={InputField}
                                 maxLength="50"
                                 placeholder="Make a chair from.. (max 50 characters)"
@@ -239,6 +250,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 name="tags"
                                 component={TagsSelectField}
                                 category="how-to"
+                                isEqual={COMPARISONS.tags}
                               />
                             </Flex>
                             <Flex flexDirection={'column'} mb={3}>
@@ -250,6 +262,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 name="time"
                                 validate={required}
                                 validateFields={[]}
+                                isEqual={COMPARISONS.textInput}
                                 options={TIME_OPTIONS}
                                 component={SelectField}
                                 data-cy="time-select"
@@ -267,6 +280,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 data-cy="difficulty-select"
                                 validate={required}
                                 validateFields={[]}
+                                isEqual={COMPARISONS.textInput}
                                 component={SelectField}
                                 options={DIFFICULTY_OPTIONS}
                                 placeholder="How hard is it?"
@@ -282,6 +296,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 data-cy="intro-description"
                                 validate={required}
                                 validateFields={[]}
+                                isEqual={COMPARISONS.textInput}
                                 component={TextAreaField}
                                 style={{
                                   resize: 'none',
@@ -347,6 +362,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 id="cover_image"
                                 name="cover_image"
                                 validate={required}
+                                isEqual={COMPARISONS.image}
                                 component={ImageInputField}
                               />
                             </Box>
@@ -360,10 +376,10 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                       </Flex>
 
                       {/* Steps Info */}
-                      <FieldArray name="steps">
+                      <FieldArray name="steps" isEqual={COMPARISONS.step}>
                         {({ fields }) => (
                           <>
-                            <PoseGroup preEnterPose="preEnter">
+                            <AnimatePresence>
                               {fields.map((name, index: number) => (
                                 <AnimationContainer
                                   key={fields.value[index]._animationKey}
@@ -384,7 +400,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   />
                                 </AnimationContainer>
                               ))}
-                            </PoseGroup>
+                            </AnimatePresence>
                             <Flex>
                               <Button
                                 icon={'add'}
@@ -438,7 +454,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                       onClick={() => this.trySubmitForm(true)}
                       width={1}
                       mt={[0, 0, 3]}
-                      variant={disabled ? 'secondary' : 'secondary'}
+                      variant="secondary"
                       type="submit"
                       disabled={submitting}
                       sx={{ display: 'block' }}
@@ -454,7 +470,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                       onClick={() => this.trySubmitForm(false)}
                       width={1}
                       mt={3}
-                      variant={disabled ? 'primary' : 'primary'}
+                      variant="primary"
                       type="submit"
                       disabled={submitting}
                       sx={{ mb: ['40px', '40px', 0] }}

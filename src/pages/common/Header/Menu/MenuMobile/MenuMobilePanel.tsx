@@ -1,4 +1,4 @@
-import React from 'react'
+import { Component } from 'react'
 import { COMMUNITY_PAGES } from 'src/pages/PageList'
 import theme from 'src/themes/styled.theme'
 import styled from 'styled-components'
@@ -7,6 +7,7 @@ import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
 import MenuMobileExternalLink from './MenuMobileExternalLink'
 import { BAZAR_URL, GLOBAL_SITE_URL } from 'src/utils/urls'
+import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
 const PanelContainer = styled(Box)`
   width: 100%;
@@ -31,29 +32,38 @@ const PanelMenu = styled(Box)`
   overflow: visible;
   min-width: 200px;
 `
-export const PanelItem = styled(Box)`
+export const PanelItem = styled(Box as any)`
   padding: ${theme.space[3]}px 0px;
 `
 
-export const MenuMobileLinkContainer = styled(Box)`
+export const MenuMobileLinkContainer = styled(Box as any)`
   border-top: 1px solid #ababac;
   border-bottom: 1px solid #ababac;
   margin-top: 5px;
 `
 
-export class MenuMobilePanel extends React.Component {
+export class MenuMobilePanel extends Component {
   render() {
     return (
       <>
         <PanelContainer>
           <PanelMenu>
-            {COMMUNITY_PAGES.map(page => (
-              <MenuMobileLink
-                path={page.path}
-                content={page.title}
-                key={page.path}
-              />
-            ))}
+            {COMMUNITY_PAGES.map(page => {
+              const link = (
+                <MenuMobileLink
+                  path={page.path}
+                  content={page.title}
+                  key={page.path}
+                />
+              )
+              return page.requiredRole ? (
+                <AuthWrapper roleRequired={page.requiredRole} key={page.path}>
+                  {link}
+                </AuthWrapper>
+              ) : (
+                link
+              )
+            })}
             <Profile isMobile={true} />
             <MenuMobileLinkContainer>
               <MenuMobileExternalLink content={'Bazar'} href={BAZAR_URL} />

@@ -1,6 +1,6 @@
 import { ModuleStore } from '../common/module.store'
 import { RootStore } from '..'
-import { action, observable } from 'mobx'
+import { action, observable, makeObservable } from 'mobx'
 import { IUser, UserRole } from 'src/models/user.models'
 import { ITag } from 'src/models/tags.model'
 import { functions } from 'src/utils/firebase'
@@ -16,10 +16,13 @@ export class AdminStore extends ModuleStore {
   @observable
   public superAdmins: IUser[] = []
   @observable
+  public betaTesters: IUser[] = []
+  @observable
   public tags: ITag[] = []
   // eslint-disable-next-line
   constructor(rootStore: RootStore) {
     super(rootStore)
+    makeObservable(this)
   }
 
   /*********************************************************************************
@@ -29,6 +32,7 @@ export class AdminStore extends ModuleStore {
   public async init() {
     this.admins = await this._getUsersByRole('admin')
     this.superAdmins = await this._getUsersByRole('admin')
+    this.betaTesters = await this._getUsersByRole('beta-tester')
   }
   public async addUserRole(username: string, role: UserRole) {
     const userRef = this.db.collection<IUser>('users').doc(username)

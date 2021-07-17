@@ -1,4 +1,3 @@
-import React from 'react'
 import { IFieldProps } from './Fields'
 import { LocationSearch } from '../LocationSearch/LocationSearch'
 
@@ -10,7 +9,6 @@ interface IExtendedFieldProps extends IFieldProps {
 
 export const LocationSearchField = ({
   input,
-  meta,
   customChange,
   ...rest
 }: IExtendedFieldProps) => (

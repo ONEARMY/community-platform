@@ -44,12 +44,8 @@
     ]
   },
   "functions": {
-    "predeploy": [
-      "yarn --cwd \"$RESOURCE_DIR\" install",
-      "npm --prefix \"$RESOURCE_DIR\" run lint",
-      "npm --prefix \"$RESOURCE_DIR\" run build"
-    ],
-    "source": "functions"
+    "predeploy": ["yarn workspace functions build"],
+    "source": "functions/dist"
   },
   "emulators": {
     "functions": {

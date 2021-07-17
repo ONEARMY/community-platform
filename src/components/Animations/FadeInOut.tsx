@@ -1,5 +1,5 @@
 import * as React from 'react'
-import posed, { PoseGroup } from 'react-pose'
+import { motion } from 'framer-motion'
 
 interface IProps {
   show: boolean
@@ -8,10 +8,17 @@ interface IState {
   show: boolean
 }
 
-const AnimationContainer = posed.div({
-  enter: { opacity: 1 },
-  exit: { y: 5, opacity: 0 },
-})
+const AnimationContainer = (props?: React.ReactNode) => {
+  return (
+    <motion.div layout
+      key={'animationContainer'}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ y: 5, opacity: 0 }}>
+      { props }
+    </motion.div>
+  )
+}
 
 export class FadeInOut extends React.Component<IProps, IState> {
   constructor(props: IProps) {
@@ -25,14 +32,6 @@ export class FadeInOut extends React.Component<IProps, IState> {
   }
 
   render() {
-    return (
-      <PoseGroup>
-        {this.state.show && (
-          <AnimationContainer key="animationContainer">
-            {this.props.children}
-          </AnimationContainer>
-        )}
-      </PoseGroup>
-    )
+      return this.state.show ? AnimationContainer(this.props.children) : AnimationContainer();
   }
 }

@@ -6,11 +6,11 @@
     "db:teardown": "TODO"
   },
   "dependencies": {
-    "cypress": "7.4.0",
-    "cypress-file-upload": "5.0.7",
+    "cypress": "7.6.0",
+    "cypress-file-upload": "5.0.8",
     "oa-shared": "1.0.0"
   },
   "devDependencies": {
-    "@cypress/webpack-preprocessor": "^5.7.0"
+    "@cypress/webpack-preprocessor": "^5.9.1"
   }
 }

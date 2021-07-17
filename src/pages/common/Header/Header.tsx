@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
 import MenuDesktop from 'src/pages/common/Header/Menu/MenuDesktop'
 import MenuMobilePanel from 'src/pages/common/Header/Menu/MenuMobile/MenuMobilePanel'
-import posed, { PoseGroup } from 'react-pose'
+import { motion } from 'framer-motion'
 import Logo from 'src/pages/common/Header/Menu/Logo/Logo'
 import theme from 'src/themes/styled.theme'
 import HamburgerMenu from 'react-hamburger-menu'
@@ -40,18 +40,27 @@ const DesktopMenuWrapper = styled(Flex)`
   }
 `
 
-const AnimationContainer = posed.div({
-  enter: {
-    duration: 250,
-    position: 'relative',
-    top: '0',
-  },
-  exit: {
-    duration: 250,
-    position: 'relative',
-    top: '-100%',
-  },
-})
+const AnimationContainer = (props: any) => {
+  const variants = {
+    visible: {
+      duration: .250,
+      top: '0',
+    },
+    hidden: {
+      duration: .250,
+      top: '-100%',
+    },
+  }
+  return (
+    <motion.div layout
+      style={{ position: "relative" }}
+      initial="hidden"
+      animate="visible"
+      variants={variants}>
+      { props.children }
+    </motion.div>
+  )
+}
 
 @inject('mobileMenuStore')
 @observer
@@ -102,7 +111,6 @@ export class Header extends Component<IProps> {
             </Flex>
           </MobileMenuWrapper>
         </Flex>
-        <PoseGroup>
           {menu.showMobilePanel && (
             <AnimationContainer key={'mobilePanelContainer'}>
               <MobileMenuWrapper>
@@ -110,7 +118,6 @@ export class Header extends Component<IProps> {
               </MobileMenuWrapper>
             </AnimationContainer>
           )}
-        </PoseGroup>
       </>
     )
   }

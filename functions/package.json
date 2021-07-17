@@ -2,9 +2,6 @@
   "name": "functions",
   "version": "1.0.0",
   "__NOTE__:": "avoid hoisting for webpack and other conflicts (should test, might be ok now)",
-  "installConfig": {
-    "hoistingLimits": "workspaces"
-  },
   "resolutions": {
     "webpack": "^4.46.0"
   },
@@ -27,7 +24,6 @@
   "main": "index.js",
   "dependencies": {
     "axios": "^0.21.1",
-    "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dateformat": "^3.0.3",
     "express": "^4.17.1",

@@ -129,14 +129,25 @@ export class MapsStore extends ModuleStore {
    * set undefined to remove any active popup
    */
   @action
-  public async setActivePin(pin?: IMapPin) {
+  public async setActivePin(pin?: IMapPin | IMapPinWithDetail) {
+    // HACK - CC - 2021-07-14 ignore hardcoded pin details, should be retrieved
+    // from profile on open instead (needs cleaning from DB)
+    if (pin && pin.hasOwnProperty('detail')) {
+      delete pin['detail']
+    }
     this.activePin = pin
     if (pin) {
-      const detail: IMapPinDetail = IS_MOCK
-        ? generatePinDetails()
-        : await this.getUserProfilePin(pin._id)
-      this.activePin = { ...pin, detail }
+      const pinWithDetail = await this.getPinDetail(pin)
+      this.activePin = pinWithDetail
     }
+  }
+  // call additional action when pin detail received to inform mobx correctly of update
+  private async getPinDetail(pin: IMapPin) {
+    const detail: IMapPinDetail = IS_MOCK
+      ? generatePinDetails()
+      : await this.getUserProfilePin(pin._id)
+    const pinWithDetail: IMapPinWithDetail = { ...pin, detail }
+    return pinWithDetail
   }
 
   // get base pin geo information
@@ -145,12 +156,6 @@ export class MapsStore extends ModuleStore {
       .collection<IMapPin>(COLLECTION_NAME)
       .doc(id)
       .get()
-    /*
-    // Doesn't work on page load: activeUser is not populated ...
-    if(pin && (pin.moderation!='accepted' && !hasAdminRights(this.activeUser))){
-      return undefined
-    }
-*/
     return pin as IMapPin
   }
 
@@ -171,7 +176,8 @@ export class MapsStore extends ModuleStore {
     if (!hasAdminRights(this.activeUser)) {
       return false
     }
-    this.setPin(pin)
+    await this.setPin(pin)
+    this.setActivePin(pin)
   }
   public needsModeration(pin: IMapPin) {
     return needsModeration(pin, this.activeUser)
@@ -185,7 +191,7 @@ export class MapsStore extends ModuleStore {
       _id: user.userName,
       location: user.location!.latlng,
       type: user.profileType ? user.profileType : 'member',
-      moderation: 'awaiting-moderation',
+      moderation: 'awaiting-moderation', // NOTE - if pin previously accespted this will be updated on backend function
     }
     if (user.workspaceType) {
       pin.subType = user.workspaceType
@@ -214,6 +220,7 @@ export class MapsStore extends ModuleStore {
         shortDescription: '',
         name: username,
         profileUrl: `${window.location.origin}/u/${username}`,
+        verifiedBadge: false,
       }
     }
     const avatar = getUserAvatar(username)
@@ -229,7 +236,7 @@ export class MapsStore extends ModuleStore {
       shortDescription: u.mapPinDescription ? u.mapPinDescription : '',
       name: u.userName,
       profileUrl: `${window.location.origin}/u/${u.userName}`,
-      verifiedBadge: u.badges?.verified,
+      verifiedBadge: u.badges?.verified || false,
     }
   }
   @action

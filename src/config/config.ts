@@ -46,14 +46,16 @@ function getSiteVariant(
   env: typeof process.env,
 ): siteVariants {
   const devSiteVariant = localStorage.getItem('devSiteVariant')
-
+  if (devSiteVariant === 'preview') {
+    return 'preview'
+  }
+  if (devSiteVariant === 'localhost') {
+    return 'localhost'
+  }
   if (env.REACT_APP_SITE_VARIANT === 'test-ci') {
     return 'test-ci'
   }
-  if (
-    env.REACT_APP_SITE_VARIANT === 'preview' ||
-    devSiteVariant === 'preview'
-  ) {
+  if (env.REACT_APP_SITE_VARIANT === 'preview') {
     return 'preview'
   }
   switch (gitBranch) {

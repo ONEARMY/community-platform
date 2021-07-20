@@ -44,7 +44,7 @@ export class AdminBetaTesters extends React.Component<IProps, IState> {
     }
   }
 
-  removeAdmin = async (username: string) => {
+  removeBetaTester = async (username: string) => {
     this.setState({ errorMsg: undefined, updating: true })
     try {
       await this.props.adminStore!.removeUserRole(username, 'beta-tester')
@@ -64,11 +64,11 @@ export class AdminBetaTesters extends React.Component<IProps, IState> {
           {betaTesters.map(u => (
             <Flex key={u.userName}>
               <Text flex={1}>{u.userName}</Text>
-              <AuthWrapper roleRequired="super-admin">
+              <AuthWrapper roleRequired="admin">
                 <Button
                   icon="delete"
                   disabled={this.state.updating}
-                  onClick={() => this.removeAdmin(u.userName)}
+                  onClick={() => this.removeBetaTester(u.userName)}
                 />
               </AuthWrapper>
             </Flex>

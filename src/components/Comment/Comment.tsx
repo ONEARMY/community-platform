@@ -3,13 +3,13 @@ import { FaTrash, FaRegEdit } from 'react-icons/fa'
 import { Flex } from 'rebass'
 import { useCommonStores } from 'src'
 import { IComment } from 'src/models'
-import { hasAdminRights } from 'src/utils/helpers'
 import { CommentHeader } from './CommentHeader'
 import { Text } from 'src/components/Text'
 import { Modal } from '../Modal/Modal'
 import { TextAreaField } from '../Form/Fields'
 import { Field, Form } from 'react-final-form'
 import { Button } from 'src/components/Button'
+import { AuthWrapper } from '../Auth/AuthWrapper'
 
 export interface IProps extends IComment {}
 
@@ -38,20 +38,18 @@ export const Comment: React.FC<IProps> = ({
         {text}
       </Text>
 
-      {user && (user._id === _creatorId || hasAdminRights(user)) && (
-        <Flex ml="auto">
-          {user._id === _creatorId && (
-            <Text
-              style={{
-                cursor: 'pointer',
-              }}
-              mr={2}
-              fontSize="12px"
-              onClick={async () => setShowEditModal(true)}
-            >
-              edit <FaRegEdit />
-            </Text>
-          )}
+      <Flex ml="auto">
+        <AuthWrapper roleRequired="admin" additionalAdmins={[_creatorId]}>
+          <Text
+            style={{
+              cursor: 'pointer',
+            }}
+            mr={2}
+            fontSize="12px"
+            onClick={async () => setShowEditModal(true)}
+          >
+            edit <FaRegEdit />
+          </Text>
           <Text
             style={{
               cursor: 'pointer',
@@ -69,8 +67,8 @@ export const Comment: React.FC<IProps> = ({
           >
             delete <FaTrash color="red" />
           </Text>
-        </Flex>
-      )}
+        </AuthWrapper>
+      </Flex>
 
       {showEditModal && (
         <Modal width={600}>

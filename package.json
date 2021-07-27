@@ -1,6 +1,6 @@
 {
   "name": "one-army-community-platform",
-  "version": "1.5.5",
+  "version": "1.6.0",
   "workspaces": [
     "functions",
     "shared",

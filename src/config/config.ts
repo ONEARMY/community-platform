@@ -10,6 +10,8 @@ Dev config is hardcoded - You can find more information about potential security
 https://javebratt.com/hide-firebase-api/
 *****************************************************************************************/
 
+import { UserRole } from 'src/models'
+
 /*********************************************************************************************** /
                                         Dev/Staging
 /********************************************************************************************** */
@@ -36,16 +38,24 @@ const branch = e.REACT_APP_BRANCH as string
 // as both dev.onearmy.world and onearmy.world are production builds we can't use process.env to distinguish
 // will be set to one of 'localhost', 'staging' or 'production'
 
+// On dev sites user can override default role
+const devSiteRole: UserRole = localStorage.getItem('devSiteRole') as UserRole
+
 function getSiteVariant(
   gitBranch: string,
   env: typeof process.env,
 ): siteVariants {
-  const url = new URL(window.location.href)
-  const siteParam = url.searchParams.get('site')
+  const devSiteVariant = localStorage.getItem('devSiteVariant')
+  if (devSiteVariant === 'preview') {
+    return 'preview'
+  }
+  if (devSiteVariant === 'localhost') {
+    return 'localhost'
+  }
   if (env.REACT_APP_SITE_VARIANT === 'test-ci') {
     return 'test-ci'
   }
-  if (env.REACT_APP_SITE_VARIANT === 'preview' || siteParam === 'preview') {
+  if (env.REACT_APP_SITE_VARIANT === 'preview') {
     return 'preview'
   }
   switch (gitBranch) {
@@ -138,6 +148,7 @@ const firebaseConfigs: { [variant in siteVariants]: IFirebaseConfig } = {
 /********************************************************************************************** */
 
 export const SITE = siteVariant
+export const DEV_SITE_ROLE = devSiteRole
 export const FIREBASE_CONFIG = firebaseConfigs[siteVariant]
 export const ALGOLIA_SEARCH_CONFIG = algoliaSearchConfig
 export const ALGOLIA_PLACES_CONFIG = algoliaPlacesConfig

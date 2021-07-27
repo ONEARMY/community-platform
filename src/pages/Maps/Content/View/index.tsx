@@ -64,7 +64,8 @@ class MapView extends React.Component<IProps> {
     }
   }
 
-  private pinClicked(pin: IMapPin) {
+  private async pinClicked(pin: IMapPin) {
+    await this.injected.mapsStore.setActivePin(pin)
     this.props.history.push('/map#' + pin._id)
   }
 

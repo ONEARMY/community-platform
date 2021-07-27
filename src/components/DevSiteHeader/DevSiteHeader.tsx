@@ -1,6 +1,7 @@
-import { SITE, VERSION } from 'src/config/config'
+import { SITE, VERSION, DEV_SITE_ROLE } from 'src/config/config'
 import Text from 'src/components/Text'
 import theme from 'src/themes/styled.theme'
+import { UserRole } from 'src/models'
 import { Flex, Box } from 'rebass'
 import Select from 'react-select'
 
@@ -23,6 +24,21 @@ const DevSiteHeader = () => (
         <Text color={'white'} medium txtcenter flex="1">
           This is a dev version of the platform (v{VERSION})
         </Text>
+        <Flex data-cy="devSiteRoleSelectContainer" alignItems="center" ml={2}>
+          <Text color={'white'} medium mr="1" title={SITE}>
+            View as:
+          </Text>
+          <Box width="150px" mr={3}>
+            <Select
+              options={siteRoles}
+              placeholder="Role"
+              defaultValue={
+                siteRoles.find(s => s.value === DEV_SITE_ROLE) || siteRoles[0]
+              }
+              onChange={(s: any) => setSiteRole(s.value)}
+            />
+          </Box>
+        </Flex>
         <Flex data-cy="devSiteSelectContainer" alignItems="center">
           <Text color={'white'} medium mr="1" title={SITE}>
             Site:
@@ -45,13 +61,30 @@ const devSites = [
   { value: 'localhost', label: 'Dev' },
   { value: 'preview', label: 'Preview' },
 ]
+// dev site users can use either a default user profile or mock another admin role
+const siteRoles: { value: UserRole | null; label: string }[] = [
+  { value: null, label: 'User' },
+  { value: 'beta-tester', label: 'Beta Tester' },
+  { value: 'admin', label: 'Admin' },
+  // { value: 'super-admin', label: 'Super Admin' },
+]
 
-/** Use url search params to specify a site that will update from src/config */
+/** Use localStorage to specify a site that will update from src/config */
 const setSite = async (site: string) => {
-  const url = new URL(window.location.href)
-  url.searchParams.set('site', site)
   await clearCache(false)
-  window.location.href = url.href
+  localStorage.setItem('devSiteVariant', site)
+  localStorage.setItem('devSiteRole', DEV_SITE_ROLE)
+  window.location.reload()
+}
+
+/** Use localStorage to specify a role that can be applied while testing on dev sites */
+const setSiteRole = async (role: string) => {
+  if (role) {
+    localStorage.setItem('devSiteRole', role)
+  } else {
+    localStorage.removeItem('devSiteRole')
+  }
+  window.location.reload()
 }
 
 /** Delete local,session and indexedDB storage */

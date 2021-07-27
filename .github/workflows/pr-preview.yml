@@ -9,6 +9,8 @@ on:
     paths:
       - "src/**"
       - "functions/**"
+      - "package.json"
+      - "yarn.lock"
 jobs:
   build_and_preview:
     # NOTE - as we are going to check out and build from forks we also need to add manual

@@ -2,7 +2,7 @@ import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 import { UserStore } from 'src/stores/User/user.store'
 import { UserRole } from 'src/models/user.models'
-import { SITE } from 'src/config/config'
+import { SITE, DEV_SITE_ROLE } from 'src/config/config'
 
 /*
     Simple wrapper to only render a component if the user is logged in (plus optional user role required)
@@ -13,21 +13,38 @@ interface IProps {
   userStore?: UserStore
   roleRequired?: UserRole
   fallback?: React.ReactNode
+  /** Optional additional user IDs that have admin rights (e.g. content creators) */
+  additionalAdmins?: string[]
 }
 interface IState {}
 @inject('userStore')
 @observer
 export class AuthWrapper extends React.Component<IProps, IState> {
-  isUserAuthenticated() {
-    // allow full access to all pages when developing in localhost
-    if (SITE === 'localhost') {
+  isUserAuthorized() {
+    const { user } = this.props.userStore!
+    const { additionalAdmins } = this.props
+
+    // provide access to named users
+    if (additionalAdmins && user?._id && additionalAdmins.includes(user?._id)) {
       return true
     }
-    const { user } = this.props.userStore!
+
     const { roleRequired } = this.props
+    let userRoles = user?.userRoles || []
+    // if running dev or preview site allow user-overridden permissions (ignoring db user role)
+    if (SITE === 'localhost' || SITE === 'preview') {
+      // default ignore existing user roles
+      if (user) {
+        userRoles = []
+      }
+      if (DEV_SITE_ROLE) {
+        return DEV_SITE_ROLE === roleRequired
+      }
+    }
+    // otherwise use logged in user profile values
     if (user) {
       if (roleRequired) {
-        return user.userRoles && user.userRoles.includes(roleRequired)
+        return userRoles.includes(roleRequired)
       } else {
         return true
       }
@@ -36,8 +53,8 @@ export class AuthWrapper extends React.Component<IProps, IState> {
   }
 
   render() {
-    const isAuthenticated = this.isUserAuthenticated()
+    const isAuthorized = this.isUserAuthorized()
     const fallback = this.props.fallback || null
-    return isAuthenticated === true ? this.props.children : fallback
+    return isAuthorized === true ? this.props.children : fallback
   }
 }

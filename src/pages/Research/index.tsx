@@ -3,7 +3,6 @@ import {
   ResearchStore,
   ResearchStoreContext,
 } from 'src/stores/Research/research.store'
-import { AuthRoute } from '../common/AuthRoute'
 import { IPageMeta } from '../PageList'
 import ResearchRoutes from './research.routes'
 
@@ -27,8 +26,7 @@ function ResearchModuleContainer() {
   return (
     <ResearchStoreContext.Provider value={new ResearchStore()}>
       {/* <AuthRoute component={ResearchRoutes}      roleRequired={undefined}  /> */}
-      <Route component={ResearchRoutes}        />
-     
+      <Route component={ResearchRoutes} />
     </ResearchStoreContext.Provider>
   )
 }

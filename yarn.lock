@@ -14594,13 +14594,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"google-protobuf@npm:^3.17.3":
-  version: 3.17.3
-  resolution: "google-protobuf@npm:3.17.3"
-  checksum: 0a98f505041d138a9330dd4bc491ea153cab2372fdbf797c1c650062335ad17ffd5bee37980183875dc83fa92570cc651df1b92357810347dcb645c9e46eb992
-  languageName: node
-  linkType: hard
-
 "googleapis-common@npm:^4.4.0":
   version: 4.4.3
   resolution: "googleapis-common@npm:4.4.3"
@@ -19818,9 +19811,7 @@ fsevents@^1.2.7:
   version: 0.0.0-use.local
   resolution: "oa-scripts@workspace:scripts"
   dependencies:
-    google-protobuf: ^3.17.3
     oa-shared: 1.0.0
-    protobufjs: ^6.11.2
   languageName: unknown
   linkType: soft
 
@@ -22513,7 +22504,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"protobufjs@npm:^6.10.0, protobufjs@npm:^6.10.2, protobufjs@npm:^6.11.2, protobufjs@npm:^6.8.6":
+"protobufjs@npm:^6.10.0, protobufjs@npm:^6.10.2, protobufjs@npm:^6.8.6":
   version: 6.11.2
   resolution: "protobufjs@npm:6.11.2"
   dependencies:

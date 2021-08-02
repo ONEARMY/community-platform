@@ -6,20 +6,19 @@
     "webpack": "^4.46.0"
   },
   "scripts": {
+    "start": "firebase emulators:start --import ./scripts/data --export-on-exit",
+    "start:live": "npm run copyDevConfig && npm run serve",
     "lint": "tslint --project tsconfig.json",
     "build": "npm run compile:src && npm run webpack",
     "watch": "yarn tsc --watch",
     "webpack": "webpack",
     "compile:src": "tsc --build ../tsconfig.src-types.json",
     "copyDevConfig": "firebase functions:config:get > .runtimeconfig.json",
-    "copyDevConfigWin": "firebase functions:config:get | ac .runtimeconfig.json",
     "db:backup:local": "firestore-export -a service.json -b backup.json -p",
     "serve": "concurrently --kill-others \"npm run watch\" \"firebase emulators:start \"",
     "serve:only:functions": "concurrently --kill-others \"npm run watch\" \"firebase emulators:start --only functions\"",
     "shell": "npm run build && firebase functions:shell",
-    "deploy:dev": "firebase use default && firebase deploy --only functions",
-    "start": "npm run copyDevConfig && npm run serve",
-    "logs": "firebase functions:log"
+    "emulators:seed": "ts-node scripts/emulators/seed "
   },
   "main": "index.js",
   "dependencies": {

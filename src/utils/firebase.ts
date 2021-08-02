@@ -4,21 +4,29 @@ import 'firebase/auth'
 import 'firebase/storage'
 import 'firebase/functions'
 import 'firebase/database'
-import { FIREBASE_CONFIG } from 'src/config/config'
-
-// NOTE - This file will be removed when new DB integrated
-
+import { FIREBASE_CONFIG, SITE } from 'src/config/config'
 // initialise with config settings, additional firestore config to support future changes
+
 firebase.initializeApp(FIREBASE_CONFIG)
 
-// note, if also testing backend functions the emulated version can be accessed below
-// firebase.functions().useFunctionsEmulator('http://localhost:5001')
 // export firebase endpoints to be accessed by other functions
-export const firestore = firebase.firestore()
-export const rtdb = firebase.database()
-export const storage = firebase.storage()
-export const auth = firebase.auth()
-export const functions = firebase.functions()
+const firestore = firebase.firestore()
+const rtdb = firebase.database()
+const storage = firebase.storage()
+const auth = firebase.auth()
+const functions = firebase.functions()
+
+// use emulators when running on localhost:4000
+if (SITE === 'emulated_site') {
+  firestore.useEmulator('localhost', 4003)
+  rtdb.useEmulator('localhost', 4006)
+  storage.useEmulator('localhost', 4007)
+  auth.useEmulator(`http://localhost:4005`)
+  functions.useEmulator('localhost', 4002)
+}
+
+export { firestore, rtdb, storage, auth, functions }
+
 export const EmailAuthProvider = firebase.auth.EmailAuthProvider
 
 // want to also expose the default firebase user

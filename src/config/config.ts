@@ -45,12 +45,20 @@ function getSiteVariant(
   gitBranch: string,
   env: typeof process.env,
 ): siteVariants {
-  const devSiteVariant = localStorage.getItem('devSiteVariant')
+  const devSiteVariant: siteVariants = localStorage.getItem(
+    'devSiteVariant',
+  ) as any
   if (devSiteVariant === 'preview') {
     return 'preview'
   }
-  if (devSiteVariant === 'localhost') {
-    return 'localhost'
+  if (devSiteVariant === 'emulated_site') {
+    return 'emulated_site'
+  }
+  if (devSiteVariant === 'dev_site') {
+    return 'dev_site'
+  }
+  if (location.host === 'localhost:4000') {
+    return 'emulated_site'
   }
   if (env.REACT_APP_SITE_VARIANT === 'test-ci') {
     return 'test-ci'
@@ -64,7 +72,7 @@ function getSiteVariant(
     case 'master':
       return 'staging'
     default:
-      return 'localhost'
+      return 'dev_site'
   }
 }
 
@@ -97,7 +105,7 @@ if (siteVariant === 'production') {
 
 const firebaseConfigs: { [variant in siteVariants]: IFirebaseConfig } = {
   /** Sandboxed dev site, all features available for interaction */
-  localhost: {
+  dev_site: {
     apiKey: 'AIzaSyChVNSMiYxCkbGd9C95aChr9GxRJtW6NRA',
     authDomain: 'precious-plastics-v4-dev.firebaseapp.com',
     databaseURL: 'https://precious-plastics-v4-dev.firebaseio.com',
@@ -124,6 +132,12 @@ const firebaseConfigs: { [variant in siteVariants]: IFirebaseConfig } = {
     storageBucket: 'onearmy-test-ci.appspot.com',
     messagingSenderId: '174193431763',
   },
+  /** Same default endpoint as test-ci, but most functions will be overwritten by emulators */
+  emulated_site: {
+    apiKey: 'AIzaSyDAxS_7M780mI3_tlwnAvpbaqRsQPlmp64',
+    projectId: 'onearmy-test-ci',
+    storageBucket: 'default-bucket',
+  } as any,
   /** Production/live backend with master branch frontend */
   staging: {
     apiKey: 'AIzaSyChVNSMiYxCkbGd9C95aChr9GxRJtW6NRA',
@@ -176,7 +190,8 @@ interface IAlgoliaConfig {
   applicationID: string
 }
 type siteVariants =
-  | 'localhost'
+  | 'emulated_site'
+  | 'dev_site'
   | 'test-ci'
   | 'staging'
   | 'production'

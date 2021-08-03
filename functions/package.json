@@ -6,19 +6,18 @@
     "webpack": "^4.46.0"
   },
   "scripts": {
-    "start": "firebase emulators:start --import ./scripts/data --export-on-exit",
-    "start:live": "npm run copyDevConfig && npm run serve",
+    "start": "ts-node scripts/start.ts",
+    "serve:emulated": "firebase emulators:start --import=./data/export --export-on-exit=./data/export",
+    "serve:live": "npm run copyDevConfig && npm run serve",
     "lint": "tslint --project tsconfig.json",
     "build": "npm run compile:src && npm run webpack",
-    "watch": "yarn tsc --watch",
+    "watch": "npm run compile:src && webpack --watch",
     "webpack": "webpack",
     "compile:src": "tsc --build ../tsconfig.src-types.json",
     "copyDevConfig": "firebase functions:config:get > .runtimeconfig.json",
     "db:backup:local": "firestore-export -a service.json -b backup.json -p",
-    "serve": "concurrently --kill-others \"npm run watch\" \"firebase emulators:start \"",
-    "serve:only:functions": "concurrently --kill-others \"npm run watch\" \"firebase emulators:start --only functions\"",
     "shell": "npm run build && firebase functions:shell",
-    "emulators:seed": "ts-node scripts/emulators/seed "
+    "emulators:reset": "ts-node scripts/emulators-reset.ts"
   },
   "main": "index.js",
   "dependencies": {
@@ -39,6 +38,7 @@
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
+    "@types/concurrently": "^6.2.1",
     "@types/cors": "^2.8.8",
     "@types/dateformat": "^3.0.1",
     "@types/fs-extra": "^9.0.2",
@@ -50,8 +50,9 @@
     "@types/webpack-node-externals": "^2.5.1",
     "awesome-typescript-loader": "^5.2.1",
     "clean-webpack-plugin": "^4.0.0-alpha.0",
-    "concurrently": "^5.3.0",
+    "concurrently": "^6.2.0",
     "generate-json-webpack-plugin": "^1.0.0",
+    "jszip": "^3.7.0",
     "ts-node": "^10.0.0",
     "tslint": "^6.1.3",
     "typescript": "4.2.2",

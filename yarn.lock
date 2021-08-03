@@ -5812,6 +5812,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/concurrently@npm:^6.2.1":
+  version: 6.2.1
+  resolution: "@types/concurrently@npm:6.2.1"
+  dependencies:
+    "@types/node": "*"
+  checksum: a348f1f09cbf8cff7b901682eb554a1d1bdc4729f22a2e2486125877c0fb56f6f56631fc743df2484d0836e510cbfa37cad5f550ac11028dac07d3bc02251168
+  languageName: node
+  linkType: hard
+
 "@types/connect@npm:*":
   version: 3.4.35
   resolution: "@types/connect@npm:3.4.35"
@@ -9992,25 +10001,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"concurrently@npm:^5.3.0":
-  version: 5.3.0
-  resolution: "concurrently@npm:5.3.0"
-  dependencies:
-    chalk: ^2.4.2
-    date-fns: ^2.0.1
-    lodash: ^4.17.15
-    read-pkg: ^4.0.1
-    rxjs: ^6.5.2
-    spawn-command: ^0.0.2-1
-    supports-color: ^6.1.0
-    tree-kill: ^1.2.2
-    yargs: ^13.3.0
-  bin:
-    concurrently: bin/concurrently.js
-  checksum: c46bb460ea0fdf1a15232d84b6122e1ec56655043c154d2be70375ab6eafe04a9224d0da35af5bf190e09d85343bda7a670a886cc67e678fabc4996e9f41650f
-  languageName: node
-  linkType: hard
-
 "concurrently@npm:^6.2.0":
   version: 6.2.0
   resolution: "concurrently@npm:6.2.0"
@@ -14066,6 +14056,7 @@ fsevents@^1.2.7:
   resolution: "functions@workspace:functions"
   dependencies:
     "@types/axios": ^0.14.0
+    "@types/concurrently": ^6.2.1
     "@types/cors": ^2.8.8
     "@types/dateformat": ^3.0.1
     "@types/fs-extra": ^9.0.2
@@ -14078,7 +14069,7 @@ fsevents@^1.2.7:
     awesome-typescript-loader: ^5.2.1
     axios: ^0.21.1
     clean-webpack-plugin: ^4.0.0-alpha.0
-    concurrently: ^5.3.0
+    concurrently: ^6.2.0
     cors: ^2.8.5
     dateformat: ^3.0.3
     express: ^4.17.1
@@ -14088,6 +14079,7 @@ fsevents@^1.2.7:
     generate-json-webpack-plugin: ^1.0.0
     google-auth-library: ^6.1.1
     googleapis: ^61.0.0
+    jszip: ^3.7.0
     log-update: ^4.0.0
     oa-shared: ^1.0.0
     one-army-community-platform: ^1.5.0
@@ -15478,6 +15470,13 @@ fsevents@^1.2.7:
   version: 3.3.0
   resolution: "immediate@npm:3.3.0"
   checksum: 782748e9f02525960109b59738f123d0960bd857131f20ed851d27f664cec5b1528d10d145683652487df9b723c9fa6a01dc796c721e93b74362a722356649b7
+  languageName: node
+  linkType: hard
+
+"immediate@npm:~3.0.5":
+  version: 3.0.6
+  resolution: "immediate@npm:3.0.6"
+  checksum: e86d4d20e2da86f9a4629d9aee9d56dfae7d3a7ace7f569b0538f2ec2570d86b3cbdc52c546d23be2cfd28306670f44676fc833cd96d9506659b8c5ab8202ca4
   languageName: node
   linkType: hard
 
@@ -17535,6 +17534,18 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"jszip@npm:^3.7.0":
+  version: 3.7.0
+  resolution: "jszip@npm:3.7.0"
+  dependencies:
+    lie: ~3.3.0
+    pako: ~1.0.2
+    readable-stream: ~2.3.6
+    set-immediate-shim: ~1.0.1
+  checksum: 11e40657f5801bffaa5b52ea74ebe177d9ff2afb2af93bf3c28a7abf0a20fdd1c7175719be310d9d5266eb735bfb98b16d2065dffd0533de0d8871f3efad09c6
+  languageName: node
+  linkType: hard
+
 "junk@npm:^3.1.0":
   version: 3.1.0
   resolution: "junk@npm:3.1.0"
@@ -17773,6 +17784,15 @@ fsevents@^1.2.7:
     prelude-ls: ~1.1.2
     type-check: ~0.3.2
   checksum: 775861da38dcb7e5f1de5bea2a1c7ffaede6e9e8632cfbac76be145ecb295370f46bb41307613c283d66f1fee5d8cc448ca3323c4a02d0fb1e913b2f78de2abb
+  languageName: node
+  linkType: hard
+
+"lie@npm:~3.3.0":
+  version: 3.3.0
+  resolution: "lie@npm:3.3.0"
+  dependencies:
+    immediate: ~3.0.5
+  checksum: 6c758fbea382ca251d8f6f32b4066b4c57b4c5d574babc7c6abf7bd20e522a54bcd364dd95d6695103b189a005fcaf9e55d7c58a6c243d4ebdd0cc803898c8bd
   languageName: node
   linkType: hard
 
@@ -20461,7 +20481,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"pako@npm:~1.0.5":
+"pako@npm:~1.0.2, pako@npm:~1.0.5":
   version: 1.0.11
   resolution: "pako@npm:1.0.11"
   checksum: 71c60150b68220ec52a404f3c39a4ed38f750e42452b88fe0eb2e6b5c98e91f73f706444359b097aca1e6db83ef8fef50b5a9ec100e30a606cda6da8d45e5439
@@ -24751,7 +24771,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^6.3.3, rxjs@npm:^6.5.2, rxjs@npm:^6.6.3, rxjs@npm:^6.6.7":
+"rxjs@npm:^6.3.3, rxjs@npm:^6.6.3, rxjs@npm:^6.6.7":
   version: 6.6.7
   resolution: "rxjs@npm:6.6.7"
   dependencies:
@@ -25148,6 +25168,13 @@ resolve@^2.0.0-next.3:
   version: 2.0.0
   resolution: "set-blocking@npm:2.0.0"
   checksum: 0ac2403b0c2d39bf452f6d5d17dfd3cb952b9113098e1231cc0614c436e2f465637e39d27cf3b93556f5c59795e9790fd7e98da784c5f9919edeba4295ffeb29
+  languageName: node
+  linkType: hard
+
+"set-immediate-shim@npm:~1.0.1":
+  version: 1.0.1
+  resolution: "set-immediate-shim@npm:1.0.1"
+  checksum: be64b6800160830fec11aee59f88c7c20f9368510059673488f4373b2d83996337757bd9bf867356120d64762e2e6347272dd83438d452247e6f19be2fac36d2
   languageName: node
   linkType: hard
 
@@ -29123,7 +29150,7 @@ typescript@4.2.4:
   languageName: node
   linkType: hard
 
-"yargs@npm:^13.3.0, yargs@npm:^13.3.2":
+"yargs@npm:^13.3.2":
   version: 13.3.2
   resolution: "yargs@npm:13.3.2"
   dependencies:

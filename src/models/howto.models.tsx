@@ -25,6 +25,7 @@ export interface IHowto extends IHowtoFormInput, IModerable {
   steps: IHowtoStep[]
   // Comments were added in V2, old howto's may not have the property
   comments?: IComment[]
+  stats?: IHowtoStats
 }
 
 /**
@@ -34,6 +35,10 @@ export type IHowtoDB = IHowto & DBDoc
 
 export type IHowtoStats = {
   votedUsefulCount: number
+}
+
+export type IHowtoStatsDoc = {
+  [key: string]: IHowtoStats
 }
 
 export interface IHowtoStep extends IHowToStepFormInput {

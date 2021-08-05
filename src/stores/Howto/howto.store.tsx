@@ -6,6 +6,7 @@ import {
   IHowtoDB,
   IHowtoFormInput,
   IHowtoStats,
+  IHowtoStatsDoc,
   IHowtoStep,
   IHowToStepFormInput,
 } from 'src/models/howto.models'
@@ -38,6 +39,8 @@ export class HowtoStore extends ModuleStore {
   @observable
   public allHowtos: IHowtoDB[]
   @observable
+  public allHowtoStats: IHowtoStatsDoc
+  @observable
   public selectedTags: ISelectedTags
   @observable
   public searchValue: string
@@ -52,11 +55,19 @@ export class HowtoStore extends ModuleStore {
     this.allDocs$.subscribe((docs: IHowtoDB[]) => this.setAllHowtos(docs))
     this.selectedTags = {}
     this.searchValue = ''
+    this.setAllHowtoStats()
   }
 
   @action
   private setAllHowtos(docs: IHowtoDB[]) {
     this.allHowtos = docs.sort((a, b) => (a._created < b._created ? 1 : -1))
+  }
+
+  @action
+  private async setAllHowtoStats() {
+    const ref = this.db.collection<IHowtoStatsDoc>('howtos').doc(`stats`)
+    const howtoStats = await ref.get('server')
+    this.allHowtoStats = howtoStats || {}
   }
 
   @action
@@ -78,12 +89,11 @@ export class HowtoStore extends ModuleStore {
   @action
   private async loadHowtoStats(id?: string) {
     if (id) {
-      const ref = this.db
-        .collection<IHowtoStats>('howtos')
-        .doc(`${id}/stats/all`)
+      const ref = this.db.collection<IHowtoStatsDoc>('howtos').doc(`stats`)
       const howtoStats = await ref.get('server')
       console.log('howtoStats', howtoStats)
-      this.howtoStats = howtoStats || { votedUsefulCount: 0 }
+      this.howtoStats =
+        howtoStats && howtoStats[id] ? howtoStats[id] : { votedUsefulCount: 0 }
     }
   }
   @action
@@ -102,19 +112,27 @@ export class HowtoStore extends ModuleStore {
       this.selectedTags,
     )
     // HACK - ARH - 2019/12/11 filter unaccepted howtos, should be done serverside
-    const validHowtos = filterModerableItems(howtos, this.activeUser)
+    let validHowtos = filterModerableItems(howtos, this.activeUser)
 
     // If user searched, filter remaining howtos by the search query with Fuse
-    if (!this.searchValue) {
-      return validHowtos
-    } else {
+    if (this.searchValue) {
       const fuse = new Fuse(validHowtos, {
         keys: HOWTO_SEARCH_WEIGHTS,
       })
 
       // Currently Fuse returns objects containing the search items, hence the need to map. https://github.com/krisk/Fuse/issues/532
-      return fuse.search(this.searchValue).map(v => v.item)
+      validHowtos = fuse.search(this.searchValue).map(v => v.item)
     }
+
+    if (this.allHowtoStats) {
+      // Add useful counts to howtos
+      validHowtos.map(howto => {
+        howto.stats = this.allHowtoStats[howto._id]
+        return howto
+      })
+    }
+
+    return validHowtos
   }
 
   public updateSearchValue(query: string) {

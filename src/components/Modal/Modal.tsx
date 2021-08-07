@@ -8,6 +8,7 @@ interface IProps {
   // provide onDidDismiss function to enable backdrop click dismiss
   onDidDismiss: (data?: any) => void
   height?: number
+  width?: number
 }
 interface IState {
   isOpen: boolean
@@ -54,12 +55,12 @@ export class Modal extends React.Component<IProps, IState> {
 
   render() {
     const isOpen = this.state
-    const { height, children } = this.props
+    const { height, width, children } = this.props
     return (
       isOpen && (
         <Portal id="portal">
           <ModalBackdrop id="ModalBackdrop" onClick={() => this.dismiss()} />
-          <ModalContent id="ModalContent" style={height ? { height } : {}}>
+          <ModalContent id="ModalContent" height={height} width={width}>
             {children}
           </ModalContent>
         </Portal>

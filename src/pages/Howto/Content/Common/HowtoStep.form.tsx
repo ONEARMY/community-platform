@@ -1,4 +1,4 @@
-import { PureComponent } from 'react';
+import { PureComponent } from 'react'
 import { Field } from 'react-final-form'
 import { TextAreaField, InputField } from 'src/components/Form/Fields'
 import Heading from 'src/components/Heading'
@@ -143,6 +143,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
           <Field
             name={`${step}.title`}
             data-cy="step-title"
+            modifiers={{ capitalize: true }}
             component={InputField}
             placeholder="Title of this step (max 30 characters)"
             maxLength="30"
@@ -158,6 +159,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
             placeholder="Explain what you are doing in this step. if it gets to long break it into 2 steps (max 700 characters)"
             maxLength="700"
             data-cy="step-description"
+            modifiers={{ capitalize: true }}
             component={TextAreaField}
             style={{ resize: 'vertical', height: '300px' }}
             validate={required}

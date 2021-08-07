@@ -23,7 +23,6 @@ import { Route } from 'react-router-dom'
 import { NotFoundPage } from '../../../NotFound/NotFound'
 import { UserStore } from 'src/stores/User/user.store'
 import { HowToComments } from './HowToComments/HowToComments'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
 // We can't directly provide the store as a prop though, and later user a get method to define it
@@ -141,12 +140,7 @@ export class Howto extends React.Component<
               <Step step={step} key={index} stepindex={index} />
             ))}
           </Box>
-          <AuthWrapper roleRequired="beta-tester">
-            <HowToComments
-              userName={loggedInUser?.userName}
-              comments={activeHowto.comments}
-            />
-          </AuthWrapper>
+          <HowToComments comments={activeHowto.comments} />
           <MoreBox py={20} mt={20}>
             <Text bold txtcenter fontSize={[4, 4, 5]}>
               You're done.

@@ -8,11 +8,16 @@ import {
 } from './elements'
 import { FieldRenderProps } from 'react-final-form'
 import 'react-datepicker/dist/react-datepicker.css'
+import { capitalizeFirstLetter } from 'src/utils/helpers'
 
 // any props can be passed to field and down to child component
 // input and meta props come from react field render props and will be
 // picked up by typing
 type FieldProps = FieldRenderProps<any, any> & { children?: React.ReactNode }
+
+type InputModifiers = {
+  capitalize?: boolean
+}
 export interface IFieldProps extends FieldProps {
   // additional fields intending to pass down
   disabled?: boolean
@@ -25,10 +30,19 @@ interface IDatePickerFieldProps extends IFieldProps {
   customChange?: (location) => void
 }
 
+const processInputModifiers = (value: any, modifiers: InputModifiers = {}) => {
+  if (typeof value !== 'string') return value
+  if (modifiers.capitalize) {
+    value = capitalizeFirstLetter(value)
+  }
+  return value
+}
+
 export const InputField = ({
   input,
   meta,
   customOnBlur,
+  modifiers,
   ...rest
 }: IFieldProps) => (
   <>
@@ -37,10 +51,14 @@ export const InputField = ({
       {...input}
       {...rest}
       onBlur={e => {
+        if (modifiers) {
+          e.target.value = processInputModifiers(e.target.value, modifiers)
+          input.onChange(e)
+        }
         if (customOnBlur) {
           customOnBlur(e)
         }
-        input.onBlur()
+        input.onBlur(e)
       }}
     />
     {meta.error && meta.touched ? (
@@ -48,6 +66,7 @@ export const InputField = ({
     ) : null}
   </>
 )
+
 export const DatePickerField = ({
   input,
   meta,
@@ -82,6 +101,8 @@ export const TextAreaField = ({
   input,
   meta,
   disabled,
+  modifiers,
+  customOnBlur,
   ...rest
 }: IFieldProps) =>
   disabled ? (
@@ -93,6 +114,16 @@ export const TextAreaField = ({
         invalid={meta.error && meta.touched}
         {...input}
         {...rest}
+        onBlur={e => {
+          if (modifiers) {
+            e.target.value = processInputModifiers(e.target.value, modifiers)
+            input.onChange(e)
+          }
+          if (customOnBlur) {
+            customOnBlur(e)
+          }
+          input.onBlur()
+        }}
       />
       {meta.error && meta.touched && <ErrorMessage>{meta.error}</ErrorMessage>}
     </>

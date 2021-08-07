@@ -18,7 +18,7 @@ import Flex from 'src/components/Flex'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { FileInputField } from 'src/components/Form/FileInput.field'
-import posed, { PoseGroup } from 'react-pose'
+import { motion, AnimatePresence } from 'framer-motion'
 import { inject, observer } from 'mobx-react'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import { PostingGuidelines } from './PostingGuidelines'
@@ -48,29 +48,34 @@ interface IInjectedProps extends IProps {
   howtoStore: HowtoStore
 }
 
-const AnimationContainer = posed.div({
-  // use flip pose to prevent default spring action on list item removed
-  flip: {
-    transition: {
-      // type: 'tween',
-      // ease: 'linear',
+const AnimationContainer = (props: any) => {
+  const variants = {
+    pre: {
+      opacity: 0,
     },
-  },
-  // use a pre-enter pose as otherwise default will be the exit state and so will animate
-  // horizontally as well
-  preEnter: {
-    opacity: 0,
-  },
-  enter: {
-    opacity: 1,
-    duration: 200,
-    applyAtStart: { display: 'block' },
-  },
-  exit: {
-    applyAtStart: { display: 'none' },
-    duration: 200,
-  },
-})
+    enter: {
+      opacity: 1,
+      duration: 0.2,
+      display: 'block',
+    },
+    post: {
+      display: 'none',
+      duration: 0.2,
+      top: '-100%',
+    },
+  }
+  return (
+    <motion.div
+      layout
+      initial="pre"
+      animate="enter"
+      exit="post"
+      variants={variants}
+    >
+      {props.children}
+    </motion.div>
+  )
+}
 
 const FormContainer = styled.form`
   width: 100%;
@@ -236,6 +241,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 validateFields={[]}
                                 validate={this.validateTitle}
                                 isEqual={COMPARISONS.textInput}
+                                modifiers={{ capitalize: true }}
                                 component={InputField}
                                 maxLength="50"
                                 placeholder="Make a chair from.. (max 50 characters)"
@@ -293,6 +299,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 data-cy="intro-description"
                                 validate={required}
                                 validateFields={[]}
+                                modifiers={{ capitalize: true }}
                                 isEqual={COMPARISONS.textInput}
                                 component={TextAreaField}
                                 style={{
@@ -376,7 +383,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                       <FieldArray name="steps" isEqual={COMPARISONS.step}>
                         {({ fields }) => (
                           <>
-                            <PoseGroup preEnterPose="preEnter">
+                            <AnimatePresence>
                               {fields.map((name, index: number) => (
                                 <AnimationContainer
                                   key={fields.value[index]._animationKey}
@@ -397,7 +404,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   />
                                 </AnimationContainer>
                               ))}
-                            </PoseGroup>
+                            </AnimatePresence>
                             <Flex>
                               <Button
                                 icon={'add'}

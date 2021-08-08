@@ -52,10 +52,12 @@ export class HowtoStore extends ModuleStore {
     // the given endpoint and emits changes as data is retrieved from cache and live collection
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
-    this.allDocs$.subscribe((docs: IHowtoDB[]) => this.setAllHowtos(docs))
+    this.allDocs$.subscribe((docs: IHowtoDB[]) => {
+      this.setAllHowtos(docs)
+      this.setAllHowtoStats()
+    })
     this.selectedTags = {}
     this.searchValue = ''
-    this.setAllHowtoStats()
   }
 
   @action

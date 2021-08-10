@@ -44,7 +44,11 @@ export interface IUser {
 }
 
 interface IUserBadges {
-  verified: boolean
+  /** We use number instead of boolean to enable Dexie to index the data
+   * (it is not compatible with boolean)
+   * 0 -> false, 1 -> true
+   * */
+  verified: number
 }
 
 interface IExternalLink {

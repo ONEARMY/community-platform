@@ -240,7 +240,7 @@ export class MapsStore extends ModuleStore {
       shortDescription: u.mapPinDescription ? u.mapPinDescription : '',
       name: u.userName,
       profileUrl: `${window.location.origin}/u/${u.userName}`,
-      verifiedBadge: u.badges?.verified || false,
+      verifiedBadge: !!u.badges?.verified,
     }
   }
   @action

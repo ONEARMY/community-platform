@@ -8,6 +8,7 @@ import { ModuleStore } from '../common/module.store'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
 import { logToSentry } from 'src/common/errors'
+import { DBDoc } from 'src/models'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
@@ -25,6 +26,10 @@ export class UserStore extends ModuleStore {
 
   @observable
   public updateStatus: IUserUpdateStatus = getInitialUpdateStatus()
+
+  /** A list of all the verified users, to display verified icons where needed */
+  @observable
+  public verifiedUsers: (IUser | DBDoc)[]
 
   @action
   public updateUser(user?: IUserPPDB) {
@@ -244,6 +249,18 @@ export class UserStore extends ModuleStore {
     }
   }
 
+  /**
+   * Fetches all users that have a `verified: 1` badge
+   */
+  @action
+  public async fetchAllVerifiedUsers() {
+    const verifiedUsers = await this.db
+      .collection<IUser>(COLLECTION_NAME)
+      .getWhere('badges.verified', '==', 1)
+
+    this.verifiedUsers = verifiedUsers
+  }
+
   // use firebase auth to listen to change to signed in user
   // on sign in want to load user profile
   // strange implementation return the unsubscribe object on subscription, so stored
@@ -294,5 +311,5 @@ const USER_BASE = {
   links: [],
   moderation: 'awaiting-moderation',
   verified: false,
-  badges: { verified: false },
+  badges: { verified: 0 },
 }

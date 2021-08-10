@@ -13,6 +13,7 @@ import Heading from 'src/components/Heading'
 import { Loader } from 'src/components/Loader'
 import { VirtualizedFlex } from 'src/components/VirtualizedFlex/VirtualizedFlex'
 import SearchInput from 'src/components/SearchInput'
+import { IHowtoDB } from 'src/models/howto.models'
 
 interface InjectedProps {
   howtoStore?: HowtoStore
@@ -50,6 +51,9 @@ export class HowtoList extends React.Component<any, IState> {
     this.state = {
       isLoading: true,
     }
+
+    this.props.userStore.fetchAllVerifiedUsers()
+
     if (props.location.search) {
       const searchParams = new URLSearchParams(props.location.search)
 
@@ -69,12 +73,14 @@ export class HowtoList extends React.Component<any, IState> {
       }
     }
   }
+
   get injected() {
     return this.props as InjectedProps
   }
 
   public render() {
     const { filteredHowtos, selectedTags, searchValue } = this.props.howtoStore
+    const { verifiedUsers } = this.props.userStore
 
     return (
       <>
@@ -152,9 +158,14 @@ export class HowtoList extends React.Component<any, IState> {
             >
               <VirtualizedFlex
                 data={filteredHowtos}
-                renderItem={data => (
+                renderItem={(data: IHowtoDB) => (
                   <Box px={4} py={4}>
-                    <HowToCard howto={data} />
+                    <HowToCard
+                      howto={data}
+                      verified={verifiedUsers.some(
+                        user => user.userName === data._createdBy,
+                      )}
+                    />
                   </Box>
                 )}
               />

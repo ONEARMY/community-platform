@@ -29,7 +29,7 @@ export class UserStore extends ModuleStore {
 
   /** A list of all the verified users, to display verified icons where needed */
   @observable
-  public verifiedUsers: (IUser | DBDoc)[]
+  public verifiedUsers: (IUser & DBDoc)[]
 
   @action
   public updateUser(user?: IUserPPDB) {

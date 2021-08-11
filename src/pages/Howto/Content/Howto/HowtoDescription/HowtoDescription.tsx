@@ -11,6 +11,7 @@ import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import StepsIcon from 'src/assets/icons/icon-steps.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
+import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
 import { Button } from 'src/components/Button'
 import { IUser } from 'src/models/user.models'
 import {
@@ -28,6 +29,7 @@ interface IProps {
   loggedInUser: IUser | undefined
   needsModeration: boolean
   votedUsefulCount?: number
+  verified?: boolean
   userVotedUseful: boolean
   moderateHowto: (accepted: boolean) => void
   onUsefulClick: () => void
@@ -143,7 +145,15 @@ export default class HowtoDescription extends PureComponent<IProps> {
                   to={'/u/' + howto._createdBy}
                 >
                   {howto._createdBy}
-                </Link>{' '}
+                </Link>
+                {this.props.verified && (
+                  <Image
+                    src={VerifiedBadgeIcon}
+                    ml={1}
+                    height="12px"
+                    width="12px"
+                  />
+                )}{' '}
                 | Published on {this.dateCreatedByText(howto)}
               </Text>
             </Flex>

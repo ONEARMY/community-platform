@@ -11,7 +11,9 @@ import { Field, Form } from 'react-final-form'
 import { Button } from 'src/components/Button'
 import { AuthWrapper } from '../Auth/AuthWrapper'
 
-export interface IProps extends IComment {}
+export interface IProps extends IComment {
+  verified: boolean
+}
 
 export const Comment: React.FC<IProps> = ({
   _creatorId,

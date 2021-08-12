@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { observer } from 'mobx-react'
 import { Box, Flex } from 'rebass'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
@@ -6,9 +7,20 @@ import Heading from 'src/components/Heading'
 import { Link } from 'src/components/Links'
 import ResearchListItem from 'src/components/Research/ResearchListItem'
 import { useResearchStore } from 'src/stores/Research/research.store'
+import { useCommonStores } from 'src'
 
 const ResearchList = observer(() => {
   const store = useResearchStore()
+  const {
+    stores: { userStore },
+  } = useCommonStores()
+
+  useEffect(() => {
+    if (userStore) {
+      userStore.fetchAllVerifiedUsers()
+    }
+  }, [userStore])
+
   const { filteredResearches } = store
   return (
     <>
@@ -18,7 +30,15 @@ const ResearchList = observer(() => {
         </Heading>
       </Flex>
       {filteredResearches.map(item => (
-        <ResearchListItem key={item._id} item={item} />
+        <ResearchListItem
+          key={item._id}
+          item={item}
+          verified={
+            !!userStore?.verifiedUsers?.some(
+              user => user.userName === item._createdBy,
+            )
+          }
+        />
       ))}
       <Box mb={4}>
         <Link

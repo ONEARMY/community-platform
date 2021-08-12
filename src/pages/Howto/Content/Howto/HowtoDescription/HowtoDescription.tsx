@@ -136,25 +136,29 @@ export default class HowtoDescription extends PureComponent<IProps> {
                 <FlagIconHowTos code={howto.creatorCountry} />
               )}
               <Text inline auxiliary my={2} ml={1}>
-                By{' '}
-                <Link
-                  sx={{
-                    textDecoration: 'underline',
-                    color: 'inherit',
-                  }}
-                  to={'/u/' + howto._createdBy}
-                >
-                  {howto._createdBy}
-                </Link>
-                {this.props.verified && (
-                  <Image
-                    src={VerifiedBadgeIcon}
+                <Flex alignItems="center">
+                  By
+                  <Link
                     ml={1}
-                    height="12px"
-                    width="12px"
-                  />
-                )}{' '}
-                | Published on {this.dateCreatedByText(howto)}
+                    mr={1}
+                    sx={{
+                      textDecoration: 'underline',
+                      color: 'inherit',
+                    }}
+                    to={'/u/' + howto._createdBy}
+                  >
+                    {howto._createdBy}
+                  </Link>
+                  {this.props.verified && (
+                    <Image
+                      src={VerifiedBadgeIcon}
+                      mr={1}
+                      height="12px"
+                      width="12px"
+                    />
+                  )}
+                  | Published on {this.dateCreatedByText(howto)}
+                </Flex>
               </Text>
             </Flex>
             <Text auxiliary sx={{ color: '#b7b5b5 !important' }} mt={1} mb={2}>

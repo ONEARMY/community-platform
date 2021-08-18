@@ -23,19 +23,19 @@ export * from './migration'
  ********************************************************************/
 exports.userStatsCountHowTos = functions.firestore
   .document(`${DB_ENDPOINTS.howtos}/{id}`)
-  .onWrite(async (change, context) => {
+  .onUpdate(async (change, context) => {
     await updateContentCounterStats(change, 'userCreatedHowtos')
   })
 
 exports.userStatsCountEvents = functions.firestore
   .document(`${DB_ENDPOINTS.events}/{id}`)
-  .onWrite(async (change, context) => {
+  .onUpdate(async (change, context) => {
     await updateContentCounterStats(change, 'userCreatedEvents')
   })
 
 exports.howtoStatsCountVotes = functions.firestore
   .document(`${DB_ENDPOINTS.users}/{id}`)
-  .onWrite(async (change, context) => {
+  .onUpdate(async (change, context) => {
     await updateHowtoVoteStats(change)
   })
 

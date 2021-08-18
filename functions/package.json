@@ -7,7 +7,8 @@
   },
   "scripts": {
     "start": "ts-node scripts/start.ts",
-    "serve:emulated": "firebase emulators:start --import=./data/export --export-on-exit=./data/export",
+    "serve:emulated": "firebase emulators:start --import=./data/emulated",
+    "serve:emulated:export": "firebase emulators:start --import=./data/emulated --export-on-exit=./data/exported",
     "serve:live": "npm run copyDevConfig && npm run serve",
     "lint": "tslint --project tsconfig.json",
     "build": "npm run compile:src && npm run webpack",
@@ -27,6 +28,7 @@
     "express": "^4.17.1",
     "firebase-admin": "^9.9.0",
     "firebase-functions": "^3.14.1",
+    "firebase-tools": "^9.16.1",
     "fs-extra": "^9.0.1",
     "google-auth-library": "^6.1.1",
     "googleapis": "^61.0.0",

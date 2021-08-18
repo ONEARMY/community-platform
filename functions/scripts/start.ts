@@ -17,7 +17,6 @@ function main() {
     if (webpackWatcher) {
         // start emulator only after compiler running (to pass close callback)
         startEmulator(webpackWatcher)
-
     }
 }
 main()

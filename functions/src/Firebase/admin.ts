@@ -9,17 +9,23 @@ const serviceAccount = SERVICE_ACCOUNT_CONFIG
 const FIREBASE_CONFIG = JSON.parse(
   process.env.FIREBASE_CONFIG,
 ) as IFirebaseConfig
-const cert = {
-  clientEmail: serviceAccount.client_email,
-  privateKey: serviceAccount.private_key,
-  projectId: serviceAccount.project_id,
+
+if (serviceAccount) {
+  const cert = {
+    clientEmail: serviceAccount.client_email,
+    privateKey: serviceAccount.private_key,
+    projectId: serviceAccount.project_id,
+  }
+  admin.initializeApp({
+    credential: admin.credential.cert(cert),
+    databaseURL: FIREBASE_CONFIG.databaseURL,
+    projectId: FIREBASE_CONFIG.projectId,
+  })
+}
+else {
+  admin.initializeApp()
 }
 
-admin.initializeApp({
-  credential: admin.credential.cert(cert),
-  databaseURL: FIREBASE_CONFIG.databaseURL,
-  projectId: FIREBASE_CONFIG.projectId,
-})
 
 export const firebaseAdmin = admin
 

@@ -7,18 +7,10 @@ import 'firebase/functions'
 import 'firebase/database'
 import { SEED_DATA } from '../../fixtures/seed'
 import { DB_ENDPOINTS } from './endpoints'
-const fbConfig = {
-  apiKey: 'AIzaSyDAxS_7M780mI3_tlwnAvpbaqRsQPlmp64',
-  authDomain: 'onearmy-test-ci.firebaseapp.com',
-  databaseURL: 'https://onearmy-test-ci.firebaseio.com',
-  projectId: 'onearmy-test-ci',
-  storageBucket: 'onearmy-test-ci.appspot.com',
-}
 
-// ensure the cypress env db prefix is also used with the mapped endpoints
-
-firebase.initializeApp(fbConfig)
+firebase.initializeApp({ projectId: 'oa-local-emulators' })
 const db = firebase.firestore()
+db.useEmulator('localhost', 8080)
 
 class FirestoreTestDB {
   seedDB = async () => {

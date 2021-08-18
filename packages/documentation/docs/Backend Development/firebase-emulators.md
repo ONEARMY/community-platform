@@ -32,19 +32,19 @@ This will start the following:
 
 The emulator should start at http://localhost:4001. Follow the link to see an overview of the available services
 
-![Dashboard](../../images/firebase-emulators-dashboard.png)
+![Dashboard](./images/firebase-emulators-dashboard.png)
 
 Clicking on individual tabs will take you to a page similar to the firebase console, from where you can interact with services.
 
 Note - any data populated into the emulator will be deleted after the emulator has closed (restoring to original state). See the section below about persistant and seed data
 
-## Seed data
+# Seed data
 
 By default the emulators load any data found in the [functions/data/emulated](../../../../functions/data/emulated) folder, which can be previously exported from another firebase app or emulator instance.
 
 By default this data is not committed to the repo and so initial data will be empty, however specific zip files have been generated from site backup files and can be loaded for testing
 
-### Loading seed data
+## Loading seed data
 
 ```
 yarn workspace functions run emulator:seed
@@ -64,9 +64,13 @@ username: demo_admin@example.com
 password: demo_admin
 ```
 
-If you need newer or other data sources contact the repo admins who can hopefully help out.
+If you need newer or other data sources contact the repo admins who can hopefully help out. 
 
-### Updating seed data
+The fully seeded database should look something like this:
+
+![Seeded DB](./images/firebase-emulator-seeded.png)
+
+## Updating seed data
 
 When the emulators close they discard any changes made, so seed data documents that have been updated will revert to their original state next time the emulator is loaded.
 
@@ -86,13 +90,13 @@ firebase emulators:start --import=./data/emulated --export-on-exit=./data/export
 
 Note - if running directly the platform server will need to be run separately on port 4000, e.g. via command `npx cross-env PORT=4000 yarn start`
 
-### Resetting seed data
+## Resetting seed data
 
 As previously mentioned, all data will be reverted back to original/seed state after emulators have closed, so there is no need to reset. If manually exported data has been copied to overwrite the seed data, the default seed can be restored using the load script above.
 
-## Calling Functions
+# Calling Functions
 
-### HTTP Functions
+## HTTP Functions
 
 E.g. A development and testing API has been created at [functions/src/dev/index.ts](../../../../functions/src/dev/index.ts). When running it can be called by making a GET request to:
 
@@ -103,7 +107,7 @@ http://localhost:4002/precious-plastics-v4-dev/us-central1/dev
 Using a REST client like [Insomnia](https://insomnia.rest/) or [Postman](https://www.getpostman.com/) can simplify the process of making api requests
 
 _E.g. Insomnia Rest Client_
-![Insomnia Rest Client](../../images/firebase-emulator-rest-client.png)
+![Insomnia Rest Client](./images/firebase-emulator-rest-client.png)
 
 # Troubleshooting
 

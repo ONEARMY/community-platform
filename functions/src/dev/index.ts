@@ -7,7 +7,7 @@ As most functions are called from triggers the api is mostly just used for testi
 import * as functions from 'firebase-functions'
 import cors from 'cors'
 import express from 'express'
-import { cleanSeedData } from './seed'
+import { cleanSeedData } from './seed/clean-seed-data'
 
 console.log('dev api ready')
 

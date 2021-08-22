@@ -75,9 +75,6 @@ const defaultProps: IProps = {
 }
 
 export interface IConvertedFileMeta {
-  startSize: string
-  endSize: string
-  compressionPercent: number
   photoData: Blob
   objectUrl: string
   name: string

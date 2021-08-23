@@ -7,8 +7,8 @@
   },
   "scripts": {
     "start": "ts-node scripts/start.ts",
-    "serve:emulated": "firebase emulators:start --import=./data/emulated",
-    "serve:emulated:export": "firebase emulators:start --import=./data/emulated --export-on-exit=./data/exported",
+    "serve:emulated": "firebase --project default emulators:start --import=data/emulated",
+    "serve:emulated:export": "firebase --project default emulators:start --import=data/emulated --export-on-exit=data/exported",
     "serve:live": "npm run copyDevConfig && npm run serve",
     "lint": "tslint --project tsconfig.json",
     "build": "npm run compile:src && npm run webpack",

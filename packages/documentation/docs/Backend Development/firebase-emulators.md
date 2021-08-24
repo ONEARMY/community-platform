@@ -76,19 +76,15 @@ When the emulators close they discard any changes made, so seed data documents t
 
 Whilst this is useful to preserve a clean testing state, sometimes it might be desirable to persist changes (such as adding additional auth users, or specific example docs)
 
-This can be achieved by passing the `--export-on-exit=./path/to/export/folder` flag to the script that starts the functions emulators. This can be run via the script
+This can be achieved by passing the `--export-on-exit=./path/to/export/folder` flag to the script that starts the functions emulators. This can be run by modifiying the functions start at [functions/scripts/start.ts](../../../../functions/scripts/start.ts)
 
-```
-yarn workspace functions serve:emulated:export
-```
+```js
+// change this value if also wanting to export data
+    if (false) {
+        cmd = `${cmd} --export-on-exit=${EMULATOR_IMPORT_DIR}`
+    }
+```	
 
-Which is a wrapper around the firebase cli command
-
-```
-firebase emulators:start --import=./data/emulated --export-on-exit=./data/exported
-```
-
-Note - if running directly the platform server will need to be run separately on port 4000, e.g. via command `npx cross-env PORT=4000 yarn start`
 
 ## Resetting seed data
 
@@ -108,6 +104,14 @@ Using a REST client like [Insomnia](https://insomnia.rest/) or [Postman](https:/
 
 _E.g. Insomnia Rest Client_
 ![Insomnia Rest Client](./images/firebase-emulator-rest-client.png)
+
+# Authentication
+
+By default emulators allow full read/write access to all resources, however firebase functions still expect an authenticated user in order to access various external APIs before completing operations. 
+
+The current workaround for this is authenticating using a custom service-account that has limited (read-only) access to resources on the testing project. This is done automatically during the start script [functions/scripts/start.ts](../../../../functions/scripts/start.ts).
+
+Alternatively developers can request access to join the firebase project for full access to the testing project, however it's hoped that this is not required.
 
 # Troubleshooting
 
@@ -140,3 +144,39 @@ taskkill /F /PID 8272
 
 _Linux: List processes on port_
 See a few examples at: https://stackoverflow.com/questions/11583562/how-to-kill-a-process-running-on-particular-port-in-linux/32592965
+e.g.
+```
+sudo apt-get install lsof
+```
+```
+npx cross-port-killer 4003
+```
+
+## Firestore Emulator fatal error
+If one of the emulators throws a fatal error you might see a vague error message such as:
+```
+⚠  firestore: Fatal error occurred: 
+   Firestore Emulator has exited with code: 1, 
+   stopping all running emulators
+```
+
+Usually a more informative log can be found in a created log file, e.g. [firestore-debug.log](../../../../functions/firestore-debug.log)
+
+```
+Exception in thread "main" com.google.cloud.datastore.core.exception.DatastoreException: /mnt/c/apps/oneArmy/community-platform/functions/data/emulated/firestore_export/all_namespaces\all_kinds\all_namespaces_all_kinds.export_metadata (No such file or directory)
+	at com.google.cloud.datastore.emulator.impl.ExportImportUtil.parseBackupFile(ExportImportUtil.java:316)
+	at com.google.cloud.datastore.emulator.impl.ExportImportUtil.fetchEntities(ExportImportUtil.java:62)
+	at com.google.cloud.datastore.emulator.firestore.CloudFirestore.main(CloudFirestore.java:90)
+Caused by: java.io.FileNotFoundException: /mnt/c/apps/oneArmy/community-platform/functions/data/emulated/firestore_export/all_namespaces\all_kinds\all_namespaces_all_kinds.export_metadata (No such file or directory)
+	at java.base/java.io.FileInputStream.open0(Native Method)
+	at java.base/java.io.FileInputStream.open(FileInputStream.java:219)
+	at java.base/java.io.FileInputStream.<init>(FileInputStream.java:157)
+	at com.google.cloud.datastore.emulator.impl.ExportImportUtil.parseBackupFile(ExportImportUtil.java:312)
+```
+
+In this example it is trying to locate the seed data which does not exist, so to fix run the seed command
+```
+yarn workspace functions run emulator:seed
+```
+
+There might be similar issues logged in [firesbase-debug.log](../../../../functions/firebase-debug.log), however this file might be deleted on exit so will require opening before crash

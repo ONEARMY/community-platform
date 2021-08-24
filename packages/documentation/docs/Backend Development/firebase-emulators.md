@@ -81,9 +81,11 @@ This can be achieved by passing the `--export-on-exit=./path/to/export/folder` f
 ```js
 // change this value if also wanting to export data
     if (false) {
-        cmd = `${cmd} --export-on-exit=${EMULATOR_IMPORT_DIR}`
+        cmd = `${cmd} --export-on-exit=${EMULATOR_IMPORT_FOLDER}`
     }
 ```	
+
+NOTE - due to filepath handling this is usually best done on a mac/linux device (windows export formattedly inconsistently for linux)
 
 
 ## Resetting seed data
@@ -97,8 +99,9 @@ As previously mentioned, all data will be reverted back to original/seed state a
 E.g. A development and testing API has been created at [functions/src/dev/index.ts](../../../../functions/src/dev/index.ts). When running it can be called by making a GET request to:
 
 ```
-http://localhost:4002/precious-plastics-v4-dev/us-central1/dev
+http://localhost:4002/{projectId}/us-central1/dev
 ```
+Where the projectId may be specified from configuration (default for emulators is `emulator-demo`)
 
 Using a REST client like [Insomnia](https://insomnia.rest/) or [Postman](https://www.getpostman.com/) can simplify the process of making api requests
 

@@ -4,7 +4,7 @@ import webpack from 'webpack'
 import * as os from 'os'
 import * as fs from 'fs-extra'
 import webpackConfig from '../webpack.config'
-import { EMULATOR_IMPORT_DIR } from './paths'
+import { EMULATOR_EXPORT_FOLDER, EMULATOR_IMPORT_FOLDER } from './paths'
 
 
 /**
@@ -67,11 +67,11 @@ function startEmulator(functionsCompiler: webpack.Compiler.Watching) {
     const REAL_PROJECT_ID = 'precious-plastics-v4-dev'
     // any project id can be specified (doesn't have to be real) - functions will be available on the endpoint
     const EMULATOR_PROJECT_ID = 'emulator-demo'
-    let cmd = `${FIREBASE_BIN} use ${REAL_PROJECT_ID} && ${FIREBASE_BIN} --project=${EMULATOR_PROJECT_ID} emulators:start --import=${EMULATOR_IMPORT_DIR}`
+    let cmd = `${FIREBASE_BIN} use ${REAL_PROJECT_ID} && ${FIREBASE_BIN} --project=${EMULATOR_PROJECT_ID} emulators:start --import=${EMULATOR_IMPORT_FOLDER}`
 
     // change this value if also wanting to export data
     if (false) {
-        cmd = `${cmd} --export-on-exit=${EMULATOR_IMPORT_DIR}`
+        cmd = `${cmd} --export-on-exit=${EMULATOR_EXPORT_FOLDER}`
     }
 
     const env = { GCLOUD_PROJECT: EMULATOR_PROJECT_ID, GOOGLE_APPLICATION_CREDENTIALS: prepareGoogleApplicationCredentials() }

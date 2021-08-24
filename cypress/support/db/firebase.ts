@@ -8,7 +8,8 @@ import 'firebase/database'
 import { SEED_DATA } from '../../fixtures/seed'
 import { DB_ENDPOINTS } from './endpoints'
 
-firebase.initializeApp({ projectId: 'oa-local-emulators' })
+firebase.initializeApp({})
+// firebase.initializeApp({ projectId: 'oa-local-emulators' })
 const db = firebase.firestore()
 db.useEmulator('localhost', 8080)
 

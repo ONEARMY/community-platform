@@ -1,10 +1,10 @@
 import * as fs from 'fs-extra'
 import * as path from 'path'
 import jszip from 'jszip'
+import { EMULATOR_IMPORT_DIR, SEED_FOLDER_PATH } from '../paths'
 const zip = new jszip()
 
-const SEED_FOLDER_PATH = path.resolve(__dirname, '../../data/seed')
-const EMULATOR_DIR = path.resolve(__dirname, '../../data/emulated')
+
 
 /**
  * Populate data from a seed-data zip file to firebase functions emulator import folder
@@ -18,24 +18,24 @@ async function main() {
         // TODO - handle selection of different file
     }
     const seedFilePath = path.resolve(SEED_FOLDER_PATH, seedFiles[0])
-    fs.ensureDirSync(EMULATOR_DIR)
-    fs.emptyDirSync(EMULATOR_DIR)
+    fs.ensureDirSync(EMULATOR_IMPORT_DIR)
+    fs.emptyDirSync(EMULATOR_IMPORT_DIR)
     const zipFile = fs.readFileSync(seedFilePath)
     zip.loadAsync(zipFile)
         .then((contents) => {
             Object.values(contents.files).forEach(file => {
                 if (file.dir) {
-                    const targetDir = path.resolve(EMULATOR_DIR, file.name)
+                    const targetDir = path.resolve(EMULATOR_IMPORT_DIR, file.name)
                     fs.mkdirSync(targetDir, { recursive: true })
                 }
                 else {
                     zip.file(file.name).async('nodebuffer').then(data => {
-                        fs.writeFileSync(path.resolve(EMULATOR_DIR, file.name), data)
+                        fs.writeFileSync(path.resolve(EMULATOR_IMPORT_DIR, file.name), data)
                     })
 
                 }
             })
-            console.log('[Seed Data] loaded', path.basename(seedFilePath), '->', EMULATOR_DIR)
+            console.log('[Seed Data] loaded', path.basename(seedFilePath), '->', EMULATOR_IMPORT_DIR)
         });
 }
 main()

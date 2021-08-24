@@ -10860,6 +10860,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cross-env@npm:^7.0.3":
+  version: 7.0.3
+  resolution: "cross-env@npm:7.0.3"
+  dependencies:
+    cross-spawn: ^7.0.1
+  bin:
+    cross-env: src/bin/cross-env.js
+    cross-env-shell: src/bin/cross-env-shell.js
+  checksum: af4fa4dab3ddf6c25ed5e0c95ef53ea363aceb41741e22b7eae83a12cc10cb2416e3aba29c95f2f2c3a1aa918d3444fe92fab318a8ba761e8d52ae88388496cc
+  languageName: node
+  linkType: hard
+
 "cross-fetch@npm:^3.0.4":
   version: 3.1.4
   resolution: "cross-fetch@npm:3.1.4"
@@ -14246,9 +14258,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"firebase-tools@npm:^9.16.1":
-  version: 9.16.1
-  resolution: "firebase-tools@npm:9.16.1"
+"firebase-tools@npm:>=9.16.5":
+  version: 9.16.5
+  resolution: "firebase-tools@npm:9.16.5"
   dependencies:
     "@google-cloud/pubsub": ^2.7.0
     "@types/archiver": ^5.1.0
@@ -14310,7 +14322,7 @@ __metadata:
     ws: ^7.2.3
   bin:
     firebase: ./lib/bin/firebase.js
-  checksum: c9c9a5c4b0b75af6e053dc54be5aa821dfe7644dd19f293b9e1e6186644dc31ae52a035e340508bc71f52120d4959a55653b3465a508b97908a816dae833207a
+  checksum: 4030ec4e334ea25433f1d2dca6ab7d4acaf1109fac692b80ff8c8be64dd3b26274673b20e3b197190547ffc3357140b050e4d76b9616ceff8c2aba7433e6a0ff
   languageName: node
   linkType: hard
 
@@ -14840,11 +14852,12 @@ fsevents@^1.2.7:
     clean-webpack-plugin: ^4.0.0-alpha.0
     concurrently: ^6.2.0
     cors: ^2.8.5
+    cross-env: ^7.0.3
     dateformat: ^3.0.3
     express: ^4.17.1
     firebase-admin: ^9.9.0
     firebase-functions: ^3.14.1
-    firebase-tools: ^9.16.1
+    firebase-tools: ">=9.16.5"
     fs-extra: ^9.0.1
     generate-json-webpack-plugin: ^1.0.0
     google-auth-library: ^6.1.1

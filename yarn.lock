@@ -5739,6 +5739,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/browser-image-compression@npm:^1.0.9":
+  version: 1.0.9
+  resolution: "@types/browser-image-compression@npm:1.0.9"
+  dependencies:
+    browser-image-compression: "*"
+  checksum: 76aa9bd5e899cf85304d285c2978f4878cfd6326047845073a259928920d8f99e98af86707e8235969b18f770baac9f0076944de28af1b40f39cdabc5109a3fb
+  languageName: node
+  linkType: hard
+
 "@types/caseless@npm:*":
   version: 0.12.2
   resolution: "@types/caseless@npm:0.12.2"
@@ -8713,6 +8722,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"bowser@npm:^2.11.0":
+  version: 2.11.0
+  resolution: "bowser@npm:2.11.0"
+  checksum: d51e10d18909b7d01dd58c35466c63d419d503acda732ea6ca6a80c9cdc5c1bbf7c77abfcf620f75bba62521048292faec6d27b7e92f44bcd82b5f89bf46052f
+  languageName: node
+  linkType: hard
+
 "boxen@npm:^4.2.0":
   version: 4.2.0
   resolution: "boxen@npm:4.2.0"
@@ -8793,6 +8809,17 @@ __metadata:
   version: 1.1.0
   resolution: "brorand@npm:1.1.0"
   checksum: 4536dd73f07f6884d89c09c906345b606abff477e87babef64a85656e8cf12b1c5f40d06313b91dac12bf3e031ac190b5d548f2c3bf75f655344c3fcf90cbc8a
+  languageName: node
+  linkType: hard
+
+"browser-image-compression@npm:*, browser-image-compression@npm:^1.0.15":
+  version: 1.0.15
+  resolution: "browser-image-compression@npm:1.0.15"
+  dependencies:
+    bowser: ^2.11.0
+    core-js: ^3.16.1
+    uzip: 0.20201231.0
+  checksum: 3bbdd42a5a2eadf03da9833681850ba9a7d40abb07f5bda1104962160bdcdd5cc10105a39ecba012f62000354f7598908df95c53e41f83832777e531bf722d81
   languageName: node
   linkType: hard
 
@@ -9613,15 +9640,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"client-compress@npm:^2.1.2":
-  version: 2.2.2
-  resolution: "client-compress@npm:2.2.2"
-  dependencies:
-    babel-runtime: ^6.26.0
-  checksum: 042a2e1bd550efbce7a040650ba90a00792f6cadb2eb6808e578d73f53b312b0e5505a7728a71a138bfdffbb0920ddabd2c8a4e5da24169eefed567f543afeb1
-  languageName: node
-  linkType: hard
-
 "cliui@npm:^5.0.0":
   version: 5.0.0
   resolution: "cliui@npm:5.0.0"
@@ -10175,6 +10193,13 @@ __metadata:
   version: 3.15.2
   resolution: "core-js@npm:3.15.2"
   checksum: 983706260ab8d1fb07adceda18b76165b625bb5807fa0974090c2167ec3744fc148c0827f3a53dc6f7783b334830b181162aa92a259d90cd3d9c8ae5284e0d9f
+  languageName: node
+  linkType: hard
+
+"core-js@npm:^3.16.1":
+  version: 3.16.2
+  resolution: "core-js@npm:3.16.2"
+  checksum: a6785c7b2f0170a0edc3a5ed98d6700a36d1e7ccc3e1a972419cb6bba6363f0119d884cf2e5dd496f11e2b0a45095643050b9567d328fb7e02cf9295fb4d87df
   languageName: node
   linkType: hard
 
@@ -19942,6 +19967,7 @@ fsevents@^1.2.7:
     "@testing-library/jest-dom": ^5.11.4
     "@testing-library/react": ^11.1.0
     "@testing-library/user-event": ^12.1.10
+    "@types/browser-image-compression": ^1.0.9
     "@types/dompurify": ^0.0.32
     "@types/flux-standard-action": 1.1.0
     "@types/jest": ^26.0.15
@@ -19967,8 +19993,8 @@ fsevents@^1.2.7:
     "@uppy/core": ^1.19.1
     "@uppy/dashboard": ^1.20.1
     "@uppy/react": ^1.0.0
+    browser-image-compression: ^1.0.15
     chai-subset: ^1.6.0
-    client-compress: ^2.1.2
     cra-bundle-analyzer: ^0.1.0
     cross-env: ^6.0.3
     date-fns: ^1.30.1
@@ -27786,6 +27812,13 @@ typescript@4.2.4:
   bin:
     uuid: dist/bin/uuid
   checksum: aed2bcef341f95635f308fea8831fb9038b18c485fe7e71feb89d2e05602dfecad0cb6f2246fae096d4da425cca6e8a71056f28abd97ad98cf770a2018853248
+  languageName: node
+  linkType: hard
+
+"uzip@npm:0.20201231.0":
+  version: 0.20201231.0
+  resolution: "uzip@npm:0.20201231.0"
+  checksum: d9cbac5391613fd5ec757877c58ded6101f086e886dec0bf5e90898e81e1a60dde1e37270e886e7927569c78c6f69d37d26f08a589c263f55df764f563f3ef5a
   languageName: node
   linkType: hard
 

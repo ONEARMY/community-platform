@@ -8,10 +8,17 @@ import 'firebase/database'
 import { SEED_DATA } from '../../fixtures/seed'
 import { DB_ENDPOINTS } from './endpoints'
 
-firebase.initializeApp({})
-// firebase.initializeApp({ projectId: 'oa-local-emulators' })
+const fbConfig = {
+  apiKey: 'AIzaSyDAxS_7M780mI3_tlwnAvpbaqRsQPlmp64',
+  authDomain: 'onearmy-test-ci.firebaseapp.com',
+  databaseURL: 'https://onearmy-test-ci.firebaseio.com',
+  projectId: 'onearmy-test-ci',
+  storageBucket: 'onearmy-test-ci.appspot.com',
+}
+
+firebase.initializeApp(fbConfig)
 const db = firebase.firestore()
-db.useEmulator('localhost', 8080)
+// db.useEmulator('localhost', 8080)
 
 class FirestoreTestDB {
   seedDB = async () => {

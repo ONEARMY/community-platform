@@ -12,7 +12,7 @@
     "build": "npm run precompile && npm run webpack",
     "watch": "npm run precompile && webpack --watch",
     "webpack": "webpack",
-    "precompile": "ts-node scripts/compile.ts",
+    "precompile": "ts-node scripts/precompile.ts",
     "copyDevConfig": "firebase functions:config:get > .runtimeconfig.json",
     "db:backup:local": "firestore-export -a service.json -b backup.json -p",
     "shell": "npm run build && firebase functions:shell",

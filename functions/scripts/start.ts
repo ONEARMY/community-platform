@@ -4,7 +4,7 @@ import webpack from 'webpack'
 import * as os from 'os'
 import * as fs from 'fs-extra'
 import webpackConfig from '../webpack.config'
-import { EMULATOR_EXPORT_FOLDER, EMULATOR_IMPORT_FOLDER } from './paths'
+import { EMULATOR_EXPORT_FOLDER, EMULATOR_IMPORT_FOLDER, EMULATOR_IMPORT_PATH } from './paths'
 
 
 /**
@@ -16,7 +16,7 @@ import { EMULATOR_EXPORT_FOLDER, EMULATOR_IMPORT_FOLDER } from './paths'
  */
 function main() {
     // CLI: concurrently --kill-others-on-fail --names \"emulator,functions\" -c \"blue,magenta\" \"yarn serve:emulated\" \"yarn watch\"
-    checkSeedData()
+
     const webpackWatcher = compileAndWatchFunctions()
     if (webpackWatcher) {
         // start emulator only after compiler running (to pass close callback)
@@ -26,9 +26,6 @@ function main() {
 main()
 
 
-function checkSeedData() {
-
-}
 
 /** Programatically run webpack in watch mode */
 function compileAndWatchFunctions() {
@@ -41,6 +38,7 @@ function compileAndWatchFunctions() {
         if (stats.hasErrors()) {
             const info = stats.toJson()
             console.log('[Compile Error]', info.errors)
+            process.exit(1)
         }
         if (err) {
             console.log('[Compiler Error]', err)
@@ -67,7 +65,12 @@ function startEmulator(functionsCompiler: webpack.Compiler.Watching) {
     const REAL_PROJECT_ID = 'precious-plastics-v4-dev'
     // any project id can be specified (doesn't have to be real) - functions will be available on the endpoint
     const EMULATOR_PROJECT_ID = 'emulator-demo'
-    let cmd = `${FIREBASE_BIN} use ${REAL_PROJECT_ID} && ${FIREBASE_BIN} --project=${EMULATOR_PROJECT_ID} emulators:start --import=${EMULATOR_IMPORT_FOLDER}`
+    let cmd = `${FIREBASE_BIN} use ${REAL_PROJECT_ID} && ${FIREBASE_BIN} --project=${EMULATOR_PROJECT_ID} emulators:start`
+
+    // only import data if it has been correctly seeded (to avoid throwing error)
+    if (fs.existsSync(EMULATOR_IMPORT_PATH)) {
+        cmd = `${cmd} --import=${EMULATOR_IMPORT_FOLDER}`
+    }
 
     // change this value if also wanting to export data
     if (false) {

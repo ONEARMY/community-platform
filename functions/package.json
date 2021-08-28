@@ -6,13 +6,13 @@
     "webpack": "^4.46.0"
   },
   "scripts": {
-    "start": "ts-node scripts/start.ts",
+    "start": "npm run precompile && ts-node scripts/start.ts",
     "serve:live": "npm run copyDevConfig && npm run serve",
     "lint": "tslint --project tsconfig.json",
-    "build": "npm run compile:src && npm run webpack",
-    "watch": "npm run compile:src && webpack --watch",
+    "build": "npm run precompile && npm run webpack",
+    "watch": "npm run precompile && webpack --watch",
     "webpack": "webpack",
-    "compile:src": "tsc --build ../tsconfig.src-types.json",
+    "precompile": "ts-node scripts/compile.ts",
     "copyDevConfig": "firebase functions:config:get > .runtimeconfig.json",
     "db:backup:local": "firestore-export -a service.json -b backup.json -p",
     "shell": "npm run build && firebase functions:shell",
@@ -32,7 +32,7 @@
     "googleapis": "^61.0.0",
     "log-update": "^4.0.0",
     "oa-shared": "^1.0.0",
-    "one-army-community-platform": "^1.5.0",
+    "one-army-community-platform": "^1",
     "request": "^2.88.2",
     "sharp": "^0.26.1"
   },

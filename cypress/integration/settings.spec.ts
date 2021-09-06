@@ -266,12 +266,12 @@ describe('[Settings]', () => {
       verified: true,
       coverImages: [
         {
-          contentType: 'image/jpeg',
+          contentType: 'image/png',
           fullPath:
-            'uploads/v3_users/settings_machine_new/images/profile-cover-1.jpg',
-          name: 'profile-cover-1.jpg',
-          size: 18987,
-          type: 'image/jpeg',
+            'uploads/v3_users/settings_machine_new/images/profile-cover-2.png',
+          name: 'profile-cover-2.png',
+          size: 34699,
+          type: 'image/png',
         },
       ],
       links: [
@@ -305,7 +305,7 @@ describe('[Settings]', () => {
       setInfo({
         username: expected.userName,
         description: expected.about,
-        coverImage: 'images/profile-cover-1.jpg',
+        coverImage: 'images/profile-cover-2.png',
       })
 
       cy.step('Choose Expertise')

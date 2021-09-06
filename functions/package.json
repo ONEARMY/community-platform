@@ -16,7 +16,7 @@
     "copyDevConfig": "firebase functions:config:get > .runtimeconfig.json",
     "db:backup:local": "firestore-export -a service.json -b backup.json -p",
     "shell": "npm run build && firebase functions:shell",
-    "emulator:seed": "ts-node scripts/emulator/load-seed-data.ts"
+    "emulator:seed": "ts-node scripts/emulator/seed.ts"
   },
   "main": "index.js",
   "dependencies": {

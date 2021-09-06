@@ -10,7 +10,7 @@ interface IProps {
   onImgClicked: (meta: IConvertedFileMeta) => void
 }
 interface IState {
-  compressionOptions: ICompressionOptions
+  compressionOptions: Parameters<typeof imageCompression>[1]
   convertedFile?: IConvertedFileMeta
   openLightbox?: boolean
 }
@@ -39,7 +39,8 @@ export class ImageConverter extends React.Component<IProps, IState> {
     super(props)
     this.state = {
       compressionOptions: {
-        maxWidthOrHeight: imageSizes.normal
+        maxWidthOrHeight: imageSizes.normal,
+        initialQuality: 0.75,
       },
     } as IState
   }

@@ -270,7 +270,7 @@ describe('[Settings]', () => {
           fullPath:
             'uploads/v3_users/settings_machine_new/images/profile-cover-2.png',
           name: 'profile-cover-2.png',
-          size: 34699,
+          size: 30658,
           type: 'image/png',
         },
       ],

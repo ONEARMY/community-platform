@@ -45,6 +45,7 @@ By default the emulators load any data found in the [functions/data/emulated](..
 By default this data is not committed to the repo and so initial data will be empty, however specific zip files have been generated from site backup files and can be loaded for testing
 
 ## Loading seed data
+By default when the script first runs it will populate seed data from [functions/data/seed](../../../../functions/data/seed). This can be repopulated either by deleting the [functions/data/emulated](../../../../functions/data/emulated) folder, or by manually calling the seed data script:
 
 ```
 yarn workspace functions run emulator:seed
@@ -64,7 +65,7 @@ username: demo_admin@example.com
 password: demo_admin
 ```
 
-If you need newer or other data sources contact the repo admins who can hopefully help out. 
+If you need newer or other data sources contact the repo admins who can hopefully help out.
 
 The fully seeded database should look something like this:
 
@@ -80,13 +81,12 @@ This can be achieved by passing the `--export-on-exit=./path/to/export/folder` f
 
 ```js
 // change this value if also wanting to export data
-    if (false) {
-        cmd = `${cmd} --export-on-exit=${EMULATOR_IMPORT_FOLDER}`
-    }
-```	
+if (false) {
+  cmd = `${cmd} --export-on-exit=${EMULATOR_IMPORT_FOLDER}`
+}
+```
 
 NOTE - due to filepath handling this is usually best done on a mac/linux device (windows export formattedly inconsistently for linux)
-
 
 ## Resetting seed data
 
@@ -101,6 +101,7 @@ E.g. A development and testing API has been created at [functions/src/dev/index.
 ```
 http://localhost:4002/{projectId}/us-central1/dev
 ```
+
 Where the projectId may be specified from configuration (default for emulators is `emulator-demo`)
 
 Using a REST client like [Insomnia](https://insomnia.rest/) or [Postman](https://www.getpostman.com/) can simplify the process of making api requests
@@ -110,7 +111,7 @@ _E.g. Insomnia Rest Client_
 
 # Authentication
 
-By default emulators allow full read/write access to all resources, however firebase functions still expect an authenticated user in order to access various external APIs before completing operations. 
+By default emulators allow full read/write access to all resources, however firebase functions still expect an authenticated user in order to access various external APIs before completing operations.
 
 The current workaround for this is authenticating using a custom service-account that has limited (read-only) access to resources on the testing project. This is done automatically during the start script [functions/scripts/start.ts](../../../../functions/scripts/start.ts).
 
@@ -148,18 +149,22 @@ taskkill /F /PID 8272
 _Linux: List processes on port_
 See a few examples at: https://stackoverflow.com/questions/11583562/how-to-kill-a-process-running-on-particular-port-in-linux/32592965
 e.g.
+
 ```
 sudo apt-get install lsof
 ```
+
 ```
 npx cross-port-killer 4003
 ```
 
 ## Firestore Emulator fatal error
+
 If one of the emulators throws a fatal error you might see a vague error message such as:
+
 ```
-⚠  firestore: Fatal error occurred: 
-   Firestore Emulator has exited with code: 1, 
+⚠  firestore: Fatal error occurred:
+   Firestore Emulator has exited with code: 1,
    stopping all running emulators
 ```
 
@@ -178,6 +183,7 @@ Caused by: java.io.FileNotFoundException: /mnt/c/apps/oneArmy/community-platform
 ```
 
 In this example it is trying to locate the seed data which does not exist, so to fix run the seed command
+
 ```
 yarn workspace functions run emulator:seed
 ```

@@ -23,7 +23,7 @@ If you think something is missing, consider sending us a PR.
 
 ## 👐 &nbsp; Code of Conduct
 
-This project and everyone participating in it is governed by the [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [platform@onearmy.world](mailto:platform@onearmy.world).
+This project and everyone participating in it is governed by the [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [platform@onearmy.earth](mailto:platform@onearmy.earth).
 
 ## 🤖 &nbsp; Technologies
 
@@ -130,7 +130,7 @@ As an open-source project most of our decisions up till now have been guided by 
 
 ## 🤝 &nbsp; Joining the team
 
-We are always open to have more people involved. If you would like to contribute more often, we would love to welcome you to the team. Just [send a quick email](mailto:platform@onearmy.world?subject=Developers%20Call%20To%20Arms), introducing yourself and outline:
+We are always open to have more people involved. If you would like to contribute more often, we would love to welcome you to the team. Just [send a quick email](mailto:platform@onearmy.earth?subject=Developers%20Call%20To%20Arms), introducing yourself and outline:
 
 1. Your experience working with the technologies listed above
 2. How much time you feel you can dedicate to the project

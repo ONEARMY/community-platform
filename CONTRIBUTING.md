@@ -51,15 +51,12 @@ You can find useful links to learn more about these technologies [in the resourc
   `yarn start`
 
 - Run the end-to-end tests
-  `yarn cy:test`
+  `yarn test`
 
 ### Additional commands
 
 - Run the component documentation
   `yarn storybook`
-
-- Open the Cypress Test Runner
-  `yarn cy:open`
 
 We use [Cypress](https://www.cypress.io/) to carry out end-to-end testing. For more information about how to setup, use and add tests refer to the sections in the [Testing Setup Wiki](https://github.com/ONEARMY/community-platform/wiki/Testing-Setup).
 

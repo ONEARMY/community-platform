@@ -1,5 +1,13 @@
 # Firebase Functions
 
+**Update 2021-08-11**
+
+This documentation likely requires updating, and the information provided may no longer be fully valid. Please feel free to create a new issue for any specific items identified as conflict/confusing or possibly no longer valid.
+
+Some additional, newer information can also be found in [Firebase Emulators Docs](../packages/documentation/docs/Backend%20Development/firebase-emulators.md)
+
+---
+
 ## What are they?
 
 Firebase functions are backend functions, triggered either via https requests, cloud pub/sub or other specific Firebase events (e.g. database/storage writes). They run within a nodejs environment and have full ability to interact with the firebase platform.
@@ -43,9 +51,7 @@ and the relevant config will automatically be made available
 
 This also only works for specific triggers (namely the https callable functions, api endpoints). For more information see https://firebase.google.com/docs/functions/local-emulator.
 
-NOTE - if running a function that requires access to the live database (and not just emulated), use `npm run serve:only:functions`, which will exclude db emulator and default to live project db 
-
-
+NOTE - if running a function that requires access to the live database (and not just emulated), use `npm run serve:only:functions`, which will exclude db emulator and default to live project db
 
 ## Handling headers and redirects
 
@@ -80,22 +86,28 @@ If making changes across the entire DB it is likely that backend functions will 
 A couple tips to help implementing:
 
 1. Create backups of all the collection points potentially affected.
-(note, you will need admin access to the project, and initialise using gcloud. Confirm access via `gcloud config list` and select project via `gcloud init`)
+   (note, you will need admin access to the project, and initialise using gcloud. Confirm access via `gcloud config list` and select project via `gcloud init`)
+
 ```
 gcloud firestore export gs://[BUCKET_NAME] --collection-ids=[COLLECTION_ID_1],[COLLECTION_ID_2]
 ```
+
 E.g. for the staging server, updating howtos and events:
+
 ```
 gcloud firestore export gs://precious-plastics-v4-dev-exports/2020-10-12 --collection-ids=v3_howtos,v3_events
 ```
+
 Or production
+
 ```
 gcloud firestore export gs://onearmyworld-exports/2020-10-12_manual_backup --collection-ids=v3_events,v3_howtos,v3_mappings,v3_tags,v3_users
 ```
+
 (note - whilst the full database can be backed up without specifying collection ids, this makes it harder to re-import a single collection)
 For more info see https://firebase.google.com/docs/firestore/manage-data/export-import#export_specific_collections
 
 1. For any data that you want to be reflected immediately, also change the `modified` field so that user caches will update as required
 
 2. If less confident or making large scale changes, consider populating to a new db endpoint, e.g. `v4_howtos`
-(this will need to also be updated in the models for both functions and frontend)
+   (this will need to also be updated in the models for both functions and frontend)

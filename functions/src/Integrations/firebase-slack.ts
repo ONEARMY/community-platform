@@ -9,22 +9,8 @@ const SLACK_WEBHOOK_URL = CONFIG.integrations.slack_webhook
 
 export const notifyNewPin = functions.firestore
   .document('v3_mappins/{pinId}')
-  .onWrite((change, context) => {
-    const info = change.after.exists ? change.after.data() : null
-    const prevInfo = change.before.exists ? change.before.data() : null
-    const prevModeration = (prevInfo !== null) ? prevInfo.moderation : null;
-    if (prevModeration === info.moderation){ // Avoid infinite loop
-      return null
-    }
-    if (prevModeration === 'accepted' && info.moderation === 'awaiting-moderation'){ // If edited after being accepted keep it accepted and avoid message #1008
-      return change.after.ref.set({
-        moderation: 'accepted'
-      }, {merge: true});
-    }
-    if (info === null || info.moderation !== 'awaiting-moderation' || prevModeration === 'awaiting-moderation') {
-      return null
-    }
-
+  .onCreate((snapshot) => {
+    const info = snapshot.data()
     const id = info._id
     const type = info.type
     const loc = info.location
@@ -46,24 +32,11 @@ export const notifyNewPin = functions.firestore
       },
     )
   })
+
 export const notifyNewHowTo = functions.firestore
   .document('v3_howtos/{id}')
-  .onWrite((change, context) => {
-    const info = change.after.exists ? change.after.data() : null
-    const prevInfo = change.before.exists ? change.before.data() : null
-    const prevModeration = (prevInfo !== null) ? prevInfo.moderation : null;
-    if (prevModeration === info.moderation){ // Avoid infinite loop
-      return null
-    }
-    if (prevModeration === 'accepted' && info.moderation === 'awaiting-moderation'){ // If edited after being accepted keep it accepted and avoid message #1008
-      return change.after.ref.set({
-        moderation: 'accepted'
-      }, {merge: true});
-    }
-    if (info === null || info.moderation !== 'awaiting-moderation') {
-      return null
-    }
-
+  .onCreate((snapshot) => {
+    const info = snapshot.data()
     const user = info._createdBy
     const title = info.title
     const slug = info.slug
@@ -88,12 +61,8 @@ export const notifyNewHowTo = functions.firestore
   })
 export const notifyNewEvent = functions.firestore
   .document('v3_events/{id}')
-  .onWrite((change, context) => {
-    const info = change.after.exists ? change.after.data() : null
-    if (info === null || info.moderation !== 'awaiting-moderation') {
-      return null
-    }
-
+  .onCreate((snapshot, context) => {
+    const info = snapshot.data()
     const user = info._createdBy
     const url = info.url
     const location = info.location.country

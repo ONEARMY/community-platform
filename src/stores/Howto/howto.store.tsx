@@ -159,7 +159,11 @@ export class HowtoStore extends ModuleStore {
           _created: new Date().toISOString(),
           _creatorId: user._id,
           creatorName: user.userName,
-          creatorCountry: user.country ? user.country.toLowerCase() : null,
+          creatorCountry: user.country
+            ? user.country.toLowerCase()
+            : user.location
+            ? user.location.countryCode
+            : null,
           text: comment,
         }
 

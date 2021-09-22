@@ -70,8 +70,12 @@ export class ImageConverter extends React.Component<IProps, IState> {
   }
 
   private _generateFileMeta(c: File) {
+    const indexOfDot = c.name.indexOf('.')
+    // inserts "-[current time in base-16]" right before the file type extension
+    const timeStampedName = c.name.slice(0, indexOfDot) + '-' + Date.now().toString(16) + c.name.slice(indexOfDot)
+
     const meta: IConvertedFileMeta = {
-      name: c.name,
+      name: timeStampedName,
       photoData: c,
       objectUrl: URL.createObjectURL(c),
       type: c.type,

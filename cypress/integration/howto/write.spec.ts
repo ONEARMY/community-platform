@@ -1,6 +1,9 @@
+const testTime = Date.now()
+
 describe('[How To]', () => {
   beforeEach(() => {
-    cy.visit('/how-to')
+    cy.clock(testTime)
+      .visit('/how-to')
   })
   type Duration = '<1 week' | '1-2 weeks' | '3-4 weeks'
   type Difficulty = 'Easy' | 'Medium' | 'Hard' | 'Very Hard'

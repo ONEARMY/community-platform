@@ -1,0 +1,37 @@
+# Build and deploy developer docs (oa-docs package)
+name: Docs Deploy
+on:
+  push:
+    branches:
+      - master
+    # Only run action if changes have been made to the documentation
+    paths:
+      - "packages/documentation/**"
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+        # Setup yarn 2 cache: https://github.com/actions/cache/blob/main/examples.md#node---yarn
+      - name: Setup Cache
+        uses: actions/cache@v2
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('packages/documentation/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install npm dependencies
+        run: yarn workspace oa-docs install --immutable
+      - name: Set Config
+        run: cp packages/documentation/docusaurus.config.gh-pages.js packages/documentation/docusaurus.config.js
+      - name: Build Docs
+        run: yarn workspace oa-docs build
+      - name: Deploy Docs
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./packages/documentation/build

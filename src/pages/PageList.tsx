@@ -2,7 +2,7 @@ import { lazy } from 'react'
 import { SITE } from 'src/config/config'
 import { CSSObject } from '@styled-system/css'
 import { Route } from 'react-router'
-import { UserRole } from 'src/models/user.models'
+import { UserRole } from 'oa-shared'
 import ExternalEmbed from 'src/components/ExternalEmbed/ExternalEmbed'
 import { ResearchModule } from './Research'
 

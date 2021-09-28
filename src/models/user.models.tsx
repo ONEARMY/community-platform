@@ -7,6 +7,7 @@ import {
 } from './common.models'
 import { IUploadedFileMeta } from 'src/stores/storage'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
+import { UserRole } from 'oa-shared'
 
 export interface IUserState {
   user?: IUser
@@ -69,5 +70,3 @@ interface IUserStats {
 }
 
 export type IUserDB = IUser & DBDoc
-
-export type UserRole = 'super-admin' | 'subscriber' | 'admin' | 'beta-tester'

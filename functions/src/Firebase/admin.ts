@@ -6,9 +6,7 @@ import * as admin from 'firebase-admin'
 import { SERVICE_ACCOUNT_CONFIG } from '../config/config'
 
 const serviceAccount = SERVICE_ACCOUNT_CONFIG
-const FIREBASE_CONFIG = JSON.parse(
-  process.env.FIREBASE_CONFIG,
-) as IFirebaseConfig
+const FIREBASE_CONFIG = JSON.parse(process.env.FIREBASE_CONFIG) as IFirebaseConfig
 // Use Service Account Config
 if (serviceAccount) {
   console.log(`[Admin Configuration] - ${FIREBASE_CONFIG.projectId}`)
@@ -38,7 +36,6 @@ else {
   console.log(`[Admin Configuration] - ${FIREBASE_CONFIG.projectId}`)
   admin.initializeApp()
 }
-
 
 export const firebaseAdmin = admin
 

@@ -3,11 +3,11 @@ module.exports = {
   tagline: 'Developer Documentation',
   url: 'https://your-docusaurus-test-site.com',
   baseUrl: '/',
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'ONEARMY', // Usually your GitHub org/user name.
-  projectName: 'Community Platform Developer Docs', // Usually your repo name.
+  projectName: 'community-platform', // Usually your repo name.
   themeConfig: {
     navbar: {
       title: 'OneArmy Community Platform',
@@ -72,8 +72,7 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           routeBasePath: '/',
           // Please change this to your repo.
-          editUrl:
-            'https://github.com/ONEARMY/community-platform/edit/master/documentation',
+          editUrl: 'https://github.com/ONEARMY/community-platform/edit/master/documentation',
         },
         // blog: {
         //   showReadingTime: true,

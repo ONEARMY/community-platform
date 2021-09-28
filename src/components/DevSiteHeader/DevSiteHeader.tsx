@@ -4,7 +4,6 @@ import theme from 'src/themes/styled.theme'
 import { UserRole } from 'src/models'
 import { Flex, Box } from 'rebass'
 import Select from 'react-select'
-
 /**
  * A simple header component that reminds developers that they are working on a dev
  * version of the platform, and provide the option to toggle between different dev sites
@@ -57,8 +56,8 @@ const DevSiteHeader = () => (
   </>
 )
 // we have 2 different dev sites, only show this component when on one and provide select
-const devSites = [
-  { value: 'localhost', label: 'Dev' },
+const devSites: { value: typeof SITE; label: string }[] = [
+  { value: 'dev_site', label: 'Dev' },
   { value: 'preview', label: 'Preview' },
 ]
 // dev site users can use either a default user profile or mock another admin role

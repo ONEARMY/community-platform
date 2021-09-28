@@ -4,11 +4,7 @@
 "Mod: Events 🎉": src/pages/Events/**/*
 "Mod: Maps 🗺": src/pages/Maps/**/*
 "Mod: Research 🔬": src/pages/Research/**/*
-
 "backend": functions/**/*
-
-"Documentation":
-  - any: ["README.md", "packages/documentation/**/*"]
-
+"Documentation": packages/documentation/**/*
 "Mod: DevOps 🤖":
   - any: ["cypress/**/*", "scripts/**/*"]

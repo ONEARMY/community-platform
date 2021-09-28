@@ -1,5 +1,5 @@
 # Build and deploy developer docs (oa-docs package)
-name: PR Preview
+name: Docs Deploy
 on:
   push:
     branches:

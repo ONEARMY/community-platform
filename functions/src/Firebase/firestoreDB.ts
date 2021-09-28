@@ -25,10 +25,7 @@ export const getLatestDoc = async (endpoint: IDBEndpoint, orderBy: string) => {
     .get()
   return col.docs[0]
 }
-export const getDoc = async <T=any>(
-  endpoint: IDBEndpoint,
-  docId: string,
-): Promise<T> => {
+export const getDoc = async <T = any>(endpoint: IDBEndpoint, docId: string): Promise<T> => {
   const mapping = DB_ENDPOINTS[endpoint] || endpoint
   console.log(`mapping [${endpoint}] -> [${mapping}]`)
   return db
@@ -48,4 +45,11 @@ export const getCollection = async <T>(endpoint: IDBEndpoint) => {
     .then(snapshot => {
       return snapshot.empty ? [] : snapshot.docs.map(d => d.data() as T & DBDoc)
     })
+}
+export const setDoc = async (endpoint: IDBEndpoint, docId: string, data: any) => {
+  const mapping = DB_ENDPOINTS[endpoint] || endpoint
+  return db
+    .collection(mapping)
+    .doc(docId)
+    .set(data)
 }

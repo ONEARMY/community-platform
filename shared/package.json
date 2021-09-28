@@ -1,5 +1,12 @@
 {
   "name": "oa-shared",
   "version": "1.0.0",
-  "main": "lib/index"
+  "main": "lib/index",
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "devDependencies": {
+    "@types/node": "^12.0.0",
+    "typescript": "4.2.4"
+  }
 }

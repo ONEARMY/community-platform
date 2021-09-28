@@ -5922,7 +5922,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/cors@npm:^2.8.8":
+"@types/cors@npm:^2.8.5, @types/cors@npm:^2.8.8":
   version: 2.8.12
   resolution: "@types/cors@npm:2.8.12"
   checksum: f3b62196df42c286282b9dbda26e24d2264211d932e7d9c2240f361e27ef693a5cb03790daeb3610fd958a0690f4d31d45ef7848b0df7a0dd2afc698a4f9df76
@@ -14247,9 +14247,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"firebase-admin@npm:^9.9.0":
-  version: 9.10.0
-  resolution: "firebase-admin@npm:9.10.0"
+"firebase-admin@npm:^9.11.1":
+  version: 9.11.1
+  resolution: "firebase-admin@npm:9.11.1"
   dependencies:
     "@firebase/database": ^0.10.0
     "@firebase/database-types": ^0.7.2
@@ -14265,27 +14265,28 @@ __metadata:
       optional: true
     "@google-cloud/storage":
       optional: true
-  checksum: 89fce1ba4a4654351170f7f4b815105456738881b410d6d192152b8b8000fae47496d0d5c1f9c3cc6736537ff2d2bcaeb294df8b25a6187b3c5d7e1b04ce511c
+  checksum: ba6b1f4f23d10a672b2d3160178a90655c2ec63ddd70f5204848c466ae9d024b193d0f573ab04b9d7b70d3668045df9f750a7b80cc883d5ecf9f491884643550
   languageName: node
   linkType: hard
 
-"firebase-functions@npm:^3.14.1":
-  version: 3.14.1
-  resolution: "firebase-functions@npm:3.14.1"
+"firebase-functions@npm:^3.15.7":
+  version: 3.15.7
+  resolution: "firebase-functions@npm:3.15.7"
   dependencies:
+    "@types/cors": ^2.8.5
     "@types/express": 4.17.3
     cors: ^2.8.5
     express: ^4.17.1
     lodash: ^4.17.14
   peerDependencies:
     firebase-admin: ^8.0.0 || ^9.0.0
-  checksum: c8901818d7b45cf325001b4810b6a9cdce452d33a8468c0a442ac01485bde0612d7794274a9a81723b703136ecbdc173fc7679d7b1d914cfff8b03646e0e26ff
+  checksum: 8ad4b3cecfda62dec5d46134d72e35d8bea7c2ca22814d4731000f7365f7838088be7eb7aeabf48c11d9334b536d0ef126e40dcb788d4b6de004b15da9b0a1b4
   languageName: node
   linkType: hard
 
-"firebase-tools@npm:>=9.16.5":
-  version: 9.16.5
-  resolution: "firebase-tools@npm:9.16.5"
+"firebase-tools@npm:>=9.18.0":
+  version: 9.18.0
+  resolution: "firebase-tools@npm:9.18.0"
   dependencies:
     "@google-cloud/pubsub": ^2.7.0
     "@types/archiver": ^5.1.0
@@ -14347,7 +14348,7 @@ __metadata:
     ws: ^7.2.3
   bin:
     firebase: ./lib/bin/firebase.js
-  checksum: 4030ec4e334ea25433f1d2dca6ab7d4acaf1109fac692b80ff8c8be64dd3b26274673b20e3b197190547ffc3357140b050e4d76b9616ceff8c2aba7433e6a0ff
+  checksum: e176a6252ea4d28446a0b46db64139e80f1fe9b24d938bd56fb49f13577c9d5310727c7e51ebfc6f167021d2d9128a4aee4f0ee5c16cf00e1165e66abf3963eb
   languageName: node
   linkType: hard
 
@@ -14880,9 +14881,9 @@ fsevents@^1.2.7:
     cross-env: ^7.0.3
     dateformat: ^3.0.3
     express: ^4.17.1
-    firebase-admin: ^9.9.0
-    firebase-functions: ^3.14.1
-    firebase-tools: ">=9.16.5"
+    firebase-admin: ^9.11.1
+    firebase-functions: ^3.15.7
+    firebase-tools: ">=9.18.0"
     fs-extra: ^9.0.1
     generate-json-webpack-plugin: ^1.0.0
     google-auth-library: ^6.1.1
@@ -21103,6 +21104,9 @@ fsevents@^1.2.7:
 "oa-shared@1.0.0, oa-shared@^1.0.0, oa-shared@workspace:shared":
   version: 0.0.0-use.local
   resolution: "oa-shared@workspace:shared"
+  dependencies:
+    "@types/node": ^12.0.0
+    typescript: 4.2.4
   languageName: unknown
   linkType: soft
 

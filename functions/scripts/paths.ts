@@ -16,3 +16,7 @@ export const EMULATOR_EXPORT_PATH = path.resolve(FUNCTIONS_DIR, EMULATOR_EXPORT_
 export const PLATFORM_ROOT_PATH = path.resolve(FUNCTIONS_DIR, '..')
 export const PLATFORM_LIB_PATH = path.resolve(PLATFORM_ROOT_PATH, 'lib')
 export const PLATFORM_TSCONFIG_TYPES_PATH = path.resolve(PLATFORM_ROOT_PATH, 'tsconfig.src-types.json')
+
+// for compiling shared folder
+export const OA_SHARED_ROOT_PATH = path.resolve(FUNCTIONS_DIR, '../shared')
+export const OA_SHARED_TSCONFIG_PATH = path.resolve(OA_SHARED_ROOT_PATH, 'tsconfig.json')

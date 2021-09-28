@@ -1,11 +1,10 @@
 # Build and deploy developer docs (oa-docs package)
-name: PR Preview
+name: Docs Deploy
 on:
   push:
     branches:
       - master
-      - feat/dev-docs
-    # Only create a preview if changes have been made to the documentation
+    # Only run action if changes have been made to the documentation
     paths:
       - "packages/documentation/**"
 jobs:
@@ -27,6 +26,8 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install npm dependencies
         run: yarn workspace oa-docs install --immutable
+      - name: Set Config
+        run: cp packages/documentation/docusaurus.config.gh-pages.js packages/documentation/docusaurus.config.js
       - name: Build Docs
         run: yarn workspace oa-docs build
       - name: Deploy Docs

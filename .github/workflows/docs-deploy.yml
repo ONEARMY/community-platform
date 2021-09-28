@@ -27,6 +27,8 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install npm dependencies
         run: yarn workspace oa-docs install --immutable
+      - name: Set Config
+        run: cp packages\documentation\docusaurus.config.gh-pages.js packages\documentation\docusaurus.config.js
       - name: Build Docs
         run: yarn workspace oa-docs build
       - name: Deploy Docs

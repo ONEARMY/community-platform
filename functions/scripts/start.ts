@@ -4,12 +4,9 @@ import webpack from 'webpack'
 import * as os from 'os'
 import * as fs from 'fs-extra'
 import webpackConfig from '../webpack.config'
-import {
-  EMULATOR_EXPORT_FOLDER,
-  EMULATOR_IMPORT_FOLDER,
-  EMULATOR_IMPORT_PATH,
-} from './paths'
+import { EMULATOR_EXPORT_FOLDER, EMULATOR_IMPORT_FOLDER, EMULATOR_IMPORT_PATH, FUNCTIONS_DIR } from './paths'
 import { emulatorSeed } from './emulator/seed'
+import { loadFirebaseConfig } from './firebase/loadConfig'
 
 /**
  * Start the functions emulator and functions source code in parallel
@@ -25,7 +22,11 @@ function main() {
     .then(webpackWatcher => {
       if (webpackWatcher) {
         // start emulator only after compiler running (to pass close callback)
-        startEmulator(webpackWatcher)
+        if (process.env.USE_LIVE_SITE) {
+          startFirebaseLiveServer(webpackWatcher)
+        } else {
+          startEmulator(webpackWatcher)
+        }
       }
     })
     .catch(err => {
@@ -107,9 +108,38 @@ function startEmulator(functionsCompiler: webpack.Compiler.Watching) {
   child.on('close', code => {
     if (code === 1) {
       console.error('[Emulator Error]')
-      functionsCompiler.close(() =>
-        console.log('Functions compiler terminated'),
-      )
+      functionsCompiler.close(() => console.log('Functions compiler terminated'))
+    }
+  })
+}
+
+/**
+ * Firebase use to support methods to interact with a live server whilst running locally,
+ * however since the emulator release this is no longer directly possible.
+ * This workaround starts the emulators, but passes a custom environment variable that
+ * will be used later to interact directly with the live project and bypass emulators
+ */
+function startFirebaseLiveServer(functionsCompiler: webpack.Compiler.Watching) {
+  // Load server firebase config and populate to file. Pass the path of the file as
+  // an environment variable to ensure read correctly. Variable name taken from:
+  // https://github.com/firebase/firebase-functions/blob/master/src/config.ts
+  const RUNTIME_CONFIG_PATH = loadFirebaseConfig()
+  const env = {
+    CLOUD_RUNTIME_CONFIG: RUNTIME_CONFIG_PATH,
+    USE_LIVE_SITE: 'true',
+  } as any
+  const FIREBASE_BIN = path.resolve(__dirname, '../node_modules/.bin/firebase')
+  const cmd = `${FIREBASE_BIN} functions:shell`
+  const child = spawn(cmd, {
+    stdio: 'inherit',
+    shell: true,
+    env,
+    cwd: FUNCTIONS_DIR,
+  })
+  child.on('close', code => {
+    if (code === 1) {
+      console.error('[Emulator Error]')
+      functionsCompiler.close(() => console.log('Functions compiler terminated'))
     }
   })
 }
@@ -131,10 +161,7 @@ function checkSeedData() {
  * considered safe enough for sharing
  */
 function prepareGoogleApplicationCredentials() {
-  const serviceAccountPath = path.resolve(
-    os.tmpdir(),
-    'firebase-functions-emulator.json',
-  )
+  const serviceAccountPath = path.resolve(os.tmpdir(), 'firebase-functions-emulator.json')
   const READ_ONLY_SERVICE_ACCOUNT_B64 = `ewogICJ0eXBlIjogInNlcnZpY2VfYWNjb3VudCIsCiAgInByb2plY3RfaWQiOiAicHJlY2lvdXMtcGxhc3RpY3MtdjQtZGV2IiwKICAicHJpdmF0ZV9rZXlfaWQiOiAiOTY5N2MyOWJjNmE3NWM2MmUzOGYzMzJiNTA3YTIwMDJjZTkxODk4ZCIsCiAgInByaXZhdGVfa2V5IjogIi0tLS0tQkVHSU4gUFJJVkFURSBLRVktLS0tLVxuTUlJRXZnSUJBREFOQmdrcWhraUc5dzBCQVFFRkFBU0NCS2d3Z2dTa0FnRUFBb0lCQVFDemZuOHlOWFJYZUcwM1xueXRnYzJsQzZtZ3o5WWhUZDNVNytnU3ZEc2t3aUl0YVZ2OU1oRXVpSFRLWHlZditCMGVCWTRkV0pSZjNPUW9wSVxuS2V3ZGdlVUw1YlhkVm5NZDkzTVlpVGVrY1RzMk5xTU5CeW5VZlpvemdXMVU1Ym1tS0lhT2dvbkNBUW1Nd01TZVxuNHZPQS9FaXFxdGppRG83TzNKT2VOOWFtS2hadUhwWVd2bHdmNU1MVmw3dTkzR2ZCdFpmZ0RlVmFpR2RkTU1PbVxuRit5SWJCNlFSbC9sNjhJaWt5UmtNSmcwRmtQOWhBb1NMK240aHZSYlMzSkFmMlpMcFJKZUFPaW9LbnJ6R3dLVFxuQ0NkZUZhcDBFNFpkNVppbmNDMXkyVFF6M3J4ZXFudGxvOXlFUWRvTE9Kbm5lN05DS3draS9xYnV4NWZaUFh3ZFxucXQ3T3BRYUpBZ01CQUFFQ2dnRUFCdEcvSDU5V0I1WTIwUXd5OUhxclgwR0h6WThldzVTYlFoSlNnVFY2akwvMVxuMXR2aU43TVdGRURhVzZoODlGZk96aFdyWlJNY2lzdnVvTUg5KzF1Q1loYTB0Mzluc1h0am15cW9hMllWWmJDQ1xuOXBWZmRwZ2NoZ2tzYUJHdndWTXdGSVU3V2x4cmVsWmZDZm5ObmtpSGNydDVzTEgwcFVHT1ZyQWdwckM1NkM1UFxuSlE2VzhLZHMvcVhQeXRmMktvWHhhR2ExaGFWNGd3ZHo1bStXVWcrNTFZdFVFbEg0V0ROSkQvV3RiVUJodUNpRVxuWlhzZGNrVWVuT0xjTUJ5V0RldEVYVi9OaHRzK2t2RCtvNFMvd3N2UHZySWZpRGtGQTVzNUQzMVh0NDczeG9GQVxuUkxmZ0hIVWtTMDFDWjlSdFJpS1I2SThjTlFidVRJYjcyWVlqbXN5dnNRS0JnUUR5Rmc5cGg0Z24zbkUxL3Jib1xuN1Z0K2RnYlJzdDErWEtWeUdRQjJ0ejRibFYrYnZuY3daTXBIZGhNc3hDSnlkVllibDlNeGZXbkhqRTI0U0I4YVxuUUxUcU1QTXhqVTNHWURwOVVHL2ZZR296TmVxalZaNjJwNVFoTDhOZ2o4bktpUzBBalpqeGJIYWN2dGtCMU42T1xuWjIraEhhb0ZyM2tBOTZrbU0xamhkaEJZbVFLQmdRQzl6M3pDdkJxdlNqSFRXQisvNDExaU5oc3ZiaVNBQURuL1xuZ0pNMlF1UFFpK3VNVW9mNHlNK3BFcGNRSzFyaHo3Y2ZINGtiTWt6aGk5NGRtaXNMK1lkeW81di9aT25ZNmIvMVxuUTYrYXlzRmYwMXdoVjVHWDE5QmNiOThyNFdTTjgxc0lzZlhJQ1hBWHI2bXd3K0wxWDJHYXhlMzBBMk92UkF4cFxuZ0VRc1hYa2pjUUtCZ1FEaUdreUd5YmtYVTZEMVIxTmF0ZVhRZFRmbFAyTzBFNS9Lc3lORnZkdmFNMmM2dFdmb1xuNFJvMEtFbThjK3VnYjRyZTlxeWYrbnlEamIxQk1zc3AzK21aR2VMcUV3bmpFQmxRMVlISFpldUtyUDdiVXFxTFxuK25SVmtxQ3VYVjJoTndHN0ZJVVdaN0ZZc0w5S0FLRms2NkxOSGtHZ1VjVjRhOWVtQUNzeFdPM25jUUtCZ1FDclxucUNxM1hqQnYySlNwQXFoci9HNW10SEh2ZWhldVh3WVVxSzM1dzVLTjl3eEY4aG1nQjlPdG51OVpJeXhrelZwWlxuM2tZN2Ywa0NMV0RwdXBRMWx5eEVvK3dmazU3Y21jRU5TWEpWZGdwZDVDTU0wRW9PWFpIRkZ6Tm9Wc1YranRnRVxuVEJUd0hJRHdHdUJHeVZESEFjU2VtV1B5YXVKTERpcC9ldzJzWmJoNU1RS0JnQ1ZROU9qaTJNb2xtQ0M2bTYzeFxuYXMxMnIxdjJhV3FzbHVlTHRvNHV4NEh4ZEkxN0JQU3RsWjdIKy95Z0hXdmxDUWNJTU5TWkRpSFpBVWh0Mzg1aVxubmp0WFYxVkxZR05sNEIyRXJabU82VUhMTzAySndOMUw0M1d4bm5yY3ZlMFp4ZnJ5bEpkUVpTTElUaWFraGVpRlxuN0piK2FxNCtkTVdDYk1yVnp4WGozb29KXG4tLS0tLUVORCBQUklWQVRFIEtFWS0tLS0tXG4iLAogICJjbGllbnRfZW1haWwiOiAiYmFja2VuZC1mdW5jdGlvbnMtZGV2QHByZWNpb3VzLXBsYXN0aWNzLXY0LWRldi5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsCiAgImNsaWVudF9pZCI6ICIxMTA1OTEyOTQyODk1MDE1NzI4NTEiLAogICJhdXRoX3VyaSI6ICJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20vby9vYXV0aDIvYXV0aCIsCiAgInRva2VuX3VyaSI6ICJodHRwczovL29hdXRoMi5nb29nbGVhcGlzLmNvbS90b2tlbiIsCiAgImF1dGhfcHJvdmlkZXJfeDUwOV9jZXJ0X3VybCI6ICJodHRwczovL3d3dy5nb29nbGVhcGlzLmNvbS9vYXV0aDIvdjEvY2VydHMiLAogICJjbGllbnRfeDUwOV9jZXJ0X3VybCI6ICJodHRwczovL3d3dy5nb29nbGVhcGlzLmNvbS9yb2JvdC92MS9tZXRhZGF0YS94NTA5L2JhY2tlbmQtZnVuY3Rpb25zLWRldiU0MHByZWNpb3VzLXBsYXN0aWNzLXY0LWRldi5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIKfQ==`
   const buffer = Buffer.from(READ_ONLY_SERVICE_ACCOUNT_B64, 'base64')
   const serviceAccountTxt = buffer.toString('utf8')

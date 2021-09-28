@@ -1,8 +1,8 @@
 module.exports = {
   title: 'OneArmy Community Platform',
   tagline: 'Developer Documentation',
-  url: 'https://your-docusaurus-test-site.com',
-  baseUrl: '/',
+  url: 'https://onearmy.github.io/community-platform',
+  baseUrl: '/community-platform/',
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
@@ -72,7 +72,8 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           routeBasePath: '/',
           // Please change this to your repo.
-          editUrl: 'https://github.com/ONEARMY/community-platform/edit/master/documentation',
+          editUrl:
+            'https://github.com/ONEARMY/community-platform/edit/master/documentation',
         },
         // blog: {
         //   showReadingTime: true,

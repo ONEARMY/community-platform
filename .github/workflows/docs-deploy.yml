@@ -4,8 +4,7 @@ on:
   push:
     branches:
       - master
-      - feat/dev-docs
-    # Only create a preview if changes have been made to the documentation
+    # Only run action if changes have been made to the documentation
     paths:
       - "packages/documentation/**"
 jobs:

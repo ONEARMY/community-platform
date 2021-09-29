@@ -15,19 +15,12 @@ export async function seedUsersCreate() {
       try {
         const authUser = await auth.getUserByEmail(user.email)
         if (authUser) {
-          const updatedUser = await auth.updateUser(authUser.uid, {
-            displayName: label,
-          })
+          const updatedUser = await auth.updateUser(authUser.uid, { displayName: label })
           createdUsers.push(updatedUser.toJSON())
         }
         // create user if does not exist
       } catch (error) {
-        const createdUser = await auth.createUser({
-          displayName: label,
-          email,
-          password,
-          uid,
-        })
+        const createdUser = await auth.createUser({ displayName: label, email, password, uid })
         createdUsers.push(createdUser.toJSON())
       }
     }

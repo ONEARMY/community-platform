@@ -8,6 +8,7 @@ import * as functions from 'firebase-functions'
 import cors from 'cors'
 import express from 'express'
 import { seedCleanData } from './seed/clean-data'
+import { seedUsersCreate } from './seed/users-create'
 
 console.log('dev api ready')
 
@@ -18,21 +19,14 @@ app.use(cors({ origin: true }))
 app.use(function(req, res, next) {
   const host = req.get('host')
   if (host === 'localhost:4002') next()
-  else
-    res
-      .status(403)
-      .send(
-        `Dev api methods can only be accessed on localhost:4002. Host: [${host}]`,
-      )
+  else res.status(403).send(`Dev api methods can only be accessed on localhost:4002. Host: [${host}]`)
 })
 
 app.get('/', (req, res) => res.status(200).send('Dev Api Working'))
 
 app.post('/seed-clean-data', (req, res) => seedCleanData(req, res))
 
-app.post('/seed-users-create', (req, res) =>
-  seedUsersCreate().then(users => res.status(200).send(users)),
-)
+app.post('/seed-users-create', (req, res) => seedUsersCreate().then(users => res.status(200).send(users)))
 
 export = functions.https.onRequest(app as any)
 

@@ -56,7 +56,8 @@
       "port": 4002
     },
     "firestore": {
-      "port": 4003
+      "port": 4003,
+      "host": "::1"
     },
     "hosting": {
       "port": 4004

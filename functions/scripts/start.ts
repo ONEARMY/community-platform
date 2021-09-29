@@ -11,6 +11,9 @@ import {
 } from './paths'
 import { emulatorSeed } from './emulator/seed'
 
+// change this value if also wanting to export data
+const EXPORT_ON_EXIT = true
+
 /**
  * Start the functions emulator and functions source code in parallel
  *
@@ -18,14 +21,15 @@ import { emulatorSeed } from './emulator/seed'
  * SIGTERM signals don't seem to always be handled correctly and the emulator doesn't complete
  * export operations. Similarly webpack watch cli respawns even after SIGINT so better to run programatically
  */
-function main() {
+async function main() {
   // CLI: concurrently --kill-others-on-fail --names \"emulator,functions\" -c \"blue,magenta\" \"yarn serve:emulated\" \"yarn watch\"
 
+  // change this value if also wanting to export data
   compileAndWatchFunctions()
-    .then(webpackWatcher => {
+    .then(async webpackWatcher => {
       if (webpackWatcher) {
         // start emulator only after compiler running (to pass close callback)
-        startEmulator(webpackWatcher)
+        await startEmulator(webpackWatcher)
       }
     })
     .catch(err => {
@@ -75,7 +79,7 @@ async function compileAndWatchFunctions(): Promise<webpack.Compiler.Watching> {
  * The reason we need both is because google expects authenticated users to access various 3rd party apis before
  * code execution, e.g. https://github.com/firebase/firebase-tools/issues/1683 and https://github.com/firebase/firebase-tools/issues/1708
  */
-function startEmulator(functionsCompiler: webpack.Compiler.Watching) {
+async function startEmulator(functionsCompiler: webpack.Compiler.Watching) {
   // call firebase bin directly in case not installed globally
   const FIREBASE_BIN = path.resolve(__dirname, '../node_modules/.bin/firebase')
   // the name of the project that generated service account credentials has access to
@@ -85,18 +89,17 @@ function startEmulator(functionsCompiler: webpack.Compiler.Watching) {
   let cmd = `${FIREBASE_BIN} use ${REAL_PROJECT_ID} && ${FIREBASE_BIN} --project=${EMULATOR_PROJECT_ID} emulators:start`
 
   // ensure seed data imported
-  checkSeedData()
+  await checkSeedData()
   cmd = `${cmd} --import=${EMULATOR_IMPORT_FOLDER}`
 
-  // change this value if also wanting to export data
-  if (false) {
+  if (EXPORT_ON_EXIT) {
     cmd = `${cmd} --export-on-exit=${EMULATOR_EXPORT_FOLDER}`
   }
 
   const env = {
     GCLOUD_PROJECT: EMULATOR_PROJECT_ID,
     GOOGLE_APPLICATION_CREDENTIALS: prepareGoogleApplicationCredentials(),
-  }
+  } as any
 
   const child = spawn(cmd, {
     shell: true,
@@ -114,11 +117,11 @@ function startEmulator(functionsCompiler: webpack.Compiler.Watching) {
   })
 }
 
-function checkSeedData() {
+async function checkSeedData() {
   // TODO - handle case where seed data exists but newer data available (e.g. specify file)
   if (!fs.existsSync(EMULATOR_IMPORT_PATH)) {
     console.log('[Emulator] - Seeding Data')
-    emulatorSeed()
+    return emulatorSeed()
   }
 }
 

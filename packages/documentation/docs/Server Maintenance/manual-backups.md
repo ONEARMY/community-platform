@@ -14,6 +14,11 @@ In order to fully backup the platform there are 3 areas that need to be backed u
 
    The backup can be made to the existing `onearmyworld-exports` bucket, or a personal storage bucket. Exports should be named in a consistent way, prefixed with a timestamp (`yyyy-mm-dd`)
 
+  :::tip
+  If using windows the default export name will use invalid characters in the timestamp for filepaths,
+  e.g. `2021-09-28T15:21:41`. A folder should be manually specified instead avoiding `:` characters.
+  :::
+
    The backup can also be downloaded locally using the [gsutil](https://cloud.google.com/storage/docs/gsutil) tool
 
    ```

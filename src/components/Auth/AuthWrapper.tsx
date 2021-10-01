@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 import { UserStore } from 'src/stores/User/user.store'
-import { UserRole } from 'src/models/user.models'
+import { UserRole } from 'oa-shared'
 import { SITE, DEV_SITE_ROLE } from 'src/config/config'
 
 /*
@@ -22,14 +22,13 @@ interface IState {}
 export class AuthWrapper extends React.Component<IProps, IState> {
   isUserAuthorized() {
     const { user } = this.props.userStore!
-    const { additionalAdmins } = this.props
+    const { additionalAdmins, roleRequired } = this.props
 
     // provide access to named users
     if (additionalAdmins && user?._id && additionalAdmins.includes(user?._id)) {
       return true
     }
 
-    const { roleRequired } = this.props
     let userRoles = user?.userRoles || []
     // if running dev or preview site allow user-overridden permissions (ignoring db user role)
     if (SITE === 'dev_site' || SITE === 'preview') {

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Route, RouteProps } from 'react-router'
 import { observer } from 'mobx-react'
-import { UserRole } from 'src/models/user.models'
+import { UserRole } from 'oa-shared'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
@@ -14,6 +14,8 @@ import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 interface IProps extends RouteProps {
   component: React.ComponentType<any>
   roleRequired?: UserRole
+  /** User ids to be treated as admin, e.g. content creator */
+  additionalAdmins?: string[]
 }
 interface IState {}
 @observer
@@ -21,9 +23,15 @@ export class AuthRoute extends React.Component<IProps, IState> {
   static defaultProps: Partial<IProps>
 
   render() {
-    const { component: Component, roleRequired, ...rest } = this.props
+    const {
+      component: Component,
+      roleRequired,
+      additionalAdmins,
+      ...rest
+    } = this.props
     return (
       <AuthWrapper
+        additionalAdmins={additionalAdmins}
         roleRequired={roleRequired}
         fallback={
           <Flex justifyContent="center" mt="40px" data-cy="auth-route-deny">

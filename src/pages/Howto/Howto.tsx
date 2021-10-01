@@ -26,6 +26,7 @@ class HowtoPage extends React.Component<IProps, any> {
   }
 
   public render() {
+    const howtoAuthorId = this.props.howtoStore?.activeHowto?._createdBy
     return (
       <Suspense fallback={<div></div>}>
         <Switch>
@@ -40,7 +41,11 @@ class HowtoPage extends React.Component<IProps, any> {
             exact
             render={props => <Howto {...props} />}
           />
-          <AuthRoute path="/how-to/:slug/edit" component={EditHowto} />
+          <AuthRoute
+            path="/how-to/:slug/edit"
+            component={EditHowto}
+            additionalAdmins={howtoAuthorId ? [howtoAuthorId] : undefined}
+          />
         </Switch>
       </Suspense>
     )

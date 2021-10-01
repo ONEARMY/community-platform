@@ -43,11 +43,7 @@ export class UserStore extends ModuleStore {
   }
 
   // when registering a new user create firebase auth profile as well as database user profile
-  public async registerNewUser(
-    email: string,
-    password: string,
-    displayName: string,
-  ) {
+  public async registerNewUser(email: string, password: string, displayName: string) {
     // stop auto detect of login as will pick up with incomplete information during registration
     this._unsubscribeFromAuthStateChanges()
     const authReq = await auth.createUserWithEmailAndPassword(email, password)
@@ -73,10 +69,7 @@ export class UserStore extends ModuleStore {
   }
 
   // handle user sign in, when firebase authenticates wnat to also fetch user document from the database
-  public async userSignedIn(
-    user: IFirebaseUser | null,
-    newUserCreated = false,
-  ) {
+  public async userSignedIn(user: IFirebaseUser | null, newUserCreated = false) {
     if (user) {
       console.log('user signed in', user)
       // legacy user formats did not save names so get profile via email - this option be removed in later version
@@ -115,23 +108,17 @@ export class UserStore extends ModuleStore {
   // to fix a script should be run to update all firebase_auth display names to correct format
   // which could then be used as a single lookup
   public async getUserProfile(_authID: string) {
-    const lookup = await this.db
-      .collection<IUserPP>(COLLECTION_NAME)
-      .getWhere('_authID', '==', _authID)
+    const lookup = await this.db.collection<IUserPP>(COLLECTION_NAME).getWhere('_authID', '==', _authID)
     if (lookup.length === 1) {
       return lookup[0]
     }
-    const lookup2 = await this.db
-      .collection<IUserPP>(COLLECTION_NAME)
-      .getWhere('_id', '==', _authID)
+    const lookup2 = await this.db.collection<IUserPP>(COLLECTION_NAME).getWhere('_id', '==', _authID)
     return lookup2[0]
   }
 
   public async updateUserProfile(values: Partial<IUserPP>) {
     this.updateUpdateStatus('Start')
-    const dbRef = this.db
-      .collection<IUserPP>(COLLECTION_NAME)
-      .doc((values as IUserDB)._id)
+    const dbRef = this.db.collection<IUserPP>(COLLECTION_NAME).doc((values as IUserDB)._id)
     const id = dbRef.id
     const user = this.user as IUserPPDB
     if (values.coverImages) {
@@ -172,10 +159,7 @@ export class UserStore extends ModuleStore {
   public async changeUserPassword(oldPassword: string, newPassword: string) {
     // *** TODO - (see code in change pw component and move here)
     const user = this.authUser as firebase.default.User
-    const credentials = EmailAuthProvider.credential(
-      user.email as string,
-      oldPassword,
-    )
+    const credentials = EmailAuthProvider.credential(user.email as string, oldPassword)
     await user.reauthenticateAndRetrieveDataWithCredential(credentials)
     return user.updatePassword(newPassword)
   }
@@ -191,10 +175,7 @@ export class UserStore extends ModuleStore {
   public async deleteUser(reauthPw: string) {
     // as delete operation is sensitive requires user to revalidate credentials first
     const authUser = auth.currentUser as firebase.default.User
-    const credential = EmailAuthProvider.credential(
-      authUser.email as string,
-      reauthPw,
-    )
+    const credential = EmailAuthProvider.credential(authUser.email as string, reauthPw)
     try {
       await authUser.reauthenticateAndRetrieveDataWithCredential(credential)
       const user = this.user as IUser
@@ -230,6 +211,7 @@ export class UserStore extends ModuleStore {
       ...fields,
     }
     // update db
+    // TODO - if a new user picks an existing displayName will wipe profile!!!! (possibly checked in form)
     await dbRef.set(user)
   }
 

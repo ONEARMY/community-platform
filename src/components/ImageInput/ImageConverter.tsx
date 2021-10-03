@@ -100,15 +100,3 @@ export class ImageConverter extends React.Component<IProps, IState> {
 ImageConverter.defaultProps = {
   onImgClicked: () => null,
 }
-
-/************************************************************************************
- *    Interfaces
- *
- *************************************************************************************/
-
-interface ICompressionOptions {
-  maxWidthOrHeight: number
-}
-
-// type imageFormats = 'image/jpeg' | 'image/jpg' | 'image/gif' | 'image/png'
-// Additional types: image/bmp, image/tiff, image/x-icon,  image/svg+xml, image/webp, image/xxx

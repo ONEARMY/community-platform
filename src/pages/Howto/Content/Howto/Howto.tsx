@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { RouteComponentProps } from 'react-router'
+import { RouteComponentProps, Redirect } from 'react-router'
 // TODO add loader (and remove this material-ui dep)
 import { inject, observer } from 'mobx-react'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
@@ -19,8 +19,6 @@ import WhiteBubble3 from 'src/assets/images/white-bubble_3.svg'
 import { Link } from 'src/components/Links'
 import { zIndex } from 'src/themes/styled.theme'
 import { Loader } from 'src/components/Loader'
-import { Route } from 'react-router-dom'
-import { NotFoundPage } from '../../../NotFound/NotFound'
 import { UserStore } from 'src/stores/User/user.store'
 import { HowToComments } from './HowToComments/HowToComments'
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
@@ -122,6 +120,7 @@ export class Howto extends React.Component<
     const { isLoading } = this.state
     const loggedInUser = this.injected.userStore.activeUser
     const { activeHowto } = this.store
+
     if (activeHowto) {
       return (
         <>
@@ -158,7 +157,18 @@ export class Howto extends React.Component<
         </>
       )
     } else {
-      return isLoading ? <Loader /> : <Route component={NotFoundPage} />
+      return isLoading ? (
+        <Loader />
+      ) : (
+        <Redirect
+          to={{
+            pathname: '/how-to',
+            search:
+              '?search=' +
+              (this.props?.match?.params?.slug).replace(/\-/gi, ' '),
+          }}
+        />
+      )
     }
   }
 }

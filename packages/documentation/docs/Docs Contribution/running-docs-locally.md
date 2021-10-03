@@ -10,7 +10,7 @@ yarn workspace oa-docs install
 ```
 Running the documentation server
 ```
-yarn workspace oa-docs docs
+yarn workspace oa-docs start
 ```
 
 

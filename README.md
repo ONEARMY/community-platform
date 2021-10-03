@@ -1,6 +1,13 @@
 [![Build Status](https://travis-ci.org/ONEARMY/community-platform.svg?branch=master)](https://travis-ci.org/ONEARMY/community-platform)
 [![style: styled-components](https://img.shields.io/badge/style-%F0%9F%92%85%20styled--components-orange.svg?colorB=daa357&colorA=db748e)](https://github.com/styled-components/styled-components)
 
+# 🔗 &nbsp; tl;dr Quick Links
+- [Project Website](https://platform.onearmy.earth)
+- [Precious Plastic Community Platform (live site)](http://community.preciousplastic.com/)
+- [Developer documentation](https://onearmy.github.io/community-platform/)
+- [Contributing Guide](/CONTRIBUTING.md)
+
+
 # 🌍 &nbsp; Community Platform
 
 Welcome to our Community Platform!

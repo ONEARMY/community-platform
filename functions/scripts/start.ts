@@ -4,7 +4,7 @@ import webpack from 'webpack'
 import * as os from 'os'
 import * as fs from 'fs-extra'
 import webpackConfig from '../webpack.config'
-import { EMULATOR_EXPORT_FOLDER, EMULATOR_IMPORT_FOLDER, EMULATOR_IMPORT_PATH, FUNCTIONS_DIR } from './paths'
+import { EMULATOR_EXPORT_FOLDER, EMULATOR_IMPORT_FOLDER, FUNCTIONS_DIR } from './paths'
 import { emulatorSeed } from './emulator/seed'
 import { loadFirebaseConfig } from './firebase/loadConfig'
 
@@ -89,8 +89,8 @@ async function startEmulator(functionsCompiler: webpack.Compiler.Watching) {
   const EMULATOR_PROJECT_ID = 'emulator-demo'
   let cmd = `${FIREBASE_BIN} use ${REAL_PROJECT_ID} && ${FIREBASE_BIN} --project=${EMULATOR_PROJECT_ID} emulators:start`
 
-  // ensure seed data imported
-  await checkSeedData()
+  // ensure latest seed data imported
+  await emulatorSeed()
   cmd = `${cmd} --import=${EMULATOR_IMPORT_FOLDER}`
 
   if (EXPORT_ON_EXIT) {
@@ -145,14 +145,6 @@ function startFirebaseLiveServer(functionsCompiler: webpack.Compiler.Watching) {
       functionsCompiler.close(() => console.log('Functions compiler terminated'))
     }
   })
-}
-
-async function checkSeedData() {
-  // TODO - handle case where seed data exists but newer data available (e.g. specify file)
-  if (!fs.existsSync(EMULATOR_IMPORT_PATH)) {
-    console.log('[Emulator] - Seeding Data')
-    return emulatorSeed()
-  }
 }
 
 /**

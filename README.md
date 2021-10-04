@@ -1,18 +1,21 @@
-[![Build Status](https://travis-ci.org/ONEARMY/community-platform.svg?branch=master)](https://travis-ci.org/ONEARMY/community-platform)
-[![style: styled-components](https://img.shields.io/badge/style-%F0%9F%92%85%20styled--components-orange.svg?colorB=daa357&colorA=db748e)](https://github.com/styled-components/styled-components)
+[![Build Status](https://circleci.com/gh/ONEARMY/community-platform/tree/master.svg?style=svg)](https://app.circleci.com/pipelines/github/ONEARMY/community-platform?branch=master)
+[![GitHub license](https://badgen.net/github/license/ONEARMY/community-platform)](https://github.com/ONEARMY/community-platform/blob/master/LICENSE)
+[![GitHub license](https://badgen.net/github/tag/ONEARMY/community-platform)](https://github.com/ONEARMY/community-platform/blob/master/LICENSE)
+[![GitHub contributors](https://img.shields.io/github/contributors/ONEARMY/community-platform)](https://GitHub.com/Naereen/badges/graphs/contributors/)
+[![discord](https://badges.aleen42.com/src/discord.svg)](https://discord.gg/up3nBbEbxY)
+
 
 # 🔗 &nbsp; tl;dr Quick Links
+
 - [Project Website](https://platform.onearmy.earth)
 - [Precious Plastic Community Platform (live site)](http://community.preciousplastic.com/)
 - [Developer documentation](https://onearmy.github.io/community-platform/)
 - [Contributing Guide](/CONTRIBUTING.md)
 
-
 # 🌍 &nbsp; Community Platform
 
 Welcome to our Community Platform!
 We are building this giant castle to help unite people and contribute to social & environmental projects, such as [Precious Plastic](https://preciousplastic.com), [Phonebloks](https://phonebloks.com/), [ProjectKamp](https://projectkamp.com/) or [Story Hopper](https://story-hopper.com/). A platform to connect, educate and empower our global community (65K) to solve society's greatest challenges. Together.
-
 
 ## 👀 &nbsp; Why?
 

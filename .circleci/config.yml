@@ -26,7 +26,7 @@ orbs:
 aliases:
   # use a base image running node v12 with chrome/firefox browsers preinstalled
   - &docker
-    - image: cimg/node:12.21-browsers
+    - image: cimg/node:12.22-browsers
     # These can also be created as commands, but slighly tidier to just use inline
     # restore/install/save can all be done with a single circle-ci orb, but less flexible and breaks intellisense
   - &restore_yarn_cache
@@ -245,6 +245,8 @@ jobs:
       BUILD_ENV:
         type: string
         default: ''
+    # Max allowed size for free builds (helps with out-of-memory issues) - https://circleci.com/docs/2.0/configuration-reference/#resourceclass 
+    resource_class: medium    
     steps:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - setup_repo

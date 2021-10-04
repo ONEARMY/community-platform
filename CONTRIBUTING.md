@@ -1,3 +1,6 @@
+[![react](https://badges.aleen42.com/src/react.svg)](https://reactjs.org/docs/getting-started.html)
+[![Style: Styled-components](https://img.shields.io/badge/style-%F0%9F%92%85%20styled--components-orange.svg?colorB=daa357&colorA=db748e)](https://github.com/styled-components/styled-components)
+
 # Contribution Guidelines
 
 Thanks for being here already! You'll find all the information you need to start contributing to the project. Make sure to read them before submitting your contribution.

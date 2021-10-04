@@ -14,7 +14,7 @@ const notificationSubscribe = (
   topic: PubSubTopics,
   callback: (data: PubSubData) => void,
 ) => {
-  return PubSub.subscribe(topic, (t: PubSubTopics, data: PubSubData) => {
+  return PubSub.subscribe(topic, (t, data) => {
     callback(data)
   })
 }

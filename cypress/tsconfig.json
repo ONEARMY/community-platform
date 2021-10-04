@@ -1,8 +1,11 @@
 {
-  "extends": "../tsconfig.json",
   "compilerOptions": {
+    "target": "es6",
+    "lib": ["es6", "dom"],
     "types": ["cypress", "node", "cypress-file-upload"],
-    "isolatedModules": false
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "resolveJsonModule": true
   },
-  "include": ["../node_modules/cypress", "**/*.ts"]
+  "include": ["**/*.ts"]
 }

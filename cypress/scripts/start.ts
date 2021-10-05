@@ -53,12 +53,12 @@ function runTests() {
 
   // main testing command, depending on whether running on ci machine or interactive local
   // call with path to bin as to ensure locally installed used
-  const { CY_BIN_PATH, CROSSENV_BIN_PATH } = PATHS
+  const { CY_BIN, CROSSENV_BIN } = PATHS
   const testCMD = isCi
-    ? `${CY_BIN_PATH} run --record --env ${CYPRESS_ENV} --key=${CYPRESS_KEY} --parallel --headless --browser ${CI_BROWSER} --group ${CI_GROUP} --ci-build-id ${buildId}`
-    : `${CY_BIN_PATH} open --browser chrome --env ${CYPRESS_ENV}`
+    ? `${CY_BIN} run --record --env ${CYPRESS_ENV} --key=${CYPRESS_KEY} --parallel --headless --browser ${CI_BROWSER} --group ${CI_GROUP} --ci-build-id ${buildId}`
+    : `${CY_BIN} open --browser chrome --env ${CYPRESS_ENV}`
 
-  const spawn = spawnSync(`${CROSSENV_BIN_PATH} FORCE_COLOR=1 ${testCMD}`, {
+  const spawn = spawnSync(`${CROSSENV_BIN} FORCE_COLOR=1 ${testCMD}`, {
     shell: true,
     stdio: ['inherit', 'inherit', 'pipe'],
     cwd: PATHS.WORKSPACE_DIR
@@ -77,26 +77,26 @@ function runTests() {
  *
  */
 async function startAppServer() {
-  const { CROSSENV_BIN_PATH } = PATHS
+  const { CROSSENV_BIN, BUILD_SERVE_JSON } = PATHS
   // by default spawns will not respect colours used in stdio, so try to force
   const crossEnvArgs = `FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci`
 
   // run local debug server for testing unless production build specified
-  let serverCmd = `${CROSSENV_BIN_PATH} ${crossEnvArgs} BROWSER=none PORT=3456 npm run start`
+  let serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} BROWSER=none PORT=3456 npm run start`
 
   // for production will instead serve from production build folder
   if (useProductionBuild) {
     // create local build if not running on ci (which will have build already generated)
     if (!isCi) {
       // specify CI=false to prevent throwing lint warnings as errors
-      spawnSync(`${CROSSENV_BIN_PATH} ${crossEnvArgs} CI=false npm run build`, {
+      spawnSync(`${CROSSENV_BIN} ${crossEnvArgs} CI=false npm run build`, {
         shell: true,
         stdio: ['inherit', 'inherit', 'pipe'],
       })
     }
     // create a rewrites file for handling local server behaviour
     const opts = { rewrites: [{ source: '/**', destination: '/index.html' }] }
-    fs.writeFileSync('build/serve.json', JSON.stringify(opts))
+    fs.writeFileSync(BUILD_SERVE_JSON, JSON.stringify(opts))
     serverCmd = `npx serve build -l 3456`
   }
 

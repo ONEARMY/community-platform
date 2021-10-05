@@ -50,6 +50,14 @@ yarn start
 
 ## Troubleshooting
 
+Sometimes dependencies can get into an outdated or bad state. As a general fix, deleting all existing 3rd party dependencies and installing clean may fix many issues. There is a helper script available to do this:
+
+```
+yarn install:clean
+```
+
+Otherwise possible solutions to some specific issues are also listed below
+
 ### Module not found
 
 If whilst attempting to run the app a `module-not-found` (or similar) error appears, it is likely because dependencies have been updated and require install again. Running the `yarn install` command again should fix.

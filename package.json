@@ -17,11 +17,12 @@
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx src --color",
     "serve": "npx serve -s build",
-    "test": "node scripts/test.e2e.js",
+    "test": "yarn workspace oa-cypress start",
     "test:unit": "react-scripts test --env=jsdom",
     "storybook": "yarn workspace oa-storybook start",
     "docs": "yarn workspace oa-docs start",
-    "analyze": "npx cra-bundle-analyzer && npx open-cli build/report.html"
+    "analyze": "npx cra-bundle-analyzer && npx open-cli build/report.html",
+    "install:clean": "yarn workspace oa-scripts install:clean"
   },
   "husky": {
     "hooks": {

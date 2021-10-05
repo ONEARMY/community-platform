@@ -1,7 +1,16 @@
 {
   "name": "oa-scripts",
   "version": "1.0.0",
+  "scripts": {
+    "install:clean": "ts-node ./install-clean.ts"
+  },
   "dependencies": {
-    "oa-shared": "1.0.0"
+    "globby": "^11.0.2",
+    "oa-shared": "workspace:*",
+    "rimraf": "^3.0.2"
+  },
+  "devDependencies": {
+    "@types/rimraf": "^3.0.2",
+    "ts-node": "^10.2.1"
   }
 }

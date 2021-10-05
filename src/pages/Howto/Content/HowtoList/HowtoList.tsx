@@ -78,6 +78,13 @@ export class HowtoList extends React.Component<any, IState> {
     return this.props as InjectedProps
   }
 
+  /* eslint-disable @typescript-eslint/naming-convention*/
+  UNSAFE_componentWillMount() {
+    if (!new RegExp(/source=how-to-not-found/).test(window.location.search)) {
+      this.props.howtoStore.updateReferrerSource('')
+    }
+  }
+
   public render() {
     const {
       filteredHowtos,

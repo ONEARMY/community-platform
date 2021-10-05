@@ -9,6 +9,7 @@ const REPO_SRC = path.resolve(__dirname, '../')
 
 /** Delete node_modules from all workspaces and reinstall clean */
 async function installClean() {
+    console.log('Starting clean install. This could take a few minutes...')
     // delete existing node_modules
     const packageJsonPaths = globby.sync(['**/package.json', '!**/node_modules'], {
         cwd: REPO_SRC,

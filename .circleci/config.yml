@@ -344,7 +344,7 @@ workflows:
           matrix:
             parameters:
               BUILD_ENV:
-                ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci CI=false']
+                ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci']
       - test_e2e:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           requires:
@@ -360,11 +360,6 @@ workflows:
           requires:
             - 'test_e2e'
           <<: *filter_only_master
-          matrix:
-            parameters:
-              # Fix memory issues during build (https://github.com/facebook/create-react-app/issues/8096)
-              # TODO - fix lint errors so that default CI=true works
-              BUILD_ENV: ['CI=false']
       - deploy:
           name: deploy_dev
           requires:
@@ -382,9 +377,6 @@ workflows:
           requires:
             - 'test_e2e'
           <<: *filter_only_production
-          matrix:
-            parameters:
-              BUILD_ENV: ['CI=false']
       # Require manual approval on CirclCI website prior to release
       - hold:
           name: approve_release

@@ -207,7 +207,7 @@ describe('[How To]', () => {
       cy.location('pathname').should('eq', '/how-to')
       cy.location('search').should(
         'eq',
-        `?search=this+how+to+does+not+exist+${uuid}`,
+        `?search=this+how+to+does+not+exist+${uuid}&source=how-to-not-found`,
       )
     })
   })

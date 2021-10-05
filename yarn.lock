@@ -5837,13 +5837,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/dompurify@npm:^0.0.32":
-  version: 0.0.32
-  resolution: "@types/dompurify@npm:0.0.32"
-  checksum: 2699284e0f75a8dcccbea7ac12de96e30c9fcc868a01cc71fc9c6075c3415594b16f644421db3dcadc10e2989461dfa718c8d24e251caad046a7db4490b9dc59
-  languageName: node
-  linkType: hard
-
 "@types/duplexify@npm:^3.6.0":
   version: 3.6.0
   resolution: "@types/duplexify@npm:3.6.0"
@@ -12204,13 +12197,6 @@ __metadata:
   dependencies:
     domelementtype: ^2.2.0
   checksum: bc4dd6f6a1b99514d8c94fd599c8e33879d9403e9f6f79e137aa7fc9d195574647601694b7e693a917251dffff1218259f0fa1f8327f051645c2d8582ac65741
-  languageName: node
-  linkType: hard
-
-"dompurify@npm:^2.0.17":
-  version: 2.3.3
-  resolution: "dompurify@npm:2.3.3"
-  checksum: 1ddaffeda54aac86dc0c55a49ae9c74dc388596851f6f74179dc5ecc74b0f00ceba579acae6c9e9b06ac71573e9f87cf5d2358f5da046f89c8a13936df8c03da
   languageName: node
   linkType: hard
 
@@ -21279,7 +21265,6 @@ fsevents@^1.2.7:
     "@testing-library/react": ^11.1.0
     "@testing-library/user-event": ^12.1.10
     "@types/browser-image-compression": ^1.0.9
-    "@types/dompurify": ^0.0.32
     "@types/flux-standard-action": 1.1.0
     "@types/jest": ^26.0.15
     "@types/node": ^12.0.0
@@ -21312,7 +21297,6 @@ fsevents@^1.2.7:
     date-fns: ^1.30.1
     debounce: ^1.2.0
     dexie: ^2.0.4
-    dompurify: ^2.0.17
     dotenv: 6.0.0
     eslint-config-prettier: ^8.3.0
     eslint-plugin-prettier: ^3.4.0

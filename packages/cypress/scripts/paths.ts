@@ -1,6 +1,6 @@
 import * as path from 'path'
 
-const PLATFORM_ROOT_DIR = path.resolve(__dirname, '../../')
+const PLATFORM_ROOT_DIR = path.resolve(__dirname, '../../../')
 const WORKSPACE_DIR = path.resolve(__dirname, '../')
 
 const SRC_DB_ENDPOINTS = path.resolve(PLATFORM_ROOT_DIR, 'src/stores/databaseV2/endpoints.ts')

@@ -21060,9 +21060,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"oa-cypress@workspace:cypress":
+"oa-cypress@workspace:packages/cypress":
   version: 0.0.0-use.local
-  resolution: "oa-cypress@workspace:cypress"
+  resolution: "oa-cypress@workspace:packages/cypress"
   dependencies:
     "@cypress/webpack-preprocessor": ^5.9.1
     "@types/fs-extra": ^9.0.13

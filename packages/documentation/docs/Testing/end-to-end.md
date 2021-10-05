@@ -13,8 +13,10 @@ yarn workspace oa-cypress start
 ```
 (or shorthand `yarn test`)
 
-### Seeding and Clearing
-A standard set of database documents are created at the start of every test and cleared at the end. In case of test fail this may not always happen successfully, and so it may be required to run another passing spec if manually running tests and seeing inconsistent behaviour (e.g. testing create a howto already has the howto populated).
+### Data Seeding
+A standard set of database documents are created at the start of every test and cleared at the end. These are populated from the `fixtures/seed` folder to the online firebase firestore database. 
+
+They will be automatically deleted after tests have completed running
 
 ### CI testing
 Tests are automatically run on every pull request, and can be viewed on the cypress dashboard. A link to the specific test run will be populated into the PR, or publicly viewable at: https://dashboard.cypress.io/projects/4s5zgo/runs
@@ -25,3 +27,13 @@ When testing is initiated a random prefix is generated to uniquely seed/clear th
 ### Browser testing
 Currently testing is carried out against chrome(stable) and firefox(latest) browsers. We are not able to support any additional browsers (e.g. safari) via ci as they are not currently supported by cypress. If this changes in the future then it would be good to add. See discussion around this here: https://github.com/ONEARMY/community-platform/issues/611
 
+### DB Teardown
+In case of test fail, documents will not be deleted from the server. This is not a major issue as they all are randomly prefixed, and will just sit in the database. From time-to-time admins may decide to delete any hanging data via the firebase cli. 
+```
+firebase use ci
+firebase firestore:delete --all-collections
+```
+:::warning
+The command will completely wipe the database, and so should only be used on the ci project when required. If needing access to the ci project ask one of the platform admins who can send an invite
+DO NOT USE AGAINST STAGING OR PRODUCTION SITES!!!
+:::

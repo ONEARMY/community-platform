@@ -37,3 +37,6 @@ firebase firestore:delete --all-collections
 The command will completely wipe the database, and so should only be used on the ci project when required. If needing access to the ci project ask one of the platform admins who can send an invite
 DO NOT USE AGAINST STAGING OR PRODUCTION SITES!!!
 :::
+
+*CI Project - firestore with uncleared data*
+![](./images/ci-firestore-project.png)

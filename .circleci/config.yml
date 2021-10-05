@@ -240,6 +240,8 @@ jobs:
   # NOTE - not currently used in test workflow as different build_env required for each machine
   build:
     docker: *docker
+    environment:
+      GENERATE_SOURCEMAP: "false"
     parameters:
       # optional environment variables to set during build process
       BUILD_ENV:

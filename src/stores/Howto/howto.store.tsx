@@ -42,8 +42,11 @@ export class HowtoStore extends ModuleStore {
   @observable
   public searchValue: string
   @observable
+  public referrerSource: string
+  @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
   @observable howtoStats: IHowtoStats | undefined
+
   constructor(rootStore: RootStore) {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
@@ -52,6 +55,7 @@ export class HowtoStore extends ModuleStore {
     this.allDocs$.subscribe((docs: IHowtoDB[]) => this.setAllHowtos(docs))
     this.selectedTags = {}
     this.searchValue = ''
+    this.referrerSource = ''
   }
 
   @action
@@ -119,6 +123,10 @@ export class HowtoStore extends ModuleStore {
 
   public updateSearchValue(query: string) {
     this.searchValue = query
+  }
+
+  public updateReferrerSource(source: string) {
+    this.referrerSource = source
   }
 
   public updateSelectedTags(tagKey: ISelectedTags) {

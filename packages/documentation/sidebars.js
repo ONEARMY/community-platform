@@ -53,5 +53,10 @@ module.exports = {
         },
       ],
     },
+    {
+      type: 'doc',
+      label: 'Security',
+      id: 'Security',
+    },
   ],
 }

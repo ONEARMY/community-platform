@@ -3,6 +3,7 @@ import Lightbox from 'react-image-lightbox'
 import { Card, CardProps, Flex, Image } from 'rebass/styled-components'
 import { IUploadedFileMeta } from 'src/stores/storage'
 import styled from 'styled-components'
+import theme from '../../themes/styled.theme';
 
 interface IProps {
   images: IUploadedFileMeta[]
@@ -28,7 +29,7 @@ const ThumbImage = styled(Image)`
   object-fit: cover;
   width: 100px;
   height: 67px;
-  border: 1px solid #ececec;
+  border: 1px solid ${theme.colors.offwhite};
   border-radius: 5px;
 `
 

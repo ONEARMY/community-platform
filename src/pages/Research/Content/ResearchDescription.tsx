@@ -108,7 +108,12 @@ const ResearchDescription: React.FC<IProps> = ({
               | Started on {format(new Date(research._created), 'DD-MM-YYYY')}
             </Text>
           </Flex>
-          <Text auxiliary sx={{ color: '#b7b5b5 !important' }} mt={1} mb={2}>
+          <Text
+            auxiliary
+            sx={{ color: `${theme.colors.lightgrey} !important` }}
+            mt={1}
+            mb={2}
+          >
             {dateLastUpdateText(research)}
           </Text>
           <Heading medium mt={2} mb={1}>

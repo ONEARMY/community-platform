@@ -4,7 +4,7 @@
 
 If you believe you have found a security vulnerability on our platform, we encourage you to let us know right away. We will investigate all legitimate reports and do our best to quickly fix the problem.
 
-Submit your report to security@onearmy.earth (one issue per report) and respond to the report with any updates.
+Submit your report to platform@onearmy.earth (one issue per report) and respond to the report with any updates.
 
 ### Reporting a Vulnerability
 

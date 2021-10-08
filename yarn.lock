@@ -13154,7 +13154,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^7.11.0":
+"eslint@npm:^7.11.0, eslint@npm:^7.32.0":
   version: 7.32.0
   resolution: "eslint@npm:7.32.0"
   dependencies:
@@ -21336,6 +21336,7 @@ fsevents@^1.2.7:
     debounce: ^1.2.0
     dexie: ^2.0.4
     dotenv: 6.0.0
+    eslint: ^7.32.0
     eslint-config-prettier: ^8.3.0
     eslint-plugin-prettier: ^3.4.0
     final-form: 4.20.2

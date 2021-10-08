@@ -15,7 +15,10 @@ module.exports = {
       },
     ],
     'Frontend Development': ['Frontend Development/overview'],
-    'Backend Development': ['Backend Development/firebase-emulators'],
+    'Backend Development': [
+      'Backend Development/firebase-emulators',
+      'Backend Development/integrations',
+    ],
     Testing: ['Testing/overview', 'Testing/end-to-end'],
     'Advanced Guides': [
       { 'Continuous Integration': ['Deployment/circle-ci'] },

@@ -21,7 +21,7 @@ process.on('unhandledRejection', err => {
  * When running e2e tests with cypress we need to first get the server up and running
  * before launching the test suite. We will seed the DB from within the test suite
  *
- * @argument ci - specify if running in ci (e.g. travis/circleci) to run and record
+ * @argument ci - specify if running in ci (e.g. circleci) to run and record
  * @argument prod - specify to use a production build instead of local development server
  * @example npm run test ci prod
  *
@@ -48,8 +48,9 @@ function runTests() {
   const CI_GROUP = e.CI_GROUP || '1x-chrome'
   // not currently used, but can pass variables accessed by Cypress.env()
   const CYPRESS_ENV = `DUMMY_VAR=1`
-  // keep compatibility with both circleci and travisci builds - note, could pass as env variable instead
-  const buildId = e.CIRCLE_WORKFLOW_ID || e.TRAVIS_BUILD_ID || randomString(8)
+  // use workflow ID so that jobs running in parallel can be assigned to same cypress build
+  // cypress will use this to split tests between parallel runs
+  const buildId = e.CIRCLE_WORKFLOW_ID || randomString(8)
 
   // main testing command, depending on whether running on ci machine or interactive local
   // call with path to bin as to ensure locally installed used

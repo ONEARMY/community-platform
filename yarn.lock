@@ -21387,6 +21387,7 @@ fsevents@^1.2.7:
     react-firebase-file-uploader: 2.4.4
     react-flag-icon-css: ^1.0.25
     react-flags-select: ^1.1.10
+    react-foco: ^1.3.1
     react-ga: ^2.5.7
     react-hamburger-menu: ^1.1.1
     react-icons: ^3.2.2
@@ -24585,6 +24586,16 @@ fsevents@^1.2.7:
   peerDependencies:
     react: 15.x
   checksum: 42c92f7a722cedd1735d7fae67091e314cf1899d1f96292841c681603dfc6dc2ba5a96f9ddde9bd29d34dfaba49d58b7e535af4d94850b83c7348438492f09fd
+  languageName: node
+  linkType: hard
+
+"react-foco@npm:^1.3.1":
+  version: 1.3.1
+  resolution: "react-foco@npm:1.3.1"
+  peerDependencies:
+    react: ">16.0.0"
+    react-dom: ">16.0.0"
+  checksum: aa1e72538d5a9864857c7c3b74cc00de44ca44dfd179224a6767197f6facfe4bec196d82e9ece9bc7a4c8c043d406680a7ab1ba13c3d09b425d77213f7be48b5
   languageName: node
   linkType: hard
 

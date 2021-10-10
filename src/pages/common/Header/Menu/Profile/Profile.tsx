@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+import Foco from 'react-foco'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import Flex from 'src/components/Flex'
@@ -71,11 +71,9 @@ export default class Profile extends Component<IProps, IState> {
               </Flex>
               <Flex>
                 {showProfileModal && (
-                  <ClickAwayListener
-                    onClickAway={() => this.toggleProfileModal()}
-                  >
+                  <Foco onClickOutside={() => this.toggleProfileModal()}>
                     <ProfileModal username={user.userName} />
-                  </ClickAwayListener>
+                  </Foco>
                 )}
               </Flex>
             </div>

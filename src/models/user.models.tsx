@@ -40,7 +40,8 @@ export interface IUser {
   year?: ISODateString
   stats?: IUserStats
   /** keep a map of all howto ids that a user has voted as useful */
-  votedUsefulHowtos?: { [howtoId: string]: boolean }
+  votedUsefulHowtos?: { [howtoId: string]: boolean },
+  notifications?: INotification[]
 }
 
 interface IUserBadges {
@@ -71,3 +72,16 @@ interface IUserStats {
 export type IUserDB = IUser & DBDoc
 
 export type UserRole = 'super-admin' | 'subscriber' | 'admin' | 'beta-tester'
+
+export interface INotification {
+  _id: string,
+  _created: string,
+  _triggeredByUserId: string,
+  twiggeredByName: string,
+  commentId?: string,
+  howToId?: string,
+  type: NotificationType,
+  read: boolean
+}
+
+export type NotificationType = 'new_comment' | 'howto_useful'

@@ -303,8 +303,6 @@ jobs:
     # build matrix will run 4 parallel builds handled by cypress, so don't need to specify more here
     parallelism: 1
     parameters:
-      CI_NODE:
-        type: integer
       CI_BROWSER:
         type: string
     steps:
@@ -328,8 +326,6 @@ jobs:
           command: npm run test ci prod
           environment:
             CI_BROWSER: << parameters.CI_BROWSER >>
-            CI_NODE: << parameters.CI_NODE >>
-            CI_GROUP: 2x-<< parameters.CI_BROWSER >>
 
 ######################################################################################################
 #  Workflows - Collections of jobs to define overall processes
@@ -348,12 +344,11 @@ workflows:
               BUILD_ENV:
                 ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci']
       - test_e2e:
-          name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
+          name: e2e-<< matrix.CI_BROWSER >>
           requires:
             - 'build_test'
           matrix:
             parameters:
-              CI_NODE: [1, 2]
               CI_BROWSER: ['chrome', 'firefox']
       #---------------------- Dev Build-Deploy ----------------------
       - build:

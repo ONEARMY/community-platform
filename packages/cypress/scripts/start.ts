@@ -45,7 +45,6 @@ function runTests() {
   const e = process.env
   const { CYPRESS_KEY } = e2eEnv.parsed
   const CI_BROWSER = e.CI_BROWSER || 'chrome'
-  const CI_GROUP = e.CI_GROUP || '1x-chrome'
   // not currently used, but can pass variables accessed by Cypress.env()
   const CYPRESS_ENV = `DUMMY_VAR=1`
   // keep compatibility with both circleci and travisci builds - note, could pass as env variable instead
@@ -55,7 +54,7 @@ function runTests() {
   // call with path to bin as to ensure locally installed used
   const { CY_BIN, CROSSENV_BIN } = PATHS
   const testCMD = isCi
-    ? `${CY_BIN} run --record --env ${CYPRESS_ENV} --key=${CYPRESS_KEY} --parallel --browser ${CI_BROWSER} --group ${CI_GROUP} --ci-build-id ${buildId}`
+    ? `${CY_BIN} run --record --env ${CYPRESS_ENV} --key=${CYPRESS_KEY} --browser ${CI_BROWSER}`
     : `${CY_BIN} open --browser chrome --env ${CYPRESS_ENV}`
 
   const spawn = spawnSync(`${CROSSENV_BIN} FORCE_COLOR=1 ${testCMD}`, {

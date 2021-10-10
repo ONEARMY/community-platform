@@ -6,7 +6,6 @@ import { HowtoStore } from 'src/stores/Howto/howto.store'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
 import Step from './Step/Step'
 import { IHowtoDB } from 'src/models/howto.models'
-// import HowtoSummary from './HowtoSummary/HowtoSummary'
 import Text from 'src/components/Text'
 import { Box, Flex } from 'rebass/styled-components'
 import { Button } from 'src/components/Button'
@@ -133,7 +132,6 @@ export class Howto extends React.Component<
             moderateHowto={this.moderateHowto}
             onUsefulClick={() => this.onUsefulClick(activeHowto._id)}
           />
-          {/* <HowtoSummary steps={howto.steps} howToSlug={howto.slug} /> */}
           <Box mt={9}>
             {activeHowto.steps.map((step: any, index: number) => (
               <Step step={step} key={index} stepindex={index} />

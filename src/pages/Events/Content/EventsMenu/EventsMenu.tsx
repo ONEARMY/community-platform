@@ -1,6 +1,6 @@
 import * as React from 'react'
 import FormControl from '@material-ui/core/FormControl'
-import Button from '@material-ui/core/Button'
+import { Button } from 'src/components/Button'
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import { IEventFilters } from 'src/models/events.models'

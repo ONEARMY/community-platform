@@ -1,5 +1,5 @@
 import { observable, action, makeObservable, toJS } from 'mobx'
-import { IUser, IUserDB } from 'src/models/user.models'
+import { INotification, IUser, IUserDB, NotificationType } from 'src/models/user.models'
 import { IUserPP, IUserPPDB } from 'src/models/user_pp.models'
 import { IFirebaseUser, auth, EmailAuthProvider } from 'src/utils/firebase'
 import { Storage } from '../storage'
@@ -7,6 +7,7 @@ import { RootStore } from '..'
 import { ModuleStore } from '../common/module.store'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
+import { randomID } from 'src/utils/helpers'
 import { logger } from 'src/logger'
 import { getLocationData } from 'src/utils/getLocationData'
 
@@ -245,6 +246,7 @@ export class UserStore extends ModuleStore {
       userName,
       moderation: 'awaiting-moderation',
       votedUsefulHowtos: {},
+      notifications: [],
       ...fields,
     }
     // update db
@@ -252,12 +254,17 @@ export class UserStore extends ModuleStore {
   }
 
   @action
-  public async updateUsefulHowTos(howtoId: string) {
+  public async updateUsefulHowTos(howtoId: string, howtoAuthor: string, howtoSlug: string) {
     if (this.user) {
       // toggle entry on user votedUsefulHowtos to either vote or unvote a howto
       // this will updated the main howto via backend `updateUserVoteStats` function
       const votedUsefulHowtos = toJS(this.user.votedUsefulHowtos) || {}
-      votedUsefulHowtos[howtoId] = !votedUsefulHowtos[howtoId]
+      votedUsefulHowtos[howtoId] = !votedUsefulHowtos[howtoId];
+
+      if (votedUsefulHowtos[howtoId]) {
+        //get how to author from howtoid
+        this.triggerNotification('howto_useful', howtoAuthor, howtoSlug);
+      }
       await this.updateUserProfile({ votedUsefulHowtos })
     }
   }
@@ -284,7 +291,112 @@ export class UserStore extends ModuleStore {
   private _unsubscribeFromAuthStateChanges() {
     this.authUnsubscribe()
   }
+
+  @action
+  public async triggerNotification(type: NotificationType, username: string,
+    howToId?: string) {
+    const howToUrl = '/how-to/';
+    try {
+      const triggeredBy = this.activeUser;
+      if (triggeredBy) {
+        // do not get notified when you're the one making a new comment or how-to useful vote
+        if(triggeredBy.userName === username){
+          return;
+        }
+        const newNotification: INotification = {
+          _id: randomID(),
+          _created: new Date().toISOString(),
+          triggeredBy: {
+            displayName: triggeredBy.displayName,
+            userId: triggeredBy._id
+          },
+          relevantUrl: howToUrl + howToId,
+          type: type,
+          read: false
+        } 
+
+        const lookup = await this.db
+          .collection<IUserPP>(COLLECTION_NAME)
+          .getWhere('userName', '==', username)
+
+        const user = lookup[0];
+        
+        const updatedUser: IUser = {
+          ...toJS(user),
+          notifications: user.notifications
+            ? [...toJS(user.notifications), newNotification]
+            : [newNotification],
+        }
+
+        const dbRef = this.db
+          .collection<IUser>(COLLECTION_NAME)
+          .doc(updatedUser._authID)
+
+        await dbRef.set(updatedUser)        
+      }
+
+    } catch (err) {
+      console.error(err)
+      throw new Error(err)
+    }
+  }
+
+  @action
+  public async markAllNotificationsRead() {
+    try {
+      const user = this.activeUser
+      if (user) {
+        const notifications = toJS(user.notifications);
+        notifications?.forEach(notification =>
+          notification.read = true
+        );
+        const updatedUser: IUser = {
+          ...toJS(user),
+          notifications,
+        }
+
+        const dbRef = this.db
+          .collection<IUser>(COLLECTION_NAME)
+          .doc(updatedUser._authID)
+
+        await dbRef.set(updatedUser);
+        await this.updateUserProfile({ notifications });
+
+      }
+    } catch (err) {
+      console.error(err);
+      throw new Error(err);
+    }
+  }
+
+  @action
+  public async deleteNotification(id: string) {
+    try {
+      const user = this.activeUser
+      if (id && user && user.notifications) {
+        const notifications = toJS(user.notifications).filter(
+          notification => !(notification._id === id),
+        )
+
+        const updatedUser: IUser = {
+          ...toJS(user),
+          notifications,
+        }
+
+        const dbRef = this.db
+          .collection<IUser>(COLLECTION_NAME)
+          .doc(updatedUser._authID)
+
+        await dbRef.set(updatedUser)
+      }
+    } catch (err) {
+      logger.error(err)
+      throw new Error(err)
+    }
+  }
 }
+
+
 
 interface IUserUpdateStatus {
   Start: boolean
@@ -314,3 +426,5 @@ const USER_BASE = {
   verified: false,
   badges: { verified: false },
 }
+
+

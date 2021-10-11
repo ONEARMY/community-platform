@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component } from 'react'
 import { Flex, Image } from 'rebass/styled-components'
 import styled, { keyframes } from 'styled-components'
 

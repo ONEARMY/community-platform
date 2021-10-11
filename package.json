@@ -61,8 +61,7 @@
   },
   "dependencies": {
     "@khanacademy/react-multi-select": "^0.3.3",
-    "@material-ui/core": "3.7.1",
-    "@sentry/react": "^6.15.0",
+    "@sentry/browser": "^4.6.3",
     "@uppy/core": "^1.19.1",
     "@uppy/dashboard": "^1.20.1",
     "@uppy/react": "^1.0.0",

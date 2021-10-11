@@ -13,8 +13,11 @@ title: Local Setup
 2. Download and install [Node](https://nodejs.org/en/download/)  
    This will be used to run the local server. It included the `npm` package manager
 
-   NOTE - the recommended version of node to use is v12 as this is what also runs in the production environment. If running a higher version and experiencing issues please file a bug report.
-   Alternatively you can install/use multiple versions via tools like [nvm](https://github.com/nvm-sh/nvm)
+   :::tip
+   The recommended version of node to use is **node 12** as this is what also runs in the production environment. If running a higher version and experiencing issues please file a bug report.   
+
+   You can use tools like [fnm](https://github.com/Schniz/fnm) or [nvm](https://github.com/nvm-sh/nvm) to run multiple versions of node on the same machine
+   :::
 
 3. Download and install Yarn (v2)
 
@@ -49,6 +52,14 @@ yarn start
 ```
 
 ## Troubleshooting
+
+Sometimes dependencies can get into an outdated or bad state. As a general fix, deleting all existing 3rd party dependencies and installing clean may fix many issues. There is a helper script available to do this:
+
+```
+yarn install:clean
+```
+
+Otherwise possible solutions to some specific issues are also listed below
 
 ### Module not found
 

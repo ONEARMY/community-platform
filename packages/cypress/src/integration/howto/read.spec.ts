@@ -1,3 +1,5 @@
+import crypto from 'crypto'
+
 describe('[How To]', () => {
   const SKIP_TIMEOUT = { timeout: 300 }
   const totalHowTo = 7
@@ -193,6 +195,20 @@ describe('[How To]', () => {
         .click()
         .url()
         .should('include', `${specificHowtoUrl}/edit`)
+    })
+  })
+
+  describe('[Fail to find a How-to]', () => {
+    const uuid = crypto.randomBytes(16).toString('hex')
+    const howToNotFoundUrl = `/how-to/this-how-to-does-not-exist-${uuid}`
+
+    it('[Redirects to search]', () => {
+      cy.visit(howToNotFoundUrl)
+      cy.location('pathname').should('eq', '/how-to')
+      cy.location('search').should(
+        'eq',
+        `?search=this+how+to+does+not+exist+${uuid}&source=how-to-not-found`,
+      )
     })
   })
 })

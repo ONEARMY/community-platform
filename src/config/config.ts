@@ -2,9 +2,9 @@
 Switch config dependent on use case
 
 For our use case the production config is stored in environment variables passed from
-Travis-CI. You can replace this with your own config or use the same pattern to keep
+CI. You can replace this with your own config or use the same pattern to keep
 api keys secret. Note, create-react-app only passes environment variables prefixed with
-'REACT_APP'. The required info has been encrypted and stored in travis. 
+'REACT_APP'. The required info has been encrypted and stored in a circleCI deployment context.
 
 Dev config is hardcoded - You can find more information about potential security risk here:
 https://javebratt.com/hide-firebase-api/
@@ -33,7 +33,7 @@ let algoliaPlacesConfig: IAlgoliaConfig = {
                                         Site Variants
 /********************************************************************************************** */
 const e = process.env
-// the name of the github branch is passed via travis as an environment variable
+// the name of the github branch is passed via ci as an environment variable
 const branch = e.REACT_APP_BRANCH as string
 // as both dev.onearmy.world and onearmy.world are production builds we can't use process.env to distinguish
 // will be set to one of 'localhost', 'staging' or 'production'

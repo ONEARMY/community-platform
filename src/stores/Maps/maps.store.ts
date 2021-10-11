@@ -223,6 +223,7 @@ export class MapsStore extends ModuleStore {
         profilePicUrl: '',
         shortDescription: '',
         name: username,
+        displayName: username,
         profileUrl: `${window.location.origin}/u/${username}`,
         verifiedBadge: false,
       }
@@ -239,6 +240,7 @@ export class MapsStore extends ModuleStore {
       profilePicUrl: avatar,
       shortDescription: u.mapPinDescription ? u.mapPinDescription : '',
       name: u.userName,
+      displayName: u.displayName,
       profileUrl: `${window.location.origin}/u/${u.userName}`,
       verifiedBadge: u.badges?.verified || false,
     }

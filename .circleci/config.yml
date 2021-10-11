@@ -37,9 +37,9 @@ aliases:
         # https://circleci.com/docs/2.0/yarn/
         # when lock file changes, use increasingly general patterns to restore cache (also need to change `save_cache` path)
         # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
-        - yarn-packages-v9-{{ .Branch }}-{{ checksum "yarn.lock" }}
-        - yarn-packages-v9-{{ .Branch }}-
-        - yarn-packages-v9-
+        - yarn-packages-v10-{{ .Branch }}-{{ checksum "yarn.lock" }}
+        - yarn-packages-v10-{{ .Branch }}-
+        - yarn-packages-v10-
   - &install_packages
     run:
       name: Install Packages
@@ -60,7 +60,7 @@ aliases:
         # - ~/.yarn/berry/cache
         # local cache location
         - ~/project/.yarn/cache
-      key: yarn-packages-v9-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      key: yarn-packages-v10-{{ .Branch }}-{{ checksum "yarn.lock" }}
 
   - &filter_only_production
     filters:
@@ -240,6 +240,8 @@ jobs:
   # NOTE - not currently used in test workflow as different build_env required for each machine
   build:
     docker: *docker
+    environment:
+      GENERATE_SOURCEMAP: "false"
     parameters:
       # optional environment variables to set during build process
       BUILD_ENV:
@@ -344,7 +346,7 @@ workflows:
           matrix:
             parameters:
               BUILD_ENV:
-                ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci CI=false']
+                ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci']
       - test_e2e:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           requires:
@@ -360,11 +362,6 @@ workflows:
           requires:
             - 'test_e2e'
           <<: *filter_only_master
-          matrix:
-            parameters:
-              # Fix memory issues during build (https://github.com/facebook/create-react-app/issues/8096)
-              # TODO - fix lint errors so that default CI=true works
-              BUILD_ENV: ['CI=false']
       - deploy:
           name: deploy_dev
           requires:
@@ -382,9 +379,6 @@ workflows:
           requires:
             - 'test_e2e'
           <<: *filter_only_production
-          matrix:
-            parameters:
-              BUILD_ENV: ['CI=false']
       # Require manual approval on CirclCI website prior to release
       - hold:
           name: approve_release

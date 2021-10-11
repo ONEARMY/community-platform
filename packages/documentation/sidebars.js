@@ -13,7 +13,13 @@ module.exports = {
       },
     ],
     'Frontend Development': ['Frontend Development/overview'],
-    'Backend Development': ['Backend Development/running-emulators', 'Backend Development/emulator-seed-data'],
+
+    'Backend Development': [
+      'Backend Development/running-emulators',
+      'Backend Development/emulator-seed-data',
+      'Backend Development/integrations',
+    ],
+    Testing: ['Testing/overview', 'Testing/end-to-end'],
     'Advanced Guides': [
       { 'Continuous Integration': ['Deployment/circle-ci'] },
       {

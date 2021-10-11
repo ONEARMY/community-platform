@@ -113,8 +113,8 @@ We use additional branches to define a specific feature or issue group being wor
 
 ## 🚀 &nbsp; Deployment
 
-Master is our current development leading branch, and will autodeploy to the
-[development site](https://dev.onearmy.world/) with Travis CI.
+The `master` branch is our current development leading branch, and will autodeploy to the
+[development site](https://dev.onearmy.world/). The `production` branch deploys to the live [community platform site](http://community.preciousplastic.com/)
 
 ## 🤓 &nbsp; Javascript style guide
 

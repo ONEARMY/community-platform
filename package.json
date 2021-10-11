@@ -17,11 +17,12 @@
     "build": "npm run compile:shared && react-scripts build",
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx src --color",
-    "test": "node scripts/test.e2e.js",
+    "test": "yarn workspace oa-cypress start",
     "test:unit": "react-scripts test --env=jsdom",
     "storybook": "yarn workspace oa-storybook start",
     "docs": "yarn workspace oa-docs start",
-    "analyze": "npx cra-bundle-analyzer && npx open-cli build/report.html"
+    "analyze": "npx cra-bundle-analyzer && npx open-cli build/report.html",
+    "install:clean": "yarn workspace oa-scripts install:clean"
   },
   "husky": {
     "hooks": {
@@ -66,7 +67,6 @@
     "date-fns": "^1.30.1",
     "debounce": "^1.2.0",
     "dexie": "^2.0.4",
-    "dompurify": "^2.0.17",
     "final-form": "4.20.2",
     "final-form-arrays": "^3.0.2",
     "final-form-calculate": "^1.3.2",
@@ -124,7 +124,6 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "@types/browser-image-compression": "^1.0.9",
-    "@types/dompurify": "^0.0.32",
     "@types/flux-standard-action": "1.1.0",
     "@types/jest": "^26.0.15",
     "@types/node": "^12.0.0",
@@ -151,6 +150,7 @@
     "cra-bundle-analyzer": "^0.1.0",
     "cross-env": "^6.0.3",
     "dotenv": "6.0.0",
+    "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
     "fs-extra": "7.0.1",

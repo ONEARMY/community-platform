@@ -1,11 +1,16 @@
-const child = require('child_process')
-const e2eEnv = require('dotenv').config({ path: `${process.cwd()}/.env.e2e` })
-const fs = require('fs-extra')
-const waitOn = require('wait-on')
-const path = require('path')
+#!/usr/bin/env ts-node
+console.log('start')
+import PATHS from './paths'
+
+import { spawnSync, spawn } from 'child_process'
+const e2eEnv = require('dotenv').config()
+import fs from 'fs-extra'
+import waitOn from 'wait-on'
 
 const isCi = process.argv.includes('ci')
 const useProductionBuild = process.argv.includes('prod')
+
+
 
 // Prevent unhandled errors being silently ignored
 process.on('unhandledRejection', err => {
@@ -16,7 +21,7 @@ process.on('unhandledRejection', err => {
  * When running e2e tests with cypress we need to first get the server up and running
  * before launching the test suite. We will seed the DB from within the test suite
  *
- * @argument ci - specify if running in ci (e.g. travis/circleci) to run and record
+ * @argument ci - specify if running in ci (e.g. circleci) to run and record
  * @argument prod - specify to use a production build instead of local development server
  * @example npm run test ci prod
  *
@@ -28,14 +33,12 @@ process.on('unhandledRejection', err => {
  */
 async function main() {
   // copy endpoints for use in testing
-  fs.copyFileSync(
-    'src/stores/databaseV2/endpoints.ts',
-    'cypress/support/db/endpoints.ts',
-  )
+  fs.copyFileSync(PATHS.SRC_DB_ENDPOINTS, PATHS.WORKSPACE_DB_ENDPOINTS)
   await startAppServer()
   runTests()
 }
-main()
+main().then(() => process.exit(0)).catch(err => { console.error(err); process.exit(1) })
+
 
 function runTests() {
   console.log(isCi ? 'Start tests' : 'Opening cypress for manual testing')
@@ -45,24 +48,26 @@ function runTests() {
   const CI_GROUP = e.CI_GROUP || '1x-chrome'
   // not currently used, but can pass variables accessed by Cypress.env()
   const CYPRESS_ENV = `DUMMY_VAR=1`
-  // keep compatibility with both circleci and travisci builds - note, could pass as env variable instead
-  const buildId = e.CIRCLE_WORKFLOW_ID || e.TRAVIS_BUILD_ID || randomString(8)
+  // use workflow ID so that jobs running in parallel can be assigned to same cypress build
+  // cypress will use this to split tests between parallel runs
+  const buildId = e.CIRCLE_WORKFLOW_ID || randomString(8)
 
   // main testing command, depending on whether running on ci machine or interactive local
   // call with path to bin as to ensure locally installed used
-  const CY_BIN_PATH = path.resolve(
-    __dirname,
-    '../cypress/node_modules/.bin/cypress',
-  )
+  const { CY_BIN, CROSSENV_BIN } = PATHS
   const testCMD = isCi
-    ? `${CY_BIN_PATH} run --record --env ${CYPRESS_ENV} --key=${CYPRESS_KEY} --parallel --headless --browser ${CI_BROWSER} --group ${CI_GROUP} --ci-build-id ${buildId}`
-    : `${CY_BIN_PATH} open --browser chrome --env ${CYPRESS_ENV}`
+    ? `${CY_BIN} run --record --env ${CYPRESS_ENV} --key=${CYPRESS_KEY} --parallel --headless --browser ${CI_BROWSER} --group ${CI_GROUP} --ci-build-id ${buildId}`
+    : `${CY_BIN} open --browser chrome --env ${CYPRESS_ENV}`
 
-  const spawn = child.spawnSync(`cross-env FORCE_COLOR=1 ${testCMD}`, {
+  const spawn = spawnSync(`${CROSSENV_BIN} FORCE_COLOR=1 ${testCMD}`, {
     shell: true,
     stdio: ['inherit', 'inherit', 'pipe'],
+    cwd: PATHS.WORKSPACE_DIR
   })
   console.log('testing complete with exit code', spawn.status)
+  if (spawn.status === 1) {
+    console.error('error', spawn.stderr.toString())
+  }
   process.exit(spawn.status)
 }
 
@@ -73,37 +78,39 @@ function runTests() {
  *
  */
 async function startAppServer() {
+  const { CROSSENV_BIN, BUILD_SERVE_JSON } = PATHS
   // by default spawns will not respect colours used in stdio, so try to force
   const crossEnvArgs = `FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci`
 
   // run local debug server for testing unless production build specified
-  let serverCmd = `cross-env ${crossEnvArgs} BROWSER=none PORT=3456 npm run start`
+  let serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} BROWSER=none PORT=3456 npm run start`
 
   // for production will instead serve from production build folder
   if (useProductionBuild) {
     // create local build if not running on ci (which will have build already generated)
     if (!isCi) {
       // specify CI=false to prevent throwing lint warnings as errors
-      child.spawnSync(`cross-env ${crossEnvArgs} CI=false npm run build`, {
+      spawnSync(`${CROSSENV_BIN} ${crossEnvArgs} CI=false npm run build`, {
         shell: true,
         stdio: ['inherit', 'inherit', 'pipe'],
       })
     }
     // create a rewrites file for handling local server behaviour
     const opts = { rewrites: [{ source: '/**', destination: '/index.html' }] }
-    fs.writeFileSync('build/serve.json', JSON.stringify(opts))
+    fs.writeFileSync(BUILD_SERVE_JSON, JSON.stringify(opts))
     serverCmd = `npx serve build -l 3456`
   }
 
   /******************* Run the main commands ******************* */
   // as the spawn will not terminate create non-async, and just listen to and handle messages
   // from the methods
-  const spawn = child.spawn(serverCmd, {
+  const child = spawn(serverCmd, {
     shell: true,
     stdio: ['pipe', 'pipe', 'inherit'],
+    cwd: PATHS.PLATFORM_ROOT_DIR
   })
 
-  spawn.stdout.on('data', d => {
+  child.stdout.on('data', d => {
     const msg = d.toString('utf8')
     console.log(msg)
     // throw typescript build errors

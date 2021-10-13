@@ -28,15 +28,6 @@ export default class TagDisplay extends React.Component<IProps> {
   public render() {
     const tag = this.injectedProps.tagsStore.allTagsByKey[this.props.tagKey]
 
-    return tag ? (
-      <Text
-        sx={{
-          ':not(:first-child)': {
-            marginLeft: '8px',
-          },
-        }}
-        tags
-      >{`#${tag.label}`}</Text>
-    ) : null
+    return tag ? <Text mr={2} tags>{`#${tag.label}`}</Text> : null
   }
 }

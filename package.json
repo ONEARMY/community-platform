@@ -13,7 +13,7 @@
   "scripts": {
     "start": "npm run compile:shared && cross-env FAST_REFRESH=false react-scripts start",
     "compile:shared": "yarn workspace oa-shared build",
-    "start:emulated": "concurrently \"yarn workspace functions start\" \"cross-env PORT=4000 yarn start\"",
+    "start:emulated": "yarn workspace oa-scripts start:emulated",
     "build": "npm run compile:shared && react-scripts build",
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx src --color",
@@ -146,7 +146,6 @@
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
     "chai-subset": "^1.6.0",
-    "concurrently": "^6.2.0",
     "cra-bundle-analyzer": "^0.1.0",
     "cross-env": "^6.0.3",
     "dotenv": "6.0.0",

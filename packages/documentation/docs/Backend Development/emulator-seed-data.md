@@ -8,15 +8,13 @@ By default the emulators load any data found in the [functions/data/emulated](..
 By default this data is not committed to the repo and so initial data will be empty, however specific zip files have been generated from site backup files and can be loaded for testing
 
 ## Loading seed data
-By default when the functions start script runs it will call a script to populate seed data from [scripts/emulator/seed-data](../../../../scripts/emulator/seed-data). There are different versions depending on export date and operating system 
-(known issue where data exported on windows won't always run on linux, pending possible fix via node 14 update or firebase exporter bin)
+When the `yarn start:emulated` script runs it will call a script to populate seed data from [scripts/emulator/seed-data](../../../../scripts/emulator/seed-data). There are different versions depending on export date and operating system 
+(there is a known issue where data exported on windows won't always run on linux. Hopefully this will be fixed either with planned node upgrades or future firebase emulator release)
 ```
 yarn workspace oa-scripts emulator:seed
 ```
 
-This will load the default seed data from the zip file [functions/data/seed](../../../../functions/data/seed/seed-default.zip).
-
-The default data contains a snapshot of most howtos, mappins etc. from the export data of the file (so may not be fully up-to-date). It also includes 2 user profiles for login:
+This will load a prompt to select seed data. Most included zips should contain a snapshot of most howtos, mappins etc. from the date of export data (so may not be fully up-to-date with production site). It also includes 2 user profiles for login:
 
 ```
 username: demo_user@example.com
@@ -51,11 +49,13 @@ The easiest way to manage this on windows is to use the [Remote - WSL](https://m
 However, this may not work if using wsl2, see troubleshooting issue in [Running Emulators](./running-emulators)
 :::caution
 
+If rolling back seed data versions keep in mind that the platform still stores data in the indexeddb cache, so that might need clearing to see just the rolled back data.
+
 **Generate a backup**  
 The first step in export is to generate a new backup of the production site and populating to the `functions/data/emulated` folder. Steps to create and export a manual backup are describe in [Manual Backups](../Server%20Maintenance/manual-backups.md)
 
 **Test locally**   
-This data should be shown the next time the emulators are restarted. Check that data appears as expected when running the platform locally, e.g. via `npm run start:emulated`
+This data should be shown the next time the emulators are restarted. Check that data appears as expected when running the platform locally, e.g. via `yarn start:emulated`
 
 **Clean data**   
 The default export will contain data for all users as well as various bits or archived or legacy content. There is a dev script currently set up to clean the data and produce a more minimal working set. It also handles creation of the demo users for local development, and can be called by sending a `POST` request to the api endpoint

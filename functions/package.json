@@ -35,7 +35,6 @@
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
-    "@types/concurrently": "^6.2.1",
     "@types/cors": "^2.8.8",
     "@types/dateformat": "^3.0.1",
     "@types/fs-extra": "^9.0.2",
@@ -47,7 +46,6 @@
     "@types/webpack-node-externals": "^2.5.1",
     "awesome-typescript-loader": "^5.2.1",
     "clean-webpack-plugin": "^4.0.0-alpha.0",
-    "concurrently": "^6.2.0",
     "cross-env": "^7.0.3",
     "generate-json-webpack-plugin": "^1.0.0",
     "ts-node": "^10.0.0",

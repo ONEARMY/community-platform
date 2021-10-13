@@ -1,5 +1,5 @@
-import * as fs from 'fs-extra'
-import * as archiver from 'archiver'
+import fs from 'fs-extra'
+import archiver from 'archiver'
 import path from 'path'
 import { EMULATOR_IMPORT_PATH, EMULATOR_SEED_PATH } from 'oa-shared/paths'
 
@@ -19,7 +19,9 @@ if (require.main === module) {
  * */
 export function zipFolder() {
   const inputFolderPath = EMULATOR_IMPORT_PATH
-  const outputFilepath = path.resolve(EMULATOR_SEED_PATH, 'exported.zip')
+  const outputPrefix = new Date().toISOString().substring(0, 10)
+  const outputName = `${outputPrefix}-export-manual.zip`
+  const outputFilepath = path.resolve(EMULATOR_SEED_PATH, outputName)
   if (fs.existsSync(outputFilepath)) {
     fs.removeSync(outputFilepath)
   }

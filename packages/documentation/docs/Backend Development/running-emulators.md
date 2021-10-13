@@ -17,7 +17,7 @@ To run emulators locally you will need (as described in: https://firebase.google
 ## Getting Started
 
 ```
-npm run start:emulated
+yarn start:emulated
 ```
 
 This will start the following:

@@ -90,8 +90,6 @@ async function startEmulator(functionsCompiler: webpack.Compiler.Watching) {
   const EMULATOR_PROJECT_ID = 'emulator-demo'
   let cmd = `${FIREBASE_BIN} use ${REAL_PROJECT_ID} && ${FIREBASE_BIN} --project=${EMULATOR_PROJECT_ID} emulators:start`
 
-  // ensure latest seed data imported
-  setEmulatorSeedData()
   cmd = `${cmd} --import=${EMULATOR_IMPORT_FOLDER}`
 
   if (EXPORT_ON_EXIT) {
@@ -117,11 +115,7 @@ async function startEmulator(functionsCompiler: webpack.Compiler.Watching) {
   })
 }
 
-function setEmulatorSeedData() {
-  // call oa-script methods
-  const cmd = `yarn workspace oa-scripts emulator:seed`
-  spawnSync(cmd, { stdio: 'inherit', shell: true })
-}
+
 
 /**
  * Firebase use to support methods to interact with a live server whilst running locally,

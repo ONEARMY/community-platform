@@ -6,7 +6,7 @@ import {
   PLATFORM_LIB_PATH,
   PLATFORM_ROOT_PATH,
   PLATFORM_TSCONFIG_TYPES_PATH,
-} from './paths'
+} from 'oa-shared/paths'
 
 /**
  * In order to correctly bundle functions code with imports from the main platform src,

@@ -8,10 +8,10 @@ By default the emulators load any data found in the [functions/data/emulated](..
 By default this data is not committed to the repo and so initial data will be empty, however specific zip files have been generated from site backup files and can be loaded for testing
 
 ## Loading seed data
-By default when the script first runs it will populate seed data from [functions/data/seed](../../../../functions/data/seed). This can be repopulated either by deleting the [functions/data/emulated](../../../../functions/data/emulated) folder, or by manually calling the seed data script:
-
+By default when the functions start script runs it will call a script to populate seed data from [scripts/emulator/seed-data](../../../../scripts/emulator/seed-data). There are different versions depending on export date and operating system 
+(known issue where data exported on windows won't always run on linux, pending possible fix via node 14 update or firebase exporter bin)
 ```
-yarn workspace functions run emulator:seed
+yarn workspace oa-scripts emulator:seed
 ```
 
 This will load the default seed data from the zip file [functions/data/seed](../../../../functions/data/seed/seed-default.zip).
@@ -77,5 +77,5 @@ sudo firebase --project emulator-demo emulators:start --import=functions/data/em
 ```
 This will populate the working data to the `functions/data/emulated`, from where it can be zipped and used to replace the `seed-default.zip` file or added as an additional data source. A script is included to produce the zip file as default zip utilities may throw errors if contents contain empty folders 
 ```
-yarn workspace functions run emulator:generate:zip
+yarn workspace oa-scripts emulator:generate:zip
 ```

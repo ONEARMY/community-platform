@@ -2,7 +2,7 @@ import { spawnSync } from 'child_process'
 import fs from 'fs-extra'
 import path from 'path'
 import os from 'os'
-import { FUNCTIONS_DIR } from '../paths'
+import { FUNCTIONS_DIR } from 'oa-shared/paths'
 
 const RUNTIME_CONFIG_PATH = path.resolve(FUNCTIONS_DIR, '.runtimeconfig.json')
 

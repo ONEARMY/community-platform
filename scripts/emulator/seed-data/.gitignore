@@ -1,0 +1,5 @@
+*.zip
+
+# List specific seed data files to keep in repo
+!2021-07-30-export-linux.zip
+!2021-10-13-export.zip

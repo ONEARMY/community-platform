@@ -1,11 +1,10 @@
-import { spawn } from 'child_process'
+import { spawn, spawnSync } from 'child_process'
 import * as path from 'path'
 import webpack from 'webpack'
 import * as os from 'os'
 import * as fs from 'fs-extra'
 import webpackConfig from '../webpack.config'
-import { EMULATOR_EXPORT_FOLDER, EMULATOR_IMPORT_FOLDER, FUNCTIONS_DIR } from './paths'
-import { emulatorSeed } from './emulator/seed'
+import { EMULATOR_EXPORT_FOLDER, EMULATOR_IMPORT_FOLDER, FUNCTIONS_DIR } from 'oa-shared/paths'
 import { loadFirebaseConfig } from './firebase/loadConfig'
 
 // change this value if also wanting to export data
@@ -17,6 +16,8 @@ const EXPORT_ON_EXIT = true
  * NOTE - whilst similar functionality can be achieved with packages like 'concurrently',
  * SIGTERM signals don't seem to always be handled correctly and the emulator doesn't complete
  * export operations. Similarly webpack watch cli respawns even after SIGINT so better to run programatically
+ *
+ * TODO - ideally all function scripts should be moved to oa-scripts workspace
  */
 async function main() {
   // CLI: concurrently --kill-others-on-fail --names \"emulator,functions\" -c \"blue,magenta\" \"yarn serve:emulated\" \"yarn watch\"
@@ -90,7 +91,7 @@ async function startEmulator(functionsCompiler: webpack.Compiler.Watching) {
   let cmd = `${FIREBASE_BIN} use ${REAL_PROJECT_ID} && ${FIREBASE_BIN} --project=${EMULATOR_PROJECT_ID} emulators:start`
 
   // ensure latest seed data imported
-  await emulatorSeed()
+  setEmulatorSeedData()
   cmd = `${cmd} --import=${EMULATOR_IMPORT_FOLDER}`
 
   if (EXPORT_ON_EXIT) {
@@ -114,6 +115,12 @@ async function startEmulator(functionsCompiler: webpack.Compiler.Watching) {
       functionsCompiler.close(() => console.log('Functions compiler terminated'))
     }
   })
+}
+
+function setEmulatorSeedData() {
+  // call oa-script methods
+  const cmd = `yarn workspace oa-scripts emulator:seed`
+  spawnSync(cmd, { stdio: 'inherit', shell: true })
 }
 
 /**

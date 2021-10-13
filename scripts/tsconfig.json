@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "ES2015",
     "module": "CommonJS",
     "lib": ["ESNext"],
     "types": ["node"],
     "moduleResolution": "Node",
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "typeRoots": ["./node_modules/@types"]
   },
-  "include": ["**/*.ts"],
-  "typeRoots": ["node_modules/@types"]
+  "include": ["**/*.ts"]
 }

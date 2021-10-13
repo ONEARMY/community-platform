@@ -1,6 +1,7 @@
 export * from './db'
 export * from './messages'
 export * from './users'
+export * from './paths'
 
 /*************************************************************************************
  * Shared Constants and Generators

@@ -34,11 +34,11 @@ export class Loader extends Component<IProps> {
     super(props)
   }
   render() {
-    const logo = this.props.themeStore.currentTheme.logo
+    const logo = this.props?.themeStore?.currentTheme.logo || null
     return (
       <>
         <Flex flexWrap="wrap" justifyContent="center">
-          <RotatingLogo src={logo} width={[75, 75, 100]} />
+          {logo && <RotatingLogo src={logo} width={[75, 75, 100]} />}
           <Text txtcenter width={1}>
             loading...
           </Text>

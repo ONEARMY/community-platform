@@ -15,7 +15,7 @@ import {
   NO_HEADER_PAGES,
   POLICY_PAGES,
 } from './PageList'
-import { Link, Flex } from 'rebass'
+import { Link, Flex } from 'rebass/styled-components'
 import DevSiteHeader from 'src/components/DevSiteHeader/DevSiteHeader'
 
 interface IState {

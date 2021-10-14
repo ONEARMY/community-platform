@@ -1,64 +1,83 @@
 import { SITE, VERSION, DEV_SITE_ROLE } from 'src/config/config'
 import Text from 'src/components/Text'
-import theme from 'src/themes/styled.theme'
 import { UserRole } from 'src/models'
-import { Flex, Box } from 'rebass'
+import { Flex, Box } from 'rebass/styled-components'
 import Select from 'react-select'
+import { observer } from 'mobx-react-lite'
+import { useCommonStores } from 'src'
 
 /**
  * A simple header component that reminds developers that they are working on a dev
  * version of the platform, and provide the option to toggle between different dev sites
  */
-const DevSiteHeader = () => (
-  <>
-    {devSites.find(s => s.value === SITE) && (
-      <Flex
-        data-cy="devSiteHeader"
-        bg={theme.colors.red2}
-        width={1}
-        py={1}
-        px={1}
-        alignItems="center"
-        style={{ zIndex: 3001 }}
-      >
-        <Text color={'white'} medium txtcenter flex="1">
-          This is a dev version of the platform (v{VERSION})
-        </Text>
-        <Flex data-cy="devSiteRoleSelectContainer" alignItems="center" ml={2}>
-          <Text color={'white'} medium mr="1" title={SITE}>
-            View as:
+const DevSiteHeader = observer(() => {
+  const { themeStore } = useCommonStores().stores
+  const { themeOptions } = themeStore
+  const theme = themeStore.currentTheme.styles
+  return (
+    <>
+      {devSites.find(s => s.value === SITE) && (
+        <Flex
+          data-cy="devSiteHeader"
+          bg={theme.colors.red2}
+          width={1}
+          py={1}
+          px={1}
+          alignItems="center"
+          style={{ zIndex: 3001 }}
+        >
+          <Text color={'white'} medium txtcenter flex="1">
+            This is a dev version of the platform (v{VERSION})
           </Text>
-          <Box width="150px" mr={3}>
-            <Select
-              options={siteRoles}
-              placeholder="Role"
-              defaultValue={
-                siteRoles.find(s => s.value === DEV_SITE_ROLE) || siteRoles[0]
-              }
-              onChange={(s: any) => setSiteRole(s.value)}
-            />
-          </Box>
+          <Flex data-cy="devSiteRoleSelectContainer" alignItems="center" ml={2}>
+            <Text color={'white'} medium mr="1" title={SITE}>
+              View as:
+            </Text>
+            <Box width="150px" mr={3}>
+              <Select
+                options={siteRoles}
+                placeholder="Role"
+                defaultValue={
+                  siteRoles.find(s => s.value === DEV_SITE_ROLE) || siteRoles[0]
+                }
+                onChange={(s: any) => setSiteRole(s.value)}
+              />
+            </Box>
+          </Flex>
+          <Flex data-cy="devSiteSelectContainer" alignItems="center">
+            <Text color={'white'} medium mr="1" title={SITE}>
+              Site:
+            </Text>
+            <Box width="130px">
+              <Select
+                options={devSites}
+                placeholder="Site"
+                defaultValue={devSites.find(s => s.value === SITE)}
+                onChange={(s: any) => setSite(s.value)}
+              />
+            </Box>
+          </Flex>
+          <Flex data-cy="themeSelectContainer" alignItems="center" ml={2}>
+            <Text color={'white'} medium ml="1" mr="1" title={SITE}>
+              Theme:
+            </Text>
+            <Box width="190px">
+              <Select
+                options={themeOptions}
+                placeholder="Site"
+                defaultValue={themeOptions[0]}
+                onChange={(s: any) => themeStore.setActiveTheme(s.value)}
+              />
+            </Box>
+          </Flex>
         </Flex>
-        <Flex data-cy="devSiteSelectContainer" alignItems="center">
-          <Text color={'white'} medium mr="1" title={SITE}>
-            Site:
-          </Text>
-          <Box width="130px">
-            <Select
-              options={devSites}
-              placeholder="Site"
-              defaultValue={devSites.find(s => s.value === SITE)}
-              onChange={(s: any) => setSite(s.value)}
-            />
-          </Box>
-        </Flex>
-      </Flex>
-    )}
-  </>
-)
+      )}
+    </>
+  )
+})
 // we have 2 different dev sites, only show this component when on one and provide select
 const devSites = [
-  { value: 'localhost', label: 'Dev' },
+  { value: 'dev_site', label: 'Development' },
   { value: 'preview', label: 'Preview' },
 ]
 // dev site users can use either a default user profile or mock another admin role

@@ -6,7 +6,6 @@ import { Link } from 'src/components/Links'
 import { ModerationStatusText } from 'src/components/ModerationStatusText'
 import Text from 'src/components/Text'
 import { IResearch } from 'src/models/research.models'
-import theme from 'src/themes/styled.theme'
 
 interface IProps {
   item: IResearch.ItemDB
@@ -40,7 +39,7 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => (
             auxiliary
             my={2}
             ml={1}
-            color={`${theme.colors.blue} !important`}
+            color={`${props => props.theme.colors.blue} !important`}
           >
             {item._createdBy}
           </Text>

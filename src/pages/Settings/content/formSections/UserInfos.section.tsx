@@ -8,19 +8,21 @@ import { FlagSelectField } from 'src/components/Form/FlagSelect'
 import { Button } from 'src/components/Button'
 import 'react-flags-select/scss/react-flags-select.scss'
 import styled from 'styled-components'
-import theme from 'src/themes/styled.theme'
 import { FieldArray } from 'react-final-form-arrays'
 import { ProfileLinkField } from './Fields/Link.field'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
-import { Box } from 'rebass'
+import { Box } from 'rebass/styled-components'
 import { required } from 'src/utils/validators'
 import { IUserPP } from 'src/models/user_pp.models'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { ErrorMessage } from 'src/components/Form/elements'
+import { inject, observer } from 'mobx-react'
+import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
 interface IProps {
   formValues: IUserPP
   mutators: { [key: string]: (...args: any[]) => any }
+  themeStore?: ThemeStore
 }
 interface IState {
   readOnly: boolean
@@ -30,12 +32,14 @@ interface IState {
 }
 
 const FlagSelectContainer = styled(Flex)`
-  border: 1px solid ${theme.colors.black};
+  border: 1px solid ${props => props.theme.colors.black};
   border-radius: 4px;
   height: 40px;
-  background-color: ${theme.colors.background};
+  background-color: ${props => props.theme.colors.background};
 `
 
+@inject('themeStore')
+@observer
 export class UserInfosSection extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
@@ -49,6 +53,8 @@ export class UserInfosSection extends React.Component<IProps, IState> {
     const { formValues } = this.props
     const { profileType, links, coverImages } = formValues
     const { isOpen } = this.state
+    const theme = this.props.themeStore.currentTheme.styles
+
     return (
       <FlexSectionContainer>
         <Flex justifyContent="space-between">

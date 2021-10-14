@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Flex, Box } from 'rebass'
+import { Flex, Box } from 'rebass/styled-components'
 import { Link } from 'src/components/Links'
 import TagsSelect from 'src/components/Tags/TagsSelect'
 import { inject, observer } from 'mobx-react'
@@ -39,7 +39,7 @@ const updateQueryParams = (url: string, key: string, val: string) => {
 }
 
 // First we use the @inject decorator to bind to the howtoStore state
-@inject('howtoStore', 'userStore')
+@inject('howtoStore', 'userStore', 'themeStore')
 // Then we can use the observer component decorator to automatically tracks observables and re-renders on change
 // (note 1, use ! to tell typescript that the store will exist (it's an injected prop))
 // (note 2, mobx seems to behave more consistently when observables are referenced outside of render methods)
@@ -93,9 +93,11 @@ export class HowtoList extends React.Component<any, IState> {
       referrerSource,
     } = this.props.howtoStore
 
+    const theme = this.props.themeStore.currentTheme
+
     return (
       <>
-        <Flex py={26}>
+        <Flex py={5}>
           {referrerSource ? (
             <Box width={1}>
               <Heading medium bold txtcenter mt={20}>
@@ -107,7 +109,7 @@ export class HowtoList extends React.Component<any, IState> {
             </Box>
           ) : (
             <Heading medium bold txtcenter width={1} my={20}>
-              Learn & share how to recycle, build and work with plastic
+              {theme.howtoHeading}
             </Heading>
           )}
         </Flex>
@@ -175,13 +177,13 @@ export class HowtoList extends React.Component<any, IState> {
           ) : (
             <Flex
               justifyContent={'center'}
-              mx={-4}
+              mx={-6}
               data-cy="howtolist-flex-container"
             >
               <VirtualizedFlex
                 data={filteredHowtos}
                 renderItem={data => (
-                  <Box px={4} py={4}>
+                  <Box px={6} py={6}>
                     <HowToCard howto={data} />
                   </Box>
                 )}
@@ -198,7 +200,7 @@ export class HowtoList extends React.Component<any, IState> {
           <MoreContainer m={'0 auto'} pt={60} pb={90}>
             <Flex alignItems={'center'} flexDirection={'column'} mt={5}>
               <Heading medium sx={{ textAlign: 'center' }}>
-                Inspire the Precious Plastic world.
+                Inspire the {theme.name} world.
               </Heading>
               <Heading medium>Share your how-to!</Heading>
               <AuthWrapper>

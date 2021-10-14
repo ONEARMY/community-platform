@@ -1,18 +1,19 @@
 import { createGlobalStyle } from 'styled-components'
-import theme, { zIndex } from 'src/themes/styled.theme'
 
 import { GlobalFonts } from './fonts'
 // declare global styling overrides (fonts etc.)
 
 export const GlobalStyle = createGlobalStyle`
   ${GlobalFonts}
+
   body {
       font-family: "Varela Round", Arial, sans-serif;
-      background-color: ${theme.colors.background};
+      background-color: ${props => props.theme.colors.background};
       margin: 0;
       padding: 0;
       min-height: 100vh;
   }
+
   a {
     text-decoration: none;
   }
@@ -25,7 +26,7 @@ export const GlobalStyle = createGlobalStyle`
   .slick-next {
     position: absolute;
     top: 50%;
-    z-index: ${zIndex.slickArrows};
+    z-index: ${props => props.theme.zIndex.slickArrows};
     transform: translateY(-50%);
     cursor: pointer;
   }
@@ -38,7 +39,6 @@ export const GlobalStyle = createGlobalStyle`
   .slick-prev {
     left: 0;
     right: auto;
-    
   }
 
   .slick-track {

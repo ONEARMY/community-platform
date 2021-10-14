@@ -1,10 +1,9 @@
 import * as React from 'react'
-import { Box, Image } from 'rebass'
+import { Box, Image } from 'rebass/styled-components'
 import styled from 'styled-components'
 import { Button } from '../Button'
 import 'react-image-lightbox/style.css'
 import { ImageConverter } from './ImageConverter'
-import theme from 'src/themes/styled.theme'
 import Dropzone from 'react-dropzone'
 import { IUploadedFileMeta } from 'src/stores/storage'
 
@@ -26,9 +25,11 @@ const ImageInputWrapper = styled(AlignCenterWrapper as any)<ITitleProps>`
   height: 100%;
   width: 100%;
   border: ${props =>
-    props.hasUploadedImg ? 0 : `2px dashed ${theme.colors.background}`};
-  border-radius: ${theme.space[1]}px;
-  background-color: ${theme.colors.white};
+    props.hasUploadedImg
+      ? 0
+      : `2px dashed ${props => props.theme.colors.background}`};
+  border-radius: ${props => props.theme.space[1]}px;
+  background-color: ${props => props.theme.colors.white};
   cursor: pointer;
 `
 
@@ -43,7 +44,7 @@ const UploadImageOverlay = styled(AlignCenterWrapper as any)`
   opacity:0;
   visibility:hidden
   transition: opacity 300ms ease-in;
-  border-radius: ${theme.space[1]}px;
+  border-radius: ${props => props.theme.space[1]}px;
   ${ImageInputWrapper}:hover & {
     visibility: visible;
     opacity: 1;

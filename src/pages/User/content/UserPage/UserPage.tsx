@@ -10,7 +10,7 @@ import {
 
 import { UserStore } from 'src/stores/User/user.store'
 import Heading from 'src/components/Heading'
-import { Box, Image } from 'rebass'
+import { Box, Image } from 'rebass/styled-components'
 // import slick and styles
 import Slider from 'react-slick'
 import 'src/assets/css/slick.min.css'
@@ -18,12 +18,10 @@ import styled from 'styled-components'
 import Icon from 'src/components/Icons'
 import Flex from 'src/components/Flex'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
-import { zIndex } from 'src/themes/styled.theme'
 import Workspace from 'src/pages/User/workspace/Workspace'
 import { Text } from 'src/components/Text'
 import { Link } from 'src/components/Links'
 
-import theme from 'src/themes/styled.theme'
 import { replaceDashesWithSpaces } from 'src/utils/helpers'
 import FlagIconEvents from 'src/components/Icons/FlagIcon/FlagIcon'
 
@@ -49,6 +47,7 @@ import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { AdminContact } from 'src/components/AdminContact/AdminContact'
 import ProfileLink from './ProfileLink'
 import { logger } from 'src/logger'
+import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
 interface IRouterCustomParams {
   id: string
@@ -60,6 +59,7 @@ interface IBackgroundImageProps {
 
 interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
   userStore: UserStore
+  themeStore?: ThemeStore
 }
 
 interface IState {
@@ -72,7 +72,7 @@ interface IProps {}
 const UserCategory = styled.div`
   position: relative;
   display: inline-block;
-  z-index: ${zIndex.default};
+  z-index: ${props => props.theme.zIndex.default};
 
   &:after {
     content: '';
@@ -81,7 +81,7 @@ const UserCategory = styled.div`
     position: absolute;
     top: 0;
 
-    z-index: ${zIndex.behind};
+    z-index: ${props => props.theme.zIndex.behind};
     background-repeat: no-repeat;
     background-size: contain;
     left: 0;
@@ -110,7 +110,7 @@ const MobileBadge = styled.div`
   max-width: 120px;
   margin-bottom: 20px;
 
-  @media only screen and (min-width: ${theme.breakpoints[2]}) {
+  @media only screen and (min-width: ${props => props.theme.breakpoints[2]}) {
     max-width: 150px;
     margin-top: -50%;
     margin-left: auto;
@@ -123,7 +123,7 @@ const UserStatsBox = styled.div`
   border: 2px solid black;
   border-radius: 10px;
   padding: 10px;
-  background-color: ${theme.colors.background};
+  background-color: ${props => props.theme.colors.background};
   margin-bottom: 20px;
 `
 
@@ -151,7 +151,7 @@ const ProfileWrapper = styled(Box)`
 const ProfileWrapperCarousel = styled.div``
 
 const OpeningHours = styled.p`
-  color: ${theme.colors.grey};
+  color: ${props => props.theme.colors.grey};
   margin-bottom: 5px;
   margin-top: 5px;
 `
@@ -166,12 +166,12 @@ const PlasticType = styled.div`
 `
 
 const ProfileContentWrapper = styled(Flex)`
-  background-color: ${theme.colors.white};
+  background-color: ${props => props.theme.colors.white};
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   /* margin-top: -112px;
 
-  @media only screen and (min-width: ${theme.breakpoints[1]}) {
+  @media only screen and (min-width: ${props => props.theme.breakpoints[1]}) {
       margin-top: 0;
   } */
 `
@@ -191,7 +191,7 @@ const SliderImage = styled.div`
   `}
 
 
-  @media only screen and (min-width: ${theme.breakpoints[2]}) {
+  @media only screen and (min-width: ${props => props.theme.breakpoints[2]}) {
     height: 500px;
   }
 `
@@ -201,13 +201,13 @@ const MachineExperienceTab = styled.div`
   padding: 10px;
   border-style: solid;
   border-width: 1px;
-  border-color: ${theme.colors.background};
+  border-color: ${props => props.theme.colors.background};
   border-radius: 5px;
-  background-color: ${theme.colors.background};
+  background-color: ${props => props.theme.colors.background};
   margin-right: 10px;
 `
 
-@inject('userStore')
+@inject('userStore', 'themeStore')
 @observer
 export class UserPage extends React.Component<
   RouteComponentProps<IRouterCustomParams>,
@@ -373,6 +373,8 @@ export class UserPage extends React.Component<
 
   public render() {
     const { user, isLoading } = this.state
+    const theme = this.injected.themeStore?.currentTheme.styles
+    
     logger.debug('render', user)
     if (isLoading) {
       return <Loader />
@@ -506,9 +508,9 @@ const sliderSettings = {
   slidesToScroll: 1,
   adaptiveHeight: false,
   nextArrow: (
-    <Icon glyph="chevron-right" color={theme.colors.white} size={60} marginRight="4px" />
+    <Icon glyph="chevron-right" color='#fff' size={60} marginRight="4px" />
   ),
   prevArrow: (
-    <Icon glyph="chevron-left" color={theme.colors.white} size={60} marginRight="4px" />
+    <Icon glyph="chevron-left" color='#fff' size={60} marginRight="4px" />
   ),
 }

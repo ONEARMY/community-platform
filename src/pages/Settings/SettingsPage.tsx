@@ -17,9 +17,8 @@ import { Form } from 'react-final-form'
 import { ARRAY_ERROR, FORM_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'
 import { UserMapPinSection } from './content/formSections/MapPin.section'
-import theme from 'src/themes/styled.theme'
 import INITIAL_VALUES from './Template'
-import { Box } from 'rebass'
+import { Box } from 'rebass/styled-components'
 import { Prompt } from 'react-router'
 import { toJS } from 'mobx'
 
@@ -27,6 +26,7 @@ interface IProps {}
 
 interface IInjectedProps extends IProps {
   userStore: UserStore
+  themeStore: any
 }
 
 interface IState {
@@ -35,7 +35,7 @@ interface IState {
   showDeleteDialog?: boolean
 }
 
-@inject('userStore')
+@inject('userStore', 'themeStore')
 @observer
 export class UserSettings extends React.Component<IProps, IState> {
   constructor(props: IProps) {
@@ -116,6 +116,7 @@ export class UserSettings extends React.Component<IProps, IState> {
 
   render() {
     const user = this.injected.userStore.user
+    const theme = this.injected.themeStore.currentTheme.styles
     const { formValues, notification } = this.state
     return (
       user && (

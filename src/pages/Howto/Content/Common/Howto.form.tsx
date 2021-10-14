@@ -22,9 +22,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { inject, observer } from 'mobx-react'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import { PostingGuidelines } from './PostingGuidelines'
-import theme from 'src/themes/styled.theme'
 import { DIFFICULTY_OPTIONS, TIME_OPTIONS } from './FormSettings'
-import { Box } from 'rebass'
+import { Box } from 'rebass/styled-components'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import { HowToSubmitStatus } from './SubmitStatus'
 import { required } from 'src/utils/validators'
@@ -33,6 +32,7 @@ import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.
 import { COMPARISONS } from 'src/utils/comparisons'
 import { UnsavedChangesDialog } from 'src/components/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
+import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
 interface IState {
   formSaved: boolean
@@ -46,7 +46,8 @@ interface IProps extends RouteComponentProps<any> {
   parentType: 'create' | 'edit'
 }
 interface IInjectedProps extends IProps {
-  howtoStore: HowtoStore
+  howtoStore: HowtoStore,
+  themeStore?: ThemeStore
 }
 
 const AnimationContainer = (props: any) => {
@@ -83,12 +84,12 @@ const FormContainer = styled.form`
 `
 
 const Label = styled.label`
-  font-size: ${theme.fontSizes[2] + 'px'};
-  margin-bottom: ${theme.space[2] + 'px'};
+  font-size: ${props => props.theme.fontSizes[2] + 'px'};
+  margin-bottom: ${props => props.theme.space[2] + 'px'};
   display: block;
 `
 
-@inject('howtoStore')
+@inject('howtoStore', 'themeStore')
 @observer
 export class HowtoForm extends React.PureComponent<IProps, IState> {
   isDraft = false
@@ -122,20 +123,20 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
     this.setState({ showSubmitModal: true })
     formValues.moderation = this.isDraft ? 'draft' : 'awaiting-moderation'
     logger.debug('submitting form', formValues)
-    await this.store.uploadHowTo(formValues)
+    await this.howtoStore.uploadHowTo(formValues)
   }
 
   get injected() {
     return this.props as IInjectedProps
   }
-  get store() {
+  get howtoStore() {
     return this.injected.howtoStore
   }
 
   public validateTitle = async (value: any) => {
     const originalId =
       this.props.parentType === 'edit' ? this.props.formValues._id : undefined
-    return this.store.validateTitleForSlug(value, 'howtos', originalId)
+    return this.howtoStore.validateTitleForSlug(value, 'howtos', originalId)
   }
 
   // automatically generate the slug when the title changes
@@ -149,6 +150,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
   public render() {
     const { formValues, parentType } = this.props
     const { fileEditMode, showSubmitModal } = this.state
+    const theme = this.injected.themeStore?.currentTheme.styles
     return (
       <>
         {showSubmitModal && (
@@ -174,7 +176,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
             return (
               <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
                 <UnsavedChangesDialog
-                  uploadComplete={this.store.uploadStatus.Complete}
+                  uploadComplete={this.howtoStore.uploadStatus.Complete}
                 />
 
                 <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} mt={4}>

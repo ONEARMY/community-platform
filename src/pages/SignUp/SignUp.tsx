@@ -3,7 +3,6 @@ import { FRIENDLY_MESSAGES } from 'oa-shared'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import styled from 'styled-components'
-import theme from 'src/themes/styled.theme'
 import { Button } from 'src/components/Button'
 import Text from 'src/components/Text'
 import { Link } from 'src/components/Links'
@@ -17,8 +16,8 @@ import { required } from 'src/utils/validators'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
 
 const Label = styled.label`
-  font-size: ${theme.fontSizes[2] + 'px'};
-  margin-bottom: ${theme.space[2] + 'px'};
+  font-size: ${props => props.theme.fontSizes[2] + 'px'};
+  margin-bottom: ${props => props.theme.space[2] + 'px'};
   display: block;
 `
 
@@ -41,6 +40,7 @@ interface IProps extends RouteComponentProps<any> {
 }
 
 @inject('userStore')
+@inject('themeStore')
 @observer
 class SignUpPage extends React.Component<IProps, IState> {
   constructor(props: IProps) {

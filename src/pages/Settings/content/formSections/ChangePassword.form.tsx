@@ -4,7 +4,6 @@ import { Button } from 'src/components/Button'
 import { InputField } from 'src/components/Form/Fields'
 import { UserStore } from 'src/stores/User/user.store'
 import Text from 'src/components/Text'
-import theme from 'src/themes/styled.theme'
 import styled from 'styled-components'
 import Flex from 'src/components/Flex'
 
@@ -24,8 +23,8 @@ interface IProps {
 }
 
 const Label = styled.label`
-  font-size: ${theme.fontSizes[2] + 'px'};
-  margin-bottom: ${theme.space[2] + 'px'};
+  font-size: ${props => props.theme.fontSizes[2] + 'px'};
+  margin-bottom: ${props => props.theme.space[2] + 'px'};
   display: block;
 `
 

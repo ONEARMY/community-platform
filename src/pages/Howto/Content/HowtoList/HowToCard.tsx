@@ -54,7 +54,9 @@ export const HowToCard = (props: IProps) => (
         </Heading>
         <Flex alignItems="center">
           {props.howto.creatorCountry && (
-            <FlagIconHowTos code={props.howto.creatorCountry} />
+            <FlagIconHowTos
+              code={formatCountryToISOCode(props.howto.creatorCountry)}
+            />
           )}
           <Text auxiliary my={2} ml={1}>
             By {props.howto._createdBy}
@@ -70,5 +72,15 @@ export const HowToCard = (props: IProps) => (
     </Link>
   </Flex>
 )
+
+function formatCountryToISOCode(str) {
+  if (str === 'united kingdom') return 'gb'
+
+  if (str === 'czechia') return 'cz'
+
+  if (str === 'france') return 'fr'
+
+  return str
+}
 
 export default HowToCard

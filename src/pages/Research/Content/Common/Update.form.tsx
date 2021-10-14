@@ -3,7 +3,8 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Field, Form } from 'react-final-form'
 import { Prompt, RouteComponentProps } from 'react-router'
-import { Box } from 'rebass'
+import { Box } from 'rebass/styled-components'
+import { useCommonStores } from 'src'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { Button } from 'src/components/Button'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
@@ -13,7 +14,6 @@ import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import Heading from 'src/components/Heading'
 import { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import theme from 'src/themes/styled.theme'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { required } from 'src/utils/validators'
 import styled from 'styled-components'
@@ -39,8 +39,8 @@ const FormContainer = styled.form`
 `
 
 const Label = styled.label`
-  font-size: ${theme.fontSizes[2] + 'px'};
-  margin-bottom: ${theme.space[2] + 'px'};
+  font-size: ${props => props.theme.fontSizes[2] + 'px'};
+  margin-bottom: ${props => props.theme.space[2] + 'px'};
   display: block;
 `
 
@@ -51,6 +51,7 @@ const beforeUnload = function(e) {
 
 const UpdateForm = observer((props: IProps) => {
   const store = useResearchStore()
+  const theme = useCommonStores().stores.themeStore.currentTheme.styles
   const [showSubmitModal, setShowSubmitModal] = React.useState<boolean>(false)
 
   React.useEffect(() => {

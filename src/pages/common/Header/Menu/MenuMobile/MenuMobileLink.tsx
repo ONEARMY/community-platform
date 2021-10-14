@@ -1,7 +1,6 @@
 import * as React from 'react'
-import theme from 'src/themes/styled.theme'
 import styled from 'styled-components'
-import { Box } from 'rebass'
+import { Box } from 'rebass/styled-components'
 import { NavLink } from 'react-router-dom'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
 import { observer, inject } from 'mobx-react'
@@ -19,14 +18,14 @@ interface IInjectedProps extends IProps {
 }
 
 const PanelItem = styled(Box)`
-  padding: ${theme.space[3]}px 0px;
+  padding: ${props => props.theme.space[3]}px 0px;
 `
 
 const MenuLink = styled(NavLink).attrs(() => ({
   activeClassName: 'current',
 }))`
   color: ${'black'};
-  font-size: ${theme.fontSizes[2]}px;
+  font-size: ${props => props.theme.fontSizes[2]}px;
   position: relative;
   > span {
     z-index: 1;

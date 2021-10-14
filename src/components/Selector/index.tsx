@@ -1,7 +1,6 @@
 import { ISelectorList } from 'src/models/selectorList.models'
 
 import styled from 'styled-components'
-import theme from 'src/themes/styled.theme'
 import {
   color,
   borderRadius,
@@ -26,7 +25,7 @@ const Wrapper = styled.div`
   ${borderRadius};
   ${space};
   ${width};
-  border: 1px solid ${theme.colors.black};
+  border: 1px solid ${props => props.theme.colors.black};
   display: inline-block;
   height: 38px;
 `
@@ -54,7 +53,6 @@ const Selector = (props: selectorProps) => (
 
 Selector.defaultProps = {
   className: 'selector',
-  color: theme.colors.black,
   borderRadius: 1,
   bg: 'white',
   px: 2,

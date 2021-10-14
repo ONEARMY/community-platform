@@ -1,7 +1,6 @@
 import styled from 'styled-components'
-import { Component } from 'react';
-import theme from 'src/themes/styled.theme'
-import { Box } from 'rebass'
+import { Component } from 'react'
+import { Box } from 'rebass/styled-components'
 import { LinkTargetBlank } from 'src/components/Links/LinkTargetBlank/LinkTargetBlank'
 import { observer, inject } from 'mobx-react'
 import { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
@@ -13,12 +12,13 @@ interface IProps {
 
 interface IInjectedProps extends IProps {
   mobileMenuStore: MobileMenuStore
+  themeStore: any; //FIXME: thisislawatts - declare a type
 }
 
 const PanelItem = styled(Box)`
-  padding: ${theme.space[3]}px 0px;
+  padding: ${props => props.theme.space[3]}px 0px;
 `
-@inject('mobileMenuStore')
+@inject('mobileMenuStore', 'themeStore')
 @observer
 export class MenuMobileExternalLink extends Component<IProps> {
   // eslint-disable-next-line
@@ -32,6 +32,7 @@ export class MenuMobileExternalLink extends Component<IProps> {
 
   render() {
     const menu = this.injected.mobileMenuStore
+    const theme = this.injected.themeStore.currentTheme.styles
     const content = this.props.content
     const id = content.toLowerCase().replace(' ', '-')
     return (

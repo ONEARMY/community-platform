@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { FaTrash, FaRegEdit } from 'react-icons/fa'
-import { Flex } from 'rebass'
+import { Flex } from 'rebass/styled-components'
 import { useCommonStores } from 'src'
 import { IComment } from 'src/models'
 import { CommentHeader } from './CommentHeader'

@@ -3,18 +3,20 @@ import * as React from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
-import { Box } from 'rebass'
+import { Box } from 'rebass/styled-components'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { WORKSPACE_TYPES } from 'src/mocks/user_pp.mock'
 import { CustomRadioField } from './Fields/CustomRadio.field'
 import { required } from 'src/utils/validators'
-import theme from 'src/themes/styled.theme'
 import { Field } from 'react-final-form'
+import { inject, observer } from 'mobx-react'
 
 interface IState {
   isOpen?: boolean
 }
 
+@inject('themeStore')
+@observer
 export class WorkspaceSection extends React.Component<any, IState> {
   state = {
     isOpen: true,
@@ -22,6 +24,7 @@ export class WorkspaceSection extends React.Component<any, IState> {
 
   render() {
     const { isOpen } = this.state
+    const theme = this.props.themeStore.currentTheme.styles
     return (
       <Field
         name="workspaceType"

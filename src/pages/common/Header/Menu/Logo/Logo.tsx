@@ -1,14 +1,15 @@
-import { Component } from 'react';
-import theme from 'src/themes/styled.theme'
+import { Component } from 'react'
 import { Link, Flex, Image } from 'rebass/styled-components'
 import styled from 'styled-components'
 
-import PPLogo from 'src/assets/images/precious-plastic-logo-official.svg'
 import Text from 'src/components/Text'
 import { VERSION } from 'src/config/config'
+import { inject, observer } from 'mobx-react'
+import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
 interface IProps {
   isMobile?: boolean
+  themeStore?: ThemeStore
 }
 
 const LogoContainer = styled(Flex)`
@@ -16,18 +17,21 @@ const LogoContainer = styled(Flex)`
   position: relative;
   padding: 10px 0;
 
-  @media only screen and (min-width: ${theme.breakpoints[1]}) {
+  @media only screen and (min-width: ${props => props.theme.breakpoints[1]}) {
     margin-bottom: -50px;
     padding: 0;
   }
 `
-
+@inject('themeStore')
+@observer
 export class Logo extends Component<IProps> {
   // eslint-disable-next-line
   constructor(props: any) {
     super(props)
   }
   render() {
+    const name = this.props.themeStore.currentTheme.siteName
+    const nameAndVersion = `${name} logo v${VERSION}`
     return (
       <>
         <LogoContainer>
@@ -44,11 +48,11 @@ export class Logo extends Component<IProps> {
               }}
             >
               <Image
-                src={PPLogo}
+                src={this.props.themeStore.currentTheme.logo}
                 width={[50, 50, 100]}
                 height={[50, 50, 100]}
-                alt={'PP Logo v' + VERSION}
-                title={'PP Logo v' + VERSION}
+                alt={nameAndVersion}
+                title={nameAndVersion}
               />
             </Flex>
             <Text
@@ -56,7 +60,7 @@ export class Logo extends Component<IProps> {
               ml={2}
               display={['none', 'none', 'block']}
             >
-              Precious Plastic
+              {name}
             </Text>
           </Link>
         </LogoContainer>

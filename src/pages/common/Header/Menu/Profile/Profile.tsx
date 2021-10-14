@@ -20,9 +20,10 @@ interface IProps {
 
 interface IInjectedProps extends IProps {
   userStore: UserStore
+  themeStore: any
 }
 
-@inject('userStore')
+@inject('userStore', 'themeStore')
 @observer
 export default class Profile extends Component<IProps, IState> {
   constructor(props: IProps) {
@@ -41,6 +42,7 @@ export default class Profile extends Component<IProps, IState> {
 
   render() {
     const user = this.injected.userStore.user
+    const theme = this.injected.themeStore.currentTheme.styles
     const { showProfileModal } = this.state
     return (
       <>

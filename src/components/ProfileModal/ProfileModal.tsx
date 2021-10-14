@@ -1,12 +1,11 @@
 import * as React from 'react'
-import { Box } from 'rebass'
+import { Box } from 'rebass/styled-components'
 import styled from 'styled-components'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
 import { NavLink } from 'react-router-dom'
 import Flex from 'src/components/Flex'
-import theme, { zIndex } from 'src/themes/styled.theme'
 
 interface IProps {
   username: string
@@ -24,11 +23,11 @@ const ModalContainer = styled(Box)`
   position: absolute;
   right: 10px;
   top: 60px;
-  z-index: ${zIndex.modalProfile};
+  z-index: ${props => props.theme.zIndex.modalProfile};
   height: 100%;
 `
 const ModalContainerInner = styled(Box)`
-  z-index: ${zIndex.modalProfile};
+  z-index: ${props => props.theme.zIndex.modalProfile};
   position: relative;
   background: white;
   border: 2px solid black;
@@ -38,27 +37,27 @@ const ModalContainerInner = styled(Box)`
 const ModalLink = styled(NavLink).attrs(() => ({
   activeClassName: 'current',
 }))`
-  z-index: ${zIndex.modalProfile};
+  z-index: ${props => props.theme.zIndex.modalProfile};
   display: flex;
   flex-direction: column;
-  color: ${theme.colors.black};
+  color: ${props => props.theme.colors.black};
   padding: 10px 30px 10px 30px;
   text-align: left;
   width: 100%;
   max-width: 100%;
   max-height: 100%;
   &:focus div {
-    color: ${theme.colors.blue};
+    color: ${props => props.theme.colors.blue};
   }
   &:hover {
-    background-color: ${theme.colors.background};
+    background-color: ${props => props.theme.colors.background};
   }
   &:active div {
-    color: ${theme.colors.blue};
+    color: ${props => props.theme.colors.blue};
   }
   &.current {
-    background-color: ${theme.colors.white};
-    color: ${theme.colors.blue};
+    background-color: #fff;
+    color: ${props => props.theme.colors.blue};
   }
 `
 @inject('userStore')

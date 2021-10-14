@@ -2,7 +2,6 @@ import {
   Text as RebassText,
   TextProps as RebassTextProps,
 } from 'rebass/styled-components'
-import theme from 'src/themes/styled.theme'
 import styled from 'styled-components'
 
 export interface ITextProps {
@@ -29,6 +28,7 @@ export interface ITextProps {
   critical?: boolean
   dashed?: boolean
   cropBottomRight?: boolean
+  theme?: any
 }
 
 export const uppercase = props =>
@@ -61,25 +61,31 @@ export const bold = (props: ITextProps) =>
   props.bold ? { fontWeight: 600 } : null
 
 export const large = (props: ITextProps) =>
-  props.large ? { fontSize: theme.fontSizes[3] } : null
+  props.large ? { fontSize: props.theme.fontSizes[3] } : null
 
 export const tags = (props: ITextProps) =>
-  props.tags ? { fontSize: '12px', color: theme.colors.blue } : null
+  props.tags ? { fontSize: '12px', color: props.theme.colors.blue } : null
 
 export const auxiliary = (props: ITextProps) =>
-  props.auxiliary ? theme.typography.auxiliary : null
+  props.auxiliary ? props.theme.typography.auxiliary : null
 
 export const paragraph = (props: ITextProps) =>
-  props.paragraph ? theme.typography.paragraph : null
+  props.paragraph
+    ? {
+        fontFamily: '"Inter", Helvetica Neue, Arial, sans-serif;',
+        fontSize: '16px',
+        color: props.theme.colors.grey,
+      }
+    : null
 
 export const medium = (props: ITextProps) =>
-  props.medium ? { fontSize: theme.fontSizes[2] } : null
+  props.medium ? { fontSize: props.theme.fontSizes[2] } : null
 
 export const small = (props: ITextProps) =>
-  props.small ? { fontSize: theme.fontSizes[1] } : null
+  props.small ? { fontSize: props.theme.fontSizes[1] } : null
 
 export const superSmall = (props: ITextProps) =>
-  props.superSmall ? { fontSize: theme.fontSizes[0] } : null
+  props.superSmall ? { fontSize: props.theme.fontSizes[0] } : null
 
 export const clipped = (props: ITextProps) =>
   props.clipped
@@ -92,7 +98,7 @@ export const preLine = (props: ITextProps) =>
 export const highlight = (props: ITextProps) =>
   props.highlight
     ? {
-        background: theme.colors.yellow.base,
+        background: props.theme.colors.yellow.base,
         padding: '7px',
         borderRadius: '5px',
       }
@@ -100,7 +106,7 @@ export const highlight = (props: ITextProps) =>
 export const critical = (props: ITextProps) =>
   props.critical
     ? {
-        color: theme.colors.red,
+        color: props.theme.colors.red,
       }
     : null
 export const dashed = (props: ITextProps) =>

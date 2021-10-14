@@ -2,7 +2,7 @@ import * as React from 'react'
 import { IEvent, IEventDB } from 'src/models/events.models'
 import { Button } from 'src/components/Button'
 import { Link } from 'src/components/Links'
-import { Flex, Box } from 'rebass'
+import { Flex, Box } from 'rebass/styled-components'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import Heading from 'src/components/Heading'
 import EventCard from 'src/components/EventCard/EventCard'
@@ -12,15 +12,17 @@ import { EventStore } from 'src/stores/Events/events.store'
 import { UserStore } from 'src/stores/User/user.store'
 
 import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
+import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
 interface InjectedProps {
   eventStore: EventStore
   userStore?: UserStore
+  themeStore?: ThemeStore
 }
 
 // const filterArrayDuplicates = (array: string[]) => Array.from(new Set(array))
 
-@inject('eventStore', 'userStore')
+@inject('eventStore', 'userStore', 'themeStore')
 @observer
 export class EventsList extends React.Component<any> {
   // eslint-disable-next-line
@@ -43,12 +45,13 @@ export class EventsList extends React.Component<any> {
 
   public render() {
     const { filteredEvents, upcomingEvents } = this.injected.eventStore
+    const { siteName } = this.injected.themeStore.currentTheme
     if (filteredEvents) {
       return (
         <>
-          <Flex py={26}>
+          <Flex py={5}>
             <Heading medium txtcenter bold width={1} my={20}>
-              Precious Plastic events from around the world
+              {siteName} events from around the world
             </Heading>
           </Flex>
           <Flex

@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Flex, Box } from 'rebass'
-import themes from 'src/themes/styled.theme'
+import { Flex, Box } from 'rebass/styled-components'
 import {
   List,
   WindowScroller,
@@ -9,11 +8,13 @@ import {
   ListRowProps,
 } from 'react-virtualized'
 import { emStringToPx } from 'src/utils/helpers'
+import { inject, observer } from 'mobx-react'
+import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
 interface IProps {
   data: any[]
   renderItem: (data: any) => JSX.Element
-  widthBreakpoints: number[]
+  themeStore?: ThemeStore
 }
 interface IState {
   totalColumns: number
@@ -32,6 +33,9 @@ const cache = new CellMeasurerCache({
  * automatically calculating the number of rows to be displayed via breakpoints.
  * Note, does not use react masonry/grid layouts to allow use with page scroller
  */
+
+@inject('themeStore')
+@observer
 export class VirtualizedFlex extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
@@ -49,7 +53,9 @@ export class VirtualizedFlex extends React.Component<IProps, IState> {
   generateRowData(props: IProps) {
     const oldColumns = this.state.totalColumns
     const oldData = this.state.data
-    const { widthBreakpoints, data } = props
+    const { data } = props
+    const theme = this.props.themeStore.currentTheme.styles
+    const widthBreakpoints = theme.breakpoints.map(emStringToPx)
     const currentWidth = window.innerWidth
     const totalColumns = this._calcTotalColumns(currentWidth, widthBreakpoints)
     // only re-render when data or columns have changed
@@ -132,7 +138,6 @@ export class VirtualizedFlex extends React.Component<IProps, IState> {
   }
 
   static defaultProps: IProps = {
-    widthBreakpoints: themes.breakpoints.map(emStringToPx),
     data: [],
     renderItem: data => <div>RenderItem {data}</div>,
   }

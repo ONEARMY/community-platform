@@ -4,7 +4,8 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Field, Form } from 'react-final-form'
 import { Prompt, RouteComponentProps } from 'react-router'
-import { Box } from 'rebass'
+import { Box } from 'rebass/styled-components'
+import { useCommonStores } from 'src'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { Button } from 'src/components/Button'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
@@ -14,7 +15,6 @@ import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 import Heading from 'src/components/Heading'
 import { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import theme from 'src/themes/styled.theme'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import { required } from 'src/utils/validators'
@@ -40,8 +40,8 @@ const FormContainer = styled.form`
 `
 
 const Label = styled.label`
-  font-size: ${theme.fontSizes[2] + 'px'};
-  margin-bottom: ${theme.space[2] + 'px'};
+  font-size: ${props => props.theme.fontSizes[2] + 'px'};
+  margin-bottom: ${props => props.theme.space[2] + 'px'};
   display: block;
 `
 
@@ -51,7 +51,7 @@ const beforeUnload = function(e) {
 }
 
 const ResearchForm = observer((props: IProps) => {
-  const store = useResearchStore()
+  const researchStore = useResearchStore()
   const [state, setState] = React.useState<IState>({
     formSaved: false,
     _toDocsList: false,
@@ -63,10 +63,10 @@ const ResearchForm = observer((props: IProps) => {
   })
 
   React.useEffect(() => {
-    if (store.researchUploadStatus.Complete) {
+    if (researchStore.researchUploadStatus.Complete) {
       window.removeEventListener('beforeunload', beforeUnload, false)
     }
-  }, [store.researchUploadStatus.Complete])
+  }, [researchStore.researchUploadStatus.Complete])
 
   React.useEffect(() => {
     if (submissionHandler.shouldSubmit) {
@@ -82,13 +82,13 @@ const ResearchForm = observer((props: IProps) => {
 
   const onSubmit = async (formValues: IResearch.FormInput) => {
     formValues.moderation = submissionHandler.draft ? 'draft' : 'accepted' // No moderation for researches for now
-    await store.uploadResearch(formValues)
+    await researchStore.uploadResearch(formValues)
   }
 
   const validateTitle = async (value: any) => {
     const originalId =
       props.parentType === 'edit' ? props.formValues._id : undefined
-    return store.validateTitleForSlug(value, 'research', originalId)
+    return researchStore.validateTitleForSlug(value, 'research', originalId)
   }
 
   // automatically generate the slug when the title changes
@@ -103,7 +103,7 @@ const ResearchForm = observer((props: IProps) => {
   const unloadDecorator = form => {
     return form.subscribe(
       ({ dirty }) => {
-        if (dirty && !store.researchUploadStatus.Complete) {
+        if (dirty && !researchStore.researchUploadStatus.Complete) {
           window.addEventListener('beforeunload', beforeUnload, false)
           return
         }
@@ -113,6 +113,8 @@ const ResearchForm = observer((props: IProps) => {
     )
   }
 
+  const theme = useCommonStores().stores.themeStore.currentTheme.styles
+
   return (
     <>
       {state.showSubmitModal && (
@@ -120,7 +122,7 @@ const ResearchForm = observer((props: IProps) => {
           {...props}
           onClose={() => {
             setState(prevState => ({ ...prevState, showSubmitModal: false }))
-            store.resetResearchUploadStatus()
+            researchStore.resetResearchUploadStatus()
           }}
         />
       )}
@@ -139,7 +141,7 @@ const ResearchForm = observer((props: IProps) => {
             <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
               <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} mt={4}>
                 <Prompt
-                  when={!store.researchUploadStatus.Complete && dirty}
+                  when={!researchStore.researchUploadStatus.Complete && dirty}
                   message={CONFIRM_DIALOG_MSG}
                 />
                 <FormContainer id="researchForm" onSubmit={handleSubmit}>

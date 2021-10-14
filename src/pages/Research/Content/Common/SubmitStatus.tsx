@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react'
 import { RouteComponentProps } from 'react-router'
-import { Box, Flex } from 'rebass'
+import { Box, Flex } from 'rebass/styled-components'
 import { Button } from 'src/components/Button'
 import Heading from 'src/components/Heading'
 import Icon from 'src/components/Icons'

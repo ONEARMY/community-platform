@@ -9,13 +9,11 @@ import Text from 'src/components/Text'
 import { Box, Flex } from 'rebass/styled-components'
 import { Button } from 'src/components/Button'
 import styled from 'styled-components'
-import theme from 'src/themes/styled.theme'
 import WhiteBubble0 from 'src/assets/images/white-bubble_0.svg'
 import WhiteBubble1 from 'src/assets/images/white-bubble_1.svg'
 import WhiteBubble2 from 'src/assets/images/white-bubble_2.svg'
 import WhiteBubble3 from 'src/assets/images/white-bubble_3.svg'
 import { Link } from 'src/components/Links'
-import { zIndex } from 'src/themes/styled.theme'
 import { Loader } from 'src/components/Loader'
 import { UserStore } from 'src/stores/User/user.store'
 import { HowToComments } from './HowToComments/HowToComments'
@@ -41,7 +39,7 @@ const MoreBox = styled(Box)`
     background-image: url(${WhiteBubble0});
     width: 100%;
     height: 100%;
-    z-index: ${zIndex.behind};
+    z-index: ${props => props.theme.zIndex.behind};
     background-size: contain;
     background-repeat: no-repeat;
     position: absolute;
@@ -52,19 +50,19 @@ const MoreBox = styled(Box)`
     background-position: center 10%;
   }
 
-  @media only screen and (min-width: ${theme.breakpoints[0]}) {
+  @media only screen and (min-width: ${props => props.theme.breakpoints[0]}) {
     &:after {
       background-image: url(${WhiteBubble1});
     }
   }
 
-  @media only screen and (min-width: ${theme.breakpoints[1]}) {
+  @media only screen and (min-width: ${props => props.theme.breakpoints[1]}) {
     &:after {
       background-image: url(${WhiteBubble2});
     }
   }
 
-  @media only screen and (min-width: ${theme.breakpoints[2]}) {
+  @media only screen and (min-width: ${props => props.theme.breakpoints[2]}) {
     &:after {
       background-image: url(${WhiteBubble3});
     }

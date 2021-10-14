@@ -1,28 +1,26 @@
 import styled from 'styled-components'
-import theme from 'src/themes/styled.theme'
 import Text, { ITextProps } from 'src/components/Text'
 import { HeadingProps as RebassHeadingProps } from 'rebass/styled-components'
+import { observer } from 'mobx-react'
+import { useCommonStores } from 'src'
 
-export const large = (props: ITextProps) =>
-  props.large ? { fontSize: theme.fontSizes[6] } : null
-export const medium = (props: ITextProps) =>
-  props.medium ? { fontSize: theme.fontSizes[5] } : null
-export const small = (props: ITextProps) =>
-  props.small ? { fontSize: theme.fontSizes[4] } : null
+type IHeadingProps = ITextProps & RebassHeadingProps
 
-export const BaseHeading = styled(Text)`
+const Heading = observer((props: IHeadingProps) => {
+  const theme = useCommonStores().stores.themeStore.currentTheme.styles
+  const large = (props: ITextProps) =>
+    props.large ? { fontSize: theme.fontSizes[6] } : null
+  const medium = (props: ITextProps) =>
+    props.medium ? { fontSize: theme.fontSizes[5] } : null
+  const small = (props: ITextProps) =>
+    props.small ? { fontSize: theme.fontSizes[4] } : null
+
+  const BaseHeading = styled(Text)`
     ${large}
     ${medium}
     ${small}`
 
-type IHeadingProps = ITextProps & RebassHeadingProps
-
-const Heading = (props: IHeadingProps) => (
-  <BaseHeading {...(props as any)}>{props.children}</BaseHeading>
-)
-
-Heading.defaultProps = {
-  theme,
-}
+  return <BaseHeading {...(props as any)}>{props.children}</BaseHeading>
+})
 
 export default Heading

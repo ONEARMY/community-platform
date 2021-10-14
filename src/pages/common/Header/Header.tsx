@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component } from 'react'
 import { Flex } from 'rebass/styled-components'
 import styled from 'styled-components'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
@@ -6,7 +6,6 @@ import MenuDesktop from 'src/pages/common/Header/Menu/MenuDesktop'
 import MenuMobilePanel from 'src/pages/common/Header/Menu/MenuMobile/MenuMobilePanel'
 import { motion } from 'framer-motion'
 import Logo from 'src/pages/common/Header/Menu/Logo/Logo'
-import theme from 'src/themes/styled.theme'
 import HamburgerMenu from 'react-hamburger-menu'
 import { observer, inject } from 'mobx-react'
 import { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
@@ -15,27 +14,28 @@ interface IProps {}
 
 interface IInjectedProps extends IProps {
   mobileMenuStore: MobileMenuStore
+  themeStore: any
 }
 
 const MobileMenuWrapper = styled(Flex)`
   position: relative;
 
-  @media only screen and (max-width: ${theme.breakpoints[1]}) {
+  @media only screen and (max-width: ${props => props.theme.breakpoints[1]}) {
     display: flex;
   }
 
-  @media only screen and (min-width: ${theme.breakpoints[1]}) {
+  @media only screen and (min-width: ${props => props.theme.breakpoints[1]}) {
     display: none;
   }
 `
 const DesktopMenuWrapper = styled(Flex)`
   position: relative;
 
-  @media only screen and (max-width: ${theme.breakpoints[1]}) {
+  @media only screen and (max-width: ${props => props.theme.breakpoints[1]}) {
     display: none;
   }
 
-  @media only screen and (min-width: ${theme.breakpoints[1]}) {
+  @media only screen and (min-width: ${props => props.theme.breakpoints[1]}) {
     display: flex;
   }
 `
@@ -43,26 +43,28 @@ const DesktopMenuWrapper = styled(Flex)`
 const AnimationContainer = (props: any) => {
   const variants = {
     visible: {
-      duration: .250,
+      duration: 0.25,
       top: '0',
     },
     hidden: {
-      duration: .250,
+      duration: 0.25,
       top: '-100%',
     },
   }
   return (
-    <motion.div layout
-      style={{ position: "relative" }}
+    <motion.div
+      layout
+      style={{ position: 'relative' }}
       initial="hidden"
       animate="visible"
-      variants={variants}>
-      { props.children }
+      variants={variants}
+    >
+      {props.children}
     </motion.div>
   )
 }
 
-@inject('mobileMenuStore')
+@inject('mobileMenuStore', 'themeStore')
 @observer
 export class Header extends Component<IProps> {
   // eslint-disable-next-line
@@ -76,6 +78,8 @@ export class Header extends Component<IProps> {
 
   render() {
     const menu = this.injected.mobileMenuStore
+    const theme = this.injected.themeStore.currentTheme.styles
+
     return (
       <>
         <Flex
@@ -111,13 +115,13 @@ export class Header extends Component<IProps> {
             </Flex>
           </MobileMenuWrapper>
         </Flex>
-          {menu.showMobilePanel && (
-            <AnimationContainer key={'mobilePanelContainer'}>
-              <MobileMenuWrapper>
-                <MenuMobilePanel />
-              </MobileMenuWrapper>
-            </AnimationContainer>
-          )}
+        {menu.showMobilePanel && (
+          <AnimationContainer key={'mobilePanelContainer'}>
+            <MobileMenuWrapper>
+              <MenuMobilePanel />
+            </MobileMenuWrapper>
+          </AnimationContainer>
+        )}
       </>
     )
   }

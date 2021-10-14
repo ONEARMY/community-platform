@@ -4,14 +4,13 @@ import Heading from 'src/components/Heading'
 import { Field } from 'react-final-form'
 import Text from 'src/components/Text'
 import { TextAreaField } from 'src/components/Form/Fields'
-import { Box, Flex, Link } from 'rebass'
+import { Box, Flex, Link } from 'rebass/styled-components'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { Map, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { Button } from 'src/components/Button'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
-import theme from 'src/themes/styled.theme'
 import { required } from 'src/utils/validators'
 import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
 import { ILocation } from 'src/models/common.models'
@@ -27,7 +26,7 @@ const customMarker = L.icon({
   iconAnchor: [10, 28],
 })
 
-@inject('mapsStore', 'userStore')
+@inject('mapsStore', 'userStore', 'themeStore')
 @observer
 export class UserMapPinSection extends React.Component<any, IState> {
   pinFilters = MAP_GROUPINGS
@@ -41,6 +40,7 @@ export class UserMapPinSection extends React.Component<any, IState> {
 
   render() {
     const { showAddressEdit, isOpen } = this.state
+    const theme = this.props.themeStore.currentTheme.styles
 
     return (
       <FlexSectionContainer>

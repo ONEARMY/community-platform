@@ -16,12 +16,12 @@ import { PostingGuidelines } from './PostingGuidelines'
 import { IEventFormInput } from 'src/models/events.models'
 import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
 import styled from 'styled-components'
-import theme from 'src/themes/styled.theme'
 import { validateUrl, addProtocolMutator, required } from 'src/utils/validators'
-import { Box } from 'rebass'
+import { Box } from 'rebass/styled-components'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import IconHeaderEvents from 'src/assets/images/header-section/events-header-icon.svg'
 import { logger } from 'src/logger'
+import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
 interface IState {
   formValues: IEventFormInput
@@ -33,6 +33,7 @@ interface IState {
 type IProps = RouteComponentProps<any>
 interface IInjectedProps extends IProps {
   eventStore: EventStore
+  themeStore?: ThemeStore
 }
 
 const FormContainer = styled.form`
@@ -40,11 +41,11 @@ const FormContainer = styled.form`
 `
 
 const Label = styled.label`
-  font-size: ${theme.fontSizes[2] + 'px'};
-  margin-bottom: ${theme.space[2] + 'px'};
+  font-size: ${props => props.theme.fontSizes[2] + 'px'};
+  margin-bottom: ${props => props.theme.space[2] + 'px'};
 `
 
-@inject('eventStore')
+@inject('eventStore', 'themeStore')
 export class EventsCreate extends React.Component<IProps, IState> {
   uploadRefs: { [key: string]: UploadedFile | null } = {}
   constructor(props: any) {
@@ -78,6 +79,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
 
   public render() {
     const { formValues, isLocationSelected } = this.state
+    const theme = this.injected.themeStore.currentTheme.styles
     return (
       <Form
         onSubmit={v => {
@@ -103,7 +105,6 @@ export class EventsCreate extends React.Component<IProps, IState> {
             <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
               <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} mt={4}>
                 <FormContainer onSubmit={e => e.preventDefault()}>
-                  {/* How To Info */}
                   <Flex flexDirection={'column'}>
                     <Flex
                       card

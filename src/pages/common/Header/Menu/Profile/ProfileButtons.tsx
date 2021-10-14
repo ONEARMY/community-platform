@@ -1,20 +1,27 @@
-import { Component } from 'react';
-import theme from 'src/themes/styled.theme'
+import { Component } from 'react'
 import styled from 'styled-components'
-import { Box } from 'rebass'
+import { Box } from 'rebass/styled-components'
 import ProfileButtonItem from './ProfileButtonItem'
+import { inject, observer } from 'mobx-react'
+import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
 interface IProps {
   isMobile?: boolean
+  themeStore?: ThemeStore
 }
 
 const PanelButton = styled(Box)`
-  padding-top: ${theme.space[1]}px;
-  padding-bottom: ${theme.space[2]}px;
+  padding-top: ${props => props.theme.space[1]}px;
+  padding-bottom: ${props => props.theme.space[2]}px;
 `
-
+@inject('themeStore')
+@observer
 export class ProfileButtons extends Component<IProps> {
+  constructor(props: any) {
+    super(props)
+  }
   render() {
+    const theme = this.props.themeStore.currentTheme.styles
     return (
       <>
         {this.props.isMobile ? (

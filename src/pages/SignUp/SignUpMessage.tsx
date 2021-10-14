@@ -1,14 +1,22 @@
-import React from 'react'
+import React, { Component } from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
-import theme from 'src/themes/styled.theme'
 import { Button } from 'src/components/Button'
 import Text from 'src/components/Text'
 import { Link } from 'src/components/Links'
-import { Link as ExternalLink } from 'rebass'
+import { Link as ExternalLink } from 'rebass/styled-components'
+import { inject, observer } from 'mobx-react'
 
-class SignUpMessagePage extends React.Component {
+@inject('themeStore')
+@observer
+class SignUpMessagePage extends Component<any> {
+  // eslint-disable-next-line
+  constructor(props: any) {
+    super(props)
+  }
+
   public render() {
+    const { colors } = this.props.themeStore.currentTheme.styles
     return (
       <Flex
         bg="inherit"
@@ -20,7 +28,7 @@ class SignUpMessagePage extends React.Component {
         mb={3}
       >
         <Flex flexDirection={'column'} width={1}>
-          <Flex card mediumRadius bg={theme.colors.softblue} px={3} py={2}>
+          <Flex card mediumRadius bg={colors.softblue} px={3} py={2}>
             <Heading medium>Sent</Heading>
           </Flex>
           <Flex
@@ -46,7 +54,7 @@ class SignUpMessagePage extends React.Component {
               <Text small color={'grey'} mt={2}>
                 Didn't receive the email?{' '}
                 <ExternalLink
-                  color={theme.colors.grey}
+                  color={colors.grey}
                   sx={{ textDecoration: 'underline' }}
                   href="mailto:hello@onearmy.earth?subject=Email%20confirmation%20failed%20community-platform"
                 >

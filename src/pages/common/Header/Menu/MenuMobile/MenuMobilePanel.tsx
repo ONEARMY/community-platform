@@ -1,8 +1,7 @@
 import { Component } from 'react'
 import { COMMUNITY_PAGES } from 'src/pages/PageList'
-import theme from 'src/themes/styled.theme'
 import styled from 'styled-components'
-import { Box } from 'rebass'
+import { Box } from 'rebass/styled-components'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
 import MenuMobileExternalLink from './MenuMobileExternalLink'
@@ -15,7 +14,7 @@ const PanelContainer = styled(Box)`
   left: 0;
   right: 0;
   display: block;
-  z-index: ${theme.zIndex.header};
+  z-index: ${props => props.theme.zIndex.header};
   height: 100%;
 `
 
@@ -33,7 +32,7 @@ const PanelMenu = styled(Box)`
   min-width: 200px;
 `
 export const PanelItem = styled(Box as any)`
-  padding: ${theme.space[3]}px 0px;
+  padding: ${props => props.theme.space[3]}px 0px;
 `
 
 export const MenuMobileLinkContainer = styled(Box as any)`

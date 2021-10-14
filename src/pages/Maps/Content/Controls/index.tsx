@@ -15,7 +15,6 @@ import { IPinGrouping, IMapGrouping, IMapPinType } from 'src/models/maps.models'
 import { HashLink as Link } from 'react-router-hash-link'
 import { Map } from 'react-leaflet'
 import { ILocation } from 'src/models/common.models'
-import { zIndex } from 'src/themes/styled.theme'
 import { inject } from 'mobx-react'
 import { MapsStore } from 'src/stores/Maps/maps.store'
 import { UserStore } from 'src/stores/User/user.store'
@@ -42,7 +41,7 @@ const MapFlexBar = styled(Flex)`
   position: absolute;
   top: 25px;
   width: 100%;
-  z-index: ${zIndex.mapFlexBar};
+  z-index: ${props => props.theme.zIndex.mapFlexBar};
   left: 50%;
   transform: translateX(-50%);
 `
@@ -81,7 +80,7 @@ class Controls extends React.Component<IProps, IState> {
         ml={['0', '0', '0', '50px']}
         py={[0, 1, 0]}
         flexDirection={['column', 'column', 'column', 'row']}
-        alignItems={'center'}
+        alignItems={'flex-start'}
         onClick={() => {
           // close any active popup on click
           this.injected.mapsStore.setActivePin(undefined)

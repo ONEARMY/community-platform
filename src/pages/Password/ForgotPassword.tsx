@@ -2,15 +2,14 @@ import React from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import styled from 'styled-components'
-import theme from 'src/themes/styled.theme'
 import { Button } from 'src/components/Button'
 import { Form, Field } from 'react-final-form'
 import { InputField } from 'src/components/Form/Fields'
 import { logger } from 'workbox-core/_private'
 
 const Label = styled.label`
- font-size: ${theme.fontSizes[2] + 'px'}
- margin-bottom: ${theme.space[2] + 'px'}
+ font-size: ${props => props.theme.fontSizes[2] + 'px'}
+ margin-bottom: ${props => props.theme.space[2] + 'px'}
  display: block;
 `
 

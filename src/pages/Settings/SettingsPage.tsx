@@ -116,7 +116,7 @@ export class UserSettings extends React.Component<IProps, IState> {
 
   render() {
     const user = this.injected.userStore.user
-    const theme = this.injected.themeStore.currentTheme.styles
+    const theme = this.injected?.themeStore?.currentTheme.styles
     const { formValues, notification } = this.state
     return (
       user && (

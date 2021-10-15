@@ -46,7 +46,6 @@ import { Loader } from 'src/components/Loader'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { AdminContact } from 'src/components/AdminContact/AdminContact'
 import ProfileLink from './ProfileLink'
-import { logger } from 'src/logger'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
 interface IRouterCustomParams {
@@ -59,7 +58,7 @@ interface IBackgroundImageProps {
 
 interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
   userStore: UserStore
-  themeStore?: ThemeStore
+  themeStore: ThemeStore
 }
 
 interface IState {
@@ -373,9 +372,8 @@ export class UserPage extends React.Component<
 
   public render() {
     const { user, isLoading } = this.state
-    const theme = this.injected.themeStore?.currentTheme.styles
-    
-    logger.debug('render', user)
+    const theme = this.injected?.themeStore?.currentTheme.styles
+
     if (isLoading) {
       return <Loader />
     }

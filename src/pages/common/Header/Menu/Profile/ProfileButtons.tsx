@@ -7,7 +7,6 @@ import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
 interface IProps {
   isMobile?: boolean
-  themeStore?: ThemeStore
 }
 
 const PanelButton = styled(Box)`
@@ -20,8 +19,15 @@ export class ProfileButtons extends Component<IProps> {
   constructor(props: any) {
     super(props)
   }
+
+  get injected() {
+    return this.props as {
+      themeStore: ThemeStore
+    }
+  }
+
   render() {
-    const theme = this.props.themeStore.currentTheme.styles
+    const theme = this.injected.themeStore?.currentTheme.styles
     return (
       <>
         {this.props.isMobile ? (

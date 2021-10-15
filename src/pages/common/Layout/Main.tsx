@@ -2,12 +2,10 @@ import { Flex, FlexProps } from 'rebass/styled-components'
 import { CSSObject } from '@styled-system/css'
 import { observer } from 'mobx-react'
 import { useCommonStores } from 'src/App'
-import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
 interface ILayoutProps {
   ignoreMaxWidth?: boolean
   customStyles?: CSSObject
-  themeStore?: ThemeStore
 }
 
 type IProps = FlexProps & ILayoutProps

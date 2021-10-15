@@ -23,7 +23,7 @@ export class FocusSection extends React.Component<any, IState> {
   state = { isOpen: true }
   render() {
     const { isOpen } = this.state
-    const theme = this.props.themeStore.currentTheme.styles
+    const theme = this.props?.themeStore?.currentTheme.styles
 
     return (
       <Field

@@ -93,7 +93,7 @@ export class HowtoList extends React.Component<any, IState> {
       referrerSource,
     } = this.props.howtoStore
 
-    const theme = this.props.themeStore.currentTheme
+    const theme = this.props?.themeStore?.currentTheme
 
     return (
       <>

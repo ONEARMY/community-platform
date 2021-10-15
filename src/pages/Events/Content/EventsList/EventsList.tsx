@@ -17,7 +17,7 @@ import type { ThemeStore } from 'src/stores/Theme/theme.store'
 interface InjectedProps {
   eventStore: EventStore
   userStore?: UserStore
-  themeStore?: ThemeStore
+  themeStore: ThemeStore
 }
 
 // const filterArrayDuplicates = (array: string[]) => Array.from(new Set(array))
@@ -45,7 +45,7 @@ export class EventsList extends React.Component<any> {
 
   public render() {
     const { filteredEvents, upcomingEvents } = this.injected.eventStore
-    const { siteName } = this.injected.themeStore.currentTheme
+    const { siteName } = this.injected?.themeStore?.currentTheme
     if (filteredEvents) {
       return (
         <>

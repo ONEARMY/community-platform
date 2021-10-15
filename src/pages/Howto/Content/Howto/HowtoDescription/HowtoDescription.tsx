@@ -32,7 +32,6 @@ interface IProps {
   userVotedUseful: boolean
   moderateHowto: (accepted: boolean) => void
   onUsefulClick: () => void
-  themeStore?: ThemeStore
 }
 
 @inject('themeStore')
@@ -57,9 +56,15 @@ export default class HowtoDescription extends PureComponent<IProps> {
     }
   }
 
+  get injected() {
+    return this.props as unknown as {
+      themeStore: ThemeStore
+    };
+  }
+
   public render() {
     const { howto, loggedInUser } = this.props
-    const theme = this.props.themeStore.currentTheme.styles
+    const theme = this.injected.themeStore.currentTheme.styles
     const iconFlexDirection =
       emStringToPx(theme.breakpoints[0]) > window.innerWidth ? 'column' : 'row'
 

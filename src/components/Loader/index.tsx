@@ -8,7 +8,6 @@ import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
 interface IProps {
   isMobile?: boolean
-  themeStore?: ThemeStore
 }
 
 const rotate = keyframes`
@@ -33,8 +32,15 @@ export class Loader extends Component<IProps> {
   constructor(props: any) {
     super(props)
   }
+
+  get injected() {
+    return this.props as {
+      themeStore: ThemeStore,
+    }
+  }
+
   render() {
-    const logo = this.props?.themeStore?.currentTheme.logo || null
+    const logo = this.injected.themeStore.currentTheme.logo || null
     return (
       <>
         <Flex flexWrap="wrap" justifyContent="center">

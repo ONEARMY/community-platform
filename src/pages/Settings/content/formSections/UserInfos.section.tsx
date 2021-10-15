@@ -22,7 +22,6 @@ import type { ThemeStore } from 'src/stores/Theme/theme.store'
 interface IProps {
   formValues: IUserPP
   mutators: { [key: string]: (...args: any[]) => any }
-  themeStore?: ThemeStore
 }
 interface IState {
   readOnly: boolean
@@ -49,11 +48,17 @@ export class UserInfosSection extends React.Component<IProps, IState> {
     }
   }
 
+  get injected() {
+    return this.props as unknown as {
+      themeStore: ThemeStore
+    }
+  }
+
   render() {
     const { formValues } = this.props
     const { profileType, links, coverImages } = formValues
     const { isOpen } = this.state
-    const theme = this.props.themeStore.currentTheme.styles
+    const theme = this.injected.themeStore?.currentTheme.styles
 
     return (
       <FlexSectionContainer>

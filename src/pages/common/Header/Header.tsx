@@ -9,12 +9,13 @@ import Logo from 'src/pages/common/Header/Menu/Logo/Logo'
 import HamburgerMenu from 'react-hamburger-menu'
 import { observer, inject } from 'mobx-react'
 import { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
+import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
 interface IProps {}
 
 interface IInjectedProps extends IProps {
   mobileMenuStore: MobileMenuStore
-  themeStore: any
+  themeStore?: ThemeStore
 }
 
 const MobileMenuWrapper = styled(Flex)`
@@ -78,7 +79,7 @@ export class Header extends Component<IProps> {
 
   render() {
     const menu = this.injected.mobileMenuStore
-    const theme = this.injected.themeStore.currentTheme.styles
+    const theme = this.injected?.themeStore?.currentTheme.styles
 
     return (
       <>

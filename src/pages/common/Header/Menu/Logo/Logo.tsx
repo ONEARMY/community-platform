@@ -9,7 +9,6 @@ import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
 interface IProps {
   isMobile?: boolean
-  themeStore?: ThemeStore
 }
 
 const LogoContainer = styled(Flex)`
@@ -22,6 +21,11 @@ const LogoContainer = styled(Flex)`
     padding: 0;
   }
 `
+
+interface InjectedProps {
+  themeStore: ThemeStore
+}
+
 @inject('themeStore')
 @observer
 export class Logo extends Component<IProps> {
@@ -29,9 +33,16 @@ export class Logo extends Component<IProps> {
   constructor(props: any) {
     super(props)
   }
+
+  get injected() {
+    return this.props as InjectedProps
+  }
+
   render() {
-    const name = this.props.themeStore.currentTheme.siteName
+    const name = this.injected.themeStore?.currentTheme.siteName
+    const logo = this.injected.themeStore?.currentTheme.logo
     const nameAndVersion = `${name} logo v${VERSION}`
+
     return (
       <>
         <LogoContainer>
@@ -48,7 +59,7 @@ export class Logo extends Component<IProps> {
               }}
             >
               <Image
-                src={this.props.themeStore.currentTheme.logo}
+                src={logo}
                 width={[50, 50, 100]}
                 height={[50, 50, 100]}
                 alt={nameAndVersion}

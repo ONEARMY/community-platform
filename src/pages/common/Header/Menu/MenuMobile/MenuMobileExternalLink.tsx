@@ -32,7 +32,7 @@ export class MenuMobileExternalLink extends Component<IProps> {
 
   render() {
     const menu = this.injected.mobileMenuStore
-    const theme = this.injected.themeStore.currentTheme.styles
+    const theme = this.injected?.themeStore?.currentTheme.styles
     const content = this.props.content
     const id = content.toLowerCase().replace(' ', '-')
     return (

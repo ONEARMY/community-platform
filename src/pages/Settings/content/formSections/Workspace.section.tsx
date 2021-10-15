@@ -24,7 +24,7 @@ export class WorkspaceSection extends React.Component<any, IState> {
 
   render() {
     const { isOpen } = this.state
-    const theme = this.props.themeStore.currentTheme.styles
+    const theme = this.props?.themeStore?.currentTheme.styles
     return (
       <Field
         name="workspaceType"

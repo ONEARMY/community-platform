@@ -40,7 +40,7 @@ export class UserMapPinSection extends React.Component<any, IState> {
 
   render() {
     const { showAddressEdit, isOpen } = this.state
-    const theme = this.props.themeStore.currentTheme.styles
+    const theme = this.props?.themeStore?.currentTheme.styles
 
     return (
       <FlexSectionContainer>

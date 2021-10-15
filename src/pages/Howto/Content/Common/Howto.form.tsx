@@ -47,7 +47,7 @@ interface IProps extends RouteComponentProps<any> {
 }
 interface IInjectedProps extends IProps {
   howtoStore: HowtoStore,
-  themeStore?: ThemeStore
+  themeStore: ThemeStore
 }
 
 const AnimationContainer = (props: any) => {
@@ -150,7 +150,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
   public render() {
     const { formValues, parentType } = this.props
     const { fileEditMode, showSubmitModal } = this.state
-    const theme = this.injected.themeStore?.currentTheme.styles
+    const theme = this.injected?.themeStore?.currentTheme.styles
     return (
       <>
         {showSubmitModal && (

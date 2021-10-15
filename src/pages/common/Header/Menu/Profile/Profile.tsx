@@ -9,6 +9,7 @@ import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLi
 import ProfileButtons from './ProfileButtons'
 import { MenuMobileLinkContainer } from '../MenuMobile/MenuMobilePanel'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
+import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
 interface IState {
   showProfileModal: boolean
@@ -20,7 +21,7 @@ interface IProps {
 
 interface IInjectedProps extends IProps {
   userStore: UserStore
-  themeStore: any
+  themeStore: ThemeStore
 }
 
 @inject('userStore', 'themeStore')
@@ -42,7 +43,7 @@ export default class Profile extends Component<IProps, IState> {
 
   render() {
     const user = this.injected.userStore.user
-    const theme = this.injected.themeStore.currentTheme.styles
+    const theme = this.injected?.themeStore?.currentTheme.styles
     const { showProfileModal } = this.state
     return (
       <>

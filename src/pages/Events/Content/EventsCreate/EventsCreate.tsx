@@ -33,7 +33,7 @@ interface IState {
 type IProps = RouteComponentProps<any>
 interface IInjectedProps extends IProps {
   eventStore: EventStore
-  themeStore?: ThemeStore
+  themeStore: ThemeStore
 }
 
 const FormContainer = styled.form`
@@ -79,7 +79,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
 
   public render() {
     const { formValues, isLocationSelected } = this.state
-    const theme = this.injected.themeStore.currentTheme.styles
+    const theme = this.injected?.themeStore?.currentTheme.styles
     return (
       <Form
         onSubmit={v => {

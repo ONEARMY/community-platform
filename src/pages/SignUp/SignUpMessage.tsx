@@ -16,7 +16,7 @@ class SignUpMessagePage extends Component<any> {
   }
 
   public render() {
-    const { colors } = this.props.themeStore.currentTheme.styles
+    const { colors } = this.props?.themeStore?.currentTheme.styles
     return (
       <Flex
         bg="inherit"

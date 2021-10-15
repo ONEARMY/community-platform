@@ -54,7 +54,7 @@ export class VirtualizedFlex extends React.Component<IProps, IState> {
     const oldColumns = this.state.totalColumns
     const oldData = this.state.data
     const { data } = props
-    const theme = this.props.themeStore.currentTheme.styles
+    const theme = this.props?.themeStore?.currentTheme.styles
     const widthBreakpoints = theme.breakpoints.map(emStringToPx)
     const currentWidth = window.innerWidth
     const totalColumns = this._calcTotalColumns(currentWidth, widthBreakpoints)

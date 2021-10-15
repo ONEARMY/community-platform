@@ -46,4 +46,5 @@ class HowtoPage extends React.Component<IProps, any> {
     )
   }
 }
+
 export default withRouter(HowtoPage)

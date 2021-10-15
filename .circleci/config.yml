@@ -237,6 +237,11 @@ jobs:
     docker: *docker
     steps:
       - setup_repo
+  
+  install_deps:
+    docker: *docker
+    steps:
+      - setup_repo
 
   # Create a production build
   # NOTE - not currently used in test workflow as different build_env required for each machine
@@ -351,18 +356,25 @@ workflows:
   main_workflow:
     # by default jobs will run concurrently, so specify requires if want to run sequentially
     jobs:
+      - install_deps:
+          name: Install deps
       #---------------------- Unit Test ----------------------
       - test_unit: 
-          name: build_unit_test
+          name: Unit tests
+          requires:
+            - "Install deps"
 
       #---------------------- Test ----------------------
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:
           name: build_test
+          requires:
+            - "Install deps"
           matrix:
             parameters:
               BUILD_ENV:
                 ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci']
+
       - test_e2e:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           requires:

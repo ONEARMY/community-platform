@@ -339,6 +339,13 @@ workflows:
   main_workflow:
     # by default jobs will run concurrently, so specify requires if want to run sequentially
     jobs:
+      #---------------------- Unit Test ----------------------
+      - build: 
+          name: build_unit_test
+          steps:
+            - setup_repo
+          run:
+            command: npm run test:unit
       #---------------------- Test ----------------------
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:

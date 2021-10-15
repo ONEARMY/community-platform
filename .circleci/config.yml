@@ -297,6 +297,16 @@ jobs:
                 event: pass
                 <<: *slack_custom_success_message
 
+  test_unit: 
+    docker: *docker
+    parallelism: 1
+    steps: 
+      - setup_repo
+      - attach_workspace:
+          at: '.'
+      - run:
+          command: npm run test:unit
+
   # Run cypress e2e tests on chrome and firefox
   test_e2e:
     docker: *docker
@@ -340,12 +350,9 @@ workflows:
     # by default jobs will run concurrently, so specify requires if want to run sequentially
     jobs:
       #---------------------- Unit Test ----------------------
-      - build: 
+      - test_unit: 
           name: build_unit_test
-          steps:
-            - setup_repo
-          run:
-            command: npm run test:unit
+
       #---------------------- Test ----------------------
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:

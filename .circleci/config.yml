@@ -24,6 +24,8 @@ orbs:
 #  Aliases - code snippets that can be included inline in any other markup
 ######################################################################################################
 aliases:
+  - &docker-lite
+    - image: cimg/node:12.22
   # use a base image running node v12 with chrome/firefox browsers preinstalled
   - &docker
     - image: cimg/node:12.22-browsers
@@ -234,19 +236,19 @@ jobs:
   # Prepare node module caches so that future tasks run more quickly
   # NOTE - not currently used as we only have one workflow
   setup:
-    docker: *docker
+    docker: *docker-lite
     steps:
       - setup_repo
   
   install_deps:
-    docker: *docker
+    docker: *docker-lite
     steps:
       - setup_repo
 
   # Create a production build
   # NOTE - not currently used in test workflow as different build_env required for each machine
   build:
-    docker: *docker
+    docker: *docker-lite
     environment:
       GENERATE_SOURCEMAP: "false"
     parameters:
@@ -276,7 +278,7 @@ jobs:
           paths:
             - build
   deploy:
-    docker: *docker
+    docker: *docker-lite
     parameters:
       # optional environment variables to set during build process
       DEPLOY_ALIAS:
@@ -305,7 +307,7 @@ jobs:
                 <<: *slack_custom_success_message
 
   test_unit: 
-    docker: *docker
+    docker: *docker-lite
     parallelism: 1
     steps: 
       - checkout

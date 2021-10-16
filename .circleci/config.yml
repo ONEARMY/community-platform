@@ -311,7 +311,7 @@ jobs:
       - checkout
       - *restore_yarn_cache
       - run:
-          command: npm run test:unit
+          command: yarn test:unit
 
   # Run cypress e2e tests on chrome and firefox
   test_e2e:

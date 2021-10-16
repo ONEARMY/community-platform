@@ -261,8 +261,9 @@ jobs:
     # Max allowed size for free builds (helps with out-of-memory issues) - https://circleci.com/docs/2.0/configuration-reference/#resourceclass 
     resource_class: medium    
     steps:
-      # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
-      - setup_repo
+      # checkout and load installed deps from cache
+      - checkout
+      - *restore_yarn_cache
       # As environment variables can only be set from strings add additional dynamic variable mappings here
       # https://discuss.circleci.com/t/using-environment-variables-in-config-yml-not-working/14237/13
       - run:

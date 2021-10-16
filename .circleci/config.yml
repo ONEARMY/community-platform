@@ -292,7 +292,8 @@ jobs:
         type: boolean
         default: true
     steps:
-      - setup_repo
+      - checkout
+      - *restore_yarn_cache
       - attach_workspace:
           at: '.'
       - firebase_deploy:
@@ -330,10 +331,8 @@ jobs:
       CI_BROWSER:
         type: string
     steps:
-      - setup_repo
-      # retrieve build folder
-      - attach_workspace:
-          at: '.'
+      - checkout
+      - *restore_yarn_cache
       # install testing browsers are required
       - when:
           condition:
@@ -347,7 +346,7 @@ jobs:
             - browser-tools/install-firefox
       # call main testing script
       - run:
-          command: npm run test ci prod
+          command: yarn test ci prod
           environment:
             CI_BROWSER: << parameters.CI_BROWSER >>
             CI_NODE: << parameters.CI_NODE >>

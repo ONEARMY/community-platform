@@ -21334,6 +21334,7 @@ fsevents@^1.2.7:
     leaflet: ^1.5.1
     leaflet.markercluster: ^1.4.1
     lint-staged: ^8.1.5
+    lodash: ^4.17.21
     lorem-ipsum: ^2.0.3
     mobx: 6.3.2
     mobx-react: 7.2.0

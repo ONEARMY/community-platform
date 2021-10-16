@@ -130,6 +130,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["oa-shared", "workspace:shared"],
             ["places.js", "npm:1.19.0"],
             ["prettier", "npm:1.19.1"],
+            ["prop-types", "npm:15.7.2"],
             ["pubsub-js", "npm:1.9.3"],
             ["react", "npm:17.0.2"],
             ["react-datepicker", "virtual:3ce9b478791bf95af45e924fe03f5df103151c323e77a4eedf38380607d099a4ddad1a5cba5a900f8d9477a759721aaca36bddf3b3ccd3605023fa39a54bf94b#npm:2.16.0"],
@@ -29891,6 +29892,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["oa-shared", "workspace:shared"],
             ["places.js", "npm:1.19.0"],
             ["prettier", "npm:1.19.1"],
+            ["prop-types", "npm:15.7.2"],
             ["pubsub-js", "npm:1.9.3"],
             ["react", "npm:17.0.2"],
             ["react-datepicker", "virtual:3ce9b478791bf95af45e924fe03f5df103151c323e77a4eedf38380607d099a4ddad1a5cba5a900f8d9477a759721aaca36bddf3b3ccd3605023fa39a54bf94b#npm:2.16.0"],
@@ -34056,7 +34058,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-ga", "virtual:3ce9b478791bf95af45e924fe03f5df103151c323e77a4eedf38380607d099a4ddad1a5cba5a900f8d9477a759721aaca36bddf3b3ccd3605023fa39a54bf94b#npm:2.7.0"],
             ["@types/prop-types", null],
             ["@types/react", "npm:16.14.16"],
-            ["prop-types", null],
+            ["prop-types", "npm:15.7.2"],
             ["react", "npm:17.0.2"]
           ],
           "packagePeers": [
@@ -34082,7 +34084,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-hamburger-menu", "virtual:3ce9b478791bf95af45e924fe03f5df103151c323e77a4eedf38380607d099a4ddad1a5cba5a900f8d9477a759721aaca36bddf3b3ccd3605023fa39a54bf94b#npm:1.2.1"],
             ["@types/prop-types", null],
             ["@types/react", "npm:16.14.16"],
-            ["prop-types", null],
+            ["prop-types", "npm:15.7.2"],
             ["react", "npm:17.0.2"]
           ],
           "packagePeers": [
@@ -35125,7 +35127,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react-dom", "npm:17.0.9"],
             ["@types/react-table", "npm:6.8.8"],
             ["classnames", "npm:2.3.1"],
-            ["prop-types", null],
+            ["prop-types", "npm:15.7.2"],
             ["react", "npm:17.0.2"],
             ["react-dom", "virtual:3ce9b478791bf95af45e924fe03f5df103151c323e77a4eedf38380607d099a4ddad1a5cba5a900f8d9477a759721aaca36bddf3b3ccd3605023fa39a54bf94b#npm:17.0.2"],
             ["react-is", "npm:16.13.1"]

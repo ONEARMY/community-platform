@@ -316,6 +316,8 @@ jobs:
     steps: 
       - checkout
       - *restore_yarn_cache
+      - run: 
+          command: yarn install --immutable
       - run:
           command: yarn test:unit
 

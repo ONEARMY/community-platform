@@ -334,6 +334,8 @@ jobs:
     steps:
       - checkout
       - *restore_yarn_cache
+      - run: 
+          command: yarn install --immutable
       # install testing browsers are required
       - when:
           condition:

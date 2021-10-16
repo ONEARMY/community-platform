@@ -275,7 +275,7 @@ jobs:
           name: Check environment variables
           command: echo REACT_APP_BRANCH=$REACT_APP_BRANCH NODE_OPTIONS=$NODE_OPTIONS
       - run:
-          command: << parameters.BUILD_ENV >> npm run build
+          command: << parameters.BUILD_ENV >> yarn build
       - persist_to_workspace:
           root: .
           paths:

@@ -238,6 +238,13 @@ jobs:
 
   # Create a production build
   # NOTE - not currently used in test workflow as different build_env required for each machine
+  test_unit:
+    docker: *docker
+    steps:
+      # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
+      - setup_repo
+      - run:
+          command: yarn run test:unit
   build:
     docker: *docker
     environment:
@@ -347,6 +354,8 @@ workflows:
             parameters:
               BUILD_ENV:
                 ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci']
+      - test_unit:
+          name: 'Unit tests'
       - test_e2e:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           requires:

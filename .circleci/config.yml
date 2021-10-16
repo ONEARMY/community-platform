@@ -308,9 +308,8 @@ jobs:
     docker: *docker
     parallelism: 1
     steps: 
-      - setup_repo
-      - attach_workspace:
-          at: '.'
+      - checkout
+      - *restore_yarn_cache
       - run:
           command: npm run test:unit
 

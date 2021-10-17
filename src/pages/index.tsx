@@ -20,6 +20,17 @@ import {
 import { Link, Flex } from 'rebass/styled-components'
 import DevSiteHeader from 'src/components/DevSiteHeader/DevSiteHeader'
 import { getSupportedModules } from 'src/modules'
+import SiteFooter from './common/SiteFooter/SiteFooter'
+
+function showOneArmyBanner(currentPageUrl, pages): boolean {
+  if (currentPageUrl === '/') {
+    return false
+  }
+
+  return !pages.find(pg => currentPageUrl.startsWith(pg.path))
+    ?.hideOneArmyBanner
+}
+
 
 export class Routes extends React.Component<any, {
   singlePageMode: boolean
@@ -97,6 +108,7 @@ export class Routes extends React.Component<any, {
             </span>
           </Button>
         </Link>
+        {showOneArmyBanner(window.location.pathname, menuItems) && <SiteFooter />}
       </Flex>
     )
   }

@@ -3,7 +3,7 @@ export const colors = {
   white: 'white',
   black: '#1b1b1b',
   primary: 'green',
-  yellow: { base: '#ec1d23', hover: '#ffde45' },
+  yellow: { base: '#ec1d23', hover: '#9E1A1A' },
   blue: '#83ceeb',
   red: '#eb1b1f',
   red2: '#f58d8e',

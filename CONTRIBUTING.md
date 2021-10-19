@@ -118,6 +118,28 @@ We use additional branches to define a specific feature or issue group being wor
 The `master` branch is our current development leading branch, and will autodeploy to the
 [development site](https://dev.onearmy.world/). The `production` branch deploys to the live [community platform site](http://community.preciousplastic.com/)
 
+## 🎨 Commit style guide
+
+* Use the present tense ("Add feature" not "Added feature")
+* Use the imperative mood ("Move cursor to..." not "Moves cursor to...")
+* Limit the first line to 72 characters or less
+* Reference issues and pull requests liberally after the first line
+* When only changing documentation, include [ci skip] in the commit title
+
+```
+<type>(<scope>?): <short summary>
+  │       │             │
+  │       │             └─⫸ Summary in present tense. Not capitalized. No period at the end.
+  │       │
+  │       └─⫸ Optional Commit Scope: functions|research|comments|notifications
+  │
+  └─⫸ Commit Type: build|ci|docs|feat|fix|perf|refactor|test
+```
+
+We use `commitlint` to lint the commit messages. Find out more:
+https://github.com/conventional-changelog/commitlint/#what-is-commitlint
+
+
 ## 🤓 &nbsp; Javascript style guide
 
 As this is a large project spread across many developers it is important that the code is both clean and consistent. We use the Prettier style guide to enforce certain conventions through the linting system – if using VSCode (which we highly recommend) it is recommended that you install and setup the [prettier plugin](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to track errors in real time.

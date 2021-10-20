@@ -1,13 +1,33 @@
 module.exports = {
   mainSidebar: {
-    Home: ['doc1'],
-    'Getting Started': [],
-    'Continuous Integration': [
-      'Deployment/circle-ci',
+    'Getting Started': [
+      'Getting Started/setup',
+      'Getting Started/recommended-tools',
     ],
-    'Server Maintenance': [
-      'Server Maintenance/dataMigration',
-      'Server Maintenance/manualBackups',
+    'How To Contribute': [
+      'Contributing/bounties',
+      'Contributing/maintainer',
+      {
+        'Writing Documentation': [
+          'Docs Contribution/running-docs-locally',
+          'Docs Contribution/md-style-guide',
+        ],
+      },
+    ],
+    'Frontend Development': ['Frontend Development/overview'],
+    'Backend Development': [
+      'Backend Development/firebase-emulators',
+      'Backend Development/integrations',
+    ],
+    Testing: ['Testing/overview', 'Testing/end-to-end'],
+    'Advanced Guides': [
+      { 'Continuous Integration': ['Deployment/circle-ci'] },
+      {
+        'Server Maintenance': [
+          'Server Maintenance/dataMigration',
+          'Server Maintenance/manualBackups',
+        ],
+      },
     ],
   },
 }

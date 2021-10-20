@@ -1,19 +1,19 @@
-import * as React from 'react'
-import { Flex, Box } from 'rebass'
-import { Link } from 'src/components/Links'
-import TagsSelect from 'src/components/Tags/TagsSelect'
 import { inject, observer } from 'mobx-react'
+import * as React from 'react'
+import { Box, Flex } from 'rebass'
+import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { Button } from 'src/components/Button'
+import Heading from 'src/components/Heading'
+import { Link } from 'src/components/Links'
+import { Loader } from 'src/components/Loader'
+import MoreContainer from 'src/components/MoreContainer/MoreContainer'
+import SearchInput from 'src/components/SearchInput'
+import TagsSelect from 'src/components/Tags/TagsSelect'
+import { VirtualizedFlex } from 'src/components/VirtualizedFlex/VirtualizedFlex'
+import { IHowtoDB } from 'src/models/howto.models'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import { UserStore } from 'src/stores/User/user.store'
-import { Button } from 'src/components/Button'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
-import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import HowToCard from './HowToCard'
-import Heading from 'src/components/Heading'
-import { Loader } from 'src/components/Loader'
-import { VirtualizedFlex } from 'src/components/VirtualizedFlex/VirtualizedFlex'
-import SearchInput from 'src/components/SearchInput'
-import { IHowtoDB } from 'src/models/howto.models'
 
 interface InjectedProps {
   howtoStore?: HowtoStore
@@ -71,6 +71,10 @@ export class HowtoList extends React.Component<any, IState> {
       if (searchQuery) {
         this.props.howtoStore.updateSearchValue(searchQuery)
       }
+
+      this.props.howtoStore.updateReferrerSource(
+        searchParams.get('source')?.toString(),
+      )
     }
   }
 
@@ -78,16 +82,39 @@ export class HowtoList extends React.Component<any, IState> {
     return this.props as InjectedProps
   }
 
+  /* eslint-disable @typescript-eslint/naming-convention*/
+  UNSAFE_componentWillMount() {
+    if (!new RegExp(/source=how-to-not-found/).test(window.location.search)) {
+      this.props.howtoStore.updateReferrerSource('')
+    }
+  }
+
   public render() {
-    const { filteredHowtos, selectedTags, searchValue } = this.props.howtoStore
     const { verifiedUsers } = this.props.userStore
+    const {
+      filteredHowtos,
+      selectedTags,
+      searchValue,
+      referrerSource,
+    } = this.props.howtoStore
 
     return (
       <>
         <Flex py={26}>
-          <Heading medium bold txtcenter width={1} my={20}>
-            Learn & share how to recycle, build and work with plastic
-          </Heading>
+          {referrerSource ? (
+            <Box width={1}>
+              <Heading medium bold txtcenter mt={20}>
+                The page you were looking for was moved or doesn't exist.
+              </Heading>
+              <Heading small txtcenter mt={3} mb={10}>
+                Search all of our how-to's below
+              </Heading>
+            </Box>
+          ) : (
+            <Heading medium bold txtcenter width={1} my={20}>
+              Learn & share how to recycle, build and work with plastic
+            </Heading>
+          )}
         </Flex>
         <Flex
           flexWrap={'nowrap'}

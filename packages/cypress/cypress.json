@@ -1,0 +1,26 @@
+{
+  "baseUrl": "http://localhost:3456",
+  "defaultCommandTimeout": 15000,
+  "watchForFileChanges": true,
+  "chromeWebSecurity": false,
+  "video_comment": "Disable video records to improve test execution as it's not worth",
+  "video": false,
+  "reporter": "junit",
+  "reporterOptions": {
+    "mochaFile": "coverage/out-[hash].xml"
+  },
+  "downloadsFolder": "src/downloads",
+  "fixturesFolder": "src/fixtures",
+  "integrationFolder": "src/integration",
+  "screenshotsFolder": "src/screenshots",
+  "videosFolder": "src/videos",
+  "supportFile": "src/support/index.ts",
+  "pluginsFile": "src/plugins/index.js",
+  "projectId": "4s5zgo",
+  "viewportWidth": 1000,
+  "viewportHeight": 1000,
+  "retries": {
+    "runMode": 2,
+    "openMode": 0
+  }
+}

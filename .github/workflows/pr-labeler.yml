@@ -1,15 +1,14 @@
 # Automatically label pull requests depending on files that have changed
 # to make for easier/clearer reviews (see https://github.com/actions/labeler)
 # List of labels can be found in './pr-labeller.config.yml'
-name: 'Pull Request Labeler'
+name: "Pull Request Labeler"
 on:
   - pull_request_target
-
 jobs:
   triage:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/labeler@main
+      - uses: actions/labeler@v3
         with:
-          repo-token: '${{ secrets.GITHUB_TOKEN }}'
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
           configuration-path: .github/pr-labeler.config.yml

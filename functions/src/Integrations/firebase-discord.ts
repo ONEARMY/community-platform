@@ -10,7 +10,7 @@ const DISCORD_WEBHOOK_URL = CONFIG.integrations.discord_webhook
 
 export const notifyPinAccepted = functions.firestore
   .document('v3_mappins/{pinId}')
-  .onWrite(async (change, context) => {
+  .onUpdate(async (change, context) => {
     const info = (change.after.data() as IMapPin) || null
     const prevInfo = (change.before.data() as IMapPin) || null
     const previouslyAccepted = prevInfo?.moderation === 'accepted'
@@ -29,7 +29,7 @@ export const notifyPinAccepted = functions.firestore
 
 export const notifyHowToAccepted = functions.firestore
   .document('v3_howtos/{id}')
-  .onWrite(async (change, context) => {
+  .onUpdate(async (change, context) => {
     const info = change.after.exists ? change.after.data() : null
     const prevInfo = change.before.exists ? change.before.data() : null
     const previouslyAccepted = prevInfo?.moderation === 'accepted'
@@ -49,7 +49,7 @@ export const notifyHowToAccepted = functions.firestore
 
 export const notifyEventAccepted = functions.firestore
   .document('v3_events/{id}')
-  .onWrite(async (change, context) => {
+  .onUpdate(async (change, context) => {
     const info = change.after.exists ? change.after.data() : null
     if (info === null || info.moderation !== 'accepted') {
       return null

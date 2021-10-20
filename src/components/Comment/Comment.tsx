@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
-import { FaTrash, FaRegEdit } from 'react-icons/fa'
+import { Field, Form } from 'react-final-form'
+import { FaRegEdit, FaTrash } from 'react-icons/fa'
 import { Flex } from 'rebass'
 import { useCommonStores } from 'src'
-import { IComment } from 'src/models'
-import { CommentHeader } from './CommentHeader'
-import { Text } from 'src/components/Text'
-import { Modal } from '../Modal/Modal'
-import { TextAreaField } from '../Form/Fields'
-import { Field, Form } from 'react-final-form'
 import { Button } from 'src/components/Button'
+import { Text } from 'src/components/Text'
+import { IComment } from 'src/models'
 import { AuthWrapper } from '../Auth/AuthWrapper'
+import { TextAreaField } from '../Form/Fields'
+import { Modal } from '../Modal/Modal'
+import { CommentHeader } from './CommentHeader'
 
 export interface IProps extends IComment {
   verified: boolean

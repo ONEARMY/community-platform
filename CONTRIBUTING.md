@@ -1,3 +1,6 @@
+[![react](https://badges.aleen42.com/src/react.svg)](https://reactjs.org/docs/getting-started.html)
+[![Style: Styled-components](https://img.shields.io/badge/style-%F0%9F%92%85%20styled--components-orange.svg?colorB=daa357&colorA=db748e)](https://github.com/styled-components/styled-components)
+
 # Contribution Guidelines
 
 Thanks for being here already! You'll find all the information you need to start contributing to the project. Make sure to read them before submitting your contribution.
@@ -23,7 +26,7 @@ If you think something is missing, consider sending us a PR.
 
 ## 👐 &nbsp; Code of Conduct
 
-This project and everyone participating in it is governed by the [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [platform@onearmy.world](mailto:platform@onearmy.world).
+This project and everyone participating in it is governed by the [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [platform@onearmy.earth](mailto:platform@onearmy.earth).
 
 ## 🤖 &nbsp; Technologies
 
@@ -51,15 +54,12 @@ You can find useful links to learn more about these technologies [in the resourc
   `yarn start`
 
 - Run the end-to-end tests
-  `yarn cy:test`
+  `yarn test`
 
 ### Additional commands
 
 - Run the component documentation
   `yarn storybook`
-
-- Open the Cypress Test Runner
-  `yarn cy:open`
 
 We use [Cypress](https://www.cypress.io/) to carry out end-to-end testing. For more information about how to setup, use and add tests refer to the sections in the [Testing Setup Wiki](https://github.com/ONEARMY/community-platform/wiki/Testing-Setup).
 
@@ -113,8 +113,8 @@ We use additional branches to define a specific feature or issue group being wor
 
 ## 🚀 &nbsp; Deployment
 
-Master is our current development leading branch, and will autodeploy to the
-[development site](https://dev.onearmy.world/) with Travis CI.
+The `master` branch is our current development leading branch, and will autodeploy to the
+[development site](https://dev.onearmy.world/). The `production` branch deploys to the live [community platform site](http://community.preciousplastic.com/)
 
 ## 🤓 &nbsp; Javascript style guide
 
@@ -133,7 +133,7 @@ As an open-source project most of our decisions up till now have been guided by 
 
 ## 🤝 &nbsp; Joining the team
 
-We are always open to have more people involved. If you would like to contribute more often, we would love to welcome you to the team. Just [send a quick email](mailto:platform@onearmy.world?subject=Developers%20Call%20To%20Arms), introducing yourself and outline:
+We are always open to have more people involved. If you would like to contribute more often, we would love to welcome you to the team. Just [send a quick email](mailto:platform@onearmy.earth?subject=Developers%20Call%20To%20Arms), introducing yourself and outline:
 
 1. Your experience working with the technologies listed above
 2. How much time you feel you can dedicate to the project

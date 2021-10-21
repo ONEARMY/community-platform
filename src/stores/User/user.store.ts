@@ -1,14 +1,14 @@
-import { observable, action, makeObservable, toJS } from 'mobx'
+import { action, makeObservable, observable, toJS } from 'mobx'
+import { logToSentry } from 'src/common/errors'
+import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
+import { DBDoc } from 'src/models'
 import { IUser, IUserDB } from 'src/models/user.models'
 import { IUserPP, IUserPPDB } from 'src/models/user_pp.models'
-import { IFirebaseUser, auth, EmailAuthProvider } from 'src/utils/firebase'
-import { Storage } from '../storage'
+import { auth, EmailAuthProvider, IFirebaseUser } from 'src/utils/firebase'
+import { formatLowerNoSpecial } from 'src/utils/helpers'
 import { RootStore } from '..'
 import { ModuleStore } from '../common/module.store'
-import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
-import { formatLowerNoSpecial } from 'src/utils/helpers'
-import { logToSentry } from 'src/common/errors'
-import { DBDoc } from 'src/models'
+import { Storage } from '../storage'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
@@ -29,7 +29,7 @@ export class UserStore extends ModuleStore {
 
   /** A list of all the verified users, to display verified icons where needed */
   @observable
-  public verifiedUsers: (IUser & DBDoc)[]
+  public verifiedUsers: (IUser & DBDoc)[] = []
 
   @action
   public updateUser(user?: IUserPPDB) {

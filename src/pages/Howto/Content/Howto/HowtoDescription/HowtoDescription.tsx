@@ -1,27 +1,27 @@
-import { PureComponent } from 'react'
-import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { format } from 'date-fns'
-import { IHowtoDB } from 'src/models/howto.models'
-import Heading from 'src/components/Heading'
-import Text from 'src/components/Text'
-import ModerationStatusText from 'src/components/ModerationStatusText'
-import { Link } from 'src/components/Links'
+import { PureComponent } from 'react'
 import { Box, Flex, Image } from 'rebass'
-import { FileInfo } from 'src/components/FileInfo/FileInfo'
+import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
+import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
 import StepsIcon from 'src/assets/icons/icon-steps.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
-import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
 import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
 import { Button } from 'src/components/Button'
-import { IUser } from 'src/models/user.models'
-import {
-  isAllowToEditContent,
-  emStringToPx,
-  capitalizeFirstLetter,
-} from 'src/utils/helpers'
-import theme from 'src/themes/styled.theme'
-import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
+import { FileInfo } from 'src/components/FileInfo/FileInfo'
+import Heading from 'src/components/Heading'
 import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
+import { Link } from 'src/components/Links'
+import ModerationStatusText from 'src/components/ModerationStatusText'
+import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
+import Text from 'src/components/Text'
+import { IHowtoDB } from 'src/models/howto.models'
+import { IUser } from 'src/models/user.models'
+import theme from 'src/themes/styled.theme'
+import {
+  capitalizeFirstLetter,
+  emStringToPx,
+  isAllowToEditContent,
+} from 'src/utils/helpers'
 import { HowtoUsefulStats } from './HowtoUsefulStats'
 
 interface IProps {
@@ -136,29 +136,22 @@ export default class HowtoDescription extends PureComponent<IProps> {
                 <FlagIconHowTos code={howto.creatorCountry} />
               )}
               <Text inline auxiliary my={2} ml={1}>
-                <Flex alignItems="center">
-                  By
-                  <Link
-                    ml={1}
-                    mr={1}
-                    sx={{
-                      textDecoration: 'underline',
-                      color: 'inherit',
-                    }}
-                    to={'/u/' + howto._createdBy}
-                  >
-                    {howto._createdBy}
-                  </Link>
-                  {this.props.verified && (
-                    <Image
-                      src={VerifiedBadgeIcon}
-                      mr={1}
-                      height="12px"
-                      width="12px"
-                    />
-                  )}
-                  | Published on {this.dateCreatedByText(howto)}
-                </Flex>
+                By{' '}
+                <Link
+                  sx={{
+                    textDecoration: 'underline',
+                    color: 'inherit',
+                  }}
+                  to={'/u/' + howto._createdBy}
+                >
+                  {howto._createdBy}
+                </Link>{' '}
+                {this.props.verified && (
+                  <>
+                    <Image src={VerifiedBadgeIcon} height="12px" width="12px" />{' '}
+                  </>
+                )}
+                | Published on {this.dateCreatedByText(howto)}
               </Text>
             </Flex>
             <Text auxiliary sx={{ color: '#b7b5b5 !important' }} mt={1} mb={2}>

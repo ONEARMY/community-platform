@@ -14,13 +14,13 @@ To run emulators locally you will need (as described in: https://firebase.google
 ## Getting Started
 
 ```
-npm run start:emulated
+yarn start:emulated
 ```
 
 This will start the following:
 
 - **Functions emulator**  
-  May take a few minutes to download if running for first time
+  May take a few minutes to download required binaries when running for the first time
 
 - **Functions src watcher**  
   To recompile functions on update

@@ -239,7 +239,8 @@ jobs:
   # Create a production build
   # NOTE - not currently used in test workflow as different build_env required for each machine
   build:
-    docker: *docker
+    docker:
+      - image: cimg/node:12.22
     environment:
       GENERATE_SOURCEMAP: "false"
     parameters:

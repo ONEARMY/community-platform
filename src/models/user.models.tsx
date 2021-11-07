@@ -77,7 +77,7 @@ export interface INotification {
   _id: string,
   _created: string,
   _triggeredByUserId: string,
-  twiggeredByName: string,
+  triggeredByName: string,
   commentId?: string,
   howToId?: string,
   type: NotificationType,

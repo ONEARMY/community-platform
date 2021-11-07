@@ -6,6 +6,7 @@ import { Button } from 'src/components/Button'
 import { Comment } from 'src/components/Comment/Comment'
 import { CommentTextArea } from 'src/components/Comment/CommentTextArea'
 import { IComment } from 'src/models'
+import { NotificationType } from 'src/models/user.models'
 import styled from 'styled-components'
 
 const MAX_COMMENTS = 5
@@ -33,10 +34,21 @@ export const HowToComments = ({ comments }: IProps) => {
 
   async function onSubmit(comment: string) {
     try {
+      const howto = stores.howtoStore.activeHowto;
       setLoading(true)
       await stores.howtoStore.addComment(comment)
+      if(howto){
+        // let user = stores.userStore.getUserProfile(howto._createdBy);
+        // console.log(user);
+        console.log(howto._createdBy);
+        // await stores.userStore.triggerNotification('new_comment', howto,
+        // howto )
+      }
+  
       setLoading(false)
       setComment('')
+      // TODO: add notification
+      //await stores.userStore.add
     } catch (err) {
       // Error: Comment could not be posted
     }

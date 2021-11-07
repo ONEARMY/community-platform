@@ -2,6 +2,7 @@ import { Component } from 'react';
 import { Flex } from 'rebass/styled-components'
 import styled from 'styled-components'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
+import Notifications from 'src/pages/common/Header/Menu/Notifications/Notifications'
 import MenuDesktop from 'src/pages/common/Header/Menu/MenuDesktop'
 import MenuMobilePanel from 'src/pages/common/Header/Menu/MenuMobile/MenuMobilePanel'
 import { motion } from 'framer-motion'
@@ -93,6 +94,7 @@ export class Header extends Component<IProps> {
           </Flex>
           <DesktopMenuWrapper className="menu-desktop" px={2}>
             <MenuDesktop />
+            <Notifications isMobile={false} />
             <Profile isMobile={false} />
           </DesktopMenuWrapper>
           <MobileMenuWrapper className="menu-mobile">

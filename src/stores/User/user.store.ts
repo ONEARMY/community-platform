@@ -231,6 +231,7 @@ export class UserStore extends ModuleStore {
       userName,
       moderation: 'awaiting-moderation',
       votedUsefulHowtos: {},
+      notifications: [],
       ...fields,
     }
     // update db
@@ -244,6 +245,9 @@ export class UserStore extends ModuleStore {
       // this will updated the main howto via backend `updateUserVoteStats` function
       const votedUsefulHowtos = toJS(this.user.votedUsefulHowtos) || {}
       votedUsefulHowtos[howtoId] = !votedUsefulHowtos[howtoId]
+      if(votedUsefulHowtos[howtoId]){
+        this.triggerNotification('howto_useful', this.user, howtoId)
+      }
       await this.updateUserProfile({ votedUsefulHowtos })
     }
   }
@@ -273,7 +277,7 @@ export class UserStore extends ModuleStore {
 
   @action
   public async triggerNotification(type: NotificationType, user: IUser,
-    howTo?: IHowto, comment?: IComment) {
+    howToId?: string) {
     try {
       const triggeredBy = this.activeUser;
       if (triggeredBy) {
@@ -281,9 +285,8 @@ export class UserStore extends ModuleStore {
           _id: randomID(),
           _created: new Date().toISOString(),
           _triggeredByUserId: triggeredBy._id,
-          twiggeredByName: triggeredBy.userName,
-          commentId: comment ? comment._id : undefined,
-          howToId: howTo ? howTo._id : undefined,
+          triggeredByName: triggeredBy.displayName,
+          howToId: howToId,
           type: type,
           read: false
         }
@@ -337,7 +340,36 @@ export class UserStore extends ModuleStore {
       throw new Error(err);
     }
   }
+
+  @action
+  public async deleteNotification(id: string) {
+    try {
+      const user = this.activeUser
+      if (id && user && user.notifications) {
+        const notifications = toJS(user.notifications).filter(
+          notification => !(notification._id === id),
+        )
+
+        const updatedUser: IUser = {
+          ...toJS(user),
+          notifications,
+        }
+
+        const dbRef = this.db
+          .collection<IUser>(COLLECTION_NAME)
+          .doc(updatedUser._authID)
+
+        await dbRef.set(updatedUser)
+        //TODO: ensure current user is updated
+      }
+    } catch (err) {
+      console.error(err)
+      throw new Error(err)
+    }
+  }
 }
+
+
 
 interface IUserUpdateStatus {
   Start: boolean

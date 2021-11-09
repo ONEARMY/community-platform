@@ -1,4 +1,4 @@
-image: node:12.22-alpine
+image: node:12
 tasks:
   - init: yarn install && yarn run build
     command: yarn run start

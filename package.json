@@ -82,6 +82,7 @@
     "mobx": "6.3.2",
     "mobx-react": "7.2.0",
     "oa-shared": "1.0.0",
+    "pino": "^7.2.0",
     "places.js": "^1.16.4",
     "pubsub-js": "^1.7.0",
     "react": "^17.0.2",

@@ -10,6 +10,7 @@ Dev config is hardcoded - You can find more information about potential security
 https://javebratt.com/hide-firebase-api/
 *****************************************************************************************/
 
+import { logger } from 'src/logger'
 import { UserRole } from 'src/models'
 
 /*********************************************************************************************** /
@@ -77,7 +78,7 @@ function getSiteVariant(
 }
 
 const siteVariant = getSiteVariant(branch, e)
-console.log(`[${siteVariant}] site`)
+logger.debug(`[${siteVariant}] site`)
 
 /*********************************************************************************************** /
                                         Production
@@ -98,9 +99,6 @@ if (siteVariant === 'production') {
     applicationID: e.REACT_APP_ALGOLIA_PLACES_APP_ID as string,
     searchOnlyAPIKey: e.REACT_APP_ALGOLIA_PLACES_API_KEY as string,
   }
-  // disable console logs
-  // eslint-disable-next-line
-  console.log = () => {}
 }
 
 const firebaseConfigs: { [variant in siteVariants]: IFirebaseConfig } = {

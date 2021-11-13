@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { logger } from 'src/logger'
 
 interface IProps {
   prop: string
@@ -11,7 +12,7 @@ export class TemplateComponent extends React.Component<IProps> {
 
   public componentDidUpdate(prevProps: IProps) {
     // component updated
-    console.log('component updated', prevProps)
+    logger.debug('component updated', prevProps)
   }
 
   public render() {

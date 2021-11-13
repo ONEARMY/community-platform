@@ -20,6 +20,7 @@ import {
   needsModeration,
   isAllowToPin,
 } from 'src/utils/helpers'
+import { logger } from 'src/logger'
 
 // NOTE - toggle below variable to use larger mock dataset
 const IS_MOCK = false
@@ -200,7 +201,7 @@ export class MapsStore extends ModuleStore {
     if (user.workspaceType) {
       pin.subType = user.workspaceType
     }
-    console.log('setting user pin', pin)
+    logger.debug('setting user pin', pin)
     await this.db
       .collection<IMapPin>(COLLECTION_NAME)
       .doc(pin._id)

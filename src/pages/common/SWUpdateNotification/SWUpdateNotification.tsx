@@ -2,6 +2,7 @@ import { memo, useEffect, useState } from 'react'
 
 import * as serviceWorkerRegistration from 'src/serviceWorkerRegistration'
 import { Prompt } from 'react-router'
+import { logger } from 'src/logger'
 
 /**
  * Handle the registration and update of service worker
@@ -15,11 +16,11 @@ export const SWUpdateNotification = memo(() => {
 
   useEffect(() => {
     if (!swLoaded) {
-      console.log('loading sw')
+      logger.debug('loading sw')
       // register service worker, activating immediately (skipWaiting) and prompt reload
       serviceWorkerRegistration.register({
         handleSWControlling: () => {
-          console.log('new sw controlling')
+          logger.debug('new sw controlling')
           setReloadRequired(true)
         },
         handleSWWaiting: wb => wb.messageSkipWaiting(),

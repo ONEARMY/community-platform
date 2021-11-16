@@ -17,7 +17,6 @@ const routes = () => (
         component={CreateResearch}
         roleRequired="beta-tester"
       />
-      <Route path="/research/:slug" component={ResearchItemDetail} />
       <AuthRoute
         exact
         path="/research/:slug/new-update"
@@ -36,6 +35,7 @@ const routes = () => (
         component={UpdateItemEditor}
         roleRequired="beta-tester"
       />
+      <Route path="/research/:slug" component={ResearchItemDetail} />
     </Switch>
   </Suspense>
 )

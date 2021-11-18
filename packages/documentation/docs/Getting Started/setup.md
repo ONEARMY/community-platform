@@ -14,7 +14,7 @@ title: Local Setup
    This will be used to run the local server. It included the `npm` package manager
 
    :::tip
-   The recommended version of node to use is **node 12** as this is what also runs in the production environment. If running a higher version and experiencing issues please file a bug report.   
+   The recommended version of node to use is **node 12** as this is what also runs in the production environment. If running a higher version and experiencing issues please file a bug report.
 
    You can use tools like [fnm](https://github.com/Schniz/fnm) or [nvm](https://github.com/nvm-sh/nvm) to run multiple versions of node on the same machine
    :::
@@ -68,6 +68,7 @@ If whilst attempting to run the app a `module-not-found` (or similar) error appe
 ### Installation freezes
 
 Some of the larger packages that require binaries to be built can get themselves into a bad state during install. If this happens usually the easiest way to resolve is to try installing individual workspaces, e.g.
+
 ```
 yarn workspace functions install
 yarn workspace oa-cypress install
@@ -76,6 +77,6 @@ yarn workspace oa-docs install
 
 ### Error: ENOENT: no such file or directory
 
-If you see an error message suggesting that a particular folder/file could not be installed, there is a chance that the previous command would have installed/fixed anyway and things might just work. 
+If you see an error message suggesting that a particular folder/file could not be installed, there is a chance that the previous command would have installed/fixed anyway and things might just work.
 
 If they don't, then try deleting the `node_modules` folder in the workspace mentioned in the error message (e.g. `./packages/documentation/node_modules` or similar)

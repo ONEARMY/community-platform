@@ -4,7 +4,6 @@
 [![GitHub contributors](https://img.shields.io/github/contributors/ONEARMY/community-platform)](https://github.com/ONEARMY/community-platform/graphs/contributors/)
 [![discord](https://badges.aleen42.com/src/discord.svg)](https://discord.gg/up3nBbEbxY)
 
-
 # 🔗 &nbsp; tl;dr Quick Links
 
 - [Project Website](https://platform.onearmy.earth)

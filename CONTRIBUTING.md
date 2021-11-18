@@ -81,6 +81,7 @@ When you start working on an issue, comment on it or if your are a registered co
 When a group of issues have been resolved a pull request to the master branch should be made, where it will undergo a quick review and test. It is expected that the developer will have done thorough testing themselves first, this helps make sure most pull requests get merged quickly.
 
 ## 🤑 &nbsp; Development Bounties
+
 We have a small bounty system as a way of saying thanks to developers for contributiong their time and code. Find out more about it in [Bounties](./BOUNTIES.md)
 
 ## 🏠 &nbsp; Project Structure

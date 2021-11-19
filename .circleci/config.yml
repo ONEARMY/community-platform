@@ -248,14 +248,14 @@ jobs:
   build:
     docker: *docker
     environment:
-      GENERATE_SOURCEMAP: "false"
+      GENERATE_SOURCEMAP: 'false'
     parameters:
       # optional environment variables to set during build process
       BUILD_ENV:
         type: string
         default: ''
-    # Max allowed size for free builds (helps with out-of-memory issues) - https://circleci.com/docs/2.0/configuration-reference/#resourceclass 
-    resource_class: medium    
+    # Max allowed size for free builds (helps with out-of-memory issues) - https://circleci.com/docs/2.0/configuration-reference/#resourceclass
+    resource_class: medium
     steps:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - setup_repo
@@ -352,8 +352,7 @@ workflows:
           name: build_test
           matrix:
             parameters:
-              BUILD_ENV:
-                ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci']
+              BUILD_ENV: ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci']
       - test_unit:
           name: 'Unit tests'
       - test_e2e:
@@ -364,7 +363,7 @@ workflows:
             parameters:
               CI_NODE: [1, 2]
               CI_BROWSER: ['chrome', 'firefox']
-      #---------------------- Dev Build-Deploy ----------------------
+      #---------------------- Development Instances Build and Deploy ----------------------
       - build:
           name: build_dev
           context: community-platform-dev
@@ -381,6 +380,16 @@ workflows:
           context:
             - circle-ci-slack-context
             - community-platform-dev
+      - deploy:
+          name: "Deploy: DEV Project Kamp"
+          requires:
+            - build_dev
+          <<: *filter_only_master
+          DEPLOY_ALIAS: project-kamp-development
+          NOTIFY_SLACK: false
+          context:
+            - circle-ci-slack-context
+            - project-kamp-dev
         #---------------------- Production Build-Approve-Deploy ----------------------
       - build:
           name: build_production

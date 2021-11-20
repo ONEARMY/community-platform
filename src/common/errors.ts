@@ -13,10 +13,10 @@ export const initErrorHandler = () => {
     location.search.indexOf('noSentry=true') !== -1 ||
     location.hostname === 'localhost'
   ) {
+    console.log('No error handler for this environment')
     return
   }
+
   // please check https://docs.sentry.io/error-reporting/configuration/?platform=javascript for options
-  Sentry.init({
-    dsn: SENTRY_CONFIG.dsn,
-  })
+  Sentry.init(SENTRY_CONFIG)
 }

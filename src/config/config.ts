@@ -82,10 +82,6 @@ console.log(`[${siteVariant}] site`)
 
 // production config is passed as environment variables during CI build.
 if (siteVariant === 'production') {
-  // note, technically not required as supplied directly to firebase config() method during build
-  sentryConfig = {
-    dsn: e.REACT_APP_SENTRY_DSN as string,
-  }
   // TODO - create production algolia config
   algoliaSearchConfig = {
     applicationID: '',

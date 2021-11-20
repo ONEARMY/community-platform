@@ -16,9 +16,6 @@ import { UserRole } from 'src/models'
                                         Dev/Staging
 /********************************************************************************************** */
 
-let sentryConfig: ISentryConfig = {
-  dsn: 'https://8c1f7eb4892e48b18956af087bdfa3ac@sentry.io/1399729',
-}
 // note - algolia lets you have multiple apps which can serve different purposes
 // (and all have their own free quotas)
 let algoliaSearchConfig: IAlgoliaConfig = {
@@ -85,10 +82,6 @@ console.log(`[${siteVariant}] site`)
 
 // production config is passed as environment variables during CI build.
 if (siteVariant === 'production') {
-  // note, technically not required as supplied directly to firebase config() method during build
-  sentryConfig = {
-    dsn: e.REACT_APP_SENTRY_DSN as string,
-  }
   // TODO - create production algolia config
   algoliaSearchConfig = {
     applicationID: '',
@@ -166,7 +159,13 @@ export const DEV_SITE_ROLE = devSiteRole
 export const FIREBASE_CONFIG = firebaseConfigs[siteVariant]
 export const ALGOLIA_SEARCH_CONFIG = algoliaSearchConfig
 export const ALGOLIA_PLACES_CONFIG = algoliaPlacesConfig
-export const SENTRY_CONFIG = sentryConfig
+export const SENTRY_CONFIG: ISentryConfig = {
+  dsn:
+    process.env.REACT_APP_SENTRY_DSN ||
+    'https://8c1f7eb4892e48b18956af087bdfa3ac@sentry.io/1399729',
+  environment: siteVariant,
+}
+
 export const VERSION = require('../../package.json').version
 export const GA_TRACKING_ID = process.env.REACT_APP_GA_TRACKING_ID
 
@@ -184,6 +183,7 @@ interface IFirebaseConfig {
 }
 interface ISentryConfig {
   dsn: string
+  environment: string
 }
 interface IAlgoliaConfig {
   searchOnlyAPIKey: string

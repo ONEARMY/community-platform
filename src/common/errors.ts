@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/browser'
+import * as Sentry from '@sentry/react'
 import { SENTRY_CONFIG } from '../config/config'
 
 export const logToSentry = {

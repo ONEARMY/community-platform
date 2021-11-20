@@ -4,3 +4,4 @@ functions-cron
 build
 cypress
 lib
+storybook-static

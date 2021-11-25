@@ -7,7 +7,6 @@ import { RootStore } from '..'
 import { ModuleStore } from '../common/module.store'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
-import { logToSentry } from 'src/common/errors'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
@@ -92,11 +91,6 @@ export class UserStore extends ModuleStore {
           .doc(userMeta._id)
           .set({ ...userMeta, _lastActive: new Date().toISOString() })
       } else {
-        // user profile not found, either it has been deleted or not migrated correctly from legacy format
-        // create a new profile to use for now and make a log to the error handler in case required
-        logToSentry.message(
-          `Could not find user profile [${user.uid} - ${user.email} - ${user.metadata}]. New profile created instead`,
-        )
         await this.createUserProfile()
         // now that a profile has been created, run this function again (use `newUserCreated` to avoid inf. loop in case not create not working correctly)
         if (!newUserCreated) {

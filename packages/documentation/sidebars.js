@@ -44,12 +44,23 @@ module.exports = {
       type: 'category',
       label: 'Advanced Guides',
       items: [
-        { 'Continuous Integration': ['Deployment/circle-ci'] },
         {
-          'Server Maintenance': [
+          type: 'category',
+          label: 'Continuous Integration',
+          items: ['Deployment/circle-ci'],
+        },
+        {
+          type: 'category',
+          label: 'Server Maintenance',
+          items: [
             'Server Maintenance/dataMigration',
             'Server Maintenance/manualBackups',
           ],
+        },
+        {
+          type: 'doc',
+          label: 'Environmental Impact',
+          id: 'Environmental Impact/environmental-impact',
         },
       ],
     },

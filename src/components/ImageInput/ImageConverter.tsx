@@ -3,6 +3,7 @@ import { Flex } from 'rebass'
 import imageCompression from 'browser-image-compression'
 import { IConvertedFileMeta } from './ImageInput'
 import styled from 'styled-components'
+import theme from '../../themes/styled.theme'
 
 interface IProps {
   file: File
@@ -29,7 +30,7 @@ const PreviewImage = styled(Flex)`
   height: 100%;
   width: 100%;
   border-radius: 5px;
-  border: 1px solid #ececec;
+  border: 1px solid ${theme.colors.offwhite};
 `
 
 export class ImageConverter extends React.Component<IProps, IState> {

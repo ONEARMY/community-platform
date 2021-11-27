@@ -505,9 +505,9 @@ const sliderSettings = {
   slidesToScroll: 1,
   adaptiveHeight: false,
   nextArrow: (
-    <Icon glyph="chevron-right" color="#fff" size={60} marginRight="4px" />
+    <Icon glyph="chevron-right" color={theme.colors.white} size={60} marginRight="4px" />
   ),
   prevArrow: (
-    <Icon glyph="chevron-left" color="#fff" size={60} marginRight="4px" />
+    <Icon glyph="chevron-left" color={theme.colors.white} size={60} marginRight="4px" />
   ),
 }

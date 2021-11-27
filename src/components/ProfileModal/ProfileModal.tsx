@@ -41,7 +41,7 @@ const ModalLink = styled(NavLink).attrs(() => ({
   z-index: ${zIndex.modalProfile};
   display: flex;
   flex-direction: column;
-  color: #000;
+  color: ${theme.colors.black};
   padding: 10px 30px 10px 30px;
   text-align: left;
   width: 100%;
@@ -57,7 +57,7 @@ const ModalLink = styled(NavLink).attrs(() => ({
     color: ${theme.colors.blue};
   }
   &.current {
-    background-color: #fff;
+    background-color: ${theme.colors.white};
     color: ${theme.colors.blue};
   }
 `

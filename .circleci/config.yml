@@ -350,6 +350,10 @@ workflows:
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:
           name: build_test
+          filters: 
+            branches:
+              ignore:
+                - production
           matrix:
             parameters:
               BUILD_ENV: ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci']
@@ -359,6 +363,10 @@ workflows:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           requires:
             - 'build_test'
+          filters: 
+            branches:
+              ignore:
+                - production
           matrix:
             parameters:
               CI_NODE: [1, 2]

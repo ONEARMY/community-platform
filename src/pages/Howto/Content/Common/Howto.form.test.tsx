@@ -1,4 +1,4 @@
-import { fireEvent, render, wait } from '@testing-library/react'
+import { fireEvent, render, waitFor } from '@testing-library/react'
 import { NavLink } from 'react-router-dom'
 import { Provider } from 'mobx-react'
 import { BrowserRouter } from 'react-router-dom'
@@ -50,7 +50,7 @@ describe('Howto form', function() {
   it('should not show the confirm dialog', async function() {
     let renderResult
     const navProps: any = {}
-    await wait(() => {
+    await waitFor(() => {
       renderResult = render(
         <Provider howtoStore={howtoStore} tagsStore={tagsStore}>
           <BrowserRouter>
@@ -80,7 +80,7 @@ describe('Howto form', function() {
   it('should show the confirm dialog, title change', async function() {
     let renderResult
     const navProps: any = {}
-    await wait(() => {
+    await waitFor(() => {
       renderResult = render(
         <Provider howtoStore={howtoStore} tagsStore={tagsStore}>
           <BrowserRouter>

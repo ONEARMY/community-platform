@@ -1,14 +1,15 @@
 # Configuration for pr-labeller actions
-
-'Mod: HowTo 📰': src/pages/Howto/**/*
-'Mod: Events 🎉': src/pages/Events/**/*
-'Mod: Maps 🗺': src/pages/Maps/**/*
-'Mod: Research 🔬': src/pages/Research/**/*
-
-'backend': functions/**/*
-
-'Documentation':
-  - any: ['README.md', 'documentation/**/*']
-
-'Mod: DevOps 🤖':
-  - any: ['cypress/**/*', 'scripts/**/*']
+"Mod: HowTo 📰":
+  - src/pages/Howto/**/*
+"Mod: Events 🎉":
+  - src/pages/Events/**/*
+"Mod: Maps 🗺":
+  - src/pages/Maps/**/*
+"Mod: Research 🔬":
+  - src/pages/Research/**/*
+"backend":
+  - functions/**/*
+"Documentation":
+  - packages/documentation/**/*
+"Mod: DevOps 🤖":
+  - any: ["cypress/**/*", "scripts/**/*", ".circleci/config.yml"]

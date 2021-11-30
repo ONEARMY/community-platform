@@ -1,3 +1,6 @@
+[![react](https://badges.aleen42.com/src/react.svg)](https://reactjs.org/docs/getting-started.html)
+[![Style: Styled-components](https://img.shields.io/badge/style-%F0%9F%92%85%20styled--components-orange.svg?colorB=daa357&colorA=db748e)](https://github.com/styled-components/styled-components)
+
 # Contribution Guidelines
 
 Thanks for being here already! You'll find all the information you need to start contributing to the project. Make sure to read them before submitting your contribution.
@@ -23,7 +26,7 @@ If you think something is missing, consider sending us a PR.
 
 ## 👐 &nbsp; Code of Conduct
 
-This project and everyone participating in it is governed by the [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [platform@onearmy.world](mailto:platform@onearmy.world).
+This project and everyone participating in it is governed by the [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [platform@onearmy.earth](mailto:platform@onearmy.earth).
 
 ## 🤖 &nbsp; Technologies
 
@@ -51,15 +54,12 @@ You can find useful links to learn more about these technologies [in the resourc
   `yarn start`
 
 - Run the end-to-end tests
-  `yarn cy:test`
+  `yarn test`
 
 ### Additional commands
 
 - Run the component documentation
   `yarn storybook`
-
-- Open the Cypress Test Runner
-  `yarn cy:open`
 
 We use [Cypress](https://www.cypress.io/) to carry out end-to-end testing. For more information about how to setup, use and add tests refer to the sections in the [Testing Setup Wiki](https://github.com/ONEARMY/community-platform/wiki/Testing-Setup).
 
@@ -81,6 +81,7 @@ When you start working on an issue, comment on it or if your are a registered co
 When a group of issues have been resolved a pull request to the master branch should be made, where it will undergo a quick review and test. It is expected that the developer will have done thorough testing themselves first, this helps make sure most pull requests get merged quickly.
 
 ## 🤑 &nbsp; Development Bounties
+
 We have a small bounty system as a way of saying thanks to developers for contributiong their time and code. Find out more about it in [Bounties](./BOUNTIES.md)
 
 ## 🏠 &nbsp; Project Structure
@@ -113,8 +114,8 @@ We use additional branches to define a specific feature or issue group being wor
 
 ## 🚀 &nbsp; Deployment
 
-Master is our current development leading branch, and will autodeploy to the
-[development site](https://dev.onearmy.world/) with Travis CI.
+The `master` branch is our current development leading branch, and will autodeploy to the
+[development site](https://dev.onearmy.world/). The `production` branch deploys to the live [community platform site](http://community.preciousplastic.com/)
 
 ## 🤓 &nbsp; Javascript style guide
 
@@ -133,7 +134,7 @@ As an open-source project most of our decisions up till now have been guided by 
 
 ## 🤝 &nbsp; Joining the team
 
-We are always open to have more people involved. If you would like to contribute more often, we would love to welcome you to the team. Just [send a quick email](mailto:platform@onearmy.world?subject=Developers%20Call%20To%20Arms), introducing yourself and outline:
+We are always open to have more people involved. If you would like to contribute more often, we would love to welcome you to the team. Just [send a quick email](mailto:platform@onearmy.earth?subject=Developers%20Call%20To%20Arms), introducing yourself and outline:
 
 1. Your experience working with the technologies listed above
 2. How much time you feel you can dedicate to the project
@@ -142,18 +143,9 @@ We ask this so that we can better understand how you might fit in with the rest 
 
 ## 📚 &nbsp; Resources
 
-- https://www.udemy.com/react-redux/
-  paid online course to cover most of the basics of React - it uses redux where we use mobx but the rest is still very good
-
-* https://levelup.gitconnected.com/typescript-and-react-using-create-react-app-a-step-by-step-guide-to-setting-up-your-first-app-6deda70843a4
-  short intro app for typescript and react
-
-* https://medium.com/teachable/getting-started-with-react-typescript-mobx-and-webpack-4-8c680517c030
-  react-mobx-typescript example
-
-* https://medium.com/get-it-working/get-googles-firestore-working-with-react-c78f198d2364 react-firestore example
-
-- https://www.robinwieruch.de/complete-firebase-authentication-react-tutorial/
-  Example using Firebase auth with React and linking Redux state
-
-- https://testautomationu.applitools.com/cypress-tutorial/ Complete tutorial about the test automation tool Cypress
+- [Modern React with Redux](https://www.udemy.com/react-redux/) – a paid online course to cover most of the basics of React - it uses redux where we use mobx but the rest is still very good
+- [TypeScript and React using create-react-app](https://levelup.gitconnected.com/typescript-and-react-using-create-react-app-a-step-by-step-guide-to-setting-up-your-first-app-6deda70843a4) – a short intro app for typescript and react
+- [Getting Started With React, TypeScript MobX, and Webpack](https://medium.com/teachable/getting-started-with-react-typescript-mobx-and-webpack-4-8c680517c030) - a recommended example of how to configure with these technologies
+- [React + Cloud Firestore](https://medium.com/get-it-working/get-googles-firestore-working-with-react-c78f198d2364) - an example of using Google's Firestore with React
+- [A Firebase in React Tutorial for Beginners](https://www.robinwieruch.de/complete-firebase-authentication-react-tutorial/) - an example using Firebase auth with React and linking Redux state
+- [Introduction to Cypress](https://testautomationu.applitools.com/cypress-tutorial/) – a complete tutorial about the test automation tool Cypress

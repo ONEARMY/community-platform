@@ -99,17 +99,7 @@ function calcUserEvents(events: IEventDB[]) {
   })
   return allEventsByUser
 }
-/**
- * Take a given array length n and split into an array of arrays, each with a maximum
- * length provided by @param chunksize
- */
-function _splitArrayToChunks<T>(arr: T[], chunksize: number): T[][] {
-  let chunkedArrays = []
-  for (let i = 0; i < arr.length; i += chunksize) {
-    chunkedArrays = arr.slice(i, i + chunksize)
-  }
-  return chunkedArrays
-}
+
 
 function _sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms))

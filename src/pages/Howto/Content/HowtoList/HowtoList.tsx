@@ -50,6 +50,7 @@ export class HowtoList extends React.Component<any, IState> {
     this.state = {
       isLoading: true,
     }
+
     if (props.location.search) {
       const searchParams = new URLSearchParams(props.location.search)
 
@@ -67,21 +68,48 @@ export class HowtoList extends React.Component<any, IState> {
       if (searchQuery) {
         this.props.howtoStore.updateSearchValue(searchQuery)
       }
+
+      this.props.howtoStore.updateReferrerSource(
+        searchParams.get('source')?.toString(),
+      )
     }
   }
   get injected() {
     return this.props as InjectedProps
   }
 
+  /* eslint-disable @typescript-eslint/naming-convention*/
+  UNSAFE_componentWillMount() {
+    if (!new RegExp(/source=how-to-not-found/).test(window.location.search)) {
+      this.props.howtoStore.updateReferrerSource('')
+    }
+  }
+
   public render() {
-    const { filteredHowtos, selectedTags, searchValue } = this.props.howtoStore
+    const {
+      filteredHowtos,
+      selectedTags,
+      searchValue,
+      referrerSource,
+    } = this.props.howtoStore
 
     return (
       <>
         <Flex py={26}>
-          <Heading medium bold txtcenter width={1} my={20}>
-            Learn & share how to recycle, build and work with plastic
-          </Heading>
+          {referrerSource ? (
+            <Box width={1}>
+              <Heading medium bold txtcenter mt={20}>
+                The page you were looking for was moved or doesn't exist.
+              </Heading>
+              <Heading small txtcenter mt={3} mb={10}>
+                Search all of our how-to's below
+              </Heading>
+            </Box>
+          ) : (
+            <Heading medium bold txtcenter width={1} my={20}>
+              Learn & share how to recycle, build and work with plastic
+            </Heading>
+          )}
         </Flex>
         <Flex
           flexWrap={'nowrap'}

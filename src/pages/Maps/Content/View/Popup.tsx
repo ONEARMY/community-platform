@@ -95,6 +95,7 @@ export class Popup extends React.Component<IProps> {
       heroImageUrl,
       shortDescription,
       name,
+      displayName,
       verifiedBadge,
     } = pin.detail
     const description =
@@ -124,7 +125,7 @@ export class Popup extends React.Component<IProps> {
               {group ? group.displayName : pin.type}
             </Text>
             <Text large mb={1} display="flex">
-              {name}
+              {displayName}
               {verifiedBadge && (
                 <Image
                   src={VerifiedBadgeIcon}

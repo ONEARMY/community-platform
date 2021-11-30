@@ -1,0 +1,13 @@
+image: node:12
+tasks:
+  - init: yarn install && yarn run build
+    command: yarn run start
+
+# List the ports to expose. Learn more https://www.gitpod.io/docs/config-ports/
+ports:
+  - port: 3000
+    onOpen: open-browser
+
+github:
+  prebuilds:
+    branches: true  

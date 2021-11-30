@@ -33,6 +33,7 @@ export interface IMapPinWithDetail extends IMapPin {
 
 export interface IMapPinDetail {
   name: string
+  displayName: string
   shortDescription: string
   lastActive: ISODateString
   profilePicUrl: string

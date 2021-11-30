@@ -147,7 +147,12 @@ export default class HowtoDescription extends PureComponent<IProps> {
                 | Published on {this.dateCreatedByText(howto)}
               </Text>
             </Flex>
-            <Text auxiliary sx={{ color: '#b7b5b5 !important' }} mt={1} mb={2}>
+            <Text
+              auxiliary
+              sx={{ color: `${theme.colors.lightgrey} !important` }}
+              mt={1}
+              mb={2}
+            >
               {this.dateLastEditText(howto)}
             </Text>
             <Heading medium mt={2} mb={1}>

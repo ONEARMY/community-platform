@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "lib": ["es6"],
-    "allowJs": true,
-    "outDir": "build",
-    "rootDir": "scripts",
-    "strict": true,
-    "noImplicitAny": true,
+    "target": "ESNext",
+    "module": "CommonJS",
+    "lib": ["ESNext"],
+    "types": ["node"],
+    "moduleResolution": "Node",
     "esModuleInterop": true,
-    "resolveJsonModule": true
-  }
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["**/*.ts"],
+  "typeRoots": ["node_modules/@types"]
 }

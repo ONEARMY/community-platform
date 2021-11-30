@@ -1,5 +1,16 @@
-[![Build Status](https://travis-ci.org/ONEARMY/community-platform.svg?branch=master)](https://travis-ci.org/ONEARMY/community-platform)
-[![style: styled-components](https://img.shields.io/badge/style-%F0%9F%92%85%20styled--components-orange.svg?colorB=daa357&colorA=db748e)](https://github.com/styled-components/styled-components)
+[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/from-referrer/)
+[![Build Status](https://circleci.com/gh/ONEARMY/community-platform/tree/master.svg?style=svg)](https://app.circleci.com/pipelines/github/ONEARMY/community-platform?branch=master)
+[![GitHub license](https://badgen.net/github/license/ONEARMY/community-platform)](https://github.com/ONEARMY/community-platform/blob/master/LICENSE)
+[![GitHub license](https://badgen.net/github/tag/ONEARMY/community-platform)](https://github.com/ONEARMY/community-platform/blob/master/LICENSE)
+[![GitHub contributors](https://img.shields.io/github/contributors/ONEARMY/community-platform)](https://github.com/ONEARMY/community-platform/graphs/contributors/)
+[![discord](https://badges.aleen42.com/src/discord.svg)](https://discord.gg/up3nBbEbxY)
+
+# 🔗 &nbsp; tl;dr Quick Links
+
+- [Project Website](https://platform.onearmy.earth)
+- [Precious Plastic Community Platform (live site)](http://community.preciousplastic.com/)
+- [Developer documentation](https://onearmy.github.io/community-platform/)
+- [Contributing Guide](/CONTRIBUTING.md)
 
 # 🌍 &nbsp; Community Platform
 
@@ -19,6 +30,8 @@ This platform aims to tackle these problems by creating a strong unified communi
 
 Our community platform helps people to grow communites and make it easier to collaborate on environmental projects in one single place. A place where people can meet, help each other, ask and answer questions, share their innovative ways of fixing problems, discover people around them, connect locally, find events and more. It aims to provide the tools to connect both online and offline. Amongst other features we have How-to, Events and Maps.
 
+### Have a look on our [website](https://platform.onearmy.earth) to have a clear overview
+
 ## 👐 Open Source
 
 Society and the environment are kind of screwed 💩 in many ways. We think free knowledge and open source are the fastest and most efficient ways to bring about innovation to tackle some of the most pressing humanity’s fuck ups. Simple.
@@ -26,13 +39,13 @@ Society and the environment are kind of screwed 💩 in many ways. We think free
 ## 🤝 &nbsp; Contributions
 
 Contributions, issues and feature requests are very welcome.
-Please make sure to read the [Contributing Guide](/CONTRIBUTING.md) before making a pull request. 
+Please make sure to read the [Contributing Guide](/CONTRIBUTING.md) before making a pull request.
 
 It also covers lots of handy additional information such as setting up a local server, or finding [good first issues](https://github.com/ONEARMY/community-platform/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aopen+label%3A%22Good+first+issue%22++label%3A%22Help+wanted%22+) to work on
 
 ## 🌟 &nbsp; Core Team
 
-If needed you can [drop us a line here](mailto:platform@onearmy.world?subject=contact%20from%20github) 👋
+If needed you can [drop us a line here](mailto:platform@onearmy.earth?subject=contact%20from%20github) 👋
 Or join our [Discord channel](https://discordapp.com/invite/rnx7m4t)
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->

@@ -26,7 +26,7 @@ orbs:
 aliases:
   # use a base image running node v12 with chrome/firefox browsers preinstalled
   - &docker
-    - image: cimg/node:12.21-browsers
+    - image: cimg/node:12.22-browsers
     # These can also be created as commands, but slighly tidier to just use inline
     # restore/install/save can all be done with a single circle-ci orb, but less flexible and breaks intellisense
   - &restore_yarn_cache
@@ -37,9 +37,9 @@ aliases:
         # https://circleci.com/docs/2.0/yarn/
         # when lock file changes, use increasingly general patterns to restore cache (also need to change `save_cache` path)
         # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
-        - yarn-packages-v9-{{ .Branch }}-{{ checksum "yarn.lock" }}
-        - yarn-packages-v9-{{ .Branch }}-
-        - yarn-packages-v9-
+        - yarn-packages-v10-{{ .Branch }}-{{ checksum "yarn.lock" }}
+        - yarn-packages-v10-{{ .Branch }}-
+        - yarn-packages-v10-
   - &install_packages
     run:
       name: Install Packages
@@ -60,7 +60,7 @@ aliases:
         # - ~/.yarn/berry/cache
         # local cache location
         - ~/project/.yarn/cache
-      key: yarn-packages-v9-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      key: yarn-packages-v10-{{ .Branch }}-{{ checksum "yarn.lock" }}
 
   - &filter_only_production
     filters:
@@ -238,13 +238,24 @@ jobs:
 
   # Create a production build
   # NOTE - not currently used in test workflow as different build_env required for each machine
+  test_unit:
+    docker: *docker
+    steps:
+      # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
+      - setup_repo
+      - run:
+          command: yarn run test:unit
   build:
     docker: *docker
+    environment:
+      GENERATE_SOURCEMAP: 'false'
     parameters:
       # optional environment variables to set during build process
       BUILD_ENV:
         type: string
         default: ''
+    # Max allowed size for free builds (helps with out-of-memory issues) - https://circleci.com/docs/2.0/configuration-reference/#resourceclass
+    resource_class: medium
     steps:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - setup_repo
@@ -339,30 +350,34 @@ workflows:
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:
           name: build_test
+          filters: 
+            branches:
+              ignore:
+                - production
           matrix:
             parameters:
-              BUILD_ENV:
-                ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci CI=false']
+              BUILD_ENV: ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci']
+      - test_unit:
+          name: 'Unit tests'
       - test_e2e:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           requires:
             - 'build_test'
+          filters: 
+            branches:
+              ignore:
+                - production
           matrix:
             parameters:
               CI_NODE: [1, 2]
               CI_BROWSER: ['chrome', 'firefox']
-      #---------------------- Dev Build-Deploy ----------------------
+      #---------------------- Development Instances Build and Deploy ----------------------
       - build:
           name: build_dev
           context: community-platform-dev
           requires:
             - 'test_e2e'
           <<: *filter_only_master
-          matrix:
-            parameters:
-              # Fix memory issues during build (https://github.com/facebook/create-react-app/issues/8096)
-              # TODO - fix lint errors so that default CI=true works
-              BUILD_ENV: ['CI=false']
       - deploy:
           name: deploy_dev
           requires:
@@ -373,6 +388,16 @@ workflows:
           context:
             - circle-ci-slack-context
             - community-platform-dev
+      - deploy:
+          name: "Deploy: DEV Project Kamp"
+          requires:
+            - build_dev
+          <<: *filter_only_master
+          DEPLOY_ALIAS: project-kamp-development
+          NOTIFY_SLACK: false
+          context:
+            - circle-ci-slack-context
+            - project-kamp-dev
         #---------------------- Production Build-Approve-Deploy ----------------------
       - build:
           name: build_production
@@ -380,9 +405,6 @@ workflows:
           requires:
             - 'test_e2e'
           <<: *filter_only_production
-          matrix:
-            parameters:
-              BUILD_ENV: ['CI=false']
       # Require manual approval on CirclCI website prior to release
       - hold:
           name: approve_release

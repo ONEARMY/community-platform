@@ -402,8 +402,6 @@ workflows:
       - build:
           name: build_production
           context: community-platform-production
-          requires:
-            - 'test_e2e'
           <<: *filter_only_production
       # Require manual approval on CirclCI website prior to release
       - hold:

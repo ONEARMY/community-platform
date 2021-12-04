@@ -4,6 +4,7 @@
     "production": "onearmyworld",
     "ci": "onearmy-test-ci",
     "next": "onearmy-next",
-    "project-kamp-development": "la-project-kamp-development"
+    "project-kamp-development": "la-project-kamp-development",
+    "project-kamp-production": "project-kamp-community"
   }
 }

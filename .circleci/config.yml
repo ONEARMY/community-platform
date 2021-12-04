@@ -266,9 +266,12 @@ jobs:
           command: |
             echo 'export REACT_APP_BRANCH=${CIRCLE_BRANCH}' >> $BASH_ENV
             echo 'export NODE_OPTIONS=--max-old-space-size=4096' >> $BASH_ENV
+            echo 'export REACT_APP_PROJECT_VERSION=$(git rev-parse HEAD)'
       - run:
           name: Check environment variables
-          command: echo REACT_APP_BRANCH=$REACT_APP_BRANCH NODE_OPTIONS=$NODE_OPTIONS
+          command: |
+            echo REACT_APP_BRANCH=$REACT_APP_BRANCH NODE_OPTIONS=$NODE_OPTIONS
+            echo $REACT_APP_PROJECT_VERSION
       - run:
           command: << parameters.BUILD_ENV >> npm run build
       - persist_to_workspace:

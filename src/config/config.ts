@@ -164,7 +164,7 @@ export const SENTRY_CONFIG: ISentryConfig = {
   environment: siteVariant,
 }
 
-export const VERSION = require('../../package.json').version
+export const VERSION = process.env.REACT_APP_PROJECT_VERSION || require('../../package.json').version
 export const GA_TRACKING_ID = process.env.REACT_APP_GA_TRACKING_ID
 
 /*********************************************************************************************** /

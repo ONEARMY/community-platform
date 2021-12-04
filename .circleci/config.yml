@@ -371,7 +371,7 @@ workflows:
             - 'test_e2e'
           <<: *filter_only_master
       - deploy:
-          name: deploy_dev
+          name: "Deploy: dev.onearmy.world"
           requires:
             - build_dev
           <<: *filter_only_master
@@ -381,7 +381,7 @@ workflows:
             - circle-ci-slack-context
             - community-platform-dev
       - deploy:
-          name: "Deploy: DEV Project Kamp"
+          name: "Deploy: dev.community.projectkamp.com"
           requires:
             - build_dev
           <<: *filter_only_master
@@ -413,7 +413,7 @@ workflows:
           <<: *filter_only_production
           <<: *slack_custom_hold_message
       - deploy:
-          name: deploy_production
+          name: "Deploy: community.preciousplastic.com"
           requires:
             - 'approve_release'
           <<: *filter_only_production
@@ -422,3 +422,13 @@ workflows:
           context:
             - circle-ci-slack-context
             - community-platform-production
+      - deploy:
+          name: "Deploy: project-kamp-community.web.app"
+          requires:
+            - 'approve_release'
+          <<: *filter_only_production
+          DEPLOY_ALIAS: project-kamp-production
+          NOTIFY_SLACK: true
+          context:
+            - circle-ci-slack-context
+            - project-kamp-production

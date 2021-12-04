@@ -30,12 +30,6 @@
     "analyze": "npx cra-bundle-analyzer && npx open-cli build/report.html",
     "install:clean": "yarn workspace oa-scripts install:clean"
   },
-  "lint-staged": {
-    "*.{js,ts,tsx}": [
-      "eslint --fix",
-      "git add"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",

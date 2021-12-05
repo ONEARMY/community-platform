@@ -201,9 +201,6 @@ commands:
         default: 'default'
         description: Firebase project alias to deploy to
     steps:
-      - run:
-          name: Install Firebase Tools
-          command: yarn add -D firebase-tools
       - when:
           condition: <<parameters.use_application_credentials>>
           steps:
@@ -212,7 +209,7 @@ commands:
                 command: echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > service_account.json
             - run:
                 name: Deploy to Firebase
-                command: ./node_modules/.bin/firebase deploy -P << parameters.alias >> --debug
+                command: npx firebase-tools deploy -P << parameters.alias >> --debug
                 environment:
                   GOOGLE_APPLICATION_CREDENTIALS: service_account.json
       - when:
@@ -221,7 +218,7 @@ commands:
           steps:
             - run:
                 name: Deploy to Firebase
-                command: ./node_modules/.bin/firebase deploy --token=<< parameters.token >> -P << parameters.alias >>
+                command: npx firebase-tools deploy --token=<< parameters.token >> -P << parameters.alias >>
 
 examples:
 

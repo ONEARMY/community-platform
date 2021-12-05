@@ -212,7 +212,7 @@ commands:
                 command: echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > service_account.json
             - run:
                 name: Deploy to Firebase
-                command: ./node_modules/.bin/firebase deploy --debug -P << parameters.alias >>
+                command: ./node_modules/.bin/firebase deploy -P << parameters.alias >> --debug
                 environment:
                   GOOGLE_APPLICATION_CREDENTIALS: service_account.json
       - when:

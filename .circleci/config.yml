@@ -355,7 +355,11 @@ jobs:
       CI_BROWSER:
         type: string
     steps:
-      - setup_repo
+      - checkout
+      - *restore_yarn_cache
+      - run:
+          command: yarn workspaces focus oa-cypress
+      - *save_yarn_cache
       # retrieve build folder
       - attach_workspace:
           at: '.'

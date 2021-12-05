@@ -311,6 +311,7 @@ jobs:
     resource_class: medium+
     environment:
       GENERATE_SOURCEMAP: 'false'
+      DISABLE_ESLINT_PLUGIN: 'true'
     parameters:
       # optional environment variables to set during build process
       DEPLOY_ALIAS:

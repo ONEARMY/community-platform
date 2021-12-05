@@ -422,10 +422,15 @@ workflows:
           requires:
             - 'test_e2e'
           <<: *filter_only_master
+      - deploy:
+          name: deploy_dev
+          requires:
+            - build_dev
+          <<: *filter_only_master
       - build_and_deploy:
           name: "Deploy: dev.onearmy.world"
-          # requires:
-          #   - build_dev
+          requires:
+            - 'test_e2e'
           # <<: *filter_only_master
           DEPLOY_ALIAS: 'default'
           NOTIFY_SLACK: false
@@ -434,8 +439,8 @@ workflows:
             - community-platform-dev
       - build_and_deploy:
           name: "Deploy: dev.community.projectkamp.com"
-          # requires:
-          #   - build_dev
+          requires:
+            - 'test_e2e'
           # <<: *filter_only_master
           DEPLOY_ALIAS: project-kamp-development
           NOTIFY_SLACK: false

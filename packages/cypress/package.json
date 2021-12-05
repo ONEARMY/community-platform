@@ -9,7 +9,8 @@
   "dependencies": {
     "cypress": "8.5.0",
     "cypress-file-upload": "5.0.8",
-    "oa-shared": "workspace:*"
+    "oa-shared": "workspace:*",
+    "typescript": "^4.5.2"
   },
   "devDependencies": {
     "@cypress/webpack-preprocessor": "^5.9.1",

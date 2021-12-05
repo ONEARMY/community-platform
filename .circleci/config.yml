@@ -312,6 +312,7 @@ jobs:
     environment:
       GENERATE_SOURCEMAP: 'false'
       DISABLE_ESLINT_PLUGIN: 'true'
+      TSC_COMPILE_ON_ERROR: 'true'
     parameters:
       # optional environment variables to set during build process
       DEPLOY_ALIAS:

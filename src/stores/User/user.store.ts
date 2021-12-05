@@ -7,7 +7,7 @@ import { RootStore } from '..'
 import { ModuleStore } from '../common/module.store'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
-import { logToSentry } from 'src/common/errors'
+import { logger } from 'src/logger'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
@@ -78,13 +78,13 @@ export class UserStore extends ModuleStore {
     newUserCreated = false,
   ) {
     if (user) {
-      console.log('user signed in', user)
+      logger.debug('user signed in', user)
       // legacy user formats did not save names so get profile via email - this option be removed in later version
       // (assumes migration strategy and check)
       const userMeta = await this.getUserProfile(user.uid)
       if (userMeta) {
         this.updateUser(userMeta)
-        console.log('userMeta', userMeta)
+        logger.debug('userMeta', userMeta)
 
         // Update last active for user
         await this.db
@@ -92,11 +92,6 @@ export class UserStore extends ModuleStore {
           .doc(userMeta._id)
           .set({ ...userMeta, _lastActive: new Date().toISOString() })
       } else {
-        // user profile not found, either it has been deleted or not migrated correctly from legacy format
-        // create a new profile to use for now and make a log to the error handler in case required
-        logToSentry.message(
-          `Could not find user profile [${user.uid} - ${user.email} - ${user.metadata}]. New profile created instead`,
-        )
         await this.createUserProfile()
         // now that a profile has been created, run this function again (use `newUserCreated` to avoid inf. loop in case not create not working correctly)
         if (!newUserCreated) {
@@ -165,7 +160,7 @@ export class UserStore extends ModuleStore {
   }
 
   public async updateUserAvatar() {
-    console.log('updating user avatar')
+    logger.debug('updating user avatar')
     // *** TODO -
   }
 
@@ -216,7 +211,7 @@ export class UserStore extends ModuleStore {
     const displayName = authUser.displayName as string
     const userName = formatLowerNoSpecial(displayName)
     const dbRef = this.db.collection<IUser>(COLLECTION_NAME).doc(userName)
-    console.log('creating user profile', userName)
+    logger.debug('creating user profile', userName)
     if (!userName) {
       throw new Error('No Username Provided')
     }

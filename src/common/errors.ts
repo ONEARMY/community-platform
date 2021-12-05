@@ -1,12 +1,6 @@
 import * as Sentry from '@sentry/react'
 import { SENTRY_CONFIG } from '../config/config'
 
-export const logToSentry = {
-  message: Sentry.captureMessage,
-  event: Sentry.captureEvent,
-  exception: Sentry.captureException,
-}
-
 export const initErrorHandler = () => {
   const { location } = window
   if (

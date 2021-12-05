@@ -48,6 +48,7 @@ import { Loader } from 'src/components/Loader'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { AdminContact } from 'src/components/AdminContact/AdminContact'
 import ProfileLink from './ProfileLink'
+import { logger } from 'src/logger'
 
 interface IRouterCustomParams {
   id: string
@@ -372,7 +373,7 @@ export class UserPage extends React.Component<
 
   public render() {
     const { user, isLoading } = this.state
-    console.log('render', user)
+    logger.debug('render', user)
     if (isLoading) {
       return <Loader />
     }

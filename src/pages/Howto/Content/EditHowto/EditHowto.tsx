@@ -10,6 +10,7 @@ import Text from 'src/components/Text'
 import { IUser } from 'src/models/user.models'
 import { isAllowToEditContent } from 'src/utils/helpers'
 import { Loader } from 'src/components/Loader'
+import { logger } from 'src/logger'
 
 interface IState {
   formValues: IHowtoDB
@@ -64,7 +65,7 @@ class EditHowto extends React.Component<IProps, IState> {
   }
 
   public render() {
-    console.log('edit', this.state)
+    logger.debug('edit', this.state)
     const { formValues, isLoading, loggedInUser } = this.state
     if (formValues && !isLoading) {
       if (loggedInUser && isAllowToEditContent(formValues, loggedInUser)) {

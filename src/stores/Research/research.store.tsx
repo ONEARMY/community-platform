@@ -8,6 +8,7 @@ import {
 } from 'mobx'
 import { createContext, useContext } from 'react'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
+import { logger } from 'src/logger'
 import { IUser } from 'src/models'
 import { IResearch } from 'src/models/research.models'
 import { ModuleStore } from 'src/stores/common/module.store'
@@ -34,7 +35,7 @@ export class ResearchStore extends ModuleStore {
     super.init()
 
     this.allDocs$.subscribe((docs: IResearch.ItemDB[]) => {
-      console.log('docs', docs)
+      logger.debug('docs', docs)
       const sortedItems = docs.sort((a, b) =>
         a._modified < b._modified ? 1 : -1,
       )
@@ -104,7 +105,7 @@ export class ResearchStore extends ModuleStore {
   }
 
   public async uploadResearch(values: IResearch.FormInput | IResearch.ItemDB) {
-    console.log('uploading research')
+    logger.debug('uploading research')
     this.updateResearchUploadStatus('Start')
     // create a reference either to the existing document (if editing) or a new document if creating
     const dbRef = this.db
@@ -121,11 +122,11 @@ export class ResearchStore extends ModuleStore {
         moderation: values.moderation ? values.moderation : 'accepted', // No moderation needed for researches for now
         updates,
       }
-      console.log('populating database', research)
+      logger.debug('populating database', research)
       // set the database document
       await dbRef.set(research)
       this.updateResearchUploadStatus('Database')
-      console.log('post added')
+      logger.debug('post added')
       const newItem = (await dbRef.get()) as IResearch.ItemDB
       runInAction(() => {
         this.activeResearchItem = newItem
@@ -133,7 +134,7 @@ export class ResearchStore extends ModuleStore {
       // complete
       this.updateResearchUploadStatus('Complete')
     } catch (error) {
-      console.log('error', error)
+      logger.debug('error', error)
       throw new Error(error.message)
     }
   }
@@ -160,7 +161,7 @@ export class ResearchStore extends ModuleStore {
           )
           updateWithMeta.images = imgMeta
         }
-        console.log('upload images ok')
+        logger.debug('upload images ok')
         this.updateUpdateUploadStatus('Images')
 
         // populate DB
@@ -189,16 +190,16 @@ export class ResearchStore extends ModuleStore {
           }
         }
 
-        console.log(
+        logger.debug(
           'old and new modified:',
           (update as IResearch.UpdateDB)._modified,
           newItem._modified,
         )
-        console.log('created:', newItem._created)
+        logger.debug('created:', newItem._created)
 
         // set the database document
         await dbRef.set(newItem)
-        console.log('populate db ok')
+        logger.debug('populate db ok')
         this.updateUpdateUploadStatus('Database')
         const createdItem = (await dbRef.get()) as IResearch.ItemDB
         runInAction(() => {
@@ -206,8 +207,8 @@ export class ResearchStore extends ModuleStore {
         })
         this.updateUpdateUploadStatus('Complete')
       } catch (error) {
-        console.log('error', error)
-        throw new Error(error.message)
+        logger.error('error', error)
+        throw new Error(error?.message)
       }
     }
   }

@@ -1,4 +1,3 @@
-import { api } from './exports/api'
 import { weeklyTasks, dailyTasks } from './exports/tasks'
 
 import * as Admin from './admin'
@@ -6,7 +5,6 @@ import * as UserUpdates from './userUpdates'
 
 // the following endpoints are exposed for use by various triggers
 // see individual files for more informaiton
-exports.api = api
 exports.weeklyTasks = weeklyTasks
 exports.dailyTasks = dailyTasks
 

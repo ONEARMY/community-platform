@@ -21,6 +21,7 @@ import { RootStore } from '..'
 import { ModuleStore } from '../common/module.store'
 import { IUploadedFileMeta } from '../storage'
 import { IComment } from 'src/models/howto.models'
+import { logger } from 'src/logger'
 
 const COLLECTION_NAME = 'howtos'
 const HOWTO_SEARCH_WEIGHTS = [
@@ -72,7 +73,7 @@ export class HowtoStore extends ModuleStore {
       .collection<IHowto>(COLLECTION_NAME)
       .getWhere('slug', '==', slug)
     const activeHowto = collection.length > 0 ? collection[0] : undefined
-    console.log('active howto', activeHowto)
+    logger.debug('active howto', activeHowto)
     this.activeHowto = activeHowto
     // load howto stats which are stored in a separate subcollection
     await this.loadHowtoStats(activeHowto?._id)
@@ -86,7 +87,7 @@ export class HowtoStore extends ModuleStore {
         .collection<IHowtoStats>('howtos')
         .doc(`${id}/stats/all`)
       const howtoStats = await ref.get('server')
-      console.log('howtoStats', howtoStats)
+      logger.debug('howtoStats', howtoStats)
       this.howtoStats = howtoStats || { votedUsefulCount: 0 }
     }
   }
@@ -255,7 +256,7 @@ export class HowtoStore extends ModuleStore {
 
   // upload a new or update an existing how-to
   public async uploadHowTo(values: IHowtoFormInput | IHowtoDB) {
-    console.log('uploading howto')
+    logger.debug('uploading howto')
     this.updateUploadStatus('Start')
     // create a reference either to the existing document (if editing) or a new document if creating
     const dbRef = this.db
@@ -319,16 +320,16 @@ export class HowtoStore extends ModuleStore {
             ? values.creatorCountry
             : '',
       }
-      console.log('populating database', howTo)
+      logger.debug('populating database', howTo)
       // set the database document
       await dbRef.set(howTo)
       this.updateUploadStatus('Database')
-      console.log('post added')
+      logger.debug('post added')
       this.activeHowto = await dbRef.get()
       // complete
       this.updateUploadStatus('Complete')
     } catch (error) {
-      console.log('error', error)
+      logger.error('error', error)
       throw new Error(error.message)
     }
   }

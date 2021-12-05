@@ -8,6 +8,7 @@ import { RootStore } from '..'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { IUploadedFileMeta, Storage } from '../storage'
 import { useCommonStores } from 'src'
+import { logger } from 'src/logger'
 
 /**
  * The module store is used to share methods and data between other stores, including
@@ -162,10 +163,10 @@ export class ModuleStore {
     collection: string,
     id: string,
   ) {
-    console.log('uploading file', file)
+    logger.debug('uploading file', file)
     // if already uploaded (e.g. editing but not replaced), skip
     if (file.hasOwnProperty('downloadUrl')) {
-      console.log('file already uploaded, skipping')
+      logger.debug('file already uploaded, skipping')
       return file as IUploadedFileMeta
     }
     // switch between converted file meta or standard file input

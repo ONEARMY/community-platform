@@ -8,6 +8,7 @@ import { Box, Flex } from 'rebass'
 import { Button } from 'src/components/Button'
 import Selector from 'src/components/Selector'
 import { Link } from 'react-router-dom'
+import { logger } from 'src/logger'
 
 interface IProps {
   onChange: () => void
@@ -19,17 +20,17 @@ export default class FilterBar extends React.Component<IProps> {
     super(props)
   }
   public onProjectChange() {
-    console.log('project changed')
+    logger.debug('project changed')
     this.props.onChange()
   }
 
   public onCategoryChange() {
-    console.log('onCategoryChange')
+    logger.debug('onCategoryChange')
     this.props.onChange()
   }
 
   public onTagsChange() {
-    console.log('onTagsChange')
+    logger.debug('onTagsChange')
     this.props.onChange()
   }
 

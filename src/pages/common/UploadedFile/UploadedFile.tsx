@@ -5,6 +5,7 @@ import './UploadedFile.scss'
 import Button from '@material-ui/core/Button'
 import Icon from 'src/components/Icons'
 import ImagePreview from './ImagePreview'
+import { logger } from 'src/logger'
 
 /*************************************************************************
  * Component to display a file that has been uploaded to firebase storage,
@@ -98,7 +99,7 @@ export class UploadedFile extends React.Component<IUploadedFileProps, IState> {
 }
 
 UploadedFile.defaultProps = {
-  onFileDeleted: () => console.log('file deleted'),
+  onFileDeleted: () => logger.debug('file deleted'),
   imagePreview: false,
   showDelete: false,
 }

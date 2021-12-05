@@ -6,6 +6,7 @@ import theme from 'src/themes/styled.theme'
 import { Button } from 'src/components/Button'
 import { Form, Field } from 'react-final-form'
 import { InputField } from 'src/components/Form/Fields'
+import { logger } from 'workbox-core/_private'
 
 const Label = styled.label`
  font-size: ${theme.fontSizes[2] + 'px'}
@@ -37,7 +38,7 @@ class ForgotPasswordPage extends React.Component<IProps, IState> {
   }
 
   onSignupSubmit(e) {
-    console.log(e)
+    logger.debug(e)
   }
 
   public render() {

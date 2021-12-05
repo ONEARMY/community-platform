@@ -105,7 +105,6 @@ export class Popup extends React.Component<IProps> {
     const lastActiveText = lastActive
       ? distanceInWords(lastActive, new Date())
       : 'a long time'
-    //    console.log('detail', pin.detail)
     const moderationStatus =
       pin.moderation !== 'rejected'
         ? 'This pin is awaiting moderation, will be shown on general map once accepted'

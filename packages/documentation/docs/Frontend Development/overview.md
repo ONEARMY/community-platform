@@ -16,10 +16,6 @@ If you never used it before don't worry, it makes a lot of sense and you'll just
 
 The main style variables are described in the [theme file](https://github.com/OneArmyWorld/onearmy/blob/module/discussion/src/themes/styled.theme.tsx) to keep a high level of consistency everywhere in the app. Also, in a long term vision, we would like to allow easy theme swapping by simply changing the theme file for anyone.
 
-### Note on components styling
-
-You may fall on [Material UI](https://material-ui.com/) components here and there, that's because we used it at the beginning to provide a quick way to prototype and test designs. But again, in the long run, we are building our own design system and encourage contributors to reuse available components or create their own.
-
 ## Components
 
 You can find all the basic stateless components in `src/components` and some more complex & statefull components in `src/pages/common`.

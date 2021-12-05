@@ -15284,7 +15284,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"firebase@npm:^8.8.1":
+"firebase@npm:8, firebase@npm:^8.8.1":
   version: 8.10.0
   resolution: "firebase@npm:8.10.0"
   dependencies:
@@ -17253,6 +17253,13 @@ fsevents@^1.2.7:
   version: 3.0.2
   resolution: "idb@npm:3.0.2"
   checksum: 7b4fa656c0d523660834cb1fc3485dc20a3f5795e3f7cb21ffd847876afab87e4b666858514cb168effd206ba8ca86db2df965748519dad679ad1e23915845e0
+  languageName: node
+  linkType: hard
+
+"idb@npm:6":
+  version: 6.1.5
+  resolution: "idb@npm:6.1.5"
+  checksum: 45d81be3bf5d5ae6d009d62b4a7eeb873fe2a9972d235aaa5c33cd3e27947b33a01fd3fb7bbdbe795cd608d2279c55ccd2db3f8b3f486bc74bdb5eab1c1be957
   languageName: node
   linkType: hard
 
@@ -21956,7 +21963,9 @@ fsevents@^1.2.7:
     cypress: 8.5.0
     cypress-file-upload: 5.0.8
     dotenv: ^10.0.0
+    firebase: 8
     fs-extra: ^10.0.0
+    idb: 6
     oa-shared: "workspace:*"
     ts-loader: 7
     ts-node: ^10.2.1

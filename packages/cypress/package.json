@@ -11,6 +11,7 @@
     "@babel/preset-env": "^7.16.4",
     "@cypress/webpack-preprocessor": "^5.9.1",
     "babel-loader": "^8.2.3",
+    "chai-subset": "^1.6.0",
     "cypress": "8.5.0",
     "cypress-file-upload": "5.0.8",
     "oa-shared": "workspace:*",

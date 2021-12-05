@@ -10,6 +10,7 @@ import { TextAreaField } from '../Form/Fields'
 import { Field, Form } from 'react-final-form'
 import { Button } from 'src/components/Button'
 import { AuthWrapper } from '../Auth/AuthWrapper'
+import { logger } from 'src/logger'
 
 export interface IProps extends IComment {}
 
@@ -72,7 +73,7 @@ export const Comment: React.FC<IProps> = ({
         <Modal width={600}>
           <Form
             onSubmit={values => {
-              console.log(values)
+              logger.debug(values)
             }}
             initialValues={{
               comment: text,

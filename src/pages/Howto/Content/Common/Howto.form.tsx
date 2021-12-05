@@ -32,6 +32,7 @@ import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { UnsavedChangesDialog } from 'src/components/Form/UnsavedChangesDialog'
+import { logger } from 'src/logger'
 
 interface IState {
   formSaved: boolean
@@ -120,7 +121,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
   public onSubmit = async (formValues: IHowtoFormInput) => {
     this.setState({ showSubmitModal: true })
     formValues.moderation = this.isDraft ? 'draft' : 'awaiting-moderation'
-    console.log('submitting form', formValues)
+    logger.debug('submitting form', formValues)
     await this.store.uploadHowTo(formValues)
   }
 

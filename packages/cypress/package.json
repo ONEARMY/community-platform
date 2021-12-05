@@ -14,6 +14,7 @@
     "cypress": "8.5.0",
     "cypress-file-upload": "5.0.8",
     "oa-shared": "workspace:*",
+    "ts-loader": "^9.2.6",
     "typescript": "^4.5.2",
     "webpack": "^5.64.4"
   },

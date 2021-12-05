@@ -20,7 +20,7 @@ const PanelContainer = styled(Box)`
 `
 
 const PanelMenu = styled(Box)`
-  background-color: #fff;
+  background-color: ${theme.colors.white};
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -37,8 +37,8 @@ export const PanelItem = styled(Box as any)`
 `
 
 export const MenuMobileLinkContainer = styled(Box as any)`
-  border-top: 1px solid #ababac;
-  border-bottom: 1px solid #ababac;
+  border-top: 1px solid ${theme.colors.lightgrey};
+  border-bottom: 1px solid ${theme.colors.lightgrey};
   margin-top: 5px;
 `
 

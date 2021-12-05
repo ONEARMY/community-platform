@@ -212,7 +212,7 @@ commands:
                 command: echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > service_account.json
             - run:
                 name: Deploy to Firebase
-                command: ./node_modules/.bin/firebase deploy -P << parameters.alias >>
+                command: ./node_modules/.bin/firebase deploy --debug -P << parameters.alias >>
                 environment:
                   GOOGLE_APPLICATION_CREDENTIALS: service_account.json
       - when:
@@ -238,17 +238,24 @@ jobs:
 
   # Create a production build
   # NOTE - not currently used in test workflow as different build_env required for each machine
+  test_unit:
+    docker: *docker
+    steps:
+      # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
+      - setup_repo
+      - run:
+          command: yarn run test:unit
   build:
     docker: *docker
     environment:
-      GENERATE_SOURCEMAP: "false"
+      GENERATE_SOURCEMAP: 'false'
     parameters:
       # optional environment variables to set during build process
       BUILD_ENV:
         type: string
         default: ''
-    # Max allowed size for free builds (helps with out-of-memory issues) - https://circleci.com/docs/2.0/configuration-reference/#resourceclass 
-    resource_class: medium    
+    # `medium` is the max allowed size for free builds (helps with out-of-memory issues) - https://circleci.com/docs/2.0/configuration-reference/#resourceclass
+    resource_class: medium+
     steps:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - setup_repo
@@ -259,9 +266,12 @@ jobs:
           command: |
             echo 'export REACT_APP_BRANCH=${CIRCLE_BRANCH}' >> $BASH_ENV
             echo 'export NODE_OPTIONS=--max-old-space-size=4096' >> $BASH_ENV
+            echo 'export REACT_APP_PROJECT_VERSION=$(git rev-parse HEAD)'
       - run:
           name: Check environment variables
-          command: echo REACT_APP_BRANCH=$REACT_APP_BRANCH NODE_OPTIONS=$NODE_OPTIONS
+          command: |
+            echo REACT_APP_BRANCH=$REACT_APP_BRANCH NODE_OPTIONS=$NODE_OPTIONS
+            echo $REACT_APP_PROJECT_VERSION
       - run:
           command: << parameters.BUILD_ENV >> npm run build
       - persist_to_workspace:
@@ -345,8 +355,13 @@ workflows:
           name: build_test
           matrix:
             parameters:
-              BUILD_ENV:
-                ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci']
+              BUILD_ENV: ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci']
+      - test_unit:
+          name: 'Unit tests'
+          filters: 
+            branches:
+              ignore:
+                - production
       - test_e2e:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           requires:
@@ -355,7 +370,7 @@ workflows:
             parameters:
               CI_NODE: [1, 2]
               CI_BROWSER: ['chrome', 'firefox']
-      #---------------------- Dev Build-Deploy ----------------------
+      #---------------------- Development Instances Build and Deploy ----------------------
       - build:
           name: build_dev
           context: community-platform-dev
@@ -363,7 +378,7 @@ workflows:
             - 'test_e2e'
           <<: *filter_only_master
       - deploy:
-          name: deploy_dev
+          name: "Deploy: dev.onearmy.world"
           requires:
             - build_dev
           <<: *filter_only_master
@@ -372,6 +387,16 @@ workflows:
           context:
             - circle-ci-slack-context
             - community-platform-dev
+      - deploy:
+          name: "Deploy: dev.community.projectkamp.com"
+          requires:
+            - build_dev
+          <<: *filter_only_master
+          DEPLOY_ALIAS: project-kamp-development
+          NOTIFY_SLACK: false
+          context:
+            - circle-ci-slack-context
+            - project-kamp-dev
         #---------------------- Production Build-Approve-Deploy ----------------------
       - build:
           name: build_production
@@ -395,7 +420,7 @@ workflows:
           <<: *filter_only_production
           <<: *slack_custom_hold_message
       - deploy:
-          name: deploy_production
+          name: "Deploy: community.preciousplastic.com"
           requires:
             - 'approve_release'
           <<: *filter_only_production
@@ -404,3 +429,13 @@ workflows:
           context:
             - circle-ci-slack-context
             - community-platform-production
+      - deploy:
+          name: "Deploy: project-kamp-community.web.app"
+          requires:
+            - 'approve_release'
+          <<: *filter_only_production
+          DEPLOY_ALIAS: project-kamp-production
+          NOTIFY_SLACK: true
+          context:
+            - circle-ci-slack-context
+            - project-kamp-production

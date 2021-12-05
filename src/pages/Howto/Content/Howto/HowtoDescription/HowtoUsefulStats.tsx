@@ -3,6 +3,7 @@ import { useHistory } from 'react-router'
 import Text from 'src/components/Text'
 import { Button } from 'src/components/Button'
 import Tooltip from 'src/components/Tooltip'
+import theme from 'src/themes/styled.theme'
 
 interface IProps {
   userVotedUseful: boolean
@@ -42,7 +43,7 @@ export const HowtoUsefulStats = (props: IProps) => {
           props.isLoggedIn ? handleUsefulClick : () => history.push('/sign-in')
         }
         ml="8px"
-        backgroundColor="#f5ede2"
+        backgroundColor={theme.colors.softyellow}
         icon={state.userVotedUseful ? 'star-active' : 'star'}
       >
         <Text ml={1}>Useful {state.votedUsefulCount}</Text>

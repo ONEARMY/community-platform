@@ -43,11 +43,11 @@ const MenuLink = styled(NavLink).attrs(() => ({
       display: block;
       position: absolute;
       bottom: -5px;
-      background-position: 50% 70%;
-      background-image: url(${MenuCurrent});
+      background-color: ${theme.colors.yellow.base};
+      mask-size: contain;
+      mask-image: url(${MenuCurrent});
+      mask-repeat: no-repeat;
       z-index: 0;
-      background-repeat: no-repeat;
-      background-size: contain;
       left: 50%;
       transform: translateX(-50%);
     }

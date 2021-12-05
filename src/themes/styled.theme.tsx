@@ -1,13 +1,17 @@
 // use enum to specify list of possible colors for typing
 export const colors = {
   white: 'white',
+  offwhite: '#ececec',
   black: '#1b1b1b',
+  softyellow: '#f5ede2',
   yellow: { base: '#fee77b', hover: '#ffde45' },
   blue: '#83ceeb',
   red: '#eb1b1f',
   red2: '#f58d8e',
   softblue: '#e2edf7',
   bluetag: '#5683b0',
+  lightgrey: '#ababac',
+  softgrey: '#c2d4e4',
   grey: '#61646b',
   green: '#00c3a9',
   error: 'red',
@@ -198,6 +202,19 @@ const buttons = {
   },
 }
 
+const typography = {
+  auxiliary: {
+    fontFamily: '"Inter", Helvetica Neue, Arial, sans-serif;',
+    fontSize: '12px',
+    color: colors.grey,
+  },
+  paragraph: {
+    fontFamily: '"Inter", Helvetica Neue, Arial, sans-serif;',
+    fontSize: '16px',
+    color: colors.grey,
+  },
+}
+
 export default {
   colors,
   buttons,
@@ -208,5 +225,6 @@ export default {
   maxContainerWidth,
   regular,
   bold,
+  typography,
   zIndex,
 }

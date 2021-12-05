@@ -306,7 +306,43 @@ jobs:
             - slack/notify:
                 event: pass
                 <<: *slack_custom_success_message
-
+  build_and_deploy:
+    docker: *docker
+    resource_class: medium+
+    environment:
+      GENERATE_SOURCEMAP: 'false'
+    parameters:
+      # optional environment variables to set during build process
+      DEPLOY_ALIAS:
+        type: string
+        default: 'default'
+      NOTIFY_SLACK:
+        type: boolean
+        default: true
+    steps:
+      # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
+      - checkout
+      - *restore_yarn_cache
+      - run:
+          name: Install Packages
+          command: yarn workspaces focus one-army-community-platform --immutable --production
+      - *save_yarn_cache
+      # As environment variables can only be set from strings add additional dynamic variable mappings here
+      # https://discuss.circleci.com/t/using-environment-variables-in-config-yml-not-working/14237/13
+      - run:
+          name: Set branch environment
+          command: |
+            echo 'export REACT_APP_BRANCH=${CIRCLE_BRANCH}' >> $BASH_ENV
+            echo 'export NODE_OPTIONS=--max-old-space-size=4096' >> $BASH_ENV
+      - run:
+          name: Check environment variables
+          command: echo REACT_APP_BRANCH=$REACT_APP_BRANCH NODE_OPTIONS=$NODE_OPTIONS
+      - run:
+          command: npm run build
+      - firebase_deploy:
+          # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
+          alias: << parameters.DEPLOY_ALIAS >>
+          use_application_credentials: true
   # Run cypress e2e tests on chrome and firefox
   test_e2e:
     docker: *docker
@@ -365,6 +401,9 @@ workflows:
       - test_e2e:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           requires:
+            - 'Unit tests'
+            # At the time of these being added build_test are faster than e2e
+            # so if our unit tests fail the project would be in a unreleasable state
             - 'build_test'
           matrix:
             parameters:
@@ -377,21 +416,21 @@ workflows:
           requires:
             - 'test_e2e'
           <<: *filter_only_master
-      - deploy:
+      - build_and_deploy:
           name: "Deploy: dev.onearmy.world"
-          requires:
-            - build_dev
-          <<: *filter_only_master
+          # requires:
+          #   - build_dev
+          # <<: *filter_only_master
           DEPLOY_ALIAS: 'default'
           NOTIFY_SLACK: false
           context:
             - circle-ci-slack-context
             - community-platform-dev
-      - deploy:
+      - build_and_deploy:
           name: "Deploy: dev.community.projectkamp.com"
-          requires:
-            - build_dev
-          <<: *filter_only_master
+          # requires:
+          #   - build_dev
+          # <<: *filter_only_master
           DEPLOY_ALIAS: project-kamp-development
           NOTIFY_SLACK: false
           context:
@@ -409,7 +448,7 @@ workflows:
           name: approve_release
           type: approval
           requires:
-            - build_production
+            - 'test_e2e'
           <<: *filter_only_production
       # Send a slack notification to approve the hold above (required config supplied in circleci-slack-context)
       - slack/on-hold:
@@ -419,7 +458,7 @@ workflows:
             - build_production
           <<: *filter_only_production
           <<: *slack_custom_hold_message
-      - deploy:
+      - build_and_deploy:
           name: "Deploy: community.preciousplastic.com"
           requires:
             - 'approve_release'
@@ -429,7 +468,7 @@ workflows:
           context:
             - circle-ci-slack-context
             - community-platform-production
-      - deploy:
+      - build_and_deploy:
           name: "Deploy: project-kamp-community.web.app"
           requires:
             - 'approve_release'

@@ -2,10 +2,10 @@ import * as React from 'react'
 import { storage } from '../../utils/firebase'
 import FileUploader from 'react-firebase-file-uploader'
 import { FullMetadata } from '@firebase/storage-types'
-import { ProgressBar } from './elements'
 import { Button } from '../Button'
 import { IGlyphs } from '../Icons'
 import { Flex } from 'rebass'
+import Loader from '../Loader'
 import { logger } from 'src/logger'
 /*
 This component takes a folder storage path and uploads files to firebase storage
@@ -97,15 +97,9 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
   public renderProgressBar() {
     if (this.state.isUploading) {
       if (this.state.uploadProgress > 0) {
-        return (
-          <ProgressBar
-            variant="determinate"
-            value={this.state.uploadProgress}
-            progress={this.state.uploadProgress}
-          />
-        )
+        return <Loader />
       }
-      return <ProgressBar />
+      return <Loader />
     } else {
       return null
     }
@@ -146,31 +140,3 @@ FirebaseFileUploader.defaultProps = {
   buttonText: 'Upload',
   accept: '*',
 }
-
-/*
-From old component:
-
-// TODO For now using the onChange method stop the upload
-// Need to start upload manually, to be able to check file size
-// see this issue https://github.com/fris-fruitig/react-firebase-file-uploader/issues/4#issuecomment-277352083
-onChange={(e: any) => {
-// if there is no file and size is bigger than 20mb
-if (
-  e.target.files[0] !== undefined &&
-  e.target.files[0].size > 20971520
-) {
-  alert(
-    'Your file is too big, maximum allowed size is 20mb',
-  )
-  e.target.value = ''
-} else {
-  // display file name
-  const el = document.getElementsByClassName(
-    'uploaded-file-name',
-  )[0]
-  el.innerHTML = e.target.files[0].name
-}
-}}
-
-
-*/

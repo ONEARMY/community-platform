@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, Flex } from 'rebass'
+import { Box, Flex } from 'rebass/styled-components'
 import { useCommonStores } from 'src'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { Button } from 'src/components/Button'

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Box } from 'rebass'
+import { Box } from 'rebass/styled-components'
 import styled from 'styled-components'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Flex, Box } from 'rebass'
+import { Flex, Box } from 'rebass/styled-components'
 import { Link } from 'src/components/Links'
 import TagsSelect from 'src/components/Tags/TagsSelect'
 import { inject, observer } from 'mobx-react'

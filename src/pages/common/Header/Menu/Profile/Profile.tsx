@@ -43,7 +43,6 @@ export default class Profile extends Component<IProps, IState> {
 
   render() {
     const user = this.injected.userStore.user
-    const theme = this.injected?.themeStore?.currentTheme.styles
     const { showProfileModal } = this.state
     return (
       <>

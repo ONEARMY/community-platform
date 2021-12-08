@@ -20,7 +20,7 @@ export const inputStyles = ({ invalid }: IFormElement) => css`
   }
 
   &:focus {
-    border-color: ${theme.colors.blue};
+    border-color: ${props => props.theme.colors.blue};
     outline: none;
   }
 `

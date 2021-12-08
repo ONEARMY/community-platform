@@ -42,7 +42,7 @@ const MenuLink = styled(NavLink).attrs(() => ({
       display: block;
       position: absolute;
       bottom: -5px;
-      background-color: ${theme.colors.yellow.base};
+      background-color: ${props => props.theme.colors.yellow.base};
       mask-size: contain;
       mask-image: url(${MenuCurrent});
       mask-repeat: no-repeat;

@@ -2,7 +2,7 @@ import { SITE, VERSION, DEV_SITE_ROLE } from 'src/config/config'
 import Text from 'src/components/Text'
 import theme from 'src/themes/styled.theme'
 import { UserRole } from 'src/models'
-import { Flex, Box } from 'rebass'
+import { Flex, Box } from 'rebass/styled-components'
 import Select from 'react-select'
 
 /**

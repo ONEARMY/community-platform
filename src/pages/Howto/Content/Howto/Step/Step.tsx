@@ -1,7 +1,7 @@
 import { PureComponent } from 'react'
 import Linkify from 'react-linkify'
 import ReactPlayer from 'react-player'
-import { Box } from 'rebass'
+import { Box } from 'rebass/styled-components'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import ImageGallery from 'src/components/ImageGallery'

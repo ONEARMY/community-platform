@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Portal } from 'react-portal'
-import { Box } from 'rebass'
+import { Box } from 'rebass/styled-components'
 import styled from 'styled-components'
 import { zIndex } from 'src/themes/styled.theme'
 

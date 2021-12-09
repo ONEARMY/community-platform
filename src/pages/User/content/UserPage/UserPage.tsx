@@ -18,7 +18,6 @@ import styled from 'styled-components'
 import Icon from 'src/components/Icons'
 import Flex from 'src/components/Flex'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
-import { zIndex } from 'src/themes/styled.theme'
 import Workspace from 'src/pages/User/workspace/Workspace'
 import { Text } from 'src/components/Text'
 import { Link } from 'src/components/Links'
@@ -72,7 +71,7 @@ interface IProps {}
 const UserCategory = styled.div`
   position: relative;
   display: inline-block;
-  z-index: ${zIndex.default};
+  z-index: ${theme.zIndex.default};
 
   &:after {
     content: '';
@@ -81,7 +80,7 @@ const UserCategory = styled.div`
     position: absolute;
     top: 0;
 
-    z-index: ${zIndex.behind};
+    z-index: ${theme.zIndex.behind};
     background-repeat: no-repeat;
     background-size: contain;
     left: 0;

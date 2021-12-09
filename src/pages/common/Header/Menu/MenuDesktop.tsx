@@ -5,7 +5,6 @@ import theme from 'src/themes/styled.theme'
 import { Flex } from 'rebass/styled-components'
 import styled from 'styled-components'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
-import { zIndex } from 'src/themes/styled.theme'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { getSupportedModules } from 'src/modules'
 
@@ -17,7 +16,7 @@ const MenuLink = styled(NavLink).attrs(() => ({
   color: ${'black'};
   position: relative;
   > div {
-    z-index: ${zIndex.default};
+    z-index: ${theme.zIndex.default};
     position: relative;
     &:hover {
       opacity: 0.7;
@@ -35,7 +34,7 @@ const MenuLink = styled(NavLink).attrs(() => ({
       mask-size: contain;
       mask-image: url(${MenuCurrent});
       mask-repeat: no-repeat;
-      z-index: ${zIndex.level};
+      z-index: ${theme.zIndex.level};
       left: 50%;
       transform: translateX(-50%);
       pointer-events: none;

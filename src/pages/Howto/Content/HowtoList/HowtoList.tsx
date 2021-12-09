@@ -106,7 +106,7 @@ export class HowtoList extends React.Component<any, IState> {
               </Heading>
             </Box>
           ) : (
-            <Heading medium bold txtcenter width={1} my={20}>
+            <Heading medium bold txtcenter width={1}>
               Learn & share how to recycle, build and work with plastic
             </Heading>
           )}

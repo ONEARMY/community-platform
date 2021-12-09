@@ -15,7 +15,7 @@ import { IPinGrouping, IMapGrouping, IMapPinType } from 'src/models/maps.models'
 import { HashLink as Link } from 'react-router-hash-link'
 import { Map } from 'react-leaflet'
 import { ILocation } from 'src/models/common.models'
-import { zIndex } from 'src/themes/styled.theme'
+import theme from 'src/themes/styled.theme'
 import { inject } from 'mobx-react'
 import { MapsStore } from 'src/stores/Maps/maps.store'
 import { UserStore } from 'src/stores/User/user.store'
@@ -42,7 +42,7 @@ const MapFlexBar = styled(Flex)`
   position: absolute;
   top: 25px;
   width: 100%;
-  z-index: ${zIndex.mapFlexBar};
+  z-index: ${theme.zIndex.mapFlexBar};
   left: 50%;
   transform: translateX(-50%);
 `

@@ -3,8 +3,10 @@ import type { DefaultTheme } from 'styled-components'
 // use enum to specify list of possible colors for typing
 export const colors = {
   white: 'white',
+  offwhite: '#ececec',
   black: '#1b1b1b',
   primary: 'green',
+  softyellow: '#f5ede2',
   yellow: { base: '#fee77b', hover: '#ffde45' },
   blue: '#83ceeb',
   red: '#eb1b1f',
@@ -16,6 +18,8 @@ export const colors = {
   error: 'red',
   background: '#f4f6f7',
   silver: '#c0c0c0',
+  softgrey: '#c2d4e4',
+  lightgrey: '#ababac',
 }
 
 export const zIndex = {
@@ -72,7 +76,7 @@ const space = [
   140,
 ]
 const radii = space
-const fontSizes = [10, 12, 14, 18, 22, 30, 38, 42, 46, 50, 58, 66, 74]
+const fontSizes = [10, 120, 14, 18, 22, 30, 38, 42, 46, 50, 58, 66, 74]
 const breakpoints = ['40em', '52em', '70em']
 // standard widths: 512px, 768px, 1024px
 const maxContainerWidth = 1280
@@ -201,16 +205,30 @@ const buttons = {
   },
 }
 
+const typography = {
+  auxiliary: {
+    fontFamily: '"Inter", Helvetica Neue, Arial, sans-serif;',
+    fontSize: '12px',
+    color: colors.grey,
+  },
+  paragraph: {
+    fontFamily: '"Inter", Helvetica Neue, Arial, sans-serif;',
+    fontSize: '16px',
+    color: colors.grey,
+  },
+}
+
 const StyledComponentTheme: DefaultTheme = {
-  colors,
-  buttons,
+  bold,
   breakpoints,
-  space,
-  radii,
+  buttons,
+  colors,
   fontSizes,
   maxContainerWidth,
+  radii,
   regular,
-  bold,
+  space,
+  typography,
   zIndex,
 }
 

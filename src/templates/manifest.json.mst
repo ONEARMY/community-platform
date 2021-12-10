@@ -1,6 +1,6 @@
 {
-  "short_name": "PP Community",
-  "name": "Precious Plastic community-platform",
+  "short_name": "{{SITE_NAME}}",
+  "name": "{{SITE_NAME}}",
   "icons": [
     {
       "src": "favicon.ico",

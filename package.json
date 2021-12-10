@@ -11,9 +11,11 @@
   "private": true,
   "main": "lib/index.js",
   "scripts": {
-    "start": "cross-env FAST_REFRESH=false react-scripts start",
+    "start": "yarn build:public && cross-env FAST_REFRESH=false react-scripts start",
     "start:emulated": "concurrently \"yarn workspace functions start\" \"cross-env PORT=4000 yarn start\" -- ",
-    "build": "react-scripts build",
+    "build:public": "yarn workspace oa-scripts build:public",
+    "build:cra": "react-scripts build",
+    "build": "yarn build:public && yarn build:cra",
     "eject": "react-scripts eject",
     "lint:code": "eslint . --ext .js,.jsx,.ts,.tsx src --color",
     "lint:format": "prettier --check '**/*.md'",

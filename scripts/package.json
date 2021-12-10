@@ -2,10 +2,12 @@
   "name": "oa-scripts",
   "version": "1.0.0",
   "scripts": {
-    "install:clean": "ts-node ./install-clean.ts"
+    "install:clean": "ts-node ./install-clean.ts",
+    "build:public": "ts-node ./prepare-public-directory.ts"
   },
   "dependencies": {
     "globby": "^11.0.2",
+    "mustache": "^4.2.0",
     "oa-shared": "workspace:*",
     "rimraf": "^3.0.2"
   },

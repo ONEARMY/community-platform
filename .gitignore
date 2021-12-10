@@ -3,6 +3,11 @@
 # dependencies
 node_modules
 
+# Generated Public files
+# This are created by scripts/prepare-public-directory.ts
+public/index.html
+public/manifest.json
+
 # testing
 /coverage
 

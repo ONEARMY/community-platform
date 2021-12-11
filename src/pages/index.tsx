@@ -12,7 +12,6 @@ import type {
 } from './PageList'
 import {
   COMMUNITY_PAGES_PROFILE,
-  COMMUNITY_PAGES_MORE,
   ADMIN_PAGES,
   NO_HEADER_PAGES,
   POLICY_PAGES,
@@ -34,7 +33,6 @@ export class Routes extends React.Component<any, {
     const menuItems = [
         ...getAvailablePageList(getSupportedModules()),
         ...COMMUNITY_PAGES_PROFILE,
-        ...COMMUNITY_PAGES_MORE,
         ...ADMIN_PAGES,
         ...NO_HEADER_PAGES,
         ...POLICY_PAGES,

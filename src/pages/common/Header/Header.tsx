@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component } from 'react'
 import { Flex } from 'rebass/styled-components'
 import styled from 'styled-components'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
@@ -10,6 +10,7 @@ import theme from 'src/themes/styled.theme'
 import HamburgerMenu from 'react-hamburger-menu'
 import { observer, inject } from 'mobx-react'
 import { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
+import { isModuleSupported, MODULE } from 'src/modules'
 
 interface IProps {}
 
@@ -43,21 +44,23 @@ const DesktopMenuWrapper = styled(Flex)`
 const AnimationContainer = (props: any) => {
   const variants = {
     visible: {
-      duration: .250,
+      duration: 0.25,
       top: '0',
     },
     hidden: {
-      duration: .250,
+      duration: 0.25,
       top: '-100%',
     },
   }
   return (
-    <motion.div layout
-      style={{ position: "relative" }}
+    <motion.div
+      layout
+      style={{ position: 'relative' }}
       initial="hidden"
       animate="visible"
-      variants={variants}>
-      { props.children }
+      variants={variants}
+    >
+      {props.children}
     </motion.div>
   )
 }
@@ -93,7 +96,9 @@ export class Header extends Component<IProps> {
           </Flex>
           <DesktopMenuWrapper className="menu-desktop" px={2}>
             <MenuDesktop />
-            <Profile isMobile={false} />
+            {isModuleSupported(MODULE.USER) ? (
+              <Profile isMobile={false} />
+            ) : null}
           </DesktopMenuWrapper>
           <MobileMenuWrapper className="menu-mobile">
             <Flex pl={5}>
@@ -111,13 +116,13 @@ export class Header extends Component<IProps> {
             </Flex>
           </MobileMenuWrapper>
         </Flex>
-          {menu.showMobilePanel && (
-            <AnimationContainer key={'mobilePanelContainer'}>
-              <MobileMenuWrapper>
-                <MenuMobilePanel />
-              </MobileMenuWrapper>
-            </AnimationContainer>
-          )}
+        {menu.showMobilePanel && (
+          <AnimationContainer key={'mobilePanelContainer'}>
+            <MobileMenuWrapper>
+              <MenuMobilePanel />
+            </MobileMenuWrapper>
+          </AnimationContainer>
+        )}
       </>
     )
   }

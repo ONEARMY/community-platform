@@ -5,6 +5,7 @@ import { Route } from 'react-router'
 import { UserRole } from 'src/models/user.models'
 import ExternalEmbed from 'src/components/ExternalEmbed/ExternalEmbed'
 import { ResearchModule } from './Research'
+import { MODULE } from 'src/modules'
 
 /**
  * Import all pages for use in lazy loading
@@ -31,7 +32,14 @@ const ForgotPasswordMessagePage = lazy(() =>
 const PrivacyPolicy = lazy(() => import('./policy/privacy'))
 const TermsPolicy = lazy(() => import('./policy/terms'))
 
+export function getAvailablePageList(supportedModules: MODULE[]): IPageMeta[] {
+  return COMMUNITY_PAGES.filter(pageItem =>
+    supportedModules.includes(pageItem.moduleName),
+  )
+}
+
 export interface IPageMeta {
+  moduleName: MODULE
   path: string
   component: any
   title: string
@@ -43,24 +51,28 @@ export interface IPageMeta {
 }
 
 const howTo = {
+  moduleName: MODULE.HOWTO,
   path: '/how-to',
   component: <HowtoPage />,
   title: 'How-to',
   description: 'Welcome to how-to',
 }
 const settings = {
+  moduleName: MODULE.USER,
   path: '/settings',
   component: <SettingsPage />,
   title: 'Settings',
   description: 'Settings',
 }
 const user = {
+  moduleName: MODULE.USER,
   path: '/u',
   component: <User />,
   title: 'Profile',
   description: 'Profile',
 }
 const academy = {
+  moduleName: MODULE.ACADEMY,
   path: '/academy',
   component: (
     <Route
@@ -81,12 +93,14 @@ const academy = {
   fullPageWidth: true,
 }
 const events = {
+  moduleName: MODULE.EVENTS,
   path: '/events',
   component: <EventsPage />,
   title: 'Events',
   description: 'Welcome to Events',
 }
 const maps = {
+  moduleName: MODULE.MAP,
   path: '/map',
   component: <MapsPage />,
   title: 'Map',
@@ -100,6 +114,7 @@ const maps = {
   fullPageWidth: true,
 }
 const admin = {
+  moduleName: MODULE.USER,
   path: '/admin',
   component: <AdminPage />,
   title: 'Admin',
@@ -107,6 +122,7 @@ const admin = {
 }
 
 const signup = {
+  moduleName: MODULE.USER,
   path: '/sign-up',
   component: <SignUpPage />,
   title: 'Sign Up',
@@ -114,6 +130,7 @@ const signup = {
 }
 
 const signin = {
+  moduleName: MODULE.USER,
   path: '/sign-in',
   component: <SignInPage />,
   title: 'Sign In',
@@ -121,6 +138,7 @@ const signin = {
 }
 
 const signupmessage = {
+  moduleName: MODULE.USER,
   path: '/sign-up-message',
   component: <SignUpMessagePage />,
   title: 'Sign Up Message',
@@ -128,6 +146,7 @@ const signupmessage = {
 }
 
 const resendsignupmessage = {
+  moduleName: MODULE.USER,
   path: '/resend-sign-up-message',
   component: <ResendSignUpMessagePage />,
   title: 'Resend Sign Up Message',
@@ -135,6 +154,7 @@ const resendsignupmessage = {
 }
 
 const forgotpassword = {
+  moduleName: MODULE.USER,
   path: '/forgot-password',
   component: <ForgotPasswordPage />,
   title: 'Forgot Password',
@@ -142,30 +162,27 @@ const forgotpassword = {
 }
 
 const forgotpasswordmessage = {
+  moduleName: MODULE.USER,
   path: '/forgot-password-message',
   component: <ForgotPasswordMessagePage />,
   title: 'Forgot Password Message',
   description: '',
 }
 const privacyPolicy = {
+  moduleName: MODULE.CORE,
   path: '/privacy',
   component: <PrivacyPolicy />,
   title: 'Privacy Policy',
   description: '',
 }
 const termsPolicy = {
+  moduleName: MODULE.CORE,
   path: '/terms',
   component: <TermsPolicy />,
   title: 'Terms of Use',
   description: '',
 }
 
-// community pages (various pages hidden on production build)
-const devCommunityPages = [howTo, maps, events, academy, ResearchModule]
-const prodCommunityPages = [howTo, maps, events, academy]
-const communityPages = ['preview', 'production'].includes(SITE)
-  ? prodCommunityPages
-  : devCommunityPages
 // community 'more' dropdown pages (various pages hidden on production build)
 const devCommunityPagesMore = []
 const prodCommunityPagesMore = []
@@ -173,7 +190,13 @@ const communityPagesMore = ['preview', 'production'].includes(SITE)
   ? prodCommunityPagesMore
   : devCommunityPagesMore
 
-export const COMMUNITY_PAGES: IPageMeta[] = communityPages
+export const COMMUNITY_PAGES: IPageMeta[] = [
+  howTo,
+  maps,
+  events,
+  academy,
+  ResearchModule,
+]
 export const COMMUNITY_PAGES_MORE: IPageMeta[] = communityPagesMore
 export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [settings]
 export const ADMIN_PAGES: IPageMeta[] = [admin]

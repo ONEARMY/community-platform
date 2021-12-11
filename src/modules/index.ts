@@ -10,7 +10,6 @@ export enum MODULE {
 
 export function getSupportedModules(): MODULE[] {
     const envModules: string[] = process?.env?.REACT_APP_SUPPORTED_MODULES?.split(',').map(s => s.trim()) || []
-    console.log({ envModules });
     return [MODULE.CORE]
         .concat(
             Object.values(MODULE)

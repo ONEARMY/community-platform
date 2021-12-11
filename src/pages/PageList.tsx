@@ -1,5 +1,4 @@
 import { lazy } from 'react'
-import { SITE } from 'src/config/config'
 import { CSSObject } from '@styled-system/css'
 import { Route } from 'react-router'
 import { UserRole } from 'src/models/user.models'

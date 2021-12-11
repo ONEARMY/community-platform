@@ -1,5 +1,5 @@
 export enum MODULE {
-    CORE = 'core',
+    CORE = 'core', // This is enabled on all installations
     HOWTO = 'howto',
     MAP = 'map',
     EVENTS = 'events',

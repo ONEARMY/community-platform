@@ -353,6 +353,8 @@ workflows:
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:
           name: build_test
+          context: 
+            build-context
           matrix:
             parameters:
               BUILD_ENV: ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci']

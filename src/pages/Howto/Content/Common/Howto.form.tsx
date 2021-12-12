@@ -33,6 +33,7 @@ import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.
 import { COMPARISONS } from 'src/utils/comparisons'
 import { UnsavedChangesDialog } from 'src/components/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
+import { HOWTO_MAX_LENGTH } from '../../constants'
 
 interface IState {
   formSaved: boolean
@@ -308,7 +309,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   flex: 1,
                                   minHeight: '150px',
                                 }}
-                                maxLength="400"
+                                maxLength={HOWTO_MAX_LENGTH}
                                 placeholder="Introduction to your How-To (max 400 characters)"
                               />
                             </Flex>

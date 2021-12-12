@@ -1,0 +1,1 @@
+export const HOWTO_MAX_LENGTH = 1000;

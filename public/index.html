@@ -10,20 +10,20 @@
     <link rel="preconnect" href="https://firebasestorage.googleapis.com" crossorigin />
     <noscript><link rel="stylesheet" href="path/to/stylesheet.css"/></noscript>
     <meta name="theme-color" content="#000000" />
-    <meta property="og:title" content="{{SITE_NAME}}" />
+    <meta property="og:title" content="Community Platform" />
     <meta
       property="og:description"
-      content="{{SITE_DESCRIPTION}}"
+      content="A series of tools for the Precious Plastic community to collaborate around the world. Connect, share and meet each other to tackle plastic waste."
     />
     <meta
       property="og:image"
       content="%PUBLIC_URL%/precious-plastic-logo-official.jpg"
     />
     <meta property="og:url" content="https://community.preciousplastic.com" />
-    <meta name="twitter:title" content="{{SITE_NAME}}" />
+    <meta name="twitter:title" content="Community Platform" />
     <meta
       name="twitter:description"
-      content="{{SITE_DESCRIPTION}}"
+      content="A series of tools for the Precious Plastic community to collaborate around the world. Connect, share and meet each other to tackle plastic waste."
     />
     <meta
       name="twitter:image"
@@ -51,7 +51,14 @@
 
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>{{SITE_NAME}}</title>
+    <title>Precious Plastic Community</title>
+    <script id="CommunityPlatform">
+      /**
+       * The following object has environment specific
+       * configuration injected into it as part of the build process
+       */
+      window.__OA_COMMUNITY_PLATFORM_CONFIGURATION = {};
+    </script>
   </head>
 
   <body style="overflow-x: hidden;">

@@ -1,5 +1,6 @@
 import Logger from 'pino'
+import { getConfigirationOption } from 'src/config/config';
 
-const logLevel = process.env.REACT_APP_LOG_LEVEL || 'warn'; 
+const logLevel = getConfigirationOption('REACT_APP_LOG_LEVEL', 'warn');
 
 export const logger = Logger({ browser: { asObject: false }, level: logLevel })

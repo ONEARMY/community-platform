@@ -55,9 +55,12 @@ function runTests() {
   // main testing command, depending on whether running on ci machine or interactive local
   // call with path to bin as to ensure locally installed used
   const { CY_BIN, CROSSENV_BIN } = PATHS
+
   const testCMD = isCi
     ? `${CY_BIN} run --record --env ${CYPRESS_ENV} --key=${CYPRESS_KEY} --parallel --headless --browser ${CI_BROWSER} --group ${CI_GROUP} --ci-build-id ${buildId}`
     : `${CY_BIN} open --browser chrome --env ${CYPRESS_ENV}`
+
+  console.log(`Running cypress with cmd: ${testCMD}`)
 
   const spawn = spawnSync(`${CROSSENV_BIN} FORCE_COLOR=1 ${testCMD}`, {
     shell: true,
@@ -80,7 +83,7 @@ function runTests() {
 async function startAppServer() {
   const { CROSSENV_BIN, BUILD_SERVE_JSON } = PATHS
   // by default spawns will not respect colours used in stdio, so try to force
-  const crossEnvArgs = `FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci`
+  const crossEnvArgs = `FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci`;
 
   // run local debug server for testing unless production build specified
   let serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} BROWSER=none PORT=3456 npm run start`
@@ -98,6 +101,7 @@ async function startAppServer() {
     // create a rewrites file for handling local server behaviour
     const opts = { rewrites: [{ source: '/**', destination: '/index.html' }] }
     fs.writeFileSync(BUILD_SERVE_JSON, JSON.stringify(opts))
+
     serverCmd = `npx serve build -l 3456`
   }
 

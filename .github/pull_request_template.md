@@ -10,7 +10,6 @@ PR Type
 - [ ] Breaking change (fix or feature that would cause existing functionality to change)
 - [ ] Developer experience (improves developer workflows for contributing to the project)
 
-
 ## Description
 
 _What this PR does_

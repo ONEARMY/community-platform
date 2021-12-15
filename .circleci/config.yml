@@ -240,6 +240,7 @@ jobs:
   # NOTE - not currently used in test workflow as different build_env required for each machine
   test_unit:
     docker: *docker
+    resource_class: small
     steps:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - checkout

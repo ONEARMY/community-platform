@@ -242,7 +242,11 @@ jobs:
     docker: *docker
     steps:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
-      - setup_repo
+      - checkout
+      - *restore_yarn_cache
+      - run: 
+          name: Install dependencies
+          command: yarn workspaces focus one-army-community-platform
       - run:
           command: yarn run test:unit
   build:

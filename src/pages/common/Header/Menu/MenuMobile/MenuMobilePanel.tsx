@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import { COMMUNITY_PAGES } from 'src/pages/PageList'
+import { getAvailablePageList } from 'src/pages/PageList'
 import theme from 'src/themes/styled.theme'
 import styled from 'styled-components'
 import { Box } from 'rebass'
@@ -8,6 +8,7 @@ import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLi
 import MenuMobileExternalLink from './MenuMobileExternalLink'
 import { BAZAR_URL, GLOBAL_SITE_URL } from 'src/utils/urls'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { getSupportedModules } from 'src/modules'
 
 const PanelContainer = styled(Box)`
   width: 100%;
@@ -48,7 +49,7 @@ export class MenuMobilePanel extends Component {
       <>
         <PanelContainer>
           <PanelMenu>
-            {COMMUNITY_PAGES.map(page => {
+            {getAvailablePageList(getSupportedModules()).map(page => {
               const link = (
                 <MenuMobileLink
                   path={page.path}

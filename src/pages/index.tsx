@@ -7,35 +7,37 @@ import Header from './common/Header/Header'
 import { SWUpdateNotification } from 'src/pages/common/SWUpdateNotification/SWUpdateNotification'
 import Main from 'src/pages/common/Layout/Main'
 import { Button } from 'src/components/Button'
+import type {
+  IPageMeta
+} from './PageList'
 import {
-  COMMUNITY_PAGES,
   COMMUNITY_PAGES_PROFILE,
-  COMMUNITY_PAGES_MORE,
   ADMIN_PAGES,
   NO_HEADER_PAGES,
   POLICY_PAGES,
+  getAvailablePageList,
 } from './PageList'
 import { Link, Flex } from 'rebass'
 import DevSiteHeader from 'src/components/DevSiteHeader/DevSiteHeader'
+import { getSupportedModules } from 'src/modules'
 
-interface IState {
+export class Routes extends React.Component<any, {
   singlePageMode: boolean
   displayPageComponent?: any
-}
-
-export class Routes extends React.Component<any, IState> {
+  supportedRoutes?: IPageMeta[]
+}> {
   public render() {
-    const pages = [
-      ...COMMUNITY_PAGES,
-      ...COMMUNITY_PAGES_PROFILE,
-      ...COMMUNITY_PAGES_MORE,
-      ...ADMIN_PAGES,
-      ...NO_HEADER_PAGES,
-      ...POLICY_PAGES,
-    ]
     // we are rendering different pages and navigation dependent on whether the user has navigated directly to view the
     // entire site, or just one page of it via subdomains. This is so we can effectively integrate just parts of this
     // platform into other sites. The first case is direct nav
+    const menuItems = [
+        ...getAvailablePageList(getSupportedModules()),
+        ...COMMUNITY_PAGES_PROFILE,
+        ...ADMIN_PAGES,
+        ...NO_HEADER_PAGES,
+        ...POLICY_PAGES,
+      ];
+
     return (
       <Flex height={'100vh'} flexDirection="column" data-cy="page-container">
         <BrowserRouter>
@@ -48,7 +50,7 @@ export class Routes extends React.Component<any, IState> {
             <Header />
             <Suspense fallback={<div></div>}>
               <Switch>
-                {pages.map(page => (
+                {menuItems.map(page => (
                   <Route
                     exact={page.exact}
                     path={page.path}

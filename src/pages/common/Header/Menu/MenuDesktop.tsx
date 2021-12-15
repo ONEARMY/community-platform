@@ -1,12 +1,14 @@
 import { Component } from 'react'
 import { NavLink } from 'react-router-dom'
-import { COMMUNITY_PAGES } from 'src/pages/PageList'
+import { getAvailablePageList } from 'src/pages/PageList'
 import theme from 'src/themes/styled.theme'
 import { Flex } from 'rebass/styled-components'
 import styled from 'styled-components'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
 import { zIndex } from 'src/themes/styled.theme'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { getSupportedModules } from 'src/modules'
+
 
 const MenuLink = styled(NavLink).attrs(() => ({
   activeClassName: 'current',
@@ -46,7 +48,7 @@ export class MenuDesktop extends Component {
     return (
       <>
         <Flex alignItems={'center'}>
-          {COMMUNITY_PAGES.map(page => {
+          {getAvailablePageList(getSupportedModules()).map(page => {
             const link = (
               <Flex key={page.path}>
                 <MenuLink to={page.path} data-cy="page-link">

@@ -266,7 +266,7 @@ jobs:
           command: |
             echo 'export REACT_APP_BRANCH=${CIRCLE_BRANCH}' >> $BASH_ENV
             echo 'export NODE_OPTIONS=--max-old-space-size=4096' >> $BASH_ENV
-            echo 'export REACT_APP_PROJECT_VERSION=$(git rev-parse HEAD)'
+            echo 'export REACT_APP_PROJECT_VERSION=$CIRCLE_SHA1' >> $BASH_ENV
       - run:
           name: Check environment variables
           command: |

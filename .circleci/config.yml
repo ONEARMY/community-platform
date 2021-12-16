@@ -385,6 +385,10 @@ workflows:
             parameters:
               CI_NODE: [1, 2]
               CI_BROWSER: ['chrome', 'firefox']
+          filters: 
+            branches:
+              ignore:
+                - production
       #---------------------- Development Instances Build and Deploy ----------------------
       - deploy:
           name: "Deploy: dev.onearmy.world"
@@ -406,26 +410,19 @@ workflows:
           context:
             - circle-ci-slack-context
             - project-kamp-dev
-        #---------------------- Production Build-Approve-Deploy ----------------------
-      - build:
-          name: build_production
-          context: community-platform-production
-          requires:
-            - 'test_e2e'
-          <<: *filter_only_production
       # Require manual approval on CirclCI website prior to release
       - hold:
           name: approve_release
           type: approval
           requires:
-            - build_production
+            - Build Application
           <<: *filter_only_production
       # Send a slack notification to approve the hold above (required config supplied in circleci-slack-context)
       - slack/on-hold:
           name: notify_slack_pending_approval
           context: circle-ci-slack-context
           requires:
-            - build_production
+            - Build Application
           <<: *filter_only_production
           <<: *slack_custom_hold_message
       - deploy:

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import L from 'leaflet'
-import { Image } from 'rebass'
+import { Image } from 'rebass/styled-components'
 import Flex from 'src/components/Flex'
 import Text from 'src/components/Text'
 import { Button } from 'src/components/Button'

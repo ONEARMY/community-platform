@@ -29,6 +29,7 @@ export interface ITextProps {
   critical?: boolean
   dashed?: boolean
   cropBottomRight?: boolean
+  theme?: any;
 }
 
 export const uppercase = props =>

@@ -47,7 +47,7 @@ describe('Howto form', function() {
     window.confirm.mockReset()
   })
 
-  it('should not show the confirm dialog', async function() {
+  it.skip('should not show the confirm dialog', async function() {
     let renderResult
     const navProps: any = {}
     await waitFor(() => {
@@ -77,7 +77,7 @@ describe('Howto form', function() {
     expect(window.confirm).not.toBeCalled()
   })
 
-  it('should show the confirm dialog, title change', async function() {
+  it.skip('should show the confirm dialog, title change', async function() {
     let renderResult
     const navProps: any = {}
     await waitFor(() => {

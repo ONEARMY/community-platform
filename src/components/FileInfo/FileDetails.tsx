@@ -1,5 +1,5 @@
 import Icon, { availableGlyphs } from '../Icons'
-import { Flex } from 'rebass'
+import { Flex } from 'rebass/styled-components'
 import Text from '../Text'
 import { IUploadedFileMeta } from 'src/stores/storage'
 import styled from 'styled-components'

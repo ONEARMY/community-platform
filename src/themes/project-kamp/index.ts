@@ -5,7 +5,7 @@ import styles from './styles'
 const Theme: PlatformTheme = {
   siteName: 'Project Kamp',
   logo,
-  howtoHeading: `Learn & share how to recycle, build and work with plastic`,
+  howtoHeading: `Learn & share how to recycle, build and work`,
   styles,
 }
 

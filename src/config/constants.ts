@@ -20,6 +20,7 @@ export const _supportedConfigurationOptions = [
   'REACT_APP_SITE_VARIANT',
   'REACT_APP_LOG_LEVEL',
   'REACT_APP_SUPPORTED_MODULES',
+  'REACT_APP_PLATFORM_THEME',
 ] as const;
 
 export type ConfigurationOption = typeof _supportedConfigurationOptions[number]

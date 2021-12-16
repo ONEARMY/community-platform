@@ -2,8 +2,9 @@ import { Component } from 'react'
 import { Flex, Image } from 'rebass/styled-components'
 import styled, { keyframes } from 'styled-components'
 
-import PPLogo from 'src/assets/images/precious-plastic-logo-official.svg'
 import Text from 'src/components/Text'
+import { inject, observer } from 'mobx-react'
+import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
 interface IProps {
   isMobile?: boolean
@@ -24,16 +25,26 @@ const RotatingLogo = styled(Image)`
   padding: 1rem;
 `
 
+@inject('themeStore')
+@observer
 export class Loader extends Component<IProps> {
   // eslint-disable-next-line
   constructor(props: any) {
     super(props)
   }
+
+  get injected() {
+    return this.props as {
+      themeStore: ThemeStore,
+    }
+  }
+
   render() {
+    const logo = this.injected.themeStore.currentTheme.logo || null
     return (
       <>
         <Flex flexWrap="wrap" justifyContent="center">
-          <RotatingLogo src={PPLogo} width={[75, 75, 100]} />
+          {logo && <RotatingLogo src={logo} width={[75, 75, 100]} />}
           <Text txtcenter width={1}>
             loading...
           </Text>

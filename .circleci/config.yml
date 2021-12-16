@@ -251,10 +251,28 @@ jobs:
     steps:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - checkout
-      - *restore_yarn_cache
+      - restore_cache:
+          name: Restore yarn cache
+          keys:
+            # https://circleci.com/docs/2.0/caching/
+            # https://circleci.com/docs/2.0/yarn/
+            # when lock file changes, use increasingly general patterns to restore cache (also need to change `save_cache` path)
+            # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
+            - yarn-packages-v10-unit-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-packages-v10-unit-{{ .Branch }}-
+            - yarn-packages-v10-unit-
       - run: 
           name: Install dependencies
           command: yarn workspaces focus one-army-community-platform
+      - save_cache:
+          # note - if moving to workspaces include paths: https://discuss.circleci.com/t/yarn-cached-install-slow/34823/2
+          # depending on whether enableGlobalCache is set to true or not (and windows/linux) these paths may vary
+          paths:
+            # global cache location
+            # - ~/.yarn/berry/cache
+            # local cache location
+            - ~/project/.yarn/cache
+          key: yarn-packages-v10-unit-{{ .Branch }}-{{ checksum "yarn.lock" }}          
       - run:
           command: yarn run test:unit
   build:

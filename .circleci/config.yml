@@ -323,6 +323,7 @@ jobs:
   # Run cypress e2e tests on chrome and firefox
   test_e2e:
     docker: *docker
+    resource_class: small
     # build matrix will run 4 parallel builds handled by cypress, so don't need to specify more here
     parallelism: 1
     parameters:

@@ -39,7 +39,7 @@ const updateQueryParams = (url: string, key: string, val: string) => {
 }
 
 // First we use the @inject decorator to bind to the howtoStore state
-@inject('howtoStore', 'userStore')
+@inject('howtoStore', 'userStore', 'themeStore')
 // Then we can use the observer component decorator to automatically tracks observables and re-renders on change
 // (note 1, use ! to tell typescript that the store will exist (it's an injected prop))
 // (note 2, mobx seems to behave more consistently when observables are referenced outside of render methods)
@@ -93,6 +93,8 @@ export class HowtoList extends React.Component<any, IState> {
       referrerSource,
     } = this.props.howtoStore
 
+    const theme = this.props?.themeStore?.currentTheme
+
     return (
       <>
         <Flex py={26}>
@@ -107,7 +109,7 @@ export class HowtoList extends React.Component<any, IState> {
             </Box>
           ) : (
             <Heading medium bold txtcenter width={1}>
-              Learn & share how to recycle, build and work with plastic
+              {theme && theme.howtoHeading}
             </Heading>
           )}
         </Flex>

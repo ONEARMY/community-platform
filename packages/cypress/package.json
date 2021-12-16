@@ -7,9 +7,11 @@
     "db:teardown": "TODO"
   },
   "dependencies": {
+    "cheerio": "^1.0.0-rc.10",
     "cypress": "8.5.0",
     "cypress-file-upload": "5.0.8",
-    "oa-shared": "workspace:*"
+    "oa-shared": "workspace:*",
+    "ts-node": "^10.4.0"
   },
   "devDependencies": {
     "@cypress/webpack-preprocessor": "^5.9.1",
@@ -18,7 +20,6 @@
     "cross-env": "^7.0.3",
     "dotenv": "^10.0.0",
     "fs-extra": "^10.0.0",
-    "ts-node": "^10.2.1",
     "wait-on": "^6.0.0"
   }
 }

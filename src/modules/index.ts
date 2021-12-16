@@ -1,3 +1,5 @@
+import { getConfigirationOption } from "src/config/config";
+
 export enum MODULE {
     CORE = 'core', // This is enabled on all installations
     HOWTO = 'howto',
@@ -9,7 +11,7 @@ export enum MODULE {
 }
 
 export function getSupportedModules(): MODULE[] {
-    const envModules: string[] = process?.env?.REACT_APP_SUPPORTED_MODULES?.split(',').map(s => s.trim()) || []
+    const envModules: string[] = getConfigirationOption('REACT_APP_SUPPORTED_MODULES', '').split(',').map(s => s.trim()) || []
     return [MODULE.CORE]
         .concat(
             Object.values(MODULE)

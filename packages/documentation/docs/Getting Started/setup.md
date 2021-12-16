@@ -39,6 +39,13 @@ Change directory into the cloned repo to run future commands
 cd community-platform
 ```
 
+Configure the installation by adding a `.env` file with the following information
+
+```
+REACT_APP_SUPPORTED_MODULES="core,howto,map,events,research,academy,user"
+```
+
+
 Install dependencies
 
 ```

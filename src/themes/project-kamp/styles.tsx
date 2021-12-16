@@ -3,8 +3,10 @@ import type { DefaultTheme } from 'styled-components'
 // use enum to specify list of possible colors for typing
 export const colors = {
   white: 'white',
+  offwhite: '#ececec',
   black: '#1b1b1b',
   primary: 'green',
+  softyellow: '#f5ede2',
   yellow: { base: '#8ab57f', hover: 'hsl(108, 25%, 68%)' },
   blue: '#83ceeb',
   red: '#eb1b1f',
@@ -16,6 +18,8 @@ export const colors = {
   error: 'red',
   background: '#f4f6f7',
   silver: '#c0c0c0',
+  softgrey: '#c2d4e4',
+  lightgrey: '#ababac',
 }
 
 export const zIndex = {
@@ -201,6 +205,19 @@ const buttons = {
   },
 }
 
+const typography = {
+  auxiliary: {
+    fontFamily: '"Inter", Helvetica Neue, Arial, sans-serif;',
+    fontSize: '12px',
+    color: colors.grey,
+  },
+  paragraph: {
+    fontFamily: '"Inter", Helvetica Neue, Arial, sans-serif;',
+    fontSize: '16px',
+    color: colors.grey,
+  },
+}
+
 const StyledComponentTheme: DefaultTheme = {
   colors,
   buttons,
@@ -211,6 +228,7 @@ const StyledComponentTheme: DefaultTheme = {
   maxContainerWidth,
   regular,
   bold,
+  typography,
   zIndex,
 }
 

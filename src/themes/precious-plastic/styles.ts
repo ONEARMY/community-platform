@@ -76,7 +76,7 @@ const space = [
   140,
 ]
 const radii = space
-const fontSizes = [10, 120, 14, 18, 22, 30, 38, 42, 46, 50, 58, 66, 74]
+const fontSizes = [10, 12, 14, 18, 22, 30, 38, 42, 46, 50, 58, 66, 74]
 const breakpoints = ['40em', '52em', '70em']
 // standard widths: 512px, 768px, 1024px
 const maxContainerWidth = 1280

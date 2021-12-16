@@ -10,8 +10,35 @@ Dev config is hardcoded - You can find more information about potential security
 https://javebratt.com/hide-firebase-api/
 *****************************************************************************************/
 
-import { logger } from 'src/logger'
+import type {
+  IFirebaseConfig,
+  ISentryConfig,
+  IAlgoliaConfig,
+  siteVariants,
+} from './types';
+import type { ConfigurationOption } from './constants';
 import { UserRole } from 'src/models'
+
+/**
+ * Helper function to load configuration property
+ * from the global configuration object
+ * During the development cycle this will be process.env
+ * when running this application with the output of `yarn build`
+ * we will instead load from the global window
+ * 
+ * @param property 
+ * @param fallbackValue - optional fallback value 
+ * @returns string
+ */
+function _c(property: ConfigurationOption, fallbackValue?: string): string {
+
+  const configurationSource = ['development', 'test'].includes(process.env.NODE_ENV) ?
+    process.env : window?.__OA_COMMUNITY_PLATFORM_CONFIGURATION;
+
+  return configurationSource?.[property] || fallbackValue;
+}
+
+export const getConfigirationOption = _c;
 
 /*********************************************************************************************** /
                                         Dev/Staging
@@ -30,22 +57,15 @@ let algoliaPlacesConfig: IAlgoliaConfig = {
 /*********************************************************************************************** /
                                         Site Variants
 /********************************************************************************************** */
-const e = process.env
-// the name of the github branch is passed via ci as an environment variable
-const branch = e.REACT_APP_BRANCH as string
-// as both dev.onearmy.world and onearmy.world are production builds we can't use process.env to distinguish
-// will be set to one of 'localhost', 'staging' or 'production'
 
 // On dev sites user can override default role
 const devSiteRole: UserRole = localStorage.getItem('devSiteRole') as UserRole
 
-function getSiteVariant(
-  gitBranch: string,
-  env: typeof process.env,
-): siteVariants {
+function getSiteVariant(): siteVariants {
   const devSiteVariant: siteVariants = localStorage.getItem(
     'devSiteVariant',
   ) as any
+
   if (devSiteVariant === 'preview') {
     return 'preview'
   }
@@ -58,13 +78,13 @@ function getSiteVariant(
   if (location.host === 'localhost:4000') {
     return 'emulated_site'
   }
-  if (env.REACT_APP_SITE_VARIANT === 'test-ci') {
+  if (_c('REACT_APP_SITE_VARIANT') === 'test-ci') {
     return 'test-ci'
   }
-  if (env.REACT_APP_SITE_VARIANT === 'preview') {
+  if (_c('REACT_APP_SITE_VARIANT') === 'preview') {
     return 'preview'
   }
-  switch (gitBranch) {
+  switch (_c('REACT_APP_BRANCH')) {
     case 'production':
       return 'production'
     case 'master':
@@ -74,8 +94,7 @@ function getSiteVariant(
   }
 }
 
-const siteVariant = getSiteVariant(branch, e)
-logger.debug(`[${siteVariant}] site`)
+const siteVariant = getSiteVariant();
 
 /*********************************************************************************************** /
                                         Production
@@ -89,8 +108,8 @@ if (siteVariant === 'production') {
     searchOnlyAPIKey: '',
   }
   algoliaPlacesConfig = {
-    applicationID: e.REACT_APP_ALGOLIA_PLACES_APP_ID as string,
-    searchOnlyAPIKey: e.REACT_APP_ALGOLIA_PLACES_API_KEY as string,
+    applicationID: _c('REACT_APP_ALGOLIA_PLACES_APP_ID'),
+    searchOnlyAPIKey: _c('REACT_APP_ALGOLIA_PLACES_API_KEY'),
   }
 }
 
@@ -140,12 +159,12 @@ const firebaseConfigs: { [variant in siteVariants]: IFirebaseConfig } = {
   },
   /** Production/live backend with released frontend */
   production: {
-    apiKey: e.REACT_APP_FIREBASE_API_KEY as string,
-    authDomain: e.REACT_APP_FIREBASE_AUTH_DOMAIN as string,
-    databaseURL: e.REACT_APP_FIREBASE_DATABASE_URL as string,
-    messagingSenderId: e.REACT_APP_FIREBASE_MESSAGING_SENDER_ID as string,
-    projectId: e.REACT_APP_FIREBASE_PROJECT_ID as string,
-    storageBucket: e.REACT_APP_FIREBASE_STORAGE_BUCKET as string,
+    apiKey: _c('REACT_APP_FIREBASE_API_KEY'),
+    authDomain: _c('REACT_APP_FIREBASE_AUTH_DOMAIN'),
+    databaseURL: _c('REACT_APP_FIREBASE_DATABASE_URL'),
+    messagingSenderId: _c('REACT_APP_FIREBASE_MESSAGING_SENDER_ID'),
+    projectId: _c('REACT_APP_FIREBASE_PROJECT_ID'),
+    storageBucket: _c('REACT_APP_FIREBASE_STORAGE_BUCKET'),
   },
 }
 /*********************************************************************************************** /
@@ -159,38 +178,10 @@ export const ALGOLIA_SEARCH_CONFIG = algoliaSearchConfig
 export const ALGOLIA_PLACES_CONFIG = algoliaPlacesConfig
 export const SENTRY_CONFIG: ISentryConfig = {
   dsn:
-    process.env.REACT_APP_SENTRY_DSN ||
-    'https://8c1f7eb4892e48b18956af087bdfa3ac@sentry.io/1399729',
+    _c('REACT_APP_SENTRY_DSN',
+      'https://8c1f7eb4892e48b18956af087bdfa3ac@sentry.io/1399729'),
   environment: siteVariant,
 }
 
-export const VERSION = process.env.REACT_APP_PROJECT_VERSION || require('../../package.json').version
-export const GA_TRACKING_ID = process.env.REACT_APP_GA_TRACKING_ID
-
-/*********************************************************************************************** /
-                                        Interfaces
-/********************************************************************************************** */
-interface IFirebaseConfig {
-  apiKey: string
-  authDomain: string
-  databaseURL: string
-  projectId: string
-  storageBucket: string
-  messagingSenderId: string
-  appId?: string
-}
-interface ISentryConfig {
-  dsn: string
-  environment: string
-}
-interface IAlgoliaConfig {
-  searchOnlyAPIKey: string
-  applicationID: string
-}
-type siteVariants =
-  | 'emulated_site'
-  | 'dev_site'
-  | 'test-ci'
-  | 'staging'
-  | 'production'
-  | 'preview'
+export const VERSION = _c('REACT_APP_PROJECT_VERSION', require('../../package.json').version);
+export const GA_TRACKING_ID = _c('REACT_APP_GA_TRACKING_ID');

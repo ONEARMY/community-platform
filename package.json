@@ -11,7 +11,7 @@
   "private": true,
   "main": "lib/index.js",
   "scripts": {
-    "start": "yarn build:public && cross-env FAST_REFRESH=false react-scripts start",
+    "start": "cross-env FAST_REFRESH=false react-scripts start",
     "start:emulated": "concurrently \"yarn workspace functions start\" \"cross-env PORT=4000 yarn start\" -- ",
     "build:cra": "react-scripts build",
     "build:post": "yarn workspace oa-scripts post-cra-build",
@@ -56,7 +56,6 @@
   "resolutions": {
     "__NOTE__": "2021-05-28 storybook clash: https://github.com/storybookjs/storybook/issues/6505",
     "webpack": "4.44.2",
-    "styled-components": "^4",
     "__NOTE2__": "2021-07-06 ram issues: https://github.com/facebook/create-react-app/issues/10154",
     "react-scripts/eslint-webpack-plugin": "2.4.1",
     "__NOTE3__": "2021-10-03 terser issues: https://github.com/facebook/create-react-app/issues/6334",

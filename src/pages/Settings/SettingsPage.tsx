@@ -19,7 +19,7 @@ import arrayMutators from 'final-form-arrays'
 import { UserMapPinSection } from './content/formSections/MapPin.section'
 import theme from 'src/themes/styled.theme'
 import INITIAL_VALUES from './Template'
-import { Box } from 'rebass'
+import { Box } from 'rebass/styled-components'
 import { Prompt } from 'react-router'
 import { toJS } from 'mobx'
 

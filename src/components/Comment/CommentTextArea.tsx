@@ -1,7 +1,5 @@
-import React from 'react'
 import styled from 'styled-components'
 import { Box, Text } from 'rebass/styled-components'
-import theme from 'src/themes/styled.theme'
 import { Avatar } from '../Avatar'
 import { useCommonStores } from 'src'
 import { Link } from '../Links'
@@ -19,7 +17,7 @@ const TextAreaStyled = styled.textarea`
   min-width: 100%;
   max-width: 100%;
   font-family: 'Inter', Arial, sans-serif;
-  font-size: ${theme.fontSizes[2] + 'px'};
+  font-size: ${props => props.theme.fontSizes[2] + 'px'};
   border-radius: 5px;
   resize: none;
 

@@ -5,7 +5,6 @@ import WhiteBubble0 from 'src/assets/images/white-bubble_0.svg'
 import WhiteBubble1 from 'src/assets/images/white-bubble_1.svg'
 import WhiteBubble2 from 'src/assets/images/white-bubble_2.svg'
 import WhiteBubble3 from 'src/assets/images/white-bubble_3.svg'
-import { zIndex } from 'src/themes/styled.theme'
 
 const MoreModalContainer = styled(Box)`
   position: relative;
@@ -15,7 +14,7 @@ const MoreModalContainer = styled(Box)`
     background-image: url(${WhiteBubble0});
     width: 100%;
     height: 100%;
-    z-index: ${zIndex.behind};
+    z-index: ${theme.zIndex.behind};
     background-size: contain;
     background-repeat: no-repeat;
     position: absolute;

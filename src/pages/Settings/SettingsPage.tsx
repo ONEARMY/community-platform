@@ -1,7 +1,8 @@
 import * as React from 'react'
 import Flex from 'src/components/Flex'
 import { IUserPP } from 'src/models/user_pp.models'
-import { UserStore } from 'src/stores/User/user.store'
+import type { ThemeStore } from 'src/stores/Theme/theme.store'
+import type { UserStore } from 'src/stores/User/user.store'
 import { observer, inject } from 'mobx-react'
 import { UserInfosSection } from './content/formSections/UserInfos.section'
 import { FocusSection } from './content/formSections/Focus.section'
@@ -22,11 +23,13 @@ import INITIAL_VALUES from './Template'
 import { Box } from 'rebass/styled-components'
 import { Prompt } from 'react-router'
 import { toJS } from 'mobx'
+import { isModuleSupported, MODULE } from 'src/modules'
 
 interface IProps {}
 
 interface IInjectedProps extends IProps {
-  userStore: UserStore
+  userStore: UserStore,
+  themeStore: ThemeStore
 }
 
 interface IState {
@@ -183,7 +186,8 @@ export class UserSettings extends React.Component<IProps, IState> {
                           <ProfileGuidelines />
                         </Box>
                         {/* Note - for fields without fieldwrapper can just render via props method and bind to input */}
-                        <FocusSection />
+                        {isModuleSupported(MODULE.MAP) && <FocusSection />}
+                        
                         {/* Specific profile type fields */}
                         {values.profileType === 'workspace' && (
                           <WorkspaceSection />
@@ -237,9 +241,10 @@ export class UserSettings extends React.Component<IProps, IState> {
                       maxWidth: ['100%', '100%', '400px'],
                     }}
                   >
-                    <Box sx={{ display: ['none', 'none', 'block'] }}>
+                    {isModuleSupported(MODULE.MAP) && (<Box mb={3}
+                       sx={{ display: ['none', 'none', 'block'] }}>
                       <ProfileGuidelines />
-                    </Box>
+                    </Box>)}
                     <Button
                       data-cy="save"
                       title={
@@ -263,7 +268,6 @@ export class UserSettings extends React.Component<IProps, IState> {
                         }
                       }}
                       width={1}
-                      my={3}
                       variant={'primary'}
                       type="submit"
                       // disable button when form invalid or during submit.

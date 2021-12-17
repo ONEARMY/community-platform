@@ -27,6 +27,30 @@ function findWordspaceHighlight(workspaceType?: string): string {
   }
 }
 
+function findWorkspaceBadgeNullable(
+  workspaceType?: string,
+  ifCleanImage?: boolean,
+): string | null {
+  if (!workspaceType) {
+    return null
+  }
+
+  const foundProfileTypeObj = PROFILE_TYPES.find(
+    type => type.label === workspaceType,
+  )
+
+  if (foundProfileTypeObj) {
+    if (ifCleanImage && foundProfileTypeObj.cleanImageSrc) {
+      return foundProfileTypeObj.cleanImageSrc
+    }
+    if (foundProfileTypeObj.imageSrc) {
+      return foundProfileTypeObj.imageSrc
+    }
+  }
+
+  return null
+}
+
 function findWorkspaceBadge(
   workspaceType?: string,
   ifCleanImage?: boolean,
@@ -54,4 +78,5 @@ function findWorkspaceBadge(
 export default {
   findWordspaceHighlight,
   findWorkspaceBadge,
+  findWorkspaceBadgeNullable,
 }

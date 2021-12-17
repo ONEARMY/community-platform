@@ -134,7 +134,7 @@ class Controls extends React.Component<IProps, IState> {
             </Link>
           </Box>
         </Flex>
-        <Flex width="95%" sx={{ display: ['flex', 'none', 'none'], mt: '5px' }}>
+        <Box width="95%" sx={{ display: ['flex', 'none', 'none'], mt: '5px' }}>
           <Button
             width="100%"
             sx={{ display: 'block' }}
@@ -151,7 +151,7 @@ class Controls extends React.Component<IProps, IState> {
               style={{ width: '18px', marginLeft: '5px' }}
             />
           </Button>
-        </Flex>
+        </Box>
         {showFiltersMobile && (
           <Modal onDidDismiss={() => this.handleFilterMobileModal()}>
             <Flex p={0} mx={-1} justifyContent="space-between">

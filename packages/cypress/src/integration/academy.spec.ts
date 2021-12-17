@@ -8,7 +8,7 @@ describe('[Academy]', () => {
       const githubDoc = 'https://onearmy.github.io/academy'
       cy.get('iframe')
         .should('have.attr', 'src')
-        .and('equal', githubDoc)
+        .and('contain', githubDoc)
     })
   })
 })

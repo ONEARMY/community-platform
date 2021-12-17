@@ -7,6 +7,7 @@ const Theme: PlatformTheme = {
   logo,
   howtoHeading: `Learn & share how to recycle, build and work with plastic`,
   styles,
+  academyResource: 'https://onearmy.github.io/academy/',
 }
 
 export default Theme

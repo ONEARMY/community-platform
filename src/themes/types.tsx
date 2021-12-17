@@ -3,4 +3,5 @@ export interface PlatformTheme {
   logo: string
   howtoHeading: string
   styles: any
+  academyResource: string
 }

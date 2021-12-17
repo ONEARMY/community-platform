@@ -1,8 +1,6 @@
 import { lazy } from 'react'
 import { CSSObject } from '@styled-system/css'
-import { Route } from 'react-router'
 import { UserRole } from 'src/models/user.models'
-import ExternalEmbed from 'src/components/ExternalEmbed/ExternalEmbed'
 import { ResearchModule } from './Research'
 import { MODULE } from 'src/modules'
 
@@ -13,6 +11,7 @@ import { MODULE } from 'src/modules'
 const HowtoPage = lazy(() => import('./Howto/Howto'))
 const SettingsPage = lazy(() => import('./Settings'))
 
+const AcademyPage = lazy(() => import('./Academy/Academy'));
 const EventsPage = lazy(() => import('./Events/Events'))
 const AdminPage = lazy(() => import('./admin/Admin'))
 const MapsPage = lazy(() => import('./Maps/Maps'))
@@ -73,17 +72,7 @@ const user = {
 const academy = {
   moduleName: MODULE.ACADEMY,
   path: '/academy',
-  component: (
-    <Route
-      render={props => (
-        // NOTE - for embed to work github.io site also must host at same path, i.e. /academy
-        <ExternalEmbed
-          src={`https://onearmy.github.io${props.location.pathname}`}
-          {...props}
-        />
-      )}
-    />
-  ),
+  component: <AcademyPage/>,
   title: 'Academy',
   description: 'Demo external page embed',
   customStyles: {

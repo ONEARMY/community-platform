@@ -15,13 +15,18 @@ interface IProps extends RouteComponentProps {
 }
 interface IState {
   src: string
+  targetOrigin: string
 }
 
 class ExternalEmbed extends React.Component<IProps, IState> {
   constructor(props) {
     super(props)
+
+    const url = new URL(this.props.src)
+
     this.state = {
       src: this.props.src,
+      targetOrigin: url.protocol + '//' + url.hostname,
     }
   }
 
@@ -42,10 +47,10 @@ class ExternalEmbed extends React.Component<IProps, IState> {
    * Custom method to allow communication from Iframe to parent via postmessage
    */
   handlePostmessageFromIframe = (e: MessageEvent) => {
+    console.log({ eOrigin: e.origin, src: this.props.src })
     // only allow messages from specific sites (academy dev and live)
-    if (
-      ['http://localhost:3001', 'https://onearmy.github.io'].includes(e.origin)
-    ) {
+    console.log(e.data.pathname)
+    if ([this.state.targetOrigin].includes(e.origin)) {
       // communicate url changes, update navbar
       if (e.data && e.data.pathname) {
         this.props.history.push(e.data.pathname)

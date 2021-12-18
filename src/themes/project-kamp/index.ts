@@ -8,6 +8,16 @@ const Theme: PlatformTheme = {
   howtoHeading: `Learn & share how to recycle, build and work`,
   styles,
   academyResource: 'https://project-kamp-academy.netlify.app/',
+  externalLinks: [
+    {
+      url: 'https://projectkamp.com/support.html',
+      label: 'Support Us'
+    },
+    {
+      url: 'https://projectkamp.com/',
+      label: 'Project Homepage'
+    }
+  ]
 }
 
 

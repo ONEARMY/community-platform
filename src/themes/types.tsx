@@ -1,3 +1,8 @@
+interface LinkList {
+  label: string
+  url: string
+}
+
 export interface PlatformTheme {
   id: string
   siteName: string
@@ -7,4 +12,5 @@ export interface PlatformTheme {
   howtoHeading: string
   styles: any
   academyResource: string
+  externalLinks: LinkList[]
 }

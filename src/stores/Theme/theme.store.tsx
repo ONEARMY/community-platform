@@ -22,4 +22,11 @@ export class ThemeStore {
       this.currentTheme = themeMap[themeId]
     }
   }
+
+  public getExternalNavigationItems():{
+    label: string
+    url: string
+  }[] {
+    return this.currentTheme.externalLinks || [];
+  }
 }

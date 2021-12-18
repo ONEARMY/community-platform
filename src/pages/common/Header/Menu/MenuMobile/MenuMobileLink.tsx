@@ -1,5 +1,4 @@
 import * as React from 'react'
-import theme from 'src/themes/styled.theme'
 import styled from 'styled-components'
 import { Box } from 'rebass/styled-components'
 import { NavLink } from 'react-router-dom'
@@ -19,14 +18,14 @@ interface IInjectedProps extends IProps {
 }
 
 const PanelItem = styled(Box)`
-  padding: ${theme.space[3]}px 0px;
+  padding: ${props => props.theme.space[3]}px 0px;
 `
 
 const MenuLink = styled(NavLink).attrs(() => ({
   activeClassName: 'current',
 }))`
-  color: ${'black'};
-  font-size: ${theme.fontSizes[2]}px;
+  color: ${props => props.theme.colors.black};
+  font-size: ${props => props.theme.fontSizes[2]}px;
   position: relative;
   > span {
     z-index: 1;
@@ -43,7 +42,7 @@ const MenuLink = styled(NavLink).attrs(() => ({
       display: block;
       position: absolute;
       bottom: -5px;
-      background-color: ${theme.colors.yellow.base};
+      background-color: ${props => props.theme.colors.yellow.base};
       mask-size: contain;
       mask-image: url(${MenuCurrent});
       mask-repeat: no-repeat;

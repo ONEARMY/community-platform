@@ -21,6 +21,8 @@ export const _supportedConfigurationOptions = [
   'REACT_APP_LOG_LEVEL',
   'REACT_APP_SUPPORTED_MODULES',
   'REACT_APP_PLATFORM_THEME',
+  'REACT_APP_LOGFLARE_KEY',
+  'REACT_APP_LOGFLARE_SOURCE',
 ] as const;
 
 export type ConfigurationOption = typeof _supportedConfigurationOptions[number]

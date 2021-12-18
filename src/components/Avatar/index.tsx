@@ -4,17 +4,22 @@ import { Image, ImageProps } from 'rebass/styled-components'
 import { inject, observer } from 'mobx-react'
 import { ProfileTypeLabel } from 'src/models/user_pp.models'
 import Workspace from 'src/pages/User/workspace/Workspace'
+import type { ThemeStore } from 'src/stores/Theme/theme.store'
+
+import MemberBadge from 'src/assets/images/badges/pt-member.svg'
+import { THEME_LIST } from 'src/themes'
 
 interface IProps extends ImageProps {
   width?: string
   profileType?: ProfileTypeLabel
+  themeStore?: ThemeStore
 }
 
 interface IState {
-  badgeProfileType?: string
+  badgeProfileSrc?: string | null
 }
 
-@inject('userStore')
+@inject('userStore', 'themeStore')
 @observer
 export class Avatar extends Component<IProps, IState> {
   constructor(props: IProps) {
@@ -29,21 +34,47 @@ export class Avatar extends Component<IProps, IState> {
   }
 
   public getProfileTypeBadge(type?: ProfileTypeLabel) {
-    const img = Workspace.findWorkspaceBadge(type, true)
-    this.setState({ badgeProfileType: img })
+    const img = Workspace.findWorkspaceBadgeNullable(type, true)
+    this.setState({ badgeProfileSrc: img })
   }
   render() {
     const { width } = this.props
-    const { badgeProfileType } = this.state
+    const { badgeProfileSrc } = this.state
+
+    let avatarUrl = badgeProfileSrc || MemberBadge;
+
+    const th = this.props?.themeStore?.currentTheme
+
+    /**
+     * 🚨🚨🚨🚨🚨🚨
+     * 
+     *  HACKY WORKAROUND
+     * 
+     *  For the second instance (Project Kamp)
+     *  there are no membership levels or variations
+     *  to the membership type.
+     * 
+     *  So that means we _always_ want the default badge
+     *  bundled with the PlatformTheme.
+     * 
+     * 🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
+     */
+
+    if ( this.props.themeStore && th?.id === THEME_LIST.PROJECT_KAMP) {
+      avatarUrl = width && parseInt(width, 10) >= 100 ? this.props.themeStore?.currentTheme.badge : this.props.themeStore.currentTheme.avatar;
+    }
+
 
     return (
-      <Image
-        className="avatar"
-        width={width ? width : 40}
-        height={width ? width : 40}
-        sx={{ borderRadius: '25px' }}
-        src={badgeProfileType}
-      />
+      <>
+        <Image
+          className="avatar"
+          width={width ? width : 40}
+          height={width ? width : 40}
+          sx={{ borderRadius: '25px' }}
+          src={avatarUrl}
+        />
+      </>
     )
   }
 }

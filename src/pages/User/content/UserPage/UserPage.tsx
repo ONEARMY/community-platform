@@ -44,10 +44,12 @@ import { IUploadedFileMeta } from 'src/stores/storage'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { Loader } from 'src/components/Loader'
 
+import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { AdminContact } from 'src/components/AdminContact/AdminContact'
 import ProfileLink from './ProfileLink'
 import { logger } from 'src/logger'
+import { Avatar } from 'src/components/Avatar'
 
 interface IRouterCustomParams {
   id: string
@@ -58,7 +60,8 @@ interface IBackgroundImageProps {
 }
 
 interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
-  userStore: UserStore
+  userStore: UserStore,
+  themeStore: ThemeStore
 }
 
 interface IState {
@@ -206,7 +209,7 @@ const MachineExperienceTab = styled.div`
   margin-right: 10px;
 `
 
-@inject('userStore')
+@inject('userStore', 'themeStore')
 @observer
 export class UserPage extends React.Component<
   RouteComponentProps<IRouterCustomParams>,
@@ -383,7 +386,6 @@ export class UserPage extends React.Component<
         </Text>
       )
     }
-    const workspaceBadgeSrc = Workspace.findWorkspaceBadge(user.profileType)
     const workspaceHighlightSrc = Workspace.findWordspaceHighlight(
       user.profileType,
     )
@@ -423,7 +425,7 @@ export class UserPage extends React.Component<
           <Box width={['100%', '100%', '80%']}>
             <Box sx={{ display: ['block', 'block', 'none'] }}>
               <MobileBadge>
-                <Image src={workspaceBadgeSrc} />
+                <Avatar profileType={user.profileType}/>
               </MobileBadge>
             </Box>
 
@@ -487,7 +489,10 @@ export class UserPage extends React.Component<
             sx={{ display: ['none', 'none', 'block'] }}
           >
             <MobileBadge>
-              <Image src={workspaceBadgeSrc} />
+              <Avatar
+                width="150"
+                profileType={user.profileType}
+                />
 
               {shouldRenderUserStatsBox && this.renderUserStatsBox(user)}
             </MobileBadge>

@@ -155,11 +155,11 @@ const ResearchForm = observer((props: IProps) => {
                     >
                       <Heading medium>
                         {props.parentType === 'create' ? (
-                          <span>Start</span>
+                          <span>Start your Research</span>
                         ) : (
-                          <span>Edit</span>
+                          <span>Edit your Research</span>
                         )}{' '}
-                        your Research
+                        
                       </Heading>
                       <Box ml="15px">
                         <ElWithBeforeIcon

@@ -289,6 +289,15 @@ jobs:
           root: .
           paths:
             - build
+  storybook: 
+    docker: *docker
+    resource_class: medium
+    steps:
+      - setup_repo
+      - attach_workspace:
+          at: '.'
+      - run:
+          command: yarn workspace oa-storybook build
   deploy:
     docker: *docker
     resource_class: small
@@ -374,6 +383,12 @@ workflows:
           filters: 
             branches:
               ignore:
+                - production
+      - storybook:
+          name: Build Storybook
+          filters:
+            branches:
+              ignore: 
                 - production
       - test_e2e:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>

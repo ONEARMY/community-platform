@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { Box, Text } from 'rebass/styled-components'
 import { Avatar } from '../Avatar'
-import { useCommonStores } from 'src'
+import { useCommonStores } from 'src/index'
 import { Link } from '../Links'
 
 export interface IProps {

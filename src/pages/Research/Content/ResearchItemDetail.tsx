@@ -54,17 +54,18 @@ const ResearchItemDetail = observer((props: IProps) => {
           moderateResearch={moderateResearch}
         />
         <Box my={16}>
-          {item.updates.map((update, index) => {
-            return (
-              <Update
-                update={update}
-                key={update._id}
-                updateIndex={index}
-                isEditable={isEditable}
-                slug={item.slug}
-              />
-            )
-          })}
+          {item &&
+            item?.updates?.map((update, index) => {
+              return (
+                <Update
+                  update={update}
+                  key={update._id}
+                  updateIndex={index}
+                  isEditable={isEditable}
+                  slug={item.slug}
+                />
+              )
+            })}
         </Box>
         {isEditable && (
           <Flex my={4}>

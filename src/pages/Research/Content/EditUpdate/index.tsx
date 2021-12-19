@@ -28,7 +28,7 @@ const EditUpdate = observer((props: IProps) => {
     formValues: {} as IResearch.UpdateDB,
     formSaved: false,
     _toDocsList: false,
-    isLoading: true,
+    isLoading: !store.activeResearchItem,
     loggedInUser: store.activeUser,
   })
 
@@ -94,7 +94,7 @@ const EditUpdate = observer((props: IProps) => {
       <Loader />
     ) : (
       <Text txtcenter mt="50px" width={1}>
-        Research not found
+        Research update not found
       </Text>
     )
   }

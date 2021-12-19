@@ -40,7 +40,7 @@ export class Loader extends Component<IProps> {
   }
 
   render() {
-    const logo = this.injected.themeStore.currentTheme.logo || null
+    const logo = this.injected.themeStore?.currentTheme?.logo || null
     return (
       <>
         <Flex flexWrap="wrap" justifyContent="center">

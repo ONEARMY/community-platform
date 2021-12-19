@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Box, Flex } from 'rebass/styled-components'
-import { useCommonStores } from 'src'
+import { useCommonStores } from 'src/index'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { Button } from 'src/components/Button'
 import { Comment } from 'src/components/Comment/Comment'

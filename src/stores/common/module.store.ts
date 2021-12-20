@@ -7,7 +7,7 @@ import { includesAll } from 'src/utils/filters'
 import { RootStore } from '..'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { IUploadedFileMeta, Storage } from '../storage'
-import { useCommonStores } from 'src'
+import { useCommonStores } from 'src/index'
 import { logger } from 'src/logger'
 
 /**

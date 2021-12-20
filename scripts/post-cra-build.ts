@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as fsExtra from 'fs-extra'
 import * as path from 'path';
 import * as cheerio from 'cheerio';
 import dotenv from 'dotenv';
@@ -21,6 +22,9 @@ const $ = cheerio.load(builtHTML, { recognizeSelfClosing: true });
  *  4. SEO changes
  *    - Update <title> element
  *    - Update description elements
+ *  5. Load assets into public/
+ *    - favicon
+ *    - og:url
  * 
  * */
 
@@ -52,6 +56,16 @@ const siteName = process.env.SITE_NAME || 'Community Platform';
 $('title').text(siteName)
 $('meta[property="og:title"]').attr('content', siteName);
 $('meta[name="twitter:title"]').attr('content', siteName);
+
+const platformTheme = process.env.REACT_APP_PLATFORM_THEME;
+
+if (platformTheme) {
+    console.log(`Applying theme: ${platformTheme}`);
+    console.log(`Copying src/assets/theme/${platformTheme}/public to build/`);
+    fsExtra.copySync('../src/assets/images/themes/' + platformTheme + '/public', '../build');
+}
+
+
 const output = $.html();
 
 console.log(`Persisting configuration and HTML updates back to ../build/index.html`);

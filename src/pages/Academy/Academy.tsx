@@ -1,5 +1,5 @@
 import { Route } from 'react-router'
-import { useCommonStores } from 'src'
+import { useCommonStores } from 'src/index'
 import ExternalEmbed from 'src/components/ExternalEmbed/ExternalEmbed'
 
 export default function Academy() {

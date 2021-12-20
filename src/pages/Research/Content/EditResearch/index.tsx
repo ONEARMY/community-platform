@@ -26,7 +26,7 @@ const EditResearch = observer((props: IProps) => {
     formValues: {} as IResearch.ItemDB,
     formSaved: false,
     _toDocsList: false,
-    isLoading: true,
+    isLoading: !store.activeResearchItem,
     loggedInUser: store.activeUser,
   })
 
@@ -63,6 +63,7 @@ const EditResearch = observer((props: IProps) => {
   }, [store, props.match.params.slug])
 
   const { formValues, isLoading, loggedInUser } = state
+
   if (formValues && !isLoading) {
     if (loggedInUser && isAllowToEditContent(formValues, loggedInUser)) {
       return (

@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom';
 import ResearchRoutes from './research.routes'
 import { render, waitFor, cleanup } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'

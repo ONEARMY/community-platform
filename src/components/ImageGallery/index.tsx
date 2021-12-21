@@ -1,3 +1,4 @@
+import 'react-image-lightbox/style.css'
 import { PureComponent } from 'react'
 import Lightbox from 'react-image-lightbox'
 import { Card, CardProps, Flex, Image } from 'rebass/styled-components'

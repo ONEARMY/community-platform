@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom'
 import ResearchRoutes from './research.routes'
 import { render, waitFor, cleanup } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
@@ -122,9 +122,14 @@ describe('research.routes', () => {
         </Provider>,
       )
 
-      await waitFor(() => {
-        expect(wrapper.getByText(/start your research/i)).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(wrapper.getByText(/start your research/i)).toBeInTheDocument()
+        },
+        {
+          timeout: 2000,
+        },
+      )
     })
   })
 

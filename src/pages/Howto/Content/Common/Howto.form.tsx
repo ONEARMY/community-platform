@@ -33,6 +33,7 @@ import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.
 import { COMPARISONS } from 'src/utils/comparisons'
 import { UnsavedChangesDialog } from 'src/components/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
+import { HOWTO_MAX_LENGTH, HOWTO_TITLE_MAX_LENGTH } from '../../constants'
 
 interface IState {
   formSaved: boolean
@@ -244,8 +245,8 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 isEqual={COMPARISONS.textInput}
                                 modifiers={{ capitalize: true }}
                                 component={InputField}
-                                maxLength="50"
-                                placeholder="Make a chair from.. (max 50 characters)"
+                                maxLength={HOWTO_TITLE_MAX_LENGTH}
+                                placeholder={`Make a chair from... (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
                               />
                             </Flex>
                             <Flex flexDirection={'column'} mb={3}>
@@ -308,7 +309,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   flex: 1,
                                   minHeight: '150px',
                                 }}
-                                maxLength="400"
+                                maxLength={HOWTO_MAX_LENGTH}
                                 placeholder="Introduction to your How-To (max 400 characters)"
                               />
                             </Flex>

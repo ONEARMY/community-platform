@@ -277,7 +277,7 @@ jobs:
           command: |
             echo 'export REACT_APP_BRANCH=${CIRCLE_BRANCH}' >> $BASH_ENV
             echo 'export NODE_OPTIONS=--max-old-space-size=4096' >> $BASH_ENV
-            echo 'export REACT_APP_PROJECT_VERSION=$CIRCLE_SHA1' >> $BASH_ENV
+            echo 'export REACT_APP_PROJECT_VERSION=${CIRCLE_SHA1}' >> $BASH_ENV
       - run:
           name: Check environment variables
           command: |
@@ -394,6 +394,7 @@ workflows:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           requires:
             - 'Build Application'
+            - 'Unit tests'
           context: 
             - e2e-tests
           matrix:
@@ -451,7 +452,7 @@ workflows:
             - circle-ci-slack-context
             - community-platform-production
       - deploy:
-          name: "Deploy: project-kamp-community.web.app"
+          name: "Deploy: community.projectkamp.com"
           requires:
             - 'approve_release'
           <<: *filter_only_production

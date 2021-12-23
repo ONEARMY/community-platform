@@ -34,7 +34,8 @@ export class Avatar extends Component<IProps, IState> {
   }
 
   public getProfileTypeBadge(type?: ProfileTypeLabel) {
-    const img = Workspace.findWorkspaceBadgeNullable(type, true)
+    const {width} = this.props;
+    const img = Workspace.findWorkspaceBadgeNullable(type, Number(width || 0) < 50)
     this.setState({ badgeProfileSrc: img })
   }
   render() {

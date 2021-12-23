@@ -23,7 +23,7 @@ export const GlobalStyle = createGlobalStyle`
 
   .slick-prev,
   .slick-next {
-    position: absolute;
+    position: absolute !important;
     top: 50%;
     z-index: ${theme.zIndex.slickArrows};
     transform: translateY(-50%);

@@ -451,7 +451,7 @@ workflows:
             - circle-ci-slack-context
             - community-platform-production
       - deploy:
-          name: "Deploy: project-kamp-community.web.app"
+          name: "Deploy: community.projectkamp.com"
           requires:
             - 'approve_release'
           <<: *filter_only_production

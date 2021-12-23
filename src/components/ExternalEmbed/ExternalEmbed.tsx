@@ -47,9 +47,7 @@ class ExternalEmbed extends React.Component<IProps, IState> {
    * Custom method to allow communication from Iframe to parent via postmessage
    */
   handlePostmessageFromIframe = (e: MessageEvent) => {
-    console.log({ eOrigin: e.origin, src: this.props.src })
     // only allow messages from specific sites (academy dev and live)
-    console.log(e.data.pathname)
     if ([this.state.targetOrigin].includes(e.origin)) {
       // communicate url changes, update navbar
       if (e.data && e.data.pathname) {

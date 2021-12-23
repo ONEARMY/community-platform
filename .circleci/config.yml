@@ -394,6 +394,7 @@ workflows:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           requires:
             - 'Build Application'
+            - 'Unit tests'
           context: 
             - e2e-tests
           matrix:

@@ -63,6 +63,14 @@ if (platformTheme) {
     console.log(`Applying theme: ${platformTheme}`);
     console.log(`Copying src/assets/theme/${platformTheme}/public to build/`);
     fsExtra.copySync('../src/assets/images/themes/' + platformTheme + '/public', '../build');
+
+    const siteDescription = platformTheme === 'precious-plastic'
+        ? 'A series of tools for the Precious Plastic community to collaborate around the world. Connect, share and meet each other to tackle plastic waste.'
+        : 'A platform for the Project Kamp community to collaborate around the world. Connect, share and meet each other to figure out how to live more sustainably'
+
+    $('meta[property="og:description"]').attr('content', siteDescription);
+    $('meta[property="twitter:description"]').attr('content', siteDescription);
+    $('meta[name="description"]').attr('content', siteDescription);
 }
 
 

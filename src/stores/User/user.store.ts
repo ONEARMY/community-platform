@@ -1,6 +1,5 @@
 import { observable, action, makeObservable, toJS } from 'mobx'
 import { INotification, IUser, IUserDB, NotificationType } from 'src/models/user.models'
-import { IComment, IHowto } from 'src/models/howto.models'
 import { IUserPP, IUserPPDB } from 'src/models/user_pp.models'
 import { IFirebaseUser, auth, EmailAuthProvider } from 'src/utils/firebase'
 import { Storage } from '../storage'
@@ -262,9 +261,10 @@ export class UserStore extends ModuleStore {
       // toggle entry on user votedUsefulHowtos to either vote or unvote a howto
       // this will updated the main howto via backend `updateUserVoteStats` function
       const votedUsefulHowtos = toJS(this.user.votedUsefulHowtos) || {}
-      votedUsefulHowtos[howtoId] = !votedUsefulHowtos[howtoId]
-      if(votedUsefulHowtos[howtoId]){
-        this.triggerNotification('howto_useful', this.user, howtoId)
+      votedUsefulHowtos[howtoId] = !votedUsefulHowtos[howtoId];
+
+      if (votedUsefulHowtos[howtoId]) {
+        this.triggerNotification('howto_useful', this.user._authID, howtoId)
       }
       await this.updateUserProfile({ votedUsefulHowtos })
     }
@@ -294,7 +294,7 @@ export class UserStore extends ModuleStore {
   }
 
   @action
-  public async triggerNotification(type: NotificationType, user: IUser,
+  public async triggerNotification(type: NotificationType, user_id: string,
     howToId?: string) {
     try {
       const triggeredBy = this.activeUser;
@@ -307,7 +307,9 @@ export class UserStore extends ModuleStore {
           howToId: howToId,
           type: type,
           read: false
-        }
+        } 
+
+        const user = await this.getUserProfile(user_id)
 
         const updatedUser: IUser = {
           ...toJS(user),

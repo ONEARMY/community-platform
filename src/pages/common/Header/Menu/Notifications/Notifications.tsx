@@ -1,5 +1,4 @@
 import { Component } from 'react'
-import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import Flex from 'src/components/Flex'
@@ -37,8 +36,9 @@ export default class Notifications extends Component<IProps, IState> {
   }
 
   render() {
-    const user = this.injected.userStore.user
-    const { showNotificationsModal } = this.state
+    const user = this.injected.userStore.user;
+    const showNotificationsModal = this.state;
+
     return (
       <>
         {user ? (
@@ -51,11 +51,7 @@ export default class Notifications extends Component<IProps, IState> {
               </Flex>
               <Flex>
                 {showNotificationsModal && (
-                  <ClickAwayListener
-                    onClickAway={() => this.toggleNotificationsModal()}
-                  >
                     <NotificationsModal/>
-                  </ClickAwayListener>
                 )}
               </Flex>
             </div>

@@ -3,18 +3,15 @@ import { Box } from 'rebass'
 import styled from 'styled-components'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
-import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
-import { NavLink } from 'react-router-dom'
 import Flex from 'src/components/Flex'
-import theme, { zIndex } from 'src/themes/styled.theme'
-import { INotification, IUser } from 'src/models/user.models'
 import { NotificationList } from 'src/components/Notifications/NotificationList'
 
 
-interface IProps {}
+interface IProps { 
+}
 
 interface IInjectedProps extends IProps {
-  userStore: UserStore
+  userStore: UserStore,
 }
 
 const ModalContainer = styled(Box)`
@@ -23,19 +20,17 @@ const ModalContainer = styled(Box)`
   position: absolute;
   right: 10px;
   top: 60px;
-  z-index: ${zIndex.modalProfile};
   height: 100%;
 `
 const ModalContainerInner = styled(Box)`
-  z-index: ${zIndex.modalProfile};
   position: relative;
   background: white;
   border: 2px solid black;
   border-radius: 5px;
+  margin: 1em;
 `
 
 const ModalItem = styled(Box)`
-  z-index: ${zIndex.modalProfile};
   display: flex;
   flex-direction: column;
   color: #000;
@@ -60,21 +55,33 @@ export class NotificationsModal extends React.Component<IProps> {
 
 
   render() {
-    const user = this.injected.userStore.user
+    const user = this.injected.userStore.user;
     const notifications = user?.notifications;
-    
+
     return (
       <ModalContainer data-cy="user-menu-list">
-        <ModalContainerInner>
-          <Flex>
-            <ModalItem>
-              Notifications
-            </ModalItem>
-          </Flex>
-          <Flex>
-            <NotificationList notifications={notifications}/>
-          </Flex>
-        </ModalContainerInner>
+        {!notifications || notifications?.length === 0 ?
+          <ModalContainerInner>
+            <Flex>
+              <ModalItem>
+                Nada, no new notification
+              </ModalItem>
+            </Flex>
+          </ModalContainerInner>
+          : <ModalContainerInner>
+            <Flex>
+              <ModalItem>
+                Notifications
+              </ModalItem>
+            </Flex>
+            <Flex>
+              <NotificationList notifications={notifications} />
+            </Flex>
+            <Flex>
+              <button>Clear notifications</button>
+            </Flex>
+          </ModalContainerInner>
+        }
       </ModalContainer>
     )
   }

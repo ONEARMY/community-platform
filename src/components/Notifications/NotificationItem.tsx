@@ -1,81 +1,109 @@
-import React, { useState } from 'react'
-import { Box } from 'rebass'
-import styled from 'styled-components'
+import React from 'react'
+import { Box, Image } from 'rebass'
 
-import { FaTrash, FaRegEdit } from 'react-icons/fa'
 import { Flex } from 'rebass'
-import { useCommonStores } from 'src'
-import { IComment, INotification } from 'src/models'
-import theme, { zIndex } from 'src/themes/styled.theme'
-
-import { Text } from 'src/components/Text'
-import { Field, Form } from 'react-final-form'
-import { Button } from 'src/components/Button'
+import { INotification } from 'src/models'
 
 import { Link } from 'src/components/Links'
+
+import IconComment from 'src/assets/icons/icon-comment.svg'
+import IconUseful from 'src/assets/icons/icon-useful.svg'
 
 
 export interface IProps extends INotification { }
 
-const ModalItem = styled(Box)`
-  z-index: ${zIndex.modalProfile};
-  display: flex;
-  flex-direction: column;
-  color: #000;
-  padding: 10px 30px 10px 30px;
-  text-align: left;
-  width: 100%;
-  max-width: 100%;
-  max-height: 100%;
-  }
-`
 
 export const NotificationItem: React.FC<IProps> = ({
-  _id,
-  _created,
   _triggeredByUserId,
   triggeredByName,
-  commentId,
   howToId,
   type,
-  read,
-  ...props
+  read
 }) => {
   return (
     <Flex
       flexDirection="column"
-      p="3"
       bg={'white'}
       width="100%"
-      mb={4}
-      style={{ borderRadius: '5px' }}
+      style={{ fontSize: '0.9em', width: '340px', padding: '1em 0em 1em 0em', borderBottom: 'groove'}}
     >
-      <Flex>
         {
           type === "howto_useful" ?
             (
-              <ModalItem>
-                Yay,
-                <Link
-                  sx={{
-                    textDecoration: 'underline',
-                    color: 'inherit',
-                  }}
-                  to={'/u/' + triggeredByName}
+              <Flex>
+                <Box
+                width={1/5}
+                style={{textAlign: 'center'}}
                 >
-                  {triggeredByName}
-                </Link>
-                found your
-                
-                useful
-
-              </ModalItem>
+                  <Image src={IconUseful} width="22px" height="22px" />
+                </Box>
+                <Box
+                  width={4/5}
+                >
+                  Yay,&nbsp;
+                  <Link
+                    sx={{
+                      textDecoration: 'underline',
+                      color: 'inherit',
+                    }}
+                    to={'/u/' + _triggeredByUserId}
+                    display="inline"
+                  >
+                    {triggeredByName}&nbsp;
+                  </Link>
+                  found your&nbsp;
+                  <Link
+                    sx={{
+                      textDecoration: 'underline',
+                      color: 'inherit',
+                    }}
+                    to={'/how-to/' + howToId}
+                    display="inline"
+                  >
+                    how-to&nbsp;
+                  </Link>
+                  useful
+                </Box>
+              </Flex>
             )
             :
-            <div></div>
+            (
+              <Flex>
+                <Box
+                width={1/5}
+                style={{textAlign: 'center'}}
+                >
+                  <Image src={IconComment} width="22px" height="22px" />
+                </Box>
+                <Box
+                  width={4/5}
+                >
+                  New comment on your&nbsp;
+                  <Link
+                    sx={{
+                      textDecoration: 'underline',
+                      color: 'inherit',
+                    }}
+                    to={'/how-to/' + howToId}
+                    display="inline"
+                  >
+                    how-to&nbsp;
+                  </Link>
+                  by&nbsp;
+                  <Link
+                    sx={{
+                      textDecoration: 'underline',
+                      color: 'inherit',
+                    }}
+                    to={'/u/' + _triggeredByUserId}
+                    display="inline"
+                  >
+                    {triggeredByName}&nbsp;
+                  </Link>
+                </Box>
+              </Flex>
+            )
         }
-      </Flex>
-
     </Flex >
   )
 };

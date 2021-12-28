@@ -51,7 +51,17 @@ class ExternalEmbed extends React.Component<IProps, IState> {
     if ([this.state.targetOrigin].includes(e.origin)) {
       // communicate url changes, update navbar
       if (e.data && e.data.pathname) {
-        this.props.history.push(e.data.pathname)
+        let newPathName = e.data.pathname
+
+        /**
+         * At the moment this component is only used for handling contents within the `/academy`
+         * section of the site. If we want to use this elsewhere this should lifted outside of the component
+         * perhaps moved to an emitted event
+         */
+        if (!newPathName.startsWith(`/academy`)) {
+          newPathName = `/academy${newPathName}`
+        }
+        this.props.history.push(newPathName)
       }
       // communicate a href link clicks, open link in new tab
       if (e.data && e.data.linkClick) {

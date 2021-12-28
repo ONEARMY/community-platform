@@ -2,7 +2,7 @@ import Logger from 'pino'
 import { createPinoBrowserSend, createWriteStream } from 'pino-logflare'
 import { getConfigirationOption } from 'src/config/config';
 
-const logLevel = getConfigirationOption('REACT_APP_LOG_LEVEL', 'warn');
+const logLevel = getConfigirationOption('REACT_APP_LOG_LEVEL', 'info');
 
 let loggerInstance;
 

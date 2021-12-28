@@ -85,6 +85,7 @@ export class EventsList extends React.Component<any> {
                   }
                   onClear={() => this.props.eventStore.clearLocationSearch()}
                   styleVariant="filter"
+                  trackingCategory="Events Listing"
                 />
               </Box>
             </Flex>

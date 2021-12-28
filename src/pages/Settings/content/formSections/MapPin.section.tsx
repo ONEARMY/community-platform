@@ -100,6 +100,7 @@ export class UserMapPinSection extends React.Component<any, IState> {
                         Your workspace address *
                       </Text>
                       <LocationSearch
+                        trackingCategory="Map Pin"
                         onChange={v => {
                           props.input.onChange(v)
                           props.input.onBlur()

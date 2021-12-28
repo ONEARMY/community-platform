@@ -100,6 +100,7 @@ class Controls extends React.Component<IProps, IState> {
               this.props.onLocationChange(location)
             }}
             styleVariant="mapinput"
+            trackingCategory="Map"
           />
         </Box>
         <Flex>

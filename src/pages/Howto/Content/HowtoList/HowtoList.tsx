@@ -85,6 +85,10 @@ export class HowtoList extends React.Component<any, IState> {
     }
   }
 
+  componentWillUnmount(): void {
+    this.props.howtoStore.updateSearchValue('')
+  }
+
   public render() {
     const {
       filteredHowtos,
@@ -137,6 +141,7 @@ export class HowtoList extends React.Component<any, IState> {
           </Flex>
           <Flex ml={[0, 0, '8px']} mr={[0, 0, 'auto']} mb={['10px', '10px', 0]}>
             <SearchInput
+              data-cy="how-to-search-box"
               value={searchValue}
               placeholder="Search for a how-to"
               onChange={value => {

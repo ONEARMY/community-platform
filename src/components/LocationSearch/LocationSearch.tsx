@@ -3,7 +3,8 @@
   Uses 2 input components, the first to take raw user input, and debounce before
   updating the second which is bound to algolia's search autocomplete implementation
 */
-import * as React from 'react';
+import * as React from 'react'
+import ReactGA from 'react-ga'
 import AlgoliaPlaces from 'places.js'
 import { ALGOLIA_PLACES_CONFIG } from 'src/config/config'
 import { Input, BlackPlaceholderInput } from '../Form/elements'
@@ -12,6 +13,7 @@ import { debounceTime, map } from 'rxjs/operators'
 import styled from 'styled-components'
 import { ILocation } from 'src/models/common.models'
 import searchIcon from 'src/assets/icons/icon-search.svg'
+import { logger } from 'src/logger'
 
 interface IProps {
   placeholder: string
@@ -19,6 +21,7 @@ interface IProps {
   onChange: (selected: ILocation) => void
   onClear?: () => void
   styleVariant?: 'filter' | 'field' | 'mapinput'
+  trackingCategory?: string
 }
 interface IState {
   debouncedInputValue: string
@@ -102,12 +105,19 @@ export class LocationSearch extends React.Component<IProps, IState> {
 
   // handle changes to debounced input change
   handleInputChange(value: string) {
+    logger.debug('LocationSearch:', { value })
     this.setState({
       debouncedInputValue: value,
     })
     // need to manually trigger an input event as this is what algolia places uses to pick up change
     const event = new Event('input', { bubbles: true })
     this.placesInputRef.current.dispatchEvent(event)
+
+    ReactGA.event({
+      category: this.props?.trackingCategory || 'LocationSearch',
+      action: 'Searched for location',
+      label: value,
+    })
   }
 
   // this time we need to pass back changes from the algolia dropdown to the initial input box

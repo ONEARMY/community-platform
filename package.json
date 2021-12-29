@@ -28,7 +28,8 @@
     "storybook": "yarn workspace oa-storybook start",
     "docs": "yarn workspace oa-docs start",
     "analyze": "npx cra-bundle-analyzer && npx open-cli build/report.html",
-    "install:clean": "yarn workspace oa-scripts install:clean"
+    "install:clean": "yarn workspace oa-scripts install:clean",
+    "postinstall": "husky install"
   },
   "browserslist": {
     "production": [
@@ -151,7 +152,7 @@
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "husky": "^1.3.1",
+    "husky": "^7.0.4",
     "idb": "^6.0.0",
     "lint-staged": "^8.1.5",
     "mobx-react-devtools": "^6.0.3",

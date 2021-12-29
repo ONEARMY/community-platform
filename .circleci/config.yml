@@ -342,9 +342,9 @@ jobs:
             # https://circleci.com/docs/2.0/yarn/
             # when lock file changes, use increasingly general patterns to restore cache (also need to change `save_cache` path)
             # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
-            - yarn-packages-v14-e2e-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - yarn-packages-v14-e2e-{{ .Branch }}-
-            - yarn-packages-v14-e2e-
+            - yarn-packages-v15-e2e-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-packages-v15-e2e-{{ .Branch }}-
+            - yarn-packages-v15-e2e-
       - run:
           # Currently the e2e is tightly coupled to the wider monorepo
           # so we need to do a global install to load all of the required
@@ -363,7 +363,7 @@ jobs:
             - ~/project/scripts/node_modules
             - ~/project/packages/cypress/node_modules
             - ~/.cache/Cypress
-          key: yarn-packages-v14-e2e-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          key: yarn-packages-v15-e2e-{{ .Branch }}-{{ checksum "yarn.lock" }}
       # retrieve build folder
       - attach_workspace:
           at: '.'
@@ -391,9 +391,9 @@ jobs:
             # https://circleci.com/docs/2.0/yarn/
             # when lock file changes, use increasingly general patterns to restore cache (also need to change `save_cache` path)
             # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
-            - yarn-packages-v14-e2e-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - yarn-packages-v14-e2e-{{ .Branch }}-
-            - yarn-packages-v14-e2e-
+            - yarn-packages-v15-e2e-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-packages-v15-e2e-{{ .Branch }}-
+            - yarn-packages-v15-e2e-
       # retrieve build folder
       - attach_workspace:
           at: '.'

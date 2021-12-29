@@ -368,6 +368,10 @@ jobs:
       - attach_workspace:
           at: '.'
       - inject_instance_configuration
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build
       
   test_e2e:
     docker: *docker

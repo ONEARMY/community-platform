@@ -359,6 +359,9 @@ jobs:
             # - ~/.yarn/berry/cache
             # local cache location
             - ~/project/.yarn/cache
+            - ~/project/node_modules
+            - ~/project/scripts/node_modules
+            - ~/project/functions/node_modules
           key: yarn-packages-v10-e2e-{{ .Branch }}-{{ checksum "yarn.lock" }}
       # retrieve build folder
       - attach_workspace:

@@ -19,6 +19,7 @@ If you think something is missing, consider sending us a PR.
 - [Project structure](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--project-structure)
 - [Branch structure](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--branch-structure)
 - [Javascript style guide](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--javascript-style-guide)
+- [Commit style guide](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--commit-style-guide)
 - [Why haven't you used ...](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-why-havent-you-used-insert-favourite-languageframeworkconvention-here)
 - [Deployment](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--deployment)
 - [Joining the team](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--joining-the-team)
@@ -122,6 +123,27 @@ The `master` branch is our current development leading branch, and will autodepl
 As this is a large project spread across many developers it is important that the code is both clean and consistent. We use the Prettier style guide to enforce certain conventions through the linting system – if using VSCode (which we highly recommend) it is recommended that you install and setup the [prettier plugin](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to track errors in real time.
 
 We also expect code to follow standard best practices, such as sensible variable naming, informative comments and avoiding files larger than a couple hundred lines of code (with emphasis on usability and reusability).
+
+## 🔬 &nbsp; Commit style guide
+
+To help everyone with understanding the commit history of this project and support our automated release tooling the following commit rules are enforced. 
+
+- commit message format of `$type($scope): $message`, for example: `docs: add commit style guide`
+- maximum of 100 characters
+
+For those of you who work with git hooks, this project offers a husky commit message as well.
+
+Here's a more detailed explanation of how you can format the commit message heading:
+
+```
+<type>(<scope>): <short summary>
+  │       │             │
+  │       │             └─⫸ Summary in present tense. Not capitalized. No period at the end.
+  │       │
+  │       └─⫸ Commit Scope (optional): platform|docs|storybook|functions|scripts
+  │
+  └─⫸ Commit Type: build|ci|docs|feat|fix|perf|refactor|test
+```
 
 ### 😖 Why haven't you used [insert favourite language/framework/convention here]
 

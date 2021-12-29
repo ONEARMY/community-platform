@@ -185,12 +185,12 @@ commands:
       - *restore_yarn_cache
       - *install_packages
       - *save_yarn_cache
-  inject_instance_configuration: 
-    steps: 
-      - run: 
+  inject_instance_configuration:
+    steps:
+      - run:
           name: Inject target environment configuration
           command: |
-                yarn build:inject-config
+            yarn build:inject-config
 
   firebase_deploy:
     description: Deploy to Firebase
@@ -236,6 +236,18 @@ examples:
 #  Jobs - Independently specified lists of tasks and environments for execution
 ######################################################################################################
 jobs:
+  lint:
+    docker: *docker
+    steps:
+      - checkout
+      - attach_workspace:
+          at: '.'
+      - run:
+          name: Linting commits
+          command: |
+            npm config set package-lock false
+            npm i @commitlint/config-conventional
+            npx commitlint --from=$(git merge-base remotes/origin/${CIRCLE_BRANCH} master) --verbose
   # Prepare node module caches so that future tasks run more quickly
   # NOTE - not currently used as we only have one workflow
   setup:
@@ -252,7 +264,7 @@ jobs:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - checkout
       - *restore_yarn_cache
-      - run: 
+      - run:
           name: Install dependencies
           command: yarn workspaces focus one-army-community-platform
       - run:
@@ -267,7 +279,7 @@ jobs:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - checkout
       - *restore_yarn_cache
-      - run: 
+      - run:
           name: Install dependencies
           command: yarn workspaces focus one-army-community-platform
       # As environment variables can only be set from strings add additional dynamic variable mappings here
@@ -289,7 +301,7 @@ jobs:
           root: .
           paths:
             - build
-  storybook: 
+  storybook:
     docker: *docker
     resource_class: medium
     steps:
@@ -372,42 +384,49 @@ workflows:
   main_workflow:
     # by default jobs will run concurrently, so specify requires if want to run sequentially
     jobs:
+      - lint:
+          name: Lint commits
       #---------------------- Test ----------------------
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:
+          requires:
+            - 'Lint commits'
           name: Build Application
-          context: 
-            build-context
+          context: build-context
       - test_unit:
           name: 'Unit tests'
-          filters: 
+          requires:
+            - 'Lint commits'
+          filters:
             branches:
               ignore:
                 - production
       - storybook:
           name: Build Storybook
+          requires:
+            - 'Lint commits'
           filters:
             branches:
-              ignore: 
+              ignore:
                 - production
       - test_e2e:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           requires:
             - 'Build Application'
             - 'Unit tests'
-          context: 
+          context:
             - e2e-tests
           matrix:
             parameters:
               CI_NODE: [1, 2]
               CI_BROWSER: ['chrome', 'firefox']
-          filters: 
+          filters:
             branches:
               ignore:
                 - production
       #---------------------- Development Instances Build and Deploy ----------------------
       - deploy:
-          name: "Deploy: dev.onearmy.world"
+          name: 'Deploy: dev.onearmy.world'
           requires:
             - test_e2e
           <<: *filter_only_master
@@ -417,7 +436,7 @@ workflows:
             - circle-ci-slack-context
             - community-platform-dev
       - deploy:
-          name: "Deploy: dev.community.projectkamp.com"
+          name: 'Deploy: dev.community.projectkamp.com'
           requires:
             - test_e2e
           <<: *filter_only_master
@@ -442,7 +461,7 @@ workflows:
           <<: *filter_only_production
           <<: *slack_custom_hold_message
       - deploy:
-          name: "Deploy: community.preciousplastic.com"
+          name: 'Deploy: community.preciousplastic.com'
           requires:
             - 'approve_release'
           <<: *filter_only_production
@@ -452,7 +471,7 @@ workflows:
             - circle-ci-slack-context
             - community-platform-production
       - deploy:
-          name: "Deploy: community.projectkamp.com"
+          name: 'Deploy: community.projectkamp.com'
           requires:
             - 'approve_release'
           <<: *filter_only_production

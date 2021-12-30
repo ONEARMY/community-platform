@@ -1,11 +1,13 @@
 require('dotenv').config()
 import * as testing from '@firebase/rules-unit-testing';
 import { readFileSync } from 'fs';
-import { setLogLevel, doc, getDoc } from 'firebase/firestore'
+import { setLogLevel, doc, getDoc, setDoc } from 'firebase/firestore'
 
 const { initializeTestEnvironment, assertFails, assertSucceeds } = testing;
 
-describe('v3_howtos', () => {
+const DOCUMENT_BASE = `v3_howtos`;
+
+describe(DOCUMENT_BASE, () => {
     let testEnv;
     beforeAll(async () => {
 
@@ -27,9 +29,36 @@ describe('v3_howtos', () => {
         await testEnv.clearFirestore();
     })
 
-    it('allows READ by all visitors', async () => {
-        const unauthedDb = testEnv.unauthenticatedContext().firestore();
+    describe('anonymous users', () => {
+        it('allows READ', async () => {
+            const unauthedDb = testEnv.unauthenticatedContext().firestore();
 
-        await assertSucceeds(getDoc(doc(unauthedDb, 'v3_howtos/bar')));
+            await assertSucceeds(getDoc(doc(unauthedDb, `${DOCUMENT_BASE}/bar`)));
+        });
+
+        it('does not allow WRITE', async () => {
+            const unauthedDb = testEnv.unauthenticatedContext().firestore();
+
+            await assertFails(setDoc(doc(unauthedDb, `${DOCUMENT_BASE}/bar`), {
+                foo: 'bar'
+            }));
+        });
     });
+
+    describe('authenticated user', () => {
+        it('can WRITE', async () => {
+            const authedDb = testEnv.authenticatedContext('jasper').firestore();
+
+            await assertSucceeds(setDoc(doc(authedDb, `${DOCUMENT_BASE}/new-document`), {
+                foo: 'bar'
+            }));
+        });
+
+        it.todo('can not modify document created by another user')
+        it.todo('can modify document created by current user')
+    })
+
+    describe('admin user', () => {
+        it.todo('can modify a document created by another user')
+    })
 });

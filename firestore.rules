@@ -5,15 +5,16 @@ service cloud.firestore {
       allow read, write: if false
     }
 
+    match /v3_howtos/{slug} {
+      allow read;
+      allow write: if request.auth != null
+    }
+
     match /research_rev20201020/{slug} {
       allow read;
     }
 
     match /v3_events/{slug} {
-      allow read;
-    }
-
-    match /v3_howtos/{slug} {
       allow read;
     }
 

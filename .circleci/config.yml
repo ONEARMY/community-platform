@@ -245,6 +245,12 @@ jobs:
 
   # Create a production build
   # NOTE - not currently used in test workflow as different build_env required for each machine
+  test_security_rules:
+    docker: 
+      - image: timbru31/java-node:alpine-12
+    steps:
+      - checkout
+      - run: cd firestore-security-rule-tests && yarn workspaces focus firestore-security-rule-tests && yarn test-with-emulator
   test_unit:
     docker: *docker
     resource_class: small
@@ -376,16 +382,28 @@ workflows:
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:
           name: Build Application
+          requires:
+            - "Security rules validation"
           context: 
             build-context
+      - test_security_rules:
+          name: 'Security rules validation'
+          filters:
+            branches:
+              ignore:
+                - production
       - test_unit:
           name: 'Unit tests'
+          requires:
+            - "Security rules validation"
           filters: 
             branches:
               ignore:
                 - production
       - storybook:
           name: Build Storybook
+          requires:
+            - "Security rules validation"
           filters:
             branches:
               ignore: 

@@ -11,11 +11,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^10.0.0",
-    "jest": "26",
     "@firebase/rules-unit-testing": "^2.0.1",
     "@types/jest": "26",
+    "dotenv": "^10.0.0",
     "firebase": "^9.6.1",
+    "firebase-tools": "^10.0.1",
+    "jest": "26",
     "ts-jest": "26"
   }
 }

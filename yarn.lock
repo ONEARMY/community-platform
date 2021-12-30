@@ -10494,6 +10494,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cli-table@npm:0.3.11":
+  version: 0.3.11
+  resolution: "cli-table@npm:0.3.11"
+  dependencies:
+    colors: 1.0.3
+  checksum: 59fb61f992ac9bc8610ed98c72bf7f5d396c5afb42926b6747b46b0f8bb98a0dfa097998e77542ac334c1eb7c18dbf4f104d5783493273c5ec4c34084aa7c663
+  languageName: node
+  linkType: hard
+
 "cli-table@npm:^0.3.1":
   version: 0.3.6
   resolution: "cli-table@npm:0.3.6"
@@ -14814,6 +14823,74 @@ __metadata:
   languageName: node
   linkType: hard
 
+"firebase-tools@npm:^10.0.1":
+  version: 10.0.1
+  resolution: "firebase-tools@npm:10.0.1"
+  dependencies:
+    "@google-cloud/pubsub": ^2.7.0
+    "@types/archiver": ^5.1.0
+    JSONStream: ^1.2.1
+    abort-controller: ^3.0.0
+    ajv: ^6.12.6
+    archiver: ^5.0.0
+    body-parser: ^1.19.0
+    chokidar: ^3.0.2
+    cjson: ^0.3.1
+    cli-color: ^1.2.0
+    cli-table: 0.3.11
+    commander: ^4.0.1
+    configstore: ^5.0.1
+    cors: ^2.8.5
+    cross-env: ^5.1.3
+    cross-spawn: ^7.0.1
+    csv-streamify: ^3.0.4
+    dotenv: ^6.1.0
+    exegesis: ^2.5.7
+    exegesis-express: ^2.0.0
+    exit-code: ^1.0.2
+    express: ^4.16.4
+    filesize: ^6.1.0
+    fs-extra: ^5.0.0
+    glob: ^7.1.2
+    google-auth-library: ^6.1.3
+    inquirer: ~6.3.1
+    js-yaml: ^3.13.1
+    jsonwebtoken: ^8.5.1
+    leven: ^3.1.0
+    lodash: ^4.17.21
+    marked: ^0.7.0
+    marked-terminal: ^3.3.0
+    mime: ^2.5.2
+    minimatch: ^3.0.4
+    morgan: ^1.10.0
+    node-fetch: ^2.6.1
+    open: ^6.3.0
+    ora: ^3.4.0
+    portfinder: ^1.0.23
+    progress: ^2.0.3
+    proxy-agent: ^5.0.0
+    request: ^2.87.0
+    rimraf: ^3.0.0
+    semver: ^5.7.1
+    superstatic: ^7.1.0
+    tar: ^4.3.0
+    tcp-port-used: ^1.0.1
+    tmp: 0.0.33
+    triple-beam: ^1.3.0
+    tweetsodium: 0.0.5
+    universal-analytics: ^0.4.16
+    unzipper: ^0.10.10
+    update-notifier: ^5.1.0
+    uuid: ^8.3.2
+    winston: ^3.0.0
+    winston-transport: ^4.4.0
+    ws: ^7.2.3
+  bin:
+    firebase: lib/bin/firebase.js
+  checksum: 025bad31a5bbcc07414ec6a886a1b143ce946b2226d8ef435a90686ae8dc4b14e56b6f1542e63fa46ee6c275fc5f38b4be5307211d21b0fca42676dd47008c6e
+  languageName: node
+  linkType: hard
+
 "firebase@npm:^8.8.1":
   version: 8.10.0
   resolution: "firebase@npm:8.10.0"
@@ -14879,6 +14956,7 @@ __metadata:
     "@types/jest": 26
     dotenv: ^10.0.0
     firebase: ^9.6.1
+    firebase-tools: ^10.0.1
     jest: 26
     ts-jest: 26
   languageName: unknown

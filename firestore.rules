@@ -1,0 +1,40 @@
+rules_version='2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false
+    }
+
+    match /research_rev20201020/{slug} {
+      allow read;
+    }
+
+    match /v3_events/{slug} {
+      allow read;
+    }
+
+    match /v3_howtos/{slug} {
+      allow read;
+    }
+
+    match /v3_mappins/{slug} {
+      allow read;
+    }
+
+    match /v3_tags/{slug} {
+      allow read;
+    }
+
+    match /v3_users/{slug} {
+      allow read;
+    }
+
+// Resources to be implemented
+// research_rev20201020
+// v3_events
+// v3_howtos
+// v3_mappins
+// v3_tags
+// v3_users
+  }
+}

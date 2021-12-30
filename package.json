@@ -6,7 +6,8 @@
     "shared",
     "packages/*",
     "scripts",
-    "cypress"
+    "cypress",
+    "firestore-security-rule-tests"
   ],
   "private": true,
   "main": "lib/index.js",

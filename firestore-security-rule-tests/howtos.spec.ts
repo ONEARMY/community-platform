@@ -54,11 +54,41 @@ describe(DOCUMENT_BASE, () => {
             }));
         });
 
-        it.todo('can not modify document created by another user')
-        it.todo('can modify document created by current user')
+        it('can not modify document created by another user', async () => {
+            const authedDb = testEnv.authenticatedContext('jasper').firestore();
+            await testEnv.withSecurityRulesDisabled(async (context) => {
+                await setDoc(doc(context.firestore(), `${DOCUMENT_BASE}/not-jasper-doc`), { _createdBy: 'not-jasper' });
+            });
+
+            await assertFails(setDoc(doc(authedDb, `${DOCUMENT_BASE}/not-jasper-doc`), {
+                foo: 'bar'
+            }));
+        })
+
+        it('can modify document created by current user', async () => {
+            const authedDb = testEnv.authenticatedContext('jasper').firestore();
+            await testEnv.withSecurityRulesDisabled(async (context) => {
+                await setDoc(doc(context.firestore(), `${DOCUMENT_BASE}/jasper-doc`), { _createdBy: 'jasper' });
+            });
+
+            await assertSucceeds(setDoc(doc(authedDb, `${DOCUMENT_BASE}/not-jasper-doc`), {
+                foo: 'bar'
+            }));
+        })
     })
 
     describe('admin user', () => {
-        it.todo('can modify a document created by another user')
+        it.skip('can modify document created by another user', async () => {
+            // Arrange
+            const authedDb = testEnv.authenticatedContext('jasper', { foo: 'breath' }).firestore();
+            await testEnv.withSecurityRulesDisabled(async (context) => {
+                await setDoc(doc(context.firestore(), `${DOCUMENT_BASE}/not-jasper-doc`), { _createdBy: 'not-jasper' });
+            });
+
+            // Act/Assert
+            await assertSucceeds(setDoc(doc(authedDb, `${DOCUMENT_BASE}/not-jasper-doc`), {
+                foo: 'bar'
+            }));
+        })
     })
 });

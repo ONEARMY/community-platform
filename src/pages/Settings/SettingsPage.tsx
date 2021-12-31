@@ -212,9 +212,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           />
                         )}
                         {/* General fields */}
-                        {values.profileType !== 'member' && (
                           <UserMapPinSection />
-                        )}
                         <UserInfosSection
                           formValues={values}
                           mutators={form.mutators}

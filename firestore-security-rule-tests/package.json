@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "jest:watch": "jest . --watch",
     "jest": "jest .",
     "test-with-emulator": "firebase emulators:exec --only firestore 'yarn jest'"
   },
@@ -17,6 +18,7 @@
     "firebase": "^9.6.1",
     "firebase-tools": "^10.0.1",
     "jest": "26",
-    "ts-jest": "26"
+    "ts-jest": "26",
+    "typescript": "4.2.4"
   }
 }

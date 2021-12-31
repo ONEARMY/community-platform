@@ -1,0 +1,1 @@
+export const pathToFirestoreRules = '../../firestore.rules'

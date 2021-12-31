@@ -14948,9 +14948,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"firestore-security-rule-tests@workspace:firestore-security-rule-tests":
+"firestore-security-rule-tests@workspace:packages/firestore-security-rule-tests":
   version: 0.0.0-use.local
-  resolution: "firestore-security-rule-tests@workspace:firestore-security-rule-tests"
+  resolution: "firestore-security-rule-tests@workspace:packages/firestore-security-rule-tests"
   dependencies:
     "@firebase/rules-unit-testing": ^2.0.1
     "@types/jest": 26

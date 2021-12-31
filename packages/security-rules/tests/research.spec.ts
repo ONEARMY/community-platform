@@ -2,10 +2,11 @@ require('dotenv').config()
 import * as testing from '@firebase/rules-unit-testing';
 import { readFileSync } from 'fs';
 import { setLogLevel, doc, getDoc } from 'firebase/firestore'
+import { pathToFirestoreRules } from './constants';
 
 const { initializeTestEnvironment, assertFails, assertSucceeds } = testing;
 
-describe('community platform', () => {
+describe('research_rev20201020', () => {
     let testEnv;
     beforeAll(async () => {
 
@@ -15,7 +16,7 @@ describe('community platform', () => {
 
         testEnv = await initializeTestEnvironment({
             projectId: process.env.PROJECT_ID,
-            firestore: { rules: readFileSync('../firestore.rules', 'utf8') },
+            firestore: { rules: readFileSync(pathToFirestoreRules, 'utf8') },
         });
     })
 
@@ -27,17 +28,9 @@ describe('community platform', () => {
         await testEnv.clearFirestore();
     })
 
-    it('should not allow users to read from a random collection', async () => {
+    it('allows READ by all visitors', async () => {
         const unauthedDb = testEnv.unauthenticatedContext().firestore();
 
-        await assertFails(getDoc(doc(unauthedDb, 'foo/bar')));
+        await assertSucceeds(getDoc(doc(unauthedDb, 'research_rev20201020/bar')));
     });
-
-    describe('users', () => {
-        it('allows READ by all visitors', async () => {
-            const unauthedDb = testEnv.unauthenticatedContext().firestore();
-
-            await assertSucceeds(getDoc(doc(unauthedDb, 'v3_users/bar')));
-        });
-    })
 });

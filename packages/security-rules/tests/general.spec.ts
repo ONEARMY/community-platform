@@ -5,7 +5,7 @@ import { setLogLevel, doc, getDoc } from 'firebase/firestore'
 
 const { initializeTestEnvironment, assertFails, assertSucceeds } = testing;
 
-describe('v3_events', () => {
+describe('community platform', () => {
     let testEnv;
     beforeAll(async () => {
 
@@ -15,7 +15,7 @@ describe('v3_events', () => {
 
         testEnv = await initializeTestEnvironment({
             projectId: process.env.PROJECT_ID,
-            firestore: { rules: readFileSync('../firestore.rules', 'utf8') },
+            firestore: { rules: readFileSync('../../firestore.rules', 'utf8') },
         });
     })
 
@@ -27,9 +27,17 @@ describe('v3_events', () => {
         await testEnv.clearFirestore();
     })
 
-    it('allows READ by all visitors', async () => {
+    it('should not allow users to read from a random collection', async () => {
         const unauthedDb = testEnv.unauthenticatedContext().firestore();
 
-        await assertSucceeds(getDoc(doc(unauthedDb, 'v3_events/bar')));
+        await assertFails(getDoc(doc(unauthedDb, 'foo/bar')));
     });
+
+    describe('users', () => {
+        it('allows READ by all visitors', async () => {
+            const unauthedDb = testEnv.unauthenticatedContext().firestore();
+
+            await assertSucceeds(getDoc(doc(unauthedDb, 'v3_users/bar')));
+        });
+    })
 });

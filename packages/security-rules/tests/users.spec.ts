@@ -2,6 +2,7 @@ require('dotenv').config()
 import * as testing from '@firebase/rules-unit-testing';
 import { readFileSync } from 'fs';
 import { setLogLevel, doc, getDoc } from 'firebase/firestore'
+import { pathToFirestoreRules } from './constants';
 
 const { initializeTestEnvironment, assertFails, assertSucceeds } = testing;
 
@@ -15,7 +16,7 @@ describe('v3_users', () => {
 
         testEnv = await initializeTestEnvironment({
             projectId: process.env.PROJECT_ID,
-            firestore: { rules: readFileSync('../firestore.rules', 'utf8') },
+            firestore: { rules: readFileSync(pathToFirestoreRules, 'utf8') },
         });
     })
 

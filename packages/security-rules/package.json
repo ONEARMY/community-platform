@@ -12,6 +12,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "private": true,
   "dependencies": {
     "@firebase/rules-unit-testing": "^2.0.1",
     "@types/jest": "26",

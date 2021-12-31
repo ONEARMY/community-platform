@@ -2,10 +2,11 @@ require('dotenv').config()
 import * as testing from '@firebase/rules-unit-testing';
 import { readFileSync } from 'fs';
 import { setLogLevel, doc, getDoc } from 'firebase/firestore'
+import { pathToFirestoreRules } from './constants';
 
 const { initializeTestEnvironment, assertFails, assertSucceeds } = testing;
 
-describe('research_rev20201020', () => {
+describe('v3_tags', () => {
     let testEnv;
     beforeAll(async () => {
 
@@ -15,7 +16,7 @@ describe('research_rev20201020', () => {
 
         testEnv = await initializeTestEnvironment({
             projectId: process.env.PROJECT_ID,
-            firestore: { rules: readFileSync('../firestore.rules', 'utf8') },
+            firestore: { rules: readFileSync(pathToFirestoreRules, 'utf8') },
         });
     })
 
@@ -30,6 +31,6 @@ describe('research_rev20201020', () => {
     it('allows READ by all visitors', async () => {
         const unauthedDb = testEnv.unauthenticatedContext().firestore();
 
-        await assertSucceeds(getDoc(doc(unauthedDb, 'research_rev20201020/bar')));
+        await assertSucceeds(getDoc(doc(unauthedDb, 'v3_tags/bar')));
     });
 });

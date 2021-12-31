@@ -1,7 +1,7 @@
 require('dotenv').config()
 import * as testing from '@firebase/rules-unit-testing';
 import { readFileSync } from 'fs';
-import { setLogLevel, doc, getDoc, setDoc } from 'firebase/firestore'
+import { setLogLevel, doc, getDoc, setDoc, deleteDoc } from 'firebase/firestore'
 
 const { initializeTestEnvironment, assertFails, assertSucceeds } = testing;
 
@@ -33,12 +33,14 @@ describe(DOCUMENT_BASE, () => {
         it('allows READ', async () => {
             const unauthedDb = testEnv.unauthenticatedContext().firestore();
 
+            // Act/Assert
             await assertSucceeds(getDoc(doc(unauthedDb, `${DOCUMENT_BASE}/bar`)));
         });
 
         it('does not allow WRITE', async () => {
             const unauthedDb = testEnv.unauthenticatedContext().firestore();
 
+            // Act/Assert
             await assertFails(setDoc(doc(unauthedDb, `${DOCUMENT_BASE}/bar`), {
                 foo: 'bar'
             }));
@@ -49,31 +51,52 @@ describe(DOCUMENT_BASE, () => {
         it('can WRITE', async () => {
             const authedDb = testEnv.authenticatedContext('jasper').firestore();
 
+            // Act/Assert
             await assertSucceeds(setDoc(doc(authedDb, `${DOCUMENT_BASE}/new-document`), {
                 foo: 'bar'
             }));
         });
 
-        it('can not modify document created by another user', async () => {
+        it('can not UPDATE document created by another user', async () => {
             const authedDb = testEnv.authenticatedContext('jasper').firestore();
             await testEnv.withSecurityRulesDisabled(async (context) => {
                 await setDoc(doc(context.firestore(), `${DOCUMENT_BASE}/not-jasper-doc`), { _createdBy: 'not-jasper' });
             });
 
+            // Act/Assert
             await assertFails(setDoc(doc(authedDb, `${DOCUMENT_BASE}/not-jasper-doc`), {
                 foo: 'bar'
             }));
         })
 
-        it('can modify document created by current user', async () => {
-            const authedDb = testEnv.authenticatedContext('jasper').firestore();
+        it('can UPDATE document created by current user', async () => {
+            // Arrange
+            const testUserSlug = 'jasper';
+            const authedDb = testEnv.authenticatedContext(testUserSlug).firestore();
             await testEnv.withSecurityRulesDisabled(async (context) => {
-                await setDoc(doc(context.firestore(), `${DOCUMENT_BASE}/jasper-doc`), { _createdBy: 'jasper' });
+                const ref = context.firestore();
+                await setDoc(doc(ref, `${DOCUMENT_BASE}/jasper-doc`), { _createdBy: 'jasper' });
+                await setDoc(doc(ref, `v3_users/jasper`), { _authID: testUserSlug });
             });
 
-            await assertSucceeds(setDoc(doc(authedDb, `${DOCUMENT_BASE}/not-jasper-doc`), {
+            // Act/Assert
+            await assertSucceeds(setDoc(doc(authedDb, `${DOCUMENT_BASE}/jasper-doc`), {
                 foo: 'bar'
             }));
+        });
+
+        it('can DELETE document created by current user', async () => {
+            // Arrange
+            const testUserSlug = 'jasper';
+            const authedDb = testEnv.authenticatedContext(testUserSlug).firestore();
+            await testEnv.withSecurityRulesDisabled(async (context) => {
+                const ref = context.firestore();
+                await setDoc(doc(ref, `${DOCUMENT_BASE}/howto-from-jasper`), { _createdBy: testUserSlug });
+                await setDoc(doc(ref, `v3_users/jasper`), { _authID: testUserSlug });
+            });
+
+            // Act/Assert
+            await assertSucceeds(deleteDoc(doc(authedDb, `${DOCUMENT_BASE}/howto-from-jasper`)));
         })
     })
 

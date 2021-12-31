@@ -6,7 +6,8 @@
   "scripts": {
     "jest:watch": "jest . --watch",
     "jest": "jest .",
-    "test-with-emulator": "firebase emulators:exec --only firestore 'yarn jest'"
+    "test-with-emulator": "firebase emulators:exec --only firestore 'yarn jest'",
+    "test-with-emulator:watch": "firebase emulators:exec --only firestore 'yarn jest:watch'"
   },
   "keywords": [],
   "author": "",

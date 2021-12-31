@@ -1,4 +1,5 @@
 rules_version='2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
     match /{document=**} {
@@ -7,10 +8,10 @@ service cloud.firestore {
 
     match /v3_howtos/{slug} {
       allow read;
-      allow create: if request.auth != null
-      allow update: if
-        request.auth != null &&
-        get(/databases/$(database)/documents/v3_users/$(resource.data._createdBy))._authID == request.auth.uid
+      allow create: if isSignedIn()
+      allow update, delete: if
+        isSignedIn() &&
+        isOwnedByAuthenticatedUser()
     }
 
     match /research_rev20201020/{slug} {
@@ -33,12 +34,14 @@ service cloud.firestore {
       allow read;
     }
 
-// Resources to be implemented
-// research_rev20201020
-// v3_events
-// v3_howtos
-// v3_mappins
-// v3_tags
-// v3_users
+    function isOwnedByAuthenticatedUser() {
+      return 
+        exists(/databases/$(database)/documents/v3_users/$(resource.data._createdBy))
+        && get(/databases/$(database)/documents/v3_users/$(resource.data._createdBy)).data._authID == request.auth.uid
+    }
+
+    function isSignedIn() {
+      return request.auth != null
+    }
   }
 }

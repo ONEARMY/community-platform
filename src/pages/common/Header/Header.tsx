@@ -2,7 +2,9 @@ import { Component } from 'react'
 import { Flex } from 'rebass/styled-components'
 import styled from 'styled-components'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
+import NotificationsIcon from 'src/pages/common/Header/Menu/Notifications/NotificationsIcon'
 import Notifications from 'src/pages/common/Header/Menu/Notifications/Notifications'
+import NotificationsMobile from 'src/pages/common/Header/Menu/Notifications/NotificationsMobile'
 import MenuDesktop from 'src/pages/common/Header/Menu/MenuDesktop'
 import MenuMobilePanel from 'src/pages/common/Header/Menu/MenuMobile/MenuMobilePanel'
 import { motion } from 'framer-motion'
@@ -13,11 +15,25 @@ import { observer, inject } from 'mobx-react'
 import { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
 import { isModuleSupported, MODULE } from 'src/modules'
 
-interface IProps {}
+interface IProps { }
 
 interface IInjectedProps extends IProps {
   mobileMenuStore: MobileMenuStore
 }
+
+const MobileNotificationsWrapper = styled(Flex)`
+  position: relative;
+
+  @media only screen and (max-width: ${theme.breakpoints[1]}) {
+    display: flex;
+    margin-left: 1em;
+    margin-right: auto;
+  }
+
+  @media only screen and (min-width: ${theme.breakpoints[1]}) {
+    display: none;
+  }
+`
 
 const MobileMenuWrapper = styled(Flex)`
   position: relative;
@@ -80,6 +96,7 @@ export class Header extends Component<IProps> {
 
   render() {
     const menu = this.injected.mobileMenuStore
+    console.log(menu.showMobilePanel);
     return (
       <>
         <Flex
@@ -95,6 +112,9 @@ export class Header extends Component<IProps> {
           <Flex>
             <Logo isMobile={true} />
           </Flex>
+          <MobileNotificationsWrapper>
+            <NotificationsIcon onCLick={() => menu.toggleMobileNotifications()}/>
+          </MobileNotificationsWrapper>
           <DesktopMenuWrapper className="menu-desktop" px={2}>
             <MenuDesktop />
             <Notifications isMobile={false} />
@@ -122,6 +142,13 @@ export class Header extends Component<IProps> {
           <AnimationContainer key={'mobilePanelContainer'}>
             <MobileMenuWrapper>
               <MenuMobilePanel />
+            </MobileMenuWrapper>
+          </AnimationContainer>
+        )}
+        {menu.showMobileNotifications && (
+          <AnimationContainer key={'mobileNotificationsContainer'}>
+            <MobileMenuWrapper>
+              <NotificationsMobile />
             </MobileMenuWrapper>
           </AnimationContainer>
         )}

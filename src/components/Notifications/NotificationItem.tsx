@@ -25,12 +25,12 @@ export const NotificationItem: React.FC<IProps> = ({
       flexDirection="column"
       bg={'white'}
       width="100%"
-      style={{ fontSize: '0.9em', width: '340px', padding: '1em 0em 1em 0em', borderBottom: 'groove'}}
+      style={{ fontSize: '0.9em', padding: '1em 0em 1em 0em', borderBottom: 'groove'}}
     >
         {
           type === "howto_useful" ?
             (
-              <Flex>
+              <Flex style={{textAlign: 'left'}}>
                 <Box
                 width={1/5}
                 style={{textAlign: 'center'}}

@@ -309,8 +309,10 @@ export class UserStore extends ModuleStore {
           read: false
         } 
 
-        const user = await this.getUserProfile(user_id)
-
+        const user = await this.getUserProfile(user_id);
+        const notifications = user.notifications ? [...user.notifications, newNotification]
+        : [newNotification]
+        await this.updateUserProfile({ notifications });
         const updatedUser: IUser = {
           ...toJS(user),
           notifications: user.notifications
@@ -322,7 +324,7 @@ export class UserStore extends ModuleStore {
           .collection<IUser>(COLLECTION_NAME)
           .doc(updatedUser._authID)
 
-        await dbRef.set(updatedUser)
+        await dbRef.set(updatedUser)        
       }
 
     } catch (err) {
@@ -332,17 +334,14 @@ export class UserStore extends ModuleStore {
   }
 
   @action
-  public async markNotificationRead(id: string) {
+  public async markAllNotificationsRead() {
     try {
       const user = this.activeUser
-      if (user && id) {
-        const notifications = toJS(user.notifications)
-        const notification = notifications?.find(
-          notification => notification._id == id
-        )
-        if (notification) {
+      if (user) {
+        const notifications = toJS(user.notifications);
+        notifications?.forEach(notification =>
           notification.read = true
-        }
+        );
         const updatedUser: IUser = {
           ...toJS(user),
           notifications,
@@ -352,7 +351,8 @@ export class UserStore extends ModuleStore {
           .collection<IUser>(COLLECTION_NAME)
           .doc(updatedUser._authID)
 
-        await dbRef.set(updatedUser)
+        await dbRef.set(updatedUser);
+        await this.updateUserProfile({ notifications });
 
       }
     } catch (err) {

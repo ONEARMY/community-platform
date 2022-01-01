@@ -1,35 +1,61 @@
-import * as React from 'react'
-import { Box } from 'rebass'
+import { Component } from 'react'
+import theme from 'src/themes/styled.theme'
 import styled from 'styled-components'
-import { UserStore } from 'src/stores/User/user.store'
+import { Box } from 'rebass/styled-components'
 import { inject, observer } from 'mobx-react'
+import { ThemeStore } from 'src/stores/Theme/theme.store'
 import Flex from 'src/components/Flex'
 import { NotificationList } from 'src/components/Notifications/NotificationList'
 import { Button } from 'src/components/Button'
 import Text from 'src/components/Text'
+import { UserStore } from 'src/stores/User/user.store'
+
 
 interface IProps {
 }
 
 interface IInjectedProps extends IProps {
-  userStore: UserStore,
+  userStore: UserStore
 }
-
-const ModalContainer = styled(Box)`
-  max-width: 100%;
-  max-height: 100%;
+const PanelContainer = styled(Box)`
+  width: 100%;
   position: absolute;
-  right: 10px;
-  top: 60px;
+  left: 0;
+  right: 0;
+  display: block;
+  z-index: ${theme.zIndex.header};
   height: 100%;
 `
+
+const PanelMenu = styled(Box)`
+  background-color: ${theme.colors.white};
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  display: block !important;
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  overflow: visible;
+  min-width: 200px;
+`
+export const PanelItem = styled(Box as any)`
+  padding: ${theme.space[3]}px 0px;
+`
+
+export const MenuMobileLinkContainer = styled(Box as any)`
+  border-top: 1px solid ${theme.colors.lightgrey};
+  border-bottom: 1px solid ${theme.colors.lightgrey};
+  margin-top: 5px;
+`
+
 const ModalContainerInner = styled(Box)`
   position: relative;
   background: white;
   border: 2px solid black;
   border-radius: 5px;
   margin: 1em;
-  max-height: 380px;
   overflow-y: scroll;
 `
 
@@ -38,31 +64,26 @@ const ModalItem = styled(Box)`
   flex-direction: column;
   color: #000;
   padding: 10px 30px 10px 30px;
-  text-align: left;
+  text-align: center;
   width: 100%;
-  max-width: 100%;
-  max-height: 100%;
   }
 `
+
 @inject('userStore')
 @observer
-export class NotificationsModal extends React.Component<IProps> {
-  constructor(props: IProps) {
-    super(props)
-  }
-
-  get injected() {
-    return this.props as IInjectedProps
-  }
-
+export class NotificationsMobile extends Component {
+    get injected() {
+        return this.props as IInjectedProps
+      }
 
   render() {
     const user = this.injected.userStore.user;
     const notifications = user?.notifications?.filter(notification => !notification.read);
-
     return (
-      <ModalContainer>
-        {!notifications || notifications?.length === 0 ?
+      <>
+        <PanelContainer>
+          <PanelMenu>
+          {!notifications || notifications?.length === 0 ?
           <ModalContainerInner>
             <Flex>
               <ModalItem>
@@ -72,16 +93,18 @@ export class NotificationsModal extends React.Component<IProps> {
           </ModalContainerInner>
           : <ModalContainerInner>
             <Flex>
-              <ModalItem>
+              <ModalItem style={{textAlign: "center"}}>
                 Notifications
               </ModalItem>
             </Flex>
             <Flex>
+                <ModalItem>
               <NotificationList notifications={notifications} />
+              </ModalItem>
             </Flex>
             <Flex>
               <Button variant="subtle" fontSize="14px"
-                style={{margin: "1em"}}
+                style={{margin: "0 auto 1em auto"}}
                 onClick={() => this.injected.userStore.markAllNotificationsRead()}>
                 <Flex>
                   <Text>Clear notifications</Text>
@@ -90,7 +113,11 @@ export class NotificationsModal extends React.Component<IProps> {
             </Flex>
           </ModalContainerInner>
         }
-      </ModalContainer>
+          </PanelMenu>
+        </PanelContainer>
+      </>
     )
   }
 }
+
+export default NotificationsMobile

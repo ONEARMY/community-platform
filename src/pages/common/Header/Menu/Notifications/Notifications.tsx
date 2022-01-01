@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react'
 import Flex from 'src/components/Flex'
 import Icon from 'src/components/Icons'
 import { NotificationsModal } from './NotificationsModal'
+import NotificationsIcon from './NotificationsIcon'
 
 
 interface IState {
@@ -45,10 +46,8 @@ export default class Notifications extends Component<IProps, IState> {
           this.props.isMobile ? (
             ""
           ) : (
-            <div data-cy="user-menu">
-              <Flex onClick={() => this.toggleNotificationsModal()} ml={1}>
-                <Icon glyph="thunderbolt" size={40} color={"orange"}  />
-              </Flex>
+            <div>
+              <NotificationsIcon onCLick={() => this.toggleNotificationsModal()}/>
               <Flex>
                 {showNotificationsModal && (
                     <NotificationsModal/>

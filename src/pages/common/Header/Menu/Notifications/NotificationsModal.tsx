@@ -30,7 +30,7 @@ const ModalContainerInner = styled(Box)`
   border-radius: 5px;
   margin: 1em;
   max-height: 380px;
-  overflow-y: scroll;
+  overflow-y: auto;
 `
 
 const ModalItem = styled(Box)`

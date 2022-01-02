@@ -1,24 +1,18 @@
 import React from 'react'
 import { Box, Image } from 'rebass'
-
 import { Flex } from 'rebass'
 import { INotification } from 'src/models'
-
 import { Link } from 'src/components/Links'
-
 import IconComment from 'src/assets/icons/icon-comment.svg'
 import IconUseful from 'src/assets/icons/icon-useful.svg'
 
-
 export interface IProps extends INotification { }
-
 
 export const NotificationItem: React.FC<IProps> = ({
   _triggeredByUserId,
   triggeredByName,
   howToId,
-  type,
-  read
+  type
 }) => {
   return (
     <Flex

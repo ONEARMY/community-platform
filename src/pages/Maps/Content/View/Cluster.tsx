@@ -31,16 +31,18 @@ export const Clusters: React.FunctionComponent<IProps> = ({
       // This means max overlay of pins is 5px when not clustered
       maxClusterRadius={32}
     >
-      {pins.map(pin => (
-        <Marker
-          key={pin._id}
-          position={[pin.location.lat, pin.location.lng]}
-          icon={createMarkerIcon(pin)}
-          onClick={() => {
-            onPinClick(pin)
-          }}
-        />
-      ))}
+      {pins
+        .filter(({ location }) => Boolean(location))
+        .map(pin => (
+          <Marker
+            key={pin._id}
+            position={[pin.location.lat, pin.location.lng]}
+            icon={createMarkerIcon(pin)}
+            onClick={() => {
+              onPinClick(pin)
+            }}
+          />
+        ))}
     </MarkerClusterGroup>
   )
 }

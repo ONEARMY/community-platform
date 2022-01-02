@@ -58,7 +58,9 @@ export class NotificationsModal extends React.Component<IProps> {
 
   render() {
     const user = this.injected.userStore.user;
-    const notifications = user?.notifications?.filter(notification => !notification.read);
+    const notifications = user?.notifications?.
+      filter(notification => !notification.read).
+      sort((a, b) => new Date(b._created).getTime() -  new Date(a._created).getTime());
 
     return (
       <ModalContainer>

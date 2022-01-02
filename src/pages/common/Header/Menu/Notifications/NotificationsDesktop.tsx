@@ -12,7 +12,6 @@ interface IState {
 }
 
 interface IProps {
-  isMobile: boolean
 }
 
 interface IInjectedProps extends IProps {
@@ -21,7 +20,7 @@ interface IInjectedProps extends IProps {
 
 @inject('userStore')
 @observer
-export default class Notifications extends Component<IProps, IState> {
+export default class NotificationsDesktop extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
@@ -44,21 +43,17 @@ export default class Notifications extends Component<IProps, IState> {
     return (
       <>
         {user ? (
-          this.props.isMobile ? (
-            ""
-          ) : (
-            <div>
-              <NotificationsIcon onCLick={() => this.toggleNotificationsModal()} isMobileMenuActive={false}
-                areThereNotifications={areThereNotifications} />
-              <Flex>
-                {showNotificationsModal && (
-                  <Foco onClickOutside={() => this.toggleNotificationsModal()}>
-                    <NotificationsModal />
-                  </Foco>
-                )}
-              </Flex>
-            </div>
-          )
+          <div>
+            <NotificationsIcon onCLick={() => this.toggleNotificationsModal()} isMobileMenuActive={false}
+              areThereNotifications={areThereNotifications} />
+            <Flex>
+              {showNotificationsModal && (
+                <Foco onClickOutside={() => this.toggleNotificationsModal()}>
+                  <NotificationsModal />
+                </Foco>
+              )}
+            </Flex>
+          </div>
         ) : ""
         }
       </>

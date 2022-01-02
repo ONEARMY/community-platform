@@ -275,6 +275,10 @@ export class UserStore extends ModuleStore {
     try {
       const triggeredBy = this.activeUser;
       if (triggeredBy) {
+        // do not get notified when you're the one making a new comment or how-to useful vote
+        if(triggeredBy._id === user_id){
+          return;
+        }
         const newNotification: INotification = {
           _id: randomID(),
           _created: new Date().toISOString(),

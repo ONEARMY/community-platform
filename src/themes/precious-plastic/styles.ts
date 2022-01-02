@@ -1,4 +1,4 @@
-import type { DefaultTheme } from 'styled-components'
+import type { ThemeWithName } from "../types"
 
 // use enum to specify list of possible colors for typing
 export const colors = {
@@ -218,7 +218,8 @@ const typography = {
   },
 }
 
-const StyledComponentTheme: DefaultTheme = {
+const StyledComponentTheme: ThemeWithName = {
+  name: 'Precious Plastic',
   bold,
   breakpoints,
   buttons,

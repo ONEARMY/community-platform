@@ -15,6 +15,7 @@ import theme from 'src/themes/styled.theme'
 import { required } from 'src/utils/validators'
 import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
 import { ILocation } from 'src/models/common.models'
+import customMarkerIconUrl from 'src/assets/icons/map-marker.png'
 
 interface IState {
   showAddressEdit: boolean
@@ -22,7 +23,7 @@ interface IState {
 }
 
 const customMarker = L.icon({
-  iconUrl: require('src/assets/icons/map-marker.png'),
+  iconUrl: customMarkerIconUrl,
   iconSize: [20, 28],
   iconAnchor: [10, 28],
 })
@@ -89,7 +90,7 @@ export class WorkspaceMapPinSection extends React.Component<any, IState> {
             render={props => {
               const { value } = props.input
               const defaultLocation = { latlng: { lat: 0, lng: 0 } }
-              const location: ILocation = value ? value : defaultLocation
+              const location: ILocation = value?.latlng ? value : defaultLocation
               const { lat, lng } = location.latlng
               const zoom = value ? 15 : 1.5
               return (

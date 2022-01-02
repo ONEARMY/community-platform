@@ -6,6 +6,8 @@ import Text from 'src/components/Text'
 import { TextAreaField } from 'src/components/Form/Fields'
 import { Box, Flex, Link } from 'rebass/styled-components'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
+import { Map, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet'
+import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { Button } from 'src/components/Button'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
@@ -13,16 +15,21 @@ import theme from 'src/themes/styled.theme'
 import { required } from 'src/utils/validators'
 import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
 import { ILocation } from 'src/models/common.models'
-import MapWithDraggablePin from 'src/components/MapWithDraggablePin/MapWithDraggablePin'
 
 interface IState {
   showAddressEdit: boolean
   isOpen?: boolean
 }
 
+const customMarker = L.icon({
+  iconUrl: require('src/assets/icons/map-marker.png'),
+  iconSize: [20, 28],
+  iconAnchor: [10, 28],
+})
+
 @inject('mapsStore', 'userStore')
 @observer
-export class UserMapPinSection extends React.Component<any, IState> {
+export class WorkspaceMapPinSection extends React.Component<any, IState> {
   pinFilters = MAP_GROUPINGS
   constructor(props) {
     super(props)
@@ -83,6 +90,8 @@ export class UserMapPinSection extends React.Component<any, IState> {
               const { value } = props.input
               const defaultLocation = { latlng: { lat: 0, lng: 0 } }
               const location: ILocation = value ? value : defaultLocation
+              const { lat, lng } = location.latlng
+              const zoom = value ? 15 : 1.5
               return (
                 <>
                   {showAddressEdit ? (
@@ -102,14 +111,27 @@ export class UserMapPinSection extends React.Component<any, IState> {
                           Please select your location
                         </Text>
                       )}
-                      <MapWithDraggablePin
-                        position={location.latlng}
-                        updatePosition={newPosition => {
-                          props.input.onChange({
-                            latlng: newPosition,
-                          })
+
+                      <Map
+                        center={[lat, lng]}
+                        zoom={zoom}
+                        zoomControl={false}
+                        style={{
+                          height: '300px',
+                          zIndex: 1,
                         }}
-                      />
+                      >
+                        <ZoomControl position="topright" />
+                        <TileLayer
+                          attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        />
+                        <Marker position={[lat, lng]} icon={customMarker}>
+                          <Popup maxWidth={225} minWidth={225}>
+                            This address will be shown on the map
+                          </Popup>
+                        </Marker>
+                      </Map>
                     </Box>
                   ) : (
                     <Box>
@@ -128,6 +150,27 @@ export class UserMapPinSection extends React.Component<any, IState> {
                       </Button>
                     </Box>
                   )}
+                  <Box
+                    bg={theme.colors.softblue}
+                    mt={2}
+                    p={2}
+                    sx={{ borderRadius: '3px' }}
+                  >
+                    <Text small>
+                      We are aware that location search may result in an
+                      inaccurate position of your pin. If it happend, choose the
+                      closest location to you. Pro tip : you can write your
+                      precise address in your profile description & help find a
+                      fix{' '}
+                      <Link
+                        href="https://github.com/ONEARMY/community-platform/issues/739"
+                        target="_blank"
+                        sx={{ color: 'black', textDecoration: 'underline' }}
+                      >
+                        here.
+                      </Link>
+                    </Text>
+                  </Box>
                 </>
               )
             }}

@@ -71,6 +71,7 @@ export const NotificationItem: React.FC<IProps> = ({
                 </Box>
                 <Box
                   width={4/5}
+                  style={{textAlign: 'left'}}
                 >
                   New comment on your&nbsp;
                   <Link

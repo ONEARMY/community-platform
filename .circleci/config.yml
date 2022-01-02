@@ -259,6 +259,7 @@ jobs:
   test_functions:
     docker: 
       - image: timbru31/java-node:alpine-12
+    resource_class: small
     steps:
       - setup_repo
       - run: cd functions && yarn build && yarn emulator:test

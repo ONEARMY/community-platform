@@ -3,7 +3,7 @@ import { Flex } from 'rebass/styled-components'
 import styled from 'styled-components'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
 import NotificationsIcon from 'src/pages/common/Header/Menu/Notifications/NotificationsIcon'
-import Notifications from 'src/pages/common/Header/Menu/Notifications/Notifications'
+import NotificationsDesktop from 'src/pages/common/Header/Menu/Notifications/NotificationsDesktop'
 import NotificationsMobile from 'src/pages/common/Header/Menu/Notifications/NotificationsMobile'
 import MenuDesktop from 'src/pages/common/Header/Menu/MenuDesktop'
 import MenuMobilePanel from 'src/pages/common/Header/Menu/MenuMobile/MenuMobilePanel'
@@ -124,7 +124,7 @@ export class Header extends Component<IProps> {
           </MobileNotificationsWrapper>
           <DesktopMenuWrapper className="menu-desktop" px={2}>
             <MenuDesktop />
-            <Notifications isMobile={false} />
+            <NotificationsDesktop />
             {isModuleSupported(MODULE.USER) ? (
               <Profile isMobile={false} />
             ) : null}

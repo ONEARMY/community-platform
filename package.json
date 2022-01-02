@@ -171,7 +171,7 @@
     "husky": "^7.0.4",
     "idb": "^6.0.0",
     "lint-staged": "^8.1.5",
-    "mobx-react-devtools": "^6.0.3",
+    "mobx-react-devtools": "^6.0.3",  
     "prettier": "^1.16.4",
     "react-dev-utils": "^11.0.4",
     "start-server-and-test": "^1.11.0",

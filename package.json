@@ -114,7 +114,7 @@
     "react-router-breadcrumbs-hoc": "^3.2.0",
     "react-router-dom": "^5.2.0",
     "react-router-hash-link": "^1.2.1",
-    "react-scripts": "4.0.3",
+    "react-scripts": "5.0.0",
     "react-select": "^2.4.3",
     "react-slick": "^0.25.2",
     "react-table": "^6.10.3",

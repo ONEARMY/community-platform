@@ -34,7 +34,7 @@
     "oa-shared": "^1.0.0",
     "one-army-community-platform": "^1",
     "request": "^2.88.2",
-    "sharp": "^0.26.1"
+    "sharp": "^0.29.3"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",

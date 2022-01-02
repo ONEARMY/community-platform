@@ -1,9 +1,8 @@
-import { Component } from 'react'
+import { Component } from 'react' 
 import theme from 'src/themes/styled.theme'
 import styled from 'styled-components'
 import { Box } from 'rebass/styled-components'
 import { inject, observer } from 'mobx-react'
-import { ThemeStore } from 'src/stores/Theme/theme.store'
 import Flex from 'src/components/Flex'
 import { NotificationList } from 'src/components/Notifications/NotificationList'
 import { Button } from 'src/components/Button'
@@ -56,7 +55,7 @@ const ModalContainerInner = styled(Box)`
   border: 2px solid black;
   border-radius: 5px;
   margin: 1em;
-  overflow-y: scroll;
+  overflow-y: auto;
 `
 
 const ModalItem = styled(Box)`

@@ -13,12 +13,14 @@ import theme from 'src/themes/styled.theme'
 import HamburgerMenu from 'react-hamburger-menu'
 import { observer, inject } from 'mobx-react'
 import { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
+import { UserStore } from 'src/stores/User/user.store'
 import { isModuleSupported, MODULE } from 'src/modules'
 
 interface IProps { }
 
 interface IInjectedProps extends IProps {
-  mobileMenuStore: MobileMenuStore
+  mobileMenuStore: MobileMenuStore,
+  userStore: UserStore
 }
 
 const MobileNotificationsWrapper = styled(Flex)`
@@ -83,6 +85,7 @@ const AnimationContainer = (props: any) => {
 }
 
 @inject('mobileMenuStore')
+@inject('userStore')
 @observer
 export class Header extends Component<IProps> {
   // eslint-disable-next-line
@@ -95,8 +98,11 @@ export class Header extends Component<IProps> {
   }
 
   render() {
-    const menu = this.injected.mobileMenuStore
-    console.log(menu.showMobilePanel);
+    const menu = this.injected.mobileMenuStore;
+    const user = this.injected.userStore.user;
+    const areThereNotifications = !(user?.notifications?.filter(notification => !notification.read).length === 0);
+    console.log(user?.notifications?.length)
+    console.log(areThereNotifications);
     return (
       <>
         <Flex
@@ -113,7 +119,8 @@ export class Header extends Component<IProps> {
             <Logo isMobile={true} />
           </Flex>
           <MobileNotificationsWrapper>
-            <NotificationsIcon onCLick={() => menu.toggleMobileNotifications()}/>
+            <NotificationsIcon onCLick={() => menu.toggleMobileNotifications()} isMobileMenuActive={menu.showMobileNotifications} 
+            areThereNotifications={areThereNotifications}/>
           </MobileNotificationsWrapper>
           <DesktopMenuWrapper className="menu-desktop" px={2}>
             <MenuDesktop />

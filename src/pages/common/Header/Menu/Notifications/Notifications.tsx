@@ -2,9 +2,9 @@ import { Component } from 'react'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import Flex from 'src/components/Flex'
-import Icon from 'src/components/Icons'
 import { NotificationsModal } from './NotificationsModal'
 import NotificationsIcon from './NotificationsIcon'
+import Foco from 'react-foco'
 
 
 interface IState {
@@ -38,7 +38,8 @@ export default class Notifications extends Component<IProps, IState> {
 
   render() {
     const user = this.injected.userStore.user;
-    const showNotificationsModal = this.state;
+    const areThereNotifications = !(user?.notifications?.filter(notification => !notification.read).length === 0);
+    const showNotificationsModal = this.state.showNotificationsModal;
 
     return (
       <>
@@ -47,10 +48,13 @@ export default class Notifications extends Component<IProps, IState> {
             ""
           ) : (
             <div>
-              <NotificationsIcon onCLick={() => this.toggleNotificationsModal()}/>
+              <NotificationsIcon onCLick={() => this.toggleNotificationsModal()} isMobileMenuActive={false}
+                areThereNotifications={areThereNotifications} />
               <Flex>
                 {showNotificationsModal && (
-                    <NotificationsModal/>
+                  <Foco onClickOutside={() => this.toggleNotificationsModal()}>
+                    <NotificationsModal />
+                  </Foco>
                 )}
               </Flex>
             </div>

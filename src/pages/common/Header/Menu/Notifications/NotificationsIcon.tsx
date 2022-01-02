@@ -1,16 +1,11 @@
-import { Component } from 'react'
 import Flex from 'src/components/Flex'
 import Icon from 'src/components/Icons'
 
-interface IProps {
-    onCLick: () => void
-}
-
-function NotificationsIcon({onCLick}) {
+function NotificationsIcon({onCLick, isMobileMenuActive, areThereNotifications}) {
         return (
             <>
-                <Flex ml={1} onClick={onCLick}>
-                    <Icon glyph="thunderbolt" size={40} color={"orange"} />
+                <Flex ml={1} onClick={onCLick} style={isMobileMenuActive ? {backgroundColor: "#e2edf7", borderRadius: "5px"} : {}}>
+                    <Icon glyph="thunderbolt" size={40} color={areThereNotifications ? "gold" : "#bfbfbf"} />
                 </Flex>
             </>
         )

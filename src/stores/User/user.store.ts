@@ -140,17 +140,24 @@ export class UserStore extends ModuleStore {
       values = { ...values, coverImages: processedImages }
     }
     // sometimes mobx has issues with de-serialising obseverables so try to force it using toJS
-    const update = { ...toJS(user), ...toJS(values) }
+    const updatedUserProfile = { ...toJS(user), ...toJS(values) }
+
+
+    if (updatedUserProfile.location?.latlng
+      && Object.keys(updatedUserProfile.location).length == 1) {
+      updatedUserProfile.location = await getLocationData(updatedUserProfile.location.latlng);
+    }
+
     await this.db
       .collection(COLLECTION_NAME)
       .doc(user.userName)
-      .set(update)
-    this.updateUser(update)
+      .set(updatedUserProfile)
+    this.updateUser(updatedUserProfile)
     // Update user map pin
     // TODO - pattern back and forth from user to map not ideal
     // should try to refactor and possibly generate map pins in backend
     if (values.location) {
-      await this.mapsStore.setUserPin(update)
+      await this.mapsStore.setUserPin(updatedUserProfile)
     }
     this.updateUpdateStatus('Complete')
   }
@@ -399,5 +406,3 @@ const USER_BASE = {
   verified: false,
   badges: { verified: false },
 }
-
-

@@ -15900,7 +15900,7 @@ fsevents@^1.2.7:
     generate-json-webpack-plugin: ^1.0.0
     google-auth-library: ^6.1.1
     googleapis: ^61.0.0
-    jest: ^27.3.1
+    jest: 26
     jszip: ^3.7.0
     log-update: ^4.0.0
     oa-shared: ^1.0.0
@@ -18794,7 +18794,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"jest-cli@npm:^26.6.0":
+"jest-cli@npm:^26.6.0, jest-cli@npm:^26.6.3":
   version: 26.6.3
   resolution: "jest-cli@npm:26.6.3"
   dependencies:
@@ -19727,6 +19727,19 @@ fsevents@^1.2.7:
     merge-stream: ^2.0.0
     supports-color: ^8.0.0
   checksum: 125d46939d894ef8cf1ffbbf6c63cee10f28218698db3949704d5f613a353f56502da50d3425ec722927c7948c5742d0306f63ad5064a432574b8b217b9ceeba
+  languageName: node
+  linkType: hard
+
+"jest@npm:26":
+  version: 26.6.3
+  resolution: "jest@npm:26.6.3"
+  dependencies:
+    "@jest/core": ^26.6.3
+    import-local: ^3.0.2
+    jest-cli: ^26.6.3
+  bin:
+    jest: bin/jest.js
+  checksum: 3a9b4c70e9bd5391e7367a0036045c1d3545c2a39e1439a71fb4b59b1748bc34e2ccb324faa1046b99bffc8dc2ed7b3c59016c462255b2646f5fa9300351f914
   languageName: node
   linkType: hard
 

@@ -59,7 +59,7 @@
     "cross-env": "^7.0.3",
     "firebase-functions-test": "^0.3.3",
     "generate-json-webpack-plugin": "^1.0.0",
-    "jest": "^27.3.1",
+    "jest": "26",
     "jszip": "^3.7.0",
     "ts-jest": "^27.0.7",
     "ts-node": "^10.0.0",

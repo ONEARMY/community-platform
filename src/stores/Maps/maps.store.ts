@@ -203,7 +203,7 @@ export class MapsStore extends ModuleStore {
       type,
       moderation,
     }
-    if (user.workspaceType) {
+    if (type !== 'member' && user.workspaceType) {
       pin.subType = user.workspaceType
     }
     logger.debug('setting user pin', pin)

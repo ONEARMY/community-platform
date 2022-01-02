@@ -58,5 +58,23 @@ describe('maps.store', () => {
                 moderation: 'awaiting-moderation',
             }));
         });
+
+        it('do not set subType if passed with member profile', async () => {
+            await store.setUserPin({
+                profileType: 'member',
+                workspaceType: 'shredder',
+                location: {
+                    latlng: {
+                        lat: 0,
+                        lng: 0,
+                    }
+                }
+            });
+
+            // Assert
+            expect(store.db.set).toHaveBeenCalledWith(expect.not.objectContaining({
+                subType: 'shredder',
+            }));
+        });
     })
 }); 

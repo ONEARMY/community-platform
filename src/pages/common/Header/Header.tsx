@@ -101,8 +101,7 @@ export class Header extends Component<IProps> {
     const menu = this.injected.mobileMenuStore;
     const user = this.injected.userStore.user;
     const areThereNotifications = !(user?.notifications?.filter(notification => !notification.read).length === 0);
-    console.log(user?.notifications?.length)
-    console.log(areThereNotifications);
+    
     return (
       <>
         <Flex

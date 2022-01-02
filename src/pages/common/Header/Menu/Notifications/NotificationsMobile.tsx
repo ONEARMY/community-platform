@@ -1,4 +1,4 @@
-import { Component } from 'react' 
+import { Component } from 'react'
 import theme from 'src/themes/styled.theme'
 import styled from 'styled-components'
 import { Box } from 'rebass/styled-components'
@@ -71,47 +71,50 @@ const ModalItem = styled(Box)`
 @inject('userStore')
 @observer
 export class NotificationsMobile extends Component {
-    get injected() {
-        return this.props as IInjectedProps
-      }
+  get injected() {
+    return this.props as IInjectedProps
+  }
 
   render() {
     const user = this.injected.userStore.user;
-    const notifications = user?.notifications?.filter(notification => !notification.read);
+    const notifications = user?.notifications?.
+      filter(notification => !notification.read).
+      sort((a, b) => new Date(b._created).getTime() -  new Date(a._created).getTime());
+
     return (
       <>
         <PanelContainer>
           <PanelMenu>
-          {!notifications || notifications?.length === 0 ?
-          <ModalContainerInner>
-            <Flex>
-              <ModalItem>
-                Nada, no new notification
-              </ModalItem>
-            </Flex>
-          </ModalContainerInner>
-          : <ModalContainerInner>
-            <Flex>
-              <ModalItem style={{textAlign: "center"}}>
-                Notifications
-              </ModalItem>
-            </Flex>
-            <Flex>
-                <ModalItem>
-              <NotificationList notifications={notifications} />
-              </ModalItem>
-            </Flex>
-            <Flex>
-              <Button variant="subtle" fontSize="14px"
-                style={{margin: "0 auto 1em auto"}}
-                onClick={() => this.injected.userStore.markAllNotificationsRead()}>
+            {!notifications || notifications?.length === 0 ?
+              <ModalContainerInner>
                 <Flex>
-                  <Text>Clear notifications</Text>
+                  <ModalItem>
+                    Nada, no new notification
+                  </ModalItem>
                 </Flex>
-              </Button>
-            </Flex>
-          </ModalContainerInner>
-        }
+              </ModalContainerInner>
+              : <ModalContainerInner>
+                <Flex>
+                  <ModalItem style={{ textAlign: "center" }}>
+                    Notifications
+                  </ModalItem>
+                </Flex>
+                <Flex>
+                  <ModalItem>
+                    <NotificationList notifications={notifications} />
+                  </ModalItem>
+                </Flex>
+                <Flex>
+                  <Button variant="subtle" fontSize="14px"
+                    style={{ margin: "0 auto 1em auto" }}
+                    onClick={() => this.injected.userStore.markAllNotificationsRead()}>
+                    <Flex>
+                      <Text>Clear notifications</Text>
+                    </Flex>
+                  </Button>
+                </Flex>
+              </ModalContainerInner>
+            }
           </PanelMenu>
         </PanelContainer>
       </>

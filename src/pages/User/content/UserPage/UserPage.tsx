@@ -257,11 +257,11 @@ export class UserPage extends React.Component<
             <Box ml="5px">Verified</Box>
           </UserStatsBoxItem>
         )}
-        {user.location && (
+        {user.location?.latlng && (
           <Link color={'black'} to={'/map/#' + user.userName}>
             <UserStatsBoxItem>
               <Icon glyph="location-on" size="22"></Icon>
-              <Box ml="5px">{user.location?.country}</Box>
+              <Box ml="5px">{user.location?.country || 'View on Map'}</Box>
             </UserStatsBoxItem>
           </Link>
         )}
@@ -410,7 +410,7 @@ export class UserPage extends React.Component<
     }
     const shouldRenderUserStatsBox =
       user &&
-      (user.location ||
+      (user.location?.latlng ||
         (user.stats &&
           (user.stats.userCreatedHowtos || user.stats.userCreatedEvents)))
         ? true

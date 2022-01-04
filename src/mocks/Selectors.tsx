@@ -1,13 +1,5 @@
 export const COM_TYPE_MOCKS = [
   {
-    value: 'discord',
-    label: 'discord',
-  },
-  {
-    value: 'forum',
-    label: 'forum',
-  },
-  {
     value: 'website',
     label: 'website',
   },

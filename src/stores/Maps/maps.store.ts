@@ -7,7 +7,7 @@ import {
   IBoundingBox,
 } from 'src/models/maps.models'
 import { IDBEndpoint } from 'src/models/common.models'
-import { RootStore } from '..'
+import { RootStore } from '../index'
 import { Subscription } from 'rxjs'
 import { ModuleStore } from '../common/module.store'
 import { getUserAvatar } from '../User/user.store'
@@ -63,7 +63,6 @@ export class MapsStore extends ModuleStore {
       const isAdminAndAccepted = isAdmin && p.moderation !== 'rejected'
       return (
         p.type &&
-        p.type !== 'member' &&
         (isPinAccepted || wasCreatedByUser || isAdminAndAccepted)
       )
     })
@@ -161,11 +160,13 @@ export class MapsStore extends ModuleStore {
       .collection<IMapPin>(COLLECTION_NAME)
       .doc(id)
       .get()
+    logger.debug({ pin }, 'MapsStore.getPin')
     return pin as IMapPin
   }
 
   // add new pin or update existing
-  public async setPin(pin: IMapPin) {
+  public async upsertPin(pin: IMapPin) {
+    logger.debug({ pin }, 'MapsStore.upsertPin')
     // generate standard doc meta
     if (!isAllowToPin(pin, this.activeUser)) {
       return false
@@ -181,7 +182,7 @@ export class MapsStore extends ModuleStore {
     if (!hasAdminRights(this.activeUser)) {
       return false
     }
-    await this.setPin(pin)
+    await this.upsertPin(pin)
     this.setActivePin(pin)
   }
   public needsModeration(pin: IMapPin) {
@@ -192,13 +193,17 @@ export class MapsStore extends ModuleStore {
   }
 
   public async setUserPin(user: IUserPP) {
+    const type = user.profileType || 'member';
+    // NOTE - if pin previously accepted this will be updated on backend function
+    const moderation = type === 'member' ? 'accepted' : 'awaiting-moderation';
     const pin: IMapPin = {
       _id: user.userName,
+      _deleted: !user.location?.latlng,
       location: user.location!.latlng,
-      type: user.profileType ? user.profileType : 'member',
-      moderation: 'awaiting-moderation', // NOTE - if pin previously accespted this will be updated on backend function
+      type,
+      moderation,
     }
-    if (user.workspaceType) {
+    if (type !== 'member' && user.workspaceType) {
       pin.subType = user.workspaceType
     }
     logger.debug('setting user pin', pin)

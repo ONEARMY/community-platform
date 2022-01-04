@@ -8,6 +8,7 @@ import { ModuleStore } from '../common/module.store'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
 import { logger } from 'src/logger'
+import { ILatLng, ILocation } from 'src/models'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
@@ -138,17 +139,24 @@ export class UserStore extends ModuleStore {
       values = { ...values, coverImages: processedImages }
     }
     // sometimes mobx has issues with de-serialising obseverables so try to force it using toJS
-    const update = { ...toJS(user), ...toJS(values) }
+    const updatedUserProfile = { ...toJS(user), ...toJS(values) }
+
+
+    if (updatedUserProfile.location?.latlng
+      && Object.keys(updatedUserProfile.location).length == 1) {
+      updatedUserProfile.location = await getLocationData(updatedUserProfile.location.latlng);
+    }
+
     await this.db
       .collection(COLLECTION_NAME)
       .doc(user.userName)
-      .set(update)
-    this.updateUser(update)
+      .set(updatedUserProfile)
+    this.updateUser(updatedUserProfile)
     // Update user map pin
     // TODO - pattern back and forth from user to map not ideal
     // should try to refactor and possibly generate map pins in backend
     if (values.location) {
-      await this.mapsStore.setUserPin(update)
+      await this.mapsStore.setUserPin(updatedUserProfile)
     }
     this.updateUpdateStatus('Complete')
   }
@@ -290,4 +298,26 @@ const USER_BASE = {
   moderation: 'awaiting-moderation',
   verified: false,
   badges: { verified: false },
+}
+
+async function getLocationData(latlng: ILatLng): Promise<ILocation> {
+  const { lat, lng } = latlng;
+  const response = await (await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=en`, {
+    headers: new Headers({
+      'User-Agent':
+        'onearmy.earth Community Platform (https://platform.onearmy.earth)',
+    })
+  })).json()
+
+  const location = {
+    name: response.display_name || '',
+    country: response.address.country || '',
+    countryCode: response.address.country_code || '',
+    administrative: response.address.county || '',
+    latlng,
+    postcode: response.address.postcode || '',
+    value: response.address.town || response.address.village || '',
+  };
+
+  return location;
 }

@@ -118,10 +118,11 @@ export class MapsStore extends ModuleStore {
 
   private filterMapPinsByType(filters: Array<string>) {
     // filter pins to include matched pin type or subtype
+    // excluding items which have been marked as deleted=true
     const filteredMapPins = this.mapPins.filter(pin => {
-      return pin.subType
+      return !pin._deleted && (pin.subType
         ? filters.includes(pin.subType)
-        : filters.includes(pin.type)
+        : filters.includes(pin.type))
     })
     return filteredMapPins
   }

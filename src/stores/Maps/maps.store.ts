@@ -21,6 +21,7 @@ import {
   isAllowToPin,
 } from 'src/utils/helpers'
 import { logger } from 'src/logger'
+import { filterMapPinsByType } from './filter'
 
 // NOTE - toggle below variable to use larger mock dataset
 const IS_MOCK = false
@@ -112,19 +113,8 @@ export class MapsStore extends ModuleStore {
       return
     }
 
-    const mapPins = this.filterMapPinsByType(filters)
+    const mapPins = filterMapPinsByType(this.mapPins, filters)
     this.filteredPins = mapPins
-  }
-
-  private filterMapPinsByType(filters: Array<string>) {
-    // filter pins to include matched pin type or subtype
-    // excluding items which have been marked as deleted=true
-    const filteredMapPins = this.mapPins.filter(pin => {
-      return !pin._deleted && (pin.subType
-        ? filters.includes(pin.subType)
-        : filters.includes(pin.type))
-    })
-    return filteredMapPins
   }
 
   /**
@@ -254,8 +244,7 @@ export class MapsStore extends ModuleStore {
   }
   @action
   public getPinsNumberByFilterType(filter: Array<string>) {
-    const pinsNumber = this.filterMapPinsByType(filter)
-    return pinsNumber.length
+    return filterMapPinsByType(this.mapPins, filter).length
   }
 }
 

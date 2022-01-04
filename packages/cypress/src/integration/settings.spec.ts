@@ -396,7 +396,7 @@ describe('[Settings]', () => {
 
       cy.step('Update Contact Links')
       expected.links.forEach((link, index) =>
-        addContactLink({ index, label: 'forum', url: link.url }),
+        addContactLink({ index, label: 'website', url: link.url }),
       )
 
       setMapPin({

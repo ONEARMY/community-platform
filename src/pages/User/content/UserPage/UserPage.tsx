@@ -416,6 +416,8 @@ export class UserPage extends React.Component<
         ? true
         : false
 
+    const userLinks = user?.links.filter(linkItem => ['discord', 'forum'].includes(linkItem.label))
+
     return (
       <ProfileWrapper mt={4} mb={6}>
         <ProfileWrapperCarousel>
@@ -470,10 +472,10 @@ export class UserPage extends React.Component<
               user.machineBuilderXp &&
               this.renderMachineBuilderXp(user.machineBuilderXp)}
 
-            {user.links && user.links.length > 0 && (
+            {userLinks.length && (
               <UserContactInfo>
                 <h3>Contact &amp; Links</h3>
-                {user.links.map((link, i) => (
+                {userLinks.map((link, i) => (
                   <ProfileLink link={link} key={'Link-' + i} />
                 ))}
               </UserContactInfo>

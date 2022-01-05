@@ -1,5 +1,5 @@
 [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/from-referrer/)
-[![Build Status](https://circleci.com/gh/ONEARMY/community-platform/tree/master.svg?style=svg)](https://app.circleci.com/pipelines/github/ONEARMY/community-platform?branch=master)
+[![Build Status](https://circleci.com/gh/ONEARMY/community-platform/tree/master.svg?style=shield)](https://app.circleci.com/pipelines/github/ONEARMY/community-platform?branch=master)
 [![GitHub license](https://badgen.net/github/license/ONEARMY/community-platform)](https://github.com/ONEARMY/community-platform/blob/master/LICENSE)
 [![GitHub license](https://badgen.net/github/tag/ONEARMY/community-platform)](https://github.com/ONEARMY/community-platform/blob/master/LICENSE)
 [![GitHub contributors](https://img.shields.io/github/contributors/ONEARMY/community-platform)](https://github.com/ONEARMY/community-platform/graphs/contributors/)

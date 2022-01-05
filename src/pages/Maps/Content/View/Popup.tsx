@@ -189,17 +189,19 @@ export class Popup extends React.Component<IProps> {
       : this.renderLoading()
 
     return (
-      <LeafletPopup
-        ref={this.leafletRef}
-        position={[activePin.location.lat, activePin.location.lng]}
-        offset={new L.Point(2, -10)}
-        closeButton={false}
-        className={activePin !== undefined ? '' : 'closed'}
-        minWidth={230}
-        maxWidth={230}
-      >
-        {content}
-      </LeafletPopup>
+      activePin.location && (
+        <LeafletPopup
+          ref={this.leafletRef}
+          position={[activePin.location.lat, activePin.location.lng]}
+          offset={new L.Point(2, -10)}
+          closeButton={false}
+          className={activePin !== undefined ? '' : 'closed'}
+          minWidth={230}
+          maxWidth={230}
+        >
+          {content}
+        </LeafletPopup>
+      )
     )
   }
 }

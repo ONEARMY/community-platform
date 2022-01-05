@@ -38,14 +38,6 @@ const GROUPINGS: IMapGrouping[] = [
     subType: 'mix',
     icon: '',
   },
-
-  {
-    grouping: 'individual',
-    displayName: 'Member',
-    type: 'member',
-    hidden: true,
-    icon: '',
-  },
   {
     grouping: 'individual',
     displayName: 'Collection Point',
@@ -62,6 +54,12 @@ const GROUPINGS: IMapGrouping[] = [
     grouping: 'individual',
     displayName: 'Community Point',
     type: 'community-builder',
+    icon: '',
+  },
+  {
+    grouping: 'individual',
+    displayName: 'Want to get started',
+    type: 'member',
     icon: '',
   },
 ]

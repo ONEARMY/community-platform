@@ -1,3 +1,4 @@
+import type { DefaultTheme } from 'styled-components'
 interface LinkList {
   label: string
   url: string
@@ -13,4 +14,8 @@ export interface PlatformTheme {
   styles: any
   academyResource: string
   externalLinks: LinkList[]
+}
+
+export interface ThemeWithName extends DefaultTheme {
+  name: string;
 }

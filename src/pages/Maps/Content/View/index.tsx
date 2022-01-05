@@ -18,6 +18,7 @@ import { inject, observer } from 'mobx-react'
 import { MapsStore } from 'src/stores/Maps/maps.store'
 import { RouteComponentProps } from 'react-router'
 import { toJS } from 'mobx'
+import type { LatLngExpression } from 'leaflet'
 
 interface IProps extends RouteComponentProps<any> {
   pins: Array<IMapPin>
@@ -72,12 +73,16 @@ class MapView extends React.Component<IProps> {
   public render() {
     const { center, zoom, pins } = this.props
     const { activePin } = this.injected.mapsStore
+
+    const mapCenter: LatLngExpression = center ? [center.lat, center.lng] : [0, 0]
+    const mapZoom = center ? zoom : 2;
+
     return (
       <Map
         ref={this.props.mapRef}
         className="markercluster-map"
-        center={[center.lat, center.lng]}
-        zoom={zoom}
+        center={mapCenter}
+        zoom={mapZoom}
         maxZoom={18}
         style={{ height: '100%', zIndex: 0 }}
         onmove={this.handleMove}

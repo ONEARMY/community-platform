@@ -17,7 +17,7 @@ import {
   needsModeration,
   randomID,
 } from 'src/utils/helpers'
-import { RootStore } from '..'
+import { RootStore } from '../index'
 import { ModuleStore } from '../common/module.store'
 import { IUploadedFileMeta } from '../storage'
 import { IComment } from 'src/models/howto.models'

@@ -17,13 +17,15 @@ import { TextNotification } from 'src/components/Notification/TextNotification'
 import { Form } from 'react-final-form'
 import { ARRAY_ERROR, FORM_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'
-import { UserMapPinSection } from './content/formSections/MapPin.section'
+import { WorkspaceMapPinSection } from './content/formSections/WorkspaceMapPin.section'
+import { MemberMapPinSection } from './content/formSections/MemberMapPin.section'
 import theme from 'src/themes/styled.theme'
 import INITIAL_VALUES from './Template'
 import { Box } from 'rebass/styled-components'
 import { Prompt } from 'react-router'
 import { toJS } from 'mobx'
 import { isModuleSupported, MODULE } from 'src/modules'
+import { logger } from 'src/logger'
 
 interface IProps {}
 
@@ -86,12 +88,14 @@ export class UserSettings extends React.Component<IProps, IState> {
     })
     // Submit, show notification update and return any errors to form
     try {
+      logger.debug({profile: vals}, 'UserSettings.saveProfile');
       await this.injected.userStore.updateUserProfile(vals)
       this.setState({
         notification: { message: 'Profile Saved', icon: 'check', show: true },
       })
       return {}
     } catch (error) {
+      logger.warn({error, profile: vals}, 'UserSettings.saveProfile.error')
       this.setState({
         notification: { message: 'Save Failed', icon: 'close', show: true },
       })
@@ -213,7 +217,11 @@ export class UserSettings extends React.Component<IProps, IState> {
                         )}
                         {/* General fields */}
                         {values.profileType !== 'member' && (
-                          <UserMapPinSection />
+                          <WorkspaceMapPinSection />
+                        )}
+
+{values.profileType === 'member' && (
+                          <MemberMapPinSection />
                         )}
                         <UserInfosSection
                           formValues={values}

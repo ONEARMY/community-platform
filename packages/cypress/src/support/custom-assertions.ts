@@ -117,7 +117,6 @@ const eqSettings = (chaiObj, utils) => {
       verified,
       profileType,
       about,
-      country,
     })
   }
   const linkAssert: Assert<IUserPPDB, any> = (subject, expected) =>

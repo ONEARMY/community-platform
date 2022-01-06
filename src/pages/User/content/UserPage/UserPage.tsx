@@ -416,7 +416,7 @@ export class UserPage extends React.Component<
         ? true
         : false
 
-    const userLinks = user?.links.filter(linkItem => ['discord', 'forum'].includes(linkItem.label))
+    const userLinks = user?.links.filter(linkItem => !['discord', 'forum'].includes(linkItem.label))
 
     return (
       <ProfileWrapper mt={4} mb={6}>
@@ -472,7 +472,7 @@ export class UserPage extends React.Component<
               user.machineBuilderXp &&
               this.renderMachineBuilderXp(user.machineBuilderXp)}
 
-            {userLinks.length && (
+            {!!userLinks.length && (
               <UserContactInfo>
                 <h3>Contact &amp; Links</h3>
                 {userLinks.map((link, i) => (

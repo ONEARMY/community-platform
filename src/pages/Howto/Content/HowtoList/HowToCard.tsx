@@ -34,23 +34,25 @@ export const HowToCard = (props: IProps) => (
       key={props.howto._id}
       width={1}
     >
-      <Flex width="1" fontSize={'0px'}>
-        <LazyLoadImage
-          style={{
-            width: '100%',
-            height: 'calc(((350px) / 3) * 2)',
-            borderRadius: '8px 8px 0px 0px',
-            objectFit: 'cover',
-          }}
-          threshold={500}
-          src={props.howto.cover_image.downloadUrl}
-          crossOrigin=""
-        />
-      </Flex>
+      {!!props?.howto.cover_image && (
+        <Flex width="1" fontSize={'0px'}>
+          <LazyLoadImage
+            style={{
+              width: '100%',
+              height: 'calc(((350px) / 3) * 2)',
+              borderRadius: '8px 8px 0px 0px',
+              objectFit: 'cover',
+            }}
+            threshold={500}
+            src={props.howto.cover_image.downloadUrl}
+            crossOrigin=""
+          />
+        </Flex>
+      )}
       <Flex px={3} py={3} flexDirection="column">
         <Heading small clipped color={'black'}>
           {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
-          {capitalizeFirstLetter(props.howto.title)}
+          {props?.howto.title && capitalizeFirstLetter(props.howto.title)}
         </Heading>
         <Flex alignItems="center">
           {props.howto.creatorCountry && (

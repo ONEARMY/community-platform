@@ -17,19 +17,10 @@ import {
   POLICY_PAGES,
   getAvailablePageList,
 } from './PageList'
-import { Link, Flex } from 'rebass/styled-components'
+import { Link, Flex, Box } from 'rebass/styled-components'
 import DevSiteHeader from 'src/components/DevSiteHeader/DevSiteHeader'
 import { getSupportedModules } from 'src/modules'
-import SiteFooter from './common/SiteFooter/SiteFooter'
-
-function showOneArmyBanner(currentPageUrl, pages): boolean {
-  if (currentPageUrl === '/') {
-    return false
-  }
-
-  return !pages.find(pg => currentPageUrl.startsWith(pg.path))
-    ?.hideOneArmyBanner
-}
+import GlobalSiteFooter from './common/GlobalSiteFooter/GlobalSiteFooter'
 
 
 export class Routes extends React.Component<any, {
@@ -37,6 +28,7 @@ export class Routes extends React.Component<any, {
   displayPageComponent?: any
   supportedRoutes?: IPageMeta[]
 }> {
+
   public render() {
     // we are rendering different pages and navigation dependent on whether the user has navigated directly to view the
     // entire site, or just one page of it via subdomains. This is so we can effectively integrate just parts of this
@@ -59,7 +51,8 @@ export class Routes extends React.Component<any, {
             {/* TODO - add better loading fallback */}
             <DevSiteHeader />
             <Header />
-            <Suspense fallback={<div></div>}>
+            <Suspense fallback={<div style={{ minHeight: 'calc(100vh - 175px)' }}>
+            </div>}>
               <Switch>
                 {menuItems.map(page => (
                   <Route
@@ -91,24 +84,11 @@ export class Routes extends React.Component<any, {
               </Switch>
             </Suspense>
           </ScrollToTop>
+          <GlobalSiteFooter />
         </BrowserRouter>
-        <Link
-          target="_blank"
-          href="https://discordapp.com/invite/cGZ5hKP"
-          data-cy="feedback"
-          sx={{ display: ['none', 'none', 'block'] }}
-        >
-          <Button
-            sx={{ position: 'fixed', bottom: '30px', right: '30px' }}
-            variant="primary"
-          >
-            #Feedback? Join our chat{' '}
-            <span role="img" aria-label="talk-bubble">
-              💬
-            </span>
-          </Button>
-        </Link>
-        {showOneArmyBanner(window.location.pathname, menuItems) && <SiteFooter />}
+        <Box sx={{ position: 'fixed', bottom: '30px', right: '30px', display: ['none', 'none', 'block']  }}>
+          <DiscordLink/>
+        </Box>
       </Flex>
     )
   }

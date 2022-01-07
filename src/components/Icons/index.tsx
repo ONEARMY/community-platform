@@ -55,6 +55,7 @@ interface IProps {
   color?: string
   onClick?: () => void
 }
+
 export type availableGlyphs =
   | 'download'
   | 'download-cloud'
@@ -92,6 +93,7 @@ export type availableGlyphs =
   | 'chevron-right'
   | 'star'
   | 'star-active'
+  | 'github'
 
 export type IGlyphs = { [k in availableGlyphs]: JSX.Element }
 
@@ -132,6 +134,7 @@ export const glyphs: IGlyphs = {
   'chevron-right': <MdChevronRight />,
   star: SVGs.star,
   'star-active': SVGs.starActive,
+  github: SVGs.github,
 }
 
 type WrapperProps = IProps & VerticalAlignProps & SpaceProps

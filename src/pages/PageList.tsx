@@ -79,7 +79,6 @@ const academy = {
     flex: 1,
   },
   fullPageWidth: true,
-  hideOneArmyBanner: true,
 }
 const events = {
   moduleName: MODULE.EVENTS,
@@ -101,7 +100,6 @@ const maps = {
     width: '100vw',
   },
   fullPageWidth: true,
-  hideOneArmyBanner: true,
 }
 const admin = {
   moduleName: MODULE.USER,

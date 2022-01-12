@@ -1,4 +1,4 @@
-import { Flex, Link, Text } from 'rebass/styled-components'
+import { Flex, Text } from 'rebass/styled-components'
 import styled, { useTheme } from 'styled-components'
 import { Icon } from 'src/components/Icons'
 
@@ -11,23 +11,39 @@ const SiteFooter = () => {
     text-decoration: underline;
   `
 
-  const IconGlyph = styled(Icon)`
-    transform: translateY(2px);
-  `
-
   const FooterContainer = styled(Flex)`
     color: #fff;
-    margin-top: 45px;
-    padding: 45px ${theme.space[4]}px;
     display: flex;
     flex-direction: column;
-    text-align: center;
+    margin-top: 45px;
     line-heigh: 1.5;
+    padding: 45px ${theme.space[4]}px;
+    position: relative;
+    text-align: center;
 
-    @media only screen and (min-width: ${theme.breakpoints[1]}) {
+    @media only screen and (min-width: ${theme
+        .breakpoints[1]}) and (max-width: ${theme.breakpoints[2]}) {
+      align-items: flex-start;
+      padding-top: 35px;
+      padding-bottom: 35px;
+      padding-left: 65px;
+      padding-right: ${discordButtonWidth}px;
+      text-align: left;
+    }
+
+    @media only screen and (min-width: ${theme.breakpoints[2]}) {
       flex-direction: row;
       padding-right: ${discordButtonWidth}px;
       text-align: left;
+    }
+  `
+
+  const OneArmyIcon = styled(Icon)`
+    @media only screen and (min-width: ${theme
+        .breakpoints[1]}) and (max-width: ${theme.breakpoints[2]}) {
+      position: absolute;
+      top: 45px;
+      left: 30px;
     }
   `
 
@@ -39,8 +55,8 @@ const SiteFooter = () => {
         marginTop: '45px',
       }}
     >
-      <Icon glyph={'star-active'} mb={[3, 3, 0]} />
-      <Text ml={3} mr={1}>
+      <OneArmyIcon glyph={'star-active'} mb={[3, 3, 0]} />
+      <Text ml={[0, 0, 0, 3]} mr={1}>
         {theme.name} is a project by{' '}
         <Anchor href="https://platform.onearmy.earth/" target="_blank">
           One Army
@@ -50,12 +66,8 @@ const SiteFooter = () => {
 
       <Text mt={[2, 2, 0]}>
         Running on our Platform software,{' '}
-        <Anchor
-          href="https://github.com/onearmy/community-platform/"
-          target="_blank"
-        >
+        <Anchor href="https://platform.onearmy.earth/" target="_blank">
           help us build it
-          <IconGlyph glyph={'github'} ml={1} />
         </Anchor>
       </Text>
     </FooterContainer>

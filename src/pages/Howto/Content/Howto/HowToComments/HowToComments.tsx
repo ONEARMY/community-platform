@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Box, Flex } from 'rebass/styled-components'
 import { useCommonStores } from 'src/index'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { Button } from 'src/components/Button'
 import { Comment } from 'src/components/Comment/Comment'
 import { CommentTextArea } from 'src/components/Comment/CommentTextArea'
@@ -68,31 +67,26 @@ export const HowToComments = ({ comments }: IProps) => {
             variant="outline"
             onClick={() => setMoreComments(moreComments + 1)}
           >
-            show more comments
+            You must be a Beta Tester to add a comment show more comments
           </Button>
         )}
       </Flex>
-      <AuthWrapper
-        roleRequired="beta-tester"
-        fallback="You must be a Beta Tester to add a comment"
-      >
-        <BoxStyled width={2 / 3}>
-          <CommentTextArea
-            data-cy="comment-text-area"
-            comment={comment}
-            onChange={setComment}
-            loading={loading}
-          />
-          <ButtonStyled
-            data-cy="comment-submit"
-            disabled={!Boolean(comment.trim()) || loading}
-            variant="primary"
-            onClick={() => onSubmit(comment)}
-          >
-            Comment
-          </ButtonStyled>
-        </BoxStyled>
-      </AuthWrapper>
+      <BoxStyled width={2 / 3}>
+        <CommentTextArea
+          data-cy="comment-text-area"
+          comment={comment}
+          onChange={setComment}
+          loading={loading}
+        />
+        <ButtonStyled
+          data-cy="comment-submit"
+          disabled={!Boolean(comment.trim()) || loading}
+          variant="primary"
+          onClick={() => onSubmit(comment)}
+        >
+          Comment
+        </ButtonStyled>
+      </BoxStyled>
     </Flex>
   )
 }

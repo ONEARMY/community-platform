@@ -6,7 +6,6 @@ import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import Header from './common/Header/Header'
 import { SWUpdateNotification } from 'src/pages/common/SWUpdateNotification/SWUpdateNotification'
 import Main from 'src/pages/common/Layout/Main'
-import { Button } from 'src/components/Button'
 import type {
   IPageMeta
 } from './PageList'
@@ -17,10 +16,11 @@ import {
   POLICY_PAGES,
   getAvailablePageList,
 } from './PageList'
-import { Link, Flex, Box } from 'rebass/styled-components'
+import { Flex, Box } from 'rebass/styled-components'
 import DevSiteHeader from 'src/components/DevSiteHeader/DevSiteHeader'
 import { getSupportedModules } from 'src/modules'
 import GlobalSiteFooter from './common/GlobalSiteFooter/GlobalSiteFooter'
+import DiscordLink from 'src/components/DiscordLink/DiscordLink'
 
 
 export class Routes extends React.Component<any, {

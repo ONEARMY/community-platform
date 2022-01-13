@@ -80,10 +80,11 @@ export const CommentTextArea = ({ onChange, comment, loading }) => {
             onChange={event => {
               onChange(event.target.value)
             }}
+            data-cy="comments-form"
             placeholder="Leave your questions or feedback..."
           />
         ) : (
-          <LoginTextStyled>
+          <LoginTextStyled data-cy="comments-login-prompt">
             Hi there!{' '}
             <Link
               to="/sign-in"

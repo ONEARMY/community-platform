@@ -74,7 +74,7 @@ export const HowToComments = ({ comments }: IProps) => {
             variant="outline"
             onClick={() => setMoreComments(moreComments + 1)}
           >
-            You must be a Beta Tester to add a comment show more comments
+            show more comments
           </Button>
         )}
       </Flex>

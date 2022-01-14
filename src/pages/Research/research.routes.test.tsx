@@ -42,8 +42,11 @@ describe('research.routes', () => {
           </MemoryRouter>
         </Provider>,
       )
-      await waitFor(() =>
-        expect(wrapper.getByText(/Research topic/)).toBeInTheDocument(),
+      await waitFor(
+        () => expect(wrapper.getByText(/Research topic/)).toBeInTheDocument(),
+        {
+          timeout: 2000,
+        },
       )
     })
   })
@@ -58,12 +61,19 @@ describe('research.routes', () => {
         </Provider>,
       )
 
-      await waitFor(() => {
-        expect(mockResearchStore.setActiveResearchItem).toHaveBeenCalledWith(
-          'research-slug',
-        )
-        expect(wrapper.getByText(/Research article title/)).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(mockResearchStore.setActiveResearchItem).toHaveBeenCalledWith(
+            'research-slug',
+          )
+          expect(
+            wrapper.getByText(/Research article title/),
+          ).toBeInTheDocument()
+        },
+        {
+          timeout: 2000,
+        },
+      )
     })
   })
 

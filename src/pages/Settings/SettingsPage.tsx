@@ -216,11 +216,11 @@ export class UserSettings extends React.Component<IProps, IState> {
                           />
                         )}
                         {/* General fields */}
-                        {values.profileType !== 'member' && (
+                        {(values.profileType !== 'member' && isModuleSupported(MODULE.MAP)) && (
                           <WorkspaceMapPinSection />
                         )}
 
-{values.profileType === 'member' && (
+                        {(values.profileType === 'member' && isModuleSupported(MODULE.MAP)) && (
                           <MemberMapPinSection />
                         )}
                         <UserInfosSection

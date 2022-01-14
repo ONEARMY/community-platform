@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
+import ReactGA from 'react-ga'
 import { Box, Flex } from 'rebass/styled-components'
 import { useCommonStores } from 'src/index'
 import { Button } from 'src/components/Button'
@@ -6,6 +7,7 @@ import { Comment } from 'src/components/Comment/Comment'
 import { CommentTextArea } from 'src/components/Comment/CommentTextArea'
 import { IComment } from 'src/models'
 import styled from 'styled-components'
+import { logger } from 'src/logger'
 
 const MAX_COMMENTS = 5
 
@@ -41,10 +43,23 @@ export const HowToComments = ({ comments }: IProps) => {
   
       setLoading(false)
       setComment('')
-      // TODO: add notification
-      //await stores.userStore.add
+
+      ReactGA.event({
+        category: 'Comments',
+        action: 'Submitted',
+        label: stores.howtoStore.activeHowto?.title,
+      })
+      logger.debug(
+        {
+          category: 'Comments',
+          action: 'Submitted',
+          label: stores.howtoStore.activeHowto?.title,
+        },
+        'comment submitted',
+      )
     } catch (err) {
       // Error: Comment could not be posted
+      logger.error({ err }, 'failed to submit comment')
     }
   }
 
@@ -72,7 +87,14 @@ export const HowToComments = ({ comments }: IProps) => {
           <Button
             width="max-content"
             variant="outline"
-            onClick={() => setMoreComments(moreComments + 1)}
+            onClick={() => {
+              ReactGA.event({
+                category: 'Comments',
+                action: 'Show more',
+                label: stores.howtoStore.activeHowto?.title,
+              })
+              return setMoreComments(moreComments + 1)
+            }}
           >
             show more comments
           </Button>

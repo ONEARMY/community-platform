@@ -47,7 +47,7 @@ export class EventsList extends React.Component<any> {
       return (
         <>
           <Flex py={26}>
-            <Heading medium txtcenter bold width={1} my={20}>
+            <Heading medium txtcenter bold width={1}>
               Precious Plastic events from around the world
             </Heading>
           </Flex>

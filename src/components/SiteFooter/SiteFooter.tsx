@@ -58,7 +58,7 @@ const SiteFooter = () => {
       <OneArmyIcon glyph={'star-active'} mb={[3, 3, 0]} />
       <Text ml={[0, 0, 0, 3]} mr={1}>
         {theme.name} is a project by{' '}
-        <Anchor href="https://platform.onearmy.earth/" target="_blank">
+        <Anchor href="https://onearmy.earth/" target="_blank">
           One Army
         </Anchor>
         .

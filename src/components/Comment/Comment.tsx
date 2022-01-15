@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import ReactGA from 'react-ga'
 import { FaTrash, FaRegEdit } from 'react-icons/fa'
 import { Flex } from 'rebass/styled-components'
 import { useCommonStores } from 'src/index'
@@ -45,7 +46,14 @@ export const Comment: React.FC<IProps> = ({
             }}
             mr={2}
             fontSize="12px"
-            onClick={async () => setShowEditModal(true)}
+            onClick={async () => {
+              ReactGA.event({
+                category: 'Comments',
+                action: 'Edit existing comment',
+                label: stores.howtoStore.activeHowto?.title,
+              })
+              return setShowEditModal(true)
+            }}
           >
             edit <FaRegEdit />
           </Text>
@@ -61,6 +69,19 @@ export const Comment: React.FC<IProps> = ({
               )
               if (confirmation) {
                 await stores.howtoStore.deleteComment(_id)
+                ReactGA.event({
+                  category: 'Comments',
+                  action: 'Deleted',
+                  label: stores.howtoStore.activeHowto?.title,
+                })
+                logger.debug(
+                  {
+                    category: 'Comments',
+                    action: 'Deleted',
+                    label: stores.howtoStore.activeHowto?.title,
+                  },
+                  'comment deleted',
+                )
               }
             }}
           >
@@ -106,6 +127,19 @@ export const Comment: React.FC<IProps> = ({
                   <Button
                     small
                     onClick={async () => {
+                      ReactGA.event({
+                        category: 'Comments',
+                        action: 'Update',
+                        label: stores.howtoStore.activeHowto?.title,
+                      })
+                      logger.debug(
+                        {
+                          category: 'Comments',
+                          action: 'Update',
+                          label: stores.howtoStore.activeHowto?.title,
+                        },
+                        'comment edited',
+                      )
                       await stores.howtoStore.editComment(_id, values.comment)
                       setShowEditModal(false)
                     }}

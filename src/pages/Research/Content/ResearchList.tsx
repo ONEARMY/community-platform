@@ -13,7 +13,7 @@ const ResearchList = observer(() => {
   return (
     <>
       <Flex py={26}>
-        <Heading medium bold txtcenter width={1} my={20}>
+        <Heading medium bold txtcenter width={1}>
           Research topics. Can we...
         </Heading>
       </Flex>

@@ -229,7 +229,7 @@ describe('[How To]', () => {
           'make-an-interlocking-brick'
         ).then(howtos => {
           cy.wrap(howtos[0].comments)
-            .should('have.length', 1)
+            .should('have.length.gte', 1)
           cy.wrap(howtos[0].comments[0])
             .should('deep.include', {
               "_creatorId": "howto_reader",

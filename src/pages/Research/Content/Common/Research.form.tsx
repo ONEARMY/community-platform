@@ -159,7 +159,7 @@ const ResearchForm = observer((props: IProps) => {
                         ) : (
                           <span>Edit your Research</span>
                         )}{' '}
-                        
+
                       </Heading>
                       <Box ml="15px">
                         <ElWithBeforeIcon
@@ -196,8 +196,8 @@ const ResearchForm = observer((props: IProps) => {
                               validate={validateTitle}
                               isEqual={COMPARISONS.textInput}
                               component={InputField}
-                              maxLength="40"
-                              placeholder="Make a chair from.. (max 40 characters)"
+                              maxLength="60"
+                              placeholder="Can we make a chair from.. (max 60 characters)"
                             />
                           </Flex>
                           <Flex flexDirection={'column'} mb={3}>

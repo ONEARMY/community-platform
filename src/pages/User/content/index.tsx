@@ -120,7 +120,7 @@ export class UserPage extends React.Component<
     const userid = this.props.match.params.id
     const userData = await this.injected.userStore.getUserProfile(userid)
     this.setState({
-      user: userData ? userData : undefined,
+      user: userData || null,
       isLoading: false,
     })
   }

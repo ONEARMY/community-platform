@@ -89,7 +89,6 @@ const CoverImages = ({
         initialValue={coverImages as IUploadedFileMeta[]}
       >
         {({ fields, meta }) => {
-          console.log(fields)
           return (
             <>
               {fields.map((name, index: number) => (

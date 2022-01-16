@@ -20,7 +20,6 @@ export const ImageInputField = ({
   customChange,
   ...rest
 }: IExtendedFieldProps) => {
-  console.log('IMAGE_INPUT: ', input, meta, dataCy, customChange)
   return (
     <>
       <FieldContainer

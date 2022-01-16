@@ -38,7 +38,6 @@ const ProfileWrapper = styled(Box)`
   position: relative;
   border: 2px solid black;
   border-radius: ${theme.space[2]}px;
-  width: 100%;
   align-self: center;
 `
 

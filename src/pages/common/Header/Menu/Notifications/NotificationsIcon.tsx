@@ -1,14 +1,30 @@
 import Flex from 'src/components/Flex'
-import Icon from 'src/components/Icons'
+import { ReactComponent as IconNotifications } from 'src/assets/icons/icon-notification.svg'
+import styled from 'styled-components'
 
-function NotificationsIcon({onCLick, isMobileMenuActive, areThereNotifications}) {
-        return (
-            <>
-                <Flex ml={1} onClick={onCLick} style={isMobileMenuActive ? {backgroundColor: "#e2edf7", borderRadius: "5px"} : {}}>
-                    <Icon glyph="thunderbolt" size={40} color={areThereNotifications ? "gold" : "#bfbfbf"} />
-                </Flex>
-            </>
-        )
+
+const IconWrapper = styled(Flex)`
+  display: flex;
+  flex-direction: column;
+  color: #000;
+  width: 100%;
+  font-size: 16px;
+  padding: 10px; 
+  cursor: pointer;
+  
+  }
+`
+
+function NotificationsIcon({ onCLick, isMobileMenuActive, areThereNotifications }) {
+    return (
+        <>
+            <IconWrapper ml={1} onClick={onCLick} style={isMobileMenuActive ? {
+                backgroundColor: "#e0e0eb", borderRadius: "5px"
+            } : {}}>
+                <IconNotifications color={areThereNotifications ? "orange" : "#bfbfbf"} height="25px" width="25px" />
+            </IconWrapper>
+        </>
+    )
 }
 
 export default NotificationsIcon

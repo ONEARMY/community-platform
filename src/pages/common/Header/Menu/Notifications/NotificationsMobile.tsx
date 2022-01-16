@@ -6,7 +6,6 @@ import { inject, observer } from 'mobx-react'
 import Flex from 'src/components/Flex'
 import { NotificationList } from 'src/components/Notifications/NotificationList'
 import { Button } from 'src/components/Button'
-import Text from 'src/components/Text'
 import { UserStore } from 'src/stores/User/user.store'
 
 
@@ -106,11 +105,9 @@ export class NotificationsMobile extends Component {
                 </Flex>
                 <Flex>
                   <Button variant="subtle" fontSize="14px"
-                    style={{ margin: "0 auto 1em auto" }}
+                    style={{ margin: "0 auto 1em auto", borderRadius: "10px" }}
                     onClick={() => this.injected.userStore.markAllNotificationsRead()}>
-                    <Flex>
-                      <Text>Clear notifications</Text>
-                    </Flex>
+                      Clear notifications
                   </Button>
                 </Flex>
               </ModalContainerInner>

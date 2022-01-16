@@ -5,8 +5,9 @@ import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import Flex from 'src/components/Flex'
 import { NotificationList } from 'src/components/Notifications/NotificationList'
-import { Button } from 'src/components/Button'
-import Text from 'src/components/Text'
+import {
+  Button
+} from 'rebass/styled-components'
 
 interface IProps {
 }
@@ -16,8 +17,8 @@ interface IInjectedProps extends IProps {
 }
 
 const ModalContainer = styled(Box)`
-  max-width: 100%;
-  max-height: 100%;
+  max-height: 300px;
+  width: 250px;
   position: absolute;
   right: 10px;
   top: 60px;
@@ -28,22 +29,22 @@ const ModalContainerInner = styled(Box)`
   background: white;
   border: 2px solid black;
   border-radius: 5px;
-  margin: 1em;
-  max-height: 380px;
   overflow-y: auto;
+  padding: 10px 20px 30px;
+  width: 248px;
+  height: 310px;
+
 `
 
 const ModalItem = styled(Box)`
   display: flex;
   flex-direction: column;
   color: #000;
-  padding: 10px 30px 10px 30px;
-  text-align: left;
   width: 100%;
-  max-width: 100%;
-  max-height: 100%;
+  font-size: 16px;
   }
 `
+
 @inject('userStore')
 @observer
 export class NotificationsModal extends React.Component<IProps> {
@@ -74,7 +75,7 @@ export class NotificationsModal extends React.Component<IProps> {
           </ModalContainerInner>
           : <ModalContainerInner>
             <Flex>
-              <ModalItem>
+              <ModalItem style={{marginBottom: "20px"}}>
                 Notifications
               </ModalItem>
             </Flex>
@@ -82,12 +83,13 @@ export class NotificationsModal extends React.Component<IProps> {
               <NotificationList notifications={notifications} />
             </Flex>
             <Flex>
-              <Button variant="subtle" fontSize="14px"
-                style={{margin: "1em"}}
+              <Button
+                style={{width: "100%", borderRadius: '10px'}}
+                variant="subtle"
                 onClick={() => this.injected.userStore.markAllNotificationsRead()}>
-                <Flex>
-                  <Text>Clear notifications</Text>
-                </Flex>
+                  <div style={{margin: "auto"}}>
+                    Clear notifications
+                  </div>
               </Button>
             </Flex>
           </ModalContainerInner>

@@ -1,6 +1,4 @@
 import * as React from 'react'
-import { RouteComponentProps } from 'react-router'
-import { inject, observer } from 'mobx-react'
 import {
   IUserPP,
   IMAchineBuilderXp,
@@ -8,7 +6,6 @@ import {
   PlasticTypeLabel,
 } from 'src/models/user_pp.models'
 
-import { UserStore } from 'src/stores/User/user.store'
 import Heading from 'src/components/Heading'
 import { Box, Image } from 'rebass/styled-components'
 // import slick and styles
@@ -42,34 +39,21 @@ import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
 
 import { IUploadedFileMeta } from 'src/stores/storage'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
-import { Loader } from 'src/components/Loader'
 
-import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { AdminContact } from 'src/components/AdminContact/AdminContact'
 import ProfileLink from './ProfileLink'
-import { logger } from 'src/logger'
 import { Avatar } from 'src/components/Avatar'
-
-interface IRouterCustomParams {
-  id: string
-}
 
 interface IBackgroundImageProps {
   bgImg: string
 }
 
-interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
-  userStore: UserStore,
-  themeStore: ThemeStore
-}
+interface IState {}
 
-interface IState {
-  user?: IUserPP
-  isLoading: boolean
+interface IProps {
+  user: IUserPP
 }
-
-interface IProps {}
 
 const UserCategory = styled.div`
   position: relative;
@@ -209,34 +193,7 @@ const MachineExperienceTab = styled.div`
   margin-right: 10px;
 `
 
-@inject('userStore', 'themeStore')
-@observer
-export class UserPage extends React.Component<
-  RouteComponentProps<IRouterCustomParams>,
-  IState,
-  IProps
-> {
-  constructor(props: any) {
-    super(props)
-    this.state = {
-      user: undefined,
-      isLoading: true,
-    }
-  }
-
-  get injected() {
-    return this.props as InjectedProps
-  }
-
-  /* eslint-disable @typescript-eslint/naming-convention*/
-  public async UNSAFE_componentWillMount() {
-    const userid = this.props.match.params.id
-    const userData = await this.injected.userStore.getUserProfile(userid)
-    this.setState({
-      user: userData ? userData : undefined,
-      isLoading: false,
-    })
-  }
+export class SpaceProfile extends React.Component<IProps, IState> {
   // Comment on 6.05.20 by BG : renderCommitmentBox commented for now, will be reused with #974
   public renderUserStatsBox(user: IUserPP) {
     let howtoCount = 0
@@ -374,18 +331,7 @@ export class UserPage extends React.Component<
   }
 
   public render() {
-    const { user, isLoading } = this.state
-    logger.debug('render', user)
-    if (isLoading) {
-      return <Loader />
-    }
-    if (!user) {
-      return (
-        <Text txtcenter mt="50px" width={1}>
-          User not found
-        </Text>
-      )
-    }
+    const user = this.props.user
     const workspaceHighlightSrc = Workspace.findWordspaceHighlight(
       user.profileType,
     )
@@ -416,7 +362,9 @@ export class UserPage extends React.Component<
         ? true
         : false
 
-    const userLinks = user?.links.filter(linkItem => !['discord', 'forum'].includes(linkItem.label))
+    const userLinks = user?.links.filter(
+      linkItem => !['discord', 'forum'].includes(linkItem.label),
+    )
 
     return (
       <ProfileWrapper mt={4} mb={6}>
@@ -427,7 +375,7 @@ export class UserPage extends React.Component<
           <Box width={['100%', '100%', '80%']}>
             <Box sx={{ display: ['block', 'block', 'none'] }}>
               <MobileBadge>
-                <Avatar profileType={user.profileType}/>
+                <Avatar profileType={user.profileType} />
               </MobileBadge>
             </Box>
 
@@ -491,10 +439,7 @@ export class UserPage extends React.Component<
             sx={{ display: ['none', 'none', 'block'] }}
           >
             <MobileBadge>
-              <Avatar
-                width="150"
-                profileType={user.profileType}
-                />
+              <Avatar width="150" profileType={user.profileType} />
 
               {shouldRenderUserStatsBox && this.renderUserStatsBox(user)}
             </MobileBadge>
@@ -512,9 +457,19 @@ const sliderSettings = {
   slidesToScroll: 1,
   adaptiveHeight: false,
   nextArrow: (
-    <Icon glyph="chevron-right" color={theme.colors.white} size={60} marginRight="4px" />
+    <Icon
+      glyph="chevron-right"
+      color={theme.colors.white}
+      size={60}
+      marginRight="4px"
+    />
   ),
   prevArrow: (
-    <Icon glyph="chevron-left" color={theme.colors.white} size={60} marginRight="4px" />
+    <Icon
+      glyph="chevron-left"
+      color={theme.colors.white}
+      size={60}
+      marginRight="4px"
+    />
   ),
 }

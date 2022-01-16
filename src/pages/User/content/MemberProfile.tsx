@@ -1,4 +1,3 @@
-import { Typography } from '@material-ui/core'
 import * as React from 'react'
 import { Box, Image } from 'rebass/styled-components'
 import 'src/assets/css/slick.min.css'
@@ -15,7 +14,6 @@ import theme from 'src/themes/styled.theme'
 import styled from 'styled-components'
 import ProfileLink from './ProfileLink'
 import { renderUserStatsBox } from '.'
-import { Avatar } from 'src/components/Avatar'
 
 interface IProps {
   user: IUserPP
@@ -48,7 +46,7 @@ const ProfileContentWrapper = styled(Flex)`
   border-radius: 10px;
 `
 
-const MemberBadge = styled(Avatar)`
+const MemberBadge = styled(Image)`
   position: absolute;
   width: 48px;
   top: -24px;
@@ -64,15 +62,15 @@ const MemberPicture = styled(Image)`
 export const MemberProfile = ({ user }: IProps) => {
   const shouldRenderUserStatsBox =
     user.location?.latlng ||
-    (user.stats &&
-      (user.stats.userCreatedHowtos || user.stats.userCreatedEvents))
+    user.stats?.userCreatedHowtos ||
+    user.stats?.userCreatedEvents
 
   const userLinks = user?.links.filter(
     linkItem => !['discord', 'forum'].includes(linkItem.label),
   )
 
   return (
-    <ProfileWrapper width={[1, 3 / 4, 1 / 2]} mt={4} mb={6}>
+    <ProfileWrapper width={[1, 3 / 4, 1 / 2]} mt={8} mb={6}>
       <MemberBadge src={Workspace.findWorkspaceBadge(user.profileType)} />
       <ProfileContentWrapper px={4} py={4}>
         <Box mr={3} minWidth="initial">
@@ -108,7 +106,7 @@ export const MemberProfile = ({ user }: IProps) => {
 
           {!!userLinks.length && (
             <UserContactInfo>
-              <Typography variant="h6">Contact & Links</Typography>
+              <span>Contact & Links</span>
               {userLinks.map((link, i) => (
                 <ProfileLink link={link} key={'Link-' + i} />
               ))}

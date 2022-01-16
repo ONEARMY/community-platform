@@ -1,10 +1,12 @@
 import React from 'react'
-import { Box, Image } from 'rebass'
+import { Box } from 'rebass'
 import { Flex } from 'rebass'
 import { INotification } from 'src/models'
 import { Link } from 'src/components/Links'
-import IconComment from 'src/assets/icons/icon-comment.svg'
-import IconUseful from 'src/assets/icons/icon-useful.svg'
+import { ReactComponent as IconComment } from 'src/assets/icons/icon-comment.svg'
+import { ReactComponent as IconUseful } from 'src/assets/icons/icon-useful.svg'
+
+
 
 export interface IProps extends INotification { }
 
@@ -19,86 +21,86 @@ export const NotificationItem: React.FC<IProps> = ({
       flexDirection="column"
       bg={'white'}
       width="100%"
-      style={{ fontSize: '0.9em', padding: '1em 0em 1em 0em', borderBottom: 'groove'}}
+      style={{
+        fontSize: '12px', marginBottom: '10px',
+        paddingBottom: '10px', borderBottom: '1px solid #c7c7c7',
+        fontFamily: "Inter, sans-serif"
+      }}
     >
-        {
-          type === "howto_useful" ?
-            (
-              <Flex style={{textAlign: 'left'}}>
-                <Box
-                width={1/5}
-                style={{textAlign: 'center'}}
-                >
-                  <Image src={IconUseful} width="22px" height="22px" />
-                </Box>
-                <Box
-                  width={4/5}
-                >
-                  Yay,&nbsp;
+      {
+        type === "howto_useful" ?
+          (
+            <Flex style={{ textAlign: 'left', color: 'black' }}>
+              <IconUseful width="15px" height="15px" style={{ marginRight: "10px", opacity: "0.6" }} />
+              <Box
+              >
+                Yay,
                   <Link
-                    sx={{
-                      textDecoration: 'underline',
-                      color: 'inherit',
-                    }}
-                    to={'/u/' + _triggeredByUserId}
-                    display="inline"
-                  >
-                    {triggeredByName}&nbsp;
-                  </Link>
-                  found your&nbsp;
+                  style={{
+                    textDecoration: 'underline',
+                    padding: '3px',
+                    color: '#61646b',
+                    fontWeight: '500'
+                  }}
+                  to={'/u/' + _triggeredByUserId}
+                  display="inline"
+                >
+                  {triggeredByName}
+                </Link>
+                  found your
                   <Link
-                    sx={{
-                      textDecoration: 'underline',
-                      color: 'inherit',
-                    }}
-                    to={'/how-to/' + howToId}
-                    display="inline"
-                  >
-                    how-to&nbsp;
+                  sx={{
+                    textDecoration: 'underline',
+                    padding: '3px',
+                    color: '#61646b',
+                    fontWeight: '500'
+                  }}
+                  to={'/how-to/' + howToId}
+                  display="inline"
+                >
+                  how-to
                   </Link>
                   useful
                 </Box>
-              </Flex>
-            )
-            :
-            (
-              <Flex>
-                <Box
-                width={1/5}
-                style={{textAlign: 'center'}}
-                >
-                  <Image src={IconComment} width="22px" height="22px" />
-                </Box>
-                <Box
-                  width={4/5}
-                  style={{textAlign: 'left'}}
-                >
-                  New comment on your&nbsp;
+            </Flex>
+          )
+          :
+          (
+            <Flex>
+              <IconComment width="15px" height="15px" style={{ marginRight: "10px", opacity: "0.6" }} />
+              <Box
+                style={{ textAlign: 'left' }}
+              >
+                New comment on your
                   <Link
-                    sx={{
-                      textDecoration: 'underline',
-                      color: 'inherit',
-                    }}
-                    to={'/how-to/' + howToId}
-                    display="inline"
-                  >
-                    how-to&nbsp;
+                  sx={{
+                    textDecoration: 'underline',
+                    padding: '3px',
+                    color: '#61646b',
+                    fontWeight: '500'
+                  }}
+                  to={'/how-to/' + howToId}
+                  display="inline"
+                >
+                  how-to
                   </Link>
-                  by&nbsp;
+                  by
                   <Link
-                    sx={{
-                      textDecoration: 'underline',
-                      color: 'inherit',
-                    }}
-                    to={'/u/' + _triggeredByUserId}
-                    display="inline"
-                  >
-                    {triggeredByName}&nbsp;
-                  </Link>
-                </Box>
-              </Flex>
-            )
-        }
+                  sx={{
+                    textDecoration: 'underline',
+                    padding: '3px',
+                    color: '#61646b',
+                    fontWeight: '500'
+                  }}
+                  to={'/u/' + _triggeredByUserId}
+                  display="inline"
+                >
+                  {triggeredByName}
+                </Link>
+              </Box>
+            </Flex>
+          )
+      }
     </Flex >
   )
 };

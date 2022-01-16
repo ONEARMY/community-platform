@@ -101,7 +101,7 @@ export class Header extends Component<IProps> {
     const menu = this.injected.mobileMenuStore;
     const user = this.injected.userStore.user;
     const areThereNotifications = !(user?.notifications?.filter(notification => !notification.read).length === 0);
-    
+
     return (
       <>
         <Flex
@@ -118,8 +118,8 @@ export class Header extends Component<IProps> {
             <Logo isMobile={true} />
           </Flex>
           <MobileNotificationsWrapper>
-            <NotificationsIcon onCLick={() => menu.toggleMobileNotifications()} isMobileMenuActive={menu.showMobileNotifications} 
-            areThereNotifications={areThereNotifications}/>
+            <NotificationsIcon onCLick={() => menu.toggleMobileNotifications()} isMobileMenuActive={menu.showMobileNotifications}
+              areThereNotifications={areThereNotifications} />
           </MobileNotificationsWrapper>
           <DesktopMenuWrapper className="menu-desktop" px={2}>
             <MenuDesktop />

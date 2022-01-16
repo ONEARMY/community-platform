@@ -8,7 +8,7 @@ interface IProps {
 
 export const NotificationList = ({ notifications }: IProps) => {
     return (
-        <div style={{padding: '0em 0.9em 0em 0.9em'}}>
+        <div>
             {notifications &&
                 notifications.map(notification => {
                     return (

@@ -17,6 +17,8 @@ import { required } from 'src/utils/validators'
 import { IUserPP } from 'src/models/user_pp.models'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { ErrorMessage } from 'src/components/Form/elements'
+import { IUser } from 'src/models'
+import { IUploadedFileMeta } from 'src/stores/storage'
 
 interface IProps {
   formValues: IUserPP
@@ -36,6 +38,101 @@ const FlagSelectContainer = styled(Flex)`
   background-color: ${theme.colors.background};
 `
 
+const MemberLocation = ({}) => (
+  <>
+    <Text mb={2} mt={7} medium>
+      Where are you based? *
+    </Text>
+    <FlagSelectContainer width={1} alignItems="center" data-cy="country">
+      <Field
+        name="country"
+        component={FlagSelectField}
+        searchable={true}
+        validate={required}
+        validateFields={[]}
+      />
+    </FlagSelectContainer>
+  </>
+)
+
+const CoverImages = ({
+  isMemberProfile,
+  coverImages,
+}: {
+  isMemberProfile: boolean
+  coverImages: IUser['coverImages']
+}) =>
+  isMemberProfile ? (
+    <>
+      <Text mb={2} mt={7} width="100%" medium>
+        Add a profile image *
+      </Text>
+      <Box height="150px" width="150px" m="10px" data-cy="cover-image">
+        <Field
+          hasText={false}
+          name="coverImages[0]"
+          validate={required}
+          validateFields={[]}
+          component={ImageInputField}
+          data-cy={`coverImage`}
+          initialValue={coverImages[0]}
+        />
+      </Box>
+    </>
+  ) : (
+    <>
+      <Text mb={2} mt={7} width="100%" medium>
+        Cover Image *
+      </Text>
+      <FieldArray
+        name="coverImages"
+        initialValue={coverImages as IUploadedFileMeta[]}
+      >
+        {({ fields, meta }) => {
+          console.log(fields)
+          return (
+            <>
+              {fields.map((name, index: number) => (
+                <Box
+                  key={name}
+                  height="100px"
+                  width="150px"
+                  m="10px"
+                  data-cy="cover-image"
+                >
+                  <Field
+                    hasText={false}
+                    name={name}
+                    validateFields={[]}
+                    data-cy={`coverImages-${index}`}
+                    component={ImageInputField}
+                  />
+                </Box>
+              ))}
+              {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
+            </>
+          )
+        }}
+      </FieldArray>
+
+      <Box
+        bg={theme.colors.softblue}
+        mt={2}
+        p={2}
+        width={1}
+        sx={{ borderRadius: '3px' }}
+      >
+        <Text small>
+          The cover images are shown in your profile and helps us evaluate your
+          account.
+        </Text>
+        <Text small>
+          Make sure the first image shows your space. Best size is 1920x1080.
+        </Text>
+      </Box>
+    </>
+  )
+
 export class UserInfosSection extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
@@ -49,6 +146,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
     const { formValues } = this.props
     const { profileType, links, coverImages } = formValues
     const { isOpen } = this.state
+    const isMemberProfile = profileType === 'member'
     return (
       <FlexSectionContainer>
         <Flex justifyContent="space-between">
@@ -73,30 +171,10 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               validate={required}
               validateFields={[]}
             />
-            {profileType === 'member' && (
-              <>
-                <Text mb={2} mt={7} medium>
-                  Where are you based? *
-                </Text>
-                <FlagSelectContainer
-                  width={1}
-                  alignItems="center"
-                  data-cy="country"
-                >
-                  <Field
-                    name="country"
-                    component={FlagSelectField}
-                    searchable={true}
-                    validate={required}
-                    validateFields={[]}
-                  />
-                </FlagSelectContainer>
-              </>
-            )}
-
+            {isMemberProfile && <MemberLocation />}
             <Text mb={2} mt={7} medium>
-              {profileType === 'member'
-                ? 'Tell us a bit about yourself'
+              {isMemberProfile
+                ? 'Tell us a bit about yourself *'
                 : 'Description *'}
             </Text>
             <Field
@@ -107,80 +185,10 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               validate={required}
               validateFields={[]}
             />
-            {profileType === 'member' ? (
-              <>
-                <Text mb={2} mt={7} width="100%" medium>
-                  Add a profile image
-                </Text>
-                <Box
-                  height="100px"
-                  width="150px"
-                  m="10px"
-                  data-cy="cover-image"
-                >
-                  <Field
-                    hasText={false}
-                    name="profile_picture"
-                    validateFields={[]}
-                    component={ImageInputField}
-                  />
-                </Box>
-              </>
-            ) : (
-              <>
-                <Text mb={2} mt={7} width="100%" medium>
-                  Cover Image *
-                </Text>
-                <FieldArray
-                  name="coverImages"
-                  initialValue={coverImages as any}
-                >
-                  {({ fields, meta }) => {
-                    return (
-                      <>
-                        {fields.map((name, index: number) => (
-                          <Box
-                            key={name}
-                            height="100px"
-                            width="150px"
-                            m="10px"
-                            data-cy="cover-image"
-                          >
-                            <Field
-                              hasText={false}
-                              name={name}
-                              validateFields={[]}
-                              data-cy={`coverImages-${index}`}
-                              component={ImageInputField}
-                            />
-                          </Box>
-                        ))}
-                        {meta.error && (
-                          <ErrorMessage>{meta.error}</ErrorMessage>
-                        )}
-                      </>
-                    )
-                  }}
-                </FieldArray>
-
-                <Box
-                  bg={theme.colors.softblue}
-                  mt={2}
-                  p={2}
-                  width={1}
-                  sx={{ borderRadius: '3px' }}
-                >
-                  <Text small>
-                    The cover images are shown in your profile and helps us
-                    evaluate your account.
-                  </Text>
-                  <Text small>
-                    Make sure the first image shows your space. Best size is
-                    1920x1080.
-                  </Text>
-                </Box>
-              </>
-            )}
+            <CoverImages
+              isMemberProfile={isMemberProfile}
+              coverImages={coverImages}
+            />
           </Flex>
           <>
             <Flex wrap={'nowrap'} alignItems={'center'} width={1}>

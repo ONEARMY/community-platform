@@ -108,6 +108,7 @@ export class UserSettings extends React.Component<IProps, IState> {
    * Return any errors as json object
    */
   public validateForm(v: IUserPP) {
+    console.log("VALIDATE: ",v)
     const errors: any = {}
     // must have at least 1 cover (awkard react final form array format)
     if (!v.coverImages[0]) {
@@ -118,6 +119,7 @@ export class UserSettings extends React.Component<IProps, IState> {
       errors.links = []
       errors.links[ARRAY_ERROR] = 'Must have at least one link'
     }
+    console.log(errors)
     return errors
   }
 

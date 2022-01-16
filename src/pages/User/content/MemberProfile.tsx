@@ -14,6 +14,7 @@ import theme from 'src/themes/styled.theme'
 import styled from 'styled-components'
 import ProfileLink from './ProfileLink'
 import { renderUserStatsBox } from '.'
+import { IUploadedFileMeta } from 'src/stores/storage'
 
 interface IProps {
   user: IUserPP
@@ -74,7 +75,13 @@ export const MemberProfile = ({ user }: IProps) => {
       <MemberBadge src={Workspace.findWorkspaceBadge(user.profileType)} />
       <ProfileContentWrapper px={4} py={4}>
         <Box mr={3} minWidth="initial">
-          <MemberPicture src={DefaultMemberImage} />
+          <MemberPicture
+            src={
+              user.coverImages[0]
+                ? (user.coverImages[0] as IUploadedFileMeta).downloadUrl
+                : DefaultMemberImage
+            }
+          />
           {shouldRenderUserStatsBox && renderUserStatsBox(user)}
         </Box>
         <Flex flexDirection="column" mt={3} ml={3}>

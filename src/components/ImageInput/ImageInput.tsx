@@ -118,6 +118,7 @@ export class ImageInput extends React.Component<IProps, IState> {
    * require extra function to separate out to handle preview of previously uploaded
    */
   private _getUploadedFiles(value: IProps['value'] = []) {
+    console.log('INPUT ', value)
     const valArray = Array.isArray(value) ? value : [value]
     return valArray.filter(v =>
       v.hasOwnProperty('downloadUrl'),

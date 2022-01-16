@@ -49,8 +49,6 @@ interface IBackgroundImageProps {
   bgImg: string
 }
 
-interface IState {}
-
 interface IProps {
   user: IUserPP
 }
@@ -193,263 +191,6 @@ const MachineExperienceTab = styled.div`
   margin-right: 10px;
 `
 
-export class SpaceProfile extends React.Component<IProps, IState> {
-  // Comment on 6.05.20 by BG : renderCommitmentBox commented for now, will be reused with #974
-  public renderUserStatsBox(user: IUserPP) {
-    let howtoCount = 0
-    let eventCount = 0
-    try {
-      howtoCount = Object.keys(user.stats!.userCreatedHowtos).length
-      eventCount = Object.keys(user.stats!.userCreatedEvents).length
-    } catch (error) {
-      // Comment on 12.10.20 by CC: would be nice if user stats had their own display to make conditional
-      // logic easier, but for now will just use a try-catch to also fix cases broken on dev during migration attempts
-    }
-
-    return (
-      <UserStatsBox>
-        {user.badges?.verified && (
-          <UserStatsBoxItem style={{ marginBottom: '15px' }}>
-            <Image src={VerifiedBadgeIcon} width="22px" height="22px" />
-            <Box ml="5px">Verified</Box>
-          </UserStatsBoxItem>
-        )}
-        {user.location?.latlng && (
-          <Link color={'black'} to={'/map/#' + user.userName}>
-            <UserStatsBoxItem>
-              <Icon glyph="location-on" size="22"></Icon>
-              <Box ml="5px">{user.location?.country || 'View on Map'}</Box>
-            </UserStatsBoxItem>
-          </Link>
-        )}
-        {/* {isV4Member && (
-          <UserStatsBoxItem>
-            <ElWithBeforeIcon IconUrl={V4MemberIcon}>
-              V4 Member
-            </ElWithBeforeIcon>
-          </UserStatsBoxItem>
-         )} */}
-        {howtoCount > 0 && (
-          <UserStatsBoxItem>
-            <ElWithBeforeIcon IconUrl={HowToCountIcon} />
-            How-to: {howtoCount}
-          </UserStatsBoxItem>
-        )}
-        {eventCount > 0 && (
-          <UserStatsBoxItem>
-            <ElWithBeforeIcon IconUrl={EventsIcon} />
-            Events: {eventCount}
-          </UserStatsBoxItem>
-        )}
-      </UserStatsBox>
-    )
-  }
-
-  public renderPlasticTypes(plasticTypes: Array<PlasticTypeLabel>) {
-    function renderIcon(type: string) {
-      switch (type) {
-        case 'hdpe':
-          return <Image src={HDPEIcon} />
-        case 'ldpe':
-          return <Image src={LDPEIcon} />
-        case 'other':
-          return <Image src={OtherIcon} />
-        case 'pet':
-          return <Image src={PETIcon} />
-        case 'pp':
-          return <Image src={PPIcon} />
-        case 'ps':
-          return <Image src={PSIcon} />
-        case 'pvc':
-          return <Image src={PVCIcon} />
-        default:
-          return null
-      }
-    }
-
-    return (
-      <div>
-        <h4>We collect the following plastic types:</h4>
-        <Flex flexWrap="wrap">
-          {plasticTypes.map(plasticType => {
-            return (
-              <PlasticType key={plasticType}>
-                {renderIcon(plasticType)}
-              </PlasticType>
-            )
-          })}
-        </Flex>
-      </div>
-    )
-  }
-
-  public renderOpeningHours(openingHours: Array<IOpeningHours>) {
-    return (
-      <div>
-        <h4>We're open on:</h4>
-        {openingHours.map(openingObj => {
-          return (
-            <OpeningHours key={openingObj.day}>
-              {openingObj.day}: {openingObj.openFrom} - {openingObj.openTo}
-            </OpeningHours>
-          )
-        })}
-      </div>
-    )
-  }
-
-  public renderMachineBuilderXp(machineBuilderXp: Array<IMAchineBuilderXp>) {
-    return (
-      <>
-        <h4>We offer the following services:</h4>
-        {machineBuilderXp.map((machineExperience, index) => {
-          return (
-            <MachineExperienceTab key={`machineXp-${index}`}>
-              {machineExperience}
-            </MachineExperienceTab>
-          )
-        })}
-      </>
-    )
-  }
-
-  public renderProfileTypeName(user: IUserPP) {
-    const profileTypeNames: { [key in IUserPP['profileType']]: string } = {
-      'collection-point': 'Collection Point',
-      'community-builder': 'Community Point',
-      'machine-builder': 'Machine Builder',
-      member: 'Member',
-      workspace: 'Workspace',
-    }
-    return (
-      <Heading small bold width={1} capitalize>
-        {user.profileType === 'machine-builder' &&
-          `${replaceDashesWithSpaces(user.workspaceType!)} `}
-        {profileTypeNames[user.profileType]}
-      </Heading>
-    )
-  }
-
-  public render() {
-    const user = this.props.user
-    const workspaceHighlightSrc = Workspace.findWordspaceHighlight(
-      user.profileType,
-    )
-    let coverImage = [
-      <SliderImage
-        key="default-image"
-        bgImg="https://i.ibb.co/zhkxbb9/no-image.jpg"
-      />,
-    ]
-    if (user.coverImages && user.coverImages.length > 0) {
-      const coverImages: Array<IConvertedFileMeta | IUploadedFileMeta> =
-        user.coverImages
-      coverImage = coverImages.map(
-        (image: IConvertedFileMeta | IUploadedFileMeta) => {
-          if ('downloadUrl' in image) {
-            return <SliderImage key={image.name} bgImg={image.downloadUrl} />
-          }
-
-          return <SliderImage key={image.name} bgImg={image.objectUrl} />
-        },
-      )
-    }
-    const shouldRenderUserStatsBox =
-      user &&
-      (user.location?.latlng ||
-        (user.stats &&
-          (user.stats.userCreatedHowtos || user.stats.userCreatedEvents)))
-        ? true
-        : false
-
-    const userLinks = user?.links.filter(
-      linkItem => !['discord', 'forum'].includes(linkItem.label),
-    )
-
-    return (
-      <ProfileWrapper mt={4} mb={6}>
-        <ProfileWrapperCarousel>
-          <Slider {...sliderSettings}>{coverImage}</Slider>
-        </ProfileWrapperCarousel>
-        <ProfileContentWrapper mt={['-122px', '-122px', 0]} px={[2, 4]} py={4}>
-          <Box width={['100%', '100%', '80%']}>
-            <Box sx={{ display: ['block', 'block', 'none'] }}>
-              <MobileBadge>
-                <Avatar profileType={user.profileType} />
-              </MobileBadge>
-            </Box>
-
-            <UserCategory bgImg={workspaceHighlightSrc}>
-              {this.renderProfileTypeName(user)}
-            </UserCategory>
-
-            <Flex alignItems="center">
-              {user.location ? (
-                <FlagIconEvents code={user.location.countryCode} />
-              ) : (
-                user.country && (
-                  <FlagIconEvents code={user.country.toLowerCase()} />
-                )
-              )}
-              <Heading medium bold color={'black'} my={3} ml={2}>
-                {user.displayName}
-              </Heading>
-            </Flex>
-            {user.about && (
-              <Text
-                preLine
-                paragraph
-                mt="0"
-                mb="20px"
-                color={theme.colors.grey}
-                width={['80%', '100%']}
-              >
-                {user.about}
-              </Text>
-            )}
-
-            {user.profileType === 'collection-point' &&
-              user.collectedPlasticTypes &&
-              this.renderPlasticTypes(user.collectedPlasticTypes)}
-
-            {user.profileType === 'collection-point' &&
-              user.openingHours &&
-              this.renderOpeningHours(user.openingHours)}
-
-            {user.profileType === 'machine-builder' &&
-              user.machineBuilderXp &&
-              this.renderMachineBuilderXp(user.machineBuilderXp)}
-
-            {!!userLinks.length && (
-              <UserContactInfo>
-                <h3>Contact &amp; Links</h3>
-                {userLinks.map((link, i) => (
-                  <ProfileLink link={link} key={'Link-' + i} />
-                ))}
-              </UserContactInfo>
-            )}
-            <AuthWrapper roleRequired={'admin'}>
-              <Box mt={3}>
-                <AdminContact user={user} />
-              </Box>
-            </AuthWrapper>
-          </Box>
-          <Box
-            width={['100%', '100%', '20%']}
-            sx={{ display: ['none', 'none', 'block'] }}
-          >
-            <MobileBadge>
-              <Avatar width="150" profileType={user.profileType} />
-
-              {shouldRenderUserStatsBox && this.renderUserStatsBox(user)}
-            </MobileBadge>
-          </Box>
-        </ProfileContentWrapper>
-      </ProfileWrapper>
-    )
-  }
-}
-
 const sliderSettings = {
   dots: false,
   speed: 500,
@@ -472,4 +213,258 @@ const sliderSettings = {
       marginRight="4px"
     />
   ),
+}
+
+// Comment on 6.05.20 by BG : renderCommitmentBox commented for now, will be reused with #974
+function renderUserStatsBox(user: IUserPP) {
+  let howtoCount = 0
+  let eventCount = 0
+  try {
+    howtoCount = Object.keys(user.stats!.userCreatedHowtos).length
+    eventCount = Object.keys(user.stats!.userCreatedEvents).length
+  } catch (error) {
+    // Comment on 12.10.20 by CC: would be nice if user stats had their own display to make conditional
+    // logic easier, but for now will just use a try-catch to also fix cases broken on dev during migration attempts
+  }
+
+  return (
+    <UserStatsBox>
+      {user.badges?.verified && (
+        <UserStatsBoxItem style={{ marginBottom: '15px' }}>
+          <Image src={VerifiedBadgeIcon} width="22px" height="22px" />
+          <Box ml="5px">Verified</Box>
+        </UserStatsBoxItem>
+      )}
+      {user.location?.latlng && (
+        <Link color={'black'} to={'/map/#' + user.userName}>
+          <UserStatsBoxItem>
+            <Icon glyph="location-on" size="22"></Icon>
+            <Box ml="5px">{user.location?.country || 'View on Map'}</Box>
+          </UserStatsBoxItem>
+        </Link>
+      )}
+      {/* {isV4Member && (
+          <UserStatsBoxItem>
+            <ElWithBeforeIcon IconUrl={V4MemberIcon}>
+              V4 Member
+            </ElWithBeforeIcon>
+          </UserStatsBoxItem>
+         )} */}
+      {howtoCount > 0 && (
+        <UserStatsBoxItem>
+          <ElWithBeforeIcon IconUrl={HowToCountIcon} />
+          How-to: {howtoCount}
+        </UserStatsBoxItem>
+      )}
+      {eventCount > 0 && (
+        <UserStatsBoxItem>
+          <ElWithBeforeIcon IconUrl={EventsIcon} />
+          Events: {eventCount}
+        </UserStatsBoxItem>
+      )}
+    </UserStatsBox>
+  )
+}
+
+function renderPlasticTypes(plasticTypes: Array<PlasticTypeLabel>) {
+  function renderIcon(type: string) {
+    switch (type) {
+      case 'hdpe':
+        return <Image src={HDPEIcon} />
+      case 'ldpe':
+        return <Image src={LDPEIcon} />
+      case 'other':
+        return <Image src={OtherIcon} />
+      case 'pet':
+        return <Image src={PETIcon} />
+      case 'pp':
+        return <Image src={PPIcon} />
+      case 'ps':
+        return <Image src={PSIcon} />
+      case 'pvc':
+        return <Image src={PVCIcon} />
+      default:
+        return null
+    }
+  }
+
+  return (
+    <div>
+      <h4>We collect the following plastic types:</h4>
+      <Flex flexWrap="wrap">
+        {plasticTypes.map(plasticType => {
+          return (
+            <PlasticType key={plasticType}>
+              {renderIcon(plasticType)}
+            </PlasticType>
+          )
+        })}
+      </Flex>
+    </div>
+  )
+}
+
+function renderOpeningHours(openingHours: Array<IOpeningHours>) {
+  return (
+    <div>
+      <h4>We're open on:</h4>
+      {openingHours.map(openingObj => {
+        return (
+          <OpeningHours key={openingObj.day}>
+            {openingObj.day}: {openingObj.openFrom} - {openingObj.openTo}
+          </OpeningHours>
+        )
+      })}
+    </div>
+  )
+}
+
+function renderMachineBuilderXp(machineBuilderXp: Array<IMAchineBuilderXp>) {
+  return (
+    <>
+      <h4>We offer the following services:</h4>
+      {machineBuilderXp.map((machineExperience, index) => {
+        return (
+          <MachineExperienceTab key={`machineXp-${index}`}>
+            {machineExperience}
+          </MachineExperienceTab>
+        )
+      })}
+    </>
+  )
+}
+
+function renderProfileTypeName(user: IUserPP) {
+  const profileTypeNames: { [key in IUserPP['profileType']]: string } = {
+    'collection-point': 'Collection Point',
+    'community-builder': 'Community Point',
+    'machine-builder': 'Machine Builder',
+    member: 'Member',
+    workspace: 'Workspace',
+  }
+  return (
+    <Heading small bold width={1} capitalize>
+      {user.profileType === 'machine-builder' &&
+        `${replaceDashesWithSpaces(user.workspaceType!)} `}
+      {profileTypeNames[user.profileType]}
+    </Heading>
+  )
+}
+
+export const SpaceProfile = ({ user }: IProps) => {
+  const workspaceHighlightSrc = Workspace.findWordspaceHighlight(
+    user.profileType,
+  )
+  let coverImage = [
+    <SliderImage
+      key="default-image"
+      bgImg="https://i.ibb.co/zhkxbb9/no-image.jpg"
+    />,
+  ]
+  if (user.coverImages && user.coverImages.length > 0) {
+    const coverImages: Array<IConvertedFileMeta | IUploadedFileMeta> =
+      user.coverImages
+    coverImage = coverImages.map(
+      (image: IConvertedFileMeta | IUploadedFileMeta) => {
+        if ('downloadUrl' in image) {
+          return <SliderImage key={image.name} bgImg={image.downloadUrl} />
+        }
+
+        return <SliderImage key={image.name} bgImg={image.objectUrl} />
+      },
+    )
+  }
+  const shouldRenderUserStatsBox =
+    user &&
+    (user.location?.latlng ||
+      (user.stats &&
+        (user.stats.userCreatedHowtos || user.stats.userCreatedEvents)))
+      ? true
+      : false
+
+  const userLinks = user?.links.filter(
+    linkItem => !['discord', 'forum'].includes(linkItem.label),
+  )
+
+  return (
+    <ProfileWrapper mt={4} mb={6}>
+      <ProfileWrapperCarousel>
+        <Slider {...sliderSettings}>{coverImage}</Slider>
+      </ProfileWrapperCarousel>
+      <ProfileContentWrapper mt={['-122px', '-122px', 0]} px={[2, 4]} py={4}>
+        <Box width={['100%', '100%', '80%']}>
+          <Box sx={{ display: ['block', 'block', 'none'] }}>
+            <MobileBadge>
+              <Avatar profileType={user.profileType} />
+            </MobileBadge>
+          </Box>
+
+          <UserCategory bgImg={workspaceHighlightSrc}>
+            {renderProfileTypeName(user)}
+          </UserCategory>
+
+          <Flex alignItems="center">
+            {user.location ? (
+              <FlagIconEvents code={user.location.countryCode} />
+            ) : (
+              user.country && (
+                <FlagIconEvents code={user.country.toLowerCase()} />
+              )
+            )}
+            <Heading medium bold color={'black'} my={3} ml={2}>
+              {user.displayName}
+            </Heading>
+          </Flex>
+          {user.about && (
+            <Text
+              preLine
+              paragraph
+              mt="0"
+              mb="20px"
+              color={theme.colors.grey}
+              width={['80%', '100%']}
+            >
+              {user.about}
+            </Text>
+          )}
+
+          {user.profileType === 'collection-point' &&
+            user.collectedPlasticTypes &&
+            renderPlasticTypes(user.collectedPlasticTypes)}
+
+          {user.profileType === 'collection-point' &&
+            user.openingHours &&
+            renderOpeningHours(user.openingHours)}
+
+          {user.profileType === 'machine-builder' &&
+            user.machineBuilderXp &&
+            renderMachineBuilderXp(user.machineBuilderXp)}
+
+          {!!userLinks.length && (
+            <UserContactInfo>
+              <h3>Contact &amp; Links</h3>
+              {userLinks.map((link, i) => (
+                <ProfileLink link={link} key={'Link-' + i} />
+              ))}
+            </UserContactInfo>
+          )}
+          <AuthWrapper roleRequired={'admin'}>
+            <Box mt={3}>
+              <AdminContact user={user} />
+            </Box>
+          </AuthWrapper>
+        </Box>
+        <Box
+          width={['100%', '100%', '20%']}
+          sx={{ display: ['none', 'none', 'block'] }}
+        >
+          <MobileBadge>
+            <Avatar width="150" profileType={user.profileType} />
+
+            {shouldRenderUserStatsBox && renderUserStatsBox(user)}
+          </MobileBadge>
+        </Box>
+      </ProfileContentWrapper>
+    </ProfileWrapper>
+  )
 }

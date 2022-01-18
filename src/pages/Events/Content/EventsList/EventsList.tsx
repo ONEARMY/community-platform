@@ -11,8 +11,6 @@ import { inject, observer } from 'mobx-react'
 import { EventStore } from 'src/stores/Events/events.store'
 import { UserStore } from 'src/stores/User/user.store'
 
-import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
-
 interface InjectedProps {
   eventStore: EventStore
   userStore?: UserStore
@@ -70,22 +68,6 @@ export class EventsList extends React.Component<any> {
                   category="event"
                   styleVariant="filter"
                   relevantTagsItems={upcomingEvents}
-                />
-              </Box>
-              <Box
-                width={[1, 1, 0.5]}
-                height="44px"
-                ml={[0, 0, 2]}
-                mb={['10px', '10px', 0]}
-                className="location-search-list"
-              >
-                <LocationSearch
-                  onChange={v =>
-                    this.props.eventStore.updateSelectedLocation(v)
-                  }
-                  onClear={() => this.props.eventStore.clearLocationSearch()}
-                  styleVariant="filter"
-                  trackingCategory="Events Listing"
                 />
               </Box>
             </Flex>

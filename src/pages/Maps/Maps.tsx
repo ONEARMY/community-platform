@@ -112,7 +112,7 @@ class MapsPage extends React.Component<IProps, IState> {
                   onFilterChange={selected => {
                     this.props.mapsStore.setActivePinFilters(selected)
                   }}
-                  onLocationChange={location => this.setCenter(location.latlng)}
+                  onLocationChange={latlng => this.setCenter(latlng)}
                   {...props}
                 />
                 <MapView

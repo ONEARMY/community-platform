@@ -2,7 +2,7 @@ import { useState, useRef } from 'react'
 import { debounce } from 'debounce'
 import { Input } from '../Form/elements'
 import { OsmGeocodingResultsList } from './OsmGeocodingResultsList'
-import { logger } from 'workbox-core/_private'
+import { logger } from 'src/logger'
 import OsmGeocodingLoader from './OsmGeocodingLoader'
 
 interface Props {
@@ -83,9 +83,11 @@ export const OsmGeocoding = ({
   }, debounceMs)
 
   return (
-    <div 
+    <div
       data-cy="osm-geocoding"
-      ref={mainContainerRef} style={{ width: '100%' }}>
+      ref={mainContainerRef}
+      style={{ width: '100%' }}
+    >
       <Input
         autoComplete="off"
         type="search"

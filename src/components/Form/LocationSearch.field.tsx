@@ -1,6 +1,7 @@
 import { IFieldProps } from './Fields'
-import { LocationSearch } from '../LocationSearch/LocationSearch'
-
+import OsmGeocoding from '../OsmGeocoding/OsmGeocoding'
+import { logger } from 'src/logger'
+import { getLocationData } from 'src/utils/getLocationData'
 interface IExtendedFieldProps extends IFieldProps {
   // add additional onChange style method to respond more directly to value changes
   // without need for react-final-form listener
@@ -12,18 +13,36 @@ export const LocationSearchField = ({
   customChange,
   ...rest
 }: IExtendedFieldProps) => (
-  <LocationSearch
-    {...rest}
-    {...input}
-    onChange={location => {
-      // as validation happens on blur also want to artificially trigger when values change
-      // (no native blur event)
-      input.onChange(location)
-      if (customChange) {
-        customChange(location)
-      }
-      input.onBlur()
-    }}
-    placeholder="Search for a location"
-  />
+  <>
+    <div style={{ position: 'relative', height: '44px' }}>
+      <div style={{ position: 'absolute', width: '100%' }}>
+        <OsmGeocoding
+          callback={async data => {
+            logger.debug(data, 'LocationSearch.field.ReactOsmGeocoding')
+            if (data.lat && data.lon) {
+              // onPositionChanged({
+              // lat: data.lat,
+              // lng: data.lon,
+              // })
+              // setCenter([data.lat, data.lon])
+              // setZoom(15)
+
+              const location = await getLocationData({
+                lat: data.lat,
+                lng: data.lon,
+              })
+
+              input.onChange(location)
+              if (customChange) {
+                customChange(location)
+              }
+              input.onBlur()
+            }
+          }}
+          countrycodes=""
+          acceptLanguage="en"
+        />
+      </div>
+    </div>
+  </>
 )

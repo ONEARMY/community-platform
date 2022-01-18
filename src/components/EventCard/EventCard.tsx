@@ -92,10 +92,7 @@ export const EventCard = (props: IProps) => (
     >
       <FlagIconEvents code={props.event.location.countryCode} />
       <Text auxiliary width={1} ml={[1, 1, 2]}>
-        {props.event.location.name},{' '}
-        <Text inline auxiliary uppercase>
-          {props.event.location.countryCode}
-        </Text>
+        {[props.event.location.administrative, props.event.location?.countryCode?.toUpperCase()].filter(Boolean).join(', ')}
       </Text>
     </Flex>
     <Flex

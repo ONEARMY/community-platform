@@ -11,6 +11,8 @@ import {
   randomID
 } from 'src/utils/helpers'
 import { logger } from 'src/logger'
+import { getLocationData } from 'src/utils/getLocationData'
+
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
 */

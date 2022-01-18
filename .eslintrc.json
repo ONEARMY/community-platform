@@ -37,6 +37,8 @@
     "react/no-unescaped-entities": "off",
     "react/jsx-no-target-blank": "warn",
     "react/display-name": "warn",
+    // https://github.com/standard/eslint-config-standard-with-typescript/issues/248
+    "@typescript-eslint/no-empty-function": "off",
     // as of v17 no longer required
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/no-non-null-assertion": "off",

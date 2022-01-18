@@ -21524,6 +21524,7 @@ fsevents@^1.2.7:
     react-image-lightbox: ^5.1.0
     react-lazy-load-image-component: ^1.5.1
     react-leaflet: ^2.5.0
+    react-leaflet-custom-control: ^1.2.2
     react-leaflet-markercluster: ^2.0.0-rc3
     react-linkify: ^0.2.2
     react-player: ^1.15.3
@@ -24895,6 +24896,17 @@ fsevents@^1.2.7:
     react: ^15.x.x || ^16.x.x || ^17.x.x
     react-dom: ^15.x.x || ^16.x.x || ^17.x.x
   checksum: 7bdc208918d12dc6c5c64e5070d030fd0f4659b7a5b25522193c03986c7db2f6fd7c297a2003c59b9d6def7bf1cdc8fa79cdfd47165b6b1420fe2bd4f2bf868d
+  languageName: node
+  linkType: hard
+
+"react-leaflet-custom-control@npm:^1.2.2":
+  version: 1.2.2
+  resolution: "react-leaflet-custom-control@npm:1.2.2"
+  peerDependencies:
+    leaflet: ^1.7.1
+    react: ^17.0.2
+    react-dom: ^17.0.2
+  checksum: 40668a0b4a8fbb763278db0f5ba04affb0767af5086498fa557cac42c4f31aa0561bcd761d33d27375a715db5cf51fd229319417c5b2d79f7d8743a39177c120
   languageName: node
   linkType: hard
 

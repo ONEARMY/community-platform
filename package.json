@@ -106,6 +106,7 @@
     "react-image-lightbox": "^5.1.0",
     "react-lazy-load-image-component": "^1.5.1",
     "react-leaflet": "^2.5.0",
+    "react-leaflet-custom-control": "^1.2.2",
     "react-leaflet-markercluster": "^2.0.0-rc3",
     "react-linkify": "^0.2.2",
     "react-player": "^1.15.3",

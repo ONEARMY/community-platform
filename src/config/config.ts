@@ -13,7 +13,6 @@ https://javebratt.com/hide-firebase-api/
 import type {
   IFirebaseConfig,
   ISentryConfig,
-  IAlgoliaConfig,
   siteVariants,
 } from './types';
 import type { ConfigurationOption } from './constants';
@@ -40,20 +39,6 @@ function _c(property: ConfigurationOption, fallbackValue?: string): string {
 
 export const getConfigirationOption = _c;
 
-/*********************************************************************************************** /
-                                        Dev/Staging
-/********************************************************************************************** */
-
-// note - algolia lets you have multiple apps which can serve different purposes
-// (and all have their own free quotas)
-let algoliaSearchConfig: IAlgoliaConfig = {
-  searchOnlyAPIKey: 'af213b7fb41ac5cbc6a2e10164370779',
-  applicationID: '4RM0GZKTOC',
-}
-let algoliaPlacesConfig: IAlgoliaConfig = {
-  searchOnlyAPIKey: 'bd622e6c60cc48e571e47b9f6ff63489',
-  applicationID: 'plG9OH6JI4BR',
-}
 /*********************************************************************************************** /
                                         Site Variants
 /********************************************************************************************** */
@@ -100,18 +85,6 @@ const siteVariant = getSiteVariant();
                                         Production
 /********************************************************************************************** */
 
-// production config is passed as environment variables during CI build.
-if (siteVariant === 'production') {
-  // TODO - create production algolia config
-  algoliaSearchConfig = {
-    applicationID: '',
-    searchOnlyAPIKey: '',
-  }
-  algoliaPlacesConfig = {
-    applicationID: _c('REACT_APP_ALGOLIA_PLACES_APP_ID'),
-    searchOnlyAPIKey: _c('REACT_APP_ALGOLIA_PLACES_API_KEY'),
-  }
-}
 
 const firebaseConfigs: { [variant in siteVariants]: IFirebaseConfig } = {
   /** Sandboxed dev site, all features available for interaction */
@@ -174,8 +147,6 @@ const firebaseConfigs: { [variant in siteVariants]: IFirebaseConfig } = {
 export const SITE = siteVariant
 export const DEV_SITE_ROLE = devSiteRole
 export const FIREBASE_CONFIG = firebaseConfigs[siteVariant]
-export const ALGOLIA_SEARCH_CONFIG = algoliaSearchConfig
-export const ALGOLIA_PLACES_CONFIG = algoliaPlacesConfig
 export const SENTRY_CONFIG: ISentryConfig = {
   dsn:
     _c('REACT_APP_SENTRY_DSN',

@@ -157,3 +157,10 @@ interface IEditableDoc extends DBDoc {
 
 // Convert theme em string to px number
 export const emStringToPx = width => Number(width.replace('em', '')) * 16
+
+
+export function randomIntFromInterval(min, max) {
+  // min and max included
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
+

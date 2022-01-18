@@ -10,8 +10,7 @@ interface IExtendedFieldProps extends IFieldProps {
 
 export const LocationSearchField = ({
   input,
-  customChange,
-  ...rest
+  customChange
 }: IExtendedFieldProps) => (
   <>
     <div style={{ position: 'relative', height: '44px' }}>

@@ -13,11 +13,6 @@ export interface ISentryConfig {
     environment: string
 }
 
-export interface IAlgoliaConfig {
-    searchOnlyAPIKey: string
-    applicationID: string
-}
-
 declare global {
     interface Window {
         // eslint-disable-next-line @typescript-eslint/naming-convention

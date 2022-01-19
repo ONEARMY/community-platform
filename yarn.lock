@@ -21475,6 +21475,7 @@ fsevents@^1.2.7:
     ts-loader: ^7.0.5
     ts-node: ^10.4.0
     typescript: 4.2.4
+    use-debounce: ^7.0.1
     wait-on: ^5.2.1
     web-vitals: ^1.1.2
     workbox-background-sync: ^6.1.5
@@ -29558,6 +29559,15 @@ typescript@4.2.4:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
   checksum: b438c1577eafb26dd8aff8d7ffbeae10b544172fc4c4f38733343f70c04da6f14a748a274cb76b70b829604e1382be56fb37a96f3c62b5aeec50657e23e61097
+  languageName: node
+  linkType: hard
+
+"use-debounce@npm:^7.0.1":
+  version: 7.0.1
+  resolution: "use-debounce@npm:7.0.1"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: c5c1c34ccef6c11fe25fecef983a07f5a7260fce77b58f0f648f6ae08693a22a9077b5362b96154896e9ea756e6aaea303eb44550a293456cecb6f15cf87d73b
   languageName: node
   linkType: hard
 

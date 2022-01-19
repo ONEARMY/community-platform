@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
 import Flex from 'src/components/Flex'
-import { Box } from 'rebass'
+import { Box } from 'rebass/styled-components'
 import Icon from 'src/components/Icons'
 import { Field } from 'react-final-form'
 

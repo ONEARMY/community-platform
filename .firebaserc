@@ -3,6 +3,8 @@
     "default": "precious-plastics-v4-dev",
     "production": "onearmyworld",
     "ci": "onearmy-test-ci",
-    "next": "onearmy-next"
+    "next": "onearmy-next",
+    "project-kamp-development": "la-project-kamp-development",
+    "project-kamp-production": "project-kamp-community"
   }
 }

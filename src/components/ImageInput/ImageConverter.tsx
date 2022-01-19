@@ -1,9 +1,10 @@
 import * as React from 'react'
-import { Flex } from 'rebass'
+import { Flex } from 'rebass/styled-components'
 import imageCompression from 'browser-image-compression'
 import { IConvertedFileMeta } from './ImageInput'
 import styled from 'styled-components'
 import { addTimestampToFileName } from 'src/utils/helpers'
+import theme from '../../themes/styled.theme'
 
 interface IProps {
   file: File
@@ -30,7 +31,7 @@ const PreviewImage = styled(Flex)`
   height: 100%;
   width: 100%;
   border-radius: 5px;
-  border: 1px solid #ececec;
+  border: 1px solid ${theme.colors.offwhite};
 `
 
 export class ImageConverter extends React.Component<IProps, IState> {
@@ -101,15 +102,3 @@ export class ImageConverter extends React.Component<IProps, IState> {
 ImageConverter.defaultProps = {
   onImgClicked: () => null,
 }
-
-/************************************************************************************
- *    Interfaces
- *
- *************************************************************************************/
-
-interface ICompressionOptions {
-  maxWidthOrHeight: number
-}
-
-// type imageFormats = 'image/jpeg' | 'image/jpg' | 'image/gif' | 'image/png'
-// Additional types: image/bmp, image/tiff, image/x-icon,  image/svg+xml, image/webp, image/xxx

@@ -55,6 +55,7 @@ interface IProps {
   color?: string
   onClick?: () => void
 }
+
 export type availableGlyphs =
   | 'download'
   | 'download-cloud'

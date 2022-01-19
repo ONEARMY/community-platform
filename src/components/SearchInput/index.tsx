@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from 'react'
 import { Input } from '../Form/elements'
 
 interface IProps {
@@ -25,6 +25,7 @@ const SearchInput: React.FC<IProps> = ({
 }) => {
   return (
     <Input
+      type="search"
       placeholder={placeholder}
       value={value}
       onChange={e => onChange(e.target.value)}

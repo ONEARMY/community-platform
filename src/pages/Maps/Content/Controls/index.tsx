@@ -15,7 +15,7 @@ import { IPinGrouping, IMapGrouping, IMapPinType } from 'src/models/maps.models'
 import { HashLink as Link } from 'react-router-hash-link'
 import { Map } from 'react-leaflet'
 import { ILocation } from 'src/models/common.models'
-import { zIndex } from 'src/themes/styled.theme'
+import theme from 'src/themes/styled.theme'
 import { inject } from 'mobx-react'
 import { MapsStore } from 'src/stores/Maps/maps.store'
 import { UserStore } from 'src/stores/User/user.store'
@@ -42,7 +42,7 @@ const MapFlexBar = styled(Flex)`
   position: absolute;
   top: 25px;
   width: 100%;
-  z-index: ${zIndex.mapFlexBar};
+  z-index: ${theme.zIndex.mapFlexBar};
   left: 50%;
   transform: translateX(-50%);
 `
@@ -100,6 +100,7 @@ class Controls extends React.Component<IProps, IState> {
               this.props.onLocationChange(location)
             }}
             styleVariant="mapinput"
+            trackingCategory="Map"
           />
         </Box>
         <Flex>
@@ -134,7 +135,7 @@ class Controls extends React.Component<IProps, IState> {
             </Link>
           </Box>
         </Flex>
-        <Flex width="95%" sx={{ display: ['flex', 'none', 'none'], mt: '5px' }}>
+        <Box width="95%" sx={{ display: ['flex', 'none', 'none'], mt: '5px' }}>
           <Button
             width="100%"
             sx={{ display: 'block' }}
@@ -151,7 +152,7 @@ class Controls extends React.Component<IProps, IState> {
               style={{ width: '18px', marginLeft: '5px' }}
             />
           </Button>
-        </Flex>
+        </Box>
         {showFiltersMobile && (
           <Modal onDidDismiss={() => this.handleFilterMobileModal()}>
             <Flex p={0} mx={-1} justifyContent="space-between">

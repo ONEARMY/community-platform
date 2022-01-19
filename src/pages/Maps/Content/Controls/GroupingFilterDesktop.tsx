@@ -5,7 +5,7 @@ import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import { IMapGrouping } from 'src/models/maps.models'
 import { inject } from 'mobx-react'
 import { MapsStore } from 'src/stores/Maps/maps.store'
-import { Box } from 'rebass'
+import { Box } from 'rebass/styled-components'
 
 interface IProps {
   items: Array<IMapGrouping>

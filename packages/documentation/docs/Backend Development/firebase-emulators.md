@@ -14,13 +14,13 @@ To run emulators locally you will need (as described in: https://firebase.google
 ## Getting Started
 
 ```
-npm run start:emulated
+yarn start:emulated
 ```
 
 This will start the following:
 
 - **Functions emulator**  
-  May take a few minutes to download if running for first time
+  May take a few minutes to download required binaries when running for the first time
 
 - **Functions src watcher**  
   To recompile functions on update
@@ -45,6 +45,7 @@ By default the emulators load any data found in the [functions/data/emulated](..
 By default this data is not committed to the repo and so initial data will be empty, however specific zip files have been generated from site backup files and can be loaded for testing
 
 ## Loading seed data
+
 By default when the script first runs it will populate seed data from [functions/data/seed](../../../../functions/data/seed). This can be repopulated either by deleting the [functions/data/emulated](../../../../functions/data/emulated) folder, or by manually calling the seed data script:
 
 ```

@@ -4,10 +4,11 @@ import { PROJECTS_MOCKS } from 'src/mocks/projects.mock'
 import { CATEGORY_MOCKS } from 'src/mocks/category.mock'
 import { TAGS_MOCK } from 'src/mocks/tags.mock'
 
-import { Box, Flex } from 'rebass'
+import { Box, Flex } from 'rebass/styled-components'
 import { Button } from 'src/components/Button'
 import Selector from 'src/components/Selector'
 import { Link } from 'react-router-dom'
+import { logger } from 'src/logger'
 
 interface IProps {
   onChange: () => void
@@ -19,17 +20,17 @@ export default class FilterBar extends React.Component<IProps> {
     super(props)
   }
   public onProjectChange() {
-    console.log('project changed')
+    logger.debug('project changed')
     this.props.onChange()
   }
 
   public onCategoryChange() {
-    console.log('onCategoryChange')
+    logger.debug('onCategoryChange')
     this.props.onChange()
   }
 
   public onTagsChange() {
-    console.log('onTagsChange')
+    logger.debug('onTagsChange')
     this.props.onChange()
   }
 

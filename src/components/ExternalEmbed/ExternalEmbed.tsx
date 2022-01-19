@@ -15,13 +15,18 @@ interface IProps extends RouteComponentProps {
 }
 interface IState {
   src: string
+  targetOrigin: string
 }
 
 class ExternalEmbed extends React.Component<IProps, IState> {
   constructor(props) {
     super(props)
+
+    const url = new URL(this.props.src)
+
     this.state = {
       src: this.props.src,
+      targetOrigin: url.protocol + '//' + url.hostname,
     }
   }
 
@@ -43,12 +48,20 @@ class ExternalEmbed extends React.Component<IProps, IState> {
    */
   handlePostmessageFromIframe = (e: MessageEvent) => {
     // only allow messages from specific sites (academy dev and live)
-    if (
-      ['http://localhost:3001', 'https://onearmy.github.io'].includes(e.origin)
-    ) {
+    if ([this.state.targetOrigin].includes(e.origin)) {
       // communicate url changes, update navbar
       if (e.data && e.data.pathname) {
-        this.props.history.push(e.data.pathname)
+        let newPathName = e.data.pathname
+
+        /**
+         * At the moment this component is only used for handling contents within the `/academy`
+         * section of the site. If we want to use this elsewhere this should lifted outside of the component
+         * perhaps moved to an emitted event
+         */
+        if (!newPathName.startsWith(`/academy`)) {
+          newPathName = `/academy${newPathName}`
+        }
+        this.props.history.push(newPathName)
       }
       // communicate a href link clicks, open link in new tab
       if (e.data && e.data.linkClick) {

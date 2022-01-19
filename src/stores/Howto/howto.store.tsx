@@ -17,10 +17,11 @@ import {
   needsModeration,
   randomID,
 } from 'src/utils/helpers'
-import { RootStore } from '..'
+import { RootStore } from '../index'
 import { ModuleStore } from '../common/module.store'
 import { IUploadedFileMeta } from '../storage'
 import { IComment } from 'src/models/howto.models'
+import { logger } from 'src/logger'
 
 const COLLECTION_NAME = 'howtos'
 const HOWTO_SEARCH_WEIGHTS = [
@@ -42,8 +43,11 @@ export class HowtoStore extends ModuleStore {
   @observable
   public searchValue: string
   @observable
+  public referrerSource: string
+  @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
   @observable howtoStats: IHowtoStats | undefined
+
   constructor(rootStore: RootStore) {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
@@ -52,6 +56,7 @@ export class HowtoStore extends ModuleStore {
     this.allDocs$.subscribe((docs: IHowtoDB[]) => this.setAllHowtos(docs))
     this.selectedTags = {}
     this.searchValue = ''
+    this.referrerSource = ''
   }
 
   @action
@@ -68,7 +73,7 @@ export class HowtoStore extends ModuleStore {
       .collection<IHowto>(COLLECTION_NAME)
       .getWhere('slug', '==', slug)
     const activeHowto = collection.length > 0 ? collection[0] : undefined
-    console.log('active howto', activeHowto)
+    logger.debug('active howto', activeHowto)
     this.activeHowto = activeHowto
     // load howto stats which are stored in a separate subcollection
     await this.loadHowtoStats(activeHowto?._id)
@@ -82,7 +87,7 @@ export class HowtoStore extends ModuleStore {
         .collection<IHowtoStats>('howtos')
         .doc(`${id}/stats/all`)
       const howtoStats = await ref.get('server')
-      console.log('howtoStats', howtoStats)
+      logger.debug('howtoStats', howtoStats)
       this.howtoStats = howtoStats || { votedUsefulCount: 0 }
     }
   }
@@ -121,6 +126,10 @@ export class HowtoStore extends ModuleStore {
     this.searchValue = query
   }
 
+  public updateReferrerSource(source: string) {
+    this.referrerSource = source
+  }
+
   public updateSelectedTags(tagKey: ISelectedTags) {
     this.selectedTags = tagKey
   }
@@ -151,7 +160,10 @@ export class HowtoStore extends ModuleStore {
           _created: new Date().toISOString(),
           _creatorId: user._id,
           creatorName: user.userName,
-          creatorCountry: user.country ? user.country.toLowerCase() : null,
+          creatorCountry:
+            user.country?.toLowerCase() ||
+            user.location?.countryCode?.toLowerCase() ||
+            null,
           text: comment,
         }
 
@@ -244,7 +256,7 @@ export class HowtoStore extends ModuleStore {
 
   // upload a new or update an existing how-to
   public async uploadHowTo(values: IHowtoFormInput | IHowtoDB) {
-    console.log('uploading howto')
+    logger.debug('uploading howto')
     this.updateUploadStatus('Start')
     // create a reference either to the existing document (if editing) or a new document if creating
     const dbRef = this.db
@@ -308,16 +320,16 @@ export class HowtoStore extends ModuleStore {
             ? values.creatorCountry
             : '',
       }
-      console.log('populating database', howTo)
+      logger.debug('populating database', howTo)
       // set the database document
       await dbRef.set(howTo)
       this.updateUploadStatus('Database')
-      console.log('post added')
+      logger.debug('post added')
       this.activeHowto = await dbRef.get()
       // complete
       this.updateUploadStatus('Complete')
     } catch (error) {
-      console.log('error', error)
+      logger.error('error', error)
       throw new Error(error.message)
     }
   }

@@ -72,7 +72,7 @@ class TagsSelect extends Component<IProps, IState> {
     return (
       <FieldContainer
         // provide a data attribute that can be used to see if tags populated
-        data-cy={categoryTags.length > 0 ? 'tag-select' : 'tag-select-empty'}
+        data-cy={categoryTags?.length > 0 ? 'tag-select' : 'tag-select-empty'}
       >
         <Select
           components={{ DropdownIndicator }}
@@ -93,7 +93,7 @@ class TagsSelect extends Component<IProps, IState> {
   // as react-select can't keep track of which object key corresponds to the selected
   // value include manual lookup so that value can also be passed from props
   private _getSelected(categoryTags: ITag[]) {
-    return categoryTags.filter(tag => this.state.selectedTags.includes(tag._id))
+    return categoryTags?.filter(tag => this.state.selectedTags.includes(tag._id))
   }
 
   // whilst we deal with arrays of selected tag ids in the component we want to store as a json map

@@ -1,21 +1,20 @@
 import { Component } from 'react'
 import { NavLink } from 'react-router-dom'
-import { COMMUNITY_PAGES } from 'src/pages/PageList'
-import theme from 'src/themes/styled.theme'
+import { getAvailablePageList } from 'src/pages/PageList'
 import { Flex } from 'rebass/styled-components'
 import styled from 'styled-components'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
-import { zIndex } from 'src/themes/styled.theme'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { getSupportedModules } from 'src/modules'
 
 const MenuLink = styled(NavLink).attrs(() => ({
   activeClassName: 'current',
 }))`
-  padding: 0px ${theme.space[4]}px;
+  padding: 0px ${props => props.theme.space[4]}px;
   color: ${'black'};
   position: relative;
   > div {
-    z-index: ${zIndex.default};
+    z-index: ${props => props.theme.zIndex.default};
     position: relative;
     &:hover {
       opacity: 0.7;
@@ -29,12 +28,14 @@ const MenuLink = styled(NavLink).attrs(() => ({
       display: block;
       position: absolute;
       bottom: -6px;
-      background-image: url(${MenuCurrent});
-      z-index: ${zIndex.level};
-      background-repeat: no-repeat;
-      background-size: contain;
+      background-color: ${props => props.theme.colors.yellow.base};
+      mask-size: contain;
+      mask-image: url(${MenuCurrent});
+      mask-repeat: no-repeat;
+      z-index: ${props => props.theme.zIndex.level};
       left: 50%;
       transform: translateX(-50%);
+      pointer-events: none;
     }
   }
 `
@@ -44,7 +45,7 @@ export class MenuDesktop extends Component {
     return (
       <>
         <Flex alignItems={'center'}>
-          {COMMUNITY_PAGES.map(page => {
+          {getAvailablePageList(getSupportedModules()).map(page => {
             const link = (
               <Flex key={page.path}>
                 <MenuLink to={page.path} data-cy="page-link">

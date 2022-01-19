@@ -2,7 +2,7 @@ import * as React from 'react'
 import { IEvent, IEventDB } from 'src/models/events.models'
 import { Button } from 'src/components/Button'
 import { Link } from 'src/components/Links'
-import { Flex, Box } from 'rebass'
+import { Flex, Box } from 'rebass/styled-components'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import Heading from 'src/components/Heading'
 import EventCard from 'src/components/EventCard/EventCard'
@@ -47,7 +47,7 @@ export class EventsList extends React.Component<any> {
       return (
         <>
           <Flex py={26}>
-            <Heading medium txtcenter bold width={1} my={20}>
+            <Heading medium txtcenter bold width={1}>
               Precious Plastic events from around the world
             </Heading>
           </Flex>
@@ -85,6 +85,7 @@ export class EventsList extends React.Component<any> {
                   }
                   onClear={() => this.props.eventStore.clearLocationSearch()}
                   styleVariant="filter"
+                  trackingCategory="Events Listing"
                 />
               </Box>
             </Flex>

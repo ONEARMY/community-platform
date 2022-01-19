@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Box, Image } from 'rebass'
+import { Box, Image } from 'rebass/styled-components'
 import styled from 'styled-components'
 import { Button } from '../Button'
 import 'react-image-lightbox/style.css'

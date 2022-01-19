@@ -7,7 +7,8 @@ import { RootStore } from '..'
 import { ModuleStore } from '../common/module.store'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
-import { logToSentry } from 'src/common/errors'
+import { logger } from 'src/logger'
+import { ILatLng, ILocation } from 'src/models'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
@@ -78,13 +79,13 @@ export class UserStore extends ModuleStore {
     newUserCreated = false,
   ) {
     if (user) {
-      console.log('user signed in', user)
+      logger.debug('user signed in', user)
       // legacy user formats did not save names so get profile via email - this option be removed in later version
       // (assumes migration strategy and check)
       const userMeta = await this.getUserProfile(user.uid)
       if (userMeta) {
         this.updateUser(userMeta)
-        console.log('userMeta', userMeta)
+        logger.debug('userMeta', userMeta)
 
         // Update last active for user
         await this.db
@@ -92,11 +93,6 @@ export class UserStore extends ModuleStore {
           .doc(userMeta._id)
           .set({ ...userMeta, _lastActive: new Date().toISOString() })
       } else {
-        // user profile not found, either it has been deleted or not migrated correctly from legacy format
-        // create a new profile to use for now and make a log to the error handler in case required
-        logToSentry.message(
-          `Could not find user profile [${user.uid} - ${user.email} - ${user.metadata}]. New profile created instead`,
-        )
         await this.createUserProfile()
         // now that a profile has been created, run this function again (use `newUserCreated` to avoid inf. loop in case not create not working correctly)
         if (!newUserCreated) {
@@ -143,17 +139,24 @@ export class UserStore extends ModuleStore {
       values = { ...values, coverImages: processedImages }
     }
     // sometimes mobx has issues with de-serialising obseverables so try to force it using toJS
-    const update = { ...toJS(user), ...toJS(values) }
+    const updatedUserProfile = { ...toJS(user), ...toJS(values) }
+
+
+    if (updatedUserProfile.location?.latlng
+      && Object.keys(updatedUserProfile.location).length == 1) {
+      updatedUserProfile.location = await getLocationData(updatedUserProfile.location.latlng);
+    }
+
     await this.db
       .collection(COLLECTION_NAME)
       .doc(user.userName)
-      .set(update)
-    this.updateUser(update)
+      .set(updatedUserProfile)
+    this.updateUser(updatedUserProfile)
     // Update user map pin
     // TODO - pattern back and forth from user to map not ideal
     // should try to refactor and possibly generate map pins in backend
     if (values.location) {
-      await this.mapsStore.setUserPin(update)
+      await this.mapsStore.setUserPin(updatedUserProfile)
     }
     this.updateUpdateStatus('Complete')
   }
@@ -165,7 +168,7 @@ export class UserStore extends ModuleStore {
   }
 
   public async updateUserAvatar() {
-    console.log('updating user avatar')
+    logger.debug('updating user avatar')
     // *** TODO -
   }
 
@@ -216,7 +219,7 @@ export class UserStore extends ModuleStore {
     const displayName = authUser.displayName as string
     const userName = formatLowerNoSpecial(displayName)
     const dbRef = this.db.collection<IUser>(COLLECTION_NAME).doc(userName)
-    console.log('creating user profile', userName)
+    logger.debug('creating user profile', userName)
     if (!userName) {
       throw new Error('No Username Provided')
     }
@@ -295,4 +298,26 @@ const USER_BASE = {
   moderation: 'awaiting-moderation',
   verified: false,
   badges: { verified: false },
+}
+
+async function getLocationData(latlng: ILatLng): Promise<ILocation> {
+  const { lat, lng } = latlng;
+  const response = await (await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=en`, {
+    headers: new Headers({
+      'User-Agent':
+        'onearmy.earth Community Platform (https://platform.onearmy.earth)',
+    })
+  })).json()
+
+  const location = {
+    name: response.display_name || '',
+    country: response.address.country || '',
+    countryCode: response.address.country_code || '',
+    administrative: response.address.county || '',
+    latlng,
+    postcode: response.address.postcode || '',
+    value: response.address.town || response.address.village || '',
+  };
+
+  return location;
 }

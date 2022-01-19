@@ -3,6 +3,8 @@ import Text from 'src/components/Text'
 
 const Loader = styled('div')`
     background: ${(prop) => prop.theme.colors.white};
+    position: relative;
+    z-index: 1;
     padding: 0;
     margin: -2px 0 0;
     padding: ${(prop) => prop.theme.space[1]}px ${(prop) => prop.theme.space[2]}px;

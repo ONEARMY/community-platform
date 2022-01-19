@@ -2,7 +2,7 @@ import { lazy } from 'react'
 import { CSSObject } from '@styled-system/css'
 import { UserRole } from 'src/models/user.models'
 import { ResearchModule } from './Research'
-import { MODULE } from 'src/modules'
+import { ExperimentalModule, MODULE } from 'src/modules'
 
 /**
  * Import all pages for use in lazy loading
@@ -11,7 +11,7 @@ import { MODULE } from 'src/modules'
 const HowtoPage = lazy(() => import('./Howto/Howto'))
 const SettingsPage = lazy(() => import('./Settings'))
 
-const AcademyPage = lazy(() => import('./Academy/Academy'));
+const AcademyPage = lazy(() => import('./Academy/Academy'))
 const EventsPage = lazy(() => import('./Events/Events'))
 const AdminPage = lazy(() => import('./admin/Admin'))
 const MapsPage = lazy(() => import('./Maps/Maps'))
@@ -72,7 +72,7 @@ const user = {
 const academy = {
   moduleName: MODULE.ACADEMY,
   path: '/academy',
-  component: <AcademyPage/>,
+  component: <AcademyPage />,
   title: 'Academy',
   description: 'Demo external page embed',
   customStyles: {
@@ -177,6 +177,7 @@ export const COMMUNITY_PAGES: IPageMeta[] = [
   events,
   academy,
   ResearchModule,
+  ExperimentalModule,
 ]
 export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [settings]
 export const ADMIN_PAGES: IPageMeta[] = [admin]

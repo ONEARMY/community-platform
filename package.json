@@ -125,6 +125,7 @@
     "styled-components": "^5.3.0",
     "styled-system": "^5.1.5",
     "ts-node": "^10.4.0",
+    "use-debounce": "^7.0.1",
     "web-vitals": "^1.1.2",
     "workbox-window": "^6.1.5",
     "yup": "^0.32.9"

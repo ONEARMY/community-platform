@@ -10,6 +10,8 @@ interface Props {
 const List = styled('ul')`
     background: ${(prop) => prop.theme.colors.white};
     padding: 0;
+    position: relative;
+    z-index: 1;
     margin: -2px 0 0;
     border: 2px solid ${(prop) => prop.theme.colors.black};
     border-top-width: 1px;

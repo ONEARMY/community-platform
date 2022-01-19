@@ -60,6 +60,23 @@ export const filterModerableItems = <T>(
     return isItemAccepted || wasCreatedByUser || isAdminAndAccepted
   })
 
+/** Insert a base-16 timestamp into a file's name and return it
+ */
+export const addTimestampToFileName = (str: string): string => {
+  // Return early for malformed input type 🙈
+  if (typeof str !== 'string')
+    return str;
+  
+  const indexOfDot = str.lastIndexOf('.')
+  
+  // Return early if the filename doesn't contain an extension
+  if (indexOfDot <= 0)
+    return str;
+  
+  // inserts "-[current time in base-16]" right before the file type extension
+  return str.slice(0, indexOfDot) + '-' + Date.now().toString(16) + str.slice(indexOfDot)
+}
+
 /**
  *  Function used to generate random ID in same manner as firestore
  */

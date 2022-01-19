@@ -3,6 +3,7 @@ import { Flex } from 'rebass'
 import imageCompression from 'browser-image-compression'
 import { IConvertedFileMeta } from './ImageInput'
 import styled from 'styled-components'
+import { addTimestampToFileName } from 'src/utils/helpers'
 
 interface IProps {
   file: File
@@ -70,12 +71,8 @@ export class ImageConverter extends React.Component<IProps, IState> {
   }
 
   private _generateFileMeta(c: File) {
-    const indexOfDot = c.name.indexOf('.')
-    // inserts "-[current time in base-16]" right before the file type extension
-    const timeStampedName = c.name.slice(0, indexOfDot) + '-' + Date.now().toString(16) + c.name.slice(indexOfDot)
-
     const meta: IConvertedFileMeta = {
-      name: timeStampedName,
+      name: addTimestampToFileName(c.name),
       photoData: c,
       objectUrl: URL.createObjectURL(c),
       type: c.type,

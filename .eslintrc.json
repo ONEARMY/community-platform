@@ -33,6 +33,8 @@
       }
     ],
     "@typescript-eslint/explicit-module-boundary-types": "off",
+    // https://github.com/standard/eslint-config-standard-with-typescript/issues/248
+    "@typescript-eslint/no-empty-function": "off",
     "react/no-deprecated": "warn",
     "react/no-unescaped-entities": "off",
     "react/jsx-no-target-blank": "warn",

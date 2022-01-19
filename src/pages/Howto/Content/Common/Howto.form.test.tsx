@@ -35,7 +35,7 @@ describe('Howto form', function() {
           image: 'test img',
         },
       ],
-      setTagsCategory: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+      setTagsCategory: () => {},
     }
     formValues = {
       files: [],

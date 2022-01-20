@@ -6533,10 +6533,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^12.0.0":
-  version: 12.20.27
-  resolution: "@types/node@npm:12.20.27"
-  checksum: d54239186169c2d7fd2e33d36f273022350916624671ed398dc8ac2623935d9f564d466f0616bc1dea32f0df29689eab822b4b5ea78c51bdb6cb26cffbc18cbe
+"@types/node@npm:16":
+  version: 16.11.17
+  resolution: "@types/node@npm:16.11.17"
+  checksum: 86ed84f79450f6aba1a6ef09f8407c10076966c3cc7cc4eb3d35b8ae4f47817e525641396ef0a667fa0a88fcdf484f6182812c074601403083bdf3b5e1ac0313
   languageName: node
   linkType: hard
 
@@ -6547,7 +6547,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^15.0.1, @types/node@npm:^15.6.1":
+"@types/node@npm:^15.0.1":
   version: 15.14.9
   resolution: "@types/node@npm:15.14.9"
   checksum: 49f7f0522a3af4b8389aee660e88426490cd54b86356672a1fedb49919a8797c00d090ec2dcc4a5df34edc2099d57fc2203d796c4e7fbd382f2022ccd789eee7
@@ -15120,7 +15120,7 @@ fsevents@^1.2.7:
     "@types/dateformat": ^3.0.1
     "@types/fs-extra": ^9.0.2
     "@types/generate-json-webpack-plugin": ^0.3.3
-    "@types/node": ^15.6.1
+    "@types/node": 16
     "@types/request": ^2.48.5
     "@types/sharp": ^0.26.0
     "@types/webpack": ^4.41.29
@@ -21450,7 +21450,7 @@ fsevents@^1.2.7:
     "@types/browser-image-compression": ^1.0.9
     "@types/flux-standard-action": 1.1.0
     "@types/jest": ^26.0.15
-    "@types/node": ^12.0.0
+    "@types/node": 16
     "@types/pubsub-js": ^1.5.18
     "@types/react": ^16.9.53
     "@types/react-dom": ^17.0.3

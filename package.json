@@ -29,7 +29,13 @@
     "docs": "yarn workspace oa-docs start",
     "analyze": "npx cra-bundle-analyzer && npx open-cli build/report.html",
     "install:clean": "yarn workspace oa-scripts install:clean",
-    "postinstall": "husky install"
+    "postinstall": "husky install",
+    "commit": "git-cz"
+  },
+  "config": {
+    "commitizen": {
+      "path": "@commitlint/cz-commitlint"
+    }
   },
   "browserslist": {
     "production": [
@@ -120,6 +126,9 @@
     "yup": "^0.32.9"
   },
   "devDependencies": {
+    "@commitlint/cli": "^16.0.3",
+    "@commitlint/config-conventional": "^16.0.0",
+    "@commitlint/cz-commitlint": "^16.0.3",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -146,6 +155,7 @@
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
     "chai-subset": "^1.6.0",
+    "commitizen": "^4.2.4",
     "concurrently": "^6.2.0",
     "cra-bundle-analyzer": "^0.1.0",
     "cross-env": "^6.0.3",

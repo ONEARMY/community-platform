@@ -1,0 +1,7 @@
+#!/bin/sh
+# Call common windows fix
+. "$(dirname "$0")/common.sh"
+
+# Call commitlint from bin (faster than yarn)
+node_modules/.bin/commitlint --edit $1
+

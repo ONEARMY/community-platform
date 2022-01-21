@@ -236,7 +236,7 @@ examples:
 #  Jobs - Independently specified lists of tasks and environments for execution
 ######################################################################################################
 jobs:
-  lint:
+  lint-commits:
     docker: *docker
     steps:
       - checkout
@@ -246,7 +246,7 @@ jobs:
           name: Linting commits
           command: |
             npm config set package-lock false
-            npm i @commitlint/config-conventional
+            npm i @types/node @commitlint/types @commitlint/config-conventional
             npx commitlint --from=$(git merge-base remotes/origin/${CIRCLE_BRANCH} master) --verbose
   # Prepare node module caches so that future tasks run more quickly
   # NOTE - not currently used as we only have one workflow
@@ -384,7 +384,7 @@ workflows:
   main_workflow:
     # by default jobs will run concurrently, so specify requires if want to run sequentially
     jobs:
-      - lint:
+      - lint-commits:
           name: Lint commits
       #---------------------- Test ----------------------
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB

@@ -9,6 +9,7 @@ import { DatabaseV2 } from './databaseV2'
 import { MobileMenuStore } from './MobileMenu/mobilemenu.store'
 import { AdminStore } from './Admin/admin.store'
 import { ThemeStore } from './Theme/theme.store'
+import { UrlRedirectsStore } from './UrlRedirects/urlredirects.store'
 
 export class RootStore {
   dbV2 = new DatabaseV2()
@@ -36,6 +37,7 @@ const stores = (rootStore: RootStore) => {
     eventStore: new EventStore(rootStore),
     mapsStore: new MapsStore(rootStore),
     adminStore: new AdminStore(rootStore),
+    urlRedirectsStore: new UrlRedirectsStore(rootStore),
     themeStore: new ThemeStore(),
   }
 }
@@ -51,4 +53,5 @@ export interface IStores {
   mapsStore: MapsStore
   adminStore: AdminStore
   themeStore: ThemeStore
+  urlRedirectsStore: UrlRedirectsStore
 }

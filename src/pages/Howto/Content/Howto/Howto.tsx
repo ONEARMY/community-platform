@@ -16,8 +16,10 @@ import WhiteBubble2 from 'src/assets/images/white-bubble_2.svg'
 import WhiteBubble3 from 'src/assets/images/white-bubble_3.svg'
 import { Link } from 'src/components/Links'
 import { Loader } from 'src/components/Loader'
-import { UserStore } from 'src/stores/User/user.store'
+import type { UrlRedirectsStore } from 'src/stores/UrlRedirects/urlredirects.store'
+import type { UserStore } from 'src/stores/User/user.store'
 import { HowToComments } from './HowToComments/HowToComments'
+import { logger } from 'src/logger'
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
 // We can't directly provide the store as a prop though, and later user a get method to define it
@@ -27,6 +29,7 @@ interface IRouterCustomParams {
 interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
   howtoStore: HowtoStore
   userStore: UserStore
+  urlRedirectsStore: UrlRedirectsStore
 }
 interface IState {
   isLoading: boolean
@@ -36,6 +39,8 @@ interface IState {
   redirect?: {
     pathname: string
     search: string
+    push?: boolean
+    forceRefresh?: boolean
   }
 }
 
@@ -76,7 +81,7 @@ const MoreBox = styled(Box)`
   }
 `
 
-@inject('howtoStore', 'userStore')
+@inject('howtoStore', 'userStore', 'urlRedirectsStore')
 @observer
 export class Howto extends React.Component<
   RouteComponentProps<IRouterCustomParams>,
@@ -120,12 +125,25 @@ export class Howto extends React.Component<
         isLoading: false,
       })
     } catch (err) {
-      // Search all redirects
-      // If redirect found
-      //   * Construct redirect object for article
-      // else
-      //   * Redirect to 404 page
-      this.setState({
+      try {
+        const urlRedirect = await this.injected.urlRedirectsStore.getByPath(`/how-to/${slug}`);
+        const destination = await this.injected.urlRedirectsStore.getDestination(urlRedirect);
+        console.log({urlRedirect, destination});
+        this.setState({
+          isLoading: false,
+          redirect: {
+            pathname: destination,
+            search: '',
+            push: true,
+            forceRefresh: true
+          }
+        });
+        if (typeof destination === 'string') {
+          await this.store.setActiveHowtoBySlug(destination.split('/').pop()|| '')
+        }
+      } catch (urlErr) {
+        logger.warn('no matching redirect found',{urlErr});
+        this.setState({
         isLoading: false,
         redirect: {
           pathname: '/how-to',
@@ -135,6 +153,7 @@ export class Howto extends React.Component<
             '&source=how-to-not-found',
         },
       })
+      }
     }
   }
 

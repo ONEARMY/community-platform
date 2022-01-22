@@ -75,10 +75,8 @@ export class HowtoStore extends ModuleStore {
     const activeHowto = collection.length > 0 ? collection[0] : undefined
 
     if (activeHowto === undefined) {
-      console.log(`LADEBUG`)
       throw new Error('No matching howto article found');
     }
-
 
     logger.debug('active howto', activeHowto)
     this.activeHowto = activeHowto

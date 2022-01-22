@@ -2,7 +2,6 @@ import * as React from 'react'
 import styled from 'styled-components'
 
 import { Button } from 'src/components/Button'
-import { LocationSearch } from 'src/components/LocationSearch/LocationSearch'
 import { Flex, Box, Image } from 'rebass/styled-components'
 import filterIcon from 'src/assets/icons/icon-filters-mobile.png'
 import crossClose from 'src/assets/icons/cross-close.svg'
@@ -14,19 +13,20 @@ import { GroupingFilterMobile } from './GroupingFilterMobile'
 import { IPinGrouping, IMapGrouping, IMapPinType } from 'src/models/maps.models'
 import { HashLink as Link } from 'react-router-hash-link'
 import { Map } from 'react-leaflet'
-import { ILocation } from 'src/models/common.models'
 import theme from 'src/themes/styled.theme'
 import { inject } from 'mobx-react'
 import { MapsStore } from 'src/stores/Maps/maps.store'
 import { UserStore } from 'src/stores/User/user.store'
 import { Text } from 'src/components/Text'
 import { RouteComponentProps } from 'react-router'
+import OsmGeocoding from 'src/components/OsmGeocoding/OsmGeocoding'
+import { logger } from 'src/logger'
 
 interface IProps extends RouteComponentProps<any> {
   mapRef: React.RefObject<Map>
   availableFilters: Array<IMapGrouping>
   onFilterChange: (selected: Array<IMapPinType>) => void
-  onLocationChange: (selectedLocation: ILocation) => void
+  onLocationChange: (latlng: {lat:number,lng:number}) => void
 }
 interface IState {
   showFiltersMobile: boolean
@@ -95,12 +95,18 @@ class Controls extends React.Component<IProps, IState> {
             m: [0, '5px 0 0 20px'],
           }}
         >
-          <LocationSearch
-            onChange={(location: ILocation) => {
-              this.props.onLocationChange(location)
+          <OsmGeocoding
+            callback={data => {
+              logger.debug(data, 'Map.Content.Controls.ReactOsmGeocoding')
+              if (data.lat && data.lon) {
+                this.props.onLocationChange({
+                  lat: data.lat,
+                  lng: data.lon,
+                })
+              }
             }}
-            styleVariant="mapinput"
-            trackingCategory="Map"
+            countrycodes=""
+            acceptLanguage="en"
           />
         </Box>
         <Flex>

@@ -73,6 +73,13 @@ export class HowtoStore extends ModuleStore {
       .collection<IHowto>(COLLECTION_NAME)
       .getWhere('slug', '==', slug)
     const activeHowto = collection.length > 0 ? collection[0] : undefined
+
+    if (activeHowto === undefined) {
+      console.log(`LADEBUG`)
+      throw new Error('No matching howto article found');
+    }
+
+
     logger.debug('active howto', activeHowto)
     this.activeHowto = activeHowto
     // load howto stats which are stored in a separate subcollection

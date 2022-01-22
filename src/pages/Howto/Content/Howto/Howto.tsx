@@ -29,10 +29,16 @@ interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
   userStore: UserStore
 }
 interface IState {
-  howto?: IHowtoDB
   isLoading: boolean
+  isNotFound: boolean
+  howto?: IHowtoDB
   changedIsUseful?: boolean
+  redirect?: {
+    pathname: string
+    search: string
+  }
 }
+
 const MoreBox = styled(Box)`
   position: relative;
   &:after {
@@ -81,6 +87,7 @@ export class Howto extends React.Component<
     super(props)
     this.state = {
       isLoading: true,
+      isNotFound: false,
     }
   }
   // workaround used later so that userStore can be called in render method when not existing on
@@ -107,14 +114,32 @@ export class Howto extends React.Component<
 
   public async componentDidMount() {
     const slug = this.props.match.params.slug
-    await this.store.setActiveHowtoBySlug(slug)
-    this.setState({
-      isLoading: false,
-    })
+    try {
+      await this.store.setActiveHowtoBySlug(slug)
+      this.setState({
+        isLoading: false,
+      })
+    } catch (err) {
+      // Search all redirects
+      // If redirect found
+      //   * Construct redirect object for article
+      // else
+      //   * Redirect to 404 page
+      this.setState({
+        isLoading: false,
+        redirect: {
+          pathname: '/how-to',
+          search:
+            '?search=' +
+            (this.props?.match?.params?.slug).replace(/\-/gi, ' ') +
+            '&source=how-to-not-found',
+        },
+      })
+    }
   }
 
   public render() {
-    const { isLoading } = this.state
+    const { isLoading, redirect } = this.state
     const loggedInUser = this.injected.userStore.activeUser
     const { activeHowto } = this.store
 
@@ -153,19 +178,9 @@ export class Howto extends React.Component<
         </>
       )
     } else {
-      return isLoading ? (
-        <Loader />
-      ) : (
-        <Redirect
-          to={{
-            pathname: '/how-to',
-            search:
-              '?search=' +
-              (this.props?.match?.params?.slug).replace(/\-/gi, ' ') +
-              '&source=how-to-not-found',
-          }}
-        />
-      )
+      if (isLoading) return <Loader />
+
+      if (redirect) return <Redirect to={redirect} />
     }
   }
 }

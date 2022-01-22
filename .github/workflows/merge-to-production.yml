@@ -23,4 +23,5 @@ jobs:
           destination_branch: "production"
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pr_title: ":robot: Release PR"
+          pr_label: "🦾 Automation"
           

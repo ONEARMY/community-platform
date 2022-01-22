@@ -126,21 +126,21 @@ export class Howto extends React.Component<
       })
     } catch (err) {
       try {
-        const urlRedirect = await this.injected.urlRedirectsStore.getByPath(`/how-to/${slug}`);
-        const destination = await this.injected.urlRedirectsStore.getDestination(urlRedirect);
-        console.log({urlRedirect, destination});
-        this.setState({
-          isLoading: false,
-          redirect: {
-            pathname: destination,
-            search: '',
-            push: true,
-            forceRefresh: true
-          }
-        });
-        if (typeof destination === 'string') {
-          await this.store.setActiveHowtoBySlug(destination.split('/').pop()|| '')
+        const targetHowto = await this.injected.urlRedirectsStore.getTargetDocument(`/how-to/${slug}`);
+
+        if (!targetHowto) {
+          throw Error('No target document found');
         }
+          this.setState({
+            isLoading: false,
+            redirect: {
+              pathname: `/how-to/${targetHowto.slug}`,
+              search: '',
+              push: true,
+              forceRefresh: true
+            }
+          });
+          await this.store.setActiveHowtoBySlug(targetHowto.slug)
       } catch (urlErr) {
         logger.warn('no matching redirect found',{urlErr});
         this.setState({

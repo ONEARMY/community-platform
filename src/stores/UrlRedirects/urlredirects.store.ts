@@ -1,52 +1,55 @@
 import type { RootStore } from 'src/stores/index'
 import { action } from 'mobx'
 import { ModuleStore } from '../common/module.store'
-import { UrlRedirect } from 'src/models'
+import { IHowtoDB, UrlRedirect } from 'src/models'
 import { logger } from 'src/logger'
 
 export class UrlRedirectsStore extends ModuleStore {
   constructor(rootStore: RootStore) {
     super(rootStore, 'urlredirects')
-    // call init immediately for tags so they are available to all pages
-    super.init()
+  }
+
+  private async getCollection() {
+    return await this.db
+      .collection<UrlRedirect>('urlredirects')
   }
 
   @action
-  public async getByPath(path: string): Promise<UrlRedirect> {
-    const urlRedirect: UrlRedirect[] = await this.db
-      .collection<UrlRedirect>('urlredirects')
+  public async getByPath(path: string): Promise<UrlRedirect | null> {
+    logger.debug('urlredirect.store.getByPath', { path });
+    const collection = await this.getCollection();
+    const [urlRedirect]: UrlRedirect[] = await collection
       .getWhere('path', '==', path);
 
-
-    if (!urlRedirect?.length) {
-      throw new Error('Matching UrlRedirect not found.');
+    if (!urlRedirect) {
+      return null;
     }
 
-    return urlRedirect[0];
-  }
-
-  public async getDestination(redirect: any):Promise<string> {
-    logger.debug(`UrlRedirectsStore.getDestination`, {redirect})
-    const destinationDocRef = await this.db
-      .collection(redirect.documentType)
-      .doc(redirect.documentId);
-
-    if (destinationDocRef) {
-      const doc: any = await destinationDocRef.get();
-      console.log({destinationDocRef});
-      return doc && doc?.slug ? `/how-to/${doc?.slug}` : '';
-    }
-
-    return '';
+    return urlRedirect;
   }
 
   @action
-  public add(urlredirect: Partial<UrlRedirect>) {
-    const $dbRef = this.db
-      .collection('urlredirects')
-      .doc(undefined);
+  public async getTargetDocument(path = '') {
+    if (!path) {
+      return null;
+    }
 
-    return $dbRef
-      .set(urlredirect)
+    const urlRedirect = await this.getByPath(path);
+
+    if (!urlRedirect) {
+      logger.debug(`urlredirect.store.getTargetDocument`, `No redirects found`);
+      return null;
+    }
+
+    const destinationDocRef = await this.db
+      .collection(urlRedirect.documentType)
+      .doc(urlRedirect.documentId);
+
+    if (!destinationDocRef) {
+      logger.debug('urlredirect.store.getTargetDocument', 'No matching document found')
+      return null
+    }
+
+    return await destinationDocRef.get() as IHowtoDB;
   }
 }

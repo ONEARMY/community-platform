@@ -1,8 +1,8 @@
-import { useState, useRef } from 'react'
-import { debounce } from 'debounce'
+import { useState, useRef, useEffect } from 'react'
 import { Input } from '../Form/elements'
 import { OsmGeocodingResultsList } from './OsmGeocodingResultsList'
-import { logger } from 'workbox-core/_private'
+import { logger } from 'src/logger'
+import { useDebouncedCallback } from 'use-debounce'
 import OsmGeocodingLoader from './OsmGeocodingLoader'
 
 interface Props {
@@ -26,14 +26,16 @@ export interface Result {
 
 export const OsmGeocoding = ({
   placeholder = 'Search for an address',
-  debounceMs = 600,
+  debounceMs = 800,
   callback,
   acceptLanguage = 'en',
   viewbox = '',
 }: Props) => {
+  const [searchValue, setSearchValue] = useState('')
   const [results, setResults] = useState<Result[]>([])
   const [showResults, setShowResults] = useState(false)
   const [showLoader, setShowLoader] = useState(false)
+  const [queryLocationService, setQueryLocationService] = useState(false)
   const mainContainerRef = useRef<HTMLDivElement>(null)
 
   document.addEventListener('click', function(event) {
@@ -52,6 +54,7 @@ export const OsmGeocoding = ({
   }
 
   function getGeocoding(address = '') {
+    logger.debug(`OsmGeocoding.getGeocoding:`, { address })
     if (address.length === 0) return
 
     setShowLoader(true)
@@ -78,14 +81,27 @@ export const OsmGeocoding = ({
   }
 
   const showResultsListing = !!results.length && showResults && !showLoader
-  const debouncedOnChange = debounce((address: string) => {
-    getGeocoding(address)
-  }, debounceMs)
+  const dcb = useDebouncedCallback(
+    (search: string) => getGeocoding(search),
+    debounceMs,
+  )
+
+  useEffect(() => {
+    logger.debug(`OsmGeocoding.useEffect`, {
+      searchValue,
+      queryLocationService,
+    })
+    if (queryLocationService) {
+      dcb(searchValue)
+    }
+  }, [searchValue, queryLocationService])
 
   return (
-    <div 
+    <div
       data-cy="osm-geocoding"
-      ref={mainContainerRef} style={{ width: '100%' }}>
+      ref={mainContainerRef}
+      style={{ width: '100%' }}
+    >
       <Input
         autoComplete="off"
         type="search"
@@ -93,6 +109,7 @@ export const OsmGeocoding = ({
         id="geocoding"
         data-cy="osm-geocoding-input"
         placeholder={placeholder}
+        value={searchValue}
         style={{
           width: '100%',
           background: 'white',
@@ -107,14 +124,23 @@ export const OsmGeocoding = ({
         }}
         onClick={() => setShowResults(true)}
         onChange={event => {
-          debouncedOnChange(event.target.value)
+          setQueryLocationService(true)
+          logger.debug(`onchange.setSearchValue`, event.target.value)
+          setSearchValue(event.target.value)
         }}
       />
       {showLoader && <OsmGeocodingLoader />}
       {showResultsListing && (
         <OsmGeocodingResultsList
           results={results}
-          callback={callback}
+          callback={result => {
+            if (result) {
+              setQueryLocationService(false)
+              setSearchValue(result.display_name)
+            }
+
+            callback(result)
+          }}
           setShowResults={setShowResults}
         />
       )}

@@ -13,16 +13,12 @@ import { required } from 'src/utils/validators'
 import { ILocation } from 'src/models/common.models'
 import MapWithDraggablePin from 'src/components/MapWithDraggablePin/MapWithDraggablePin'
 import type { UserStore } from 'src/stores/User/user.store'
+import { randomIntFromInterval } from 'src/utils/helpers'
 
 interface IState {
   showAddressEdit: boolean
   hasMapPin: boolean
   isOpen?: boolean
-}
-
-function randomIntFromInterval(min, max) {
-  // min and max included
-  return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
 @inject('mapsStore', 'userStore')

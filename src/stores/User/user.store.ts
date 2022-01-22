@@ -8,7 +8,7 @@ import { ModuleStore } from '../common/module.store'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
 import { logger } from 'src/logger'
-import { ILatLng, ILocation } from 'src/models'
+import { getLocationData } from 'src/utils/getLocationData'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
@@ -298,26 +298,4 @@ const USER_BASE = {
   moderation: 'awaiting-moderation',
   verified: false,
   badges: { verified: false },
-}
-
-async function getLocationData(latlng: ILatLng): Promise<ILocation> {
-  const { lat, lng } = latlng;
-  const response = await (await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=en`, {
-    headers: new Headers({
-      'User-Agent':
-        'onearmy.earth Community Platform (https://platform.onearmy.earth)',
-    })
-  })).json()
-
-  const location = {
-    name: response.display_name || '',
-    country: response.address.country || '',
-    countryCode: response.address.country_code || '',
-    administrative: response.address.county || '',
-    latlng,
-    postcode: response.address.postcode || '',
-    value: response.address.town || response.address.village || '',
-  };
-
-  return location;
 }

@@ -117,10 +117,10 @@ export class Header extends Component<IProps> {
           <Flex>
             <Logo isMobile={true} />
           </Flex>
-          <MobileNotificationsWrapper>
+          {user ? <MobileNotificationsWrapper>
             <NotificationsIcon onCLick={() => menu.toggleMobileNotifications()} isMobileMenuActive={menu.showMobileNotifications}
               areThereNotifications={areThereNotifications} />
-          </MobileNotificationsWrapper>
+          </MobileNotificationsWrapper> : ""}
           <DesktopMenuWrapper className="menu-desktop" px={2}>
             <MenuDesktop />
             <NotificationsDesktop />

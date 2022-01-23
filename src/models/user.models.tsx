@@ -76,10 +76,11 @@ export type UserRole = 'super-admin' | 'subscriber' | 'admin' | 'beta-tester'
 export interface INotification {
   _id: string,
   _created: string,
-  _triggeredByUserId: string,
-  triggeredByName: string,
-  commentId?: string,
-  howToId?: string,
+  triggeredBy: {
+    displayName: string,
+    userId: string
+  },
+  relevantUrl?: string,
   type: NotificationType,
   read: boolean
 }

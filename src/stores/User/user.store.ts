@@ -256,7 +256,7 @@ export class UserStore extends ModuleStore {
   }
 
   @action
-  public async updateUsefulHowTos(howtoId: string) {
+  public async updateUsefulHowTos(howtoId: string, howtoAuthor: string, howtoSlug: string) {
     if (this.user) {
       // toggle entry on user votedUsefulHowtos to either vote or unvote a howto
       // this will updated the main howto via backend `updateUserVoteStats` function
@@ -264,7 +264,8 @@ export class UserStore extends ModuleStore {
       votedUsefulHowtos[howtoId] = !votedUsefulHowtos[howtoId];
 
       if (votedUsefulHowtos[howtoId]) {
-        this.triggerNotification('howto_useful', this.user._authID, howtoId)
+        //get how to author from howtoid
+        this.triggerNotification('howto_useful', howtoAuthor, howtoSlug);
       }
       await this.updateUserProfile({ votedUsefulHowtos })
     }
@@ -294,29 +295,34 @@ export class UserStore extends ModuleStore {
   }
 
   @action
-  public async triggerNotification(type: NotificationType, user_id: string,
+  public async triggerNotification(type: NotificationType, username: string,
     howToId?: string) {
+    const howToUrl = '/how-to/';
     try {
       const triggeredBy = this.activeUser;
       if (triggeredBy) {
         // do not get notified when you're the one making a new comment or how-to useful vote
-        if(triggeredBy._id === user_id){
+        if(triggeredBy.userName === username){
           return;
         }
         const newNotification: INotification = {
           _id: randomID(),
           _created: new Date().toISOString(),
-          _triggeredByUserId: triggeredBy._id,
-          triggeredByName: triggeredBy.displayName,
-          howToId: howToId,
+          triggeredBy: {
+            displayName: triggeredBy.displayName,
+            userId: triggeredBy._id
+          },
+          relevantUrl: howToUrl + howToId,
           type: type,
           read: false
         } 
 
-        const user = await this.getUserProfile(user_id);
-        const notifications = user.notifications ? [...user.notifications, newNotification]
-        : [newNotification]
-        await this.updateUserProfile({ notifications });
+        const lookup = await this.db
+          .collection<IUserPP>(COLLECTION_NAME)
+          .getWhere('userName', '==', username)
+
+        const user = lookup[0];
+        
         const updatedUser: IUser = {
           ...toJS(user),
           notifications: user.notifications

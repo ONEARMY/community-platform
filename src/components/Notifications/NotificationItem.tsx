@@ -11,9 +11,8 @@ import { ReactComponent as IconUseful } from 'src/assets/icons/icon-useful.svg'
 export interface IProps extends INotification { }
 
 export const NotificationItem: React.FC<IProps> = ({
-  _triggeredByUserId,
-  triggeredByName,
-  howToId,
+  triggeredBy,
+  relevantUrl,
   type
 }) => {
   return (
@@ -42,10 +41,10 @@ export const NotificationItem: React.FC<IProps> = ({
                     color: '#61646b',
                     fontWeight: '500'
                   }}
-                  to={'/u/' + _triggeredByUserId}
+                  to={'/u/' + triggeredBy.userId}
                   display="inline"
                 >
-                  {triggeredByName}
+                  {triggeredBy.displayName}
                 </Link>
                   found your
                   <Link
@@ -55,7 +54,7 @@ export const NotificationItem: React.FC<IProps> = ({
                     color: '#61646b',
                     fontWeight: '500'
                   }}
-                  to={'/how-to/' + howToId}
+                  to={relevantUrl}
                   display="inline"
                 >
                   how-to
@@ -79,7 +78,7 @@ export const NotificationItem: React.FC<IProps> = ({
                     color: '#61646b',
                     fontWeight: '500'
                   }}
-                  to={'/how-to/' + howToId}
+                  to={relevantUrl}
                   display="inline"
                 >
                   how-to
@@ -92,10 +91,10 @@ export const NotificationItem: React.FC<IProps> = ({
                     color: '#61646b',
                     fontWeight: '500'
                   }}
-                  to={'/u/' + _triggeredByUserId}
+                  to={'/u/' + triggeredBy.userId}
                   display="inline"
                 >
-                  {triggeredByName}
+                  {triggeredBy.displayName}
                 </Link>
               </Box>
             </Flex>

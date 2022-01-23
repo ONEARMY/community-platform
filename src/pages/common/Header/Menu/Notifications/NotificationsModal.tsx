@@ -17,7 +17,6 @@ interface IInjectedProps extends IProps {
 }
 
 const ModalContainer = styled(Box)`
-  max-height: 300px;
   width: 250px;
   position: absolute;
   right: 10px;
@@ -30,9 +29,9 @@ const ModalContainerInner = styled(Box)`
   border: 2px solid black;
   border-radius: 5px;
   overflow-y: auto;
-  padding: 10px 20px 30px;
+  padding: 10px 20px 10px;
   width: 248px;
-  height: 310px;
+  max-height: 310px;
 
 `
 

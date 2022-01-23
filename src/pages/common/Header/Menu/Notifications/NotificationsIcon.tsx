@@ -19,7 +19,7 @@ function NotificationsIcon({ onCLick, isMobileMenuActive, areThereNotifications 
     return (
         <>
             <IconWrapper ml={1} onClick={onCLick} style={isMobileMenuActive ? {
-                backgroundColor: "#e0e0eb", borderRadius: "5px"
+                backgroundColor: "#e2edf7", borderRadius: "5px"
             } : {}}>
                 <IconNotifications color={areThereNotifications ? "orange" : "#bfbfbf"} height="25px" width="25px" />
             </IconWrapper>

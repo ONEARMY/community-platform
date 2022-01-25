@@ -13,9 +13,12 @@ exports.integrations = require('./Integrations')
 // export all userStats functions as a single group
 exports.stats = require('./stats')
 
-exports.dev = require('./dev')
-
 exports.userUpdates = UserUpdates.handleUserUpdates
 // CC Note, 2020-04-40
 // folder-based naming conventions should be encourage from now on
 exports.adminGetUserEmail = Admin.getUserEmail
+
+// Only export development api when working locally (with functions emulator)
+if (process.env.FUNCTIONS_EMULATOR) {
+  exports.dev = require('./dev')
+}

@@ -21,9 +21,9 @@ app.use(function(req, res, next) {
   else res.status(403).send(`Dev api methods can only be accessed on localhost:4002. Host: [${host}]`)
 })
 
-// app.get('/', (req, res) => res.status(200).send('Dev Api Working'))
+app.get('/', (req, res) => res.status(200).send('Dev Api Working'))
 
-// app.post('/seed-clean', (req, res) => cleanSeedData(req, res))
+app.post('/seed-clean', (req, res) => cleanSeedData(req, res))
 
 export = functions.https.onRequest(app as any)
 

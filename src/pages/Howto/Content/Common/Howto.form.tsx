@@ -123,7 +123,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
     this.setState({ showSubmitModal: true })
     formValues.moderation = this.isDraft ? 'draft' : 'awaiting-moderation'
     logger.debug('submitting form', formValues)
-    await this.store.uploadHowTo(formValues)
+    await this.store.upsertHowTo(formValues)
   }
 
   get injected() {

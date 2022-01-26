@@ -4,10 +4,7 @@ import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
-import { FlagSelectField } from 'src/components/Form/FlagSelect'
 import { Button } from 'src/components/Button'
-import 'react-flags-select/scss/react-flags-select.scss'
-import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
 import { FieldArray } from 'react-final-form-arrays'
 import { ProfileLinkField } from './Fields/Link.field'
@@ -29,13 +26,6 @@ interface IState {
   isOpen?: boolean
 }
 
-const FlagSelectContainer = styled(Flex)`
-  border: 1px solid ${theme.colors.black};
-  border-radius: 4px;
-  height: 40px;
-  background-color: ${theme.colors.background};
-`
-
 export class UserInfosSection extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
@@ -47,7 +37,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
 
   render() {
     const { formValues } = this.props
-    const { profileType, links, coverImages } = formValues
+    const { links, coverImages } = formValues
     const { isOpen } = this.state
     return (
       <FlexSectionContainer>
@@ -73,26 +63,6 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               validate={required}
               validateFields={[]}
             />
-            {profileType === 'member' && (
-              <>
-                <Text mb={2} mt={7} medium>
-                  Where are you based? *
-                </Text>
-                <FlagSelectContainer
-                  width={1}
-                  alignItems="center"
-                  data-cy="country"
-                >
-                  <Field
-                    name="country"
-                    component={FlagSelectField}
-                    searchable={true}
-                    validate={required}
-                    validateFields={[]}
-                  />
-                </FlagSelectContainer>
-              </>
-            )}
 
             <Text mb={2} mt={7} medium>
               Description *

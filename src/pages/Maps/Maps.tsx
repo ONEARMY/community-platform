@@ -99,7 +99,7 @@ class MapsPage extends React.Component<IProps, IState> {
     const { center, zoom } = this.state
     return (
       // the calculation for the height is kind of hacky for now, will set properly on final mockups
-      <Box id="mapPage" sx={{ height: 'calc(100vh - 60px)' }}>
+      <Box id="mapPage" sx={{ height: 'calc(100vh - 80px)' }}>
         <Switch>
           <Route
             exact
@@ -112,7 +112,7 @@ class MapsPage extends React.Component<IProps, IState> {
                   onFilterChange={selected => {
                     this.props.mapsStore.setActivePinFilters(selected)
                   }}
-                  onLocationChange={location => this.setCenter(location.latlng)}
+                  onLocationChange={latlng => this.setCenter(latlng)}
                   {...props}
                 />
                 <MapView

@@ -257,11 +257,11 @@ export class UserPage extends React.Component<
             <Box ml="5px">Verified</Box>
           </UserStatsBoxItem>
         )}
-        {user.location && (
+        {user.location?.latlng && (
           <Link color={'black'} to={'/map/#' + user.userName}>
             <UserStatsBoxItem>
               <Icon glyph="location-on" size="22"></Icon>
-              <Box ml="5px">{user.location?.country}</Box>
+              <Box ml="5px">{user.location?.country || 'View on Map'}</Box>
             </UserStatsBoxItem>
           </Link>
         )}
@@ -410,11 +410,13 @@ export class UserPage extends React.Component<
     }
     const shouldRenderUserStatsBox =
       user &&
-      (user.location ||
+      (user.location?.latlng ||
         (user.stats &&
           (user.stats.userCreatedHowtos || user.stats.userCreatedEvents)))
         ? true
         : false
+
+    const userLinks = user?.links.filter(linkItem => !['discord', 'forum'].includes(linkItem.label))
 
     return (
       <ProfileWrapper mt={4} mb={6}>
@@ -470,10 +472,10 @@ export class UserPage extends React.Component<
               user.machineBuilderXp &&
               this.renderMachineBuilderXp(user.machineBuilderXp)}
 
-            {user.links && user.links.length > 0 && (
+            {!!userLinks.length && (
               <UserContactInfo>
                 <h3>Contact &amp; Links</h3>
-                {user.links.map((link, i) => (
+                {userLinks.map((link, i) => (
                   <ProfileLink link={link} key={'Link-' + i} />
                 ))}
               </UserContactInfo>

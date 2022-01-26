@@ -18,7 +18,7 @@ type ILink = IUser['links'][0] & { index: number }
 
 describe('[Settings]', () => {
   beforeEach(() => {
-    cy.visit('/how-to')
+    cy.visit('/sign-in')
     cy.logout()
   })
   const selectFocus = (focus: string) => {
@@ -30,19 +30,6 @@ describe('[Settings]', () => {
     cy.get('[data-cy=username')
       .clear()
       .type(info.username)
-    if (info.country) {
-      cy.get('[data-cy=country]')
-        .find('.flag-select')
-        .click()
-      cy.get('[data-cy=country]')
-        .find(':text')
-        .clear()
-        .type(info.country)
-      cy.get('[data-cy=country')
-        .find('li')
-        .first()
-        .click()
-    }
     cy.get('[data-cy=info-description')
       .clear()
       .type(info.description)
@@ -50,8 +37,8 @@ describe('[Settings]', () => {
       .find(':file')
       .attachFile(info.coverImage)
   }
-  const setMapPin = (mapPin: IMapPin) => {
-    cy.step('Update Map section')
+  const setWorkspaceMapPin = (mapPin: IMapPin) => {
+    cy.step('Update Workspace Map section')
     cy.get('[data-cy=pin-description]')
       .clear()
       .type(mapPin.description)
@@ -65,6 +52,19 @@ describe('[Settings]', () => {
     cy.get('[data-cy=location-search]')
       .find('input')
       .should('have.value', mapPin.locationName)
+  }
+
+  const setMemberMapPin = (mapPin: IMapPin) => {
+    cy.step('Update Member section')
+    cy.get('[data-cy=pin-description]')
+      .clear()
+      .type(mapPin.description)
+    cy.get('[data-cy="osm-geocoding-input"]')
+      .clear()
+      .type(mapPin.searchKeyword)
+    cy.get('[data-cy="osm-geocoding-results"]')
+      .find('li:eq(0)', { timeout: 10000 })
+      .click()
   }
 
   const addContactLink = (link: ILink) => {
@@ -157,7 +157,7 @@ describe('[Settings]', () => {
         url: `http://www.${freshSettings.userName}.com`,
       })
 
-      setMapPin({
+      setWorkspaceMapPin({
         description: expected.mapPinDescription,
         searchKeyword: 'ohio',
         locationName: expected.location.value,
@@ -180,7 +180,8 @@ describe('[Settings]', () => {
           .should('eqSettings', expected)
       })
     })
-  })
+  });
+
   describe('[Focus Member]', () => {
     const freshSettings = {
       _authID: 'pbx4jStD8sNj4OEZTg4AegLTl6E3',
@@ -253,6 +254,90 @@ describe('[Settings]', () => {
           .should('eqSettings', expected)
       })
     })
+
+    it.only('[Add a user pin]', () => {
+      const expected = {
+        _authID: 'pbx4jStD8sNj4OEZTg4AegLTl6E3',
+        _deleted: false,
+        _id: 'settings_member_new',
+        about: "I'm a very active member",
+        // note - flag-picker returns country code but displays labels,
+        // so tests will only work for countries that code start same as label
+        country: 'AU',
+        profileType: 'member',
+        userName: 'settings_member_new',
+        verified: true,
+        coverImages: [
+          {
+            contentType: 'image/jpeg',
+            fullPath:
+              'uploads/v3_users/settings_member_new/images/profile-cover-1.jpg',
+            name: 'profile-cover-1.jpg',
+            size: 18987,
+            type: 'image/jpeg',
+          },
+        ],
+        links: [
+          {
+            label: 'email',
+            url: `${freshSettings.userName}@test.com`,
+          },
+        ],
+        mapPinDescription: 'Fun, vibrant and full of amazing people',
+        location: {
+          administrative: null,
+          country: 'Singapore',
+          countryCode: 'sg',
+          latlng: {
+            lat: 1.29048,
+            lng: 103.852,
+          },
+          name: 'Singapore',
+          postcode: '178957',
+          value: 'Singapore, Singapore',
+        },
+      }
+      cy.login('settings_member_new@test.com', 'test1234')
+      cy.step('Go to User Settings')
+      cy.clickMenuItem(UserMenuItem.Settings)
+      selectFocus(expected.profileType)
+
+      cy.get('[data-cy="add-a-map-pin"]').click();
+
+      setInfo({
+        username: expected.userName,
+        country: expected.country,
+        description: expected.about,
+        coverImage: 'images/profile-cover-1.jpg',
+      })
+      cy.step('Update Contact Links')
+      addContactLink({
+        index: 0,
+        label: 'email',
+        url: `${freshSettings.userName}@test.com`,
+      })
+
+      setMemberMapPin({
+        description: expected.mapPinDescription,
+        searchKeyword: 'singapo',
+        locationName: expected.location.value
+      })
+
+      cy.get('[data-cy=save]').click()
+      cy.get('[data-cy=save]').should('not.be.disabled')
+      cy.queryDocuments(
+        DbCollectionName.users,
+        'userName',
+        '==',
+        expected.userName,
+      ).then(docs => {
+        cy.log('queryDocs', docs)
+        expect(docs.length).to.equal(1)
+        cy.wrap(null)
+          .then(() => docs[0])
+          .should('eqSettings', expected)
+      })
+    });
   })
 
   describe('[Focus Machine Builder]', () => {
@@ -318,7 +403,7 @@ describe('[Settings]', () => {
         label: 'bazar',
         url: `http://settings_machine_bazarlink.com`,
       })
-      setMapPin({
+      setWorkspaceMapPin({
         description: expected.mapPinDescription,
         searchKeyword: 'singapo',
         locationName: expected.location.value,
@@ -396,10 +481,10 @@ describe('[Settings]', () => {
 
       cy.step('Update Contact Links')
       expected.links.forEach((link, index) =>
-        addContactLink({ index, label: 'forum', url: link.url }),
+        addContactLink({ index, label: 'website', url: link.url }),
       )
 
-      setMapPin({
+      setWorkspaceMapPin({
         description: expected.mapPinDescription,
         searchKeyword: 'london, city of',
         locationName: expected.location.value,
@@ -588,7 +673,7 @@ describe('[Settings]', () => {
       cy.get('[data-cy=plastic-pvc]').click()
       cy.get('[data-cy=plastic-other]').click()
 
-      setMapPin({
+      setWorkspaceMapPin({
         description: expected.mapPinDescription,
         searchKeyword: 'Malacca',
         locationName: expected.location.value,

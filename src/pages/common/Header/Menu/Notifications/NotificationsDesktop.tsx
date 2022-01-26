@@ -43,7 +43,7 @@ export default class NotificationsDesktop extends Component<IProps, IState> {
     return (
       <>
         {user ? (
-          <div>
+          <div data-cy="notifications-desktop">
             <NotificationsIcon onCLick={() => this.toggleNotificationsModal()} isMobileMenuActive={false}
               areThereNotifications={areThereNotifications} />
             <Flex>

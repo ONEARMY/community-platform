@@ -18,7 +18,7 @@ const IconWrapper = styled(Flex)`
 function NotificationsIcon({ onCLick, isMobileMenuActive, areThereNotifications }) {
     return (
         <>
-            <IconWrapper ml={1} onClick={onCLick} style={isMobileMenuActive ? {
+            <IconWrapper data-cy="open-notifications" ml={1} onClick={onCLick} style={isMobileMenuActive ? {
                 backgroundColor: "#e2edf7", borderRadius: "5px"
             } : {}}>
                 <IconNotifications color={areThereNotifications ? "orange" : "#bfbfbf"} height="25px" width="25px" />

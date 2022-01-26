@@ -20,6 +20,7 @@ export const NotificationItem: React.FC<IProps> = ({
       flexDirection="column"
       bg={'white'}
       width="100%"
+      data-cy="notification"
       style={{
         fontSize: '12px', marginBottom: '10px',
         paddingBottom: '10px', borderBottom: '1px solid #c7c7c7',

@@ -246,7 +246,7 @@ jobs:
           name: Linting commits
           command: |
             npm config set package-lock false
-            npm i @types/node @commitlint/types @commitlint/config-conventional
+            npm i @types/node @commitlint/types @commitlint/config-conventional --force
             npx commitlint --from=$(git merge-base remotes/origin/${CIRCLE_BRANCH} master) --verbose
   # Prepare node module caches so that future tasks run more quickly
   # NOTE - not currently used as we only have one workflow

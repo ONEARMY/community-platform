@@ -85,6 +85,7 @@ export class NotificationsModal extends React.Component<IProps> {
               <Button
                 style={{width: "100%", borderRadius: '10px'}}
                 variant="subtle"
+                data-cy="clear-notifications"
                 onClick={() => this.injected.userStore.markAllNotificationsRead()}>
                   <div style={{margin: "auto"}}>
                     Clear notifications

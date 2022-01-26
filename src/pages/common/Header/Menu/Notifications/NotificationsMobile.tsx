@@ -106,6 +106,7 @@ export class NotificationsMobile extends Component {
                 <Flex>
                   <Button variant="subtle" fontSize="14px"
                     style={{ margin: "0 auto 1em auto", borderRadius: "10px" }}
+                    data-cy="clear-notifications"
                     onClick={() => this.injected.userStore.markAllNotificationsRead()}>
                       Clear notifications
                   </Button>

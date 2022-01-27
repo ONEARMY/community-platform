@@ -1,5 +1,5 @@
 {
-  "branches": ["production", "master", "chore/automated-releases"],
+  "branches": ["production"],
   "dryRun": true,
   "plugins": [
     "@semantic-release/commit-analyzer",

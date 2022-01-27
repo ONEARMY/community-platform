@@ -453,6 +453,8 @@ workflows:
             - project-kamp-dev
       - release: 
           name: Release new version to GitHub
+          context: 
+            - release-context
       # Require manual approval on CirclCI website prior to release
       - hold:
           name: approve_release

@@ -1,0 +1,4 @@
+{
+  "branches": ["production", "master", "chore/automated-releases"],
+  "dryRun": true
+}

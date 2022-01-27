@@ -379,6 +379,9 @@ jobs:
   release: 
     docker: *docker
     steps: 
+      - setup_repo
+      - attach_workspace:
+          at: '.'
       - run: 
           command: npx semantic-release
 

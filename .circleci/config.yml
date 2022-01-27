@@ -455,6 +455,9 @@ workflows:
             - circle-ci-slack-context
             - project-kamp-dev
       - release: 
+          requires: 
+            - 'Deploy: community.preciousplastic.com'
+            - 'Deploy: community.projectkamp.com'
           name: Release new version to GitHub
           context: 
             - release-context

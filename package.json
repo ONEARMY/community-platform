@@ -1,5 +1,9 @@
 {
   "name": "one-army-community-platform",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ONEARMY/community-platform.git"
+  },
   "version": "1.6.2",
   "workspaces": [
     "functions",

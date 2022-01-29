@@ -9,6 +9,7 @@ const formatter: Formatter = function (report, options) {
     for (const result of results) {
       if (result.errors) {
         for (const error of result.errors) {
+          console.log(result.input)
           console.log('\x1b[31m%s\x1b[0m', '✖   ' + error.message)
         }
       }

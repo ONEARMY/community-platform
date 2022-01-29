@@ -238,6 +238,7 @@ examples:
 jobs:
   lint-commits:
     docker: *docker
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:

@@ -58,7 +58,6 @@
     "terser-webpack-plugin": "4.2.3"
   },
   "dependencies": {
-    "@khanacademy/react-multi-select": "^0.3.3",
     "@sentry/react": "^6.15.0",
     "@uppy/core": "^1.19.1",
     "@uppy/dashboard": "^1.20.1",

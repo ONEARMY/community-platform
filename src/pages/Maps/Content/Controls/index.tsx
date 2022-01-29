@@ -82,6 +82,7 @@ class Controls extends React.Component<IProps, IState> {
         py={[0, 1, 0]}
         flexDirection={['column', 'column', 'column', 'row']}
         alignItems={'center'}
+        justifyContent={'center'}
         onClick={() => {
           // close any active popup on click
           this.injected.mapsStore.setActivePin(undefined)
@@ -110,16 +111,14 @@ class Controls extends React.Component<IProps, IState> {
           />
         </Box>
         <Flex>
-          {Object.keys(groupedFilters).map(grouping => (
-            <GroupingFilterDesktop
-              key={grouping}
-              entityType={grouping}
-              items={groupedFilters[grouping]}
-              onChange={selected => {
-                this.props.onFilterChange(selected as IMapPinType[])
-              }}
-            />
-          ))}
+          <GroupingFilterDesktop
+            items={groupedFilters}
+            selectedItems={filtersSelected}
+            onChange={selected => {
+              this.props.onFilterChange(selected as IMapPinType[])
+              this.setState({ filtersSelected: selected })
+            }}
+          />
           <Box
             ml={['0', '50px']}
             mt="5px"

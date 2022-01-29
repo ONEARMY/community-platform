@@ -4492,6 +4492,45 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@semantic-release/changelog@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "@semantic-release/changelog@npm:6.0.1"
+  dependencies:
+    "@semantic-release/error": ^3.0.0
+    aggregate-error: ^3.0.0
+    fs-extra: ^9.0.0
+    lodash: ^4.17.4
+  peerDependencies:
+    semantic-release: ">=18.0.0"
+  checksum: a7c999f20297f229ebb32dc65f56c3aee237d941b478a1c75f5e904382c66fc4054bf3da93b1f5382e0b689147a825665500332f70807bfed952d312d2f501ac
+  languageName: node
+  linkType: hard
+
+"@semantic-release/error@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@semantic-release/error@npm:3.0.0"
+  checksum: 29c4391ecbefd9ea991f8fdf5ab3ceb9c4830281da56d9dbacd945c476cb86f10c3b55cd4a6597098c0ea3a59f1ec4752132abeea633e15972f49f4704e61d35
+  languageName: node
+  linkType: hard
+
+"@semantic-release/git@npm:^10.0.1":
+  version: 10.0.1
+  resolution: "@semantic-release/git@npm:10.0.1"
+  dependencies:
+    "@semantic-release/error": ^3.0.0
+    aggregate-error: ^3.0.0
+    debug: ^4.0.0
+    dir-glob: ^3.0.0
+    execa: ^5.0.0
+    lodash: ^4.17.4
+    micromatch: ^4.0.0
+    p-reduce: ^2.0.0
+  peerDependencies:
+    semantic-release: ">=18.0.0"
+  checksum: b0a346acaf13d1bbd8d8d895bb0dee025dd6d4742769b5dd875018fff8fcfe0f5414299dbe1ed026e53b8f8b04eeceef49a3d56c5f6506016c656df95d2ced04
+  languageName: node
+  linkType: hard
+
 "@sentry/browser@npm:6.15.0":
   version: 6.15.0
   resolution: "@sentry/browser@npm:6.15.0"
@@ -12334,6 +12373,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"debug@npm:^4.0.0":
+  version: 4.3.3
+  resolution: "debug@npm:4.3.3"
+  dependencies:
+    ms: 2.1.2
+  peerDependenciesMeta:
+    supports-color:
+      optional: true
+  checksum: 14472d56fe4a94dbcfaa6dbed2dd3849f1d72ba78104a1a328047bb564643ca49df0224c3a17fa63533fd11dd3d4c8636cd861191232a2c6735af00cc2d4de16
+  languageName: node
+  linkType: hard
+
 "decamelize-keys@npm:^1.1.0":
   version: 1.1.0
   resolution: "decamelize-keys@npm:1.1.0"
@@ -12765,7 +12816,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dir-glob@npm:^3.0.1":
+"dir-glob@npm:^3.0.0, dir-glob@npm:^3.0.1":
   version: 3.0.1
   resolution: "dir-glob@npm:3.0.1"
   dependencies:
@@ -20111,7 +20162,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"lodash@npm:>=3.5 <5, lodash@npm:^4.0.1, lodash@npm:^4.17.10, lodash@npm:^4.17.11, lodash@npm:^4.17.12, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.5, lodash@npm:^4.7.0, lodash@npm:~4.17.21":
+"lodash@npm:>=3.5 <5, lodash@npm:^4.0.1, lodash@npm:^4.17.10, lodash@npm:^4.17.11, lodash@npm:^4.17.12, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.4, lodash@npm:^4.17.5, lodash@npm:^4.7.0, lodash@npm:~4.17.21":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: eb835a2e51d381e561e508ce932ea50a8e5a68f4ebdd771ea240d3048244a8d13658acbd502cd4829768c56f2e16bdd4340b9ea141297d472517b83868e677f7
@@ -22020,6 +22071,8 @@ fsevents@^1.2.7:
     "@commitlint/config-conventional": ^16.0.0
     "@commitlint/cz-commitlint": ^16.0.3
     "@khanacademy/react-multi-select": ^0.3.3
+    "@semantic-release/changelog": ^6.0.1
+    "@semantic-release/git": ^10.0.1
     "@sentry/react": ^6.15.0
     "@testing-library/jest-dom": ^5.11.4
     "@testing-library/react": ^11.1.0
@@ -22457,6 +22510,13 @@ fsevents@^1.2.7:
   dependencies:
     aggregate-error: ^3.0.0
   checksum: cb0ab21ec0f32ddffd31dfc250e3afa61e103ef43d957cc45497afe37513634589316de4eb88abdfd969fe6410c22c0b93ab24328833b8eb1ccc087fc0442a1c
+  languageName: node
+  linkType: hard
+
+"p-reduce@npm:^2.0.0":
+  version: 2.1.0
+  resolution: "p-reduce@npm:2.1.0"
+  checksum: 99b26d36066a921982f25c575e78355824da0787c486e3dd9fc867460e8bf17d5fb3ce98d006b41bdc81ffc0aa99edf5faee53d11fe282a20291fb721b0cb1c7
   languageName: node
   linkType: hard
 

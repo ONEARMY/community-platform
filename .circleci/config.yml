@@ -376,6 +376,14 @@ jobs:
             CI_BROWSER: << parameters.CI_BROWSER >>
             CI_NODE: << parameters.CI_NODE >>
             CI_GROUP: 2x-<< parameters.CI_BROWSER >>
+  release: 
+    docker: *docker
+    steps: 
+      - setup_repo
+      - attach_workspace:
+          at: '.'
+      - run: 
+          command: npx semantic-release
 
 ######################################################################################################
 #  Workflows - Collections of jobs to define overall processes
@@ -446,6 +454,13 @@ workflows:
           context:
             - circle-ci-slack-context
             - project-kamp-dev
+      - release: 
+          requires: 
+            - 'Deploy: community.preciousplastic.com'
+            - 'Deploy: community.projectkamp.com'
+          name: Release new version to GitHub
+          context: 
+            - release-context
       # Require manual approval on CirclCI website prior to release
       - hold:
           name: approve_release

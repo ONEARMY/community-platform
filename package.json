@@ -1,5 +1,9 @@
 {
   "name": "one-army-community-platform",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ONEARMY/community-platform.git"
+  },
   "version": "1.6.2",
   "workspaces": [
     "functions",
@@ -130,6 +134,8 @@
     "@commitlint/cli": "^16.0.3",
     "@commitlint/config-conventional": "^16.0.0",
     "@commitlint/cz-commitlint": "^16.0.3",
+    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/git": "^10.0.1",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",

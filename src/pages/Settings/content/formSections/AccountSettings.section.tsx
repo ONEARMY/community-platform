@@ -6,6 +6,7 @@ import { UserStore } from 'src/stores/User/user.store'
 import { Box } from 'rebass/styled-components'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { ChangePasswordForm } from './ChangePassword.form'
+import { ChangeEmailForm } from './ChangeEmail.form'
 import { ProfileDelete } from '../ProfileDelete'
 import { observer, inject } from 'mobx-react'
 import { VERSION } from 'src/config/config'
@@ -48,6 +49,7 @@ export class AccountSettingsSection extends React.Component<any, IState> {
           />
         </Flex>
         <Box mt={2} sx={{ display: isOpen ? 'block' : 'none' }}>
+          <ChangeEmailForm userStore={this.props.userStore} />
           <ChangePasswordForm userStore={this.props.userStore} />
           <ProfileDelete
             onConfirmation={reauthPw => this.deleteProfile(reauthPw)}

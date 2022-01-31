@@ -451,6 +451,8 @@ workflows:
           requires:
             - 'Build Application'
             - 'Unit tests'
+            - 'Check Functions'
+            - 'Build Storybook'
           context:
             - e2e-tests
           matrix:

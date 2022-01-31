@@ -379,6 +379,7 @@ jobs:
             CI_GROUP: 2x-<< parameters.CI_BROWSER >>
   release: 
     docker: *docker
+    resource_class: small
     steps: 
       - setup_repo
       - attach_workspace:

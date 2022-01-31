@@ -9,8 +9,10 @@ import {
   IHowtoStats,
   IUserDB,
   IMapPin,
+  IResearchStats,
+  IResearchDB,
 } from 'one-army-community-platform/lib/models'
-export { DBDoc, IDBEndpoint, IEventDB, IHowtoDB, IHowtoStats, IUserDB, IMapPin }
+export { DBDoc, IDBEndpoint, IEventDB, IHowtoDB, IHowtoStats, IUserDB, IMapPin, IResearchStats, IResearchDB }
 
 import { generateDBEndpoints } from 'oa-shared'
 export const DB_ENDPOINTS = generateDBEndpoints()

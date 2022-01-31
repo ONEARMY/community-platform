@@ -7,6 +7,7 @@ import { Link } from 'src/components/Links'
 import { Loader } from 'src/components/Loader'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { useResearchStore } from 'src/stores/Research/research.store'
+import { UserStore } from 'src/stores/User/user.store'
 import { isAllowToEditContent } from 'src/utils/helpers'
 import ResearchDescription from './ResearchDescription'
 import Update from './Update'
@@ -26,6 +27,10 @@ const ResearchItemDetail = observer((props: IProps) => {
     }
   }
 
+  const onUsefulClick = async (researchId: string) => {
+    //await this.injected.userStore.updateUsefulResearch(researchId)
+  }
+
   React.useEffect(() => {
     (async () => {
       const { slug } = props.match.params
@@ -40,6 +45,7 @@ const ResearchItemDetail = observer((props: IProps) => {
   }, [props, store])
 
   const item = store.activeResearchItem
+  const loggedInUser = store.activeUser
 
   if (item) {
     const isEditable =
@@ -49,9 +55,13 @@ const ResearchItemDetail = observer((props: IProps) => {
       <Box maxWidth="1000px" width="100%" alignSelf="center">
         <ResearchDescription
           research={item}
+          votedUsefulCount={store.researchStats?.votedUsefulCount}
+          loggedInUser={loggedInUser}
           isEditable={isEditable}
           needsModeration={store.needsModeration(item)}
+          userVotedUseful={store.userVotedActiveResearchUseful}
           moderateResearch={moderateResearch}
+          onUsefulClick={() => onUsefulClick(item._id)}
         />
         <Box my={16}>
           {item &&

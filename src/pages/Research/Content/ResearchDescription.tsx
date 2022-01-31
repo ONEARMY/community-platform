@@ -9,12 +9,18 @@ import ModerationStatusText from 'src/components/ModerationStatusText'
 import Text from 'src/components/Text'
 import { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
+import { ResearchUsefulStats } from './ResearchUsefulStats'
+import { IUser } from 'src/models/user.models'
 
 interface IProps {
   research: IResearch.ItemDB
   isEditable: boolean
+  loggedInUser: IUser | undefined
   needsModeration: boolean
+  votedUsefulCount?: number
+  userVotedUseful: boolean
   moderateResearch: (accepted: boolean) => void
+  onUsefulClick: () => void
 }
 
 const ResearchDescription: React.FC<IProps> = ({
@@ -65,6 +71,16 @@ const ResearchDescription: React.FC<IProps> = ({
               </Flex>
             </Button>
           </Link>
+          <Box style={{ flexGrow: 1 }}>
+              {props.votedUsefulCount !== undefined && (
+                <ResearchUsefulStats
+                  votedUsefulCount={props.votedUsefulCount}
+                  userVotedUseful={props.userVotedUseful}
+                  isLoggedIn={props.loggedInUser ? true : false}
+                  onUsefulClick={props.onUsefulClick}
+                />
+              )}
+            </Box>
           {/* Check if research should be moderated */}
           {props.needsModeration && (
             <Flex justifyContent={'space-between'}>

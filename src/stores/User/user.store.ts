@@ -172,11 +172,6 @@ export class UserStore extends ModuleStore {
     // *** TODO -
   }
 
-  public async getUserEmail() {
-    const user = this.authUser as firebase.default.User
-    return user.email as string
-  }
-
   public async changeUserPassword(oldPassword: string, newPassword: string) {
     // *** TODO - (see code in change pw component and move here)
     const user = this.authUser as firebase.default.User
@@ -186,16 +181,6 @@ export class UserStore extends ModuleStore {
     )
     await user.reauthenticateAndRetrieveDataWithCredential(credentials)
     return user.updatePassword(newPassword)
-  }
-
-  public async changeUserEmail(password: string, newEmail: string) {
-    const user = this.authUser as firebase.default.User
-    const credentials = EmailAuthProvider.credential(
-      user.email as string,
-      password,
-    )
-    await user.reauthenticateAndRetrieveDataWithCredential(credentials)
-    return user.updateEmail(newEmail)
   }
 
   public async sendPasswordResetEmail(email: string) {
@@ -245,6 +230,7 @@ export class UserStore extends ModuleStore {
       userName,
       moderation: 'awaiting-moderation',
       votedUsefulHowtos: {},
+      votedUsefulResearch: {},
       ...fields,
     }
     // update db
@@ -259,6 +245,17 @@ export class UserStore extends ModuleStore {
       const votedUsefulHowtos = toJS(this.user.votedUsefulHowtos) || {}
       votedUsefulHowtos[howtoId] = !votedUsefulHowtos[howtoId]
       await this.updateUserProfile({ votedUsefulHowtos })
+    }
+  }
+
+  @action
+  public async updateUsefulResearch(researchId: string) {
+    if (this.user) {
+      // toggle entry on user votedUsefulResearch to either vote or unvote a Research
+      // this will updated the main Research via backend `updateUserVoteStats` function
+      const votedUsefulResearch = toJS(this.user.votedUsefulResearch) || {}
+      votedUsefulResearch[researchId] = !votedUsefulResearch[researchId]
+      await this.updateUserProfile({ votedUsefulResearch })
     }
   }
 

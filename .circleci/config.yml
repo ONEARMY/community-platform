@@ -303,12 +303,12 @@ jobs:
           root: .
           paths:
             - build
-  build-functions:
+  check-functions:
     docker: *docker
     environment:
       GENERATE_SOURCEMAP: 'false'
     # `medium` is the max allowed size for free builds (helps with out-of-memory issues) - https://circleci.com/docs/2.0/configuration-reference/#resourceclass
-    resource_class: medium+
+    resource_class: small
     steps:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - checkout
@@ -323,7 +323,7 @@ jobs:
           command: |
             echo 'export NODE_OPTIONS=--max-old-space-size=4096' >> $BASH_ENV
       - run:
-          command: cd functions && yarn build
+          command: cd functions && yarn precompile
   storybook:
     docker: *docker
     resource_class: medium
@@ -425,10 +425,10 @@ workflows:
             - 'Lint commits'
           name: Build Application
           context: build-context
-      - build-functions:
+      - check-functions:
           requires:
             -  'Lint commits'
-          name: Build Functions
+          name: Check Functions
           context: build-context
       - test_unit:
           name: 'Unit tests'

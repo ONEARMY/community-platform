@@ -125,7 +125,7 @@ class GroupingFilterDesktop extends Component<IProps, IState> {
             valueContainer: (base) => ({
               ...base,
               flexWrap: 'nowrap',
-              overflow: 'scroll',
+              overflow: 'auto',
             }),
             control: () => ({
               width: '100%',

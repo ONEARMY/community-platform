@@ -5,7 +5,7 @@ title: Modules
 
 The platform consists of multiple _modules_ which provide the building blocks the app features and core functionality. Examples include features such as _howtos_, _events_ and _research_. These modules are designed to be drop-in/drop-out to allow for different combinations of modules to be used in different deployments.
 
-A module can consist of a combination of frontend pages, components, stores, as well as backend db endpoints, methods and triggers. They can import code from shared components folders and the common database, although should avoid importing code directly from other modules (better to refactor reuable code where possible)
+A module can consist of a combination of frontend pages, components, stores, as well as backend db endpoints, methods and triggers. They can import code from shared components folders, common stores and providers (e.g. user, database), but should avoid importing code directly from other modules (better to refactor to shared, reusable component where possible)
 
 ## Integrated Module Folder Structure
 

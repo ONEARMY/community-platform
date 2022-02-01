@@ -1,4 +1,4 @@
-import type { ThemeWithName } from "../types"
+import { ThemeWithName } from "../types"
 
 // use enum to specify list of possible colors for typing
 export const colors = {

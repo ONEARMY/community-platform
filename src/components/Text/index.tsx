@@ -2,7 +2,7 @@ import {
   Text as RebassText,
   TextProps as RebassTextProps,
 } from 'rebass/styled-components'
-import theme from 'src/themes/styled.theme'
+import theme from '../../themes/styled.theme'
 import styled from 'styled-components'
 
 export interface ITextProps {

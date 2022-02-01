@@ -18,8 +18,8 @@ export const handleUserUpdates = functions.firestore
   })
 
 async function processHowToUpdates(change: IDBDocChange) {
-  const info: IUserDB = change.after.exists ? change.after.data() : {}
-  const prevInfo: IUserDB = change.before.exists ? change.before.data() : {}
+  const info = (change.after.exists ? change.after.data() : {}) as IUserDB
+  const prevInfo = (change.before.exists ? change.before.data() : {}) as IUserDB
   // optional chaining (.?.) incase does not exists
   const prevCountryCode = prevInfo.location?.countryCode
   const newCountryCode = info.location?.countryCode

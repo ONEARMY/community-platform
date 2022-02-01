@@ -3,13 +3,13 @@ id: modules
 title: Modules
 ---
 
-The platform consists of multiple _modules_ which provide the building blocks the app features and core functionality. Examples include features such as _howtos_, _events_ and _research_, alongside core modules such as _database_ and _user_
+The platform consists of multiple _modules_ which provide the building blocks the app features and core functionality. Examples include features such as _howtos_, _events_ and _research_. These modules are designed to be drop-in/drop-out to allow for different combinations of modules to be used in different deployments.
 
-A module can consist of a combination of frontend pages, components, stores, as well as backend db endpoints, methods and triggers. Currently there is a significant level of overlap between (what should ideally be) standalone modules, however new modules should try to roughly design themselves in the following way:
+A module can consist of a combination of frontend pages, components, stores, as well as backend db endpoints, methods and triggers. They can import code from shared components folders and the common database, although should avoid importing code directly from other modules (better to refactor reuable code where possible)
 
-## Module Folder
+## Integrated Module Folder Structure
 
-All frontend code should sit in a single module folder
+If developing a new module, the proposed simplest structure to include all relevant frontend code in a single directory is a follows:
 
 ```
 

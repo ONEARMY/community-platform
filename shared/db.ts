@@ -15,4 +15,5 @@ export const generateDBEndpoints = (DB_PREFIX = '') => ({
   events: `${DB_PREFIX}v3_events`,
   mappins: `${DB_PREFIX}v3_mappins`,
   research: `${DB_PREFIX}research_rev20201020`,
+  aggregations: `${DB_PREFIX}aggregations_rev20220126`,
 })

@@ -5,8 +5,8 @@ import {
   DBDoc,
   IModerationStatus,
 } from './common.models'
-import { IUploadedFileMeta } from 'src/stores/storage'
-import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
+import type { IUploadedFileMeta } from '../stores/storage'
+import type { IConvertedFileMeta } from '../components/ImageInput/ImageInput'
 
 export interface IUserState {
   user?: IUser

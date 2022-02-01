@@ -17,7 +17,12 @@
     "noImplicitAny": false,
     "strictPropertyInitialization": false,
     "experimentalDecorators": true,
-    "typeRoots": ["./node_modules/@types", "./types", "@testing-library/jest-dom"],
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types",
+      "@testing-library/jest-dom",
+      "../src/themes/types"
+    ],
     "declaration": true,
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,

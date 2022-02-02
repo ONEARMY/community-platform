@@ -4,7 +4,7 @@ import 'firebase/auth'
 import 'firebase/storage'
 import 'firebase/functions'
 import 'firebase/database'
-import { FIREBASE_CONFIG, SITE } from 'src/config/config'
+import { FIREBASE_CONFIG, SITE } from '../config/config'
 // initialise with config settings, additional firestore config to support future changes
 
 firebase.initializeApp(FIREBASE_CONFIG)

@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Icon, IGlyphs } from 'src/components/Icons'
+import { Icon, IGlyphs } from '../Icons'
 import {
   Button as RebassButton,
   ButtonProps as RebassButtonProps,
 } from 'rebass/styled-components'
-import Text from 'src/components/Text'
+import Text from '../Text'
 import styled from 'styled-components'
 
 // extend to allow any default button props (e.g. onClick) to also be passed

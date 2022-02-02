@@ -257,6 +257,14 @@ jobs:
     steps:
       - setup_repo
 
+  test_functions:
+    docker: 
+      - image: timbru31/java-node:alpine-12
+    resource_class: small
+    steps:
+      - setup_repo
+      - run: cd functions && yarn && yarn build && yarn emulator:test
+
   # Create a production build
   # NOTE - not currently used in test workflow as different build_env required for each machine
   test_unit:
@@ -275,6 +283,7 @@ jobs:
     docker: *docker
     environment:
       GENERATE_SOURCEMAP: 'false'
+      SKIP_PREFLIGHT_CHECK: 'true'
     # `medium` is the max allowed size for free builds (helps with out-of-memory issues) - https://circleci.com/docs/2.0/configuration-reference/#resourceclass
     resource_class: medium+
     steps:
@@ -446,6 +455,8 @@ workflows:
             branches:
               ignore:
                 - production
+      - test_functions: 
+          name: 'Cloud Function tests'
       - test_e2e:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           requires:

@@ -6,7 +6,7 @@
     "webpack": "^4.46.0"
   },
   "scripts": {
-    "start": "yarn precompile && ts-node scripts/start.ts",
+    "start": "ts-node scripts/start.ts",
     "serve:live": "yarn copyDevConfig && yarn serve",
     "lint": "tslint --project tsconfig.json",
     "build": "webpack",

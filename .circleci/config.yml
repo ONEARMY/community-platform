@@ -323,7 +323,7 @@ jobs:
           command: |
             echo 'export NODE_OPTIONS=--max-old-space-size=4096' >> $BASH_ENV
       - run:
-          command: cd functions && yarn precompile
+          command: cd functions && yarn build
   storybook:
     docker: *docker
     resource_class: medium

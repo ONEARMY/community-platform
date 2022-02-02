@@ -15,7 +15,7 @@ export function splitArrayToChunks<T>(arr: T[], chunksize: number): T[][] {
  * Compare two json objects nested one level deep for equality (key order not important)
  * Adapted from https://stackoverflow.com/a/52323412/5693245
  * */
-export function shallowCompareObjectsEqual(obj1: any, obj2: any) {
+export function objectsAreEqualShallow(obj1: any = {}, obj2: any = {}) {
   return (
     Object.keys(obj1).length === Object.keys(obj2).length &&
     Object.keys(obj1).every(

@@ -2,7 +2,7 @@ import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
 import { DB_ENDPOINTS, IUserDB } from '../models'
 import { db } from '../Firebase/firestoreDB'
-import { shallowCompareObjectsEqual } from '../Utils/data.utils'
+import { objectsAreEqualShallow } from '../Utils/data.utils'
 
 /** Aggregate a single list of all users with badges */
 exports.badges = functions.firestore
@@ -20,10 +20,11 @@ async function updateUserBadges(id: string, user: IUserDB) {
   const doc = await ref.get()
   if (!doc.exists) {
     await seedUserBadges(ref)
+    return updateUserBadges(id, user)
   }
   const userBadges = doc.data()
   // handle user badges changed - set if user has badges, delete if not
-  if (shallowCompareObjectsEqual(user.badges, userBadges[id])) {
+  if (!objectsAreEqualShallow(user.badges, userBadges[id])) {
     ref.update({ [id]: user.badges || admin.firestore.FieldValue.delete() })
   }
 }

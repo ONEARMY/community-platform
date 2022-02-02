@@ -13,9 +13,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true,
-    "paths": {
-    }
+    "resolveJsonModule": true
   },
   "references": [
     // these (should) be compiled ahead of functions, although can break: https://github.com/microsoft/TypeScript/issues/25864#issuecomment-596217193

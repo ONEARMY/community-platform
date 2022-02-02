@@ -217,8 +217,8 @@ const ResearchForm = observer((props: IProps) => {
                                 flex: 1,
                                 minHeight: '150px',
                               }}
-                              maxLength="400"
-                              placeholder="Introduction to your research question. Mention what you want to do, inspiration you got, what challenges you must see etc (max 400 characters)"
+                              maxLength="1000"
+                              placeholder="Introduction to your research question. Mention what you want to do, whats the goal and what challenges you see etc (max 1000 characters)"
                             />
                           </Flex>
                           <Flex flexDirection={'column'} mb={3}>

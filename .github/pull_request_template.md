@@ -1,7 +1,7 @@
 PR Checklist
 
+- [ ] - Commit [messages are descriptive](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--commit-style-guide), it will be used in our [Release Notes](https://github.com/ONEARMY/community-platform/releases/)
 - [ ] - Latest `master` branch merged
-- [ ] - PR title descriptive (can be used in release notes)
 
 PR Type
 

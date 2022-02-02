@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions'
 
 // Import and Re-export models from the main platform if required by functions
-import {
+import type {
   DBDoc,
   IDBEndpoint,
   IEventDB,
@@ -9,7 +9,7 @@ import {
   IHowtoStats,
   IUserDB,
   IMapPin,
-} from '../../src/models'
+} from 'one-army-community-platform/src/models'
 export { DBDoc, IDBEndpoint, IEventDB, IHowtoDB, IHowtoStats, IUserDB, IMapPin }
 
 import { generateDBEndpoints } from 'oa-shared'

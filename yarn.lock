@@ -15679,8 +15679,8 @@ fsevents@^1.2.7:
     googleapis: ^61.0.0
     jszip: ^3.7.0
     log-update: ^4.0.0
-    oa-shared: ^1.0.0
-    one-army-community-platform: ^1
+    oa-shared: "workspace:*"
+    one-army-community-platform: "workspace:*"
     request: ^2.88.2
     sharp: ^0.26.1
     ts-node: ^10.0.0
@@ -21935,7 +21935,7 @@ fsevents@^1.2.7:
   languageName: unknown
   linkType: soft
 
-"oa-shared@1.0.0, oa-shared@^1.0.0, oa-shared@workspace:*, oa-shared@workspace:shared":
+"oa-shared@1.0.0, oa-shared@workspace:*, oa-shared@workspace:shared":
   version: 0.0.0-use.local
   resolution: "oa-shared@workspace:shared"
   languageName: unknown
@@ -22146,7 +22146,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"one-army-community-platform@^1, one-army-community-platform@workspace:.":
+"one-army-community-platform@workspace:*, one-army-community-platform@workspace:.":
   version: 0.0.0-use.local
   resolution: "one-army-community-platform@workspace:."
   dependencies:

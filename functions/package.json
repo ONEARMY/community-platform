@@ -46,6 +46,7 @@
     "@types/dateformat": "^3.0.1",
     "@types/fs-extra": "^9.0.2",
     "@types/generate-json-webpack-plugin": "^0.3.3",
+    "@types/jest": "^26",
     "@types/node": "16",
     "@types/request": "^2.48.5",
     "@types/sharp": "^0.26.0",

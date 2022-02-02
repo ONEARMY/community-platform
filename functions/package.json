@@ -6,14 +6,14 @@
     "webpack": "^4.46.0"
   },
   "scripts": {
-    "start": "npm run precompile && ts-node scripts/start.ts",
-    "serve:live": "npm run copyDevConfig && npm run serve",
+    "start": "yarn precompile && ts-node scripts/start.ts",
+    "serve:live": "yarn copyDevConfig && yarn serve",
     "lint": "tslint --project tsconfig.json",
     "build": "webpack",
     "watch": "webpack --watch",
     "copyDevConfig": "firebase functions:config:get > .runtimeconfig.json",
     "db:backup:local": "firestore-export -a service.json -b backup.json -p",
-    "shell": "npm run build && firebase functions:shell",
+    "shell": "yarn build && firebase functions:shell",
     "emulator:seed": "ts-node scripts/emulator/seed.ts"
   },
   "main": "index.js",
@@ -29,8 +29,8 @@
     "google-auth-library": "^6.1.1",
     "googleapis": "^61.0.0",
     "log-update": "^4.0.0",
-    "oa-shared": "^1.0.0",
-    "one-army-community-platform": "^1",
+    "oa-shared": "workspace:*",
+    "one-army-community-platform": "workspace:*",
     "request": "^2.88.2",
     "sharp": "^0.26.1"
   },

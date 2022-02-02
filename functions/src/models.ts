@@ -9,7 +9,7 @@ import {
   IHowtoStats,
   IUserDB,
   IMapPin,
-} from 'one-army-community-platform/lib/models'
+} from '../../src/models'
 export { DBDoc, IDBEndpoint, IEventDB, IHowtoDB, IHowtoStats, IUserDB, IMapPin }
 
 import { generateDBEndpoints } from 'oa-shared'

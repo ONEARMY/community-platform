@@ -21,6 +21,6 @@
     { "path": "../tsconfig.src-types.json" },
     { "path": "../shared/tsconfig.json" }
   ],
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../types"],
   "exclude": ["src/**/*.test.tsx", "../src/**/*.test.tsx"]
 }

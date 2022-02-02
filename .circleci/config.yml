@@ -238,6 +238,7 @@ examples:
 jobs:
   lint-commits:
     docker: *docker
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:
@@ -302,6 +303,27 @@ jobs:
           root: .
           paths:
             - build
+  check-functions:
+    docker: *docker
+    environment:
+      GENERATE_SOURCEMAP: 'false'
+    # `medium` is the max allowed size for free builds (helps with out-of-memory issues) - https://circleci.com/docs/2.0/configuration-reference/#resourceclass
+    resource_class: small
+    steps:
+      # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
+      - checkout
+      - *restore_yarn_cache
+      - run:
+          name: Install dependencies
+          command: yarn workspaces focus functions
+      # As environment variables can only be set from strings add additional dynamic variable mappings here
+      # https://discuss.circleci.com/t/using-environment-variables-in-config-yml-not-working/14237/13
+      - run:
+          name: Set branch environment
+          command: |
+            echo 'export NODE_OPTIONS=--max-old-space-size=4096' >> $BASH_ENV
+      - run:
+          command: cd functions && yarn build
   storybook:
     docker: *docker
     resource_class: medium
@@ -376,6 +398,15 @@ jobs:
             CI_BROWSER: << parameters.CI_BROWSER >>
             CI_NODE: << parameters.CI_NODE >>
             CI_GROUP: 2x-<< parameters.CI_BROWSER >>
+  release: 
+    docker: *docker
+    resource_class: small
+    steps: 
+      - setup_repo
+      - attach_workspace:
+          at: '.'
+      - run: 
+          command: npx semantic-release
 
 ######################################################################################################
 #  Workflows - Collections of jobs to define overall processes
@@ -393,6 +424,11 @@ workflows:
           requires:
             - 'Lint commits'
           name: Build Application
+          context: build-context
+      - check-functions:
+          requires:
+            -  'Lint commits'
+          name: Check Functions
           context: build-context
       - test_unit:
           name: 'Unit tests'
@@ -415,6 +451,8 @@ workflows:
           requires:
             - 'Build Application'
             - 'Unit tests'
+            - 'Check Functions'
+            - 'Build Storybook'
           context:
             - e2e-tests
           matrix:
@@ -446,6 +484,13 @@ workflows:
           context:
             - circle-ci-slack-context
             - project-kamp-dev
+      - release: 
+          requires: 
+            - 'Deploy: community.preciousplastic.com'
+            - 'Deploy: community.projectkamp.com'
+          name: Release new version to GitHub
+          context: 
+            - release-context
       # Require manual approval on CirclCI website prior to release
       - hold:
           name: approve_release

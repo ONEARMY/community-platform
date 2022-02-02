@@ -1,7 +1,7 @@
 import * as React from 'react'
 import '@uppy/core/dist/style.css'
 import '@uppy/dashboard/dist/style.css'
-import Uppy from '@uppy/core'
+import Uppy, { UppyFile } from '@uppy/core'
 import { DashboardModal } from '@uppy/react'
 import { Button } from '../Button'
 import { UPPY_CONFIG } from './UppyConfig'
@@ -9,7 +9,7 @@ import { Flex } from 'rebass/styled-components'
 import { FileInfo } from '../FileInfo/FileInfo'
 
 interface IUppyFiles {
-  [key: string]: Uppy.UppyFile
+  [key: string]: UppyFile
 }
 interface IProps {
   onFilesChange?: (files: (Blob | File)[]) => void
@@ -18,7 +18,7 @@ interface IState {
   open: boolean
 }
 export class FileInput extends React.Component<IProps, IState> {
-  private uppy = Uppy({
+  private uppy = new Uppy({
     ...UPPY_CONFIG,
     onBeforeUpload: () => this.uploadTriggered(),
   })

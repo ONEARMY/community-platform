@@ -24,7 +24,7 @@ module.exports = {
     {
       type: 'category',
       label: 'Frontend Development',
-      items: ['Frontend Development/overview'],
+      items: ['Frontend Development/overview', 'Frontend Development/modules'],
     },
     {
       type: 'category',

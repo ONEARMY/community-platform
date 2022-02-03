@@ -9,7 +9,7 @@ test('splitArrayToChunks', () => {
   )
 })
 
-test('objectsDiff', () => {
+test('compareObjectDiffs', () => {
   const before = {
     stringSame: 'hello',
     stringDiff: 'hello',

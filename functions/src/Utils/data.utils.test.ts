@@ -40,49 +40,35 @@ test('compareObjectDiffs', () => {
     arrayDiff: [2, 'a', { stringSame: 'hello' }, null],
     additionalAfterDiff: 'additional after',
   }
+  const expected = {
+    stringDiff: {
+      before: 'hello',
+      after: 'goodbye',
+    },
+    numberDiff: {
+      before: 0,
+      after: 1,
+    },
+    mixedFalsyDiff: {
+      before: null,
+    },
+    arrayDiff: {
+      before: [1, 'a', { stringSame: 'hello' }, null],
+      after: [2, 'a', { stringSame: 'hello' }, null],
+    },
+    additionalBeforeDiff: {
+      before: 'additional field',
+      after: undefined,
+    },
+    additionalAfterDiff: {
+      before: undefined,
+      after: 'additional after',
+    },
+  }
   // stringify output comparison as jest equal does not do deep diff
   // which is what is meant to be tested (!)
   expect(JSON.stringify(compareObjectDiffs(before, after))).toEqual(
-    JSON.stringify({
-      stringDiff: {
-        before: 'hello',
-        after: 'goodbye',
-      },
-
-      numberDiff: {
-        before: 0,
-        after: 1,
-      },
-      mixedFalsyDiff: {
-        before: null,
-      },
-      arrayDiff: {
-        before: [
-          1,
-          'a',
-          {
-            stringSame: 'hello',
-          },
-          null,
-        ],
-        after: [
-          2,
-          'a',
-          {
-            stringSame: 'hello',
-          },
-          null,
-        ],
-      },
-      additionalBeforeDiff: {
-        before: 'additional field',
-        after: undefined,
-      },
-      additionalAfterDiff: {
-        before: undefined,
-        after: 'additional after',
-      },
-    }),
+    JSON.stringify(expected),
   )
 })
 

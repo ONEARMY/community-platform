@@ -43,7 +43,7 @@ export async function handleDBAggregations(
   }
 }
 
-export class AggregationHandler {
+class AggregationHandler {
   /** Reference to database path for aggregation doc */
   public aggregationRef: IDocumentRef
   /** Reference to database path for triggered collection */

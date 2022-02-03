@@ -14,7 +14,11 @@
     "copyDevConfig": "firebase functions:config:get > .runtimeconfig.json",
     "db:backup:local": "firestore-export -a service.json -b backup.json -p",
     "shell": "yarn build && firebase functions:shell",
-    "emulator:seed": "ts-node scripts/emulator/seed.ts"
+    "emulator:test": "firebase emulators:exec --project default 'jest .'",
+    "emulator:start": "firebase emulators:start --import=./data/emulated",
+    "emulator:seed": "ts-node scripts/emulator/seed.ts",
+    "emulator": "yarn emulator:seed && yarn emulator:start",
+    "test": "jest ."
   },
   "main": "index.js",
   "dependencies": {
@@ -32,7 +36,8 @@
     "oa-shared": "workspace:*",
     "one-army-community-platform": "workspace:*",
     "request": "^2.88.2",
-    "sharp": "^0.26.1"
+    "sharp": "^0.26.1",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
@@ -41,6 +46,7 @@
     "@types/dateformat": "^3.0.1",
     "@types/fs-extra": "^9.0.2",
     "@types/generate-json-webpack-plugin": "^0.3.3",
+    "@types/jest": "^26",
     "@types/node": "16",
     "@types/request": "^2.48.5",
     "@types/sharp": "^0.26.0",
@@ -50,8 +56,11 @@
     "clean-webpack-plugin": "^4.0.0-alpha.0",
     "concurrently": "^6.2.0",
     "cross-env": "^7.0.3",
+    "firebase-functions-test": "^0.3.3",
     "generate-json-webpack-plugin": "^1.0.0",
+    "jest": "26",
     "jszip": "^3.7.0",
+    "ts-jest": "26",
     "ts-node": "^10.0.0",
     "tslint": "^6.1.3",
     "typescript": "4.5.5",

@@ -415,7 +415,7 @@ jobs:
       - attach_workspace:
           at: '.'
       - run: 
-          command: npx semantic-release
+          command: npx semantic-release --dry-run
 
 ######################################################################################################
 #  Workflows - Collections of jobs to define overall processes

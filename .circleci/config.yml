@@ -439,6 +439,10 @@ workflows:
             -  'Lint commits'
           name: Check Functions
           context: build-context
+          filters:
+            branches:
+              ignore:
+                - production
       - test_unit:
           name: 'Unit tests'
           requires:
@@ -457,6 +461,11 @@ workflows:
                 - production
       - test_functions: 
           name: 'Cloud Function tests'
+          context: build-context
+          filters:
+            branches:
+              ignore:
+                - production
       - test_e2e:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           requires:
@@ -503,18 +512,22 @@ workflows:
           context: 
             - release-context
       # Require manual approval on CirclCI website prior to release
+      - build:
+          name: Build Production Release
+          context: build-context
+          <<: *filter_only_production
       - hold:
           name: approve_release
           type: approval
           requires:
-            - Build Application
+            - Build Production Release
           <<: *filter_only_production
       # Send a slack notification to approve the hold above (required config supplied in circleci-slack-context)
       - slack/on-hold:
           name: notify_slack_pending_approval
           context: circle-ci-slack-context
           requires:
-            - Build Application
+            - Build Production Release
           <<: *filter_only_production
           <<: *slack_custom_hold_message
       - deploy:

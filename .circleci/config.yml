@@ -427,6 +427,10 @@ workflows:
     jobs:
       - lint-commits:
           name: Lint commits
+          filters:
+              branches:
+                ignore:
+                  - production
       #---------------------- Test ----------------------
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:

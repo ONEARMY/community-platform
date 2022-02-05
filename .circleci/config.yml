@@ -466,6 +466,8 @@ workflows:
       - test_functions: 
           name: 'Cloud Function tests'
           context: build-context
+          requires:
+            - 'Lint commits'
           filters:
             branches:
               ignore:

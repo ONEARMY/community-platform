@@ -1,4 +1,28 @@
 {
+  "notification_howto_author": {
+    "verified": false,
+    "_modified": "2022-01-07T12:07:05.988Z",
+    "_authID": "5UXRly49EOXtIXmKjPfSU5UpeI66",
+    "_created": "2022-01-09T12:07:05.988Z",
+    "displayName": "notification_howto_author",
+    "_id": "notification_howto_author",
+    "_deleted": false,
+    "userName": "notification_howto_author",
+    "moderation": "awaiting-moderation",
+    "notifications": []
+  },
+  "notification_triggerer": {
+    "verified": false,
+    "_modified": "2022-01-07T12:07:05.988Z",
+    "_authID": "5UXRly49EOXtIXmKjPfSU5UpeI55",
+    "_created": "2022-01-09T12:07:05.988Z",
+    "displayName": "notification_triggerer",
+    "_id": "notification_triggerer",
+    "_deleted": false,
+    "userName": "notification_triggerer",
+    "moderation": "awaiting-moderation",
+    "notifications": []
+  },
   "event_creator": {
     "verified": false,
     "_modified": "2020-01-07T12:07:05.988Z",

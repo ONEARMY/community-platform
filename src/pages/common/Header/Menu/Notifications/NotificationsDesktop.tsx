@@ -6,13 +6,11 @@ import { NotificationsModal } from './NotificationsModal'
 import NotificationsIcon from './NotificationsIcon'
 import Foco from 'react-foco'
 
-
 interface IState {
   showNotificationsModal: boolean
 }
 
-interface IProps {
-}
+interface IProps {}
 
 interface IInjectedProps extends IProps {
   userStore: UserStore
@@ -32,7 +30,9 @@ export default class NotificationsDesktop extends Component<IProps, IState> {
   }
 
   toggleNotificationsModal() {
-    this.setState({ showNotificationsModal: !this.state.showNotificationsModal })
+    this.setState({
+      showNotificationsModal: !this.state.showNotificationsModal,
+    })
   }
 
   render() {
@@ -51,8 +51,11 @@ export default class NotificationsDesktop extends Component<IProps, IState> {
       <>
         {user ? (
           <div data-cy="notifications-desktop">
-            <NotificationsIcon onCLick={() => this.toggleNotificationsModal()} isMobileMenuActive={false}
-              areThereNotifications={areThereNotifications} />
+            <NotificationsIcon
+              onCLick={() => this.toggleNotificationsModal()}
+              isMobileMenuActive={false}
+              areThereNotifications={areThereNotifications}
+            />
             <Flex>
               {showNotificationsModal && (
                 <Foco onClickOutside={() => this.toggleNotificationsModal()}>
@@ -61,8 +64,9 @@ export default class NotificationsDesktop extends Component<IProps, IState> {
               )}
             </Flex>
           </div>
-        ) : ""
-        }
+        ) : (
+          ''
+        )}
       </>
     )
   }

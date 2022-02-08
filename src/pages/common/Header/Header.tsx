@@ -15,6 +15,7 @@ import { observer, inject } from 'mobx-react'
 import { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
 import { UserStore } from 'src/stores/User/user.store'
 import { isModuleSupported, MODULE } from 'src/modules'
+import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
 interface IProps { }
 
@@ -98,7 +99,15 @@ export class Header extends Component<IProps> {
   }
 
   render() {
+    const menu = this.injected.mobileMenuStore
+    const user = this.injected.userStore.user
     const areThereNotifications = Boolean(
+      user?.notifications?.length &&
+        !(
+          user?.notifications?.filter(notification => !notification.read)
+            .length === 0
+        ),
+    )
 
     return (
       <>
@@ -115,15 +124,29 @@ export class Header extends Component<IProps> {
           <Flex>
             <Logo isMobile={true} />
           </Flex>
-          {user ? <MobileNotificationsWrapper>
-            <NotificationsIcon onCLick={() => menu.toggleMobileNotifications()} isMobileMenuActive={menu.showMobileNotifications}
-              areThereNotifications={areThereNotifications} />
-          </MobileNotificationsWrapper> : ""}
+          {user ? (
+            <AuthWrapper roleRequired="beta-tester">
+              <MobileNotificationsWrapper>
+                <NotificationsIcon
+                  onCLick={() => menu.toggleMobileNotifications()}
+                  isMobileMenuActive={menu.showMobileNotifications}
+                  areThereNotifications={areThereNotifications}
+                />
+              </MobileNotificationsWrapper>
+            </AuthWrapper>
+          ) : (
+            ''
+          )}
           <DesktopMenuWrapper className="menu-desktop" px={2}>
             <MenuDesktop />
-            <NotificationsDesktop />
+
             {isModuleSupported(MODULE.USER) ? (
-              <Profile isMobile={false} />
+              <>
+                <AuthWrapper roleRequired="beta-tester">
+                  <NotificationsDesktop />
+                </AuthWrapper>
+                <Profile isMobile={false} />
+              </>
             ) : null}
           </DesktopMenuWrapper>
           <MobileMenuWrapper className="menu-mobile">

@@ -37,9 +37,9 @@ aliases:
         # https://circleci.com/docs/2.0/yarn/
         # when lock file changes, use increasingly general patterns to restore cache (also need to change `save_cache` path)
         # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
-        - yarn-packages-v10-{{ .Branch }}-{{ checksum "yarn.lock" }}
-        - yarn-packages-v10-{{ .Branch }}-
-        - yarn-packages-v10-
+        - yarn-packages-v11-{{ .Branch }}-{{ checksum "yarn.lock" }}
+        - yarn-packages-v11-{{ .Branch }}-
+        - yarn-packages-v11-
   - &install_packages
     run:
       name: Install Packages
@@ -60,7 +60,7 @@ aliases:
         # - ~/.yarn/berry/cache
         # local cache location
         - ~/project/.yarn/cache
-      key: yarn-packages-v10-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      key: yarn-packages-v11-{{ .Branch }}-{{ checksum "yarn.lock" }}
 
   - &filter_only_production
     filters:
@@ -415,7 +415,7 @@ jobs:
       - attach_workspace:
           at: '.'
       - run: 
-          command: npx semantic-release
+          command: npx semantic-release --dry-run
 
 ######################################################################################################
 #  Workflows - Collections of jobs to define overall processes
@@ -427,6 +427,10 @@ workflows:
     jobs:
       - lint-commits:
           name: Lint commits
+          filters:
+              branches:
+                ignore:
+                  - production
       #---------------------- Test ----------------------
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:
@@ -439,6 +443,10 @@ workflows:
             -  'Lint commits'
           name: Check Functions
           context: build-context
+          filters:
+            branches:
+              ignore:
+                - production
       - test_unit:
           name: 'Unit tests'
           requires:
@@ -457,6 +465,13 @@ workflows:
                 - production
       - test_functions: 
           name: 'Cloud Function tests'
+          context: build-context
+          requires:
+            - 'Lint commits'
+          filters:
+            branches:
+              ignore:
+                - production
       - test_e2e:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           requires:
@@ -503,18 +518,22 @@ workflows:
           context: 
             - release-context
       # Require manual approval on CirclCI website prior to release
+      - build:
+          name: Build Production Release
+          context: build-context
+          <<: *filter_only_production
       - hold:
           name: approve_release
           type: approval
           requires:
-            - Build Application
+            - Build Production Release
           <<: *filter_only_production
       # Send a slack notification to approve the hold above (required config supplied in circleci-slack-context)
       - slack/on-hold:
           name: notify_slack_pending_approval
           context: circle-ci-slack-context
           requires:
-            - Build Application
+            - Build Production Release
           <<: *filter_only_production
           <<: *slack_custom_hold_message
       - deploy:

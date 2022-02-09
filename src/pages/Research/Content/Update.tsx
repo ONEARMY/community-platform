@@ -11,6 +11,7 @@ import { Link } from 'src/components/Links'
 import Text from 'src/components/Text'
 import { IResearch } from 'src/models/research.models'
 import { IUploadedFileMeta } from 'src/stores/storage'
+import { ResearchComments } from './ResearchComments/ResearchComments';
 import styled from 'styled-components'
 
 interface IProps {
@@ -121,6 +122,7 @@ const Update: React.FC<IProps> = ({
               <ImageGallery images={update.images as IUploadedFileMeta[]} />
             )}
           </Box>
+          <ResearchComments update={update} comments={update.comments} />
         </Flex>
       </Flex>
     </>

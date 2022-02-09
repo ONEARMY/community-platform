@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
-import ReactGA from 'react-ga'
 import { FaTrash, FaRegEdit } from 'react-icons/fa'
 import { Flex } from 'rebass/styled-components'
-import { useCommonStores } from 'src/index'
 import { IComment } from 'src/models'
 import { CommentHeader } from './CommentHeader'
 import { Text } from 'src/components/Text'
@@ -13,18 +11,35 @@ import { Button } from 'src/components/Button'
 import { AuthWrapper } from '../Auth/AuthWrapper'
 import { logger } from 'src/logger'
 
-export interface IProps extends IComment {
-  verified: boolean
+interface CommentProps {
+  handleEditRequest,
+  handleDelete,
+  handleEdit,
 }
+
+export interface IProps extends IComment, CommentProps {
+  verified: boolean
+} 
 
 export const Comment: React.FC<IProps> = ({
   _creatorId,
   text,
   _id,
+  handleEditRequest,
+  handleDelete,
+  handleEdit,
   ...props
 }) => {
-  const { stores } = useCommonStores()
   const [showEditModal, setShowEditModal] = useState(false)
+
+  const onEditRequest = () => {
+    handleEditRequest()
+    return setShowEditModal(true)
+  }
+
+  const onDelete = () => {
+    handleDelete(_id)
+  }
 
   return (
     <Flex
@@ -48,14 +63,7 @@ export const Comment: React.FC<IProps> = ({
             }}
             mr={2}
             fontSize="12px"
-            onClick={async () => {
-              ReactGA.event({
-                category: 'Comments',
-                action: 'Edit existing comment',
-                label: stores.howtoStore.activeHowto?.title,
-              })
-              return setShowEditModal(true)
-            }}
+            onClick={onEditRequest}
           >
             edit <FaRegEdit />
           </Text>
@@ -65,27 +73,7 @@ export const Comment: React.FC<IProps> = ({
               alignItems: 'center',
             }}
             fontSize="12px"
-            onClick={async () => {
-              const confirmation = window.confirm(
-                'Are you sure you want to delete this comment?',
-              )
-              if (confirmation) {
-                await stores.howtoStore.deleteComment(_id)
-                ReactGA.event({
-                  category: 'Comments',
-                  action: 'Deleted',
-                  label: stores.howtoStore.activeHowto?.title,
-                })
-                logger.debug(
-                  {
-                    category: 'Comments',
-                    action: 'Deleted',
-                    label: stores.howtoStore.activeHowto?.title,
-                  },
-                  'comment deleted',
-                )
-              }
-            }}
+            onClick={onDelete}
           >
             delete <FaTrash color="red" />
           </Text>
@@ -128,21 +116,8 @@ export const Comment: React.FC<IProps> = ({
                   </Button>
                   <Button
                     small
-                    onClick={async () => {
-                      ReactGA.event({
-                        category: 'Comments',
-                        action: 'Update',
-                        label: stores.howtoStore.activeHowto?.title,
-                      })
-                      logger.debug(
-                        {
-                          category: 'Comments',
-                          action: 'Update',
-                          label: stores.howtoStore.activeHowto?.title,
-                        },
-                        'comment edited',
-                      )
-                      await stores.howtoStore.editComment(_id, values.comment)
+                    onClick={() => {
+                      handleEdit(_id, values.comment)
                       setShowEditModal(false)
                     }}
                   >

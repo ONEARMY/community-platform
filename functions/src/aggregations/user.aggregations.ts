@@ -1,43 +1,58 @@
 import * as functions from 'firebase-functions'
-import * as admin from 'firebase-admin'
-import { compareObjectDiffs } from '../Utils/data.utils'
+import { compareObjectDiffs } from '../Utils'
 import { DB_ENDPOINTS, IUserDB } from '../models'
-import { handleDBAggregations, IAggregation } from './common.aggregations'
+import {
+  VALUE_MODIFIERS,
+  handleDBAggregations,
+  IAggregation,
+} from './common.aggregations'
 
 interface IUserAggregation extends IAggregation {
-  field: keyof IUserDB
+  sourceFields: (keyof IUserDB)[]
 }
 
 const userAggregations: IUserAggregation[] = [
-  // aggregate all users with lists of badges
+  // aggregate all users with verified badges
   {
-    field: 'badges',
-    aggregationField: 'user_badges',
+    sourceCollection: 'users',
+    sourceFields: ['badges'],
+    changeType: 'updated',
+    targetCollection: 'aggregations',
+    targetDocId: 'users_verified',
+    process: ({ dbChange }) => {
+      const user: IUserDB = dbChange.after.data() as any
+      // return user doc id and verified status (removing entry if not verified)
+      return {
+        [dbChange.after.id]: user.badges?.verified || VALUE_MODIFIERS.delete(),
+      }
+    },
   },
   // The voted useful aggregator is more complex, as it needs to record
   // changes in nested field and update overall counters instead of just values
   {
-    field: 'votedUsefulHowtos',
-    aggregationField: 'user_votedUsefulHowtos',
-    handleAggregationSeed: async aggregator => {
-      const snapshot = await aggregator.collectionRef
-        .orderBy('votedUsefulHowtos')
-        .get()
-      const allVotes = snapshot.docs
-        .map(d => d.data() as IUserDB)
-        .map(u => u.votedUsefulHowtos)
-      const votesByHowto = countHowtoVotes(allVotes)
-      return aggregator.aggregationRef.set(votesByHowto)
-    },
-    handleAggregationUpdate: async aggregator => {
-      const { before, after } = aggregator.valueChange
-      const changedVotes = compareObjectDiffs(before, after)
+    sourceCollection: 'users',
+    sourceFields: ['votedUsefulHowtos'],
+    changeType: 'updated',
+    targetCollection: 'aggregations',
+    targetDocId: 'users_votedUsefulHowtos',
+    process: ({ dbChange }) => {
+      const { before, after } = dbChange
+      const changedVotes = compareObjectDiffs(
+        before.data().votedUsefulHowtos,
+        after.data().votedUsefulHowtos,
+      )
+      const updates = {}
       for (const [howto_id, change] of Object.entries(changedVotes)) {
-        const counterChange = change.after === true ? 1 : -1
-        await aggregator.aggregationRef.update({
-          [howto_id]: admin.firestore.FieldValue.increment(counterChange),
-        })
+        let changeValue: number
+        // during seed before values are all undefined, so use truthy/falsy checks instead of strict true/false
+        if (change.after && !change.before) changeValue = 1
+        if (change.before && !change.after) changeValue = -1
+        if (changeValue) {
+          updates[howto_id] = VALUE_MODIFIERS.increment(changeValue)
+        }
       }
+      // only return non-empty updates
+      return Object.keys(updates).length > 0 ? updates : null
     },
   },
 ]
@@ -48,22 +63,3 @@ exports.default = functions.firestore
   .onUpdate(change => {
     return handleDBAggregations(change, userAggregations)
   })
-
-/**
- * Howto votes are stored in key:value pairs corresponding to howto id and
- * vote true/false. Collate all votes across all users by howto for intial seed stats
- */
-function countHowtoVotes(allVotes: IUserDB['votedUsefulHowtos'][]) {
-  const votesByHowto = {}
-  for (const votes of allVotes) {
-    Object.entries(votes).forEach(([howto_id, voted]) => {
-      if (voted) {
-        if (!votesByHowto.hasOwnProperty(howto_id)) {
-          votesByHowto[howto_id] = 0
-        }
-        votesByHowto[howto_id]++
-      }
-    })
-  }
-  return votesByHowto
-}

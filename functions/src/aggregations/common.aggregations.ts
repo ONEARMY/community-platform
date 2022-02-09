@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions'
-import { DB_ENDPOINTS } from '../models'
+import { DB_ENDPOINTS, IDBEndpoint } from '../models'
 import { db } from '../Firebase/firestoreDB'
 import { compareObjectDiffs } from '../Utils/data.utils'
 
@@ -8,15 +8,30 @@ type IDocumentRef = FirebaseFirestore.DocumentReference
 type ICollectionRef = FirebaseFirestore.CollectionReference
 type IDBChange = functions.Change<functions.firestore.QueryDocumentSnapshot>
 
+export const VALUE_MODIFIERS = {
+  delete: () => admin.firestore.FieldValue.delete(),
+  increment: (value: number) => admin.firestore.FieldValue.increment(value),
+}
+
 export interface IAggregation {
-  /** Collection field to watch for aggregations */
-  field: string
-  /** Aggregation field to apply updates to */
-  aggregationField: string
-  /** Value aggregators store all updated values, count simply total entries */
-  //   aggregationType: 'value' | 'count'
-  handleAggregationUpdate?: (handler: AggregationHandler) => Promise<any>
-  handleAggregationSeed?: (handler: AggregationHandler) => Promise<any>
+  /**
+   * Changetype supported (currently only updated)
+   * Full list: https://firebase.google.com/docs/functions/firestore-events
+   * */
+  changeType: 'updated'
+  /** DB collection watched for changes */
+  sourceCollection: IDBEndpoint
+  /**
+   * Collection fields to trigger aggregation on update.
+   * The first named field will be assumed required and used during initial seed query
+   **/
+  sourceFields: string[]
+  /** function used to generate aggregation value from source data */
+  process: (aggregation: AggregationHandler) => any
+  /** Collection ID for output aggregated data */
+  targetCollection: IDBEndpoint
+  /** Document ID for aggregated data in target aggregation collection */
+  targetDocId: string
 }
 
 /**
@@ -33,35 +48,30 @@ export async function handleDBAggregations(
     // changed detected by firestore but not locally
     console.warn('change missed', before.data(), after.data())
   }
-  for (const fieldname of Object.keys(changedFields)) {
-    for (const aggregation of aggregations) {
-      if (aggregation.field === fieldname) {
-        const update = changedFields[fieldname]
-        await new AggregationHandler(aggregation, dbChange, update).run()
-      }
+  const changedFieldnames = Object.keys(changedFields)
+  for (const aggregation of aggregations) {
+    // run aggregation if any specified aggregation field matches any changed field
+    const shouldRunAggregation = aggregation.sourceFields.some(fieldname =>
+      changedFieldnames.includes(fieldname),
+    )
+    if (shouldRunAggregation) {
+      await new AggregationHandler(aggregation, dbChange).run()
     }
   }
 }
 
 class AggregationHandler {
-  /** Reference to database path for aggregation doc */
-  public aggregationRef: IDocumentRef
-  /** Reference to database path for triggered collection */
-  public collectionRef: ICollectionRef
+  /** Reference to database path for target aggregation doc */
+  public targetDocRef: IDocumentRef
+  /** Reference to database path for source triggered collection */
+  public sourceCollectionRef: ICollectionRef
 
-  constructor(
-    public aggregation: IAggregation,
-    public dbChange: IDBChange,
-    public valueChange: { before: any; after: any },
-  ) {
-    this.collectionRef = dbChange.after.ref.parent
-    // apply function overrides
-    if (aggregation.handleAggregationSeed) {
-      this.seed = () => aggregation.handleAggregationSeed(this)
-    }
-    if (aggregation.handleAggregationUpdate) {
-      this.update = () => aggregation.handleAggregationUpdate(this)
-    }
+  constructor(public aggregation: IAggregation, public dbChange: IDBChange) {
+    this.sourceCollectionRef = dbChange.after.ref.parent
+    const { targetCollection, targetDocId } = aggregation
+    this.targetDocRef = db
+      .collection(DB_ENDPOINTS[targetCollection])
+      .doc(targetDocId)
   }
 
   /**
@@ -69,12 +79,8 @@ class AggregationHandler {
    * If yes, update with updated values
    */
   public async run() {
-    const { aggregationField } = this.aggregation
-    this.aggregationRef = db
-      .collection(DB_ENDPOINTS.aggregations)
-      .doc(aggregationField)
-    const aggregationDoc = await this.aggregationRef.get()
-    return aggregationDoc.exists ? this.update() : this.seed()
+    const targetDoc = await this.targetDocRef.get()
+    return targetDoc.exists ? this.update() : this.seed()
   }
 
   /**
@@ -82,12 +88,8 @@ class AggregationHandler {
    * entry in case where updated field no longer valid for aggregation
    */
   private async update() {
-    const value = this.valueChange.after
-    const valid = isValidAggregationEntry(value)
-    const doc_id = this.dbChange.after.id
-    return this.aggregationRef.update({
-      [doc_id]: valid ? value : admin.firestore.FieldValue.delete(),
-    })
+    const aggregationEntry = this.aggregation.process(this)
+    return aggregationEntry ? this.targetDocRef.update(aggregationEntry) : null
   }
 
   /**
@@ -95,21 +97,28 @@ class AggregationHandler {
    * watched field and batch update all aggregation entries
    */
   private async seed() {
-    const { field } = this.aggregation
-    // orderBy will only filter to include docs with field populated
-    const snapshot = await this.collectionRef.orderBy(field).get()
-    const seedData = {}
+    const { sourceFields } = this.aggregation
+    // orderBy will only filter to include docs with primary field populated
+    const snapshot = await this.sourceCollectionRef
+      .orderBy(sourceFields[0])
+      .get()
+    const batch = db.batch()
+    batch.set(this.targetDocRef, {})
     for (const doc of snapshot.docs) {
-      const aggregationEntry = doc.data()[field]
-      if (isValidAggregationEntry(aggregationEntry))
-        seedData[doc.id] = aggregationEntry
+      // for purpose of seeding before will always be empty so just track each doc in after state
+      this.dbChange.before.data = () => ({})
+      this.dbChange.after = doc
+      const aggregationEntry = this.aggregation.process(this)
+      if (aggregationEntry) {
+        batch.update(this.targetDocRef, aggregationEntry)
+      }
     }
-    return this.aggregationRef.set(seedData)
+    return batch.commit()
   }
 }
 
 /** Avoid storing empty arrays, objects or other falsy values in aggregation */
-function isValidAggregationEntry(v: any) {
+export function isValidAggregationEntry(v: any) {
   if (!v) return false
   if (typeof v === 'object') return Object.keys(v).length > 0
   if (Array.isArray(v)) return v.length > 0

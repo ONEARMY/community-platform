@@ -10,7 +10,7 @@ interface IState {
   showNotificationsModal: boolean
 }
 
-interface IProps {}
+interface IProps { }
 
 interface IInjectedProps extends IProps {
   userStore: UserStore
@@ -39,10 +39,10 @@ export default class NotificationsDesktop extends Component<IProps, IState> {
     const user = this.injected.userStore.user
     const areThereNotifications = Boolean(
       user?.notifications?.length &&
-        !(
-          user?.notifications?.filter(notification => !notification.read)
-            .length === 0
-        ),
+      !(
+        user?.notifications?.filter(notification => !notification.read)
+          .length === 0
+      ),
     )
 
     const showNotificationsModal = this.state.showNotificationsModal
@@ -50,20 +50,22 @@ export default class NotificationsDesktop extends Component<IProps, IState> {
     return (
       <>
         {user ? (
-          <div data-cy="notifications-desktop">
-            <NotificationsIcon
-              onCLick={() => this.toggleNotificationsModal()}
-              isMobileMenuActive={false}
-              areThereNotifications={areThereNotifications}
-            />
-            <Flex>
-              {showNotificationsModal && (
-                <Foco onClickOutside={() => this.toggleNotificationsModal()}>
+          <Foco onClickOutside={() => this.setState({
+            showNotificationsModal: false
+          })}>
+            <div data-cy="notifications-desktop">
+              <NotificationsIcon
+                onCLick={() => this.toggleNotificationsModal()}
+                isMobileMenuActive={false}
+                areThereNotifications={areThereNotifications}
+              />
+              <Flex>
+                {showNotificationsModal && (
                   <NotificationsModal />
-                </Foco>
-              )}
-            </Flex>
-          </div>
+                )}
+              </Flex>
+            </div>
+          </Foco>
         ) : (
           ''
         )}

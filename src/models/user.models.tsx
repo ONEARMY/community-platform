@@ -41,6 +41,7 @@ export interface IUser {
   stats?: IUserStats
   /** keep a map of all howto ids that a user has voted as useful */
   votedUsefulHowtos?: { [howtoId: string]: boolean }
+  notifications?: INotification[]
 }
 
 interface IUserBadges {
@@ -71,3 +72,17 @@ interface IUserStats {
 export type IUserDB = IUser & DBDoc
 
 export type UserRole = 'super-admin' | 'subscriber' | 'admin' | 'beta-tester'
+
+export interface INotification {
+  _id: string,
+  _created: string,
+  triggeredBy: {
+    displayName: string,
+    userId: string
+  },
+  relevantUrl?: string,
+  type: NotificationType,
+  read: boolean
+}
+
+export type NotificationType = 'new_comment' | 'howto_useful'

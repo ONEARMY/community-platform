@@ -11,12 +11,20 @@
     }
   },
   "rules": {
-    "@typescript-eslint/no-inferrable-types": "off",
-    "@typescript-eslint/no-use-before-define": "off",
+    "max-classes-per-file": "error",
     "no-useless-escape": "off",
-    "@typescript-eslint/interface-name-prefix": "off",
+    "react/display-name": "warn",
+    "react/jsx-no-target-blank": "warn",
+    // https://github.com/standard/eslint-config-standard-with-typescript/issues/248
+    "react/no-deprecated": "warn",
+    "react/no-unescaped-entities": "off",
+    "react/no-unknown-property": "warn",
+    // as of v17 no longer required
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/interface-name-prefix": "off",
     // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/naming-convention.md
     // NOTE - typings throughout the platform are fairly inconsistent, hence the wide range of rules
     "@typescript-eslint/naming-convention": [
@@ -32,21 +40,13 @@
         "leadingUnderscore": "allow"
       }
     ],
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    // https://github.com/standard/eslint-config-standard-with-typescript/issues/248
     "@typescript-eslint/no-empty-function": "off",
-    "react/no-deprecated": "warn",
-    "react/no-unescaped-entities": "off",
-    "react/jsx-no-target-blank": "warn",
-    "react/display-name": "warn",
-    // as of v17 no longer required
-    "react/react-in-jsx-scope": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-inferrable-types": "off",
+    "@typescript-eslint/no-use-before-define": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-empty-interface": "off",
-    "react/prop-types": "off",
-    "react/no-unknown-property": "warn",
     "@typescript-eslint/no-var-requires": "off",
-    "@typescript-eslint/no-namespace": "off",
-    "max-classes-per-file": "error"
+    "@typescript-eslint/no-namespace": "off"
   }
 }

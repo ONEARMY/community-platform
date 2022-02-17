@@ -24,7 +24,6 @@ export const Comment: React.FC<IProps> = ({
   ...props
 }) => {
   const { stores } = useCommonStores()
-
   const [showEditModal, setShowEditModal] = useState(false)
 
   return (

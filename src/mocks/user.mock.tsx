@@ -4,7 +4,7 @@ import { MOCK_DB_META } from './db.mock'
 
 export const MOCK_USER: IUser = {
   verified: true,
-  badges: { verified: 1 },
+  badges: { verified: true },
   userName: 'chris-m-clarke',
   displayName: 'chris-m-clarke',
   moderation: 'accepted',

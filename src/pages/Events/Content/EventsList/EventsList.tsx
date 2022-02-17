@@ -24,6 +24,9 @@ export class EventsList extends React.Component<any> {
   // eslint-disable-next-line
   constructor(props: any) {
     super(props)
+
+    // fetch verified users to show badges on events
+    this.props.userStore?.fetchAllVerifiedUsers()
   }
 
   get injected() {
@@ -94,6 +97,9 @@ export class EventsList extends React.Component<any> {
                   {filteredEvents.map((event: IEventDB) => (
                     <EventCard
                       key={event._id}
+                      verified={this.props.userStore?.verifiedUsers?.some(
+                        user => user.userName === event._createdBy,
+                      )}
                       event={event}
                       needsModeration={this.store.needsModeration(event)}
                       moderateEvent={this.moderateEvent}

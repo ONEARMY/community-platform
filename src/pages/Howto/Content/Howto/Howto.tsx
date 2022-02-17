@@ -82,6 +82,9 @@ export class Howto extends React.Component<
     this.state = {
       isLoading: true,
     }
+
+    // Verified users will be used to display badges on comments & howto author
+    this.injected.userStore.fetchAllVerifiedUsers()
   }
   // workaround used later so that userStore can be called in render method when not existing on
   get injected() {
@@ -123,6 +126,9 @@ export class Howto extends React.Component<
         <>
           <HowtoDescription
             howto={activeHowto}
+            verified={this.injected.userStore.verifiedUsers.some(
+              user => user.userName === this.store.activeHowto?._createdBy,
+            )}
             votedUsefulCount={this.store.howtoStats?.votedUsefulCount}
             loggedInUser={loggedInUser}
             needsModeration={this.store.needsModeration(activeHowto)}
@@ -135,7 +141,10 @@ export class Howto extends React.Component<
               <Step step={step} key={index} stepindex={index} />
             ))}
           </Box>
-          <HowToComments comments={activeHowto.comments} />
+          <HowToComments
+            comments={activeHowto.comments}
+            verifiedUsers={this.injected.userStore.verifiedUsers}
+          />
           <MoreBox py={20} mt={20}>
             <Text bold txtcenter fontSize={[4, 4, 5]}>
               You're done.

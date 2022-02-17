@@ -50,7 +50,7 @@ export class UserStore extends ModuleStore {
     super(rootStore)
     makeObservable(this)
     this._listenToAuthStateChanges()
-    this.fetchAllVerifiedUsers()
+    this.loadVerifiedUsers()
   }
 
   // when registering a new user create firebase auth profile as well as database user profile
@@ -285,11 +285,9 @@ export class UserStore extends ModuleStore {
     }
   }
 
-  /**
-   * Fetches all users that have a `verified: 1` badge
-   */
   @action
-  public async fetchAllVerifiedUsers() {
+  /** Perform a single lookup of all verified users (will update on page reload or on demand) */
+  public async loadVerifiedUsers() {
     const verifiedUsers = await this.db
       .collection<any>('aggregations')
       .doc('users_verified')

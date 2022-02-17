@@ -89,9 +89,9 @@ export class EventsList extends React.Component<any> {
                   {filteredEvents.map((event: IEventDB) => (
                     <EventCard
                       key={event._id}
-                      verified={this.props.userStore?.verifiedUsers?.some(
-                        user => user.userName === event._createdBy,
-                      )}
+                      verified={
+                        this.injected.userStore?.verifiedUsers[event._createdBy]
+                      }
                       event={event}
                       needsModeration={this.store.needsModeration(event)}
                       moderateEvent={this.moderateEvent}

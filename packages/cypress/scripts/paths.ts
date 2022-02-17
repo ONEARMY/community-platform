@@ -16,5 +16,5 @@ export default {
     WORKSPACE_DB_ENDPOINTS,
     CY_BIN,
     CROSSENV_BIN,
-    BUILD_SERVE_JSON
+    BUILD_SERVE_JSON,
 }

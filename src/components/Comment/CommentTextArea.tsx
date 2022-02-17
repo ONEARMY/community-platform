@@ -1,9 +1,7 @@
-import React from 'react'
 import styled from 'styled-components'
 import { Box, Text } from 'rebass/styled-components'
-import theme from 'src/themes/styled.theme'
 import { Avatar } from '../Avatar'
-import { useCommonStores } from 'src'
+import { useCommonStores } from 'src/index'
 import { Link } from '../Links'
 
 export interface IProps {
@@ -19,7 +17,7 @@ const TextAreaStyled = styled.textarea`
   min-width: 100%;
   max-width: 100%;
   font-family: 'Inter', Arial, sans-serif;
-  font-size: ${theme.fontSizes[2] + 'px'};
+  font-size: ${props => props.theme.fontSizes[2] + 'px'};
   border-radius: 5px;
   resize: none;
 
@@ -82,10 +80,11 @@ export const CommentTextArea = ({ onChange, comment, loading }) => {
             onChange={event => {
               onChange(event.target.value)
             }}
+            data-cy="comments-form"
             placeholder="Leave your questions or feedback..."
           />
         ) : (
-          <LoginTextStyled>
+          <LoginTextStyled data-cy="comments-login-prompt">
             Hi there!{' '}
             <Link
               to="/sign-in"

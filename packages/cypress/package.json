@@ -7,7 +7,7 @@
     "db:teardown": "TODO"
   },
   "dependencies": {
-    "cypress": "8.5.0",
+    "cypress": "^9.5.0",
     "cypress-file-upload": "5.0.8",
     "oa-shared": "workspace:*"
   },
@@ -20,5 +20,8 @@
     "fs-extra": "^10.0.0",
     "ts-node": "^10.2.1",
     "wait-on": "^6.0.0"
+  },
+  "installConfig": {
+    "hoistingLimits": "workspaces"
   }
 }

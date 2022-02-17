@@ -1,13 +1,15 @@
 import { Component } from 'react'
-import { COMMUNITY_PAGES } from 'src/pages/PageList'
+import { getAvailablePageList } from 'src/pages/PageList'
 import theme from 'src/themes/styled.theme'
 import styled from 'styled-components'
-import { Box } from 'rebass'
+import { Box } from 'rebass/styled-components'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
 import MenuMobileExternalLink from './MenuMobileExternalLink'
-import { BAZAR_URL, GLOBAL_SITE_URL } from 'src/utils/urls'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { getSupportedModules } from 'src/modules'
+import { inject } from 'mobx-react'
+import { ThemeStore } from 'src/stores/Theme/theme.store'
 
 const PanelContainer = styled(Box)`
   width: 100%;
@@ -20,7 +22,7 @@ const PanelContainer = styled(Box)`
 `
 
 const PanelMenu = styled(Box)`
-  background-color: #fff;
+  background-color: ${theme.colors.white};
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -37,18 +39,25 @@ export const PanelItem = styled(Box as any)`
 `
 
 export const MenuMobileLinkContainer = styled(Box as any)`
-  border-top: 1px solid #ababac;
-  border-bottom: 1px solid #ababac;
+  border-top: 1px solid ${theme.colors.lightgrey};
+  border-bottom: 1px solid ${theme.colors.lightgrey};
   margin-top: 5px;
 `
 
+@inject('themeStore')
 export class MenuMobilePanel extends Component {
+  injected() {
+    return this.props as {
+      themeStore: ThemeStore
+    }
+  }
+
   render() {
     return (
       <>
         <PanelContainer>
           <PanelMenu>
-            {COMMUNITY_PAGES.map(page => {
+            {getAvailablePageList(getSupportedModules()).map(page => {
               const link = (
                 <MenuMobileLink
                   path={page.path}
@@ -66,11 +75,17 @@ export class MenuMobilePanel extends Component {
             })}
             <Profile isMobile={true} />
             <MenuMobileLinkContainer>
-              <MenuMobileExternalLink content={'Bazar'} href={BAZAR_URL} />
-              <MenuMobileExternalLink
-                content={'Global Site'}
-                href={GLOBAL_SITE_URL}
-              />
+              {this.injected()
+                .themeStore.getExternalNavigationItems()
+                .map((navigationItem, idx) => {
+                  return (
+                    <MenuMobileExternalLink
+                      key={idx}
+                      content={navigationItem.label}
+                      href={navigationItem.url}
+                    />
+                  )
+                })}
             </MenuMobileLinkContainer>
           </PanelMenu>
         </PanelContainer>

@@ -1,13 +1,14 @@
 PR Checklist
 
+- [ ] - Commit [messages are descriptive](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--commit-style-guide), it will be used in our [Release Notes](https://github.com/ONEARMY/community-platform/releases/)
 - [ ] - Latest `master` branch merged
-- [ ] - PR title descriptive (can be used in release notes)
 
 PR Type
 
 - [ ] Bug fix (non-breaking change which fixes an issue)
 - [ ] New feature (non-breaking change which adds functionality)
 - [ ] Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] Developer experience (improves developer workflows for contributing to the project)
 
 ## Description
 

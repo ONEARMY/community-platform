@@ -3,7 +3,7 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Field, Form } from 'react-final-form'
 import { Prompt, RouteComponentProps } from 'react-router'
-import { Box } from 'rebass'
+import { Box } from 'rebass/styled-components'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { Button } from 'src/components/Button'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
@@ -54,10 +54,10 @@ const UpdateForm = observer((props: IProps) => {
   const [showSubmitModal, setShowSubmitModal] = React.useState<boolean>(false)
 
   React.useEffect(() => {
-    if (store.updateUploadStatus.Complete) {
+    if (store.updateUploadStatus?.Complete) {
       window.removeEventListener('beforeunload', beforeUnload, false)
     }
-  }, [store.updateUploadStatus.Complete])
+  }, [store.updateUploadStatus?.Complete])
 
   const trySubmitForm = () => {
     const form = document.getElementById('updateForm')
@@ -145,11 +145,11 @@ const UpdateForm = observer((props: IProps) => {
                     >
                       <Heading medium>
                         {props.parentType === 'create' ? (
-                          <span>New</span>
+                          <span>New update</span>
                         ) : (
-                          <span>Edit your</span>
+                          <span>Edit your update</span>
                         )}{' '}
-                        update
+                        
                       </Heading>
                       <Box ml="15px">
                         <ElWithBeforeIcon

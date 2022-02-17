@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { observer } from 'mobx-react'
-import { Box, Flex } from 'rebass'
+import { Box, Flex } from 'rebass/styled-components'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { Button } from 'src/components/Button'
 import Heading from 'src/components/Heading'
@@ -25,7 +25,7 @@ const ResearchList = observer(() => {
   return (
     <>
       <Flex py={26}>
-        <Heading medium bold txtcenter width={1} my={20}>
+        <Heading medium bold txtcenter width={1}>
           Research topics. Can we...
         </Heading>
       </Flex>

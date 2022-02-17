@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import * as React from 'react'
-import { Box, Flex, Image } from 'rebass'
+import { Box, Flex, Image } from 'rebass/styled-components'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import { Button } from 'src/components/Button'
 import Heading from 'src/components/Heading'
@@ -122,7 +122,12 @@ const ResearchDescription: React.FC<IProps> = ({
               </Flex>
             </Text>
           </Flex>
-          <Text auxiliary sx={{ color: '#b7b5b5 !important' }} mt={1} mb={2}>
+          <Text
+            auxiliary
+            sx={{ color: `${theme.colors.lightgrey} !important` }}
+            mt={1}
+            mb={2}
+          >
             {dateLastUpdateText(research)}
           </Text>
           <Heading medium mt={2} mb={1}>

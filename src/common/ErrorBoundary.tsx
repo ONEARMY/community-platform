@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/browser'
+import * as Sentry from '@sentry/react'
 import { Component } from 'react'
 
 export default class ErrorBoundary extends Component<any, any> {

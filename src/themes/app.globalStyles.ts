@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
-import theme, { zIndex } from 'src/themes/styled.theme'
+import theme from 'src/themes/styled.theme'
 
 import { GlobalFonts } from './fonts'
 // declare global styling overrides (fonts etc.)
@@ -23,9 +23,9 @@ export const GlobalStyle = createGlobalStyle`
 
   .slick-prev,
   .slick-next {
-    position: absolute;
+    position: absolute !important;
     top: 50%;
-    z-index: ${zIndex.slickArrows};
+    z-index: ${theme.zIndex.slickArrows};
     transform: translateY(-50%);
     cursor: pointer;
   }

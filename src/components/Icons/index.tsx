@@ -31,7 +31,7 @@ import {
   MdLocationOn,
   MdMail,
   MdChevronLeft,
-  MdChevronRight,
+  MdChevronRight
 } from 'react-icons/md'
 import {
   GoCloudUpload,
@@ -39,6 +39,7 @@ import {
   GoTrashcan,
   GoLinkExternal,
 } from 'react-icons/go'
+import { AiFillThunderbolt } from "react-icons/ai";
 import { FaSignal, FaFacebookF, FaSlack, FaInstagram } from 'react-icons/fa'
 import { IconContext } from 'react-icons'
 import SVGs from './svgs'
@@ -55,6 +56,7 @@ interface IProps {
   color?: string
   onClick?: () => void
 }
+
 export type availableGlyphs =
   | 'download'
   | 'download-cloud'
@@ -92,6 +94,7 @@ export type availableGlyphs =
   | 'chevron-right'
   | 'star'
   | 'star-active'
+  | 'thunderbolt'
 
 export type IGlyphs = { [k in availableGlyphs]: JSX.Element }
 
@@ -132,6 +135,7 @@ export const glyphs: IGlyphs = {
   'chevron-right': <MdChevronRight />,
   star: SVGs.star,
   'star-active': SVGs.starActive,
+  thunderbolt: <AiFillThunderbolt />
 }
 
 type WrapperProps = IProps & VerticalAlignProps & SpaceProps

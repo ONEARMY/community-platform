@@ -1,5 +1,3 @@
-import { Page } from '../utils/test-utils'
-
 describe('[Sign in]', () => {
   it('[By Anonymous]', () => {
     cy.step('Go to the sign-up page')

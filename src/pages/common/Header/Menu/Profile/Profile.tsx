@@ -1,11 +1,10 @@
 import { Component } from 'react'
-import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+import Foco from 'react-foco'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import Flex from 'src/components/Flex'
 import { Avatar } from 'src/components/Avatar'
 import { ProfileModal } from 'src/components/ProfileModal/ProfileModal'
-import theme from 'src/themes/styled.theme'
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
 import ProfileButtons from './ProfileButtons'
 import { MenuMobileLinkContainer } from '../MenuMobile/MenuMobilePanel'
@@ -62,7 +61,6 @@ export default class Profile extends Component<IProps, IState> {
               <MenuMobileLink
                 path={window.location.pathname}
                 content={'Log out'}
-                style={{ color: theme.colors.silver }}
                 onClick={() => this.injected.userStore.logout()}
               />
             </MenuMobileLinkContainer>
@@ -73,11 +71,9 @@ export default class Profile extends Component<IProps, IState> {
               </Flex>
               <Flex>
                 {showProfileModal && (
-                  <ClickAwayListener
-                    onClickAway={() => this.toggleProfileModal()}
-                  >
+                  <Foco onClickOutside={() => this.toggleProfileModal()}>
                     <ProfileModal username={user.userName} />
-                  </ClickAwayListener>
+                  </Foco>
                 )}
               </Flex>
             </div>

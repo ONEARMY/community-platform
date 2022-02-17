@@ -1,7 +1,8 @@
 import * as React from 'react'
 import Flex from 'src/components/Flex'
 import { IUserPP } from 'src/models/user_pp.models'
-import { UserStore } from 'src/stores/User/user.store'
+import type { ThemeStore } from 'src/stores/Theme/theme.store'
+import type { UserStore } from 'src/stores/User/user.store'
 import { observer, inject } from 'mobx-react'
 import { UserInfosSection } from './content/formSections/UserInfos.section'
 import { FocusSection } from './content/formSections/Focus.section'
@@ -16,17 +17,21 @@ import { TextNotification } from 'src/components/Notification/TextNotification'
 import { Form } from 'react-final-form'
 import { ARRAY_ERROR, FORM_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'
-import { UserMapPinSection } from './content/formSections/MapPin.section'
+import { WorkspaceMapPinSection } from './content/formSections/WorkspaceMapPin.section'
+import { MemberMapPinSection } from './content/formSections/MemberMapPin.section'
 import theme from 'src/themes/styled.theme'
 import INITIAL_VALUES from './Template'
-import { Box } from 'rebass'
+import { Box } from 'rebass/styled-components'
 import { Prompt } from 'react-router'
 import { toJS } from 'mobx'
+import { isModuleSupported, MODULE } from 'src/modules'
+import { logger } from 'src/logger'
 
 interface IProps {}
 
 interface IInjectedProps extends IProps {
-  userStore: UserStore
+  userStore: UserStore,
+  themeStore: ThemeStore
 }
 
 interface IState {
@@ -83,12 +88,14 @@ export class UserSettings extends React.Component<IProps, IState> {
     })
     // Submit, show notification update and return any errors to form
     try {
+      logger.debug({profile: vals}, 'UserSettings.saveProfile');
       await this.injected.userStore.updateUserProfile(vals)
       this.setState({
         notification: { message: 'Profile Saved', icon: 'check', show: true },
       })
       return {}
     } catch (error) {
+      logger.warn({error, profile: vals}, 'UserSettings.saveProfile.error')
       this.setState({
         notification: { message: 'Save Failed', icon: 'close', show: true },
       })
@@ -183,7 +190,8 @@ export class UserSettings extends React.Component<IProps, IState> {
                           <ProfileGuidelines />
                         </Box>
                         {/* Note - for fields without fieldwrapper can just render via props method and bind to input */}
-                        <FocusSection />
+                        {isModuleSupported(MODULE.MAP) && <FocusSection />}
+                        
                         {/* Specific profile type fields */}
                         {values.profileType === 'workspace' && (
                           <WorkspaceSection />
@@ -208,8 +216,12 @@ export class UserSettings extends React.Component<IProps, IState> {
                           />
                         )}
                         {/* General fields */}
-                        {values.profileType !== 'member' && (
-                          <UserMapPinSection />
+                        {(values.profileType !== 'member' && isModuleSupported(MODULE.MAP)) && (
+                          <WorkspaceMapPinSection />
+                        )}
+
+                        {(values.profileType === 'member' && isModuleSupported(MODULE.MAP)) && (
+                          <MemberMapPinSection />
                         )}
                         <UserInfosSection
                           formValues={values}
@@ -237,9 +249,10 @@ export class UserSettings extends React.Component<IProps, IState> {
                       maxWidth: ['100%', '100%', '400px'],
                     }}
                   >
-                    <Box sx={{ display: ['none', 'none', 'block'] }}>
+                    {isModuleSupported(MODULE.MAP) && (<Box mb={3}
+                       sx={{ display: ['none', 'none', 'block'] }}>
                       <ProfileGuidelines />
-                    </Box>
+                    </Box>)}
                     <Button
                       data-cy="save"
                       title={
@@ -263,7 +276,6 @@ export class UserSettings extends React.Component<IProps, IState> {
                         }
                       }}
                       width={1}
-                      my={3}
                       variant={'primary'}
                       type="submit"
                       // disable button when form invalid or during submit.

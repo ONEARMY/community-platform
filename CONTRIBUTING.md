@@ -19,6 +19,7 @@ If you think something is missing, consider sending us a PR.
 - [Project structure](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--project-structure)
 - [Branch structure](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--branch-structure)
 - [Javascript style guide](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--javascript-style-guide)
+- [Commit style guide](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--commit-style-guide)
 - [Why haven't you used ...](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-why-havent-you-used-insert-favourite-languageframeworkconvention-here)
 - [Deployment](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--deployment)
 - [Joining the team](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--joining-the-team)
@@ -81,6 +82,7 @@ When you start working on an issue, comment on it or if your are a registered co
 When a group of issues have been resolved a pull request to the master branch should be made, where it will undergo a quick review and test. It is expected that the developer will have done thorough testing themselves first, this helps make sure most pull requests get merged quickly.
 
 ## 🤑 &nbsp; Development Bounties
+
 We have a small bounty system as a way of saying thanks to developers for contributiong their time and code. Find out more about it in [Bounties](./BOUNTIES.md)
 
 ## 🏠 &nbsp; Project Structure
@@ -122,6 +124,27 @@ As this is a large project spread across many developers it is important that th
 
 We also expect code to follow standard best practices, such as sensible variable naming, informative comments and avoiding files larger than a couple hundred lines of code (with emphasis on usability and reusability).
 
+## 🔬 &nbsp; Commit style guide
+
+To help everyone with understanding the commit history of this project and support our automated release tooling the following commit rules are enforced. 
+
+- commit message format of `$type($scope): $message`, for example: `docs: add commit style guide`
+- maximum of 100 characters
+
+For those of you who work with git hooks, this project offers a husky commit message as well.
+
+Here's a more detailed explanation of how you can format the commit message heading:
+
+```
+<type>(<scope>): <short summary>
+  │       │             │
+  │       │             └─⫸ Summary in present tense. Not capitalized. No period at the end.
+  │       │
+  │       └─⫸ Commit Scope (optional): platform|docs|storybook|functions|scripts
+  │
+  └─⫸ Commit Type: build|ci|docs|feat|fix|perf|refactor|test
+```
+
 ### 😖 Why haven't you used [insert favourite language/framework/convention here]
 
 As an open-source project most of our decisions up till now have been guided by the people writing the code and conversations with people in our community whose opinions we value and respect. Some things are by careful design after the result of lengthy discussions, others are just individual preference with few complaints to date. As we both want to encourage input from newer contributors but also want to avoid getting bogged down in circular or repetitive debates we encourage you to:
@@ -142,18 +165,9 @@ We ask this so that we can better understand how you might fit in with the rest 
 
 ## 📚 &nbsp; Resources
 
-- https://www.udemy.com/react-redux/
-  paid online course to cover most of the basics of React - it uses redux where we use mobx but the rest is still very good
-
-* https://levelup.gitconnected.com/typescript-and-react-using-create-react-app-a-step-by-step-guide-to-setting-up-your-first-app-6deda70843a4
-  short intro app for typescript and react
-
-* https://medium.com/teachable/getting-started-with-react-typescript-mobx-and-webpack-4-8c680517c030
-  react-mobx-typescript example
-
-* https://medium.com/get-it-working/get-googles-firestore-working-with-react-c78f198d2364 react-firestore example
-
-- https://www.robinwieruch.de/complete-firebase-authentication-react-tutorial/
-  Example using Firebase auth with React and linking Redux state
-
-- https://testautomationu.applitools.com/cypress-tutorial/ Complete tutorial about the test automation tool Cypress
+- [Modern React with Redux](https://www.udemy.com/react-redux/) – a paid online course to cover most of the basics of React - it uses redux where we use mobx but the rest is still very good
+- [TypeScript and React using create-react-app](https://levelup.gitconnected.com/typescript-and-react-using-create-react-app-a-step-by-step-guide-to-setting-up-your-first-app-6deda70843a4) – a short intro app for typescript and react
+- [Getting Started With React, TypeScript MobX, and Webpack](https://medium.com/teachable/getting-started-with-react-typescript-mobx-and-webpack-4-8c680517c030) - a recommended example of how to configure with these technologies
+- [React + Cloud Firestore](https://medium.com/get-it-working/get-googles-firestore-working-with-react-c78f198d2364) - an example of using Google's Firestore with React
+- [A Firebase in React Tutorial for Beginners](https://www.robinwieruch.de/complete-firebase-authentication-react-tutorial/) - an example using Firebase auth with React and linking Redux state
+- [Introduction to Cypress](https://testautomationu.applitools.com/cypress-tutorial/) – a complete tutorial about the test automation tool Cypress

@@ -34,11 +34,14 @@ const eqHowto = (chaiObj, utils) => {
       title,
       tags,
     })
-    // note, full cover image meta won't match as uploaded image meta changes
 
-    expect(subject.cover_image.name, 'Cover images').to.eq(
-      expected.cover_image.name,
-    )
+    // We want to validate that uploaded filename matches that originally specified
+    // by the user. The filename will include a timestamp to avoid collisions with
+    // existing files that have been uploaded.
+    // Rather than using a RegExp to validate as our fixture specifies the filename
+    // using a plain, we can break filename into chunks and validate each of those are present.
+    // note, full cover image meta won't match as uploaded image meta changes
+    expect(subject.cover_image.name, 'Cover images').to.satisfy(str => expected.cover_image.name.split('.').filter(Boolean).every(chunk => str.includes(chunk)))
 
     expected.steps.forEach((step, index) => {
       expect(subject.steps[index], `Have step ${index}`).to.eqHowtoStep(
@@ -117,7 +120,6 @@ const eqSettings = (chaiObj, utils) => {
       verified,
       profileType,
       about,
-      country,
     })
   }
   const linkAssert: Assert<IUserPPDB, any> = (subject, expected) =>

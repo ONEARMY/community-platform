@@ -1,4 +1,5 @@
 import crypto from 'crypto'
+import { DbCollectionName } from '../../utils/test-utils'
 
 describe('[How To]', () => {
   const SKIP_TIMEOUT = { timeout: 300 }
@@ -155,6 +156,10 @@ describe('[How To]', () => {
             .and('match', pic3Regex)
         })
 
+        cy.step(`Comment functionality prompts user to login`);
+        cy.get(`[data-cy="comments-login-prompt"]`)
+          .should('be.exist');
+
         cy.step('Video embed exists')
         cy.get('[data-cy="video-embed"]').within(() => {
           cy.get('iframe')
@@ -178,13 +183,61 @@ describe('[How To]', () => {
           .url()
           .should('include', '/how-to')
       })
+
+      it('[Comment requires login]', () => {
+        cy.visit(specificHowtoUrl)
+        cy.step(`Comment functionality prompts user to login`);
+        cy.get(`[data-cy="comments-login-prompt"]`)
+          .should('be.exist')
+
+        cy.get(`[data-cy="comments-form"]`)
+          .should('not.exist');
+      })
     })
 
-    it('[By Authenticated}', () => {
-      cy.step('Edit button is unavailable to non-resource owners')
-      cy.login('howto_reader@test.com', 'test1234')
-      cy.visit(specificHowtoUrl)
-      cy.get('[data-cy=edit]').should('not.exist')
+    describe('[By Authenticated}', () => {
+      it('[Edit button is unavailable to non-resource owners]', () => {
+        cy.login('howto_reader@test.com', 'test1234')
+        cy.visit(specificHowtoUrl)
+        cy.get('[data-cy=edit]').should('not.exist')
+      })
+
+      it.only('[Comment functionality available]', () => {
+        const commentText = 'A short string intended to test commenting';
+        cy.login('howto_reader@test.com', 'test1234')
+        cy.visit(specificHowtoUrl)
+
+        cy.get(`[data-cy="comments-login-prompt"]`)
+          .should('not.exist');
+
+        cy.get(`[data-cy="comments-form"]`)
+          .should('be.exist');
+
+        cy.get(`[data-cy="comments-form"]`)
+          .should('be.exist');
+
+        cy.get('[data-cy="comments-form"]')
+          .type(commentText);
+
+        cy.get('[data-cy="comment-submit"]')
+          .click();
+
+        cy.queryDocuments(
+          DbCollectionName.howtos,
+          'slug',
+          '==',
+          'make-an-interlocking-brick'
+        ).then(howtos => {
+          cy.wrap(howtos[0].comments)
+            .should('have.length.gte', 1)
+          cy.wrap(howtos[0].comments[0])
+            .should('deep.include', {
+              "_creatorId": "howto_reader",
+              "creatorName": "howto_reader",
+              "text": commentText,
+            });
+        })
+      });
     })
 
     it('[By Owner]', () => {

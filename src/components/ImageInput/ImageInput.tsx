@@ -1,12 +1,12 @@
 import * as React from 'react'
-import { Box, Image } from 'rebass'
+import { Box, Image } from 'rebass/styled-components'
 import styled from 'styled-components'
 import { Button } from '../Button'
 import 'react-image-lightbox/style.css'
 import { ImageConverter } from './ImageConverter'
-import theme from 'src/themes/styled.theme'
+import theme from '../../themes/styled.theme'
 import Dropzone from 'react-dropzone'
-import { IUploadedFileMeta } from 'src/stores/storage'
+import type { IUploadedFileMeta } from '../../stores/storage'
 
 interface ITitleProps {
   hasUploadedImg: boolean

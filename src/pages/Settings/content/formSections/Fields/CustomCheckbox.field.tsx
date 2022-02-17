@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { HiddenInputField } from 'src/components/Form/Fields'
 import { Label, HiddenInput } from '../elements'
-import { Image } from 'rebass'
+import { Image } from 'rebass/styled-components'
 import Text from 'src/components/Text'
 
 interface IProps {

@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
-import { Box, Flex } from 'rebass'
-import { useCommonStores } from 'src'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { useState } from 'react'
+import ReactGA from 'react-ga'
+import { Box, Flex } from 'rebass/styled-components'
+import { useCommonStores } from 'src/index'
 import { Button } from 'src/components/Button'
 import { Comment } from 'src/components/Comment/Comment'
 import { CommentTextArea } from 'src/components/Comment/CommentTextArea'
 import { IComment } from 'src/models'
 import styled from 'styled-components'
 import { IUser } from 'src/models/user.models'
+import { logger } from 'src/logger'
 
 const MAX_COMMENTS = 5
 
@@ -35,12 +36,36 @@ export const HowToComments = ({ comments, verifiedUsers }: IProps) => {
 
   async function onSubmit(comment: string) {
     try {
+      const howto = stores.howtoStore.activeHowto
       setLoading(true)
       await stores.howtoStore.addComment(comment)
+      if (howto) {
+        await stores.userStore.triggerNotification(
+          'new_comment',
+          howto._createdBy,
+          howto.slug,
+        )
+      }
+
       setLoading(false)
       setComment('')
+
+      ReactGA.event({
+        category: 'Comments',
+        action: 'Submitted',
+        label: stores.howtoStore.activeHowto?.title,
+      })
+      logger.debug(
+        {
+          category: 'Comments',
+          action: 'Submitted',
+          label: stores.howtoStore.activeHowto?.title,
+        },
+        'comment submitted',
+      )
     } catch (err) {
       // Error: Comment could not be posted
+      logger.error({ err }, 'failed to submit comment')
     }
   }
 
@@ -78,33 +103,35 @@ export const HowToComments = ({ comments, verifiedUsers }: IProps) => {
           <Button
             width="max-content"
             variant="outline"
-            onClick={() => setMoreComments(moreComments + 1)}
+            onClick={() => {
+              ReactGA.event({
+                category: 'Comments',
+                action: 'Show more',
+                label: stores.howtoStore.activeHowto?.title,
+              })
+              return setMoreComments(moreComments + 1)
+            }}
           >
             show more comments
           </Button>
         )}
       </Flex>
-      <AuthWrapper
-        roleRequired="beta-tester"
-        fallback="You must be a Beta Tester to add a comment"
-      >
-        <BoxStyled width={2 / 3}>
-          <CommentTextArea
-            data-cy="comment-text-area"
-            comment={comment}
-            onChange={setComment}
-            loading={loading}
-          />
-          <ButtonStyled
-            data-cy="comment-submit"
-            disabled={!Boolean(comment.trim()) || loading}
-            variant="primary"
-            onClick={() => onSubmit(comment)}
-          >
-            Comment
-          </ButtonStyled>
-        </BoxStyled>
-      </AuthWrapper>
+      <BoxStyled width={2 / 3}>
+        <CommentTextArea
+          data-cy="comment-text-area"
+          comment={comment}
+          onChange={setComment}
+          loading={loading}
+        />
+        <ButtonStyled
+          data-cy="comment-submit"
+          disabled={!Boolean(comment.trim()) || loading}
+          variant="primary"
+          onClick={() => onSubmit(comment)}
+        >
+          Comment
+        </ButtonStyled>
+      </BoxStyled>
     </Flex>
   )
 }

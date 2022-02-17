@@ -1,10 +1,16 @@
+import { DBDoc } from 'src/models'
 import { observable, action, makeObservable, toJS } from 'mobx'
-import { INotification, IUser, IUserDB, NotificationType } from 'src/models/user.models'
+import {
+  INotification,
+  IUser,
+  IUserDB,
+  NotificationType,
+} from 'src/models/user.models'
 import { IUserPP, IUserPPDB } from 'src/models/user_pp.models'
-import { IFirebaseUser, auth, EmailAuthProvider } from 'src/utils/firebase'
-import { Storage } from '../storage'
+import { auth, EmailAuthProvider, IFirebaseUser } from 'src/utils/firebase'
 import { RootStore } from '..'
 import { ModuleStore } from '../common/module.store'
+import { Storage } from '../storage'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { formatLowerNoSpecial, randomID } from 'src/utils/helpers'
 import { logger } from 'src/logger'
@@ -26,6 +32,10 @@ export class UserStore extends ModuleStore {
 
   @observable
   public updateStatus: IUserUpdateStatus = getInitialUpdateStatus()
+
+  /** A list of all the verified users, to display verified icons where needed */
+  @observable
+  public verifiedUsers: (IUser & DBDoc)[] = []
 
   @action
   public updateUser(user?: IUserPPDB) {
@@ -141,10 +151,13 @@ export class UserStore extends ModuleStore {
     // sometimes mobx has issues with de-serialising obseverables so try to force it using toJS
     const updatedUserProfile = { ...toJS(user), ...toJS(values) }
 
-
-    if (updatedUserProfile.location?.latlng
-      && Object.keys(updatedUserProfile.location).length == 1) {
-      updatedUserProfile.location = await getLocationData(updatedUserProfile.location.latlng);
+    if (
+      updatedUserProfile.location?.latlng &&
+      Object.keys(updatedUserProfile.location).length == 1
+    ) {
+      updatedUserProfile.location = await getLocationData(
+        updatedUserProfile.location.latlng,
+      )
     }
 
     await this.db
@@ -253,19 +266,35 @@ export class UserStore extends ModuleStore {
   }
 
   @action
-  public async updateUsefulHowTos(howtoId: string, howtoAuthor: string, howtoSlug: string) {
+  public async updateUsefulHowTos(
+    howtoId: string,
+    howtoAuthor: string,
+    howtoSlug: string,
+  ) {
     if (this.user) {
       // toggle entry on user votedUsefulHowtos to either vote or unvote a howto
       // this will updated the main howto via backend `updateUserVoteStats` function
       const votedUsefulHowtos = toJS(this.user.votedUsefulHowtos) || {}
-      votedUsefulHowtos[howtoId] = !votedUsefulHowtos[howtoId];
+      votedUsefulHowtos[howtoId] = !votedUsefulHowtos[howtoId]
 
       if (votedUsefulHowtos[howtoId]) {
         //get how to author from howtoid
-        this.triggerNotification('howto_useful', howtoAuthor, howtoSlug);
+        this.triggerNotification('howto_useful', howtoAuthor, howtoSlug)
       }
       await this.updateUserProfile({ votedUsefulHowtos })
     }
+  }
+
+  /**
+   * Fetches all users that have a `verified: 1` badge
+   */
+  @action
+  public async fetchAllVerifiedUsers() {
+    const verifiedUsers = await this.db
+      .collection<IUser>(COLLECTION_NAME)
+      .getWhere('badges.verified', '==', 1)
+
+    this.verifiedUsers = verifiedUsers
   }
 
   // use firebase auth to listen to change to signed in user
@@ -292,34 +321,37 @@ export class UserStore extends ModuleStore {
   }
 
   @action
-  public async triggerNotification(type: NotificationType, username: string,
-    howToId?: string) {
-    const howToUrl = '/how-to/';
+  public async triggerNotification(
+    type: NotificationType,
+    username: string,
+    howToId?: string,
+  ) {
+    const howToUrl = '/how-to/'
     try {
-      const triggeredBy = this.activeUser;
+      const triggeredBy = this.activeUser
       if (triggeredBy) {
         // do not get notified when you're the one making a new comment or how-to useful vote
-        if(triggeredBy.userName === username){
-          return;
+        if (triggeredBy.userName === username) {
+          return
         }
         const newNotification: INotification = {
           _id: randomID(),
           _created: new Date().toISOString(),
           triggeredBy: {
             displayName: triggeredBy.displayName,
-            userId: triggeredBy._id
+            userId: triggeredBy._id,
           },
           relevantUrl: howToUrl + howToId,
           type: type,
-          read: false
-        } 
+          read: false,
+        }
 
         const lookup = await this.db
           .collection<IUserPP>(COLLECTION_NAME)
           .getWhere('userName', '==', username)
 
-        const user = lookup[0];
-        
+        const user = lookup[0]
+
         const updatedUser: IUser = {
           ...toJS(user),
           notifications: user.notifications
@@ -331,9 +363,8 @@ export class UserStore extends ModuleStore {
           .collection<IUser>(COLLECTION_NAME)
           .doc(updatedUser._authID)
 
-        await dbRef.set(updatedUser)        
+        await dbRef.set(updatedUser)
       }
-
     } catch (err) {
       console.error(err)
       throw new Error(err)
@@ -345,10 +376,8 @@ export class UserStore extends ModuleStore {
     try {
       const user = this.activeUser
       if (user) {
-        const notifications = toJS(user.notifications);
-        notifications?.forEach(notification =>
-          notification.read = true
-        );
+        const notifications = toJS(user.notifications)
+        notifications?.forEach(notification => (notification.read = true))
         const updatedUser: IUser = {
           ...toJS(user),
           notifications,
@@ -358,13 +387,12 @@ export class UserStore extends ModuleStore {
           .collection<IUser>(COLLECTION_NAME)
           .doc(updatedUser._authID)
 
-        await dbRef.set(updatedUser);
-        await this.updateUserProfile({ notifications });
-
+        await dbRef.set(updatedUser)
+        await this.updateUserProfile({ notifications })
       }
     } catch (err) {
-      console.error(err);
-      throw new Error(err);
+      console.error(err)
+      throw new Error(err)
     }
   }
 
@@ -396,8 +424,6 @@ export class UserStore extends ModuleStore {
   }
 }
 
-
-
 interface IUserUpdateStatus {
   Start: boolean
   Complete: boolean
@@ -424,5 +450,5 @@ const USER_BASE = {
   links: [],
   moderation: 'awaiting-moderation',
   verified: false,
-  badges: { verified: false },
+  badges: { verified: 0 },
 }

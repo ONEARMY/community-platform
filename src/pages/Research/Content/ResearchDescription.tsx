@@ -9,17 +9,19 @@ import ModerationStatusText from 'src/components/ModerationStatusText'
 import Text from 'src/components/Text'
 import { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
-
+import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
 interface IProps {
   research: IResearch.ItemDB
   isEditable: boolean
   needsModeration: boolean
   moderateResearch: (accepted: boolean) => void
+  verified: boolean
 }
 
 const ResearchDescription: React.FC<IProps> = ({
   research,
   isEditable,
+  verified,
   ...props
 }) => {
   const dateLastUpdateText = (research: IResearch.ItemDB): string => {
@@ -95,17 +97,29 @@ const ResearchDescription: React.FC<IProps> = ({
         <Box mt={3} mb={2}>
           <Flex alignItems="center">
             <Text inline auxiliary my={2} ml={1}>
-              By{' '}
-              <Link
-                sx={{
-                  textDecoration: 'underline',
-                  color: 'inherit',
-                }}
-                to={'/u/' + research._createdBy}
-              >
-                {research._createdBy}
-              </Link>{' '}
-              | Started on {format(new Date(research._created), 'DD-MM-YYYY')}
+              <Flex alignItems="center">
+                By
+                <Link
+                  ml={1}
+                  mr={1}
+                  sx={{
+                    textDecoration: 'underline',
+                    color: 'inherit',
+                  }}
+                  to={'/u/' + research._createdBy}
+                >
+                  {research._createdBy}
+                </Link>
+                {verified && (
+                  <Image
+                    src={VerifiedBadgeIcon}
+                    mr={1}
+                    width="12px"
+                    height="12px"
+                  />
+                )}
+                | Started on {format(new Date(research._created), 'DD-MM-YYYY')}
+              </Flex>
             </Text>
           </Flex>
           <Text

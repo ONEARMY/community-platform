@@ -22,6 +22,7 @@
     "build:inject-config": "yarn build:post",
     "build": "yarn build:cra",
     "eject": "react-scripts eject",
+    "lint:commits": " npx commitlint --from=$(git merge-base master HEAD) --verbose",
     "lint:code": "eslint . --ext .js,.jsx,.ts,.tsx src --color",
     "lint:format": "prettier --check '**/*.md'",
     "lint": "yarn lint:format && yarn lint:code",

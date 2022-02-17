@@ -312,27 +312,6 @@ jobs:
           root: .
           paths:
             - build
-  check-functions:
-    docker: *docker
-    environment:
-      GENERATE_SOURCEMAP: 'false'
-    # `medium` is the max allowed size for free builds (helps with out-of-memory issues) - https://circleci.com/docs/2.0/configuration-reference/#resourceclass
-    resource_class: small
-    steps:
-      # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
-      - checkout
-      - *restore_yarn_cache
-      - run:
-          name: Install dependencies
-          command: yarn workspaces focus functions
-      # As environment variables can only be set from strings add additional dynamic variable mappings here
-      # https://discuss.circleci.com/t/using-environment-variables-in-config-yml-not-working/14237/13
-      - run:
-          name: Set branch environment
-          command: |
-            echo 'export NODE_OPTIONS=--max-old-space-size=4096' >> $BASH_ENV
-      - run:
-          command: cd functions && yarn build
   storybook:
     docker: *docker
     resource_class: medium
@@ -438,15 +417,6 @@ workflows:
             - 'Lint commits'
           name: Build Application
           context: build-context
-      - check-functions:
-          requires:
-            -  'Lint commits'
-          name: Check Functions
-          context: build-context
-          filters:
-            branches:
-              ignore:
-                - production
       - test_unit:
           name: 'Unit tests'
           requires:
@@ -477,7 +447,7 @@ workflows:
           requires:
             - 'Build Application'
             - 'Unit tests'
-            - 'Check Functions'
+            - 'Cloud Function tests'
             - 'Build Storybook'
           context:
             - e2e-tests

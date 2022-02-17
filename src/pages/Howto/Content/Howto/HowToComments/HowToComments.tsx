@@ -34,8 +34,13 @@ export const HowToComments = ({ comments }: IProps) => {
 
   async function onSubmit(comment: string) {
     try {
+      const howto = stores.howtoStore.activeHowto;
       setLoading(true)
       await stores.howtoStore.addComment(comment)
+      if(howto){
+        await stores.userStore.triggerNotification('new_comment', howto._createdBy, howto.slug);
+      }
+  
       setLoading(false)
       setComment('')
 

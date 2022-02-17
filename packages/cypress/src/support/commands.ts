@@ -162,6 +162,7 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
       }
     })
   })
+
   Cypress.Commands.add('deleteCurrentUser', () => {
     return new Cypress.Promise((resolve, reject) => {
       if (Auth.currentUser) {

@@ -1,4 +1,3 @@
-import { DBDoc } from 'src/models'
 import { observable, action, makeObservable, toJS } from 'mobx'
 import {
   INotification,
@@ -35,7 +34,7 @@ export class UserStore extends ModuleStore {
 
   /** A list of all the verified users, to display verified icons where needed */
   @observable
-  public verifiedUsers: (IUser & DBDoc)[] = []
+  public verifiedUsers: { [user_id: string]: boolean } = {}
 
   @action
   public updateUser(user?: IUserPPDB) {
@@ -291,10 +290,10 @@ export class UserStore extends ModuleStore {
   @action
   public async fetchAllVerifiedUsers() {
     const verifiedUsers = await this.db
-      .collection<IUser>(COLLECTION_NAME)
-      .getWhere('badges.verified', '==', 1)
-
-    this.verifiedUsers = verifiedUsers
+      .collection<any>('aggregations')
+      .doc('users_verified')
+      .get()
+    this.verifiedUsers = verifiedUsers || {}
   }
 
   // use firebase auth to listen to change to signed in user
@@ -450,5 +449,4 @@ const USER_BASE = {
   links: [],
   moderation: 'awaiting-moderation',
   verified: false,
-  badges: { verified: 0 },
 }

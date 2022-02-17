@@ -63,9 +63,7 @@ const ResearchItemDetail = observer((props: IProps) => {
           isEditable={isEditable}
           needsModeration={store.needsModeration(item)}
           moderateResearch={moderateResearch}
-          verified={
-            !!verifiedUsers?.some(user => user.userName === item._createdBy)
-          }
+          verified={verifiedUsers?.[item._createdBy]}
         />
         <Box my={16}>
           {item &&

@@ -14,10 +14,12 @@ import { IHowtoDB } from 'src/models/howto.models'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import { UserStore } from 'src/stores/User/user.store'
 import HowToCard from './HowToCard'
+import { ThemeStore } from 'src/stores/Theme/theme.store'
 
 interface InjectedProps {
-  howtoStore?: HowtoStore
-  userStore?: UserStore
+  howtoStore: HowtoStore
+  userStore: UserStore
+  themeStore: ThemeStore
 }
 
 interface IState {
@@ -69,12 +71,12 @@ export class HowtoList extends React.Component<any, IState> {
 
       const searchQuery = searchParams.get('search')?.toString()
       if (searchQuery) {
-        this.props.howtoStore.updateSearchValue(searchQuery)
+        this.injected.howtoStore.updateSearchValue(searchQuery)
       }
-
-      this.props.howtoStore.updateReferrerSource(
-        searchParams.get('source')?.toString(),
-      )
+      const referrerSource = searchParams.get('source')?.toString()
+      if (referrerSource) {
+        this.injected.howtoStore.updateReferrerSource(referrerSource)
+      }
     }
   }
 
@@ -94,7 +96,7 @@ export class HowtoList extends React.Component<any, IState> {
   }
 
   public render() {
-    const { verifiedUsers } = this.props.userStore
+    const { verifiedUsers } = this.injected.userStore
     const {
       filteredHowtos,
       selectedTags,
@@ -196,9 +198,7 @@ export class HowtoList extends React.Component<any, IState> {
                   <Box px={4} py={4}>
                     <HowToCard
                       howto={data}
-                      verified={verifiedUsers.some(
-                        user => user.userName === data._createdBy,
-                      )}
+                      verified={verifiedUsers?.[data._createdBy]}
                     />
                   </Box>
                 )}

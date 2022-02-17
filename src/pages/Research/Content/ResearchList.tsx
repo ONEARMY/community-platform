@@ -33,11 +33,7 @@ const ResearchList = observer(() => {
         <ResearchListItem
           key={item._id}
           item={item}
-          verified={
-            !!userStore?.verifiedUsers?.some(
-              user => user.userName === item._createdBy,
-            )
-          }
+          verified={userStore?.verifiedUsers?.[item._createdBy]}
         />
       ))}
       <Box mb={4}>

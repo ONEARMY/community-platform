@@ -7,14 +7,13 @@ import { Comment } from 'src/components/Comment/Comment'
 import { CommentTextArea } from 'src/components/Comment/CommentTextArea'
 import { IComment } from 'src/models'
 import styled from 'styled-components'
-import { IUser } from 'src/models/user.models'
 import { logger } from 'src/logger'
 
 const MAX_COMMENTS = 5
 
 interface IProps {
   comments?: IComment[]
-  verifiedUsers?: IUser[]
+  verifiedUsers?: { [user_id: string]: boolean }
 }
 
 const BoxStyled = styled(Box)`
@@ -91,11 +90,7 @@ export const HowToComments = ({ comments, verifiedUsers }: IProps) => {
             .map(comment => (
               <Comment
                 key={comment._id}
-                verified={
-                  !!verifiedUsers?.some(
-                    user => user.userName === comment.creatorName,
-                  )
-                }
+                verified={verifiedUsers?.[comment.creatorName] ? true : false}
                 {...comment}
               />
             ))}

@@ -19,7 +19,6 @@ type ILink = IUser['links'][0] & { index: number }
 describe('[Settings]', () => {
   beforeEach(() => {
     cy.visit('/sign-in')
-    cy.logout()
   })
   const selectFocus = (focus: string) => {
     cy.get(`[data-cy=${focus}]`).click()
@@ -180,7 +179,7 @@ describe('[Settings]', () => {
           .should('eqSettings', expected)
       })
     })
-  });
+  })
 
   describe('[Focus Member]', () => {
     const freshSettings = {
@@ -302,7 +301,7 @@ describe('[Settings]', () => {
       cy.clickMenuItem(UserMenuItem.Settings)
       selectFocus(expected.profileType)
 
-      cy.get('[data-cy="add-a-map-pin"]').click();
+      cy.get('[data-cy="add-a-map-pin"]').click()
 
       setInfo({
         username: expected.userName,
@@ -320,7 +319,7 @@ describe('[Settings]', () => {
       setMemberMapPin({
         description: expected.mapPinDescription,
         searchKeyword: 'singapo',
-        locationName: expected.location.value
+        locationName: expected.location.value,
       })
 
       cy.get('[data-cy=save]').click()
@@ -337,7 +336,7 @@ describe('[Settings]', () => {
           .then(() => docs[0])
           .should('eqSettings', expected)
       })
-    });
+    })
   })
 
   describe('[Focus Machine Builder]', () => {

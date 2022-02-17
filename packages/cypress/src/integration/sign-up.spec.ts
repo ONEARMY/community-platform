@@ -64,7 +64,6 @@ describe('[Sign-up - new user]', () => {
     cy.get('[data-cy=user-menu]')
   })
   it('sign in as new user', () => {
-    cy.logout()
     cy.get('[data-cy=login]').click()
     cy.get('[data-cy=email]').type(newUser.email)
     cy.get('[data-cy=password]').type(newUser.password)

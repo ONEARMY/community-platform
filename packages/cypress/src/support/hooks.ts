@@ -54,8 +54,11 @@ before(() => {
 beforeEach(() => {
   // set the db_prefix variable on platform session storage (cypress wipes between tests)
   cy.setSessionStorage('DB_PREFIX', Cypress.env('DB_PREFIX'))
+})
+
+afterEach(() => {
   // ensure all tests are also logged out (requires being on a page to check)
-  cy.logout(false)
+  cy.logout()
 })
 
 /**

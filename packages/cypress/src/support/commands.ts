@@ -150,17 +150,15 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
     },
   )
 
-  Cypress.Commands.add('logout', (checkUI = true) => {
+  Cypress.Commands.add('logout', () => {
     cy.wrap('logging out').then(() => {
       return new Cypress.Promise((resolve, reject) => {
-        Auth.signOut().then(() => resolve())
+        Auth.signOut()
+          .then(() => resolve())
+          .catch(reject)
       })
     })
-    cy.wrap(checkUI ? 'check logout ui' : 'skip ui check').then(() => {
-      if (checkUI) {
-        cy.get('[data-cy=login]')
-      }
-    })
+    cy.get('[data-cy=login]')
   })
   Cypress.Commands.add('deleteCurrentUser', () => {
     return new Cypress.Promise((resolve, reject) => {

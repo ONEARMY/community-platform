@@ -53,9 +53,6 @@ export class HowtoList extends React.Component<any, IState> {
     this.state = {
       isLoading: true,
     }
-
-    this.props.userStore.fetchAllVerifiedUsers()
-
     if (props.location.search) {
       const searchParams = new URLSearchParams(props.location.search)
 

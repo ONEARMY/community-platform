@@ -21,13 +21,6 @@ interface InjectedProps {
 @inject('eventStore', 'userStore')
 @observer
 export class EventsList extends React.Component<any> {
-  // eslint-disable-next-line
-  constructor(props: any) {
-    super(props)
-    // fetch verified users to show badges on events
-    this.props.userStore?.fetchAllVerifiedUsers()
-  }
-
   get injected() {
     return this.props as InjectedProps
   }

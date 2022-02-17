@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { observer } from 'mobx-react'
 import { Box, Flex } from 'rebass/styled-components'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
@@ -7,19 +6,11 @@ import Heading from 'src/components/Heading'
 import { Link } from 'src/components/Links'
 import ResearchListItem from 'src/components/Research/ResearchListItem'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import { useCommonStores } from 'src/App'
+import { useCommonStores } from 'src/index'
 
 const ResearchList = observer(() => {
   const store = useResearchStore()
-  const {
-    stores: { userStore },
-  } = useCommonStores()
-
-  useEffect(() => {
-    if (userStore) {
-      userStore.fetchAllVerifiedUsers()
-    }
-  }, [userStore])
+  const { userStore } = useCommonStores().stores
 
   const { filteredResearches } = store
   return (

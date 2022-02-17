@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
-import { useCommonStores } from 'src/App'
+import { useCommonStores } from 'src/index'
 import { Box, Flex } from 'rebass/styled-components'
 import { Button } from 'src/components/Button'
 import { Link } from 'src/components/Links'
@@ -16,9 +16,7 @@ type IProps = RouteComponentProps<{ slug: string }>
 
 const ResearchItemDetail = observer((props: IProps) => {
   const store = useResearchStore()
-  const {
-    stores: { userStore },
-  } = useCommonStores()
+  const { userStore } = useCommonStores().stores
 
   const [isLoading, setIsLoading] = React.useState(true)
 
@@ -42,12 +40,6 @@ const ResearchItemDetail = observer((props: IProps) => {
       store.setActiveResearchItem()
     }
   }, [props, store])
-
-  React.useEffect(() => {
-    if (userStore) {
-      userStore.fetchAllVerifiedUsers()
-    }
-  }, [userStore])
 
   const item = store.activeResearchItem
   const { verifiedUsers } = userStore

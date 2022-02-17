@@ -239,7 +239,7 @@ export class MapsStore extends ModuleStore {
       name: u.userName,
       displayName: u.displayName,
       profileUrl: `${window.location.origin}/u/${u.userName}`,
-      verifiedBadge: u.badges?.verified || false,
+      verifiedBadge: !!u.badges?.verified,
     }
   }
   @action

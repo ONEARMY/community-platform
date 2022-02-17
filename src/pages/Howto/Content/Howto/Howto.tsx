@@ -100,9 +100,17 @@ export class Howto extends React.Component<
     }
   }
 
-  private onUsefulClick = async (howtoId: string, howtoCreatedBy: string, howToSlug: string) => {
+  private onUsefulClick = async (
+    howtoId: string,
+    howtoCreatedBy: string,
+    howToSlug: string,
+  ) => {
     // Fire & forget
-    await this.injected.userStore.updateUsefulHowTos(howtoId, howtoCreatedBy, howToSlug)
+    await this.injected.userStore.updateUsefulHowTos(
+      howtoId,
+      howtoCreatedBy,
+      howToSlug,
+    )
   }
 
   public async componentDidMount() {
@@ -123,19 +131,31 @@ export class Howto extends React.Component<
         <>
           <HowtoDescription
             howto={activeHowto}
+            verified={
+              this.injected.userStore.verifiedUsers[activeHowto._createdBy]
+            }
             votedUsefulCount={this.store.howtoStats?.votedUsefulCount}
             loggedInUser={loggedInUser}
             needsModeration={this.store.needsModeration(activeHowto)}
             userVotedUseful={this.store.userVotedActiveHowToUseful}
             moderateHowto={this.moderateHowto}
-            onUsefulClick={() => this.onUsefulClick(activeHowto._id, activeHowto._createdBy, activeHowto.slug)}
+            onUsefulClick={() =>
+              this.onUsefulClick(
+                activeHowto._id,
+                activeHowto._createdBy,
+                activeHowto.slug,
+              )
+            }
           />
           <Box mt={9}>
             {activeHowto.steps.map((step: any, index: number) => (
               <Step step={step} key={index} stepindex={index} />
             ))}
           </Box>
-          <HowToComments comments={activeHowto.comments} />
+          <HowToComments
+            comments={activeHowto.comments}
+            verifiedUsers={this.injected.userStore.verifiedUsers}
+          />
           <MoreBox py={20} mt={20}>
             <Text bold txtcenter fontSize={[4, 4, 5]}>
               You're done.

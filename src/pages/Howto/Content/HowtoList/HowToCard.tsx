@@ -8,9 +8,12 @@ import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { IHowtoDB } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
+import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
+import { Image } from 'rebass'
 
 interface IProps {
   howto: IHowtoDB
+  verified: boolean
 }
 export const HowToCard = (props: IProps) => (
   <Flex
@@ -56,9 +59,12 @@ export const HowToCard = (props: IProps) => (
           {props.howto.creatorCountry && (
             <FlagIconHowTos code={props.howto.creatorCountry} />
           )}
-          <Text auxiliary my={2} ml={1}>
+          <Text auxiliary my={2} ml={1} display="flex">
             By {props.howto._createdBy}
           </Text>
+          {props.verified && (
+            <Image src={VerifiedBadgeIcon} ml={1} height="12px" width="12px" />
+          )}
         </Flex>
         <Flex mt={4}>
           {props.howto.tags &&

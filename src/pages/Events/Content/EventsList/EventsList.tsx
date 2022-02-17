@@ -21,11 +21,6 @@ interface InjectedProps {
 @inject('eventStore', 'userStore')
 @observer
 export class EventsList extends React.Component<any> {
-  // eslint-disable-next-line
-  constructor(props: any) {
-    super(props)
-  }
-
   get injected() {
     return this.props as InjectedProps
   }
@@ -94,6 +89,9 @@ export class EventsList extends React.Component<any> {
                   {filteredEvents.map((event: IEventDB) => (
                     <EventCard
                       key={event._id}
+                      verified={
+                        this.injected.userStore?.verifiedUsers[event._createdBy]
+                      }
                       event={event}
                       needsModeration={this.store.needsModeration(event)}
                       moderateEvent={this.moderateEvent}

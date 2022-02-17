@@ -13,6 +13,7 @@ const MAX_COMMENTS = 5
 
 interface IProps {
   comments?: IComment[]
+  verifiedUsers?: { [user_id: string]: boolean }
 }
 
 const BoxStyled = styled(Box)`
@@ -26,7 +27,7 @@ const ButtonStyled = styled(Button)`
 `
 
 // TODO: Expect the comments as a prop from the HowTo
-export const HowToComments = ({ comments }: IProps) => {
+export const HowToComments = ({ comments, verifiedUsers }: IProps) => {
   const [comment, setComment] = useState('')
   const [loading, setLoading] = useState(false)
   const { stores } = useCommonStores()
@@ -34,13 +35,17 @@ export const HowToComments = ({ comments }: IProps) => {
 
   async function onSubmit(comment: string) {
     try {
-      const howto = stores.howtoStore.activeHowto;
+      const howto = stores.howtoStore.activeHowto
       setLoading(true)
       await stores.howtoStore.addComment(comment)
-      if(howto){
-        await stores.userStore.triggerNotification('new_comment', howto._createdBy, howto.slug);
+      if (howto) {
+        await stores.userStore.triggerNotification(
+          'new_comment',
+          howto._createdBy,
+          howto.slug,
+        )
       }
-  
+
       setLoading(false)
       setComment('')
 
@@ -82,7 +87,13 @@ export const HowToComments = ({ comments }: IProps) => {
         {comments &&
           comments
             .slice(0, shownComments)
-            .map(comment => <Comment key={comment._id} {...comment} />)}
+            .map(comment => (
+              <Comment
+                key={comment._id}
+                verified={verifiedUsers?.[comment.creatorName] ? true : false}
+                {...comment}
+              />
+            ))}
         {comments && comments.length > shownComments && (
           <Button
             width="max-content"

@@ -57,8 +57,8 @@ beforeEach(() => {
 })
 
 afterEach(() => {
-  // ensure all tests are also logged out (requires being on a page to check)
-  cy.logout()
+  // ensure all tests are also logged out (skip ui check in case page not loaded)
+  cy.logout(false)
 })
 
 /**

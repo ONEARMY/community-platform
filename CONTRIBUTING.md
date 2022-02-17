@@ -126,7 +126,7 @@ We also expect code to follow standard best practices, such as sensible variable
 
 ## 🔬 &nbsp; Commit style guide
 
-To help everyone with understanding the commit history of this project and support our automated release tooling the following commit rules are enforced. 
+To help everyone with understanding the commit history of this project and support our automated release tooling the following commit rules are enforced.
 
 - commit message format of `$type($scope): $message`, for example: `docs: add commit style guide`
 - maximum of 100 characters

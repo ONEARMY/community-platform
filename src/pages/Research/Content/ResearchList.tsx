@@ -7,7 +7,7 @@ import Heading from 'src/components/Heading'
 import { Link } from 'src/components/Links'
 import ResearchListItem from 'src/components/Research/ResearchListItem'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import { useCommonStores } from 'src'
+import { useCommonStores } from 'src/App'
 
 const ResearchList = observer(() => {
   const store = useResearchStore()

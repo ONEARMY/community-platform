@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
-import { useCommonStores } from 'src'
+import { useCommonStores } from 'src/App'
 import { Box, Flex } from 'rebass/styled-components'
 import { Button } from 'src/components/Button'
 import { Link } from 'src/components/Links'

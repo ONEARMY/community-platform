@@ -50,6 +50,7 @@ export class UserStore extends ModuleStore {
     super(rootStore)
     makeObservable(this)
     this._listenToAuthStateChanges()
+    this.fetchAllVerifiedUsers()
   }
 
   // when registering a new user create firebase auth profile as well as database user profile

@@ -4,6 +4,16 @@ import { render, waitFor, cleanup } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
 import { Provider } from 'mobx-react'
 
+// Similar to issues in Academy.test.tsx - stub methods called in user store constructor
+// TODO - replace with mock store or avoid direct call
+jest.mock('src/index', () => ({
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  __esModule: true,
+  useCommonStores() {
+    return { stores: { userStore: { fetchAllVerifiedUsers: jest.fn() } } }
+  },
+}))
+
 const mockResearchStore: any = {
   filteredResearches: [],
   setActiveResearchItem: jest.fn(),
@@ -26,6 +36,7 @@ jest.mock('src/stores/Research/research.store', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useResearchStore() {
+    console.log('using research store')
     return mockResearchStore
   },
 }))

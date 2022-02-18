@@ -1,7 +1,7 @@
 import { inject, observer } from 'mobx-react'
 import * as React from 'react'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import Heading from 'src/components/Heading'
 import { Flex, Box } from 'rebass/styled-components'
 import { Link } from 'src/components/Links'

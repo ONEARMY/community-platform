@@ -323,7 +323,7 @@ jobs:
       - attach_workspace:
           at: '.'
       - run:
-          command: yarn workspace oa-storybook build
+          command: yarn workspace oa-components build:sb
   deploy:
     docker: *docker
     resource_class: small

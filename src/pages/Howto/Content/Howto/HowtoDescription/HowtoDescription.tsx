@@ -12,7 +12,7 @@ import StepsIcon from 'src/assets/icons/icon-steps.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
 import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import { IUser } from 'src/models/user.models'
 import {
   isAllowToEditContent,

@@ -1,4 +1,6 @@
-import { Link, Button } from 'rebass/styled-components'
+import { Link } from 'rebass/styled-components'
+import { Button } from 'oa-components'
+import styled, { useTheme } from 'styled-components'
 
 export const DiscordLink = () => {
   return (

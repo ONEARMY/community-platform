@@ -9,7 +9,7 @@ import { Text } from 'src/components/Text'
 import { Modal } from '../Modal/Modal'
 import { TextAreaField } from '../Form/Fields'
 import { Field, Form } from 'react-final-form'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import { AuthWrapper } from '../Auth/AuthWrapper'
 import { logger } from 'src/logger'
 

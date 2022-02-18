@@ -41,6 +41,12 @@
     "functions",
     "src/utils/UserMigration",
     "src/setupProxy.js",
-    "src/assets/userReportInit.js"
+    "src/assets/userReportInit.js",
+    "packages/components"
+  ],
+  "references": [
+    {
+      "path": "./packages/components"
+    }
   ]
 }

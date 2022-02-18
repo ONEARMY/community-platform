@@ -389,6 +389,8 @@ jobs:
             CI_BROWSER: << parameters.CI_BROWSER >>
             CI_NODE: << parameters.CI_NODE >>
             CI_GROUP: 2x-<< parameters.CI_BROWSER >>
+      - store_artifacts:
+          path: ./packages/cypress/src/screenshots/
   release:
     docker: *docker
     resource_class: small

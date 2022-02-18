@@ -63,7 +63,6 @@ describe('[Common]', () => {
   describe('[User Menu]', () => {
     it('[By Anonymous]', () => {
       cy.step('Login and Join buttons are available')
-      cy.logout()
       cy.visit('/how-to')
       cy.get('[data-cy=login]').should('be.visible')
       cy.get('[data-cy=join]').should('be.visible')

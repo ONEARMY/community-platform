@@ -1,22 +1,25 @@
+import { inject, observer } from 'mobx-react'
 import * as React from 'react'
+import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { Button } from 'src/components/Button'
+import Heading from 'src/components/Heading'
 import { Flex, Box } from 'rebass/styled-components'
 import { Link } from 'src/components/Links'
+import { Loader } from 'src/components/Loader'
+import MoreContainer from 'src/components/MoreContainer/MoreContainer'
+import SearchInput from 'src/components/SearchInput'
 import TagsSelect from 'src/components/Tags/TagsSelect'
-import { inject, observer } from 'mobx-react'
+import { VirtualizedFlex } from 'src/components/VirtualizedFlex/VirtualizedFlex'
+import { IHowtoDB } from 'src/models/howto.models'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import { UserStore } from 'src/stores/User/user.store'
-import { Button } from 'src/components/Button'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
-import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import HowToCard from './HowToCard'
-import Heading from 'src/components/Heading'
-import { Loader } from 'src/components/Loader'
-import { VirtualizedFlex } from 'src/components/VirtualizedFlex/VirtualizedFlex'
-import SearchInput from 'src/components/SearchInput'
+import { ThemeStore } from 'src/stores/Theme/theme.store'
 
 interface InjectedProps {
-  howtoStore?: HowtoStore
-  userStore?: UserStore
+  howtoStore: HowtoStore
+  userStore: UserStore
+  themeStore: ThemeStore
 }
 
 interface IState {
@@ -50,7 +53,6 @@ export class HowtoList extends React.Component<any, IState> {
     this.state = {
       isLoading: true,
     }
-
     if (props.location.search) {
       const searchParams = new URLSearchParams(props.location.search)
 
@@ -66,14 +68,15 @@ export class HowtoList extends React.Component<any, IState> {
 
       const searchQuery = searchParams.get('search')?.toString()
       if (searchQuery) {
-        this.props.howtoStore.updateSearchValue(searchQuery)
+        this.injected.howtoStore.updateSearchValue(searchQuery)
       }
-
-      this.props.howtoStore.updateReferrerSource(
-        searchParams.get('source')?.toString(),
-      )
+      const referrerSource = searchParams.get('source')?.toString()
+      if (referrerSource) {
+        this.injected.howtoStore.updateReferrerSource(referrerSource)
+      }
     }
   }
+
   get injected() {
     return this.props as InjectedProps
   }
@@ -90,6 +93,7 @@ export class HowtoList extends React.Component<any, IState> {
   }
 
   public render() {
+    const { verifiedUsers } = this.injected.userStore
     const {
       filteredHowtos,
       selectedTags,
@@ -187,9 +191,12 @@ export class HowtoList extends React.Component<any, IState> {
             >
               <VirtualizedFlex
                 data={filteredHowtos}
-                renderItem={data => (
+                renderItem={(data: IHowtoDB) => (
                   <Box px={4} py={4}>
-                    <HowToCard howto={data} />
+                    <HowToCard
+                      howto={data}
+                      verified={verifiedUsers?.[data._createdBy]}
+                    />
                   </Box>
                 )}
               />

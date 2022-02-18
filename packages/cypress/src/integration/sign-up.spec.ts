@@ -61,11 +61,9 @@ describe('[Sign-up - new user]', () => {
     cy.get('div')
       .contains('Sign up successful')
       .should('be.visible')
+    cy.get('[data-cy=user-menu]')
   })
   it('sign in as new user', () => {
-    cy.visit('/')
-    cy.logout()
-    cy.wait(1000)
     cy.get('[data-cy=login]').click()
     cy.get('[data-cy=email]').type(newUser.email)
     cy.get('[data-cy=password]').type(newUser.password)

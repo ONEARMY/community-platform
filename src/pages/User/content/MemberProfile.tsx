@@ -1,20 +1,18 @@
-import * as React from 'react'
-import { Box, Image } from 'rebass/styled-components'
 import 'src/assets/css/slick.min.css'
+import type { IUserPP } from 'src/models/user_pp.models'
+import type { IUploadedFileMeta } from 'src/stores/storage'
+
+import { Box, Image } from 'rebass/styled-components'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
-import { AdminContact } from 'src/components/AdminContact/AdminContact'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
-import FlagIconEvents from 'src/components/Icons/FlagIcon/FlagIcon'
+import { FlagIcon } from 'src/components/Icons/FlagIcon/FlagIcon'
 import { Text } from 'src/components/Text'
-import { IUserPP } from 'src/models/user_pp.models'
 import Workspace from 'src/pages/User/workspace/Workspace'
 import theme from 'src/themes/styled.theme'
 import styled from 'styled-components'
 import ProfileLink from './ProfileLink'
-import { renderUserStatsBox } from '.'
-import { IUploadedFileMeta } from 'src/stores/storage'
+import { UserStats } from "./UserStats"
 
 interface IProps {
   user: IUserPP
@@ -35,10 +33,12 @@ const UserContactInfo = styled.div`
 `
 
 const ProfileWrapper = styled(Box)`
-  position: relative;
+  display: block;
   border: 2px solid black;
   border-radius: ${theme.space[2]}px;
   align-self: center;
+  width: 100%;
+  position: relative;
 `
 
 const ProfileContentWrapper = styled(Flex)`
@@ -50,79 +50,71 @@ const MemberBadge = styled(Image)`
   position: absolute;
   width: 48px;
   top: -24px;
-  left: calc(50% - 24px);
+  left: 50%;
+  margin-left: -24px;
 `
 
 const MemberPicture = styled(Image)`
   width: 120px;
   height: 120px;
   border-radius: 50%;
+  max-width: none;
 `
 
 export const MemberProfile = ({ user }: IProps) => {
-  const shouldRenderUserStatsBox =
-    user.location?.latlng ||
-    user.stats?.userCreatedHowtos ||
-    user.stats?.userCreatedEvents
-
   const userLinks = user?.links.filter(
     linkItem => !['discord', 'forum'].includes(linkItem.label),
-  )
+    )
 
+  const userCountryCode = user.location?.countryCode || user.country?.toLowerCase() || null
+    
   return (
-    <ProfileWrapper width={[1, 3 / 4, 1 / 2]} mt={8} mb={6}>
+    <ProfileWrapper mt={8} mb={6}>
       <MemberBadge src={Workspace.findWorkspaceBadge(user.profileType)} />
       <ProfileContentWrapper px={4} py={4}>
-        <Box mr={3} minWidth="initial">
+        <Box mr={3} minWidth="initial" style={{flexGrow: 1}}>
           <MemberPicture
             src={
-              user.coverImages[0]
+                user.coverImages[0]
                 ? (user.coverImages[0] as IUploadedFileMeta).downloadUrl
                 : DefaultMemberImage
             }
-          />
-          {shouldRenderUserStatsBox && renderUserStatsBox(user)}
+            />
+          <UserStats user={user}/>
         </Box>
-        <Flex flexDirection="column" mt={3} ml={3}>
-          <Text>{user.userName}</Text>
-          <Flex alignItems="center" mb={3}>
-            {user.location ? (
-              <FlagIconEvents code={user.location.countryCode} />
-            ) : (
-              user.country && (
-                <FlagIconEvents code={user.country.toLowerCase()} />
-              )
-            )}
-            <Heading medium bold color={'black'} ml={2}>
-              {user.displayName}
-            </Heading>
-          </Flex>
-          {user.about && (
-            <Text
-              preLine
-              paragraph
-              mt="0"
-              mb="20px"
-              color={theme.colors.grey}
-              width={['80%', '100%']}
-            >
-              {user.about}
-            </Text>
-          )}
-
-          {!!userLinks.length && (
-            <UserContactInfo>
-              <span>Contact & Links</span>
-              {userLinks.map((link, i) => (
-                <ProfileLink link={link} key={'Link-' + i} />
-              ))}
-            </UserContactInfo>
-          )}
-          <AuthWrapper roleRequired={'admin'}>
-            <Box mt={3}>
-              <AdminContact user={user} />
+        <Flex flexDirection="column" mt={3} ml={3} style={{flexGrow: 1}}>
+            <Text style={{wordWrap: 'break-word'}}>{user.userName}</Text>
+            <Box alignItems="center" mb={3}>
+              <Heading medium bold color={'black'} style={{wordWrap: 'break-word'}}>
+                  {userCountryCode && (
+                      <FlagIcon mr={2} code={userCountryCode} style={{display: 'inline-block'}} />
+                  )}
+                  {user.displayName}
+              </Heading>
             </Box>
-          </AuthWrapper>
+            {user.about && (
+              <Text
+                  preLine
+                  paragraph
+                  mt="0"
+                  mb="20px"
+                  color={theme.colors.grey}
+                  width={['80%', '100%']}
+              >
+                  {user.about}
+              </Text>
+              )}
+              {!!userLinks.length && (
+                <UserContactInfo>
+                    <span>Contact & Links</span>
+                    {userLinks.map((link, i) => (
+                    <ProfileLink link={link} key={'Link-' + i} />
+                    ))}
+                </UserContactInfo>
+                )}
+                <Box mt={3}>
+                  {/* <AdminContact user={user} /> */}
+                </Box>
         </Flex>
       </ProfileContentWrapper>
     </ProfileWrapper>

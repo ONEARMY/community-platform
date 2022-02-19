@@ -191,11 +191,14 @@ export class HowtoList extends React.Component<any, IState> {
             >
               <VirtualizedFlex
                 data={filteredHowtos}
-                renderItem={(data: IHowtoDB) => (
+                renderItem={(howto: IHowtoDB) => (
                   <Box px={4} py={4}>
                     <HowToCard
-                      howto={data}
-                      verified={verifiedUsers?.[data._createdBy]}
+                      howto={howto}
+                      verified={verifiedUsers?.[howto._createdBy]}
+                      votedUsefulCount={
+                        this.injected.userStore.userVotedHowtos[howto._id]
+                      }
                     />
                   </Box>
                 )}

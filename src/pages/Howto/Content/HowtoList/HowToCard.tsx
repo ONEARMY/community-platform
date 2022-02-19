@@ -15,6 +15,7 @@ import { Image } from 'rebass'
 interface IProps {
   howto: IHowtoDB
   verified: boolean
+  votedUsefulCount: number
 }
 export const HowToCard = (props: IProps) => (
   <Flex
@@ -74,12 +75,12 @@ export const HowToCard = (props: IProps) => (
                 return <TagDisplay key={tag} tagKey={tag} />
               })}
           </Flex>
-          <Flex ml="auto" alignItems="center">
-            <Icon glyph="star-active" marginRight="4px" />
-            <Text color="black">
-              {props.howto.stats?.votedUsefulCount || '0'}
-            </Text>
-          </Flex>
+          {props.votedUsefulCount && (
+            <Flex ml="auto" alignItems="center">
+              <Icon glyph="star-active" marginRight="4px" />
+              <Text color="black">{props.votedUsefulCount}</Text>
+            </Flex>
+          )}
         </Flex>
       </Flex>
     </Link>

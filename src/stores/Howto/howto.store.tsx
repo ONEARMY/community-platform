@@ -98,12 +98,9 @@ export class HowtoStore extends ModuleStore {
     if (id) {
       const ref = this.db.collection<IHowtoStatsDoc>('howtos').doc(`stats`)
       const howtoStats = await ref.get('server')
-      
-      // this.howtoStats =
-      //  howtoStats && howtoStats[id] ? howtoStats[id] : { votedUsefulCount: 0 }
-
       logger.debug('howtoStats', howtoStats)
-      this.howtoStats = howtoStats || { votedUsefulCount: 0 }
+      this.howtoStats =
+        howtoStats && howtoStats[id] ? howtoStats[id] : { votedUsefulCount: 0 }
     }
   }
   @action

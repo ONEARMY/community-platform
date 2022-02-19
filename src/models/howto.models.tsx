@@ -26,7 +26,6 @@ export interface IHowto extends IHowtoFormInput, IModerable {
   steps: IHowtoStep[]
   // Comments were added in V2, old howto's may not have the property
   comments?: IComment[]
-  stats?: IHowtoStats
 }
 
 /**
@@ -34,13 +33,6 @@ export interface IHowto extends IHowtoFormInput, IModerable {
  */
 export type IHowtoDB = IHowto & DBDoc
 
-export type IHowtoStats = {
-  votedUsefulCount: number
-}
-
-export type IHowtoStatsDoc = {
-  [key: string]: IHowtoStats
-}
 
 export interface IHowtoStep extends IHowToStepFormInput {
   // *** NOTE - adding an '_animationKey' field to track when specific array element removed for

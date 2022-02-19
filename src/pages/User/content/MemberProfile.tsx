@@ -8,29 +8,16 @@ import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import { FlagIcon } from 'src/components/Icons/FlagIcon/FlagIcon'
 import { Text } from 'src/components/Text'
-import Workspace from 'src/pages/User/workspace/Workspace'
 import theme from 'src/themes/styled.theme'
 import styled from 'styled-components'
-import ProfileLink from './ProfileLink'
 import { UserStats } from "./UserStats"
+import UserContactAndLinks from './UserContactAndLinks'
+import Badge from 'src/components/Badge/Badge'
 
 interface IProps {
-  user: IUserPP
+  user: IUserPP,
+  adminButton?: JSX.Element | React.Component
 }
-
-const UserContactInfo = styled.div`
-  h6 {
-    margin-top: ${theme.space[3]}px;
-  }
-  div {
-    margin-bottom: ${theme.space[2]}px;
-    margin-top: ${theme.space[3]}px;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-`
 
 const ProfileWrapper = styled(Box)`
   display: block;
@@ -38,20 +25,13 @@ const ProfileWrapper = styled(Box)`
   border-radius: ${theme.space[2]}px;
   align-self: center;
   width: 100%;
+  max-width: 42em;
   position: relative;
 `
 
 const ProfileContentWrapper = styled(Flex)`
   background-color: ${theme.colors.white};
   border-radius: 10px;
-`
-
-const MemberBadge = styled(Image)`
-  position: absolute;
-  width: 48px;
-  top: -24px;
-  left: 50%;
-  margin-left: -24px;
 `
 
 const MemberPicture = styled(Image)`
@@ -61,7 +41,7 @@ const MemberPicture = styled(Image)`
   max-width: none;
 `
 
-export const MemberProfile = ({ user }: IProps) => {
+export const MemberProfile = ({ user, adminButton }: IProps) => {
   const userLinks = user?.links.filter(
     linkItem => !['discord', 'forum'].includes(linkItem.label),
     )
@@ -70,7 +50,13 @@ export const MemberProfile = ({ user }: IProps) => {
     
   return (
     <ProfileWrapper mt={8} mb={6}>
-      <MemberBadge src={Workspace.findWorkspaceBadge(user.profileType)} />
+      <Badge profileType="member" size={50} style={{
+        position: 'absolute',
+        top: 0,
+        left: '50%',
+        marginLeft: 50 * -.5,
+        marginTop: 50 * -.5,
+      }}/>
       <ProfileContentWrapper px={4} py={4}>
         <Box mr={3} minWidth="initial" style={{flexGrow: 1}}>
           <MemberPicture
@@ -104,16 +90,9 @@ export const MemberProfile = ({ user }: IProps) => {
                   {user.about}
               </Text>
               )}
-              {!!userLinks.length && (
-                <UserContactInfo>
-                    <span>Contact & Links</span>
-                    {userLinks.map((link, i) => (
-                    <ProfileLink link={link} key={'Link-' + i} />
-                    ))}
-                </UserContactInfo>
-                )}
+              <UserContactAndLinks links={userLinks}/>
                 <Box mt={3}>
-                  {/* <AdminContact user={user} /> */}
+                  {adminButton}
                 </Box>
         </Flex>
       </ProfileContentWrapper>

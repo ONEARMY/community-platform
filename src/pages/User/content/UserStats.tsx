@@ -66,13 +66,13 @@ export const UserStats = ({user}:IProps) => {
       {howtoCount > 0 && (
         <UserStatsBoxItem>
           <ElWithBeforeIcon IconUrl={HowToCountIcon} />
-          How-to: {howtoCount}
+          How‑to:&nbsp;{howtoCount}
         </UserStatsBoxItem>
       )}
       {eventCount > 0 && (
         <UserStatsBoxItem>
           <ElWithBeforeIcon IconUrl={EventsIcon} />
-          Events: {eventCount}
+          Events:&nbsp;{eventCount}
         </UserStatsBoxItem>
       )}
     </UserStatsBox>

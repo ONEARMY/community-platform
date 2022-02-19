@@ -1,4 +1,3 @@
-import * as React from 'react'
 import {
   IUserPP,
   IMAchineBuilderXp,
@@ -14,14 +13,14 @@ import 'src/assets/css/slick.min.css'
 import styled from 'styled-components'
 import Icon from 'src/components/Icons'
 import Flex from 'src/components/Flex'
-import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import Workspace from 'src/pages/User/workspace/Workspace'
 import { Text } from 'src/components/Text'
-import { Link } from 'src/components/Links'
+
+import Badge from 'src/components/Badge/Badge';
 
 import theme from 'src/themes/styled.theme'
 import { replaceDashesWithSpaces } from 'src/utils/helpers'
-import FlagIconEvents from 'src/components/Icons/FlagIcon/FlagIcon'
+import { FlagIcon } from 'src/components/Icons/FlagIcon/FlagIcon'
 
 // Plastic types
 import HDPEIcon from 'src/assets/images/plastic-types/hdpe.svg'
@@ -32,18 +31,13 @@ import PPIcon from 'src/assets/images/plastic-types/pp.svg'
 import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 
-import EventsIcon from 'src/assets/icons/icon-events.svg'
-import HowToCountIcon from 'src/assets/icons/icon-how-to.svg'
-import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
 // import V4MemberIcon from 'src/assets/icons/icon-v4-member.svg'
 
-import { IUploadedFileMeta } from 'src/stores/storage'
-import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
+import type { IUploadedFileMeta } from 'src/stores/storage'
+import type { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
-import { AdminContact } from 'src/components/AdminContact/AdminContact'
-import ProfileLink from './ProfileLink'
-import { Avatar } from 'src/components/Avatar'
+import { UserStats } from './UserStats'
+import UserContactAndLinks from './UserContactAndLinks'
 
 interface IBackgroundImageProps {
   bgImg: string
@@ -51,6 +45,7 @@ interface IBackgroundImageProps {
 
 interface IProps {
   user: IUserPP
+  adminButton?: JSX.Element
 }
 
 const UserCategory = styled.div`
@@ -99,25 +94,6 @@ const MobileBadge = styled.div`
     margin-top: -50%;
     margin-left: auto;
     margin-right: auto;
-  }
-`
-
-const UserStatsBox = styled.div`
-  margin-top: 15px;
-  border: 2px solid black;
-  border-radius: 10px;
-  padding: 10px;
-  background-color: ${theme.colors.background};
-  margin-bottom: 20px;
-`
-
-const UserStatsBoxItem = styled.div`
-  margin-top: 15px;
-  display: flex;
-  align-items: center;
-
-  &:first-child {
-    margin-top: 0;
   }
 `
 
@@ -216,55 +192,6 @@ const sliderSettings = {
 }
 
 // Comment on 6.05.20 by BG : renderCommitmentBox commented for now, will be reused with #974
-function renderUserStatsBox(user: IUserPP) {
-  let howtoCount = 0
-  let eventCount = 0
-  try {
-    howtoCount = Object.keys(user.stats!.userCreatedHowtos).length
-    eventCount = Object.keys(user.stats!.userCreatedEvents).length
-  } catch (error) {
-    // Comment on 12.10.20 by CC: would be nice if user stats had their own display to make conditional
-    // logic easier, but for now will just use a try-catch to also fix cases broken on dev during migration attempts
-  }
-
-  return (
-    <UserStatsBox>
-      {user.badges?.verified && (
-        <UserStatsBoxItem style={{ marginBottom: '15px' }}>
-          <Image src={VerifiedBadgeIcon} width="22px" height="22px" />
-          <Box ml="5px">Verified</Box>
-        </UserStatsBoxItem>
-      )}
-      {user.location?.latlng && (
-        <Link color={'black'} to={'/map/#' + user.userName}>
-          <UserStatsBoxItem>
-            <Icon glyph="location-on" size="22"></Icon>
-            <Box ml="5px">{user.location?.country || 'View on Map'}</Box>
-          </UserStatsBoxItem>
-        </Link>
-      )}
-      {/* {isV4Member && (
-          <UserStatsBoxItem>
-            <ElWithBeforeIcon IconUrl={V4MemberIcon}>
-              V4 Member
-            </ElWithBeforeIcon>
-          </UserStatsBoxItem>
-         )} */}
-      {howtoCount > 0 && (
-        <UserStatsBoxItem>
-          <ElWithBeforeIcon IconUrl={HowToCountIcon} />
-          How-to: {howtoCount}
-        </UserStatsBoxItem>
-      )}
-      {eventCount > 0 && (
-        <UserStatsBoxItem>
-          <ElWithBeforeIcon IconUrl={EventsIcon} />
-          Events: {eventCount}
-        </UserStatsBoxItem>
-      )}
-    </UserStatsBox>
-  )
-}
 
 function renderPlasticTypes(plasticTypes: Array<PlasticTypeLabel>) {
   function renderIcon(type: string) {
@@ -351,7 +278,7 @@ function renderProfileTypeName(user: IUserPP) {
   )
 }
 
-export const SpaceProfile = ({ user }: IProps) => {
+export const SpaceProfile = ({ user, adminButton }: IProps) => {
   const workspaceHighlightSrc = Workspace.findWordspaceHighlight(
     user.profileType,
   )
@@ -374,17 +301,12 @@ export const SpaceProfile = ({ user }: IProps) => {
       },
     )
   }
-  const shouldRenderUserStatsBox =
-    user &&
-    (user.location?.latlng ||
-      (user.stats &&
-        (user.stats.userCreatedHowtos || user.stats.userCreatedEvents)))
-      ? true
-      : false
 
   const userLinks = user?.links.filter(
     linkItem => !['discord', 'forum'].includes(linkItem.label),
   )
+
+  const userCountryCode = user.location?.countryCode || user.country?.toLowerCase() || null
 
   return (
     <ProfileWrapper mt={4} mb={6}>
@@ -395,7 +317,7 @@ export const SpaceProfile = ({ user }: IProps) => {
         <Box width={['100%', '100%', '80%']}>
           <Box sx={{ display: ['block', 'block', 'none'] }}>
             <MobileBadge>
-              <Avatar profileType={user.profileType} />
+              <Badge profileType={user.profileType} />
             </MobileBadge>
           </Box>
 
@@ -404,14 +326,10 @@ export const SpaceProfile = ({ user }: IProps) => {
           </UserCategory>
 
           <Flex alignItems="center">
-            {user.location ? (
-              <FlagIconEvents code={user.location.countryCode} />
-            ) : (
-              user.country && (
-                <FlagIconEvents code={user.country.toLowerCase()} />
-              )
-            )}
-            <Heading medium bold color={'black'} my={3} ml={2}>
+            <Heading medium bold color={'black'} my={3} style={{wordBreak:'break-word'}}>
+              {userCountryCode && (
+                <FlagIcon mr={2} code={userCountryCode} style={{display: 'inline-block'}} />
+              )}
               {user.displayName}
             </Heading>
           </Flex>
@@ -440,28 +358,17 @@ export const SpaceProfile = ({ user }: IProps) => {
             user.machineBuilderXp &&
             renderMachineBuilderXp(user.machineBuilderXp)}
 
-          {!!userLinks.length && (
-            <UserContactInfo>
-              <h3>Contact &amp; Links</h3>
-              {userLinks.map((link, i) => (
-                <ProfileLink link={link} key={'Link-' + i} />
-              ))}
-            </UserContactInfo>
-          )}
-          <AuthWrapper roleRequired={'admin'}>
-            <Box mt={3}>
-              <AdminContact user={user} />
-            </Box>
-          </AuthWrapper>
+          <UserContactAndLinks links={userLinks}/>
+          <Box mt={3}>{adminButton}</Box>
         </Box>
         <Box
           width={['100%', '100%', '20%']}
           sx={{ display: ['none', 'none', 'block'] }}
         >
           <MobileBadge>
-            <Avatar width="150" profileType={user.profileType} />
+            <Badge size={150} profileType={user.profileType} />
 
-            {shouldRenderUserStatsBox && renderUserStatsBox(user)}
+            <UserStats user={user} />
           </MobileBadge>
         </Box>
       </ProfileContentWrapper>

@@ -69,14 +69,14 @@ export const HowToCard = (props: IProps) => (
           )}
         </Flex>
         <Flex mt={4}>
-          <Flex>
+          <Flex flex={1} flexWrap={'wrap'}>
             {props.howto.tags &&
               Object.keys(props.howto.tags).map(tag => {
                 return <TagDisplay key={tag} tagKey={tag} />
               })}
           </Flex>
           {props.votedUsefulCount && (
-            <Flex ml="auto" alignItems="center">
+            <Flex ml={1} alignItems="center">
               <Icon glyph="star-active" marginRight="4px" />
               <Text color="black">{props.votedUsefulCount}</Text>
             </Flex>

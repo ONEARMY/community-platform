@@ -34,11 +34,20 @@ const ProfileContentWrapper = styled(Flex)`
   border-radius: 10px;
 `
 
-const MemberPicture = styled(Image)`
+const MemberPicture = styled('figure')`
+  display: block;
   width: 120px;
   height: 120px;
   border-radius: 50%;
   max-width: none;
+  overflow: hidden;
+
+  img {
+    outline: 100px solid red;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
 `
 
 export const MemberProfile = ({ user, adminButton }: IProps) => {
@@ -59,13 +68,14 @@ export const MemberProfile = ({ user, adminButton }: IProps) => {
       }}/>
       <ProfileContentWrapper px={4} py={4}>
         <Box mr={3} minWidth="initial" style={{flexGrow: 1}}>
-          <MemberPicture
-            src={
+          <MemberPicture>
+            <Image src={
                 user.coverImages[0]
                 ? (user.coverImages[0] as IUploadedFileMeta).downloadUrl
                 : DefaultMemberImage
             }
             />
+            </MemberPicture>
           <UserStats user={user}/>
         </Box>
         <Flex flexDirection="column" mt={3} ml={3} style={{flexGrow: 1}}>

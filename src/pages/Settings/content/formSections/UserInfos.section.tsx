@@ -47,7 +47,7 @@ const CoverImages = ({
           validate={required}
           validateFields={[]}
           component={ImageInputField}
-          data-cy={`coverImage`}
+          data-cy={`coverImages-0`}
           initialValue={coverImages[0]}
         />
       </Box>

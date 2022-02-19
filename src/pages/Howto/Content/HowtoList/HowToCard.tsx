@@ -7,6 +7,7 @@ import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { IHowtoDB } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
+import Icon from 'src/components/Icons'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
 import { Image } from 'rebass'
@@ -67,10 +68,18 @@ export const HowToCard = (props: IProps) => (
           )}
         </Flex>
         <Flex mt={4}>
-          {props.howto.tags &&
-            Object.keys(props.howto.tags).map(tag => {
-              return <TagDisplay key={tag} tagKey={tag} />
-            })}
+          <Flex>
+            {props.howto.tags &&
+              Object.keys(props.howto.tags).map(tag => {
+                return <TagDisplay key={tag} tagKey={tag} />
+              })}
+          </Flex>
+          <Flex ml="auto" alignItems="center">
+            <Icon glyph="star-active" marginRight="4px" />
+            <Text color="black">
+              {props.howto.stats?.votedUsefulCount || '0'}
+            </Text>
+          </Flex>
         </Flex>
       </Flex>
     </Link>

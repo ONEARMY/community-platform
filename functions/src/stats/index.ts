@@ -99,12 +99,10 @@ async function updateHowtoVoteStats(change: IDBDocChange) {
           counterChange,
         ) as any,
       }
-      const howtoStatsRef = db
-        .collection(DB_ENDPOINTS.howtos)
-        .doc(howtoId)
-        .collection('stats')
-        .doc('all')
-      await howtoStatsRef.set(update, { merge: true })
+
+      // Update the vote count for howto in stats doc
+      const howtoStatsRef = db.collection(DB_ENDPOINTS.howtos).doc('stats')
+      await howtoStatsRef.set({ [howtoId]: update }, { merge: true })
     }
   })
   await Promise.all(updates)

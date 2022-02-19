@@ -9,6 +9,8 @@ import { UserStore } from 'src/stores/User/user.store'
 import { MemberProfile } from './MemberProfile'
 import { SpaceProfile } from './SpaceProfile'
 import { logger } from 'src/logger'
+import { AdminContact } from 'src/components/AdminContact/AdminContact'
+import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
 interface IRouterCustomParams {
   id: string
@@ -71,9 +73,17 @@ export class UserPage extends React.Component<
       )
     }
     return user.profileType === 'member' ? (
-      <MemberProfile user={user} />
+      <MemberProfile user={user} adminButton={ <AuthWrapper roleRequired={'admin'}>
+      <AdminContact user={user}/>
+    </AuthWrapper>}/>
     ) : (
-      <SpaceProfile user={user} />
+      <SpaceProfile user={user}
+      adminButton={
+        <AuthWrapper roleRequired={'admin'}>
+          <AdminContact user={user}/>
+        </AuthWrapper>
+      }
+        />
     )
   }
 }

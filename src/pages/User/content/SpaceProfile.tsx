@@ -74,16 +74,6 @@ const UserCategory = styled.div`
   }
 `
 
-const UserContactInfo = styled.div`
-  div {
-    margin-bottom: 10px;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-`
-
 const MobileBadge = styled.div`
   position: relative;
   max-width: 120px;

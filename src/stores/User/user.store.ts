@@ -306,7 +306,7 @@ export class UserStore extends ModuleStore {
       .collection<any>('aggregations')
       .doc('users_votedUsefulHowtos')
       .get()
-    this.userVotedHowtos = userVotedHowtos
+    this.userVotedHowtos = userVotedHowtos || {}
   }
 
   // use firebase auth to listen to change to signed in user

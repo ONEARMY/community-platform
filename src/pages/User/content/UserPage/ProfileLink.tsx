@@ -1,4 +1,4 @@
-import { Link } from 'rebass'
+import { Link } from 'rebass/styled-components'
 
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 

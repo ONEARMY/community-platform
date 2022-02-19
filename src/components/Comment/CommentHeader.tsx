@@ -1,15 +1,20 @@
-import { Box, Flex, Text } from 'rebass'
+import { Box, Flex, Text, Image } from 'rebass/styled-components'
 import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
 import { IComment } from 'src/models'
 import { Link } from 'src/components/Links'
+import theme from 'src/themes/styled.theme'
+import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
 
-interface IProps extends Omit<IComment, 'text' | '_id' | '_creatorId'> {}
+interface IProps extends Omit<IComment, 'text' | '_id' | '_creatorId'> {
+  verified: boolean
+}
 
 export const CommentHeader = ({
   creatorName,
   creatorCountry,
   _created,
   _edited,
+  verified,
 }: IProps) => {
   return (
     <Flex justifyContent="space-between" alignItems="baseline">
@@ -25,12 +30,15 @@ export const CommentHeader = ({
           >
             {creatorName}
           </Link>
+          {verified && (
+            <Image src={VerifiedBadgeIcon} ml={1} height="12px" width="12px" />
+          )}
         </span>
       </Box>
       <Flex alignItems="center">
         {_edited ? (
           <>
-            <Text color="#777" fontSize={0} mr={2}>
+            <Text color={theme.colors.grey} fontSize={0} mr={2}>
               (Edited)
             </Text>
             <Text fontSize={1}>

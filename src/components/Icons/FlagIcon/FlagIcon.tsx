@@ -1,7 +1,6 @@
 import * as React from 'react'
 import FlagIconFactory from 'react-flag-icon-css'
 import styled from 'styled-components'
-import theme from 'src/themes/styled.theme'
 
 // Please only use `FlagIconFactory` one time in your application, there is no
 // need to use it multiple times (it would slow down your app). You may place the
@@ -15,7 +14,7 @@ const FlagIconEvents = styled(FlagIcon)`
   height: 23px;
   width: 35px !important;
 
-  @media only screen and (max-width: ${theme.breakpoints[1]}) {
+  @media only screen and (max-width: ${props => props.theme.breakpoints[1]}) {
     height: 15px;
     width: 25px !important;
   }

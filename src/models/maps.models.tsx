@@ -18,6 +18,7 @@ export type IMapPinSubtype = WorkspaceType
  */
 export interface IMapPin extends IModerable {
   _id: string
+  _deleted: boolean
   type: IMapPinType
   location: ILatLng
   subType?: IMapPinSubtype
@@ -33,6 +34,7 @@ export interface IMapPinWithDetail extends IMapPin {
 
 export interface IMapPinDetail {
   name: string
+  displayName: string
   shortDescription: string
   lastActive: ISODateString
   profilePicUrl: string

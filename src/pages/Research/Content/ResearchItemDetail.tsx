@@ -1,7 +1,8 @@
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
-import { Box, Flex } from 'rebass'
+import { useCommonStores } from 'src/index'
+import { Box, Flex } from 'rebass/styled-components'
 import { Button } from 'src/components/Button'
 import { Link } from 'src/components/Links'
 import { Loader } from 'src/components/Loader'
@@ -15,6 +16,7 @@ type IProps = RouteComponentProps<{ slug: string }>
 
 const ResearchItemDetail = observer((props: IProps) => {
   const store = useResearchStore()
+  const { userStore } = useCommonStores().stores
 
   const [isLoading, setIsLoading] = React.useState(true)
 
@@ -27,7 +29,7 @@ const ResearchItemDetail = observer((props: IProps) => {
   }
 
   React.useEffect(() => {
-    (async () => {
+    ;(async () => {
       const { slug } = props.match.params
       await store.setActiveResearchItem(slug)
       setIsLoading(false)
@@ -40,6 +42,7 @@ const ResearchItemDetail = observer((props: IProps) => {
   }, [props, store])
 
   const item = store.activeResearchItem
+  const { verifiedUsers } = userStore
 
   if (item) {
     const isEditable =
@@ -52,19 +55,21 @@ const ResearchItemDetail = observer((props: IProps) => {
           isEditable={isEditable}
           needsModeration={store.needsModeration(item)}
           moderateResearch={moderateResearch}
+          verified={verifiedUsers?.[item._createdBy]}
         />
         <Box my={16}>
-          {item.updates.map((update, index) => {
-            return (
-              <Update
-                update={update}
-                key={update._id}
-                updateIndex={index}
-                isEditable={isEditable}
-                slug={item.slug}
-              />
-            )
-          })}
+          {item &&
+            item?.updates?.map((update, index) => {
+              return (
+                <Update
+                  update={update}
+                  key={update._id}
+                  updateIndex={index}
+                  isEditable={isEditable}
+                  slug={item.slug}
+                />
+              )
+            })}
         </Box>
         {isEditable && (
           <Flex my={4}>

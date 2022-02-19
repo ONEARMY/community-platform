@@ -1,12 +1,12 @@
 import * as React from 'react'
-import { Box } from 'rebass'
+import { Box } from 'rebass/styled-components'
 import styled from 'styled-components'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
 import { NavLink } from 'react-router-dom'
 import Flex from 'src/components/Flex'
-import theme, { zIndex } from 'src/themes/styled.theme'
+import theme from 'src/themes/styled.theme'
 
 interface IProps {
   username: string
@@ -24,11 +24,11 @@ const ModalContainer = styled(Box)`
   position: absolute;
   right: 10px;
   top: 60px;
-  z-index: ${zIndex.modalProfile};
+  z-index: ${theme.zIndex.modalProfile};
   height: 100%;
 `
 const ModalContainerInner = styled(Box)`
-  z-index: ${zIndex.modalProfile};
+  z-index: ${theme.zIndex.modalProfile};
   position: relative;
   background: white;
   border: 2px solid black;
@@ -38,10 +38,10 @@ const ModalContainerInner = styled(Box)`
 const ModalLink = styled(NavLink).attrs(() => ({
   activeClassName: 'current',
 }))`
-  z-index: ${zIndex.modalProfile};
+  z-index: ${theme.zIndex.modalProfile};
   display: flex;
   flex-direction: column;
-  color: #000;
+  color: ${theme.colors.black};
   padding: 10px 30px 10px 30px;
   text-align: left;
   width: 100%;
@@ -57,7 +57,7 @@ const ModalLink = styled(NavLink).attrs(() => ({
     color: ${theme.colors.blue};
   }
   &.current {
-    background-color: #fff;
+    background-color: ${theme.colors.white};
     color: ${theme.colors.blue};
   }
 `
@@ -104,7 +104,7 @@ export class ProfileModal extends React.Component<IProps> {
               to={window.location.pathname}
               data-cy="menu-Logout"
             >
-              <Flex color="rgba(27,27,27,0.5)">Log out</Flex>
+              <Flex>Log out</Flex>
             </ModalLink>
           </Flex>
         </ModalContainerInner>

@@ -1,13 +1,19 @@
 import { observable, action, makeObservable, toJS } from 'mobx'
-import { IUser, IUserDB } from 'src/models/user.models'
+import {
+  INotification,
+  IUser,
+  IUserDB,
+  NotificationType,
+} from 'src/models/user.models'
 import { IUserPP, IUserPPDB } from 'src/models/user_pp.models'
-import { IFirebaseUser, auth, EmailAuthProvider } from 'src/utils/firebase'
-import { Storage } from '../storage'
+import { auth, EmailAuthProvider, IFirebaseUser } from 'src/utils/firebase'
 import { RootStore } from '..'
 import { ModuleStore } from '../common/module.store'
+import { Storage } from '../storage'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
-import { formatLowerNoSpecial } from 'src/utils/helpers'
-import { logToSentry } from 'src/common/errors'
+import { formatLowerNoSpecial, randomID } from 'src/utils/helpers'
+import { logger } from 'src/logger'
+import { getLocationData } from 'src/utils/getLocationData'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
@@ -26,6 +32,10 @@ export class UserStore extends ModuleStore {
   @observable
   public updateStatus: IUserUpdateStatus = getInitialUpdateStatus()
 
+  /** A list of all the verified users, to display verified icons where needed */
+  @observable
+  public verifiedUsers: { [user_id: string]: boolean } = {}
+
   @action
   public updateUser(user?: IUserPPDB) {
     this.user = user
@@ -40,6 +50,7 @@ export class UserStore extends ModuleStore {
     super(rootStore)
     makeObservable(this)
     this._listenToAuthStateChanges()
+    this.loadVerifiedUsers()
   }
 
   // when registering a new user create firebase auth profile as well as database user profile
@@ -78,13 +89,13 @@ export class UserStore extends ModuleStore {
     newUserCreated = false,
   ) {
     if (user) {
-      console.log('user signed in', user)
+      logger.debug('user signed in', user)
       // legacy user formats did not save names so get profile via email - this option be removed in later version
       // (assumes migration strategy and check)
       const userMeta = await this.getUserProfile(user.uid)
       if (userMeta) {
         this.updateUser(userMeta)
-        console.log('userMeta', userMeta)
+        logger.debug('userMeta', userMeta)
 
         // Update last active for user
         await this.db
@@ -92,11 +103,6 @@ export class UserStore extends ModuleStore {
           .doc(userMeta._id)
           .set({ ...userMeta, _lastActive: new Date().toISOString() })
       } else {
-        // user profile not found, either it has been deleted or not migrated correctly from legacy format
-        // create a new profile to use for now and make a log to the error handler in case required
-        logToSentry.message(
-          `Could not find user profile [${user.uid} - ${user.email} - ${user.metadata}]. New profile created instead`,
-        )
         await this.createUserProfile()
         // now that a profile has been created, run this function again (use `newUserCreated` to avoid inf. loop in case not create not working correctly)
         if (!newUserCreated) {
@@ -143,17 +149,27 @@ export class UserStore extends ModuleStore {
       values = { ...values, coverImages: processedImages }
     }
     // sometimes mobx has issues with de-serialising obseverables so try to force it using toJS
-    const update = { ...toJS(user), ...toJS(values) }
+    const updatedUserProfile = { ...toJS(user), ...toJS(values) }
+
+    if (
+      updatedUserProfile.location?.latlng &&
+      Object.keys(updatedUserProfile.location).length == 1
+    ) {
+      updatedUserProfile.location = await getLocationData(
+        updatedUserProfile.location.latlng,
+      )
+    }
+
     await this.db
       .collection(COLLECTION_NAME)
       .doc(user.userName)
-      .set(update)
-    this.updateUser(update)
+      .set(updatedUserProfile)
+    this.updateUser(updatedUserProfile)
     // Update user map pin
     // TODO - pattern back and forth from user to map not ideal
     // should try to refactor and possibly generate map pins in backend
     if (values.location) {
-      await this.mapsStore.setUserPin(update)
+      await this.mapsStore.setUserPin(updatedUserProfile)
     }
     this.updateUpdateStatus('Complete')
   }
@@ -165,8 +181,13 @@ export class UserStore extends ModuleStore {
   }
 
   public async updateUserAvatar() {
-    console.log('updating user avatar')
+    logger.debug('updating user avatar')
     // *** TODO -
+  }
+
+  public async getUserEmail() {
+    const user = this.authUser as firebase.default.User
+    return user.email as string
   }
 
   public async changeUserPassword(oldPassword: string, newPassword: string) {
@@ -178,6 +199,16 @@ export class UserStore extends ModuleStore {
     )
     await user.reauthenticateAndRetrieveDataWithCredential(credentials)
     return user.updatePassword(newPassword)
+  }
+
+  public async changeUserEmail(password: string, newEmail: string) {
+    const user = this.authUser as firebase.default.User
+    const credentials = EmailAuthProvider.credential(
+      user.email as string,
+      password,
+    )
+    await user.reauthenticateAndRetrieveDataWithCredential(credentials)
+    return user.updateEmail(newEmail)
   }
 
   public async sendPasswordResetEmail(email: string) {
@@ -216,7 +247,7 @@ export class UserStore extends ModuleStore {
     const displayName = authUser.displayName as string
     const userName = formatLowerNoSpecial(displayName)
     const dbRef = this.db.collection<IUser>(COLLECTION_NAME).doc(userName)
-    console.log('creating user profile', userName)
+    logger.debug('creating user profile', userName)
     if (!userName) {
       throw new Error('No Username Provided')
     }
@@ -227,6 +258,7 @@ export class UserStore extends ModuleStore {
       userName,
       moderation: 'awaiting-moderation',
       votedUsefulHowtos: {},
+      notifications: [],
       ...fields,
     }
     // update db
@@ -234,14 +266,33 @@ export class UserStore extends ModuleStore {
   }
 
   @action
-  public async updateUsefulHowTos(howtoId: string) {
+  public async updateUsefulHowTos(
+    howtoId: string,
+    howtoAuthor: string,
+    howtoSlug: string,
+  ) {
     if (this.user) {
       // toggle entry on user votedUsefulHowtos to either vote or unvote a howto
       // this will updated the main howto via backend `updateUserVoteStats` function
       const votedUsefulHowtos = toJS(this.user.votedUsefulHowtos) || {}
       votedUsefulHowtos[howtoId] = !votedUsefulHowtos[howtoId]
+
+      if (votedUsefulHowtos[howtoId]) {
+        //get how to author from howtoid
+        this.triggerNotification('howto_useful', howtoAuthor, howtoSlug)
+      }
       await this.updateUserProfile({ votedUsefulHowtos })
     }
+  }
+
+  @action
+  /** Perform a single lookup of all verified users (will update on page reload or on demand) */
+  public async loadVerifiedUsers() {
+    const verifiedUsers = await this.db
+      .collection<any>('aggregations')
+      .doc('users_verified')
+      .get()
+    this.verifiedUsers = verifiedUsers || {}
   }
 
   // use firebase auth to listen to change to signed in user
@@ -265,6 +316,109 @@ export class UserStore extends ModuleStore {
 
   private _unsubscribeFromAuthStateChanges() {
     this.authUnsubscribe()
+  }
+
+  @action
+  public async triggerNotification(
+    type: NotificationType,
+    username: string,
+    howToId?: string,
+  ) {
+    const howToUrl = '/how-to/'
+    try {
+      const triggeredBy = this.activeUser
+      if (triggeredBy) {
+        // do not get notified when you're the one making a new comment or how-to useful vote
+        if (triggeredBy.userName === username) {
+          return
+        }
+        const newNotification: INotification = {
+          _id: randomID(),
+          _created: new Date().toISOString(),
+          triggeredBy: {
+            displayName: triggeredBy.displayName,
+            userId: triggeredBy._id,
+          },
+          relevantUrl: howToUrl + howToId,
+          type: type,
+          read: false,
+        }
+
+        const lookup = await this.db
+          .collection<IUserPP>(COLLECTION_NAME)
+          .getWhere('userName', '==', username)
+
+        const user = lookup[0]
+
+        const updatedUser: IUser = {
+          ...toJS(user),
+          notifications: user.notifications
+            ? [...toJS(user.notifications), newNotification]
+            : [newNotification],
+        }
+
+        const dbRef = this.db
+          .collection<IUser>(COLLECTION_NAME)
+          .doc(updatedUser._authID)
+
+        await dbRef.set(updatedUser)
+      }
+    } catch (err) {
+      console.error(err)
+      throw new Error(err)
+    }
+  }
+
+  @action
+  public async markAllNotificationsRead() {
+    try {
+      const user = this.activeUser
+      if (user) {
+        const notifications = toJS(user.notifications)
+        notifications?.forEach(notification => (notification.read = true))
+        const updatedUser: IUser = {
+          ...toJS(user),
+          notifications,
+        }
+
+        const dbRef = this.db
+          .collection<IUser>(COLLECTION_NAME)
+          .doc(updatedUser._authID)
+
+        await dbRef.set(updatedUser)
+        await this.updateUserProfile({ notifications })
+      }
+    } catch (err) {
+      console.error(err)
+      throw new Error(err)
+    }
+  }
+
+  @action
+  public async deleteNotification(id: string) {
+    try {
+      const user = this.activeUser
+      if (id && user && user.notifications) {
+        const notifications = toJS(user.notifications).filter(
+          notification => !(notification._id === id),
+        )
+
+        const updatedUser: IUser = {
+          ...toJS(user),
+          notifications,
+        }
+
+        const dbRef = this.db
+          .collection<IUser>(COLLECTION_NAME)
+          .doc(updatedUser._authID)
+
+        await dbRef.set(updatedUser)
+        //TODO: ensure current user is updated
+      }
+    } catch (err) {
+      console.error(err)
+      throw new Error(err)
+    }
   }
 }
 
@@ -294,5 +448,4 @@ const USER_BASE = {
   links: [],
   moderation: 'awaiting-moderation',
   verified: false,
-  badges: { verified: false },
 }

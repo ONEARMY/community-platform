@@ -24,9 +24,9 @@ orbs:
 #  Aliases - code snippets that can be included inline in any other markup
 ######################################################################################################
 aliases:
-  # use a base image running node v12 with chrome/firefox browsers preinstalled
+  # use a base image running node v16 with chrome/firefox browsers preinstalled
   - &docker
-    - image: cimg/node:12.21-browsers
+    - image: cimg/node:16.13.1-browsers
     # These can also be created as commands, but slighly tidier to just use inline
     # restore/install/save can all be done with a single circle-ci orb, but less flexible and breaks intellisense
   - &restore_yarn_cache
@@ -37,9 +37,8 @@ aliases:
         # https://circleci.com/docs/2.0/yarn/
         # when lock file changes, use increasingly general patterns to restore cache (also need to change `save_cache` path)
         # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
-        - yarn-packages-v9-{{ .Branch }}-{{ checksum "yarn.lock" }}
-        - yarn-packages-v9-{{ .Branch }}-
-        - yarn-packages-v9-
+        - yarn-packages-v12-{{ checksum "yarn.lock" }}
+        - yarn-packages-v12-
   - &install_packages
     run:
       name: Install Packages
@@ -60,7 +59,7 @@ aliases:
         # - ~/.yarn/berry/cache
         # local cache location
         - ~/project/.yarn/cache
-      key: yarn-packages-v9-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      key: yarn-packages-v12-{{ checksum "yarn.lock" }}
 
   - &filter_only_production
     filters:
@@ -185,6 +184,13 @@ commands:
       - *restore_yarn_cache
       - *install_packages
       - *save_yarn_cache
+  inject_instance_configuration:
+    steps:
+      - run:
+          name: Inject target environment configuration
+          command: |
+            yarn build:inject-config
+
   firebase_deploy:
     description: Deploy to Firebase
     parameters:
@@ -212,7 +218,7 @@ commands:
                 command: echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > service_account.json
             - run:
                 name: Deploy to Firebase
-                command: ./node_modules/.bin/firebase deploy -P << parameters.alias >>
+                command: ./node_modules/.bin/firebase deploy --debug -P << parameters.alias >>
                 environment:
                   GOOGLE_APPLICATION_CREDENTIALS: service_account.json
       - when:
@@ -229,6 +235,20 @@ examples:
 #  Jobs - Independently specified lists of tasks and environments for execution
 ######################################################################################################
 jobs:
+  lint-commits:
+    docker: *docker
+    resource_class: small
+    steps:
+      - checkout
+      - attach_workspace:
+          at: '.'
+      - run:
+          name: Linting commits
+          command: |
+            rm package.json
+            npm config set package-lock false
+            npm i @types/node @commitlint/types @commitlint/config-conventional --force
+            npx commitlint --from=$(git merge-base remotes/origin/${CIRCLE_BRANCH} master) --verbose
   # Prepare node module caches so that future tasks run more quickly
   # NOTE - not currently used as we only have one workflow
   setup:
@@ -236,18 +256,42 @@ jobs:
     steps:
       - setup_repo
 
+  test_functions:
+    docker: 
+      - image: timbru31/java-node:alpine-12
+    resource_class: small
+    steps:
+      - setup_repo
+      - run: cd functions && yarn && yarn build && yarn emulator:test
+
   # Create a production build
   # NOTE - not currently used in test workflow as different build_env required for each machine
-  build:
+  test_unit:
     docker: *docker
-    parameters:
-      # optional environment variables to set during build process
-      BUILD_ENV:
-        type: string
-        default: ''
+    resource_class: small
     steps:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
-      - setup_repo
+      - checkout
+      - *restore_yarn_cache
+      - run:
+          name: Install dependencies
+          command: yarn workspaces focus one-army-community-platform
+      - run:
+          command: yarn run test:unit
+  build:
+    docker: *docker
+    environment:
+      GENERATE_SOURCEMAP: 'false'
+      SKIP_PREFLIGHT_CHECK: 'true'
+    # `medium` is the max allowed size for free builds (helps with out-of-memory issues) - https://circleci.com/docs/2.0/configuration-reference/#resourceclass
+    resource_class: medium+
+    steps:
+      # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
+      - checkout
+      - *restore_yarn_cache
+      - run:
+          name: Install dependencies
+          command: yarn workspaces focus one-army-community-platform
       # As environment variables can only be set from strings add additional dynamic variable mappings here
       # https://discuss.circleci.com/t/using-environment-variables-in-config-yml-not-working/14237/13
       - run:
@@ -255,17 +299,30 @@ jobs:
           command: |
             echo 'export REACT_APP_BRANCH=${CIRCLE_BRANCH}' >> $BASH_ENV
             echo 'export NODE_OPTIONS=--max-old-space-size=4096' >> $BASH_ENV
+            echo 'export REACT_APP_PROJECT_VERSION=${CIRCLE_SHA1}' >> $BASH_ENV
       - run:
           name: Check environment variables
-          command: echo REACT_APP_BRANCH=$REACT_APP_BRANCH NODE_OPTIONS=$NODE_OPTIONS
+          command: |
+            echo REACT_APP_BRANCH=$REACT_APP_BRANCH NODE_OPTIONS=$NODE_OPTIONS
+            echo $REACT_APP_PROJECT_VERSION
       - run:
-          command: << parameters.BUILD_ENV >> npm run build
+          command: yarn build
       - persist_to_workspace:
           root: .
           paths:
             - build
+  storybook:
+    docker: *docker
+    resource_class: medium
+    steps:
+      - setup_repo
+      - attach_workspace:
+          at: '.'
+      - run:
+          command: yarn workspace oa-storybook build
   deploy:
     docker: *docker
+    resource_class: small
     parameters:
       # optional environment variables to set during build process
       DEPLOY_ALIAS:
@@ -278,6 +335,7 @@ jobs:
       - setup_repo
       - attach_workspace:
           at: '.'
+      - inject_instance_configuration
       - firebase_deploy:
           # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
           alias: << parameters.DEPLOY_ALIAS >>
@@ -308,6 +366,7 @@ jobs:
       # retrieve build folder
       - attach_workspace:
           at: '.'
+      - inject_instance_configuration
       # install testing browsers are required
       - when:
           condition:
@@ -326,6 +385,15 @@ jobs:
             CI_BROWSER: << parameters.CI_BROWSER >>
             CI_NODE: << parameters.CI_NODE >>
             CI_GROUP: 2x-<< parameters.CI_BROWSER >>
+  release: 
+    docker: *docker
+    resource_class: small
+    steps: 
+      - setup_repo
+      - attach_workspace:
+          at: '.'
+      - run: 
+          command: npx semantic-release --dry-run
 
 ######################################################################################################
 #  Workflows - Collections of jobs to define overall processes
@@ -335,71 +403,110 @@ workflows:
   main_workflow:
     # by default jobs will run concurrently, so specify requires if want to run sequentially
     jobs:
+      - lint-commits:
+          name: Lint commits
+          filters:
+              branches:
+                ignore:
+                  - production
       #---------------------- Test ----------------------
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:
-          name: build_test
-          matrix:
-            parameters:
-              BUILD_ENV:
-                ['FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci CI=false']
+          requires:
+            - 'Lint commits'
+          name: Build Application
+          context: build-context
+      - test_unit:
+          name: 'Unit tests'
+          requires:
+            - 'Lint commits'
+          filters:
+            branches:
+              ignore:
+                - production
+      - storybook:
+          name: Build Storybook
+          requires:
+            - 'Lint commits'
+          filters:
+            branches:
+              ignore:
+                - production
+      - test_functions: 
+          name: 'Cloud Function tests'
+          context: build-context
+          requires:
+            - 'Lint commits'
+          filters:
+            branches:
+              ignore:
+                - production
       - test_e2e:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           requires:
-            - 'build_test'
+            - 'Build Application'
+            - 'Unit tests'
+            - 'Cloud Function tests'
+            - 'Build Storybook'
+          context:
+            - e2e-tests
           matrix:
             parameters:
               CI_NODE: [1, 2]
               CI_BROWSER: ['chrome', 'firefox']
-      #---------------------- Dev Build-Deploy ----------------------
-      - build:
-          name: build_dev
-          context: community-platform-dev
-          requires:
-            - 'test_e2e'
-          <<: *filter_only_master
-          matrix:
-            parameters:
-              # Fix memory issues during build (https://github.com/facebook/create-react-app/issues/8096)
-              # TODO - fix lint errors so that default CI=true works
-              BUILD_ENV: ['CI=false']
+          filters:
+            branches:
+              ignore:
+                - production
+      #---------------------- Development Instances Build and Deploy ----------------------
       - deploy:
-          name: deploy_dev
+          name: 'Deploy: dev.onearmy.world'
           requires:
-            - build_dev
+            - test_e2e
           <<: *filter_only_master
           DEPLOY_ALIAS: 'default'
           NOTIFY_SLACK: false
           context:
             - circle-ci-slack-context
             - community-platform-dev
-        #---------------------- Production Build-Approve-Deploy ----------------------
-      - build:
-          name: build_production
-          context: community-platform-production
+      - deploy:
+          name: 'Deploy: dev.community.projectkamp.com'
           requires:
-            - 'test_e2e'
-          <<: *filter_only_production
-          matrix:
-            parameters:
-              BUILD_ENV: ['CI=false']
+            - test_e2e
+          <<: *filter_only_master
+          DEPLOY_ALIAS: project-kamp-development
+          NOTIFY_SLACK: false
+          context:
+            - circle-ci-slack-context
+            - project-kamp-dev
+      - release: 
+          requires: 
+            - 'Deploy: community.preciousplastic.com'
+            - 'Deploy: community.projectkamp.com'
+          name: Release new version to GitHub
+          context: 
+            - release-context
       # Require manual approval on CirclCI website prior to release
+      - build:
+          name: Build Production Release
+          context: build-context
+          <<: *filter_only_production
       - hold:
           name: approve_release
           type: approval
           requires:
-            - build_production
+            - Build Production Release
           <<: *filter_only_production
       # Send a slack notification to approve the hold above (required config supplied in circleci-slack-context)
       - slack/on-hold:
           name: notify_slack_pending_approval
           context: circle-ci-slack-context
           requires:
-            - build_production
+            - Build Production Release
           <<: *filter_only_production
           <<: *slack_custom_hold_message
       - deploy:
-          name: deploy_production
+          name: 'Deploy: community.preciousplastic.com'
           requires:
             - 'approve_release'
           <<: *filter_only_production
@@ -408,3 +515,13 @@ workflows:
           context:
             - circle-ci-slack-context
             - community-platform-production
+      - deploy:
+          name: 'Deploy: community.projectkamp.com'
+          requires:
+            - 'approve_release'
+          <<: *filter_only_production
+          DEPLOY_ALIAS: project-kamp-production
+          NOTIFY_SLACK: true
+          context:
+            - circle-ci-slack-context
+            - project-kamp-production

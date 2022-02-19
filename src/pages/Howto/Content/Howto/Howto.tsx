@@ -1,12 +1,10 @@
 import * as React from 'react'
-import { RouteComponentProps } from 'react-router'
-// TODO add loader (and remove this material-ui dep)
+import { RouteComponentProps, Redirect } from 'react-router'
 import { inject, observer } from 'mobx-react'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
 import Step from './Step/Step'
 import { IHowtoDB } from 'src/models/howto.models'
-// import HowtoSummary from './HowtoSummary/HowtoSummary'
 import Text from 'src/components/Text'
 import { Box, Flex } from 'rebass/styled-components'
 import { Button } from 'src/components/Button'
@@ -17,10 +15,7 @@ import WhiteBubble1 from 'src/assets/images/white-bubble_1.svg'
 import WhiteBubble2 from 'src/assets/images/white-bubble_2.svg'
 import WhiteBubble3 from 'src/assets/images/white-bubble_3.svg'
 import { Link } from 'src/components/Links'
-import { zIndex } from 'src/themes/styled.theme'
 import { Loader } from 'src/components/Loader'
-import { Route } from 'react-router-dom'
-import { NotFoundPage } from '../../../NotFound/NotFound'
 import { UserStore } from 'src/stores/User/user.store'
 import { HowToComments } from './HowToComments/HowToComments'
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
@@ -45,7 +40,7 @@ const MoreBox = styled(Box)`
     background-image: url(${WhiteBubble0});
     width: 100%;
     height: 100%;
-    z-index: ${zIndex.behind};
+    z-index: ${theme.zIndex.behind};
     background-size: contain;
     background-repeat: no-repeat;
     position: absolute;
@@ -105,9 +100,17 @@ export class Howto extends React.Component<
     }
   }
 
-  private onUsefulClick = async (howtoId: string) => {
+  private onUsefulClick = async (
+    howtoId: string,
+    howtoCreatedBy: string,
+    howToSlug: string,
+  ) => {
     // Fire & forget
-    await this.injected.userStore.updateUsefulHowTos(howtoId)
+    await this.injected.userStore.updateUsefulHowTos(
+      howtoId,
+      howtoCreatedBy,
+      howToSlug,
+    )
   }
 
   public async componentDidMount() {
@@ -122,25 +125,37 @@ export class Howto extends React.Component<
     const { isLoading } = this.state
     const loggedInUser = this.injected.userStore.activeUser
     const { activeHowto } = this.store
+
     if (activeHowto) {
       return (
         <>
           <HowtoDescription
             howto={activeHowto}
+            verified={
+              this.injected.userStore.verifiedUsers[activeHowto._createdBy]
+            }
             votedUsefulCount={this.store.howtoStats?.votedUsefulCount}
             loggedInUser={loggedInUser}
             needsModeration={this.store.needsModeration(activeHowto)}
             userVotedUseful={this.store.userVotedActiveHowToUseful}
             moderateHowto={this.moderateHowto}
-            onUsefulClick={() => this.onUsefulClick(activeHowto._id)}
+            onUsefulClick={() =>
+              this.onUsefulClick(
+                activeHowto._id,
+                activeHowto._createdBy,
+                activeHowto.slug,
+              )
+            }
           />
-          {/* <HowtoSummary steps={howto.steps} howToSlug={howto.slug} /> */}
           <Box mt={9}>
             {activeHowto.steps.map((step: any, index: number) => (
               <Step step={step} key={index} stepindex={index} />
             ))}
           </Box>
-          <HowToComments comments={activeHowto.comments} />
+          <HowToComments
+            comments={activeHowto.comments}
+            verifiedUsers={this.injected.userStore.verifiedUsers}
+          />
           <MoreBox py={20} mt={20}>
             <Text bold txtcenter fontSize={[4, 4, 5]}>
               You're done.
@@ -158,7 +173,19 @@ export class Howto extends React.Component<
         </>
       )
     } else {
-      return isLoading ? <Loader /> : <Route component={NotFoundPage} />
+      return isLoading ? (
+        <Loader />
+      ) : (
+        <Redirect
+          to={{
+            pathname: '/how-to',
+            search:
+              '?search=' +
+              (this.props?.match?.params?.slug).replace(/\-/gi, ' ') +
+              '&source=how-to-not-found',
+          }}
+        />
+      )
     }
   }
 }

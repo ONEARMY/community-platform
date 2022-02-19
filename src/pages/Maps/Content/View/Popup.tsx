@@ -1,6 +1,6 @@
 import * as React from 'react'
 import L from 'leaflet'
-import { Image } from 'rebass'
+import { Image } from 'rebass/styled-components'
 import Flex from 'src/components/Flex'
 import Text from 'src/components/Text'
 import { Button } from 'src/components/Button'
@@ -95,6 +95,7 @@ export class Popup extends React.Component<IProps> {
       heroImageUrl,
       shortDescription,
       name,
+      displayName,
       verifiedBadge,
     } = pin.detail
     const description =
@@ -104,7 +105,6 @@ export class Popup extends React.Component<IProps> {
     const lastActiveText = lastActive
       ? distanceInWords(lastActive, new Date())
       : 'a long time'
-    //    console.log('detail', pin.detail)
     const moderationStatus =
       pin.moderation !== 'rejected'
         ? 'This pin is awaiting moderation, will be shown on general map once accepted'
@@ -124,7 +124,7 @@ export class Popup extends React.Component<IProps> {
               {group ? group.displayName : pin.type}
             </Text>
             <Text large mb={1} display="flex">
-              {name}
+              {displayName}
               {verifiedBadge && (
                 <Image
                   src={VerifiedBadgeIcon}
@@ -189,17 +189,19 @@ export class Popup extends React.Component<IProps> {
       : this.renderLoading()
 
     return (
-      <LeafletPopup
-        ref={this.leafletRef}
-        position={[activePin.location.lat, activePin.location.lng]}
-        offset={new L.Point(2, -10)}
-        closeButton={false}
-        className={activePin !== undefined ? '' : 'closed'}
-        minWidth={230}
-        maxWidth={230}
-      >
-        {content}
-      </LeafletPopup>
+      activePin.location && (
+        <LeafletPopup
+          ref={this.leafletRef}
+          position={[activePin.location.lat, activePin.location.lng]}
+          offset={new L.Point(2, -10)}
+          closeButton={false}
+          className={activePin !== undefined ? '' : 'closed'}
+          minWidth={230}
+          maxWidth={230}
+        >
+          {content}
+        </LeafletPopup>
+      )
     )
   }
 }

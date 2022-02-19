@@ -1,13 +1,11 @@
 import * as React from 'react';
-import { Icon, IGlyphs } from 'src/components/Icons'
+import { Icon, IGlyphs } from '../Icons'
 import {
   Button as RebassButton,
   ButtonProps as RebassButtonProps,
-} from 'rebass'
-import theme from 'src/themes/styled.theme'
-import Text from 'src/components/Text'
+} from 'rebass/styled-components'
+import Text from '../Text'
 import styled from 'styled-components'
-// import { IBtnProps } from './index'
 
 // extend to allow any default button props (e.g. onClick) to also be passed
 export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
@@ -70,5 +68,4 @@ export const Button = (props: BtnProps) => (
 
 Button.defaultProps = {
   type: 'button',
-  theme,
 }

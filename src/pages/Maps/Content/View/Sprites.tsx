@@ -5,6 +5,7 @@ import clusterIcon from 'src/assets/icons/map-cluster.svg'
 import Workspace from 'src/pages/User/workspace/Workspace'
 
 import AwaitingModerationHighlight from 'src/assets/icons/map-unpproved-pin.svg'
+import { logger } from 'workbox-core/_private'
 
 /**
  * Generate custom cluster icon, including style formatting, size, image etc.
@@ -37,7 +38,7 @@ export const createMarkerIcon = (pin: IMapPin) => {
       ? Workspace.findWorkspaceBadge(pin.type, true)
       : AwaitingModerationHighlight
   if (!pin.type) {
-    console.log('NO TYPE', pin)
+    logger.debug('NO TYPE', pin)
   }
   return L.divIcon({
     className: `icon-marker icon-${pin.type}`,

@@ -7,12 +7,15 @@ import { ModerationStatusText } from 'src/components/ModerationStatusText'
 import Text from 'src/components/Text'
 import { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
+import { Image } from 'rebass/styled-components'
+import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
 
 interface IProps {
   item: IResearch.ItemDB
+  verified: boolean
 }
 
-const ResearchListItem: React.FC<IProps> = ({ item }) => (
+const ResearchListItem: React.FC<IProps> = ({ item, verified }) => (
   <Flex
     card
     mediumRadius
@@ -44,6 +47,9 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => (
           >
             {item._createdBy}
           </Text>
+          {verified && (
+            <Image src={VerifiedBadgeIcon} ml={1} height="12px" width="12px" />
+          )}
         </Flex>
         <Flex
           alignItems="center"

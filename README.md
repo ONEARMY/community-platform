@@ -1,11 +1,21 @@
-[![Build Status](https://travis-ci.org/ONEARMY/community-platform.svg?branch=master)](https://travis-ci.org/ONEARMY/community-platform)
-[![style: styled-components](https://img.shields.io/badge/style-%F0%9F%92%85%20styled--components-orange.svg?colorB=daa357&colorA=db748e)](https://github.com/styled-components/styled-components)
+[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/from-referrer/)
+[![Build Status](https://circleci.com/gh/ONEARMY/community-platform/tree/master.svg?style=shield)](https://app.circleci.com/pipelines/github/ONEARMY/community-platform?branch=master)
+[![GitHub license](https://badgen.net/github/license/ONEARMY/community-platform)](https://github.com/ONEARMY/community-platform/blob/master/LICENSE)
+[![GitHub license](https://badgen.net/github/tag/ONEARMY/community-platform)](https://github.com/ONEARMY/community-platform/blob/master/LICENSE)
+[![GitHub contributors](https://img.shields.io/github/contributors/ONEARMY/community-platform)](https://github.com/ONEARMY/community-platform/graphs/contributors/)
+[![discord](https://badges.aleen42.com/src/discord.svg)](https://discord.gg/up3nBbEbxY)
+
+# 🔗 &nbsp; tl;dr Quick Links
+
+- [Project Website](https://platform.onearmy.earth)
+- [Precious Plastic Community Platform (live site)](http://community.preciousplastic.com/)
+- [Developer documentation](https://onearmy.github.io/community-platform/)
+- [Contributing Guide](/CONTRIBUTING.md)
 
 # 🌍 &nbsp; Community Platform
 
 Welcome to our Community Platform!
 We are building this giant castle to help unite people and contribute to social & environmental projects, such as [Precious Plastic](https://preciousplastic.com), [Phonebloks](https://phonebloks.com/), [ProjectKamp](https://projectkamp.com/) or [Story Hopper](https://story-hopper.com/). A platform to connect, educate and empower our global community (65K) to solve society's greatest challenges. Together.
-
 
 ## 👀 &nbsp; Why?
 
@@ -40,7 +50,7 @@ Or join our [Discord channel](https://discordapp.com/invite/rnx7m4t)
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
-| [<img src="https://avatars0.githubusercontent.com/u/10515065?s=60&v=4" width="60px;"/><br /><sub><b>Chris Clarke</b></sub>](https://github.com/chrismclarke)<br />[💻](https://github.com/OneArmyWorld/onearmy/commits?author=chrismclarke "Code") | [<img src="https://avatars2.githubusercontent.com/u/4993215?s=60&v=4" width="60px;"/><br /><sub><b>Benjamin Gammaire</b></sub>](https://github.com/bengamma)<br />[💻](https://github.com/OneArmyWorld/onearmy/commits?author=BenGamma "Code")
+| [<img src="https://avatars0.githubusercontent.com/u/10515065?s=60&v=4" width="60px;"/><br /><sub><b>Chris Clarke</b></sub>](https://github.com/chrismclarke)<br />[💻](https://github.com/OneArmyWorld/onearmy/commits?author=chrismclarke "Code") | [<img src="https://avatars.githubusercontent.com/u/472589?v=4" width="60px;"/><br /><sub><b>Luke Watts</b></sub>](https://github.com/thisislawatts)<br />[💻](https://github.com/ONEARMY/community-platform/commits?author=thisislawatts "Code")
 | :---: | :---: |
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->

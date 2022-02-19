@@ -13,6 +13,7 @@ import { IHowtoStep } from 'src/models/howto.models'
 import { IUploadedFileMeta } from 'src/stores/storage'
 import { required } from 'src/utils/validators'
 import { COMPARISONS } from 'src/utils/comparisons'
+import { HOWTO_MAX_LENGTH, HOWTO_TITLE_MAX_LENGTH } from '../../constants'
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;
@@ -145,8 +146,8 @@ class HowtoStep extends PureComponent<IProps, IState> {
             data-cy="step-title"
             modifiers={{ capitalize: true }}
             component={InputField}
-            placeholder="Title of this step (max 30 characters)"
-            maxLength="30"
+            placeholder={`Title of this step (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
+            maxLength={HOWTO_TITLE_MAX_LENGTH}
             validate={required}
             validateFields={[]}
             isEqual={COMPARISONS.textInput}
@@ -157,7 +158,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
           <Field
             name={`${step}.text`}
             placeholder="Explain what you are doing in this step. if it gets to long break it into 2 steps (max 700 characters)"
-            maxLength="700"
+            maxLength={HOWTO_MAX_LENGTH}
             data-cy="step-description"
             modifiers={{ capitalize: true }}
             component={TextAreaField}

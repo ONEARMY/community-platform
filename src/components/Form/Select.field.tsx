@@ -29,7 +29,7 @@ export const SelectStyles: Partial<Styles> = {
   }),
   control: provided => ({
     ...provided,
-    border: '1px solid #dce4e5',
+    border: '1px solid ' + theme.colors.softblue,
     backgroundColor: theme.colors.background,
     minHeight: '40px',
     boxShadow: 'none',
@@ -46,21 +46,21 @@ export const SelectStyles: Partial<Styles> = {
     ...provided,
     backgroundColor: theme.colors.background,
     boxShadow: 'none',
-    color: 'black',
+    color: theme.colors.black,
     ':hover': {
       outline: 'none',
-      backgroundColor: 'white',
-      color: 'black',
+      backgroundColor: theme.colors.white,
+      color: theme.colors.black,
     },
   }),
 
   menu: provided => ({
     ...provided,
-    border: '1px solid #dce4e5',
+    border: '1px solid ' + theme.colors.softblue,
     boxShadow: 'none',
     backgroundColor: theme.colors.background,
     ':hover': {
-      border: '1px solid #dce4e5',
+      border: '1px solid ' + theme.colors.softblue,
     },
   }),
 
@@ -68,7 +68,7 @@ export const SelectStyles: Partial<Styles> = {
     ...provided,
     backgroundColor: theme.colors.softblue,
     padding: '2px',
-    border: '1px solid #c2d4e4',
+    border: '1px solid ' + theme.colors.softgrey,
     color: theme.colors.grey,
   }),
 
@@ -91,13 +91,13 @@ export const FilterStyles: Partial<Styles> = {
     ...provided,
     fontSize: theme.fontSizes[2] + 'px',
     fontFamily: '"Varela Round", Arial, sans-serif',
-    border: '2px solid black',
+    border: '2px solid ' + theme.colors.black,
     borderRadius: '5px',
-    color: 'black',
+    color: theme.colors.black,
   }),
   control: provided => ({
     ...provided,
-    backgroundColor: 'white',
+    backgroundColor: theme.colors.white,
     minHeight: '40px',
     boxShadow: 'none',
     ':hover': {
@@ -109,27 +109,27 @@ export const FilterStyles: Partial<Styles> = {
   }),
   placeholder: provided => ({
     ...provided,
-    color: 'black',
+    color: theme.colors.black,
   }),
   option: provided => ({
     ...provided,
-    color: 'black',
-    backgroundColor: 'white',
+    color: theme.colors.black,
+    backgroundColor: theme.colors.white,
     boxShadow: 'none',
     ':hover': {
       outline: 'none',
       backgroundColor: theme.colors.softblue,
-      color: 'black',
+      color: theme.colors.black,
     },
   }),
 
   menu: provided => ({
     ...provided,
-    border: '2px solid black',
+    border: '2px solid ' + theme.colors.black,
     boxShadow: 'none',
-    backgroundColor: 'white',
+    backgroundColor: theme.colors.white,
     ':hover': {
-      border: '2px solid black',
+      border: '2px solid ' + theme.colors.black,
     },
   }),
 
@@ -137,7 +137,7 @@ export const FilterStyles: Partial<Styles> = {
     ...provided,
     backgroundColor: theme.colors.softblue,
     padding: '2px',
-    border: '1px solid black',
+    border: '1px solid ' + theme.colors.black,
     color: theme.colors.grey,
   }),
 

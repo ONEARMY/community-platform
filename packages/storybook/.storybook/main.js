@@ -11,6 +11,7 @@ module.exports = {
     '@storybook/addon-essentials',
     '@storybook/addon-knobs',
     'storybook/preset-create-react-app',
+    '@react-theming/storybook-addon',
     {
       name: '@storybook/addon-docs',
       options: {
@@ -24,7 +25,10 @@ module.exports = {
   // https://webpack.js.org/configuration/resolve/#resolve-modules
   // https://storybook.js.org/docs/react/configure/webpack
   webpackFinal: async config => {
-    config.resolve.modules = [paths.appSrcDir, ...(config.resolve.modules || [])]
+    config.resolve.modules = [
+      paths.appSrcDir,
+      ...(config.resolve.modules || []),
+    ]
     return config
   },
 }

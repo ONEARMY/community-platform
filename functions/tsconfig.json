@@ -15,12 +15,6 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true
   },
-  "references": [
-    // these (should) be compiled ahead of functions, although can break: https://github.com/microsoft/TypeScript/issues/25864#issuecomment-596217193
-    // in these cases manual build might be required on other projects first (currently done in firebase.json)
-    { "path": "../tsconfig.src-types.json" },
-    { "path": "../shared/tsconfig.json" }
-  ],
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../types"],
   "exclude": ["src/**/*.test.tsx", "../src/**/*.test.tsx"]
 }

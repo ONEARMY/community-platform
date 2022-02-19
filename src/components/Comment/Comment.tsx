@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
+import ReactGA from 'react-ga'
 import { FaTrash, FaRegEdit } from 'react-icons/fa'
-import { Flex } from 'rebass'
-import { useCommonStores } from 'src'
+import { Flex } from 'rebass/styled-components'
+import { useCommonStores } from 'src/index'
 import { IComment } from 'src/models'
 import { CommentHeader } from './CommentHeader'
 import { Text } from 'src/components/Text'
@@ -10,8 +11,11 @@ import { TextAreaField } from '../Form/Fields'
 import { Field, Form } from 'react-final-form'
 import { Button } from 'src/components/Button'
 import { AuthWrapper } from '../Auth/AuthWrapper'
+import { logger } from 'src/logger'
 
-export interface IProps extends IComment {}
+export interface IProps extends IComment {
+  verified: boolean
+}
 
 export const Comment: React.FC<IProps> = ({
   _creatorId,
@@ -20,8 +24,6 @@ export const Comment: React.FC<IProps> = ({
   ...props
 }) => {
   const { stores } = useCommonStores()
-  const user = stores.userStore.activeUser
-
   const [showEditModal, setShowEditModal] = useState(false)
 
   return (
@@ -46,7 +48,14 @@ export const Comment: React.FC<IProps> = ({
             }}
             mr={2}
             fontSize="12px"
-            onClick={async () => setShowEditModal(true)}
+            onClick={async () => {
+              ReactGA.event({
+                category: 'Comments',
+                action: 'Edit existing comment',
+                label: stores.howtoStore.activeHowto?.title,
+              })
+              return setShowEditModal(true)
+            }}
           >
             edit <FaRegEdit />
           </Text>
@@ -62,6 +71,19 @@ export const Comment: React.FC<IProps> = ({
               )
               if (confirmation) {
                 await stores.howtoStore.deleteComment(_id)
+                ReactGA.event({
+                  category: 'Comments',
+                  action: 'Deleted',
+                  label: stores.howtoStore.activeHowto?.title,
+                })
+                logger.debug(
+                  {
+                    category: 'Comments',
+                    action: 'Deleted',
+                    label: stores.howtoStore.activeHowto?.title,
+                  },
+                  'comment deleted',
+                )
               }
             }}
           >
@@ -74,7 +96,7 @@ export const Comment: React.FC<IProps> = ({
         <Modal width={600}>
           <Form
             onSubmit={values => {
-              console.log(values)
+              logger.debug(values)
             }}
             initialValues={{
               comment: text,
@@ -107,6 +129,19 @@ export const Comment: React.FC<IProps> = ({
                   <Button
                     small
                     onClick={async () => {
+                      ReactGA.event({
+                        category: 'Comments',
+                        action: 'Update',
+                        label: stores.howtoStore.activeHowto?.title,
+                      })
+                      logger.debug(
+                        {
+                          category: 'Comments',
+                          action: 'Update',
+                          label: stores.howtoStore.activeHowto?.title,
+                        },
+                        'comment edited',
+                      )
                       await stores.howtoStore.editComment(_id, values.comment)
                       setShowEditModal(false)
                     }}

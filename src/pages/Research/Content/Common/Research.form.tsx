@@ -4,7 +4,7 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Field, Form } from 'react-final-form'
 import { Prompt, RouteComponentProps } from 'react-router'
-import { Box } from 'rebass'
+import { Box } from 'rebass/styled-components'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { Button } from 'src/components/Button'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
@@ -155,11 +155,11 @@ const ResearchForm = observer((props: IProps) => {
                     >
                       <Heading medium>
                         {props.parentType === 'create' ? (
-                          <span>Start</span>
+                          <span>Start your Research</span>
                         ) : (
-                          <span>Edit</span>
+                          <span>Edit your Research</span>
                         )}{' '}
-                        your Research
+
                       </Heading>
                       <Box ml="15px">
                         <ElWithBeforeIcon
@@ -196,8 +196,8 @@ const ResearchForm = observer((props: IProps) => {
                               validate={validateTitle}
                               isEqual={COMPARISONS.textInput}
                               component={InputField}
-                              maxLength="40"
-                              placeholder="Make a chair from.. (max 40 characters)"
+                              maxLength="60"
+                              placeholder="Can we make a chair from.. (max 60 characters)"
                             />
                           </Flex>
                           <Flex flexDirection={'column'} mb={3}>
@@ -217,8 +217,8 @@ const ResearchForm = observer((props: IProps) => {
                                 flex: 1,
                                 minHeight: '150px',
                               }}
-                              maxLength="400"
-                              placeholder="Introduction to your research question. Mention what you want to do, inspiration you got, what challenges you must see etc (max 400 characters)"
+                              maxLength="1000"
+                              placeholder="Introduction to your research question. Mention what you want to do, whats the goal and what challenges you see etc (max 1000 characters)"
                             />
                           </Flex>
                           <Flex flexDirection={'column'} mb={3}>

@@ -6,11 +6,12 @@ import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import ModerationStatusText from 'src/components/ModerationStatusText'
 import { Link } from 'src/components/Links'
-import { Box, Flex, Image } from 'rebass'
+import { Box, Flex, Image } from 'rebass/styled-components'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import StepsIcon from 'src/assets/icons/icon-steps.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
+import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
 import { Button } from 'src/components/Button'
 import { IUser } from 'src/models/user.models'
 import {
@@ -28,6 +29,7 @@ interface IProps {
   loggedInUser: IUser | undefined
   needsModeration: boolean
   votedUsefulCount?: number
+  verified?: boolean
   userVotedUseful: boolean
   moderateHowto: (accepted: boolean) => void
   onUsefulClick: () => void
@@ -144,10 +146,20 @@ export default class HowtoDescription extends PureComponent<IProps> {
                 >
                   {howto._createdBy}
                 </Link>{' '}
+                {this.props.verified && (
+                  <>
+                    <Image src={VerifiedBadgeIcon} height="12px" width="12px" />{' '}
+                  </>
+                )}
                 | Published on {this.dateCreatedByText(howto)}
               </Text>
             </Flex>
-            <Text auxiliary sx={{ color: '#b7b5b5 !important' }} mt={1} mb={2}>
+            <Text
+              auxiliary
+              sx={{ color: `${theme.colors.lightgrey} !important` }}
+              mt={1}
+              mb={2}
+            >
               {this.dateLastEditText(howto)}
             </Text>
             <Heading medium mt={2} mb={1}>

@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component } from 'react'
 import { COM_TYPE_MOCKS } from 'src/mocks/Selectors'
 import { Field } from 'react-final-form'
 import { InputField } from 'src/components/Form/Fields'
@@ -7,12 +7,8 @@ import { Modal } from 'src/components/Modal/Modal'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
 import { SelectField } from 'src/components/Form/Select.field'
-import {
-  validateUrl,
-  validateEmail,
-  required,
-  ensureExternalUrl,
-} from 'src/utils/validators'
+import { validateUrl, validateEmail, required } from 'src/utils/validators'
+import { formatLink } from 'src/utils/formatters'
 
 interface IProps {
   name: string
@@ -43,23 +39,6 @@ export class ProfileLinkField extends Component<IProps, IState> {
   confirmDelete() {
     this.toggleDeleteModal()
     this.props.onDelete()
-  }
-  // TODO - we might want to add more formatting for cases where,
-  // e.g. only a username is given for a bazar link
-  public formatLink(link: string) {
-    link = link && link.toLowerCase()
-    switch (this.state.linkType) {
-      case 'forum':
-        return ensureExternalUrl(link)
-      case 'website':
-        return ensureExternalUrl(link)
-      case 'social media':
-        return ensureExternalUrl(link)
-      case 'bazar':
-        return ensureExternalUrl(link)
-      default:
-        return link
-    }
   }
 
   public validateDependingOnType(e) {
@@ -119,7 +98,7 @@ export class ProfileLinkField extends Component<IProps, IState> {
           validateFields={[]}
           component={InputField}
           placeholder="Link"
-          format={v => this.formatLink(v)}
+          format={v => formatLink(v, this.state.linkType)}
           formatOnBlur={true}
         />
         <DeleteButton

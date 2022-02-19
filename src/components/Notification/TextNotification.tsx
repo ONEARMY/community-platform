@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Icon, { IGlyphs } from '../Icons'
 import Text from '../Text'
-import { Flex } from 'rebass'
+import { Flex } from 'rebass/styled-components'
 import { FadeInOut } from '../Animations/FadeInOut'
 import { getFriendlyMessage } from 'oa-shared'
 
@@ -65,7 +65,7 @@ export class TextNotification extends React.Component<
 
   triggerNotificationHide() {
     clearTimeout(this.timerHandle)
-    this.timerHandle = setTimeout(() => {
+    this.timerHandle = window.setTimeout(() => {
       if (this.timerHandle && this.timerHandle > 0) {
         this.setState({ show: false })
         this.timerHandle = 0

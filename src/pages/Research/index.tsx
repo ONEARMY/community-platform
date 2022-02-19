@@ -1,9 +1,10 @@
 import { Route } from 'react-router'
+import { MODULE } from 'src/modules'
 import {
   ResearchStore,
   ResearchStoreContext,
 } from 'src/stores/Research/research.store'
-import { IPageMeta } from '../PageList'
+import type { IPageMeta } from '../PageList'
 import ResearchRoutes from './research.routes'
 
 /**
@@ -12,6 +13,7 @@ import ResearchRoutes from './research.routes'
  * experimental projects
  */
 export const ResearchModule: IPageMeta = {
+  moduleName: MODULE.RESEARCH,
   path: '/research',
   component: <ResearchModuleContainer />,
   title: 'Research',

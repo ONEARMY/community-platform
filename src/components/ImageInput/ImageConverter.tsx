@@ -1,8 +1,9 @@
 import * as React from 'react'
-import { Flex } from 'rebass'
-import * as clientCompress from 'client-compress'
-import { IConvertedFileMeta, bytesToSize } from './ImageInput'
+import { Flex } from 'rebass/styled-components'
+import imageCompression from 'browser-image-compression'
+import { IConvertedFileMeta } from './ImageInput'
 import styled from 'styled-components'
+import theme from '../../themes/styled.theme'
 
 interface IProps {
   file: File
@@ -10,7 +11,7 @@ interface IProps {
   onImgClicked: (meta: IConvertedFileMeta) => void
 }
 interface IState {
-  compressionOptions: ICompressionOptions
+  compressionOptions: Parameters<typeof imageCompression>[1]
   convertedFile?: IConvertedFileMeta
   openLightbox?: boolean
 }
@@ -29,7 +30,7 @@ const PreviewImage = styled(Flex)`
   height: 100%;
   width: 100%;
   border-radius: 5px;
-  border: 1px solid #ececec;
+  border: 1px solid ${theme.colors.offwhite};
 `
 
 export class ImageConverter extends React.Component<IProps, IState> {
@@ -39,8 +40,8 @@ export class ImageConverter extends React.Component<IProps, IState> {
     super(props)
     this.state = {
       compressionOptions: {
-        maxWidth: imageSizes.normal,
-        quality: 0.75,
+        maxWidthOrHeight: imageSizes.normal,
+        initialQuality: 0.75,
       },
     } as IState
   }
@@ -59,26 +60,22 @@ export class ImageConverter extends React.Component<IProps, IState> {
 
   async compressFiles(file: File) {
     const { compressionOptions } = this.state
-    const compressor: clientCompress = new clientCompress(compressionOptions)
 
     // by default compress takes an array and gives back an array. We only want to handle a single image
-    const conversion: ICompressedOutput[] = await compressor.compress([file])
-    const convertedMeta = this._generateFileMeta(conversion[0])
+    const conversion: File = await imageCompression(file, compressionOptions)
+    const convertedMeta = this._generateFileMeta(conversion)
     this.setState({
       convertedFile: convertedMeta,
     })
     this.props.onImgConverted(convertedMeta)
   }
 
-  private _generateFileMeta(c: ICompressedOutput) {
+  private _generateFileMeta(c: File) {
     const meta: IConvertedFileMeta = {
-      name: c.photo.name,
-      startSize: bytesToSize(c.info.startSizeMB * 1000 * 1000),
-      endSize: bytesToSize(c.info.endSizeMB * 1000 * 1000),
-      compressionPercent: Number(c.info.sizeReducedInPercent.toFixed(1)),
-      photoData: c.photo.data,
-      objectUrl: URL.createObjectURL(c.photo.data),
-      type: c.photo.type,
+      name: addTimestampToFileName(c.name),
+      photoData: c,
+      objectUrl: URL.createObjectURL(c),
+      type: c.type,
     }
     return meta
   }
@@ -105,47 +102,22 @@ ImageConverter.defaultProps = {
   onImgClicked: () => null,
 }
 
-/************************************************************************************
- *    Interfaces
- *
- *************************************************************************************/
+/** Insert a base-16 timestamp into a file's name and return it
+ */
+export const addTimestampToFileName = (str: string): string => {
+  // Return early for malformed input type 🙈
+  if (typeof str !== 'string') return str
 
-interface ICompressedOutput {
-  photo: ICompressedPhoto
-  info: ICompressedInfo
-}
+  const indexOfDot = str.lastIndexOf('.')
 
-interface ICompressionOptions {
-  quality: number
-  maxWidth: number
-}
-interface ICompressedPhoto {
-  name: string
-  type: 'image/jpeg' | string
-  size: number // in bytes,
-  orientation: -1
-  data: Blob
-  width: number
-  height: number
-}
-// This is the metadata for this conversion
-interface ICompressedInfo {
-  start: number
-  quality: number
-  startType: 'image/jpeg'
-  startWidth: number
-  startHeight: number
-  endWidth: number
-  endHeight: number
-  iterations: number
-  startSizeMB: number
-  endSizeMB: number
-  sizeReducedInPercent: number
-  end: number
-  elapsedTimeInSeconds: number
-  endType: 'image/jpeg'
-}
+  // Return early if the filename doesn't contain an extension
+  if (indexOfDot <= 0) return str
 
-// type imageFormats = 'image/jpeg' | 'image/jpg' | 'image/gif' | 'image/png'
-// NOTE - gifs will lose animation and png will lost transparency
-// Additional types: image/bmp, image/tiff, image/x-icon,  image/svg+xml, image/webp, image/xxx
+  // inserts "-[current time in base-16]" right before the file type extension
+  return (
+    str.slice(0, indexOfDot) +
+    '-' +
+    Date.now().toString(16) +
+    str.slice(indexOfDot)
+  )
+}

@@ -94,14 +94,12 @@ export default class HowtoDescription extends PureComponent<IProps> {
               </Button>
             </Link>
             <Box style={{ flexGrow: 1 }}>
-              {this.props.votedUsefulCount !== undefined && (
-                <HowtoUsefulStats
-                  votedUsefulCount={this.props.votedUsefulCount}
-                  userVotedUseful={this.props.userVotedUseful}
-                  isLoggedIn={this.props.loggedInUser ? true : false}
-                  onUsefulClick={this.props.onUsefulClick}
-                />
-              )}
+              <HowtoUsefulStats
+                votedUsefulCount={this.props.votedUsefulCount || 0}
+                userVotedUseful={this.props.userVotedUseful}
+                isLoggedIn={this.props.loggedInUser ? true : false}
+                onUsefulClick={this.props.onUsefulClick}
+              />
             </Box>
             {/* Check if pin should be moderated */}
             {this.props.needsModeration && (

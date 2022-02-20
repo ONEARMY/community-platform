@@ -75,7 +75,7 @@ export const HowToCard = (props: IProps) => (
                 return <TagDisplay key={tag} tagKey={tag} />
               })}
           </Flex>
-          {props.votedUsefulCount && (
+          {props.votedUsefulCount > 0 && (
             <Flex ml={1} alignItems="center">
               <Icon glyph="star-active" marginRight="4px" />
               <Text color="black">{props.votedUsefulCount}</Text>

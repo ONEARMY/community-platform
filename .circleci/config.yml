@@ -281,7 +281,7 @@ jobs:
           name: Install dependencies
           command: yarn workspaces focus one-army-community-platform
       - run:
-          command: yarn run test:unit
+          command: yarn && yarn run test:unit
   build:
     docker: *docker
     environment:

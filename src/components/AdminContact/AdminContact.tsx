@@ -17,6 +17,7 @@ interface IState {
   disabled: boolean
   contactDetails?: string
 }
+
 @inject('adminStore')
 @observer
 export class AdminContact extends React.Component<IProps, IState> {

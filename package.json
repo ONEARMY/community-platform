@@ -87,7 +87,7 @@
     "lorem-ipsum": "^2.0.3",
     "mobx": "6.3.2",
     "mobx-react": "7.2.0",
-    "oa-components": "workspace:^",
+    "oa-components": "workspace:*",
     "oa-shared": "1.0.0",
     "pino": "^7.2.0",
     "pino-logflare": "^0.3.12",

@@ -92,6 +92,17 @@ export class HowtoList extends React.Component<any, IState> {
     this.props.howtoStore.updateSearchValue('')
   }
 
+  componentDidMount() {
+    /**
+     * Currently the `userVotedHowtos` property is only
+     * populated by the constructor of UserStore.
+     *
+     * To ensure the value is updated check the store
+     * each time the component is mounted.
+     */
+    this.props.userStore?.loadUserHowtoVotes()
+  }
+
   public render() {
     const { verifiedUsers } = this.injected.userStore
     const {

@@ -4,6 +4,7 @@
   "packageManager": "yarn@3.1.1",
   "private": true,
   "main": "dist/index.js",
+  "types": "dist/index.d.js",
   "scripts": {
     "start": "start-storybook -p 6006",
     "build:sb": "build-storybook",

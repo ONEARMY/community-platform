@@ -21,7 +21,7 @@ By providing a docker image we can address all issues above and provide better p
 [ ] - Integrate as backend for app start
 [ ] - Populate seed data
 [ ] - Provide as image on dockerhub
-[ ] - Add docker-compose image for easier customisation
+[ ] - Add docker-compose image for easier customisation/volume mapping
 [ ] - Documentation
 
 ## Known Issues

@@ -106,6 +106,12 @@ function updateFirebaseJson() {
   fs.writeFileSync(firebaseJsonPath, JSON.stringify(firebaseJson, null, 2))
 }
 
+/**
+ * Docker builds are triggered in the background, so that the current scripts are unaware
+ * of any progress updated and when completed/failed.
+ * Add bindings to docker modem to track progress, proxy logs to main stdout, and resolve
+ * as promise build completion/fail
+ */
 async function followBuildProgress(stream: NodeJS.ReadableStream) {
   await new Promise((resolve, reject) => {
     //   pipe logs, reformatting text which defaults to nested json
@@ -121,6 +127,8 @@ async function followBuildProgress(stream: NodeJS.ReadableStream) {
         const { stream, error, errorDetail } = onProgress || {}
         if (stream && typeof stream === 'string') {
           let output = stream
+          // avoid duplicate line spacing caused by console logging text split
+          // across multiple lines
           if (stream.endsWith('\n')) {
             output = stream.slice(0, -1)
           }

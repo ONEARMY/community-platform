@@ -22,6 +22,7 @@ export interface IMapPin extends IModerable {
   type: IMapPinType
   location: ILatLng
   subType?: IMapPinSubtype
+  verified: boolean
 }
 
 /**

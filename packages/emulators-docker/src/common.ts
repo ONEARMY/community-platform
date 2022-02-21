@@ -7,6 +7,7 @@ interface IDockerPortMapping {
   hostPort: string
 }
 
+/** Convert emulators port to mapping supported by dockerode */
 export function getFirebasePortMapping() {
   const portMapping: IDockerPortMapping[] = Object.values<{ port: number }>(
     FIREBASE_JSON_EMULATORS_DEFAULT,
@@ -37,8 +38,6 @@ export const FIREBASE_JSON_EMULATORS_DEFAULT = {
   },
   database: {
     port: 4006,
-    __note__:
-      'host bindings do not appear to work for database (https://github.com/firebase/firebase-tools/issues/2633)',
   },
   storage: {
     port: 4007,

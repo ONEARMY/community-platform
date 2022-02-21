@@ -49,8 +49,8 @@ RUN cd /app/functions/dist && yarn install
 
 # Copied config files - Should be present in main repo and copied via build script
 
-COPY ./volumes/firebase.json /app/firebase.json
-COPY ./volumes/.firebaserc /app/.firebaserc
+COPY ./app/firebase.json /app/firebase.json
+COPY ./app/.firebaserc /app/.firebaserc
 COPY ./app/firebase.storage.rules /app/firebase.storage.rules
 COPY ./app/functions/dist/index.js /app/functions/dist/index.js
 

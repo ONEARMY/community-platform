@@ -13,11 +13,12 @@ interface IProps {
 }
 export const HowtoUsefulStats = (props: IProps) => {
   const history = useHistory()
+  const { votedUsefulCount, userVotedUseful } = props
   // when loading, we first want to use values passed from props to set the local state
   // we don't use these directly as we will want to update when the user toggles the useful vote button
   const [state, setState] = React.useState({
-    votedUsefulCount: props.votedUsefulCount,
-    userVotedUseful: props.userVotedUseful,
+    votedUsefulCount,
+    userVotedUseful,
   })
   // when voting useful, update local display first before propogating changes to update db
   // this provides immediate feedback whilst waiting for the database to handle updates
@@ -31,6 +32,13 @@ export const HowtoUsefulStats = (props: IProps) => {
     })
     props.onUsefulClick()
   }
+
+  React.useEffect(() => {
+    setState({
+      ...state,
+      userVotedUseful,
+    })
+  }, [userVotedUseful])
 
   return (
     <>

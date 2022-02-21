@@ -5,7 +5,6 @@ import {
   IHowto,
   IHowtoDB,
   IHowtoFormInput,
-  IHowtoStats,
   IHowtoStep,
   IHowToStepFormInput,
 } from 'src/models/howto.models'
@@ -46,14 +45,15 @@ export class HowtoStore extends ModuleStore {
   public referrerSource: string
   @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
-  @observable howtoStats: IHowtoStats | undefined
 
   constructor(rootStore: RootStore) {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
-    this.allDocs$.subscribe((docs: IHowtoDB[]) => this.setAllHowtos(docs))
+    this.allDocs$.subscribe((docs: IHowtoDB[]) => {
+      this.setAllHowtos(docs)
+    })
     this.selectedTags = {}
     this.searchValue = ''
     this.referrerSource = ''
@@ -68,29 +68,16 @@ export class HowtoStore extends ModuleStore {
   public async setActiveHowtoBySlug(slug: string) {
     // clear any cached data and then load the new howto
     this.activeHowto = undefined
-    this.howtoStats = undefined
     const collection = await this.db
       .collection<IHowto>(COLLECTION_NAME)
       .getWhere('slug', '==', slug)
     const activeHowto = collection.length > 0 ? collection[0] : undefined
     logger.debug('active howto', activeHowto)
     this.activeHowto = activeHowto
-    // load howto stats which are stored in a separate subcollection
-    await this.loadHowtoStats(activeHowto?._id)
 
     return activeHowto
   }
-  @action
-  private async loadHowtoStats(id?: string) {
-    if (id) {
-      const ref = this.db
-        .collection<IHowtoStats>('howtos')
-        .doc(`${id}/stats/all`)
-      const howtoStats = await ref.get('server')
-      logger.debug('howtoStats', howtoStats)
-      this.howtoStats = howtoStats || { votedUsefulCount: 0 }
-    }
-  }
+
   @action
   public updateUploadStatus(update: keyof IHowToUploadStatus) {
     this.uploadStatus[update] = true
@@ -107,19 +94,19 @@ export class HowtoStore extends ModuleStore {
       this.selectedTags,
     )
     // HACK - ARH - 2019/12/11 filter unaccepted howtos, should be done serverside
-    const validHowtos = filterModerableItems(howtos, this.activeUser)
+    let validHowtos = filterModerableItems(howtos, this.activeUser)
 
     // If user searched, filter remaining howtos by the search query with Fuse
-    if (!this.searchValue) {
-      return validHowtos
-    } else {
+    if (this.searchValue) {
       const fuse = new Fuse(validHowtos, {
         keys: HOWTO_SEARCH_WEIGHTS,
       })
 
       // Currently Fuse returns objects containing the search items, hence the need to map. https://github.com/krisk/Fuse/issues/532
-      return fuse.search(this.searchValue).map(v => v.item)
+      validHowtos = fuse.search(this.searchValue).map(v => v.item)
     }
+
+    return validHowtos
   }
 
   public updateSearchValue(query: string) {

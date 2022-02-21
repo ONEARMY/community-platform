@@ -92,6 +92,17 @@ export class HowtoList extends React.Component<any, IState> {
     this.props.howtoStore.updateSearchValue('')
   }
 
+  componentDidMount() {
+    /**
+     * Currently the `userVotedHowtos` property is only
+     * populated by the constructor of UserStore.
+     *
+     * To ensure the value is updated check the store
+     * each time the component is mounted.
+     */
+    this.props.userStore?.loadUserHowtoVotes()
+  }
+
   public render() {
     const { verifiedUsers } = this.injected.userStore
     const {
@@ -191,11 +202,14 @@ export class HowtoList extends React.Component<any, IState> {
             >
               <VirtualizedFlex
                 data={filteredHowtos}
-                renderItem={(data: IHowtoDB) => (
+                renderItem={(howto: IHowtoDB) => (
                   <Box px={4} py={4}>
                     <HowToCard
-                      howto={data}
-                      verified={verifiedUsers?.[data._createdBy]}
+                      howto={howto}
+                      verified={verifiedUsers?.[howto._createdBy]}
+                      votedUsefulCount={
+                        this.injected.userStore.userVotedHowtos[howto._id]
+                      }
                     />
                   </Box>
                 )}

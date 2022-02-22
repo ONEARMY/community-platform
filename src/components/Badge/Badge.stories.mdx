@@ -1,0 +1,25 @@
+import { Button } from 'src/components/Button'
+import { Story, Preview } from '@storybook/addon-docs'
+import Badge from './Badge.tsx'
+
+<Meta title="Components|Badge" component={Badge} />
+
+# Badge
+
+<Story name="Default">
+    <Badge/>
+</Story>
+
+<Story name="Sizes">
+    <Badge size={75}/>
+    <Badge size={100}/>
+    <Badge size={150}/>
+</Story>
+
+<Story name="Types">
+    <Badge size={100} profileType={'member'}/>
+    <Badge size={100} profileType={'workspace'}/>
+    <Badge size={100} profileType={'community-builder'}/>
+    <Badge size={100} profileType={'collection-point'}/>
+    <Badge size={100} profileType={'machine-builder'}/>
+</Story>

@@ -12,8 +12,8 @@ const docker = new Dockerode()
 
 async function build() {
   buildFunctions()
-  populateDummyCredentials()
   copyAppFiles()
+  populateDummyCredentials()
   updateFirebaseJson()
 
   const stream = await startDockerBuild()
@@ -25,7 +25,7 @@ async function startDockerBuild() {
     {
       context: PATHS.workspaceDir,
       // Files listed here will be available to DOCKERFILE
-      src: ['Dockerfile', 'app', 'credentials.json'],
+      src: ['Dockerfile', 'app'],
     },
     { t: OA_FIREBASE_IMAGE_NAME },
   )
@@ -50,7 +50,11 @@ function buildFunctions() {
  * (production credentials could be mapped with volume if desirable)
  */
 function populateDummyCredentials() {
-  const credentialsPath = path.resolve(PATHS.workspaceDir, 'credentials.json')
+  const credentialsPath = path.resolve(
+    PATHS.workspaceDir,
+    'app',
+    'credentials.json',
+  )
   const dummyCredentials = {
     type: 'service_account',
     project_id: 'test',

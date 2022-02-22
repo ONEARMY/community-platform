@@ -78,7 +78,7 @@ export const MemberProfile = ({ user, adminButton }: IProps) => {
             </MemberPicture>
           <UserStats user={user}/>
         </Box>
-        <Flex flexDirection="column" mt={3} ml={3} style={{flexGrow: 1}}>
+        <Flex flexDirection="column" mt={3} ml={3} style={{flexGrow: 2, width: '100%'}}>
             <Text style={{wordWrap: 'break-word'}}>{user.userName}</Text>
             <Box alignItems="center" mb={3}>
               <Heading medium bold color={'black'} style={{wordWrap: 'break-word'}}>

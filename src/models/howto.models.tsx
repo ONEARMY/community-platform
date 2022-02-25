@@ -33,9 +33,6 @@ export interface IHowto extends IHowtoFormInput, IModerable {
  */
 export type IHowtoDB = IHowto & DBDoc
 
-export type IHowtoStats = {
-  votedUsefulCount: number
-}
 
 export interface IHowtoStep extends IHowToStepFormInput {
   // *** NOTE - adding an '_animationKey' field to track when specific array element removed for

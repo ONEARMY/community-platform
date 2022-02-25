@@ -134,7 +134,9 @@ export class Howto extends React.Component<
             verified={
               this.injected.userStore.verifiedUsers[activeHowto._createdBy]
             }
-            votedUsefulCount={this.store.howtoStats?.votedUsefulCount}
+            votedUsefulCount={
+              this.injected.userStore.userVotedHowtos[activeHowto._id]
+            }
             loggedInUser={loggedInUser}
             needsModeration={this.store.needsModeration(activeHowto)}
             userVotedUseful={this.store.userVotedActiveHowToUseful}

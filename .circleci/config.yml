@@ -187,6 +187,10 @@ commands:
   inject_instance_configuration:
     steps:
       - run:
+          name: Set branch environment
+          command: |
+            echo 'export REACT_APP_PROJECT_VERSION=${CIRCLE_SHA1}' >> $BASH_ENV
+      - run:
           name: Inject target environment configuration
           command: |
             yarn build:inject-config
@@ -257,7 +261,7 @@ jobs:
       - setup_repo
 
   test_functions:
-    docker: 
+    docker:
       - image: timbru31/java-node:alpine-12
     resource_class: small
     steps:
@@ -385,14 +389,16 @@ jobs:
             CI_BROWSER: << parameters.CI_BROWSER >>
             CI_NODE: << parameters.CI_NODE >>
             CI_GROUP: 2x-<< parameters.CI_BROWSER >>
-  release: 
+      - store_artifacts:
+          path: ./packages/cypress/src/screenshots/
+  release:
     docker: *docker
     resource_class: small
-    steps: 
+    steps:
       - setup_repo
       - attach_workspace:
           at: '.'
-      - run: 
+      - run:
           command: npx semantic-release --dry-run
 
 ######################################################################################################
@@ -406,9 +412,9 @@ workflows:
       - lint-commits:
           name: Lint commits
           filters:
-              branches:
-                ignore:
-                  - production
+            branches:
+              ignore:
+                - production
       #---------------------- Test ----------------------
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:
@@ -432,7 +438,7 @@ workflows:
             branches:
               ignore:
                 - production
-      - test_functions: 
+      - test_functions:
           name: 'Cloud Function tests'
           context: build-context
           requires:
@@ -479,12 +485,12 @@ workflows:
           context:
             - circle-ci-slack-context
             - project-kamp-dev
-      - release: 
-          requires: 
+      - release:
+          requires:
             - 'Deploy: community.preciousplastic.com'
             - 'Deploy: community.projectkamp.com'
           name: Release new version to GitHub
-          context: 
+          context:
             - release-context
       # Require manual approval on CirclCI website prior to release
       - build:

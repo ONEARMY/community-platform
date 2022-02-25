@@ -36,6 +36,9 @@ export class UserStore extends ModuleStore {
   @observable
   public verifiedUsers: { [user_id: string]: boolean } = {}
 
+  @observable
+  public userVotedHowtos: { [howto_id: string]: number } = {}
+
   @action
   public updateUser(user?: IUserPPDB) {
     this.user = user
@@ -50,7 +53,9 @@ export class UserStore extends ModuleStore {
     super(rootStore)
     makeObservable(this)
     this._listenToAuthStateChanges()
+    // load aggregations - TODO - likely better in a separate aggregations store
     this.loadVerifiedUsers()
+    this.loadUserHowtoVotes()
   }
 
   // when registering a new user create firebase auth profile as well as database user profile
@@ -293,6 +298,15 @@ export class UserStore extends ModuleStore {
       .doc('users_verified')
       .get()
     this.verifiedUsers = verifiedUsers || {}
+  }
+
+  @action
+  public async loadUserHowtoVotes() {
+    const userVotedHowtos = await this.db
+      .collection<any>('aggregations')
+      .doc('users_votedUsefulHowtos')
+      .get()
+    this.userVotedHowtos = userVotedHowtos || {}
   }
 
   // use firebase auth to listen to change to signed in user

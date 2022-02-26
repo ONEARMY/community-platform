@@ -5,6 +5,7 @@ import { PATHS } from './paths'
 const docker = new Dockerode()
 
 const CONTAINER_NAME = 'oa_firebase_emulator'
+const IMAGE_NAME = 'oa-firebase-emulators:latest'
 
 async function start() {
   let container: Dockerode.Container
@@ -61,13 +62,13 @@ function attachContainer(container: Dockerode.Container) {
   )
 }
 
-function createNewContainer() {
+async function createNewContainer() {
   const { ExposedPorts, PortBindings } = rewritePortMapping()
   return new Promise<Dockerode.Container>((resolve, reject) => {
     docker.createContainer(
       {
         // Image: 'goatlab/firebase-emulator:latest',
-        Image: 'oa-firebase-emulators:latest',
+        Image: IMAGE_NAME,
         name: CONTAINER_NAME,
         Tty: true,
         ExposedPorts,

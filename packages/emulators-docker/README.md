@@ -17,12 +17,18 @@ By providing a docker image we can address all issues above and provide better p
 [x] - Handle service account authentication
 [x] - Add scripts to handle build (including functions compile, copy, docker build etc.)
 [x] - Add scripts to handle start
+[x] - Populate seed data
 
-[ ] - Integrate as backend for app start
-[ ] - Populate seed data
+[?] - Support live-reload for functions (linux)
+[x] - Integrate as backend for app start
+
 [ ] - Provide as image on dockerhub
+[ ] - Handle sigint to spin down image
 [ ] - Add docker-compose image for easier customisation/volume mapping
-[ ] - Documentation
+[ ] - Developer Documentation
+
+[ ] - Integrate emulator build/seed/deploy with CI system
+[ ] - Provide windows-based docker image (for live-reload on windows)
 
 ## Known Issues
 

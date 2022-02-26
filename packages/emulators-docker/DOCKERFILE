@@ -59,10 +59,10 @@ RUN mkdir -p /app/import
 COPY ./import /app/import
 
 # Prompt firebase to use json credentials for login by exporting variable
-ENV GOOGLE_APPLICATION_CREDENTIALS=credentials.json
+ENV GOOGLE_APPLICATION_CREDENTIALS=/app/credentials.json
 
 # Ensure emulators configured to run and perform any 1-time ops
-RUN firebase emulators:exec --project  ${FIRESTORE_PROJECT_NAME:-test} --import=/app/import ls
+RUN firebase emulators:exec --project  ${FIRESTORE_PROJECT_NAME:-demo-community-platform} --import=/app/import ls
 
 # # Exposed Ports - These should match firebase.json config
 EXPOSE 4001 4002 4003 4004 4005 4006 4007
@@ -70,7 +70,7 @@ EXPOSE 4001 4002 4003 4004 4005 4006 4007
 # # Troubleshooting - can just run to get cli access
 # CMD [ "/bin/sh" ]
 
-CMD firebase emulators:start --only auth,functions,firestore,pubsub,storage,hosting,database --project ${FIRESTORE_PROJECT_NAME:-test} --import=/app/import
+CMD firebase emulators:start --only auth,functions,firestore,pubsub,storage,hosting,database --project ${FIRESTORE_PROJECT_NAME:-demo-community-platform} --import=/app/import
 
 
 

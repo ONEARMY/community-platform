@@ -60,7 +60,7 @@ function attachContainer(container: Dockerode.Container) {
     },
   )
 }
-import path from 'path'
+
 function createNewContainer() {
   const { ExposedPorts, PortBindings } = rewritePortMapping()
   return new Promise<Dockerode.Container>((resolve, reject) => {
@@ -77,13 +77,7 @@ function createNewContainer() {
           PortBindings,
           // Volumes - as node_modules installed locally and in container could be different os,
           // just bind compiled dist as a volume to allow any updates to be tracked
-          Binds: [
-            `${PATHS.functionsDistIndex}:/app/functions/dist/index.js`,
-            `${path.resolve(
-              PATHS.workspaceDir,
-              'credentials.json',
-            )}:/app/credentials.json`,
-          ],
+          Binds: [`${PATHS.functionsDistIndex}:/app/functions/dist/index.js`],
         },
       },
       function(err, container) {

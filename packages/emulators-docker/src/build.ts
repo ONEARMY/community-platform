@@ -25,7 +25,7 @@ async function startDockerBuild() {
     {
       context: PATHS.workspaceDir,
       // Files listed here will be available to DOCKERFILE
-      src: ['Dockerfile', 'app'],
+      src: ['Dockerfile', 'app', 'import'],
     },
     { t: OA_FIREBASE_IMAGE_NAME },
   )
@@ -77,9 +77,8 @@ function populateDummyCredentials() {
 function copyAppFiles() {
   const appFolder = path.resolve(PATHS.workspaceDir, 'app')
   fs.ensureDirSync(appFolder)
-  fs.emptyDirSync(appFolder)
   // list of files to copy across.
-  // Possible TODOs - copy only if changed, check firebase.json for rules
+  // Possible TODOs - clear folder of files not in list, check firebase.json for rules
   const filenames = [
     'firebase.json',
     '.firebaserc',
@@ -91,8 +90,16 @@ function copyAppFiles() {
   for (const filename of filenames) {
     const src = path.resolve(PATHS.rootDir, filename)
     if (fs.existsSync(src)) {
+      const { mtime, atime } = fs.statSync(src)
       const dest = path.resolve(PATHS.workspaceDir, 'app', filename)
-      fs.copySync(src, dest)
+      // only copy if doesn't exist or changed. Retain timestamps for future comparison
+      if (
+        !fs.existsSync(dest) ||
+        fs.statSync(dest).mtime.getTime() !== mtime.getTime()
+      ) {
+        fs.copySync(src, dest)
+        fs.utimesSync(dest, atime, mtime)
+      }
     }
   }
 }

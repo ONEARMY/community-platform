@@ -17,6 +17,7 @@
   "scripts": {
     "start": "cross-env FAST_REFRESH=false react-scripts start",
     "start:emulated": "concurrently \"yarn workspace functions start\" \"cross-env PORT=4000 yarn start\" -- ",
+    "start:emulated:docker": "concurrently \"yarn workspace functions watch\" \"yarn workspace oa-emulators-docker start\" \"cross-env PORT=4000 yarn start\"",
     "build:cra": "react-scripts build",
     "build:post": "yarn workspace oa-scripts post-cra-build",
     "build:inject-config": "yarn build:post",

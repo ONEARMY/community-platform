@@ -8,6 +8,7 @@ import type {
 import { DBEndpoint, DB_ENDPOINTS } from './endpoints'
 import { CollectionReference } from './CollectionReference'
 import { AbstractDatabase } from './AbstractDatabase'
+import { SITE } from '../../config/config'
 
 /**
  * Main Database class
@@ -41,11 +42,8 @@ export class DatabaseV2 extends AbstractDatabase {
     const cacheDB = window.location.search.includes('no-cache')
       ? serverDB
       : new DexieClient()
-    return {
-      cacheDB,
-      serverDB,
-      serverCacheDB: new RealtimeDBClient(),
-    }
+    const serverCacheDB = SITE === 'emulated_site' ? serverDB : new RealtimeDBClient();
+    return { cacheDB,   serverDB,  serverCacheDB }
   }
 }
 

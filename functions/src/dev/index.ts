@@ -7,7 +7,7 @@ As most functions are called from triggers the api is mostly just used for testi
 import * as functions from 'firebase-functions'
 import cors from 'cors'
 import express from 'express'
-import { cleanSeedData } from './seed/clean-seed-data'
+import { seedDataClean } from './seed/data-clean'
 
 console.log('dev api ready')
 
@@ -18,12 +18,17 @@ app.use(cors({ origin: true }))
 app.use(function(req, res, next) {
   const host = req.get('host')
   if (host === 'localhost:4002') next()
-  else res.status(403).send(`Dev api methods can only be accessed on localhost:4002. Host: [${host}]`)
+  else
+    res
+      .status(403)
+      .send(
+        `Dev api methods can only be accessed on localhost:4002. Host: [${host}]`,
+      )
 })
 
 app.get('/', (req, res) => res.status(200).send('Dev Api Working'))
 
-app.post('/seed-clean', (req, res) => cleanSeedData(req, res))
+app.post('/seed-clean', (req, res) => seedDataClean(req, res))
 
 export = functions.https.onRequest(app as any)
 

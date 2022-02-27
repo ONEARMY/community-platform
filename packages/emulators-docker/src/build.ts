@@ -24,7 +24,7 @@ async function startDockerBuild() {
   const stream = await docker.buildImage(
     {
       context: PATHS.workspaceDir,
-      // Files listed here will be available to DOCKERFILE
+      // Paths listed here will be available to DOCKERFILE
       src: ['Dockerfile', 'app', 'import'],
     },
     { t: OA_FIREBASE_IMAGE_NAME },

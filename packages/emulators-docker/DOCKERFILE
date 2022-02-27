@@ -42,7 +42,7 @@ RUN firebase setup:emulators:database && \
 
 WORKDIR /app
 
-# Only install packages if package.json has changed
+# Copy dist package.json and install (step will be cached unless changed)
 RUN mkdir -p /app/functions/dist
 COPY ./app/functions/dist/package.json /app/functions/dist/package.json
 RUN cd /app/functions/dist && yarn install
@@ -61,8 +61,9 @@ COPY ./import /app/import
 # Prompt firebase to use json credentials for login by exporting variable
 ENV GOOGLE_APPLICATION_CREDENTIALS=/app/credentials.json
 
-# Ensure emulators configured to run and perform any 1-time ops
-RUN firebase emulators:exec --project  ${FIRESTORE_PROJECT_NAME:-demo-community-platform} --import=/app/import ls
+# Make a first run of emulators to ensure configured correctly and allow any import data to be processed
+# Import data is re-exported as first import will often reformat for easier future use
+RUN firebase emulators:exec --project  ${FIRESTORE_PROJECT_NAME:-demo-community-platform} --import=/app/import --export-on-exit=/app/import ls
 
 # # Exposed Ports - These should match firebase.json config
 EXPOSE 4001 4002 4003 4004 4005 4006 4007

@@ -13,22 +13,29 @@ By providing a docker image we can address all issues above and provide better p
 
 ## TODO
 
+Phase 1 - Dockerised emulators working locally with seed data, providing a solid environment testing frontend/UI changes against replica live data
+
 [x] - Create dockerfile for base firebase emulator environment
 [x] - Handle service account authentication
 [x] - Add scripts to handle build (including functions compile, copy, docker build etc.)
 [x] - Add scripts to handle start
 [x] - Populate seed data
-
-[?] - Support live-reload for functions (linux)
 [x] - Integrate as backend for app start
 
-[ ] - Provide as image on dockerhub
-[ ] - Handle sigint to spin down image
-[ ] - Add docker-compose image for easier customisation/volume mapping
-[ ] - Developer Documentation
+Phase 2 - Dockerised emulators also support local functions development/testing (on linux)
 
-[ ] - Integrate emulator build/seed/deploy with CI system
+[?] - Support live-reload for functions (linux)
 [ ] - Provide windows-based docker image (for live-reload on windows)
+[ ] - Provide as images on dockerhub
+[ ] - Handle sigint to spin down image
+
+Phase 3 - Ready for use/full replacement of legacy methods
+
+[ ] - Migrate seed clean scripts
+[ ] - Developer Documentation
+[ ] - Integrate emulator build/seed/deploy with CI system
+[ ] - Remove all legacy functions code
+[ ] - Add docker-compose image for easier customisation/volume mapping (?)
 
 ## Known Issues
 

@@ -46,8 +46,7 @@ const config: webpack.Configuration = {
         include: [
           __dirname,
           // Include any external modules here
-          // Note - yarn workspaces are bundled with node_modules so do not need to be included
-          // path.resolve(__dirname, '../shared/'),
+          path.resolve(__dirname, '../shared/'),
         ],
       },
     ],

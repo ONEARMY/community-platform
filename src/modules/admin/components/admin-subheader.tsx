@@ -19,15 +19,33 @@ const SubmenuLink = styled(NavLink).attrs(() => ({
     text-decoration: underline;
   }
 `
+// The parent container limits max width (at 1280px). Use custom query
+// to retain full width beyond this limit
+const fullWidthMarginOverride = `calc((${theme.maxContainerWidth /
+  2}px - 50vw) - ${theme.space[4]}px  )`
+
+const SubheaderContainer = styled(Box)`
+  @media only screen and (min-width: ${theme.maxContainerWidth}px) {
+    margin-left: ${fullWidthMarginOverride}!important;
+    margin-right ${fullWidthMarginOverride}!important;
+  }
+`
 
 const AdminSubheader = () => (
-  <Box bg={theme.colors.black} p={2} textAlign={'right'}>
+  <SubheaderContainer
+    bg={theme.colors.black}
+    p={2}
+    textAlign={'right'}
+    ml={[-2, -3, -4]} // adjust for main-container padding on regular screen breakpoints
+    mr={[-2, -3, -4]}
+    data-cy="admin-subheader"
+  >
     {ADMIN_PAGES.map(p => (
       <SubmenuLink key={p.path} to={`/${moduleName}${p.path}`} exact>
         {p.title}
       </SubmenuLink>
     ))}
-  </Box>
+  </SubheaderContainer>
 )
 
 export default AdminSubheader

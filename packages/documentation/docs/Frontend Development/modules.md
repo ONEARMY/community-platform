@@ -39,10 +39,13 @@ const moduleName = 'myModule'
 
 const pages: IPageMeta[] = [
   {
-    component: lazy(() => import('./component_a')),
-    title: 'Component A',
-    description: 'This page displays component a',
-    path: 'component_a',
+    component: lazy(() => import('./main_page_component')),
+    path: '',
+    moduleName,
+  },
+  {
+    component: lazy(() => import('./child_page_component')),
+    path: 'child_route',
     moduleName,
   },
 ]
@@ -64,12 +67,29 @@ const routes = () => (
 export default withRouter(routes)
 ```
 
+The nested child routes should be consumed by a single entrypoint via the module index file.
+This is also a place where a store could be provided or additional subheader component.
+
+_myModule/index.tsx_
+
+```tsx
+export const MyModule: IPageMeta = {
+  moduleName,
+  path: `/my-module`,
+  component: <MyModuleContainer />,
+}
+
+function MyModuleContainer() {
+  return <Route component={myModuleRoutes} />
+}
+```
+
 With the module routes defined they can be imported into the main PageList to be made available in the platform
 
 _src\pages\PageList.tsx_
 
 ```tsx
-import MyModule from 'src/modules/myModule'
+import { MyModule } from 'src/modules/myModule'
 // ...
 export const COMMUNITY_PAGES: IPageMeta[] = [
   // ...

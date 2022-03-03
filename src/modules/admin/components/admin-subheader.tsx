@@ -10,6 +10,7 @@ const moduleName = MODULE.ADMIN
 const SubmenuLink = styled(NavLink).attrs(() => ({
   activeClassName: 'active',
 }))`
+  font-family: 'Inter', helveticaNeue, Arial, sans-serif;
   padding: 0px ${props => props.theme.space[4]}px;
   color: ${theme.colors.white};
   &:hover {

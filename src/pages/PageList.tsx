@@ -178,9 +178,9 @@ export const COMMUNITY_PAGES: IPageMeta[] = [
   events,
   academy,
   ResearchModule,
-  AdminModule,
 ]
-export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [settings]
+/** Additional pages to show in signed-in profile dropdown */
+export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [settings, AdminModule]
 export const ADMIN_PAGES: IPageMeta[] = [admin]
 export const POLICY_PAGES: IPageMeta[] = [privacyPolicy, termsPolicy]
 export const NO_HEADER_PAGES: IPageMeta[] = [

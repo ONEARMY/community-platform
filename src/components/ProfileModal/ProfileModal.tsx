@@ -7,6 +7,7 @@ import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
 import { NavLink } from 'react-router-dom'
 import Flex from 'src/components/Flex'
 import theme from 'src/themes/styled.theme'
+import { AuthWrapper } from '../Auth/AuthWrapper'
 
 interface IProps {
   username: string
@@ -87,17 +88,15 @@ export class ProfileModal extends React.Component<IProps> {
               <Flex>Profile</Flex>
             </ModalLink>
           </Flex>
-          <Flex>
-            {COMMUNITY_PAGES_PROFILE.map(page => (
-              <ModalLink
-                key={page.path}
-                to={page.path}
-                data-cy={`menu-${page.title}`}
-              >
-                <Flex>{page.title}</Flex>
-              </ModalLink>
-            ))}
-          </Flex>
+          {COMMUNITY_PAGES_PROFILE.map(page => (
+            <AuthWrapper roleRequired={page.requiredRole} key={page.path}>
+              <Flex>
+                <ModalLink to={page.path} data-cy={`menu-${page.title}`}>
+                  <Flex>{page.title}</Flex>
+                </ModalLink>
+              </Flex>
+            </AuthWrapper>
+          ))}
           <Flex>
             <ModalLink
               onClick={() => this.logout()}

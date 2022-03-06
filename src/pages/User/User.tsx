@@ -16,7 +16,7 @@ class UserPageRoutes extends React.Component<IProps, any> {
   public render() {
     return (
       <Switch>
-        <Route exact path="/u/:id" render={props => <UserPage {...props} />} />
+        <Route exact path="/u/:id" key={Math.random()} render={props => <UserPage {...props} />}/>
         <Route exact path="/u" render={() => <NotFoundPage />} />
       </Switch>
     )

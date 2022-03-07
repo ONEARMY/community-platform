@@ -127,17 +127,15 @@ export class Howto extends React.Component<
     const { isLoading } = this.state
     const loggedInUser = this.injected.userStore.activeUser
     const { activeHowto } = this.store
-    const {
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      users_votedUsefulHowtos,
-    } = this.injected.aggregationsStore.aggregations
 
     if (activeHowto) {
+      const votedUsefulCount = this.injected.aggregationsStore.aggregations
+        .users_votedUsefulHowtos[activeHowto._id]
       return (
         <>
           <HowtoDescription
             howto={activeHowto}
-            votedUsefulCount={users_votedUsefulHowtos[activeHowto._id]}
+            votedUsefulCount={votedUsefulCount}
             loggedInUser={loggedInUser}
             needsModeration={this.store.needsModeration(activeHowto)}
             userVotedUseful={this.store.userVotedActiveHowToUseful}

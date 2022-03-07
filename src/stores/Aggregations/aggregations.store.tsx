@@ -1,5 +1,4 @@
 import { action, makeAutoObservable, observable } from 'mobx'
-import { createContext, useContext } from 'react'
 import { Subscription } from 'rxjs'
 import { RootStore } from '..'
 import { DatabaseV2 } from '../databaseV2'
@@ -19,6 +18,10 @@ type IAggregationId = typeof AGGREGATION_DOC_IDS[number]
 /** Aggregation subscriptions default close after 5 minutes */
 const DEFAULT_TIMEOUT = 1000 * 60 * 5
 
+/**
+ * The aggregation store provides access to various aggregation endpoints, created as a means to cheaply
+ * retrieve data collated across entire collections as single documents
+ */
 export class AggregationsStore {
   /** Observable list of all aggregations by id */
   @observable aggregations: {
@@ -91,7 +94,3 @@ export class AggregationsStore {
     }
   }
 }
-
-const AggregationsStoreContext = createContext<AggregationsStore>(null as any)
-/** Provide context to use with hooks if preferred */
-export const useAggregationsStore = () => useContext(AggregationsStoreContext)

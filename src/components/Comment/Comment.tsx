@@ -11,15 +11,12 @@ import { Button } from 'src/components/Button'
 import { AuthWrapper } from '../Auth/AuthWrapper'
 import { logger } from 'src/logger'
 
-interface CommentProps {
-  handleEditRequest,
-  handleDelete,
-  handleEdit,
-}
-
-export interface IProps extends IComment, CommentProps {
+export interface IProps extends IComment {
   verified: boolean
-} 
+  handleEditRequest
+  handleDelete
+  handleEdit
+}
 
 export const Comment: React.FC<IProps> = ({
   _creatorId,

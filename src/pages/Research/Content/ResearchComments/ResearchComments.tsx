@@ -12,10 +12,9 @@ import { useResearchStore } from 'src/stores/Research/research.store'
 import { IResearch } from 'src/models/research.models'
 import styled from 'styled-components'
 
-
 interface IProps {
   comments?: IComment[]
-  update: IResearch.UpdateDB 
+  update: IResearch.UpdateDB
 }
 
 const BoxStyled = styled(Box)`
@@ -44,7 +43,9 @@ export const ResearchComments = ({ comments, update }: IProps) => {
   const ButtonMain = styled(Button)`
     width: 100%;
     justify-content: center;
-    &:hover { background-color: ${viewComments ? "#ffffff" : "#c2daf0" }; }
+    &:hover {
+      background-color: ${viewComments ? '#ffffff' : '#c2daf0'};
+    }
   `
 
   async function onSubmit(comment: string) {
@@ -81,7 +82,7 @@ export const ResearchComments = ({ comments, update }: IProps) => {
     })
   }
 
-  async function handleDelete (_id: string) {
+  async function handleDelete(_id: string) {
     const confirmation = window.confirm(
       'Are you sure you want to delete this comment?',
     )
@@ -128,10 +129,11 @@ export const ResearchComments = ({ comments, update }: IProps) => {
     let text = ''
     if (!viewComments) {
       if (comments && comments.length > 0) {
-        text = comments.length === 1 ? `View 1 Comment` :
-        `View ${comments.length} Comments`
-      }
-      else {
+        text =
+          comments.length === 1
+            ? `View 1 Comment`
+            : `View ${comments.length} Comments`
+      } else {
         text = 'Start a discussion'
       }
     } else {
@@ -142,18 +144,18 @@ export const ResearchComments = ({ comments, update }: IProps) => {
 
   return (
     <BoxMain
-      paddingTop={viewComments ? "15px" : "0"}
-      paddingLeft={viewComments ? "25px" : "0"}
-      paddingRight={viewComments ? "25px" : "0"}
-      backgroundColor={viewComments ? "#e2edf7" : "inherit"}
-      marginBottom={viewComments ? "20px" : "0"}
+      paddingTop={viewComments ? '15px' : '0'}
+      paddingLeft={viewComments ? '25px' : '0'}
+      paddingRight={viewComments ? '25px' : '0'}
+      backgroundColor={viewComments ? '#e2edf7' : 'inherit'}
+      marginBottom={viewComments ? '20px' : '0'}
     >
-      {(user || comments && comments.length > 0) && (
+      {(user || (comments && comments.length > 0)) && (
         <ButtonMain
           variant="subtle"
           fontSize="14px"
           onClick={onButtonClick}
-          backgroundColor={viewComments ? "#c2daf0" : "#e2edf7"}
+          backgroundColor={viewComments ? '#c2daf0' : '#e2edf7'}
         >
           <Flex>
             <Text>{setButtonText()}</Text>
@@ -161,53 +163,53 @@ export const ResearchComments = ({ comments, update }: IProps) => {
         </ButtonMain>
       )}
       {viewComments && (
-      <Flex
-        mt={5}
-        flexDirection="column"
-        alignItems="end"
-        marginTop="15px"
-        data-cy="update-comments"
-      >
-        {comments ? (
         <Flex
-          width="100%"
-          mb={4}
+          mt={5}
           flexDirection="column"
-          alignItems="center"
+          alignItems="end"
+          marginTop="15px"
+          data-cy="update-comments"
         >
-          {comments &&
-            comments
-              .map(comment => 
-              <Comment
-                key={comment._id}
-                {...comment} 
-                handleEdit={handleEdit}
-                handleDelete={handleDelete}
-                handleEditRequest={handleEditRequest}
-              />)}
-        </Flex>
-        ) : null}
-        {user ? (
-          <BoxStyled width={[7 / 10, 8 / 10, 9 / 10]}>
-            <CommentTextArea
-              data-cy="comment-text-area"
-              comment={comment}
-              onChange={setComment}
-              loading={loading}
-            />
-            <ButtonStyled
-              data-cy="comment-submit"
-              disabled={!Boolean(comment.trim()) || loading}
-              variant="primary"
-              onClick={() => onSubmit(comment)}
+          {comments ? (
+            <Flex
+              width="100%"
+              mb={4}
+              flexDirection="column"
+              alignItems="center"
             >
-              Comment
-            </ButtonStyled>
-          </BoxStyled>
-        ): null}
-      </Flex>
+              {comments &&
+                comments.map(comment => (
+                  <Comment
+                    key={comment._id}
+                    verified={false}
+                    {...comment}
+                    handleEdit={handleEdit}
+                    handleDelete={handleDelete}
+                    handleEditRequest={handleEditRequest}
+                  />
+                ))}
+            </Flex>
+          ) : null}
+          {user ? (
+            <BoxStyled width={[7 / 10, 8 / 10, 9 / 10]}>
+              <CommentTextArea
+                data-cy="comment-text-area"
+                comment={comment}
+                onChange={setComment}
+                loading={loading}
+              />
+              <ButtonStyled
+                data-cy="comment-submit"
+                disabled={!Boolean(comment.trim()) || loading}
+                variant="primary"
+                onClick={() => onSubmit(comment)}
+              >
+                Comment
+              </ButtonStyled>
+            </BoxStyled>
+          ) : null}
+        </Flex>
       )}
     </BoxMain>
-    
   )
 }

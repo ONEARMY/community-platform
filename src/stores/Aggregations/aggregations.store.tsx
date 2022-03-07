@@ -4,14 +4,23 @@ import { Subscription } from 'rxjs'
 import { RootStore } from '..'
 import { DatabaseV2 } from '../databaseV2'
 
-// TODO - refactor to shared list (search targetDocId)
-const targetDocIds = ['users_votedUsefulHowtos', 'users_verified'] as const
+/**
+ * List of existing aggregation docs
+ * TODO - refactor to shared list (search targetDocId)
+ */
+const AGGREGATION_DOC_IDS = [
+  'users_votedUsefulHowtos',
+  'users_verified',
+] as const
 
-type IAggregationId = typeof targetDocIds[number]
+// Utility type to generate from list of aggregation docs ids
+type IAggregationId = typeof AGGREGATION_DOC_IDS[number]
 
+/** Aggregation subscriptions default close after 5 minutes */
 const DEFAULT_TIMEOUT = 1000 * 60 * 5
 
 export class AggregationsStore {
+  /** Observable list of all aggregations by id */
   @observable aggregations: {
     [aggregationId in IAggregationId]: any
   }
@@ -24,13 +33,13 @@ export class AggregationsStore {
 
   constructor(rootStore: RootStore) {
     this.db = rootStore.dbV2
-    // By default initialisise all aggregations as empty documents
+    // initialisise all aggregations as empty documents by default
     const aggregations: any = {}
-    for (const targetDocId of targetDocIds) {
+    for (const targetDocId of AGGREGATION_DOC_IDS) {
       aggregations[targetDocId] = {}
     }
     this.aggregations = aggregations
-    makeAutoObservable(this)
+    makeAutoObservable(this, { aggregations: observable })
   }
 
   @action
@@ -83,12 +92,6 @@ export class AggregationsStore {
   }
 }
 
-/**
- * Export an empty context object to be shared with components
- * The context will be populated with the researchStore in the module index
- * (avoids cyclic deps and ensure shared module ready)
- */
-export const AggregationsStoreContext = createContext<AggregationsStore>(
-  null as any,
-)
+const AggregationsStoreContext = createContext<AggregationsStore>(null as any)
+/** Provide context to use with hooks if preferred */
 export const useAggregationsStore = () => useContext(AggregationsStoreContext)

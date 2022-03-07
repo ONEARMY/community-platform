@@ -12,8 +12,9 @@ const AGGREGATION_DOC_IDS = [
   'users_verified',
 ] as const
 
-// Utility type to generate from list of aggregation docs ids
+// Utility types generated from list of aggregation docs ids
 type IAggregationId = typeof AGGREGATION_DOC_IDS[number]
+type IAggregations = { [aggregationId in IAggregationId]: any }
 
 /** Aggregation subscriptions default close after 5 minutes */
 const DEFAULT_TIMEOUT = 1000 * 60 * 5
@@ -24,9 +25,7 @@ const DEFAULT_TIMEOUT = 1000 * 60 * 5
  */
 export class AggregationsStore {
   /** Observable list of all aggregations by id */
-  @observable aggregations: {
-    [aggregationId in IAggregationId]: any
-  }
+  @observable aggregations: IAggregations
 
   private db: DatabaseV2
   private subscriptions$: { [aggregationId: string]: Subscription } = {}
@@ -54,7 +53,7 @@ export class AggregationsStore {
    * Subscribe to updates to a particularly aggregation. Includes a default timeout so that subscriptions are not
    * left hanging too much longer than required, but at the same time are not repeatedly created to re-fetch same data
    */
-  updateAggregation(
+  public updateAggregation(
     aggregationId: IAggregationId,
     timeoutDuration = DEFAULT_TIMEOUT,
   ) {

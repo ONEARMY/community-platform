@@ -1,5 +1,5 @@
 import { Image, ImageProps } from 'rebass'
-import { useCommonStores } from 'src'
+import { useCommonStores } from 'src/index'
 import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
 
 interface IProps extends ImageProps {

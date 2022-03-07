@@ -18,6 +18,7 @@ import { Link } from 'src/components/Links'
 import { Loader } from 'src/components/Loader'
 import { UserStore } from 'src/stores/User/user.store'
 import { HowToComments } from './HowToComments/HowToComments'
+import { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
 // We can't directly provide the store as a prop though, and later user a get method to define it
@@ -27,6 +28,7 @@ interface IRouterCustomParams {
 interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
   howtoStore: HowtoStore
   userStore: UserStore
+  aggregationsStore: AggregationsStore
 }
 interface IState {
   howto?: IHowtoDB
@@ -70,7 +72,7 @@ const MoreBox = styled(Box)`
   }
 `
 
-@inject('howtoStore', 'userStore')
+@inject('howtoStore', 'userStore', 'aggregationsStore')
 @observer
 export class Howto extends React.Component<
   RouteComponentProps<IRouterCustomParams>,
@@ -125,18 +127,17 @@ export class Howto extends React.Component<
     const { isLoading } = this.state
     const loggedInUser = this.injected.userStore.activeUser
     const { activeHowto } = this.store
+    const {
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      users_votedUsefulHowtos,
+    } = this.injected.aggregationsStore.aggregations
 
     if (activeHowto) {
       return (
         <>
           <HowtoDescription
             howto={activeHowto}
-            verified={
-              this.injected.userStore.verifiedUsers[activeHowto._createdBy]
-            }
-            votedUsefulCount={
-              this.injected.userStore.userVotedHowtos[activeHowto._id]
-            }
+            votedUsefulCount={users_votedUsefulHowtos[activeHowto._id]}
             loggedInUser={loggedInUser}
             needsModeration={this.store.needsModeration(activeHowto)}
             userVotedUseful={this.store.userVotedActiveHowToUseful}
@@ -154,10 +155,7 @@ export class Howto extends React.Component<
               <Step step={step} key={index} stepindex={index} />
             ))}
           </Box>
-          <HowToComments
-            comments={activeHowto.comments}
-            verifiedUsers={this.injected.userStore.verifiedUsers}
-          />
+          <HowToComments comments={activeHowto.comments} />
           <MoreBox py={20} mt={20}>
             <Text bold txtcenter fontSize={[4, 4, 5]}>
               You're done.

@@ -63,6 +63,9 @@ export class ModuleStore {
   get mapsStore() {
     return this.rootStore.stores.mapsStore
   }
+  get aggregationsStore() {
+    return this.rootStore.stores.aggregationsStore
+  }
 
   /****************************************************************************
    *            Database Management Methods

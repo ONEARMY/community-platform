@@ -30,7 +30,7 @@ export interface ITextProps {
   critical?: boolean
   dashed?: boolean
   cropBottomRight?: boolean
-  theme?: any;
+  theme?: any
 }
 
 export const uppercase = props =>
@@ -146,7 +146,10 @@ type TextProps = ITextProps & RebassTextProps
 
 // TODO - incorporate custom css into rebass props to allow things like below to be passed
 export const Text = forwardRef((props: TextProps, ref) => (
-  <BaseText ref={ref} {...(props as any)}>{props.children}</BaseText>
+  <BaseText ref={ref} {...(props as any)}>
+    {props.children}
+  </BaseText>
 ))
-
+// Fix lint issue https://stackoverflow.com/questions/67992894/component-definition-is-missing-display-name-for-forwardref
+Text.displayName = 'Text'
 export default Text

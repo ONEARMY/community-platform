@@ -100,7 +100,7 @@ export class HowtoList extends React.Component<any, IState> {
      * To ensure the value is updated check the store
      * each time the component is mounted.
      */
-    this.props.userStore?.loadUserHowtoVotes()
+    this.injected.userStore.loadUserHowtoVotes()
   }
 
   public render() {

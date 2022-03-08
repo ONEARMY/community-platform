@@ -42,8 +42,9 @@ aliases:
   - &install_packages
     run:
       name: Install Packages
-      # Install to system tmp folder https://github.com/react-native-community/react-native-circleci-orb/issues/44
-      command: yarn install --immutable --cache-folder /tmp/yarn
+      command: yarn install --immutable
+      environment:
+        YARN_CACHE_FOLDER: /tmp/yarn # Install to system tmp folder https://github.com/react-native-community/react-native-circleci-orb/issues/44
     # Example debugging commands for use troubleshooting caching (du will exit with status 141)
   - &check_folders
     run:

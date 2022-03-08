@@ -37,11 +37,6 @@ export class UserStore extends ModuleStore {
     return this.aggregationsStore.aggregations.users_verified
   }
 
-  // redirect calls for userVotedHowtos to the aggregation store list
-  @computed get userVotedHowtos(): { [howto_id: string]: number } {
-    return this.aggregationsStore.aggregations.users_votedUsefulHowtos
-  }
-
   @action
   public updateUser(user?: IUserPPDB) {
     this.user = user
@@ -56,10 +51,8 @@ export class UserStore extends ModuleStore {
     super(rootStore)
     makeObservable(this)
     this._listenToAuthStateChanges()
-    // update howto votes and verified users on intial load
-    // use timeout to ensure aggregation store initialised
+    // Update verified users on intial load. use timeout to ensure aggregation store initialised
     setTimeout(() => {
-      this.loadUserHowtoVotes()
       this.loadVerifiedUsers()
     }, 50)
   }
@@ -299,11 +292,6 @@ export class UserStore extends ModuleStore {
   @action
   public async loadVerifiedUsers() {
     this.aggregationsStore.updateAggregation('users_verified')
-  }
-
-  @action
-  public async loadUserHowtoVotes() {
-    this.aggregationsStore.updateAggregation('users_votedUsefulHowtos')
   }
 
   // use firebase auth to listen to change to signed in user

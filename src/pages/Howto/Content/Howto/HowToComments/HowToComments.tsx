@@ -13,7 +13,6 @@ const MAX_COMMENTS = 5
 
 interface IProps {
   comments?: IComment[]
-  verifiedUsers?: { [user_id: string]: boolean }
 }
 
 const BoxStyled = styled(Box)`
@@ -27,7 +26,7 @@ const ButtonStyled = styled(Button)`
 `
 
 // TODO: Expect the comments as a prop from the HowTo
-export const HowToComments = ({ comments, verifiedUsers }: IProps) => {
+export const HowToComments = ({ comments }: IProps) => {
   const [comment, setComment] = useState('')
   const [loading, setLoading] = useState(false)
   const { stores } = useCommonStores()
@@ -136,7 +135,6 @@ export const HowToComments = ({ comments, verifiedUsers }: IProps) => {
             .slice(0, shownComments)
             .map(comment => (
               <Comment
-                verified={verifiedUsers?.[comment.creatorName] ? true : false}
                 key={comment._id}
                 {...comment}
                 handleEditRequest={handleEditRequest}

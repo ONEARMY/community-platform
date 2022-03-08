@@ -185,7 +185,6 @@ export const ResearchComments = ({ comments, update }: IProps) => {
                 comments.map(comment => (
                   <Comment
                     key={comment._id}
-                    verified={false}
                     {...comment}
                     handleEdit={handleEdit}
                     handleDelete={handleDelete}

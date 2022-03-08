@@ -7,12 +7,10 @@ import FlagIconEvents from 'src/components/Icons/FlagIcon/FlagIcon'
 import { IEvent } from '../../models/events.models'
 import { getMonth, getDay, capitalizeFirstLetter } from 'src/utils/helpers'
 import { LinkTargetBlank } from '../Links/LinkTargetBlank/LinkTargetBlank'
-import { Image } from 'rebass'
-import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
+import { VerifiedUserBadge } from '../VerifiedUserBadge/VerifiedUserBadge'
 
 interface IProps {
   event: IEvent
-  verified?: boolean
   needsModeration: boolean
   moderateEvent: (event: IEvent, accepted: boolean) => void
 }
@@ -86,9 +84,11 @@ export const EventCard = (props: IProps) => (
         <Text auxiliary width={1}>
           By {props.event._createdBy}
         </Text>
-        {props.verified && (
-          <Image src={VerifiedBadgeIcon} height="16px" width="16px" />
-        )}
+        <VerifiedUserBadge
+          userId={props.event._createdBy}
+          width="16px"
+          height="16px"
+        />
       </Flex>
     </Flex>
     <Flex
@@ -100,7 +100,12 @@ export const EventCard = (props: IProps) => (
     >
       <FlagIconEvents code={props.event.location.countryCode} />
       <Text auxiliary width={1} ml={[1, 1, 2]}>
-        {[props.event.location.administrative, props.event.location?.countryCode?.toUpperCase()].filter(Boolean).join(', ')}
+        {[
+          props.event.location.administrative,
+          props.event.location?.countryCode?.toUpperCase(),
+        ]
+          .filter(Boolean)
+          .join(', ')}
       </Text>
     </Flex>
     <Flex

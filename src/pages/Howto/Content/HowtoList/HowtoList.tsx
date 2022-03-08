@@ -15,11 +15,13 @@ import { HowtoStore } from 'src/stores/Howto/howto.store'
 import { UserStore } from 'src/stores/User/user.store'
 import HowToCard from './HowToCard'
 import { ThemeStore } from 'src/stores/Theme/theme.store'
+import { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
 
 interface InjectedProps {
   howtoStore: HowtoStore
   userStore: UserStore
   themeStore: ThemeStore
+  aggregationsStore: AggregationsStore
 }
 
 interface IState {
@@ -42,7 +44,7 @@ const updateQueryParams = (url: string, key: string, val: string) => {
 }
 
 // First we use the @inject decorator to bind to the howtoStore state
-@inject('howtoStore', 'userStore', 'themeStore')
+@inject('howtoStore', 'userStore', 'themeStore', 'aggregationsStore')
 // Then we can use the observer component decorator to automatically tracks observables and re-renders on change
 // (note 1, use ! to tell typescript that the store will exist (it's an injected prop))
 // (note 2, mobx seems to behave more consistently when observables are referenced outside of render methods)
@@ -100,11 +102,10 @@ export class HowtoList extends React.Component<any, IState> {
      * To ensure the value is updated check the store
      * each time the component is mounted.
      */
-    this.injected.userStore.loadUserHowtoVotes()
+    this.injected.aggregationsStore.updateAggregation('users_votedUsefulHowtos')
   }
 
   public render() {
-    const { verifiedUsers } = this.injected.userStore
     const {
       filteredHowtos,
       selectedTags,
@@ -113,6 +114,9 @@ export class HowtoList extends React.Component<any, IState> {
     } = this.props.howtoStore
 
     const theme = this.props?.themeStore?.currentTheme
+    const {
+      users_votedUsefulHowtos,
+    } = this.injected.aggregationsStore.aggregations
 
     return (
       <>
@@ -206,10 +210,7 @@ export class HowtoList extends React.Component<any, IState> {
                   <Box px={4} py={4}>
                     <HowToCard
                       howto={howto}
-                      verified={verifiedUsers?.[howto._createdBy]}
-                      votedUsefulCount={
-                        this.injected.userStore.userVotedHowtos[howto._id]
-                      }
+                      votedUsefulCount={users_votedUsefulHowtos[howto._id]}
                     />
                   </Box>
                 )}

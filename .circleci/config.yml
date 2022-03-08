@@ -42,7 +42,8 @@ aliases:
   - &install_packages
     run:
       name: Install Packages
-      command: yarn install --immutable
+      # Install to system tmp folder https://github.com/react-native-community/react-native-circleci-orb/issues/44
+      command: yarn install --immutable --cache-folder /tmp/yarn
     # Example debugging commands for use troubleshooting caching (du will exit with status 141)
   - &check_folders
     run:
@@ -58,7 +59,7 @@ aliases:
         # global cache location
         # - ~/.yarn/berry/cache
         # local cache location
-        - ~/project/.yarn/cache
+        - /tmp/yarn
       key: yarn-packages-v12-{{ checksum "yarn.lock" }}
 
   - &filter_only_production

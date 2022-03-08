@@ -459,7 +459,7 @@ workflows:
           matrix:
             parameters:
               CI_NODE: [1, 2]
-              CI_BROWSER: ['chrome', 'firefox']
+              CI_BROWSER: ['chrome']
           filters:
             branches:
               ignore:

@@ -35,7 +35,7 @@ export const createClusterIcon = () => {
 export const createMarkerIcon = (pin: IMapPin) => {
   const icon =
     pin.moderation === 'accepted'
-      ? Workspace.findWorkspaceBadge(pin.type, true)
+      ? Workspace.findWorkspaceBadge(pin.type, true, pin.verified)
       : AwaitingModerationHighlight
   if (!pin.type) {
     logger.debug('NO TYPE', pin)

@@ -1,3 +1,4 @@
+import { forwardRef } from 'react'
 import {
   Text as RebassText,
   TextProps as RebassTextProps,
@@ -144,8 +145,8 @@ export const BaseText = styled(RebassText as any)`
 type TextProps = ITextProps & RebassTextProps
 
 // TODO - incorporate custom css into rebass props to allow things like below to be passed
-export const Text = (props: TextProps) => (
-  <BaseText {...(props as any)}>{props.children}</BaseText>
-)
+export const Text = forwardRef((props: TextProps, ref) => (
+  <BaseText ref={ref} {...(props as any)}>{props.children}</BaseText>
+))
 
 export default Text

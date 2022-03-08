@@ -459,7 +459,7 @@ workflows:
           matrix:
             parameters:
               CI_NODE: [1, 2]
-              CI_BROWSER: ['chrome', 'firefox']
+              CI_BROWSER: ['chrome']
           filters:
             branches:
               ignore:
@@ -492,16 +492,9 @@ workflows:
           name: Release new version to GitHub
           context:
             - release-context
-      # Require manual approval on CirclCI website prior to release
       - build:
           name: Build Production Release
           context: build-context
-          <<: *filter_only_production
-      - hold:
-          name: approve_release
-          type: approval
-          requires:
-            - Build Production Release
           <<: *filter_only_production
       # Send a slack notification to approve the hold above (required config supplied in circleci-slack-context)
       - slack/on-hold:
@@ -514,7 +507,7 @@ workflows:
       - deploy:
           name: 'Deploy: community.preciousplastic.com'
           requires:
-            - 'approve_release'
+            - 'Build Production Release'
           <<: *filter_only_production
           DEPLOY_ALIAS: 'production'
           NOTIFY_SLACK: true
@@ -524,7 +517,7 @@ workflows:
       - deploy:
           name: 'Deploy: community.projectkamp.com'
           requires:
-            - 'approve_release'
+            - 'Build Production Release'
           <<: *filter_only_production
           DEPLOY_ALIAS: project-kamp-production
           NOTIFY_SLACK: true

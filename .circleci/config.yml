@@ -452,13 +452,6 @@ workflows:
           name: Build Production Release
           context: build-context
           <<: *filter_only_production
-      # Send a slack notification to approve the hold above (required config supplied in circleci-slack-context)
-      - slack/on-hold:
-          name: notify_slack_pending_approval
-          context: circle-ci-slack-context
-          requires:
-            - Build Production Release
-          <<: *filter_only_production
       - deploy:
           name: 'Deploy: community.preciousplastic.com'
           requires:

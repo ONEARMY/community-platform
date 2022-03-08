@@ -32,6 +32,17 @@ const ButtonStyled = styled(Button)`
   margin-top: 1em !important;
 `
 
+const ButtonMain = styled(Button)`
+  width: 100%;
+  justify-content: center;
+  &:hover {
+    background-color: #c2daf0;
+  }
+  &:hover.viewComments {
+    background-color: #ffffff;
+  }
+`
+
 export const ResearchComments = ({ comments, update }: IProps) => {
   const [comment, setComment] = useState('')
   const [loading, setLoading] = useState(false)
@@ -39,14 +50,6 @@ export const ResearchComments = ({ comments, update }: IProps) => {
   const researchStore = useResearchStore()
   const user = stores.userStore.activeUser
   const [viewComments, setViewComments] = useState(false)
-
-  const ButtonMain = styled(Button)`
-    width: 100%;
-    justify-content: center;
-    &:hover {
-      background-color: ${viewComments ? '#ffffff' : '#c2daf0'};
-    }
-  `
 
   async function onSubmit(comment: string) {
     try {
@@ -156,6 +159,7 @@ export const ResearchComments = ({ comments, update }: IProps) => {
           fontSize="14px"
           onClick={onButtonClick}
           backgroundColor={viewComments ? '#c2daf0' : '#e2edf7'}
+          className={viewComments ? 'viewComments' : ''}
         >
           <Flex>
             <Text>{setButtonText()}</Text>

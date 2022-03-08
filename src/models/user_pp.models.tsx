@@ -41,6 +41,7 @@ export interface IProfileType {
   label: ProfileTypeLabel
   imageSrc?: string
   cleanImageSrc?: string
+  cleanImageVerifiedSrc?: string
   textLabel?: string
 }
 export interface IWorkspaceType {

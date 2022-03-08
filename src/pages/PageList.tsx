@@ -3,6 +3,7 @@ import { CSSObject } from '@styled-system/css'
 import { UserRole } from 'src/models/user.models'
 import { ResearchModule } from './Research'
 import { MODULE } from 'src/modules'
+import { AdminModule } from 'src/modules/admin'
 
 /**
  * Import all pages for use in lazy loading
@@ -11,7 +12,7 @@ import { MODULE } from 'src/modules'
 const HowtoPage = lazy(() => import('./Howto/Howto'))
 const SettingsPage = lazy(() => import('./Settings'))
 
-const AcademyPage = lazy(() => import('./Academy/Academy'));
+const AcademyPage = lazy(() => import('./Academy/Academy'))
 const EventsPage = lazy(() => import('./Events/Events'))
 const AdminPage = lazy(() => import('./admin/Admin'))
 const MapsPage = lazy(() => import('./Maps/Maps'))
@@ -72,7 +73,7 @@ const user = {
 const academy = {
   moduleName: MODULE.ACADEMY,
   path: '/academy',
-  component: <AcademyPage/>,
+  component: <AcademyPage />,
   title: 'Academy',
   description: 'Demo external page embed',
   customStyles: {
@@ -178,7 +179,8 @@ export const COMMUNITY_PAGES: IPageMeta[] = [
   academy,
   ResearchModule,
 ]
-export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [settings]
+/** Additional pages to show in signed-in profile dropdown */
+export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [settings, AdminModule]
 export const ADMIN_PAGES: IPageMeta[] = [admin]
 export const POLICY_PAGES: IPageMeta[] = [privacyPolicy, termsPolicy]
 export const NO_HEADER_PAGES: IPageMeta[] = [

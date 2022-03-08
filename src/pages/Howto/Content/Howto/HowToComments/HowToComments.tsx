@@ -67,6 +67,53 @@ export const HowToComments = ({ comments }: IProps) => {
     }
   }
 
+  async function handleEditRequest() {
+    ReactGA.event({
+      category: 'Comments',
+      action: 'Edit existing comment',
+      label: stores.howtoStore.activeHowto?.title,
+    })
+  }
+
+  async function handleDelete(_id: string) {
+    const confirmation = window.confirm(
+      'Are you sure you want to delete this comment?',
+    )
+    if (confirmation) {
+      await stores.howtoStore.deleteComment(_id)
+      ReactGA.event({
+        category: 'Comments',
+        action: 'Deleted',
+        label: stores.howtoStore.activeHowto?.title,
+      })
+      logger.debug(
+        {
+          category: 'Comments',
+          action: 'Deleted',
+          label: stores.howtoStore.activeHowto?.title,
+        },
+        'comment deleted',
+      )
+    }
+  }
+
+  async function handleEdit(_id: string, comment: string) {
+    ReactGA.event({
+      category: 'Comments',
+      action: 'Update',
+      label: stores.howtoStore.activeHowto?.title,
+    })
+    logger.debug(
+      {
+        category: 'Comments',
+        action: 'Update',
+        label: stores.howtoStore.activeHowto?.title,
+      },
+      'comment edited',
+    )
+    await stores.howtoStore.editComment(_id, comment)
+  }
+
   const shownComments = moreComments * MAX_COMMENTS
 
   return (
@@ -86,7 +133,15 @@ export const HowToComments = ({ comments }: IProps) => {
         {comments &&
           comments
             .slice(0, shownComments)
-            .map(comment => <Comment key={comment._id} {...comment} />)}
+            .map(comment => (
+              <Comment
+                key={comment._id}
+                {...comment}
+                handleEditRequest={handleEditRequest}
+                handleDelete={handleDelete}
+                handleEdit={handleEdit}
+              />
+            ))}
         {comments && comments.length > shownComments && (
           <Button
             width="max-content"

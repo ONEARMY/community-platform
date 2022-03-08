@@ -77,50 +77,6 @@ aliases:
         only:
           - ci/circle-ci-release
 
-  - &slack_custom_hold_message
-    # Message shown in slack to approve new deployment - edit in https://app.slack.com/block-kit-builder
-    # Based on: https://github.com/CircleCI-Public/slack-orb/tree/master/src/message_templates
-    custom: |
-      {
-        "blocks": [
-          {
-            "type": "header",
-            "text": {
-              "type": "plain_text",
-              "text": ":rocket: New Update - Ready for Launch",
-              "emoji": true
-            }
-          },
-          {
-            "type": "section",
-            "fields": [
-              {
-                "type": "mrkdwn",
-                "text": "*Project*: $CIRCLE_PROJECT_REPONAME"
-              }
-            ],
-            "accessory": {
-              "type": "image",
-              "image_url": "https://yt3.ggpht.com/ytc/AAUvwni_34CcLQsIhNo1d1A2zUK0pNPzipCV9oM1gvkNNw=s900-c-k-c0x00ffffff-no-rj",
-              "alt_text": "Logo"
-            }
-          },
-          {
-            "type": "actions",
-            "elements": [
-              {
-                "type": "button",
-                "text": {
-                  "type": "plain_text",
-                  "text": "Go To Approval"
-                },
-                "url": "https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}"
-              }
-            ]
-          }
-        ]
-      }
-
   - &slack_custom_success_message
     custom: |
       {
@@ -503,7 +459,6 @@ workflows:
           requires:
             - Build Production Release
           <<: *filter_only_production
-          <<: *slack_custom_hold_message
       - deploy:
           name: 'Deploy: community.preciousplastic.com'
           requires:

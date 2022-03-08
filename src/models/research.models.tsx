@@ -1,5 +1,5 @@
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
-import { DBDoc, IModerable, ISelectedTags } from 'src/models'
+import { DBDoc, IComment, IModerable, ISelectedTags } from 'src/models'
 import { IUploadedFileMeta } from 'src/stores/storage'
 
 /** All typings related to the Research Module can be found here */
@@ -16,6 +16,7 @@ export namespace IResearch {
     description: string
     images: Array<IUploadedFileMeta | IConvertedFileMeta | null>
     videoUrl?: string
+    comments?: IComment[]
   }
 
   export interface FormInput extends IModerable {

@@ -9,7 +9,7 @@ import {
 import { createContext, useContext } from 'react'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { logger } from 'src/logger'
-import { IUser } from 'src/models'
+import { IComment, IUser } from 'src/models'
 import { IResearch } from 'src/models/research.models'
 import { ModuleStore } from 'src/stores/common/module.store'
 import {
@@ -104,6 +104,179 @@ export class ResearchStore extends ModuleStore {
     this.updateUploadStatus = getInitialUpdateUploadStatus()
   }
 
+  public async addComment(text: string, update: IResearch.Update | IResearch.UpdateDB) {
+    const user = this.activeUser
+    const item = this.activeResearchItem
+    const comment = text.slice(0, 400).trim()
+
+    if (item && comment && user) {
+      const dbRef = this.db
+        .collection<IResearch.Item>(COLLECTION_NAME)
+        .doc(item._id)
+      const id = dbRef.id
+
+      try {
+        const newComment: IComment = {
+          _id: randomID(),
+          _created: new Date().toISOString(),
+          _creatorId: user._id,
+          creatorName: user.userName,
+          creatorCountry:
+            user.country?.toLowerCase() ||
+            user.location?.countryCode?.toLowerCase() ||
+            null,
+          text: comment,
+        }
+
+        const updateWithMeta = { ...update }
+        if (update.images.length > 0) {
+          const imgMeta = await this.uploadCollectionBatch(
+            update.images.filter(img => !!img) as IConvertedFileMeta[],
+            COLLECTION_NAME,
+            id,
+          )
+          const newImg = imgMeta.map((img) => ({...img}))
+          updateWithMeta.images = newImg
+        } else updateWithMeta.images = []
+
+        updateWithMeta.comments = updateWithMeta.comments
+        ? [...toJS(updateWithMeta.comments), newComment]
+        : [newComment]
+
+        const existingUpdateIndex = item.updates.findIndex(
+          upd => upd._id === (update as IResearch.UpdateDB)._id,
+        )
+
+        const newItem = {
+          ...toJS(item),
+          updates: [...toJS(item.updates)],
+        }
+
+        newItem.updates[existingUpdateIndex] = {
+          ...(updateWithMeta as IResearch.UpdateDB),
+        }
+
+        await dbRef.set(newItem)
+        const createdItem = (await dbRef.get()) as IResearch.ItemDB
+        runInAction(() => {
+          this.activeResearchItem = createdItem
+        })
+      } catch (error) {
+        console.error(error)
+        throw new Error(error?.message)
+      }
+    }
+  }
+
+  public async deleteComment(commentId: string, update: IResearch.Update | IResearch.UpdateDB) {
+    try {
+      const item = this.activeResearchItem
+      const user = this.activeUser
+      if (commentId && item && user && update.comments) {
+        const dbRef = this.db
+        .collection<IResearch.Item>(COLLECTION_NAME)
+        .doc(item._id)
+        const id = dbRef.id
+
+        const newComments = toJS(update.comments).filter(
+          comment => !(comment._creatorId === user._id && comment._id === commentId),
+        )
+        
+        const updateWithMeta = { ...update }
+        if (update.images.length > 0) {
+          const imgMeta = await this.uploadCollectionBatch(
+            update.images.filter(img => !!img) as IConvertedFileMeta[],
+            COLLECTION_NAME,
+            id,
+          )
+          const newImg = imgMeta.map((img) => ({...img}))
+          updateWithMeta.images = newImg
+        } else updateWithMeta.images = []
+
+        updateWithMeta.comments = newComments
+
+        const existingUpdateIndex = item.updates.findIndex(
+          upd => upd._id === (update as IResearch.UpdateDB)._id,
+        )
+
+        const newItem = {
+          ...toJS(item),
+          updates: [...toJS(item.updates)],
+        }
+
+        newItem.updates[existingUpdateIndex] = {
+          ...(updateWithMeta as IResearch.UpdateDB),
+        }
+
+        await dbRef.set(newItem)
+        const createdItem = (await dbRef.get()) as IResearch.ItemDB
+        runInAction(() => {
+          this.activeResearchItem = createdItem
+        })
+      }
+    } catch (err) {
+      console.error(err)
+      throw new Error(err)
+    }
+  }
+
+  public async editComment(commentId: string, newText: string, update: IResearch.Update | IResearch.UpdateDB) {
+    try {
+      const item = this.activeResearchItem
+      const user = this.activeUser
+      if (commentId && item && user && update.comments) {
+        const dbRef = this.db
+        .collection<IResearch.Item>(COLLECTION_NAME)
+        .doc(item._id)
+        const id = dbRef.id
+
+        const pastComments = toJS(update.comments)
+        const commentIndex = pastComments.findIndex(
+          comment => comment._creatorId === user._id && comment._id === commentId,
+        )
+        const updateWithMeta = { ...update }
+        if (update.images.length > 0) {
+          const imgMeta = await this.uploadCollectionBatch(
+            update.images.filter(img => !!img) as IConvertedFileMeta[],
+            COLLECTION_NAME,
+            id,
+          )
+          const newImg = imgMeta.map((img) => ({...img}))
+          updateWithMeta.images = newImg
+        } else updateWithMeta.images = []
+
+        
+        if (commentIndex !== -1) {
+          pastComments[commentIndex].text = newText.slice(0, 400).trim()
+          pastComments[commentIndex]._edited = new Date().toISOString()
+          updateWithMeta.comments = pastComments
+
+          const existingUpdateIndex = item.updates.findIndex(
+            upd => upd._id === (update as IResearch.UpdateDB)._id,
+          )
+  
+          const newItem = {
+            ...toJS(item),
+            updates: [...toJS(item.updates)],
+          }
+          
+          newItem.updates[existingUpdateIndex] = {
+            ...(updateWithMeta as IResearch.UpdateDB),
+          }
+
+          await dbRef.set(newItem)
+          const createdItem = (await dbRef.get()) as IResearch.ItemDB
+          runInAction(() => {
+            this.activeResearchItem = createdItem
+          })
+        }
+      }
+    } catch (err) {
+      console.error(err)
+      throw new Error(err)
+    }
+  }
+
   public async uploadResearch(values: IResearch.FormInput | IResearch.ItemDB) {
     logger.debug('uploading research')
     this.updateResearchUploadStatus('Start')
@@ -181,6 +354,7 @@ export class ResearchStore extends ModuleStore {
             _created: new Date().toISOString(),
             _modified: new Date().toISOString(),
             _deleted: false,
+            comments: [],
           })
         } else {
           // editing update

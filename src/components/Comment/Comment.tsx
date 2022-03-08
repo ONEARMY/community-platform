@@ -12,7 +12,6 @@ import { AuthWrapper } from '../Auth/AuthWrapper'
 import { logger } from 'src/logger'
 
 export interface IProps extends IComment {
-  verified: boolean
   handleEditRequest
   handleDelete
   handleEdit

@@ -222,7 +222,7 @@ jobs:
     resource_class: small
     steps:
       - setup_repo
-      - run: cd functions && yarn && yarn build && yarn emulator:test
+      - run: yarn && yarn build:components && yarn workspace functions build && yarn workspace functions emulator:test
 
   # Create a production build
   # NOTE - not currently used in test workflow as different build_env required for each machine

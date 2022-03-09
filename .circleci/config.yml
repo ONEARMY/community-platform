@@ -273,7 +273,7 @@ jobs:
             - build
   storybook:
     docker: *docker
-    resource_class: medium
+    resource_class: medium+
     steps:
       - setup_repo
       - attach_workspace:

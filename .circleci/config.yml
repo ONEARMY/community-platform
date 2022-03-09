@@ -344,7 +344,7 @@ jobs:
           environment:
             CI_BROWSER: << parameters.CI_BROWSER >>
             CI_NODE: << parameters.CI_NODE >>
-            CI_GROUP: 2x-<< parameters.CI_BROWSER >>
+            CI_GROUP: ci-<< parameters.CI_BROWSER >>
       - store_artifacts:
           path: ./packages/cypress/src/screenshots/
   release:
@@ -414,7 +414,7 @@ workflows:
             - e2e-tests
           matrix:
             parameters:
-              CI_NODE: [1, 2]
+              CI_NODE: [1, 2, 3, 4]
               CI_BROWSER: ['chrome']
           filters:
             branches:

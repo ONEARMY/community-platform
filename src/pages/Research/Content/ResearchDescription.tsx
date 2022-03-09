@@ -9,19 +9,17 @@ import ModerationStatusText from 'src/components/ModerationStatusText'
 import Text from 'src/components/Text'
 import { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
-import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
+import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 interface IProps {
   research: IResearch.ItemDB
   isEditable: boolean
   needsModeration: boolean
   moderateResearch: (accepted: boolean) => void
-  verified: boolean
 }
 
 const ResearchDescription: React.FC<IProps> = ({
   research,
   isEditable,
-  verified,
   ...props
 }) => {
   const dateLastUpdateText = (research: IResearch.ItemDB): string => {
@@ -110,14 +108,12 @@ const ResearchDescription: React.FC<IProps> = ({
                 >
                   {research._createdBy}
                 </Link>
-                {verified && (
-                  <Image
-                    src={VerifiedBadgeIcon}
-                    mr={1}
-                    width="12px"
-                    height="12px"
-                  />
-                )}
+                <VerifiedUserBadge
+                  userId={research._createdBy}
+                  mr={1}
+                  width="12px"
+                  height="12px"
+                />
                 | Started on {format(new Date(research._created), 'DD-MM-YYYY')}
               </Flex>
             </Text>

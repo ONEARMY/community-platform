@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { createRef, useEffect, useState } from 'react'
 import { FaTrash, FaRegEdit } from 'react-icons/fa'
 import { Flex } from 'rebass/styled-components'
 import { IComment } from 'src/models'
@@ -12,7 +12,6 @@ import { AuthWrapper } from '../Auth/AuthWrapper'
 import { logger } from 'src/logger'
 
 export interface IProps extends IComment {
-  verified: boolean
   handleEditRequest
   handleDelete
   handleEdit
@@ -27,7 +26,10 @@ export const Comment: React.FC<IProps> = ({
   handleEdit,
   ...props
 }) => {
+  const textRef = createRef<any>();
   const [showEditModal, setShowEditModal] = useState(false)
+  const [textHeight, setTextHeight] = useState(0)
+  const [isShowMore, setShowMore] = useState(false)
 
   const onEditRequest = () => {
     handleEditRequest()
@@ -36,6 +38,16 @@ export const Comment: React.FC<IProps> = ({
 
   const onDelete = () => {
     handleDelete(_id)
+  }
+
+  useEffect(() => {
+    if (textRef.current) {
+      setTextHeight(textRef.current.scrollHeight)
+    }
+  }, [])
+
+  const showMore = () => {
+    setShowMore(!isShowMore);
   }
 
   return (
@@ -48,10 +60,31 @@ export const Comment: React.FC<IProps> = ({
       style={{ borderRadius: '5px' }}
     >
       <CommentHeader {...props} />
-      <Text my={2} style={{ whiteSpace: 'pre-wrap' }}>
+      <Text
+        my={2} 
+        style={{ 
+          whiteSpace: 'pre-wrap',
+          wordBreak: 'break-word',
+          overflow: "hidden",
+          lineHeight: "1em",
+          maxHeight: isShowMore ? "max-content" : "10em",
+        }}
+        ref={textRef}
+      >
         {text}
       </Text>
-
+      {textHeight > 160 &&
+          <a 
+            onClick={showMore}
+            style={{
+              color: "gray",
+              cursor: "pointer",
+              fontSize: "14px",
+            }}
+          >
+            {isShowMore ? 'Show less' : 'Show more'}
+          </a>
+      }
       <Flex ml="auto">
         <AuthWrapper roleRequired="admin" additionalAdmins={[_creatorId]}>
           <Text

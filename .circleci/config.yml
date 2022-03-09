@@ -222,7 +222,7 @@ jobs:
     resource_class: small
     steps:
       - setup_repo
-      - run: cd functions && yarn && yarn build && yarn emulator:test
+      - run: yarn && yarn build:components && yarn workspace functions build && yarn workspace functions emulator:test
 
   # Create a production build
   # NOTE - not currently used in test workflow as different build_env required for each machine
@@ -237,7 +237,7 @@ jobs:
           name: Install dependencies
           command: yarn workspaces focus one-army-community-platform
       - run:
-          command: yarn run test:unit
+          command: yarn && yarn build:components && yarn run test:unit
   build:
     docker: *docker
     environment:
@@ -273,13 +273,13 @@ jobs:
             - build
   storybook:
     docker: *docker
-    resource_class: medium
+    resource_class: medium+
     steps:
       - setup_repo
       - attach_workspace:
           at: '.'
       - run:
-          command: yarn workspace oa-storybook build
+          command: yarn workspace oa-components build:sb
   deploy:
     docker: *docker
     resource_class: small

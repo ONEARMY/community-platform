@@ -1,7 +1,7 @@
 import Flex from 'src/components/Flex'
 import ModerationStatusText from 'src/components/ModerationStatusText'
 import Text from 'src/components/Text'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import FlagIconEvents from 'src/components/Icons/FlagIcon/FlagIcon'
 import { IEvent } from '../../models/events.models'

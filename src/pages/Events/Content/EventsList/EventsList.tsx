@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { IEvent, IEventDB } from 'src/models/events.models'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import { Link } from 'src/components/Links'
 import { Flex, Box } from 'rebass/styled-components'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'

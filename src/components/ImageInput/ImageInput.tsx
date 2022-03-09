@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Box, Image } from 'rebass/styled-components'
 import styled from 'styled-components'
-import { Button } from '../Button'
+import { Button } from 'oa-components'
 import 'react-image-lightbox/style.css'
 import { ImageConverter } from './ImageConverter'
 import theme from '../../themes/styled.theme'

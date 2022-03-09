@@ -1,15 +1,13 @@
-import * as React from 'react';
-import { Icon, IGlyphs } from '../Icons'
+import * as React from 'react'
 import {
   Button as RebassButton,
   ButtonProps as RebassButtonProps,
 } from 'rebass/styled-components'
-import Text from '../Text'
 import styled from 'styled-components'
 
 // extend to allow any default button props (e.g. onClick) to also be passed
 export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
-  icon?: keyof IGlyphs
+  icon?: any
   disabled?: boolean
   translateY?: boolean
   small?: boolean
@@ -17,28 +15,29 @@ export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
   large?: boolean
   hasText?: boolean
 }
-export const small = (props: IBtnProps) =>
+
+const small = (props: IBtnProps) =>
   props.small
     ? {
         padding: '4px 10px!important',
       }
     : null
 
-export const medium = (props: IBtnProps) =>
+const medium = (props: IBtnProps) =>
   props.medium
     ? {
         padding: '6px 12px!important',
       }
     : null
 
-export const large = (props: IBtnProps) =>
+const large = (props: IBtnProps) =>
   props.large
     ? {
         padding: '8px 14px!important',
       }
     : null
 
-export const translateY = (props: IBtnProps) =>
+const translateY = (props: IBtnProps) =>
   props.translateY
     ? {
         '&:hover': {
@@ -50,7 +49,7 @@ export const translateY = (props: IBtnProps) =>
       }
     : null
 
-type BtnProps = IBtnProps & RebassButtonProps
+export type BtnProps = IBtnProps & RebassButtonProps
 
 const BaseButton = styled(RebassButton)`
   ${translateY}
@@ -61,8 +60,7 @@ const BaseButton = styled(RebassButton)`
 
 export const Button = (props: BtnProps) => (
   <BaseButton {...props}>
-    {props.icon && <Icon glyph={props.icon} marginRight="4px" />}
-    <Text>{props.children}</Text>
+    <span>{props.children}</span>
   </BaseButton>
 )
 

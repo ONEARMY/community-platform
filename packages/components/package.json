@@ -7,7 +7,7 @@
   "types": "dist/index.d.js",
   "scripts": {
     "start": "start-storybook -p 6006",
-    "build:sb": "build-storybook",
+    "build:sb": "yarn build && build-storybook",
     "build": "tsc"
   },
   "dependencies": {

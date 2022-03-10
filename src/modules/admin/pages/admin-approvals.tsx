@@ -2,9 +2,8 @@ import { observer } from 'mobx-react'
 import { useCallback, useEffect, useState } from 'react'
 import { Box } from 'rebass'
 import { useDB } from 'src/App'
-import { DB_ENDPOINTS, IDBEndpoint, IHowto, IMapPin } from 'src/models'
+import { IDBEndpoint, IHowto, IMapPin } from 'src/models'
 import { DatabaseV2 } from 'src/stores/databaseV2'
-import { FirestoreClient } from 'src/stores/databaseV2/clients/firestore'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
 import { useHistory } from 'react-router'
@@ -155,21 +154,22 @@ const AdminHome = observer(() => {
 })
 export default AdminHome
 
-/**
- * Make direct calls to firebase server db to check status of approvals
- * TODO - would be nice to use general method against all clients but will require
- * support for limit queries and chaining where conditions
- */
+/** Query database for documents pending moderation */
 async function getPendingApprovals(
   endpoint: IDBEndpoint,
   dbClient: DatabaseV2,
 ) {
-  const db = (dbClient.clients.serverDB as FirestoreClient)._raw
-  const mappedEndpoint = DB_ENDPOINTS[endpoint]
-  const res = await db
-    .collection(mappedEndpoint)
-    .where('moderation', '==', 'awaiting-moderation')
-    // .limit(10)
-    .get()
-  return res.docs.map(d => d.data())
+  return dbClient
+    .collection(endpoint)
+    .getWhere('moderation', '==', 'awaiting-moderation')
+
+  /** Alt syntax via raw firestore TODO - decide if required (likely if multiple where chains) */
+  // const db = (dbClient.clients.serverDB as FirestoreClient)._raw // <-- will need to be exposed
+  // const mappedEndpoint = DB_ENDPOINTS[endpoint]
+  // const res = await db
+  //   .collection(mappedEndpoint)
+  //   .where('moderation', '==', 'awaiting-moderation')
+  //   // .limit(10)
+  //   .get()
+  // return res.docs.map(d => d.data())
 }

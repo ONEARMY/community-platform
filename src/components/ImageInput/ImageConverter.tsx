@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Flex } from 'rebass/styled-components'
 import imageCompression from 'browser-image-compression'
-import { IConvertedFileMeta } from './ImageInput'
+import type { IConvertedFileMeta } from 'src/types'
 import styled from 'styled-components'
 import theme from '../../themes/styled.theme'
 

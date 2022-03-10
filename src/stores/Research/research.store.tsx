@@ -7,7 +7,7 @@ import {
   toJS,
 } from 'mobx'
 import { createContext, useContext } from 'react'
-import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
+import type { IConvertedFileMeta } from 'src/types'
 import { logger } from 'src/logger'
 import { IComment, IUser } from 'src/models'
 import { IResearch } from 'src/models/research.models'

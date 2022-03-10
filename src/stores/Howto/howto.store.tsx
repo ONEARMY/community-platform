@@ -1,6 +1,6 @@
 import Fuse from 'fuse.js'
 import { action, computed, makeObservable, observable, toJS } from 'mobx'
-import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
+import type { IConvertedFileMeta } from 'src/types'
 import {
   IHowto,
   IHowtoDB,

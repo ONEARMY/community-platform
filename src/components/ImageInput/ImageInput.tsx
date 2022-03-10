@@ -7,6 +7,7 @@ import { ImageConverter } from './ImageConverter'
 import theme from '../../themes/styled.theme'
 import Dropzone from 'react-dropzone'
 import type { IUploadedFileMeta } from '../../stores/storage'
+import { IConvertedFileMeta } from 'src/types'
 
 interface ITitleProps {
   hasUploadedImg: boolean
@@ -72,13 +73,6 @@ interface IProps {
 const defaultProps: IProps = {
   onFilesChange: () => null,
   multiple: false,
-}
-
-export interface IConvertedFileMeta {
-  photoData: Blob
-  objectUrl: string
-  name: string
-  type: string
 }
 
 interface IState {

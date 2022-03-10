@@ -11,7 +11,6 @@ import { Box, Image } from 'rebass/styled-components'
 import Slider from 'react-slick'
 import 'src/assets/css/slick.min.css'
 import styled from 'styled-components'
-import Icon from 'src/components/Icons'
 import Flex from 'src/components/Flex'
 import Workspace from 'src/pages/User/workspace/Workspace'
 import { Text } from 'src/components/Text'
@@ -20,7 +19,7 @@ import Badge from 'src/components/Badge/Badge';
 
 import theme from 'src/themes/styled.theme'
 import { replaceDashesWithSpaces } from 'src/utils/helpers'
-import { FlagIcon } from 'src/components/Icons/FlagIcon/FlagIcon'
+import { Icon, FlagIcon } from 'oa-components'
 
 // Plastic types
 import HDPEIcon from 'src/assets/images/plastic-types/hdpe.svg'

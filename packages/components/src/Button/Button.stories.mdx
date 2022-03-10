@@ -9,7 +9,11 @@ import {
 } from '@storybook/addon-docs/blocks'
 import { Button } from './Button.tsx'
 
-<Meta title="Base Components/Button" component={Button} decorators={[withKnobs]} />
+<Meta
+  title="Base Components/Button"
+  component={Button}
+  decorators={[withKnobs]}
+/>
 
 # Buttons
 
@@ -70,6 +74,7 @@ You can add an icon to the button by setting the `icon` prop, for example:
   <Story name="With Icon">
     <Button icon={'add'}>Add Icon</Button>
   </Story>
+  <Button icon={'delete'}>Delete</Button>
   <Button icon={'email'}>Send Email</Button>
   <Button icon={'close'}>Close Me</Button>
   <Button icon={'arrow-back'}>Go Back</Button>

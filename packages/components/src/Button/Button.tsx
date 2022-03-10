@@ -1,4 +1,6 @@
 import * as React from 'react'
+import { Icon } from '../Icon/Icon'
+import type { IGlyphs } from '../Icon/types'
 import {
   Button as RebassButton,
   ButtonProps as RebassButtonProps,
@@ -7,7 +9,7 @@ import styled from 'styled-components'
 
 // extend to allow any default button props (e.g. onClick) to also be passed
 export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
-  icon?: any
+  icon?: keyof IGlyphs
   disabled?: boolean
   translateY?: boolean
   small?: boolean
@@ -60,6 +62,7 @@ const BaseButton = styled(RebassButton)`
 
 export const Button = (props: BtnProps) => (
   <BaseButton {...props}>
+    {props.icon && <Icon glyph={props.icon} marginRight="4px" />}
     <span>{props.children}</span>
   </BaseButton>
 )

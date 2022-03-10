@@ -3,7 +3,7 @@ import { IFirebaseUploadInfo } from 'src/components/FirebaseFileUploader/Firebas
 import { storage } from 'src/utils/firebase'
 import './UploadedFile.scss'
 import { Button } from 'oa-components'
-import Icon from 'src/components/Icons'
+import {Icon} from 'oa-components'
 import ImagePreview from './ImagePreview'
 import { logger } from 'src/logger'
 

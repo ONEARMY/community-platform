@@ -31,7 +31,7 @@ import {
   MdLocationOn,
   MdMail,
   MdChevronLeft,
-  MdChevronRight
+  MdChevronRight,
 } from 'react-icons/md'
 import {
   GoCloudUpload,
@@ -39,14 +39,15 @@ import {
   GoTrashcan,
   GoLinkExternal,
 } from 'react-icons/go'
-import { AiFillThunderbolt } from "react-icons/ai";
+import { AiFillThunderbolt } from 'react-icons/ai'
 import { FaSignal, FaFacebookF, FaSlack, FaInstagram } from 'react-icons/fa'
 import { IconContext } from 'react-icons'
 import SVGs from './svgs'
 import { DownloadIcon } from './DownloadIcon'
+import type { IGlyphs } from './types'
 
 interface IGlyphProps {
-  glyph: string
+  glyph: keyof IGlyphs
 }
 
 interface IProps {
@@ -56,47 +57,6 @@ interface IProps {
   color?: string
   onClick?: () => void
 }
-
-export type availableGlyphs =
-  | 'download'
-  | 'download-cloud'
-  | 'upload'
-  | 'add'
-  | 'check'
-  | 'arrow-back'
-  | 'arrow-full-down'
-  | 'arrow-full-up'
-  | 'arrow-forward'
-  | 'arrow-down'
-  | 'mail-outline'
-  | 'notifications'
-  | 'account-circle'
-  | 'lock'
-  | 'close'
-  | 'delete'
-  | 'more-vert'
-  | 'comment'
-  | 'turned-in'
-  | 'edit'
-  | 'time'
-  | 'step'
-  | 'difficulty'
-  | 'image'
-  | 'pdf'
-  | 'loading'
-  | 'location-on'
-  | 'external-link'
-  | 'facebook'
-  | 'instagram'
-  | 'slack'
-  | 'email'
-  | 'chevron-left'
-  | 'chevron-right'
-  | 'star'
-  | 'star-active'
-  | 'thunderbolt'
-
-export type IGlyphs = { [k in availableGlyphs]: JSX.Element }
 
 export const glyphs: IGlyphs = {
   download: <MdFileDownload />,
@@ -135,31 +95,31 @@ export const glyphs: IGlyphs = {
   'chevron-right': <MdChevronRight />,
   star: SVGs.star,
   'star-active': SVGs.starActive,
-  thunderbolt: <AiFillThunderbolt />
+  thunderbolt: <AiFillThunderbolt />,
 }
 
 type WrapperProps = IProps & VerticalAlignProps & SpaceProps
 
 const IconWrapper = styled.div<WrapperProps>`
   display: inline-block;
-  flex: 0 0 ${props => (props.size ? `${props.size}px` : '32px')};
-  width: ${props => (props.size ? `${props.size}px` : '32px')};
-  height: ${props => (props.size ? `${props.size}px` : '32px')};
-  min-width: ${props => (props.size ? `${props.size}px` : '32px')};
-  min-height: ${props => (props.size ? `${props.size}px` : '32px')};
+  flex: 0 0 ${(props) => (props.size ? `${props.size}px` : '32px')};
+  width: ${(props) => (props.size ? `${props.size}px` : '32px')};
+  height: ${(props) => (props.size ? `${props.size}px` : '32px')};
+  min-width: ${(props) => (props.size ? `${props.size}px` : '32px')};
+  min-height: ${(props) => (props.size ? `${props.size}px` : '32px')};
   position: relative;
-  color: ${props => (props.color ? `${props.color}` : 'inherit')};
+  color: ${(props) => (props.color ? `${props.color}` : 'inherit')};
   ${verticalAlign}
   ${space}
 
-  ${props =>
+  ${(props) =>
     props.onClick &&
     `
     cursor: pointer;
   `}
 `
 
-const Glyph = ({ glyph = '' }: IGlyphProps) => {
+const Glyph = ({ glyph }: IGlyphProps) => {
   return glyphs[glyph] || null
 }
 
@@ -179,21 +139,28 @@ export class Icon extends Component<WrapperProps> {
       xl: 64,
     }
 
-    let { size } = this.props
+    const { size } = this.props
     const isSizeNumeric = size - parseFloat(size) + 1 >= 0
-    size = isSizeNumeric ? size : sizeMap[size]
-    size = size || 16
+
+    let definedSize = 16
+
+    if (isSizeNumeric) {
+      definedSize = size
+    } else if (Object.keys(sizeMap).includes(size)) {
+      const pointer = size as 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+      definedSize = sizeMap[pointer]
+    }
 
     return (
       <IconWrapper
-        size={size}
+        size={definedSize}
         {...this.props}
         style={{ marginRight: this.props.marginRight }}
       >
         <IconContext.Provider
           value={{ style: { width: size + 'px', height: size + 'px' } }}
         >
-          <Glyph glyph={glyph as string} />
+          <Glyph glyph={glyph} />
         </IconContext.Provider>
       </IconWrapper>
     )

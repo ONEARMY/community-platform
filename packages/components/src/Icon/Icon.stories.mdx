@@ -4,7 +4,7 @@ import { Story, Meta, Preview } from '@storybook/addon-docs'
 import { PropsTable } from '@storybook/components'
 import { Icon, glyphs } from './index.tsx'
 
-<Meta title="Components|Icon" component={Icon} decorators={[withKnobs]} />
+<Meta title="Icons" component={Icon} decorators={[withKnobs]} />
 
 # Icon
 
@@ -41,14 +41,14 @@ You can use one of the pre-determined size constants: `xs`, `sm`, `md`, `lg` and
 
 <Preview>
   <Story name="Available Glyphs">
-    {Object.keys(glyphs).map(x => (
+    {Object.keys(glyphs).map((x) => (
       <Icon glyph={x} size={32} marginRight={'10px'} />
     ))}
   </Story>
 </Preview>
 
 <div>
-  {Object.keys(glyphs).map(x => (
+  {Object.keys(glyphs).map((x) => (
     <span>{x}, </span>
   ))}
 </div>

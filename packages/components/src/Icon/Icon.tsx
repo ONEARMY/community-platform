@@ -153,12 +153,14 @@ export class Icon extends Component<WrapperProps> {
 
     return (
       <IconWrapper
-        size={definedSize}
         {...this.props}
+        size={definedSize}
         style={{ marginRight: this.props.marginRight }}
       >
         <IconContext.Provider
-          value={{ style: { width: size + 'px', height: size + 'px' } }}
+          value={{
+            style: { width: definedSize + 'px', height: definedSize + 'px' },
+          }}
         >
           <Glyph glyph={glyph} />
         </IconContext.Provider>

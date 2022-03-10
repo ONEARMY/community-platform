@@ -7018,6 +7018,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-flag-icon-css@npm:^1.0.5":
+  version: 1.0.5
+  resolution: "@types/react-flag-icon-css@npm:1.0.5"
+  dependencies:
+    "@types/react": "*"
+    csstype: ^3.0.2
+  checksum: f7f87ceaf42fb8e72cf80b22e949ed46bf909af536379e323048476c2d116e0e4cf52845cf1bea0a8768cf5cc853dc7a45c363e3ba19b64f76ffdc84ffea2a07
+  languageName: node
+  linkType: hard
+
 "@types/react-hamburger-menu@npm:^0.0.3":
   version: 0.0.3
   resolution: "@types/react-hamburger-menu@npm:0.0.3"
@@ -22103,8 +22113,11 @@ fsevents@^1.2.7:
     "@storybook/addon-links": ^6.4.19
     "@storybook/preset-create-react-app": ^4.0.1
     "@storybook/react": ^6.4.19
+    "@types/react-flag-icon-css": ^1.0.5
     babel-loader: 8.1.0
+    prettier: ^2.5.1
     react: ^17.0.2
+    react-flag-icon-css: ^1.0.25
     rebass: ^4.0.7
     styled-components: ^5.3.3
     typescript: ^4.5.5
@@ -24769,6 +24782,15 @@ fsevents@^1.2.7:
   bin:
     prettier: ./bin-prettier.js
   checksum: bc78219e0f8173a808f4c6c8e0a137dd8ebd4fbe013e63fe1a37a82b48612f17b8ae8e18a992adf802ee2cf7428f14f084e7c2846ca5759cf4013c6e54810e1f
+  languageName: node
+  linkType: hard
+
+"prettier@npm:^2.5.1":
+  version: 2.5.1
+  resolution: "prettier@npm:2.5.1"
+  bin:
+    prettier: bin-prettier.js
+  checksum: 21b9408476ea1c544b0e45d51ceb94a84789ff92095abb710942d780c862d0daebdb29972d47f6b4d0f7ebbfb0ffbf56cc2cfa3e3e9d1cca54864af185b15b66
   languageName: node
   linkType: hard
 

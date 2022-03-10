@@ -20,7 +20,7 @@ import {
 } from 'src/utils/helpers'
 import theme from 'src/themes/styled.theme'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
-import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
+import { FlagIconHowTos } from 'oa-components'
 import { HowtoUsefulStats } from './HowtoUsefulStats'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 

@@ -1,5 +1,5 @@
 import { Box, Flex, Text } from 'rebass/styled-components'
-import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
+import { FlagIconHowTos } from 'oa-components'
 import { IComment } from 'src/models'
 import { Link } from 'src/components/Links'
 import theme from 'src/themes/styled.theme'

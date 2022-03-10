@@ -9,13 +9,13 @@ import { Box } from 'rebass/styled-components'
 // write `export default FlagIcon` as shown below and import it elsewhere in your app.
 const FlagIconFact = FlagIconFactory(React, { useCssModules: false })
 
-const FlagIconEvents = styled(FlagIconFact)`
+export const FlagIconEvents = styled(FlagIconFact)`
   border-radius: 5px;
   background-size: cover !important;
   height: 23px;
   width: 35px !important;
 
-  @media only screen and (max-width: ${props => props.theme.breakpoints[1]}) {
+  @media only screen and (max-width: ${(props) => props.theme.breakpoints[1]}) {
     height: 15px;
     width: 25px !important;
   }
@@ -28,7 +28,7 @@ const FlagIconHowTos = styled(FlagIconFact)`
   width: 21px !important;
 `
 
-export const FlagIcon = props => (
+export const FlagIcon = (props: any) => (
   <Box {...(props as any)}>
     <FlagIconEvents code={props.code}>{props.children}</FlagIconEvents>
   </Box>

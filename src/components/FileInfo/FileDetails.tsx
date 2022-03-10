@@ -1,4 +1,4 @@
-import Icon, { availableGlyphs } from '../Icons'
+import { Icon, availableGlyphs } from 'oa-components'
 import { Flex } from 'rebass/styled-components'
 import Text from '../Text'
 import { IUploadedFileMeta } from 'src/stores/storage'

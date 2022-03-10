@@ -24,7 +24,6 @@ function AdminModuleContainer() {
     <AdminStoreContext.Provider value={new AdminStore()}>
       <AdminSubheader />
       <AuthRoute component={adminRoutes} roleRequired="admin" redirect="/" />
-      <div>Coming Soon...</div>
     </AdminStoreContext.Provider>
   )
 }

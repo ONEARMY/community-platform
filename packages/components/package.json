@@ -9,7 +9,8 @@
     "start": "start-storybook -p 6006",
     "format": "prettier --write '**/*.{tsx,mdx}'",
     "build:sb": "yarn build && build-storybook",
-    "build": "tsc"
+    "build": "tsc",
+    "dev": "tsc --watch"
   },
   "dependencies": {
     "prettier": "^2.5.1",

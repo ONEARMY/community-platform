@@ -130,7 +130,7 @@ const Glyph = ({ glyph }: IGlyphProps) => {
   return glyphs[glyph] || null
 }
 
-export const Icon = (props: IProps) => {
+export const Icon = (props: WrapperProps) => {
   const { glyph, size, marginRight } = props
 
   const isSizeNumeric = !isNaN(size as any)

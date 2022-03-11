@@ -1,0 +1,8 @@
+{
+    "extends": "../../.eslintrc.json",
+    "rules": {
+        "react/function-component-definition": [
+            "error"
+        ]
+    }
+}

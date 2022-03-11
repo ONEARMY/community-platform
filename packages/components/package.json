@@ -9,7 +9,8 @@
     "start": "start-storybook -p 6006",
     "format": "prettier --write '**/*.{tsx,mdx}'",
     "build:sb": "yarn build && build-storybook",
-    "build": "tsc"
+    "build": "tsc",
+    "lint:code": "eslint . --ext .js,.jsx,.ts,.tsx src --color"
   },
   "dependencies": {
     "prettier": "^2.5.1",
@@ -31,6 +32,7 @@
     "@storybook/react": "^6.4.19",
     "@types/react-flag-icon-css": "^1.0.5",
     "babel-loader": "8.1.0",
+    "eslint": "^7.32.0",
     "typescript": "^4.5.5"
   }
 }

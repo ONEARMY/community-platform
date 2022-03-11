@@ -22115,6 +22115,7 @@ fsevents@^1.2.7:
     "@storybook/react": ^6.4.19
     "@types/react-flag-icon-css": ^1.0.5
     babel-loader: 8.1.0
+    eslint: ^7.32.0
     prettier: ^2.5.1
     react: ^17.0.2
     react-flag-icon-css: ^1.0.25

@@ -7,7 +7,11 @@ import { Box } from 'theme-ui'
 // need to use it multiple times (it would slow down your app). You may place the
 // line below in a `FlagIcon.js` file in your 'components' directory, then
 // write `export default FlagIcon` as shown below and import it elsewhere in your app.
+<<<<<<< HEAD
 export const FlagIconFact = FlagIconFactory(React, { useCssModules: false })
+=======
+const FlagIconFact = FlagIconFactory(React, { useCssModules: true })
+>>>>>>> 325e346a (feat: import Button, broken on GCF)
 
 export const FlagIconEvents = styled(FlagIconFact)`
   border-radius: 5px;

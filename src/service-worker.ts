@@ -60,6 +60,11 @@ registerRoute(
     }
 
     // If this is a URL that starts with /_, skip.
+    if (url.pathname.startsWith('/seo/')) {
+      return false
+    }
+
+    // If this is a URL that starts with /_, skip.
     if (url.pathname.startsWith('/_')) {
       return false
     }

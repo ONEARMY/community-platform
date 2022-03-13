@@ -1,3 +1,5 @@
+import { Button } from 'oa-components'
+
 export async function getServerSideProps(context) {
   return {
     props: {
@@ -15,6 +17,8 @@ export default function HowtoArticle({ slug }) {
 
       <footer>Published {Date.now()}</footer>
 
+      <Button>A Button</Button>
+
       <div>
         <div>
           You're done.
@@ -22,7 +26,7 @@ export default function HowtoArticle({ slug }) {
           Nice one!
         </div>
         <div>
-          Back
+          <a href="/">Back</a>
         </div>
       </div>
     </div>

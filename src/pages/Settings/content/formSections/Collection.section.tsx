@@ -8,7 +8,7 @@ import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { OpeningHoursPicker } from './Fields/OpeningHoursPicker.field'
 
 import { FieldArray } from 'react-final-form-arrays'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import { CustomCheckbox } from './Fields/CustomCheckbox.field'
 import { PLASTIC_TYPES } from 'src/mocks/user_pp.mock'
 import { IUserPP } from 'src/models/user_pp.models'

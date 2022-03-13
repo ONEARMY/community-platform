@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Modal } from 'src/components/Modal/Modal'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import Text from 'src/components/Text'
 import { Form, Field } from 'react-final-form'
 import { InputField } from 'src/components/Form/Fields'

@@ -13,7 +13,7 @@ import {
   WidthProps,
 } from 'styled-system'
 
-import Icon from 'src/components/Icons'
+import { Icon } from 'oa-components'
 
 interface IProps {
   onChange?: () => void

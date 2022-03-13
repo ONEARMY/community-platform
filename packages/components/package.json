@@ -1,0 +1,36 @@
+{
+  "name": "oa-components",
+  "version": "1.0.0",
+  "packageManager": "yarn@3.1.1",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
+  "scripts": {
+    "start": "start-storybook -p 6006",
+    "format": "prettier --write '**/*.{tsx,mdx}'",
+    "build:sb": "yarn build && build-storybook",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "prettier": "^2.5.1",
+    "react": "^17.0.2",
+    "react-flag-icon-css": "^1.0.25",
+    "rebass": "^4.0.7",
+    "styled-components": "^5.3.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.3",
+    "@mdx-js/react": "^1.6.22",
+    "@react-theming/storybook-addon": "^1.1.5",
+    "@storybook/addon-actions": "^6.4.19",
+    "@storybook/addon-docs": "^6.4.19",
+    "@storybook/addon-essentials": "^6.4.19",
+    "@storybook/addon-knobs": "^6.2.9",
+    "@storybook/addon-links": "^6.4.19",
+    "@storybook/preset-create-react-app": "^4.0.1",
+    "@storybook/react": "^6.4.19",
+    "@types/react-flag-icon-css": "^1.0.5",
+    "babel-loader": "8.1.0",
+    "typescript": "^4.5.5"
+  }
+}

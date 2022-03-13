@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { IEvent, IEventDB } from 'src/models/events.models'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import { Link } from 'src/components/Links'
 import { Flex, Box } from 'rebass/styled-components'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
@@ -89,9 +89,6 @@ export class EventsList extends React.Component<any> {
                   {filteredEvents.map((event: IEventDB) => (
                     <EventCard
                       key={event._id}
-                      verified={
-                        this.injected.userStore?.verifiedUsers[event._createdBy]
-                      }
                       event={event}
                       needsModeration={this.store.needsModeration(event)}
                       moderateEvent={this.moderateEvent}

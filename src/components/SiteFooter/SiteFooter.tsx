@@ -1,6 +1,6 @@
 import { Flex, Text } from 'rebass/styled-components'
 import styled, { useTheme } from 'styled-components'
-import { Icon } from 'src/components/Icons'
+import { Icon } from 'oa-components'
 
 const SiteFooter = () => {
   const theme = useTheme() as any

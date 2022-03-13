@@ -2,7 +2,7 @@ import { useState } from 'react'
 import ReactGA from 'react-ga'
 import { Box, Flex } from 'rebass/styled-components'
 import { useCommonStores } from 'src/index'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import Text from 'src/components/Text'
 import { Comment } from 'src/components/Comment/Comment'
 import { CommentTextArea } from 'src/components/Comment/CommentTextArea'
@@ -185,7 +185,6 @@ export const ResearchComments = ({ comments, update }: IProps) => {
                 comments.map(comment => (
                   <Comment
                     key={comment._id}
-                    verified={false}
                     {...comment}
                     handleEdit={handleEdit}
                     handleDelete={handleDelete}

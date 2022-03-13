@@ -6,7 +6,7 @@ import {
   IModerationStatus,
 } from './common.models'
 import type { IUploadedFileMeta } from '../stores/storage'
-import type { IConvertedFileMeta } from '../components/ImageInput/ImageInput'
+import type { IConvertedFileMeta } from '../types'
 
 export interface IUserState {
   user?: IUser

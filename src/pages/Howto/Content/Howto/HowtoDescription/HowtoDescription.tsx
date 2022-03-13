@@ -11,8 +11,7 @@ import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import StepsIcon from 'src/assets/icons/icon-steps.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
-import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import { IUser } from 'src/models/user.models'
 import {
   isAllowToEditContent,
@@ -21,8 +20,9 @@ import {
 } from 'src/utils/helpers'
 import theme from 'src/themes/styled.theme'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
-import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
+import { FlagIconHowTos } from 'oa-components'
 import { HowtoUsefulStats } from './HowtoUsefulStats'
+import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 
 interface IProps {
   howto: IHowtoDB
@@ -144,11 +144,11 @@ export default class HowtoDescription extends PureComponent<IProps> {
                 >
                   {howto._createdBy}
                 </Link>{' '}
-                {this.props.verified && (
-                  <>
-                    <Image src={VerifiedBadgeIcon} height="12px" width="12px" />{' '}
-                  </>
-                )}
+                <VerifiedUserBadge
+                  userId={howto._createdBy}
+                  height="12px"
+                  width="12px"
+                />
                 | Published on {this.dateCreatedByText(howto)}
               </Text>
             </Flex>

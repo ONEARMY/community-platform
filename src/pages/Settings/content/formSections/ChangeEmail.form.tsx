@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Field, Form } from 'react-final-form'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import { InputField } from 'src/components/Form/Fields'
 import { UserStore } from 'src/stores/User/user.store'
 import Text from 'src/components/Text'

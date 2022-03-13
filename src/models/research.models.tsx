@@ -1,4 +1,4 @@
-import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
+import type { IConvertedFileMeta } from 'src/types'
 import { DBDoc, IComment, IModerable, ISelectedTags } from 'src/models'
 import { IUploadedFileMeta } from 'src/stores/storage'
 

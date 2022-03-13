@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import Heading from 'src/components/Heading'
 import { AdminStore } from 'src/stores/Admin/admin.store'
 import { Box } from 'rebass/styled-components'

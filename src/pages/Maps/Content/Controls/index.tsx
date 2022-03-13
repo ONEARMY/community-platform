@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import { Flex, Box, Image } from 'rebass/styled-components'
 import filterIcon from 'src/assets/icons/icon-filters-mobile.png'
 import crossClose from 'src/assets/icons/cross-close.svg'

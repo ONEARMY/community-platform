@@ -3,18 +3,15 @@ import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
 import ModerationStatusText from 'src/components/ModerationStatusText'
 import { Link } from 'src/components/Links'
-import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
+import { FlagIconHowTos, Icon } from 'oa-components'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { IHowtoDB } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
-import Icon from 'src/components/Icons'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
-import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
-import { Image } from 'rebass'
+import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 
 interface IProps {
   howto: IHowtoDB
-  verified: boolean
   votedUsefulCount: number
 }
 export const HowToCard = (props: IProps) => (
@@ -64,9 +61,12 @@ export const HowToCard = (props: IProps) => (
           <Text auxiliary my={2} ml={1} display="flex">
             By {props.howto._createdBy}
           </Text>
-          {props.verified && (
-            <Image src={VerifiedBadgeIcon} ml={1} height="12px" width="12px" />
-          )}
+          <VerifiedUserBadge
+            userId={props.howto._createdBy}
+            ml={1}
+            height="12px"
+            width="12px"
+          />
         </Flex>
         <Flex mt={4}>
           <Flex flex={1} flexWrap={'wrap'}>

@@ -16,6 +16,7 @@
     "react": "^17.0.2",
     "react-flag-icon-css": "^1.0.25",
     "rebass": "^4.0.7",
+    "storybook": "^6.4.19",
     "styled-components": "^5.3.3"
   },
   "devDependencies": {
@@ -25,7 +26,6 @@
     "@storybook/addon-actions": "^6.4.19",
     "@storybook/addon-docs": "^6.4.19",
     "@storybook/addon-essentials": "^6.4.19",
-    "@storybook/addon-knobs": "^6.2.9",
     "@storybook/addon-links": "^6.4.19",
     "@storybook/preset-create-react-app": "^4.0.1",
     "@storybook/react": "^6.4.19",

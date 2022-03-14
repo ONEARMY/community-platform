@@ -6,10 +6,8 @@ const imgStyle = {
   maxWidth: '100%',
 }
 
-const iconMap = {
+export const iconMap = {
   loading: <img alt="icon" style={imgStyle} src={loadingSVG} />,
   star: <img alt="icon" style={imgStyle} src={starSVG} />,
   starActive: <img alt="icon" style={imgStyle} src={starActiveSVG} />,
 }
-
-export default iconMap

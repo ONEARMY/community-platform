@@ -11,12 +11,14 @@
     "build:sb": "yarn build && build-storybook",
     "build": "tsc",
     "dev": "tsc --watch"
+    "lint:code": "eslint . --ext .js,.jsx,.ts,.tsx src --color"
   },
   "dependencies": {
     "prettier": "^2.5.1",
     "react": "^17.0.2",
     "react-flag-icon-css": "^1.0.25",
     "rebass": "^4.0.7",
+    "storybook": "^6.4.19",
     "styled-components": "^5.3.3"
   },
   "devDependencies": {
@@ -26,12 +28,13 @@
     "@storybook/addon-actions": "^6.4.19",
     "@storybook/addon-docs": "^6.4.19",
     "@storybook/addon-essentials": "^6.4.19",
-    "@storybook/addon-knobs": "^6.2.9",
     "@storybook/addon-links": "^6.4.19",
     "@storybook/preset-create-react-app": "^4.0.1",
     "@storybook/react": "^6.4.19",
     "@types/react-flag-icon-css": "^1.0.5",
     "babel-loader": "8.1.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-import": "^2.25.4",
     "typescript": "^4.5.5"
   }
 }

@@ -1,4 +1,3 @@
-import { Component } from 'react'
 import styled from 'styled-components'
 import {
   verticalAlign,
@@ -42,7 +41,7 @@ import {
 import { AiFillThunderbolt } from 'react-icons/ai'
 import { FaSignal, FaFacebookF, FaSlack, FaInstagram } from 'react-icons/fa'
 import { IconContext } from 'react-icons'
-import SVGs from './svgs'
+import { iconMap } from './svgs'
 import { DownloadIcon } from './DownloadIcon'
 import type { IGlyphs } from './types'
 
@@ -52,7 +51,7 @@ interface IGlyphProps {
 
 interface IProps {
   glyph: keyof IGlyphs
-  size?: any
+  size?: number | string
   marginRight?: string
   color?: string
   onClick?: () => void
@@ -84,7 +83,7 @@ export const glyphs: IGlyphs = {
   difficulty: <FaSignal />,
   image: <MdImage />,
   pdf: <GoFilePdf />,
-  loading: SVGs.loading,
+  loading: iconMap.loading,
   'location-on': <MdLocationOn />,
   'external-link': <GoLinkExternal />,
   facebook: <FaFacebookF />,
@@ -93,8 +92,8 @@ export const glyphs: IGlyphs = {
   email: <MdMail />,
   'chevron-left': <MdChevronLeft />,
   'chevron-right': <MdChevronRight />,
-  star: SVGs.star,
-  'star-active': SVGs.starActive,
+  star: iconMap.star,
+  'star-active': iconMap.starActive,
   thunderbolt: <AiFillThunderbolt />,
 }
 
@@ -119,53 +118,41 @@ const IconWrapper = styled.div<WrapperProps>`
   `}
 `
 
+const sizeMap = {
+  xs: 8,
+  sm: 16,
+  md: 32,
+  lg: 48,
+  xl: 64,
+}
+
 const Glyph = ({ glyph }: IGlyphProps) => {
   return glyphs[glyph] || null
 }
 
-export class Icon extends Component<WrapperProps> {
-  // eslint-disable-next-line
-  constructor(props: WrapperProps) {
-    super(props)
+export const Icon = (props: WrapperProps) => {
+  const { glyph, size, marginRight } = props
+
+  const isSizeNumeric = !isNaN(size as any)
+
+  let definedSize = 16
+
+  if (isSizeNumeric) {
+    definedSize = size as number
+  } else if (Object.keys(sizeMap).includes(size as string)) {
+    const pointer = size as 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+    definedSize = sizeMap[pointer]
   }
-  public render() {
-    const { glyph } = this.props
 
-    const sizeMap = {
-      xs: 8,
-      sm: 16,
-      md: 32,
-      lg: 48,
-      xl: 64,
-    }
-
-    const { size } = this.props
-    const isSizeNumeric = size - parseFloat(size) + 1 >= 0
-
-    let definedSize = 16
-
-    if (isSizeNumeric) {
-      definedSize = size
-    } else if (Object.keys(sizeMap).includes(size)) {
-      const pointer = size as 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-      definedSize = sizeMap[pointer]
-    }
-
-    return (
-      <IconWrapper
-        {...this.props}
-        size={definedSize}
-        style={{ marginRight: this.props.marginRight }}
+  return (
+    <IconWrapper {...props} size={definedSize} style={{ marginRight }}>
+      <IconContext.Provider
+        value={{
+          style: { width: definedSize + 'px', height: definedSize + 'px' },
+        }}
       >
-        <IconContext.Provider
-          value={{
-            style: { width: definedSize + 'px', height: definedSize + 'px' },
-          }}
-        >
-          <Glyph glyph={glyph} />
-        </IconContext.Provider>
-      </IconWrapper>
-    )
-  }
+        <Glyph glyph={glyph} />
+      </IconContext.Provider>
+    </IconWrapper>
+  )
 }
-export default Icon

@@ -16117,6 +16117,7 @@ __metadata:
     jest: 26
     log-update: ^4.0.0
     next: ^12.1.0
+    next-seo: ^5.1.0
     oa-components: "workspace:^"
     oa-shared: "workspace:*"
     one-army-community-platform: "workspace:*"
@@ -22021,6 +22022,17 @@ __metadata:
   version: 2.0.2
   resolution: "netmask@npm:2.0.2"
   checksum: c65cb8d3f7ea5669edddb3217e4c96910a60d0d9a4b52d9847ff6b28b2d0277cd8464eee0ef85133cdee32605c57940cacdd04a9a019079b091b6bba4cb0ec22
+  languageName: node
+  linkType: hard
+
+"next-seo@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "next-seo@npm:5.1.0"
+  peerDependencies:
+    next: ^8.1.1-canary.54 || >=9.0.0
+    react: ">=16.0.0"
+    react-dom: ">=16.0.0"
+  checksum: 4a14fda26d57019637172032436ced849131fea823f72c59f0f043b8cddb0e7cd343c986f26ba9b7608b1cbbcbb0636140bf073d78b593efded52fb3d5f40b64
   languageName: node
   linkType: hard
 

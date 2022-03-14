@@ -10,7 +10,7 @@
     "format": "prettier --write '**/*.{tsx,mdx}'",
     "build:sb": "yarn build && build-storybook",
     "build": "tsc",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
     "lint:code": "eslint . --ext .js,.jsx,.ts,.tsx src --color"
   },
   "dependencies": {

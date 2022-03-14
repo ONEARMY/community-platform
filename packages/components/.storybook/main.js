@@ -7,27 +7,26 @@ module.exports = {
   stories: [
     '../../../src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
     '../../components/src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
+    '../src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
   ],
   // https://github.com/storybookjs/presets/tree/master/packages/preset-create-react-app
   addons: [
-    '@storybook/addon-links',
-    '@storybook/addon-essentials',
-    '@storybook/addon-knobs',
-    'storybook/preset-create-react-app',
-    '@react-theming/storybook-addon',
     {
       name: '@storybook/addon-docs',
       options: {
         configureJSX: true,
       },
     },
+    '@storybook/addon-links',
+    '@storybook/addon-essentials',
+    '@react-theming/storybook-addon',
   ],
   // https://storybook.js.org/docs/react/configure/typescript
   typescript: {},
   // update path resolution so root folder correctly checked for direct 'src' imports (before other folders)
   // https://webpack.js.org/configuration/resolve/#resolve-modules
   // https://storybook.js.org/docs/react/configure/webpack
-  webpackFinal: async config => {
+  webpackFinal: async (config) => {
     config.resolve.modules = [
       paths.appSrcDir,
       ...(config.resolve.modules || []),

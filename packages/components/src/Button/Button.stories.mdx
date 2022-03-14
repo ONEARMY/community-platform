@@ -1,5 +1,4 @@
 import { action } from '@storybook/addon-actions'
-import { withKnobs, text, boolean } from '@storybook/addon-knobs'
 import {
   Story,
   Meta,
@@ -9,11 +8,7 @@ import {
 } from '@storybook/addon-docs/blocks'
 import { Button } from './Button.tsx'
 
-<Meta
-  title="Base Components/Button"
-  component={Button}
-  decorators={[withKnobs]}
-/>
+<Meta title="Base Components/Button" component={Button} />
 
 # Buttons
 
@@ -21,16 +16,16 @@ Below you will be able to see how to use and configure a `Button` component:
 
 <Story name="Default Button">
   <Button
-    disabled={boolean('Disabled', false)}
-    small={boolean('Small', false)}
-    medium={boolean('Medium', false)}
-    large={boolean('Large', false)}
-    hasText={boolean('Has Text?', true)}
-    variant={text('Variant', 'primary')}
-    icon={text('Icon', '')}
+    disabled={false}
+    small={false}
+    medium={false}
+    large={false}
+    hasText={true}
+    variant={'primary'}
+    icon={''}
     onClick={action('onClick')}
   >
-    {text('Label', 'Button Text')}
+    {'Button Text'}
   </Button>
 </Story>
 

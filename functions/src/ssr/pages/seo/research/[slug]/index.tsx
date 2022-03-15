@@ -1,50 +1,76 @@
-import { Box, Flex } from 'rebass/styled-components'
-import styled from 'styled-components'
+import * as admin from 'firebase-admin'
+import { NextSeo } from 'next-seo'
 
 export async function getServerSideProps(context) {
+  const FIREBASE_CONFIG = process.env.FIREBASE_CONFIG
+    ? JSON.parse(process.env.FIREBASE_CONFIG)
+    : {
+        databaseURL: '',
+        projectId: '',
+      }
+
+  const app = admin.initializeApp(
+    {
+      projectId: FIREBASE_CONFIG.projectId,
+    },
+    `${Math.floor(Math.random() * 10000)}`,
+  )
+
+  console.log({ app })
+
+  const db = admin.firestore()
+
+  const collection = db.collection('research_rev20201020')
+
+  const queryResult = await collection
+    .where('slug', '==', context.params.slug)
+    .get()
+
+  let article
+
+  queryResult.forEach(doc => {
+    // doc.data() is never undefined for query doc snapshots
+    ;(article = doc.data()),
+      console.log(`Results of query:`, doc.id, ' => ', doc.data())
+  })
+
   return {
     props: {
+      article,
       slug: context.params.slug,
     },
   }
 }
 
-const MoreBox = styled(Box)`
-  position: relative;
-  &:after {
-    content: '';
-    width: 100%;
-    height: 100%;
-    background-size: contain;
-    background-repeat: no-repeat;
-    position: absolute;
-    top: 55%;
-    transform: translate(-50%, -50%);
-    left: 50%;
-    max-width: 850px;
-    background-position: center 10%;
+export default function HowtoArticle({ slug, article }) {
+  if (!article) {
+    return <>Research: Not found</>
   }
-`
 
-export default function HowtoArticle({ slug }) {
+  const { title, description } = article
+  const seoTitle = title + ' | Precious Plastic Community'
   return (
-    <div id="HowtoArticle">
-      <pre>{JSON.stringify(slug)}</pre>
-      <h1>Slug: {slug}</h1>
-      <p>Individual How to article</p>
+    <>
+      <NextSeo
+        title={seoTitle}
+        description={description}
+        openGraph={{
+          type: 'website',
+          url: 'https://www.example.com/page',
+          title: seoTitle,
+          description,
+          images: [],
+        }}
+      />
+      <div id="HowtoArticle">
+        <pre>{JSON.stringify(slug)}</pre>
+        <h1>{title}</h1>
+        <p>{description}</p>
 
-      <footer>Published {Date.now()}</footer>
-
-      <MoreBox py={20} mt={20}>
-        <div>
-          You're done.
-          <br />
-          Nice one!
-        </div>
-        <Flex justifyContent={'center'} mt={2}>
-          Back
-        </Flex>
-      </MoreBox>
-    </div>
+        <pre>
+          {JSON.stringify(article)}
+        </pre>
+      </div>
+    </>
   )
 }

@@ -43,6 +43,10 @@ export async function getServerSideProps(context) {
 }
 
 export default function HowtoArticle({ slug, article }) {
+  if (!article) {
+    return (<>Not found</>)
+  }
+
   const { title, description } = article
   const seoTitle = title + ' | Precious Plastic Community'
   return (

@@ -1,8 +1,8 @@
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import {
   Flex as RebassFlex,
   FlexProps as RebassFlexProps,
-} from 'rebass/styled-components'
+} from 'rebass'
 
 export interface IFlexProps extends RebassFlexProps {
   border?: boolean

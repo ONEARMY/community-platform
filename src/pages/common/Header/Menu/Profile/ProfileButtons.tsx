@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import theme from 'src/themes/styled.theme'
-import styled from 'styled-components'
-import { Box } from 'rebass/styled-components'
+import styled from '@emotion/styled'
+import { Box } from 'rebass'
 import ProfileButtonItem from './ProfileButtonItem'
 
 interface IProps {

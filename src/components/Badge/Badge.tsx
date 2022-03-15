@@ -1,4 +1,4 @@
-import { Image, ImageProps } from 'rebass/styled-components'
+import { Image, ImageProps } from 'rebass'
 import { ProfileTypeLabel } from 'src/models/user_pp.models'
 import Workspace from 'src/pages/User/workspace/Workspace'
 

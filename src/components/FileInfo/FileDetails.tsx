@@ -1,8 +1,8 @@
 import { Icon, availableGlyphs } from 'oa-components'
-import { Flex } from 'rebass/styled-components'
+import { Flex } from 'rebass'
 import Text from '../Text'
 import { IUploadedFileMeta } from 'src/stores/storage'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 
 interface IProps {

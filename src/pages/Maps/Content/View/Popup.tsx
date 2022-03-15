@@ -1,11 +1,11 @@
 import * as React from 'react'
 import L from 'leaflet'
-import { Image } from 'rebass/styled-components'
+import { Image } from 'rebass'
 import Flex from 'src/components/Flex'
 import Text from 'src/components/Text'
 import { Button } from 'oa-components'
 import { Popup as LeafletPopup, Map } from 'react-leaflet'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { distanceInWords } from 'date-fns'
 
 import { IMapPin, IMapPinWithDetail } from 'src/models/maps.models'

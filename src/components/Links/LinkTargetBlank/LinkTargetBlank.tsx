@@ -1,4 +1,4 @@
-import { Link } from 'rebass/styled-components'
+import { Link } from 'rebass'
 import ImageTargetBlank from 'src/assets/icons/link-target-blank.svg'
 import theme from 'src/themes/styled.theme'
 

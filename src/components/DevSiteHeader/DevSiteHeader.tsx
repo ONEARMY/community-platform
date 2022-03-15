@@ -1,7 +1,7 @@
 import { SITE, VERSION, DEV_SITE_ROLE } from 'src/config/config'
 import Text from 'src/components/Text'
 import { UserRole } from 'src/models'
-import { Flex, Box } from 'rebass/styled-components'
+import { Flex, Box } from 'rebass'
 import Select from 'react-select'
 import { observer } from 'mobx-react-lite'
 import { useCommonStores } from 'src/index'

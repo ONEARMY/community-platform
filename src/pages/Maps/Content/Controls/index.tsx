@@ -1,8 +1,8 @@
 import * as React from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import { Button } from 'oa-components'
-import { Flex, Box, Image } from 'rebass/styled-components'
+import { Flex, Box, Image } from 'rebass'
 import filterIcon from 'src/assets/icons/icon-filters-mobile.png'
 import crossClose from 'src/assets/icons/cross-close.svg'
 import { Modal } from 'src/components/Modal/Modal'

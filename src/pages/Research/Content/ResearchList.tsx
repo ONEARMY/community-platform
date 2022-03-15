@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react'
-import { Box, Flex } from 'rebass/styled-components'
+import { Box, Flex } from 'rebass'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { Button } from 'oa-components'
 import Heading from 'src/components/Heading'

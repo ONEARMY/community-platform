@@ -6,11 +6,11 @@ import {
 } from 'src/models/user_pp.models'
 
 import Heading from 'src/components/Heading'
-import { Box, Image } from 'rebass/styled-components'
+import { Box, Image } from 'rebass'
 // import slick and styles
 import Slider from 'react-slick'
 import 'src/assets/css/slick.min.css'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import Flex from 'src/components/Flex'
 import Workspace from 'src/pages/User/workspace/Workspace'
 import { Text } from 'src/components/Text'

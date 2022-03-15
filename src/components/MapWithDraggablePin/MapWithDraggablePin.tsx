@@ -5,11 +5,11 @@ import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 import Text from 'src/components/Text'
 import { Button } from 'oa-components'
-import { Box, Flex } from 'rebass/styled-components'
+import { Box, Flex } from 'rebass'
 import theme from 'src/themes/styled.theme'
 import customMarkerIcon from 'src/assets/icons/map-marker.png'
 import { logger } from 'src/logger'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 const customMarker = L.icon({
   iconUrl: customMarkerIcon,

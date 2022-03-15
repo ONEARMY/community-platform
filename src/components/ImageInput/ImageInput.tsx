@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { Box, Image } from 'rebass/styled-components'
-import styled from 'styled-components'
+import { Box, Image } from 'rebass'
+import styled from '@emotion/styled'
 import { Button } from 'oa-components'
 import 'react-image-lightbox/style.css'
 import { ImageConverter } from './ImageConverter'

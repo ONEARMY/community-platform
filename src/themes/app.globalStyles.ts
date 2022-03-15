@@ -1,10 +1,10 @@
-import { createGlobalStyle } from 'styled-components'
+import { css } from '@emotion/react’;
 import theme from 'src/themes/styled.theme'
 
 import { GlobalFonts } from './fonts'
 // declare global styling overrides (fonts etc.)
 
-export const GlobalStyle = createGlobalStyle`
+export const GlobalStyle = css`
   ${GlobalFonts}
   body {
       font-family: "Varela Round", Arial, sans-serif;

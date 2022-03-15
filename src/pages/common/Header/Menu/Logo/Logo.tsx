@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import theme from 'src/themes/styled.theme'
-import { Link, Flex, Image } from 'rebass/styled-components'
-import styled from 'styled-components'
+import { Link, Flex, Image } from 'rebass'
+import styled from '@emotion/styled'
 import { inject, observer } from 'mobx-react'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 

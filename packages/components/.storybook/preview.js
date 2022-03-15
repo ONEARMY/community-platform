@@ -1,7 +1,8 @@
-import { ThemeProvider } from 'styled-components'
+import { ThemeProvider } from '@emotion/react'
 import { addDecorator } from '@storybook/react'
 import { withThemes } from '@react-theming/storybook-addon'
 
+import { Global } from '@emotion/react'
 import { GlobalStyle } from '../../../src/themes/app.globalStyles'
 
 import preciousPlasticTheme from '../../../src/themes/precious-plastic/styles'
@@ -14,9 +15,9 @@ addDecorator(
   withThemes(ThemeProvider, [preciousPlasticTheme, projectKampTheme]),
 )
 
-addDecorator(story => (
+addDecorator((story) => (
   <>
-    <GlobalStyle />
+    <Global style={GlobalStyle} />
     <MemoryRouter initialEntries={['/']}>{story()}</MemoryRouter>
   </>
 ))

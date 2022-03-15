@@ -4,8 +4,8 @@ import type { IGlyphs } from '../Icon/types'
 import {
   Button as RebassButton,
   ButtonProps as RebassButtonProps,
-} from 'rebass/styled-components'
-import styled from 'styled-components'
+} from 'rebass'
+import styled from '@emotion/styled'
 
 // extend to allow any default button props (e.g. onClick) to also be passed
 export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {

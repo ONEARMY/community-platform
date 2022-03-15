@@ -2,9 +2,9 @@ import { forwardRef } from 'react'
 import {
   Text as RebassText,
   TextProps as RebassTextProps,
-} from 'rebass/styled-components'
+} from 'rebass'
 import theme from '../../themes/styled.theme'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 export interface ITextProps {
   uppercase?: boolean

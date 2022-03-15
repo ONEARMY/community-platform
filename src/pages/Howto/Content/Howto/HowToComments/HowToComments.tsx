@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import ReactGA from 'react-ga'
-import { Box, Flex } from 'rebass/styled-components'
+import { Box, Flex } from 'rebass'
 import { useCommonStores } from 'src/index'
 import { Button } from 'oa-components'
 import { CommentTextArea } from 'src/components/Comment/CommentTextArea'
 import { IComment } from 'src/models'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { logger } from 'src/logger'
 import { CommentList } from 'src/components/CommentList/CommentList'
 

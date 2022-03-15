@@ -1,5 +1,5 @@
-import styled from 'styled-components'
-import { Box, Text } from 'rebass/styled-components'
+import styled from '@emotion/styled'
+import { Box, Text } from 'rebass'
 import { Avatar } from '../Avatar'
 import { useCommonStores } from 'src/index'
 import { Link } from '../Links'

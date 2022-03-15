@@ -5,7 +5,7 @@ import theme from 'src/themes/styled.theme'
 import { Button } from 'oa-components'
 import Text from 'src/components/Text'
 import { Link } from 'src/components/Links'
-import { Link as ExternalLink } from 'rebass/styled-components'
+import { Link as ExternalLink } from 'rebass'
 
 class SignUpMessagePage extends React.Component {
   public render() {

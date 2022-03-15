@@ -21,7 +21,7 @@ import { WorkspaceMapPinSection } from './content/formSections/WorkspaceMapPin.s
 import { MemberMapPinSection } from './content/formSections/MemberMapPin.section'
 import theme from 'src/themes/styled.theme'
 import INITIAL_VALUES from './Template'
-import { Box } from 'rebass/styled-components'
+import { Box } from 'rebass'
 import { Prompt } from 'react-router'
 import { toJS } from 'mobx'
 import { isModuleSupported, MODULE } from 'src/modules'

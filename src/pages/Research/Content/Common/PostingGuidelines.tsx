@@ -1,4 +1,4 @@
-import { Link } from 'rebass/styled-components'
+import { Link } from 'rebass'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'

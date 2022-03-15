@@ -8,7 +8,7 @@ import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { Link } from 'src/components/Links'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
-import { Box } from 'rebass/styled-components'
+import { Box } from 'rebass'
 import { inject, observer } from 'mobx-react'
 import { AdminStore } from 'src/stores/Admin/admin.store'
 

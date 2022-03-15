@@ -1,7 +1,7 @@
 import { inject, observer } from 'mobx-react'
 import * as React from 'react'
 import { RouteComponentProps, Switch, withRouter } from 'react-router'
-import { Flex } from 'rebass/styled-components'
+import { Flex } from 'rebass'
 import { Text } from 'src/components/Text'
 import { IResearch } from 'src/models/research.models'
 import { IUser } from 'src/models/user.models'

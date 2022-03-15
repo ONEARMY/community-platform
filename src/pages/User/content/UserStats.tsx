@@ -1,4 +1,4 @@
-import { Box, Image } from 'rebass/styled-components'
+import { Box, Image } from 'rebass'
 import EventsIcon from 'src/assets/icons/icon-events.svg'
 import HowToCountIcon from 'src/assets/icons/icon-how-to.svg'
 import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
@@ -7,7 +7,7 @@ import {Icon} from 'oa-components'
 import { Link } from 'src/components/Links'
 import type { IUserPP } from 'src/models'
 import theme from 'src/themes/styled.theme'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 
 export const UserStatsBoxItem = styled.div`

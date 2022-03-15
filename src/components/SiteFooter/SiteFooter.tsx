@@ -1,4 +1,4 @@
-import { Flex, Text } from 'rebass/styled-components'
+import { Flex, Text } from 'rebass'
 import styled, { useTheme } from 'styled-components'
 import { Icon } from 'oa-components'
 

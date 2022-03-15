@@ -1,7 +1,7 @@
 import * as React from 'react'
 import FlagIconFactory from 'react-flag-icon-css'
-import styled from 'styled-components'
-import { Box } from 'rebass/styled-components'
+import styled from '@emotion/styled'
+import { Box } from 'rebass'
 
 // Please only use `FlagIconFactory` one time in your application, there is no
 // need to use it multiple times (it would slow down your app). You may place the

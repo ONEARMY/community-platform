@@ -5,9 +5,9 @@ import Heading from 'src/components/Heading'
 import {Icon} from 'oa-components'
 import { Modal } from 'src/components/Modal/Modal'
 import { Button } from 'oa-components'
-import { Flex } from 'rebass/styled-components'
+import { Flex } from 'rebass'
 import Text from 'src/components/Text'
-import { Box } from 'rebass/styled-components'
+import { Box } from 'rebass'
 import { RouteComponentProps } from 'react-router'
 
 interface IProps extends RouteComponentProps<any> {

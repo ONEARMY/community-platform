@@ -4,7 +4,7 @@ import { RouteComponentProps, withRouter, Route, Switch } from 'react-router'
 
 import { MapsStore } from 'src/stores/Maps/maps.store'
 import { MapView, Controls } from './Content'
-import { Box } from 'rebass/styled-components'
+import { Box } from 'rebass'
 
 import './styles.css'
 

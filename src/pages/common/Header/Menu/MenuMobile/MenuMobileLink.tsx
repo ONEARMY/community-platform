@@ -1,6 +1,6 @@
 import * as React from 'react'
-import styled from 'styled-components'
-import { Box } from 'rebass/styled-components'
+import styled from '@emotion/styled'
+import { Box } from 'rebass'
 import { NavLink } from 'react-router-dom'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
 import { observer, inject } from 'mobx-react'
@@ -21,9 +21,7 @@ const PanelItem = styled(Box)`
   padding: ${props => props.theme.space[3]}px 0px;
 `
 
-const MenuLink = styled(NavLink).attrs(() => ({
-  activeClassName: 'current',
-}))`
+const MenuLink = styled(NavLink)`
   color: ${props => props.theme.colors.black};
   font-size: ${props => props.theme.fontSizes[2]}px;
   position: relative;
@@ -52,6 +50,10 @@ const MenuLink = styled(NavLink).attrs(() => ({
     }
   }
 `
+
+MenuLink.defaultProps = {
+  activeClassName: 'current',
+}
 @inject('mobileMenuStore')
 @observer
 export class MenuMobileLink extends React.Component<IProps> {

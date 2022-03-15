@@ -16,7 +16,7 @@ import {
   POLICY_PAGES,
   getAvailablePageList,
 } from './PageList'
-import { Flex, Box } from 'rebass/styled-components'
+import { Flex, Box } from 'rebass'
 import DevSiteHeader from 'src/components/DevSiteHeader/DevSiteHeader'
 import { getSupportedModules } from 'src/modules'
 import GlobalSiteFooter from './common/GlobalSiteFooter/GlobalSiteFooter'

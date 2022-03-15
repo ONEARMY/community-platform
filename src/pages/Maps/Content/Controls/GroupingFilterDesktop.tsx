@@ -7,7 +7,7 @@ import { DropdownIndicator } from 'src/components/DropdownIndicator'
 import { IMapGrouping, IPinGrouping } from 'src/models/maps.models'
 import { inject } from 'mobx-react'
 import { MapsStore } from 'src/stores/Maps/maps.store'
-import { Box, Flex, Image } from 'rebass/styled-components'
+import { Box, Flex, Image } from 'rebass'
 import { SelectStyles } from 'src/components/Form/Select.field';
 interface IProps {
   items: Record<IPinGrouping, Array<IMapGrouping>>

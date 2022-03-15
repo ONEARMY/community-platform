@@ -1,5 +1,5 @@
 import React, { createRef, useEffect, useState } from 'react'
-import { Box, Flex } from 'rebass/styled-components'
+import { Box, Flex } from 'rebass'
 import { IComment } from 'src/models'
 import { CommentHeader } from './CommentHeader'
 import { Text } from 'src/components/Text'

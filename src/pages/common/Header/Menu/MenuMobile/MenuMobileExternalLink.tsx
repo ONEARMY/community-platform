@@ -1,7 +1,7 @@
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { Component } from 'react';
 import theme from 'src/themes/styled.theme'
-import { Box } from 'rebass/styled-components'
+import { Box } from 'rebass'
 import { LinkTargetBlank } from 'src/components/Links/LinkTargetBlank/LinkTargetBlank'
 import { observer, inject } from 'mobx-react'
 import { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'

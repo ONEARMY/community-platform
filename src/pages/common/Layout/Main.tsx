@@ -1,4 +1,4 @@
-import { Flex, FlexProps } from 'rebass/styled-components'
+import { Flex, FlexProps } from 'rebass'
 import theme from 'src/themes/styled.theme'
 import { CSSObject } from '@styled-system/css'
 

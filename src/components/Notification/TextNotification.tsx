@@ -2,7 +2,7 @@ import * as React from 'react'
 import type { IGlyphs } from 'oa-components'
 import { Icon } from 'oa-components'
 import Text from '../Text'
-import { Flex } from 'rebass/styled-components'
+import { Flex } from 'rebass'
 import { FadeInOut } from '../Animations/FadeInOut'
 import { getFriendlyMessage } from 'oa-shared'
 

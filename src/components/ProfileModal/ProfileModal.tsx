@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { Box } from 'rebass/styled-components'
-import styled from 'styled-components'
+import { Box } from 'rebass'
+import styled from '@emotion/styled'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
@@ -36,9 +36,7 @@ const ModalContainerInner = styled(Box)`
   border-radius: 5px;
 `
 
-const ModalLink = styled(NavLink).attrs(() => ({
-  activeClassName: 'current',
-}))`
+const ModalLink = styled(NavLink)`
   z-index: ${theme.zIndex.modalProfile};
   display: flex;
   flex-direction: column;
@@ -62,6 +60,11 @@ const ModalLink = styled(NavLink).attrs(() => ({
     color: ${theme.colors.blue};
   }
 `
+
+ModalLink.defaultProps = {
+  activeClassName: 'current',
+}
+
 @inject('userStore')
 @observer
 export class ProfileModal extends React.Component<IProps> {

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Portal } from 'react-portal'
-import { Box } from 'rebass/styled-components'
-import styled from 'styled-components'
+import { Box } from 'rebass'
+import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 
 interface IProps {

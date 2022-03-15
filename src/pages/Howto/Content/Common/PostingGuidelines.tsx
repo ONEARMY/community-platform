@@ -1,7 +1,7 @@
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
-import { Link } from 'rebass/styled-components'
+import { Link } from 'rebass'
 import theme from 'src/themes/styled.theme'
 
 export const PostingGuidelines = () => (

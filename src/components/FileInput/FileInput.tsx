@@ -5,7 +5,7 @@ import Uppy, { UppyFile } from '@uppy/core'
 import { DashboardModal } from '@uppy/react'
 import { Button } from 'oa-components'
 import { UPPY_CONFIG } from './UppyConfig'
-import { Flex } from 'rebass/styled-components'
+import { Flex } from 'rebass'
 import { FileInfo } from '../FileInfo/FileInfo'
 
 interface IUppyFiles {

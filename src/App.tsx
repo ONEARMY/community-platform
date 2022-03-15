@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { observer, Provider } from 'mobx-react'
-import { ThemeProvider } from 'styled-components'
+import { ThemeProvider } from '@emotion/react'
+import { Global } from '@emotion/react'
 import { GlobalStyle } from './themes/app.globalStyles'
 import { RootStore } from './stores'
 import ErrorBoundary from './common/ErrorBoundary'
@@ -31,12 +32,10 @@ export class App extends Component {
               <ErrorBoundary>
                 <Routes />
               </ErrorBoundary>
-              <GlobalStyle />
+              <Global styles={GlobalStyle} />
             </>
           </ThemeProvider>
         </Provider>
-        
-
       </>
     )
   }

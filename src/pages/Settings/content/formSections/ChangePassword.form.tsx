@@ -5,7 +5,7 @@ import { InputField } from 'src/components/Form/Fields'
 import { UserStore } from 'src/stores/User/user.store'
 import Text from 'src/components/Text'
 import theme from 'src/themes/styled.theme'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import Flex from 'src/components/Flex'
 
 interface IFormValues {

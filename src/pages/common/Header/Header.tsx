@@ -1,6 +1,6 @@
 import { Component } from 'react'
-import { Flex } from 'rebass/styled-components'
-import styled from 'styled-components'
+import { Flex } from 'rebass'
+import styled from '@emotion/styled'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
 import NotificationsIcon from 'src/pages/common/Header/Menu/Notifications/NotificationsIcon'
 import NotificationsDesktop from 'src/pages/common/Header/Menu/Notifications/NotificationsDesktop'

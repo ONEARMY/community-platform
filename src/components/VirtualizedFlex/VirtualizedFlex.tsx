@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Flex, Box } from 'rebass/styled-components'
+import { Flex, Box } from 'rebass'
 import themes from 'src/themes/styled.theme'
 import {
   List,

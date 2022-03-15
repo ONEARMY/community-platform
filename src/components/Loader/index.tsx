@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import { Flex, Image } from 'rebass/styled-components'
+import { Flex, Image } from 'rebass'
 import styled, { keyframes } from 'styled-components'
 
 import Text from 'src/components/Text'

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { Link } from 'src/components/Links'
 import { Button } from 'oa-components'
 import { display, DisplayProps } from 'styled-system'

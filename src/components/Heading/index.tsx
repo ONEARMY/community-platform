@@ -1,6 +1,6 @@
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import Text, { ITextProps } from 'src/components/Text'
-import { HeadingProps as RebassHeadingProps } from 'rebass/styled-components'
+import { HeadingProps as RebassHeadingProps } from 'rebass'
 
 export const large = (props: ITextProps) =>
   props.large ? { fontSize: props.theme?.fontSizes[6] } : null

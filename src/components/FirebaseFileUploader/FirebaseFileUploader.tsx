@@ -4,7 +4,7 @@ import FileUploader from 'react-firebase-file-uploader'
 import { FullMetadata } from '@firebase/storage-types'
 import { Button } from 'oa-components'
 import type { IGlyphs } from 'oa-components'
-import { Flex } from 'rebass/styled-components'
+import { Flex } from 'rebass'
 import Loader from '../Loader'
 import { logger } from 'src/logger'
 /*

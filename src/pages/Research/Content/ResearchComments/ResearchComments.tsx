@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import ReactGA from 'react-ga'
-import { Box, Flex } from 'rebass/styled-components'
+import { Box, Flex } from 'rebass'
 import { useCommonStores } from 'src/index'
 import { Button } from 'oa-components'
 import Text from 'src/components/Text'
@@ -9,8 +9,8 @@ import { IComment } from 'src/models'
 import { logger } from 'src/logger'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { IResearch } from 'src/models/research.models'
-import styled from 'styled-components'
 import { CommentList } from 'src/components/CommentList/CommentList'
+import styled from '@emotion/styled'
 
 interface IProps {
   comments?: IComment[]

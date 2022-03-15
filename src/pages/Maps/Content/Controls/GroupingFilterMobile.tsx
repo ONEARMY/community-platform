@@ -2,7 +2,7 @@ import { Component } from 'react';
 import Text from 'src/components/Text'
 import { IMapGrouping } from 'src/models/maps.models'
 import checkmarkIcon from 'src/assets/icons/icon-checkmark.svg'
-import { Flex, Image } from 'rebass/styled-components'
+import { Flex, Image } from 'rebass'
 import { inject } from 'mobx-react'
 import { MapsStore } from 'src/stores/Maps/maps.store'
 

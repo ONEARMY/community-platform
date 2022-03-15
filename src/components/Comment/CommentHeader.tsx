@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from 'rebass/styled-components'
+import { Box, Flex, Text } from 'rebass'
 import { FlagIconHowTos } from 'oa-components'
 import { IComment } from 'src/models'
 import { Link } from 'src/components/Links'

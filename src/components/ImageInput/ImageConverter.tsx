@@ -1,8 +1,8 @@
 import * as React from 'react'
-import { Flex } from 'rebass/styled-components'
+import { Flex } from 'rebass'
 import imageCompression from 'browser-image-compression'
 import type { IConvertedFileMeta } from 'src/types'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import theme from '../../themes/styled.theme'
 
 interface IProps {

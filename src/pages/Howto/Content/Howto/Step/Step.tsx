@@ -1,7 +1,7 @@
 import { PureComponent } from 'react'
 import Linkify from 'react-linkify'
 import ReactPlayer from 'react-player'
-import { Box } from 'rebass/styled-components'
+import { Box } from 'rebass'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import ImageGallery from 'src/components/ImageGallery'
@@ -9,7 +9,7 @@ import Text from 'src/components/Text'
 import { IHowtoStep } from 'src/models/howto.models'
 import { IUploadedFileMeta } from 'src/stores/storage'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 interface IProps {
   step: IHowtoStep

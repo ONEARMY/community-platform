@@ -8,6 +8,7 @@ import { Link } from 'src/components/Links'
 import { Loader } from 'src/components/Loader'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import SearchInput from 'src/components/SearchInput'
+import SortSelect from 'src/components/SortSelect'
 import TagsSelect from 'src/components/Tags/TagsSelect'
 import { VirtualizedFlex } from 'src/components/VirtualizedFlex/VirtualizedFlex'
 import { IHowtoDB } from 'src/models/howto.models'
@@ -157,6 +158,9 @@ export class HowtoList extends React.Component<any, IState> {
               placeholder="Filter by tags"
               relevantTagsItems={filteredHowtos}
             />
+          </Flex>
+          <Flex ml={[0, 0, '8px']} mb={['10px', '10px', 0]} width={[1, 1, 0.2]}>
+            <SortSelect usefulCounts={users_votedUsefulHowtos} />
           </Flex>
           <Flex ml={[0, 0, '8px']} mr={[0, 0, 'auto']} mb={['10px', '10px', 0]}>
             <SearchInput

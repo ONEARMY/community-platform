@@ -3,7 +3,7 @@ import * as React from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
-import { Box } from 'rebass'
+import { Box } from 'theme-ui'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { FieldArray } from 'react-final-form-arrays'
 import { MACHINE_BUILDER_XP } from 'src/mocks/user_pp.mock'
@@ -26,7 +26,7 @@ export class ExpertiseSection extends React.Component<IProps, any> {
     const { required } = this.props
     return (
       <FlexSectionContainer>
-        <Flex justifyContent="space-between">
+        <Flex sx={{justifyContent: "space-between"}}>
           <Heading small>Expertise</Heading>
           <ArrowIsSectionOpen
             onClick={() => {
@@ -39,7 +39,7 @@ export class ExpertiseSection extends React.Component<IProps, any> {
           <Text regular my={4}>
             What are you specialised in ? *
           </Text>
-          <Flex flexWrap={['wrap', 'wrap', 'nowrap']}>
+          <Flex sx={{flexWrap:['wrap', 'wrap', 'nowrap']}}>
             <FieldArray name="machineBuilderXp">
               {({ fields }) => (
                 <>

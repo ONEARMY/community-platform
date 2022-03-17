@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import { Flex } from 'rebass'
+import { Flex } from 'theme-ui'
 import styled from '@emotion/styled'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
 import NotificationsIcon from 'src/pages/common/Header/Menu/Notifications/NotificationsIcon'
@@ -17,10 +17,10 @@ import { UserStore } from 'src/stores/User/user.store'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
-interface IProps { }
+interface IProps {}
 
 interface IInjectedProps extends IProps {
-  mobileMenuStore: MobileMenuStore,
+  mobileMenuStore: MobileMenuStore
   userStore: UserStore
 }
 
@@ -114,12 +114,15 @@ export class Header extends Component<IProps> {
         <Flex
           data-cy="header"
           bg="white"
-          justifyContent="space-between"
-          alignItems="center"
           pl={[4, 4, 0]}
           pr={[4, 4, 0]}
-          sx={{ zIndex: theme.zIndex.header, position: 'relative' }}
-          minHeight={[null, null, 80]}
+          sx={{
+            zIndex: theme.zIndex.header,
+            position: 'relative',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            minHeight: [null, null, 80],
+          }}
         >
           <Flex>
             <Logo isMobile={true} />

@@ -5,7 +5,7 @@ import { Field } from 'react-final-form'
 import Text from 'src/components/Text'
 import { Button } from 'oa-components'
 import { TextAreaField } from 'src/components/Form/Fields'
-import { Box, Flex } from 'rebass'
+import { Box, Flex } from 'theme-ui'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import theme from 'src/themes/styled.theme'
@@ -52,7 +52,7 @@ export class MemberMapPinSection extends React.Component<any, IState> {
 
     return (
       <FlexSectionContainer>
-        <Flex justifyContent="space-between">
+        <Flex sx={{justifyContent: "space-between"}}>
           <Heading small id="your-map-pin">
             Add yourself to the map!
           </Heading>

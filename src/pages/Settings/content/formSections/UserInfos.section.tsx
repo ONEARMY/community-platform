@@ -9,7 +9,7 @@ import theme from 'src/themes/styled.theme'
 import { FieldArray } from 'react-final-form-arrays'
 import { ProfileLinkField } from './Fields/Link.field'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
-import { Box } from 'rebass'
+import { Box } from 'theme-ui'
 import { required } from 'src/utils/validators'
 import { IUserPP } from 'src/models/user_pp.models'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
@@ -37,10 +37,17 @@ const CoverImages = ({
 }) =>
   isMemberProfile ? (
     <>
-      <Text mb={2} mt={7} width="100%" medium>
+      <Text mb={2} mt={7} sx={{ width: '100%' }} medium>
         Add a profile image *
       </Text>
-      <Box height="150px" width="150px" m="10px" data-cy="cover-image">
+      <Box
+        sx={{
+          height: '150px',
+          width: '150px',
+        }}
+        m="10px"
+        data-cy="cover-image"
+      >
         <Field
           hasText={false}
           name="coverImages[0]"
@@ -54,7 +61,7 @@ const CoverImages = ({
     </>
   ) : (
     <>
-      <Text mb={2} mt={7} width="100%" medium>
+      <Text mb={2} mt={7} sx={{width: '100%'}} medium>
         Cover Image *
       </Text>
       <FieldArray
@@ -67,8 +74,10 @@ const CoverImages = ({
               {fields.map((name, index: number) => (
                 <Box
                   key={name}
-                  height="100px"
-                  width="150px"
+                  sx={{
+                    height: '100px',
+                    width: '150px',
+                  }}
                   m="10px"
                   data-cy="cover-image"
                 >
@@ -91,8 +100,7 @@ const CoverImages = ({
         bg={theme.colors.softblue}
         mt={2}
         p={2}
-        width={1}
-        sx={{ borderRadius: '3px' }}
+        sx={{ width: '100%', borderRadius: '3px' }}
       >
         <Text small>
           The cover images are shown in your profile and helps us evaluate your
@@ -121,7 +129,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
     const isMemberProfile = profileType === 'member'
     return (
       <FlexSectionContainer>
-        <Flex justifyContent="space-between">
+        <Flex sx={{ justifyContent: 'space-between' }}>
           <Heading small>Infos</Heading>
           <ArrowIsSectionOpen
             onClick={() => {
@@ -131,7 +139,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
           />
         </Flex>
         <Box sx={{ display: isOpen ? 'block' : 'none' }}>
-          <Flex flexWrap={'wrap'}>
+          <Flex sx={{ flexWrap: 'wrap' }}>
             <Text my={4} medium>
               Display Name *
             </Text>
@@ -163,7 +171,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             />
           </Flex>
           <>
-            <Flex wrap={'nowrap'} alignItems={'center'} width={1}>
+            <Flex sx={{ alignItems: 'center', width: '100%', wrap: 'nowrap' }}>
               <Text mb={2} mt={7} medium>
                 Contacts & links *
               </Text>

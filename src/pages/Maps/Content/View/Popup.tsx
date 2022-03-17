@@ -1,6 +1,6 @@
 import * as React from 'react'
 import L from 'leaflet'
-import { Image } from 'rebass'
+import { Image } from 'theme-ui'
 import Flex from 'src/components/Flex'
 import Text from 'src/components/Text'
 import { Button } from 'oa-components'
@@ -119,11 +119,11 @@ export class Popup extends React.Component<IProps> {
       <>
         <Link to={'/u/' + name} data-cy="map-pin-popup">
           <HeroImage src={heroImageUrl} onError={addFallbackSrc} />
-          <Flex flexDirection={'column'} px={2} py={2}>
+          <Flex sx={{ flexDirection: 'column' }} px={2} py={2}>
             <Text tags mb={2}>
               {group ? group.displayName : pin.type}
             </Text>
-            <Text large mb={1} display="flex">
+            <Text large mb={1} sx={{ display: 'flex' }}>
               {displayName}
               {verifiedBadge && (
                 <Image
@@ -155,10 +155,9 @@ export class Popup extends React.Component<IProps> {
         </Link>
         {this.store.needsModeration(pin) && (
           <Flex
-            flexDirection={'row'}
             px={10}
             py={1}
-            justifyContent={'space-around'}
+            sx={{ flexDirection: 'row', justifyContent: 'space-around' }}
           >
             <Button
               small

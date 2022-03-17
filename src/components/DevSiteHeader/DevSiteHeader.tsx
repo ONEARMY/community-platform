@@ -1,7 +1,7 @@
 import { SITE, VERSION, DEV_SITE_ROLE } from 'src/config/config'
 import Text from 'src/components/Text'
 import { UserRole } from 'src/models'
-import { Flex, Box } from 'rebass'
+import { Flex, Box } from 'theme-ui'
 import Select from 'react-select'
 import { observer } from 'mobx-react-lite'
 import { useCommonStores } from 'src/index'
@@ -19,20 +19,22 @@ const DevSiteHeader = observer(() => {
         <Flex
           data-cy="devSiteHeader"
           bg={theme.colors.red2}
-          width={1}
           py={1}
           px={1}
-          alignItems="center"
-          style={{ zIndex: 3001 }}
+          style={{ alignItems: 'center', zIndex: 3001 }}
         >
-          <Text color={'white'} medium txtcenter flex="1">
+          <Text color={'white'} medium txtcenter sx={{ flex: '1' }}>
             This is a dev version of the platform (v{VERSION})
           </Text>
-          <Flex data-cy="devSiteRoleSelectContainer" alignItems="center" ml={2}>
+          <Flex
+            data-cy="devSiteRoleSelectContainer"
+            sx={{ alignItems: 'center' }}
+            ml={2}
+          >
             <Text color={'white'} medium mr="1" title={SITE}>
               View as:
             </Text>
-            <Box width="150px" mr={3}>
+            <Box sx={{ width: '150px' }} mr={3}>
               <Select
                 options={siteRoles}
                 placeholder="Role"
@@ -43,11 +45,11 @@ const DevSiteHeader = observer(() => {
               />
             </Box>
           </Flex>
-          <Flex data-cy="devSiteSelectContainer" alignItems="center">
+          <Flex data-cy="devSiteSelectContainer" sx={{ alignItems: 'center' }}>
             <Text color={'white'} medium mr="1" title={SITE}>
               Site:
             </Text>
-            <Box width="130px" mr={3}>
+            <Box sx={{ width: '130px' }} mr={3}>
               <Select
                 options={devSites}
                 placeholder="Site"
@@ -56,11 +58,11 @@ const DevSiteHeader = observer(() => {
               />
             </Box>
           </Flex>
-          <Flex data-cy="devSiteSelectContainer" alignItems="center">
+          <Flex data-cy="devSiteSelectContainer" sx={{ alignItems: 'center' }}>
             <Text color={'white'} medium mr="1" title={SITE}>
               Theme:
             </Text>
-            <Box width="180px">
+            <Box sx={{ width: '180px' }}>
               <Select
                 options={availableThemes}
                 placeholder="Pick a theme"

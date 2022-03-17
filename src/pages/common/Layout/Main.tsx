@@ -1,4 +1,4 @@
-import { Flex, FlexProps } from 'rebass'
+import { Flex, FlexProps } from 'theme-ui'
 import theme from 'src/themes/styled.theme'
 import { CSSObject } from '@styled-system/css'
 
@@ -10,10 +10,8 @@ interface ILayoutProps {
 type IProps = FlexProps & ILayoutProps
 
 const Main = (props: IProps) => (
-  <Flex {...(props as any)} flexDirection="column">
+  <Flex {...(props as any)} sx={{flexDirection: "column"}}>
     <Flex
-      width="100%"
-      flexDirection="column"
       className="main-container"
       css={props.customStyles}
       sx={
@@ -25,8 +23,13 @@ const Main = (props: IProps) => (
               px: [2, 3, 4],
               mx: 'auto',
               my: 0,
+              flexDirection: "column",
+              width: '100%'
             }
-          : {}
+          : {
+            flexDirection: "column",
+            width: '100%'
+          }
       }
     >
       {props.children}

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import styled from '@emotion/styled'
-import { Box } from 'rebass'
+import { Box } from 'theme-ui'
 import { NavLink } from 'react-router-dom'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
 import { observer, inject } from 'mobx-react'

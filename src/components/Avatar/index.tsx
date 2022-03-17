@@ -1,6 +1,6 @@
 import { Component } from 'react'
 
-import { Image, ImageProps } from 'rebass'
+import { Image, ImageProps } from 'theme-ui'
 import { inject, observer } from 'mobx-react'
 import { ProfileTypeLabel } from 'src/models/user_pp.models'
 import Workspace from 'src/pages/User/workspace/Workspace'
@@ -70,9 +70,8 @@ export class Avatar extends Component<IProps, IState> {
       <>
         <Image
           className="avatar"
-          width={width ? width : 40}
+          sx={{width: width ? width : 40, borderRadius: '25px'}}
           height={width ? width : 40}
-          sx={{ borderRadius: '25px' }}
           src={avatarUrl}
         />
       </>

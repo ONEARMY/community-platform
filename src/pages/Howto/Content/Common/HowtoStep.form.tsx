@@ -83,10 +83,10 @@ class HowtoStep extends PureComponent<IProps, IState> {
         card
         mediumRadius
         bg={'white'}
-        flexDirection={'column'}
+        sx={{ flexDirection: 'column' }}
       >
         <Flex p={0}>
-          <Heading small flex={1} mb={3}>
+          <Heading small sx={{flex:1}} mb={3}>
             Step {index + 1}
           </Heading>
           {index >= 1 && (
@@ -116,7 +116,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
           {this.state.showDeleteModal && (
             <Modal onDidDismiss={() => this.toggleDeleteModal()}>
               <Text>Are you sure you want to delete this step?</Text>
-              <Flex mt={3} p={0} mx={-1} justifyContent="flex-end">
+              <Flex mt={3} p={0} mx={-1} sx={{ justifyContent: 'flex-end' }}>
                 <Flex px={1}>
                   <Button
                     variant={'outline'}
@@ -139,7 +139,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
           )}
         </Flex>
 
-        <Flex flexDirection="column" mb={3}>
+        <Flex sx={{ flexDirection: 'column' }} mb={3}>
           <Label htmlFor={`${step}.title`}>Title of this step *</Label>
           <Field
             name={`${step}.title`}
@@ -153,7 +153,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
             isEqual={COMPARISONS.textInput}
           />
         </Flex>
-        <Flex flexDirection="column" mb={3}>
+        <Flex sx={{ flexDirection: 'column' }} mb={3}>
           <Label htmlFor={`${step}.text`}>Description of this step *</Label>
           <Field
             name={`${step}.text`}
@@ -169,7 +169,10 @@ class HowtoStep extends PureComponent<IProps, IState> {
           />
         </Flex>
         <Label htmlFor={`${step}.text`}>Upload image(s) for this step *</Label>
-        <Flex flexDirection={['column', 'row']} alignItems="center" mb={3}>
+        <Flex
+          sx={{ flexDirection: ['column', 'row'], alignItems: 'center' }}
+          mb={3}
+        >
           <ImageInputFieldWrapper data-cy="step-image-0">
             <Field
               hasText={false}
@@ -195,7 +198,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
             />
           </ImageInputFieldWrapper>
         </Flex>
-        <Flex flexDirection="column" mb={3}>
+        <Flex sx={{ flexDirection: 'column' }} mb={3}>
           <Label htmlFor={`${step}.videoUrl`}>Or embed a YouTube video*</Label>
           <Field
             name={`${step}.videoUrl`}

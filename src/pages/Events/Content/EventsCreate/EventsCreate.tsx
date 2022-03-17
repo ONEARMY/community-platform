@@ -18,7 +18,7 @@ import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import { validateUrl, addProtocolMutator, required } from 'src/utils/validators'
-import { Box } from 'rebass'
+import { Box } from 'theme-ui'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import IconHeaderEvents from 'src/assets/images/header-section/events-header-icon.svg'
 import { logger } from 'src/logger'
@@ -100,18 +100,18 @@ export class EventsCreate extends React.Component<IProps, IState> {
         validateOnBlur
         render={({ form: { mutators }, submitting, handleSubmit }) => {
           return (
-            <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
-              <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} mt={4}>
+            <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
+              <Flex bg="inherit" px={2} sx={{ width: ['100%', '100%', `${2 / 3 * 100}%`] }} mt={4}>
                 <FormContainer onSubmit={e => e.preventDefault()}>
                   {/* How To Info */}
-                  <Flex flexDirection={'column'}>
+                  <Flex sx={{ flexDirection: 'column' }}>
                     <Flex
                       card
                       mediumRadius
                       bg={theme.colors.softblue}
                       px={3}
                       py={2}
-                      alignItems="center"
+                      sx={{ alignItems: 'center' }}
                     >
                       <Heading medium>Create an event</Heading>
                       <Box ml="15px">
@@ -132,13 +132,11 @@ export class EventsCreate extends React.Component<IProps, IState> {
                       bg={'white'}
                       mt={5}
                       p={4}
-                      flexWrap="wrap"
-                      flexDirection="column"
+                      sx={{ flexDirection: 'column', flexWrap: 'wrap' }}
                     >
                       <Flex
-                        flexDirection={'column'}
                         mb={3}
-                        width={[1, 1, 2 / 3]}
+                        sx={{ width: ['100%', '100%', `${2 / 3 * 100}%`], flexDirection: 'column' }}
                       >
                         <Label htmlFor="title">Title of the event *</Label>
                         <Field
@@ -155,14 +153,15 @@ export class EventsCreate extends React.Component<IProps, IState> {
                       </Flex>
                       <Flex
                         mx={-2}
-                        width={1}
-                        flexDirection={['column', 'column', 'row']}
+                        sx={{
+                          width: '100%',
+                          flexDirection: ['column', 'column', 'row'],
+                        }}
                       >
                         <Flex
-                          flexDirection={'column'}
                           mb={3}
                           px={2}
-                          width={1}
+                          sx={{ width: '100%', flexDirection: 'column' }}
                           data-cy="date"
                         >
                           <Label htmlFor="location">
@@ -180,7 +179,11 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             placeholderText="yyyy/mm/dd"
                           />
                         </Flex>
-                        <Flex flexDirection={'column'} mb={3} px={2} width={1}>
+                        <Flex
+                          mb={3}
+                          px={2}
+                          sx={{ width: '100%', flexDirection: 'column' }}
+                        >
                           <Label htmlFor="location">
                             In which city is the event taking place? *
                           </Label>
@@ -207,10 +210,16 @@ export class EventsCreate extends React.Component<IProps, IState> {
                       </Flex>
                       <Flex
                         mx={-2}
-                        width={1}
-                        flexDirection={['column', 'column', 'row']}
+                        sx={{
+                          width: '100%',
+                          flexDirection: ['column', 'column', 'row'],
+                        }}
                       >
-                        <Flex flexDirection={'column'} mb={3} px={2} width={1}>
+                        <Flex
+                          mb={3}
+                          px={2}
+                          sx={{ width: '100%', flexDirection: 'column' }}
+                        >
                           <Label htmlFor="location">
                             Select tags for your event *
                           </Label>
@@ -220,7 +229,11 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             category="event"
                           />
                         </Flex>
-                        <Flex flexDirection={'column'} mb={3} px={2} width={1}>
+                        <Flex
+                          mb={3}
+                          px={2}
+                          sx={{ width: '100%', flexDirection: 'column' }}
+                        >
                           <Label htmlFor="location">Link to your event *</Label>
                           <Field
                             name="url"
@@ -242,9 +255,11 @@ export class EventsCreate extends React.Component<IProps, IState> {
 
               {/* post guidelines container */}
               <Flex
-                flexDirection={'column'}
-                width={[1, 1, 1 / 3]}
-                height={'100%'}
+                sx={{
+                  width: [1, 1, 1 / 3],
+                  flexDirection: 'column',
+                  height: '100%',
+                }}
                 bg="inherit"
                 px={2}
                 mt={4}
@@ -260,12 +275,11 @@ export class EventsCreate extends React.Component<IProps, IState> {
                       this.setState({ isLocationSelected: false })
                     }
                   }}
-                  width={1}
                   mt={3}
                   variant={'primary'}
                   disabled={submitting}
                   data-cy="submit"
-                  sx={{ mb: ['40px', '40px', 0] }}
+                  sx={{ mb: ['40px', '40px', 0], width: '100%' }}
                 >
                   Publish
                 </Button>

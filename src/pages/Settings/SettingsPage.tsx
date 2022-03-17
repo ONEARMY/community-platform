@@ -21,7 +21,7 @@ import { WorkspaceMapPinSection } from './content/formSections/WorkspaceMapPin.s
 import { MemberMapPinSection } from './content/formSections/MemberMapPin.section'
 import theme from 'src/themes/styled.theme'
 import INITIAL_VALUES from './Template'
-import { Box } from 'rebass'
+import { Box } from 'theme-ui'
 import { Prompt } from 'react-router'
 import { toJS } from 'mobx'
 import { isModuleSupported, MODULE } from 'src/modules'
@@ -150,7 +150,7 @@ export class UserSettings extends React.Component<IProps, IState> {
             ...rest
           }) => {
             return (
-              <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
+              <Flex mx={-2} bg={'inherit'} sx={{flexWrap: 'wrap'}}>
                 <Prompt
                   when={!this.injected.userStore.updateStatus.Complete}
                   message={
@@ -158,16 +158,15 @@ export class UserSettings extends React.Component<IProps, IState> {
                   }
                 />
                 <Flex
-                  width={[1, 1, 2 / 3]}
-                  sx={{
+                  sx={{width: ['100%', '100%', `${2 / 3 * 100}%`],
                     my: 4,
                     bg: 'inherit',
                     px: 2,
                   }}
                 >
-                  <Box width="100%">
+                  <Box sx={{width:"100%"}}>
                     <form id="userProfileForm" onSubmit={handleSubmit}>
-                      <Flex flexDirection={'column'}>
+                      <Flex sx={{flexDirection: 'column'}}>
                         <Flex
                           card
                           mediumRadius
@@ -234,8 +233,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                 </Flex>
                 {/* desktop guidelines container */}
                 <Flex
-                  width={[1, 1, 1 / 3]}
-                  sx={{
+                  sx={{width: ['100%', '100%', `${100 * .333}%`],
                     flexDirection: 'column',
                     bg: 'inherit',
                     px: 2,
@@ -275,7 +273,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           )
                         }
                       }}
-                      width={1}
+                      sx={{width: '100%'}}
                       variant={'primary'}
                       type="submit"
                       // disable button when form invalid or during submit.

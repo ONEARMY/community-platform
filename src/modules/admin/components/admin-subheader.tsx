@@ -1,4 +1,4 @@
-import { Box } from 'rebass'
+import { Box } from 'theme-ui'
 import { NavLink } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { MODULE } from 'src/modules'
@@ -39,7 +39,7 @@ const AdminSubheader = () => (
   <SubheaderContainer
     bg={theme.colors.black}
     p={2}
-    textAlign={'right'}
+    sx={{textAlign:'right'}}
     ml={[-2, -3, -4]} // adjust for main-container padding on regular screen breakpoints
     mr={[-2, -3, -4]}
     data-cy="admin-subheader"

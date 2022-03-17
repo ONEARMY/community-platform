@@ -1,10 +1,10 @@
 import 'react-image-lightbox/style.css'
 import { PureComponent } from 'react'
 import Lightbox from 'react-image-lightbox'
-import { Card, CardProps, Flex, Image } from 'rebass'
+import { Card, CardProps, Flex, Image } from 'theme-ui'
 import { IUploadedFileMeta } from 'src/stores/storage'
 import styled from '@emotion/styled'
-import theme from '../../themes/styled.theme';
+import theme from '../../themes/styled.theme'
 
 interface IProps {
   images: IUploadedFileMeta[]
@@ -79,11 +79,11 @@ export default class ImageGallery extends PureComponent<IProps, IState> {
     const images = this.state.images
     const imageNumber = images.length
     return this.state.activeImage ? (
-      <Flex flexDirection={'column'}>
-        <Flex width={1}>
+      <Flex sx={{ flexDirection: 'column' }}>
+        <Flex sx={{ width: '100%' }}>
           <ImageWithPointer
             data-cy="active-image"
-            width={1}
+            sx={{ width: '100%' }}
             src={this.state.activeImage.downloadUrl}
             onClick={() => {
               this.triggerLightbox()
@@ -91,7 +91,7 @@ export default class ImageGallery extends PureComponent<IProps, IState> {
             crossOrigin=""
           />
         </Flex>
-        <Flex flexWrap={'wrap'} width={1} mx={[2, 2, '-5px']}>
+        <Flex sx={{ width: '100%', flexWrap: 'wrap' }} mx={[2, 2, '-5px']}>
           {imageNumber > 1
             ? images.map((image: any, index: number) => (
                 <ThumbCard

@@ -1,4 +1,4 @@
-import { Box, Image } from 'rebass'
+import { Box, Image } from 'theme-ui'
 import EventsIcon from 'src/assets/icons/icon-events.svg'
 import HowToCountIcon from 'src/assets/icons/icon-how-to.svg'
 import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'

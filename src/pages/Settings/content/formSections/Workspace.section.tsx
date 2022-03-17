@@ -3,7 +3,7 @@ import * as React from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
-import { Box } from 'rebass'
+import { Box } from 'theme-ui'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { WORKSPACE_TYPES } from 'src/mocks/user_pp.mock'
 import { CustomRadioField } from './Fields/CustomRadio.field'
@@ -29,7 +29,7 @@ export class WorkspaceSection extends React.Component<any, IState> {
         validateFields={[]}
         render={({ input, meta }) => (
           <FlexSectionContainer>
-            <Flex justifyContent="space-between">
+            <Flex sx={{justifyContent: "space-between"}}>
               <Heading small>Workspace</Heading>
               <ArrowIsSectionOpen
                 onClick={() => {
@@ -42,7 +42,7 @@ export class WorkspaceSection extends React.Component<any, IState> {
               <Text regular my={4}>
                 What kind of Precious Plastic workspace do you run?
               </Text>
-              <Flex flexWrap={['wrap', 'wrap', 'nowrap']}>
+              <Flex sx={{flexWrap:['wrap', 'wrap', 'nowrap']}}>
                 {WORKSPACE_TYPES.map((workspace, index: number) => (
                   <CustomRadioField
                     data-cy={workspace.label}

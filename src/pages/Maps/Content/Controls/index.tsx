@@ -2,7 +2,7 @@ import * as React from 'react'
 import styled from '@emotion/styled'
 
 import { Button } from 'oa-components'
-import { Flex, Box, Image } from 'rebass'
+import { Flex, Box, Image } from 'theme-ui'
 import filterIcon from 'src/assets/icons/icon-filters-mobile.png'
 import crossClose from 'src/assets/icons/cross-close.svg'
 import { Modal } from 'src/components/Modal/Modal'
@@ -26,7 +26,7 @@ interface IProps extends RouteComponentProps<any> {
   mapRef: React.RefObject<Map>
   availableFilters: Array<IMapGrouping>
   onFilterChange: (selected: Array<IMapPinType>) => void
-  onLocationChange: (latlng: {lat:number,lng:number}) => void
+  onLocationChange: (latlng: { lat: number; lng: number }) => void
 }
 interface IState {
   showFiltersMobile: boolean
@@ -80,9 +80,11 @@ class Controls extends React.Component<IProps, IState> {
         data-cy="map-controls"
         ml={['0', '0', '0', '50px']}
         py={[0, 1, 0]}
-        flexDirection={['column', 'column', 'column', 'row']}
-        alignItems={'center'}
-        justifyContent={'center'}
+        sx={{
+          flexDirection: ['column', 'column', 'column', 'row'],
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
         onClick={() => {
           // close any active popup on click
           this.injected.mapsStore.setActivePin(undefined)
@@ -140,10 +142,11 @@ class Controls extends React.Component<IProps, IState> {
             </Link>
           </Box>
         </Flex>
-        <Box width="95%" sx={{ display: ['flex', 'none', 'none'], mt: '5px' }}>
+        <Box
+          sx={{ display: ['flex', 'none', 'none'], mt: '5px', width: '95%' }}
+        >
           <Button
-            width="100%"
-            sx={{ display: 'block' }}
+            sx={{ display: 'block', width: '100%' }}
             variant="outline"
             onClick={() => this.handleFilterMobileModal()}
           >
@@ -160,7 +163,7 @@ class Controls extends React.Component<IProps, IState> {
         </Box>
         {showFiltersMobile && (
           <Modal onDidDismiss={() => this.handleFilterMobileModal()}>
-            <Flex p={0} mx={-1} justifyContent="space-between">
+            <Flex p={0} mx={-1} sx={{ justifyContent: 'space-between' }}>
               <Text bold>Select filters</Text>
               <Image
                 width="25px"

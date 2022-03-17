@@ -1,5 +1,5 @@
 import { FunctionComponent } from 'react';
-import { Box } from 'rebass'
+import { Box } from 'theme-ui'
 import checkmarkIcon from 'src/assets/icons/icon-checkmark.svg'
 
 interface IProps {

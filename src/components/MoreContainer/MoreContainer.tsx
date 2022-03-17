@@ -1,4 +1,4 @@
-import { Box, BoxProps } from 'rebass'
+import { Box, BoxProps } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import WhiteBubble0 from 'src/assets/images/white-bubble_0.svg'

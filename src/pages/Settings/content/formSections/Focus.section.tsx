@@ -3,9 +3,9 @@ import * as React from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
-import { Box } from 'rebass'
+import { Box } from 'theme-ui'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
-import { Link } from 'rebass'
+import { Link } from 'theme-ui'
 import { Button } from 'oa-components'
 import { ProfileTypeLabel } from 'src/models/user_pp.models'
 import { PROFILE_TYPES } from 'src/mocks/user_pp.mock'
@@ -26,7 +26,7 @@ export class FocusSection extends React.Component<any, IState> {
         name="profileType"
         render={props => (
           <FlexSectionContainer>
-            <Flex justifyContent="space-between">
+            <Flex sx={{ justifyContent: 'space-between' }}>
               <Heading small>Focus</Heading>
               <ArrowIsSectionOpen
                 onClick={() => {
@@ -39,7 +39,7 @@ export class FocusSection extends React.Component<any, IState> {
               <Text regular my={4}>
                 What is your main Precious Plastic activity?
               </Text>
-              <Flex flexWrap={['wrap', 'wrap', 'nowrap']}>
+              <Flex sx={{ flexWrap: ['wrap', 'wrap', 'nowrap'] }}>
                 {PROFILE_TYPES.map((profile, index: number) => (
                   <CustomRadioField
                     data-cy={profile.label}
@@ -53,7 +53,7 @@ export class FocusSection extends React.Component<any, IState> {
                   />
                 ))}
               </Flex>
-              <Flex flexWrap="wrap" alignItems="center" mt={4}>
+              <Flex sx={{ flexWrap: 'wrap', alignItems: 'center' }} mt={4}>
                 <Text my={2}>Not sure about your focus ?</Text>
                 <Link
                   href="https://drive.google.com/open?id=1fXTtBbzgCO0EL6G9__aixwqc-Euqgqnd"

@@ -16,7 +16,7 @@ import {
   POLICY_PAGES,
   getAvailablePageList,
 } from './PageList'
-import { Flex, Box } from 'rebass'
+import { Flex, Box } from 'theme-ui'
 import DevSiteHeader from 'src/components/DevSiteHeader/DevSiteHeader'
 import { getSupportedModules } from 'src/modules'
 import GlobalSiteFooter from './common/GlobalSiteFooter/GlobalSiteFooter'
@@ -42,7 +42,7 @@ export class Routes extends React.Component<any, {
       ];
 
     return (
-      <Flex height={'100vh'} flexDirection="column" data-cy="page-container">
+      <Flex sx={{height: '100vh', flexDirection:"column"}} data-cy="page-container">
         <BrowserRouter>
           <SWUpdateNotification />
           <GoogleAnalytics />

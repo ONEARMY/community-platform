@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
-import { Box, Flex } from 'rebass'
+import { Box, Flex } from 'theme-ui'
 import { Button } from 'oa-components'
 import { Link } from 'src/components/Links'
 import { Loader } from 'src/components/Loader'
@@ -46,7 +46,7 @@ const ResearchItemDetail = observer((props: IProps) => {
       !!store.activeUser && isAllowToEditContent(item, store.activeUser)
 
     return (
-      <Box maxWidth="1000px" width="100%" alignSelf="center">
+      <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
         <ResearchDescription
           research={item}
           isEditable={isEditable}

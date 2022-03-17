@@ -1,16 +1,14 @@
 import { Component } from 'react'
 import theme from 'src/themes/styled.theme'
 import styled from '@emotion/styled'
-import { Box } from 'rebass'
+import { Box } from 'theme-ui'
 import { inject, observer } from 'mobx-react'
 import Flex from 'src/components/Flex'
 import { NotificationList } from 'src/components/Notifications/NotificationList'
 import { Button } from 'oa-components'
 import { UserStore } from 'src/stores/User/user.store'
 
-
-interface IProps {
-}
+interface IProps {}
 
 interface IInjectedProps extends IProps {
   userStore: UserStore
@@ -75,26 +73,28 @@ export class NotificationsMobile extends Component {
   }
 
   render() {
-    const user = this.injected.userStore.user;
-    const notifications = user?.notifications?.
-      filter(notification => !notification.read).
-      sort((a, b) => new Date(b._created).getTime() -  new Date(a._created).getTime());
+    const user = this.injected.userStore.user
+    const notifications = user?.notifications
+      ?.filter(notification => !notification.read)
+      .sort(
+        (a, b) =>
+          new Date(b._created).getTime() - new Date(a._created).getTime(),
+      )
 
     return (
       <>
         <PanelContainer>
           <PanelMenu>
-            {!notifications || notifications?.length === 0 ?
+            {!notifications || notifications?.length === 0 ? (
               <ModalContainerInner>
                 <Flex>
-                  <ModalItem>
-                    Nada, no new notification
-                  </ModalItem>
+                  <ModalItem>Nada, no new notification</ModalItem>
                 </Flex>
               </ModalContainerInner>
-              : <ModalContainerInner>
+            ) : (
+              <ModalContainerInner>
                 <Flex>
-                  <ModalItem style={{ textAlign: "center" }}>
+                  <ModalItem style={{ textAlign: 'center' }}>
                     Notifications
                   </ModalItem>
                 </Flex>
@@ -104,15 +104,23 @@ export class NotificationsMobile extends Component {
                   </ModalItem>
                 </Flex>
                 <Flex>
-                  <Button variant="subtle" fontSize="14px"
-                    style={{ margin: "0 auto 1em auto", borderRadius: "10px" }}
+                  <Button
+                    variant="subtle"
+                    sx={{
+                      margin: '0 auto 1em auto',
+                      borderRadius: '10px',
+                      fontSize: '14px',
+                    }}
                     data-cy="clear-notifications"
-                    onClick={() => this.injected.userStore.markAllNotificationsRead()}>
-                      Clear notifications
+                    onClick={() =>
+                      this.injected.userStore.markAllNotificationsRead()
+                    }
+                  >
+                    Clear notifications
                   </Button>
                 </Flex>
               </ModalContainerInner>
-            }
+            )}
           </PanelMenu>
         </PanelContainer>
       </>

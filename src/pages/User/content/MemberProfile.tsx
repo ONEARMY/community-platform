@@ -2,7 +2,7 @@ import 'src/assets/css/slick.min.css'
 import type { IUserPP } from 'src/models/user_pp.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 
-import { Box, Image } from 'rebass'
+import { Box, Image } from 'theme-ui'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
@@ -67,7 +67,7 @@ export const MemberProfile = ({ user, adminButton }: IProps) => {
         marginTop: 50 * -.5,
       }}/>
       <ProfileContentWrapper px={4} py={4}>
-        <Box mr={3} minWidth="initial" style={{flexGrow: 1}}>
+        <Box mr={3} style={{flexGrow: 1, minWidth:"initial"}}>
           <MemberPicture>
             <Image src={
                 user.coverImages[0]
@@ -78,9 +78,9 @@ export const MemberProfile = ({ user, adminButton }: IProps) => {
             </MemberPicture>
           <UserStats user={user}/>
         </Box>
-        <Flex flexDirection="column" mt={3} ml={3} style={{flexGrow: 2, width: '100%'}}>
+        <Flex mt={3} ml={3} sx={{flexGrow: 2, width: '100%', flexDirection: "column"}}>
             <Text style={{wordWrap: 'break-word'}}>{user.userName}</Text>
-            <Box alignItems="center" mb={3}>
+            <Box sx={{flexDirection:"column"}} mb={3}>
               <Heading medium bold color={'black'} style={{wordWrap: 'break-word'}}>
                   {userCountryCode && (
                       <FlagIcon mr={2} code={userCountryCode} style={{display: 'inline-block'}} />
@@ -95,7 +95,7 @@ export const MemberProfile = ({ user, adminButton }: IProps) => {
                   mt="0"
                   mb="20px"
                   color={theme.colors.grey}
-                  width={['80%', '100%']}
+                  sx={{width:['80%', '100%']}}
               >
                   {user.about}
               </Text>

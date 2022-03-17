@@ -67,7 +67,7 @@ export class UserPage extends React.Component<
     }
     if (!user) {
       return (
-        <Text txtcenter mt="50px" width={1}>
+        <Text txtcenter mt="50px" sx={{width: '100%'}}>
           User not found
         </Text>
       )

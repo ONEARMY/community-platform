@@ -1,15 +1,15 @@
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import Flex from 'src/components/Flex'
-import { Box } from 'rebass'
-import {Icon} from 'oa-components'
+import { Box } from 'theme-ui'
+import { Icon } from 'oa-components'
 import { Field } from 'react-final-form'
 
 export const Label = props => (
   <Flex
     as="label"
-    flexDirection={['row', 'row', 'column']}
     sx={{
+      flexDirection: ['row', 'row', 'column'],
       m: '5px',
       p: '10px 0',
       borderRadius: '5px',
@@ -44,8 +44,7 @@ export const FlexSectionContainer = props => (
     bg={'white'}
     p={4}
     mt={4}
-    flexWrap="nowrap"
-    flexDirection="column"
+    sx={{ flexWrap: 'nowrap', flexDirection: 'column' }}
   >
     {props.children}
   </Flex>

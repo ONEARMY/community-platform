@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react'
 import { Button } from 'oa-components'
 import Heading from 'src/components/Heading'
 import { AdminStore } from 'src/stores/Admin/admin.store'
-import { Box } from 'rebass'
+import { Box } from 'theme-ui'
 import { Input } from 'src/components/Form/elements'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
@@ -63,7 +63,7 @@ export class AdminUsers extends React.Component<IProps, IState> {
         <Box mb={3} bg={'white'} p={2}>
           {superAdmins.map(u => (
             <Flex key={u.userName}>
-              <Text flex={1}>{u.userName}</Text>
+              <Text sx={{flex:1}}>{u.userName}</Text>
             </Flex>
           ))}
         </Box>
@@ -71,7 +71,7 @@ export class AdminUsers extends React.Component<IProps, IState> {
         <Box mb={3} bg={'white'} p={2}>
           {admins.map(u => (
             <Flex key={u.userName}>
-              <Text flex={1}>{u.userName}</Text>
+              <Text sx={{flex:1}}>{u.userName}</Text>
               <AuthWrapper roleRequired="super-admin">
                 <Button
                   icon="delete"

@@ -1,11 +1,11 @@
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
-import { Link } from 'rebass'
+import { Link } from 'theme-ui'
 import theme from 'src/themes/styled.theme'
 
 export const PostingGuidelines = () => (
-  <Flex card mediumRadius flexDirection={'column'} bg="white" p={4}>
+  <Flex card mediumRadius sx={{ flexDirection: 'column' }} bg="white" p={4}>
     <Heading medium bold mb={2}>
       How does it work?
     </Heading>

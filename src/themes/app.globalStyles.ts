@@ -1,4 +1,4 @@
-import { css } from '@emotion/react’;
+import { css } from '@emotion/react';
 import theme from 'src/themes/styled.theme'
 
 import { GlobalFonts } from './fonts'

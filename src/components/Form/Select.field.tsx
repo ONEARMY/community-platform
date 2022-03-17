@@ -186,7 +186,7 @@ export const SelectField = ({
 }: ISelectFieldProps) => (
   // note, we first use a div container so that default styles can be applied
   <>
-    <Flex p={0} flexWrap="nowrap">
+    <Flex p={0} sx={{flexWrap: 'nowrap'}}>
       <FieldContainer
         invalid={meta.error && meta.touched}
         style={rest.style}

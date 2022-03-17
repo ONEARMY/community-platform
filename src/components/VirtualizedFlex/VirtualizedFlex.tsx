@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Flex, Box } from 'rebass'
+import { Flex, Box } from 'theme-ui'
 import themes from 'src/themes/styled.theme'
 import {
   List,
@@ -78,7 +78,10 @@ export class VirtualizedFlex extends React.Component<IProps, IState> {
       >
         <Flex key={key} style={style}>
           {row.map((rowData: any, i: number) => (
-            <Box key={key + i} width={[1, 1 / 2, 1 / 3]}>
+            <Box
+              key={key + i}
+              sx={{ width: ['100%', `${100 * 0.5}%`, `${100 / 3}%`] }}
+            >
               {renderItem(rowData)}
             </Box>
           ))}
@@ -115,8 +118,8 @@ export class VirtualizedFlex extends React.Component<IProps, IState> {
         {({ onChildScroll, isScrolling, height, width, scrollTop }) => (
           <List
             autoHeight
-            height={height}
             width={width}
+            height={height}
             isScrolling={isScrolling}
             onScroll={onChildScroll}
             scrollTop={scrollTop}

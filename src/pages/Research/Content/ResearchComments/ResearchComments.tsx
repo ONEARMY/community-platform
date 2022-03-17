@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import ReactGA from 'react-ga'
-import { Box, Flex } from 'rebass'
+import { Box, Flex } from 'theme-ui'
 import { useCommonStores } from 'src/index'
 import { Button } from 'oa-components'
 import Text from 'src/components/Text'
@@ -27,21 +27,18 @@ const BoxMain = styled(Box)`
   margin-right: 20px;
   margin-top: 20px;
 `
-const ButtonStyled = styled(Button)`
-  float: right;
-  margin-top: 1em !important;
-`
 
-const ButtonMain = styled(Button)`
-  width: 100%;
-  justify-content: center;
-  &:hover {
-    background-color: #c2daf0;
-  }
-  &:hover.viewComments {
-    background-color: #ffffff;
-  }
-`
+const ButtonMain = Button
+// styled(Button)`
+//   width: 100%;
+//   justify-content: center;
+//   &:hover {
+//     background-color: #c2daf0;
+//   }
+//   &:hover.viewComments {
+//     background-color: #ffffff;
+//   }
+// `
 
 export const ResearchComments = ({ comments, update }: IProps) => {
   const [comment, setComment] = useState('')
@@ -156,7 +153,7 @@ export const ResearchComments = ({ comments, update }: IProps) => {
       {(user || (comments && comments.length > 0)) && (
         <ButtonMain
           variant="subtle"
-          fontSize="14px"
+          sx={{ fontSize: '14px' }}
           onClick={onButtonClick}
           backgroundColor={viewComments ? '#c2daf0' : '#e2edf7'}
           className={viewComments ? 'viewComments' : ''}
@@ -169,8 +166,7 @@ export const ResearchComments = ({ comments, update }: IProps) => {
       {viewComments && (
         <Flex
           mt={5}
-          flexDirection="column"
-          alignItems="end"
+          sx={{ flexDirection: 'column', alignItems: 'end' }}
           marginTop="15px"
           data-cy="update-comments"
         >
@@ -182,21 +178,21 @@ export const ResearchComments = ({ comments, update }: IProps) => {
             handleEditRequest={handleEditRequest}
           />
           {user ? (
-            <BoxStyled width={[7 / 10, 8 / 10, 9 / 10]}>
+            <BoxStyled sx={{ width: [7 / 10, 8 / 10, 9 / 10] }}>
               <CommentTextArea
                 data-cy="comment-text-area"
                 comment={comment}
                 onChange={setComment}
                 loading={loading}
               />
-              <ButtonStyled
+              <Button
                 data-cy="comment-submit"
                 disabled={!Boolean(comment.trim()) || loading}
                 variant="primary"
                 onClick={() => onSubmit(comment)}
               >
                 Comment
-              </ButtonStyled>
+              </Button>
             </BoxStyled>
           ) : null}
         </Flex>

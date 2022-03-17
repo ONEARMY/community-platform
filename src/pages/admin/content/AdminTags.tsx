@@ -4,7 +4,7 @@ import { TagsStore } from 'src/stores/Tags/tags.store'
 import { Button } from 'oa-components'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
-import { Box } from 'rebass'
+import { Box } from 'theme-ui'
 import Flex from 'src/components/Flex'
 import { ITag, TagCategory } from 'src/models/tags.model'
 import { Modal } from 'src/components/Modal/Modal'
@@ -65,7 +65,7 @@ export class AdminTags extends React.Component<IProps, IState> {
     return (
       <Box mt={4}>
         <Flex>
-          <Heading small flex={1}>
+          <Heading small sx={{flex:1}}>
             Tags Admin
           </Heading>
           <Button onClick={() => this.showEditor(NEW_TAG)}>Add Tag</Button>

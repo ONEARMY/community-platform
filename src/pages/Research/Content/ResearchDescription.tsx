@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import * as React from 'react'
-import { Box, Flex, Image } from 'rebass'
+import { Box, Flex, Image } from 'theme-ui'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import { Button } from 'oa-components'
 import Heading from 'src/components/Heading'
@@ -48,10 +48,14 @@ const ResearchDescription: React.FC<IProps> = ({
         mt: 4,
       }}
     >
-      <Flex px={4} py={4} flexDirection={'column'} width={1}>
-        <Flex justifyContent="space-between" flexWrap="wrap">
+      <Flex px={4} py={4} sx={{ flexDirection: 'column', width: '100%' }}>
+        <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
           <Link to={'/research'}>
-            <Button variant="subtle" fontSize="14px" data-cy="go-back">
+            <Button
+              variant="subtle"
+              sx={{ fontSize: '14px' }}
+              data-cy="go-back"
+            >
               <Flex>
                 <Image
                   sx={{
@@ -67,7 +71,7 @@ const ResearchDescription: React.FC<IProps> = ({
           </Link>
           {/* Check if research should be moderated */}
           {props.needsModeration && (
-            <Flex justifyContent={'space-between'}>
+            <Flex sx={{ justifyContent: 'space-between' }}>
               <Button
                 data-cy={'accept'}
                 variant={'primary'}
@@ -93,9 +97,9 @@ const ResearchDescription: React.FC<IProps> = ({
           )}
         </Flex>
         <Box mt={3} mb={2}>
-          <Flex alignItems="center">
+          <Flex sx={{ alignItems: 'center' }}>
             <Text inline auxiliary my={2} ml={1}>
-              <Flex alignItems="center">
+              <Flex sx={{ alignItems: 'center' }}>
                 By
                 <Link
                   ml={1}

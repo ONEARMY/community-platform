@@ -52,15 +52,21 @@ class ResendSignUpMessagePage extends React.Component<IProps, IState> {
             <Flex
               bg="inherit"
               px={2}
-              width={1}
-              css={{ maxWidth: '620px' }}
+              sx={{ width: '100%', maxWidth: '620px' }}
               mx={'auto'}
               mt={20}
               mb={3}
             >
-              <Flex flexDirection={'column'} width={1}>
-                <Flex card mediumRadius bg={'softblue'} px={3} py={2} width={1}>
-                  <Heading medium width={1}>
+              <Flex sx={{ flexDirection: 'column', width: '100%' }}>
+                <Flex
+                  card
+                  mediumRadius
+                  bg={'softblue'}
+                  px={3}
+                  py={2}
+                  sx={{ width: '100%' }}
+                >
+                  <Heading medium sx={{ width: '100%' }}>
                     Something didn't work
                   </Heading>
                 </Flex>
@@ -68,19 +74,24 @@ class ResendSignUpMessagePage extends React.Component<IProps, IState> {
                   card
                   mediumRadius
                   bg={'white'}
-                  width={1}
                   mt={3}
                   px={4}
                   pt={0}
                   pb={4}
-                  flexWrap="wrap"
-                  flexDirection="column"
+                  sx={{
+                    flexWrap: 'wrap',
+                    flexDirection: 'column',
+                    width: '100%',
+                  }}
                 >
-                  <Heading small py={4} width={1}>
+                  <Heading small py={4} sx={{ width: '100%' }}>
                     Resend email
                   </Heading>
-                  <Flex flexDirection={'column'} mb={3}>
-                    <Flex flexDirection={'column'} mb={3} width={[1, 1, 2 / 3]}>
+                  <Flex sx={{ flexDirection: 'column' }} mb={3}>
+                    <Flex
+                      mb={3}
+                      sx={{ flexDirection: 'column', width: ['100%', '100%', `${2 / 3 * 100}%`] }}
+                    >
                       <Label htmlFor="email">Email</Label>
                       <Field
                         name="email"
@@ -91,7 +102,7 @@ class ResendSignUpMessagePage extends React.Component<IProps, IState> {
                       />
                     </Flex>
                     <Button
-                      width={1}
+                      sx={{ width: '100%' }}
                       variant={'primary'}
                       disabled={disabled}
                       type="submit"
@@ -100,7 +111,7 @@ class ResendSignUpMessagePage extends React.Component<IProps, IState> {
                     </Button>
                   </Flex>
                 </Flex>
-                <Flex mt={3} justifyContent={'flex-end'}>
+                <Flex mt={3} sx={{ justifyContent: 'flex-end' }}>
                   <Button variant="tertiary">Home</Button>
                 </Flex>
               </Flex>

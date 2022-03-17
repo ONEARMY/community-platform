@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { HiddenInputField } from 'src/components/Form/Fields'
 import { Label, HiddenInput } from '../elements'
-import { Image } from 'rebass'
+import { Image } from 'theme-ui'
 import Text from 'src/components/Text'
 
 interface IProps {
@@ -52,7 +52,7 @@ class CustomCheckbox extends Component<IProps, IState> {
     return (
       <Label
         htmlFor={value}
-        width={['inherit', 'inherit', '100%']}
+        sx={{width: ['inherit', 'inherit', '100%']}}
         className={classNames.join(' ')}
         data-cy={dataCy}
       >
@@ -68,7 +68,7 @@ class CustomCheckbox extends Component<IProps, IState> {
           component={HiddenInputField}
         />
         {imageSrc && (
-          <Image px={3} src={imageSrc} width={['70px', '70px', '100%']} />
+          <Image px={3} src={imageSrc} sx={{width: ['70px', '70px', '100%']}} />
         )}
         {btnLabel && (
           <Text medium m="10px">

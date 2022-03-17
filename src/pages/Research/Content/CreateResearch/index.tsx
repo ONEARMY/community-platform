@@ -1,7 +1,7 @@
 import { inject, observer } from 'mobx-react'
 import * as React from 'react'
 import { RouteComponentProps, Switch, withRouter } from 'react-router'
-import { Flex } from 'rebass'
+import { Flex } from 'theme-ui'
 import { Text } from 'src/components/Text'
 import { IResearch } from 'src/models/research.models'
 import { IUser } from 'src/models/user.models'
@@ -50,7 +50,7 @@ class CreateResearch extends React.Component<RouteComponentProps, IState> {
         />
       </Switch>
     ) : (
-      <Flex justifyContent="center" mt="40px">
+      <Flex sx={{justifyContent: "center"}} mt="40px">
         <Text regular>Please login to access this page</Text>
       </Flex>
     )

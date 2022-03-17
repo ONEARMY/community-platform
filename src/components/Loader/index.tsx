@@ -1,6 +1,7 @@
 import { Component } from 'react'
-import { Flex, Image } from 'rebass'
-import styled, { keyframes } from 'styled-components'
+import { Flex, Image } from 'theme-ui'
+import styled from '@emotion/styled'
+import { keyframes } from '@emotion/react'
 
 import Text from 'src/components/Text'
 import { inject, observer } from 'mobx-react'
@@ -43,9 +44,9 @@ export class Loader extends Component<IProps> {
     const logo = this.injected.themeStore?.currentTheme?.logo || null
     return (
       <>
-        <Flex flexWrap="wrap" justifyContent="center">
-          {logo && <RotatingLogo src={logo} width={[75, 75, 100]} />}
-          <Text txtcenter width={1}>
+        <Flex sx={{flexWrap: 'wrap',justifyContent: 'center'}}>
+          {logo && <RotatingLogo src={logo} sx={{width: [75, 75, 100]}} />}
+          <Text txtcenter sx={{width: '100%'}}>
             loading...
           </Text>
         </Flex>

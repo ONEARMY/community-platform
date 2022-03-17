@@ -4,7 +4,7 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Field, Form } from 'react-final-form'
 import { Prompt, RouteComponentProps } from 'react-router'
-import { Box } from 'rebass'
+import { Box } from 'theme-ui'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { Button } from 'oa-components'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
@@ -136,22 +136,22 @@ const ResearchForm = observer((props: IProps) => {
         decorators={[calculatedFields, unloadDecorator]}
         render={({ submitting, dirty, handleSubmit }) => {
           return (
-            <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
-              <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} mt={4}>
+            <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
+              <Flex bg="inherit" px={2} sx={{ width: ['100%', '100%', `${2 / 3 * 100}%`] }} mt={4}>
                 <Prompt
                   when={!store.researchUploadStatus.Complete && dirty}
                   message={CONFIRM_DIALOG_MSG}
                 />
                 <FormContainer id="researchForm" onSubmit={handleSubmit}>
                   {/* Research Info */}
-                  <Flex flexDirection={'column'}>
+                  <Flex sx={{ flexDirection: 'column' }}>
                     <Flex
                       card
                       mediumRadius
                       bg={theme.colors.softblue}
                       px={3}
                       py={2}
-                      alignItems="center"
+                      sx={{ alignItems: 'center' }}
                     >
                       <Heading medium>
                         {props.parentType === 'create' ? (
@@ -159,7 +159,6 @@ const ResearchForm = observer((props: IProps) => {
                         ) : (
                           <span>Edit your Research</span>
                         )}{' '}
-
                       </Heading>
                       <Box ml="15px">
                         <ElWithBeforeIcon
@@ -179,12 +178,17 @@ const ResearchForm = observer((props: IProps) => {
                       bg={'white'}
                       mt={3}
                       p={4}
-                      flexWrap="wrap"
-                      flexDirection="column"
+                      sx={{ flexWrap: 'wrap', flexDirection: 'column' }}
                     >
-                      <Flex mx={-2} flexDirection={['column', 'column', 'row']}>
-                        <Flex flex={[1, 1, 4]} px={2} flexDirection="column">
-                          <Flex flexDirection={'column'} mb={3}>
+                      <Flex
+                        mx={-2}
+                        sx={{ flexDirection: ['column', 'column', 'row'] }}
+                      >
+                        <Flex
+                          px={2}
+                          sx={{ flexDirection: 'column', flex: [1, 1, 4] }}
+                        >
+                          <Flex sx={{ flexDirection: 'column' }} mb={3}>
                             <Label htmlFor="title">
                               Title of your research. Can we...
                             </Label>
@@ -200,7 +204,7 @@ const ResearchForm = observer((props: IProps) => {
                               placeholder="Can we make a chair from.. (max 60 characters)"
                             />
                           </Flex>
-                          <Flex flexDirection={'column'} mb={3}>
+                          <Flex sx={{ flexDirection: 'column' }} mb={3}>
                             <Label htmlFor="description">
                               What are you trying to find out?
                             </Label>
@@ -221,7 +225,7 @@ const ResearchForm = observer((props: IProps) => {
                               placeholder="Introduction to your research question. Mention what you want to do, whats the goal and what challenges you see etc (max 1000 characters)"
                             />
                           </Flex>
-                          <Flex flexDirection={'column'} mb={3}>
+                          <Flex sx={{ flexDirection: 'column' }} mb={3}>
                             <Label>Select tags for your Research</Label>
                             <Field
                               name="tags"
@@ -238,9 +242,11 @@ const ResearchForm = observer((props: IProps) => {
               </Flex>
               {/* post guidelines container */}
               <Flex
-                flexDirection={'column'}
-                width={[1, 1, 1 / 3]}
-                height={'100%'}
+                sx={{
+                  flexDirection: 'column',
+                  width: [1, 1, 1 / 3],
+                  height: '100%',
+                }}
                 bg="inherit"
                 px={2}
                 mt={[0, 0, 4]}
@@ -259,12 +265,11 @@ const ResearchForm = observer((props: IProps) => {
                     onClick={() =>
                       setSubmissionHandler({ shouldSubmit: true, draft: true })
                     }
-                    width={1}
                     mt={[0, 0, 3]}
                     variant="secondary"
                     type="submit"
                     disabled={submitting}
-                    sx={{ display: 'block' }}
+                    sx={{ width: '100%', display: 'block' }}
                   >
                     {props.formValues.moderation !== 'draft' ? (
                       <span>Revert to draft</span>
@@ -277,12 +282,11 @@ const ResearchForm = observer((props: IProps) => {
                     onClick={() =>
                       setSubmissionHandler({ shouldSubmit: true, draft: false })
                     }
-                    width={1}
                     mt={3}
                     variant="primary"
                     type="submit"
                     disabled={submitting}
-                    sx={{ mb: ['40px', '40px', 0] }}
+                    sx={{ width: '100%', mb: ['40px', '40px', 0] }}
                   >
                     <span>Publish</span>
                   </Button>

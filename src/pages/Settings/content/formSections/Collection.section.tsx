@@ -3,7 +3,7 @@ import * as React from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
-import { Box } from 'rebass'
+import { Box } from 'theme-ui'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { OpeningHoursPicker } from './Fields/OpeningHoursPicker.field'
 
@@ -35,7 +35,7 @@ export class CollectionSection extends React.Component<IProps, IState> {
     const { required } = this.props
     return (
       <FlexSectionContainer>
-        <Flex justifyContent="space-between">
+        <Flex sx={{ justifyContent: 'space-between' }}>
           <Heading small>Collection</Heading>
           <ArrowIsSectionOpen
             onClick={() => {
@@ -45,7 +45,7 @@ export class CollectionSection extends React.Component<IProps, IState> {
           />
         </Flex>
         <Box sx={{ display: isOpen ? 'block' : 'none' }}>
-          <Flex wrap={'nowrap'} alignItems={'center'} width={1}>
+          <Flex sx={{ wrap: 'nowrap', alignItems: 'center', width: '100%' }}>
             <Text regular my={4}>
               Opening time *
             </Text>
@@ -83,7 +83,7 @@ export class CollectionSection extends React.Component<IProps, IState> {
           <Text regular my={4}>
             Plastic types accepted *
           </Text>
-          <Flex flexWrap={['wrap', 'wrap', 'nowrap']} my="10px">
+          <Flex sx={{ flexWrap: ['wrap', 'wrap', 'nowrap'] }} my="10px">
             <FieldArray name="collectedPlasticTypes">
               {({ fields }) => (
                 <>

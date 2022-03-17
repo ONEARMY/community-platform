@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Box, Image } from 'rebass'
+import { Box, Image } from 'theme-ui'
 import styled from '@emotion/styled'
 import { Button } from 'oa-components'
 import 'react-image-lightbox/style.css'
@@ -45,7 +45,8 @@ const UploadImageOverlay = styled(AlignCenterWrapper as any)`
   visibility:hidden
   transition: opacity 300ms ease-in;
   border-radius: ${theme.space[1]}px;
-  ${ImageInputWrapper}:hover & {
+  
+  .image-input__wrapper:hover & {
     visibility: visible;
     opacity: 1;
   }
@@ -145,7 +146,7 @@ export class ImageInput extends React.Component<IProps, IState> {
     const showUploadedImg = uploadedFiles.length > 0
     const hasImages = uploadedFiles.length > 0 || inputFiles.length > 0
     return (
-      <Box p={0} height="100%">
+      <Box p={0} sx={{height:"100%"}}>
         <Dropzone
           accept="image/*"
           multiple={multiple}
@@ -153,6 +154,7 @@ export class ImageInput extends React.Component<IProps, IState> {
         >
           {({ getRootProps, getInputProps }) => (
             <ImageInputWrapper
+              className={'image-input__wrapper'}
               hasUploadedImg={showUploadedImg}
               {...getRootProps()}
             >

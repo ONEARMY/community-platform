@@ -1,5 +1,6 @@
-import { Flex, Text } from 'rebass'
-import styled, { useTheme } from 'styled-components'
+import { Flex, Text } from 'theme-ui'
+import styled from '@emotion/styled'
+import { useTheme } from '@emotion/react'
 import { Icon } from 'oa-components'
 
 const SiteFooter = () => {
@@ -50,7 +51,7 @@ const SiteFooter = () => {
   return (
     <FooterContainer
       bg="#27272c"
-      alignItems="center"
+      sx={{alignItems: 'center'}}
       style={{
         marginTop: '45px',
       }}

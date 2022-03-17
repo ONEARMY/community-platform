@@ -4,7 +4,7 @@ import { PROJECTS_MOCKS } from 'src/mocks/projects.mock'
 import { CATEGORY_MOCKS } from 'src/mocks/category.mock'
 import { TAGS_MOCK } from 'src/mocks/tags.mock'
 
-import { Box, Flex } from 'rebass'
+import { Box, Flex } from 'theme-ui'
 import { Button } from 'oa-components'
 import Selector from 'src/components/Selector'
 import { Link } from 'react-router-dom'
@@ -37,7 +37,7 @@ export default class FilterBar extends React.Component<IProps> {
   render() {
     const { section } = this.props
     return (
-      <Flex justifyContent={'space-between'} mb={4}>
+      <Flex sx={{justifyContent:'space-between'}} mb={4}>
         <Box>
           <Selector
             onChange={() => this.onProjectChange()}

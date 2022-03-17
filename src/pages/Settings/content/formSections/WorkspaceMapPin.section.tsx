@@ -4,7 +4,7 @@ import Heading from 'src/components/Heading'
 import { Field } from 'react-final-form'
 import Text from 'src/components/Text'
 import { TextAreaField } from 'src/components/Form/Fields'
-import { Box, Flex, Link } from 'rebass'
+import { Box, Flex, Link } from 'theme-ui'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import theme from 'src/themes/styled.theme'
@@ -33,7 +33,7 @@ export class WorkspaceMapPinSection extends React.Component<any, IState> {
 
     return (
       <FlexSectionContainer>
-        <Flex justifyContent="space-between">
+        <Flex sx={{justifyContent: "space-between"}}>
           <Heading small id="your-map-pin">
             Your map pin
           </Heading>

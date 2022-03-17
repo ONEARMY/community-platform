@@ -6,7 +6,7 @@ import {
 } from 'src/models/user_pp.models'
 
 import Heading from 'src/components/Heading'
-import { Box, Image } from 'rebass'
+import { Box, Image } from 'theme-ui'
 // import slick and styles
 import Slider from 'react-slick'
 import 'src/assets/css/slick.min.css'
@@ -207,7 +207,7 @@ function renderPlasticTypes(plasticTypes: Array<PlasticTypeLabel>) {
   return (
     <div>
       <h4>We collect the following plastic types:</h4>
-      <Flex flexWrap="wrap">
+      <Flex sx={{flexWrap:"wrap"}}>
         {plasticTypes.map(plasticType => {
           return (
             <PlasticType key={plasticType}>
@@ -259,7 +259,7 @@ function renderProfileTypeName(user: IUserPP) {
     workspace: 'Workspace',
   }
   return (
-    <Heading small bold width={1} capitalize>
+    <Heading small bold capitalize>
       {user.profileType === 'machine-builder' &&
         `${replaceDashesWithSpaces(user.workspaceType!)} `}
       {profileTypeNames[user.profileType]}
@@ -303,7 +303,7 @@ export const SpaceProfile = ({ user, adminButton }: IProps) => {
         <Slider {...sliderSettings}>{coverImage}</Slider>
       </ProfileWrapperCarousel>
       <ProfileContentWrapper mt={['-122px', '-122px', 0]} px={[2, 4]} py={4}>
-        <Box width={['100%', '100%', '80%']}>
+        <Box sx={{width:['100%', '100%', '80%']}}>
           <Box sx={{ display: ['block', 'block', 'none'] }}>
             <MobileBadge>
               <Badge profileType={user.profileType} />
@@ -314,7 +314,7 @@ export const SpaceProfile = ({ user, adminButton }: IProps) => {
             {renderProfileTypeName(user)}
           </UserCategory>
 
-          <Flex alignItems="center">
+          <Flex sx={{alignItems: "center"}}>
             <Heading medium bold color={'black'} my={3} style={{wordBreak:'break-word'}}>
               {userCountryCode && (
                 <FlagIcon mr={2} code={userCountryCode} style={{display: 'inline-block'}} />
@@ -329,7 +329,7 @@ export const SpaceProfile = ({ user, adminButton }: IProps) => {
               mt="0"
               mb="20px"
               color={theme.colors.grey}
-              width={['80%', '100%']}
+              sx={{width:['80%', '100%']}}
             >
               {user.about}
             </Text>
@@ -351,8 +351,8 @@ export const SpaceProfile = ({ user, adminButton }: IProps) => {
           <Box mt={3}>{adminButton}</Box>
         </Box>
         <Box
-          width={['100%', '100%', '20%']}
-          sx={{ display: ['none', 'none', 'block'] }}
+          sx={{ display: ['none', 'none', 'block'],
+          width:['100%', '100%', '20%'] }}
         >
           <MobileBadge>
             <Badge size={150} profileType={user.profileType} />

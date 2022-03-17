@@ -1,7 +1,7 @@
-import { Component } from 'react';
+import { Component } from 'react'
 import theme from 'src/themes/styled.theme'
 import styled from '@emotion/styled'
-import { Box } from 'rebass'
+import { Box, Flex } from 'theme-ui'
 import ProfileButtonItem from './ProfileButtonItem'
 
 interface IProps {
@@ -11,6 +11,7 @@ interface IProps {
 const PanelButton = styled(Box)`
   padding-top: ${theme.space[1]}px;
   padding-bottom: ${theme.space[2]}px;
+  display: block;
 `
 
 export class ProfileButtons extends Component<IProps> {
@@ -18,45 +19,52 @@ export class ProfileButtons extends Component<IProps> {
     return (
       <>
         {this.props.isMobile ? (
-          <>
+          <Flex
+            sx={{
+              width: '100%',
+              justifyContent: 'center',
+            }}
+          >
             <PanelButton>
               <ProfileButtonItem
                 link={'/sign-in'}
                 text="Login"
                 variant="secondary"
-                style={{
+                sx={{
+                  justifyContent: 'center',
                   fontWeight: 'bold',
-                  marginRight: 2,
-                  display: 'inline-block',
-                  width: 100,
-                  fontSize: theme.fontSizes[1],
+                  marginRight: '10px',
+                  display: 'block',
+                  width: '100%',
+                  fontSize: '12px',
+                  textAlign: 'center',
+                  marginBottom: '10px',
                 }}
                 isMobile={true}
               />
-            </PanelButton>
-            <PanelButton>
               <ProfileButtonItem
                 link={'/sign-up'}
                 text="Join"
                 variant="colorful"
                 isMobile={true}
-                style={{
-                  display: 'inline-block',
-                  width: 100,
-                  fontSize: theme.fontSizes[1],
+                sx={{
+                  fontSize: '12px',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  width: '100%',
                 }}
               />
             </PanelButton>
-          </>
+          </Flex>
         ) : (
           <>
             <ProfileButtonItem
               link={'/sign-in'}
               text="Login"
               variant="secondary"
-              style={{
+              sx={{
                 fontWeight: 'bold',
-                marginRight: theme.radii[2],
+                marginRight: '10px',
                 fontSize: theme.fontSizes[2],
               }}
             />
@@ -64,7 +72,7 @@ export class ProfileButtons extends Component<IProps> {
               link={'/sign-up'}
               text="Join"
               variant="colorful"
-              style={{ fontSize: theme.fontSizes[2] }}
+              sx={{ fontSize: theme.fontSizes[2] }}
             />
           </>
         )}

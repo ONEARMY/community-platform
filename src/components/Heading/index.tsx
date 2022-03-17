@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import Text, { ITextProps } from 'src/components/Text'
-import { HeadingProps as RebassHeadingProps } from 'rebass'
+import { HeadingProps as ThemeUiHeadingProps } from 'theme-ui'
 
 export const large = (props: ITextProps) =>
   props.large ? { fontSize: props.theme?.fontSizes[6] } : null
@@ -14,10 +14,15 @@ export const BaseHeading = styled(Text)`
     ${medium}
     ${small}`
 
-type IHeadingProps = ITextProps & RebassHeadingProps
+type IHeadingProps = ITextProps & ThemeUiHeadingProps
 
 const Heading = (props: IHeadingProps) => (
-  <BaseHeading {...(props as any)}>{props.children}</BaseHeading>
+  <BaseHeading
+    {...(props as any)}
+    sx={{ ...props?.sx, display: 'block', width: '100%' }}
+  >
+    {props.children}
+  </BaseHeading>
 )
 
 export default Heading

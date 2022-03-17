@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@emotion/react'
+import { ThemeProvider } from 'theme-ui'
 import { addDecorator } from '@storybook/react'
 import { withThemes } from '@react-theming/storybook-addon'
 
@@ -17,7 +17,7 @@ addDecorator(
 
 addDecorator((story) => (
   <>
-    <Global style={GlobalStyle} />
+    <Global styles={GlobalStyle} />
     <MemoryRouter initialEntries={['/']}>{story()}</MemoryRouter>
   </>
 ))

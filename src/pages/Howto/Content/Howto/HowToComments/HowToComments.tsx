@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import ReactGA from 'react-ga'
-import { Box, Flex } from 'rebass'
+import { Box, Flex } from 'theme-ui'
 import { useCommonStores } from 'src/index'
 import { Button } from 'oa-components'
 import { CommentTextArea } from 'src/components/Comment/CommentTextArea'
@@ -16,11 +16,6 @@ interface IProps {
 const BoxStyled = styled(Box)`
   position: relative;
   border-radius: 5px;
-`
-
-const ButtonStyled = styled(Button)`
-  float: right;
-  margin-top: 1em !important;
 `
 
 // TODO: Expect the comments as a prop from the HowTo
@@ -115,15 +110,20 @@ export const HowToComments = ({ comments }: IProps) => {
     <Flex
       ml={[0, 0, 6]}
       mt={5}
-      flexDirection="column"
-      alignItems="center"
+      sx={{ flexDirection: 'column', alignItems: 'center' }}
       data-cy="howto-comments"
     >
       <Flex
-        width={[4 / 5, 4 / 5, 2 / 3]}
         mb={4}
-        flexDirection="column"
-        alignItems="center"
+        sx={{
+          width: [
+            `${(4 / 5) * 100}%`,
+            `${(4 / 5) * 100}%`,
+            `${(2 / 3) * 100}%`,
+          ],
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
       >
         <CommentList
           articleTitle={stores.howtoStore.activeHowto?.title}
@@ -133,21 +133,25 @@ export const HowToComments = ({ comments }: IProps) => {
           handleDelete={handleDelete}
         />
       </Flex>
-      <BoxStyled width={2 / 3}>
+      <BoxStyled sx={{ width: `${(2 / 3) * 100}%` }}>
         <CommentTextArea
           data-cy="comment-text-area"
           comment={comment}
           onChange={setComment}
           loading={loading}
         />
-        <ButtonStyled
+        <Button
           data-cy="comment-submit"
           disabled={!Boolean(comment.trim()) || loading}
           variant="primary"
           onClick={() => onSubmit(comment)}
+          mt={3}
+          sx={{
+            float: 'right',
+          }}
         >
           Comment
-        </ButtonStyled>
+        </Button>
       </BoxStyled>
     </Flex>
   )

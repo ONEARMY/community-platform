@@ -1,4 +1,4 @@
 import { Link as RouterLink } from 'react-router-dom'
-import { Link as RebassLink } from 'rebass'
+import { Link as ThemeUiLink } from 'theme-ui'
 
-export const Link = props => <RebassLink {...props} as={RouterLink} />
+export const Link = props => <ThemeUiLink {...props} as={RouterLink} />

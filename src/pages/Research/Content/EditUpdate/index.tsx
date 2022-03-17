@@ -93,7 +93,7 @@ const EditUpdate = observer((props: IProps) => {
     return isLoading ? (
       <Loader />
     ) : (
-      <Text txtcenter mt="50px" width={1}>
+      <Text txtcenter mt="50px" sx={{width: '100%'}}>
         Research update not found
       </Text>
     )

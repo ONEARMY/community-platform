@@ -5,7 +5,7 @@ import Uppy, { UppyFile } from '@uppy/core'
 import { DashboardModal } from '@uppy/react'
 import { Button } from 'oa-components'
 import { UPPY_CONFIG } from './UppyConfig'
-import { Flex } from 'rebass'
+import { Flex } from 'theme-ui'
 import { FileInfo } from '../FileInfo/FileInfo'
 
 interface IUppyFiles {
@@ -65,7 +65,7 @@ export class FileInput extends React.Component<IProps, IState> {
     const showFileList = this.filesArray.length > 0
     return (
       <>
-        <Flex flexDirection="column" justifyContent="center">
+        <Flex sx={{ flexDirection: 'column', justifyContent: 'center' }}>
           {showFileList ? (
             <>
               <Button

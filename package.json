@@ -15,7 +15,7 @@
   "private": true,
   "main": "lib/index.js",
   "scripts": {
-    "start": "yarn build:components && cross-env FAST_REFRESH=false yarn react-scripts start",
+    "start": "yarn workspace oa-components dev & cross-env FAST_REFRESH=false yarn react-scripts start",
     "start:emulated": "concurrently \"yarn workspace functions start\" \"cross-env PORT=4000 yarn start\" -- ",
     "build:components": "yarn workspace oa-components build",
     "build:cra": "react-scripts build",

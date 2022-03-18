@@ -1,9 +1,8 @@
-import { withKnobs, text, boolean } from '@storybook/addon-knobs'
 import { PropsTable } from '@storybook/components'
 import { Story, Meta, Preview } from '@storybook/addon-docs'
 import Heading from './index.tsx'
 
-<Meta title="Components|Heading" component={Heading} decorators={[withKnobs]} />
+<Meta title="Components|Heading" component={Heading} />
 
 # Headings
 
@@ -30,11 +29,11 @@ Props that can be applied to the `Heading` component:
 
 <Story name="Default Heading" parameters={{ docs: { disable: true } }}>
   <Heading
-    small={boolean('small', false)}
-    medium={boolean('medium', true)}
-    large={boolean('large', false)}
-    clipped={boolean('clipped', false)}
-    color={text('color', 'black')}
+    small={false}
+    medium={true}
+    large={false}
+    clipped={false}
+    color={'black'}
   >
     Lorem ipsum dolor sit amet.
   </Heading>

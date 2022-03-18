@@ -1,10 +1,9 @@
 import { action } from '@storybook/addon-actions'
-import { withKnobs, text, boolean } from '@storybook/addon-knobs'
 import { Story, Meta, Preview } from '@storybook/addon-docs'
 import { PropsTable } from '@storybook/components'
 import { Icon, glyphs } from './Icon.tsx'
 
-<Meta title="Icons" component={Icon} decorators={[withKnobs]} />
+<Meta title="Icons" component={Icon} />
 
 # Icon
 
@@ -13,10 +12,10 @@ Below you will be able to see how to use and configure a `Icon` component:
 <Preview>
   <Story name="Default Icon">
     <Icon
-      glyph={text('glyph', 'download')}
-      size={text('size', 'md')}
+      glyph={'download'}
+      size={'md'}
       onClick={action('onClick')}
-      color={text('color', '')}
+      color={''}
     />
   </Story>
 </Preview>

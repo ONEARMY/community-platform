@@ -20,7 +20,8 @@
     "react-flag-icon-css": "^1.0.25",
     "rebass": "^4.0.7",
     "storybook": "^6.4.19",
-    "styled-components": "^5.3.3"
+    "styled-components": "^5.3.3",
+    "styled-system": "^5.1.5"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
@@ -32,7 +33,11 @@
     "@storybook/addon-links": "^6.4.19",
     "@storybook/preset-create-react-app": "^4.0.1",
     "@storybook/react": "^6.4.19",
+    "@types/react": "^17.0.41",
     "@types/react-flag-icon-css": "^1.0.5",
+    "@types/rebass": "^4.0.10",
+    "@types/styled-components": "^5.1.24",
+    "@types/styled-system": "^5.1.15",
     "babel-loader": "8.1.0",
     "eslint": "^7.32.0",
     "eslint-plugin-import": "^2.25.4",

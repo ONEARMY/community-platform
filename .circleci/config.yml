@@ -247,7 +247,7 @@ jobs:
             # local cache location
             - ~/project/.yarn/cache
           key: yarn-packages-cloud-functions-v12-{{ checksum "yarn.lock" }}
-      - run: yarn && yarn build:components && yarn workspace functions build && yarn workspace functions emulator:test
+      - run: yarn build:components && yarn workspace functions build && yarn workspace functions emulator:test
 
   # Create a production build
   # NOTE - not currently used in test workflow as different build_env required for each machine

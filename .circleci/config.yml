@@ -232,6 +232,9 @@ jobs:
             - yarn-packages-cloud-functions-v12-{{ checksum "yarn.lock" }}
             - yarn-packages-cloud-functions-v12-
       - run:
+          name: Verify Yarn
+          command: yarn --version && yarn cache dir
+      - run:
           name: Install Packages
           command: yarn install --immutable
         # Example debugging commands for use troubleshooting caching (du will exit with status 141)

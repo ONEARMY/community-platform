@@ -14,7 +14,6 @@
     "lint:code": "eslint . --ext .js,.jsx,.ts,.tsx src --color"
   },
   "dependencies": {
-    "@react-icons/all-files": "^4.1.0",
     "prettier": "^2.5.1",
     "react": "^17.0.2",
     "react-flag-icon-css": "^1.0.25",

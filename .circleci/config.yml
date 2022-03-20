@@ -231,10 +231,9 @@ jobs:
     resource_class: small
     steps:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
-      - checkout
-      - *restore_yarn_cache
+      - setup_repo
       - run:
-          command: yarn build:components && yarn run test:unit
+          command: yarn run test:unit
   build:
     docker: *docker
     environment:
@@ -244,11 +243,7 @@ jobs:
     resource_class: medium+
     steps:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
-      - checkout
-      - *restore_yarn_cache
-      - run:
-          name: Install dependencies
-          command: yarn install --immutable
+      - setup_repo
       # As environment variables can only be set from strings add additional dynamic variable mappings here
       # https://discuss.circleci.com/t/using-environment-variables-in-config-yml-not-working/14237/13
       - run:

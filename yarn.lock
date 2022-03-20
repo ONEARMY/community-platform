@@ -7678,14 +7678,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^16.9.53":
-  version: 16.14.22
-  resolution: "@types/react@npm:16.14.22"
+"@types/react@npm:^17.0.2":
+  version: 17.0.41
+  resolution: "@types/react@npm:17.0.41"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 4b49644466c72c4fc2eafa16f8c787eac09d84117b3ab7d17d547f938cdb7bdce7cac92cb12c94d860bbdc0316802eca5af01afd7ed4ef06f6009b4bae8a494b
+  checksum: 1b086ec0ea5d666f05e19e0724e41278d27a2ca29a2cd71b9d9ab3fe27dba233806eb728d744e092c9fe9637ac738d8c5a05983cde84d215342949b47ecba2ef
   languageName: node
   linkType: hard
 
@@ -23116,7 +23116,7 @@ fsevents@^1.2.7:
     "@types/jest": ^26.0.15
     "@types/node": 16
     "@types/pubsub-js": ^1.5.18
-    "@types/react": ^16.9.53
+    "@types/react": ^17.0.2
     "@types/react-dom": ^17.0.3
     "@types/react-hamburger-menu": ^0.0.3
     "@types/react-lazy-load-image-component": ^1.5.1

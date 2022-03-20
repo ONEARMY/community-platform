@@ -235,6 +235,8 @@ jobs:
       - *restore_yarn_cache
       - run:
           command: yarn
+      - run:
+          command: yarn build:components
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - run:
           command: yarn test:unit

@@ -23208,7 +23208,6 @@ fsevents@^1.2.7:
     react-foco: ^1.3.1
     react-ga: ^2.5.7
     react-hamburger-menu: ^1.1.1
-    react-icons: ^3.2.2
     react-image-lightbox: ^5.1.0
     react-lazy-load-image-component: ^1.5.1
     react-leaflet: ^2.5.0
@@ -26563,17 +26562,6 @@ fsevents@^1.2.7:
   peerDependencies:
     react: ">=16.3.0"
   checksum: a4998479dab7fc1c2799eddefb1870a9d881b5f71cfdf97979a9882e42f4bb50402d55335f308f461e735e01a06f46b16cc7b4e6bcb22c7a4a6f85a753c5c106
-  languageName: node
-  linkType: hard
-
-"react-icons@npm:^3.2.2":
-  version: 3.11.0
-  resolution: "react-icons@npm:3.11.0"
-  dependencies:
-    camelcase: ^5.0.0
-  peerDependencies:
-    react: "*"
-  checksum: 2d45d47387aa85692ee431abe814c3984bc303b0ff25146de86a3cecf7f144c75bc9755df296c626bf133a05622b812fbf95d99776d9a92c7edd90fa7fbbead1
   languageName: node
   linkType: hard
 

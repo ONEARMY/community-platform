@@ -37,8 +37,8 @@ aliases:
         # https://circleci.com/docs/2.0/yarn/
         # when lock file changes, use increasingly general patterns to restore cache (also need to change `save_cache` path)
         # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
-        - v0-{{ arch }}-yarn-packages-{{ checksum "yarn.lock" }}
-        - v0-{{ arch }}-yarn-packages-
+        - v1-{{ arch }}-yarn-packages-{{ checksum "yarn.lock" }}
+        - v1-{{ arch }}-yarn-packages-
   - &install_packages
     run:
       name: Install Packages
@@ -59,7 +59,9 @@ aliases:
         # - ~/.yarn/berry/cache
         # local cache location
         - ~/project/.yarn/cache
-      key: v0-{{ arch }}-yarn-packages-{{ checksum "yarn.lock" }}
+        - ~/project/.yarn/cache
+        - ~/project/.yarn/unplugged
+      key: v1-{{ arch }}-yarn-packages-{{ checksum "yarn.lock" }}
 
   - &filter_only_production
     filters:

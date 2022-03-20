@@ -4885,6 +4885,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-icons/all-files@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "@react-icons/all-files@npm:4.1.0"
+  peerDependencies:
+    react: "*"
+  checksum: c34c644650a144e4f2157c20b3106200ac1f76b3132dcda1a40f061e000a34c78df188266395afae571d5c85bf48365824db7b1bf8b7ae6229fdc148c941ab85
+  languageName: node
+  linkType: hard
+
 "@react-theming/flatten@npm:^0.1.1":
   version: 0.1.1
   resolution: "@react-theming/flatten@npm:0.1.1"
@@ -22850,6 +22859,7 @@ fsevents@^1.2.7:
   dependencies:
     "@babel/core": ^7.14.3
     "@mdx-js/react": ^1.6.22
+    "@react-icons/all-files": ^4.1.0
     "@react-theming/storybook-addon": ^1.1.5
     "@storybook/addon-actions": ^6.4.19
     "@storybook/addon-docs": ^6.4.19

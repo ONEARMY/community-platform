@@ -1,5 +1,4 @@
 import React, { createRef, useEffect, useState } from 'react'
-import { FaTrash, FaRegEdit } from 'react-icons/fa'
 import { Flex } from 'rebass/styled-components'
 import { IComment } from 'src/models'
 import { CommentHeader } from './CommentHeader'
@@ -26,7 +25,7 @@ export const Comment: React.FC<IProps> = ({
   handleEdit,
   ...props
 }) => {
-  const textRef = createRef<any>();
+  const textRef = createRef<any>()
   const [showEditModal, setShowEditModal] = useState(false)
   const [textHeight, setTextHeight] = useState(0)
   const [isShowMore, setShowMore] = useState(false)
@@ -47,7 +46,7 @@ export const Comment: React.FC<IProps> = ({
   }, [])
 
   const showMore = () => {
-    setShowMore(!isShowMore);
+    setShowMore(!isShowMore)
   }
 
   return (
@@ -61,52 +60,49 @@ export const Comment: React.FC<IProps> = ({
     >
       <CommentHeader {...props} />
       <Text
-        my={2} 
-        style={{ 
+        my={2}
+        style={{
           whiteSpace: 'pre-wrap',
           wordBreak: 'break-word',
-          overflow: "hidden",
-          lineHeight: "1em",
-          maxHeight: isShowMore ? "max-content" : "10em",
+          overflow: 'hidden',
+          lineHeight: '1em',
+          maxHeight: isShowMore ? 'max-content' : '10em',
         }}
         ref={textRef}
       >
         {text}
       </Text>
-      {textHeight > 160 &&
-          <a 
-            onClick={showMore}
-            style={{
-              color: "gray",
-              cursor: "pointer",
-              fontSize: "14px",
-            }}
-          >
-            {isShowMore ? 'Show less' : 'Show more'}
-          </a>
-      }
+      {textHeight > 160 && (
+        <a
+          onClick={showMore}
+          style={{
+            color: 'gray',
+            cursor: 'pointer',
+            fontSize: '14px',
+          }}
+        >
+          {isShowMore ? 'Show less' : 'Show more'}
+        </a>
+      )}
       <Flex ml="auto">
         <AuthWrapper roleRequired="admin" additionalAdmins={[_creatorId]}>
-          <Text
-            style={{
-              cursor: 'pointer',
-            }}
-            mr={2}
-            fontSize="12px"
+          <Button
+            variant={'outline'}
+            small={true}
+            icon={'edit'}
             onClick={onEditRequest}
           >
-            edit <FaRegEdit />
-          </Text>
-          <Text
-            style={{
-              cursor: 'pointer',
-              alignItems: 'center',
-            }}
-            fontSize="12px"
+            edit
+          </Button>
+          <Button
+            variant={'outline'}
+            small={true}
+            icon="delete"
             onClick={onDelete}
+            ml={2}
           >
-            delete <FaTrash color="red" />
-          </Text>
+            delete
+          </Button>
         </AuthWrapper>
       </Flex>
 

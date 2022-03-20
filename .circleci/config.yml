@@ -230,14 +230,11 @@ jobs:
     docker: *docker
     resource_class: small
     steps:
-      # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - checkout
       - *restore_yarn_cache
+      # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - run:
-          name: Install dependencies
-          command: yarn workspaces focus one-army-community-platform
-      - run:
-          command: yarn && yarn build:components && yarn run test:unit
+          command: yarn run test:unit
   build:
     docker: *docker
     environment:
@@ -371,6 +368,11 @@ workflows:
             branches:
               ignore:
                 - production
+      #---------------------- Prepare ----------------------
+      - setup:
+          name: Install Dependencies
+          # requires:
+          #   - 'Lint commits'
       #---------------------- Test ----------------------
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:
@@ -381,7 +383,7 @@ workflows:
       - test_unit:
           name: 'Unit tests'
           requires:
-            - 'Lint commits'
+            - 'Install Dependencies'
           filters:
             branches:
               ignore:

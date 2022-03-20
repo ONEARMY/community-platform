@@ -4,11 +4,9 @@ import { IComment } from 'src/models'
 import { CommentHeader } from './CommentHeader'
 import { Text } from 'src/components/Text'
 import { Modal } from '../Modal/Modal'
-import { TextAreaField } from '../Form/Fields'
-import { Field, Form } from 'react-final-form'
 import { Button } from 'oa-components'
 import { AuthWrapper } from '../Auth/AuthWrapper'
-import { logger } from 'src/logger'
+import FormEditComment from '../FormEditComment/FormEditComment'
 
 export interface IProps extends IComment {
   handleEditRequest
@@ -108,50 +106,13 @@ export const Comment: React.FC<IProps> = ({
 
       {showEditModal && (
         <Modal width={600}>
-          <Form
-            onSubmit={values => {
-              logger.debug(values)
+          <FormEditComment
+            comment={text}
+            handleSubmit={commentText => {
+              handleEdit(_id, commentText)
+              setShowEditModal(false)
             }}
-            initialValues={{
-              comment: text,
-            }}
-            render={({ handleSubmit, values }) => (
-              <Flex
-                as="form"
-                flexDirection="column"
-                p={2}
-                onSubmit={handleSubmit}
-              >
-                <Text
-                  as="label"
-                  large
-                  htmlFor="comment"
-                  style={{ marginBottom: '6px' }}
-                >
-                  Edit comment
-                </Text>
-                <Field name="comment" id="comment" component={TextAreaField} />
-                <Flex mt={4} ml="auto">
-                  <Button
-                    small
-                    mr={4}
-                    variant="secondary"
-                    onClick={() => setShowEditModal(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    small
-                    onClick={() => {
-                      handleEdit(_id, values.comment)
-                      setShowEditModal(false)
-                    }}
-                  >
-                    Edit
-                  </Button>
-                </Flex>
-              </Flex>
-            )}
+            handleCancel={() => setShowEditModal(false)}
           />
         </Modal>
       )}

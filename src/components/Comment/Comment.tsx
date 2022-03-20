@@ -1,5 +1,5 @@
 import React, { createRef, useEffect, useState } from 'react'
-import { Flex } from 'rebass/styled-components'
+import { Box, Flex } from 'rebass/styled-components'
 import { IComment } from 'src/models'
 import { CommentHeader } from './CommentHeader'
 import { Text } from 'src/components/Text'
@@ -48,74 +48,76 @@ export const Comment: React.FC<IProps> = ({
   }
 
   return (
-    <Flex
-      flexDirection="column"
-      p="3"
-      bg={'white'}
-      width="100%"
-      mb={4}
-      style={{ borderRadius: '5px' }}
-    >
-      <CommentHeader {...props} />
-      <Text
-        my={2}
-        style={{
-          whiteSpace: 'pre-wrap',
-          wordBreak: 'break-word',
-          overflow: 'hidden',
-          lineHeight: '1em',
-          maxHeight: isShowMore ? 'max-content' : '10em',
-        }}
-        ref={textRef}
+    <Box>
+      <Flex
+        flexDirection="column"
+        p="3"
+        bg={'white'}
+        width="100%"
+        mb={4}
+        style={{ borderRadius: '5px' }}
       >
-        {text}
-      </Text>
-      {textHeight > 160 && (
-        <a
-          onClick={showMore}
+        <CommentHeader {...props} />
+        <Text
+          my={2}
           style={{
-            color: 'gray',
-            cursor: 'pointer',
-            fontSize: '14px',
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-word',
+            overflow: 'hidden',
+            lineHeight: '1em',
+            maxHeight: isShowMore ? 'max-content' : '10em',
           }}
+          ref={textRef}
         >
-          {isShowMore ? 'Show less' : 'Show more'}
-        </a>
-      )}
-      <Flex ml="auto">
-        <AuthWrapper roleRequired="admin" additionalAdmins={[_creatorId]}>
-          <Button
-            variant={'outline'}
-            small={true}
-            icon={'edit'}
-            onClick={onEditRequest}
-          >
-            edit
-          </Button>
-          <Button
-            variant={'outline'}
-            small={true}
-            icon="delete"
-            onClick={onDelete}
-            ml={2}
-          >
-            delete
-          </Button>
-        </AuthWrapper>
-      </Flex>
-
-      {showEditModal && (
-        <Modal width={600}>
-          <FormEditComment
-            comment={text}
-            handleSubmit={commentText => {
-              handleEdit(_id, commentText)
-              setShowEditModal(false)
+          {text}
+        </Text>
+        {textHeight > 160 && (
+          <a
+            onClick={showMore}
+            style={{
+              color: 'gray',
+              cursor: 'pointer',
+              fontSize: '14px',
             }}
-            handleCancel={() => setShowEditModal(false)}
-          />
-        </Modal>
-      )}
-    </Flex>
+          >
+            {isShowMore ? 'Show less' : 'Show more'}
+          </a>
+        )}
+        <Flex ml="auto">
+          <AuthWrapper roleRequired="admin" additionalAdmins={[_creatorId]}>
+            <Button
+              variant={'outline'}
+              small={true}
+              icon={'edit'}
+              onClick={onEditRequest}
+            >
+              edit
+            </Button>
+            <Button
+              variant={'outline'}
+              small={true}
+              icon="delete"
+              onClick={onDelete}
+              ml={2}
+            >
+              delete
+            </Button>
+          </AuthWrapper>
+        </Flex>
+
+        {showEditModal && (
+          <Modal width={600}>
+            <FormEditComment
+              comment={text}
+              handleSubmit={commentText => {
+                handleEdit(_id, commentText)
+                setShowEditModal(false)
+              }}
+              handleCancel={() => setShowEditModal(false)}
+            />
+          </Modal>
+        )}
+      </Flex>
+    </Box>
   )
 }

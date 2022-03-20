@@ -234,10 +234,7 @@ jobs:
       - checkout
       - *restore_yarn_cache
       - run:
-          name: Install dependencies
-          command: yarn install --immutable
-      - run:
-          command: yarn && yarn build:components && yarn run test:unit
+          command: yarn build:components && yarn run test:unit
   build:
     docker: *docker
     environment:

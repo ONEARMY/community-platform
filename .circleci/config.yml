@@ -380,7 +380,7 @@ workflows:
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:
           requires:
-            - 'Lint commits'
+            - 'Install Dependencies'
           name: Build Application
           context: build-context
       - test_unit:
@@ -394,7 +394,7 @@ workflows:
       - storybook:
           name: Build Storybook
           requires:
-            - 'Lint commits'
+            - 'Install Dependencies'
           filters:
             branches:
               ignore:
@@ -403,7 +403,7 @@ workflows:
           name: 'Cloud Function tests'
           context: build-context
           requires:
-            - 'Lint commits'
+            - 'Install Dependencies'
           filters:
             branches:
               ignore:

@@ -235,7 +235,7 @@ jobs:
       - *restore_yarn_cache
       - run:
           name: Install dependencies
-          command: yarn workspaces focus one-army-community-platform
+          command: yarn install --immutable
       - run:
           command: yarn && yarn build:components && yarn run test:unit
   build:
@@ -251,7 +251,7 @@ jobs:
       - *restore_yarn_cache
       - run:
           name: Install dependencies
-          command: yarn workspaces focus one-army-community-platform
+          command: yarn install --immutable
       # As environment variables can only be set from strings add additional dynamic variable mappings here
       # https://discuss.circleci.com/t/using-environment-variables-in-config-yml-not-working/14237/13
       - run:

@@ -86,10 +86,29 @@ describe('[Notifications]', () => {
         cy.login('event_reader@test.com', 'test1234');
         cy.visit('/how-to/testing-testing')
         cy.wait(5000)
-        cy.get('[data-cy="notifications-desktop"] [data-cy="open-notifications"]').click()
+        cy.get('[data-cy="notifications-desktop"] [data-cy="toggle-notifications-modal"]').click()
         cy.wait(2000)
         const notifications = cy.get('[data-cy="notification"]')
         expect(notifications).to.exist
+    })
+
+    it('[notifications modal is closed when clicking on the notifications icon for the second time or clicking on the header]', () => { 
+        cy.visit('how-to')
+        cy.login('event_reader@test.com', 'test1234');
+        cy.visit('/how-to/testing-testing')
+        cy.wait(5000)
+        cy.get('[data-cy="notifications-desktop"] [data-cy="toggle-notifications-modal"]').click()
+        let notificationsModal = cy.get('[data-cy="notifications-modal-desktop"]')
+        expect(notificationsModal).to.exist
+        //click on the notifications button again
+        cy.get('[data-cy="notifications-desktop"] [data-cy="toggle-notifications-modal"]').click()
+        notificationsModal = cy.get('[data-cy="notifications-modal-desktop"]')
+        notificationsModal.should('not.exist')
+        //click within the header area
+        cy.get('[data-cy="notifications-desktop"] [data-cy="toggle-notifications-modal"]').click()
+        cy.get('[data-cy="header"]').click()
+        notificationsModal = cy.get('[data-cy="notifications-modal-desktop"]')
+        notificationsModal.should('not.exist')
     })
 
     it('[are marked read when clicking on clear button]', () => { 
@@ -97,7 +116,7 @@ describe('[Notifications]', () => {
         cy.login('event_reader@test.com', 'test1234');
         cy.visit('/how-to/testing-testing')
         cy.wait(5000)
-        cy.get('[data-cy="notifications-desktop"] [data-cy="open-notifications"]').click()
+        cy.get('[data-cy="notifications-desktop"] [data-cy="toggle-notifications-modal"]').click()
         cy.wait(2000)
         cy.get('[data-cy="clear-notifications"]')
              .click()

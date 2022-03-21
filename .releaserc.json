@@ -1,7 +1,20 @@
 {
   "branches": ["production"],
   "plugins": [
-    "@semantic-release/commit-analyzer",
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "angular",
+        "releaseRules": [
+          { "type": "docs", "scope": "README", "release": "patch" },
+          { "type": "refactor", "release": "patch" },
+          { "type": "style", "release": "patch" }
+        ],
+        "parserOpts": {
+          "noteKeywords": ["MAJOR VERSION", "MAJOR VERSIONS"]
+        }
+      }
+    ],
     "@semantic-release/release-notes-generator",
     "@semantic-release/github",
     "@semantic-release/changelog"

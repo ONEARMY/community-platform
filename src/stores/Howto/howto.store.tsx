@@ -1,6 +1,6 @@
 import Fuse from 'fuse.js'
 import { action, computed, makeObservable, observable, toJS } from 'mobx'
-import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
+import type { IConvertedFileMeta } from 'src/types'
 import {
   IHowto,
   IHowtoDB,
@@ -52,7 +52,7 @@ export class HowtoStore extends ModuleStore {
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
     this.allDocs$.subscribe((docs: IHowtoDB[]) => {
-      this.setAllHowtos(docs)
+      this.sortHowtosByLatest(docs)
     })
     this.selectedTags = {}
     this.searchValue = ''
@@ -60,8 +60,16 @@ export class HowtoStore extends ModuleStore {
   }
 
   @action
-  private setAllHowtos(docs: IHowtoDB[]) {
-    this.allHowtos = docs.sort((a, b) => (a._created < b._created ? 1 : -1))
+  public sortHowtosByLatest(docs?: IHowtoDB[]) {
+    const howtos = docs || this.allHowtos
+    this.allHowtos = howtos.sort((a, b) => (a._created < b._created ? 1 : -1))
+  }
+
+  @action
+  public sortHowtosByUsefulCount(usefulCounts: { [key: string]: number }) {
+    this.allHowtos = this.allHowtos.sort((a, b) =>
+      (usefulCounts[a._id] || 0) < (usefulCounts[b._id] || 0) ? 1 : -1,
+    )
   }
 
   @action

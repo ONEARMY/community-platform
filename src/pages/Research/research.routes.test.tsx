@@ -3,6 +3,7 @@ import ResearchRoutes from './research.routes'
 import { render, waitFor, cleanup } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
 import { Provider } from 'mobx-react'
+import { MockVerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge.test'
 
 // Similar to issues in Academy.test.tsx - stub methods called in user store constructor
 // TODO - replace with mock store or avoid direct call
@@ -13,6 +14,10 @@ jest.mock('src/index', () => ({
     return { stores: { userStore: { fetchAllVerifiedUsers: jest.fn() } } }
   },
 }))
+
+beforeAll(() => {
+  MockVerifiedUserBadge()
+})
 
 const mockResearchStore: any = {
   filteredResearches: [],

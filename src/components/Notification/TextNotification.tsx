@@ -1,5 +1,6 @@
 import * as React from 'react'
-import Icon, { IGlyphs } from '../Icons'
+import type { IGlyphs } from 'oa-components'
+import { Icon } from 'oa-components'
 import Text from '../Text'
 import { Flex } from 'rebass/styled-components'
 import { FadeInOut } from '../Animations/FadeInOut'

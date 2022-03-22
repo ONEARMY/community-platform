@@ -2,15 +2,15 @@ import { useState } from 'react'
 import ReactGA from 'react-ga'
 import { Box, Flex } from 'rebass/styled-components'
 import { useCommonStores } from 'src/index'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import Text from 'src/components/Text'
-import { Comment } from 'src/components/Comment/Comment'
 import { CommentTextArea } from 'src/components/Comment/CommentTextArea'
 import { IComment } from 'src/models'
 import { logger } from 'src/logger'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { IResearch } from 'src/models/research.models'
 import styled from 'styled-components'
+import { CommentList } from 'src/components/CommentList/CommentList'
 
 interface IProps {
   comments?: IComment[]
@@ -174,26 +174,13 @@ export const ResearchComments = ({ comments, update }: IProps) => {
           marginTop="15px"
           data-cy="update-comments"
         >
-          {comments ? (
-            <Flex
-              width="100%"
-              mb={4}
-              flexDirection="column"
-              alignItems="center"
-            >
-              {comments &&
-                comments.map(comment => (
-                  <Comment
-                    key={comment._id}
-                    verified={false}
-                    {...comment}
-                    handleEdit={handleEdit}
-                    handleDelete={handleDelete}
-                    handleEditRequest={handleEditRequest}
-                  />
-                ))}
-            </Flex>
-          ) : null}
+          <CommentList
+            articleTitle={researchStore.activeResearchItem?.title}
+            comments={comments}
+            handleEdit={handleEdit}
+            handleDelete={handleDelete}
+            handleEditRequest={handleEditRequest}
+          />
           {user ? (
             <BoxStyled width={[7 / 10, 8 / 10, 9 / 10]}>
               <CommentTextArea

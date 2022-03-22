@@ -5,7 +5,7 @@ export class DocReference<T> {
   public id: string
   constructor(
     private endpoint: string,
-    docID: string = '_generate',
+    private docID: string = '_generate',
     private clients: DBClients,
   ) {
     this.id = docID === '_generate' ? this._generateDocID() : docID

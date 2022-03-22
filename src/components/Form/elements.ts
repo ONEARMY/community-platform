@@ -49,6 +49,7 @@ export const StyledDatePicker = styled(DatePicker)`
 
 export const TextAreaStyled = styled.textarea<IFormElement>`
   ${inputStyles};
+  resize: vertical;
   padding: 10px;
   height: 150px;
 `

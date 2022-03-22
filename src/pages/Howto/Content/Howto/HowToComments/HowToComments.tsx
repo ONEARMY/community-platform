@@ -2,18 +2,15 @@ import { useState } from 'react'
 import ReactGA from 'react-ga'
 import { Box, Flex } from 'rebass/styled-components'
 import { useCommonStores } from 'src/index'
-import { Button } from 'src/components/Button'
-import { Comment } from 'src/components/Comment/Comment'
+import { Button } from 'oa-components'
 import { CommentTextArea } from 'src/components/Comment/CommentTextArea'
 import { IComment } from 'src/models'
 import styled from 'styled-components'
 import { logger } from 'src/logger'
-
-const MAX_COMMENTS = 5
+import { CommentList } from 'src/components/CommentList/CommentList'
 
 interface IProps {
   comments?: IComment[]
-  verifiedUsers?: { [user_id: string]: boolean }
 }
 
 const BoxStyled = styled(Box)`
@@ -27,11 +24,10 @@ const ButtonStyled = styled(Button)`
 `
 
 // TODO: Expect the comments as a prop from the HowTo
-export const HowToComments = ({ comments, verifiedUsers }: IProps) => {
+export const HowToComments = ({ comments }: IProps) => {
   const [comment, setComment] = useState('')
   const [loading, setLoading] = useState(false)
   const { stores } = useCommonStores()
-  const [moreComments, setMoreComments] = useState(1)
 
   async function onSubmit(comment: string) {
     try {
@@ -115,8 +111,6 @@ export const HowToComments = ({ comments, verifiedUsers }: IProps) => {
     await stores.howtoStore.editComment(_id, comment)
   }
 
-  const shownComments = moreComments * MAX_COMMENTS
-
   return (
     <Flex
       ml={[0, 0, 6]}
@@ -131,35 +125,13 @@ export const HowToComments = ({ comments, verifiedUsers }: IProps) => {
         flexDirection="column"
         alignItems="center"
       >
-        {comments &&
-          comments
-            .slice(0, shownComments)
-            .map(comment => (
-              <Comment
-                verified={verifiedUsers?.[comment.creatorName] ? true : false}
-                key={comment._id}
-                {...comment}
-                handleEditRequest={handleEditRequest}
-                handleDelete={handleDelete}
-                handleEdit={handleEdit}
-              />
-            ))}
-        {comments && comments.length > shownComments && (
-          <Button
-            width="max-content"
-            variant="outline"
-            onClick={() => {
-              ReactGA.event({
-                category: 'Comments',
-                action: 'Show more',
-                label: stores.howtoStore.activeHowto?.title,
-              })
-              return setMoreComments(moreComments + 1)
-            }}
-          >
-            show more comments
-          </Button>
-        )}
+        <CommentList
+          articleTitle={stores.howtoStore.activeHowto?.title}
+          comments={comments}
+          handleEdit={handleEdit}
+          handleEditRequest={handleEditRequest}
+          handleDelete={handleDelete}
+        />
       </Flex>
       <BoxStyled width={2 / 3}>
         <CommentTextArea

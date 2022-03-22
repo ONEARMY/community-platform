@@ -1,4 +1,4 @@
-import { observable, action, makeObservable, toJS } from 'mobx'
+import { observable, action, makeObservable, toJS, computed } from 'mobx'
 import {
   INotification,
   IUser,
@@ -10,7 +10,7 @@ import { auth, EmailAuthProvider, IFirebaseUser } from 'src/utils/firebase'
 import { RootStore } from '..'
 import { ModuleStore } from '../common/module.store'
 import { Storage } from '../storage'
-import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
+import type { IConvertedFileMeta } from 'src/types'
 import { formatLowerNoSpecial, randomID } from 'src/utils/helpers'
 import { logger } from 'src/logger'
 import { getLocationData } from 'src/utils/getLocationData'
@@ -32,12 +32,10 @@ export class UserStore extends ModuleStore {
   @observable
   public updateStatus: IUserUpdateStatus = getInitialUpdateStatus()
 
-  /** A list of all the verified users, to display verified icons where needed */
-  @observable
-  public verifiedUsers: { [user_id: string]: boolean } = {}
-
-  @observable
-  public userVotedHowtos: { [howto_id: string]: number } = {}
+  // redirect calls for verifiedUsers to the aggregation store list
+  @computed get verifiedUsers(): { [user_id: string]: boolean } {
+    return this.aggregationsStore.aggregations.users_verified
+  }
 
   @action
   public updateUser(user?: IUserPPDB) {
@@ -53,9 +51,10 @@ export class UserStore extends ModuleStore {
     super(rootStore)
     makeObservable(this)
     this._listenToAuthStateChanges()
-    // load aggregations - TODO - likely better in a separate aggregations store
-    this.loadVerifiedUsers()
-    this.loadUserHowtoVotes()
+    // Update verified users on intial load. use timeout to ensure aggregation store initialised
+    setTimeout(() => {
+      this.loadVerifiedUsers()
+    }, 50)
   }
 
   // when registering a new user create firebase auth profile as well as database user profile
@@ -291,22 +290,8 @@ export class UserStore extends ModuleStore {
   }
 
   @action
-  /** Perform a single lookup of all verified users (will update on page reload or on demand) */
   public async loadVerifiedUsers() {
-    const verifiedUsers = await this.db
-      .collection<any>('aggregations')
-      .doc('users_verified')
-      .get()
-    this.verifiedUsers = verifiedUsers || {}
-  }
-
-  @action
-  public async loadUserHowtoVotes() {
-    const userVotedHowtos = await this.db
-      .collection<any>('aggregations')
-      .doc('users_votedUsefulHowtos')
-      .get()
-    this.userVotedHowtos = userVotedHowtos || {}
+    this.aggregationsStore.updateAggregation('users_verified')
   }
 
   // use firebase auth to listen to change to signed in user

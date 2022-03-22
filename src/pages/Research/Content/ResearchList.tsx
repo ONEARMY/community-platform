@@ -1,16 +1,14 @@
 import { observer } from 'mobx-react'
 import { Box, Flex } from 'rebass/styled-components'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import Heading from 'src/components/Heading'
 import { Link } from 'src/components/Links'
 import ResearchListItem from 'src/components/Research/ResearchListItem'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import { useCommonStores } from 'src/index'
 
 const ResearchList = observer(() => {
   const store = useResearchStore()
-  const { userStore } = useCommonStores().stores
 
   const { filteredResearches } = store
   return (
@@ -21,11 +19,7 @@ const ResearchList = observer(() => {
         </Heading>
       </Flex>
       {filteredResearches.map(item => (
-        <ResearchListItem
-          key={item._id}
-          item={item}
-          verified={userStore?.verifiedUsers?.[item._createdBy]}
-        />
+        <ResearchListItem key={item._id} item={item} />
       ))}
       <Box mb={4}>
         <Link

@@ -66,6 +66,8 @@ export class MapsStore extends ModuleStore {
         p.type &&
         (isPinAccepted || wasCreatedByUser || isAdminAndAccepted)
       )
+    }).map(p => {
+      return { ...p, verified: this.userStore.verifiedUsers[p._id] === true}
     })
     if (IS_MOCK) {
       pins = MOCK_PINS
@@ -193,6 +195,7 @@ export class MapsStore extends ModuleStore {
       location: user.location!.latlng,
       type,
       moderation,
+      verified: user.verified
     }
     if (type !== 'member' && user.workspaceType) {
       pin.subType = user.workspaceType

@@ -63,7 +63,7 @@ export class NotificationsModal extends React.Component<IProps> {
       sort((a, b) => new Date(b._created).getTime() -  new Date(a._created).getTime());
 
     return (
-      <ModalContainer>
+      <ModalContainer data-cy="notifications-modal-desktop">
         {!notifications || notifications?.length === 0 ?
           <ModalContainerInner>
             <Flex>

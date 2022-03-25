@@ -90,6 +90,7 @@
     "oa-shared": "1.0.0",
     "pino": "^7.2.0",
     "pino-logflare": "^0.3.12",
+    "prop-types": "15",
     "pubsub-js": "^1.7.0",
     "react": "^17.0.2",
     "react-datepicker": "^2.9.6",

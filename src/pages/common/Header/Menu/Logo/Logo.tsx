@@ -42,7 +42,7 @@ export class Logo extends Component<IProps> {
   render() {
     const name = this.injected.themeStore?.currentTheme.siteName
     const logo = this.injected.themeStore?.currentTheme.logo
-    const nameAndVersion = `${name} logo v${VERSION}`
+    const nameAndVersion = `${name} logo ${VERSION}`
     
     return (
       <>

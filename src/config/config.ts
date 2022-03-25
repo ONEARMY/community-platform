@@ -33,7 +33,6 @@ function _c(property: ConfigurationOption, fallbackValue?: string): string {
 
   const configurationSource = ['development', 'test'].includes(process.env.NODE_ENV) ?
     process.env : window?.__OA_COMMUNITY_PLATFORM_CONFIGURATION;
-
   return configurationSource?.[property] || fallbackValue;
 }
 
@@ -154,5 +153,5 @@ export const SENTRY_CONFIG: ISentryConfig = {
   environment: siteVariant,
 }
 
-export const VERSION = _c('REACT_APP_PROJECT_VERSION', require('../../package.json').version);
+export const VERSION = _c('REACT_APP_PROJECT_VERSION', '');
 export const GA_TRACKING_ID = _c('REACT_APP_GA_TRACKING_ID');

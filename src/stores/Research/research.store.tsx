@@ -294,6 +294,17 @@ export class ResearchStore extends ModuleStore {
         _createdBy: values._createdBy ? values._createdBy : user.userName,
         moderation: values.moderation ? values.moderation : 'accepted', // No moderation needed for researches for now
         updates,
+        creatorCountry:
+          (values._createdBy && values._createdBy === user.userName) ||
+          !values._createdBy
+            ? user.location
+              ? user.location.countryCode
+              : user.country
+              ? user.country.toLowerCase()
+              : ''
+            : values.creatorCountry
+            ? values.creatorCountry
+            : '',
       }
       logger.debug('populating database', research)
       // set the database document

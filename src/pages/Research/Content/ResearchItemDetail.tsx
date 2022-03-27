@@ -27,7 +27,7 @@ const ResearchItemDetail = observer((props: IProps) => {
   }
 
   React.useEffect(() => {
-    ;(async () => {
+    (async () => {
       const { slug } = props.match.params
       await store.setActiveResearchItem(slug)
       setIsLoading(false)

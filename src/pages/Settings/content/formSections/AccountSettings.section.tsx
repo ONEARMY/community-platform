@@ -9,7 +9,6 @@ import { ChangePasswordForm } from './ChangePassword.form'
 import { ChangeEmailForm } from './ChangeEmail.form'
 import { ProfileDelete } from '../ProfileDelete'
 import { observer, inject } from 'mobx-react'
-import { VERSION } from 'src/config/config'
 
 interface IProps {}
 interface IInjectedProps extends IProps {
@@ -54,7 +53,6 @@ export class AccountSettingsSection extends React.Component<any, IState> {
           <ProfileDelete
             onConfirmation={reauthPw => this.deleteProfile(reauthPw)}
           />
-          v{VERSION}
         </Box>
       </FlexSectionContainer>
     )

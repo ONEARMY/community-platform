@@ -39,7 +39,8 @@ const DevSiteHeader = observer(() => {
                 options={siteRoles}
                 placeholder="Role"
                 defaultValue={
-                  siteRoles.find(s => s.value === DEV_SITE_ROLE) || siteRoles[0]
+                  siteRoles.find((s) => s.value === DEV_SITE_ROLE) ||
+                  siteRoles[0]
                 }
                 onChange={(s: any) => setSiteRole(s.value)}
               />
@@ -53,7 +54,7 @@ const DevSiteHeader = observer(() => {
               <Select
                 options={devSites}
                 placeholder="Site"
-                defaultValue={devSites.find(s => s.value === SITE)}
+                defaultValue={devSites.find((s) => s.value === SITE)}
                 onChange={(s: any) => setSite(s.value)}
               />
             </Box>
@@ -66,7 +67,7 @@ const DevSiteHeader = observer(() => {
               <Select
                 options={availableThemes}
                 placeholder="Pick a theme"
-                defaultValue={availableThemes.find(s => s.value === SITE)}
+                defaultValue={availableThemes.find((s) => s.value === SITE)}
                 onChange={(selectedElement: any) => {
                   const theme = selectedElement?.value || ''
                   localStorage.setItem('platformTheme', theme)
@@ -83,7 +84,7 @@ const DevSiteHeader = observer(() => {
 
 function showDevSiteHeader() {
   return (
-    devSites.some(s => s.value === SITE) ||
+    devSites.some((s) => s.value === SITE) ||
     window.location?.hostname === 'localhost'
   )
 }
@@ -126,7 +127,7 @@ const setSiteRole = async (role: string) => {
 
 /** Delete local,session and indexedDB storage */
 const clearCache = (reload = true) => {
-  return new Promise(async resolve => {
+  return new Promise(async (resolve) => {
     localStorage.clear()
     sessionStorage.clear()
     const req = indexedDB.deleteDatabase('OneArmyCache')

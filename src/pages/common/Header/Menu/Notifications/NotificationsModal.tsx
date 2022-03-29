@@ -5,15 +5,12 @@ import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import Flex from 'src/components/Flex'
 import { NotificationList } from 'src/components/Notifications/NotificationList'
-import {
-  Button
-} from 'theme-ui'
+import { Button } from 'theme-ui'
 
-interface IProps {
-}
+interface IProps {}
 
 interface IInjectedProps extends IProps {
-  userStore: UserStore,
+  userStore: UserStore
 }
 
 const ModalContainer = styled(Box)`
@@ -32,7 +29,6 @@ const ModalContainerInner = styled(Box)`
   padding: 10px 20px 10px;
   width: 248px;
   max-height: 310px;
-
 `
 
 const ModalItem = styled(Box)`
@@ -55,26 +51,27 @@ export class NotificationsModal extends React.Component<IProps> {
     return this.props as IInjectedProps
   }
 
-
   render() {
-    const user = this.injected.userStore.user;
-    const notifications = user?.notifications?.
-      filter(notification => !notification.read).
-      sort((a, b) => new Date(b._created).getTime() -  new Date(a._created).getTime());
+    const user = this.injected.userStore.user
+    const notifications = user?.notifications
+      ?.filter((notification) => !notification.read)
+      .sort(
+        (a, b) =>
+          new Date(b._created).getTime() - new Date(a._created).getTime(),
+      )
 
     return (
       <ModalContainer data-cy="notifications-modal-desktop">
-        {!notifications || notifications?.length === 0 ?
+        {!notifications || notifications?.length === 0 ? (
           <ModalContainerInner>
             <Flex>
-              <ModalItem>
-                Nada, no new notification
-              </ModalItem>
+              <ModalItem>Nada, no new notification</ModalItem>
             </Flex>
           </ModalContainerInner>
-          : <ModalContainerInner>
+        ) : (
+          <ModalContainerInner>
             <Flex>
-              <ModalItem style={{marginBottom: "20px"}}>
+              <ModalItem style={{ marginBottom: '20px' }}>
                 Notifications
               </ModalItem>
             </Flex>
@@ -83,17 +80,18 @@ export class NotificationsModal extends React.Component<IProps> {
             </Flex>
             <Flex>
               <Button
-                style={{width: "100%", borderRadius: '10px'}}
+                style={{ width: '100%', borderRadius: '10px' }}
                 variant="subtle"
                 data-cy="clear-notifications"
-                onClick={() => this.injected.userStore.markAllNotificationsRead()}>
-                  <div style={{margin: "auto"}}>
-                    Clear notifications
-                  </div>
+                onClick={() =>
+                  this.injected.userStore.markAllNotificationsRead()
+                }
+              >
+                <div style={{ margin: 'auto' }}>Clear notifications</div>
               </Button>
             </Flex>
           </ModalContainerInner>
-        }
+        )}
       </ModalContainer>
     )
   }

@@ -1,7 +1,7 @@
 import { IDBEndpoint, DBDoc } from 'src/models/common.models'
 import Dexie from 'dexie'
 import { DBQueryOptions, DBQueryWhereOptions } from '../types'
-import type { AbstractDBClient } from "../types"
+import type { AbstractDBClient } from '../types'
 import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
 import { DB_ENDPOINTS } from '../endpoints'
 
@@ -45,10 +45,7 @@ export class DexieClient implements AbstractDBClient {
    *  Additional Methods - specific only to dexie
    ***********************************************************************/
   getLatestDoc<T>(endpoint: IDBEndpoint) {
-    return db
-      .table<T & DBDoc>(endpoint)
-      .orderBy('_modified')
-      .last()
+    return db.table<T & DBDoc>(endpoint).orderBy('_modified').last()
   }
 
   // mapping to generate firebase query from standard db queryOpts
@@ -68,11 +65,11 @@ export class DexieClient implements AbstractDBClient {
       // as sortBy is a manual operation specify all other criteria first
       directed
         .sortBy(orderBy!)
-        .then(sorted => {
+        .then((sorted) => {
           resolve(limit ? (sorted.slice(0, limit) as any) : sorted)
         })
         // error will be thrown if index doesn't exist, simply pass up the chain
-        .catch(err => {
+        .catch((err) => {
           reject(err)
         })
     })
@@ -107,7 +104,7 @@ export class DexieClient implements AbstractDBClient {
     this._dbInit(DB_CACHE_NUMBER, DEXIE_SCHEMA)
     // test open db, catch errors for upgrade version not defined or
     // idb not supported
-    db.open().catch(async err => {
+    db.open().catch(async (err) => {
       console.error(err)
       // NOTE - invalid state error suggests dexie not supported, so
       // try reloading with cachedb disabled (see db index for implementation)
@@ -162,7 +159,7 @@ const SCHEMA_BASE: IDexieSchema = {
 // Ensure dexie also handles any prefixed database schema
 const MAPPED_SCHEMA = {} as IDexieSchema
 Object.keys(SCHEMA_BASE).forEach(
-  endpoint =>
+  (endpoint) =>
     (MAPPED_SCHEMA[DB_ENDPOINTS[endpoint] as IDBEndpoint] =
       SCHEMA_BASE[endpoint]),
 )

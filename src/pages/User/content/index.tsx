@@ -17,7 +17,7 @@ interface IRouterCustomParams {
 }
 
 interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
-  userStore: UserStore,
+  userStore: UserStore
   themeStore: ThemeStore
 }
 
@@ -27,7 +27,6 @@ interface IState {
 }
 
 interface IProps {}
-
 
 // TODO: Replace this logic with a simpler mobx-react hook: https://mobx-react.js.org/recipes-migration
 @inject('userStore', 'themeStore')
@@ -67,23 +66,29 @@ export class UserPage extends React.Component<
     }
     if (!user) {
       return (
-        <Text txtcenter mt="50px" sx={{width: '100%'}}>
+        <Text txtcenter mt="50px" sx={{ width: '100%' }}>
           User not found
         </Text>
       )
     }
     return user.profileType === 'member' ? (
-      <MemberProfile user={user} adminButton={ <AuthWrapper roleRequired={'admin'}>
-      <AdminContact user={user}/>
-    </AuthWrapper>}/>
+      <MemberProfile
+        user={user}
+        adminButton={
+          <AuthWrapper roleRequired={'admin'}>
+            <AdminContact user={user} />
+          </AuthWrapper>
+        }
+      />
     ) : (
-      <SpaceProfile user={user}
-      adminButton={
-        <AuthWrapper roleRequired={'admin'}>
-          <AdminContact user={user}/>
-        </AuthWrapper>
-      }
-        />
+      <SpaceProfile
+        user={user}
+        adminButton={
+          <AuthWrapper roleRequired={'admin'}>
+            <AdminContact user={user} />
+          </AuthWrapper>
+        }
+      />
     )
   }
 }

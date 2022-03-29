@@ -35,7 +35,7 @@ const EditResearch = observer((props: IProps) => {
       let loggedInUser = store.activeUser
       if (!loggedInUser) {
         // TODO - handle the case where user is still loading
-        await new Promise<void>(resolve =>
+        await new Promise<void>((resolve) =>
           setTimeout(() => {
             loggedInUser = store.activeUser
             resolve()
@@ -43,7 +43,7 @@ const EditResearch = observer((props: IProps) => {
         )
       }
       if (store.activeResearchItem! !== undefined) {
-        setState(prevState => ({
+        setState((prevState) => ({
           ...prevState,
           formValues: toJS(store.activeResearchItem) as IResearch.ItemDB,
           isLoading: false,
@@ -52,7 +52,7 @@ const EditResearch = observer((props: IProps) => {
       } else {
         const slug = props.match.params.slug
         const doc = await store.setActiveResearchItem(slug)
-        setState(prevState => ({
+        setState((prevState) => ({
           ...prevState,
           formValues: doc as IResearch.ItemDB,
           isLoading: false,
@@ -76,7 +76,7 @@ const EditResearch = observer((props: IProps) => {
     return isLoading ? (
       <Loader />
     ) : (
-      <Text txtcenter mt="50px" sx={{width: '100%'}}>
+      <Text txtcenter mt="50px" sx={{ width: '100%' }}>
         Research not found
       </Text>
     )

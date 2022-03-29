@@ -10,7 +10,7 @@ interface ILayoutProps {
 type IProps = FlexProps & ILayoutProps
 
 const Main = (props: IProps) => (
-  <Flex {...(props as any)} sx={{flexDirection: "column"}}>
+  <Flex {...(props as any)} sx={{ flexDirection: 'column' }}>
     <Flex
       className="main-container"
       css={props.customStyles}
@@ -23,13 +23,13 @@ const Main = (props: IProps) => (
               px: [2, 3, 4],
               mx: 'auto',
               my: 0,
-              flexDirection: "column",
-              width: '100%'
+              flexDirection: 'column',
+              width: '100%',
             }
           : {
-            flexDirection: "column",
-            width: '100%'
-          }
+              flexDirection: 'column',
+              width: '100%',
+            }
       }
     >
       {props.children}

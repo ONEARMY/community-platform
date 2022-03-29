@@ -33,7 +33,7 @@ export const Clusters: React.FunctionComponent<IProps> = ({
     >
       {pins
         .filter(({ location }) => Boolean(location))
-        .map(pin => (
+        .map((pin) => (
           <Marker
             key={pin._id}
             position={[pin.location.lat, pin.location.lng]}

@@ -45,7 +45,7 @@ const Label = styled.label`
   display: block;
 `
 
-const beforeUnload = function(e) {
+const beforeUnload = function (e) {
   e.preventDefault()
   e.returnValue = CONFIRM_DIALOG_MSG
 }
@@ -75,7 +75,7 @@ const ResearchForm = observer((props: IProps) => {
         form.dispatchEvent(
           new Event('submit', { cancelable: true, bubbles: true }),
         )
-        setState(prevState => ({ ...prevState, showSubmitModal: true }))
+        setState((prevState) => ({ ...prevState, showSubmitModal: true }))
       }
     }
   }, [submissionHandler])
@@ -95,12 +95,12 @@ const ResearchForm = observer((props: IProps) => {
   const calculatedFields = createDecorator({
     field: 'title',
     updates: {
-      slug: title => stripSpecialCharacters(title).toLowerCase(),
+      slug: (title) => stripSpecialCharacters(title).toLowerCase(),
     },
   })
 
   // Display a confirmation dialog when leaving the page outside the React Router
-  const unloadDecorator = form => {
+  const unloadDecorator = (form) => {
     return form.subscribe(
       ({ dirty }) => {
         if (dirty && !store.researchUploadStatus.Complete) {
@@ -119,13 +119,13 @@ const ResearchForm = observer((props: IProps) => {
         <ResearchSubmitStatus
           {...props}
           onClose={() => {
-            setState(prevState => ({ ...prevState, showSubmitModal: false }))
+            setState((prevState) => ({ ...prevState, showSubmitModal: false }))
             store.resetResearchUploadStatus()
           }}
         />
       )}
       <Form
-        onSubmit={v => {
+        onSubmit={(v) => {
           onSubmit(v as IResearch.FormInput)
         }}
         initialValues={props.formValues}
@@ -137,7 +137,12 @@ const ResearchForm = observer((props: IProps) => {
         render={({ submitting, dirty, handleSubmit }) => {
           return (
             <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
-              <Flex bg="inherit" px={2} sx={{ width: ['100%', '100%', `${2 / 3 * 100}%`] }} mt={4}>
+              <Flex
+                bg="inherit"
+                px={2}
+                sx={{ width: ['100%', '100%', `${(2 / 3) * 100}%`] }}
+                mt={4}
+              >
                 <Prompt
                   when={!store.researchUploadStatus.Complete && dirty}
                   message={CONFIRM_DIALOG_MSG}

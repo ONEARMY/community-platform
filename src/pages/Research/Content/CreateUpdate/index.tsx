@@ -19,7 +19,7 @@ const CreateUpdate = observer((props: IProps) => {
       let loggedInUser = store.activeUser
       if (!loggedInUser) {
         // TODO - handle the case where user is still loading
-        await new Promise<void>(resolve =>
+        await new Promise<void>((resolve) =>
           setTimeout(() => {
             loggedInUser = store.activeUser
             resolve()
@@ -52,7 +52,7 @@ const CreateUpdate = observer((props: IProps) => {
     )
   } else {
     return (
-      <Text txtcenter mt="50px" sx={{width: '100%'}}>
+      <Text txtcenter mt="50px" sx={{ width: '100%' }}>
         Research not found
       </Text>
     )

@@ -62,7 +62,7 @@ export class HowtoList extends React.Component<any, IState> {
       const tagQuery = searchParams.get('tags')?.toString()
       if (tagQuery) {
         const tags = {}
-        tagQuery.split(',').forEach(tag => {
+        tagQuery.split(',').forEach((tag) => {
           tags[tag] = true
         })
 
@@ -107,17 +107,12 @@ export class HowtoList extends React.Component<any, IState> {
   }
 
   public render() {
-    const {
-      filteredHowtos,
-      selectedTags,
-      searchValue,
-      referrerSource,
-    } = this.props.howtoStore
+    const { filteredHowtos, selectedTags, searchValue, referrerSource } =
+      this.props.howtoStore
 
     const theme = this.props?.themeStore?.currentTheme
-    const {
-      users_votedUsefulHowtos,
-    } = this.injected.aggregationsStore.aggregations
+    const { users_votedUsefulHowtos } =
+      this.injected.aggregationsStore.aggregations
 
     return (
       <Box>
@@ -150,7 +145,7 @@ export class HowtoList extends React.Component<any, IState> {
           >
             <TagsSelect
               value={selectedTags}
-              onChange={tags => {
+              onChange={(tags) => {
                 updateQueryParams(
                   window.location.href,
                   'tags',
@@ -176,7 +171,7 @@ export class HowtoList extends React.Component<any, IState> {
               data-cy="how-to-search-box"
               value={searchValue}
               placeholder="Search for a how-to"
-              onChange={value => {
+              onChange={(value) => {
                 updateQueryParams(window.location.href, 'search', value)
                 this.props.howtoStore.updateSearchValue(value)
               }}

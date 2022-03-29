@@ -129,8 +129,10 @@ export class Howto extends React.Component<
     const { activeHowto } = this.store
 
     if (activeHowto) {
-      const votedUsefulCount = this.injected.aggregationsStore.aggregations
-        .users_votedUsefulHowtos[activeHowto._id]
+      const votedUsefulCount =
+        this.injected.aggregationsStore.aggregations.users_votedUsefulHowtos[
+          activeHowto._id
+        ]
       return (
         <>
           <HowtoDescription
@@ -155,12 +157,12 @@ export class Howto extends React.Component<
           </Box>
           <HowToComments comments={activeHowto.comments} />
           <MoreBox py={20} mt={20}>
-            <Text bold txtcenter sx={{fontSize: [4, 4, 5], display: 'block'}}>
+            <Text bold txtcenter sx={{ fontSize: [4, 4, 5], display: 'block' }}>
               You're done.
               <br />
               Nice one!
             </Text>
-            <Flex sx={{justifyContent:'center'}} mt={2}>
+            <Flex sx={{ justifyContent: 'center' }} mt={2}>
               <Link to={'/how-to/'}>
                 <Button variant={'secondary'} data-cy="go-back">
                   Back

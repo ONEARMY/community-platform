@@ -6,7 +6,7 @@ import { DBDoc, IDBDocChange } from '../models'
  */
 const hasUserDataUpdated = (prevUser: DBDoc, updatedUser: DBDoc): boolean => {
   return Object.keys(prevUser).some(
-    key =>
+    (key) =>
       key !== '_modified' &&
       key !== '_lastActive' &&
       prevUser[key] !== updatedUser[key],
@@ -23,9 +23,6 @@ export const backupUser = (change: IDBDocChange) => {
   const rev = before.data() as DBDoc
   const updated = after.data() as DBDoc
   if (rev && rev._modified && hasUserDataUpdated(rev, updated)) {
-    return before.ref
-      .collection('revisions')
-      .doc(rev._modified)
-      .set(rev)
+    return before.ref.collection('revisions').doc(rev._modified).set(rev)
   }
 }

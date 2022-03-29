@@ -49,7 +49,7 @@ class AdminPage extends React.Component<IProps, any> {
                 </Text>
                 <AuthWrapper roleRequired="admin">
                   <Flex>
-                    {ADMIN_ROUTES.map(route => (
+                    {ADMIN_ROUTES.map((route) => (
                       <Box key={route.name} bg="white" p={2} m={2}>
                         <Link to={`/admin/${route.slug}`}>
                           {route.name} Admin
@@ -61,7 +61,7 @@ class AdminPage extends React.Component<IProps, any> {
               </>
             )}
           />
-          {ADMIN_ROUTES.map(route => (
+          {ADMIN_ROUTES.map((route) => (
             <AuthRoute
               key={route.name}
               path={`/admin/${route.slug}`}

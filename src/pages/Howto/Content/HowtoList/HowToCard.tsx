@@ -75,7 +75,7 @@ export const HowToCard = (props: IProps) => (
         <Flex mt={4}>
           <Flex sx={{ flex: 1, flexWrap: 'wrap' }}>
             {props.howto.tags &&
-              Object.keys(props.howto.tags).map(tag => {
+              Object.keys(props.howto.tags).map((tag) => {
                 return <TagDisplay key={tag} tagKey={tag} />
               })}
           </Flex>

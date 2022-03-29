@@ -19,7 +19,7 @@ if (require.main === module) {
 export function emulatorSeed() {
   const seedFiles = fs
     .readdirSync(EMULATOR_SEED_FOLDER)
-    .filter(filename => filename.endsWith('.zip'))
+    .filter((filename) => filename.endsWith('.zip'))
   if (seedFiles.length === 0) {
     throw new Error('No seed files found in ' + EMULATOR_SEED_FOLDER)
   }
@@ -32,8 +32,8 @@ export function emulatorSeed() {
   const zipFile = fs.readFileSync(seedFilePath)
   zip
     .loadAsync(zipFile)
-    .then(contents => {
-      Object.values(contents.files).forEach(file => {
+    .then((contents) => {
+      Object.values(contents.files).forEach((file) => {
         if (file.dir) {
           const targetDir = path.resolve(EMULATOR_IMPORT_PATH, file.name)
           fs.mkdirSync(targetDir, { recursive: true })
@@ -41,7 +41,7 @@ export function emulatorSeed() {
           zip
             .file(file.name)
             .async('nodebuffer')
-            .then(data => {
+            .then((data) => {
               fs.writeFileSync(
                 path.resolve(EMULATOR_IMPORT_PATH, file.name),
                 data,
@@ -56,7 +56,7 @@ export function emulatorSeed() {
         EMULATOR_IMPORT_PATH,
       )
     })
-    .catch(err => {
+    .catch((err) => {
       console.error(err)
       process.exit(1)
     })

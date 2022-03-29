@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import theme from 'src/themes/styled.theme'
 import DatePicker from 'react-datepicker'

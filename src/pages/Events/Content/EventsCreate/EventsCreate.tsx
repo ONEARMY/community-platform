@@ -80,7 +80,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
     const { formValues, isLocationSelected } = this.state
     return (
       <Form
-        onSubmit={v => {
+        onSubmit={(v) => {
           const datepickerDate = this.state.selectedDate
           // convert from Date type to yyyy/mm/dd string and back into local timezone
           const convert = new Date(
@@ -101,8 +101,13 @@ export class EventsCreate extends React.Component<IProps, IState> {
         render={({ form: { mutators }, submitting, handleSubmit }) => {
           return (
             <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
-              <Flex bg="inherit" px={2} sx={{ width: ['100%', '100%', `${2 / 3 * 100}%`] }} mt={4}>
-                <FormContainer onSubmit={e => e.preventDefault()}>
+              <Flex
+                bg="inherit"
+                px={2}
+                sx={{ width: ['100%', '100%', `${(2 / 3) * 100}%`] }}
+                mt={4}
+              >
+                <FormContainer onSubmit={(e) => e.preventDefault()}>
                   {/* How To Info */}
                   <Flex sx={{ flexDirection: 'column' }}>
                     <Flex
@@ -136,7 +141,10 @@ export class EventsCreate extends React.Component<IProps, IState> {
                     >
                       <Flex
                         mb={3}
-                        sx={{ width: ['100%', '100%', `${2 / 3 * 100}%`], flexDirection: 'column' }}
+                        sx={{
+                          width: ['100%', '100%', `${(2 / 3) * 100}%`],
+                          flexDirection: 'column',
+                        }}
                       >
                         <Label htmlFor="title">Title of the event *</Label>
                         <Field
@@ -175,7 +183,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             dateFormat="yyyy/MM/dd"
                             validate={required}
                             selected={this.state.selectedDate}
-                            customChange={date => this.handleChange(date)}
+                            customChange={(date) => this.handleChange(date)}
                             placeholderText="yyyy/mm/dd"
                           />
                         </Flex>
@@ -239,10 +247,10 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             name="url"
                             data-cy="url"
                             validateFields={[]}
-                            validate={value => validateUrl(value)}
+                            validate={(value) => validateUrl(value)}
                             component={InputField}
                             placeholder="URL to offsite link (Facebook, Meetup, etc)"
-                            customOnBlur={e =>
+                            customOnBlur={(e) =>
                               mutators.addProtocolMutator(e.target.name)
                             }
                           />

@@ -32,7 +32,7 @@ export const CommentList: React.FC<{
       {comments &&
         comments
           .slice(0, shownComments)
-          .map(comment => (
+          .map((comment) => (
             <Comment
               key={comment._id}
               {...comment}

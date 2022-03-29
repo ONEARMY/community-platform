@@ -39,7 +39,7 @@ export class ProfileButtonItem extends React.Component<IProps> {
   }
   render() {
     const menu = this.injected.mobileMenuStore
-    console.log(`ProfileButtonItem`, this.props.sx);
+    console.log(`ProfileButtonItem`, this.props.sx)
     return (
       <>
         <Link to={this.props.link} sx={{ minWidth: 'auto' }}>

@@ -86,7 +86,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
         sx={{ flexDirection: 'column' }}
       >
         <Flex p={0}>
-          <Heading small sx={{flex:1}} mb={3}>
+          <Heading small sx={{ flex: 1 }} mb={3}>
             Step {index + 1}
           </Heading>
           {index >= 1 && (
@@ -205,7 +205,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
             data-cy="step-videoUrl"
             component={InputField}
             placeholder="https://youtube.com/watch?v="
-            validate={url => this.validateMedia(url)}
+            validate={(url) => this.validateMedia(url)}
             validateFields={[]}
             isEqual={COMPARISONS.textInput}
           />

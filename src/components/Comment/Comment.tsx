@@ -111,7 +111,7 @@ export const Comment: React.FC<IProps> = ({
           <Modal width={600}>
             <FormEditComment
               comment={text}
-              handleSubmit={commentText => {
+              handleSubmit={(commentText) => {
                 handleEdit(_id, commentText)
                 setShowEditModal(false)
               }}

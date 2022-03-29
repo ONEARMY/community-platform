@@ -30,7 +30,7 @@ import { logger } from 'src/logger'
 interface IProps {}
 
 interface IInjectedProps extends IProps {
-  userStore: UserStore,
+  userStore: UserStore
   themeStore: ThemeStore
 }
 
@@ -77,25 +77,25 @@ export class UserSettings extends React.Component<IProps, IState> {
     // use a copy of values to allow manipulsation without re-render
     const vals = { ...values }
     // remove empty images
-    vals.coverImages = (vals.coverImages as any[]).filter(cover =>
+    vals.coverImages = (vals.coverImages as any[]).filter((cover) =>
       cover ? true : false,
     )
     // // Remove undefined vals from obj before sending to firebase
-    Object.keys(vals).forEach(key => {
+    Object.keys(vals).forEach((key) => {
       if (vals[key] === undefined) {
         delete vals[key]
       }
     })
     // Submit, show notification update and return any errors to form
     try {
-      logger.debug({profile: vals}, 'UserSettings.saveProfile');
+      logger.debug({ profile: vals }, 'UserSettings.saveProfile')
       await this.injected.userStore.updateUserProfile(vals)
       this.setState({
         notification: { message: 'Profile Saved', icon: 'check', show: true },
       })
       return {}
     } catch (error) {
-      logger.warn({error, profile: vals}, 'UserSettings.saveProfile.error')
+      logger.warn({ error, profile: vals }, 'UserSettings.saveProfile.error')
       this.setState({
         notification: { message: 'Save Failed', icon: 'close', show: true },
       })
@@ -127,14 +127,14 @@ export class UserSettings extends React.Component<IProps, IState> {
     return (
       user && (
         <Form
-          onSubmit={v =>
+          onSubmit={(v) =>
             // return any errors (or success) on submit
-            this.saveProfile(v).then(res => {
+            this.saveProfile(v).then((res) => {
               return res
             })
           }
           initialValues={formValues}
-          validate={v => this.validateForm(v)}
+          validate={(v) => this.validateForm(v)}
           mutators={{
             ...arrayMutators,
           }}
@@ -150,7 +150,7 @@ export class UserSettings extends React.Component<IProps, IState> {
             ...rest
           }) => {
             return (
-              <Flex mx={-2} bg={'inherit'} sx={{flexWrap: 'wrap'}}>
+              <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
                 <Prompt
                   when={!this.injected.userStore.updateStatus.Complete}
                   message={
@@ -158,15 +158,16 @@ export class UserSettings extends React.Component<IProps, IState> {
                   }
                 />
                 <Flex
-                  sx={{width: ['100%', '100%', `${2 / 3 * 100}%`],
+                  sx={{
+                    width: ['100%', '100%', `${(2 / 3) * 100}%`],
                     my: 4,
                     bg: 'inherit',
                     px: 2,
                   }}
                 >
-                  <Box sx={{width:"100%"}}>
+                  <Box sx={{ width: '100%' }}>
                     <form id="userProfileForm" onSubmit={handleSubmit}>
-                      <Flex sx={{flexDirection: 'column'}}>
+                      <Flex sx={{ flexDirection: 'column' }}>
                         <Flex
                           card
                           mediumRadius
@@ -190,7 +191,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                         </Box>
                         {/* Note - for fields without fieldwrapper can just render via props method and bind to input */}
                         {isModuleSupported(MODULE.MAP) && <FocusSection />}
-                        
+
                         {/* Specific profile type fields */}
                         {values.profileType === 'workspace' && (
                           <WorkspaceSection />
@@ -215,13 +216,15 @@ export class UserSettings extends React.Component<IProps, IState> {
                           />
                         )}
                         {/* General fields */}
-                        {(values.profileType !== 'member' && isModuleSupported(MODULE.MAP)) && (
-                          <WorkspaceMapPinSection />
-                        )}
+                        {values.profileType !== 'member' &&
+                          isModuleSupported(MODULE.MAP) && (
+                            <WorkspaceMapPinSection />
+                          )}
 
-                        {(values.profileType === 'member' && isModuleSupported(MODULE.MAP)) && (
-                          <MemberMapPinSection />
-                        )}
+                        {values.profileType === 'member' &&
+                          isModuleSupported(MODULE.MAP) && (
+                            <MemberMapPinSection />
+                          )}
                         <UserInfosSection
                           formValues={values}
                           mutators={form.mutators}
@@ -233,7 +236,8 @@ export class UserSettings extends React.Component<IProps, IState> {
                 </Flex>
                 {/* desktop guidelines container */}
                 <Flex
-                  sx={{width: ['100%', '100%', `${100 * .333}%`],
+                  sx={{
+                    width: ['100%', '100%', `${100 * 0.333}%`],
                     flexDirection: 'column',
                     bg: 'inherit',
                     px: 2,
@@ -247,10 +251,11 @@ export class UserSettings extends React.Component<IProps, IState> {
                       maxWidth: ['100%', '100%', '400px'],
                     }}
                   >
-                    {isModuleSupported(MODULE.MAP) && (<Box mb={3}
-                       sx={{ display: ['none', 'none', 'block'] }}>
-                      <ProfileGuidelines />
-                    </Box>)}
+                    {isModuleSupported(MODULE.MAP) && (
+                      <Box mb={3} sx={{ display: ['none', 'none', 'block'] }}>
+                        <ProfileGuidelines />
+                      </Box>
+                    )}
                     <Button
                       data-cy="save"
                       title={
@@ -261,9 +266,8 @@ export class UserSettings extends React.Component<IProps, IState> {
                       onClick={() => {
                         // workaround for issues described:
                         // https://github.com/final-form/react-final-form/blob/master/docs/faq.md#how-can-i-trigger-a-submit-from-outside-my-form
-                        const formEl = document.getElementById(
-                          'userProfileForm',
-                        )
+                        const formEl =
+                          document.getElementById('userProfileForm')
                         if (typeof formEl !== 'undefined' && formEl !== null) {
                           formEl.dispatchEvent(
                             new Event('submit', {
@@ -273,7 +277,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           )
                         }
                       }}
-                      sx={{width: '100%'}}
+                      sx={{ width: '100%' }}
                       variant={'primary'}
                       type="submit"
                       // disable button when form invalid or during submit.

@@ -80,7 +80,7 @@ function getDownloadUrl(filePath: string) {
         action: 'read',
         expires: '03-17-2045',
       },
-      function(err, url) {
+      function (err, url) {
         if (err) {
           console.error(err)
           reject(err)

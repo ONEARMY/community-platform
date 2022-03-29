@@ -26,7 +26,7 @@ export class ExpertiseSection extends React.Component<IProps, any> {
     const { required } = this.props
     return (
       <FlexSectionContainer>
-        <Flex sx={{justifyContent: "space-between"}}>
+        <Flex sx={{ justifyContent: 'space-between' }}>
           <Heading small>Expertise</Heading>
           <ArrowIsSectionOpen
             onClick={() => {
@@ -39,7 +39,7 @@ export class ExpertiseSection extends React.Component<IProps, any> {
           <Text regular my={4}>
             What are you specialised in ? *
           </Text>
-          <Flex sx={{flexWrap:['wrap', 'wrap', 'nowrap']}}>
+          <Flex sx={{ flexWrap: ['wrap', 'wrap', 'nowrap'] }}>
             <FieldArray name="machineBuilderXp">
               {({ fields }) => (
                 <>

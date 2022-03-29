@@ -58,7 +58,7 @@ export class OpeningHoursPicker extends Component<IProps, IState> {
             icon={'delete'}
             variant={'tertiary'}
             ml={'10px'}
-            sx={{ height: '40px',display: ['block', 'block', 'none'] }}
+            sx={{ height: '40px', display: ['block', 'block', 'none'] }}
             onClick={() => this.toggleDeleteModal()}
           />
         </Flex>

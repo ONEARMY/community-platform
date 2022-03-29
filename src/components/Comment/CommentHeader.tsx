@@ -35,20 +35,20 @@ export const CommentHeader = ({
           />
         </span>
       </Box>
-      <Flex sx={{alignItems:"center"}}>
+      <Flex sx={{ alignItems: 'center' }}>
         {_edited ? (
           <>
-            <Text color={theme.colors.grey} sx={{fontSize: 0}} mr={2}>
+            <Text color={theme.colors.grey} sx={{ fontSize: 0 }} mr={2}>
               (Edited)
             </Text>
-            <Text sx={{fontSize: 1}}>
+            <Text sx={{ fontSize: 1 }}>
               {new Date(_edited)
                 .toLocaleDateString('en-GB')
                 .replaceAll('/', '-')}
             </Text>
           </>
         ) : (
-          <Text sx={{fontSize: 1}}>
+          <Text sx={{ fontSize: 1 }}>
             {new Date(_created)
               .toLocaleDateString('en-GB')
               .replaceAll('/', '-')}

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Component } from 'react';
+import { Component } from 'react'
 import theme from 'src/themes/styled.theme'
 import { Box } from 'theme-ui'
 import { LinkTargetBlank } from 'src/components/Links/LinkTargetBlank/LinkTargetBlank'

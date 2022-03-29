@@ -19,20 +19,20 @@ const MapsPage = lazy(() => import('./Maps/Maps'))
 const User = lazy(() => import('./User/User'))
 
 const SignUpMessagePage = lazy(() => import('./SignUp/SignUpMessage'))
-const ResendSignUpMessagePage = lazy(() =>
-  import('./SignUp/ResendSignUpMessage'),
+const ResendSignUpMessagePage = lazy(
+  () => import('./SignUp/ResendSignUpMessage'),
 )
 const SignUpPage = lazy(() => import('./SignUp/SignUp'))
 const SignInPage = lazy(() => import('./SignIn/SignIn'))
 const ForgotPasswordPage = lazy(() => import('./Password/ForgotPassword'))
-const ForgotPasswordMessagePage = lazy(() =>
-  import('./Password/ForgotPasswordMessage'),
+const ForgotPasswordMessagePage = lazy(
+  () => import('./Password/ForgotPasswordMessage'),
 )
 const PrivacyPolicy = lazy(() => import('./policy/privacy'))
 const TermsPolicy = lazy(() => import('./policy/terms'))
 
 export function getAvailablePageList(supportedModules: MODULE[]): IPageMeta[] {
-  return COMMUNITY_PAGES.filter(pageItem =>
+  return COMMUNITY_PAGES.filter((pageItem) =>
     supportedModules.includes(pageItem.moduleName),
   )
 }

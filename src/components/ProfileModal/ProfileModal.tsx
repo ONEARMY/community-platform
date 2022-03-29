@@ -91,7 +91,7 @@ export class ProfileModal extends React.Component<IProps> {
               <Flex>Profile</Flex>
             </ModalLink>
           </Flex>
-          {COMMUNITY_PAGES_PROFILE.map(page => (
+          {COMMUNITY_PAGES_PROFILE.map((page) => (
             <AuthWrapper roleRequired={page.requiredRole} key={page.path}>
               <Flex>
                 <ModalLink to={page.path} data-cy={`menu-${page.title}`}>

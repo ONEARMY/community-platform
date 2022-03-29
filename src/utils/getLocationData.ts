@@ -1,12 +1,18 @@
-import { ILatLng, ILocation } from 'src/models';
+import { ILatLng, ILocation } from 'src/models'
 
 export async function getLocationData(latlng: ILatLng): Promise<ILocation> {
-  const { lat, lng } = latlng;
-  const response = await (await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=en`, {
-    headers: new Headers({
-      'User-Agent': 'onearmy.earth Community Platform (https://platform.onearmy.earth)',
-    })
-  })).json();
+  const { lat, lng } = latlng
+  const response = await (
+    await fetch(
+      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=en`,
+      {
+        headers: new Headers({
+          'User-Agent':
+            'onearmy.earth Community Platform (https://platform.onearmy.earth)',
+        }),
+      },
+    )
+  ).json()
 
   const location = {
     name: response.display_name || '',
@@ -15,8 +21,12 @@ export async function getLocationData(latlng: ILatLng): Promise<ILocation> {
     administrative: response.address.county || '',
     latlng,
     postcode: response.address.postcode || '',
-    value: response.address.city || response.address.town || response.address.village || '',
-  };
+    value:
+      response.address.city ||
+      response.address.town ||
+      response.address.village ||
+      '',
+  }
 
-  return location;
+  return location
 }

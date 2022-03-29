@@ -68,7 +68,7 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
         </Button>
         {this.state.showChangePasswordForm && (
           <Form
-            onSubmit={values => this.submit(values as IFormValues)}
+            onSubmit={(values) => this.submit(values as IFormValues)}
             initialValues={this.state.formValues}
             render={({ submitting, values, handleSubmit }) => {
               const { oldPassword, newPassword, repeatPassword } = values

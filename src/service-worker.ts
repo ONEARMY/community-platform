@@ -29,7 +29,7 @@ const fullManifest = self.__WB_MANIFEST
 
 // just cache index, allow others to be added to runtime cache instead (better for lazy loading)
 const coreManifest = (fullManifest as PrecacheEntry[]).filter(
-  entry => entry.url === '/index.html',
+  (entry) => entry.url === '/index.html',
 )
 precacheAndRoute(coreManifest)
 
@@ -120,7 +120,7 @@ registerRoute(
 // )
 
 // allow skip-waiting message to be sent from client
-self.addEventListener('message', event => {
+self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting()
   }

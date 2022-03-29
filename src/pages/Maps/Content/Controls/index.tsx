@@ -99,7 +99,7 @@ class Controls extends React.Component<IProps, IState> {
           }}
         >
           <OsmGeocoding
-            callback={data => {
+            callback={(data) => {
               logger.debug(data, 'Map.Content.Controls.ReactOsmGeocoding')
               if (data.lat && data.lon) {
                 this.props.onLocationChange({
@@ -116,7 +116,7 @@ class Controls extends React.Component<IProps, IState> {
           <GroupingFilterDesktop
             items={groupedFilters}
             selectedItems={filtersSelected}
-            onChange={selected => {
+            onChange={(selected) => {
               this.props.onFilterChange(selected as IMapPinType[])
               this.setState({ filtersSelected: selected })
             }}
@@ -136,7 +136,7 @@ class Controls extends React.Component<IProps, IState> {
                   : { pathname: '/sign-up' }
               }
               // the map underneath also redirects, so prevent it from doing so
-              onClick={e => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()}
             >
               <Button variant={'primary'}>My pin</Button>
             </Link>
@@ -172,13 +172,13 @@ class Controls extends React.Component<IProps, IState> {
                 onClick={() => this.handleFilterMobileModal()}
               />
             </Flex>
-            {Object.keys(groupedFilters).map(grouping => (
+            {Object.keys(groupedFilters).map((grouping) => (
               <GroupingFilterMobile
                 key={grouping}
                 entityType={grouping}
                 items={groupedFilters[grouping]}
                 selectedItems={filtersSelected}
-                onChange={selected => {
+                onChange={(selected) => {
                   this.props.onFilterChange(selected as IMapPinType[])
                   this.setState({ filtersSelected: selected })
                 }}

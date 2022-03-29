@@ -51,7 +51,7 @@ const SiteFooter = () => {
   return (
     <FooterContainer
       bg="#27272c"
-      sx={{alignItems: 'center'}}
+      sx={{ alignItems: 'center' }}
       style={{
         marginTop: '45px',
       }}

@@ -53,7 +53,7 @@ export class CollectionReference<T> {
             operator: '>',
             value: latest,
           },
-        }).subscribe(async updates => {
+        }).subscribe(async (updates) => {
           totals.live = updates.length
           await cacheDB.setBulkDocs(endpoint, updates)
           const allDocs = await cacheDB.getCollection<T>(endpoint)
@@ -68,8 +68,8 @@ export class CollectionReference<T> {
         serverDB.streamCollection!(`_archived/${endpoint}/summary`, {
           order: 'asc',
           where: { field: '_archived', operator: '>', value: lastArchive },
-        }).subscribe(async docs => {
-          const archiveIds = docs.map(d => d._id)
+        }).subscribe(async (docs) => {
+          const archiveIds = docs.map((d) => d._id)
           for (const docId of archiveIds) {
             try {
               cacheDB.deleteDoc(endpoint, docId)
@@ -82,7 +82,7 @@ export class CollectionReference<T> {
         })
       },
     )
-    const subscription = observer.subscribe(value => onUpdate(value))
+    const subscription = observer.subscribe((value) => onUpdate(value))
     return subscription
   }
 
@@ -94,7 +94,7 @@ export class CollectionReference<T> {
    */
   async set(docs: any[]) {
     const { cacheDB, serverDB } = this.clients
-    const dbDocs: DBDoc[] = docs.map(d =>
+    const dbDocs: DBDoc[] = docs.map((d) =>
       new DocReference(this.endpoint, d._id, this.clients).batchDoc(d),
     )
     await serverDB.setBulkDocs(this.endpoint, dbDocs)

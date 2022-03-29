@@ -30,14 +30,14 @@ export interface ITextProps {
   theme?: any
 }
 
-export const uppercase = props =>
+export const uppercase = (props) =>
   props.uppercase
     ? {
         textTransform: 'uppercase',
       }
     : null
 
-export const capitalize = props =>
+export const capitalize = (props) =>
   props.capitalize
     ? {
         textTransform: 'capitalize',
@@ -117,7 +117,6 @@ export const cropBottomRight = (props: ITextProps) =>
 
 // any export to fix: https://github.com/microsoft/TypeScript/issues/37597
 export const BaseText = styled(ThemeUiText as any)`
-
   ${inline}
   ${uppercase as any}
   ${capitalize as any}

@@ -35,7 +35,7 @@ export class FileInput extends React.Component<IProps, IState> {
     return files
   }
   get filesArray() {
-    return Object.values(this.files).map(meta => meta.data) as File[]
+    return Object.values(this.files).map((meta) => meta.data) as File[]
   }
 
   // when upload button clicked just want to clise modal and reflect files
@@ -76,7 +76,7 @@ export class FileInput extends React.Component<IProps, IState> {
               >
                 Add Files (.zip)
               </Button>
-              {this.filesArray.map(file => (
+              {this.filesArray.map((file) => (
                 <FileInfo key={file.name} file={file} />
               ))}
             </>

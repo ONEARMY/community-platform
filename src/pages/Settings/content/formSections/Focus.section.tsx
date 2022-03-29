@@ -24,7 +24,7 @@ export class FocusSection extends React.Component<any, IState> {
     return (
       <Field
         name="profileType"
-        render={props => (
+        render={(props) => (
           <FlexSectionContainer>
             <Flex sx={{ justifyContent: 'space-between' }}>
               <Heading small>Focus</Heading>
@@ -47,7 +47,9 @@ export class FocusSection extends React.Component<any, IState> {
                     value={profile.label}
                     name="profileType"
                     isSelected={profile.label === props.input.value}
-                    onChange={v => props.input.onChange(v as ProfileTypeLabel)}
+                    onChange={(v) =>
+                      props.input.onChange(v as ProfileTypeLabel)
+                    }
                     imageSrc={profile.imageSrc}
                     textLabel={profile.textLabel}
                   />

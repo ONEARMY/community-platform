@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component } from 'react'
 import ReactGA from 'react-ga'
 import { GA_TRACKING_ID } from 'src/config/config'
 import { RouteComponentProps, withRouter } from 'react-router-dom'

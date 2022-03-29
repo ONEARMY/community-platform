@@ -74,14 +74,14 @@ export type IUserDB = IUser & DBDoc
 export type UserRole = 'super-admin' | 'subscriber' | 'admin' | 'beta-tester'
 
 export interface INotification {
-  _id: string,
-  _created: string,
+  _id: string
+  _created: string
   triggeredBy: {
-    displayName: string,
+    displayName: string
     userId: string
-  },
-  relevantUrl?: string,
-  type: NotificationType,
+  }
+  relevantUrl?: string
+  type: NotificationType
   read: boolean
 }
 

@@ -29,7 +29,7 @@ export class WorkspaceSection extends React.Component<any, IState> {
         validateFields={[]}
         render={({ input, meta }) => (
           <FlexSectionContainer>
-            <Flex sx={{justifyContent: "space-between"}}>
+            <Flex sx={{ justifyContent: 'space-between' }}>
               <Heading small>Workspace</Heading>
               <ArrowIsSectionOpen
                 onClick={() => {
@@ -42,7 +42,7 @@ export class WorkspaceSection extends React.Component<any, IState> {
               <Text regular my={4}>
                 What kind of Precious Plastic workspace do you run?
               </Text>
-              <Flex sx={{flexWrap:['wrap', 'wrap', 'nowrap']}}>
+              <Flex sx={{ flexWrap: ['wrap', 'wrap', 'nowrap'] }}>
                 {WORKSPACE_TYPES.map((workspace, index: number) => (
                   <CustomRadioField
                     data-cy={workspace.label}
@@ -50,7 +50,7 @@ export class WorkspaceSection extends React.Component<any, IState> {
                     value={workspace.label}
                     name="workspaceType"
                     isSelected={workspace.label === input.value}
-                    onChange={v => {
+                    onChange={(v) => {
                       input.onChange(v)
                       input.onBlur()
                     }}

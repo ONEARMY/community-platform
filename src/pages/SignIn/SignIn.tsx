@@ -119,7 +119,7 @@ class SignInPage extends React.Component<IProps, IState> {
     }
     return (
       <Form
-        onSubmit={v => this.onLoginSubmit(v as IFormValues)}
+        onSubmit={(v) => this.onLoginSubmit(v as IFormValues)}
         render={({ submitting, values, invalid, handleSubmit }) => {
           // eslint-disable-next-line
           const disabled = invalid || submitting
@@ -168,7 +168,7 @@ class SignInPage extends React.Component<IProps, IState> {
                           <Text mb={3} mt={3}>
                             Login with :
                           </Text>
-                          {Object.values(AUTH_PROVIDERS).map(p => (
+                          {Object.values(AUTH_PROVIDERS).map((p) => (
                             <Button
                               sx={{ width: '100%' }}
                               key={p.provider}

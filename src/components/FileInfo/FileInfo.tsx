@@ -2,7 +2,7 @@ import * as React from 'react'
 import { bytesToSize } from '../ImageInput/ImageInput'
 import { IUploadedFileMeta } from 'src/stores/storage'
 import { FileDetails } from './FileDetails'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 interface IProps {
   file: File | IUploadedFileMeta | null

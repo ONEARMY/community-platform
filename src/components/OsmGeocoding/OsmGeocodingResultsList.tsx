@@ -1,5 +1,5 @@
 import type { Result } from './OsmGeocoding'
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 interface Props {
     results: Result[],

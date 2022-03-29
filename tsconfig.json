@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "baseUrl": ".",
     "skipLibCheck": true,
@@ -18,6 +14,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
     "noImplicitAny": false,
     "strictPropertyInitialization": false,
     "experimentalDecorators": true,
@@ -32,10 +29,7 @@
     "noFallthroughCasesInSwitch": true,
     "useUnknownInCatchVariables": false
   },
-  "include": [
-    "src/**/*",
-    "types"
-  ],
+  "include": ["src/**/*", "types"],
   "exclude": [
     "node_modules",
     "build",

@@ -3,7 +3,7 @@ import * as React from 'react'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { Button } from 'oa-components'
 import Heading from 'src/components/Heading'
-import { Flex, Box } from 'rebass/styled-components'
+import { Flex, Box } from 'theme-ui'
 import { Link } from 'src/components/Links'
 import { Loader } from 'src/components/Loader'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
@@ -120,10 +120,10 @@ export class HowtoList extends React.Component<any, IState> {
     } = this.injected.aggregationsStore.aggregations
 
     return (
-      <>
+      <Box>
         <Flex py={26}>
           {referrerSource ? (
-            <Box width={1}>
+            <Box sx={{ width: '100%' }}>
               <Heading medium bold txtcenter mt={20}>
                 The page you were looking for was moved or doesn't exist.
               </Heading>
@@ -132,17 +132,22 @@ export class HowtoList extends React.Component<any, IState> {
               </Heading>
             </Box>
           ) : (
-            <Heading medium bold txtcenter width={1}>
+            <Heading medium bold txtcenter sx={{ marginX: 'auto' }}>
               {theme && theme.howtoHeading}
             </Heading>
           )}
         </Flex>
         <Flex
-          flexWrap={'nowrap'}
-          justifyContent={'space-between'}
-          flexDirection={['column', 'column', 'row']}
+          sx={{
+            flexWrap: 'nowrap',
+            justifyContent: 'space-between',
+            flexDirection: ['column', 'column', 'row'],
+          }}
         >
-          <Flex width={[1, 1, 0.2]} mb={['10px', '10px', 0]}>
+          <Flex
+            sx={{ width: ['100%', '100%', '20%'] }}
+            mb={['10px', '10px', 0]}
+          >
             <TagsSelect
               value={selectedTags}
               onChange={tags => {
@@ -159,7 +164,11 @@ export class HowtoList extends React.Component<any, IState> {
               relevantTagsItems={filteredHowtos}
             />
           </Flex>
-          <Flex ml={[0, 0, '8px']} mb={['10px', '10px', 0]} width={[1, 1, 0.2]}>
+          <Flex
+            ml={[0, 0, '8px']}
+            mb={['10px', '10px', 0]}
+            sx={{ width: ['100%', '100%', '20%'] }}
+          >
             <SortSelect usefulCounts={users_votedUsefulHowtos} />
           </Flex>
           <Flex ml={[0, 0, '8px']} mr={[0, 0, 'auto']} mb={['10px', '10px', 0]}>
@@ -173,14 +182,14 @@ export class HowtoList extends React.Component<any, IState> {
               }}
             />
           </Flex>
-          <Flex justifyContent={['flex-end', 'flex-end', 'auto']}>
+          <Flex sx={{ justifyContent: ['flex-end', 'flex-end', 'auto'] }}>
             <Link
-              width="100%"
+              sx={{ width: '100%' }}
               to={this.props.userStore!.user ? '/how-to/create' : 'sign-up'}
               mb={[3, 3, 0]}
             >
               <Button
-                width="100%"
+                sx={{ width: '100%' }}
                 variant={'primary'}
                 translateY
                 data-cy="create"
@@ -193,7 +202,7 @@ export class HowtoList extends React.Component<any, IState> {
         <React.Fragment>
           {filteredHowtos.length === 0 ? (
             <Flex>
-              <Heading auxiliary txtcenter width={1}>
+              <Heading auxiliary txtcenter sx={{ width: '100%' }}>
                 {Object.keys(selectedTags).length === 0 &&
                 searchValue.length === 0 ? (
                   <Loader />
@@ -204,7 +213,7 @@ export class HowtoList extends React.Component<any, IState> {
             </Flex>
           ) : (
             <Flex
-              justifyContent={'center'}
+              sx={{ justifyContent: 'center' }}
               mx={-4}
               data-cy="howtolist-flex-container"
             >
@@ -221,7 +230,7 @@ export class HowtoList extends React.Component<any, IState> {
               />
             </Flex>
           )}
-          <Flex justifyContent={'center'} mt={20}>
+          <Flex sx={{ justifyContent: 'center' }} mt={20}>
             <Link to={'#'} style={{ visibility: 'hidden' }}>
               <Button variant={'secondary'} data-cy="more-how-tos">
                 More how-tos
@@ -229,7 +238,7 @@ export class HowtoList extends React.Component<any, IState> {
             </Link>
           </Flex>
           <MoreContainer m={'0 auto'} pt={60} pb={90}>
-            <Flex alignItems={'center'} flexDirection={'column'} mt={5}>
+            <Flex sx={{ alignItems: 'center', flexDirection: 'column' }} mt={5}>
               <Heading medium sx={{ textAlign: 'center' }}>
                 Inspire the Precious Plastic world.
               </Heading>
@@ -244,7 +253,7 @@ export class HowtoList extends React.Component<any, IState> {
             </Flex>
           </MoreContainer>
         </React.Fragment>
-      </>
+      </Box>
     )
   }
 }

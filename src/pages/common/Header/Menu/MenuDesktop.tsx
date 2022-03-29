@@ -1,15 +1,13 @@
 import { Component } from 'react'
 import { NavLink } from 'react-router-dom'
 import { getAvailablePageList } from 'src/pages/PageList'
-import { Flex } from 'rebass/styled-components'
-import styled from 'styled-components'
+import { Flex } from 'theme-ui'
+import styled from '@emotion/styled'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { getSupportedModules } from 'src/modules'
 
-const MenuLink = styled(NavLink).attrs(() => ({
-  activeClassName: 'current',
-}))`
+const MenuLink = styled(NavLink)`
   padding: 0px ${props => props.theme.space[4]}px;
   color: ${'black'};
   position: relative;
@@ -40,11 +38,15 @@ const MenuLink = styled(NavLink).attrs(() => ({
   }
 `
 
+MenuLink.defaultProps = {
+  activeClassName: 'current',
+}
+
 export class MenuDesktop extends Component {
   render() {
     return (
       <>
-        <Flex alignItems={'center'}>
+        <Flex sx={{ alignItems: 'center', width: '100%' }}>
           {getAvailablePageList(getSupportedModules()).map(page => {
             const link = (
               <Flex key={page.path}>

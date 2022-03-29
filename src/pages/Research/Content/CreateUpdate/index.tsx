@@ -52,7 +52,7 @@ const CreateUpdate = observer((props: IProps) => {
     )
   } else {
     return (
-      <Text txtcenter mt="50px" width={1}>
+      <Text txtcenter mt="50px" sx={{width: '100%'}}>
         Research not found
       </Text>
     )

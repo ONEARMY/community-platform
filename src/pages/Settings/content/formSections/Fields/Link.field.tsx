@@ -73,7 +73,7 @@ export class ProfileLinkField extends Component<IProps, IState> {
     return (
       <Flex
         my={['10px', '10px', '5px']}
-        flexDirection={['column', 'column', 'row']}
+        sx={{flexDirection: ['column', 'column', 'row']}}
       >
         <Flex mb={[1, 1, 0]}>
           <Field
@@ -107,7 +107,7 @@ export class ProfileLinkField extends Component<IProps, IState> {
         {this.state.showDeleteModal && (
           <Modal onDidDismiss={() => this.toggleDeleteModal()}>
             <Text>Are you sure you want to delete this link?</Text>
-            <Flex p={0} mx={-1} justifyContent="flex-end">
+            <Flex p={0} mx={-1} sx={{justifyContent: "flex-end"}}>
               <Flex px={1}>
                 <Button
                   variant={'outline'}

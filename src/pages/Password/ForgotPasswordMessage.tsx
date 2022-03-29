@@ -11,15 +11,22 @@ class ForgotPasswordMessagePage extends React.Component {
       <Flex
         bg="inherit"
         px={2}
-        width={1}
+        sx={{ width: '100%' }}
         css={{ maxWidth: '620px' }}
         mx={'auto'}
         mt={20}
         mb={3}
       >
-        <Flex flexDirection={'column'} width={1}>
-          <Flex card mediumRadius bg={'softblue'} px={3} py={2} width={1}>
-            <Heading medium width={1}>
+        <Flex sx={{ flexDirection: 'column', width: '100%' }}>
+          <Flex
+            card
+            mediumRadius
+            bg={'softblue'}
+            px={3}
+            py={2}
+            sx={{ width: '100%' }}
+          >
+            <Heading medium sx={{ width: '100%' }}>
               Sent
             </Heading>
           </Flex>
@@ -27,19 +34,17 @@ class ForgotPasswordMessagePage extends React.Component {
             card
             mediumRadius
             bg={'white'}
-            width={1}
             mt={3}
             px={4}
             pt={0}
             pb={4}
-            flexWrap="wrap"
-            flexDirection="column"
+            sx={{ flexWrap: 'wrap', flexDirection: 'column', width: '100%' }}
           >
-            <Heading small py={4} width={1}>
+            <Heading small py={4} sx={{ width: '100%' }}>
               Check your email
             </Heading>
-            <Flex flexDirection={'column'} mb={3}>
-              <Flex flexDirection={'column'}>
+            <Flex sx={{ flexDirection: 'column' }} mb={3}>
+              <Flex sx={{ flexDirection: 'column' }}>
                 <Text>
                   We sent you an email with all the details to reset your
                   password. Psss.. Try a password manager tool :)
@@ -50,7 +55,7 @@ class ForgotPasswordMessagePage extends React.Component {
               </Flex>
             </Flex>
           </Flex>
-          <Flex mt={3} justifyContent={'flex-end'}>
+          <Flex mt={3} sx={{ justifyContent: 'flex-end' }}>
             <Button variant="tertiary">Close</Button>
           </Flex>
         </Flex>

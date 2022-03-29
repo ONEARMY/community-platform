@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import ReactGA from 'react-ga'
-import { Box } from 'rebass/styled-components'
+import { Box } from 'theme-ui'
 import { Button } from 'oa-components'
 import { Comment } from 'src/components/Comment/Comment'
 
@@ -24,9 +24,9 @@ export const CommentList: React.FC<{
   return (
     <Box
       mb={4}
-      display={'block'}
       sx={{
         width: '100%',
+        display: 'block',
       }}
     >
       {comments &&
@@ -43,7 +43,7 @@ export const CommentList: React.FC<{
           ))}
       {comments && comments.length > shownComments && (
         <Button
-          width="max-content"
+          sx={{ width: 'max-content', margin: '0 auto' }}
           variant="outline"
           onClick={() => {
             ReactGA.event({

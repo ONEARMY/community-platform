@@ -5,7 +5,7 @@ import { InputField } from 'src/components/Form/Fields'
 import { UserStore } from 'src/stores/User/user.store'
 import Text from 'src/components/Text'
 import theme from 'src/themes/styled.theme'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import Flex from 'src/components/Flex'
 
 interface IFormValues {
@@ -80,7 +80,7 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
                 oldPassword === newPassword
               return (
                 <form onSubmit={handleSubmit}>
-                  <Flex flexDirection={'column'} mb={3}>
+                  <Flex sx={{ flexDirection: 'column' }} mb={3}>
                     <Label htmlFor="oldPassword">Old password :</Label>
                     <Field
                       name="oldPassword"
@@ -91,7 +91,7 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
                       required
                     />
                   </Flex>
-                  <Flex flexDirection={'column'} mb={3}>
+                  <Flex sx={{ flexDirection: 'column' }} mb={3}>
                     <Label htmlFor="newPassword">New password :</Label>
                     <Field
                       name="newPassword"
@@ -102,7 +102,7 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
                       required
                     />
                   </Flex>
-                  <Flex flexDirection={'column'} mb={3}>
+                  <Flex sx={{ flexDirection: 'column' }} mb={3}>
                     <Label htmlFor="repeatPassword">
                       Repeat new password :
                     </Label>

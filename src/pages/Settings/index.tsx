@@ -32,7 +32,7 @@ class SettingsPage extends React.Component<IProps> {
         <Route exact path="/settings" render={() => <UserSettings />} />
       </Switch>
     ) : (
-      <Flex justifyContent="center" mt="40px">
+      <Flex sx={{justifyContent: "center"}} mt="40px">
         <Text regular>
           {' '}
           You can only access the settings page if you are logged in

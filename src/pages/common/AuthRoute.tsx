@@ -31,7 +31,7 @@ export class AuthRoute extends React.Component<IProps, IState> {
           this.props.redirect ? (
             <Redirect to={this.props.redirect} />
           ) : (
-            <Flex justifyContent="center" mt="40px" data-cy="auth-route-deny">
+            <Flex sx={{justifyContent: "center"}} mt="40px" data-cy="auth-route-deny">
               <Text regular>
                 {roleRequired
                   ? `${roleRequired} role required to access this page`

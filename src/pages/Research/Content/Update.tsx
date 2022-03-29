@@ -2,7 +2,7 @@ import { format } from 'date-fns'
 import * as React from 'react'
 import Linkify from 'react-linkify'
 import ReactPlayer from 'react-player'
-import { Box } from 'rebass/styled-components'
+import { Box } from 'theme-ui'
 import { Button } from 'oa-components'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
@@ -12,7 +12,7 @@ import Text from 'src/components/Text'
 import { IResearch } from 'src/models/research.models'
 import { IUploadedFileMeta } from 'src/stores/storage'
 import { ResearchComments } from './ResearchComments/ResearchComments'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
 interface IProps {
@@ -38,17 +38,16 @@ const Update: React.FC<IProps> = ({
         data-cy={`update_${updateIndex}`}
         mx={[0, 0, -2]}
         mt={9}
-        flexDirection={['column', 'column', 'row']}
+        sx={{ flexDirection: ['column', 'column', 'row'] }}
       >
-        <Flex flex={1} mx={[0, 0, 2]} width={1} mb={[3, 3, 0]}>
+        <Flex mx={[0, 0, 2]} sx={{ width: '100%', flex: 1 }} mb={[3, 3, 0]}>
           <FlexStepNumber
             card
             mediumRadius
-            justifyContent={'center'}
             py={3}
             px={4}
             bg={'white'}
-            width={1}
+            sx={{ width: '100%', justifyContent: 'center' }}
           >
             <Heading medium mb={0}>
               {updateIndex + 1}
@@ -60,28 +59,44 @@ const Update: React.FC<IProps> = ({
           mediumRadius
           mx={[0, 0, 2]}
           bg={'white'}
-          flex={9}
-          width={1}
-          flexDirection={'column'}
-          overflow={'hidden'}
+          sx={{
+            width: '100%',
+            flexDirection: 'column',
+            flex: 9,
+            overflow: 'hidden',
+          }}
         >
-          <Flex width={1} py={4} px={4} flexDirection={'column'}>
-            <Flex width={1} flexDirection={['column', 'row', 'row']}>
-              <Heading width={[1, 3 / 4, 3 / 4]} medium mb={[2, 0, 0]}>
+          <Flex sx={{ width: '100%', flexDirection: 'column' }} py={4} px={4}>
+            <Flex
+              sx={{ width: '100%', flexDirection: ['column', 'row', 'row'] }}
+            >
+              <Heading
+                sx={{ width: ['100%', '75%', '75%'] }}
+                medium
+                mb={[2, 0, 0]}
+              >
                 {update.title}
               </Heading>
               <Flex
-                flexDirection={['row', 'column', 'column']}
-                width={[1, 1 / 4, 1 / 4]}
-                justifyContent="space-between"
+                sx={{
+                  flexDirection: ['row', 'column', 'column'],
+                  width: ['100%', '25%', '25%'],
+                  justifyContent: 'space-between',
+                }}
               >
-                <Flex flexDirection={['column']}>
-                  <Text auxiliary textAlign={['left', 'right', 'right']}>
+                <Flex sx={{ flexDirection: ['column'] }}>
+                  <Text
+                    auxiliary
+                    sx={{ textAlign: ['left', 'right', 'right'] }}
+                  >
                     {'created ' +
                       format(new Date(update._created), 'DD-MM-YYYY')}
                   </Text>
                   {update._created !== update._modified && (
-                    <Text auxiliary textAlign={['left', 'right', 'right']}>
+                    <Text
+                      auxiliary
+                      sx={{ textAlign: ['left', 'right', 'right'] }}
+                    >
                       {'edited ' +
                         format(new Date(update._modified), 'DD-MM-YYYY')}
                     </Text>
@@ -94,11 +109,7 @@ const Update: React.FC<IProps> = ({
                     mt={[0, 2, 2]}
                     to={'/research/' + slug + '/edit-update/' + update._id}
                   >
-                    <Button
-                      size="sm"
-                      variant={'primary'}
-                      data-cy={'edit-update'}
-                    >
+                    <Button variant={'primary'} data-cy={'edit-update'}>
                       Edit
                     </Button>
                   </Link>
@@ -111,7 +122,7 @@ const Update: React.FC<IProps> = ({
               </Text>
             </Box>
           </Flex>
-          <Box width={1}>
+          <Box sx={{ width: '100%' }}>
             {update.videoUrl ? (
               <ReactPlayer
                 width="auto"

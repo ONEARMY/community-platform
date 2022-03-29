@@ -1,6 +1,6 @@
-import { Component } from 'react';
-import { Label, HiddenInput } from '../elements'
-import { Image, Flex, Box } from 'rebass/styled-components'
+import { Component } from 'react'
+import { HiddenInput } from '../elements'
+import { Label, Image, Flex, Box } from 'theme-ui'
 import Text from 'src/components/Text'
 import { HiddenInputField } from 'src/components/Form/Fields'
 
@@ -15,6 +15,7 @@ interface IProps {
   fullWidth?: boolean
   required?: boolean
   'data-cy'?: string
+  theme?: any
 }
 interface IState {
   showDeleteModal: boolean
@@ -54,11 +55,29 @@ class CustomRadioField extends Component<IProps, IState> {
 
     return (
       <Label
-        alignItems={'center'}
+        sx={{
+          //TODO: Remove hardcoded theme values
+          alignItems: 'center',
+          width: '100%',
+          display: 'flex',
+          padding: '10px',
+          flexDirection: ['row', 'row', 'column'],
+          m: '5px',
+          p: '10px 0',
+          borderRadius: '5px',
+          border: `#f4f6f7`, // theme.colors.background
+          ':hover': {
+            backgroundColor: `#f4f6f7`, // theme.colors.background
+            cursor: 'pointer',
+          },
+          '&.selected': {
+            backgroundColor: `#f4f6f7`, // theme.colors.background
+            border: '1px solid ' + `#00c3a9`, // theme.colors.green
+          },
+        }}
         htmlFor={value}
         className={classNames.join(' ')}
         data-cy={dataCy}
-        width={'100%'}
       >
         <HiddenInput
           id={value}
@@ -74,14 +93,19 @@ class CustomRadioField extends Component<IProps, IState> {
           }}
         />
         {imageSrc && (
-          <Image px={3} src={imageSrc} width={['100px', '100px', '100%']} />
+          <Image
+            px={3}
+            src={imageSrc}
+            sx={{ width: ['100px', '100px', '100%'] }}
+          />
         )}
         <Flex
-          alignItems="center"
-          flexWrap="nowrap"
-          flexDirection="column"
+          sx={{
+            alignItems: 'center',
+            flexWrap: 'nowrap',
+            flexDirection: 'column',
+          }}
           px={1}
-          height={['inherit', 'inherit', '100%']}
         >
           <Box mt="auto">
             {textLabel && (

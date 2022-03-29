@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 import { Form, Field } from 'react-final-form'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
 import createDecorator from 'final-form-calculate'
@@ -24,7 +24,7 @@ import { stripSpecialCharacters } from 'src/utils/helpers'
 import { PostingGuidelines } from './PostingGuidelines'
 import theme from 'src/themes/styled.theme'
 import { DIFFICULTY_OPTIONS, TIME_OPTIONS } from './FormSettings'
-import { Box } from 'rebass/styled-components'
+import { Box } from 'theme-ui'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import { HowToSubmitStatus } from './SubmitStatus'
 import { required } from 'src/utils/validators'
@@ -173,26 +173,26 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
           decorators={[this.calculatedFields]}
           render={({ submitting, handleSubmit }) => {
             return (
-              <Flex mx={-2} bg={'inherit'} flexWrap="wrap">
+              <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
                 <UnsavedChangesDialog
                   uploadComplete={this.store.uploadStatus.Complete}
                 />
 
-                <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} mt={4}>
+                <Flex bg="inherit" px={2} sx={{ width: ['100%', '100%', `${2 / 3 * 100}%`] }} mt={4}>
                   <FormContainer
                     ref={this.formContainerRef as any}
                     id="howtoForm"
                     onSubmit={handleSubmit}
                   >
                     {/* How To Info */}
-                    <Flex flexDirection={'column'}>
+                    <Flex sx={{ flexDirection: 'column' }}>
                       <Flex
                         card
                         mediumRadius
                         bg={theme.colors.softblue}
                         px={3}
                         py={2}
-                        alignItems="center"
+                        sx={{ alignItems: 'center' }}
                       >
                         <Heading medium>
                           {this.props.parentType === 'create' ? (
@@ -220,8 +220,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                         bg={'white'}
                         mt={3}
                         p={4}
-                        flexWrap="wrap"
-                        flexDirection="column"
+                        sx={{ flexWrap: 'wrap', flexDirection: 'column' }}
                       >
                         {/* Left Side */}
                         <Heading small mb={3}>
@@ -229,10 +228,13 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                         </Heading>
                         <Flex
                           mx={-2}
-                          flexDirection={['column', 'column', 'row']}
+                          sx={{ flexDirection: ['column', 'column', 'row'] }}
                         >
-                          <Flex flex={[1, 1, 4]} px={2} flexDirection="column">
-                            <Flex flexDirection={'column'} mb={3}>
+                          <Flex
+                            px={2}
+                            sx={{ flexDirection: 'column', flex: [1, 1, 4] }}
+                          >
+                            <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <Label htmlFor="title">
                                 Title of your How-to *
                               </Label>
@@ -249,7 +251,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 placeholder={`Make a chair from... (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
                               />
                             </Flex>
-                            <Flex flexDirection={'column'} mb={3}>
+                            <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <Label>Select tags for your How-to*</Label>
                               <Field
                                 name="tags"
@@ -258,7 +260,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 isEqual={COMPARISONS.tags}
                               />
                             </Flex>
-                            <Flex flexDirection={'column'} mb={3}>
+                            <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <Label htmlFor="time">
                                 How long does it take? *
                               </Label>
@@ -274,7 +276,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 placeholder="How much time?"
                               />
                             </Flex>
-                            <Flex flexDirection={'column'} mb={3}>
+                            <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <Label htmlFor="difficulty_level">
                                 Difficulty level? *
                               </Label>
@@ -291,7 +293,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 placeholder="How hard is it?"
                               />
                             </Flex>
-                            <Flex flexDirection={'column'} mb={3}>
+                            <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <Label htmlFor="description">
                                 Short description of your How-to *
                               </Label>
@@ -317,13 +319,18 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                               Do you have supporting file to help others
                               replicate your How-to?
                             </Label>
-                            <Flex flexDirection={'column'} mb={[4, 4, 0]}>
+                            <Flex
+                              sx={{ flexDirection: 'column' }}
+                              mb={[4, 4, 0]}
+                            >
                               {formValues.files.length !== 0 &&
                               parentType === 'edit' &&
                               !fileEditMode ? (
                                 <Flex
-                                  flexDirection={'column'}
-                                  alignItems={'center'}
+                                  sx={{
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                  }}
                                 >
                                   {formValues.files.map(file => (
                                     <FileInfo
@@ -358,12 +365,11 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                           {/* Right side */}
                           <Flex
                             px={2}
-                            flex={[1, 1, 3]}
-                            flexDirection={'column'}
+                            sx={{ flexDirection: 'column', flex: [1, 1, 3] }}
                             data-cy={'intro-cover'}
                           >
                             <Label htmlFor="cover_image">Cover image *</Label>
-                            <Box height="230px">
+                            <Box sx={{ height: '230px' }}>
                               <Field
                                 id="cover_image"
                                 name="cover_image"
@@ -439,9 +445,11 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                 </Flex>
                 {/* post guidelines container */}
                 <Flex
-                  flexDirection={'column'}
-                  width={[1, 1, 1 / 3]}
-                  height={'100%'}
+                  sx={{
+                    flexDirection: 'column',
+                    width: [1, 1, 1 / 3],
+                    height: '100%',
+                  }}
                   bg="inherit"
                   px={2}
                   mt={[0, 0, 4]}
@@ -458,12 +466,11 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                     <Button
                       data-cy={'draft'}
                       onClick={() => this.trySubmitForm(true)}
-                      width={1}
                       mt={[0, 0, 3]}
                       variant="secondary"
                       type="submit"
                       disabled={submitting}
-                      sx={{ display: 'block' }}
+                      sx={{ width: '100%', display: 'block' }}
                     >
                       {formValues.moderation !== 'draft' ? (
                         <span>Save to draft</span>
@@ -474,12 +481,11 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                     <Button
                       data-cy={'submit'}
                       onClick={() => this.trySubmitForm(false)}
-                      width={1}
                       mt={3}
                       variant="primary"
                       type="submit"
                       disabled={submitting}
-                      sx={{ mb: ['40px', '40px', 0] }}
+                      sx={{ width: '100%', mb: ['40px', '40px', 0] }}
                     >
                       <span>Publish</span>
                     </Button>

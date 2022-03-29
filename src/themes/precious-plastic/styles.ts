@@ -5,7 +5,7 @@ export const colors = {
   white: 'white',
   offwhite: '#ececec',
   black: '#1b1b1b',
-  primary: 'green',
+  primary: 'red',
   softyellow: '#f5ede2',
   yellow: { base: '#fee77b', hover: '#ffde45' },
   blue: '#83ceeb',

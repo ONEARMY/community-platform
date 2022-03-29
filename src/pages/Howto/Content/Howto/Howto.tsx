@@ -6,9 +6,9 @@ import HowtoDescription from './HowtoDescription/HowtoDescription'
 import Step from './Step/Step'
 import { IHowtoDB } from 'src/models/howto.models'
 import Text from 'src/components/Text'
-import { Box, Flex } from 'rebass/styled-components'
+import { Box, Flex } from 'theme-ui'
 import { Button } from 'oa-components'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import WhiteBubble0 from 'src/assets/images/white-bubble_0.svg'
 import WhiteBubble1 from 'src/assets/images/white-bubble_1.svg'
@@ -155,12 +155,12 @@ export class Howto extends React.Component<
           </Box>
           <HowToComments comments={activeHowto.comments} />
           <MoreBox py={20} mt={20}>
-            <Text bold txtcenter fontSize={[4, 4, 5]}>
+            <Text bold txtcenter sx={{fontSize: [4, 4, 5], display: 'block'}}>
               You're done.
               <br />
               Nice one!
             </Text>
-            <Flex justifyContent={'center'} mt={2}>
+            <Flex sx={{justifyContent:'center'}} mt={2}>
               <Link to={'/how-to/'}>
                 <Button variant={'secondary'} data-cy="go-back">
                   Back

@@ -19,24 +19,28 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => (
     mediumRadius
     mediumScale
     bg={'white'}
-    width={1}
     data-cy="research=list-item"
     data-id={item._id}
-    sx={{ position: 'relative' }}
+    sx={{ width: '100%', position: 'relative' }}
     mb={3}
   >
     <Link
       to={`/research/${encodeURIComponent(item.slug)}`}
       key={item._id}
-      width={1}
+      sx={{ width: '100%' }}
     >
-      <Flex px={3} py={3} flexDirection={['column', 'column', 'row']}>
-        <Flex alignItems="center" width={[1, 1, 1 / 2]}>
+      <Flex px={3} py={3} sx={{ flexDirection: ['column', 'column', 'row'] }}>
+        <Flex
+          sx={{
+            alignItems: 'center',
+            width: ['100%', '100%', `${(1 / 2) * 100}%`],
+          }}
+        >
           <Heading small color={'black'}>
             {item.title}
           </Heading>
         </Flex>
-        <Flex alignItems="center" width={[1, 1, 1 / 4]}>
+        <Flex sx={{ alignItems: 'center', width: ['100%', '100%', '25%'] }}>
           <Text
             auxiliary
             my={2}
@@ -53,14 +57,19 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => (
           />
         </Flex>
         <Flex
-          alignItems="center"
-          justifyContent="space-between"
-          width={[1, 1, 1 / 4]}
+          sx={{
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: ['100%', '100%', '25%'],
+          }}
         >
           <Text color="black">{getUpdateText(item)}</Text>
           <Text
             auxiliary
-            alignSelf={item.moderation !== 'accepted' ? 'flex-start' : 'center'}
+            sx={{
+              alignSelf:
+                item.moderation !== 'accepted' ? 'flex-start' : 'center',
+            }}
           >
             {format(new Date(item._modified), 'DD-MM-YYYY')}
           </Text>

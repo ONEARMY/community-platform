@@ -39,7 +39,6 @@ else {
   admin.initializeApp()
 }
 
-
 export const firebaseAdmin = admin
 
 // this is automatically populated by firebase

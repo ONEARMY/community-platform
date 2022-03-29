@@ -3,9 +3,7 @@ import { UserMenuItem } from '../support/commands'
 describe('[Common]', () => {
   it('[Default Page]', () => {
     cy.step('The home page is /academy')
-    cy.visit('/')
-      .url()
-      .should('include', '/academy')
+    cy.visit('/').url().should('include', '/academy')
   })
 
   it('[Not-Found Page]', () => {
@@ -15,10 +13,7 @@ describe('[Common]', () => {
     cy.contains(
       `The page you were looking for was moved or doesn't exist`,
     ).should('be.exist')
-    cy.get('a')
-      .contains('Home')
-      .should('have.attr', 'href')
-      .and('eq', '/')
+    cy.get('a').contains('Home').should('have.attr', 'href').and('eq', '/')
   })
 
   it('[Page Navigation]', () => {
@@ -32,30 +27,22 @@ describe('[Common]', () => {
     //   )
 
     cy.step('Go to Events page')
-    cy.get('[data-cy=page-link]')
-      .contains('Events')
-      .click()
+    cy.get('[data-cy=page-link]').contains('Events').click()
     cy.url().should('include', '/events')
     // cy.get('[data-cy=feedback] > button').should('be.visible')
 
     cy.step('Go to Map page')
-    cy.get('[data-cy=page-link]')
-      .contains('Map')
-      .click()
+    cy.get('[data-cy=page-link]').contains('Map').click()
     cy.url().should('include', '/map')
     // cy.get('[data-cy=feedback] > button').should('be.visible')
 
     cy.step('Go to Academy page')
-    cy.get('[data-cy=page-link]')
-      .contains('Academy')
-      .click()
+    cy.get('[data-cy=page-link]').contains('Academy').click()
     cy.url().should('include', '/academy')
     // cy.get('[data-cy=feedback] > button').should('be.visible')
 
     cy.step('Go to How-to page')
-    cy.get('[data-cy=page-link]')
-      .contains('How-to')
-      .click()
+    cy.get('[data-cy=page-link]').contains('How-to').click()
     cy.url().should('include', '/how-to')
     // cy.get('[data-cy=feedback] > button').should('be.visible')
   })

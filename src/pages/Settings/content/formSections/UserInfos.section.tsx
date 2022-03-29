@@ -61,7 +61,7 @@ const CoverImages = ({
     </>
   ) : (
     <>
-      <Text mb={2} mt={7} sx={{width: '100%'}} medium>
+      <Text mb={2} mt={7} sx={{ width: '100%' }} medium>
         Cover Image *
       </Text>
       <FieldArray

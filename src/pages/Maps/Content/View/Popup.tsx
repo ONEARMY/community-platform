@@ -85,7 +85,7 @@ export class Popup extends React.Component<IProps> {
   }
 
   private renderContent(pin: IMapPinWithDetail) {
-    const group = MAP_GROUPINGS.find(g => {
+    const group = MAP_GROUPINGS.find((g) => {
       return pin.subType
         ? g.subType === pin.subType && g.type === pin.type
         : g.type === pin.type

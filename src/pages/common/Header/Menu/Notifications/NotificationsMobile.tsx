@@ -75,7 +75,7 @@ export class NotificationsMobile extends Component {
   render() {
     const user = this.injected.userStore.user
     const notifications = user?.notifications
-      ?.filter(notification => !notification.read)
+      ?.filter((notification) => !notification.read)
       .sort(
         (a, b) =>
           new Date(b._created).getTime() - new Date(a._created).getTime(),

@@ -1,8 +1,5 @@
 import styled from '@emotion/styled'
-import {
-  Flex as ThemeUiFlex,
-  FlexProps as ThemeUiFlexProps,
-} from 'theme-ui'
+import { Flex as ThemeUiFlex, FlexProps as ThemeUiFlexProps } from 'theme-ui'
 
 export interface IFlexProps extends ThemeUiFlexProps {
   border?: boolean

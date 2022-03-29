@@ -10,9 +10,10 @@ export const small = (props: ITextProps) =>
   props.small ? { fontSize: props.theme?.fontSizes[4] } : null
 
 export const BaseHeading = styled(Text)`
-    ${large}
-    ${medium}
-    ${small}`
+  ${large}
+  ${medium}
+    ${small}
+`
 
 type IHeadingProps = ITextProps & ThemeUiHeadingProps
 

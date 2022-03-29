@@ -51,7 +51,7 @@ export async function handleDBAggregations(
   const changedFieldnames = Object.keys(changedFields)
   for (const aggregation of aggregations) {
     // run aggregation if any specified aggregation field matches any changed field
-    const shouldRunAggregation = aggregation.sourceFields.some(fieldname =>
+    const shouldRunAggregation = aggregation.sourceFields.some((fieldname) =>
       changedFieldnames.includes(fieldname),
     )
     if (shouldRunAggregation) {

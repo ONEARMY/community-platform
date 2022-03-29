@@ -37,7 +37,7 @@ class GroupingFilterMobile extends Component<IProps, IState> {
     // from https://stackoverflow.com/a/52531625
     const exists = array.includes(item)
     if (exists) {
-      return array.filter(c => {
+      return array.filter((c) => {
         return c !== item
       })
     } else {
@@ -55,10 +55,10 @@ class GroupingFilterMobile extends Component<IProps, IState> {
 
   asOptions(items: Array<IMapGrouping>) {
     return items
-      .filter(item => {
+      .filter((item) => {
         return !item.hidden
       })
-      .map(item => ({
+      .map((item) => ({
         label: item.displayName,
         value: item.subType ? item.subType : item.type,
         icon: item.icon,
@@ -78,11 +78,11 @@ class GroupingFilterMobile extends Component<IProps, IState> {
         <Text medium py="10px">
           {entityType === 'place' ? 'All Workspaces' : 'Others'}
         </Text>
-        {options.map(filter => (
+        {options.map((filter) => (
           <Flex
             sx={{ alignItems: 'center', justifyContent: 'space-between' }}
             mt="5px"
-            onClick={evt => {
+            onClick={(evt) => {
               evt.preventDefault()
               evt.stopPropagation()
               this.handleChange(filter.value)

@@ -33,9 +33,7 @@ export const resizeLocalImage = async (
   const resizedFilePath = join(tmpdir(), 'resized', resizedFileName)
   console.log(`resizing [${filePath}]`)
   // Resize source image
-  await sharp(filePath)
-    .resize(width)
-    .toFile(resizedFilePath)
+  await sharp(filePath).resize(width).toFile(resizedFilePath)
   return resizedFilePath
 }
 

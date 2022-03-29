@@ -9,8 +9,8 @@ export default class ErrorBoundary extends Component<any, any> {
 
   componentDidCatch(error, errorInfo) {
     this.setState({ error })
-    Sentry.withScope(scope => {
-      Object.keys(errorInfo).forEach(key => {
+    Sentry.withScope((scope) => {
+      Object.keys(errorInfo).forEach((key) => {
         scope.setExtra(key, errorInfo[key])
       })
       Sentry.captureException(error)

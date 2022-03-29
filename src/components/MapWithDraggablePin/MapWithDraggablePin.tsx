@@ -49,7 +49,7 @@ const MapControls = styled('div')`
   position: absolute;
   top: 0;
   left: 0;
-  padding: ${props => props.theme.space[2]}px;
+  padding: ${(props) => props.theme.space[2]}px;
   z-index: 2;
 `
 
@@ -69,7 +69,7 @@ function MapWithDraggablePin(props: Props) {
   const hasUserLocation = props.hasUserLocation || false
   const onPositionChanged =
     props.updatePosition ||
-    function(evt) {
+    function (evt) {
       logger.debug({ evt }, 'MapWithDraggablePin.clickHandler.fallback')
     }
 
@@ -82,7 +82,7 @@ function MapWithDraggablePin(props: Props) {
       <MapControls>
         <Flex style={{ width: '280px' }}>
           <OsmGeocoding
-            callback={data => {
+            callback={(data) => {
               logger.debug(data, 'MapWithDraggablePin.ReactOsmGeocoding')
               if (data.lat && data.lon) {
                 onPositionChanged({
@@ -99,10 +99,10 @@ function MapWithDraggablePin(props: Props) {
           {hasUserLocation && (
             <Button
               mx={2}
-              onClick={evt => {
+              onClick={(evt) => {
                 evt.preventDefault()
                 navigator.geolocation.getCurrentPosition(
-                  position => {
+                  (position) => {
                     logger.debug(`MapWithDraggablePin.geolocation.success`, {
                       position,
                     })
@@ -116,7 +116,7 @@ function MapWithDraggablePin(props: Props) {
                     ])
                     setZoom(15)
                   },
-                  err => {
+                  (err) => {
                     logger.error(err, 'MapWithDraggablePin.geolocation.error')
                   },
                 )
@@ -132,13 +132,13 @@ function MapWithDraggablePin(props: Props) {
           center={center}
           zoom={zoom}
           zoomControl={false}
-          onViewportChanged={evt => {
+          onViewportChanged={(evt) => {
             logger.debug(evt, `MapWithDraggablePin.onViewportChanged`)
             if (evt.zoom) {
               setZoom(evt.zoom)
             }
           }}
-          onclick={evt => {
+          onclick={(evt) => {
             logger.debug(evt, 'MapWithDraggablePin.onclick')
             onPositionChanged({
               lat: evt.latlng.lat,
@@ -157,7 +157,7 @@ function MapWithDraggablePin(props: Props) {
           />
           <DraggableMarker
             position={props.position}
-            ondragend={evt => {
+            ondragend={(evt) => {
               logger.debug(evt, `MapWithDraggablePin.DraggableMarker.onDragEnd`)
 
               if (evt.lat && evt.lng)

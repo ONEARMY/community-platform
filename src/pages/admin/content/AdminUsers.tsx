@@ -61,17 +61,17 @@ export class AdminUsers extends React.Component<IProps, IState> {
       <Box mt={4}>
         <Heading>List of Super Admins</Heading>
         <Box mb={3} bg={'white'} p={2}>
-          {superAdmins.map(u => (
+          {superAdmins.map((u) => (
             <Flex key={u.userName}>
-              <Text sx={{flex:1}}>{u.userName}</Text>
+              <Text sx={{ flex: 1 }}>{u.userName}</Text>
             </Flex>
           ))}
         </Box>
         <Heading>List of Admins</Heading>
         <Box mb={3} bg={'white'} p={2}>
-          {admins.map(u => (
+          {admins.map((u) => (
             <Flex key={u.userName}>
-              <Text sx={{flex:1}}>{u.userName}</Text>
+              <Text sx={{ flex: 1 }}>{u.userName}</Text>
               <AuthWrapper roleRequired="super-admin">
                 <Button
                   icon="delete"

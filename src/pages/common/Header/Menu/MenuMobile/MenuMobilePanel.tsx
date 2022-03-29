@@ -57,7 +57,7 @@ export class MenuMobilePanel extends Component {
       <>
         <PanelContainer>
           <PanelMenu>
-            {getAvailablePageList(getSupportedModules()).map(page => {
+            {getAvailablePageList(getSupportedModules()).map((page) => {
               const link = (
                 <MenuMobileLink
                   path={page.path}

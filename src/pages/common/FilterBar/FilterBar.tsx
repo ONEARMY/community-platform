@@ -37,7 +37,7 @@ export default class FilterBar extends React.Component<IProps> {
   render() {
     const { section } = this.props
     return (
-      <Flex sx={{justifyContent:'space-between'}} mb={4}>
+      <Flex sx={{ justifyContent: 'space-between' }} mb={4}>
         <Box>
           <Selector
             onChange={() => this.onProjectChange()}

@@ -9,7 +9,7 @@ interface IProps {
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'
 
-const beforeUnload = function(e) {
+const beforeUnload = function (e) {
   e.preventDefault()
   e.returnValue = CONFIRM_DIALOG_MSG
 }
@@ -33,7 +33,7 @@ export const UnsavedChangesDialog = memo((props: IProps) => {
     <>
       <FormSpy
         subscription={{ dirty: true }}
-        onChange={form => {
+        onChange={(form) => {
           setFormIsDirty(form.dirty)
         }}
         render={() => null}

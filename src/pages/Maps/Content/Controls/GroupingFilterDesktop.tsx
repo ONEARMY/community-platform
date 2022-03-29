@@ -46,7 +46,7 @@ class GroupingFilterDesktop extends Component<IProps, IState> {
   }
 
   transform = (items: Record<IPinGrouping, Array<IMapGrouping>>) => {
-    return Object.keys(items).map(item => {
+    return Object.keys(items).map((item) => {
       return {
         label: item === 'place' ? 'All Workspaces' : 'Others',
         options: this.asOptions(items[item]),
@@ -56,10 +56,10 @@ class GroupingFilterDesktop extends Component<IProps, IState> {
 
   asOptions(items: Array<IMapGrouping>) {
     return items
-      .filter(item => {
+      .filter((item) => {
         return !item.hidden
       })
-      .map(item => ({
+      .map((item) => ({
         label: item.displayName,
         value: item.subType ? item.subType : item.type,
         icon: item.icon,
@@ -95,8 +95,8 @@ class GroupingFilterDesktop extends Component<IProps, IState> {
       )
     }
 
-    const onSelectChange = selectedOptions => {
-      const arr = selectedOptions.map(option => option.value)
+    const onSelectChange = (selectedOptions) => {
+      const arr = selectedOptions.map((option) => option.value)
       this.props.onChange(arr)
     }
 
@@ -114,12 +114,12 @@ class GroupingFilterDesktop extends Component<IProps, IState> {
           isMulti
           styles={{
             ...SelectStyles,
-            multiValue: base => ({
+            multiValue: (base) => ({
               ...base,
               minWidth: 'auto',
             }),
             multiValueRemove: () => ({}),
-            valueContainer: base => ({
+            valueContainer: (base) => ({
               ...base,
               flexWrap: 'nowrap',
               overflow: 'auto',

@@ -21,18 +21,10 @@ beforeEach(() => {
 
 const fillSignupForm = (form: typeof authUser) => {
   const { username, email, password, confirmPassword } = form
-  cy.get('[data-cy=username]')
-    .clear()
-    .type(username)
-  cy.get('[data-cy=email]')
-    .clear()
-    .type(email)
-  cy.get('[data-cy=password]')
-    .clear()
-    .type(password)
-  cy.get('[data-cy=confirm-password]')
-    .clear()
-    .type(confirmPassword)
+  cy.get('[data-cy=username]').clear().type(username)
+  cy.get('[data-cy=email]').clear().type(email)
+  cy.get('[data-cy=password]').clear().type(password)
+  cy.get('[data-cy=confirm-password]').clear().type(confirmPassword)
   cy.get('[data-cy=consent]').check()
 }
 
@@ -58,9 +50,7 @@ describe('[Sign-up - new user]', () => {
     fillSignupForm(newUser)
     cy.get('[data-cy=submit]').click()
     cy.url().should('include', 'sign-up-message')
-    cy.get('div')
-      .contains('Sign up successful')
-      .should('be.visible')
+    cy.get('div').contains('Sign up successful').should('be.visible')
     cy.get('[data-cy=user-menu]')
   })
   it('sign in as new user', () => {

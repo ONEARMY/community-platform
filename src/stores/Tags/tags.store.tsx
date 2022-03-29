@@ -35,16 +35,13 @@ export class TagsStore extends ModuleStore {
   }
 
   public saveTag(tag: Partial<ITag>) {
-    return this.db
-      .collection('tags')
-      .doc(tag._id)
-      .set(tag)
+    return this.db.collection('tags').doc(tag._id).set(tag)
   }
 
   private _filterTags() {
     let tags = [...this.allTags]
     if (this.activeCategory) {
-      tags = tags.filter(tag =>
+      tags = tags.filter((tag) =>
         tag.categories.includes(this.activeCategory as TagCategory),
       )
     }

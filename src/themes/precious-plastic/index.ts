@@ -7,7 +7,8 @@ import styles from './styles'
 const Theme: PlatformTheme = {
   id: THEME_LIST.PRECIOUS_PLASTIC,
   siteName: 'Precious Plastic',
-  logo, badge,
+  logo,
+  badge,
   avatar: '',
   howtoHeading: `Learn & share how to recycle, build and work with plastic`,
   styles,
@@ -15,13 +16,13 @@ const Theme: PlatformTheme = {
   externalLinks: [
     {
       url: 'https://bazar.preciousplastic.com/',
-      label: 'Bazar'
+      label: 'Bazar',
     },
     {
       url: 'https://preciousplastic.com/',
-      label: 'Global Site'
+      label: 'Global Site',
     },
-  ]
+  ],
 }
 
 export default Theme

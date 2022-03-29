@@ -128,7 +128,7 @@ export const EventCard = (props: IProps) => (
       mb={[2, 2, 0]}
     >
       {props.event.tags &&
-        Object.keys(props.event.tags).map(tag => {
+        Object.keys(props.event.tags).map((tag) => {
           return <TagDisplay key={tag} tagKey={tag} />
         })}
     </Flex>

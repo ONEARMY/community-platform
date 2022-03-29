@@ -104,22 +104,22 @@ class MapsPage extends React.Component<IProps, IState> {
           <Route
             exact
             path="/map"
-            render={props => (
+            render={(props) => (
               <>
                 <Controls
                   mapRef={this.mapRef}
                   availableFilters={MAP_GROUPINGS}
-                  onFilterChange={selected => {
+                  onFilterChange={(selected) => {
                     this.props.mapsStore.setActivePinFilters(selected)
                   }}
-                  onLocationChange={latlng => this.setCenter(latlng)}
+                  onLocationChange={(latlng) => this.setCenter(latlng)}
                   {...props}
                 />
                 <MapView
                   mapRef={this.mapRef}
                   pins={filteredPins}
                   filters={activePinFilters}
-                  onBoundingBoxChange={boundingBox =>
+                  onBoundingBoxChange={(boundingBox) =>
                     this.props.mapsStore.setMapBoundingBox(boundingBox)
                   }
                   center={center}

@@ -64,7 +64,7 @@ export class EventsList extends React.Component<any> {
                 mb={['10px', '10px', 0]}
               >
                 <TagsSelect
-                  onChange={tags =>
+                  onChange={(tags) =>
                     this.props.eventStore.updateSelectedTags(tags)
                   }
                   category="event"

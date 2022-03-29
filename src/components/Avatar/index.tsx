@@ -34,43 +34,48 @@ export class Avatar extends Component<IProps, IState> {
   }
 
   public getProfileTypeBadge(type?: ProfileTypeLabel) {
-    const {width} = this.props;
-    const img = Workspace.findWorkspaceBadgeNullable(type, Number(width || 0) < 50)
+    const { width } = this.props
+    const img = Workspace.findWorkspaceBadgeNullable(
+      type,
+      Number(width || 0) < 50,
+    )
     this.setState({ badgeProfileSrc: img })
   }
   render() {
     const { width } = this.props
     const { badgeProfileSrc } = this.state
 
-    let avatarUrl = badgeProfileSrc || MemberBadge;
+    let avatarUrl = badgeProfileSrc || MemberBadge
 
     const th = this.props?.themeStore?.currentTheme
 
     /**
      * 🚨🚨🚨🚨🚨🚨
-     * 
+     *
      *  HACKY WORKAROUND
-     * 
+     *
      *  For the second instance (Project Kamp)
      *  there are no membership levels or variations
      *  to the membership type.
-     * 
+     *
      *  So that means we _always_ want the default badge
      *  bundled with the PlatformTheme.
-     * 
+     *
      * 🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
      */
 
-    if ( this.props.themeStore && th?.id === THEME_LIST.PROJECT_KAMP) {
-      avatarUrl = width && parseInt(width, 10) >= 100 ? this.props.themeStore?.currentTheme.badge : this.props.themeStore.currentTheme.avatar;
+    if (this.props.themeStore && th?.id === THEME_LIST.PROJECT_KAMP) {
+      avatarUrl =
+        width && parseInt(width, 10) >= 100
+          ? this.props.themeStore?.currentTheme.badge
+          : this.props.themeStore.currentTheme.avatar
     }
-
 
     return (
       <>
         <Image
           className="avatar"
-          sx={{width: width ? width : 40, borderRadius: '25px'}}
+          sx={{ width: width ? width : 40, borderRadius: '25px' }}
           height={width ? width : 40}
           src={avatarUrl}
         />

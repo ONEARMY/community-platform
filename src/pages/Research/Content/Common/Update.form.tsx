@@ -44,7 +44,7 @@ const Label = styled.label`
   display: block;
 `
 
-const beforeUnload = function(e) {
+const beforeUnload = function (e) {
   e.preventDefault()
   e.returnValue = CONFIRM_DIALOG_MSG
 }
@@ -74,7 +74,7 @@ const UpdateForm = observer((props: IProps) => {
   }
 
   // Display a confirmation dialog when leaving the page outside the React Router
-  const unloadDecorator = form => {
+  const unloadDecorator = (form) => {
     return form.subscribe(
       ({ dirty }) => {
         if (dirty && !store.updateUploadStatus.Complete) {
@@ -115,7 +115,7 @@ const UpdateForm = observer((props: IProps) => {
         />
       )}
       <Form
-        onSubmit={v => {
+        onSubmit={(v) => {
           onSubmit(v as IResearch.Update)
         }}
         initialValues={props.formValues}
@@ -127,7 +127,12 @@ const UpdateForm = observer((props: IProps) => {
         render={({ submitting, dirty, handleSubmit }) => {
           return (
             <Flex mx={-2} mb={4} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
-              <Flex bg="inherit" px={2} sx={{ width: ['100%', '100%', `${2 / 3 * 100}%`] }} mt={4}>
+              <Flex
+                bg="inherit"
+                px={2}
+                sx={{ width: ['100%', '100%', `${(2 / 3) * 100}%`] }}
+                mt={4}
+              >
                 <Prompt
                   when={!store.updateUploadStatus.Complete && dirty}
                   message={CONFIRM_DIALOG_MSG}

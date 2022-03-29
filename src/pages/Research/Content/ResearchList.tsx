@@ -14,11 +14,11 @@ const ResearchList = observer(() => {
   return (
     <>
       <Flex py={26}>
-        <Heading medium bold txtcenter sx={{width: '100%'}}>
+        <Heading medium bold txtcenter sx={{ width: '100%' }}>
           Research topics. Can we...
         </Heading>
       </Flex>
-      {filteredResearches.map(item => (
+      {filteredResearches.map((item) => (
         <ResearchListItem key={item._id} item={item} />
       ))}
       <Box mb={4}>

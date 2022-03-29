@@ -33,7 +33,7 @@ export class WorkspaceMapPinSection extends React.Component<any, IState> {
 
     return (
       <FlexSectionContainer>
-        <Flex sx={{justifyContent: "space-between"}}>
+        <Flex sx={{ justifyContent: 'space-between' }}>
           <Heading small id="your-map-pin">
             Your map pin
           </Heading>
@@ -75,7 +75,7 @@ export class WorkspaceMapPinSection extends React.Component<any, IState> {
           />
           <Field
             name={'location'}
-            render={props => {
+            render={(props) => {
               const { value } = props.input
               const defaultLocation = {
                 latlng: {
@@ -100,7 +100,7 @@ export class WorkspaceMapPinSection extends React.Component<any, IState> {
 
                     <MapWithDraggablePin
                       position={location.latlng}
-                      updatePosition={newPosition => {
+                      updatePosition={(newPosition) => {
                         props.input.onChange({
                           latlng: newPosition,
                         })

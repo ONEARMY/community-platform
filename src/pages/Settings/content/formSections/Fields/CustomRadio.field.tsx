@@ -88,7 +88,7 @@ class CustomRadioField extends Component<IProps, IState> {
           checked={isSelected}
           validate={required ? isRequired : undefined}
           validateFields={[]}
-          onChange={v => {
+          onChange={(v) => {
             this.props.onChange(v.target.value)
           }}
         />

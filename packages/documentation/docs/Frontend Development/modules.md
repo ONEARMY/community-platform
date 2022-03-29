@@ -53,7 +53,7 @@ const pages: IPageMeta[] = [
 const routes = () => (
   <Suspense fallback={<div></div>}>
     <Switch>
-      {pages.map(page => (
+      {pages.map((page) => (
         <Route
           key={page.path}
           path={`/${moduleName}/${page.path}`}

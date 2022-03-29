@@ -36,7 +36,7 @@ export class Loader extends Component<IProps> {
 
   get injected() {
     return this.props as {
-      themeStore: ThemeStore,
+      themeStore: ThemeStore
     }
   }
 
@@ -44,9 +44,9 @@ export class Loader extends Component<IProps> {
     const logo = this.injected.themeStore?.currentTheme?.logo || null
     return (
       <>
-        <Flex sx={{flexWrap: 'wrap',justifyContent: 'center'}}>
-          {logo && <RotatingLogo src={logo} sx={{width: [75, 75, 100]}} />}
-          <Text txtcenter sx={{width: '100%'}}>
+        <Flex sx={{ flexWrap: 'wrap', justifyContent: 'center' }}>
+          {logo && <RotatingLogo src={logo} sx={{ width: [75, 75, 100] }} />}
+          <Text txtcenter sx={{ width: '100%' }}>
             loading...
           </Text>
         </Flex>

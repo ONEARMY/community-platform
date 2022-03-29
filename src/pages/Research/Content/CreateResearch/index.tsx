@@ -50,7 +50,7 @@ class CreateResearch extends React.Component<RouteComponentProps, IState> {
         />
       </Switch>
     ) : (
-      <Flex sx={{justifyContent: "center"}} mt="40px">
+      <Flex sx={{ justifyContent: 'center' }} mt="40px">
         <Text regular>Please login to access this page</Text>
       </Flex>
     )

@@ -23,7 +23,7 @@ export const SWUpdateNotification = memo(() => {
           logger.debug('new sw controlling')
           setReloadRequired(true)
         },
-        handleSWWaiting: wb => wb.messageSkipWaiting(),
+        handleSWWaiting: (wb) => wb.messageSkipWaiting(),
       })
       setSWLoaded(true)
     }
@@ -35,7 +35,7 @@ export const SWUpdateNotification = memo(() => {
     <>
       <Prompt
         when={reloadRequired}
-        message={location => {
+        message={(location) => {
           // navigate to the target page, but via window navigation to reload the service worker
           window.location.assign(location.pathname)
           // allow the transition to proceed as normal (don't block the location assign)

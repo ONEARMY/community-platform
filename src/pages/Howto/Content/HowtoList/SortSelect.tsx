@@ -25,7 +25,7 @@ interface IState {
 }
 
 const sortingOptions: OptionsType<ISortOption> = ['Latest', 'Most useful'].map(
-  label => ({
+  (label) => ({
     label,
     value: label.toLowerCase(),
   }),
@@ -65,7 +65,7 @@ class SortSelect extends Component<IProps, IState> {
           options={sortingOptions}
           placeholder="Sort by"
           value={this.state.value}
-          onChange={value => this.onSortValueChange(value as ISortOption)}
+          onChange={(value) => this.onSortValueChange(value as ISortOption)}
         />
       </FieldContainer>
     )

@@ -36,13 +36,13 @@ function findWorkspaceBadgeNullable(
   }
 
   const foundProfileTypeObj = PROFILE_TYPES.find(
-    type => type.label === workspaceType,
+    (type) => type.label === workspaceType,
   )
 
   if (!foundProfileTypeObj) {
     return null
   }
-  
+
   if (useCleanImage && foundProfileTypeObj.cleanImageSrc) {
     return foundProfileTypeObj.cleanImageSrc
   }
@@ -53,20 +53,20 @@ function findWorkspaceBadgeNullable(
 function findWorkspaceBadge(
   workspaceType?: string,
   ifCleanImage?: boolean,
-  verifiedUser?: boolean
+  verifiedUser?: boolean,
 ): string {
   if (!workspaceType) {
     return MemberBadge
   }
 
   const foundProfileTypeObj = PROFILE_TYPES.find(
-    type => type.label === workspaceType,
+    (type) => type.label === workspaceType,
   )
   if (foundProfileTypeObj) {
-    if (ifCleanImage){
-      if (verifiedUser && foundProfileTypeObj.cleanImageVerifiedSrc){
+    if (ifCleanImage) {
+      if (verifiedUser && foundProfileTypeObj.cleanImageVerifiedSrc) {
         return foundProfileTypeObj.cleanImageVerifiedSrc
-      } else if(foundProfileTypeObj.cleanImageSrc) {
+      } else if (foundProfileTypeObj.cleanImageSrc) {
         return foundProfileTypeObj.cleanImageSrc
       }
     }

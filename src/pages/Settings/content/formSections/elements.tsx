@@ -5,7 +5,7 @@ import { Box } from 'theme-ui'
 import { Icon } from 'oa-components'
 import { Field } from 'react-final-form'
 
-export const Label = props => (
+export const Label = (props) => (
   <Flex
     as="label"
     sx={{
@@ -37,7 +37,7 @@ export const HiddenInput = styled(Field)`
   height: 0;
 `
 
-export const FlexSectionContainer = props => (
+export const FlexSectionContainer = (props) => (
   <Flex
     card
     mediumRadius
@@ -50,7 +50,7 @@ export const FlexSectionContainer = props => (
   </Flex>
 )
 
-export const ArrowIsSectionOpen = props => (
+export const ArrowIsSectionOpen = (props) => (
   <Box
     height="20px"
     sx={{

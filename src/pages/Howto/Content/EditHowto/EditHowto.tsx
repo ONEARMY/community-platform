@@ -83,7 +83,7 @@ class EditHowto extends React.Component<IProps, IState> {
       return isLoading ? (
         <Loader />
       ) : (
-        <Text txtcenter mt="50px" sx={{width: '100%'}}>
+        <Text txtcenter mt="50px" sx={{ width: '100%' }}>
           How-to not found
         </Text>
       )

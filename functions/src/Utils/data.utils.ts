@@ -26,9 +26,9 @@ export function compareObjectDiffs(beforeObj: any = {}, afterObj: any = {}) {
   const diffs: { [key: string]: { before: any; after: any } } = {}
   //   extract a list of all keys within either before or after object
   const uniqueKeys = Object.keys(beforeObj).concat(
-    Object.keys(afterObj).filter(k => !beforeObj.hasOwnProperty(k)),
+    Object.keys(afterObj).filter((k) => !beforeObj.hasOwnProperty(k)),
   )
-  uniqueKeys.forEach(key => {
+  uniqueKeys.forEach((key) => {
     const beforeVal = beforeObj[key]
     const afterVal = afterObj[key]
     if (!valuesAreDeepEqual(beforeVal, afterVal)) {
@@ -68,7 +68,7 @@ export function valuesAreDeepEqual(a: any, b: any) {
   ) {
     return (
       Object.keys(a).length === Object.keys(b).length &&
-      Object.keys(a).every(key => valuesAreDeepEqual(a[key], b[key]))
+      Object.keys(a).every((key) => valuesAreDeepEqual(a[key], b[key]))
     )
   }
   // handle rest

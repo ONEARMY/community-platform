@@ -28,7 +28,7 @@ const SearchInput: React.FC<IProps> = ({
       type="search"
       placeholder={placeholder}
       value={value}
-      onChange={e => onChange(e.target.value)}
+      onChange={(e) => onChange(e.target.value)}
       style={style}
       {...props}
     />

@@ -104,7 +104,7 @@ export class Header extends Component<IProps> {
     const areThereNotifications = Boolean(
       user?.notifications?.length &&
         !(
-          user?.notifications?.filter(notification => !notification.read)
+          user?.notifications?.filter((notification) => !notification.read)
             .length === 0
         ),
     )

@@ -2,7 +2,7 @@ import * as React from 'react'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import { inject, observer } from 'mobx-react'
 import Heading from 'src/components/Heading'
-import {Icon} from 'oa-components'
+import { Icon } from 'oa-components'
 import { Modal } from 'src/components/Modal/Modal'
 import { Button } from 'oa-components'
 import { Flex } from 'theme-ui'
@@ -33,8 +33,8 @@ export class HowToSubmitStatus extends React.Component<IProps> {
     const uploadStatus = this.injected.howtoStore.uploadStatus
     return uploadStatus.Start ? (
       <Modal>
-        <Flex sx={{justifyContent: "space-between"}}>
-          <Heading small sx={{textAlign:"center"}}>
+        <Flex sx={{ justifyContent: 'space-between' }}>
+          <Heading small sx={{ textAlign: 'center' }}>
             Uploading How To
           </Heading>
           <Icon
@@ -45,8 +45,8 @@ export class HowToSubmitStatus extends React.Component<IProps> {
           />
         </Flex>
         <Box margin="15px 0" p={0}>
-          {Object.keys(uploadStatus).map(key => (
-            <Flex p={0} sx={{alignItems: 'center'}} key={key}>
+          {Object.keys(uploadStatus).map((key) => (
+            <Flex p={0} sx={{ alignItems: 'center' }} key={key}>
               <Icon
                 marginRight="4px"
                 glyph={uploadStatus[key] ? 'check' : 'loading'}

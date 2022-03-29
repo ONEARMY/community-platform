@@ -62,7 +62,7 @@ export class AggregationsStore {
         .collection('aggregations')
         .doc(aggregationId)
         .stream()
-        .subscribe(value => {
+        .subscribe((value) => {
           if (value) {
             this.updateAggregationValue(aggregationId, value)
           }

@@ -17,7 +17,7 @@ const TextAreaStyled = styled.textarea`
   min-width: 100%;
   max-width: 100%;
   font-family: 'Inter', Arial, sans-serif;
-  font-size: ${props => props.theme.fontSizes[2] + 'px'};
+  font-size: ${(props) => props.theme.fontSizes[2] + 'px'};
   border-radius: 5px;
   resize: none;
 
@@ -80,7 +80,7 @@ export const CommentTextArea = ({ onChange, comment, loading }) => {
             disabled={loading}
             value={comment}
             maxLength={400}
-            onChange={event => {
+            onChange={(event) => {
               onChange(event.target.value)
             }}
             data-cy="comments-form"

@@ -202,7 +202,7 @@ export default class HowtoDescription extends PureComponent<IProps> {
           </Flex>
           <Flex mt={4}>
             {howto.tags &&
-              Object.keys(howto.tags).map(tag => {
+              Object.keys(howto.tags).map((tag) => {
                 return <TagDisplay key={tag} tagKey={tag} />
               })}
           </Flex>

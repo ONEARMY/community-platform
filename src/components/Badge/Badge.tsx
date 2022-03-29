@@ -9,7 +9,7 @@ interface IProps extends ImageProps {
   profileType?: ProfileTypeLabel
 }
 
-const Avatar = function(props: IProps) {
+const Avatar = function (props: IProps) {
   const { size, style } = props
   const badgeProfileSrc = Workspace.findWorkspaceBadgeNullable(
     props.profileType,

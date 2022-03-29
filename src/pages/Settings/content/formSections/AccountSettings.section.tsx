@@ -38,7 +38,7 @@ export class AccountSettingsSection extends React.Component<any, IState> {
     const { isOpen } = this.state
     return (
       <FlexSectionContainer>
-        <Flex sx={{justifyContent: "space-between"}}>
+        <Flex sx={{ justifyContent: 'space-between' }}>
           <Heading small>Account settings</Heading>
           <ArrowIsSectionOpen
             onClick={() => {
@@ -51,7 +51,7 @@ export class AccountSettingsSection extends React.Component<any, IState> {
           <ChangeEmailForm userStore={this.props.userStore} />
           <ChangePasswordForm userStore={this.props.userStore} />
           <ProfileDelete
-            onConfirmation={reauthPw => this.deleteProfile(reauthPw)}
+            onConfirmation={(reauthPw) => this.deleteProfile(reauthPw)}
           />
         </Box>
       </FlexSectionContainer>

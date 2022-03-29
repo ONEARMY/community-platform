@@ -16,11 +16,11 @@ export interface PlatformTheme {
 }
 
 export interface ThemeWithName {
-  name: string;
-  /** 
+  name: string
+  /**
    * Following properties are taken from DefaultTheme
    * exported from `styled-components`
-   * 
+   *
    * This should ideally be imported rather than manually
    * inlined. However some behaviour is making this hard to
    * achieve at the moment.
@@ -28,7 +28,7 @@ export interface ThemeWithName {
   typography: {
     auxiliary: any
     paragraph: any
-  },
+  }
 
   colors: {
     white: string
@@ -73,5 +73,4 @@ export interface ThemeWithName {
   maxContainerWidth: number
   regular: number
   bold: number
-
 }

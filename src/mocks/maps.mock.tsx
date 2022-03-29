@@ -17,7 +17,7 @@ export const generatePins = (count: number): Array<IMapPin> => {
       },
       type: pinType.type,
       moderation: 'awaiting-moderation',
-      verified: Math.random() < 0.5
+      verified: Math.random() < 0.5,
     })
   }
   return newPins
@@ -30,11 +30,11 @@ export const generatePinDetails = (): IMapPinDetail => {
   return {
     name: loremIpsum({ count: 2, units: 'words' })
       .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' '),
     displayName: loremIpsum({ count: 2, units: 'words' })
       .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' '),
     shortDescription: loremIpsum({ count: 2, units: 'sentences' }),
     lastActive,

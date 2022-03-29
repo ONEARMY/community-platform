@@ -50,7 +50,7 @@ export const InputField = ({
       invalid={meta.error && meta.touched}
       {...input}
       {...rest}
-      onBlur={e => {
+      onBlur={(e) => {
         if (modifiers) {
           e.target.value = processInputModifiers(e.target.value, modifiers)
           input.onChange(e)
@@ -78,7 +78,7 @@ export const DatePickerField = ({
       invalid={meta.error && meta.touched}
       {...input}
       {...rest}
-      onChange={date => {
+      onChange={(date) => {
         input.onChange(date)
         if (customChange) {
           customChange(date)
@@ -114,7 +114,7 @@ export const TextAreaField = ({
         invalid={meta.error && meta.touched}
         {...input}
         {...rest}
-        onBlur={e => {
+        onBlur={(e) => {
           if (modifiers) {
             e.target.value = processInputModifiers(e.target.value, modifiers)
             input.onChange(e)

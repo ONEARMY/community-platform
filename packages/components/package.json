@@ -7,7 +7,7 @@
   "types": "dist/index.d.js",
   "scripts": {
     "start": "start-storybook -p 6006",
-    "format": "prettier --write '**/*.{tsx,mdx}'",
+    "format": "prettier --write '**/*.{tsx,mdx,md}'",
     "build:sb": "yarn build && build-storybook",
     "build": "tsc",
     "dev": "tsc --watch",

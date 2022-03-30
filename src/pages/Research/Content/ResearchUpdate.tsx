@@ -26,7 +26,7 @@ const FlexStepNumber = styled(Flex)`
   height: fit-content;
 `
 
-const Update: React.FC<IProps> = ({
+const ResearchUpdate: React.FC<IProps> = ({
   update,
   updateIndex,
   isEditable,
@@ -143,4 +143,4 @@ const Update: React.FC<IProps> = ({
   )
 }
 
-export default Update
+export default ResearchUpdate

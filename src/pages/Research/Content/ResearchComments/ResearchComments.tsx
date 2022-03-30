@@ -178,7 +178,11 @@ export const ResearchComments = ({ comments, update }: IProps) => {
             handleEditRequest={handleEditRequest}
           />
           {user ? (
-            <BoxStyled sx={{ width: [7 / 10, 8 / 10, 9 / 10] }}>
+            <BoxStyled
+              sx={{
+                width: [`70%`, `80%`, `90%`],
+              }}
+            >
               <CommentTextArea
                 data-cy="comment-text-area"
                 comment={comment}
@@ -189,6 +193,7 @@ export const ResearchComments = ({ comments, update }: IProps) => {
                 data-cy="comment-submit"
                 disabled={!Boolean(comment.trim()) || loading}
                 variant="primary"
+                mt={3}
                 onClick={() => onSubmit(comment)}
               >
                 Comment

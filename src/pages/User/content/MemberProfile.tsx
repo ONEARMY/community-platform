@@ -89,7 +89,22 @@ export const MemberProfile = ({ user, adminButton }: IProps) => {
           ml={3}
           sx={{ flexGrow: 2, width: '100%', flexDirection: 'column' }}
         >
-          <Text style={{ wordWrap: 'break-word' }}>{user.userName}</Text>
+          <Flex 
+            sx={{
+              alignItems: "center",
+              pt: ['40px', '40px', '0'],
+            }}
+          >
+            {userCountryCode && (
+              <FlagIcon mr={2} code={userCountryCode} style={{display: 'inline-block'}} />
+            )}
+            <Text large my={2} sx={{
+              color: `${theme.colors.lightgrey} !important`,
+              wordBreak: 'break-word',
+            }}>
+              {user.userName}
+            </Text>
+          </Flex>
           <Box sx={{ flexDirection: 'column' }} mb={3}>
             <Heading
               medium
@@ -97,13 +112,6 @@ export const MemberProfile = ({ user, adminButton }: IProps) => {
               color={'black'}
               style={{ wordWrap: 'break-word' }}
             >
-              {userCountryCode && (
-                <FlagIcon
-                  mr={2}
-                  code={userCountryCode}
-                  style={{ display: 'inline-block' }}
-                />
-              )}
               {user.displayName}
             </Heading>
           </Box>

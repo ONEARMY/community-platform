@@ -134,9 +134,7 @@ const ResearchUpdate: React.FC<IProps> = ({
               <ImageGallery images={update.images as IUploadedFileMeta[]} />
             )}
           </Box>
-          <AuthWrapper roleRequired="beta-tester">
-            <ResearchComments update={update} comments={update.comments} />
-          </AuthWrapper>
+          <ResearchComments update={update} comments={update.comments} />
         </Flex>
       </Flex>
     </>

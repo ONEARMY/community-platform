@@ -233,10 +233,7 @@ export class UserStore extends ModuleStore {
     try {
       await authUser.reauthenticateAndRetrieveDataWithCredential(credential)
       const user = this.user as IUser
-      await this.db
-        .collection(COLLECTION_NAME)
-        .doc(user.userName)
-        .delete()
+      await this.db.collection(COLLECTION_NAME).doc(user.userName).delete()
       await authUser.delete()
       // TODO - delete user avatar
       // TODO - show deleted notification
@@ -299,7 +296,7 @@ export class UserStore extends ModuleStore {
   // strange implementation return the unsubscribe object on subscription, so stored
   // to authUnsubscribe variable for use later
   private _listenToAuthStateChanges(checkEmailVerification = false) {
-    this.authUnsubscribe = auth.onAuthStateChanged(authUser => {
+    this.authUnsubscribe = auth.onAuthStateChanged((authUser) => {
       this.authUser = authUser
       if (authUser) {
         this.userSignedIn(authUser)
@@ -374,7 +371,7 @@ export class UserStore extends ModuleStore {
       const user = this.activeUser
       if (user) {
         const notifications = toJS(user.notifications)
-        notifications?.forEach(notification => (notification.read = true))
+        notifications?.forEach((notification) => (notification.read = true))
         const updatedUser: IUser = {
           ...toJS(user),
           notifications,
@@ -399,7 +396,7 @@ export class UserStore extends ModuleStore {
       const user = this.activeUser
       if (id && user && user.notifications) {
         const notifications = toJS(user.notifications).filter(
-          notification => !(notification._id === id),
+          (notification) => !(notification._id === id),
         )
 
         const updatedUser: IUser = {

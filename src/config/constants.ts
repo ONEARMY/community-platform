@@ -1,6 +1,6 @@
 /**
- * This export is intended for use _only_ within the 
- * build process. If you're looking to work with 
+ * This export is intended for use _only_ within the
+ * build process. If you're looking to work with
  * the configuration options please use the `ConfigurationOption`
  * type exported from this file
  */
@@ -23,6 +23,6 @@ export const _supportedConfigurationOptions = [
   'REACT_APP_PLATFORM_THEME',
   'REACT_APP_LOGFLARE_KEY',
   'REACT_APP_LOGFLARE_SOURCE',
-] as const;
+] as const
 
 export type ConfigurationOption = typeof _supportedConfigurationOptions[number]

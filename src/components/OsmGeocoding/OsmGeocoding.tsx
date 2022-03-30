@@ -38,7 +38,7 @@ export const OsmGeocoding = ({
   const [queryLocationService, setQueryLocationService] = useState(false)
   const mainContainerRef = useRef<HTMLDivElement>(null)
 
-  document.addEventListener('click', function(event) {
+  document.addEventListener('click', function (event) {
     const isClickInside = mainContainerRef?.current?.contains(
       event.target as Node,
     )
@@ -47,7 +47,7 @@ export const OsmGeocoding = ({
     }
   })
 
-  document.onkeyup = function(event) {
+  document.onkeyup = function (event) {
     if (event.key === 'Escape') {
       setShowResults(false)
     }
@@ -71,12 +71,12 @@ export const OsmGeocoding = ({
           'onearmy.earth Community Platform (https://platform.onearmy.earth)',
       }),
     })
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         setResults(data)
         setShowResults(true)
       })
-      .catch(err => logger.error(err, 'OsmGeocoding.getGeocoding.error'))
+      .catch((err) => logger.error(err, 'OsmGeocoding.getGeocoding.error'))
       .finally(() => setShowLoader(false))
   }
 
@@ -123,7 +123,7 @@ export const OsmGeocoding = ({
           marginBottom: 0,
         }}
         onClick={() => setShowResults(true)}
-        onChange={event => {
+        onChange={(event) => {
           setQueryLocationService(true)
           logger.debug(`onchange.setSearchValue`, event.target.value)
           setSearchValue(event.target.value)
@@ -133,7 +133,7 @@ export const OsmGeocoding = ({
       {showResultsListing && (
         <OsmGeocodingResultsList
           results={results}
-          callback={result => {
+          callback={(result) => {
             if (result) {
               setQueryLocationService(false)
               setSearchValue(result.display_name)

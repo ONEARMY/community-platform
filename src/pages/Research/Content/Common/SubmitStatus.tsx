@@ -1,9 +1,9 @@
 import { observer } from 'mobx-react'
 import { RouteComponentProps } from 'react-router'
-import { Box, Flex } from 'rebass/styled-components'
+import { Box, Flex } from 'theme-ui'
 import { Button } from 'oa-components'
 import Heading from 'src/components/Heading'
-import {Icon} from 'oa-components'
+import { Icon } from 'oa-components'
 import { Modal } from 'src/components/Modal/Modal'
 import Text from 'src/components/Text'
 import { useResearchStore } from 'src/stores/Research/research.store'
@@ -18,8 +18,8 @@ export const ResearchSubmitStatus = observer((props: IProps) => {
 
   return uploadStatus.Start ? (
     <Modal>
-      <Flex justifyContent="space-between">
-        <Heading small textAlign="center">
+      <Flex sx={{ justifyContent: 'space-between' }}>
+        <Heading small sx={{ textAlign: 'center' }}>
           Uploading Research
         </Heading>
         <Icon
@@ -30,8 +30,8 @@ export const ResearchSubmitStatus = observer((props: IProps) => {
         />
       </Flex>
       <Box margin="15px 0" p={0}>
-        {Object.keys(uploadStatus).map(key => (
-          <Flex p={0} alignItems="center" key={key}>
+        {Object.keys(uploadStatus).map((key) => (
+          <Flex p={0} sx={{ alignItems: 'center' }} key={key}>
             <Icon
               marginRight="4px"
               glyph={uploadStatus[key] ? 'check' : 'loading'}
@@ -62,8 +62,8 @@ export const UpdateSubmitStatus = observer((props: IProps) => {
 
   return uploadStatus.Start ? (
     <Modal>
-      <Flex justifyContent="space-between">
-        <Heading small textAlign="center">
+      <Flex sx={{ justifyContent: 'space-between' }}>
+        <Heading small sx={{ textAlign: 'center' }}>
           Uploading Update
         </Heading>
         <Icon
@@ -74,8 +74,8 @@ export const UpdateSubmitStatus = observer((props: IProps) => {
         />
       </Flex>
       <Box margin="15px 0" p={0}>
-        {Object.keys(uploadStatus).map(key => (
-          <Flex p={0} alignItems="center" key={key}>
+        {Object.keys(uploadStatus).map((key) => (
+          <Flex p={0} sx={{ alignItems: 'center' }} key={key}>
             <Icon
               marginRight="4px"
               glyph={uploadStatus[key] ? 'check' : 'loading'}

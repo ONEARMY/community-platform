@@ -1,7 +1,7 @@
 import React from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import { Button } from 'oa-components'
 import { Form, Field } from 'react-final-form'
@@ -46,21 +46,28 @@ class ForgotPasswordPage extends React.Component<IProps, IState> {
     const disabled = this.state.disabled || email === ''
     return (
       <Form
-        onSubmit={e => this.onSignupSubmit(e)}
+        onSubmit={(e) => this.onSignupSubmit(e)}
         render={() => (
           <form>
             <Flex
               bg="inherit"
               px={2}
-              width={1}
+              sx={{ width: '100%' }}
               css={{ maxWidth: '620px' }}
               mx={'auto'}
               mt={20}
               mb={3}
             >
-              <Flex flexDirection={'column'} width={1}>
-                <Flex card mediumRadius bg={'softblue'} px={3} py={2} width={1}>
-                  <Heading medium width={1}>
+              <Flex sx={{ flexDirection: 'column', width: '100%' }}>
+                <Flex
+                  card
+                  mediumRadius
+                  bg={'softblue'}
+                  px={3}
+                  py={2}
+                  sx={{ width: '100%' }}
+                >
+                  <Heading medium sx={{ width: '100%' }}>
                     We've all been there
                   </Heading>
                 </Flex>
@@ -68,23 +75,27 @@ class ForgotPasswordPage extends React.Component<IProps, IState> {
                   card
                   mediumRadius
                   bg={'white'}
-                  width={1}
                   mt={3}
                   px={4}
                   pt={0}
                   pb={4}
-                  flexWrap="wrap"
-                  flexDirection="column"
+                  sx={{
+                    width: '100%',
+                    flexWrap: 'wrap',
+                    flexDirection: 'column',
+                  }}
                 >
-                  <Heading small py={4} width={1}>
+                  <Heading small py={4} sx={{ width: '100%' }}>
                     Reset your password
                   </Heading>
-                  <Flex flexDirection={'column'} mb={3}>
-                    <Flex flexDirection={'column'} mb={3}>
+                  <Flex sx={{ flexDirection: 'column' }} mb={3}>
+                    <Flex sx={{ flexDirection: 'column' }} mb={3}>
                       <Flex
-                        flexDirection={'column'}
                         mb={3}
-                        width={[1, 1, 2 / 3]}
+                        sx={{
+                          flexDirection: 'column',
+                          width: ['100%', '100%', `${(2 / 3) * 100}%`],
+                        }}
                       >
                         <Label htmlFor="email">Email</Label>
                         <Field
@@ -96,7 +107,7 @@ class ForgotPasswordPage extends React.Component<IProps, IState> {
                         />
                       </Flex>
                       <Button
-                        width={1}
+                        sx={{ width: '100%' }}
                         variant={'primary'}
                         disabled={disabled}
                         type="submit"
@@ -106,7 +117,7 @@ class ForgotPasswordPage extends React.Component<IProps, IState> {
                     </Flex>
                   </Flex>
                 </Flex>
-                <Flex mt={3} justifyContent={'flex-end'}>
+                <Flex mt={3} sx={{ justifyContent: 'flex-end' }}>
                   <Button variant="tertiary">Close</Button>
                 </Flex>
               </Flex>

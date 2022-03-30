@@ -3,7 +3,7 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Field, Form } from 'react-final-form'
 import { Prompt, RouteComponentProps } from 'react-router'
-import { Box } from 'rebass/styled-components'
+import { Box } from 'theme-ui'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { Button } from 'oa-components'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
@@ -16,7 +16,7 @@ import { useResearchStore } from 'src/stores/Research/research.store'
 import theme from 'src/themes/styled.theme'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { required } from 'src/utils/validators'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { UpdateSubmitStatus } from './SubmitStatus'
 
 const ImageInputFieldWrapper = styled.div`
@@ -44,7 +44,7 @@ const Label = styled.label`
   display: block;
 `
 
-const beforeUnload = function(e) {
+const beforeUnload = function (e) {
   e.preventDefault()
   e.returnValue = CONFIRM_DIALOG_MSG
 }
@@ -74,7 +74,7 @@ const UpdateForm = observer((props: IProps) => {
   }
 
   // Display a confirmation dialog when leaving the page outside the React Router
-  const unloadDecorator = form => {
+  const unloadDecorator = (form) => {
     return form.subscribe(
       ({ dirty }) => {
         if (dirty && !store.updateUploadStatus.Complete) {
@@ -115,7 +115,7 @@ const UpdateForm = observer((props: IProps) => {
         />
       )}
       <Form
-        onSubmit={v => {
+        onSubmit={(v) => {
           onSubmit(v as IResearch.Update)
         }}
         initialValues={props.formValues}
@@ -126,22 +126,27 @@ const UpdateForm = observer((props: IProps) => {
         decorators={[unloadDecorator]}
         render={({ submitting, dirty, handleSubmit }) => {
           return (
-            <Flex mx={-2} mb={4} bg={'inherit'} flexWrap="wrap">
-              <Flex bg="inherit" px={2} width={[1, 1, 2 / 3]} mt={4}>
+            <Flex mx={-2} mb={4} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
+              <Flex
+                bg="inherit"
+                px={2}
+                sx={{ width: ['100%', '100%', `${(2 / 3) * 100}%`] }}
+                mt={4}
+              >
                 <Prompt
                   when={!store.updateUploadStatus.Complete && dirty}
                   message={CONFIRM_DIALOG_MSG}
                 />
                 <FormContainer id="updateForm" onSubmit={handleSubmit}>
                   {/* Update Info */}
-                  <Flex flexDirection={'column'}>
+                  <Flex sx={{ flexDirection: 'column' }}>
                     <Flex
                       card
                       mediumRadius
                       bg={theme.colors.softblue}
                       px={3}
                       py={2}
-                      alignItems="center"
+                      sx={{ alignItems: 'center' }}
                     >
                       <Heading medium>
                         {props.parentType === 'create' ? (
@@ -149,7 +154,6 @@ const UpdateForm = observer((props: IProps) => {
                         ) : (
                           <span>Edit your update</span>
                         )}{' '}
-                        
                       </Heading>
                       <Box ml="15px">
                         <ElWithBeforeIcon
@@ -164,12 +168,17 @@ const UpdateForm = observer((props: IProps) => {
                       bg={'white'}
                       mt={3}
                       p={4}
-                      flexWrap="wrap"
-                      flexDirection="column"
+                      sx={{ flexWrap: 'wrap', flexDirection: 'column' }}
                     >
-                      <Flex mx={-2} flexDirection={['column', 'column', 'row']}>
-                        <Flex flex={[1, 1, 4]} px={2} flexDirection="column">
-                          <Flex flexDirection={'column'} mb={3}>
+                      <Flex
+                        mx={-2}
+                        sx={{ flexDirection: ['column', 'column', 'row'] }}
+                      >
+                        <Flex
+                          px={2}
+                          sx={{ flexDirection: 'column', flex: [1, 1, 4] }}
+                        >
+                          <Flex sx={{ flexDirection: 'column' }} mb={3}>
                             <Label htmlFor="title">Title of this update</Label>
                             <Field
                               id="title"
@@ -183,7 +192,7 @@ const UpdateForm = observer((props: IProps) => {
                               placeholder="Title of this update (max 40 characters)"
                             />
                           </Flex>
-                          <Flex flexDirection={'column'} mb={3}>
+                          <Flex sx={{ flexDirection: 'column' }} mb={3}>
                             <Label htmlFor="description">
                               Description of this update
                             </Label>
@@ -208,9 +217,11 @@ const UpdateForm = observer((props: IProps) => {
                             Upload image(s) for this update
                           </Label>
                           <Flex
-                            flexDirection={['column', 'row']}
-                            flexWrap="wrap"
-                            alignItems="center"
+                            sx={{
+                              flexDirection: ['column', 'row'],
+                              flexWrap: 'wrap',
+                              alignItems: 'center',
+                            }}
                             mb={3}
                           >
                             <ImageInputFieldWrapper data-cy="image-0">
@@ -259,7 +270,7 @@ const UpdateForm = observer((props: IProps) => {
                               />
                             </ImageInputFieldWrapper>
                           </Flex>
-                          <Flex flexDirection="column" mb={3}>
+                          <Flex sx={{ flexDirection: 'column' }} mb={3}>
                             <Label htmlFor={`videoUrl`}>
                               Or embed a YouTube video
                             </Label>
@@ -282,9 +293,11 @@ const UpdateForm = observer((props: IProps) => {
                 </FormContainer>
               </Flex>
               <Flex
-                flexDirection={'column'}
-                width={[1, 1, 1 / 3]}
-                height={'100%'}
+                sx={{
+                  flexDirection: 'column',
+                  width: [1, 1, 1 / 3],
+                  height: '100%',
+                }}
                 bg="inherit"
                 px={2}
                 mt={[0, 0, 4]}
@@ -298,12 +311,11 @@ const UpdateForm = observer((props: IProps) => {
                   <Button
                     data-cy={'submit'}
                     onClick={trySubmitForm}
-                    width={1}
                     mt={3}
                     variant="primary"
                     type="submit"
                     disabled={submitting}
-                    sx={{ mb: ['40px', '40px', 0] }}
+                    sx={{ mb: ['40px', '40px', 0], width: '100%' }}
                   >
                     <span>
                       {props.parentType === 'edit' ? 'Save' : 'Add update'}

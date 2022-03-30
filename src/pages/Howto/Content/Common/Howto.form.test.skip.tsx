@@ -6,17 +6,17 @@ import { BrowserRouter } from 'react-router-dom'
 import { HowtoForm } from './Howto.form'
 declare const window: any
 
-describe('Howto form', function() {
+describe('Howto form', function () {
   let howtoStore
   let tagsStore
   let formValues
   let parentType
 
-  beforeAll(function() {
+  beforeAll(function () {
     window.confirm = jest.fn(() => true)
   })
 
-  beforeEach(function() {
+  beforeEach(function () {
     howtoStore = {
       uploadStatus: {
         Start: false,
@@ -47,7 +47,7 @@ describe('Howto form', function() {
     window.confirm.mockReset()
   })
 
-  it.skip('should not show the confirm dialog', async function() {
+  it.skip('should not show the confirm dialog', async function () {
     let renderResult
     const navProps: any = {}
     await waitFor(() => {
@@ -77,7 +77,7 @@ describe('Howto form', function() {
     expect(window.confirm).not.toBeCalled()
   })
 
-  it.skip('should show the confirm dialog, title change', async function() {
+  it.skip('should show the confirm dialog, title change', async function () {
     let renderResult
     const navProps: any = {}
     await waitFor(() => {

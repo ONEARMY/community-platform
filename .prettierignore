@@ -1,2 +1,4 @@
 build
 .firebase
+storybook-static
+dist

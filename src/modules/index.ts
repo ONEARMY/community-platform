@@ -18,9 +18,9 @@ export function getSupportedModules(): MODULE[] {
       'howto,map,events,research,academy,user,admin_v2',
     )
       .split(',')
-      .map(s => s.trim()) || []
+      .map((s) => s.trim()) || []
   return [MODULE.CORE].concat(
-    Object.values(MODULE).filter(module => envModules.includes(module)),
+    Object.values(MODULE).filter((module) => envModules.includes(module)),
   )
 }
 

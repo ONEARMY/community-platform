@@ -1,8 +1,8 @@
-import { Link } from 'rebass/styled-components'
+import { Link } from 'theme-ui'
 import ImageTargetBlank from 'src/assets/icons/link-target-blank.svg'
 import theme from 'src/themes/styled.theme'
 
-export const LinkTargetBlank = props => (
+export const LinkTargetBlank = (props) => (
   <Link
     {...props}
     target="_blank"
@@ -21,6 +21,7 @@ export const LinkTargetBlank = props => (
         top: '-5px',
         right: '0px',
       },
+      ...props?.sx,
     }}
   />
 )

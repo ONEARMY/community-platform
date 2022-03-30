@@ -24,10 +24,12 @@ export const EventCard = (props: IProps) => (
     px={3}
     mt={4}
     py={3}
-    flex={1}
     key={props.event.slug}
-    flexDirection={['column', 'column', 'initial']}
-    sx={{ position: 'relative' }}
+    sx={{
+      flex: 1,
+      flexDirection: ['column', 'column', 'initial'],
+      position: 'relative',
+    }}
     data-cy="card"
     data-eventid={props.event._id}
   >
@@ -39,49 +41,54 @@ export const EventCard = (props: IProps) => (
       />
     )}
 
-    <Flex flexWrap={'wrap'} flex={'1'} mb={[1, 1, 0]} order={[1, 1, 1]}>
-      <Flex
-        alignItems={['center', 'center', 'center']}
-        width={['auto', 'auto', 1]}
-        mr={[1, 1, 0]}
+    <Flex
+      mb={[1, 1, 0]}
+      sx={{
+        order: [1, 1, 1],
+        flexWrap: 'wrap',
+        flex: 1,
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+      }}
+    >
+      <Text
+        bold
+        sx={{
+          display: 'block',
+          fontSize: [2, 2, 5],
+          textAlign: 'center',
+          flex: 2,
+        }}
       >
-        <Text
-          bold
-          fontSize={[2, 2, 5]}
-          textAlign={'center'}
-          width={['auto', 'auto', 1]}
-        >
-          {getDay(new Date(props.event.date))}
-        </Text>
-      </Flex>
-      <Flex
-        alignItems={['center', 'center', 'center']}
-        width={['auto', 'auto', 1]}
+        {getDay(new Date(props.event.date))}
+      </Text>
+      <Text
+        bold
+        sx={{
+          display: 'block',
+          fontSize: [2, 2, 5],
+          textAlign: 'center',
+        }}
       >
-        <Text
-          bold
-          fontSize={[2, 2, 5]}
-          textAlign={'center'}
-          width={['auto', 'auto', 1]}
-        >
-          {getMonth(new Date(props.event.date), 'short')}
-        </Text>
-      </Flex>
+        {getMonth(new Date(props.event.date), 'short')}
+      </Text>
     </Flex>
     <Flex
-      flexWrap={'wrap'}
-      flex={'2'}
+      sx={{
+        flexWrap: 'wrap',
+        flex: '2',
+        order: [3, 3, 2],
+      }}
       px={[0, 0, 2]}
-      order={[3, 3, 2]}
       mb={[2, 2, 0]}
     >
-      <Flex alignItems={'center'} width={1}>
-        <Text bold color="black" fontSize={[3, 3, 4]}>
+      <Flex sx={{ alignItems: 'center', width: '100%' }}>
+        <Text bold color="black" sx={{ fontSize: [3, 3, 4] }}>
           {capitalizeFirstLetter(props.event.title)}
         </Text>
       </Flex>
       <Flex>
-        <Text auxiliary width={1}>
+        <Text auxiliary sx={{ width: '100%' }}>
           By {props.event._createdBy}
         </Text>
         <VerifiedUserBadge
@@ -92,14 +99,16 @@ export const EventCard = (props: IProps) => (
       </Flex>
     </Flex>
     <Flex
-      flexWrap={'nowrap'}
-      alignItems={'center'}
-      flex={'1'}
-      order={[2, 2, 3]}
+      sx={{
+        alignItems: 'center',
+        flexWrap: 'nowrap',
+        flex: 1,
+        order: [2, 2, 3],
+      }}
       mb={[2, 2, 0]}
     >
       <FlagIconEvents code={props.event.location.countryCode} />
-      <Text auxiliary width={1} ml={[1, 1, 2]}>
+      <Text auxiliary sx={{ width: '100%' }} ml={[1, 1, 2]}>
         {[
           props.event.location.administrative,
           props.event.location?.countryCode?.toUpperCase(),
@@ -109,25 +118,29 @@ export const EventCard = (props: IProps) => (
       </Text>
     </Flex>
     <Flex
-      flex="1"
-      alignItems="flex-start"
-      justifyContent="center"
-      flexDirection="column"
-      order={[4, 4, 4]}
+      sx={{
+        flex: 1,
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        order: [4, 4, 4],
+      }}
       mb={[2, 2, 0]}
     >
       {props.event.tags &&
-        Object.keys(props.event.tags).map(tag => {
+        Object.keys(props.event.tags).map((tag) => {
           return <TagDisplay key={tag} tagKey={tag} />
         })}
     </Flex>
     {props.needsModeration && (
       <Flex
-        flexWrap={'nowrap'}
-        flexDirection={'row'}
-        alignItems={'center'}
+        sx={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          flexWrap: 'nowrap',
+          order: [5, 5, 5],
+        }}
         ml={2}
-        order={[5, 5, 5]}
       >
         <Button
           small
@@ -149,13 +162,20 @@ export const EventCard = (props: IProps) => (
       </Flex>
     )}
     <Flex
-      flexWrap={'nowrap'}
-      alignItems={'center'}
-      flex={'1'}
-      order={[5, 5, 5]}
+      sx={{
+        alignItems: 'center',
+        flexWrap: 'nowrap',
+        flex: 1,
+        order: [5, 5, 5],
+      }}
     >
-      <LinkTargetBlank href={props.event.url} color={'black'} mr={1} width={1}>
-        <Text auxiliary width={1} txtRight>
+      <LinkTargetBlank
+        href={props.event.url}
+        color={'black'}
+        mr={1}
+        sx={{ width: '100%' }}
+      >
+        <Text auxiliary sx={{ width: '100%' }} txtRight>
           Go to event
         </Text>
       </LinkTargetBlank>

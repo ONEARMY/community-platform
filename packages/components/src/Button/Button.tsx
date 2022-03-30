@@ -2,10 +2,10 @@ import * as React from 'react'
 import { Icon } from '../Icon/Icon'
 import type { IGlyphs } from '../Icon/types'
 import {
-  Button as RebassButton,
-  ButtonProps as RebassButtonProps,
-} from 'rebass/styled-components'
-import styled from 'styled-components'
+  Button as ThemeUiButton,
+  ButtonProps as ThemeUiButtonProps,
+} from 'theme-ui'
+import styled from '@emotion/styled'
 
 // extend to allow any default button props (e.g. onClick) to also be passed
 export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
@@ -51,21 +51,23 @@ const translateY = (props: IBtnProps) =>
       }
     : null
 
-export type BtnProps = IBtnProps & RebassButtonProps
+export type BtnProps = IBtnProps & ThemeUiButtonProps
 
-const BaseButton = styled(RebassButton)`
+const BaseButton = styled(ThemeUiButton)`
   ${translateY}
   ${small}
   ${medium}
   ${large}
 `
 
-export const Button = (props: BtnProps) => (
-  <BaseButton {...props}>
-    {props.icon && <Icon glyph={props.icon} marginRight="4px" />}
-    <span>{props.children}</span>
-  </BaseButton>
-)
+export const Button = (props: BtnProps) => {
+  return (
+    <BaseButton {...props}>
+      {props.icon && <Icon glyph={props.icon} marginRight="4px" />}
+      <span>{props.children}</span>
+    </BaseButton>
+  )
+}
 
 Button.defaultProps = {
   type: 'button',

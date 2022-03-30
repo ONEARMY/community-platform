@@ -60,7 +60,7 @@ export class ProfileLinkField extends Component<IProps, IState> {
 
   render() {
     const { index, name } = this.props
-    const DeleteButton = props => (
+    const DeleteButton = (props) => (
       <Button
         data-cy={`delete-link-${index}`}
         icon={'delete'}
@@ -73,7 +73,7 @@ export class ProfileLinkField extends Component<IProps, IState> {
     return (
       <Flex
         my={['10px', '10px', '5px']}
-        flexDirection={['column', 'column', 'row']}
+        sx={{ flexDirection: ['column', 'column', 'row'] }}
       >
         <Flex mb={[1, 1, 0]}>
           <Field
@@ -94,11 +94,11 @@ export class ProfileLinkField extends Component<IProps, IState> {
         <Field
           data-cy={`input-link-${index}`}
           name={`${name}.url`}
-          validate={value => this.validateDependingOnType(value)}
+          validate={(value) => this.validateDependingOnType(value)}
           validateFields={[]}
           component={InputField}
           placeholder="Link"
-          format={v => formatLink(v, this.state.linkType)}
+          format={(v) => formatLink(v, this.state.linkType)}
           formatOnBlur={true}
         />
         <DeleteButton
@@ -107,7 +107,7 @@ export class ProfileLinkField extends Component<IProps, IState> {
         {this.state.showDeleteModal && (
           <Modal onDidDismiss={() => this.toggleDeleteModal()}>
             <Text>Are you sure you want to delete this link?</Text>
-            <Flex p={0} mx={-1} justifyContent="flex-end">
+            <Flex p={0} mx={-1} sx={{ justifyContent: 'flex-end' }}>
               <Flex px={1}>
                 <Button
                   variant={'outline'}

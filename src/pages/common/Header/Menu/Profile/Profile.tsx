@@ -51,7 +51,7 @@ export default class Profile extends Component<IProps, IState> {
                 path={'/u/' + user.userName}
                 content={'Profile'}
               />
-              {COMMUNITY_PAGES_PROFILE.map(page => (
+              {COMMUNITY_PAGES_PROFILE.map((page) => (
                 <MenuMobileLink
                   path={page.path}
                   key={page.path}

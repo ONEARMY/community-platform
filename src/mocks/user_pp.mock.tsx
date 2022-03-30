@@ -375,35 +375,35 @@ export const PROFILE_TYPES: IProfileType[] = [
     textLabel: 'I am a member',
     imageSrc: MemberBadge,
     cleanImageSrc: LogoMember,
-    cleanImageVerifiedSrc: LogoMemberVerified
+    cleanImageVerifiedSrc: LogoMemberVerified,
   },
   {
     label: 'workspace',
     textLabel: 'I run a workspace',
     imageSrc: WorkspaceBadge,
     cleanImageSrc: LogoWorkspace,
-    cleanImageVerifiedSrc: LogoWorkspaceVerified
+    cleanImageVerifiedSrc: LogoWorkspaceVerified,
   },
   {
     label: 'machine-builder',
     textLabel: 'I build machines',
     imageSrc: MachineBadge,
     cleanImageSrc: LogoMachine,
-    cleanImageVerifiedSrc: LogoMachineVerified
+    cleanImageVerifiedSrc: LogoMachineVerified,
   },
   {
     label: 'community-builder',
     textLabel: 'I run a local community',
     imageSrc: LocalComBadge,
     cleanImageSrc: LogoCommunity,
-    cleanImageVerifiedSrc: LogoCommunityVerified
+    cleanImageVerifiedSrc: LogoCommunityVerified,
   },
   {
     label: 'collection-point',
     textLabel: 'I collect & sort plastic',
     imageSrc: CollectionBadge,
     cleanImageSrc: LogoCollection,
-    cleanImageVerifiedSrc: LogoCollectionVerified
+    cleanImageVerifiedSrc: LogoCollectionVerified,
   },
 ]
 

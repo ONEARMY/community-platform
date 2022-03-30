@@ -2,7 +2,7 @@ import * as React from 'react'
 import { FRIENDLY_MESSAGES } from 'oa-shared'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import { Button } from 'oa-components'
 import Text from 'src/components/Text'
@@ -86,15 +86,11 @@ class SignUpPage extends React.Component<IProps, IState> {
   public render() {
     return (
       <Form
-        onSubmit={v => this.onSignupSubmit(v as IFormValues)}
+        onSubmit={(v) => this.onSignupSubmit(v as IFormValues)}
         validate={async (values: any) => {
           const validationSchema = object({
-            displayName: string()
-              .min(2, 'Too short')
-              .required('Required'),
-            email: string()
-              .email('Invalid email')
-              .required('Required'),
+            displayName: string().min(2, 'Too short').required('Required'),
+            email: string().email('Invalid email').required('Required'),
             password: string().required('Password is required'),
             'confirm-password': string()
               .oneOf(
@@ -124,22 +120,22 @@ class SignUpPage extends React.Component<IProps, IState> {
               <Flex
                 bg="inherit"
                 px={2}
-                width={1}
+                sx={{ width: '100%' }}
                 css={{ maxWidth: '620px' }}
                 mx={'auto'}
                 mt={20}
                 mb={3}
               >
-                <Flex flexDirection={'column'} width={1}>
+                <Flex sx={{ flexDirection: 'column', width: '100%' }}>
                   <Flex
                     card
                     mediumRadius
                     bg={'softblue'}
                     px={3}
                     py={2}
-                    width={1}
+                    sx={{ width: '100%' }}
                   >
-                    <Heading medium width={1}>
+                    <Heading medium sx={{ width: '100%' }}>
                       Hey, nice to see you here
                     </Heading>
                   </Flex>
@@ -147,18 +143,26 @@ class SignUpPage extends React.Component<IProps, IState> {
                     card
                     mediumRadius
                     bg={'white'}
-                    width={1}
                     mt={3}
                     px={4}
                     pt={0}
                     pb={4}
-                    flexWrap="wrap"
-                    flexDirection="column"
+                    sx={{
+                      flexWrap: 'wrap',
+                      flexDirection: 'column',
+                      width: '100%',
+                    }}
                   >
-                    <Heading small py={4} width={1}>
+                    <Heading small py={4} sx={{ width: '100%' }}>
                       Create an account
                     </Heading>
-                    <Flex flexDirection={'column'} mb={3} width={[1, 1, 2 / 3]}>
+                    <Flex
+                      mb={3}
+                      sx={{
+                        width: ['100%', '100%', `${(2 / 3) * 100}%`],
+                        flexDirection: 'column',
+                      }}
+                    >
                       <Label htmlFor="displayName">
                         Username. Think carefully. You can't change this*
                       </Label>
@@ -171,7 +175,13 @@ class SignUpPage extends React.Component<IProps, IState> {
                         validate={required}
                       />
                     </Flex>
-                    <Flex flexDirection={'column'} mb={3} width={[1, 1, 2 / 3]}>
+                    <Flex
+                      mb={3}
+                      sx={{
+                        flexDirection: 'column',
+                        width: ['100%', '100%', `${(2 / 3) * 100}%`],
+                      }}
+                    >
                       <Label htmlFor="email">
                         Email, personal or workspace*
                       </Label>
@@ -184,7 +194,13 @@ class SignUpPage extends React.Component<IProps, IState> {
                         validate={required}
                       />
                     </Flex>
-                    <Flex flexDirection={'column'} mb={3} width={[1, 1, 2 / 3]}>
+                    <Flex
+                      mb={3}
+                      sx={{
+                        flexDirection: 'column',
+                        width: ['100%', '100%', `${(2 / 3) * 100}%`],
+                      }}
+                    >
                       <Label htmlFor="password">Password*</Label>
                       <Field
                         data-cy="password"
@@ -194,7 +210,13 @@ class SignUpPage extends React.Component<IProps, IState> {
                         validate={required}
                       />
                     </Flex>
-                    <Flex flexDirection={'column'} mb={3} width={[1, 1, 2 / 3]}>
+                    <Flex
+                      mb={3}
+                      sx={{
+                        flexDirection: 'column',
+                        width: ['100%', '100%', `${(2 / 3) * 100}%`],
+                      }}
+                    >
                       <Label htmlFor="confirm-password">
                         Confirm Password*
                       </Label>
@@ -206,7 +228,11 @@ class SignUpPage extends React.Component<IProps, IState> {
                         validate={required}
                       />
                     </Flex>
-                    <Flex mb={3} mt={2} width={[1, 1, 2 / 3]}>
+                    <Flex
+                      mb={3}
+                      mt={2}
+                      sx={{ width: ['100%', '100%', `${(2 / 3) * 100}%`] }}
+                    >
                       <Field
                         data-cy="consent"
                         name="consent"
@@ -228,7 +254,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                     <Text color={'red'} data-cy="error-msg">
                       {this.state.errorMsg}
                     </Text>
-                    <Flex mb={3} justifyContent={'space-between'}>
+                    <Flex mb={3} sx={{ justifyContent: 'space-between' }}>
                       <Text small color={'grey'} mt={2}>
                         Already have an account ?
                         <Link to="/sign-in"> Sign-in here</Link>
@@ -238,7 +264,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                     <Flex>
                       <Button
                         data-cy="submit"
-                        width={1}
+                        sx={{ width: '100%' }}
                         variant={'primary'}
                         disabled={disabled}
                         type="submit"

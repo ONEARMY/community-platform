@@ -28,7 +28,7 @@ export const replaceDashesWithSpaces = (str: string) => {
 // [{id:'abc',val:'hello'},{id:'def',val:'world'}] = > {abc:{id:abc,val:'hello}, def:{id:'def',val:'world'}}
 export const arrayToJson = (arr: any[], keyField: string) => {
   const json = {}
-  arr.forEach(el => {
+  arr.forEach((el) => {
     if (el.hasOwnProperty(keyField)) {
       const key = el[keyField]
       json[key] = el
@@ -49,7 +49,7 @@ export const filterModerableItems = <T>(
   items: (IModerable & T)[],
   user?: IUser,
 ): T[] =>
-  items.filter(item => {
+  items.filter((item) => {
     const isItemAccepted = item.moderation === 'accepted'
     const wasCreatedByUser = user && item._createdBy === user.userName
     const isAdminAndAccepted =
@@ -93,7 +93,8 @@ export const getDay = (d: Date) => {
  ***********************************************************************/
 export const isEmail = (email: string) => {
   // eslint-disable-next-line
-  const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  const re =
+    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   return re.test(email)
 }
 
@@ -156,11 +157,9 @@ interface IEditableDoc extends DBDoc {
 }
 
 // Convert theme em string to px number
-export const emStringToPx = width => Number(width.replace('em', '')) * 16
-
+export const emStringToPx = (width) => Number(width.replace('em', '')) * 16
 
 export function randomIntFromInterval(min, max) {
   // min and max included
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
-

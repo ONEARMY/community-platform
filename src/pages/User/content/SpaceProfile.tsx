@@ -6,16 +6,16 @@ import {
 } from 'src/models/user_pp.models'
 
 import Heading from 'src/components/Heading'
-import { Box, Image } from 'rebass/styled-components'
+import { Box, Image } from 'theme-ui'
 // import slick and styles
 import Slider from 'react-slick'
 import 'src/assets/css/slick.min.css'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import Flex from 'src/components/Flex'
 import Workspace from 'src/pages/User/workspace/Workspace'
 import { Text } from 'src/components/Text'
 
-import Badge from 'src/components/Badge/Badge';
+import Badge from 'src/components/Badge/Badge'
 
 import theme from 'src/themes/styled.theme'
 import { replaceDashesWithSpaces } from 'src/utils/helpers'
@@ -139,8 +139,7 @@ const SliderImage = styled.div`
     background-image: url(${props.bgImg});
   `}
 
-
-  @media only screen and (min-width: ${props => props.theme.breakpoints[2]}) {
+  @media only screen and (min-width: ${(props) => props.theme.breakpoints[2]}) {
     height: 500px;
   }
 `
@@ -207,8 +206,8 @@ function renderPlasticTypes(plasticTypes: Array<PlasticTypeLabel>) {
   return (
     <div>
       <h4>We collect the following plastic types:</h4>
-      <Flex flexWrap="wrap">
-        {plasticTypes.map(plasticType => {
+      <Flex sx={{ flexWrap: 'wrap' }}>
+        {plasticTypes.map((plasticType) => {
           return (
             <PlasticType key={plasticType}>
               {renderIcon(plasticType)}
@@ -224,7 +223,7 @@ function renderOpeningHours(openingHours: Array<IOpeningHours>) {
   return (
     <div>
       <h4>We're open on:</h4>
-      {openingHours.map(openingObj => {
+      {openingHours.map((openingObj) => {
         return (
           <OpeningHours key={openingObj.day}>
             {openingObj.day}: {openingObj.openFrom} - {openingObj.openTo}
@@ -259,7 +258,7 @@ function renderProfileTypeName(user: IUserPP) {
     workspace: 'Workspace',
   }
   return (
-    <Heading small bold width={1} capitalize>
+    <Heading small bold capitalize>
       {user.profileType === 'machine-builder' &&
         `${replaceDashesWithSpaces(user.workspaceType!)} `}
       {profileTypeNames[user.profileType]}
@@ -292,10 +291,11 @@ export const SpaceProfile = ({ user, adminButton }: IProps) => {
   }
 
   const userLinks = user?.links.filter(
-    linkItem => !['discord', 'forum'].includes(linkItem.label),
+    (linkItem) => !['discord', 'forum'].includes(linkItem.label),
   )
 
-  const userCountryCode = user.location?.countryCode || user.country?.toLowerCase() || null
+  const userCountryCode =
+    user.location?.countryCode || user.country?.toLowerCase() || null
 
   return (
     <ProfileWrapper mt={4} mb={6}>
@@ -303,7 +303,7 @@ export const SpaceProfile = ({ user, adminButton }: IProps) => {
         <Slider {...sliderSettings}>{coverImage}</Slider>
       </ProfileWrapperCarousel>
       <ProfileContentWrapper mt={['-122px', '-122px', 0]} px={[2, 4]} py={4}>
-        <Box width={['100%', '100%', '80%']}>
+        <Box sx={{ width: ['100%', '100%', '80%'] }}>
           <Box sx={{ display: ['block', 'block', 'none'] }}>
             <MobileBadge>
               <Badge profileType={user.profileType} />
@@ -314,10 +314,20 @@ export const SpaceProfile = ({ user, adminButton }: IProps) => {
             {renderProfileTypeName(user)}
           </UserCategory>
 
-          <Flex alignItems="center">
-            <Heading medium bold color={'black'} my={3} style={{wordBreak:'break-word'}}>
+          <Flex sx={{ alignItems: 'center' }}>
+            <Heading
+              medium
+              bold
+              color={'black'}
+              my={3}
+              style={{ wordBreak: 'break-word' }}
+            >
               {userCountryCode && (
-                <FlagIcon mr={2} code={userCountryCode} style={{display: 'inline-block'}} />
+                <FlagIcon
+                  mr={2}
+                  code={userCountryCode}
+                  style={{ display: 'inline-block' }}
+                />
               )}
               {user.displayName}
             </Heading>
@@ -329,7 +339,7 @@ export const SpaceProfile = ({ user, adminButton }: IProps) => {
               mt="0"
               mb="20px"
               color={theme.colors.grey}
-              width={['80%', '100%']}
+              sx={{ width: ['80%', '100%'] }}
             >
               {user.about}
             </Text>
@@ -347,12 +357,14 @@ export const SpaceProfile = ({ user, adminButton }: IProps) => {
             user.machineBuilderXp &&
             renderMachineBuilderXp(user.machineBuilderXp)}
 
-          <UserContactAndLinks links={userLinks}/>
+          <UserContactAndLinks links={userLinks} />
           <Box mt={3}>{adminButton}</Box>
         </Box>
         <Box
-          width={['100%', '100%', '20%']}
-          sx={{ display: ['none', 'none', 'block'] }}
+          sx={{
+            display: ['none', 'none', 'block'],
+            width: ['100%', '100%', '20%'],
+          }}
         >
           <MobileBadge>
             <Badge size={150} profileType={user.profileType} />

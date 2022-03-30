@@ -1,7 +1,7 @@
 import { PureComponent } from 'react'
 import Linkify from 'react-linkify'
 import ReactPlayer from 'react-player'
-import { Box } from 'rebass/styled-components'
+import { Box } from 'theme-ui'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import ImageGallery from 'src/components/ImageGallery'
@@ -9,7 +9,7 @@ import Text from 'src/components/Text'
 import { IHowtoStep } from 'src/models/howto.models'
 import { IUploadedFileMeta } from 'src/stores/storage'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 interface IProps {
   step: IHowtoStep
@@ -29,17 +29,16 @@ export default class Step extends PureComponent<IProps> {
           data-cy={`step_${stepindex}`}
           mx={[0, 0, -2]}
           mt={9}
-          flexDirection={['column', 'column', 'row']}
+          sx={{ flexDirection: ['column', 'column', 'row'] }}
         >
-          <Flex flex={1} mx={[0, 0, 2]} width={1} mb={[3, 3, 0]}>
+          <Flex mx={[0, 0, 2]} sx={{ flex: 1, width: '100%' }} mb={[3, 3, 0]}>
             <FlexStepNumber
               card
               mediumRadius
-              justifyContent={'center'}
               py={3}
               px={4}
               bg={'white'}
-              width={1}
+              sx={{ justifyContent: 'center', width: '100%' }}
             >
               <Heading medium mb={0}>
                 {stepindex + 1}
@@ -51,12 +50,21 @@ export default class Step extends PureComponent<IProps> {
             mediumRadius
             mx={[0, 0, 2]}
             bg={'white'}
-            flex={9}
-            width={1}
-            flexDirection={['column', 'column', 'row']}
-            overflow={'hidden'}
+            sx={{
+              flex: 9,
+              width: '100%',
+              flexDirection: ['column', 'column', 'row'],
+              overflow: 'hidden',
+            }}
           >
-            <Flex width={[1, 1, 4 / 9]} py={4} px={4} flexDirection={'column'}>
+            <Flex
+              py={4}
+              px={4}
+              sx={{
+                width: ['100%', '100%', `${(1 / 2) * 100}%`],
+                flexDirection: 'column',
+              }}
+            >
               <Heading medium mb={0}>
                 {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
                 {capitalizeFirstLetter(step.title)}
@@ -70,7 +78,7 @@ export default class Step extends PureComponent<IProps> {
                 </Text>
               </Box>
             </Flex>
-            <Box width={[1, 1, 5 / 9]}>
+            <Box sx={{ width: ['100%', '100%', `${(1 / 2) * 100}%`] }}>
               {step.videoUrl ? (
                 <ReactPlayer
                   width="auto"

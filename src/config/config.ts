@@ -10,12 +10,8 @@ Dev config is hardcoded - You can find more information about potential security
 https://javebratt.com/hide-firebase-api/
 *****************************************************************************************/
 
-import type {
-  IFirebaseConfig,
-  ISentryConfig,
-  siteVariants,
-} from './types';
-import type { ConfigurationOption } from './constants';
+import type { IFirebaseConfig, ISentryConfig, siteVariants } from './types'
+import type { ConfigurationOption } from './constants'
 import { UserRole } from '../models'
 
 /**
@@ -24,19 +20,21 @@ import { UserRole } from '../models'
  * During the development cycle this will be process.env
  * when running this application with the output of `yarn build`
  * we will instead load from the global window
- * 
- * @param property 
- * @param fallbackValue - optional fallback value 
+ *
+ * @param property
+ * @param fallbackValue - optional fallback value
  * @returns string
  */
 function _c(property: ConfigurationOption, fallbackValue?: string): string {
-
-  const configurationSource = ['development', 'test'].includes(process.env.NODE_ENV) ?
-    process.env : window?.__OA_COMMUNITY_PLATFORM_CONFIGURATION;
-  return configurationSource?.[property] || fallbackValue;
+  const configurationSource = ['development', 'test'].includes(
+    process.env.NODE_ENV,
+  )
+    ? process.env
+    : window?.__OA_COMMUNITY_PLATFORM_CONFIGURATION
+  return configurationSource?.[property] || fallbackValue
 }
 
-export const getConfigirationOption = _c;
+export const getConfigirationOption = _c
 
 /*********************************************************************************************** /
                                         Site Variants
@@ -78,12 +76,11 @@ function getSiteVariant(): siteVariants {
   }
 }
 
-const siteVariant = getSiteVariant();
+const siteVariant = getSiteVariant()
 
 /*********************************************************************************************** /
                                         Production
 /********************************************************************************************** */
-
 
 const firebaseConfigs: { [variant in siteVariants]: IFirebaseConfig } = {
   /** Sandboxed dev site, all features available for interaction */
@@ -147,11 +144,12 @@ export const SITE = siteVariant
 export const DEV_SITE_ROLE = devSiteRole
 export const FIREBASE_CONFIG = firebaseConfigs[siteVariant]
 export const SENTRY_CONFIG: ISentryConfig = {
-  dsn:
-    _c('REACT_APP_SENTRY_DSN',
-      'https://8c1f7eb4892e48b18956af087bdfa3ac@sentry.io/1399729'),
+  dsn: _c(
+    'REACT_APP_SENTRY_DSN',
+    'https://8c1f7eb4892e48b18956af087bdfa3ac@sentry.io/1399729',
+  ),
   environment: siteVariant,
 }
 
-export const VERSION = _c('REACT_APP_PROJECT_VERSION', '');
-export const GA_TRACKING_ID = _c('REACT_APP_GA_TRACKING_ID');
+export const VERSION = _c('REACT_APP_PROJECT_VERSION', '')
+export const GA_TRACKING_ID = _c('REACT_APP_GA_TRACKING_ID')

@@ -1,7 +1,7 @@
-import { Component } from 'react';
+import { Component } from 'react'
 import theme from 'src/themes/styled.theme'
-import { Link, Flex, Image } from 'rebass/styled-components'
-import styled from 'styled-components'
+import { Link, Flex, Image } from 'theme-ui'
+import styled from '@emotion/styled'
 import { inject, observer } from 'mobx-react'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
@@ -43,7 +43,7 @@ export class Logo extends Component<IProps> {
     const name = this.injected.themeStore?.currentTheme.siteName
     const logo = this.injected.themeStore?.currentTheme.logo
     const nameAndVersion = `${name} logo ${VERSION}`
-    
+
     return (
       <>
         <LogoContainer>
@@ -61,16 +61,18 @@ export class Logo extends Component<IProps> {
             >
               <Image
                 src={logo}
-                width={[50, 50, 100]}
-                height={[50, 50, 100]}
+                sx={{
+                  width: [50, 50, 100],
+                  height: [50, 50, 100],
+                }}
                 alt={nameAndVersion}
                 title={nameAndVersion}
-                />
+              />
             </Flex>
             <Text
               className="sr-only"
               ml={2}
-              display={['none', 'none', 'block']}
+              sx={{ display: ['none', 'none', 'block'] }}
             >
               Precious Plastic
             </Text>

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Portal } from 'react-portal'
-import { Box } from 'rebass/styled-components'
-import styled from 'styled-components'
+import { Box } from 'theme-ui'
+import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 
 interface IProps {
@@ -60,7 +60,7 @@ export class Modal extends React.Component<IProps, IState> {
       isOpen && (
         <Portal id="portal">
           <ModalBackdrop id="ModalBackdrop" onClick={() => this.dismiss()} />
-          <ModalContent id="ModalContent" height={height} width={width}>
+          <ModalContent id="ModalContent" sx={{ height, width }}>
             {children}
           </ModalContent>
         </Portal>

@@ -1,7 +1,7 @@
 import { IDBEndpoint, DBDoc } from 'src/models/common.models'
 import { firestore } from 'src/utils/firebase'
 import { DBQueryOptions } from '../types'
-import { AbstractDBClient } from "../types"
+import { AbstractDBClient } from '../types'
 import { Observable, Observer } from 'rxjs'
 import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
 
@@ -12,10 +12,7 @@ export class FirestoreClient implements AbstractDBClient {
    *  Main Methods - taken from abstract class
    ***********************************************************************/
   async getDoc<T>(endpoint: IDBEndpoint, docId: string) {
-    const doc = await db
-      .collection(endpoint)
-      .doc(docId)
-      .get()
+    const doc = await db.collection(endpoint).doc(docId).get()
     return doc.exists ? (doc.data() as T & DBDoc) : undefined
   }
 
@@ -25,7 +22,7 @@ export class FirestoreClient implements AbstractDBClient {
 
   async setBulkDocs(endpoint: IDBEndpoint, docs: DBDoc[]) {
     const batch = db.batch()
-    docs.forEach(d => {
+    docs.forEach((d) => {
       const ref = db.collection(endpoint).doc(d._id)
       batch.set(ref, d)
     })
@@ -34,19 +31,16 @@ export class FirestoreClient implements AbstractDBClient {
   // get a collection with optional value to query _modified field
   async getCollection<T>(endpoint: IDBEndpoint) {
     const snapshot = await db.collection(endpoint).get()
-    return snapshot.empty ? [] : snapshot.docs.map(d => d.data() as T & DBDoc)
+    return snapshot.empty ? [] : snapshot.docs.map((d) => d.data() as T & DBDoc)
   }
 
   async queryCollection<T>(endpoint: IDBEndpoint, queryOpts: DBQueryOptions) {
     const ref = this._generateQueryRef(endpoint, queryOpts)
     const data = await ref.get()
-    return data.empty ? [] : data.docs.map(doc => doc.data() as T)
+    return data.empty ? [] : data.docs.map((doc) => doc.data() as T)
   }
   deleteDoc(endpoint: IDBEndpoint, docId: string) {
-    return db
-      .collection(endpoint)
-      .doc(docId)
-      .delete()
+    return db.collection(endpoint).doc(docId).delete()
   }
 
   /************************************************************************
@@ -57,8 +51,8 @@ export class FirestoreClient implements AbstractDBClient {
     const ref = this._generateQueryRef(endpoint, queryOpts)
     const observer: Observable<T[]> = Observable.create(
       async (obs: Observer<T[]>) => {
-        ref.onSnapshot(snap => {
-          const docs = snap.docs.map(d => d.data() as T)
+        ref.onSnapshot((snap) => {
+          const docs = snap.docs.map((d) => d.data() as T)
           obs.next(docs)
         })
       },
@@ -69,7 +63,7 @@ export class FirestoreClient implements AbstractDBClient {
     const ref = db.doc(endpoint)
     const observer: Observable<T> = Observable.create(
       async (obs: Observer<T>) => {
-        ref.onSnapshot(snap => {
+        ref.onSnapshot((snap) => {
           obs.next(snap.data() as T)
         })
       },

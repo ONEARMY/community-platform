@@ -65,7 +65,7 @@ const GROUPINGS: IMapGrouping[] = [
 ]
 
 // merge groupings with icons above for export
-export const MAP_GROUPINGS = GROUPINGS.map(g => ({
+export const MAP_GROUPINGS = GROUPINGS.map((g) => ({
   ...g,
   icon: Workspace.findWorkspaceBadge(g.type, true),
 }))

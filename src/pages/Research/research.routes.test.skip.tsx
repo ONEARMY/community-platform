@@ -3,7 +3,7 @@ import ResearchRoutes from './research.routes'
 import { render, waitFor, cleanup } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
 import { Provider } from 'mobx-react'
-import { MockVerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge.test'
+import { MockVerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge.test.skip'
 
 // Similar to issues in Academy.test.tsx - stub methods called in user store constructor
 // TODO - replace with mock store or avoid direct call

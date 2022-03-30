@@ -1,5 +1,5 @@
 import React, { createRef, useEffect, useState } from 'react'
-import { Box, Flex } from 'rebass/styled-components'
+import { Flex, Box } from 'theme-ui'
 import { IComment } from 'src/models'
 import { CommentHeader } from './CommentHeader'
 import { Text } from 'src/components/Text'
@@ -50,17 +50,19 @@ export const Comment: React.FC<IProps> = ({
   return (
     <Box>
       <Flex
-        flexDirection="column"
         p="3"
         bg={'white'}
-        width="100%"
         mb={4}
-        style={{ borderRadius: '5px' }}
+        sx={{
+          width: '100%',
+          flexDirection: 'column',
+          borderRadius: '5px',
+        }}
       >
         <CommentHeader {...props} />
         <Text
           my={2}
-          style={{
+          sx={{
             whiteSpace: 'pre-wrap',
             wordBreak: 'break-word',
             overflow: 'hidden',
@@ -109,7 +111,7 @@ export const Comment: React.FC<IProps> = ({
           <Modal width={600}>
             <FormEditComment
               comment={text}
-              handleSubmit={commentText => {
+              handleSubmit={(commentText) => {
                 handleEdit(_id, commentText)
                 setShowEditModal(false)
               }}

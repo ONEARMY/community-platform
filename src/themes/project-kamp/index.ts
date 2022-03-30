@@ -8,21 +8,22 @@ import { THEME_LIST } from '..'
 const Theme: PlatformTheme = {
   id: THEME_LIST.PROJECT_KAMP,
   siteName: 'Project Kamp',
-  logo, badge, avatar,
+  logo,
+  badge,
+  avatar,
   howtoHeading: `Learn & share how to recycle, build and work`,
   styles,
   academyResource: 'https://project-kamp-academy.netlify.app/',
   externalLinks: [
     {
       url: 'https://projectkamp.com/support.html',
-      label: 'Support Us'
+      label: 'Support Us',
     },
     {
       url: 'https://projectkamp.com/',
-      label: 'Project Homepage'
-    }
-  ]
+      label: 'Project Homepage',
+    },
+  ],
 }
-
 
 export default Theme

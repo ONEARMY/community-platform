@@ -43,8 +43,8 @@ export class DocReference<T> {
     if (serverDB.streamDoc) {
       return serverDB.streamDoc<T>(`${this.endpoint}/${this.id}`)
     } else {
-      return new Observable<DBDoc>(subscriber => {
-        this.get('server').then(res => {
+      return new Observable<DBDoc>((subscriber) => {
+        this.get('server').then((res) => {
           subscriber.next(res)
           subscriber.complete()
         })

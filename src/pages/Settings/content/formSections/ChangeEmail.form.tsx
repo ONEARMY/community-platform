@@ -5,7 +5,7 @@ import { InputField } from 'src/components/Form/Fields'
 import { UserStore } from 'src/stores/User/user.store'
 import Text from 'src/components/Text'
 import theme from 'src/themes/styled.theme'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import Flex from 'src/components/Flex'
 
 interface IFormValues {
@@ -71,11 +71,11 @@ export class ChangeEmailForm extends React.Component<IProps, IState> {
             })
           }
         >
-            Change email
-          </Button>
+          Change email
+        </Button>
         {this.state.showChangeEmailForm && (
           <Form
-            onSubmit={values => this.submit(values as IFormValues)}
+            onSubmit={(values) => this.submit(values as IFormValues)}
             initialValues={this.state.formValues}
             render={({ submitting, values, handleSubmit }) => {
               const { password, newEmail } = values
@@ -86,10 +86,10 @@ export class ChangeEmailForm extends React.Component<IProps, IState> {
                 newEmail === this.state.email
               return (
                 <form onSubmit={handleSubmit}>
-                  <Flex flexDirection={'column'} mb={3}>
+                  <Flex sx={{ flexDirection: 'column' }} mb={3}>
                     <Text>Current email address: {this.state.email}</Text>
                   </Flex>
-                  <Flex flexDirection={'column'} mb={3}>
+                  <Flex sx={{ flexDirection: 'column' }} mb={3}>
                     <Label htmlFor="newEmail">New email address :</Label>
                     <Field
                       name="newEmail"
@@ -100,7 +100,7 @@ export class ChangeEmailForm extends React.Component<IProps, IState> {
                       required
                     />
                   </Flex>
-                  <Flex flexDirection={'column'} mb={3}>
+                  <Flex sx={{ flexDirection: 'column' }} mb={3}>
                     <Label htmlFor="oldPassword">Password :</Label>
                     <Field
                       name="password"

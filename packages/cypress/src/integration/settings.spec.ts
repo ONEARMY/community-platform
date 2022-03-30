@@ -26,21 +26,13 @@ describe('[Settings]', () => {
 
   const setInfo = (info: Info) => {
     cy.step('Update Info section')
-    cy.get('[data-cy=username')
-      .clear()
-      .type(info.username)
-    cy.get('[data-cy=info-description')
-      .clear()
-      .type(info.description)
-    cy.get('[data-cy=coverImages-0]')
-      .find(':file')
-      .attachFile(info.coverImage)
+    cy.get('[data-cy=username').clear().type(info.username)
+    cy.get('[data-cy=info-description').clear().type(info.description)
+    cy.get('[data-cy=coverImages-0]').find(':file').attachFile(info.coverImage)
   }
   const setWorkspaceMapPin = (mapPin: IMapPin) => {
     cy.step('Update Workspace Map section')
-    cy.get('[data-cy=pin-description]')
-      .clear()
-      .type(mapPin.description)
+    cy.get('[data-cy=pin-description]').clear().type(mapPin.description)
     cy.get('[data-cy=location-search]')
       .find(':text')
       .clear()
@@ -55,12 +47,8 @@ describe('[Settings]', () => {
 
   const setMemberMapPin = (mapPin: IMapPin) => {
     cy.step('Update Member section')
-    cy.get('[data-cy=pin-description]')
-      .clear()
-      .type(mapPin.description)
-    cy.get('[data-cy="osm-geocoding-input"]')
-      .clear()
-      .type(mapPin.searchKeyword)
+    cy.get('[data-cy=pin-description]').clear().type(mapPin.description)
+    cy.get('[data-cy="osm-geocoding-input"]').clear().type(mapPin.searchKeyword)
     cy.get('[data-cy="osm-geocoding-results"]')
       .find('li:eq(0)', { timeout: 10000 })
       .click()
@@ -74,9 +62,7 @@ describe('[Settings]', () => {
     // specifies the contact type, such as website or discord
     cy.selectTag(link.label, `[data-cy=select-link-${link.index}]`)
     // input the corresponding value
-    cy.get(`[data-cy=input-link-${link.index}]`)
-      .clear()
-      .type(link.url)
+    cy.get(`[data-cy=input-link-${link.index}]`).clear().type(link.url)
   }
   describe('[Focus Workplace]', () => {
     const freshSettings = {
@@ -171,7 +157,7 @@ describe('[Settings]', () => {
         'userName',
         '==',
         expected.userName,
-      ).then(docs => {
+      ).then((docs) => {
         cy.log('queryDocs', docs)
         expect(docs.length).to.equal(1)
         cy.wrap(null)
@@ -245,7 +231,7 @@ describe('[Settings]', () => {
         'userName',
         '==',
         expected.userName,
-      ).then(docs => {
+      ).then((docs) => {
         cy.log('queryDocs', docs)
         expect(docs.length).to.equal(1)
         cy.wrap(null)
@@ -329,7 +315,7 @@ describe('[Settings]', () => {
         'userName',
         '==',
         expected.userName,
-      ).then(docs => {
+      ).then((docs) => {
         cy.log('queryDocs', docs)
         expect(docs.length).to.equal(1)
         cy.wrap(null)
@@ -416,7 +402,7 @@ describe('[Settings]', () => {
         'userName',
         '==',
         expected.userName,
-      ).then(docs => {
+      ).then((docs) => {
         cy.log('queryDocs', docs)
         expect(docs.length).to.equal(1)
         cy.wrap(null)
@@ -497,7 +483,7 @@ describe('[Settings]', () => {
         'userName',
         '==',
         expected.userName,
-      ).then(docs => {
+      ).then((docs) => {
         cy.log('queryDocs', docs)
         expect(docs.length).to.equal(1)
         cy.wrap(null)
@@ -685,7 +671,7 @@ describe('[Settings]', () => {
         'userName',
         '==',
         expected.userName,
-      ).then(docs => {
+      ).then((docs) => {
         cy.log('queryDocs', docs)
         expect(docs.length).to.equal(1)
         cy.wrap(null)

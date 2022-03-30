@@ -5,7 +5,7 @@ import { Field } from 'react-final-form'
 import Text from 'src/components/Text'
 import { Button } from 'oa-components'
 import { TextAreaField } from 'src/components/Form/Fields'
-import { Box, Flex } from 'rebass/styled-components'
+import { Box, Flex } from 'theme-ui'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import theme from 'src/themes/styled.theme'
@@ -36,23 +36,22 @@ export class MemberMapPinSection extends React.Component<any, IState> {
 
   get injected() {
     return this.props as {
-      userStore: UserStore,
+      userStore: UserStore
     }
   }
 
   componentDidMount() {
     this.setState({
-      hasMapPin: !!this.injected.userStore.user?.location?.latlng
+      hasMapPin: !!this.injected.userStore.user?.location?.latlng,
     })
   }
 
   render() {
     const { isOpen } = this.state
 
-
     return (
       <FlexSectionContainer>
-        <Flex justifyContent="space-between">
+        <Flex sx={{ justifyContent: 'space-between' }}>
           <Heading small id="your-map-pin">
             Add yourself to the map!
           </Heading>
@@ -82,10 +81,11 @@ export class MemberMapPinSection extends React.Component<any, IState> {
                 Add a map pin
               </Button>
 
-              <Field type="hidden"
+              <Field
+                type="hidden"
                 name={'location'}
-                render={()=>{
-                  return ('');
+                render={() => {
+                  return ''
                 }}
               ></Field>
             </>
@@ -109,7 +109,7 @@ export class MemberMapPinSection extends React.Component<any, IState> {
               />
               <Field
                 name={'location'}
-                render={props => {
+                render={(props) => {
                   const { value } = props.input
                   const defaultLocation = {
                     latlng: {
@@ -117,7 +117,8 @@ export class MemberMapPinSection extends React.Component<any, IState> {
                       lng: randomIntFromInterval(-180, 180),
                     },
                   }
-                  const location: ILocation = value && value.latlng ? value : defaultLocation
+                  const location: ILocation =
+                    value && value.latlng ? value : defaultLocation
                   return (
                     <>
                       <Box>
@@ -132,22 +133,27 @@ export class MemberMapPinSection extends React.Component<any, IState> {
 
                         <MapWithDraggablePin
                           position={location.latlng}
-                          updatePosition={newPosition => {
+                          updatePosition={(newPosition) => {
                             props.input.onChange({
                               latlng: newPosition,
                             })
                           }}
                         />
 
-                        <Button mt={4} variant="outline"
+                        <Button
+                          mt={4}
+                          variant="outline"
                           onClick={() => {
                             this.setState({
                               hasMapPin: false,
                             })
                             props.input.onChange({
                               latlng: null,
-                            });
-                          }}>Remove map pin</Button>
+                            })
+                          }}
+                        >
+                          Remove map pin
+                        </Button>
                       </Box>
                     </>
                   )

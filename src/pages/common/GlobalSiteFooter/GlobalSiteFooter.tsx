@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import SiteFooter from 'src/components/SiteFooter/SiteFooter'
 
-const isFooterVisible = path => {
+const isFooterVisible = (path) => {
   return (
     !path.startsWith('/map') && !path.startsWith('/academy') && path !== '/'
   )
@@ -16,7 +16,7 @@ const GlobalSiteFooter = () => {
 
   useEffect(
     () =>
-      history.listen(location => {
+      history.listen((location) => {
         setShowFooter(isFooterVisible(location?.pathname))
       }),
     [history],

@@ -1,5 +1,6 @@
 import * as admin from 'firebase-admin'
 import { NextSeo } from 'next-seo'
+import { Button } from 'oa-components'
 
 export async function getServerSideProps(context) {
   const FIREBASE_CONFIG = process.env.FIREBASE_CONFIG
@@ -70,7 +71,7 @@ export default function HowtoArticle({ slug, article }) {
         }}
       />
       <div id="HowtoArticle">
-        <pre>{article.slug}</pre>
+        <Button>Back</Button>
         <h1>{article.title}</h1>
         <p>{article.description}</p>
         <ul>

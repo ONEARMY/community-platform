@@ -13,6 +13,7 @@
     "build:next": "next build src/ssr",
     "build:bundle": "webpack",
     "build": "rm -Rf dist && npm run build:next && npm run build:bundle && mv ./src/.next/ ./dist && cp -R ./node_modules dist",
+    "ssr": "yarn watch | firebase emulators:start",
     "watch": "yarn watch:next & yarn watch:webpack",
     "watch:next": "next dev src/ssr",
     "watch:webpack": "webpack --watch",

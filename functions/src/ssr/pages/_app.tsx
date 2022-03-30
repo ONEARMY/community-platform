@@ -1,5 +1,6 @@
 import { Global, css, ThemeProvider } from '@emotion/react'
 import Head from 'next/head'
+import SiteFooter from '../components/SiteFooter'
 
 const colors = {
   white: 'white',
@@ -272,7 +273,11 @@ export default function App({ Component, pageProps }) {
         `}
       />
       <ThemeProvider theme={theme}>
+        <h2>
+          Site Heading
+        </h2>
         <Component {...pageProps} />
+        <SiteFooter/>
       </ThemeProvider>
     </>
   )

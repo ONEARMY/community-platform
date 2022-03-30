@@ -17,8 +17,6 @@ export async function getServerSideProps(context) {
     `${Math.floor(Math.random() * 10000)}`,
   )
 
-  console.log({ app })
-
   const db = admin.firestore()
 
   const collection = db.collection('research_rev20201020')

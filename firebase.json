@@ -8,6 +8,16 @@
         "function": "api"
       },
       {
+        "source": "/static/**",
+        "destination": "/static/**",
+        "headers": [
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+          }
+        ]
+      },
+      {
         "source": "**",
         "destination": "/index.html",
         "headers": [

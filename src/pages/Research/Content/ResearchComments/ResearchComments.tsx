@@ -3,7 +3,6 @@ import ReactGA from 'react-ga'
 import { Box, Flex } from 'theme-ui'
 import { useCommonStores } from 'src/index'
 import { Button } from 'oa-components'
-import Text from 'src/components/Text'
 import { CommentTextArea } from 'src/components/Comment/CommentTextArea'
 import { IComment } from 'src/models'
 import { logger } from 'src/logger'
@@ -27,18 +26,6 @@ const BoxMain = styled(Box)`
   margin-right: 20px;
   margin-top: 20px;
 `
-
-const ButtonMain = Button
-// styled(Button)`
-//   width: 100%;
-//   justify-content: center;
-//   &:hover {
-//     background-color: #c2daf0;
-//   }
-//   &:hover.viewComments {
-//     background-color: #ffffff;
-//   }
-// `
 
 export const ResearchComments = ({ comments, update }: IProps) => {
   const [comment, setComment] = useState('')
@@ -153,14 +140,17 @@ export const ResearchComments = ({ comments, update }: IProps) => {
       {(user || (comments && comments.length > 0)) && (
         <ButtonMain
           variant="subtle"
-          sx={{ fontSize: '14px' }}
+          sx={{
+            fontSize: '14px',
+            width: '100%',
+            textAlign: 'center',
+            display: 'block',
+          }}
           onClick={onButtonClick}
           backgroundColor={viewComments ? '#c2daf0' : '#e2edf7'}
           className={viewComments ? 'viewComments' : ''}
         >
-          <Flex>
-            <Text>{setButtonText()}</Text>
-          </Flex>
+          <>{setButtonText()}</>
         </ButtonMain>
       )}
       {viewComments && (

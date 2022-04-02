@@ -12,13 +12,11 @@ import Slider from 'react-slick'
 import 'src/assets/css/slick.min.css'
 import styled from '@emotion/styled'
 import Flex from 'src/components/Flex'
-import Workspace from 'src/pages/User/workspace/Workspace'
 import { Text } from 'src/components/Text'
 
 import Badge from 'src/components/Badge/Badge'
 
 import theme from 'src/themes/styled.theme'
-import { replaceDashesWithSpaces } from 'src/utils/helpers'
 import { Icon, FlagIcon } from 'oa-components'
 
 // Plastic types
@@ -46,32 +44,6 @@ interface IProps {
   user: IUserPP
   adminButton?: JSX.Element
 }
-
-const UserCategory = styled.div`
-  position: relative;
-  display: inline-block;
-  z-index: ${theme.zIndex.default};
-
-  &:after {
-    content: '';
-    height: 100%;
-    display: block;
-    position: absolute;
-    top: 0;
-
-    z-index: ${theme.zIndex.behind};
-    background-repeat: no-repeat;
-    background-size: contain;
-    left: 0;
-    right: 0;
-
-    ${(props: IBackgroundImageProps) =>
-      props.bgImg &&
-      `
-      background-image: url(${props.bgImg});
-    `}
-  }
-`
 
 const MobileBadge = styled.div`
   position: relative;
@@ -249,27 +221,7 @@ function renderMachineBuilderXp(machineBuilderXp: Array<IMAchineBuilderXp>) {
   )
 }
 
-function renderProfileTypeName(user: IUserPP) {
-  const profileTypeNames: { [key in IUserPP['profileType']]: string } = {
-    'collection-point': 'Collection Point',
-    'community-builder': 'Community Point',
-    'machine-builder': 'Machine Builder',
-    member: 'Member',
-    workspace: 'Workspace',
-  }
-  return (
-    <Heading small bold capitalize>
-      {user.profileType === 'machine-builder' &&
-        `${replaceDashesWithSpaces(user.workspaceType!)} `}
-      {profileTypeNames[user.profileType]}
-    </Heading>
-  )
-}
-
 export const SpaceProfile = ({ user, adminButton }: IProps) => {
-  const workspaceHighlightSrc = Workspace.findWordspaceHighlight(
-    user.profileType,
-  )
   let coverImage = [
     <SliderImage
       key="default-image"
@@ -310,25 +262,23 @@ export const SpaceProfile = ({ user, adminButton }: IProps) => {
             </MobileBadge>
           </Box>
 
-          <UserCategory bgImg={workspaceHighlightSrc}>
-            {renderProfileTypeName(user)}
-          </UserCategory>
+          <Flex 
+            sx={{
+              alignItems: "center",
+              pt: ['40px', '40px', '0'],
+            }}
+          >
+            {userCountryCode && (
+              <FlagIcon mr={2} code={userCountryCode} style={{display: 'inline-block'}} />
+            )}
+            <Text large my={2} sx={{ color: `${theme.colors.lightgrey} !important` }}>
+              {user.userName}
+            </Text>
+          </Flex>
 
-          <Flex sx={{ alignItems: 'center' }}>
-            <Heading
-              medium
-              bold
-              color={'black'}
-              my={3}
-              style={{ wordBreak: 'break-word' }}
-            >
-              {userCountryCode && (
-                <FlagIcon
-                  mr={2}
-                  code={userCountryCode}
-                  style={{ display: 'inline-block' }}
-                />
-              )}
+
+          <Flex sx={{ alignItems: "center" }}>
+            <Heading medium bold color={'black'} mb={3} style={{wordBreak:'break-word'}}>
               {user.displayName}
             </Heading>
           </Flex>

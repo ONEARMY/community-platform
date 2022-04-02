@@ -138,7 +138,7 @@ export const ResearchComments = ({ comments, update }: IProps) => {
       marginBottom={viewComments ? '20px' : '0'}
     >
       {(user || (comments && comments.length > 0)) && (
-        <ButtonMain
+        <Button
           variant="subtle"
           sx={{
             fontSize: '14px',
@@ -151,7 +151,7 @@ export const ResearchComments = ({ comments, update }: IProps) => {
           className={viewComments ? 'viewComments' : ''}
         >
           <>{setButtonText()}</>
-        </ButtonMain>
+        </Button>
       )}
       {viewComments && (
         <Flex

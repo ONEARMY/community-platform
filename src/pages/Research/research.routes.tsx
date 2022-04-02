@@ -5,7 +5,7 @@ const CreateResearch = lazy(() => import('./Content/CreateResearch'))
 const CreateUpdate = lazy(() => import('./Content/CreateUpdate'))
 const ResearchItemEditor = lazy(() => import('./Content/EditResearch'))
 const UpdateItemEditor = lazy(() => import('./Content/EditUpdate'))
-const ResearchItemDetail = lazy(() => import('./Content/ResearchItemDetail'))
+const ResearchArticle = lazy(() => import('./Content/ResearchArticle'))
 const ResearchList = lazy(() => import('./Content/ResearchList'))
 
 const routes = () => (
@@ -35,7 +35,7 @@ const routes = () => (
         component={UpdateItemEditor}
         roleRequired="beta-tester"
       />
-      <Route path="/research/:slug" component={ResearchItemDetail} />
+      <Route path="/research/:slug" component={ResearchArticle} />
     </Switch>
   </Suspense>
 )

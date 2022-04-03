@@ -13,7 +13,6 @@ import { IResearch } from 'src/models/research.models'
 import { IUploadedFileMeta } from 'src/stores/storage'
 import { ResearchComments } from './ResearchComments/ResearchComments'
 import styled from '@emotion/styled'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
 interface IProps {
   update: IResearch.UpdateDB
@@ -134,9 +133,7 @@ const ResearchUpdate: React.FC<IProps> = ({
               <ImageGallery images={update.images as IUploadedFileMeta[]} />
             )}
           </Box>
-          <AuthWrapper roleRequired="beta-tester">
-            <ResearchComments update={update} comments={update.comments} />
-          </AuthWrapper>
+          <ResearchComments update={update} comments={update.comments} />
         </Flex>
       </Flex>
     </>

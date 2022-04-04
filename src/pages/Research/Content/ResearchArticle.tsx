@@ -9,11 +9,11 @@ import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { isAllowToEditContent } from 'src/utils/helpers'
 import ResearchDescription from './ResearchDescription'
-import Update from './Update'
+import ResearchUpdate from './ResearchUpdate'
 
 type IProps = RouteComponentProps<{ slug: string }>
 
-const ResearchItemDetail = observer((props: IProps) => {
+const ResearchArticle = observer((props: IProps) => {
   const store = useResearchStore()
 
   const [isLoading, setIsLoading] = React.useState(true)
@@ -57,7 +57,7 @@ const ResearchItemDetail = observer((props: IProps) => {
           {item &&
             item?.updates?.map((update, index) => {
               return (
-                <Update
+                <ResearchUpdate
                   update={update}
                   key={update._id}
                   updateIndex={index}
@@ -82,4 +82,4 @@ const ResearchItemDetail = observer((props: IProps) => {
     return isLoading ? <Loader /> : <NotFoundPage />
   }
 })
-export default ResearchItemDetail
+export default ResearchArticle

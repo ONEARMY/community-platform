@@ -9,13 +9,7 @@
       },
       {
         "source": "/static/**",
-        "destination": "/static/**",
-        "headers": [
-          {
-            "key": "Access-Control-Allow-Origin",
-            "value": "*"
-          }
-        ]
+        "destination": "/static/**"
       },
       {
         "source": "**",

@@ -1,6 +1,7 @@
 import Fuse from 'fuse.js'
 import { action, computed, makeObservable, observable, toJS } from 'mobx'
 import type { IConvertedFileMeta } from 'src/types'
+import { getUserCountry } from 'src/utils/getUserCountry';
 import {
   IHowto,
   IHowtoDB,
@@ -150,15 +151,13 @@ export class HowtoStore extends ModuleStore {
       const howto = this.activeHowto
       const comment = text.slice(0, 400).trim()
       if (user && howto && comment) {
+        const userCountry = getUserCountry(user);
         const newComment: IComment = {
           _id: randomID(),
           _created: new Date().toISOString(),
           _creatorId: user._id,
           creatorName: user.userName,
-          creatorCountry:
-            user.country?.toLowerCase() ||
-            user.location?.countryCode?.toLowerCase() ||
-            null,
+          creatorCountry: userCountry,
           text: comment,
         }
 
@@ -292,6 +291,7 @@ export class HowtoStore extends ModuleStore {
       this.updateUploadStatus('Files')
       // populate DB
       // redefine howTo based on processing done above (should match stronger typing)
+      const userCountry = getUserCountry(user);
       const howTo: IHowto = {
         ...values,
         _createdBy: values._createdBy ? values._createdBy : user.userName,
@@ -306,11 +306,7 @@ export class HowtoStore extends ModuleStore {
         creatorCountry:
           (values._createdBy && values._createdBy === user.userName) ||
           !values._createdBy
-            ? user.location
-              ? user.location.countryCode
-              : user.country
-              ? user.country.toLowerCase()
-              : ''
+            ? userCountry
             : values.creatorCountry
             ? values.creatorCountry
             : '',

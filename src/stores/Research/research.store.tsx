@@ -8,6 +8,7 @@ import {
 } from 'mobx'
 import { createContext, useContext } from 'react'
 import type { IConvertedFileMeta } from 'src/types'
+import { getUserCountry } from 'src/utils/getUserCountry';
 import { logger } from 'src/logger'
 import { IComment, IUser } from 'src/models'
 import { IResearch } from 'src/models/research.models'
@@ -118,15 +119,13 @@ export class ResearchStore extends ModuleStore {
       const id = dbRef.id
 
       try {
+        const userCountry = getUserCountry(user);
         const newComment: IComment = {
           _id: randomID(),
           _created: new Date().toISOString(),
           _creatorId: user._id,
           creatorName: user.userName,
-          creatorCountry:
-            user.country?.toLowerCase() ||
-            user.location?.countryCode?.toLowerCase() ||
-            null,
+          creatorCountry: userCountry,
           text: comment,
         }
 
@@ -299,11 +298,19 @@ export class ResearchStore extends ModuleStore {
     try {
       // populate DB
       // define research
+      const userCountry = getUserCountry(user);
       const research: IResearch.Item = {
         ...values,
         _createdBy: values._createdBy ? values._createdBy : user.userName,
         moderation: values.moderation ? values.moderation : 'accepted', // No moderation needed for researches for now
         updates,
+        creatorCountry:
+          (values._createdBy && values._createdBy === user.userName) ||
+          !values._createdBy
+            ? userCountry
+            : values.creatorCountry
+            ? values.creatorCountry
+            : '',
       }
       logger.debug('populating database', research)
       // set the database document

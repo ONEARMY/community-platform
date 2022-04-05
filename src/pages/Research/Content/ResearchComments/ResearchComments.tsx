@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import ReactGA from 'react-ga'
 import { Box, Flex } from 'theme-ui'
-import { useCommonStores } from 'src/index'
 import { Button } from 'oa-components'
 import { CommentTextArea } from 'src/components/Comment/CommentTextArea'
 import { IComment } from 'src/models'
@@ -30,9 +29,7 @@ const BoxMain = styled(Box)`
 export const ResearchComments = ({ comments, update }: IProps) => {
   const [comment, setComment] = useState('')
   const [loading, setLoading] = useState(false)
-  const { stores } = useCommonStores()
   const researchStore = useResearchStore()
-  const user = stores.userStore.activeUser
   const [viewComments, setViewComments] = useState(false)
 
   async function onSubmit(comment: string) {
@@ -137,22 +134,20 @@ export const ResearchComments = ({ comments, update }: IProps) => {
       backgroundColor={viewComments ? '#e2edf7' : 'inherit'}
       marginBottom={viewComments ? '20px' : '0'}
     >
-      {(user || (comments && comments.length > 0)) && (
-        <Button
-          variant="subtle"
-          sx={{
-            fontSize: '14px',
-            width: '100%',
-            textAlign: 'center',
-            display: 'block',
-          }}
-          onClick={onButtonClick}
-          backgroundColor={viewComments ? '#c2daf0' : '#e2edf7'}
-          className={viewComments ? 'viewComments' : ''}
-        >
-          <>{setButtonText()}</>
-        </Button>
-      )}
+      <Button
+        variant="subtle"
+        sx={{
+          fontSize: '14px',
+          width: '100%',
+          textAlign: 'center',
+          display: 'block',
+        }}
+        onClick={onButtonClick}
+        backgroundColor={viewComments ? '#c2daf0' : '#e2edf7'}
+        className={viewComments ? 'viewComments' : ''}
+      >
+        <>{setButtonText()}</>
+      </Button>
       {viewComments && (
         <Flex
           mt={5}
@@ -167,29 +162,30 @@ export const ResearchComments = ({ comments, update }: IProps) => {
             handleDelete={handleDelete}
             handleEditRequest={handleEditRequest}
           />
-          {user ? (
-            <BoxStyled
+          <BoxStyled
+            sx={{
+              width: [`70%`, `80%`, `90%`],
+            }}
+          >
+            <CommentTextArea
+              data-cy="comment-text-area"
+              comment={comment}
+              onChange={setComment}
+              loading={loading}
+            />
+            <Button
+              data-cy="comment-submit"
+              disabled={!Boolean(comment.trim()) || loading}
+              variant="primary"
+              onClick={() => onSubmit(comment)}
+              mt={3}
               sx={{
-                width: [`70%`, `80%`, `90%`],
+                float: 'right',
               }}
             >
-              <CommentTextArea
-                data-cy="comment-text-area"
-                comment={comment}
-                onChange={setComment}
-                loading={loading}
-              />
-              <Button
-                data-cy="comment-submit"
-                disabled={!Boolean(comment.trim()) || loading}
-                variant="primary"
-                mt={3}
-                onClick={() => onSubmit(comment)}
-              >
-                Comment
-              </Button>
-            </BoxStyled>
-          ) : null}
+              Comment
+            </Button>
+          </BoxStyled>
         </Flex>
       )}
     </BoxMain>

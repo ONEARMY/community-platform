@@ -38,7 +38,7 @@ precacheAndRoute(coreManifest)
 registerRoute(
   new RegExp('/static/'),
   new CacheFirst({
-    cacheName: 'oa-runtime',
+    cacheName: 'oa-static-v1',
     plugins: [
       // Allow static assets to be cached for up to 1 year
       // NOTE - workbox will ignore default max-age settings from hosting
@@ -74,6 +74,20 @@ registerRoute(
     return true
   },
   createHandlerBoundToURL(process.env.PUBLIC_URL + '/index.html'),
+)
+
+// Cache map tiles for up to 30 days
+registerRoute(
+  ({ url }) => url.host.includes('tile.openstreetmap.org'),
+  new CacheFirst({
+    cacheName: 'oa-maptiles',
+    plugins: [
+      new ExpirationPlugin({ maxAgeSeconds: 60 * 60 * 24 * 30 }),
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+    ],
+  }),
 )
 
 // image assets not hard-coded

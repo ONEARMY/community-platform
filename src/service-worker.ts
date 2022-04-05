@@ -81,6 +81,10 @@ registerRoute(
   ({ url }) => url.host.includes('tile.openstreetmap.org'),
   new CacheFirst({
     cacheName: 'oa-maptiles',
+    fetchOptions: {
+      credentials: 'same-origin',
+      mode: 'cors',
+    },
     plugins: [
       new ExpirationPlugin({ maxAgeSeconds: 60 * 60 * 24 * 30 }),
       new CacheableResponsePlugin({

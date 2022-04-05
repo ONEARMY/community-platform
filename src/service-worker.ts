@@ -76,9 +76,17 @@ registerRoute(
   createHandlerBoundToURL(process.env.PUBLIC_URL + '/index.html'),
 )
 
-// Cache map tiles for up to 30 days
+// Cache osm tiles for up to 30 days (servers from https://wiki.openstreetmap.org/wiki/Tile_servers)
+// NOTE - depending on server load could be sent from any endpoint which may recache same asset
+// TODO - explore workarounds such as manually checking cache for file cached from any of the hostnames or having 3 separate caches
+const tileHostnames = [
+  'a.tile.openstreetmap.org',
+  'b.tile.openstreetmap.org',
+  'c.tile.openstreetmap.org',
+]
 registerRoute(
-  ({ url }) => url.host.includes('tile.openstreetmap.org'),
+  ({ url, request }) =>
+    request.destination === 'image' && tileHostnames.includes(url.hostname),
   new CacheFirst({
     cacheName: 'oa-maptiles',
     fetchOptions: {

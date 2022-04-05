@@ -42,13 +42,6 @@ registerRoute(
       // Allow static assets to be cached for up to 1 month
       // NOTE - workbox will ignore default max-age settings from hosting
       new ExpirationPlugin({ maxAgeSeconds: 60 * 60 * 24 * 30 }),
-      new CacheableResponsePlugin({
-        statuses: [200],
-        // Firebase hosting - confirm received intended via header
-        headers: {
-          'x-cache': 'HIT',
-        },
-      }),
     ],
   }),
 )

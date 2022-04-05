@@ -38,10 +38,11 @@ precacheAndRoute(coreManifest)
 registerRoute(
   new RegExp('/static/'),
   new CacheFirst({
+    cacheName: 'oa-runtime',
     plugins: [
-      // Allow static assets to be cached for up to 1 month
+      // Allow static assets to be cached for up to 1 year
       // NOTE - workbox will ignore default max-age settings from hosting
-      new ExpirationPlugin({ maxAgeSeconds: 60 * 60 * 24 * 30 }),
+      new ExpirationPlugin({ maxAgeSeconds: 60 * 60 * 24 * 365 }),
     ],
   }),
 )

@@ -92,6 +92,7 @@ function showDevSiteHeader() {
 const availableThemes = [
   { value: 'precious-plastic', label: 'Precious Plastic' },
   { value: 'project-kamp', label: 'Project Kamp' },
+  { value: 'fixing-fashion', label: 'Fixing Fashion' },
 ]
 
 // we have 2 different dev sites, only show this component when on one and provide select

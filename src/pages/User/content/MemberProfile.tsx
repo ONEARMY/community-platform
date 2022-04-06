@@ -89,19 +89,27 @@ export const MemberProfile = ({ user, adminButton }: IProps) => {
           ml={3}
           sx={{ flexGrow: 2, width: '100%', flexDirection: 'column' }}
         >
-          <Flex 
+          <Flex
             sx={{
-              alignItems: "center",
+              alignItems: 'center',
               pt: ['40px', '40px', '0'],
             }}
           >
             {userCountryCode && (
-              <FlagIcon mr={2} code={userCountryCode} style={{display: 'inline-block'}} />
+              <FlagIcon
+                mr={2}
+                code={userCountryCode}
+                style={{ display: 'inline-block' }}
+              />
             )}
-            <Text large my={2} sx={{
-              color: `${theme.colors.lightgrey} !important`,
-              wordBreak: 'break-word',
-            }}>
+            <Text
+              large
+              my={2}
+              sx={{
+                color: `${theme.colors.lightgrey} !important`,
+                wordBreak: 'break-word',
+              }}
+            >
               {user.userName}
             </Text>
           </Flex>

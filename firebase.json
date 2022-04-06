@@ -8,6 +8,10 @@
         "function": "api"
       },
       {
+        "source": "/static/**",
+        "destination": "/static/**"
+      },
+      {
         "source": "**",
         "destination": "/index.html",
         "headers": [
@@ -29,7 +33,7 @@
         ]
       },
       {
-        "source": "**/*.@(jpg|jpeg|gif|png)",
+        "source": "**/*.@(jpg|jpeg|gif|png|svg)",
         "headers": [
           {
             "key": "Cache-Control",
@@ -42,7 +46,7 @@
         ]
       },
       {
-        "source": "static/**/*.js",
+        "source": "static/**/*.@(js|css|map)",
         "headers": [
           {
             "key": "Cache-Control",

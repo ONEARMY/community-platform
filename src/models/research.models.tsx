@@ -24,6 +24,7 @@ export namespace IResearch {
     description: string
     slug: string
     tags: ISelectedTags
+    creatorCountry?: string
   }
 
   /** Research items synced from the database will contain additional metadata */

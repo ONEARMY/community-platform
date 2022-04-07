@@ -77,14 +77,12 @@ const ResearchDescription: React.FC<IProps> = ({
             </Button>
           </Link>
           <Box style={{ flexGrow: 1 }}>
-            {props.votedUsefulCount !== undefined && (
-              <ResearchUsefulStats
-                votedUsefulCount={props.votedUsefulCount || 0}
-                userVotedUseful={props.userVotedUseful}
-                isLoggedIn={props.loggedInUser ? true : false}
-                onUsefulClick={props.onUsefulClick}
-              />
-            )}
+            <ResearchUsefulStats
+              votedUsefulCount={props.votedUsefulCount || 0}
+              userVotedUseful={props.userVotedUseful}
+              isLoggedIn={props.loggedInUser ? true : false}
+              onUsefulClick={props.onUsefulClick}
+            />
           </Box>
           {/* Check if research should be moderated */}
           {props.needsModeration && (

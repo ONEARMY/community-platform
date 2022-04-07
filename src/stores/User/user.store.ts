@@ -14,7 +14,6 @@ import type { IConvertedFileMeta } from 'src/types'
 import { formatLowerNoSpecial, randomID } from 'src/utils/helpers'
 import { logger } from 'src/logger'
 import { getLocationData } from 'src/utils/getLocationData'
-import { createContext, useContext } from 'react'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
@@ -443,9 +442,6 @@ function getInitialUpdateStatus() {
   }
   return status
 }
-
-export const UserStoreContext = createContext<UserStore>(null as any)
-export const useUserStore = () => useContext(UserStoreContext)
 
 /***********************************************************************************************
  *    Additional Utils - available without store injection

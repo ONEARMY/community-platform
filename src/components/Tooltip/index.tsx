@@ -1,13 +1,13 @@
-import * as React from 'react';
+import * as React from 'react'
 import ReactTooltip from 'react-tooltip'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 const StyledTooltip = styled(ReactTooltip)`
   opacity: 1 !important;
   z-index: 9999 !important;
 `
 
-const Tooltip: React.FC = props => {
+const Tooltip: React.FC = (props) => {
   return (
     <StyledTooltip
       event="mouseenter focus"

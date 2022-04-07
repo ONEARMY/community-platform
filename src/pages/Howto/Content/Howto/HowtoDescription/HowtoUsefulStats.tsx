@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useHistory } from 'react-router'
 import Text from 'src/components/Text'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import Tooltip from 'src/components/Tooltip'
 import theme from 'src/themes/styled.theme'
 
@@ -46,11 +46,11 @@ export const HowtoUsefulStats = (props: IProps) => {
         data-cy="vote-useful"
         data-tip={props.isLoggedIn ? undefined : 'log in to use this'}
         variant="subtle"
-        fontSize="14px"
         onClick={
           props.isLoggedIn ? handleUsefulClick : () => history.push('/sign-in')
         }
         ml="8px"
+        sx={{ fontSize: '14px' }}
         backgroundColor={theme.colors.softyellow}
         icon={state.userVotedUseful ? 'star-active' : 'star'}
       >

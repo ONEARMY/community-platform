@@ -16,7 +16,13 @@ class UserPageRoutes extends React.Component<IProps, any> {
   public render() {
     return (
       <Switch>
-        <Route exact path="/u/:id" render={props => <UserPage {...props} />} />
+        <Route
+          exact
+          path="/u/:id"
+          render={(props) => (
+            <UserPage {...props} key={props.match.params.id} />
+          )}
+        />
         <Route exact path="/u" render={() => <NotFoundPage />} />
       </Switch>
     )

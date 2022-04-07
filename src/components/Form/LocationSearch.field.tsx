@@ -10,13 +10,13 @@ interface IExtendedFieldProps extends IFieldProps {
 
 export const LocationSearchField = ({
   input,
-  customChange
+  customChange,
 }: IExtendedFieldProps) => (
   <>
     <div style={{ position: 'relative', height: '44px' }}>
       <div style={{ position: 'absolute', width: '100%' }}>
         <OsmGeocoding
-          callback={async data => {
+          callback={async (data) => {
             logger.debug(data, 'LocationSearch.field.ReactOsmGeocoding')
             if (data.lat && data.lon) {
               // onPositionChanged({

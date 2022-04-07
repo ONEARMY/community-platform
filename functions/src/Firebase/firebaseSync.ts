@@ -1,4 +1,3 @@
-
 import * as rtdb from './realtimeDB'
 import * as firestore from './firestoreDB'
 import { DBDoc, DB_ENDPOINTS } from '../models'
@@ -16,7 +15,7 @@ import { DBDoc, DB_ENDPOINTS } from '../models'
 const endpoints = Object.values(DB_ENDPOINTS)
 
 export const syncAll = async () => {
-  const promises = endpoints.map(async endpoint => await sync(endpoint))
+  const promises = endpoints.map(async (endpoint) => await sync(endpoint))
   const results = await Promise.all(promises)
   const response = {}
   endpoints.forEach((endpoint, i) => (response[endpoint] = results[i]))
@@ -37,9 +36,9 @@ export const sync = async (endpoint: string) => {
     .collection(endpoint)
     .where('_modified', '>', latest)
     .get()
-  const docs = update.empty ? [] : update.docs.map(d => d.data())
+  const docs = update.empty ? [] : update.docs.map((d) => d.data())
   const json = {}
-  docs.forEach(doc => (json[doc._id] = doc))
+  docs.forEach((doc) => (json[doc._id] = doc))
   await rtdb.update(endpoint, json)
   return json
 }

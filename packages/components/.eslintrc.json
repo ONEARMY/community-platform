@@ -1,0 +1,13 @@
+{
+  "extends": "../../.eslintrc.json",
+  "plugins": ["import"],
+  "rules": {
+    "import/no-default-export": "error",
+    "react/prefer-stateless-function": ["error"],
+    "react/function-component-definition": [
+      "error",
+      { "namedComponents": "arrow-function" }
+    ],
+    "@typescript-eslint/no-unused-vars": ["error"]
+  }
+}

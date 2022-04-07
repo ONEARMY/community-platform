@@ -15,7 +15,7 @@ const app = express()
 app.use(cors({ origin: true }))
 
 // Ensure dev moethods only accessed on localhost
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   const host = req.get('host')
   if (host === 'localhost:4002') next()
   else

@@ -51,7 +51,7 @@ export default class Profile extends Component<IProps, IState> {
                 path={'/u/' + user.userName}
                 content={'Profile'}
               />
-              {COMMUNITY_PAGES_PROFILE.map(page => (
+              {COMMUNITY_PAGES_PROFILE.map((page) => (
                 <MenuMobileLink
                   path={page.path}
                   key={page.path}
@@ -66,7 +66,11 @@ export default class Profile extends Component<IProps, IState> {
             </MenuMobileLinkContainer>
           ) : (
             <div data-cy="user-menu">
-              <Flex onClick={() => this.toggleProfileModal()} ml={1}>
+              <Flex
+                onClick={() => this.toggleProfileModal()}
+                ml={1}
+                sx={{ height: '100%' }}
+              >
                 <Avatar profileType={user.profileType} />
               </Flex>
               <Flex>

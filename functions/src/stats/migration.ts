@@ -79,7 +79,7 @@ export const migrateUserStats = functions.https.onCall(
  */
 function calcUserHowtos(howtos: IHowtoDB[]) {
   const allHowTosByUser = {}
-  howtos.forEach(v => {
+  howtos.forEach((v) => {
     const createdBy = v._createdBy || '_anonymous'
     allHowTosByUser[createdBy] = allHowTosByUser[createdBy] || {}
     allHowTosByUser[createdBy][v._id] = v.moderation
@@ -92,7 +92,7 @@ function calcUserHowtos(howtos: IHowtoDB[]) {
  */
 function calcUserEvents(events: IEventDB[]) {
   const allEventsByUser = {}
-  events.forEach(v => {
+  events.forEach((v) => {
     const createdBy = v._createdBy || '_anonymous'
     allEventsByUser[createdBy] = allEventsByUser[createdBy] || {}
     allEventsByUser[createdBy][v._id] = v.moderation
@@ -100,7 +100,6 @@ function calcUserEvents(events: IEventDB[]) {
   return allEventsByUser
 }
 
-
 function _sleep(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms))
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }

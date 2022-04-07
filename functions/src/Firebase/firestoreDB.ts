@@ -35,7 +35,7 @@ export const getDoc = async <T = any>(
     .collection(mapping)
     .doc(docId)
     .get()
-    .then(res => {
+    .then((res) => {
       return res.data() as T
     })
 }
@@ -45,8 +45,10 @@ export const getCollection = async <T>(endpoint: IDBEndpoint) => {
   return db
     .collection(mapping)
     .get()
-    .then(snapshot => {
-      return snapshot.empty ? [] : snapshot.docs.map(d => d.data() as T & DBDoc)
+    .then((snapshot) => {
+      return snapshot.empty
+        ? []
+        : snapshot.docs.map((d) => d.data() as T & DBDoc)
     })
 }
 export const setDoc = async (

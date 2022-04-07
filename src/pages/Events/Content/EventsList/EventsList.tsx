@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { IEvent, IEventDB } from 'src/models/events.models'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import { Link } from 'src/components/Links'
-import { Flex, Box } from 'rebass/styled-components'
+import { Flex, Box } from 'theme-ui'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import Heading from 'src/components/Heading'
 import EventCard from 'src/components/EventCard/EventCard'
@@ -40,24 +40,31 @@ export class EventsList extends React.Component<any> {
       return (
         <>
           <Flex py={26}>
-            <Heading medium txtcenter bold width={1}>
+            <Heading medium txtcenter bold>
               Precious Plastic events from around the world
             </Heading>
           </Flex>
           <Flex
-            flexWrap={'nowrap'}
-            justifyContent={'space-between'}
-            flexDirection={['column', 'column', 'row']}
+            sx={{
+              justifyContent: 'space-between',
+              flexDirection: ['column', 'column', 'row'],
+              flexWrap: 'nowrap',
+            }}
             mb={['20px', 0]}
           >
             <Flex
-              flexWrap={'nowrap'}
-              flexDirection={['column-reverse', 'column-reverse', 'row']}
-              width={[1, 1, 0.5]}
+              sx={{
+                flexWrap: 'nowrap',
+                flexDirection: ['column-reverse', 'column-reverse', 'row'],
+                width: ['100%', '100%', '50%'],
+              }}
             >
-              <Box width={[1, 1, 0.5]} mb={['10px', '10px', 0]}>
+              <Box
+                sx={{ width: ['100%', '100%', '50%'] }}
+                mb={['10px', '10px', 0]}
+              >
                 <TagsSelect
-                  onChange={tags =>
+                  onChange={(tags) =>
                     this.props.eventStore.updateSelectedTags(tags)
                   }
                   category="event"
@@ -68,14 +75,20 @@ export class EventsList extends React.Component<any> {
             </Flex>
             <Flex>
               <Flex
-                justifyContent={['flex-end', 'flex-end', 'auto']}
-                width="100%"
+                sx={{
+                  justifyContent: ['flex-end', 'flex-end', 'auto'],
+                  width: '100%',
+                }}
               >
                 <Link
-                  width="100%"
+                  sx={{ width: '100%' }}
                   to={this.props.userStore!.user ? '/events/create' : 'sign-up'}
                 >
-                  <Button width="100%" variant="primary" data-cy="create-event">
+                  <Button
+                    sx={{ width: '100%' }}
+                    variant="primary"
+                    data-cy="create-event"
+                  >
                     Create an event
                   </Button>
                 </Link>
@@ -85,13 +98,10 @@ export class EventsList extends React.Component<any> {
           <React.Fragment>
             <>
               {filteredEvents.length === 0 ? null : ( // *** TODO - indicate whether no upcoming events or data still just loading
-                <Flex flexWrap={'wrap'} flexDirection="column">
+                <Flex sx={{ flexWrap: 'wrap', flexDirection: 'column' }}>
                   {filteredEvents.map((event: IEventDB) => (
                     <EventCard
                       key={event._id}
-                      verified={
-                        this.injected.userStore?.verifiedUsers[event._createdBy]
-                      }
                       event={event}
                       needsModeration={this.store.needsModeration(event)}
                       moderateEvent={this.moderateEvent}
@@ -99,7 +109,7 @@ export class EventsList extends React.Component<any> {
                   ))}
                 </Flex>
               )}
-              <Flex justifyContent={'center'} mt={20}>
+              <Flex sx={{ justifyContent: 'center' }} mt={20}>
                 <Link to={'#'} style={{ visibility: 'hidden' }}>
                   <Button variant={'secondary'} data-cy="more-events">
                     More Events
@@ -107,10 +117,15 @@ export class EventsList extends React.Component<any> {
                 </Link>
               </Flex>
               <MoreContainer m={'0 auto'} pt={60} pb={90}>
-                <Flex alignItems={'center'} flexDirection={'column'} mt={5}>
-                  <Heading medium sx={{ textAlign: 'center' }}>
-                    Connect with a likeminded community.
-                  </Heading>
+                <Flex
+                  sx={{
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                    textAlign: 'center',
+                  }}
+                  mt={5}
+                >
+                  <Heading medium>Connect with a likeminded community.</Heading>
                   <Heading medium>All around the planet.</Heading>
                   <Link
                     to={

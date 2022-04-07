@@ -1,4 +1,5 @@
-import styled, { css } from 'styled-components'
+import styled from '@emotion/styled'
+import { css } from '@emotion/react'
 import theme from 'src/themes/styled.theme'
 import DatePicker from 'react-datepicker'
 interface IFormElement {
@@ -49,6 +50,7 @@ export const StyledDatePicker = styled(DatePicker)`
 
 export const TextAreaStyled = styled.textarea<IFormElement>`
   ${inputStyles};
+  resize: vertical;
   padding: 10px;
   height: 150px;
 `

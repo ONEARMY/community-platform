@@ -2,12 +2,12 @@ import * as React from 'react'
 import { HowtoStore } from 'src/stores/Howto/howto.store'
 import { inject, observer } from 'mobx-react'
 import Heading from 'src/components/Heading'
-import Icon from 'src/components/Icons'
+import { Icon } from 'oa-components'
 import { Modal } from 'src/components/Modal/Modal'
-import { Button } from 'src/components/Button'
-import { Flex } from 'rebass/styled-components'
+import { Button } from 'oa-components'
+import { Flex } from 'theme-ui'
 import Text from 'src/components/Text'
-import { Box } from 'rebass/styled-components'
+import { Box } from 'theme-ui'
 import { RouteComponentProps } from 'react-router'
 
 interface IProps extends RouteComponentProps<any> {
@@ -33,8 +33,8 @@ export class HowToSubmitStatus extends React.Component<IProps> {
     const uploadStatus = this.injected.howtoStore.uploadStatus
     return uploadStatus.Start ? (
       <Modal>
-        <Flex justifyContent="space-between">
-          <Heading small textAlign="center">
+        <Flex sx={{ justifyContent: 'space-between' }}>
+          <Heading small sx={{ textAlign: 'center' }}>
             Uploading How To
           </Heading>
           <Icon
@@ -45,8 +45,8 @@ export class HowToSubmitStatus extends React.Component<IProps> {
           />
         </Flex>
         <Box margin="15px 0" p={0}>
-          {Object.keys(uploadStatus).map(key => (
-            <Flex p={0} alignItems="center" key={key}>
+          {Object.keys(uploadStatus).map((key) => (
+            <Flex p={0} sx={{ alignItems: 'center' }} key={key}>
               <Icon
                 marginRight="4px"
                 glyph={uploadStatus[key] ? 'check' : 'loading'}

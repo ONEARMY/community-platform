@@ -14,7 +14,7 @@ import { ISODateString } from 'src/models/common.models'
  * @param arr2 The values to test, e.g. ["a","c"]
  */
 export const includesAll = (arr1: string[], arr2: string[]) => {
-  return arr1.every(val => arr2.includes(val))
+  return arr1.every((val) => arr2.includes(val))
 }
 
 /************************************************************************

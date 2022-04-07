@@ -51,9 +51,11 @@ export class TemplateStore extends ModuleStore {
   @action
   public async dbCollectionRequest() {
     // eslint-disable-next-line
-    const docs$ = await this.db.collection<IExampleDoc>('tags').stream(docs => {
-      this.exampleCollection = docs
-    })
+    const docs$ = await this.db
+      .collection<IExampleDoc>('tags')
+      .stream((docs) => {
+        this.exampleCollection = docs
+      })
   }
 }
 

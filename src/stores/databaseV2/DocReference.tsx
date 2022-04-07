@@ -5,7 +5,7 @@ export class DocReference<T> {
   public id: string
   constructor(
     private endpoint: string,
-    docID: string = '_generate',
+    private docID: string = '_generate',
     private clients: DBClients,
   ) {
     this.id = docID === '_generate' ? this._generateDocID() : docID
@@ -43,8 +43,8 @@ export class DocReference<T> {
     if (serverDB.streamDoc) {
       return serverDB.streamDoc<T>(`${this.endpoint}/${this.id}`)
     } else {
-      return new Observable<DBDoc>(subscriber => {
-        this.get('server').then(res => {
+      return new Observable<DBDoc>((subscriber) => {
+        this.get('server').then((res) => {
           subscriber.next(res)
           subscriber.complete()
         })

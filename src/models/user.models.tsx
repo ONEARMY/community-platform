@@ -6,7 +6,7 @@ import {
   IModerationStatus,
 } from './common.models'
 import type { IUploadedFileMeta } from '../stores/storage'
-import type { IConvertedFileMeta } from '../components/ImageInput/ImageInput'
+import type { IConvertedFileMeta } from '../types'
 
 export interface IUserState {
   user?: IUser
@@ -74,14 +74,14 @@ export type IUserDB = IUser & DBDoc
 export type UserRole = 'super-admin' | 'subscriber' | 'admin' | 'beta-tester'
 
 export interface INotification {
-  _id: string,
-  _created: string,
+  _id: string
+  _created: string
   triggeredBy: {
-    displayName: string,
+    displayName: string
     userId: string
-  },
-  relevantUrl?: string,
-  type: NotificationType,
+  }
+  relevantUrl?: string
+  type: NotificationType
   read: boolean
 }
 

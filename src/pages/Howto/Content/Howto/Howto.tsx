@@ -6,9 +6,9 @@ import HowtoDescription from './HowtoDescription/HowtoDescription'
 import Step from './Step/Step'
 import { IHowtoDB } from 'src/models/howto.models'
 import Text from 'src/components/Text'
-import { Box, Flex } from 'rebass/styled-components'
-import { Button } from 'src/components/Button'
-import styled from 'styled-components'
+import { Box, Flex } from 'theme-ui'
+import { Button } from 'oa-components'
+import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import WhiteBubble0 from 'src/assets/images/white-bubble_0.svg'
 import WhiteBubble1 from 'src/assets/images/white-bubble_1.svg'
@@ -18,6 +18,7 @@ import { Link } from 'src/components/Links'
 import { Loader } from 'src/components/Loader'
 import { UserStore } from 'src/stores/User/user.store'
 import { HowToComments } from './HowToComments/HowToComments'
+import { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
 // We can't directly provide the store as a prop though, and later user a get method to define it
@@ -27,6 +28,7 @@ interface IRouterCustomParams {
 interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
   howtoStore: HowtoStore
   userStore: UserStore
+  aggregationsStore: AggregationsStore
 }
 interface IState {
   howto?: IHowtoDB
@@ -70,7 +72,7 @@ const MoreBox = styled(Box)`
   }
 `
 
-@inject('howtoStore', 'userStore')
+@inject('howtoStore', 'userStore', 'aggregationsStore')
 @observer
 export class Howto extends React.Component<
   RouteComponentProps<IRouterCustomParams>,
@@ -127,16 +129,15 @@ export class Howto extends React.Component<
     const { activeHowto } = this.store
 
     if (activeHowto) {
+      const votedUsefulCount =
+        this.injected.aggregationsStore.aggregations.users_votedUsefulHowtos[
+          activeHowto._id
+        ]
       return (
         <>
           <HowtoDescription
             howto={activeHowto}
-            verified={
-              this.injected.userStore.verifiedUsers[activeHowto._createdBy]
-            }
-            votedUsefulCount={
-              this.injected.userStore.userVotedHowtos[activeHowto._id]
-            }
+            votedUsefulCount={votedUsefulCount}
             loggedInUser={loggedInUser}
             needsModeration={this.store.needsModeration(activeHowto)}
             userVotedUseful={this.store.userVotedActiveHowToUseful}
@@ -154,17 +155,14 @@ export class Howto extends React.Component<
               <Step step={step} key={index} stepindex={index} />
             ))}
           </Box>
-          <HowToComments
-            comments={activeHowto.comments}
-            verifiedUsers={this.injected.userStore.verifiedUsers}
-          />
+          <HowToComments comments={activeHowto.comments} />
           <MoreBox py={20} mt={20}>
-            <Text bold txtcenter fontSize={[4, 4, 5]}>
+            <Text bold txtcenter sx={{ fontSize: [4, 4, 5], display: 'block' }}>
               You're done.
               <br />
               Nice one!
             </Text>
-            <Flex justifyContent={'center'} mt={2}>
+            <Flex sx={{ justifyContent: 'center' }} mt={2}>
               <Link to={'/how-to/'}>
                 <Button variant={'secondary'} data-cy="go-back">
                   Back

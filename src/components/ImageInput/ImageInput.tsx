@@ -1,12 +1,13 @@
 import * as React from 'react'
-import { Box, Image } from 'rebass/styled-components'
-import styled from 'styled-components'
-import { Button } from '../Button'
+import { Box, Image } from 'theme-ui'
+import styled from '@emotion/styled'
+import { Button } from 'oa-components'
 import 'react-image-lightbox/style.css'
 import { ImageConverter } from './ImageConverter'
 import theme from '../../themes/styled.theme'
 import Dropzone from 'react-dropzone'
 import type { IUploadedFileMeta } from '../../stores/storage'
+import { IConvertedFileMeta } from 'src/types'
 
 interface ITitleProps {
   hasUploadedImg: boolean
@@ -25,7 +26,7 @@ const ImageInputWrapper = styled(AlignCenterWrapper as any)<ITitleProps>`
   position: relative;
   height: 100%;
   width: 100%;
-  border: ${props =>
+  border: ${(props) =>
     props.hasUploadedImg ? 0 : `2px dashed ${theme.colors.background}`};
   border-radius: ${theme.space[1]}px;
   background-color: ${theme.colors.white};
@@ -44,7 +45,8 @@ const UploadImageOverlay = styled(AlignCenterWrapper as any)`
   visibility:hidden
   transition: opacity 300ms ease-in;
   border-radius: ${theme.space[1]}px;
-  ${ImageInputWrapper}:hover & {
+  
+  .image-input__wrapper:hover & {
     visibility: visible;
     opacity: 1;
   }
@@ -72,13 +74,6 @@ interface IProps {
 const defaultProps: IProps = {
   onFilesChange: () => null,
   multiple: false,
-}
-
-export interface IConvertedFileMeta {
-  photoData: Blob
-  objectUrl: string
-  name: string
-  type: string
 }
 
 interface IState {
@@ -119,7 +114,7 @@ export class ImageInput extends React.Component<IProps, IState> {
    */
   private _getUploadedFiles(value: IProps['value'] = []) {
     const valArray = Array.isArray(value) ? value : [value]
-    return valArray.filter(v =>
+    return valArray.filter((v) =>
       v.hasOwnProperty('downloadUrl'),
     ) as IUploadedFileMeta[]
   }
@@ -151,7 +146,7 @@ export class ImageInput extends React.Component<IProps, IState> {
     const showUploadedImg = uploadedFiles.length > 0
     const hasImages = uploadedFiles.length > 0 || inputFiles.length > 0
     return (
-      <Box p={0} height="100%">
+      <Box p={0} sx={{ height: '100%' }}>
         <Dropzone
           accept="image/*"
           multiple={multiple}
@@ -159,6 +154,7 @@ export class ImageInput extends React.Component<IProps, IState> {
         >
           {({ getRootProps, getInputProps }) => (
             <ImageInputWrapper
+              className={'image-input__wrapper'}
               hasUploadedImg={showUploadedImg}
               {...getRootProps()}
             >
@@ -172,7 +168,7 @@ export class ImageInput extends React.Component<IProps, IState> {
                     <ImageConverter
                       key={file.name}
                       file={file}
-                      onImgConverted={meta =>
+                      onImgConverted={(meta) =>
                         this.handleConvertedFileChange(meta, index)
                       }
                     />
@@ -191,7 +187,7 @@ export class ImageInput extends React.Component<IProps, IState> {
                     small
                     variant="outline"
                     icon="delete"
-                    onClick={event => this.handleImageDelete(event)}
+                    onClick={(event) => this.handleImageDelete(event)}
                   >
                     Delete
                   </Button>

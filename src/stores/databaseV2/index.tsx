@@ -1,9 +1,7 @@
 import { DexieClient } from './clients/dexie'
 import { FirestoreClient } from './clients/firestore'
 import { RealtimeDBClient } from './clients/rtdb'
-import type {
-  DBClients,
-} from './types'
+import type { DBClients } from './types'
 
 import { DBEndpoint, DB_ENDPOINTS } from './endpoints'
 import { CollectionReference } from './CollectionReference'
@@ -15,10 +13,9 @@ import { SITE } from '../../config/config'
  */
 export class DatabaseV2 extends AbstractDatabase {
   constructor(clients?: DBClients) {
-    super(clients);
-    
-    if (!clients)
-      this.clients = this._getDefaultClients();
+    super(clients)
+
+    if (!clients) this.clients = this._getDefaultClients()
   }
 
   /**
@@ -46,5 +43,3 @@ export class DatabaseV2 extends AbstractDatabase {
     return { cacheDB,   serverDB,  serverCacheDB }
   }
 }
-
-

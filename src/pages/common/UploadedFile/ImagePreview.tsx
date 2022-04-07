@@ -1,7 +1,7 @@
 import * as React from 'react'
 import './UploadedFile.scss'
-import { Button } from 'src/components/Button'
-import Icon from 'src/components/Icons'
+import { Button } from 'oa-components'
+import { Icon } from 'oa-components'
 
 interface IProps {
   imageSrc: string
@@ -27,8 +27,9 @@ export default class ImagePreview extends React.Component<IProps, IState> {
     return (
       <div className="img-preview__container">
         <img
-          className={`img-preview__image ${this.state.imageLoaded &&
-            'loaded'} `}
+          className={`img-preview__image ${
+            this.state.imageLoaded && 'loaded'
+          } `}
           src={this.props.imageSrc}
           alt={this.props.imageAlt}
           onLoad={this.imageLoaded}

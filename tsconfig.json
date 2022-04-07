@@ -14,6 +14,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
     "noImplicitAny": false,
     "strictPropertyInitialization": false,
     "experimentalDecorators": true,
@@ -41,6 +42,12 @@
     "functions",
     "src/utils/UserMigration",
     "src/setupProxy.js",
-    "src/assets/userReportInit.js"
+    "src/assets/userReportInit.js",
+    "packages/components"
+  ],
+  "references": [
+    {
+      "path": "./packages/components"
+    }
   ]
 }

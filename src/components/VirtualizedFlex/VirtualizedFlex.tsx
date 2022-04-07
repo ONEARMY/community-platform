@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Flex, Box } from 'rebass/styled-components'
+import { Flex, Box } from 'theme-ui'
 import themes from 'src/themes/styled.theme'
 import {
   List,
@@ -78,7 +78,10 @@ export class VirtualizedFlex extends React.Component<IProps, IState> {
       >
         <Flex key={key} style={style}>
           {row.map((rowData: any, i: number) => (
-            <Box key={key + i} width={[1, 1 / 2, 1 / 3]}>
+            <Box
+              key={key + i}
+              sx={{ width: ['100%', `${100 * 0.5}%`, `${100 / 3}%`] }}
+            >
               {renderItem(rowData)}
             </Box>
           ))}
@@ -103,7 +106,9 @@ export class VirtualizedFlex extends React.Component<IProps, IState> {
    */
   private _calcTotalColumns(containerWidth: number, breakpoints: number[]) {
     return Math.min(
-      [0, ...breakpoints, Infinity].findIndex(width => containerWidth < width),
+      [0, ...breakpoints, Infinity].findIndex(
+        (width) => containerWidth < width,
+      ),
       breakpoints.length,
     )
   }
@@ -115,14 +120,14 @@ export class VirtualizedFlex extends React.Component<IProps, IState> {
         {({ onChildScroll, isScrolling, height, width, scrollTop }) => (
           <List
             autoHeight
-            height={height}
             width={width}
+            height={height}
             isScrolling={isScrolling}
             onScroll={onChildScroll}
             scrollTop={scrollTop}
             rowCount={dataRows.length}
             overscanRowCount={2}
-            rowRenderer={rowProps => this.rowRenderer(rowProps)}
+            rowRenderer={(rowProps) => this.rowRenderer(rowProps)}
             deferredMeasurementCache={cache}
             rowHeight={cache.rowHeight}
           />
@@ -134,6 +139,6 @@ export class VirtualizedFlex extends React.Component<IProps, IState> {
   static defaultProps: IProps = {
     widthBreakpoints: themes.breakpoints.map(emStringToPx),
     data: [],
-    renderItem: data => <div>RenderItem {data}</div>,
+    renderItem: (data) => <div>RenderItem {data}</div>,
   }
 }

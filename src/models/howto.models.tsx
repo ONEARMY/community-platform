@@ -1,6 +1,6 @@
 import { ISelectedTags } from './tags.model'
 import { DBDoc, IModerable } from './common.models'
-import type { IConvertedFileMeta } from '../components/ImageInput/ImageInput'
+import type { IConvertedFileMeta } from '../types'
 import type { IUploadedFileMeta } from '../stores/storage'
 
 /**
@@ -32,7 +32,6 @@ export interface IHowto extends IHowtoFormInput, IModerable {
  * Howtos retrieved from the database also include metadata such as _id, _created and _modified
  */
 export type IHowtoDB = IHowto & DBDoc
-
 
 export interface IHowtoStep extends IHowToStepFormInput {
   // *** NOTE - adding an '_animationKey' field to track when specific array element removed for

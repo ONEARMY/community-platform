@@ -5,7 +5,7 @@ import Flex from 'src/components/Flex'
 // TODO : create a component to avoid duplicate with how-to's guidelines
 
 export const PostingGuidelines = () => (
-  <Flex card mediumRadius flexDirection={'column'} bg="white" p={4}>
+  <Flex card mediumRadius sx={{ flexDirection: 'column' }} bg="white" p={4}>
     <Heading medium bold mb={2}>
       Event Posting Guidelines
     </Heading>

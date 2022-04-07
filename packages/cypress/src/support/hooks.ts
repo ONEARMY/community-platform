@@ -16,7 +16,7 @@ before(() => {
 
   // Add error handlers
   // https://docs.cypress.io/api/utilities/promise.html#Rejected-test-promises-do-not-fail-tests
-  window.addEventListener('unhandledrejection', event => {
+  window.addEventListener('unhandledrejection', (event) => {
     throw event.reason
   })
   Cypress.Promise.onPossiblyUnhandledRejection((error, promise) => {
@@ -36,9 +36,7 @@ before(() => {
         resolve()
       }, 10000)
       // seed the database
-      TestDB.seedDB()
-        .then(resolve)
-        .catch(reject)
+      TestDB.seedDB().then(resolve).catch(reject)
     })
   })
   // the seeddb function returns an array of [db_key, db_data] entries
@@ -76,7 +74,7 @@ after(() => {
       // clear the database
       TestDB.clearDB().then(
         () => resolve(),
-        err => reject(err),
+        (err) => reject(err),
       )
     })
   })

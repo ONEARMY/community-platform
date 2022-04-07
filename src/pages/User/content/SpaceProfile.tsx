@@ -6,21 +6,18 @@ import {
 } from 'src/models/user_pp.models'
 
 import Heading from 'src/components/Heading'
-import { Box, Image } from 'rebass/styled-components'
+import { Box, Image } from 'theme-ui'
 // import slick and styles
 import Slider from 'react-slick'
 import 'src/assets/css/slick.min.css'
-import styled from 'styled-components'
-import Icon from 'src/components/Icons'
+import styled from '@emotion/styled'
 import Flex from 'src/components/Flex'
-import Workspace from 'src/pages/User/workspace/Workspace'
 import { Text } from 'src/components/Text'
 
-import Badge from 'src/components/Badge/Badge';
+import Badge from 'src/components/Badge/Badge'
 
 import theme from 'src/themes/styled.theme'
-import { replaceDashesWithSpaces } from 'src/utils/helpers'
-import { FlagIcon } from 'src/components/Icons/FlagIcon/FlagIcon'
+import { Icon, FlagIcon } from 'oa-components'
 
 // Plastic types
 import HDPEIcon from 'src/assets/images/plastic-types/hdpe.svg'
@@ -34,7 +31,7 @@ import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 // import V4MemberIcon from 'src/assets/icons/icon-v4-member.svg'
 
 import type { IUploadedFileMeta } from 'src/stores/storage'
-import type { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
+import type { IConvertedFileMeta } from 'src/types'
 
 import { UserStats } from './UserStats'
 import UserContactAndLinks from './UserContactAndLinks'
@@ -47,32 +44,6 @@ interface IProps {
   user: IUserPP
   adminButton?: JSX.Element
 }
-
-const UserCategory = styled.div`
-  position: relative;
-  display: inline-block;
-  z-index: ${theme.zIndex.default};
-
-  &:after {
-    content: '';
-    height: 100%;
-    display: block;
-    position: absolute;
-    top: 0;
-
-    z-index: ${theme.zIndex.behind};
-    background-repeat: no-repeat;
-    background-size: contain;
-    left: 0;
-    right: 0;
-
-    ${(props: IBackgroundImageProps) =>
-      props.bgImg &&
-      `
-      background-image: url(${props.bgImg});
-    `}
-  }
-`
 
 const MobileBadge = styled.div`
   position: relative;
@@ -140,8 +111,7 @@ const SliderImage = styled.div`
     background-image: url(${props.bgImg});
   `}
 
-
-  @media only screen and (min-width: ${props => props.theme.breakpoints[2]}) {
+  @media only screen and (min-width: ${(props) => props.theme.breakpoints[2]}) {
     height: 500px;
   }
 `
@@ -208,8 +178,8 @@ function renderPlasticTypes(plasticTypes: Array<PlasticTypeLabel>) {
   return (
     <div>
       <h4>We collect the following plastic types:</h4>
-      <Flex flexWrap="wrap">
-        {plasticTypes.map(plasticType => {
+      <Flex sx={{ flexWrap: 'wrap' }}>
+        {plasticTypes.map((plasticType) => {
           return (
             <PlasticType key={plasticType}>
               {renderIcon(plasticType)}
@@ -225,7 +195,7 @@ function renderOpeningHours(openingHours: Array<IOpeningHours>) {
   return (
     <div>
       <h4>We're open on:</h4>
-      {openingHours.map(openingObj => {
+      {openingHours.map((openingObj) => {
         return (
           <OpeningHours key={openingObj.day}>
             {openingObj.day}: {openingObj.openFrom} - {openingObj.openTo}
@@ -251,27 +221,7 @@ function renderMachineBuilderXp(machineBuilderXp: Array<IMAchineBuilderXp>) {
   )
 }
 
-function renderProfileTypeName(user: IUserPP) {
-  const profileTypeNames: { [key in IUserPP['profileType']]: string } = {
-    'collection-point': 'Collection Point',
-    'community-builder': 'Community Point',
-    'machine-builder': 'Machine Builder',
-    member: 'Member',
-    workspace: 'Workspace',
-  }
-  return (
-    <Heading small bold width={1} capitalize>
-      {user.profileType === 'machine-builder' &&
-        `${replaceDashesWithSpaces(user.workspaceType!)} `}
-      {profileTypeNames[user.profileType]}
-    </Heading>
-  )
-}
-
 export const SpaceProfile = ({ user, adminButton }: IProps) => {
-  const workspaceHighlightSrc = Workspace.findWordspaceHighlight(
-    user.profileType,
-  )
   let coverImage = [
     <SliderImage
       key="default-image"
@@ -293,10 +243,11 @@ export const SpaceProfile = ({ user, adminButton }: IProps) => {
   }
 
   const userLinks = user?.links.filter(
-    linkItem => !['discord', 'forum'].includes(linkItem.label),
+    (linkItem) => !['discord', 'forum'].includes(linkItem.label),
   )
 
-  const userCountryCode = user.location?.countryCode || user.country?.toLowerCase() || null
+  const userCountryCode =
+    user.location?.countryCode || user.country?.toLowerCase() || null
 
   return (
     <ProfileWrapper mt={4} mb={6}>
@@ -304,22 +255,43 @@ export const SpaceProfile = ({ user, adminButton }: IProps) => {
         <Slider {...sliderSettings}>{coverImage}</Slider>
       </ProfileWrapperCarousel>
       <ProfileContentWrapper mt={['-122px', '-122px', 0]} px={[2, 4]} py={4}>
-        <Box width={['100%', '100%', '80%']}>
+        <Box sx={{ width: ['100%', '100%', '80%'] }}>
           <Box sx={{ display: ['block', 'block', 'none'] }}>
             <MobileBadge>
               <Badge profileType={user.profileType} />
             </MobileBadge>
           </Box>
 
-          <UserCategory bgImg={workspaceHighlightSrc}>
-            {renderProfileTypeName(user)}
-          </UserCategory>
+          <Flex
+            sx={{
+              alignItems: 'center',
+              pt: ['40px', '40px', '0'],
+            }}
+          >
+            {userCountryCode && (
+              <FlagIcon
+                mr={2}
+                code={userCountryCode}
+                style={{ display: 'inline-block' }}
+              />
+            )}
+            <Text
+              large
+              my={2}
+              sx={{ color: `${theme.colors.lightgrey} !important` }}
+            >
+              {user.userName}
+            </Text>
+          </Flex>
 
-          <Flex alignItems="center">
-            <Heading medium bold color={'black'} my={3} style={{wordBreak:'break-word'}}>
-              {userCountryCode && (
-                <FlagIcon mr={2} code={userCountryCode} style={{display: 'inline-block'}} />
-              )}
+          <Flex sx={{ alignItems: 'center' }}>
+            <Heading
+              medium
+              bold
+              color={'black'}
+              mb={3}
+              style={{ wordBreak: 'break-word' }}
+            >
               {user.displayName}
             </Heading>
           </Flex>
@@ -330,7 +302,7 @@ export const SpaceProfile = ({ user, adminButton }: IProps) => {
               mt="0"
               mb="20px"
               color={theme.colors.grey}
-              width={['80%', '100%']}
+              sx={{ width: ['80%', '100%'] }}
             >
               {user.about}
             </Text>
@@ -348,12 +320,14 @@ export const SpaceProfile = ({ user, adminButton }: IProps) => {
             user.machineBuilderXp &&
             renderMachineBuilderXp(user.machineBuilderXp)}
 
-          <UserContactAndLinks links={userLinks}/>
+          <UserContactAndLinks links={userLinks} />
           <Box mt={3}>{adminButton}</Box>
         </Box>
         <Box
-          width={['100%', '100%', '20%']}
-          sx={{ display: ['none', 'none', 'block'] }}
+          sx={{
+            display: ['none', 'none', 'block'],
+            width: ['100%', '100%', '20%'],
+          }}
         >
           <MobileBadge>
             <Badge size={150} profileType={user.profileType} />

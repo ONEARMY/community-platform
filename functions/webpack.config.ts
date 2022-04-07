@@ -94,8 +94,8 @@ function generatePackageJson() {
   const workspacePrefixes = ['oa-', 'one-army', 'onearmy', '@oa', '@onearmy']
   // TODO - could generate actual workspace list from `yarn workspace list --json`
   // remove workspace dependencies
-  Object.keys(json.dependencies).forEach(key => {
-    if (workspacePrefixes.find(prefix => key.startsWith(prefix))) {
+  Object.keys(json.dependencies).forEach((key) => {
+    if (workspacePrefixes.find((prefix) => key.startsWith(prefix))) {
       delete json.dependencies[key]
     }
   })

@@ -1,10 +1,7 @@
-import styled from 'styled-components'
-import {
-  Flex as RebassFlex,
-  FlexProps as RebassFlexProps,
-} from 'rebass/styled-components'
+import styled from '@emotion/styled'
+import { Flex as ThemeUiFlex, FlexProps as ThemeUiFlexProps } from 'theme-ui'
 
-export interface IFlexProps extends RebassFlexProps {
+export interface IFlexProps extends ThemeUiFlexProps {
   border?: boolean
   littleRadius?: boolean
   mediumRadius?: boolean
@@ -15,7 +12,7 @@ export interface IFlexProps extends RebassFlexProps {
   mediumScale?: boolean
 }
 
-type FlexProps = IFlexProps & RebassFlexProps
+type FlexProps = IFlexProps & ThemeUiFlexProps
 
 export const card = (props: IFlexProps) =>
   props.card ? { border: '2px solid black' } : null
@@ -49,7 +46,7 @@ export const mediumScale = (props: IFlexProps) =>
       }
     : null
 
-export const BaseFlex = styled(RebassFlex as any)`
+export const BaseFlex = styled(ThemeUiFlex as any)`
   ${littleRadius}
   ${mediumRadius}
   ${largeRadius}
@@ -58,7 +55,7 @@ export const BaseFlex = styled(RebassFlex as any)`
   ${mediumScale}
 `
 
-// TODO - incorporate custom css into rebass props to allow things like below to be passed
+// TODO - incorporate custom css into theme-ui props to allow things like below to be passed
 export const Flex = (props: FlexProps) => (
   <BaseFlex {...(props as any)}>{props.children}</BaseFlex>
 )

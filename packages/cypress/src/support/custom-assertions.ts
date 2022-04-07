@@ -41,7 +41,12 @@ const eqHowto = (chaiObj, utils) => {
     // Rather than using a RegExp to validate as our fixture specifies the filename
     // using a plain, we can break filename into chunks and validate each of those are present.
     // note, full cover image meta won't match as uploaded image meta changes
-    expect(subject.cover_image.name, 'Cover images').to.satisfy(str => expected.cover_image.name.split('.').filter(Boolean).every(chunk => str.includes(chunk)))
+    expect(subject.cover_image.name, 'Cover images').to.satisfy((str) =>
+      expected.cover_image.name
+        .split('.')
+        .filter(Boolean)
+        .every((chunk) => str.includes(chunk)),
+    )
 
     expected.steps.forEach((step, index) => {
       expect(subject.steps[index], `Have step ${index}`).to.eqHowtoStep(
@@ -78,19 +83,12 @@ const eqSettings = (chaiObj, utils) => {
       this.asserts.push(...asserts)
     }
     assert: Assert<S, E> = (subject: S, expected: E) => {
-      this.asserts.forEach(assert => assert(subject, expected))
+      this.asserts.forEach((assert) => assert(subject, expected))
     }
   }
   const basicInfoAssert: Assert<IUserPPDB, any> = (subject, expected) => {
-    const {
-      _authID,
-      _deleted,
-      _id,
-      about,
-      profileType,
-      userName,
-      verified,
-    } = expected
+    const { _authID, _deleted, _id, about, profileType, userName, verified } =
+      expected
     expect(subject, 'Basic Info').to.containSubset({
       _authID,
       _deleted,

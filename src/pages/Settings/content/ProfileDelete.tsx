@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Modal } from 'src/components/Modal/Modal'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import Text from 'src/components/Text'
 import { Form, Field } from 'react-final-form'
 import { InputField } from 'src/components/Form/Fields'
@@ -39,10 +39,10 @@ export class ProfileDelete extends React.Component<IProps, IState> {
           Delete Profile
         </Button>
         {this.state.showDeleteDialog && (
-          <Modal onDidDismiss={confirm => this.onModalDismiss(confirm)}>
+          <Modal onDidDismiss={(confirm) => this.onModalDismiss(confirm)}>
             <Text>Confirm your password to delete your account</Text>
             <Form
-              onSubmit={values => this.onModalDismiss(values)}
+              onSubmit={(values) => this.onModalDismiss(values)}
               render={({ values, handleSubmit }) => {
                 return (
                   <form onSubmit={handleSubmit}>

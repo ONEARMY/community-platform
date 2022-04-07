@@ -60,6 +60,6 @@ const userAggregations: IUserAggregation[] = [
 /** Watch changes to all user docs and apply aggregations */
 exports.default = functions.firestore
   .document(`${DB_ENDPOINTS.users}/{id}`)
-  .onUpdate(change => {
+  .onUpdate((change) => {
     return handleDBAggregations(change, userAggregations)
   })

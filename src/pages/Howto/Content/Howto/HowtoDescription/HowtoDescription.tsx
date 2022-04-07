@@ -6,13 +6,12 @@ import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import ModerationStatusText from 'src/components/ModerationStatusText'
 import { Link } from 'src/components/Links'
-import { Box, Flex, Image } from 'rebass/styled-components'
+import { Box, Flex, Image } from 'theme-ui'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import StepsIcon from 'src/assets/icons/icon-steps.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
-import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import { IUser } from 'src/models/user.models'
 import {
   isAllowToEditContent,
@@ -21,8 +20,9 @@ import {
 } from 'src/utils/helpers'
 import theme from 'src/themes/styled.theme'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
-import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
+import { FlagIconHowTos } from 'oa-components'
 import { HowtoUsefulStats } from './HowtoUsefulStats'
+import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 
 interface IProps {
   howto: IHowtoDB
@@ -76,10 +76,21 @@ export default class HowtoDescription extends PureComponent<IProps> {
           mt: 4,
         }}
       >
-        <Flex px={4} py={4} flexDirection={'column'} width={[1, 1, 1 / 2]}>
-          <Flex justifyContent="space-between" flexWrap="wrap">
+        <Flex
+          px={4}
+          py={4}
+          sx={{
+            flexDirection: 'column',
+            width: ['100%', '100%', `${(1 / 2) * 100}%`],
+          }}
+        >
+          <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
             <Link to={'/how-to/'}>
-              <Button variant="subtle" fontSize="14px" data-cy="go-back">
+              <Button
+                variant="subtle"
+                sx={{ fontSize: '14px' }}
+                data-cy="go-back"
+              >
                 <Flex>
                   <Image
                     sx={{
@@ -103,7 +114,7 @@ export default class HowtoDescription extends PureComponent<IProps> {
             </Box>
             {/* Check if pin should be moderated */}
             {this.props.needsModeration && (
-              <Flex justifyContent={'space-between'}>
+              <Flex sx={{ justifyContent: 'space-between' }}>
                 <Button
                   data-cy={'accept'}
                   variant={'primary'}
@@ -129,7 +140,7 @@ export default class HowtoDescription extends PureComponent<IProps> {
             )}
           </Flex>
           <Box mt={3} mb={2}>
-            <Flex alignItems="center">
+            <Flex sx={{ alignItems: 'center' }}>
               {howto.creatorCountry && (
                 <FlagIconHowTos code={howto.creatorCountry} />
               )}
@@ -144,11 +155,11 @@ export default class HowtoDescription extends PureComponent<IProps> {
                 >
                   {howto._createdBy}
                 </Link>{' '}
-                {this.props.verified && (
-                  <>
-                    <Image src={VerifiedBadgeIcon} height="12px" width="12px" />{' '}
-                  </>
-                )}
+                <VerifiedUserBadge
+                  userId={howto._createdBy}
+                  height="12px"
+                  width="12px"
+                />
                 | Published on {this.dateCreatedByText(howto)}
               </Text>
             </Flex>
@@ -170,27 +181,37 @@ export default class HowtoDescription extends PureComponent<IProps> {
           </Box>
 
           <Flex mt="4">
-            <Flex mr="4" flexDirection={iconFlexDirection}>
-              <Image src={StepsIcon} height="1em" mr="2" mb="2" />
+            <Flex mr="4" sx={{ flexDirection: iconFlexDirection }}>
+              <Image src={StepsIcon} height="16" width="23" mr="2" mb="2" />
               {howto.steps.length} steps
             </Flex>
-            <Flex mr="4" flexDirection={iconFlexDirection}>
-              <Image src={TimeNeeded} height="1em" mr="2" mb="2" />
+            <Flex mr="4" sx={{ flexDirection: iconFlexDirection }}>
+              <Image src={TimeNeeded} height="16" width="16" mr="2" mb="2" />
               {howto.time}
             </Flex>
-            <Flex mr="4" flexDirection={iconFlexDirection}>
-              <Image src={DifficultyLevel} height="1em" mr="2" mb="2" />
+            <Flex mr="4" sx={{ flexDirection: iconFlexDirection }}>
+              <Image
+                src={DifficultyLevel}
+                height="15"
+                width="16"
+                mr="2"
+                mb="2"
+              />
               {howto.difficulty_level}
             </Flex>
           </Flex>
           <Flex mt={4}>
             {howto.tags &&
-              Object.keys(howto.tags).map(tag => {
+              Object.keys(howto.tags).map((tag) => {
                 return <TagDisplay key={tag} tagKey={tag} />
               })}
           </Flex>
           {howto.files && howto.files.length > 0 && (
-            <Flex className="file-container" mt={3} flexDirection={'column'}>
+            <Flex
+              className="file-container"
+              mt={3}
+              sx={{ flexDirection: 'column' }}
+            >
               {howto.files.map((file, index) => (
                 <FileInfo
                   allowDownload
@@ -202,9 +223,11 @@ export default class HowtoDescription extends PureComponent<IProps> {
           )}
         </Flex>
         <Flex
-          justifyContent={'end'}
-          width={[1, 1, 1 / 2]}
-          sx={{ position: 'relative' }}
+          sx={{
+            width: ['100%', '100%', `${(1 / 2) * 100}%`],
+            position: 'relative',
+            justifyContent: 'end',
+          }}
         >
           <Image
             sx={{

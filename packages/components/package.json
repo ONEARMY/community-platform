@@ -1,0 +1,45 @@
+{
+  "name": "oa-components",
+  "version": "1.0.0",
+  "packageManager": "yarn@3.1.1",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
+  "scripts": {
+    "start": "start-storybook -p 6006",
+    "format": "prettier --write '**/*.{tsx,mdx,md}'",
+    "build:sb": "yarn build && build-storybook",
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint:code": "eslint . --ext .js,.jsx,.ts,.tsx src --color"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.8.2",
+    "@emotion/styled": "^11.8.1",
+    "@react-icons/all-files": "^4.1.0",
+    "prettier": "^2.5.1",
+    "react": "^17.0.2",
+    "react-flag-icon-css": "^1.0.25",
+    "react-icons": "^4.3.1",
+    "react-router": "^6.2.2",
+    "storybook": "^6.4.19",
+    "theme-ui": "^0.14.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.3",
+    "@mdx-js/react": "^2.0.0",
+    "@react-theming/storybook-addon": "^1.1.5",
+    "@storybook/addon-actions": "^6.4.19",
+    "@storybook/addon-docs": "^6.4.19",
+    "@storybook/addon-essentials": "^6.4.19",
+    "@storybook/addon-links": "^6.4.19",
+    "@storybook/addons": "^6.4.19",
+    "@storybook/react": "^6.4.19",
+    "@storybook/theming": "^6.4.19",
+    "@types/react-flag-icon-css": "^1.0.5",
+    "babel-loader": "8.1.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-import": "^2.25.4",
+    "typescript": "^4.5.5"
+  }
+}

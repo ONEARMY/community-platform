@@ -8,6 +8,10 @@
         "function": "api"
       },
       {
+        "source": "/static/**",
+        "destination": "/static/**"
+      },
+      {
         "source": "**",
         "destination": "/index.html",
         "headers": [
@@ -29,11 +33,24 @@
         ]
       },
       {
-        "source": "**/*.@(jpg|jpeg|gif|png)",
+        "source": "**/*.@(jpg|jpeg|gif|png|svg)",
         "headers": [
           {
             "key": "Cache-Control",
             "value": "max-age=604800, s-maxage=3600"
+          },
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+          }
+        ]
+      },
+      {
+        "source": "static/**/*.@(js|css|map)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000"
           },
           {
             "key": "Access-Control-Allow-Origin",

@@ -1,6 +1,7 @@
 import Fuse from 'fuse.js'
 import { action, computed, makeObservable, observable, toJS } from 'mobx'
-import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
+import type { IConvertedFileMeta } from 'src/types'
+import { getUserCountry } from 'src/utils/getUserCountry';
 import {
   IHowto,
   IHowtoDB,
@@ -52,7 +53,7 @@ export class HowtoStore extends ModuleStore {
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
     this.allDocs$.subscribe((docs: IHowtoDB[]) => {
-      this.setAllHowtos(docs)
+      this.sortHowtosByLatest(docs)
     })
     this.selectedTags = {}
     this.searchValue = ''
@@ -60,8 +61,16 @@ export class HowtoStore extends ModuleStore {
   }
 
   @action
-  private setAllHowtos(docs: IHowtoDB[]) {
-    this.allHowtos = docs.sort((a, b) => (a._created < b._created ? 1 : -1))
+  public sortHowtosByLatest(docs?: IHowtoDB[]) {
+    const howtos = docs || this.allHowtos
+    this.allHowtos = howtos.sort((a, b) => (a._created < b._created ? 1 : -1))
+  }
+
+  @action
+  public sortHowtosByUsefulCount(usefulCounts: { [key: string]: number }) {
+    this.allHowtos = this.allHowtos.sort((a, b) =>
+      (usefulCounts[a._id] || 0) < (usefulCounts[b._id] || 0) ? 1 : -1,
+    )
   }
 
   @action
@@ -103,7 +112,7 @@ export class HowtoStore extends ModuleStore {
       })
 
       // Currently Fuse returns objects containing the search items, hence the need to map. https://github.com/krisk/Fuse/issues/532
-      validHowtos = fuse.search(this.searchValue).map(v => v.item)
+      validHowtos = fuse.search(this.searchValue).map((v) => v.item)
     }
 
     return validHowtos
@@ -142,15 +151,13 @@ export class HowtoStore extends ModuleStore {
       const howto = this.activeHowto
       const comment = text.slice(0, 400).trim()
       if (user && howto && comment) {
+        const userCountry = getUserCountry(user);
         const newComment: IComment = {
           _id: randomID(),
           _created: new Date().toISOString(),
           _creatorId: user._id,
           creatorName: user.userName,
-          creatorCountry:
-            user.country?.toLowerCase() ||
-            user.location?.countryCode?.toLowerCase() ||
-            null,
+          creatorCountry: userCountry,
           text: comment,
         }
 
@@ -184,7 +191,7 @@ export class HowtoStore extends ModuleStore {
       if (id && howto && user && howto.comments) {
         const comments = toJS(howto.comments)
         const commentIndex = comments.findIndex(
-          comment => comment._creatorId === user._id && comment._id === id,
+          (comment) => comment._creatorId === user._id && comment._id === id,
         )
         if (commentIndex !== -1) {
           comments[commentIndex].text = newText.slice(0, 400).trim()
@@ -218,7 +225,7 @@ export class HowtoStore extends ModuleStore {
       const user = this.activeUser
       if (id && howto && user && howto.comments) {
         const comments = toJS(howto.comments).filter(
-          comment => !(comment._creatorId === user._id && comment._id === id),
+          (comment) => !(comment._creatorId === user._id && comment._id === id),
         )
 
         const updatedHowto: IHowto = {
@@ -284,6 +291,7 @@ export class HowtoStore extends ModuleStore {
       this.updateUploadStatus('Files')
       // populate DB
       // redefine howTo based on processing done above (should match stronger typing)
+      const userCountry = getUserCountry(user);
       const howTo: IHowto = {
         ...values,
         _createdBy: values._createdBy ? values._createdBy : user.userName,
@@ -298,11 +306,7 @@ export class HowtoStore extends ModuleStore {
         creatorCountry:
           (values._createdBy && values._createdBy === user.userName) ||
           !values._createdBy
-            ? user.location
-              ? user.location.countryCode
-              : user.country
-              ? user.country.toLowerCase()
-              : ''
+            ? userCountry
             : values.creatorCountry
             ? values.creatorCountry
             : '',
@@ -328,7 +332,7 @@ export class HowtoStore extends ModuleStore {
     for (const step of steps) {
       // determine any new images to upload
       const stepImages = (step.images as IConvertedFileMeta[]).filter(
-        img => !!img,
+        (img) => !!img,
       )
       const imgMeta = await this.uploadCollectionBatch(
         stepImages,
@@ -338,7 +342,7 @@ export class HowtoStore extends ModuleStore {
       step.images = imgMeta
       stepsWithImgMeta.push({
         ...step,
-        images: imgMeta.map(f => {
+        images: imgMeta.map((f) => {
           if (f === undefined) {
             return null
           }

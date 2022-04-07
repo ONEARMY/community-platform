@@ -1,6 +1,6 @@
 import { ISelectorList } from 'src/models/selectorList.models'
 
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import {
   color,
@@ -13,7 +13,7 @@ import {
   WidthProps,
 } from 'styled-system'
 
-import Icon from 'src/components/Icons'
+import { Icon } from 'oa-components'
 
 interface IProps {
   onChange?: () => void

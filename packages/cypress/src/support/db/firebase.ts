@@ -23,7 +23,7 @@ const db = firebase.firestore()
 class FirestoreTestDB {
   seedDB = async () => {
     const endpoints = ensureDBPrefixes(DB_ENDPOINTS)
-    const dbWrites = Object.keys(SEED_DATA).map(async key => {
+    const dbWrites = Object.keys(SEED_DATA).map(async (key) => {
       const endpoint = endpoints[key]
       await this.addDocuments(endpoint, SEED_DATA[key])
       return [endpoint, SEED_DATA[key]]
@@ -33,7 +33,7 @@ class FirestoreTestDB {
 
   clearDB = async () => {
     const endpoints = ensureDBPrefixes(DB_ENDPOINTS)
-    const dbDeletes = Object.values(endpoints).map(endpoint => {
+    const dbDeletes = Object.values(endpoints).map((endpoint) => {
       return this.deleteAll(endpoint)
     })
     return Promise.all(dbDeletes)
@@ -54,10 +54,10 @@ class FirestoreTestDB {
           db.collection(`${endpoint}`)
             .where(fieldPath, opStr, value)
             .get()
-            .then(snapshot => {
-              resolve(snapshot.docs.map(d => d.data()))
+            .then((snapshot) => {
+              resolve(snapshot.docs.map((d) => d.data()))
             })
-            .catch(err => reject(err))
+            .catch((err) => reject(err))
         })
       })
   }
@@ -66,7 +66,7 @@ class FirestoreTestDB {
     cy.log(`DB Seed: ${collectionName}`)
     const batch = db.batch()
     const col = db.collection(collectionName)
-    docs.forEach(doc => {
+    docs.forEach((doc) => {
       const ref = col.doc(doc._id)
       batch.set(ref, doc)
     })
@@ -77,7 +77,7 @@ class FirestoreTestDB {
     const batch = db.batch()
     const col = db.collection(collectionName)
     const docs = (await col.get()) || []
-    docs.forEach(d => {
+    docs.forEach((d) => {
       batch.delete(col.doc(d.id))
     })
     return batch.commit()

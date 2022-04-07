@@ -64,7 +64,7 @@ async function updateHowTosCountry(
     .get()
 
   if (querySnapshot) {
-    querySnapshot.forEach(doc => {
+    querySnapshot.forEach((doc) => {
       console.log('Updating howTo ', doc.data()._id, 'to', country)
       doc.ref
         .update({
@@ -75,7 +75,7 @@ async function updateHowTosCountry(
           console.log('Document successfully updated!')
           return true
         })
-        .catch(error => {
+        .catch((error) => {
           console.error('Error updating HowToCountry: ', error)
           return false
         })
@@ -107,10 +107,10 @@ async function updateHowTosComments({
 
   let count = 0
   if (querySnapshot) {
-    querySnapshot.forEach(doc => {
+    querySnapshot.forEach((doc) => {
       const howto = doc.data() as IHowtoDB
       if (howto.comments) {
-        howto.comments.forEach(comment => {
+        howto.comments.forEach((comment) => {
           if (comment._creatorId === userId) {
             const updatedComment = {
               ...comment,
@@ -127,7 +127,7 @@ async function updateHowTosComments({
               .then(() => {
                 count += 1
               })
-              .catch(error => {
+              .catch((error) => {
                 console.error('Error updating comment: ', error)
               })
           }

@@ -10,7 +10,7 @@ const IMAGE_NAME = 'oa-firebase-emulators:latest'
 async function start() {
   let container: Dockerode.Container
   const allContainers = await docker.listContainers()
-  const existingContainer = allContainers.find(c =>
+  const existingContainer = allContainers.find((c) =>
     c.Names.includes(`/${CONTAINER_NAME}`),
   )
   if (existingContainer) {
@@ -81,7 +81,7 @@ async function createNewContainer() {
           Binds: [`${PATHS.functionsDistIndex}:/app/functions/dist/index.js`],
         },
       },
-      function(err, container) {
+      function (err, container) {
         if (err) {
           reject(err)
         }
@@ -108,14 +108,14 @@ function startContainer(container: Dockerode.Container) {
 function rewritePortMapping() {
   const portMapping = getFirebasePortMapping()
   const ExposedPorts = portMapping
-    .filter(port => port.expose)
+    .filter((port) => port.expose)
     .reduce((prev, curr) => {
       const key = `${curr.port}/${curr.type}`
       prev[key] = {}
       return prev
     }, {} as any)
   const PortBindings = portMapping
-    .filter(port => port.expose)
+    .filter((port) => port.expose)
     .reduce((prev, curr) => {
       const key = `${curr.port}/${curr.type}`
       const hostCfg: any = {}

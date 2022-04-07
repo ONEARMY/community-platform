@@ -19,7 +19,7 @@ const USE_SMALL_SAMPLE_SEED = false
  */
 export async function seedDataClean(req: Request, res: Response) {
   const dbCollections = await db.listCollections()
-  const dbEndpoints = dbCollections.map(c => c.id)
+  const dbEndpoints = dbCollections.map((c) => c.id)
   const expectedEndpoints = Object.values(DB_ENDPOINTS)
   const returnMessage: { deleted: any; kept: any; created: any } = {
     deleted: {},
@@ -40,9 +40,7 @@ export async function seedDataClean(req: Request, res: Response) {
   const endpointsToCheck = ['mappins', 'howtos', 'research', 'events'] as const
   type ICheckedEndpoint = typeof endpointsToCheck[number]
   const allDocs: {
-    [endpoint in ICheckedEndpoint]: firestore.QuerySnapshot<
-      firestore.DocumentData
-    >
+    [endpoint in ICheckedEndpoint]: firestore.QuerySnapshot<firestore.DocumentData>
   } = {} as any
 
   // Get list of users with howtos, mappins or events to retain data
@@ -51,7 +49,7 @@ export async function seedDataClean(req: Request, res: Response) {
     if (mappedEndpoint) {
       const snapshot = await db.collection(mappedEndpoint).get()
       allDocs[endpoint as any] = snapshot
-      snapshot.docs.forEach(doc => {
+      snapshot.docs.forEach((doc) => {
         switch (endpoint) {
           case 'mappins':
             keptUsers[doc.id] = true
@@ -69,21 +67,21 @@ export async function seedDataClean(req: Request, res: Response) {
   const deletedUsers = await deleteQueryDocs(
     db.collection(DB_ENDPOINTS.users),
     '[Users Deleted]',
-    doc => !keptUsers[doc.data()._id],
+    (doc) => !keptUsers[doc.data()._id],
   )
   returnMessage.deleted['users'] = deletedUsers
   // Delete nested revision docs (TODO - should add filter to ensure doc ref is a subcollection of users)
   const deletedRevisions = await deleteQueryDocs(
     db.collectionGroup('revisions'),
     '[Revisions Deleted]',
-    doc => !keptUsers[doc.data()._id],
+    (doc) => !keptUsers[doc.data()._id],
   )
   returnMessage.deleted['revisions'] = deletedRevisions
   // Delete nested stats docs
   const deletedStats = await deleteQueryDocs(
     db.collectionGroup('stats'),
     '[Stats Deleted]',
-    doc => !keptUsers[doc.data()._id],
+    (doc) => !keptUsers[doc.data()._id],
   )
   returnMessage.deleted['stats'] = deletedStats
   returnMessage.kept.users = keptUsers
@@ -107,15 +105,15 @@ async function WiPReduceSeedSize(allDocs) {
     const shuffledHowtos = allDocs.howtos.docs
       .sort(() => 0.5 - Math.random())
       .slice(0, sampleSize)
-    shuffledHowtos.forEach(doc => (keptUsers[doc.data()._createdBy] = true))
+    shuffledHowtos.forEach((doc) => (keptUsers[doc.data()._createdBy] = true))
     // Delete howtos
     const deletedHowtos = await batchDeleteDocs(
-      allDocs.howtos.docs.filter(d => !keptUsers[d.data()._createdBy]),
+      allDocs.howtos.docs.filter((d) => !keptUsers[d.data()._createdBy]),
       '[Howtos Deleted]',
     )
     // Delete mappins
     const deletedMappins = await batchDeleteDocs(
-      allDocs.mappins.docs.filter(d => !keptUsers[d.id]),
+      allDocs.mappins.docs.filter((d) => !keptUsers[d.id]),
       '[Mappins Deleted]',
     )
     // Delete events (TBD)
@@ -133,7 +131,7 @@ async function deleteQueryDocs(
   filterFn = (doc: firestore.QueryDocumentSnapshot) => false,
 ) {
   const queryResults = await query.get()
-  const filteredResults = queryResults.docs.filter(doc => filterFn(doc))
+  const filteredResults = queryResults.docs.filter((doc) => filterFn(doc))
   return batchDeleteDocs(filteredResults, logPrefix)
 }
 
@@ -141,7 +139,7 @@ async function batchDeleteDocs(
   docs: firestore.QueryDocumentSnapshot<firestore.DocumentData>[],
   logPrefix = '[Deleted]',
 ) {
-  const refs = docs.map(doc => doc.ref)
+  const refs = docs.map((doc) => doc.ref)
   const chunks = splitArrayToChunks(refs, 500)
   let currentChunk = 0
   const totalDocs = refs.length
@@ -160,7 +158,7 @@ async function batchDeleteDocs(
 
 /** Simple wrapper function to avoid cascading knock-ons for triggered functions etc. */
 function _waitForNextTick(): Promise<void> {
-  return new Promise(resolve => process.nextTick(() => resolve()))
+  return new Promise((resolve) => process.nextTick(() => resolve()))
 }
 
 /**
@@ -191,7 +189,7 @@ async function deleteCollectionCLI(endpoint: string) {
       recursive: true,
       yes: true,
     })
-    .catch(err => {
+    .catch((err) => {
       console.error(err)
       process.exit(1)
     })
@@ -227,7 +225,7 @@ async function deleteQueryBatch(query, resolve) {
 
   // Delete documents in a batch
   const batch = db.batch()
-  snapshot.docs.forEach(doc => {
+  snapshot.docs.forEach((doc) => {
     batch.delete(doc.ref)
   })
   await batch.commit()

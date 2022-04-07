@@ -39,7 +39,8 @@ export class DatabaseV2 extends AbstractDatabase {
     const cacheDB = window.location.search.includes('no-cache')
       ? serverDB
       : new DexieClient()
-    const serverCacheDB = SITE === 'emulated_site' ? serverDB : new RealtimeDBClient();
-    return { cacheDB,   serverDB,  serverCacheDB }
+    const serverCacheDB =
+      SITE === 'emulated_site' ? serverDB : new RealtimeDBClient()
+    return { cacheDB, serverDB, serverCacheDB }
   }
 }

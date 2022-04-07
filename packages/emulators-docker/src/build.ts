@@ -138,7 +138,7 @@ async function followBuildProgress(stream: NodeJS.ReadableStream) {
         }
         resolve(result)
       },
-      onProgress => {
+      (onProgress) => {
         const { stream, error, errorDetail } = onProgress || {}
         if (stream && typeof stream === 'string') {
           let output = stream

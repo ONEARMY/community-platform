@@ -9,6 +9,7 @@ import { DatabaseV2 } from '../databaseV2'
  */
 const AGGREGATION_DOC_IDS = [
   'users_votedUsefulHowtos',
+  'users_votedUsefulResearch',
   'users_verified',
 ] as const
 

@@ -41,6 +41,8 @@ export interface IUser {
   stats?: IUserStats
   /** keep a map of all howto ids that a user has voted as useful */
   votedUsefulHowtos?: { [howtoId: string]: boolean }
+  /** keep a map of all Research ids that a user has voted as useful */
+  votedUsefulResearch?: { [researchId: string]: boolean }
   notifications?: INotification[]
 }
 
@@ -66,6 +68,7 @@ interface IExternalLink {
  */
 interface IUserStats {
   userCreatedHowtos: { [id: string]: IModerationStatus }
+  userCreatedResearch: { [id: string]: IModerationStatus }
   userCreatedEvents: { [id: string]: IModerationStatus }
 }
 

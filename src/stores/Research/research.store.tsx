@@ -6,9 +6,10 @@ import {
   runInAction,
   toJS,
 } from 'mobx'
+import { IResearchStats, IResearchDB } from 'src/models/research.models'
 import { createContext, useContext } from 'react'
 import type { IConvertedFileMeta } from 'src/types'
-import { getUserCountry } from 'src/utils/getUserCountry';
+import { getUserCountry } from 'src/utils/getUserCountry'
 import { logger } from 'src/logger'
 import { IComment, IUser } from 'src/models'
 import { IResearch } from 'src/models/research.models'
@@ -23,6 +24,8 @@ import {
 const COLLECTION_NAME = 'research'
 
 export class ResearchStore extends ModuleStore {
+  @observable
+  public activeResearch: IResearchDB | undefined
   @observable public allResearchItems: IResearch.ItemDB[] = []
   @observable public activeResearchItem: IResearch.ItemDB | undefined
   @observable
@@ -31,6 +34,7 @@ export class ResearchStore extends ModuleStore {
   @observable
   public updateUploadStatus: IUpdateUploadStatus =
     getInitialUpdateUploadStatus()
+  @observable researchStats: IResearchStats | undefined
 
   constructor() {
     super(null as any, 'research')
@@ -53,6 +57,7 @@ export class ResearchStore extends ModuleStore {
 
   public async setActiveResearchItem(slug?: string) {
     if (slug) {
+      this.researchStats = undefined
       const collection = await this.db
         .collection<IResearch.ItemDB>(COLLECTION_NAME)
         .getWhere('slug', '==', slug)
@@ -60,11 +65,25 @@ export class ResearchStore extends ModuleStore {
       runInAction(() => {
         this.activeResearchItem = researchItem
       })
+      // load Research stats which are stored in a separate subcollection
+      await this.loadResearchStats(researchItem?._id)
       return researchItem
     } else {
       runInAction(() => {
         this.activeResearchItem = undefined
       })
+    }
+  }
+
+  @action
+  private async loadResearchStats(id?: string) {
+    if (id) {
+      const ref = this.db
+        .collection<IResearchStats>('research')
+        .doc(`${id}/stats/all`)
+      const researchStats = await ref.get('server')
+      logger.debug('researchStats', researchStats)
+      this.researchStats = researchStats || { votedUsefulCount: 0 }
     }
   }
 
@@ -119,7 +138,7 @@ export class ResearchStore extends ModuleStore {
       const id = dbRef.id
 
       try {
-        const userCountry = getUserCountry(user);
+        const userCountry = getUserCountry(user)
         const newComment: IComment = {
           _id: randomID(),
           _created: new Date().toISOString(),
@@ -298,7 +317,7 @@ export class ResearchStore extends ModuleStore {
     try {
       // populate DB
       // define research
-      const userCountry = getUserCountry(user);
+      const userCountry = getUserCountry(user)
       const research: IResearch.Item = {
         ...values,
         _createdBy: values._createdBy ? values._createdBy : user.userName,
@@ -325,7 +344,7 @@ export class ResearchStore extends ModuleStore {
       this.updateResearchUploadStatus('Complete')
     } catch (error) {
       logger.debug('error', error)
-      throw new Error(error.message)
+      //throw new Error(error.message)
     }
   }
 
@@ -399,9 +418,13 @@ export class ResearchStore extends ModuleStore {
         this.updateUpdateUploadStatus('Complete')
       } catch (error) {
         logger.error('error', error)
-        throw new Error(error?.message)
       }
     }
+  }
+  get userVotedActiveResearchUseful(): boolean {
+    const researchId = this.activeResearchItem!._id
+    const userVotedResearch = this.activeUser?.votedUsefulResearch || {}
+    return userVotedResearch[researchId] ? true : false
   }
 }
 

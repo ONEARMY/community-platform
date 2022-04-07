@@ -14,6 +14,7 @@ import type { IConvertedFileMeta } from 'src/types'
 import { formatLowerNoSpecial, randomID } from 'src/utils/helpers'
 import { logger } from 'src/logger'
 import { getLocationData } from 'src/utils/getLocationData'
+import { createContext, useContext } from 'react'
 
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
@@ -189,6 +190,11 @@ export class UserStore extends ModuleStore {
     // *** TODO -
   }
 
+  public async getUserEmail() {
+    const user = this.authUser as firebase.default.User
+    return user.email as string
+  }
+
   public async changeUserPassword(oldPassword: string, newPassword: string) {
     // *** TODO - (see code in change pw component and move here)
     const user = this.authUser as firebase.default.User
@@ -198,6 +204,16 @@ export class UserStore extends ModuleStore {
     )
     await user.reauthenticateAndRetrieveDataWithCredential(credentials)
     return user.updatePassword(newPassword)
+  }
+
+  public async changeUserEmail(password: string, newEmail: string) {
+    const user = this.authUser as firebase.default.User
+    const credentials = EmailAuthProvider.credential(
+      user.email as string,
+      password,
+    )
+    await user.reauthenticateAndRetrieveDataWithCredential(credentials)
+    return user.updateEmail(newEmail)
   }
 
   public async sendPasswordResetEmail(email: string) {
@@ -277,6 +293,7 @@ export class UserStore extends ModuleStore {
     this.aggregationsStore.updateAggregation('users_verified')
   }
 
+  @action
   public async updateUsefulResearch(researchId: string) {
     if (this.user) {
       // toggle entry on user votedUsefulResearch to either vote or unvote a Research
@@ -426,6 +443,9 @@ function getInitialUpdateStatus() {
   }
   return status
 }
+
+export const UserStoreContext = createContext<UserStore>(null as any)
+export const useUserStore = () => useContext(UserStoreContext)
 
 /***********************************************************************************************
  *    Additional Utils - available without store injection

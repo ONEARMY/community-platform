@@ -418,7 +418,6 @@ export class ResearchStore extends ModuleStore {
         this.updateUpdateUploadStatus('Complete')
       } catch (error) {
         logger.error('error', error)
-        //throw new Error(error?.message)
       }
     }
   }

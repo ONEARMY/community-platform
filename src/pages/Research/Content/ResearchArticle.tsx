@@ -7,59 +7,61 @@ import { Link } from 'src/components/Links'
 import { Loader } from 'src/components/Loader'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import { UserStore } from 'src/stores/User/user.store'
 import { isAllowToEditContent } from 'src/utils/helpers'
 import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
+import { useUserStore } from 'src/stores/User/user.store'
 
 type IProps = RouteComponentProps<{ slug: string }>
 
 const ResearchArticle = observer((props: IProps) => {
-  const store = useResearchStore()
+  const researchStore = useResearchStore()
+  const userStore = useUserStore()
 
   const [isLoading, setIsLoading] = React.useState(true)
 
   const moderateResearch = async (accepted: boolean) => {
-    const item = store.activeResearchItem
+    const item = researchStore.activeResearchItem
     if (item) {
       item.moderation = accepted ? 'accepted' : 'rejected'
-      await store.moderateResearch(item)
+      await researchStore.moderateResearch(item)
     }
   }
 
   const onUsefulClick = async (researchId: string) => {
-    //await this.injected.userStore.updateUsefulResearch(researchId)
+    await userStore.updateUsefulResearch(researchId)
   }
 
   React.useEffect(() => {
-    (async () => {
+    ;(async () => {
       const { slug } = props.match.params
-      await store.setActiveResearchItem(slug)
+      await researchStore.setActiveResearchItem(slug)
       setIsLoading(false)
     })()
 
     // Reset the store's active item on component cleanup
     return () => {
-      store.setActiveResearchItem()
+      researchStore.setActiveResearchItem()
     }
-  }, [props, store])
+  }, [props, researchStore])
 
-  const item = store.activeResearchItem
-  const loggedInUser = store.activeUser
+  const item = researchStore.activeResearchItem
+  const loggedInUser = researchStore.activeUser
 
   if (item) {
     const isEditable =
-      !!store.activeUser && isAllowToEditContent(item, store.activeUser)
+      !!researchStore.activeUser &&
+      isAllowToEditContent(item, researchStore.activeUser)
 
     return (
       <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
         <ResearchDescription
           research={item}
-          votedUsefulCount={store.researchStats?.votedUsefulCount}
+          votedUsefulCount={researchStore.researchStats?.votedUsefulCount}
           loggedInUser={loggedInUser}
           isEditable={isEditable}
-          needsModeration={store.needsModeration(item)}
-          userVotedUseful={store.userVotedActiveResearchUseful}
+          needsModeration={researchStore.needsModeration(item)}
+          userVotedUseful={researchStore.userVotedActiveResearchUseful}
           moderateResearch={moderateResearch}
           onUsefulClick={() => onUsefulClick(item._id)}
         />

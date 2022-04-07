@@ -79,7 +79,7 @@ const ResearchDescription: React.FC<IProps> = ({
           <Box style={{ flexGrow: 1 }}>
             {props.votedUsefulCount !== undefined && (
               <ResearchUsefulStats
-                votedUsefulCount={props.votedUsefulCount}
+                votedUsefulCount={props.votedUsefulCount || 0}
                 userVotedUseful={props.userVotedUseful}
                 isLoggedIn={props.loggedInUser ? true : false}
                 onUsefulClick={props.onUsefulClick}

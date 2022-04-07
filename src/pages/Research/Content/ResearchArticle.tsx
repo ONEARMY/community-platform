@@ -10,13 +10,13 @@ import { useResearchStore } from 'src/stores/Research/research.store'
 import { isAllowToEditContent } from 'src/utils/helpers'
 import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
-import { useUserStore } from 'src/stores/User/user.store'
+import { useCommonStores } from 'src/index'
 
 type IProps = RouteComponentProps<{ slug: string }>
 
 const ResearchArticle = observer((props: IProps) => {
   const researchStore = useResearchStore()
-  const userStore = useUserStore()
+  const { userStore, aggregationsStore } = useCommonStores().stores
 
   const [isLoading, setIsLoading] = React.useState(true)
 
@@ -49,6 +49,8 @@ const ResearchArticle = observer((props: IProps) => {
   const loggedInUser = researchStore.activeUser
 
   if (item) {
+    const votedUsefulCount =
+      aggregationsStore.aggregations.users_votedUsefulResearch[item._id]
     const isEditable =
       !!researchStore.activeUser &&
       isAllowToEditContent(item, researchStore.activeUser)
@@ -57,7 +59,7 @@ const ResearchArticle = observer((props: IProps) => {
       <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
         <ResearchDescription
           research={item}
-          votedUsefulCount={researchStore.researchStats?.votedUsefulCount}
+          votedUsefulCount={votedUsefulCount}
           loggedInUser={loggedInUser}
           isEditable={isEditable}
           needsModeration={researchStore.needsModeration(item)}

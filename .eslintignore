@@ -5,3 +5,4 @@ build
 cypress
 lib
 storybook-static
+dist

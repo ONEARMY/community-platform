@@ -2,8 +2,8 @@ import * as React from 'react'
 import { IFirebaseUploadInfo } from 'src/components/FirebaseFileUploader/FirebaseFileUploader'
 import { storage } from 'src/utils/firebase'
 import './UploadedFile.scss'
-import { Button } from 'src/components/Button'
-import Icon from 'src/components/Icons'
+import { Button } from 'oa-components'
+import { Icon } from 'oa-components'
 import ImagePreview from './ImagePreview'
 import { logger } from 'src/logger'
 
@@ -36,7 +36,7 @@ export class UploadedFile extends React.Component<IUploadedFileProps, IState> {
     // return callback before confirmation of deletion to provide immediate feedback to user
     this.props.onFileDeleted()
     this.setState({ deleted: true })
-    ref.delete().catch(error => {
+    ref.delete().catch((error) => {
       throw new Error(JSON.stringify(error))
     })
   }

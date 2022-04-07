@@ -1,15 +1,15 @@
 import * as React from 'react'
 import '@uppy/core/dist/style.css'
 import '@uppy/dashboard/dist/style.css'
-import Uppy from '@uppy/core'
+import Uppy, { UppyFile } from '@uppy/core'
 import { DashboardModal } from '@uppy/react'
-import { Button } from '../Button'
+import { Button } from 'oa-components'
 import { UPPY_CONFIG } from './UppyConfig'
-import { Flex } from 'rebass/styled-components'
+import { Flex } from 'theme-ui'
 import { FileInfo } from '../FileInfo/FileInfo'
 
 interface IUppyFiles {
-  [key: string]: Uppy.UppyFile
+  [key: string]: UppyFile
 }
 interface IProps {
   onFilesChange?: (files: (Blob | File)[]) => void
@@ -18,7 +18,7 @@ interface IState {
   open: boolean
 }
 export class FileInput extends React.Component<IProps, IState> {
-  private uppy = Uppy({
+  private uppy = new Uppy({
     ...UPPY_CONFIG,
     onBeforeUpload: () => this.uploadTriggered(),
   })
@@ -35,7 +35,7 @@ export class FileInput extends React.Component<IProps, IState> {
     return files
   }
   get filesArray() {
-    return Object.values(this.files).map(meta => meta.data) as File[]
+    return Object.values(this.files).map((meta) => meta.data) as File[]
   }
 
   // when upload button clicked just want to clise modal and reflect files
@@ -65,7 +65,7 @@ export class FileInput extends React.Component<IProps, IState> {
     const showFileList = this.filesArray.length > 0
     return (
       <>
-        <Flex flexDirection="column" justifyContent="center">
+        <Flex sx={{ flexDirection: 'column', justifyContent: 'center' }}>
           {showFileList ? (
             <>
               <Button
@@ -76,7 +76,7 @@ export class FileInput extends React.Component<IProps, IState> {
               >
                 Add Files (.zip)
               </Button>
-              {this.filesArray.map(file => (
+              {this.filesArray.map((file) => (
                 <FileInfo key={file.name} file={file} />
               ))}
             </>

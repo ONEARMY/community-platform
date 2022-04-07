@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import Heading from 'src/components/Heading'
 import { AdminStore } from 'src/stores/Admin/admin.store'
-import { Box } from 'rebass/styled-components'
+import { Box } from 'theme-ui'
 import { Input } from 'src/components/Form/elements'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
@@ -61,9 +61,9 @@ export class AdminBetaTesters extends React.Component<IProps, IState> {
       <Box mt={4}>
         <Heading>List of Beta Testers</Heading>
         <Box mb={3} bg={'white'} p={2}>
-          {betaTesters.map(u => (
+          {betaTesters.map((u) => (
             <Flex key={u.userName}>
-              <Text flex={1}>{u.userName}</Text>
+              <Text sx={{ flex: 1 }}>{u.userName}</Text>
               <AuthWrapper roleRequired="admin">
                 <Button
                   icon="delete"

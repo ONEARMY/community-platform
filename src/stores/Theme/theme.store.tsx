@@ -10,10 +10,16 @@ const themeMap = {
 }
 
 export class ThemeStore {
-  currentTheme: PlatformTheme = themeMap[ localStorage.getItem('platformTheme')|| getConfigirationOption('REACT_APP_PLATFORM_THEME', 'precious-plastic')];
+  currentTheme: PlatformTheme =
+    themeMap[
+      localStorage.getItem('platformTheme') ||
+        getConfigirationOption('REACT_APP_PLATFORM_THEME', 'precious-plastic')
+    ]
 
   constructor() {
     makeAutoObservable(this)
+
+    console.log(`Current theme:`, this.currentTheme)
   }
 
   @action
@@ -23,10 +29,10 @@ export class ThemeStore {
     }
   }
 
-  public getExternalNavigationItems():{
+  public getExternalNavigationItems(): {
     label: string
     url: string
   }[] {
-    return this.currentTheme.externalLinks || [];
+    return this.currentTheme.externalLinks || []
   }
 }

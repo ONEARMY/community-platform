@@ -27,7 +27,7 @@ class EventsPage extends React.Component<IProps, any> {
         <Route
           exact
           path="/events"
-          render={props => <EventsList {...props} />}
+          render={(props) => <EventsList {...props} />}
         />
         <AuthRoute path="/events/create" component={EventsCreate} />
       </Switch>

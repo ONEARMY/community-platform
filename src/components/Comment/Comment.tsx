@@ -1,157 +1,125 @@
-import React, { useState } from 'react'
-import ReactGA from 'react-ga'
-import { FaTrash, FaRegEdit } from 'react-icons/fa'
-import { Flex } from 'rebass/styled-components'
-import { useCommonStores } from 'src/index'
+import React, { createRef, useEffect, useState } from 'react'
+import { Flex, Box } from 'theme-ui'
 import { IComment } from 'src/models'
 import { CommentHeader } from './CommentHeader'
 import { Text } from 'src/components/Text'
 import { Modal } from '../Modal/Modal'
-import { TextAreaField } from '../Form/Fields'
-import { Field, Form } from 'react-final-form'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import { AuthWrapper } from '../Auth/AuthWrapper'
-import { logger } from 'src/logger'
+import FormEditComment from '../FormEditComment/FormEditComment'
 
-export interface IProps extends IComment {}
+export interface IProps extends IComment {
+  handleEditRequest
+  handleDelete
+  handleEdit
+}
 
 export const Comment: React.FC<IProps> = ({
   _creatorId,
   text,
   _id,
+  handleEditRequest,
+  handleDelete,
+  handleEdit,
   ...props
 }) => {
-  const { stores } = useCommonStores()
+  const textRef = createRef<any>()
   const [showEditModal, setShowEditModal] = useState(false)
+  const [textHeight, setTextHeight] = useState(0)
+  const [isShowMore, setShowMore] = useState(false)
+
+  const onEditRequest = () => {
+    handleEditRequest()
+    return setShowEditModal(true)
+  }
+
+  const onDelete = () => {
+    handleDelete(_id)
+  }
+
+  useEffect(() => {
+    if (textRef.current) {
+      setTextHeight(textRef.current.scrollHeight)
+    }
+  }, [])
+
+  const showMore = () => {
+    setShowMore(!isShowMore)
+  }
 
   return (
-    <Flex
-      flexDirection="column"
-      p="3"
-      bg={'white'}
-      width="100%"
-      mb={4}
-      style={{ borderRadius: '5px' }}
-    >
-      <CommentHeader {...props} />
-      <Text my={2} style={{ whiteSpace: 'pre-wrap' }}>
-        {text}
-      </Text>
+    <Box>
+      <Flex
+        p="3"
+        bg={'white'}
+        mb={4}
+        sx={{
+          width: '100%',
+          flexDirection: 'column',
+          borderRadius: '5px',
+        }}
+      >
+        <CommentHeader {...props} />
+        <Text
+          my={2}
+          sx={{
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-word',
+            overflow: 'hidden',
+            lineHeight: '1em',
+            maxHeight: isShowMore ? 'max-content' : '10em',
+          }}
+          ref={textRef}
+        >
+          {text}
+        </Text>
+        {textHeight > 160 && (
+          <a
+            onClick={showMore}
+            style={{
+              color: 'gray',
+              cursor: 'pointer',
+              fontSize: '14px',
+            }}
+          >
+            {isShowMore ? 'Show less' : 'Show more'}
+          </a>
+        )}
+        <Flex ml="auto">
+          <AuthWrapper roleRequired="admin" additionalAdmins={[_creatorId]}>
+            <Button
+              variant={'outline'}
+              small={true}
+              icon={'edit'}
+              onClick={onEditRequest}
+            >
+              edit
+            </Button>
+            <Button
+              variant={'outline'}
+              small={true}
+              icon="delete"
+              onClick={onDelete}
+              ml={2}
+            >
+              delete
+            </Button>
+          </AuthWrapper>
+        </Flex>
 
-      <Flex ml="auto">
-        <AuthWrapper roleRequired="admin" additionalAdmins={[_creatorId]}>
-          <Text
-            style={{
-              cursor: 'pointer',
-            }}
-            mr={2}
-            fontSize="12px"
-            onClick={async () => {
-              ReactGA.event({
-                category: 'Comments',
-                action: 'Edit existing comment',
-                label: stores.howtoStore.activeHowto?.title,
-              })
-              return setShowEditModal(true)
-            }}
-          >
-            edit <FaRegEdit />
-          </Text>
-          <Text
-            style={{
-              cursor: 'pointer',
-              alignItems: 'center',
-            }}
-            fontSize="12px"
-            onClick={async () => {
-              const confirmation = window.confirm(
-                'Are you sure you want to delete this comment?',
-              )
-              if (confirmation) {
-                await stores.howtoStore.deleteComment(_id)
-                ReactGA.event({
-                  category: 'Comments',
-                  action: 'Deleted',
-                  label: stores.howtoStore.activeHowto?.title,
-                })
-                logger.debug(
-                  {
-                    category: 'Comments',
-                    action: 'Deleted',
-                    label: stores.howtoStore.activeHowto?.title,
-                  },
-                  'comment deleted',
-                )
-              }
-            }}
-          >
-            delete <FaTrash color="red" />
-          </Text>
-        </AuthWrapper>
+        {showEditModal && (
+          <Modal width={600}>
+            <FormEditComment
+              comment={text}
+              handleSubmit={(commentText) => {
+                handleEdit(_id, commentText)
+                setShowEditModal(false)
+              }}
+              handleCancel={() => setShowEditModal(false)}
+            />
+          </Modal>
+        )}
       </Flex>
-
-      {showEditModal && (
-        <Modal width={600}>
-          <Form
-            onSubmit={values => {
-              logger.debug(values)
-            }}
-            initialValues={{
-              comment: text,
-            }}
-            render={({ handleSubmit, values }) => (
-              <Flex
-                as="form"
-                flexDirection="column"
-                p={2}
-                onSubmit={handleSubmit}
-              >
-                <Text
-                  as="label"
-                  large
-                  htmlFor="comment"
-                  style={{ marginBottom: '6px' }}
-                >
-                  Edit comment
-                </Text>
-                <Field name="comment" id="comment" component={TextAreaField} />
-                <Flex mt={4} ml="auto">
-                  <Button
-                    small
-                    mr={4}
-                    variant="secondary"
-                    onClick={() => setShowEditModal(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    small
-                    onClick={async () => {
-                      ReactGA.event({
-                        category: 'Comments',
-                        action: 'Update',
-                        label: stores.howtoStore.activeHowto?.title,
-                      })
-                      logger.debug(
-                        {
-                          category: 'Comments',
-                          action: 'Update',
-                          label: stores.howtoStore.activeHowto?.title,
-                        },
-                        'comment edited',
-                      )
-                      await stores.howtoStore.editComment(_id, values.comment)
-                      setShowEditModal(false)
-                    }}
-                  >
-                    Edit
-                  </Button>
-                </Flex>
-              </Flex>
-            )}
-          />
-        </Modal>
-      )}
-    </Flex>
+    </Box>
   )
 }

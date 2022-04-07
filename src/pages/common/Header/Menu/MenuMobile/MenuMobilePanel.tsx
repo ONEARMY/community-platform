@@ -1,8 +1,8 @@
 import { Component } from 'react'
 import { getAvailablePageList } from 'src/pages/PageList'
 import theme from 'src/themes/styled.theme'
-import styled from 'styled-components'
-import { Box } from 'rebass/styled-components'
+import styled from '@emotion/styled'
+import { Box } from 'theme-ui'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
 import MenuMobileExternalLink from './MenuMobileExternalLink'
@@ -57,7 +57,7 @@ export class MenuMobilePanel extends Component {
       <>
         <PanelContainer>
           <PanelMenu>
-            {getAvailablePageList(getSupportedModules()).map(page => {
+            {getAvailablePageList(getSupportedModules()).map((page) => {
               const link = (
                 <MenuMobileLink
                   path={page.path}

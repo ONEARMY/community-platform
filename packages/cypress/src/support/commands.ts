@@ -69,7 +69,7 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
   Cypress.Commands.add('deleteIDB', (name: string) => {
     cy.wrap('Delete Firebase IDB: ' + name)
       .then(() => {
-        return new Cypress.Promise<boolean>(resolve => {
+        return new Cypress.Promise<boolean>((resolve) => {
           // Ensure DB exists - NOTE - only supported in chrome
           // ;(indexedDB as any).databases().then((names: string[]) => {
           //   if (names.includes(name)) {
@@ -82,14 +82,12 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
             .catch(() => resolve(false))
         })
       })
-      .then(deleted => cy.log('deleted?', deleted))
+      .then((deleted) => cy.log('deleted?', deleted))
   })
 
   Cypress.Commands.add('setSessionStorage', (key: string, value: string) => {
     cy.wrap(`setSessionStorage - ${key}:${value}`).then(() => {
-      cy.window()
-        .its('sessionStorage')
-        .invoke('setItem', key, value)
+      cy.window().its('sessionStorage').invoke('setItem', key, value)
       cy.window()
         .its('sessionStorage')
         .invoke('getItem', key)
@@ -98,13 +96,13 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
   })
 
   Cypress.Commands.add('clearServiceWorkers', () => {
-    cy.window().then(w => {
+    cy.window().then((w) => {
       cy.wrap('Clearing service workers').then(() => {
-        return new Cypress.Promise(resolve => {
+        return new Cypress.Promise((resolve) => {
           // if running production builds locally may also need to remove service workers between runs
           if (w.navigator && navigator.serviceWorker) {
-            navigator.serviceWorker.getRegistrations().then(registrations => {
-              registrations.forEach(registration => {
+            navigator.serviceWorker.getRegistrations().then((registrations) => {
+              registrations.forEach((registration) => {
                 registration.unregister()
               })
               resolve()
@@ -134,7 +132,7 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
         .then(() => {
           return new Cypress.Promise((resolve, reject) => {
             Auth.signInWithEmailAndPassword(email, password)
-              .then(res => resolve(res.user))
+              .then((res) => resolve(res.user))
               .catch(reject)
           })
         })
@@ -162,13 +160,14 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
       }
     })
   })
+
   Cypress.Commands.add('deleteCurrentUser', () => {
     return new Cypress.Promise((resolve, reject) => {
       if (Auth.currentUser) {
         Auth.currentUser
           .delete()
           .then(() => resolve(null))
-          .catch(err => {
+          .catch((err) => {
             console.error(err)
             reject(err)
           })

@@ -7,7 +7,7 @@
     "db:teardown": "TODO"
   },
   "dependencies": {
-    "cypress": "^9.2.0",
+    "cypress": "9.4",
     "cypress-file-upload": "5.0.8",
     "oa-shared": "workspace:*"
   },

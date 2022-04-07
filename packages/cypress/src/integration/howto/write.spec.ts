@@ -22,18 +22,14 @@ describe('[How To]', () => {
     const stepIndex = stepNumber - 1
     console.log('stepIndex', stepIndex)
     cy.step(`Filling step ${stepNumber}`)
-    cy.get(`[data-cy=step_${stepIndex}]:visible`).within($step => {
-      cy.get('[data-cy=step-title]')
-        .clear()
-        .type(`Step ${stepNumber} is easy`)
+    cy.get(`[data-cy=step_${stepIndex}]:visible`).within(($step) => {
+      cy.get('[data-cy=step-title]').clear().type(`Step ${stepNumber} is easy`)
       cy.get('[data-cy=step-description]')
         .clear()
         .type(`Description for step ${stepNumber}`)
       if (videoUrl) {
         cy.step('Adding Video Url')
-        cy.get('[data-cy=step-videoUrl]')
-          .clear()
-          .type(videoUrl)
+        cy.get('[data-cy=step-videoUrl]').clear().type(videoUrl)
       } else {
         cy.step('Uploading pics')
         const hasExistingPics =
@@ -41,7 +37,7 @@ describe('[How To]', () => {
         if (hasExistingPics) {
           cy.wrap($step)
             .find('[data-cy=delete-image]')
-            .each($deleteButton => {
+            .each(($deleteButton) => {
               cy.wrap($deleteButton).click()
             })
         }
@@ -161,13 +157,15 @@ describe('[How To]', () => {
         .should('include', `/how-to/create-a-how-to-test`)
 
       cy.step('Howto was created correctly')
-      cy.queryDocuments('howtos', 'title', '==', expected.title).then(docs => {
-        cy.log('queryDocs', docs)
-        expect(docs.length).to.equal(1)
-        cy.wrap(null)
-          .then(() => docs[0])
-          .should('eqHowto', expected)
-      })
+      cy.queryDocuments('howtos', 'title', '==', expected.title).then(
+        (docs) => {
+          cy.log('queryDocs', docs)
+          expect(docs.length).to.equal(1)
+          cy.wrap(null)
+            .then(() => docs[0])
+            .should('eqHowto', expected)
+        },
+      )
     })
 
     it('[By Anonymous]', () => {
@@ -198,9 +196,7 @@ describe('[How To]', () => {
       cy.url().should('match', /\/how-to\/create$/)
 
       cy.step('Clear title input')
-      cy.get('[data-cy=intro-title')
-        .clear()
-        .blur({ force: true })
+      cy.get('[data-cy=intro-title').clear().blur({ force: true })
       cy.get('[data-cy=page-link][href*="/how-to"]')
         .click()
         .then(() => {
@@ -300,9 +296,7 @@ describe('[How To]', () => {
       cy.get('[data-cy=edit]').click()
 
       cy.step('Warn if title is identical with the existing ones')
-      cy.get('[data-cy=intro-title]')
-        .focus()
-        .blur({ force: true })
+      cy.get('[data-cy=intro-title]').focus().blur({ force: true })
       cy.wait(1000)
       cy.contains(
         'Titles must be unique, please try being more specific',
@@ -317,15 +311,11 @@ describe('[How To]', () => {
       ).should('exist')
 
       cy.step('Update the intro')
-      cy.get('[data-cy=intro-title]')
-        .clear()
-        .type(expected.title)
+      cy.get('[data-cy=intro-title]').clear().type(expected.title)
       cy.selectTag('howto_testing')
       selectTimeDuration(expected.time as Duration)
       selectDifficultLevel(expected.difficulty_level as Difficulty)
-      cy.get('[data-cy=intro-description]')
-        .clear()
-        .type(expected.description)
+      cy.get('[data-cy=intro-description]').clear().type(expected.description)
 
       cy.step('Update a new cover for the intro')
 
@@ -360,7 +350,7 @@ describe('[How To]', () => {
         .should('include', '/how-to/this-is-an-edit-test')
       cy.get('[data-cy=how-to-basis]').contains('This is an edit test')
       cy.queryDocuments('howtos', 'title', '==', 'This is an edit test').then(
-        docs => {
+        (docs) => {
           cy.log('queryDocs', docs)
           expect(docs.length).to.equal(1)
           cy.wrap(null)

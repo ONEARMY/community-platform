@@ -1,8 +1,8 @@
-import Icon, { availableGlyphs } from '../Icons'
-import { Flex } from 'rebass/styled-components'
+import { Icon, availableGlyphs } from 'oa-components'
+import { Flex } from 'theme-ui'
 import Text from '../Text'
 import { IUploadedFileMeta } from 'src/stores/storage'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 
 interface IProps {
@@ -22,13 +22,15 @@ export const FileDetails = (props: IProps) => (
   <FileFlex
     p={2}
     mb={1}
-    justifyContent="space-between"
-    alignItems="center"
-    flexDirection={'row'}
-    width={'300px'}
+    sx={{
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      flexDirection: 'row',
+      width: '300px',
+    }}
   >
     <Icon size={24} glyph={props.glyph} mr={3} />
-    <Text small clipped={true} flex={1} mr={3}>
+    <Text small clipped={true} sx={{ flex: 1 }} mr={3}>
       {props.file.name}
     </Text>
     <Text small>{props.size}</Text>

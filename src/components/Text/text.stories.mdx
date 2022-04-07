@@ -1,6 +1,5 @@
 import { action } from '@storybook/addon-actions'
-import { withKnobs, text, boolean } from '@storybook/addon-knobs'
-import { Story, Meta, Preview } from '@storybook/addon-docs/blocks'
+import { Story, Meta, Preview } from '@storybook/addon-docs'
 import { PropsTable } from '@storybook/components'
 import { Text } from './index.tsx'
 
@@ -13,27 +12,26 @@ Below you will be able to see how to use and configure a `Text` component:
 <Preview>
   <Story name="Default Text">
     <Text
-      uppercase={boolean('uppercase', false)}
-      capitalize={boolean('capitalize', false)}
-      superSmall={boolean('superSmall', false)}
-      small={boolean('small', false)}
-      medium={boolean('medium', false)}
-      regular={boolean('regular', true)}
-      large={boolean('large', false)}
-      bold={boolean('bold', false)}
-      tags={boolean('tags', false)}
-      auxiliary={boolean('auxiliary', false)}
-      paragraph={boolean('paragraph', false)}
-      clipped={boolean('clipped', false)}
-      preLine={boolean('preLine', false)}
-      txtcenter={boolean('txtcenter', false)}
-      txtRight={boolean('txtRight', false)}
+      uppercase={false}
+      capitalize={false}
+      superSmall={false}
+      small={false}
+      medium={false}
+      regular={true}
+      large={false}
+      bold={false}
+      tags={false}
+      auxiliary={false}
+      paragraph={false}
+      clipped={false}
+      preLine={false}
+      txtcenter={false}
+      txtRight={false}
     >
-      {text('Content', 'The quick brown fox jumped over the lazy dog.')}
+      {'The quick brown fox jumped over the lazy dog.'}
     </Text>
   </Story>
 </Preview>
-
 <br />
 <br />
 
@@ -148,7 +146,7 @@ Or you can set the prop `fontSize` yourself:
 
 <Preview>
   <Story name="Font Size">
-    <Text fontSize={30}>The quick brown fox jumped over the lazy dog.</Text>
+    <Text sx={{fontSize: 30}}>The quick brown fox jumped over the lazy dog.</Text>
   </Story>
 </Preview>
 

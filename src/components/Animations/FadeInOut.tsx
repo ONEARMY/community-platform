@@ -10,12 +10,14 @@ interface IState {
 
 const AnimationContainer = (props?: React.ReactNode) => {
   return (
-    <motion.div layout
+    <motion.div
+      layout
       key={'animationContainer'}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ y: 5, opacity: 0 }}>
-      { props }
+      exit={{ y: 5, opacity: 0 }}
+    >
+      {props}
     </motion.div>
   )
 }
@@ -32,6 +34,8 @@ export class FadeInOut extends React.Component<IProps, IState> {
   }
 
   render() {
-      return this.state.show ? AnimationContainer(this.props.children) : AnimationContainer();
+    return this.state.show
+      ? AnimationContainer(this.props.children)
+      : AnimationContainer()
   }
 }

@@ -14,13 +14,20 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
     "noImplicitAny": false,
     "strictPropertyInitialization": false,
     "experimentalDecorators": true,
-    "typeRoots": ["./node_modules/@types", "./types", "@testing-library/jest-dom"],
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types",
+      "@testing-library/jest-dom",
+      "../src/themes/types"
+    ],
     "declaration": true,
     "noEmit": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "useUnknownInCatchVariables": false
   },
   "include": ["src/**/*", "types"],
   "exclude": [
@@ -35,6 +42,12 @@
     "functions",
     "src/utils/UserMigration",
     "src/setupProxy.js",
-    "src/assets/userReportInit.js"
+    "src/assets/userReportInit.js",
+    "packages/components"
+  ],
+  "references": [
+    {
+      "path": "./packages/components"
+    }
   ]
 }

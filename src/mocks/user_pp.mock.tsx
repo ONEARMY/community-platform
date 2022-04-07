@@ -27,6 +27,12 @@ import LogoCollection from 'src/assets/icons/map-collection.svg'
 import LogoMember from 'src/assets/icons/map-member.svg'
 import LogoMachine from 'src/assets/icons/map-machine.svg'
 import LogoCommunity from 'src/assets/icons/map-community.svg'
+// Verified
+import LogoWorkspaceVerified from 'src/assets/icons/map-workspace-verified.svg'
+import LogoCollectionVerified from 'src/assets/icons/map-collection-verified.svg'
+import LogoMemberVerified from 'src/assets/icons/map-member-verified.svg'
+import LogoMachineVerified from 'src/assets/icons/map-machine-verified.svg'
+import LogoCommunityVerified from 'src/assets/icons/map-community-verified.svg'
 
 // assets workspaceType
 import Extrusion from 'src/assets/images/workspace-focus/extrusion.png'
@@ -369,30 +375,35 @@ export const PROFILE_TYPES: IProfileType[] = [
     textLabel: 'I am a member',
     imageSrc: MemberBadge,
     cleanImageSrc: LogoMember,
+    cleanImageVerifiedSrc: LogoMemberVerified,
   },
   {
     label: 'workspace',
     textLabel: 'I run a workspace',
     imageSrc: WorkspaceBadge,
     cleanImageSrc: LogoWorkspace,
+    cleanImageVerifiedSrc: LogoWorkspaceVerified,
   },
   {
     label: 'machine-builder',
     textLabel: 'I build machines',
     imageSrc: MachineBadge,
     cleanImageSrc: LogoMachine,
+    cleanImageVerifiedSrc: LogoMachineVerified,
   },
   {
     label: 'community-builder',
     textLabel: 'I run a local community',
     imageSrc: LocalComBadge,
     cleanImageSrc: LogoCommunity,
+    cleanImageVerifiedSrc: LogoCommunityVerified,
   },
   {
     label: 'collection-point',
     textLabel: 'I collect & sort plastic',
     imageSrc: CollectionBadge,
     cleanImageSrc: LogoCollection,
+    cleanImageVerifiedSrc: LogoCollectionVerified,
   },
 ]
 

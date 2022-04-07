@@ -1,11 +1,11 @@
 import * as React from 'react'
 import L from 'leaflet'
-import { Image } from 'rebass/styled-components'
+import { Image } from 'theme-ui'
 import Flex from 'src/components/Flex'
 import Text from 'src/components/Text'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import { Popup as LeafletPopup, Map } from 'react-leaflet'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { distanceInWords } from 'date-fns'
 
 import { IMapPin, IMapPinWithDetail } from 'src/models/maps.models'
@@ -85,7 +85,7 @@ export class Popup extends React.Component<IProps> {
   }
 
   private renderContent(pin: IMapPinWithDetail) {
-    const group = MAP_GROUPINGS.find(g => {
+    const group = MAP_GROUPINGS.find((g) => {
       return pin.subType
         ? g.subType === pin.subType && g.type === pin.type
         : g.type === pin.type
@@ -119,11 +119,11 @@ export class Popup extends React.Component<IProps> {
       <>
         <Link to={'/u/' + name} data-cy="map-pin-popup">
           <HeroImage src={heroImageUrl} onError={addFallbackSrc} />
-          <Flex flexDirection={'column'} px={2} py={2}>
+          <Flex sx={{ flexDirection: 'column' }} px={2} py={2}>
             <Text tags mb={2}>
               {group ? group.displayName : pin.type}
             </Text>
-            <Text large mb={1} display="flex">
+            <Text large mb={1} sx={{ display: 'flex' }}>
               {displayName}
               {verifiedBadge && (
                 <Image
@@ -155,10 +155,9 @@ export class Popup extends React.Component<IProps> {
         </Link>
         {this.store.needsModeration(pin) && (
           <Flex
-            flexDirection={'row'}
             px={10}
             py={1}
-            justifyContent={'space-around'}
+            sx={{ flexDirection: 'row', justifyContent: 'space-around' }}
           >
             <Button
               small

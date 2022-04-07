@@ -1,5 +1,5 @@
-import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
-import { DBDoc, IModerable, ISelectedTags } from 'src/models'
+import type { IConvertedFileMeta } from 'src/types'
+import { DBDoc, IComment, IModerable, ISelectedTags } from 'src/models'
 import { IUploadedFileMeta } from 'src/stores/storage'
 
 
@@ -35,6 +35,7 @@ export namespace IResearch {
     description: string
     images: Array<IUploadedFileMeta | IConvertedFileMeta | null>
     videoUrl?: string
+    comments?: IComment[]
   }
 
   export interface FormInput extends IModerable {
@@ -42,6 +43,7 @@ export namespace IResearch {
     description: string
     slug: string
     tags: ISelectedTags
+    creatorCountry?: string
   }
 
   /** Research items synced from the database will contain additional metadata */

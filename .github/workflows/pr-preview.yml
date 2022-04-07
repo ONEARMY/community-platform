@@ -41,6 +41,10 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install npm dependencies
         run: yarn install --immutable
+      - name: Set environment variables
+        run: export REACT_APP_PROJECT_VERSION=${GITHUB_SHA}
+      - name: Check environment variables
+        run: echo $REACT_APP_PROJECT_VERSION
       - name: Build for Preview
         run: npm run build
         env:

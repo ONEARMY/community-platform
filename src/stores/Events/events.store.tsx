@@ -36,7 +36,7 @@ export class EventStore extends ModuleStore {
     const activeUser = this.activeUser
     const isAdmin = hasAdminRights(activeUser)
 
-    return this.allEvents.filter(event => {
+    return this.allEvents.filter((event) => {
       // dates saved as yyyy-mm-dd string so convert to date object for comparison
       return (
         Filters.newerThan(event.date, 'yesterday') &&
@@ -47,7 +47,7 @@ export class EventStore extends ModuleStore {
     })
   }
   @computed get pastEvents() {
-    return this.allEvents.filter(event => {
+    return this.allEvents.filter((event) => {
       return Filters.olderThan(event.date, 'today')
     })
   }

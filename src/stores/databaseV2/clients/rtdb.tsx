@@ -19,7 +19,7 @@ export class RealtimeDBClient implements AbstractDBClient {
 
   async setBulkDocs(endpoint: IDBEndpoint, docs: DBDoc[]) {
     const updates = {}
-    docs.forEach(d => (updates[d._id] = d))
+    docs.forEach((d) => (updates[d._id] = d))
     return db.ref(`/${endpoint}`).update(updates)
   }
 

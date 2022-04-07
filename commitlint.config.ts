@@ -1,14 +1,14 @@
-import type {UserConfig} from '@commitlint/types';
+import type { UserConfig } from '@commitlint/types'
 import path from 'path'
 
-const Configuration: UserConfig  = {
+const Configuration: UserConfig = {
   extends: ['@commitlint/config-conventional'],
   /** Add optional custom formatter */
-  formatter: path.resolve(__dirname,'commitlint.format.ts'),
+  formatter: path.resolve(__dirname, 'commitlint.format.ts'),
   /** Add optional override rules (https://www.npmjs.com/package/@commitlint/config-conventional) */
   // rules: {},
   helpUrl:
-  'run `yarn commit` for interactive prompt or see examples at\nhttps://www.conventionalcommits.org',
+    'run `yarn commit` for interactive prompt or see examples at\nhttps://www.conventionalcommits.org',
   // Interactive prompts, called via `yarn commit`
   prompt: {
     settings: {},
@@ -121,4 +121,4 @@ const Configuration: UserConfig  = {
   },
 }
 
-module.exports = Configuration;
+module.exports = Configuration

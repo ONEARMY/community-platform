@@ -10,10 +10,8 @@ import waitOn from 'wait-on'
 const isCi = process.argv.includes('ci')
 const useProductionBuild = process.argv.includes('prod')
 
-
-
 // Prevent unhandled errors being silently ignored
-process.on('unhandledRejection', err => {
+process.on('unhandledRejection', (err) => {
   console.error('There was an uncaught error', err)
   process.exitCode = 1
 })
@@ -37,8 +35,12 @@ async function main() {
   await startAppServer()
   runTests()
 }
-main().then(() => process.exit(0)).catch(err => { console.error(err); process.exit(1) })
-
+main()
+  .then(() => process.exit(0))
+  .catch((err) => {
+    console.error(err)
+    process.exit(1)
+  })
 
 function runTests() {
   console.log(isCi ? 'Start tests' : 'Opening cypress for manual testing')
@@ -65,7 +67,7 @@ function runTests() {
   const spawn = spawnSync(`${CROSSENV_BIN} FORCE_COLOR=1 ${testCMD}`, {
     shell: true,
     stdio: ['inherit', 'inherit', 'pipe'],
-    cwd: PATHS.WORKSPACE_DIR
+    cwd: PATHS.WORKSPACE_DIR,
   })
   console.log('testing complete with exit code', spawn.status)
   if (spawn.status === 1) {
@@ -83,7 +85,7 @@ function runTests() {
 async function startAppServer() {
   const { CROSSENV_BIN, BUILD_SERVE_JSON } = PATHS
   // by default spawns will not respect colours used in stdio, so try to force
-  const crossEnvArgs = `FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci`;
+  const crossEnvArgs = `FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci`
 
   // run local debug server for testing unless production build specified
   let serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} BROWSER=none PORT=3456 npm run start`
@@ -111,10 +113,10 @@ async function startAppServer() {
   const child = spawn(serverCmd, {
     shell: true,
     stdio: ['pipe', 'pipe', 'inherit'],
-    cwd: PATHS.PLATFORM_ROOT_DIR
+    cwd: PATHS.PLATFORM_ROOT_DIR,
   })
 
-  child.stdout.on('data', d => {
+  child.stdout.on('data', (d) => {
     const msg = d.toString('utf8')
     console.log(msg)
     // throw typescript build errors

@@ -1,15 +1,15 @@
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import Flex from 'src/components/Flex'
-import { Box } from 'rebass/styled-components'
-import Icon from 'src/components/Icons'
+import { Box } from 'theme-ui'
+import { Icon } from 'oa-components'
 import { Field } from 'react-final-form'
 
-export const Label = props => (
+export const Label = (props) => (
   <Flex
     as="label"
-    flexDirection={['row', 'row', 'column']}
     sx={{
+      flexDirection: ['row', 'row', 'column'],
       m: '5px',
       p: '10px 0',
       borderRadius: '5px',
@@ -37,21 +37,20 @@ export const HiddenInput = styled(Field)`
   height: 0;
 `
 
-export const FlexSectionContainer = props => (
+export const FlexSectionContainer = (props) => (
   <Flex
     card
     mediumRadius
     bg={'white'}
     p={4}
     mt={4}
-    flexWrap="nowrap"
-    flexDirection="column"
+    sx={{ flexWrap: 'nowrap', flexDirection: 'column' }}
   >
     {props.children}
   </Flex>
 )
 
-export const ArrowIsSectionOpen = props => (
+export const ArrowIsSectionOpen = (props) => (
   <Box
     height="20px"
     sx={{

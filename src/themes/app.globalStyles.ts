@@ -1,17 +1,17 @@
-import { createGlobalStyle } from 'styled-components'
+import { css } from '@emotion/react'
 import theme from 'src/themes/styled.theme'
 
 import { GlobalFonts } from './fonts'
 // declare global styling overrides (fonts etc.)
 
-export const GlobalStyle = createGlobalStyle`
+export const GlobalStyle = css`
   ${GlobalFonts}
   body {
-      font-family: "Varela Round", Arial, sans-serif;
-      background-color: ${theme.colors.background};
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
+    font-family: 'Varela Round', Arial, sans-serif;
+    background-color: ${theme.colors.background};
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
   }
   a {
     text-decoration: none;
@@ -38,7 +38,6 @@ export const GlobalStyle = createGlobalStyle`
   .slick-prev {
     left: 0;
     right: auto;
-    
   }
 
   .slick-track {
@@ -60,7 +59,7 @@ export const GlobalStyle = createGlobalStyle`
     height: 1px;
     padding: 0;
     overflow: hidden;
-    clip: rect(0,0,0,0);
+    clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
   }

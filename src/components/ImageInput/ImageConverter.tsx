@@ -1,8 +1,8 @@
 import * as React from 'react'
-import { Flex } from 'rebass/styled-components'
+import { Flex } from 'theme-ui'
 import imageCompression from 'browser-image-compression'
-import { IConvertedFileMeta } from './ImageInput'
-import styled from 'styled-components'
+import type { IConvertedFileMeta } from 'src/types'
+import styled from '@emotion/styled'
 import theme from '../../themes/styled.theme'
 
 interface IProps {
@@ -72,7 +72,7 @@ export class ImageConverter extends React.Component<IProps, IState> {
 
   private _generateFileMeta(c: File) {
     const meta: IConvertedFileMeta = {
-      name: c.name,
+      name: addTimestampToFileName(c.name),
       photoData: c,
       objectUrl: URL.createObjectURL(c),
       type: c.type,
@@ -100,4 +100,24 @@ export class ImageConverter extends React.Component<IProps, IState> {
 }
 ImageConverter.defaultProps = {
   onImgClicked: () => null,
+}
+
+/** Insert a base-16 timestamp into a file's name and return it
+ */
+export const addTimestampToFileName = (str: string): string => {
+  // Return early for malformed input type 🙈
+  if (typeof str !== 'string') return str
+
+  const indexOfDot = str.lastIndexOf('.')
+
+  // Return early if the filename doesn't contain an extension
+  if (indexOfDot <= 0) return str
+
+  // inserts "-[current time in base-16]" right before the file type extension
+  return (
+    str.slice(0, indexOfDot) +
+    '-' +
+    Date.now().toString(16) +
+    str.slice(indexOfDot)
+  )
 }

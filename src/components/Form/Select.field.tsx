@@ -22,12 +22,12 @@ interface ISelectFieldProps extends IFieldProps, SelectProps {
 // TODO - better bind the above input styles to the react-select component
 // (currently implements its own styling with following overrides)
 export const SelectStyles: Partial<Styles> = {
-  container: provided => ({
+  container: (provided) => ({
     ...provided,
     fontSize: theme.fontSizes[2] + 'px',
     fontFamily: '"Varela Round", Arial, sans-serif',
   }),
-  control: provided => ({
+  control: (provided) => ({
     ...provided,
     border: '1px solid ' + theme.colors.softblue,
     backgroundColor: theme.colors.background,
@@ -42,7 +42,7 @@ export const SelectStyles: Partial<Styles> = {
     },
   }),
 
-  option: provided => ({
+  option: (provided) => ({
     ...provided,
     backgroundColor: theme.colors.background,
     boxShadow: 'none',
@@ -54,7 +54,7 @@ export const SelectStyles: Partial<Styles> = {
     },
   }),
 
-  menu: provided => ({
+  menu: (provided) => ({
     ...provided,
     border: '1px solid ' + theme.colors.softblue,
     boxShadow: 'none',
@@ -64,7 +64,7 @@ export const SelectStyles: Partial<Styles> = {
     },
   }),
 
-  multiValue: provided => ({
+  multiValue: (provided) => ({
     ...provided,
     backgroundColor: theme.colors.softblue,
     padding: '2px',
@@ -72,7 +72,7 @@ export const SelectStyles: Partial<Styles> = {
     color: theme.colors.grey,
   }),
 
-  indicatorSeparator: provided => ({
+  indicatorSeparator: (provided) => ({
     ...provided,
     display: 'none',
   }),
@@ -87,7 +87,7 @@ export const SelectStyles: Partial<Styles> = {
 }
 
 export const FilterStyles: Partial<Styles> = {
-  container: provided => ({
+  container: (provided) => ({
     ...provided,
     fontSize: theme.fontSizes[2] + 'px',
     fontFamily: '"Varela Round", Arial, sans-serif',
@@ -95,7 +95,7 @@ export const FilterStyles: Partial<Styles> = {
     borderRadius: '5px',
     color: theme.colors.black,
   }),
-  control: provided => ({
+  control: (provided) => ({
     ...provided,
     backgroundColor: theme.colors.white,
     minHeight: '40px',
@@ -107,11 +107,11 @@ export const FilterStyles: Partial<Styles> = {
       border: '1px solid ' + theme.colors.blue,
     },
   }),
-  placeholder: provided => ({
+  placeholder: (provided) => ({
     ...provided,
     color: theme.colors.black,
   }),
-  option: provided => ({
+  option: (provided) => ({
     ...provided,
     color: theme.colors.black,
     backgroundColor: theme.colors.white,
@@ -123,7 +123,7 @@ export const FilterStyles: Partial<Styles> = {
     },
   }),
 
-  menu: provided => ({
+  menu: (provided) => ({
     ...provided,
     border: '2px solid ' + theme.colors.black,
     boxShadow: 'none',
@@ -133,7 +133,7 @@ export const FilterStyles: Partial<Styles> = {
     },
   }),
 
-  multiValue: provided => ({
+  multiValue: (provided) => ({
     ...provided,
     backgroundColor: theme.colors.softblue,
     padding: '2px',
@@ -141,7 +141,7 @@ export const FilterStyles: Partial<Styles> = {
     color: theme.colors.grey,
   }),
 
-  indicatorSeparator: provided => ({
+  indicatorSeparator: (provided) => ({
     ...provided,
     display: 'none',
   }),
@@ -154,7 +154,7 @@ export const FilterStyles: Partial<Styles> = {
 function getValueFromSelect(
   v: ISelectOption | ISelectOption[] | null | undefined,
 ) {
-  return v ? (Array.isArray(v) ? v.map(el => el.value) : v.value) : v
+  return v ? (Array.isArray(v) ? v.map((el) => el.value) : v.value) : v
 }
 
 // given current values find the relevant select options
@@ -163,11 +163,11 @@ function getValueForSelect(
   v: string | string[] | null | undefined,
 ) {
   function findVal(optVal: string) {
-    return opts.find(o => o.value === optVal)
+    return opts.find((o) => o.value === optVal)
   }
   return v
     ? Array.isArray(v)
-      ? v.map(optVal => findVal(optVal) as ISelectOption)
+      ? v.map((optVal) => findVal(optVal) as ISelectOption)
       : findVal(v)
     : null
 }
@@ -186,7 +186,7 @@ export const SelectField = ({
 }: ISelectFieldProps) => (
   // note, we first use a div container so that default styles can be applied
   <>
-    <Flex p={0} flexWrap="nowrap">
+    <Flex p={0} sx={{ flexWrap: 'nowrap' }}>
       <FieldContainer
         invalid={meta.error && meta.touched}
         style={rest.style}
@@ -194,7 +194,7 @@ export const SelectField = ({
       >
         <Select
           styles={SelectStyles}
-          onChange={v => {
+          onChange={(v) => {
             input.onChange(getValueFromSelect(v as any))
             if (onCustomChange) {
               onCustomChange(getValueFromSelect(v as any))

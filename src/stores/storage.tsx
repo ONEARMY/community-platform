@@ -4,7 +4,7 @@
   b) to enforce specific patterns when interacting with storage, such as setting metadata
 */
 
-import { storage } from 'src/utils/firebase'
+import { storage } from '../utils/firebase'
 
 export class Storage {
   /****************************************************************************** *

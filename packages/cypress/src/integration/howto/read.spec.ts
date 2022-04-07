@@ -20,17 +20,13 @@ describe('[How To]', () => {
 
       cy.step('All how-tos are shown')
 
-      cy.get('[data-cy=card]')
-        .its('length')
-        .should('be.eq', totalHowTo)
+      cy.get('[data-cy=card]').its('length').should('be.eq', totalHowTo)
 
       cy.step('How-to cards has basic info')
       cy.get(`[data-cy=card] > a[href="${howtoUrl}"]`).within(() => {
         cy.contains('Make glass-like beams').should('be.exist')
         cy.contains('By howto_creator').should('be.exist')
-        cy.get('img')
-          .should('have.attr', 'src')
-          .and('match', coverFileRegex)
+        cy.get('img').should('have.attr', 'src').and('match', coverFileRegex)
         cy.contains('extrusion').should('be.exist')
       })
 
@@ -42,30 +38,23 @@ describe('[How To]', () => {
     it('[By Authenticated]', () => {
       cy.login('howto_reader@test.com', 'test1234')
       cy.step('Create button is available')
-      cy.get('[data-cy=create]')
-        .click()
-        .url()
+      cy.get('[data-cy=create]').click().url()
     })
   })
 
   describe('[Filter with Tag]', () => {
     beforeEach(() => {
       cy.visit('/how-to')
-      cy.logout()
     })
     it('[By Everyone]', () => {
       cy.step('Select a tag')
       cy.selectTag('product')
-      cy.get('[data-cy=card]')
-        .its('length')
-        .should('be.eq', 3)
+      cy.get('[data-cy=card]').its('length').should('be.eq', 3)
 
       cy.step('Type and select a tag')
       cy.selectTag('injection')
 
-      cy.get('[data-cy=card]')
-        .its('length')
-        .should('be.eq', 2)
+      cy.get('[data-cy=card]').its('length').should('be.eq', 2)
 
       cy.step('Remove a tag')
       cy.get('.data-cy__multi-value__label')
@@ -76,16 +65,12 @@ describe('[How To]', () => {
       cy.get('.data-cy__multi-value__label')
         .contains('injection')
         .should('not.exist')
-      cy.get('[data-cy=card]')
-        .its('length')
-        .should('be.eq', 3)
+      cy.get('[data-cy=card]').its('length').should('be.eq', 3)
 
       cy.step('Remove all tags')
       cy.get('.data-cy__clear-indicator').click()
       cy.get('.data-cy__multi-value__label').should('not.exist')
-      cy.get('[data-cy=card]')
-        .its('length')
-        .should('be.eq', totalHowTo)
+      cy.get('[data-cy=card]').its('length').should('be.eq', totalHowTo)
     })
   })
 
@@ -102,7 +87,7 @@ describe('[How To]', () => {
         cy.get('[data-cy=edit]').should('not.exist')
 
         cy.step('How-to has basic info')
-        cy.get('[data-cy=how-to-basis]').then($summary => {
+        cy.get('[data-cy=how-to-basis]').then(($summary) => {
           expect($summary).to.contain('By howto_creator', 'Author')
           expect($summary).to.contain('Last edit on', 'Edit')
           expect($summary).to.contain('Make an interlocking brick', 'Title')
@@ -137,7 +122,7 @@ describe('[How To]', () => {
         cy.get('[data-cy^=step_]').should('have.length', 12)
 
         cy.step('All step info is shown')
-        cy.get('[data-cy=step_11]').within($step => {
+        cy.get('[data-cy=step_11]').within(($step) => {
           const pic1Regex = /brick-12-1.jpg/
           const pic3Regex = /brick-12.jpg/
           expect($step).to.contain('12', 'Step #')
@@ -156,15 +141,12 @@ describe('[How To]', () => {
             .and('match', pic3Regex)
         })
 
-        cy.step(`Comment functionality prompts user to login`);
-        cy.get(`[data-cy="comments-login-prompt"]`)
-          .should('be.exist');
+        cy.step(`Comment functionality prompts user to login`)
+        cy.get(`[data-cy="comments-login-prompt"]`).should('be.exist')
 
         cy.step('Video embed exists')
         cy.get('[data-cy="video-embed"]').within(() => {
-          cy.get('iframe')
-            .should('have.attr', 'src')
-            .and('include', 'youtube')
+          cy.get('iframe').should('have.attr', 'src').and('include', 'youtube')
         })
         // This fails in firefox due to cross security, simply check url
         // .should(iframe => expect(iframe.contents().find('video')).to.exist)
@@ -186,12 +168,10 @@ describe('[How To]', () => {
 
       it('[Comment requires login]', () => {
         cy.visit(specificHowtoUrl)
-        cy.step(`Comment functionality prompts user to login`);
-        cy.get(`[data-cy="comments-login-prompt"]`)
-          .should('be.exist')
+        cy.step(`Comment functionality prompts user to login`)
+        cy.get(`[data-cy="comments-login-prompt"]`).should('be.exist')
 
-        cy.get(`[data-cy="comments-form"]`)
-          .should('not.exist');
+        cy.get(`[data-cy="comments-form"]`).should('not.exist')
       })
     })
 
@@ -203,41 +183,34 @@ describe('[How To]', () => {
       })
 
       it.only('[Comment functionality available]', () => {
-        const commentText = 'A short string intended to test commenting';
+        const commentText = 'A short string intended to test commenting'
         cy.login('howto_reader@test.com', 'test1234')
         cy.visit(specificHowtoUrl)
 
-        cy.get(`[data-cy="comments-login-prompt"]`)
-          .should('not.exist');
+        cy.get(`[data-cy="comments-login-prompt"]`).should('not.exist')
 
-        cy.get(`[data-cy="comments-form"]`)
-          .should('be.exist');
+        cy.get(`[data-cy="comments-form"]`).should('be.exist')
 
-        cy.get(`[data-cy="comments-form"]`)
-          .should('be.exist');
+        cy.get(`[data-cy="comments-form"]`).should('be.exist')
 
-        cy.get('[data-cy="comments-form"]')
-          .type(commentText);
+        cy.get('[data-cy="comments-form"]').type(commentText)
 
-        cy.get('[data-cy="comment-submit"]')
-          .click();
+        cy.get('[data-cy="comment-submit"]').click()
 
         cy.queryDocuments(
           DbCollectionName.howtos,
           'slug',
           '==',
-          'make-an-interlocking-brick'
-        ).then(howtos => {
-          cy.wrap(howtos[0].comments)
-            .should('have.length.gte', 1)
-          cy.wrap(howtos[0].comments[0])
-            .should('deep.include', {
-              "_creatorId": "howto_reader",
-              "creatorName": "howto_reader",
-              "text": commentText,
-            });
+          'make-an-interlocking-brick',
+        ).then((howtos) => {
+          cy.wrap(howtos[0].comments).should('have.length.gte', 1)
+          cy.wrap(howtos[0].comments[0]).should('deep.include', {
+            _creatorId: 'howto_reader',
+            creatorName: 'howto_reader',
+            text: commentText,
+          })
         })
-      });
+      })
     })
 
     it('[By Owner]', () => {

@@ -13,9 +13,7 @@ describe('[Events]', () => {
       cy.step('Upcoming events are shown')
 
       cy.step('Move Events button is hidden')
-      cy.get('button')
-        .contains('More Events')
-        .should('not.visible')
+      cy.get('button').contains('More Events').should('not.visible')
 
       cy.step(`Basic info of an event is shown`)
       cy.get('[data-cy=card]:has(:contains(SURA BAYA Exhibition))').within(
@@ -35,9 +33,7 @@ describe('[Events]', () => {
     it('[By Authenticated]', () => {
       cy.login('event_reader@test.com', 'test1234')
       cy.step('Create button is available')
-      cy.get('[data-cy=create-event]')
-        .click()
-        .url()
+      cy.get('[data-cy=create-event]').click().url()
     })
   })
 
@@ -46,15 +42,11 @@ describe('[Events]', () => {
       cy.step('Select a tag in the dropdown list')
       // ensure tags loaded
       cy.selectTag('workshop')
-      cy.get('[data-cy=card')
-        .its('length')
-        .should('eq', 2)
+      cy.get('[data-cy=card').its('length').should('eq', 2)
 
       cy.step('Type and select second tag')
       cy.selectTag('screening')
-      cy.get('[data-cy=card')
-        .its('length')
-        .should('eq', 1)
+      cy.get('[data-cy=card').its('length').should('eq', 1)
 
       cy.step('Remove a tag')
       cy.get('.data-cy__multi-value__label')
@@ -62,16 +54,12 @@ describe('[Events]', () => {
         .parent()
         .find('.data-cy__multi-value__remove')
         .click()
-      cy.get('[data-cy=card]')
-        .its('length')
-        .should('be.eq', 2)
+      cy.get('[data-cy=card]').its('length').should('be.eq', 2)
 
       cy.step('Remove all tags')
       cy.get('.data-cy__clear-indicator').click()
       cy.get('.data-cy__multi-value__label').should('not.exist')
-      cy.get('[data-cy=card]')
-        .its('length')
-        .should('be.eq', 7)
+      cy.get('[data-cy=card]').its('length').should('be.eq', 7)
     })
   })
 
@@ -85,9 +73,7 @@ describe('[Events]', () => {
 
       cy.step('Fill up mandatory info')
       cy.get('[data-cy=title]').type('Create a test event')
-      cy.get('[data-cy=date]')
-        .find('input')
-        .click()
+      cy.get('[data-cy=date]').find('input').click()
       // make date first of next month (ensure in future)
       cy.get('.react-datepicker')
         .get('button.react-datepicker__navigation--next')
@@ -96,8 +82,7 @@ describe('[Events]', () => {
         .first()
         .click()
       cy.selectTag('event_testing')
-      cy.get('[data-cy="osm-geocoding-input"]')
-        .type('Atucucho')
+      cy.get('[data-cy="osm-geocoding-input"]').type('Atucucho')
       cy.get('[data-cy="osm-geocoding-results"]')
         .find('li:eq(0)', { timeout: 10000 })
         .click()
@@ -107,9 +92,7 @@ describe('[Events]', () => {
         .blur()
 
       cy.step('Publish the event')
-      cy.get('[data-cy=submit]')
-        .should('not.be.disabled')
-        .click()
+      cy.get('[data-cy=submit]').should('not.be.disabled').click()
       cy.step('The new event is shown in /events')
       cy.get('[data-cy=card]')
         .contains('Create a test event')

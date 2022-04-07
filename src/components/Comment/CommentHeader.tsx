@@ -1,8 +1,9 @@
-import { Box, Flex, Text } from 'rebass/styled-components'
-import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
+import { Box, Flex, Text } from 'theme-ui'
+import { FlagIconHowTos } from 'oa-components'
 import { IComment } from 'src/models'
 import { Link } from 'src/components/Links'
 import theme from 'src/themes/styled.theme'
+import { VerifiedUserBadge } from '../VerifiedUserBadge/VerifiedUserBadge'
 
 interface IProps extends Omit<IComment, 'text' | '_id' | '_creatorId'> {}
 
@@ -13,7 +14,7 @@ export const CommentHeader = ({
   _edited,
 }: IProps) => {
   return (
-    <Flex justifyContent="space-between" alignItems="baseline">
+    <Flex sx={{ justifyContent: 'space-between', alignItems: 'baseline' }}>
       <Box>
         {creatorCountry && <FlagIconHowTos code={creatorCountry} />}
         <span style={{ marginLeft: creatorCountry ? '5px' : 0 }}>
@@ -26,22 +27,28 @@ export const CommentHeader = ({
           >
             {creatorName}
           </Link>
+          <VerifiedUserBadge
+            userId={creatorName}
+            ml={1}
+            height="12px"
+            width="12px"
+          />
         </span>
       </Box>
-      <Flex alignItems="center">
+      <Flex sx={{ alignItems: 'center' }}>
         {_edited ? (
           <>
-            <Text color={theme.colors.grey} fontSize={0} mr={2}>
+            <Text color={theme.colors.grey} sx={{ fontSize: 0 }} mr={2}>
               (Edited)
             </Text>
-            <Text fontSize={1}>
+            <Text sx={{ fontSize: 1 }}>
               {new Date(_edited)
                 .toLocaleDateString('en-GB')
                 .replaceAll('/', '-')}
             </Text>
           </>
         ) : (
-          <Text fontSize={1}>
+          <Text sx={{ fontSize: 1 }}>
             {new Date(_created)
               .toLocaleDateString('en-GB')
               .replaceAll('/', '-')}

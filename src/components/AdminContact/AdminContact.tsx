@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import { AdminStore } from 'src/stores/Admin/admin.store'
 import { IUser } from 'src/models/user.models'
 import Text from '../Text'
@@ -17,6 +17,7 @@ interface IState {
   disabled: boolean
   contactDetails?: string
 }
+
 @inject('adminStore')
 @observer
 export class AdminContact extends React.Component<IProps, IState> {

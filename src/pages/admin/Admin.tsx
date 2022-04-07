@@ -8,7 +8,7 @@ import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { Link } from 'src/components/Links'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
-import { Box } from 'rebass/styled-components'
+import { Box } from 'theme-ui'
 import { inject, observer } from 'mobx-react'
 import { AdminStore } from 'src/stores/Admin/admin.store'
 
@@ -49,7 +49,7 @@ class AdminPage extends React.Component<IProps, any> {
                 </Text>
                 <AuthWrapper roleRequired="admin">
                   <Flex>
-                    {ADMIN_ROUTES.map(route => (
+                    {ADMIN_ROUTES.map((route) => (
                       <Box key={route.name} bg="white" p={2} m={2}>
                         <Link to={`/admin/${route.slug}`}>
                           {route.name} Admin
@@ -61,7 +61,7 @@ class AdminPage extends React.Component<IProps, any> {
               </>
             )}
           />
-          {ADMIN_ROUTES.map(route => (
+          {ADMIN_ROUTES.map((route) => (
             <AuthRoute
               key={route.name}
               path={`/admin/${route.slug}`}

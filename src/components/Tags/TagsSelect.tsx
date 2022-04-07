@@ -52,7 +52,7 @@ class TagsSelect extends Component<IProps, IState> {
 
   // emit values as {[tagKey]:true} object to be picked up by field
   public onSelectedTagsChanged(selected: ITag[]) {
-    const selectedTags = selected.map(tag => tag._id)
+    const selectedTags = selected.map((tag) => tag._id)
     this.setState({ selectedTags })
     this.props.onChange(this._tagsArrayToSelectedJson(selectedTags))
   }
@@ -63,7 +63,7 @@ class TagsSelect extends Component<IProps, IState> {
 
     if (relevantTagsItems) {
       const tagCounts = this._getTagCounts(relevantTagsItems)
-      categoryTags = categoryTags.filter(tag =>
+      categoryTags = categoryTags.filter((tag) =>
         Object.keys(tagCounts).includes(tag._id),
       )
     }
@@ -82,7 +82,7 @@ class TagsSelect extends Component<IProps, IState> {
           value={this._getSelected(categoryTags)}
           getOptionLabel={(tag: ITag) => tag.label}
           getOptionValue={(tag: ITag) => tag._id}
-          onChange={values => this.onSelectedTagsChanged(values as ITag[])}
+          onChange={(values) => this.onSelectedTagsChanged(values as ITag[])}
           placeholder={this.props.placeholder}
           classNamePrefix={'data-cy'}
         />
@@ -93,7 +93,9 @@ class TagsSelect extends Component<IProps, IState> {
   // as react-select can't keep track of which object key corresponds to the selected
   // value include manual lookup so that value can also be passed from props
   private _getSelected(categoryTags: ITag[]) {
-    return categoryTags?.filter(tag => this.state.selectedTags.includes(tag._id))
+    return categoryTags?.filter((tag) =>
+      this.state.selectedTags.includes(tag._id),
+    )
   }
 
   // whilst we deal with arrays of selected tag ids in the component we want to store as a json map
@@ -101,7 +103,7 @@ class TagsSelect extends Component<IProps, IState> {
   // i.e [tag1,tag2,tag3] <-> {tag1:true, tag2:true, tag3:true}
   private _tagsArrayToSelectedJson(arr: string[]) {
     const selectedJson = {}
-    arr.forEach(el => (selectedJson[el] = true))
+    arr.forEach((el) => (selectedJson[el] = true))
     return selectedJson
   }
 
@@ -110,10 +112,10 @@ class TagsSelect extends Component<IProps, IState> {
     const tagCounts: { [key: string]: number } = {}
 
     items.map(
-      item =>
+      (item) =>
         item.tags &&
         Object.keys(item.tags).forEach(
-          tag => (tagCounts[tag] = (tagCounts[tag] || 0) + 1),
+          (tag) => (tagCounts[tag] = (tagCounts[tag] || 0) + 1),
         ),
     )
 
@@ -128,7 +130,7 @@ export default TagsSelect
 // include default input and meta bindings for use within form fields
 // default onChange calls the input onChange function (linked to react-final-form)
 TagsSelect.defaultProps = {
-  onChange: val => {
+  onChange: (val) => {
     TagsSelect.defaultProps.input!.onChange(val)
   },
   input: {

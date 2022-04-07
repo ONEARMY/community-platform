@@ -1,5 +1,4 @@
 [![react](https://badges.aleen42.com/src/react.svg)](https://reactjs.org/docs/getting-started.html)
-[![Style: Styled-components](https://img.shields.io/badge/style-%F0%9F%92%85%20styled--components-orange.svg?colorB=daa357&colorA=db748e)](https://github.com/styled-components/styled-components)
 
 # Contribution Guidelines
 
@@ -33,7 +32,7 @@ This project and everyone participating in it is governed by the [Code of Conduc
 
 ### Frontend
 
-The platform is built in **React** and [Typescript](https://www.typescriptlang.org/docs/handbook/basic-types.html) for typing and consistency, [styled-components](https://www.styled-components.com/) for reusability and component based styling.
+The platform is built in **React** and [Typescript](https://www.typescriptlang.org/docs/handbook/basic-types.html) for typing and consistency, [Emotion](https://emotion.sh/) for reusability and component based styling.
 We created a frontend guide to explain our choices and best practice in building the One Army interface. This guide is available in [the wiki](https://github.com/ONEARMY/community-platform/wiki/Frontend).
 
 ### Backend
@@ -124,9 +123,11 @@ As this is a large project spread across many developers it is important that th
 
 We also expect code to follow standard best practices, such as sensible variable naming, informative comments and avoiding files larger than a couple hundred lines of code (with emphasis on usability and reusability).
 
+Running `yarn format` from the project route prior to committing will ensure the code you're adding is formatted to align with the standards of this project.
+
 ## 🔬 &nbsp; Commit style guide
 
-To help everyone with understanding the commit history of this project and support our automated release tooling the following commit rules are enforced. 
+To help everyone with understanding the commit history of this project and support our automated release tooling the following commit rules are enforced.
 
 - commit message format of `$type($scope): $message`, for example: `docs: add commit style guide`
 - maximum of 100 characters

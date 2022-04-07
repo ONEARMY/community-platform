@@ -15,10 +15,15 @@ const app = express()
 app.use(cors({ origin: true }))
 
 // Ensure dev moethods only accessed on localhost
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   const host = req.get('host')
   if (host === 'localhost:4002') next()
-  else res.status(403).send(`Dev api methods can only be accessed on localhost:4002. Host: [${host}]`)
+  else
+    res
+      .status(403)
+      .send(
+        `Dev api methods can only be accessed on localhost:4002. Host: [${host}]`,
+      )
 })
 
 app.get('/', (req, res) => res.status(200).send('Dev Api Working'))

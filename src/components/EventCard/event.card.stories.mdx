@@ -1,13 +1,8 @@
-import { withKnobs, text } from '@storybook/addon-knobs'
 import { PropsTable } from '@storybook/components'
-import { Story, Meta, Preview } from '@storybook/addon-docs/blocks'
+import { Story, Meta, Preview } from '@storybook/addon-docs'
 import { EventCard } from './EventCard.tsx'
 
-<Meta
-  title="Components|EventCard"
-  component={EventCard}
-  decorators={[withKnobs]}
-/>
+<Meta title="Components|EventCard" component={EventCard} />
 
 # Event Cards
 
@@ -17,20 +12,19 @@ Below you will be able to see how to use and configure a `EventCard` component:
   <Story name="Default Event Card">
     <EventCard
       event={{
-        _createdBy: text('Created By', 'John Doe'),
+        _createdBy: 'John Doe',
         slug: 'event-slug',
-        url: text('URL', ''),
+        url: '',
         date: Date.now(),
-        title: text('Title', 'Lighten the Black Sea'),
+        title: 'Lighten the Black Sea',
         location: {
-          name: text('Location Name', 'Odessa'),
-          countryCode: text('Country Code', 'UKR'),
+          name: 'Odessa',
+          countryCode: 'UKR',
         },
       }}
     />
   </Story>
 </Preview>
-
 <br />
 <br />
 

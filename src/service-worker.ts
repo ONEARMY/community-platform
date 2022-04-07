@@ -29,13 +29,23 @@ const fullManifest = self.__WB_MANIFEST
 
 // just cache index, allow others to be added to runtime cache instead (better for lazy loading)
 const coreManifest = (fullManifest as PrecacheEntry[]).filter(
-  entry => entry.url === '/index.html',
+  (entry) => entry.url === '/index.html',
 )
 precacheAndRoute(coreManifest)
 
 // static assets are already cachebusted with their file names so can just serve cacheFirst
 // for same origin (https://developers.google.com/web/tools/workbox/modules/workbox-routing)
-registerRoute(new RegExp('/static/'), new CacheFirst())
+registerRoute(
+  new RegExp('/static/'),
+  new CacheFirst({
+    cacheName: 'oa-static-v1',
+    plugins: [
+      // Allow static assets to be cached for up to 1 year
+      // NOTE - workbox will ignore default max-age settings from hosting
+      new ExpirationPlugin({ maxAgeSeconds: 60 * 60 * 24 * 365 }),
+    ],
+  }),
+)
 
 // Set up App Shell-style routing, so that all navigation requests
 // are fulfilled with your index.html shell. Learn more at
@@ -64,6 +74,32 @@ registerRoute(
     return true
   },
   createHandlerBoundToURL(process.env.PUBLIC_URL + '/index.html'),
+)
+
+// Cache osm tiles for up to 30 days (servers from https://wiki.openstreetmap.org/wiki/Tile_servers)
+// NOTE - depending on server load could be sent from any endpoint which may recache same asset
+// TODO - explore workarounds such as manually checking cache for file cached from any of the hostnames or having 3 separate caches
+const tileHostnames = [
+  'a.tile.openstreetmap.org',
+  'b.tile.openstreetmap.org',
+  'c.tile.openstreetmap.org',
+]
+registerRoute(
+  ({ url, request }) =>
+    request.destination === 'image' && tileHostnames.includes(url.hostname),
+  new CacheFirst({
+    cacheName: 'oa-maptiles',
+    fetchOptions: {
+      credentials: 'same-origin',
+      mode: 'cors',
+    },
+    plugins: [
+      new ExpirationPlugin({ maxAgeSeconds: 60 * 60 * 24 * 30 }),
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+    ],
+  }),
 )
 
 // image assets not hard-coded
@@ -120,7 +156,7 @@ registerRoute(
 // )
 
 // allow skip-waiting message to be sent from client
-self.addEventListener('message', event => {
+self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting()
   }

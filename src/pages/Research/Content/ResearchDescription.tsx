@@ -99,7 +99,7 @@ const ResearchDescription: React.FC<IProps> = ({
         <Box mt={3} mb={2}>
           <Flex sx={{ alignItems: 'center' }}>
             {research.creatorCountry && (
-                <FlagIconHowTos code={research.creatorCountry} />
+              <FlagIconHowTos code={research.creatorCountry} />
             )}
             <Text inline auxiliary my={2} ml={1}>
               <Flex sx={{ alignItems: 'center' }}>

@@ -42,5 +42,4 @@ describe('getUserCountry', () => {
 
     expect(getUserCountry(user)).toBe('uk')
   })
-
 })

@@ -78,7 +78,7 @@ const config: webpack.Configuration = {
     // reference other installed workspace packages here
     nodeExternals({
       allowlist: [/^oa-/],
-    }),
+    }) as any,
   ],
 }
 export default config

@@ -1,7 +1,6 @@
-import type { IConvertedFileMeta } from 'src/types'
-import { DBDoc, IComment, IModerable, ISelectedTags } from 'src/models'
-import { IUploadedFileMeta } from 'src/stores/storage'
-
+import type { IConvertedFileMeta } from '../types'
+import type { DBDoc, IComment, IModerable, ISelectedTags } from '.'
+import type { IUploadedFileMeta } from '../stores/storage'
 
 // By default all how-to form input fields come as strings
 // The IResearch interface can imposes the correct formats on fields
@@ -9,7 +8,7 @@ import { IUploadedFileMeta } from 'src/stores/storage'
 export interface IResearch extends IModerable {
   _createdBy: string
   cover_image: IUploadedFileMeta
-  files: Array<IUploadedFileMeta | File | null>  
+  files: Array<IUploadedFileMeta | File | null>
 }
 
 /**

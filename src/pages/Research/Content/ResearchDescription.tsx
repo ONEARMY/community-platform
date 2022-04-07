@@ -12,6 +12,7 @@ import theme from 'src/themes/styled.theme'
 import { ResearchUsefulStats } from './ResearchUsefulStats'
 import { IUser } from 'src/models/user.models'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
+import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
 interface IProps {
   research: IResearch.ItemDB
@@ -76,14 +77,17 @@ const ResearchDescription: React.FC<IProps> = ({
               </Flex>
             </Button>
           </Link>
-          <Box style={{ flexGrow: 1 }}>
-            <ResearchUsefulStats
-              votedUsefulCount={props.votedUsefulCount || 0}
-              userVotedUseful={props.userVotedUseful}
-              isLoggedIn={props.loggedInUser ? true : false}
-              onUsefulClick={props.onUsefulClick}
-            />
-          </Box>
+          {/* TODO - limited to beta testers, can remove AuthWrapper to make public */}
+          <AuthWrapper roleRequired="beta-tester">
+            <Box style={{ flexGrow: 1 }}>
+              <ResearchUsefulStats
+                votedUsefulCount={props.votedUsefulCount || 0}
+                userVotedUseful={props.userVotedUseful}
+                isLoggedIn={props.loggedInUser ? true : false}
+                onUsefulClick={props.onUsefulClick}
+              />
+            </Box>
+          </AuthWrapper>
           {/* Check if research should be moderated */}
           {props.needsModeration && (
             <Flex sx={{ justifyContent: 'space-between' }}>

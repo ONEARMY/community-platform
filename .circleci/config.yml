@@ -209,6 +209,12 @@ jobs:
             npm config set package-lock false
             npm i @types/node @commitlint/types @commitlint/config-conventional --force
             npx commitlint --from=$(git merge-base remotes/origin/${CIRCLE_BRANCH} master) --verbose
+  lint:
+    docker: *docker
+    steps:
+      - setup_repo
+      - run:
+          command: yarn lint
   # Prepare node module caches so that future tasks run more quickly
   # NOTE - not currently used as we only have one workflow
   setup:
@@ -371,17 +377,25 @@ workflows:
             branches:
               ignore:
                 - production
+      - lint:
+          name: Lint code
+          requires:
+            - "Lint commits"
+          filters:
+            branches:
+              ignore:
+                - production
       #---------------------- Test ----------------------
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:
           requires:
-            - 'Lint commits'
+            - 'Lint code'
           name: Build Application
           context: build-context
       - test_unit:
           name: 'Unit tests'
           requires:
-            - 'Lint commits'
+            - 'Lint code'
           filters:
             branches:
               ignore:
@@ -389,7 +403,7 @@ workflows:
       - storybook:
           name: Build Storybook
           requires:
-            - 'Lint commits'
+            - 'Lint code'
           filters:
             branches:
               ignore:
@@ -397,8 +411,6 @@ workflows:
       # - test_functions:
       #     name: 'Cloud Function tests'
       #     context: build-context
-      #     requires:
-      #       - 'Lint commits'
       #     filters:
       #       branches:
       #         ignore:

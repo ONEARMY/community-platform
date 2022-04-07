@@ -262,23 +262,36 @@ export const SpaceProfile = ({ user, adminButton }: IProps) => {
             </MobileBadge>
           </Box>
 
-          <Flex 
+          <Flex
             sx={{
-              alignItems: "center",
+              alignItems: 'center',
               pt: ['40px', '40px', '0'],
             }}
           >
             {userCountryCode && (
-              <FlagIcon mr={2} code={userCountryCode} style={{display: 'inline-block'}} />
+              <FlagIcon
+                mr={2}
+                code={userCountryCode}
+                style={{ display: 'inline-block' }}
+              />
             )}
-            <Text large my={2} sx={{ color: `${theme.colors.lightgrey} !important` }}>
+            <Text
+              large
+              my={2}
+              sx={{ color: `${theme.colors.lightgrey} !important` }}
+            >
               {user.userName}
             </Text>
           </Flex>
 
-
-          <Flex sx={{ alignItems: "center" }}>
-            <Heading medium bold color={'black'} mb={3} style={{wordBreak:'break-word'}}>
+          <Flex sx={{ alignItems: 'center' }}>
+            <Heading
+              medium
+              bold
+              color={'black'}
+              mb={3}
+              style={{ wordBreak: 'break-word' }}
+            >
               {user.displayName}
             </Heading>
           </Flex>

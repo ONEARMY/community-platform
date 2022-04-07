@@ -66,7 +66,11 @@ export default class Profile extends Component<IProps, IState> {
             </MenuMobileLinkContainer>
           ) : (
             <div data-cy="user-menu">
-              <Flex onClick={() => this.toggleProfileModal()} ml={1} sx={{height: '100%'}}>
+              <Flex
+                onClick={() => this.toggleProfileModal()}
+                ml={1}
+                sx={{ height: '100%' }}
+              >
                 <Avatar profileType={user.profileType} />
               </Flex>
               <Flex>

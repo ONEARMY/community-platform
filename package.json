@@ -16,7 +16,7 @@
   "scripts": {
     "start": "yarn workspace oa-components dev & yarn start:platform",
     "start:platform": "cross-env FAST_REFRESH=false yarn react-scripts start",
-    "start:emulated": "concurrently \"yarn workspace functions start\" \"cross-env PORT=4000 yarn start\" -- ",
+    "start:emulated": "concurrently --kill-others \"yarn workspace functions start\" \"yarn workspace oa-components dev\" \"cross-env PORT=4000 yarn start:platform\"",
     "build:components": "yarn workspace oa-components build",
     "build:cra": "react-scripts build",
     "build:post": "yarn workspace oa-scripts post-cra-build",

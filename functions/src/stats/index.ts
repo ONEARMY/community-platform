@@ -1,13 +1,6 @@
 import * as functions from 'firebase-functions'
 import { db } from '../Firebase/firestoreDB'
-import {
-  IUserDB,
-  IDBDocChange,
-  DB_ENDPOINTS,
-  IHowtoDB,
-  IResearchDB,
-  IEventDB,
-} from '../models'
+import { IUserDB, IDBDocChange, DB_ENDPOINTS, IModerable } from '../models'
 export * from './migration'
 
 /**
@@ -57,10 +50,8 @@ async function updateContentCounterStats(
   change: IDBDocChange,
   target: keyof IUserDB['stats'],
 ) {
-  const after: IResearchDB | IHowtoDB | IEventDB =
-    change.after.data() || ({} as any)
-  const before: IResearchDB | IHowtoDB | IEventDB =
-    change.before.data() || ({} as any)
+  const after: IModerable = change.after.data() || ({} as any)
+  const before: IModerable = change.before.data() || ({} as any)
   if (after.moderation !== before.moderation) {
     const userDoc = await db
       .collection(DB_ENDPOINTS.users)

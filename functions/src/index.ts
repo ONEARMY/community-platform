@@ -21,6 +21,6 @@ exports.userUpdates = UserUpdates.handleUserUpdates
 exports.adminGetUserEmail = Admin.getUserEmail
 
 // Only export development api when working locally (with functions emulator)
-if (process.env.FUNCTIONS_EMULATOR) {
-  exports.dev = require('./dev')
+if (process.env.FUNCTIONS_EMULATOR === 'true') {
+  exports.emulator = require('./emulator')
 }

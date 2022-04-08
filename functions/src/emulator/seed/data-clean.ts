@@ -5,7 +5,6 @@ import { DB_ENDPOINTS } from '../../models'
 import { db } from '../../Firebase/firestoreDB'
 import { splitArrayToChunks } from '../../Utils/data.utils'
 import { firestore } from 'firebase-admin'
-import { seedUsersCreate } from './users-create'
 import axios from 'axios'
 
 const USE_SMALL_SAMPLE_SEED = false
@@ -85,10 +84,6 @@ export async function seedDataClean(req: Request, res: Response) {
   )
   returnMessage.deleted['stats'] = deletedStats
   returnMessage.kept.users = keptUsers
-
-  // Add auth users
-  const createdUsers = await seedUsersCreate()
-  returnMessage.created.users = createdUsers
 
   res.status(200).send(returnMessage)
 }

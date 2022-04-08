@@ -33,8 +33,6 @@ async function start() {
     console.error('Failed to create container')
     process.exit(1)
   }
-
-  //   docker.run('goatlab/firebase-emulator:latest',[],process.stdout)
 }
 
 /** Get latest container logs */
@@ -53,13 +51,29 @@ async function inspectContainer(container: Dockerode.Container) {
   return data
 }
 
+function showDeveloperCLIOptions() {
+  console.log(`
+🦾 Emulator Up and Running!!
+Visit: http://localhost:4001 for dashboard  
+  `)
+}
+
 function attachContainer(container: Dockerode.Container) {
   container.attach(
     { stream: true, stdout: true, stderr: true },
     (err, stream) => {
       stream.pipe(process.stdout)
+      // HACK - determine when functions init complete via console logs
+      stream.on('data', (data) => {
+        const msg: string = data.toString()
+        if (msg.includes('Issues? Report them at')) {
+          showDeveloperCLIOptions()
+        }
+      })
     },
   )
+  // Handle ^C
+  process.on('SIGINT', () => container.stop().then(() => process.exit(0)))
 }
 
 async function createNewContainer() {

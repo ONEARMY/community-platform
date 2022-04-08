@@ -63,7 +63,15 @@ ENV GOOGLE_APPLICATION_CREDENTIALS=/app/credentials.json
 
 # Make a first run of emulators to ensure configured correctly and allow any import data to be processed
 # Import data is re-exported as first import will often reformat for easier future use
-RUN firebase emulators:exec --project  ${FIRESTORE_PROJECT_NAME:-demo-community-platform} --import=/app/import --export-on-exit=/app/import ls
+# Additionally executes emulator seed endpoints
+# TODO - auth users don't seem to persist so likely just clean data here and seed in startup
+
+RUN firebase emulators:exec \
+    --project  ${FIRESTORE_PROJECT_NAME:-demo-community-platform} \
+    --import=/app/import --export-on-exit=/app/import \
+    "echo 'Creating Users'\
+    curl http://localhost:4002/demo-community-platform/us-central1/emulator/seed-users-create && \
+    echo 'init completed'"
 
 # # Exposed Ports - These should match firebase.json config
 EXPOSE 4001 4002 4003 4004 4005 4006 4007
@@ -71,7 +79,10 @@ EXPOSE 4001 4002 4003 4004 4005 4006 4007
 # # Troubleshooting - can just run to get cli access
 # CMD [ "/bin/sh" ]
 
-CMD firebase emulators:start --only auth,functions,firestore,pubsub,storage,hosting,database --project ${FIRESTORE_PROJECT_NAME:-demo-community-platform} --import=/app/import
+CMD firebase emulators:start \
+    --only auth,functions,firestore,pubsub,storage,hosting,database \
+    --project ${FIRESTORE_PROJECT_NAME:-demo-community-platform} \
+    --import=/app/import
 
 
 

@@ -27,11 +27,12 @@ Phase 2 - Dockerised emulators also support local functions development/testing 
 [?] - Support live-reload for functions (linux)
 [ ] - Provide windows-based docker image (for live-reload on windows)
 [ ] - Provide as images on dockerhub
-[ ] - Handle sigint to spin down image
+[x] - Handle sigint to spin down image
 
 Phase 3 - Ready for use/full replacement of legacy methods
 
-[ ] - Migrate seed clean scripts
+[x] - Migrate seed clean scripts
+[ ] - Optimise image size
 [ ] - Developer Documentation
 [ ] - Integrate emulator build/seed/deploy with CI system
 [ ] - Remove all legacy functions code

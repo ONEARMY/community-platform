@@ -8,8 +8,9 @@ import type {
   IHowtoDB,
   IUserDB,
   IMapPin,
+  IModerable,
 } from 'one-army-community-platform/src/models'
-export { DBDoc, IDBEndpoint, IEventDB, IHowtoDB, IUserDB, IMapPin }
+export { DBDoc, IDBEndpoint, IEventDB, IHowtoDB, IUserDB, IMapPin, IModerable }
 
 import { generateDBEndpoints } from 'oa-shared'
 export const DB_ENDPOINTS = generateDBEndpoints()

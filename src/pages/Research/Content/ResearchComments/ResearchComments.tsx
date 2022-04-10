@@ -45,8 +45,7 @@ export const ResearchComments = ({ comments, update }: IProps) => {
         await stores.userStore.triggerNotification(
           'new_comment_research',
           currResearchItem._createdBy,
-          "",
-          '/research/' + currResearchItem.slug,
+          '/research/' + currResearchItem.slug
         )
       }
 

@@ -281,7 +281,7 @@ export class UserStore extends ModuleStore {
 
       if (votedUsefulHowtos[howtoId]) {
         //get how to author from howtoid
-        this.triggerNotification('howto_useful', howtoAuthor, '/how-to/', howtoSlug)
+        this.triggerNotification('howto_useful', howtoAuthor, '/how-to/' + howtoSlug)
       }
       await this.updateUserProfile({ votedUsefulHowtos })
     }
@@ -330,8 +330,7 @@ export class UserStore extends ModuleStore {
   public async triggerNotification(
     type: NotificationType,
     username: string,
-    relevantPath: string,
-    slug: string,
+    relevantUrl: string,
   ) {
     try {
       const triggeredBy = this.activeUser
@@ -347,7 +346,7 @@ export class UserStore extends ModuleStore {
             displayName: triggeredBy.displayName,
             userId: triggeredBy._id,
           },
-          relevantUrl: relevantPath + slug,
+          relevantUrl: relevantUrl,
           type: type,
           read: false,
         }

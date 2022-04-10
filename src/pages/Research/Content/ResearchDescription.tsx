@@ -79,14 +79,16 @@ const ResearchDescription: React.FC<IProps> = ({
           </Link>
           {/* TODO - limited to beta testers, can remove AuthWrapper to make public */}
           <AuthWrapper roleRequired="beta-tester">
-            <Box style={{ flexGrow: 1 }}>
-              <ResearchUsefulStats
-                votedUsefulCount={props.votedUsefulCount || 0}
-                userVotedUseful={props.userVotedUseful}
-                isLoggedIn={props.loggedInUser ? true : false}
-                onUsefulClick={props.onUsefulClick}
-              />
-            </Box>
+            {props.votedUsefulCount !== undefined && (
+              <Box style={{ flexGrow: 1 }}>
+                <ResearchUsefulStats
+                  votedUsefulCount={props.votedUsefulCount}
+                  userVotedUseful={props.userVotedUseful}
+                  isLoggedIn={props.loggedInUser ? true : false}
+                  onUsefulClick={props.onUsefulClick}
+                />
+              </Box>
+            )}
           </AuthWrapper>
           {/* Check if research should be moderated */}
           {props.needsModeration && (

@@ -4,26 +4,11 @@ import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { Button } from 'oa-components'
 import Heading from 'src/components/Heading'
 import { Link } from 'src/components/Links'
-import ResearchListItem from 'src/components/Research/ResearchListItem'
+import ResearchListItem from './ResearchListItem'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import { useEffect } from 'react'
-import { useCommonStores } from 'src/index'
 
 const ResearchList = observer(() => {
   const store = useResearchStore()
-  const { aggregationsStore } = useCommonStores().stores
-
-  /**
-   * Currently the `userVotedResearch` property is only
-   * populated by the constructor of UserStore.
-   *
-   * To ensure the value is updated check the store
-   * each time the component is mounted.
-   */
-  useEffect(() => {
-    aggregationsStore.updateAggregation('users_votedUsefulResearch')
-  })
-
   const { filteredResearches } = store
   return (
     <>

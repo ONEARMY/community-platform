@@ -118,6 +118,7 @@ export class Howto extends React.Component<
   public async componentDidMount() {
     const slug = this.props.match.params.slug
     await this.store.setActiveHowtoBySlug(slug)
+    this.injected.aggregationsStore.updateAggregation('users_votedUsefulHowtos')
     this.setState({
       isLoading: false,
     })

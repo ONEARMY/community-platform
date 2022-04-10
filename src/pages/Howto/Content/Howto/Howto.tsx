@@ -129,10 +129,12 @@ export class Howto extends React.Component<
     const { activeHowto } = this.store
 
     if (activeHowto) {
-      const votedUsefulCount =
-        this.injected.aggregationsStore.aggregations.users_votedUsefulHowtos[
-          activeHowto._id
-        ]
+      const { aggregations } = this.injected.aggregationsStore
+      // Distinguish between undefined aggregations (not loaded) and undefined aggregation (no votes)
+      const votedUsefulCount = aggregations.users_votedUsefulHowtos
+        ? aggregations.users_votedUsefulHowtos[activeHowto._id] || 0
+        : undefined
+
       return (
         <>
           <HowtoDescription

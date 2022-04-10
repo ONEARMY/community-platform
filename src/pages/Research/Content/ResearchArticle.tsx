@@ -49,8 +49,11 @@ const ResearchArticle = observer((props: IProps) => {
   const loggedInUser = researchStore.activeUser
 
   if (item) {
-    const votedUsefulCount =
-      aggregationsStore.aggregations.users_votedUsefulResearch[item._id]
+    const { aggregations } = aggregationsStore
+    // Distinguish between undefined aggregations (not loaded) and undefined aggregation (no votes)
+    const votedUsefulCount = aggregations.users_votedUsefulResearch
+      ? aggregations.users_votedUsefulResearch[item._id] || 0
+      : undefined
     const isEditable =
       !!researchStore.activeUser &&
       isAllowToEditContent(item, researchStore.activeUser)

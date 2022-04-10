@@ -15,7 +15,7 @@ const AGGREGATION_DOC_IDS = [
 
 // Utility types generated from list of aggregation docs ids
 type IAggregationId = typeof AGGREGATION_DOC_IDS[number]
-type IAggregations = { [aggregationId in IAggregationId]: any }
+type IAggregations = { [aggregationId in IAggregationId]?: any }
 
 /** Aggregation subscriptions default close after 5 minutes */
 const DEFAULT_TIMEOUT = 1000 * 60 * 5
@@ -25,8 +25,11 @@ const DEFAULT_TIMEOUT = 1000 * 60 * 5
  * retrieve data collated across entire collections as single documents
  */
 export class AggregationsStore {
-  /** Observable list of all aggregations by id */
-  @observable aggregations: IAggregations
+  /**
+   * Observable list of all aggregations by id
+   * NOTE - each aggregation will be undefined until update called for the first time
+   * */
+  @observable aggregations: IAggregations = {}
 
   private db: DatabaseV2
   private subscriptions$: { [aggregationId: string]: Subscription } = {}
@@ -36,12 +39,6 @@ export class AggregationsStore {
 
   constructor(rootStore: RootStore) {
     this.db = rootStore.dbV2
-    // initialisise all aggregations as empty documents by default
-    const aggregations: any = {}
-    for (const targetDocId of AGGREGATION_DOC_IDS) {
-      aggregations[targetDocId] = {}
-    }
-    this.aggregations = aggregations
     makeAutoObservable(this, { aggregations: observable })
   }
 

@@ -72,6 +72,10 @@ export class AggregationsStore {
     }
     this.setSubscriptionTimeout(aggregationId, timeoutDuration)
   }
+  /** Stop subscribing to updates for specific aggregation */
+  public stopAggregationUpdates(aggregationId: IAggregationId) {
+    this.setSubscriptionTimeout(aggregationId, 0)
+  }
 
   /**
    * Use window timeout methods to handle termination of subscriptions. Setting a new timeout on an

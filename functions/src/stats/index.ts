@@ -1,18 +1,13 @@
 import * as functions from 'firebase-functions'
 import { db } from '../Firebase/firestoreDB'
-import {
-  IUserDB,
-  IDBDocChange,
-  DB_ENDPOINTS,
-  IHowtoDB,
-  IEventDB,
-} from '../models'
+import { IUserDB, IDBDocChange, DB_ENDPOINTS, IModerable } from '../models'
 export * from './migration'
 
 /**
  * User-generated content stats
  * Keep count of user contributions, including
  * - total howtos created
+ * - total Research created
  * - total events created
  */
 
@@ -23,6 +18,12 @@ exports.userStatsCountHowTos = functions.firestore
   .document(`${DB_ENDPOINTS.howtos}/{id}`)
   .onUpdate(async (change, context) => {
     await updateContentCounterStats(change, 'userCreatedHowtos')
+  })
+
+exports.userStatsCountResearch = functions.firestore
+  .document(`${DB_ENDPOINTS.research}/{id}`)
+  .onUpdate(async (change, context) => {
+    await updateContentCounterStats(change, 'userCreatedResearch')
   })
 
 exports.userStatsCountEvents = functions.firestore
@@ -49,8 +50,8 @@ async function updateContentCounterStats(
   change: IDBDocChange,
   target: keyof IUserDB['stats'],
 ) {
-  const after: IHowtoDB | IEventDB = change.after.data() || ({} as any)
-  const before: IHowtoDB | IEventDB = change.before.data() || ({} as any)
+  const after: IModerable = change.after.data() || ({} as any)
+  const before: IModerable = change.before.data() || ({} as any)
   if (after.moderation !== before.moderation) {
     const userDoc = await db
       .collection(DB_ENDPOINTS.users)
@@ -62,8 +63,13 @@ async function updateContentCounterStats(
       user.stats = user.stats || {
         userCreatedEvents: {},
         userCreatedHowtos: {},
+        userCreatedResearch: {},
       }
-      if (target === 'userCreatedEvents' || target === 'userCreatedHowtos')
+      if (
+        target === 'userCreatedEvents' ||
+        target === 'userCreatedHowtos' ||
+        target === 'userCreatedResearch'
+      )
         user.stats[target] = {
           ...user.stats[target],
           [after._id]: after.moderation,

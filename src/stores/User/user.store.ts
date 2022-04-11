@@ -259,6 +259,7 @@ export class UserStore extends ModuleStore {
       userName,
       moderation: 'awaiting-moderation',
       votedUsefulHowtos: {},
+      votedUsefulResearch: {},
       notifications: [],
       ...fields,
     }
@@ -289,6 +290,17 @@ export class UserStore extends ModuleStore {
   @action
   public async loadVerifiedUsers() {
     this.aggregationsStore.updateAggregation('users_verified')
+  }
+
+  @action
+  public async updateUsefulResearch(researchId: string) {
+    if (this.user) {
+      // toggle entry on user votedUsefulResearch to either vote or unvote a Research
+      // this will updated the main Research via backend `updateUserVoteStats` function
+      const votedUsefulResearch = toJS(this.user.votedUsefulResearch) || {}
+      votedUsefulResearch[researchId] = !votedUsefulResearch[researchId]
+      await this.updateUserProfile({ votedUsefulResearch })
+    }
   }
 
   // use firebase auth to listen to change to signed in user

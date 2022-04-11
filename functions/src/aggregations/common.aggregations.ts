@@ -2,7 +2,7 @@ import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions'
 import { DB_ENDPOINTS, IDBEndpoint } from '../models'
 import { db } from '../Firebase/firestoreDB'
-import { compareObjectDiffs } from '../Utils/data.utils'
+import { compareObjectDiffs, splitArrayToChunks } from '../Utils/data.utils'
 
 type IDocumentRef = FirebaseFirestore.DocumentReference
 type ICollectionRef = FirebaseFirestore.CollectionReference
@@ -102,18 +102,27 @@ class AggregationHandler {
     const snapshot = await this.sourceCollectionRef
       .orderBy(sourceFields[0])
       .get()
-    const batch = db.batch()
-    batch.set(this.targetDocRef, {})
+    const updates: { ref: IDocumentRef; entry: any }[] = []
     for (const doc of snapshot.docs) {
       // for purpose of seeding before will always be empty so just track each doc in after state
       this.dbChange.before.data = () => ({})
       this.dbChange.after = doc
       const aggregationEntry = this.aggregation.process(this)
       if (aggregationEntry) {
-        batch.update(this.targetDocRef, aggregationEntry)
+        updates.push({ ref: this.targetDocRef, entry: aggregationEntry })
       }
     }
-    return batch.commit()
+    // split updates into batches of 500 with 1s pause between
+    const chunks = splitArrayToChunks(updates, 500)
+    for (const [index, chunk] of chunks.entries()) {
+      const batch = db.batch()
+      if (index === 0) {
+        batch.set(this.targetDocRef, {})
+      }
+      chunk.forEach(({ ref, entry }) => batch.update(ref, entry))
+      await batch.commit()
+      await _sleep(1000)
+    }
   }
 }
 
@@ -123,4 +132,8 @@ export function isValidAggregationEntry(v: any) {
   if (typeof v === 'object') return Object.keys(v).length > 0
   if (Array.isArray(v)) return v.length > 0
   return true
+}
+
+function _sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }

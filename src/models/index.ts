@@ -2,6 +2,7 @@
 export * from './common.models'
 export * from './events.models'
 export * from './howto.models'
+export * from './research.models'
 export * from './maps.models'
 export * from './project.models'
 export * from './selectorList.models'

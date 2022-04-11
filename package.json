@@ -14,10 +14,10 @@
   "private": true,
   "main": "lib/index.js",
   "scripts": {
-    "start": "yarn workspace oa-components dev & yarn start:platform",
+    "start": "concurrently --kill-others \"yarn workspace oa-components dev\" \"yarn start:platform\"",
     "start:platform": "cross-env FAST_REFRESH=false yarn react-scripts start",
-    "start:emulated": "concurrently \"yarn workspace functions start\" \"cross-env PORT=4000 yarn start\" -- ",
-    "start:emulated:docker": "concurrently --kill-others \"yarn workspace functions watch\" \"yarn workspace oa-emulators-docker start\" \"cross-env PORT=4000 yarn start\"",
+    "start:emulated": "concurrently --kill-others \"yarn workspace functions start\" \"yarn workspace oa-components dev\" \"cross-env PORT=4000 yarn start:platform\"",
+    "start:emulated:docker": "concurrently --kill-others \"yarn workspace functions watch\" \"yarn workspace oa-emulators-docker start\" \"yarn workspace oa-components dev\" \"cross-env PORT=4000 yarn start:platform\"",
     "build:components": "yarn workspace oa-components build",
     "build:cra": "react-scripts build",
     "build:post": "yarn workspace oa-scripts post-cra-build",

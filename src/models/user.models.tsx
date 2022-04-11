@@ -5,6 +5,8 @@ import {
   DBDoc,
   IModerationStatus,
 } from './common.models'
+import { UserRole } from 'oa-shared'
+export type { UserRole }
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IConvertedFileMeta } from '../types'
 
@@ -73,8 +75,6 @@ interface IUserStats {
 }
 
 export type IUserDB = IUser & DBDoc
-
-export type UserRole = 'super-admin' | 'subscriber' | 'admin' | 'beta-tester'
 
 export interface INotification {
   _id: string

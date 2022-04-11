@@ -1,4 +1,3 @@
-import { Request, Response } from 'express'
 // (note - typings don't currently exist for firebase-tools: https://github.com/firebase/firebase-tools/issues/2378)
 import * as firebase_tools from 'firebase-tools'
 import { DB_ENDPOINTS } from '../../models'

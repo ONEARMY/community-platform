@@ -21,8 +21,8 @@ import {
 import theme from 'src/themes/styled.theme'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import { FlagIconHowTos } from 'oa-components'
-import { HowtoUsefulStats } from './HowtoUsefulStats'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
+import { UsefulStats } from 'src/components/UsefulStats/UsefulStats'
 
 interface IProps {
   howto: IHowtoDB
@@ -106,7 +106,7 @@ export default class HowtoDescription extends PureComponent<IProps> {
             </Link>
             {this.props.votedUsefulCount !== undefined && (
               <Box style={{ flexGrow: 1 }}>
-                <HowtoUsefulStats
+                <UsefulStats
                   votedUsefulCount={this.props.votedUsefulCount}
                   userVotedUseful={this.props.userVotedUseful}
                   isLoggedIn={this.props.loggedInUser ? true : false}

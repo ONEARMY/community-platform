@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import Text from 'src/components/Text'
 import { Button } from 'oa-components'
@@ -11,23 +11,21 @@ interface IProps {
   isLoggedIn: boolean
   onUsefulClick: () => void
 }
-export const HowtoUsefulStats = (props: IProps) => {
+export const UsefulStats = (props: IProps) => {
   const history = useHistory()
-  const { votedUsefulCount, userVotedUseful } = props
-  // Map state to props only for first render
-  const [state, setState] = React.useState({
-    votedUsefulCount,
-    userVotedUseful,
-  })
-  // Optimistically update the value (that would otherwise be passesd by props)
-  // We avoid useEffect or any other props-based re-renders to allow optimistic value to take precedence after
+
+  const [votedUsefulCount, setVotedUsefulCount] = useState<number>()
+  const [userVotedUseful, setUserVotedUseful] = useState<boolean>()
+
+  useEffect(
+    () => setUserVotedUseful(props.userVotedUseful),
+    [props.userVotedUseful],
+  )
+  useEffect(
+    () => setVotedUsefulCount(props.votedUsefulCount),
+    [props.votedUsefulCount],
+  )
   const handleUsefulClick = () => {
-    const usefulCounterChange = state.userVotedUseful ? -1 : 1
-    setState({
-      ...state,
-      votedUsefulCount: state.votedUsefulCount + usefulCounterChange,
-      userVotedUseful: !state.userVotedUseful,
-    })
     props.onUsefulClick()
   }
 
@@ -43,9 +41,9 @@ export const HowtoUsefulStats = (props: IProps) => {
         ml="8px"
         sx={{ fontSize: '14px' }}
         backgroundColor={theme.colors.softyellow}
-        icon={state.userVotedUseful ? 'star-active' : 'star'}
+        icon={userVotedUseful ? 'star-active' : 'star'}
       >
-        <Text ml={1}>Useful {state.votedUsefulCount}</Text>
+        <Text ml={1}>Useful {votedUsefulCount}</Text>
       </Button>
       {!props.isLoggedIn && <Tooltip />}
     </>

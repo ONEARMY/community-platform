@@ -9,10 +9,10 @@ import ModerationStatusText from 'src/components/ModerationStatusText'
 import Text from 'src/components/Text'
 import { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
-import { ResearchUsefulStats } from './ResearchUsefulStats'
 import { IUser } from 'src/models/user.models'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { UsefulStats } from 'src/components/UsefulStats/UsefulStats'
 
 interface IProps {
   research: IResearch.ItemDB
@@ -81,7 +81,7 @@ const ResearchDescription: React.FC<IProps> = ({
           <AuthWrapper roleRequired="beta-tester">
             {props.votedUsefulCount !== undefined && (
               <Box style={{ flexGrow: 1 }}>
-                <ResearchUsefulStats
+                <UsefulStats
                   votedUsefulCount={props.votedUsefulCount}
                   userVotedUseful={props.userVotedUseful}
                   isLoggedIn={props.loggedInUser ? true : false}

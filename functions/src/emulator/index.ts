@@ -33,6 +33,10 @@ app.get('/seed-users-create', (req, res) =>
   ),
 )
 
-app.post('/seed-clean', (req, res) => seedDataClean(req, res))
+app.get('/seed-clean', (req, res) =>
+  seedDataClean().then((result) => {
+    res.status(200).send(result)
+  }),
+)
 
 export = functions.https.onRequest(app as any)

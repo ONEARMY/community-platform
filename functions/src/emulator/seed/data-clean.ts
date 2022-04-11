@@ -16,9 +16,10 @@ const USE_SMALL_SAMPLE_SEED = false
  * for users that have not posted content to mappins, howtos, research or events
  * (basically anywhere their profile might be linked from)
  */
-export async function seedDataClean(req: Request, res: Response) {
+export async function seedDataClean() {
   const dbCollections = await db.listCollections()
   const dbEndpoints = dbCollections.map((c) => c.id)
+  console.log('db endpoints', dbEndpoints)
   const expectedEndpoints = Object.values(DB_ENDPOINTS)
   const returnMessage: { deleted: any; kept: any; created: any } = {
     deleted: {},
@@ -29,6 +30,7 @@ export async function seedDataClean(req: Request, res: Response) {
   // Delete collections not in use
   for (const endpoint of dbEndpoints) {
     if (!expectedEndpoints.includes(endpoint)) {
+      console.log('deleting endpoint', endpoint)
       await deleteCollectionAPI(endpoint)
       returnMessage.deleted[endpoint] = true
     }
@@ -85,7 +87,7 @@ export async function seedDataClean(req: Request, res: Response) {
   returnMessage.deleted['stats'] = deletedStats
   returnMessage.kept.users = keptUsers
 
-  res.status(200).send(returnMessage)
+  return returnMessage
 }
 
 /**
@@ -162,10 +164,8 @@ function _waitForNextTick(): Promise<void> {
  * @returns
  */
 async function deleteCollectionAPI(endpoint: string) {
-  // endpoint copied from firebase.json host
-  return axios.delete(
-    `http://[::1]:4003/emulator/v1/projects/emulator-demo/databases/(default)/documents/${endpoint}`,
-  )
+  const apiHost = 'http://0.0.0.0:4003/emulator/v1/projects/emulator-demo' // http://[::1] for non-docker env
+  return axios.delete(`${apiHost}/databases/(default)/documents/${endpoint}`)
 }
 
 /**

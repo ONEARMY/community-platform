@@ -25,7 +25,7 @@ async function startDockerBuild() {
     {
       context: PATHS.workspaceDir,
       // Paths listed here will be available to DOCKERFILE
-      src: ['Dockerfile', 'app', 'import'],
+      src: ['Dockerfile', 'app', 'import', 'config'],
     },
     { t: OA_FIREBASE_IMAGE_NAME },
   )

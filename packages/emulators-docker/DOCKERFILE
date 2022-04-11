@@ -9,32 +9,32 @@ ARG BUILD_DATE
 ARG VERSION
 ARG VCS_REF
 LABEL org.label-schema.schema-version="1.0" \
-    org.label-schema.name="" \
-    org.label-schema.version=${VERSION} \
-    org.label-schema.build-date=${BUILD_DATE} \
-    org.label-schema.description="" \
-    org.label-schema.url="" \
-    org.label-schema.vcs-url="" \
-    org.label-schema.vcs-ref=${VCS_REF}
+  org.label-schema.name="" \
+  org.label-schema.version=${VERSION} \
+  org.label-schema.build-date=${BUILD_DATE} \
+  org.label-schema.description="" \
+  org.label-schema.url="" \
+  org.label-schema.vcs-url="" \
+  org.label-schema.vcs-ref=${VCS_REF}
 ENV FIREBASE_TOOLS_VERSION=${VERSION}
 ENV HOME=/home/node
 
 # Install Java, Curl and Firebase-Tools
 RUN apk --no-cache add curl openjdk11-jre bash && \
-    yarn global add firebase-tools@${VERSION} && \
-    yarn cache clean   
+  yarn global add firebase-tools@${VERSION} && \
+  yarn cache clean   
 
 # Check versions
 RUN firebase -V && \
-    java -version && \
-    chown -R node:node $HOME   
+  java -version && \
+  chown -R node:node $HOME   
 
 # First run to setup emulators
 RUN firebase setup:emulators:database && \
-    firebase setup:emulators:firestore && \
-    firebase setup:emulators:pubsub && \
-    firebase setup:emulators:storage && \
-    firebase setup:emulators:ui
+  firebase setup:emulators:firestore && \
+  firebase setup:emulators:pubsub && \
+  firebase setup:emulators:storage && \
+  firebase setup:emulators:ui
 
 # Install gcloud commmand utilities to use default login (requires python)
 # RUN curl -sSL https://sdk.cloud.google.com > /tmp/gcl && bash /tmp/gcl --install-dir=~/gcloud --disable-prompts
@@ -54,24 +54,26 @@ COPY ./app/firebase.storage.rules /app/firebase.storage.rules
 COPY ./app/functions/dist/index.js /app/functions/dist/index.js
 COPY ./app/credentials.json /app/credentials.json
 
+
 # Copy seed data
 RUN mkdir -p /app/import
 COPY ./import /app/import
+
+# Copy config files
+RUN mkdir -p /app/config
+COPY ./config /app/config
+RUN chmod +x /app/config/bootstrap.sh
 
 # Prompt firebase to use json credentials for login by exporting variable
 ENV GOOGLE_APPLICATION_CREDENTIALS=/app/credentials.json
 
 # Make a first run of emulators to ensure configured correctly and allow any import data to be processed
 # Import data is re-exported as first import will often reformat for easier future use
-# Additionally executes emulator seed endpoints
-# TODO - auth users don't seem to persist so likely just clean data here and seed in startup
-
+# Additionally executes emulator seed endpoints via bootstrap script
 RUN firebase emulators:exec \
-    --project  ${FIRESTORE_PROJECT_NAME:-demo-community-platform} \
-    --import=/app/import --export-on-exit=/app/import \
-    "echo 'Creating Users'\
-    curl http://localhost:4002/demo-community-platform/us-central1/emulator/seed-users-create && \
-    echo 'init completed'"
+  --project  ${FIRESTORE_PROJECT_NAME:-demo-community-platform} \
+  --import=/app/import --export-on-exit=/app/import \
+  "/app/config/bootstrap.sh"
 
 # # Exposed Ports - These should match firebase.json config
 EXPOSE 4001 4002 4003 4004 4005 4006 4007
@@ -80,10 +82,6 @@ EXPOSE 4001 4002 4003 4004 4005 4006 4007
 # CMD [ "/bin/sh" ]
 
 CMD firebase emulators:start \
-    --only auth,functions,firestore,pubsub,storage,hosting,database \
-    --project ${FIRESTORE_PROJECT_NAME:-demo-community-platform} \
-    --import=/app/import
-
-
-
-
+  --only auth,functions,firestore,pubsub,storage,hosting,database \
+  --project ${FIRESTORE_PROJECT_NAME:-demo-community-platform} \
+  --import=/app/import

@@ -1,4 +1,4 @@
-import { action, makeAutoObservable, observable } from 'mobx'
+import { action, makeAutoObservable, observable, toJS } from 'mobx'
 import { Subscription } from 'rxjs'
 import { RootStore } from '..'
 import { DatabaseV2 } from '../databaseV2'
@@ -15,7 +15,9 @@ const AGGREGATION_DOC_IDS = [
 
 // Utility types generated from list of aggregation docs ids
 type IAggregationId = typeof AGGREGATION_DOC_IDS[number]
-type IAggregations = { [aggregationId in IAggregationId]?: any }
+type IAggregations = {
+  [aggregationId in IAggregationId]?: { [key: string]: any }
+}
 
 /** Aggregation subscriptions default close after 5 minutes */
 const DEFAULT_TIMEOUT = 1000 * 60 * 5
@@ -69,6 +71,16 @@ export class AggregationsStore {
     }
     this.setSubscriptionTimeout(aggregationId, timeoutDuration)
   }
+
+  /** Provide a manual patch override for a specific aggregation as an optimistic update ahead of expected server triggers*/
+  public overrideAggregationValue(
+    aggregationId: IAggregationId,
+    override: { [key: string]: any },
+  ) {
+    const updated = { ...this.aggregations[aggregationId], ...override }
+    this.updateAggregationValue(aggregationId, updated)
+  }
+
   /** Stop subscribing to updates for specific aggregation */
   public stopAggregationUpdates(aggregationId: IAggregationId) {
     this.setSubscriptionTimeout(aggregationId, 0)

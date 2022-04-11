@@ -23147,6 +23147,8 @@ fsevents@^1.2.7:
 "oa-shared@1.0.0, oa-shared@workspace:*, oa-shared@workspace:shared":
   version: 0.0.0-use.local
   resolution: "oa-shared@workspace:shared"
+  dependencies:
+    typescript: ^4.5.5
   languageName: unknown
   linkType: soft
 

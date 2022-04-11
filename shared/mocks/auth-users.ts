@@ -8,9 +8,10 @@ interface IMockAuthUser {
   roles: UserRole[]
 }
 
+type IMockUsers = { [key in UserRole]: IMockAuthUser }
 /** A list of specific demo/mock users that are prepopulated onto testing sites for use in development */
 
-export const MOCK_AUTH_USERS: { [key in UserRole]: IMockAuthUser } = {
+export const MOCK_AUTH_USERS: IMockUsers = {
   subscriber: {
     uid: 'demo_user',
     label: 'User',

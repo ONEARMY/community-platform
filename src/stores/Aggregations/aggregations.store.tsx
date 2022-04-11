@@ -1,4 +1,4 @@
-import { action, makeAutoObservable, observable, toJS } from 'mobx'
+import { action, makeAutoObservable, observable } from 'mobx'
 import { Subscription } from 'rxjs'
 import { RootStore } from '..'
 import { DatabaseV2 } from '../databaseV2'

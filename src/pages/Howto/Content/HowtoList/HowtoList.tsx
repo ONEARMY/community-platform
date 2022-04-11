@@ -153,7 +153,7 @@ export class HowtoList extends React.Component<any, IState> {
             mb={['10px', '10px', 0]}
             sx={{ width: ['100%', '100%', '20%'] }}
           >
-            <SortSelect usefulCounts={users_votedUsefulHowtos} />
+            <SortSelect usefulCounts={users_votedUsefulHowtos || {}} />
           </Flex>
           <Flex ml={[0, 0, '8px']} mr={[0, 0, 'auto']} mb={['10px', '10px', 0]}>
             <SearchInput
@@ -207,7 +207,7 @@ export class HowtoList extends React.Component<any, IState> {
                   <Box px={4} py={4}>
                     <HowToCard
                       howto={howto}
-                      votedUsefulCount={users_votedUsefulHowtos[howto._id]}
+                      votedUsefulCount={users_votedUsefulHowtos?.[howto._id]}
                     />
                   </Box>
                 )}

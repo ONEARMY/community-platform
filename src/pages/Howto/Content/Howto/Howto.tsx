@@ -107,12 +107,17 @@ export class Howto extends React.Component<
     howtoCreatedBy: string,
     howToSlug: string,
   ) => {
-    // Fire & forget
-    await this.injected.userStore.updateUsefulHowTos(
-      howtoId,
-      howtoCreatedBy,
-      howToSlug,
-    )
+    // Make an optimistic update of current aggregation to update UI
+    const { aggregationsStore } = this.injected
+    const votedUsefulCount =
+      aggregationsStore.aggregations.users_votedUsefulHowtos![howtoId]
+    const userVotedUseful = this.store.userVotedActiveHowToUseful
+    aggregationsStore.overrideAggregationValue('users_votedUsefulHowtos', {
+      [howtoId]: votedUsefulCount + (userVotedUseful ? -1 : 1),
+    })
+    // Trigger update
+    const { userStore } = this.injected
+    userStore.updateUsefulHowTos(howtoId, howtoCreatedBy, howToSlug)
   }
 
   public async componentDidMount() {

@@ -7243,13 +7243,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/dockerode@npm:^3.3.3":
-  version: 3.3.3
-  resolution: "@types/dockerode@npm:3.3.3"
+"@types/dockerode@npm:^3.3.8":
+  version: 3.3.8
+  resolution: "@types/dockerode@npm:3.3.8"
   dependencies:
     "@types/docker-modem": "*"
     "@types/node": "*"
-  checksum: 19032875eb43fb8bf454cd764f8abb645cb4eceaf8db66dcd66681c315ca910d73421178998c78e67e2c0942467081d3e866a4bda5a8d4e08feccdaa1c99ea48
+  checksum: 3eebbe2c3e5c067c06ece6f67b8ff8beb8598b8f68ed34509cc6d0f4447705229b7cc20e95b6f64e42e26bc183da8ba186955d289f27d4fc3439f0c44fada93b
   languageName: node
   linkType: hard
 
@@ -16546,6 +16546,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fs-extra@npm:^10.0.1":
+  version: 10.0.1
+  resolution: "fs-extra@npm:10.0.1"
+  dependencies:
+    graceful-fs: ^4.2.0
+    jsonfile: ^6.0.1
+    universalify: ^2.0.0
+  checksum: c1faaa5eb9e1c5c7c7ff09f966e93922ecb068ae1b04801cfc983ef05fcc1f66bfbb8d8d0b745c910014c7a2e7317fb6cf3bfe7390450c1157e3cc1a218f221d
+  languageName: node
+  linkType: hard
+
 "fs-extra@npm:^5.0.0":
   version: 5.0.0
   resolution: "fs-extra@npm:5.0.0"
@@ -16568,7 +16579,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-extra@npm:^9.0.0, fs-extra@npm:^9.0.1, fs-extra@npm:^9.0.13, fs-extra@npm:^9.1.0":
+"fs-extra@npm:^9.0.0, fs-extra@npm:^9.0.1, fs-extra@npm:^9.1.0":
   version: 9.1.0
   resolution: "fs-extra@npm:9.1.0"
   dependencies:
@@ -23108,11 +23119,12 @@ fsevents@^1.2.7:
   version: 0.0.0-use.local
   resolution: "oa-emulators-docker@workspace:packages/emulators-docker"
   dependencies:
-    "@types/dockerode": ^3.3.3
+    "@types/dockerode": ^3.3.8
     "@types/fs-extra": ^9.0.13
+    boxen: ^5.1.2
     dockerode: ^3.3.1
-    fs-extra: ^9.0.13
-    ts-node: ^10.5.0
+    fs-extra: ^10.0.1
+    ts-node: ^10.7.0
     typescript: ^4.5.5
   languageName: unknown
   linkType: soft
@@ -30989,9 +31001,9 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"ts-node@npm:^10.5.0":
-  version: 10.5.0
-  resolution: "ts-node@npm:10.5.0"
+"ts-node@npm:^10.7.0":
+  version: 10.7.0
+  resolution: "ts-node@npm:10.7.0"
   dependencies:
     "@cspotcode/source-map-support": 0.7.0
     "@tsconfig/node10": ^1.0.7
@@ -31019,10 +31031,11 @@ resolve@^2.0.0-next.3:
   bin:
     ts-node: dist/bin.js
     ts-node-cwd: dist/bin-cwd.js
+    ts-node-esm: dist/bin-esm.js
     ts-node-script: dist/bin-script.js
     ts-node-transpile-only: dist/bin-transpile.js
     ts-script: dist/bin-script-deprecated.js
-  checksum: d51ac8a9b3582ce3705cef8d35f3372e40caa277dbd7c7baeb651961538f13d2f11f22402614348f78d9b10501bd1cb5f05ec4f2ec9a74bd0e288de769c32335
+  checksum: 2a379e43f7478d0b79e1e63af91fe222d83857727957df4bd3bdf3c0a884de5097b12feb9bbf530074526b8874c0338b0e6328cf334f3a5e2c49c71e837273f7
   languageName: node
   linkType: hard
 

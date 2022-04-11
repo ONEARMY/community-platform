@@ -1,4 +1,5 @@
 import Dockerode from 'dockerode'
+import boxen from 'boxen'
 import { getFirebasePortMapping } from './common'
 import { PATHS } from './paths'
 
@@ -43,7 +44,7 @@ async function containerLogs(container: Dockerode.Container, tail?: number) {
     tail,
     follow: false, // return as string
   })) as any
-  console.log('logs', logs.toString('utf8'))
+  console.log(logs.toString('utf8'))
 }
 
 async function inspectContainer(container: Dockerode.Container) {
@@ -51,11 +52,20 @@ async function inspectContainer(container: Dockerode.Container) {
   return data
 }
 
-function showDeveloperCLIOptions() {
-  console.log(`
-🦾 Emulator Up and Running!!
-Visit: http://localhost:4001 for dashboard  
-  `)
+async function handleEmulatorReady() {
+  console.log(
+    boxen(
+      `
+  🦾 Emulator Up and Running!
+  Visit: http://localhost:4001 for dashboard  
+    `,
+      {
+        borderColor: 'magenta',
+        title: 'OneArmy Docker',
+        titleAlignment: 'center',
+      },
+    ),
+  )
 }
 
 function attachContainer(container: Dockerode.Container) {
@@ -67,7 +77,7 @@ function attachContainer(container: Dockerode.Container) {
       stream.on('data', (data) => {
         const msg: string = data.toString()
         if (msg.includes('Issues? Report them at')) {
-          showDeveloperCLIOptions()
+          handleEmulatorReady()
         }
       })
     },
@@ -111,6 +121,23 @@ function startContainer(container: Dockerode.Container) {
       process.exit(1)
     }
   })
+}
+
+/** Execute an arbitrary command from within the container */
+function execContainerCmd(container: Dockerode.Container, Cmd: string[]) {
+  return container.exec(
+    {
+      Cmd,
+      AttachStdin: true,
+      AttachStderr: true,
+      AttachStdout: true,
+    },
+    (err, exec) => {
+      exec.start({ hijack: true, stdin: true }, (err, stream) => {
+        docker.modem.demuxStream(stream, process.stdout, process.stderr)
+      })
+    },
+  )
 }
 
 /**

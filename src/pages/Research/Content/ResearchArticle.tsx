@@ -31,7 +31,7 @@ const ResearchArticle = observer((props: IProps) => {
   const onUsefulClick = async (researchId: string) => {
     // Make an optimistic update of current aggregation to update UI
     const votedUsefulCount =
-      aggregationsStore.aggregations.users_votedUsefulResearch![researchId]
+      aggregationsStore.aggregations.users_votedUsefulResearch![researchId] || 0
     const userVotedUseful = researchStore.userVotedActiveResearchUseful
     aggregationsStore.overrideAggregationValue('users_votedUsefulResearch', {
       [researchId]: votedUsefulCount + (userVotedUseful ? -1 : 1),

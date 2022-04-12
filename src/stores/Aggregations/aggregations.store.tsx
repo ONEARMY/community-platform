@@ -63,9 +63,8 @@ export class AggregationsStore {
         .doc(aggregationId)
         .stream()
         .subscribe((value) => {
-          if (value) {
-            this.updateAggregationValue(aggregationId, value)
-          }
+          // Set the value received for aggregation - if aggregation does not exist populate empty
+          this.updateAggregationValue(aggregationId, value || {})
         })
       this.subscriptions$[aggregationId] = subscription
     }

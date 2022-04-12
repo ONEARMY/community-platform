@@ -110,7 +110,7 @@ export class Howto extends React.Component<
     // Make an optimistic update of current aggregation to update UI
     const { aggregationsStore } = this.injected
     const votedUsefulCount =
-      aggregationsStore.aggregations.users_votedUsefulHowtos![howtoId]
+      aggregationsStore.aggregations.users_votedUsefulHowtos![howtoId] || 0
     const userVotedUseful = this.store.userVotedActiveHowToUseful
     aggregationsStore.overrideAggregationValue('users_votedUsefulHowtos', {
       [howtoId]: votedUsefulCount + (userVotedUseful ? -1 : 1),

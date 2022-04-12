@@ -107,6 +107,9 @@ export class Howto extends React.Component<
     howtoCreatedBy: string,
     howToSlug: string,
   ) => {
+    // Trigger update without waiting
+    const { userStore } = this.injected
+    userStore.updateUsefulHowTos(howtoId, howtoCreatedBy, howToSlug)
     // Make an optimistic update of current aggregation to update UI
     const { aggregationsStore } = this.injected
     const votedUsefulCount =
@@ -115,9 +118,6 @@ export class Howto extends React.Component<
     aggregationsStore.overrideAggregationValue('users_votedUsefulHowtos', {
       [howtoId]: votedUsefulCount + (userVotedUseful ? -1 : 1),
     })
-    // Trigger update
-    const { userStore } = this.injected
-    userStore.updateUsefulHowTos(howtoId, howtoCreatedBy, howToSlug)
   }
 
   public async componentDidMount() {

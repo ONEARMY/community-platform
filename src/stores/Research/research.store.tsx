@@ -8,7 +8,7 @@ import {
 } from 'mobx'
 import { createContext, useContext } from 'react'
 import type { IConvertedFileMeta } from 'src/types'
-import { getUserCountry } from 'src/utils/getUserCountry';
+import { getUserCountry } from 'src/utils/getUserCountry'
 import { logger } from 'src/logger'
 import { IComment, IUser } from 'src/models'
 import { IResearch } from 'src/models/research.models'
@@ -119,7 +119,7 @@ export class ResearchStore extends ModuleStore {
       const id = dbRef.id
 
       try {
-        const userCountry = getUserCountry(user);
+        const userCountry = getUserCountry(user)
         const newComment: IComment = {
           _id: randomID(),
           _created: new Date().toISOString(),
@@ -298,7 +298,7 @@ export class ResearchStore extends ModuleStore {
     try {
       // populate DB
       // define research
-      const userCountry = getUserCountry(user);
+      const userCountry = getUserCountry(user)
       const research: IResearch.Item = {
         ...values,
         _createdBy: values._createdBy ? values._createdBy : user.userName,

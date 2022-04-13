@@ -29,15 +29,12 @@ export const UsefulStatsButton = (props: IProps) => {
     props.onUsefulClick()
   }
 
-  return (
+  return props.isLoggedIn ? (
     <>
       <Button
         data-cy="vote-useful"
-        data-tip={props.isLoggedIn ? undefined : 'log in to use this'}
         variant="subtle"
-        onClick={
-          props.isLoggedIn ? handleUsefulClick : () => history.push('/sign-in')
-        }
+        onClick={handleUsefulClick}
         ml="8px"
         sx={{ fontSize: '14px' }}
         backgroundColor={theme.colors.softyellow}
@@ -45,7 +42,22 @@ export const UsefulStatsButton = (props: IProps) => {
       >
         <Text ml={1}>Useful {votedUsefulCount}</Text>
       </Button>
-      {!props.isLoggedIn && <Tooltip />}
+    </>
+  ) : (
+    <>
+      <Button
+        data-cy="vote-useful-redirect"
+        data-tip={'Login to add your vote'}
+        variant="subtle"
+        onClick={() => history.push('/sign-in')}
+        ml="8px"
+        sx={{ fontSize: '14px' }}
+        backgroundColor={theme.colors.softyellow}
+        icon={hasUserVotedUseful ? 'star-active' : 'star'}
+      >
+        <Text ml={1}>Useful {votedUsefulCount}</Text>
+      </Button>
+      <Tooltip />
     </>
   )
 }

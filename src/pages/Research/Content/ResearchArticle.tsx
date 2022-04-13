@@ -29,7 +29,15 @@ const ResearchArticle = observer((props: IProps) => {
   }
 
   const onUsefulClick = async (researchId: string) => {
-    await userStore.updateUsefulResearch(researchId)
+    // Trigger update without waiting
+    userStore.updateUsefulResearch(researchId)
+    // Make an optimistic update of current aggregation to update UI
+    const votedUsefulCount =
+      aggregationsStore.aggregations.users_votedUsefulResearch![researchId] || 0
+    const hasUserVotedUseful = researchStore.userVotedActiveResearchUseful
+    aggregationsStore.overrideAggregationValue('users_votedUsefulResearch', {
+      [researchId]: votedUsefulCount + (hasUserVotedUseful ? -1 : 1),
+    })
   }
 
   React.useEffect(() => {
@@ -49,8 +57,11 @@ const ResearchArticle = observer((props: IProps) => {
   const loggedInUser = researchStore.activeUser
 
   if (item) {
-    const votedUsefulCount =
-      aggregationsStore.aggregations.users_votedUsefulResearch[item._id]
+    const { aggregations } = aggregationsStore
+    // Distinguish between undefined aggregations (not loaded) and undefined aggregation (no votes)
+    const votedUsefulCount = aggregations.users_votedUsefulResearch
+      ? aggregations.users_votedUsefulResearch[item._id] || 0
+      : undefined
     const isEditable =
       !!researchStore.activeUser &&
       isAllowToEditContent(item, researchStore.activeUser)
@@ -63,7 +74,7 @@ const ResearchArticle = observer((props: IProps) => {
           loggedInUser={loggedInUser}
           isEditable={isEditable}
           needsModeration={researchStore.needsModeration(item)}
-          userVotedUseful={researchStore.userVotedActiveResearchUseful}
+          hasUserVotedUseful={researchStore.userVotedActiveResearchUseful}
           moderateResearch={moderateResearch}
           onUsefulClick={() => onUsefulClick(item._id)}
         />

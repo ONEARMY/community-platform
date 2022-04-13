@@ -34,7 +34,7 @@ export class UserStore extends ModuleStore {
 
   // redirect calls for verifiedUsers to the aggregation store list
   @computed get verifiedUsers(): { [user_id: string]: boolean } {
-    return this.aggregationsStore.aggregations.users_verified
+    return this.aggregationsStore.aggregations.users_verified || {}
   }
 
   @action

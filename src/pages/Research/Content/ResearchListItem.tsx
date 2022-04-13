@@ -7,7 +7,7 @@ import { ModerationStatusText } from 'src/components/ModerationStatusText'
 import Text from 'src/components/Text'
 import { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
-import { VerifiedUserBadge } from '../VerifiedUserBadge/VerifiedUserBadge'
+import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 
 interface IProps {
   item: IResearch.ItemDB

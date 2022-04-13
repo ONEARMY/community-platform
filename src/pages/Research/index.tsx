@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import { Route } from 'react-router'
+import { useCommonStores } from 'src'
 import { MODULE } from 'src/modules'
 import {
   ResearchStore,
@@ -25,6 +27,16 @@ export const ResearchModule: IPageMeta = {
  * Wraps the research module routing elements with the research module provider
  */
 function ResearchModuleContainer() {
+  const { aggregationsStore } = useCommonStores().stores
+
+  // Ensure aggregations up-to-date when using any child pages and unsubscribe when leaving
+  useEffect(() => {
+    aggregationsStore.updateAggregation('users_votedUsefulResearch')
+    return () => {
+      aggregationsStore.stopAggregationUpdates('users_votedUsefulResearch')
+    }
+  })
+
   return (
     <ResearchStoreContext.Provider value={new ResearchStore()}>
       {/* <AuthRoute component={ResearchRoutes}      roleRequired={undefined}  /> */}

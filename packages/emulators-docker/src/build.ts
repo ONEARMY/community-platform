@@ -85,25 +85,24 @@ function copyAppFiles() {
   const appFolder = path.resolve(PATHS.workspaceDir, 'app')
   fs.ensureDirSync(appFolder)
 
-  const functionsFiles = []
+  const functionsFiles = globbySync(['functions/dist'], {
+    cwd: path.resolve(PATHS.rootDir),
+  })
 
   /** Alternative glob pattern to match against src - requires refactor as described in readme known issues */
-  // const functionsFiles = globbySync(['**'], {
+  // const functionsFiles = globbySync(['functions/'], {
   //   gitignore: true,
-  //   cwd: path.resolve(PATHS.workspaceDir, 'functions'),
+  //   cwd: path.resolve(PATHS.rootDir, 'functions'),
   //   ignore: ['data', 'node_modules', 'scripts'],
-  // })
+  // }).map(filename=>`functions/${filename}`)
 
   const additionalFiles = [
     'firebase.json',
     '.firebaserc',
     'firebase.storage.rules',
     'functions/package.json',
-    'functions/dist',
   ]
-  const srcFiles = additionalFiles.concat(
-    functionsFiles.map((filename) => `functions/${filename}`),
-  )
+  const srcFiles = [...additionalFiles, ...functionsFiles]
   const targetFiles = globbySync(['**'], { cwd: appFolder })
 
   // Remove target files that no longer exist in source

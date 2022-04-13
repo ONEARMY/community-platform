@@ -58,8 +58,6 @@ Phase 3 - Ready for use/full replacement of legacy methods
 - Firebase realtime database emulator does not work. All other emulators support providing a `0.0.0.0` host binding to access the docker host, however the realtime database emulator does not appear to be working when set.
   Requires further investigation, possibly linked to https://github.com/firebase/firebase-tools/issues/2633
 
-- Build pipeline could be further optimised by avoiding repopulation of firebase.json and credentials (if unchanged), and possibly splitting to multi-build
-
 - Boxen and globby packages have been pinned to older versions as newer require es module imports, which is not currently supported by dockerode (https://github.com/apocas/dockerode/issues/632)
 
 ## Quickstart

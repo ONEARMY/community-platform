@@ -59,9 +59,10 @@ COPY ./app/credentials.json /app/credentials.json
 RUN mkdir -p /app/import
 COPY ./import /app/import
 
-# Copy config files
+# Copy config files. Ensure executable and lf line format
 RUN mkdir -p /app/config
 COPY ./config /app/config
+RUN dos2unix /app/config/bootstrap.sh
 RUN chmod +x /app/config/bootstrap.sh
 
 # Prompt firebase to use json credentials for login by exporting variable
@@ -73,7 +74,7 @@ ENV GOOGLE_APPLICATION_CREDENTIALS=/app/credentials.json
 RUN firebase emulators:exec \
   --project  ${FIRESTORE_PROJECT_NAME:-demo-community-platform} \
   --import=/app/import --export-on-exit=/app/import \
-  "/app/config/bootstrap.sh"
+  "/bin/bash /app/config/bootstrap.sh"
 
 # # Exposed Ports - These should match firebase.json config
 EXPOSE 4001 4002 4003 4004 4005 4006 4007

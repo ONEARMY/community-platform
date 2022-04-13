@@ -43,6 +43,8 @@ Phase 3 - Ready for use/full replacement of legacy methods
 
 ## Known Issues
 
+- DB updates made from frontend (e.g updating user profile) are not written to the database. Not sure why this is, possibly has already been fixed if updating to firebase 9. So for now it works as read-only, or testing triggers from manual db update via dashboard
+
 - Changes made within the workspace package.json will not be reflected in the container.
   Node_modules cannot be bound via volumes as they depend on OS, and so updating package.json will require new build with updated modules. Workaround would be binding full functions src with platform-specific docker image (e.g. node-16-win/node-16-linux) or just documenting required build update (discussion about node-windows support: https://github.com/nodejs/docker-node/pull/362)
 

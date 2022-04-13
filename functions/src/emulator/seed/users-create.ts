@@ -31,8 +31,18 @@ export async function seedUsersCreate() {
         createdUsers.push(createdUser.toJSON())
       }
     }
-    // assign roles to firestore
-    await setDoc('users', uid, { roles })
+    // assign user doc
+    // TODO - should refactor to shared model to keep aligned more with user store
+    await setDoc('users', uid, {
+      _authID: uid,
+      displayName: user.label,
+      userName: uid,
+      moderation: 'awaiting-moderation',
+      votedUsefulHowtos: {},
+      votedUsefulResearch: {},
+      notifications: [],
+      roles,
+    })
   }
   return createdUsers
 }

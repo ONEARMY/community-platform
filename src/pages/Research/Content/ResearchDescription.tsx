@@ -11,7 +11,6 @@ import { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
 import { IUser } from 'src/models/user.models'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { UsefulStatsButton } from 'src/components/UsefulStatsButton/UsefulStatsButton'
 
 interface IProps {

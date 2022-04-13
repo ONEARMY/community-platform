@@ -22,7 +22,7 @@ import theme from 'src/themes/styled.theme'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import { FlagIconHowTos } from 'oa-components'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
-import { UsefulStats } from 'src/components/UsefulStats/UsefulStats'
+import { UsefulStatsButton } from 'src/components/UsefulStatsButton/UsefulStatsButton'
 
 interface IProps {
   howto: IHowtoDB
@@ -30,7 +30,7 @@ interface IProps {
   needsModeration: boolean
   votedUsefulCount?: number
   verified?: boolean
-  userVotedUseful: boolean
+  hasUserVotedUseful: boolean
   moderateHowto: (accepted: boolean) => void
   onUsefulClick: () => void
 }
@@ -106,9 +106,9 @@ export default class HowtoDescription extends PureComponent<IProps> {
             </Link>
             {this.props.votedUsefulCount !== undefined && (
               <Box style={{ flexGrow: 1 }}>
-                <UsefulStats
+                <UsefulStatsButton
                   votedUsefulCount={this.props.votedUsefulCount}
-                  userVotedUseful={this.props.userVotedUseful}
+                  hasUserVotedUseful={this.props.hasUserVotedUseful}
                   isLoggedIn={this.props.loggedInUser ? true : false}
                   onUsefulClick={this.props.onUsefulClick}
                 />

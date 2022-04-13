@@ -358,7 +358,7 @@ export class HowtoStore extends ModuleStore {
   @computed
   get userVotedActiveHowToUseful(): boolean {
     const howtoId = this.activeHowto!._id
-    return this.activeUser?.votedUsefulHowtos?.[howtoId] ? true : false
+    return !!this.activeUser?.votedUsefulHowtos?.[howtoId]
   }
 }
 

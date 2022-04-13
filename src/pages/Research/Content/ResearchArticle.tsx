@@ -34,9 +34,9 @@ const ResearchArticle = observer((props: IProps) => {
     // Make an optimistic update of current aggregation to update UI
     const votedUsefulCount =
       aggregationsStore.aggregations.users_votedUsefulResearch![researchId] || 0
-    const userVotedUseful = researchStore.userVotedActiveResearchUseful
+    const hasUserVotedUseful = researchStore.userVotedActiveResearchUseful
     aggregationsStore.overrideAggregationValue('users_votedUsefulResearch', {
-      [researchId]: votedUsefulCount + (userVotedUseful ? -1 : 1),
+      [researchId]: votedUsefulCount + (hasUserVotedUseful ? -1 : 1),
     })
   }
 
@@ -74,7 +74,7 @@ const ResearchArticle = observer((props: IProps) => {
           loggedInUser={loggedInUser}
           isEditable={isEditable}
           needsModeration={researchStore.needsModeration(item)}
-          userVotedUseful={researchStore.userVotedActiveResearchUseful}
+          hasUserVotedUseful={researchStore.userVotedActiveResearchUseful}
           moderateResearch={moderateResearch}
           onUsefulClick={() => onUsefulClick(item._id)}
         />

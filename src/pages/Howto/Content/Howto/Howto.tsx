@@ -114,9 +114,9 @@ export class Howto extends React.Component<
     const { aggregationsStore } = this.injected
     const votedUsefulCount =
       aggregationsStore.aggregations.users_votedUsefulHowtos![howtoId] || 0
-    const userVotedUseful = this.store.userVotedActiveHowToUseful
+    const hasUserVotedUseful = this.store.userVotedActiveHowToUseful
     aggregationsStore.overrideAggregationValue('users_votedUsefulHowtos', {
-      [howtoId]: votedUsefulCount + (userVotedUseful ? -1 : 1),
+      [howtoId]: votedUsefulCount + (hasUserVotedUseful ? -1 : 1),
     })
   }
 
@@ -147,7 +147,7 @@ export class Howto extends React.Component<
             votedUsefulCount={votedUsefulCount}
             loggedInUser={loggedInUser}
             needsModeration={this.store.needsModeration(activeHowto)}
-            userVotedUseful={this.store.userVotedActiveHowToUseful}
+            hasUserVotedUseful={this.store.userVotedActiveHowToUseful}
             moderateHowto={this.moderateHowto}
             onUsefulClick={() =>
               this.onUsefulClick(

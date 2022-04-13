@@ -12,7 +12,7 @@ import theme from 'src/themes/styled.theme'
 import { IUser } from 'src/models/user.models'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
-import { UsefulStats } from 'src/components/UsefulStats/UsefulStats'
+import { UsefulStatsButton } from 'src/components/ButtonUsefulStatsButton/ButtonUsefulStatsButton'
 
 interface IProps {
   research: IResearch.ItemDB
@@ -20,7 +20,7 @@ interface IProps {
   loggedInUser: IUser | undefined
   needsModeration: boolean
   votedUsefulCount?: number
-  userVotedUseful: boolean
+  hasUserVotedUseful: boolean
   moderateResearch: (accepted: boolean) => void
   onUsefulClick: () => void
 }
@@ -81,9 +81,9 @@ const ResearchDescription: React.FC<IProps> = ({
           <AuthWrapper roleRequired="beta-tester">
             {props.votedUsefulCount !== undefined && (
               <Box style={{ flexGrow: 1 }}>
-                <UsefulStats
+                <UsefulStatsButton
                   votedUsefulCount={props.votedUsefulCount}
-                  userVotedUseful={props.userVotedUseful}
+                  hasUserVotedUseful={props.hasUserVotedUseful}
                   isLoggedIn={props.loggedInUser ? true : false}
                   onUsefulClick={props.onUsefulClick}
                 />

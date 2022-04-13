@@ -6,20 +6,20 @@ import Tooltip from 'src/components/Tooltip'
 import theme from 'src/themes/styled.theme'
 
 interface IProps {
-  userVotedUseful: boolean
+  hasUserVotedUseful: boolean
   votedUsefulCount: number
   isLoggedIn: boolean
   onUsefulClick: () => void
 }
-export const UsefulStats = (props: IProps) => {
+export const UsefulStatsButton = (props: IProps) => {
   const history = useHistory()
 
   const [votedUsefulCount, setVotedUsefulCount] = useState<number>()
-  const [userVotedUseful, setUserVotedUseful] = useState<boolean>()
+  const [hasUserVotedUseful, setHasUserVotedUseful] = useState<boolean>()
 
   useEffect(
-    () => setUserVotedUseful(props.userVotedUseful),
-    [props.userVotedUseful],
+    () => setHasUserVotedUseful(props.hasUserVotedUseful),
+    [props.hasUserVotedUseful],
   )
   useEffect(
     () => setVotedUsefulCount(props.votedUsefulCount),
@@ -41,7 +41,7 @@ export const UsefulStats = (props: IProps) => {
         ml="8px"
         sx={{ fontSize: '14px' }}
         backgroundColor={theme.colors.softyellow}
-        icon={userVotedUseful ? 'star-active' : 'star'}
+        icon={hasUserVotedUseful ? 'star-active' : 'star'}
       >
         <Text ml={1}>Useful {votedUsefulCount}</Text>
       </Button>

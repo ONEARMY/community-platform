@@ -355,10 +355,10 @@ export class HowtoStore extends ModuleStore {
   }
 
   /** As users retain their own list of voted howtos lookup the current howto from the active user vote stats */
+  @computed
   get userVotedActiveHowToUseful(): boolean {
     const howtoId = this.activeHowto!._id
-    const userVotedHowtos = this.activeUser?.votedUsefulHowtos || {}
-    return userVotedHowtos[howtoId] ? true : false
+    return !!this.activeUser?.votedUsefulHowtos?.[howtoId]
   }
 }
 

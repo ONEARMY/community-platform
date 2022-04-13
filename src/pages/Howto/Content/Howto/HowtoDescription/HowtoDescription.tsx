@@ -21,8 +21,8 @@ import {
 import theme from 'src/themes/styled.theme'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import { FlagIconHowTos } from 'oa-components'
-import { HowtoUsefulStats } from './HowtoUsefulStats'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
+import { UsefulStatsButton } from 'src/components/UsefulStatsButton/UsefulStatsButton'
 
 interface IProps {
   howto: IHowtoDB
@@ -30,7 +30,7 @@ interface IProps {
   needsModeration: boolean
   votedUsefulCount?: number
   verified?: boolean
-  userVotedUseful: boolean
+  hasUserVotedUseful: boolean
   moderateHowto: (accepted: boolean) => void
   onUsefulClick: () => void
 }
@@ -104,14 +104,16 @@ export default class HowtoDescription extends PureComponent<IProps> {
                 </Flex>
               </Button>
             </Link>
-            <Box style={{ flexGrow: 1 }}>
-              <HowtoUsefulStats
-                votedUsefulCount={this.props.votedUsefulCount || 0}
-                userVotedUseful={this.props.userVotedUseful}
-                isLoggedIn={this.props.loggedInUser ? true : false}
-                onUsefulClick={this.props.onUsefulClick}
-              />
-            </Box>
+            {this.props.votedUsefulCount !== undefined && (
+              <Box style={{ flexGrow: 1 }}>
+                <UsefulStatsButton
+                  votedUsefulCount={this.props.votedUsefulCount}
+                  hasUserVotedUseful={this.props.hasUserVotedUseful}
+                  isLoggedIn={this.props.loggedInUser ? true : false}
+                  onUsefulClick={this.props.onUsefulClick}
+                />
+              </Box>
+            )}
             {/* Check if pin should be moderated */}
             {this.props.needsModeration && (
               <Flex sx={{ justifyContent: 'space-between' }}>

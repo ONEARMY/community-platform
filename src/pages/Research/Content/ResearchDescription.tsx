@@ -9,10 +9,9 @@ import ModerationStatusText from 'src/components/ModerationStatusText'
 import Text from 'src/components/Text'
 import { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
-import { ResearchUsefulStats } from './ResearchUsefulStats'
 import { IUser } from 'src/models/user.models'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { UsefulStatsButton } from 'src/components/UsefulStatsButton/UsefulStatsButton'
 
 interface IProps {
   research: IResearch.ItemDB
@@ -20,7 +19,7 @@ interface IProps {
   loggedInUser: IUser | undefined
   needsModeration: boolean
   votedUsefulCount?: number
-  userVotedUseful: boolean
+  hasUserVotedUseful: boolean
   moderateResearch: (accepted: boolean) => void
   onUsefulClick: () => void
 }
@@ -77,17 +76,16 @@ const ResearchDescription: React.FC<IProps> = ({
               </Flex>
             </Button>
           </Link>
-          {/* TODO - limited to beta testers, can remove AuthWrapper to make public */}
-          <AuthWrapper roleRequired="beta-tester">
+          {props.votedUsefulCount !== undefined && (
             <Box style={{ flexGrow: 1 }}>
-              <ResearchUsefulStats
-                votedUsefulCount={props.votedUsefulCount || 0}
-                userVotedUseful={props.userVotedUseful}
+              <UsefulStatsButton
+                votedUsefulCount={props.votedUsefulCount}
+                hasUserVotedUseful={props.hasUserVotedUseful}
                 isLoggedIn={props.loggedInUser ? true : false}
                 onUsefulClick={props.onUsefulClick}
               />
             </Box>
-          </AuthWrapper>
+          )}
           {/* Check if research should be moderated */}
           {props.needsModeration && (
             <Flex sx={{ justifyContent: 'space-between' }}>

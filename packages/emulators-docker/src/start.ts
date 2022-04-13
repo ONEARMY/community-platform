@@ -8,6 +8,7 @@ const docker = new Dockerode()
 const CONTAINER_NAME = 'oa_firebase_emulator'
 const IMAGE_NAME = 'oa-firebase-emulators:latest'
 
+/** Attach to running container or create if does not exist */
 async function start() {
   let container: Dockerode.Container
   const allContainers = await docker.listContainers()
@@ -29,7 +30,6 @@ async function start() {
       attachContainer(container)
       startContainer(container)
     }
-    //
   } else {
     console.error('Failed to create container')
     process.exit(1)
@@ -52,6 +52,7 @@ async function inspectContainer(container: Dockerode.Container) {
   return data
 }
 
+/** Show log messages to indicate emulators ready for interaction and correct port */
 async function handleEmulatorReady() {
   console.log(
     boxen(
@@ -98,9 +99,10 @@ async function createNewContainer() {
         ExposedPorts,
         // Cmd: ['/bin/sh'], // uncomment to override default command to allow debugging on container
         HostConfig: {
-          AutoRemove: true, // TODO - remove once stable
+          AutoRemove: true, // assume best to fully remove after use and provide clean environment each run
           PortBindings,
-          // Volumes - as node_modules installed locally and in container could be different os,
+          // Bind Volumes
+          // NOTE - as node_modules installed locally and in container could be different os,
           // just bind compiled dist as a volume to allow any updates to be tracked
           Binds: [`${PATHS.functionsDistIndex}:/app/functions/dist/index.js`],
         },
@@ -121,23 +123,6 @@ function startContainer(container: Dockerode.Container) {
       process.exit(1)
     }
   })
-}
-
-/** Execute an arbitrary command from within the container */
-function execContainerCmd(container: Dockerode.Container, Cmd: string[]) {
-  return container.exec(
-    {
-      Cmd,
-      AttachStdin: true,
-      AttachStderr: true,
-      AttachStdout: true,
-    },
-    (err, exec) => {
-      exec.start({ hijack: true, stdin: true }, (err, stream) => {
-        docker.modem.demuxStream(stream, process.stdout, process.stderr)
-      })
-    },
-  )
 }
 
 /**
@@ -169,6 +154,27 @@ function rewritePortMapping() {
       return prev
     }, {} as any)
   return { ExposedPorts, PortBindings }
+}
+
+/**
+ * Execute an arbitrary command from within the container
+ * NOTE - not currently used, previously included to trigger api endpoint after load.
+ * Retaining for future ref
+ * */
+function execContainerCmd(container: Dockerode.Container, Cmd: string[]) {
+  return container.exec(
+    {
+      Cmd,
+      AttachStdin: true,
+      AttachStderr: true,
+      AttachStdout: true,
+    },
+    (err, exec) => {
+      exec.start({ hijack: true, stdin: true }, (err, stream) => {
+        docker.modem.demuxStream(stream, process.stdout, process.stderr)
+      })
+    },
+  )
 }
 
 start()

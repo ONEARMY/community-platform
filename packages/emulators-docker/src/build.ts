@@ -1,6 +1,8 @@
 import { spawnSync } from 'child_process'
+import chalk from 'chalk'
 import Dockerode from 'dockerode'
 import fs from 'fs-extra'
+import { sync as globbySync } from 'globby'
 import path from 'path'
 import {
   FIREBASE_JSON_EMULATORS_DEFAULT,
@@ -37,6 +39,7 @@ async function startDockerBuild() {
  * Changes can be mapped with a volume
  * */
 function buildFunctions() {
+  console.log(chalk.yellow('Building functions workspace...'))
   spawnSync('yarn workspace functions build', {
     stdio: 'inherit',
     shell: true,
@@ -81,17 +84,37 @@ function populateDummyCredentials() {
 function copyAppFiles() {
   const appFolder = path.resolve(PATHS.workspaceDir, 'app')
   fs.ensureDirSync(appFolder)
-  // list of files to copy across.
-  // Possible TODOs - clear folder of files not in list, check firebase.json for rules
-  const filenames = [
+
+  const functionsFiles = []
+
+  /** Alternative glob pattern to match against src - requires refactor as described in readme known issues */
+  // const functionsFiles = globbySync(['**'], {
+  //   gitignore: true,
+  //   cwd: path.resolve(PATHS.workspaceDir, 'functions'),
+  //   ignore: ['data', 'node_modules', 'scripts'],
+  // })
+
+  const additionalFiles = [
     'firebase.json',
     '.firebaserc',
     'firebase.storage.rules',
     'functions/package.json',
     'functions/dist',
   ]
+  const srcFiles = additionalFiles.concat(
+    functionsFiles.map((filename) => `functions/${filename}`),
+  )
+  const targetFiles = globbySync(['**'], { cwd: appFolder })
 
-  for (const filename of filenames) {
+  // Remove target files that no longer exist in source
+  targetFiles.forEach((filename) => {
+    if (!srcFiles.includes(filename)) {
+      fs.removeSync(path.resolve(appFolder, filename))
+    }
+  })
+
+  // Copy src files that do not exist in target or have been modified
+  for (const filename of srcFiles) {
     const src = path.resolve(PATHS.rootDir, filename)
     if (fs.existsSync(src)) {
       const { mtime, atime } = fs.statSync(src)

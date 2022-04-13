@@ -25,8 +25,9 @@ Phase 1 - Dockerised emulators working locally with seed data, providing a solid
 Phase 2 - Dockerised emulators also support local functions development/testing (on linux)
 
 [?] - Support live-reload for functions (linux)
-[ ] - Provide windows-based docker image (for live-reload on windows)
 [ ] - Provide as images on dockerhub
+[x] - Integrate auth user account seeding
+[x] - Add logging output override to correct information (e.g. docker port)
 [x] - Handle sigint to spin down image
 
 Phase 3 - Ready for use/full replacement of legacy methods
@@ -35,8 +36,10 @@ Phase 3 - Ready for use/full replacement of legacy methods
 [ ] - Optimise image size
 [ ] - Developer Documentation
 [ ] - Integrate emulator build/seed/deploy with CI system
+(requires fix to existing staging site export/restore actions)
 [ ] - Remove all legacy functions code
 [ ] - Add docker-compose image for easier customisation/volume mapping (?)
+[ ] - Provide windows-based docker image (for live-reload on windows)
 
 ## Known Issues
 
@@ -48,8 +51,16 @@ Phase 3 - Ready for use/full replacement of legacy methods
   https://github.com/merofeev/docker-windows-volume-watcher
   Possibly require manual watch on win and exec on image like in L104 https://github.dev/merofeev/docker-windows-volume-watcher/blob/master/docker_volume_watcher/container_notifier.py
 
+- Ideally we would want to just copy functions src code into the docker volume and execute directly from there (would avoid issue with livereload), however as the functions depend on other workspaces (namely shared and the main src workspace) binding these will have the same issue as node_modules.
+
+  It might be possible to manually build and create symlinks within the docker volume node_modules (in the same way yarn workspaces makes symlinks to the real workspaces), however this adds considerable overhead. It would be more viable once shared src types moved to shared folder, so at least only one shared workspace to bind
+
 - Firebase realtime database emulator does not work. All other emulators support providing a `0.0.0.0` host binding to access the docker host, however the realtime database emulator does not appear to be working when set.
   Requires further investigation, possibly linked to https://github.com/firebase/firebase-tools/issues/2633
+
+- Build pipeline could be further optimised by avoiding repopulation of firebase.json and credentials (if unchanged), and possibly splitting to multi-build
+
+- Boxen and globby packages have been pinned to older versions as newer require es module imports, which is not currently supported by dockerode (https://github.com/apocas/dockerode/issues/632)
 
 ## Quickstart
 
@@ -83,6 +94,10 @@ Failed Build
 Misc
 
 - Retart docker
+
+Container access
+
+- Start shell from docker-desktop or use vscode [Remote-Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension to `attach to running container` and open vscode directly in docker container
 
 ## Links
 

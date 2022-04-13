@@ -53,7 +53,11 @@ const translateY = (props: IBtnProps) =>
 
 export type BtnProps = IBtnProps & ThemeUiButtonProps
 
-const BaseButton = styled(ThemeUiButton)`
+const BaseButton = styled(ThemeUiButton, {
+  // avoid passing custom props
+  shouldForwardProp: (prop: keyof IBtnProps) =>
+    !['translateY', 'small', 'medium', 'large'].includes(prop),
+})`
   ${translateY}
   ${small}
   ${medium}

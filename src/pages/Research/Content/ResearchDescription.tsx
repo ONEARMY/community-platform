@@ -77,19 +77,16 @@ const ResearchDescription: React.FC<IProps> = ({
               </Flex>
             </Button>
           </Link>
-          {/* TODO - limited to beta testers, can remove AuthWrapper to make public */}
-          <AuthWrapper roleRequired="beta-tester">
-            {props.votedUsefulCount !== undefined && (
-              <Box style={{ flexGrow: 1 }}>
-                <UsefulStatsButton
-                  votedUsefulCount={props.votedUsefulCount}
-                  hasUserVotedUseful={props.hasUserVotedUseful}
-                  isLoggedIn={props.loggedInUser ? true : false}
-                  onUsefulClick={props.onUsefulClick}
-                />
-              </Box>
-            )}
-          </AuthWrapper>
+          {props.votedUsefulCount !== undefined && (
+            <Box style={{ flexGrow: 1 }}>
+              <UsefulStatsButton
+                votedUsefulCount={props.votedUsefulCount}
+                hasUserVotedUseful={props.hasUserVotedUseful}
+                isLoggedIn={props.loggedInUser ? true : false}
+                onUsefulClick={props.onUsefulClick}
+              />
+            </Box>
+          )}
           {/* Check if research should be moderated */}
           {props.needsModeration && (
             <Flex sx={{ justifyContent: 'space-between' }}>

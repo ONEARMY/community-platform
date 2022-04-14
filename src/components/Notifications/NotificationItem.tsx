@@ -2,6 +2,7 @@ import React from 'react'
 import { Box } from 'theme-ui'
 import { Flex } from 'theme-ui'
 import { INotification } from 'src/models'
+import { StyledHashLink } from 'src/components/Links'
 import { Link } from 'src/components/Links'
 import { ReactComponent as IconComment } from 'src/assets/icons/icon-comment.svg'
 import { ReactComponent as IconUseful } from 'src/assets/icons/icon-useful.svg'
@@ -73,7 +74,7 @@ export const NotificationItem: React.FC<IProps> = ({
           />
           <Box style={{ textAlign: 'left' }}>
             New comment on your
-            <Link
+            <StyledHashLink
               sx={{
                 textDecoration: 'underline',
                 padding: '3px',
@@ -84,7 +85,7 @@ export const NotificationItem: React.FC<IProps> = ({
               display="inline"
             >
               {type == 'new_comment_research' ? 'Research' : 'how-to'}
-            </Link>
+            </StyledHashLink>
             by
             <Link
               sx={{

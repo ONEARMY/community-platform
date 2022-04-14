@@ -14,6 +14,7 @@ import styled from '@emotion/styled'
 interface IProps {
   comments?: IComment[]
   update: IResearch.UpdateDB
+  updateIndex: number
 }
 
 const BoxStyled = styled(Box)`
@@ -27,7 +28,7 @@ const BoxMain = styled(Box)`
   margin-top: 20px;
 `
 
-export const ResearchComments = ({ comments, update }: IProps) => {
+export const ResearchComments = ({ comments, update, updateIndex }: IProps) => {
   const [comment, setComment] = useState('')
   const [loading, setLoading] = useState(false)
   const researchStore = useResearchStore()
@@ -45,7 +46,7 @@ export const ResearchComments = ({ comments, update }: IProps) => {
         await stores.userStore.triggerNotification(
           'new_comment_research',
           currResearchItem._createdBy,
-          '/research/' + currResearchItem.slug,
+          '/research/' + currResearchItem.slug + '#update_' + updateIndex,
         )
       }
 

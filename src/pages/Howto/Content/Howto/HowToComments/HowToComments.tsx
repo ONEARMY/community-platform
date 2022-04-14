@@ -33,7 +33,7 @@ export const HowToComments = ({ comments }: IProps) => {
         await stores.userStore.triggerNotification(
           'new_comment',
           howto._createdBy,
-          '/how-to/' + howto.slug
+          '/how-to/' + howto.slug,
         )
       }
 

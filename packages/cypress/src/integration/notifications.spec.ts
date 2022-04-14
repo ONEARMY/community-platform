@@ -92,9 +92,7 @@ describe('[Notifications]', () => {
         let notifications = user['notifications']
         expect(notifications.length).to.equal(1)
         expect(notifications[0]['type']).to.equal('new_comment_research')
-        expect(notifications[0]['relevantUrl']).to.equal(
-          '/research/qwerty',
-        )
+        expect(notifications[0]['relevantUrl']).to.equal('/research/qwerty')
         expect(notifications[0]['read']).to.equal(false)
         expect(notifications[0]['triggeredBy']['displayName']).to.equal(
           'howto_reader',

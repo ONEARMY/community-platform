@@ -281,7 +281,11 @@ export class UserStore extends ModuleStore {
 
       if (votedUsefulHowtos[howtoId]) {
         //get how to author from howtoid
-        this.triggerNotification('howto_useful', howtoAuthor, '/how-to/' + howtoSlug)
+        this.triggerNotification(
+          'howto_useful',
+          howtoAuthor,
+          '/how-to/' + howtoSlug,
+        )
       }
       await this.updateUserProfile({ votedUsefulHowtos })
     }

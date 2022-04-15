@@ -10,48 +10,73 @@ import { useResearchStore } from 'src/stores/Research/research.store'
 import { isAllowToEditContent } from 'src/utils/helpers'
 import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
+import { useCommonStores } from 'src/index'
 
 type IProps = RouteComponentProps<{ slug: string }>
 
 const ResearchArticle = observer((props: IProps) => {
-  const store = useResearchStore()
+  const researchStore = useResearchStore()
+  const { userStore, aggregationsStore } = useCommonStores().stores
 
   const [isLoading, setIsLoading] = React.useState(true)
 
   const moderateResearch = async (accepted: boolean) => {
-    const item = store.activeResearchItem
+    const item = researchStore.activeResearchItem
     if (item) {
       item.moderation = accepted ? 'accepted' : 'rejected'
-      await store.moderateResearch(item)
+      await researchStore.moderateResearch(item)
     }
+  }
+
+  const onUsefulClick = async (researchId: string) => {
+    // Trigger update without waiting
+    userStore.updateUsefulResearch(researchId)
+    // Make an optimistic update of current aggregation to update UI
+    const votedUsefulCount =
+      aggregationsStore.aggregations.users_votedUsefulResearch![researchId] || 0
+    const hasUserVotedUseful = researchStore.userVotedActiveResearchUseful
+    aggregationsStore.overrideAggregationValue('users_votedUsefulResearch', {
+      [researchId]: votedUsefulCount + (hasUserVotedUseful ? -1 : 1),
+    })
   }
 
   React.useEffect(() => {
     ;(async () => {
       const { slug } = props.match.params
-      await store.setActiveResearchItem(slug)
+      await researchStore.setActiveResearchItem(slug)
       setIsLoading(false)
     })()
 
     // Reset the store's active item on component cleanup
     return () => {
-      store.setActiveResearchItem()
+      researchStore.setActiveResearchItem()
     }
-  }, [props, store])
+  }, [props, researchStore])
 
-  const item = store.activeResearchItem
+  const item = researchStore.activeResearchItem
+  const loggedInUser = researchStore.activeUser
 
   if (item) {
+    const { aggregations } = aggregationsStore
+    // Distinguish between undefined aggregations (not loaded) and undefined aggregation (no votes)
+    const votedUsefulCount = aggregations.users_votedUsefulResearch
+      ? aggregations.users_votedUsefulResearch[item._id] || 0
+      : undefined
     const isEditable =
-      !!store.activeUser && isAllowToEditContent(item, store.activeUser)
+      !!researchStore.activeUser &&
+      isAllowToEditContent(item, researchStore.activeUser)
 
     return (
       <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
         <ResearchDescription
           research={item}
+          votedUsefulCount={votedUsefulCount}
+          loggedInUser={loggedInUser}
           isEditable={isEditable}
-          needsModeration={store.needsModeration(item)}
+          needsModeration={researchStore.needsModeration(item)}
+          hasUserVotedUseful={researchStore.userVotedActiveResearchUseful}
           moderateResearch={moderateResearch}
+          onUsefulClick={() => onUsefulClick(item._id)}
         />
         <Box my={16}>
           {item &&

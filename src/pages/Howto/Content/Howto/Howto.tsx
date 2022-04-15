@@ -107,12 +107,17 @@ export class Howto extends React.Component<
     howtoCreatedBy: string,
     howToSlug: string,
   ) => {
-    // Fire & forget
-    await this.injected.userStore.updateUsefulHowTos(
-      howtoId,
-      howtoCreatedBy,
-      howToSlug,
-    )
+    // Trigger update without waiting
+    const { userStore } = this.injected
+    userStore.updateUsefulHowTos(howtoId, howtoCreatedBy, howToSlug)
+    // Make an optimistic update of current aggregation to update UI
+    const { aggregationsStore } = this.injected
+    const votedUsefulCount =
+      aggregationsStore.aggregations.users_votedUsefulHowtos![howtoId] || 0
+    const hasUserVotedUseful = this.store.userVotedActiveHowToUseful
+    aggregationsStore.overrideAggregationValue('users_votedUsefulHowtos', {
+      [howtoId]: votedUsefulCount + (hasUserVotedUseful ? -1 : 1),
+    })
   }
 
   public async componentDidMount() {
@@ -129,10 +134,12 @@ export class Howto extends React.Component<
     const { activeHowto } = this.store
 
     if (activeHowto) {
-      const votedUsefulCount =
-        this.injected.aggregationsStore.aggregations.users_votedUsefulHowtos[
-          activeHowto._id
-        ]
+      const { aggregations } = this.injected.aggregationsStore
+      // Distinguish between undefined aggregations (not loaded) and undefined aggregation (no votes)
+      const votedUsefulCount = aggregations.users_votedUsefulHowtos
+        ? aggregations.users_votedUsefulHowtos[activeHowto._id] || 0
+        : undefined
+
       return (
         <>
           <HowtoDescription
@@ -140,7 +147,7 @@ export class Howto extends React.Component<
             votedUsefulCount={votedUsefulCount}
             loggedInUser={loggedInUser}
             needsModeration={this.store.needsModeration(activeHowto)}
-            userVotedUseful={this.store.userVotedActiveHowToUseful}
+            hasUserVotedUseful={this.store.userVotedActiveHowToUseful}
             moderateHowto={this.moderateHowto}
             onUsefulClick={() =>
               this.onUsefulClick(

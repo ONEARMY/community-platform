@@ -9,12 +9,19 @@ import ModerationStatusText from 'src/components/ModerationStatusText'
 import Text from 'src/components/Text'
 import { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
+import { IUser } from 'src/models/user.models'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
+import { UsefulStatsButton } from 'src/components/UsefulStatsButton/UsefulStatsButton'
+
 interface IProps {
   research: IResearch.ItemDB
   isEditable: boolean
+  loggedInUser: IUser | undefined
   needsModeration: boolean
+  votedUsefulCount?: number
+  hasUserVotedUseful: boolean
   moderateResearch: (accepted: boolean) => void
+  onUsefulClick: () => void
 }
 
 const ResearchDescription: React.FC<IProps> = ({
@@ -69,6 +76,16 @@ const ResearchDescription: React.FC<IProps> = ({
               </Flex>
             </Button>
           </Link>
+          {props.votedUsefulCount !== undefined && (
+            <Box style={{ flexGrow: 1 }}>
+              <UsefulStatsButton
+                votedUsefulCount={props.votedUsefulCount}
+                hasUserVotedUseful={props.hasUserVotedUseful}
+                isLoggedIn={props.loggedInUser ? true : false}
+                onUsefulClick={props.onUsefulClick}
+              />
+            </Box>
+          )}
           {/* Check if research should be moderated */}
           {props.needsModeration && (
             <Flex sx={{ justifyContent: 'space-between' }}>

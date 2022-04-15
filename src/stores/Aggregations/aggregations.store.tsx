@@ -9,12 +9,15 @@ import { DatabaseV2 } from '../databaseV2'
  */
 const AGGREGATION_DOC_IDS = [
   'users_votedUsefulHowtos',
+  'users_votedUsefulResearch',
   'users_verified',
 ] as const
 
 // Utility types generated from list of aggregation docs ids
 type IAggregationId = typeof AGGREGATION_DOC_IDS[number]
-type IAggregations = { [aggregationId in IAggregationId]: any }
+type IAggregations = {
+  [aggregationId in IAggregationId]?: { [key: string]: any }
+}
 
 /** Aggregation subscriptions default close after 5 minutes */
 const DEFAULT_TIMEOUT = 1000 * 60 * 5
@@ -24,8 +27,11 @@ const DEFAULT_TIMEOUT = 1000 * 60 * 5
  * retrieve data collated across entire collections as single documents
  */
 export class AggregationsStore {
-  /** Observable list of all aggregations by id */
-  @observable aggregations: IAggregations
+  /**
+   * Observable list of all aggregations by id
+   * NOTE - each aggregation will be undefined until update called for the first time
+   * */
+  @observable aggregations: IAggregations = {}
 
   private db: DatabaseV2
   private subscriptions$: { [aggregationId: string]: Subscription } = {}
@@ -35,12 +41,6 @@ export class AggregationsStore {
 
   constructor(rootStore: RootStore) {
     this.db = rootStore.dbV2
-    // initialisise all aggregations as empty documents by default
-    const aggregations: any = {}
-    for (const targetDocId of AGGREGATION_DOC_IDS) {
-      aggregations[targetDocId] = {}
-    }
-    this.aggregations = aggregations
     makeAutoObservable(this, { aggregations: observable })
   }
 
@@ -63,13 +63,26 @@ export class AggregationsStore {
         .doc(aggregationId)
         .stream()
         .subscribe((value) => {
-          if (value) {
-            this.updateAggregationValue(aggregationId, value)
-          }
+          // Set the value received for aggregation - if aggregation does not exist populate empty
+          this.updateAggregationValue(aggregationId, value || {})
         })
       this.subscriptions$[aggregationId] = subscription
     }
     this.setSubscriptionTimeout(aggregationId, timeoutDuration)
+  }
+
+  /** Provide a manual patch override for a specific aggregation as an optimistic update ahead of expected server triggers*/
+  public overrideAggregationValue(
+    aggregationId: IAggregationId,
+    override: { [key: string]: any },
+  ) {
+    const updated = { ...this.aggregations[aggregationId], ...override }
+    this.updateAggregationValue(aggregationId, updated)
+  }
+
+  /** Stop subscribing to updates for specific aggregation */
+  public stopAggregationUpdates(aggregationId: IAggregationId) {
+    this.setSubscriptionTimeout(aggregationId, 0)
   }
 
   /**

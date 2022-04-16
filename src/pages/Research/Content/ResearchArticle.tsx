@@ -32,11 +32,23 @@ const ResearchArticle = observer((props: IProps) => {
     await userStore.updateUsefulResearch(researchId)
   }
 
+  const scrollIntoRelevantSection = (hash: string) => {
+    setTimeout(() => {
+      const section = document.querySelector(hash)
+      // the delay is needed, otherwise the scroll is not happening in Firefox
+      section?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 500)
+  }
+
   React.useEffect(() => {
     ;(async () => {
       const { slug } = props.match.params
       await researchStore.setActiveResearchItem(slug)
       setIsLoading(false)
+      const hash = props.location.hash
+      if (hash) {
+        scrollIntoRelevantSection(hash)
+      }
     })()
 
     // Reset the store's active item on component cleanup

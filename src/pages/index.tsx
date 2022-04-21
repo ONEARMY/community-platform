@@ -19,6 +19,7 @@ import DevSiteHeader from 'src/components/DevSiteHeader/DevSiteHeader'
 import { getSupportedModules } from 'src/modules'
 import GlobalSiteFooter from './common/GlobalSiteFooter/GlobalSiteFooter'
 import DiscordLink from 'src/components/DiscordLink/DiscordLink'
+import NotificationBanner from 'src/components/NotificationBanner/NotificationBanner'
 
 export class Routes extends React.Component<
   any,
@@ -52,6 +53,7 @@ export class Routes extends React.Component<
           <ScrollToTop>
             {/* TODO - add better loading fallback */}
             <DevSiteHeader />
+            <NotificationBanner />
             <Header />
             <Suspense
               fallback={

@@ -175,7 +175,7 @@ describe('[How To]', () => {
       })
     })
 
-    describe('[By Authenticated}', () => {
+    describe('[By Authenticated]', () => {
       it('[Edit button is unavailable to non-resource owners]', () => {
         cy.login('howto_reader@test.com', 'test1234')
         cy.visit(specificHowtoUrl)

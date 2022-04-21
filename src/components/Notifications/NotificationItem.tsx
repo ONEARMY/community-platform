@@ -83,7 +83,7 @@ export const NotificationItem: React.FC<IProps> = ({
               to={relevantUrl}
               display="inline"
             >
-              how-to
+              {type == 'new_comment_research' ? 'Research' : 'how-to'}
             </Link>
             by
             <Link

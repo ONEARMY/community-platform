@@ -5,6 +5,7 @@ import howtos from './howtos.json'
 import mappins from './mappins.json'
 import tags from './tags.json'
 import users from './users.json'
+import research from './research.json'
 
 /**
  * Seed data is used to populate a common initial state
@@ -16,7 +17,7 @@ export const SEED_DATA: { [key in DBEndpoint]: any[] } = {
   events: Object.values(events),
   howtos: Object.values(howtos),
   mappins: Object.values(mappins),
-  research: [],
+  research: Object.values(research),
   tags: Object.values(tags),
   users: Object.values(users),
 }

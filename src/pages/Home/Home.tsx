@@ -4,10 +4,10 @@ This is the Home Page main component, rendering content seen at '/'
 
 import * as React from 'react'
 import './Home.scss'
-import { UserStore } from 'src/stores/User/user.store'
-import { IStores } from 'src/stores'
+import type { UserStore } from 'src/stores/User/user.store'
+import type { IStores } from 'src/stores'
 import { inject } from 'mobx-react'
-import { IUser } from 'src/models/user.models'
+import type { IUser } from 'src/models/user.models'
 import { withRouter } from 'react-router'
 
 interface IState {

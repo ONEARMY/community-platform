@@ -1,4 +1,4 @@
-import { IPageMeta } from 'src/pages/PageList'
+import type { IPageMeta } from 'src/pages/PageList'
 import { AdminStoreContext, AdminStore } from './admin.store'
 import { MODULE } from '..'
 import adminRoutes from './admin.routes'

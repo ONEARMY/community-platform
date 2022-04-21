@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react'
-import { RouteComponentProps } from 'react-router'
+import type { RouteComponentProps } from 'react-router'
 import { Box, Flex } from 'theme-ui'
 import { Button } from 'oa-components'
 import Heading from 'src/components/Heading'

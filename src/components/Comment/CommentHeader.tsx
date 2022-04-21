@@ -1,6 +1,6 @@
 import { Box, Flex, Text } from 'theme-ui'
 import { FlagIconHowTos } from 'oa-components'
-import { IComment } from 'src/models'
+import type { IComment } from 'src/models'
 import { Link } from 'src/components/Links'
 import theme from 'src/themes/styled.theme'
 import { VerifiedUserBadge } from '../VerifiedUserBadge/VerifiedUserBadge'

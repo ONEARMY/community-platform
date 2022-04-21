@@ -1,4 +1,4 @@
-import { IUser } from './user.models'
+import type { IUser } from './user.models'
 
 export interface ITemplateData {
   id: number

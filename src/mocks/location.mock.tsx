@@ -1,4 +1,4 @@
-import { ILocation } from 'src/models/common.models'
+import type { ILocation } from 'src/models/common.models'
 
 /**
  * Generate mock location data matching algolia places format

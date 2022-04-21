@@ -1,6 +1,6 @@
 import { SITE, VERSION, DEV_SITE_ROLE } from 'src/config/config'
 import Text from 'src/components/Text'
-import { UserRole } from 'src/models'
+import type { UserRole } from 'src/models'
 import { Flex, Box } from 'theme-ui'
 import Select from 'react-select'
 import { observer } from 'mobx-react-lite'

@@ -1,8 +1,9 @@
 import 'react-image-lightbox/style.css'
 import { PureComponent } from 'react'
 import Lightbox from 'react-image-lightbox'
-import { Card, CardProps, Flex, Image } from 'theme-ui'
-import { IUploadedFileMeta } from 'src/stores/storage'
+import type { CardProps } from 'theme-ui'
+import { Card, Flex, Image } from 'theme-ui'
+import type { IUploadedFileMeta } from 'src/stores/storage'
 import styled from '@emotion/styled'
 import theme from '../../themes/styled.theme'
 

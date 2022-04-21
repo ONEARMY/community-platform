@@ -10,15 +10,19 @@ import { Modal } from 'src/components/Modal/Modal'
 import { GroupingFilterDesktop } from './GroupingFilterDesktop'
 import { GroupingFilterMobile } from './GroupingFilterMobile'
 
-import { IPinGrouping, IMapGrouping, IMapPinType } from 'src/models/maps.models'
+import type {
+  IPinGrouping,
+  IMapGrouping,
+  IMapPinType,
+} from 'src/models/maps.models'
 import { HashLink as Link } from 'react-router-hash-link'
-import { Map } from 'react-leaflet'
+import type { Map } from 'react-leaflet'
 import theme from 'src/themes/styled.theme'
 import { inject } from 'mobx-react'
-import { MapsStore } from 'src/stores/Maps/maps.store'
-import { UserStore } from 'src/stores/User/user.store'
+import type { MapsStore } from 'src/stores/Maps/maps.store'
+import type { UserStore } from 'src/stores/User/user.store'
 import { Text } from 'src/components/Text'
-import { RouteComponentProps } from 'react-router'
+import type { RouteComponentProps } from 'react-router'
 import OsmGeocoding from 'src/components/OsmGeocoding/OsmGeocoding'
 import { logger } from 'src/logger'
 

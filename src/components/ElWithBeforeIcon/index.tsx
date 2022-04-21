@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react'
+import type { FunctionComponent } from 'react'
 import { Box } from 'theme-ui'
 import checkmarkIcon from 'src/assets/icons/icon-checkmark.svg'
 

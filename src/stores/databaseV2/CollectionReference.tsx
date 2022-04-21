@@ -1,10 +1,11 @@
-import {
+import type {
   DBClients,
   DBDoc,
   DBQueryWhereOperator,
   DBQueryWhereValue,
 } from './types'
-import { Observable, Observer } from 'rxjs'
+import type { Observer } from 'rxjs'
+import { Observable } from 'rxjs'
 import { DocReference } from './DocReference'
 
 export class CollectionReference<T> {

@@ -4,7 +4,7 @@ import theme from 'src/themes/styled.theme'
 import { Box } from 'theme-ui'
 import { LinkTargetBlank } from 'src/components/Links/LinkTargetBlank/LinkTargetBlank'
 import { observer, inject } from 'mobx-react'
-import { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
+import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
 
 interface IProps {
   content: string

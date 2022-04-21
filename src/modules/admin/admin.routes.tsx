@@ -1,6 +1,6 @@
 import { Suspense, lazy } from 'react'
 import { Route, Switch, withRouter } from 'react-router-dom'
-import { IPageMeta } from 'src/pages/PageList'
+import type { IPageMeta } from 'src/pages/PageList'
 import { MODULE } from '..'
 
 const moduleName = MODULE.ADMIN

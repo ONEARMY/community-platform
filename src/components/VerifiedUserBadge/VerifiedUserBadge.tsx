@@ -1,4 +1,5 @@
-import { Image, ImageProps } from 'theme-ui'
+import type { ImageProps } from 'theme-ui'
+import { Image } from 'theme-ui'
 import { useCommonStores } from 'src/index'
 import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
 

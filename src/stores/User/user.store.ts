@@ -1,13 +1,14 @@
 import { observable, action, makeObservable, toJS, computed } from 'mobx'
-import {
+import type {
   INotification,
   IUser,
   IUserDB,
   NotificationType,
 } from 'src/models/user.models'
-import { IUserPP, IUserPPDB } from 'src/models/user_pp.models'
-import { auth, EmailAuthProvider, IFirebaseUser } from 'src/utils/firebase'
-import { RootStore } from '..'
+import type { IUserPP, IUserPPDB } from 'src/models/user_pp.models'
+import type { IFirebaseUser } from 'src/utils/firebase'
+import { auth, EmailAuthProvider } from 'src/utils/firebase'
+import type { RootStore } from '..'
 import { ModuleStore } from '../common/module.store'
 import { Storage } from '../storage'
 import type { IConvertedFileMeta } from 'src/types'

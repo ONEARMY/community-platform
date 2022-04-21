@@ -1,7 +1,7 @@
 import { action, makeAutoObservable, observable } from 'mobx'
-import { Subscription } from 'rxjs'
-import { RootStore } from '..'
-import { DatabaseV2 } from '../databaseV2'
+import type { Subscription } from 'rxjs'
+import type { RootStore } from '..'
+import type { DatabaseV2 } from '../databaseV2'
 
 /**
  * List of existing aggregation docs

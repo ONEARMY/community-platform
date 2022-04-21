@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Box } from 'theme-ui'
 import styled from '@emotion/styled'
-import { UserStore } from 'src/stores/User/user.store'
+import type { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import Flex from 'src/components/Flex'
 import { NotificationList } from 'src/components/Notifications/NotificationList'

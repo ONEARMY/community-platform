@@ -1,5 +1,5 @@
-import { IUser } from './user.models'
-import { DBDoc } from './common.models'
+import type { IUser } from './user.models'
+import type { DBDoc } from './common.models'
 
 export type PlasticTypeLabel =
   | 'pet'

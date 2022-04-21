@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
-import Text, { ITextProps } from 'src/components/Text'
-import { HeadingProps as ThemeUiHeadingProps } from 'theme-ui'
+import type { ITextProps } from 'src/components/Text'
+import Text from 'src/components/Text'
+import type { HeadingProps as ThemeUiHeadingProps } from 'theme-ui'
 
 export const large = (props: ITextProps) =>
   props.large ? { fontSize: props.theme?.fontSizes[6] } : null

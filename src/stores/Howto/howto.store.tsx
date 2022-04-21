@@ -2,25 +2,25 @@ import Fuse from 'fuse.js'
 import { action, computed, makeObservable, observable, toJS } from 'mobx'
 import type { IConvertedFileMeta } from 'src/types'
 import { getUserCountry } from 'src/utils/getUserCountry'
-import {
+import type {
   IHowto,
   IHowtoDB,
   IHowtoFormInput,
   IHowtoStep,
   IHowToStepFormInput,
 } from 'src/models/howto.models'
-import { ISelectedTags } from 'src/models/tags.model'
-import { IUser } from 'src/models/user.models'
+import type { ISelectedTags } from 'src/models/tags.model'
+import type { IUser } from 'src/models/user.models'
 import {
   filterModerableItems,
   hasAdminRights,
   needsModeration,
   randomID,
 } from 'src/utils/helpers'
-import { RootStore } from '../index'
+import type { RootStore } from '../index'
 import { ModuleStore } from '../common/module.store'
-import { IUploadedFileMeta } from '../storage'
-import { IComment } from 'src/models/howto.models'
+import type { IUploadedFileMeta } from '../storage'
+import type { IComment } from 'src/models/howto.models'
 import { logger } from 'src/logger'
 
 const COLLECTION_NAME = 'howtos'

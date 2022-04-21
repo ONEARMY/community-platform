@@ -10,7 +10,7 @@ import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
 import { Box } from 'theme-ui'
 import { inject, observer } from 'mobx-react'
-import { AdminStore } from 'src/stores/Admin/admin.store'
+import type { AdminStore } from 'src/stores/Admin/admin.store'
 
 const ADMIN_ROUTES = [
   { name: 'Users', slug: 'users', component: AdminUsers },

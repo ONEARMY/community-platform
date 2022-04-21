@@ -1,8 +1,8 @@
 import { ModuleStore } from '../common/module.store'
-import { RootStore } from '..'
+import type { RootStore } from '..'
 import { action, observable, makeObservable } from 'mobx'
-import { IUser, UserRole } from 'src/models/user.models'
-import { ITag } from 'src/models/tags.model'
+import type { IUser, UserRole } from 'src/models/user.models'
+import type { ITag } from 'src/models/tags.model'
 import { functions } from 'src/utils/firebase'
 
 /*********************************************************************************

@@ -35,6 +35,7 @@ const ResearchUpdate: React.FC<IProps> = ({
     <>
       <Flex
         data-cy={`update_${updateIndex}`}
+        id={`update_${updateIndex}`}
         mx={[0, 0, -2]}
         mt={9}
         sx={{ flexDirection: ['column', 'column', 'row'] }}
@@ -133,7 +134,11 @@ const ResearchUpdate: React.FC<IProps> = ({
               <ImageGallery images={update.images as IUploadedFileMeta[]} />
             )}
           </Box>
-          <ResearchComments update={update} comments={update.comments} />
+          <ResearchComments
+            update={update}
+            comments={update.comments}
+            updateIndex={updateIndex}
+          />
         </Flex>
       </Flex>
     </>

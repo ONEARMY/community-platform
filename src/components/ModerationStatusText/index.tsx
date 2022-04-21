@@ -1,6 +1,6 @@
-import { FunctionComponent } from 'react'
+import type { FunctionComponent } from 'react'
 import Text from 'src/components/Text'
-import { IModerable } from 'src/models'
+import type { IModerable } from 'src/models'
 
 type IProps = {
   moderatedContent: IModerable

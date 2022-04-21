@@ -2,9 +2,10 @@ import * as React from 'react'
 import styled from '@emotion/styled'
 import { Link } from 'src/components/Links'
 import { Button } from 'oa-components'
-import { display, DisplayProps } from 'styled-system'
+import type { DisplayProps } from 'styled-system'
+import { display } from 'styled-system'
 import { observer, inject } from 'mobx-react'
-import { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
+import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
 
 const ButtonSign = styled(Button as any)<DisplayProps>`
   ${display};

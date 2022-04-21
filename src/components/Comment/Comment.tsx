@@ -1,6 +1,6 @@
 import React, { createRef, useEffect, useState } from 'react'
 import { Flex, Box } from 'theme-ui'
-import { IComment } from 'src/models'
+import type { IComment } from 'src/models'
 import { CommentHeader } from './CommentHeader'
 import { Text } from 'src/components/Text'
 import { Modal } from '../Modal/Modal'

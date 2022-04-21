@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
-import { TagsStore } from 'src/stores/Tags/tags.store'
+import type { TagsStore } from 'src/stores/Tags/tags.store'
 import Text from 'src/components/Text'
 
 /*

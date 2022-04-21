@@ -1,13 +1,9 @@
 import * as React from 'react'
-import {
-  Route,
-  Switch,
-  withRouter,
-  RouteComponentProps,
-} from 'react-router-dom'
+import type { RouteComponentProps } from 'react-router-dom'
+import { Route, Switch, withRouter } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
-import { UserStore } from 'src/stores/User/user.store'
-import { IUser } from 'src/models/user.models'
+import type { UserStore } from 'src/stores/User/user.store'
+import type { IUser } from 'src/models/user.models'
 import { UserSettings } from './SettingsPage'
 import { Text } from 'src/components/Text'
 import Flex from 'src/components/Flex'

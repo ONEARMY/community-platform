@@ -1,4 +1,4 @@
-import { UppyOptions } from '@uppy/core'
+import type { UppyOptions } from '@uppy/core'
 
 export const UPPY_CONFIG: Partial<UppyOptions> = {
   restrictions: {

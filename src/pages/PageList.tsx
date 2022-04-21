@@ -1,6 +1,6 @@
 import { lazy } from 'react'
-import { CSSObject } from '@styled-system/css'
-import { UserRole } from 'src/models/user.models'
+import type { CSSObject } from '@styled-system/css'
+import type { UserRole } from 'src/models/user.models'
 import { ResearchModule } from './Research'
 import { MODULE } from 'src/modules'
 import { AdminModule } from 'src/modules/admin'

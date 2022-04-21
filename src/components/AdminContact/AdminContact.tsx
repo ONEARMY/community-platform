@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 import { Button } from 'oa-components'
-import { AdminStore } from 'src/stores/Admin/admin.store'
-import { IUser } from 'src/models/user.models'
+import type { AdminStore } from 'src/stores/Admin/admin.store'
+import type { IUser } from 'src/models/user.models'
 import Text from '../Text'
 
 /*

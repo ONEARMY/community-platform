@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { bytesToSize } from '../ImageInput/ImageInput'
-import { IUploadedFileMeta } from 'src/stores/storage'
+import type { IUploadedFileMeta } from 'src/stores/storage'
 import { FileDetails } from './FileDetails'
 import styled from '@emotion/styled'
 

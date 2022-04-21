@@ -10,13 +10,13 @@ import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import SearchInput from 'src/components/SearchInput'
 import TagsSelect from 'src/components/Tags/TagsSelect'
 import { VirtualizedFlex } from 'src/components/VirtualizedFlex/VirtualizedFlex'
-import { IHowtoDB } from 'src/models/howto.models'
-import { HowtoStore } from 'src/stores/Howto/howto.store'
-import { UserStore } from 'src/stores/User/user.store'
+import type { IHowtoDB } from 'src/models/howto.models'
+import type { HowtoStore } from 'src/stores/Howto/howto.store'
+import type { UserStore } from 'src/stores/User/user.store'
 import HowToCard from './HowToCard'
 import SortSelect from './SortSelect'
-import { ThemeStore } from 'src/stores/Theme/theme.store'
-import { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
+import type { ThemeStore } from 'src/stores/Theme/theme.store'
+import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
 
 interface InjectedProps {
   howtoStore: HowtoStore

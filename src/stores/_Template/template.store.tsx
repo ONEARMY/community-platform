@@ -1,7 +1,7 @@
 import { observable, action, makeObservable } from 'mobx'
-import { RootStore } from '..'
+import type { RootStore } from '..'
 import { ModuleStore } from '../common/module.store'
-import { DBDoc } from '../databaseV2/types'
+import type { DBDoc } from '../databaseV2/types'
 
 // example interface for the structure of data expected
 interface IExampleDoc {

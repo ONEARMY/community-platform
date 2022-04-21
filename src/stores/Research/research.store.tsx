@@ -6,13 +6,13 @@ import {
   runInAction,
   toJS,
 } from 'mobx'
-import { IResearchStats, IResearchDB } from 'src/models/research.models'
+import type { IResearchStats, IResearchDB } from 'src/models/research.models'
 import { createContext, useContext } from 'react'
 import type { IConvertedFileMeta } from 'src/types'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { logger } from 'src/logger'
-import { IComment, IUser } from 'src/models'
-import { IResearch } from 'src/models/research.models'
+import type { IComment, IUser } from 'src/models'
+import type { IResearch } from 'src/models/research.models'
 import { ModuleStore } from 'src/stores/common/module.store'
 import {
   filterModerableItems,

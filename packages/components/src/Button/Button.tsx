@@ -1,10 +1,8 @@
 import * as React from 'react'
 import { Icon } from '../Icon/Icon'
 import type { IGlyphs } from '../Icon/types'
-import {
-  Button as ThemeUiButton,
-  ButtonProps as ThemeUiButtonProps,
-} from 'theme-ui'
+import type { ButtonProps as ThemeUiButtonProps } from 'theme-ui'
+import { Button as ThemeUiButton } from 'theme-ui'
 import styled from '@emotion/styled'
 
 // extend to allow any default button props (e.g. onClick) to also be passed

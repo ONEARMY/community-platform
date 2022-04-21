@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { IFirebaseUploadInfo } from 'src/components/FirebaseFileUploader/FirebaseFileUploader'
+import type { IFirebaseUploadInfo } from 'src/components/FirebaseFileUploader/FirebaseFileUploader'
 import { storage } from 'src/utils/firebase'
 import './UploadedFile.scss'
 import { Button } from 'oa-components'

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention*/
-import {
+import type {
   ISODateString,
   ILocation,
   DBDoc,

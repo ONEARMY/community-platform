@@ -1,8 +1,8 @@
 import { observable, action, makeObservable } from 'mobx'
-import { ITag, TagCategory } from 'src/models/tags.model'
+import type { ITag, TagCategory } from 'src/models/tags.model'
 import { arrayToJson } from 'src/utils/helpers'
 import { ModuleStore } from '../common/module.store'
-import { RootStore } from '..'
+import type { RootStore } from '..'
 
 export class TagsStore extends ModuleStore {
   activeCategory?: TagCategory

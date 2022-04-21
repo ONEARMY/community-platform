@@ -27,7 +27,7 @@
     "lint:commits": " npx commitlint --from=$(git merge-base master HEAD) --verbose",
     "lint:code": "eslint . --ext .js,.jsx,.ts,.tsx src --color",
     "lint:style": "prettier --check '**/*.{md,json,js,tsx,ts}'",
-    "format": "yarn format:style && yarn format:code",
+    "format": "yarn format:code && yarn format:style",
     "format:code": "eslint . --ext .js,.jsx,.ts,.tsx src --color --fix",
     "format:style": "prettier --write '**/*.{md,json,js,tsx,ts}'",
     "serve": "npx serve -s build",

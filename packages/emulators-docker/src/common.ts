@@ -1,4 +1,8 @@
-export const OA_FIREBASE_IMAGE_NAME = 'oa-firebase-emulators'
+const { repo, tag } = extractArgs()
+export const REPOSITORY = repo ? `${repo}/` : ''
+export const CONTAINER_NAME = 'oa_firebase_emulator'
+const TAG = tag
+export const IMAGE_NAME = `${REPOSITORY}${CONTAINER_NAME}:${TAG}`
 
 interface IDockerPortMapping {
   expose?: boolean
@@ -43,4 +47,20 @@ export const FIREBASE_JSON_EMULATORS_DEFAULT = {
     port: 4007,
     host: '0.0.0.0',
   },
+}
+
+/** Minimal method to extract optional repo and tag args */
+function extractArgs() {
+  const args = { repo: null, tag: 'latest' }
+  process.argv.slice(2).forEach((arg) => {
+    const [selector, value] = arg
+      .split('=')
+      .map((v) => v.trim().replace('--', ''))
+    if (args.hasOwnProperty(selector)) {
+      args[selector] = value
+    } else {
+      console.warn('Arg not recognised', selector)
+    }
+  })
+  return args
 }

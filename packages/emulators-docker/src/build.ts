@@ -4,10 +4,7 @@ import Dockerode from 'dockerode'
 import fs from 'fs-extra'
 import { sync as globbySync } from 'globby'
 import path from 'path'
-import {
-  FIREBASE_JSON_EMULATORS_DEFAULT,
-  OA_FIREBASE_IMAGE_NAME,
-} from './common'
+import { FIREBASE_JSON_EMULATORS_DEFAULT, IMAGE_NAME } from './common'
 import { PATHS } from './paths'
 
 const docker = new Dockerode()
@@ -29,7 +26,7 @@ async function startDockerBuild() {
       // Paths listed here will be available to DOCKERFILE
       src: ['Dockerfile', 'app', 'import', 'config'],
     },
-    { t: OA_FIREBASE_IMAGE_NAME },
+    { t: IMAGE_NAME },
   )
   return stream
 }

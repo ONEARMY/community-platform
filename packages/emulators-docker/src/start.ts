@@ -1,15 +1,19 @@
 import Dockerode from 'dockerode'
 import boxen from 'boxen'
-import { getFirebasePortMapping } from './common'
+import logUpdate from 'log-update'
+import {
+  CONTAINER_NAME,
+  getFirebasePortMapping,
+  IMAGE_NAME,
+  REPOSITORY,
+} from './common'
 import { PATHS } from './paths'
 
 const docker = new Dockerode()
 
-const CONTAINER_NAME = 'oa_firebase_emulator'
-const IMAGE_NAME = 'oa-firebase-emulators:latest'
-
 /** Attach to running container or create if does not exist */
 async function start() {
+  console.log('Container Start:', CONTAINER_NAME)
   let container: Dockerode.Container
   const allContainers = await docker.listContainers()
   const existingContainer = allContainers.find((c) =>
@@ -88,6 +92,9 @@ function attachContainer(container: Dockerode.Container) {
 }
 
 async function createNewContainer() {
+  if (REPOSITORY) {
+    await pullRemoteImage(IMAGE_NAME)
+  }
   const { ExposedPorts, PortBindings } = rewritePortMapping()
   return new Promise<Dockerode.Container>((resolve, reject) => {
     docker.createContainer(
@@ -114,6 +121,35 @@ async function createNewContainer() {
         resolve(container)
       },
     )
+  })
+}
+async function pullRemoteImage(imageName: string) {
+  const updates: any = {}
+  return new Promise((resolve, reject) => {
+    docker.pull(imageName, {}, (err, stream) => {
+      if (err) {
+        reject(err)
+      }
+      docker.modem.followProgress(
+        stream,
+        (finshedErr, finishedResult) => {
+          logUpdate.done()
+          if (finshedErr) reject(finshedErr)
+          resolve(finishedResult)
+        },
+        (progress) => {
+          // provide console log updates in a reasonable format
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { id, progressDetail, ...update } = progress
+          updates[id] = update
+          logUpdate(
+            ...Object.values(updates).map((entry) =>
+              JSON.stringify(entry, null, 2),
+            ),
+          )
+        },
+      )
+    })
   })
 }
 function startContainer(container: Dockerode.Container) {

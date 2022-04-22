@@ -18,7 +18,7 @@
     "start:components": "yarn workspace oa-components dev",
     "start:platform": "yarn build:shared && cross-env FAST_REFRESH=false yarn react-scripts start",
     "start:emulated": "concurrently --kill-others \"yarn workspace functions start\" \"yarn start:components\" \"cross-env PORT=4000 yarn start:platform\"",
-    "start:emulated:docker": "concurrently --kill-others \"yarn workspace functions watch\" \"yarn workspace oa-emulators-docker start\" \"yarn workspace oa-components dev\" \"cross-env PORT=4000 yarn start:platform\"",
+    "start:emulated:docker": "concurrently --kill-others \"yarn workspace functions watch\" \"yarn workspace oa-components dev\" \"cross-env PORT=4000 yarn start:platform\" \"yarn workspace oa-emulators-docker start\"",
     "build:components": "yarn workspace oa-components build",
     "build:cra": "react-scripts build",
     "build:post": "yarn workspace oa-scripts post-cra-build",

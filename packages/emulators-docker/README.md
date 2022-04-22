@@ -1,7 +1,28 @@
 ## Quickstart
 
-- Populate data for import in the `./import` directory. This should be an export from firestore with individual collection namespaces selected (not all namespaces)
--
+### Creating a new docker image
+
+Populate data for import in the `./import` directory. This should be an export from firestore with individual collection namespaces selected (not all namespaces)
+
+Run the build script
+
+```
+yarn workspace oa-emulators-docker build
+```
+
+Optionally repo and tag args can be passed if planning to upload to dockerhub
+
+```
+yarn workspace oa-emulators-docker build --repo=my_docker_repo --tag=v1
+```
+
+### Running a docker image
+
+```
+yarn workspace oa-emulators-docker start --repo=my_docker_repo --tag=v1
+```
+
+With repo and tag args specified from build step (or left as defaults)
 
 ## About
 
@@ -30,7 +51,8 @@ Phase 1 - Dockerised emulators working locally with seed data, providing a solid
 Phase 2 - Dockerised emulators also support local functions development/testing (on linux)
 
 [?] - Support live-reload for functions (linux)
-[ ] - Provide as images on dockerhub
+[x] - Provide as images on dockerhub
+[x] - Add support for pulling from remote image
 [x] - Integrate auth user account seeding
 [x] - Add logging output override to correct information (e.g. docker port)
 [x] - Handle sigint to spin down image
@@ -71,7 +93,7 @@ Phase 3 - Ready for use/full replacement of legacy methods
 - Firebase realtime database emulator does not work. All other emulators support providing a `0.0.0.0` host binding to access the docker host, however the realtime database emulator does not appear to be working when set.
   Requires further investigation, possibly linked to https://github.com/firebase/firebase-tools/issues/2633
 
-- Boxen and globby packages have been pinned to older versions as newer require es module imports, which is not currently supported by dockerode (https://github.com/apocas/dockerode/issues/632)
+- Boxen, globby and log-update packages have been pinned to older versions as newer require es module imports, which is not currently supported by dockerode (https://github.com/apocas/dockerode/issues/632)
 
 ## Quickstart
 

@@ -72,7 +72,7 @@ ENV GOOGLE_APPLICATION_CREDENTIALS=/app/credentials.json
 # Import data is re-exported as first import will often reformat for easier future use
 # Additionally executes emulator seed endpoints via bootstrap script
 RUN firebase emulators:exec \
-  --project  ${FIRESTORE_PROJECT_NAME:-demo-community-platform} \
+  --project  ${FIRESTORE_PROJECT_NAME:-community-platform-emulated} \
   --import=/app/import --export-on-exit=/app/import \
   "/bin/bash /app/config/bootstrap.sh"
 
@@ -84,5 +84,5 @@ EXPOSE 4001 4002 4003 4004 4005 4006 4007
 
 CMD firebase emulators:start \
   --only auth,functions,firestore,pubsub,storage,hosting,database \
-  --project ${FIRESTORE_PROJECT_NAME:-demo-community-platform} \
+  --project ${FIRESTORE_PROJECT_NAME:-community-platform-emulated} \
   --import=/app/import

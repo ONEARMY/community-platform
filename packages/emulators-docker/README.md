@@ -1,3 +1,8 @@
+## Quickstart
+
+- Populate data for import in the `./import` directory. This should be an export from firestore with individual collection namespaces selected (not all namespaces)
+-
+
 ## About
 
 This workspace aims at providing a fully configured and seeded suite of firebase emulators within a docker container for use with the oa-community-platform.
@@ -36,14 +41,20 @@ Phase 3 - Ready for use/full replacement of legacy methods
 [ ] - Optimise image size
 [ ] - Developer Documentation
 [ ] - Integrate emulator build/seed/deploy with CI system
+[ ] - Improve tagging to include project (e.g. precious-plastic), date and raw/cleaned data
 (requires fix to existing staging site export/restore actions)
 [ ] - Remove all legacy functions code
+[ ] - Consider binding functions src folder and not dist (will require configuring yarn workspaces to populate shared as required, known issue below)
 [ ] - Add docker-compose image for easier customisation/volume mapping (?)
 [ ] - Provide windows-based docker image (for live-reload on windows)
 
 ## Known Issues
 
-- DB updates made from frontend (e.g updating user profile) are not written to the database. Not sure why this is, possibly has already been fixed if updating to firebase 9. So for now it works as read-only, or testing triggers from manual db update via dashboard
+~- DB updates made from frontend (e.g updating user profile) are not written to the database. Not sure why this is, possibly has already been fixed if updating to firebase 9. So for now it works as read-only, or testing triggers from manual db update via dashboard. The [Client SDK availability](https://firebase.google.com/docs/emulator-suite/install_and_configure#client_sdk_availability) docs suggest that (currently) the emulators only work with sdk `8.0.0`~
+
+- DB can only make write updates from client sdk if project names match, and so the DOCKER file may need to be updated if using a project name that is not the same as the one hardcoded into the frontend (currently `community-platform-emulated`)
+
+- According to the [Client SDK availability](https://firebase.google.com/docs/emulator-suite/install_and_configure#client_sdk_availability) docs the current sdk version supported is `8.0.0`, so it is unclear if the emulators will continue to work if upgrading firebase further
 
 - Changes made within the workspace package.json will not be reflected in the container.
   Node_modules cannot be bound via volumes as they depend on OS, and so updating package.json will require new build with updated modules. Workaround would be binding full functions src with platform-specific docker image (e.g. node-16-win/node-16-linux) or just documenting required build update (discussion about node-windows support: https://github.com/nodejs/docker-node/pull/362)

@@ -111,10 +111,10 @@ const firebaseConfigs: { [variant in siteVariants]: IFirebaseConfig } = {
     storageBucket: 'onearmy-test-ci.appspot.com',
     messagingSenderId: '174193431763',
   },
-  /** Same default endpoint as test-ci, but most functions will be overwritten by emulators */
+  /** Site backed by sandboxed emulator */
   emulated_site: {
-    apiKey: 'AIzaSyDAxS_7M780mI3_tlwnAvpbaqRsQPlmp64',
-    projectId: 'onearmy-test-ci',
+    apiKey: 'abc',
+    projectId: 'community-platform-emulated',
     storageBucket: 'default-bucket',
   } as any,
   /** Production/live backend with master branch frontend */

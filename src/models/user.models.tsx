@@ -5,7 +5,7 @@ import type {
   DBDoc,
   IModerationStatus,
 } from './common.models'
-import { UserRole } from 'oa-shared'
+import type { UserRole } from 'oa-shared'
 export type { UserRole }
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IConvertedFileMeta } from '../types'

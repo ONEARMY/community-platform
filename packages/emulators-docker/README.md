@@ -39,7 +39,12 @@ yarn cross-env PORT=4000 yarn start:platform
 ```
 
 As you use the platform you should see changes happen within the firebase emulator dashboard
-`shared\mocks\auth-users.ts`
+`shared\mocks\auth-users.ts`. E.g. you can login as
+
+```
+user: demo_admin@example.com
+pass: demo_admin
+```
 
 ### Modifying functions
 

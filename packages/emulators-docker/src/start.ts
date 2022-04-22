@@ -153,7 +153,7 @@ async function pullRemoteImage(imageName: string) {
   })
 }
 function startContainer(container: Dockerode.Container) {
-  container.start((err, data) => {
+  container.start((err) => {
     if (err) {
       console.error(err)
       process.exit(1)
@@ -197,6 +197,7 @@ function rewritePortMapping() {
  * NOTE - not currently used, previously included to trigger api endpoint after load.
  * Retaining for future ref
  * */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function execContainerCmd(container: Dockerode.Container, Cmd: string[]) {
   return container.exec(
     {

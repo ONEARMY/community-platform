@@ -22,7 +22,30 @@ yarn workspace oa-emulators-docker build --repo=my_docker_repo --tag=v1
 yarn workspace oa-emulators-docker start --repo=my_docker_repo --tag=v1
 ```
 
-With repo and tag args specified from build step (or left as defaults)
+With repo and tag args specified from build step (or left as defaults). An example build can be run directly via
+
+```
+yarn workspace oa-emulators-docker start --repo=chrismclarke
+```
+
+This will start the emulators with a dashboard available at `http://localhost:4001`
+
+### Using with frontend
+
+Once the emulators are up and running you can spin up the platform on port 4000 (which defaults to using emulators)
+
+```
+yarn cross-env PORT=4000 yarn start:platform
+```
+
+As you use the platform you should see changes happen within the firebase emulator dashboard
+`shared\mocks\auth-users.ts`
+
+### Modifying functions
+
+The emulators bind to the `functions/dist` folder so that changes made will be reflected in the emulators. On linux these changes should be picked up immediately, and so live-reload can be added for functions development via `yarn workspace functions watch`
+
+If running on windows the changes are not always detected, and may require spinning the emulators down and then starting back up
 
 ## About
 

@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react'
 import * as React from 'react'
-import { RouteComponentProps } from 'react-router'
+import type { RouteComponentProps } from 'react-router'
 import { Box, Flex } from 'theme-ui'
 import { Button } from 'oa-components'
 import { Link } from 'src/components/Links'
@@ -40,11 +40,23 @@ const ResearchArticle = observer((props: IProps) => {
     })
   }
 
+  const scrollIntoRelevantSection = (hash: string) => {
+    setTimeout(() => {
+      const section = document.querySelector(hash)
+      // the delay is needed, otherwise the scroll is not happening in Firefox
+      section?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 500)
+  }
+
   React.useEffect(() => {
     ;(async () => {
       const { slug } = props.match.params
       await researchStore.setActiveResearchItem(slug)
       setIsLoading(false)
+      const hash = props.location.hash
+      if (hash) {
+        scrollIntoRelevantSection(hash)
+      }
     })()
 
     // Reset the store's active item on component cleanup

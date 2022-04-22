@@ -9,8 +9,8 @@ import Heading from 'src/components/Heading'
 import ImageGallery from 'src/components/ImageGallery'
 import { Link } from 'src/components/Links'
 import Text from 'src/components/Text'
-import { IResearch } from 'src/models/research.models'
-import { IUploadedFileMeta } from 'src/stores/storage'
+import type { IResearch } from 'src/models/research.models'
+import type { IUploadedFileMeta } from 'src/stores/storage'
 import { ResearchComments } from './ResearchComments/ResearchComments'
 import styled from '@emotion/styled'
 
@@ -35,6 +35,7 @@ const ResearchUpdate: React.FC<IProps> = ({
     <>
       <Flex
         data-cy={`update_${updateIndex}`}
+        id={`update_${updateIndex}`}
         mx={[0, 0, -2]}
         mt={9}
         sx={{ flexDirection: ['column', 'column', 'row'] }}
@@ -133,7 +134,11 @@ const ResearchUpdate: React.FC<IProps> = ({
               <ImageGallery images={update.images as IUploadedFileMeta[]} />
             )}
           </Box>
-          <ResearchComments update={update} comments={update.comments} />
+          <ResearchComments
+            update={update}
+            comments={update.comments}
+            updateIndex={updateIndex}
+          />
         </Flex>
       </Flex>
     </>

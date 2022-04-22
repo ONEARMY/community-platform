@@ -1,13 +1,14 @@
 import { observable, action, makeObservable, toJS, computed } from 'mobx'
-import {
+import type {
   INotification,
   IUser,
   IUserDB,
   NotificationType,
 } from 'src/models/user.models'
-import { IUserPP, IUserPPDB } from 'src/models/user_pp.models'
-import { auth, EmailAuthProvider, IFirebaseUser } from 'src/utils/firebase'
-import { RootStore } from '..'
+import type { IUserPP, IUserPPDB } from 'src/models/user_pp.models'
+import type { IFirebaseUser } from 'src/utils/firebase'
+import { auth, EmailAuthProvider } from 'src/utils/firebase'
+import type { RootStore } from '..'
 import { ModuleStore } from '../common/module.store'
 import { Storage } from '../storage'
 import type { IConvertedFileMeta } from 'src/types'
@@ -281,7 +282,11 @@ export class UserStore extends ModuleStore {
 
       if (votedUsefulHowtos[howtoId]) {
         //get how to author from howtoid
-        this.triggerNotification('howto_useful', howtoAuthor, howtoSlug)
+        this.triggerNotification(
+          'howto_useful',
+          howtoAuthor,
+          '/how-to/' + howtoSlug,
+        )
       }
       await this.updateUserProfile({ votedUsefulHowtos })
     }
@@ -330,9 +335,8 @@ export class UserStore extends ModuleStore {
   public async triggerNotification(
     type: NotificationType,
     username: string,
-    howToId?: string,
+    relevantUrl: string,
   ) {
-    const howToUrl = '/how-to/'
     try {
       const triggeredBy = this.activeUser
       if (triggeredBy) {
@@ -347,7 +351,7 @@ export class UserStore extends ModuleStore {
             displayName: triggeredBy.displayName,
             userId: triggeredBy._id,
           },
-          relevantUrl: howToUrl + howToId,
+          relevantUrl: relevantUrl,
           type: type,
           read: false,
         }

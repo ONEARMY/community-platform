@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { IEvent, IEventDB } from 'src/models/events.models'
+import type { IEvent, IEventDB } from 'src/models/events.models'
 import { Button } from 'oa-components'
 import { Link } from 'src/components/Links'
 import { Flex, Box } from 'theme-ui'
@@ -8,8 +8,8 @@ import Heading from 'src/components/Heading'
 import EventCard from 'src/components/EventCard/EventCard'
 import TagsSelect from 'src/components/Tags/TagsSelect'
 import { inject, observer } from 'mobx-react'
-import { EventStore } from 'src/stores/Events/events.store'
-import { UserStore } from 'src/stores/User/user.store'
+import type { EventStore } from 'src/stores/Events/events.store'
+import type { UserStore } from 'src/stores/User/user.store'
 
 interface InjectedProps {
   eventStore: EventStore

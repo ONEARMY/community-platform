@@ -8,6 +8,10 @@ const UpdateItemEditor = lazy(() => import('./Content/EditUpdate'))
 const ResearchArticle = lazy(() => import('./Content/ResearchArticle'))
 const ResearchList = lazy(() => import('./Content/ResearchList'))
 
+const getRandomInt = (max) => {
+  return Math.floor(Math.random() * max)
+}
+
 const routes = () => (
   <Suspense fallback={<div></div>}>
     <Switch>
@@ -35,7 +39,12 @@ const routes = () => (
         component={UpdateItemEditor}
         roleRequired="beta-tester"
       />
-      <Route path="/research/:slug" component={ResearchArticle} />
+      <Route
+        path="/research/:slug"
+        exact
+        key={getRandomInt(55555)}
+        component={ResearchArticle}
+      />
     </Switch>
   </Suspense>
 )

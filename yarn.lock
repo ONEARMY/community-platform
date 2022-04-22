@@ -23450,7 +23450,7 @@ fsevents@^1.2.7:
     react-router: ^5.2.0
     react-router-breadcrumbs-hoc: ^3.2.0
     react-router-dom: ^5.2.0
-    react-router-hash-link: ^1.2.1
+    react-router-hash-link: ^2.4.3
     react-scripts: 4.0.3
     react-select: ^2.4.3
     react-slick: ^0.25.2
@@ -27088,15 +27088,15 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-router-hash-link@npm:^1.2.1":
-  version: 1.2.2
-  resolution: "react-router-hash-link@npm:1.2.2"
+"react-router-hash-link@npm:^2.4.3":
+  version: 2.4.3
+  resolution: "react-router-hash-link@npm:2.4.3"
   dependencies:
-    prop-types: ^15.6.0
+    prop-types: ^15.7.2
   peerDependencies:
     react: ">=15"
     react-router-dom: ">=4"
-  checksum: 0636f08edbe252178f54733d65468fb1bf2a21a79a0a3b83b6c7c19c4087a7b1475c6026e348bfc3d8c79af2cce68a1d459d40b1128e15f64a04c80bca473a0a
+  checksum: 7dad53ebbd726e8a1ab379f4e68bce3a6b406e55af3de8a9c128510a81ad4a681ce9a5e25c0efc3d3c283b276145729b6228d0173d1d0c6e04b9cc6fb10738d4
   languageName: node
   linkType: hard
 

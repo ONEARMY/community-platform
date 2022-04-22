@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
-import { UserStore } from 'src/stores/User/user.store'
+import type { UserStore } from 'src/stores/User/user.store'
 import { Box } from 'theme-ui'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { ChangePasswordForm } from './ChangePassword.form'

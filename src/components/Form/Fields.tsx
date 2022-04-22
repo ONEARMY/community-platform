@@ -6,7 +6,7 @@ import {
   ErrorMessage,
   StyledDatePicker,
 } from './elements'
-import { FieldRenderProps } from 'react-final-form'
+import type { FieldRenderProps } from 'react-final-form'
 import 'react-datepicker/dist/react-datepicker.css'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 

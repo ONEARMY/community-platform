@@ -1,4 +1,4 @@
-import { DBQueryOptions } from '../types'
+import type { DBQueryOptions } from '../types'
 
 /**
  * For mapping queries it is easiest to provide a common subset of defaults

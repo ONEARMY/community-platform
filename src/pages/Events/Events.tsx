@@ -1,10 +1,11 @@
 import React from 'react'
 import { inject, observer } from 'mobx-react'
-import { EventStore } from 'src/stores/Events/events.store'
+import type { EventStore } from 'src/stores/Events/events.store'
 import { EventsCreate } from './Content/EventsCreate/EventsCreate'
 import { EventsList } from './Content/EventsList/EventsList'
 
-import { withRouter, Switch, Route, RouteComponentProps } from 'react-router'
+import type { RouteComponentProps } from 'react-router'
+import { withRouter, Switch, Route } from 'react-router'
 import { AuthRoute } from '../common/AuthRoute'
 
 // see similar implementation in 'how-to' page for more detailed commenting

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention*/
-import {
+import type {
   ISODateString,
   ILocation,
   DBDoc,
@@ -88,4 +88,7 @@ export interface INotification {
   read: boolean
 }
 
-export type NotificationType = 'new_comment' | 'howto_useful'
+export type NotificationType =
+  | 'new_comment'
+  | 'howto_useful'
+  | 'new_comment_research'

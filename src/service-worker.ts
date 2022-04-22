@@ -8,7 +8,7 @@ import { registerRoute } from 'workbox-routing'
 import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies'
 import { BackgroundSyncPlugin } from 'workbox-background-sync'
-import { PrecacheEntry } from 'workbox-precaching/_types'
+import type { PrecacheEntry } from 'workbox-precaching/_types'
 import { setCacheNameDetails } from 'workbox-core'
 
 setCacheNameDetails({

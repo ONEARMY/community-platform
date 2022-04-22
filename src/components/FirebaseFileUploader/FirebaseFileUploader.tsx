@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { storage } from '../../utils/firebase'
 import FileUploader from 'react-firebase-file-uploader'
-import { FullMetadata } from '@firebase/storage-types'
+import type { FullMetadata } from '@firebase/storage-types'
 import { Button } from 'oa-components'
 import type { IGlyphs } from 'oa-components'
 import { Flex } from 'theme-ui'

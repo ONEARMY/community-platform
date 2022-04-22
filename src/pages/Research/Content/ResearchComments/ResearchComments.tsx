@@ -3,16 +3,18 @@ import ReactGA from 'react-ga'
 import { Box, Flex } from 'theme-ui'
 import { Button } from 'oa-components'
 import { CommentTextArea } from 'src/components/Comment/CommentTextArea'
-import { IComment } from 'src/models'
+import type { IComment } from 'src/models'
 import { logger } from 'src/logger'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import { IResearch } from 'src/models/research.models'
+import type { IResearch } from 'src/models/research.models'
 import { CommentList } from 'src/components/CommentList/CommentList'
+import { useCommonStores } from 'src/index'
 import styled from '@emotion/styled'
 
 interface IProps {
   comments?: IComment[]
   update: IResearch.UpdateDB
+  updateIndex: number
 }
 
 const BoxStyled = styled(Box)`
@@ -26,11 +28,12 @@ const BoxMain = styled(Box)`
   margin-top: 20px;
 `
 
-export const ResearchComments = ({ comments, update }: IProps) => {
+export const ResearchComments = ({ comments, update, updateIndex }: IProps) => {
   const [comment, setComment] = useState('')
   const [loading, setLoading] = useState(false)
   const researchStore = useResearchStore()
   const [viewComments, setViewComments] = useState(false)
+  const { stores } = useCommonStores()
 
   async function onSubmit(comment: string) {
     try {
@@ -38,6 +41,14 @@ export const ResearchComments = ({ comments, update }: IProps) => {
       await researchStore.addComment(comment, update as IResearch.Update)
       setLoading(false)
       setComment('')
+      const currResearchItem = researchStore.activeResearchItem
+      if (currResearchItem) {
+        await stores.userStore.triggerNotification(
+          'new_comment_research',
+          currResearchItem._createdBy,
+          '/research/' + currResearchItem.slug + '#update_' + updateIndex,
+        )
+      }
 
       ReactGA.event({
         category: 'Comments',
@@ -145,6 +156,7 @@ export const ResearchComments = ({ comments, update }: IProps) => {
         onClick={onButtonClick}
         backgroundColor={viewComments ? '#c2daf0' : '#e2edf7'}
         className={viewComments ? 'viewComments' : ''}
+        data-cy={!viewComments ? 'open-comments' : ''}
       >
         <>{setButtonText()}</>
       </Button>

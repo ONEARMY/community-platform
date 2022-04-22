@@ -1,4 +1,4 @@
-import { IResearch } from '../models/research.models'
+import type { IResearch } from '../models/research.models'
 import { MOCK_DB_META } from './db.mock'
 
 export const MOCK_RESEARCH_ITEMS: IResearch.ItemDB[] = [

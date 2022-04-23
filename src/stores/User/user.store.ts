@@ -301,7 +301,7 @@ export class UserStore extends ModuleStore {
   public async updateUsefulResearch(
     researchId: string,
     researchAuthor: string,
-    researchSlug: string
+    researchSlug: string,
   ) {
     if (this.user) {
       // toggle entry on user votedUsefulResearch to either vote or unvote a Research
@@ -313,7 +313,7 @@ export class UserStore extends ModuleStore {
         this.triggerNotification(
           'research_useful',
           researchAuthor,
-          '/research/' + researchSlug
+          '/research/' + researchSlug,
         )
       }
       await this.updateUserProfile({ votedUsefulResearch })

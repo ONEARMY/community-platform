@@ -28,7 +28,11 @@ const ResearchArticle = observer((props: IProps) => {
     }
   }
 
-  const onUsefulClick = async (researchId: string, researchAuthor: string, researchSlug: string) => {
+  const onUsefulClick = async (
+    researchId: string,
+    researchAuthor: string,
+    researchSlug: string,
+  ) => {
     // Trigger update without waiting
     userStore.updateUsefulResearch(researchId, researchAuthor, researchSlug)
     // Make an optimistic update of current aggregation to update UI
@@ -88,7 +92,9 @@ const ResearchArticle = observer((props: IProps) => {
           needsModeration={researchStore.needsModeration(item)}
           hasUserVotedUseful={researchStore.userVotedActiveResearchUseful}
           moderateResearch={moderateResearch}
-          onUsefulClick={() => onUsefulClick(item._id, item._createdBy, item.slug)}
+          onUsefulClick={() =>
+            onUsefulClick(item._id, item._createdBy, item.slug)
+          }
         />
         <Box my={16}>
           {item &&

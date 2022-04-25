@@ -172,6 +172,7 @@
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-unicorn": "^36.0.0",
     "husky": "^7.0.4",
     "idb": "^6.0.0",
     "lint-staged": "^8.1.5",

@@ -1,6 +1,6 @@
 {
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "prettier"],
+  "plugins": ["@typescript-eslint", "prettier", "unicorn"],
   "extends": [
     "plugin:react/recommended", // Uses the recommended rules from @eslint-plugin-react
     "plugin:@typescript-eslint/recommended", // Uses the recommended rules from the @typescript-eslint/eslint-plugin
@@ -45,6 +45,39 @@
         "selector": "classMethod",
         "format": ["camelCase"],
         "leadingUnderscore": "allow"
+      }
+    ],
+    // Filenames - https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/filename-case.md
+    "unicorn/filename-case": [
+      "error",
+      {
+        "cases": {
+          "camelCase": true,
+          "pascalCase": true
+        },
+        // TODO - most can be renamed although holding off until after #1501 and #1533 merged
+        "ignore": [
+          "docusaurus.config.gh-pages.js",
+          "install-clean.ts",
+          "SWUpdateNotification.tsx",
+          "react-app-env.d.ts",
+          "service-worker.ts",
+          "AbstractDBClient.ts",
+          "react-firebase-file-uploader.d.ts",
+          "reset-staging-site.ts",
+          "post-cra-build.ts",
+          "user_pp.mock.tsx",
+          "user_pp.models.tsx",
+          "admin-subheader.tsx",
+          "admin-approvals.tsx",
+          "admin-howtos.tsx",
+          "admin-mappins.tsx",
+          "admin-research-detail.tsx",
+          "admin-research.tsx",
+          "admin-tags.tsx",
+          "admin-user-detail.tsx",
+          "admin-users.tsx"
+        ]
       }
     ],
     "@typescript-eslint/no-empty-function": "off",

@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react'
 import { useCallback, useEffect, useState } from 'react'
-import { Box } from 'rebass'
+import { Box } from 'theme-ui'
 import { useDB } from 'src/App'
-import { IDBEndpoint, IHowto, IMapPin } from 'src/models'
-import { DatabaseV2 } from 'src/stores/databaseV2'
-import styled from 'styled-components'
+import type { IDBEndpoint, IHowto, IMapPin } from 'src/models'
+import type { DatabaseV2 } from 'src/stores/databaseV2'
+import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import { useHistory } from 'react-router'
 import Heading from 'src/components/Heading'
@@ -68,7 +68,7 @@ const AdminHome = observer(() => {
   }, [])
   return (
     <>
-      <Heading medium bold txtcenter width={1} py={26}>
+      <Heading medium bold txtcenter sx={{ width: '100%' }} py={26}>
         Pending Content Approvals
       </Heading>
       {/* Users - TODO (confirm if required)*/}
@@ -110,7 +110,7 @@ const AdminHome = observer(() => {
               </tr>
             </thead>
             <tbody>
-              {pending.mappins.map(p => (
+              {pending.mappins.map((p) => (
                 <ContentRow
                   key={p._id}
                   onClick={() => history.push(`/map#${p._id}`)}
@@ -136,7 +136,7 @@ const AdminHome = observer(() => {
               </tr>
             </thead>
             <tbody>
-              {pending.howtos.map(p => (
+              {pending.howtos.map((p) => (
                 <ContentRow
                   key={p._id}
                   onClick={() => history.push(`/how-to/${p.slug}`)}

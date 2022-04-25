@@ -1,5 +1,6 @@
 node_modules
 app
-import/*
-!import/.gitkeep
+seed_data/*
+# retain latest tar file
+!seed_data/pp-2022-04-07.tar.gz
 exports

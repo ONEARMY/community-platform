@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "build": "ts-node src/build.ts",
+    "prepare": "ts-node src/prepare.ts",
     "start": "ts-node src/start.ts"
   },
   "dependencies": {

@@ -11,7 +11,7 @@ app.use(cors({ origin: true }))
 
 /**
  * Expose an api endpoint available just for use with emulators
- * NOTE - if changing endpoints check emulators workspace in case in use (e.g. called via DOCKERFILE)
+ * NOTE - if changing endpoints check emulators workspace in case in use (e.g. called via Dockerfile)
  */
 app.use(function (req, res, next) {
   if (process.env.FUNCTIONS_EMULATOR === 'true') next()

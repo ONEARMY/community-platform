@@ -57,7 +57,7 @@ COPY ./app/credentials.json /app/credentials.json
 
 # Copy seed data
 RUN mkdir -p /app/import
-COPY ./import /app/import
+COPY ./seed_data/pp-2022-04-07 /app/import
 
 # Copy config files. Ensure executable and lf line format
 RUN mkdir -p /app/config

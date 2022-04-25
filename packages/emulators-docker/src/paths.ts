@@ -6,7 +6,9 @@ const rootDir = path.resolve(workspaceDir, '../../')
 
 const firebaseJson = path.resolve(rootDir, 'firebase.json')
 
-const dockerFile = path.resolve(workspaceDir, 'DOCKERFILE')
+const dockerFile = path.resolve(workspaceDir, 'Dockerfile')
+
+const seedDataDir = path.resolve(workspaceDir, 'seed_data')
 
 const functionsDistIndex = path.resolve(
   rootDir,
@@ -21,4 +23,5 @@ export const PATHS = {
   firebaseJson,
   dockerFile,
   functionsDistIndex,
+  seedDataDir,
 }

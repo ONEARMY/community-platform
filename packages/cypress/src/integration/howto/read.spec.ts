@@ -1,9 +1,8 @@
 import crypto from 'crypto'
-import { DbCollectionName } from '../../utils/test-utils'
 
 describe('[How To]', () => {
   const SKIP_TIMEOUT = { timeout: 300 }
-  const totalHowTo = 7
+  const totalHowTo = 8
 
   describe('[List how-tos]', () => {
     const howtoUrl = '/how-to/make-glass-like-beams'

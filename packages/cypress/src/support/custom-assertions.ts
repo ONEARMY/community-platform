@@ -1,6 +1,9 @@
-import { IHowto, IHowtoStep } from '../../src/models/howto.models'
+import type { IHowto, IHowtoStep } from '../../../../src/models/howto.models'
 import chaiSubset from 'chai-subset'
-import { IUserPPDB, ProfileTypeLabel } from '../../src/models/user_pp.models'
+import type {
+  IUserPPDB,
+  ProfileTypeLabel,
+} from '../../../../src/models/user_pp.models'
 
 declare global {
   namespace Chai {

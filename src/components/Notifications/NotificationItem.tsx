@@ -27,7 +27,7 @@ export const NotificationItem: React.FC<IProps> = ({
         fontFamily: 'Inter, sans-serif',
       }}
     >
-      {type === 'howto_useful' ? (
+      {type === 'howto_useful' || type === 'research_useful' ? (
         <Flex style={{ textAlign: 'left', color: 'black' }}>
           <IconUseful
             width="15px"
@@ -59,7 +59,7 @@ export const NotificationItem: React.FC<IProps> = ({
               to={relevantUrl}
               display="inline"
             >
-              how-to
+              {type === 'howto_useful' ? 'how-to' : 'research'}
             </Link>
             useful
           </Box>

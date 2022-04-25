@@ -92,3 +92,4 @@ export type NotificationType =
   | 'new_comment'
   | 'howto_useful'
   | 'new_comment_research'
+  | 'research_useful'

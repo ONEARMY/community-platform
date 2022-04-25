@@ -1,6 +1,6 @@
 import { DbCollectionName } from '../utils/test-utils'
 import { UserMenuItem } from '../support/commands'
-import { IUser } from 'src/models/user.models'
+import { IUser } from '../../../../src/models/user.models'
 
 interface Info {
   username: string

@@ -48,7 +48,7 @@ export const Comment: React.FC<IProps> = ({
   }
 
   return (
-    <Box>
+    <Box data-cy="comment">
       <Flex
         p="3"
         bg={'white'}
@@ -61,6 +61,7 @@ export const Comment: React.FC<IProps> = ({
       >
         <CommentHeader {...props} />
         <Text
+          data-cy="comment-text"
           my={2}
           sx={{
             whiteSpace: 'pre-wrap',

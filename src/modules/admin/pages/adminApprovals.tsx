@@ -1,17 +1,17 @@
 import { observer } from 'mobx-react'
 import { useCallback, useEffect, useState } from 'react'
 import { Box } from 'theme-ui'
-import { useDB } from 'src/App'
-import type { IDBEndpoint, IHowto, IMapPin } from 'src/models'
-import type { DatabaseV2 } from 'src/stores/databaseV2'
+import type { IDBEndpoint, IHowto, IMapPin, IUserDB } from 'src/models'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import { useHistory } from 'react-router'
 import Heading from 'src/components/Heading'
+import { useAdminStoreV2 } from '../admin.storeV2'
 
 interface IPendingApprovals {
   mappins: IMapPin[]
   howtos: IHowto[]
+  users?: IUserDB[]
 }
 
 const endpoints: IDBEndpoint[] = ['mappins', 'howtos']
@@ -49,20 +49,20 @@ const ContentRow = styled('tr')`
 `
 
 const AdminHome = observer(() => {
-  const { db } = useDB()
+  const adminStore = useAdminStoreV2()
   const [pending, setPending] = useState<IPendingApprovals>({} as any)
   const history = useHistory()
 
   const getApprovals = useCallback(async () => {
     const approvals: IPendingApprovals = {} as any
     for (const endpoint of endpoints) {
-      const pendingApprovals = await getPendingApprovals(endpoint, db)
+      const pendingApprovals = await adminStore.getPendingApprovals(endpoint)
       approvals[endpoint] = pendingApprovals
     }
-    console.log('allPending', approvals)
     setPending(approvals)
   }, [])
 
+  // Load list of pending approvals on mount only, dependencies empty to avoid reloading
   useEffect(() => {
     getApprovals()
   }, [])
@@ -71,32 +71,6 @@ const AdminHome = observer(() => {
       <Heading medium bold txtcenter sx={{ width: '100%' }} py={26}>
         Pending Content Approvals
       </Heading>
-      {/* Users - TODO (confirm if required)*/}
-      {/* {pending.users && (
-        <Box mb={4}>
-          <Heading small>Users {pending.users.length}</Heading>
-          <Divider />
-          <ContentTable style={{ textAlign: 'left', width: '100%' }}>
-            <thead>
-              <tr>
-                <th>Type</th>
-                <th>Username</th>
-              </tr>
-            </thead>
-            <tbody>
-              {pending.users.map(p => (
-                <ContentRow
-                  key={p._id}
-                  onClick={() => history.push(`/u/${p.userName}`)}
-                >
-                  <td></td>
-                  <td>{p.userName}</td>
-                </ContentRow>
-              ))}
-            </tbody>
-          </ContentTable>
-        </Box>
-      )} */}
       {/* Map Pins */}
       {pending.mappins && (
         <Box mb={4}>
@@ -149,27 +123,33 @@ const AdminHome = observer(() => {
           </ContentTable>
         </Box>
       )}
+      {/* Users (not currently used) */}
+      {pending.users && (
+        <Box mb={4}>
+          <Heading small>Users {pending.users.length}</Heading>
+          <Divider />
+          <ContentTable style={{ textAlign: 'left', width: '100%' }}>
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Username</th>
+              </tr>
+            </thead>
+            <tbody>
+              {pending.users.map((p) => (
+                <ContentRow
+                  key={p._id}
+                  onClick={() => history.push(`/u/${p.userName}`)}
+                >
+                  <td></td>
+                  <td>{p.userName}</td>
+                </ContentRow>
+              ))}
+            </tbody>
+          </ContentTable>
+        </Box>
+      )}
     </>
   )
 })
 export default AdminHome
-
-/** Query database for documents pending moderation */
-async function getPendingApprovals(
-  endpoint: IDBEndpoint,
-  dbClient: DatabaseV2,
-) {
-  return dbClient
-    .collection(endpoint)
-    .getWhere('moderation', '==', 'awaiting-moderation')
-
-  /** Alt syntax via raw firestore TODO - decide if required (likely if multiple where chains) */
-  // const db = (dbClient.clients.serverDB as FirestoreClient)._raw // <-- will need to be exposed
-  // const mappedEndpoint = DB_ENDPOINTS[endpoint]
-  // const res = await db
-  //   .collection(mappedEndpoint)
-  //   .where('moderation', '==', 'awaiting-moderation')
-  //   // .limit(10)
-  //   .get()
-  // return res.docs.map(d => d.data())
-}

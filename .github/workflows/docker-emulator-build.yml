@@ -18,7 +18,8 @@ on:
     #   - "packages/emulators-docker/**"
 
 env:
-  IMAGE_NAME: onearmy/community-platform-emulator
+  # Image name that will be added as suffix to either github repo owner or dockerhub username
+  IMAGE_NAME: community-platform-emulator
 jobs:
   build_and_preview:
     runs-on: ubuntu-latest
@@ -49,7 +50,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
-          images: ghcr.io/${{ github.repository }},${{ env.IMAGE_NAME }}
+          images: ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }},${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
       - name: Check metadata
         run: echo ${{steps.meta.outputs}}
       - uses: actions/setup-node@v2

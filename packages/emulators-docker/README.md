@@ -88,7 +88,7 @@ Phase 2 - Dockerised emulators also support local functions development/testing 
 Phase 3 - Ready for use/full replacement of legacy methods
 
 [x] - Migrate seed clean scripts
-[ ] - Optimise image size
+[ ] - Optimise image size (reduce RUN cmds, possible multi-stage build)
 [x] - Developer Documentation
 [x] - Integrate emulator build/seed/deploy with CI system
 [x] - Improve tagging to include project (e.g. precious-plastic), date and raw/cleaned data

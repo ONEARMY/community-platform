@@ -6,6 +6,7 @@ import {
   getFirebasePortMapping,
   IMAGE_NAME,
   REPOSITORY,
+  TAG_NAME,
 } from './common'
 import { PATHS } from './paths'
 
@@ -13,7 +14,7 @@ const docker = new Dockerode()
 
 /** Attach to running container or create if does not exist */
 async function start() {
-  console.log('Container Start:', CONTAINER_NAME)
+  console.log('Container Start:', IMAGE_NAME)
   let container: Dockerode.Container
   const allContainers = await docker.listContainers()
   const existingContainer = allContainers.find((c) =>
@@ -62,6 +63,8 @@ async function handleEmulatorReady() {
     boxen(
       `
   🦾 Emulator Up and Running!
+  ${TAG_NAME}
+  
   Visit: http://localhost:4001 for dashboard  
     `,
       {

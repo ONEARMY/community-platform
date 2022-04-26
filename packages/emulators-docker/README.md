@@ -89,9 +89,9 @@ Phase 3 - Ready for use/full replacement of legacy methods
 
 [x] - Migrate seed clean scripts
 [ ] - Optimise image size
-[ ] - Developer Documentation
-[ ] - Integrate emulator build/seed/deploy with CI system
-[ ] - Improve tagging to include project (e.g. precious-plastic), date and raw/cleaned data
+[x] - Developer Documentation
+[x] - Integrate emulator build/seed/deploy with CI system
+[x] - Improve tagging to include project (e.g. precious-plastic), date and raw/cleaned data
 (requires fix to existing staging site export/restore actions)
 [ ] - Remove all legacy functions code
 [ ] - Consider binding functions src folder and not dist (will require configuring yarn workspaces to populate shared as required, known issue below)

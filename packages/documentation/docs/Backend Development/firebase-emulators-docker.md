@@ -44,7 +44,13 @@ When the emulator is stopped the image is destroyed, so each time the emulators 
 The frontend should start on http://localhost:4000
 You should see a small banner at the bottom of the page that informs emulators are in use.
 
-The data that appears will have been exported at the time the image was made, and so may be slightly outdated when compared to the live site. You can see the time the data was last exported
+![](./images/emulators-docker-frontend.png)
+
+The data that appears will have been exported at the time the image was made, and so may be slightly outdated when compared to the live site. You can see the time the data was last exported.
+
+You can see the version of data used in the command line output, e.g. data exported from precious plastic on 2022-04-07
+
+![](../images/emulators-docker-cli.png)
 
 ### User Login
 
@@ -103,7 +109,7 @@ That specific image can then either be uploaded to dockerhub (assuming the repo 
 yarn workspace oa-emulators-docker start --repo=my_custom_repo --tag=my_custom_tag
 ```
 
-Note - this will only start the emulators, to run the frontend you will also need to run the rest of the scripts found in the main package.json [start:emulated:docker](../../../../package.json) script separately as required
+Note - this will only start the emulators, to run the frontend you will also need to run the rest of the scripts found in the src package.json `start:emulated:docker` script separately as required
 
 ## Troubleshooting
 

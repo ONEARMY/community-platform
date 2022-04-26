@@ -1,8 +1,8 @@
 const { repo, tag } = extractArgs()
 export const REPOSITORY = repo ? `${repo}/` : ''
 export const CONTAINER_NAME = 'community-platform-emulator'
-const TAG = tag
-export const IMAGE_NAME = `${REPOSITORY}${CONTAINER_NAME}:${TAG}`
+export const TAG_NAME = tag
+export const IMAGE_NAME = `${REPOSITORY}${CONTAINER_NAME}:${TAG_NAME}`
 
 interface IDockerPortMapping {
   expose?: boolean

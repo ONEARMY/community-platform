@@ -1,49 +1,66 @@
 # Build docker container for development emulators
+# Uses github container registry for caching and additional push to dockerhub for public use
+
+# Secrets required:
+# DOCKERHUB_USERNAME
+# DOCKERHUB_TOKEN
+
 name: Docker Emulator Build
 on:
   push:
     branches:
       - spike/docker-emulators
+    # TODO - decide on strategy post-merge (e.g. callable, cron, master + paths)
+    # Depends on export action fix (reset-staging-site) and future integration
+
     # Only create a preview if changes have been made to the emulators-docker workspace
     # paths:
     #   - "packages/emulators-docker/**"
 env:
-  REGISTRY: ghcr.io
   IMAGE_NAME: onearmy/community-platform-emulator
 jobs:
   build_and_preview:
     runs-on: ubuntu-latest
     steps:
+      # Setup
       - uses: actions/checkout@v3
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
+
+      # Login to github container registry and dockerhub
       - name: Log in to the Container registry
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Login to DockerHub
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Prepare image tags for future submission to both github container registry and dockerhub
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
+          images: ghcr.io/${{ env.IMAGE_NAME }},${{ env.IMAGE_NAME }}
       - name: Check metadata
         run: echo ${{steps.meta.outputs}}
       - uses: actions/setup-node@v2
         with:
           node-version: "16"
 
+      # Prepare build
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-        # Setup yarn 2 cache: https://github.com/actions/cache/blob/main/examples.md#node---yarn
       - name: Setup Cache
         uses: actions/cache@v2
-        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
@@ -53,11 +70,13 @@ jobs:
         run: yarn install --immutable
       - name: Set environment variables
         run: export REACT_APP_PROJECT_VERSION=${GITHUB_SHA}
-      - name: Check environment variables
-        run: echo $REACT_APP_PROJECT_VERSION
       - name: Prepare Build
         run: yarn workspace oa-emulators-docker prepare
 
+      # Build and deploy
+      # This will use the tags generate to identify target destination, by default pushing to both
+      # github container registery (used mostly for cahing as requires gh auth to pull locally) and
+      # dockerhub (used publicy)
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:

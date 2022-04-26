@@ -48,7 +48,7 @@ You should see a small banner at the bottom of the page that informs emulators a
 
 The data that appears will have been exported at the time the image was made, and so may be slightly outdated when compared to the live site. You can see the time the data was last exported.
 
-You can see the version of data used in the command line output, e.g. data exported from precious plastic on 2022-04-07
+You can see the version of data used in the command line output, e.g. data exported from precious plastic
 
 ![](../images/emulators-docker-cli.png)
 

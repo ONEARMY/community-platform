@@ -103,6 +103,8 @@ A custom image can be built and run by passing custom repo or tag args to the bu
 yarn workspace oa-emulators-docker build --repo=my_custom_repo --tag=my_custom_tag
 ```
 
+If just intending to test locally a blank `--repo=` can be provided to avoid trying to pull an image from dockerhub
+
 That specific image can then either be uploaded to dockerhub (assuming the repo name provided matches a personal repo configured locally) and/or run directly with the start command
 
 ```

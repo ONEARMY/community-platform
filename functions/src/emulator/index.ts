@@ -39,4 +39,5 @@ app.get('/seed-clean', (req, res) =>
   }),
 )
 
-export = functions.https.onRequest(app as any)
+// Increase default timeout to max allowed for longer-running operations
+export = functions.runWith({ timeoutSeconds: 540 }).https.onRequest(app as any)

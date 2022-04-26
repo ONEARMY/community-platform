@@ -56,8 +56,8 @@ COPY ./app/credentials.json /app/credentials.json
 
 
 # Copy seed data
-RUN mkdir -p /app/import
-COPY ./seed_data/pp-2022-04-07 /app/import
+RUN mkdir -p /app/seed_data && mkdir -p /app/import
+COPY ./seed_data/pp-2022-04-07 /app/seed_data
 
 # Copy config files. Ensure executable and lf line format
 RUN mkdir -p /app/config
@@ -68,13 +68,18 @@ RUN chmod +x /app/config/bootstrap.sh
 # Prompt firebase to use json credentials for login by exporting variable
 ENV GOOGLE_APPLICATION_CREDENTIALS=/app/credentials.json
 
-# Make a first run of emulators to ensure configured correctly and allow any import data to be processed
-# Import data is re-exported as first import will often reformat for easier future use
-# Additionally executes emulator seed endpoints via bootstrap script
+# Make a first run of emulators to ensure configured correctly and allow any seed data to be processed
+# via bootstrap script. Once processed seed data is then re-exported for use at runtime
 RUN firebase emulators:exec \
   --project  ${FIRESTORE_PROJECT_NAME:-community-platform-emulated} \
-  --import=/app/import --export-on-exit=/app/import \
-  "/bin/bash /app/config/bootstrap.sh"
+  --import=/app/seed_data --export-on-exit=/app/import \
+  "/bin/bash /app/config/bootstrap.sh" \
+  # Check that data exists and remove seed once complete
+  && printf "\nExports" \
+  && cat /app/import/firebase-export-metadata.json \
+  && printf "\nUsers" \
+  && cat /app/import/auth_export/accounts.json \
+  && rm -R /app/seed_data
 
 # # Exposed Ports - These should match firebase.json config
 EXPOSE 4001 4002 4003 4004 4005 4006 4007

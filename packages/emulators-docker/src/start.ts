@@ -146,8 +146,8 @@ async function pullRemoteImage(imageName: string) {
           const { id, progressDetail, ...update } = progress
           updates[id] = update
           logUpdate(
-            ...Object.values(updates).map((entry) =>
-              JSON.stringify(entry, null, 2),
+            ...Object.values<any>(updates).map((entry) =>
+              JSON.stringify(entry, null, 2).replace(/[{}"]/g, ''),
             ),
           )
         },

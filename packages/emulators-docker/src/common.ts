@@ -1,6 +1,6 @@
 const { repo, tag } = extractArgs()
 export const REPOSITORY = repo ? `${repo}/` : ''
-export const CONTAINER_NAME = 'oa_firebase_emulator'
+export const CONTAINER_NAME = 'community-platform-emulator'
 const TAG = tag
 export const IMAGE_NAME = `${REPOSITORY}${CONTAINER_NAME}:${TAG}`
 
@@ -51,7 +51,7 @@ export const FIREBASE_JSON_EMULATORS_DEFAULT = {
 
 /** Minimal method to extract optional repo and tag args */
 function extractArgs() {
-  const args = { repo: null, tag: 'latest' }
+  const args = { repo: 'chrismclarke', tag: 'pp-2022-04-07' }
   process.argv.slice(2).forEach((arg) => {
     const [selector, value] = arg
       .split('=')

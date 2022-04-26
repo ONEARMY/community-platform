@@ -6,7 +6,7 @@ The emulators can be a bit tricky to setup and populate with seed data, and so i
 
 ## Prerequisites
 
-You will need to be able to run `docker` commands locally, the easiest way is to install[Docker Desktop](https://docs.docker.com/desktop/)
+You will need to be able to run `docker` commands locally, the easiest way is to install [Docker Desktop](https://docs.docker.com/desktop/)
 
 ## Getting Started
 

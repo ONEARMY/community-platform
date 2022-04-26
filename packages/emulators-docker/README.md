@@ -96,6 +96,7 @@ Phase 3 - Ready for use/full replacement of legacy methods
 [ ] - Remove all legacy functions code
 [ ] - Add tests to ensure data is exported as expected (e.g all collections exist)
 [ ] - Consider binding functions src folder and not dist (will require configuring yarn workspaces to populate shared as required, known issue below)
+[ ] - Find means to have functions-specific lock file and use as part of build process
 [ ] - Add docker-compose image for easier customisation/volume mapping (?)
 [ ] - Provide windows-based docker image (for live-reload on windows)
 

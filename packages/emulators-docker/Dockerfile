@@ -1,6 +1,6 @@
 FROM node:16-alpine
 ################################################################################
-# Original Source
+# Loosely based on
 # https://github.com/AndreySenov/firebase-tools-docker/blob/main/Dockerfile
 # https://github.com/goat-io/fluent/blob/master/src/Docker/Database/Firebase/Dockerfile
 ################################################################################
@@ -22,7 +22,7 @@ ENV HOME=/home/node
 # Install Java, Curl and Firebase-Tools
 RUN apk --no-cache add curl openjdk11-jre bash && \
   yarn global add firebase-tools@${VERSION} && \
-  yarn cache clean   
+  yarn cache clean
 
 # Check versions
 RUN firebase -V && \
@@ -45,7 +45,7 @@ WORKDIR /app
 # Copy dist package.json and install (step will be cached unless changed)
 RUN mkdir -p /app/functions/dist
 COPY ./app/functions/dist/package.json /app/functions/dist/package.json
-RUN cd /app/functions/dist && yarn install
+RUN cd /app/functions/dist && yarn install && yarn cache clean
 
 # Copy additional config files (done individually to not override dist package.json)
 COPY ./app/firebase.json /app/firebase.json
@@ -54,10 +54,9 @@ COPY ./app/firebase.storage.rules /app/firebase.storage.rules
 COPY ./app/functions/dist/index.js /app/functions/dist/index.js
 COPY ./app/credentials.json /app/credentials.json
 
-
 # Copy seed data
 RUN mkdir -p /app/seed_data && mkdir -p /app/import
-COPY ./seed_data/pp-2022-04-08 /app/seed_data
+COPY ./seed_data/pp-2022-04-26 /app/seed_data
 
 # Copy config files. Ensure executable and lf line format
 RUN mkdir -p /app/config

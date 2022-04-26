@@ -1,4 +1,5 @@
 import { MOCK_AUTH_USERS } from '../../../../shared'
+import type { IUserDB } from '../../../../src/models'
 import { firebaseAdmin } from '../../Firebase/admin'
 import { setDoc } from '../../Firebase/firestoreDB'
 
@@ -32,17 +33,25 @@ export async function seedUsersCreate() {
       }
     }
     // assign user doc
-    // TODO - should refactor to shared model to keep aligned more with user store
-    await setDoc('users', uid, {
+    const dbUser: IUserDB = {
       _authID: uid,
+      _id: uid,
+      _created: '2022-01-30T18:51:57.719Z',
+      _modified: '2022-01-30T18:51:57.719Z',
+      _deleted: false,
       displayName: user.label,
       userName: uid,
       moderation: 'awaiting-moderation',
       votedUsefulHowtos: {},
       votedUsefulResearch: {},
       notifications: [],
-      roles,
-    })
+      userRoles: roles,
+      links: [],
+      ['profileType' as any]: 'member', // include pp profile field
+      coverImages: [],
+      verified: true,
+    }
+    await setDoc('users', uid, dbUser)
   }
   return createdUsers
 }

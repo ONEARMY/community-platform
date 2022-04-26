@@ -16,6 +16,7 @@ on:
     # Only create a preview if changes have been made to the emulators-docker workspace
     # paths:
     #   - "packages/emulators-docker/**"
+
 env:
   IMAGE_NAME: onearmy/community-platform-emulator
 jobs:
@@ -43,11 +44,12 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       # Prepare image tags for future submission to both github container registry and dockerhub
+      # NOTE - authenticated dockerhub user will need access to specified env IMAGE_NAME
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
-          images: ghcr.io/${{ env.IMAGE_NAME }},${{ env.IMAGE_NAME }}
+          images: ghcr.io/${{ github.repository }},${{ env.IMAGE_NAME }}
       - name: Check metadata
         run: echo ${{steps.meta.outputs}}
       - uses: actions/setup-node@v2

@@ -104,7 +104,7 @@ Phase 3 - Ready for use/full replacement of legacy methods
 
 - DB can only make write updates from client sdk if project names match, and so the DOCKER file may need to be updated if using a project name that is not the same as the one hardcoded into the frontend (currently `community-platform-emulated`)
 
-- According to the [Client SDK availability](https://firebase.google.com/docs/emulator-suite/install_and_configure#client_sdk_availability) docs the current sdk version supported is `8.0.0`, so it is unclear if the emulators will continue to work if upgrading firebase further
+~- According to the [Client SDK availability](https://firebase.google.com/docs/emulator-suite/install_and_configure#client_sdk_availability) docs the current sdk version supported is `8.0.0`, so it is unclear if the emulators will continue to work if upgrading firebase further~(min version supported, should be fine to update)
 
 - Changes made within the workspace package.json will not be reflected in the container.
   Node_modules cannot be bound via volumes as they depend on OS, and so updating package.json will require new build with updated modules. Workaround would be binding full functions src with platform-specific docker image (e.g. node-16-win/node-16-linux) or just documenting required build update (discussion about node-windows support: https://github.com/nodejs/docker-node/pull/362)

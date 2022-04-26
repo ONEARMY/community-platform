@@ -68,9 +68,12 @@ RUN chmod +x /app/config/bootstrap.sh
 # Prompt firebase to use json credentials for login by exporting variable
 ENV GOOGLE_APPLICATION_CREDENTIALS=/app/credentials.json
 
-# Make a first run of emulators to ensure configured correctly and allow any seed data to be processed
-# via bootstrap script. Once processed seed data is then re-exported for use at runtime
-RUN firebase emulators:exec \
+RUN \
+  # Include a temporary env file to avoid timeouts (https://github.com/firebase/firebase-tools/issues/2837)
+  echo "FUNCTIONS_EMULATOR_TIMEOUT_SECONDS=540s" > /app/functions/dist/.env.local && \ 
+  # Make a first run of emulators to ensure configured correctly and allow any seed data to be processed
+  # via bootstrap script. Once processed seed data is then re-exported for use at runtime
+  firebase emulators:exec \
   --project  ${FIRESTORE_PROJECT_NAME:-community-platform-emulated} \
   --import=/app/seed_data --export-on-exit=/app/import \
   "/bin/bash /app/config/bootstrap.sh" \
@@ -79,7 +82,8 @@ RUN firebase emulators:exec \
   && cat /app/import/firebase-export-metadata.json \
   && printf "\nUsers" \
   && cat /app/import/auth_export/accounts.json \
-  && rm -R /app/seed_data
+  && rm -R /app/seed_data \
+  && rm -R /app/functions/dist/.env.local
 
 # # Exposed Ports - These should match firebase.json config
 EXPOSE 4001 4002 4003 4004 4005 4006 4007

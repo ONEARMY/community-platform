@@ -94,6 +94,7 @@ Phase 3 - Ready for use/full replacement of legacy methods
 [x] - Improve tagging to include project (e.g. precious-plastic), date and raw/cleaned data
 (requires fix to existing staging site export/restore actions)
 [ ] - Remove all legacy functions code
+[ ] - Add tests to ensure data is exported as expected (e.g all collections exist)
 [ ] - Consider binding functions src folder and not dist (will require configuring yarn workspaces to populate shared as required, known issue below)
 [ ] - Add docker-compose image for easier customisation/volume mapping (?)
 [ ] - Provide windows-based docker image (for live-reload on windows)

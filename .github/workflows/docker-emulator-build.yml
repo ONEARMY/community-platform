@@ -12,6 +12,7 @@ on:
       - spike/docker-emulators
     # TODO - decide on strategy post-merge (e.g. callable, cron, master + paths)
     # Depends on export action fix (reset-staging-site) and future integration
+    # Should also be linked to tagging strategies described in "meta" step
 
     # Only create a preview if changes have been made to the emulators-docker workspace
     # paths:
@@ -59,13 +60,6 @@ jobs:
           flavor: |
             latest=auto
             prefix=pp-
-      - name: Check metadata
-        run: |
-          echo ${{steps.meta.outputs.tags}}
-          echo ${{steps.meta.outputs.labels}}
-      - uses: actions/setup-node@v2
-        with:
-          node-version: "16"
 
       # Prepare build
       - name: Get yarn cache directory path

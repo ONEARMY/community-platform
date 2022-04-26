@@ -5,8 +5,8 @@ on:
     branches:
       - spike/docker-emulators
     # Only create a preview if changes have been made to the emulators-docker workspace
-    paths:
-      - "packages/emulators-docker/**"
+    # paths:
+    #   - "packages/emulators-docker/**"
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: onearmy/community-platform-emulator

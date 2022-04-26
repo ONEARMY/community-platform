@@ -131,6 +131,7 @@ async function pullRemoteImage(imageName: string) {
   return new Promise((resolve, reject) => {
     docker.pull(imageName, {}, (err, stream) => {
       if (err) {
+        handleImagePullFail(imageName)
         reject(err)
       }
       docker.modem.followProgress(
@@ -193,6 +194,25 @@ function rewritePortMapping() {
       return prev
     }, {} as any)
   return { ExposedPorts, PortBindings }
+}
+
+function handleImagePullFail(imageName: string) {
+  const baseName = imageName.split(':')[0]
+  console.log(
+    boxen(
+      `🙁 Failed to pull image
+${imageName}
+
+See list of available images at: 
+https://hub.docker.com/r/${baseName}/tags `,
+      {
+        borderColor: 'red',
+        title: 'Error',
+        titleAlignment: 'center',
+        padding: 1,
+      },
+    ),
+  )
 }
 
 /**

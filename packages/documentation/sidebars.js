@@ -69,5 +69,10 @@ module.exports = {
       label: 'Security',
       id: 'Security',
     },
+    {
+      type: 'link',
+      label: 'Component Storybook',
+      href: 'pathname:///storybook-static/index.html',
+    },
   ],
 }

@@ -1,56 +1,6 @@
 ## Quickstart
 
-### Creating a new docker image
-
-Populate data for import in the `./import` directory. This should be an export from firestore with individual collection namespaces selected (not all namespaces)
-
-Run the build script
-
-```
-yarn workspace oa-emulators-docker build
-```
-
-Optionally repo and tag args can be passed if planning to upload to dockerhub
-
-```
-yarn workspace oa-emulators-docker build --repo=my_docker_repo --tag=v1
-```
-
-### Running a docker image
-
-```
-yarn workspace oa-emulators-docker start --repo=my_docker_repo --tag=v1
-```
-
-With repo and tag args specified from build step (or left as defaults). An example build can be run directly via
-
-```
-yarn workspace oa-emulators-docker start --repo=chrismclarke
-```
-
-This will start the emulators with a dashboard available at `http://localhost:4001`
-
-### Using with frontend
-
-Once the emulators are up and running you can spin up the platform on port 4000 (which defaults to using emulators)
-
-```
-yarn cross-env PORT=4000 yarn start:platform
-```
-
-As you use the platform you should see changes happen within the firebase emulator dashboard
-`shared\mocks\auth-users.ts`. E.g. you can login as
-
-```
-user: demo_admin@example.com
-pass: demo_admin
-```
-
-### Modifying functions
-
-The emulators bind to the `functions/dist` folder so that changes made will be reflected in the emulators. On linux these changes should be picked up immediately, and so live-reload can be added for functions development via `yarn workspace functions watch`
-
-If running on windows the changes are not always detected, and may require spinning the emulators down and then starting back up
+See [documentation](../../packages/documentation/docs/Backend%20Development/firebase-emulators-docker.md)
 
 ## About
 
@@ -67,46 +17,19 @@ By providing a docker image we can address all issues above and provide better p
 
 ## TODO
 
-Phase 1 - Dockerised emulators working locally with seed data, providing a solid environment testing frontend/UI changes against replica live data
-
-[x] - Create dockerfile for base firebase emulator environment
-[x] - Handle service account authentication
-[x] - Add scripts to handle build (including functions compile, copy, docker build etc.)
-[x] - Add scripts to handle start
-[x] - Populate seed data
-[x] - Integrate as backend for app start
-
-Phase 2 - Dockerised emulators also support local functions development/testing (on linux)
-
 [?] - Support live-reload for functions (linux)
-[x] - Provide as images on dockerhub
-[x] - Add support for pulling from remote image
-[x] - Integrate auth user account seeding
-[x] - Add logging output override to correct information (e.g. docker port)
-[x] - Handle sigint to spin down image
-
-Phase 3 - Ready for use/full replacement of legacy methods
-
-[x] - Migrate seed clean scripts
 [ ] - Optimise image size (reduce RUN cmds, possible multi-stage build)
-[x] - Developer Documentation
-[x] - Integrate emulator build/seed/deploy with CI system
-[x] - Improve tagging to include project (e.g. precious-plastic), date and raw/cleaned data
-(requires fix to existing staging site export/restore actions)
 [ ] - Remove all legacy functions code
 [ ] - Add tests to ensure data is exported as expected (e.g all collections exist)
 [ ] - Consider binding functions src folder and not dist (will require configuring yarn workspaces to populate shared as required, known issue below)
 [ ] - Find means to have functions-specific lock file and use as part of build process
+[ ] - Automate seed data update (cron action to export and make pr)
 [ ] - Add docker-compose image for easier customisation/volume mapping (?)
 [ ] - Provide windows-based docker image (for live-reload on windows)
 
 ## Known Issues
 
-~- DB updates made from frontend (e.g updating user profile) are not written to the database. Not sure why this is, possibly has already been fixed if updating to firebase 9. So for now it works as read-only, or testing triggers from manual db update via dashboard. The [Client SDK availability](https://firebase.google.com/docs/emulator-suite/install_and_configure#client_sdk_availability) docs suggest that (currently) the emulators only work with sdk `8.0.0`~
-
 - DB can only make write updates from client sdk if project names match, and so the DOCKER file may need to be updated if using a project name that is not the same as the one hardcoded into the frontend (currently `community-platform-emulated`)
-
-~- According to the [Client SDK availability](https://firebase.google.com/docs/emulator-suite/install_and_configure#client_sdk_availability) docs the current sdk version supported is `8.0.0`, so it is unclear if the emulators will continue to work if upgrading firebase further~(min version supported, should be fine to update)
 
 - Changes made within the workspace package.json will not be reflected in the container.
   Node_modules cannot be bound via volumes as they depend on OS, and so updating package.json will require new build with updated modules. Workaround would be binding full functions src with platform-specific docker image (e.g. node-16-win/node-16-linux) or just documenting required build update (discussion about node-windows support: https://github.com/nodejs/docker-node/pull/362)
@@ -124,43 +47,6 @@ Phase 3 - Ready for use/full replacement of legacy methods
   Requires further investigation, possibly linked to https://github.com/firebase/firebase-tools/issues/2633
 
 - Boxen, globby and log-update packages have been pinned to older versions as newer require es module imports, which is not currently supported by dockerode (https://github.com/apocas/dockerode/issues/632)
-
-## Quickstart
-
-### Install Docker
-
-Follow instructions at: https://docs.docker.com/get-docker/
-
-Ensure running `docker -v`
-
-### Build image
-
-```
-yarn workspace oa-emulators-docker build
-```
-
-### Run image
-
-```
-yarn workspace oa-emulators-docker start
-```
-
-NOTE - the emulator ui will be available on http://localhost:4001
-(not http://0.0.0.0:4001 as logs state - this is internal docker binding)
-
-## Troubleshooting
-
-Failed Build
-
-- Check firebase-debug.log on container
-
-Misc
-
-- Retart docker
-
-Container access
-
-- Start shell from docker-desktop or use vscode [Remote-Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension to `attach to running container` and open vscode directly in docker container
 
 ## Links
 

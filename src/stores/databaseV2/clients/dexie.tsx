@@ -152,6 +152,7 @@ const SCHEMA_BASE: IDexieSchema = {
   howtos: `${DEFAULT_SCHEMA},slug`,
   mappins: DEFAULT_SCHEMA,
   tags: DEFAULT_SCHEMA,
+  categories: DEFAULT_SCHEMA,
   users: `${DEFAULT_SCHEMA},_authID`,
   research: `${DEFAULT_SCHEMA},slug`,
   aggregations: `${DEFAULT_SCHEMA}`,

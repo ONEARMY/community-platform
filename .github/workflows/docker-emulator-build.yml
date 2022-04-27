@@ -9,14 +9,10 @@ name: Docker Emulator Build
 on:
   push:
     branches:
-      - spike/docker-emulators
-    # TODO - decide on strategy post-merge (e.g. callable, cron, master + paths)
-    # Depends on export action fix (reset-staging-site) and future integration
-    # Should also be linked to tagging strategies described in "meta" step
-
-    # Only create a preview if changes have been made to the emulators-docker workspace
-    # paths:
-    #   - "packages/emulators-docker/**"
+      - master
+    # Only create new build when seed data updates
+    paths:
+      - "packages/emulators-docker/seed_data/**"
 
 env:
   # Image name that will be added as suffix to either github repo owner or dockerhub username
@@ -54,7 +50,6 @@ jobs:
           images: ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }},${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
           tags: |
             type=raw,value=2022-04-26
-            type=sha
           # TODO - would be nice to extract tags based on seed data provided automatically or consider other strategies
           # https://github.com/docker/metadata-action#tags-input
           flavor: |

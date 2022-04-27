@@ -1,10 +1,10 @@
-import { Request, Response } from 'express'
 // (note - typings don't currently exist for firebase-tools: https://github.com/firebase/firebase-tools/issues/2378)
 import * as firebase_tools from 'firebase-tools'
 import { DB_ENDPOINTS } from '../../models'
 import { db } from '../../Firebase/firestoreDB'
 import { splitArrayToChunks } from '../../Utils/data.utils'
-import { firestore, auth } from 'firebase-admin'
+import { firestore } from 'firebase-admin'
+import axios from 'axios'
 
 const USE_SMALL_SAMPLE_SEED = false
 
@@ -15,14 +15,23 @@ const USE_SMALL_SAMPLE_SEED = false
  * for users that have not posted content to mappins, howtos, research or events
  * (basically anywhere their profile might be linked from)
  */
-export async function cleanSeedData(req: Request, res: Response) {
+export async function seedDataClean() {
   const dbCollections = await db.listCollections()
   const dbEndpoints = dbCollections.map((c) => c.id)
+  console.log('db endpoints', dbEndpoints)
   const expectedEndpoints = Object.values(DB_ENDPOINTS)
+  const returnMessage: { deleted: any; kept: any; created: any } = {
+    deleted: {},
+    kept: {},
+    created: {},
+  }
+
   // Delete collections not in use
   for (const endpoint of dbEndpoints) {
     if (!expectedEndpoints.includes(endpoint)) {
-      await deleteCollectionCLI(endpoint)
+      console.log('deleting endpoint', endpoint)
+      await deleteCollectionAPI(endpoint)
+      returnMessage.deleted[endpoint] = true
     }
   }
 
@@ -33,11 +42,6 @@ export async function cleanSeedData(req: Request, res: Response) {
   const allDocs: {
     [endpoint in ICheckedEndpoint]: firestore.QuerySnapshot<firestore.DocumentData>
   } = {} as any
-  const returnMessage: { deleted: any; kept: any; created: any } = {
-    deleted: {},
-    kept: {},
-    created: {},
-  }
 
   // Get list of users with howtos, mappins or events to retain data
   for (const endpoint of endpointsToCheck) {
@@ -82,37 +86,7 @@ export async function cleanSeedData(req: Request, res: Response) {
   returnMessage.deleted['stats'] = deletedStats
   returnMessage.kept.users = keptUsers
 
-  // Add auth users
-  const createdUsers = await addSeedDemoAuthUsers()
-  returnMessage.created.users = createdUsers
-
-  res.status(200).send(returnMessage)
-}
-
-async function addSeedDemoAuthUsers() {
-  const authAdmin = auth()
-  const authUsers = [
-    { name: 'demo_user', roles: [] },
-    { name: 'demo_admin', roles: ['admin'] },
-  ]
-  const createdUsers = {}
-  for (const user of authUsers) {
-    try {
-      const authResponse = await authAdmin.createUser({
-        displayName: user.name,
-        password: user.name,
-        uid: user.name,
-        email: `${user.name}@example.com`,
-      })
-      const userDocRef = db.collection(DB_ENDPOINTS.users).doc(user.name)
-      await userDocRef.set({ roles: user.roles })
-      createdUsers[user.name] = authResponse
-    } catch (error) {
-      // user might already exist, should be fine but log for reference
-      console.error(error.message)
-    }
-  }
-  return createdUsers
+  return returnMessage
 }
 
 /**
@@ -184,17 +158,35 @@ function _waitForNextTick(): Promise<void> {
 }
 
 /**
+ * Use rest api to delete documents being served on the emulator
+ * @param endpoint
+ * @returns
+ */
+async function deleteCollectionAPI(endpoint: string) {
+  const apiHost = 'http://0.0.0.0:4003/emulator/v1/projects/emulator-demo' // http://[::1] for non-docker env
+  return axios.delete(`${apiHost}/databases/(default)/documents/${endpoint}`)
+}
+
+/**
  * Use firebase tools to fully delete collection and subcollection from command-line tools
  * https://firebase.google.com/docs/firestore/solutions/delete-collections
+ *
+ * NOTE CC 2021-09-29 - Seems to have stopped working with current emulators (not sure why)
+ * reverting to api method instead. Might be fixed with updated host endpoint used above and in firebase.json
  */
 async function deleteCollectionCLI(endpoint: string) {
   // Note - whilst we are only operating on the emulator user will probably
   // still need to be logged into firebase to call
   // https://github.com/firebase/firebase-tools/issues/1940
-  await firebase_tools.firestore.delete(endpoint, {
-    recursive: true,
-    yes: true,
-  })
+  await firebase_tools.firestore
+    .delete(endpoint, {
+      recursive: true,
+      yes: true,
+    })
+    .catch((err) => {
+      console.error(err)
+      process.exit(1)
+    })
 }
 
 /**

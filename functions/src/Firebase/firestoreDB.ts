@@ -51,3 +51,11 @@ export const getCollection = async <T>(endpoint: IDBEndpoint) => {
         : snapshot.docs.map((d) => d.data() as T & DBDoc)
     })
 }
+export const setDoc = async (
+  endpoint: IDBEndpoint,
+  docId: string,
+  data: any,
+) => {
+  const mapping = DB_ENDPOINTS[endpoint] || endpoint
+  return db.collection(mapping).doc(docId).set(data)
+}

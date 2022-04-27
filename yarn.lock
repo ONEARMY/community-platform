@@ -7616,6 +7616,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/mustache@npm:^4.1.2":
+  version: 4.1.2
+  resolution: "@types/mustache@npm:4.1.2"
+  checksum: 1f37849aae39b3188dbeac71734393586db80faa798795ea730db8e40d393c1d4d6a65ad8735a5ccf6dfc8b920d0792af1e6ef13e3ed2e02d204259678545240
+  languageName: node
+  linkType: hard
+
 "@types/node-fetch@npm:^2.5.7":
   version: 2.5.12
   resolution: "@types/node-fetch@npm:2.5.12"
@@ -23171,10 +23178,12 @@ fsevents@^1.2.7:
     "@storybook/addons": ^6.4.22
     "@storybook/react": ^6.4.22
     "@storybook/theming": ^6.4.22
+    "@types/mustache": ^4.1.2
     "@types/react-flag-icon-css": ^1.0.5
     babel-loader: 8.1.0
     eslint: ^7.32.0
     eslint-plugin-import: ^2.25.4
+    mustache: ^4.2.0
     prettier: ^2.5.1
     react: ^17.0.2
     react-flag-icon-css: ^1.0.25

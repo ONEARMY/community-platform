@@ -8,6 +8,13 @@ The emulators can be a bit tricky to setup and populate with seed data, and so i
 
 You will need to be able to run `docker` commands locally, the easiest way is to install [Docker Desktop](https://docs.docker.com/desktop/)
 
+You can ensure it is running with the command `docker -v`
+
+```sh
+docker -v
+# Docker version 20.10.14, build a224086
+```
+
 ## Getting Started
 
 ```
@@ -65,25 +72,45 @@ password: 'demo_admin',
 
 ### Writing functions code
 
-TODO docs
+The emulators bind to the `functions/dist` folder so that changes made will be reflected in the emulators. On linux these changes should be picked up immediately, and so live-reload can be added for functions development via `yarn workspace functions watch`
 
-- Volume bindings for local functions (should just be able to write locally and see updated in emulators)
-- Troubleshooting live-reload
+If running on windows the changes are not always detected, and may require spinning the emulators down and then starting back up
 
 ### Invoking functions
 
-TODO docs
+Functions can be invoked in different ways depending on their trigger type.
 
-- Calling from frontend
-- Calling directly
+For functions triggered by storage or database changes, making changes directly on the dashboard or from the frontend should trigger the corresponding function.
+Similarly callable functions should be called triggered from frontend code.
+
+For functions triggered by http request you can call directly either from command line, a web browser or REST client such as [Insomnia](https://insomnia.rest/)
+
+E.g. calling the emulator `seed-users-create` function via a GET request:
+
+```
+http://localhost:4002/community-platform-emulated/us-central1/emulator/seed-users-create
+```
+
+![](images/emulators-docker-http-req.png)
 
 ### Accessing Logs
 
-TODO docs
+If the emulator throws an error you may want to check generated debug.log files. These will exist in the container in the root `/app` folder.
 
-- where to find docs on emulator
-- how to exec command to read doc files
-- direct container access in vscode
+You can access the file system within the docker container directly using the
+[Remote-Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension for vscode, and running the command to `attach to running container`
+
+![](images/emulators-docker-remote.png)
+
+Once running in the container you can open the `/app` folder to view files
+![](images/emulator-docker-remote-files.png)
+
+Alternatively you can request docker to execute commands directly on the container, e.g.
+
+```
+docker exec -it community-platform-emulator ls
+docker exec -it community-platform-emulator cat /app/firestore-debug.log
+```
 
 ## Extending the image
 
@@ -117,6 +144,4 @@ Note - this will only start the emulators, to run the frontend you will also nee
 
 ### Known Issues
 
-TODO docs
-
-- Copy from workspace readme
+See list of known issues in the workspace [README](https://github.com/ONEARMY/community-platform/tree/master/packages/emulators-docker)

@@ -24,3 +24,15 @@ cd ./packages/components
 yarn install
 yarn start
 ```
+
+## Creating a new Component
+
+You can quickly create a new component using the command `yarn new-component MyNewComponentName`, which
+will generate the following items:
+
+```
+src/
+  MyNewComponentName/
+    MyNewComponentName.tsx # Component
+    MyNewComponentName.stories.mdx # Storybook documentation
+```

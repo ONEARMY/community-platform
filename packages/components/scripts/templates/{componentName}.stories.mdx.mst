@@ -2,9 +2,7 @@ import { action } from '@storybook/addon-actions'
 import { Story, Meta, Preview, Props, Description } from '@storybook/addon-docs'
 import { {{ComponentName}} } from './{{ComponentName}}.tsx'
 
-{{=<% %>=}}
-<Meta title="Base Components/<% ComponentName %>" component={<% ComponentName %>} />
-<%={{ }}=%>
+<Meta title="Base Components/<% ComponentName %>" component={ {{ComponentName}} } />
 
 # {{ComponentName}}
 

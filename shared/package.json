@@ -1,5 +1,12 @@
 {
   "name": "oa-shared",
   "version": "1.0.0",
-  "main": "lib/index"
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "devDependencies": {
+    "typescript": "^4.5.5"
+  }
 }

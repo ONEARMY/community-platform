@@ -1,4 +1,4 @@
-# Firebase Emulators
+# Firebase Emulators (Legacy)
 
 In order to test backend functions locally, firebase provides a suite of emulators to mimic most functionality seen online (e.g firestore, storage, functions, triggers etc.)
 

@@ -11,7 +11,7 @@
     "build:sb": "yarn build && build-storybook",
     "build": "tsc",
     "dev": "tsc --watch",
-    "lint:code": "eslint . --ext .js,.jsx,.ts,.tsx src --color"
+    "new-component": "ts-node scripts/new-component.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.8.2",

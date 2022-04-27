@@ -1,20 +1,20 @@
 import { observable, action, makeObservable } from 'mobx'
-import {
+import type {
   IMapPin,
   IMapGrouping,
   IMapPinWithDetail,
   IMapPinDetail,
   IBoundingBox,
 } from 'src/models/maps.models'
-import { IDBEndpoint } from 'src/models/common.models'
-import { RootStore } from '../index'
-import { Subscription } from 'rxjs'
+import type { IDBEndpoint } from 'src/models/common.models'
+import type { RootStore } from '../index'
+import type { Subscription } from 'rxjs'
 import { ModuleStore } from '../common/module.store'
 import { getUserAvatar } from '../User/user.store'
 import { MAP_GROUPINGS } from './maps.groupings'
 import { generatePins, generatePinDetails } from 'src/mocks/maps.mock'
-import { IUserPP } from 'src/models/user_pp.models'
-import { IUploadedFileMeta } from '../storage'
+import type { IUserPP } from 'src/models/user_pp.models'
+import type { IUploadedFileMeta } from '../storage'
 import {
   hasAdminRights,
   needsModeration,

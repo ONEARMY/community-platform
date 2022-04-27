@@ -1,4 +1,4 @@
-import { ITag } from 'src/models/tags.model'
+import type { ITag } from 'src/models/tags.model'
 import { MOCK_DB_META } from './db.mock'
 
 export const TAGS_MOCK: ITag[] = [

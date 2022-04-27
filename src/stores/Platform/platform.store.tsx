@@ -1,5 +1,5 @@
 import { observable, action, makeObservable } from 'mobx'
-import { RootStore } from '..'
+import type { RootStore } from '..'
 
 /*
 The platform store handles information related to the platform, such as update

@@ -1,5 +1,5 @@
 import * as _ from 'lodash'
-import { ISelectedTags } from 'src/models/tags.model'
+import type { ISelectedTags } from 'src/models/tags.model'
 
 /** Functions used to give as callback to the isEqual prop of form fields.
  *  The isEqual callback is used to determine if a field is dirty.

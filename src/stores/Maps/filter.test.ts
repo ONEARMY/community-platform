@@ -1,4 +1,4 @@
-import { IMapPin } from 'src/models'
+import type { IMapPin } from 'src/models'
 import { filterMapPinsByType } from './filter'
 
 describe('filterMapPinsByType', () => {

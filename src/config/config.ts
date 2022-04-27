@@ -12,7 +12,7 @@ https://javebratt.com/hide-firebase-api/
 
 import type { IFirebaseConfig, ISentryConfig, siteVariants } from './types'
 import type { ConfigurationOption } from './constants'
-import { UserRole } from '../models'
+import type { UserRole } from '../models'
 
 /**
  * Helper function to load configuration property
@@ -60,7 +60,10 @@ function getSiteVariant(): siteVariants {
   if (location.host === 'localhost:4000') {
     return 'emulated_site'
   }
-  if (_c('REACT_APP_SITE_VARIANT') === 'test-ci') {
+  if (
+    location.host === 'localhost:3456' ||
+    _c('REACT_APP_SITE_VARIANT') === 'test-ci'
+  ) {
     return 'test-ci'
   }
   if (_c('REACT_APP_SITE_VARIANT') === 'preview') {

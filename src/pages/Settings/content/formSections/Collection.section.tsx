@@ -11,7 +11,7 @@ import { FieldArray } from 'react-final-form-arrays'
 import { Button } from 'oa-components'
 import { CustomCheckbox } from './Fields/CustomCheckbox.field'
 import { PLASTIC_TYPES } from 'src/mocks/user_pp.mock'
-import { IUserPP } from 'src/models/user_pp.models'
+import type { IUserPP } from 'src/models/user_pp.models'
 
 interface IProps {
   formValues: IUserPP

@@ -141,7 +141,7 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
         .should('eq', email)
       cy.wrap(checkUI ? 'check login ui' : 'skip ui check').then(() => {
         if (checkUI) {
-          cy.get('[data-cy=user-menu]')
+          cy.get('[data-cy=user-menu]').should('exist')
         }
       })
       cy.log('user', Auth.currentUser)

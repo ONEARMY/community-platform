@@ -1,5 +1,5 @@
-import { IHowto } from '../models/howto.models'
-import { IUploadedFileMeta } from 'src/stores/storage'
+import type { IHowto } from '../models/howto.models'
+import type { IUploadedFileMeta } from 'src/stores/storage'
 import { MOCK_DB_META } from './db.mock'
 
 const exampleUploadImage: IUploadedFileMeta = {

@@ -1,4 +1,4 @@
-import { IEventFilters, IEvent } from 'src/models/events.models'
+import type { IEventFilters, IEvent } from 'src/models/events.models'
 import { MOCK_DB_META } from './db.mock'
 import { MOCK_LOCATION } from './location.mock'
 

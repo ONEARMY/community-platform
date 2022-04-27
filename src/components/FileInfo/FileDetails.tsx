@@ -1,7 +1,8 @@
-import { Icon, availableGlyphs } from 'oa-components'
+import type { availableGlyphs } from 'oa-components'
+import { Icon } from 'oa-components'
 import { Flex } from 'theme-ui'
 import Text from '../Text'
-import { IUploadedFileMeta } from 'src/stores/storage'
+import type { IUploadedFileMeta } from 'src/stores/storage'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 

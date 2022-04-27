@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import Foco from 'react-foco'
-import { UserStore } from 'src/stores/User/user.store'
+import type { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import Flex from 'src/components/Flex'
 import { Avatar } from 'src/components/Avatar'

@@ -1,6 +1,7 @@
-import { Flex, FlexProps } from 'theme-ui'
+import type { FlexProps } from 'theme-ui'
+import { Flex } from 'theme-ui'
 import theme from 'src/themes/styled.theme'
-import { CSSObject } from '@styled-system/css'
+import type { CSSObject } from '@styled-system/css'
 
 interface ILayoutProps {
   ignoreMaxWidth?: boolean

@@ -8,15 +8,15 @@ import './index.css'
 import { Clusters } from './Cluster'
 import { Popup } from './Popup'
 
-import {
+import type {
   IMapPin,
   ILatLng,
   IBoundingBox,
   IMapGrouping,
 } from 'src/models/maps.models'
 import { inject, observer } from 'mobx-react'
-import { MapsStore } from 'src/stores/Maps/maps.store'
-import { RouteComponentProps } from 'react-router'
+import type { MapsStore } from 'src/stores/Maps/maps.store'
+import type { RouteComponentProps } from 'react-router'
 import { toJS } from 'mobx'
 import type { LatLngExpression } from 'leaflet'
 

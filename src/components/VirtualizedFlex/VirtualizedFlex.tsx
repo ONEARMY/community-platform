@@ -1,12 +1,12 @@
 import * as React from 'react'
 import { Flex, Box } from 'theme-ui'
 import themes from 'src/themes/styled.theme'
+import type { ListRowProps } from 'react-virtualized'
 import {
   List,
   WindowScroller,
   CellMeasurerCache,
   CellMeasurer,
-  ListRowProps,
 } from 'react-virtualized'
 import { emStringToPx } from 'src/utils/helpers'
 

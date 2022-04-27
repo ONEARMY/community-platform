@@ -1,8 +1,9 @@
-import { Image, ImageProps } from 'theme-ui'
-import { ProfileTypeLabel } from 'src/models/user_pp.models'
 import { inject } from 'mobx-react'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import { Component } from 'react'
+import type { ImageProps } from 'theme-ui'
+import { Image } from 'theme-ui'
+import type { ProfileTypeLabel } from 'src/models/user_pp.models'
 
 import MemberBadge from 'src/assets/images/badges/pt-member.svg'
 

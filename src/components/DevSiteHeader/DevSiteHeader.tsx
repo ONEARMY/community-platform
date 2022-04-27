@@ -1,6 +1,6 @@
 import { SITE, VERSION, DEV_SITE_ROLE } from 'src/config/config'
 import Text from 'src/components/Text'
-import { UserRole } from 'src/models'
+import type { UserRole } from 'src/models'
 import { Flex, Box } from 'theme-ui'
 import Select from 'react-select'
 import { observer } from 'mobx-react-lite'
@@ -92,6 +92,7 @@ function showDevSiteHeader() {
 const availableThemes = [
   { value: 'precious-plastic', label: 'Precious Plastic' },
   { value: 'project-kamp', label: 'Project Kamp' },
+  { value: 'fixing-fashion', label: 'Fixing Fashion' },
 ]
 
 // we have 2 different dev sites, only show this component when on one and provide select

@@ -1,4 +1,4 @@
-import { IHowtoFormInput } from 'src/models/howto.models'
+import type { IHowtoFormInput } from 'src/models/howto.models'
 
 // initialise fields which contain nested objects (and steps to have 3 placeholders)
 const INITIAL_VALUES: Partial<IHowtoFormInput> = {

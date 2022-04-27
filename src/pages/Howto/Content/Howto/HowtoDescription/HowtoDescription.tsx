@@ -1,7 +1,7 @@
 import { PureComponent } from 'react'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { format } from 'date-fns'
-import { IHowtoDB } from 'src/models/howto.models'
+import type { IHowtoDB } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import ModerationStatusText from 'src/components/ModerationStatusText'
@@ -12,7 +12,7 @@ import StepsIcon from 'src/assets/icons/icon-steps.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
 import { Button } from 'oa-components'
-import { IUser } from 'src/models/user.models'
+import type { IUser } from 'src/models/user.models'
 import {
   isAllowToEditContent,
   emStringToPx,

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Switch, withRouter } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
-import { UserStore } from 'src/stores/User/user.store'
+import type { UserStore } from 'src/stores/User/user.store'
 import { UserPage } from './content'
 import { NotFoundPage } from '../NotFound/NotFound'
 

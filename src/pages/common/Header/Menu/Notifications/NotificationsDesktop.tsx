@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import { UserStore } from 'src/stores/User/user.store'
+import type { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import Flex from 'src/components/Flex'
 import { NotificationsModal } from './NotificationsModal'

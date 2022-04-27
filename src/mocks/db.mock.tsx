@@ -1,4 +1,4 @@
-import { DBDoc } from 'src/models/common.models'
+import type { DBDoc } from 'src/models/common.models'
 import { randomID } from 'src/utils/helpers'
 
 // helper methods used in generation of mock db data

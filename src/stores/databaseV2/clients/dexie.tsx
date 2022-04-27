@@ -1,6 +1,6 @@
-import { IDBEndpoint, DBDoc } from 'src/models/common.models'
+import type { IDBEndpoint, DBDoc } from 'src/models/common.models'
 import Dexie from 'dexie'
-import { DBQueryOptions, DBQueryWhereOptions } from '../types'
+import type { DBQueryOptions, DBQueryWhereOptions } from '../types'
 import type { AbstractDBClient } from '../types'
 import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
 import { DB_ENDPOINTS } from '../endpoints'

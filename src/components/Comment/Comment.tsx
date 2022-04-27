@@ -1,6 +1,6 @@
 import React, { createRef, useEffect, useState } from 'react'
 import { Flex, Box } from 'theme-ui'
-import { IComment } from 'src/models'
+import type { IComment } from 'src/models'
 import { CommentHeader } from './CommentHeader'
 import { Text } from 'src/components/Text'
 import { Modal } from '../Modal/Modal'
@@ -48,7 +48,7 @@ export const Comment: React.FC<IProps> = ({
   }
 
   return (
-    <Box>
+    <Box data-cy="comment">
       <Flex
         p="3"
         bg={'white'}
@@ -61,6 +61,7 @@ export const Comment: React.FC<IProps> = ({
       >
         <CommentHeader {...props} />
         <Text
+          data-cy="comment-text"
           my={2}
           sx={{
             whiteSpace: 'pre-wrap',

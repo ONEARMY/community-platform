@@ -1,5 +1,5 @@
 import dateFns from 'date-fns'
-import { ISODateString } from 'src/models/common.models'
+import type { ISODateString } from 'src/models/common.models'
 /*
     Manual implementation of filters commonly used through the app
     In the future this could possibly be replaced by more comprehensive libraries

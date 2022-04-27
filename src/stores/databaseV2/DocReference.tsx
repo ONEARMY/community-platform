@@ -1,4 +1,4 @@
-import { DBClients, DBDoc } from './types'
+import type { DBClients, DBDoc } from './types'
 import { Observable } from 'rxjs'
 
 export class DocReference<T> {

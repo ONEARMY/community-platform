@@ -1,5 +1,5 @@
-import { IUserPP } from 'src/models/user_pp.models'
-import { IUser } from 'src/models/user.models'
+import type { IUserPP } from 'src/models/user_pp.models'
+import type { IUser } from 'src/models/user.models'
 
 // when using the user settings page a base user will already exist
 // pass an empty object with IUser interface for purpose of future typings

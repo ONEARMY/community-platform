@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { RouteComponentProps } from 'react-router'
+import type { RouteComponentProps } from 'react-router'
 
 /*************************************************************************************
  *  Embed an Iframe

@@ -10,13 +10,13 @@ import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import SearchInput from 'src/components/SearchInput'
 import TagsSelect from 'src/components/Tags/TagsSelect'
 import { VirtualizedFlex } from 'src/components/VirtualizedFlex/VirtualizedFlex'
-import { IHowtoDB } from 'src/models/howto.models'
-import { HowtoStore } from 'src/stores/Howto/howto.store'
-import { UserStore } from 'src/stores/User/user.store'
+import type { IHowtoDB } from 'src/models/howto.models'
+import type { HowtoStore } from 'src/stores/Howto/howto.store'
+import type { UserStore } from 'src/stores/User/user.store'
 import HowToCard from './HowToCard'
 import SortSelect from './SortSelect'
-import { ThemeStore } from 'src/stores/Theme/theme.store'
-import { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
+import type { ThemeStore } from 'src/stores/Theme/theme.store'
+import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
 
 interface InjectedProps {
   howtoStore: HowtoStore
@@ -224,9 +224,10 @@ export class HowtoList extends React.Component<any, IState> {
           <MoreContainer m={'0 auto'} pt={60} pb={90}>
             <Flex sx={{ alignItems: 'center', flexDirection: 'column' }} mt={5}>
               <Heading medium sx={{ textAlign: 'center' }}>
-                Inspire the Precious Plastic world.
+                Inspire the {theme.siteName} world.
+                <br />
+                Share your how-to!
               </Heading>
-              <Heading medium>Share your how-to!</Heading>
               <AuthWrapper>
                 <Link to={'/how-to/create'}>
                   <Button variant="primary" mt={30}>

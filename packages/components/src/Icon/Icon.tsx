@@ -1,10 +1,6 @@
 import styled from '@emotion/styled'
-import {
-  verticalAlign,
-  VerticalAlignProps,
-  space,
-  SpaceProps,
-} from 'styled-system'
+import type { VerticalAlignProps, SpaceProps } from 'styled-system'
+import { verticalAlign, space } from 'styled-system'
 
 import { MdFileDownload } from '@react-icons/all-files/md/MdFileDownload'
 import { MdAdd } from '@react-icons/all-files/md/MdAdd'

@@ -1,4 +1,4 @@
-import { IUser } from 'src/models/user.models'
+import type { IUser } from 'src/models/user.models'
 
 export function getUserCountry(user: IUser) {
   const userCountry =

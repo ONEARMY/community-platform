@@ -14,7 +14,6 @@ describe('[Notification Banner]', () => {
   describe('[By Authenticated user with blank profile]', () => {
     it('[Notification Banner is visible for user with blank profile]', () => {
       cy.login('howto_reader@test.com', 'test1234')
-      cy.get('[data-cy=notificationBanner]').should('exist')
       cy.get('[data-cy=notificationBanner]').click()
       cy.url().should('eq', 'http://localhost:3456/settings')
     })
@@ -23,7 +22,6 @@ describe('[Notification Banner]', () => {
   describe('[By Authenticated user with filled profile]', () => {
     it('[Notification Banner is visible for user with blank profile]', () => {
       cy.login('howto_reader@test.com', 'test1234')
-      cy.wait(2000)
       cy.step('Go to User Settings')
       cy.clickMenuItem(UserMenuItem.Settings)
 

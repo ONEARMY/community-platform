@@ -11,11 +11,11 @@ import { ProfileLinkField } from './Fields/Link.field'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { Box } from 'theme-ui'
 import { required } from 'src/utils/validators'
-import { IUserPP } from 'src/models/user_pp.models'
+import type { IUserPP } from 'src/models/user_pp.models'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { ErrorMessage } from 'src/components/Form/elements'
-import { IUser } from 'src/models'
-import { IUploadedFileMeta } from 'src/stores/storage'
+import type { IUser } from 'src/models'
+import type { IUploadedFileMeta } from 'src/stores/storage'
 
 interface IProps {
   formValues: IUserPP

@@ -7,7 +7,7 @@ import { ImageConverter } from './ImageConverter'
 import theme from '../../themes/styled.theme'
 import Dropzone from 'react-dropzone'
 import type { IUploadedFileMeta } from '../../stores/storage'
-import { IConvertedFileMeta } from 'src/types'
+import type { IConvertedFileMeta } from 'src/types'
 
 interface ITitleProps {
   hasUploadedImg: boolean

@@ -9,7 +9,7 @@ import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import theme from 'src/themes/styled.theme'
 import { required } from 'src/utils/validators'
-import { ILocation } from 'src/models/common.models'
+import type { ILocation } from 'src/models/common.models'
 import MapWithDraggablePin from 'src/components/MapWithDraggablePin/MapWithDraggablePin'
 import { randomIntFromInterval } from 'src/utils/helpers'
 

@@ -1,6 +1,6 @@
-import { CollectionReference } from './CollectionReference'
-import { DBEndpoint } from './endpoints'
-import { DBClients } from './types'
+import type { CollectionReference } from './CollectionReference'
+import type { DBEndpoint } from './endpoints'
+import type { DBClients } from './types'
 
 export abstract class AbstractDatabase {
   private _clients: DBClients

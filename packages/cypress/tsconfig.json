@@ -5,7 +5,8 @@
     "types": ["cypress", "node", "cypress-file-upload"],
     "moduleResolution": "Node",
     "esModuleInterop": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "jsx": "react"
   },
   "include": ["**/*.ts"]
 }

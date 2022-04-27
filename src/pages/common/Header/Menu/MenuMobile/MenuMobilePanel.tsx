@@ -9,7 +9,7 @@ import MenuMobileExternalLink from './MenuMobileExternalLink'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { getSupportedModules } from 'src/modules'
 import { inject } from 'mobx-react'
-import { ThemeStore } from 'src/stores/Theme/theme.store'
+import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
 const PanelContainer = styled(Box)`
   width: 100%;

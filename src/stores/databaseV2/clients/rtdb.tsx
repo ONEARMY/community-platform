@@ -1,6 +1,6 @@
-import { IDBEndpoint, DBDoc } from 'src/models/common.models'
+import type { IDBEndpoint, DBDoc } from 'src/models/common.models'
 import { rtdb } from 'src/utils/firebase'
-import { AbstractDBClient } from '../types'
+import type { AbstractDBClient } from '../types'
 
 const db = rtdb
 

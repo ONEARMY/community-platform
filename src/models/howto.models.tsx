@@ -1,5 +1,5 @@
-import { ISelectedTags } from './tags.model'
-import { DBDoc, IModerable } from './common.models'
+import type { ISelectedTags } from './tags.model'
+import type { DBDoc, IModerable } from './common.models'
 import type { IConvertedFileMeta } from '../types'
 import type { IUploadedFileMeta } from '../stores/storage'
 

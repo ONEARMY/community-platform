@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
-import { UserStore } from 'src/stores/User/user.store'
-import { UserRole } from 'src/models/user.models'
+import type { UserStore } from 'src/stores/User/user.store'
+import type { UserRole } from 'src/models/user.models'
 import { SITE, DEV_SITE_ROLE } from 'src/config/config'
 
 /*

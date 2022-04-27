@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention*/
-import { IUser } from 'src/models/user.models'
+import type { IUser } from 'src/models/user.models'
 import { MOCK_DB_META } from './db.mock'
 
 export const MOCK_USER: IUser = {

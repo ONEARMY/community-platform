@@ -1,4 +1,4 @@
-import { IFieldProps } from './Fields'
+import type { IFieldProps } from './Fields'
 import OsmGeocoding from '../OsmGeocoding/OsmGeocoding'
 import { logger } from 'src/logger'
 import { getLocationData } from 'src/utils/getLocationData'

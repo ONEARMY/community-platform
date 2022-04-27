@@ -5,7 +5,7 @@ import Heading from 'src/components/Heading'
 import { Link } from 'src/components/Links'
 import { ModerationStatusText } from 'src/components/ModerationStatusText'
 import Text from 'src/components/Text'
-import { IResearch } from 'src/models/research.models'
+import type { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 

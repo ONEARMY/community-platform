@@ -1,11 +1,11 @@
-import {
+import type {
   IUserPP,
   IProfileType,
   IWorkspaceType,
 } from 'src/models/user_pp.models'
 import { MOCK_DB_META } from './db.mock'
 import { MOCK_USER } from './user.mock'
-import { IPlasticType, IMAchineBuilderXp } from 'src/models/user_pp.models'
+import type { IPlasticType, IMAchineBuilderXp } from 'src/models/user_pp.models'
 
 // assets plasticType
 import Pet from 'src/assets/images/plastic-types/pet.svg'

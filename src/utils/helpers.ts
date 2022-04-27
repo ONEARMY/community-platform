@@ -1,7 +1,7 @@
 import { isObservableObject, toJS } from 'mobx'
-import { DBDoc, IModerable } from 'src/models/common.models'
-import { IMapPin } from 'src/models/maps.models'
-import { IUser } from 'src/models/user.models'
+import type { DBDoc, IModerable } from 'src/models/common.models'
+import type { IMapPin } from 'src/models/maps.models'
+import type { IUser } from 'src/models/user.models'
 
 // remove special characters from string, also replacing spaces with dashes
 export const stripSpecialCharacters = (text: string) => {

@@ -1,4 +1,4 @@
-import { IEventFormInput } from 'src/models/events.models'
+import type { IEventFormInput } from 'src/models/events.models'
 
 const INITIAL_VALUES: IEventFormInput = {
   title: '',

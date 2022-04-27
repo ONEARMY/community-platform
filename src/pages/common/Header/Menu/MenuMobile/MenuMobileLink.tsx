@@ -4,7 +4,7 @@ import { Box } from 'theme-ui'
 import { NavLink } from 'react-router-dom'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
 import { observer, inject } from 'mobx-react'
-import { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
+import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
 
 interface IProps {
   path: string

@@ -1,4 +1,4 @@
-import { ITemplateData } from 'src/models/_template.model'
+import type { ITemplateData } from 'src/models/_template.model'
 import { MOCK_USER } from './user.mock'
 
 export const TemplateMock: ITemplateData[] = [

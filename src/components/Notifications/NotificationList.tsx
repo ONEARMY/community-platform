@@ -1,5 +1,5 @@
 import { NotificationItem } from 'src/components/Notifications/NotificationItem'
-import { INotification } from 'src/models'
+import type { INotification } from 'src/models'
 
 interface IProps {
   notifications?: INotification[]

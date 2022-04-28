@@ -66,7 +66,9 @@
     "__NOTE2__": "2021-07-06 ram issues: https://github.com/facebook/create-react-app/issues/10154",
     "react-scripts/eslint-webpack-plugin": "2.4.1",
     "__NOTE3__": "2021-10-03 terser issues: https://github.com/facebook/create-react-app/issues/6334",
-    "terser-webpack-plugin": "4.2.3"
+    "terser-webpack-plugin": "4.2.3",
+    "__NOTE4__": "2022-04-28 webpack issue: https://github.com/gregberge/svgr/issues/665",
+    "@svgr/webpack": "5.5.0"
   },
   "dependencies": {
     "@emotion/react": "^11.8.2",

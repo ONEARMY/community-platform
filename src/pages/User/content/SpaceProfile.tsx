@@ -279,6 +279,7 @@ export const SpaceProfile = ({ user }: IProps) => {
               large
               my={2}
               sx={{ color: `${theme.colors.lightgrey} !important` }}
+              data-cy="userName"
             >
               {user.userName}
             </Text>

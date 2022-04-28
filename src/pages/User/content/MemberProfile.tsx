@@ -59,7 +59,7 @@ export const MemberProfile = ({ user }: IProps) => {
     user.location?.countryCode || user.country?.toLowerCase() || null
 
   return (
-    <ProfileWrapper mt={8} mb={6}>
+    <ProfileWrapper mt={8} mb={6} data-cy="MemberProfile">
       <Badge
         profileType="member"
         size={50}
@@ -109,6 +109,7 @@ export const MemberProfile = ({ user }: IProps) => {
                 color: `${theme.colors.lightgrey} !important`,
                 wordBreak: 'break-word',
               }}
+              data-cy="userName"
             >
               {user.userName}
             </Text>
@@ -119,6 +120,7 @@ export const MemberProfile = ({ user }: IProps) => {
               bold
               color={'black'}
               style={{ wordWrap: 'break-word' }}
+              data-cy="userDisplayName"
             >
               {user.displayName}
             </Heading>

@@ -457,7 +457,7 @@ workflows:
           name: 'Deploy: fixing-fashion-dev.web.app'
           requires:
             - test_e2e
-          # <<: *filter_only_master
+          <<: *filter_only_master
           DEPLOY_ALIAS: fixing-fashion-dev
           NOTIFY_SLACK: false
           context:

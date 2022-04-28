@@ -40,19 +40,19 @@ Note - any data populated into the emulator will be deleted after the emulator h
 
 # Seed data
 
-By default the emulators load any data found in the [functions/data/emulated](../../../../functions/data/emulated) folder, which can be previously exported from another firebase app or emulator instance.
+By default the emulators load any data found in the [functions/data/emulated](https://github.com/ONEARMY/community-platform/tree/master/functions/data/emulated) folder, which can be previously exported from another firebase app or emulator instance.
 
 By default this data is not committed to the repo and so initial data will be empty, however specific zip files have been generated from site backup files and can be loaded for testing
 
 ## Loading seed data
 
-By default when the script first runs it will populate seed data from [functions/data/seed](../../../../functions/data/seed). This can be repopulated either by deleting the [functions/data/emulated](../../../../functions/data/emulated) folder, or by manually calling the seed data script:
+By default when the script first runs it will populate seed data from [functions/data/seed](https://github.com/ONEARMY/community-platform/tree/master/functions/data/seed). This can be repopulated either by deleting the [functions/data/emulated](https://github.com/ONEARMY/community-platform/tree/master/functions/data/emulated) folder, or by manually calling the seed data script:
 
 ```
 yarn workspace functions run emulator:seed
 ```
 
-This will load the default seed data from the zip file [functions/data/seed](../../../../functions/data/seed/seed-default.zip).
+This will load the default seed data from the zip file [functions/data/seed](https://github.com/ONEARMY/community-platform/tree/master/functions/data/seed/seed-default.zip).
 
 The default data contains a snapshot of most howtos, mappins etc. from the export data of the file (so may not be fully up-to-date). It also includes 2 user profiles for login:
 
@@ -78,7 +78,7 @@ When the emulators close they discard any changes made, so seed data documents t
 
 Whilst this is useful to preserve a clean testing state, sometimes it might be desirable to persist changes (such as adding additional auth users, or specific example docs)
 
-This can be achieved by passing the `--export-on-exit=./path/to/export/folder` flag to the script that starts the functions emulators. This can be run by modifiying the functions start at [functions/scripts/start.ts](../../../../functions/scripts/start.ts)
+This can be achieved by passing the `--export-on-exit=./path/to/export/folder` flag to the script that starts the functions emulators. This can be run by modifiying the functions start at [functions/scripts/start.ts](https://github.com/ONEARMY/community-platform/tree/master/functions/scripts/start.ts)
 
 ```js
 // change this value if also wanting to export data
@@ -97,7 +97,7 @@ As previously mentioned, all data will be reverted back to original/seed state a
 
 ## HTTP Functions
 
-E.g. A development and testing API has been created at [functions/src/dev/index.ts](../../../../functions/src/dev/index.ts). When running it can be called by making a GET request to:
+E.g. A development and testing API has been created at [functions/src/dev/index.ts](https://github.com/ONEARMY/community-platform/tree/master/functions/src/dev/index.ts). When running it can be called by making a GET request to:
 
 ```
 http://localhost:4002/{projectId}/us-central1/dev
@@ -114,7 +114,7 @@ _E.g. Insomnia Rest Client_
 
 By default emulators allow full read/write access to all resources, however firebase functions still expect an authenticated user in order to access various external APIs before completing operations.
 
-The current workaround for this is authenticating using a custom service-account that has limited (read-only) access to resources on the testing project. This is done automatically during the start script [functions/scripts/start.ts](../../../../functions/scripts/start.ts).
+The current workaround for this is authenticating using a custom service-account that has limited (read-only) access to resources on the testing project. This is done automatically during the start script [functions/scripts/start.ts](https://github.com/ONEARMY/community-platform/tree/master/functions/scripts/start.ts).
 
 Alternatively developers can request access to join the firebase project for full access to the testing project, however it's hoped that this is not required.
 
@@ -169,7 +169,7 @@ If one of the emulators throws a fatal error you might see a vague error message
    stopping all running emulators
 ```
 
-Usually a more informative log can be found in a created log file, e.g. [firestore-debug.log](../../../../functions/firestore-debug.log)
+Usually a more informative log can be found in a created log file, e.g. [firestore-debug.log](https://github.com/ONEARMY/community-platform/tree/master/functions/firestore-debug.log)
 
 ```
 Exception in thread "main" com.google.cloud.datastore.core.exception.DatastoreException: /mnt/c/apps/oneArmy/community-platform/functions/data/emulated/firestore_export/all_namespaces\all_kinds\all_namespaces_all_kinds.export_metadata (No such file or directory)
@@ -189,4 +189,4 @@ In this example it is trying to locate the seed data which does not exist, so to
 yarn workspace functions run emulator:seed
 ```
 
-There might be similar issues logged in [firesbase-debug.log](../../../../functions/firebase-debug.log), however this file might be deleted on exit so will require opening before crash
+There might be similar issues logged in [firesbase-debug.log](https://github.com/ONEARMY/community-platform/tree/master/functions/firebase-debug.log), however this file might be deleted on exit so will require opening before crash

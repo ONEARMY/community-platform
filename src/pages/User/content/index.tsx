@@ -8,10 +8,6 @@ import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { UserStore } from 'src/stores/User/user.store'
 import { MemberProfile } from './MemberProfile'
 import { SpaceProfile } from './SpaceProfile'
-import { AdminContact } from 'src/components/AdminContact/AdminContact'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
-import { Button } from 'oa-components'
-import { Link } from 'react-router-dom'
 
 interface IRouterCustomParams {
   id: string
@@ -74,36 +70,10 @@ export class UserPage extends React.Component<
     return (
       <>
         {user.profileType === 'member' ? (
-          <MemberProfile
-            data-cy="memberProfile"
-            user={user}
-            adminButton={
-              <AuthWrapper roleRequired={'admin'}>
-                <AdminContact user={user} />
-              </AuthWrapper>
-            }
-          />
+          <MemberProfile data-cy="memberProfile" user={user} />
         ) : (
-          <SpaceProfile
-            data-cy="spaceProfile"
-            user={user}
-            adminButton={
-              <AuthWrapper roleRequired={'admin'}>
-                <AdminContact user={user} />
-              </AuthWrapper>
-            }
-          />
+          <SpaceProfile data-cy="spaceProfile" user={user} />
         )}
-        <AuthWrapper roleRequired="admin">
-          <Link to={({ pathname }) => `${pathname}/admin`}>
-            <Button
-              data-cy="adminProfileEditLink"
-              sx={{ position: 'absolute', top: '1em', right: '1em' }}
-            >
-              Edit
-            </Button>
-          </Link>
-        </AuthWrapper>
       </>
     )
   }

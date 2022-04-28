@@ -13,10 +13,10 @@ import styled from '@emotion/styled'
 import { UserStats } from './UserStats'
 import UserContactAndLinks from './UserContactAndLinks'
 import Badge from 'src/components/Badge/Badge'
+import { UserAdmin } from './UserAdmin'
 
 interface IProps {
   user: IUserPP
-  adminButton?: JSX.Element | React.Component
 }
 
 const ProfileWrapper = styled(Box)`
@@ -50,7 +50,7 @@ const MemberPicture = styled('figure')`
   }
 `
 
-export const MemberProfile = ({ user, adminButton }: IProps) => {
+export const MemberProfile = ({ user }: IProps) => {
   const userLinks = user?.links.filter(
     (linkItem) => !['discord', 'forum'].includes(linkItem.label),
   )
@@ -136,7 +136,9 @@ export const MemberProfile = ({ user, adminButton }: IProps) => {
             </Text>
           )}
           <UserContactAndLinks links={userLinks} />
-          <Box mt={3}>{adminButton}</Box>
+          <Box mt={3}>
+            <UserAdmin user={user} />
+          </Box>
         </Flex>
       </ProfileContentWrapper>
     </ProfileWrapper>

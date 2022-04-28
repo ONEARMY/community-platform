@@ -1,6 +1,6 @@
 export * from './db'
 export * from './messages'
-export { MOCK_AUTH_USERS, UserRole } from './mocks/auth-users'
+export { MOCK_AUTH_USERS, UserRole } from './mocks/authUsers'
 
 /*************************************************************************************
  * Shared Constants and Generators

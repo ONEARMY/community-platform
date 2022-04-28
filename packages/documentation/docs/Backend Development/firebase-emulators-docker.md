@@ -61,7 +61,7 @@ You can see the version of data used in the command line output, e.g. data expor
 
 ### User Login
 
-By default the image comes preloaded with user auth accounts as found in [shared\mocks\auth-users.ts](../../../../shared/mocks/auth-users.ts). This means you can login as any of these users, e.g.
+By default the image comes preloaded with user auth accounts as found in [shared\mocks\authUsers.ts](../../../../shared/mocks/authUsers.ts). This means you can login as any of these users, e.g.
 
 ```
 email: 'demo_admin@example.com',

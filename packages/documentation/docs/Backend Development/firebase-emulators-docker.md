@@ -61,7 +61,7 @@ You can see the version of data used in the command line output, e.g. data expor
 
 ### User Login
 
-By default the image comes preloaded with user auth accounts as found in [shared\mocks\auth-users.ts](../../../../shared/mocks/auth-users.ts). This means you can login as any of these users, e.g.
+By default the image comes preloaded with user auth accounts as found in [shared\mocks\auth-users.ts](https://github.com/ONEARMY/community-platform/tree/master/shared/mocks/auth-users.ts). This means you can login as any of these users, e.g.
 
 ```
 email: 'demo_admin@example.com',
@@ -114,7 +114,7 @@ docker exec -it community-platform-emulator cat /app/firestore-debug.log
 
 ## Extending the image
 
-The code used to build the docker image can all be found in the [packages/emulators-docker](../../../../packages/emulators-docker) workspace.
+The code used to build the docker image can all be found in the [packages/emulators-docker](https://github.com/ONEARMY/community-platform/tree/master/packages/emulators-docker) workspace.
 
 ### Updating seed data
 

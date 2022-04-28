@@ -37,7 +37,7 @@ aliases:
         # https://circleci.com/docs/2.0/yarn/
         # when lock file changes, use increasingly general patterns to restore cache (also need to change `save_cache` path)
         # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
-        - v15-yarn-packages-{{ checksum "yarn.lock" }}
+        - v15-yarn-packages-{{ checksum 'yarn.lock' }}
         - v15-yarn-packages-
   - &install_packages
     run:
@@ -59,7 +59,7 @@ aliases:
         # - ~/.yarn/berry/cache
         # local cache location
         - ~/project/.yarn/cache
-      key: v15-yarn-packages-{{ checksum "yarn.lock" }}
+      key: v15-yarn-packages-{{ checksum 'yarn.lock' }}
 
   - &filter_only_production
     filters:
@@ -80,47 +80,47 @@ aliases:
   - &slack_custom_success_message
     custom: |
       {
-        "blocks": [
+        'blocks': [
           {
-            "type": "header",
-            "text": {
-              "type": "plain_text",
-              "text": "Deploy Success :tada:",
-              "emoji": true
+            'type': 'header',
+            'text': {
+              'type': 'plain_text',
+              'text': 'Deploy Success :tada:',
+              'emoji': true
             }
           },
           {
-            "type": "section",
-            "fields": [
+            'type': 'section',
+            'fields': [
               {
-                "type": "mrkdwn",
-                "text": "*Job*: ${CIRCLE_JOB}"
+                'type': 'mrkdwn',
+                'text': '*Job*: ${CIRCLE_JOB}'
               },
               {
-                "type": "mrkdwn",
-                "text": "*When*: $(date +'%m/%d/%Y %T')"
+                'type': 'mrkdwn',
+                'text': '*When*: $(date +'%m/%d/%Y %T')'
               },
               {
-                "type": "mrkdwn",
-                "text": "*Tag*: $CIRCLE_TAG"
+                'type': 'mrkdwn',
+                'text': '*Tag*: $CIRCLE_TAG'
               }
             ],
-            "accessory": {
-              "type": "image",
-              "image_url": "https://yt3.ggpht.com/ytc/AAUvwni_34CcLQsIhNo1d1A2zUK0pNPzipCV9oM1gvkNNw=s900-c-k-c0x00ffffff-no-rj",
-              "alt_text": "CircleCI logo"
+            'accessory': {
+              'type': 'image',
+              'image_url': 'https://yt3.ggpht.com/ytc/AAUvwni_34CcLQsIhNo1d1A2zUK0pNPzipCV9oM1gvkNNw=s900-c-k-c0x00ffffff-no-rj',
+              'alt_text': 'CircleCI logo'
             }
           },
           {
-            "type": "actions",
-            "elements": [
+            'type': 'actions',
+            'elements': [
               {
-                "type": "button",
-                "text": {
-                  "type": "plain_text",
-                  "text": "Build Logs"
+                'type': 'button',
+                'text': {
+                  'type': 'plain_text',
+                  'text': 'Build Logs'
                 },
-                "url": "${CIRCLE_BUILD_URL}"
+                'url': '${CIRCLE_BUILD_URL}'
               }
             ]
           }
@@ -156,7 +156,7 @@ commands:
     parameters:
       token:
         type: string
-        default: ""
+        default: ''
         description: Firebase Deploy Token
       use_application_credentials:
         type: boolean
@@ -164,7 +164,7 @@ commands:
         description: Specify if GOOGLE_APPLICATION_CREDENTIALS_JSON var used instead of firebase token
       alias:
         type: string
-        default: "default"
+        default: 'default'
         description: Firebase project alias to deploy to
     steps:
       - run:
@@ -201,7 +201,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: "."
+          at: '.'
       - run:
           name: Linting commits
           command: |
@@ -247,8 +247,8 @@ jobs:
   build:
     docker: *docker
     environment:
-      GENERATE_SOURCEMAP: "false"
-      SKIP_PREFLIGHT_CHECK: "true"
+      GENERATE_SOURCEMAP: 'false'
+      SKIP_PREFLIGHT_CHECK: 'true'
     # `medium` is the max allowed size for free builds (helps with out-of-memory issues) - https://circleci.com/docs/2.0/configuration-reference/#resourceclass
     resource_class: medium+
     steps:
@@ -283,7 +283,7 @@ jobs:
     steps:
       - setup_repo
       - attach_workspace:
-          at: "."
+          at: '.'
       - run:
           command: yarn workspace oa-components build:sb
   deploy:
@@ -293,14 +293,14 @@ jobs:
       # optional environment variables to set during build process
       DEPLOY_ALIAS:
         type: string
-        default: "default"
+        default: 'default'
       NOTIFY_SLACK:
         type: boolean
         default: true
     steps:
       - setup_repo
       - attach_workspace:
-          at: "."
+          at: '.'
       - inject_instance_configuration
       - firebase_deploy:
           # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
@@ -311,7 +311,7 @@ jobs:
           steps:
             - slack/notify:
                 event: fail
-                mentions: "@Chris Clarke"
+                mentions: '@Chris Clarke'
                 template: basic_fail_1
             - slack/notify:
                 event: pass
@@ -331,17 +331,17 @@ jobs:
       - setup_repo
       # retrieve build folder
       - attach_workspace:
-          at: "."
+          at: '.'
       - inject_instance_configuration
       # install testing browsers are required
       - when:
           condition:
-            equal: ["chrome", << parameters.CI_BROWSER >>]
+            equal: ['chrome', << parameters.CI_BROWSER >>]
           steps:
             - browser-tools/install-chrome
       - when:
           condition:
-            equal: ["firefox", << parameters.CI_BROWSER >>]
+            equal: ['firefox', << parameters.CI_BROWSER >>]
           steps:
             - browser-tools/install-firefox
       # call main testing script
@@ -359,7 +359,7 @@ jobs:
     steps:
       - setup_repo
       - attach_workspace:
-          at: "."
+          at: '.'
       - run:
           command: npx semantic-release
 
@@ -380,7 +380,7 @@ workflows:
       - lint:
           name: Lint code
           requires:
-            - "Lint commits"
+            - 'Lint commits'
           filters:
             branches:
               ignore:
@@ -389,13 +389,13 @@ workflows:
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:
           requires:
-            - "Lint code"
+            - 'Lint code'
           name: Build Application
           context: build-context
       - test_unit:
-          name: "Unit tests"
+          name: 'Unit tests'
           requires:
-            - "Lint code"
+            - 'Lint code'
           filters:
             branches:
               ignore:
@@ -403,7 +403,7 @@ workflows:
       - storybook:
           name: Build Storybook
           requires:
-            - "Lint code"
+            - 'Lint code'
           filters:
             branches:
               ignore:
@@ -418,33 +418,33 @@ workflows:
       - test_e2e:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           requires:
-            - "Build Application"
-            - "Unit tests"
+            - 'Build Application'
+            - 'Unit tests'
             # - 'Cloud Function tests'
-            - "Build Storybook"
+            - 'Build Storybook'
           context:
             - e2e-tests
           matrix:
             parameters:
               CI_NODE: [1, 2, 3, 4]
-              CI_BROWSER: ["chrome"]
+              CI_BROWSER: ['chrome']
           filters:
             branches:
               ignore:
                 - production
       #---------------------- Development Instances Build and Deploy ----------------------
       - deploy:
-          name: "Deploy: dev.onearmy.world"
+          name: 'Deploy: dev.onearmy.world'
           requires:
             - test_e2e
           <<: *filter_only_master
-          DEPLOY_ALIAS: "default"
+          DEPLOY_ALIAS: 'default'
           NOTIFY_SLACK: false
           context:
             - circle-ci-slack-context
             - community-platform-dev
       - deploy:
-          name: "Deploy: dev.community.projectkamp.com"
+          name: 'Deploy: dev.community.projectkamp.com'
           requires:
             - test_e2e
           <<: *filter_only_master
@@ -454,7 +454,7 @@ workflows:
             - circle-ci-slack-context
             - project-kamp-dev
       - deploy:
-          name: "Deploy: fixing-fashion-dev.web.app"
+          name: 'Deploy: fixing-fashion-dev.web.app'
           requires:
             - test_e2e
           <<: *filter_only_master
@@ -465,8 +465,8 @@ workflows:
             - fixing-fashion-dev
       - release:
           requires:
-            - "Deploy: community.preciousplastic.com"
-            - "Deploy: community.projectkamp.com"
+            - 'Deploy: community.preciousplastic.com'
+            - 'Deploy: community.projectkamp.com'
           name: Release new version to GitHub
           context:
             - release-context
@@ -475,9 +475,9 @@ workflows:
           context: build-context
           <<: *filter_only_production
       - deploy:
-          name: "Deploy: fixing-fashion-prod.web.app"
+          name: 'Deploy: fixing-fashion-prod.web.app'
           requires:
-            - "Build Production Release"
+            - 'Build Production Release'
           <<: *filter_only_production
           DEPLOY_ALIAS: fixing-fashion-prod
           NOTIFY_SLACK: false
@@ -485,19 +485,19 @@ workflows:
             - circle-ci-slack-context
             - fixing-fashion-prod
       - deploy:
-          name: "Deploy: community.preciousplastic.com"
+          name: 'Deploy: community.preciousplastic.com'
           requires:
-            - "Build Production Release"
+            - 'Build Production Release'
           <<: *filter_only_production
-          DEPLOY_ALIAS: "production"
+          DEPLOY_ALIAS: 'production'
           NOTIFY_SLACK: true
           context:
             - circle-ci-slack-context
             - community-platform-production
       - deploy:
-          name: "Deploy: community.projectkamp.com"
+          name: 'Deploy: community.projectkamp.com'
           requires:
-            - "Build Production Release"
+            - 'Build Production Release'
           <<: *filter_only_production
           DEPLOY_ALIAS: project-kamp-production
           NOTIFY_SLACK: true

@@ -41,7 +41,7 @@ export const Comment: React.FC<IProps> = ({
     if (textRef.current) {
       setTextHeight(textRef.current.scrollHeight)
     }
-  }, [])
+  }, [text])
 
   const showMore = () => {
     setShowMore(!isShowMore)
@@ -68,13 +68,13 @@ export const Comment: React.FC<IProps> = ({
             wordBreak: 'break-word',
             overflow: 'hidden',
             lineHeight: '1em',
-            maxHeight: isShowMore ? 'max-content' : '10em',
+            maxHeight: isShowMore ? 'max-content' : '128px',
           }}
           ref={textRef}
         >
           {text}
         </Text>
-        {textHeight > 160 && (
+        {textHeight > 129 && (
           <a
             onClick={showMore}
             style={{

@@ -25672,7 +25672,7 @@ fsevents@^1.2.7:
     react-firebase-file-uploader: 2.4.4
     react-flag-icon-css: ^1.0.25
     react-foco: ^1.3.1
-    react-ga: ^2.5.7
+    react-ga4: ^1.4.1
     react-hamburger-menu: ^1.1.1
     react-image-lightbox: ^5.1.0
     react-lazy-load-image-component: ^1.5.1
@@ -29397,13 +29397,10 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-ga@npm:^2.5.7":
-  version: 2.7.0
-  resolution: "react-ga@npm:2.7.0"
-  peerDependencies:
-    prop-types: ^15.6.0
-    react: ^15.6.2 || ^16.0
-  checksum: 15d8571c156edfaa204ff0041db7a901b0eeca3e3b21774e918269b0fe48204bb5b6a3df882caea5e0077aa3a32be39a48e7082e556563338f2a78b402a59463
+"react-ga4@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "react-ga4@npm:1.4.1"
+  checksum: 4c33ecb47dfc26c241a6af8e2b08b29b6c059f40e456e93d1c2b65c995edce18f32d9777295774ec992d968d7c5efdd105eb62398972d85ff2e2b6dad8646a26
   languageName: node
   linkType: hard
 

@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import ReactGA from 'react-ga'
+import ReactGA from 'react-ga4'
 import { GA_TRACKING_ID } from 'src/config/config'
 import type { RouteComponentProps } from 'react-router-dom'
 import { withRouter } from 'react-router-dom'
@@ -9,7 +9,7 @@ class GoogleAnalytics extends Component<RouteComponentProps> {
     super(props)
 
     if (GA_TRACKING_ID) {
-      ReactGA.initialize(GA_TRACKING_ID, { debug: true })
+      ReactGA.initialize([{ trackingId: GA_TRACKING_ID }])
     }
   }
 
@@ -22,7 +22,7 @@ class GoogleAnalytics extends Component<RouteComponentProps> {
 
   sendPageView(location: any) {
     ReactGA.set({ page: location.pathname })
-    ReactGA.pageview(location.pathname)
+    ReactGA.send({ hitType: 'pageview', page: location.pathname })
   }
 
   render() {

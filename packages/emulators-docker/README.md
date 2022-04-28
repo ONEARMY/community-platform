@@ -25,6 +25,7 @@ By providing a docker image we can address all issues above and provide better p
 [ ] - Find means to have functions-specific lock file and use as part of build process
 [ ] - Automate seed data update (cron action to export and make pr)
 [ ] - Add docker-compose image for easier customisation/volume mapping (?)
+[ ] - Possible option to use without functions dist (currently requires functions build during start)
 [ ] - Provide windows-based docker image (for live-reload on windows)
 
 ## Known Issues

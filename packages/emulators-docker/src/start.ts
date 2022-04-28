@@ -107,7 +107,7 @@ async function createNewContainer() {
     await pullRemoteImage(IMAGE_NAME)
   }
   const { ExposedPorts, PortBindings } = rewritePortMapping()
-  return new Promise<Dockerode.Container>(async (resolve, reject) => {
+  return new Promise<Dockerode.Container>((resolve, reject) => {
     docker.createContainer(
       {
         // Image: 'goatlab/firebase-emulator:latest',

@@ -80,47 +80,47 @@ aliases:
   - &slack_custom_success_message
     custom: |
       {
-        'blocks': [
+        "blocks": [
           {
-            'type': 'header',
-            'text': {
-              'type': 'plain_text',
-              'text': 'Deploy Success :tada:',
-              'emoji': true
+            "type": "header",
+            "text": {
+              "type": "plain_text",
+              "text": "Deploy Success :tada:",
+              "emoji": true
             }
           },
           {
-            'type': 'section',
-            'fields': [
+            "type": "section",
+            "fields": [
               {
-                'type': 'mrkdwn',
-                'text': '*Job*: ${CIRCLE_JOB}'
+                "type": "mrkdwn",
+                "text": "*Job*: ${CIRCLE_JOB}"
               },
               {
-                'type': 'mrkdwn',
-                'text': '*When*: $(date +'%m/%d/%Y %T')'
+                "type": "mrkdwn",
+                "text": "*When*: $(date +"%m/%d/%Y %T")"
               },
               {
-                'type': 'mrkdwn',
-                'text': '*Tag*: $CIRCLE_TAG'
+                "type": "mrkdwn",
+                "text": "*Tag*: $CIRCLE_TAG"
               }
             ],
-            'accessory': {
-              'type': 'image',
-              'image_url': 'https://yt3.ggpht.com/ytc/AAUvwni_34CcLQsIhNo1d1A2zUK0pNPzipCV9oM1gvkNNw=s900-c-k-c0x00ffffff-no-rj',
-              'alt_text': 'CircleCI logo'
+            "accessory": {
+              "type": "image",
+              "image_url": "https://yt3.ggpht.com/ytc/AAUvwni_34CcLQsIhNo1d1A2zUK0pNPzipCV9oM1gvkNNw=s900-c-k-c0x00ffffff-no-rj",
+              "alt_text": "CircleCI logo"
             }
           },
           {
-            'type': 'actions',
-            'elements': [
+            "type": "actions",
+            "elements": [
               {
-                'type': 'button',
-                'text': {
-                  'type': 'plain_text',
-                  'text': 'Build Logs'
+                "type": "button",
+                "text": {
+                  "type": "plain_text",
+                  "text": "Build Logs"
                 },
-                'url': '${CIRCLE_BUILD_URL}'
+                "url": "${CIRCLE_BUILD_URL}"
               }
             ]
           }

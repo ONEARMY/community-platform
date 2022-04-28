@@ -453,6 +453,16 @@ workflows:
           context:
             - circle-ci-slack-context
             - project-kamp-dev
+      - deploy:
+          name: 'Deploy: fixing-fashion-dev.web.app'
+          requires:
+            - test_e2e
+          <<: *filter_only_master
+          DEPLOY_ALIAS: fixing-fashion-dev
+          NOTIFY_SLACK: false
+          context:
+            - circle-ci-slack-context
+            - fixing-fashion-dev
       - release:
           requires:
             - 'Deploy: community.preciousplastic.com'
@@ -464,6 +474,16 @@ workflows:
           name: Build Production Release
           context: build-context
           <<: *filter_only_production
+      - deploy:
+          name: 'Deploy: fixing-fashion-prod.web.app'
+          requires:
+            - 'Build Production Release'
+          <<: *filter_only_production
+          DEPLOY_ALIAS: fixing-fashion-prod
+          NOTIFY_SLACK: false
+          context:
+            - circle-ci-slack-context
+            - fixing-fashion-prod
       - deploy:
           name: 'Deploy: community.preciousplastic.com'
           requires:

@@ -292,6 +292,7 @@ export const SpaceProfile = ({ user }: IProps) => {
               color={'black'}
               mb={3}
               style={{ wordBreak: 'break-word' }}
+              data-cy="userDisplayName"
             >
               {user.displayName}
             </Heading>

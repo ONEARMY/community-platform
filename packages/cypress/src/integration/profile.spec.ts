@@ -40,7 +40,10 @@ describe('[Profile]', () => {
     })
     it.only('[Can edit another user profile]', () => {
       cy.visit(`/u/${subscriber.userName}`)
-      cy.get('[data-cy=userName]').should('contain.text', subscriber.userName)
+      cy.get('[data-cy=userDisplayName]').should(
+        'contain.text',
+        subscriber.displayName,
+      )
       cy.get('[data-cy=UserAdminEdit]').click()
       cy.url().should('include', `/u/${subscriber.userName}/admin`)
       const editedName = `EDITED ${subscriber.displayName}`
@@ -53,7 +56,7 @@ describe('[Profile]', () => {
       cy.wait(2000)
       cy.get('[data-cy=save]').should('not.be.disabled')
       cy.visit(`/u/${subscriber.userName}`)
-      cy.get('[data-cy=userName]').should('contain.text', editedName)
+      cy.get('[data-cy=userDisplayName]').should('contain.text', editedName)
     })
   })
 })

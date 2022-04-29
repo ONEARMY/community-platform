@@ -11,12 +11,14 @@ import { useCommonStores } from 'src'
 const NotificationBanner = observer(() => {
   const { userStore } = useCommonStores().stores
   const activeUser = userStore.activeUser
+  if (!activeUser) return null
   const isProfileFilled =
-    activeUser?.about &&
+    activeUser.about &&
     activeUser.displayName &&
     activeUser.coverImages.length !== 0 &&
     activeUser.links.length !== 0
-  return !isProfileFilled && activeUser ? (
+  if (isProfileFilled) return null
+  return (
     <Link to="/settings">
       <Flex
         data-cy="notificationBanner"
@@ -30,7 +32,7 @@ const NotificationBanner = observer(() => {
         </Text>
       </Flex>
     </Link>
-  ) : null
+  )
 })
 
 export default NotificationBanner

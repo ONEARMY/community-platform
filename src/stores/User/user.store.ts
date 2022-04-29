@@ -39,7 +39,7 @@ export class UserStore extends ModuleStore {
   }
 
   @action
-  public updateUser(user?: IUserPPDB) {
+  private updateActiveUser(user?: IUserPPDB) {
     this.user = user
   }
 
@@ -99,7 +99,7 @@ export class UserStore extends ModuleStore {
       // (assumes migration strategy and check)
       const userMeta = await this.getUserProfile(user.uid)
       if (userMeta) {
-        this.updateUser(userMeta)
+        this.updateActiveUser(userMeta)
         logger.debug('userMeta', userMeta)
 
         // Update last active for user
@@ -141,19 +141,25 @@ export class UserStore extends ModuleStore {
   /**
    * Update a user profile
    * @param values Set of values to merge into user profile
-   * @param targetUser Optionally pass an existing user to update with values
+   * @param adminEditableUserId Optionally pass an existing user ID to update with values
    * (default is current logged in user)
    */
   public async updateUserProfile(
     values: Partial<IUserPP>,
-    targetUser?: IUserPP,
+    adminEditableUserId?: string,
   ) {
     this.setUpdateStaus('Start')
     const dbRef = this.db
       .collection<IUserPP>(COLLECTION_NAME)
       .doc((values as IUserDB)._id)
     const id = dbRef.id
-    const user = (targetUser || this.user) as IUserPPDB
+
+    // If admin updating another user assume full user passed as values, otherwise merge updates with current user.
+    // Include a shallow merge of update with existing user, deserialising mobx observables (caused issue previously)
+    const updatedUserProfile: IUserPPDB = adminEditableUserId
+      ? (values as any)
+      : { ...toJS(this.user), ...toJS(values) }
+
     // upload any new cover images
     if (values.coverImages) {
       const processedImages = await this.uploadCollectionBatch(
@@ -161,10 +167,8 @@ export class UserStore extends ModuleStore {
         COLLECTION_NAME,
         id,
       )
-      values = { ...values, coverImages: processedImages }
+      updatedUserProfile.coverImages = processedImages
     }
-    // perform a shallow merge of update with existing user, deserialising mobx observables (caused issue previously)
-    const updatedUserProfile = { ...toJS(user), ...toJS(values) }
 
     // retrieve location data and replace existing with detailed OSM info
     if (
@@ -179,11 +183,11 @@ export class UserStore extends ModuleStore {
     // update on db and update locally (if targeting self as user)
     await this.db
       .collection(COLLECTION_NAME)
-      .doc(user.userName)
+      .doc(updatedUserProfile.userName)
       .set(updatedUserProfile)
 
-    if (!targetUser) {
-      this.updateUser(updatedUserProfile)
+    if (!adminEditableUserId) {
+      this.updateActiveUser(updatedUserProfile)
     }
 
     // Update user map pin
@@ -345,7 +349,7 @@ export class UserStore extends ModuleStore {
           this.sendEmailVerification()
         }
       } else {
-        this.updateUser(undefined)
+        this.updateActiveUser(undefined)
       }
     })
   }

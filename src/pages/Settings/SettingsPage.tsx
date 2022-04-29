@@ -102,7 +102,8 @@ export class UserSettings extends React.Component<IProps, IState> {
     // Submit, show notification update and return any errors to form
     try {
       logger.debug({ profile: vals }, 'UserSettings.saveProfile')
-      await this.injected.userStore.updateUserProfile(vals, this.state.user)
+      const { adminEditableUserId } = this.props
+      await this.injected.userStore.updateUserProfile(vals, adminEditableUserId)
       this.setState({
         notification: { message: 'Profile Saved', icon: 'check', show: true },
       })

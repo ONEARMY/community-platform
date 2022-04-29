@@ -44,7 +44,9 @@ Note - any data populated into the emulator will be deleted after the emulator h
 
 ## Resetting seed data
 
-When the emulator is stopped the image is destroyed, so each time the emulators are restarted a clean set of data will be available
+When the emulator is stopped the image is destroyed, so each time the emulators are restarted a clean set of data will be available.
+
+If using the frontend data changes may still persist due to the browser's own caching mechanisms. In this case the browser indexeddb cache will need to be manually cleared
 
 ## Frontend
 

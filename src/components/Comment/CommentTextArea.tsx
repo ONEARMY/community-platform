@@ -3,6 +3,7 @@ import { Box, Text } from 'theme-ui'
 import { Avatar } from '../Avatar'
 import { useCommonStores } from 'src/index'
 import { Link } from '../Links'
+import { MAX_COMMENT_LENGTH } from './constants'
 
 export interface IProps {
   onSubmit: (string) => Promise<void>
@@ -79,7 +80,7 @@ export const CommentTextArea = ({ onChange, comment, loading }) => {
           <TextAreaStyled
             disabled={loading}
             value={comment}
-            maxLength={400}
+            maxLength={MAX_COMMENT_LENGTH}
             onChange={(event) => {
               onChange(event.target.value)
             }}
@@ -103,7 +104,9 @@ export const CommentTextArea = ({ onChange, comment, loading }) => {
         )}
       </TextBoxStyled>
       {user && (
-        <TextStyled sx={{ fontSize: 2 }}>{comment.length}/400</TextStyled>
+        <TextStyled sx={{ fontSize: 2 }}>
+          {comment.length}/{MAX_COMMENT_LENGTH}
+        </TextStyled>
       )}
     </BoxStyled>
   )

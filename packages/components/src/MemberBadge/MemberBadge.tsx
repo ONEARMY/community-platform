@@ -1,18 +1,14 @@
-import { Image } from 'theme-ui'
 import type { ImageProps } from 'theme-ui'
-import type { ProfileTypeLabel } from 'src/models/user_pp.models'
-import Workspace from 'src/pages/User/workspace/Workspace'
-
-import MemberBadge from 'src/assets/images/badges/pt-member.svg'
+import { Image } from 'theme-ui'
 import { useTheme } from '@emotion/react'
 
-interface IProps extends ImageProps {
+interface Props extends ImageProps {
   size?: number
-  profileType?: ProfileTypeLabel
+  profileType?: string
 }
 
-const Badge = function (props: IProps) {
-  const theme = useTheme()
+export const MemberBadge = (props: Props) => {
+  const theme: any = useTheme()
   const { size, style } = props
   const profileType = props.profileType || 'member'
 
@@ -26,5 +22,3 @@ const Badge = function (props: IProps) {
     />
   )
 }
-
-export default Badge

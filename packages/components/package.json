@@ -24,7 +24,8 @@
     "react-icons": "^4.3.1",
     "react-router": "^6.2.2",
     "storybook": "^6.4.22",
-    "theme-ui": "^0.14.1"
+    "theme-ui": "^0.14.1",
+    "webpack": "^5.72.0"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",

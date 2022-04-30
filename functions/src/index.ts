@@ -24,3 +24,6 @@ exports.adminGetUserEmail = Admin.getUserEmail
 if (process.env.FUNCTIONS_EMULATOR === 'true') {
   exports.emulator = require('./emulator')
 }
+
+exports.renderHowtoArticle = require('./server-side-render').renderHowToArticle;
+exports.renderResearchArticle = require('./server-side-render').renderResearchArticle

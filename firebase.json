@@ -12,6 +12,14 @@
         "destination": "/static/**"
       },
       {
+        "source": "/seo/how-to/*",
+        "function": "renderHowtoArticle"
+      },
+      {
+        "source": "/seo/research/*",
+        "function": "renderResearchArticle"
+      },
+      {
         "source": "**",
         "destination": "/index.html",
         "headers": [

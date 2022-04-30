@@ -44,3 +44,5 @@ functions/firebase-debug.log
 .pnp.*
 
 *.tsbuildinfo
+
+.next

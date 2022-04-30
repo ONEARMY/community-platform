@@ -74,9 +74,24 @@ export class HowtoStore extends ModuleStore {
     )
   }
 
+  public getActiveHowToComments(): IComment[] {
+    return this.activeHowto?.comments
+      ? this.activeHowto?.comments.map((comment: IComment) => {
+          return {
+            ...comment,
+            isUserVerified:
+              !!this.aggregationsStore.aggregations.users_verified?.[
+                comment.creatorName
+              ],
+          }
+        })
+      : []
+  }
+
   @action
   public async setActiveHowtoBySlug(slug: string) {
     // clear any cached data and then load the new howto
+    logger.debug(`setActiveHowtoBySlug:`, { slug })
     this.activeHowto = undefined
     const collection = await this.db
       .collection<IHowto>(COLLECTION_NAME)

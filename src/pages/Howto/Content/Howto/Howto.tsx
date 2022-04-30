@@ -141,6 +141,8 @@ export class Howto extends React.Component<
         ? aggregations.users_votedUsefulHowtos[activeHowto._id] || 0
         : undefined
 
+      const activeHowToComments = this.store.getActiveHowToComments()
+
       return (
         <>
           <HowtoDescription
@@ -163,7 +165,7 @@ export class Howto extends React.Component<
               <Step step={step} key={index} stepindex={index} />
             ))}
           </Box>
-          <HowToComments comments={activeHowto.comments} />
+          <HowToComments comments={activeHowToComments} />
           <MoreBox py={20} mt={20}>
             <Text bold txtcenter sx={{ fontSize: [4, 4, 5], display: 'block' }}>
               You're done.

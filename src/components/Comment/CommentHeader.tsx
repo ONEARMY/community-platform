@@ -3,15 +3,19 @@ import { FlagIconHowTos } from 'oa-components'
 import type { IComment } from 'src/models'
 import { Link } from 'src/components/Links'
 import theme from 'src/themes/styled.theme'
-import { VerifiedUserBadge } from '../VerifiedUserBadge/VerifiedUserBadge'
+import { Image } from 'theme-ui'
+import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
 
-interface IProps extends Omit<IComment, 'text' | '_id' | '_creatorId'> {}
+interface IProps extends Omit<IComment, 'text' | '_id' | '_creatorId'> {
+  isUserVerified?: boolean
+}
 
 export const CommentHeader = ({
   creatorName,
   creatorCountry,
   _created,
   _edited,
+  isUserVerified,
 }: IProps) => {
   return (
     <Flex sx={{ justifyContent: 'space-between', alignItems: 'baseline' }}>
@@ -27,12 +31,9 @@ export const CommentHeader = ({
           >
             {creatorName}
           </Link>
-          <VerifiedUserBadge
-            userId={creatorName}
-            ml={1}
-            height="12px"
-            width="12px"
-          />
+          {isUserVerified ? (
+            <Image src={VerifiedBadgeIcon} ml={1} height="12px" width="12px" />
+          ) : null}
         </span>
       </Box>
       <Flex sx={{ alignItems: 'center' }}>

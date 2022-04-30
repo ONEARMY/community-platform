@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import ReactGA from 'react-ga'
+import ReactGA from 'react-ga4'
 import { Box, Flex } from 'theme-ui'
 import { useCommonStores } from 'src/index'
 import { Button } from 'oa-components'

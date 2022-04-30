@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import ReactGA from 'react-ga'
+import ReactGA from 'react-ga4'
 import { Box } from 'theme-ui'
 import { Button } from 'oa-components'
 import { Comment } from 'src/components/Comment/Comment'

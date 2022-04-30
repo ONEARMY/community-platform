@@ -29,7 +29,7 @@ export async function getServerSideProps(context) {
 
   let article
 
-  queryResult.forEach(doc => {
+  queryResult.forEach((doc) => {
     // doc.data() is never undefined for query doc snapshots
     ;(article = doc.data()),
       console.log(`Results of query:`, doc.id, ' => ', doc.data())
@@ -45,7 +45,7 @@ export async function getServerSideProps(context) {
 
 export default function HowtoArticle({ slug, article }) {
   if (!article) {
-    return (<>Not found</>)
+    return <>Not found</>
   }
 
   const { title, description } = article

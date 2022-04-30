@@ -27,7 +27,7 @@ export async function getServerSideProps(context) {
 
   let article
 
-  queryResult.forEach(doc => {
+  queryResult.forEach((doc) => {
     // doc.data() is never undefined for query doc snapshots
     ;(article = doc.data()),
       console.log(`Results of query:`, doc.id, ' => ', doc.data())
@@ -63,13 +63,11 @@ export default function HowtoArticle({ slug, article }) {
       />
       <div id="HowtoArticle">
         <Button>Back</Button>
-        
+
         <h1>{title}</h1>
         <p>{description}</p>
 
-        <pre>
-          {JSON.stringify(article)}
-        </pre>
+        <pre>{JSON.stringify(article)}</pre>
       </div>
     </>
   )

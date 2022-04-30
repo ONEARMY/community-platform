@@ -60,6 +60,6 @@ export class AuthWrapper extends React.Component<IProps, IState> {
   render() {
     const isAuthorized = this.isUserAuthorized()
     const fallback = this.props.fallback || null
-    return isAuthorized === true ? this.props.children : fallback
+    return <>{isAuthorized === true ? this.props.children : fallback}</>
   }
 }

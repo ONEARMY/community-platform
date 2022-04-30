@@ -9,7 +9,7 @@ import { Box } from 'theme-ui'
 // write `export default FlagIcon` as shown below and import it elsewhere in your app.
 export const FlagIconFact = FlagIconFactory(React, { useCssModules: false })
 
-export const FlagIconEvents = styled(FlagIconFact)`
+export const FlagIconEvents = styled(FlagIconFact as any)`
   border-radius: 5px;
   background-size: cover !important;
   height: 23px;
@@ -23,7 +23,7 @@ export const FlagIconEvents = styled(FlagIconFact)`
   }
 */
 
-export const FlagIconHowTos = styled(FlagIconFact)`
+export const FlagIconHowTos = styled(FlagIconFact as any)`
   border-radius: 3px;
   background-size: cover !important;
   height: 14px;

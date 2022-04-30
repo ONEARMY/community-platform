@@ -14,6 +14,7 @@ export interface IComment {
   creatorName: string
   creatorCountry?: string | null
   text: string
+  userIsVerfied?: boolean
 }
 
 // By default all how-to form input fields come as strings

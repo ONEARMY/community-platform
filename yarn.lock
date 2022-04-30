@@ -25127,6 +25127,7 @@ fsevents@^1.2.7:
     theme-ui: ^0.14.1
     ts-node: ^10.7.0
     typescript: ^4.5.5
+    webpack: ^5.72.0
   languageName: unknown
   linkType: soft
 

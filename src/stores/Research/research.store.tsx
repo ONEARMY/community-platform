@@ -56,6 +56,20 @@ export class ResearchStore extends ModuleStore {
     return filterModerableItems(this.allResearchItems, this.activeUser)
   }
 
+  public getActiveResearchUpdateComments(pointer: number): IComment[] {
+    const comments = this.activeResearchItem?.updates[pointer]?.comments || []
+
+    return comments.map((comment: IComment) => {
+      return {
+        ...comment,
+        isUserVerified:
+          !!this.aggregationsStore.aggregations.users_verified?.[
+            comment.creatorName
+          ],
+      }
+    })
+  }
+
   public async setActiveResearchItem(slug?: string) {
     if (slug) {
       this.researchStats = undefined

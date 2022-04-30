@@ -1,3 +1,4 @@
+import member from 'src/assets/images/themes/project-kamp/badge.svg'
 import type { ThemeWithName } from '../types'
 
 // use enum to specify list of possible colors for typing
@@ -193,6 +194,9 @@ const typography = {
 
 const StyledComponentTheme: ThemeWithName = {
   name: 'Project Kamp',
+  badges: {
+    member,
+  },
   colors,
   buttons,
   breakpoints,

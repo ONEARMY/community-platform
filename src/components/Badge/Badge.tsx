@@ -1,48 +1,30 @@
-import { inject } from 'mobx-react'
-import type { ThemeStore } from 'src/stores/Theme/theme.store'
-import { Component } from 'react'
-import type { ImageProps } from 'theme-ui'
 import { Image } from 'theme-ui'
+import type { ImageProps } from 'theme-ui'
 import type { ProfileTypeLabel } from 'src/models/user_pp.models'
+import Workspace from 'src/pages/User/workspace/Workspace'
 
 import MemberBadge from 'src/assets/images/badges/pt-member.svg'
+import { useTheme } from '@emotion/react'
 
 interface IProps extends ImageProps {
   size?: number
   profileType?: ProfileTypeLabel
-  themeStore?: ThemeStore
 }
-interface IState {
-  badgeProfileSrc?: string | null
+
+const Badge = function (props: IProps) {
+  const theme = useTheme()
+  const { size, style } = props
+  const profileType = props.profileType || 'member'
+
+  return (
+    <Image
+      className="avatar"
+      sx={{ width: size ? size : 40, borderRadius: '50%' }}
+      height={size ? size : 40}
+      src={theme.badges[profileType]}
+      style={style}
+    />
+  )
 }
-@inject('userStore', 'themeStore')
-export class Avatar extends Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props)
-    this.state = {}
-  }
 
-  render() {
-    const { badgeProfileSrc } = this.state
-    const { size, style } = this.props
-
-    let avatarUrl = badgeProfileSrc || MemberBadge
-
-    if (this.props.themeStore) {
-      avatarUrl = this.props.themeStore.currentTheme.badge
-    }
-
-    return (
-      <>
-        <Image
-          className="avatar"
-          sx={{ width: size ? size : 40, borderRadius: '50%' }}
-          height={size ? size : 40}
-          src={avatarUrl}
-          style={style}
-        />
-      </>
-    )
-  }
-}
-export default Avatar
+export default Badge

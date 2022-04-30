@@ -2,12 +2,12 @@ import { action } from '@storybook/addon-actions'
 import { Story, Meta, Preview, Props, Description } from '@storybook/addon-docs'
 import { {{ComponentName}} } from './{{ComponentName}}.tsx'
 
-<Meta title="Base Components/{{ComponentName}}" component={{{ComponentName}}} />
+<Meta title="Base Components/{{ComponentName}}" component={ {{ComponentName}} } />
 
-# ComponentNames
+# {{ComponentName}}
 
-Below you will be able to see how to use and configure a `ComponentName` component:
+Below you will be able to see how to use and configure a `{{ComponentName}}` component:
 
-<Story name="{{ComponentName}}">
+<Story name="default">
   <{{ComponentName}} />
 </Story>

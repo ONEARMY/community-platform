@@ -1,7 +1,7 @@
 import * as React from 'react'
 import type { IEvent, IEventDB } from 'src/models/events.models'
 import { Button } from 'oa-components'
-import { Link } from 'src/components/Links'
+import { Link } from 'src/components/Link/Link'
 import { Flex, Box } from 'theme-ui'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import Heading from 'src/components/Heading'

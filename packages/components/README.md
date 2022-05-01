@@ -1,4 +1,4 @@
-# One Army UI Kit
+# Platform Components
 
 These components provide a collection of elements that can be reused across the platform.
 

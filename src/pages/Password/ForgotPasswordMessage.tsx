@@ -1,9 +1,9 @@
 import React from 'react'
-import Flex from 'src/components/Flex'
+import Flex from 'src/components/Flex/Flex'
 import Heading from 'src/components/Heading'
 import { Button } from 'oa-components'
 import Text from 'src/components/Text'
-import { Link } from 'src/components/Links'
+import { Link } from 'src/components/Link/Link'
 
 class ForgotPasswordMessagePage extends React.Component {
   public render() {

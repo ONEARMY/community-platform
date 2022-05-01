@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import type { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
-import Flex from 'src/components/Flex'
+import Flex from 'src/components/Flex/Flex'
 import { NotificationsModal } from './NotificationsModal'
 import NotificationsIcon from './NotificationsIcon'
 import Foco from 'react-foco'

@@ -5,14 +5,15 @@ import { Button } from 'oa-components'
 import { Comment } from 'src/components/Comment/Comment'
 
 const MAX_COMMENTS = 5
-
-export const CommentList: React.FC<{
+export interface Props {
   comments: any
   handleEdit: (_id: string, comment: string) => Promise<void>
   handleEditRequest: () => Promise<void>
   handleDelete: (_id: string) => Promise<void>
   articleTitle?: string
-}> = ({
+}
+
+export const CommentList: React.FC<Props> = ({
   articleTitle,
   comments,
   handleEditRequest,

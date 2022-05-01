@@ -3,10 +3,10 @@ import Select from 'react-select'
 import type { Props as SelectProps } from 'react-select/lib/Select'
 import type { Styles } from 'react-select/lib/styles'
 import theme from 'src/themes/styled.theme'
-import { Flex } from 'src/components/Flex'
+import { Flex } from 'src/components/Flex/Flex'
 import { ErrorMessage, FieldContainer } from './elements'
 import type { IFieldProps } from './Fields'
-import { DropdownIndicator } from '../DropdownIndicator'
+import { DropdownIndicator } from '../DropdownIndicator/DropdownIndicator'
 
 interface ISelectOption {
   value: string

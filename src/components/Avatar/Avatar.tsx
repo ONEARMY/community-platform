@@ -20,7 +20,7 @@ interface IState {
   badgeProfileSrc?: string | null
 }
 
-@inject('userStore', 'themeStore')
+@inject('themeStore')
 @observer
 export class Avatar extends Component<IProps, IState> {
   constructor(props: IProps) {

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import styled from '@emotion/styled'
-import { Link } from 'src/components/Links'
+import { Link } from 'src/components/Link/Link'
 import { Button } from 'oa-components'
 import type { DisplayProps } from 'styled-system'
 import { display } from 'styled-system'

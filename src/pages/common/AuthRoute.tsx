@@ -4,7 +4,7 @@ import { Redirect, Route } from 'react-router'
 import { observer } from 'mobx-react'
 import type { UserRole } from 'src/models/user.models'
 import Text from 'src/components/Text'
-import Flex from 'src/components/Flex'
+import Flex from 'src/components/Flex/Flex'
 import { AuthWrapper } from 'src/components/AuthWrapper/AuthWrapper'
 
 /*

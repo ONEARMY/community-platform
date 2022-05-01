@@ -2,7 +2,7 @@ import React from 'react'
 import { Box } from 'theme-ui'
 import { Flex } from 'theme-ui'
 import type { INotification } from 'src/models'
-import { Link } from 'src/components/Links'
+import { Link } from 'src/components/Link/Link'
 import { ReactComponent as IconComment } from 'src/assets/icons/icon-comment.svg'
 import { ReactComponent as IconUseful } from 'src/assets/icons/icon-useful.svg'
 

@@ -20,6 +20,7 @@
     "@react-icons/all-files": "^4.1.0",
     "prettier": "^2.5.1",
     "react": "^17.0.2",
+    "react-country-flag": "^3.0.2",
     "react-flag-icon-css": "^1.0.25",
     "react-icons": "^4.3.1",
     "react-router": "^6.2.2",

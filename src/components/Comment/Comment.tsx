@@ -2,10 +2,9 @@ import React, { createRef, useEffect, useState } from 'react'
 import Linkify from 'react-linkify'
 import { Flex, Box } from 'theme-ui'
 import type { IComment } from 'src/models'
-import { CommentHeader } from './CommentHeader'
 import { Text } from 'src/components/Text'
 import { Modal } from '../Modal/Modal'
-import { Button } from 'oa-components'
+import { Button, CommentHeading } from 'oa-components'
 import { AuthWrapper } from '../AuthWrapper/AuthWrapper'
 import FormEditComment from '../FormEditComment/FormEditComment'
 
@@ -60,7 +59,7 @@ export const Comment: React.FC<IProps> = ({
           borderRadius: '5px',
         }}
       >
-        <CommentHeader {...props} />
+        <CommentHeading {...props} />
         <Text
           data-cy="comment-text"
           my={2}

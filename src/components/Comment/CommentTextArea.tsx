@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { Box, Text } from 'theme-ui'
 import { Avatar } from '../Avatar/Avatar'
 import { useCommonStores } from 'src/index'
-import { Link } from '../Links'
+import { Link } from '../Link/Link'
 import { MAX_COMMENT_LENGTH } from './constants'
 
 export interface IProps {

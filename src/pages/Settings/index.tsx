@@ -6,7 +6,7 @@ import type { UserStore } from 'src/stores/User/user.store'
 import type { IUser } from 'src/models/user.models'
 import { UserSettings } from './SettingsPage'
 import { Text } from 'src/components/Text'
-import Flex from 'src/components/Flex'
+import Flex from 'src/components/Flex/Flex'
 
 interface InjectedProps extends IProps {
   userStore: UserStore

@@ -1,9 +1,9 @@
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import Text from 'src/components/Text'
-import Flex from 'src/components/Flex'
+import Flex from 'src/components/Flex/Flex'
 import ModerationStatusText from 'src/components/ModerationStatusText'
-import { Link } from 'src/components/Links'
-import { FlagIconHowTos, Icon } from 'oa-components'
+import { Link } from 'src/components/Link/Link'
+import { FlagIcon, Icon } from 'oa-components'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import type { IHowtoDB } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
@@ -60,7 +60,7 @@ export const HowToCard = (props: IProps) => (
         </Heading>
         <Flex sx={{ alignItems: 'center' }}>
           {props.howto.creatorCountry && (
-            <FlagIconHowTos code={props.howto.creatorCountry} />
+            <FlagIcon code={props.howto.creatorCountry} width={21} />
           )}
           <Text auxiliary my={2} ml={1} sx={{ display: 'flex' }}>
             By {props.howto._createdBy}

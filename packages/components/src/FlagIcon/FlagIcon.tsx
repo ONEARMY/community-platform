@@ -1,37 +1,314 @@
-import * as React from 'react'
-import FlagIconFactory from 'react-flag-icon-css'
-import styled from '@emotion/styled'
+import ReactCountryFlag from 'react-country-flag'
 import { Box } from 'theme-ui'
 
-// Please only use `FlagIconFactory` one time in your application, there is no
-// need to use it multiple times (it would slow down your app). You may place the
-// line below in a `FlagIcon.js` file in your 'components' directory, then
-// write `export default FlagIcon` as shown below and import it elsewhere in your app.
-export const FlagIconFact = FlagIconFactory(React, { useCssModules: false })
+export interface FlagIconProp extends React.ButtonHTMLAttributes<HTMLElement> {
+  code: string
+  width?: number
+}
 
-export const FlagIconEvents = styled(FlagIconFact)`
-  border-radius: 5px;
-  background-size: cover !important;
-  height: 23px;
-  width: 35px !important;
-`
-/*
+/**
+ * Based on the 2 letter country codes listed here
+ * https://en.wikipedia.org/wiki/ISO_3166-2
+ */
+const countryCodes = [
+  'AF',
+  'AX',
+  'AL',
+  'DZ',
+  'AS',
+  'AD',
+  'AO',
+  'AI',
+  'AQ',
+  'AG',
+  'AR',
+  'AM',
+  'AW',
+  'AU',
+  'AT',
+  'AZ',
+  'BS',
+  'BH',
+  'BD',
+  'BB',
+  'BY',
+  'BE',
+  'BZ',
+  'BJ',
+  'BM',
+  'BT',
+  'BO',
+  'BQ',
+  'BA',
+  'BW',
+  'BV',
+  'BR',
+  'IO',
+  'BN',
+  'BG',
+  'BF',
+  'BI',
+  'CV',
+  'KH',
+  'CM',
+  'CA',
+  'KY',
+  'CF',
+  'TD',
+  'CL',
+  'CN',
+  'CX',
+  'CC',
+  'CO',
+  'KM',
+  'CG',
+  'CD',
+  'CK',
+  'CR',
+  'CI',
+  'HR',
+  'CU',
+  'CW',
+  'CY',
+  'CZ',
+  'DK',
+  'DJ',
+  'DM',
+  'DO',
+  'EC',
+  'EG',
+  'SV',
+  'GQ',
+  'ER',
+  'EE',
+  'SZ',
+  'ET',
+  'FK',
+  'FO',
+  'FJ',
+  'FI',
+  'FR',
+  'GF',
+  'PF',
+  'TF',
+  'GA',
+  'GM',
+  'GE',
+  'DE',
+  'GH',
+  'GI',
+  'GR',
+  'GL',
+  'GD',
+  'GP',
+  'GU',
+  'GT',
+  'GG',
+  'GN',
+  'GW',
+  'GY',
+  'HT',
+  'HM',
+  'VA',
+  'HN',
+  'HK',
+  'HU',
+  'IS',
+  'IN',
+  'ID',
+  'IR',
+  'IQ',
+  'IE',
+  'IM',
+  'IL',
+  'IT',
+  'JM',
+  'JP',
+  'JE',
+  'JO',
+  'KZ',
+  'KE',
+  'KI',
+  'KP',
+  'KR',
+  'KW',
+  'KG',
+  'LA',
+  'LV',
+  'LB',
+  'LS',
+  'LR',
+  'LY',
+  'LI',
+  'LT',
+  'LU',
+  'MO',
+  'MG',
+  'MW',
+  'MY',
+  'MV',
+  'ML',
+  'MT',
+  'MH',
+  'MQ',
+  'MR',
+  'MU',
+  'YT',
+  'MX',
+  'FM',
+  'MD',
+  'MC',
+  'MN',
+  'ME',
+  'MS',
+  'MA',
+  'MZ',
+  'MM',
+  'NA',
+  'NR',
+  'NP',
+  'NL',
+  'NC',
+  'NZ',
+  'NI',
+  'NE',
+  'NG',
+  'NU',
+  'NF',
+  'MK',
+  'MP',
+  'NO',
+  'OM',
+  'PK',
+  'PW',
+  'PS',
+  'PA',
+  'PG',
+  'PY',
+  'PE',
+  'PH',
+  'PN',
+  'PL',
+  'PT',
+  'PR',
+  'QA',
+  'RE',
+  'RO',
+  'RU',
+  'RW',
+  'BL',
+  'SH',
+  'KN',
+  'LC',
+  'MF',
+  'PM',
+  'VC',
+  'WS',
+  'SM',
+  'ST',
+  'SA',
+  'SN',
+  'RS',
+  'SC',
+  'SL',
+  'SG',
+  'SX',
+  'SK',
+  'SI',
+  'SB',
+  'SO',
+  'ZA',
+  'GS',
+  'SS',
+  'ES',
+  'LK',
+  'SD',
+  'SR',
+  'SJ',
+  'SE',
+  'CH',
+  'SY',
+  'TW',
+  'TJ',
+  'TZ',
+  'TH',
+  'TL',
+  'TG',
+  'TK',
+  'TO',
+  'TT',
+  'TN',
+  'TR',
+  'TM',
+  'TC',
+  'TV',
+  'UG',
+  'UA',
+  'AE',
+  'GB',
+  'US',
+  'UM',
+  'UY',
+  'UZ',
+  'VU',
+  'VE',
+  'VN',
+  'VG',
+  'VI',
+  'WF',
+  'EH',
+  'YE',
+  'ZM',
+  'ZW',
+]
 
-@media only screen and (max-width: ${(props) => props.theme.breakpoints[1]}) {
-    height: 15px;
-    width: 25px !important;
-  }
-*/
-
-export const FlagIconHowTos = styled(FlagIconFact)`
-  border-radius: 3px;
-  background-size: cover !important;
-  height: 14px;
-  width: 21px !important;
-`
-
-export const FlagIcon = (props: any) => (
-  <Box {...(props as any)}>
-    <FlagIconEvents code={props.code}>{props.children}</FlagIconEvents>
-  </Box>
-)
+export const FlagIcon = (props: FlagIconProp) => {
+  const size = props.width || 20
+  const height = size * 0.75
+  return countryCodes.includes(props.code.toUpperCase()) ? (
+    <Box
+      {...(props as any)}
+      sx={{
+        display: 'inline-block',
+        overflow: 'hidden',
+        lineHeight: 0,
+        width: `${size}px !important`,
+        height: `${height}px`,
+        borderRadius: '3px',
+      }}
+    >
+      <ReactCountryFlag
+        svg
+        countryCode={props.code}
+        cdnSuffix="svg"
+        style={{
+          width: `${size}px`,
+          height: height + 'px',
+        }}
+      >
+        {props.children}
+      </ReactCountryFlag>
+    </Box>
+  ) : (
+    <>
+      <Box
+        style={{
+          borderRadius: '3px',
+          background: '#282727',
+          width: `${size}px`,
+          height: height + 'px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <img
+          src="https://community.preciousplastic.com/static/media/icon-star-active.e35a3de2.svg"
+          alt=""
+          width={`${size * 0.75}px`}
+          height={height * 0.75 + 'px'}
+        />
+      </Box>
+    </>
+  )
+}

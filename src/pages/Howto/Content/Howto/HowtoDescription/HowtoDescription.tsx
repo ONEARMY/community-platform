@@ -5,7 +5,7 @@ import type { IHowtoDB } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import ModerationStatusText from 'src/components/ModerationStatusText'
-import { Link } from 'src/components/Links'
+import { Link } from 'src/components/Link/Link'
 import { Box, Flex, Image } from 'theme-ui'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import StepsIcon from 'src/assets/icons/icon-steps.svg'
@@ -20,7 +20,7 @@ import {
 } from 'src/utils/helpers'
 import theme from 'src/themes/styled.theme'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
-import { FlagIconHowTos } from 'oa-components'
+import { FlagIcon } from 'oa-components'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 import { UsefulStatsButton } from 'src/components/UsefulStatsButton/UsefulStatsButton'
 
@@ -143,9 +143,7 @@ export default class HowtoDescription extends PureComponent<IProps> {
           </Flex>
           <Box mt={3} mb={2}>
             <Flex sx={{ alignItems: 'center' }}>
-              {howto.creatorCountry && (
-                <FlagIconHowTos code={howto.creatorCountry} />
-              )}
+              {howto.creatorCountry && <FlagIcon code={howto.creatorCountry} />}
               <Text inline auxiliary my={2} ml={1}>
                 By{' '}
                 <Link

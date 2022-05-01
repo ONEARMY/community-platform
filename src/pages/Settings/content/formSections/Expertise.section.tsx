@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import Flex from 'src/components/Flex'
+import Flex from 'src/components/Flex/Flex'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import { Box } from 'theme-ui'

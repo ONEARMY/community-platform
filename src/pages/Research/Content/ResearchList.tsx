@@ -3,7 +3,7 @@ import { Box, Flex } from 'theme-ui'
 import { AuthWrapper } from 'src/components/AuthWrapper/AuthWrapper'
 import { Button } from 'oa-components'
 import Heading from 'src/components/Heading'
-import { Link } from 'src/components/Links'
+import { Link } from 'src/components/Link/Link'
 import ResearchListItem from './ResearchListItem'
 import { useResearchStore } from 'src/stores/Research/research.store'
 

@@ -5,7 +5,7 @@ import type { FullMetadata } from '@firebase/storage-types'
 import { Button } from 'oa-components'
 import type { IGlyphs } from 'oa-components'
 import { Flex } from 'theme-ui'
-import Loader from '../Loader'
+import Loader from '../Loader/Loader'
 import { logger } from 'src/logger'
 /*
 This component takes a folder storage path and uploads files to firebase storage

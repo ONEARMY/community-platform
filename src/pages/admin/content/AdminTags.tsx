@@ -5,7 +5,7 @@ import { Button } from 'oa-components'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import { Box } from 'theme-ui'
-import Flex from 'src/components/Flex'
+import Flex from 'src/components/Flex/Flex'
 import type { ITag, TagCategory } from 'src/models/tags.model'
 import { Modal } from 'src/components/Modal/Modal'
 // Import React Table

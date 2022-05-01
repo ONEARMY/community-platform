@@ -1,12 +1,12 @@
-import Flex from 'src/components/Flex'
+import { Button, FlagIcon } from 'oa-components'
+import Flex from 'src/components/Flex/Flex'
 import ModerationStatusText from 'src/components/ModerationStatusText'
-import Text from 'src/components/Text'
-import { Button } from 'oa-components'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
-import { FlagIconEvents } from 'oa-components'
+import Text from 'src/components/Text'
+import { capitalizeFirstLetter, getDay, getMonth } from 'src/utils/helpers'
+import { Box } from 'theme-ui'
 import type { IEvent } from '../../models/events.models'
-import { getMonth, getDay, capitalizeFirstLetter } from 'src/utils/helpers'
-import { LinkTargetBlank } from '../Links/LinkTargetBlank/LinkTargetBlank'
+import { LinkTargetBlank } from '../LinkTargetBlank/LinkTargetBlank'
 import { VerifiedUserBadge } from '../VerifiedUserBadge/VerifiedUserBadge'
 
 interface IProps {
@@ -107,7 +107,9 @@ export const EventCard = (props: IProps) => (
       }}
       mb={[2, 2, 0]}
     >
-      <FlagIconEvents code={props.event.location.countryCode} />
+      <Box sx={{ lineHeight: 0 }}>
+        <FlagIcon code={props.event.location.countryCode} width={28} />
+      </Box>
       <Text auxiliary sx={{ width: '100%' }} ml={[1, 1, 2]}>
         {[
           props.event.location.administrative,

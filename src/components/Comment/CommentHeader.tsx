@@ -1,7 +1,7 @@
 import { Box, Flex, Text } from 'theme-ui'
-import { FlagIconHowTos } from 'oa-components'
+import { FlagIcon } from 'oa-components'
 import type { IComment } from 'src/models'
-import { Link } from 'src/components/Links'
+import { Link } from 'src/components/Link/Link'
 import theme from 'src/themes/styled.theme'
 import { Image } from 'theme-ui'
 import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
@@ -20,7 +20,7 @@ export const CommentHeader = ({
   return (
     <Flex sx={{ justifyContent: 'space-between', alignItems: 'baseline' }}>
       <Box>
-        {creatorCountry && <FlagIconHowTos code={creatorCountry} />}
+        {creatorCountry && <FlagIcon code={creatorCountry} width={21} />}
         <span style={{ marginLeft: creatorCountry ? '5px' : 0 }}>
           <Link
             sx={{

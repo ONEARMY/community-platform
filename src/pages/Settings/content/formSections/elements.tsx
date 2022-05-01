@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
-import Flex from 'src/components/Flex'
+import Flex from 'src/components/Flex/Flex'
 import { Box } from 'theme-ui'
 import { Icon } from 'oa-components'
 import { Field } from 'react-final-form'

@@ -2,9 +2,9 @@ import { format } from 'date-fns'
 import * as React from 'react'
 import { Box, Flex, Image } from 'theme-ui'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
-import { Button, FlagIconHowTos } from 'oa-components'
+import { Button, FlagIcon } from 'oa-components'
 import Heading from 'src/components/Heading'
-import { Link } from 'src/components/Links'
+import { Link } from 'src/components/Link/Link'
 import ModerationStatusText from 'src/components/ModerationStatusText'
 import Text from 'src/components/Text'
 import type { IResearch } from 'src/models/research.models'
@@ -116,7 +116,7 @@ const ResearchDescription: React.FC<IProps> = ({
         <Box mt={3} mb={2}>
           <Flex sx={{ alignItems: 'center' }}>
             {research.creatorCountry && (
-              <FlagIconHowTos code={research.creatorCountry} />
+              <FlagIcon code={research.creatorCountry} />
             )}
             <Text inline auxiliary my={2} ml={1}>
               <Flex sx={{ alignItems: 'center' }}>

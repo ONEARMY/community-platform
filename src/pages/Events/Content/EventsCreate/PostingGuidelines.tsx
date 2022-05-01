@@ -1,6 +1,6 @@
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
-import Flex from 'src/components/Flex'
+import Flex from 'src/components/Flex/Flex'
 
 // TODO : create a component to avoid duplicate with how-to's guidelines
 

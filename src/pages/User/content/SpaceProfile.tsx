@@ -11,7 +11,7 @@ import { Box, Image } from 'theme-ui'
 import Slider from 'react-slick'
 import 'src/assets/css/slick.min.css'
 import styled from '@emotion/styled'
-import Flex from 'src/components/Flex'
+import Flex from 'src/components/Flex/Flex'
 import { Text } from 'src/components/Text'
 
 import { MemberBadge } from 'oa-components'

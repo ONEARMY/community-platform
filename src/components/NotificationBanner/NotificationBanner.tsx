@@ -1,7 +1,7 @@
 import Text from 'src/components/Text'
 import { Flex } from 'theme-ui'
 import theme from 'src/themes/styled.theme'
-import { Link } from 'src/components/Links'
+import { Link } from 'src/components/Link/Link'
 import { observer } from 'mobx-react-lite'
 import { useCommonStores } from 'src'
 

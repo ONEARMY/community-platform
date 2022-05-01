@@ -14,6 +14,7 @@ export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
   medium?: boolean
   large?: boolean
   hasText?: boolean
+  label?: string
 }
 
 const small = (props: IBtnProps) =>
@@ -66,7 +67,10 @@ export const Button = (props: BtnProps) => {
   return (
     <BaseButton {...props}>
       {props.icon && <Icon glyph={props.icon} marginRight="4px" />}
-      <span>{props.children}</span>
+      <span>
+        {props.label}
+        {props.children}
+      </span>
     </BaseButton>
   )
 }

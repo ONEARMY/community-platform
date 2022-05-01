@@ -1,5 +1,5 @@
 import * as React from 'react'
-import Flex from 'src/components/Flex'
+import Flex from 'src/components/Flex/Flex'
 import type { IUserPP } from 'src/models/user_pp.models'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { UserStore } from 'src/stores/User/user.store'

@@ -7,8 +7,8 @@ const webpack = require('webpack')
 module.exports = {
   stories: [
     '../../../src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
-    '../../components/src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
-    '../src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
+    '../../components/src/**/*.story.@(js|jsx|ts|tsx|mdx)',
+    '../src/**/*.story.@(js|jsx|ts|tsx|mdx)',
   ],
   features: {
     emotionAlias: false,

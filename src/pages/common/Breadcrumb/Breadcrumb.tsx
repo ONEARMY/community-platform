@@ -1,4 +1,4 @@
-import { Link } from 'src/components/Links'
+import { Link } from 'src/components/Link/Link'
 import withBreadcrumbs from 'react-router-breadcrumbs-hoc'
 import HowtoBreadcrumb from 'src/pages/common/Breadcrumb/HowtoBreadcrumb'
 const routes = [

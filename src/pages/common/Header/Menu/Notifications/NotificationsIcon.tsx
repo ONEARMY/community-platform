@@ -1,4 +1,4 @@
-import Flex from 'src/components/Flex'
+import Flex from 'src/components/Flex/Flex'
 import { ReactComponent as IconNotifications } from 'src/assets/icons/icon-notification.svg'
 import styled from '@emotion/styled'
 

@@ -1,5 +1,5 @@
 import { Link } from 'theme-ui'
-import Flex from 'src/components/Flex'
+import Flex from 'src/components/Flex/Flex'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import theme from 'src/themes/styled.theme'

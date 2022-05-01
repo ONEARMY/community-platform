@@ -10,8 +10,8 @@ addons.setConfig({
   isToolshown: true,
   theme: create({
     base: 'light',
-    brandTitle: 'One Army UI Kit',
-    brandUrl: 'https://onearmy.world',
+    brandTitle: 'Platform Components',
+    brandUrl: 'https://platform.onearmy.earth',
   }),
   selectedPanel: undefined,
   initialActive: 'sidebar',

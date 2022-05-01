@@ -1,5 +1,5 @@
 import React from 'react'
-import Flex from 'src/components/Flex'
+import Flex from 'src/components/Flex/Flex'
 import Heading from 'src/components/Heading'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'

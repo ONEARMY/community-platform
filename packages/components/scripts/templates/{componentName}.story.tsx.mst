@@ -1,0 +1,14 @@
+import { {{ComponentName}} } from './{{ComponentName}}'
+import type { Props } from './{{ComponentName}}'
+import type { ComponentStory, ComponentMeta } from '@storybook/react'
+
+export default {
+  title: 'Base Components/{{ComponentName}}',
+  component: {{ComponentName}},
+} as ComponentMeta<typeof {{ComponentName}}>
+
+const Base: ComponentStory<typeof {{ComponentName}}> = (args: Props) => (
+  <{{ComponentName}} {...args}/>
+)
+
+export const Default = Base.bind({})

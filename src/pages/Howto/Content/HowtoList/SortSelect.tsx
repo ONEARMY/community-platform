@@ -3,7 +3,7 @@ import { Component } from 'react'
 import Select from 'react-select'
 import type { OptionsType, ValueType } from 'react-select/lib/types'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
-import { DropdownIndicator } from 'src/components/DropdownIndicator'
+import { DropdownIndicator } from 'src/components/DropdownIndicator/DropdownIndicator'
 import { FieldContainer } from 'src/components/Form/elements'
 import { FilterStyles } from 'src/components/Form/Select.field'
 

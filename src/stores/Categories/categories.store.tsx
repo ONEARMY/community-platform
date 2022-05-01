@@ -3,6 +3,7 @@ import type { ICategory } from 'src/models/categories.model'
 import { arrayToJson } from 'src/utils/helpers'
 import { ModuleStore } from '../common/module.store'
 import type { RootStore } from '..'
+import { logger } from 'src/logger'
 
 export class CategoriesStore extends ModuleStore {
   @observable
@@ -12,14 +13,15 @@ export class CategoriesStore extends ModuleStore {
 
   constructor(rootStore: RootStore) {
     super(rootStore, 'categories')
-    this.allDocs$.subscribe((docs: ICategory[]) => {
-      this.setAllCategories(docs)
-    })
+    // call init immediately for tags so they are available to all pages
+    super.init()
     makeObservable(this)
+    this.allDocs$.subscribe(this.setAllCategories)
   }
 
   @action
   public setAllCategories(docs: ICategory[]) {
+    logger.debug(`CategoriesStore.setAllCategories`, { docs })
     this.allCategories = docs.sort((a, b) => (a.label > b.label ? 1 : -1))
     this.allCategoriesByKey = arrayToJson(docs, '_id')
   }

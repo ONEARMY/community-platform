@@ -7,7 +7,7 @@ import { Box } from 'theme-ui'
 import { Input } from 'src/components/Form/elements'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { AuthWrapper } from 'src/components/AuthWrapper/AuthWrapper'
 
 // we include props from react-final-form fields so it can be used as a custom field component
 interface IProps {

@@ -1,6 +1,6 @@
 import { inject, observer } from 'mobx-react'
 import * as React from 'react'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { AuthWrapper } from 'src/components/AuthWrapper/AuthWrapper'
 import { Button } from 'oa-components'
 import Heading from 'src/components/Heading'
 import { Flex, Box } from 'theme-ui'

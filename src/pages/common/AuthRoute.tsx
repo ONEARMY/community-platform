@@ -5,7 +5,7 @@ import { observer } from 'mobx-react'
 import type { UserRole } from 'src/models/user.models'
 import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { AuthWrapper } from 'src/components/AuthWrapper/AuthWrapper'
 
 /*
     This provides a <AuthRoute /> component that can be used in place of <Route /> components

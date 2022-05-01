@@ -38,7 +38,7 @@ module.exports = {
 
     config.plugins.push(
       new webpack.NormalModuleReplacementPlugin(
-        /Auth\/AuthWrapper/,
+        /AuthWrapper\/AuthWrapper/,
         (resource) => {
           resource.request = path.resolve(
             __dirname,

@@ -7,7 +7,7 @@ import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
 import { NavLink } from 'react-router-dom'
 import Flex from 'src/components/Flex'
 import theme from 'src/themes/styled.theme'
-import { AuthWrapper } from '../Auth/AuthWrapper'
+import { AuthWrapper } from '../AuthWrapper/AuthWrapper'
 
 interface IProps {
   username: string

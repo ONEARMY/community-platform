@@ -6,7 +6,7 @@ import { CommentHeader } from './CommentHeader'
 import { Text } from 'src/components/Text'
 import { Modal } from '../Modal/Modal'
 import { Button } from 'oa-components'
-import { AuthWrapper } from '../Auth/AuthWrapper'
+import { AuthWrapper } from '../AuthWrapper/AuthWrapper'
 import FormEditComment from '../FormEditComment/FormEditComment'
 
 export interface IProps extends IComment {

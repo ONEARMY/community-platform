@@ -10,7 +10,7 @@ import { MemberProfile } from './MemberProfile'
 import { SpaceProfile } from './SpaceProfile'
 import { logger } from 'src/logger'
 import { AdminContact } from 'src/components/AdminContact/AdminContact'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { AuthWrapper } from 'src/components/AuthWrapper/AuthWrapper'
 
 interface IRouterCustomParams {
   id: string

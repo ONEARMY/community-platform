@@ -67,7 +67,9 @@ export class AdminCategories extends React.Component<IProps, IState> {
           <Heading small sx={{ flex: 1 }}>
             Categories Admin
           </Heading>
-          <Button onClick={() => this.showEditor(NEW_TAG)}>Add Category</Button>
+          <Button onClick={() => this.showEditor(NEW_CATEGORY)}>
+            Add Category
+          </Button>
         </Flex>
 
         <Box my={3} bg={'white'} p={2}>
@@ -136,6 +138,6 @@ const CATEGORY_TABLE_COLUMNS: { [key: string]: keyof ICategory }[] = [
   },
 ]
 
-const NEW_TAG: Partial<ICategory> = {
+const NEW_CATEGORY: Partial<ICategory> = {
   label: '',
 }

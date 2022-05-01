@@ -16,12 +16,11 @@ export class CategoriesStore extends ModuleStore {
     // call init immediately for tags so they are available to all pages
     super.init()
     makeObservable(this)
-    this.allDocs$.subscribe(this.setAllCategories)
+    this.allDocs$.subscribe((docs) => this.setAllCategories(docs))
   }
 
   @action
   public setAllCategories(docs: ICategory[]) {
-    logger.debug(`CategoriesStore.setAllCategories`, { docs })
     this.allCategories = docs.sort((a, b) => (a.label > b.label ? 1 : -1))
     this.allCategoriesByKey = arrayToJson(docs, '_id')
   }

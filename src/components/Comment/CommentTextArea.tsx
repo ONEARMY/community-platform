@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { Box, Text } from 'theme-ui'
-import { Avatar } from '../Avatar'
+import { Avatar } from '../Avatar/Avatar'
 import { useCommonStores } from 'src/index'
 import { Link } from '../Links'
 import { MAX_COMMENT_LENGTH } from './constants'

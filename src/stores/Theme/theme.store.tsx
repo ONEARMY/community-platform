@@ -20,8 +20,6 @@ export class ThemeStore {
 
   constructor() {
     makeAutoObservable(this)
-
-    console.log(`Current theme:`, this.currentTheme)
   }
 
   @action

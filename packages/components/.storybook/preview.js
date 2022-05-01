@@ -20,14 +20,12 @@ addDecorator(
   ]),
 )
 
-addDecorator((story) => {
-  return (
-    <>
-      <Global styles={GlobalStyle} />
-      <MemoryRouter initialEntries={['/']}>{story()}</MemoryRouter>
-    </>
-  )
-})
+addDecorator((story) => (
+  <>
+    <Global styles={GlobalStyle} />
+    <MemoryRouter initialEntries={['/']}>{story()}</MemoryRouter>
+  </>
+))
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },

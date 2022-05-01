@@ -1,5 +1,7 @@
 export const AuthWrapper = (props: any) => {
-  if (!props.additionalAdmins.includes(props.roleRequired)) {
+  const additionalAdmins = props?.additionalAdmins || []
+
+  if (!additionalAdmins.includes(props.roleRequired)) {
     return null
   }
 

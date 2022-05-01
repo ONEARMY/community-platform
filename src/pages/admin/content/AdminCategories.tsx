@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
-import { CategoriesStore } from 'src/stores/Categories/categories.store'
+import type { CategoriesStore } from 'src/stores/Categories/categories.store'
 import { Button } from 'oa-components'
 import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
@@ -10,7 +10,7 @@ import { Modal } from 'src/components/Modal/Modal'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import { Input } from 'src/components/Form/elements'
-import { ICategory } from 'src/models/categories.model'
+import type { ICategory } from 'src/models/categories.model'
 
 // we include props from react-final-form fields so it can be used as a custom field component
 interface IProps {
@@ -109,20 +109,13 @@ export class AdminCategories extends React.Component<IProps, IState> {
                 </Button>
                 <Button
                   onClick={this.saveEditor}
-                  disabled={
-                    !categoryForm.label ||
-                    updating
-                  }
+                  disabled={!categoryForm.label || updating}
                 >
                   Save
                 </Button>
-                {categoryForm._id &&
-                  <Button
-                    onClick={this.saveEditor}
-                  >
-                    Delete
-                  </Button>
-                }
+                {categoryForm._id && (
+                  <Button onClick={this.saveEditor}>Delete</Button>
+                )}
               </Flex>
             </Box>
           </Modal>

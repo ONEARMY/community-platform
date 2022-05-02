@@ -1,3 +1,4 @@
+import type { IFieldProps } from '../Form/Fields'
 import * as React from 'react'
 import '@uppy/core/dist/style.css'
 import '@uppy/dashboard/dist/style.css'
@@ -18,7 +19,7 @@ interface IProps {
 interface IState {
   open: boolean
 }
-export class FileInput extends React.Component<IProps, IState> {
+class FileInput extends React.Component<IProps, IState> {
   private uppy = new Uppy({
     ...UPPY_CONFIG,
     onBeforeUpload: () => this.uploadTriggered(),
@@ -103,3 +104,7 @@ export class FileInput extends React.Component<IProps, IState> {
     )
   }
 }
+
+export const FileInputField = ({ input, ...rest }: IFieldProps) => (
+  <FileInput {...rest} onFilesChange={(files) => input.onChange(files)} />
+)

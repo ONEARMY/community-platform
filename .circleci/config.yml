@@ -434,9 +434,10 @@ workflows:
                 - production
       #---------------------- Development Instances Build and Deploy ----------------------
       - release:
+          name: Release new version to GitHub
           requires:
             - test_e2e
-          name: Release new version to GitHub
+          <<: *filter_only_master
           context:
             - release-context
       - deploy:

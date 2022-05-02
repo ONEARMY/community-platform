@@ -1,4 +1,4 @@
-import type { IFieldProps } from '../Form/Fields'
+import type { IFieldProps } from '../Form/types'
 import * as React from 'react'
 import '@uppy/core/dist/style.css'
 import '@uppy/dashboard/dist/style.css'

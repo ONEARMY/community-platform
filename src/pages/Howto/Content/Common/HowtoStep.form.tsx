@@ -1,6 +1,6 @@
 import { PureComponent } from 'react'
 import { Field } from 'react-final-form'
-import { TextAreaField, InputField } from 'src/components/Form/Fields'
+import { TextAreaField } from 'src/components/Form/TextArea.field'
 import Heading from 'src/components/Heading'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import Flex from 'src/components/Flex'
@@ -14,6 +14,7 @@ import type { IUploadedFileMeta } from 'src/stores/storage'
 import { required } from 'src/utils/validators'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { HOWTO_MAX_LENGTH, HOWTO_TITLE_MAX_LENGTH } from '../../constants'
+import { InputField } from 'src/components/Form/Input.field'
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;

@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import { Button } from 'oa-components'
 import { Form, Field } from 'react-final-form'
-import { InputField } from 'src/components/Form/Fields'
+import { InputField } from 'src/components/Form/Input.field'
 import { logger } from 'src/logger'
 
 const Label = styled.label`

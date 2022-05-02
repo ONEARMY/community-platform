@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import { HiddenInputField } from 'src/components/Form/Fields'
+import { HiddenInputField } from 'src/components/Form/HiddenInput.field'
 import { Label, HiddenInput } from '../elements'
 import { Image } from 'theme-ui'
 import Text from 'src/components/Text'

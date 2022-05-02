@@ -10,7 +10,7 @@ import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.
 import { Button } from 'oa-components'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import Flex from 'src/components/Flex'
-import { InputField, TextAreaField } from 'src/components/Form/Fields'
+import { TextAreaField } from 'src/components/Form/TextArea.field'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 import Heading from 'src/components/Heading'
 import type { IResearch } from 'src/models/research.models'
@@ -22,6 +22,7 @@ import { required } from 'src/utils/validators'
 import styled from '@emotion/styled'
 import { PostingGuidelines } from './PostingGuidelines'
 import { ResearchSubmitStatus } from './SubmitStatus'
+import { InputField } from 'src/components/Form/Input.field'
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'

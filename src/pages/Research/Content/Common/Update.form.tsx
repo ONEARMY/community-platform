@@ -9,7 +9,7 @@ import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.
 import { Button } from 'oa-components'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import Flex from 'src/components/Flex'
-import { InputField, TextAreaField } from 'src/components/Form/Fields'
+import { TextAreaField } from 'src/components/Form/TextArea.field'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import Heading from 'src/components/Heading'
 import type { IResearch } from 'src/models/research.models'
@@ -19,6 +19,7 @@ import { COMPARISONS } from 'src/utils/comparisons'
 import { required } from 'src/utils/validators'
 import styled from '@emotion/styled'
 import { UpdateSubmitStatus } from './SubmitStatus'
+import { InputField } from 'src/components/Form/Input.field'
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;

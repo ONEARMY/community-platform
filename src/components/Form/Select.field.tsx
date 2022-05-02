@@ -5,7 +5,7 @@ import type { Styles } from 'react-select/lib/styles'
 import theme from 'src/themes/styled.theme'
 import { Flex } from 'src/components/Flex'
 import { ErrorMessage, FieldContainer } from './elements'
-import type { IFieldProps } from './Fields'
+import type { IFieldProps } from './types'
 import { DropdownIndicator } from '../DropdownIndicator'
 
 interface ISelectOption {

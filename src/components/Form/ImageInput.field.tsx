@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { ImageInput } from '../ImageInput/ImageInput'
 import { ErrorMessage, FieldContainer } from './elements'
-import type { IFieldProps } from './Fields'
+import type { IFieldProps } from './types'
 
 // Assign correct typing so that ImageInput props can also be passed down to child
 // Note, partial as default onChange function provided

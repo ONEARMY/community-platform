@@ -3,7 +3,7 @@ import { Modal } from 'src/components/Modal/Modal'
 import { Button } from 'oa-components'
 import Text from 'src/components/Text'
 import { Form, Field } from 'react-final-form'
-import { InputField } from 'src/components/Form/Fields'
+import { InputField } from 'src/components/Form/Input.field'
 import Flex from 'src/components/Flex'
 
 interface IState {

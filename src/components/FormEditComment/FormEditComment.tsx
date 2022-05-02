@@ -1,6 +1,6 @@
 import { Flex } from 'theme-ui'
 import { Text } from 'src/components/Text'
-import { TextAreaField } from '../Form/Fields'
+import { TextAreaField } from '../Form/TextArea.field'
 import { Field, Form } from 'react-final-form'
 import { Button } from 'oa-components'
 import { logger } from 'src/logger'

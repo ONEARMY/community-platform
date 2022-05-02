@@ -2,7 +2,7 @@ import { Component } from 'react'
 import { HiddenInput } from '../elements'
 import { Label, Image, Flex, Box } from 'theme-ui'
 import Text from 'src/components/Text'
-import { HiddenInputField } from 'src/components/Form/Fields'
+import { HiddenInputField } from 'src/components/Form/HiddenInput.field'
 
 interface IProps {
   value: string

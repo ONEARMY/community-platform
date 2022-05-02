@@ -72,71 +72,78 @@ export const MemberProfile = ({ user, adminButton }: IProps) => {
         }}
       />
       <ProfileContentWrapper px={4} py={4}>
-        <Box mr={3} style={{ flexGrow: 1, minWidth: 'initial' }}>
-          <MemberPicture>
-            <Image
-              src={
-                user.coverImages[0]
-                  ? (user.coverImages[0] as IUploadedFileMeta).downloadUrl
-                  : DefaultMemberImage
-              }
-            />
-          </MemberPicture>
-          <UserStats user={user} />
-        </Box>
-        <Flex
-          mt={3}
-          ml={3}
-          sx={{ flexGrow: 2, width: '100%', flexDirection: 'column' }}
-        >
+        <Flex sx={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+          <Box mr={3} style={{ flexGrow: 1, minWidth: 'initial' }}>
+            <MemberPicture>
+              <Image
+                src={
+                  user.coverImages[0]
+                    ? (user.coverImages[0] as IUploadedFileMeta).downloadUrl
+                    : DefaultMemberImage
+                }
+              />
+            </MemberPicture>
+            <UserStats user={user} />
+          </Box>
           <Flex
+            mt={3}
+            ml={3}
             sx={{
-              alignItems: 'center',
-              pt: ['40px', '40px', '0'],
+              flexGrow: 2,
+              width: '100%',
+              flexDirection: 'column',
+              flex: '50%',
             }}
           >
-            {userCountryCode && (
-              <FlagIcon
-                mr={2}
-                code={userCountryCode}
-                style={{ display: 'inline-block' }}
-              />
-            )}
-            <Text
-              large
-              my={2}
+            <Flex
               sx={{
-                color: `${theme.colors.lightgrey} !important`,
-                wordBreak: 'break-word',
+                alignItems: 'center',
+                pt: ['40px', '40px', '0'],
               }}
             >
-              {user.userName}
-            </Text>
+              {userCountryCode && (
+                <FlagIcon
+                  mr={2}
+                  code={userCountryCode}
+                  style={{ display: 'inline-block' }}
+                />
+              )}
+              <Text
+                large
+                my={2}
+                sx={{
+                  color: `${theme.colors.lightgrey} !important`,
+                  wordBreak: 'break-word',
+                }}
+              >
+                {user.userName}
+              </Text>
+            </Flex>
+            <Box sx={{ flexDirection: 'column' }} mb={3}>
+              <Heading
+                medium
+                bold
+                color={'black'}
+                style={{ wordWrap: 'break-word' }}
+              >
+                {user.displayName}
+              </Heading>
+            </Box>
+            {user.about && (
+              <Text
+                preLine
+                paragraph
+                mt="0"
+                mb="20px"
+                color={theme.colors.grey}
+                sx={{ width: ['80%', '100%'] }}
+              >
+                {user.about}
+              </Text>
+            )}
+            <UserContactAndLinks links={userLinks} />
+            <Box mt={3}>{adminButton}</Box>
           </Flex>
-          <Box sx={{ flexDirection: 'column' }} mb={3}>
-            <Heading
-              medium
-              bold
-              color={'black'}
-              style={{ wordWrap: 'break-word' }}
-            >
-              {user.displayName}
-            </Heading>
-          </Box>
-          {user.about && (
-            <Text
-              preLine
-              paragraph
-              mt="0"
-              mb="20px"
-              color={theme.colors.grey}
-              sx={{ width: ['80%', '100%'] }}
-            >
-              {user.about}
-            </Text>
-          )}
-          <UserContactAndLinks links={userLinks} />
-          <Box mt={3}>{adminButton}</Box>
         </Flex>
       </ProfileContentWrapper>
     </ProfileWrapper>

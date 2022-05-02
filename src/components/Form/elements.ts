@@ -6,7 +6,8 @@ interface IFormElement {
   invalid?: boolean
   customChange?: (location) => void
 }
-export const inputStyles = ({ invalid }: IFormElement) => css`
+
+const inputStyles = ({ invalid }: IFormElement) => css`
   border: 1px solid ${invalid ? theme.colors.error : 'transparent'};
   border-radius: 5px;
   font-family: 'Inter', Arial, sans-serif;

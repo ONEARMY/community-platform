@@ -35,6 +35,7 @@ import type { IConvertedFileMeta } from 'src/types'
 
 import { UserStats } from './UserStats'
 import UserContactAndLinks from './UserContactAndLinks'
+import { UserAdmin } from './UserAdmin'
 
 interface IBackgroundImageProps {
   bgImg: string
@@ -42,7 +43,6 @@ interface IBackgroundImageProps {
 
 interface IProps {
   user: IUserPP
-  adminButton?: JSX.Element
 }
 
 const MobileBadge = styled.div`
@@ -221,7 +221,7 @@ function renderMachineBuilderXp(machineBuilderXp: Array<IMAchineBuilderXp>) {
   )
 }
 
-export const SpaceProfile = ({ user, adminButton }: IProps) => {
+export const SpaceProfile = ({ user }: IProps) => {
   let coverImage = [
     <SliderImage
       key="default-image"
@@ -279,6 +279,7 @@ export const SpaceProfile = ({ user, adminButton }: IProps) => {
               large
               my={2}
               sx={{ color: `${theme.colors.lightgrey} !important` }}
+              data-cy="userName"
             >
               {user.userName}
             </Text>
@@ -291,6 +292,7 @@ export const SpaceProfile = ({ user, adminButton }: IProps) => {
               color={'black'}
               mb={3}
               style={{ wordBreak: 'break-word' }}
+              data-cy="userDisplayName"
             >
               {user.displayName}
             </Heading>
@@ -321,7 +323,9 @@ export const SpaceProfile = ({ user, adminButton }: IProps) => {
             renderMachineBuilderXp(user.machineBuilderXp)}
 
           <UserContactAndLinks links={userLinks} />
-          <Box mt={3}>{adminButton}</Box>
+          <Box mt={3}>
+            <UserAdmin user={user} />
+          </Box>
         </Box>
         <Box
           sx={{

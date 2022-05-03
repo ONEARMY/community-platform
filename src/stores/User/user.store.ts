@@ -39,12 +39,12 @@ export class UserStore extends ModuleStore {
   }
 
   @action
-  public updateUser(user?: IUserPPDB) {
+  private updateActiveUser(user?: IUserPPDB) {
     this.user = user
   }
 
   @action
-  public updateUpdateStatus(update: keyof IUserUpdateStatus) {
+  public setUpdateStaus(update: keyof IUserUpdateStatus) {
     this.updateStatus[update] = true
   }
 
@@ -99,7 +99,7 @@ export class UserStore extends ModuleStore {
       // (assumes migration strategy and check)
       const userMeta = await this.getUserProfile(user.uid)
       if (userMeta) {
-        this.updateUser(userMeta)
+        this.updateActiveUser(userMeta)
         logger.debug('userMeta', userMeta)
 
         // Update last active for user
@@ -138,24 +138,39 @@ export class UserStore extends ModuleStore {
     return lookup2[0]
   }
 
-  public async updateUserProfile(values: Partial<IUserPP>) {
-    this.updateUpdateStatus('Start')
+  /**
+   * Update a user profile
+   * @param values Set of values to merge into user profile
+   * @param adminEditableUserId Optionally pass an existing user ID to update with values
+   * (default is current logged in user)
+   */
+  public async updateUserProfile(
+    values: Partial<IUserPP>,
+    adminEditableUserId?: string,
+  ) {
+    this.setUpdateStaus('Start')
     const dbRef = this.db
       .collection<IUserPP>(COLLECTION_NAME)
       .doc((values as IUserDB)._id)
     const id = dbRef.id
-    const user = this.user as IUserPPDB
+
+    // If admin updating another user assume full user passed as values, otherwise merge updates with current user.
+    // Include a shallow merge of update with existing user, deserialising mobx observables (caused issue previously)
+    const updatedUserProfile: IUserPPDB = adminEditableUserId
+      ? (values as any)
+      : { ...toJS(this.user), ...toJS(values) }
+
+    // upload any new cover images
     if (values.coverImages) {
       const processedImages = await this.uploadCollectionBatch(
         values.coverImages as IConvertedFileMeta[],
         COLLECTION_NAME,
         id,
       )
-      values = { ...values, coverImages: processedImages }
+      updatedUserProfile.coverImages = processedImages
     }
-    // sometimes mobx has issues with de-serialising obseverables so try to force it using toJS
-    const updatedUserProfile = { ...toJS(user), ...toJS(values) }
 
+    // retrieve location data and replace existing with detailed OSM info
     if (
       updatedUserProfile.location?.latlng &&
       Object.keys(updatedUserProfile.location).length == 1
@@ -165,29 +180,29 @@ export class UserStore extends ModuleStore {
       )
     }
 
+    // update on db and update locally (if targeting self as user)
     await this.db
       .collection(COLLECTION_NAME)
-      .doc(user.userName)
+      .doc(updatedUserProfile.userName)
       .set(updatedUserProfile)
-    this.updateUser(updatedUserProfile)
+
+    if (!adminEditableUserId) {
+      this.updateActiveUser(updatedUserProfile)
+    }
+
     // Update user map pin
     // TODO - pattern back and forth from user to map not ideal
     // should try to refactor and possibly generate map pins in backend
     if (values.location) {
       await this.mapsStore.setUserPin(updatedUserProfile)
     }
-    this.updateUpdateStatus('Complete')
+    this.setUpdateStaus('Complete')
   }
 
   public async sendEmailVerification() {
     if (this.authUser) {
       return this.authUser.sendEmailVerification()
     }
-  }
-
-  public async updateUserAvatar() {
-    logger.debug('updating user avatar')
-    // *** TODO -
   }
 
   public async getUserEmail() {
@@ -202,7 +217,7 @@ export class UserStore extends ModuleStore {
       user.email as string,
       oldPassword,
     )
-    await user.reauthenticateAndRetrieveDataWithCredential(credentials)
+    await user.reauthenticateWithCredential(credentials)
     return user.updatePassword(newPassword)
   }
 
@@ -212,7 +227,7 @@ export class UserStore extends ModuleStore {
       user.email as string,
       password,
     )
-    await user.reauthenticateAndRetrieveDataWithCredential(credentials)
+    await user.reauthenticateWithCredential(credentials)
     return user.updateEmail(newEmail)
   }
 
@@ -232,7 +247,7 @@ export class UserStore extends ModuleStore {
       reauthPw,
     )
     try {
-      await authUser.reauthenticateAndRetrieveDataWithCredential(credential)
+      await authUser.reauthenticateWithCredential(credential)
       const user = this.user as IUser
       await this.db.collection(COLLECTION_NAME).doc(user.userName).delete()
       await authUser.delete()
@@ -334,7 +349,7 @@ export class UserStore extends ModuleStore {
           this.sendEmailVerification()
         }
       } else {
-        this.updateUser(undefined)
+        this.updateActiveUser(undefined)
       }
     })
   }

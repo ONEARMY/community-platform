@@ -28,7 +28,7 @@ class UserPageRoutes extends React.Component<IProps, any> {
         {/* Allow admins to edit via userSettings as target user */}
         <AuthRoute
           roleRequired="admin"
-          path="/u/:id/admin"
+          path="/u/:id/edit"
           component={(props) => (
             <UserSettings adminEditableUserId={props.match.params.id} />
           )}

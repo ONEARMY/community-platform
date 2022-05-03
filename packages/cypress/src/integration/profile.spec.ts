@@ -29,7 +29,7 @@ describe('[Profile]', () => {
       cy.visit(`/u/${admin.userName}`)
       cy.get('[data-cy=userName]').should('contain.text', admin.userName)
       cy.get('[data-cy=adminEdit]').should('not.exist')
-      cy.visit(`/u/${admin.userName}/admin`)
+      cy.visit(`/u/${admin.userName}/edit`)
       cy.get('[data-cy=auth-route-deny]').should('exist')
     })
   })
@@ -45,7 +45,7 @@ describe('[Profile]', () => {
         subscriber.displayName,
       )
       cy.get('[data-cy=UserAdminEdit]').click()
-      cy.url().should('include', `/u/${subscriber.userName}/admin`)
+      cy.url().should('include', `/u/${subscriber.userName}/edit`)
       const editedName = `EDITED ${subscriber.displayName}`
       cy.get("input[name='displayName']")
         .should('have.value', subscriber.displayName)

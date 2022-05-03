@@ -132,27 +132,28 @@ export const HowToComments = ({ comments }: IProps) => {
           handleEditRequest={handleEditRequest}
           handleDelete={handleDelete}
         />
+
+        <BoxStyled sx={{ width: `${(2 / 3) * 100}%` }}>
+          <CommentTextArea
+            data-cy="comment-text-area"
+            comment={comment}
+            onChange={setComment}
+            loading={loading}
+          />
+          <Button
+            data-cy="comment-submit"
+            disabled={!Boolean(comment.trim()) || loading}
+            variant="primary"
+            onClick={() => onSubmit(comment)}
+            mt={3}
+            sx={{
+              float: 'right',
+            }}
+          >
+            Comment
+          </Button>
+        </BoxStyled>
       </Flex>
-      <BoxStyled sx={{ width: `${(2 / 3) * 100}%` }}>
-        <CommentTextArea
-          data-cy="comment-text-area"
-          comment={comment}
-          onChange={setComment}
-          loading={loading}
-        />
-        <Button
-          data-cy="comment-submit"
-          disabled={!Boolean(comment.trim()) || loading}
-          variant="primary"
-          onClick={() => onSubmit(comment)}
-          mt={3}
-          sx={{
-            float: 'right',
-          }}
-        >
-          Comment
-        </Button>
-      </BoxStyled>
     </Flex>
   )
 }

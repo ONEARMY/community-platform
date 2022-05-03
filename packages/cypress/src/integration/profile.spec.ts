@@ -38,7 +38,7 @@ describe('[Profile]', () => {
     beforeEach(() => {
       cy.login(admin.email, admin.password)
     })
-    it.only('[Can edit another user profile]', () => {
+    it('[Can edit another user profile]', () => {
       cy.visit(`/u/${subscriber.userName}`)
       cy.get('[data-cy=userDisplayName]').should(
         'contain.text',

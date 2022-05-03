@@ -84,7 +84,7 @@ export default class ImageGallery extends PureComponent<IProps, IState> {
         <Flex sx={{ width: '100%' }}>
           <ImageWithPointer
             data-cy="active-image"
-            sx={{ px: 3, py: 5, width: '100%' }}
+            sx={{ width: '100%' }}
             src={this.state.activeImage.downloadUrl}
             onClick={() => {
               this.triggerLightbox()

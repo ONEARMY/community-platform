@@ -12,8 +12,8 @@ import theme from 'src/themes/styled.theme'
 import styled from '@emotion/styled'
 import { UserStats } from './UserStats'
 import UserContactAndLinks from './UserContactAndLinks'
-import Badge from 'src/components/Badge/Badge'
 import { UserAdmin } from './UserAdmin'
+import { MemberBadge } from 'oa-components'
 
 interface IProps {
   user: IUserPP
@@ -60,7 +60,7 @@ export const MemberProfile = ({ user }: IProps) => {
 
   return (
     <ProfileWrapper mt={8} mb={6} data-cy="MemberProfile">
-      <Badge
+      <MemberBadge
         profileType="member"
         size={50}
         style={{

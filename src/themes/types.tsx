@@ -17,6 +17,9 @@ export interface PlatformTheme {
 
 export interface ThemeWithName {
   name: string
+
+  badges: any
+
   /**
    * Following properties are taken from DefaultTheme
    * exported from `styled-components`

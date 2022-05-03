@@ -1,3 +1,9 @@
+import memberBadge from 'src/assets/images/themes/precious-plastic/badge-member.svg'
+import CollectionBadge from 'src/assets/images/badges/pt-collection-point.svg'
+import MachineBadge from 'src/assets/images/badges/pt-machine-shop.svg'
+import WorkspaceBadge from 'src/assets/images/badges/pt-workspace.svg'
+import LocalComBadge from 'src/assets/images/badges/pt-local-community.svg'
+
 import type { ThemeWithName } from '../types'
 
 // use enum to specify list of possible colors for typing
@@ -193,6 +199,13 @@ const typography = {
 
 const StyledComponentTheme: ThemeWithName = {
   name: 'Precious Plastic',
+  badges: {
+    member: memberBadge,
+    workspace: WorkspaceBadge,
+    'community-builder': LocalComBadge,
+    'collection-point': CollectionBadge,
+    'machine-builder': MachineBadge,
+  },
   bold,
   breakpoints,
   buttons,

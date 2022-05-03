@@ -13,12 +13,14 @@ import type { IResearch } from 'src/models/research.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { ResearchComments } from './ResearchComments/ResearchComments'
 import styled from '@emotion/styled'
+import type { IComment } from 'src/models'
 
 interface IProps {
   update: IResearch.UpdateDB
   updateIndex: number
   isEditable: boolean
   slug: string
+  comments: IComment[]
 }
 
 const FlexStepNumber = styled(Flex)`
@@ -30,6 +32,7 @@ const ResearchUpdate: React.FC<IProps> = ({
   updateIndex,
   isEditable,
   slug,
+  comments,
 }) => {
   return (
     <>
@@ -136,7 +139,7 @@ const ResearchUpdate: React.FC<IProps> = ({
           </Box>
           <ResearchComments
             update={update}
-            comments={update.comments}
+            comments={comments}
             updateIndex={updateIndex}
           />
         </Flex>

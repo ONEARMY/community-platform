@@ -106,6 +106,9 @@ const ResearchArticle = observer((props: IProps) => {
                   updateIndex={index}
                   isEditable={isEditable}
                   slug={item.slug}
+                  comments={researchStore.getActiveResearchUpdateComments(
+                    index,
+                  )}
                 />
               )
             })}

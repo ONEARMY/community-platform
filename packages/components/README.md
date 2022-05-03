@@ -36,3 +36,9 @@ src/
     MyNewComponentName.tsx # Component
     MyNewComponentName.stories.mdx # Storybook documentation
 ```
+
+## Recommended Plugins
+
+VSCode
+
+- [MDX](https://marketplace.visualstudio.com/items?itemName=silvenon.mdx) syntax highlighting

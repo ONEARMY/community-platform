@@ -14,7 +14,7 @@ import styled from '@emotion/styled'
 import Flex from 'src/components/Flex'
 import { Text } from 'src/components/Text'
 
-import Badge from 'src/components/Badge/Badge'
+import { MemberBadge } from 'oa-components'
 
 import theme from 'src/themes/styled.theme'
 import { Icon, FlagIcon } from 'oa-components'
@@ -258,7 +258,7 @@ export const SpaceProfile = ({ user }: IProps) => {
         <Box sx={{ width: ['100%', '100%', '80%'] }}>
           <Box sx={{ display: ['block', 'block', 'none'] }}>
             <MobileBadge>
-              <Badge profileType={user.profileType} />
+              <MemberBadge profileType={user.profileType} />
             </MobileBadge>
           </Box>
 
@@ -334,7 +334,7 @@ export const SpaceProfile = ({ user }: IProps) => {
           }}
         >
           <MobileBadge>
-            <Badge size={150} profileType={user.profileType} />
+            <MemberBadge size={150} profileType={user.profileType} />
 
             <UserStats user={user} />
           </MobileBadge>

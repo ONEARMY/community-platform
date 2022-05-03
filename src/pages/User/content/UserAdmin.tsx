@@ -45,7 +45,7 @@ export class UserAdmin extends React.Component<IProps, IState> {
         >
           Email
         </Button>
-        <Link to={({ pathname }) => `${pathname}/admin`}>
+        <Link to={({ pathname }) => `${pathname}/edit`}>
           <Button data-cy="UserAdminEdit" ml={2}>
             Edit
           </Button>

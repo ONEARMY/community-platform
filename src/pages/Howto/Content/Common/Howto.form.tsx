@@ -34,6 +34,8 @@ import { COMPARISONS } from 'src/utils/comparisons'
 import { UnsavedChangesDialog } from 'src/components/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import { HOWTO_MAX_LENGTH, HOWTO_TITLE_MAX_LENGTH } from '../../constants'
+import { CategoriesSelect } from 'src/components/Category/CategoriesSelect'
+import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
 interface IState {
   formSaved: boolean
@@ -256,6 +258,25 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 placeholder={`Make a chair from... (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
                               />
                             </Flex>
+                            <AuthWrapper roleRequired="beta-tester">
+                              <Flex sx={{ flexDirection: 'column' }} mb={3}>
+                                <Label>Category *</Label>
+                                <Field
+                                  name="category"
+                                  render={({ input, ...rest }) => (
+                                    <CategoriesSelect
+                                      {...rest}
+                                      onChange={(category) =>
+                                        input.onChange(category)
+                                      }
+                                      value={input.value}
+                                      styleVariant="selector"
+                                      placeholder="Select one category"
+                                    />
+                                  )}
+                                />
+                              </Flex>
+                            </AuthWrapper>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <Label>Select tags for your How-to*</Label>
                               <Field

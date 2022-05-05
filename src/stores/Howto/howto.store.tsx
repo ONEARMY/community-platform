@@ -42,6 +42,8 @@ export class HowtoStore extends ModuleStore {
   @observable
   public selectedTags: ISelectedTags
   @observable
+  public selectedCategory: string
+  @observable
   public searchValue: string
   @observable
   public referrerSource: string
@@ -57,6 +59,7 @@ export class HowtoStore extends ModuleStore {
       this.sortHowtosByLatest(docs)
     })
     this.selectedTags = {}
+    this.selectedCategory = ''
     this.searchValue = ''
     this.referrerSource = ''
   }
@@ -114,10 +117,8 @@ export class HowtoStore extends ModuleStore {
   }
 
   @computed get filteredHowtos() {
-    const howtos = this.filterCollectionByTags(
-      this.allHowtos,
-      this.selectedTags,
-    )
+    let howtos = this.filterCollectionByTags(this.allHowtos, this.selectedTags)
+    howtos = this.filterHowtosByCategory(howtos, this.selectedCategory)
     // HACK - ARH - 2019/12/11 filter unaccepted howtos, should be done serverside
     let validHowtos = filterModerableItems(howtos, this.activeUser)
 
@@ -144,6 +145,11 @@ export class HowtoStore extends ModuleStore {
 
   public updateSelectedTags(tagKey: ISelectedTags) {
     this.selectedTags = tagKey
+  }
+
+  @action
+  public updateSelectedCategory(category: string) {
+    this.selectedCategory = category
   }
 
   // Moderate Howto
@@ -264,6 +270,17 @@ export class HowtoStore extends ModuleStore {
       console.error(err)
       throw new Error(err)
     }
+  }
+
+  public filterHowtosByCategory = (
+    collection: IHowtoDB[] = [],
+    category: string,
+  ) => {
+    return category
+      ? collection.filter((obj) => {
+          return obj.category?.label === category
+        })
+      : collection
   }
 
   // upload a new or update an existing how-to

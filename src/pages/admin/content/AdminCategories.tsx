@@ -116,7 +116,9 @@ export class AdminCategories extends React.Component<IProps, IState> {
                   Save
                 </Button>
                 {categoryForm._id && (
-                  <Button onClick={this.saveEditor}>Delete</Button>
+                  <Button onClick={this.deleteEditor} disabled={updating}>
+                    Delete
+                  </Button>
                 )}
               </Flex>
             </Box>

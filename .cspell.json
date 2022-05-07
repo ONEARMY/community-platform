@@ -1,0 +1,31 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "ignorePaths": ["node_modules/**", "**/node_modules/**"],
+  "words": [
+    "appengine",
+    "appspot",
+    "circleci",
+    "dockerhub",
+    "dockerode",
+    "ENOENT",
+    "firebase",
+    "firestore",
+    "formattedly",
+    "gcloud",
+    "globby",
+    "gsutil",
+    "howto",
+    "howtos",
+    "indexeddb",
+    "Kamp",
+    "mappins",
+    "mattia",
+    "onearmyworld",
+    "Phonebloks",
+    "runtimeconfig",
+    "taskkill",
+    "truetype",
+    "Varela"
+  ]
+}

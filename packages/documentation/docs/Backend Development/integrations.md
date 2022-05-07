@@ -15,4 +15,4 @@ The full code can be seen at [`functions\src\Integrations\firebase-slack.ts`](ht
 
 ## Configuration
 
-Sometimes specific urls/api_keys need to be stored to use with the service. This is best done using config variables so that they are not exposed publically, such as those described at [`functions/src/config/config.ts`](https://github.com/ONEARMY/community-platform/blob/master/functions/src/config/config.ts).
+Sometimes specific urls/api_keys need to be stored to use with the service. This is best done using config variables so that they are not exposed publicly, such as those described at [`functions/src/config/config.ts`](https://github.com/ONEARMY/community-platform/blob/master/functions/src/config/config.ts).

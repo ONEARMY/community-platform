@@ -18,7 +18,7 @@ The main style variables are described in the [theme file](https://github.com/On
 
 ## Components
 
-You can find all the basic stateless components in `src/components` and some more complex & statefull components in `src/pages/common`.
+You can find all the basic stateless components in `src/components` and some more complex & stateful components in `src/pages/common`.
 
 ### Containers
 
@@ -54,7 +54,7 @@ You can add an icon to the button by using the `icon` props :
 
 Path : `src/components/Icons`
 
-We use [react-icons](https://react-icons.netlify.com/#/) lightweight library to provide icons. We may need a custom implementation in the futur but for now it's enough.
+We use [react-icons](https://react-icons.netlify.com/#/) lightweight library to provide icons. We may need a custom implementation in the future but for now it's enough.
 How to use :
 
 ```js
@@ -71,7 +71,7 @@ import { MdFileDownload } from 'react-icons/md'
 ```
 
 - Add a case for the imported icon to the `Glyph` const.
-  Then you'll be able to use the new icon anywere in the project by importing the `Icons` component and use it as described above.
+  Then you'll be able to use the new icon anywhere in the project by importing the `Icons` component and use it as described above.
 
 ## Inconsistencies
 

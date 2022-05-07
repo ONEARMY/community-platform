@@ -1,14 +1,18 @@
 {
   "version": "0.2",
-  "language": "en",
+  "language": "en-GB",
   "ignorePaths": ["node_modules/**", "**/node_modules/**"],
   "words": [
     "appengine",
     "appspot",
+    "bigquery",
+    "blockquotes",
+    "boxen",
     "circleci",
     "dockerhub",
+    "dockerised",
     "dockerode",
-    "ENOENT",
+    "enoent",
     "firebase",
     "firestore",
     "formattedly",
@@ -18,14 +22,15 @@
     "howto",
     "howtos",
     "indexeddb",
-    "Kamp",
+    "kamp",
     "mappins",
     "mattia",
+    "microservices",
     "onearmyworld",
-    "Phonebloks",
+    "phonebloks",
+    "redownload",
     "runtimeconfig",
-    "taskkill",
-    "truetype",
-    "Varela"
+    "strikethrough",
+    "taskkill"
   ]
 }

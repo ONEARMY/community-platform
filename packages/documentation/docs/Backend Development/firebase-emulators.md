@@ -36,7 +36,7 @@ The emulator should start at http://localhost:4001. Follow the link to see an ov
 
 Clicking on individual tabs will take you to a page similar to the firebase console, from where you can interact with services.
 
-Note - any data populated into the emulator will be deleted after the emulator has closed (restoring to original state). See the section below about persistant and seed data
+Note - any data populated into the emulator will be deleted after the emulator has closed (restoring to original state). See the section below about persistent and seed data
 
 # Seed data
 
@@ -78,7 +78,7 @@ When the emulators close they discard any changes made, so seed data documents t
 
 Whilst this is useful to preserve a clean testing state, sometimes it might be desirable to persist changes (such as adding additional auth users, or specific example docs)
 
-This can be achieved by passing the `--export-on-exit=./path/to/export/folder` flag to the script that starts the functions emulators. This can be run by modifiying the functions start at [functions/scripts/start.ts](https://github.com/ONEARMY/community-platform/tree/master/functions/scripts/start.ts)
+This can be achieved by passing the `--export-on-exit=./path/to/export/folder` flag to the script that starts the functions emulators. This can be run by modifying the functions start at [functions/scripts/start.ts](https://github.com/ONEARMY/community-platform/tree/master/functions/scripts/start.ts)
 
 ```js
 // change this value if also wanting to export data
@@ -134,12 +134,16 @@ Try to identify what is already running, and if required kill the process. Metho
 
 _Windows: List processes on port 4003_
 
+<!--- spell-checker: disable --->
+
 ```c
 netstat -ano | findstr 4003
 
 /* example output */
 TCP    127.0.0.1:4003         0.0.0.0:0              LISTENING       8272
 ```
+
+<!--- spell-checker: enable --->
 
 _Windows: Kill process_
 
@@ -189,4 +193,4 @@ In this example it is trying to locate the seed data which does not exist, so to
 yarn workspace functions run emulator:seed
 ```
 
-There might be similar issues logged in [firesbase-debug.log](https://github.com/ONEARMY/community-platform/tree/master/functions/firebase-debug.log), however this file might be deleted on exit so will require opening before crash
+There might be similar issues logged in [firebase-debug.log](https://github.com/ONEARMY/community-platform/tree/master/functions/firebase-debug.log), however this file might be deleted on exit so will require opening before crash

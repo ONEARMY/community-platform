@@ -23,6 +23,15 @@ module.exports = {
     },
     {
       type: 'category',
+      label: 'Design',
+      items: [
+        'Design/our-design-system',
+        'Design/contributing-feedback',
+        'Design/contributing-designs',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Frontend Development',
       items: ['Frontend Development/overview', 'Frontend Development/modules'],
     },

@@ -287,7 +287,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                   variant={'primary'}
                   disabled={submitting}
                   data-cy="submit"
-                  sx={{ mb: ['40px', '40px', 0], minWidth:'-webkit-max-content' }}
+                  sx={{ mb: ['40px', '40px', 0], minWidth: 'max-content' }}
                 >
                   Publish
                 </Button>

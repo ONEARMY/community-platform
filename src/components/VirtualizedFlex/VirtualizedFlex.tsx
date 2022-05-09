@@ -115,7 +115,8 @@ export class VirtualizedFlex extends React.Component<IProps, IState> {
 
   render() {
     const { dataRows } = this.state
-    return dataRows.length > 0 ? (
+    const { data } = this.props
+    return dataRows.length > 0 && data.length > 0 ? (
       <WindowScroller onResize={() => this.generateRowData(this.props)}>
         {({ onChildScroll, isScrolling, height, width, scrollTop }) => (
           <List

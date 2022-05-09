@@ -3,6 +3,7 @@ import { withRouter, Switch, Route } from 'react-router'
 import { AuthRoute } from '../common/AuthRoute'
 import { AdminTags } from './content/AdminTags'
 import { AdminUsers } from './content/AdminUsers'
+import { AdminCategories } from './content/AdminCategories'
 import { AdminBetaTesters } from './content/AdminBetaTesters'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { Link } from 'src/components/Links'
@@ -15,6 +16,7 @@ import type { AdminStore } from 'src/stores/Admin/admin.store'
 const ADMIN_ROUTES = [
   { name: 'Users', slug: 'users', component: AdminUsers },
   { name: 'Tags', slug: 'tags', component: AdminTags },
+  { name: 'Categories', slug: 'categories', component: AdminCategories },
   {
     name: 'Beta Testers',
     slug: 'beta-testers',

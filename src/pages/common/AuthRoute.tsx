@@ -15,6 +15,8 @@ import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 interface IProps extends RouteProps {
   component: React.ComponentType<any>
   roleRequired?: UserRole
+  /** User ids to be treated as admin, e.g. content creator */
+  additionalAdmins?: string[]
   /** Page to redirect if role not satisfied (default shows message) */
   redirect?: string
 }
@@ -24,9 +26,15 @@ export class AuthRoute extends React.Component<IProps, IState> {
   static defaultProps: Partial<IProps>
 
   render() {
-    const { component: Component, roleRequired, ...rest } = this.props
+    const {
+      component: Component,
+      roleRequired,
+      additionalAdmins,
+      ...rest
+    } = this.props
     return (
       <AuthWrapper
+        additionalAdmins={additionalAdmins}
         roleRequired={roleRequired}
         fallback={
           this.props.redirect ? (

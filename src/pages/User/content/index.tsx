@@ -8,9 +8,6 @@ import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { UserStore } from 'src/stores/User/user.store'
 import { MemberProfile } from './MemberProfile'
 import { SpaceProfile } from './SpaceProfile'
-import { logger } from 'src/logger'
-import { AdminContact } from 'src/components/AdminContact/AdminContact'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
 interface IRouterCustomParams {
   id: string
@@ -60,7 +57,6 @@ export class UserPage extends React.Component<
 
   render() {
     const { user, isLoading } = this.state
-    logger.debug('render', user)
     if (isLoading) {
       return <Loader />
     }
@@ -71,24 +67,14 @@ export class UserPage extends React.Component<
         </Text>
       )
     }
-    return user.profileType === 'member' ? (
-      <MemberProfile
-        user={user}
-        adminButton={
-          <AuthWrapper roleRequired={'admin'}>
-            <AdminContact user={user} />
-          </AuthWrapper>
-        }
-      />
-    ) : (
-      <SpaceProfile
-        user={user}
-        adminButton={
-          <AuthWrapper roleRequired={'admin'}>
-            <AdminContact user={user} />
-          </AuthWrapper>
-        }
-      />
+    return (
+      <>
+        {user.profileType === 'member' ? (
+          <MemberProfile data-cy="memberProfile" user={user} />
+        ) : (
+          <SpaceProfile data-cy="spaceProfile" user={user} />
+        )}
+      </>
     )
   }
 }

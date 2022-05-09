@@ -1,4 +1,55 @@
 {
+  "subscriber": {
+    "_authID": "a0dFrGVJTlQUA9BqH0QmnQM6flX2",
+    "_id": "demo_user",
+    "_created": "2022-01-30T18:51:57.719Z",
+    "_modified": "2022-01-30T18:51:57.719Z",
+    "displayName": "demo_user",
+    "userName": "demo_user",
+    "userRoles": [],
+    "coverImages": [
+      {
+        "contentType": "image/jpeg",
+        "fullPath": "uploads/v3_users/demo_user/images/profile-cover-1.jpg",
+        "name": "profile-cover-1.jpg",
+        "size": 18987,
+        "type": "image/jpeg"
+      }
+    ],
+    "links": [
+      {
+        "label": "website",
+        "url": "http://demo_user.example.com"
+      }
+    ],
+    "about": "Hi! I'm a robot 🤖 Beep boop",
+    "email": "demo_user@example.com",
+    "password": "demo_user"
+  },
+  "beta-tester": {
+    "_authID": "jzusd4xgZTfQBtFBBZzY1UlGAlC3",
+    "_id": "demo_beta_tester",
+    "_created": "2022-01-30T18:51:57.719Z",
+    "_modified": "2022-01-30T18:51:57.719Z",
+    "displayName": "demo_beta_tester",
+    "userName": "demo_beta_tester",
+    "userRoles": ["beta-tester"],
+    "links": [],
+    "email": "demo_beta_tester@example.com",
+    "password": "demo_beta_tester"
+  },
+  "admin": {
+    "_authID": "RaU8WzbqSIQFdj7iHxiz3fWz0cj1",
+    "_id": "demo_admin",
+    "_created": "2022-01-30T18:51:57.719Z",
+    "_modified": "2022-01-30T18:51:57.719Z",
+    "displayName": "demo_admin",
+    "userName": "demo_admin",
+    "userRoles": ["admin"],
+    "links": [],
+    "email": "demo_admin@example.com",
+    "password": "demo_admin"
+  },
   "notification_howto_author": {
     "verified": false,
     "_modified": "2022-01-07T12:07:05.988Z",

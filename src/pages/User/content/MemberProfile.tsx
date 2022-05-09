@@ -12,11 +12,11 @@ import theme from 'src/themes/styled.theme'
 import styled from '@emotion/styled'
 import { UserStats } from './UserStats'
 import UserContactAndLinks from './UserContactAndLinks'
+import { UserAdmin } from './UserAdmin'
 import { MemberBadge } from 'oa-components'
 
 interface IProps {
   user: IUserPP
-  adminButton?: JSX.Element | React.Component
 }
 
 const ProfileWrapper = styled(Box)`
@@ -50,7 +50,7 @@ const MemberPicture = styled('figure')`
   }
 `
 
-export const MemberProfile = ({ user, adminButton }: IProps) => {
+export const MemberProfile = ({ user }: IProps) => {
   const userLinks = user?.links.filter(
     (linkItem) => !['discord', 'forum'].includes(linkItem.label),
   )
@@ -59,7 +59,7 @@ export const MemberProfile = ({ user, adminButton }: IProps) => {
     user.location?.countryCode || user.country?.toLowerCase() || null
 
   return (
-    <ProfileWrapper mt={8} mb={6}>
+    <ProfileWrapper mt={8} mb={6} data-cy="MemberProfile">
       <MemberBadge
         profileType="member"
         size={50}
@@ -109,6 +109,7 @@ export const MemberProfile = ({ user, adminButton }: IProps) => {
                 color: `${theme.colors.lightgrey} !important`,
                 wordBreak: 'break-word',
               }}
+              data-cy="userName"
             >
               {user.userName}
             </Text>
@@ -119,6 +120,7 @@ export const MemberProfile = ({ user, adminButton }: IProps) => {
               bold
               color={'black'}
               style={{ wordWrap: 'break-word' }}
+              data-cy="userDisplayName"
             >
               {user.displayName}
             </Heading>
@@ -136,7 +138,9 @@ export const MemberProfile = ({ user, adminButton }: IProps) => {
             </Text>
           )}
           <UserContactAndLinks links={userLinks} />
-          <Box mt={3}>{adminButton}</Box>
+          <Box mt={3}>
+            <UserAdmin user={user} />
+          </Box>
         </Flex>
       </ProfileContentWrapper>
     </ProfileWrapper>

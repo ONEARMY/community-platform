@@ -24,11 +24,11 @@ For the past 5+ years we’ve worked together with thousands of people from all 
 - A project's success is closely linked to its community, and for a new project starting up, finding and creating their own strong community is often a time-consuming activity that can take lots of resources.
 - While working on a project we often find ourselves having to use a multitude of digital tools that are often incomplete, disconnected, privately owned and not open source.
 
-This platform aims to tackle these problems by creating a strong unified community for the different projects under its umbrella and offering the necessary tools to collaborate and connect in one single place. Free and opensource.
+This platform aims to tackle these problems by creating a strong unified community for the different projects under its umbrella and offering the necessary tools to collaborate and connect in one single place. Free and open-source.
 
 ## ⚡️ &nbsp; What is this platform?
 
-Our community platform helps people to grow communites and make it easier to collaborate on environmental projects in one single place. A place where people can meet, help each other, ask and answer questions, share their innovative ways of fixing problems, discover people around them, connect locally, find events and more. It aims to provide the tools to connect both online and offline. Amongst other features we have How-to, Events and Maps.
+Our community platform helps people to grow communities and make it easier to collaborate on environmental projects in one single place. A place where people can meet, help each other, ask and answer questions, share their innovative ways of fixing problems, discover people around them, connect locally, find events and more. It aims to provide the tools to connect both online and offline. Amongst other features we have How-to, Events and Maps.
 
 ### Have a look on our [website](https://platform.onearmy.earth) to have a clear overview
 

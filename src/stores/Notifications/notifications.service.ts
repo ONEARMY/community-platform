@@ -2,7 +2,7 @@
     Sometimes it may be useful to pass information between unrelated components
     (e.g. side-wide notice, confirmation of event etc.)
     These could be handled via other mobx stores and creating subscription objects
-    (e.g. rxjs behaviorSubjects), however additional, simple methods are given here
+    (e.g. rxjs behaviourSubjects), however additional, simple methods are given here
     to allow for pubsub exchanges wihtout use of mobx. We keep all the methods here
     to make it easier to see what topics are in use
 */

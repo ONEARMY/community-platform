@@ -23,7 +23,7 @@ More often you will be linked to Figma in Design mode. You can zoom in and out b
 
 1. Two-finger scroll on a laptop mousepad.
 2. Tap the `h` key to select the Hand tool, then click and drag around.
-3. Click and drag around while holding the `Spacebar` key.
+3. Click and drag around while holding the `Space bar` key.
 4. Scroll with a mouse while holding down the `Ctrl/Cmd` key to pan vertically, adding the `Shift` key to pan horizontally.
 
 ![Figma design mode layout highlighting page controls in left sidebar and comment bubbles in main area](images/design-contributions-0.png)
@@ -38,7 +38,7 @@ If you’re more comfortable, it’s also okay to leave a comment in the Discord
 
 ![](images/design-contributions-1.png)
 
-The Figma Comment tool can be selected by tapping the `c` key or clicking on the comment bubble icon in the top-left toolbar. From there you can either click where you want to leave a comment on a point, or click and drag to leave a comment over an area. Feel free to tag the designer, **@davehakkens**, and/or **@franknoirot** in the comment, which will send a notification to their Figma accounts.
+The Figma Comment tool can be selected by tapping the `c` key or clicking on the comment bubble icon in the top-left toolbar. From there you can either click where you want to leave a comment on a point, or click and drag to leave a comment over an area. Feel free to tag the designer, `@davehakkens`, and/or `@franknoirot` in the comment, which will send a notification to their Figma accounts.
 
 ![Example of feedback comment, with text "@Dave Hakkens what is the hover state for these?"](images/design-contributions-2.png 'Example of a feedback comment')
 

@@ -11,7 +11,7 @@ If you’re interested in trying it out, here are the steps for contributing des
 
 ## Step 1: claim a task
 
-Discussions around new features often occur within Discord, or during our monthly planning meeting (on the first Monday of every month, join our Discord to get access!). From here you can claim a design task with a chat message in the platform channel tagging **@davehakkens** (cc: **@franknoirot** optional). Consider giving your task a clear title if it’s a new feature, as this will make referring to it easier throughout the process.
+Discussions around new features often occur within Discord, or during our monthly planning meeting (on the first Monday of every month, join our Discord to get access!). From here you can claim a design task with a chat message in the platform channel tagging `@davehakkens` (cc: `@franknoirot` optional). Consider giving your task a clear title if it’s a new feature, as this will make referring to it easier throughout the process.
 
 ## Step 2: jump into Figma
 
@@ -44,7 +44,7 @@ We actually recommend setting up your Design Documentation Card as you begin you
 
 ## Step 5: start a review
 
-You can kick off a review either in Discord or Figma by commenting in and tagging Dave Hakkens (@davehakkens) and/or Frank Johnson (@franknoirot) requesting eyes on your designs. The review will consist of a few rounds of feedback delivered as Figma comments on your designs.
+You can kick off a review either in Discord or Figma by commenting in and tagging Dave Hakkens (`@davehakkens`) and/or Frank Johnson (`@franknoirot`) requesting eyes on your designs. The review will consist of a few rounds of feedback delivered as Figma comments on your designs.
 
 Try to move through a round of feedback over the course of a week if you can. You can always DM or reach out to Dave and Frank if your review ever stalls, and don’t sweat it if you have to move out a review. We’re all working in different parts of the world, and life happens. Just try to communicate with your reviewer as your availability changes.
 

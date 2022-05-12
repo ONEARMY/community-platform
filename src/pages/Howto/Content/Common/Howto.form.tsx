@@ -36,6 +36,8 @@ import { HOWTO_MAX_LENGTH, HOWTO_TITLE_MAX_LENGTH } from '../../constants'
 import { CategoriesSelect } from 'src/components/Category/CategoriesSelect'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
+const MAX_LINK_LENGTH = 1500
+
 interface IState {
   formSaved: boolean
   _toDocsList: boolean
@@ -147,6 +149,10 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
       slug: (title) => stripSpecialCharacters(title).toLowerCase(),
     },
   })
+
+  private validateMedia = (videoUrl: string) => {
+    return true
+  }
 
   public render() {
     const { formValues, parentType } = this.props

@@ -22,6 +22,7 @@ import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import { FlagIconHowTos } from 'oa-components'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 import { UsefulStatsButton } from 'src/components/UsefulStatsButton/UsefulStatsButton'
+import { DownloadExternal } from 'src/components/FileInfo/DownloadExternal'
 
 interface IProps {
   howto: IHowtoDB
@@ -215,12 +216,13 @@ export default class HowtoDescription extends PureComponent<IProps> {
                 return <TagDisplay key={tag} tagKey={tag} />
               })}
           </Flex>
-          {howto.files && howto.files.length > 0 && (
+          {((howto.files && howto.files.length > 0) || howto.fileLink) && (
             <Flex
               className="file-container"
               mt={3}
               sx={{ flexDirection: 'column' }}
             >
+              {howto.fileLink ? <DownloadExternal link={howto.fileLink} /> : ''}
               {howto.files.map((file, index) => (
                 <FileInfo
                   allowDownload

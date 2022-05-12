@@ -38,6 +38,7 @@ import { FaInstagram } from '@react-icons/all-files/fa/FaInstagram'
 import { IconContext } from '@react-icons/all-files'
 import { iconMap } from './svgs'
 import { DownloadIcon } from './DownloadIcon'
+import { ExternalUrl } from './ExternalUrl'
 import type { IGlyphs } from './types'
 
 interface IGlyphProps {
@@ -55,6 +56,7 @@ interface IProps {
 export const glyphs: IGlyphs = {
   download: <MdFileDownload />,
   'download-cloud': <DownloadIcon />,
+  'external-url': <ExternalUrl />,
   upload: <GoCloudUpload />,
   add: <MdAdd />,
   check: <MdCheck />,

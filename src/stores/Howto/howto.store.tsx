@@ -333,6 +333,7 @@ export class HowtoStore extends ModuleStore {
         comments,
         cover_image: processedCover,
         steps: processedSteps,
+        fileLink: values.fileLink ?? '',
         files: processedFiles,
         moderation: values.moderation
           ? values.moderation

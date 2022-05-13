@@ -1,4 +1,5 @@
 export { Button } from './Button/Button'
+export { SiteFooter } from './SiteFooter/SiteFooter'
 export { MemberBadge } from './MemberBadge/MemberBadge'
 export { Icon } from './Icon/Icon'
 export type { availableGlyphs, IGlyphs } from './Icon/types'

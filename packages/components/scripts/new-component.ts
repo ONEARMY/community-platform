@@ -49,7 +49,7 @@ function createComponentFile(filename: string) {
   )
 }
 
-;['{componentName}.tsx.mst', '{componentName}.stories.mdx.mst'].map(
+;['{componentName}.tsx.mst', '{componentName}.stories.tsx.mst'].map(
   createComponentFile,
 )
 

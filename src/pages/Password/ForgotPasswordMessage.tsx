@@ -2,7 +2,7 @@ import React from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import { Button } from 'oa-components'
-import Text from 'src/components/Text'
+import { Text } from 'theme-ui'
 import { Link } from 'src/components/Links'
 
 class ForgotPasswordMessagePage extends React.Component {
@@ -49,7 +49,7 @@ class ForgotPasswordMessagePage extends React.Component {
                   We sent you an email with all the details to reset your
                   password. Psss.. Try a password manager tool :)
                 </Text>
-                <Text small color={'grey'} mt={2}>
+                <Text color={'grey'} mt={2} sx={{ fontSize: 1 }}>
                   Didn't receive the email? <Link to="#">Resend</Link>.
                 </Text>
               </Flex>

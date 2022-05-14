@@ -3,13 +3,12 @@ import OsmGeocoding from 'src/components/OsmGeocoding/OsmGeocoding'
 import { Map, TileLayer, Marker, ZoomControl } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
-import Text from 'src/components/Text'
 import { Button } from 'oa-components'
-import { Box, Flex } from 'theme-ui'
-import theme from 'src/themes/styled.theme'
+import { Box, Flex, Text } from 'theme-ui'
 import customMarkerIcon from 'src/assets/icons/map-marker.png'
 import { logger } from 'src/logger'
 import styled from '@emotion/styled'
+import { useTheme } from '@emotion/react'
 
 const customMarker = L.icon({
   iconUrl: customMarkerIcon,
@@ -62,6 +61,7 @@ interface Props {
 }
 
 function MapWithDraggablePin(props: Props) {
+  const theme = useTheme()
   const [zoom, setZoom] = React.useState(props.zoom || 1)
   const [center, setCenter] = React.useState(
     props.center || [props.position.lat, props.position.lng],
@@ -72,6 +72,8 @@ function MapWithDraggablePin(props: Props) {
     function (evt) {
       logger.debug({ evt }, 'MapWithDraggablePin.clickHandler.fallback')
     }
+
+  console.log(`fontSize`, theme.fontSizes[1])
 
   return (
     <div
@@ -170,7 +172,7 @@ function MapWithDraggablePin(props: Props) {
         </Map>
       </div>
       <Box bg={theme.colors.softblue} mt={2} p={2} sx={{ borderRadius: '3px' }}>
-        <Text small>
+        <Text sx={{ fontSize: 1 }}>
           You can click on the map, or drag the marker to adjust it's position.
         </Text>
       </Box>

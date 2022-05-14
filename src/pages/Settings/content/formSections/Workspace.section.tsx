@@ -2,8 +2,7 @@ import * as React from 'react'
 
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
-import Text from 'src/components/Text'
-import { Box } from 'theme-ui'
+import { Box, Text } from 'theme-ui'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { WORKSPACE_TYPES } from 'src/mocks/user_pp.mock'
 import { CustomRadioField } from './Fields/CustomRadio.field'
@@ -39,7 +38,7 @@ export class WorkspaceSection extends React.Component<any, IState> {
               />
             </Flex>
             <Box sx={{ display: isOpen ? 'block' : 'none' }}>
-              <Text regular my={4}>
+              <Text mt={4} mb={4}>
                 What kind of Precious Plastic workspace do you run?
               </Text>
               <Flex sx={{ flexWrap: ['wrap', 'wrap', 'nowrap'] }}>

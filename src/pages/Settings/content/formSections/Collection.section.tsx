@@ -2,8 +2,7 @@ import * as React from 'react'
 
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
-import Text from 'src/components/Text'
-import { Box } from 'theme-ui'
+import { Box, Text } from 'theme-ui'
 import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
 import { OpeningHoursPicker } from './Fields/OpeningHoursPicker.field'
 
@@ -46,7 +45,7 @@ export class CollectionSection extends React.Component<IProps, IState> {
         </Flex>
         <Box sx={{ display: isOpen ? 'block' : 'none' }}>
           <Flex sx={{ wrap: 'nowrap', alignItems: 'center', width: '100%' }}>
-            <Text regular my={4}>
+            <Text mt={4} mb={4}>
               Opening time *
             </Text>
           </Flex>
@@ -80,7 +79,7 @@ export class CollectionSection extends React.Component<IProps, IState> {
               </>
             )}
           </FieldArray>
-          <Text regular my={4}>
+          <Text mt={4} mb={4}>
             Plastic types accepted *
           </Text>
           <Flex sx={{ flexWrap: ['wrap', 'wrap', 'nowrap'] }} my="10px">

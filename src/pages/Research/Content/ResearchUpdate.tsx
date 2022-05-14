@@ -2,18 +2,18 @@ import { format } from 'date-fns'
 import * as React from 'react'
 import Linkify from 'react-linkify'
 import ReactPlayer from 'react-player'
-import { Box } from 'theme-ui'
+import { Box, Text } from 'theme-ui'
 import { Button } from 'oa-components'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import ImageGallery from 'src/components/ImageGallery'
 import { Link } from 'src/components/Links'
-import Text from 'src/components/Text'
 import type { IResearch } from 'src/models/research.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { ResearchComments } from './ResearchComments/ResearchComments'
 import styled from '@emotion/styled'
 import type { IComment } from 'src/models'
+import { useTheme } from '@emotion/react'
 
 interface IProps {
   update: IResearch.UpdateDB
@@ -34,6 +34,7 @@ const ResearchUpdate: React.FC<IProps> = ({
   slug,
   comments,
 }) => {
+  const theme = useTheme()
   return (
     <>
       <Flex
@@ -89,16 +90,20 @@ const ResearchUpdate: React.FC<IProps> = ({
               >
                 <Flex sx={{ flexDirection: ['column'] }}>
                   <Text
-                    auxiliary
-                    sx={{ textAlign: ['left', 'right', 'right'] }}
+                    sx={{
+                      textAlign: ['left', 'right', 'right'],
+                      ...theme.typography.auxiliary,
+                    }}
                   >
                     {'created ' +
                       format(new Date(update._created), 'DD-MM-YYYY')}
                   </Text>
                   {update._created !== update._modified && (
                     <Text
-                      auxiliary
-                      sx={{ textAlign: ['left', 'right', 'right'] }}
+                      sx={{
+                        textAlign: ['left', 'right', 'right'],
+                        ...theme.typography.auxiliary,
+                      }}
                     >
                       {'edited ' +
                         format(new Date(update._modified), 'DD-MM-YYYY')}
@@ -120,7 +125,11 @@ const ResearchUpdate: React.FC<IProps> = ({
               </Flex>
             </Flex>
             <Box>
-              <Text preLine paragraph mt={3} color={'grey'}>
+              <Text
+                mt={3}
+                color={'grey'}
+                sx={{ whiteSpace: 'pre-line', ...theme.typography.paragraph }}
+              >
                 <Linkify>{update.description}</Linkify>
               </Text>
             </Box>

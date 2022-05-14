@@ -6,7 +6,7 @@ import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import { inject } from 'mobx-react'
 import { toJS } from 'mobx'
 import { HowtoForm } from 'src/pages/Howto/Content/Common/Howto.form'
-import Text from 'src/components/Text'
+import { Text } from 'theme-ui'
 import type { IUser } from 'src/models/user.models'
 import { isAllowToEditContent } from 'src/utils/helpers'
 import { Loader } from 'src/components/Loader'
@@ -83,7 +83,7 @@ class EditHowto extends React.Component<IProps, IState> {
       return isLoading ? (
         <Loader />
       ) : (
-        <Text txtcenter mt="50px" sx={{ width: '100%' }}>
+        <Text mt="50px" sx={{ width: '100%', textAlign: 'center' }}>
           How-to not found
         </Text>
       )

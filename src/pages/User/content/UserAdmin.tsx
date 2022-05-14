@@ -3,9 +3,9 @@ import { inject, observer } from 'mobx-react'
 import { Button } from 'oa-components'
 import type { AdminStore } from 'src/stores/Admin/admin.store'
 import type { IUser } from 'src/models/user.models'
-import Text from '../../../components/Text'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { Link } from 'react-router-dom'
+import { Text } from 'theme-ui'
 
 /*
     Button to request a user's email from the firebase auth database and open in default mail client
@@ -50,6 +50,7 @@ export class UserAdmin extends React.Component<IProps, IState> {
             Edit
           </Button>
         </Link>
+
         {contactDetails && (
           <Text mt={3}>
             <a href={`mailto:${contactDetails}`}>{contactDetails}</a>

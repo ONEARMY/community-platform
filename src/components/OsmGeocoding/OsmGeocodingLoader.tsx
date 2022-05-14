@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import Text from 'src/components/Text'
+import { Text } from 'theme-ui'
 
 const Loader = styled('div')`
   background: ${(prop) => prop.theme.colors.white};
@@ -17,7 +17,7 @@ const Loader = styled('div')`
 export const OsmGeocodingLoader = () => {
   return (
     <Loader>
-      <Text small>Fetching results from Open Street Map</Text>
+      <Text sx={{ fontSize: 1 }}>Fetching results from Open Street Map</Text>
     </Loader>
   )
 }

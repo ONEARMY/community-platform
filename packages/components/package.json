@@ -9,7 +9,7 @@
     "start": "start-storybook -p 6006 --loglevel verbose",
     "format": "prettier --write '**/*.{ts,tsx,mdx,md}'",
     "build:sb": "yarn build && build-storybook",
-    "build": "tsc",
+    "build": "tsc --build --verbose",
     "dev": "tsc --watch",
     "lint:code": "eslint . --ext .js,.jsx,.ts,.tsx src --color",
     "new-component": "ts-node scripts/new-component.ts"

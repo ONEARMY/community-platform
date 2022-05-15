@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Field } from 'react-final-form'
 import Heading from 'src/components/Heading'
-import Flex from 'src/components/Flex'
+import { Flex } from 'theme-ui'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
 import { Button } from 'oa-components'
 import theme from 'src/themes/styled.theme'

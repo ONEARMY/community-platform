@@ -1,5 +1,5 @@
 import * as React from 'react'
-import Flex from 'src/components/Flex'
+import { Card, Flex } from 'theme-ui'
 import type { IUserPP } from 'src/models/user_pp.models'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { UserStore } from 'src/stores/User/user.store'
@@ -161,6 +161,7 @@ export class UserSettings extends React.Component<IProps, IState> {
           errors,
           ...rest
         }) => {
+          const heading = user.profileType ? 'Edit profile' : 'Create profile'
           return (
             <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
               <Prompt
@@ -180,19 +181,11 @@ export class UserSettings extends React.Component<IProps, IState> {
                 <Box sx={{ width: '100%' }}>
                   <form id="userProfileForm" onSubmit={handleSubmit}>
                     <Flex sx={{ flexDirection: 'column' }}>
-                      <Flex
-                        card
-                        mediumRadius
-                        bg={theme.colors.softblue}
-                        px={3}
-                        py={2}
-                      >
-                        {user.profileType ? (
-                          <Heading medium>Edit profile</Heading>
-                        ) : (
-                          <Heading medium>Create profile</Heading>
-                        )}
-                      </Flex>
+                      <Card bg={theme.colors.softblue}>
+                        <Flex px={3} py={2}>
+                          <Heading medium>{heading}</Heading>
+                        </Flex>
+                      </Card>
                       <Box
                         sx={{
                           display: ['block', 'block', 'none'],

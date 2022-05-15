@@ -4,7 +4,7 @@ import type { TagsStore } from 'src/stores/Tags/tags.store'
 import { Button } from 'oa-components'
 import Heading from 'src/components/Heading'
 import { Box, Text } from 'theme-ui'
-import Flex from 'src/components/Flex'
+import { Flex } from 'theme-ui'
 import type { ITag, TagCategory } from 'src/models/tags.model'
 import { Modal } from 'src/components/Modal/Modal'
 // Import React Table

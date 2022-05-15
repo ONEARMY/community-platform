@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import Flex from 'src/components/Flex'
+import { Flex } from 'theme-ui'
 import Heading from 'src/components/Heading'
 import type { UserStore } from 'src/stores/User/user.store'
 import { Box } from 'theme-ui'

@@ -4,7 +4,7 @@ import HowToCountIcon from 'src/assets/icons/icon-how-to.svg'
 import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import { Icon } from 'oa-components'
-import { Link } from 'src/components/Links'
+import { Link } from 'theme-ui'
 import type { IUserPP } from 'src/models'
 import theme from 'src/themes/styled.theme'
 import styled from '@emotion/styled'
@@ -55,7 +55,7 @@ export const UserStats = ({ user }: IProps) => {
         </UserStatsBoxItem>
       )}
       {user.location?.latlng && (
-        <Link color={'black'} to={'/map/#' + user.userName}>
+        <Link color={'black'} href={'/map/#' + user.userName}>
           <UserStatsBoxItem>
             <Icon glyph="location-on" size="22"></Icon>
             <Box ml="5px">{user.location?.country || 'View on Map'}</Box>

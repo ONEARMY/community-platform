@@ -4,7 +4,7 @@ import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { Button } from 'oa-components'
 import Heading from 'src/components/Heading'
 import { Flex, Box } from 'theme-ui'
-import { Link } from 'src/components/Links'
+import { Link } from 'theme-ui'
 import { Loader } from 'src/components/Loader'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import SearchInput from 'src/components/SearchInput'
@@ -224,8 +224,8 @@ export class HowtoList extends React.Component<any, IState> {
           </Flex>
           <Flex sx={{ justifyContent: ['flex-end', 'flex-end', 'auto'] }}>
             <Link
-              sx={{ width: '100%' }}
-              to={this.props.userStore!.user ? '/how-to/create' : 'sign-up'}
+              sx={{ width: '100%', display: 'block' }}
+              href={this.props.userStore!.user ? '/how-to/create' : 'sign-up'}
               mb={[3, 3, 0]}
             >
               <Button
@@ -277,7 +277,7 @@ export class HowtoList extends React.Component<any, IState> {
             />
           </Flex>
           <Flex sx={{ justifyContent: 'center' }} mt={20}>
-            <Link to={'#'} style={{ visibility: 'hidden' }}>
+            <Link href={'#'} style={{ visibility: 'hidden' }}>
               <Button variant={'secondary'} data-cy="more-how-tos">
                 More how-tos
               </Button>
@@ -291,7 +291,7 @@ export class HowtoList extends React.Component<any, IState> {
                 Share your how-to!
               </Heading>
               <AuthWrapper>
-                <Link to={'/how-to/create'}>
+                <Link href={'/how-to/create'}>
                   <Button variant="primary" mt={30}>
                     Create a how-to
                   </Button>

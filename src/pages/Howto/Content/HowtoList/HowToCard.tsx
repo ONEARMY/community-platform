@@ -1,7 +1,7 @@
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { Text, Card, Flex } from 'theme-ui'
 import ModerationStatusText from 'src/components/ModerationStatusText/ModerationStatustext'
-import { Link } from 'src/components/Links'
+import { Link } from 'theme-ui'
 import { FlagIconHowTos, Icon } from 'oa-components'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import type { IHowtoDB } from 'src/models/howto.models'
@@ -29,8 +29,8 @@ export const HowToCard = (props: IProps) => {
           />
         )}
         <Link
-          to={`/how-to/${encodeURIComponent(howto.slug)}`}
           key={howto._id}
+          href={`/how-to/${encodeURIComponent(howto.slug)}`}
           sx={{ width: '100%' }}
         >
           <Flex

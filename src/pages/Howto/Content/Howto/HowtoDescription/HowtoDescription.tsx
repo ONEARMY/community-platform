@@ -4,7 +4,7 @@ import { format } from 'date-fns'
 import type { IHowtoDB } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
 import { ModerationStatusText } from 'src/components/ModerationStatusText/ModerationStatustext'
-import { Link } from 'src/components/Links'
+import { Link } from 'theme-ui'
 import { Text, Box, Flex, Image } from 'theme-ui'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import StepsIcon from 'src/assets/icons/icon-steps.svg'
@@ -85,7 +85,7 @@ export default class HowtoDescription extends PureComponent<IProps> {
           }}
         >
           <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
-            <Link to={'/how-to/'}>
+            <Link href={'/how-to/'}>
               <Button
                 variant="subtle"
                 sx={{ fontSize: '14px' }}
@@ -134,7 +134,7 @@ export default class HowtoDescription extends PureComponent<IProps> {
             )}
             {/* Check if logged in user is the creator of the how-to OR a super-admin */}
             {loggedInUser && isAllowToEditContent(howto, loggedInUser) && (
-              <Link to={'/how-to/' + this.props.howto.slug + '/edit'}>
+              <Link href={'/how-to/' + this.props.howto.slug + '/edit'}>
                 <Button variant={'primary'} data-cy={'edit'}>
                   Edit
                 </Button>
@@ -157,7 +157,7 @@ export default class HowtoDescription extends PureComponent<IProps> {
                     textDecoration: 'underline',
                     color: 'inherit',
                   }}
-                  to={'/u/' + howto._createdBy}
+                  href={'/u/' + howto._createdBy}
                 >
                   {howto._createdBy}
                 </Link>{' '}

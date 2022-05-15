@@ -1,6 +1,6 @@
 import { Flex, Text } from 'theme-ui'
 import theme from 'src/themes/styled.theme'
-import { Link } from 'src/components/Links'
+import { Link } from 'theme-ui'
 import { observer } from 'mobx-react-lite'
 import { useCommonStores } from 'src'
 
@@ -18,7 +18,7 @@ const NotificationBanner = observer(() => {
     activeUser.links.length !== 0
   if (isProfileFilled) return null
   return (
-    <Link to="/settings">
+    <Link href="/settings">
       <Flex
         data-cy="notificationBanner"
         bg={theme.colors.red2}

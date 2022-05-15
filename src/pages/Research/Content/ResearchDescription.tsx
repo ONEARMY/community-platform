@@ -4,8 +4,8 @@ import { Box, Flex, Image, Text } from 'theme-ui'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import { Button, FlagIconHowTos } from 'oa-components'
 import Heading from 'src/components/Heading'
-import { Link } from 'src/components/Links'
 import ModerationStatusText from 'src/components/ModerationStatusText/ModerationStatustext'
+import { Link } from 'theme-ui'
 import type { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
 import type { IUser } from 'src/models/user.models'
@@ -56,7 +56,7 @@ const ResearchDescription: React.FC<IProps> = ({
     >
       <Flex px={4} py={4} sx={{ flexDirection: 'column', width: '100%' }}>
         <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
-          <Link to={'/research'}>
+          <Link href={'/research'}>
             <Button
               variant="subtle"
               sx={{ fontSize: '14px' }}
@@ -105,7 +105,7 @@ const ResearchDescription: React.FC<IProps> = ({
           )}
           {/* Show edit button for the creator of the research OR a super-admin */}
           {isEditable && (
-            <Link to={'/research/' + research.slug + '/edit'}>
+            <Link href={'/research/' + research.slug + '/edit'}>
               <Button variant={'primary'} data-cy={'edit'}>
                 Edit
               </Button>
@@ -134,7 +134,7 @@ const ResearchDescription: React.FC<IProps> = ({
                     textDecoration: 'underline',
                     color: 'inherit',
                   }}
-                  to={'/u/' + research._createdBy}
+                  href={'/u/' + research._createdBy}
                 >
                   {research._createdBy}
                 </Link>

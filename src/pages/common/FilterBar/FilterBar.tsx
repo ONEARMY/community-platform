@@ -4,10 +4,9 @@ import { PROJECTS_MOCKS } from 'src/mocks/projects.mock'
 import { CATEGORY_MOCKS } from 'src/mocks/category.mock'
 import { TAGS_MOCK } from 'src/mocks/tags.mock'
 
-import { Box, Flex } from 'theme-ui'
+import { Box, Flex, Link } from 'theme-ui'
 import { Button } from 'oa-components'
 import Selector from 'src/components/Selector'
-import { Link } from 'react-router-dom'
 import { logger } from 'src/logger'
 
 interface IProps {
@@ -50,7 +49,7 @@ export default class FilterBar extends React.Component<IProps> {
           <Selector onChange={() => this.onTagsChange()} list={TAGS_MOCK} />
         </Box>
         <Box>
-          <Link to={section + '/create'}>
+          <Link href={section + '/create'}>
             <Button variant="outline">create {section}</Button>
           </Link>
         </Box>

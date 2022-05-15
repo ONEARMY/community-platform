@@ -26,7 +26,7 @@ If you think something is missing, consider sending us a PR.
 
 ## 👐 &nbsp; Code of Conduct
 
-This project and everyone participating in it is governed by the [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [platform@onearmy.earth](mailto:platform@onearmy.earth).
+This project and everyone participating in it is governed by the [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behaviour to [platform@onearmy.earth](mailto:platform@onearmy.earth).
 
 ## 🤖 &nbsp; Technologies
 
@@ -75,14 +75,14 @@ Some issues are collated to form modules which are the parent of each section of
 
 Additionally if you have identified a bug you may want to write a test to make reproducible (and less likely to arise in the future). You can find more information to do this in the [Testing Bugs Wiki](https://github.com/ONEARMY/community-platform/wiki/Testing---Bugs)
 
-We've also labeled some of the issues with _Good-first-issue_ to help you get started quickly.
+We've also labelled some of the issues with _Good-first-issue_ to help you get started quickly.
 When you start working on an issue, comment on it or if your are a registered contributor assign yourself to let us know so we avoid working on something twice. The comment should include a mention to @mattia-io (our project lead).
 
 When a group of issues have been resolved a pull request to the `master` branch should be made, where it will undergo a quick review and test. It is expected that the developer will have done thorough testing themselves first, this helps make sure most pull requests get merged quickly.
 
 ## 🤑 &nbsp; Development Bounties
 
-We have a small bounty system as a way of saying thanks to developers for contributiong their time and code. Find out more about it in [Bounties](./BOUNTIES.md)
+We have a small bounty system as a way of saying thanks to developers for contributing their time and code. Find out more about it in [Bounties](./BOUNTIES.md)
 
 ## 🏠 &nbsp; Project Structure
 
@@ -114,7 +114,7 @@ We use additional branches to define a specific feature or issue group being wor
 
 ## 🚀 &nbsp; Deployment
 
-The `master` branch is our current development leading branch, and will autodeploy to the
+The `master` branch is our current development leading branch, and will auto-deploy to the
 [development site](https://dev.onearmy.world/). The `production` branch deploys to the live [community platform site](http://community.preciousplastic.com/)
 
 ## 🤓 &nbsp; Javascript style guide

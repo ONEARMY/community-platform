@@ -40,7 +40,7 @@ The emulator should start at http://localhost:4001. Follow the link to see an ov
 
 Clicking on individual tabs will take you to a page similar to the firebase console, from where you can interact with services.
 
-Note - any data populated into the emulator will be deleted after the emulator has closed (restoring to original state). See the section below about persistant and seed data
+Note - any data populated into the emulator will be deleted after the emulator has closed (restoring to original state). See the section below about persistent and seed data
 
 ## Resetting seed data
 

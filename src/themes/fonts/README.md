@@ -10,6 +10,8 @@ Note - as the platform relies on modern browser feature legacy font formats (ttf
 Legacy (css) implementation:
 Define a `fonts.css` file
 
+<!--- spell-checker: disable --->
+
 ```
 @font-face {
   font-family: 'Varela Round';
@@ -42,7 +44,11 @@ Define a `fonts.css` file
 
 ```
 
+<!--- spell-checker: enable -->
+
 Import in `index.html` (note, seemed to break with lazy-loading)
+
+<!--- spell-checker: disable -->
 
 ```
     <link
@@ -52,3 +58,5 @@ Import in `index.html` (note, seemed to break with lazy-loading)
       crossorigin
     />
 ```
+
+<!--- spell-checker: enable -->

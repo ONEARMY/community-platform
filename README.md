@@ -53,7 +53,9 @@ Or join our [Discord channel](https://discordapp.com/invite/rnx7m4t)
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="http://davehakkens.nl"><img src="https://avatars.githubusercontent.com/u/13672737?v=4" width="100px;" alt=""/><br /><sub><b>Dave Hakkens</b></sub></a></td>
+    <td align="center"><a href="http://davehakkens.nl"><img src="https://avatars.githubusercontent.com/u/13672737?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Dave Hakkens</b></sub></a><br /><a href="#design-davehakkens" title="Design">🎨</a> <a href="#ideas-davehakkens" title="Ideas, Planning, & Feedback">🤔</a> <a href="#projectManagement-davehakkens" title="Project Management">📆</a> <a href="[💪]("Maintainer")," title="Maintainer">💪</a></td>
+    <td align="center"><a href="https://c2dev.co.uk/"><img src="https://avatars.githubusercontent.com/u/10515065?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Chris Clarke</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=chrismclarke" title="Code">💻</a> <a href="[💪]("Maintainer")," title="Maintainer">💪</a></td>
+    <td align="center"><a href="https://thisis.la/"><img src="https://avatars.githubusercontent.com/u/472589?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Luke Watts</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=thisislawatts" title="Code">💻</a> <a href="[💪]("Maintainer")," title="Maintainer">💪</a></td>
   </tr>
 </table>
 

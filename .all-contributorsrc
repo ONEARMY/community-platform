@@ -1,5 +1,7 @@
 {
-  "files": ["README.md"],
+  "files": [
+    "README.md"
+  ],
   "imageSize": 100,
   "contributorsPerLine": 7,
   "contributorsSortAlphabetically": false,
@@ -12,6 +14,22 @@
       "link": "[<%= symbol %>](<%= url %> \"<%= description %>\"),"
     }
   },
-  "skipCi": "true",
-  "contributors": []
+  "skipCi": true,
+  "contributors": [
+    {
+      "login": "davehakkens",
+      "name": "Dave Hakkens",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13672737?v=4",
+      "profile": "http://davehakkens.nl",
+      "contributions": [
+        "design",
+        "ideas",
+        "projectManagement"
+      ]
+    }
+  ],
+  "projectName": "community-platform",
+  "projectOwner": "ONEARMY",
+  "repoType": "github",
+  "repoHost": "https://github.com"
 }

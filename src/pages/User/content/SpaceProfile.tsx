@@ -36,6 +36,7 @@ import type { IConvertedFileMeta } from 'src/types'
 import { UserStats } from './UserStats'
 import UserContactAndLinks from './UserContactAndLinks'
 import { UserAdmin } from './UserAdmin'
+import { ProfileType } from 'src/modules/profile'
 
 interface IBackgroundImageProps {
   bgImg: string
@@ -314,15 +315,15 @@ export const SpaceProfile = ({ user }: IProps) => {
             </Text>
           )}
 
-          {user.profileType === 'collection-point' &&
+          {user.profileType === ProfileType.COLLECTION_POINT &&
             user.collectedPlasticTypes &&
             renderPlasticTypes(user.collectedPlasticTypes)}
 
-          {user.profileType === 'collection-point' &&
+          {user.profileType === ProfileType.COLLECTION_POINT &&
             user.openingHours &&
             renderOpeningHours(user.openingHours)}
 
-          {user.profileType === 'machine-builder' &&
+          {user.profileType === ProfileType.MACHINE_BUILDER &&
             user.machineBuilderXp &&
             renderMachineBuilderXp(user.machineBuilderXp)}
 

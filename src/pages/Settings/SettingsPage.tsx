@@ -26,6 +26,7 @@ import { Prompt } from 'react-router'
 import { toJS } from 'mobx'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { logger } from 'src/logger'
+import { ProfileType } from 'src/modules/profile'
 
 interface IProps {
   /** user ID for lookup when editing another user as admin */
@@ -198,10 +199,10 @@ export class UserSettings extends React.Component<IProps, IState> {
                       {isModuleSupported(MODULE.MAP) && <FocusSection />}
 
                       {/* Specific profile type fields */}
-                      {values.profileType === 'workspace' && (
+                      {values.profileType === ProfileType.WORKSPACE && (
                         <WorkspaceSection />
                       )}
-                      {values.profileType === 'collection-point' && (
+                      {values.profileType === ProfileType.COLLECTION_POINT && (
                         <CollectionSection
                           required={
                             values.collectedPlasticTypes
@@ -211,7 +212,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           formValues={values}
                         />
                       )}
-                      {values.profileType === 'machine-builder' && (
+                      {values.profileType === ProfileType.MACHINE_BUILDER && (
                         <ExpertiseSection
                           required={
                             values.machineBuilderXp
@@ -221,12 +222,12 @@ export class UserSettings extends React.Component<IProps, IState> {
                         />
                       )}
                       {/* General fields */}
-                      {values.profileType !== 'member' &&
+                      {values.profileType !== ProfileType.MEMBER &&
                         isModuleSupported(MODULE.MAP) && (
                           <WorkspaceMapPinSection />
                         )}
 
-                      {values.profileType === 'member' &&
+                      {values.profileType === ProfileType.MEMBER &&
                         isModuleSupported(MODULE.MAP) && (
                           <MemberMapPinSection />
                         )}

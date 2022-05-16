@@ -49,8 +49,15 @@ If needed you can [drop us a line here](mailto:platform@onearmy.earth?subject=co
 Or join our [Discord channel](https://discordapp.com/invite/rnx7m4t)
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore -->
-| [<img src="https://avatars0.githubusercontent.com/u/10515065?s=60&v=4" width="60px;"/><br /><sub><b>Chris Clarke</b></sub>](https://github.com/chrismclarke)<br />[💻](https://github.com/OneArmyWorld/onearmy/commits?author=chrismclarke "Code") | [<img src="https://avatars.githubusercontent.com/u/472589?v=4" width="60px;"/><br /><sub><b>Luke Watts</b></sub>](https://github.com/thisislawatts)<br />[💻](https://github.com/ONEARMY/community-platform/commits?author=thisislawatts "Code")
-| :---: | :---: |
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="http://davehakkens.nl"><img src="https://avatars.githubusercontent.com/u/13672737?v=4" width="100px;" alt=""/><br /><sub><b>Dave Hakkens</b></sub></a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->

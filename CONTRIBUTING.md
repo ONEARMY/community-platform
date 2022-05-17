@@ -43,18 +43,24 @@ You can find useful links to learn more about these technologies [in the resourc
 
 ## 📟 &nbsp; Getting started
 
-- Fork the repository
-- Clone the project from the fork you have created previously at first step :
-  `git clone https://github.com/`**your-github-user**`/community-platform.git`
+**Prerequisites**
 
-- Install dependencies
-  `yarn`
+- [Node.js v16](https://nodejs.org/en/download/)
+- [Yarn v3](https://yarnpkg.com/getting-started/install)
 
-- Run the dev server
-  `yarn start`
+With the above tools available, you are ready:
 
-- Run the end-to-end tests
-  `yarn test`
+1. Clone the project from the fork you have created previously at first step :
+   `git clone https://github.com/`**your-github-user**`/community-platform.git`
+
+2. Install dependencies
+   `yarn`
+
+3. Run the dev server
+   `yarn start`
+
+4. Run the end-to-end tests
+   `yarn test`
 
 ### Additional commands
 

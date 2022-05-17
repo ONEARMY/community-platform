@@ -34,7 +34,7 @@ will generate the following items:
 src/
   MyNewComponentName/
     MyNewComponentName.tsx # Component
-    MyNewComponentName.stories.mdx # Storybook documentation
+    MyNewComponentName.stories.tsx # Storybook documentation
 ```
 
 ## Recommended Plugins

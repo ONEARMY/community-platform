@@ -1,14 +1,14 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import Select, { components } from 'react-select'
 import type { MultiValueRemoveProps } from 'react-select/lib/components/MultiValue'
-import Text from 'src/components/Text'
 import checkmarkIcon from 'src/assets/icons/icon-checkmark.svg'
 import { DropdownIndicator } from 'src/components/DropdownIndicator'
 import type { IMapGrouping, IPinGrouping } from 'src/models/maps.models'
 import { inject } from 'mobx-react'
 import type { MapsStore } from 'src/stores/Maps/maps.store'
-import { Box, Flex, Image } from 'theme-ui'
+import { Box, Flex, Image, Text } from 'theme-ui'
 import { SelectStyles } from 'src/components/Form/Select.field'
+
 interface IProps {
   items: Record<IPinGrouping, Array<IMapGrouping>>
   onChange: (selectedItems: string[]) => void
@@ -84,7 +84,7 @@ class GroupingFilterDesktop extends Component<IProps, IState> {
         >
           <Flex sx={{ alignItems: 'center' }}>
             <Image width="30px" src={option.icon} />
-            <Text medium ml="10px">
+            <Text sx={{ fontSize: 2 }} ml="10px">
               {option.label} ({option.number})
             </Text>
           </Flex>

@@ -6,7 +6,7 @@ import { withRouter } from 'react-router'
 import { Redirect } from 'react-router'
 import Heading from 'src/components/Heading'
 import { Button } from 'oa-components'
-import Text from 'src/components/Text'
+import { Text } from 'theme-ui'
 import { Link } from 'src/components/Links'
 import { InputField } from 'src/components/Form/Fields'
 import { inject, observer } from 'mobx-react'
@@ -210,12 +210,12 @@ class SignInPage extends React.Component<IProps, IState> {
                           </Flex>
                           <Text color={'red'}>{this.state.errorMsg}</Text>
                           <Flex mb={3} sx={{ justifyContent: 'space-between' }}>
-                            <Text small color={'grey'} mt={2}>
+                            <Text sx={{ fontSize: 1 }} color={'grey'} mt={2}>
                               <Link to={'/sign-up'} data-cy="no-account">
                                 Don't have an account?
                               </Link>
                             </Text>
-                            <Text small color={'grey'} mt={2}>
+                            <Text sx={{ fontSize: 1 }} color={'grey'} mt={2}>
                               <Link
                                 to="#"
                                 data-cy="lost-password"

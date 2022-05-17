@@ -4,7 +4,7 @@ import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import { Link } from 'src/components/Links'
 import { ModerationStatusText } from 'src/components/ModerationStatusText'
-import Text from 'src/components/Text'
+import { Text } from 'theme-ui'
 import type { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
@@ -42,10 +42,12 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => (
         </Flex>
         <Flex sx={{ alignItems: 'center', width: ['100%', '100%', '25%'] }}>
           <Text
-            auxiliary
             my={2}
             ml={1}
             color={`${theme.colors.blue} !important`}
+            sx={{
+              ...theme.typography.auxiliary,
+            }}
           >
             {item._createdBy}
           </Text>
@@ -65,10 +67,10 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => (
         >
           <Text color="black">{getUpdateText(item)}</Text>
           <Text
-            auxiliary
             sx={{
               alignSelf:
                 item.moderation !== 'accepted' ? 'flex-start' : 'center',
+              ...theme.typography.auxiliary,
             }}
           >
             {format(new Date(item._modified), 'DD-MM-YYYY')}

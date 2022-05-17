@@ -41,7 +41,7 @@ export class MenuMobileExternalLink extends Component<IProps> {
             onClick={() => menu.toggleMobilePanel()}
             id={id}
             href={this.props.href}
-            style={{ color: theme.colors.silver, fontSize: theme.fontSizes[2] }}
+            style={{ color: theme.colors.silver, fontSize: 2 }}
           >
             {content}
           </LinkTargetBlank>

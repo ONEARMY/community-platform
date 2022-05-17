@@ -2,7 +2,7 @@ import * as React from 'react'
 import { observer, inject } from 'mobx-react'
 import Heading from 'src/components/Heading'
 import { Field } from 'react-final-form'
-import Text from 'src/components/Text'
+import { Text } from 'theme-ui'
 import { Button } from 'oa-components'
 import { TextAreaField } from 'src/components/Form/Fields'
 import { Box, Flex } from 'theme-ui'
@@ -64,7 +64,7 @@ export class MemberMapPinSection extends React.Component<any, IState> {
         </Flex>
 
         <Box sx={{ display: isOpen ? 'block' : 'none' }}>
-          <Text regular my={4}>
+          <Text mt={4} mb={4} sx={{ display: 'block' }}>
             Add yourself to the map as an individual who wants to get started.
             Find local community members and meetup to join forces and
             collaborate.
@@ -93,7 +93,7 @@ export class MemberMapPinSection extends React.Component<any, IState> {
 
           {this.state.hasMapPin && (
             <>
-              <Text mb={2} mt={4} medium>
+              <Text mb={2} mt={4} sx={{ fontSize: 2, display: 'block' }}>
                 Short description of your pin*
               </Text>
               <Field
@@ -122,11 +122,21 @@ export class MemberMapPinSection extends React.Component<any, IState> {
                   return (
                     <>
                       <Box>
-                        <Text mb={2} mt={4} medium>
+                        <Text
+                          mb={2}
+                          mt={4}
+                          sx={{ fontSize: 2, display: 'block' }}
+                        >
                           Your location
                         </Text>
                         {props.meta.invalid && (
-                          <Text small color={theme.colors.red} mb="5px">
+                          <Text
+                            color={theme.colors.red}
+                            mb="5px"
+                            sx={{
+                              fontSize: 1,
+                            }}
+                          >
                             Please select your location
                           </Text>
                         )}

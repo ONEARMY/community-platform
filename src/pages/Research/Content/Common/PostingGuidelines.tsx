@@ -1,7 +1,6 @@
-import { Link } from 'theme-ui'
+import { Link, Text } from 'theme-ui'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
-import Text from 'src/components/Text'
 import theme from 'src/themes/styled.theme'
 
 export const PostingGuidelines = () => (
@@ -9,13 +8,13 @@ export const PostingGuidelines = () => (
     <Heading medium bold mb={2}>
       How does it work?
     </Heading>
-    <Text auxiliary mb={1}>
+    <Text mb={1} sx={{ ...theme.typography.auxiliary }}>
       1. Choose a topic you want to research{' '}
       <span role="img" aria-label="raised-hand">
         🙌
       </span>
     </Text>
-    <Text auxiliary mb={1}>
+    <Text mb={1} sx={{ ...theme.typography.auxiliary }}>
       2. Read{' '}
       <Link
         color={theme.colors.blue}
@@ -28,25 +27,25 @@ export const PostingGuidelines = () => (
         </span>
       </Link>
     </Text>
-    <Text auxiliary mb={1}>
+    <Text mb={1} sx={{ ...theme.typography.auxiliary }}>
       3. Write your introduction{' '}
       <span role="img" aria-label="archive-box">
         🗄️
       </span>
     </Text>
-    <Text auxiliary mb={1}>
+    <Text mb={1} sx={{ ...theme.typography.auxiliary }}>
       4. Come back when you made progress{' '}
       <span role="img" aria-label="writing-hand">
         ✍️
       </span>
     </Text>
-    <Text auxiliary mb={1}>
+    <Text mb={1} sx={{ ...theme.typography.auxiliary }}>
       5. Keep doing this
     </Text>
-    <Text auxiliary mb={1}>
+    <Text mb={1} sx={{ ...theme.typography.auxiliary }}>
       6. When its ready, press finished
     </Text>
-    <Text auxiliary mb={1}>
+    <Text mb={1} sx={{ ...theme.typography.auxiliary }}>
       7. Be proud{' '}
       <span role="img" aria-label="simple-smile">
         🙂

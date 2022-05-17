@@ -6,14 +6,24 @@ import Heading from 'src/components/Heading'
 import { Link } from 'src/components/Links'
 import ResearchListItem from './ResearchListItem'
 import { useResearchStore } from 'src/stores/Research/research.store'
+import { useTheme } from '@emotion/react'
 
 const ResearchList = observer(() => {
   const store = useResearchStore()
+  const theme = useTheme()
+
   const { filteredResearches } = store
   return (
     <>
       <Flex py={26}>
-        <Heading medium bold txtcenter sx={{ width: '100%' }}>
+        <Heading
+          sx={{
+            width: '100%',
+            textAlign: 'center',
+            fontWeight: 'bold',
+            fontSize: theme.fontSizes[5],
+          }}
+        >
           Research topics. Can we...
         </Heading>
       </Flex>

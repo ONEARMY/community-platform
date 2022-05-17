@@ -3,9 +3,8 @@ import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import theme from 'src/themes/styled.theme'
 import { Button } from 'oa-components'
-import Text from 'src/components/Text'
 import { Link } from 'src/components/Links'
-import { Link as ExternalLink } from 'theme-ui'
+import { Link as ExternalLink, Text } from 'theme-ui'
 
 class SignUpMessagePage extends React.Component {
   public render() {
@@ -41,7 +40,7 @@ class SignUpMessagePage extends React.Component {
                 We sent you an email with all the details to complete your
                 profile.
               </Text>
-              <Text small color={'grey'} mt={2}>
+              <Text color={'grey'} mt={2} sx={{ fontSize: 1 }}>
                 Didn't receive the email?{' '}
                 <ExternalLink
                   color={theme.colors.grey}

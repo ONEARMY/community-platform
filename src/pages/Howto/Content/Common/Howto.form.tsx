@@ -6,7 +6,6 @@ import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
 import createDecorator from 'final-form-calculate'
 import type { IHowtoFormInput } from 'src/models/howto.models'
-import Text from 'src/components/Text'
 import type { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
 import { SelectField } from 'src/components/Form/Select.field'
@@ -24,7 +23,7 @@ import { stripSpecialCharacters } from 'src/utils/helpers'
 import { PostingGuidelines } from './PostingGuidelines'
 import theme from 'src/themes/styled.theme'
 import { DIFFICULTY_OPTIONS, TIME_OPTIONS } from './FormSettings'
-import { Box } from 'theme-ui'
+import { Box, Text } from 'theme-ui'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import { HowToSubmitStatus } from './SubmitStatus'
 import { required } from 'src/utils/validators'
@@ -405,7 +404,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                               />
                             </Box>
 
-                            <Text small color={'grey'} mt={4}>
+                            <Text color={'grey'} mt={4} sx={{ fontSize: 1 }}>
                               This image should be landscape. We advise
                               1280x960px
                             </Text>

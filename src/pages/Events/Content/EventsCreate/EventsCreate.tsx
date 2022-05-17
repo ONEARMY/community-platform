@@ -8,7 +8,6 @@ import { InputField, DatePickerField } from 'src/components/Form/Fields'
 import { Button } from 'oa-components'
 import type { EventStore } from 'src/stores/Events/events.store'
 import Heading from 'src/components/Heading'
-import Text from 'src/components/Text'
 import Flex from 'src/components/Flex'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 import { inject } from 'mobx-react'
@@ -18,7 +17,7 @@ import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import { validateUrl, addProtocolMutator, required } from 'src/utils/validators'
-import { Box } from 'theme-ui'
+import { Box, Text } from 'theme-ui'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import IconHeaderEvents from 'src/assets/images/header-section/events-header-icon.svg'
 import { logger } from 'src/logger'
@@ -210,7 +209,11 @@ export class EventsCreate extends React.Component<IProps, IState> {
                           />
                           {isLocationSelected !== undefined &&
                             !isLocationSelected && (
-                              <Text small color={theme.colors.red} mb="5px">
+                              <Text
+                                color={theme.colors.red}
+                                mb="5px"
+                                sx={{ fontSize: 1 }}
+                              >
                                 Select a location for your event
                               </Text>
                             )}

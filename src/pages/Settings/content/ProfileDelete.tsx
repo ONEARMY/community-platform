@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Modal } from 'src/components/Modal/Modal'
 import { Button } from 'oa-components'
-import Text from 'src/components/Text'
+import { Text } from 'theme-ui'
 import { Form, Field } from 'react-final-form'
 import { InputField } from 'src/components/Form/Fields'
 import Flex from 'src/components/Flex'

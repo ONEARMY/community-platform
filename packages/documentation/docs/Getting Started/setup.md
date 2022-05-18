@@ -19,11 +19,7 @@ title: Local Setup
    You can use tools like [fnm](https://github.com/Schniz/fnm) or [nvm](https://github.com/nvm-sh/nvm) to run multiple versions of node on the same machine
    :::
 
-3. Download and install Yarn (v2)
-
-```
-npm i -g yarn
-```
+3. [Download and install Yarn](https://yarnpkg.com/getting-started/install) (v3)
 
 ## Run locally
 

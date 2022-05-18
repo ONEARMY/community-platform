@@ -164,6 +164,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                         label: countries[country].name,
                         value: country,
                       }))}
+                      placeholder="Country"
                       {...field}
                     />
                   )}

@@ -3,7 +3,7 @@ import type { PlatformTheme } from 'src/themes/types'
 import preciousPlasticTheme from 'src/themes/precious-plastic'
 import projectKampTheme from 'src/themes/project-kamp'
 import fixingFashionTheme from 'src/themes/fixing-fashion'
-import { getConfigirationOption } from 'src/config/config'
+import { getConfigurationOption } from 'src/config/config'
 
 const themeMap = {
   'precious-plastic': preciousPlasticTheme,
@@ -15,7 +15,7 @@ export class ThemeStore {
   currentTheme: PlatformTheme =
     themeMap[
       localStorage.getItem('platformTheme') ||
-        getConfigirationOption('REACT_APP_PLATFORM_THEME', 'precious-plastic')
+        getConfigurationOption('REACT_APP_PLATFORM_THEME', 'precious-plastic')
     ]
 
   constructor() {

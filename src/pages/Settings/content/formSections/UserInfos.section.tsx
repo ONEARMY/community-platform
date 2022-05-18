@@ -15,6 +15,7 @@ import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { ErrorMessage } from 'src/components/Form/elements'
 import type { IUser } from 'src/models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
+import { ProfileType } from 'src/modules/profile'
 
 interface IProps {
   formValues: IUserPP
@@ -122,7 +123,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
   render() {
     const { formValues } = this.props
     const { profileType, links, coverImages } = formValues
-    const isMemberProfile = profileType === 'member'
+    const isMemberProfile = profileType === ProfileType.MEMBER
     return (
       <FlexSectionContainer>
         <Flex sx={{ justifyContent: 'space-between' }}>

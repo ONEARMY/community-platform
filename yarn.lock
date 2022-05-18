@@ -14460,6 +14460,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"countries-list@npm:^2.6.1":
+  version: 2.6.1
+  resolution: "countries-list@npm:2.6.1"
+  checksum: 72185813fdd77b6fd1b441d87e103664ef3eb79f2c977124817c2dacb655d97a7369dcf519cc8ae04a92314a69af5396f0b85c38ba8c283ffd5ec01be8769147
+  languageName: node
+  linkType: hard
+
 "cp-file@npm:^7.0.0":
   version: 7.0.0
   resolution: "cp-file@npm:7.0.0"
@@ -26127,6 +26134,7 @@ fsevents@^1.2.7:
     cheerio: ^1.0.0-rc.10
     commitizen: ^4.2.4
     concurrently: ^6.2.0
+    countries-list: ^2.6.1
     cra-bundle-analyzer: ^0.1.0
     cross-env: ^6.0.3
     cspell: ^6.1.0

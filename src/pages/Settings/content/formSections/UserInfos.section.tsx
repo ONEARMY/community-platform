@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Field } from 'react-final-form'
 import { Heading } from 'theme-ui'
+import { countries } from 'countries-list'
 import { Flex } from 'theme-ui'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
 import { Button } from 'oa-components'
@@ -16,9 +17,11 @@ import { ErrorMessage } from 'src/components/Form/elements'
 import type { IUser } from 'src/models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { ProfileType } from 'src/modules/profile'
+import { SelectField } from 'src/components/Form/Select.field'
 
 interface IProps {
   formValues: IUserPP
+  showLocationDropdown: boolean
   mutators: { [key: string]: (...args: any[]) => any }
 }
 interface IState {
@@ -149,6 +152,24 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               validate={required}
               validateFields={[]}
             />
+            {this.props.showLocationDropdown && (
+              <Flex sx={{ flexDirection: 'column', width: '100%' }}>
+                <Text my={4} sx={{ fontSize: 2 }}>
+                  Your location
+                </Text>
+                <Field data-cy="location-dropdown" name="country">
+                  {(field) => (
+                    <SelectField
+                      options={Object.keys(countries).map((country) => ({
+                        label: countries[country].name,
+                        value: country,
+                      }))}
+                      {...field}
+                    />
+                  )}
+                </Field>
+              </Flex>
+            )}
 
             <Text mb={2} mt={7} sx={{ fontSize: 2 }}>
               {isMemberProfile

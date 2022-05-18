@@ -3,7 +3,7 @@ import * as React from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import { Box, Text } from 'theme-ui'
-import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
+import { FlexSectionContainer } from './elements'
 import { FieldArray } from 'react-final-form-arrays'
 import { MACHINE_BUILDER_XP } from 'src/mocks/user_pp.mock'
 import { CustomCheckbox } from './Fields/CustomCheckbox.field'
@@ -15,26 +15,16 @@ interface IProps {
 export class ExpertiseSection extends React.Component<IProps, any> {
   constructor(props: any) {
     super(props)
-    this.state = {
-      isOpen: true,
-    }
   }
 
   render() {
-    const { isOpen } = this.state
     const { required } = this.props
     return (
       <FlexSectionContainer>
         <Flex sx={{ justifyContent: 'space-between' }}>
           <Heading small>Expertise</Heading>
-          <ArrowIsSectionOpen
-            onClick={() => {
-              this.setState({ isOpen: !isOpen })
-            }}
-            isOpen={isOpen}
-          />
         </Flex>
-        <Box sx={{ display: isOpen ? 'block' : 'none' }}>
+        <Box>
           <Text mt={4} mb={4}>
             What are you specialised in ? *
           </Text>

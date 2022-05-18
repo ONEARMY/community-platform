@@ -4,7 +4,7 @@ import Heading from 'src/components/Heading'
 import { Field } from 'react-final-form'
 import { TextAreaField } from 'src/components/Form/Fields'
 import { Box, Flex, Link, Text } from 'theme-ui'
-import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
+import { FlexSectionContainer } from './elements'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import theme from 'src/themes/styled.theme'
 import { required } from 'src/utils/validators'
@@ -12,36 +12,21 @@ import type { ILocation } from 'src/models/common.models'
 import MapWithDraggablePin from 'src/components/MapWithDraggablePin/MapWithDraggablePin'
 import { randomIntFromInterval } from 'src/utils/helpers'
 
-interface IState {
-  isOpen?: boolean
-}
-
 @inject('mapsStore', 'userStore')
 @observer
-export class WorkspaceMapPinSection extends React.Component<any, IState> {
+export class WorkspaceMapPinSection extends React.Component<any> {
   pinFilters = MAP_GROUPINGS
   constructor(props) {
     super(props)
-    this.state = {
-      isOpen: true,
-    }
   }
 
   render() {
-    const { isOpen } = this.state
-
     return (
       <FlexSectionContainer>
         <Flex sx={{ justifyContent: 'space-between' }}>
           <Heading small id="your-map-pin">
             Your map pin
           </Heading>
-          <ArrowIsSectionOpen
-            onClick={() => {
-              this.setState({ isOpen: !isOpen })
-            }}
-            isOpen={isOpen}
-          />
         </Flex>
         <Box bg={theme.colors.red2} mt={2} p={3} sx={{ borderRadius: '3px' }}>
           <Text sx={{ fontSize: 2 }}>
@@ -57,7 +42,7 @@ export class WorkspaceMapPinSection extends React.Component<any, IState> {
             and how you can join.
           </Text>
         </Box>
-        <Box sx={{ display: isOpen ? 'block' : 'none' }}>
+        <Box>
           <Text mb={2} mt={4} sx={{ fontSize: 2 }}>
             Short description of your pin*
           </Text>

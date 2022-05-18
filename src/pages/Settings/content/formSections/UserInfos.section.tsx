@@ -7,7 +7,7 @@ import { Button } from 'oa-components'
 import theme from 'src/themes/styled.theme'
 import { FieldArray } from 'react-final-form-arrays'
 import { ProfileLinkField } from './Fields/Link.field'
-import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
+import { FlexSectionContainer } from './elements'
 import { Box, Text } from 'theme-ui'
 import { required } from 'src/utils/validators'
 import type { IUserPP } from 'src/models/user_pp.models'
@@ -24,7 +24,6 @@ interface IState {
   readOnly: boolean
   isSaving?: boolean
   showNotification?: boolean
-  isOpen?: boolean
 }
 
 const CoverImages = ({
@@ -117,27 +116,19 @@ export class UserInfosSection extends React.Component<IProps, IState> {
     super(props)
     this.state = {
       readOnly: true,
-      isOpen: true,
     }
   }
 
   render() {
     const { formValues } = this.props
     const { profileType, links, coverImages } = formValues
-    const { isOpen } = this.state
     const isMemberProfile = profileType === 'member'
     return (
       <FlexSectionContainer>
         <Flex sx={{ justifyContent: 'space-between' }}>
           <Heading small>Infos</Heading>
-          <ArrowIsSectionOpen
-            onClick={() => {
-              this.setState({ isOpen: !isOpen })
-            }}
-            isOpen={isOpen}
-          />
         </Flex>
-        <Box sx={{ display: isOpen ? 'block' : 'none' }}>
+        <Box>
           <Flex sx={{ flexWrap: 'wrap' }}>
             <Text
               sx={{

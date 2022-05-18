@@ -4,7 +4,7 @@ import { Field } from 'react-final-form'
 import { Button } from 'oa-components'
 import { Modal } from 'src/components/Modal/Modal'
 import { Text } from 'theme-ui'
-import Flex from 'src/components/Flex'
+import { Flex } from 'theme-ui'
 import { SelectField } from 'src/components/Form/Select.field'
 import { required } from 'src/utils/validators'
 

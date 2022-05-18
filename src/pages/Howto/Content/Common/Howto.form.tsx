@@ -13,7 +13,7 @@ import { HowtoStep } from './HowtoStep.form'
 import { Button } from 'oa-components'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import Heading from 'src/components/Heading'
-import Flex from 'src/components/Flex'
+import { Card, Flex } from 'theme-ui'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { FileInputField } from 'src/components/Form/FileInput.field'
@@ -192,225 +192,219 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                   >
                     {/* How To Info */}
                     <Flex sx={{ flexDirection: 'column' }}>
-                      <Flex
-                        card
-                        mediumRadius
-                        bg={theme.colors.softblue}
-                        px={3}
-                        py={2}
-                        sx={{ alignItems: 'center' }}
-                      >
-                        <Heading medium>
-                          {this.props.parentType === 'create' ? (
-                            <span>Create</span>
-                          ) : (
-                            <span>Edit</span>
-                          )}{' '}
-                          a How-To
-                        </Heading>
-                        <Box ml="15px">
-                          <ElWithBeforeIcon
-                            IconUrl={IconHeaderHowto}
-                            height="20px"
-                          />
-                        </Box>
-                      </Flex>
+                      <Card bg={theme.colors.softblue}>
+                        <Flex px={3} py={2} sx={{ alignItems: 'center' }}>
+                          <Heading medium>
+                            {this.props.parentType === 'create' ? (
+                              <span>Create</span>
+                            ) : (
+                              <span>Edit</span>
+                            )}{' '}
+                            a How-To
+                          </Heading>
+                          <Box ml="15px">
+                            <ElWithBeforeIcon
+                              IconUrl={IconHeaderHowto}
+                              height="20px"
+                            />
+                          </Box>
+                        </Flex>
+                      </Card>
                       <Box
                         sx={{ mt: '20px', display: ['block', 'block', 'none'] }}
                       >
                         <PostingGuidelines />
                       </Box>
-                      <Flex
-                        card
-                        mediumRadius
-                        bg={'white'}
-                        mt={3}
-                        p={4}
-                        sx={{ flexWrap: 'wrap', flexDirection: 'column' }}
-                      >
-                        {/* Left Side */}
-                        <Heading small mb={3}>
-                          Intro
-                        </Heading>
+                      <Card mt={3}>
                         <Flex
-                          mx={-2}
-                          sx={{ flexDirection: ['column', 'column', 'row'] }}
+                          p={4}
+                          sx={{ flexWrap: 'wrap', flexDirection: 'column' }}
                         >
+                          {/* Left Side */}
+                          <Heading small mb={3}>
+                            Intro
+                          </Heading>
                           <Flex
-                            px={2}
-                            sx={{ flexDirection: 'column', flex: [1, 1, 4] }}
+                            mx={-2}
+                            sx={{ flexDirection: ['column', 'column', 'row'] }}
                           >
-                            <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label htmlFor="title">
-                                Title of your How-to *
-                              </Label>
-                              <Field
-                                id="title"
-                                name="title"
-                                data-cy="intro-title"
-                                validateFields={[]}
-                                validate={this.validateTitle}
-                                isEqual={COMPARISONS.textInput}
-                                modifiers={{ capitalize: true }}
-                                component={InputField}
-                                maxLength={HOWTO_TITLE_MAX_LENGTH}
-                                placeholder={`Make a chair from... (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
-                              />
-                            </Flex>
-                            <AuthWrapper roleRequired="beta-tester">
+                            <Flex
+                              px={2}
+                              sx={{ flexDirection: 'column', flex: [1, 1, 4] }}
+                            >
                               <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                                <Label>Category *</Label>
+                                <Label htmlFor="title">
+                                  Title of your How-to *
+                                </Label>
                                 <Field
-                                  name="category"
-                                  render={({ input, ...rest }) => (
-                                    <CategoriesSelect
-                                      {...rest}
-                                      onChange={(category) =>
-                                        input.onChange(category)
-                                      }
-                                      value={input.value}
-                                      styleVariant="selector"
-                                      placeholder="Select one category"
-                                    />
-                                  )}
+                                  id="title"
+                                  name="title"
+                                  data-cy="intro-title"
+                                  validateFields={[]}
+                                  validate={this.validateTitle}
+                                  isEqual={COMPARISONS.textInput}
+                                  modifiers={{ capitalize: true }}
+                                  component={InputField}
+                                  maxLength={HOWTO_TITLE_MAX_LENGTH}
+                                  placeholder={`Make a chair from... (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
                                 />
                               </Flex>
-                            </AuthWrapper>
-                            <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label>Select tags for your How-to*</Label>
-                              <Field
-                                name="tags"
-                                component={TagsSelectField}
-                                category="how-to"
-                                isEqual={COMPARISONS.tags}
-                              />
-                            </Flex>
-                            <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label htmlFor="time">
-                                How long does it take? *
-                              </Label>
-                              <Field
-                                id="time"
-                                name="time"
-                                validate={required}
-                                validateFields={[]}
-                                isEqual={COMPARISONS.textInput}
-                                options={TIME_OPTIONS}
-                                component={SelectField}
-                                data-cy="time-select"
-                                placeholder="How much time?"
-                              />
-                            </Flex>
-                            <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label htmlFor="difficulty_level">
-                                Difficulty level? *
-                              </Label>
-                              <Field
-                                px={1}
-                                id="difficulty_level"
-                                name="difficulty_level"
-                                data-cy="difficulty-select"
-                                validate={required}
-                                validateFields={[]}
-                                isEqual={COMPARISONS.textInput}
-                                component={SelectField}
-                                options={DIFFICULTY_OPTIONS}
-                                placeholder="How hard is it?"
-                              />
-                            </Flex>
-                            <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label htmlFor="description">
-                                Short description of your How-to *
-                              </Label>
-                              <Field
-                                id="description"
-                                name="description"
-                                data-cy="intro-description"
-                                validate={required}
-                                validateFields={[]}
-                                modifiers={{ capitalize: true }}
-                                isEqual={COMPARISONS.textInput}
-                                component={TextAreaField}
-                                style={{
-                                  resize: 'none',
-                                  flex: 1,
-                                  minHeight: '150px',
-                                }}
-                                maxLength={HOWTO_MAX_LENGTH}
-                                placeholder="Introduction to your How-To (max 400 characters)"
-                              />
-                            </Flex>
-                            <Label htmlFor="description">
-                              Do you have supporting file to help others
-                              replicate your How-to?
-                            </Label>
-                            <Flex
-                              sx={{ flexDirection: 'column' }}
-                              mb={[4, 4, 0]}
-                            >
-                              {formValues.files.length !== 0 &&
-                              parentType === 'edit' &&
-                              !fileEditMode ? (
-                                <Flex
-                                  sx={{
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                  }}
-                                >
-                                  {formValues.files.map((file) => (
-                                    <FileInfo
-                                      allowDownload
-                                      file={file}
-                                      key={file.name}
-                                    />
-                                  ))}
-                                  <Button
-                                    variant={'tertiary'}
-                                    icon="delete"
-                                    onClick={() =>
-                                      this.setState({
-                                        fileEditMode: !this.state.fileEditMode,
-                                      })
-                                    }
-                                  >
-                                    Re-upload files (this will delete the
-                                    existing ones)
-                                  </Button>
-                                </Flex>
-                              ) : (
-                                <>
+                              <AuthWrapper roleRequired="beta-tester">
+                                <Flex sx={{ flexDirection: 'column' }} mb={3}>
+                                  <Label>Category *</Label>
                                   <Field
-                                    name="files"
-                                    component={FileInputField}
+                                    name="category"
+                                    render={({ input, ...rest }) => (
+                                      <CategoriesSelect
+                                        {...rest}
+                                        onChange={(category) =>
+                                          input.onChange(category)
+                                        }
+                                        value={input.value}
+                                        styleVariant="selector"
+                                        placeholder="Select one category"
+                                      />
+                                    )}
                                   />
-                                </>
-                              )}
+                                </Flex>
+                              </AuthWrapper>
+                              <Flex sx={{ flexDirection: 'column' }} mb={3}>
+                                <Label>Select tags for your How-to*</Label>
+                                <Field
+                                  name="tags"
+                                  component={TagsSelectField}
+                                  category="how-to"
+                                  isEqual={COMPARISONS.tags}
+                                />
+                              </Flex>
+                              <Flex sx={{ flexDirection: 'column' }} mb={3}>
+                                <Label htmlFor="time">
+                                  How long does it take? *
+                                </Label>
+                                <Field
+                                  id="time"
+                                  name="time"
+                                  validate={required}
+                                  validateFields={[]}
+                                  isEqual={COMPARISONS.textInput}
+                                  options={TIME_OPTIONS}
+                                  component={SelectField}
+                                  data-cy="time-select"
+                                  placeholder="How much time?"
+                                />
+                              </Flex>
+                              <Flex sx={{ flexDirection: 'column' }} mb={3}>
+                                <Label htmlFor="difficulty_level">
+                                  Difficulty level? *
+                                </Label>
+                                <Field
+                                  px={1}
+                                  id="difficulty_level"
+                                  name="difficulty_level"
+                                  data-cy="difficulty-select"
+                                  validate={required}
+                                  validateFields={[]}
+                                  isEqual={COMPARISONS.textInput}
+                                  component={SelectField}
+                                  options={DIFFICULTY_OPTIONS}
+                                  placeholder="How hard is it?"
+                                />
+                              </Flex>
+                              <Flex sx={{ flexDirection: 'column' }} mb={3}>
+                                <Label htmlFor="description">
+                                  Short description of your How-to *
+                                </Label>
+                                <Field
+                                  id="description"
+                                  name="description"
+                                  data-cy="intro-description"
+                                  validate={required}
+                                  validateFields={[]}
+                                  modifiers={{ capitalize: true }}
+                                  isEqual={COMPARISONS.textInput}
+                                  component={TextAreaField}
+                                  style={{
+                                    resize: 'none',
+                                    flex: 1,
+                                    minHeight: '150px',
+                                  }}
+                                  maxLength={HOWTO_MAX_LENGTH}
+                                  placeholder="Introduction to your How-To (max 400 characters)"
+                                />
+                              </Flex>
+                              <Label htmlFor="description">
+                                Do you have supporting file to help others
+                                replicate your How-to?
+                              </Label>
+                              <Flex
+                                sx={{ flexDirection: 'column' }}
+                                mb={[4, 4, 0]}
+                              >
+                                {formValues.files.length !== 0 &&
+                                parentType === 'edit' &&
+                                !fileEditMode ? (
+                                  <Flex
+                                    sx={{
+                                      flexDirection: 'column',
+                                      alignItems: 'center',
+                                    }}
+                                  >
+                                    {formValues.files.map((file) => (
+                                      <FileInfo
+                                        allowDownload
+                                        file={file}
+                                        key={file.name}
+                                      />
+                                    ))}
+                                    <Button
+                                      variant={'tertiary'}
+                                      icon="delete"
+                                      onClick={() =>
+                                        this.setState({
+                                          fileEditMode:
+                                            !this.state.fileEditMode,
+                                        })
+                                      }
+                                    >
+                                      Re-upload files (this will delete the
+                                      existing ones)
+                                    </Button>
+                                  </Flex>
+                                ) : (
+                                  <>
+                                    <Field
+                                      name="files"
+                                      component={FileInputField}
+                                    />
+                                  </>
+                                )}
+                              </Flex>
                             </Flex>
-                          </Flex>
-                          {/* Right side */}
-                          <Flex
-                            px={2}
-                            sx={{ flexDirection: 'column', flex: [1, 1, 3] }}
-                            data-cy={'intro-cover'}
-                          >
-                            <Label htmlFor="cover_image">Cover image *</Label>
-                            <Box sx={{ height: '230px' }}>
-                              <Field
-                                id="cover_image"
-                                name="cover_image"
-                                validate={required}
-                                isEqual={COMPARISONS.image}
-                                component={ImageInputField}
-                              />
-                            </Box>
+                            {/* Right side */}
+                            <Flex
+                              px={2}
+                              sx={{ flexDirection: 'column', flex: [1, 1, 3] }}
+                              data-cy={'intro-cover'}
+                            >
+                              <Label htmlFor="cover_image">Cover image *</Label>
+                              <Box sx={{ height: '230px' }}>
+                                <Field
+                                  id="cover_image"
+                                  name="cover_image"
+                                  validate={required}
+                                  isEqual={COMPARISONS.image}
+                                  component={ImageInputField}
+                                />
+                              </Box>
 
-                            <Text color={'grey'} mt={4} sx={{ fontSize: 1 }}>
-                              This image should be landscape. We advise
-                              1280x960px
-                            </Text>
+                              <Text color={'grey'} mt={4} sx={{ fontSize: 1 }}>
+                                This image should be landscape. We advise
+                                1280x960px
+                              </Text>
+                            </Flex>
                           </Flex>
                         </Flex>
-                      </Flex>
+                      </Card>
 
                       {/* Steps Info */}
                       <FieldArray name="steps" isEqual={COMPARISONS.step}>

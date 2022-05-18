@@ -4,7 +4,7 @@ import { Button } from 'oa-components'
 import { Text } from 'theme-ui'
 import { Form, Field } from 'react-final-form'
 import { InputField } from 'src/components/Form/Fields'
-import Flex from 'src/components/Flex'
+import { Flex } from 'theme-ui'
 
 interface IState {
   showDeleteDialog: boolean

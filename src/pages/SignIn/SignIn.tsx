@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { getFriendlyMessage } from 'oa-shared'
-import Flex from 'src/components/Flex'
+import { Card, Flex } from 'theme-ui'
 import type { RouteComponentProps } from 'react-router'
 import { withRouter } from 'react-router'
 import { Redirect } from 'react-router'
@@ -135,115 +135,115 @@ class SignInPage extends React.Component<IProps, IState> {
                   mb={3}
                 >
                   <Flex sx={{ flexDirection: 'column', width: '100%' }}>
-                    <Flex
-                      card
-                      mediumRadius
-                      bg={'softblue'}
-                      px={3}
-                      py={2}
-                      sx={{ width: '100%' }}
-                    >
-                      <Heading medium sx={{ width: '100%' }}>
-                        Welcome back
-                      </Heading>
-                    </Flex>
-                    <Flex
-                      card
-                      mediumRadius
-                      bg={'white'}
-                      mt={3}
-                      px={4}
-                      pt={0}
-                      pb={4}
-                      sx={{
-                        flexWrap: 'wrap',
-                        flexDirection: 'column',
-                        width: '100%',
-                      }}
-                    >
-                      {/* PauthProvider Provider Select */}
-                      {!this.state.authProvider && (
-                        <>
-                          <Text mb={3} mt={3}>
-                            Login with :
-                          </Text>
-                          {Object.values(AUTH_PROVIDERS).map((p) => (
-                            <Button
-                              sx={{ width: '100%' }}
-                              key={p.provider}
-                              mb={2}
-                              variant="outline"
-                              onClick={() => this.setState({ authProvider: p })}
-                            >
-                              {p.buttonLabel}
-                            </Button>
-                          ))}
-                        </>
-                      )}
-                      {/* Login Form */}
-                      {this.state.authProvider && (
-                        <>
-                          <Heading small py={4} sx={{ width: '100%' }}>
-                            Log in to your account
-                          </Heading>
-                          <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                            <Label htmlFor="title">
-                              {authProvider!.inputLabel}
-                            </Label>
-                            <Field
-                              name="email"
-                              type="email"
-                              data-cy="email"
-                              component={InputField}
-                              validate={required}
-                            />
-                          </Flex>
-                          <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                            <Label htmlFor="title">Password</Label>
-                            <Field
-                              name="password"
-                              type="password"
-                              data-cy="password"
-                              component={InputField}
-                              validate={required}
-                            />
-                          </Flex>
-                          <Text color={'red'}>{this.state.errorMsg}</Text>
-                          <Flex mb={3} sx={{ justifyContent: 'space-between' }}>
-                            <Text sx={{ fontSize: 1 }} color={'grey'} mt={2}>
-                              <Link to={'/sign-up'} data-cy="no-account">
-                                Don't have an account?
-                              </Link>
+                    <Card bg={'softblue'}>
+                      <Flex px={3} py={2}>
+                        <Heading medium sx={{ width: '100%' }}>
+                          Welcome back
+                        </Heading>
+                      </Flex>
+                    </Card>
+                    <Card mt={3}>
+                      <Flex
+                        px={4}
+                        pt={0}
+                        pb={4}
+                        sx={{
+                          flexWrap: 'wrap',
+                          flexDirection: 'column',
+                          width: '100%',
+                        }}
+                      >
+                        {/* PauthProvider Provider Select */}
+                        {!this.state.authProvider && (
+                          <>
+                            <Text mb={3} mt={3}>
+                              Login with :
                             </Text>
-                            <Text sx={{ fontSize: 1 }} color={'grey'} mt={2}>
-                              <Link
-                                to="#"
-                                data-cy="lost-password"
-                                onClick={() => this.resetPasword(values.email)}
+                            {Object.values(AUTH_PROVIDERS).map((p) => (
+                              <Button
+                                sx={{ width: '100%' }}
+                                key={p.provider}
+                                mb={2}
+                                variant="outline"
+                                onClick={() =>
+                                  this.setState({ authProvider: p })
+                                }
                               >
-                                Lost password?
-                              </Link>
-                              <TextNotification
-                                {...notificationProps}
-                                hideNotificationCb={this.hideNotification}
+                                {p.buttonLabel}
+                              </Button>
+                            ))}
+                          </>
+                        )}
+                        {/* Login Form */}
+                        {this.state.authProvider && (
+                          <>
+                            <Heading small py={4} sx={{ width: '100%' }}>
+                              Log in to your account
+                            </Heading>
+                            <Flex sx={{ flexDirection: 'column' }} mb={3}>
+                              <Label htmlFor="title">
+                                {authProvider!.inputLabel}
+                              </Label>
+                              <Field
+                                name="email"
+                                type="email"
+                                data-cy="email"
+                                component={InputField}
+                                validate={required}
                               />
-                            </Text>
-                          </Flex>
-
-                          <Flex>
-                            <Button
-                              data-cy="submit"
-                              sx={{ width: '100%' }}
-                              variant={'primary'}
-                              disabled={submitting || invalid}
-                              type="submit"
+                            </Flex>
+                            <Flex sx={{ flexDirection: 'column' }} mb={3}>
+                              <Label htmlFor="title">Password</Label>
+                              <Field
+                                name="password"
+                                type="password"
+                                data-cy="password"
+                                component={InputField}
+                                validate={required}
+                              />
+                            </Flex>
+                            <Text color={'red'}>{this.state.errorMsg}</Text>
+                            <Flex
+                              mb={3}
+                              sx={{ justifyContent: 'space-between' }}
                             >
-                              Log in
-                            </Button>
-                          </Flex>
-                        </>
-                      )}
-                    </Flex>
+                              <Text sx={{ fontSize: 1 }} color={'grey'} mt={2}>
+                                <Link to={'/sign-up'} data-cy="no-account">
+                                  Don't have an account?
+                                </Link>
+                              </Text>
+                              <Text sx={{ fontSize: 1 }} color={'grey'} mt={2}>
+                                <Link
+                                  to="#"
+                                  data-cy="lost-password"
+                                  onClick={() =>
+                                    this.resetPasword(values.email)
+                                  }
+                                >
+                                  Lost password?
+                                </Link>
+                                <TextNotification
+                                  {...notificationProps}
+                                  hideNotificationCb={this.hideNotification}
+                                />
+                              </Text>
+                            </Flex>
+
+                            <Flex>
+                              <Button
+                                data-cy="submit"
+                                sx={{ width: '100%' }}
+                                variant={'primary'}
+                                disabled={submitting || invalid}
+                                type="submit"
+                              >
+                                Log in
+                              </Button>
+                            </Flex>
+                          </>
+                        )}
+                      </Flex>
+                    </Card>
                   </Flex>
                 </Flex>
               </form>

@@ -4,11 +4,11 @@ import * as React from 'react'
 import { Field, Form } from 'react-final-form'
 import type { RouteComponentProps } from 'react-router'
 import { Prompt } from 'react-router'
-import { Box } from 'theme-ui'
+import { Box, Card } from 'theme-ui'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { Button } from 'oa-components'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
-import Flex from 'src/components/Flex'
+import { Flex } from 'theme-ui'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import Heading from 'src/components/Heading'
@@ -141,155 +141,150 @@ const UpdateForm = observer((props: IProps) => {
                 <FormContainer id="updateForm" onSubmit={handleSubmit}>
                   {/* Update Info */}
                   <Flex sx={{ flexDirection: 'column' }}>
-                    <Flex
-                      card
-                      mediumRadius
-                      bg={theme.colors.softblue}
-                      px={3}
-                      py={2}
-                      sx={{ alignItems: 'center' }}
-                    >
-                      <Heading medium>
-                        {props.parentType === 'create' ? (
-                          <span>New update</span>
-                        ) : (
-                          <span>Edit your update</span>
-                        )}{' '}
-                      </Heading>
-                      <Box ml="15px">
-                        <ElWithBeforeIcon
-                          IconUrl={IconHeaderHowto}
-                          height="20px"
-                        />
-                      </Box>
-                    </Flex>
-                    <Flex
-                      card
-                      mediumRadius
-                      bg={'white'}
-                      mt={3}
-                      p={4}
-                      sx={{ flexWrap: 'wrap', flexDirection: 'column' }}
-                    >
+                    <Card bg={theme.colors.softblue}>
+                      <Flex px={3} py={2} sx={{ alignItems: 'center' }}>
+                        <Heading medium>
+                          {props.parentType === 'create' ? (
+                            <span>New update</span>
+                          ) : (
+                            <span>Edit your update</span>
+                          )}{' '}
+                        </Heading>
+                        <Box ml="15px">
+                          <ElWithBeforeIcon
+                            IconUrl={IconHeaderHowto}
+                            height="20px"
+                          />
+                        </Box>
+                      </Flex>
+                    </Card>
+                    <Card mt={3}>
                       <Flex
-                        mx={-2}
-                        sx={{ flexDirection: ['column', 'column', 'row'] }}
+                        p={4}
+                        sx={{ flexWrap: 'wrap', flexDirection: 'column' }}
                       >
                         <Flex
-                          px={2}
-                          sx={{ flexDirection: 'column', flex: [1, 1, 4] }}
+                          mx={-2}
+                          sx={{ flexDirection: ['column', 'column', 'row'] }}
                         >
-                          <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                            <Label htmlFor="title">Title of this update</Label>
-                            <Field
-                              id="title"
-                              name="title"
-                              data-cy="intro-title"
-                              validateFields={[]}
-                              validate={required}
-                              isEqual={COMPARISONS.textInput}
-                              component={InputField}
-                              maxLength="40"
-                              placeholder="Title of this update (max 40 characters)"
-                            />
-                          </Flex>
-                          <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                            <Label htmlFor="description">
-                              Description of this update
-                            </Label>
-                            <Field
-                              id="description"
-                              name="description"
-                              data-cy="intro-description"
-                              validate={required}
-                              validateFields={[]}
-                              isEqual={COMPARISONS.textInput}
-                              component={TextAreaField}
-                              style={{
-                                resize: 'none',
-                                flex: 1,
-                                minHeight: '150px',
-                              }}
-                              maxLength="1500"
-                              placeholder="Explain what is happening in your research (max 1500 characters)"
-                            />
-                          </Flex>
-                          <Label htmlFor={`images`}>
-                            Upload image(s) for this update
-                          </Label>
                           <Flex
-                            sx={{
-                              flexDirection: ['column', 'row'],
-                              flexWrap: 'wrap',
-                              alignItems: 'center',
-                            }}
-                            mb={3}
+                            px={2}
+                            sx={{ flexDirection: 'column', flex: [1, 1, 4] }}
                           >
-                            <ImageInputFieldWrapper data-cy="image-0">
+                            <Flex sx={{ flexDirection: 'column' }} mb={3}>
+                              <Label htmlFor="title">
+                                Title of this update
+                              </Label>
                               <Field
-                                hasText={false}
-                                name={`images[0]`}
-                                component={ImageInputField}
-                                isEqual={COMPARISONS.image}
-                                validateFields={['videoUrl']}
+                                id="title"
+                                name="title"
+                                data-cy="intro-title"
+                                validateFields={[]}
+                                validate={required}
+                                isEqual={COMPARISONS.textInput}
+                                component={InputField}
+                                maxLength="40"
+                                placeholder="Title of this update (max 40 characters)"
                               />
-                            </ImageInputFieldWrapper>
-                            <ImageInputFieldWrapper data-cy="image-1">
+                            </Flex>
+                            <Flex sx={{ flexDirection: 'column' }} mb={3}>
+                              <Label htmlFor="description">
+                                Description of this update
+                              </Label>
                               <Field
-                                hasText={false}
-                                name={`images[1]`}
-                                validateFields={['videoUrl']}
-                                component={ImageInputField}
-                                isEqual={COMPARISONS.image}
+                                id="description"
+                                name="description"
+                                data-cy="intro-description"
+                                validate={required}
+                                validateFields={[]}
+                                isEqual={COMPARISONS.textInput}
+                                component={TextAreaField}
+                                style={{
+                                  resize: 'none',
+                                  flex: 1,
+                                  minHeight: '150px',
+                                }}
+                                maxLength="1500"
+                                placeholder="Explain what is happening in your research (max 1500 characters)"
                               />
-                            </ImageInputFieldWrapper>
-                            <ImageInputFieldWrapper data-cy="image-2">
-                              <Field
-                                hasText={false}
-                                name={`images[2]`}
-                                validateFields={['videoUrl']}
-                                component={ImageInputField}
-                                isEqual={COMPARISONS.image}
-                              />
-                            </ImageInputFieldWrapper>
-                            <ImageInputFieldWrapper data-cy="image-3">
-                              <Field
-                                hasText={false}
-                                name={`images[3]`}
-                                validateFields={['videoUrl']}
-                                component={ImageInputField}
-                                isEqual={COMPARISONS.image}
-                              />
-                            </ImageInputFieldWrapper>
-                            <ImageInputFieldWrapper data-cy="image-4">
-                              <Field
-                                hasText={false}
-                                name={`images[4]`}
-                                validateFields={['videoUrl']}
-                                component={ImageInputField}
-                                isEqual={COMPARISONS.image}
-                              />
-                            </ImageInputFieldWrapper>
-                          </Flex>
-                          <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                            <Label htmlFor={`videoUrl`}>
-                              Or embed a YouTube video
+                            </Flex>
+                            <Label htmlFor={`images`}>
+                              Upload image(s) for this update
                             </Label>
-                            <Field
-                              name={`videoUrl`}
-                              data-cy="videoUrl"
-                              component={InputField}
-                              placeholder="https://youtube.com/watch?v="
-                              validate={(url, values) =>
-                                validateMedia(url, values)
-                              }
-                              validateFields={[]}
-                              isEqual={COMPARISONS.textInput}
-                            />
+                            <Flex
+                              sx={{
+                                flexDirection: ['column', 'row'],
+                                flexWrap: 'wrap',
+                                alignItems: 'center',
+                              }}
+                              mb={3}
+                            >
+                              <ImageInputFieldWrapper data-cy="image-0">
+                                <Field
+                                  hasText={false}
+                                  name={`images[0]`}
+                                  component={ImageInputField}
+                                  isEqual={COMPARISONS.image}
+                                  validateFields={['videoUrl']}
+                                />
+                              </ImageInputFieldWrapper>
+                              <ImageInputFieldWrapper data-cy="image-1">
+                                <Field
+                                  hasText={false}
+                                  name={`images[1]`}
+                                  validateFields={['videoUrl']}
+                                  component={ImageInputField}
+                                  isEqual={COMPARISONS.image}
+                                />
+                              </ImageInputFieldWrapper>
+                              <ImageInputFieldWrapper data-cy="image-2">
+                                <Field
+                                  hasText={false}
+                                  name={`images[2]`}
+                                  validateFields={['videoUrl']}
+                                  component={ImageInputField}
+                                  isEqual={COMPARISONS.image}
+                                />
+                              </ImageInputFieldWrapper>
+                              <ImageInputFieldWrapper data-cy="image-3">
+                                <Field
+                                  hasText={false}
+                                  name={`images[3]`}
+                                  validateFields={['videoUrl']}
+                                  component={ImageInputField}
+                                  isEqual={COMPARISONS.image}
+                                />
+                              </ImageInputFieldWrapper>
+                              <ImageInputFieldWrapper data-cy="image-4">
+                                <Field
+                                  hasText={false}
+                                  name={`images[4]`}
+                                  validateFields={['videoUrl']}
+                                  component={ImageInputField}
+                                  isEqual={COMPARISONS.image}
+                                />
+                              </ImageInputFieldWrapper>
+                            </Flex>
+                            <Flex sx={{ flexDirection: 'column' }} mb={3}>
+                              <Label htmlFor={`videoUrl`}>
+                                Or embed a YouTube video
+                              </Label>
+                              <Field
+                                name={`videoUrl`}
+                                data-cy="videoUrl"
+                                component={InputField}
+                                placeholder="https://youtube.com/watch?v="
+                                validate={(url, values) =>
+                                  validateMedia(url, values)
+                                }
+                                validateFields={[]}
+                                isEqual={COMPARISONS.textInput}
+                              />
+                            </Flex>
                           </Flex>
                         </Flex>
                       </Flex>
-                    </Flex>
+                    </Card>
                   </Flex>
                 </FormContainer>
               </Flex>

@@ -4,7 +4,7 @@ import type { IUploadedFileMeta } from 'src/stores/storage'
 
 import { Box, Image, Text } from 'theme-ui'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
-import Flex from 'src/components/Flex'
+import { Flex } from 'theme-ui'
 import Heading from 'src/components/Heading'
 import { FlagIcon } from 'oa-components'
 import theme from 'src/themes/styled.theme'

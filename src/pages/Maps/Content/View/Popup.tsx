@@ -1,7 +1,7 @@
 import * as React from 'react'
 import L from 'leaflet'
 import { Image, Text } from 'theme-ui'
-import Flex from 'src/components/Flex'
+import { Flex } from 'theme-ui'
 import { Button } from 'oa-components'
 import type { Map } from 'react-leaflet'
 import { Popup as LeafletPopup } from 'react-leaflet'
@@ -17,7 +17,7 @@ import type { MapsStore } from 'src/stores/Maps/maps.store'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import Workspace from 'src/pages/User/workspace/Workspace'
 import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
-import { useTheme } from '@emotion/react'
+import theme from 'src/themes/styled.theme'
 
 interface IProps {
   activePin: IMapPin | IMapPinWithDetail
@@ -86,7 +86,6 @@ export class Popup extends React.Component<IProps> {
   }
 
   private renderContent(pin: IMapPinWithDetail) {
-    const theme = useTheme()
     const group = MAP_GROUPINGS.find((g) => {
       return pin.subType
         ? g.subType === pin.subType && g.type === pin.type

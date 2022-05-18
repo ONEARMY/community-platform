@@ -3,7 +3,7 @@ import { Field } from 'react-final-form'
 import { TextAreaField, InputField } from 'src/components/Form/Fields'
 import Heading from 'src/components/Heading'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
-import Flex from 'src/components/Flex'
+import { Card, Flex } from 'theme-ui'
 import { Button } from 'oa-components'
 import { Modal } from 'src/components/Modal/Modal'
 import { Text } from 'theme-ui'
@@ -75,142 +75,139 @@ class HowtoStep extends PureComponent<IProps, IState> {
 
     return (
       // NOTE - animation parent container in CreateHowTo
-      <Flex
-        data-cy={`step_${index}`}
-        mt={5}
-        p={3}
-        key={index}
-        card
-        mediumRadius
-        bg={'white'}
-        sx={{ flexDirection: 'column' }}
-      >
-        <Flex p={0}>
-          <Heading small sx={{ flex: 1 }} mb={3}>
-            Step {index + 1}
-          </Heading>
-          {index >= 1 && (
+      <Card data-cy={`step_${index}`} mt={5} key={index}>
+        <Flex p={3} sx={{ flexDirection: 'column' }}>
+          <Flex p={0}>
+            <Heading small sx={{ flex: 1 }} mb={3}>
+              Step {index + 1}
+            </Heading>
+            {index >= 1 && (
+              <Button
+                data-cy="move-step"
+                variant={'secondary'}
+                icon="arrow-full-up"
+                sx={{ mx: '5px' }}
+                onClick={() => this.props.moveStep(index, index - 1)}
+              />
+            )}
             <Button
               data-cy="move-step"
               variant={'secondary'}
-              icon="arrow-full-up"
+              icon="arrow-full-down"
               sx={{ mx: '5px' }}
-              onClick={() => this.props.moveStep(index, index - 1)}
+              onClick={() => this.props.moveStep(index, index + 1)}
             />
-          )}
-          <Button
-            data-cy="move-step"
-            variant={'secondary'}
-            icon="arrow-full-down"
-            sx={{ mx: '5px' }}
-            onClick={() => this.props.moveStep(index, index + 1)}
-          />
-          {index >= 1 && (
-            <Button
-              data-cy="delete-step"
-              variant={'tertiary'}
-              icon="delete"
-              onClick={() => this.toggleDeleteModal()}
-            />
-          )}
-          {this.state.showDeleteModal && (
-            <Modal onDidDismiss={() => this.toggleDeleteModal()}>
-              <Text>Are you sure you want to delete this step?</Text>
-              <Flex mt={3} p={0} mx={-1} sx={{ justifyContent: 'flex-end' }}>
-                <Flex px={1}>
-                  <Button
-                    variant={'outline'}
-                    onClick={() => this.toggleDeleteModal()}
-                  >
-                    Cancel
-                  </Button>
+            {index >= 1 && (
+              <Button
+                data-cy="delete-step"
+                variant={'tertiary'}
+                icon="delete"
+                onClick={() => this.toggleDeleteModal()}
+              />
+            )}
+            {this.state.showDeleteModal && (
+              <Modal onDidDismiss={() => this.toggleDeleteModal()}>
+                <Text>Are you sure you want to delete this step?</Text>
+                <Flex mt={3} p={0} mx={-1} sx={{ justifyContent: 'flex-end' }}>
+                  <Flex px={1}>
+                    <Button
+                      variant={'outline'}
+                      onClick={() => this.toggleDeleteModal()}
+                    >
+                      Cancel
+                    </Button>
+                  </Flex>
+                  <Flex px={1}>
+                    <Button
+                      data-cy="confirm"
+                      variant={'tertiary'}
+                      onClick={() => this.confirmDelete()}
+                    >
+                      Delete
+                    </Button>
+                  </Flex>
                 </Flex>
-                <Flex px={1}>
-                  <Button
-                    data-cy="confirm"
-                    variant={'tertiary'}
-                    onClick={() => this.confirmDelete()}
-                  >
-                    Delete
-                  </Button>
-                </Flex>
-              </Flex>
-            </Modal>
-          )}
-        </Flex>
+              </Modal>
+            )}
+          </Flex>
 
-        <Flex sx={{ flexDirection: 'column' }} mb={3}>
-          <Label htmlFor={`${step}.title`}>Title of this step *</Label>
-          <Field
-            name={`${step}.title`}
-            data-cy="step-title"
-            modifiers={{ capitalize: true }}
-            component={InputField}
-            placeholder={`Title of this step (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
-            maxLength={HOWTO_TITLE_MAX_LENGTH}
-            validate={required}
-            validateFields={[]}
-            isEqual={COMPARISONS.textInput}
-          />
-        </Flex>
-        <Flex sx={{ flexDirection: 'column' }} mb={3}>
-          <Label htmlFor={`${step}.text`}>Description of this step *</Label>
-          <Field
-            name={`${step}.text`}
-            placeholder="Explain what you are doing in this step. if it gets to long break it into 2 steps (max 700 characters)"
-            maxLength={HOWTO_MAX_LENGTH}
-            data-cy="step-description"
-            modifiers={{ capitalize: true }}
-            component={TextAreaField}
-            style={{ resize: 'vertical', height: '300px' }}
-            validate={required}
-            validateFields={[]}
-            isEqual={COMPARISONS.textInput}
-          />
-        </Flex>
-        <Label htmlFor={`${step}.text`}>Upload image(s) for this step *</Label>
-        <Flex
-          sx={{ flexDirection: ['column', 'row'], alignItems: 'center' }}
-          mb={3}
-        >
-          <ImageInputFieldWrapper data-cy="step-image-0">
+          <Flex sx={{ flexDirection: 'column' }} mb={3}>
+            <Label htmlFor={`${step}.title`}>Title of this step *</Label>
             <Field
-              hasText={false}
-              name={`${step}.images[0]`}
-              component={ImageInputField}
-              isEqual={COMPARISONS.image}
+              name={`${step}.title`}
+              data-cy="step-title"
+              modifiers={{ capitalize: true }}
+              component={InputField}
+              placeholder={`Title of this step (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
+              maxLength={HOWTO_TITLE_MAX_LENGTH}
+              validate={required}
+              validateFields={[]}
+              isEqual={COMPARISONS.textInput}
             />
-          </ImageInputFieldWrapper>
-          <ImageInputFieldWrapper data-cy="step-image-1">
+          </Flex>
+          <Flex sx={{ flexDirection: 'column' }} mb={3}>
+            <Label htmlFor={`${step}.text`}>Description of this step *</Label>
             <Field
-              hasText={false}
-              name={`${step}.images[1]`}
-              component={ImageInputField}
-              isEqual={COMPARISONS.image}
+              name={`${step}.text`}
+              placeholder="Explain what you are doing in this step. if it gets to long break it into 2 steps (max 700 characters)"
+              maxLength={HOWTO_MAX_LENGTH}
+              data-cy="step-description"
+              modifiers={{ capitalize: true }}
+              component={TextAreaField}
+              style={{ resize: 'vertical', height: '300px' }}
+              validate={required}
+              validateFields={[]}
+              isEqual={COMPARISONS.textInput}
             />
-          </ImageInputFieldWrapper>
-          <ImageInputFieldWrapper data-cy="step-image-2">
+          </Flex>
+          <Label htmlFor={`${step}.text`}>
+            Upload image(s) for this step *
+          </Label>
+          <Flex
+            sx={{ flexDirection: ['column', 'row'], alignItems: 'center' }}
+            mb={3}
+          >
+            <ImageInputFieldWrapper data-cy="step-image-0">
+              <Field
+                hasText={false}
+                name={`${step}.images[0]`}
+                component={ImageInputField}
+                isEqual={COMPARISONS.image}
+              />
+            </ImageInputFieldWrapper>
+            <ImageInputFieldWrapper data-cy="step-image-1">
+              <Field
+                hasText={false}
+                name={`${step}.images[1]`}
+                component={ImageInputField}
+                isEqual={COMPARISONS.image}
+              />
+            </ImageInputFieldWrapper>
+            <ImageInputFieldWrapper data-cy="step-image-2">
+              <Field
+                hasText={false}
+                name={`${step}.images[2]`}
+                component={ImageInputField}
+                isEqual={COMPARISONS.image}
+              />
+            </ImageInputFieldWrapper>
+          </Flex>
+          <Flex sx={{ flexDirection: 'column' }} mb={3}>
+            <Label htmlFor={`${step}.videoUrl`}>
+              Or embed a YouTube video*
+            </Label>
             <Field
-              hasText={false}
-              name={`${step}.images[2]`}
-              component={ImageInputField}
-              isEqual={COMPARISONS.image}
+              name={`${step}.videoUrl`}
+              data-cy="step-videoUrl"
+              component={InputField}
+              placeholder="https://youtube.com/watch?v="
+              validate={(url) => this.validateMedia(url)}
+              validateFields={[]}
+              isEqual={COMPARISONS.textInput}
             />
-          </ImageInputFieldWrapper>
+          </Flex>
         </Flex>
-        <Flex sx={{ flexDirection: 'column' }} mb={3}>
-          <Label htmlFor={`${step}.videoUrl`}>Or embed a YouTube video*</Label>
-          <Field
-            name={`${step}.videoUrl`}
-            data-cy="step-videoUrl"
-            component={InputField}
-            placeholder="https://youtube.com/watch?v="
-            validate={(url) => this.validateMedia(url)}
-            validateFields={[]}
-            isEqual={COMPARISONS.textInput}
-          />
-        </Flex>
-      </Flex>
+      </Card>
     )
   }
 }

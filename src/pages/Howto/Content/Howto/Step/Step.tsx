@@ -1,8 +1,8 @@
 import { PureComponent } from 'react'
 import Linkify from 'react-linkify'
 import ReactPlayer from 'react-player'
-import { Box, Text } from 'theme-ui'
-import Flex from 'src/components/Flex'
+import { Box, Card, Text } from 'theme-ui'
+import { Flex } from 'theme-ui'
 import Heading from 'src/components/Heading'
 import ImageGallery from 'src/components/ImageGallery'
 import type { IHowtoStep } from 'src/models/howto.models'
@@ -32,68 +32,66 @@ export default class Step extends PureComponent<IProps> {
           sx={{ flexDirection: ['column', 'column', 'row'] }}
         >
           <Flex mx={[0, 0, 2]} sx={{ flex: 1, width: '100%' }} mb={[3, 3, 0]}>
-            <FlexStepNumber
-              card
-              mediumRadius
-              py={3}
-              px={4}
-              bg={'white'}
-              sx={{ justifyContent: 'center', width: '100%' }}
-            >
-              <Heading medium mb={0}>
-                {stepindex + 1}
-              </Heading>
+            <FlexStepNumber sx={{ justifyContent: 'center', width: '100%' }}>
+              <Card sx={{ width: '100%', textAlign: 'center' }} py={3} px={4}>
+                <Heading medium mb={0}>
+                  {stepindex + 1}
+                </Heading>
+              </Card>
             </FlexStepNumber>
           </Flex>
           <Flex
-            card
-            mediumRadius
             mx={[0, 0, 2]}
-            bg={'white'}
             sx={{
               flex: 9,
-              width: '100%',
               flexDirection: ['column', 'column', 'row'],
               overflow: 'hidden',
             }}
           >
-            <Flex
-              py={4}
-              px={4}
-              sx={{
-                width: ['100%', '100%', `${(1 / 2) * 100}%`],
-                flexDirection: 'column',
-              }}
-            >
-              <Heading medium mb={0}>
-                {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
-                {capitalizeFirstLetter(step.title)}
-              </Heading>
-              <Box>
-                <Text
-                  mt={3}
-                  color={'grey'}
-                  sx={{ ...theme.typography.paragraph, whiteSpace: 'pre-line' }}
+            <Card sx={{ width: '100%' }}>
+              <Flex>
+                <Flex
+                  py={4}
+                  px={4}
+                  sx={{
+                    width: ['100%', '100%', `${(1 / 2) * 100}%`],
+                    flexDirection: 'column',
+                  }}
                 >
-                  <Linkify>
+                  <Heading medium mb={0}>
                     {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
-                    {capitalizeFirstLetter(step.text)}
-                  </Linkify>
-                </Text>
-              </Box>
-            </Flex>
-            <Box sx={{ width: ['100%', '100%', `${(1 / 2) * 100}%`] }}>
-              {step.videoUrl ? (
-                <ReactPlayer
-                  width="auto"
-                  data-cy="video-embed"
-                  controls
-                  url={step.videoUrl}
-                />
-              ) : (
-                <ImageGallery images={step.images as IUploadedFileMeta[]} />
-              )}
-            </Box>
+                    {capitalizeFirstLetter(step.title)}
+                  </Heading>
+                  <Box>
+                    <Text
+                      mt={3}
+                      color={'grey'}
+                      sx={{
+                        ...theme.typography.paragraph,
+                        whiteSpace: 'pre-line',
+                      }}
+                    >
+                      <Linkify>
+                        {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
+                        {capitalizeFirstLetter(step.text)}
+                      </Linkify>
+                    </Text>
+                  </Box>
+                </Flex>
+                <Box sx={{ width: ['100%', '100%', `${(1 / 2) * 100}%`] }}>
+                  {step.videoUrl ? (
+                    <ReactPlayer
+                      width="auto"
+                      data-cy="video-embed"
+                      controls
+                      url={step.videoUrl}
+                    />
+                  ) : (
+                    <ImageGallery images={step.images as IUploadedFileMeta[]} />
+                  )}
+                </Box>
+              </Flex>
+            </Card>
           </Flex>
         </Flex>
       </>

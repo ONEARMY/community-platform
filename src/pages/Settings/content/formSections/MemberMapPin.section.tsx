@@ -6,7 +6,7 @@ import { Text } from 'theme-ui'
 import { Button } from 'oa-components'
 import { TextAreaField } from 'src/components/Form/Fields'
 import { Box, Flex } from 'theme-ui'
-import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
+import { FlexSectionContainer } from './elements'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import theme from 'src/themes/styled.theme'
 import { required } from 'src/utils/validators'
@@ -18,7 +18,6 @@ import { randomIntFromInterval } from 'src/utils/helpers'
 interface IState {
   showAddressEdit: boolean
   hasMapPin: boolean
-  isOpen?: boolean
 }
 
 @inject('mapsStore', 'userStore')
@@ -29,7 +28,6 @@ export class MemberMapPinSection extends React.Component<any, IState> {
     super(props)
     this.state = {
       showAddressEdit: true,
-      isOpen: true,
       hasMapPin: false,
     }
   }
@@ -47,23 +45,15 @@ export class MemberMapPinSection extends React.Component<any, IState> {
   }
 
   render() {
-    const { isOpen } = this.state
-
     return (
       <FlexSectionContainer>
         <Flex sx={{ justifyContent: 'space-between' }}>
           <Heading small id="your-map-pin">
             Add yourself to the map!
           </Heading>
-          <ArrowIsSectionOpen
-            onClick={() => {
-              this.setState({ isOpen: !isOpen })
-            }}
-            isOpen={isOpen}
-          />
         </Flex>
 
-        <Box sx={{ display: isOpen ? 'block' : 'none' }}>
+        <Box>
           <Text mt={4} mb={4} sx={{ display: 'block' }}>
             Add yourself to the map as an individual who wants to get started.
             Find local community members and meetup to join forces and

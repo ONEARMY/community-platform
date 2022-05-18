@@ -1,8 +1,6 @@
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import Flex from 'src/components/Flex'
-import { Box } from 'theme-ui'
-import { Icon } from 'oa-components'
 import { Field } from 'react-final-form'
 
 export const Label = (props) => (
@@ -48,20 +46,4 @@ export const FlexSectionContainer = (props) => (
   >
     {props.children}
   </Flex>
-)
-
-export const ArrowIsSectionOpen = (props) => (
-  <Box
-    height="20px"
-    sx={{
-      transform: props.isOpen ? 'rotate(180deg)' : null,
-      transformOrigin: 'center',
-      ':hover': {
-        cursor: 'pointer',
-      },
-    }}
-    {...props}
-  >
-    <Icon size="20" glyph="arrow-full-down" />
-  </Box>
 )

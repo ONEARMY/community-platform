@@ -3,7 +3,7 @@ import * as React from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import { Box, Text } from 'theme-ui'
-import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
+import { FlexSectionContainer } from './elements'
 import { OpeningHoursPicker } from './Fields/OpeningHoursPicker.field'
 
 import { FieldArray } from 'react-final-form-arrays'
@@ -17,33 +17,19 @@ interface IProps {
   required: boolean
 }
 
-interface IState {
-  isOpen: boolean
-}
-
-export class CollectionSection extends React.Component<IProps, IState> {
+export class CollectionSection extends React.Component<IProps> {
   constructor(props: IProps) {
     super(props)
-    this.state = {
-      isOpen: true,
-    }
   }
 
   render() {
-    const { isOpen } = this.state
     const { required } = this.props
     return (
       <FlexSectionContainer>
         <Flex sx={{ justifyContent: 'space-between' }}>
           <Heading small>Collection</Heading>
-          <ArrowIsSectionOpen
-            onClick={() => {
-              this.setState({ isOpen: !isOpen })
-            }}
-            isOpen={isOpen}
-          />
         </Flex>
-        <Box sx={{ display: isOpen ? 'block' : 'none' }}>
+        <Box>
           <Flex sx={{ wrap: 'nowrap', alignItems: 'center', width: '100%' }}>
             <Text mt={4} mb={4}>
               Opening time *

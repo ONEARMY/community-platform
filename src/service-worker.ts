@@ -3,12 +3,15 @@
 
 import { clientsClaim } from 'workbox-core'
 import { ExpirationPlugin } from 'workbox-expiration'
-import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching'
+import { createHandlerBoundToURL } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
 import { CacheableResponsePlugin } from 'workbox-cacheable-response'
-import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies'
+import {
+  CacheFirst,
+  NetworkOnly,
+  StaleWhileRevalidate,
+} from 'workbox-strategies'
 import { BackgroundSyncPlugin } from 'workbox-background-sync'
-import type { PrecacheEntry } from 'workbox-precaching/_types'
 import { setCacheNameDetails } from 'workbox-core'
 
 setCacheNameDetails({
@@ -23,15 +26,14 @@ declare const self: ServiceWorkerGlobalScope
 // if the page does not have an active service worker take control immediately
 clientsClaim()
 
-// This variable must be present somewhere in your service worker file,
-// even if you decide not to use precaching. See https://cra.link/PWA
-const fullManifest = self.__WB_MANIFEST
+// The variable `self.__WB_MANIFEST` must be present somewhere in your
+// service worker file, even if you decide not to use precaching.
+// This is because the Workbox compilation plugin checks for this value when
+// generating a manifest of URLs to precache.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const ignored = self.__WB_MANIFEST
 
-// just cache index, allow others to be added to runtime cache instead (better for lazy loading)
-const coreManifest = (fullManifest as PrecacheEntry[]).filter(
-  (entry) => entry.url === '/index.html',
-)
-precacheAndRoute(coreManifest)
+registerRoute(new RegExp('^/index.html'), new NetworkOnly())
 
 // static assets are already cachebusted with their file names so can just serve cacheFirst
 // for same origin (https://developers.google.com/web/tools/workbox/modules/workbox-routing)

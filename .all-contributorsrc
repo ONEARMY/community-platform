@@ -46,6 +46,15 @@
         "code",
         "maintainer"
       ]
+    },
+    {
+      "login": "amuroBosetti",
+      "name": "Mauro Bosetti",
+      "avatar_url": "https://avatars.githubusercontent.com/u/46928545?v=4",
+      "profile": "https://github.com/amuroBosetti",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "projectName": "community-platform",

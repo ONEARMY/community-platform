@@ -47,6 +47,7 @@ export const ModerationStatusText: FunctionComponent<IProps> = ({
   return (
     <Text
       sx={{
+        display: 'block',
         position: 'absolute',
         maxWidth: '90%',
         color: status === 'rejected' ? theme.colors.red : 'black',

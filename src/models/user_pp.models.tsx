@@ -1,6 +1,6 @@
 import type { IUser } from './user.models'
 import type { DBDoc } from './common.models'
-import type { ProfileTypeLabel } from 'src/modules/profile'
+import type { ProfileTypeLabel } from '../modules/profile'
 
 export type PlasticTypeLabel =
   | 'pet'

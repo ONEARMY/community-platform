@@ -1,4 +1,4 @@
-import { getConfigurationOption } from 'src/config/config'
+import { getConfigurationOption } from '../../config/config'
 import { SupportedProfileTypesFactory } from './SupportedProfileTypesFactory'
 
 export const ProfileType = {

@@ -1,5 +1,4 @@
-import { Flex } from 'theme-ui'
-import { Text } from 'src/components/Text'
+import { Flex, Text } from 'theme-ui'
 import { TextAreaField } from '../Form/Fields'
 import { Field, Form } from 'react-final-form'
 import { Button } from 'oa-components'
@@ -11,6 +10,7 @@ export const FormEditComment: React.FC<{
   handleSubmit: (commentText: string) => void
 }> = (props) => {
   const { comment } = props
+
   return (
     <Form
       onSubmit={(values) => {
@@ -28,7 +28,7 @@ export const FormEditComment: React.FC<{
           p={2}
           onSubmit={handleSubmit}
         >
-          <Text as="label" large style={{ marginBottom: '6px' }}>
+          <Text as="label" style={{ marginBottom: '6px', fontSize: 3 }}>
             Edit comment
           </Text>
           <Field name="comment" id="comment" component={TextAreaField} />

@@ -1,15 +1,15 @@
 import Logger from 'pino'
 import { createPinoBrowserSend, createWriteStream } from 'pino-logflare'
-import { getConfigirationOption } from 'src/config/config'
+import { getConfigurationOption } from 'src/config/config'
 
-const logLevel = getConfigirationOption('REACT_APP_LOG_LEVEL', 'info')
+const logLevel = getConfigurationOption('REACT_APP_LOG_LEVEL', 'info')
 
 let loggerInstance
 
-if (getConfigirationOption('REACT_APP_LOGFLARE_KEY', '')) {
+if (getConfigurationOption('REACT_APP_LOGFLARE_KEY', '')) {
   const logflareConfiguration = {
-    apiKey: getConfigirationOption('REACT_APP_LOGFLARE_KEY', ''),
-    sourceToken: getConfigirationOption('REACT_APP_LOGFLARE_SOURCE', ''),
+    apiKey: getConfigurationOption('REACT_APP_LOGFLARE_KEY', ''),
+    sourceToken: getConfigurationOption('REACT_APP_LOGFLARE_SOURCE', ''),
   }
 
   loggerInstance = Logger(

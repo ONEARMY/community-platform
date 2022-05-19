@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - master
-    # Only run action if changes have been made to the documentation
+    # Only run action if changes have been made
+    # to the documentation or components packages
     paths:
       - "packages/documentation/**"
+      - "packages/components/**"
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest

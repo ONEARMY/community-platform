@@ -1,11 +1,10 @@
 import { Component } from 'react'
 import theme from 'src/themes/styled.theme'
-import { Link, Flex, Image } from 'theme-ui'
+import { Link, Flex, Image, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 import { inject, observer } from 'mobx-react'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
-import Text from 'src/components/Text'
 import { VERSION } from 'src/config/config'
 
 interface IProps {

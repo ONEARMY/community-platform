@@ -1,8 +1,4 @@
-import type {
-  IUserPP,
-  IProfileType,
-  IWorkspaceType,
-} from 'src/models/user_pp.models'
+import type { IUserPP, IWorkspaceType } from 'src/models/user_pp.models'
 import { MOCK_DB_META } from './db.mock'
 import { MOCK_USER } from './user.mock'
 import type { IPlasticType, IMAchineBuilderXp } from 'src/models/user_pp.models'
@@ -17,22 +13,7 @@ import Other from 'src/assets/images/plastic-types/other.svg'
 import Pvc from 'src/assets/images/plastic-types/pvc.svg'
 
 // assets profileType
-import CollectionBadge from 'src/assets/images/badges/pt-collection-point.svg'
-import MemberBadge from 'src/assets/images/badges/pt-member.svg'
-import MachineBadge from 'src/assets/images/badges/pt-machine-shop.svg'
-import WorkspaceBadge from 'src/assets/images/badges/pt-workspace.svg'
-import LocalComBadge from 'src/assets/images/badges/pt-local-community.svg'
-import LogoWorkspace from 'src/assets/icons/map-workspace.svg'
-import LogoCollection from 'src/assets/icons/map-collection.svg'
-import LogoMember from 'src/assets/icons/map-member.svg'
-import LogoMachine from 'src/assets/icons/map-machine.svg'
-import LogoCommunity from 'src/assets/icons/map-community.svg'
 // Verified
-import LogoWorkspaceVerified from 'src/assets/icons/map-workspace-verified.svg'
-import LogoCollectionVerified from 'src/assets/icons/map-collection-verified.svg'
-import LogoMemberVerified from 'src/assets/icons/map-member-verified.svg'
-import LogoMachineVerified from 'src/assets/icons/map-machine-verified.svg'
-import LogoCommunityVerified from 'src/assets/icons/map-community-verified.svg'
 
 // assets workspaceType
 import Extrusion from 'src/assets/images/workspace-focus/extrusion.png'
@@ -40,13 +21,14 @@ import Injection from 'src/assets/images/workspace-focus/injection.png'
 import Mix from 'src/assets/images/workspace-focus/mix.png'
 import Sheetpress from 'src/assets/images/workspace-focus/sheetpress.png'
 import Shredder from 'src/assets/images/workspace-focus/shredder.png'
+import { ProfileType } from 'src/modules/profile'
 
 export const MOCK_USER_WORKSPACE: IUserPP = {
   ...MOCK_USER,
   userName: 'workspace-username',
   about:
     "Description of user profile, it's a nice workspace where we build products out of recycled plastic",
-  profileType: 'workspace',
+  profileType: ProfileType.WORKSPACE,
   workspaceType: 'extrusion',
   coverImages: [
     {
@@ -99,7 +81,7 @@ export const MOCK_USER_COLLECTION: IUserPP = {
   ...MOCK_DB_META(),
   _authID: '123',
   country: 'Netherlands',
-  profileType: 'collection-point',
+  profileType: ProfileType.COLLECTION_POINT,
   moderation: 'accepted',
   displayName: 'collection-username',
   coverImages: [
@@ -154,7 +136,7 @@ export const MOCK_USER_MEMBER: IUserPP = {
   ...MOCK_DB_META(),
   _authID: '123',
   country: 'Netherlands',
-  profileType: 'member',
+  profileType: ProfileType.MEMBER,
   moderation: 'accepted',
   displayName: 'member-username',
   coverImages: [
@@ -208,7 +190,7 @@ export const MOCK_USER_COMMUNITY: IUserPP = {
   ...MOCK_DB_META(),
   _authID: '123',
   country: 'Kenya',
-  profileType: 'community-builder',
+  profileType: ProfileType.COMMUNITY_BUILDER,
   moderation: 'accepted',
   displayName: 'community-username',
   coverImages: [
@@ -264,7 +246,7 @@ export const MOCK_USER_MACHINE: IUserPP = {
   ...MOCK_DB_META(),
   _authID: '123',
   country: 'USA',
-  profileType: 'machine-builder',
+  profileType: ProfileType.MACHINE_BUILDER,
   moderation: 'accepted',
   displayName: 'collection-username',
   coverImages: [
@@ -366,44 +348,6 @@ export const MACHINE_BUILDER_XP: IMAchineBuilderXp[] = [
   },
   {
     label: 'mould-making',
-  },
-]
-
-export const PROFILE_TYPES: IProfileType[] = [
-  {
-    label: 'member',
-    textLabel: 'I am a member',
-    imageSrc: MemberBadge,
-    cleanImageSrc: LogoMember,
-    cleanImageVerifiedSrc: LogoMemberVerified,
-  },
-  {
-    label: 'workspace',
-    textLabel: 'I run a workspace',
-    imageSrc: WorkspaceBadge,
-    cleanImageSrc: LogoWorkspace,
-    cleanImageVerifiedSrc: LogoWorkspaceVerified,
-  },
-  {
-    label: 'machine-builder',
-    textLabel: 'I build machines',
-    imageSrc: MachineBadge,
-    cleanImageSrc: LogoMachine,
-    cleanImageVerifiedSrc: LogoMachineVerified,
-  },
-  {
-    label: 'community-builder',
-    textLabel: 'I run a local community',
-    imageSrc: LocalComBadge,
-    cleanImageSrc: LogoCommunity,
-    cleanImageVerifiedSrc: LogoCommunityVerified,
-  },
-  {
-    label: 'collection-point',
-    textLabel: 'I collect & sort plastic',
-    imageSrc: CollectionBadge,
-    cleanImageSrc: LogoCollection,
-    cleanImageVerifiedSrc: LogoCollectionVerified,
   },
 ]
 

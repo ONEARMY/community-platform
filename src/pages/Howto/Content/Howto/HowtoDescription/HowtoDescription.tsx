@@ -3,10 +3,9 @@ import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { format } from 'date-fns'
 import type { IHowtoDB } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
-import Text from 'src/components/Text'
 import ModerationStatusText from 'src/components/ModerationStatusText'
 import { Link } from 'src/components/Links'
-import { Box, Flex, Image } from 'theme-ui'
+import { Text, Box, Flex, Image } from 'theme-ui'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import StepsIcon from 'src/assets/icons/icon-steps.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
@@ -146,7 +145,11 @@ export default class HowtoDescription extends PureComponent<IProps> {
               {howto.creatorCountry && (
                 <FlagIconHowTos code={howto.creatorCountry} />
               )}
-              <Text inline auxiliary my={2} ml={1}>
+              <Text
+                my={2}
+                ml={1}
+                sx={{ ...theme.typography.auxiliary, display: 'inline-block' }}
+              >
                 By{' '}
                 <Link
                   sx={{
@@ -166,8 +169,10 @@ export default class HowtoDescription extends PureComponent<IProps> {
               </Text>
             </Flex>
             <Text
-              auxiliary
-              sx={{ color: `${theme.colors.lightgrey} !important` }}
+              sx={{
+                ...theme.typography.auxiliary,
+                color: `${theme.colors.lightgrey} !important`,
+              }}
               mt={1}
               mb={2}
             >
@@ -177,7 +182,9 @@ export default class HowtoDescription extends PureComponent<IProps> {
               {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
               {capitalizeFirstLetter(howto.title)}
             </Heading>
-            <Text preLine paragraph>
+            <Text
+              sx={{ ...theme.typography.paragraph, whiteSpace: 'pre-line' }}
+            >
               {howto.description}
             </Text>
           </Box>

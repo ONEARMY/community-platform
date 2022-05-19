@@ -1,4 +1,4 @@
-import { PROFILE_TYPES } from 'src/mocks/user_pp.mock'
+import { getSupportedProfileTypes, ProfileType } from 'src/modules/profile'
 
 // Highlights
 import CollectionHighlight from 'src/assets/images/highlights/highlight-collection-point.svg'
@@ -12,15 +12,15 @@ import MemberBadge from 'src/assets/images/badges/pt-member.svg'
 
 function findWordspaceHighlight(workspaceType?: string): string {
   switch (workspaceType) {
-    case 'workspace':
+    case ProfileType.WORKSPACE:
       return WorkspaceHighlight
-    case 'member':
+    case ProfileType.MEMBER:
       return MemberHighlight
-    case 'machine-builder':
+    case ProfileType.MACHINE_BUILDER:
       return MachineHighlight
-    case 'community-builder':
+    case ProfileType.COMMUNITY_BUILDER:
       return LocalCommunityHighlight
-    case 'collection-point':
+    case ProfileType.COLLECTION_POINT:
       return CollectionHighlight
     default:
       return MemberHighlight
@@ -35,7 +35,7 @@ function findWorkspaceBadgeNullable(
     return null
   }
 
-  const foundProfileTypeObj = PROFILE_TYPES.find(
+  const foundProfileTypeObj = getSupportedProfileTypes().find(
     (type) => type.label === workspaceType,
   )
 
@@ -59,7 +59,7 @@ function findWorkspaceBadge(
     return MemberBadge
   }
 
-  const foundProfileTypeObj = PROFILE_TYPES.find(
+  const foundProfileTypeObj = getSupportedProfileTypes().find(
     (type) => type.label === workspaceType,
   )
   if (foundProfileTypeObj) {

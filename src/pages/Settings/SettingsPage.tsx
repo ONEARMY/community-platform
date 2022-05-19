@@ -1,5 +1,5 @@
 import * as React from 'react'
-import Flex from 'src/components/Flex'
+import { Card, Flex } from 'theme-ui'
 import type { IUserPP } from 'src/models/user_pp.models'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { UserStore } from 'src/stores/User/user.store'
@@ -26,6 +26,7 @@ import { Prompt } from 'react-router'
 import { toJS } from 'mobx'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { logger } from 'src/logger'
+import { ProfileType } from 'src/modules/profile'
 
 interface IProps {
   /** user ID for lookup when editing another user as admin */
@@ -161,6 +162,7 @@ export class UserSettings extends React.Component<IProps, IState> {
           errors,
           ...rest
         }) => {
+          const heading = user.profileType ? 'Edit profile' : 'Create profile'
           return (
             <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
               <Prompt
@@ -180,19 +182,11 @@ export class UserSettings extends React.Component<IProps, IState> {
                 <Box sx={{ width: '100%' }}>
                   <form id="userProfileForm" onSubmit={handleSubmit}>
                     <Flex sx={{ flexDirection: 'column' }}>
-                      <Flex
-                        card
-                        mediumRadius
-                        bg={theme.colors.softblue}
-                        px={3}
-                        py={2}
-                      >
-                        {user.profileType ? (
-                          <Heading medium>Edit profile</Heading>
-                        ) : (
-                          <Heading medium>Create profile</Heading>
-                        )}
-                      </Flex>
+                      <Card bg={theme.colors.softblue}>
+                        <Flex px={3} py={2}>
+                          <Heading medium>{heading}</Heading>
+                        </Flex>
+                      </Card>
                       <Box
                         sx={{
                           display: ['block', 'block', 'none'],
@@ -205,10 +199,10 @@ export class UserSettings extends React.Component<IProps, IState> {
                       {isModuleSupported(MODULE.MAP) && <FocusSection />}
 
                       {/* Specific profile type fields */}
-                      {values.profileType === 'workspace' && (
+                      {values.profileType === ProfileType.WORKSPACE && (
                         <WorkspaceSection />
                       )}
-                      {values.profileType === 'collection-point' && (
+                      {values.profileType === ProfileType.COLLECTION_POINT && (
                         <CollectionSection
                           required={
                             values.collectedPlasticTypes
@@ -218,7 +212,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                           formValues={values}
                         />
                       )}
-                      {values.profileType === 'machine-builder' && (
+                      {values.profileType === ProfileType.MACHINE_BUILDER && (
                         <ExpertiseSection
                           required={
                             values.machineBuilderXp
@@ -228,12 +222,12 @@ export class UserSettings extends React.Component<IProps, IState> {
                         />
                       )}
                       {/* General fields */}
-                      {values.profileType !== 'member' &&
+                      {values.profileType !== ProfileType.MEMBER &&
                         isModuleSupported(MODULE.MAP) && (
                           <WorkspaceMapPinSection />
                         )}
 
-                      {values.profileType === 'member' &&
+                      {values.profileType === ProfileType.MEMBER &&
                         isModuleSupported(MODULE.MAP) && (
                           <MemberMapPinSection />
                         )}

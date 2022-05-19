@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { HiddenInput } from '../elements'
-import { Label, Image, Flex, Box } from 'theme-ui'
-import Text from 'src/components/Text'
+import { Label, Image, Flex, Box, Text } from 'theme-ui'
 import { HiddenInputField } from 'src/components/Form/Fields'
 
 interface IProps {
@@ -111,9 +110,11 @@ class CustomRadioField extends Component<IProps, IState> {
             {textLabel && (
               <Text
                 px={1}
-                my={1}
-                small
                 sx={{
+                  display: 'block',
+                  fontSize: 1,
+                  marginTop: 1,
+                  marginBottom: 1,
                   fontWeight: ['bold', 'bold', 'inherit'],
                   textAlign: ['left', 'left', 'center'],
                 }}
@@ -122,7 +123,15 @@ class CustomRadioField extends Component<IProps, IState> {
               </Text>
             )}
             {subText && (
-              <Text my={1} txtcenter small>
+              <Text
+                sx={{
+                  textAlign: 'center',
+                  fontSize: 1,
+                  display: 'block',
+                  marginTop: 1,
+                  marginBottom: 1,
+                }}
+              >
                 {subText}
               </Text>
             )}

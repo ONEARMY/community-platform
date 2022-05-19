@@ -3,12 +3,13 @@ import { Component } from 'react'
 import type { ImageProps } from 'theme-ui'
 import { Image } from 'theme-ui'
 import { inject, observer } from 'mobx-react'
-import type { ProfileTypeLabel } from 'src/models/user_pp.models'
+
 import Workspace from 'src/pages/User/workspace/Workspace'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
 import MemberBadge from 'src/assets/images/badges/pt-member.svg'
 import { THEME_LIST } from 'src/themes'
+import type { ProfileTypeLabel } from 'src/modules/profile'
 
 interface IProps extends ImageProps {
   width?: string

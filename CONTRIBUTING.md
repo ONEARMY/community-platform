@@ -50,16 +50,18 @@ You can find useful links to learn more about these technologies [in the resourc
 
 With the above tools available, you are ready:
 
-1. Clone the project from the fork you have created previously at first step :
+1. Fork the repository.
+
+2. Clone the project from the fork you have created previously at first step :
    `git clone https://github.com/`**your-github-user**`/community-platform.git`
 
-2. Install dependencies
+3. Install dependencies
    `yarn`
 
-3. Run the dev server
+4. Run the dev server
    `yarn start`
 
-4. Run the end-to-end tests
+5. Run the end-to-end tests
    `yarn test`
 
 ### Additional commands

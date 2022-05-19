@@ -1,4 +1,5 @@
 import type { ThemeWithName } from '../types'
+import member from 'src/assets/images/themes/fixing-fashion/badge.svg'
 
 // use enum to specify list of possible colors for typing
 export const colors = {
@@ -193,6 +194,17 @@ const typography = {
 
 const StyledComponentTheme: ThemeWithName = {
   name: 'Fixing Fashion',
+  badges: {
+    member,
+  },
+  cards: {
+    primary: {
+      background: 'white',
+      border: `2px solid ${colors.black}`,
+      borderRadius: 1,
+      overflow: 'hidden',
+    },
+  },
   colors,
   buttons,
   breakpoints,

@@ -42,12 +42,18 @@ export class EventsList extends React.Component<any> {
 
   public render() {
     const { filteredEvents, upcomingEvents } = this.injected.eventStore
-    console.log(this.theme)
     if (filteredEvents) {
       return (
         <>
           <Flex py={26}>
-            <Heading medium txtcenter bold>
+            <Heading
+              sx={{
+                marginX: 'auto',
+                textAlign: 'center',
+                fontWeight: 'bold',
+                fontSize: 5,
+              }}
+            >
               {this.theme.currentTheme.siteName} events from around the world
             </Heading>
           </Flex>

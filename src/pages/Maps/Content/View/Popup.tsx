@@ -1,8 +1,7 @@
 import * as React from 'react'
 import L from 'leaflet'
-import { Image } from 'theme-ui'
-import Flex from 'src/components/Flex'
-import Text from 'src/components/Text'
+import { Image, Text } from 'theme-ui'
+import { Flex } from 'theme-ui'
 import { Button } from 'oa-components'
 import type { Map } from 'react-leaflet'
 import { Popup as LeafletPopup } from 'react-leaflet'
@@ -18,6 +17,7 @@ import type { MapsStore } from 'src/stores/Maps/maps.store'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import Workspace from 'src/pages/User/workspace/Workspace'
 import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
+import theme from 'src/themes/styled.theme'
 
 interface IProps {
   activePin: IMapPin | IMapPinWithDetail
@@ -121,10 +121,10 @@ export class Popup extends React.Component<IProps> {
         <Link to={'/u/' + name} data-cy="map-pin-popup">
           <HeroImage src={heroImageUrl} onError={addFallbackSrc} />
           <Flex sx={{ flexDirection: 'column' }} px={2} py={2}>
-            <Text tags mb={2}>
+            <Text mb={2} sx={{ fontSize: '12px', color: theme.colors.blue }}>
               {group ? group.displayName : pin.type}
             </Text>
-            <Text large mb={1} sx={{ display: 'flex' }}>
+            <Text mb={1} sx={{ display: 'flex', fontSize: 2 }}>
               {displayName}
               {verifiedBadge && (
                 <Image
@@ -135,19 +135,24 @@ export class Popup extends React.Component<IProps> {
                 />
               )}
             </Text>
-            <Text small mb={2} style={{ wordBreak: 'break-word' }}>
+            <Text mb={2} sx={{ wordBreak: 'break-word', fontSize: 1 }}>
               {description}
             </Text>
             <LastOnline>Last active {lastActiveText} ago</LastOnline>
             {pin.moderation !== 'accepted' && (
               <Text
-                auxiliary
-                small
-                bold
                 mb={2}
-                highlight
-                dashed
-                critical={pin.moderation === 'rejected'}
+                sx={{
+                  ...theme.typography.auxiliary,
+                  fontWeight: 'bold',
+                  fontSize: 1,
+                  background: theme.colors.yellow.base,
+                  padding: '7px',
+                  borderRadius: '5px',
+                  border: '1px dashed',
+                  color:
+                    pin.moderation === 'rejected' ? theme.colors.red : null,
+                }}
               >
                 {moderationStatus}
               </Text>

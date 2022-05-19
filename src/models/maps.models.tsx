@@ -1,5 +1,6 @@
 import type { ISODateString, IModerable } from './common.models'
-import type { WorkspaceType, ProfileTypeLabel } from './user_pp.models'
+import type { WorkspaceType } from './user_pp.models'
+import type { ProfileTypeLabel } from 'src/modules/profile'
 
 /**
  * Map pins keep minimal information required for pin display.

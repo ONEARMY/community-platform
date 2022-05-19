@@ -2,6 +2,7 @@ import type { ISelectedTags } from './tags.model'
 import type { DBDoc, IModerable } from './common.models'
 import type { IConvertedFileMeta } from '../types'
 import type { IUploadedFileMeta } from '../stores/storage'
+import type { ICategory } from './categories.model'
 
 /**
  * Comments are currently only used in Howtos.
@@ -14,6 +15,7 @@ export interface IComment {
   creatorName: string
   creatorCountry?: string | null
   text: string
+  userIsVerfied?: boolean
 }
 
 // By default all how-to form input fields come as strings
@@ -59,6 +61,7 @@ export interface IHowtoFormInput extends IModerable {
   files: Array<IUploadedFileMeta | File | null>
   steps: IHowToStepFormInput[]
   slug: string
+  category?: ICategory
   // note, tags will remain optional as if populated {} will be stripped by db (firestore)
   tags?: ISelectedTags
   // Added to be able to recover on eddit by admin

@@ -1,4 +1,4 @@
-import { getConfigirationOption } from 'src/config/config'
+import { getConfigurationOption } from 'src/config/config'
 
 export enum MODULE {
   CORE = 'core', // This is enabled on all installations
@@ -13,7 +13,7 @@ export enum MODULE {
 
 export function getSupportedModules(): MODULE[] {
   const envModules: string[] =
-    getConfigirationOption(
+    getConfigurationOption(
       'REACT_APP_SUPPORTED_MODULES',
       'howto,map,events,research,academy,user,admin_v2',
     )

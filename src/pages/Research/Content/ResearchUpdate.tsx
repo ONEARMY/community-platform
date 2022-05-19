@@ -2,23 +2,25 @@ import { format } from 'date-fns'
 import * as React from 'react'
 import Linkify from 'react-linkify'
 import ReactPlayer from 'react-player'
-import { Box } from 'theme-ui'
+import { Box, Card, Text } from 'theme-ui'
 import { Button } from 'oa-components'
-import Flex from 'src/components/Flex'
+import { Flex } from 'theme-ui'
 import Heading from 'src/components/Heading'
 import ImageGallery from 'src/components/ImageGallery'
 import { Link } from 'src/components/Links'
-import Text from 'src/components/Text'
 import type { IResearch } from 'src/models/research.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { ResearchComments } from './ResearchComments/ResearchComments'
 import styled from '@emotion/styled'
+import type { IComment } from 'src/models'
+import { useTheme } from '@emotion/react'
 
 interface IProps {
   update: IResearch.UpdateDB
   updateIndex: number
   isEditable: boolean
   slug: string
+  comments: IComment[]
 }
 
 const FlexStepNumber = styled(Flex)`
@@ -30,7 +32,9 @@ const ResearchUpdate: React.FC<IProps> = ({
   updateIndex,
   isEditable,
   slug,
+  comments,
 }) => {
+  const theme = useTheme()
   return (
     <>
       <Flex
@@ -41,24 +45,16 @@ const ResearchUpdate: React.FC<IProps> = ({
         sx={{ flexDirection: ['column', 'column', 'row'] }}
       >
         <Flex mx={[0, 0, 2]} sx={{ width: '100%', flex: 1 }} mb={[3, 3, 0]}>
-          <FlexStepNumber
-            card
-            mediumRadius
-            py={3}
-            px={4}
-            bg={'white'}
-            sx={{ width: '100%', justifyContent: 'center' }}
-          >
-            <Heading medium mb={0}>
-              {updateIndex + 1}
-            </Heading>
+          <FlexStepNumber sx={{ height: 'fit-content' }}>
+            <Card py={3} px={4} sx={{ width: '100%', textAlign: 'center' }}>
+              <Heading medium mb={0}>
+                {updateIndex + 1}
+              </Heading>
+            </Card>
           </FlexStepNumber>
         </Flex>
+
         <Flex
-          card
-          mediumRadius
-          mx={[0, 0, 2]}
-          bg={'white'}
           sx={{
             width: '100%',
             flexDirection: 'column',
@@ -66,79 +62,89 @@ const ResearchUpdate: React.FC<IProps> = ({
             overflow: 'hidden',
           }}
         >
-          <Flex sx={{ width: '100%', flexDirection: 'column' }} py={4} px={4}>
-            <Flex
-              sx={{ width: '100%', flexDirection: ['column', 'row', 'row'] }}
-            >
-              <Heading
-                sx={{ width: ['100%', '75%', '75%'] }}
-                medium
-                mb={[2, 0, 0]}
-              >
-                {update.title}
-              </Heading>
+          <Card mx={[0, 0, 2]}>
+            <Flex sx={{ width: '100%', flexDirection: 'column' }} py={4} px={4}>
               <Flex
-                sx={{
-                  flexDirection: ['row', 'column', 'column'],
-                  width: ['100%', '25%', '25%'],
-                  justifyContent: 'space-between',
-                }}
+                sx={{ width: '100%', flexDirection: ['column', 'row', 'row'] }}
               >
-                <Flex sx={{ flexDirection: ['column'] }}>
-                  <Text
-                    auxiliary
-                    sx={{ textAlign: ['left', 'right', 'right'] }}
-                  >
-                    {'created ' +
-                      format(new Date(update._created), 'DD-MM-YYYY')}
-                  </Text>
-                  {update._created !== update._modified && (
+                <Heading
+                  sx={{ width: ['100%', '75%', '75%'] }}
+                  medium
+                  mb={[2, 0, 0]}
+                >
+                  {update.title}
+                </Heading>
+                <Flex
+                  sx={{
+                    flexDirection: ['row', 'column', 'column'],
+                    width: ['100%', '25%', '25%'],
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <Flex sx={{ flexDirection: ['column'] }}>
                     <Text
-                      auxiliary
-                      sx={{ textAlign: ['left', 'right', 'right'] }}
+                      sx={{
+                        textAlign: ['left', 'right', 'right'],
+                        ...theme.typography.auxiliary,
+                      }}
                     >
-                      {'edited ' +
-                        format(new Date(update._modified), 'DD-MM-YYYY')}
+                      {'created ' +
+                        format(new Date(update._created), 'DD-MM-YYYY')}
                     </Text>
+                    {update._created !== update._modified && (
+                      <Text
+                        sx={{
+                          textAlign: ['left', 'right', 'right'],
+                          ...theme.typography.auxiliary,
+                        }}
+                      >
+                        {'edited ' +
+                          format(new Date(update._modified), 'DD-MM-YYYY')}
+                      </Text>
+                    )}
+                  </Flex>
+                  {/* Show edit button for the creator of the research OR a super-admin */}
+                  {isEditable && (
+                    <Link
+                      ml="auto"
+                      mt={[0, 2, 2]}
+                      to={'/research/' + slug + '/edit-update/' + update._id}
+                    >
+                      <Button variant={'primary'} data-cy={'edit-update'}>
+                        Edit
+                      </Button>
+                    </Link>
                   )}
                 </Flex>
-                {/* Show edit button for the creator of the research OR a super-admin */}
-                {isEditable && (
-                  <Link
-                    ml="auto"
-                    mt={[0, 2, 2]}
-                    to={'/research/' + slug + '/edit-update/' + update._id}
-                  >
-                    <Button variant={'primary'} data-cy={'edit-update'}>
-                      Edit
-                    </Button>
-                  </Link>
-                )}
               </Flex>
+              <Box>
+                <Text
+                  mt={3}
+                  color={'grey'}
+                  sx={{ whiteSpace: 'pre-line', ...theme.typography.paragraph }}
+                >
+                  <Linkify>{update.description}</Linkify>
+                </Text>
+              </Box>
             </Flex>
-            <Box>
-              <Text preLine paragraph mt={3} color={'grey'}>
-                <Linkify>{update.description}</Linkify>
-              </Text>
+            <Box sx={{ width: '100%' }}>
+              {update.videoUrl ? (
+                <ReactPlayer
+                  width="auto"
+                  data-cy="video-embed"
+                  controls
+                  url={update.videoUrl}
+                />
+              ) : (
+                <ImageGallery images={update.images as IUploadedFileMeta[]} />
+              )}
             </Box>
-          </Flex>
-          <Box sx={{ width: '100%' }}>
-            {update.videoUrl ? (
-              <ReactPlayer
-                width="auto"
-                data-cy="video-embed"
-                controls
-                url={update.videoUrl}
-              />
-            ) : (
-              <ImageGallery images={update.images as IUploadedFileMeta[]} />
-            )}
-          </Box>
-          <ResearchComments
-            update={update}
-            comments={update.comments}
-            updateIndex={updateIndex}
-          />
+            <ResearchComments
+              update={update}
+              comments={comments}
+              updateIndex={updateIndex}
+            />
+          </Card>
         </Flex>
       </Flex>
     </>

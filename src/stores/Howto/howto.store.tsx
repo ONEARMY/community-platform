@@ -20,6 +20,7 @@ import {
 import type { RootStore } from '../index'
 import { ModuleStore } from '../common/module.store'
 import type { IUploadedFileMeta } from '../storage'
+import { MAX_COMMENT_LENGTH } from 'src/components/Comment/constants'
 import type { IComment } from 'src/models/howto.models'
 import { logger } from 'src/logger'
 
@@ -41,6 +42,8 @@ export class HowtoStore extends ModuleStore {
   @observable
   public selectedTags: ISelectedTags
   @observable
+  public selectedCategory: string
+  @observable
   public searchValue: string
   @observable
   public referrerSource: string
@@ -56,6 +59,7 @@ export class HowtoStore extends ModuleStore {
       this.sortHowtosByLatest(docs)
     })
     this.selectedTags = {}
+    this.selectedCategory = ''
     this.searchValue = ''
     this.referrerSource = ''
   }
@@ -73,9 +77,24 @@ export class HowtoStore extends ModuleStore {
     )
   }
 
+  public getActiveHowToComments(): IComment[] {
+    return this.activeHowto?.comments
+      ? this.activeHowto?.comments.map((comment: IComment) => {
+          return {
+            ...comment,
+            isUserVerified:
+              !!this.aggregationsStore.aggregations.users_verified?.[
+                comment.creatorName
+              ],
+          }
+        })
+      : []
+  }
+
   @action
   public async setActiveHowtoBySlug(slug: string) {
     // clear any cached data and then load the new howto
+    logger.debug(`setActiveHowtoBySlug:`, { slug })
     this.activeHowto = undefined
     const collection = await this.db
       .collection<IHowto>(COLLECTION_NAME)
@@ -98,10 +117,8 @@ export class HowtoStore extends ModuleStore {
   }
 
   @computed get filteredHowtos() {
-    const howtos = this.filterCollectionByTags(
-      this.allHowtos,
-      this.selectedTags,
-    )
+    let howtos = this.filterCollectionByTags(this.allHowtos, this.selectedTags)
+    howtos = this.filterHowtosByCategory(howtos, this.selectedCategory)
     // HACK - ARH - 2019/12/11 filter unaccepted howtos, should be done serverside
     let validHowtos = filterModerableItems(howtos, this.activeUser)
 
@@ -130,6 +147,11 @@ export class HowtoStore extends ModuleStore {
     this.selectedTags = tagKey
   }
 
+  @action
+  public updateSelectedCategory(category: string) {
+    this.selectedCategory = category
+  }
+
   // Moderate Howto
   public async moderateHowto(howto: IHowto) {
     if (!hasAdminRights(toJS(this.activeUser))) {
@@ -149,7 +171,7 @@ export class HowtoStore extends ModuleStore {
     try {
       const user = this.activeUser
       const howto = this.activeHowto
-      const comment = text.slice(0, 400).trim()
+      const comment = text.slice(0, MAX_COMMENT_LENGTH).trim()
       if (user && howto && comment) {
         const userCountry = getUserCountry(user)
         const newComment: IComment = {
@@ -194,7 +216,9 @@ export class HowtoStore extends ModuleStore {
           (comment) => comment._creatorId === user._id && comment._id === id,
         )
         if (commentIndex !== -1) {
-          comments[commentIndex].text = newText.slice(0, 400).trim()
+          comments[commentIndex].text = newText
+            .slice(0, MAX_COMMENT_LENGTH)
+            .trim()
           comments[commentIndex]._edited = new Date().toISOString()
 
           const updatedHowto: IHowto = {
@@ -246,6 +270,17 @@ export class HowtoStore extends ModuleStore {
       console.error(err)
       throw new Error(err)
     }
+  }
+
+  public filterHowtosByCategory = (
+    collection: IHowtoDB[] = [],
+    category: string,
+  ) => {
+    return category
+      ? collection.filter((obj) => {
+          return obj.category?.label === category
+        })
+      : collection
   }
 
   // upload a new or update an existing how-to

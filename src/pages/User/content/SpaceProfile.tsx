@@ -11,10 +11,10 @@ import { Box, Image } from 'theme-ui'
 import Slider from 'react-slick'
 import 'src/assets/css/slick.min.css'
 import styled from '@emotion/styled'
-import Flex from 'src/components/Flex'
-import { Text } from 'src/components/Text'
+import { Flex } from 'theme-ui'
+import { Text } from 'theme-ui'
 
-import Badge from 'src/components/Badge/Badge'
+import { MemberBadge } from 'oa-components'
 
 import theme from 'src/themes/styled.theme'
 import { Icon, FlagIcon } from 'oa-components'
@@ -35,6 +35,8 @@ import type { IConvertedFileMeta } from 'src/types'
 
 import { UserStats } from './UserStats'
 import UserContactAndLinks from './UserContactAndLinks'
+import { UserAdmin } from './UserAdmin'
+import { ProfileType } from 'src/modules/profile'
 
 interface IBackgroundImageProps {
   bgImg: string
@@ -42,7 +44,6 @@ interface IBackgroundImageProps {
 
 interface IProps {
   user: IUserPP
-  adminButton?: JSX.Element
 }
 
 const MobileBadge = styled.div`
@@ -221,7 +222,7 @@ function renderMachineBuilderXp(machineBuilderXp: Array<IMAchineBuilderXp>) {
   )
 }
 
-export const SpaceProfile = ({ user, adminButton }: IProps) => {
+export const SpaceProfile = ({ user }: IProps) => {
   let coverImage = [
     <SliderImage
       key="default-image"
@@ -258,7 +259,7 @@ export const SpaceProfile = ({ user, adminButton }: IProps) => {
         <Box sx={{ width: ['100%', '100%', '80%'] }}>
           <Box sx={{ display: ['block', 'block', 'none'] }}>
             <MobileBadge>
-              <Badge profileType={user.profileType} />
+              <MemberBadge profileType={user.profileType} />
             </MobileBadge>
           </Box>
 
@@ -276,9 +277,12 @@ export const SpaceProfile = ({ user, adminButton }: IProps) => {
               />
             )}
             <Text
-              large
               my={2}
-              sx={{ color: `${theme.colors.lightgrey} !important` }}
+              sx={{
+                color: `${theme.colors.lightgrey} !important`,
+                fontSize: 3,
+              }}
+              data-cy="userName"
             >
               {user.userName}
             </Text>
@@ -291,37 +295,42 @@ export const SpaceProfile = ({ user, adminButton }: IProps) => {
               color={'black'}
               mb={3}
               style={{ wordBreak: 'break-word' }}
+              data-cy="userDisplayName"
             >
               {user.displayName}
             </Heading>
           </Flex>
           {user.about && (
             <Text
-              preLine
-              paragraph
               mt="0"
               mb="20px"
               color={theme.colors.grey}
-              sx={{ width: ['80%', '100%'] }}
+              sx={{
+                ...theme.typography.paragraph,
+                width: ['80%', '100%'],
+                whiteSpace: 'pre-line',
+              }}
             >
               {user.about}
             </Text>
           )}
 
-          {user.profileType === 'collection-point' &&
+          {user.profileType === ProfileType.COLLECTION_POINT &&
             user.collectedPlasticTypes &&
             renderPlasticTypes(user.collectedPlasticTypes)}
 
-          {user.profileType === 'collection-point' &&
+          {user.profileType === ProfileType.COLLECTION_POINT &&
             user.openingHours &&
             renderOpeningHours(user.openingHours)}
 
-          {user.profileType === 'machine-builder' &&
+          {user.profileType === ProfileType.MACHINE_BUILDER &&
             user.machineBuilderXp &&
             renderMachineBuilderXp(user.machineBuilderXp)}
 
           <UserContactAndLinks links={userLinks} />
-          <Box mt={3}>{adminButton}</Box>
+          <Box mt={3}>
+            <UserAdmin user={user} />
+          </Box>
         </Box>
         <Box
           sx={{
@@ -330,7 +339,7 @@ export const SpaceProfile = ({ user, adminButton }: IProps) => {
           }}
         >
           <MobileBadge>
-            <Badge size={150} profileType={user.profileType} />
+            <MemberBadge size={150} profileType={user.profileType} />
 
             <UserStats user={user} />
           </MobileBadge>

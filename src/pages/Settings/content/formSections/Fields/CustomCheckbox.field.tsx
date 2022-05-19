@@ -1,8 +1,7 @@
 import { Component } from 'react'
 import { HiddenInputField } from 'src/components/Form/Fields'
 import { Label, HiddenInput } from '../elements'
-import { Image } from 'theme-ui'
-import Text from 'src/components/Text'
+import { Image, Text } from 'theme-ui'
 
 interface IProps {
   value: string
@@ -75,7 +74,7 @@ class CustomCheckbox extends Component<IProps, IState> {
           />
         )}
         {btnLabel && (
-          <Text medium m="10px">
+          <Text sx={{ fontSize: 2 }} m="10px">
             {btnLabel}
           </Text>
         )}

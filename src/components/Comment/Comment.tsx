@@ -1,8 +1,9 @@
 import React, { createRef, useEffect, useState } from 'react'
+import Linkify from 'react-linkify'
 import { Flex, Box } from 'theme-ui'
 import type { IComment } from 'src/models'
 import { CommentHeader } from './CommentHeader'
-import { Text } from 'src/components/Text'
+import { Text } from 'theme-ui'
 import { Modal } from '../Modal/Modal'
 import { Button } from 'oa-components'
 import { AuthWrapper } from '../Auth/AuthWrapper'
@@ -41,7 +42,7 @@ export const Comment: React.FC<IProps> = ({
     if (textRef.current) {
       setTextHeight(textRef.current.scrollHeight)
     }
-  }, [])
+  }, [text])
 
   const showMore = () => {
     setShowMore(!isShowMore)
@@ -62,19 +63,20 @@ export const Comment: React.FC<IProps> = ({
         <CommentHeader {...props} />
         <Text
           data-cy="comment-text"
-          my={2}
+          mt={2}
+          mb={2}
           sx={{
             whiteSpace: 'pre-wrap',
             wordBreak: 'break-word',
             overflow: 'hidden',
             lineHeight: '1em',
-            maxHeight: isShowMore ? 'max-content' : '10em',
+            maxHeight: isShowMore ? 'max-content' : '128px',
           }}
           ref={textRef}
         >
-          {text}
+          <Linkify properties={{ target: '_blank' }}>{text}</Linkify>
         </Text>
-        {textHeight > 160 && (
+        {textHeight > 129 && (
           <a
             onClick={showMore}
             style={{

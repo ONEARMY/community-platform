@@ -24,11 +24,11 @@ For the past 5+ years we’ve worked together with thousands of people from all 
 - A project's success is closely linked to its community, and for a new project starting up, finding and creating their own strong community is often a time-consuming activity that can take lots of resources.
 - While working on a project we often find ourselves having to use a multitude of digital tools that are often incomplete, disconnected, privately owned and not open source.
 
-This platform aims to tackle these problems by creating a strong unified community for the different projects under its umbrella and offering the necessary tools to collaborate and connect in one single place. Free and opensource.
+This platform aims to tackle these problems by creating a strong unified community for the different projects under its umbrella and offering the necessary tools to collaborate and connect in one single place. Free and open-source.
 
 ## ⚡️ &nbsp; What is this platform?
 
-Our community platform helps people to grow communites and make it easier to collaborate on environmental projects in one single place. A place where people can meet, help each other, ask and answer questions, share their innovative ways of fixing problems, discover people around them, connect locally, find events and more. It aims to provide the tools to connect both online and offline. Amongst other features we have How-to, Events and Maps.
+Our community platform helps people to grow communities and make it easier to collaborate on environmental projects in one single place. A place where people can meet, help each other, ask and answer questions, share their innovative ways of fixing problems, discover people around them, connect locally, find events and more. It aims to provide the tools to connect both online and offline. Amongst other features we have How-to, Events and Maps.
 
 ### Have a look on our [website](https://platform.onearmy.earth) to have a clear overview
 
@@ -49,8 +49,17 @@ If needed you can [drop us a line here](mailto:platform@onearmy.earth?subject=co
 Or join our [Discord channel](https://discordapp.com/invite/rnx7m4t)
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore -->
-| [<img src="https://avatars0.githubusercontent.com/u/10515065?s=60&v=4" width="60px;"/><br /><sub><b>Chris Clarke</b></sub>](https://github.com/chrismclarke)<br />[💻](https://github.com/OneArmyWorld/onearmy/commits?author=chrismclarke "Code") | [<img src="https://avatars.githubusercontent.com/u/472589?v=4" width="60px;"/><br /><sub><b>Luke Watts</b></sub>](https://github.com/thisislawatts)<br />[💻](https://github.com/ONEARMY/community-platform/commits?author=thisislawatts "Code")
-| :---: | :---: |
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="http://davehakkens.nl"><img src="https://avatars.githubusercontent.com/u/13672737?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Dave Hakkens</b></sub></a><br /><a href="#design-davehakkens" title="Design">🎨</a> <a href="#ideas-davehakkens" title="Ideas, Planning, & Feedback">🤔</a> <a href="#projectManagement-davehakkens" title="Project Management">📆</a> <a href="[💪]("Maintainer")," title="Maintainer">💪</a></td>
+    <td align="center"><a href="https://c2dev.co.uk/"><img src="https://avatars.githubusercontent.com/u/10515065?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Chris Clarke</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=chrismclarke" title="Code">💻</a> <a href="[💪]("Maintainer")," title="Maintainer">💪</a></td>
+    <td align="center"><a href="https://thisis.la/"><img src="https://avatars.githubusercontent.com/u/472589?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Luke Watts</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=thisislawatts" title="Code">💻</a> <a href="[💪]("Maintainer")," title="Maintainer">💪</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->

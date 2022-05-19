@@ -14,10 +14,10 @@
   "private": true,
   "main": "lib/index.js",
   "scripts": {
-    "start": "concurrently --kill-others \"yarn start:components\" \"yarn start:platform\"",
+    "start": "concurrently --kill-others --names components,platform --prefix-colors blue,magenta \"yarn start:components\" \"yarn start:platform\"",
     "start:components": "yarn workspace oa-components dev",
     "start:platform": "yarn build:shared && cross-env FAST_REFRESH=false yarn react-scripts start",
-    "start:emulated": "concurrently --kill-others \"yarn workspace functions start\" \"yarn start:components\" \"cross-env PORT=4000 yarn start:platform\"",
+    "start:emulated": "concurrently --kill-others --names functions,components,platform --prefix-colors yellow,blue,magenta \"yarn workspace functions start\" \"yarn start:components\" \"cross-env PORT=4000 yarn start:platform\"",
     "start:emulated:docker": "concurrently --names functions,components,platform,emulators --prefix-colors yellow,blue,magenta,green --kill-others \"yarn workspace functions watch\" \"yarn workspace oa-components dev\" \"cross-env PORT=4000 yarn start:platform\" \"yarn workspace oa-emulators-docker start\"",
     "build:components": "yarn workspace oa-components build",
     "build:cra": "react-scripts build",
@@ -66,7 +66,9 @@
     "__NOTE2__": "2021-07-06 ram issues: https://github.com/facebook/create-react-app/issues/10154",
     "react-scripts/eslint-webpack-plugin": "2.4.1",
     "__NOTE3__": "2021-10-03 terser issues: https://github.com/facebook/create-react-app/issues/6334",
-    "terser-webpack-plugin": "4.2.3"
+    "terser-webpack-plugin": "4.2.3",
+    "__NOTE4__": "2022-04-28 webpack issue: https://github.com/gregberge/svgr/issues/665",
+    "@svgr/webpack": "5.5.0"
   },
   "dependencies": {
     "@emotion/react": "^11.8.2",
@@ -108,7 +110,7 @@
     "react-firebase-file-uploader": "2.4.4",
     "react-flag-icon-css": "^1.0.25",
     "react-foco": "^1.3.1",
-    "react-ga": "^2.5.7",
+    "react-ga4": "^1.4.1",
     "react-hamburger-menu": "^1.1.1",
     "react-image-lightbox": "^5.1.0",
     "react-lazy-load-image-component": "^1.5.1",
@@ -167,6 +169,7 @@
     "@types/yup": "^0.26.27",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
+    "all-contributors-cli": "^6.20.0",
     "chai-subset": "^1.6.0",
     "commitizen": "^4.2.4",
     "concurrently": "^6.2.0",

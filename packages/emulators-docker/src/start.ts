@@ -1,6 +1,7 @@
 import Dockerode from 'dockerode'
 import boxen from 'boxen'
 import logUpdate from 'log-update'
+import fs from 'fs-extra'
 import {
   CONTAINER_NAME,
   getFirebasePortMapping,
@@ -95,6 +96,13 @@ function attachContainer(container: Dockerode.Container) {
 }
 
 async function createNewContainer() {
+  // ensure functions dist exists for binding
+  if (!fs.existsSync(PATHS.functionsDistIndex)) {
+    console.log('Waiting for functions to be built...')
+    await _wait(5000)
+    return createNewContainer()
+  }
+  // pull remote image if required
   if (REPOSITORY) {
     await pullRemoteImage(IMAGE_NAME)
   }
@@ -235,6 +243,13 @@ function execContainerCmd(container: Dockerode.Container, Cmd: string[]) {
       })
     },
   )
+}
+
+/** Wait an aribitrary number of milliseconds before continuing */
+async function _wait(ms: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms)
+  })
 }
 
 start()

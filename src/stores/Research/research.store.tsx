@@ -20,6 +20,7 @@ import {
   needsModeration,
   randomID,
 } from 'src/utils/helpers'
+import { MAX_COMMENT_LENGTH } from 'src/components/Comment/constants'
 
 const COLLECTION_NAME = 'research'
 
@@ -53,6 +54,20 @@ export class ResearchStore extends ModuleStore {
   }
   @computed get filteredResearches() {
     return filterModerableItems(this.allResearchItems, this.activeUser)
+  }
+
+  public getActiveResearchUpdateComments(pointer: number): IComment[] {
+    const comments = this.activeResearchItem?.updates[pointer]?.comments || []
+
+    return comments.map((comment: IComment) => {
+      return {
+        ...comment,
+        isUserVerified:
+          !!this.aggregationsStore.aggregations.users_verified?.[
+            comment.creatorName
+          ],
+      }
+    })
   }
 
   public async setActiveResearchItem(slug?: string) {
@@ -129,7 +144,7 @@ export class ResearchStore extends ModuleStore {
   ) {
     const user = this.activeUser
     const item = this.activeResearchItem
-    const comment = text.slice(0, 400).trim()
+    const comment = text.slice(0, MAX_COMMENT_LENGTH).trim()
 
     if (item && comment && user) {
       const dbRef = this.db
@@ -275,7 +290,9 @@ export class ResearchStore extends ModuleStore {
         } else updateWithMeta.images = []
 
         if (commentIndex !== -1) {
-          pastComments[commentIndex].text = newText.slice(0, 400).trim()
+          pastComments[commentIndex].text = newText
+            .slice(0, MAX_COMMENT_LENGTH)
+            .trim()
           pastComments[commentIndex]._edited = new Date().toISOString()
           updateWithMeta.comments = pastComments
 

@@ -1,4 +1,4 @@
-## Quickstart
+## Quick start
 
 See [documentation](../../packages/documentation/docs/Backend%20Development/firebase-emulators-docker.md)
 
@@ -18,13 +18,14 @@ By providing a docker image we can address all issues above and provide better p
 ## TODO
 
 [?] - Support live-reload for functions (linux)
-[ ] - Optimise image size (reduce RUN cmds, possible multi-stage build)
+[ ] - Optimise image size (reduce RUN commands, possible multi-stage build)
 [ ] - Remove all legacy functions code
 [ ] - Add tests to ensure data is exported as expected (e.g all collections exist)
 [ ] - Consider binding functions src folder and not dist (will require configuring yarn workspaces to populate shared as required, known issue below)
 [ ] - Find means to have functions-specific lock file and use as part of build process
 [ ] - Automate seed data update (cron action to export and make pr)
 [ ] - Add docker-compose image for easier customisation/volume mapping (?)
+[ ] - Possible option to use without functions dist (currently requires functions build during start)
 [ ] - Provide windows-based docker image (for live-reload on windows)
 
 ## Known Issues
@@ -46,7 +47,7 @@ By providing a docker image we can address all issues above and provide better p
 - Firebase realtime database emulator does not work. All other emulators support providing a `0.0.0.0` host binding to access the docker host, however the realtime database emulator does not appear to be working when set.
   Requires further investigation, possibly linked to https://github.com/firebase/firebase-tools/issues/2633
 
-- Boxen, globby and log-update packages have been pinned to older versions as newer require es module imports, which is not currently supported by dockerode (https://github.com/apocas/dockerode/issues/632)
+- [Boxen](https://www.npmjs.com/package/boxen), globby and log-update packages have been pinned to older versions as newer require es module imports, which is not currently supported by dockerode (https://github.com/apocas/dockerode/issues/632)
 
 ## Links
 

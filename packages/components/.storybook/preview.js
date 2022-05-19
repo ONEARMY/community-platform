@@ -9,7 +9,7 @@ import preciousPlasticTheme from '../../../src/themes/precious-plastic/styles'
 import projectKampTheme from '../../../src/themes/project-kamp/styles'
 import fixingFashionTheme from '../../../src/themes/fixing-fashion/styles'
 
-import { MemoryRouter } from 'react-router'
+import { MemoryRouter } from 'react-router-dom'
 
 // pass ThemeProvider and array of your themes to decorator
 addDecorator(
@@ -24,7 +24,7 @@ addDecorator((story) => {
   return (
     <>
       <Global styles={GlobalStyle} />
-      <MemoryRouter initialEntries={['/']}>{story()}</MemoryRouter>
+      <MemoryRouter>{story()}</MemoryRouter>
     </>
   )
 })

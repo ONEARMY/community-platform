@@ -2,13 +2,10 @@ const path = require('path')
 const paths = {
   appSrcDir: path.resolve(__dirname, '../../../'),
 }
+const webpack = require('webpack')
 
 module.exports = {
-  stories: [
-    '../../../src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
-    '../../components/src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
-    '../src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
-  ],
+  stories: ['../src/**/*.stories.tsx'],
   features: {
     emotionAlias: false,
   },
@@ -34,6 +31,20 @@ module.exports = {
       paths.appSrcDir,
       ...(config.resolve.modules || []),
     ]
+
+    config.plugins.push(
+      new webpack.NormalModuleReplacementPlugin(
+        /Auth\/AuthWrapper/,
+        (resource) => {
+          resource.request = path.resolve(
+            __dirname,
+            '../src/__mocks__/AuthWrapper.mock.tsx',
+          )
+          return resource
+        },
+      ),
+    )
+
     return config
   },
 }

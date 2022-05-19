@@ -195,6 +195,17 @@ examples:
 #  Jobs - Independently specified lists of tasks and environments for execution
 ######################################################################################################
 jobs:
+  spellcheck:
+    docker: *docker
+    resource_class: small
+    steps:
+      - checkout
+      - attach_workspace:
+          at: '.'
+      - run:
+          name: Check spelling on documentation
+          command: |
+            npx cspell "**/*.md" --config ./.cspell.json
   lint-commits:
     docker: *docker
     resource_class: small
@@ -371,6 +382,12 @@ workflows:
   main_workflow:
     # by default jobs will run concurrently, so specify requires if want to run sequentially
     jobs:
+      - spellcheck:
+          name: Check documentation spelling
+          filters:
+            branches:
+              ignore:
+                - production
       - lint-commits:
           name: Lint commits
           filters:
@@ -380,7 +397,8 @@ workflows:
       - lint:
           name: Lint code
           requires:
-            - "Lint commits"
+            - 'Check documentation spelling'
+            - 'Lint commits'
           filters:
             branches:
               ignore:
@@ -433,10 +451,17 @@ workflows:
               ignore:
                 - production
       #---------------------- Development Instances Build and Deploy ----------------------
+      - release:
+          name: Release new version to GitHub
+          requires:
+            - test_e2e
+          <<: *filter_only_master
+          context:
+            - release-context
       - deploy:
           name: 'Deploy: dev.onearmy.world'
           requires:
-            - test_e2e
+            - 'Release new version to GitHub'
           <<: *filter_only_master
           DEPLOY_ALIAS: 'default'
           NOTIFY_SLACK: false
@@ -446,7 +471,7 @@ workflows:
       - deploy:
           name: 'Deploy: dev.community.projectkamp.com'
           requires:
-            - test_e2e
+            - 'Release new version to GitHub'
           <<: *filter_only_master
           DEPLOY_ALIAS: project-kamp-development
           NOTIFY_SLACK: false
@@ -456,20 +481,13 @@ workflows:
       - deploy:
           name: 'Deploy: fixing-fashion-dev.web.app'
           requires:
-            - test_e2e
+            - 'Release new version to GitHub'
           <<: *filter_only_master
           DEPLOY_ALIAS: fixing-fashion-dev
           NOTIFY_SLACK: false
           context:
             - circle-ci-slack-context
             - fixing-fashion-dev
-      - release:
-          requires:
-            - 'Deploy: community.preciousplastic.com'
-            - 'Deploy: community.projectkamp.com'
-          name: Release new version to GitHub
-          context:
-            - release-context
       - build:
           name: Build Production Release
           context: build-context

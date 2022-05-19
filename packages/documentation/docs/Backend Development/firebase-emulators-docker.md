@@ -40,11 +40,13 @@ The emulator should start at http://localhost:4001. Follow the link to see an ov
 
 Clicking on individual tabs will take you to a page similar to the firebase console, from where you can interact with services.
 
-Note - any data populated into the emulator will be deleted after the emulator has closed (restoring to original state). See the section below about persistant and seed data
+Note - any data populated into the emulator will be deleted after the emulator has closed (restoring to original state). See the section below about persistent and seed data
 
 ## Resetting seed data
 
-When the emulator is stopped the image is destroyed, so each time the emulators are restarted a clean set of data will be available
+When the emulator is stopped the image is destroyed, so each time the emulators are restarted a clean set of data will be available.
+
+If using the frontend data changes may still persist due to the browser's own caching mechanisms. In this case the browser indexeddb cache will need to be manually cleared
 
 ## Frontend
 
@@ -61,7 +63,7 @@ You can see the version of data used in the command line output, e.g. data expor
 
 ### User Login
 
-By default the image comes preloaded with user auth accounts as found in [shared\mocks\authUsers.ts](../../../../shared/mocks/authUsers.ts). This means you can login as any of these users, e.g.
+By default the image comes preloaded with user auth accounts as found in [shared\mocks\auth-users.ts](https://github.com/ONEARMY/community-platform/tree/master/shared/mocks/auth-users.ts). This means you can login as any of these users, e.g.
 
 ```
 email: 'demo_admin@example.com',
@@ -114,7 +116,7 @@ docker exec -it community-platform-emulator cat /app/firestore-debug.log
 
 ## Extending the image
 
-The code used to build the docker image can all be found in the [packages/emulators-docker](../../../../packages/emulators-docker) workspace.
+The code used to build the docker image can all be found in the [packages/emulators-docker](https://github.com/ONEARMY/community-platform/tree/master/packages/emulators-docker) workspace.
 
 ### Updating seed data
 

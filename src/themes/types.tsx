@@ -17,6 +17,9 @@ export interface PlatformTheme {
 
 export interface ThemeWithName {
   name: string
+
+  badges: any
+
   /**
    * Following properties are taken from DefaultTheme
    * exported from `styled-components`
@@ -28,6 +31,10 @@ export interface ThemeWithName {
   typography: {
     auxiliary: any
     paragraph: any
+  }
+
+  cards?: {
+    primary: any
   }
 
   colors: {

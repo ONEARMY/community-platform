@@ -3,8 +3,8 @@ import type { RouteProps } from 'react-router'
 import { Redirect, Route } from 'react-router'
 import { observer } from 'mobx-react'
 import type { UserRole } from 'src/models/user.models'
-import Text from 'src/components/Text'
-import Flex from 'src/components/Flex'
+import { Flex } from 'theme-ui'
+import { Text } from 'theme-ui'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
 /*
@@ -15,6 +15,8 @@ import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 interface IProps extends RouteProps {
   component: React.ComponentType<any>
   roleRequired?: UserRole
+  /** User ids to be treated as admin, e.g. content creator */
+  additionalAdmins?: string[]
   /** Page to redirect if role not satisfied (default shows message) */
   redirect?: string
 }
@@ -24,9 +26,15 @@ export class AuthRoute extends React.Component<IProps, IState> {
   static defaultProps: Partial<IProps>
 
   render() {
-    const { component: Component, roleRequired, ...rest } = this.props
+    const {
+      component: Component,
+      roleRequired,
+      additionalAdmins,
+      ...rest
+    } = this.props
     return (
       <AuthWrapper
+        additionalAdmins={additionalAdmins}
         roleRequired={roleRequired}
         fallback={
           this.props.redirect ? (
@@ -37,7 +45,7 @@ export class AuthRoute extends React.Component<IProps, IState> {
               mt="40px"
               data-cy="auth-route-deny"
             >
-              <Text regular>
+              <Text>
                 {roleRequired
                   ? `${roleRequired} role required to access this page`
                   : 'Please login to access this page'}

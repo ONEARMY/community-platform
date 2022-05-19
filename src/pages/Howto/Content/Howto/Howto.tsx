@@ -6,8 +6,7 @@ import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
 import Step from './Step/Step'
 import type { IHowtoDB } from 'src/models/howto.models'
-import Text from 'src/components/Text'
-import { Box, Flex } from 'theme-ui'
+import { Box, Flex, Text } from 'theme-ui'
 import { Button } from 'oa-components'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
@@ -141,6 +140,8 @@ export class Howto extends React.Component<
         ? aggregations.users_votedUsefulHowtos[activeHowto._id] || 0
         : undefined
 
+      const activeHowToComments = this.store.getActiveHowToComments()
+
       return (
         <>
           <HowtoDescription
@@ -163,9 +164,16 @@ export class Howto extends React.Component<
               <Step step={step} key={index} stepindex={index} />
             ))}
           </Box>
-          <HowToComments comments={activeHowto.comments} />
+          <HowToComments comments={activeHowToComments} />
           <MoreBox py={20} mt={20}>
-            <Text bold txtcenter sx={{ fontSize: [4, 4, 5], display: 'block' }}>
+            <Text
+              sx={{
+                fontSize: [4, 4, 5],
+                display: 'block',
+                fontWeight: 'bold',
+                textAlign: 'center',
+              }}
+            >
               You're done.
               <br />
               Nice one!

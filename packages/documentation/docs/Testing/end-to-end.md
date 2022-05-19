@@ -33,7 +33,7 @@ When testing is initiated a random prefix is generated to uniquely seed/clear th
 
 Currently testing is carried out against chrome(stable) and firefox(latest) browsers. We are not able to support any additional browsers (e.g. safari) via ci as they are not currently supported by cypress. If this changes in the future then it would be good to add. See discussion around this here: https://github.com/ONEARMY/community-platform/issues/611
 
-### DB Teardown
+### Database tear down
 
 In case of test fail, documents will not be deleted from the server. This is not a major issue as they all are randomly prefixed, and will just sit in the database. From time-to-time admins may decide to delete any hanging data via the firebase cli.
 

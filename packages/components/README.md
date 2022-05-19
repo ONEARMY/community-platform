@@ -4,7 +4,7 @@ These components provide a collection of elements that can be reused across the 
 
 Components can be combined to help anyone building on the platform to efficiently design consistent experiences for site visitors.
 
-The aim of packaging these components seperately is to:
+The aim of packaging these components separately is to:
 
 1. Reduce the overhead for contributors looking to work **only** on the component layer without needing to spin up the entire application locally.
 2. Encourage decoupling of presentation layer from business logic, typically stored within the `*.stores.tsx` files.
@@ -34,5 +34,11 @@ will generate the following items:
 src/
   MyNewComponentName/
     MyNewComponentName.tsx # Component
-    MyNewComponentName.stories.mdx # Storybook documentation
+    MyNewComponentName.stories.tsx # Storybook documentation
 ```
+
+## Recommended Plugins
+
+VSCode
+
+- [MDX](https://marketplace.visualstudio.com/items?itemName=silvenon.mdx) syntax highlighting

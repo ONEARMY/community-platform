@@ -8,7 +8,7 @@ import { registerRoute } from 'workbox-routing'
 import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import {
   CacheFirst,
-  NetworkOnly,
+  NetworkFirst,
   StaleWhileRevalidate,
 } from 'workbox-strategies'
 import { BackgroundSyncPlugin } from 'workbox-background-sync'
@@ -33,7 +33,10 @@ clientsClaim()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ignored = self.__WB_MANIFEST
 
-registerRoute(new RegExp('^/index.html'), new NetworkOnly())
+registerRoute(
+  ({ url }) => url.pathname.startsWith('/index.html'),
+  new NetworkFirst(),
+)
 
 // static assets are already cachebusted with their file names so can just serve cacheFirst
 // for same origin (https://developers.google.com/web/tools/workbox/modules/workbox-routing)

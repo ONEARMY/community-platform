@@ -1,4 +1,4 @@
-import ModerationStatusText from 'src/components/ModerationStatusText'
+import ModerationStatusText from 'src/components/ModerationStatusText/ModerationStatustext'
 import { Card, Text, Flex } from 'theme-ui'
 import { Button } from 'oa-components'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'

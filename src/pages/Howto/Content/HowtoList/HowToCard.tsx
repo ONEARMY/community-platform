@@ -1,6 +1,6 @@
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { Text, Card, Flex } from 'theme-ui'
-import ModerationStatusText from 'src/components/ModerationStatusText'
+import ModerationStatusText from 'src/components/ModerationStatusText/ModerationStatustext'
 import { Link } from 'src/components/Links'
 import { FlagIconHowTos, Icon } from 'oa-components'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
@@ -16,20 +16,21 @@ interface IProps {
 }
 
 export const HowToCard = (props: IProps) => {
+  const { howto, votedUsefulCount } = props
   const theme = useTheme()
   return (
-    <Card data-cy="card" sx={{ borderRadius: 2 }}>
+    <Card data-cy="card" sx={{ borderRadius: 2, position: 'relative' }}>
       <Flex>
-        {props.howto.moderation !== 'accepted' && (
+        {howto.moderation !== 'accepted' && (
           <ModerationStatusText
-            moderatedContent={props.howto}
+            moderatedContent={howto}
             contentType="howto"
             top={'62%'}
           />
         )}
         <Link
-          to={`/how-to/${encodeURIComponent(props.howto.slug)}`}
-          key={props.howto._id}
+          to={`/how-to/${encodeURIComponent(howto.slug)}`}
+          key={howto._id}
           sx={{ width: '100%' }}
         >
           <Flex
@@ -45,28 +46,28 @@ export const HowToCard = (props: IProps) => {
                 objectFit: 'cover',
               }}
               threshold={500}
-              src={props.howto.cover_image.downloadUrl}
+              src={howto.cover_image.downloadUrl}
               crossOrigin=""
             />
           </Flex>
           <Flex sx={{ flexDirection: 'column', padding: 3 }}>
             <Heading small color={'black'}>
               {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
-              {capitalizeFirstLetter(props.howto.title)}
+              {capitalizeFirstLetter(howto.title)}
             </Heading>
             <Flex sx={{ alignItems: 'center' }}>
-              {props.howto.creatorCountry && (
-                <FlagIconHowTos code={props.howto.creatorCountry} />
+              {howto.creatorCountry && (
+                <FlagIconHowTos code={howto.creatorCountry} />
               )}
               <Text
                 my={2}
                 ml={1}
                 sx={{ display: 'flex', ...theme.typography.auxiliary }}
               >
-                By {props.howto._createdBy}
+                By {howto._createdBy}
               </Text>
               <VerifiedUserBadge
-                userId={props.howto._createdBy}
+                userId={howto._createdBy}
                 ml={1}
                 height="12px"
                 width="12px"
@@ -74,15 +75,15 @@ export const HowToCard = (props: IProps) => {
             </Flex>
             <Flex mt={4}>
               <Flex sx={{ flex: 1, flexWrap: 'wrap' }}>
-                {props.howto.tags &&
-                  Object.keys(props.howto.tags).map((tag) => {
+                {howto.tags &&
+                  Object.keys(howto.tags).map((tag) => {
                     return <TagDisplay key={tag} tagKey={tag} />
                   })}
               </Flex>
-              {props.votedUsefulCount > 0 && (
+              {votedUsefulCount > 0 && (
                 <Flex ml={1} sx={{ alignItems: 'center' }}>
                   <Icon glyph="star-active" marginRight="4px" />
-                  <Text color="black">{props.votedUsefulCount}</Text>
+                  <Text color="black">{votedUsefulCount}</Text>
                 </Flex>
               )}
             </Flex>

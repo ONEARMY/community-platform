@@ -1,30 +1,37 @@
 import styled from '@emotion/styled'
-import type { ITextProps } from 'src/components/Text'
-import Text from 'src/components/Text'
+import { Text } from 'theme-ui'
 import type { HeadingProps as ThemeUiHeadingProps } from 'theme-ui'
 
-export const large = (props: ITextProps) =>
+const large = (props: any) =>
   props.large ? { fontSize: props.theme?.fontSizes[6] } : null
-export const medium = (props: ITextProps) =>
+const medium = (props: any) =>
   props.medium ? { fontSize: props.theme?.fontSizes?.[5] } : null
-export const small = (props: ITextProps) =>
+const small = (props: any) =>
   props.small ? { fontSize: props.theme?.fontSizes[4] } : null
 
-export const BaseHeading = styled(Text)`
+export const BaseHeading = styled(Text, {
+  shouldForwardProp(prop: keyof ThemeUiHeadingProps) {
+    return !['medium', 'small', 'large', 'bold', 'txtcenter'].includes(
+      prop.toLowerCase(),
+    )
+  },
+})`
   ${large}
   ${medium}
-    ${small}
+  ${small}
 `
 
-type IHeadingProps = ITextProps & ThemeUiHeadingProps
+type IHeadingProps = any & ThemeUiHeadingProps
 
-const Heading = (props: IHeadingProps) => (
-  <BaseHeading
-    {...(props as any)}
-    sx={{ ...props?.sx, display: 'block', width: '100%' }}
-  >
-    {props.children}
-  </BaseHeading>
-)
+const Heading = (props: IHeadingProps) => {
+  return (
+    <BaseHeading
+      {...(props as any)}
+      sx={{ ...props?.sx, display: 'block', width: '100%' }}
+    >
+      {props.children}
+    </BaseHeading>
+  )
+}
 
 export default Heading

@@ -2,15 +2,13 @@ import { inject, observer } from 'mobx-react'
 import React from 'react'
 import type { RouteComponentProps } from 'react-router'
 import Loader from 'src/components/Loader'
-import { Text } from 'src/components/Text'
+import { Text } from 'theme-ui'
 import type { IUserPP } from 'src/models'
+import { ProfileType } from 'src/modules/profile'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { UserStore } from 'src/stores/User/user.store'
 import { MemberProfile } from './MemberProfile'
 import { SpaceProfile } from './SpaceProfile'
-import { logger } from 'src/logger'
-import { AdminContact } from 'src/components/AdminContact/AdminContact'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
 interface IRouterCustomParams {
   id: string
@@ -60,35 +58,31 @@ export class UserPage extends React.Component<
 
   render() {
     const { user, isLoading } = this.state
-    logger.debug('render', user)
     if (isLoading) {
       return <Loader />
     }
     if (!user) {
       return (
-        <Text txtcenter mt="50px" sx={{ width: '100%' }}>
+        <Text
+          sx={{
+            width: '100%',
+            textAlign: 'center',
+            display: 'block',
+            marginTop: 10,
+          }}
+        >
           User not found
         </Text>
       )
     }
-    return user.profileType === 'member' ? (
-      <MemberProfile
-        user={user}
-        adminButton={
-          <AuthWrapper roleRequired={'admin'}>
-            <AdminContact user={user} />
-          </AuthWrapper>
-        }
-      />
-    ) : (
-      <SpaceProfile
-        user={user}
-        adminButton={
-          <AuthWrapper roleRequired={'admin'}>
-            <AdminContact user={user} />
-          </AuthWrapper>
-        }
-      />
+    return (
+      <>
+        {user.profileType === ProfileType.MEMBER ? (
+          <MemberProfile data-cy="memberProfile" user={user} />
+        ) : (
+          <SpaceProfile data-cy="spaceProfile" user={user} />
+        )}
+      </>
     )
   }
 }

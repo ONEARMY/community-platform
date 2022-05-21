@@ -195,6 +195,17 @@ examples:
 #  Jobs - Independently specified lists of tasks and environments for execution
 ######################################################################################################
 jobs:
+  spellcheck:
+    docker: *docker
+    resource_class: small
+    steps:
+      - checkout
+      - attach_workspace:
+          at: '.'
+      - run:
+          name: Check spelling on documentation
+          command: |
+            npx cspell "**/*.md" --config ./.cspell.json
   lint-commits:
     docker: *docker
     resource_class: small
@@ -371,6 +382,12 @@ workflows:
   main_workflow:
     # by default jobs will run concurrently, so specify requires if want to run sequentially
     jobs:
+      - spellcheck:
+          name: Check documentation spelling
+          filters:
+            branches:
+              ignore:
+                - production
       - lint-commits:
           name: Lint commits
           filters:
@@ -380,7 +397,8 @@ workflows:
       - lint:
           name: Lint code
           requires:
-            - "Lint commits"
+            - 'Check documentation spelling'
+            - 'Lint commits'
           filters:
             branches:
               ignore:
@@ -434,9 +452,10 @@ workflows:
                 - production
       #---------------------- Development Instances Build and Deploy ----------------------
       - release:
+          name: Release new version to GitHub
           requires:
             - test_e2e
-          name: Release new version to GitHub
+          <<: *filter_only_master
           context:
             - release-context
       - deploy:

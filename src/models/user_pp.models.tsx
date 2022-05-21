@@ -1,5 +1,6 @@
 import type { IUser } from './user.models'
 import type { DBDoc } from './common.models'
+import type { ProfileTypeLabel } from '../modules/profile'
 
 export type PlasticTypeLabel =
   | 'pet'
@@ -16,13 +17,6 @@ export type MachineBuilderXpLabel =
   | 'welding'
   | 'assembling'
   | 'mould-making'
-
-export type ProfileTypeLabel =
-  | 'member'
-  | 'workspace'
-  | 'community-builder'
-  | 'collection-point'
-  | 'machine-builder'
 
 export type WorkspaceType =
   | 'shredder'

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import Flex from 'src/components/Flex'
+import { Card, Flex } from 'theme-ui'
 import type { IUserPP } from 'src/models/user_pp.models'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { UserStore } from 'src/stores/User/user.store'
@@ -26,8 +26,12 @@ import { Prompt } from 'react-router'
 import { toJS } from 'mobx'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { logger } from 'src/logger'
+import { ProfileType } from 'src/modules/profile'
 
-interface IProps {}
+interface IProps {
+  /** user ID for lookup when editing another user as admin */
+  adminEditableUserId?: string
+}
 
 interface IInjectedProps extends IProps {
   userStore: UserStore
@@ -38,6 +42,7 @@ interface IState {
   formValues: IUserPP
   notification: { message: string; icon: string; show: boolean }
   showDeleteDialog?: boolean
+  user?: IUserPP
 }
 
 @inject('userStore')
@@ -45,7 +50,15 @@ interface IState {
 export class UserSettings extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
-    const user = this.injected.userStore.user as IUserPP
+    this.state = {} as any
+  }
+  async componentDidMount() {
+    let user = this.injected.userStore.user as IUserPP
+    if (this.props.adminEditableUserId) {
+      user = await this.injected.userStore.getUserProfile(
+        this.props.adminEditableUserId,
+      )
+    }
 
     // ensure user form includes all user fields (merge any legacy user with correct format)
     const baseValues: IUserPP = {
@@ -63,10 +76,11 @@ export class UserSettings extends React.Component<IProps, IState> {
       links: links.length > 0 ? links : [{} as any],
       openingHours: openingHours!.length > 0 ? openingHours : [{} as any],
     }
-    this.state = {
+    this.setState({
       formValues,
       notification: { message: '', icon: '', show: false },
-    }
+      user,
+    })
   }
 
   get injected() {
@@ -89,7 +103,8 @@ export class UserSettings extends React.Component<IProps, IState> {
     // Submit, show notification update and return any errors to form
     try {
       logger.debug({ profile: vals }, 'UserSettings.saveProfile')
-      await this.injected.userStore.updateUserProfile(vals)
+      const { adminEditableUserId } = this.props
+      await this.injected.userStore.updateUserProfile(vals, adminEditableUserId)
       this.setState({
         notification: { message: 'Profile Saved', icon: 'check', show: true },
       })
@@ -122,190 +137,179 @@ export class UserSettings extends React.Component<IProps, IState> {
   }
 
   render() {
-    const user = this.injected.userStore.user
-    const { formValues, notification } = this.state
-    return (
-      user && (
-        <Form
-          onSubmit={(v) =>
-            // return any errors (or success) on submit
-            this.saveProfile(v).then((res) => {
-              return res
-            })
-          }
-          initialValues={formValues}
-          validate={(v) => this.validateForm(v)}
-          mutators={{
-            ...arrayMutators,
-          }}
-          validateOnBlur
-          render={({
-            form,
-            submitting,
-            values,
-            handleSubmit,
-            submitError,
-            valid,
-            errors,
-            ...rest
-          }) => {
-            return (
-              <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
-                <Prompt
-                  when={!this.injected.userStore.updateStatus.Complete}
-                  message={
-                    'You are leaving this page without saving. Do you want to continue ?'
-                  }
-                />
-                <Flex
-                  sx={{
-                    width: ['100%', '100%', `${(2 / 3) * 100}%`],
-                    my: 4,
-                    bg: 'inherit',
-                    px: 2,
-                  }}
-                >
-                  <Box sx={{ width: '100%' }}>
-                    <form id="userProfileForm" onSubmit={handleSubmit}>
-                      <Flex sx={{ flexDirection: 'column' }}>
-                        <Flex
-                          card
-                          mediumRadius
-                          bg={theme.colors.softblue}
-                          px={3}
-                          py={2}
-                        >
-                          {user.profileType ? (
-                            <Heading medium>Edit profile</Heading>
-                          ) : (
-                            <Heading medium>Create profile</Heading>
-                          )}
+    const { formValues, notification, user } = this.state
+    return user ? (
+      <Form
+        onSubmit={(v) =>
+          // return any errors (or success) on submit
+          this.saveProfile(v).then((res) => {
+            return res
+          })
+        }
+        initialValues={formValues}
+        validate={(v) => this.validateForm(v)}
+        mutators={{
+          ...arrayMutators,
+        }}
+        validateOnBlur
+        render={({
+          form,
+          submitting,
+          values,
+          handleSubmit,
+          submitError,
+          valid,
+          errors,
+          ...rest
+        }) => {
+          const heading = user.profileType ? 'Edit profile' : 'Create profile'
+          return (
+            <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
+              <Prompt
+                when={!this.injected.userStore.updateStatus.Complete}
+                message={
+                  'You are leaving this page without saving. Do you want to continue ?'
+                }
+              />
+              <Flex
+                sx={{
+                  width: ['100%', '100%', `${(2 / 3) * 100}%`],
+                  my: 4,
+                  bg: 'inherit',
+                  px: 2,
+                }}
+              >
+                <Box sx={{ width: '100%' }}>
+                  <form id="userProfileForm" onSubmit={handleSubmit}>
+                    <Flex sx={{ flexDirection: 'column' }}>
+                      <Card bg={theme.colors.softblue}>
+                        <Flex px={3} py={2}>
+                          <Heading medium>{heading}</Heading>
                         </Flex>
-                        <Box
-                          sx={{
-                            display: ['block', 'block', 'none'],
-                            mt: 3,
-                          }}
-                        >
-                          <ProfileGuidelines />
-                        </Box>
-                        {/* Note - for fields without fieldwrapper can just render via props method and bind to input */}
-                        {isModuleSupported(MODULE.MAP) && <FocusSection />}
-
-                        {/* Specific profile type fields */}
-                        {values.profileType === 'workspace' && (
-                          <WorkspaceSection />
-                        )}
-                        {values.profileType === 'collection-point' && (
-                          <CollectionSection
-                            required={
-                              values.collectedPlasticTypes
-                                ? values.collectedPlasticTypes.length === 0
-                                : true
-                            }
-                            formValues={values}
-                          />
-                        )}
-                        {values.profileType === 'machine-builder' && (
-                          <ExpertiseSection
-                            required={
-                              values.machineBuilderXp
-                                ? values.machineBuilderXp.length === 0
-                                : true
-                            }
-                          />
-                        )}
-                        {/* General fields */}
-                        {values.profileType !== 'member' &&
-                          isModuleSupported(MODULE.MAP) && (
-                            <WorkspaceMapPinSection />
-                          )}
-
-                        {values.profileType === 'member' &&
-                          isModuleSupported(MODULE.MAP) && (
-                            <MemberMapPinSection />
-                          )}
-                        <UserInfosSection
-                          formValues={values}
-                          mutators={form.mutators}
-                        />
-                      </Flex>
-                    </form>
-                    <AccountSettingsSection />
-                  </Box>
-                </Flex>
-                {/* desktop guidelines container */}
-                <Flex
-                  sx={{
-                    width: ['100%', '100%', `${100 * 0.333}%`],
-                    flexDirection: 'column',
-                    bg: 'inherit',
-                    px: 2,
-                    height: '100%',
-                    mt: [0, 0, 4],
-                  }}
-                >
-                  <Box
-                    sx={{
-                      position: ['relative', 'relative', 'fixed'],
-                      maxWidth: ['100%', '100%', '400px'],
-                    }}
-                  >
-                    {isModuleSupported(MODULE.MAP) && (
-                      <Box mb={3} sx={{ display: ['none', 'none', 'block'] }}>
+                      </Card>
+                      <Box
+                        sx={{
+                          display: ['block', 'block', 'none'],
+                          mt: 3,
+                        }}
+                      >
                         <ProfileGuidelines />
                       </Box>
-                    )}
-                    <Button
-                      data-cy="save"
-                      title={
-                        rest.invalid
-                          ? `Errors: ${Object.keys(errors || {})}`
-                          : 'Submit'
-                      }
-                      onClick={() => {
-                        // workaround for issues described:
-                        // https://github.com/final-form/react-final-form/blob/master/docs/faq.md#how-can-i-trigger-a-submit-from-outside-my-form
-                        const formEl =
-                          document.getElementById('userProfileForm')
-                        if (typeof formEl !== 'undefined' && formEl !== null) {
-                          formEl.dispatchEvent(
-                            new Event('submit', {
-                              cancelable: true,
-                              bubbles: true,
-                            }),
-                          )
-                        }
-                      }}
-                      sx={{ width: '100%' }}
-                      variant={'primary'}
-                      type="submit"
-                      // disable button when form invalid or during submit.
-                      // ensure enabled after submit error
-                      disabled={submitError ? false : !valid || submitting}
-                    >
-                      Save profile
-                    </Button>
-                    <div style={{ float: 'right' }}>
-                      <TextNotification
-                        data-cy="profile-saved"
-                        text={notification.message}
-                        icon={submitError ? 'close' : 'check'}
-                        show={notification.show}
-                        hideNotificationCb={() =>
-                          this.setState({
-                            notification: { ...notification, show: false },
-                          })
-                        }
+                      {/* Note - for fields without fieldwrapper can just render via props method and bind to input */}
+                      {isModuleSupported(MODULE.MAP) && <FocusSection />}
+
+                      {/* Specific profile type fields */}
+                      {values.profileType === ProfileType.WORKSPACE && (
+                        <WorkspaceSection />
+                      )}
+                      {values.profileType === ProfileType.COLLECTION_POINT && (
+                        <CollectionSection
+                          required={
+                            values.collectedPlasticTypes
+                              ? values.collectedPlasticTypes.length === 0
+                              : true
+                          }
+                          formValues={values}
+                        />
+                      )}
+                      {values.profileType === ProfileType.MACHINE_BUILDER && (
+                        <ExpertiseSection
+                          required={
+                            values.machineBuilderXp
+                              ? values.machineBuilderXp.length === 0
+                              : true
+                          }
+                        />
+                      )}
+                      {/* General fields */}
+                      {values.profileType !== ProfileType.MEMBER &&
+                        isModuleSupported(MODULE.MAP) && (
+                          <WorkspaceMapPinSection />
+                        )}
+
+                      {values.profileType === ProfileType.MEMBER &&
+                        isModuleSupported(MODULE.MAP) && (
+                          <MemberMapPinSection />
+                        )}
+                      <UserInfosSection
+                        formValues={values}
+                        mutators={form.mutators}
                       />
-                    </div>
-                  </Box>
-                </Flex>
+                    </Flex>
+                  </form>
+                  <AccountSettingsSection />
+                </Box>
               </Flex>
-            )
-          }}
-        />
-      )
-    )
+              {/* desktop guidelines container */}
+              <Flex
+                sx={{
+                  width: ['100%', '100%', `${100 * 0.333}%`],
+                  flexDirection: 'column',
+                  bg: 'inherit',
+                  px: 2,
+                  height: '100%',
+                  mt: [0, 0, 4],
+                }}
+              >
+                <Box
+                  sx={{
+                    position: ['relative', 'relative', 'fixed'],
+                    maxWidth: ['100%', '100%', '400px'],
+                  }}
+                >
+                  {isModuleSupported(MODULE.MAP) && (
+                    <Box mb={3} sx={{ display: ['none', 'none', 'block'] }}>
+                      <ProfileGuidelines />
+                    </Box>
+                  )}
+                  <Button
+                    data-cy="save"
+                    title={
+                      rest.invalid
+                        ? `Errors: ${Object.keys(errors || {})}`
+                        : 'Submit'
+                    }
+                    onClick={() => {
+                      // workaround for issues described:
+                      // https://github.com/final-form/react-final-form/blob/master/docs/faq.md#how-can-i-trigger-a-submit-from-outside-my-form
+                      const formEl = document.getElementById('userProfileForm')
+                      if (typeof formEl !== 'undefined' && formEl !== null) {
+                        formEl.dispatchEvent(
+                          new Event('submit', {
+                            cancelable: true,
+                            bubbles: true,
+                          }),
+                        )
+                      }
+                    }}
+                    sx={{ width: '100%' }}
+                    variant={'primary'}
+                    type="submit"
+                    // disable button when form invalid or during submit.
+                    // ensure enabled after submit error
+                    disabled={submitError ? false : !valid || submitting}
+                  >
+                    Save profile
+                  </Button>
+                  <div style={{ float: 'right' }}>
+                    <TextNotification
+                      data-cy="profile-saved"
+                      text={notification.message}
+                      icon={submitError ? 'close' : 'check'}
+                      show={notification.show}
+                      hideNotificationCb={() =>
+                        this.setState({
+                          notification: { ...notification, show: false },
+                        })
+                      }
+                    />
+                  </div>
+                </Box>
+              </Flex>
+            </Flex>
+          )
+        }}
+      />
+    ) : null
   }
 }

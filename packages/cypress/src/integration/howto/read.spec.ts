@@ -22,7 +22,7 @@ describe('[How To]', () => {
       cy.get('[data-cy=card]').its('length').should('be.eq', totalHowTo)
 
       cy.step('How-to cards has basic info')
-      cy.get(`[data-cy=card] > a[href="${howtoUrl}"]`).within(() => {
+      cy.get(`[data-cy=card] a[href="${howtoUrl}"]`).within(() => {
         cy.contains('Make glass-like beams').should('be.exist')
         cy.contains('By howto_creator').should('be.exist')
         cy.get('img').should('have.attr', 'src').and('match', coverFileRegex)
@@ -30,7 +30,7 @@ describe('[How To]', () => {
       })
 
       cy.step(`Open how-to details when click on a how-to ${howtoUrl}`)
-      cy.get(`[data-cy=card] > a[href="${howtoUrl}"]`, SKIP_TIMEOUT).click()
+      cy.get(`[data-cy=card] a[href="${howtoUrl}"]`, SKIP_TIMEOUT).click()
       cy.url().should('include', howtoUrl)
     })
 

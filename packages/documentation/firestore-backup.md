@@ -29,7 +29,7 @@ In order to fully backup the platform there are 3 areas that need to be backed u
    ./my-local-backup-folder
    ```
 
-3. Firbase Auth Users  
+3. Firebase Auth Users  
    See documentation: https://firebase.google.com/docs/cli/auth
 
 ## Migrate/Clone

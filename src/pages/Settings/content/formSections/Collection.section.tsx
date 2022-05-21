@@ -1,10 +1,9 @@
 import * as React from 'react'
 
-import Flex from 'src/components/Flex'
+import { Flex } from 'theme-ui'
 import Heading from 'src/components/Heading'
-import Text from 'src/components/Text'
-import { Box } from 'theme-ui'
-import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
+import { Box, Text } from 'theme-ui'
+import { FlexSectionContainer } from './elements'
 import { OpeningHoursPicker } from './Fields/OpeningHoursPicker.field'
 
 import { FieldArray } from 'react-final-form-arrays'
@@ -18,35 +17,21 @@ interface IProps {
   required: boolean
 }
 
-interface IState {
-  isOpen: boolean
-}
-
-export class CollectionSection extends React.Component<IProps, IState> {
+export class CollectionSection extends React.Component<IProps> {
   constructor(props: IProps) {
     super(props)
-    this.state = {
-      isOpen: true,
-    }
   }
 
   render() {
-    const { isOpen } = this.state
     const { required } = this.props
     return (
       <FlexSectionContainer>
         <Flex sx={{ justifyContent: 'space-between' }}>
           <Heading small>Collection</Heading>
-          <ArrowIsSectionOpen
-            onClick={() => {
-              this.setState({ isOpen: !isOpen })
-            }}
-            isOpen={isOpen}
-          />
         </Flex>
-        <Box sx={{ display: isOpen ? 'block' : 'none' }}>
+        <Box>
           <Flex sx={{ wrap: 'nowrap', alignItems: 'center', width: '100%' }}>
-            <Text regular my={4}>
+            <Text mt={4} mb={4}>
               Opening time *
             </Text>
           </Flex>
@@ -80,7 +65,7 @@ export class CollectionSection extends React.Component<IProps, IState> {
               </>
             )}
           </FieldArray>
-          <Text regular my={4}>
+          <Text mt={4} mb={4}>
             Plastic types accepted *
           </Text>
           <Flex sx={{ flexWrap: ['wrap', 'wrap', 'nowrap'] }} my="10px">

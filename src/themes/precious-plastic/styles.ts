@@ -209,6 +209,14 @@ const StyledComponentTheme: ThemeWithName = {
   bold,
   breakpoints,
   buttons,
+  cards: {
+    primary: {
+      background: 'white',
+      border: `2px solid ${colors.black}`,
+      borderRadius: 1,
+      overflow: 'hidden',
+    },
+  },
   colors,
   fontSizes,
   maxContainerWidth,

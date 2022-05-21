@@ -15,7 +15,7 @@ and storing the credentials as an environment variable (see this [Github Issue](
 GOOGLE_APPLICATION_CREDENTIALS_JSON
 ```
 
-If using multiple projects (e.g. staging/prodcution) these can be configured in different contexts.
+If using multiple projects (e.g. staging/production) these can be configured in different contexts.
 
 When configuring a service account the following permissions should be assigned:
 
@@ -32,7 +32,7 @@ however this is less preferable as the token would provide access to all a user'
 
 ### Slack Notifications
 
-Send slack notificatons on deploy success/fail/approval-hold:
+Send slack notifications on deploy success/fail/approval-hold:
 
 ```
 SLACK_DEFAULT_CHANNEL

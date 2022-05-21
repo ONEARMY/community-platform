@@ -8,8 +8,7 @@ import { InputField, DatePickerField } from 'src/components/Form/Fields'
 import { Button } from 'oa-components'
 import type { EventStore } from 'src/stores/Events/events.store'
 import Heading from 'src/components/Heading'
-import Text from 'src/components/Text'
-import Flex from 'src/components/Flex'
+import { Card, Flex } from 'theme-ui'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 import { inject } from 'mobx-react'
 import { PostingGuidelines } from './PostingGuidelines'
@@ -18,7 +17,7 @@ import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import { validateUrl, addProtocolMutator, required } from 'src/utils/validators'
-import { Box } from 'theme-ui'
+import { Box, Text } from 'theme-ui'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import IconHeaderEvents from 'src/assets/images/header-section/events-header-icon.svg'
 import { logger } from 'src/logger'
@@ -110,153 +109,152 @@ export class EventsCreate extends React.Component<IProps, IState> {
                 <FormContainer onSubmit={(e) => e.preventDefault()}>
                   {/* How To Info */}
                   <Flex sx={{ flexDirection: 'column' }}>
-                    <Flex
-                      card
-                      mediumRadius
-                      bg={theme.colors.softblue}
-                      px={3}
-                      py={2}
-                      sx={{ alignItems: 'center' }}
-                    >
-                      <Heading medium>Create an event</Heading>
-                      <Box ml="15px">
-                        <ElWithBeforeIcon
-                          IconUrl={IconHeaderEvents}
-                          height="20px"
-                        />
-                      </Box>
-                    </Flex>
+                    <Card>
+                      <Flex
+                        bg={theme.colors.softblue}
+                        sx={{ alignItems: 'center', padding: 3 }}
+                      >
+                        <Heading medium>Create an event</Heading>
+                        <Box ml="15px">
+                          <ElWithBeforeIcon
+                            IconUrl={IconHeaderEvents}
+                            height="20px"
+                          />
+                        </Box>
+                      </Flex>
+                    </Card>
                     <Box
                       sx={{ mt: '20px', display: ['block', 'block', 'none'] }}
                     >
                       <PostingGuidelines />
                     </Box>
-                    <Flex
-                      card
-                      mediumRadius
-                      bg={'white'}
-                      mt={5}
-                      p={4}
-                      sx={{ flexDirection: 'column', flexWrap: 'wrap' }}
-                    >
-                      <Flex
-                        mb={3}
-                        sx={{
-                          width: ['100%', '100%', `${(2 / 3) * 100}%`],
-                          flexDirection: 'column',
-                        }}
-                      >
-                        <Label htmlFor="title">Title of the event *</Label>
-                        <Field
-                          id="title"
-                          name="title"
-                          data-cy="title"
-                          validate={required}
-                          validateFields={[]}
-                          modifiers={{ capitalize: true }}
-                          component={InputField}
-                          maxLength="140"
-                          placeholder="Title of your event (max 140 characters)"
-                        />
-                      </Flex>
-                      <Flex
-                        mx={-2}
-                        sx={{
-                          width: '100%',
-                          flexDirection: ['column', 'column', 'row'],
-                        }}
-                      >
+                    <Card mt={5} p={4}>
+                      <Flex sx={{ flexDirection: 'column', flexWrap: 'wrap' }}>
                         <Flex
                           mb={3}
-                          px={2}
-                          sx={{ width: '100%', flexDirection: 'column' }}
-                          data-cy="date"
+                          sx={{
+                            width: ['100%', '100%', `${(2 / 3) * 100}%`],
+                            flexDirection: 'column',
+                          }}
                         >
-                          <Label htmlFor="location">
-                            When is your event taking place? *
-                          </Label>
+                          <Label htmlFor="title">Title of the event *</Label>
                           <Field
-                            className="datepicker"
-                            component={DatePickerField}
-                            name="date"
-                            type="date"
-                            dateFormat="yyyy/MM/dd"
+                            id="title"
+                            name="title"
+                            data-cy="title"
                             validate={required}
-                            selected={this.state.selectedDate}
-                            customChange={(date) => this.handleChange(date)}
-                            placeholderText="yyyy/mm/dd"
-                          />
-                        </Flex>
-                        <Flex
-                          mb={3}
-                          px={2}
-                          sx={{ width: '100%', flexDirection: 'column' }}
-                        >
-                          <Label htmlFor="location">
-                            In which city is the event taking place? *
-                          </Label>
-                          <Field
-                            id="location"
-                            name="location"
-                            className="location-search-create"
                             validateFields={[]}
-                            validate={required}
-                            customChange={() => {
-                              this.setState({
-                                isLocationSelected: true,
-                              })
-                            }}
-                            component={LocationSearchField}
-                          />
-                          {isLocationSelected !== undefined &&
-                            !isLocationSelected && (
-                              <Text small color={theme.colors.red} mb="5px">
-                                Select a location for your event
-                              </Text>
-                            )}
-                        </Flex>
-                      </Flex>
-                      <Flex
-                        mx={-2}
-                        sx={{
-                          width: '100%',
-                          flexDirection: ['column', 'column', 'row'],
-                        }}
-                      >
-                        <Flex
-                          mb={3}
-                          px={2}
-                          sx={{ width: '100%', flexDirection: 'column' }}
-                        >
-                          <Label htmlFor="location">
-                            Select tags for your event *
-                          </Label>
-                          <Field
-                            name="tags"
-                            component={TagsSelectField}
-                            category="event"
-                          />
-                        </Flex>
-                        <Flex
-                          mb={3}
-                          px={2}
-                          sx={{ width: '100%', flexDirection: 'column' }}
-                        >
-                          <Label htmlFor="location">Link to your event *</Label>
-                          <Field
-                            name="url"
-                            data-cy="url"
-                            validateFields={[]}
-                            validate={(value) => validateUrl(value)}
+                            modifiers={{ capitalize: true }}
                             component={InputField}
-                            placeholder="URL to offsite link (Facebook, Meetup, etc)"
-                            customOnBlur={(e) =>
-                              mutators.addProtocolMutator(e.target.name)
-                            }
+                            maxLength="140"
+                            placeholder="Title of your event (max 140 characters)"
                           />
                         </Flex>
+                        <Flex
+                          mx={-2}
+                          sx={{
+                            width: '100%',
+                            flexDirection: ['column', 'column', 'row'],
+                          }}
+                        >
+                          <Flex
+                            mb={3}
+                            px={2}
+                            sx={{ width: '100%', flexDirection: 'column' }}
+                            data-cy="date"
+                          >
+                            <Label htmlFor="location">
+                              When is your event taking place? *
+                            </Label>
+                            <Field
+                              className="datepicker"
+                              component={DatePickerField}
+                              name="date"
+                              type="date"
+                              dateFormat="yyyy/MM/dd"
+                              validate={required}
+                              selected={this.state.selectedDate}
+                              customChange={(date) => this.handleChange(date)}
+                              placeholderText="yyyy/mm/dd"
+                            />
+                          </Flex>
+                          <Flex
+                            mb={3}
+                            px={2}
+                            sx={{ width: '100%', flexDirection: 'column' }}
+                          >
+                            <Label htmlFor="location">
+                              In which city is the event taking place? *
+                            </Label>
+                            <Field
+                              id="location"
+                              name="location"
+                              className="location-search-create"
+                              validateFields={[]}
+                              validate={required}
+                              customChange={() => {
+                                this.setState({
+                                  isLocationSelected: true,
+                                })
+                              }}
+                              component={LocationSearchField}
+                            />
+                            {isLocationSelected !== undefined &&
+                              !isLocationSelected && (
+                                <Text
+                                  color={theme.colors.red}
+                                  mb="5px"
+                                  sx={{ fontSize: 1 }}
+                                >
+                                  Select a location for your event
+                                </Text>
+                              )}
+                          </Flex>
+                        </Flex>
+                        <Flex
+                          mx={-2}
+                          sx={{
+                            width: '100%',
+                            flexDirection: ['column', 'column', 'row'],
+                          }}
+                        >
+                          <Flex
+                            mb={3}
+                            px={2}
+                            sx={{ width: '100%', flexDirection: 'column' }}
+                          >
+                            <Label htmlFor="location">
+                              Select tags for your event *
+                            </Label>
+                            <Field
+                              name="tags"
+                              component={TagsSelectField}
+                              category="event"
+                            />
+                          </Flex>
+                          <Flex
+                            mb={3}
+                            px={2}
+                            sx={{ width: '100%', flexDirection: 'column' }}
+                          >
+                            <Label htmlFor="location">
+                              Link to your event *
+                            </Label>
+                            <Field
+                              name="url"
+                              data-cy="url"
+                              validateFields={[]}
+                              validate={(value) => validateUrl(value)}
+                              component={InputField}
+                              placeholder="URL to offsite link (Facebook, Meetup, etc)"
+                              customOnBlur={(e) =>
+                                mutators.addProtocolMutator(e.target.name)
+                              }
+                            />
+                          </Flex>
+                        </Flex>
                       </Flex>
-                    </Flex>
+                    </Card>
                   </Flex>
                 </FormContainer>
               </Flex>

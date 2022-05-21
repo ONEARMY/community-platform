@@ -40,7 +40,7 @@ The emulator should start at http://localhost:4001. Follow the link to see an ov
 
 Clicking on individual tabs will take you to a page similar to the firebase console, from where you can interact with services.
 
-Note - any data populated into the emulator will be deleted after the emulator has closed (restoring to original state). See the section below about persistant and seed data
+Note - any data populated into the emulator will be deleted after the emulator has closed (restoring to original state). See the section below about persistent and seed data
 
 ## Resetting seed data
 
@@ -63,7 +63,7 @@ You can see the version of data used in the command line output, e.g. data expor
 
 ### User Login
 
-By default the image comes preloaded with user auth accounts as found in [shared\mocks\auth-users.ts](https://github.com/ONEARMY/community-platform/tree/master/shared/mocks/auth-users.ts). This means you can login as any of these users, e.g.
+By default the image comes preloaded with user auth accounts as found in [shared\mocks\authUsers.ts](https://github.com/ONEARMY/community-platform/tree/master/shared/mocks/authUsers.ts). This means you can login as any of these users, e.g.
 
 ```
 email: 'demo_admin@example.com',

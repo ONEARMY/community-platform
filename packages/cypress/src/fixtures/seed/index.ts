@@ -20,4 +20,5 @@ export const SEED_DATA: { [key in DBEndpoint]: any[] } = {
   research: Object.values(research),
   tags: Object.values(tags),
   users: Object.values(users),
+  aggregations: [],
 }

@@ -1,7 +1,6 @@
 import { SITE, VERSION, DEV_SITE_ROLE } from 'src/config/config'
-import Text from 'src/components/Text'
 import type { UserRole } from 'src/models'
-import { Flex, Box } from 'theme-ui'
+import { Flex, Box, Text } from 'theme-ui'
 import Select from 'react-select'
 import { observer } from 'mobx-react-lite'
 import { useCommonStores } from 'src/index'
@@ -23,7 +22,14 @@ const DevSiteHeader = observer(() => {
           px={1}
           style={{ alignItems: 'center', zIndex: 3001 }}
         >
-          <Text color={'white'} medium txtcenter sx={{ flex: '1' }}>
+          <Text
+            color={'white'}
+            sx={{
+              flex: '1',
+              textAlign: 'center',
+              fontSize: 2,
+            }}
+          >
             This is a dev version of the platform (v{VERSION})
           </Text>
           <Flex
@@ -31,7 +37,7 @@ const DevSiteHeader = observer(() => {
             sx={{ alignItems: 'center' }}
             ml={2}
           >
-            <Text color={'white'} medium mr="1" title={SITE}>
+            <Text color={'white'} mr="1" title={SITE} sx={{ fontSize: 2 }}>
               View as:
             </Text>
             <Box sx={{ width: '150px' }} mr={3}>
@@ -47,7 +53,7 @@ const DevSiteHeader = observer(() => {
             </Box>
           </Flex>
           <Flex data-cy="devSiteSelectContainer" sx={{ alignItems: 'center' }}>
-            <Text color={'white'} medium mr="1" title={SITE}>
+            <Text color={'white'} mr="1" title={SITE} sx={{ fontSize: 2 }}>
               Site:
             </Text>
             <Box sx={{ width: '130px' }} mr={3}>
@@ -60,7 +66,7 @@ const DevSiteHeader = observer(() => {
             </Box>
           </Flex>
           <Flex data-cy="devSiteSelectContainer" sx={{ alignItems: 'center' }}>
-            <Text color={'white'} medium mr="1" title={SITE}>
+            <Text color={'white'} sx={{ fontSize: 2 }} mr="1" title={SITE}>
               Theme:
             </Text>
             <Box sx={{ width: '180px' }}>

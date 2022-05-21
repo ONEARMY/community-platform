@@ -197,6 +197,14 @@ const StyledComponentTheme: ThemeWithName = {
   badges: {
     member,
   },
+  cards: {
+    primary: {
+      background: 'white',
+      border: `2px solid ${colors.black}`,
+      borderRadius: 1,
+      overflow: 'hidden',
+    },
+  },
   colors,
   buttons,
   breakpoints,

@@ -34,7 +34,7 @@ function _c(property: ConfigurationOption, fallbackValue?: string): string {
   return configurationSource?.[property] || fallbackValue
 }
 
-export const getConfigirationOption = _c
+export const getConfigurationOption = _c
 
 /*********************************************************************************************** /
                                         Site Variants

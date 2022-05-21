@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
-import Text from 'src/components/Text'
+import { Text } from 'theme-ui'
 import { Button } from 'oa-components'
 import Tooltip from 'src/components/Tooltip'
 import theme from 'src/themes/styled.theme'

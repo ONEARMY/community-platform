@@ -33,6 +33,10 @@ export interface ThemeWithName {
     paragraph: any
   }
 
+  cards?: {
+    primary: any
+  }
+
   colors: {
     white: string
     black: string

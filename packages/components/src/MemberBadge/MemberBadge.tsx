@@ -2,7 +2,7 @@ import type { ImageProps } from 'theme-ui'
 import { Image } from 'theme-ui'
 import { useTheme } from '@emotion/react'
 
-interface Props extends ImageProps {
+export interface Props extends ImageProps {
   size?: number
   profileType?: string
 }

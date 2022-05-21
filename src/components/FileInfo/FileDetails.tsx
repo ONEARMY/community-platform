@@ -1,7 +1,6 @@
 import type { availableGlyphs } from 'oa-components'
 import { Icon } from 'oa-components'
-import { Flex } from 'theme-ui'
-import Text from '../Text'
+import { Flex, Text } from 'theme-ui'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
@@ -31,9 +30,18 @@ export const FileDetails = (props: IProps) => (
     }}
   >
     <Icon size={24} glyph={props.glyph} mr={3} />
-    <Text small clipped={true} sx={{ flex: 1 }} mr={3}>
+    <Text
+      sx={{
+        flex: 1,
+        fontSize: 1,
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+      }}
+      mr={3}
+    >
       {props.file.name}
     </Text>
-    <Text small>{props.size}</Text>
+    <Text sx={{ fontSize: 1 }}>{props.size}</Text>
   </FileFlex>
 )

@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { FRIENDLY_MESSAGES } from 'oa-shared'
-import Flex from 'src/components/Flex'
+import { Card, Flex } from 'theme-ui'
 import Heading from 'src/components/Heading'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import { Button } from 'oa-components'
-import Text from 'src/components/Text'
+import { Text } from 'theme-ui'
 import { Link } from 'src/components/Links'
 import { Form, Field } from 'react-final-form'
 import { InputField } from 'src/components/Form/Fields'
@@ -128,152 +128,145 @@ class SignUpPage extends React.Component<IProps, IState> {
                 mb={3}
               >
                 <Flex sx={{ flexDirection: 'column', width: '100%' }}>
-                  <Flex
-                    card
-                    mediumRadius
-                    bg={'softblue'}
-                    px={3}
-                    py={2}
-                    sx={{ width: '100%' }}
-                  >
-                    <Heading medium sx={{ width: '100%' }}>
-                      Hey, nice to see you here
-                    </Heading>
-                  </Flex>
-                  <Flex
-                    card
-                    mediumRadius
-                    bg={'white'}
-                    mt={3}
-                    px={4}
-                    pt={0}
-                    pb={4}
-                    sx={{
-                      flexWrap: 'wrap',
-                      flexDirection: 'column',
-                      width: '100%',
-                    }}
-                  >
-                    <Heading small py={4} sx={{ width: '100%' }}>
-                      Create an account
-                    </Heading>
+                  <Card bg={'softblue'}>
+                    <Flex px={3} py={2} sx={{ width: '100%' }}>
+                      <Heading medium sx={{ width: '100%' }}>
+                        Hey, nice to see you here
+                      </Heading>
+                    </Flex>
+                  </Card>
+                  <Card mt={3}>
                     <Flex
-                      mb={3}
+                      px={4}
+                      pt={0}
+                      pb={4}
                       sx={{
-                        width: ['100%', '100%', `${(2 / 3) * 100}%`],
+                        flexWrap: 'wrap',
                         flexDirection: 'column',
+                        width: '100%',
                       }}
                     >
-                      <Label htmlFor="displayName">
-                        Username. Think carefully. You can't change this*
-                      </Label>
-                      <Field
-                        data-cy="username"
-                        name="displayName"
-                        type="userName"
-                        component={InputField}
-                        placeholder="Pick a unique name"
-                        validate={required}
-                      />
-                    </Flex>
-                    <Flex
-                      mb={3}
-                      sx={{
-                        flexDirection: 'column',
-                        width: ['100%', '100%', `${(2 / 3) * 100}%`],
-                      }}
-                    >
-                      <Label htmlFor="email">
-                        Email, personal or workspace*
-                      </Label>
-                      <Field
-                        data-cy="email"
-                        name="email"
-                        type="email"
-                        component={InputField}
-                        placeholder="hey@jack.com"
-                        validate={required}
-                      />
-                    </Flex>
-                    <Flex
-                      mb={3}
-                      sx={{
-                        flexDirection: 'column',
-                        width: ['100%', '100%', `${(2 / 3) * 100}%`],
-                      }}
-                    >
-                      <Label htmlFor="password">Password*</Label>
-                      <Field
-                        data-cy="password"
-                        name="password"
-                        type="password"
-                        component={InputField}
-                        validate={required}
-                      />
-                    </Flex>
-                    <Flex
-                      mb={3}
-                      sx={{
-                        flexDirection: 'column',
-                        width: ['100%', '100%', `${(2 / 3) * 100}%`],
-                      }}
-                    >
-                      <Label htmlFor="confirm-password">
-                        Confirm Password*
-                      </Label>
-                      <Field
-                        data-cy="confirm-password"
-                        name="confirm-password"
-                        type="password"
-                        component={InputField}
-                        validate={required}
-                      />
-                    </Flex>
-                    <Flex
-                      mb={3}
-                      mt={2}
-                      sx={{ width: ['100%', '100%', `${(2 / 3) * 100}%`] }}
-                    >
-                      <Field
-                        data-cy="consent"
-                        name="consent"
-                        type="checkbox"
-                        component="input"
-                        validate={required}
-                      />
-                      <Label htmlFor="consent">
-                        I agree to the{' '}
-                        <a href="/terms" target="_blank" rel="nofollow">
-                          Terms of Service
-                        </a>
-                        <span> and </span>
-                        <a href="/privacy" target="_blank" rel="nofollow">
-                          Privacy Policy
-                        </a>
-                      </Label>
-                    </Flex>
-                    <Text color={'red'} data-cy="error-msg">
-                      {this.state.errorMsg}
-                    </Text>
-                    <Flex mb={3} sx={{ justifyContent: 'space-between' }}>
-                      <Text small color={'grey'} mt={2}>
-                        Already have an account ?
-                        <Link to="/sign-in"> Sign-in here</Link>
-                      </Text>
-                    </Flex>
-
-                    <Flex>
-                      <Button
-                        data-cy="submit"
-                        sx={{ width: '100%' }}
-                        variant={'primary'}
-                        disabled={disabled}
-                        type="submit"
+                      <Heading small py={4} sx={{ width: '100%' }}>
+                        Create an account
+                      </Heading>
+                      <Flex
+                        mb={3}
+                        sx={{
+                          width: ['100%', '100%', `${(2 / 3) * 100}%`],
+                          flexDirection: 'column',
+                        }}
                       >
-                        Create account
-                      </Button>
+                        <Label htmlFor="displayName">
+                          Username. Think carefully. You can't change this*
+                        </Label>
+                        <Field
+                          data-cy="username"
+                          name="displayName"
+                          type="userName"
+                          component={InputField}
+                          placeholder="Pick a unique name"
+                          validate={required}
+                        />
+                      </Flex>
+                      <Flex
+                        mb={3}
+                        sx={{
+                          flexDirection: 'column',
+                          width: ['100%', '100%', `${(2 / 3) * 100}%`],
+                        }}
+                      >
+                        <Label htmlFor="email">
+                          Email, personal or workspace*
+                        </Label>
+                        <Field
+                          data-cy="email"
+                          name="email"
+                          type="email"
+                          component={InputField}
+                          placeholder="hey@jack.com"
+                          validate={required}
+                        />
+                      </Flex>
+                      <Flex
+                        mb={3}
+                        sx={{
+                          flexDirection: 'column',
+                          width: ['100%', '100%', `${(2 / 3) * 100}%`],
+                        }}
+                      >
+                        <Label htmlFor="password">Password*</Label>
+                        <Field
+                          data-cy="password"
+                          name="password"
+                          type="password"
+                          component={InputField}
+                          validate={required}
+                        />
+                      </Flex>
+                      <Flex
+                        mb={3}
+                        sx={{
+                          flexDirection: 'column',
+                          width: ['100%', '100%', `${(2 / 3) * 100}%`],
+                        }}
+                      >
+                        <Label htmlFor="confirm-password">
+                          Confirm Password*
+                        </Label>
+                        <Field
+                          data-cy="confirm-password"
+                          name="confirm-password"
+                          type="password"
+                          component={InputField}
+                          validate={required}
+                        />
+                      </Flex>
+                      <Flex
+                        mb={3}
+                        mt={2}
+                        sx={{ width: ['100%', '100%', `${(2 / 3) * 100}%`] }}
+                      >
+                        <Field
+                          data-cy="consent"
+                          name="consent"
+                          type="checkbox"
+                          component="input"
+                          validate={required}
+                        />
+                        <Label htmlFor="consent">
+                          I agree to the{' '}
+                          <a href="/terms" target="_blank" rel="nofollow">
+                            Terms of Service
+                          </a>
+                          <span> and </span>
+                          <a href="/privacy" target="_blank" rel="nofollow">
+                            Privacy Policy
+                          </a>
+                        </Label>
+                      </Flex>
+                      <Text color={'red'} data-cy="error-msg">
+                        {this.state.errorMsg}
+                      </Text>
+                      <Flex mb={3} sx={{ justifyContent: 'space-between' }}>
+                        <Text color={'grey'} mt={2} sx={{ fontSize: 1 }}>
+                          Already have an account ?
+                          <Link to="/sign-in"> Sign-in here</Link>
+                        </Text>
+                      </Flex>
+
+                      <Flex>
+                        <Button
+                          data-cy="submit"
+                          sx={{ width: '100%' }}
+                          variant={'primary'}
+                          disabled={disabled}
+                          type="submit"
+                        >
+                          Create account
+                        </Button>
+                      </Flex>
                     </Flex>
-                  </Flex>
+                  </Card>
                 </Flex>
               </Flex>
             </form>

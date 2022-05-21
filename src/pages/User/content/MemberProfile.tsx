@@ -13,6 +13,7 @@ import styled from '@emotion/styled'
 import { UserStats } from './UserStats'
 import UserContactAndLinks from './UserContactAndLinks'
 import { MemberBadge } from 'oa-components'
+import { maxWidth, width } from 'styled-system'
 
 interface IProps {
   user: IUserPP
@@ -41,12 +42,17 @@ const MemberPicture = styled('figure')`
   border-radius: 50%;
   max-width: none;
   overflow: hidden;
-
   img {
     outline: 100px solid red;
     object-fit: cover;
     width: 100%;
     height: 100%;
+  }
+  @media screen and (max-width: 523px) {
+    width: 200px;
+    height: 200px;
+    margin-left: auto;
+    margin-right: auto;
   }
 `
 
@@ -83,7 +89,17 @@ export const MemberProfile = ({ user, adminButton }: IProps) => {
                 }
               />
             </MemberPicture>
-            <UserStats user={user} />
+            <Box
+              sx={{
+                '@media screen and (max-width: 523px)': {
+                  maxWidth: '94%',
+                  marginLeft: 'auto',
+                  marginRight: 'auto',
+                },
+              }}
+            >
+              <UserStats user={user} />
+            </Box>
           </Box>
           <Flex
             mt={3}
@@ -136,7 +152,12 @@ export const MemberProfile = ({ user, adminButton }: IProps) => {
                 mt="0"
                 mb="20px"
                 color={theme.colors.grey}
-                sx={{ width: ['80%', '100%'] }}
+                sx={{
+                  width: ['80%', '100%'],
+                  '@media screen and (max-width: 523px)': {
+                    width: ['100%', '100%'],
+                  },
+                }}
               >
                 {user.about}
               </Text>

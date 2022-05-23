@@ -40,6 +40,10 @@ export default class HowtoDescription extends PureComponent<IProps> {
     super(props)
   }
 
+  state = {
+    fileDownloadCount: this.props.howto.total_downloads
+  }
+
   private dateCreatedByText(howto: IHowtoDB): string {
     return format(new Date(howto._created), 'DD-MM-YYYY')
   }
@@ -52,6 +56,12 @@ export default class HowtoDescription extends PureComponent<IProps> {
     } else {
       return ''
     }
+  }
+
+  private setFileDownloadCount = (val: number) => {
+    this.setState({
+      fileDownloadCount: val
+    });
   }
 
   public render() {
@@ -245,8 +255,13 @@ export default class HowtoDescription extends PureComponent<IProps> {
                   allowDownload
                   file={file}
                   key={file ? file.name : `file-${index}`}
+                  howToID={howto._id}
+                  setFileDownloadCount={this.setFileDownloadCount}
                 />
               ))}
+              { typeof this.state.fileDownloadCount !== undefined && (
+                <Text>{this.state.fileDownloadCount} downloads</Text>)
+              }
             </Flex>
           )}
         </Flex>

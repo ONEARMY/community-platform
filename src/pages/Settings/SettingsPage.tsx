@@ -81,7 +81,7 @@ export class UserSettings extends React.Component<IProps, IState> {
       formValues,
       notification: { message: '', icon: '', show: false },
       user,
-      showLocationDropdown: true,
+      showLocationDropdown: !user?.location?.latlng,
     })
   }
 
@@ -136,6 +136,19 @@ export class UserSettings extends React.Component<IProps, IState> {
       errors.links[ARRAY_ERROR] = 'Must have at least one link'
     }
     return errors
+  }
+
+  toggleLocationDropdown = () => {
+    this.setState((prevState) => ({
+      ...prevState,
+      showLocationDropdown: !prevState.showLocationDropdown,
+      formValues: {
+        ...prevState.formValues,
+        mapPinDescription: '',
+        location: null,
+        country: null,
+      },
+    }))
   }
 
   render() {
@@ -232,12 +245,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                       {values.profileType === ProfileType.MEMBER &&
                         isModuleSupported(MODULE.MAP) && (
                           <MemberMapPinSection
-                            toggleLocationDropdown={() =>
-                              this.setState((prevState) => ({
-                                showLocationDropdown:
-                                  !prevState.showLocationDropdown,
-                              }))
-                            }
+                            toggleLocationDropdown={this.toggleLocationDropdown}
                           />
                         )}
                       <UserInfosSection

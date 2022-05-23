@@ -142,6 +142,7 @@ export class MemberMapPinSection extends React.Component<any, IState> {
                         />
 
                         <Button
+                          data-cy="remove-a-member-map-pin"
                           mt={4}
                           variant="outline"
                           onClick={() => {

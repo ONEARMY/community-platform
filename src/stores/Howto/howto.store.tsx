@@ -148,7 +148,7 @@ export class HowtoStore extends ModuleStore {
     if (howToData) {
       const updatedHowto: IHowto = {
         ...howToData,
-        total_downloads: incrementTotalDownloads()
+        total_downloads: incrementTotalDownloads(),
       }
 
       await dbRef.set(updatedHowto)
@@ -356,7 +356,7 @@ export class HowtoStore extends ModuleStore {
         steps: processedSteps,
         fileLink: values.fileLink ?? '',
         files: processedFiles,
-        total_downloads: (processedFiles) ? 0 : undefined,
+        total_downloads: processedFiles ? 0 : undefined,
         moderation: values.moderation
           ? values.moderation
           : 'awaiting-moderation',

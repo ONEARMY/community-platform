@@ -1,6 +1,7 @@
 import { Flex } from 'theme-ui'
 import { ReactComponent as IconNotifications } from 'src/assets/icons/icon-notification.svg'
 import styled from '@emotion/styled'
+import { useEffect, useState } from 'react'
 
 const IconWrapper = styled(Flex)`
   display: flex;
@@ -19,12 +20,24 @@ function NotificationsIcon({
   isMobileMenuActive,
   areThereNotifications,
 }) {
+  const [hasUnseenNotifications, setHasUnseenNotifications] = useState<boolean>(
+    areThereNotifications,
+  )
+
+  // To illuminate the icon when new notifications are passed
+  useEffect(() => {
+    setHasUnseenNotifications(areThereNotifications)
+  }, [areThereNotifications])
+
   return (
     <>
       <IconWrapper
         data-cy="toggle-notifications-modal"
         ml={1}
-        onClick={onCLick}
+        onClick={() => {
+          setHasUnseenNotifications(false)
+          onCLick()
+        }}
         style={
           isMobileMenuActive
             ? {
@@ -35,7 +48,7 @@ function NotificationsIcon({
         }
       >
         <IconNotifications
-          color={areThereNotifications ? 'orange' : '#bfbfbf'}
+          color={hasUnseenNotifications ? 'orange' : '#bfbfbf'}
           height="25px"
           width="25px"
         />

@@ -260,7 +260,15 @@ export default class HowtoDescription extends PureComponent<IProps> {
                 />
               ))}
               {typeof this.state.fileDownloadCount !== undefined && (
-                <Text>{this.state.fileDownloadCount} downloads</Text>
+                <Text
+                  sx={{
+                    fontSize: '12px',
+                    color: '#61646B',
+                    paddingLeft: '6px',
+                  }}
+                >
+                  {this.state.fileDownloadCount} downloads
+                </Text>
               )}
             </Flex>
           )}

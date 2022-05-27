@@ -12,7 +12,7 @@
     "build": "tsc --build --verbose",
     "dev": "tsc --watch",
     "lint:code": "eslint . --ext .js,.jsx,.ts,.tsx src --color",
-    "new-component": "ts-node scripts/new-component.ts"
+    "new-component": "ts-node scripts/newComponent.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.8.2",

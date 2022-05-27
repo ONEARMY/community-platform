@@ -1,11 +1,10 @@
 import { observer } from 'mobx-react'
 import type { RouteComponentProps } from 'react-router'
-import { Box, Flex } from 'theme-ui'
+import { Box, Flex, Text } from 'theme-ui'
 import { Button } from 'oa-components'
 import Heading from 'src/components/Heading'
 import { Icon } from 'oa-components'
 import { Modal } from 'src/components/Modal/Modal'
-import Text from 'src/components/Text'
 import { useResearchStore } from 'src/stores/Research/research.store'
 
 interface IProps extends RouteComponentProps<any> {

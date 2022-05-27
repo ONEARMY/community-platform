@@ -1,10 +1,9 @@
-import { Component } from 'react'
-import Text from 'src/components/Text'
-import type { IMapGrouping } from 'src/models/maps.models'
-import checkmarkIcon from 'src/assets/icons/icon-checkmark.svg'
-import { Flex, Image } from 'theme-ui'
 import { inject } from 'mobx-react'
+import { Component } from 'react'
+import checkmarkIcon from 'src/assets/icons/icon-checkmark.svg'
+import type { IMapGrouping } from 'src/models/maps.models'
 import type { MapsStore } from 'src/stores/Maps/maps.store'
+import { Flex, Image, Text } from 'theme-ui'
 
 interface IProps {
   items: Array<IMapGrouping>
@@ -75,7 +74,14 @@ class GroupingFilterMobile extends Component<IProps, IState> {
 
     return (
       <Flex sx={{ flexDirection: 'column' }}>
-        <Text medium py="10px">
+        <Text
+          sx={{
+            fontSize: 2,
+            display: 'block',
+            paddingTop: 2,
+            paddingBottom: 2,
+          }}
+        >
           {entityType === 'place' ? 'All Workspaces' : 'Others'}
         </Text>
         {options.map((filter) => (
@@ -91,7 +97,7 @@ class GroupingFilterMobile extends Component<IProps, IState> {
           >
             <Flex sx={{ alignItems: 'center' }}>
               <Image width="30px" src={filter.icon} />
-              <Text medium ml="10px">
+              <Text sx={{ fontSize: 2 }} ml="10px">
                 {filter.label} ({filter.number})
               </Text>
             </Flex>

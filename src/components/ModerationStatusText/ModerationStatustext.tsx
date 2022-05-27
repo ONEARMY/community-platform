@@ -1,5 +1,6 @@
+import { useTheme } from '@emotion/react'
 import type { FunctionComponent } from 'react'
-import Text from 'src/components/Text'
+import { Text } from 'theme-ui'
 import type { IModerable } from 'src/models'
 
 type IProps = {
@@ -15,8 +16,8 @@ export const ModerationStatusText: FunctionComponent<IProps> = ({
   contentType,
   top,
   bottom,
-  cropBottomRight,
 }) => {
+  const theme = useTheme()
   let status = moderatedContent.moderation
   if (contentType === 'event') {
     status = 'draft' !== status ? status : 'awaiting-moderation'
@@ -45,18 +46,22 @@ export const ModerationStatusText: FunctionComponent<IProps> = ({
 
   return (
     <Text
-      small
-      clipped
-      highlight
-      critical={status === 'rejected'}
-      cropBottomRight={cropBottomRight}
       sx={{
+        display: 'block',
         position: 'absolute',
         maxWidth: '90%',
-        color: 'black',
+        color: status === 'rejected' ? theme.colors.red : 'black',
         right: '0',
         top: top ? top : 'auto',
         bottom: bottom ? bottom : 'auto',
+        fontSize: 1,
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        background: theme.colors.yellow.base,
+        padding: '7px',
+        borderRadius: '5px',
+        borderBottomRightRadius: '8px',
       }}
     >
       {text}

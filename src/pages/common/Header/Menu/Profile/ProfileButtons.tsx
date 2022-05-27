@@ -65,14 +65,14 @@ export class ProfileButtons extends Component<IProps> {
               sx={{
                 fontWeight: 'bold',
                 marginRight: '10px',
-                fontSize: theme.fontSizes[2],
+                fontSize: 2,
               }}
             />
             <ProfileButtonItem
               link={'/sign-up'}
               text="Join"
               variant="colorful"
-              sx={{ fontSize: theme.fontSizes[2] }}
+              sx={{ fontSize: 2 }}
             />
           </>
         )}

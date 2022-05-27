@@ -3,7 +3,7 @@ import { Flex, Image } from 'theme-ui'
 import styled from '@emotion/styled'
 import { keyframes } from '@emotion/react'
 
-import Text from 'src/components/Text'
+import { Text } from 'theme-ui'
 import { inject, observer } from 'mobx-react'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
@@ -46,9 +46,7 @@ export class Loader extends Component<IProps> {
       <>
         <Flex sx={{ flexWrap: 'wrap', justifyContent: 'center' }}>
           {logo && <RotatingLogo src={logo} sx={{ width: [75, 75, 100] }} />}
-          <Text txtcenter sx={{ width: '100%' }}>
-            loading...
-          </Text>
+          <Text sx={{ width: '100%', textAlign: 'center' }}>loading...</Text>
         </Flex>
       </>
     )

@@ -48,6 +48,7 @@ It also covers lots of handy additional information such as setting up a local s
 If needed you can [drop us a line here](mailto:platform@onearmy.earth?subject=contact%20from%20github) 👋
 Or join our [Discord channel](https://discordapp.com/invite/rnx7m4t)
 
+<!--- spell-checker: disable --->
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
@@ -56,6 +57,7 @@ Or join our [Discord channel](https://discordapp.com/invite/rnx7m4t)
     <td align="center"><a href="http://davehakkens.nl"><img src="https://avatars.githubusercontent.com/u/13672737?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Dave Hakkens</b></sub></a><br /><a href="#design-davehakkens" title="Design">🎨</a> <a href="#ideas-davehakkens" title="Ideas, Planning, & Feedback">🤔</a> <a href="#projectManagement-davehakkens" title="Project Management">📆</a> <a href="[💪]("Maintainer")," title="Maintainer">💪</a></td>
     <td align="center"><a href="https://c2dev.co.uk/"><img src="https://avatars.githubusercontent.com/u/10515065?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Chris Clarke</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=chrismclarke" title="Code">💻</a> <a href="[💪]("Maintainer")," title="Maintainer">💪</a></td>
     <td align="center"><a href="https://thisis.la/"><img src="https://avatars.githubusercontent.com/u/472589?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Luke Watts</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=thisislawatts" title="Code">💻</a> <a href="[💪]("Maintainer")," title="Maintainer">💪</a></td>
+    <td align="center"><a href="https://github.com/amuroBosetti"><img src="https://avatars.githubusercontent.com/u/46928545?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Mauro Bosetti</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=amuroBosetti" title="Documentation">📖</a></td>
   </tr>
 </table>
 
@@ -63,3 +65,4 @@ Or join our [Discord channel](https://discordapp.com/invite/rnx7m4t)
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+<!--- spell-checker: enable --->

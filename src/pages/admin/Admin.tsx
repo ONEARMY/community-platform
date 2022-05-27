@@ -7,9 +7,8 @@ import { AdminCategories } from './content/AdminCategories'
 import { AdminBetaTesters } from './content/AdminBetaTesters'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { Link } from 'src/components/Links'
-import Text from 'src/components/Text'
-import Flex from 'src/components/Flex'
-import { Box } from 'theme-ui'
+import { Flex } from 'theme-ui'
+import { Box, Text } from 'theme-ui'
 import { inject, observer } from 'mobx-react'
 import type { AdminStore } from 'src/stores/Admin/admin.store'
 
@@ -46,7 +45,7 @@ class AdminPage extends React.Component<IProps, any> {
             path="/admin"
             render={() => (
               <>
-                <Text my={3}>
+                <Text sx={{ display: 'block', marginTop: 3, marginBottom: 3 }}>
                   NOTE - This content is only viewable by admins
                 </Text>
                 <AuthWrapper roleRequired="admin">

@@ -2,10 +2,9 @@ import * as React from 'react'
 import { observer, inject } from 'mobx-react'
 import Heading from 'src/components/Heading'
 import { Field } from 'react-final-form'
-import Text from 'src/components/Text'
 import { TextAreaField } from 'src/components/Form/Fields'
-import { Box, Flex, Link } from 'theme-ui'
-import { FlexSectionContainer, ArrowIsSectionOpen } from './elements'
+import { Box, Flex, Link, Text } from 'theme-ui'
+import { FlexSectionContainer } from './elements'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import theme from 'src/themes/styled.theme'
 import { required } from 'src/utils/validators'
@@ -13,39 +12,24 @@ import type { ILocation } from 'src/models/common.models'
 import MapWithDraggablePin from 'src/components/MapWithDraggablePin/MapWithDraggablePin'
 import { randomIntFromInterval } from 'src/utils/helpers'
 
-interface IState {
-  isOpen?: boolean
-}
-
 @inject('mapsStore', 'userStore')
 @observer
-export class WorkspaceMapPinSection extends React.Component<any, IState> {
+export class WorkspaceMapPinSection extends React.Component<any> {
   pinFilters = MAP_GROUPINGS
   constructor(props) {
     super(props)
-    this.state = {
-      isOpen: true,
-    }
   }
 
   render() {
-    const { isOpen } = this.state
-
     return (
       <FlexSectionContainer>
         <Flex sx={{ justifyContent: 'space-between' }}>
           <Heading small id="your-map-pin">
             Your map pin
           </Heading>
-          <ArrowIsSectionOpen
-            onClick={() => {
-              this.setState({ isOpen: !isOpen })
-            }}
-            isOpen={isOpen}
-          />
         </Flex>
         <Box bg={theme.colors.red2} mt={2} p={3} sx={{ borderRadius: '3px' }}>
-          <Text medium>
+          <Text sx={{ fontSize: 2 }}>
             In order to have your pin accepted on our map you have to collect at
             least 6 stars in the Ally Checklist. Learn more about the{' '}
             <Link
@@ -58,8 +42,8 @@ export class WorkspaceMapPinSection extends React.Component<any, IState> {
             and how you can join.
           </Text>
         </Box>
-        <Box sx={{ display: isOpen ? 'block' : 'none' }}>
-          <Text mb={2} mt={4} medium>
+        <Box>
+          <Text mb={2} mt={4} sx={{ fontSize: 2 }}>
             Short description of your pin*
           </Text>
           <Field
@@ -89,11 +73,15 @@ export class WorkspaceMapPinSection extends React.Component<any, IState> {
               return (
                 <>
                   <Box>
-                    <Text mb={2} mt={4} medium>
+                    <Text mb={2} mt={4} sx={{ fontSize: 2 }}>
                       Your workspace location
                     </Text>
                     {props.meta.invalid && (
-                      <Text small color={theme.colors.red} mb="5px">
+                      <Text
+                        color={theme.colors.red}
+                        mb="5px"
+                        sx={{ fontSize: 1 }}
+                      >
                         Please select your location
                       </Text>
                     )}

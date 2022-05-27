@@ -119,15 +119,37 @@ export class HowtoList extends React.Component<any, IState> {
         <Flex py={26}>
           {referrerSource ? (
             <Box sx={{ width: '100%' }}>
-              <Heading medium bold txtcenter mt={20}>
+              <Heading
+                sx={{
+                  marginX: 'auto',
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                  fontSize: 5,
+                }}
+                mt={20}
+              >
                 The page you were looking for was moved or doesn't exist.
               </Heading>
-              <Heading small txtcenter mt={3} mb={10}>
+              <Heading
+                sx={{
+                  textAlign: 'center',
+                  fontSize: 1,
+                }}
+                mt={3}
+                mb={10}
+              >
                 Search all of our how-to's below
               </Heading>
             </Box>
           ) : (
-            <Heading medium bold txtcenter sx={{ marginX: 'auto' }}>
+            <Heading
+              sx={{
+                marginX: 'auto',
+                textAlign: 'center',
+                fontWeight: 'bold',
+                fontSize: 5,
+              }}
+            >
               {theme && theme.howtoHeading}
             </Heading>
           )}
@@ -220,7 +242,13 @@ export class HowtoList extends React.Component<any, IState> {
         <React.Fragment>
           {filteredHowtos.length === 0 && (
             <Flex>
-              <Heading auxiliary txtcenter sx={{ width: '100%' }}>
+              <Heading
+                sx={{
+                  width: '100%',
+                  textAlign: 'center',
+                  ...theme.typography?.auxiliary,
+                }}
+              >
                 {Object.keys(selectedTags).length === 0 &&
                 searchValue.length === 0 &&
                 selectedCategory.length === 0 ? (

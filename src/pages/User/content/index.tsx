@@ -2,8 +2,9 @@ import { inject, observer } from 'mobx-react'
 import React from 'react'
 import type { RouteComponentProps } from 'react-router'
 import Loader from 'src/components/Loader'
-import { Text } from 'src/components/Text'
+import { Text } from 'theme-ui'
 import type { IUserPP } from 'src/models'
+import { ProfileType } from 'src/modules/profile'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { UserStore } from 'src/stores/User/user.store'
 import { MemberProfile } from './MemberProfile'
@@ -62,14 +63,21 @@ export class UserPage extends React.Component<
     }
     if (!user) {
       return (
-        <Text txtcenter mt="50px" sx={{ width: '100%' }}>
+        <Text
+          sx={{
+            width: '100%',
+            textAlign: 'center',
+            display: 'block',
+            marginTop: 10,
+          }}
+        >
           User not found
         </Text>
       )
     }
     return (
       <>
-        {user.profileType === 'member' ? (
+        {user.profileType === ProfileType.MEMBER ? (
           <MemberProfile data-cy="memberProfile" user={user} />
         ) : (
           <SpaceProfile data-cy="spaceProfile" user={user} />

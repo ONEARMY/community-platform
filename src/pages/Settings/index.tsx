@@ -5,8 +5,8 @@ import { inject, observer } from 'mobx-react'
 import type { UserStore } from 'src/stores/User/user.store'
 import type { IUser } from 'src/models/user.models'
 import { UserSettings } from './SettingsPage'
-import { Text } from 'src/components/Text'
-import Flex from 'src/components/Flex'
+import { Text } from 'theme-ui'
+import { Flex } from 'theme-ui'
 
 interface InjectedProps extends IProps {
   userStore: UserStore
@@ -29,10 +29,7 @@ class SettingsPage extends React.Component<IProps> {
       </Switch>
     ) : (
       <Flex sx={{ justifyContent: 'center' }} mt="40px">
-        <Text regular>
-          {' '}
-          You can only access the settings page if you are logged in
-        </Text>
+        <Text> You can only access the settings page if you are logged in</Text>
       </Flex>
     )
   }

@@ -24,6 +24,7 @@ export interface IComment {
 export interface IHowto extends IHowtoFormInput, IModerable {
   _createdBy: string
   cover_image: IUploadedFileMeta
+  fileLink?: string
   files: Array<IUploadedFileMeta | File | null>
   steps: IHowtoStep[]
   // Comments were added in V2, old howto's may not have the property
@@ -58,6 +59,7 @@ export interface IHowtoFormInput extends IModerable {
   description: string
   difficulty_level: 'Easy' | 'Medium' | 'Hard' | 'Very Hard'
   time: string
+  fileLink?: string
   files: Array<IUploadedFileMeta | File | null>
   steps: IHowToStepFormInput[]
   slug: string

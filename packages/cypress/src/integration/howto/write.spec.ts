@@ -68,6 +68,7 @@ describe('[How To]', () => {
       time: '1-2 weeks',
       title: 'Create a how-to test',
       slug: 'create-a-how-to-test',
+      fileLink: 'http://google.com/',
       files: [],
       tags: {
         EOVeOZaKKw1UJkDIf3c3: true,
@@ -130,6 +131,7 @@ describe('[How To]', () => {
       selectDifficultLevel(expected.difficulty_level as Difficulty)
 
       cy.get('[data-cy=intro-description]').type(expected.description)
+      cy.get('[data-cy=fileLink]').type(expected.fileLink)
       cy.step('Upload a cover for the intro')
       cy.get('[data-cy=intro-cover]')
         .find(':file')

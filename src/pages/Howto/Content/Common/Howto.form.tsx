@@ -26,7 +26,7 @@ import { DIFFICULTY_OPTIONS, TIME_OPTIONS } from './FormSettings'
 import { Box, Text } from 'theme-ui'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import { HowToSubmitStatus } from './SubmitStatus'
-import { required } from 'src/utils/validators'
+import { required, validateUrlAcceptEmpty } from 'src/utils/validators'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { COMPARISONS } from 'src/utils/comparisons'
@@ -36,12 +36,15 @@ import { HOWTO_MAX_LENGTH, HOWTO_TITLE_MAX_LENGTH } from '../../constants'
 import { CategoriesSelect } from 'src/components/Category/CategoriesSelect'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
+const MAX_LINK_LENGTH = 2000
+
 interface IState {
   formSaved: boolean
   _toDocsList: boolean
   showSubmitModal?: boolean
   editCoverImg?: boolean
   fileEditMode?: boolean
+  showInvalidFileWarning: boolean
 }
 interface IProps extends RouteComponentProps<any> {
   formValues: any
@@ -104,6 +107,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
       editCoverImg: false,
       fileEditMode: false,
       showSubmitModal: false,
+      showInvalidFileWarning: false,
     }
     this.isDraft = props.moderation === 'draft'
   }
@@ -120,7 +124,21 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
       )
     }
   }
+
+  public checkFilesValid = (formValues: IHowtoFormInput) => {
+    if (formValues.fileLink && formValues.files.length > 0) {
+      this.setState({ showInvalidFileWarning: true })
+      return false
+    } else {
+      this.setState({ showInvalidFileWarning: false })
+      return true
+    }
+  }
+
   public onSubmit = async (formValues: IHowtoFormInput) => {
+    if (!this.checkFilesValid(formValues)) {
+      return
+    }
     this.setState({ showSubmitModal: true })
     formValues.moderation = this.isDraft ? 'draft' : 'awaiting-moderation'
     logger.debug('submitting form', formValues)
@@ -372,10 +390,46 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   </Flex>
                                 ) : (
                                   <>
-                                    <Field
-                                      name="files"
-                                      component={FileInputField}
-                                    />
+                                    <Flex
+                                      sx={{
+                                        flexDirection: 'column',
+                                      }}
+                                      mb={3}
+                                    >
+                                      <Label
+                                        htmlFor="file-download-link"
+                                        style={{ fontSize: '12px' }}
+                                      >
+                                        Add a download link
+                                      </Label>
+                                      <Field
+                                        id="fileLink"
+                                        name="fileLink"
+                                        data-cy="fileLink"
+                                        component={InputField}
+                                        placeholder="Link to Gdrive, Dropbox, Grabcad etc"
+                                        isEqual={COMPARISONS.textInput}
+                                        maxLength={MAX_LINK_LENGTH}
+                                        validate={validateUrlAcceptEmpty}
+                                        validateFields={[]}
+                                      />
+                                    </Flex>
+                                    <Flex
+                                      sx={{
+                                        flexDirection: 'column',
+                                      }}
+                                    >
+                                      <Label
+                                        htmlFor="files"
+                                        style={{ fontSize: '12px' }}
+                                      >
+                                        Or upload your files here
+                                      </Label>
+                                      <Field
+                                        name="files"
+                                        component={FileInputField}
+                                      />
+                                    </Flex>
                                   </>
                                 )}
                               </Flex>

@@ -11,7 +11,7 @@ import { distanceInWords } from 'date-fns'
 import type { IMapPin, IMapPinWithDetail } from 'src/models/maps.models'
 
 import './popup.css'
-import { Link } from 'src/components/Links'
+import { Link } from 'theme-ui'
 import { inject } from 'mobx-react'
 import type { MapsStore } from 'src/stores/Maps/maps.store'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
@@ -118,7 +118,7 @@ export class Popup extends React.Component<IProps> {
 
     return (
       <>
-        <Link to={'/u/' + name} data-cy="map-pin-popup">
+        <Link href={'/u/' + name} data-cy="map-pin-popup">
           <HeroImage src={heroImageUrl} onError={addFallbackSrc} />
           <Flex sx={{ flexDirection: 'column' }} px={2} py={2}>
             <Text mb={2} sx={{ fontSize: '12px', color: theme.colors.blue }}>

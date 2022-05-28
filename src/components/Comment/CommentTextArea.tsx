@@ -1,8 +1,7 @@
 import styled from '@emotion/styled'
-import { Box, Text } from 'theme-ui'
+import { Box, Text, Link } from 'theme-ui'
 import { Avatar } from '../Avatar'
 import { useCommonStores } from 'src/index'
-import { Link } from '../Links'
 import { MAX_COMMENT_LENGTH } from './constants'
 
 export interface IProps {
@@ -91,7 +90,7 @@ export const CommentTextArea = ({ onChange, comment, loading }) => {
           <LoginTextStyled data-cy="comments-login-prompt">
             Hi there!{' '}
             <Link
-              to="/sign-in"
+              href="/sign-in"
               sx={{
                 textDecoration: 'underline',
                 color: 'inherit',

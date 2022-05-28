@@ -2,7 +2,7 @@ import React from 'react'
 import { Box } from 'theme-ui'
 import { Flex } from 'theme-ui'
 import type { INotification } from 'src/models'
-import { Link } from 'src/components/Links'
+import { Link } from 'theme-ui'
 import { ReactComponent as IconComment } from 'src/assets/icons/icon-comment.svg'
 import { ReactComponent as IconUseful } from 'src/assets/icons/icon-useful.svg'
 
@@ -41,10 +41,8 @@ export const NotificationItem: React.FC<IProps> = ({
                 textDecoration: 'underline',
                 padding: '3px',
                 color: '#61646b',
-                fontWeight: '500',
               }}
-              to={'/u/' + triggeredBy.userId}
-              display="inline"
+              href={'/u/' + triggeredBy.userId}
             >
               {triggeredBy.displayName}
             </Link>
@@ -55,9 +53,9 @@ export const NotificationItem: React.FC<IProps> = ({
                 padding: '3px',
                 color: '#61646b',
                 fontWeight: '500',
+                display: 'inline',
               }}
-              to={relevantUrl}
-              display="inline"
+              href={relevantUrl}
             >
               {type === 'howto_useful' ? 'how-to' : 'research'}
             </Link>
@@ -78,10 +76,8 @@ export const NotificationItem: React.FC<IProps> = ({
                 textDecoration: 'underline',
                 padding: '3px',
                 color: '#61646b',
-                fontWeight: '500',
               }}
-              to={relevantUrl}
-              display="inline"
+              href={relevantUrl}
             >
               {type == 'new_comment_research' ? 'Research' : 'how-to'}
             </Link>
@@ -92,9 +88,9 @@ export const NotificationItem: React.FC<IProps> = ({
                 padding: '3px',
                 color: '#61646b',
                 fontWeight: '500',
+                display: 'inline',
               }}
-              to={'/u/' + triggeredBy.userId}
-              display="inline"
+              href={'/u/' + triggeredBy.userId}
             >
               {triggeredBy.displayName}
             </Link>

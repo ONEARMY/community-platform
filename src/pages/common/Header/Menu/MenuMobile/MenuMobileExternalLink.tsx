@@ -1,8 +1,7 @@
 import styled from '@emotion/styled'
 import { Component } from 'react'
 import theme from 'src/themes/styled.theme'
-import { Box } from 'theme-ui'
-import { LinkTargetBlank } from 'src/components/Links/LinkTargetBlank/LinkTargetBlank'
+import { Box, Link } from 'theme-ui'
 import { observer, inject } from 'mobx-react'
 import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
 
@@ -37,14 +36,14 @@ export class MenuMobileExternalLink extends Component<IProps> {
     return (
       <>
         <PanelItem data-cy="mobile-menu-item">
-          <LinkTargetBlank
+          <Link
             onClick={() => menu.toggleMobilePanel()}
             id={id}
             href={this.props.href}
             style={{ color: theme.colors.silver, fontSize: 2 }}
           >
             {content}
-          </LinkTargetBlank>
+          </Link>
         </PanelItem>
       </>
     )

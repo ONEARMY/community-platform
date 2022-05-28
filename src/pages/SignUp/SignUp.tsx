@@ -6,7 +6,7 @@ import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import { Button } from 'oa-components'
 import { Text } from 'theme-ui'
-import { Link } from 'src/components/Links'
+import { Link } from 'theme-ui'
 import { Form, Field } from 'react-final-form'
 import { InputField } from 'src/components/Form/Fields'
 import { inject, observer } from 'mobx-react'
@@ -250,7 +250,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                       <Flex mb={3} sx={{ justifyContent: 'space-between' }}>
                         <Text color={'grey'} mt={2} sx={{ fontSize: 1 }}>
                           Already have an account ?
-                          <Link to="/sign-in"> Sign-in here</Link>
+                          <Link href="/sign-in"> Sign-in here</Link>
                         </Text>
                       </Flex>
 

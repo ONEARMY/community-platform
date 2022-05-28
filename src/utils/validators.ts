@@ -12,6 +12,12 @@ const validateUrl = (value: any) => {
   return 'Required'
 }
 
+const validateUrlAcceptEmpty = (value: any) => {
+  if (value) {
+    return isUrl(value) ? undefined : 'Invalid url'
+  }
+}
+
 const validateEmail = (value: string) => {
   if (value) {
     return isEmail(value) ? undefined : 'Invalid email'
@@ -43,6 +49,7 @@ const ensureExternalUrl = (url: string) =>
 
 export {
   validateUrl,
+  validateUrlAcceptEmpty,
   validateEmail,
   required,
   addProtocolMutator,

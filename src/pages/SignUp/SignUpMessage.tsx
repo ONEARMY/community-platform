@@ -3,7 +3,7 @@ import { Card, Flex } from 'theme-ui'
 import Heading from 'src/components/Heading'
 import theme from 'src/themes/styled.theme'
 import { Button } from 'oa-components'
-import { Link } from 'src/components/Links'
+import { Link } from 'theme-ui'
 import { Link as ExternalLink, Text } from 'theme-ui'
 
 class SignUpMessagePage extends React.Component {
@@ -52,7 +52,7 @@ class SignUpMessagePage extends React.Component {
             </Flex>
           </Card>
           <Flex mt={3} sx={{ justifyContent: 'flex-end' }}>
-            <Link to={'/'}>
+            <Link href={'/'}>
               <Button variant="secondary" data-cy="home">
                 Home
               </Button>

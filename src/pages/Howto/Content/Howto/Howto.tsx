@@ -14,7 +14,7 @@ import WhiteBubble0 from 'src/assets/images/white-bubble_0.svg'
 import WhiteBubble1 from 'src/assets/images/white-bubble_1.svg'
 import WhiteBubble2 from 'src/assets/images/white-bubble_2.svg'
 import WhiteBubble3 from 'src/assets/images/white-bubble_3.svg'
-import { Link } from 'src/components/Links'
+import { Link } from 'theme-ui'
 import { Loader } from 'src/components/Loader'
 import type { UserStore } from 'src/stores/User/user.store'
 import { HowToComments } from './HowToComments/HowToComments'
@@ -179,7 +179,7 @@ export class Howto extends React.Component<
               Nice one!
             </Text>
             <Flex sx={{ justifyContent: 'center' }} mt={2}>
-              <Link to={'/how-to/'}>
+              <Link href={'/how-to/'}>
                 <Button variant={'secondary'} data-cy="go-back">
                   Back
                 </Button>

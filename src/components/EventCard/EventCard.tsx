@@ -1,11 +1,10 @@
 import ModerationStatusText from 'src/components/ModerationStatusText/ModerationStatustext'
-import { Card, Text, Flex } from 'theme-ui'
+import { Card, Text, Flex, Link } from 'theme-ui'
 import { Button } from 'oa-components'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { FlagIconEvents } from 'oa-components'
 import type { IEvent } from '../../models/events.models'
 import { getMonth, getDay, capitalizeFirstLetter } from 'src/utils/helpers'
-import { LinkTargetBlank } from '../Links/LinkTargetBlank/LinkTargetBlank'
 import { VerifiedUserBadge } from '../VerifiedUserBadge/VerifiedUserBadge'
 import { useTheme } from '@emotion/react'
 
@@ -170,9 +169,10 @@ export const EventCard = (props: IProps) => {
             order: [5, 5, 5],
           }}
         >
-          <LinkTargetBlank
+          <Link
             href={props.event.url}
             color={'black'}
+            target="_blank"
             mr={1}
             sx={{ width: '100%' }}
           >
@@ -185,7 +185,7 @@ export const EventCard = (props: IProps) => {
             >
               Go to event
             </Text>
-          </LinkTargetBlank>
+          </Link>
         </Flex>
       </Flex>
     </Card>

@@ -1,9 +1,7 @@
-import { Box, Flex, Text } from 'theme-ui'
+import { Box, Flex, Text, Link, Image } from 'theme-ui'
 import { FlagIconHowTos } from 'oa-components'
 import type { IComment } from 'src/models'
-import { Link } from 'src/components/Links'
 import theme from 'src/themes/styled.theme'
-import { Image } from 'theme-ui'
 import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
 
 interface IProps extends Omit<IComment, 'text' | '_id' | '_creatorId'> {
@@ -27,7 +25,7 @@ export const CommentHeader = ({
               textDecoration: 'underline',
               color: 'inherit',
             }}
-            to={'/u/' + creatorName}
+            href={'/u/' + creatorName}
           >
             {creatorName}
           </Link>

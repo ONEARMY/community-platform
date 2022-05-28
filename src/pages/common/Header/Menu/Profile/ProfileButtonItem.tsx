@@ -1,6 +1,6 @@
 import * as React from 'react'
 import styled from '@emotion/styled'
-import { Link } from 'src/components/Links'
+import { Link } from 'theme-ui'
 import { Button } from 'oa-components'
 import type { DisplayProps } from 'styled-system'
 import { display } from 'styled-system'
@@ -42,7 +42,7 @@ export class ProfileButtonItem extends React.Component<IProps> {
     const menu = this.injected.mobileMenuStore
     return (
       <>
-        <Link to={this.props.link} sx={{ minWidth: 'auto' }}>
+        <Link href={this.props.link} sx={{ minWidth: 'auto' }}>
           <ButtonSign
             onClick={() => this.props.isMobile && menu.toggleMobilePanel()}
             variant={this.props.variant}

@@ -6,7 +6,7 @@ import { AdminUsers } from './content/AdminUsers'
 import { AdminCategories } from './content/AdminCategories'
 import { AdminBetaTesters } from './content/AdminBetaTesters'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
-import { Link } from 'src/components/Links'
+import { Link } from 'theme-ui'
 import { Flex } from 'theme-ui'
 import { Box, Text } from 'theme-ui'
 import { inject, observer } from 'mobx-react'
@@ -52,7 +52,7 @@ class AdminPage extends React.Component<IProps, any> {
                   <Flex>
                     {ADMIN_ROUTES.map((route) => (
                       <Box key={route.name} bg="white" p={2} m={2}>
-                        <Link to={`/admin/${route.slug}`}>
+                        <Link href={`/admin/${route.slug}`}>
                           {route.name} Admin
                         </Link>
                       </Box>

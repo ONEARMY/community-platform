@@ -1,8 +1,7 @@
 import * as React from 'react'
 import type { IEvent, IEventDB } from 'src/models/events.models'
 import { Button } from 'oa-components'
-import { Link } from 'src/components/Links'
-import { Flex, Box } from 'theme-ui'
+import { Flex, Box, Link } from 'theme-ui'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import Heading from 'src/components/Heading'
 import EventCard from 'src/components/EventCard/EventCard'
@@ -94,8 +93,10 @@ export class EventsList extends React.Component<any> {
                 }}
               >
                 <Link
-                  sx={{ width: '100%' }}
-                  to={this.props.userStore!.user ? '/events/create' : 'sign-up'}
+                  sx={{ width: '100%', display: 'block' }}
+                  href={
+                    this.props.userStore!.user ? '/events/create' : 'sign-up'
+                  }
                 >
                   <Button
                     sx={{ width: '100%' }}
@@ -123,7 +124,7 @@ export class EventsList extends React.Component<any> {
                 </Flex>
               )}
               <Flex sx={{ justifyContent: 'center' }} mt={20}>
-                <Link to={'#'} style={{ visibility: 'hidden' }}>
+                <Link href={'#'} style={{ visibility: 'hidden' }}>
                   <Button variant={'secondary'} data-cy="more-events">
                     More Events
                   </Button>
@@ -141,7 +142,7 @@ export class EventsList extends React.Component<any> {
                   <Heading medium>Connect with a likeminded community.</Heading>
                   <Heading medium>All around the planet.</Heading>
                   <Link
-                    to={
+                    href={
                       this.props.userStore!.user ? '/events/create' : 'sign-up'
                     }
                   >

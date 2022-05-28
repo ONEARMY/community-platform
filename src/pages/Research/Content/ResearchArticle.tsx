@@ -3,7 +3,7 @@ import * as React from 'react'
 import type { RouteComponentProps } from 'react-router'
 import { Box, Flex } from 'theme-ui'
 import { Button } from 'oa-components'
-import { Link } from 'src/components/Links'
+import { Link } from 'theme-ui'
 import { Loader } from 'src/components/Loader'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { useResearchStore } from 'src/stores/Research/research.store'
@@ -115,7 +115,7 @@ const ResearchArticle = observer((props: IProps) => {
         </Box>
         {isEditable && (
           <Flex my={4}>
-            <Link to={`/research/${item.slug}/new-update`} mb={[3, 3, 0]}>
+            <Link href={`/research/${item.slug}/new-update`} mb={[3, 3, 0]}>
               <Button large ml={2}>
                 Add update
               </Button>

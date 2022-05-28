@@ -6,8 +6,7 @@ import { withRouter } from 'react-router'
 import { Redirect } from 'react-router'
 import Heading from 'src/components/Heading'
 import { Button } from 'oa-components'
-import { Text } from 'theme-ui'
-import { Link } from 'src/components/Links'
+import { Text, Link } from 'theme-ui'
 import { InputField } from 'src/components/Form/Fields'
 import { inject, observer } from 'mobx-react'
 import { Form, Field } from 'react-final-form'
@@ -208,13 +207,13 @@ class SignInPage extends React.Component<IProps, IState> {
                               sx={{ justifyContent: 'space-between' }}
                             >
                               <Text sx={{ fontSize: 1 }} color={'grey'} mt={2}>
-                                <Link to={'/sign-up'} data-cy="no-account">
+                                <Link href={'/sign-up'} data-cy="no-account">
                                   Don't have an account?
                                 </Link>
                               </Text>
                               <Text sx={{ fontSize: 1 }} color={'grey'} mt={2}>
                                 <Link
-                                  to="#"
+                                  href="#"
                                   data-cy="lost-password"
                                   onClick={() =>
                                     this.resetPasword(values.email)

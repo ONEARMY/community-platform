@@ -7,7 +7,7 @@ import { Button } from 'oa-components'
 import { Flex } from 'theme-ui'
 import Heading from 'src/components/Heading'
 import ImageGallery from 'src/components/ImageGallery'
-import { Link } from 'src/components/Links'
+import { Link } from 'theme-ui'
 import type { IResearch } from 'src/models/research.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { ResearchComments } from './ResearchComments/ResearchComments'
@@ -108,7 +108,7 @@ const ResearchUpdate: React.FC<IProps> = ({
                     <Link
                       ml="auto"
                       mt={[0, 2, 2]}
-                      to={'/research/' + slug + '/edit-update/' + update._id}
+                      href={'/research/' + slug + '/edit-update/' + update._id}
                     >
                       <Button variant={'primary'} data-cy={'edit-update'}>
                         Edit

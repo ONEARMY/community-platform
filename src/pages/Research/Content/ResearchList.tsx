@@ -3,7 +3,7 @@ import { Box, Flex } from 'theme-ui'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { Button } from 'oa-components'
 import Heading from 'src/components/Heading'
-import { Link } from 'src/components/Links'
+import { Link } from 'theme-ui'
 import ResearchListItem from './ResearchListItem'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { useTheme } from '@emotion/react'
@@ -32,7 +32,7 @@ const ResearchList = observer(() => {
       ))}
       <Box mb={4}>
         <Link
-          to={store.activeUser ? '/research/create' : 'sign-up'}
+          href={store.activeUser ? '/research/create' : 'sign-up'}
           mb={[3, 3, 0]}
         >
           <AuthWrapper roleRequired="beta-tester">

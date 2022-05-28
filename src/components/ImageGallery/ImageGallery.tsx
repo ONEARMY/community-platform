@@ -43,7 +43,7 @@ const ImageWithPointer = styled(Image)`
   object-fit: cover;
 `
 
-export default class ImageGallery extends PureComponent<IProps, IState> {
+export class ImageGallery extends PureComponent<IProps, IState> {
   constructor(props) {
     super(props)
     this.state = {

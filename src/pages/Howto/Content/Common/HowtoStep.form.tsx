@@ -1,7 +1,7 @@
 import { PureComponent } from 'react'
 import { Field } from 'react-final-form'
 import { TextAreaField, InputField } from 'src/components/Form/Fields'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { Card, Flex } from 'theme-ui'
 import { Button } from 'oa-components'
@@ -78,7 +78,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
       <Card data-cy={`step_${index}`} mt={5} key={index}>
         <Flex p={3} sx={{ flexDirection: 'column' }}>
           <Flex p={0}>
-            <Heading small sx={{ flex: 1 }} mb={3}>
+            <Heading variant="small" sx={{ flex: 1 }} mb={3}>
               Step {index + 1}
             </Heading>
             {index >= 1 && (

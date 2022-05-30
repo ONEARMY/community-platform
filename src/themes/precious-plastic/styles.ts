@@ -223,6 +223,18 @@ const StyledComponentTheme: ThemeWithName = {
   radii,
   regular,
   space,
+  text: {
+    heading: {
+      fontFamily: '"Varela Round", Arial, sans-serif',
+      fontSize: fontSizes[5],
+      fontWeight: 'normal',
+    },
+    small: {
+      fontFamily: '"Varela Round", Arial, sans-serif',
+      fontSize: fontSizes[4],
+      fontWeight: 'normal',
+    },
+  },
   typography,
   zIndex,
 }

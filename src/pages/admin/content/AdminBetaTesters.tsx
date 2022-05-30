@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 import { Button } from 'oa-components'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import type { AdminStore } from 'src/stores/Admin/admin.store'
 import { Box, Text } from 'theme-ui'
 import { Input } from 'src/components/Form/elements'

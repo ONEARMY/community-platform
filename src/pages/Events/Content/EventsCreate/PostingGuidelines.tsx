@@ -1,4 +1,4 @@
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { Card, Text } from 'theme-ui'
 import { Flex } from 'theme-ui'
 import { useTheme } from '@emotion/react'
@@ -10,9 +10,7 @@ export const PostingGuidelines = () => {
   return (
     <Card p={4}>
       <Flex sx={{ flexDirection: 'column' }}>
-        <Heading medium bold mb={2}>
-          Event Posting Guidelines
-        </Heading>
+        <Heading mb={2}>Event Posting Guidelines</Heading>
         <Text sx={{ ...theme.typography.auxiliary }} mb={1}>
           1. Use a platform like Facebook, Eventbrite, Meetup, etc.
         </Text>

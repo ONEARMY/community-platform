@@ -7,7 +7,7 @@ import type { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 import { InputField, DatePickerField } from 'src/components/Form/Fields'
 import { Button } from 'oa-components'
 import type { EventStore } from 'src/stores/Events/events.store'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { Card, Flex } from 'theme-ui'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 import { inject } from 'mobx-react'
@@ -114,7 +114,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                         bg={theme.colors.softblue}
                         sx={{ alignItems: 'center', padding: 3 }}
                       >
-                        <Heading medium>Create an event</Heading>
+                        <Heading>Create an event</Heading>
                         <Box ml="15px">
                           <ElWithBeforeIcon
                             IconUrl={IconHeaderEvents}

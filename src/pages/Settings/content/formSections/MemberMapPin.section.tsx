@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { observer, inject } from 'mobx-react'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { Field } from 'react-final-form'
 import { Text } from 'theme-ui'
 import { Button } from 'oa-components'
@@ -48,7 +48,7 @@ export class MemberMapPinSection extends React.Component<any, IState> {
     return (
       <FlexSectionContainer>
         <Flex sx={{ justifyContent: 'space-between' }}>
-          <Heading small id="your-map-pin">
+          <Heading variant="small" id="your-map-pin">
             Add yourself to the map!
           </Heading>
         </Flex>

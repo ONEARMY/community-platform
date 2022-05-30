@@ -2,7 +2,7 @@ import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 import type { CategoriesStore } from 'src/stores/Categories/categories.store'
 import { Button } from 'oa-components'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { Box, Text } from 'theme-ui'
 import { Flex } from 'theme-ui'
 import { Modal } from 'src/components/Modal/Modal'
@@ -63,7 +63,7 @@ export class AdminCategories extends React.Component<IProps, IState> {
     return (
       <Box mt={4}>
         <Flex>
-          <Heading small sx={{ flex: 1 }}>
+          <Heading variant="small" sx={{ flex: 1 }}>
             Categories Admin
           </Heading>
           <Button onClick={() => this.showEditor(NEW_CATEGORY)}>

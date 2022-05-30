@@ -4,7 +4,7 @@ import { Card, Flex } from 'theme-ui'
 import type { RouteComponentProps } from 'react-router'
 import { withRouter } from 'react-router'
 import { Redirect } from 'react-router'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { Button } from 'oa-components'
 import { Text, Link } from 'theme-ui'
 import { InputField } from 'src/components/Form/Fields'
@@ -136,9 +136,7 @@ class SignInPage extends React.Component<IProps, IState> {
                   <Flex sx={{ flexDirection: 'column', width: '100%' }}>
                     <Card bg={'softblue'}>
                       <Flex px={3} py={2}>
-                        <Heading medium sx={{ width: '100%' }}>
-                          Welcome back
-                        </Heading>
+                        <Heading>Welcome back</Heading>
                       </Flex>
                     </Card>
                     <Card mt={3}>
@@ -176,7 +174,11 @@ class SignInPage extends React.Component<IProps, IState> {
                         {/* Login Form */}
                         {this.state.authProvider && (
                           <>
-                            <Heading small py={4} sx={{ width: '100%' }}>
+                            <Heading
+                              variant="small"
+                              py={4}
+                              sx={{ width: '100%' }}
+                            >
                               Log in to your account
                             </Heading>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>

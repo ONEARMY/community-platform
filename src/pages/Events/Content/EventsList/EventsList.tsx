@@ -3,7 +3,7 @@ import type { IEvent, IEventDB } from 'src/models/events.models'
 import { Button } from 'oa-components'
 import { Flex, Box, Link } from 'theme-ui'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import EventCard from 'src/components/EventCard/EventCard'
 import TagsSelect from 'src/components/Tags/TagsSelect'
 import { inject, observer } from 'mobx-react'
@@ -139,8 +139,8 @@ export class EventsList extends React.Component<any> {
                   }}
                   mt={5}
                 >
-                  <Heading medium>Connect with a likeminded community.</Heading>
-                  <Heading medium>All around the planet.</Heading>
+                  <Heading>Connect with a likeminded community.</Heading>
+                  <Heading>All around the planet.</Heading>
                   <Link
                     href={
                       this.props.userStore!.user ? '/events/create' : 'sign-up'

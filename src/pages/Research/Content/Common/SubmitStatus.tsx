@@ -2,7 +2,7 @@ import { observer } from 'mobx-react'
 import type { RouteComponentProps } from 'react-router'
 import { Box, Flex, Text } from 'theme-ui'
 import { Button } from 'oa-components'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { Icon } from 'oa-components'
 import { Modal } from 'src/components/Modal/Modal'
 import { useResearchStore } from 'src/stores/Research/research.store'
@@ -18,7 +18,7 @@ export const ResearchSubmitStatus = observer((props: IProps) => {
   return uploadStatus.Start ? (
     <Modal>
       <Flex sx={{ justifyContent: 'space-between' }}>
-        <Heading small sx={{ textAlign: 'center' }}>
+        <Heading variant="small" sx={{ textAlign: 'center' }}>
           Uploading Research
         </Heading>
         <Icon
@@ -62,7 +62,7 @@ export const UpdateSubmitStatus = observer((props: IProps) => {
   return uploadStatus.Start ? (
     <Modal>
       <Flex sx={{ justifyContent: 'space-between' }}>
-        <Heading small sx={{ textAlign: 'center' }}>
+        <Heading variant="small" sx={{ textAlign: 'center' }}>
           Uploading Update
         </Heading>
         <Icon

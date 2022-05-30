@@ -5,7 +5,7 @@ import type {
   PlasticTypeLabel,
 } from 'src/models/user_pp.models'
 
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { Box, Image } from 'theme-ui'
 // import slick and styles
 import Slider from 'react-slick'
@@ -290,8 +290,6 @@ export const SpaceProfile = ({ user }: IProps) => {
 
           <Flex sx={{ alignItems: 'center' }}>
             <Heading
-              medium
-              bold
               color={'black'}
               mb={3}
               style={{ wordBreak: 'break-word' }}

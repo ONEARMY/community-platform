@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { Flex } from 'theme-ui'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { Box, Text } from 'theme-ui'
 import { FlexSectionContainer } from './elements'
 import { OpeningHoursPicker } from './Fields/OpeningHoursPicker.field'
@@ -27,7 +27,7 @@ export class CollectionSection extends React.Component<IProps> {
     return (
       <FlexSectionContainer>
         <Flex sx={{ justifyContent: 'space-between' }}>
-          <Heading small>Collection</Heading>
+          <Heading variant="small">Collection</Heading>
         </Flex>
         <Box>
           <Flex sx={{ wrap: 'nowrap', alignItems: 'center', width: '100%' }}>

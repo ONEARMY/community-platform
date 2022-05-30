@@ -1,6 +1,6 @@
 import React from 'react'
 import { Card, Flex } from 'theme-ui'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import { Button } from 'oa-components'
@@ -60,9 +60,7 @@ class ForgotPasswordPage extends React.Component<IProps, IState> {
             >
               <Flex sx={{ flexDirection: 'column', width: '100%' }}>
                 <Card bg={'softblue'} px={3} py={2} sx={{ width: '100%' }}>
-                  <Heading medium sx={{ width: '100%' }}>
-                    We've all been there
-                  </Heading>
+                  <Heading>We've all been there</Heading>
                 </Card>
                 <Card mt={3}>
                   <Flex
@@ -75,7 +73,7 @@ class ForgotPasswordPage extends React.Component<IProps, IState> {
                       flexDirection: 'column',
                     }}
                   >
-                    <Heading small py={4} sx={{ width: '100%' }}>
+                    <Heading variant="small" py={4} sx={{ width: '100%' }}>
                       Reset your password
                     </Heading>
                     <Flex sx={{ flexDirection: 'column' }} mb={3}>

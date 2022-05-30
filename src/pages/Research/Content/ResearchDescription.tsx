@@ -3,7 +3,7 @@ import * as React from 'react'
 import { Box, Flex, Image, Text } from 'theme-ui'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import { Button, FlagIconHowTos } from 'oa-components'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import ModerationStatusText from 'src/components/ModerationStatusText/ModerationStatustext'
 import { Link } from 'theme-ui'
 import type { IResearch } from 'src/models/research.models'
@@ -158,7 +158,7 @@ const ResearchDescription: React.FC<IProps> = ({
           >
             {dateLastUpdateText(research)}
           </Text>
-          <Heading medium mt={2} mb={1}>
+          <Heading mt={2} mb={1}>
             {research.title}
           </Heading>
           <Text sx={{ whiteSpace: 'pre-line', ...theme.typography.paragraph }}>

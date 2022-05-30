@@ -2,7 +2,7 @@ import { inject, observer } from 'mobx-react'
 import * as React from 'react'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { Button } from 'oa-components'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { Flex, Box } from 'theme-ui'
 import { Link } from 'theme-ui'
 import { Loader } from 'src/components/Loader'
@@ -285,7 +285,7 @@ export class HowtoList extends React.Component<any, IState> {
           </Flex>
           <MoreContainer m={'0 auto'} pt={60} pb={90}>
             <Flex sx={{ alignItems: 'center', flexDirection: 'column' }} mt={5}>
-              <Heading medium sx={{ textAlign: 'center' }}>
+              <Heading sx={{ textAlign: 'center' }}>
                 Inspire the {theme.siteName} world.
                 <br />
                 Share your how-to!

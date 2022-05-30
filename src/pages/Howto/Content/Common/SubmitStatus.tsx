@@ -1,7 +1,7 @@
 import * as React from 'react'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import { inject, observer } from 'mobx-react'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { Icon } from 'oa-components'
 import { Modal } from 'src/components/Modal/Modal'
 import { Button } from 'oa-components'
@@ -33,7 +33,7 @@ export class HowToSubmitStatus extends React.Component<IProps> {
     return uploadStatus.Start ? (
       <Modal>
         <Flex sx={{ justifyContent: 'space-between' }}>
-          <Heading small sx={{ textAlign: 'center' }}>
+          <Heading variant="small" sx={{ textAlign: 'center' }}>
             Uploading How To
           </Heading>
           <Icon

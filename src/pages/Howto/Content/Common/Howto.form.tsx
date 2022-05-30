@@ -12,7 +12,7 @@ import { SelectField } from 'src/components/Form/Select.field'
 import { HowtoStep } from './HowtoStep.form'
 import { Button } from 'oa-components'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { Card, Flex } from 'theme-ui'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
@@ -212,7 +212,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                     <Flex sx={{ flexDirection: 'column' }}>
                       <Card bg={theme.colors.softblue}>
                         <Flex px={3} py={2} sx={{ alignItems: 'center' }}>
-                          <Heading medium>
+                          <Heading>
                             {this.props.parentType === 'create' ? (
                               <span>Create</span>
                             ) : (
@@ -239,7 +239,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                           sx={{ flexWrap: 'wrap', flexDirection: 'column' }}
                         >
                           {/* Left Side */}
-                          <Heading small mb={3}>
+                          <Heading variant="small" mb={3}>
                             Intro
                           </Heading>
                           <Flex

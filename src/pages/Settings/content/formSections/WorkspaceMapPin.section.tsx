@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { observer, inject } from 'mobx-react'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { Field } from 'react-final-form'
 import { TextAreaField } from 'src/components/Form/Fields'
 import { Box, Flex, Link, Text } from 'theme-ui'
@@ -24,7 +24,7 @@ export class WorkspaceMapPinSection extends React.Component<any> {
     return (
       <FlexSectionContainer>
         <Flex sx={{ justifyContent: 'space-between' }}>
-          <Heading small id="your-map-pin">
+          <Heading variant="small" id="your-map-pin">
             Your map pin
           </Heading>
         </Flex>

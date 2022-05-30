@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { Flex } from 'theme-ui'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import type { UserStore } from 'src/stores/User/user.store'
 import { Box } from 'theme-ui'
 import { FlexSectionContainer } from './elements'
@@ -33,7 +33,7 @@ export class AccountSettingsSection extends React.Component<any> {
     return (
       <FlexSectionContainer>
         <Flex sx={{ justifyContent: 'space-between' }}>
-          <Heading small>Account settings</Heading>
+          <Heading variant="small">Account settings</Heading>
         </Flex>
         <Box mt={2}>
           <ChangeEmailForm userStore={this.props.userStore} />

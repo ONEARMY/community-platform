@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { Flex } from 'theme-ui'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { Box, Text } from 'theme-ui'
 import { FlexSectionContainer } from './elements'
 import { WORKSPACE_TYPES } from 'src/mocks/user_pp.mock'
@@ -20,7 +20,7 @@ export class WorkspaceSection extends React.Component<any> {
         render={({ input, meta }) => (
           <FlexSectionContainer>
             <Flex sx={{ justifyContent: 'space-between' }}>
-              <Heading small>Workspace</Heading>
+              <Heading variant="small">Workspace</Heading>
             </Flex>
             <Box>
               <Text mt={4} mb={4}>

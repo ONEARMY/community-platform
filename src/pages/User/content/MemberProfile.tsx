@@ -5,7 +5,7 @@ import type { IUploadedFileMeta } from 'src/stores/storage'
 import { Box, Image, Text } from 'theme-ui'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
 import { Flex } from 'theme-ui'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { FlagIcon } from 'oa-components'
 import theme from 'src/themes/styled.theme'
 import styled from '@emotion/styled'
@@ -115,8 +115,6 @@ export const MemberProfile = ({ user }: IProps) => {
           </Flex>
           <Box sx={{ flexDirection: 'column' }} mb={3}>
             <Heading
-              medium
-              bold
               color={'black'}
               style={{ wordWrap: 'break-word' }}
               data-cy="userDisplayName"

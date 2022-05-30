@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { FlexSectionContainer } from './elements'
 import { Link, Box, Text, Flex } from 'theme-ui'
 import { Button } from 'oa-components'
@@ -19,7 +19,7 @@ function ProfileTypes() {
       render={(props) => (
         <FlexSectionContainer>
           <Flex sx={{ justifyContent: 'space-between' }}>
-            <Heading small>Focus</Heading>
+            <Heading variant="small">Focus</Heading>
           </Flex>
           <Box>
             <Text my={4}>What is your main {theme.name} activity?</Text>

@@ -2,7 +2,7 @@ import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 import type { TagsStore } from 'src/stores/Tags/tags.store'
 import { Button } from 'oa-components'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { Box, Text } from 'theme-ui'
 import { Flex } from 'theme-ui'
 import type { ITag, TagCategory } from 'src/models/tags.model'
@@ -67,7 +67,7 @@ export class AdminTags extends React.Component<IProps, IState> {
     return (
       <Box mt={4}>
         <Flex>
-          <Heading small sx={{ flex: 1 }}>
+          <Heading variant="small" sx={{ flex: 1 }}>
             Tags Admin
           </Heading>
           <Button onClick={() => this.showEditor(NEW_TAG)}>Add Tag</Button>

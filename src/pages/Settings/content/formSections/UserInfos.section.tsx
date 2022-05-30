@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Field } from 'react-final-form'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { Flex } from 'theme-ui'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
 import { Button } from 'oa-components'
@@ -127,7 +127,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
     return (
       <FlexSectionContainer>
         <Flex sx={{ justifyContent: 'space-between' }}>
-          <Heading small>Infos</Heading>
+          <Heading variant="small">Infos</Heading>
         </Flex>
         <Box>
           <Flex sx={{ flexWrap: 'wrap' }}>

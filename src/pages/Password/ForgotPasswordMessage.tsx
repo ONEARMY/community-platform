@@ -1,6 +1,6 @@
 import React from 'react'
 import { Card, Flex } from 'theme-ui'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { Button } from 'oa-components'
 import { Text } from 'theme-ui'
 import { Link } from 'theme-ui'
@@ -20,9 +20,7 @@ class ForgotPasswordMessagePage extends React.Component {
         <Flex sx={{ flexDirection: 'column', width: '100%' }}>
           <Card bg={'softblue'}>
             <Flex px={3} py={2} sx={{ width: '100%' }}>
-              <Heading medium sx={{ width: '100%' }}>
-                Sent
-              </Heading>
+              <Heading>Sent</Heading>
             </Flex>
           </Card>
           <Card mt={3}>
@@ -32,7 +30,7 @@ class ForgotPasswordMessagePage extends React.Component {
               pb={4}
               sx={{ flexWrap: 'wrap', flexDirection: 'column', width: '100%' }}
             >
-              <Heading small py={4} sx={{ width: '100%' }}>
+              <Heading variant="small" py={4} sx={{ width: '100%' }}>
                 Check your email
               </Heading>
               <Flex sx={{ flexDirection: 'column' }} mb={3}>

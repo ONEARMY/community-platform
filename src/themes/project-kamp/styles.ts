@@ -214,6 +214,18 @@ const StyledComponentTheme: ThemeWithName = {
   maxContainerWidth,
   regular,
   bold,
+  text: {
+    heading: {
+      fontFamily: '"Varela Round", Arial, sans-serif',
+      fontSize: fontSizes[5],
+      fontWeight: 'normal',
+    },
+    small: {
+      fontFamily: '"Varela Round", Arial, sans-serif',
+      fontSize: fontSizes[4],
+      fontWeight: 'normal',
+    },
+  },
   typography,
   zIndex,
 }

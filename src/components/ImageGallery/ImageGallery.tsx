@@ -2,7 +2,7 @@ import 'react-image-lightbox/style.css'
 import { PureComponent } from 'react'
 import Lightbox from 'react-image-lightbox'
 import type { CardProps } from 'theme-ui'
-import { Card, Flex, Image } from 'theme-ui'
+import { Box, Flex, Image } from 'theme-ui'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import styled from '@emotion/styled'
 import theme from '../../themes/styled.theme'
@@ -18,7 +18,8 @@ interface IState {
   imgIndex: number
 }
 
-const ThumbCard = styled<CardProps & React.ComponentProps<any>>(Card)`
+const ThumbCard = styled<CardProps & React.ComponentProps<any>>(Box)`
+  cursor: pointer;
   padding: 5px;
   overflow: hidden;
   transition: 0.2s ease-in-out;
@@ -42,7 +43,7 @@ const ImageWithPointer = styled(Image)`
   object-fit: cover;
 `
 
-export default class ImageGallery extends PureComponent<IProps, IState> {
+export class ImageGallery extends PureComponent<IProps, IState> {
   constructor(props) {
     super(props)
     this.state = {

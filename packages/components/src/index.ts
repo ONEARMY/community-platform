@@ -1,3 +1,4 @@
+export { FieldDatepicker } from './FieldDatepicker/FieldDatepicker'
 export { FieldInput } from './FieldInput/FieldInput'
 export { FieldTextarea } from './FieldTextarea/FieldTextarea'
 export { Button } from './Button/Button'

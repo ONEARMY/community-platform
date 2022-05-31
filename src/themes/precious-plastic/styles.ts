@@ -224,6 +224,7 @@ const StyledComponentTheme: ThemeWithName = {
       background: colors.background,
       borderRadius: 1,
       border: '1px solid transparent',
+      fontFamily: `'Inter', Arial, sans-serif`,
       fontSize: 1,
       '&:focus': {
         borderColor: colors.blue,
@@ -245,6 +246,8 @@ const StyledComponentTheme: ThemeWithName = {
       background: colors.background,
       borderRadius: 1,
       border: `1px solid ${colors.error}`,
+      fontFamily: `'Inter', Arial, sans-serif`,
+      fontSize: 1,
       '&:focus': {
         borderColor: colors.blue,
         outline: 'none',

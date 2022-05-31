@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import theme from 'src/themes/styled.theme'
-import DatePicker from 'react-datepicker'
+
 interface IFormElement {
   invalid?: boolean
   customChange?: (location) => void
@@ -24,12 +24,6 @@ export const inputStyles = ({ invalid }: IFormElement) => css`
     border-color: ${theme.colors.blue};
     outline: none;
   }
-`
-
-export const StyledDatePicker = styled(DatePicker)`
-  ${inputStyles};
-  height: 40px;
-  padding: 10px;
 `
 
 // generic container used for some custom component fields

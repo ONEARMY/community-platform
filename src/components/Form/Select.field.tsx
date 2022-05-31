@@ -4,15 +4,15 @@ import type { Props as SelectProps } from 'react-select/lib/Select'
 import type { Styles } from 'react-select/lib/styles'
 import theme from 'src/themes/styled.theme'
 import { Flex, Text } from 'theme-ui'
-import { FieldContainer } from './elements'
-import type { IFieldProps } from './Fields'
+import { FieldContainer } from './FieldContainer'
+import type { FieldProps } from './types'
 import { DropdownIndicator } from '../DropdownIndicator'
 
 interface ISelectOption {
   value: string
   label: string
 }
-interface ISelectFieldProps extends IFieldProps, SelectProps {
+interface ISelectFieldProps extends FieldProps, SelectProps {
   options?: ISelectOption[]
   placeholder?: string
   style?: React.CSSProperties

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { observer } from 'mobx-react'
-import { FieldContainer } from '../Form/elements'
+import { FieldContainer } from '../Form/FieldContainer'
 import { DropdownIndicator } from '../DropdownIndicator'
 import Select from 'react-select'
 import { SelectStyles, FilterStyles } from '../Form/Select.field'

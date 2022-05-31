@@ -7,11 +7,12 @@ export default {
 } as ComponentMeta<typeof FieldTextarea>
 
 export const Default: ComponentStory<typeof FieldTextarea> = () => (
-  <FieldTextarea placeholder="Text area input" meta={{}} />
+  <FieldTextarea input={{} as any} placeholder="Text area input" meta={{}} />
 )
 
 export const WithError: ComponentStory<typeof FieldTextarea> = () => (
   <FieldTextarea
+    input={{} as any}
     placeholder="Text area input"
     meta={{ error: 'What an error', touched: true }}
   />

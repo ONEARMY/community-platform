@@ -1,6 +1,7 @@
 import * as React from 'react'
+import { Text } from 'theme-ui'
 import { ImageInput } from '../ImageInput/ImageInput'
-import { ErrorMessage, FieldContainer } from './elements'
+import { FieldContainer } from './elements'
 import type { IFieldProps } from './Fields'
 
 // Assign correct typing so that ImageInput props can also be passed down to child
@@ -40,6 +41,8 @@ export const ImageInputField = ({
         }}
       />
     </FieldContainer>
-    {meta.error && meta.touched && <ErrorMessage>{meta.error}</ErrorMessage>}
+    {meta.error && meta.touched && (
+      <Text sx={{ fontSize: 0, margin: 1, color: 'error' }}>{meta.error}</Text>
+    )}
   </>
 )

@@ -34,10 +34,3 @@ export const FieldContainer = styled.div<IFormElement>`
   border: none;
   padding: 0;
 `
-export const ErrorMessage = styled.span`
-  position: relative;
-  color: ${theme.colors.error};
-  font-size: ${theme.fontSizes[0]}px;
-  height: ${theme.space[0]};
-  margin: 5px;
-`

@@ -11,7 +11,6 @@ import { Box, Text } from 'theme-ui'
 import { required } from 'src/utils/validators'
 import type { IUserPP } from 'src/models/user_pp.models'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
-import { ErrorMessage } from 'src/components/Form/elements'
 import type { IUser } from 'src/models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { ProfileType } from 'src/modules/profile'
@@ -88,7 +87,11 @@ const CoverImages = ({
                   />
                 </Box>
               ))}
-              {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
+              {meta.error && (
+                <Text sx={{ fontSize: 0, margin: 1, color: 'error' }}>
+                  {meta.error}
+                </Text>
+              )}
             </>
           )
         }}

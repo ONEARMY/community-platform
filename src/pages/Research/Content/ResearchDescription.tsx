@@ -11,6 +11,7 @@ import theme from 'src/themes/styled.theme'
 import type { IUser } from 'src/models/user.models'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 import { UsefulStatsButton } from 'src/components/UsefulStatsButton/UsefulStatsButton'
+import Linkify from 'react-linkify'
 
 interface IProps {
   research: IResearch.ItemDB
@@ -162,7 +163,9 @@ const ResearchDescription: React.FC<IProps> = ({
             {research.title}
           </Heading>
           <Text sx={{ whiteSpace: 'pre-line', ...theme.typography.paragraph }}>
-            {research.description}
+            <Linkify properties={{ target: '_blank' }}>
+              {research.description}
+            </Linkify>
           </Text>
         </Box>
       </Flex>

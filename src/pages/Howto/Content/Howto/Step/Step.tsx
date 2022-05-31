@@ -69,7 +69,7 @@ export default class Step extends PureComponent<IProps> {
                         whiteSpace: 'pre-line',
                       }}
                     >
-                      <Linkify>
+                      <Linkify properties={{ target: '_blank' }}>
                         {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
                         {capitalizeFirstLetter(step.text)}
                       </Linkify>

@@ -23,6 +23,7 @@ import { FlagIconHowTos } from 'oa-components'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 import { UsefulStatsButton } from 'src/components/UsefulStatsButton/UsefulStatsButton'
 import { DownloadExternal } from 'src/pages/Howto/DownloadExternal/DownloadExternal'
+import Linkify from 'react-linkify'
 
 interface IProps {
   howto: IHowtoDB
@@ -186,7 +187,9 @@ export default class HowtoDescription extends PureComponent<IProps> {
             <Text
               sx={{ ...theme.typography.paragraph, whiteSpace: 'pre-line' }}
             >
-              {howto.description}
+              <Linkify properties={{ target: '_blank' }}>
+                {howto.description}
+              </Linkify>
             </Text>
           </Box>
 

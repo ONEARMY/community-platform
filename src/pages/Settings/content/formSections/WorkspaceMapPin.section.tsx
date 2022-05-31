@@ -2,7 +2,7 @@ import * as React from 'react'
 import { observer, inject } from 'mobx-react'
 import { Heading } from 'theme-ui'
 import { Field } from 'react-final-form'
-import { TextAreaField } from 'src/components/Form/Fields'
+import { FieldTextarea } from 'oa-components'
 import { Box, Flex, Link, Text } from 'theme-ui'
 import { FlexSectionContainer } from './elements'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
@@ -49,7 +49,7 @@ export class WorkspaceMapPinSection extends React.Component<any> {
           <Field
             data-cy="pin-description"
             name="mapPinDescription"
-            component={TextAreaField}
+            component={FieldTextarea}
             maxLength="70"
             style={{ height: 'inherit' }}
             rows="1"

@@ -6,10 +6,10 @@ import type { RouteComponentProps } from 'react-router'
 import { Prompt } from 'react-router'
 import { Box, Card } from 'theme-ui'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
-import { Button } from 'oa-components'
+import { Button, FieldTextarea } from 'oa-components'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import { Flex } from 'theme-ui'
-import { InputField, TextAreaField } from 'src/components/Form/Fields'
+import { InputField } from 'src/components/Form/Fields'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { Heading } from 'theme-ui'
 import type { IResearch } from 'src/models/research.models'
@@ -198,7 +198,7 @@ const UpdateForm = observer((props: IProps) => {
                                 validate={required}
                                 validateFields={[]}
                                 isEqual={COMPARISONS.textInput}
-                                component={TextAreaField}
+                                component={FieldTextarea}
                                 style={{
                                   resize: 'none',
                                   flex: 1,

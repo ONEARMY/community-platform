@@ -224,6 +224,7 @@ const StyledComponentTheme: ThemeWithName = {
       background: colors.background,
       borderRadius: 1,
       border: '1px solid transparent',
+      fontSize: 1,
       '&:focus': {
         borderColor: colors.blue,
         outline: 'none',
@@ -244,6 +245,32 @@ const StyledComponentTheme: ThemeWithName = {
       background: colors.background,
       borderRadius: 1,
       border: `1px solid ${colors.error}`,
+      '&:focus': {
+        borderColor: colors.blue,
+        outline: 'none',
+        boxShadow: 'none',
+      },
+    },
+    textarea: {
+      background: colors.background,
+      border: `1px solid transparent`,
+      borderRadius: 1,
+      fontFamily: `'Inter', Arial, sans-serif`,
+      fontSize: 1,
+      padding: 2,
+      '&:focus': {
+        borderColor: colors.blue,
+        outline: 'none',
+        boxShadow: 'none',
+      },
+    },
+    textareaError: {
+      background: colors.background,
+      border: `1px solid ${colors.error}`,
+      borderRadius: 1,
+      fontFamily: `'Inter', Arial, sans-serif`,
+      fontSize: 1,
+      padding: 2,
       '&:focus': {
         borderColor: colors.blue,
         outline: 'none',

@@ -26,6 +26,8 @@ export interface ThemeWithName {
     input: any
     inputOutline: any
     error: any
+    textarea?: any
+    textareaError?: any
   }
 
   /**

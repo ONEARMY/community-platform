@@ -1,5 +1,5 @@
 import { Flex, Text } from 'theme-ui'
-import { TextAreaField } from '../Form/Fields'
+import { FieldTextarea } from 'oa-components'
 import { Field, Form } from 'react-final-form'
 import { Button } from 'oa-components'
 import { logger } from 'src/logger'
@@ -31,7 +31,7 @@ export const FormEditComment: React.FC<{
           <Text as="label" style={{ marginBottom: '6px', fontSize: 3 }}>
             Edit comment
           </Text>
-          <Field name="comment" id="comment" component={TextAreaField} />
+          <Field name="comment" id="comment" component={FieldTextarea} />
           <Flex mt={4} ml="auto">
             <Button
               small

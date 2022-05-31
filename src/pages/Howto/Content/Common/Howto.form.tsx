@@ -7,10 +7,10 @@ import arrayMutators from 'final-form-arrays'
 import createDecorator from 'final-form-calculate'
 import type { IHowtoFormInput } from 'src/models/howto.models'
 import type { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
-import { InputField, TextAreaField } from 'src/components/Form/Fields'
+import { InputField } from 'src/components/Form/Fields'
 import { SelectField } from 'src/components/Form/Select.field'
 import { HowtoStep } from './HowtoStep.form'
-import { Button } from 'oa-components'
+import { Button, FieldTextarea } from 'oa-components'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import { Heading } from 'theme-ui'
 import { Card, Flex } from 'theme-ui'
@@ -340,7 +340,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   validateFields={[]}
                                   modifiers={{ capitalize: true }}
                                   isEqual={COMPARISONS.textInput}
-                                  component={TextAreaField}
+                                  component={FieldTextarea}
                                   style={{
                                     resize: 'none',
                                     flex: 1,

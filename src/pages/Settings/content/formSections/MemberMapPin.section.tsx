@@ -3,8 +3,7 @@ import { observer, inject } from 'mobx-react'
 import { Heading } from 'theme-ui'
 import { Field } from 'react-final-form'
 import { Text } from 'theme-ui'
-import { Button } from 'oa-components'
-import { TextAreaField } from 'src/components/Form/Fields'
+import { Button, FieldTextarea } from 'oa-components'
 import { Box, Flex } from 'theme-ui'
 import { FlexSectionContainer } from './elements'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
@@ -89,7 +88,7 @@ export class MemberMapPinSection extends React.Component<any, IState> {
               <Field
                 data-cy="pin-description"
                 name="mapPinDescription"
-                component={TextAreaField}
+                component={FieldTextarea}
                 maxLength="70"
                 style={{ height: 'inherit' }}
                 rows="1"

@@ -32,17 +32,6 @@ export const StyledDatePicker = styled(DatePicker)`
   padding: 10px;
 `
 
-export const TextAreaStyled = styled.textarea<IFormElement>`
-  ${inputStyles};
-  resize: vertical;
-  padding: 10px;
-  height: 150px;
-`
-export const TextAreaDisabled = styled.div`
-  ${inputStyles};
-  border: none;
-`
-
 // generic container used for some custom component fields
 export const FieldContainer = styled.div<IFormElement>`
   height: 100%;

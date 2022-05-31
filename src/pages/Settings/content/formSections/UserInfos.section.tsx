@@ -2,8 +2,8 @@ import * as React from 'react'
 import { Field } from 'react-final-form'
 import { Heading } from 'theme-ui'
 import { Flex } from 'theme-ui'
-import { InputField, TextAreaField } from 'src/components/Form/Fields'
-import { Button } from 'oa-components'
+import { InputField } from 'src/components/Form/Fields'
+import { Button, FieldTextarea } from 'oa-components'
 import theme from 'src/themes/styled.theme'
 import { FieldArray } from 'react-final-form-arrays'
 import { ProfileLinkField } from './Fields/Link.field'
@@ -158,7 +158,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             <Field
               data-cy="info-description"
               name="about"
-              component={TextAreaField}
+              component={FieldTextarea}
               placeholder="Describe in details what you do and who you are. Write in English otherwise your profile won't be approved."
               validate={required}
               validateFields={[]}

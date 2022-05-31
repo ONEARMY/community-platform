@@ -1,8 +1,14 @@
-interface Props {
-  meta: any
-  input: any
-  disabled: boolean
+import type { FieldRenderProps } from 'react-final-form'
+
+type FieldProps = FieldRenderProps<any, any> & { children?: React.ReactNode }
+export interface Props extends FieldProps {
+  // additional fields intending to pass down
+  disabled?: boolean
+  children?: React.ReactNode
+  'data-cy'?: string
+  customOnBlur?: (event: any) => void
 }
+
 import { Textarea, Text } from 'theme-ui'
 
 const capitalizeFirstLetter = (str: string) =>
@@ -28,7 +34,7 @@ export const FieldTextarea = ({
     <>
       <Textarea
         disabled={disabled}
-        invalid={meta?.error && meta?.touched}
+        variant={meta?.error && meta?.touched ? 'textareaError' : 'textarea'}
         {...input}
         {...rest}
         onBlur={(e) => {
@@ -43,7 +49,11 @@ export const FieldTextarea = ({
         }}
       />
 
-      {meta.error && meta.touched && <Text>{meta.error}</Text>}
+      {meta.error && meta.touched && (
+        <Text sx={{ fontSize: 0, margin: 1, color: 'error' }}>
+          {meta.error}
+        </Text>
+      )}
     </>
   )
 }

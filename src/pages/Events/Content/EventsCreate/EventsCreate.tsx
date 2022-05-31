@@ -69,10 +69,9 @@ export class EventsCreate extends React.Component<IProps, IState> {
   }
 
   public handleChange = (date: any) => {
-    console.log(`handleChange:`, { date })
-    // this.setState({
-    //   selectedDate: date,
-    // })
+    this.setState({
+      selectedDate: date,
+    })
   }
 
   public render() {
@@ -173,6 +172,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                               type="date"
                               validate={required}
                               selected={this.state.selectedDate}
+                              data-cy="input-date"
                               customChange={(date) => {
                                 const formattedDate = date.target
                                   ? new Date(date.target.value)

@@ -219,6 +219,38 @@ const StyledComponentTheme: ThemeWithName = {
   },
   colors,
   fontSizes,
+  forms: {
+    input: {
+      background: colors.background,
+      borderRadius: 1,
+      border: '1px solid transparent',
+      '&:focus': {
+        borderColor: colors.blue,
+        outline: 'none',
+        boxShadow: 'none',
+      },
+    },
+    inputOutline: {
+      background: 'white',
+      border: `2px solid ${colors.black}`,
+      borderRadius: 1,
+      '&:focus': {
+        borderColor: colors.blue,
+        outline: 'none',
+        boxShadow: 'none',
+      },
+    },
+    error: {
+      background: colors.background,
+      borderRadius: 1,
+      border: `1px solid ${colors.error}`,
+      '&:focus': {
+        borderColor: colors.blue,
+        outline: 'none',
+        boxShadow: 'none',
+      },
+    },
+  },
   maxContainerWidth,
   radii,
   regular,

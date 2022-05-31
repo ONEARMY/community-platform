@@ -26,22 +26,6 @@ export const inputStyles = ({ invalid }: IFormElement) => css`
   }
 `
 
-export const Input = styled.input<IFormElement>`
-  ${inputStyles};
-  height: 40px;
-  padding: 10px;
-`
-
-export const BlackPlaceholderInput = styled.input<IFormElement>`
-  ${inputStyles};
-  height: 40px;
-  padding: 10px;
-
-  ::placeholder {
-    color: black;
-  }
-`
-
 export const StyledDatePicker = styled(DatePicker)`
   ${inputStyles};
   height: 40px;

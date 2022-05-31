@@ -2,12 +2,11 @@ import { inject, observer } from 'mobx-react'
 import * as React from 'react'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { Button } from 'oa-components'
-import { Heading } from 'theme-ui'
+import { Heading, Input } from 'theme-ui'
 import { Flex, Box } from 'theme-ui'
 import { Link } from 'theme-ui'
 import { Loader } from 'src/components/Loader'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
-import SearchInput from 'src/components/SearchInput'
 import TagsSelect from 'src/components/Tags/TagsSelect'
 import { VirtualizedFlex } from 'src/components/VirtualizedFlex/VirtualizedFlex'
 import type { IHowtoDB } from 'src/models/howto.models'
@@ -212,11 +211,13 @@ export class HowtoList extends React.Component<any, IState> {
             <SortSelect usefulCounts={users_votedUsefulHowtos || {}} />
           </Flex>
           <Flex ml={[0, 0, '8px']} mr={[0, 0, 'auto']} mb={['10px', '10px', 0]}>
-            <SearchInput
+            <Input
+              variant="inputOutline"
               data-cy="how-to-search-box"
               value={searchValue}
               placeholder="Search for a how-to"
-              onChange={(value) => {
+              onChange={(evt) => {
+                const value = evt.target.value
                 updateQueryParams(window.location.href, 'search', value)
                 this.props.howtoStore.updateSearchValue(value)
               }}

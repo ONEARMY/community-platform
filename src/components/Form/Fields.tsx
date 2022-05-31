@@ -1,11 +1,11 @@
 import * as React from 'react'
 import {
   TextAreaStyled,
-  Input,
   TextAreaDisabled,
   ErrorMessage,
   StyledDatePicker,
 } from './elements'
+import { Input } from 'theme-ui'
 import type { FieldRenderProps } from 'react-final-form'
 import 'react-datepicker/dist/react-datepicker.css'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
@@ -47,7 +47,7 @@ export const InputField = ({
 }: IFieldProps) => (
   <>
     <Input
-      invalid={meta.error && meta.touched}
+      variant={meta.error && meta.touched ? 'error' : 'input'}
       {...input}
       {...rest}
       onBlur={(e) => {
@@ -93,7 +93,11 @@ export const DatePickerField = ({
 )
 export const HiddenInputField = ({ input, meta, ...rest }: IFieldProps) => (
   <>
-    <Input invalid={meta.error && meta.touched} {...input} {...rest} />
+    <Input
+      variant={meta.error && meta.touched ? 'error' : 'input'}
+      {...input}
+      {...rest}
+    />
   </>
 )
 

@@ -1,3 +1,4 @@
+export { FieldInput } from './FieldInput/FieldInput'
 export { FieldTextarea } from './FieldTextarea/FieldTextarea'
 export { Button } from './Button/Button'
 export { SiteFooter } from './SiteFooter/SiteFooter'

@@ -33,35 +33,6 @@ const processInputModifiers = (value: any, modifiers: InputModifiers = {}) => {
   return value
 }
 
-export const InputField = ({
-  input,
-  meta,
-  customOnBlur,
-  modifiers,
-  ...rest
-}: IFieldProps) => (
-  <>
-    <Input
-      variant={meta.error && meta.touched ? 'error' : 'input'}
-      {...input}
-      {...rest}
-      onBlur={(e) => {
-        if (modifiers) {
-          e.target.value = processInputModifiers(e.target.value, modifiers)
-          input.onChange(e)
-        }
-        if (customOnBlur) {
-          customOnBlur(e)
-        }
-        input.onBlur(e)
-      }}
-    />
-    {meta.error && meta.touched ? (
-      <ErrorMessage>{meta.error}</ErrorMessage>
-    ) : null}
-  </>
-)
-
 export const DatePickerField = ({
   input,
   meta,

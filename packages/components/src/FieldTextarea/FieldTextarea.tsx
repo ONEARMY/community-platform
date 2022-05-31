@@ -29,31 +29,27 @@ export const FieldTextarea = ({
   modifiers,
   customOnBlur,
   ...rest
-}: any) => {
-  return (
-    <>
-      <Textarea
-        disabled={disabled}
-        variant={meta?.error && meta?.touched ? 'textareaError' : 'textarea'}
-        {...input}
-        {...rest}
-        onBlur={(e) => {
-          if (modifiers) {
-            e.target.value = processInputModifiers(e.target.value, modifiers)
-            input.onChange(e)
-          }
-          if (customOnBlur) {
-            customOnBlur(e)
-          }
-          input.onBlur()
-        }}
-      />
+}: Props) => (
+  <>
+    <Textarea
+      disabled={disabled}
+      variant={meta?.error && meta?.touched ? 'textareaError' : 'textarea'}
+      {...input}
+      {...rest}
+      onBlur={(e) => {
+        if (modifiers) {
+          e.target.value = processInputModifiers(e.target.value, modifiers)
+          input.onChange(e)
+        }
+        if (customOnBlur) {
+          customOnBlur(e)
+        }
+        input.onBlur()
+      }}
+    />
 
-      {meta.error && meta.touched && (
-        <Text sx={{ fontSize: 0, margin: 1, color: 'error' }}>
-          {meta.error}
-        </Text>
-      )}
-    </>
-  )
-}
+    {meta.error && meta.touched && (
+      <Text sx={{ fontSize: 0, margin: 1, color: 'error' }}>{meta.error}</Text>
+    )}
+  </>
+)

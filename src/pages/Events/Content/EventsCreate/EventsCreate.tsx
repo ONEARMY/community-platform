@@ -4,8 +4,8 @@ import { Form, Field } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import TEMPLATE from './Template'
 import type { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
-import { InputField, DatePickerField } from 'src/components/Form/Fields'
-import { Button } from 'oa-components'
+import { DatePickerField } from 'src/components/Form/Fields'
+import { Button, FieldInput } from 'oa-components'
 import type { EventStore } from 'src/stores/Events/events.store'
 import { Heading } from 'theme-ui'
 import { Card, Flex } from 'theme-ui'
@@ -145,7 +145,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             validate={required}
                             validateFields={[]}
                             modifiers={{ capitalize: true }}
-                            component={InputField}
+                            component={FieldInput}
                             maxLength="140"
                             placeholder="Title of your event (max 140 characters)"
                           />
@@ -245,7 +245,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                               data-cy="url"
                               validateFields={[]}
                               validate={(value) => validateUrl(value)}
-                              component={InputField}
+                              component={FieldInput}
                               placeholder="URL to offsite link (Facebook, Meetup, etc)"
                               customOnBlur={(e) =>
                                 mutators.addProtocolMutator(e.target.name)

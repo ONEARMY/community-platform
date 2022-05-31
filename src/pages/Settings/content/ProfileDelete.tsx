@@ -1,9 +1,8 @@
 import * as React from 'react'
 import { Modal } from 'src/components/Modal/Modal'
-import { Button } from 'oa-components'
+import { Button, FieldInput } from 'oa-components'
 import { Text } from 'theme-ui'
 import { Form, Field } from 'react-final-form'
-import { InputField } from 'src/components/Form/Fields'
 import { Flex } from 'theme-ui'
 
 interface IState {
@@ -48,7 +47,7 @@ export class ProfileDelete extends React.Component<IProps, IState> {
                   <form onSubmit={handleSubmit}>
                     <Field
                       name="password"
-                      component={InputField}
+                      component={FieldInput}
                       type="password"
                     />
                     <Flex p={0}>

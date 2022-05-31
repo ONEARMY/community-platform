@@ -2,8 +2,7 @@ import * as React from 'react'
 import { Field } from 'react-final-form'
 import { Heading } from 'theme-ui'
 import { Flex } from 'theme-ui'
-import { InputField } from 'src/components/Form/Fields'
-import { Button, FieldTextarea } from 'oa-components'
+import { Button, FieldInput, FieldTextarea } from 'oa-components'
 import theme from 'src/themes/styled.theme'
 import { FieldArray } from 'react-final-form-arrays'
 import { ProfileLinkField } from './Fields/Link.field'
@@ -144,7 +143,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             <Field
               data-cy="username"
               name="displayName"
-              component={InputField}
+              component={FieldInput}
               placeholder="Pick a unique username"
               validate={required}
               validateFields={[]}

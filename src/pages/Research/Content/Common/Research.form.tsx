@@ -7,10 +7,9 @@ import type { RouteComponentProps } from 'react-router'
 import { Prompt } from 'react-router'
 import { Box, Card } from 'theme-ui'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
-import { Button, FieldTextarea } from 'oa-components'
+import { Button, FieldInput, FieldTextarea } from 'oa-components'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import { Flex } from 'theme-ui'
-import { InputField } from 'src/components/Form/Fields'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 import { Heading } from 'theme-ui'
 import type { IResearch } from 'src/models/research.models'
@@ -197,7 +196,7 @@ const ResearchForm = observer((props: IProps) => {
                                 validateFields={[]}
                                 validate={validateTitle}
                                 isEqual={COMPARISONS.textInput}
-                                component={InputField}
+                                component={FieldInput}
                                 maxLength="60"
                                 placeholder="Can we make a chair from.. (max 60 characters)"
                               />

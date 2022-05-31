@@ -5,9 +5,8 @@ import type { RouteComponentProps } from 'react-router'
 import { withRouter } from 'react-router'
 import { Redirect } from 'react-router'
 import { Heading } from 'theme-ui'
-import { Button } from 'oa-components'
+import { Button, FieldInput } from 'oa-components'
 import { Text, Link } from 'theme-ui'
-import { InputField } from 'src/components/Form/Fields'
 import { inject, observer } from 'mobx-react'
 import { Form, Field } from 'react-final-form'
 import type { UserStore } from 'src/stores/User/user.store'
@@ -189,7 +188,7 @@ class SignInPage extends React.Component<IProps, IState> {
                                 name="email"
                                 type="email"
                                 data-cy="email"
-                                component={InputField}
+                                component={FieldInput}
                                 validate={required}
                               />
                             </Flex>
@@ -199,7 +198,7 @@ class SignInPage extends React.Component<IProps, IState> {
                                 name="password"
                                 type="password"
                                 data-cy="password"
-                                component={InputField}
+                                component={FieldInput}
                                 validate={required}
                               />
                             </Flex>

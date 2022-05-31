@@ -4,11 +4,10 @@ import { Card, Flex } from 'theme-ui'
 import { Heading } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
-import { Button } from 'oa-components'
+import { Button, FieldInput } from 'oa-components'
 import { Text } from 'theme-ui'
 import { Link } from 'theme-ui'
 import { Form, Field } from 'react-final-form'
-import { InputField } from 'src/components/Form/Fields'
 import { inject, observer } from 'mobx-react'
 import type { UserStore } from 'src/stores/User/user.store'
 import type { RouteComponentProps } from 'react-router'
@@ -161,7 +160,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                           data-cy="username"
                           name="displayName"
                           type="userName"
-                          component={InputField}
+                          component={FieldInput}
                           placeholder="Pick a unique name"
                           validate={required}
                         />
@@ -180,7 +179,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                           data-cy="email"
                           name="email"
                           type="email"
-                          component={InputField}
+                          component={FieldInput}
                           placeholder="hey@jack.com"
                           validate={required}
                         />
@@ -197,7 +196,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                           data-cy="password"
                           name="password"
                           type="password"
-                          component={InputField}
+                          component={FieldInput}
                           validate={required}
                         />
                       </Flex>
@@ -215,7 +214,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                           data-cy="confirm-password"
                           name="confirm-password"
                           type="password"
-                          component={InputField}
+                          component={FieldInput}
                           validate={required}
                         />
                       </Flex>

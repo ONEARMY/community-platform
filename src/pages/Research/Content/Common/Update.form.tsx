@@ -6,10 +6,9 @@ import type { RouteComponentProps } from 'react-router'
 import { Prompt } from 'react-router'
 import { Box, Card } from 'theme-ui'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
-import { Button, FieldTextarea } from 'oa-components'
+import { Button, FieldInput, FieldTextarea } from 'oa-components'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import { Flex } from 'theme-ui'
-import { InputField } from 'src/components/Form/Fields'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { Heading } from 'theme-ui'
 import type { IResearch } from 'src/models/research.models'
@@ -182,7 +181,7 @@ const UpdateForm = observer((props: IProps) => {
                                 validateFields={[]}
                                 validate={required}
                                 isEqual={COMPARISONS.textInput}
-                                component={InputField}
+                                component={FieldInput}
                                 maxLength="40"
                                 placeholder="Title of this update (max 40 characters)"
                               />
@@ -272,7 +271,7 @@ const UpdateForm = observer((props: IProps) => {
                               <Field
                                 name={`videoUrl`}
                                 data-cy="videoUrl"
-                                component={InputField}
+                                component={FieldInput}
                                 placeholder="https://youtube.com/watch?v="
                                 validate={(url, values) =>
                                   validateMedia(url, values)

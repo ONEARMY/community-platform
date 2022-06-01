@@ -1,7 +1,7 @@
 import { format } from 'date-fns'
 import * as React from 'react'
 import { Card, Flex, Link } from 'theme-ui'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { ModerationStatusText } from 'src/components/ModerationStatusText/ModerationStatustext'
 import { Text } from 'theme-ui'
 import type { IResearch } from 'src/models/research.models'
@@ -27,7 +27,7 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => (
               width: ['100%', '100%', `${(1 / 2) * 100}%`],
             }}
           >
-            <Heading small color={'black'}>
+            <Heading variant="small" color={'black'}>
               {item.title}
             </Heading>
           </Flex>

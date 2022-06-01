@@ -1,6 +1,6 @@
 import React from 'react'
 import { Card, Flex } from 'theme-ui'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import theme from 'src/themes/styled.theme'
 import { Button } from 'oa-components'
 import { Link } from 'theme-ui'
@@ -20,7 +20,7 @@ class SignUpMessagePage extends React.Component {
       >
         <Flex sx={{ flexDirection: 'column', width: '100%' }}>
           <Card bg={theme.colors.softblue} px={3} py={2}>
-            <Heading medium>Sent</Heading>
+            <Heading>Sent</Heading>
           </Card>
           <Card mt={3}>
             <Flex
@@ -29,7 +29,7 @@ class SignUpMessagePage extends React.Component {
               pb={4}
               sx={{ flexWrap: 'wrap', width: '100%', flexDirection: 'column' }}
             >
-              <Heading small py={4} sx={{ width: '100%' }}>
+              <Heading variant="small" py={4} sx={{ width: '100%' }}>
                 Sign up successful
               </Heading>
               <Flex sx={{ flexDirection: 'column' }} mb={3}>

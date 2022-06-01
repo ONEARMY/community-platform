@@ -12,7 +12,7 @@ import { CollectionSection } from './content/formSections/Collection.section'
 import { AccountSettingsSection } from './content/formSections/AccountSettings.section'
 import { Button } from 'oa-components'
 import { ProfileGuidelines } from './content/PostingGuidelines'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { TextNotification } from 'src/components/Notification/TextNotification'
 import { Form } from 'react-final-form'
 import { ARRAY_ERROR, FORM_ERROR } from 'final-form'
@@ -184,7 +184,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                     <Flex sx={{ flexDirection: 'column' }}>
                       <Card bg={theme.colors.softblue}>
                         <Flex px={3} py={2}>
-                          <Heading medium>{heading}</Heading>
+                          <Heading>{heading}</Heading>
                         </Flex>
                       </Card>
                       <Box

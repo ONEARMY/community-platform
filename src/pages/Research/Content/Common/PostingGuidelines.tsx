@@ -1,14 +1,12 @@
 import { Card, Link, Text } from 'theme-ui'
 import { Flex } from 'theme-ui'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import theme from 'src/themes/styled.theme'
 
 export const PostingGuidelines = () => (
   <Card>
     <Flex sx={{ flexDirection: 'column' }} p={4}>
-      <Heading medium bold mb={2}>
-        How does it work?
-      </Heading>
+      <Heading mb={2}>How does it work?</Heading>
       <Text mb={1} sx={{ ...theme.typography.auxiliary }}>
         1. Choose a topic you want to research{' '}
         <span role="img" aria-label="raised-hand">

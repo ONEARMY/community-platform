@@ -3,7 +3,7 @@ import Linkify from 'react-linkify'
 import ReactPlayer from 'react-player'
 import { Box, Card, Text } from 'theme-ui'
 import { Flex } from 'theme-ui'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { ImageGallery } from 'src/components/ImageGallery/ImageGallery'
 import type { IHowtoStep } from 'src/models/howto.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
@@ -34,9 +34,7 @@ export default class Step extends PureComponent<IProps> {
           <Flex mx={[0, 0, 2]} sx={{ flex: 1, width: '100%' }} mb={[3, 3, 0]}>
             <FlexStepNumber sx={{ justifyContent: 'center', width: '100%' }}>
               <Card sx={{ width: '100%', textAlign: 'center' }} py={3} px={4}>
-                <Heading medium mb={0}>
-                  {stepindex + 1}
-                </Heading>
+                <Heading mb={0}>{stepindex + 1}</Heading>
               </Card>
             </FlexStepNumber>
           </Flex>
@@ -58,7 +56,7 @@ export default class Step extends PureComponent<IProps> {
                     flexDirection: 'column',
                   }}
                 >
-                  <Heading medium mb={0}>
+                  <Heading mb={0}>
                     {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
                     {capitalizeFirstLetter(step.title)}
                   </Heading>
@@ -71,7 +69,7 @@ export default class Step extends PureComponent<IProps> {
                         whiteSpace: 'pre-line',
                       }}
                     >
-                      <Linkify>
+                      <Linkify properties={{ target: '_blank' }}>
                         {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
                         {capitalizeFirstLetter(step.text)}
                       </Linkify>

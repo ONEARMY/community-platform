@@ -5,7 +5,7 @@ import ReactPlayer from 'react-player'
 import { Box, Card, Text } from 'theme-ui'
 import { Button } from 'oa-components'
 import { Flex } from 'theme-ui'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { ImageGallery } from 'src/components/ImageGallery/ImageGallery'
 import { Link } from 'theme-ui'
 import type { IResearch } from 'src/models/research.models'
@@ -47,9 +47,7 @@ const ResearchUpdate: React.FC<IProps> = ({
         <Flex mx={[0, 0, 2]} sx={{ width: '100%', flex: 1 }} mb={[3, 3, 0]}>
           <FlexStepNumber sx={{ height: 'fit-content' }}>
             <Card py={3} px={4} sx={{ width: '100%', textAlign: 'center' }}>
-              <Heading medium mb={0}>
-                {updateIndex + 1}
-              </Heading>
+              <Heading mb={0}>{updateIndex + 1}</Heading>
             </Card>
           </FlexStepNumber>
         </Flex>
@@ -67,11 +65,7 @@ const ResearchUpdate: React.FC<IProps> = ({
               <Flex
                 sx={{ width: '100%', flexDirection: ['column', 'row', 'row'] }}
               >
-                <Heading
-                  sx={{ width: ['100%', '75%', '75%'] }}
-                  medium
-                  mb={[2, 0, 0]}
-                >
+                <Heading sx={{ width: ['100%', '75%', '75%'] }} mb={[2, 0, 0]}>
                   {update.title}
                 </Heading>
                 <Flex
@@ -123,7 +117,9 @@ const ResearchUpdate: React.FC<IProps> = ({
                   color={'grey'}
                   sx={{ whiteSpace: 'pre-line', ...theme.typography.paragraph }}
                 >
-                  <Linkify>{update.description}</Linkify>
+                  <Linkify properties={{ target: '_blank' }}>
+                    {update.description}
+                  </Linkify>
                 </Text>
               </Box>
             </Flex>

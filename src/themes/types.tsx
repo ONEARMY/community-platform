@@ -20,6 +20,8 @@ export interface ThemeWithName {
 
   badges: any
 
+  text: any
+
   /**
    * Following properties are taken from DefaultTheme
    * exported from `styled-components`

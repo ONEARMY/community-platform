@@ -2,7 +2,7 @@ import { PureComponent } from 'react'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { format } from 'date-fns'
 import type { IHowtoDB } from 'src/models/howto.models'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { ModerationStatusText } from 'src/components/ModerationStatusText/ModerationStatustext'
 import { Link } from 'theme-ui'
 import { Text, Box, Flex, Image } from 'theme-ui'
@@ -23,6 +23,7 @@ import { FlagIconHowTos } from 'oa-components'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 import { UsefulStatsButton } from 'src/components/UsefulStatsButton/UsefulStatsButton'
 import { DownloadExternal } from 'src/pages/Howto/DownloadExternal/DownloadExternal'
+import Linkify from 'react-linkify'
 
 interface IProps {
   howto: IHowtoDB
@@ -179,14 +180,16 @@ export default class HowtoDescription extends PureComponent<IProps> {
             >
               {this.dateLastEditText(howto)}
             </Text>
-            <Heading medium mt={2} mb={1}>
+            <Heading mt={2} mb={1}>
               {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
               {capitalizeFirstLetter(howto.title)}
             </Heading>
             <Text
               sx={{ ...theme.typography.paragraph, whiteSpace: 'pre-line' }}
             >
-              {howto.description}
+              <Linkify properties={{ target: '_blank' }}>
+                {howto.description}
+              </Linkify>
             </Text>
           </Box>
 

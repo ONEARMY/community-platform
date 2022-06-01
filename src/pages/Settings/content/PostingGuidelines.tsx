@@ -1,4 +1,4 @@
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { Card, Flex } from 'theme-ui'
 import { Link, Text } from 'theme-ui'
 import theme from 'src/themes/styled.theme'
@@ -6,9 +6,7 @@ import theme from 'src/themes/styled.theme'
 export const ProfileGuidelines = () => (
   <Card>
     <Flex sx={{ flexDirection: 'column' }} p={4}>
-      <Heading medium bold mb={2}>
-        Profile tips
-      </Heading>
+      <Heading mb={2}>Profile tips</Heading>
       <Text sx={{ ...theme.typography.auxiliary }} mb={1}>
         1. Have a look at our{' '}
         <Link

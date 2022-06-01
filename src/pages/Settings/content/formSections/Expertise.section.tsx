@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { Flex } from 'theme-ui'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { Box, Text } from 'theme-ui'
 import { FlexSectionContainer } from './elements'
 import { FieldArray } from 'react-final-form-arrays'
@@ -22,7 +22,7 @@ export class ExpertiseSection extends React.Component<IProps, any> {
     return (
       <FlexSectionContainer>
         <Flex sx={{ justifyContent: 'space-between' }}>
-          <Heading small>Expertise</Heading>
+          <Heading variant="small">Expertise</Heading>
         </Flex>
         <Box>
           <Text mt={4} mb={4}>

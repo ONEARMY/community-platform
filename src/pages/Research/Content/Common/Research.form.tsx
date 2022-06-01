@@ -12,7 +12,7 @@ import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import { Flex } from 'theme-ui'
 import { InputField, TextAreaField } from 'src/components/Form/Fields'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import type { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import theme from 'src/themes/styled.theme'
@@ -153,7 +153,7 @@ const ResearchForm = observer((props: IProps) => {
                   <Flex sx={{ flexDirection: 'column' }}>
                     <Card bg={theme.colors.softblue}>
                       <Flex px={3} py={2} sx={{ alignItems: 'center' }}>
-                        <Heading medium>
+                        <Heading>
                           {props.parentType === 'create' ? (
                             <span>Start your Research</span>
                           ) : (

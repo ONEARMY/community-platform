@@ -5,7 +5,7 @@ import { Link } from 'theme-ui'
 import { FlagIconHowTos, Icon } from 'oa-components'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import type { IHowtoDB } from 'src/models/howto.models'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 import { useTheme } from '@emotion/react'
@@ -51,7 +51,7 @@ export const HowToCard = (props: IProps) => {
             />
           </Flex>
           <Flex sx={{ flexDirection: 'column', padding: 3 }}>
-            <Heading small color={'black'}>
+            <Heading variant="small" color={'black'}>
               {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
               {capitalizeFirstLetter(howto.title)}
             </Heading>

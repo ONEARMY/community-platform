@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { FRIENDLY_MESSAGES } from 'oa-shared'
 import { Card, Flex } from 'theme-ui'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import { Button } from 'oa-components'
@@ -130,9 +130,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                 <Flex sx={{ flexDirection: 'column', width: '100%' }}>
                   <Card bg={'softblue'}>
                     <Flex px={3} py={2} sx={{ width: '100%' }}>
-                      <Heading medium sx={{ width: '100%' }}>
-                        Hey, nice to see you here
-                      </Heading>
+                      <Heading>Hey, nice to see you here</Heading>
                     </Flex>
                   </Card>
                   <Card mt={3}>
@@ -146,7 +144,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                         width: '100%',
                       }}
                     >
-                      <Heading small py={4} sx={{ width: '100%' }}>
+                      <Heading variant="small" py={4} sx={{ width: '100%' }}>
                         Create an account
                       </Heading>
                       <Flex

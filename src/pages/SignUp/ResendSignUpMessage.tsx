@@ -1,6 +1,6 @@
 import React from 'react'
 import { Card, Flex } from 'theme-ui'
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import { Button } from 'oa-components'
@@ -60,9 +60,7 @@ class ResendSignUpMessagePage extends React.Component<IProps, IState> {
               <Flex sx={{ flexDirection: 'column', width: '100%' }}>
                 <Card bg={'softblue'}>
                   <Flex px={3} py={2} sx={{ width: '100%' }}>
-                    <Heading medium sx={{ width: '100%' }}>
-                      Something didn't work
-                    </Heading>
+                    <Heading>Something didn't work</Heading>
                   </Flex>
                 </Card>
                 <Card mt={3}>
@@ -76,7 +74,7 @@ class ResendSignUpMessagePage extends React.Component<IProps, IState> {
                       width: '100%',
                     }}
                   >
-                    <Heading small py={4} sx={{ width: '100%' }}>
+                    <Heading variant="small" py={4} sx={{ width: '100%' }}>
                       Resend email
                     </Heading>
                     <Flex sx={{ flexDirection: 'column' }} mb={3}>

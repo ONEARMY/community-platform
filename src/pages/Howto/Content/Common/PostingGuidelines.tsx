@@ -1,13 +1,11 @@
-import Heading from 'src/components/Heading'
+import { Heading } from 'theme-ui'
 import { Text, Link, Card, Flex } from 'theme-ui'
 import theme from 'src/themes/styled.theme'
 
 export const PostingGuidelines = () => (
   <Card>
     <Flex sx={{ flexDirection: 'column' }} p={4}>
-      <Heading medium bold mb={2}>
-        How does it work?
-      </Heading>
+      <Heading mb={2}>How does it work?</Heading>
       <Text sx={{ ...theme.typography.auxiliary }} mb={1}>
         1. Choose what you want to share{' '}
         <span role="img" aria-label="raised-hand">

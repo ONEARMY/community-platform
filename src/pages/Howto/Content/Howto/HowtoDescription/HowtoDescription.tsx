@@ -22,6 +22,14 @@ import { UsefulStatsButton } from 'src/components/UsefulStatsButton/UsefulStatsB
 import { DownloadExternal } from 'src/pages/Howto/DownloadExternal/DownloadExternal'
 import Linkify from 'react-linkify'
 import { Link } from 'react-router-dom'
+import type { HowtoStore } from 'src/stores/Howto/howto.store'
+import { inject, observer } from 'mobx-react'
+import {
+  retrieveHowtoDownloadCooldown,
+  isHowtoDownloadCooldownExpired,
+  addHowtoDownloadCooldown,
+  updateHowtoDownloadCooldown,
+} from './utils'
 
 interface IProps {
   howto: IHowtoDB
@@ -34,14 +42,34 @@ interface IProps {
   onUsefulClick: () => void
 }
 
-export default class HowtoDescription extends PureComponent<IProps> {
+interface IInjected extends IProps {
+  howtoStore: HowtoStore
+}
+
+interface IState {
+  fileDownloadCount: number | undefined
+}
+
+@inject('howtoStore')
+@observer
+export default class HowtoDescription extends PureComponent<IProps, IState> {
   // eslint-disable-next-line
   constructor(props: IProps) {
     super(props)
+    this.state = {
+      fileDownloadCount: this.props.howto.total_downloads,
+    }
+    this.handleClick = this.handleClick.bind(this)
   }
 
-  state = {
-    fileDownloadCount: this.props.howto.total_downloads,
+  get injected() {
+    return this.props as IInjected
+  }
+
+  private setFileDownloadCount = (val: number) => {
+    this.setState({
+      fileDownloadCount: val,
+    })
   }
 
   private dateCreatedByText(howto: IHowtoDB): string {
@@ -58,10 +86,31 @@ export default class HowtoDescription extends PureComponent<IProps> {
     }
   }
 
-  private setFileDownloadCount = (val: number) => {
-    this.setState({
-      fileDownloadCount: val,
-    })
+  private incrementDownloadCount = async () => {
+    const updatedDownloadCount =
+      await this.injected.howtoStore.incrementDownloadCount(
+        this.props.howto._id,
+      )
+    this.setFileDownloadCount(updatedDownloadCount!)
+  }
+
+  private handleClick = async () => {
+    const howtoDownloadCooldown = retrieveHowtoDownloadCooldown(
+      this.props.howto._id,
+    )
+    const date = new Date(howtoDownloadCooldown!.expiry)
+    console.log(date.toString())
+
+    if (
+      howtoDownloadCooldown &&
+      isHowtoDownloadCooldownExpired(howtoDownloadCooldown)
+    ) {
+      updateHowtoDownloadCooldown(this.props.howto._id)
+      this.incrementDownloadCount()
+    } else if (!howtoDownloadCooldown) {
+      addHowtoDownloadCooldown(this.props.howto._id)
+      this.incrementDownloadCount()
+    }
   }
 
   public render() {
@@ -255,8 +304,7 @@ export default class HowtoDescription extends PureComponent<IProps> {
                   allowDownload
                   file={file}
                   key={file ? file.name : `file-${index}`}
-                  howToID={howto._id}
-                  setFileDownloadCount={this.setFileDownloadCount}
+                  handleClick={this.handleClick}
                 />
               ))}
               {typeof this.state.fileDownloadCount !== undefined && (

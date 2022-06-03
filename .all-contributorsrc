@@ -64,6 +64,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "tedspare",
+      "name": "Ted Spare",
+      "avatar_url": "https://avatars.githubusercontent.com/u/36117635?v=4",
+      "profile": "https://tedspare.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

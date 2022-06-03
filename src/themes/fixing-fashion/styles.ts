@@ -117,6 +117,69 @@ const buttons = {
     borderRadius: radii[1] + 'px',
   },
 
+  forms: {
+    input: {
+      background: colors.background,
+      borderRadius: 1,
+      border: '1px solid transparent',
+      fontFamily: `'Inter', Arial, sans-serif`,
+      fontSize: 1,
+      '&:focus': {
+        borderColor: colors.blue,
+        outline: 'none',
+        boxShadow: 'none',
+      },
+    },
+    inputOutline: {
+      background: 'white',
+      border: `2px solid ${colors.black}`,
+      borderRadius: 1,
+      '&:focus': {
+        borderColor: colors.blue,
+        outline: 'none',
+        boxShadow: 'none',
+      },
+    },
+    error: {
+      background: colors.background,
+      borderRadius: 1,
+      border: `1px solid ${colors.error}`,
+      fontFamily: `'Inter', Arial, sans-serif`,
+      fontSize: 1,
+      '&:focus': {
+        borderColor: colors.blue,
+        outline: 'none',
+        boxShadow: 'none',
+      },
+    },
+    textarea: {
+      background: colors.background,
+      border: `1px solid transparent`,
+      borderRadius: 1,
+      fontFamily: `'Inter', Arial, sans-serif`,
+      fontSize: 1,
+      padding: 2,
+      '&:focus': {
+        borderColor: colors.blue,
+        outline: 'none',
+        boxShadow: 'none',
+      },
+    },
+    textareaError: {
+      background: colors.background,
+      border: `1px solid ${colors.error}`,
+      borderRadius: 1,
+      fontFamily: `'Inter', Arial, sans-serif`,
+      fontSize: 1,
+      padding: 2,
+      '&:focus': {
+        borderColor: colors.blue,
+        outline: 'none',
+        boxShadow: 'none',
+      },
+    },
+  },
+
   outline: {
     fontFamily: '"Varela Round", Arial, sans-serif',
     border: '2px solid ' + colors.black,

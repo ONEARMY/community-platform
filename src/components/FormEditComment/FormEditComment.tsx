@@ -28,7 +28,7 @@ export const FormEditComment: React.FC<{
           p={2}
           onSubmit={handleSubmit}
         >
-          <Text as="label" style={{ marginBottom: '6px', fontSize: 3 }}>
+          <Text as="label" sx={{ marginBottom: '6px', fontSize: 3 }}>
             Edit comment
           </Text>
           <Field name="comment" id="comment" component={FieldTextarea} />

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Box, Text, Link } from 'theme-ui'
+import { Box, Text, Link, Textarea } from 'theme-ui'
 import { Avatar } from '../Avatar'
 import { useCommonStores } from 'src/index'
 import { MAX_COMMENT_LENGTH } from './constants'
@@ -9,26 +9,6 @@ export interface IProps {
   onChange: (string) => void
   comment: string
 }
-
-const TextAreaStyled = styled.textarea`
-  padding: 1.5em 1em;
-  height: 150px;
-  border: none;
-  min-width: 100%;
-  max-width: 100%;
-  font-family: 'Inter', Arial, sans-serif;
-  font-size: ${(props) => props.theme.fontSizes[2] + 'px'};
-  border-radius: 5px;
-  resize: none;
-
-  &:focus-visible {
-    outline: none;
-  }
-
-  &:disabled {
-    background-color: white;
-  }
-`
 
 const BoxStyled = styled(Box)`
   position: relative;
@@ -76,7 +56,7 @@ export const CommentTextArea = ({ onChange, comment, loading }) => {
       </AvatarBoxStyled>
       <TextBoxStyled>
         {user ? (
-          <TextAreaStyled
+          <Textarea
             disabled={loading}
             value={comment}
             maxLength={MAX_COMMENT_LENGTH}

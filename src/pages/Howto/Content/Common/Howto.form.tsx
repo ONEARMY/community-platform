@@ -7,10 +7,9 @@ import arrayMutators from 'final-form-arrays'
 import createDecorator from 'final-form-calculate'
 import type { IHowtoFormInput } from 'src/models/howto.models'
 import type { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
-import { InputField, TextAreaField } from 'src/components/Form/Fields'
 import { SelectField } from 'src/components/Form/Select.field'
 import { HowtoStep } from './HowtoStep.form'
-import { Button } from 'oa-components'
+import { Button, FieldTextarea, FieldInput } from 'oa-components'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import { Heading } from 'theme-ui'
 import { Card, Flex } from 'theme-ui'
@@ -262,7 +261,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   validate={this.validateTitle}
                                   isEqual={COMPARISONS.textInput}
                                   modifiers={{ capitalize: true }}
-                                  component={InputField}
+                                  component={FieldInput}
                                   maxLength={HOWTO_TITLE_MAX_LENGTH}
                                   placeholder={`Make a chair from... (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
                                 />
@@ -340,7 +339,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   validateFields={[]}
                                   modifiers={{ capitalize: true }}
                                   isEqual={COMPARISONS.textInput}
-                                  component={TextAreaField}
+                                  component={FieldTextarea}
                                   style={{
                                     resize: 'none',
                                     flex: 1,
@@ -406,7 +405,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                         id="fileLink"
                                         name="fileLink"
                                         data-cy="fileLink"
-                                        component={InputField}
+                                        component={FieldInput}
                                         placeholder="Link to Gdrive, Dropbox, Grabcad etc"
                                         isEqual={COMPARISONS.textInput}
                                         maxLength={MAX_LINK_LENGTH}

@@ -1,8 +1,7 @@
 import { Component } from 'react'
 import { COM_TYPE_MOCKS } from 'src/mocks/Selectors'
 import { Field } from 'react-final-form'
-import { InputField } from 'src/components/Form/Fields'
-import { Button } from 'oa-components'
+import { Button, FieldInput } from 'oa-components'
 import { Modal } from 'src/components/Modal/Modal'
 import { Text } from 'theme-ui'
 import { Flex } from 'theme-ui'
@@ -96,7 +95,7 @@ export class ProfileLinkField extends Component<IProps, IState> {
           name={`${name}.url`}
           validate={(value) => this.validateDependingOnType(value)}
           validateFields={[]}
-          component={InputField}
+          component={FieldInput}
           placeholder="Link"
           format={(v) => formatLink(v, this.state.linkType)}
           formatOnBlur={true}

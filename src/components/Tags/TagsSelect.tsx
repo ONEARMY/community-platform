@@ -5,7 +5,7 @@ import type { ISelectedTags, ITag, TagCategory } from 'src/models/tags.model'
 import type { FieldRenderProps } from 'react-final-form'
 import Select from 'react-select'
 import { SelectStyles, FilterStyles } from '../Form/Select.field'
-import { FieldContainer } from '../Form/elements'
+import { FieldContainer } from '../Form/FieldContainer'
 import { DropdownIndicator } from '../DropdownIndicator'
 
 // we include props from react-final-form fields so it can be used as a custom field component

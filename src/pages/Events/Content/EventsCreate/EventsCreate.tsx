@@ -4,8 +4,7 @@ import { Form, Field } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import TEMPLATE from './Template'
 import type { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
-import { InputField, DatePickerField } from 'src/components/Form/Fields'
-import { Button } from 'oa-components'
+import { Button, FieldDatepicker, FieldInput } from 'oa-components'
 import type { EventStore } from 'src/stores/Events/events.store'
 import { Heading } from 'theme-ui'
 import { Card, Flex } from 'theme-ui'
@@ -128,7 +127,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                     >
                       <PostingGuidelines />
                     </Box>
-                    <Card mt={5} p={4}>
+                    <Card mt={5} p={4} sx={{ overflow: 'visible' }}>
                       <Flex sx={{ flexDirection: 'column', flexWrap: 'wrap' }}>
                         <Flex
                           mb={3}
@@ -145,7 +144,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             validate={required}
                             validateFields={[]}
                             modifiers={{ capitalize: true }}
-                            component={InputField}
+                            component={FieldInput}
                             maxLength="140"
                             placeholder="Title of your event (max 140 characters)"
                           />
@@ -168,14 +167,18 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             </Label>
                             <Field
                               className="datepicker"
-                              component={DatePickerField}
+                              component={FieldDatepicker}
                               name="date"
                               type="date"
-                              dateFormat="yyyy/MM/dd"
                               validate={required}
                               selected={this.state.selectedDate}
-                              customChange={(date) => this.handleChange(date)}
-                              placeholderText="yyyy/mm/dd"
+                              data-cy="input-date"
+                              customChange={(date) => {
+                                const formattedDate = date.target
+                                  ? new Date(date.target.value)
+                                  : date
+                                this.handleChange(formattedDate)
+                              }}
                             />
                           </Flex>
                           <Flex
@@ -245,7 +248,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                               data-cy="url"
                               validateFields={[]}
                               validate={(value) => validateUrl(value)}
-                              component={InputField}
+                              component={FieldInput}
                               placeholder="URL to offsite link (Facebook, Meetup, etc)"
                               customOnBlur={(e) =>
                                 mutators.addProtocolMutator(e.target.name)

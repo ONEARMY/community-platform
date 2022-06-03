@@ -5854,19 +5854,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hypnosphi/create-react-context@npm:^0.3.1":
-  version: 0.3.1
-  resolution: "@hypnosphi/create-react-context@npm:0.3.1"
-  dependencies:
-    gud: ^1.0.0
-    warning: ^4.0.3
-  peerDependencies:
-    prop-types: ^15.0.0
-    react: ">=0.14.0"
-  checksum: d2f069a562e138057aa067e1483e28cea3193bbacd33ca9528131f31e656939cfeb552af760b3be437d3a8074315a8854fc6d5d89878e2746618ad930c817122
-  languageName: node
-  linkType: hard
-
 "@icons/material@npm:^0.2.4":
   version: 0.2.4
   resolution: "@icons/material@npm:0.2.4"
@@ -15533,7 +15520,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"date-fns@npm:^2.0.1, date-fns@npm:^2.16.1":
+"date-fns@npm:^2.16.1":
   version: 2.24.0
   resolution: "date-fns@npm:2.24.0"
   checksum: f930419e356cf6a6a02c7ed6c6e438df61b4011861002a3dc94a4efc83bc96a7f30ea3cc2e7231c421604c3d5131f9ffb097bf8e7f81a59d68f556864490664f
@@ -15678,7 +15665,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"deep-equal@npm:^1.0.1, deep-equal@npm:^1.1.1":
+"deep-equal@npm:^1.0.1":
   version: 1.1.1
   resolution: "deep-equal@npm:1.1.1"
   dependencies:
@@ -19897,13 +19884,6 @@ fsevents@^1.2.7:
     google-p12-pem: ^3.0.3
     jws: ^4.0.0
   checksum: 77466790270c9d0542788ec973d1d6acee51bde538ecef1cf797977ea81f73c4061ddf0e9cb2a49f8ea85df4c8302d4bf7853d993180e1c6fa34142ecfb4833d
-  languageName: node
-  linkType: hard
-
-"gud@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "gud@npm:1.0.0"
-  checksum: 3e2eb37cf794364077c18f036d6aa259c821c7fd188f2b7935cb00d589d82a41e0ebb1be809e1a93679417f62f1ad0513e745c3cf5329596e489aef8c5e5feae
   languageName: node
   linkType: hard
 
@@ -26170,7 +26150,6 @@ fsevents@^1.2.7:
     prettier: ^2.6.1
     pubsub-js: ^1.7.0
     react: ^17.0.2
-    react-datepicker: ^2.9.6
     react-dev-utils: ^11.0.4
     react-dom: ^17.0.2
     react-dropzone: ^10.1.10
@@ -27198,13 +27177,6 @@ fsevents@^1.2.7:
     style-value-types: 4.1.4
     tslib: ^2.1.0
   checksum: 551446ec3763790efde7a3bb8c43189122f9b559985be2efa79842138257c4e331efcff606732a4bd5ac82d9bde1b236258d69a435f4bb5e9fc5908241b5ba3f
-  languageName: node
-  linkType: hard
-
-"popper.js@npm:^1.14.4":
-  version: 1.16.1
-  resolution: "popper.js@npm:1.16.1"
-  checksum: c56ae5001ec50a77ee297a8061a0221d99d25c7348d2e6bcd3e45a0d0f32a1fd81bca29d46cb0d4bdf13efb77685bd6a0ce93f9eb3c608311a461f945fffedbe
   languageName: node
   linkType: hard
 
@@ -29691,22 +29663,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-datepicker@npm:^2.9.6":
-  version: 2.16.0
-  resolution: "react-datepicker@npm:2.16.0"
-  dependencies:
-    classnames: ^2.2.6
-    date-fns: ^2.0.1
-    prop-types: ^15.7.2
-    react-onclickoutside: ^6.9.0
-    react-popper: ^1.3.4
-  peerDependencies:
-    react: ^16.9.0
-    react-dom: ^16.9.0
-  checksum: ce74eb6dab4c07c9c7aadac2f8a3d06f32e44e69fe2569f839d0fab6247b3b00d60379114adf980d28e43270486226abe31d853de00e0e67e3ab6def3ed4301e
-  languageName: node
-  linkType: hard
-
 "react-dev-utils@npm:^11.0.3, react-dev-utils@npm:^11.0.4":
   version: 11.0.4
   resolution: "react-dev-utils@npm:11.0.4"
@@ -30149,16 +30105,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-onclickoutside@npm:^6.9.0":
-  version: 6.12.0
-  resolution: "react-onclickoutside@npm:6.12.0"
-  peerDependencies:
-    react: ^15.5.x || ^16.x || ^17.x
-    react-dom: ^15.5.x || ^16.x || ^17.x
-  checksum: f3d2f2fd0aaf05baaccc572895c6381bbbb01fd748a7e228f424b0f610af957fc3df748d7fefa09a88afdaedb09ffd563de04bc0614acb7a5e4031538251084b
-  languageName: node
-  linkType: hard
-
 "react-player@npm:^1.15.3":
   version: 1.15.3
   resolution: "react-player@npm:1.15.3"
@@ -30183,23 +30129,6 @@ fsevents@^1.2.7:
     react: ^16.6.0 || ^17.0.0
     react-dom: ^16.6.0 || ^17.0.0
   checksum: c820122a4fdce46ff446b2c7bfe45727de42eacf1c2981fe8f8562da246a289dc7349f0732e36390a08ce50717dc52c4e8ab8e418af19cdd2ded7795ea6b8017
-  languageName: node
-  linkType: hard
-
-"react-popper@npm:^1.3.4":
-  version: 1.3.11
-  resolution: "react-popper@npm:1.3.11"
-  dependencies:
-    "@babel/runtime": ^7.1.2
-    "@hypnosphi/create-react-context": ^0.3.1
-    deep-equal: ^1.1.1
-    popper.js: ^1.14.4
-    prop-types: ^15.6.1
-    typed-styles: ^0.0.7
-    warning: ^4.0.2
-  peerDependencies:
-    react: 0.14.x || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: a0f5994f5799f1c7364498f74df123dd2561fff4ae834b10fdcca74d9a8e159b523ed1f0708db33bad606933ab4f0d5ce9c90e48cbb671bf30016c890f3c7ea4
   languageName: node
   linkType: hard
 
@@ -34763,13 +34692,6 @@ resolve@^2.0.0-next.3:
   version: 2.5.0
   resolution: "type@npm:2.5.0"
   checksum: 0fe1bb4e8ba298b2b245fdc6bca6178887e29e2134d231e468366615b3adffd651d464eb51d8b15f8cfd168577c282a17e19bf80f036a60d4df16308a83a93c4
-  languageName: node
-  linkType: hard
-
-"typed-styles@npm:^0.0.7":
-  version: 0.0.7
-  resolution: "typed-styles@npm:0.0.7"
-  checksum: 36a6ad6bee008c15ddb8c2425eaf9aee37d2841985b4c44406ea4cf57080a9c30b6f9f3feb842ac952354733ac53299ee44f68d83f734486e8344d413f8c8c0d
   languageName: node
   linkType: hard
 

@@ -1,10 +1,9 @@
 import { PureComponent } from 'react'
 import { Field } from 'react-final-form'
-import { TextAreaField, InputField } from 'src/components/Form/Fields'
 import { Heading } from 'theme-ui'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { Card, Flex } from 'theme-ui'
-import { Button } from 'oa-components'
+import { Button, FieldInput, FieldTextarea } from 'oa-components'
 import { Modal } from 'src/components/Modal/Modal'
 import { Text } from 'theme-ui'
 import styled from '@emotion/styled'
@@ -137,7 +136,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
               name={`${step}.title`}
               data-cy="step-title"
               modifiers={{ capitalize: true }}
-              component={InputField}
+              component={FieldInput}
               placeholder={`Title of this step (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
               maxLength={HOWTO_TITLE_MAX_LENGTH}
               validate={required}
@@ -153,7 +152,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
               maxLength={HOWTO_MAX_LENGTH}
               data-cy="step-description"
               modifiers={{ capitalize: true }}
-              component={TextAreaField}
+              component={FieldTextarea}
               style={{ resize: 'vertical', height: '300px' }}
               validate={required}
               validateFields={[]}
@@ -199,7 +198,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
             <Field
               name={`${step}.videoUrl`}
               data-cy="step-videoUrl"
-              component={InputField}
+              component={FieldInput}
               placeholder="https://youtube.com/watch?v="
               validate={(url) => this.validateMedia(url)}
               validateFields={[]}

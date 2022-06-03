@@ -3,8 +3,7 @@ import { Field } from 'react-final-form'
 import { Heading } from 'theme-ui'
 import { countries } from 'countries-list'
 import { Flex } from 'theme-ui'
-import { InputField, TextAreaField } from 'src/components/Form/Fields'
-import { Button } from 'oa-components'
+import { Button, FieldInput, FieldTextarea } from 'oa-components'
 import theme from 'src/themes/styled.theme'
 import { FieldArray } from 'react-final-form-arrays'
 import { ProfileLinkField } from './Fields/Link.field'
@@ -13,7 +12,6 @@ import { Box, Text } from 'theme-ui'
 import { required } from 'src/utils/validators'
 import type { IUserPP } from 'src/models/user_pp.models'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
-import { ErrorMessage } from 'src/components/Form/elements'
 import type { IUser } from 'src/models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { ProfileType } from 'src/modules/profile'
@@ -92,7 +90,11 @@ const CoverImages = ({
                   />
                 </Box>
               ))}
-              {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
+              {meta.error && (
+                <Text sx={{ fontSize: 0, margin: 1, color: 'error' }}>
+                  {meta.error}
+                </Text>
+              )}
             </>
           )
         }}
@@ -147,7 +149,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             <Field
               data-cy="username"
               name="displayName"
-              component={InputField}
+              component={FieldInput}
               placeholder="Pick a unique username"
               validate={required}
               validateFields={[]}
@@ -180,7 +182,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             <Field
               data-cy="info-description"
               name="about"
-              component={TextAreaField}
+              component={FieldTextarea}
               placeholder="Describe in details what you do and who you are. Write in English otherwise your profile won't be approved."
               validate={required}
               validateFields={[]}

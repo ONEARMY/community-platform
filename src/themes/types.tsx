@@ -22,6 +22,14 @@ export interface ThemeWithName {
 
   text: any
 
+  forms?: {
+    input: any
+    inputOutline: any
+    error: any
+    textarea?: any
+    textareaError?: any
+  }
+
   /**
    * Following properties are taken from DefaultTheme
    * exported from `styled-components`

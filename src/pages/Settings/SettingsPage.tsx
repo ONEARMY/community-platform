@@ -42,6 +42,7 @@ interface IState {
   formValues: IUserPP
   notification: { message: string; icon: string; show: boolean }
   showDeleteDialog?: boolean
+  showLocationDropdown: boolean
   user?: IUserPP
 }
 
@@ -80,6 +81,7 @@ export class UserSettings extends React.Component<IProps, IState> {
       formValues,
       notification: { message: '', icon: '', show: false },
       user,
+      showLocationDropdown: !user?.location?.latlng,
     })
   }
 
@@ -134,6 +136,19 @@ export class UserSettings extends React.Component<IProps, IState> {
       errors.links[ARRAY_ERROR] = 'Must have at least one link'
     }
     return errors
+  }
+
+  toggleLocationDropdown = () => {
+    this.setState((prevState) => ({
+      ...prevState,
+      showLocationDropdown: !prevState.showLocationDropdown,
+      formValues: {
+        ...prevState.formValues,
+        mapPinDescription: '',
+        location: null,
+        country: null,
+      },
+    }))
   }
 
   render() {
@@ -229,11 +244,14 @@ export class UserSettings extends React.Component<IProps, IState> {
 
                       {values.profileType === ProfileType.MEMBER &&
                         isModuleSupported(MODULE.MAP) && (
-                          <MemberMapPinSection />
+                          <MemberMapPinSection
+                            toggleLocationDropdown={this.toggleLocationDropdown}
+                          />
                         )}
                       <UserInfosSection
                         formValues={values}
                         mutators={form.mutators}
+                        showLocationDropdown={this.state.showLocationDropdown}
                       />
                     </Flex>
                   </form>

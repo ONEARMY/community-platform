@@ -65,6 +65,7 @@ export class MemberMapPinSection extends React.Component<any, IState> {
               <Button
                 data-cy="add-a-map-pin"
                 onClick={() => {
+                  this.props.toggleLocationDropdown()
                   this.setState({ hasMapPin: !this.state.hasMapPin })
                 }}
               >
@@ -141,9 +142,11 @@ export class MemberMapPinSection extends React.Component<any, IState> {
                         />
 
                         <Button
+                          data-cy="remove-a-member-map-pin"
                           mt={4}
                           variant="outline"
                           onClick={() => {
+                            this.props.toggleLocationDropdown()
                             this.setState({
                               hasMapPin: false,
                             })

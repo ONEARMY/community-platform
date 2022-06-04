@@ -1,5 +1,5 @@
 {
-  "extends": "../../.eslintrc.json",
+  "extends": ["../../.eslintrc.json", "plugin:import/recommended"],
   "plugins": ["import"],
   "rules": {
     "react/prefer-stateless-function": ["error"],
@@ -7,6 +7,16 @@
       "error",
       { "namedComponents": "arrow-function" }
     ],
-    "@typescript-eslint/no-unused-vars": ["error"]
-  }
+    "@typescript-eslint/no-unused-vars": ["error"],
+    "import/no-unresolved": "off",
+    "import/no-default-export": "error"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.stories.tsx"],
+      "rules": {
+        "import/no-default-export": "off"
+      }
+    }
+  ]
 }

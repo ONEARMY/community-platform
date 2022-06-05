@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
 import { Box, Text, Link, Textarea } from 'theme-ui'
-import { Avatar } from '../Avatar'
 import { useCommonStores } from 'src/index'
 import { MAX_COMMENT_LENGTH } from './constants'
+import { MemberBadge } from 'oa-components'
 
 export interface IProps {
   onSubmit: (string) => Promise<void>
@@ -52,7 +52,10 @@ export const CommentTextArea = ({ onChange, comment, loading }) => {
   return (
     <BoxStyled sx={{ background: 'white' }}>
       <AvatarBoxStyled>
-        <Avatar profileType={user?.profileType} />
+        <MemberBadge
+          profileType={user?.profileType || 'member'}
+          useLowDetailVersion
+        />
       </AvatarBoxStyled>
       <TextBoxStyled>
         {user ? (

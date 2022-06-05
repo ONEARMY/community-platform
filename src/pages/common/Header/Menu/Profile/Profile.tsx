@@ -3,12 +3,12 @@ import Foco from 'react-foco'
 import type { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import { Flex } from 'theme-ui'
-import { Avatar } from 'src/components/Avatar'
 import { ProfileModal } from 'src/components/ProfileModal/ProfileModal'
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
 import ProfileButtons from './ProfileButtons'
 import { MenuMobileLinkContainer } from '../MenuMobile/MenuMobilePanel'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
+import { MemberBadge } from 'oa-components'
 
 interface IState {
   showProfileModal: boolean
@@ -71,7 +71,7 @@ export default class Profile extends Component<IProps, IState> {
                 ml={1}
                 sx={{ height: '100%' }}
               >
-                <Avatar profileType={user.profileType} />
+                <MemberBadge profileType={user.profileType} />
               </Flex>
               <Flex>
                 {showProfileModal && (

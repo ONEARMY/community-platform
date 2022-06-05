@@ -2,9 +2,9 @@ import ModerationStatusText from 'src/components/ModerationStatusText/Moderation
 import { Card, Text, Flex, Link } from 'theme-ui'
 import { Button, FlagIconEvents } from 'oa-components'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
-import type { IEvent } from '../../models/events.models'
+import type { IEvent } from '../../../models/events.models'
 import { getMonth, getDay, capitalizeFirstLetter } from 'src/utils/helpers'
-import { VerifiedUserBadge } from '../VerifiedUserBadge/VerifiedUserBadge'
+import { VerifiedUserBadge } from '../../../components/VerifiedUserBadge/VerifiedUserBadge'
 import { useTheme } from '@emotion/react'
 
 interface IProps {

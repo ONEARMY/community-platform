@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom'
-import GoogleAnalytics from 'src/components/GoogleAnalytics'
+import GoogleAnalytics from 'src/pages/common/GoogleAnalytics'
 import { NotFoundPage } from './NotFound/NotFound'
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import Header from './common/Header/Header'

@@ -50,7 +50,13 @@ function createComponentFile(filename: string) {
 }
 
 ;['{componentName}.tsx.mst', '{componentName}.stories.tsx.mst'].map(
-  createComponentFile,
+writeFileSync(
+  resolve(__dirname, '../src/index.ts'),
+  `export { ${componentName} } from './${componentName}/${componentName}'`,
+  {
+    encoding: 'utf-8',
+    flag: 'a+',
+  },
 )
 
 /** from: https://quickref.me/convert-a-string-to-pascal-case */

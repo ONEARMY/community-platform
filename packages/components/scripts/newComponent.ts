@@ -28,9 +28,8 @@ try {
 
 console.log(`Created a new component: ${componentName}`)
 
-// Load template files
-function createComponentFile(filename: string) {
-  const componentPath = resolve(__dirname, './templates/' + filename)
+function createComponentFileFromTemplate(templateName: string) {
+  const componentPath = resolve(__dirname, './templates/' + templateName)
   // Transform to include `componentName`
   const fileTemplate = readFileSync(componentPath, {
     encoding: 'utf8',
@@ -40,7 +39,7 @@ function createComponentFile(filename: string) {
   const newFilePath = resolve(
     __dirname,
     `../src/${componentName}/`,
-    filename.replace('{componentName}', componentName).replace('.mst', ''),
+    templateName.replace('{componentName}', componentName).replace('.mst', ''),
   )
   console.log(`Writing:`, newFilePath)
   writeFileSync(
@@ -50,6 +49,9 @@ function createComponentFile(filename: string) {
 }
 
 ;['{componentName}.tsx.mst', '{componentName}.stories.tsx.mst'].map(
+  createComponentFileFromTemplate,
+)
+
 writeFileSync(
   resolve(__dirname, '../src/index.ts'),
   `export { ${componentName} } from './${componentName}/${componentName}'`,

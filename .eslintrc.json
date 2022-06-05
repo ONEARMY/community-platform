@@ -17,6 +17,7 @@
   "rules": {
     "import/no-duplicates": "error",
     "import/no-unresolved": "off",
+    "import/no-named-as-default": "off",
     "max-classes-per-file": "error",
     "no-useless-escape": "off",
     "react/display-name": "warn",

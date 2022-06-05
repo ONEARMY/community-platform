@@ -13,7 +13,7 @@ const Theme: PlatformTheme = {
   avatar,
   howtoHeading: `Learn & share how to recycle, build and work`,
   styles,
-  academyResource: 'https://project-kamp-academy.netlify.app/',
+  academyResource: 'https://fixing-fashion-academy.netlify.app/',
   externalLinks: [
     {
       url: 'https://fixing.fashion/',

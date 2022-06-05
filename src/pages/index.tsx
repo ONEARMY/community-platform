@@ -15,7 +15,7 @@ import {
   getAvailablePageList,
 } from './PageList'
 import { Flex, Box } from 'theme-ui'
-import DevSiteHeader from 'src/components/DevSiteHeader/DevSiteHeader'
+import DevSiteHeader from 'src/pages/common/DevSiteHeader/DevSiteHeader'
 import { getSupportedModules } from 'src/modules'
 import GlobalSiteFooter from './common/GlobalSiteFooter/GlobalSiteFooter'
 import DiscordLink from 'src/components/DiscordLink/DiscordLink'

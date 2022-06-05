@@ -1,19 +1,15 @@
 import * as React from 'react'
 import { getFriendlyMessage } from 'oa-shared'
-import { Card, Flex } from 'theme-ui'
+import { Card, Flex, Heading, Text, Link, Label } from 'theme-ui'
 import type { RouteComponentProps } from 'react-router'
-import { withRouter } from 'react-router'
-import { Redirect } from 'react-router'
-import { Heading } from 'theme-ui'
+import { withRouter, Redirect } from 'react-router'
 import { Button, FieldInput } from 'oa-components'
-import { Text, Link } from 'theme-ui'
 import { inject, observer } from 'mobx-react'
 import { Form, Field } from 'react-final-form'
 import type { UserStore } from 'src/stores/User/user.store'
 import type { ITextNotificationProps } from 'src/components/Notification/TextNotification'
 import { TextNotification } from 'src/components/Notification/TextNotification'
 import { required } from 'src/utils/validators'
-import { Label } from 'theme-ui'
 
 interface IFormValues {
   email: string

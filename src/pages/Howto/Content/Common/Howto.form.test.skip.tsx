@@ -1,7 +1,6 @@
 import { fireEvent, render, waitFor } from '@testing-library/react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, BrowserRouter } from 'react-router-dom'
 import { Provider } from 'mobx-react'
-import { BrowserRouter } from 'react-router-dom'
 
 import { HowtoForm } from './Howto.form'
 declare const window: any

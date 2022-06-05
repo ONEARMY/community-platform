@@ -1,9 +1,7 @@
 import * as React from 'react'
 
-import { Flex } from 'theme-ui'
-import { Heading } from 'theme-ui'
+import { Flex, Heading, Box } from 'theme-ui'
 import type { UserStore } from 'src/stores/User/user.store'
-import { Box } from 'theme-ui'
 import { FlexSectionContainer } from './elements'
 import { ChangePasswordForm } from './ChangePassword.form'
 import { ChangeEmailForm } from './ChangeEmail.form'

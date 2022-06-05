@@ -1,6 +1,5 @@
 import React from 'react'
-import { Card, Flex } from 'theme-ui'
-import { Heading } from 'theme-ui'
+import { Card, Flex, Heading } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import { Button, FieldInput } from 'oa-components'

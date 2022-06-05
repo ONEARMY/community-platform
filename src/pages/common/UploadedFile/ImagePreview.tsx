@@ -1,7 +1,6 @@
 import * as React from 'react'
 import './UploadedFile.scss'
-import { Button } from 'oa-components'
-import { Icon } from 'oa-components'
+import { Button, Icon } from 'oa-components'
 
 interface IProps {
   imageSrc: string

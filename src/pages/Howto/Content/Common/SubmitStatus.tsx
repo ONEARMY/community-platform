@@ -1,12 +1,9 @@
 import * as React from 'react'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import { inject, observer } from 'mobx-react'
-import { Heading } from 'theme-ui'
-import { Icon } from 'oa-components'
+import { Heading, Flex, Box, Text } from 'theme-ui'
+import { Icon, Button } from 'oa-components'
 import { Modal } from 'src/components/Modal/Modal'
-import { Button } from 'oa-components'
-import { Flex } from 'theme-ui'
-import { Box, Text } from 'theme-ui'
 import type { RouteComponentProps } from 'react-router'
 
 interface IProps extends RouteComponentProps<any> {

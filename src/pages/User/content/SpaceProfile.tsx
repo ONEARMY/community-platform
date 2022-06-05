@@ -5,19 +5,15 @@ import type {
   PlasticTypeLabel,
 } from 'src/models/user_pp.models'
 
-import { Heading } from 'theme-ui'
-import { Box, Image } from 'theme-ui'
+import { Heading, Box, Image, Flex, Text } from 'theme-ui'
 // import slick and styles
 import Slider from 'react-slick'
 import 'src/assets/css/slick.min.css'
 import styled from '@emotion/styled'
-import { Flex } from 'theme-ui'
-import { Text } from 'theme-ui'
 
-import { MemberBadge } from 'oa-components'
+import { MemberBadge, Icon, FlagIcon } from 'oa-components'
 
 import theme from 'src/themes/styled.theme'
-import { Icon, FlagIcon } from 'oa-components'
 
 // Plastic types
 import HDPEIcon from 'src/assets/images/plastic-types/hdpe.svg'

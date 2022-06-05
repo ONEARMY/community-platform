@@ -75,7 +75,13 @@ describe('[Events]', () => {
       cy.get('[data-cy=title]').type('Create a test event')
       cy.get('[data-cy=date]').find('input').click()
       // make date first of next month (ensure in future)
-      cy.get('[data-cy="input-date"]').type(`2022-06-03`)
+      const d = new Date(new Date().setDate(new Date().getDate() + 2))
+      cy.get('[data-cy="input-date"]').type(
+        `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
+          2,
+          '0',
+        )}-${String(d.getUTCDate()).padStart(2, '0')}`,
+      )
       cy.selectTag('event_testing')
       cy.get('[data-cy="osm-geocoding-input"]').type('Atucucho')
       cy.get('[data-cy="osm-geocoding-results"]')

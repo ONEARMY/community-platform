@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { observer } from 'mobx-react'
-import { FieldContainer } from '../Form/FieldContainer'
-import { DropdownIndicator } from '../DropdownIndicator'
+import { FieldContainer } from '../../../components/Form/FieldContainer'
+import { DropdownIndicator } from '../../../components/DropdownIndicator'
 import Select from 'react-select'
-import { SelectStyles, FilterStyles } from '../Form/Select.field'
+import { SelectStyles, FilterStyles } from '../../../components/Form/Select.field'
 import { useCommonStores } from 'src'
 
 export const CategoriesSelect = observer(

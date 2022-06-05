@@ -14,7 +14,7 @@ import HowToCard from './HowToCard'
 import SortSelect from './SortSelect'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
-import { CategoriesSelect } from 'src/components/Category/CategoriesSelect'
+import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 
 interface InjectedProps {
   howtoStore: HowtoStore

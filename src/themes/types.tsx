@@ -22,7 +22,7 @@ export interface ThemeWithName {
 
   text: any
 
-  forms?: {
+  forms: {
     input: any
     inputOutline: any
     error: any

@@ -1,4 +1,4 @@
-import { weeklyTasks, dailyTasks } from './exports/tasks'
+import { weeklyTasks, dailyTasks } from './scheduled/tasks'
 
 import * as Admin from './admin'
 import * as UserUpdates from './userUpdates'

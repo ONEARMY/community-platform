@@ -38,7 +38,6 @@
     "webpack",
     "jest",
     "src/setupTests.ts",
-    "functions-cron",
     "functions",
     "src/utils/UserMigration",
     "src/setupProxy.js",

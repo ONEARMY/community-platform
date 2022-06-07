@@ -1,6 +1,4 @@
-import { Heading } from 'theme-ui'
-import { Card, Flex } from 'theme-ui'
-import { Link, Text } from 'theme-ui'
+import { Heading, Card, Flex, Link, Text } from 'theme-ui'
 import theme from 'src/themes/styled.theme'
 
 export const ProfileGuidelines = () => (

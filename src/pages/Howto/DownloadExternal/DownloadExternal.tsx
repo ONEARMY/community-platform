@@ -1,6 +1,5 @@
 import { Icon } from 'oa-components'
-import { Flex } from 'theme-ui'
-import { Text, Link } from 'theme-ui'
+import { Flex, Text, Link } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 

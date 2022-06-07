@@ -2,10 +2,9 @@ import * as React from 'react'
 import { Field, Form } from 'react-final-form'
 import { Button, FieldInput } from 'oa-components'
 import type { UserStore } from 'src/stores/User/user.store'
-import { Text } from 'theme-ui'
+import { Text, Flex } from 'theme-ui'
 import theme from 'src/themes/styled.theme'
 import styled from '@emotion/styled'
-import { Flex } from 'theme-ui'
 
 interface IFormValues {
   oldPassword?: string

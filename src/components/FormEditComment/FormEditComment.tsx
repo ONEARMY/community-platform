@@ -1,7 +1,6 @@
 import { Flex, Text } from 'theme-ui'
-import { FieldTextarea } from 'oa-components'
+import { FieldTextarea, Button } from 'oa-components'
 import { Field, Form } from 'react-final-form'
-import { Button } from 'oa-components'
 import { logger } from 'src/logger'
 
 export const FormEditComment: React.FC<{

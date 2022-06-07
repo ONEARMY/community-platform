@@ -1,8 +1,6 @@
 import * as React from 'react'
 
-import { Flex } from 'theme-ui'
-import { Heading } from 'theme-ui'
-import { Box, Text } from 'theme-ui'
+import { Flex, Heading, Box, Text } from 'theme-ui'
 import { FlexSectionContainer } from './elements'
 import { FieldArray } from 'react-final-form-arrays'
 import { MACHINE_BUILDER_XP } from 'src/mocks/user_pp.mock'

@@ -1,9 +1,8 @@
 import { Component } from 'react'
-import { Flex, Image } from 'theme-ui'
+import { Flex, Image, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 import { keyframes } from '@emotion/react'
 
-import { Text } from 'theme-ui'
 import { inject, observer } from 'mobx-react'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 

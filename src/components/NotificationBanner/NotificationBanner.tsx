@@ -1,6 +1,5 @@
-import { Flex, Text } from 'theme-ui'
+import { Flex, Text, Link } from 'theme-ui'
 import theme from 'src/themes/styled.theme'
-import { Link } from 'theme-ui'
 import { observer } from 'mobx-react-lite'
 import { useCommonStores } from 'src'
 

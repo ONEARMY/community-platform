@@ -29,8 +29,9 @@ type IPlatformMetaName =
  * https://www.npmjs.com/package/react-document-meta
  * https://github.com/nfl/react-helmet
  */
-export const updateSeoTags = (update: Partial<ISEOMeta>) => {
-  const { title, description, imageUrl, faviconUrl } = update
+export const seoTagsUpdate = (update: Partial<ISEOMeta>) => {
+  const allTags = { ...getDefaultSEOTags(), ...update }
+  const { title, description, imageUrl, faviconUrl } = allTags
   if (title) {
     document.title = title
     setMetaProperty('og:title', title)
@@ -50,6 +51,21 @@ export const updateSeoTags = (update: Partial<ISEOMeta>) => {
   if (imageUrl) {
     setMetaName('twitter:image', imageUrl)
     setMetaProperty('og:image', imageUrl)
+  }
+}
+
+/**
+ * Load the default SEO tags for the site (as currently hardcoded into the public index.html file)
+ * TODO - it would be better if these were linked to the active site/deployment/theme in some way
+ */
+function getDefaultSEOTags(): ISEOMeta {
+  const PUBLIC_URL = location.origin
+  return {
+    title: 'Community Platform',
+    description:
+      'A series of tools for the Precious Plastic community to collaborate around the world. Connect, share and meet each other to tackle plastic waste.',
+    faviconUrl: `${PUBLIC_URL}/favicon.ico`,
+    imageUrl: `${PUBLIC_URL}/social-image.jpg`,
   }
 }
 

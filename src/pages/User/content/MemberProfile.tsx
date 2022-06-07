@@ -71,6 +71,7 @@ export const MemberProfile = ({ user }: IProps) => {
         <Box mr={3} style={{ flexGrow: 1, minWidth: 'initial' }}>
           <MemberPicture>
             <Image
+              loading="lazy"
               src={
                 user.coverImages[0]
                   ? (user.coverImages[0] as IUploadedFileMeta).downloadUrl

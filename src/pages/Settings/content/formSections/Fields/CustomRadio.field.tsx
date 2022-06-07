@@ -111,6 +111,7 @@ class CustomRadioField extends Component<IProps, IState> {
         />
         {imageSrc && (
           <Image
+            loading="lazy"
             px={3}
             src={imageSrc}
             sx={{ width: ['100px', '100px', '100%'] }}

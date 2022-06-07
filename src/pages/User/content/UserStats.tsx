@@ -49,7 +49,12 @@ export const UserStats = ({ user }: IProps) => {
     <UserStatsBox mt={3} p={2} pb={0}>
       {user.badges?.verified && (
         <UserStatsBoxItem>
-          <Image src={VerifiedBadgeIcon} width="22px" height="22px" />
+          <Image
+            loading="lazy"
+            src={VerifiedBadgeIcon}
+            width="22px"
+            height="22px"
+          />
           <Box ml="5px">Verified</Box>
         </UserStatsBoxItem>
       )}

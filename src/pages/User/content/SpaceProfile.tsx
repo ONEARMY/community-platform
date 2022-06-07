@@ -154,19 +154,19 @@ function renderPlasticTypes(plasticTypes: Array<PlasticTypeLabel>) {
   function renderIcon(type: string) {
     switch (type) {
       case 'hdpe':
-        return <Image src={HDPEIcon} />
+        return <Image loading="lazy" src={HDPEIcon} />
       case 'ldpe':
-        return <Image src={LDPEIcon} />
+        return <Image loading="lazy" src={LDPEIcon} />
       case 'other':
-        return <Image src={OtherIcon} />
+        return <Image loading="lazy" src={OtherIcon} />
       case 'pet':
-        return <Image src={PETIcon} />
+        return <Image loading="lazy" src={PETIcon} />
       case 'pp':
-        return <Image src={PPIcon} />
+        return <Image loading="lazy" src={PPIcon} />
       case 'ps':
-        return <Image src={PSIcon} />
+        return <Image loading="lazy" src={PSIcon} />
       case 'pvc':
-        return <Image src={PVCIcon} />
+        return <Image loading="lazy" src={PVCIcon} />
       default:
         return null
     }

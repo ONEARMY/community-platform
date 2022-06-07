@@ -14,6 +14,7 @@ export const VerifiedUserBadge = (props: IProps) => {
   const isVerified = aggregationsStore.aggregations.users_verified?.[userId]
   return isVerified ? (
     <Image
+      loading="lazy"
       src={VerifiedBadgeIcon}
       height={props.height}
       sx={{ width: props.height }}

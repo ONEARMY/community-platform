@@ -91,6 +91,7 @@ export default class HowtoDescription extends PureComponent<IProps> {
               >
                 <Flex>
                   <Image
+                    loading="lazy"
                     sx={{
                       width: '10px',
                       marginRight: '4px',
@@ -192,15 +193,30 @@ export default class HowtoDescription extends PureComponent<IProps> {
 
           <Flex mt="4">
             <Flex mr="4" sx={{ flexDirection: iconFlexDirection }}>
-              <Image src={StepsIcon} height="16" width="23" mr="2" mb="2" />
+              <Image
+                loading="lazy"
+                src={StepsIcon}
+                height="16"
+                width="23"
+                mr="2"
+                mb="2"
+              />
               {howto.steps.length} steps
             </Flex>
             <Flex mr="4" sx={{ flexDirection: iconFlexDirection }}>
-              <Image src={TimeNeeded} height="16" width="16" mr="2" mb="2" />
+              <Image
+                loading="lazy"
+                src={TimeNeeded}
+                height="16"
+                width="16"
+                mr="2"
+                mb="2"
+              />
               {howto.time}
             </Flex>
             <Flex mr="4" sx={{ flexDirection: iconFlexDirection }}>
               <Image
+                loading="lazy"
                 src={DifficultyLevel}
                 height="15"
                 width="16"
@@ -241,6 +257,7 @@ export default class HowtoDescription extends PureComponent<IProps> {
           }}
         >
           <Image
+            loading="lazy"
             sx={{
               objectFit: 'cover',
               width: 'auto',

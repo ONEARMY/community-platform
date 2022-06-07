@@ -96,13 +96,13 @@ class GroupingFilterMobile extends Component<IProps, IState> {
             key={filter.label}
           >
             <Flex sx={{ alignItems: 'center' }}>
-              <Image width="30px" src={filter.icon} />
+              <Image loading="lazy" width="30px" src={filter.icon} />
               <Text sx={{ fontSize: 2 }} ml="10px">
                 {filter.label} ({filter.number})
               </Text>
             </Flex>
             {selectedItems.includes(filter.value) && (
-              <Image src={checkmarkIcon} width="20px" />
+              <Image loading="lazy" src={checkmarkIcon} width="20px" />
             )}
           </Flex>
         ))}

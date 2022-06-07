@@ -63,6 +63,7 @@ const ResearchDescription: React.FC<IProps> = ({
             >
               <Flex>
                 <Image
+                  loading="lazy"
                   sx={{
                     width: '10px',
                     marginRight: '4px',

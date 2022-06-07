@@ -169,6 +169,7 @@ class Controls extends React.Component<IProps, IState> {
             <Flex p={0} mx={-1} sx={{ justifyContent: 'space-between' }}>
               <Text sx={{ fontWeight: 'bold' }}>Select filters</Text>
               <Image
+                loading="lazy"
                 width="25px"
                 src={crossClose}
                 alt="cross-close"

@@ -126,6 +126,7 @@ export class Popup extends React.Component<IProps> {
               {displayName}
               {verifiedBadge && (
                 <Image
+                  loading="lazy"
                   src={VerifiedBadgeIcon}
                   width="22px"
                   height="22px"

@@ -106,6 +106,7 @@ export class ImageGallery extends PureComponent<IProps, IState> {
                   key={index}
                 >
                   <ThumbImage
+                    loading="lazy"
                     src={image.downloadUrl}
                     key={index}
                     crossOrigin=""

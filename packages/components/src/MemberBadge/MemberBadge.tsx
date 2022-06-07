@@ -14,6 +14,7 @@ export const MemberBadge = (props: Props) => {
 
   return (
     <Image
+      loading="lazy"
       className="avatar"
       sx={{ width: size ? size : 40, borderRadius: '50%' }}
       height={size ? size : 40}

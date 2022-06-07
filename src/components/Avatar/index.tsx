@@ -76,6 +76,7 @@ export class Avatar extends Component<IProps, IState> {
     return (
       <>
         <Image
+          loading="lazy"
           className="avatar"
           sx={{ width: width ? width : 40, borderRadius: '25px' }}
           height={width ? width : 40}

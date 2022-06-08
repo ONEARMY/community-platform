@@ -1,7 +1,7 @@
 import React from 'react'
-import { Card, Flex, Heading, Text, Link as ExternalLink } from 'theme-ui'
+import { Card, Flex, Heading, Text } from 'theme-ui'
 import theme from 'src/themes/styled.theme'
-import { Button } from 'oa-components'
+import { Button, ExternalLink } from 'oa-components'
 import { Link } from 'react-router-dom'
 
 class SignUpMessagePage extends React.Component {

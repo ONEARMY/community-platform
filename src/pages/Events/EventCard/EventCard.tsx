@@ -1,6 +1,6 @@
 import ModerationStatusText from 'src/components/ModerationStatusText/ModerationStatustext'
-import { Card, Text, Flex, Link as ExternalLink } from 'theme-ui'
-import { Button, FlagIconEvents } from 'oa-components'
+import { Card, Text, Flex } from 'theme-ui'
+import { Button, FlagIconEvents, ExternalLink } from 'oa-components'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import type { IEvent } from '../../../models/events.models'
 import { getMonth, getDay, capitalizeFirstLetter } from 'src/utils/helpers'
@@ -171,7 +171,6 @@ export const EventCard = (props: IProps) => {
           <ExternalLink
             href={props.event.url}
             color={'black'}
-            target="_blank"
             mr={1}
             sx={{ width: '100%' }}
           >

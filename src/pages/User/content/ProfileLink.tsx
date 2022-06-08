@@ -1,5 +1,4 @@
-import { Link as ExternalLink } from 'theme-ui'
-
+import { ExternalLink } from 'oa-components'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 
 import { capitalizeFirstLetter } from 'src/utils/helpers'
@@ -48,12 +47,7 @@ const ProfileLink = (props: IProps) => {
   const { link } = props
   return (
     <ElWithBeforeIcon IconUrl={ProfileLinkIcon(link)}>
-      <ExternalLink
-        ml={2}
-        color={'black'}
-        href={rewriteUrl(link)}
-        target="_blank"
-      >
+      <ExternalLink ml={2} color={'black'} href={rewriteUrl(link)}>
         {link.label && capitalizeFirstLetter(link.label)}
       </ExternalLink>
     </ElWithBeforeIcon>

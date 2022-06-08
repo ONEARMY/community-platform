@@ -1,13 +1,13 @@
 import { Flex, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useTheme } from '@emotion/react'
-import { Icon } from '../index'
+import { ExternalLink, Icon } from '..'
 
 export const SiteFooter = () => {
   const theme = useTheme() as any
   const discordButtonWidth = 310
 
-  const Anchor = styled('a')`
+  const Anchor = styled(ExternalLink)`
     color: #fff;
     text-decoration: underline;
   `
@@ -59,17 +59,12 @@ export const SiteFooter = () => {
       <OneArmyIcon glyph={'star-active'} mb={[3, 3, 0]} />
       <Text ml={[0, 0, 0, 3]} mr={1}>
         {theme.name} is a project by{' '}
-        <Anchor href="https://onearmy.earth/" target="_blank">
-          One Army
-        </Anchor>
-        .
+        <Anchor href="https://onearmy.earth/">One Army</Anchor>.
       </Text>
 
       <Text mt={[2, 2, 0]}>
         Running on our Platform software,{' '}
-        <Anchor href="https://platform.onearmy.earth/" target="_blank">
-          help us build it
-        </Anchor>
+        <Anchor href="https://platform.onearmy.earth/">help us build it</Anchor>
       </Text>
     </FooterContainer>
   )

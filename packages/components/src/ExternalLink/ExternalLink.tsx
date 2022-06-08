@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import { Link } from 'theme-ui'
 import type { LinkProps } from 'theme-ui'
 

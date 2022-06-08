@@ -93,6 +93,19 @@
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/no-var-requires": "off",
-    "@typescript-eslint/no-namespace": "off"
+    "@typescript-eslint/no-namespace": "off",
+    // Prevent import of theme-ui link (prefer react-router link as prevents page reload nav)
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "theme-ui",
+            "importNames": ["Link"],
+            "message": "Please import 'ExternalLink' from 'oa-components' or 'Link' from 'react-router-dom' instead"
+          }
+        ]
+      }
+    ]
   }
 }

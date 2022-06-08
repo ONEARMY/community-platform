@@ -20,6 +20,7 @@ import { getSupportedModules } from 'src/modules'
 import GlobalSiteFooter from './common/GlobalSiteFooter/GlobalSiteFooter'
 import DiscordLink from 'src/components/DiscordLink/DiscordLink'
 import NotificationBanner from 'src/components/NotificationBanner/NotificationBanner'
+import { SeoTagsUpdateComponent } from 'src/utils/seo'
 
 export class Routes extends React.Component<
   any,
@@ -68,6 +69,7 @@ export class Routes extends React.Component<
                     key={page.path}
                     render={() => (
                       <React.Fragment>
+                        <SeoTagsUpdateComponent title={page.title} />
                         <Main
                           data-cy="main-layout-container"
                           style={{ flex: 1 }}

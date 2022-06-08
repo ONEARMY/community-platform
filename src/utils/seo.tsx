@@ -20,10 +20,9 @@ type IPlatformMetaName =
 /**
  * Update document SEO tags
  *
- * NOTE 1 - this only updates tags that already appear in the public index.html file and does not
+ * NOTE - this only updates tags that already appear in the public index.html file and does not
  * add additional
  *
- * NOTE 2 - this function is designed for use by store that manually specify tags on page load
  * Alternative methods to update from within components or server can be found at the links below
  * https://create-react-app.dev/docs/title-and-meta-tags/
  * https://www.npmjs.com/package/react-document-meta
@@ -52,6 +51,16 @@ export const seoTagsUpdate = (update: Partial<ISEOMeta>) => {
     setMetaName('twitter:image', imageUrl)
     setMetaProperty('og:image', imageUrl)
   }
+}
+
+/**
+ * Use a component to force SEO tag updates. This may be useful in cases such
+ * as alongside a router's child routes
+ * @example `<SeoTagsUpdateComponent title='my title' />`
+ */
+export const SeoTagsUpdateComponent = (update: Partial<ISEOMeta>) => {
+  seoTagsUpdate(update)
+  return null
 }
 
 /**

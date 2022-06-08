@@ -127,9 +127,6 @@ export class Howto extends React.Component<
       isLoading: false,
     })
   }
-  public async componentWillUnmount() {
-    // seoTagsUpdate({})
-  }
 
   public render() {
     const { isLoading } = this.state

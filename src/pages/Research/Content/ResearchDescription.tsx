@@ -129,7 +129,7 @@ const ResearchDescription: React.FC<IProps> = ({
               <Flex sx={{ alignItems: 'center' }}>
                 By
                 <Link to={'/u/' + research._createdBy}>
-                  <Box
+                  <Text
                     ml={1}
                     mr={1}
                     sx={{
@@ -138,7 +138,7 @@ const ResearchDescription: React.FC<IProps> = ({
                     }}
                   >
                     {research._createdBy}
-                  </Box>
+                  </Text>
                 </Link>
                 <VerifiedUserBadge
                   userId={research._createdBy}

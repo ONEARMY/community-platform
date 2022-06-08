@@ -1,8 +1,13 @@
 import memberBadge from 'src/assets/images/themes/precious-plastic/badge-member.svg'
+import memberBadgeLowDetail from 'src/assets/icons/map-member.svg'
 import CollectionBadge from 'src/assets/images/badges/pt-collection-point.svg'
+import CollectionBadgeLowDetail from 'src/assets/icons/map-collection.svg'
 import MachineBadge from 'src/assets/images/badges/pt-machine-shop.svg'
+import MachineBadgeLowDetail from 'src/assets/icons/map-machine.svg'
 import WorkspaceBadge from 'src/assets/images/badges/pt-workspace.svg'
+import WorkspaceBadgeLowDetail from 'src/assets/icons/map-workspace.svg'
 import LocalComBadge from 'src/assets/images/badges/pt-local-community.svg'
+import LocalComBadgeLowDetail from 'src/assets/icons/map-community.svg'
 
 import type { ThemeWithName } from '../types'
 
@@ -200,11 +205,26 @@ const typography = {
 const StyledComponentTheme: ThemeWithName = {
   name: 'Precious Plastic',
   badges: {
-    member: memberBadge,
-    workspace: WorkspaceBadge,
-    'community-builder': LocalComBadge,
-    'collection-point': CollectionBadge,
-    'machine-builder': MachineBadge,
+    member: {
+      lowDetail: memberBadgeLowDetail,
+      normal: memberBadge,
+    },
+    workspace: {
+      lowDetail: WorkspaceBadgeLowDetail,
+      normal: WorkspaceBadge,
+    },
+    'community-builder': {
+      lowDetail: LocalComBadgeLowDetail,
+      normal: LocalComBadge,
+    },
+    'collection-point': {
+      lowDetail: CollectionBadgeLowDetail,
+      normal: CollectionBadge,
+    },
+    'machine-builder': {
+      lowDetail: MachineBadgeLowDetail,
+      normal: MachineBadge,
+    },
   },
   bold,
   breakpoints,

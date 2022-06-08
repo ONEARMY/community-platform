@@ -43,6 +43,9 @@ interface IDeployment {
 }
 
 interface configVars {
+  prerender: {
+    api_key: string
+  }
   service: IServiceAccount
   analytics: IAnalytics
   integrations: IIntergrations

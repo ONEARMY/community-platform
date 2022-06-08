@@ -8,6 +8,14 @@
         "function": "api"
       },
       {
+        "source": "/how-to/**",
+        "function": "seoRender"
+      },
+      {
+        "source": "/research/**",
+        "function": "seoRender"
+      },
+      {
         "source": "/static/**",
         "destination": "/static/**"
       },

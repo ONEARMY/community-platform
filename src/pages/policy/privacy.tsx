@@ -1,3 +1,4 @@
+import { ExternalLink } from 'oa-components'
 import React from 'react'
 
 class PrivacyPolicy extends React.PureComponent {
@@ -49,13 +50,9 @@ class PrivacyPolicy extends React.PureComponent {
           </p>
           <ul>
             <li>
-              <a
-                href="https://policies.google.com/privacy"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <ExternalLink href="https://policies.google.com/privacy">
                 Google Analytics
-              </a>
+              </ExternalLink>
             </li>
           </ul>
         </div>

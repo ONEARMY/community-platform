@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { Link } from 'react-router-dom'
 
 export class NotFoundPage extends React.Component {
   public render() {
@@ -17,7 +18,7 @@ export class NotFoundPage extends React.Component {
         <div style={{ marginBottom: '2em' }}>
           The page you were looking for was moved or doesn't exist
         </div>
-        <a href="/">Home</a>
+        <Link to="/">Home</Link>
       </div>
     )
   }

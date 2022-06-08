@@ -14,11 +14,12 @@ import {
   POLICY_PAGES,
   getAvailablePageList,
 } from './PageList'
-import { Flex, Box, Button, Link } from 'theme-ui'
+import { Flex, Box, Button } from 'theme-ui'
 import DevSiteHeader from 'src/pages/common/DevSiteHeader/DevSiteHeader'
 import { getSupportedModules } from 'src/modules'
 import GlobalSiteFooter from './common/GlobalSiteFooter/GlobalSiteFooter'
 import NotificationBanner from 'src/components/NotificationBanner/NotificationBanner'
+import { ExternalLink } from 'oa-components'
 
 export class Routes extends React.Component<
   any,
@@ -100,8 +101,7 @@ export class Routes extends React.Component<
             display: ['none', 'none', 'block'],
           }}
         >
-          <Link
-            target="_blank"
+          <ExternalLink
             href="https://discordapp.com/invite/cGZ5hKP"
             data-cy="feedback"
           >
@@ -111,7 +111,7 @@ export class Routes extends React.Component<
                 💬
               </span>
             </Button>
-          </Link>
+          </ExternalLink>
         </Box>
       </Flex>
     )

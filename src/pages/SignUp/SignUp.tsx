@@ -3,7 +3,7 @@ import { FRIENDLY_MESSAGES } from 'oa-shared'
 import { Card, Flex, Heading, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
-import { Button, FieldInput } from 'oa-components'
+import { Button, ExternalLink, FieldInput } from 'oa-components'
 import { Form, Field } from 'react-final-form'
 import { inject, observer } from 'mobx-react'
 import type { UserStore } from 'src/stores/User/user.store'
@@ -230,13 +230,13 @@ class SignUpPage extends React.Component<IProps, IState> {
                         />
                         <Label htmlFor="consent">
                           I agree to the{' '}
-                          <a href="/terms" target="_blank" rel="nofollow">
+                          <ExternalLink href="/terms">
                             Terms of Service
-                          </a>
+                          </ExternalLink>
                           <span> and </span>
-                          <a href="/privacy" target="_blank" rel="nofollow">
+                          <ExternalLink href="/privacy">
                             Privacy Policy
-                          </a>
+                          </ExternalLink>
                         </Label>
                       </Flex>
                       <Text color={'red'} data-cy="error-msg">

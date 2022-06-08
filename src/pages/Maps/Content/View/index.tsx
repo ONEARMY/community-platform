@@ -95,7 +95,7 @@ class MapView extends React.Component<IProps> {
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          attribution='&copy; <a href="http://osm.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors'
         />
         <Clusters pins={pins} onPinClick={(pin) => this.pinClicked(pin)} />
         {activePin && this.injected.mapsStore.canSeePin(activePin) && (

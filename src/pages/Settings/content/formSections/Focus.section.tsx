@@ -1,6 +1,4 @@
-import * as React from 'react'
-
-import { Heading, Link, Box, Text, Flex } from 'theme-ui'
+import { Heading, Link as ExternalLink, Box, Text, Flex } from 'theme-ui'
 import { FlexSectionContainer } from './elements'
 import { Button } from 'oa-components'
 import type { ProfileTypeLabel } from 'src/modules/profile'
@@ -43,14 +41,14 @@ function ProfileTypes() {
             </Flex>
             <Flex sx={{ flexWrap: 'wrap', alignItems: 'center' }} mt={4}>
               <Text my={2}>Not sure about your focus ?</Text>
-              <Link
+              <ExternalLink
                 href="https://drive.google.com/open?id=1fXTtBbzgCO0EL6G9__aixwqc-Euqgqnd"
                 target="_blank"
               >
                 <Button ml={[1, 2, 2]} variant="outline" data-cy="go-to">
                   Check out our guidelines
                 </Button>
-              </Link>
+              </ExternalLink>
             </Flex>
             {props.meta.error && (
               <Text color={theme.colors.red}>Please select a focus</Text>

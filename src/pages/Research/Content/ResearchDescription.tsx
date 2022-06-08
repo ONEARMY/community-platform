@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import * as React from 'react'
-import { Box, Flex, Image, Text, Heading, Link } from 'theme-ui'
+import { Box, Flex, Image, Text, Heading } from 'theme-ui'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import { Button, FlagIconHowTos } from 'oa-components'
 import ModerationStatusText from 'src/components/ModerationStatusText/ModerationStatustext'
@@ -10,6 +10,7 @@ import type { IUser } from 'src/models/user.models'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 import { UsefulStatsButton } from 'src/components/UsefulStatsButton/UsefulStatsButton'
 import Linkify from 'react-linkify'
+import { Link } from 'react-router-dom'
 
 interface IProps {
   research: IResearch.ItemDB
@@ -55,7 +56,7 @@ const ResearchDescription: React.FC<IProps> = ({
     >
       <Flex px={4} py={4} sx={{ flexDirection: 'column', width: '100%' }}>
         <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
-          <Link href={'/research'}>
+          <Link to={'/research'}>
             <Button
               variant="subtle"
               sx={{ fontSize: '14px' }}
@@ -105,7 +106,7 @@ const ResearchDescription: React.FC<IProps> = ({
           )}
           {/* Show edit button for the creator of the research OR a super-admin */}
           {isEditable && (
-            <Link href={'/research/' + research.slug + '/edit'}>
+            <Link to={'/research/' + research.slug + '/edit'}>
               <Button variant={'primary'} data-cy={'edit'}>
                 Edit
               </Button>
@@ -127,16 +128,17 @@ const ResearchDescription: React.FC<IProps> = ({
             >
               <Flex sx={{ alignItems: 'center' }}>
                 By
-                <Link
-                  ml={1}
-                  mr={1}
-                  sx={{
-                    textDecoration: 'underline',
-                    color: 'inherit',
-                  }}
-                  href={'/u/' + research._createdBy}
-                >
-                  {research._createdBy}
+                <Link to={'/u/' + research._createdBy}>
+                  <Text
+                    ml={1}
+                    mr={1}
+                    sx={{
+                      textDecoration: 'underline',
+                      color: 'black',
+                    }}
+                  >
+                    {research._createdBy}
+                  </Text>
                 </Link>
                 <VerifiedUserBadge
                   userId={research._createdBy}

@@ -2,7 +2,7 @@ import { inject, observer } from 'mobx-react'
 import * as React from 'react'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { Button } from 'oa-components'
-import { Heading, Input, Flex, Box, Link } from 'theme-ui'
+import { Heading, Input, Flex, Box } from 'theme-ui'
 import { Loader } from 'src/components/Loader'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import TagsSelect from 'src/components/Tags/TagsSelect'
@@ -15,6 +15,7 @@ import SortSelect from './SortSelect'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
+import { Link } from 'react-router-dom'
 
 interface InjectedProps {
   howtoStore: HowtoStore
@@ -223,18 +224,18 @@ export class HowtoList extends React.Component<any, IState> {
           </Flex>
           <Flex sx={{ justifyContent: ['flex-end', 'flex-end', 'auto'] }}>
             <Link
-              sx={{ width: '100%', display: 'block' }}
-              href={this.props.userStore!.user ? '/how-to/create' : 'sign-up'}
-              mb={[3, 3, 0]}
+              to={this.props.userStore!.user ? '/how-to/create' : 'sign-up'}
             >
-              <Button
-                sx={{ width: '100%' }}
-                variant={'primary'}
-                translateY
-                data-cy="create"
-              >
-                Create a How-to
-              </Button>
+              <Box sx={{ width: '100%', display: 'block' }} mb={[3, 3, 0]}>
+                <Button
+                  sx={{ width: '100%' }}
+                  variant={'primary'}
+                  translateY
+                  data-cy="create"
+                >
+                  Create a How-to
+                </Button>
+              </Box>
             </Link>
           </Flex>
         </Flex>
@@ -276,7 +277,7 @@ export class HowtoList extends React.Component<any, IState> {
             />
           </Flex>
           <Flex sx={{ justifyContent: 'center' }} mt={20}>
-            <Link href={'#'} style={{ visibility: 'hidden' }}>
+            <Link to={'#'} style={{ visibility: 'hidden' }}>
               <Button variant={'secondary'} data-cy="more-how-tos">
                 More how-tos
               </Button>
@@ -290,7 +291,7 @@ export class HowtoList extends React.Component<any, IState> {
                 Share your how-to!
               </Heading>
               <AuthWrapper>
-                <Link href={'/how-to/create'}>
+                <Link to={'/how-to/create'}>
                   <Button variant="primary" mt={30}>
                     Create a how-to
                   </Button>

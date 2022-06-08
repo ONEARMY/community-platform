@@ -1,5 +1,6 @@
 import { LazyLoadImage } from 'react-lazy-load-image-component'
-import { Text, Card, Flex, Link, Heading } from 'theme-ui'
+import { Text, Card, Flex, Heading } from 'theme-ui'
+import { Link as RouterLink } from 'react-router-dom'
 import ModerationStatusText from 'src/components/ModerationStatusText/ModerationStatustext'
 import { FlagIconHowTos, Icon } from 'oa-components'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
@@ -26,10 +27,10 @@ export const HowToCard = (props: IProps) => {
             top={'62%'}
           />
         )}
-        <Link
+        <RouterLink
           key={howto._id}
-          href={`/how-to/${encodeURIComponent(howto.slug)}`}
-          sx={{ width: '100%' }}
+          to={`/how-to/${encodeURIComponent(howto.slug)}`}
+          style={{ width: '100%' }}
         >
           <Flex
             sx={{
@@ -86,7 +87,7 @@ export const HowToCard = (props: IProps) => {
               )}
             </Flex>
           </Flex>
-        </Link>
+        </RouterLink>
       </Flex>
     </Card>
   )

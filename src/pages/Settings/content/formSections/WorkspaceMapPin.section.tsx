@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { observer, inject } from 'mobx-react'
-import { Heading, Box, Flex, Link, Text } from 'theme-ui'
+import { Heading, Box, Flex, Link as ExternalLink, Text } from 'theme-ui'
 import { Field } from 'react-final-form'
 import { FieldTextarea } from 'oa-components'
 import { FlexSectionContainer } from './elements'
@@ -31,13 +31,13 @@ export class WorkspaceMapPinSection extends React.Component<any> {
           <Text sx={{ fontSize: 2 }}>
             In order to have your pin accepted on our map you have to collect at
             least 6 stars in the Ally Checklist. Learn more about the{' '}
-            <Link
+            <ExternalLink
               href="https://community.preciousplastic.com/academy/guides/community-program"
               target="_blank"
               sx={{ color: 'black', textDecoration: 'underline' }}
             >
               Community Program
-            </Link>{' '}
+            </ExternalLink>{' '}
             and how you can join.
           </Text>
         </Box>

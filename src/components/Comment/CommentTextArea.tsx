@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
-import { Box, Text, Link, Textarea } from 'theme-ui'
+import { Box, Text, Textarea } from 'theme-ui'
+import { Link } from 'react-router-dom'
 import { useCommonStores } from 'src/index'
 import { MAX_COMMENT_LENGTH } from './constants'
 import { MemberBadge } from 'oa-components'
@@ -73,8 +74,8 @@ export const CommentTextArea = ({ onChange, comment, loading }) => {
           <LoginTextStyled data-cy="comments-login-prompt">
             Hi there!{' '}
             <Link
-              href="/sign-in"
-              sx={{
+              to="/sign-in"
+              style={{
                 textDecoration: 'underline',
                 color: 'inherit',
               }}

@@ -6,7 +6,7 @@ import { Heading, Input, Flex, Box, Link } from 'theme-ui'
 import { Loader } from 'src/components/Loader'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
 import TagsSelect from 'src/components/Tags/TagsSelect'
-import { VirtualizedFlex } from 'src/components/VirtualizedFlex/VirtualizedFlex'
+import { VirtualizedFlex } from 'src/pages/Howto/VirtualizedFlex/VirtualizedFlex'
 import type { IHowtoDB } from 'src/models/howto.models'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import type { UserStore } from 'src/stores/User/user.store'
@@ -14,7 +14,7 @@ import HowToCard from './HowToCard'
 import SortSelect from './SortSelect'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
-import { CategoriesSelect } from 'src/components/Category/CategoriesSelect'
+import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 
 interface InjectedProps {
   howtoStore: HowtoStore

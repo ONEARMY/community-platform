@@ -263,7 +263,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
               {/* post guidelines container */}
               <Flex
                 sx={{
-                  width: [1, 1, `${(1 / 3) * 100}%`],
+                  width: [`100%`, `100%`, `${(1 / 3) * 100}%`],
                   flexDirection: 'column',
                   height: '100%',
                 }}

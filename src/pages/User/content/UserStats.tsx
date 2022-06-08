@@ -1,4 +1,4 @@
-import { Box, Image, Link } from 'theme-ui'
+import { Box, Image } from 'theme-ui'
 import EventsIcon from 'src/assets/icons/icon-events.svg'
 import HowToCountIcon from 'src/assets/icons/icon-how-to.svg'
 import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
@@ -7,6 +7,7 @@ import { Icon } from 'oa-components'
 import type { IUserPP } from 'src/models'
 import theme from 'src/themes/styled.theme'
 import styled from '@emotion/styled'
+import { Link } from 'react-router-dom'
 
 export const UserStatsBoxItem = styled.div`
   margin: ${theme.space[2]}px 0;
@@ -59,10 +60,12 @@ export const UserStats = ({ user }: IProps) => {
         </UserStatsBoxItem>
       )}
       {user.location?.latlng && (
-        <Link color={'black'} href={'/map/#' + user.userName}>
+        <Link to={'/map/#' + user.userName}>
           <UserStatsBoxItem>
             <Icon glyph="location-on" size="22"></Icon>
-            <Box ml="5px">{user.location?.country || 'View on Map'}</Box>
+            <Box ml="5px" color={'black'}>
+              {user.location?.country || 'View on Map'}
+            </Box>
           </UserStatsBoxItem>
         </Link>
       )}

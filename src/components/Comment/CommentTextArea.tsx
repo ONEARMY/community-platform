@@ -1,8 +1,9 @@
 import styled from '@emotion/styled'
-import { Box, Text, Link, Textarea } from 'theme-ui'
-import { Avatar } from '../Avatar'
+import { Box, Text, Textarea } from 'theme-ui'
+import { Link } from 'react-router-dom'
 import { useCommonStores } from 'src/index'
 import { MAX_COMMENT_LENGTH } from './constants'
+import { MemberBadge } from 'oa-components'
 
 export interface IProps {
   onSubmit: (string) => Promise<void>
@@ -52,7 +53,10 @@ export const CommentTextArea = ({ onChange, comment, loading }) => {
   return (
     <BoxStyled sx={{ background: 'white' }}>
       <AvatarBoxStyled>
-        <Avatar profileType={user?.profileType} />
+        <MemberBadge
+          profileType={user?.profileType || 'member'}
+          useLowDetailVersion
+        />
       </AvatarBoxStyled>
       <TextBoxStyled>
         {user ? (
@@ -70,8 +74,8 @@ export const CommentTextArea = ({ onChange, comment, loading }) => {
           <LoginTextStyled data-cy="comments-login-prompt">
             Hi there!{' '}
             <Link
-              href="/sign-in"
-              sx={{
+              to="/sign-in"
+              style={{
                 textDecoration: 'underline',
                 color: 'inherit',
               }}

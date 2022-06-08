@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { FRIENDLY_MESSAGES } from 'oa-shared'
-import { Card, Flex, Heading, Text, Link } from 'theme-ui'
+import { Card, Flex, Heading, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import { Button, FieldInput } from 'oa-components'
@@ -12,6 +12,7 @@ import { withRouter } from 'react-router'
 import { string, object, ref, bool } from 'yup'
 import { required } from 'src/utils/validators'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
+import { Link } from 'react-router-dom'
 
 const Label = styled.label`
   font-size: ${theme.fontSizes[2] + 'px'};
@@ -244,7 +245,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                       <Flex mb={3} sx={{ justifyContent: 'space-between' }}>
                         <Text color={'grey'} mt={2} sx={{ fontSize: 1 }}>
                           Already have an account ?
-                          <Link href="/sign-in"> Sign-in here</Link>
+                          <Link to="/sign-in"> Sign-in here</Link>
                         </Text>
                       </Flex>
 

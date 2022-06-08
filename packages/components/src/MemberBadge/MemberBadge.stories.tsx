@@ -13,21 +13,52 @@ export default {
 export const Basic: ComponentStory<typeof MemberBadge> = () => <MemberBadge />
 
 export const Sizes: ComponentStory<typeof MemberBadge> = (args) => (
-  <MemberBadge size={args.size} />
+  <>
+    <MemberBadge size={args.size} />
+    <MemberBadge size={(args.size || 40) * 2} />
+    <MemberBadge size={(args.size || 40) * 3} />
+  </>
 )
 
 export const TypeMember: ComponentStory<typeof MemberBadge> = () => (
-  <MemberBadge size={100} profileType={'member'} />
+  <>
+    <MemberBadge size={100} profileType={'member'} />
+    <MemberBadge size={100} profileType={'member'} useLowDetailVersion />
+  </>
 )
 export const TypeWorkspace: ComponentStory<typeof MemberBadge> = () => (
-  <MemberBadge size={100} profileType={'workspace'} />
+  <>
+    <MemberBadge size={100} profileType={'workspace'} />
+    <MemberBadge size={100} profileType={'workspace'} useLowDetailVersion />
+  </>
 )
 export const TypeCommunityBuilder: ComponentStory<typeof MemberBadge> = () => (
-  <MemberBadge size={100} profileType={'community-builder'} />
+  <>
+    <MemberBadge size={100} profileType={'community-builder'} />
+    <MemberBadge
+      size={100}
+      profileType={'community-builder'}
+      useLowDetailVersion
+    />
+  </>
 )
 export const TypeCollectionPoint: ComponentStory<typeof MemberBadge> = () => (
-  <MemberBadge size={100} profileType={'collection-point'} />
+  <>
+    <MemberBadge size={100} profileType={'collection-point'} />
+    <MemberBadge
+      size={100}
+      profileType={'collection-point'}
+      useLowDetailVersion
+    />
+  </>
 )
 export const TypeMachineBuilder: ComponentStory<typeof MemberBadge> = () => (
-  <MemberBadge size={100} profileType={'machine-builder'} />
+  <>
+    <MemberBadge size={100} profileType={'machine-builder'} />
+    <MemberBadge
+      size={100}
+      profileType={'machine-builder'}
+      useLowDetailVersion
+    />
+  </>
 )

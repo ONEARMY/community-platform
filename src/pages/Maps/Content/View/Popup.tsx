@@ -1,6 +1,6 @@
 import * as React from 'react'
 import L from 'leaflet'
-import { Image, Text, Flex, Link } from 'theme-ui'
+import { Image, Text, Flex } from 'theme-ui'
 import { Button } from 'oa-components'
 import type { Map } from 'react-leaflet'
 import { Popup as LeafletPopup } from 'react-leaflet'
@@ -16,6 +16,7 @@ import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import Workspace from 'src/pages/User/workspace/Workspace'
 import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
 import theme from 'src/themes/styled.theme'
+import { Link } from 'react-router-dom'
 
 interface IProps {
   activePin: IMapPin | IMapPinWithDetail
@@ -116,7 +117,7 @@ export class Popup extends React.Component<IProps> {
 
     return (
       <>
-        <Link href={'/u/' + name} data-cy="map-pin-popup">
+        <Link to={'/u/' + name} data-cy="map-pin-popup">
           <HeroImage src={heroImageUrl} onError={addFallbackSrc} />
           <Flex sx={{ flexDirection: 'column' }} px={2} py={2}>
             <Text mb={2} sx={{ fontSize: '12px', color: theme.colors.blue }}>

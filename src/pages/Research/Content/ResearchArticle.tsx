@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import type { RouteComponentProps } from 'react-router'
-import { Box, Flex, Link } from 'theme-ui'
+import { Box, Flex } from 'theme-ui'
 import { Button } from 'oa-components'
 import { Loader } from 'src/components/Loader'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
@@ -10,6 +10,7 @@ import { isAllowToEditContent } from 'src/utils/helpers'
 import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
 import { useCommonStores } from 'src/index'
+import { Link } from 'react-router-dom'
 
 type IProps = RouteComponentProps<{ slug: string }>
 
@@ -114,8 +115,8 @@ const ResearchArticle = observer((props: IProps) => {
         </Box>
         {isEditable && (
           <Flex my={4}>
-            <Link href={`/research/${item.slug}/new-update`} mb={[3, 3, 0]}>
-              <Button large ml={2}>
+            <Link to={`/research/${item.slug}/new-update`}>
+              <Button large ml={2} mb={[3, 3, 0]}>
                 Add update
               </Button>
             </Link>

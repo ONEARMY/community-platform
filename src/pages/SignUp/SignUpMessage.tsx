@@ -1,7 +1,8 @@
 import React from 'react'
-import { Card, Flex, Heading, Link, Link as ExternalLink, Text } from 'theme-ui'
+import { Card, Flex, Heading, Text, Link as ExternalLink } from 'theme-ui'
 import theme from 'src/themes/styled.theme'
 import { Button } from 'oa-components'
+import { Link } from 'react-router-dom'
 
 class SignUpMessagePage extends React.Component {
   public render() {
@@ -49,7 +50,7 @@ class SignUpMessagePage extends React.Component {
             </Flex>
           </Card>
           <Flex mt={3} sx={{ justifyContent: 'flex-end' }}>
-            <Link href={'/'}>
+            <Link to={'/'}>
               <Button variant="secondary" data-cy="home">
                 Home
               </Button>

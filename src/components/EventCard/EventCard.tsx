@@ -1,5 +1,5 @@
 import ModerationStatusText from 'src/components/ModerationStatusText/ModerationStatustext'
-import { Card, Text, Flex, Link } from 'theme-ui'
+import { Card, Text, Flex, Link as ExternalLink } from 'theme-ui'
 import { Button, FlagIconEvents } from 'oa-components'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import type { IEvent } from '../../models/events.models'
@@ -168,7 +168,7 @@ export const EventCard = (props: IProps) => {
             order: [5, 5, 5],
           }}
         >
-          <Link
+          <ExternalLink
             href={props.event.url}
             color={'black'}
             target="_blank"
@@ -184,7 +184,7 @@ export const EventCard = (props: IProps) => {
             >
               Go to event
             </Text>
-          </Link>
+          </ExternalLink>
         </Flex>
       </Flex>
     </Card>

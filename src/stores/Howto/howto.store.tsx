@@ -102,7 +102,10 @@ export class HowtoStore extends ModuleStore {
     const activeHowto = collection.length > 0 ? collection[0] : undefined
     logger.debug('active howto', activeHowto)
     this.activeHowto = activeHowto
-
+    // seoTagsUpdate({
+    //   description: this.activeHowto?.description,
+    //   title: this.activeHowto?.title,
+    // })
     return activeHowto
   }
 

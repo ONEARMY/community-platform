@@ -1,9 +1,9 @@
-import { Link } from 'theme-ui'
+import { Link as ExternalLink } from 'theme-ui'
 import { Button } from 'oa-components'
 
 export const DiscordLink = () => {
   return (
-    <Link
+    <ExternalLink
       target="_blank"
       href="https://discordapp.com/invite/cGZ5hKP"
       data-cy="feedback"
@@ -14,7 +14,7 @@ export const DiscordLink = () => {
           💬
         </span>
       </Button>
-    </Link>
+    </ExternalLink>
   )
 }
 

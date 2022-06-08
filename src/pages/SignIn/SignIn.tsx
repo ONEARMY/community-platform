@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { getFriendlyMessage } from 'oa-shared'
-import { Card, Flex, Heading, Text, Link, Label } from 'theme-ui'
+import { Card, Flex, Heading, Text, Label } from 'theme-ui'
 import type { RouteComponentProps } from 'react-router'
 import { withRouter, Redirect } from 'react-router'
 import { Button, FieldInput } from 'oa-components'
@@ -10,6 +10,7 @@ import type { UserStore } from 'src/stores/User/user.store'
 import type { ITextNotificationProps } from 'src/components/Notification/TextNotification'
 import { TextNotification } from 'src/components/Notification/TextNotification'
 import { required } from 'src/utils/validators'
+import { Link } from 'react-router-dom'
 
 interface IFormValues {
   email: string
@@ -204,13 +205,13 @@ class SignInPage extends React.Component<IProps, IState> {
                               sx={{ justifyContent: 'space-between' }}
                             >
                               <Text sx={{ fontSize: 1 }} color={'grey'} mt={2}>
-                                <Link href={'/sign-up'} data-cy="no-account">
+                                <Link to={'/sign-up'} data-cy="no-account">
                                   Don't have an account?
                                 </Link>
                               </Text>
                               <Text sx={{ fontSize: 1 }} color={'grey'} mt={2}>
                                 <Link
-                                  href="#"
+                                  to="#"
                                   data-cy="lost-password"
                                   onClick={() =>
                                     this.resetPasword(values.email)

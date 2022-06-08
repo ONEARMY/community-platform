@@ -1,4 +1,4 @@
-import { Link } from 'theme-ui'
+import { Link as ExternalLink } from 'theme-ui'
 
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 
@@ -48,9 +48,14 @@ const ProfileLink = (props: IProps) => {
   const { link } = props
   return (
     <ElWithBeforeIcon IconUrl={ProfileLinkIcon(link)}>
-      <Link ml={2} color={'black'} href={rewriteUrl(link)} target="_blank">
+      <ExternalLink
+        ml={2}
+        color={'black'}
+        href={rewriteUrl(link)}
+        target="_blank"
+      >
         {link.label && capitalizeFirstLetter(link.label)}
-      </Link>
+      </ExternalLink>
     </ElWithBeforeIcon>
   )
 }

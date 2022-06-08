@@ -1,4 +1,4 @@
-import { Heading, Text, Link, Card, Flex } from 'theme-ui'
+import { Heading, Text, Link as ExternalLink, Card, Flex } from 'theme-ui'
 import theme from 'src/themes/styled.theme'
 
 export const PostingGuidelines = () => (
@@ -13,7 +13,7 @@ export const PostingGuidelines = () => (
       </Text>
       <Text sx={{ ...theme.typography.auxiliary }} mb={1}>
         2. Read{' '}
-        <Link
+        <ExternalLink
           color={theme.colors.blue}
           target="_blank"
           href="/academy/create/howto"
@@ -22,7 +22,7 @@ export const PostingGuidelines = () => (
           <span role="img" aria-label="nerd-face">
             🤓
           </span>
-        </Link>
+        </ExternalLink>
       </Text>
       <Text sx={{ ...theme.typography.auxiliary }} mb={1}>
         3. Prepare your text & images{' '}

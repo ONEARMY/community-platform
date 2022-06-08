@@ -6,7 +6,7 @@ import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
 import Step from './Step/Step'
 import type { IHowtoDB } from 'src/models/howto.models'
-import { Box, Flex, Text, Link } from 'theme-ui'
+import { Box, Flex, Text } from 'theme-ui'
 import { Button } from 'oa-components'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
@@ -18,6 +18,7 @@ import { Loader } from 'src/components/Loader'
 import type { UserStore } from 'src/stores/User/user.store'
 import { HowToComments } from './HowToComments/HowToComments'
 import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
+import { Link } from 'react-router-dom'
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
 // We can't directly provide the store as a prop though, and later user a get method to define it
@@ -126,6 +127,9 @@ export class Howto extends React.Component<
       isLoading: false,
     })
   }
+  public async componentWillUnmount() {
+    // seoTagsUpdate({})
+  }
 
   public render() {
     const { isLoading } = this.state
@@ -178,7 +182,7 @@ export class Howto extends React.Component<
               Nice one!
             </Text>
             <Flex sx={{ justifyContent: 'center' }} mt={2}>
-              <Link href={'/how-to/'}>
+              <Link to={'/how-to/'}>
                 <Button variant={'secondary'} data-cy="go-back">
                   Back
                 </Button>

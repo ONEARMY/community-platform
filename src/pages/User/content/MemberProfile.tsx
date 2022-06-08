@@ -2,17 +2,14 @@ import 'src/assets/css/slick.min.css'
 import type { IUserPP } from 'src/models/user_pp.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 
-import { Box, Image, Text } from 'theme-ui'
+import { Box, Image, Text, Flex, Heading } from 'theme-ui'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
-import { Flex } from 'theme-ui'
-import { Heading } from 'theme-ui'
-import { FlagIcon } from 'oa-components'
+import { FlagIcon, MemberBadge } from 'oa-components'
 import theme from 'src/themes/styled.theme'
 import styled from '@emotion/styled'
 import { UserStats } from './UserStats'
 import UserContactAndLinks from './UserContactAndLinks'
 import { UserAdmin } from './UserAdmin'
-import { MemberBadge } from 'oa-components'
 
 interface IProps {
   user: IUserPP
@@ -74,6 +71,7 @@ export const MemberProfile = ({ user }: IProps) => {
         <Box mr={3} style={{ flexGrow: 1, minWidth: 'initial' }}>
           <MemberPicture>
             <Image
+              loading="lazy"
               src={
                 user.coverImages[0]
                   ? (user.coverImages[0] as IUploadedFileMeta).downloadUrl

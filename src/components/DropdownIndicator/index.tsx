@@ -6,6 +6,6 @@ import ArrowSelectIcon from '../../assets/icons/icon-arrow-select.svg'
 export const DropdownIndicator = (props) =>
   components.DropdownIndicator && (
     <components.DropdownIndicator {...props}>
-      <Image src={ArrowSelectIcon} sx={{ width: '12px' }} />
+      <Image loading="lazy" src={ArrowSelectIcon} sx={{ width: '12px' }} />
     </components.DropdownIndicator>
   )

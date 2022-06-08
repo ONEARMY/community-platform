@@ -30,7 +30,13 @@ export const CommentHeader = ({
             {creatorName}
           </Link>
           {isUserVerified ? (
-            <Image src={VerifiedBadgeIcon} ml={1} height="12px" width="12px" />
+            <Image
+              loading="lazy"
+              src={VerifiedBadgeIcon}
+              ml={1}
+              height="12px"
+              width="12px"
+            />
           ) : null}
         </span>
       </Box>

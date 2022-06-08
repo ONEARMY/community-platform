@@ -1,9 +1,7 @@
 import { observer } from 'mobx-react'
 import type { RouteComponentProps } from 'react-router'
-import { Box, Flex, Text } from 'theme-ui'
-import { Button } from 'oa-components'
-import { Heading } from 'theme-ui'
-import { Icon } from 'oa-components'
+import { Box, Flex, Text, Heading } from 'theme-ui'
+import { Button, Icon } from 'oa-components'
 import { Modal } from 'src/components/Modal/Modal'
 import { useResearchStore } from 'src/stores/Research/research.store'
 

@@ -1,7 +1,7 @@
 /// <reference lib="webworker" />
 /* eslint-disable no-restricted-globals */
 
-import { clientsClaim } from 'workbox-core'
+import { clientsClaim, setCacheNameDetails } from 'workbox-core'
 import { ExpirationPlugin } from 'workbox-expiration'
 import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
@@ -9,7 +9,6 @@ import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies'
 import { BackgroundSyncPlugin } from 'workbox-background-sync'
 import type { PrecacheEntry } from 'workbox-precaching/_types'
-import { setCacheNameDetails } from 'workbox-core'
 
 setCacheNameDetails({
   prefix: 'oa',

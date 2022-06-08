@@ -8,6 +8,7 @@ import type {
   IHowtoFormInput,
   IHowtoStep,
   IHowToStepFormInput,
+  IComment,
 } from 'src/models/howto.models'
 import type { ISelectedTags } from 'src/models/tags.model'
 import type { IUser } from 'src/models/user.models'
@@ -21,7 +22,6 @@ import type { RootStore } from '../index'
 import { ModuleStore } from '../common/module.store'
 import type { IUploadedFileMeta } from '../storage'
 import { MAX_COMMENT_LENGTH } from 'src/components/Comment/constants'
-import type { IComment } from 'src/models/howto.models'
 import { logger } from 'src/logger'
 
 const COLLECTION_NAME = 'howtos'

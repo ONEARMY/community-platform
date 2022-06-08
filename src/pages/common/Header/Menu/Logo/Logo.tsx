@@ -59,6 +59,7 @@ export class Logo extends Component<IProps> {
               }}
             >
               <Image
+                loading="lazy"
                 src={logo}
                 sx={{
                   width: [50, 50, 100],

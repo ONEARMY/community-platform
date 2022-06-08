@@ -1,8 +1,7 @@
 import * as React from 'react'
 
-import { Heading } from 'theme-ui'
+import { Heading, Link, Box, Text, Flex } from 'theme-ui'
 import { FlexSectionContainer } from './elements'
-import { Link, Box, Text, Flex } from 'theme-ui'
 import { Button } from 'oa-components'
 import type { ProfileTypeLabel } from 'src/modules/profile'
 import { getSupportedProfileTypes } from 'src/modules/profile'

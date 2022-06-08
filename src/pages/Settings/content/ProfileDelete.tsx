@@ -1,9 +1,8 @@
 import * as React from 'react'
 import { Modal } from 'src/components/Modal/Modal'
 import { Button, FieldInput } from 'oa-components'
-import { Text } from 'theme-ui'
+import { Text, Flex } from 'theme-ui'
 import { Form, Field } from 'react-final-form'
-import { Flex } from 'theme-ui'
 
 interface IState {
   showDeleteDialog: boolean

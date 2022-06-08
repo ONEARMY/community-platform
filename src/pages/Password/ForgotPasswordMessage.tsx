@@ -1,9 +1,6 @@
 import React from 'react'
-import { Card, Flex } from 'theme-ui'
-import { Heading } from 'theme-ui'
+import { Card, Flex, Heading, Text, Link } from 'theme-ui'
 import { Button } from 'oa-components'
-import { Text } from 'theme-ui'
-import { Link } from 'theme-ui'
 
 class ForgotPasswordMessagePage extends React.Component {
   public render() {

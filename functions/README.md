@@ -76,9 +76,7 @@ To view console logs and events from deployed functions request project access f
 
 ## Adding cron tasks
 
-Both production and live have small app-engine instances that run cron tasks, schedules can be seen in ../functions-cron.
-
-If changing either of these remember to deploy both to production and development servers
+Firebase supports adding functions that can be triggered periodically (e.g. daily, weekly) using cloud pubsub and scheduled functions. See examples in [./src/scheduled/tasks.ts](./src/scheduled/tasks.ts)
 
 # Using functions for data migrations
 

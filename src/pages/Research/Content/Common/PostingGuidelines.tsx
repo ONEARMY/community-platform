@@ -1,6 +1,4 @@
-import { Card, Link, Text } from 'theme-ui'
-import { Flex } from 'theme-ui'
-import { Heading } from 'theme-ui'
+import { Card, Link, Text, Flex, Heading } from 'theme-ui'
 import theme from 'src/themes/styled.theme'
 
 export const PostingGuidelines = () => (

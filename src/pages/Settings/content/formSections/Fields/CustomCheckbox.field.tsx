@@ -86,6 +86,7 @@ class CustomCheckbox extends Component<IProps, IState> {
         />
         {imageSrc && (
           <Image
+            loading="lazy"
             px={3}
             src={imageSrc}
             sx={{ width: ['70px', '70px', '100%'] }}

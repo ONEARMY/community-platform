@@ -1,7 +1,7 @@
 import { Flex, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useTheme } from '@emotion/react'
-import { ExternalLink, Icon } from 'oa-components'
+import { ExternalLink, Icon } from '..'
 
 export const SiteFooter = () => {
   const theme = useTheme() as any

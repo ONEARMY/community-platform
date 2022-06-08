@@ -6,7 +6,7 @@ import { inject, observer } from 'mobx-react'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
 import { NavLink } from 'react-router-dom'
 import theme from 'src/themes/styled.theme'
-import { AuthWrapper } from '../Auth/AuthWrapper'
+import { AuthWrapper } from '../../../../../components/Auth/AuthWrapper'
 
 interface IProps {
   username: string

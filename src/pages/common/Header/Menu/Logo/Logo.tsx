@@ -47,7 +47,7 @@ export class Logo extends Component<IProps> {
     return (
       <>
         <LogoContainer>
-          <Link color="black" to="/">
+          <Link to="/">
             <Flex
               ml={[0, 4]}
               sx={{
@@ -73,6 +73,7 @@ export class Logo extends Component<IProps> {
               className="sr-only"
               ml={2}
               sx={{ display: ['none', 'none', 'block'] }}
+              color="black"
             >
               Precious Plastic
             </Text>

@@ -134,7 +134,7 @@ const ResearchDescription: React.FC<IProps> = ({
                     mr={1}
                     sx={{
                       textDecoration: 'underline',
-                      color: 'inherit',
+                      color: 'black',
                     }}
                   >
                     {research._createdBy}

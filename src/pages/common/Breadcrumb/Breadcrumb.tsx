@@ -1,6 +1,7 @@
 import withBreadcrumbs from 'react-router-breadcrumbs-hoc'
 import { Link } from 'react-router-dom'
 import HowtoBreadcrumb from 'src/pages/common/Breadcrumb/HowtoBreadcrumb'
+import { Text } from 'theme-ui'
 const routes = [
   { path: '/how-to', breadcrumb: 'How-to' },
   { path: '/how-to/create', breadcrumb: 'Create' },
@@ -16,8 +17,8 @@ const Breadcrumbs = ({ breadcrumbs }) => (
       <span key={match.url}>
         {index > 0 ? ' > ' : null}
         {index < breadcrumbs.length - 1 ? (
-          <Link to={match.url} color={'black'}>
-            {breadcrumb}
+          <Link to={match.url}>
+            <Text color="black">{breadcrumb}</Text>
           </Link>
         ) : (
           <> {breadcrumb} </>

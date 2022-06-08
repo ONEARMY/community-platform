@@ -2,8 +2,7 @@ import { PureComponent } from 'react'
 import { Field } from 'react-final-form'
 import { Heading, Card, Flex, Text } from 'theme-ui'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
-import { Button, FieldInput, FieldTextarea } from 'oa-components'
-import { Modal } from 'src/components/Modal/Modal'
+import { Button, FieldInput, FieldTextarea, Modal } from 'oa-components'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import type { IHowtoStep } from 'src/models/howto.models'
@@ -102,30 +101,32 @@ class HowtoStep extends PureComponent<IProps, IState> {
                 onClick={() => this.toggleDeleteModal()}
               />
             )}
-            {this.state.showDeleteModal && (
-              <Modal onDidDismiss={() => this.toggleDeleteModal()}>
-                <Text>Are you sure you want to delete this step?</Text>
-                <Flex mt={3} p={0} mx={-1} sx={{ justifyContent: 'flex-end' }}>
-                  <Flex px={1}>
-                    <Button
-                      variant={'outline'}
-                      onClick={() => this.toggleDeleteModal()}
-                    >
-                      Cancel
-                    </Button>
-                  </Flex>
-                  <Flex px={1}>
-                    <Button
-                      data-cy="confirm"
-                      variant={'tertiary'}
-                      onClick={() => this.confirmDelete()}
-                    >
-                      Delete
-                    </Button>
-                  </Flex>
+
+            <Modal
+              onDidDismiss={() => this.toggleDeleteModal()}
+              isOpen={!!this.state.showDeleteModal}
+            >
+              <Text>Are you sure you want to delete this step?</Text>
+              <Flex mt={3} p={0} mx={-1} sx={{ justifyContent: 'flex-end' }}>
+                <Flex px={1}>
+                  <Button
+                    variant={'outline'}
+                    onClick={() => this.toggleDeleteModal()}
+                  >
+                    Cancel
+                  </Button>
                 </Flex>
-              </Modal>
-            )}
+                <Flex px={1}>
+                  <Button
+                    data-cy="confirm"
+                    variant={'tertiary'}
+                    onClick={() => this.confirmDelete()}
+                  >
+                    Delete
+                  </Button>
+                </Flex>
+              </Flex>
+            </Modal>
           </Flex>
 
           <Flex sx={{ flexDirection: 'column' }} mb={3}>

@@ -1,8 +1,7 @@
 import { Component } from 'react'
 import { WEEK_DAYS, OPENING_HOURS } from 'src/mocks/Selectors'
 import { Field } from 'react-final-form'
-import { Button } from 'oa-components'
-import { Modal } from 'src/components/Modal/Modal'
+import { Button, Modal } from 'oa-components'
 import { Text, Flex } from 'theme-ui'
 import { SelectField } from 'src/components/Form/Select.field'
 import { required } from 'src/utils/validators'
@@ -91,31 +90,32 @@ export class OpeningHoursPicker extends Component<IProps, IState> {
           sx={{ height: '40px', display: ['none', 'none', 'block'] }}
           onClick={() => this.toggleDeleteModal()}
         />
-        {this.state.showDeleteModal && (
-          <Modal onDidDismiss={() => this.toggleDeleteModal()}>
-            <Text>Are you sure you want to delete this schedule ?</Text>
-            <Flex p={0} mx={-1} sx={{ justifyContent: 'flex-end' }}>
-              <Flex px={1}>
-                <Button
-                  data-cy={'cancel-delete'}
-                  variant={'outline'}
-                  onClick={() => this.toggleDeleteModal()}
-                >
-                  Cancel
-                </Button>
-              </Flex>
-              <Flex px={1}>
-                <Button
-                  data-cy={'confirm-delete'}
-                  variant={'tertiary'}
-                  onClick={() => this.confirmDelete()}
-                >
-                  Delete
-                </Button>
-              </Flex>
+        <Modal
+          onDidDismiss={() => this.toggleDeleteModal()}
+          isOpen={this.state.showDeleteModal}
+        >
+          <Text>Are you sure you want to delete this schedule ?</Text>
+          <Flex p={0} mx={-1} sx={{ justifyContent: 'flex-end' }}>
+            <Flex px={1}>
+              <Button
+                data-cy={'cancel-delete'}
+                variant={'outline'}
+                onClick={() => this.toggleDeleteModal()}
+              >
+                Cancel
+              </Button>
             </Flex>
-          </Modal>
-        )}
+            <Flex px={1}>
+              <Button
+                data-cy={'confirm-delete'}
+                variant={'tertiary'}
+                onClick={() => this.confirmDelete()}
+              >
+                Delete
+              </Button>
+            </Flex>
+          </Flex>
+        </Modal>
       </Flex>
     )
   }

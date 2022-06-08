@@ -1,6 +1,6 @@
-import { Heading, Link as ExternalLink, Box, Text, Flex } from 'theme-ui'
+import { Heading, Box, Text, Flex } from 'theme-ui'
 import { FlexSectionContainer } from './elements'
-import { Button } from 'oa-components'
+import { Button, ExternalLink } from 'oa-components'
 import type { ProfileTypeLabel } from 'src/modules/profile'
 import { getSupportedProfileTypes } from 'src/modules/profile'
 import { CustomRadioField } from './Fields/CustomRadio.field'
@@ -41,10 +41,7 @@ function ProfileTypes() {
             </Flex>
             <Flex sx={{ flexWrap: 'wrap', alignItems: 'center' }} mt={4}>
               <Text my={2}>Not sure about your focus ?</Text>
-              <ExternalLink
-                href="https://drive.google.com/open?id=1fXTtBbzgCO0EL6G9__aixwqc-Euqgqnd"
-                target="_blank"
-              >
+              <ExternalLink href="https://drive.google.com/open?id=1fXTtBbzgCO0EL6G9__aixwqc-Euqgqnd">
                 <Button ml={[1, 2, 2]} variant="outline" data-cy="go-to">
                   Check out our guidelines
                 </Button>

@@ -2,17 +2,13 @@ import * as React from 'react'
 import { bytesToSize } from '../ImageInput/ImageInput'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { FileDetails } from './FileDetails'
-import styled from '@emotion/styled'
+import { ExternalLink } from 'oa-components'
 
 interface IProps {
   file: File | IUploadedFileMeta | null
   allowDownload?: boolean
 }
 
-const FileContainer = styled.a`
-  width: 300px;
-  margin: 3px 3px;
-`
 export const FileInfo: React.FC<IProps> = ({ file, allowDownload }) => {
   const meta = file as IUploadedFileMeta
   const size = file ? bytesToSize(file.size) : '0'
@@ -24,13 +20,14 @@ export const FileInfo: React.FC<IProps> = ({ file, allowDownload }) => {
   return (
     <>
       {allowDownload && meta.downloadUrl ? (
-        <FileContainer
+        <ExternalLink
+          m={1}
           href={meta.downloadUrl}
-          target="_blank"
           download={file.name}
+          style={{ width: '300px' }}
         >
           <FileDetails file={file} glyph="download-cloud" size={size} />
-        </FileContainer>
+        </ExternalLink>
       ) : (
         <FileDetails file={file} glyph="download-cloud" size={size} />
       )}

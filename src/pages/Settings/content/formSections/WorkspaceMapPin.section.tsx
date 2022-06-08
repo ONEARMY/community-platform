@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { observer, inject } from 'mobx-react'
-import { Heading, Box, Flex, Link as ExternalLink, Text } from 'theme-ui'
+import { Heading, Box, Flex, Text } from 'theme-ui'
 import { Field } from 'react-final-form'
-import { FieldTextarea } from 'oa-components'
+import { ExternalLink, FieldTextarea } from 'oa-components'
 import { FlexSectionContainer } from './elements'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import theme from 'src/themes/styled.theme'
@@ -33,7 +33,6 @@ export class WorkspaceMapPinSection extends React.Component<any> {
             least 6 stars in the Ally Checklist. Learn more about the{' '}
             <ExternalLink
               href="https://community.preciousplastic.com/academy/guides/community-program"
-              target="_blank"
               sx={{ color: 'black', textDecoration: 'underline' }}
             >
               Community Program

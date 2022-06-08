@@ -1,6 +1,6 @@
 import { Route } from 'react-router'
 import { useCommonStores } from 'src/index'
-import ExternalEmbed from 'src/components/ExternalEmbed/ExternalEmbed'
+import ExternalEmbed from 'src/pages/Academy/ExternalEmbed/ExternalEmbed'
 
 export function getFrameSrc(base, path): string {
   return `${base}${path

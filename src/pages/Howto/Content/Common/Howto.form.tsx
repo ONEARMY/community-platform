@@ -30,7 +30,7 @@ import { COMPARISONS } from 'src/utils/comparisons'
 import { UnsavedChangesDialog } from 'src/components/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import { HOWTO_MAX_LENGTH, HOWTO_TITLE_MAX_LENGTH } from '../../constants'
-import { CategoriesSelect } from 'src/components/Category/CategoriesSelect'
+import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
 const MAX_LINK_LENGTH = 2000

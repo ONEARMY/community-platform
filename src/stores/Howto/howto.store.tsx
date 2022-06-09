@@ -139,16 +139,10 @@ export class HowtoStore extends ModuleStore {
     const howToData = await toJS(dbRef.get())
     const totalDownloads = howToData?.total_downloads
 
-    const incrementTotalDownloads = () => {
-      if (totalDownloads != undefined) {
-        return totalDownloads + 1
-      }
-    }
-
     if (howToData) {
       const updatedHowto: IHowto = {
         ...howToData,
-        total_downloads: incrementTotalDownloads(),
+        total_downloads: totalDownloads! + 1,
       }
 
       await dbRef.set(updatedHowto)

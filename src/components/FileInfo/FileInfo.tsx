@@ -11,10 +11,6 @@ interface IProps {
   handleClick?: () => Promise<void>
 }
 
-const FileContainer = styled.a`
-  width: 300px;
-  margin: 3px 3px;
-`
 export const FileInfo: React.FC<IProps> = ({
   file,
   allowDownload,

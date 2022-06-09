@@ -35,7 +35,6 @@ export const FileInfo: React.FC<IProps> = ({
           onClick={() => handleClick()}
           href={meta.downloadUrl}
           download={file.name}
-          a
           style={{ width: '300px' }}
         >
           <FileDetails file={file} glyph="download-cloud" size={size} />

@@ -98,8 +98,6 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
     const howtoDownloadCooldown = retrieveHowtoDownloadCooldown(
       this.props.howto._id,
     )
-    const date = new Date(howtoDownloadCooldown!.expiry)
-    console.log(date.toString())
 
     if (
       howtoDownloadCooldown &&

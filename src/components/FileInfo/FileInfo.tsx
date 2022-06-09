@@ -3,7 +3,6 @@ import { bytesToSize } from '../ImageInput/ImageInput'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { FileDetails } from './FileDetails'
 import { ExternalLink } from 'oa-components'
-import styled from '@emotion/styled'
 
 interface IProps {
   file: File | IUploadedFileMeta | null

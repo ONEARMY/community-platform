@@ -1,8 +1,6 @@
 import type { ThemeWithName } from '../types'
-import member from 'src/assets/images/themes/fixing-fashion/badge.svg'
 import memberBadge from 'src/assets/images/themes/fixing-fashion/badge.svg'
-import memberBadgeLowDetail from 'src/assets/icons/map-member.svg'
-import SpaceBadge from 'src/assets/images/themes/fixing-fashion/badge_space.svg'
+import spaceBadge from 'src/assets/images/themes/fixing-fashion/badge_space.svg'
 
 // use enum to specify list of possible colors for typing
 export const colors = {
@@ -198,14 +196,14 @@ const typography = {
 const StyledComponentTheme: ThemeWithName = {
   name: 'Fixing Fashion',
   badges: {
+    // missing lowdetail badges, not sure which one should be used for both
     member: {
-      lowDetail: memberBadgeLowDetail,
+      lowDetail: memberBadge,
       normal: memberBadge,
     },
     space: {
-      // missing lowdetail spacebadge, not sure which one should be used
-      lowDetail: SpaceBadge,
-      normal: SpaceBadge,
+      lowDetail: spaceBadge,
+      normal: spaceBadge,
     },
   },
   cards: {

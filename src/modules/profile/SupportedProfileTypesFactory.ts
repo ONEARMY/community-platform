@@ -26,7 +26,7 @@ export const ProfileType = {
 } as const
 
 const DEFAULT_PROFILE_TYPES =
-  'member,workspace,community-builder,collection-point,machine-builder'
+  'member,space,workspace,community-builder,collection-point,machine-builder'
 
 const PROFILE_TYPES: IProfileType[] = [
   {

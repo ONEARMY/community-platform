@@ -9,7 +9,18 @@ import { useTheme } from '@emotion/react'
 
 function ProfileTypes() {
   const theme = useTheme()
-  const profileTypes = getSupportedProfileTypes()
+
+  function filteredProfileTypes() {
+    if (theme.name === 'Fixing Fashion') {
+      return getSupportedProfileTypes().filter(
+        (profile) => profile.label === 'member' || profile.label === 'space',
+      )
+    } else {
+      return getSupportedProfileTypes().filter(
+        (profile) => profile.label != 'space',
+      )
+    }
+  }
   return (
     <Field
       name="profileType"
@@ -21,7 +32,7 @@ function ProfileTypes() {
           <Box>
             <Text my={4}>What is your main {theme.name} activity?</Text>
             <Flex sx={{ flexWrap: ['wrap', 'wrap', 'nowrap'] }}>
-              {profileTypes.map((profile, index: number) => (
+              {filteredProfileTypes().map((profile, index: number) => (
                 <Box key={index} sx={{ width: `20%` }}>
                   <CustomRadioField
                     data-cy={profile.label}

@@ -194,6 +194,10 @@ const typography = {
 
 const StyledComponentTheme: ThemeWithName = {
   name: 'Fixing Fashion',
+  profileGuidelinesURL:
+    'https://community.fixing.fashion/academy/guides/profile',
+  communityProgramURL:
+    'https://community.fixing.fashion/academy/guides/community-program',
   badges: {
     member,
   },

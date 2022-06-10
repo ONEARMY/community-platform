@@ -41,7 +41,7 @@ function ProfileTypes() {
             </Flex>
             <Flex sx={{ flexWrap: 'wrap', alignItems: 'center' }} mt={4}>
               <Text my={2}>Not sure about your focus ?</Text>
-              <ExternalLink href="https://drive.google.com/open?id=1fXTtBbzgCO0EL6G9__aixwqc-Euqgqnd">
+              <ExternalLink href={theme.profileGuidelinesURL}>
                 <Button ml={[1, 2, 2]} variant="outline" data-cy="go-to">
                   Check out our guidelines
                 </Button>

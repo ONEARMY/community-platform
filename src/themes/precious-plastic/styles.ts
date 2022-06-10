@@ -204,6 +204,10 @@ const typography = {
 
 const StyledComponentTheme: ThemeWithName = {
   name: 'Precious Plastic',
+  profileGuidelinesURL:
+    'https://drive.google.com/file/d/1fXTtBbzgCO0EL6G9__aixwqc-Euqgqnd/view',
+  communityProgramURL:
+    'https://community.preciousplastic.com/academy/guides/community-program',
   badges: {
     member: {
       lowDetail: memberBadgeLowDetail,

@@ -18,6 +18,10 @@ export interface PlatformTheme {
 export interface ThemeWithName {
   name: string
 
+  profileGuidelinesURL: string
+
+  communityProgramURL: string
+
   badges: any
 
   text: any

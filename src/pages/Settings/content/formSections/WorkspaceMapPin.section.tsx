@@ -10,13 +10,20 @@ import { required } from 'src/utils/validators'
 import type { ILocation } from 'src/models/common.models'
 import MapWithDraggablePin from 'src/components/MapWithDraggablePin/MapWithDraggablePin'
 import { randomIntFromInterval } from 'src/utils/helpers'
+import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
-@inject('mapsStore', 'userStore')
+@inject('mapsStore', 'userStore', 'themeStore')
 @observer
 export class WorkspaceMapPinSection extends React.Component<any> {
   pinFilters = MAP_GROUPINGS
   constructor(props) {
     super(props)
+  }
+
+  get injected() {
+    return this.props as {
+      themeStore: ThemeStore
+    }
   }
 
   render() {
@@ -32,7 +39,10 @@ export class WorkspaceMapPinSection extends React.Component<any> {
             In order to have your pin accepted on our map you have to collect at
             least 6 stars in the Ally Checklist. Learn more about the{' '}
             <ExternalLink
-              href="https://community.preciousplastic.com/academy/guides/community-program"
+              href={
+                this.injected.themeStore?.currentTheme.styles
+                  .communityProgramURL
+              }
               sx={{ color: 'black', textDecoration: 'underline' }}
             >
               Community Program

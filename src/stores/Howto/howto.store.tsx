@@ -350,7 +350,6 @@ export class HowtoStore extends ModuleStore {
         steps: processedSteps,
         fileLink: values.fileLink ?? '',
         files: processedFiles,
-        total_downloads: processedFiles && 0,
         moderation: values.moderation
           ? values.moderation
           : 'awaiting-moderation',
@@ -363,6 +362,8 @@ export class HowtoStore extends ModuleStore {
             ? values.creatorCountry
             : '',
       }
+      if (processedFiles) howTo['total_downloads'] = 0
+
       logger.debug('populating database', howTo)
       // set the database document
       await dbRef.set(howTo)

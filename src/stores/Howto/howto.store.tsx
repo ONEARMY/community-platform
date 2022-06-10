@@ -137,7 +137,7 @@ export class HowtoStore extends ModuleStore {
   public async incrementDownloadCount(howToID: string) {
     const dbRef = this.db.collection<IHowto>(COLLECTION_NAME).doc(howToID)
     const howToData = await toJS(dbRef.get())
-    const totalDownloads = howToData?.total_downloads
+    const totalDownloads = howToData?.total_downloads || 0
 
     if (howToData) {
       const updatedHowto: IHowto = {
@@ -350,7 +350,7 @@ export class HowtoStore extends ModuleStore {
         steps: processedSteps,
         fileLink: values.fileLink ?? '',
         files: processedFiles,
-        total_downloads: processedFiles ? 0 : undefined,
+        total_downloads: processedFiles && 0,
         moderation: values.moderation
           ? values.moderation
           : 'awaiting-moderation',

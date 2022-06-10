@@ -3,13 +3,13 @@ interface localStorageExpiry {
   expiry: number
 }
 
-export const retrieveLocalStorageArray = ():
-  | localStorageExpiry[]
-  | undefined => {
+export const retrieveLocalStorageArray = (): localStorageExpiry[] => {
   const downloadCooldownArray: string | null =
     localStorage.getItem('downloadCooldown')
   if (typeof downloadCooldownArray === 'string') {
     return JSON.parse(downloadCooldownArray)
+  } else {
+    return new Array<localStorageExpiry>()
   }
 }
 
@@ -44,16 +44,10 @@ export const createHowtoExpiryObject = (
 }
 
 export const addHowtoDownloadCooldown = (howtoID: string) => {
-  let downloadCooldownArray = retrieveLocalStorageArray()
+  const downloadCooldownArray = retrieveLocalStorageArray()
   const expiryObject = createHowtoExpiryObject(howtoID)
 
-  if (!downloadCooldownArray) {
-    // create array for localstorage if none exists
-    downloadCooldownArray = []
-    downloadCooldownArray.push(expiryObject)
-  } else {
-    downloadCooldownArray.push(expiryObject)
-  }
+  downloadCooldownArray.push(expiryObject)
   localStorage.setItem(
     'downloadCooldown',
     JSON.stringify(downloadCooldownArray),
@@ -63,11 +57,11 @@ export const addHowtoDownloadCooldown = (howtoID: string) => {
 export const updateHowtoDownloadCooldown = (howtoID: string) => {
   const downloadCooldownArray = retrieveLocalStorageArray()
   const expiryObject = createHowtoExpiryObject(howtoID)
-  const foundIndex = downloadCooldownArray!.findIndex(
+  const foundIndex = downloadCooldownArray.findIndex(
     (elem) => elem.howtoID === howtoID,
   )
 
-  downloadCooldownArray![foundIndex] = expiryObject
+  downloadCooldownArray[foundIndex] = expiryObject
   localStorage.setItem(
     'downloadCooldown',
     JSON.stringify(downloadCooldownArray),

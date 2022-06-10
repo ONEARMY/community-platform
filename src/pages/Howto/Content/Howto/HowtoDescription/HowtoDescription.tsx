@@ -29,7 +29,7 @@ import {
   isHowtoDownloadCooldownExpired,
   addHowtoDownloadCooldown,
   updateHowtoDownloadCooldown,
-} from './utils'
+} from './downloadCooldown'
 
 interface IProps {
   howto: IHowtoDB
@@ -57,7 +57,7 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
-      fileDownloadCount: this.props.howto.total_downloads,
+      fileDownloadCount: this.props.howto.total_downloads || 0,
     }
     this.handleClick = this.handleClick.bind(this)
   }
@@ -305,15 +305,18 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
                   handleClick={this.handleClick}
                 />
               ))}
-              {typeof this.state.fileDownloadCount !== undefined && (
+              {typeof this.state.fileDownloadCount === 'number' && (
                 <Text
                   sx={{
                     fontSize: '12px',
                     color: '#61646B',
-                    paddingLeft: '6px',
+                    paddingLeft: '8px',
                   }}
                 >
-                  {this.state.fileDownloadCount} downloads
+                  {this.state.fileDownloadCount}
+                  {this.state.fileDownloadCount !== 1
+                    ? ' downloads'
+                    : ' download'}
                 </Text>
               )}
             </Flex>

@@ -1,4 +1,6 @@
 import type { ThemeWithName } from '../types'
+import spaceBadge from 'src/assets/images/themes/fixing-fashion/badge_space.svg'
+import memberLow from 'src/assets/images/themes/fixing-fashion/avatar.svg'
 import member from 'src/assets/images/themes/fixing-fashion/badge.svg'
 
 // use enum to specify list of possible colors for typing
@@ -199,7 +201,15 @@ const StyledComponentTheme: ThemeWithName = {
   communityProgramURL:
     'https://community.fixing.fashion/academy/guides/community-program',
   badges: {
-    member,
+    // missing lowdetail badges, not sure which one should be used for both
+    member: {
+      lowDetail: memberLow,
+      normal: member,
+    },
+    space: {
+      lowDetail: spaceBadge,
+      normal: spaceBadge,
+    },
   },
   cards: {
     primary: {

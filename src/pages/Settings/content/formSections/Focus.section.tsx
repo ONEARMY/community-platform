@@ -9,7 +9,10 @@ import { useTheme } from '@emotion/react'
 
 function ProfileTypes() {
   const theme = useTheme()
-  const profileTypes = getSupportedProfileTypes()
+  const profileTypes = getSupportedProfileTypes().filter(({ label }) =>
+    Object.keys(theme.badges).includes(label),
+  )
+
   return (
     <Field
       name="profileType"

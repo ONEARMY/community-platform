@@ -1,4 +1,5 @@
 import member from 'src/assets/images/themes/project-kamp/badge.svg'
+import memberLowDetailBadge from 'src/assets/images/themes/project-kamp/avatar.svg'
 import type { ThemeWithName } from '../types'
 
 // use enum to specify list of possible colors for typing
@@ -199,7 +200,10 @@ const StyledComponentTheme: ThemeWithName = {
   communityProgramURL:
     'https://community.preciousplastic.com/academy/guides/community-program',
   badges: {
-    member,
+    member: {
+      lowDetail: memberLowDetailBadge,
+      normal: member,
+    },
   },
   cards: {
     primary: {

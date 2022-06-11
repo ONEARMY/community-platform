@@ -199,7 +199,6 @@ const StyledComponentTheme: ThemeWithName = {
   communityProgramURL:
     'https://community.fixing.fashion/academy/guides/community-program',
   badges: {
-    // missing lowdetail badges, not sure which one should be used for both
     member: {
       lowDetail: memberLow,
       normal: member,

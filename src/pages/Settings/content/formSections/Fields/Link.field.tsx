@@ -1,8 +1,7 @@
 import { Component } from 'react'
 import { COM_TYPE_MOCKS } from 'src/mocks/Selectors'
 import { Field } from 'react-final-form'
-import { Button, FieldInput } from 'oa-components'
-import { Modal } from 'src/components/Modal/Modal'
+import { Button, FieldInput, Modal } from 'oa-components'
 import { Text, Flex } from 'theme-ui'
 import { SelectField } from 'src/components/Form/Select.field'
 import { validateUrl, validateEmail, required } from 'src/utils/validators'
@@ -102,8 +101,11 @@ export class ProfileLinkField extends Component<IProps, IState> {
         <DeleteButton
           sx={{ display: ['none', 'none', 'block'], height: '40px' }}
         />
-        {this.state.showDeleteModal && (
-          <Modal onDidDismiss={() => this.toggleDeleteModal()}>
+        {
+          <Modal
+            onDidDismiss={() => this.toggleDeleteModal()}
+            isOpen={!!this.state.showDeleteModal}
+          >
             <Text>Are you sure you want to delete this link?</Text>
             <Flex p={0} mx={-1} sx={{ justifyContent: 'flex-end' }}>
               <Flex px={1}>
@@ -124,7 +126,7 @@ export class ProfileLinkField extends Component<IProps, IState> {
               </Flex>
             </Flex>
           </Modal>
-        )}
+        }
       </Flex>
     )
   }

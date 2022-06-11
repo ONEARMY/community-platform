@@ -21,6 +21,7 @@ export const MemberBadge = (props: Props) => {
       loading="lazy"
       className="avatar"
       sx={{ width: badgeSize, borderRadius: '50%' }}
+      width={badgeSize}
       height={badgeSize}
       src={
         badgeSize > MINIMUM_SIZE && !useLowDetailVersion

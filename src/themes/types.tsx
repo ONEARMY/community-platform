@@ -86,8 +86,6 @@ export interface ThemeWithName {
     logoContainer: number
     mapFlexBar: number
     header: number
-    modalBackdrop: number
-    modalContent: number
   }
   breakpoints: string[]
   buttons: any

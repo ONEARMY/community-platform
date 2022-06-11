@@ -42,8 +42,6 @@ export const zIndex = {
   logoContainer: 999,
   mapFlexBar: 2000,
   header: 3000,
-  modalBackdrop: 4000,
-  modalContent: 5000,
 }
 
 export type ButtonVariants =

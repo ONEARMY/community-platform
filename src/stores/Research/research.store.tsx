@@ -23,7 +23,7 @@ import {
   needsModeration,
   randomID,
 } from 'src/utils/helpers'
-import { MAX_COMMENT_LENGTH } from 'src/components/Comment/constants'
+import { MAX_COMMENT_LENGTH } from 'src/constants'
 
 const COLLECTION_NAME = 'research'
 

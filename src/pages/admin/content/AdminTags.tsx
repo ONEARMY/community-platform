@@ -1,10 +1,9 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 import type { TagsStore } from 'src/stores/Tags/tags.store'
-import { Button } from 'oa-components'
+import { Button, Modal } from 'oa-components'
 import { Heading, Box, Text, Input, Flex } from 'theme-ui'
 import type { ITag, TagCategory } from 'src/models/tags.model'
-import { Modal } from 'src/components/Modal/Modal'
 // Import React Table
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
@@ -87,46 +86,42 @@ export class AdminTags extends React.Component<IProps, IState> {
           />
         </Box>
 
-        {showEditor && (
-          <Modal>
-            <Box mb={3} bg={'white'} p={2}>
-              {tagForm._id && <Text>_id: {tagForm._id}</Text>}
-              <Input
-                type="text"
-                name="label"
-                placeholder="Label"
-                value={tagForm.label}
-                onChange={this.handleFormChange}
-              />
-              <Select
-                isMulti
-                options={TAG_CATEGORIES}
-                value={this._getSelected()}
-                onChange={(values) => this.onSelectedTagsChanged(values as any)}
-              />
-              {msg && <Text color="red">{msg}</Text>}
-              <Flex mt={3}>
-                <Button
-                  mr={2}
-                  onClick={() => this.setState({ showEditor: false })}
-                  variant={'secondary'}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={this.saveEditor}
-                  disabled={
-                    !tagForm.label ||
-                    tagForm.categories!.length === 0 ||
-                    updating
-                  }
-                >
-                  Save
-                </Button>
-              </Flex>
-            </Box>
-          </Modal>
-        )}
+        <Modal isOpen={!!showEditor}>
+          <Box mb={3} bg={'white'} p={2}>
+            {tagForm._id && <Text>_id: {tagForm._id}</Text>}
+            <Input
+              type="text"
+              name="label"
+              placeholder="Label"
+              value={tagForm.label}
+              onChange={this.handleFormChange}
+            />
+            <Select
+              isMulti
+              options={TAG_CATEGORIES}
+              value={this._getSelected()}
+              onChange={(values) => this.onSelectedTagsChanged(values as any)}
+            />
+            {msg && <Text color="red">{msg}</Text>}
+            <Flex mt={3}>
+              <Button
+                mr={2}
+                onClick={() => this.setState({ showEditor: false })}
+                variant={'secondary'}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={this.saveEditor}
+                disabled={
+                  !tagForm.label || tagForm.categories!.length === 0 || updating
+                }
+              >
+                Save
+              </Button>
+            </Flex>
+          </Box>
+        </Modal>
       </Box>
     )
   }

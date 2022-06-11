@@ -21,7 +21,7 @@ import {
 import type { RootStore } from '../index'
 import { ModuleStore } from '../common/module.store'
 import type { IUploadedFileMeta } from '../storage'
-import { MAX_COMMENT_LENGTH } from 'src/components/Comment/constants'
+import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
 
 const COLLECTION_NAME = 'howtos'

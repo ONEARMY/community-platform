@@ -25899,8 +25899,8 @@ fsevents@^1.2.7:
     react-icons: ^4.3.1
     react-linkify: ^0.2.2
     react-portal: ^4.2.2
-    react-router: ^6.2.2
-    react-router-dom: ^6.3.0
+    react-router: ^5.2.0
+    react-router-dom: ^5.2.0
     storybook: ^6.4.22
     theme-ui: ^0.14.1
     ts-node: ^10.7.0
@@ -30359,19 +30359,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:^6.3.0":
-  version: 6.3.0
-  resolution: "react-router-dom@npm:6.3.0"
-  dependencies:
-    history: ^5.2.0
-    react-router: 6.3.0
-  peerDependencies:
-    react: ">=16.8"
-    react-dom: ">=16.8"
-  checksum: 77603a654f8a8dc7f65535a2e5917a65f8d9ffcb06546d28dd297e52adcc4b8a84377e0115f48dca330b080af2da3e78f29d590c89307094d36927d2b1751ec3
-  languageName: node
-  linkType: hard
-
 "react-router-hash-link@npm:^2.4.3":
   version: 2.4.3
   resolution: "react-router-hash-link@npm:2.4.3"
@@ -30412,28 +30399,6 @@ fsevents@^1.2.7:
   peerDependencies:
     react: ">=16.8"
   checksum: 081a89237ab4f32195d1f2173bc4b3d95637cd6942a4d1a9e90d4ac8c80faa95528255ca2ec44c1e88c1b369e712c4ca74cba5ae3acef6fc30a51a62805b95a4
-  languageName: node
-  linkType: hard
-
-"react-router@npm:6.3.0":
-  version: 6.3.0
-  resolution: "react-router@npm:6.3.0"
-  dependencies:
-    history: ^5.2.0
-  peerDependencies:
-    react: ">=16.8"
-  checksum: 7be673f5e72104be01e6ab274516bdb932efd93305243170690f6560e3bd1035dd1df3d3c9ce1e0f452638a2529f43a1e77dcf0934fc8031c4783da657be13ca
-  languageName: node
-  linkType: hard
-
-"react-router@npm:^6.2.2":
-  version: 6.2.2
-  resolution: "react-router@npm:6.2.2"
-  dependencies:
-    history: ^5.2.0
-  peerDependencies:
-    react: ">=16.8"
-  checksum: 1a2e7006d4d56bfae8ff11dd5ec15e8049578864dfb2764652510eb0ce4af26a8949790a3732c4f7beb14bcb6500469ea18841b8cfc953e09828e4e4113922f0
   languageName: node
   linkType: hard
 

@@ -54,7 +54,7 @@ export const NotificationItem: React.FC<IProps> = ({
                 fontWeight: 500,
                 display: 'inline',
               }}
-              to={relevantUrl}
+              to={relevantUrl || ''}
             >
               {type === 'howto_useful' ? 'how-to' : 'research'}
             </Link>
@@ -76,7 +76,7 @@ export const NotificationItem: React.FC<IProps> = ({
                 padding: '3px',
                 color: '#61646b',
               }}
-              to={relevantUrl}
+              to={relevantUrl || ''}
             >
               {type == 'new_comment_research' ? 'Research' : 'how-to'}
             </Link>

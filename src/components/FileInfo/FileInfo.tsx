@@ -24,10 +24,10 @@ export const FileInfo: React.FC<IProps> = ({
 
   return (
     <>
-      {allowDownload && meta.downloadUrl && handleClick ? (
+      {allowDownload && meta.downloadUrl ? (
         <ExternalLink
           m={1}
-          onClick={() => handleClick()}
+          onClick={() => handleClick && handleClick()}
           href={meta.downloadUrl}
           download={file.name}
           style={{ width: '300px' }}

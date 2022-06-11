@@ -296,7 +296,12 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
               mt={3}
               sx={{ flexDirection: 'column' }}
             >
-              {howto.fileLink ? <DownloadExternal link={howto.fileLink} /> : ''}
+              {howto.fileLink && (
+                <DownloadExternal
+                  handleClick={this.handleClick}
+                  link={howto.fileLink}
+                />
+              )}
               {howto.files.map((file, index) => (
                 <FileInfo
                   allowDownload

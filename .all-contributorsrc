@@ -82,6 +82,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "AlfonsoGhislieri",
+      "name": "Alfonso",
+      "avatar_url": "https://avatars.githubusercontent.com/u/652368?v=4",
+      "profile": "https://medium.com/@Alfonso_Ghislieri",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

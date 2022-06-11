@@ -62,6 +62,9 @@ Or join our [Discord channel](https://discordapp.com/invite/rnx7m4t)
     <td align="center"><a href="https://tedspare.com"><img src="https://avatars.githubusercontent.com/u/36117635?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Ted Spare</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=tedspare" title="Code">💻</a></td>
     <td align="center"><a href="https://www.linkedin.com/in/eliasvelardez"><img src="https://avatars.githubusercontent.com/u/40184787?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Elias Velardez</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=eliasvelardezft" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://medium.com/@Alfonso_Ghislieri"><img src="https://avatars.githubusercontent.com/u/652368?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Alfonso</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=AlfonsoGhislieri" title="Code">💻</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->

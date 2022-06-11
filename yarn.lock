@@ -15430,9 +15430,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:9.4":
-  version: 9.4.1
-  resolution: "cypress@npm:9.4.1"
+"cypress@npm:^10.1.0":
+  version: 10.1.0
+  resolution: "cypress@npm:10.1.0"
   dependencies:
     "@cypress/request": ^2.88.10
     "@cypress/xvfb": ^1.2.4
@@ -15466,7 +15466,7 @@ __metadata:
     listr2: ^3.8.3
     lodash: ^4.17.21
     log-symbols: ^4.0.0
-    minimist: ^1.2.5
+    minimist: ^1.2.6
     ospath: ^1.2.2
     pretty-bytes: ^5.6.0
     proxy-from-env: 1.0.0
@@ -15478,7 +15478,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: d068704a1a13b6ab22db2cb6867683d0c2d383c41f4d8ded7529999ed1f2bc929f91edc0a69df56a272230c984458ee8198e007af611860dca6a4a1c918319e8
+  checksum: 5c93db957f70eba2299896754b43cc56274fe4f13df9569622924f5d98a61b464bb619b641baeb60244b5d95ee4483d1903930ce631efa55fdd35e33cf951f28
   languageName: node
   linkType: hard
 
@@ -25905,7 +25905,7 @@ fsevents@^1.2.7:
     "@types/fs-extra": ^9.0.13
     "@types/wait-on": ^5.3.1
     cross-env: ^7.0.3
-    cypress: 9.4
+    cypress: ^10.1.0
     cypress-file-upload: 5.0.8
     dotenv: ^10.0.0
     fs-extra: ^10.0.0

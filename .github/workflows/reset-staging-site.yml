@@ -14,9 +14,9 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 16
       - name: Set up Cloud SDK
         uses:
           google-github-actions/setup-gcloud@master

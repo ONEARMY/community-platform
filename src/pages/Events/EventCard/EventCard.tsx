@@ -1,6 +1,10 @@
-import ModerationStatusText from 'src/components/ModerationStatusText/ModerationStatustext'
 import { Card, Text, Flex } from 'theme-ui'
-import { Button, FlagIconEvents, ExternalLink } from 'oa-components'
+import {
+  Button,
+  FlagIconEvents,
+  ExternalLink,
+  ModerationStatus,
+} from 'oa-components'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import type { IEvent } from '../../../models/events.models'
 import { getMonth, getDay, capitalizeFirstLetter } from 'src/utils/helpers'
@@ -30,10 +34,10 @@ export const EventCard = (props: IProps) => {
         data-eventid={props.event._id}
       >
         {props.event.moderation !== 'accepted' && (
-          <ModerationStatusText
-            moderatedContent={props.event}
+          <ModerationStatus
+            status={props.event.moderation}
             contentType="event"
-            top={'0px'}
+            sx={{ top: 0, position: 'absolute', right: 0 }}
           />
         )}
 

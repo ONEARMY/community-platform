@@ -1,5 +1,6 @@
 import type { ThemeWithName } from '../types'
 import spaceBadge from 'src/assets/images/themes/fixing-fashion/badge_space.svg'
+import spaceBadgeLow from 'src/assets/images/themes/fixing-fashion/avatar_space.svg'
 import memberLow from 'src/assets/images/themes/fixing-fashion/avatar.svg'
 import member from 'src/assets/images/themes/fixing-fashion/badge.svg'
 
@@ -199,13 +200,12 @@ const StyledComponentTheme: ThemeWithName = {
   communityProgramURL:
     'https://community.fixing.fashion/academy/guides/community-program',
   badges: {
-    // missing lowdetail badges, not sure which one should be used for both
     member: {
       lowDetail: memberLow,
       normal: member,
     },
     space: {
-      lowDetail: spaceBadge,
+      lowDetail: spaceBadgeLow,
       normal: spaceBadge,
     },
   },

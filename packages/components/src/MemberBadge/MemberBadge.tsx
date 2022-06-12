@@ -1,6 +1,7 @@
 import type { ImageProps } from 'theme-ui'
 import { Image } from 'theme-ui'
 import { useTheme } from '@emotion/react'
+import badge from '../../assets/icons/icon-star-active.svg'
 
 export interface Props extends ImageProps {
   size?: number
@@ -24,9 +25,9 @@ export const MemberBadge = (props: Props) => {
       width={badgeSize}
       height={badgeSize}
       src={
-        badgeSize > MINIMUM_SIZE && !useLowDetailVersion
-          ? theme.badges[profileType].normal
-          : theme.badges[profileType].lowDetail
+        (badgeSize > MINIMUM_SIZE && !useLowDetailVersion
+          ? theme.badges[profileType]?.normal
+          : theme.badges[profileType]?.lowDetail) || badge
       }
       style={style}
     />

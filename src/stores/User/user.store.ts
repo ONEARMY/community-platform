@@ -80,6 +80,17 @@ export class UserStore extends ModuleStore {
     }
   }
 
+  public getUserNotifications() {
+    return (
+      this.user?.notifications
+        ?.filter((notification) => !notification.read)
+        .sort(
+          (a, b) =>
+            new Date(b._created).getTime() - new Date(a._created).getTime(),
+        ) || []
+    )
+  }
+
   public async login(provider: string, email: string, password: string) {
     switch (provider) {
       // eslint-disable-next-line

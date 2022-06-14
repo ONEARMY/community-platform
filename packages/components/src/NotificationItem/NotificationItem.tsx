@@ -1,17 +1,18 @@
-import React from 'react'
-import { Box, Flex } from 'theme-ui'
-import type { INotification } from 'src/models'
-import { ReactComponent as IconComment } from 'src/assets/icons/icon-comment.svg'
-import { ReactComponent as IconUseful } from 'src/assets/icons/icon-useful.svg'
 import { Link } from 'react-router-dom'
+import { Flex, Box } from 'theme-ui'
+import { Icon } from '../Icon/Icon'
 
-export interface IProps extends INotification {}
+export interface Props {
+  triggeredBy: {
+    displayName: string
+    userId: string
+  }
+  relevantUrl: string
+  type: string
+}
 
-export const NotificationItem: React.FC<IProps> = ({
-  triggeredBy,
-  relevantUrl,
-  type,
-}) => {
+export const NotificationItem = (props: Props) => {
+  const { triggeredBy, relevantUrl, type } = props
   return (
     <Flex
       bg={'white'}
@@ -26,13 +27,11 @@ export const NotificationItem: React.FC<IProps> = ({
         fontFamily: 'Inter, sans-serif',
       }}
     >
-      {type === 'howto_useful' || type === 'research_useful' ? (
+      {['howto_useful', 'research_useful'].includes(type) ? (
         <Flex style={{ textAlign: 'left', color: 'black' }}>
-          <IconUseful
-            width="15px"
-            height="15px"
-            style={{ marginRight: '10px', opacity: '0.6' }}
-          />
+          <Box sx={{ opacity: 0.6 }}>
+            <Icon glyph="useful" size={15} mr={2} />
+          </Box>
           <Box>
             Yay,
             <Link
@@ -63,11 +62,9 @@ export const NotificationItem: React.FC<IProps> = ({
         </Flex>
       ) : (
         <Flex>
-          <IconComment
-            width="15px"
-            height="15px"
-            style={{ marginRight: '10px', opacity: '0.6' }}
-          />
+          <Box sx={{ opacity: 0.6 }}>
+            <Icon glyph="comment" size={15} mr={2} />
+          </Box>
           <Box style={{ textAlign: 'left' }}>
             New comment on your
             <Link

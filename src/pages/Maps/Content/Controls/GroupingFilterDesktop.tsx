@@ -9,6 +9,7 @@ import type { MapsStore } from 'src/stores/Maps/maps.store'
 import { Box, Flex, Image, Text } from 'theme-ui'
 import { SelectStyles } from 'src/components/Form/Select.field'
 import { MemberBadge } from 'oa-components'
+import { transformSpecialistWorkspaceTypeToWorkspace } from './transformSpecialistWorkspaceTypeToWorkspace'
 
 interface IProps {
   items: Record<IPinGrouping, Array<IMapGrouping>>
@@ -84,7 +85,12 @@ class GroupingFilterDesktop extends Component<IProps, IState> {
           key={option.label}
         >
           <Flex sx={{ alignItems: 'center' }}>
-            <MemberBadge profileType={option.value} size={30} />
+            <MemberBadge
+              profileType={transformSpecialistWorkspaceTypeToWorkspace(
+                option.value,
+              )}
+              size={30}
+            />
             <Text sx={{ fontSize: 2 }} ml="10px">
               {option.label} ({option.number})
             </Text>

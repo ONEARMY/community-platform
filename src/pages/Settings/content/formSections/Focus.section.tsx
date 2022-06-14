@@ -35,7 +35,7 @@ function ProfileTypes() {
                       props.input.onChange(v as ProfileTypeLabel)
                     }
                     imageSrc={
-                      theme.badges[profile.label].normal || profile.imageSrc
+                      theme.badges[profile.label]?.normal || profile.imageSrc
                     }
                     textLabel={profile.textLabel}
                   />

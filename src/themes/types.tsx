@@ -1,3 +1,5 @@
+import type { ProfileTypeLabel } from 'src/modules/profile'
+
 interface LinkList {
   label: string
   url: string
@@ -15,6 +17,11 @@ export interface PlatformTheme {
   externalLinks: LinkList[]
 }
 
+type Badge = {
+  lowDetail: string
+  normal: string
+}
+
 export interface ThemeWithName {
   name: string
 
@@ -22,7 +29,9 @@ export interface ThemeWithName {
 
   communityProgramURL: string
 
-  badges: any
+  badges: {
+    [K in ProfileTypeLabel]?: Badge
+  }
 
   text: any
 

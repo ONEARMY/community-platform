@@ -1,9 +1,11 @@
 import { inject } from 'mobx-react'
+import { MemberBadge } from 'oa-components'
 import { Component } from 'react'
 import checkmarkIcon from 'src/assets/icons/icon-checkmark.svg'
 import type { IMapGrouping } from 'src/models/maps.models'
 import type { MapsStore } from 'src/stores/Maps/maps.store'
 import { Flex, Image, Text } from 'theme-ui'
+import { transformSpecialistWorkspaceTypeToWorkspace } from './transformSpecialistWorkspaceTypeToWorkspace'
 
 interface IProps {
   items: Array<IMapGrouping>
@@ -96,7 +98,12 @@ class GroupingFilterMobile extends Component<IProps, IState> {
             key={filter.label}
           >
             <Flex sx={{ alignItems: 'center' }}>
-              <Image loading="lazy" width="30px" src={filter.icon} />
+              <MemberBadge
+                profileType={transformSpecialistWorkspaceTypeToWorkspace(
+                  filter.value,
+                )}
+                size={30}
+              />
               <Text sx={{ fontSize: 2 }} ml="10px">
                 {filter.label} ({filter.number})
               </Text>

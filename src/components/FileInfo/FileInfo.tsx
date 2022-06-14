@@ -7,9 +7,14 @@ import { ExternalLink } from 'oa-components'
 interface IProps {
   file: File | IUploadedFileMeta | null
   allowDownload?: boolean
+  handleClick?: () => Promise<void>
 }
 
-export const FileInfo: React.FC<IProps> = ({ file, allowDownload }) => {
+export const FileInfo: React.FC<IProps> = ({
+  file,
+  allowDownload,
+  handleClick,
+}) => {
   const meta = file as IUploadedFileMeta
   const size = file ? bytesToSize(file.size) : '0'
 
@@ -22,6 +27,7 @@ export const FileInfo: React.FC<IProps> = ({ file, allowDownload }) => {
       {allowDownload && meta.downloadUrl ? (
         <ExternalLink
           m={1}
+          onClick={() => handleClick && handleClick()}
           href={meta.downloadUrl}
           download={file.name}
           style={{ width: '300px' }}

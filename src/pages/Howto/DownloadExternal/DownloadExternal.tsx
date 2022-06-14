@@ -5,6 +5,7 @@ import theme from 'src/themes/styled.theme'
 
 interface IProps {
   link: string
+  handleClick?: () => Promise<void>
 }
 
 const FileFlex = styled(Flex)`
@@ -15,7 +16,10 @@ const FileFlex = styled(Flex)`
 `
 
 export const DownloadExternal = (props: IProps) => (
-  <ExternalLink href={props.link}>
+  <ExternalLink
+    href={props.link}
+    onClick={() => props.handleClick && props.handleClick()}
+  >
     <FileFlex
       p={2}
       mb={1}

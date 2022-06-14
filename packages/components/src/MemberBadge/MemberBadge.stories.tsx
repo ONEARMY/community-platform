@@ -62,3 +62,10 @@ export const TypeMachineBuilder: ComponentStory<typeof MemberBadge> = () => (
     />
   </>
 )
+
+export const TypeSpace: ComponentStory<typeof MemberBadge> = () => (
+  <>
+    <MemberBadge size={100} profileType={'space'} />
+    <MemberBadge size={100} profileType={'space'} useLowDetailVersion />
+  </>
+)

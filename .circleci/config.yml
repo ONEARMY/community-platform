@@ -500,7 +500,7 @@ workflows:
             - 'Build Production Release'
           <<: *filter_only_production
           DEPLOY_ALIAS: fixing-fashion-prod
-          NOTIFY_SLACK: false
+          NOTIFY_SLACK: true
           context:
             - circle-ci-slack-context
             - fixing-fashion-prod

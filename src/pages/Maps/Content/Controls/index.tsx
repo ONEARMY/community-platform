@@ -1,11 +1,10 @@
 import * as React from 'react'
 import styled from '@emotion/styled'
 
-import { Button } from 'oa-components'
+import { Button, Modal } from 'oa-components'
 import { Flex, Box, Image, Text } from 'theme-ui'
 import filterIcon from 'src/assets/icons/icon-filters-mobile.png'
 import crossClose from 'src/assets/icons/cross-close.svg'
-import { Modal } from 'src/components/Modal/Modal'
 
 import { GroupingFilterDesktop } from './GroupingFilterDesktop'
 import { GroupingFilterMobile } from './GroupingFilterMobile'
@@ -164,31 +163,33 @@ class Controls extends React.Component<IProps, IState> {
             />
           </Button>
         </Box>
-        {showFiltersMobile && (
-          <Modal onDidDismiss={() => this.handleFilterMobileModal()}>
-            <Flex p={0} mx={-1} sx={{ justifyContent: 'space-between' }}>
-              <Text sx={{ fontWeight: 'bold' }}>Select filters</Text>
-              <Image
-                width="25px"
-                src={crossClose}
-                alt="cross-close"
-                onClick={() => this.handleFilterMobileModal()}
-              />
-            </Flex>
-            {Object.keys(groupedFilters).map((grouping) => (
-              <GroupingFilterMobile
-                key={grouping}
-                entityType={grouping}
-                items={groupedFilters[grouping]}
-                selectedItems={filtersSelected}
-                onChange={(selected) => {
-                  this.props.onFilterChange(selected as IMapPinType[])
-                  this.setState({ filtersSelected: selected })
-                }}
-              />
-            ))}
-          </Modal>
-        )}
+        <Modal
+          onDidDismiss={() => this.handleFilterMobileModal()}
+          isOpen={showFiltersMobile}
+        >
+          <Flex p={0} mx={-1} sx={{ justifyContent: 'space-between' }}>
+            <Text sx={{ fontWeight: 'bold' }}>Select filters</Text>
+            <Image
+              loading="lazy"
+              width="25px"
+              src={crossClose}
+              alt="cross-close"
+              onClick={() => this.handleFilterMobileModal()}
+            />
+          </Flex>
+          {Object.keys(groupedFilters).map((grouping) => (
+            <GroupingFilterMobile
+              key={grouping}
+              entityType={grouping}
+              items={groupedFilters[grouping]}
+              selectedItems={filtersSelected}
+              onChange={(selected) => {
+                this.props.onFilterChange(selected as IMapPinType[])
+                this.setState({ filtersSelected: selected })
+              }}
+            />
+          ))}
+        </Modal>
       </MapFlexBar>
     )
   }

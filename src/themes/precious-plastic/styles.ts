@@ -1,8 +1,13 @@
 import memberBadge from 'src/assets/images/themes/precious-plastic/badge-member.svg'
+import memberBadgeLowDetail from 'src/assets/icons/map-member.svg'
 import CollectionBadge from 'src/assets/images/badges/pt-collection-point.svg'
+import CollectionBadgeLowDetail from 'src/assets/icons/map-collection.svg'
 import MachineBadge from 'src/assets/images/badges/pt-machine-shop.svg'
+import MachineBadgeLowDetail from 'src/assets/icons/map-machine.svg'
 import WorkspaceBadge from 'src/assets/images/badges/pt-workspace.svg'
+import WorkspaceBadgeLowDetail from 'src/assets/icons/map-workspace.svg'
 import LocalComBadge from 'src/assets/images/badges/pt-local-community.svg'
+import LocalComBadgeLowDetail from 'src/assets/icons/map-community.svg'
 
 import type { ThemeWithName } from '../types'
 
@@ -37,8 +42,6 @@ export const zIndex = {
   logoContainer: 999,
   mapFlexBar: 2000,
   header: 3000,
-  modalBackdrop: 4000,
-  modalContent: 5000,
 }
 
 export type ButtonVariants =
@@ -199,12 +202,31 @@ const typography = {
 
 const StyledComponentTheme: ThemeWithName = {
   name: 'Precious Plastic',
+  profileGuidelinesURL:
+    'https://drive.google.com/file/d/1fXTtBbzgCO0EL6G9__aixwqc-Euqgqnd/view',
+  communityProgramURL:
+    'https://community.preciousplastic.com/academy/guides/community-program',
   badges: {
-    member: memberBadge,
-    workspace: WorkspaceBadge,
-    'community-builder': LocalComBadge,
-    'collection-point': CollectionBadge,
-    'machine-builder': MachineBadge,
+    member: {
+      lowDetail: memberBadgeLowDetail,
+      normal: memberBadge,
+    },
+    workspace: {
+      lowDetail: WorkspaceBadgeLowDetail,
+      normal: WorkspaceBadge,
+    },
+    'community-builder': {
+      lowDetail: LocalComBadgeLowDetail,
+      normal: LocalComBadge,
+    },
+    'collection-point': {
+      lowDetail: CollectionBadgeLowDetail,
+      normal: CollectionBadge,
+    },
+    'machine-builder': {
+      lowDetail: MachineBadgeLowDetail,
+      normal: MachineBadge,
+    },
   },
   bold,
   breakpoints,
@@ -219,6 +241,68 @@ const StyledComponentTheme: ThemeWithName = {
   },
   colors,
   fontSizes,
+  forms: {
+    input: {
+      background: colors.background,
+      borderRadius: 1,
+      border: '1px solid transparent',
+      fontFamily: `'Inter', Arial, sans-serif`,
+      fontSize: 1,
+      '&:focus': {
+        borderColor: colors.blue,
+        outline: 'none',
+        boxShadow: 'none',
+      },
+    },
+    inputOutline: {
+      background: 'white',
+      border: `2px solid ${colors.black}`,
+      borderRadius: 1,
+      '&:focus': {
+        borderColor: colors.blue,
+        outline: 'none',
+        boxShadow: 'none',
+      },
+    },
+    error: {
+      background: colors.background,
+      borderRadius: 1,
+      border: `1px solid ${colors.error}`,
+      fontFamily: `'Inter', Arial, sans-serif`,
+      fontSize: 1,
+      '&:focus': {
+        borderColor: colors.blue,
+        outline: 'none',
+        boxShadow: 'none',
+      },
+    },
+    textarea: {
+      background: colors.background,
+      border: `1px solid transparent`,
+      borderRadius: 1,
+      fontFamily: `'Inter', Arial, sans-serif`,
+      fontSize: 1,
+      padding: 2,
+      '&:focus': {
+        borderColor: colors.blue,
+        outline: 'none',
+        boxShadow: 'none',
+      },
+    },
+    textareaError: {
+      background: colors.background,
+      border: `1px solid ${colors.error}`,
+      borderRadius: 1,
+      fontFamily: `'Inter', Arial, sans-serif`,
+      fontSize: 1,
+      padding: 2,
+      '&:focus': {
+        borderColor: colors.blue,
+        outline: 'none',
+        boxShadow: 'none',
+      },
+    },
+  },
   maxContainerWidth,
   radii,
   regular,

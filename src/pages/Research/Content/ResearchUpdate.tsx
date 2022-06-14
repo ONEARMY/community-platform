@@ -2,18 +2,16 @@ import { format } from 'date-fns'
 import * as React from 'react'
 import Linkify from 'react-linkify'
 import ReactPlayer from 'react-player'
-import { Box, Card, Text } from 'theme-ui'
+import { Box, Card, Text, Flex, Heading } from 'theme-ui'
 import { Button } from 'oa-components'
-import { Flex } from 'theme-ui'
-import { Heading } from 'theme-ui'
 import { ImageGallery } from 'src/components/ImageGallery/ImageGallery'
-import { Link } from 'theme-ui'
 import type { IResearch } from 'src/models/research.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { ResearchComments } from './ResearchComments/ResearchComments'
 import styled from '@emotion/styled'
 import type { IComment } from 'src/models'
 import { useTheme } from '@emotion/react'
+import { Link } from 'react-router-dom'
 
 interface IProps {
   update: IResearch.UpdateDB
@@ -100,11 +98,14 @@ const ResearchUpdate: React.FC<IProps> = ({
                   {/* Show edit button for the creator of the research OR a super-admin */}
                   {isEditable && (
                     <Link
-                      ml="auto"
-                      mt={[0, 2, 2]}
-                      href={'/research/' + slug + '/edit-update/' + update._id}
+                      to={'/research/' + slug + '/edit-update/' + update._id}
                     >
-                      <Button variant={'primary'} data-cy={'edit-update'}>
+                      <Button
+                        variant={'primary'}
+                        data-cy={'edit-update'}
+                        ml="auto"
+                        mt={[0, 2, 2]}
+                      >
                         Edit
                       </Button>
                     </Link>

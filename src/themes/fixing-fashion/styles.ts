@@ -1,4 +1,7 @@
 import type { ThemeWithName } from '../types'
+import spaceBadge from 'src/assets/images/themes/fixing-fashion/badge_space.svg'
+import spaceBadgeLow from 'src/assets/images/themes/fixing-fashion/avatar_space.svg'
+import memberLow from 'src/assets/images/themes/fixing-fashion/avatar.svg'
 import member from 'src/assets/images/themes/fixing-fashion/badge.svg'
 
 // use enum to specify list of possible colors for typing
@@ -32,8 +35,6 @@ export const zIndex = {
   logoContainer: 999,
   mapFlexBar: 2000,
   header: 3000,
-  modalBackdrop: 4000,
-  modalContent: 5000,
 }
 
 export type ButtonVariants =
@@ -194,8 +195,19 @@ const typography = {
 
 const StyledComponentTheme: ThemeWithName = {
   name: 'Fixing Fashion',
+  profileGuidelinesURL:
+    'https://community.fixing.fashion/academy/guides/profile',
+  communityProgramURL:
+    'https://community.fixing.fashion/academy/guides/community-program',
   badges: {
-    member,
+    member: {
+      lowDetail: memberLow,
+      normal: member,
+    },
+    space: {
+      lowDetail: spaceBadgeLow,
+      normal: spaceBadge,
+    },
   },
   cards: {
     primary: {
@@ -211,6 +223,68 @@ const StyledComponentTheme: ThemeWithName = {
   space,
   radii,
   fontSizes,
+  forms: {
+    input: {
+      background: colors.background,
+      borderRadius: 1,
+      border: '1px solid transparent',
+      fontFamily: `'Inter', Arial, sans-serif`,
+      fontSize: 1,
+      '&:focus': {
+        borderColor: colors.blue,
+        outline: 'none',
+        boxShadow: 'none',
+      },
+    },
+    inputOutline: {
+      background: 'white',
+      border: `2px solid ${colors.black}`,
+      borderRadius: 1,
+      '&:focus': {
+        borderColor: colors.blue,
+        outline: 'none',
+        boxShadow: 'none',
+      },
+    },
+    error: {
+      background: colors.background,
+      borderRadius: 1,
+      border: `1px solid ${colors.error}`,
+      fontFamily: `'Inter', Arial, sans-serif`,
+      fontSize: 1,
+      '&:focus': {
+        borderColor: colors.blue,
+        outline: 'none',
+        boxShadow: 'none',
+      },
+    },
+    textarea: {
+      background: colors.background,
+      border: `1px solid transparent`,
+      borderRadius: 1,
+      fontFamily: `'Inter', Arial, sans-serif`,
+      fontSize: 1,
+      padding: 2,
+      '&:focus': {
+        borderColor: colors.blue,
+        outline: 'none',
+        boxShadow: 'none',
+      },
+    },
+    textareaError: {
+      background: colors.background,
+      border: `1px solid ${colors.error}`,
+      borderRadius: 1,
+      fontFamily: `'Inter', Arial, sans-serif`,
+      fontSize: 1,
+      padding: 2,
+      '&:focus': {
+        borderColor: colors.blue,
+        outline: 'none',
+        boxShadow: 'none',
+      },
+    },
+  },
   maxContainerWidth,
   regular,
   bold,

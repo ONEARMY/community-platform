@@ -1,6 +1,6 @@
-import type { IFieldProps } from './Fields'
+import type { FieldProps } from './types'
 import { FileInput } from '../FileInput/FileInput'
 
-export const FileInputField = ({ input, ...rest }: IFieldProps) => (
+export const FileInputField = ({ input, ...rest }: FieldProps) => (
   <FileInput {...rest} onFilesChange={(files) => input.onChange(files)} />
 )

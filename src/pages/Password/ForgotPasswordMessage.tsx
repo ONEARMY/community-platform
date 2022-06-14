@@ -1,9 +1,7 @@
 import React from 'react'
-import { Card, Flex } from 'theme-ui'
-import { Heading } from 'theme-ui'
+import { Card, Flex, Heading, Text } from 'theme-ui'
 import { Button } from 'oa-components'
-import { Text } from 'theme-ui'
-import { Link } from 'theme-ui'
+import { Link } from 'react-router-dom'
 
 class ForgotPasswordMessagePage extends React.Component {
   public render() {
@@ -40,7 +38,7 @@ class ForgotPasswordMessagePage extends React.Component {
                     password. Psss.. Try a password manager tool :)
                   </Text>
                   <Text color={'grey'} mt={2} sx={{ fontSize: 1 }}>
-                    Didn't receive the email? <Link href="#">Resend</Link>.
+                    Didn't receive the email? <Link to="#">Resend</Link>.
                   </Text>
                 </Flex>
               </Flex>

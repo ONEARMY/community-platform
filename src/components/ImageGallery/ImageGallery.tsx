@@ -84,6 +84,7 @@ export class ImageGallery extends PureComponent<IProps, IState> {
       <Flex sx={{ flexDirection: 'column' }}>
         <Flex sx={{ width: '100%' }}>
           <ImageWithPointer
+            loading="lazy"
             data-cy="active-image"
             sx={{ width: '100%' }}
             src={this.state.activeImage.downloadUrl}
@@ -105,6 +106,7 @@ export class ImageGallery extends PureComponent<IProps, IState> {
                   key={index}
                 >
                   <ThumbImage
+                    loading="lazy"
                     src={image.downloadUrl}
                     key={index}
                     crossOrigin=""

@@ -1,10 +1,7 @@
 import { observer } from 'mobx-react'
 import type { RouteComponentProps } from 'react-router'
-import { Box, Flex, Text } from 'theme-ui'
-import { Button } from 'oa-components'
-import { Heading } from 'theme-ui'
-import { Icon } from 'oa-components'
-import { Modal } from 'src/components/Modal/Modal'
+import { Box, Flex, Text, Heading } from 'theme-ui'
+import { Button, Icon, Modal } from 'oa-components'
 import { useResearchStore } from 'src/stores/Research/research.store'
 
 interface IProps extends RouteComponentProps<any> {
@@ -15,8 +12,8 @@ export const ResearchSubmitStatus = observer((props: IProps) => {
   const store = useResearchStore()
   const uploadStatus = store.researchUploadStatus
 
-  return uploadStatus.Start ? (
-    <Modal>
+  return (
+    <Modal isOpen={!!uploadStatus.Start}>
       <Flex sx={{ justifyContent: 'space-between' }}>
         <Heading variant="small" sx={{ textAlign: 'center' }}>
           Uploading Research
@@ -52,15 +49,15 @@ export const ResearchSubmitStatus = observer((props: IProps) => {
         View Research
       </Button>
     </Modal>
-  ) : null
+  )
 })
 
 export const UpdateSubmitStatus = observer((props: IProps) => {
   const store = useResearchStore()
   const uploadStatus = store.updateUploadStatus
 
-  return uploadStatus.Start ? (
-    <Modal>
+  return (
+    <Modal isOpen={!!uploadStatus.Start}>
       <Flex sx={{ justifyContent: 'space-between' }}>
         <Heading variant="small" sx={{ textAlign: 'center' }}>
           Uploading Update
@@ -96,5 +93,5 @@ export const UpdateSubmitStatus = observer((props: IProps) => {
         View Research
       </Button>
     </Modal>
-  ) : null
+  )
 })

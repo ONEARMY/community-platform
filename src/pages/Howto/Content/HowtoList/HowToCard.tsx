@@ -1,11 +1,10 @@
 import { LazyLoadImage } from 'react-lazy-load-image-component'
-import { Text, Card, Flex } from 'theme-ui'
+import { Text, Card, Flex, Heading } from 'theme-ui'
+import { Link as RouterLink } from 'react-router-dom'
 import ModerationStatusText from 'src/components/ModerationStatusText/ModerationStatustext'
-import { Link } from 'theme-ui'
 import { FlagIconHowTos, Icon } from 'oa-components'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import type { IHowtoDB } from 'src/models/howto.models'
-import { Heading } from 'theme-ui'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 import { useTheme } from '@emotion/react'
@@ -28,10 +27,10 @@ export const HowToCard = (props: IProps) => {
             top={'62%'}
           />
         )}
-        <Link
+        <RouterLink
           key={howto._id}
-          href={`/how-to/${encodeURIComponent(howto.slug)}`}
-          sx={{ width: '100%' }}
+          to={`/how-to/${encodeURIComponent(howto.slug)}`}
+          style={{ width: '100%' }}
         >
           <Flex
             sx={{
@@ -88,7 +87,7 @@ export const HowToCard = (props: IProps) => {
               )}
             </Flex>
           </Flex>
-        </Link>
+        </RouterLink>
       </Flex>
     </Card>
   )

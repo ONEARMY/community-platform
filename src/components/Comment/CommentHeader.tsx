@@ -1,8 +1,9 @@
-import { Box, Flex, Text, Link, Image } from 'theme-ui'
+import { Box, Flex, Text, Image } from 'theme-ui'
 import { FlagIconHowTos } from 'oa-components'
 import type { IComment } from 'src/models'
 import theme from 'src/themes/styled.theme'
 import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
+import { Link } from 'react-router-dom'
 
 interface IProps extends Omit<IComment, 'text' | '_id' | '_creatorId'> {
   isUserVerified?: boolean
@@ -21,16 +22,22 @@ export const CommentHeader = ({
         {creatorCountry && <FlagIconHowTos code={creatorCountry} />}
         <span style={{ marginLeft: creatorCountry ? '5px' : 0 }}>
           <Link
-            sx={{
+            style={{
               textDecoration: 'underline',
               color: 'inherit',
             }}
-            href={'/u/' + creatorName}
+            to={'/u/' + creatorName}
           >
             {creatorName}
           </Link>
           {isUserVerified ? (
-            <Image src={VerifiedBadgeIcon} ml={1} height="12px" width="12px" />
+            <Image
+              loading="lazy"
+              src={VerifiedBadgeIcon}
+              ml={1}
+              height="12px"
+              width="12px"
+            />
           ) : null}
         </span>
       </Box>

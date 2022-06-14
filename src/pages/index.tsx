@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom'
-import GoogleAnalytics from 'src/components/GoogleAnalytics'
+import GoogleAnalytics from 'src/pages/common/GoogleAnalytics'
 import { NotFoundPage } from './NotFound/NotFound'
 import ScrollToTop from './../components/ScrollToTop/ScrollToTop'
 import Header from './common/Header/Header'
@@ -14,12 +14,12 @@ import {
   POLICY_PAGES,
   getAvailablePageList,
 } from './PageList'
-import { Flex, Box } from 'theme-ui'
-import DevSiteHeader from 'src/components/DevSiteHeader/DevSiteHeader'
+import { Flex, Box, Button } from 'theme-ui'
+import DevSiteHeader from 'src/pages/common/DevSiteHeader/DevSiteHeader'
 import { getSupportedModules } from 'src/modules'
 import GlobalSiteFooter from './common/GlobalSiteFooter/GlobalSiteFooter'
-import DiscordLink from 'src/components/DiscordLink/DiscordLink'
 import NotificationBanner from 'src/components/NotificationBanner/NotificationBanner'
+import { ExternalLink } from 'oa-components'
 
 export class Routes extends React.Component<
   any,
@@ -101,7 +101,17 @@ export class Routes extends React.Component<
             display: ['none', 'none', 'block'],
           }}
         >
-          <DiscordLink />
+          <ExternalLink
+            href="https://discordapp.com/invite/cGZ5hKP"
+            data-cy="feedback"
+          >
+            <Button variant="primary">
+              Join our chat{' '}
+              <span role="img" aria-label="talk-bubble">
+                💬
+              </span>
+            </Button>
+          </ExternalLink>
         </Box>
       </Flex>
     )

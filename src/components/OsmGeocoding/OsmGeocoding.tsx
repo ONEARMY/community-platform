@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { Input } from '../Form/elements'
+import { Input } from 'theme-ui'
 import { OsmGeocodingResultsList } from './OsmGeocodingResultsList'
 import { logger } from 'src/logger'
 import { useDebouncedCallback } from 'use-debounce'

@@ -1,12 +1,10 @@
 import * as React from 'react'
 import { Field, Form } from 'react-final-form'
-import { Button } from 'oa-components'
-import { InputField } from 'src/components/Form/Fields'
+import { Button, FieldInput } from 'oa-components'
 import type { UserStore } from 'src/stores/User/user.store'
-import { Text } from 'theme-ui'
+import { Text, Flex } from 'theme-ui'
 import theme from 'src/themes/styled.theme'
 import styled from '@emotion/styled'
-import { Flex } from 'theme-ui'
 
 interface IFormValues {
   password?: string
@@ -93,7 +91,7 @@ export class ChangeEmailForm extends React.Component<IProps, IState> {
                     <Label htmlFor="newEmail">New email address :</Label>
                     <Field
                       name="newEmail"
-                      component={InputField}
+                      component={FieldInput}
                       placeholder="New email address"
                       type="email"
                       autocomplete="off"
@@ -104,7 +102,7 @@ export class ChangeEmailForm extends React.Component<IProps, IState> {
                     <Label htmlFor="oldPassword">Password :</Label>
                     <Field
                       name="password"
-                      component={InputField}
+                      component={FieldInput}
                       placeholder="password"
                       type="password"
                       autocomplete="off"

@@ -64,6 +64,33 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "tedspare",
+      "name": "Ted Spare",
+      "avatar_url": "https://avatars.githubusercontent.com/u/36117635?v=4",
+      "profile": "https://tedspare.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "eliasvelardezft",
+      "name": "Elias Velardez",
+      "avatar_url": "https://avatars.githubusercontent.com/u/40184787?v=4",
+      "profile": "https://www.linkedin.com/in/eliasvelardez",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "AlfonsoGhislieri",
+      "name": "Alfonso",
+      "avatar_url": "https://avatars.githubusercontent.com/u/652368?v=4",
+      "profile": "https://medium.com/@Alfonso_Ghislieri",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

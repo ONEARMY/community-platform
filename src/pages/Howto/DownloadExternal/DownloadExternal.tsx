@@ -1,6 +1,5 @@
-import { Icon } from 'oa-components'
-import { Flex } from 'theme-ui'
-import { Text, Link } from 'theme-ui'
+import { Icon, ExternalLink } from 'oa-components'
+import { Flex, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 
@@ -16,7 +15,7 @@ const FileFlex = styled(Flex)`
 `
 
 export const DownloadExternal = (props: IProps) => (
-  <Link href={props.link} target="_blank" rel="noopener noreferrer">
+  <ExternalLink href={props.link}>
     <FileFlex
       p={2}
       mb={1}
@@ -32,5 +31,5 @@ export const DownloadExternal = (props: IProps) => (
         Download files
       </Text>
     </FileFlex>
-  </Link>
+  </ExternalLink>
 )

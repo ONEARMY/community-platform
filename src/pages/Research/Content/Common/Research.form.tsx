@@ -5,14 +5,11 @@ import * as React from 'react'
 import { Field, Form } from 'react-final-form'
 import type { RouteComponentProps } from 'react-router'
 import { Prompt } from 'react-router'
-import { Box, Card } from 'theme-ui'
+import { Box, Card, Flex, Heading } from 'theme-ui'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
-import { Button } from 'oa-components'
+import { Button, FieldInput, FieldTextarea } from 'oa-components'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
-import { Flex } from 'theme-ui'
-import { InputField, TextAreaField } from 'src/components/Form/Fields'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
-import { Heading } from 'theme-ui'
 import type { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import theme from 'src/themes/styled.theme'
@@ -197,7 +194,7 @@ const ResearchForm = observer((props: IProps) => {
                                 validateFields={[]}
                                 validate={validateTitle}
                                 isEqual={COMPARISONS.textInput}
-                                component={InputField}
+                                component={FieldInput}
                                 maxLength="60"
                                 placeholder="Can we make a chair from.. (max 60 characters)"
                               />
@@ -213,7 +210,7 @@ const ResearchForm = observer((props: IProps) => {
                                 validate={required}
                                 validateFields={[]}
                                 isEqual={COMPARISONS.textInput}
-                                component={TextAreaField}
+                                component={FieldTextarea}
                                 style={{
                                   resize: 'none',
                                   flex: 1,

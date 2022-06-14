@@ -1,7 +1,7 @@
 import { Component } from 'react'
-import { HiddenInputField } from 'src/components/Form/Fields'
 import { Label, HiddenInput } from '../elements'
-import { Image, Text } from 'theme-ui'
+import { Image, Input, Text } from 'theme-ui'
+import type { FieldRenderProps } from 'react-final-form'
 
 interface IProps {
   value: string
@@ -17,6 +17,24 @@ interface IProps {
 interface IState {
   showDeleteModal: boolean
 }
+
+type FieldProps = FieldRenderProps<any, any> & {
+  children?: React.ReactNode
+  disabled?: boolean
+  'data-cy'?: string
+  customOnBlur?: (event) => void
+}
+
+const HiddenInputField = ({ input, meta, ...rest }: FieldProps) => (
+  <>
+    <Input
+      type="hidden"
+      variant={meta.error && meta.touched ? 'error' : 'input'}
+      {...input}
+      {...rest}
+    />
+  </>
+)
 
 // validation - return undefined if no error (i.e. valid)
 const isRequired = (value: any) => (value ? undefined : 'Required')
@@ -68,6 +86,7 @@ class CustomCheckbox extends Component<IProps, IState> {
         />
         {imageSrc && (
           <Image
+            loading="lazy"
             px={3}
             src={imageSrc}
             sx={{ width: ['70px', '70px', '100%'] }}

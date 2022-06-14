@@ -1,12 +1,11 @@
 import { observer } from 'mobx-react'
-import { Box, Flex } from 'theme-ui'
+import { Box, Flex, Heading } from 'theme-ui'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 import { Button } from 'oa-components'
-import { Heading } from 'theme-ui'
-import { Link } from 'theme-ui'
 import ResearchListItem from './ResearchListItem'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { useTheme } from '@emotion/react'
+import { Link } from 'react-router-dom'
 
 const ResearchList = observer(() => {
   const store = useResearchStore()
@@ -30,11 +29,8 @@ const ResearchList = observer(() => {
       {filteredResearches.map((item) => (
         <ResearchListItem key={item._id} item={item} />
       ))}
-      <Box mb={4}>
-        <Link
-          href={store.activeUser ? '/research/create' : 'sign-up'}
-          mb={[3, 3, 0]}
-        >
+      <Box mb={[3, 3, 0]}>
+        <Link to={store.activeUser ? '/research/create' : 'sign-up'}>
           <AuthWrapper roleRequired="beta-tester">
             <Button>Add Research</Button>
           </AuthWrapper>

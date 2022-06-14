@@ -8,6 +8,7 @@ import type {
   IHowtoFormInput,
   IHowtoStep,
   IHowToStepFormInput,
+  IComment,
 } from 'src/models/howto.models'
 import type { ISelectedTags } from 'src/models/tags.model'
 import type { IUser } from 'src/models/user.models'
@@ -20,8 +21,7 @@ import {
 import type { RootStore } from '../index'
 import { ModuleStore } from '../common/module.store'
 import type { IUploadedFileMeta } from '../storage'
-import { MAX_COMMENT_LENGTH } from 'src/components/Comment/constants'
-import type { IComment } from 'src/models/howto.models'
+import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
 
 const COLLECTION_NAME = 'howtos'
@@ -102,7 +102,6 @@ export class HowtoStore extends ModuleStore {
     const activeHowto = collection.length > 0 ? collection[0] : undefined
     logger.debug('active howto', activeHowto)
     this.activeHowto = activeHowto
-
     return activeHowto
   }
 

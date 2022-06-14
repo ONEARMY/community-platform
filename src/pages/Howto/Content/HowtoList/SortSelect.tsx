@@ -4,7 +4,7 @@ import Select from 'react-select'
 import type { OptionsType, ValueType } from 'react-select/lib/types'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import { DropdownIndicator } from 'src/components/DropdownIndicator'
-import { FieldContainer } from 'src/components/Form/elements'
+import { FieldContainer } from 'src/components/Form/FieldContainer'
 import { FilterStyles } from 'src/components/Form/Select.field'
 
 interface ISortOption {

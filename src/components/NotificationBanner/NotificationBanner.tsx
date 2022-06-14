@@ -1,8 +1,8 @@
 import { Flex, Text } from 'theme-ui'
 import theme from 'src/themes/styled.theme'
-import { Link } from 'theme-ui'
 import { observer } from 'mobx-react-lite'
 import { useCommonStores } from 'src'
+import { Link } from 'react-router-dom'
 
 /**
  * A simple notification banner component that reminds users to fill profile details
@@ -18,7 +18,7 @@ const NotificationBanner = observer(() => {
     activeUser.links.length !== 0
   if (isProfileFilled) return null
   return (
-    <Link href="/settings">
+    <Link to="/settings">
       <Flex
         data-cy="notificationBanner"
         bg={theme.colors.red2}

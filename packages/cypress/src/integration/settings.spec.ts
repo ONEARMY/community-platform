@@ -167,7 +167,7 @@ describe('[Settings]', () => {
     })
   })
 
-  describe('[Focus Member]', () => {
+  describe.only('[Focus Member]', () => {
     const freshSettings = {
       _authID: 'pbx4jStD8sNj4OEZTg4AegLTl6E3',
       _id: 'settings_member_new',
@@ -240,7 +240,7 @@ describe('[Settings]', () => {
       })
     })
 
-    it.only('[Add a user pin]', () => {
+    it('[Add a user pin]', () => {
       const expected = {
         _authID: 'pbx4jStD8sNj4OEZTg4AegLTl6E3',
         _deleted: false,
@@ -287,6 +287,8 @@ describe('[Settings]', () => {
       cy.clickMenuItem(UserMenuItem.Settings)
       selectFocus(expected.profileType)
 
+      cy.get('[data-cy=location-dropdown]').should('exist')
+
       cy.get('[data-cy="add-a-map-pin"]').click()
 
       setInfo({
@@ -307,6 +309,11 @@ describe('[Settings]', () => {
         searchKeyword: 'singapo',
         locationName: expected.location.value,
       })
+      cy.get('[data-cy=location-dropdown]').should('not.exist')
+
+      cy.step('Remove a user pin')
+      cy.get('[data-cy="remove-a-member-map-pin"]').click()
+      cy.get('[data-cy=location-dropdown]').should('exist')
 
       cy.get('[data-cy=save]').click()
       cy.get('[data-cy=save]').should('not.be.disabled')

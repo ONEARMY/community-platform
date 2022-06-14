@@ -1,14 +1,10 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 import type { CategoriesStore } from 'src/stores/Categories/categories.store'
-import { Button } from 'oa-components'
-import { Heading } from 'theme-ui'
-import { Box, Text } from 'theme-ui'
-import { Flex } from 'theme-ui'
-import { Modal } from 'src/components/Modal/Modal'
+import { Button, Modal } from 'oa-components'
+import { Heading, Box, Text, Input, Flex } from 'theme-ui'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
-import { Input } from 'src/components/Form/elements'
 import type { ICategory } from 'src/models/categories.model'
 
 // we include props from react-final-form fields so it can be used as a custom field component
@@ -88,41 +84,39 @@ export class AdminCategories extends React.Component<IProps, IState> {
           />
         </Box>
 
-        {showEditor && (
-          <Modal>
-            <Box mb={3} bg={'white'} p={2}>
-              {categoryForm._id && <Text>_id: {categoryForm._id}</Text>}
-              <Input
-                type="text"
-                name="label"
-                placeholder="Label"
-                value={categoryForm.label}
-                onChange={this.handleFormChange}
-              />
-              {msg && <Text color="red">{msg}</Text>}
-              <Flex mt={3}>
-                <Button
-                  mr={2}
-                  onClick={() => this.setState({ showEditor: false })}
-                  variant={'secondary'}
-                >
-                  Cancel
+        <Modal isOpen={!!showEditor}>
+          <Box mb={3} bg={'white'} p={2}>
+            {categoryForm._id && <Text>_id: {categoryForm._id}</Text>}
+            <Input
+              type="text"
+              name="label"
+              placeholder="Label"
+              value={categoryForm.label}
+              onChange={this.handleFormChange}
+            />
+            {msg && <Text color="red">{msg}</Text>}
+            <Flex mt={3}>
+              <Button
+                mr={2}
+                onClick={() => this.setState({ showEditor: false })}
+                variant={'secondary'}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={this.saveEditor}
+                disabled={!categoryForm.label || updating}
+              >
+                Save
+              </Button>
+              {categoryForm._id && (
+                <Button onClick={this.deleteEditor} disabled={updating}>
+                  Delete
                 </Button>
-                <Button
-                  onClick={this.saveEditor}
-                  disabled={!categoryForm.label || updating}
-                >
-                  Save
-                </Button>
-                {categoryForm._id && (
-                  <Button onClick={this.deleteEditor} disabled={updating}>
-                    Delete
-                  </Button>
-                )}
-              </Flex>
-            </Box>
-          </Modal>
-        )}
+              )}
+            </Flex>
+          </Box>
+        </Modal>
       </Box>
     )
   }

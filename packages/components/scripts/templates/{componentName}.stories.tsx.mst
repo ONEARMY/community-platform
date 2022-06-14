@@ -7,5 +7,5 @@ export default {
 } as ComponentMeta<typeof {{ComponentName}}>
 
 export const Default: ComponentStory<typeof {{ComponentName}}> = () => (
-  <{{ComponentName}}>/>
+  <{{ComponentName}}/>
 )

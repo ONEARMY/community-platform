@@ -91,6 +91,7 @@ export const glyphs: IGlyphs = {
   'chevron-right': <MdChevronRight />,
   star: iconMap.star,
   'star-active': iconMap.starActive,
+  verified: iconMap.verified,
   thunderbolt: <AiFillThunderbolt />,
 }
 

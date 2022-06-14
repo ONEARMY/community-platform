@@ -1,15 +1,15 @@
 import * as React from 'react'
 import type { IEvent, IEventDB } from 'src/models/events.models'
 import { Button } from 'oa-components'
-import { Flex, Box, Link } from 'theme-ui'
+import { Flex, Box, Heading } from 'theme-ui'
 import MoreContainer from 'src/components/MoreContainer/MoreContainer'
-import { Heading } from 'theme-ui'
-import EventCard from 'src/components/EventCard/EventCard'
+import EventCard from 'src/pages/Events/EventCard/EventCard'
 import TagsSelect from 'src/components/Tags/TagsSelect'
 import { inject, observer } from 'mobx-react'
 import type { EventStore } from 'src/stores/Events/events.store'
 import type { UserStore } from 'src/stores/User/user.store'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
+import { Link } from 'react-router-dom'
 
 interface InjectedProps {
   eventStore: EventStore
@@ -93,10 +93,8 @@ export class EventsList extends React.Component<any> {
                 }}
               >
                 <Link
-                  sx={{ width: '100%', display: 'block' }}
-                  href={
-                    this.props.userStore!.user ? '/events/create' : 'sign-up'
-                  }
+                  style={{ width: '100%', display: 'block' }}
+                  to={this.props.userStore!.user ? '/events/create' : 'sign-up'}
                 >
                   <Button
                     sx={{ width: '100%' }}
@@ -124,7 +122,7 @@ export class EventsList extends React.Component<any> {
                 </Flex>
               )}
               <Flex sx={{ justifyContent: 'center' }} mt={20}>
-                <Link href={'#'} style={{ visibility: 'hidden' }}>
+                <Link to={'#'} style={{ visibility: 'hidden' }}>
                   <Button variant={'secondary'} data-cy="more-events">
                     More Events
                   </Button>
@@ -142,7 +140,7 @@ export class EventsList extends React.Component<any> {
                   <Heading>Connect with a likeminded community.</Heading>
                   <Heading>All around the planet.</Heading>
                   <Link
-                    href={
+                    to={
                       this.props.userStore!.user ? '/events/create' : 'sign-up'
                     }
                   >

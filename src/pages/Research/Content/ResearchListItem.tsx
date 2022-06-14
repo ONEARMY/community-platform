@@ -1,12 +1,11 @@
 import { format } from 'date-fns'
 import * as React from 'react'
-import { Card, Flex, Link } from 'theme-ui'
-import { Heading } from 'theme-ui'
+import { Card, Flex, Heading, Text } from 'theme-ui'
 import { ModerationStatusText } from 'src/components/ModerationStatusText/ModerationStatustext'
-import { Text } from 'theme-ui'
 import type { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
+import { Link } from 'react-router-dom'
 
 interface IProps {
   item: IResearch.ItemDB
@@ -16,9 +15,9 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => (
   <Card data-cy="research=list-item" data-id={item._id} mb={3}>
     <Flex sx={{ width: '100%', position: 'relative' }}>
       <Link
-        href={`/research/${encodeURIComponent(item.slug)}`}
+        to={`/research/${encodeURIComponent(item.slug)}`}
         key={item._id}
-        sx={{ width: '100%' }}
+        style={{ width: '100%' }}
       >
         <Flex px={3} py={3} sx={{ flexDirection: ['column', 'column', 'row'] }}>
           <Flex

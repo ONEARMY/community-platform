@@ -1,12 +1,10 @@
 import * as React from 'react'
 import { Field, Form } from 'react-final-form'
-import { Button } from 'oa-components'
-import { InputField } from 'src/components/Form/Fields'
+import { Button, FieldInput } from 'oa-components'
 import type { UserStore } from 'src/stores/User/user.store'
-import { Text } from 'theme-ui'
+import { Text, Flex } from 'theme-ui'
 import theme from 'src/themes/styled.theme'
 import styled from '@emotion/styled'
-import { Flex } from 'theme-ui'
 
 interface IFormValues {
   oldPassword?: string
@@ -84,7 +82,7 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
                     <Label htmlFor="oldPassword">Old password :</Label>
                     <Field
                       name="oldPassword"
-                      component={InputField}
+                      component={FieldInput}
                       placeholder="Old password"
                       type="password"
                       autocomplete="off"
@@ -95,7 +93,7 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
                     <Label htmlFor="newPassword">New password :</Label>
                     <Field
                       name="newPassword"
-                      component={InputField}
+                      component={FieldInput}
                       placeholder="New password"
                       type="password"
                       autocomplete="off"
@@ -108,7 +106,7 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
                     </Label>
                     <Field
                       name="repeatPassword"
-                      component={InputField}
+                      component={FieldInput}
                       placeholder="Repeat new password"
                       type="password"
                       autocomplete="off"

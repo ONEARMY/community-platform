@@ -1,9 +1,8 @@
 import * as React from 'react'
 import { observer, inject } from 'mobx-react'
-import { Heading } from 'theme-ui'
+import { Heading, Box, Flex, Text } from 'theme-ui'
 import { Field } from 'react-final-form'
-import { TextAreaField } from 'src/components/Form/Fields'
-import { Box, Flex, Link, Text } from 'theme-ui'
+import { ExternalLink, FieldTextarea } from 'oa-components'
 import { FlexSectionContainer } from './elements'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import theme from 'src/themes/styled.theme'
@@ -11,13 +10,20 @@ import { required } from 'src/utils/validators'
 import type { ILocation } from 'src/models/common.models'
 import MapWithDraggablePin from 'src/components/MapWithDraggablePin/MapWithDraggablePin'
 import { randomIntFromInterval } from 'src/utils/helpers'
+import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
-@inject('mapsStore', 'userStore')
+@inject('mapsStore', 'userStore', 'themeStore')
 @observer
 export class WorkspaceMapPinSection extends React.Component<any> {
   pinFilters = MAP_GROUPINGS
   constructor(props) {
     super(props)
+  }
+
+  get injected() {
+    return this.props as {
+      themeStore: ThemeStore
+    }
   }
 
   render() {
@@ -32,13 +38,15 @@ export class WorkspaceMapPinSection extends React.Component<any> {
           <Text sx={{ fontSize: 2 }}>
             In order to have your pin accepted on our map you have to collect at
             least 6 stars in the Ally Checklist. Learn more about the{' '}
-            <Link
-              href="https://community.preciousplastic.com/academy/guides/community-program"
-              target="_blank"
+            <ExternalLink
+              href={
+                this.injected.themeStore?.currentTheme.styles
+                  .communityProgramURL
+              }
               sx={{ color: 'black', textDecoration: 'underline' }}
             >
               Community Program
-            </Link>{' '}
+            </ExternalLink>{' '}
             and how you can join.
           </Text>
         </Box>
@@ -49,7 +57,7 @@ export class WorkspaceMapPinSection extends React.Component<any> {
           <Field
             data-cy="pin-description"
             name="mapPinDescription"
-            component={TextAreaField}
+            component={FieldTextarea}
             maxLength="70"
             style={{ height: 'inherit' }}
             rows="1"

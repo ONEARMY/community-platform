@@ -1,11 +1,8 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 import { Button } from 'oa-components'
-import { Heading } from 'theme-ui'
+import { Heading, Box, Text, Input, Flex } from 'theme-ui'
 import type { AdminStore } from 'src/stores/Admin/admin.store'
-import { Box, Text } from 'theme-ui'
-import { Input } from 'src/components/Form/elements'
-import { Flex } from 'theme-ui'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
 // we include props from react-final-form fields so it can be used as a custom field component

@@ -1,11 +1,12 @@
 import { Component } from 'react'
 import theme from 'src/themes/styled.theme'
-import { Link, Flex, Image, Text } from 'theme-ui'
+import { Flex, Image, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 import { inject, observer } from 'mobx-react'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
 import { VERSION } from 'src/config/config'
+import { Link } from 'react-router-dom'
 
 interface IProps {
   isMobile?: boolean
@@ -46,19 +47,19 @@ export class Logo extends Component<IProps> {
     return (
       <>
         <LogoContainer>
-          <Link
-            sx={{ zIndex: 1000, display: 'flex', alignItems: 'center' }}
-            color="black"
-            ml={[0, 4]}
-            href="/"
-          >
+          <Link to="/">
             <Flex
+              ml={[0, 4]}
               sx={{
+                zIndex: 1000,
+                display: 'flex',
+                alignItems: 'center',
                 width: ['50px', '50px', '100px'],
                 height: ['50px', '50px', '100px'],
               }}
             >
               <Image
+                loading="lazy"
                 src={logo}
                 sx={{
                   width: [50, 50, 100],
@@ -72,6 +73,7 @@ export class Logo extends Component<IProps> {
               className="sr-only"
               ml={2}
               sx={{ display: ['none', 'none', 'block'] }}
+              color="black"
             >
               Precious Plastic
             </Text>

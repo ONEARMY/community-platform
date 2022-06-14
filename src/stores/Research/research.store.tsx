@@ -6,13 +6,16 @@ import {
   runInAction,
   toJS,
 } from 'mobx'
-import type { IResearchStats, IResearchDB } from 'src/models/research.models'
+import type {
+  IResearchStats,
+  IResearchDB,
+  IResearch,
+} from 'src/models/research.models'
 import { createContext, useContext } from 'react'
 import type { IConvertedFileMeta } from 'src/types'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { logger } from 'src/logger'
 import type { IComment, IUser } from 'src/models'
-import type { IResearch } from 'src/models/research.models'
 import { ModuleStore } from 'src/stores/common/module.store'
 import {
   filterModerableItems,
@@ -20,7 +23,7 @@ import {
   needsModeration,
   randomID,
 } from 'src/utils/helpers'
-import { MAX_COMMENT_LENGTH } from 'src/components/Comment/constants'
+import { MAX_COMMENT_LENGTH } from 'src/constants'
 
 const COLLECTION_NAME = 'research'
 

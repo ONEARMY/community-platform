@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Card, Flex } from 'theme-ui'
+import { Card, Flex, Heading, Box } from 'theme-ui'
 import type { IUserPP } from 'src/models/user_pp.models'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { UserStore } from 'src/stores/User/user.store'
@@ -12,7 +12,6 @@ import { CollectionSection } from './content/formSections/Collection.section'
 import { AccountSettingsSection } from './content/formSections/AccountSettings.section'
 import { Button } from 'oa-components'
 import { ProfileGuidelines } from './content/PostingGuidelines'
-import { Heading } from 'theme-ui'
 import { TextNotification } from 'src/components/Notification/TextNotification'
 import { Form } from 'react-final-form'
 import { ARRAY_ERROR, FORM_ERROR } from 'final-form'
@@ -21,7 +20,6 @@ import { WorkspaceMapPinSection } from './content/formSections/WorkspaceMapPin.s
 import { MemberMapPinSection } from './content/formSections/MemberMapPin.section'
 import theme from 'src/themes/styled.theme'
 import INITIAL_VALUES from './Template'
-import { Box } from 'theme-ui'
 import { Prompt } from 'react-router'
 import { toJS } from 'mobx'
 import { isModuleSupported, MODULE } from 'src/modules'
@@ -42,6 +40,7 @@ interface IState {
   formValues: IUserPP
   notification: { message: string; icon: string; show: boolean }
   showDeleteDialog?: boolean
+  showLocationDropdown: boolean
   user?: IUserPP
 }
 
@@ -80,6 +79,7 @@ export class UserSettings extends React.Component<IProps, IState> {
       formValues,
       notification: { message: '', icon: '', show: false },
       user,
+      showLocationDropdown: !user?.location?.latlng,
     })
   }
 
@@ -134,6 +134,19 @@ export class UserSettings extends React.Component<IProps, IState> {
       errors.links[ARRAY_ERROR] = 'Must have at least one link'
     }
     return errors
+  }
+
+  toggleLocationDropdown = () => {
+    this.setState((prevState) => ({
+      ...prevState,
+      showLocationDropdown: !prevState.showLocationDropdown,
+      formValues: {
+        ...prevState.formValues,
+        mapPinDescription: '',
+        location: null,
+        country: null,
+      },
+    }))
   }
 
   render() {
@@ -229,11 +242,14 @@ export class UserSettings extends React.Component<IProps, IState> {
 
                       {values.profileType === ProfileType.MEMBER &&
                         isModuleSupported(MODULE.MAP) && (
-                          <MemberMapPinSection />
+                          <MemberMapPinSection
+                            toggleLocationDropdown={this.toggleLocationDropdown}
+                          />
                         )}
                       <UserInfosSection
                         formValues={values}
                         mutators={form.mutators}
+                        showLocationDropdown={this.state.showLocationDropdown}
                       />
                     </Flex>
                   </form>

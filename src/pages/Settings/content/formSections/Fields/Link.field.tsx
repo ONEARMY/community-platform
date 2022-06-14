@@ -1,11 +1,8 @@
 import { Component } from 'react'
 import { COM_TYPE_MOCKS } from 'src/mocks/Selectors'
 import { Field } from 'react-final-form'
-import { InputField } from 'src/components/Form/Fields'
-import { Button } from 'oa-components'
-import { Modal } from 'src/components/Modal/Modal'
-import { Text } from 'theme-ui'
-import { Flex } from 'theme-ui'
+import { Button, FieldInput, Modal } from 'oa-components'
+import { Text, Flex } from 'theme-ui'
 import { SelectField } from 'src/components/Form/Select.field'
 import { validateUrl, validateEmail, required } from 'src/utils/validators'
 import { formatLink } from 'src/utils/formatters'
@@ -96,7 +93,7 @@ export class ProfileLinkField extends Component<IProps, IState> {
           name={`${name}.url`}
           validate={(value) => this.validateDependingOnType(value)}
           validateFields={[]}
-          component={InputField}
+          component={FieldInput}
           placeholder="Link"
           format={(v) => formatLink(v, this.state.linkType)}
           formatOnBlur={true}
@@ -104,8 +101,11 @@ export class ProfileLinkField extends Component<IProps, IState> {
         <DeleteButton
           sx={{ display: ['none', 'none', 'block'], height: '40px' }}
         />
-        {this.state.showDeleteModal && (
-          <Modal onDidDismiss={() => this.toggleDeleteModal()}>
+        {
+          <Modal
+            onDidDismiss={() => this.toggleDeleteModal()}
+            isOpen={!!this.state.showDeleteModal}
+          >
             <Text>Are you sure you want to delete this link?</Text>
             <Flex p={0} mx={-1} sx={{ justifyContent: 'flex-end' }}>
               <Flex px={1}>
@@ -126,7 +126,7 @@ export class ProfileLinkField extends Component<IProps, IState> {
               </Flex>
             </Flex>
           </Modal>
-        )}
+        }
       </Flex>
     )
   }

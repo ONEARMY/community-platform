@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import { HiddenInput } from '../elements'
-import { Label, Image, Flex, Box, Text } from 'theme-ui'
-import { HiddenInputField } from 'src/components/Form/Fields'
+import { Label, Image, Flex, Box, Text, Input } from 'theme-ui'
+import type { FieldRenderProps } from 'react-final-form'
 
 interface IProps {
   value: string
@@ -19,6 +19,24 @@ interface IProps {
 interface IState {
   showDeleteModal: boolean
 }
+
+type FieldProps = FieldRenderProps<any, any> & {
+  children?: React.ReactNode
+  disabled?: boolean
+  'data-cy'?: string
+  customOnBlur?: (event) => void
+}
+
+const HiddenInputField = ({ input, meta, ...rest }: FieldProps) => (
+  <>
+    <Input
+      type="hidden"
+      variant={meta.error && meta.touched ? 'error' : 'input'}
+      {...input}
+      {...rest}
+    />
+  </>
+)
 
 // validation - return undefined if no error (i.e. valid)
 const isRequired = (value: any) => (value ? undefined : 'Required')
@@ -93,6 +111,7 @@ class CustomRadioField extends Component<IProps, IState> {
         />
         {imageSrc && (
           <Image
+            loading="lazy"
             px={3}
             src={imageSrc}
             sx={{ width: ['100px', '100px', '100%'] }}

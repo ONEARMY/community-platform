@@ -5,19 +5,15 @@ import type {
   PlasticTypeLabel,
 } from 'src/models/user_pp.models'
 
-import { Heading } from 'theme-ui'
-import { Box, Image } from 'theme-ui'
+import { Heading, Box, Image, Flex, Text } from 'theme-ui'
 // import slick and styles
 import Slider from 'react-slick'
 import 'src/assets/css/slick.min.css'
 import styled from '@emotion/styled'
-import { Flex } from 'theme-ui'
-import { Text } from 'theme-ui'
 
-import { MemberBadge } from 'oa-components'
+import { MemberBadge, Icon, FlagIcon } from 'oa-components'
 
 import theme from 'src/themes/styled.theme'
-import { Icon, FlagIcon } from 'oa-components'
 
 // Plastic types
 import HDPEIcon from 'src/assets/images/plastic-types/hdpe.svg'
@@ -158,19 +154,19 @@ function renderPlasticTypes(plasticTypes: Array<PlasticTypeLabel>) {
   function renderIcon(type: string) {
     switch (type) {
       case 'hdpe':
-        return <Image src={HDPEIcon} />
+        return <Image loading="lazy" src={HDPEIcon} />
       case 'ldpe':
-        return <Image src={LDPEIcon} />
+        return <Image loading="lazy" src={LDPEIcon} />
       case 'other':
-        return <Image src={OtherIcon} />
+        return <Image loading="lazy" src={OtherIcon} />
       case 'pet':
-        return <Image src={PETIcon} />
+        return <Image loading="lazy" src={PETIcon} />
       case 'pp':
-        return <Image src={PPIcon} />
+        return <Image loading="lazy" src={PPIcon} />
       case 'ps':
-        return <Image src={PSIcon} />
+        return <Image loading="lazy" src={PSIcon} />
       case 'pvc':
-        return <Image src={PVCIcon} />
+        return <Image loading="lazy" src={PVCIcon} />
       default:
         return null
     }

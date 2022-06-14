@@ -1,11 +1,8 @@
 import * as React from 'react'
 import { observer, inject } from 'mobx-react'
-import { Heading } from 'theme-ui'
+import { Heading, Text, Box, Flex } from 'theme-ui'
 import { Field } from 'react-final-form'
-import { Text } from 'theme-ui'
-import { Button } from 'oa-components'
-import { TextAreaField } from 'src/components/Form/Fields'
-import { Box, Flex } from 'theme-ui'
+import { Button, FieldTextarea } from 'oa-components'
 import { FlexSectionContainer } from './elements'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import theme from 'src/themes/styled.theme'
@@ -65,6 +62,7 @@ export class MemberMapPinSection extends React.Component<any, IState> {
               <Button
                 data-cy="add-a-map-pin"
                 onClick={() => {
+                  this.props.toggleLocationDropdown()
                   this.setState({ hasMapPin: !this.state.hasMapPin })
                 }}
               >
@@ -89,7 +87,7 @@ export class MemberMapPinSection extends React.Component<any, IState> {
               <Field
                 data-cy="pin-description"
                 name="mapPinDescription"
-                component={TextAreaField}
+                component={FieldTextarea}
                 maxLength="70"
                 style={{ height: 'inherit' }}
                 rows="1"
@@ -141,9 +139,11 @@ export class MemberMapPinSection extends React.Component<any, IState> {
                         />
 
                         <Button
+                          data-cy="remove-a-member-map-pin"
                           mt={4}
                           variant="outline"
                           onClick={() => {
+                            this.props.toggleLocationDropdown()
                             this.setState({
                               hasMapPin: false,
                             })

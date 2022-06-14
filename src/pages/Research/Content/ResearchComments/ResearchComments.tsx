@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import ReactGA from 'react-ga4'
 import { Box, Flex } from 'theme-ui'
-import { Button } from 'oa-components'
-import { CommentTextArea } from 'src/components/Comment/CommentTextArea'
+import { Button, CreateComment } from 'oa-components'
 import type { IComment } from 'src/models'
 import { logger } from 'src/logger'
 import { useResearchStore } from 'src/stores/Research/research.store'
@@ -10,6 +9,7 @@ import type { IResearch } from 'src/models/research.models'
 import { CommentList } from 'src/components/CommentList/CommentList'
 import { useCommonStores } from 'src/index'
 import styled from '@emotion/styled'
+import { MAX_COMMENT_LENGTH } from 'src/constants'
 
 interface IProps {
   comments?: IComment[]
@@ -17,10 +17,6 @@ interface IProps {
   updateIndex: number
 }
 
-const BoxStyled = styled(Box)`
-  position: relative;
-  border-radius: 5px;
-`
 const BoxMain = styled(Box)`
   padding-bottom: 15px;
   margin-left: 20px;
@@ -30,7 +26,7 @@ const BoxMain = styled(Box)`
 
 export const ResearchComments = ({ comments, update, updateIndex }: IProps) => {
   const [comment, setComment] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [, setLoading] = useState(false)
   const researchStore = useResearchStore()
   const [viewComments, setViewComments] = useState(false)
   const { stores } = useCommonStores()
@@ -174,30 +170,15 @@ export const ResearchComments = ({ comments, update, updateIndex }: IProps) => {
             handleDelete={handleDelete}
             handleEditRequest={handleEditRequest}
           />
-          <BoxStyled
-            sx={{
-              width: [`70%`, `80%`, `90%`],
-            }}
-          >
-            <CommentTextArea
-              data-cy="comment-text-area"
+          <Box sx={{ width: '100%' }}>
+            <CreateComment
+              maxLength={MAX_COMMENT_LENGTH}
               comment={comment}
               onChange={setComment}
-              loading={loading}
+              onSubmit={onSubmit}
+              isLoggedIn={!!stores.userStore.activeUser}
             />
-            <Button
-              data-cy="comment-submit"
-              disabled={!Boolean(comment.trim()) || loading}
-              variant="primary"
-              onClick={() => onSubmit(comment)}
-              mt={3}
-              sx={{
-                float: 'right',
-              }}
-            >
-              Comment
-            </Button>
-          </BoxStyled>
+          </Box>
         </Flex>
       )}
     </BoxMain>

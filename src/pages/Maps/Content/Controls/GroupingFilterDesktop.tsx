@@ -8,6 +8,7 @@ import { inject } from 'mobx-react'
 import type { MapsStore } from 'src/stores/Maps/maps.store'
 import { Box, Flex, Image, Text } from 'theme-ui'
 import { SelectStyles } from 'src/components/Form/Select.field'
+import { MemberBadge } from 'oa-components'
 
 interface IProps {
   items: Record<IPinGrouping, Array<IMapGrouping>>
@@ -83,13 +84,13 @@ class GroupingFilterDesktop extends Component<IProps, IState> {
           key={option.label}
         >
           <Flex sx={{ alignItems: 'center' }}>
-            <Image width="30px" src={option.icon} />
+            <MemberBadge profileType={option.value} size={30} />
             <Text sx={{ fontSize: 2 }} ml="10px">
               {option.label} ({option.number})
             </Text>
           </Flex>
           {selectedItems.includes(option.value) && (
-            <Image src={checkmarkIcon} width="20px" />
+            <Image loading="lazy" src={checkmarkIcon} width="20px" />
           )}
         </Flex>
       )

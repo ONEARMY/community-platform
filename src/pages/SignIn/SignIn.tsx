@@ -1,20 +1,16 @@
 import * as React from 'react'
 import { getFriendlyMessage } from 'oa-shared'
-import { Card, Flex } from 'theme-ui'
+import { Card, Flex, Heading, Text, Label } from 'theme-ui'
 import type { RouteComponentProps } from 'react-router'
-import { withRouter } from 'react-router'
-import { Redirect } from 'react-router'
-import { Heading } from 'theme-ui'
-import { Button } from 'oa-components'
-import { Text, Link } from 'theme-ui'
-import { InputField } from 'src/components/Form/Fields'
+import { withRouter, Redirect } from 'react-router'
+import { Button, FieldInput } from 'oa-components'
 import { inject, observer } from 'mobx-react'
 import { Form, Field } from 'react-final-form'
 import type { UserStore } from 'src/stores/User/user.store'
 import type { ITextNotificationProps } from 'src/components/Notification/TextNotification'
 import { TextNotification } from 'src/components/Notification/TextNotification'
 import { required } from 'src/utils/validators'
-import { Label } from 'theme-ui'
+import { Link } from 'react-router-dom'
 
 interface IFormValues {
   email: string
@@ -189,7 +185,7 @@ class SignInPage extends React.Component<IProps, IState> {
                                 name="email"
                                 type="email"
                                 data-cy="email"
-                                component={InputField}
+                                component={FieldInput}
                                 validate={required}
                               />
                             </Flex>
@@ -199,7 +195,7 @@ class SignInPage extends React.Component<IProps, IState> {
                                 name="password"
                                 type="password"
                                 data-cy="password"
-                                component={InputField}
+                                component={FieldInput}
                                 validate={required}
                               />
                             </Flex>
@@ -209,13 +205,13 @@ class SignInPage extends React.Component<IProps, IState> {
                               sx={{ justifyContent: 'space-between' }}
                             >
                               <Text sx={{ fontSize: 1 }} color={'grey'} mt={2}>
-                                <Link href={'/sign-up'} data-cy="no-account">
+                                <Link to={'/sign-up'} data-cy="no-account">
                                   Don't have an account?
                                 </Link>
                               </Text>
                               <Text sx={{ fontSize: 1 }} color={'grey'} mt={2}>
                                 <Link
-                                  href="#"
+                                  to="#"
                                   data-cy="lost-password"
                                   onClick={() =>
                                     this.resetPasword(values.email)

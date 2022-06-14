@@ -1,14 +1,10 @@
 import * as React from 'react'
 import { FRIENDLY_MESSAGES } from 'oa-shared'
-import { Card, Flex } from 'theme-ui'
-import { Heading } from 'theme-ui'
+import { Card, Flex, Heading, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
-import { Button } from 'oa-components'
-import { Text } from 'theme-ui'
-import { Link } from 'theme-ui'
+import { Button, ExternalLink, FieldInput } from 'oa-components'
 import { Form, Field } from 'react-final-form'
-import { InputField } from 'src/components/Form/Fields'
 import { inject, observer } from 'mobx-react'
 import type { UserStore } from 'src/stores/User/user.store'
 import type { RouteComponentProps } from 'react-router'
@@ -16,6 +12,7 @@ import { withRouter } from 'react-router'
 import { string, object, ref, bool } from 'yup'
 import { required } from 'src/utils/validators'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
+import { Link } from 'react-router-dom'
 
 const Label = styled.label`
   font-size: ${theme.fontSizes[2] + 'px'};
@@ -161,7 +158,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                           data-cy="username"
                           name="displayName"
                           type="userName"
-                          component={InputField}
+                          component={FieldInput}
                           placeholder="Pick a unique name"
                           validate={required}
                         />
@@ -180,7 +177,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                           data-cy="email"
                           name="email"
                           type="email"
-                          component={InputField}
+                          component={FieldInput}
                           placeholder="hey@jack.com"
                           validate={required}
                         />
@@ -197,7 +194,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                           data-cy="password"
                           name="password"
                           type="password"
-                          component={InputField}
+                          component={FieldInput}
                           validate={required}
                         />
                       </Flex>
@@ -215,7 +212,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                           data-cy="confirm-password"
                           name="confirm-password"
                           type="password"
-                          component={InputField}
+                          component={FieldInput}
                           validate={required}
                         />
                       </Flex>
@@ -233,13 +230,13 @@ class SignUpPage extends React.Component<IProps, IState> {
                         />
                         <Label htmlFor="consent">
                           I agree to the{' '}
-                          <a href="/terms" target="_blank" rel="nofollow">
+                          <ExternalLink href="/terms">
                             Terms of Service
-                          </a>
+                          </ExternalLink>
                           <span> and </span>
-                          <a href="/privacy" target="_blank" rel="nofollow">
+                          <ExternalLink href="/privacy">
                             Privacy Policy
-                          </a>
+                          </ExternalLink>
                         </Label>
                       </Flex>
                       <Text color={'red'} data-cy="error-msg">
@@ -248,7 +245,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                       <Flex mb={3} sx={{ justifyContent: 'space-between' }}>
                         <Text color={'grey'} mt={2} sx={{ fontSize: 1 }}>
                           Already have an account ?
-                          <Link href="/sign-in"> Sign-in here</Link>
+                          <Link to="/sign-in"> Sign-in here</Link>
                         </Text>
                       </Flex>
 

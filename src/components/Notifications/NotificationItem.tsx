@@ -1,10 +1,9 @@
 import React from 'react'
-import { Box } from 'theme-ui'
-import { Flex } from 'theme-ui'
+import { Box, Flex } from 'theme-ui'
 import type { INotification } from 'src/models'
-import { Link } from 'theme-ui'
 import { ReactComponent as IconComment } from 'src/assets/icons/icon-comment.svg'
 import { ReactComponent as IconUseful } from 'src/assets/icons/icon-useful.svg'
+import { Link } from 'react-router-dom'
 
 export interface IProps extends INotification {}
 
@@ -42,20 +41,20 @@ export const NotificationItem: React.FC<IProps> = ({
                 padding: '3px',
                 color: '#61646b',
               }}
-              href={'/u/' + triggeredBy.userId}
+              to={'/u/' + triggeredBy.userId}
             >
               {triggeredBy.displayName}
             </Link>
             found your
             <Link
-              sx={{
+              style={{
                 textDecoration: 'underline',
                 padding: '3px',
                 color: '#61646b',
-                fontWeight: '500',
+                fontWeight: 500,
                 display: 'inline',
               }}
-              href={relevantUrl}
+              to={relevantUrl || ''}
             >
               {type === 'howto_useful' ? 'how-to' : 'research'}
             </Link>
@@ -72,25 +71,25 @@ export const NotificationItem: React.FC<IProps> = ({
           <Box style={{ textAlign: 'left' }}>
             New comment on your
             <Link
-              sx={{
+              style={{
                 textDecoration: 'underline',
                 padding: '3px',
                 color: '#61646b',
               }}
-              href={relevantUrl}
+              to={relevantUrl || ''}
             >
               {type == 'new_comment_research' ? 'Research' : 'how-to'}
             </Link>
             by
             <Link
-              sx={{
+              style={{
                 textDecoration: 'underline',
                 padding: '3px',
                 color: '#61646b',
-                fontWeight: '500',
+                fontWeight: 500,
                 display: 'inline',
               }}
-              href={'/u/' + triggeredBy.userId}
+              to={'/u/' + triggeredBy.userId}
             >
               {triggeredBy.displayName}
             </Link>

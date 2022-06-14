@@ -1,9 +1,10 @@
 import styled from '@emotion/styled'
 import { Component } from 'react'
 import theme from 'src/themes/styled.theme'
-import { Box, Link } from 'theme-ui'
+import { Box } from 'theme-ui'
 import { observer, inject } from 'mobx-react'
 import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
+import { Link } from 'react-router-dom'
 
 interface IProps {
   content: string
@@ -39,7 +40,7 @@ export class MenuMobileExternalLink extends Component<IProps> {
           <Link
             onClick={() => menu.toggleMobilePanel()}
             id={id}
-            href={this.props.href}
+            to={this.props.href}
             style={{ color: theme.colors.silver, fontSize: 2 }}
           >
             {content}

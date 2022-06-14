@@ -1,6 +1,5 @@
-import { Card, Link, Text } from 'theme-ui'
-import { Flex } from 'theme-ui'
-import { Heading } from 'theme-ui'
+import { Card, Text, Flex, Heading } from 'theme-ui'
+import { ExternalLink } from 'oa-components'
 import theme from 'src/themes/styled.theme'
 
 export const PostingGuidelines = () => (
@@ -15,16 +14,12 @@ export const PostingGuidelines = () => (
       </Text>
       <Text mb={1} sx={{ ...theme.typography.auxiliary }}>
         2. Read{' '}
-        <Link
-          color={theme.colors.blue}
-          target="_blank"
-          href="/academy/guides/research"
-        >
+        <ExternalLink color={theme.colors.blue} href="/academy/guides/research">
           our guidelines{' '}
           <span role="img" aria-label="nerd-face">
             🤓
           </span>
-        </Link>
+        </ExternalLink>
       </Text>
       <Text mb={1} sx={{ ...theme.typography.auxiliary }}>
         3. Write your introduction{' '}

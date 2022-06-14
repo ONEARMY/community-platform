@@ -7,13 +7,11 @@ import arrayMutators from 'final-form-arrays'
 import createDecorator from 'final-form-calculate'
 import type { IHowtoFormInput } from 'src/models/howto.models'
 import type { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
-import { InputField, TextAreaField } from 'src/components/Form/Fields'
 import { SelectField } from 'src/components/Form/Select.field'
 import { HowtoStep } from './HowtoStep.form'
-import { Button } from 'oa-components'
+import { Button, FieldTextarea, FieldInput } from 'oa-components'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
-import { Heading } from 'theme-ui'
-import { Card, Flex } from 'theme-ui'
+import { Heading, Card, Flex, Box, Text } from 'theme-ui'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 import { ImageInputField } from 'src/components/Form/ImageInput.field'
 import { FileInputField } from 'src/components/Form/FileInput.field'
@@ -23,7 +21,6 @@ import { stripSpecialCharacters } from 'src/utils/helpers'
 import { PostingGuidelines } from './PostingGuidelines'
 import theme from 'src/themes/styled.theme'
 import { DIFFICULTY_OPTIONS, TIME_OPTIONS } from './FormSettings'
-import { Box, Text } from 'theme-ui'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import { HowToSubmitStatus } from './SubmitStatus'
 import { required, validateUrlAcceptEmpty } from 'src/utils/validators'
@@ -33,7 +30,7 @@ import { COMPARISONS } from 'src/utils/comparisons'
 import { UnsavedChangesDialog } from 'src/components/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import { HOWTO_MAX_LENGTH, HOWTO_TITLE_MAX_LENGTH } from '../../constants'
-import { CategoriesSelect } from 'src/components/Category/CategoriesSelect'
+import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
 const MAX_LINK_LENGTH = 2000
@@ -262,7 +259,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   validate={this.validateTitle}
                                   isEqual={COMPARISONS.textInput}
                                   modifiers={{ capitalize: true }}
-                                  component={InputField}
+                                  component={FieldInput}
                                   maxLength={HOWTO_TITLE_MAX_LENGTH}
                                   placeholder={`Make a chair from... (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
                                 />
@@ -340,7 +337,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   validateFields={[]}
                                   modifiers={{ capitalize: true }}
                                   isEqual={COMPARISONS.textInput}
-                                  component={TextAreaField}
+                                  component={FieldTextarea}
                                   style={{
                                     resize: 'none',
                                     flex: 1,
@@ -406,7 +403,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                         id="fileLink"
                                         name="fileLink"
                                         data-cy="fileLink"
-                                        component={InputField}
+                                        component={FieldInput}
                                         placeholder="Link to Gdrive, Dropbox, Grabcad etc"
                                         isEqual={COMPARISONS.textInput}
                                         maxLength={MAX_LINK_LENGTH}

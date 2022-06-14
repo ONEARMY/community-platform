@@ -2,15 +2,13 @@ import { PureComponent } from 'react'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { format } from 'date-fns'
 import type { IHowtoDB } from 'src/models/howto.models'
-import { Heading } from 'theme-ui'
+import { Heading, Text, Box, Flex, Image } from 'theme-ui'
 import { ModerationStatusText } from 'src/components/ModerationStatusText/ModerationStatustext'
-import { Link } from 'theme-ui'
-import { Text, Box, Flex, Image } from 'theme-ui'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import StepsIcon from 'src/assets/icons/icon-steps.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
-import { Button } from 'oa-components'
+import { Button, FlagIconHowTos } from 'oa-components'
 import type { IUser } from 'src/models/user.models'
 import {
   isAllowToEditContent,
@@ -19,11 +17,11 @@ import {
 } from 'src/utils/helpers'
 import theme from 'src/themes/styled.theme'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
-import { FlagIconHowTos } from 'oa-components'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 import { UsefulStatsButton } from 'src/components/UsefulStatsButton/UsefulStatsButton'
 import { DownloadExternal } from 'src/pages/Howto/DownloadExternal/DownloadExternal'
 import Linkify from 'react-linkify'
+import { Link } from 'react-router-dom'
 
 interface IProps {
   howto: IHowtoDB
@@ -86,7 +84,7 @@ export default class HowtoDescription extends PureComponent<IProps> {
           }}
         >
           <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
-            <Link href={'/how-to/'}>
+            <Link to={'/how-to/'}>
               <Button
                 variant="subtle"
                 sx={{ fontSize: '14px' }}
@@ -94,6 +92,7 @@ export default class HowtoDescription extends PureComponent<IProps> {
               >
                 <Flex>
                   <Image
+                    loading="lazy"
                     sx={{
                       width: '10px',
                       marginRight: '4px',
@@ -135,7 +134,7 @@ export default class HowtoDescription extends PureComponent<IProps> {
             )}
             {/* Check if logged in user is the creator of the how-to OR a super-admin */}
             {loggedInUser && isAllowToEditContent(howto, loggedInUser) && (
-              <Link href={'/how-to/' + this.props.howto.slug + '/edit'}>
+              <Link to={'/how-to/' + this.props.howto.slug + '/edit'}>
                 <Button variant={'primary'} data-cy={'edit'}>
                   Edit
                 </Button>
@@ -154,11 +153,11 @@ export default class HowtoDescription extends PureComponent<IProps> {
               >
                 By{' '}
                 <Link
-                  sx={{
+                  style={{
                     textDecoration: 'underline',
                     color: 'inherit',
                   }}
-                  href={'/u/' + howto._createdBy}
+                  to={'/u/' + howto._createdBy}
                 >
                   {howto._createdBy}
                 </Link>{' '}
@@ -195,15 +194,30 @@ export default class HowtoDescription extends PureComponent<IProps> {
 
           <Flex mt="4">
             <Flex mr="4" sx={{ flexDirection: iconFlexDirection }}>
-              <Image src={StepsIcon} height="16" width="23" mr="2" mb="2" />
+              <Image
+                loading="lazy"
+                src={StepsIcon}
+                height="16"
+                width="23"
+                mr="2"
+                mb="2"
+              />
               {howto.steps.length} steps
             </Flex>
             <Flex mr="4" sx={{ flexDirection: iconFlexDirection }}>
-              <Image src={TimeNeeded} height="16" width="16" mr="2" mb="2" />
+              <Image
+                loading="lazy"
+                src={TimeNeeded}
+                height="16"
+                width="16"
+                mr="2"
+                mb="2"
+              />
               {howto.time}
             </Flex>
             <Flex mr="4" sx={{ flexDirection: iconFlexDirection }}>
               <Image
+                loading="lazy"
                 src={DifficultyLevel}
                 height="15"
                 width="16"
@@ -244,6 +258,7 @@ export default class HowtoDescription extends PureComponent<IProps> {
           }}
         >
           <Image
+            loading="lazy"
             sx={{
               objectFit: 'cover',
               width: 'auto',

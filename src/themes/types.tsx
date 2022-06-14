@@ -1,3 +1,5 @@
+import type { ProfileTypeLabel } from 'src/modules/profile'
+
 interface LinkList {
   label: string
   url: string
@@ -15,12 +17,31 @@ export interface PlatformTheme {
   externalLinks: LinkList[]
 }
 
+type Badge = {
+  lowDetail: string
+  normal: string
+}
+
 export interface ThemeWithName {
   name: string
 
-  badges: any
+  profileGuidelinesURL: string
+
+  communityProgramURL: string
+
+  badges: {
+    [K in ProfileTypeLabel]?: Badge
+  }
 
   text: any
+
+  forms: {
+    input: any
+    inputOutline: any
+    error: any
+    textarea?: any
+    textareaError?: any
+  }
 
   /**
    * Following properties are taken from DefaultTheme
@@ -74,8 +95,6 @@ export interface ThemeWithName {
     logoContainer: number
     mapFlexBar: number
     header: number
-    modalBackdrop: number
-    modalContent: number
   }
   breakpoints: string[]
   buttons: any

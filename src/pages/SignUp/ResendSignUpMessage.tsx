@@ -1,11 +1,9 @@
 import React from 'react'
-import { Card, Flex } from 'theme-ui'
-import { Heading } from 'theme-ui'
+import { Card, Flex, Heading } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
-import { Button } from 'oa-components'
+import { Button, FieldInput } from 'oa-components'
 import { Form, Field } from 'react-final-form'
-import { InputField } from 'src/components/Form/Fields'
 import { logger } from 'src/logger'
 
 const Label = styled.label`
@@ -90,7 +88,7 @@ class ResendSignUpMessagePage extends React.Component<IProps, IState> {
                           name="email"
                           type="email"
                           id="email"
-                          component={InputField}
+                          component={FieldInput}
                           autoComplete="email"
                         />
                       </Flex>

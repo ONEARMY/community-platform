@@ -17,6 +17,7 @@ const INITIAL_VALUES: IEventFormInput = {
     postcode: '',
     value: '',
   },
+  isDigital: false,
 }
 
 export default {

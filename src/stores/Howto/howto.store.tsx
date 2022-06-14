@@ -134,6 +134,22 @@ export class HowtoStore extends ModuleStore {
     return validHowtos
   }
 
+  public async incrementDownloadCount(howToID: string) {
+    const dbRef = this.db.collection<IHowto>(COLLECTION_NAME).doc(howToID)
+    const howToData = await toJS(dbRef.get())
+    const totalDownloads = howToData?.total_downloads || 0
+
+    if (howToData) {
+      const updatedHowto: IHowto = {
+        ...howToData,
+        total_downloads: totalDownloads! + 1,
+      }
+
+      await dbRef.set(updatedHowto)
+      return updatedHowto.total_downloads
+    }
+  }
+
   public updateSearchValue(query: string) {
     this.searchValue = query
   }
@@ -346,6 +362,8 @@ export class HowtoStore extends ModuleStore {
             ? values.creatorCountry
             : '',
       }
+      if (processedFiles) howTo['total_downloads'] = 0
+
       logger.debug('populating database', howTo)
       // set the database document
       await dbRef.set(howTo)

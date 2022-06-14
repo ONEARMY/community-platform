@@ -21,7 +21,7 @@ interface InjectedProps {
 
 @inject('eventStore', 'userStore', 'themeStore')
 @observer
-export class EventsLists extends React.Component<any> {
+export class EventsListings extends React.Component<any> {
   get injected() {
     return this.props as InjectedProps
   }
@@ -175,7 +175,7 @@ export class EventsLists extends React.Component<any> {
                 <EventCard
                   key={event._id}
                   event={event}
-                  inactive
+                  isPastEvent
                   needsModeration={this.store.needsModeration(event)}
                   moderateEvent={this.moderateEvent}
                 />

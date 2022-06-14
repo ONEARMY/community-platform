@@ -2,7 +2,7 @@ import { PureComponent } from 'react'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { format } from 'date-fns'
 import type { IHowtoDB } from 'src/models/howto.models'
-import { Heading, Text, Box, Flex, Image } from 'theme-ui'
+import { Heading, Text, Box, Flex, Image, AspectImage } from 'theme-ui'
 import { ModerationStatusText } from 'src/components/ModerationStatusText/ModerationStatustext'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import StepsIcon from 'src/assets/icons/icon-steps.svg'
@@ -327,19 +327,18 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
             </Flex>
           )}
         </Flex>
-        <Flex
+        <Box
           sx={{
             width: ['100%', '100%', `${(1 / 2) * 100}%`],
             position: 'relative',
-            justifyContent: 'end',
           }}
         >
-          <Image
+          <AspectImage
             loading="lazy"
+            ratio={12 / 9}
             sx={{
               objectFit: 'cover',
-              width: 'auto',
-              height: '100%',
+              width: '100%',
             }}
             src={howto.cover_image.downloadUrl}
             crossOrigin=""
@@ -352,7 +351,7 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
               top={'0px'}
             />
           )}
-        </Flex>
+        </Box>
       </Flex>
     )
   }

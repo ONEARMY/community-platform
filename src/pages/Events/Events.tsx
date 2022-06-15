@@ -2,7 +2,7 @@ import React from 'react'
 import { inject, observer } from 'mobx-react'
 import type { EventStore } from 'src/stores/Events/events.store'
 import { EventsCreate } from './Content/EventsCreate/EventsCreate'
-import { EventsList } from './Content/EventsList/EventsList'
+import { EventsListings } from './Content/EventsListings/EventsListings'
 
 import type { RouteComponentProps } from 'react-router'
 import { withRouter, Switch, Route } from 'react-router'
@@ -28,7 +28,7 @@ class EventsPage extends React.Component<IProps, any> {
         <Route
           exact
           path="/events"
-          render={(props) => <EventsList {...props} />}
+          render={(props) => <EventsListings {...props} />}
         />
         <AuthRoute path="/events/create" component={EventsCreate} />
       </Switch>

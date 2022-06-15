@@ -2,7 +2,7 @@ import { useState } from 'react'
 import ReactGA from 'react-ga4'
 import { Box } from 'theme-ui'
 import { Button, CommentItem } from '../'
-
+import { IComment } from '../../../../src/models'
 const MAX_COMMENTS = 5
 
 export const CommentList: React.FC<{
@@ -31,7 +31,7 @@ export const CommentList: React.FC<{
       {comments &&
         comments
           .slice(0, shownComments)
-          .map((comment: any) => (
+          .map((comment: IComment) => (
             <CommentItem
               key={comment._id}
               {...comment}

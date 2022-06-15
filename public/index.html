@@ -7,28 +7,26 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <link rel="preconnect" href="https://storage.googleapis.com" crossorigin />
-    <link rel="preconnect" href="https://firebasestorage.googleapis.com" crossorigin />
-    <noscript><link rel="stylesheet" href="path/to/stylesheet.css"/></noscript>
+    <link
+      rel="preconnect"
+      href="https://firebasestorage.googleapis.com"
+      crossorigin
+    />
+    <noscript><link rel="stylesheet" href="path/to/stylesheet.css" /></noscript>
     <meta name="theme-color" content="#000000" />
     <meta property="og:title" content="Community Platform" />
     <meta
       property="og:description"
       content="A series of tools for the Precious Plastic community to collaborate around the world. Connect, share and meet each other to tackle plastic waste."
     />
-    <meta
-      property="og:image"
-      content="%PUBLIC_URL%/social-image.jpg"
-    />
+    <meta property="og:image" content="%PUBLIC_URL%/social-image.jpg" />
     <meta property="og:url" content="https://community.preciousplastic.com" />
     <meta name="twitter:title" content="Community Platform" />
     <meta
       name="twitter:description"
       content="A series of tools for the Precious Plastic community to collaborate around the world. Connect, share and meet each other to tackle plastic waste."
     />
-    <meta
-      name="twitter:image"
-      content="%PUBLIC_URL%/social-image.jpg"
-    />
+    <meta name="twitter:image" content="%PUBLIC_URL%/social-image.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <!--
       manifest.json provides metadata used when your web app is added to the
@@ -36,7 +34,7 @@
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link id="favicon" rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
 
@@ -52,17 +50,20 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Precious Plastic Community</title>
-    <meta name="description" content="A series of tools for the Precious Plastic community to collaborate around the world. Connect, share and meet each other to tackle plastic waste.">
+    <meta
+      name="description"
+      content="A series of tools for the Precious Plastic community to collaborate around the world. Connect, share and meet each other to tackle plastic waste."
+    />
     <script id="CommunityPlatform">
       /**
        * The following object has environment specific
        * configuration injected into it as part of the build process
        */
-      window.__OA_COMMUNITY_PLATFORM_CONFIGURATION = {};
+      window.__OA_COMMUNITY_PLATFORM_CONFIGURATION = {}
     </script>
   </head>
 
-  <body style="overflow-x: hidden;">
+  <body style="overflow-x: hidden">
     <noscript> You need to enable JavaScript to run this app. </noscript>
     <div id="root"></div>
     <!--

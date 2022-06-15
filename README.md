@@ -64,6 +64,7 @@ Or join our [Discord channel](https://discordapp.com/invite/rnx7m4t)
   </tr>
   <tr>
     <td align="center"><a href="https://medium.com/@Alfonso_Ghislieri"><img src="https://avatars.githubusercontent.com/u/652368?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Alfonso</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=AlfonsoGhislieri" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/Xyli0"><img src="https://avatars.githubusercontent.com/u/10441748?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Xyli0</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=Xyli0" title="Code">💻</a></td>
   </tr>
 </table>
 

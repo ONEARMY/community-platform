@@ -18,6 +18,7 @@ import { Loader } from 'src/components/Loader'
 import type { UserStore } from 'src/stores/User/user.store'
 import { HowToComments } from './HowToComments/HowToComments'
 import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
+import { seoTagsUpdate } from 'src/utils/seo'
 import { Link } from 'react-router-dom'
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
@@ -123,9 +124,17 @@ export class Howto extends React.Component<
   public async componentDidMount() {
     const slug = this.props.match.params.slug
     await this.store.setActiveHowtoBySlug(slug)
+    seoTagsUpdate({
+      title: this.store.activeHowto?.title,
+      description: this.store.activeHowto?.description,
+      imageUrl: this.store.activeHowto?.cover_image.downloadUrl,
+    })
     this.setState({
       isLoading: false,
     })
+  }
+  public async componentWillUnmount() {
+    seoTagsUpdate({})
   }
 
   public render() {

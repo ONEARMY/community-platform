@@ -147,7 +147,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
             <Label htmlFor={`${step}.text`}>Description of this step *</Label>
             <Field
               name={`${step}.text`}
-              placeholder="Explain what you are doing in this step. if it gets to long break it into 2 steps (max 700 characters)"
+              placeholder="Explain what you are doing in this step. If it gets too long, consider breaking it into multiple steps (max 700 characters)"
               maxLength={HOWTO_MAX_LENGTH}
               data-cy="step-description"
               modifiers={{ capitalize: true }}

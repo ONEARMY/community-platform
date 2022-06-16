@@ -15,4 +15,23 @@ The full code can be seen at [`functions\src\Integrations\firebase-slack.ts`](ht
 
 ## Configuration
 
-Sometimes specific urls/api_keys need to be stored to use with the service. This is best done using config variables so that they are not exposed publicly, such as those described at [`functions/src/config/config.ts`](https://github.com/ONEARMY/community-platform/blob/master/functions/src/config/config.ts).
+Sometimes specific urls/api_keys need to be stored to use with the service. Rather than storing this values in code we are using config variables. This keeps them out of version control and prevents them being public.
+
+To work with the [environment configuration](https://firebase.google.com/docs/functions/config-env#migrating_from_environment_configuration) you will need to be authenticated via the CLI and have edit access to the target Firebase instance.
+
+Inspect the configuration on the current instance, this will return all values that have been set as an object.
+
+```bash
+firebase functions:config:get
+```
+
+Store values on the instance
+
+```bash
+firebase functions:config:set documentation=amazing
+
+# You can set values in a nested object using dot notation
+firebase functions:config:set nested.path=value
+```
+
+The implementation is at [`functions/src/config/config.ts`](https://github.com/ONEARMY/community-platform/blob/master/functions/src/config/config.ts).

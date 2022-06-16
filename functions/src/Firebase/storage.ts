@@ -9,7 +9,9 @@ import { firebaseAdmin, IFirebaseConfig } from './admin'
 const FIREBASE_CONFIG = JSON.parse(
   process.env.FIREBASE_CONFIG,
 ) as IFirebaseConfig
-const bucket = firebaseAdmin.storage().bucket(FIREBASE_CONFIG.storageBucket)
+export const bucket = firebaseAdmin
+  .storage()
+  .bucket(FIREBASE_CONFIG.storageBucket)
 // get firebase storage file meta and return subset (+download link) for reference
 // pass originalUrl if wanting to retain previous migraiton data
 export const getStorageFileMeta = async (

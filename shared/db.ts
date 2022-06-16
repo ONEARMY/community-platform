@@ -18,3 +18,13 @@ export const generateDBEndpoints = (DB_PREFIX = '') => ({
   research: `${DB_PREFIX}research_rev20201020`,
   aggregations: `${DB_PREFIX}aggregations_rev20220126`,
 })
+
+/**
+ * A list of known subcollections used in endpoints, e.g.
+ * /howtos/my-howto-id/stats
+ */
+export const dbEndpointSubollections = {
+  user: ['revisions'],
+  howtos: ['stats'],
+  research: ['stats'],
+}

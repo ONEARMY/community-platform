@@ -41,6 +41,7 @@ module.exports = {
       items: [
         'Backend Development/BackendOverview',
         'Backend Development/firebase-emulators-docker',
+        'Backend Development/firestore-backup',
         'Backend Development/integrations',
       ],
     },

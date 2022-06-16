@@ -112,8 +112,9 @@ class AggregationHandler {
         updates.push({ ref: this.targetDocRef, entry: aggregationEntry })
       }
     }
-    // split updates into batches of 500 with 1s pause between
-    const chunks = splitArrayToChunks(updates, 500)
+    // firebase supports up to 500 requests every second
+    // as each update uses 2 ops (set + update) run in batches of 250
+    const chunks = splitArrayToChunks(updates, 250)
     for (const [index, chunk] of chunks.entries()) {
       const batch = db.batch()
       if (index === 0) {

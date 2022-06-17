@@ -226,7 +226,7 @@ jobs:
       - setup_repo
       - run:
           command: yarn lint
-      - run: 
+      - run:
           command: yarn workspace oa-components lint
   # Prepare node module caches so that future tasks run more quickly
   # NOTE - not currently used as we only have one workflow
@@ -324,7 +324,7 @@ jobs:
           steps:
             - slack/notify:
                 event: fail
-                mentions: '@Chris Clarke'
+                mentions: '@channel'
                 template: basic_fail_1
             - slack/notify:
                 event: pass

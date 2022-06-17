@@ -6,7 +6,7 @@ import TEMPLATE from './Template'
 import type { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 import { Button, FieldDatepicker, FieldInput } from 'oa-components'
 import type { EventStore } from 'src/stores/Events/events.store'
-import { Heading, Card, Flex, Box, Text, Checkbox } from 'theme-ui'
+import { Heading, Card, Flex, Box, Text } from 'theme-ui'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
 import { inject } from 'mobx-react'
 import { PostingGuidelines } from './PostingGuidelines'
@@ -18,6 +18,7 @@ import { validateUrl, addProtocolMutator, required } from 'src/utils/validators'
 import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import IconHeaderEvents from 'src/assets/images/header-section/events-header-icon.svg'
 import { logger } from 'src/logger'
+import { CheckboxInput } from 'src/components/Form/Checkbox'
 
 interface IState {
   formValues: IEventFormInput
@@ -25,7 +26,6 @@ interface IState {
   showSubmitModal?: boolean
   selectedDate: any
   isLocationSelected?: boolean
-  isDigitalEvent: boolean
 }
 type IProps = RouteComponentProps<any>
 interface IInjectedProps extends IProps {
@@ -41,14 +41,9 @@ const Label = styled.label`
   margin-bottom: ${theme.space[2] + 'px'};
 `
 
-const AnimatedDiv = styled.div`
-  transition: height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-`
-
-const StyledLabel = styled(Label)`
-  margin: 0;
-  cursor: 'pointer';
-`
+// const AnimatedDiv = styled.div`
+//   transition: height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+// `
 
 @inject('eventStore')
 export class EventsCreate extends React.Component<IProps, IState> {
@@ -60,7 +55,6 @@ export class EventsCreate extends React.Component<IProps, IState> {
       formValues: { ...TEMPLATE.INITIAL_VALUES },
       formSaved: false,
       selectedDate: null,
-      isDigitalEvent: false,
     }
   }
 
@@ -84,12 +78,8 @@ export class EventsCreate extends React.Component<IProps, IState> {
   }
 
   public render() {
-    const { formValues, isLocationSelected, selectedDate, isDigitalEvent } =
-      this.state
+    const { formValues, isLocationSelected, selectedDate } = this.state
 
-    const checked = isDigitalEvent
-      ? { backgroundColor: '#000' }
-      : { backgroundColor: '#fff' }
     return (
       <Form
         onSubmit={(v) => {
@@ -176,7 +166,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             sx={{ width: '100%', flexDirection: 'column' }}
                             data-cy="date"
                           >
-                            <Label htmlFor="location">
+                            <Label htmlFor="date">
                               When is your event taking place? *
                             </Label>
                             <Field
@@ -201,9 +191,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             px={2}
                             sx={{ width: '100%', flexDirection: 'column' }}
                           >
-                            <Label htmlFor="location">
-                              Link to your event *
-                            </Label>
+                            <Label htmlFor="url">Link to your event *</Label>
                             <Field
                               name="url"
                               data-cy="url"
@@ -232,7 +220,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                               flexDirection: 'column',
                             }}
                           >
-                            {!isDigitalEvent && (
+                            {!formValues?.isDigital && (
                               <>
                                 <Label htmlFor="location">
                                   In which city is the event taking place? *
@@ -265,20 +253,11 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             <Flex my={3} sx={{ alignItems: 'center' }}>
                               <Field
                                 type="checkbox"
-                                component={Checkbox}
-                                id="digital"
-                                name="digital"
-                                onClick={() => {
-                                  this.setState({
-                                    isDigitalEvent: !isDigitalEvent,
-                                  })
-                                }}
-                                value={Boolean(isDigitalEvent)}
-                                style={checked}
-                              />
-                              <StyledLabel htmlFor="digital">
-                                This is a digital event
-                              </StyledLabel>
+                                id="isDigital"
+                                name="isDigital"
+                                labelText=" This is a digital event"
+                                component={CheckboxInput}
+                              ></Field>
                             </Flex>
                           </Flex>
                           <Flex

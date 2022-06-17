@@ -109,7 +109,6 @@ export class EventStore extends ModuleStore {
     const user = this.activeUser as IUser
     try {
       // add event meta fields and format date
-      console.log('VALUES UPLOAD EVENT: ', values)
       const event: IEvent = {
         ...values,
         date: new Date(Date.parse(values.date as string)).toISOString(),

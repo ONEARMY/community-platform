@@ -1,11 +1,12 @@
 import ModerationStatusText from 'src/components/ModerationStatusText/ModerationStatustext'
-import { Card, Text, Flex } from 'theme-ui'
+import { Card, Text, Flex, Image } from 'theme-ui'
 import { Button, FlagIconEvents, ExternalLink } from 'oa-components'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import type { IEvent } from '../../../models/events.models'
 import { getMonth, getDay, capitalizeFirstLetter } from 'src/utils/helpers'
 import { VerifiedUserBadge } from '../../../components/VerifiedUserBadge/VerifiedUserBadge'
 import { useTheme } from '@emotion/react'
+import laptopIcon from 'src/assets/icons/icon-laptop.png'
 
 interface IProps {
   event: IEvent
@@ -103,18 +104,32 @@ export const EventCard = (props: IProps) => {
           }}
           mb={[2, 2, 0]}
         >
-          <FlagIconEvents code={props.event.location.countryCode} />
-          <Text
-            sx={{ width: '100%', ...theme.typography.auxiliary }}
-            ml={[1, 1, 2]}
-          >
-            {[
-              props.event.location.administrative,
-              props.event.location?.countryCode?.toUpperCase(),
-            ]
-              .filter(Boolean)
-              .join(', ')}
-          </Text>
+          {props.event?.isDigital ? (
+            <>
+              <Image src={laptopIcon} alt="" width="36px" />
+              <Text
+                sx={{ width: '100%', ...theme.typography.auxiliary }}
+                ml={[1, 1, 2]}
+              >
+                Digital
+              </Text>
+            </>
+          ) : (
+            <>
+              <FlagIconEvents code={props.event.location.countryCode} />
+              <Text
+                sx={{ width: '100%', ...theme.typography.auxiliary }}
+                ml={[1, 1, 2]}
+              >
+                {[
+                  props.event.location.administrative,
+                  props.event.location?.countryCode?.toUpperCase(),
+                ]
+                  .filter(Boolean)
+                  .join(', ')}
+              </Text>
+            </>
+          )}
         </Flex>
         <Flex
           sx={{

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ReactGA from 'react-ga4'
 import { Box, Flex } from 'theme-ui'
 import { Button, CreateComment } from 'oa-components'
@@ -15,6 +15,7 @@ interface IProps {
   comments?: IComment[]
   update: IResearch.UpdateDB
   updateIndex: number
+  commentToScrollTo: string
 }
 
 const BoxMain = styled(Box)`
@@ -24,27 +25,34 @@ const BoxMain = styled(Box)`
   margin-top: 20px;
 `
 
-export const ResearchComments = ({ comments, update, updateIndex }: IProps) => {
+export const ResearchComments = ({
+  comments,
+  update,
+  updateIndex,
+  commentToScrollTo,
+}: IProps) => {
   const [comment, setComment] = useState('')
   const [, setLoading] = useState(false)
   const researchStore = useResearchStore()
   const [viewComments, setViewComments] = useState(false)
   const { stores } = useCommonStores()
 
+  useEffect(() => {
+    if (comments?.some((comment) => comment._id == commentToScrollTo)) {
+      setViewComments(true)
+    }
+  }, [commentToScrollTo])
+
   async function onSubmit(comment: string) {
     try {
       setLoading(true)
-      await researchStore.addComment(comment, update as IResearch.Update)
+      await researchStore.addComment(
+        comment,
+        update as IResearch.Update,
+        updateIndex,
+      )
       setLoading(false)
       setComment('')
-      const currResearchItem = researchStore.activeResearchItem
-      if (currResearchItem) {
-        await stores.userStore.triggerNotification(
-          'new_comment_research',
-          currResearchItem._createdBy,
-          '/research/' + currResearchItem.slug + '#update_' + updateIndex,
-        )
-      }
 
       ReactGA.event({
         category: 'Comments',
@@ -169,6 +177,7 @@ export const ResearchComments = ({ comments, update, updateIndex }: IProps) => {
             handleEdit={handleEdit}
             handleDelete={handleDelete}
             handleEditRequest={handleEditRequest}
+            commentToScrollTo={commentToScrollTo}
           />
           <Box sx={{ width: '100%' }}>
             <CreateComment

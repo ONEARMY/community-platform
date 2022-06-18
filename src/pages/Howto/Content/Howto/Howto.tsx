@@ -164,7 +164,13 @@ export class Howto extends React.Component<
               <Step step={step} key={index} stepindex={index} />
             ))}
           </Box>
-          <HowToComments comments={activeHowToComments} />
+          <HowToComments
+            comments={activeHowToComments}
+            commentToScrollTo={this.props.location.hash.replace(
+              '#comment_',
+              '',
+            )}
+          />
           <MoreBox py={20} mt={20}>
             <Text
               sx={{

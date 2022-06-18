@@ -19,6 +19,7 @@ interface IProps {
   isEditable: boolean
   slug: string
   comments: IComment[]
+  commentToScrollTo: string
 }
 
 const FlexStepNumber = styled(Flex)`
@@ -31,6 +32,7 @@ const ResearchUpdate: React.FC<IProps> = ({
   isEditable,
   slug,
   comments,
+  commentToScrollTo,
 }) => {
   const theme = useTheme()
   return (
@@ -140,6 +142,7 @@ const ResearchUpdate: React.FC<IProps> = ({
               update={update}
               comments={comments}
               updateIndex={updateIndex}
+              commentToScrollTo={commentToScrollTo}
             />
           </Card>
         </Flex>

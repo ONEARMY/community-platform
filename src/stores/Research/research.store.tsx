@@ -144,12 +144,15 @@ export class ResearchStore extends ModuleStore {
   public async addComment(
     text: string,
     update: IResearch.Update | IResearch.UpdateDB,
+    updateIndex: number,
   ) {
     const user = this.activeUser
     const item = this.activeResearchItem
-    const comment = text.slice(0, MAX_COMMENT_LENGTH).trim()
+    let comment = text.slice(0, MAX_COMMENT_LENGTH).trim()
 
     if (item && comment && user) {
+      const mentions = await this.parseMentions(comment)
+      comment = mentions.text
       const dbRef = this.db
         .collection<IResearch.Item>(COLLECTION_NAME)
         .doc(item._id)
@@ -199,6 +202,26 @@ export class ResearchStore extends ModuleStore {
         runInAction(() => {
           this.activeResearchItem = createdItem
         })
+        this.notifyMentionedUsers(
+          mentions.mentionedUsers,
+          'comment_mention_research',
+          '/research/' +
+            item.slug +
+            '#update_' +
+            updateIndex +
+            'comment_' +
+            newComment._id,
+        )
+        // trigger notification for comment only
+        // if how-to author wasn't mentioned in the comment
+        // to avoid duplicated notifications
+        if (!mentions.mentionedUsers.has(item._createdBy)) {
+          await this.userStore.triggerNotification(
+            'new_comment_research',
+            item._createdBy,
+            '/research/' + item.slug + '#update_' + updateIndex,
+          )
+        }
       } catch (error) {
         console.error(error)
         throw new Error(error?.message)

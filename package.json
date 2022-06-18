@@ -127,6 +127,7 @@
     "react-scripts": "4.0.3",
     "react-select": "^2.4.3",
     "react-slick": "^0.25.2",
+    "react-string-replace": "^1.1.0",
     "react-table": "^6.10.3",
     "react-tooltip": "^4.2.20",
     "react-virtualized": "^9.22.3",

@@ -26299,6 +26299,7 @@ fsevents@^1.2.7:
     react-scripts: 4.0.3
     react-select: ^2.4.3
     react-slick: ^0.25.2
+    react-string-replace: ^1.1.0
     react-table: ^6.10.3
     react-tooltip: ^4.2.20
     react-virtualized: ^9.22.3
@@ -30523,6 +30524,13 @@ fsevents@^1.2.7:
     react: ^0.14.0 || ^15.0.1 || ^16.0.0
     react-dom: ^0.14.0 || ^15.0.1 || ^16.0.0
   checksum: a728161f6d6dd09a626db9d0c089d3eed3e8087246c0307c7e1343f6420c645d1760498c41733fce67138eadaf14a67552fd9e5d85227617cd54c750f4f542dc
+  languageName: node
+  linkType: hard
+
+"react-string-replace@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "react-string-replace@npm:1.1.0"
+  checksum: 5df67fbdb49cacdc9f4488d4bc3dedef1f85d6156b3626d9b4b6c317ec8cc534494def078ab0b2df7aea8fa3cbcecd8d3f76a161f04bf8b29869daccf33785ec
   languageName: node
   linkType: hard
 

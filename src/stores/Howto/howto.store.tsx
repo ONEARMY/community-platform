@@ -170,8 +170,11 @@ export class HowtoStore extends ModuleStore {
     try {
       const user = this.activeUser
       const howto = this.activeHowto
-      const comment = text.slice(0, MAX_COMMENT_LENGTH).trim()
+      let comment = text.slice(0, MAX_COMMENT_LENGTH).trim()
+
       if (user && howto && comment) {
+        const mentions = await this.parseMentions(comment)
+        comment = mentions.text
         const userCountry = getUserCountry(user)
         const newComment: IComment = {
           _id: randomID(),
@@ -197,6 +200,21 @@ export class HowtoStore extends ModuleStore {
 
         // Refresh the active howto
         this.activeHowto = await dbRef.get()
+        this.notifyMentionedUsers(
+          mentions.mentionedUsers,
+          'comment_mention_howto',
+          '/how-to/' + howto.slug + '#comment_' + newComment._id,
+        )
+        // trigger notification for comment only
+        // if how-to author wasn't mentioned in the comment
+        // to avoid duplicated notifications
+        if (!mentions.mentionedUsers.has(howto._createdBy)) {
+          await this.userStore.triggerNotification(
+            'new_comment',
+            howto._createdBy,
+            '/how-to/' + howto.slug,
+          )
+        }
       }
     } catch (err) {
       console.error(err)

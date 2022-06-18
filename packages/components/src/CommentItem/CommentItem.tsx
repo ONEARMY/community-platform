@@ -5,6 +5,7 @@ import { Button, EditComment, Modal } from '../index'
 import { Box, Flex, Text } from 'theme-ui'
 import { FlagIconHowTos } from '../FlagIcon/FlagIcon'
 import { Icon } from '../Icon/Icon'
+import { TextWithMentions } from './../TextWithMetnions/TextWithMentions'
 
 export interface Props {
   text: string
@@ -57,7 +58,7 @@ export const CommentItem = (props: Props) => {
   }
 
   return (
-    <Box data-cy="comment">
+    <Box data-cy="comment" id={'comment_' + _id}>
       <Flex
         p="3"
         bg={'white'}
@@ -112,7 +113,9 @@ export const CommentItem = (props: Props) => {
           }}
           ref={textRef}
         >
-          <Linkify properties={{ target: '_blank' }}>{text}</Linkify>
+          <Linkify properties={{ target: '_blank' }}>
+            <TextWithMentions text={text} />
+          </Linkify>
         </Text>
         {textHeight > 129 && (
           <a

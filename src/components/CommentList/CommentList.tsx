@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ReactGA from 'react-ga4'
 import { Box } from 'theme-ui'
 import { Button, CommentItem } from 'oa-components'
@@ -12,15 +12,34 @@ export const CommentList: React.FC<{
   handleEditRequest: () => Promise<void>
   handleDelete: (_id: string) => Promise<void>
   articleTitle?: string
+  commentToScrollTo: string
 }> = ({
   articleTitle,
   comments,
   handleEditRequest,
   handleDelete,
   handleEdit,
+  commentToScrollTo,
 }) => {
   const [moreComments, setMoreComments] = useState(1)
   const shownComments = moreComments * MAX_COMMENTS
+
+  const scrollIntoRelevantComment = (hash: string) => {
+    setTimeout(() => {
+      const section = document.querySelector(hash)
+      // the delay is needed, otherwise the scroll is not happening in Firefox
+      section?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 1300)
+  }
+
+  useEffect(() => {
+    const i = comments.map((comment) => comment._id).indexOf(commentToScrollTo)
+    if (i > 0) {
+      setMoreComments(Math.floor(i / MAX_COMMENTS) + 1)
+      scrollIntoRelevantComment('#comment_' + commentToScrollTo)
+    }
+  }, [commentToScrollTo])
+
   return (
     <Box
       mb={4}

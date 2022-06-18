@@ -10,6 +10,7 @@ import type { IUploadedFileMeta } from '../storage'
 import { Storage } from '../storage'
 import { useCommonStores } from 'src/index'
 import { logger } from 'src/logger'
+import type { NotificationType } from 'src/models'
 
 /**
  * The module store is used to share methods and data between other stores, including
@@ -197,8 +198,43 @@ export class ModuleStore {
     })
     return Promise.all(promises)
   }
-}
 
+  public async parseMentions(
+    text: string,
+  ): Promise<{ text: string; mentionedUsers: Set<string> }> {
+    let mentions = text.split(' ')
+    mentions = mentions.map((w) => w.trim())
+    mentions = mentions.filter((w) => w.startsWith('@'))
+    const mentionedUsers = new Set<string>()
+    for (const mention of mentions) {
+      const userId = mention.replace('@', '')
+      const userProfile = await this.userStore.getUserProfile(userId)
+      if (userProfile) {
+        const username = userProfile.userName
+        const link = '/u/' + userProfile.userName
+        text = text.replace(mention, `@[${username}:${link}]`)
+        console.log(text)
+        mentionedUsers.add(userId)
+      }
+    }
+    return { text, mentionedUsers }
+  }
+
+  public async notifyMentionedUsers(
+    mentionedUsers: Set<string>,
+    mentionType: NotificationType,
+    relevantLink: string,
+  ) {
+    const mentionedUsersArr = Array.from(mentionedUsers)
+    for (const mentionedUserId of mentionedUsersArr) {
+      await this.userStore.triggerNotification(
+        mentionType,
+        mentionedUserId,
+        relevantLink,
+      )
+    }
+  }
+}
 // collection typings to ensure correct fields are available for filter
 interface ICollectionWithTags {
   // NOTE - tags field can't be ensured as firebase ignores empty tags:{}

@@ -69,6 +69,10 @@ const ResearchArticle = observer((props: IProps) => {
     }
   }, [props, researchStore])
 
+  const extractCommentIdFromHash = (hash: string) => {
+    return hash.substring(hash.indexOf('comment')).replace('comment_', '')
+  }
+
   const item = researchStore.activeResearchItem
   const loggedInUser = researchStore.activeUser
 
@@ -108,6 +112,9 @@ const ResearchArticle = observer((props: IProps) => {
                   slug={item.slug}
                   comments={researchStore.getActiveResearchUpdateComments(
                     index,
+                  )}
+                  commentToScrollTo={extractCommentIdFromHash(
+                    props.location.hash,
                   )}
                 />
               )

@@ -10,27 +10,18 @@ import { MAX_COMMENT_LENGTH } from 'src/constants'
 
 interface IProps {
   comments?: IComment[]
+  commentToScrollTo: string
 }
 
 // TODO: Expect the comments as a prop from the HowTo
-export const HowToComments = ({ comments }: IProps) => {
+export const HowToComments = ({ comments, commentToScrollTo }: IProps) => {
   const [comment, setComment] = useState('')
   const { stores } = useCommonStores()
 
   async function onSubmit(comment: string) {
     try {
-      const howto = stores.howtoStore.activeHowto
       await stores.howtoStore.addComment(comment)
-      if (howto) {
-        await stores.userStore.triggerNotification(
-          'new_comment',
-          howto._createdBy,
-          '/how-to/' + howto.slug,
-        )
-      }
-
       setComment('')
-
       ReactGA.event({
         category: 'Comments',
         action: 'Submitted',
@@ -122,6 +113,7 @@ export const HowToComments = ({ comments }: IProps) => {
           handleEdit={handleEdit}
           handleEditRequest={handleEditRequest}
           handleDelete={handleDelete}
+          commentToScrollTo={commentToScrollTo}
         />
       </Flex>
       <Box

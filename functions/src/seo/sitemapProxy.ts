@@ -13,10 +13,10 @@ export const sitemapProxy = functions.https.onRequest(async (req, res) => {
   const [exists] = await ref.exists()
   // If sitemap does not exist (e.g. new site) try to generate
   if (!exists) {
-    try {
-      const sitemapString = await generateSitemap()
+    const sitemapString = await generateSitemap()
+    if (sitemapString) {
       res.send(sitemapString)
-    } catch (error) {
+    } else {
       res.status(404).send()
     }
     return

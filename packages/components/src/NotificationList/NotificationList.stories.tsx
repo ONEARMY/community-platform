@@ -8,45 +8,43 @@ export default {
 
 export const Default: ComponentStory<typeof NotificationList> = () => (
   <NotificationList
-    notifications={
-      [
-        {
-          triggeredBy: {
-            displayName: 'Example User',
-            userId: 'abc',
-          },
-          type: 'new_comment',
-          relevantUrl: 'https://example.com',
+    notifications={[
+      {
+        triggeredBy: {
+          displayName: 'Example User',
+          userId: 'abc',
         },
-        {
-          triggeredBy: {
-            displayName: 'Example User',
-            userId: 'abc',
-          },
-          type: 'howto_useful',
-          relevantUrl: 'https://example.com',
+        type: 'new_comment',
+        relevantUrl: 'https://example.com',
+      },
+      {
+        triggeredBy: {
+          displayName: 'Example User',
+          userId: 'abc',
         },
-        {
-          triggeredBy: {
-            displayName: 'Example User',
-            userId: 'abc',
-          },
-          type: 'new_comment_research',
-          relevantUrl: 'https://example.com',
+        type: 'howto_useful',
+        relevantUrl: 'https://example.com',
+      },
+      {
+        triggeredBy: {
+          displayName: 'Example User',
+          userId: 'abc',
         },
-        {
-          triggeredBy: {
-            displayName: 'Example User',
-            userId: 'abc',
-          },
-          type: 'research_useful',
-          relevantUrl: 'https://example.com',
+        type: 'new_comment_research',
+        relevantUrl: 'https://example.com',
+      },
+      {
+        triggeredBy: {
+          displayName: 'Example User',
+          userId: 'abc',
         },
-      ] as any
-    }
+        type: 'research_useful',
+        relevantUrl: 'https://example.com',
+      },
+    ]}
   />
 )
 
 export const Empty: ComponentStory<typeof NotificationList> = () => (
-  <NotificationList notifications={[] as any} />
+  <NotificationList notifications={[]} />
 )

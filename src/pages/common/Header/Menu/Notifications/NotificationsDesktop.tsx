@@ -2,10 +2,11 @@ import { useState } from 'react'
 import { Flex } from 'theme-ui'
 import { NotificationsIcon } from './NotificationsIcon'
 import Foco from 'react-foco'
+import type { UserNotificationList } from 'oa-components'
 import { NotificationList } from 'oa-components'
 
 export interface Props {
-  notifications: any[]
+  notifications: UserNotificationList
   handleOnClick: () => void
 }
 

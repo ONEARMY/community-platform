@@ -2,16 +2,16 @@ import { Link } from 'react-router-dom'
 import { Flex, Box } from 'theme-ui'
 import { Icon } from '../Icon/Icon'
 
-export interface Props {
+export interface NotificationItemProps {
   triggeredBy: {
     displayName: string
     userId: string
   }
-  relevantUrl: string
   type: string
+  relevantUrl?: string
 }
 
-export const NotificationItem = (props: Props) => {
+export const NotificationItem = (props: NotificationItemProps) => {
   const { triggeredBy, relevantUrl, type } = props
   return (
     <Flex

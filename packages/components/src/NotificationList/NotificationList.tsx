@@ -2,7 +2,10 @@ import styled from '@emotion/styled'
 import { Box, Card, Text } from 'theme-ui'
 import { Button } from '../Button/Button'
 import { NotificationItem } from '../NotificationItem/NotificationItem'
-import type { Props as Notification } from '../NotificationItem/NotificationItem'
+import type { NotificationItemProps as Notification } from '../NotificationItem/NotificationItem'
+
+export type UserNotificationList = Notification[]
+
 export interface Props {
   notifications: Notification[]
   sx?: any

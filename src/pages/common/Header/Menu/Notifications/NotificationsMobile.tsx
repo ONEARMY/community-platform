@@ -1,6 +1,7 @@
 import theme from 'src/themes/styled.theme'
 import styled from '@emotion/styled'
 import { Box } from 'theme-ui'
+import type { UserNotificationList } from 'oa-components'
 import { NotificationList } from 'oa-components'
 
 const PanelContainer = styled(Box)`
@@ -37,7 +38,7 @@ export const MenuMobileLinkContainer = styled(Box as any)`
 `
 
 export interface Props {
-  notifications: any[]
+  notifications: UserNotificationList
   handleOnClick: () => void
 }
 
@@ -48,7 +49,7 @@ export const NotificationsMobile = (props: Props) => {
     <PanelContainer>
       <PanelMenu>
         <NotificationList
-          notifications={notifications as any}
+          notifications={notifications}
           handleOnClick={() => handleOnClick && handleOnClick()}
           sx={{
             position: 'absolute',

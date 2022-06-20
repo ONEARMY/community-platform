@@ -1,9 +1,9 @@
 import * as functions from 'firebase-functions'
 import cors from 'cors'
 import express from 'express'
-import { PubSub } from '@google-cloud/pubsub'
 import { seedDataClean } from './seed/data-clean'
 import { seedUsersCreate } from './seed/users-create'
+import { triggerPubsub } from './pubsub'
 
 console.log('emulator api ready')
 
@@ -52,40 +52,19 @@ app.get('/seed-clean', (req, res) =>
  * `http://localhost:4002/community-platform-emulated/us-central1/emulator/pubsub/schedule/dailyTasks`
  * `http://localhost:4002/community-platform-emulated/us-central1/emulator/pubsub/topic/test-topic`
  */
-app.post('/pubsub/:trigger/:topic', async (req, res) => {
+app.all('/pubsub/:trigger/:name', async (req, res) => {
   if (!process.env.PUBSUB_EMULATOR_HOST) {
     functions.logger.error(
       'This function should only run locally in an emulator.',
     )
     res.status(400).end()
   }
-  const pubsub = new PubSub()
-
-  const trigger: 'topic' | 'schedule' = req.params.trigger as any
-  let topic: string = req.params.topic
-
-  console.log({ trigger, topic })
-
-  if (trigger === 'schedule') {
-    // prefix scheduled functions to be picked up by firebase
-    // https://github.com/firebase/firebase-tools/pull/2011/files
-    topic = `firebase-schedule-${topic}`
-  }
-
-  const [topics] = await pubsub.getTopics()
-  if (!topics.find((t) => t.name.includes(topic))) {
-    await pubsub.createTopic(topic)
-  }
-
+  const trigger = req.params.trigger as 'topic' | 'schedule'
+  const name = req.params.name
   const payload = req.body
-
-  const messageID = await pubsub.topic(topic).publishMessage({ json: payload })
-  res.status(201).send({
-    success: 'Published to pubsub',
-    topic,
-    messageID,
-    payload,
-  })
+  const messageId = await triggerPubsub({ trigger, name, payload })
+  const result = 'Pubsub Published'
+  res.status(201).send({ result, trigger, name, messageId, payload })
 })
 
 // Increase default timeout to max allowed for longer-running operations

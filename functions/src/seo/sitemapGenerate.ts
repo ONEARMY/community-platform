@@ -158,7 +158,7 @@ const sitemapItemGenerators: {
     changefreq: EnumChangefreq.MONTHLY,
   }),
   // NOTE - additional endpoints excluded:
-  // Events - are often expired and don't render
+  // Events - don't have standalone pages for events
   // Academy - only hosts iframe so not sure how to extract list of urls
   // Map - pins don't hold much info of value for search
   // Profile/Settings - not sure if good idea to make as publically searchable

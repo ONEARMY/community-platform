@@ -1,5 +1,4 @@
-import { ExternalLink } from 'oa-components'
-import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
+import { ExternalLink, ElWithBeforeIcon } from 'oa-components'
 
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 import IconEmail from 'src/assets/icons/icon-email.svg'

@@ -13,6 +13,9 @@ on:
       - '.github/workflows/pr-preview.yml'
       - 'package.json'
       - 'yarn.lock'
+   push:
+    branches:
+      - fix/hosting-preview
 jobs:
   build_and_preview:
     # NOTE - as we are going to check out and build from forks we also need to add manual

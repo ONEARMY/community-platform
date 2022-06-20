@@ -1,7 +1,7 @@
 # Create and deploy a build on all pull requests
 name: PR Preview
 on:
-  use pull_request_target so that secrets accessible from fork
+  # use pull_request_target so that secrets accessible from fork
   pull_request_target:
     # Trigger when labels are changed or more commits added to a PR that contains labels
     types: [labeled, synchronize]

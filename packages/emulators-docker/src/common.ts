@@ -47,6 +47,10 @@ export const FIREBASE_JSON_EMULATORS_DEFAULT = {
     port: 4007,
     host: '0.0.0.0',
   },
+  pubsub: {
+    port: 4008,
+    host: '0.0.0.0',
+  },
 }
 
 /** Minimal method to extract optional repo and tag args */

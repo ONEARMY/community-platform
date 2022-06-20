@@ -70,7 +70,3 @@ jobs:
           firebaseServiceAccount: '${{ secrets.ONEARMY_NEXT_FIREBASE_SERVICE_ACCOUNT }}'
           expires: 30d
           projectId: onearmy-next
-          # The action usually generates based on PR title, but easier to just provide our
-          # own channelId from the PR number (could also include hash if wanting to support multiple)
-          channelId: 'pr-${{ github.event.issue.number }}'
-          # channelId: 'pr-${{ github.event.number }}'-${{ github.event.pull_request.head.ref }}

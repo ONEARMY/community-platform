@@ -70,3 +70,5 @@ jobs:
           firebaseServiceAccount: '${{ secrets.ONEARMY_NEXT_FIREBASE_SERVICE_ACCOUNT }}'
           expires: 30d
           projectId: onearmy-next
+          channelId: 'pr-${{ github.event.number }}'
+          # channelId: 'pr-${{ github.event.number }}'-${{ github.event.pull_request.head.ref }}

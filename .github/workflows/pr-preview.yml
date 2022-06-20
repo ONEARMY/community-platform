@@ -13,9 +13,9 @@ on:
   #     - '.github/workflows/pr-preview.yml'
   #     - 'package.json'
   #     - 'yarn.lock'
-  push:
-    branches:
-      - fix/hosting-preview
+  pull_request:
+    types: [labeled, synchronize]
+
 jobs:
   build_and_preview:
     # NOTE - as we are going to check out and build from forks we also need to add manual
@@ -72,5 +72,5 @@ jobs:
           projectId: onearmy-next
           # The action usually generates based on PR title, but easier to just provide our
           # own channelId from the PR number (could also include hash if wanting to support multiple)
-          channelId: 'pr-${{ github.event.number }}'
+          channelId: 'pr-${{ github.event.issue.number }}'
           # channelId: 'pr-${{ github.event.number }}'-${{ github.event.pull_request.head.ref }}

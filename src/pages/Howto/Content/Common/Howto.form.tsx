@@ -9,7 +9,12 @@ import type { IHowtoFormInput } from 'src/models/howto.models'
 import type { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 import { SelectField } from 'src/components/Form/Select.field'
 import { HowtoStep } from './HowtoStep.form'
-import { Button, FieldTextarea, FieldInput } from 'oa-components'
+import {
+  Button,
+  FieldInput,
+  FieldTextarea,
+  ElWithBeforeIcon,
+} from 'oa-components'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import { Heading, Card, Flex, Box, Text } from 'theme-ui'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
@@ -24,7 +29,6 @@ import { DIFFICULTY_OPTIONS, TIME_OPTIONS } from './FormSettings'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import { HowToSubmitStatus } from './SubmitStatus'
 import { required, validateUrlAcceptEmpty } from 'src/utils/validators'
-import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { UnsavedChangesDialog } from 'src/components/Form/UnsavedChangesDialog'

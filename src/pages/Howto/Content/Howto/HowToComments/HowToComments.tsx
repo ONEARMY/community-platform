@@ -107,11 +107,7 @@ export const HowToComments = ({ comments }: IProps) => {
       <Flex
         mb={4}
         sx={{
-          width: [
-            `${(4 / 5) * 100}%`,
-            `${(4 / 5) * 100}%`,
-            `${(2 / 3) * 100}%`,
-          ],
+          width: [`100%`, `${(4 / 5) * 100}%`, `${(2 / 3) * 100}%`],
           flexDirection: 'column',
           alignItems: 'center',
         }}
@@ -125,7 +121,9 @@ export const HowToComments = ({ comments }: IProps) => {
         />
       </Flex>
       <Box
-        sx={{ width: `calc(${(2 / 3) * 100}% + 66px)`, marginLeft: '-66px' }}
+        sx={{
+          width: ['100%', `calc(${(2 / 3) * 100}%)`],
+        }}
       >
         <CreateComment
           maxLength={MAX_COMMENT_LENGTH}
@@ -134,7 +132,7 @@ export const HowToComments = ({ comments }: IProps) => {
           onSubmit={onSubmit}
           isLoggedIn={!!stores.userStore.activeUser}
           sx={{
-            marginLeft: 2 * -1,
+            marginLeft: [0, 2 * -1],
           }}
         />
       </Box>

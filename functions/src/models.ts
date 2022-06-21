@@ -12,8 +12,9 @@ import type {
 } from 'one-army-community-platform/src/models'
 export { DBDoc, IDBEndpoint, IEventDB, IHowtoDB, IUserDB, IMapPin, IModerable }
 
-import { generateDBEndpoints } from 'oa-shared'
+import { generateDBEndpoints, dbEndpointSubollections } from 'oa-shared'
 export const DB_ENDPOINTS = generateDBEndpoints()
+export const DB_ENDPOINT_SUBCOLLECTIONS = dbEndpointSubollections
 
 export type IDBDocChange =
   functions.Change<functions.firestore.DocumentSnapshot>

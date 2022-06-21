@@ -19,6 +19,7 @@ import DevSiteHeader from 'src/pages/common/DevSiteHeader/DevSiteHeader'
 import { getSupportedModules } from 'src/modules'
 import GlobalSiteFooter from './common/GlobalSiteFooter/GlobalSiteFooter'
 import NotificationBanner from 'src/components/NotificationBanner/NotificationBanner'
+import { SeoTagsUpdateComponent } from 'src/utils/seo'
 import { ExternalLink } from 'oa-components'
 
 export class Routes extends React.Component<
@@ -68,6 +69,7 @@ export class Routes extends React.Component<
                     key={page.path}
                     render={() => (
                       <React.Fragment>
+                        <SeoTagsUpdateComponent title={page.title} />
                         <Main
                           data-cy="main-layout-container"
                           style={{ flex: 1 }}

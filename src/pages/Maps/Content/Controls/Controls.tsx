@@ -9,11 +9,7 @@ import crossClose from 'src/assets/icons/cross-close.svg'
 import { GroupingFilterDesktop } from './GroupingFilterDesktop'
 import { GroupingFilterMobile } from './GroupingFilterMobile'
 
-import type {
-  IPinGrouping,
-  IMapGrouping,
-  IMapPinType,
-} from 'src/models/maps.models'
+import type { IMapPinType } from 'src/models/maps.models'
 import { HashLink as Link } from 'react-router-hash-link'
 import type { Map } from 'react-leaflet'
 import theme from 'src/themes/styled.theme'
@@ -23,10 +19,11 @@ import type { UserStore } from 'src/stores/User/user.store'
 import type { RouteComponentProps } from 'react-router'
 import OsmGeocoding from 'src/components/OsmGeocoding/OsmGeocoding'
 import { logger } from 'src/logger'
+import type { FilterGroup } from './transformAvailableFiltersToGroups'
 
 interface IProps extends RouteComponentProps<any> {
   mapRef: React.RefObject<Map>
-  availableFilters: Array<IMapGrouping>
+  availableFilters: FilterGroup[]
   onFilterChange: (selected: Array<IMapPinType>) => void
   onLocationChange: (latlng: { lat: number; lng: number }) => void
 }
@@ -68,14 +65,7 @@ class Controls extends React.Component<IProps, IState> {
   public render() {
     const { availableFilters } = this.props
     const { showFiltersMobile, filtersSelected } = this.state
-    const groupedFilters = availableFilters.reduce((accumulator, current) => {
-      const { grouping } = current
-      if (accumulator[grouping] === undefined) {
-        accumulator[grouping] = []
-      }
-      accumulator[grouping].push(current)
-      return accumulator
-    }, {} as Record<IPinGrouping, Array<IMapGrouping>>)
+    const groupedFilters = availableFilters
 
     return (
       <MapFlexBar
@@ -177,18 +167,14 @@ class Controls extends React.Component<IProps, IState> {
               onClick={() => this.handleFilterMobileModal()}
             />
           </Flex>
-          {Object.keys(groupedFilters).map((grouping) => (
-            <GroupingFilterMobile
-              key={grouping}
-              entityType={grouping}
-              items={groupedFilters[grouping]}
-              selectedItems={filtersSelected}
-              onChange={(selected) => {
-                this.props.onFilterChange(selected as IMapPinType[])
-                this.setState({ filtersSelected: selected })
-              }}
-            />
-          ))}
+          <GroupingFilterMobile
+            items={groupedFilters}
+            selectedItems={filtersSelected}
+            onChange={(selected) => {
+              this.props.onFilterChange(selected as IMapPinType[])
+              this.setState({ filtersSelected: selected })
+            }}
+          />
         </Modal>
       </MapFlexBar>
     )

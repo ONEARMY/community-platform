@@ -48,7 +48,10 @@ export const NotificationList = (props: Props) => {
           </Button>
         </>
       ) : (
-        <Text sx={{ display: 'block', textAlign: 'center' }}>
+        <Text
+          sx={{ display: 'block', textAlign: 'center' }}
+          data-cy="NotificationList: empty state"
+        >
           Nada, no new notifications
         </Text>
       )}

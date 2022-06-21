@@ -42,7 +42,7 @@ interface IDeployment {
   site_url: string
 }
 
-interface configVars {
+export interface configVars {
   service: IServiceAccount
   analytics: IAnalytics
   integrations: IIntergrations

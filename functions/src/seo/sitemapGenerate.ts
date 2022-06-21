@@ -4,6 +4,7 @@ import path from 'path'
 import { EnumChangefreq, SitemapStream, streamToPromise } from 'sitemap'
 import type { SitemapItem } from 'sitemap'
 import { Readable } from 'stream'
+import { CONFIG } from '../config/config'
 import { uploadLocalFileToStorage } from '../Firebase/storage'
 import { getCollection } from '../Firebase/firestoreDB'
 import { IDBEndpoint } from '../models'
@@ -23,10 +24,7 @@ export const sitemapGenerate = functions.pubsub
  * Main Methods
  ************************************************************************/
 
-/**
- * TODO - confirm what is published to circle-ci for deployments (will likely need to be added)
- * */
-const SITE_URL = process.env.SITE_URL
+const SITE_URL = CONFIG.deployment?.site_url
 
 /**
  * Generate a sitemap of dynamic content from the site
@@ -37,9 +35,9 @@ export async function generateSitemap() {
   functions.logger.log('[sitemapGenerate] Start')
   // Only generate if a fully-qualified site url is available
   if (!SITE_URL) {
-    functions.logger.error(
-      'Cannot generate sitemap, [SITE_URL] variable not set',
-    )
+    const errMessage =
+      '[deployment.site_url] missing. Specify via firebase functions:config:set'
+    functions.logger.error(errMessage)
     return
   }
   const sitemapItems = await generateSitemapItems()
@@ -75,6 +73,7 @@ async function generateSitemapItems() {
   //   Add additional top-level endpoints
   items.push(
     { ...endpointItemDefaults, url: `${SITE_URL}/how-to` },
+    { ...endpointItemDefaults, url: `${SITE_URL}/research` },
     { ...endpointItemDefaults, url: `${SITE_URL}/map` },
     { ...endpointItemDefaults, url: `${SITE_URL}/events` },
     { ...endpointItemDefaults, url: `${SITE_URL}/academy` },

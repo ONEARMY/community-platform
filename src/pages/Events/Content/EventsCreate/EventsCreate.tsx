@@ -4,7 +4,12 @@ import { Form, Field } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import TEMPLATE from './Template'
 import type { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
-import { Button, FieldDatepicker, FieldInput, ElWithBeforeIcon } from 'oa-components'
+import {
+  Button,
+  FieldDatepicker,
+  FieldInput,
+  ElWithBeforeIcon,
+} from 'oa-components'
 import type { EventStore } from 'src/stores/Events/events.store'
 import { Heading, Card, Flex, Box, Text } from 'theme-ui'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'

@@ -64,8 +64,12 @@ describe('SEO', () => {
       console.log('sitemap String', sitemapString)
       expect(sitemapString).not.toBe(undefined)
     })
-    describe('filters sitemap entries correctly', () => {
+    // Use nested describe-test statements to allow iterating over dynamic data
+    // This seems to play more nicely than test.each which kept losing variables
+    describe('sitemap populates entries as expected', () => {
       for (const testDoc of testDocs) {
+        // we just check for the end of location tags for the slug as additional prefix
+        // will also be included before
         const snippet = `/${testDoc.slug}</loc>`
         test(testDoc.slug, () => {
           const isIncluded = sitemapString.includes(snippet)
@@ -73,9 +77,10 @@ describe('SEO', () => {
         })
       }
     })
-    describe('includes main module routes', () => {
+    describe('sitemap includes additional top-level routes', () => {
       const modulePages = ['how-to', 'map', 'research', 'events', 'academy']
       for (const modulePage of modulePages) {
+        // the top-level pages should appear fully encapsulated, with domain specified from config
         const tag = `<loc>https://functions.test/${modulePage}</loc>`
         test(modulePage, () => {
           const isIncluded = sitemapString.includes(tag)
@@ -85,18 +90,3 @@ describe('SEO', () => {
     })
   })
 })
-/**
- * describe('filters sitemap entries correctly', () => {
-      test.each(testDocs)('$entry.slug', (entry) => {
-        const tag = '<loc>https://functions.test/$entry.slug</loc>'
-        expect(sitemapString.includes(tag)).toBe(entry.expectIncluded)
-      })
-    })
-    describe('includes main module routes', () => {
-      const modulePages = ['how-to', 'map', 'events', 'academy']
-      test.each(modulePages)('$_slug', (_slug) => {
-        const tag = '<loc>https://functions.test/$_slug</loc>'
-        expect(sitemapString.includes(tag)).toBe(true)
-      })
-    })
- */

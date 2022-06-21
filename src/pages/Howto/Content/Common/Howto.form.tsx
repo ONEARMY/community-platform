@@ -9,7 +9,12 @@ import type { IHowtoFormInput } from 'src/models/howto.models'
 import type { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 import { SelectField } from 'src/components/Form/Select.field'
 import { HowtoStep } from './HowtoStep.form'
-import { Button, FieldTextarea, FieldInput, ElWithBeforeIcon } from 'oa-components'
+import {
+  Button,
+  FieldInput,
+  FieldTextarea,
+  ElWithBeforeIcon,
+} from 'oa-components'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import { Heading, Card, Flex, Box, Text } from 'theme-ui'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'

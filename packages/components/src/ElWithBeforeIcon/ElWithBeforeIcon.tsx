@@ -1,7 +1,6 @@
 import { Box } from 'theme-ui'
 import checkmarkIcon from 'src/assets/icons/icon-checkmark.svg'
 
-
 export interface IProps {
   IconUrl: JSX.Element | string
   height?: string
@@ -18,7 +17,6 @@ export const ElWithBeforeIcon: React.FC<IProps> = ({
   ticked,
   contain,
 }) => {
-
   let after: any
   if (ticked) {
     after = {

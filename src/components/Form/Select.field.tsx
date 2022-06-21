@@ -6,7 +6,7 @@ import theme from 'src/themes/styled.theme'
 import { Flex, Text } from 'theme-ui'
 import { FieldContainer } from './FieldContainer'
 import type { FieldProps } from './types'
-import { DropdownIndicator } from '../DropdownIndicator'
+import { DropdownIndicator } from 'oa-components'
 
 interface ISelectOption {
   value: string

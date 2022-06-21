@@ -6,7 +6,7 @@ import type { FieldRenderProps } from 'react-final-form'
 import Select from 'react-select'
 import { SelectStyles, FilterStyles } from '../Form/Select.field'
 import { FieldContainer } from '../Form/FieldContainer'
-import { DropdownIndicator } from '../DropdownIndicator'
+import { DropdownIndicator } from 'oa-components'
 
 // we include props from react-final-form fields so it can be used as a custom field component
 export interface IProps extends Partial<FieldRenderProps<any, any>> {

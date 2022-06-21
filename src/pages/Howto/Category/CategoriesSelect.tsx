@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { observer } from 'mobx-react'
 import { FieldContainer } from '../../../components/Form/FieldContainer'
-import { DropdownIndicator } from '../../../components/DropdownIndicator'
+import { DropdownIndicator } from 'oa-components'
 import Select from 'react-select'
 import {
   SelectStyles,

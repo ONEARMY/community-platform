@@ -11,6 +11,7 @@ import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
 import { useCommonStores } from 'src/index'
 import { Link } from 'react-router-dom'
+import type { IComment, UserComment } from 'src/models'
 
 type IProps = RouteComponentProps<{ slug: string }>
 
@@ -106,8 +107,8 @@ const ResearchArticle = observer((props: IProps) => {
                   updateIndex={index}
                   isEditable={isEditable}
                   slug={item.slug}
-                  comments={researchStore.getActiveResearchUpdateComments(
-                    index,
+                  comments={transformToUserComment(
+                    researchStore.getActiveResearchUpdateComments(index),
                   )}
                 />
               )
@@ -128,4 +129,12 @@ const ResearchArticle = observer((props: IProps) => {
     return isLoading ? <Loader /> : <NotFoundPage />
   }
 })
+
+function transformToUserComment(comments: IComment[]): UserComment[] {
+  return comments.map((c) => ({
+    ...c,
+    isEditable: true,
+  }))
+}
+
 export default ResearchArticle

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import ReactGA from 'react-ga4'
 import { Box, Flex } from 'theme-ui'
 import { Button, CreateComment } from 'oa-components'
-import type { IComment } from 'src/models'
+import type { UserComment } from 'src/models'
 import { logger } from 'src/logger'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import type { IResearch } from 'src/models/research.models'
@@ -12,7 +12,7 @@ import styled from '@emotion/styled'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 
 interface IProps {
-  comments?: IComment[]
+  comments: UserComment[]
   update: IResearch.UpdateDB
   updateIndex: number
 }

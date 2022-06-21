@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
 import Step from './Step/Step'
-import type { IHowtoDB } from 'src/models/howto.models'
+import type { IComment, IHowtoDB } from 'src/models/howto.models'
 import { Box, Flex, Text } from 'theme-ui'
 import { Button } from 'oa-components'
 import styled from '@emotion/styled'
@@ -20,9 +20,11 @@ import { HowToComments } from './HowToComments/HowToComments'
 import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
 import { seoTagsUpdate } from 'src/utils/seo'
 import { Link } from 'react-router-dom'
+import type { UserComment } from 'src/models'
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
 // We can't directly provide the store as a prop though, and later user a get method to define it
+
 interface IRouterCustomParams {
   slug: string
 }
@@ -149,7 +151,14 @@ export class Howto extends React.Component<
         ? aggregations.users_votedUsefulHowtos[activeHowto._id] || 0
         : undefined
 
-      const activeHowToComments = this.store.getActiveHowToComments()
+      const activeHowToComments: UserComment[] = this.store
+        .getActiveHowToComments()
+        .map((c): UserComment => {
+          return {
+            ...c,
+            isEditable: c._creatorId === this.injected.userStore.user?.userName,
+          }
+        })
 
       return (
         <>

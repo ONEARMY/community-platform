@@ -182,11 +182,10 @@ describe('[How To]', () => {
       })
 
       describe('[Commenting]', () => {
-
         it('[Logged in user cannot edit a comment by another user]', () => {
           cy.login('howto_reader@test.com', 'test1234')
           cy.visit(specificHowtoUrl)
-          cy.get('[data-cy="howto-comments"]').should('exist');
+          cy.get('[data-cy="howto-comments"]').should('exist')
           cy.get('[data-cy="CommentItem: edit button"]').should('not.exist')
         })
 
@@ -213,7 +212,6 @@ describe('[How To]', () => {
           cy.get('[data-cy="CommentItem: edit button"]').should('exist')
         })
       })
-
     })
 
     it('[By Owner]', () => {

@@ -130,6 +130,7 @@ export const CommentItem = (props: Props) => {
           {isEditable && (
             <>
               <Button
+                data-cy='CommentItem: edit button'
                 variant={'outline'}
                 small={true}
                 icon={'edit'}

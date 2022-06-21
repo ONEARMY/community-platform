@@ -2506,6 +2506,15 @@
         "downloadUrl": "https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2FhowtosV1%2Fme5Bq0wq5FdoJUY8gELN%2Fart%20final%202.skp?alt=media&token=f4ebe379-2038-4ac0-9e6f-68c379174908",
         "contentType": "application/octet-stream"
       }
+    ],
+    "comments": [
+      {
+        "_id": "abc123",
+        "_created": "2019-09-18T14:49:54.311Z",
+        "_creatorId": "abc",
+        "creatorName": "abc",
+        "text": "A generated comment"
+      }
     ]
   },
   "zVVjXc34gKhUNIcgLEXg": {

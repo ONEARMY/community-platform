@@ -153,7 +153,7 @@ const UpdateForm = observer((props: IProps) => {
                         </Heading>
                         <Box ml="15px">
                           <ElWithBeforeIcon
-                            IconUrl={IconHeaderHowto}
+                            icon={IconHeaderHowto}
                             size="20px"
                           />
                         </Box>

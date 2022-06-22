@@ -3,7 +3,7 @@ import { Box } from 'theme-ui'
 import checkmarkIcon from 'src/assets/icons/icon-checkmark.svg'
 
 export interface ElWithBeforeIconProps {
-  IconUrl: JSX.Element | string
+  icon: JSX.Element | string
   size?: string
   ticked?: boolean
   contain?: boolean
@@ -12,7 +12,7 @@ export interface ElWithBeforeIconProps {
 const DEFAULT_ICON_SIZE = '22px'
 
 export const ElWithBeforeIcon: React.FC<ElWithBeforeIconProps> = ({
-  IconUrl,
+  icon,
   size,
   children,
   ticked,
@@ -54,7 +54,7 @@ export const ElWithBeforeIcon: React.FC<ElWithBeforeIconProps> = ({
           height: size || DEFAULT_ICON_SIZE,
 
           backgroundRepeat: 'no-repeat',
-          backgroundImage: `url("${IconUrl}")`,
+          backgroundImage: `url("${icon}")`,
           backgroundSize: contain ? 'contain' : 'initial',
         },
       }}

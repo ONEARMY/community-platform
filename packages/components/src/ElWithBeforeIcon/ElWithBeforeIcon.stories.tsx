@@ -9,13 +9,13 @@ export default {
 } as ComponentMeta<typeof ElWithBeforeIcon>
 
 export const Default: ComponentStory<typeof ElWithBeforeIcon> = () => (
-  <ElWithBeforeIcon IconUrl={HeaderHowtoIcon}>
+  <ElWithBeforeIcon icon={HeaderHowtoIcon}>
     <p>Element</p>
   </ElWithBeforeIcon>
 )
 
 export const Sizes: ComponentStory<typeof ElWithBeforeIcon> = (args) => (
-  <ElWithBeforeIcon {...args} IconUrl={HeaderHowtoIcon}>
+  <ElWithBeforeIcon {...args} icon={HeaderHowtoIcon}>
     <p>Element</p>
   </ElWithBeforeIcon>
 )

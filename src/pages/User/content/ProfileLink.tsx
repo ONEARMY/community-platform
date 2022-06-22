@@ -45,7 +45,7 @@ const ProfileLinkIcon = (link: IProps['link']) => {
 const ProfileLink = (props: IProps) => {
   const { link } = props
   return (
-    <ElWithBeforeIcon IconUrl={ProfileLinkIcon(link)}>
+    <ElWithBeforeIcon icon={ProfileLinkIcon(link)}>
       <ExternalLink ml={2} color={'black'} href={rewriteUrl(link)}>
         {link.label && capitalizeFirstLetter(link.label)}
       </ExternalLink>

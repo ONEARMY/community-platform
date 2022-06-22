@@ -6,7 +6,7 @@ import 'firebase/storage'
 import 'firebase/functions'
 import 'firebase/database'
 import { SEED_DATA } from '../../fixtures/seed'
-import { DB_ENDPOINTS } from './endpoints'
+import { DB_ENDPOINTS } from 'oa-shared/models'
 
 const fbConfig = {
   apiKey: 'AIzaSyDAxS_7M780mI3_tlwnAvpbaqRsQPlmp64',
@@ -25,7 +25,7 @@ class FirestoreTestDB {
     const endpoints = ensureDBPrefixes(DB_ENDPOINTS)
     const dbWrites = Object.keys(SEED_DATA).map(async (key) => {
       const endpoint = endpoints[key]
-      await this.addDocuments(endpoint, SEED_DATA[key])
+      await this.addDocuments(endpoint, Object.values(SEED_DATA[key]))
       return [endpoint, SEED_DATA[key]]
     })
     return Promise.all(dbWrites)

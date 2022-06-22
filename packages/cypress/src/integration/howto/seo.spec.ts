@@ -1,9 +1,9 @@
-import HOWTOS from '../../fixtures/seed/howtos.json'
+import { SEED_DATA } from '../../fixtures/seed'
 
 describe('[How To]', () => {
   describe('[SEO Metadata]', () => {
     const { slug, title, description, cover_image } =
-      HOWTOS.cmMzzlQP00fCckYIeL2e
+      SEED_DATA.howtos.cmMzzlQP00fCckYIeL2e
     it('[Populates title and description tags]', () => {
       cy.visit(`/how-to/${slug}`)
       // General

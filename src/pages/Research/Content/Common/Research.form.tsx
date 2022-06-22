@@ -164,7 +164,7 @@ const ResearchForm = observer((props: IProps) => {
                         <Box ml="15px">
                           <ElWithBeforeIcon
                             IconUrl={IconHeaderHowto}
-                            height="20px"
+                            size="20px"
                           />
                         </Box>
                       </Flex>

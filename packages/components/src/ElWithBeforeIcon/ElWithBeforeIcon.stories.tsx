@@ -14,11 +14,8 @@ export const Default: ComponentStory<typeof ElWithBeforeIcon> = () => (
   </ElWithBeforeIcon>
 )
 
-export const Sizes: ComponentStory<typeof ElWithBeforeIcon> = ({
-  height,
-  width,
-}) => (
-  <ElWithBeforeIcon IconUrl={HeaderHowtoIcon} height={height} width={width}>
+export const Sizes: ComponentStory<typeof ElWithBeforeIcon> = (args) => (
+  <ElWithBeforeIcon {...args} IconUrl={HeaderHowtoIcon}>
     <p>Element</p>
   </ElWithBeforeIcon>
 )

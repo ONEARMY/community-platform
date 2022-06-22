@@ -139,6 +139,7 @@ export const CommentItem = (props: Props) => {
                 edit
               </Button>
               <Button
+                data-cy="CommentItem: delete button"
                 variant={'outline'}
                 small={true}
                 icon="delete"

@@ -109,6 +109,7 @@ const ResearchArticle = observer((props: IProps) => {
                   slug={item.slug}
                   comments={transformToUserComment(
                     researchStore.getActiveResearchUpdateComments(index),
+                    loggedInUser?.userName,
                   )}
                 />
               )
@@ -130,10 +131,13 @@ const ResearchArticle = observer((props: IProps) => {
   }
 })
 
-function transformToUserComment(comments: IComment[]): UserComment[] {
+function transformToUserComment(
+  comments: IComment[],
+  loggedInUsername,
+): UserComment[] {
   return comments.map((c) => ({
     ...c,
-    isEditable: true,
+    isEditable: c.creatorName === loggedInUsername,
   }))
 }
 

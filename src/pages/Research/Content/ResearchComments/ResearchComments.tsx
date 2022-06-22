@@ -152,7 +152,11 @@ export const ResearchComments = ({ comments, update, updateIndex }: IProps) => {
         onClick={onButtonClick}
         backgroundColor={viewComments ? '#c2daf0' : '#e2edf7'}
         className={viewComments ? 'viewComments' : ''}
-        data-cy={!viewComments ? 'open-comments' : ''}
+        data-cy={
+          !viewComments
+            ? 'ResearchComments: button open-comments'
+            : 'ResearchComments: button'
+        }
       >
         <>{setButtonText()}</>
       </Button>

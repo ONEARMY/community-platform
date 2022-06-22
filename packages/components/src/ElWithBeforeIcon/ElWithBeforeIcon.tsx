@@ -4,12 +4,12 @@ import checkmarkIcon from 'src/assets/icons/icon-checkmark.svg'
 
 export interface ElWithBeforeIconProps {
   icon: JSX.Element | string
-  size?: string
+  size?: number
   ticked?: boolean
   contain?: boolean
 }
 
-const DEFAULT_ICON_SIZE = '22px'
+const DEFAULT_ICON_SIZE = 22
 
 export const ElWithBeforeIcon: React.FC<ElWithBeforeIconProps> = ({
   icon,
@@ -20,6 +20,8 @@ export const ElWithBeforeIcon: React.FC<ElWithBeforeIconProps> = ({
 }) => {
   let after: ThemeUIStyleObject = {}
 
+  const iconSize = size || DEFAULT_ICON_SIZE
+
   if (ticked) {
     after = {
       content: "''",
@@ -28,8 +30,8 @@ export const ElWithBeforeIcon: React.FC<ElWithBeforeIconProps> = ({
       bottom: '50%',
       transform: 'translateY(50%)',
 
-      width: size || DEFAULT_ICON_SIZE,
-      height: size || DEFAULT_ICON_SIZE,
+      width: iconSize,
+      height: iconSize,
 
       backgroundImage: `url("${checkmarkIcon}")`,
       backgroundRepeat: 'no-repeat',
@@ -50,8 +52,8 @@ export const ElWithBeforeIcon: React.FC<ElWithBeforeIconProps> = ({
           bottom: '50%',
           transform: 'translateY(50%)',
 
-          width: size || DEFAULT_ICON_SIZE,
-          height: size || DEFAULT_ICON_SIZE,
+          width: iconSize,
+          height: iconSize,
 
           backgroundRepeat: 'no-repeat',
           backgroundImage: `url("${icon}")`,

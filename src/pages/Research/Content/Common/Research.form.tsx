@@ -162,10 +162,7 @@ const ResearchForm = observer((props: IProps) => {
                           )}{' '}
                         </Heading>
                         <Box ml="15px">
-                          <ElWithBeforeIcon
-                            icon={IconHeaderHowto}
-                            size="20px"
-                          />
+                          <ElWithBeforeIcon icon={IconHeaderHowto} size={20} />
                         </Box>
                       </Flex>
                     </Card>

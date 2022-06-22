@@ -224,7 +224,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                           <Box ml="15px">
                             <ElWithBeforeIcon
                               icon={IconHeaderHowto}
-                              size="20px"
+                              size={20}
                             />
                           </Box>
                         </Flex>

@@ -117,10 +117,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                       >
                         <Heading>Create an event</Heading>
                         <Box ml="15px">
-                          <ElWithBeforeIcon
-                            icon={IconHeaderEvents}
-                            size="20px"
-                          />
+                          <ElWithBeforeIcon icon={IconHeaderEvents} size={20} />
                         </Box>
                       </Flex>
                     </Card>

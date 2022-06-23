@@ -1,4 +1,4 @@
-import { SEED_DATA } from '../fixtures/seed'
+import { users } from '../data'
 import { UserMenuItem } from '../support/commands'
 
 describe('[Profile]', () => {
@@ -6,8 +6,8 @@ describe('[Profile]', () => {
     cy.visit('/')
   })
 
-  const subscriber = SEED_DATA.users.subscriber
-  const admin = SEED_DATA.users.admin
+  const subscriber = users.subscriber
+  const admin = users.admin
 
   describe('[By Anonymous]', () => {
     it('[Can view public profile]', () => {

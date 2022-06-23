@@ -2,8 +2,7 @@ import { Box, Image } from 'theme-ui'
 import EventsIcon from 'src/assets/icons/icon-events.svg'
 import HowToCountIcon from 'src/assets/icons/icon-how-to.svg'
 import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
-import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
-import { Icon } from 'oa-components'
+import { Icon, ElWithBeforeIcon } from 'oa-components'
 import type { IUserPP } from 'src/models'
 import theme from 'src/themes/styled.theme'
 import styled from '@emotion/styled'
@@ -71,13 +70,13 @@ export const UserStats = ({ user }: IProps) => {
       )}
       {howtoCount > 0 && (
         <UserStatsBoxItem>
-          <ElWithBeforeIcon IconUrl={HowToCountIcon} />
+          <ElWithBeforeIcon icon={HowToCountIcon} />
           How‑to:&nbsp;{howtoCount}
         </UserStatsBoxItem>
       )}
       {eventCount > 0 && (
         <UserStatsBoxItem>
-          <ElWithBeforeIcon IconUrl={EventsIcon} />
+          <ElWithBeforeIcon icon={EventsIcon} />
           Events:&nbsp;{eventCount}
         </UserStatsBoxItem>
       )}

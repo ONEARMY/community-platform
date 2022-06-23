@@ -177,10 +177,7 @@ describe('[Notifications]', () => {
         })
       },
     )
-    const noNotificationsText = 'Nada, no new notification'
-    cy.get('[data-cy="notifications-desktop"]').should(
-      'have.text',
-      noNotificationsText,
-    )
+    const noNotificationsText = 'Nada, no new notifications'
+    cy.get('[data-cy="NotificationList: empty state"]').should('exist')
   })
 })

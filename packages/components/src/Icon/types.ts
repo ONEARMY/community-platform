@@ -37,6 +37,7 @@ export type availableGlyphs =
   | 'star-active'
   | 'thunderbolt'
   | 'external-url'
+  | 'useful'
   | 'verified'
 
 export type IGlyphs = { [k in availableGlyphs]: JSX.Element }

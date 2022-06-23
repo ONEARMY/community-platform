@@ -2,9 +2,9 @@ import { Component } from 'react'
 import { Flex } from 'theme-ui'
 import styled from '@emotion/styled'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
-import NotificationsIcon from 'src/pages/common/Header/Menu/Notifications/NotificationsIcon'
-import NotificationsDesktop from 'src/pages/common/Header/Menu/Notifications/NotificationsDesktop'
-import NotificationsMobile from 'src/pages/common/Header/Menu/Notifications/NotificationsMobile'
+import { NotificationsIcon } from 'src/pages/common/Header/Menu/Notifications/NotificationsIcon'
+import { NotificationsDesktop } from 'src/pages/common/Header/Menu/Notifications/NotificationsDesktop'
+import { NotificationsMobile } from 'src/pages/common/Header/Menu/Notifications/NotificationsMobile'
 import MenuDesktop from 'src/pages/common/Header/Menu/MenuDesktop'
 import MenuMobilePanel from 'src/pages/common/Header/Menu/MenuMobile/MenuMobilePanel'
 import { motion } from 'framer-motion'
@@ -101,13 +101,8 @@ export class Header extends Component<IProps> {
   render() {
     const menu = this.injected.mobileMenuStore
     const user = this.injected.userStore.user
-    const areThereNotifications = Boolean(
-      user?.notifications?.length &&
-        !(
-          user?.notifications?.filter((notification) => !notification.read)
-            .length === 0
-        ),
-    )
+    const notifications = this.injected.userStore.getUserNotifications()
+    const areThereNotifications = Boolean(notifications.length)
 
     return (
       <>
@@ -146,7 +141,12 @@ export class Header extends Component<IProps> {
             {isModuleSupported(MODULE.USER) ? (
               <>
                 <AuthWrapper roleRequired="beta-tester">
-                  <NotificationsDesktop />
+                  <NotificationsDesktop
+                    notifications={notifications}
+                    handleOnClick={() =>
+                      this.injected.userStore.markAllNotificationsRead()
+                    }
+                  />
                 </AuthWrapper>
                 <Profile isMobile={false} />
               </>
@@ -178,7 +178,12 @@ export class Header extends Component<IProps> {
         {menu.showMobileNotifications && (
           <AnimationContainer key={'mobileNotificationsContainer'}>
             <MobileMenuWrapper>
-              <NotificationsMobile />
+              <NotificationsMobile
+                notifications={notifications}
+                handleOnClick={() =>
+                  this.injected.userStore.markAllNotificationsRead()
+                }
+              />
             </MobileMenuWrapper>
           </AnimationContainer>
         )}

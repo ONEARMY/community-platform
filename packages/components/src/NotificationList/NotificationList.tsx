@@ -26,7 +26,7 @@ export const NotificationList = (props: Props) => {
   const { notifications, handleOnClick } = props
   const sx = props.sx || {}
   return (
-    <Card sx={{ padding: 2, ...sx }}>
+    <Card sx={{ padding: 2, maxHeight: 310, overflowY: 'auto', ...sx }}>
       {notifications.length ? (
         <>
           <ModalItem style={{ textAlign: 'center' }}>Notifications</ModalItem>

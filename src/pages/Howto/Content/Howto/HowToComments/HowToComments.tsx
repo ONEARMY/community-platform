@@ -3,13 +3,13 @@ import ReactGA from 'react-ga4'
 import { Box, Flex } from 'theme-ui'
 import { useCommonStores } from 'src/index'
 import { CreateComment } from 'oa-components'
-import type { IComment } from 'src/models'
+import type { UserComment } from 'src/models'
 import { logger } from 'src/logger'
 import { CommentList } from 'src/components/CommentList/CommentList'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 
 interface IProps {
-  comments?: IComment[]
+  comments: UserComment[]
 }
 
 // TODO: Expect the comments as a prop from the HowTo

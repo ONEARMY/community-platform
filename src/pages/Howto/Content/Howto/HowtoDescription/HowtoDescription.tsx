@@ -3,12 +3,11 @@ import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { format } from 'date-fns'
 import type { IHowtoDB } from 'src/models/howto.models'
 import { Heading, Text, Box, Flex, Image, AspectImage } from 'theme-ui'
-import { ModerationStatusText } from 'src/components/ModerationStatusText/ModerationStatustext'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import StepsIcon from 'src/assets/icons/icon-steps.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
-import { Button, FlagIconHowTos } from 'oa-components'
+import { Button, FlagIconHowTos, ModerationStatus } from 'oa-components'
 import type { IUser } from 'src/models/user.models'
 import {
   isAllowToEditContent,
@@ -345,10 +344,10 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
             alt="how-to cover"
           />
           {howto.moderation !== 'accepted' && (
-            <ModerationStatusText
-              moderatedContent={howto}
+            <ModerationStatus
+              status={howto.moderation}
               contentType="howto"
-              top={'0px'}
+              sx={{ top: 0, position: 'absolute', right: 0 }}
             />
           )}
         </Box>

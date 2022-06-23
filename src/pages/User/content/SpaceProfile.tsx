@@ -45,7 +45,7 @@ interface IProps {
 const MobileBadge = styled.div`
   position: relative;
   max-width: 120px;
-  margin-bottom: 20px;
+  margin-bottom: 0;
 
   @media only screen and (min-width: ${theme.breakpoints[2]}) {
     max-width: 150px;
@@ -66,7 +66,9 @@ const ProfileWrapper = styled(Box)`
   align-self: center;
 `
 
-const ProfileWrapperCarousel = styled.div``
+const ProfileWrapperCarousel = styled.div`
+  line-height: 0;
+`
 
 const OpeningHours = styled.p`
   color: ${theme.colors.grey};
@@ -87,11 +89,6 @@ const ProfileContentWrapper = styled(Flex)`
   background-color: ${theme.colors.white};
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
-  /* margin-top: -112px;
-
-  @media only screen and (min-width: ${theme.breakpoints[1]}) {
-      margin-top: 0;
-  } */
 `
 
 const SliderImage = styled.div`
@@ -251,7 +248,7 @@ export const SpaceProfile = ({ user }: IProps) => {
       <ProfileWrapperCarousel>
         <Slider {...sliderSettings}>{coverImage}</Slider>
       </ProfileWrapperCarousel>
-      <ProfileContentWrapper mt={['-122px', '-122px', 0]} px={[2, 4]} py={4}>
+      <ProfileContentWrapper px={[2, 4]} py={4}>
         <Box sx={{ width: ['100%', '100%', '80%'] }}>
           <Box sx={{ display: ['block', 'block', 'none'] }}>
             <MobileBadge>
@@ -262,7 +259,7 @@ export const SpaceProfile = ({ user }: IProps) => {
           <Flex
             sx={{
               alignItems: 'center',
-              pt: ['40px', '40px', '0'],
+              pt: ['0', '40px', '0'],
             }}
           >
             {userCountryCode && (

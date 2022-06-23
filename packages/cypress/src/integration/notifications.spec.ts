@@ -98,7 +98,7 @@ describe('[Notifications]', () => {
     cy.visit('how-to')
     cy.login('howto_reader@test.com', 'test1234')
     cy.visit('/research/qwerty')
-    cy.get('[data-cy="open-comments"]').click()
+    cy.get('[data-cy="ResearchComments: button open-comments"]').click()
     cy.get('[data-cy="comments-form"]').type('some sample comment')
     cy.get('[data-cy="comment-submit"]').click()
     cy.wait(DB_WAIT_TIME)

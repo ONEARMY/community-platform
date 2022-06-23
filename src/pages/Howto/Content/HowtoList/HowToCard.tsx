@@ -1,13 +1,12 @@
+import { useTheme } from '@emotion/react'
+import { FlagIconHowTos, Icon, ModerationStatus } from 'oa-components'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
-import { Text, Card, Flex, Heading } from 'theme-ui'
 import { Link as RouterLink } from 'react-router-dom'
-import ModerationStatusText from 'src/components/ModerationStatusText/ModerationStatustext'
-import { FlagIconHowTos, Icon } from 'oa-components'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
+import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 import type { IHowtoDB } from 'src/models/howto.models'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
-import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
-import { useTheme } from '@emotion/react'
+import { Card, Flex, Heading, Text } from 'theme-ui'
 
 interface IProps {
   howto: IHowtoDB
@@ -21,11 +20,13 @@ export const HowToCard = (props: IProps) => {
     <Card data-cy="card" sx={{ borderRadius: 2, position: 'relative' }}>
       <Flex>
         {howto.moderation !== 'accepted' && (
-          <ModerationStatusText
-            moderatedContent={howto}
-            contentType="howto"
-            top={'62%'}
-          />
+          <>
+            <ModerationStatus
+              status={howto.moderation}
+              contentType="howto"
+              sx={{ top: '62%', position: 'absolute', right: 0 }}
+            />
+          </>
         )}
         <RouterLink
           key={howto._id}

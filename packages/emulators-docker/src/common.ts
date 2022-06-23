@@ -47,11 +47,15 @@ export const FIREBASE_JSON_EMULATORS_DEFAULT = {
     port: 4007,
     host: '0.0.0.0',
   },
+  pubsub: {
+    port: 4008,
+    host: '0.0.0.0',
+  },
 }
 
 /** Minimal method to extract optional repo and tag args */
 function extractArgs() {
-  const args = { repo: 'onearmyplatform', tag: 'pp-2022-04-26' }
+  const args = { repo: 'onearmyplatform', tag: 'pp-2022-06-16' }
   process.argv.slice(2).forEach((arg) => {
     const [selector, value] = arg
       .split('=')

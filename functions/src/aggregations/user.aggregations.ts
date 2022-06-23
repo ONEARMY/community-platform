@@ -22,8 +22,9 @@ const userAggregations: IUserAggregation[] = [
     process: ({ dbChange }) => {
       const user: IUserDB = dbChange.after.data() as any
       // return user doc id and verified status (removing entry if not verified)
+      const value = user.badges?.verified ? true : VALUE_MODIFIERS.delete()
       return {
-        [dbChange.after.id]: user.badges?.verified || VALUE_MODIFIERS.delete(),
+        [dbChange.after.id]: value,
       }
     },
   },

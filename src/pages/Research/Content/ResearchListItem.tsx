@@ -1,7 +1,7 @@
 import { format } from 'date-fns'
 import * as React from 'react'
 import { Card, Flex, Heading, Text } from 'theme-ui'
-import { ModerationStatusText } from 'src/components/ModerationStatusText/ModerationStatustext'
+import { ModerationStatus } from 'oa-components'
 import type { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
@@ -12,7 +12,7 @@ interface IProps {
 }
 
 const ResearchListItem: React.FC<IProps> = ({ item }) => (
-  <Card data-cy="research=list-item" data-id={item._id} mb={3}>
+  <Card data-cy="ResearchListItem" data-id={item._id} mb={3}>
     <Flex sx={{ width: '100%', position: 'relative' }}>
       <Link
         to={`/research/${encodeURIComponent(item.slug)}`}
@@ -68,11 +68,14 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => (
           </Flex>
         </Flex>
         {item.moderation !== 'accepted' && (
-          <ModerationStatusText
-            moderatedContent={item}
+          <ModerationStatus
+            status={item.moderation}
             contentType="research"
-            bottom={['36px', '36px', 0]}
-            cropBottomRight
+            sx={{
+              position: 'absolute',
+              bottom: 0,
+              right: 0,
+            }}
           />
         )}
       </Link>

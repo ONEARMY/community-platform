@@ -2,8 +2,7 @@ import { format } from 'date-fns'
 import * as React from 'react'
 import { Box, Flex, Image, Text, Heading } from 'theme-ui'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
-import { Button, FlagIconHowTos } from 'oa-components'
-import ModerationStatusText from 'src/components/ModerationStatusText/ModerationStatustext'
+import { Button, FlagIconHowTos, ModerationStatus } from 'oa-components'
 import type { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
 import type { IUser } from 'src/models/user.models'
@@ -171,11 +170,14 @@ const ResearchDescription: React.FC<IProps> = ({
         </Box>
       </Flex>
       {research.moderation !== 'accepted' && (
-        <ModerationStatusText
-          moderatedContent={research}
+        <ModerationStatus
+          status={research.moderation}
           contentType="research"
-          bottom={'0'}
-          cropBottomRight
+          sx={{
+            position: 'absolute',
+            bottom: 0,
+            right: 0,
+          }}
         />
       )}
     </Flex>

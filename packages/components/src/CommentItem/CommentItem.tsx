@@ -107,8 +107,9 @@ export const CommentItem = (props: Props) => {
             whiteSpace: 'pre-wrap',
             wordBreak: 'break-word',
             overflow: 'hidden',
-            lineHeight: '1em',
             maxHeight: isShowMore ? 'max-content' : '128px',
+            fontFamily: 'body',
+            lineHeight: 1.3,
           }}
           ref={textRef}
         >

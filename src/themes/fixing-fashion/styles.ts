@@ -4,6 +4,10 @@ import spaceBadgeLow from 'src/assets/images/themes/fixing-fashion/avatar_space.
 import memberLow from 'src/assets/images/themes/fixing-fashion/avatar.svg'
 import member from 'src/assets/images/themes/fixing-fashion/badge.svg'
 
+const fonts = {
+  body: `'Inter', Arial, sans-serif`,
+}
+
 // use enum to specify list of possible colors for typing
 export const colors = {
   white: 'white',
@@ -223,6 +227,7 @@ const StyledComponentTheme: ThemeWithName = {
   space,
   radii,
   fontSizes,
+  fonts,
   forms: {
     input: {
       background: colors.background,

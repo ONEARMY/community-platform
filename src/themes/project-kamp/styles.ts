@@ -35,6 +35,10 @@ export const zIndex = {
   header: 3000,
 }
 
+const fonts = {
+  body: `'Inter', Arial, sans-serif`,
+}
+
 export type ButtonVariants =
   | 'primary'
   | 'secondary'
@@ -217,6 +221,7 @@ const StyledComponentTheme: ThemeWithName = {
   space,
   radii,
   fontSizes,
+  fonts,
   forms: {
     input: {
       background: colors.background,

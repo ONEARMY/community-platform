@@ -11,6 +11,10 @@ import LocalComBadgeLowDetail from 'src/assets/icons/map-community.svg'
 
 import type { ThemeWithName } from '../types'
 
+const fonts = {
+  body: `'Inter', Arial, sans-serif`,
+}
+
 // use enum to specify list of possible colors for typing
 export const colors = {
   white: 'white',
@@ -240,13 +244,14 @@ const StyledComponentTheme: ThemeWithName = {
     },
   },
   colors,
+  fonts,
   fontSizes,
   forms: {
     input: {
       background: colors.background,
       borderRadius: 1,
       border: '1px solid transparent',
-      fontFamily: `'Inter', Arial, sans-serif`,
+      fontFamily: fonts.body,
       fontSize: 1,
       '&:focus': {
         borderColor: colors.blue,

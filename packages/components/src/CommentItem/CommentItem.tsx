@@ -6,7 +6,7 @@ import { Box, Flex, Text } from 'theme-ui'
 import { FlagIconHowTos } from '../FlagIcon/FlagIcon'
 import { Icon } from '../Icon/Icon'
 
-export interface Props {
+export interface CommentItemProps {
   text: string
   isUserVerified: boolean
   isEditable: boolean
@@ -27,7 +27,7 @@ const formatDate = (d: string | undefined): string => {
   return new Date(d).toLocaleDateString('en-GB').replace(/\//g, '-')
 }
 
-export const CommentItem = (props: Props) => {
+export const CommentItem = (props: CommentItemProps) => {
   const textRef = createRef<any>()
   const [showEditModal, setShowEditModal] = useState(false)
   const [textHeight, setTextHeight] = useState(0)

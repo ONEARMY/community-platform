@@ -2,7 +2,7 @@ import { useState } from 'react'
 import ReactGA from 'react-ga4'
 import { Box } from 'theme-ui'
 import { Button, CommentItem } from '../'
-import { IComment } from '../../../../src/models'
+import type { CommentItemProps as Comment } from '../CommentItem/CommentItem'
 const MAX_COMMENTS = 5
 
 export const CommentList: React.FC<{
@@ -31,12 +31,12 @@ export const CommentList: React.FC<{
       {comments &&
         comments
           .slice(0, shownComments)
-          .map((comment: IComment) => (
+          .map((comment: Comment) => (
             <CommentItem
               key={comment._id}
               {...comment}
-              isUserVerified={!!comment.userIsVerfied}
-              isEditable={!!comment.isEditable}
+              isUserVerified={!!comment.isUserVerified}
+              isEditable={false}
               handleEditRequest={handleEditRequest}
               handleDelete={handleDelete}
               handleEdit={handleEdit}

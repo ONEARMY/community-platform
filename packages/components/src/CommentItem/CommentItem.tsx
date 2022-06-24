@@ -8,7 +8,7 @@ import { Icon } from '../Icon/Icon'
 
 export interface CommentItemProps {
   text: string
-  isUserVerified: boolean
+  isUserVerified?: boolean
   isEditable: boolean
   creatorCountry?: string | null
   creatorName: string

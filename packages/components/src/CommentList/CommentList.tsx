@@ -6,7 +6,7 @@ import type { CommentItemProps as Comment } from '../CommentItem/CommentItem'
 const MAX_COMMENTS = 5
 
 export const CommentList: React.FC<{
-  comments: UserComment[]
+  comments: Comment[]
   handleEdit: (_id: string, comment: string) => Promise<void>
   handleEditRequest: () => Promise<void>
   handleDelete: (_id: string) => Promise<void>

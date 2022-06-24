@@ -3,7 +3,7 @@ import ReactGA from 'react-ga4'
 import { Box, Flex } from 'theme-ui'
 import { useCommonStores } from 'src/index'
 import { CreateComment, CommentList } from 'oa-components'
-import type { IComment } from 'src/models'
+import type { UserComment } from 'src/models'
 import { logger } from 'src/logger'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 

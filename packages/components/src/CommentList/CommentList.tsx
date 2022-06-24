@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import ReactGA from 'react-ga4'
 import { Box } from 'theme-ui'
-import { Button, CommentItem } from 'oa-components'
-import type { UserComment } from 'src/models'
+import { Button, CommentItem } from '../'
 
 const MAX_COMMENTS = 5
 
@@ -32,7 +31,7 @@ export const CommentList: React.FC<{
       {comments &&
         comments
           .slice(0, shownComments)
-          .map((comment) => (
+          .map((comment: any) => (
             <CommentItem
               key={comment._id}
               {...comment}

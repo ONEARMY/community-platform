@@ -2,10 +2,9 @@ import { useState } from 'react'
 import ReactGA from 'react-ga4'
 import { Box, Flex } from 'theme-ui'
 import { useCommonStores } from 'src/index'
-import { CreateComment } from 'oa-components'
-import type { UserComment } from 'src/models'
+import { CreateComment, CommentList } from 'oa-components'
+import type { IComment } from 'src/models'
 import { logger } from 'src/logger'
-import { CommentList } from 'src/components/CommentList/CommentList'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 
 interface IProps {

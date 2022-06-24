@@ -1,4 +1,4 @@
-import { MOCK_AUTH_USERS } from '../../../../shared'
+import { MOCK_AUTH_USERS } from 'oa-shared/mocks/auth'
 import type { IUserDB } from '../../../../src/models'
 import { firebaseAdmin } from '../../Firebase/admin'
 import { setDoc } from '../../Firebase/firestoreDB'

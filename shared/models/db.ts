@@ -33,9 +33,9 @@ export const dbEndpointSubollections = {
 // (e.g. cypress will instead use it's own env to populate a prefix)
 const e = process ? process.env : ({} as any)
 
-// Check if window exists (running in browser environment), use window sessionStorage available
+// Check if sessionStorage exists (e.g. running in browser environment), and use if available
 const storage =
-  typeof window === 'undefined' ? ({} as any) : window.sessionStorage
+  typeof sessionStorage === 'undefined' ? ({} as any) : sessionStorage
 
 /**
  * A prefix can be used to simplify large-scale schema changes or multisite hosting

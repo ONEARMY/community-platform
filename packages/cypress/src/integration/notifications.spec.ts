@@ -98,7 +98,7 @@ describe('[Notifications]', () => {
     cy.visit('how-to')
     cy.login('howto_reader@test.com', 'test1234')
     cy.visit('/research/qwerty')
-    cy.get('[data-cy="open-comments"]').click()
+    cy.get('[data-cy="ResearchComments: button open-comments"]').click()
     cy.get('[data-cy="comments-form"]').type('some sample comment')
     cy.get('[data-cy="comment-submit"]').click()
     cy.wait(DB_WAIT_TIME)
@@ -177,10 +177,7 @@ describe('[Notifications]', () => {
         })
       },
     )
-    const noNotificationsText = 'Nada, no new notification'
-    cy.get('[data-cy="notifications-desktop"]').should(
-      'have.text',
-      noNotificationsText,
-    )
+    const noNotificationsText = 'Nada, no new notifications'
+    cy.get('[data-cy="NotificationList: empty state"]').should('exist')
   })
 })

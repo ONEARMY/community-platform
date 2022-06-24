@@ -2818,6 +2818,15 @@ export const howtos = {
         contentType: 'application/octet-stream',
       },
     ],
+    comments: [
+      {
+        _id: 'abc123',
+        _created: '2019-09-18T14:49:54.311Z',
+        _creatorId: 'abc',
+        creatorName: 'abc',
+        text: 'A generated comment',
+      },
+    ],
   },
   zVVjXc34gKhUNIcgLEXg: {
     _created: '2022-01-06T14:50:38.830Z',

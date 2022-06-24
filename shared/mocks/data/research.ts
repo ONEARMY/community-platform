@@ -35,6 +35,15 @@ export const research = {
           },
         ],
         title: 'qwerty',
+        comments: [
+          {
+            _id: 'abc123',
+            _created: '2019-09-18T14:49:54.311Z',
+            _creatorId: 'abc',
+            creatorName: 'abc',
+            text: 'A generated comment',
+          },
+        ],
       },
     ],
   },

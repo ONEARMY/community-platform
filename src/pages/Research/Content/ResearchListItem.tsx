@@ -12,7 +12,7 @@ interface IProps {
 }
 
 const ResearchListItem: React.FC<IProps> = ({ item }) => (
-  <Card data-cy="research=list-item" data-id={item._id} mb={3}>
+  <Card data-cy="ResearchListItem" data-id={item._id} mb={3}>
     <Flex sx={{ width: '100%', position: 'relative' }}>
       <Link
         to={`/research/${encodeURIComponent(item.slug)}`}

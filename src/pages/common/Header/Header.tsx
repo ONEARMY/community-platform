@@ -14,6 +14,7 @@ import HamburgerMenu from 'react-hamburger-menu'
 import { observer, inject } from 'mobx-react'
 import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
 import type { UserStore } from 'src/stores/User/user.store'
+import { isModuleSupported, MODULE } from 'src/modules'
 
 interface IInjectedProps {
   mobileMenuStore: MobileMenuStore
@@ -99,7 +100,7 @@ export class Header extends Component {
     const user = this.injected.userStore.user
     const notifications = this.injected.userStore.getUserNotifications()
     const areThereNotifications = Boolean(notifications.length)
-    const isUserAvailable = !!user
+    const isLoggedInUser = !!user
 
     return (
       <>
@@ -119,7 +120,7 @@ export class Header extends Component {
           <Flex>
             <Logo isMobile={true} />
           </Flex>
-          {isUserAvailable && (
+          {isLoggedInUser && (
             <MobileNotificationsWrapper>
               <NotificationsIcon
                 onCLick={() => menu.toggleMobileNotifications()}
@@ -130,7 +131,7 @@ export class Header extends Component {
           )}
           <DesktopMenuWrapper className="menu-desktop" px={2}>
             <MenuDesktop />
-            {isUserAvailable && (
+            {isLoggedInUser && (
               <>
                 <NotificationsDesktop
                   notifications={notifications}
@@ -138,9 +139,9 @@ export class Header extends Component {
                     this.injected.userStore.markAllNotificationsRead()
                   }
                 />
-                <Profile isMobile={false} />
               </>
             )}
+            {isModuleSupported(MODULE.USER) && <Profile isMobile={false} />}
           </DesktopMenuWrapper>
           <MobileMenuWrapper className="menu-mobile">
             <Flex pl={5}>

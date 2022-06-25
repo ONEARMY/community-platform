@@ -14,12 +14,8 @@ import HamburgerMenu from 'react-hamburger-menu'
 import { observer, inject } from 'mobx-react'
 import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
 import type { UserStore } from 'src/stores/User/user.store'
-import { isModuleSupported, MODULE } from 'src/modules'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
-interface IProps {}
-
-interface IInjectedProps extends IProps {
+interface IInjectedProps {
   mobileMenuStore: MobileMenuStore
   userStore: UserStore
 }
@@ -88,7 +84,7 @@ const AnimationContainer = (props: any) => {
 @inject('mobileMenuStore')
 @inject('userStore')
 @observer
-export class Header extends Component<IProps> {
+export class Header extends Component {
   // eslint-disable-next-line
   constructor(props: any) {
     super(props)
@@ -103,6 +99,7 @@ export class Header extends Component<IProps> {
     const user = this.injected.userStore.user
     const notifications = this.injected.userStore.getUserNotifications()
     const areThereNotifications = Boolean(notifications.length)
+    const isUserAvailable = !!user
 
     return (
       <>
@@ -122,35 +119,28 @@ export class Header extends Component<IProps> {
           <Flex>
             <Logo isMobile={true} />
           </Flex>
-          {user ? (
-            <AuthWrapper roleRequired="beta-tester">
-              <MobileNotificationsWrapper>
-                <NotificationsIcon
-                  onCLick={() => menu.toggleMobileNotifications()}
-                  isMobileMenuActive={menu.showMobileNotifications}
-                  areThereNotifications={areThereNotifications}
-                />
-              </MobileNotificationsWrapper>
-            </AuthWrapper>
-          ) : (
-            ''
+          {isUserAvailable && (
+            <MobileNotificationsWrapper>
+              <NotificationsIcon
+                onCLick={() => menu.toggleMobileNotifications()}
+                isMobileMenuActive={menu.showMobileNotifications}
+                areThereNotifications={areThereNotifications}
+              />
+            </MobileNotificationsWrapper>
           )}
           <DesktopMenuWrapper className="menu-desktop" px={2}>
             <MenuDesktop />
-
-            {isModuleSupported(MODULE.USER) ? (
+            {isUserAvailable && (
               <>
-                <AuthWrapper roleRequired="beta-tester">
-                  <NotificationsDesktop
-                    notifications={notifications}
-                    handleOnClick={() =>
-                      this.injected.userStore.markAllNotificationsRead()
-                    }
-                  />
-                </AuthWrapper>
+                <NotificationsDesktop
+                  notifications={notifications}
+                  handleOnClick={() =>
+                    this.injected.userStore.markAllNotificationsRead()
+                  }
+                />
                 <Profile isMobile={false} />
               </>
-            ) : null}
+            )}
           </DesktopMenuWrapper>
           <MobileMenuWrapper className="menu-mobile">
             <Flex pl={5}>

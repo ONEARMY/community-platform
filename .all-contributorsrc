@@ -100,6 +100,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "laianbraum",
+      "name": "Laian Braum",
+      "avatar_url": "https://avatars.githubusercontent.com/u/61033391?v=4",
+      "profile": "http://www.linkedin.com/in/laianbraum",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

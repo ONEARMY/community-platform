@@ -466,7 +466,7 @@ workflows:
             - 'Release new version to GitHub'
           <<: *filter_only_master
           DEPLOY_ALIAS: 'default'
-          NOTIFY_SLACK: false
+          NOTIFY_SLACK: true
           context:
             - circle-ci-slack-context
             - community-platform-dev
@@ -476,7 +476,7 @@ workflows:
             - 'Release new version to GitHub'
           <<: *filter_only_master
           DEPLOY_ALIAS: project-kamp-development
-          NOTIFY_SLACK: false
+          NOTIFY_SLACK: true
           context:
             - circle-ci-slack-context
             - project-kamp-dev
@@ -486,7 +486,7 @@ workflows:
             - 'Release new version to GitHub'
           <<: *filter_only_master
           DEPLOY_ALIAS: fixing-fashion-dev
-          NOTIFY_SLACK: false
+          NOTIFY_SLACK: true
           context:
             - circle-ci-slack-context
             - fixing-fashion-dev

@@ -36,7 +36,7 @@ export const CommentList: React.FC<{
               key={comment._id}
               {...comment}
               isUserVerified={!!comment.isUserVerified}
-              isEditable={false}
+              isEditable={!!comment.isEditable}
               handleEditRequest={handleEditRequest}
               handleDelete={handleDelete}
               handleEdit={handleEdit}

@@ -46,6 +46,7 @@ export const CommentItem = (props: CommentItemProps) => {
     isEditable,
   } = props
 
+  console.log(isEditable)
   useEffect(() => {
     if (textRef.current) {
       setTextHeight(textRef.current.scrollHeight)

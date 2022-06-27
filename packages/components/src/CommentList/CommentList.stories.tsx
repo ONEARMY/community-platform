@@ -14,6 +14,7 @@ const comments = [
     creatorName: 'TestName',
     isUserVerified: false,
     text: 'Test text one',
+    isEditable: true,
   },
   {
     _created: '2022-06-15T09:41:09.571Z',
@@ -22,6 +23,7 @@ const comments = [
     creatorName: 'TestName2',
     isUserVerified: false,
     text: 'Test text two',
+    isEditable: true,
   },
 ]
 

@@ -476,7 +476,7 @@ export class UserStore extends ModuleStore {
     try {
       const data = await this.db.collection(COLLECTION_NAME).getCollection()
 
-      return data;
+      return data
     } catch (err) {
       console.error(err)
       throw new Error(err)

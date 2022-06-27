@@ -113,7 +113,7 @@ const AdminUsers = observer(() => {
           filteredTypes.push(it)
         }
         if (it?.userRoles && it?.userRoles.length) {
-          const intersection = filterRoles.filter((element:any) =>
+          const intersection = filterRoles.filter((element: any) =>
             it?.userRoles?.includes(element),
           )
           if (intersection.length) {

@@ -26,7 +26,7 @@ export const ADMIN_PAGES: IPageMeta[] = [
     description: 'Browse Users',
     path: '/users/:id',
     moduleName,
-    hideHeader: true
+    hideHeader: true,
   },
   {
     component: lazy(() => import('./pages/admin-mappins')),

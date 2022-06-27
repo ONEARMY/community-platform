@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
-import { Box, Container, Flex, Image, Input, Text } from 'theme-ui';
-import Search from '../../../assets/icons/icon-search.svg';
+import React, { useState } from 'react'
+import { Box, Container, Flex, Image, Input, Text } from 'theme-ui'
+import Search from '../../../assets/icons/icon-search.svg'
 
 type Props = {
-  total: number,
+  total: number
   onChange: (text: string) => void
 }
 
 function Header({ total, onChange }: Props) {
-  const [searchTxt, setSearchTxt] = useState('');
+  const [searchTxt, setSearchTxt] = useState('')
 
   const handleChange = (val) => {
-    setSearchTxt(val);
-    if (val.length > 3) onChange(val);
-    else onChange('');
-  };
+    setSearchTxt(val)
+    if (val.length > 3) onChange(val)
+    else onChange('')
+  }
 
   return (
     <Container sx={{ my: 5, pb: 2, borderBottom: '2px solid' }}>

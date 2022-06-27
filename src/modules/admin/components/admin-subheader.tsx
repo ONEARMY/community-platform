@@ -45,11 +45,14 @@ const AdminSubheader = () => (
     mr={[-2, -3, -4]}
     data-cy="admin-subheader"
   >
-    {ADMIN_PAGES.map((p) => (
-      !p.hideHeader && <SubmenuLink key={p.path} to={`/${moduleName}${p.path}`} exact>
-      {p.title}
-      </SubmenuLink>
-    ))}
+    {ADMIN_PAGES.map(
+      (p) =>
+        !p.hideHeader && (
+          <SubmenuLink key={p.path} to={`/${moduleName}${p.path}`} exact>
+            {p.title}
+          </SubmenuLink>
+        ),
+    )}
   </SubheaderContainer>
 )
 

@@ -20,7 +20,14 @@ export const ADMIN_PAGES: IPageMeta[] = [
     path: '/users',
     moduleName,
   },
-
+  {
+    component: lazy(() => import('./pages/admin-user-detail')),
+    title: 'Users Details',
+    description: 'Browse Users',
+    path: '/users/:id',
+    moduleName,
+    hideHeader: true
+  },
   {
     component: lazy(() => import('./pages/admin-mappins')),
     title: 'Map Pins',

@@ -47,6 +47,7 @@ export interface IPageMeta {
   fullPageWidth?: boolean
   customStyles?: CSSObject
   requiredRole?: UserRole
+  hideHeader?: boolean
 }
 
 const howTo = {

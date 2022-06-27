@@ -470,6 +470,18 @@ export class UserStore extends ModuleStore {
       throw new Error(err)
     }
   }
+
+  @action
+  public async getAllUser() {
+    try {
+      const data = await this.db.collection(COLLECTION_NAME).getCollection()
+
+      return data;
+    } catch (err) {
+      console.error(err)
+      throw new Error(err)
+    }
+  }
 }
 
 interface IUserUpdateStatus {

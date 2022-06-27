@@ -1,0 +1,32 @@
+.ReactTable .rt-thead.-header{
+    box-shadow: none;
+}
+
+.-sort-desc {
+    box-shadow: none !important;
+}
+
+.-sort-desc:before {
+    content: "▼" !important;
+    margin-left: 10px;
+    float: right;
+}
+
+  
+.-sort-asc {
+    box-shadow: none !important;
+    
+}
+
+.rt-resizable-header:before{
+    content: "-";
+    margin-left: 10px;
+    float: right;
+} 
+
+.-sort-asc:before {
+    content: "▲" !important;
+    margin-left: 10px;
+    float: right;
+}
+  

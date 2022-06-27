@@ -134,6 +134,23 @@ export class CollectionReference<T> {
     return docs
   }
 
+  // query that retreive all data from collection
+  async getCollection() {
+    const { serverDB, cacheDB } = this.clients
+    let docs = await serverDB.queryCollection<T>(this.endpoint)
+    // if not found on live try find on cached (might be offline)
+    // use catch as not all endpoints are cached or some might not be indexed
+    if (docs.length === 0) {
+      try {
+        docs = await cacheDB.queryCollection<T>(this.endpoint)
+      } catch (error) {
+        console.error(error)
+        // at least we can say we tried...
+      }
+    }
+    return docs
+  }
+
   private async _getCacheLastModified(endpoint: string) {
     const { cacheDB } = this.clients
     const latest = await cacheDB.queryCollection(endpoint, {

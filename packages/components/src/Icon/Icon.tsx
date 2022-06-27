@@ -35,6 +35,7 @@ import { FaSignal } from '@react-icons/all-files/fa/FaSignal'
 import { FaFacebookF } from '@react-icons/all-files/fa/FaFacebookF'
 import { FaSlack } from '@react-icons/all-files/fa/FaSlack'
 import { FaInstagram } from '@react-icons/all-files/fa/FaInstagram'
+import { RiFilter2Fill } from '@react-icons/all-files/ri/RiFilter2Fill'
 import { IconContext } from '@react-icons/all-files'
 import { iconMap } from './svgs'
 import { DownloadIcon } from './DownloadIcon'
@@ -94,6 +95,7 @@ export const glyphs: IGlyphs = {
   verified: iconMap.verified,
   useful: iconMap.useful,
   thunderbolt: <AiFillThunderbolt />,
+  filter: <RiFilter2Fill />,
 }
 
 type WrapperProps = IProps & VerticalAlignProps & SpaceProps

@@ -38,6 +38,7 @@ function asOptions(mapStore, items: Array<IMapGrouping>): FilterGroupOption[] {
           ),
       }
     })
+    .filter(({ number }) => !!number)
 }
 
 type FilterGroupOption = {

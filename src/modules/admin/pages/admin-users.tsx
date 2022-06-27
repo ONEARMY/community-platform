@@ -1,6 +1,5 @@
 import { Box } from 'theme-ui'
-import { useEffect, useRef, useState } from 'react'
-import styled from '@emotion/styled'
+import { useEffect, useState } from 'react'
 import { format } from 'date-fns'
 import { Link } from 'react-router-dom'
 import Table from '../components/Table/Table'
@@ -13,7 +12,7 @@ import machineBuilder from '../../../assets/images/badges/pt-machine-shop.jpg'
 import communitybuilder from '../../../assets/images/badges/pt_community_point.png'
 import member from '../../../assets/images/badges/pt-member.jpg'
 import collectionPoint from '../../../assets/images/badges/pt-collection-point.jpg'
-import type { IUserPP, UserRole } from 'src/models'
+import type { IUserPP } from 'src/models'
 import Fuse from 'fuse.js'
 import Loader from 'src/components/Loader'
 
@@ -45,29 +44,8 @@ const TAG_TABLE_COLUMNS: any[] = [
   },
 ]
 
-const Top = styled(Box)`
-  position: absolute;
-  top: 23px;
-  left: -25px;
-  width: 0px;
-  height: 0px;
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-
-  border-bottom: 15px solid white;
-`
-
 interface Props {
   val: string
-}
-
-interface userData {
-  _id: string
-  userName: string
-  profileType: string
-  _created: Date
-  verified: boolean
-  userRoles: string[]
 }
 
 interface DataProps {
@@ -88,10 +66,8 @@ const types = [
 
 const roles = ['user', 'beta-tester', 'admin']
 
-const AdminUsers = observer((props) => {
+const AdminUsers = observer(() => {
   const { stores } = useCommonStores()
-  const { themeStore } = useCommonStores().stores
-  const theme = themeStore.currentTheme.styles
   const [data, setData] = useState<IUserPP[]>([])
   const [filteredData, setFilteredData] = useState<IUserPP[]>([])
   const [filterBy, setFilterBy] = useState<string[]>([])

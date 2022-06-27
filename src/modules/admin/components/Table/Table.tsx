@@ -8,9 +8,9 @@ import type { IUserPP } from 'src/models'
 
 type TableProps = {
   columns: {
-    Header: string,
-    accessor: string,
-    minWidth:number
+    Header: string
+    accessor: string
+    minWidth: number
   }[]
   data: IUserPP[]
   filters?: React.FC | any
@@ -20,10 +20,9 @@ type TableProps = {
 function Table(props: TableProps) {
   return (
     <ReactTable
-      
       style={{
         border: 'none',
-        maxHeight: '40rem' 
+        maxHeight: '40rem',
       }}
       ThComponent={(row) => {
         return (
@@ -47,35 +46,34 @@ function Table(props: TableProps) {
         if (!col.rowData) {
           return <></>
         }
-        return (
-          props.TData ? (
-            <Box
-              sx={{
-                flex: '100 0 auto',
-                width: '50px',
-                color: col.id == 'Username' ? '#0898CB' : 'black',
-                textDecoration: col.id == 'Username' ? 'underline' : 'none',
-                cursor: col.id == 'Username' ? 'pointer' : 'default',
-              }}
-            >
-              <props.TData col={col}/>
-            </Box>
-          ) : (
-            <Box
-              sx={{
-                flex: '120 0 auto', width: '120px',
-                color: col.id == 'Username' ? '#0898CB' : 'black',
-              }}
-            >
-              {col?.children?.toString() ? col?.children?.toString() : '-'}
-            </Box>
-          )
+        return props.TData ? (
+          <Box
+            sx={{
+              flex: '100 0 auto',
+              width: '50px',
+              color: col.id == 'Username' ? '#0898CB' : 'black',
+              textDecoration: col.id == 'Username' ? 'underline' : 'none',
+              cursor: col.id == 'Username' ? 'pointer' : 'default',
+            }}
+          >
+            <props.TData col={col} />
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              flex: '120 0 auto',
+              width: '120px',
+              color: col.id == 'Username' ? '#0898CB' : 'black',
+            }}
+          >
+            {col?.children?.toString() ? col?.children?.toString() : '-'}
+          </Box>
         )
       }}
-      getTdProps={(state, rowInfo, column, instance) => {
+      getTdProps={(state, rowInfo, column) => {
         return {
           id: column.Header,
-          rowData:rowInfo
+          rowData: rowInfo,
         }
       }}
       getTrProps={() => {
@@ -93,11 +91,11 @@ function Table(props: TableProps) {
           },
         }
       }}
-      getPaginationProps ={() => {
+      getPaginationProps={() => {
         return {
-          style:{
-            marginTop:'10px'
-          }
+          style: {
+            marginTop: '10px',
+          },
         }
       }}
       showPagination={true}

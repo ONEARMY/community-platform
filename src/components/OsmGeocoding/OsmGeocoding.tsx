@@ -14,6 +14,7 @@ interface Props {
   countrycodes?: string
   acceptLanguage?: string
   viewbox?: string
+  customClear?: () => void
 }
 
 export interface Result {
@@ -30,6 +31,7 @@ export const OsmGeocoding = ({
   callback,
   acceptLanguage = 'en',
   viewbox = '',
+  customClear,
 }: Props) => {
   const [searchValue, setSearchValue] = useState('')
   const [results, setResults] = useState<Result[]>([])
@@ -127,6 +129,9 @@ export const OsmGeocoding = ({
           setQueryLocationService(true)
           logger.debug(`onchange.setSearchValue`, event.target.value)
           setSearchValue(event.target.value)
+          if (event.target.value === '') {
+            customClear?.()
+          }
         }}
       />
       {showLoader && <OsmGeocodingLoader />}

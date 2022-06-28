@@ -6,16 +6,19 @@ interface IExtendedFieldProps extends FieldProps {
   // add additional onChange style method to respond more directly to value changes
   // without need for react-final-form listener
   customChange?: (location) => void
+  customClear?: () => void
 }
 
 export const LocationSearchField = ({
   input,
   customChange,
+  customClear,
 }: IExtendedFieldProps) => (
   <>
     <div style={{ position: 'relative', height: '44px' }}>
       <div style={{ position: 'absolute', width: '100%' }}>
         <OsmGeocoding
+          customClear={customClear}
           callback={async (data) => {
             logger.debug(data, 'LocationSearch.field.ReactOsmGeocoding')
             if (data.lat && data.lon) {

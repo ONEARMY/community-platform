@@ -26,6 +26,7 @@ interface IState {
   showSubmitModal?: boolean
   selectedDate: any
   isLocationSelected?: boolean
+  isDigitalEvent?: boolean
 }
 type IProps = RouteComponentProps<any>
 interface IInjectedProps extends IProps {
@@ -41,10 +42,6 @@ const Label = styled.label`
   margin-bottom: ${theme.space[2] + 'px'};
 `
 
-// const AnimatedDiv = styled.div`
-//   transition: height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-// `
-
 @inject('eventStore')
 export class EventsCreate extends React.Component<IProps, IState> {
   uploadRefs: { [key: string]: UploadedFile | null } = {}
@@ -55,6 +52,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
       formValues: { ...TEMPLATE.INITIAL_VALUES },
       formSaved: false,
       selectedDate: null,
+      isDigitalEvent: TEMPLATE?.INITIAL_VALUES?.isDigital,
     }
   }
 
@@ -78,11 +76,17 @@ export class EventsCreate extends React.Component<IProps, IState> {
   }
 
   public render() {
-    const { formValues, isLocationSelected, selectedDate } = this.state
+    const { formValues, isLocationSelected, selectedDate, isDigitalEvent } =
+      this.state
 
+    const shouldShowLocationError =
+      !isDigitalEvent && isLocationSelected !== undefined && !isLocationSelected
     return (
       <Form
         onSubmit={(v) => {
+          if (v.isDigital) {
+            v.location = TEMPLATE.INITIAL_VALUES?.location
+          }
           const datepickerDate = selectedDate
           // convert from Date type to yyyy/mm/dd string and back into local timezone
           const convert = new Date(
@@ -220,17 +224,21 @@ export class EventsCreate extends React.Component<IProps, IState> {
                               flexDirection: 'column',
                             }}
                           >
-                            {!formValues?.isDigital && (
+                            {!isDigitalEvent && (
                               <>
                                 <Label htmlFor="location">
-                                  In which city is the event taking place? *
+                                  In which city is the event taking place?
                                 </Label>
                                 <Field
                                   id="location"
                                   name="location"
                                   className="location-search-create"
                                   validateFields={[]}
-                                  validate={required}
+                                  customClear={() => {
+                                    this.setState({
+                                      isLocationSelected: false,
+                                    })
+                                  }}
                                   customChange={() => {
                                     this.setState({
                                       isLocationSelected: true,
@@ -238,24 +246,32 @@ export class EventsCreate extends React.Component<IProps, IState> {
                                   }}
                                   component={LocationSearchField}
                                 />
-                                {isLocationSelected !== undefined &&
-                                  !isLocationSelected && (
-                                    <Text
-                                      color={theme.colors.red}
-                                      mb="5px"
-                                      sx={{ fontSize: 1 }}
-                                    >
-                                      Select a location for your event
-                                    </Text>
-                                  )}
+                                {shouldShowLocationError && (
+                                  <Text
+                                    color={theme.colors.red}
+                                    mb="5px"
+                                    sx={{ fontSize: 1 }}
+                                  >
+                                    Select a location for your event
+                                  </Text>
+                                )}
                               </>
                             )}
                             <Flex my={3} sx={{ alignItems: 'center' }}>
                               <Field
+                                onClick={() => {
+                                  this.setState({
+                                    isDigitalEvent: !isDigitalEvent,
+                                  })
+                                  // Browser clears location when LocationSearchField isn't rendering
+                                  if (isDigitalEvent && isLocationSelected) {
+                                    this.setState({ isLocationSelected: false })
+                                  }
+                                }}
                                 type="checkbox"
                                 id="isDigital"
                                 name="isDigital"
-                                labelText=" This is a digital event"
+                                labelText="This is a digital event"
                                 component={CheckboxInput}
                               ></Field>
                             </Flex>
@@ -266,7 +282,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             sx={{ width: '100%', flexDirection: 'column' }}
                           >
                             <Label htmlFor="location">
-                              Select tags for your event *
+                              Select tags for your event
                             </Label>
                             <Field
                               name="tags"
@@ -297,7 +313,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                 </Box>
                 <Button
                   onClick={() => {
-                    if (isLocationSelected) {
+                    if (isDigitalEvent || isLocationSelected) {
                       handleSubmit()
                     } else {
                       this.setState({ isLocationSelected: false })

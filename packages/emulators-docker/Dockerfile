@@ -57,7 +57,7 @@ COPY ./app/functions/.runtimeconfig.json /app/functions/.runtimeconfig.json
 
 # Copy seed data
 RUN mkdir -p /app/seed_data && mkdir -p /app/import
-COPY ./seed_data/pp-2022-06-26 /app/seed_data
+COPY ./seed_data/pp-2022-06-28 /app/seed_data
 
 # Copy config files. Ensure executable and lf line format
 RUN mkdir -p /app/config

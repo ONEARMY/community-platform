@@ -16,7 +16,7 @@ export const BackupDatabase = async () => {
   //  https://stackoverflow.com/questions/57512324/cloud-function-to-export-firestore-backup-data-using-firebase-admin-or-google
 
   const client = new firebaseAdmin.firestore.v1.FirestoreAdminClient({})
-  const timestamp = dateformat(Date.now(), 'yyyy-mm-dd-HH-MM-ss')
+  const timestamp = dateformat(Date.now(), 'yyyy-mm-dd')
 
   // Export only the collections and subcollections currently used by the platform
   const activeCollections = Object.values(DB_ENDPOINTS)

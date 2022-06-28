@@ -1,6 +1,7 @@
 import { spawnSync } from 'child_process'
 import chalk from 'chalk'
 import fs from 'fs-extra'
+import { runtimeConfigTest } from 'functions/scripts/runtimeConfig/model'
 import { sync as globbySync } from 'globby'
 import path from 'path'
 import { FIREBASE_JSON_EMULATORS_DEFAULT } from './common'
@@ -16,6 +17,7 @@ export async function prepare() {
   buildFunctions()
   copyAppFiles()
   populateDummyCredentials()
+  addRuntimeConfig()
   updateFirebaseJson()
 }
 
@@ -149,6 +151,19 @@ function updateFirebaseJson() {
   firebaseJson.emulators = FIREBASE_JSON_EMULATORS_DEFAULT
 
   fs.writeFileSync(firebaseJsonPath, JSON.stringify(firebaseJson, null, 2))
+}
+
+/** Populate a runtime config file to set default firebase config variables for test */
+function addRuntimeConfig() {
+  const config = { ...runtimeConfigTest }
+  config.deployment.site_url = 'http://localhost:4000'
+  const target = path.resolve(
+    PATHS.workspaceDir,
+    'app',
+    'functions',
+    '.runtimeconfig.json',
+  )
+  fs.writeFileSync(target, JSON.stringify(config, null, 2))
 }
 
 /**

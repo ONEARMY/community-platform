@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:16-alpine AS community-platform-builder
 ################################################################################
 # Loosely based on
 # https://github.com/AndreySenov/firebase-tools-docker/blob/main/Dockerfile
@@ -53,6 +53,7 @@ COPY ./app/.firebaserc /app/.firebaserc
 COPY ./app/firebase.storage.rules /app/firebase.storage.rules
 COPY ./app/functions/dist/index.js /app/functions/dist/index.js
 COPY ./app/credentials.json /app/credentials.json
+COPY ./app/functions/.runtimeconfig.json /app/functions/.runtimeconfig.json
 
 # Copy seed data
 RUN mkdir -p /app/seed_data && mkdir -p /app/import
@@ -67,6 +68,10 @@ RUN chmod +x /app/config/bootstrap.sh
 # Prompt firebase to use json credentials for login by exporting variable
 ENV GOOGLE_APPLICATION_CREDENTIALS=/app/credentials.json
 
+# Ensure runtime config vars picked up (https://github.com/firebase/firebase-tools/issues/3983)
+ENV CLOUD_RUNTIME_CONFIG=/app/functions/.runtimeconfig.json
+
+# Prepare seed data used in the app
 RUN \
   # Include a temporary env file to avoid timeouts (https://github.com/firebase/firebase-tools/issues/2837)
   echo "FUNCTIONS_EMULATOR_TIMEOUT_SECONDS=540s" > /app/functions/dist/.env.local && \ 
@@ -77,17 +82,15 @@ RUN \
   --import=/app/seed_data --export-on-exit=/app/import \
   "/bin/bash /app/config/bootstrap.sh" \
   # Check that data exists and remove seed once complete
-  && printf "\nExports" \
-  && cat /app/import/firebase-export-metadata.json \
-  && printf "\nUsers" \
-  && cat /app/import/auth_export/accounts.json \
   && rm -R /app/seed_data \
   && rm -R /app/functions/dist/.env.local
 
-# # Exposed Ports - These should match firebase.json config
+# TODO - find a way to run the functions test spec against emulator 
+
+# Exposed Ports - These should match firebase.json config
 EXPOSE 4001 4002 4003 4004 4005 4006 4007
 
-# # Troubleshooting - can just run to get cli access
+# Troubleshooting - can just run to get cli access
 # CMD [ "/bin/sh" ]
 
 CMD firebase emulators:start \

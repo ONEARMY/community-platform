@@ -8,7 +8,7 @@ import { generateSitemap } from './sitemapGenerate'
  * Test in emulator:
  * http://localhost:4002/community-platform-emulated/us-central1/seo-sitemapProxy
  */
-export const sitemapProxy = async (
+export const handleSitemapProxy = async (
   req: functions.https.Request,
   res: functions.Response,
 ) => {

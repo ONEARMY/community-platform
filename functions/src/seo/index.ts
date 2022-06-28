@@ -4,6 +4,7 @@ import * as fs from 'fs'
 import { CONFIG } from '../config/config'
 import { requestHandler } from './render/request-handler'
 import { generateSitemap } from './sitemap/sitemapGenerate'
+import { handleSitemapProxy } from './sitemap/sitemapProxy'
 
 /**
  * Serve pre-rendered html with enhanced SEO metadata for requests from bots
@@ -34,6 +35,4 @@ export const sitemapGenerate = functions.pubsub
  * Test in emulator:
  * http://localhost:4002/community-platform-emulated/us-central1/seo-sitemapProxy
  */
-export const sitemapProxy = functions.https.onRequest(async (req, res) =>
-  sitemapProxy(req, res),
-)
+export const sitemapProxy = functions.https.onRequest(handleSitemapProxy)

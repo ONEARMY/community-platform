@@ -18,10 +18,13 @@ import { Loader } from 'src/components/Loader'
 import type { UserStore } from 'src/stores/User/user.store'
 import { HowToComments } from './HowToComments/HowToComments'
 import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
+import { seoTagsUpdate } from 'src/utils/seo'
 import { Link } from 'react-router-dom'
+import type { UserComment } from 'src/models'
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
 // We can't directly provide the store as a prop though, and later user a get method to define it
+
 interface IRouterCustomParams {
   slug: string
 }
@@ -123,9 +126,17 @@ export class Howto extends React.Component<
   public async componentDidMount() {
     const slug = this.props.match.params.slug
     await this.store.setActiveHowtoBySlug(slug)
+    seoTagsUpdate({
+      title: this.store.activeHowto?.title,
+      description: this.store.activeHowto?.description,
+      imageUrl: this.store.activeHowto?.cover_image.downloadUrl,
+    })
     this.setState({
       isLoading: false,
     })
+  }
+  public async componentWillUnmount() {
+    seoTagsUpdate({})
   }
 
   public render() {
@@ -140,7 +151,14 @@ export class Howto extends React.Component<
         ? aggregations.users_votedUsefulHowtos[activeHowto._id] || 0
         : undefined
 
-      const activeHowToComments = this.store.getActiveHowToComments()
+      const activeHowToComments: UserComment[] = this.store
+        .getActiveHowToComments()
+        .map((c): UserComment => {
+          return {
+            ...c,
+            isEditable: c._creatorId === this.injected.userStore.user?.userName,
+          }
+        })
 
       return (
         <>

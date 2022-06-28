@@ -92,6 +92,7 @@ export const glyphs: IGlyphs = {
   star: iconMap.star,
   'star-active': iconMap.starActive,
   verified: iconMap.verified,
+  useful: iconMap.useful,
   thunderbolt: <AiFillThunderbolt />,
 }
 

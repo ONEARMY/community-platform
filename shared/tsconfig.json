@@ -4,7 +4,9 @@
     "outDir": "./lib",
     "typeRoots": ["../node_modules/@types"],
     "composite": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true
   },
   "exclude": ["../node_modules", "./lib"]
 }

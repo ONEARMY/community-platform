@@ -8,6 +8,10 @@
         "function": "api"
       },
       {
+        "source": "/sitemap",
+        "function": "seo-sitemapProxy"
+      },
+      {
         "source": "/static/**",
         "destination": "/static/**"
       },
@@ -95,6 +99,9 @@
     },
     "storage": {
       "port": 4007
+    },
+    "pubsub": {
+      "port": 4008
     }
   },
   "storage": {

@@ -1,5 +1,6 @@
 import type { ThemeWithName } from '../types'
 import spaceBadge from 'src/assets/images/themes/fixing-fashion/badge_space.svg'
+import spaceBadgeLow from 'src/assets/images/themes/fixing-fashion/avatar_space.svg'
 import memberLow from 'src/assets/images/themes/fixing-fashion/avatar.svg'
 import member from 'src/assets/images/themes/fixing-fashion/badge.svg'
 
@@ -204,7 +205,7 @@ const StyledComponentTheme: ThemeWithName = {
       normal: member,
     },
     space: {
-      lowDetail: spaceBadge,
+      lowDetail: spaceBadgeLow,
       normal: spaceBadge,
     },
   },

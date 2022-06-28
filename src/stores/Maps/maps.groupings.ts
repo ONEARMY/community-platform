@@ -1,4 +1,5 @@
 import type { IMapGrouping } from 'src/models/maps.models'
+import { getSupportedProfileTypes } from 'src/modules/profile'
 import Workspace from 'src/pages/User/workspace/Workspace'
 
 // grouping used (icons will be generated from type in method below)
@@ -62,10 +63,20 @@ const GROUPINGS: IMapGrouping[] = [
     type: 'member',
     icon: '',
   },
+  {
+    grouping: 'individual',
+    displayName: 'Space',
+    type: 'space',
+    icon: '',
+  },
 ]
+
+const supportedProfileTypes = getSupportedProfileTypes().map(
+  ({ label }) => label,
+)
 
 // merge groupings with icons above for export
 export const MAP_GROUPINGS = GROUPINGS.map((g) => ({
   ...g,
   icon: Workspace.findWorkspaceBadge(g.type, true),
-}))
+})).filter(({ type }) => supportedProfileTypes.includes(type))

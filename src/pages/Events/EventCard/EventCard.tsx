@@ -1,6 +1,10 @@
-import ModerationStatusText from 'src/components/ModerationStatusText/ModerationStatustext'
 import { Card, Text, Flex, Image } from 'theme-ui'
-import { Button, FlagIconEvents, ExternalLink } from 'oa-components'
+import {
+  Button,
+  FlagIconEvents,
+  ExternalLink,
+  ModerationStatus,
+} from 'oa-components'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import type { IEvent } from '../../../models/events.models'
 import { getMonth, getDay, capitalizeFirstLetter } from 'src/utils/helpers'
@@ -10,6 +14,7 @@ import laptopIcon from 'src/assets/icons/icon-laptop.png'
 
 interface IProps {
   event: IEvent
+  isPastEvent?: boolean
   needsModeration: boolean
   moderateEvent: (event: IEvent, accepted: boolean) => void
 }
@@ -24,15 +29,16 @@ export const EventCard = (props: IProps) => {
           flexDirection: ['column', 'column', 'initial'],
           position: 'relative',
           padding: 3,
+          opacity: props.isPastEvent ? '0.6' : null,
         }}
         data-cy="card"
         data-eventid={props.event._id}
       >
         {props.event.moderation !== 'accepted' && (
-          <ModerationStatusText
-            moderatedContent={props.event}
+          <ModerationStatus
+            status={props.event.moderation}
             contentType="event"
-            top={'0px'}
+            sx={{ top: 0, position: 'absolute', right: 0 }}
           />
         )}
 

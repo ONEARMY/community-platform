@@ -71,6 +71,7 @@ const ResearchUpdate: React.FC<IProps> = ({
                     flexDirection: ['row', 'column', 'column'],
                     width: ['100%', '25%', '25%'],
                     justifyContent: 'space-between',
+                    alignItems: 'flex-end',
                   }}
                 >
                   <Flex sx={{ flexDirection: ['column'] }}>
@@ -138,7 +139,7 @@ const ResearchUpdate: React.FC<IProps> = ({
             </Box>
             <ResearchComments
               update={update}
-              comments={comments}
+              comments={comments as any}
               updateIndex={updateIndex}
             />
           </Card>

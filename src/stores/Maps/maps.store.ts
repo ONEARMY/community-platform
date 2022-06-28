@@ -238,7 +238,7 @@ export class MapsStore extends ModuleStore {
     }
   }
   @action
-  public getPinsNumberByFilterType(filter: Array<string>) {
+  public getPinsNumberByFilterType(filter: Array<string>): number {
     return filterMapPinsByType(this.mapPins, filter).length
   }
 }

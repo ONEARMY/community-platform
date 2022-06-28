@@ -41,12 +41,14 @@ Society and the environment are kind of screwed 💩 in many ways. We think free
 Contributions, issues and feature requests are very welcome.
 Please make sure to read the [Contributing Guide](/CONTRIBUTING.md) before making a pull request.
 
-It also covers lots of handy additional information such as setting up a local server, or finding [good first issues](https://github.com/ONEARMY/community-platform/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aopen+label%3A%22Good+first+issue%22++label%3A%22Help+wanted%22+) to work on
-
-## 🌟 &nbsp; Core Team
+It also covers lots of handy additional information such as setting up a local server, or finding [good first issues](https://github.com/ONEARMY/community-platform/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aopen+label%3A%22Good+first+issue%22++label%3A%22Help+wanted%22+) to work on.
 
 If needed you can [drop us a line here](mailto:platform@onearmy.earth?subject=contact%20from%20github) 👋
 Or join our [Discord channel](https://discordapp.com/invite/rnx7m4t)
+
+## Contributors ✨
+
+Thanks go to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!--- spell-checker: disable --->
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -64,6 +66,8 @@ Or join our [Discord channel](https://discordapp.com/invite/rnx7m4t)
   </tr>
   <tr>
     <td align="center"><a href="https://medium.com/@Alfonso_Ghislieri"><img src="https://avatars.githubusercontent.com/u/652368?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Alfonso</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=AlfonsoGhislieri" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/Xyli0"><img src="https://avatars.githubusercontent.com/u/10441748?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Xyli0</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=Xyli0" title="Code">💻</a></td>
+    <td align="center"><a href="http://www.linkedin.com/in/laianbraum"><img src="https://avatars.githubusercontent.com/u/61033391?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Laian Braum</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=laianbraum" title="Code">💻</a></td>
   </tr>
 </table>
 
@@ -72,3 +76,6 @@ Or join our [Discord channel](https://discordapp.com/invite/rnx7m4t)
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 <!--- spell-checker: enable --->
+
+This project adopted the [all-contributors](https://allcontributors.org) specification in June 2022.
+Contributions of any kind are welcome!

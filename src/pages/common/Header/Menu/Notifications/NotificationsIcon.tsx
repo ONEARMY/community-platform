@@ -8,13 +8,11 @@ const IconWrapper = styled(Flex)`
   color: #000;
   width: 100%;
   font-size: 16px;
-  padding: 10px; 
+  padding: 10px;
   cursor: pointer;
-  
-  }
 `
 
-function NotificationsIcon({
+export function NotificationsIcon({
   onCLick,
   isMobileMenuActive,
   areThereNotifications,
@@ -43,5 +41,3 @@ function NotificationsIcon({
     </>
   )
 }
-
-export default NotificationsIcon

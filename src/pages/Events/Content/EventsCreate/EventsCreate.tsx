@@ -4,7 +4,12 @@ import { Form, Field } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import TEMPLATE from './Template'
 import type { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
-import { Button, FieldDatepicker, FieldInput } from 'oa-components'
+import {
+  Button,
+  FieldDatepicker,
+  FieldInput,
+  ElWithBeforeIcon,
+} from 'oa-components'
 import type { EventStore } from 'src/stores/Events/events.store'
 import { Heading, Card, Flex, Box, Text } from 'theme-ui'
 import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
@@ -15,7 +20,6 @@ import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import { validateUrl, addProtocolMutator, required } from 'src/utils/validators'
-import ElWithBeforeIcon from 'src/components/ElWithBeforeIcon'
 import IconHeaderEvents from 'src/assets/images/header-section/events-header-icon.svg'
 import { logger } from 'src/logger'
 import { CheckboxInput } from 'src/components/Form/Checkbox'
@@ -123,10 +127,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                       >
                         <Heading>Create an event</Heading>
                         <Box ml="15px">
-                          <ElWithBeforeIcon
-                            IconUrl={IconHeaderEvents}
-                            height="20px"
-                          />
+                          <ElWithBeforeIcon icon={IconHeaderEvents} size={20} />
                         </Box>
                       </Flex>
                     </Card>

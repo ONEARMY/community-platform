@@ -2,13 +2,12 @@ import { PureComponent } from 'react'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { format } from 'date-fns'
 import type { IHowtoDB } from 'src/models/howto.models'
-import { Heading, Text, Box, Flex, Image } from 'theme-ui'
-import { ModerationStatusText } from 'src/components/ModerationStatusText/ModerationStatustext'
+import { Heading, Text, Box, Flex, Image, AspectImage } from 'theme-ui'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import StepsIcon from 'src/assets/icons/icon-steps.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
-import { Button, FlagIconHowTos } from 'oa-components'
+import { Button, FlagIconHowTos, ModerationStatus } from 'oa-components'
 import type { IUser } from 'src/models/user.models'
 import {
   isAllowToEditContent,
@@ -22,6 +21,14 @@ import { UsefulStatsButton } from 'src/components/UsefulStatsButton/UsefulStatsB
 import { DownloadExternal } from 'src/pages/Howto/DownloadExternal/DownloadExternal'
 import Linkify from 'react-linkify'
 import { Link } from 'react-router-dom'
+import type { HowtoStore } from 'src/stores/Howto/howto.store'
+import { inject, observer } from 'mobx-react'
+import {
+  retrieveHowtoDownloadCooldown,
+  isHowtoDownloadCooldownExpired,
+  addHowtoDownloadCooldown,
+  updateHowtoDownloadCooldown,
+} from './downloadCooldown'
 
 interface IProps {
   howto: IHowtoDB
@@ -34,10 +41,34 @@ interface IProps {
   onUsefulClick: () => void
 }
 
-export default class HowtoDescription extends PureComponent<IProps> {
+interface IInjected extends IProps {
+  howtoStore: HowtoStore
+}
+
+interface IState {
+  fileDownloadCount: number | undefined
+}
+
+@inject('howtoStore')
+@observer
+export default class HowtoDescription extends PureComponent<IProps, IState> {
   // eslint-disable-next-line
   constructor(props: IProps) {
     super(props)
+    this.state = {
+      fileDownloadCount: this.props.howto.total_downloads || 0,
+    }
+    this.handleClick = this.handleClick.bind(this)
+  }
+
+  get injected() {
+    return this.props as IInjected
+  }
+
+  private setFileDownloadCount = (val: number) => {
+    this.setState({
+      fileDownloadCount: val,
+    })
   }
 
   private dateCreatedByText(howto: IHowtoDB): string {
@@ -51,6 +82,31 @@ export default class HowtoDescription extends PureComponent<IProps> {
       return 'Last edit on ' + format(new Date(howto._modified), 'DD-MM-YYYY')
     } else {
       return ''
+    }
+  }
+
+  private incrementDownloadCount = async () => {
+    const updatedDownloadCount =
+      await this.injected.howtoStore.incrementDownloadCount(
+        this.props.howto._id,
+      )
+    this.setFileDownloadCount(updatedDownloadCount!)
+  }
+
+  private handleClick = async () => {
+    const howtoDownloadCooldown = retrieveHowtoDownloadCooldown(
+      this.props.howto._id,
+    )
+
+    if (
+      howtoDownloadCooldown &&
+      isHowtoDownloadCooldownExpired(howtoDownloadCooldown)
+    ) {
+      updateHowtoDownloadCooldown(this.props.howto._id)
+      this.incrementDownloadCount()
+    } else if (!howtoDownloadCooldown) {
+      addHowtoDownloadCooldown(this.props.howto._id)
+      this.incrementDownloadCount()
     }
   }
 
@@ -239,43 +295,63 @@ export default class HowtoDescription extends PureComponent<IProps> {
               mt={3}
               sx={{ flexDirection: 'column' }}
             >
-              {howto.fileLink ? <DownloadExternal link={howto.fileLink} /> : ''}
+              {howto.fileLink && (
+                <DownloadExternal
+                  handleClick={this.handleClick}
+                  link={howto.fileLink}
+                />
+              )}
               {howto.files.map((file, index) => (
                 <FileInfo
                   allowDownload
                   file={file}
                   key={file ? file.name : `file-${index}`}
+                  handleClick={this.handleClick}
                 />
               ))}
+              {typeof this.state.fileDownloadCount === 'number' && (
+                <Text
+                  data-cy="file-download-counter"
+                  sx={{
+                    fontSize: '12px',
+                    color: '#61646B',
+                    paddingLeft: '8px',
+                  }}
+                >
+                  {this.state.fileDownloadCount}
+                  {this.state.fileDownloadCount !== 1
+                    ? ' downloads'
+                    : ' download'}
+                </Text>
+              )}
             </Flex>
           )}
         </Flex>
-        <Flex
+        <Box
           sx={{
             width: ['100%', '100%', `${(1 / 2) * 100}%`],
             position: 'relative',
-            justifyContent: 'end',
           }}
         >
-          <Image
+          <AspectImage
             loading="lazy"
+            ratio={12 / 9}
             sx={{
               objectFit: 'cover',
-              width: 'auto',
-              height: '100%',
+              width: '100%',
             }}
             src={howto.cover_image.downloadUrl}
             crossOrigin=""
             alt="how-to cover"
           />
           {howto.moderation !== 'accepted' && (
-            <ModerationStatusText
-              moderatedContent={howto}
+            <ModerationStatus
+              status={howto.moderation}
               contentType="howto"
-              top={'0px'}
+              sx={{ top: 0, position: 'absolute', right: 0 }}
             />
           )}
-        </Flex>
+        </Box>
       </Flex>
     )
   }

@@ -1,75 +1,48 @@
-import { Component } from 'react'
-import type { UserStore } from 'src/stores/User/user.store'
-import { inject, observer } from 'mobx-react'
+import { useState } from 'react'
 import { Flex } from 'theme-ui'
-import { NotificationsModal } from './NotificationsModal'
-import NotificationsIcon from './NotificationsIcon'
+import { NotificationsIcon } from './NotificationsIcon'
 import Foco from 'react-foco'
+import type { UserNotificationList } from 'oa-components'
+import { NotificationList } from 'oa-components'
 
-interface IState {
-  showNotificationsModal: boolean
+export interface Props {
+  notifications: UserNotificationList
+  handleOnClick: () => void
 }
 
-interface IProps {}
+export const NotificationsDesktop = (props: Props) => {
+  const { notifications, handleOnClick } = props
+  const [showMobileNotifications, setMobileNotificationVisibility] =
+    useState(false)
+  const areThereNotifications = Boolean(notifications.length)
 
-interface IInjectedProps extends IProps {
-  userStore: UserStore
-}
-
-@inject('userStore')
-@observer
-export default class NotificationsDesktop extends Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props)
-    this.state = {
-      showNotificationsModal: false,
-    }
-  }
-  get injected() {
-    return this.props as IInjectedProps
-  }
-
-  toggleNotificationsModal() {
-    this.setState({
-      showNotificationsModal: !this.state.showNotificationsModal,
-    })
-  }
-
-  render() {
-    const user = this.injected.userStore.user
-    const areThereNotifications = Boolean(
-      user?.notifications?.length &&
-        !(
-          user?.notifications?.filter((notification) => !notification.read)
-            .length === 0
-        ),
-    )
-
-    const showNotificationsModal = this.state.showNotificationsModal
-
-    return (
-      <>
-        {user ? (
-          <Foco
-            onClickOutside={() =>
-              this.setState({
-                showNotificationsModal: false,
-              })
-            }
-          >
-            <div data-cy="notifications-desktop">
-              <NotificationsIcon
-                onCLick={() => this.toggleNotificationsModal()}
-                isMobileMenuActive={false}
-                areThereNotifications={areThereNotifications}
+  return (
+    <Foco onClickOutside={() => setMobileNotificationVisibility(false)}>
+      <div data-cy="notifications-desktop">
+        <NotificationsIcon
+          onCLick={() =>
+            setMobileNotificationVisibility(!showMobileNotifications)
+          }
+          isMobileMenuActive={false}
+          areThereNotifications={areThereNotifications}
+        />
+        {showMobileNotifications && (
+          <Flex>
+            <div data-cy="notifications-modal-desktop">
+              <NotificationList
+                notifications={notifications}
+                handleOnClick={() => handleOnClick && handleOnClick()}
+                sx={{
+                  width: '250px',
+                  position: 'absolute',
+                  right: '10px',
+                  top: '60px',
+                }}
               />
-              <Flex>{showNotificationsModal && <NotificationsModal />}</Flex>
             </div>
-          </Foco>
-        ) : (
-          ''
+          </Flex>
         )}
-      </>
-    )
-  }
+      </div>
+    </Foco>
+  )
 }

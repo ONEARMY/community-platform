@@ -13,6 +13,7 @@ import type { ILatLng } from 'src/models/maps.models'
 import { GetLocation } from 'src/utils/geolocation'
 import type { Map } from 'react-leaflet'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
+import { transformAvailableFiltersToGroups } from './Content/Controls/transformAvailableFiltersToGroups'
 
 interface IProps extends RouteComponentProps<any> {
   mapsStore: MapsStore
@@ -109,7 +110,17 @@ class MapsPage extends React.Component<IProps, IState> {
               <>
                 <Controls
                   mapRef={this.mapRef}
-                  availableFilters={MAP_GROUPINGS}
+                  availableFilters={transformAvailableFiltersToGroups(
+                    this.props.mapsStore,
+                    [
+                      {
+                        grouping: 'verified-filter',
+                        displayName: 'Verified',
+                        type: 'verified',
+                      },
+                      ...MAP_GROUPINGS,
+                    ],
+                  )}
                   onFilterChange={(selected) => {
                     this.props.mapsStore.setActivePinFilters(selected)
                   }}

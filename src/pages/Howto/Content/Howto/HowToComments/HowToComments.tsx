@@ -2,14 +2,13 @@ import { useState } from 'react'
 import ReactGA from 'react-ga4'
 import { Box, Flex } from 'theme-ui'
 import { useCommonStores } from 'src/index'
-import { CreateComment } from 'oa-components'
-import type { IComment } from 'src/models'
+import { CreateComment, CommentList } from 'oa-components'
+import type { UserComment } from 'src/models'
 import { logger } from 'src/logger'
-import { CommentList } from 'src/components/CommentList/CommentList'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 
 interface IProps {
-  comments?: IComment[]
+  comments: UserComment[]
 }
 
 // TODO: Expect the comments as a prop from the HowTo
@@ -107,11 +106,7 @@ export const HowToComments = ({ comments }: IProps) => {
       <Flex
         mb={4}
         sx={{
-          width: [
-            `${(4 / 5) * 100}%`,
-            `${(4 / 5) * 100}%`,
-            `${(2 / 3) * 100}%`,
-          ],
+          width: [`100%`, `${(4 / 5) * 100}%`, `${(2 / 3) * 100}%`],
           flexDirection: 'column',
           alignItems: 'center',
         }}
@@ -125,7 +120,9 @@ export const HowToComments = ({ comments }: IProps) => {
         />
       </Flex>
       <Box
-        sx={{ width: `calc(${(2 / 3) * 100}% + 66px)`, marginLeft: '-66px' }}
+        sx={{
+          width: ['100%', `calc(${(2 / 3) * 100}%)`],
+        }}
       >
         <CreateComment
           maxLength={MAX_COMMENT_LENGTH}
@@ -134,7 +131,7 @@ export const HowToComments = ({ comments }: IProps) => {
           onSubmit={onSubmit}
           isLoggedIn={!!stores.userStore.activeUser}
           sx={{
-            marginLeft: 2 * -1,
+            marginLeft: [0, 2 * -1],
           }}
         />
       </Box>

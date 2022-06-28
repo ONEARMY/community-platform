@@ -20,7 +20,7 @@ exports.userUpdates = UserUpdates.handleUserUpdates
 // folder-based naming conventions should be encourage from now on
 exports.adminGetUserEmail = Admin.getUserEmail
 
-export { seoRender } from './seo-render'
+exports.seo = require('./seo')
 
 // Only export development api when working locally (with functions emulator)
 if (process.env.FUNCTIONS_EMULATOR === 'true') {

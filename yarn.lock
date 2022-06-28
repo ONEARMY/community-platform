@@ -19214,6 +19214,7 @@ fsevents@^1.2.7:
     one-army-community-platform: "workspace:*"
     request: ^2.88.2
     sharp: ^0.30.1
+    sitemap: ^7.1.1
     ts-jest: 26
     ts-node: ^10.0.0
     tslint: ^6.1.3

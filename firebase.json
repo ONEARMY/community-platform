@@ -16,6 +16,10 @@
         "function": "seoRender"
       },
       {
+        "source": "/sitemap",
+        "function": "seo-sitemapProxy"
+      },
+      {
         "source": "/static/**",
         "destination": "/static/**"
       },

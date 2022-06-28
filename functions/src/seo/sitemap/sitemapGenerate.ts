@@ -96,7 +96,11 @@ async function writeSitemapXMLStringToAssets(xmlString: string) {
 async function notifySearchEngines() {
   const sitemapUrl = `${SITE_URL}/sitemap`
   const googleNotiferUrl = `https://www.google.com/ping?sitemap=${sitemapUrl}`
-  await axios.get(googleNotiferUrl)
+  await axios
+    .get(googleNotiferUrl)
+    .catch((err) =>
+      functions.logger.error(`[Sitemap] Failed to notify`, err.message),
+    )
 }
 
 /*************************************************************************

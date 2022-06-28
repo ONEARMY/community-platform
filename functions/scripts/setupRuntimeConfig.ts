@@ -20,9 +20,5 @@ const runtimeConfig: configVars = {
     api_key: 'fake_prerender_key',
   },
 }
-
-// Write config file when executed directly
-if (require.main === module) {
-  const runtimeConfigPath = resolve(__dirname, '../.runtimeconfig.json')
-  writeFileSync(runtimeConfigPath, JSON.stringify(runtimeConfig))
-}
+const runtimeConfigPath = resolve(__dirname, '../.runtimeconfig.json')
+writeFileSync(runtimeConfigPath, JSON.stringify(runtimeConfig))

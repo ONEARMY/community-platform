@@ -2,5 +2,5 @@ node_modules
 app
 seed_data/*
 # retain latest tar file
-!seed_data/pp-2022-06-16.tar.gz
+!seed_data/pp-2022-06-26.tar.gz
 exports

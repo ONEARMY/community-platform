@@ -13,6 +13,7 @@ import { PATHS } from './paths'
  * dummy credentials for firebase auth and rewriting required mappings in firebase.json
  */
 export async function prepare() {
+  createSeedZips()
   ensureSeedData()
   buildFunctions()
   copyAppFiles()

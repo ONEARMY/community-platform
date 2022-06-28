@@ -21,6 +21,9 @@ const runtimeConfig: configVars = {
   deployment: {
     site_url: 'https://functions.test',
   },
+  prerender: {
+    api_key: 'fake_prerender_key',
+  },
 }
 const runtimeConfigPath = resolve(__dirname, '../.runtimeconfig.json')
 writeFileSync(runtimeConfigPath, JSON.stringify(runtimeConfig))

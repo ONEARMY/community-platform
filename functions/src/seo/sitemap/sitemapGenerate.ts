@@ -4,21 +4,11 @@ import path from 'path'
 import { EnumChangefreq, SitemapStream, streamToPromise } from 'sitemap'
 import type { SitemapItem } from 'sitemap'
 import { Readable } from 'stream'
-import { CONFIG } from '../config/config'
-import { uploadLocalFileToStorage } from '../Firebase/storage'
-import { getCollection } from '../Firebase/firestoreDB'
-import { IDBEndpoint } from '../models'
+import { CONFIG } from '../../config/config'
+import { uploadLocalFileToStorage } from '../../Firebase/storage'
+import { getCollection } from '../../Firebase/firestoreDB'
+import { IDBEndpoint } from '../../models'
 import axios from 'axios'
-
-/**
- * Generate a weekly sitemap of all content
- *
- * Local emulators test path:
- * http://localhost:4002/community-platform-emulated/us-central1/emulator/pubsub/schedule/seo-sitemapGenerate
- */
-export const sitemapGenerate = functions.pubsub
-  .schedule('0 2 * * MON')
-  .onRun(() => generateSitemap())
 
 /*************************************************************************
  * Main Methods

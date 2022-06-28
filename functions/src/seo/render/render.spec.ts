@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { requestHandler, RequestHandlerDeps } from './request-handler'
 
 const mockRequest = (userAgent = '') =>

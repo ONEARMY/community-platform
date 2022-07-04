@@ -169,7 +169,8 @@ commands:
     steps:
       - run:
           name: Install Firebase Tools
-          command: yarn add -D firebase-tools
+          # Pinned to 11.1.0 pending fix of https://github.com/firebase/firebase-tools/issues/4697
+          command: yarn add -D firebase-tools@11.1.0
       - when:
           condition: <<parameters.use_application_credentials>>
           steps:

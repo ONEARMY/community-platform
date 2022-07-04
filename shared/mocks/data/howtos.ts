@@ -19,6 +19,8 @@ export const howtos = {
     _id: '0EwdD1IMrwXcOncqVwOl',
     difficulty_level: 'Easy',
     files: [],
+    fileLink: 'http://google.com/',
+    total_downloads: 10,
     steps: [
       {
         title: 'Get the code',

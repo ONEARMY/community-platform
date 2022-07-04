@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions'
-import { generateSitemap } from '.'
-import { bucket } from '../Firebase/storage'
+import { bucket } from '../../Firebase/storage'
+import { generateSitemap } from './sitemapGenerate'
 
 /**
  * Read saved sitemap.xml from storage and return on request for sitemap
@@ -8,7 +8,10 @@ import { bucket } from '../Firebase/storage'
  * Test in emulator:
  * http://localhost:4002/community-platform-emulated/us-central1/seo-sitemapProxy
  */
-export const sitemapProxy = functions.https.onRequest(async (req, res) => {
+export const handleSitemapProxy = async (
+  req: functions.https.Request,
+  res: functions.Response,
+) => {
   const ref = bucket.file('sitemap.xml')
   const [exists] = await ref.exists()
   // If sitemap does not exist (e.g. new site) try to generate
@@ -25,4 +28,4 @@ export const sitemapProxy = functions.https.onRequest(async (req, res) => {
   const data = await ref.download()
   const sitemapString = Buffer.from(...data).toString()
   res.send(sitemapString)
-})
+}

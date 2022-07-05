@@ -38,7 +38,7 @@ export const requestHandler =
     if (dependencies.prerenderApiKey) {
       if (isBotRequest(request.headers)) {
         const prerenderUrl = `https://service.prerender.io/${dependencies.deploymentUrl}${pathName}`
-        logger.info('seo-render-request', {
+        logger.info('[SeoRender] bot request', {
           pathName,
           userAgent: request.headers['user-agent'],
         })

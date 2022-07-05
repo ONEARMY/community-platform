@@ -1,6 +1,4 @@
-import axios from 'axios'
 import * as functions from 'firebase-functions'
-import * as fs from 'fs'
 import { CONFIG } from '../config/config'
 import { requestHandler } from './render/request-handler'
 import { generateSitemap } from './sitemap/sitemapGenerate'
@@ -9,14 +7,11 @@ import { handleSitemapProxy } from './sitemap/sitemapProxy'
 /**
  * Serve pre-rendered html with enhanced SEO metadata for requests from bots
  */
-export const seoRender = functions.https.onRequest(
+export const seoRender = functions.https.onRequest((req, res) =>
   requestHandler({
     prerenderApiKey: CONFIG.prerender?.api_key,
-    deploymentUrl: CONFIG.deployment.site_url,
-    httpClient: axios.get,
-    syncFileReader: fs.readFileSync,
-    logger: functions.logger,
-  }),
+    deploymentUrl: CONFIG.deployment?.site_url,
+  })(req, res),
 )
 
 /**

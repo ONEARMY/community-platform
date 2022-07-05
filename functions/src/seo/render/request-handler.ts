@@ -1,5 +1,7 @@
+import axios, { AxiosError } from 'axios'
 import type { AxiosRequestConfig, AxiosResponse } from 'axios'
-import type { https } from 'firebase-functions'
+import * as functions from 'firebase-functions'
+import * as fs from 'fs'
 import { IncomingHttpHeaders } from 'http'
 
 export interface RequestHandlerDeps {
@@ -20,65 +22,75 @@ export interface RequestHandlerDeps {
 }
 
 export const requestHandler =
-  (dependencies: RequestHandlerDeps) =>
-  async (request: https.Request, res: any) => {
-    const pathName = request.path.replace('/seo', '')
-
-    if (!!dependencies.prerenderApiKey && isBotRequest(request.headers)) {
-      dependencies.logger.info(`Bot user detected.`)
-      try {
-        const { data, status } = await dependencies.httpClient(
-          `https://service.prerender.io/${dependencies.deploymentUrl}${pathName}`,
-          {
+  (dependencyOverrides: Partial<RequestHandlerDeps>) =>
+  async (request: functions.https.Request, res: any) => {
+    const pathName = request.path
+    const dependencies: RequestHandlerDeps = {
+      httpClient: axios.get,
+      syncFileReader: fs.readFileSync,
+      logger: functions.logger,
+      prerenderApiKey: '',
+      deploymentUrl: '',
+      ...dependencyOverrides,
+    }
+    const { logger } = dependencies
+    // Handle bot request
+    if (dependencies.prerenderApiKey) {
+      if (isBotRequest(request.headers)) {
+        const prerenderUrl = `https://service.prerender.io/${dependencies.deploymentUrl}${pathName}`
+        logger.info('seo-render-request', {
+          pathName,
+          userAgent: request.headers['user-agent'],
+        })
+        try {
+          const { data, status } = await dependencies.httpClient(prerenderUrl, {
             headers: {
               'X-Prerender-Token': dependencies.prerenderApiKey,
             },
             responseType: 'text',
-          },
-        )
-
-        res.status = status
-        return res.send(data)
-      } catch (error) {
-        dependencies.logger.error(`Error fetching response from prerender:`, {
-          error,
-        })
+          })
+          res.status = status
+          return res.send(data)
+        } catch (error) {
+          // Bot request error, will proceed as regular user after logging
+          if (
+            (error as AxiosError)?.response?.status === 401 ||
+            error?.message?.includes('401')
+          ) {
+            logger.error('Prerender access denied, check configured token')
+          }
+          logger.error(`Error fetching response from prerender:`, {
+            error,
+            prerenderUrl,
+          })
+        }
       }
+    } else {
+      logger.warn('No prerender key supplied, seo-render will not function')
     }
-
+    // Handle user request - serve index file uploaded with functions
     try {
       const response = dependencies.syncFileReader('./index.html', {
         encoding: 'utf-8',
       })
-
-      res.status = 200
-
-      return res.send(response)
+      return res.status(200).send(response)
     } catch (error) {
-      dependencies.logger.error(`Unable to load index.html from filesystem`, {
+      logger.error(`Unable to load index.html from filesystem`, {
         error,
       })
     }
-
+    // Fallback - request index file from deployment url
     try {
       const { status, data } = await dependencies.httpClient(
         `${dependencies.deploymentUrl}/index.html`,
-        {
-          responseType: 'text',
-        },
+        { responseType: 'text' },
       )
-
-      res.status = status
-
-      return res.send(data)
+      return res.status(status).send(data)
     } catch (err) {
-      dependencies.logger.error('Unable to fetch index.html over HTTP')
+      logger.error('Unable to fetch index.html over HTTP')
     }
-
-    dependencies.logger.error(
-      'Unable to return any content to the user request',
-    )
-
+    // End of the line
+    logger.error('Unable to return any content to the user request')
     res.status = 500
     return res.send('error')
   }

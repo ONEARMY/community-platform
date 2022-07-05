@@ -5,6 +5,8 @@
     "ci": "onearmy-test-ci",
     "next": "onearmy-next",
     "project-kamp-development": "la-project-kamp-development",
-    "project-kamp-production": "project-kamp-community"
+    "project-kamp-production": "project-kamp-community",
+    "fixing-fashion-development": "fixing-fashion-dev",
+    "fixing-fashion-production": "fixing-fashion-prod"
   }
 }

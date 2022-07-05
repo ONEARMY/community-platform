@@ -69,6 +69,8 @@ export const requestHandler =
       logger.warn('No prerender key supplied, seo-render will not function')
     }
     // Handle user request - serve index file uploaded with functions
+    // NOTE - CC 2022-07-05 - This is difficult to keep updated when developing/debugging
+    // Should ideally add a better system that ensures platform built before functions (e.g. turborepo/nx)
     try {
       const response = dependencies.syncFileReader('./index.html', {
         encoding: 'utf-8',

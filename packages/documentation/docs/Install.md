@@ -43,4 +43,5 @@ You will need to set up a CircleCI context for each target environment. This con
 - `REACT_APP_GA_TRACKING_ID`
 - `REACT_APP_PLATFORM_THEME`
 - `REACT_APP_PLATFORM_PROFILES` - comma separated list of available profiles. Use `ProfileType` from modules/profile/index for guidance here. For example: `member,workspace`
-- `REACT_APP_SUPPORTED_MODULES` - `SITE_NAME`
+- `REACT_APP_SUPPORTED_MODULES` – comma separated list of available modules. See `/src/modules/index.ts` for the definitions.
+- `SITE_NAME`

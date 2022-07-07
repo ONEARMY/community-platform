@@ -8,6 +8,18 @@
         "function": "api"
       },
       {
+        "source": "/how-to/**",
+        "function": "seo-seoRender"
+      },
+      {
+        "source": "/research/**",
+        "function": "seo-seoRender"
+      },
+      {
+        "source": "/sitemap.xml",
+        "function": "seo-sitemapProxy"
+      },
+      {
         "source": "/static/**",
         "destination": "/static/**"
       },

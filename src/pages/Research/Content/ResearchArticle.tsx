@@ -12,6 +12,8 @@ import ResearchUpdate from './ResearchUpdate'
 import { useCommonStores } from 'src/index'
 import { Link } from 'react-router-dom'
 import type { IComment, UserComment } from 'src/models'
+import { seoTagsUpdate } from 'src/utils/seo'
+import type { IUploadedFileMeta } from 'src/stores/storage'
 
 type IProps = RouteComponentProps<{ slug: string }>
 
@@ -56,17 +58,31 @@ const ResearchArticle = observer((props: IProps) => {
   React.useEffect(() => {
     ;(async () => {
       const { slug } = props.match.params
-      await researchStore.setActiveResearchItem(slug)
+      const researchItem = await researchStore.setActiveResearchItem(slug)
       setIsLoading(false)
       const hash = props.location.hash
       if (hash) {
         scrollIntoRelevantSection(hash)
       }
+      // Update SEO tags
+      if (researchItem) {
+        // Use whatever image used in most recent update for SEO image
+        const latestImage = researchItem?.updates
+          ?.map((u) => (u.images?.[0] as IUploadedFileMeta)?.downloadUrl)
+          .filter((url: string) => !!url)
+          .pop()
+        seoTagsUpdate({
+          title: researchItem.title,
+          description: researchItem.description,
+          imageUrl: latestImage,
+        })
+      }
     })()
 
-    // Reset the store's active item on component cleanup
+    // Reset the store's active item and seo tags on component cleanup
     return () => {
       researchStore.setActiveResearchItem()
+      seoTagsUpdate({})
     }
   }, [props, researchStore])
 

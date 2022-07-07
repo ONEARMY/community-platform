@@ -1,13 +1,12 @@
 import { useState } from 'react'
 import ReactGA from 'react-ga4'
 import { Box } from 'theme-ui'
-import { Button, CommentItem } from 'oa-components'
-import type { UserComment } from 'src/models'
-
+import { Button, CommentItem } from '../'
+import type { CommentItemProps as Comment } from '../CommentItem/CommentItem'
 const MAX_COMMENTS = 5
 
 export const CommentList: React.FC<{
-  comments: UserComment[]
+  comments: Comment[]
   handleEdit: (_id: string, comment: string) => Promise<void>
   handleEditRequest: () => Promise<void>
   handleDelete: (_id: string) => Promise<void>
@@ -32,11 +31,11 @@ export const CommentList: React.FC<{
       {comments &&
         comments
           .slice(0, shownComments)
-          .map((comment) => (
+          .map((comment: Comment) => (
             <CommentItem
               key={comment._id}
               {...comment}
-              isUserVerified={!!comment.userIsVerfied}
+              isUserVerified={!!comment.isUserVerified}
               isEditable={!!comment.isEditable}
               handleEditRequest={handleEditRequest}
               handleDelete={handleDelete}

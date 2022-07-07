@@ -24,6 +24,7 @@ import webpack from 'webpack'
 
 import { CleanWebpackPlugin } from 'clean-webpack-plugin'
 import GenerateJsonPlugin from 'generate-json-webpack-plugin'
+import CopyWebpackPlugin from 'copy-webpack-plugin'
 
 import PackageJson from './package.json'
 
@@ -60,6 +61,15 @@ const config: webpack.Configuration = {
     new CleanWebpackPlugin(),
     // copy package.json
     new GenerateJsonPlugin('package.json', generatePackageJson(), null, 2),
+    // copy src index.html to be served during seoRender function
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, '../build/index.html'),
+          to: 'index.html',
+        },
+      ],
+    }),
   ],
   output: {
     path: path.resolve(__dirname, 'dist'),

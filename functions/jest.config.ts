@@ -5,7 +5,10 @@ const config: InitialOptionsTsJest = {
   testEnvironment: 'node',
   roots: ['<rootDir>'],
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
-  setupFiles: ['<rootDir>/scripts/set-up-environment-variables.ts'],
+  setupFiles: [
+    '<rootDir>/scripts/set-up-environment-variables.ts',
+    '<rootDir>/scripts/setupRuntimeConfig.ts',
+  ],
 }
 
 export default config

@@ -1,7 +1,7 @@
 import * as admin from 'firebase-admin'
 
 const firebaseTest = require('firebase-functions-test')()
-import { DB_ENDPOINTS } from '../models'
+import { DB_ENDPOINTS } from '../../models'
 import { generateSitemap } from './sitemapGenerate'
 
 const testDocs = [

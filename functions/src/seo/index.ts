@@ -13,8 +13,7 @@ export const seoRender = functions.https.onRequest((req, res) => {
     prerenderApiKey: CONFIG.prerender?.api_key,
     deploymentUrl: CONFIG.deployment?.site_url,
   })(req, res)
-}
-)
+})
 
 /**
  * Generate a weekly sitemap of all content

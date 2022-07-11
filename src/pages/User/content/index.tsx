@@ -1,7 +1,7 @@
 import { inject, observer } from 'mobx-react'
 import React from 'react'
 import type { RouteComponentProps } from 'react-router'
-import Loader from 'src/components/Loader'
+import { Loader } from 'oa-components'
 import { Text } from 'theme-ui'
 import type { IUserPP } from 'src/models'
 import { ProfileType } from 'src/modules/profile'

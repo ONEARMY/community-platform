@@ -8,6 +8,7 @@ import WorkspaceBadge from 'src/assets/images/badges/pt-workspace.svg'
 import WorkspaceBadgeLowDetail from 'src/assets/icons/map-workspace.svg'
 import LocalComBadge from 'src/assets/images/badges/pt-local-community.svg'
 import LocalComBadgeLowDetail from 'src/assets/icons/map-community.svg'
+import logo from 'src/assets/images/precious-plastic-logo-official.svg'
 
 import type { ThemeWithName } from '../types'
 
@@ -202,6 +203,7 @@ const typography = {
 
 const StyledComponentTheme: ThemeWithName = {
   name: 'Precious Plastic',
+  logo: logo,
   profileGuidelinesURL:
     'https://drive.google.com/file/d/1fXTtBbzgCO0EL6G9__aixwqc-Euqgqnd/view',
   communityProgramURL:

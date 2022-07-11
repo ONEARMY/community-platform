@@ -25,6 +25,8 @@ type Badge = {
 export interface ThemeWithName {
   name: string
 
+  logo: string
+
   profileGuidelinesURL: string
 
   communityProgramURL: string

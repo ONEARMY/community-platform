@@ -1,0 +1,20 @@
+#!/bin/sh
+# Call common windows fix
+. "$(dirname "$0")/common.sh"
+
+
+if git diff --name-only --cached --diff-filter=A | grep -o src/components --silent; then
+    echo '┌──────────────────────────────────────────────────────────────┐'
+    echo '│ Your Commit was Blocked                                      │'
+    echo '│ ========================                                     │'
+    echo '│                                                              │'
+    echo '│ We are no longer accepting new files in ./src/components/    │'
+    echo '│ Please move the new component to ./packages/components/src/  │'
+    echo '│                                                              │'
+    echo '│ You can then import it using:                                │'
+    echo "│ import { YourComponent } from 'oa-components'                │"
+    echo '│                                                              │' 
+    echo '│ Find out more: https://github.com/orgs/ONEARMY/projects/3    │' 
+    echo '└──────────────────────────────────────────────────────────────┘'
+    exit 1
+fi

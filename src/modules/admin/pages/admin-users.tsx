@@ -3,18 +3,18 @@ import { useEffect, useState } from 'react'
 import { format } from 'date-fns'
 import { Link } from 'react-router-dom'
 import Table from '../components/Table/Table'
-import Header from '../components/Header'
 import HeadFilter from '../components/Table/HeadFilter'
 import { observer } from 'mobx-react'
 import { useCommonStores } from 'src/index'
-import workspace from '../../../assets/images/badges/pt-workspace.jpg'
-import machineBuilder from '../../../assets/images/badges/pt-machine-shop.jpg'
-import communitybuilder from '../../../assets/images/badges/pt_community_point.png'
-import member from '../../../assets/images/badges/pt-member.jpg'
-import collectionPoint from '../../../assets/images/badges/pt-collection-point.jpg'
+import workspace from 'src/assets/images/badges/pt-workspace.jpg'
+import machineBuilder from 'src/assets/images/badges/pt-machine-shop.jpg'
+import communitybuilder from 'src/assets/images/badges/pt_community_point.png'
+import member from 'src/assets/images/badges/pt-member.jpg'
+import collectionPoint from 'src/assets/images/badges/pt-collection-point.jpg'
 import type { IUserPP } from 'src/models'
 import Fuse from 'fuse.js'
 import { Loader } from 'oa-components'
+import AdminUserSearch from '../components/adminUserSearch'
 
 const TAG_TABLE_COLUMNS: any[] = [
   {
@@ -74,9 +74,15 @@ const AdminUsers = observer(() => {
   const [open, setopen] = useState<boolean>(false)
   const [toOpen, settoOpen] = useState('')
 
+  // Create placeholder fuse instance to power search feature
+  const fuseOptions = { keys: ['userName'] }
+  const [fuse] = useState<Fuse<IUserPP>>(
+    new Fuse([], { keys: fuseOptions.keys }),
+  )
+
   const [loading, setLoading] = useState(false)
   useEffect(() => {
-    getUsers()
+    loadUserData()
   }, [])
 
   useEffect(() => {
@@ -84,12 +90,15 @@ const AdminUsers = observer(() => {
     else setFilteredData(data)
   }, [filterBy])
 
-  const getUsers = async () => {
+  const loadUserData = async () => {
     setLoading(true)
     try {
       const usersdata = await stores.userStore.getAllUser()
       setData(usersdata)
       setFilteredData(usersdata)
+      // update search data data for use in local search
+      const index = Fuse.createIndex(fuseOptions.keys, usersdata)
+      fuse.setCollection(usersdata, index)
     } catch (error) {
       console.log({ error })
     }
@@ -209,24 +218,22 @@ const AdminUsers = observer(() => {
     }
   }
 
-  const searchData = (val) => {
-    const options = {
-      keys: ['userName'],
-    }
+  const handleSearchChange = (val: string) => {
     // Change the pattern
     if (!val) {
       setFilteredData(data)
       return
     }
-    const index = Fuse.createIndex(options.keys, data)
-    const fuse = new Fuse(data, options, index)
-    const tempData = fuse.search(val).map((it) => it.item)
-    setFilteredData(tempData)
+    const filteredData = fuse.search(val).map((it) => it.item)
+    setFilteredData(filteredData)
   }
 
   return (
     <Box sx={{ width: '100%', mt: 5 }}>
-      <Header total={filteredData.length} onChange={searchData} />
+      <AdminUserSearch
+        total={filteredData.length}
+        onSearchChange={handleSearchChange}
+      />
       {!loading ? (
         <Table
           data={filteredData}

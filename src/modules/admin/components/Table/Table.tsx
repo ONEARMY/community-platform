@@ -22,7 +22,6 @@ function Table(props: TableProps) {
     <ReactTable
       style={{
         border: 'none',
-        maxHeight: '40rem',
       }}
       ThComponent={(row) => {
         return (

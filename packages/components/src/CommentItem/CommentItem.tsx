@@ -6,9 +6,9 @@ import { Box, Flex, Text } from 'theme-ui'
 import { FlagIconHowTos } from '../FlagIcon/FlagIcon'
 import { Icon } from '../Icon/Icon'
 
-export interface Props {
+export interface CommentItemProps {
   text: string
-  isUserVerified: boolean
+  isUserVerified?: boolean
   isEditable: boolean
   creatorCountry?: string | null
   creatorName: string
@@ -27,7 +27,7 @@ const formatDate = (d: string | undefined): string => {
   return new Date(d).toLocaleDateString('en-GB').replace(/\//g, '-')
 }
 
-export const CommentItem = (props: Props) => {
+export const CommentItem = (props: CommentItemProps) => {
   const textRef = createRef<any>()
   const [showEditModal, setShowEditModal] = useState(false)
   const [textHeight, setTextHeight] = useState(0)
@@ -46,6 +46,7 @@ export const CommentItem = (props: Props) => {
     isEditable,
   } = props
 
+  console.log(isEditable)
   useEffect(() => {
     if (textRef.current) {
       setTextHeight(textRef.current.scrollHeight)
@@ -107,8 +108,9 @@ export const CommentItem = (props: Props) => {
             whiteSpace: 'pre-wrap',
             wordBreak: 'break-word',
             overflow: 'hidden',
-            lineHeight: '1em',
             maxHeight: isShowMore ? 'max-content' : '128px',
+            fontFamily: 'body',
+            lineHeight: 1.3,
           }}
           ref={textRef}
         >

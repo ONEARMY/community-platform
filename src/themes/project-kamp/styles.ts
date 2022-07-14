@@ -1,5 +1,6 @@
 import member from 'src/assets/images/themes/project-kamp/badge.svg'
 import memberLowDetailBadge from 'src/assets/images/themes/project-kamp/avatar.svg'
+import logo from 'src/assets/images/themes/project-kamp/project-kamp-header.png'
 import type { ThemeWithName } from '../types'
 
 // use enum to specify list of possible colors for typing
@@ -33,6 +34,10 @@ export const zIndex = {
   logoContainer: 999,
   mapFlexBar: 2000,
   header: 3000,
+}
+
+const fonts = {
+  body: `'Inter', Arial, sans-serif`,
 }
 
 export type ButtonVariants =
@@ -197,6 +202,7 @@ const StyledComponentTheme: ThemeWithName = {
     'https://drive.google.com/file/d/1fXTtBbzgCO0EL6G9__aixwqc-Euqgqnd/view',
   communityProgramURL:
     'https://community.preciousplastic.com/academy/guides/community-program',
+  logo: logo,
   badges: {
     member: {
       lowDetail: memberLowDetailBadge,
@@ -217,6 +223,7 @@ const StyledComponentTheme: ThemeWithName = {
   space,
   radii,
   fontSizes,
+  fonts,
   forms: {
     input: {
       background: colors.background,

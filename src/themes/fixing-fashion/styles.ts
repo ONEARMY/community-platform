@@ -3,6 +3,11 @@ import spaceBadge from 'src/assets/images/themes/fixing-fashion/badge_space.svg'
 import spaceBadgeLow from 'src/assets/images/themes/fixing-fashion/avatar_space.svg'
 import memberLow from 'src/assets/images/themes/fixing-fashion/avatar.svg'
 import member from 'src/assets/images/themes/fixing-fashion/badge.svg'
+import logo from 'src/assets/images/themes/fixing-fashion/fixing-fashion-header.png'
+
+const fonts = {
+  body: `'Inter', Arial, sans-serif`,
+}
 
 // use enum to specify list of possible colors for typing
 export const colors = {
@@ -195,6 +200,7 @@ const typography = {
 
 const StyledComponentTheme: ThemeWithName = {
   name: 'Fixing Fashion',
+  logo: logo,
   profileGuidelinesURL:
     'https://community.fixing.fashion/academy/guides/profile',
   communityProgramURL:
@@ -223,6 +229,7 @@ const StyledComponentTheme: ThemeWithName = {
   space,
   radii,
   fontSizes,
+  fonts,
   forms: {
     input: {
       background: colors.background,

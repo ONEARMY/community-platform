@@ -85,7 +85,7 @@ export class ResearchStore extends ModuleStore {
       })
       // load Research stats which are stored in a separate subcollection
       await this.loadResearchStats(researchItem?._id)
-      return researchItem
+      return researchItem as IResearch.ItemDB
     } else {
       runInAction(() => {
         this.activeResearchItem = undefined

@@ -311,6 +311,7 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
               ))}
               {typeof this.state.fileDownloadCount === 'number' && (
                 <Text
+                  data-cy="file-download-counter"
                   sx={{
                     fontSize: '12px',
                     color: '#61646B',

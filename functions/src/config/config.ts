@@ -42,11 +42,14 @@ interface IDeployment {
   site_url: string
 }
 
-interface configVars {
+export interface configVars {
   service: IServiceAccount
   analytics: IAnalytics
   integrations: IIntergrations
   deployment: IDeployment
+  prerender: {
+    api_key: string
+  }
 }
 
 // if passing complex config variables, may want to

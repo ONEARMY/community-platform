@@ -14,7 +14,7 @@ import member from '../../../assets/images/badges/pt-member.jpg'
 import collectionPoint from '../../../assets/images/badges/pt-collection-point.jpg'
 import type { IUserPP } from 'src/models'
 import Fuse from 'fuse.js'
-import Loader from 'src/components/Loader'
+import { Loader } from 'oa-components'
 
 const TAG_TABLE_COLUMNS: any[] = [
   {

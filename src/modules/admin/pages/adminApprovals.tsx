@@ -1,11 +1,10 @@
 import { observer } from 'mobx-react'
 import { useCallback, useEffect, useState } from 'react'
-import { Box } from 'theme-ui'
+import { Box, Heading } from 'theme-ui'
 import type { IDBEndpoint, IHowto, IMapPin, IUserDB } from 'src/models'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import { useHistory } from 'react-router'
-import Heading from 'src/components/Heading'
 import { useAdminStoreV2 } from '../admin.storeV2'
 
 interface IPendingApprovals {
@@ -68,13 +67,11 @@ const AdminHome = observer(() => {
   }, [])
   return (
     <>
-      <Heading medium bold txtcenter sx={{ width: '100%' }} py={26}>
-        Pending Content Approvals
-      </Heading>
+      <Heading my={9}>Pending Content Approvals</Heading>
       {/* Map Pins */}
       {pending.mappins && (
         <Box mb={4}>
-          <Heading small>Map Pins {pending.mappins.length}</Heading>
+          <Heading variant="small">Map Pins {pending.mappins.length}</Heading>
           <Divider />
           <ContentTable style={{ textAlign: 'left', width: '100%' }}>
             <thead>
@@ -100,7 +97,7 @@ const AdminHome = observer(() => {
       {/* Howtos */}
       {pending.howtos && (
         <Box mb={4}>
-          <Heading small>HowTos {pending.howtos.length}</Heading>
+          <Heading variant="small">HowTos {pending.howtos.length}</Heading>
           <Divider />
           <ContentTable style={{ textAlign: 'left', width: '100%' }}>
             <thead>
@@ -126,7 +123,7 @@ const AdminHome = observer(() => {
       {/* Users (not currently used) */}
       {pending.users && (
         <Box mb={4}>
-          <Heading small>Users {pending.users.length}</Heading>
+          <Heading variant="small">Users {pending.users.length}</Heading>
           <Divider />
           <ContentTable style={{ textAlign: 'left', width: '100%' }}>
             <thead>

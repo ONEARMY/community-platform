@@ -9,6 +9,7 @@ interface Props {
 function TableHead({ children, row }: Props) {
   return (
     <Box
+      data-cy="tableHead"
       sx={{
         ...row.style,
         textAlign: 'left',

@@ -1,17 +1,18 @@
-import { Box } from 'theme-ui'
+import { Box, Text } from 'theme-ui'
 import { useEffect, useState } from 'react'
 import { format } from 'date-fns'
-import { Link } from 'react-router-dom'
 import Table from '../components/Table/Table'
+import type { ITableProps, ICellRenderProps } from '../components/Table/Table'
 import HeadFilter from '../components/Table/HeadFilter'
 import { observer } from 'mobx-react'
 import { useCommonStores } from 'src/index'
-import type { IUserPP } from 'src/models'
+import type { IUserPPDB } from 'src/models'
 import Fuse from 'fuse.js'
 import { Loader, MemberBadge } from 'oa-components'
 import AdminUserSearch from '../components/adminUserSearch'
+import { Link } from 'react-router-dom'
 
-const TAG_TABLE_COLUMNS: any[] = [
+const TABLE_COLUMNS: ITableProps<IUserPPDB>['columns'] = [
   {
     Header: 'Type',
     accessor: 'profileType',
@@ -33,22 +34,14 @@ const TAG_TABLE_COLUMNS: any[] = [
     minWidth: 140,
   },
   {
-    Header: 'Status',
-    accessor: 'verified',
+    Header: 'Badges',
+    accessor: 'badges',
     minWidth: 140,
   },
 ]
 
 interface Props {
   val: string
-}
-
-interface DataProps {
-  col: {
-    id: string
-    children: any
-    rowData: any
-  }
 }
 
 const types = [
@@ -63,15 +56,15 @@ const roles = ['user', 'beta-tester', 'admin']
 
 const AdminUsers = observer(() => {
   const { stores } = useCommonStores()
-  const [data, setData] = useState<IUserPP[]>([])
-  const [filteredData, setFilteredData] = useState<IUserPP[]>([])
+  const [data, setData] = useState<IUserPPDB[]>([])
+  const [filteredData, setFilteredData] = useState<IUserPPDB[]>([])
   const [filterBy, setFilterBy] = useState<string[]>([])
   const [open, setopen] = useState<boolean>(false)
   const [toOpen, settoOpen] = useState('')
 
   // Create placeholder fuse instance to power search feature
   const fuseOptions = { keys: ['userName'] }
-  const [fuse] = useState<Fuse<IUserPP>>(
+  const [fuse] = useState<Fuse<IUserPPDB>>(
     new Fuse([], { keys: fuseOptions.keys }),
   )
 
@@ -110,7 +103,7 @@ const AdminUsers = observer(() => {
         types.push(filterBy[i].replace('Type-', ''))
       }
     }
-    const filteredTypes: IUserPP[] = []
+    const filteredTypes: IUserPPDB[] = []
     ;(types.length > 0 || filterRoles.length > 0) &&
       data.map((it) => {
         if (types.includes(it.profileType)) {
@@ -149,35 +142,63 @@ const AdminUsers = observer(() => {
     }
   }
 
-  const getTypeImage = (type?: string) => {
+  const getProfileTypeImage = (type?: string) => {
     return type ? <MemberBadge profileType={type} /> : null
   }
 
-  const renderText = ({ col }: DataProps) => {
-    if (col.id == 'Username' && col?.rowData?.original?._id) {
-      return (
-        <Link to={'/admin_v2/users/' + col?.rowData?.original?._id}>
-          {col.children}
-        </Link>
-      )
+  /**
+   * Default function used to render the value of a cell
+   * Displays arrays as bullet list, stringified json, '-'
+   */
+  const defaultValueRenderer = (value: any) => {
+    if (typeof value === 'object') {
+      // null and undefined
+      if (!value) {
+        return '-'
+      }
+      // arrays
+      if (Array.isArray(value)) {
+        return (
+          <ul>
+            {value.map((v) => (
+              <li key={v}>{v}</li>
+            ))}
+          </ul>
+        )
+      }
+      // objects
+      value = JSON.stringify(value, null, 2)
     }
-    return col?.children?.toString()
+    // string, boolean, number
+    return <Text>{value}</Text>
   }
 
-  const RenderContent: React.FC<DataProps> = (props: DataProps) => {
+  /** Function applied to render each table row cell */
+  const RenderContent: React.FC<ICellRenderProps> = (
+    props: ICellRenderProps,
+  ) => {
     const { col } = props
-    if (col?.children || col?.children?.toString()) {
-      if (col.id === 'Type') {
-        const type = col?.children?.toString()
-        return getTypeImage(type)
+    const { field, value } = col
+    const userField = field as keyof IUserPPDB
+    if (value) {
+      if (userField === 'profileType') {
+        const type = value?.toString()
+        return getProfileTypeImage(type) as any
       }
-      if (col.id === 'Signup Date') {
-        return format(new Date(col?.children?.toString()), 'DD-MM-YYYY')
+      if (userField === '_created') {
+        return format(new Date(value?.toString()), 'DD-MM-YYYY')
       }
-      return renderText({ col })
-    } else {
-      return '-'
+      if (userField === 'badges') {
+        const badges = Object.entries(value)
+          .filter(([, value]) => !!value)
+          .map(([key]) => key)
+        return defaultValueRenderer(badges)
+      }
+      if (userField === 'userName') {
+        return <Link to={`/u/${value}/edit`}>{value}</Link>
+      }
     }
+    return defaultValueRenderer(value)
   }
 
   const handleSearchChange = (val: string) => {
@@ -199,9 +220,9 @@ const AdminUsers = observer(() => {
       {!loading ? (
         <Table
           data={filteredData}
-          columns={TAG_TABLE_COLUMNS}
+          columns={TABLE_COLUMNS}
           filters={RenderFilter}
-          TData={RenderContent}
+          rowComponent={RenderContent}
         />
       ) : (
         <Loader />

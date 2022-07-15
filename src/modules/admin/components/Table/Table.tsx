@@ -1,23 +1,37 @@
 import React from 'react'
 import ReactTable from 'react-table'
+import type { Column, ComponentPropsGetterRC, RowInfo } from 'react-table'
 import 'react-table/react-table.css'
 import { Box, Text } from 'theme-ui'
-import type { IUserPP } from 'src/models'
 import TableHead from './TableHead'
 import { css, Global } from '@emotion/react'
 
-type TableProps = {
-  columns: {
-    Header: string
-    accessor: string
-    minWidth: number
-  }[]
-  data: IUserPP[]
-  filters?: React.FC | any
-  TData?: React.FC | any
+/** Props rendered for each row cell */
+export interface ICellRenderProps {
+  col: {
+    field?: string
+    value?: any
+    rowInfo?: RowInfo
+  }
 }
 
-function Table(props: TableProps) {
+export interface ITableProps<T = any> {
+  columns: Column[]
+  data: T[]
+  filters?: React.FC | any
+  rowComponent: React.FC<ICellRenderProps>
+}
+const getTdProps: ComponentPropsGetterRC = (finalState, rowInfo?, column?) => {
+  const field = column?.id || ''
+  const tdProps: ICellRenderProps['col'] = {
+    field,
+    value: rowInfo?.original[field],
+    rowInfo,
+  }
+  return tdProps
+}
+
+function Table(props: ITableProps) {
   return (
     <>
       <Global
@@ -54,40 +68,20 @@ function Table(props: TableProps) {
             </TableHead>
           )
         }}
-        TdComponent={(col) => {
-          if (!col.rowData) {
-            return <></>
-          }
-          return props.TData ? (
-            <Box
-              sx={{
-                flex: '100 0 auto',
-                width: '50px',
-                color: col.id == 'Username' ? '#0898CB' : 'black',
-                textDecoration: col.id == 'Username' ? 'underline' : 'none',
-                cursor: col.id == 'Username' ? 'pointer' : 'default',
-              }}
-            >
-              <props.TData col={col} />
-            </Box>
-          ) : (
-            <Box
-              sx={{
-                flex: '120 0 auto',
-                width: '120px',
-                color: col.id == 'Username' ? '#0898CB' : 'black',
-              }}
-            >
-              {col?.children?.toString() ? col?.children?.toString() : '-'}
-            </Box>
-          )
-        }}
-        getTdProps={(state, rowInfo, column) => {
-          return {
-            id: column.Header,
-            rowData: rowInfo,
-          }
-        }}
+        TdComponent={(col) => (
+          <Box
+            sx={{
+              flex: '100 0 auto',
+              width: '50px',
+              color: col.id == 'Username' ? '#0898CB' : 'black',
+              textDecoration: col.id == 'Username' ? 'underline' : 'none',
+              cursor: col.id == 'Username' ? 'pointer' : 'default',
+            }}
+          >
+            <props.rowComponent col={col} />
+          </Box>
+        )}
+        getTdProps={getTdProps}
         getTrProps={() => {
           return {
             style: {

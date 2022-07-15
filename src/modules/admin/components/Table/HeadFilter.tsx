@@ -4,10 +4,10 @@ import { Icon } from 'oa-components'
 import styled from '@emotion/styled'
 
 type Props = {
-  val: string
-  filter: string[]
-  filterBy: string[]
-  setFilterBy: (values: string[]) => void
+  field: string
+  filterOptions: string[]
+  filterValues: any[]
+  filterValueChanged: (filterValues: any[]) => void
   open: boolean
   setopen: (open: boolean) => void
   toOpen: string
@@ -27,29 +27,24 @@ const Top = styled(Box)`
 
 function HeadFilter(props: Props) {
   const {
-    val,
-    filter,
-    filterBy,
-    setFilterBy,
+    field,
+    filterOptions,
+    filterValues,
+    filterValueChanged,
     open,
     setopen,
     toOpen,
     settoOpen,
   } = props
 
-  const handleChange = (e) => {
-    const { value, checked } = e.target
-    const temp: string[] = [...filterBy]
-    if (checked) {
-      temp.push(value)
-      setFilterBy(temp)
+  const toggleFilter = (value: any) => {
+    const filterIndex = filterValues.indexOf(value)
+    if (filterIndex > -1) {
+      filterValues.splice(filterIndex)
     } else {
-      const index = temp.findIndex((it) => it == value)
-      if (index !== -1) {
-        temp.splice(index, 1)
-        setFilterBy(temp)
-      }
+      filterValues.push(value)
     }
+    filterValueChanged(filterValues)
   }
 
   return (
@@ -68,12 +63,12 @@ function HeadFilter(props: Props) {
         <Icon
           glyph="filter"
           onClick={() => {
-            settoOpen(val)
+            settoOpen(field)
             setopen(!open)
           }}
         />
       </Text>
-      {open && toOpen == val && (
+      {open && toOpen == field && (
         <Box style={{ position: 'relative' }}>
           <Top />
           <Box
@@ -88,14 +83,14 @@ function HeadFilter(props: Props) {
               borderRadius: '10px',
             }}
           >
-            {filter.map((text) => (
-              <Label key={text}>
+            {filterOptions.map((value) => (
+              <Label key={value}>
                 <Checkbox
-                  value={`${val}-${text}`}
-                  checked={filterBy.includes(`${val}-${text}`)}
-                  onChange={(e) => handleChange(e)}
+                  value={value}
+                  defaultChecked={filterValues.includes(value)}
+                  onChange={() => toggleFilter(value)}
                 />
-                {text}
+                {value} {filterValues.includes(value)}
               </Label>
             ))}
           </Box>

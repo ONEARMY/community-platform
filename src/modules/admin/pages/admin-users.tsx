@@ -2,15 +2,20 @@ import { Box, Text } from 'theme-ui'
 import { useEffect, useState } from 'react'
 import { format } from 'date-fns'
 import Table from '../components/Table/Table'
-import type { ITableProps, ICellRenderProps } from '../components/Table/Table'
+import type {
+  ITableProps,
+  ICellRenderProps,
+  IHeaderRenderProps,
+} from '../components/Table/Table'
 import HeadFilter from '../components/Table/HeadFilter'
 import { observer } from 'mobx-react'
 import { useCommonStores } from 'src/index'
-import type { IUserPPDB } from 'src/models'
+import type { IUserBadges, IUserPPDB, UserRole } from 'src/models'
 import Fuse from 'fuse.js'
 import { Loader, MemberBadge } from 'oa-components'
 import AdminUserSearch from '../components/adminUserSearch'
 import { Link } from 'react-router-dom'
+import { ProfileType } from 'src/modules/profile'
 
 const TABLE_COLUMNS: ITableProps<IUserPPDB>['columns'] = [
   {
@@ -40,25 +45,24 @@ const TABLE_COLUMNS: ITableProps<IUserPPDB>['columns'] = [
   },
 ]
 
-interface Props {
-  val: string
-}
+const profileTypeFilters = Object.values(ProfileType)
 
-const types = [
-  'member',
-  'workspace',
-  'machine-builder',
-  'community-builder',
-  'collection-point',
+const userRoleFilters: UserRole[] = [
+  'subscriber',
+  'beta-tester',
+  'admin',
+  'super-admin',
 ]
 
-const roles = ['user', 'beta-tester', 'admin']
+const badgeFilters: (keyof IUserBadges)[] = ['verified']
 
 const AdminUsers = observer(() => {
   const { stores } = useCommonStores()
   const [data, setData] = useState<IUserPPDB[]>([])
   const [filteredData, setFilteredData] = useState<IUserPPDB[]>([])
-  const [filterBy, setFilterBy] = useState<string[]>([])
+  const [filterValues, setFilterValues] = useState<{
+    [field in keyof IUserPPDB]?: any[]
+  }>({})
   const [open, setopen] = useState<boolean>(false)
   const [toOpen, settoOpen] = useState('')
 
@@ -73,15 +77,15 @@ const AdminUsers = observer(() => {
     loadUserData()
   }, [])
 
-  useEffect(() => {
-    if (filterBy.length > 0) filterByType()
-    else setFilteredData(data)
-  }, [filterBy])
-
   const loadUserData = async () => {
     setLoading(true)
     try {
-      const usersdata = await stores.userStore.getAllUser()
+      // HACK - retrieve all users from the DB
+      // TODO - should ideally be retrieved via aggregation to reduce DB queries
+      const usersdata = await stores.userStore.db
+        .collection<IUserPPDB>('users')
+        // .getWhere('userName', '<', 'c') // limit data when testing
+        .getCollection()
       setData(usersdata)
       setFilteredData(usersdata)
       // update search data data for use in local search
@@ -93,53 +97,57 @@ const AdminUsers = observer(() => {
     setLoading(false)
   }
 
-  const filterByType = () => {
-    const filterRoles: Array<string> = []
-    const types: Array<string> = []
-    for (let i = 0; i < filterBy.length; i++) {
-      if (filterBy[i].includes('Roles-')) {
-        filterRoles.push(filterBy[i].replace('Roles-', ''))
-      } else {
-        types.push(filterBy[i].replace('Type-', ''))
-      }
-    }
-    const filteredTypes: IUserPPDB[] = []
-    ;(types.length > 0 || filterRoles.length > 0) &&
-      data.map((it) => {
-        if (types.includes(it.profileType)) {
-          filteredTypes.push(it)
+  /** Filter data using all provided filters */
+  const filterData = () => {
+    const filters = Object.entries<any[]>(filterValues)
+      .map(([field, values]) => ({
+        field: field as keyof IUserPPDB,
+        values,
+      }))
+      .filter(({ values }) => values.length > 0)
+    const filteredData = data.filter((entry) =>
+      filters.every(({ field, values }) => {
+        // search badges json for truthy value (currently how aggregations handles)
+        if (field === 'badges') {
+          return !!values.find((v) => !!entry?.badges?.[v])
         }
-        if (it?.userRoles && it?.userRoles.length) {
-          const intersection = filterRoles.filter((element: any) =>
-            it?.userRoles?.includes(element),
-          )
-          if (intersection.length) {
-            filteredTypes.push(it)
-          }
+        // search userRoles array for any match
+        if (field === 'userRoles') {
+          return !!values.find((v) => entry?.userRoles?.includes(v))
         }
-      })
-    setFilteredData(filteredTypes)
+        // default match single value
+        return values.includes(entry[field])
+      }),
+    )
+    setFilteredData(filteredData)
   }
 
-  const RenderFilter: React.FC<Props> = (props: Props) => {
-    const { val } = props
-    if (val === 'Type' || val === 'Roles') {
-      const filter = val === 'Type' ? types : roles
-      return (
-        <HeadFilter
-          val={val}
-          filter={filter}
-          setFilterBy={setFilterBy}
-          filterBy={filterBy}
-          open={open}
-          setopen={setopen}
-          toOpen={toOpen}
-          settoOpen={settoOpen}
-        />
-      )
-    } else {
-      return <></>
+  const updateFilterValues = (field: string, values: any[]) => {
+    filterValues[field] = values
+    setFilterValues(filterValues)
+    filterData()
+  }
+
+  /** Render filter options for column type */
+  const RenderFilter: React.FC<IHeaderRenderProps> = ({ field, header }) => {
+    const filterMapping = {
+      profileType: profileTypeFilters,
+      userRoles: userRoleFilters,
+      badges: badgeFilters,
     }
+    const filterOptions = filterMapping[field]
+    return filterOptions ? (
+      <HeadFilter
+        field={header}
+        filterOptions={filterOptions}
+        filterValueChanged={(values) => updateFilterValues(field, values)}
+        filterValues={filterValues[field] || []}
+        open={open}
+        setopen={setopen}
+        toOpen={toOpen}
+        settoOpen={settoOpen}
+      />
+    ) : null
   }
 
   const getProfileTypeImage = (type?: string) => {
@@ -178,8 +186,20 @@ const AdminUsers = observer(() => {
     props: ICellRenderProps,
   ) => {
     const { col } = props
-    const { field, value } = col
+    const { field, value, rowInfo } = col
     const userField = field as keyof IUserPPDB
+    // render userName column even if no value (just show id)
+    if (userField === 'userName') {
+      return value ? (
+        <Link to={`/u/${value}/edit`}>{value}</Link>
+      ) : (
+        <Box>
+          <Text sx={{ display: 'block' }}>-</Text>
+          <Text sx={{ fontSize: 1 }}>{rowInfo?.original['_id']}</Text>
+        </Box>
+      )
+    }
+    // render specific column values
     if (value) {
       if (userField === 'profileType') {
         const type = value?.toString()
@@ -194,10 +214,8 @@ const AdminUsers = observer(() => {
           .map(([key]) => key)
         return defaultValueRenderer(badges)
       }
-      if (userField === 'userName') {
-        return <Link to={`/u/${value}/edit`}>{value}</Link>
-      }
     }
+    // default render other columns and null values
     return defaultValueRenderer(value)
   }
 
@@ -221,7 +239,7 @@ const AdminUsers = observer(() => {
         <Table
           data={filteredData}
           columns={TABLE_COLUMNS}
-          filters={RenderFilter}
+          filterComponent={RenderFilter}
           rowComponent={RenderContent}
         />
       ) : (

@@ -1,6 +1,12 @@
 import React from 'react'
+import type { MouseEvent } from 'react'
 import ReactTable from 'react-table'
-import type { Column, ComponentPropsGetterRC, RowInfo } from 'react-table'
+import type {
+  Column,
+  ComponentPropsGetterRC,
+  RowInfo,
+  ComponentPropsGetterC,
+} from 'react-table'
 import 'react-table/react-table.css'
 import { Box, Text } from 'theme-ui'
 import TableHead from './TableHead'
@@ -14,26 +20,48 @@ export interface ICellRenderProps {
     rowInfo?: RowInfo
   }
 }
+export interface IHeaderRenderProps {
+  field: string
+  header: string
+  className: string
+  toggleSort?: (e: MouseEvent) => void
+}
 
 export interface ITableProps<T = any> {
   columns: Column[]
   data: T[]
-  filters?: React.FC | any
+  filterComponent?: React.FC<IHeaderRenderProps>
   rowComponent: React.FC<ICellRenderProps>
 }
-const getTdProps: ComponentPropsGetterRC = (finalState, rowInfo?, column?) => {
+const getTdProps: ComponentPropsGetterRC = (
+  finalState,
+  rowInfo?,
+  column?,
+): ICellRenderProps['col'] => {
   const field = column?.id || ''
-  const tdProps: ICellRenderProps['col'] = {
+  return {
     field,
     value: rowInfo?.original[field],
     rowInfo,
   }
-  return tdProps
+}
+const getTHeadThProps: ComponentPropsGetterC = (
+  finalState,
+  rowInfo,
+  column,
+): IHeaderRenderProps => {
+  const field = column?.id || ''
+  return {
+    field,
+    header: column?.Header as string,
+    className: column?.className as string,
+  }
 }
 
 function Table(props: ITableProps) {
   return (
     <>
+      {/* Override styles applied in global css */}
       <Global
         styles={css`
           .ReactTable .rt-thead.-header {
@@ -46,25 +74,26 @@ function Table(props: ITableProps) {
         style={{
           border: 'none',
         }}
-        ThComponent={(row) => {
-          const isSortAsc = row.className.includes('-sort-asc')
-          const isSortDesc = row.className.includes('-sort-desc')
+        ThComponent={(row: IHeaderRenderProps) => {
+          const isSortAsc = row.className?.includes('-sort-asc')
+          const isSortDesc = row.className?.includes('-sort-desc')
+          const { header, className, toggleSort } = row
           return (
             <TableHead row={row}>
               <Text
-                onClick={(e) => row.toggleSort(e)}
+                onClick={(e) => toggleSort?.(e)}
                 p={2}
                 sx={{
                   backgroundColor: '#E2EDF7',
                   borderRadius: '4px',
                 }}
-                className={row.className}
+                className={className}
               >
-                {row.children[0].props.children}
+                {header}
               </Text>
               {isSortAsc && <Text>⬆️</Text>}
               {isSortDesc && <Text>⬇️</Text>}
-              <props.filters val={row.children[0].props.children} />
+              {props.filterComponent && props.filterComponent({ ...row })}
             </TableHead>
           )
         }}
@@ -73,15 +102,13 @@ function Table(props: ITableProps) {
             sx={{
               flex: '100 0 auto',
               width: '50px',
-              color: col.id == 'Username' ? '#0898CB' : 'black',
-              textDecoration: col.id == 'Username' ? 'underline' : 'none',
-              cursor: col.id == 'Username' ? 'pointer' : 'default',
             }}
           >
             <props.rowComponent col={col} />
           </Box>
         )}
         getTdProps={getTdProps}
+        getTheadThProps={getTHeadThProps}
         getTrProps={() => {
           return {
             style: {

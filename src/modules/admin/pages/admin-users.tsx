@@ -6,14 +6,9 @@ import Table from '../components/Table/Table'
 import HeadFilter from '../components/Table/HeadFilter'
 import { observer } from 'mobx-react'
 import { useCommonStores } from 'src/index'
-import workspace from 'src/assets/images/badges/pt-workspace.jpg'
-import machineBuilder from 'src/assets/images/badges/pt-machine-shop.jpg'
-import communitybuilder from 'src/assets/images/badges/pt_community_point.png'
-import member from 'src/assets/images/badges/pt-member.jpg'
-import collectionPoint from 'src/assets/images/badges/pt-collection-point.jpg'
 import type { IUserPP } from 'src/models'
 import Fuse from 'fuse.js'
-import { Loader } from 'oa-components'
+import { Loader, MemberBadge } from 'oa-components'
 import AdminUserSearch from '../components/adminUserSearch'
 
 const TAG_TABLE_COLUMNS: any[] = [
@@ -154,42 +149,8 @@ const AdminUsers = observer(() => {
     }
   }
 
-  const getTypeImage = (type: string) => {
-    let img = ''
-    switch (type) {
-      case 'workspace':
-        img = workspace
-        break
-      case 'community-builder':
-        img = communitybuilder
-        break
-      case 'member':
-        img = member
-        break
-      case 'machine-builder':
-        img = machineBuilder
-        break
-      case 'collection-point':
-        img = collectionPoint
-        break
-
-      default:
-        break
-    }
-    if (img) {
-      return (
-        <img
-          src={img}
-          style={{
-            width: '3rem',
-            height: '3rem',
-            display: 'flex',
-            alignContent: 'center',
-          }}
-        />
-      )
-    }
-    return type
+  const getTypeImage = (type?: string) => {
+    return type ? <MemberBadge profileType={type} /> : null
   }
 
   const renderText = ({ col }: DataProps) => {
@@ -207,7 +168,8 @@ const AdminUsers = observer(() => {
     const { col } = props
     if (col?.children || col?.children?.toString()) {
       if (col.id === 'Type') {
-        return getTypeImage(col?.children?.toString())
+        const type = col?.children?.toString()
+        return getTypeImage(type)
       }
       if (col.id === 'Signup Date') {
         return format(new Date(col?.children?.toString()), 'DD-MM-YYYY')

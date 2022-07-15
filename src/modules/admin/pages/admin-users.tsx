@@ -84,8 +84,7 @@ const AdminUsers = observer(() => {
       // TODO - should ideally be retrieved via aggregation to reduce DB queries
       const usersdata = await stores.userStore.db
         .collection<IUserPPDB>('users')
-        // .getWhere('userName', '<', 'c') // limit data when testing
-        .getCollection()
+        .getWhere('_created', '>', '1900-01-01') // Hack - retrieve all users
       setData(usersdata)
       setFilteredData(usersdata)
       // update search data data for use in local search

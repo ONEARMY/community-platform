@@ -7,12 +7,13 @@ import { handleSitemapProxy } from './sitemap/sitemapProxy'
 /**
  * Serve pre-rendered html with enhanced SEO metadata for requests from bots
  */
-export const seoRender = functions.https.onRequest((req, res) =>
-  requestHandler({
+export const seoRender = functions.https.onRequest((req, res) => {
+  functions.logger.info({ prerenderApiKey: CONFIG.prerender })
+  return requestHandler({
     prerenderApiKey: CONFIG.prerender?.api_key,
     deploymentUrl: CONFIG.deployment?.site_url,
-  })(req, res),
-)
+  })(req, res)
+})
 
 /**
  * Generate a weekly sitemap of all content

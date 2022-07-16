@@ -9,7 +9,7 @@ import { HowtoForm } from 'src/pages/Howto/Content/Common/Howto.form'
 import { Text } from 'theme-ui'
 import type { IUser } from 'src/models/user.models'
 import { isAllowToEditContent } from 'src/utils/helpers'
-import { Loader } from 'src/components/Loader'
+import { Loader } from 'oa-components'
 import { logger } from 'src/logger'
 
 interface IState {

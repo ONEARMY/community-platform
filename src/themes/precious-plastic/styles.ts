@@ -8,8 +8,13 @@ import WorkspaceBadge from 'src/assets/images/badges/pt-workspace.svg'
 import WorkspaceBadgeLowDetail from 'src/assets/icons/map-workspace.svg'
 import LocalComBadge from 'src/assets/images/badges/pt-local-community.svg'
 import LocalComBadgeLowDetail from 'src/assets/icons/map-community.svg'
+import logo from 'src/assets/images/precious-plastic-logo-official.svg'
 
 import type { ThemeWithName } from '../types'
+
+const fonts = {
+  body: `'Inter', Arial, sans-serif`,
+}
 
 // use enum to specify list of possible colors for typing
 export const colors = {
@@ -202,6 +207,7 @@ const typography = {
 
 const StyledComponentTheme: ThemeWithName = {
   name: 'Precious Plastic',
+  logo: logo,
   profileGuidelinesURL:
     'https://drive.google.com/file/d/1fXTtBbzgCO0EL6G9__aixwqc-Euqgqnd/view',
   communityProgramURL:
@@ -240,13 +246,14 @@ const StyledComponentTheme: ThemeWithName = {
     },
   },
   colors,
+  fonts,
   fontSizes,
   forms: {
     input: {
       background: colors.background,
       borderRadius: 1,
       border: '1px solid transparent',
-      fontFamily: `'Inter', Arial, sans-serif`,
+      fontFamily: fonts.body,
       fontSize: 1,
       '&:focus': {
         borderColor: colors.blue,

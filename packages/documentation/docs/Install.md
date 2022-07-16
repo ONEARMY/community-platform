@@ -25,6 +25,11 @@ Troubleshooting:
 1. `Error: Can't determine Firebase Database URL`
    If you see this message it is likely you skipped adding the [Realtime Database](https://firebase.google.com/docs/database?authuser=0&hl=en). Easily done!
 
+2. `The caller does not have permission`
+   This occurs more commonly when deploying from a CI environment, and usually signifies additional permissions are required for the service account that is used for deployment. You can view the service account details from the [GCP Logs Explorer](https://console.cloud.google.com/logs), filtering by severity and expanding to see more information.
+
+   Examples of previously noted permissions required can be found in [Deployment via CircleCI](Deployment/circle-ci.md) and [Firestore DB Backup](./Backend%20Development//firestore-backup.md)
+
 ## Community Platform Maintainers
 
 We deploy to our instances directly from the `master` and `production` branches of the git repository.

@@ -2,10 +2,9 @@ import * as React from 'react'
 import { storage } from '../../utils/firebase'
 import FileUploader from 'react-firebase-file-uploader'
 import type { FullMetadata } from '@firebase/storage-types'
-import { Button } from 'oa-components'
+import { Button, Loader } from 'oa-components'
 import type { IGlyphs } from 'oa-components'
 import { Flex } from 'theme-ui'
-import Loader from '../Loader'
 import { logger } from 'src/logger'
 /*
 This component takes a folder storage path and uploads files to firebase storage

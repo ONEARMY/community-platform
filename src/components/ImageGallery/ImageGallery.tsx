@@ -41,6 +41,11 @@ const ImageWithPointer = styled(Image)`
   width: 100%;
   height: 450px;
   object-fit: cover;
+
+  // Reduce height for mobile devices
+  @media (max-width: ${theme.breakpoints[0]}) {
+    height: 300px;
+  }
 `
 
 export class ImageGallery extends PureComponent<IProps, IState> {

@@ -127,6 +127,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "franknoirot",
+      "name": "Frank Noirot",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23481541?v=4",
+      "profile": "https://franknoirot.co",
+      "contributions": [
+        "design"
+      ]
     }
   ],
   "projectName": "community-platform",

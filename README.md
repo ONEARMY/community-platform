@@ -69,6 +69,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
     <td align="center"><a href="https://github.com/Xyli0"><img src="https://avatars.githubusercontent.com/u/10441748?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Xyli0</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=Xyli0" title="Code">💻</a></td>
     <td align="center"><a href="http://www.linkedin.com/in/laianbraum"><img src="https://avatars.githubusercontent.com/u/61033391?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Laian Braum</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=laianbraum" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/osouthwell-scottlogic"><img src="https://avatars.githubusercontent.com/u/98388720?v=4?s=60" width="60px;" alt=""/><br /><sub><b>osouthwell-scottlogic</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=osouthwell-scottlogic" title="Code">💻</a></td>
+    <td align="center"><a href="http://asheerrizvi.com"><img src="https://avatars.githubusercontent.com/u/17976252?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Asheer Rizvi</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=asheerrizvi" title="Code">💻</a></td>
   </tr>
 </table>
 

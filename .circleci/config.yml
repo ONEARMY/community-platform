@@ -374,7 +374,7 @@ jobs:
       - attach_workspace:
           at: '.'
       - run:
-          command: npx semantic-release --debug
+          command: npx semantic-release --debug --dry-run
 
 ######################################################################################################
 #  Workflows - Collections of jobs to define overall processes
@@ -455,8 +455,8 @@ workflows:
       #---------------------- Development Instances Build and Deploy ----------------------
       - release:
           name: Release new version to GitHub
-          requires:
-            - test_e2e
+          # requires:
+          #   - test_e2e
           <<: *filter_only_master
           context:
             - release-context

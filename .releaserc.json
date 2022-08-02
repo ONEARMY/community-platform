@@ -1,5 +1,6 @@
 {
   "branches": ["master"],
+  "ci": false,
   "plugins": [
     [
       "@semantic-release/commit-analyzer",

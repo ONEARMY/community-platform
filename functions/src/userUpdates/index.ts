@@ -119,6 +119,7 @@ async function updateUserCommentsInfo({
           (comment) => comment.creatorName === originalUserName,
         )
       ) {
+        let toUpdateCount = 0
         const updatedComments = howto.comments.map((comment) => {
           if (comment.creatorName !== originalUserName) return comment
 
@@ -132,7 +133,7 @@ async function updateUserCommentsInfo({
             updatedComment.creatorCountry = country
           }
 
-          count += 1
+          toUpdateCount += 1
           return updatedComment
         })
 
@@ -140,6 +141,7 @@ async function updateUserCommentsInfo({
           await doc.ref.update({
             comments: updatedComments,
           })
+          count += toUpdateCount
         } catch (error) {
           console.error('Error updating comment: ', error)
         }

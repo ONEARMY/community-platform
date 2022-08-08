@@ -136,6 +136,15 @@
       "contributions": [
         "design"
       ]
+    },
+    {
+      "login": "LucasGabrielBecker",
+      "name": "Lucas Becker ",
+      "avatar_url": "https://avatars.githubusercontent.com/u/48301172?v=4",
+      "profile": "https://github.com/LucasGabrielBecker",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

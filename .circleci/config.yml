@@ -453,17 +453,10 @@ workflows:
               ignore:
                 - production
       #---------------------- Development Instances Build and Deploy ----------------------
-      - release:
-          name: Release new version to GitHub
-          requires:
-            - test_e2e
-          <<: *filter_only_master
-          context:
-            - release-context
       - deploy:
           name: 'Deploy: dev.onearmy.world'
           requires:
-            - 'Release new version to GitHub'
+            - test_e2e
           <<: *filter_only_master
           DEPLOY_ALIAS: 'default'
           NOTIFY_SLACK: true
@@ -473,7 +466,7 @@ workflows:
       - deploy:
           name: 'Deploy: dev.community.projectkamp.com'
           requires:
-            - 'Release new version to GitHub'
+            - test_e2e
           <<: *filter_only_master
           DEPLOY_ALIAS: project-kamp-development
           NOTIFY_SLACK: true
@@ -483,16 +476,24 @@ workflows:
       - deploy:
           name: 'Deploy: fixing-fashion-dev.web.app'
           requires:
-            - 'Release new version to GitHub'
+            - test_e2e
           <<: *filter_only_master
           DEPLOY_ALIAS: fixing-fashion-dev
           NOTIFY_SLACK: true
           context:
             - circle-ci-slack-context
             - fixing-fashion-dev
+      #---------------------- Development Instances Build and Deploy ----------------------
+      - release:
+          name: Release new version to GitHub
+          <<: *filter_only_production
+          context:
+            - release-context
       - build:
           name: Build Production Release
           context: build-context
+          requires: 
+            - 'Release new version to GitHub'
           <<: *filter_only_production
       - deploy:
           name: 'Deploy: fixing-fashion-prod.web.app'

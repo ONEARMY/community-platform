@@ -71,6 +71,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
     <td align="center"><a href="https://github.com/osouthwell-scottlogic"><img src="https://avatars.githubusercontent.com/u/98388720?v=4?s=60" width="60px;" alt=""/><br /><sub><b>osouthwell-scottlogic</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=osouthwell-scottlogic" title="Code">💻</a></td>
     <td align="center"><a href="http://asheerrizvi.com"><img src="https://avatars.githubusercontent.com/u/17976252?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Asheer Rizvi</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=asheerrizvi" title="Code">💻</a></td>
     <td align="center"><a href="https://franknoirot.co"><img src="https://avatars.githubusercontent.com/u/23481541?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Frank Noirot</b></sub></a><br /><a href="#design-franknoirot" title="Design">🎨</a></td>
+    <td align="center"><a href="https://github.com/LucasGabrielBecker"><img src="https://avatars.githubusercontent.com/u/48301172?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Lucas Becker </b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=LucasGabrielBecker" title="Code">💻</a></td>
   </tr>
 </table>
 

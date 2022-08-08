@@ -109,6 +109,42 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "osouthwell-scottlogic",
+      "name": "osouthwell-scottlogic",
+      "avatar_url": "https://avatars.githubusercontent.com/u/98388720?v=4",
+      "profile": "https://github.com/osouthwell-scottlogic",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "asheerrizvi",
+      "name": "Asheer Rizvi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17976252?v=4",
+      "profile": "http://asheerrizvi.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "franknoirot",
+      "name": "Frank Noirot",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23481541?v=4",
+      "profile": "https://franknoirot.co",
+      "contributions": [
+        "design"
+      ]
+    },
+    {
+      "login": "LucasGabrielBecker",
+      "name": "Lucas Becker ",
+      "avatar_url": "https://avatars.githubusercontent.com/u/48301172?v=4",
+      "profile": "https://github.com/LucasGabrielBecker",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

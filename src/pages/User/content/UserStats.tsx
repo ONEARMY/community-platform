@@ -61,7 +61,7 @@ export const UserStats = ({ user }: IProps) => {
       {user.location?.latlng && (
         <Link to={'/map/#' + user.userName}>
           <UserStatsBoxItem>
-            <Icon glyph="location-on" size="22"></Icon>
+            <Icon glyph="location-on" size="22" color={'black'}></Icon>
             <Box ml="5px" color={'black'}>
               {user.location?.country || 'View on Map'}
             </Box>

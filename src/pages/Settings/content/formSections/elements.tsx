@@ -36,7 +36,7 @@ export const HiddenInput = styled(Field)`
 `
 
 export const FlexSectionContainer = (props) => (
-  <Card mt={4}>
+  <Card mt={4} style={{ overflow: 'visible' }}>
     <Flex p={4} sx={{ flexWrap: 'nowrap', flexDirection: 'column' }}>
       {props.children}
     </Flex>

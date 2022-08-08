@@ -37,6 +37,10 @@ export interface ThemeWithName {
 
   text: any
 
+  fonts: {
+    body: string
+  }
+
   forms: {
     input: any
     inputOutline: any

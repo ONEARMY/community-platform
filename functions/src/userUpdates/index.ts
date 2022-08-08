@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions'
 import { db } from '../Firebase/firestoreDB'
-import { DB_ENDPOINTS, IDBDocChange, IUserDB, IHowtoDB } from '../models'
+import { DB_ENDPOINTS, IDBDocChange, IHowtoDB, IUserDB } from '../models'
 import { backupUser } from './backupUser'
 
 /*********************************************************************
@@ -36,14 +36,14 @@ async function processHowToUpdates(change: IDBDocChange) {
 
   const didChangeUserName = prevInfo.userName !== info.userName
   if (didChangeCountry || didChangeUserName) {
-    await updateHowTosComments({
-      userId: info._id,
+    await updateUserCommentsInfo({
       country: didChangeCountry
         ? newCountryCode
           ? newCountryCode
           : newCountry.toLowerCase()
         : undefined,
-      userName: didChangeUserName ? info.userName : undefined,
+      newUserName: didChangeUserName ? info.userName : undefined,
+      originalUserName: prevInfo.userName,
     })
   }
 }
@@ -56,7 +56,8 @@ async function updateHowTosCountry(
     console.error('Missing information to set howToCountry')
     return false
   }
-  console.log('Update', userId, 'moved to :', country)
+  console.log("Updating howto's from user", userId, 'to country:', country)
+  let count = 0
 
   const querySnapshot = await db
     .collection(DB_ENDPOINTS.howtos)
@@ -65,14 +66,13 @@ async function updateHowTosCountry(
 
   if (querySnapshot) {
     querySnapshot.forEach((doc) => {
-      console.log('Updating howTo ', doc.data()._id, 'to', country)
       doc.ref
         .update({
           creatorCountry: country,
           _modified: new Date().toISOString(),
         })
         .then(() => {
-          console.log('Document successfully updated!')
+          count += 1
           return true
         })
         .catch((error) => {
@@ -84,56 +84,69 @@ async function updateHowTosCountry(
     console.log('Error getting user howTo')
     return false
   }
+  console.log('Successfully updated', count, 'howTos!')
   return false
 }
 
 /**
  * Updates either `userName` or `country` in any comments made by the user on any HowTo
  */
-async function updateHowTosComments({
-  userId,
-  userName,
+async function updateUserCommentsInfo({
+  originalUserName,
+  newUserName,
   country,
 }: {
-  userId: string
-  userName?: string
+  originalUserName: string
+  newUserName?: string
   country?: string
 }) {
-  console.log('Updating comments by user', userId)
-  const querySnapshot = await db
-    .collection(DB_ENDPOINTS.howtos)
-    .where('comments', 'array-contains', { _creatorId: userId })
-    .get()
+  console.log('Updating comments by user', originalUserName)
+  if (country) {
+    console.log('with new country', country)
+  }
+  if (newUserName) {
+    console.log('with new userName', newUserName)
+  }
+  const querySnapshot = await db.collection(DB_ENDPOINTS.howtos).get()
 
   let count = 0
   if (querySnapshot) {
-    querySnapshot.forEach((doc) => {
+    for (const doc of querySnapshot.docs) {
       const howto = doc.data() as IHowtoDB
-      if (howto.comments) {
-        howto.comments.forEach((comment) => {
-          if (comment._creatorId === userId) {
-            const updatedComment = {
-              ...comment,
-            }
-            if (userName) {
-              updatedComment.creatorName = userName
-            }
-            if (country) {
-              updatedComment.creatorCountry = country
-            }
+      if (
+        howto.comments &&
+        howto.comments.some(
+          (comment) => comment.creatorName === originalUserName,
+        )
+      ) {
+        let toUpdateCount = 0
+        const updatedComments = howto.comments.map((comment) => {
+          if (comment.creatorName !== originalUserName) return comment
 
-            doc.ref
-              .update(updatedComment)
-              .then(() => {
-                count += 1
-              })
-              .catch((error) => {
-                console.error('Error updating comment: ', error)
-              })
+          const updatedComment = {
+            ...comment,
           }
+          if (newUserName) {
+            updatedComment.creatorName = newUserName
+          }
+          if (country) {
+            updatedComment.creatorCountry = country
+          }
+
+          toUpdateCount += 1
+          return updatedComment
         })
+
+        try {
+          await doc.ref.update({
+            comments: updatedComments,
+          })
+          count += toUpdateCount
+        } catch (error) {
+          console.error('Error updating comment: ', error)
+        }
       }
-    })
+    }
   }
   console.log('Successfully updated', count, 'comments!')
 }

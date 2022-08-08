@@ -112,7 +112,7 @@ export class HowtoList extends React.Component<any, IState> {
 
     return (
       <Box>
-        <Flex py={26}>
+        <Flex sx={{ paddingTop: [10, 26], paddingBottom: [10, 26] }}>
           {referrerSource ? (
             <Box sx={{ width: '100%' }}>
               <Heading

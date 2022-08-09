@@ -25,6 +25,7 @@ import { toJS } from 'mobx'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { logger } from 'src/logger'
 import { ProfileType } from 'src/modules/profile'
+import { FormSubmitResult } from './content/FormSubmitResult'
 
 interface IProps {
   /** user ID for lookup when editing another user as admin */
@@ -42,6 +43,7 @@ interface IState {
   showDeleteDialog?: boolean
   showLocationDropdown: boolean
   user?: IUserPP
+  showFormSubmitResult: boolean
 }
 
 @inject('userStore')
@@ -80,6 +82,7 @@ export class UserSettings extends React.Component<IProps, IState> {
       notification: { message: '', icon: '', show: false },
       user,
       showLocationDropdown: !user?.location?.latlng,
+      showFormSubmitResult: false,
     })
   }
 
@@ -173,6 +176,8 @@ export class UserSettings extends React.Component<IProps, IState> {
           submitError,
           valid,
           errors,
+          hasValidationErrors,
+          submitSucceeded,
           ...rest
         }) => {
           const heading = user.profileType ? 'Edit profile' : 'Create profile'
@@ -290,6 +295,9 @@ export class UserSettings extends React.Component<IProps, IState> {
                       // https://github.com/final-form/react-final-form/blob/master/docs/faq.md#how-can-i-trigger-a-submit-from-outside-my-form
                       const formEl = document.getElementById('userProfileForm')
                       if (typeof formEl !== 'undefined' && formEl !== null) {
+                        this.setState({
+                          showFormSubmitResult: true,
+                        })
                         formEl.dispatchEvent(
                           new Event('submit', {
                             cancelable: true,
@@ -298,15 +306,20 @@ export class UserSettings extends React.Component<IProps, IState> {
                         )
                       }
                     }}
+                    mb={3}
                     sx={{ width: '100%' }}
                     variant={'primary'}
                     type="submit"
                     // disable button when form invalid or during submit.
                     // ensure enabled after submit error
-                    disabled={submitError ? false : !valid || submitting}
+                    disabled={submitting}
                   >
                     Save profile
                   </Button>
+                  {this.state.showFormSubmitResult &&
+                    (hasValidationErrors || submitError || submitSucceeded) && (
+                      <FormSubmitResult valid={valid} />
+                    )}
                   <div style={{ float: 'right' }}>
                     <TextNotification
                       data-cy="profile-saved"

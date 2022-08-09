@@ -64,6 +64,23 @@ const regular = 400
 const bold = 600
 // cc - assume standard image widths are 4:3, however not clearly defined
 
+const alerts = {
+  success: {
+    borderRadius: 1,
+    paddingX: 2,
+    paddingY: 3,
+    backgroundColor: colors.green,
+    textAlign: 'center'
+  },
+  failure: {
+    borderRadius: 1,
+    paddingX: 2,
+    paddingY: 3,
+    backgroundColor: colors.red2,
+    textAlign: 'center'
+  }
+}
+
 const buttons = {
   primary: {
     fontFamily: '"Varela Round", Arial, sans-serif',
@@ -205,6 +222,7 @@ const StyledComponentTheme: ThemeWithName = {
     'https://community.fixing.fashion/academy/guides/profile',
   communityProgramURL:
     'https://community.fixing.fashion/academy/guides/community-program',
+  alerts,
   badges: {
     member: {
       lowDetail: memberLow,

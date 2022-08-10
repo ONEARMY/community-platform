@@ -1,25 +1,32 @@
 import * as React from 'react'
+import errorImage from '../../assets/images/404error.png'
+import { Box, Image } from 'theme-ui'
 import { Link } from 'react-router-dom'
 
 export class NotFoundPage extends React.Component {
   public render() {
     return (
-      <div
-        style={{
+      <Box
+        sx={{
           flex: 1,
-          marginTop: '20vh',
-          marginRight: 'auto',
-          marginLeft: 'auto',
-          width: '220px',
+          marginTop: 4,
+          alignItems: 'center',
+          flexDirection: 'column',
+          justifyContent: 'center',
           textAlign: 'center',
         }}
       >
-        <div style={{ marginBottom: '2em', fontSize: 'x-large' }}>404</div>
-        <div style={{ marginBottom: '2em' }}>
-          The page you were looking for was moved or doesn't exist
-        </div>
-        <Link to="/">Home</Link>
-      </div>
+        <Image
+          src={errorImage}
+          sx={{
+            maxWidth: '45em',
+            width: '98%',
+            marginBottom: '2vw',
+          }}
+        />
+        <div style={{ marginBottom: '2em' }}>Nada, page not found 💩</div>
+        Go to the <Link to="/">home page</Link>
+      </Box>
     )
   }
 }

@@ -1,0 +1,37 @@
+.content {
+  display: flex;
+  height: 75vh;
+  justify-content: center;
+  align-items: flex-end;
+  
+}
+.error-page {
+  text-align: center;
+  font-weight: 500;
+}
+img {
+  width: 50%;
+}
+@media screen and (max-width: 600px) {
+  .content {
+    height: 50vh;
+  }
+  img {
+    width: 75%;
+  }
+}
+
+@media screen and (min-width: 600px) and (max-width: 725px) {
+  .content {
+    height:50vh;
+  }
+  img {
+    width: 67%;
+  }
+}
+
+@media screen and (min-width: 725px) and (max-width: 1024px) {
+  .content {
+    height: 60vh;
+  }
+}

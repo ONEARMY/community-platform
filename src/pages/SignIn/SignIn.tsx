@@ -201,7 +201,7 @@ class SignInPage extends React.Component<IProps, IState> {
                             </Flex>
                             <Text color={'red'}>{this.state.errorMsg}</Text>
                             <Flex
-                              mb={3}
+                              mb={1}
                               sx={{ justifyContent: 'space-between' }}
                             >
                               <Text sx={{ fontSize: 1 }} color={'grey'} mt={2}>
@@ -219,6 +219,10 @@ class SignInPage extends React.Component<IProps, IState> {
                                 >
                                   Lost password?
                                 </Link>
+                              </Text>
+                            </Flex>
+                            <Flex>
+                              <Text sx={{ fontSize: 1 }} color={'grey'} mb={3}>
                                 <TextNotification
                                   {...notificationProps}
                                   hideNotificationCb={this.hideNotification}

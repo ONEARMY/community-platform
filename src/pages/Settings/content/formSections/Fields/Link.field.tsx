@@ -2,7 +2,7 @@ import { Component } from 'react'
 import { COM_TYPE_MOCKS } from 'src/mocks/Selectors'
 import { Field } from 'react-final-form'
 import { Button, FieldInput, Modal } from 'oa-components'
-import { Text, Flex } from 'theme-ui'
+import { Text, Flex, Grid } from 'theme-ui'
 import { SelectField } from 'src/components/Form/Select.field'
 import { validateUrl, validateEmail, required } from 'src/utils/validators'
 import { formatLink } from 'src/utils/formatters'
@@ -72,7 +72,11 @@ export class ProfileLinkField extends Component<IProps, IState> {
         my={['10px', '10px', '5px']}
         sx={{ flexDirection: ['column', 'column', 'row'] }}
       >
-        <Flex mb={[1, 1, 0]}>
+        <Grid
+          mb={[1, 1, 0]}
+          gap={0}
+          columns={['1fr auto', '1fr auto', '160px']}
+        >
           <Field
             data-cy={`select-link-${index}`}
             name={`${name}.label`}
@@ -82,12 +86,13 @@ export class ProfileLinkField extends Component<IProps, IState> {
             placeholder="type"
             validate={required}
             validateFields={[]}
-            style={{ width: '160px', height: '40px', marginRight: '8px' }}
+            style={{ width: '100%', height: '40px', marginRight: '8px' }}
           />
           <DeleteButton
             sx={{ display: ['block', 'block', 'none'], height: '40px' }}
+            ml={'2px'}
           />
-        </Flex>
+        </Grid>
         <Field
           data-cy={`input-link-${index}`}
           name={`${name}.url`}
@@ -97,6 +102,7 @@ export class ProfileLinkField extends Component<IProps, IState> {
           placeholder="Link"
           format={(v) => formatLink(v, this.state.linkType)}
           formatOnBlur={true}
+          style={{ flex: 1 }}
         />
         <DeleteButton
           sx={{ display: ['none', 'none', 'block'], height: '40px' }}

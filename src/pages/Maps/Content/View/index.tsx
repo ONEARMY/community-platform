@@ -46,7 +46,7 @@ class MapView extends React.Component<IProps> {
   }
   componentDidMount() {
     if (this.props.mapRef.current) {
-      return this.props.mapRef.current.leafletElement.zoomControl.setPosition(
+      return this.props.mapRef.current.leafletElement.zoomControl?.setPosition(
         'bottomleft',
       )
     }
@@ -73,6 +73,7 @@ class MapView extends React.Component<IProps> {
   public render() {
     const { center, zoom, pins } = this.props
     const { activePin } = this.injected.mapsStore
+    const isViewportGreaterThanTablet = window.innerWidth > 1024
 
     const mapCenter: LatLngExpression = center
       ? [center.lat, center.lng]
@@ -86,6 +87,7 @@ class MapView extends React.Component<IProps> {
         center={mapCenter}
         zoom={mapZoom}
         maxZoom={18}
+        zoomControl={isViewportGreaterThanTablet}
         style={{ height: '100%', zIndex: 0 }}
         onmove={this.handleMove}
         onclick={() => {

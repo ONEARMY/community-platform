@@ -38,13 +38,6 @@ const ThumbCard = styled<CardProps & React.ComponentProps<any>>(Box)`
   }
 `
 
-const ImageWithPointer = styled(Image)`
-  cursor: pointer;
-  width: 100%;
-  height: 450px;
-  object-fit: cover;
-`
-
 export const ImageGallery = (props: IProps) => {
   const [state, setState] = useState<IState>({
     activeImage: null,
@@ -86,6 +79,19 @@ export const ImageGallery = (props: IProps) => {
     border: 1px solid ${theme.colors.offwhite};
     border-radius: 5px;
   `
+
+  const ImageWithPointer = styled(Image)`
+    cursor: pointer;
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+
+    // Reduce height for mobile devices
+    @media (max-width: ${theme.breakpoints[0]}) {
+      height: 300px;
+    }
+  `
+
   const images = state.images
   const imageNumber = images.length
 

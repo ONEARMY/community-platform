@@ -62,7 +62,7 @@ const ResearchUpdate: React.FC<IProps> = ({
               <Flex
                 sx={{ width: '100%', flexDirection: ['column', 'row', 'row'] }}
               >
-                <Heading sx={{ width: ['100%', '75%', '75%'] }} mb={[2, 0, 0]}>
+                <Heading sx={{ width: ['100%', '75%', '75%'] }} mb={2}>
                   {update.title}
                 </Heading>
                 <Flex
@@ -118,7 +118,15 @@ const ResearchUpdate: React.FC<IProps> = ({
                   color={'grey'}
                   sx={{ whiteSpace: 'pre-line', ...theme.typography.paragraph }}
                 >
-                  <Linkify properties={{ target: '_blank' }}>
+                  <Linkify
+                    properties={{
+                      target: '_blank',
+                      style: {
+                        color: theme.colors.grey,
+                        textDecoration: 'underline',
+                      },
+                    }}
+                  >
                     {update.description}
                   </Linkify>
                 </Text>

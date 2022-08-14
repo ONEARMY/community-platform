@@ -163,7 +163,15 @@ const ResearchDescription: React.FC<IProps> = ({
             {research.title}
           </Heading>
           <Text sx={{ whiteSpace: 'pre-line', ...theme.typography.paragraph }}>
-            <Linkify properties={{ target: '_blank' }}>
+            <Linkify
+              properties={{
+                target: '_blank',
+                style: {
+                  color: theme.colors.grey,
+                  textDecoration: 'underline',
+                },
+              }}
+            >
               {research.description}
             </Linkify>
           </Text>

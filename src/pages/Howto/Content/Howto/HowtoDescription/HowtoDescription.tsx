@@ -242,7 +242,15 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
             <Text
               sx={{ ...theme.typography.paragraph, whiteSpace: 'pre-line' }}
             >
-              <Linkify properties={{ target: '_blank' }}>
+              <Linkify
+                properties={{
+                  target: '_blank',
+                  style: {
+                    color: theme.colors.grey,
+                    textDecoration: 'underline',
+                  },
+                }}
+              >
                 {howto.description}
               </Linkify>
             </Text>

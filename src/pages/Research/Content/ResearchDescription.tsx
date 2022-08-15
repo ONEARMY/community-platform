@@ -8,8 +8,8 @@ import theme from 'src/themes/styled.theme'
 import type { IUser } from 'src/models/user.models'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 import { UsefulStatsButton } from 'src/components/UsefulStatsButton/UsefulStatsButton'
-import Linkify from 'react-linkify'
 import { Link } from 'react-router-dom'
+import StyledLinkify from 'src/components/StyledLinkify/StyledLinkify'
 
 interface IProps {
   research: IResearch.ItemDB
@@ -163,17 +163,13 @@ const ResearchDescription: React.FC<IProps> = ({
             {research.title}
           </Heading>
           <Text sx={{ whiteSpace: 'pre-line', ...theme.typography.paragraph }}>
-            <Linkify
+            <StyledLinkify
               properties={{
                 target: '_blank',
-                style: {
-                  color: theme.colors.grey,
-                  textDecoration: 'underline',
-                },
               }}
             >
               {research.description}
-            </Linkify>
+            </StyledLinkify>
           </Text>
         </Box>
       </Flex>

@@ -1,6 +1,5 @@
 import { format } from 'date-fns'
 import * as React from 'react'
-import Linkify from 'react-linkify'
 import ReactPlayer from 'react-player'
 import { Box, Card, Text, Flex, Heading } from 'theme-ui'
 import { Button, ImageGallery } from 'oa-components'
@@ -11,6 +10,7 @@ import styled from '@emotion/styled'
 import type { IComment } from 'src/models'
 import { useTheme } from '@emotion/react'
 import { Link } from 'react-router-dom'
+import StyledLinkify from 'src/components/StyledLinkify/StyledLinkify'
 
 interface IProps {
   update: IResearch.UpdateDB
@@ -62,7 +62,7 @@ const ResearchUpdate: React.FC<IProps> = ({
               <Flex
                 sx={{ width: '100%', flexDirection: ['column', 'row', 'row'] }}
               >
-                <Heading sx={{ width: ['100%', '75%', '75%'] }} mb={[2, 0, 0]}>
+                <Heading sx={{ width: ['100%', '75%', '75%'] }} mb={2}>
                   {update.title}
                 </Heading>
                 <Flex
@@ -118,9 +118,13 @@ const ResearchUpdate: React.FC<IProps> = ({
                   color={'grey'}
                   sx={{ whiteSpace: 'pre-line', ...theme.typography.paragraph }}
                 >
-                  <Linkify properties={{ target: '_blank' }}>
+                  <StyledLinkify
+                    properties={{
+                      target: '_blank',
+                    }}
+                  >
                     {update.description}
-                  </Linkify>
+                  </StyledLinkify>
                 </Text>
               </Box>
             </Flex>

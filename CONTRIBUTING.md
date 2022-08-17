@@ -84,7 +84,7 @@ Some issues are collated to form modules which are the parent of each section of
 Additionally if you have identified a bug you may want to write a test to make reproducible (and less likely to arise in the future). You can find more information to do this in the [Testing Bugs Wiki](https://github.com/ONEARMY/community-platform/wiki/Testing---Bugs)
 
 We've also labelled some of the issues with _Good-first-issue_ to help you get started quickly.
-When you start working on an issue, comment on it or if your are a registered contributor assign yourself to let us know so we avoid working on something twice. The comment should include a mention to @mattia-io (our project lead).
+When you start working on an issue, comment on it or if your are a registered contributor assign yourself to let us know so we avoid working on something twice. The comment should include a mention to [@ONEARMY/maintainers](https://github.com/orgs/ONEARMY/teams/maintainers).
 
 When a group of issues have been resolved a pull request to the `master` branch should be made, where it will undergo a quick review and test. It is expected that the developer will have done thorough testing themselves first, this helps make sure most pull requests get merged quickly.
 

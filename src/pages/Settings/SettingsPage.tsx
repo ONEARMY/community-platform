@@ -263,7 +263,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                   flexDirection: 'column',
                   bg: 'inherit',
                   px: 2,
-                  height: '100%',
+                  height: 'auto',
                   mt: [0, 0, 4],
                 }}
               >

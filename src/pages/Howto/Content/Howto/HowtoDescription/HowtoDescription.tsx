@@ -19,7 +19,6 @@ import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 import { UsefulStatsButton } from 'src/components/UsefulStatsButton/UsefulStatsButton'
 import { DownloadExternal } from 'src/pages/Howto/DownloadExternal/DownloadExternal'
-import Linkify from 'react-linkify'
 import { Link } from 'react-router-dom'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import { inject, observer } from 'mobx-react'
@@ -29,6 +28,7 @@ import {
   addHowtoDownloadCooldown,
   updateHowtoDownloadCooldown,
 } from './downloadCooldown'
+import StyledLinkify from 'src/components/StyledLinkify/StyledLinkify'
 
 interface IProps {
   howto: IHowtoDB
@@ -242,9 +242,13 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
             <Text
               sx={{ ...theme.typography.paragraph, whiteSpace: 'pre-line' }}
             >
-              <Linkify properties={{ target: '_blank' }}>
+              <StyledLinkify
+                properties={{
+                  target: '_blank',
+                }}
+              >
                 {howto.description}
-              </Linkify>
+              </StyledLinkify>
             </Text>
           </Box>
 

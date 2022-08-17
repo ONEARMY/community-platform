@@ -1,5 +1,4 @@
 import { PureComponent } from 'react'
-import Linkify from 'react-linkify'
 import ReactPlayer from 'react-player'
 import { Box, Card, Text, Flex, Heading } from 'theme-ui'
 import { ImageGallery } from 'oa-components'
@@ -8,6 +7,7 @@ import type { IUploadedFileMeta } from 'src/stores/storage'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
+import StyledLinkify from 'src/components/StyledLinkify/StyledLinkify'
 
 interface IProps {
   step: IHowtoStep
@@ -71,10 +71,14 @@ export default class Step extends PureComponent<IProps> {
                         whiteSpace: 'pre-line',
                       }}
                     >
-                      <Linkify properties={{ target: '_blank' }}>
+                      <StyledLinkify
+                        properties={{
+                          target: '_blank',
+                        }}
+                      >
                         {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
                         {capitalizeFirstLetter(step.text)}
-                      </Linkify>
+                      </StyledLinkify>
                     </Text>
                   </Box>
                 </Flex>

@@ -45,7 +45,11 @@ export default class Step extends PureComponent<IProps> {
             }}
           >
             <Card sx={{ width: '100%' }}>
-              <Flex>
+              <Flex
+                sx={{
+                  flexDirection: ['column-reverse', 'column-reverse', 'row'],
+                }}
+              >
                 <Flex
                   py={4}
                   px={4}

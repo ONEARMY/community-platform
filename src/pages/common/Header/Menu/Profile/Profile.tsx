@@ -81,7 +81,10 @@ export default class Profile extends Component<IProps, IState> {
               <Flex>
                 {showProfileModal && (
                   <Foco onClickOutside={() => this.toggleProfileModal()}>
-                    <ProfileModal username={user.userName} closeProfileModal={() => this.closeProfileModal() }/>
+                    <ProfileModal
+                      username={user.userName}
+                      closeProfileModal={() => this.closeProfileModal()}
+                    />
                   </Foco>
                 )}
               </Flex>

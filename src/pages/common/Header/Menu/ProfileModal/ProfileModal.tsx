@@ -10,13 +10,13 @@ import { AuthWrapper } from '../../../../../components/Auth/AuthWrapper'
 
 interface IProps {
   username: string
-  closeProfileModal: () => void;
+  closeProfileModal: () => void
 }
 
 interface IProps {}
 
 interface IInjectedProps extends IProps {
-  userStore: UserStore;
+  userStore: UserStore
 }
 
 const ModalContainer = styled(Box)`
@@ -76,14 +76,23 @@ export class ProfileModal extends React.Component<IProps> {
       <ModalContainer data-cy="user-menu-list">
         <ModalContainerInner>
           <Flex>
-            <ModalLink to={'/u/' + username} data-cy="menu-Profile" onClick={()=> this.props.closeProfileModal()}>
+            <ModalLink
+              to={'/u/' + username}
+              data-cy="menu-Profile"
+              onClick={() => this.props.closeProfileModal()}
+            >
               <Flex>Profile</Flex>
             </ModalLink>
           </Flex>
           {COMMUNITY_PAGES_PROFILE.map((page) => (
             <AuthWrapper roleRequired={page.requiredRole} key={page.path}>
               <Flex>
-                <ModalLink activeClassName="current" to={page.path} data-cy={`menu-${page.title}`} onClick={()=> this.props.closeProfileModal()}>
+                <ModalLink
+                  activeClassName="current"
+                  to={page.path}
+                  data-cy={`menu-${page.title}`}
+                  onClick={() => this.props.closeProfileModal()}
+                >
                   <Flex>{page.title}</Flex>
                 </ModalLink>
               </Flex>

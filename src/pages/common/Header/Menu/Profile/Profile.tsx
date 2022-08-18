@@ -39,9 +39,14 @@ export default class Profile extends Component<IProps, IState> {
     this.setState({ showProfileModal: !this.state.showProfileModal })
   }
 
+  closeProfileModal() {
+    this.setState({ showProfileModal: false })
+  }
+
   render() {
     const user = this.injected.userStore.user
     const { showProfileModal } = this.state
+
     return (
       <>
         {user ? (
@@ -76,7 +81,7 @@ export default class Profile extends Component<IProps, IState> {
               <Flex>
                 {showProfileModal && (
                   <Foco onClickOutside={() => this.toggleProfileModal()}>
-                    <ProfileModal username={user.userName} />
+                    <ProfileModal username={user.userName} closeProfileModal={() => this.closeProfileModal() }/>
                   </Foco>
                 )}
               </Flex>

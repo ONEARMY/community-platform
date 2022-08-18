@@ -10,12 +10,13 @@ import { AuthWrapper } from '../../../../../components/Auth/AuthWrapper'
 
 interface IProps {
   username: string
+  closeProfileModal: () => void;
 }
 
 interface IProps {}
 
 interface IInjectedProps extends IProps {
-  userStore: UserStore
+  userStore: UserStore;
 }
 
 const ModalContainer = styled(Box)`
@@ -45,24 +46,13 @@ const ModalLink = styled(NavLink)`
   width: 100%;
   max-width: 100%;
   max-height: 100%;
-  &:focus div {
-    color: ${theme.colors.blue};
-  }
   &:hover {
-    background-color: ${theme.colors.background};
-  }
-  &:active div {
-    color: ${theme.colors.blue};
+    background-color: ${theme.colors.offwhite};
   }
   &.current {
-    background-color: ${theme.colors.white};
-    color: ${theme.colors.blue};
+    background-color: ${theme.colors.offwhite};
   }
 `
-
-ModalLink.defaultProps = {
-  activeClassName: 'current',
-}
 
 @inject('userStore')
 @observer
@@ -86,14 +76,16 @@ export class ProfileModal extends React.Component<IProps> {
       <ModalContainer data-cy="user-menu-list">
         <ModalContainerInner>
           <Flex>
-            <ModalLink to={'/u/' + username} data-cy="menu-Profile">
+            <ModalLink to={'/u/' + username} data-cy="menu-Profile" onClick={(e)=> {
+              this.props.closeProfileModal()
+            }}>
               <Flex>Profile</Flex>
             </ModalLink>
           </Flex>
           {COMMUNITY_PAGES_PROFILE.map((page) => (
             <AuthWrapper roleRequired={page.requiredRole} key={page.path}>
               <Flex>
-                <ModalLink to={page.path} data-cy={`menu-${page.title}`}>
+                <ModalLink activeClassName="current" to={page.path} data-cy={`menu-${page.title}`} onClick={()=> this.props.closeProfileModal()}>
                   <Flex>{page.title}</Flex>
                 </ModalLink>
               </Flex>

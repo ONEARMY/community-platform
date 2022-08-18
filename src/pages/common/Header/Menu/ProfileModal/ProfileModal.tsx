@@ -76,9 +76,7 @@ export class ProfileModal extends React.Component<IProps> {
       <ModalContainer data-cy="user-menu-list">
         <ModalContainerInner>
           <Flex>
-            <ModalLink to={'/u/' + username} data-cy="menu-Profile" onClick={(e)=> {
-              this.props.closeProfileModal()
-            }}>
+            <ModalLink to={'/u/' + username} data-cy="menu-Profile" onClick={()=> this.props.closeProfileModal()}>
               <Flex>Profile</Flex>
             </ModalLink>
           </Flex>

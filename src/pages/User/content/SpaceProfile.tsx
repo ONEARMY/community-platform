@@ -51,7 +51,7 @@ const MobileBadge = styled.div`
 
   @media only screen and (min-width: ${theme.breakpoints[1]}) {
     align-items: center;
-  } 
+  }
 
   @media only screen and (min-width: ${theme.breakpoints[2]}) {
     margin-top: -50%;

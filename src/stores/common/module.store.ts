@@ -1,16 +1,17 @@
-import { BehaviorSubject, Subscription } from 'rxjs'
-import { stripSpecialCharacters } from 'src/utils/helpers'
-import isUrl from 'is-url'
+import isUrl from 'is-url';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { useCommonStores } from 'src/index';
+import { logger } from 'src/logger';
+import { includesAll } from 'src/utils/filters';
+import { stripSpecialCharacters } from 'src/utils/helpers';
+
+import { Storage } from '../storage';
+
 import type { ISelectedTags } from 'src/models/tags.model'
 import type { IDBEndpoint, ILocation } from 'src/models/common.models'
-import { includesAll } from 'src/utils/filters'
 import type { RootStore } from '../index'
 import type { IConvertedFileMeta } from 'src/types'
 import type { IUploadedFileMeta } from '../storage'
-import { Storage } from '../storage'
-import { useCommonStores } from 'src/index'
-import { logger } from 'src/logger'
-
 /**
  * The module store is used to share methods and data between other stores, including
  * `db` - the common database
@@ -66,6 +67,10 @@ export class ModuleStore {
   }
   get aggregationsStore() {
     return this.rootStore.stores.aggregationsStore
+  }
+
+  get userNotificationsStore() {
+    return this.rootStore.stores.userNotificationsStore
   }
 
   /****************************************************************************

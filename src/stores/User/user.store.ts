@@ -1,26 +1,22 @@
-import { observable, action, makeObservable, toJS, computed } from 'mobx'
-import type {
-  INotification,
-  IUser,
-  IUserDB,
-  NotificationType,
-} from 'src/models/user.models'
+import { action, computed, makeObservable, observable, toJS } from 'mobx';
+import { logger } from 'src/logger';
+import { auth, EmailAuthProvider } from 'src/utils/firebase';
+import { getLocationData } from 'src/utils/getLocationData';
+import { formatLowerNoSpecial } from 'src/utils/helpers';
+
+import { ModuleStore } from '../common/module.store';
+import { Storage } from '../storage';
+
+import type { IUser, IUserDB } from 'src/models/user.models'
 import type { IUserPP, IUserPPDB } from 'src/models/user_pp.models'
 import type { IFirebaseUser } from 'src/utils/firebase'
-import { auth, EmailAuthProvider } from 'src/utils/firebase'
 import type { RootStore } from '..'
-import { ModuleStore } from '../common/module.store'
-import { Storage } from '../storage'
 import type { IConvertedFileMeta } from 'src/types'
-import { formatLowerNoSpecial, randomID } from 'src/utils/helpers'
-import { logger } from 'src/logger'
-import { getLocationData } from 'src/utils/getLocationData'
-
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
 */
 
-const COLLECTION_NAME = 'users'
+export const COLLECTION_NAME = 'users'
 
 export class UserStore extends ModuleStore {
   private authUnsubscribe: firebase.default.Unsubscribe
@@ -308,7 +304,7 @@ export class UserStore extends ModuleStore {
 
       if (votedUsefulHowtos[howtoId]) {
         //get how to author from howtoid
-        this.triggerNotification(
+        this.userNotificationsStore.triggerNotification(
           'howto_useful',
           howtoAuthor,
           '/how-to/' + howtoSlug,
@@ -336,7 +332,7 @@ export class UserStore extends ModuleStore {
       votedUsefulResearch[researchId] = !votedUsefulResearch[researchId]
 
       if (votedUsefulResearch[researchId]) {
-        this.triggerNotification(
+        this.userNotificationsStore.triggerNotification(
           'research_useful',
           researchAuthor,
           '/research/' + researchSlug,
@@ -367,108 +363,6 @@ export class UserStore extends ModuleStore {
 
   private _unsubscribeFromAuthStateChanges() {
     this.authUnsubscribe()
-  }
-
-  @action
-  public async triggerNotification(
-    type: NotificationType,
-    username: string,
-    relevantUrl: string,
-  ) {
-    try {
-      const triggeredBy = this.activeUser
-      if (triggeredBy) {
-        // do not get notified when you're the one making a new comment or how-to useful vote
-        if (triggeredBy.userName === username) {
-          return
-        }
-        const newNotification: INotification = {
-          _id: randomID(),
-          _created: new Date().toISOString(),
-          triggeredBy: {
-            displayName: triggeredBy.displayName,
-            userId: triggeredBy._id,
-          },
-          relevantUrl: relevantUrl,
-          type: type,
-          read: false,
-        }
-
-        const lookup = await this.db
-          .collection<IUserPP>(COLLECTION_NAME)
-          .getWhere('userName', '==', username)
-
-        const user = lookup[0]
-
-        const updatedUser: IUser = {
-          ...toJS(user),
-          notifications: user.notifications
-            ? [...toJS(user.notifications), newNotification]
-            : [newNotification],
-        }
-
-        const dbRef = this.db
-          .collection<IUser>(COLLECTION_NAME)
-          .doc(updatedUser._authID)
-
-        await dbRef.set(updatedUser)
-      }
-    } catch (err) {
-      console.error(err)
-      throw new Error(err)
-    }
-  }
-
-  @action
-  public async markAllNotificationsRead() {
-    try {
-      const user = this.activeUser
-      if (user) {
-        const notifications = toJS(user.notifications)
-        notifications?.forEach((notification) => (notification.read = true))
-        const updatedUser: IUser = {
-          ...toJS(user),
-          notifications,
-        }
-
-        const dbRef = this.db
-          .collection<IUser>(COLLECTION_NAME)
-          .doc(updatedUser._authID)
-
-        await dbRef.set(updatedUser)
-        await this.updateUserProfile({ notifications })
-      }
-    } catch (err) {
-      console.error(err)
-      throw new Error(err)
-    }
-  }
-
-  @action
-  public async deleteNotification(id: string) {
-    try {
-      const user = this.activeUser
-      if (id && user && user.notifications) {
-        const notifications = toJS(user.notifications).filter(
-          (notification) => !(notification._id === id),
-        )
-
-        const updatedUser: IUser = {
-          ...toJS(user),
-          notifications,
-        }
-
-        const dbRef = this.db
-          .collection<IUser>(COLLECTION_NAME)
-          .doc(updatedUser._authID)
-
-        await dbRef.set(updatedUser)
-        //TODO: ensure current user is updated
-      }
-    } catch (err) {
-      console.error(err)
-      throw new Error(err)
-    }
   }
 }
 

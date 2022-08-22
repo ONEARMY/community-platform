@@ -1,24 +1,29 @@
-import { Component } from 'react'
-import { Flex } from 'theme-ui'
-import styled from '@emotion/styled'
-import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
-import { NotificationsIcon } from 'src/pages/common/Header/Menu/Notifications/NotificationsIcon'
-import { NotificationsDesktop } from 'src/pages/common/Header/Menu/Notifications/NotificationsDesktop'
-import { NotificationsMobile } from 'src/pages/common/Header/Menu/Notifications/NotificationsMobile'
-import MenuDesktop from 'src/pages/common/Header/Menu/MenuDesktop'
-import MenuMobilePanel from 'src/pages/common/Header/Menu/MenuMobile/MenuMobilePanel'
-import { motion } from 'framer-motion'
-import Logo from 'src/pages/common/Header/Menu/Logo/Logo'
-import theme from 'src/themes/styled.theme'
-import HamburgerMenu from 'react-hamburger-menu'
-import { observer, inject } from 'mobx-react'
-import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
-import type { UserStore } from 'src/stores/User/user.store'
-import { isModuleSupported, MODULE } from 'src/modules'
+import { motion } from 'framer-motion';
+import { inject, observer } from 'mobx-react';
+import { Component } from 'react';
+import HamburgerMenu from 'react-hamburger-menu';
+import { isModuleSupported, MODULE } from 'src/modules';
+import Logo from 'src/pages/common/Header/Menu/Logo/Logo';
+import MenuDesktop from 'src/pages/common/Header/Menu/MenuDesktop';
+import MenuMobilePanel from 'src/pages/common/Header/Menu/MenuMobile/MenuMobilePanel';
+import {
+    NotificationsDesktop
+} from 'src/pages/common/Header/Menu/Notifications/NotificationsDesktop';
+import { NotificationsIcon } from 'src/pages/common/Header/Menu/Notifications/NotificationsIcon';
+import {
+    NotificationsMobile
+} from 'src/pages/common/Header/Menu/Notifications/NotificationsMobile';
+import Profile from 'src/pages/common/Header/Menu/Profile/Profile';
+import theme from 'src/themes/styled.theme';
+import { Flex } from 'theme-ui';
 
+import styled from '@emotion/styled';
+
+import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
+import type { UserNotificationsStore } from 'src/stores/User/notifications.store'
 interface IInjectedProps {
   mobileMenuStore: MobileMenuStore
-  userStore: UserStore
+  userNotificationsStore: UserNotificationsStore
 }
 
 const MobileNotificationsWrapper = styled(Flex)`
@@ -83,7 +88,7 @@ const AnimationContainer = (props: any) => {
 }
 
 @inject('mobileMenuStore')
-@inject('userStore')
+@inject('userNotificationsStore')
 @observer
 export class Header extends Component {
   // eslint-disable-next-line
@@ -97,8 +102,8 @@ export class Header extends Component {
 
   render() {
     const menu = this.injected.mobileMenuStore
-    const user = this.injected.userStore.user
-    const notifications = this.injected.userStore.getUserNotifications()
+    const user = this.injected.userNotificationsStore.user
+    const notifications = this.injected.userNotificationsStore.getUserNotifications()
     const areThereNotifications = Boolean(notifications.length)
     const isLoggedInUser = !!user
 
@@ -136,7 +141,7 @@ export class Header extends Component {
                 <NotificationsDesktop
                   notifications={notifications}
                   handleOnClick={() =>
-                    this.injected.userStore.markAllNotificationsRead()
+                    this.injected.userNotificationsStore.markAllNotificationsRead()
                   }
                 />
               </>
@@ -172,7 +177,7 @@ export class Header extends Component {
               <NotificationsMobile
                 notifications={notifications}
                 handleOnClick={() =>
-                  this.injected.userStore.markAllNotificationsRead()
+                  this.injected.userNotificationsStore.markAllNotificationsRead()
                 }
               />
             </MobileMenuWrapper>

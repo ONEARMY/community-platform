@@ -140,8 +140,11 @@ export class Header extends Component {
               <>
                 <NotificationsDesktop
                   notifications={notifications}
-                  handleOnClick={() =>
+                  markAllRead={() =>
                     this.injected.userNotificationsStore.markAllNotificationsRead()
+                  }
+                  markAllNotified={() => 
+                    this.injected.userNotificationsStore.markAllNotificationsNotified()
                   }
                 />
               </>
@@ -176,8 +179,11 @@ export class Header extends Component {
             <MobileMenuWrapper>
               <NotificationsMobile
                 notifications={notifications}
-                handleOnClick={() =>
+                markAllRead={() =>
                   this.injected.userNotificationsStore.markAllNotificationsRead()
+                }
+                markAllNotified={() => 
+                  this.injected.userNotificationsStore.markAllNotificationsNotified()
                 }
               />
             </MobileMenuWrapper>

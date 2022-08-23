@@ -1,17 +1,19 @@
-import { useState } from 'react'
-import { Flex } from 'theme-ui'
-import { NotificationsIcon } from './NotificationsIcon'
-import Foco from 'react-foco'
-import type { UserNotificationList } from 'oa-components'
-import { NotificationList } from 'oa-components'
+import { NotificationList } from 'oa-components';
+import { useState } from 'react';
+import Foco from 'react-foco';
+import { Flex } from 'theme-ui';
 
+import { NotificationsIcon } from './NotificationsIcon';
+
+import type { UserNotificationList } from 'oa-components'
 export interface Props {
   notifications: UserNotificationList
-  handleOnClick: () => void
+  markAllRead: () => void
+  markAllNotified: () => void
 }
 
 export const NotificationsDesktop = (props: Props) => {
-  const { notifications, handleOnClick } = props
+  const { notifications, markAllRead, markAllNotified } = props
   const [showMobileNotifications, setMobileNotificationVisibility] =
     useState(false)
   const areThereNotifications = Boolean(notifications.length)
@@ -31,7 +33,8 @@ export const NotificationsDesktop = (props: Props) => {
             <div data-cy="notifications-modal-desktop">
               <NotificationList
                 notifications={notifications}
-                handleOnClick={() => handleOnClick && handleOnClick()}
+                markAllNotified={markAllNotified}
+                markAllRead={() => markAllRead && markAllRead()}
                 sx={{
                   width: '250px',
                   position: 'absolute',

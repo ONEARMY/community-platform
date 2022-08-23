@@ -1,9 +1,10 @@
-import theme from 'src/themes/styled.theme'
-import styled from '@emotion/styled'
-import { Box } from 'theme-ui'
-import type { UserNotificationList } from 'oa-components'
-import { NotificationList } from 'oa-components'
+import { NotificationList } from 'oa-components';
+import theme from 'src/themes/styled.theme';
+import { Box } from 'theme-ui';
 
+import styled from '@emotion/styled';
+
+import type { UserNotificationList } from 'oa-components'
 const PanelContainer = styled(Box)`
   width: 100%;
   position: absolute;
@@ -39,18 +40,20 @@ export const MenuMobileLinkContainer = styled(Box as any)`
 
 export interface Props {
   notifications: UserNotificationList
-  handleOnClick: () => void
+  markAllRead: () => void
+  markAllNotified: () => void
 }
 
 export const NotificationsMobile = (props: Props) => {
-  const { notifications, handleOnClick } = props
+  const { notifications, markAllRead, markAllNotified } = props
 
   return (
     <PanelContainer>
       <PanelMenu>
         <NotificationList
           notifications={notifications}
-          handleOnClick={() => handleOnClick && handleOnClick()}
+          markAllNotified={markAllNotified}
+          markAllRead={() => markAllRead && markAllRead()}
           sx={{
             position: 'absolute',
             left: 1,

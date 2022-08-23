@@ -103,7 +103,7 @@ export class Header extends Component {
   render() {
     const menu = this.injected.mobileMenuStore
     const user = this.injected.userNotificationsStore.user
-    const notifications = this.injected.userNotificationsStore.getUserNotifications()
+    const notifications = this.injected.userNotificationsStore.getUnreadNotifications()
     const areThereNotifications = Boolean(notifications.length)
     const isLoggedInUser = !!user
 

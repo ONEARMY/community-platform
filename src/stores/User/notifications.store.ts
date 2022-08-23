@@ -26,10 +26,27 @@ export class UserNotificationsStore extends ModuleStore {
     return this.userStore.user
   }
 
-  public getUserNotifications() {
+  // Returns all users created and notified but not read notifications
+  //
+  // Notification states are `created -> notified -> read`
+  public getUnreadNotifications() {
     return (
       this.user?.notifications
         ?.filter((notification) => !notification.read)
+        .sort(
+          (a, b) =>
+            new Date(b._created).getTime() - new Date(a._created).getTime(),
+        ) || []
+    )
+  }
+
+  // Returns all users created but not notified and not read notifications
+  //
+  // Notification states are `created -> notified -> read`
+  public getUnnotifiedNotifications() {
+    return (
+      this.user?.notifications
+        ?.filter((notification) => !notification.notified && !notification.read)
         .sort(
           (a, b) =>
             new Date(b._created).getTime() - new Date(a._created).getTime(),

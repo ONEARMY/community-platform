@@ -86,6 +86,7 @@ export interface INotification {
   relevantUrl?: string
   type: NotificationType
   read: boolean
+  notified: boolean
 }
 
 export type NotificationType =

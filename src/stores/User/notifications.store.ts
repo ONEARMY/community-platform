@@ -89,6 +89,31 @@ export class UserNotificationsStore extends ModuleStore {
   }
 
   @action
+  public async markAllNotificationsNotified() {
+    try {
+      const user = this.activeUser
+      if (user) {
+        const notifications = toJS(user.notifications)
+        notifications?.forEach((notification) => (notification.notified = true))
+        const updatedUser: IUser = {
+          ...toJS(user),
+          notifications,
+        }
+
+        const dbRef = this.db
+          .collection<IUser>(USER_COLLECTION_NAME)
+          .doc(updatedUser._authID)
+
+        await dbRef.set(updatedUser)
+        await this.userStore.updateUserProfile({ notifications })
+      }
+    } catch (err) {
+      console.error(err)
+      throw new Error(err)
+    }
+  }
+
+  @action
   public async markAllNotificationsRead() {
     try {
       const user = this.activeUser

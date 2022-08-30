@@ -73,6 +73,9 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
     <td align="center"><a href="https://franknoirot.co"><img src="https://avatars.githubusercontent.com/u/23481541?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Frank Noirot</b></sub></a><br /><a href="#design-franknoirot" title="Design">🎨</a></td>
     <td align="center"><a href="https://github.com/LucasGabrielBecker"><img src="https://avatars.githubusercontent.com/u/48301172?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Lucas Becker </b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=LucasGabrielBecker" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/cschilbe"><img src="https://avatars.githubusercontent.com/u/485557?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Conrad Schilbe</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=cschilbe" title="Code">💻</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->

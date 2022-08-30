@@ -145,6 +145,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "cschilbe",
+      "name": "Conrad Schilbe",
+      "avatar_url": "https://avatars.githubusercontent.com/u/485557?v=4",
+      "profile": "https://github.com/cschilbe",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

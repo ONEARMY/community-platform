@@ -77,15 +77,15 @@ const alerts = {
     paddingX: 2,
     paddingY: 3,
     backgroundColor: colors.green,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   failure: {
     borderRadius: 1,
     paddingX: 2,
     paddingY: 3,
     backgroundColor: colors.red2,
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 }
 
 const buttons = {

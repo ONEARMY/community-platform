@@ -6,7 +6,7 @@ import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUser
 import { useCommonStores } from 'src/index'
 import type { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
-import { Card, Flex, Heading, Text } from 'theme-ui'
+import { Card, Flex, Grid, Heading, Text } from 'theme-ui'
 
 interface IProps {
   item: IResearch.ItemDB
@@ -28,19 +28,20 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => {
           key={item._id}
           style={{ width: '100%' }}
         >
-          <Flex
-            px={3}
-            py={3}
-            sx={{ flexDirection: ['column', 'column', 'row'] }}
-          >
+          <Grid pl={3} pr={10} py={3} columns={'2fr 1fr'} gap="60px">
             <Flex
               sx={{
                 flexDirection: 'column',
                 alignItems: 'flex-start',
-                width: ['100%', '100%', `${(1 / 2) * 100}%`],
               }}
             >
-              <Heading variant="small" color={'black'}>
+              <Heading
+                color={'black'}
+                mb={2}
+                sx={{
+                  fontSize: ['18px', '18px', '22px'],
+                }}
+              >
                 {item.title}
               </Heading>
               <Flex
@@ -52,7 +53,6 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => {
                   <FlagIconHowTos code={item.creatorCountry} />
                 )}
                 <Text
-                  my={2}
                   color={`${theme.colors.blue} !important`}
                   sx={{
                     ...theme.typography.auxiliary,
@@ -82,23 +82,19 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => {
               sx={{
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                width: ['100%', '100%', '25%'],
               }}
             >
-              <Text color="black">{votedUsefulCount}</Text>
-              <Text color="black">{calculateTotalComments(item)}</Text>
-              <Text color="black">{getUpdateText(item)}</Text>
-              {/* <Text
-                sx={{
-                  alignSelf:
-                    item.moderation !== 'accepted' ? 'flex-start' : 'center',
-                  ...theme.typography.auxiliary,
-                }}
-              >
-                {format(new Date(item._modified), 'DD-MM-YYYY')}
-              </Text> */}
+              <Text color="black" sx={{ fontSize: ['12px', '16px', '16px'] }}>
+                {votedUsefulCount}
+              </Text>
+              <Text color="black" sx={{ fontSize: ['12px', '16px', '16px'] }}>
+                {calculateTotalComments(item)}
+              </Text>
+              <Text color="black" sx={{ fontSize: ['12px', '16px', '16px'] }}>
+                {getUpdateText(item)}
+              </Text>
             </Flex>
-          </Flex>
+          </Grid>
           {item.moderation !== 'accepted' && (
             <ModerationStatus
               status={item.moderation}

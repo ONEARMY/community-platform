@@ -36,6 +36,7 @@ export const colors = {
   silver: '#c0c0c0',
   softgrey: '#c2d4e4',
   lightgrey: '#ababac',
+  darkGrey: '#686868',
 }
 
 export const zIndex = {

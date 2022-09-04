@@ -85,6 +85,7 @@ export interface ThemeWithName {
     softgrey: string
     offwhite: string
     lightgrey: string
+    darkGrey: string
   }
 
   fontSizes: number[]

@@ -6,6 +6,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.js",
   "scripts": {
+    "storybook": "yarn start",
     "start": "start-storybook -p 6006 --loglevel verbose",
     "format": "prettier --write '**/*.{ts,tsx,mdx,md}'",
     "build:sb": "yarn build && build-storybook",

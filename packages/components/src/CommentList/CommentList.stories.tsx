@@ -2,7 +2,7 @@ import type { ComponentStory, ComponentMeta } from '@storybook/react'
 import { CommentList } from './CommentList'
 
 export default {
-  title: 'Base Components/CommentList',
+  title: 'Components/CommentList',
   component: CommentList,
 } as ComponentMeta<typeof CommentList>
 

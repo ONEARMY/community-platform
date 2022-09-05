@@ -2,7 +2,7 @@ import type { ComponentStory, ComponentMeta } from '@storybook/react'
 import { ModerationStatus } from './ModerationStatus'
 
 export default {
-  title: 'Base Components/ModerationStatus',
+  title: 'Components/ModerationStatus',
   component: ModerationStatus,
 } as ComponentMeta<typeof ModerationStatus>
 

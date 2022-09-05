@@ -11,7 +11,7 @@ import theme from 'src/themes/styled.theme'
 
 const ResearchListHeader = styled.header`
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 2fr minmax(274px, 1fr);
   gap: 60px;
   padding: 15px;
   margin-bottom: 16px;

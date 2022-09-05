@@ -50,7 +50,12 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => {
           key={item._id}
           style={{ width: '100%' }}
         >
-          <Grid px={3} py={3} columns={[1, '2fr 1fr']} gap="60px">
+          <Grid
+            px={3}
+            py={3}
+            columns={[1, '2fr minmax(274px, 1fr)']}
+            gap="60px"
+          >
             <Flex
               sx={{
                 flexDirection: 'column',

@@ -30,7 +30,7 @@ const ResearchList = observer(() => {
   const { filteredResearches } = store
   return (
     <>
-      <Flex py={26}>
+      <Flex my={[18, 26]}>
         <Heading
           sx={{
             width: '100%',

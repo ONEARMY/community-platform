@@ -1,11 +1,27 @@
 import { observer } from 'mobx-react'
-import { Box, Flex, Heading } from 'theme-ui'
+import { Box, Flex, Heading, Text } from 'theme-ui'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
-import { Button } from 'oa-components'
+import { Button, Icon } from 'oa-components'
 import ResearchListItem from './ResearchListItem'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { useTheme } from '@emotion/react'
 import { Link } from 'react-router-dom'
+import styled from '@emotion/styled'
+import theme from 'src/themes/styled.theme'
+
+const ResearchListHeader = styled.header`
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 60px;
+  padding: 15px;
+  margin-bottom: 16px;
+
+  @media (max-width: ${theme.breakpoints[0]}) {
+    display: none;
+    grid-template-columns: unset;
+    gap: unset;
+  }
+`
 
 const ResearchList = observer(() => {
   const store = useResearchStore()
@@ -26,6 +42,31 @@ const ResearchList = observer(() => {
           Research topics. Can we...
         </Heading>
       </Flex>
+      <ResearchListHeader>
+        <Text color={theme.colors.black} sx={{ fontSize: '16px' }}>
+          Title
+        </Text>
+
+        <Flex sx={{ alignItems: 'center', justifyContent: 'space-around' }}>
+          <Text
+            color={theme.colors.black}
+            sx={{ display: 'flex', alignItems: 'center', fontSize: '16px' }}
+          >
+            <Icon glyph="star-active" mr={1} />
+            Useful
+          </Text>
+          <Text
+            color={theme.colors.black}
+            sx={{ display: 'flex', alignItems: 'center', fontSize: '16px' }}
+          >
+            <Icon glyph="comment" mr={1} />
+            Comments
+          </Text>
+          <Text color={theme.colors.black} sx={{ fontSize: '16px' }}>
+            Updates
+          </Text>
+        </Flex>
+      </ResearchListHeader>
       {filteredResearches.map((item) => (
         <ResearchListItem key={item._id} item={item} />
       ))}

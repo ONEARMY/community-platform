@@ -1,5 +1,6 @@
+import styled from '@emotion/styled'
 import { format } from 'date-fns'
-import { FlagIconHowTos, ModerationStatus } from 'oa-components'
+import { FlagIconHowTos, Icon, ModerationStatus } from 'oa-components'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
@@ -11,6 +12,26 @@ import { Card, Flex, Grid, Heading, Text } from 'theme-ui'
 interface IProps {
   item: IResearch.ItemDB
 }
+
+const DesktopItemInfo = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  @media (max-width: ${theme.breakpoints[0]}) {
+    display: none;
+    align-items: unset;
+    justify-content: unset;
+  }
+`
+
+const MobileItemInfo = styled.div`
+  display: none;
+
+  @media (max-width: ${theme.breakpoints[0]}) {
+    display: flex;
+  }
+`
 
 const ResearchListItem: React.FC<IProps> = ({ item }) => {
   const { aggregationsStore } = useCommonStores().stores
@@ -28,7 +49,7 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => {
           key={item._id}
           style={{ width: '100%' }}
         >
-          <Grid pl={3} pr={10} py={3} columns={'2fr 1fr'} gap="60px">
+          <Grid px={3} py={3} columns={[1, '2fr 1fr']} gap="60px">
             <Flex
               sx={{
                 flexDirection: 'column',
@@ -46,44 +67,67 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => {
               </Heading>
               <Flex
                 sx={{
+                  width: '100%',
                   alignItems: 'center',
+                  justifyContent: 'space-between',
                 }}
               >
-                {item.creatorCountry && (
-                  <FlagIconHowTos code={item.creatorCountry} />
-                )}
-                <Text
-                  color={`${theme.colors.blue} !important`}
-                  sx={{
-                    ...theme.typography.auxiliary,
-                    marginLeft: '6px',
-                  }}
-                >
-                  {item._createdBy}
-                </Text>
-                <VerifiedUserBadge
-                  userId={item._createdBy}
-                  ml={1}
-                  height="12px"
-                  width="12px"
-                />
-                <Text
-                  ml={4}
-                  sx={{
-                    fontSize: theme.fontSizes[1] + 'px',
-                    color: theme.colors.darkGrey,
-                  }}
-                >
-                  {getItemDate(item)}
-                </Text>
+                <Flex>
+                  {item.creatorCountry && (
+                    <FlagIconHowTos code={item.creatorCountry} />
+                  )}
+                  <Text
+                    color={`${theme.colors.blue} !important`}
+                    sx={{
+                      ...theme.typography.auxiliary,
+                      marginLeft: '6px',
+                    }}
+                  >
+                    {item._createdBy}
+                  </Text>
+                  <VerifiedUserBadge
+                    userId={item._createdBy}
+                    ml={1}
+                    height="12px"
+                    width="12px"
+                  />
+                  {/* Hide this on mobile, show on tablet & above. */}
+                  <Text
+                    ml={4}
+                    sx={{
+                      display: ['none', 'block'],
+                      fontSize: theme.fontSizes[1] + 'px',
+                      color: theme.colors.darkGrey,
+                    }}
+                  >
+                    {getItemDate(item, 'long')}
+                  </Text>
+                </Flex>
+                {/* Show these on mobile, hide on tablet & above. */}
+                <MobileItemInfo>
+                  <Text
+                    color="black"
+                    sx={{ fontSize: ['12px', '16px', '16px'] }}
+                  >
+                    {votedUsefulCount}
+                  </Text>
+                  <Text
+                    color="black"
+                    sx={{ fontSize: ['12px', '16px', '16px'] }}
+                  >
+                    {calculateTotalComments(item)}
+                  </Text>
+                  <Text
+                    color="black"
+                    sx={{ fontSize: ['12px', '16px', '16px'] }}
+                  >
+                    {getUpdateText(item)}
+                  </Text>
+                </MobileItemInfo>
               </Flex>
             </Flex>
-            <Flex
-              sx={{
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
-            >
+            {/* Hide these on mobile, show on tablet & above. */}
+            <DesktopItemInfo>
               <Text color="black" sx={{ fontSize: ['12px', '16px', '16px'] }}>
                 {votedUsefulCount}
               </Text>
@@ -93,7 +137,7 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => {
               <Text color="black" sx={{ fontSize: ['12px', '16px', '16px'] }}>
                 {getUpdateText(item)}
               </Text>
-            </Flex>
+            </DesktopItemInfo>
           </Grid>
           {item.moderation !== 'accepted' && (
             <ModerationStatus
@@ -112,13 +156,14 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => {
   )
 }
 
-const getItemDate = (item: IResearch.ItemDB): string => {
+const getItemDate = (item: IResearch.ItemDB, variant: string): string => {
   const lastModifiedDate = format(new Date(item._modified), 'DD-MM-YYYY')
   const creationDate = format(new Date(item._created), 'DD-MM-YYYY')
+
   if (lastModifiedDate !== creationDate) {
-    return `Updated ${lastModifiedDate}`
+    return variant === 'long' ? `Updated ${lastModifiedDate}` : lastModifiedDate
   } else {
-    return `Created ${creationDate}`
+    return variant === 'long' ? `Created ${creationDate}` : creationDate
   }
 }
 

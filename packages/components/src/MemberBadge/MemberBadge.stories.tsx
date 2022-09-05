@@ -6,7 +6,7 @@ export default {
    * See https://storybook.js.org/docs/react/configure/overview#configure-story-loading
    * to learn how to generate automatic titles
    */
-  title: 'Base Components/MemberBadge',
+  title: 'Components/MemberBadge',
   component: MemberBadge,
 } as ComponentMeta<typeof MemberBadge>
 

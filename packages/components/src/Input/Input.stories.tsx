@@ -2,7 +2,7 @@ import type { ComponentStory, ComponentMeta } from '@storybook/react'
 import { Input } from 'theme-ui'
 
 export default {
-  title: 'Base Components/Input',
+  title: 'Components/Input',
   component: Input,
 } as ComponentMeta<typeof Input>
 

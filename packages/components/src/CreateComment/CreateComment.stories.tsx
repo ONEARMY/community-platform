@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { CreateComment } from './CreateComment'
 
 export default {
-  title: 'Base Components/CreateComment',
+  title: 'Components/CreateComment',
   component: CreateComment,
 } as ComponentMeta<typeof CreateComment>
 

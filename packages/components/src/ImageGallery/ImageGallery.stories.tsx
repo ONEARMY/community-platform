@@ -33,7 +33,7 @@ const testImages: IUploadedFileMeta[] = imageUrls.map((elt, i) => {
 })
 
 export default {
-  title: 'Base Components/ImageGallery',
+  title: 'Components/ImageGallery',
   component: ImageGallery,
 } as ComponentMeta<typeof ImageGallery>
 

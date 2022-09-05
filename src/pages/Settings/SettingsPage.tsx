@@ -25,8 +25,7 @@ import { toJS } from 'mobx'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { logger } from 'src/logger'
 import { ProfileType } from 'src/modules/profile'
-import {FormSubmitResult} from './content/FormSubmitResult'
-
+import { FormSubmitResult } from './content/FormSubmitResult'
 
 interface IProps {
   /** user ID for lookup when editing another user as admin */
@@ -83,7 +82,7 @@ export class UserSettings extends React.Component<IProps, IState> {
       notification: { message: '', icon: '', show: false },
       user,
       showLocationDropdown: !user?.location?.latlng,
-      showFormSubmitResult: false
+      showFormSubmitResult: false,
     })
   }
 
@@ -297,7 +296,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                       const formEl = document.getElementById('userProfileForm')
                       if (typeof formEl !== 'undefined' && formEl !== null) {
                         this.setState({
-                          showFormSubmitResult: true
+                          showFormSubmitResult: true,
                         })
                         formEl.dispatchEvent(
                           new Event('submit', {
@@ -307,7 +306,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                         )
                       }
                     }}
-                    mb = {3}
+                    mb={3}
                     sx={{ width: '100%' }}
                     variant={'primary'}
                     type="submit"
@@ -317,9 +316,10 @@ export class UserSettings extends React.Component<IProps, IState> {
                   >
                     Save profile
                   </Button>
-                  {
-                    (this.state.showFormSubmitResult && (hasValidationErrors || submitError || submitSucceeded)) && <FormSubmitResult valid={valid}/>
-                  }
+                  {this.state.showFormSubmitResult &&
+                    (hasValidationErrors || submitError || submitSucceeded) && (
+                      <FormSubmitResult valid={valid} />
+                    )}
                   <div style={{ float: 'right' }}>
                     <TextNotification
                       data-cy="profile-saved"

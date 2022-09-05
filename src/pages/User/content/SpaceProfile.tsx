@@ -44,11 +44,16 @@ interface IProps {
 
 const MobileBadge = styled.div`
   position: relative;
-  max-width: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   margin-bottom: 0;
 
+  @media only screen and (min-width: ${theme.breakpoints[1]}) {
+    align-items: center;
+  }
+
   @media only screen and (min-width: ${theme.breakpoints[2]}) {
-    max-width: 150px;
     margin-top: -50%;
     margin-left: auto;
     margin-right: auto;

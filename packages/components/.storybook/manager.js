@@ -10,7 +10,7 @@ addons.setConfig({
   isToolshown: true,
   theme: create({
     base: 'light',
-    brandTitle: 'One Army UI Kit',
+    brandTitle: 'Platform Components',
     brandUrl: 'https://onearmy.world',
   }),
   selectedPanel: undefined,

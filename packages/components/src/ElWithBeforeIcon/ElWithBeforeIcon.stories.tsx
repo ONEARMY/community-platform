@@ -4,7 +4,7 @@ import { ElWithBeforeIcon } from './ElWithBeforeIcon'
 import HeaderHowtoIcon from '../../../../src/assets/images/header-section/howto-header-icon.svg'
 
 export default {
-  title: 'Base Components/ElWithBeforeIcon',
+  title: 'Components/ElWithBeforeIcon',
   component: ElWithBeforeIcon,
 } as ComponentMeta<typeof ElWithBeforeIcon>
 

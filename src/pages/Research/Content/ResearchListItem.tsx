@@ -30,6 +30,7 @@ const MobileItemInfo = styled.div`
 
   @media (max-width: ${theme.breakpoints[0]}) {
     display: flex;
+    align-items: center;
   }
 `
 
@@ -107,21 +108,37 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => {
                 <MobileItemInfo>
                   <Text
                     color="black"
-                    sx={{ fontSize: ['12px', '16px', '16px'] }}
+                    ml={3}
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      fontSize: ['12px', '16px', '16px'],
+                    }}
                   >
                     {votedUsefulCount}
+                    <Icon glyph="star-active" ml={1} />
                   </Text>
                   <Text
                     color="black"
-                    sx={{ fontSize: ['12px', '16px', '16px'] }}
+                    ml={3}
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      fontSize: ['12px', '16px', '16px'],
+                    }}
                   >
                     {calculateTotalComments(item)}
+                    <Icon glyph="comment" ml={1} mb={-1} />
                   </Text>
                   <Text
-                    color="black"
-                    sx={{ fontSize: ['12px', '16px', '16px'] }}
+                    ml={3}
+                    sx={{
+                      display: ['block', 'none'],
+                      fontSize: '12px',
+                      color: theme.colors.darkGrey,
+                    }}
                   >
-                    {getUpdateText(item)}
+                    {getItemDate(item, 'short')}
                   </Text>
                 </MobileItemInfo>
               </Flex>

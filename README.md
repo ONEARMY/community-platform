@@ -75,6 +75,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/cschilbe"><img src="https://avatars.githubusercontent.com/u/485557?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Conrad Schilbe</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=cschilbe" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/ThakurKarthik"><img src="https://avatars.githubusercontent.com/u/26309938?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Thakur Karthik</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=ThakurKarthik" title="Code">💻</a></td>
   </tr>
 </table>
 

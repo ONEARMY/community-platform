@@ -2,7 +2,7 @@ import type { ComponentStory, ComponentMeta } from '@storybook/react'
 import { Heading } from 'theme-ui'
 
 export default {
-  title: 'Base Components/Heading',
+  title: 'Components/Heading',
   component: Heading,
 } as ComponentMeta<typeof Heading>
 

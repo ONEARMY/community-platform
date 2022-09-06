@@ -31,6 +31,8 @@ export interface ThemeWithName {
 
   communityProgramURL: string
 
+  alerts: any
+
   badges: {
     [K in ProfileTypeLabel]?: Badge
   }

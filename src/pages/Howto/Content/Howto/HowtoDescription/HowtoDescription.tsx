@@ -7,7 +7,12 @@ import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import StepsIcon from 'src/assets/icons/icon-steps.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
-import { Button, FlagIconHowTos, ModerationStatus } from 'oa-components'
+import {
+  Button,
+  FlagIconHowTos,
+  ModerationStatus,
+  LinkifyText,
+} from 'oa-components'
 import type { IUser } from 'src/models/user.models'
 import {
   isAllowToEditContent,
@@ -28,7 +33,6 @@ import {
   addHowtoDownloadCooldown,
   updateHowtoDownloadCooldown,
 } from './downloadCooldown'
-import StyledLinkify from 'src/components/StyledLinkify/StyledLinkify'
 
 interface IProps {
   howto: IHowtoDB
@@ -242,13 +246,13 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
             <Text
               sx={{ ...theme.typography.paragraph, whiteSpace: 'pre-line' }}
             >
-              <StyledLinkify
+              <LinkifyText
                 properties={{
                   target: '_blank',
                 }}
               >
                 {howto.description}
-              </StyledLinkify>
+              </LinkifyText>
             </Text>
           </Box>
 

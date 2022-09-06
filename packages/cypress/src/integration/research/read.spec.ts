@@ -21,7 +21,7 @@ describe('[Research]', () => {
       ).within(() => {
         cy.contains('qwerty').should('be.exist')
         cy.contains('event_reader').should('be.exist')
-        cy.contains('1 update').should('be.exist')
+        cy.get('[data-cy="ItemUpdateText"]').contains('1').should('be.exist')
       })
 
       cy.step(

@@ -156,7 +156,11 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => {
               <Text color="black" sx={{ fontSize: ['12px', '16px', '16px'] }}>
                 {calculateTotalComments(item)}
               </Text>
-              <Text color="black" sx={{ fontSize: ['12px', '16px', '16px'] }}>
+              <Text
+                color="black"
+                sx={{ fontSize: ['12px', '16px', '16px'] }}
+                data-cy="ItemUpdateText"
+              >
                 {getUpdateText(item)}
               </Text>
             </DesktopItemInfo>

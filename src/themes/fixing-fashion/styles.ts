@@ -67,14 +67,14 @@ const bold = 600
 const alerts = {
   success: {
     borderRadius: 1,
-    paddingX: 2,
+    paddingX: 3,
     paddingY: 3,
     backgroundColor: colors.green,
     textAlign: 'center',
   },
   failure: {
     borderRadius: 1,
-    paddingX: 2,
+    paddingX: 3,
     paddingY: 3,
     backgroundColor: colors.red2,
     textAlign: 'center',

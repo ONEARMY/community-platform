@@ -35,7 +35,7 @@ import { UnsavedChangesDialog } from 'src/components/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import { HOWTO_MAX_LENGTH, HOWTO_TITLE_MAX_LENGTH } from '../../constants'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 
 const MAX_LINK_LENGTH = 2000
 

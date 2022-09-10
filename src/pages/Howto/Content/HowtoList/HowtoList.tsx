@@ -1,6 +1,6 @@
 import { inject, observer } from 'mobx-react'
 import * as React from 'react'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 import { Button, MoreContainer, Loader } from 'oa-components'
 import { Heading, Input, Flex, Box } from 'theme-ui'
 import TagsSelect from 'src/components/Tags/TagsSelect'

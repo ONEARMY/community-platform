@@ -18,7 +18,7 @@ import { Flex, Box, Button } from 'theme-ui'
 import DevSiteHeader from 'src/pages/common/DevSiteHeader/DevSiteHeader'
 import { getSupportedModules } from 'src/modules'
 import GlobalSiteFooter from './common/GlobalSiteFooter/GlobalSiteFooter'
-import NotificationBanner from 'src/components/NotificationBanner/NotificationBanner'
+import { AlertIncompleteProfile } from 'src/common/AlertIncompleteProfile'
 import { SeoTagsUpdateComponent } from 'src/utils/seo'
 import { ExternalLink } from 'oa-components'
 
@@ -54,7 +54,7 @@ export class Routes extends React.Component<
           <ScrollToTop>
             {/* TODO - add better loading fallback */}
             <DevSiteHeader />
-            <NotificationBanner />
+            <AlertIncompleteProfile />
             <Header />
             <Suspense
               fallback={

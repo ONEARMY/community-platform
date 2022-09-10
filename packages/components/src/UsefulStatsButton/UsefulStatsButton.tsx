@@ -21,12 +21,13 @@ const Tooltip: React.FC = (props) => {
   )
 }
 
-interface IProps {
+export interface IProps {
   hasUserVotedUseful: boolean
   votedUsefulCount: number
   isLoggedIn: boolean
   onUsefulClick: () => void
 }
+
 export const UsefulStatsButton = (props: IProps) => {
   const theme: any = useTheme()
 

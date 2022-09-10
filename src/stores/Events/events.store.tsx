@@ -93,7 +93,7 @@ export class EventStore extends ModuleStore {
   }
 
   // Moderate Event
-  public async moderateEvent(event: IEvent) {
+  public async moderateEvent(event: Pick<IEvent, '_id'>) {
     if (!hasAdminRights(toJS(this.activeUser))) {
       return false
     }

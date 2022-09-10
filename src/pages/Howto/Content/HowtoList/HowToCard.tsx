@@ -1,15 +1,19 @@
 import { useTheme } from '@emotion/react'
-import { FlagIconHowTos, Icon, ModerationStatus } from 'oa-components'
+import {
+  CategoryTag,
+  FlagIconHowTos,
+  Icon,
+  ModerationStatus,
+} from 'oa-components'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { Link as RouterLink } from 'react-router-dom'
-import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 import type { IHowtoDB } from 'src/models/howto.models'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 import { Card, Flex, Heading, Text } from 'theme-ui'
 
 interface IProps {
-  howto: IHowtoDB
+  howto: IHowtoDB & { taglist: any }
   votedUsefulCount: number
 }
 
@@ -75,10 +79,10 @@ export const HowToCard = (props: IProps) => {
             </Flex>
             <Flex mt={4}>
               <Flex sx={{ flex: 1, flexWrap: 'wrap' }}>
-                {howto.tags &&
-                  Object.keys(howto.tags).map((tag) => {
-                    return <TagDisplay key={tag} tagKey={tag} />
-                  })}
+                {howto.taglist &&
+                  howto.taglist.map((tag, idx) => (
+                    <CategoryTag key={idx} tag={tag} sx={{ mr: 1 }} />
+                  ))}
               </Flex>
               {votedUsefulCount > 0 && (
                 <Flex ml={1} sx={{ alignItems: 'center' }}>

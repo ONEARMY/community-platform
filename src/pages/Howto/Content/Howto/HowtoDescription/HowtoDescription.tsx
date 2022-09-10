@@ -1,5 +1,4 @@
 import { PureComponent } from 'react'
-import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { format } from 'date-fns'
 import type { IHowtoDB } from 'src/models/howto.models'
 import { Heading, Text, Box, Flex, Image, AspectImage } from 'theme-ui'
@@ -13,6 +12,7 @@ import {
   ModerationStatus,
   LinkifyText,
   UsefulStatsButton,
+  CategoryTag,
 } from 'oa-components'
 import type { IUser } from 'src/models/user.models'
 import {
@@ -35,7 +35,7 @@ import {
 } from './downloadCooldown'
 
 interface IProps {
-  howto: IHowtoDB
+  howto: IHowtoDB & { taglist: any }
   loggedInUser: IUser | undefined
   needsModeration: boolean
   votedUsefulCount?: number
@@ -286,10 +286,10 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
             </Flex>
           </Flex>
           <Flex mt={4}>
-            {howto.tags &&
-              Object.keys(howto.tags).map((tag) => {
-                return <TagDisplay key={tag} tagKey={tag} />
-              })}
+            {howto.taglist &&
+              howto.taglist.map((tag, idx) => (
+                <CategoryTag key={idx} tag={tag} sx={{ mr: 1 }} />
+              ))}
           </Flex>
           {((howto.files && howto.files.length > 0) || howto.fileLink) && (
             <Flex

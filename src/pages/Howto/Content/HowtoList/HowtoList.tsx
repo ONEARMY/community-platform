@@ -5,13 +5,13 @@ import { Button, MoreContainer, Loader } from 'oa-components'
 import { Heading, Input, Flex, Box } from 'theme-ui'
 import TagsSelect from 'src/components/Tags/TagsSelect'
 import { VirtualizedFlex } from 'src/pages/Howto/VirtualizedFlex/VirtualizedFlex'
-import type { IHowtoDB } from 'src/models/howto.models'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import type { UserStore } from 'src/stores/User/user.store'
 import HowToCard from './HowToCard'
 import SortSelect from './SortSelect'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
+import type { TagsStore } from 'src/stores/Tags/tags.store'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import { Link } from 'react-router-dom'
 
@@ -20,6 +20,7 @@ interface InjectedProps {
   userStore: UserStore
   themeStore: ThemeStore
   aggregationsStore: AggregationsStore
+  tagsStore: TagsStore
 }
 
 interface IState {
@@ -42,7 +43,13 @@ const updateQueryParams = (url: string, key: string, val: string) => {
 }
 
 // First we use the @inject decorator to bind to the howtoStore state
-@inject('howtoStore', 'userStore', 'themeStore', 'aggregationsStore')
+@inject(
+  'howtoStore',
+  'userStore',
+  'themeStore',
+  'aggregationsStore',
+  'tagsStore',
+)
 // Then we can use the observer component decorator to automatically tracks observables and re-renders on change
 // (note 1, use ! to tell typescript that the store will exist (it's an injected prop))
 // (note 2, mobx seems to behave more consistently when observables are referenced outside of render methods)
@@ -107,8 +114,18 @@ export class HowtoList extends React.Component<any, IState> {
     } = this.props.howtoStore
 
     const theme = this.props?.themeStore?.currentTheme
+    const { allTagsByKey } = this.injected.tagsStore
     const { users_votedUsefulHowtos } =
       this.injected.aggregationsStore.aggregations
+
+    const howtoItems = filteredHowtos.map((howto) => ({
+      ...howto,
+      taglist:
+        howto.tags &&
+        Object.keys(howto.tags)
+          .map((t) => allTagsByKey[t])
+          .filter(Boolean),
+    }))
 
     return (
       <Box>
@@ -238,7 +255,7 @@ export class HowtoList extends React.Component<any, IState> {
           </Flex>
         </Flex>
         <React.Fragment>
-          {filteredHowtos.length === 0 && (
+          {howtoItems.length === 0 && (
             <Flex>
               <Heading
                 sx={{
@@ -263,8 +280,8 @@ export class HowtoList extends React.Component<any, IState> {
             data-cy="howtolist-flex-container"
           >
             <VirtualizedFlex
-              data={filteredHowtos}
-              renderItem={(howto: IHowtoDB) => (
+              data={howtoItems}
+              renderItem={(howto: any) => (
                 <Box px={4} py={4}>
                   <HowToCard
                     howto={howto}

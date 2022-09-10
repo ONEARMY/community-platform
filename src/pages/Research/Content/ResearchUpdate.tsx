@@ -2,7 +2,7 @@ import { format } from 'date-fns'
 import * as React from 'react'
 import ReactPlayer from 'react-player'
 import { Box, Card, Text, Flex, Heading } from 'theme-ui'
-import { Button, ImageGallery } from 'oa-components'
+import { Button, ImageGallery, LinkifyText } from 'oa-components'
 import type { IResearch } from 'src/models/research.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { ResearchComments } from './ResearchComments/ResearchComments'
@@ -10,7 +10,6 @@ import styled from '@emotion/styled'
 import type { IComment } from 'src/models'
 import { useTheme } from '@emotion/react'
 import { Link } from 'react-router-dom'
-import StyledLinkify from 'src/components/StyledLinkify/StyledLinkify'
 
 interface IProps {
   update: IResearch.UpdateDB
@@ -118,13 +117,7 @@ const ResearchUpdate: React.FC<IProps> = ({
                   color={'grey'}
                   sx={{ whiteSpace: 'pre-line', ...theme.typography.paragraph }}
                 >
-                  <StyledLinkify
-                    properties={{
-                      target: '_blank',
-                    }}
-                  >
-                    {update.description}
-                  </StyledLinkify>
+                  <LinkifyText>{update.description}</LinkifyText>
                 </Text>
               </Box>
             </Flex>

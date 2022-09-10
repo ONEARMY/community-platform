@@ -8,6 +8,7 @@ import { useTheme } from '@emotion/react'
 import { Link } from 'react-router-dom'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
+import { useCommonStores } from 'src'
 
 const ResearchListHeader = styled.header`
   display: grid;
@@ -25,6 +26,8 @@ const ResearchListHeader = styled.header`
 
 const ResearchList = observer(() => {
   const store = useResearchStore()
+  const { aggregationsStore } = useCommonStores().stores
+  const { aggregations } = aggregationsStore
   const theme = useTheme()
 
   const { filteredResearches } = store
@@ -67,9 +70,21 @@ const ResearchList = observer(() => {
           </Text>
         </Flex>
       </ResearchListHeader>
-      {filteredResearches.map((item) => (
-        <ResearchListItem key={item._id} item={item} />
-      ))}
+      {filteredResearches.map((item) => {
+        const votedUsefulCount = aggregations.users_votedUsefulResearch
+          ? aggregations.users_votedUsefulResearch[item._id] || 0
+          : '...'
+
+        return (
+          <ResearchListItem
+            key={item._id}
+            item={{
+              ...item,
+              votedUsefulCount,
+            }}
+          />
+        )
+      })}
       <Box mb={[3, 3, 0]}>
         <Link to={store.activeUser ? '/research/create' : 'sign-up'}>
           <AuthWrapper roleRequired="beta-tester">

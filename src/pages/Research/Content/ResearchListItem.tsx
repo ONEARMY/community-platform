@@ -4,13 +4,14 @@ import { FlagIconHowTos, Icon, ModerationStatus } from 'oa-components'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
-import { useCommonStores } from 'src/index'
 import type { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
 import { Card, Flex, Grid, Heading, Text } from 'theme-ui'
 
 interface IProps {
-  item: IResearch.ItemDB
+  item: IResearch.ItemDB & {
+    votedUsefulCount: number | string
+  }
 }
 
 const DesktopItemInfo = styled.div`
@@ -35,13 +36,6 @@ const MobileItemInfo = styled.div`
 `
 
 const ResearchListItem: React.FC<IProps> = ({ item }) => {
-  const { aggregationsStore } = useCommonStores().stores
-  const { aggregations } = aggregationsStore
-
-  const votedUsefulCount = aggregations.users_votedUsefulResearch
-    ? aggregations.users_votedUsefulResearch[item._id] || 0
-    : '...'
-
   return (
     <Card data-cy="ResearchListItem" data-id={item._id} mb={3}>
       <Flex sx={{ width: '100%', position: 'relative' }}>
@@ -120,7 +114,7 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => {
                       fontSize: ['12px', '16px', '16px'],
                     }}
                   >
-                    {votedUsefulCount}
+                    {item.votedUsefulCount}
                     <Icon glyph="star-active" ml={1} />
                   </Text>
                   <Text
@@ -151,7 +145,7 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => {
             {/* Hide these on mobile, show on tablet & above. */}
             <DesktopItemInfo>
               <Text color="black" sx={{ fontSize: ['12px', '16px', '16px'] }}>
-                {votedUsefulCount}
+                {item.votedUsefulCount}
               </Text>
               <Text color="black" sx={{ fontSize: ['12px', '16px', '16px'] }}>
                 {calculateTotalComments(item)}

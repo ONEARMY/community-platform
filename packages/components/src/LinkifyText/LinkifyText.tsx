@@ -4,14 +4,11 @@ import Linkify from 'react-linkify'
 
 export interface Props {
   children?: React.ReactNode
-  target: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const LinkifyText = (props: Props) => {
   const theme = useTheme() as any
-  const target = props.target || '_blank';
-
   const ThemedLinkify = styled(Linkify)`
     a {
       color: ${theme.colors.grey};
@@ -24,7 +21,7 @@ export const LinkifyText = (props: Props) => {
   ` as any
 
   return (
-    <ThemedLinkify properties={{ target }}>
+    <ThemedLinkify properties={{ target: '_blank' }}>
       {props.children}
     </ThemedLinkify>
   )

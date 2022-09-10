@@ -117,13 +117,7 @@ const ResearchUpdate: React.FC<IProps> = ({
                   color={'grey'}
                   sx={{ whiteSpace: 'pre-line', ...theme.typography.paragraph }}
                 >
-                  <LinkifyText
-                    properties={{
-                      target: '_blank',
-                    }}
-                  >
-                    {update.description}
-                  </LinkifyText>
+                  <LinkifyText>{update.description}</LinkifyText>
                 </Text>
               </Box>
             </Flex>

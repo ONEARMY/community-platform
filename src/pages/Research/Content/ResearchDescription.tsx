@@ -7,12 +7,12 @@ import {
   FlagIconHowTos,
   LinkifyText,
   ModerationStatus,
+  UsefulStatsButton,
 } from 'oa-components'
 import type { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
 import type { IUser } from 'src/models/user.models'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
-import { UsefulStatsButton } from 'src/components/UsefulStatsButton/UsefulStatsButton'
 import { Link } from 'react-router-dom'
 
 interface IProps {

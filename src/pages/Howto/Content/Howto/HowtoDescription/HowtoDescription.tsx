@@ -12,6 +12,7 @@ import {
   FlagIconHowTos,
   ModerationStatus,
   LinkifyText,
+  UsefulStatsButton,
 } from 'oa-components'
 import type { IUser } from 'src/models/user.models'
 import {
@@ -22,7 +23,6 @@ import {
 import theme from 'src/themes/styled.theme'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
-import { UsefulStatsButton } from 'src/components/UsefulStatsButton/UsefulStatsButton'
 import { DownloadExternal } from 'src/pages/Howto/DownloadExternal/DownloadExternal'
 import { Link } from 'react-router-dom'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'

@@ -2,7 +2,6 @@ import { PureComponent } from 'react'
 import { format } from 'date-fns'
 import type { IHowtoDB } from 'src/models/howto.models'
 import { Heading, Text, Box, Flex, Image, AspectImage } from 'theme-ui'
-import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import StepsIcon from 'src/assets/icons/icon-steps.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
@@ -13,6 +12,7 @@ import {
   LinkifyText,
   UsefulStatsButton,
   CategoryTag,
+  FileInformation,
 } from 'oa-components'
 import type { IUser } from 'src/models/user.models'
 import {
@@ -303,14 +303,19 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
                   link={howto.fileLink}
                 />
               )}
-              {howto.files.map((file, index) => (
-                <FileInfo
-                  allowDownload
-                  file={file}
-                  key={file ? file.name : `file-${index}`}
-                  handleClick={this.handleClick}
-                />
-              ))}
+              {howto.files
+                .filter(Boolean)
+                .map(
+                  (file, index) =>
+                    file && (
+                      <FileInformation
+                        allowDownload
+                        file={file}
+                        key={file ? file.name : `file-${index}`}
+                        handleClick={this.handleClick}
+                      />
+                    ),
+                )}
               {typeof this.state.fileDownloadCount === 'number' && (
                 <Text
                   data-cy="file-download-counter"

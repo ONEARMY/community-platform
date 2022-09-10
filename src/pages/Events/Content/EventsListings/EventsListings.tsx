@@ -150,9 +150,11 @@ export class EventsListings extends React.Component<any> {
                   moderateEvent={this.moderateEvent}
                   tags={
                     event.tags &&
-                    Object.keys(event.tags).map((t) => {
-                      return this.injected.tagsStore.allTagsByKey[t]
-                    })
+                    Object.keys(event.tags)
+                      .map((t) => {
+                        return this.injected.tagsStore.allTagsByKey[t]
+                      })
+                      .filter(Boolean)
                   }
                 />
               ))}

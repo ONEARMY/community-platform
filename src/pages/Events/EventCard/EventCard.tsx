@@ -137,9 +137,7 @@ export const EventCard = (props: IProps) => {
           }}
           mb={[2, 2, 0]}
         >
-          {props.tags?.map((t, idx) => (
-            <CategoryTag key={idx} tag={t} />
-          ))}
+          {props.tags?.map((t, idx) => t && <CategoryTag key={idx} tag={t} />)}
         </Flex>
         {props.needsModeration && (
           <Flex

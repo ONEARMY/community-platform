@@ -9,16 +9,18 @@ import type { EventStore } from 'src/stores/Events/events.store'
 import type { UserStore } from 'src/stores/User/user.store'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import { Link } from 'react-router-dom'
+import type { TagsStore } from 'src/stores/Tags/tags.store'
 
 interface InjectedProps {
   eventStore: EventStore
   themeStore: ThemeStore
+  tagsStore: TagsStore
   userStore?: UserStore
 }
 
 // const filterArrayDuplicates = (array: string[]) => Array.from(new Set(array))
 
-@inject('eventStore', 'userStore', 'themeStore')
+@inject('eventStore', 'userStore', 'themeStore', 'tagsStore')
 @observer
 export class EventsListings extends React.Component<any> {
   get injected() {
@@ -146,6 +148,14 @@ export class EventsListings extends React.Component<any> {
                   event={event}
                   needsModeration={this.store.needsModeration(event)}
                   moderateEvent={this.moderateEvent}
+                  tags={
+                    event.tags &&
+                    Object.keys(event.tags)
+                      .map((t) => {
+                        return this.injected.tagsStore.allTagsByKey[t]
+                      })
+                      .filter(Boolean)
+                  }
                 />
               ))}
             </Flex>
@@ -177,6 +187,14 @@ export class EventsListings extends React.Component<any> {
                   isPastEvent
                   needsModeration={this.store.needsModeration(event)}
                   moderateEvent={this.moderateEvent}
+                  tags={
+                    event.tags &&
+                    Object.keys(event.tags)
+                      .map((t) => {
+                        return this.injected.tagsStore.allTagsByKey[t]
+                      })
+                      .filter(Boolean)
+                  }
                 />
               ))}
             </>

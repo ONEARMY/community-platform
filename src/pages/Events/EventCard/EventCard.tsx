@@ -4,8 +4,8 @@ import {
   FlagIconEvents,
   ExternalLink,
   ModerationStatus,
+  CategoryTag,
 } from 'oa-components'
-import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import type { IEvent } from '../../../models/events.models'
 import { getMonth, getDay, capitalizeFirstLetter } from 'src/utils/helpers'
 import { VerifiedUserBadge } from '../../../components/VerifiedUserBadge/VerifiedUserBadge'
@@ -16,6 +16,11 @@ interface IProps {
   isPastEvent?: boolean
   needsModeration: boolean
   moderateEvent: (event: IEvent, accepted: boolean) => void
+  tags:
+    | {
+        label: string
+      }[]
+    | undefined
 }
 
 export const EventCard = (props: IProps) => {
@@ -132,10 +137,7 @@ export const EventCard = (props: IProps) => {
           }}
           mb={[2, 2, 0]}
         >
-          {props.event.tags &&
-            Object.keys(props.event.tags).map((tag) => {
-              return <TagDisplay key={tag} tagKey={tag} />
-            })}
+          {props.tags?.map((t, idx) => t && <CategoryTag key={idx} tag={t} />)}
         </Flex>
         {props.needsModeration && (
           <Flex

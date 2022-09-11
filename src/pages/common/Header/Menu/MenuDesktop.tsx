@@ -4,7 +4,7 @@ import { getAvailablePageList } from 'src/pages/PageList'
 import { Flex } from 'theme-ui'
 import styled from '@emotion/styled'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 import { getSupportedModules } from 'src/modules'
 
 const MenuLink = styled(NavLink)`

@@ -1,5 +1,4 @@
-import { Flex, Text } from 'theme-ui'
-import theme from 'src/themes/styled.theme'
+import { Flex, Alert } from 'theme-ui'
 import { observer } from 'mobx-react-lite'
 import { useCommonStores } from 'src'
 import { Link } from 'react-router-dom'
@@ -7,7 +6,7 @@ import { Link } from 'react-router-dom'
 /**
  * A simple notification banner component that reminds users to fill profile details
  */
-const NotificationBanner = observer(() => {
+export const AlertIncompleteProfile = observer(() => {
   const { userStore } = useCommonStores().stores
   const activeUser = userStore.activeUser
   if (!activeUser) return null
@@ -19,22 +18,22 @@ const NotificationBanner = observer(() => {
   if (isProfileFilled) return null
   return (
     <Link to="/settings">
-      <Flex
-        data-cy="notificationBanner"
-        bg={theme.colors.red2}
-        py={2}
-        px={1}
-        style={{ alignItems: 'center', zIndex: 3001 }}
-      >
-        <Text
-          color={'white'}
-          sx={{ flex: '1', textAlign: 'center', fontSize: 2 }}
+      <Flex data-cy="notificationBanner" style={{ zIndex: 3001 }}>
+        <Alert
+          variant="failure"
+          sx={{
+            borderRadius: 0,
+            alignItems: 'center',
+            flex: '1',
+            justifyContent: 'center',
+            textAlign: 'center',
+            fontSize: 2,
+            fontWeight: 'normal',
+          }}
         >
           Fill in your profile details before posting
-        </Text>
+        </Alert>
       </Flex>
     </Link>
   )
 })
-
-export default NotificationBanner

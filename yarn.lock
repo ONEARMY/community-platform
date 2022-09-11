@@ -25925,6 +25925,7 @@ fsevents@^1.2.7:
     react-portal: ^4.2.2
     react-router: ^5.2.0
     react-router-dom: ^5.2.0
+    react-tooltip: ^4.2.21
     storybook: ^6.4.22
     theme-ui: ^0.14.1
     ts-node: ^10.7.0
@@ -26324,7 +26325,6 @@ fsevents@^1.2.7:
     react-select: ^2.4.3
     react-slick: ^0.25.2
     react-table: ^6.10.3
-    react-tooltip: ^4.2.20
     react-virtualized: ^9.22.3
     rxjs: ^6.6.3
     sass: ^1.45.2
@@ -30604,7 +30604,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-tooltip@npm:^4.2.20":
+"react-tooltip@npm:^4.2.21":
   version: 4.2.21
   resolution: "react-tooltip@npm:4.2.21"
   dependencies:

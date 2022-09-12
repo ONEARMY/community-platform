@@ -25930,6 +25930,7 @@ fsevents@^1.2.7:
     theme-ui: ^0.14.1
     ts-node: ^10.7.0
     typescript: ^4.5.5
+    use-debounce: ^8.0.4
     webpack: ^5.72.0
   languageName: unknown
   linkType: soft
@@ -35386,6 +35387,15 @@ typescript@^4.4.3:
   peerDependencies:
     react: ">=16.8.0"
   checksum: c5c1c34ccef6c11fe25fecef983a07f5a7260fce77b58f0f648f6ae08693a22a9077b5362b96154896e9ea756e6aaea303eb44550a293456cecb6f15cf87d73b
+  languageName: node
+  linkType: hard
+
+"use-debounce@npm:^8.0.4":
+  version: 8.0.4
+  resolution: "use-debounce@npm:8.0.4"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 0f8b9e571f68a4694033ec00690bf73d781ac890140ae9ed4b330f71f7adb3f7d7df5cdaa32923c4d03fdc9de8a11be0f84301175ae4f66208af52ad03c55504
   languageName: node
   linkType: hard
 

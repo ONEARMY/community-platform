@@ -46,7 +46,6 @@ export const CommentItem = (props: CommentItemProps) => {
     isEditable,
   } = props
 
-  console.log(isEditable)
   useEffect(() => {
     if (textRef.current) {
       setTextHeight(textRef.current.scrollHeight)
@@ -55,6 +54,13 @@ export const CommentItem = (props: CommentItemProps) => {
 
   const showMore = () => {
     setShowMore(!isShowMore)
+  }
+
+  const onEditRequest = (_id: string) => {
+    if (handleEditRequest) {
+      handleEditRequest(_id)
+      return setShowEditModal(true)
+    }
   }
 
   return (
@@ -136,7 +142,7 @@ export const CommentItem = (props: CommentItemProps) => {
                 variant={'outline'}
                 small={true}
                 icon={'edit'}
-                onClick={() => handleEditRequest}
+                onClick={() => onEditRequest(_id)}
               >
                 edit
               </Button>

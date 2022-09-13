@@ -14,6 +14,7 @@ import {
   FieldInput,
   FieldTextarea,
   ElWithBeforeIcon,
+  FileInformation,
 } from 'oa-components'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import { Heading, Card, Flex, Box, Text } from 'theme-ui'
@@ -26,7 +27,6 @@ import { stripSpecialCharacters } from 'src/utils/helpers'
 import { PostingGuidelines } from './PostingGuidelines'
 import theme from 'src/themes/styled.theme'
 import { DIFFICULTY_OPTIONS, TIME_OPTIONS } from './FormSettings'
-import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import { HowToSubmitStatus } from './SubmitStatus'
 import { required, validateUrlAcceptEmpty } from 'src/utils/validators'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
@@ -35,7 +35,7 @@ import { UnsavedChangesDialog } from 'src/components/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import { HOWTO_MAX_LENGTH, HOWTO_TITLE_MAX_LENGTH } from '../../constants'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 
 const MAX_LINK_LENGTH = 2000
 
@@ -369,7 +369,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                     }}
                                   >
                                     {formValues.files.map((file) => (
-                                      <FileInfo
+                                      <FileInformation
                                         allowDownload
                                         file={file}
                                         key={file.name}

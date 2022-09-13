@@ -1,13 +1,19 @@
 import { PureComponent } from 'react'
-import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { format } from 'date-fns'
 import type { IHowtoDB } from 'src/models/howto.models'
 import { Heading, Text, Box, Flex, Image, AspectImage } from 'theme-ui'
-import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import StepsIcon from 'src/assets/icons/icon-steps.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
-import { Button, FlagIconHowTos, ModerationStatus } from 'oa-components'
+import {
+  Button,
+  FlagIconHowTos,
+  ModerationStatus,
+  LinkifyText,
+  UsefulStatsButton,
+  CategoryTag,
+  FileInformation,
+} from 'oa-components'
 import type { IUser } from 'src/models/user.models'
 import {
   isAllowToEditContent,
@@ -17,7 +23,6 @@ import {
 import theme from 'src/themes/styled.theme'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
-import { UsefulStatsButton } from 'src/components/UsefulStatsButton/UsefulStatsButton'
 import { DownloadExternal } from 'src/pages/Howto/DownloadExternal/DownloadExternal'
 import { Link } from 'react-router-dom'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
@@ -28,10 +33,9 @@ import {
   addHowtoDownloadCooldown,
   updateHowtoDownloadCooldown,
 } from './downloadCooldown'
-import StyledLinkify from 'src/components/StyledLinkify/StyledLinkify'
 
 interface IProps {
-  howto: IHowtoDB
+  howto: IHowtoDB & { taglist: any }
   loggedInUser: IUser | undefined
   needsModeration: boolean
   votedUsefulCount?: number
@@ -242,13 +246,7 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
             <Text
               sx={{ ...theme.typography.paragraph, whiteSpace: 'pre-line' }}
             >
-              <StyledLinkify
-                properties={{
-                  target: '_blank',
-                }}
-              >
-                {howto.description}
-              </StyledLinkify>
+              <LinkifyText>{howto.description}</LinkifyText>
             </Text>
           </Box>
 
@@ -288,10 +286,10 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
             </Flex>
           </Flex>
           <Flex mt={4}>
-            {howto.tags &&
-              Object.keys(howto.tags).map((tag) => {
-                return <TagDisplay key={tag} tagKey={tag} />
-              })}
+            {howto.taglist &&
+              howto.taglist.map((tag, idx) => (
+                <CategoryTag key={idx} tag={tag} sx={{ mr: 1 }} />
+              ))}
           </Flex>
           {((howto.files && howto.files.length > 0) || howto.fileLink) && (
             <Flex
@@ -305,14 +303,19 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
                   link={howto.fileLink}
                 />
               )}
-              {howto.files.map((file, index) => (
-                <FileInfo
-                  allowDownload
-                  file={file}
-                  key={file ? file.name : `file-${index}`}
-                  handleClick={this.handleClick}
-                />
-              ))}
+              {howto.files
+                .filter(Boolean)
+                .map(
+                  (file, index) =>
+                    file && (
+                      <FileInformation
+                        allowDownload
+                        file={file}
+                        key={file ? file.name : `file-${index}`}
+                        handleClick={this.handleClick}
+                      />
+                    ),
+                )}
               {typeof this.state.fileDownloadCount === 'number' && (
                 <Text
                   data-cy="file-download-counter"

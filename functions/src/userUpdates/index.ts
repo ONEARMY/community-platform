@@ -1,6 +1,12 @@
 import * as functions from 'firebase-functions'
 import { db } from '../Firebase/firestoreDB'
-import { DB_ENDPOINTS, IDBDocChange, IHowtoDB, IUserDB } from '../models'
+import {
+  DB_ENDPOINTS,
+  IDBDocChange,
+  IHowtoDB,
+  IResearchDB,
+  IUserDB,
+} from '../models'
 import { backupUser } from './backupUser'
 
 /*********************************************************************
@@ -31,7 +37,7 @@ async function processHowToUpdates(change: IDBDocChange) {
   if (didChangeCountry) {
     // Update country flag in user's created howTos
     const country = newCountryCode ? newCountryCode : newCountry.toLowerCase()
-    await updateHowTosCountry(info._id, country)
+    await updatePostsCountry(info._id, country)
   }
 
   const didChangeUserName = prevInfo.userName !== info.userName
@@ -48,48 +54,71 @@ async function processHowToUpdates(change: IDBDocChange) {
   }
 }
 
-async function updateHowTosCountry(
-  userId: string,
-  country: IUserDB['country'],
-) {
+async function updatePostsCountry(userId: string, country: IUserDB['country']) {
   if (!userId || !country) {
     console.error('Missing information to set howToCountry')
     return false
   }
-  console.log("Updating howto's from user", userId, 'to country:', country)
-  let count = 0
+  console.log(
+    "Updating howto's and researches from user",
+    userId,
+    'to country:',
+    country,
+  )
 
-  const querySnapshot = await db
+  // 1. Update howTos
+  let updatedHowToCount = 0
+  const howToQuerySnapshot = await db
     .collection(DB_ENDPOINTS.howtos)
     .where('_createdBy', '==', userId)
     .get()
 
-  if (querySnapshot) {
-    querySnapshot.forEach((doc) => {
-      doc.ref
-        .update({
+  if (howToQuerySnapshot) {
+    for (const doc of howToQuerySnapshot.docs) {
+      try {
+        await doc.ref.update({
           creatorCountry: country,
           _modified: new Date().toISOString(),
         })
-        .then(() => {
-          count += 1
-          return true
-        })
-        .catch((error) => {
-          console.error('Error updating HowToCountry: ', error)
-          return false
-        })
-    })
+        updatedHowToCount += 1
+      } catch (error) {
+        console.error('Error updating HowToCountry: ', error)
+      }
+    }
   } else {
     console.log('Error getting user howTo')
+  }
+  console.log('Successfully updated', updatedHowToCount, 'howTos!')
+
+  // 2. Update Researches
+  let updatedResearchCount = 0
+  const researchQuerySnapshot = await db
+    .collection(DB_ENDPOINTS.research)
+    .where('_createdBy', '==', userId)
+    .get()
+  if (researchQuerySnapshot) {
+    for (const doc of researchQuerySnapshot.docs) {
+      try {
+        await doc.ref.update({
+          creatorCountry: country,
+          _modified: new Date().toISOString(),
+        })
+        updatedResearchCount += 1
+      } catch (error) {
+        console.error('Error updating Research: ', error)
+      }
+    }
+  } else {
+    console.log('Error getting user researches')
     return false
   }
-  console.log('Successfully updated', count, 'howTos!')
+  console.log('Successfully updated', updatedResearchCount, 'researches!')
+
   return false
 }
 
 /**
- * Updates either `userName` or `country` in any comments made by the user on any HowTo
+ * Updates either `userName` or `country` in any comments made by the user on any HowTo or research
  */
 async function updateUserCommentsInfo({
   originalUserName,
@@ -107,11 +136,13 @@ async function updateUserCommentsInfo({
   if (newUserName) {
     console.log('with new userName', newUserName)
   }
-  const querySnapshot = await db.collection(DB_ENDPOINTS.howtos).get()
 
+  // 1. Update howTo comments
   let count = 0
-  if (querySnapshot) {
-    for (const doc of querySnapshot.docs) {
+  const howToQuerySnapshot = await db.collection(DB_ENDPOINTS.howtos).get()
+
+  if (howToQuerySnapshot) {
+    for (const doc of howToQuerySnapshot.docs) {
       const howto = doc.data() as IHowtoDB
       if (
         howto.comments &&
@@ -143,10 +174,73 @@ async function updateUserCommentsInfo({
           })
           count += toUpdateCount
         } catch (error) {
-          console.error('Error updating comment: ', error)
+          console.error('Error updating howTo comment: ', error)
         }
       }
     }
   }
-  console.log('Successfully updated', count, 'comments!')
+  console.log('Successfully updated', count, 'howTo comments!')
+
+  // 2. update Research comments
+  count = 0
+  const researchQuerySnapshot = await db.collection(DB_ENDPOINTS.research).get()
+
+  if (researchQuerySnapshot) {
+    for (const doc of researchQuerySnapshot.docs) {
+      const research = doc.data() as IResearchDB
+      if (
+        research.updates &&
+        research.updates.some(
+          (update) =>
+            update.comments &&
+            update.comments.some(
+              (comment) => comment.creatorName === originalUserName,
+            ),
+        )
+      ) {
+        let toUpdateCount = 0
+        const updatedResearchUpdates = research.updates.map((update) => {
+          if (
+            !update.comments ||
+            !update.comments.some(
+              (comment) => comment.creatorName === originalUserName,
+            )
+          )
+            return update
+
+          const updatedComments = update.comments.map((comment) => {
+            if (comment.creatorName !== originalUserName) return comment
+
+            const updatedComment = {
+              ...comment,
+            }
+            if (newUserName) {
+              updatedComment.creatorName = newUserName
+            }
+            if (country) {
+              updatedComment.creatorCountry = country
+            }
+
+            toUpdateCount += 1
+            return updatedComment
+          })
+
+          return {
+            ...update,
+            comments: updatedComments,
+          }
+        })
+
+        try {
+          await doc.ref.update({
+            updates: updatedResearchUpdates,
+          })
+          count += toUpdateCount
+        } catch (error) {
+          console.error('Error updating research comment: ', error)
+        }
+      }
+    }
+  }
+  console.log('Successfully updated', count, 'research comments!')
 }

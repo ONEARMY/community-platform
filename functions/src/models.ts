@@ -6,13 +6,23 @@ import type {
   IDBEndpoint,
   IEventDB,
   IHowtoDB,
+  IMapPin,
+  IModerable,
+  IResearchDB,
+  IUserDB,
+} from 'one-army-community-platform/src/models'
+export {
+  DBDoc,
+  IDBEndpoint,
+  IEventDB,
+  IHowtoDB,
   IUserDB,
   IMapPin,
   IModerable,
-} from 'one-army-community-platform/src/models'
-export { DBDoc, IDBEndpoint, IEventDB, IHowtoDB, IUserDB, IMapPin, IModerable }
+  IResearchDB,
+}
 
-import { generateDBEndpoints, dbEndpointSubollections } from 'oa-shared'
+import { dbEndpointSubollections, generateDBEndpoints } from 'oa-shared'
 export const DB_ENDPOINTS = generateDBEndpoints()
 export const DB_ENDPOINT_SUBCOLLECTIONS = dbEndpointSubollections
 

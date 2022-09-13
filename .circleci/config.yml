@@ -474,7 +474,7 @@ workflows:
             - circle-ci-slack-context
             - project-kamp-dev
       - deploy:
-          name: 'Deploy: fixing-fashion-dev.web.app'
+          name: 'Deploy: dev.community.fixing.fashion'
           requires:
             - test_e2e
           <<: *filter_only_master
@@ -496,7 +496,7 @@ workflows:
             - 'Release new version to GitHub'
           <<: *filter_only_production
       - deploy:
-          name: 'Deploy: fixing-fashion-prod.web.app'
+          name: 'Deploy: community.fixing.fashion'
           requires:
             - 'Build Production Release'
           <<: *filter_only_production

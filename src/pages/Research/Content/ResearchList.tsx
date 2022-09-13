@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react'
 import { Box, Flex, Heading, Text } from 'theme-ui'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 import { Button, Icon } from 'oa-components'
 import ResearchListItem from './ResearchListItem'
 import { useResearchStore } from 'src/stores/Research/research.store'

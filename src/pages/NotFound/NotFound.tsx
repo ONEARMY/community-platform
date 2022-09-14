@@ -24,7 +24,9 @@ export class NotFoundPage extends React.Component {
             marginBottom: '2vw',
           }}
         />
-        <div style={{ marginBottom: '2em' }}>Nada, page not found 💩</div>
+        <div style={{ marginBottom: '2em' }} data-test="NotFound: Heading">
+          Nada, page not found 💩
+        </div>
         Go to the <Link to="/">home page</Link>
       </Box>
     )

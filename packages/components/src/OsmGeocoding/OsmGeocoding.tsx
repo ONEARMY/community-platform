@@ -1,11 +1,10 @@
 import { useState, useRef, useEffect } from 'react'
 import { Input } from 'theme-ui'
 import { OsmGeocodingResultsList } from './OsmGeocodingResultsList'
-import { logger } from 'src/logger'
 import { useDebouncedCallback } from 'use-debounce'
-import OsmGeocodingLoader from './OsmGeocodingLoader'
+import { OsmGeocodingLoader } from './OsmGeocodingLoader'
 
-interface Props {
+export interface Props {
   placeholder?: string
   debounceMs?: number
   iconUrl?: string
@@ -14,13 +13,21 @@ interface Props {
   countrycodes?: string
   acceptLanguage?: string
   viewbox?: string
+  loading?: boolean
 }
 
 export interface Result {
+  place_id: number
+  licence: string
+  osm_type: string
+  osm_id: number
   boundingbox: Array<string>
   display_name: string
   lat: string
   lon: string
+  class: string
+  type: string
+  importance: number
   icon?: string
 }
 
@@ -30,11 +37,12 @@ export const OsmGeocoding = ({
   callback,
   acceptLanguage = 'en',
   viewbox = '',
+  loading = false,
 }: Props) => {
   const [searchValue, setSearchValue] = useState('')
   const [results, setResults] = useState<Result[]>([])
   const [showResults, setShowResults] = useState(false)
-  const [showLoader, setShowLoader] = useState(false)
+  const [showLoader, setShowLoader] = useState(loading)
   const [queryLocationService, setQueryLocationService] = useState(false)
   const mainContainerRef = useRef<HTMLDivElement>(null)
 
@@ -54,7 +62,6 @@ export const OsmGeocoding = ({
   }
 
   function getGeocoding(address = '') {
-    logger.debug(`OsmGeocoding.getGeocoding:`, { address })
     if (address.length === 0) return
 
     setShowLoader(true)
@@ -76,7 +83,7 @@ export const OsmGeocoding = ({
         setResults(data)
         setShowResults(true)
       })
-      .catch((err) => logger.error(err, 'OsmGeocoding.getGeocoding.error'))
+      .catch(null)
       .finally(() => setShowLoader(false))
   }
 
@@ -87,10 +94,6 @@ export const OsmGeocoding = ({
   )
 
   useEffect(() => {
-    logger.debug(`OsmGeocoding.useEffect`, {
-      searchValue,
-      queryLocationService,
-    })
     if (queryLocationService) {
       dcb(searchValue)
     }
@@ -125,7 +128,6 @@ export const OsmGeocoding = ({
         onClick={() => setShowResults(true)}
         onChange={(event) => {
           setQueryLocationService(true)
-          logger.debug(`onchange.setSearchValue`, event.target.value)
           setSearchValue(event.target.value)
         }}
       />
@@ -133,7 +135,7 @@ export const OsmGeocoding = ({
       {showResultsListing && (
         <OsmGeocodingResultsList
           results={results}
-          callback={(result) => {
+          callback={(result: Result) => {
             if (result) {
               setQueryLocationService(false)
               setSearchValue(result.display_name)
@@ -147,5 +149,3 @@ export const OsmGeocoding = ({
     </div>
   )
 }
-
-export default OsmGeocoding

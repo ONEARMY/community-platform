@@ -1,33 +1,23 @@
-import {
-  Story,
-  Meta,
-  Preview,
-  Props,
-  Description,
-} from '@storybook/addon-docs'
-import OsmGeocoding from './OsmGeocoding'
-import OsmGeocodingResultsList from './OsmGeocodingResultsList'
-import OsmGeocodingLoader from './OsmGeocodingLoader'
+import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import { OsmGeocoding } from './OsmGeocoding'
+import { OsmGeocodingResultsList } from './OsmGeocodingResultsList'
 
-<Meta title="Components|OsmGeocoding" component={OsmGeocoding} />
+export default {
+  title: 'Components/OsmGeocoding',
+  component: OsmGeocoding,
+} as ComponentMeta<typeof OsmGeocoding>
 
-# OSM Geocoding
+export const Default: ComponentStory<typeof OsmGeocoding> = () => (
+  <OsmGeocoding loading={false} />
+)
 
-Queries the [OSM Search API](https://nominatim.openstreetmap.org/ui/about.html) for location results.
+export const Loading: ComponentStory<typeof OsmGeocoding> = () => (
+  <OsmGeocoding loading />
+)
 
-<Story name="Default">
-  <OsmGeocoding />
-</Story>
-
-<br/>
-
-## Nested Components
-
-<br />
-
-### Results List
-
-<Story name="Results List">
+export const ResultsList: ComponentStory<
+  typeof OsmGeocodingResultsList
+> = () => (
   <OsmGeocodingResultsList
     results={[
       {
@@ -43,8 +33,7 @@ Queries the [OSM Search API](https://nominatim.openstreetmap.org/ui/about.html) 
         class: 'boundary',
         type: 'administrative',
         importance: 0.5823870580190648,
-        icon:
-          'https://nominatim.openstreetmap.org/ui/mapicons//poi_boundary_administrative.p.20.png',
+        icon: 'https://nominatim.openstreetmap.org/ui/mapicons//poi_boundary_administrative.p.20.png',
       },
       {
         place_id: 79535975,
@@ -60,8 +49,7 @@ Queries the [OSM Search API](https://nominatim.openstreetmap.org/ui/about.html) 
         class: 'railway',
         type: 'station',
         importance: 0.406301518086152,
-        icon:
-          'https://nominatim.openstreetmap.org/ui/mapicons//transport_train_station2.p.20.png',
+        icon: 'https://nominatim.openstreetmap.org/ui/mapicons//transport_train_station2.p.20.png',
       },
       {
         place_id: 208556,
@@ -94,11 +82,7 @@ Queries the [OSM Search API](https://nominatim.openstreetmap.org/ui/about.html) 
         importance: 0.101,
       },
     ]}
+    callback={undefined}
+    setShowResults={() => null}
   />
-</Story>
-
-### Loading State
-
-<Story name="Loading state">
-  <OsmGeocodingLoader />
-</Story>
+)

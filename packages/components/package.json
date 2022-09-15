@@ -30,6 +30,7 @@
     "react-tooltip": "^4.2.21",
     "storybook": "^6.4.22",
     "theme-ui": "^0.14.1",
+    "use-debounce": "^8.0.4",
     "webpack": "^5.72.0"
   },
   "devDependencies": {

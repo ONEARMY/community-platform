@@ -1,14 +1,11 @@
 import * as React from 'react'
-import OsmGeocoding from 'src/components/OsmGeocoding/OsmGeocoding'
 import { Map, TileLayer, Marker, ZoomControl } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
-import { Button } from 'oa-components'
+import { Button, OsmGeocoding } from '../'
 import { Box, Flex, Text } from 'theme-ui'
 import customMarkerIcon from 'src/assets/icons/map-marker.png'
-import { logger } from 'src/logger'
-import styled from '@emotion/styled'
-import { useTheme } from '@emotion/react'
+import type { Result } from '../OsmGeocoding/OsmGeocoding'
 
 const customMarker = L.icon({
   iconUrl: customMarkerIcon,
@@ -16,7 +13,7 @@ const customMarker = L.icon({
   iconAnchor: [10, 28],
 })
 
-function DraggableMarker(props: { position: any; ondragend: any }) {
+const DraggableMarker = (props: { position: any; ondragend: any }) => {
   const [draggable] = React.useState(true)
   const markerRef = React.useRef(null)
 
@@ -27,13 +24,11 @@ function DraggableMarker(props: { position: any; ondragend: any }) {
         const marker: any = markerRef.current
 
         if (!marker) {
-          logger.warn('DraggableMarker: marker not found')
           return null
         }
 
         const markerLatLng = marker.leafletElement.getLatLng()
         if (props.ondragend) {
-          logger.debug({ markerLatLng }, 'DraggableMarker.Marker.ondragend')
           props.ondragend(markerLatLng)
         }
       }}
@@ -44,15 +39,7 @@ function DraggableMarker(props: { position: any; ondragend: any }) {
   )
 }
 
-const MapControls = styled('div')`
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: ${(props) => props.theme.space[2]}px;
-  z-index: 2;
-`
-
-interface Props {
+export interface Props {
   position: any
   updatePosition?: any
   center?: any
@@ -60,20 +47,13 @@ interface Props {
   hasUserLocation?: boolean
 }
 
-function MapWithDraggablePin(props: Props) {
-  const theme = useTheme()
+export const MapWithDraggablePin = (props: Props) => {
   const [zoom, setZoom] = React.useState(props.zoom || 1)
   const [center, setCenter] = React.useState(
     props.center || [props.position.lat, props.position.lng],
   )
   const hasUserLocation = props.hasUserLocation || false
-  const onPositionChanged =
-    props.updatePosition ||
-    function (evt) {
-      logger.debug({ evt }, 'MapWithDraggablePin.clickHandler.fallback')
-    }
-
-  console.log(`fontSize`, theme.fontSizes[1])
+  const onPositionChanged = props.updatePosition || function () {}
 
   return (
     <div
@@ -81,11 +61,18 @@ function MapWithDraggablePin(props: Props) {
         position: 'relative',
       }}
     >
-      <MapControls>
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          padding: 2,
+          zIndex: 2,
+        }}
+      >
         <Flex style={{ width: '280px' }}>
           <OsmGeocoding
-            callback={(data) => {
-              logger.debug(data, 'MapWithDraggablePin.ReactOsmGeocoding')
+            callback={(data: Result) => {
               if (data.lat && data.lon) {
                 onPositionChanged({
                   lat: data.lat,
@@ -105,9 +92,6 @@ function MapWithDraggablePin(props: Props) {
                 evt.preventDefault()
                 navigator.geolocation.getCurrentPosition(
                   (position) => {
-                    logger.debug(`MapWithDraggablePin.geolocation.success`, {
-                      position,
-                    })
                     onPositionChanged({
                       lat: position.coords.latitude,
                       lng: position.coords.longitude,
@@ -118,9 +102,7 @@ function MapWithDraggablePin(props: Props) {
                     ])
                     setZoom(15)
                   },
-                  (err) => {
-                    logger.error(err, 'MapWithDraggablePin.geolocation.error')
-                  },
+                  () => {},
                 )
               }}
             >
@@ -128,20 +110,18 @@ function MapWithDraggablePin(props: Props) {
             </Button>
           )}
         </Flex>
-      </MapControls>
+      </Box>
       <div>
         <Map
           center={center}
           zoom={zoom}
           zoomControl={false}
           onViewportChanged={(evt) => {
-            logger.debug(evt, `MapWithDraggablePin.onViewportChanged`)
             if (evt.zoom) {
               setZoom(evt.zoom)
             }
           }}
           onclick={(evt) => {
-            logger.debug(evt, 'MapWithDraggablePin.onclick')
             onPositionChanged({
               lat: evt.latlng.lat,
               lng: evt.latlng.lng,
@@ -159,9 +139,7 @@ function MapWithDraggablePin(props: Props) {
           />
           <DraggableMarker
             position={props.position}
-            ondragend={(evt) => {
-              logger.debug(evt, `MapWithDraggablePin.DraggableMarker.onDragEnd`)
-
+            ondragend={(evt: any) => {
               if (evt.lat && evt.lng)
                 onPositionChanged({
                   lat: evt.lat,
@@ -171,7 +149,14 @@ function MapWithDraggablePin(props: Props) {
           />
         </Map>
       </div>
-      <Box bg={theme.colors.softblue} mt={2} p={2} sx={{ borderRadius: '3px' }}>
+      <Box
+        sx={{
+          p: 2,
+          mt: 2,
+          background: 'softblue',
+          borderRadius: 1,
+        }}
+      >
         <Text sx={{ fontSize: 1 }}>
           You can click on the map, or drag the marker to adjust it's position.
         </Text>
@@ -179,5 +164,3 @@ function MapWithDraggablePin(props: Props) {
     </div>
   )
 }
-
-export default MapWithDraggablePin

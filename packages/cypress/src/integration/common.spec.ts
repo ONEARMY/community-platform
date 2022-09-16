@@ -9,11 +9,10 @@ describe('[Common]', () => {
   it('[Not-Found Page]', () => {
     const unknownUrl = '/abcdefghijklm'
     cy.visit(unknownUrl)
-    cy.contains('404').should('be.exist')
-    cy.contains(
-      `The page you were looking for was moved or doesn't exist`,
-    ).should('be.exist')
-    cy.get('a').contains('Home').should('have.attr', 'href').and('eq', '/')
+    cy.get('[data-test="NotFound: Heading"]')
+      .contains(`Nada, page not found 💩`)
+      .should('be.exist')
+    cy.get('a').contains('home page').should('have.attr', 'href').and('eq', '/')
   })
 
   it('[Page Navigation]', () => {

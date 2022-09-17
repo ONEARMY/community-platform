@@ -24,6 +24,7 @@ import {
   randomID,
 } from 'src/utils/helpers'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
+import { convertUserReferenceToPlainText } from '../common/filters'
 
 const COLLECTION_NAME = 'research'
 
@@ -65,6 +66,7 @@ export class ResearchStore extends ModuleStore {
     return comments.map((comment: IComment) => {
       return {
         ...comment,
+        text: convertUserReferenceToPlainText(comment.text),
         isUserVerified:
           !!this.aggregationsStore.aggregations.users_verified?.[
             comment.creatorName

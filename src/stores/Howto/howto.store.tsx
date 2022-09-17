@@ -23,6 +23,7 @@ import { ModuleStore } from '../common/module.store'
 import type { IUploadedFileMeta } from '../storage'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
+import { convertUserReferenceToPlainText } from '../common/filters'
 
 const COLLECTION_NAME = 'howtos'
 const HOWTO_SEARCH_WEIGHTS = [
@@ -82,6 +83,7 @@ export class HowtoStore extends ModuleStore {
       ? this.activeHowto?.comments.map((comment: IComment) => {
           return {
             ...comment,
+            text: convertUserReferenceToPlainText(comment.text),
             isUserVerified:
               !!this.aggregationsStore.aggregations.users_verified?.[
                 comment.creatorName

@@ -10,7 +10,7 @@ import type { IUploadedFileMeta } from '../storage'
 import { Storage } from '../storage'
 import { useCommonStores } from 'src/index'
 import { logger } from 'src/logger'
-import type { NotificationType } from 'src/models'
+import type { IUser, NotificationType } from 'src/models'
 
 /**
  * The module store is used to share methods and data between other stores, including
@@ -208,13 +208,17 @@ export class ModuleStore {
     const mentionedUsers = new Set<string>()
     for (const mention of mentions) {
       const userId = mention.replace('@', '')
-      const userProfile = await this.userStore.getUserProfile(userId)
+      const userProfile: IUser = await this.userStore.getUserProfile(userId)
       if (userProfile) {
-        const username = userProfile.userName
-        const link = '/u/' + userProfile.userName
-        text = text.replace(mention, `@[${username}:${link}]`)
+        console.log(`Userprofile found`, { userProfile })
+        text = text.replace(
+          mention,
+          `@@{${userProfile._authID}:${userProfile.userName}}`,
+        )
         console.log(text)
         mentionedUsers.add(userId)
+      } else {
+        logger.debug('Unable to find matching profile with')
       }
     }
     return { text, mentionedUsers }

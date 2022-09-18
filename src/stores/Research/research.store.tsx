@@ -24,6 +24,10 @@ import {
   randomID,
 } from 'src/utils/helpers'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
+import {
+  changeMentionToUserReference,
+  changeUserReferenceToPlainText,
+} from '../common/mentions'
 
 const COLLECTION_NAME = 'research'
 
@@ -65,6 +69,7 @@ export class ResearchStore extends ModuleStore {
     return comments.map((comment: IComment) => {
       return {
         ...comment,
+        text: changeUserReferenceToPlainText(comment.text),
         isUserVerified:
           !!this.aggregationsStore.aggregations.users_verified?.[
             comment.creatorName
@@ -79,9 +84,19 @@ export class ResearchStore extends ModuleStore {
       const collection = await this.db
         .collection<IResearch.ItemDB>(COLLECTION_NAME)
         .getWhere('slug', '==', slug)
-      const researchItem = collection.length > 0 ? collection[0] : undefined
+      const researchItem: IResearch.ItemDB =
+        collection.length > 0 ? collection[0] : undefined
       runInAction(() => {
-        this.activeResearchItem = researchItem
+        this.activeResearchItem = {
+          ...researchItem,
+          description: changeUserReferenceToPlainText(researchItem.description),
+          updates: researchItem.updates.map((update) => {
+            update.description = changeUserReferenceToPlainText(
+              update.description,
+            )
+            return update
+          }),
+        }
       })
       // load Research stats which are stored in a separate subcollection
       await this.loadResearchStats(researchItem?._id)
@@ -141,6 +156,10 @@ export class ResearchStore extends ModuleStore {
     this.updateUploadStatus = getInitialUpdateUploadStatus()
   }
 
+  private async addUserReference(text: string): Promise<string> {
+    return await changeMentionToUserReference(text, this.userStore)
+  }
+
   public async addComment(
     text: string,
     update: IResearch.Update | IResearch.UpdateDB,
@@ -163,7 +182,7 @@ export class ResearchStore extends ModuleStore {
           _creatorId: user._id,
           creatorName: user.userName,
           creatorCountry: userCountry,
-          text: comment,
+          text: await this.addUserReference(comment),
         }
 
         const updateWithMeta = { ...update }
@@ -293,7 +312,9 @@ export class ResearchStore extends ModuleStore {
         } else updateWithMeta.images = []
 
         if (commentIndex !== -1) {
-          pastComments[commentIndex].text = newText
+          pastComments[commentIndex].text = (
+            await this.addUserReference(newText)
+          )
             .slice(0, MAX_COMMENT_LENGTH)
             .trim()
           pastComments[commentIndex]._edited = new Date().toISOString()
@@ -340,6 +361,7 @@ export class ResearchStore extends ModuleStore {
       const userCountry = getUserCountry(user)
       const research: IResearch.Item = {
         ...values,
+        description: await this.addUserReference(values.description),
         _createdBy: values._createdBy ? values._createdBy : user.userName,
         moderation: values.moderation ? values.moderation : 'accepted', // No moderation needed for researches for now
         updates,
@@ -419,6 +441,15 @@ export class ResearchStore extends ModuleStore {
             _modified: new Date().toISOString(),
           }
         }
+
+        //
+        logger.debug('Update steps', newItem.updates)
+        await Promise.all(
+          newItem.updates.map(async (up, idx) => {
+            const text = await this.addUserReference(up.description)
+            newItem.updates[idx].description = text
+          }),
+        )
 
         logger.debug(
           'old and new modified:',

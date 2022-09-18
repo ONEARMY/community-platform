@@ -154,12 +154,15 @@ export class Howto extends React.Component<
 
       const activeHowToComments: UserComment[] = this.store
         .getActiveHowToComments()
-        .map((c): UserComment => {
-          return {
+        .map(
+          (c): UserComment => ({
             ...c,
-            isEditable: c._creatorId === this.injected.userStore.user?.userName,
-          }
-        })
+            isEditable: [
+              this.injected.userStore.user?._id,
+              this.injected.userStore.user?.userName,
+            ].includes(c._creatorId),
+          }),
+        )
 
       const { allTagsByKey } = this.injected.tagsStore
       const howto = {

@@ -1,7 +1,6 @@
 import { createRef, useEffect, useState } from 'react'
-import Linkify from 'react-linkify'
 import { Link } from 'react-router-dom'
-import { Button, EditComment, Modal } from '../index'
+import { Button, EditComment, Modal, LinkifyText } from '../index'
 import { Box, Flex, Text } from 'theme-ui'
 import { FlagIconHowTos } from '../FlagIcon/FlagIcon'
 import { Icon } from '../Icon/Icon'
@@ -120,7 +119,7 @@ export const CommentItem = (props: CommentItemProps) => {
           }}
           ref={textRef}
         >
-          <Linkify properties={{ target: '_blank' }}>{text}</Linkify>
+          <LinkifyText>{text}</LinkifyText>
         </Text>
         {textHeight > 129 && (
           <a

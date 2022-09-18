@@ -1,5 +1,5 @@
 import type { FieldProps } from './types'
-import OsmGeocoding from '../OsmGeocoding/OsmGeocoding'
+import { OsmGeocoding } from 'oa-components'
 import { logger } from 'src/logger'
 import { getLocationData } from 'src/utils/getLocationData'
 interface IExtendedFieldProps extends FieldProps {

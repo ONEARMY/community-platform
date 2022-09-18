@@ -70,6 +70,7 @@ const alerts = {
     paddingY: 3,
     backgroundColor: colors.green,
     textAlign: 'center',
+    fontWeight: 'normal',
   },
   failure: {
     borderRadius: 1,
@@ -77,6 +78,7 @@ const alerts = {
     paddingY: 3,
     backgroundColor: colors.red2,
     textAlign: 'center',
+    fontWeight: 'normal',
   },
 }
 

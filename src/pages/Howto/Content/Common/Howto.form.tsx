@@ -521,8 +521,10 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                 <Flex
                   sx={{
                     flexDirection: 'column',
-                    width: [1, 1, 1 / 3],
+                    width: ['100%', '100%', `${100 / 3}%`],
                     height: '100%',
+                    position: ['relative', 'relative', 'sticky'],
+                    top: 3,
                   }}
                   bg="inherit"
                   px={2}
@@ -530,7 +532,6 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                 >
                   <Box
                     sx={{
-                      position: ['relative', 'relative', 'fixed'],
                       maxWidth: ['inherit', 'inherit', '400px'],
                     }}
                   >

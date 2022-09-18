@@ -25,6 +25,7 @@ import {
 } from 'src/utils/helpers'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { convertUserReferenceToPlainText } from '../common/filters'
+import { parseMentions } from '../common/parseMentions'
 
 const COLLECTION_NAME = 'research'
 
@@ -153,7 +154,7 @@ export class ResearchStore extends ModuleStore {
     let comment = text.slice(0, MAX_COMMENT_LENGTH).trim()
 
     if (item && comment && user) {
-      const mentions = await this.parseMentions(comment)
+      const mentions = await parseMentions(comment, this.userStore)
       comment = mentions.text
       const dbRef = this.db
         .collection<IResearch.Item>(COLLECTION_NAME)

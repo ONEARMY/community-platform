@@ -24,6 +24,7 @@ import type { IUploadedFileMeta } from '../storage'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
 import { convertUserReferenceToPlainText } from '../common/filters'
+import { parseMentions } from '../common/parseMentions'
 
 const COLLECTION_NAME = 'howtos'
 const HOWTO_SEARCH_WEIGHTS = [
@@ -175,7 +176,7 @@ export class HowtoStore extends ModuleStore {
       let comment = text.slice(0, MAX_COMMENT_LENGTH).trim()
 
       if (user && howto && comment) {
-        const mentions = await this.parseMentions(comment)
+        const mentions = await parseMentions(comment, this.userStore)
         comment = mentions.text
         const userCountry = getUserCountry(user)
         const newComment: IComment = {

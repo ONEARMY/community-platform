@@ -61,7 +61,7 @@ describe('parseMentions', () => {
     })
   })
 
-  it.only('handles errors when fetching user', async () => {
+  it('handles errors when fetching user', async () => {
     mockUserStore.getUserProfile.mockRejectedValue(new Error())
 
     expect(
@@ -74,6 +74,4 @@ describe('parseMentions', () => {
       mentionedUsers: new Set([]),
     })
   })
-
-
 })

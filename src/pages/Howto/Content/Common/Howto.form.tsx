@@ -280,7 +280,6 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                           input.onChange(category)
                                         }
                                         value={input.value}
-                                        styleVariant="selector"
                                         placeholder="Select one category"
                                       />
                                     )}

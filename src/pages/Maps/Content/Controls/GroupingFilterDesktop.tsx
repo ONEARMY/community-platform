@@ -1,11 +1,8 @@
 import { Component } from 'react'
-import Select, { components } from 'react-select'
-import type { MultiValueRemoveProps } from 'react-select/lib/components/MultiValue'
 import checkmarkIcon from 'src/assets/icons/icon-checkmark.svg'
-import { DropdownIndicator } from 'src/components/DropdownIndicator'
 import type { MapsStore } from 'src/stores/Maps/maps.store'
 import { Box, Flex, Image, Text } from 'theme-ui'
-import { SelectStyles } from 'src/components/Form/Select.field'
+import { Select } from 'oa-components'
 import type { FilterGroup } from './transformAvailableFiltersToGroups'
 
 interface IProps {
@@ -15,17 +12,6 @@ interface IProps {
 }
 interface IInjectedProps extends IProps {
   mapsStore: MapsStore
-}
-
-interface FilterOption {
-  label: string
-  value: string
-  icon: string
-  number: number
-}
-
-const MultiValueRemove = (props: MultiValueRemoveProps<FilterOption>) => {
-  return <components.MultiValueRemove {...props}> </components.MultiValueRemove>
 }
 
 class GroupingFilterDesktop extends Component<IProps> {
@@ -77,39 +63,10 @@ class GroupingFilterDesktop extends Component<IProps> {
         }}
       >
         <Select
-          components={{ DropdownIndicator, MultiValueRemove }}
+          variant="icons"
           isMulti
-          styles={{
-            ...SelectStyles,
-            multiValue: (base) => ({
-              ...base,
-              minWidth: 'auto',
-            }),
-            multiValueRemove: () => ({}),
-            valueContainer: (base) => ({
-              ...base,
-              flexWrap: 'nowrap',
-              overflow: 'auto',
-            }),
-            control: () => ({
-              width: '100%',
-              background: 'white',
-              fontFamily: 'Varela Round',
-              fontSize: '14px',
-              border: '2px solid black',
-              height: '44px',
-              display: 'flex',
-              borderRadius: '5px',
-              marginBottom: 0,
-            }),
-          }}
           options={groupedOptions}
-          disableSearch={true}
           onChange={onSelectChange}
-          hasSelectAll
-          hideSelectedOptions={false}
-          isSearchable={false}
-          closeMenuOnSelect={false}
           formatOptionLabel={optionsRender}
           placeholder="Select filters"
         />

@@ -289,7 +289,7 @@ const UpdateForm = observer((props: IProps) => {
               <Flex
                 sx={{
                   flexDirection: 'column',
-                  width: [1, 1, 1 / 3],
+                  width: ['100%', '100%', `${100 / 3}%`],
                   height: '100%',
                 }}
                 bg="inherit"
@@ -298,7 +298,8 @@ const UpdateForm = observer((props: IProps) => {
               >
                 <Box
                   sx={{
-                    position: ['relative', 'relative', 'fixed'],
+                    position: ['relative', 'relative', 'sticky'],
+                    top: 3,
                     maxWidth: ['inherit', 'inherit', '400px'],
                   }}
                 >

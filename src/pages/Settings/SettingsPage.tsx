@@ -266,7 +266,7 @@ export class UserSettings extends React.Component<IProps, IState> {
               {/* desktop guidelines container */}
               <Flex
                 sx={{
-                  width: ['100%', '100%', `${100 * 0.333}%`],
+                  width: ['100%', '100%', `${100 / 3}%`],
                   flexDirection: 'column',
                   bg: 'inherit',
                   px: 2,
@@ -276,7 +276,8 @@ export class UserSettings extends React.Component<IProps, IState> {
               >
                 <Box
                   sx={{
-                    position: ['relative', 'relative', 'fixed'],
+                    position: ['relative', 'relative', 'sticky'],
+                    top: 3,
                     maxWidth: ['100%', '100%', '400px'],
                   }}
                 >

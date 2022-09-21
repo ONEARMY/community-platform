@@ -8,12 +8,12 @@ describe('[Sign in]', () => {
     cy.step('Lost Password requires email')
     cy.visit('/sign-in')
     cy.get('[data-cy=lost-password]').click()
-    cy.get('[data-cy=notification-error]').should('be.visible')
+    cy.get('[data-cy="TextNotification: failure"]').should('be.visible')
 
     cy.step('Lost Password cannot sent a reset link on wrong email')
     cy.get('[data-cy=email]').clear().type('what_is_mypassword@test.com')
     cy.get('[data-cy=lost-password]').click()
-    cy.get('[data-cy=notification-error]').should('be.visible')
+    cy.get('[data-cy="TextNotification: failure"]').should('be.visible')
 
     cy.step('Login with correct credentials')
     cy.get('[data-cy=email]').clear().type('howto_reader@test.com')

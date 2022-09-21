@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Card, Flex, Heading, Box } from 'theme-ui'
+import { Card, Flex, Heading, Box, Text } from 'theme-ui'
 import type { IUserPP } from 'src/models/user_pp.models'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { UserStore } from 'src/stores/User/user.store'
@@ -10,9 +10,8 @@ import { ExpertiseSection } from './content/formSections/Expertise.section'
 import { WorkspaceSection } from './content/formSections/Workspace.section'
 import { CollectionSection } from './content/formSections/Collection.section'
 import { AccountSettingsSection } from './content/formSections/AccountSettings.section'
-import { Button } from 'oa-components'
+import { Button, TextNotification } from 'oa-components'
 import { ProfileGuidelines } from './content/PostingGuidelines'
-import { TextNotification } from 'src/components/Notification/TextNotification'
 import { Form } from 'react-final-form'
 import { ARRAY_ERROR, FORM_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'
@@ -25,7 +24,6 @@ import { toJS } from 'mobx'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { logger } from 'src/logger'
 import { ProfileType } from 'src/modules/profile'
-import { FormSubmitResult } from './content/FormSubmitResult'
 
 interface IProps {
   /** user ID for lookup when editing another user as admin */
@@ -105,12 +103,19 @@ export class UserSettings extends React.Component<IProps, IState> {
     })
     // Submit, show notification update and return any errors to form
     try {
-      logger.debug({ profile: vals }, 'UserSettings.saveProfile')
+      console.debug({ profile: vals }, 'UserSettings.saveProfile')
       const { adminEditableUserId } = this.props
       await this.injected.userStore.updateUserProfile(vals, adminEditableUserId)
-      this.setState({
-        notification: { message: 'Profile Saved', icon: 'check', show: true },
-      })
+      // throw new Error('I hate you');
+      console.log(`before setState`)
+      this.setState(
+        {
+          notification: { message: 'Profile Saved', icon: 'check', show: true },
+        },
+        () => {
+          console.log(`After setState`, this.state.notification)
+        },
+      )
       return {}
     } catch (error) {
       logger.warn({ error, profile: vals }, 'UserSettings.saveProfile.error')
@@ -153,7 +158,7 @@ export class UserSettings extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { formValues, notification, user } = this.state
+    const { formValues, user } = this.state
     return user ? (
       <Form
         onSubmit={(v) =>
@@ -173,11 +178,8 @@ export class UserSettings extends React.Component<IProps, IState> {
           submitting,
           values,
           handleSubmit,
-          submitError,
           valid,
           errors,
-          hasValidationErrors,
-          submitSucceeded,
           ...rest
         }) => {
           const heading = user.profileType ? 'Edit profile' : 'Create profile'
@@ -264,7 +266,7 @@ export class UserSettings extends React.Component<IProps, IState> {
               {/* desktop guidelines container */}
               <Flex
                 sx={{
-                  width: ['100%', '100%', `${100 * 0.333}%`],
+                  width: ['100%', '100%', `${100 / 3}%`],
                   flexDirection: 'column',
                   bg: 'inherit',
                   px: 2,
@@ -274,7 +276,8 @@ export class UserSettings extends React.Component<IProps, IState> {
               >
                 <Box
                   sx={{
-                    position: ['relative', 'relative', 'fixed'],
+                    position: ['relative', 'relative', 'sticky'],
+                    top: 3,
                     maxWidth: ['100%', '100%', '400px'],
                   }}
                 >
@@ -316,23 +319,23 @@ export class UserSettings extends React.Component<IProps, IState> {
                   >
                     Save profile
                   </Button>
-                  {this.state.showFormSubmitResult &&
-                    (hasValidationErrors || submitError || submitSucceeded) && (
-                      <FormSubmitResult valid={valid} />
-                    )}
-                  <div style={{ float: 'right' }}>
+                  {this.state.showFormSubmitResult && (
                     <TextNotification
-                      data-cy="profile-saved"
-                      text={notification.message}
-                      icon={submitError ? 'close' : 'check'}
-                      show={notification.show}
-                      hideNotificationCb={() =>
-                        this.setState({
-                          notification: { ...notification, show: false },
-                        })
-                      }
-                    />
-                  </div>
+                      isVisible={this.state.showFormSubmitResult}
+                      variant={valid ? 'success' : 'failure'}
+                    >
+                      <Text>
+                        {valid ? (
+                          <>Profile saved successfully</>
+                        ) : (
+                          <>
+                            Ouch, something's wrong. Make sure all fields are
+                            filled correctly to save your profile.
+                          </>
+                        )}
+                      </Text>
+                    </TextNotification>
+                  )}
                 </Box>
               </Flex>
             </Flex>

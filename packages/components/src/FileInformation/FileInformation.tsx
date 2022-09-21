@@ -30,6 +30,7 @@ const FileDetails = (props: {
         borderRadius: 1,
         border: '2px solid black',
         background: 'yellow.base',
+        color: 'black',  
         justifyContent: 'space-between',
         alignItems: 'center',
         flexDirection: 'row',

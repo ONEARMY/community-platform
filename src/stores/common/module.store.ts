@@ -28,7 +28,7 @@ export class ModuleStore {
 
   // when a module store is initiated automatically load the docs in the collection
   // this can be subscribed to in individual stores
-  constructor(private rootStore: RootStore, private basePath?: IDBEndpoint) {
+  constructor(private rootStore?: RootStore, private basePath?: IDBEndpoint) {
     if (!rootStore) {
       this.rootStore = useCommonStores()
     }
@@ -50,22 +50,22 @@ export class ModuleStore {
 
   // use getters for root store bindings as will not be available during constructor method
   get db() {
-    return this.rootStore.dbV2
+    return this.rootStore!.dbV2
   }
 
   get activeUser() {
-    return this.rootStore.stores.userStore.user
+    return this.rootStore!.stores.userStore.user
   }
 
   get userStore() {
-    return this.rootStore.stores.userStore
+    return this.rootStore!.stores.userStore
   }
 
   get mapsStore() {
-    return this.rootStore.stores.mapsStore
+    return this.rootStore!.stores.mapsStore
   }
   get aggregationsStore() {
-    return this.rootStore.stores.aggregationsStore
+    return this.rootStore!.stores.aggregationsStore
   }
 
   /****************************************************************************

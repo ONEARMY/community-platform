@@ -9452,12 +9452,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-table@npm:^6.8.5":
-  version: 6.8.8
-  resolution: "@types/react-table@npm:6.8.8"
+"@types/react-table@npm:^6.8.5, @types/react-table@npm:^6.8.9":
+  version: 6.8.9
+  resolution: "@types/react-table@npm:6.8.9"
   dependencies:
     "@types/react": "*"
-  checksum: 5cedbc813610534fa4236d3d80e8c11ef75c4af269cef603eebc2a4b261e9dc4ddfaa88fb44d7c806aba5ca031903b907bdd24ac0e5a25764d4e97fa764bf966
+  checksum: 519333ed44fca2133d2349634f0e228292715e401ae3572cbef7429729110476f79338f8d817d7de1049895a9173951691430438f9cfac48ea49aad2cc8c66d9
   languageName: node
   linkType: hard
 
@@ -26395,7 +26395,7 @@ fsevents@^1.2.7:
     "@types/react-router-dom": 5.1.7
     "@types/react-select": ^2.0.17
     "@types/react-slick": 0.23.2
-    "@types/react-table": ^6.8.5
+    "@types/react-table": ^6.8.9
     "@types/react-virtualized": ^9.21.10
     "@types/rebass": 4.0.8
     "@types/styled-system": ^5.1.11
@@ -26472,7 +26472,8 @@ fsevents@^1.2.7:
     react-scripts: 4.0.3
     react-select: ^2.4.3
     react-slick: ^0.25.2
-    react-table: ^6.10.3
+    react-table: ^6.11.5
+    react-tooltip: ^4.2.20
     react-virtualized: ^9.22.3
     rxjs: ^6.6.3
     sass: ^1.45.2
@@ -30757,7 +30758,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-table@npm:^6.10.3":
+"react-table@npm:^6.11.5":
   version: 6.11.5
   resolution: "react-table@npm:6.11.5"
   dependencies:
@@ -30796,7 +30797,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-tooltip@npm:^4.2.21":
+"react-tooltip@npm:^4.2.20, react-tooltip@npm:^4.2.21":
   version: 4.2.21
   resolution: "react-tooltip@npm:4.2.21"
   dependencies:

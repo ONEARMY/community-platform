@@ -114,10 +114,12 @@ export class CollectionReference<T> {
     field: string,
     operator: DBQueryWhereOperator,
     value: DBQueryWhereValue,
+    limit?: number,
   ) {
     const { serverDB, cacheDB } = this.clients
     let docs = await serverDB.queryCollection<T>(this.endpoint, {
       where: { field, operator, value },
+      limit,
     })
     // if not found on live try find on cached (might be offline)
     // use catch as not all endpoints are cached or some might not be indexed
@@ -125,6 +127,7 @@ export class CollectionReference<T> {
       try {
         docs = await cacheDB.queryCollection<T>(this.endpoint, {
           where: { field, operator, value },
+          limit,
         })
       } catch (error) {
         console.error(error)

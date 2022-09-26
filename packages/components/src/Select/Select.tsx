@@ -160,17 +160,18 @@ export const Select = (props: Props) => {
   const options: OptionsOrGroups<any, any> | undefined = props.options || []
   return (
     <ReactSelect
-      defaultValue={props.defaultValue}
+      classNamePrefix={'data-cy'}
       components={{ DropdownIndicator, Option }}
-      options={options}
+      defaultValue={props.defaultValue}
+      getOptionLabel={props.getOptionLabel && props.getOptionLabel}
+      getOptionValue={props.getOptionValue && props.getOptionValue}
       isClearable={!!props.isClearable}
       isMulti={!!props.isMulti}
       placeholder={props.placeholder}
       styles={props.variant === 'form' ? SelectStyles : FilterStyles}
-      value={props.value}
-      getOptionLabel={props.getOptionLabel && props.getOptionLabel}
-      getOptionValue={props.getOptionValue && props.getOptionValue}
+      options={options}
       onChange={(v) => props.onChange && props.onChange(v)}
+      value={props.value}
     />
   )
 }

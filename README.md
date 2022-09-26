@@ -79,6 +79,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center"><a href="https://github.com/ThakurKarthik"><img src="https://avatars.githubusercontent.com/u/26309938?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Thakur Karthik</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=ThakurKarthik" title="Code">💻</a></td>
       <td align="center"><a href="https://www.linkedin.com/in/danitrod/"><img src="https://avatars.githubusercontent.com/u/45438149?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Daniel T. Rodrigues</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=danitrod" title="Code">💻</a></td>
       <td align="center"><a href="https://github.com/adrianduke"><img src="https://avatars.githubusercontent.com/u/711058?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Adrian Duke</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=adrianduke" title="Code">💻</a></td>
+      <td align="center"><a href="https://github.com/missalyss"><img src="https://avatars.githubusercontent.com/u/19866110?v=4?s=60" width="60px;" alt=""/><br /><sub><b>Alyssa Helgason</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=missalyss" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

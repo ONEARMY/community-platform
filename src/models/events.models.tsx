@@ -33,4 +33,5 @@ export interface IEventFormInput {
   // note, datepicker passes simple yyyy-mm-dd string format for dates
   date: string
   url: string
+  isDigital: boolean
 }

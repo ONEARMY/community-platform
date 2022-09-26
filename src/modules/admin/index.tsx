@@ -1,5 +1,5 @@
 import type { IPageMeta } from 'src/pages/PageList'
-import { AdminStoreContext, AdminStore } from './admin.store'
+import { AdminStoreV2Context, AdminStoreV2 } from './admin.storeV2'
 import { MODULE } from '..'
 import adminRoutes from './admin.routes'
 import AdminSubheader from './components/admin-subheader'
@@ -21,10 +21,9 @@ export const AdminModule: IPageMeta = {
  */
 function AdminModuleContainer() {
   return (
-    <AdminStoreContext.Provider value={new AdminStore()}>
+    <AdminStoreV2Context.Provider value={new AdminStoreV2()}>
       <AdminSubheader />
       <AuthRoute component={adminRoutes} roleRequired="admin" redirect="/" />
-      <div>Coming Soon...</div>
-    </AdminStoreContext.Provider>
+    </AdminStoreV2Context.Provider>
   )
 }

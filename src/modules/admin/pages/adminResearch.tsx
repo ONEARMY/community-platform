@@ -4,6 +4,7 @@ const AdminResearch = observer(() => {
   return (
     <>
       <h2>Admin Research </h2>
+      <div>Coming Soon...</div>
     </>
   )
 })

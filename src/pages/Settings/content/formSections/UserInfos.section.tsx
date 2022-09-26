@@ -40,8 +40,8 @@ const CoverImages = ({
       </Text>
       <Box
         sx={{
-          height: '150px',
-          width: '100%',
+          height: '190px',
+          width: '190px',
         }}
         m="10px"
         data-cy="cover-image"
@@ -53,7 +53,6 @@ const CoverImages = ({
           validateFields={[]}
           component={ImageInputField}
           data-cy={`coverImages-0`}
-          field-width="150px"
           initialValue={coverImages[0]}
         />
       </Box>

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Text } from 'theme-ui'
-import { ImageInput } from '../ImageInput/ImageInput'
+import { ImageInput } from './ImageInput/ImageInput'
 import { FieldContainer } from './FieldContainer'
 import type { FieldProps } from './types'
 

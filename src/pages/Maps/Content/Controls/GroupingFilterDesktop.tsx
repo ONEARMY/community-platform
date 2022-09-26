@@ -42,6 +42,7 @@ class GroupingFilterDesktop extends Component<IProps> {
         <Select
           variant="icons"
           isMulti
+          isClearable
           options={groupedOptions}
           onChange={onSelectChange}
           placeholder="Select filters"

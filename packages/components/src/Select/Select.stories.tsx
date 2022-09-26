@@ -49,7 +49,13 @@ export const Clearable: ComponentStory<typeof Select> = () => {
 }
 
 export const MultipleSelect: ComponentStory<typeof Select> = () => {
-  const [value, setValue] = useState()
+  const [value, setValue] = useState([
+    {
+      value: 'value-three',
+      label: 'Value 3',
+    },
+  ])
+
   return (
     <Select
       value={value}
@@ -64,6 +70,10 @@ export const MultipleSelect: ComponentStory<typeof Select> = () => {
         {
           value: 'value-two',
           label: 'Value 2',
+        },
+        {
+          value: 'value-three',
+          label: 'Value 3',
         },
       ]}
     />

@@ -74,6 +74,7 @@ class TagsSelect extends Component<IProps, IState> {
         <Select
           options={categoryTags}
           placeholder={this.props.placeholder}
+          isClearable={true}
           isMulti={true}
           value={this._getSelected(categoryTags)}
           getOptionLabel={(tag: ITag) => tag.label}

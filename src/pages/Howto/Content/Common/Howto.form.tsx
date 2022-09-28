@@ -276,6 +276,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                     render={({ input, ...rest }) => (
                                       <CategoriesSelect
                                         {...rest}
+                                        isForm={true}
                                         onChange={(category) =>
                                           input.onChange(category)
                                         }

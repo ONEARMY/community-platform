@@ -8,6 +8,7 @@ import { FieldContainer } from '../Form/FieldContainer'
 
 // we include props from react-final-form fields so it can be used as a custom field component
 export interface IProps extends Partial<FieldRenderProps<any, any>> {
+  isForm?: boolean
   value?: ISelectedTags
   onChange: (val: ISelectedTags) => void
   category?: TagCategory | undefined
@@ -72,6 +73,7 @@ class TagsSelect extends Component<IProps, IState> {
         data-cy={categoryTags?.length > 0 ? 'tag-select' : 'tag-select-empty'}
       >
         <Select
+          variant={this.injectedProps.isForm ? 'form' : undefined}
           options={categoryTags}
           placeholder={this.props.placeholder}
           isClearable={true}

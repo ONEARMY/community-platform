@@ -1,9 +1,9 @@
 import styled from '@emotion/styled'
 import { format } from 'date-fns'
-import { FlagIconHowTos, Icon, ModerationStatus } from 'oa-components'
+import { Icon, ModerationStatus, Username } from 'oa-components'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
-import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
+import { isUserVerified } from 'src/common/isUserVerified'
 import type { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
 import { Card, Flex, Grid, Heading, Text } from 'theme-ui'
@@ -72,24 +72,13 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => {
                   justifyContent: 'space-between',
                 }}
               >
-                <Flex>
-                  {item.creatorCountry && (
-                    <FlagIconHowTos code={item.creatorCountry} />
-                  )}
-                  <Text
-                    color={`${theme.colors.blue} !important`}
-                    sx={{
-                      ...theme.typography.auxiliary,
-                      marginLeft: '6px',
+                <Flex sx={{ alignItems: 'center' }}>
+                  <Username
+                    user={{
+                      userName: item._createdBy,
+                      countryCode: item.creatorCountry,
                     }}
-                  >
-                    {item._createdBy}
-                  </Text>
-                  <VerifiedUserBadge
-                    userId={item._createdBy}
-                    ml={1}
-                    height="12px"
-                    width="12px"
+                    isVerified={isUserVerified(item._createdBy)}
                   />
                   {/* Hide this on mobile, show on tablet & above. */}
                   <Text
@@ -98,6 +87,7 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => {
                       display: ['none', 'block'],
                       fontSize: theme.fontSizes[1] + 'px',
                       color: theme.colors.darkGrey,
+                      transform: 'translateY(2px)',
                     }}
                   >
                     {getItemDate(item, 'long')}

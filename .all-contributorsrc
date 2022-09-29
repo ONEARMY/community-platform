@@ -190,6 +190,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Kiebert",
+      "name": "Kieb",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3414938?v=4",
+      "profile": "https://github.com/Kiebert",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

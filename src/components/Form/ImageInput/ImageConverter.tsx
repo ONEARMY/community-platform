@@ -3,7 +3,7 @@ import { Flex } from 'theme-ui'
 import imageCompression from 'browser-image-compression'
 import type { IConvertedFileMeta } from 'src/types'
 import styled from '@emotion/styled'
-import theme from '../../themes/styled.theme'
+import theme from '../../../themes/styled.theme'
 
 interface IProps {
   file: File

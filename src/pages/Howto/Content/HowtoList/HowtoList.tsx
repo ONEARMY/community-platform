@@ -24,6 +24,7 @@ interface InjectedProps {
 
 interface IState {
   isLoading: boolean
+  currentPage: number
   // totalHowtoColumns: number
 }
 
@@ -58,6 +59,7 @@ export class HowtoList extends React.Component<any, IState> {
     super(props)
     this.state = {
       isLoading: true,
+      currentPage: this.props.match.params.page,
     }
     if (props.location.search) {
       const searchParams = new URLSearchParams(props.location.search)
@@ -125,6 +127,13 @@ export class HowtoList extends React.Component<any, IState> {
           .map((t) => allTagsByKey[t])
           .filter(Boolean),
     }))
+
+    // 1. Calculate the number of pages based on howtoItems:
+    // Example: if howtoItems are 150 and page size is 30 items
+    // number of pages will be 5 pages
+    // 2. Get current page from state which gets it from route params.
+    // 3. Filter out howtoItems depending on the current page.
+    // 4. If current page is greater than 5 show 404 page.
 
     return (
       <Box>
@@ -287,6 +296,11 @@ export class HowtoList extends React.Component<any, IState> {
               />
             ))}
           </Grid>
+
+          {/* 
+            Add buttons for navigating between pages.
+          */}
+
           <Flex sx={{ justifyContent: 'center' }} mt={20}>
             <Link to={'#'} style={{ visibility: 'hidden' }}>
               <Button variant={'secondary'} data-cy="more-how-tos">

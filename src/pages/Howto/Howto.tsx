@@ -40,7 +40,7 @@ class HowtoPage extends React.Component<IProps, any> {
         <Switch>
           <Route
             exact
-            path="/how-to"
+            path="/how-to/:page"
             render={(props) => <HowtoList {...props} />}
           />
           <AuthRoute
@@ -61,4 +61,5 @@ class HowtoPage extends React.Component<IProps, any> {
     )
   }
 }
+
 export default withRouter(HowtoPage)

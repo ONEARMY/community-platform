@@ -40,8 +40,8 @@ const CoverImages = ({
       </Text>
       <Box
         sx={{
-          height: '150px',
-          width: '150px',
+          height: '190px',
+          width: '190px',
         }}
         m="10px"
         data-cy="cover-image"

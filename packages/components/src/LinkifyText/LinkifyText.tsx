@@ -1,6 +1,7 @@
 import { useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
-import Linkify from 'react-linkify'
+import Linkify from 'linkify-react'
+import 'linkify-plugin-mention'
 
 export interface Props {
   children?: React.ReactNode
@@ -21,7 +22,14 @@ export const LinkifyText = (props: Props) => {
   ` as any
 
   return (
-    <ThemedLinkify properties={{ target: '_blank' }}>
+    <ThemedLinkify
+      properties={{ target: '_blank' }}
+      options={{
+        formatHref: {
+          mention: (href: string) => '/u' + href,
+        },
+      }}
+    >
       {props.children}
     </ThemedLinkify>
   )

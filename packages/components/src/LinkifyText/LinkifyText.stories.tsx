@@ -12,3 +12,9 @@ export const Default: ComponentStory<typeof LinkifyText> = () => (
     spot all of them.
   </LinkifyText>
 )
+
+export const SupportsMentions: ComponentStory<typeof LinkifyText> = () => (
+  <LinkifyText>
+    In addition to a URLs, it is also possible to @mention somone.
+  </LinkifyText>
+)

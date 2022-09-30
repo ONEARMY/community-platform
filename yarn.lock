@@ -9452,12 +9452,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-table@npm:^6.8.5":
-  version: 6.8.8
-  resolution: "@types/react-table@npm:6.8.8"
+"@types/react-table@npm:^6.8.5, @types/react-table@npm:^6.8.9":
+  version: 6.8.9
+  resolution: "@types/react-table@npm:6.8.9"
   dependencies:
     "@types/react": "*"
-  checksum: 5cedbc813610534fa4236d3d80e8c11ef75c4af269cef603eebc2a4b261e9dc4ddfaa88fb44d7c806aba5ca031903b907bdd24ac0e5a25764d4e97fa764bf966
+  checksum: 519333ed44fca2133d2349634f0e228292715e401ae3572cbef7429729110476f79338f8d817d7de1049895a9173951691430438f9cfac48ea49aad2cc8c66d9
   languageName: node
   linkType: hard
 
@@ -13046,17 +13046,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30000981, caniuse-lite@npm:^1.0.30001109, caniuse-lite@npm:^1.0.30001125, caniuse-lite@npm:^1.0.30001261, caniuse-lite@npm:^1.0.30001313":
-  version: 1.0.30001320
-  resolution: "caniuse-lite@npm:1.0.30001320"
-  checksum: d1f52e9d8e2316f2dba4c7adb4c5957e535b07a4a90ac5432bef3a83b4dab487f0efaa6eff3cda75a52bf044d09886ec583299595389fe0a92cf135f4f07692e
-  languageName: node
-  linkType: hard
-
-"caniuse-lite@npm:^1.0.30001332":
-  version: 1.0.30001332
-  resolution: "caniuse-lite@npm:1.0.30001332"
-  checksum: e54182ea42ab3d2ff1440f9a6480292f7ab23c00c188df7ad65586312e4da567e8bedd5cb5fb8f0ff4193dc027a54e17e0b3c0b6db5d5a3fb61c7726ff9c45b3
+"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30000981, caniuse-lite@npm:^1.0.30001109, caniuse-lite@npm:^1.0.30001125, caniuse-lite@npm:^1.0.30001261, caniuse-lite@npm:^1.0.30001313, caniuse-lite@npm:^1.0.30001332":
+  version: 1.0.30001414
+  resolution: "caniuse-lite@npm:1.0.30001414"
+  checksum: 97210cfd15ded093b20c33d35bef9711a88402c3345411dad420c991a41a3e38ad17fd66721e8334c86e9b2e4aa2c1851d3631f1441afb73b92d93b2b8ca890d
   languageName: node
   linkType: hard
 
@@ -23770,6 +23763,32 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"linkify-plugin-mention@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "linkify-plugin-mention@npm:3.0.4"
+  peerDependencies:
+    linkifyjs: ^3.0.0
+  checksum: 3f0ab11f0ca7f5cb91c320d878e17741001c2021afce5c56b898a86e747211ba0946f50fe05cf134e31eaf665b821e0878b90094573a56593e9e3f75438d9c69
+  languageName: node
+  linkType: hard
+
+"linkify-react@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "linkify-react@npm:3.0.4"
+  peerDependencies:
+    linkifyjs: ^3.0.0
+    react: ">= 15.0.0"
+  checksum: 4d7e24412b9217dbdb9173543ad8a9916e09b75febf72473ffd0a8436986fdcc7b50ab3abf9c6fa76040eb9c14ee401972046ac8d90093e0bb85353ab68ccc36
+  languageName: node
+  linkType: hard
+
+"linkifyjs@npm:^3.0.5":
+  version: 3.0.5
+  resolution: "linkifyjs@npm:3.0.5"
+  checksum: a926669022f41db6464071d3df2b2de71531d5a83db478e0e0b16617cbabde32c89ff0f46406927d53b31eb8f7501b7bb53410aedf05890c38900a55a1cc5283
+  languageName: node
+  linkType: hard
+
 "lint-staged@npm:^8.1.5":
   version: 8.2.1
   resolution: "lint-staged@npm:8.2.1"
@@ -26035,12 +26054,14 @@ fsevents@^1.2.7:
     babel-loader: 8.1.0
     eslint: ^7.32.0
     eslint-plugin-import: ^2.25.4
+    linkify-plugin-mention: ^3.0.4
+    linkify-react: ^3.0.4
+    linkifyjs: ^3.0.5
     mustache: ^4.2.0
     prettier: ^2.5.1
     react: ^17.0.2
     react-flag-icon-css: ^1.0.25
     react-icons: ^4.3.1
-    react-linkify: ^0.2.2
     react-portal: ^4.2.2
     react-router: ^5.2.0
     react-router-dom: ^5.2.0
@@ -26367,7 +26388,7 @@ fsevents@^1.2.7:
     "@types/react-router-dom": 5.1.7
     "@types/react-select": ^2.0.17
     "@types/react-slick": 0.23.2
-    "@types/react-table": ^6.8.5
+    "@types/react-table": ^6.8.9
     "@types/react-virtualized": ^9.21.10
     "@types/rebass": 4.0.8
     "@types/styled-system": ^5.1.11
@@ -26444,7 +26465,8 @@ fsevents@^1.2.7:
     react-scripts: 4.0.3
     react-select: ^2.4.3
     react-slick: ^0.25.2
-    react-table: ^6.10.3
+    react-table: ^6.11.5
+    react-tooltip: ^4.2.20
     react-virtualized: ^9.22.3
     rxjs: ^6.6.3
     sass: ^1.45.2
@@ -30729,7 +30751,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-table@npm:^6.10.3":
+"react-table@npm:^6.11.5":
   version: 6.11.5
   resolution: "react-table@npm:6.11.5"
   dependencies:
@@ -30768,7 +30790,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-tooltip@npm:^4.2.21":
+"react-tooltip@npm:^4.2.20, react-tooltip@npm:^4.2.21":
   version: 4.2.21
   resolution: "react-tooltip@npm:4.2.21"
   dependencies:

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Text } from 'theme-ui'
-import { ImageInput } from '../ImageInput/ImageInput'
+import { ImageInput } from './ImageInput/ImageInput'
 import { FieldContainer } from './FieldContainer'
 import type { FieldProps } from './types'
 
@@ -23,7 +23,11 @@ export const ImageInputField = ({
 }: IExtendedFieldProps) => (
   <>
     <FieldContainer
-      style={{ height: '100%', width: '100%', overflow: 'hidden' }}
+      style={{
+        height: '100%',
+        width: '100%',
+        overflow: 'hidden',
+      }}
       invalid={meta.touched && meta.error}
       data-cy={dataCy}
     >

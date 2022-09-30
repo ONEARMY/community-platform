@@ -4,9 +4,9 @@ import styled from '@emotion/styled'
 import { Button } from 'oa-components'
 import 'react-image-lightbox/style.css'
 import { ImageConverter } from './ImageConverter'
-import theme from '../../themes/styled.theme'
+import theme from '../../../themes/styled.theme'
 import Dropzone from 'react-dropzone'
-import type { IUploadedFileMeta } from '../../stores/storage'
+import type { IUploadedFileMeta } from '../../../stores/storage'
 import type { IConvertedFileMeta } from 'src/types'
 
 interface ITitleProps {

@@ -30,6 +30,7 @@ const FileDetails = (props: {
         borderRadius: 1,
         border: '2px solid black',
         background: 'yellow.base',
+        color: 'black',
         justifyContent: 'space-between',
         alignItems: 'center',
         flexDirection: 'row',
@@ -73,7 +74,7 @@ export const FileInformation: React.FC<IProps> = ({
           onClick={() => handleClick && handleClick()}
           href={file.downloadUrl}
           download={file.name}
-          style={{ width: '300px' }}
+          style={{ width: '300px', marginLeft: 0 }}
         >
           <FileDetails file={file} glyph="download-cloud" size={size} />
         </ExternalLink>

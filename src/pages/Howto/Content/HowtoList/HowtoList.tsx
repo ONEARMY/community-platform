@@ -2,9 +2,8 @@ import { inject, observer } from 'mobx-react'
 import * as React from 'react'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { Button, MoreContainer, Loader } from 'oa-components'
-import { Heading, Input, Flex, Box } from 'theme-ui'
+import { Heading, Input, Flex, Box, Grid } from 'theme-ui'
 import TagsSelect from 'src/components/Tags/TagsSelect'
-import { VirtualizedFlex } from 'src/pages/Howto/VirtualizedFlex/VirtualizedFlex'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import type { UserStore } from 'src/stores/User/user.store'
 import HowToCard from './HowToCard'
@@ -274,22 +273,20 @@ export class HowtoList extends React.Component<any, IState> {
               </Heading>
             </Flex>
           )}
-          <Flex
+          <Grid
             my={4}
-            mx={-4}
-            sx={{ justifyContent: 'center' }}
+            gap={4}
+            columns={[1, 2, 3]}
             data-cy="howtolist-flex-container"
           >
-            <VirtualizedFlex
-              data={howtoItems}
-              renderItem={(howto: any) => (
-                <HowToCard
-                  howto={howto}
-                  votedUsefulCount={users_votedUsefulHowtos?.[howto._id]}
-                />
-              )}
-            />
-          </Flex>
+            {howtoItems.map((howto) => (
+              <HowToCard
+                key={howto._id}
+                howto={howto}
+                votedUsefulCount={users_votedUsefulHowtos?.[howto._id]}
+              />
+            ))}
+          </Grid>
           <Flex sx={{ justifyContent: 'center' }} mt={20}>
             <Link to={'#'} style={{ visibility: 'hidden' }}>
               <Button variant={'secondary'} data-cy="more-how-tos">

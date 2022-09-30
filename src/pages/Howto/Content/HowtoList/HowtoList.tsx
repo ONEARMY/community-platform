@@ -133,7 +133,8 @@ export class HowtoList extends React.Component<any, IState> {
     // number of pages will be 5 pages
     // 2. Get current page from state which gets it from route params.
     // 3. Filter out howtoItems depending on the current page.
-    // 4. If current page is greater than 5 show 404 page.
+    // 4. If current page is greater than number of possible pages show 404 page.
+    // 5. Show buttons below the grid to navigate between pages.
 
     return (
       <Box>

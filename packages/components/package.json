@@ -29,6 +29,7 @@
     "react-portal": "^4.2.2",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
+    "react-select": "^5.4.0",
     "react-tooltip": "^4.2.21",
     "storybook": "^6.4.22",
     "theme-ui": "^0.14.1",

@@ -3,13 +3,12 @@ import { inject, observer } from 'mobx-react'
 import type { TagsStore } from 'src/stores/Tags/tags.store'
 import type { ISelectedTags, ITag, TagCategory } from 'src/models/tags.model'
 import type { FieldRenderProps } from 'react-final-form'
-import Select from 'react-select'
-import { SelectStyles, FilterStyles } from '../Form/Select.field'
+import { Select } from 'oa-components'
 import { FieldContainer } from '../Form/FieldContainer'
-import { DropdownIndicator } from '../DropdownIndicator'
 
 // we include props from react-final-form fields so it can be used as a custom field component
 export interface IProps extends Partial<FieldRenderProps<any, any>> {
+  isForm?: boolean
   value?: ISelectedTags
   onChange: (val: ISelectedTags) => void
   category?: TagCategory | undefined
@@ -68,23 +67,21 @@ class TagsSelect extends Component<IProps, IState> {
       )
     }
 
-    const { styleVariant } = this.props
     return (
       <FieldContainer
         // provide a data attribute that can be used to see if tags populated
         data-cy={categoryTags?.length > 0 ? 'tag-select' : 'tag-select-empty'}
       >
         <Select
-          components={{ DropdownIndicator }}
-          styles={styleVariant === 'selector' ? SelectStyles : FilterStyles}
-          isMulti
+          variant={this.injectedProps.isForm ? 'form' : undefined}
           options={categoryTags}
+          placeholder={this.props.placeholder}
+          isClearable={true}
+          isMulti={true}
           value={this._getSelected(categoryTags)}
           getOptionLabel={(tag: ITag) => tag.label}
           getOptionValue={(tag: ITag) => tag._id}
           onChange={(values) => this.onSelectedTagsChanged(values as ITag[])}
-          placeholder={this.props.placeholder}
-          classNamePrefix={'data-cy'}
         />
       </FieldContainer>
     )

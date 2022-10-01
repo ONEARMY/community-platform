@@ -192,8 +192,8 @@ export class HowtoList extends React.Component<any, IState> {
                     category ? category.label : '',
                   )
                 }}
-                styleVariant="filter"
                 placeholder="Filter by category"
+                isForm={false}
               />
             </Flex>
           </AuthWrapper>

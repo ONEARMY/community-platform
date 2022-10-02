@@ -1,11 +1,8 @@
 import { inject, observer } from 'mobx-react'
 import { Component } from 'react'
-import Select from 'react-select'
-import type { OptionsType, ValueType } from 'react-select/lib/types'
+import { Select } from 'oa-components'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
-import { DropdownIndicator } from 'src/components/DropdownIndicator'
 import { FieldContainer } from 'src/components/Form/FieldContainer'
-import { FilterStyles } from 'src/components/Form/Select.field'
 
 interface ISortOption {
   value: string
@@ -21,10 +18,10 @@ interface InjectedProps extends IProps {
 }
 
 interface IState {
-  value: ValueType<ISortOption> | null
+  value: ISortOption | null
 }
 
-const sortingOptions: OptionsType<ISortOption> = ['Latest', 'Most useful'].map(
+const sortingOptions: ISortOption[] = ['Latest', 'Most useful'].map(
   (label) => ({
     label,
     value: label.toLowerCase(),
@@ -60,8 +57,6 @@ class SortSelect extends Component<IProps, IState> {
     return (
       <FieldContainer>
         <Select
-          components={{ DropdownIndicator }}
-          styles={FilterStyles}
           options={sortingOptions}
           placeholder="Sort by"
           value={this.state.value}

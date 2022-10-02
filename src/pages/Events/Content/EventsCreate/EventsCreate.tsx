@@ -12,17 +12,17 @@ import {
 } from 'oa-components'
 import type { EventStore } from 'src/stores/Events/events.store'
 import { Heading, Card, Flex, Box, Text } from 'theme-ui'
-import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
+import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import { inject } from 'mobx-react'
 import { PostingGuidelines } from './PostingGuidelines'
 import type { IEventFormInput } from 'src/models/events.models'
-import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
+import { LocationSearchField } from 'src/common/Form/LocationSearch.field'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import { validateUrl, addProtocolMutator, required } from 'src/utils/validators'
 import IconHeaderEvents from 'src/assets/images/header-section/events-header-icon.svg'
 import { logger } from 'src/logger'
-import { CheckboxInput } from 'src/components/Form/Checkbox'
+import { CheckboxInput } from 'src/common/Form/Checkbox'
 
 interface IState {
   formValues: IEventFormInput

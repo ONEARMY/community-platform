@@ -12,7 +12,7 @@ import {
   FieldTextarea,
   ElWithBeforeIcon,
 } from 'oa-components'
-import { ImageInputField } from 'src/components/Form/ImageInput.field'
+import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import type { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import theme from 'src/themes/styled.theme'

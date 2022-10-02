@@ -1,11 +1,20 @@
 ---
 id: bounties
-title: Feature Bounties
+title: Bounties
 ---
 
-# Feature Bounties
+# Bounties
 
 As a way of saying thanks to developers for their time, we've implemented a small bounty system to reward feature development.
+
+
+## How do I find bounty issues?
+
+Simply go to the `Issues` page on github and look for issues with labelled with [Bounty](https://github.com/ONEARMY/community-platform/issues).
+
+_Note_ - There are 3 different bounty levels. You can see in the issue which level it is.
+
+---
 
 ## How much are they?
 
@@ -13,47 +22,55 @@ We currently have 3 bounty levels
 
 | Level | Amount | It should take...                                           | E.g.                                |
 | ----- | ------ | ----------------------------------------------------------- | ----------------------------------- |
-| 1     | €20    | Roughly 1-2 hours work for a junior/intermediate developer  | Small bugfixes, UI tweaks           |
-| 2     | €40    | Roughly 3-5 hours work for an intermediate/senior developer | Minor feature, e.g. Howto search    |
-| 3     | €85    | Roughly 6+ hours work for a more senior developer           | Major feature, e.g. Research module |
+| ![bounty label](images/bounty1.png)       | €20    | Roughly 1-2 hours work for a junior/intermediate developer  | Small bugfixes, UI tweaks           |
+| ![bounty label](images/bounty2.png)      | €40    | Roughly 3-5 hours work for an intermediate/senior developer | Minor feature, e.g. Howto search    |
+| ![bounty label](images/bounty3.png)      | €85    | Roughly 6+ hours work for a more senior developer           | Major feature, e.g. Research module |
 
 ---
 
-## How do I find bounty issues?
+## How do I claim bounties?
 
-Simply go to the `Issues` page on github and look for issues with labelled with [Bounty](https://github.com/ONEARMY/community-platform/labels/bounty).
-
-_Note_ - the exact bounty level is not included as knowing in advance how much work will be involved is hard! Instead we assign levels collectively on the monthly developer call.
-
----
-
-## How do I claim them?
-
-### Step 1 - Assigned the issue
+#### Step 1 - Assigned the issue
 
 Drop a message in the issue thread to say that you are interested taking it on. If the issue is already assigned, or we think it might be too much for a new or individual contributor we might suggest looking at other issues instead. Otherwise it's all yours :D
 
-### Step 2 - Do the work
+#### Step 2 - Do the work
 
 Once assigned try to complete the issue within the next month. Once complete make a PR, which will get reviewed and merged (maybe with some minor edits requested, or new issues created for future dev work)
 
-### Step 3 - Register on open collective
+#### Step 3 - Claim the Bounty on Open collective
 
-We handle payments through [Open Collective](https://opencollective.com/onearmy). Follow the link and register as a contributor to the project. You can add your paypal or bank details there which will be used to
+Once the PR is merged you can claim the bounty. We handle payments through [Open Collective](https://opencollective.com/onearmy). Follow the link and register as a contributor to the project. Use your Paypal details.
 
-### Step 4 - (optional) Join our monthly dev call
+#### Step 4 - Submit an expense
 
-If you want more feedback on the issue or suggested bounty levels, we have a monthly call welcome for all developers to join. After the call we will finalise the bounties and organise the admin.
+Go to our [Open Collective](https://opencollective.com/onearmy) page and Submit an expense
 
-### Step 5 - Receive payment
+![open collective](images/open_collective_01.jpg)
 
----
+
+#### Step 5 - Add details
+
+Ideally you collect your bounties monthly and only add one expense to reduce transactions and administration. That said, if you like to claim it right away go for it :) Do make sure to add a link to the issues that had the bounties on it.
+1. Select Invoice
+2. Add Paypal
+3. Add links to the issues you are claiming
+
+![bounty label](images/open_collective_02.jpg)
+
+
+
+#### Step 6 - Receive payment
+We don't have a fixed payment schedule. But for sure it will be once a month.
+
+#### Step 7 - (optional) Join our monthly dev call
+
+If you want more feedback on the issue or suggested bounty levels, we have a monthly call welcome for all developers to join. Have a look on our [Discord Events](https://discordapp.com/invite/SSBrzeR) to join the next one.
+
 
 ## What if I don't want the bounty?
 
-No problem, if we haven't heard anything from you we'll just keep a record of the bounty and try reach out to see what you would like done with it.
-
-If you just want the bounty to go back in to the community program we can do that, or if you want the bounty to be contributed to somewhere else (e.g. another charity or social cause) then we can also try make arrangements with you.
+No problem, thanks for the help :) We will keep the funds for future development
 
 ---
 

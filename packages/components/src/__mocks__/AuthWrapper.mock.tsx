@@ -1,6 +1,10 @@
-export const AuthWrapper = (props: any) => {
-  console.log(`MockAuthWrapper:`, props)
+import type { ReactNode } from 'react'
 
+export const AuthWrapper = (props: {
+  additionalAdmins: string[]
+  children: ReactNode
+  roleRequired: string
+}) => {
   if (!props.additionalAdmins.includes(props.roleRequired)) {
     return null
   }

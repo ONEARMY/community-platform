@@ -2,7 +2,7 @@ import { inject, observer } from 'mobx-react'
 import { Component } from 'react'
 import { Select } from 'oa-components'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
-import { FieldContainer } from 'src/components/Form/FieldContainer'
+import { FieldContainer } from 'src/common/Form/FieldContainer'
 
 interface ISortOption {
   value: string

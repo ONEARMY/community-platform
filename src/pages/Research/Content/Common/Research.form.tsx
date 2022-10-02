@@ -13,7 +13,7 @@ import {
   FieldTextarea,
   ElWithBeforeIcon,
 } from 'oa-components'
-import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
+import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import type { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import theme from 'src/themes/styled.theme'

@@ -72,7 +72,7 @@ const ResearchList = observer(() => {
       </ResearchListHeader>
       {filteredResearches.map((item) => {
         const votedUsefulCount = aggregations.users_votedUsefulResearch
-          ? aggregations.users_votedUsefulResearch[item._id] || 0
+          ? aggregations.users_votedUsefulResearch[item._id] || '-'
           : '...'
 
         return (

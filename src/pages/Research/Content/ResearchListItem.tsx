@@ -187,19 +187,19 @@ const getItemDate = (item: IResearch.ItemDB, variant: string): string => {
   }
 }
 
-const calculateTotalComments = (item: IResearch.ItemDB) => {
+export const calculateTotalComments = (item: IResearch.ItemDB) => {
   if (item.updates) {
     return item.updates.reduce((totalComments, update) => {
-      const updateCommentsLength = update.comments ? update.comments.length : 0
+      const updateCommentsLength = update.comments?.length || 0
       return totalComments + updateCommentsLength
     }, 0)
   } else {
-    return 0
+    return '-'
   }
 }
 
 const getUpdateText = (item: IResearch.ItemDB) => {
-  return item.updates?.length || 0
+  return item.updates?.length || '-'
 }
 
 export default ResearchListItem

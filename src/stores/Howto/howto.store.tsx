@@ -10,7 +10,6 @@ import type {
   IHowToStepFormInput,
   IComment,
 } from 'src/models/howto.models'
-import type { ISelectedTags } from 'src/models/tags.model'
 import type { IUser } from 'src/models/user.models'
 import {
   filterModerableItems,
@@ -44,8 +43,6 @@ export class HowtoStore extends ModuleStore {
   @observable
   public allHowtos: IHowtoDB[]
   @observable
-  public selectedTags: ISelectedTags
-  @observable
   public selectedCategory: string
   @observable
   public searchValue: string
@@ -62,7 +59,6 @@ export class HowtoStore extends ModuleStore {
     this.allDocs$.subscribe((docs: IHowtoDB[]) => {
       this.sortHowtosByLatest(docs)
     })
-    this.selectedTags = {}
     this.selectedCategory = ''
     this.searchValue = ''
     this.referrerSource = ''
@@ -134,8 +130,10 @@ export class HowtoStore extends ModuleStore {
   }
 
   @computed get filteredHowtos() {
-    let howtos = this.filterCollectionByTags(this.allHowtos, this.selectedTags)
-    howtos = this.filterHowtosByCategory(howtos, this.selectedCategory)
+    const howtos = this.filterHowtosByCategory(
+      this.allHowtos,
+      this.selectedCategory,
+    )
     // HACK - ARH - 2019/12/11 filter unaccepted howtos, should be done serverside
     let validHowtos = filterModerableItems(howtos, this.activeUser)
 
@@ -174,10 +172,6 @@ export class HowtoStore extends ModuleStore {
 
   public updateReferrerSource(source: string) {
     this.referrerSource = source
-  }
-
-  public updateSelectedTags(tagKey: ISelectedTags) {
-    this.selectedTags = tagKey
   }
 
   @action

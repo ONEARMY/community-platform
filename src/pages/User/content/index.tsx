@@ -77,10 +77,11 @@ export class UserPage extends React.Component<
     }
     return (
       <>
-        {user.profileType === ProfileType.SPACE ? (
-          <SpaceProfile data-cy="spaceProfile" user={user} />
-        ) : (
+        {user.profileType === ProfileType.MEMBER ||
+        user.profileType === undefined ? (
           <MemberProfile data-cy="memberProfile" user={user} />
+        ) : (
+          <SpaceProfile data-cy="spaceProfile" user={user} />
         )}
       </>
     )

@@ -3,7 +3,7 @@ import { WEEK_DAYS, OPENING_HOURS } from 'src/mocks/Selectors'
 import { Field } from 'react-final-form'
 import { Button, Modal } from 'oa-components'
 import { Text, Flex } from 'theme-ui'
-import { SelectField } from 'src/components/Form/Select.field'
+import { SelectField } from 'src/common/Form/Select.field'
 import { required } from 'src/utils/validators'
 
 interface IProps {

@@ -3,7 +3,7 @@ import { COM_TYPE_MOCKS } from 'src/mocks/Selectors'
 import { Field } from 'react-final-form'
 import { Button, FieldInput, Modal } from 'oa-components'
 import { Text, Flex, Grid } from 'theme-ui'
-import { SelectField } from 'src/components/Form/Select.field'
+import { SelectField } from 'src/common/Form/Select.field'
 import { validateUrl, validateEmail, required } from 'src/utils/validators'
 import { formatLink } from 'src/utils/formatters'
 

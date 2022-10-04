@@ -3,7 +3,7 @@ import * as React from 'react'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { Button, MoreContainer, Loader } from 'oa-components'
 import { Heading, Input, Flex, Box } from 'theme-ui'
-import TagsSelect from 'src/components/Tags/TagsSelect'
+import TagsSelect from 'src/common/Tags/TagsSelect'
 import { VirtualizedFlex } from 'src/pages/Howto/VirtualizedFlex/VirtualizedFlex'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import type { UserStore } from 'src/stores/User/user.store'
@@ -192,8 +192,8 @@ export class HowtoList extends React.Component<any, IState> {
                     category ? category.label : '',
                   )
                 }}
-                styleVariant="filter"
                 placeholder="Filter by category"
+                isForm={false}
               />
             </Flex>
           </AuthWrapper>

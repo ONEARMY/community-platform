@@ -7,7 +7,7 @@ import arrayMutators from 'final-form-arrays'
 import createDecorator from 'final-form-calculate'
 import type { IHowtoFormInput } from 'src/models/howto.models'
 import type { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
-import { SelectField } from 'src/components/Form/Select.field'
+import { SelectField } from 'src/common/Form/Select.field'
 import { HowtoStep } from './HowtoStep.form'
 import {
   Button,
@@ -18,9 +18,9 @@ import {
 } from 'oa-components'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import { Heading, Card, Flex, Box, Text } from 'theme-ui'
-import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
-import { ImageInputField } from 'src/components/Form/ImageInput.field'
-import { FileInputField } from 'src/components/Form/FileInput.field'
+import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
+import { ImageInputField } from 'src/common/Form/ImageInput.field'
+import { FileInputField } from 'src/common/Form/FileInput.field'
 import { motion, AnimatePresence } from 'framer-motion'
 import { inject, observer } from 'mobx-react'
 import { stripSpecialCharacters } from 'src/utils/helpers'
@@ -31,7 +31,7 @@ import { HowToSubmitStatus } from './SubmitStatus'
 import { required, validateUrlAcceptEmpty } from 'src/utils/validators'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { COMPARISONS } from 'src/utils/comparisons'
-import { UnsavedChangesDialog } from 'src/components/Form/UnsavedChangesDialog'
+import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import { HOWTO_MAX_LENGTH, HOWTO_TITLE_MAX_LENGTH } from '../../constants'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
@@ -276,11 +276,11 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                     render={({ input, ...rest }) => (
                                       <CategoriesSelect
                                         {...rest}
+                                        isForm={true}
                                         onChange={(category) =>
                                           input.onChange(category)
                                         }
                                         value={input.value}
-                                        styleVariant="selector"
                                         placeholder="Select one category"
                                       />
                                     )}

@@ -40,6 +40,11 @@ export const MemberProfile = ({ user }: IProps) => {
   const userCountryCode =
     user.location?.countryCode || user.country?.toLowerCase() || null
 
+  const memberPictureSource =
+    user.coverImages && user.coverImages[0]
+      ? (user.coverImages[0] as IUploadedFileMeta).downloadUrl
+      : DefaultMemberImage
+
   return (
     <Card
       mt={8}
@@ -71,14 +76,7 @@ export const MemberProfile = ({ user }: IProps) => {
       >
         <Box mr={3} style={{ flexGrow: 1, minWidth: 'initial' }}>
           <MemberPicture>
-            <Image
-              loading="lazy"
-              src={
-                user.coverImages[0]
-                  ? (user.coverImages[0] as IUploadedFileMeta).downloadUrl
-                  : DefaultMemberImage
-              }
-            />
+            <Image loading="lazy" src={memberPictureSource} />
           </MemberPicture>
           <UserStats user={user} />
         </Box>

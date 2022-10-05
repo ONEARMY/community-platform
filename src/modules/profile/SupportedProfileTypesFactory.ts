@@ -14,7 +14,10 @@ import LogoCollectionVerified from 'src/assets/icons/map-collection-verified.svg
 import LogoMemberVerified from 'src/assets/icons/map-member-verified.svg'
 import LogoMachineVerified from 'src/assets/icons/map-machine-verified.svg'
 import LogoCommunityVerified from 'src/assets/icons/map-community-verified.svg'
+import FixingFashionMember from 'src/assets/images/themes/fixing-fashion/avatar_member.svg'
+import FixingFashionSpace from 'src/assets/images/themes/fixing-fashion/avatar_space.svg'
 import type { IProfileType } from './types'
+import type { PlatformTheme } from 'src/themes/types'
 
 export const ProfileType = {
   MEMBER: 'member',
@@ -28,55 +31,73 @@ export const ProfileType = {
 const DEFAULT_PROFILE_TYPES =
   'member,workspace,community-builder,collection-point,machine-builder'
 
-const PROFILE_TYPES: IProfileType[] = [
-  {
-    label: ProfileType.MEMBER,
-    textLabel: 'I am a member',
-    imageSrc: MemberBadge,
-    cleanImageSrc: LogoMember,
-    cleanImageVerifiedSrc: LogoMemberVerified,
-  },
-  {
-    label: ProfileType.SPACE,
-    textLabel: 'I run a space',
-    imageSrc: SpaceBadge,
-    cleanImageSrc: SpaceBadge,
-    cleanImageVerifiedSrc: LogoMemberVerified,
-  },
-  {
-    label: ProfileType.WORKSPACE,
-    textLabel: 'I run a workspace',
-    imageSrc: WorkspaceBadge,
-    cleanImageSrc: LogoWorkspace,
-    cleanImageVerifiedSrc: LogoWorkspaceVerified,
-  },
-  {
-    label: ProfileType.MACHINE_BUILDER,
-    textLabel: 'I build machines',
-    imageSrc: MachineBadge,
-    cleanImageSrc: LogoMachine,
-    cleanImageVerifiedSrc: LogoMachineVerified,
-  },
-  {
-    label: ProfileType.COMMUNITY_BUILDER,
-    textLabel: 'I run a local community',
-    imageSrc: LocalComBadge,
-    cleanImageSrc: LogoCommunity,
-    cleanImageVerifiedSrc: LogoCommunityVerified,
-  },
-  {
-    label: ProfileType.COLLECTION_POINT,
-    textLabel: 'I collect & sort plastic',
-    imageSrc: CollectionBadge,
-    cleanImageSrc: LogoCollection,
-    cleanImageVerifiedSrc: LogoCollectionVerified,
-  },
-]
+function getProfileTypes(currentTheme?: PlatformTheme) {
+  const memberImageSrc =
+    currentTheme && currentTheme.id === 'fixing-fashion'
+      ? FixingFashionMember
+      : MemberBadge
+  const spaceImageSrc =
+    currentTheme && currentTheme.id === 'fixing-fashion'
+      ? FixingFashionSpace
+      : SpaceBadge
 
-export function SupportedProfileTypesFactory(configurationString: string) {
+  const PROFILE_TYPES: IProfileType[] = [
+    {
+      label: ProfileType.MEMBER,
+      textLabel: 'I am a member',
+      imageSrc: memberImageSrc,
+      cleanImageSrc: memberImageSrc,
+      cleanImageVerifiedSrc: memberImageSrc,
+    },
+    {
+      label: ProfileType.SPACE,
+      textLabel: 'I run a space',
+      imageSrc: spaceImageSrc,
+      cleanImageSrc: spaceImageSrc,
+      cleanImageVerifiedSrc: spaceImageSrc,
+    },
+    {
+      label: ProfileType.WORKSPACE,
+      textLabel: 'I run a workspace',
+      imageSrc: WorkspaceBadge,
+      cleanImageSrc: LogoWorkspace,
+      cleanImageVerifiedSrc: LogoWorkspaceVerified,
+    },
+    {
+      label: ProfileType.MACHINE_BUILDER,
+      textLabel: 'I build machines',
+      imageSrc: MachineBadge,
+      cleanImageSrc: LogoMachine,
+      cleanImageVerifiedSrc: LogoMachineVerified,
+    },
+    {
+      label: ProfileType.COMMUNITY_BUILDER,
+      textLabel: 'I run a local community',
+      imageSrc: LocalComBadge,
+      cleanImageSrc: LogoCommunity,
+      cleanImageVerifiedSrc: LogoCommunityVerified,
+    },
+    {
+      label: ProfileType.COLLECTION_POINT,
+      textLabel: 'I collect & sort plastic',
+      imageSrc: CollectionBadge,
+      cleanImageSrc: LogoCollection,
+      cleanImageVerifiedSrc: LogoCollectionVerified,
+    },
+  ]
+
+  return PROFILE_TYPES
+}
+
+export function SupportedProfileTypesFactory(
+  configurationString: string,
+  currentTheme?: PlatformTheme,
+) {
   const supportedProfileTypes = (configurationString || DEFAULT_PROFILE_TYPES)
     .split(',')
     .map((s) => s.trim())
   return () =>
-    PROFILE_TYPES.filter(({ label }) => supportedProfileTypes.includes(label))
+    getProfileTypes(currentTheme).filter(({ label }) =>
+      supportedProfileTypes.includes(label),
+    )
 }

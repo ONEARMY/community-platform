@@ -6,18 +6,19 @@ import WorkspaceBadge from 'src/assets/images/badges/pt-workspace.svg'
 import LocalComBadge from 'src/assets/images/badges/pt-local-community.svg'
 import LogoWorkspace from 'src/assets/icons/map-workspace.svg'
 import LogoCollection from 'src/assets/icons/map-collection.svg'
-import LogoMember from 'src/assets/icons/map-member.svg'
 import LogoMachine from 'src/assets/icons/map-machine.svg'
 import LogoCommunity from 'src/assets/icons/map-community.svg'
 import LogoWorkspaceVerified from 'src/assets/icons/map-workspace-verified.svg'
 import LogoCollectionVerified from 'src/assets/icons/map-collection-verified.svg'
-import LogoMemberVerified from 'src/assets/icons/map-member-verified.svg'
 import LogoMachineVerified from 'src/assets/icons/map-machine-verified.svg'
 import LogoCommunityVerified from 'src/assets/icons/map-community-verified.svg'
-import FixingFashionMember from 'src/assets/images/themes/fixing-fashion/avatar_member.svg'
-import FixingFashionSpace from 'src/assets/images/themes/fixing-fashion/avatar_space.svg'
 import type { IProfileType } from './types'
 import type { PlatformTheme } from 'src/themes/types'
+import FixingFashionMember from 'src/assets/images/themes/fixing-fashion/avatar_member_sm.svg'
+import FixingFashionSpace from 'src/assets/images/themes/fixing-fashion/avatar_space_sm.svg'
+import PreciousPlasticMember from 'src/assets/images/themes/precious-plastic/avatar_member_sm.svg'
+import ProjectKampMember from 'src/assets/images/themes/project-kamp/avatar_member_sm.svg'
+import ProjectKampSpace from 'src/assets/images/themes/project-kamp/avatar_space_sm.svg'
 
 export const ProfileType = {
   MEMBER: 'member',
@@ -31,30 +32,48 @@ export const ProfileType = {
 const DEFAULT_PROFILE_TYPES =
   'member,workspace,community-builder,collection-point,machine-builder'
 
-function getProfileTypes(currentTheme?: PlatformTheme) {
-  const memberImageSrc =
-    currentTheme && currentTheme.id === 'fixing-fashion'
-      ? FixingFashionMember
-      : MemberBadge
-  const spaceImageSrc =
-    currentTheme && currentTheme.id === 'fixing-fashion'
-      ? FixingFashionSpace
-      : SpaceBadge
+const MemberAndSpace = {
+  'fixing-fashion': {
+    member: FixingFashionMember,
+    space: FixingFashionSpace,
+  },
+  'precious-plastic': {
+    member: PreciousPlasticMember,
+    space: undefined,
+  },
+  'project-kamp': {
+    member: ProjectKampMember,
+    space: ProjectKampSpace,
+  },
+}
 
+function getProfileTypes(currentTheme?: PlatformTheme) {
   const PROFILE_TYPES: IProfileType[] = [
     {
       label: ProfileType.MEMBER,
       textLabel: 'I am a member',
-      imageSrc: memberImageSrc,
-      cleanImageSrc: memberImageSrc,
-      cleanImageVerifiedSrc: memberImageSrc,
+      imageSrc: currentTheme
+        ? MemberAndSpace[currentTheme.id].member
+        : MemberBadge,
+      cleanImageSrc: currentTheme
+        ? MemberAndSpace[currentTheme.id].member
+        : MemberBadge,
+      cleanImageVerifiedSrc: currentTheme
+        ? MemberAndSpace[currentTheme.id].member
+        : MemberBadge,
     },
     {
       label: ProfileType.SPACE,
       textLabel: 'I run a space',
-      imageSrc: spaceImageSrc,
-      cleanImageSrc: spaceImageSrc,
-      cleanImageVerifiedSrc: spaceImageSrc,
+      imageSrc: currentTheme
+        ? MemberAndSpace[currentTheme.id].space
+        : SpaceBadge,
+      cleanImageSrc: currentTheme
+        ? MemberAndSpace[currentTheme.id].space
+        : SpaceBadge,
+      cleanImageVerifiedSrc: currentTheme
+        ? MemberAndSpace[currentTheme.id].space
+        : SpaceBadge,
     },
     {
       label: ProfileType.WORKSPACE,

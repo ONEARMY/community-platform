@@ -73,6 +73,7 @@ function Table(props: ITableProps) {
         data-cy="reactTable"
         style={{
           border: 'none',
+          height: 'calc(100vh - 450px)',
         }}
         ThComponent={(row: IHeaderRenderProps) => {
           const isSortAsc = row.className?.includes('-sort-asc')

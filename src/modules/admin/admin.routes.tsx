@@ -23,7 +23,6 @@ export const ADMIN_PAGES: IAdminPageMeta[] = [
     description: 'Browse Users',
     path: '/users',
     moduleName,
-    disabled: true,
   },
   {
     component: lazy(() => import('./pages/adminMappins')),

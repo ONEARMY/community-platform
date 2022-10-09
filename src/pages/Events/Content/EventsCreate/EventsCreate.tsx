@@ -12,16 +12,17 @@ import {
 } from 'oa-components'
 import type { EventStore } from 'src/stores/Events/events.store'
 import { Heading, Card, Flex, Box, Text } from 'theme-ui'
-import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
+import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import { inject } from 'mobx-react'
 import { PostingGuidelines } from './PostingGuidelines'
 import type { IEventFormInput } from 'src/models/events.models'
-import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
+import { LocationSearchField } from 'src/common/Form/LocationSearch.field'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import { validateUrl, addProtocolMutator, required } from 'src/utils/validators'
 import IconHeaderEvents from 'src/assets/images/header-section/events-header-icon.svg'
 import { logger } from 'src/logger'
+import { CheckboxInput } from 'src/common/Form/Checkbox'
 
 interface IState {
   formValues: IEventFormInput
@@ -29,6 +30,7 @@ interface IState {
   showSubmitModal?: boolean
   selectedDate: any
   isLocationSelected?: boolean
+  isDigitalEvent?: boolean
 }
 type IProps = RouteComponentProps<any>
 interface IInjectedProps extends IProps {
@@ -54,6 +56,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
       formValues: { ...TEMPLATE.INITIAL_VALUES },
       formSaved: false,
       selectedDate: null,
+      isDigitalEvent: TEMPLATE?.INITIAL_VALUES?.isDigital,
     }
   }
 
@@ -77,11 +80,18 @@ export class EventsCreate extends React.Component<IProps, IState> {
   }
 
   public render() {
-    const { formValues, isLocationSelected } = this.state
+    const { formValues, isLocationSelected, selectedDate, isDigitalEvent } =
+      this.state
+
+    const shouldShowLocationError =
+      !isDigitalEvent && isLocationSelected !== undefined && !isLocationSelected
     return (
       <Form
         onSubmit={(v) => {
-          const datepickerDate = this.state.selectedDate
+          if (v.isDigital) {
+            v.location = TEMPLATE.INITIAL_VALUES?.location
+          }
+          const datepickerDate = selectedDate
           // convert from Date type to yyyy/mm/dd string and back into local timezone
           const convert = new Date(
             datepickerDate.getTime() -
@@ -161,7 +171,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             sx={{ width: '100%', flexDirection: 'column' }}
                             data-cy="date"
                           >
-                            <Label htmlFor="location">
+                            <Label htmlFor="date">
                               When is your event taking place? *
                             </Label>
                             <Field
@@ -180,37 +190,24 @@ export class EventsCreate extends React.Component<IProps, IState> {
                               }}
                             />
                           </Flex>
+
                           <Flex
                             mb={3}
                             px={2}
                             sx={{ width: '100%', flexDirection: 'column' }}
                           >
-                            <Label htmlFor="location">
-                              In which city is the event taking place? *
-                            </Label>
+                            <Label htmlFor="url">Link to your event *</Label>
                             <Field
-                              id="location"
-                              name="location"
-                              className="location-search-create"
+                              name="url"
+                              data-cy="url"
                               validateFields={[]}
-                              validate={required}
-                              customChange={() => {
-                                this.setState({
-                                  isLocationSelected: true,
-                                })
-                              }}
-                              component={LocationSearchField}
+                              validate={(value) => validateUrl(value)}
+                              component={FieldInput}
+                              placeholder="URL to offsite link (Facebook, Meetup, etc)"
+                              customOnBlur={(e) =>
+                                mutators.addProtocolMutator(e.target.name)
+                              }
                             />
-                            {isLocationSelected !== undefined &&
-                              !isLocationSelected && (
-                                <Text
-                                  color={theme.colors.red}
-                                  mb="5px"
-                                  sx={{ fontSize: 1 }}
-                                >
-                                  Select a location for your event
-                                </Text>
-                              )}
                           </Flex>
                         </Flex>
                         <Flex
@@ -223,16 +220,59 @@ export class EventsCreate extends React.Component<IProps, IState> {
                           <Flex
                             mb={3}
                             px={2}
-                            sx={{ width: '100%', flexDirection: 'column' }}
+                            sx={{
+                              width: '100%',
+                              flexDirection: 'column',
+                            }}
                           >
-                            <Label htmlFor="location">
-                              Select tags for your event *
-                            </Label>
-                            <Field
-                              name="tags"
-                              component={TagsSelectField}
-                              category="event"
-                            />
+                            {!isDigitalEvent && (
+                              <>
+                                <Label htmlFor="location">
+                                  In which city is the event taking place?
+                                </Label>
+                                <Field
+                                  id="location"
+                                  name="location"
+                                  className="location-search-create"
+                                  validateFields={[]}
+                                  customClear={() => {
+                                    this.setState({
+                                      isLocationSelected: false,
+                                    })
+                                  }}
+                                  customChange={() => {
+                                    this.setState({
+                                      isLocationSelected: true,
+                                    })
+                                  }}
+                                  component={LocationSearchField}
+                                />
+                                {shouldShowLocationError && (
+                                  <Text
+                                    color={theme.colors.red}
+                                    mb="5px"
+                                    sx={{ fontSize: 1 }}
+                                  >
+                                    Select a location for your event
+                                  </Text>
+                                )}
+                              </>
+                            )}
+                            <Flex my={3} sx={{ alignItems: 'center' }}>
+                              <Field
+                                onClick={() => {
+                                  this.setState({
+                                    isDigitalEvent: !isDigitalEvent,
+                                    isLocationSelected: !!isDigitalEvent,
+                                  })
+                                }}
+                                type="checkbox"
+                                id="isDigital"
+                                name="isDigital"
+                                labelText="This is a digital event"
+                                component={CheckboxInput}
+                              ></Field>
+                            </Flex>
                           </Flex>
                           <Flex
                             mb={3}
@@ -240,18 +280,12 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             sx={{ width: '100%', flexDirection: 'column' }}
                           >
                             <Label htmlFor="location">
-                              Link to your event *
+                              Select tags for your event
                             </Label>
                             <Field
-                              name="url"
-                              data-cy="url"
-                              validateFields={[]}
-                              validate={(value) => validateUrl(value)}
-                              component={FieldInput}
-                              placeholder="URL to offsite link (Facebook, Meetup, etc)"
-                              customOnBlur={(e) =>
-                                mutators.addProtocolMutator(e.target.name)
-                              }
+                              name="tags"
+                              component={TagsSelectField}
+                              category="event"
                             />
                           </Flex>
                         </Flex>
@@ -277,7 +311,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                 </Box>
                 <Button
                   onClick={() => {
-                    if (isLocationSelected) {
+                    if (isDigitalEvent || isLocationSelected) {
                       handleSubmit()
                     } else {
                       this.setState({ isLocationSelected: false })

@@ -31,6 +31,8 @@ export interface ThemeWithName {
 
   communityProgramURL: string
 
+  alerts: any
+
   badges: {
     [K in ProfileTypeLabel]?: Badge
   }
@@ -85,6 +87,7 @@ export interface ThemeWithName {
     softgrey: string
     offwhite: string
     lightgrey: string
+    darkGrey: string
   }
 
   fontSizes: number[]

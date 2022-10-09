@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Card, Flex, Heading, Box } from 'theme-ui'
+import { Card, Flex, Heading, Box, Text } from 'theme-ui'
 import type { IUserPP } from 'src/models/user_pp.models'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { UserStore } from 'src/stores/User/user.store'
@@ -10,9 +10,8 @@ import { ExpertiseSection } from './content/formSections/Expertise.section'
 import { WorkspaceSection } from './content/formSections/Workspace.section'
 import { CollectionSection } from './content/formSections/Collection.section'
 import { AccountSettingsSection } from './content/formSections/AccountSettings.section'
-import { Button } from 'oa-components'
+import { Button, TextNotification } from 'oa-components'
 import { ProfileGuidelines } from './content/PostingGuidelines'
-import { TextNotification } from 'src/components/Notification/TextNotification'
 import { Form } from 'react-final-form'
 import { ARRAY_ERROR, FORM_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'
@@ -42,6 +41,7 @@ interface IState {
   showDeleteDialog?: boolean
   showLocationDropdown: boolean
   user?: IUserPP
+  showFormSubmitResult: boolean
 }
 
 @inject('userStore')
@@ -80,6 +80,7 @@ export class UserSettings extends React.Component<IProps, IState> {
       notification: { message: '', icon: '', show: false },
       user,
       showLocationDropdown: !user?.location?.latlng,
+      showFormSubmitResult: false,
     })
   }
 
@@ -102,12 +103,19 @@ export class UserSettings extends React.Component<IProps, IState> {
     })
     // Submit, show notification update and return any errors to form
     try {
-      logger.debug({ profile: vals }, 'UserSettings.saveProfile')
+      console.debug({ profile: vals }, 'UserSettings.saveProfile')
       const { adminEditableUserId } = this.props
       await this.injected.userStore.updateUserProfile(vals, adminEditableUserId)
-      this.setState({
-        notification: { message: 'Profile Saved', icon: 'check', show: true },
-      })
+      // throw new Error('I hate you');
+      console.log(`before setState`)
+      this.setState(
+        {
+          notification: { message: 'Profile Saved', icon: 'check', show: true },
+        },
+        () => {
+          console.log(`After setState`, this.state.notification)
+        },
+      )
       return {}
     } catch (error) {
       logger.warn({ error, profile: vals }, 'UserSettings.saveProfile.error')
@@ -150,7 +158,7 @@ export class UserSettings extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { formValues, notification, user } = this.state
+    const { formValues, user } = this.state
     return user ? (
       <Form
         onSubmit={(v) =>
@@ -170,7 +178,6 @@ export class UserSettings extends React.Component<IProps, IState> {
           submitting,
           values,
           handleSubmit,
-          submitError,
           valid,
           errors,
           ...rest
@@ -259,17 +266,18 @@ export class UserSettings extends React.Component<IProps, IState> {
               {/* desktop guidelines container */}
               <Flex
                 sx={{
-                  width: ['100%', '100%', `${100 * 0.333}%`],
+                  width: ['100%', '100%', `${100 / 3}%`],
                   flexDirection: 'column',
                   bg: 'inherit',
                   px: 2,
-                  height: '100%',
+                  height: 'auto',
                   mt: [0, 0, 4],
                 }}
               >
                 <Box
                   sx={{
-                    position: ['relative', 'relative', 'fixed'],
+                    position: ['relative', 'relative', 'sticky'],
+                    top: 3,
                     maxWidth: ['100%', '100%', '400px'],
                   }}
                 >
@@ -290,6 +298,9 @@ export class UserSettings extends React.Component<IProps, IState> {
                       // https://github.com/final-form/react-final-form/blob/master/docs/faq.md#how-can-i-trigger-a-submit-from-outside-my-form
                       const formEl = document.getElementById('userProfileForm')
                       if (typeof formEl !== 'undefined' && formEl !== null) {
+                        this.setState({
+                          showFormSubmitResult: true,
+                        })
                         formEl.dispatchEvent(
                           new Event('submit', {
                             cancelable: true,
@@ -298,28 +309,33 @@ export class UserSettings extends React.Component<IProps, IState> {
                         )
                       }
                     }}
+                    mb={3}
                     sx={{ width: '100%' }}
                     variant={'primary'}
                     type="submit"
                     // disable button when form invalid or during submit.
                     // ensure enabled after submit error
-                    disabled={submitError ? false : !valid || submitting}
+                    disabled={submitting}
                   >
                     Save profile
                   </Button>
-                  <div style={{ float: 'right' }}>
+                  {this.state.showFormSubmitResult && (
                     <TextNotification
-                      data-cy="profile-saved"
-                      text={notification.message}
-                      icon={submitError ? 'close' : 'check'}
-                      show={notification.show}
-                      hideNotificationCb={() =>
-                        this.setState({
-                          notification: { ...notification, show: false },
-                        })
-                      }
-                    />
-                  </div>
+                      isVisible={this.state.showFormSubmitResult}
+                      variant={valid ? 'success' : 'failure'}
+                    >
+                      <Text>
+                        {valid ? (
+                          <>Profile saved successfully</>
+                        ) : (
+                          <>
+                            Ouch, something's wrong. Make sure all fields are
+                            filled correctly to save your profile.
+                          </>
+                        )}
+                      </Text>
+                    </TextNotification>
+                  )}
                 </Box>
               </Flex>
             </Flex>

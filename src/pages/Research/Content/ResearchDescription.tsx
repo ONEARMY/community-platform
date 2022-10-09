@@ -2,13 +2,17 @@ import { format } from 'date-fns'
 import * as React from 'react'
 import { Box, Flex, Image, Text, Heading } from 'theme-ui'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
-import { Button, FlagIconHowTos, ModerationStatus } from 'oa-components'
+import {
+  Button,
+  FlagIconHowTos,
+  LinkifyText,
+  ModerationStatus,
+  UsefulStatsButton,
+} from 'oa-components'
 import type { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
 import type { IUser } from 'src/models/user.models'
 import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
-import { UsefulStatsButton } from 'src/components/UsefulStatsButton/UsefulStatsButton'
-import Linkify from 'react-linkify'
 import { Link } from 'react-router-dom'
 
 interface IProps {
@@ -163,9 +167,7 @@ const ResearchDescription: React.FC<IProps> = ({
             {research.title}
           </Heading>
           <Text sx={{ whiteSpace: 'pre-line', ...theme.typography.paragraph }}>
-            <Linkify properties={{ target: '_blank' }}>
-              {research.description}
-            </Linkify>
+            <LinkifyText>{research.description}</LinkifyText>
           </Text>
         </Box>
       </Flex>

@@ -3,7 +3,7 @@ import { MoreContainer } from './MoreContainer'
 import { Heading, Flex } from 'theme-ui'
 
 export default {
-  title: 'Base Components/MoreContainer',
+  title: 'Components/MoreContainer',
   component: MoreContainer,
   parameters: {
     layout: 'padded',

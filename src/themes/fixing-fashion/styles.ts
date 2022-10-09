@@ -29,6 +29,7 @@ export const colors = {
   silver: '#c0c0c0',
   softgrey: '#c2d4e4',
   lightgrey: '#ababac',
+  darkGrey: '#686868',
 }
 
 export const zIndex = {
@@ -63,6 +64,25 @@ const maxContainerWidth = 1280
 const regular = 400
 const bold = 600
 // cc - assume standard image widths are 4:3, however not clearly defined
+
+const alerts = {
+  success: {
+    borderRadius: 1,
+    paddingX: 3,
+    paddingY: 3,
+    backgroundColor: colors.green,
+    textAlign: 'center',
+    fontWeight: 'normal',
+  },
+  failure: {
+    borderRadius: 1,
+    paddingX: 3,
+    paddingY: 3,
+    backgroundColor: colors.red2,
+    textAlign: 'center',
+    fontWeight: 'normal',
+  },
+}
 
 const buttons = {
   primary: {
@@ -205,6 +225,7 @@ const StyledComponentTheme: ThemeWithName = {
     'https://community.fixing.fashion/academy/guides/profile',
   communityProgramURL:
     'https://community.fixing.fashion/academy/guides/community-program',
+  alerts,
   badges: {
     member: {
       lowDetail: memberLow,

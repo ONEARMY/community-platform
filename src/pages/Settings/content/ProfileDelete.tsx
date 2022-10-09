@@ -39,7 +39,7 @@ export class ProfileDelete extends React.Component<IProps, IState> {
         >
           Delete Profile
         </Button>
-        (
+
         <Modal
           onDidDismiss={() => this.onModalDismiss()}
           isOpen={!!this.state.showDeleteDialog}
@@ -80,7 +80,6 @@ export class ProfileDelete extends React.Component<IProps, IState> {
             }}
           />
         </Modal>
-        )
       </>
     )
   }

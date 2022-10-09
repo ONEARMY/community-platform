@@ -13,7 +13,7 @@ import {
   FieldTextarea,
   ElWithBeforeIcon,
 } from 'oa-components'
-import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
+import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import type { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import theme from 'src/themes/styled.theme'
@@ -241,7 +241,7 @@ const ResearchForm = observer((props: IProps) => {
               <Flex
                 sx={{
                   flexDirection: 'column',
-                  width: [1, 1, 1 / 3],
+                  width: ['100%', '100%', `${100 / 3}%`],
                   height: '100%',
                 }}
                 bg="inherit"
@@ -250,7 +250,8 @@ const ResearchForm = observer((props: IProps) => {
               >
                 <Box
                   sx={{
-                    position: ['relative', 'relative', 'fixed'],
+                    position: ['relative', 'relative', 'sticky'],
+                    top: 3,
                     maxWidth: ['inherit', 'inherit', '400px'],
                   }}
                 >

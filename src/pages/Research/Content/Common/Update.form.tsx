@@ -12,7 +12,7 @@ import {
   FieldTextarea,
   ElWithBeforeIcon,
 } from 'oa-components'
-import { ImageInputField } from 'src/components/Form/ImageInput.field'
+import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import type { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import theme from 'src/themes/styled.theme'
@@ -289,7 +289,7 @@ const UpdateForm = observer((props: IProps) => {
               <Flex
                 sx={{
                   flexDirection: 'column',
-                  width: [1, 1, 1 / 3],
+                  width: ['100%', '100%', `${100 / 3}%`],
                   height: '100%',
                 }}
                 bg="inherit"
@@ -298,7 +298,8 @@ const UpdateForm = observer((props: IProps) => {
               >
                 <Box
                   sx={{
-                    position: ['relative', 'relative', 'fixed'],
+                    position: ['relative', 'relative', 'sticky'],
+                    top: 3,
                     maxWidth: ['inherit', 'inherit', '400px'],
                   }}
                 >

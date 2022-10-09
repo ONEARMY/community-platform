@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react'
 import { Button } from 'oa-components'
 import { Heading, Box, Text, Flex, Input } from 'theme-ui'
 import type { AdminStore } from 'src/stores/Admin/admin.store'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 
 // we include props from react-final-form fields so it can be used as a custom field component
 interface IProps {

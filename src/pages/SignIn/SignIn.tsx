@@ -1,14 +1,13 @@
 import * as React from 'react'
 import { getFriendlyMessage } from 'oa-shared'
-import { Card, Flex, Heading, Text, Label } from 'theme-ui'
+import { Card, Flex, Heading, Text, Label, Box } from 'theme-ui'
 import type { RouteComponentProps } from 'react-router'
 import { withRouter, Redirect } from 'react-router'
-import { Button, FieldInput } from 'oa-components'
+import { Button, FieldInput, TextNotification } from 'oa-components'
 import { inject, observer } from 'mobx-react'
 import { Form, Field } from 'react-final-form'
 import type { UserStore } from 'src/stores/User/user.store'
-import type { ITextNotificationProps } from 'src/components/Notification/TextNotification'
-import { TextNotification } from 'src/components/Notification/TextNotification'
+import type { TextNotificationProps } from 'oa-components'
 import { required } from 'src/utils/validators'
 import { Link } from 'react-router-dom'
 
@@ -21,7 +20,9 @@ interface IState {
   errorMsg?: string
   disabled?: boolean
   authProvider?: IAuthProvider
-  notificationProps?: ITextNotificationProps
+  notificationProps?: Pick<TextNotificationProps, 'isVisible' | 'variant'> & {
+    text: string
+  }
 }
 interface IProps extends RouteComponentProps<any> {
   onChange?: (e: React.FormEvent<any>) => void
@@ -57,8 +58,6 @@ class SignInPage extends React.Component<IProps, IState> {
       },
       authProvider: AUTH_PROVIDERS.firebase,
     }
-
-    this.hideNotification = this.hideNotification.bind(this)
   }
 
   async onLoginSubmit(v: IFormValues) {
@@ -78,31 +77,20 @@ class SignInPage extends React.Component<IProps, IState> {
       await this.props.userStore!.sendPasswordResetEmail(inputEmail)
       this.setState({
         notificationProps: {
-          show: true,
+          isVisible: true,
           text: 'Reset email sent',
-          icon: 'email',
-          type: 'confirmation',
+          variant: 'success',
         },
       })
     } catch (error) {
       this.setState({
         notificationProps: {
-          show: true,
+          isVisible: true,
           text: error.code,
-          icon: 'close',
-          type: 'error',
+          variant: 'failure',
         },
       })
     }
-  }
-
-  hideNotification = () => {
-    this.setState({
-      notificationProps: {
-        ...this.state.notificationProps,
-        show: false,
-      },
-    })
   }
 
   public render() {
@@ -201,7 +189,7 @@ class SignInPage extends React.Component<IProps, IState> {
                             </Flex>
                             <Text color={'red'}>{this.state.errorMsg}</Text>
                             <Flex
-                              mb={3}
+                              mb={1}
                               sx={{ justifyContent: 'space-between' }}
                             >
                               <Text sx={{ fontSize: 1 }} color={'grey'} mt={2}>
@@ -219,12 +207,23 @@ class SignInPage extends React.Component<IProps, IState> {
                                 >
                                   Lost password?
                                 </Link>
-                                <TextNotification
-                                  {...notificationProps}
-                                  hideNotificationCb={this.hideNotification}
-                                />
                               </Text>
                             </Flex>
+
+                            {notificationProps && (
+                              <Box
+                                sx={{
+                                  marginBottom: 3,
+                                }}
+                              >
+                                <TextNotification
+                                  isVisible={notificationProps.isVisible}
+                                  variant={notificationProps.variant}
+                                >
+                                  {getFriendlyMessage(notificationProps?.text)}
+                                </TextNotification>
+                              </Box>
+                            )}
 
                             <Flex>
                               <Button

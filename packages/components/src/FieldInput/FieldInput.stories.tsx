@@ -2,7 +2,7 @@ import type { ComponentStory, ComponentMeta } from '@storybook/react'
 import { FieldInput } from './FieldInput'
 
 export default {
-  title: 'Base Components/Form/FieldInput',
+  title: 'Components/FieldInput',
   component: FieldInput,
 } as ComponentMeta<typeof FieldInput>
 

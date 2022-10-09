@@ -2,7 +2,7 @@ import type { ComponentStory, ComponentMeta } from '@storybook/react'
 import { EditComment } from './EditComment'
 
 export default {
-  title: 'Base Components/EditComment',
+  title: 'Components/EditComment',
   component: EditComment,
 } as ComponentMeta<typeof EditComment>
 

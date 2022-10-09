@@ -78,8 +78,7 @@ class CustomRadioField extends Component<IProps, IState> {
           width: '100%',
           display: 'flex',
           padding: '10px',
-          flexDirection: ['row', 'row', 'column'],
-          m: '5px',
+          flexDirection: 'column',
           p: '10px 0',
           borderRadius: '5px',
           border: `#f4f6f7`, // theme.colors.background

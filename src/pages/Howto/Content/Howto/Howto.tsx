@@ -20,6 +20,7 @@ import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.sto
 import { seoTagsUpdate } from 'src/utils/seo'
 import { Link } from 'react-router-dom'
 import type { UserComment } from 'src/models'
+import type { TagsStore } from 'src/stores/Tags/tags.store'
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
 // We can't directly provide the store as a prop though, and later user a get method to define it
@@ -31,6 +32,7 @@ interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
   howtoStore: HowtoStore
   userStore: UserStore
   aggregationsStore: AggregationsStore
+  tagsStore: TagsStore
 }
 interface IState {
   howto?: IHowtoDB
@@ -74,7 +76,7 @@ const MoreBox = styled(Box)`
   }
 `
 
-@inject('howtoStore', 'userStore', 'aggregationsStore')
+@inject('howtoStore', 'userStore', 'aggregationsStore', 'tagsStore')
 @observer
 export class Howto extends React.Component<
   RouteComponentProps<IRouterCustomParams>,
@@ -152,17 +154,30 @@ export class Howto extends React.Component<
 
       const activeHowToComments: UserComment[] = this.store
         .getActiveHowToComments()
-        .map((c): UserComment => {
-          return {
+        .map(
+          (c): UserComment => ({
             ...c,
-            isEditable: c._creatorId === this.injected.userStore.user?.userName,
-          }
-        })
+            isEditable: [
+              this.injected.userStore.user?._id,
+              this.injected.userStore.user?.userName,
+            ].includes(c._creatorId),
+          }),
+        )
+
+      const { allTagsByKey } = this.injected.tagsStore
+      const howto = {
+        ...activeHowto,
+        taglist:
+          activeHowto.tags &&
+          Object.keys(activeHowto.tags)
+            .map((t) => allTagsByKey[t])
+            .filter(Boolean),
+      }
 
       return (
         <>
           <HowtoDescription
-            howto={activeHowto}
+            howto={howto}
             votedUsefulCount={votedUsefulCount}
             loggedInUser={loggedInUser}
             needsModeration={this.store.needsModeration(activeHowto)}

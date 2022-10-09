@@ -4,6 +4,7 @@ import styled from '@emotion/styled'
 import { MODULE } from 'src/modules'
 import theme from 'src/themes/styled.theme'
 import { ADMIN_PAGES } from '../admin.routes'
+import { Fragment } from 'react'
 
 const moduleName = MODULE.ADMIN
 
@@ -16,6 +17,9 @@ const SubmenuLink = styled(NavLink)`
   &.active {
     color: ${theme.colors.yellow.base};
     text-decoration: underline;
+  }
+  &.disabled {
+    opacity: 0.5;
   }
 `
 
@@ -45,11 +49,24 @@ const AdminSubheader = () => (
     mr={[-2, -3, -4]}
     data-cy="admin-subheader"
   >
-    {ADMIN_PAGES.map((p) => (
-      <SubmenuLink key={p.path} to={`/${moduleName}${p.path}`} exact>
-        {p.title}
-      </SubmenuLink>
-    ))}
+    {ADMIN_PAGES.map((p) => {
+      return p.disabled ? (
+        <Fragment key={p.path}>
+          <SubmenuLink
+            to={`/${moduleName}${p.path}`}
+            onClick={(e) => e.preventDefault()}
+            className="disabled"
+            data-tip={'Coming soon...'}
+          >
+            {p.title}
+          </SubmenuLink>
+        </Fragment>
+      ) : (
+        <SubmenuLink key={p.path} to={`/${moduleName}${p.path}`} exact>
+          {p.title}
+        </SubmenuLink>
+      )
+    })}
   </SubheaderContainer>
 )
 

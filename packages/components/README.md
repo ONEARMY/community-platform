@@ -1,13 +1,12 @@
-# One Army Components
+# Platform Components
 
-These components provide a collection of elements that can be reused across the platform.
+A collection of react components for reuse across the platform. Built with [Theme UI](https://theme-ui.com/) for styling.
 
-Components can be combined to help anyone building on the platform to efficiently design consistent experiences for site visitors.
-
+These components are stored within the [Community Platform monorepo](https://github.com/ONEARMY/community-platform) and configured as a standalone package using [Yarn workspaces](https://yarnpkg.com/features/workspaces/).  
 The aim of packaging these components separately is to:
 
-1. Reduce the overhead for contributors looking to work **only** on the component layer without needing to spin up the entire application locally.
-2. Encourage decoupling of presentation layer from business logic, typically stored within the `*.stores.tsx` files.
+1. Encourage separation between presentation layer and business logic
+2. Reduce the overhead for contributors looking to work **only** on the component layer without needing to spin up the entire application locally.
 
 We are using [Storybook](https://storybook.js.org/) to provide a browser accessible interface for our components.
 

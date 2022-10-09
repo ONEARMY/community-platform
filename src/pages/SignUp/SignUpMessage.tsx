@@ -49,10 +49,10 @@ class SignUpMessagePage extends React.Component {
               </Flex>
             </Flex>
           </Card>
-          <Flex mt={3} sx={{ justifyContent: 'flex-end' }}>
-            <Link to={'/'}>
-              <Button variant="secondary" data-cy="home">
-                Home
+          <Flex mt={3} sx={{ justifyContent: 'flex-start' }}>
+            <Link to={'/settings'}>
+              <Button variant="primary" data-cy="home">
+                Complete your profile
               </Button>
             </Link>
           </Flex>

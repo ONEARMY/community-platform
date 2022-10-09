@@ -158,10 +158,6 @@ commands:
         type: string
         default: ''
         description: Firebase Deploy Token
-      use_application_credentials:
-        type: boolean
-        default: false
-        description: Specify if GOOGLE_APPLICATION_CREDENTIALS_JSON var used instead of firebase token
       alias:
         type: string
         default: 'default'
@@ -170,24 +166,14 @@ commands:
       - run:
           name: Install Firebase Tools
           command: yarn add -D firebase-tools
-      - when:
-          condition: <<parameters.use_application_credentials>>
-          steps:
-            - run:
-                name: Export application credentials
-                command: echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > service_account.json
-            - run:
-                name: Deploy to Firebase
-                command: ./node_modules/.bin/firebase deploy --debug -P << parameters.alias >>
-                environment:
-                  GOOGLE_APPLICATION_CREDENTIALS: service_account.json
-      - when:
-          condition:
-            not: <<parameters.use_application_credentials>>
-          steps:
-            - run:
-                name: Deploy to Firebase
-                command: ./node_modules/.bin/firebase deploy --token=<< parameters.token >> -P << parameters.alias >>
+      - run:
+          name: Export application credentials
+          command: echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > service_account.json
+      - run:
+          name: Deploy to Firebase
+          command: ./node_modules/.bin/firebase deploy --debug -P << parameters.alias >>
+          environment:
+            GOOGLE_APPLICATION_CREDENTIALS: service_account.json
 
 examples:
 
@@ -318,7 +304,6 @@ jobs:
       - firebase_deploy:
           # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
           alias: << parameters.DEPLOY_ALIAS >>
-          use_application_credentials: true
       - when:
           condition: << parameters.NOTIFY_SLACK >>
           steps:
@@ -453,17 +438,10 @@ workflows:
               ignore:
                 - production
       #---------------------- Development Instances Build and Deploy ----------------------
-      - release:
-          name: Release new version to GitHub
-          requires:
-            - test_e2e
-          <<: *filter_only_master
-          context:
-            - release-context
       - deploy:
           name: 'Deploy: dev.onearmy.world'
           requires:
-            - 'Release new version to GitHub'
+            - test_e2e
           <<: *filter_only_master
           DEPLOY_ALIAS: 'default'
           NOTIFY_SLACK: true
@@ -473,7 +451,7 @@ workflows:
       - deploy:
           name: 'Deploy: dev.community.projectkamp.com'
           requires:
-            - 'Release new version to GitHub'
+            - test_e2e
           <<: *filter_only_master
           DEPLOY_ALIAS: project-kamp-development
           NOTIFY_SLACK: true
@@ -481,21 +459,29 @@ workflows:
             - circle-ci-slack-context
             - project-kamp-dev
       - deploy:
-          name: 'Deploy: fixing-fashion-dev.web.app'
+          name: 'Deploy: dev.community.fixing.fashion'
           requires:
-            - 'Release new version to GitHub'
+            - test_e2e
           <<: *filter_only_master
           DEPLOY_ALIAS: fixing-fashion-dev
           NOTIFY_SLACK: true
           context:
             - circle-ci-slack-context
             - fixing-fashion-dev
+      #---------------------- Development Instances Build and Deploy ----------------------
+      - release:
+          name: Release new version to GitHub
+          <<: *filter_only_production
+          context:
+            - release-context
       - build:
           name: Build Production Release
           context: build-context
+          requires: 
+            - 'Release new version to GitHub'
           <<: *filter_only_production
       - deploy:
-          name: 'Deploy: fixing-fashion-prod.web.app'
+          name: 'Deploy: community.fixing.fashion'
           requires:
             - 'Build Production Release'
           <<: *filter_only_production

@@ -85,4 +85,14 @@ describe('changeUserReferenceToPlainText', () => {
       ),
     ).toBe('@username @username2')
   })
+
+  it('converts multiple userreferences to plain text', () => {
+    expect(
+      changeUserReferenceToPlainText(
+        '@@{authId0021:username-one} @@{authId:username-with-trailing-slash-} @@{authId:-username-with-leading-slash} @@{authId:username-multiple---slashes}',
+      ),
+    ).toBe(
+      '@username-one @username-with-trailing-slash- @-username-with-leading-slash @username-multiple---slashes',
+    )
+  })
 })

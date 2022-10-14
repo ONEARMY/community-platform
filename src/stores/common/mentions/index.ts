@@ -17,7 +17,7 @@ export const changeMentionToUserReference = async function (
   text: string,
   userStore: UserStore,
 ): Promise<string> {
-  const mentions = text.match(/\B@[a-z0-9_-]+/g)
+  const mentions = text.match(/\B@[​a-z0-9_-]+/g)
   const mentionedUsers = new Set<string>()
 
   if (!mentions) {
@@ -26,7 +26,7 @@ export const changeMentionToUserReference = async function (
 
   for (const mention of mentions) {
     const userProfile: IUser = await userStore.getUserProfile(
-      mention.replace('@', ''),
+      mention.replace(/[@​]/g, ''),
     )
 
     logger.debug({ userProfile })
@@ -45,5 +45,5 @@ export const changeMentionToUserReference = async function (
 }
 
 export const changeUserReferenceToPlainText = function (text: string) {
-  return text.replace(/@@\{([A-Za-z0-9_-]+):([a-z0-9\-]+)}/g, '@$2')
+  return text.replace(/@([A-Za-z0-9_-]+)/, '@​$1').replace(/@@\{([A-Za-z0-9_-]+):([a-z0-9\-]+)}/g, '@$2')
 }

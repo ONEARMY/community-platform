@@ -29,7 +29,7 @@ describe('changeMentionToUserReference', () => {
 
     expect(
       await changeMentionToUserReference(
-        'a simple @fish containing multiple usernames, @seconduser. A fake @user',
+        'a simple @​fish containing multiple usernames, @seconduser. A fake @user',
         mockUserStore as unknown as UserStore,
       ),
     ).toEqual(
@@ -93,6 +93,16 @@ describe('changeUserReferenceToPlainText', () => {
       ),
     ).toBe(
       '@username-one @username-with-trailing-slash- @-username-with-leading-slash @username-multiple---slashes',
+    )
+  })
+
+  it('turns `@plain-text` into format that will not be autolinked', () => {
+    expect(
+      changeUserReferenceToPlainText(
+        '@abc',
+      ),
+    ).toBe(
+      '@​abc',
     )
   })
 })

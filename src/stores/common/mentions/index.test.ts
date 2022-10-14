@@ -29,11 +29,11 @@ describe('changeMentionToUserReference', () => {
 
     expect(
       await changeMentionToUserReference(
-        'a simple @​fish containing multiple usernames, @seconduser. A fake @user',
+        'a simple @​fish containing multiple usernames, @seconduser. One fake @user',
         mockUserStore as unknown as UserStore,
       ),
     ).toEqual(
-      'a simple @@{fish:FISH} containing multiple usernames, @@{seconduser:seconduser}. A fake @user',
+      'a simple @@{fish:FISH} containing multiple usernames, @@{seconduser:seconduser}. One fake @​user',
     )
   })
 

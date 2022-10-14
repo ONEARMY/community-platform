@@ -45,5 +45,7 @@ export const changeMentionToUserReference = async function (
 }
 
 export const changeUserReferenceToPlainText = function (text: string) {
-  return text.replace(/@([A-Za-z0-9_-]+)/, '@​$1').replace(/@@\{([A-Za-z0-9_-]+):([a-z0-9\-]+)}/g, '@$2')
+  return text
+    .replace(/@([A-Za-z0-9_-]+)/, '@​$1')
+    .replace(/@@\{([A-Za-z0-9_-]+):([a-z0-9\-]+)}/g, '@$2')
 }

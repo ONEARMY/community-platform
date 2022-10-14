@@ -97,12 +97,6 @@ describe('changeUserReferenceToPlainText', () => {
   })
 
   it('turns `@plain-text` into format that will not be autolinked', () => {
-    expect(
-      changeUserReferenceToPlainText(
-        '@abc',
-      ),
-    ).toBe(
-      '@​abc',
-    )
+    expect(changeUserReferenceToPlainText('@abc')).toBe('@​abc')
   })
 })

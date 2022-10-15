@@ -10,13 +10,13 @@ import type {
   IResearchStats,
   IResearchDB,
   IResearch,
-} from 'src/models/research.models'
+} from '../../models/research.models'
 import { createContext, useContext } from 'react'
 import type { IConvertedFileMeta } from 'src/types'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { logger } from 'src/logger'
 import type { IComment, IUser } from 'src/models'
-import { ModuleStore } from 'src/stores/common/module.store'
+import { ModuleStore } from '../common/module.store'
 import {
   filterModerableItems,
   hasAdminRights,
@@ -28,20 +28,28 @@ import {
   changeMentionToUserReference,
   changeUserReferenceToPlainText,
 } from '../common/mentions'
+import type { DocReference } from '../databaseV2/DocReference'
 
 const COLLECTION_NAME = 'research'
 
 export class ResearchStore extends ModuleStore {
   @observable
   public activeResearch: IResearchDB | undefined
-  @observable public allResearchItems: IResearch.ItemDB[] = []
-  @observable public activeResearchItem: IResearch.ItemDB | undefined
+
+  @observable
+  public allResearchItems: IResearch.ItemDB[] = []
+
+  @observable
+  public activeResearchItem: IResearch.ItemDB | undefined
+
   @observable
   public researchUploadStatus: IResearchUploadStatus =
     getInitialResearchUploadStatus()
+
   @observable
   public updateUploadStatus: IUpdateUploadStatus =
     getInitialUpdateUploadStatus()
+
   @observable researchStats: IResearchStats | undefined
 
   constructor() {
@@ -90,7 +98,7 @@ export class ResearchStore extends ModuleStore {
         this.activeResearchItem = {
           ...researchItem,
           description: changeUserReferenceToPlainText(researchItem.description),
-          updates: researchItem.updates.map((update) => {
+          updates: researchItem.updates?.map((update) => {
             update.description = changeUserReferenceToPlainText(
               update.description,
             )
@@ -167,7 +175,6 @@ export class ResearchStore extends ModuleStore {
     const user = this.activeUser
     const item = this.activeResearchItem
     const comment = text.slice(0, MAX_COMMENT_LENGTH).trim()
-
     if (item && comment && user) {
       const dbRef = this.db
         .collection<IResearch.Item>(COLLECTION_NAME)
@@ -213,7 +220,7 @@ export class ResearchStore extends ModuleStore {
           ...(updateWithMeta as IResearch.UpdateDB),
         }
 
-        await dbRef.set(newItem)
+        await this.updateResearchItem(dbRef, newItem)
         const createdItem = (await dbRef.get()) as IResearch.ItemDB
         runInAction(() => {
           this.activeResearchItem = createdItem
@@ -252,7 +259,9 @@ export class ResearchStore extends ModuleStore {
           )
           const newImg = imgMeta.map((img) => ({ ...img }))
           updateWithMeta.images = newImg
-        } else updateWithMeta.images = []
+        } else {
+          updateWithMeta.images = []
+        }
 
         updateWithMeta.comments = newComments
 
@@ -269,7 +278,7 @@ export class ResearchStore extends ModuleStore {
           ...(updateWithMeta as IResearch.UpdateDB),
         }
 
-        await dbRef.set(newItem)
+        await this.updateResearchItem(dbRef, newItem)
         const createdItem = (await dbRef.get()) as IResearch.ItemDB
         runInAction(() => {
           this.activeResearchItem = createdItem
@@ -333,7 +342,7 @@ export class ResearchStore extends ModuleStore {
             ...(updateWithMeta as IResearch.UpdateDB),
           }
 
-          await dbRef.set(newItem)
+          await this.updateResearchItem(dbRef, newItem)
           const createdItem = (await dbRef.get()) as IResearch.ItemDB
           runInAction(() => {
             this.activeResearchItem = createdItem
@@ -344,6 +353,35 @@ export class ResearchStore extends ModuleStore {
       console.error(err)
       throw new Error(err)
     }
+  }
+
+  /**
+   * Updates supplied dbRef after
+   * converting @mentions to user references
+   * on all required properties within researchItem object.
+   *
+   */
+  private async updateResearchItem(
+    dbRef: DocReference<IResearch.Item>,
+    researchItem: IResearch.Item,
+  ): Promise<void> {
+    logger.debug('updateResearchItem', {
+      before: researchItem.description,
+      after: await this.addUserReference(researchItem.description),
+    })
+
+    await Promise.all(
+      researchItem.updates.map(async (up, idx) => {
+        researchItem.updates[idx].description = await this.addUserReference(
+          up.description,
+        )
+      }),
+    )
+
+    return dbRef.set({
+      ...researchItem,
+      description: await this.addUserReference(researchItem.description),
+    })
   }
 
   public async uploadResearch(values: IResearch.FormInput | IResearch.ItemDB) {
@@ -359,9 +397,8 @@ export class ResearchStore extends ModuleStore {
       // populate DB
       // define research
       const userCountry = getUserCountry(user)
-      const research: IResearch.Item = {
+      const researchItem: IResearch.Item = {
         ...values,
-        description: await this.addUserReference(values.description),
         _createdBy: values._createdBy ? values._createdBy : user.userName,
         moderation: values.moderation ? values.moderation : 'accepted', // No moderation needed for researches for now
         updates,
@@ -373,9 +410,9 @@ export class ResearchStore extends ModuleStore {
             ? values.creatorCountry
             : '',
       }
-      logger.debug('populating database', research)
+      logger.debug('populating database', researchItem)
       // set the database document
-      await dbRef.set(research)
+      await this.updateResearchItem(dbRef, researchItem)
       this.updateResearchUploadStatus('Database')
       logger.debug('post added')
       const newItem = (await dbRef.get()) as IResearch.ItemDB
@@ -390,8 +427,12 @@ export class ResearchStore extends ModuleStore {
     }
   }
 
+  /**
+   * Uploads new or edits an existing update
+   *
+   * @param update
+   */
   public async uploadUpdate(update: IResearch.Update | IResearch.UpdateDB) {
-    // uploads new or edits existing update
     const item = this.activeResearchItem
     if (item) {
       const dbRef = this.db
@@ -444,15 +485,6 @@ export class ResearchStore extends ModuleStore {
         }
 
         //
-        logger.debug('Update steps', newItem.updates)
-        await Promise.all(
-          newItem.updates.map(async (up, idx) => {
-            newItem.updates[idx].description = await this.addUserReference(
-              up.description,
-            )
-          }),
-        )
-
         logger.debug(
           'old and new modified:',
           (update as IResearch.UpdateDB)._modified,
@@ -461,7 +493,7 @@ export class ResearchStore extends ModuleStore {
         logger.debug('created:', newItem._created)
 
         // set the database document
-        await dbRef.set(newItem)
+        await this.updateResearchItem(dbRef, newItem)
         logger.debug('populate db ok')
         this.updateUpdateUploadStatus('Database')
         const createdItem = (await dbRef.get()) as IResearch.ItemDB

@@ -249,7 +249,7 @@ export const SpaceProfile = ({ user }: IProps) => {
     user.location?.countryCode || user.country?.toLowerCase() || null
 
   return (
-    <ProfileWrapper mt={4} mb={6}>
+    <ProfileWrapper mt={4} mb={6} data-cy="SpaceProfile">
       <ProfileWrapperCarousel>
         <Slider {...sliderSettings}>{coverImage}</Slider>
       </ProfileWrapperCarousel>

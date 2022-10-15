@@ -11,9 +11,6 @@ describe('[How To]', () => {
       cy.visit('/how-to')
     })
     it('[By Everyone]', () => {
-      cy.step('No tag is selected')
-      cy.get('.data-cy__multi-value__label').should('not.exist')
-
       cy.step('More How-tos button is hidden')
       cy.get('[data-cy=more-how-tos]', SKIP_TIMEOUT).should('be.hidden')
 
@@ -41,32 +38,21 @@ describe('[How To]', () => {
     })
   })
 
-  describe('[Filter with Tag]', () => {
+  describe.only('[Filter by Category]', () => {
     beforeEach(() => {
       cy.visit('/how-to')
     })
     it('[By Everyone]', () => {
-      cy.step('Select a tag')
-      cy.selectTag('product')
+      cy.step('Select a category')
+      cy.selectTag('product', '[data-cy="category-select"]')
       cy.get('[data-cy=card]').its('length').should('be.eq', 3)
 
-      cy.step('Type and select a tag')
-      cy.selectTag('injection')
+      cy.step('Type and select a category')
+      cy.selectTag('injection', '[data-cy="category-select"]')
 
       cy.get('[data-cy=card]').its('length').should('be.eq', 2)
 
-      cy.step('Remove a tag')
-      cy.get('.data-cy__multi-value__label')
-        .contains('injection')
-        .parent()
-        .find('.data-cy__multi-value__remove')
-        .click()
-      cy.get('.data-cy__multi-value__label')
-        .contains('injection')
-        .should('not.exist')
-      cy.get('[data-cy=card]').its('length').should('be.eq', 3)
-
-      cy.step('Remove all tags')
+      cy.step('Remove all category filter')
       cy.get('.data-cy__clear-indicator').click()
       cy.get('.data-cy__multi-value__label').should('not.exist')
       cy.get('[data-cy=card]').its('length').should('be.eq', totalHowTo)

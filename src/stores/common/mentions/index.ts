@@ -17,7 +17,7 @@ export const changeMentionToUserReference = async function (
   text: string,
   userStore: UserStore,
 ): Promise<string> {
-  const mentions = text.match(/\B@[a-z0-9_-]+/g)
+  const mentions = text.match(/\B@[​a-z0-9_-]+/g)
   const mentionedUsers = new Set<string>()
 
   if (!mentions) {
@@ -25,19 +25,20 @@ export const changeMentionToUserReference = async function (
   }
 
   for (const mention of mentions) {
-    const userProfile: IUser = await userStore.getUserProfile(
-      mention.replace('@', ''),
+    const foundUseProfile: IUser = await userStore.getUserProfile(
+      mention.replace(/[@​]/g, ''),
     )
 
-    logger.debug({ userProfile })
+    logger.debug({ userProfile: foundUseProfile })
 
-    if (userProfile) {
+    if (foundUseProfile) {
       text = text.replace(
         mention,
-        `@@{${userProfile._authID}:${userProfile.userName}}`,
+        `@@{${foundUseProfile._authID}:${foundUseProfile.userName}}`,
       )
-      mentionedUsers.add(userProfile.userName)
+      mentionedUsers.add(foundUseProfile.userName)
     } else {
+      text = text.replace(mention, '@​' + mention.slice(1))
       logger.debug('Unable to find matching profile', { mention })
     }
   }
@@ -45,5 +46,7 @@ export const changeMentionToUserReference = async function (
 }
 
 export const changeUserReferenceToPlainText = function (text: string) {
-  return text.replace(/@@\{([A-Za-z0-9_-]+):([a-z0-9]+)}/g, '@$2')
+  return text
+    .replace(/@([A-Za-z0-9_-]+)/, '@​$1')
+    .replace(/@@\{([A-Za-z0-9_-]+):([a-z0-9\-]+)}/g, '@$2')
 }

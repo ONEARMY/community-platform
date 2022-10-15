@@ -21,7 +21,7 @@ describe('[How To]', () => {
       cy.step('How-to cards has basic info')
       cy.get(`[data-cy=card] a[href="${howtoUrl}"]`).within(() => {
         cy.contains('Make glass-like beams').should('be.exist')
-        cy.contains('By howto_creator').should('be.exist')
+        cy.contains('howto_creator').should('be.exist')
         cy.get('img').should('have.attr', 'src').and('match', coverFileRegex)
         cy.contains('extrusion').should('be.exist')
       })
@@ -73,7 +73,7 @@ describe('[How To]', () => {
 
         cy.step('How-to has basic info')
         cy.get('[data-cy=how-to-basis]').then(($summary) => {
-          expect($summary).to.contain('By howto_creator', 'Author')
+          expect($summary).to.contain('howto_creator', 'Author')
           expect($summary).to.contain('Last edit on', 'Edit')
           expect($summary).to.contain('Make an interlocking brick', 'Title')
           expect($summary).to.contain(

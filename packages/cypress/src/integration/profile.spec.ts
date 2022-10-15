@@ -13,7 +13,7 @@ describe('[Profile]', () => {
   describe('[By Anonymous]', () => {
     it('[Can view public profile]', () => {
       cy.visit(`/u/${subscriber.userName}`)
-      cy.get('[data-cy=userName]').should('contain.text', subscriber.userName)
+      cy.get('[data-cy="Username"]').should('contain.text', subscriber.userName)
     })
   })
 
@@ -30,8 +30,7 @@ describe('[Profile]', () => {
     })
     it('[Cannot edit another user profile]', () => {
       cy.visit(`/u/${admin.userName}`)
-
-      cy.get('[data-cy=userName]').should('contain.text', admin.userName)
+      cy.get('[data-cy="Username"]').should('contain.text', admin.userName)
       cy.get('[data-cy=adminEdit]').should('not.exist')
       cy.visit(`/u/${admin.userName}/edit`)
       cy.get('[data-cy=auth-route-deny]').should('exist')

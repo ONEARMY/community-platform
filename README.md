@@ -81,11 +81,9 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center"><a href="https://github.com/adrianduke"><img src="https://avatars.githubusercontent.com/u/711058?v=4?s=60" width="60px;" alt="Adrian Duke"/><br /><sub><b>Adrian Duke</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=adrianduke" title="Code">💻</a></td>
       <td align="center"><a href="https://github.com/missalyss"><img src="https://avatars.githubusercontent.com/u/19866110?v=4?s=60" width="60px;" alt="Alyssa Helgason"/><br /><sub><b>Alyssa Helgason</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=missalyss" title="Code">💻</a></td>
       <td align="center"><a href="https://github.com/Kiebert"><img src="https://avatars.githubusercontent.com/u/3414938?v=4?s=60" width="60px;" alt="Kieb"/><br /><sub><b>Kieb</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=Kiebert" title="Code">💻</a></td>
+      <td align="center"><a href="https://github.com/Sc4ramouche"><img src="https://avatars.githubusercontent.com/u/25829136?v=4?s=60" width="60px;" alt="Kovechenkov Vladislav"/><br /><sub><b>Kovechenkov Vladislav</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=Sc4ramouche" title="Code">💻</a></td>
     </tr>
   </tbody>
-  <tfoot>
-    
-  </tfoot>
 </table>
 
 <!-- markdownlint-restore -->

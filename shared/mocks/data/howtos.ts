@@ -139,6 +139,9 @@ export const howtos = {
     id: 'DBgbCKle7h4CcNxeUP2V',
     _createdBy: 'howto_editor',
     tags: {},
+    category: {
+      label: 'product',
+    },
     title: 'Set up devsite to help coding!',
     _modified: '2019-09-16T17:54:19.978Z',
     _created: '2019-07-08T07:24:24.456Z',
@@ -1023,6 +1026,9 @@ export const howtos = {
     tags: {
       '36hWyk3OckrLSH1ehdIE': true,
     },
+    category: {
+      label: 'product',
+    },
     id: 'oIVF73weEIlVJQYfolcg',
     title: 'Make a raincoat with plastic bags',
     _modified: '2019-09-27T13:52:31.679Z',
@@ -1493,6 +1499,9 @@ export const howtos = {
       xEfoXujd49MgXTnMg7wj: true,
       Wk6RnHHFfKSiI71BlM8r: true,
     },
+    category: {
+      label: 'product',
+    },
     id: 'DUjTZCQJ6OmSMkEYdZ6f',
     title: 'Make a handplane (simple mould)',
     _modified: '2019-10-04T14:02:46.083Z',
@@ -1505,6 +1514,9 @@ export const howtos = {
     tags: {
       DJN99ErXz8FHy035YdMO: true,
       Cdg3VhG5Yv9BjBEDMcH8: true,
+    },
+    category: {
+      label: 'injection',
     },
     title: 'Create an extruded lamp',
     _modified: '2019-09-27T10:28:06.541Z',
@@ -2212,6 +2224,9 @@ export const howtos = {
     tags: {
       '36hWyk3OckrLSH1ehdIE': true,
       Wk6RnHHFfKSiI71BlM8r: true,
+    },
+    category: {
+      label: 'injection',
     },
   },
   cmMzzlQP00fCckYIeL2e: {

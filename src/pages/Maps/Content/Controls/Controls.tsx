@@ -2,9 +2,8 @@ import * as React from 'react'
 import styled from '@emotion/styled'
 
 import { Button, Modal, OsmGeocoding } from 'oa-components'
-import { Flex, Box, Image, Text } from 'theme-ui'
+import { Flex, Box } from 'theme-ui'
 import filterIcon from 'src/assets/icons/icon-filters-mobile.png'
-import crossClose from 'src/assets/icons/cross-close.svg'
 
 import { GroupingFilterDesktop } from './GroupingFilterDesktop'
 import { GroupingFilterMobile } from './GroupingFilterMobile'
@@ -52,12 +51,13 @@ class Controls extends React.Component<IProps, IState> {
       showFiltersMobile: false,
       filtersSelected: [],
     }
+    this.toggleFilterMobileModal = this.toggleFilterMobileModal.bind(this)
   }
   get injected() {
     return this.props as IInjectedProps
   }
 
-  handleFilterMobileModal() {
+  toggleFilterMobileModal() {
     this.setState({ showFiltersMobile: !this.state.showFiltersMobile })
   }
 
@@ -139,7 +139,7 @@ class Controls extends React.Component<IProps, IState> {
           <Button
             sx={{ display: 'block', width: '100%' }}
             variant="outline"
-            onClick={() => this.handleFilterMobileModal()}
+            onClick={this.toggleFilterMobileModal}
           >
             Filters
             {filtersSelected.length > 0 && (
@@ -153,19 +153,9 @@ class Controls extends React.Component<IProps, IState> {
           </Button>
         </Box>
         <Modal
-          onDidDismiss={() => this.handleFilterMobileModal()}
+          onDidDismiss={this.toggleFilterMobileModal}
           isOpen={showFiltersMobile}
         >
-          <Flex p={0} mx={-1} sx={{ justifyContent: 'space-between' }}>
-            <Text sx={{ fontWeight: 'bold' }}>Select filters</Text>
-            <Image
-              loading="lazy"
-              width="25px"
-              src={crossClose}
-              alt="cross-close"
-              onClick={() => this.handleFilterMobileModal()}
-            />
-          </Flex>
           <GroupingFilterMobile
             items={groupedFilters}
             selectedItems={filtersSelected}
@@ -173,6 +163,7 @@ class Controls extends React.Component<IProps, IState> {
               this.props.onFilterChange(selected as IMapPinType[])
               this.setState({ filtersSelected: selected })
             }}
+            onClose={this.toggleFilterMobileModal}
           />
         </Modal>
       </MapFlexBar>

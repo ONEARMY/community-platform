@@ -103,6 +103,13 @@ function Table(props: ITableProps) {
             sx={{
               flex: '100 0 auto',
               width: '50px',
+              a: {
+                color: '#67bfdf',
+                textDecoration: 'underline',
+              },
+              'a:hover': {
+                textDecoration: 'none',
+              },
             }}
           >
             <props.rowComponent col={col} />

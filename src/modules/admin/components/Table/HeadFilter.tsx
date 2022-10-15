@@ -57,6 +57,10 @@ function HeadFilter(props: Props) {
         display: 'flex',
         alignItems: 'center',
         height: '2.5rem',
+        border:
+          open && toOpen == field
+            ? '2px solid #000000'
+            : '2px solid transparent',
       }}
     >
       <Text sx={{ display: 'flex', alignItems: 'center' }}>

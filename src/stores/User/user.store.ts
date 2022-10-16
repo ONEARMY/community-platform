@@ -131,6 +131,13 @@ export class UserStore extends ModuleStore {
     }
   }
 
+  public async getUserByUsername(username: string) {
+    const [user] = await this.db
+      .collection<IUserPP>(COLLECTION_NAME)
+      .getWhere('_id', '==', username)
+    return user
+  }
+
   // TODO
   // this is a bit messy due to legacy users having mismatched firebase data and ids
   // should resolve all users so that a single lookup is successful

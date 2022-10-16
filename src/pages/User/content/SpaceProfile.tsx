@@ -11,7 +11,7 @@ import Slider from 'react-slick'
 import 'src/assets/css/slick.min.css'
 import styled from '@emotion/styled'
 
-import { MemberBadge, Icon, FlagIcon } from 'oa-components'
+import { MemberBadge, Icon, Username } from 'oa-components'
 
 import theme from 'src/themes/styled.theme'
 
@@ -33,6 +33,7 @@ import { UserStats } from './UserStats'
 import UserContactAndLinks from './UserContactAndLinks'
 import { UserAdmin } from './UserAdmin'
 import { ProfileType } from 'src/modules/profile'
+import { isUserVerified } from 'src/common/isUserVerified'
 
 interface IBackgroundImageProps {
   bgImg: string
@@ -246,7 +247,7 @@ export const SpaceProfile = ({ user }: IProps) => {
   )
 
   const userCountryCode =
-    user.location?.countryCode || user.country?.toLowerCase() || null
+    user.location?.countryCode || user.country?.toLowerCase() || undefined
 
   return (
     <ProfileWrapper mt={4} mb={6} data-cy="SpaceProfile">
@@ -267,23 +268,13 @@ export const SpaceProfile = ({ user }: IProps) => {
               pt: ['0', '40px', '0'],
             }}
           >
-            {userCountryCode && (
-              <FlagIcon
-                mr={2}
-                code={userCountryCode}
-                style={{ display: 'inline-block' }}
-              />
-            )}
-            <Text
-              my={2}
-              sx={{
-                color: `${theme.colors.lightgrey} !important`,
-                fontSize: 3,
+            <Username
+              user={{
+                userName: user.userName,
+                countryCode: userCountryCode,
               }}
-              data-cy="userName"
-            >
-              {user.userName}
-            </Text>
+              isVerified={isUserVerified(user.userName)}
+            />
           </Flex>
 
           <Flex sx={{ alignItems: 'center' }}>

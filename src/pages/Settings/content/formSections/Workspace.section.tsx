@@ -43,7 +43,14 @@ export class WorkspaceSection extends React.Component<any> {
                 ))}
               </Flex>
               {meta.touched && meta.error && (
-                <Text color={theme.colors.red}>
+                <Text
+                  color={theme.colors.error}
+                  sx={{
+                    fontSize: 0.5,
+                    marginLeft: 1,
+                    marginRight: 1,
+                  }}
+                >
                   Please select your workspace type
                 </Text>
               )}

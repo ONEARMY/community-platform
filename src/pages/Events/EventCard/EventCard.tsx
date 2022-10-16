@@ -5,12 +5,13 @@ import {
   ExternalLink,
   ModerationStatus,
   CategoryTag,
+  Username,
 } from 'oa-components'
 import type { IEvent } from '../../../models/events.models'
 import { getMonth, getDay, capitalizeFirstLetter } from 'src/utils/helpers'
-import { VerifiedUserBadge } from '../../../components/VerifiedUserBadge/VerifiedUserBadge'
 import { useTheme } from '@emotion/react'
 import laptopIcon from 'src/assets/icons/icon-laptop.png'
+import { isUserVerified } from 'src/common/isUserVerified'
 
 interface IProps {
   event: IEvent
@@ -95,16 +96,15 @@ export const EventCard = (props: IProps) => {
               {capitalizeFirstLetter(props.event.title)}
             </Text>
           </Flex>
-          <Flex>
-            <Text sx={{ width: '100%', ...theme.typography.auxiliary }}>
-              By {props.event._createdBy}
-            </Text>
-            <VerifiedUserBadge
-              userId={props.event._createdBy}
-              width="16px"
-              height="16px"
+          <div>
+            <Username
+              user={{
+                userName: props.event._createdBy,
+                countryCode: '',
+              }}
+              isVerified={isUserVerified(props.event._createdBy)}
             />
-          </Flex>
+          </div>
         </Flex>
         <Flex
           sx={{

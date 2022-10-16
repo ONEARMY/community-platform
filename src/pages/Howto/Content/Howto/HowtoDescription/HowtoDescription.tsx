@@ -7,12 +7,12 @@ import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
 import {
   Button,
-  FlagIconHowTos,
   ModerationStatus,
   LinkifyText,
   UsefulStatsButton,
   CategoryTag,
   FileInformation,
+  Username,
 } from 'oa-components'
 import type { IUser } from 'src/models/user.models'
 import {
@@ -22,7 +22,6 @@ import {
 } from 'src/utils/helpers'
 import theme from 'src/themes/styled.theme'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
-import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 import { DownloadExternal } from 'src/pages/Howto/DownloadExternal/DownloadExternal'
 import { Link } from 'react-router-dom'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
@@ -73,10 +72,6 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
     this.setState({
       fileDownloadCount: val,
     })
-  }
-
-  private dateCreatedByText(howto: IHowtoDB): string {
-    return format(new Date(howto._created), 'DD-MM-YYYY')
   }
 
   private dateLastEditText(howto: IHowtoDB): string {
@@ -202,33 +197,14 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
             )}
           </Flex>
           <Box mt={3} mb={2}>
-            <Flex sx={{ alignItems: 'center' }}>
-              {howto.creatorCountry && (
-                <FlagIconHowTos code={howto.creatorCountry} />
-              )}
-              <Text
-                my={2}
-                ml={1}
-                sx={{ ...theme.typography.auxiliary, display: 'inline-block' }}
-              >
-                By{' '}
-                <Link
-                  style={{
-                    textDecoration: 'underline',
-                    color: 'inherit',
-                  }}
-                  to={'/u/' + howto._createdBy}
-                >
-                  {howto._createdBy}
-                </Link>{' '}
-                <VerifiedUserBadge
-                  userId={howto._createdBy}
-                  height="12px"
-                  width="12px"
-                />
-                | Published on {this.dateCreatedByText(howto)}
-              </Text>
-            </Flex>
+            <Username
+              user={{
+                userName: howto._createdBy,
+                countryCode: howto.creatorCountry,
+              }}
+              isVerified={false}
+              // isVerified={isUserVerified(howto._createdBy)}
+            />
             <Text
               sx={{
                 ...theme.typography.auxiliary,

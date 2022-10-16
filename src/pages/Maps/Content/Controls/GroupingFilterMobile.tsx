@@ -105,7 +105,7 @@ class GroupingFilterMobile extends Component<IProps, IState> {
           )
         })}
 
-        <Button mt="15px" onClick={this.props.onClose}>
+        <Button mt={3} onClick={this.props.onClose}>
           Apply filters
         </Button>
       </Flex>

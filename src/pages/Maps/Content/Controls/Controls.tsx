@@ -45,20 +45,18 @@ const MapFlexBar = styled(Flex)`
 `
 @inject('mapsStore', 'userStore')
 class Controls extends React.Component<IProps, IState> {
+  toggleFilterMobileModal = () => {
+    this.setState({ showFiltersMobile: !this.state.showFiltersMobile })
+  }
   constructor(props: IProps) {
     super(props)
     this.state = {
       showFiltersMobile: false,
       filtersSelected: [],
     }
-    this.toggleFilterMobileModal = this.toggleFilterMobileModal.bind(this)
   }
   get injected() {
     return this.props as IInjectedProps
-  }
-
-  toggleFilterMobileModal() {
-    this.setState({ showFiltersMobile: !this.state.showFiltersMobile })
   }
 
   public render() {
@@ -84,9 +82,9 @@ class Controls extends React.Component<IProps, IState> {
       >
         <Box
           sx={{
-            width: ['95%', '308px', '308px'],
+            width: ['95%', '95%', '308px'],
             height: '45px',
-            m: [0, '5px 0 0 20px'],
+            m: [0, 0, '5px 0 0 20px'],
           }}
         >
           <OsmGeocoding
@@ -134,7 +132,7 @@ class Controls extends React.Component<IProps, IState> {
           </Box>
         </Flex>
         <Box
-          sx={{ display: ['flex', 'none', 'none'], mt: '5px', width: '95%' }}
+          sx={{ display: ['flex', 'flex', 'none'], mt: '5px', width: '95%' }}
         >
           <Button
             sx={{ display: 'block', width: '100%' }}

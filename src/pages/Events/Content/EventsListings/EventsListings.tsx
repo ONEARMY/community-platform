@@ -23,6 +23,10 @@ interface InjectedProps {
 @inject('eventStore', 'userStore', 'themeStore', 'tagsStore')
 @observer
 export class EventsListings extends React.Component<any> {
+  private moderateEvent = async (event: IEvent, accepted: boolean) => {
+    event.moderation = accepted ? 'accepted' : 'rejected'
+    await this.store.moderateEvent(event)
+  }
   get injected() {
     return this.props as InjectedProps
   }
@@ -33,11 +37,6 @@ export class EventsListings extends React.Component<any> {
 
   get theme() {
     return this.injected.themeStore
-  }
-
-  private moderateEvent = async (event: IEvent, accepted: boolean) => {
-    event.moderation = accepted ? 'accepted' : 'rejected'
-    await this.store.moderateEvent(event)
   }
 
   public render() {

@@ -21,35 +21,31 @@ interface IState {
 @inject('categoriesStore')
 @observer
 export class AdminCategories extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props)
-    this.state = { categoryForm: {} }
-  }
-
   saveEditor = async () => {
     this.setState({ updating: true })
     await this.props.categoriesStore.saveCategory(this.state.categoryForm)
     this.setState({ updating: false, showEditor: false })
   }
-
   deleteEditor = async () => {
     this.setState({ updating: true })
     await this.props.categoriesStore.deleteCategory(this.state.categoryForm)
     this.setState({ updating: false, showEditor: false })
   }
-
   showEditor = (category: Partial<ICategory>) => {
     this.setState({
       showEditor: true,
       categoryForm: { ...category },
     })
   }
-
   handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const patch = { [e.target.name]: e.target.value }
     this.setState({
       categoryForm: { ...this.state.categoryForm, ...patch },
     })
+  }
+  constructor(props: IProps) {
+    super(props)
+    this.state = { categoryForm: {} }
   }
 
   public render() {

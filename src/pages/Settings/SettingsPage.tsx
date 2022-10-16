@@ -47,6 +47,18 @@ interface IState {
 @inject('userStore')
 @observer
 export class UserSettings extends React.Component<IProps, IState> {
+  toggleLocationDropdown = () => {
+    this.setState((prevState) => ({
+      ...prevState,
+      showLocationDropdown: !prevState.showLocationDropdown,
+      formValues: {
+        ...prevState.formValues,
+        mapPinDescription: '',
+        location: null,
+        country: null,
+      },
+    }))
+  }
   constructor(props: IProps) {
     super(props)
     this.state = {} as any
@@ -142,19 +154,6 @@ export class UserSettings extends React.Component<IProps, IState> {
       errors.links[ARRAY_ERROR] = 'Must have at least one link'
     }
     return errors
-  }
-
-  toggleLocationDropdown = () => {
-    this.setState((prevState) => ({
-      ...prevState,
-      showLocationDropdown: !prevState.showLocationDropdown,
-      formValues: {
-        ...prevState.formValues,
-        mapPinDescription: '',
-        location: null,
-        country: null,
-      },
-    }))
   }
 
   render() {

@@ -70,16 +70,6 @@ export class ImageConverter extends React.Component<IProps, IState> {
     this.props.onImgConverted(convertedMeta)
   }
 
-  private _generateFileMeta(c: File) {
-    const meta: IConvertedFileMeta = {
-      name: addTimestampToFileName(c.name),
-      photoData: c,
-      objectUrl: URL.createObjectURL(c),
-      type: c.type,
-    }
-    return meta
-  }
-
   render() {
     const { convertedFile } = this.state
 
@@ -96,6 +86,15 @@ export class ImageConverter extends React.Component<IProps, IState> {
         onClick={() => this.props.onImgClicked(convertedFile)}
       />
     )
+  }
+  private _generateFileMeta(c: File) {
+    const meta: IConvertedFileMeta = {
+      name: addTimestampToFileName(c.name),
+      photoData: c,
+      objectUrl: URL.createObjectURL(c),
+      type: c.type,
+    }
+    return meta
   }
 }
 ImageConverter.defaultProps = {

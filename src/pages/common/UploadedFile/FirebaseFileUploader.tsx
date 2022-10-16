@@ -39,14 +39,6 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
   public static defaultProps: any
   public fileInputRef: any
 
-  constructor(props: any) {
-    super(props)
-    this.state = {
-      isUploading: false,
-      uploadProgress: 0,
-    }
-  }
-
   public handleUploadStart = () => {
     this.setState({ isUploading: true, uploadProgress: 0 })
   }
@@ -78,10 +70,16 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
     }
     return this.props.onUploadSuccess(fileInfo, this.props.callbackData)
   }
-
   public deleteUploads = async (fileInfo?: any) => {
     // WiP
     logger.warn('TODO - handle delete', fileInfo)
+  }
+  constructor(props: any) {
+    super(props)
+    this.state = {
+      isUploading: false,
+      uploadProgress: 0,
+    }
   }
 
   // the first styled button in our template intercepts all click events so we have a manual method

@@ -10,6 +10,8 @@ import MemberHighlight from 'src/assets/images/highlights/highlight-member.svg'
 // assets profileType
 import MemberBadge from 'src/assets/images/badges/pt-member.svg'
 
+import type { PlatformTheme } from 'src/themes/types'
+
 function findWordspaceHighlight(workspaceType?: string): string {
   switch (workspaceType) {
     case ProfileType.WORKSPACE:
@@ -54,12 +56,13 @@ function findWorkspaceBadge(
   workspaceType?: string,
   ifCleanImage?: boolean,
   verifiedUser?: boolean,
+  currentTheme?: PlatformTheme,
 ): string {
   if (!workspaceType) {
     return MemberBadge
   }
 
-  const foundProfileTypeObj = getSupportedProfileTypes().find(
+  const foundProfileTypeObj = getSupportedProfileTypes(currentTheme).find(
     (type) => type.label === workspaceType,
   )
   if (foundProfileTypeObj) {

@@ -10,12 +10,14 @@ describe('findWorkspaceBadgeNullable', () => {
   })
 
   it('returns a profile image', () => {
-    expect(Workspace.findWorkspaceBadgeNullable('member')).toBe('pt-member.svg')
+    expect(Workspace.findWorkspaceBadgeNullable('member')).toBe(
+      'avatar_member_sm.svg',
+    )
   })
 
   it('returns a "clean" profile image', () => {
     expect(Workspace.findWorkspaceBadgeNullable('member', true)).toBe(
-      'map-member.svg',
+      'avatar_member_sm.svg',
     )
   })
 })

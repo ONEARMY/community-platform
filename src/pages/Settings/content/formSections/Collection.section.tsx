@@ -9,6 +9,7 @@ import { Button } from 'oa-components'
 import { CustomCheckbox } from './Fields/CustomCheckbox.field'
 import { PLASTIC_TYPES } from 'src/mocks/user_pp.mock'
 import type { IUserPP } from 'src/models/user_pp.models'
+import theme from 'src/themes/styled.theme'
 
 interface IProps {
   formValues: IUserPP
@@ -106,7 +107,16 @@ export class CollectionSection extends React.Component<IProps> {
             </FieldArray>
           </Flex>
           {required && (
-            <Text color="red">Choose at least one plastic type </Text>
+            <Text
+              color={theme.colors.error}
+              sx={{
+                fontSize: 0.5,
+                marginLeft: 1,
+                marginRight: 1,
+              }}
+            >
+              Choose at least one plastic type{' '}
+            </Text>
           )}
         </Box>
       </FlexSectionContainer>

@@ -13,6 +13,7 @@ interface ISelectFieldProps extends FieldProps {
   placeholder?: string
   style?: React.CSSProperties
   onCustomChange?: (value) => void
+  showError?: boolean
 }
 
 // annoyingly react-final-form saves the full option as values (not just the value field)
@@ -50,34 +51,33 @@ export const SelectField = ({
   input,
   meta,
   onCustomChange,
+  showError = true,
   ...rest
 }: ISelectFieldProps) => (
   // note, we first use a div container so that default styles can be applied
-  <>
-    <Flex p={0} sx={{ flexWrap: 'nowrap' }}>
-      <FieldContainer
-        invalid={meta.error && meta.touched}
-        style={rest.style}
-        data-cy={rest['data-cy']}
-      >
-        <Select
-          onChange={(v) => {
-            input.onChange(getValueFromSelect(v as any))
-            if (onCustomChange) {
-              onCustomChange(getValueFromSelect(v as any))
-            }
-          }}
-          onBlur={input.onBlur as any}
-          onFocus={input.onFocus as any}
-          value={getValueForSelect(rest.options, input.value)}
-          variant="form"
-          {...defaultProps}
-          {...(rest as any)}
-        />
-      </FieldContainer>
-    </Flex>
-    {meta.error && meta.touched && (
+  <Flex p={0} sx={{ flexDirection: 'column', flexWrap: 'nowrap' }}>
+    <FieldContainer
+      invalid={meta.error && meta.touched}
+      style={rest.style}
+      data-cy={rest['data-cy']}
+    >
+      <Select
+        onChange={(v) => {
+          input.onChange(getValueFromSelect(v as any))
+          if (onCustomChange) {
+            onCustomChange(getValueFromSelect(v as any))
+          }
+        }}
+        onBlur={input.onBlur as any}
+        onFocus={input.onFocus as any}
+        value={getValueForSelect(rest.options, input.value)}
+        variant="form"
+        {...defaultProps}
+        {...(rest as any)}
+      />
+    </FieldContainer>
+    {showError && meta.error && meta.touched && (
       <Text sx={{ fontSize: 0, margin: 1, color: 'error' }}>{meta.error}</Text>
     )}
-  </>
+  </Flex>
 )

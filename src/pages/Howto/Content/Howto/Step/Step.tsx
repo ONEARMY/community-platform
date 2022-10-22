@@ -1,8 +1,7 @@
 import { PureComponent } from 'react'
-import Linkify from 'react-linkify'
 import ReactPlayer from 'react-player'
 import { Box, Card, Text, Flex, Heading } from 'theme-ui'
-import { ImageGallery } from 'src/components/ImageGallery/ImageGallery'
+import { ImageGallery, LinkifyText } from 'oa-components'
 import type { IHowtoStep } from 'src/models/howto.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
@@ -45,7 +44,11 @@ export default class Step extends PureComponent<IProps> {
             }}
           >
             <Card sx={{ width: '100%' }}>
-              <Flex>
+              <Flex
+                sx={{
+                  flexDirection: ['column-reverse', 'column-reverse', 'row'],
+                }}
+              >
                 <Flex
                   py={4}
                   px={4}
@@ -67,10 +70,10 @@ export default class Step extends PureComponent<IProps> {
                         whiteSpace: 'pre-line',
                       }}
                     >
-                      <Linkify properties={{ target: '_blank' }}>
+                      <LinkifyText>
                         {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
                         {capitalizeFirstLetter(step.text)}
-                      </Linkify>
+                      </LinkifyText>
                     </Text>
                   </Box>
                 </Flex>

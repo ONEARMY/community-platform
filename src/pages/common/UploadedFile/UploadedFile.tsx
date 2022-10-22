@@ -1,5 +1,5 @@
 import * as React from 'react'
-import type { IFirebaseUploadInfo } from 'src/components/FirebaseFileUploader/FirebaseFileUploader'
+import type { IFirebaseUploadInfo } from 'src/pages/common/UploadedFile/FirebaseFileUploader'
 import { storage } from 'src/utils/firebase'
 import './UploadedFile.scss'
 import { Button, ExternalLink, Icon } from 'oa-components'
@@ -24,11 +24,6 @@ interface IState {
 
 export class UploadedFile extends React.Component<IUploadedFileProps, IState> {
   public static defaultProps: Partial<IUploadedFileProps>
-  constructor(props: any) {
-    super(props)
-    this.state = { deleted: false }
-  }
-
   // remove the file from storage repository
   public delete = () => {
     const ref = storage.ref(this.props.file.fullPath)
@@ -38,6 +33,10 @@ export class UploadedFile extends React.Component<IUploadedFileProps, IState> {
     ref.delete().catch((error) => {
       throw new Error(JSON.stringify(error))
     })
+  }
+  constructor(props: any) {
+    super(props)
+    this.state = { deleted: false }
   }
 
   public render() {

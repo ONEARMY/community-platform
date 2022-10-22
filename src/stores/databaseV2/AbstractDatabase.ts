@@ -16,12 +16,11 @@ export abstract class AbstractDatabase {
     if (clients) this._clients = clients
   }
 
-  public set clients(clients) {
-    this._clients = clients
-  }
-
   public get clients() {
     return this._clients
+  }
+  public set clients(clients) {
+    this._clients = clients
   }
 
   /**

@@ -2,7 +2,7 @@ import type { ComponentStory, ComponentMeta } from '@storybook/react'
 import { {{ComponentName}} } from './{{ComponentName}}'
 
 export default {
-  title: 'Base Components/{{ComponentName}}',
+  title: 'Components/{{ComponentName}}',
   component: {{ComponentName}},
 } as ComponentMeta<typeof {{ComponentName}}>
 

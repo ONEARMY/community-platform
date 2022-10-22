@@ -2,8 +2,8 @@ import { Component } from 'react'
 import { COM_TYPE_MOCKS } from 'src/mocks/Selectors'
 import { Field } from 'react-final-form'
 import { Button, FieldInput, Modal } from 'oa-components'
-import { Text, Flex } from 'theme-ui'
-import { SelectField } from 'src/components/Form/Select.field'
+import { Text, Flex, Grid } from 'theme-ui'
+import { SelectField } from 'src/common/Form/Select.field'
 import { validateUrl, validateEmail, required } from 'src/utils/validators'
 import { formatLink } from 'src/utils/formatters'
 
@@ -72,34 +72,58 @@ export class ProfileLinkField extends Component<IProps, IState> {
         my={['10px', '10px', '5px']}
         sx={{ flexDirection: ['column', 'column', 'row'] }}
       >
-        <Flex mb={[1, 1, 0]}>
-          <Field
-            data-cy={`select-link-${index}`}
-            name={`${name}.label`}
-            options={COM_TYPE_MOCKS}
-            component={SelectField}
-            onCustomChange={(linkType: string) => this.setState({ linkType })}
-            placeholder="type"
-            validate={required}
-            validateFields={[]}
-            style={{ width: '160px', height: '40px', marginRight: '8px' }}
-          />
+        <Grid
+          mb={[1, 1, 0]}
+          gap={0}
+          columns={['auto 60px', 'auto 60px', '210px']}
+          sx={{ width: ['100%', '100%', '210px'] }}
+        >
+          <div>
+            <Field
+              data-cy={`select-link-${index}`}
+              name={`${name}.label`}
+              options={COM_TYPE_MOCKS}
+              component={SelectField}
+              onCustomChange={(linkType: string) => this.setState({ linkType })}
+              placeholder="type"
+              validate={required}
+              validateFields={[]}
+              style={{ width: '100%', height: '40px', marginRight: '8px' }}
+            />
+          </div>
           <DeleteButton
-            sx={{ display: ['block', 'block', 'none'], height: '40px' }}
+            sx={{
+              display: ['block', 'block', 'none'],
+              height: '40px',
+              width: '50px',
+            }}
+            ml={'2px'}
           />
-        </Flex>
-        <Field
-          data-cy={`input-link-${index}`}
-          name={`${name}.url`}
-          validate={(value) => this.validateDependingOnType(value)}
-          validateFields={[]}
-          component={FieldInput}
-          placeholder="Link"
-          format={(v) => formatLink(v, this.state.linkType)}
-          formatOnBlur={true}
-        />
+        </Grid>
+        <Grid
+          mb={[1, 1, 0]}
+          gap={0}
+          columns={['auto', 'auto', 'auto']}
+          sx={{ width: ['100%', '100%', 'calc(100% - 270px)'] }}
+        >
+          <Field
+            data-cy={`input-link-${index}`}
+            name={`${name}.url`}
+            validate={(value) => this.validateDependingOnType(value)}
+            validateFields={[]}
+            component={FieldInput}
+            placeholder="Link"
+            format={(v) => formatLink(v, this.state.linkType)}
+            formatOnBlur={true}
+            style={{ width: '100%', height: '40px', marginBottom: '0px' }}
+          />
+        </Grid>
         <DeleteButton
-          sx={{ display: ['none', 'none', 'block'], height: '40px' }}
+          sx={{
+            display: ['none', 'none', 'block'],
+            height: '40px',
+            width: '50px',
+          }}
         />
         {
           <Modal

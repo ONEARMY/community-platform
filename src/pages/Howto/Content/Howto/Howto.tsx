@@ -7,20 +7,20 @@ import HowtoDescription from './HowtoDescription/HowtoDescription'
 import Step from './Step/Step'
 import type { IHowtoDB } from 'src/models/howto.models'
 import { Box, Flex, Text } from 'theme-ui'
-import { Button } from 'oa-components'
+import { Button, Loader } from 'oa-components'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import WhiteBubble0 from 'src/assets/images/white-bubble_0.svg'
 import WhiteBubble1 from 'src/assets/images/white-bubble_1.svg'
 import WhiteBubble2 from 'src/assets/images/white-bubble_2.svg'
 import WhiteBubble3 from 'src/assets/images/white-bubble_3.svg'
-import { Loader } from 'src/components/Loader'
 import type { UserStore } from 'src/stores/User/user.store'
 import { HowToComments } from './HowToComments/HowToComments'
 import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
 import { seoTagsUpdate } from 'src/utils/seo'
 import { Link } from 'react-router-dom'
 import type { UserComment } from 'src/models'
+import type { TagsStore } from 'src/stores/Tags/tags.store'
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
 // We can't directly provide the store as a prop though, and later user a get method to define it
@@ -32,6 +32,7 @@ interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
   howtoStore: HowtoStore
   userStore: UserStore
   aggregationsStore: AggregationsStore
+  tagsStore: TagsStore
 }
 interface IState {
   howto?: IHowtoDB
@@ -75,28 +76,12 @@ const MoreBox = styled(Box)`
   }
 `
 
-@inject('howtoStore', 'userStore', 'aggregationsStore')
+@inject('howtoStore', 'userStore', 'aggregationsStore', 'tagsStore')
 @observer
 export class Howto extends React.Component<
   RouteComponentProps<IRouterCustomParams>,
   IState
 > {
-  //TODO: Typing Props
-  constructor(props: any) {
-    super(props)
-    this.state = {
-      isLoading: true,
-    }
-  }
-  // workaround used later so that userStore can be called in render method when not existing on
-  get injected() {
-    return this.props as InjectedProps
-  }
-
-  get store() {
-    return this.injected.howtoStore
-  }
-
   private moderateHowto = async (accepted: boolean) => {
     const _howto = this.store.activeHowto
     if (_howto) {
@@ -104,7 +89,6 @@ export class Howto extends React.Component<
       await this.store.moderateHowto(_howto)
     }
   }
-
   private onUsefulClick = async (
     howtoId: string,
     howtoCreatedBy: string,
@@ -121,6 +105,21 @@ export class Howto extends React.Component<
     aggregationsStore.overrideAggregationValue('users_votedUsefulHowtos', {
       [howtoId]: votedUsefulCount + (hasUserVotedUseful ? -1 : 1),
     })
+  }
+  //TODO: Typing Props
+  constructor(props: any) {
+    super(props)
+    this.state = {
+      isLoading: true,
+    }
+  }
+  // workaround used later so that userStore can be called in render method when not existing on
+  get injected() {
+    return this.props as InjectedProps
+  }
+
+  get store() {
+    return this.injected.howtoStore
   }
 
   public async componentDidMount() {
@@ -153,17 +152,30 @@ export class Howto extends React.Component<
 
       const activeHowToComments: UserComment[] = this.store
         .getActiveHowToComments()
-        .map((c): UserComment => {
-          return {
+        .map(
+          (c): UserComment => ({
             ...c,
-            isEditable: c._creatorId === this.injected.userStore.user?.userName,
-          }
-        })
+            isEditable: [
+              this.injected.userStore.user?._id,
+              this.injected.userStore.user?.userName,
+            ].includes(c._creatorId),
+          }),
+        )
+
+      const { allTagsByKey } = this.injected.tagsStore
+      const howto = {
+        ...activeHowto,
+        taglist:
+          activeHowto.tags &&
+          Object.keys(activeHowto.tags)
+            .map((t) => allTagsByKey[t])
+            .filter(Boolean),
+      }
 
       return (
         <>
           <HowtoDescription
-            howto={activeHowto}
+            howto={howto}
             votedUsefulCount={votedUsefulCount}
             loggedInUser={loggedInUser}
             needsModeration={this.store.needsModeration(activeHowto)}

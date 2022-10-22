@@ -17,17 +17,17 @@ type IExampleDocDB = IExampleDoc & DBDoc
  * including the current `activeUser` and the global database, or `db` objects
  */
 export class TemplateStore extends ModuleStore {
+  // observables are data variables that can be subscribed to and change over time
+  @observable
+  public randomNumber: number
+  public exampleDoc: IExampleDocDB
+  public exampleCollection: IExampleDocDB[]
   // eslint-disable-next-line
   constructor(rootStore: RootStore) {
     super(rootStore)
     // tell mobx to process the decorators and handle observers
     makeObservable(this)
   }
-  // observables are data variables that can be subscribed to and change over time
-  @observable
-  public randomNumber: number
-  public exampleDoc: IExampleDocDB
-  public exampleCollection: IExampleDocDB[]
 
   // actions change observables
   @action

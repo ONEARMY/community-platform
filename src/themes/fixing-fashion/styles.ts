@@ -1,8 +1,11 @@
 import type { ThemeWithName } from '../types'
-import spaceBadge from 'src/assets/images/themes/fixing-fashion/badge_space.svg'
-import spaceBadgeLow from 'src/assets/images/themes/fixing-fashion/avatar_space.svg'
-import memberLow from 'src/assets/images/themes/fixing-fashion/avatar.svg'
-import member from 'src/assets/images/themes/fixing-fashion/badge.svg'
+import spaceBadge from 'src/assets/images/themes/fixing-fashion/avatar_space_lg.svg'
+import member from 'src/assets/images/themes/fixing-fashion/avatar_member_sm.svg'
+import logo from 'src/assets/images/themes/fixing-fashion/fixing-fashion-header.png'
+
+const fonts = {
+  body: `'Inter', Arial, sans-serif`,
+}
 
 // use enum to specify list of possible colors for typing
 export const colors = {
@@ -24,6 +27,7 @@ export const colors = {
   silver: '#c0c0c0',
   softgrey: '#c2d4e4',
   lightgrey: '#ababac',
+  darkGrey: '#686868',
 }
 
 export const zIndex = {
@@ -58,6 +62,25 @@ const maxContainerWidth = 1280
 const regular = 400
 const bold = 600
 // cc - assume standard image widths are 4:3, however not clearly defined
+
+const alerts = {
+  success: {
+    borderRadius: 1,
+    paddingX: 3,
+    paddingY: 3,
+    backgroundColor: colors.green,
+    textAlign: 'center',
+    fontWeight: 'normal',
+  },
+  failure: {
+    borderRadius: 1,
+    paddingX: 3,
+    paddingY: 3,
+    backgroundColor: colors.red2,
+    textAlign: 'center',
+    fontWeight: 'normal',
+  },
+}
 
 const buttons = {
   primary: {
@@ -195,17 +218,19 @@ const typography = {
 
 const StyledComponentTheme: ThemeWithName = {
   name: 'Fixing Fashion',
+  logo: logo,
   profileGuidelinesURL:
     'https://community.fixing.fashion/academy/guides/profile',
   communityProgramURL:
     'https://community.fixing.fashion/academy/guides/community-program',
+  alerts,
   badges: {
     member: {
-      lowDetail: memberLow,
+      lowDetail: member,
       normal: member,
     },
     space: {
-      lowDetail: spaceBadgeLow,
+      lowDetail: spaceBadge,
       normal: spaceBadge,
     },
   },
@@ -223,6 +248,7 @@ const StyledComponentTheme: ThemeWithName = {
   space,
   radii,
   fontSizes,
+  fonts,
   forms: {
     input: {
       background: colors.background,

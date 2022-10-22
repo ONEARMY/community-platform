@@ -3,24 +3,30 @@ import type { IEvent, IEventDB } from 'src/models/events.models'
 import { Button, MoreContainer } from 'oa-components'
 import { Flex, Box, Heading } from 'theme-ui'
 import EventCard from '../../EventCard/EventCard'
-import TagsSelect from 'src/components/Tags/TagsSelect'
+import TagsSelect from 'src/common/Tags/TagsSelect'
 import { inject, observer } from 'mobx-react'
 import type { EventStore } from 'src/stores/Events/events.store'
 import type { UserStore } from 'src/stores/User/user.store'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import { Link } from 'react-router-dom'
+import type { TagsStore } from 'src/stores/Tags/tags.store'
 
 interface InjectedProps {
   eventStore: EventStore
   themeStore: ThemeStore
+  tagsStore: TagsStore
   userStore?: UserStore
 }
 
 // const filterArrayDuplicates = (array: string[]) => Array.from(new Set(array))
 
-@inject('eventStore', 'userStore', 'themeStore')
+@inject('eventStore', 'userStore', 'themeStore', 'tagsStore')
 @observer
 export class EventsListings extends React.Component<any> {
+  private moderateEvent = async (event: IEvent, accepted: boolean) => {
+    event.moderation = accepted ? 'accepted' : 'rejected'
+    await this.store.moderateEvent(event)
+  }
   get injected() {
     return this.props as InjectedProps
   }
@@ -31,11 +37,6 @@ export class EventsListings extends React.Component<any> {
 
   get theme() {
     return this.injected.themeStore
-  }
-
-  private moderateEvent = async (event: IEvent, accepted: boolean) => {
-    event.moderation = accepted ? 'accepted' : 'rejected'
-    await this.store.moderateEvent(event)
   }
 
   public render() {
@@ -146,6 +147,14 @@ export class EventsListings extends React.Component<any> {
                   event={event}
                   needsModeration={this.store.needsModeration(event)}
                   moderateEvent={this.moderateEvent}
+                  tags={
+                    event.tags &&
+                    Object.keys(event.tags)
+                      .map((t) => {
+                        return this.injected.tagsStore.allTagsByKey[t]
+                      })
+                      .filter(Boolean)
+                  }
                 />
               ))}
             </Flex>
@@ -177,6 +186,14 @@ export class EventsListings extends React.Component<any> {
                   isPastEvent
                   needsModeration={this.store.needsModeration(event)}
                   moderateEvent={this.moderateEvent}
+                  tags={
+                    event.tags &&
+                    Object.keys(event.tags)
+                      .map((t) => {
+                        return this.injected.tagsStore.allTagsByKey[t]
+                      })
+                      .filter(Boolean)
+                  }
                 />
               ))}
             </>

@@ -1,21 +1,18 @@
-import { useTheme } from '@emotion/react'
-import { FlagIconHowTos, Icon, ModerationStatus } from 'oa-components'
+import { CategoryTag, Icon, ModerationStatus, Username } from 'oa-components'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { Link as RouterLink } from 'react-router-dom'
-import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
-import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
+import { isUserVerified } from 'src/common/isUserVerified'
 import type { IHowtoDB } from 'src/models/howto.models'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 import { Card, Flex, Heading, Text } from 'theme-ui'
 
 interface IProps {
-  howto: IHowtoDB
+  howto: IHowtoDB & { taglist: any }
   votedUsefulCount: number
 }
 
 export const HowToCard = (props: IProps) => {
   const { howto, votedUsefulCount } = props
-  const theme = useTheme()
   return (
     <Card data-cy="card" sx={{ borderRadius: 2, position: 'relative' }}>
       <Flex>
@@ -56,29 +53,20 @@ export const HowToCard = (props: IProps) => {
               {capitalizeFirstLetter(howto.title)}
             </Heading>
             <Flex sx={{ alignItems: 'center' }}>
-              {howto.creatorCountry && (
-                <FlagIconHowTos code={howto.creatorCountry} />
-              )}
-              <Text
-                my={2}
-                ml={1}
-                sx={{ display: 'flex', ...theme.typography.auxiliary }}
-              >
-                By {howto._createdBy}
-              </Text>
-              <VerifiedUserBadge
-                userId={howto._createdBy}
-                ml={1}
-                height="12px"
-                width="12px"
+              <Username
+                user={{
+                  userName: howto._createdBy,
+                  countryCode: howto.creatorCountry,
+                }}
+                isVerified={isUserVerified(howto._createdBy)}
               />
             </Flex>
             <Flex mt={4}>
               <Flex sx={{ flex: 1, flexWrap: 'wrap' }}>
-                {howto.tags &&
-                  Object.keys(howto.tags).map((tag) => {
-                    return <TagDisplay key={tag} tagKey={tag} />
-                  })}
+                {howto.taglist &&
+                  howto.taglist.map((tag, idx) => (
+                    <CategoryTag key={idx} tag={tag} sx={{ mr: 1 }} />
+                  ))}
               </Flex>
               {votedUsefulCount > 0 && (
                 <Flex ml={1} sx={{ alignItems: 'center' }}>

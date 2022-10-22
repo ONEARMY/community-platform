@@ -4,12 +4,13 @@ import type { IUploadedFileMeta } from 'src/stores/storage'
 
 import { Box, Image, Text, Flex, Heading, Card } from 'theme-ui'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
-import { FlagIcon, MemberBadge } from 'oa-components'
+import { MemberBadge, Username } from 'oa-components'
 import theme from 'src/themes/styled.theme'
 import styled from '@emotion/styled'
 import { UserStats } from './UserStats'
 import UserContactAndLinks from './UserContactAndLinks'
 import { UserAdmin } from './UserAdmin'
+import { isUserVerified } from 'src/common/isUserVerified'
 
 interface IProps {
   user: IUserPP
@@ -38,7 +39,12 @@ export const MemberProfile = ({ user }: IProps) => {
   )
 
   const userCountryCode =
-    user.location?.countryCode || user.country?.toLowerCase() || null
+    user.location?.countryCode || user.country?.toLowerCase() || undefined
+
+  const memberPictureSource =
+    user.coverImages && user.coverImages[0]
+      ? (user.coverImages[0] as IUploadedFileMeta).downloadUrl
+      : DefaultMemberImage
 
   return (
     <Card
@@ -71,14 +77,7 @@ export const MemberProfile = ({ user }: IProps) => {
       >
         <Box mr={3} style={{ flexGrow: 1, minWidth: 'initial' }}>
           <MemberPicture>
-            <Image
-              loading="lazy"
-              src={
-                user.coverImages[0]
-                  ? (user.coverImages[0] as IUploadedFileMeta).downloadUrl
-                  : DefaultMemberImage
-              }
-            />
+            <Image loading="lazy" src={memberPictureSource} />
           </MemberPicture>
           <UserStats user={user} />
         </Box>
@@ -93,24 +92,13 @@ export const MemberProfile = ({ user }: IProps) => {
               pt: ['40px', '40px', '0'],
             }}
           >
-            {userCountryCode && (
-              <FlagIcon
-                mr={2}
-                code={userCountryCode}
-                style={{ display: 'inline-block' }}
-              />
-            )}
-            <Text
-              my={2}
-              sx={{
-                color: `${theme.colors.lightgrey} !important`,
-                wordBreak: 'break-word',
-                fontSize: 3,
+            <Username
+              user={{
+                userName: user.userName,
+                countryCode: userCountryCode,
               }}
-              data-cy="userName"
-            >
-              {user.userName}
-            </Text>
+              isVerified={isUserVerified(user.userName)}
+            />
           </Flex>
           <Box sx={{ flexDirection: 'column' }} mb={3}>
             <Heading

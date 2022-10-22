@@ -36,23 +36,15 @@ interface IInjectedProps extends IProps {
 @inject('mapsStore')
 @observer
 class MapView extends React.Component<IProps> {
-  constructor(props: IProps) {
-    super(props)
-    this.handleMove = debounce(this.handleMove, 1000)
-  }
-
-  get injected() {
-    return this.props as IInjectedProps
-  }
-  componentDidMount() {
-    if (this.props.mapRef.current) {
-      return this.props.mapRef.current.leafletElement.zoomControl.setPosition(
-        'bottomleft',
-      )
-    }
-  }
-
   // on move end want to calculate current bounding box and notify parent
+  static defaultProps: Partial<IProps> = {
+    onBoundingBoxChange: () => null,
+    onPinClicked: () => null,
+    pins: [],
+    filters: [],
+    center: { lat: 51.0, lng: 19.0 },
+    zoom: 3,
+  }
   // so that pins can be displayed as required
   private handleMove = () => {
     if (this.props.mapRef.current) {
@@ -64,6 +56,21 @@ class MapView extends React.Component<IProps> {
       this.props.onBoundingBoxChange(newBoundingBox)
     }
   }
+  constructor(props: IProps) {
+    super(props)
+    this.handleMove = debounce(this.handleMove, 1000)
+  }
+
+  get injected() {
+    return this.props as IInjectedProps
+  }
+  componentDidMount() {
+    if (this.props.mapRef.current) {
+      return this.props.mapRef.current.leafletElement.zoomControl?.setPosition(
+        'bottomleft',
+      )
+    }
+  }
 
   private async pinClicked(pin: IMapPin) {
     await this.injected.mapsStore.setActivePin(pin)
@@ -73,6 +80,7 @@ class MapView extends React.Component<IProps> {
   public render() {
     const { center, zoom, pins } = this.props
     const { activePin } = this.injected.mapsStore
+    const isViewportGreaterThanTablet = window.innerWidth > 1024
 
     const mapCenter: LatLngExpression = center
       ? [center.lat, center.lng]
@@ -86,6 +94,7 @@ class MapView extends React.Component<IProps> {
         center={mapCenter}
         zoom={mapZoom}
         maxZoom={18}
+        zoomControl={isViewportGreaterThanTablet}
         style={{ height: '100%', zIndex: 0 }}
         onmove={this.handleMove}
         onclick={() => {
@@ -104,15 +113,6 @@ class MapView extends React.Component<IProps> {
         )}
       </Map>
     )
-  }
-
-  static defaultProps: Partial<IProps> = {
-    onBoundingBoxChange: () => null,
-    onPinClicked: () => null,
-    pins: [],
-    filters: [],
-    center: { lat: 51.0, lng: 19.0 },
-    zoom: 3,
   }
 }
 

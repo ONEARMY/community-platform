@@ -1,26 +1,26 @@
 import { inject, observer } from 'mobx-react'
 import * as React from 'react'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
-import { Button, MoreContainer } from 'oa-components'
+import { Link } from 'react-router-dom'
+import { Button, MoreContainer, Loader } from 'oa-components'
 import { Heading, Input, Flex, Box } from 'theme-ui'
-import { Loader } from 'src/components/Loader'
-import TagsSelect from 'src/components/Tags/TagsSelect'
+import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import { VirtualizedFlex } from 'src/pages/Howto/VirtualizedFlex/VirtualizedFlex'
-import type { IHowtoDB } from 'src/models/howto.models'
-import type { HowtoStore } from 'src/stores/Howto/howto.store'
-import type { UserStore } from 'src/stores/User/user.store'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 import HowToCard from './HowToCard'
 import SortSelect from './SortSelect'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
-import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
-import { Link } from 'react-router-dom'
+import type { TagsStore } from 'src/stores/Tags/tags.store'
+import type { HowtoStore } from 'src/stores/Howto/howto.store'
+import type { UserStore } from 'src/stores/User/user.store'
+import type { IHowto } from 'src/models'
 
 interface InjectedProps {
   howtoStore: HowtoStore
   userStore: UserStore
   themeStore: ThemeStore
   aggregationsStore: AggregationsStore
+  tagsStore: TagsStore
 }
 
 interface IState {
@@ -28,7 +28,7 @@ interface IState {
   // totalHowtoColumns: number
 }
 
-// Update query params for search and tags
+// Update query params for search and categories
 const updateQueryParams = (url: string, key: string, val: string) => {
   const newUrl = new URL(url)
   const urlParams = new URLSearchParams(newUrl.search)
@@ -43,7 +43,13 @@ const updateQueryParams = (url: string, key: string, val: string) => {
 }
 
 // First we use the @inject decorator to bind to the howtoStore state
-@inject('howtoStore', 'userStore', 'themeStore', 'aggregationsStore')
+@inject(
+  'howtoStore',
+  'userStore',
+  'themeStore',
+  'aggregationsStore',
+  'tagsStore',
+)
 // Then we can use the observer component decorator to automatically tracks observables and re-renders on change
 // (note 1, use ! to tell typescript that the store will exist (it's an injected prop))
 // (note 2, mobx seems to behave more consistently when observables are referenced outside of render methods)
@@ -56,16 +62,6 @@ export class HowtoList extends React.Component<any, IState> {
     }
     if (props.location.search) {
       const searchParams = new URLSearchParams(props.location.search)
-
-      const tagQuery = searchParams.get('tags')?.toString()
-      if (tagQuery) {
-        const tags = {}
-        tagQuery.split(',').forEach((tag) => {
-          tags[tag] = true
-        })
-
-        this.props.howtoStore.updateSelectedTags(tags)
-      }
 
       const categoryQuery = searchParams.get('category')?.toString()
       if (categoryQuery) {
@@ -99,21 +95,26 @@ export class HowtoList extends React.Component<any, IState> {
   }
 
   public render() {
-    const {
-      filteredHowtos,
-      selectedTags,
-      selectedCategory,
-      searchValue,
-      referrerSource,
-    } = this.props.howtoStore
+    const { filteredHowtos, selectedCategory, searchValue, referrerSource } =
+      this.props.howtoStore
 
     const theme = this.props?.themeStore?.currentTheme
+    const { allTagsByKey } = this.injected.tagsStore
     const { users_votedUsefulHowtos } =
       this.injected.aggregationsStore.aggregations
 
+    const howtoItems = filteredHowtos.map((howto: IHowto) => ({
+      ...howto,
+      taglist:
+        howto.tags &&
+        Object.keys(howto.tags)
+          .map((key) => allTagsByKey[key])
+          .filter(Boolean),
+    }))
+
     return (
       <Box>
-        <Flex py={26}>
+        <Flex sx={{ paddingTop: [10, 26], paddingBottom: [10, 26] }}>
           {referrerSource ? (
             <Box sx={{ width: '100%' }}>
               <Heading
@@ -158,47 +159,25 @@ export class HowtoList extends React.Component<any, IState> {
             flexDirection: ['column', 'column', 'row'],
           }}
         >
-          <AuthWrapper roleRequired="beta-tester">
-            <Flex
-              sx={{ width: ['100%', '100%', '20%'] }}
-              mb={['10px', '10px', 0]}
-              mr={[0, 0, '8px']}
-            >
-              <CategoriesSelect
-                value={selectedCategory ? { label: selectedCategory } : null}
-                onChange={(category) => {
-                  updateQueryParams(
-                    window.location.href,
-                    'category',
-                    category ? category.label : '',
-                  )
-                  this.props.howtoStore.updateSelectedCategory(
-                    category ? category.label : '',
-                  )
-                }}
-                styleVariant="filter"
-                placeholder="Filter by category"
-              />
-            </Flex>
-          </AuthWrapper>
           <Flex
             sx={{ width: ['100%', '100%', '20%'] }}
             mb={['10px', '10px', 0]}
+            mr={[0, 0, '8px']}
           >
-            <TagsSelect
-              value={selectedTags}
-              onChange={(tags) => {
+            <CategoriesSelect
+              value={selectedCategory ? { label: selectedCategory } : null}
+              onChange={(category) => {
                 updateQueryParams(
                   window.location.href,
-                  'tags',
-                  Object.keys(tags).join(','),
+                  'category',
+                  category ? category.label : '',
                 )
-                this.props.howtoStore.updateSelectedTags(tags)
+                this.props.howtoStore.updateSelectedCategory(
+                  category ? category.label : '',
+                )
               }}
-              category="how-to"
-              styleVariant="filter"
-              placeholder="Filter by tags"
-              relevantTagsItems={filteredHowtos}
+              placeholder="Filter by category"
+              isForm={false}
             />
           </Flex>
           <Flex
@@ -239,7 +218,7 @@ export class HowtoList extends React.Component<any, IState> {
           </Flex>
         </Flex>
         <React.Fragment>
-          {filteredHowtos.length === 0 && (
+          {howtoItems.length === 0 && (
             <Flex>
               <Heading
                 sx={{
@@ -248,9 +227,7 @@ export class HowtoList extends React.Component<any, IState> {
                   ...theme.typography?.auxiliary,
                 }}
               >
-                {Object.keys(selectedTags).length === 0 &&
-                searchValue.length === 0 &&
-                selectedCategory.length === 0 ? (
+                {searchValue.length === 0 && selectedCategory.length === 0 ? (
                   <Loader />
                 ) : (
                   'No how-tos to show'
@@ -264,8 +241,8 @@ export class HowtoList extends React.Component<any, IState> {
             data-cy="howtolist-flex-container"
           >
             <VirtualizedFlex
-              data={filteredHowtos}
-              renderItem={(howto: IHowtoDB) => (
+              data={howtoItems}
+              renderItem={(howto: any) => (
                 <Box px={4} py={4}>
                   <HowToCard
                     howto={howto}

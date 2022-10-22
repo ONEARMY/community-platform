@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styled from '@emotion/styled'
 
-import { Button, Modal } from 'oa-components'
+import { Button, Modal, OsmGeocoding } from 'oa-components'
 import { Flex, Box, Image, Text } from 'theme-ui'
 import filterIcon from 'src/assets/icons/icon-filters-mobile.png'
 import crossClose from 'src/assets/icons/cross-close.svg'
@@ -17,7 +17,6 @@ import { inject } from 'mobx-react'
 import type { MapsStore } from 'src/stores/Maps/maps.store'
 import type { UserStore } from 'src/stores/User/user.store'
 import type { RouteComponentProps } from 'react-router'
-import OsmGeocoding from 'src/components/OsmGeocoding/OsmGeocoding'
 import { logger } from 'src/logger'
 import type { FilterGroup } from './transformAvailableFiltersToGroups'
 

@@ -2,19 +2,10 @@ import type { IConvertedFileMeta } from '../types'
 import type { DBDoc, IComment, IModerable, ISelectedTags } from '.'
 import type { IUploadedFileMeta } from '../stores/storage'
 
-// By default all how-to form input fields come as strings
-// The IResearch interface can imposes the correct formats on fields
-// Additionally convert from local filemeta to uploaded filemeta
-export interface IResearch extends IModerable {
-  _createdBy: string
-  cover_image: IUploadedFileMeta
-  files: Array<IUploadedFileMeta | File | null>
-}
-
 /**
  * Research retrieved from the database also include metadata such as _id, _created and _modified
  */
-export type IResearchDB = IResearch & DBDoc
+export type IResearchDB = IResearch.ItemDB & DBDoc
 
 export type IResearchStats = {
   votedUsefulCount: number

@@ -9,14 +9,14 @@
       },
       {
         "source": "/how-to/**",
-        "function": "seoRender"
+        "function": "seo-seoRender"
       },
       {
         "source": "/research/**",
-        "function": "seoRender"
+        "function": "seo-seoRender"
       },
       {
-        "source": "/sitemap",
+        "source": "/sitemap.xml",
         "function": "seo-sitemapProxy"
       },
       {

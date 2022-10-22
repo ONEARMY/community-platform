@@ -5,7 +5,7 @@ const paths = {
 const webpack = require('webpack')
 
 module.exports = {
-  stories: ['../src/**/*.stories.tsx'],
+  stories: ['../src/**/*.stories.tsx', '../src/stories.mdx'],
   features: {
     emotionAlias: false,
   },

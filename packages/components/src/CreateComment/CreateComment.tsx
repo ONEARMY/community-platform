@@ -23,7 +23,7 @@ export const CreateComment = (props: Props) => {
 
   return (
     <>
-      <Flex>
+      <Flex sx={{ marginBottom: 5 }}>
         <Box sx={{ lineHeight: 0, marginTop: 2 }}>
           <MemberBadge profileType={userProfileType} useLowDetailVersion />
         </Box>
@@ -69,9 +69,8 @@ export const CreateComment = (props: Props) => {
                   fontSize: 2,
                   position: 'absolute',
                   right: 0,
-                  bottom: 0,
+                  bottom: -5,
                   pointerEvents: 'none',
-                  background: 'white',
                   padding: 1,
                 }}
               >

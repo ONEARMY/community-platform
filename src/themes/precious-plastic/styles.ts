@@ -1,5 +1,4 @@
-import memberBadge from 'src/assets/images/themes/precious-plastic/badge-member.svg'
-import memberBadgeLowDetail from 'src/assets/icons/map-member.svg'
+import memberBadge from 'src/assets/images/themes/precious-plastic/avatar_member_sm.svg'
 import CollectionBadge from 'src/assets/images/badges/pt-collection-point.svg'
 import CollectionBadgeLowDetail from 'src/assets/icons/map-collection.svg'
 import MachineBadge from 'src/assets/images/badges/pt-machine-shop.svg'
@@ -8,8 +7,13 @@ import WorkspaceBadge from 'src/assets/images/badges/pt-workspace.svg'
 import WorkspaceBadgeLowDetail from 'src/assets/icons/map-workspace.svg'
 import LocalComBadge from 'src/assets/images/badges/pt-local-community.svg'
 import LocalComBadgeLowDetail from 'src/assets/icons/map-community.svg'
+import logo from 'src/assets/images/precious-plastic-logo-official.svg'
 
 import type { ThemeWithName } from '../types'
+
+const fonts = {
+  body: `'Inter', Arial, sans-serif`,
+}
 
 // use enum to specify list of possible colors for typing
 export const colors = {
@@ -31,6 +35,7 @@ export const colors = {
   silver: '#c0c0c0',
   softgrey: '#c2d4e4',
   lightgrey: '#ababac',
+  darkGrey: '#686868',
 }
 
 export const zIndex = {
@@ -65,6 +70,25 @@ const maxContainerWidth = 1280
 const regular = 400
 const bold = 600
 // cc - assume standard image widths are 4:3, however not clearly defined
+
+const alerts = {
+  success: {
+    borderRadius: 1,
+    paddingX: 3,
+    paddingY: 3,
+    backgroundColor: colors.green,
+    textAlign: 'center',
+    fontWeight: 'normal',
+  },
+  failure: {
+    borderRadius: 1,
+    paddingX: 3,
+    paddingY: 3,
+    backgroundColor: colors.red2,
+    textAlign: 'center',
+    fontWeight: 'normal',
+  },
+}
 
 const buttons = {
   primary: {
@@ -202,13 +226,15 @@ const typography = {
 
 const StyledComponentTheme: ThemeWithName = {
   name: 'Precious Plastic',
+  logo: logo,
   profileGuidelinesURL:
     'https://drive.google.com/file/d/1fXTtBbzgCO0EL6G9__aixwqc-Euqgqnd/view',
   communityProgramURL:
     'https://community.preciousplastic.com/academy/guides/community-program',
+  alerts,
   badges: {
     member: {
-      lowDetail: memberBadgeLowDetail,
+      lowDetail: memberBadge,
       normal: memberBadge,
     },
     workspace: {
@@ -240,13 +266,14 @@ const StyledComponentTheme: ThemeWithName = {
     },
   },
   colors,
+  fonts,
   fontSizes,
   forms: {
     input: {
       background: colors.background,
       borderRadius: 1,
       border: '1px solid transparent',
-      fontFamily: `'Inter', Arial, sans-serif`,
+      fontFamily: fonts.body,
       fontSize: 1,
       '&:focus': {
         borderColor: colors.blue,

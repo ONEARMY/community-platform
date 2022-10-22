@@ -1,5 +1,5 @@
-import member from 'src/assets/images/themes/project-kamp/badge.svg'
-import memberLowDetailBadge from 'src/assets/images/themes/project-kamp/avatar.svg'
+import member from 'src/assets/images/themes/project-kamp/avatar_member_sm.svg'
+import logo from 'src/assets/images/themes/project-kamp/project-kamp-header.png'
 import type { ThemeWithName } from '../types'
 
 // use enum to specify list of possible colors for typing
@@ -22,6 +22,7 @@ export const colors = {
   silver: '#c0c0c0',
   softgrey: '#c2d4e4',
   lightgrey: '#ababac',
+  darkGrey: '#686868',
 }
 
 export const zIndex = {
@@ -33,6 +34,10 @@ export const zIndex = {
   logoContainer: 999,
   mapFlexBar: 2000,
   header: 3000,
+}
+
+const fonts = {
+  body: `'Inter', Arial, sans-serif`,
 }
 
 export type ButtonVariants =
@@ -56,6 +61,25 @@ const maxContainerWidth = 1280
 const regular = 400
 const bold = 600
 // cc - assume standard image widths are 4:3, however not clearly defined
+
+const alerts = {
+  success: {
+    borderRadius: 1,
+    paddingX: 3,
+    paddingY: 3,
+    backgroundColor: colors.green,
+    textAlign: 'center',
+    fontWeight: 'normal',
+  },
+  failure: {
+    borderRadius: 1,
+    paddingX: 3,
+    paddingY: 3,
+    backgroundColor: colors.red2,
+    textAlign: 'center',
+    fontWeight: 'normal',
+  },
+}
 
 const buttons = {
   primary: {
@@ -197,9 +221,11 @@ const StyledComponentTheme: ThemeWithName = {
     'https://drive.google.com/file/d/1fXTtBbzgCO0EL6G9__aixwqc-Euqgqnd/view',
   communityProgramURL:
     'https://community.preciousplastic.com/academy/guides/community-program',
+  logo: logo,
+  alerts,
   badges: {
     member: {
-      lowDetail: memberLowDetailBadge,
+      lowDetail: member,
       normal: member,
     },
   },
@@ -217,6 +243,7 @@ const StyledComponentTheme: ThemeWithName = {
   space,
   radii,
   fontSizes,
+  fonts,
   forms: {
     input: {
       background: colors.background,

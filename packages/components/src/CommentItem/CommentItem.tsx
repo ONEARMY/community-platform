@@ -1,10 +1,7 @@
 import { createRef, useEffect, useState } from 'react'
-import Linkify from 'react-linkify'
-import { Link } from 'react-router-dom'
-import { Button, EditComment, Modal } from '../index'
+import { Button, EditComment, Modal, LinkifyText } from '../index'
 import { Box, Flex, Text } from 'theme-ui'
-import { FlagIconHowTos } from '../FlagIcon/FlagIcon'
-import { Icon } from '../Icon/Icon'
+import { Username } from '../Username/Username'
 
 export interface CommentItemProps {
   text: string
@@ -46,7 +43,6 @@ export const CommentItem = (props: CommentItemProps) => {
     isEditable,
   } = props
 
-  console.log(isEditable)
   useEffect(() => {
     if (textRef.current) {
       setTextHeight(textRef.current.scrollHeight)
@@ -55,6 +51,13 @@ export const CommentItem = (props: CommentItemProps) => {
 
   const showMore = () => {
     setShowMore(!isShowMore)
+  }
+
+  const onEditRequest = (_id: string) => {
+    if (handleEditRequest) {
+      handleEditRequest(_id)
+      return setShowEditModal(true)
+    }
   }
 
   return (
@@ -70,23 +73,13 @@ export const CommentItem = (props: CommentItemProps) => {
         }}
       >
         <Flex sx={{ justifyContent: 'space-between', alignItems: 'baseline' }}>
-          <Box>
-            {creatorCountry && <FlagIconHowTos code={creatorCountry} />}
-            <span style={{ marginLeft: creatorCountry ? '5px' : 0 }}>
-              <Link
-                style={{
-                  textDecoration: 'underline',
-                  color: 'inherit',
-                  display: 'inline-block',
-                  marginRight: '5px',
-                }}
-                to={'/u/' + creatorName}
-              >
-                {creatorName}
-              </Link>
-              {isUserVerified && <Icon glyph="verified" size={12} />}
-            </span>
-          </Box>
+          <Username
+            user={{
+              userName: creatorName,
+              countryCode: creatorCountry,
+            }}
+            isVerified={!!isUserVerified}
+          />
           <Flex sx={{ alignItems: 'center' }}>
             <>
               {_edited && (
@@ -108,12 +101,13 @@ export const CommentItem = (props: CommentItemProps) => {
             whiteSpace: 'pre-wrap',
             wordBreak: 'break-word',
             overflow: 'hidden',
-            lineHeight: '1em',
             maxHeight: isShowMore ? 'max-content' : '128px',
+            fontFamily: 'body',
+            lineHeight: 1.3,
           }}
           ref={textRef}
         >
-          <Linkify properties={{ target: '_blank' }}>{text}</Linkify>
+          <LinkifyText>{text}</LinkifyText>
         </Text>
         {textHeight > 129 && (
           <a
@@ -135,7 +129,7 @@ export const CommentItem = (props: CommentItemProps) => {
                 variant={'outline'}
                 small={true}
                 icon={'edit'}
-                onClick={() => handleEditRequest}
+                onClick={() => onEditRequest(_id)}
               >
                 edit
               </Button>

@@ -1,7 +1,7 @@
 import type { PlatformTheme } from '../types'
 import logo from 'src/assets/images/themes/fixing-fashion/fixing-fashion-header.png'
-import badge from 'src/assets/images/themes/fixing-fashion/badge.svg'
-import avatar from 'src/assets/images/themes/fixing-fashion/avatar.svg'
+import badge from 'src/assets/images/themes/fixing-fashion/avatar_member_sm.svg'
+import avatar from 'src/assets/images/themes/fixing-fashion/avatar_space_sm.svg'
 import styles from './styles'
 import { THEME_LIST } from '..'
 

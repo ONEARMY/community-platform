@@ -140,7 +140,7 @@ const sitemapItemGenerators: {
 } = {
   howtos: (slug: string) => ({
     ...endpointItemDefaults,
-    url: `${SITE_URL}/how-tos/${slug}`,
+    url: `${SITE_URL}/how-to/${slug}`,
     changefreq: EnumChangefreq.MONTHLY,
     priority: 0.8,
   }),

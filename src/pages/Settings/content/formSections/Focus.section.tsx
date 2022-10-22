@@ -1,7 +1,7 @@
-import { Heading, Box, Text, Flex } from 'theme-ui'
+import { Heading, Box, Text, Flex, Grid, Paragraph } from 'theme-ui'
 import { FlexSectionContainer } from './elements'
 import { Button, ExternalLink } from 'oa-components'
-import type { ProfileTypeLabel } from 'src/modules/profile'
+import type { ProfileTypeLabel } from 'src/modules/profile/types'
 import { getSupportedProfileTypes } from 'src/modules/profile'
 import { CustomRadioField } from './Fields/CustomRadio.field'
 import { Field } from 'react-final-form'
@@ -22,10 +22,12 @@ function ProfileTypes() {
             <Heading variant="small">Focus</Heading>
           </Flex>
           <Box>
-            <Text my={4}>What is your main {theme.name} activity?</Text>
-            <Flex sx={{ flexWrap: ['wrap', 'wrap', 'nowrap'] }}>
+            <Paragraph my={4}>
+              What is your main {theme.name} activity?
+            </Paragraph>
+            <Grid columns={['repeat(auto-fill, minmax(150px, 1fr))']} gap={2}>
               {profileTypes.map((profile, index: number) => (
-                <Box key={index} sx={{ width: `20%` }}>
+                <Box key={index}>
                   <CustomRadioField
                     data-cy={profile.label}
                     value={profile.label}
@@ -41,7 +43,7 @@ function ProfileTypes() {
                   />
                 </Box>
               ))}
-            </Flex>
+            </Grid>
             <Flex sx={{ flexWrap: 'wrap', alignItems: 'center' }} mt={4}>
               <Text my={2}>Not sure about your focus ?</Text>
               <ExternalLink href={theme.profileGuidelinesURL}>

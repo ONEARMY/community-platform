@@ -1,4 +1,4 @@
-import type { ProfileTypeLabel } from 'src/modules/profile'
+import type { ProfileTypeLabel } from 'src/modules/profile/types'
 
 interface LinkList {
   label: string
@@ -25,15 +25,23 @@ type Badge = {
 export interface ThemeWithName {
   name: string
 
+  logo: string
+
   profileGuidelinesURL: string
 
   communityProgramURL: string
+
+  alerts: any
 
   badges: {
     [K in ProfileTypeLabel]?: Badge
   }
 
   text: any
+
+  fonts: {
+    body: string
+  }
 
   forms: {
     input: any
@@ -79,6 +87,7 @@ export interface ThemeWithName {
     softgrey: string
     offwhite: string
     lightgrey: string
+    darkGrey: string
   }
 
   fontSizes: number[]

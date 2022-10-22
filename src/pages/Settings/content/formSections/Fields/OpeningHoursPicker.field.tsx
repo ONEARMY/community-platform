@@ -3,7 +3,7 @@ import { WEEK_DAYS, OPENING_HOURS } from 'src/mocks/Selectors'
 import { Field } from 'react-final-form'
 import { Button, Modal } from 'oa-components'
 import { Text, Flex } from 'theme-ui'
-import { SelectField } from 'src/components/Form/Select.field'
+import { SelectField } from 'src/common/Form/Select.field'
 import { required } from 'src/utils/validators'
 
 interface IProps {
@@ -38,10 +38,14 @@ export class OpeningHoursPicker extends Component<IProps, IState> {
     return (
       <Flex
         key={index}
-        sx={{ alignItems: 'flex-start', flexWrap: ['wrap', 'wrap', 'nowrap'] }}
+        sx={{
+          gap: '8px',
+          alignItems: 'flex-start',
+          flexWrap: ['wrap', 'wrap', 'nowrap'],
+        }}
         my={1}
       >
-        <Flex mb={1}>
+        <Flex mb={1} sx={{ gap: '8px' }}>
           <Field
             data-cy={`opening-time-day-${index}`}
             name={`${openingHoursValues}.day`}
@@ -50,17 +54,16 @@ export class OpeningHoursPicker extends Component<IProps, IState> {
             validate={required}
             validateFields={[]}
             placeholder="Select day"
-            style={{ width: '160px', marginRight: '8px', marginBottom: 0 }}
+            style={{ marginBottom: 0 }}
           />
           <Button
             icon={'delete'}
             variant={'tertiary'}
-            ml={'10px'}
             sx={{ height: '40px', display: ['block', 'block', 'none'] }}
             onClick={() => this.toggleDeleteModal()}
           />
         </Flex>
-        <Flex>
+        <Flex sx={{ gap: '8px' }}>
           <Field
             data-cy={`opening-time-from-${index}`}
             name={`${openingHoursValues}.openFrom`}
@@ -69,7 +72,8 @@ export class OpeningHoursPicker extends Component<IProps, IState> {
             placeholder="from --:-- AM"
             validate={required}
             validateFields={[]}
-            style={{ width: '160px', marginRight: '8px', marginBottom: 0 }}
+            showError={false}
+            style={{ marginBottom: 0 }}
           />
           <Field
             data-cy={`opening-time-to-${index}`}
@@ -79,13 +83,13 @@ export class OpeningHoursPicker extends Component<IProps, IState> {
             placeholder="to --:-- PM"
             validate={required}
             validateFields={[]}
-            style={{ width: '160px', marginBottom: 0 }}
+            showError={false}
+            style={{ marginBottom: 0 }}
           />
         </Flex>
         <Button
           icon={'delete'}
           variant={'tertiary'}
-          ml={'10px'}
           data-cy={`delete-opening-time-${index}-desk`}
           sx={{ height: '40px', display: ['none', 'none', 'block'] }}
           onClick={() => this.toggleDeleteModal()}

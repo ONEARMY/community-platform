@@ -16,18 +16,16 @@ describe('[Events]', () => {
       cy.get('button').contains('More Events').should('not.visible')
 
       cy.step(`Basic info of an event is shown`)
-      cy.get('[data-cy=card]:has(:contains(SURA BAYA Exhibition))').within(
-        () => {
-          cy.contains('18').should('be.exist')
-          cy.contains('Aug').should('be.exist')
-          cy.contains('SURA BAYA Exhibition').should('be.exist')
-          cy.contains('By event_creator').should('be.exist')
-          cy.contains('East Java').should('be.exist')
-          cy.get('a[target=_blank]')
-            .should('have.attr', 'href')
-            .and('eq', 'https://www.instagram.com/p/B1N6zVUjj0M/')
-        },
-      )
+      cy.get('[data-cy=card]:contains(SURA BAYA Exhibition)').within(() => {
+        cy.contains('18').should('be.exist')
+        cy.contains('Aug').should('be.exist')
+        cy.contains('SURA BAYA Exhibition').should('be.exist')
+        cy.contains('event_creator').should('be.exist')
+        cy.contains('East Java').should('be.exist')
+        cy.get('a[target=_blank]')
+          .should('have.attr', 'href')
+          .and('eq', 'https://www.instagram.com/p/B1N6zVUjj0M/')
+      })
     })
 
     it('[By Authenticated]', () => {

@@ -14,6 +14,12 @@ import { required } from 'src/utils/validators'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
 import { Link } from 'react-router-dom'
 
+const CheckboxLabel = styled.label`
+  font-size: ${theme.fontSizes[2] + 'px'};
+  display: flex;
+  align-items: center;
+`
+
 const Label = styled.label`
   font-size: ${theme.fontSizes[2] + 'px'};
   margin-bottom: ${theme.space[2] + 'px'};
@@ -221,23 +227,25 @@ class SignUpPage extends React.Component<IProps, IState> {
                         mt={2}
                         sx={{ width: ['100%', '100%', `${(2 / 3) * 100}%`] }}
                       >
-                        <Field
-                          data-cy="consent"
-                          name="consent"
-                          type="checkbox"
-                          component="input"
-                          validate={required}
-                        />
-                        <Label htmlFor="consent">
-                          I agree to the{' '}
-                          <ExternalLink href="/terms">
-                            Terms of Service
-                          </ExternalLink>
-                          <span> and </span>
-                          <ExternalLink href="/privacy">
-                            Privacy Policy
-                          </ExternalLink>
-                        </Label>
+                        <CheckboxLabel>
+                          <Field
+                            data-cy="consent"
+                            name="consent"
+                            type="checkbox"
+                            component="input"
+                            validate={required}
+                          />
+                          <Text>
+                            I agree to the{' '}
+                            <ExternalLink href="/terms">
+                              Terms of Service
+                            </ExternalLink>
+                            <span> and </span>
+                            <ExternalLink href="/privacy">
+                              Privacy Policy
+                            </ExternalLink>
+                          </Text>
+                        </CheckboxLabel>
                       </Flex>
                       <Text color={'red'} data-cy="error-msg">
                         {this.state.errorMsg}

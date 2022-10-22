@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react'
 import { Button } from 'oa-components'
 import type { AdminStore } from 'src/stores/Admin/admin.store'
 import type { IUser } from 'src/models/user.models'
-import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 import { Text } from 'theme-ui'
 import { Link } from 'react-router-dom'
 
@@ -23,10 +23,6 @@ interface IState {
 @inject('adminStore')
 @observer
 export class UserAdmin extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props)
-    this.state = { disabled: false }
-  }
   getUserEmail = async () => {
     this.setState({ disabled: true, contactDetails: 'Requesting Email...' })
     const contactDetails = await this.props.adminStore!.getUserEmail(
@@ -34,6 +30,11 @@ export class UserAdmin extends React.Component<IProps, IState> {
     )
     this.setState({ disabled: false, contactDetails })
   }
+  constructor(props: IProps) {
+    super(props)
+    this.state = { disabled: false }
+  }
+
   public render() {
     const { contactDetails, disabled } = this.state
     return (

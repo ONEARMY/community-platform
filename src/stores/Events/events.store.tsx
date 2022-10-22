@@ -17,15 +17,6 @@ import {
 import type { IUser } from 'src/models/user.models'
 
 export class EventStore extends ModuleStore {
-  constructor(rootStore: RootStore) {
-    super(rootStore, 'events')
-    this.allDocs$.subscribe((docs: IEventDB[]) => {
-      this.allEvents = docs.sort((a, b) => (a.date > b.date ? 1 : -1))
-    })
-    makeObservable(this)
-    this.selectedTags = {}
-    this.initLocation()
-  }
   // observables are data variables that can be subscribed to and change over time
   @observable
   public allEvents: IEventDB[] = []
@@ -35,6 +26,16 @@ export class EventStore extends ModuleStore {
   public selectedTags: ISelectedTags
   @observable
   public selectedLocation: ILocation
+  constructor(rootStore: RootStore) {
+    super(rootStore, 'events')
+    this.allDocs$.subscribe((docs: IEventDB[]) => {
+      this.allEvents = docs.sort((a, b) => (a.date > b.date ? 1 : -1))
+    })
+    makeObservable(this)
+    this.selectedTags = {}
+    this.initLocation()
+  }
+
   @computed get upcomingEvents() {
     // HACK - ARH - 2019/12/11 filter unaccepted events, should be done serverside
     const activeUser = this.activeUser
@@ -93,7 +94,7 @@ export class EventStore extends ModuleStore {
   }
 
   // Moderate Event
-  public async moderateEvent(event: IEvent) {
+  public async moderateEvent(event: Pick<IEvent, '_id'>) {
     if (!hasAdminRights(toJS(this.activeUser))) {
       return false
     }

@@ -2,7 +2,7 @@ import type { ComponentStory, ComponentMeta } from '@storybook/react'
 import { Modal } from './Modal'
 
 export default {
-  title: 'Base Components/Modal',
+  title: 'Components/Modal',
   component: Modal,
 } as ComponentMeta<typeof Modal>
 

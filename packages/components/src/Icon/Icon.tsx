@@ -15,7 +15,6 @@ import { MdAccountCircle } from '@react-icons/all-files/md/MdAccountCircle'
 import { MdLock } from '@react-icons/all-files/md/MdLock'
 import { MdClose } from '@react-icons/all-files/md/MdClose'
 import { MdMoreVert } from '@react-icons/all-files/md/MdMoreVert'
-import { MdComment } from '@react-icons/all-files/md/MdComment'
 import { MdTurnedIn } from '@react-icons/all-files/md/MdTurnedIn'
 import { MdEdit } from '@react-icons/all-files/md/MdEdit'
 import { MdAccessTime } from '@react-icons/all-files/md/MdAccessTime'
@@ -72,7 +71,7 @@ export const glyphs: IGlyphs = {
   close: <MdClose />,
   delete: <GoTrashcan />,
   'more-vert': <MdMoreVert />,
-  comment: <MdComment />,
+  comment: iconMap.comment,
   'turned-in': <MdTurnedIn />,
   edit: <MdEdit />,
   time: <MdAccessTime />,

@@ -1,13 +1,19 @@
 import { PureComponent } from 'react'
-import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { format } from 'date-fns'
 import type { IHowtoDB } from 'src/models/howto.models'
 import { Heading, Text, Box, Flex, Image, AspectImage } from 'theme-ui'
-import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import StepsIcon from 'src/assets/icons/icon-steps.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
-import { Button, FlagIconHowTos, ModerationStatus } from 'oa-components'
+import {
+  Button,
+  ModerationStatus,
+  LinkifyText,
+  UsefulStatsButton,
+  CategoryTag,
+  FileInformation,
+  Username,
+} from 'oa-components'
 import type { IUser } from 'src/models/user.models'
 import {
   isAllowToEditContent,
@@ -16,10 +22,7 @@ import {
 } from 'src/utils/helpers'
 import theme from 'src/themes/styled.theme'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
-import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
-import { UsefulStatsButton } from 'src/components/UsefulStatsButton/UsefulStatsButton'
 import { DownloadExternal } from 'src/pages/Howto/DownloadExternal/DownloadExternal'
-import Linkify from 'react-linkify'
 import { Link } from 'react-router-dom'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import { inject, observer } from 'mobx-react'
@@ -31,7 +34,7 @@ import {
 } from './downloadCooldown'
 
 interface IProps {
-  howto: IHowtoDB
+  howto: IHowtoDB & { taglist: any }
   loggedInUser: IUser | undefined
   needsModeration: boolean
   votedUsefulCount?: number
@@ -52,39 +55,11 @@ interface IState {
 @inject('howtoStore')
 @observer
 export default class HowtoDescription extends PureComponent<IProps, IState> {
-  // eslint-disable-next-line
-  constructor(props: IProps) {
-    super(props)
-    this.state = {
-      fileDownloadCount: this.props.howto.total_downloads || 0,
-    }
-    this.handleClick = this.handleClick.bind(this)
-  }
-
-  get injected() {
-    return this.props as IInjected
-  }
-
   private setFileDownloadCount = (val: number) => {
     this.setState({
       fileDownloadCount: val,
     })
   }
-
-  private dateCreatedByText(howto: IHowtoDB): string {
-    return format(new Date(howto._created), 'DD-MM-YYYY')
-  }
-
-  private dateLastEditText(howto: IHowtoDB): string {
-    const lastModifiedDate = format(new Date(howto._modified), 'DD-MM-YYYY')
-    const creationDate = format(new Date(howto._created), 'DD-MM-YYYY')
-    if (lastModifiedDate !== creationDate) {
-      return 'Last edit on ' + format(new Date(howto._modified), 'DD-MM-YYYY')
-    } else {
-      return ''
-    }
-  }
-
   private incrementDownloadCount = async () => {
     const updatedDownloadCount =
       await this.injected.howtoStore.incrementDownloadCount(
@@ -92,7 +67,6 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
       )
     this.setFileDownloadCount(updatedDownloadCount!)
   }
-
   private handleClick = async () => {
     const howtoDownloadCooldown = retrieveHowtoDownloadCooldown(
       this.props.howto._id,
@@ -107,6 +81,28 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
     } else if (!howtoDownloadCooldown) {
       addHowtoDownloadCooldown(this.props.howto._id)
       this.incrementDownloadCount()
+    }
+  }
+  // eslint-disable-next-line
+  constructor(props: IProps) {
+    super(props)
+    this.state = {
+      fileDownloadCount: this.props.howto.total_downloads || 0,
+    }
+    this.handleClick = this.handleClick.bind(this)
+  }
+
+  get injected() {
+    return this.props as IInjected
+  }
+
+  private dateLastEditText(howto: IHowtoDB): string {
+    const lastModifiedDate = format(new Date(howto._modified), 'DD-MM-YYYY')
+    const creationDate = format(new Date(howto._created), 'DD-MM-YYYY')
+    if (lastModifiedDate !== creationDate) {
+      return 'Last edit on ' + format(new Date(howto._modified), 'DD-MM-YYYY')
+    } else {
+      return ''
     }
   }
 
@@ -198,33 +194,14 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
             )}
           </Flex>
           <Box mt={3} mb={2}>
-            <Flex sx={{ alignItems: 'center' }}>
-              {howto.creatorCountry && (
-                <FlagIconHowTos code={howto.creatorCountry} />
-              )}
-              <Text
-                my={2}
-                ml={1}
-                sx={{ ...theme.typography.auxiliary, display: 'inline-block' }}
-              >
-                By{' '}
-                <Link
-                  style={{
-                    textDecoration: 'underline',
-                    color: 'inherit',
-                  }}
-                  to={'/u/' + howto._createdBy}
-                >
-                  {howto._createdBy}
-                </Link>{' '}
-                <VerifiedUserBadge
-                  userId={howto._createdBy}
-                  height="12px"
-                  width="12px"
-                />
-                | Published on {this.dateCreatedByText(howto)}
-              </Text>
-            </Flex>
+            <Username
+              user={{
+                userName: howto._createdBy,
+                countryCode: howto.creatorCountry,
+              }}
+              isVerified={false}
+              // isVerified={isUserVerified(howto._createdBy)}
+            />
             <Text
               sx={{
                 ...theme.typography.auxiliary,
@@ -242,9 +219,7 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
             <Text
               sx={{ ...theme.typography.paragraph, whiteSpace: 'pre-line' }}
             >
-              <Linkify properties={{ target: '_blank' }}>
-                {howto.description}
-              </Linkify>
+              <LinkifyText>{howto.description}</LinkifyText>
             </Text>
           </Box>
 
@@ -284,10 +259,10 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
             </Flex>
           </Flex>
           <Flex mt={4}>
-            {howto.tags &&
-              Object.keys(howto.tags).map((tag) => {
-                return <TagDisplay key={tag} tagKey={tag} />
-              })}
+            {howto.taglist &&
+              howto.taglist.map((tag, idx) => (
+                <CategoryTag key={idx} tag={tag} sx={{ mr: 1 }} />
+              ))}
           </Flex>
           {((howto.files && howto.files.length > 0) || howto.fileLink) && (
             <Flex
@@ -301,14 +276,19 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
                   link={howto.fileLink}
                 />
               )}
-              {howto.files.map((file, index) => (
-                <FileInfo
-                  allowDownload
-                  file={file}
-                  key={file ? file.name : `file-${index}`}
-                  handleClick={this.handleClick}
-                />
-              ))}
+              {howto.files
+                .filter(Boolean)
+                .map(
+                  (file, index) =>
+                    file && (
+                      <FileInformation
+                        allowDownload
+                        file={file}
+                        key={file ? file.name : `file-${index}`}
+                        handleClick={this.handleClick}
+                      />
+                    ),
+                )}
               {typeof this.state.fileDownloadCount === 'number' && (
                 <Text
                   data-cy="file-download-counter"

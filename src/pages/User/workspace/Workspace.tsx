@@ -1,4 +1,5 @@
-import { getSupportedProfileTypes, ProfileType } from 'src/modules/profile'
+import { getSupportedProfileTypes } from 'src/modules/profile'
+import { ProfileType } from 'src/modules/profile/types'
 
 // Highlights
 import CollectionHighlight from 'src/assets/images/highlights/highlight-collection-point.svg'

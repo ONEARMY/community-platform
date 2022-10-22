@@ -6,6 +6,12 @@
   border-radius: 50%;
 }
 
+/* To make sure images are not
+bigger than image container */
+.icon-marker img {
+  width: 100%;
+}
+
 .icon-cluster-text {
   position: absolute;
   left: 0;

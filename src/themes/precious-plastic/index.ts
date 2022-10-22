@@ -1,5 +1,5 @@
 import logo from 'src/assets/images/precious-plastic-logo-official.svg'
-import badge from 'src/assets/images/themes/precious-plastic/badge-member.svg'
+import badge from 'src/assets/images/themes/precious-plastic/avatar_member_sm.svg'
 import { THEME_LIST } from '..'
 import type { PlatformTheme } from '../types'
 import styles from './styles'

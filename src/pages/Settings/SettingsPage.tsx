@@ -23,7 +23,7 @@ import { Prompt } from 'react-router'
 import { toJS } from 'mobx'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { logger } from 'src/logger'
-import { ProfileType } from 'src/modules/profile'
+import { ProfileType } from 'src/modules/profile/types'
 
 interface IProps {
   /** user ID for lookup when editing another user as admin */

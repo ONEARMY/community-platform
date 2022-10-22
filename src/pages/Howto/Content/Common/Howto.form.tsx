@@ -100,6 +100,48 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
   isDraft = false
   uploadRefs: { [key: string]: UploadedFile | null } = {}
   formContainerRef = React.createRef<HTMLElement>()
+  /** When submitting from outside the form dispatch an event from the form container ref to trigger validation */
+  private trySubmitForm = (draft: boolean) => {
+    this.isDraft = draft
+    const formContainerRef = this.formContainerRef.current
+    // dispatch submit from the element
+    if (formContainerRef) {
+      // https://github.com/final-form/react-final-form/issues/878
+      formContainerRef.dispatchEvent(
+        new Event('submit', { cancelable: true, bubbles: true }),
+      )
+    }
+  }
+  public checkFilesValid = (formValues: IHowtoFormInput) => {
+    if (formValues.fileLink && formValues.files.length > 0) {
+      this.setState({ showInvalidFileWarning: true })
+      return false
+    } else {
+      this.setState({ showInvalidFileWarning: false })
+      return true
+    }
+  }
+  public onSubmit = async (formValues: IHowtoFormInput) => {
+    if (!this.checkFilesValid(formValues)) {
+      return
+    }
+    this.setState({ showSubmitModal: true })
+    formValues.moderation = this.isDraft ? 'draft' : 'awaiting-moderation'
+    logger.debug('submitting form', formValues)
+    await this.store.uploadHowTo(formValues)
+  }
+  public validateTitle = async (value: any) => {
+    const originalId =
+      this.props.parentType === 'edit' ? this.props.formValues._id : undefined
+    return this.store.validateTitleForSlug(value, 'howtos', originalId)
+  }
+  // automatically generate the slug when the title changes
+  private calculatedFields = createDecorator({
+    field: 'title',
+    updates: {
+      slug: (title) => stripSpecialCharacters(title).toLowerCase(),
+    },
+  })
   constructor(props: any) {
     super(props)
     this.state = {
@@ -113,59 +155,12 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
     this.isDraft = props.moderation === 'draft'
   }
 
-  /** When submitting from outside the form dispatch an event from the form container ref to trigger validation */
-  private trySubmitForm = (draft: boolean) => {
-    this.isDraft = draft
-    const formContainerRef = this.formContainerRef.current
-    // dispatch submit from the element
-    if (formContainerRef) {
-      // https://github.com/final-form/react-final-form/issues/878
-      formContainerRef.dispatchEvent(
-        new Event('submit', { cancelable: true, bubbles: true }),
-      )
-    }
-  }
-
-  public checkFilesValid = (formValues: IHowtoFormInput) => {
-    if (formValues.fileLink && formValues.files.length > 0) {
-      this.setState({ showInvalidFileWarning: true })
-      return false
-    } else {
-      this.setState({ showInvalidFileWarning: false })
-      return true
-    }
-  }
-
-  public onSubmit = async (formValues: IHowtoFormInput) => {
-    if (!this.checkFilesValid(formValues)) {
-      return
-    }
-    this.setState({ showSubmitModal: true })
-    formValues.moderation = this.isDraft ? 'draft' : 'awaiting-moderation'
-    logger.debug('submitting form', formValues)
-    await this.store.uploadHowTo(formValues)
-  }
-
   get injected() {
     return this.props as IInjectedProps
   }
   get store() {
     return this.injected.howtoStore
   }
-
-  public validateTitle = async (value: any) => {
-    const originalId =
-      this.props.parentType === 'edit' ? this.props.formValues._id : undefined
-    return this.store.validateTitleForSlug(value, 'howtos', originalId)
-  }
-
-  // automatically generate the slug when the title changes
-  private calculatedFields = createDecorator({
-    field: 'title',
-    updates: {
-      slug: (title) => stripSpecialCharacters(title).toLowerCase(),
-    },
-  })
 
   public render() {
     const { formValues, parentType } = this.props

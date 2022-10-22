@@ -35,7 +35,7 @@ export class DatabaseV2 extends AbstractDatabase {
    * Additionally, a 'no-idb' search param can be provided to disable
    * cache-db entirely (triggered from dexie if not supported)
    */
-  private _getDefaultClients = (): DBClients => {
+  private _getDefaultClients(): DBClients {
     const serverDB = new FirestoreClient()
     const cacheDB = window.location.search.includes('no-cache')
       ? serverDB

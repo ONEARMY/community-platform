@@ -17331,6 +17331,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-sort-class-members@npm:^1.15.2":
+  version: 1.15.2
+  resolution: "eslint-plugin-sort-class-members@npm:1.15.2"
+  peerDependencies:
+    eslint: ">=0.8.0"
+  checksum: 6491a4af602a8ea22226fbe986024da6aa737b383fcd9d0c60d3ec2e4d0e5f4519b84ec5bb58507f3175ec3a11d0c030b905270644267f7f511ff0da70823b2a
+  languageName: node
+  linkType: hard
+
 "eslint-plugin-testing-library@npm:^3.9.2":
   version: 3.10.2
   resolution: "eslint-plugin-testing-library@npm:3.10.2"
@@ -26450,6 +26459,7 @@ fsevents@^1.2.7:
     eslint-config-prettier: ^8.3.0
     eslint-plugin-import: ^2.26.0
     eslint-plugin-prettier: ^3.4.0
+    eslint-plugin-sort-class-members: ^1.15.2
     eslint-plugin-unicorn: ^36.0.0
     final-form: 4.20.2
     final-form-arrays: ^3.0.2

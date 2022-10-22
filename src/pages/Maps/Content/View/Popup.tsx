@@ -1,7 +1,7 @@
 import * as React from 'react'
 import L from 'leaflet'
 import { Image, Text, Flex } from 'theme-ui'
-import { Button } from 'oa-components'
+import { Button, MapMemberCard } from 'oa-components'
 import type { Map } from 'react-leaflet'
 import { Popup as LeafletPopup } from 'react-leaflet'
 import styled from '@emotion/styled'
@@ -83,12 +83,16 @@ export class Popup extends React.Component<IProps> {
     return 'loading'
   }
 
-  private renderContent(pin: IMapPinWithDetail) {
+  private getHeading(pin): string {
     const group = MAP_GROUPINGS.find((g) => {
       return pin.subType
         ? g.subType === pin.subType && g.type === pin.type
         : g.type === pin.type
     })
+    return group ? group.displayName : pin.type
+  }
+
+  private renderContent(pin: IMapPinWithDetail) {
     const {
       lastActive,
       heroImageUrl,
@@ -120,7 +124,7 @@ export class Popup extends React.Component<IProps> {
           <HeroImage src={heroImageUrl} onError={addFallbackSrc} />
           <Flex sx={{ flexDirection: 'column' }} px={2} py={2}>
             <Text mb={2} sx={{ fontSize: '12px', color: theme.colors.blue }}>
-              {group ? group.displayName : pin.type}
+              {this.getHeading(pin)}
             </Text>
             <Text mb={1} sx={{ display: 'flex', fontSize: 2 }}>
               {displayName}
@@ -188,9 +192,6 @@ export class Popup extends React.Component<IProps> {
 
   public render() {
     const activePin = this.props.activePin as IMapPinWithDetail
-    const content = activePin.detail
-      ? this.renderContent(activePin)
-      : this.renderLoading()
 
     return (
       activePin.location && (
@@ -203,7 +204,17 @@ export class Popup extends React.Component<IProps> {
           minWidth={230}
           maxWidth={230}
         >
-          {content}
+          <MapMemberCard
+            loading={!activePin.detail}
+            imageUrl={activePin.detail?.heroImageUrl}
+            lastActive={activePin.detail?.lastActive || ''}
+            description={activePin.detail?.shortDescription}
+            user={{
+              isVerified: !!activePin.detail?.verifiedBadge,
+              username: activePin.detail?.name,
+            }}
+            heading={this.getHeading(activePin)}
+          />
         </LeafletPopup>
       )
     )

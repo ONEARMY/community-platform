@@ -32,7 +32,7 @@ import type { IConvertedFileMeta } from 'src/types'
 import { UserStats } from './UserStats'
 import UserContactAndLinks from './UserContactAndLinks'
 import { UserAdmin } from './UserAdmin'
-import { ProfileType } from 'src/modules/profile'
+import { ProfileType } from 'src/modules/profile/types'
 import { isUserVerified } from 'src/common/isUserVerified'
 
 interface IBackgroundImageProps {

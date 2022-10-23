@@ -23,7 +23,7 @@ import { Prompt } from 'react-router'
 import { toJS } from 'mobx'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { logger } from 'src/logger'
-import { ProfileType } from 'src/modules/profile'
+import { ProfileType } from 'src/modules/profile/types'
 
 interface IProps {
   /** user ID for lookup when editing another user as admin */
@@ -47,6 +47,18 @@ interface IState {
 @inject('userStore')
 @observer
 export class UserSettings extends React.Component<IProps, IState> {
+  toggleLocationDropdown = () => {
+    this.setState((prevState) => ({
+      ...prevState,
+      showLocationDropdown: !prevState.showLocationDropdown,
+      formValues: {
+        ...prevState.formValues,
+        mapPinDescription: '',
+        location: null,
+        country: null,
+      },
+    }))
+  }
   constructor(props: IProps) {
     super(props)
     this.state = {} as any
@@ -142,19 +154,6 @@ export class UserSettings extends React.Component<IProps, IState> {
       errors.links[ARRAY_ERROR] = 'Must have at least one link'
     }
     return errors
-  }
-
-  toggleLocationDropdown = () => {
-    this.setState((prevState) => ({
-      ...prevState,
-      showLocationDropdown: !prevState.showLocationDropdown,
-      formValues: {
-        ...prevState.formValues,
-        mapPinDescription: '',
-        location: null,
-        country: null,
-      },
-    }))
   }
 
   render() {

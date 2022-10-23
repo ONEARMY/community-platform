@@ -10,6 +10,9 @@ interface IProps {
   onConfirmation: (reauthPw: string) => void
 }
 export class ProfileDelete extends React.Component<IProps, IState> {
+  static defaultProps: IProps = {
+    onConfirmation: () => null,
+  }
   constructor(props: IProps) {
     super(props)
     this.state = {
@@ -82,9 +85,5 @@ export class ProfileDelete extends React.Component<IProps, IState> {
         </Modal>
       </>
     )
-  }
-
-  static defaultProps: IProps = {
-    onConfirmation: () => null,
   }
 }

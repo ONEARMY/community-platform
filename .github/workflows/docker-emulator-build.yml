@@ -49,7 +49,7 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }},${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=2022-06-16
+            type=raw,value=2022-06-28
           # TODO - would be nice to extract tags based on seed data provided automatically or consider other strategies
           # https://github.com/docker/metadata-action#tags-input
           flavor: |

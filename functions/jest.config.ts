@@ -7,7 +7,7 @@ const config: InitialOptionsTsJest = {
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
   setupFiles: [
     '<rootDir>/scripts/set-up-environment-variables.ts',
-    '<rootDir>/scripts/setupRuntimeConfig.ts',
+    '<rootDir>/scripts/runtimeConfig/write.ts',
   ],
 }
 

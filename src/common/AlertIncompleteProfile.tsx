@@ -1,6 +1,6 @@
 import { Flex, Alert } from 'theme-ui'
 import { observer } from 'mobx-react-lite'
-import { useCommonStores } from 'src'
+import { useCommonStores } from '../'
 import { Link } from 'react-router-dom'
 
 /**

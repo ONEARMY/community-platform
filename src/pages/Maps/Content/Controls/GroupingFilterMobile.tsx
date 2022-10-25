@@ -23,20 +23,19 @@ interface IInjectedProps extends IProps {
 }
 
 class GroupingFilterMobile extends Component<IProps, IState> {
+  addOrRemoveFilter = (selected, item) => {
+    if (selected.includes(item)) {
+      return selected.filter((selectedItem) => selectedItem !== item)
+    } else {
+      return [...selected, item]
+    }
+  }
   constructor(props: IProps) {
     super(props)
   }
 
   get injected() {
     return this.props as IInjectedProps
-  }
-
-  addOrRemoveFilter = (selected, item) => {
-    if (selected.includes(item)) {
-      return selected.filter((f) => f !== item)
-    } else {
-      return [...selected, item]
-    }
   }
 
   handleChange(item: string) {

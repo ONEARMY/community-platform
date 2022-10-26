@@ -66,3 +66,10 @@ describe('[Sign-up - new user]', () => {
     cy.deleteCurrentUser()
   })
 })
+describe('[Sign-up - authenticated user]', () => {
+  it('redirects to home page', () => {
+    cy.login('howto_reader@test.com', 'test1234')
+    cy.wait(3000)
+    cy.visit('/sign-up').url().should('include', '/')
+  })
+})

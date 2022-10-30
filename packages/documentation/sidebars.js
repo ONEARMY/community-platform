@@ -9,8 +9,8 @@ module.exports = {
       type: 'category',
       label: 'How To Contribute',
       items: [
-          'Contributing/start-contributing',
-          'Contributing/bounties',
+        'Contributing/start-contributing',
+        'Contributing/bounties',
         {
           type: 'category',
           label: 'Writing Documentation',

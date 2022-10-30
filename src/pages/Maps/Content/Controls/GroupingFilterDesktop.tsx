@@ -33,7 +33,7 @@ class GroupingFilterDesktop extends Component<IProps> {
     return (
       <Box
         sx={{
-          display: ['none', 'block', 'block'],
+          display: ['none', 'none', 'block'],
           width: '308px',
           height: '45px',
           m: [0, '5px 0 0 20px'],

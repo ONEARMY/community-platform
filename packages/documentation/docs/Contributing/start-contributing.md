@@ -5,7 +5,7 @@ title: Start Contributing
 
 ## What is my role?
 
-By default we consider everyone that submits a PR a contributor. People that contribute regulary and want to get more involved can become maintainers to help new contributors. People here for the long term are core maintainers and work on the core of the platform. Here is an overview of the roles
+By default we consider everyone that submits a PR a contributor. People that contribute regularly and want to get more involved can become maintainers to help new contributors. People here for the long term are core maintainers and work on the core of the platform. Here is an overview of the roles
 
 | Role                   | Payment       | Requirements                                      | Tasks                                                                                                      |
 | ---------------------- | ------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |

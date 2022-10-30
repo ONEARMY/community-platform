@@ -22,11 +22,6 @@ interface IState {
 @inject('tagsStore')
 @observer
 export class AdminTags extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props)
-    this.state = { tagForm: {} }
-  }
-
   saveEditor = async () => {
     this.setState({ updating: true })
     await this.props.tagsStore!.saveTag(this.state.tagForm)
@@ -38,12 +33,15 @@ export class AdminTags extends React.Component<IProps, IState> {
       tagForm: { ...tag },
     })
   }
-
   handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const patch = { [e.target.name]: e.target.value }
     this.setState({
       tagForm: { ...this.state.tagForm, ...patch },
     })
+  }
+  constructor(props: IProps) {
+    super(props)
+    this.state = { tagForm: {} }
   }
 
   onSelectedTagsChanged(values: ITagCategorySelect[]) {

@@ -3,7 +3,7 @@ import type { IEvent, IEventDB } from 'src/models/events.models'
 import { Button, MoreContainer } from 'oa-components'
 import { Flex, Box, Heading } from 'theme-ui'
 import EventCard from '../../EventCard/EventCard'
-import TagsSelect from 'src/components/Tags/TagsSelect'
+import TagsSelect from 'src/common/Tags/TagsSelect'
 import { inject, observer } from 'mobx-react'
 import type { EventStore } from 'src/stores/Events/events.store'
 import type { UserStore } from 'src/stores/User/user.store'
@@ -23,6 +23,10 @@ interface InjectedProps {
 @inject('eventStore', 'userStore', 'themeStore', 'tagsStore')
 @observer
 export class EventsListings extends React.Component<any> {
+  private moderateEvent = async (event: IEvent, accepted: boolean) => {
+    event.moderation = accepted ? 'accepted' : 'rejected'
+    await this.store.moderateEvent(event)
+  }
   get injected() {
     return this.props as InjectedProps
   }
@@ -33,11 +37,6 @@ export class EventsListings extends React.Component<any> {
 
   get theme() {
     return this.injected.themeStore
-  }
-
-  private moderateEvent = async (event: IEvent, accepted: boolean) => {
-    event.moderation = accepted ? 'accepted' : 'rejected'
-    await this.store.moderateEvent(event)
   }
 
   public render() {

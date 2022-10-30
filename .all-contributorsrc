@@ -43,8 +43,7 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/472589?v=4",
       "profile": "https://thisis.la/",
       "contributions": [
-        "code",
-        "maintainer"
+        "code"
       ]
     },
     {
@@ -196,6 +195,15 @@
       "name": "Kieb",
       "avatar_url": "https://avatars.githubusercontent.com/u/3414938?v=4",
       "profile": "https://github.com/Kiebert",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Sc4ramouche",
+      "name": "Kovechenkov Vladislav",
+      "avatar_url": "https://avatars.githubusercontent.com/u/25829136?v=4",
+      "profile": "https://github.com/Sc4ramouche",
       "contributions": [
         "code"
       ]

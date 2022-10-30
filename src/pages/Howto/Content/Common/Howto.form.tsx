@@ -7,7 +7,7 @@ import arrayMutators from 'final-form-arrays'
 import createDecorator from 'final-form-calculate'
 import type { IHowtoFormInput } from 'src/models/howto.models'
 import type { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
-import { SelectField } from 'src/components/Form/Select.field'
+import { SelectField } from 'src/common/Form/Select.field'
 import { HowtoStep } from './HowtoStep.form'
 import {
   Button,
@@ -18,9 +18,9 @@ import {
 } from 'oa-components'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import { Heading, Card, Flex, Box, Text } from 'theme-ui'
-import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
-import { ImageInputField } from 'src/components/Form/ImageInput.field'
-import { FileInputField } from 'src/components/Form/FileInput.field'
+import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
+import { ImageInputField } from 'src/common/Form/ImageInput.field'
+import { FileInputField } from 'src/common/Form/FileInput.field'
 import { motion, AnimatePresence } from 'framer-motion'
 import { inject, observer } from 'mobx-react'
 import { stripSpecialCharacters } from 'src/utils/helpers'
@@ -31,7 +31,7 @@ import { HowToSubmitStatus } from './SubmitStatus'
 import { required, validateUrlAcceptEmpty } from 'src/utils/validators'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { COMPARISONS } from 'src/utils/comparisons'
-import { UnsavedChangesDialog } from 'src/components/Form/UnsavedChangesDialog'
+import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import { HOWTO_MAX_LENGTH, HOWTO_TITLE_MAX_LENGTH } from '../../constants'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
@@ -100,6 +100,48 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
   isDraft = false
   uploadRefs: { [key: string]: UploadedFile | null } = {}
   formContainerRef = React.createRef<HTMLElement>()
+  /** When submitting from outside the form dispatch an event from the form container ref to trigger validation */
+  private trySubmitForm = (draft: boolean) => {
+    this.isDraft = draft
+    const formContainerRef = this.formContainerRef.current
+    // dispatch submit from the element
+    if (formContainerRef) {
+      // https://github.com/final-form/react-final-form/issues/878
+      formContainerRef.dispatchEvent(
+        new Event('submit', { cancelable: true, bubbles: true }),
+      )
+    }
+  }
+  public checkFilesValid = (formValues: IHowtoFormInput) => {
+    if (formValues.fileLink && formValues.files.length > 0) {
+      this.setState({ showInvalidFileWarning: true })
+      return false
+    } else {
+      this.setState({ showInvalidFileWarning: false })
+      return true
+    }
+  }
+  public onSubmit = async (formValues: IHowtoFormInput) => {
+    if (!this.checkFilesValid(formValues)) {
+      return
+    }
+    this.setState({ showSubmitModal: true })
+    formValues.moderation = this.isDraft ? 'draft' : 'awaiting-moderation'
+    logger.debug('submitting form', formValues)
+    await this.store.uploadHowTo(formValues)
+  }
+  public validateTitle = async (value: any) => {
+    const originalId =
+      this.props.parentType === 'edit' ? this.props.formValues._id : undefined
+    return this.store.validateTitleForSlug(value, 'howtos', originalId)
+  }
+  // automatically generate the slug when the title changes
+  private calculatedFields = createDecorator({
+    field: 'title',
+    updates: {
+      slug: (title) => stripSpecialCharacters(title).toLowerCase(),
+    },
+  })
   constructor(props: any) {
     super(props)
     this.state = {
@@ -113,59 +155,12 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
     this.isDraft = props.moderation === 'draft'
   }
 
-  /** When submitting from outside the form dispatch an event from the form container ref to trigger validation */
-  private trySubmitForm = (draft: boolean) => {
-    this.isDraft = draft
-    const formContainerRef = this.formContainerRef.current
-    // dispatch submit from the element
-    if (formContainerRef) {
-      // https://github.com/final-form/react-final-form/issues/878
-      formContainerRef.dispatchEvent(
-        new Event('submit', { cancelable: true, bubbles: true }),
-      )
-    }
-  }
-
-  public checkFilesValid = (formValues: IHowtoFormInput) => {
-    if (formValues.fileLink && formValues.files.length > 0) {
-      this.setState({ showInvalidFileWarning: true })
-      return false
-    } else {
-      this.setState({ showInvalidFileWarning: false })
-      return true
-    }
-  }
-
-  public onSubmit = async (formValues: IHowtoFormInput) => {
-    if (!this.checkFilesValid(formValues)) {
-      return
-    }
-    this.setState({ showSubmitModal: true })
-    formValues.moderation = this.isDraft ? 'draft' : 'awaiting-moderation'
-    logger.debug('submitting form', formValues)
-    await this.store.uploadHowTo(formValues)
-  }
-
   get injected() {
     return this.props as IInjectedProps
   }
   get store() {
     return this.injected.howtoStore
   }
-
-  public validateTitle = async (value: any) => {
-    const originalId =
-      this.props.parentType === 'edit' ? this.props.formValues._id : undefined
-    return this.store.validateTitleForSlug(value, 'howtos', originalId)
-  }
-
-  // automatically generate the slug when the title changes
-  private calculatedFields = createDecorator({
-    field: 'title',
-    updates: {
-      slug: (title) => stripSpecialCharacters(title).toLowerCase(),
-    },
-  })
 
   public render() {
     const { formValues, parentType } = this.props

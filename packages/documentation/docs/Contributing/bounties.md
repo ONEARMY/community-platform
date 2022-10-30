@@ -7,7 +7,6 @@ title: Bounties
 
 As a way of saying thanks to developers for their time, we've implemented a small bounty system to reward feature development.
 
-
 ## How do I find bounty issues?
 
 Simply go to the `Issues` page on github and look for issues with labelled with [Bounty](https://github.com/ONEARMY/community-platform/issues).
@@ -18,13 +17,13 @@ _Note_ - There are 3 different bounty levels. You can see in the issue which lev
 
 ## How much are they?
 
-We currently have 3 bounty levels
+Simply go to the `Issues` page on github and look for issues with labelled with [Bounty](https://github.com/ONEARMY/community-platform/issues).
 
-| Level | Amount | It should take...                                           | E.g.                                |
-| ----- | ------ | ----------------------------------------------------------- | ----------------------------------- |
-| ![bounty label](images/bounty1.png)       | €20    | Roughly 1-2 hours work for a junior/intermediate developer  | Small bugfixes, UI tweaks           |
-| ![bounty label](images/bounty2.png)      | €40    | Roughly 3-5 hours work for an intermediate/senior developer | Minor feature, e.g. Howto search    |
-| ![bounty label](images/bounty3.png)      | €85    | Roughly 6+ hours work for a more senior developer           | Major feature, e.g. Research module |
+| Level                               | Amount | It should take...                                           | E.g.                                |
+| ----------------------------------- | ------ | ----------------------------------------------------------- | ----------------------------------- |
+| ![bounty label](images/bounty1.png) | €20    | Roughly 1-2 hours work for a junior/intermediate developer  | Small bugfixes, UI tweaks           |
+| ![bounty label](images/bounty2.png) | €40    | Roughly 3-5 hours work for an intermediate/senior developer | Minor feature, e.g. Howto search    |
+| ![bounty label](images/bounty3.png) | €85    | Roughly 6+ hours work for a more senior developer           | Major feature, e.g. Research module |
 
 ---
 
@@ -48,25 +47,23 @@ Go to our [Open Collective](https://opencollective.com/onearmy) page and Submit 
 
 ![open collective](images/open_collective_01.jpg)
 
-
 #### Step 5 - Add details
 
 Ideally you collect your bounties monthly and only add one expense to reduce transactions and administration. That said, if you like to claim it right away go for it :) Do make sure to add a link to the issues that had the bounties on it.
+
 1. Select Invoice
 2. Add Paypal
 3. Add links to the issues you are claiming
 
 ![bounty label](images/open_collective_02.jpg)
 
-
-
 #### Step 6 - Receive payment
+
 We don't have a fixed payment schedule. But for sure it will be once a month.
 
 #### Step 7 - (optional) Join our monthly dev call
 
 If you want more feedback on the issue or suggested bounty levels, we have a monthly call welcome for all developers to join. Have a look on our [Discord Events](https://discordapp.com/invite/SSBrzeR) to join the next one.
-
 
 ## What if I don't want the bounty?
 

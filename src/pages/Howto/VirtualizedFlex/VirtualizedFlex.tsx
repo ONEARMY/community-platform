@@ -33,6 +33,11 @@ const cache = new CellMeasurerCache({
  * Note, does not use react masonry/grid layouts to allow use with page scroller
  */
 export class VirtualizedFlex extends React.Component<IProps, IState> {
+  static defaultProps: IProps = {
+    widthBreakpoints: themes.breakpoints.map(emStringToPx),
+    data: [],
+    renderItem: (data) => <div>RenderItem {data}</div>,
+  }
   constructor(props: IProps) {
     super(props)
     this.state = { data: [], dataRows: [], totalColumns: -1 }
@@ -89,30 +94,6 @@ export class VirtualizedFlex extends React.Component<IProps, IState> {
       </CellMeasurer>
     )
   }
-  /**
-   * Takes an array and subdivides into row/column array
-   * of arrays for a specified number of columns
-   */
-  private _dataToRows(data: any[], columns: number) {
-    const totalRows = Math.ceil(data.length / columns)
-    const rows: typeof data[] = []
-    for (let i = 0; i < totalRows; i++) {
-      rows.push(data.slice(columns * i, columns * (i + 1)))
-    }
-    return rows
-  }
-  /**
-   * Use theme breakpoints to decide how many columns
-   */
-  private _calcTotalColumns(containerWidth: number, breakpoints: number[]) {
-    return Math.min(
-      [0, ...breakpoints, Infinity].findIndex(
-        (width) => containerWidth < width,
-      ),
-      breakpoints.length,
-    )
-  }
-
   render() {
     const { dataRows } = this.state
     const { data } = this.props
@@ -136,10 +117,27 @@ export class VirtualizedFlex extends React.Component<IProps, IState> {
       </WindowScroller>
     ) : null
   }
-
-  static defaultProps: IProps = {
-    widthBreakpoints: themes.breakpoints.map(emStringToPx),
-    data: [],
-    renderItem: (data) => <div>RenderItem {data}</div>,
+  /**
+   * Takes an array and subdivides into row/column array
+   * of arrays for a specified number of columns
+   */
+  private _dataToRows(data: any[], columns: number) {
+    const totalRows = Math.ceil(data.length / columns)
+    const rows: typeof data[] = []
+    for (let i = 0; i < totalRows; i++) {
+      rows.push(data.slice(columns * i, columns * (i + 1)))
+    }
+    return rows
+  }
+  /**
+   * Use theme breakpoints to decide how many columns
+   */
+  private _calcTotalColumns(containerWidth: number, breakpoints: number[]) {
+    return Math.min(
+      [0, ...breakpoints, Infinity].findIndex(
+        (width) => containerWidth < width,
+      ),
+      breakpoints.length,
+    )
   }
 }

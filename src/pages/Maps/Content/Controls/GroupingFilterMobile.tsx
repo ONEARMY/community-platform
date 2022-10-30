@@ -19,14 +19,6 @@ interface IInjectedProps extends IProps {
 }
 
 class GroupingFilterMobile extends Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props)
-  }
-
-  get injected() {
-    return this.props as IInjectedProps
-  }
-
   addOrRemove = (array, item) => {
     // from https://stackoverflow.com/a/52531625
     const exists = array.includes(item)
@@ -39,6 +31,13 @@ class GroupingFilterMobile extends Component<IProps, IState> {
       result.push(item)
       return result
     }
+  }
+  constructor(props: IProps) {
+    super(props)
+  }
+
+  get injected() {
+    return this.props as IInjectedProps
   }
 
   handleChange(item: string) {

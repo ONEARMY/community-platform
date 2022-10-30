@@ -9,14 +9,14 @@ status of service workers
 type ISWStatus = 'updated' | 'success' | null
 
 export class PlatformStore {
-  // eslint-disable-next-line
-  constructor(rootStore: RootStore) {
-    makeObservable(this)
-  }
   @observable
   public serviceWorkerStatus: ISWStatus
   @observable
   public registration: ServiceWorkerRegistration
+  // eslint-disable-next-line
+  constructor(rootStore: RootStore) {
+    makeObservable(this)
+  }
 
   @action
   public setServiceWorkerStatus(

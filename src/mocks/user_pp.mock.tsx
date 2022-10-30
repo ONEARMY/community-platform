@@ -25,7 +25,7 @@ import Injection from 'src/assets/images/workspace-focus/injection.png'
 import Mix from 'src/assets/images/workspace-focus/mix.png'
 import Sheetpress from 'src/assets/images/workspace-focus/sheetpress.png'
 import Shredder from 'src/assets/images/workspace-focus/shredder.png'
-import { ProfileType } from 'src/modules/profile'
+import { ProfileType } from 'src/modules/profile/types'
 
 export const MOCK_USER_WORKSPACE: IUserPP = {
   ...MOCK_USER,

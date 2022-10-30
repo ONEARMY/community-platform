@@ -1,19 +1,19 @@
 import { inject, observer } from 'mobx-react'
 import * as React from 'react'
-import { AuthWrapper } from 'src/common/AuthWrapper'
+import { Link } from 'react-router-dom'
 import { Button, MoreContainer, Loader } from 'oa-components'
 import { Heading, Input, Flex, Box } from 'theme-ui'
-import TagsSelect from 'src/components/Tags/TagsSelect'
+import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import { VirtualizedFlex } from 'src/pages/Howto/VirtualizedFlex/VirtualizedFlex'
-import type { HowtoStore } from 'src/stores/Howto/howto.store'
-import type { UserStore } from 'src/stores/User/user.store'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 import HowToCard from './HowToCard'
 import SortSelect from './SortSelect'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
 import type { TagsStore } from 'src/stores/Tags/tags.store'
-import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
-import { Link } from 'react-router-dom'
+import type { HowtoStore } from 'src/stores/Howto/howto.store'
+import type { UserStore } from 'src/stores/User/user.store'
+import type { IHowto } from 'src/models'
 
 interface InjectedProps {
   howtoStore: HowtoStore
@@ -28,7 +28,7 @@ interface IState {
   // totalHowtoColumns: number
 }
 
-// Update query params for search and tags
+// Update query params for search and categories
 const updateQueryParams = (url: string, key: string, val: string) => {
   const newUrl = new URL(url)
   const urlParams = new URLSearchParams(newUrl.search)
@@ -63,16 +63,6 @@ export class HowtoList extends React.Component<any, IState> {
     if (props.location.search) {
       const searchParams = new URLSearchParams(props.location.search)
 
-      const tagQuery = searchParams.get('tags')?.toString()
-      if (tagQuery) {
-        const tags = {}
-        tagQuery.split(',').forEach((tag) => {
-          tags[tag] = true
-        })
-
-        this.props.howtoStore.updateSelectedTags(tags)
-      }
-
       const categoryQuery = searchParams.get('category')?.toString()
       if (categoryQuery) {
         this.props.howtoStore.updateSelectedCategory(categoryQuery)
@@ -105,25 +95,20 @@ export class HowtoList extends React.Component<any, IState> {
   }
 
   public render() {
-    const {
-      filteredHowtos,
-      selectedTags,
-      selectedCategory,
-      searchValue,
-      referrerSource,
-    } = this.props.howtoStore
+    const { filteredHowtos, selectedCategory, searchValue, referrerSource } =
+      this.props.howtoStore
 
     const theme = this.props?.themeStore?.currentTheme
     const { allTagsByKey } = this.injected.tagsStore
     const { users_votedUsefulHowtos } =
       this.injected.aggregationsStore.aggregations
 
-    const howtoItems = filteredHowtos.map((howto) => ({
+    const howtoItems = filteredHowtos.map((howto: IHowto) => ({
       ...howto,
       taglist:
         howto.tags &&
         Object.keys(howto.tags)
-          .map((t) => allTagsByKey[t])
+          .map((key) => allTagsByKey[key])
           .filter(Boolean),
     }))
 
@@ -174,47 +159,25 @@ export class HowtoList extends React.Component<any, IState> {
             flexDirection: ['column', 'column', 'row'],
           }}
         >
-          <AuthWrapper roleRequired="beta-tester">
-            <Flex
-              sx={{ width: ['100%', '100%', '20%'] }}
-              mb={['10px', '10px', 0]}
-              mr={[0, 0, '8px']}
-            >
-              <CategoriesSelect
-                value={selectedCategory ? { label: selectedCategory } : null}
-                onChange={(category) => {
-                  updateQueryParams(
-                    window.location.href,
-                    'category',
-                    category ? category.label : '',
-                  )
-                  this.props.howtoStore.updateSelectedCategory(
-                    category ? category.label : '',
-                  )
-                }}
-                placeholder="Filter by category"
-                isForm={false}
-              />
-            </Flex>
-          </AuthWrapper>
           <Flex
             sx={{ width: ['100%', '100%', '20%'] }}
             mb={['10px', '10px', 0]}
+            mr={[0, 0, '8px']}
           >
-            <TagsSelect
-              value={selectedTags}
-              onChange={(tags) => {
+            <CategoriesSelect
+              value={selectedCategory ? { label: selectedCategory } : null}
+              onChange={(category) => {
                 updateQueryParams(
                   window.location.href,
-                  'tags',
-                  Object.keys(tags).join(','),
+                  'category',
+                  category ? category.label : '',
                 )
-                this.props.howtoStore.updateSelectedTags(tags)
+                this.props.howtoStore.updateSelectedCategory(
+                  category ? category.label : '',
+                )
               }}
-              category="how-to"
-              styleVariant="filter"
-              placeholder="Filter by tags"
-              relevantTagsItems={filteredHowtos}
+              placeholder="Filter by category"
+              isForm={false}
             />
           </Flex>
           <Flex
@@ -264,9 +227,7 @@ export class HowtoList extends React.Component<any, IState> {
                   ...theme.typography?.auxiliary,
                 }}
               >
-                {Object.keys(selectedTags).length === 0 &&
-                searchValue.length === 0 &&
-                selectedCategory.length === 0 ? (
+                {searchValue.length === 0 && selectedCategory.length === 0 ? (
                   <Loader />
                 ) : (
                   'No how-tos to show'

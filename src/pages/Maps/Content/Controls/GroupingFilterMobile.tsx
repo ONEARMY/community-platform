@@ -1,14 +1,18 @@
 import { Component } from 'react'
+import { Button } from 'oa-components'
+import { Flex, Text, Image } from 'theme-ui'
+
 import checkmarkIcon from 'src/assets/icons/icon-checkmark.svg'
+import crossClose from 'src/assets/icons/cross-close.svg'
 
 import type { MapsStore } from 'src/stores/Maps/maps.store'
-import { Flex, Text, Image } from 'theme-ui'
 import type { FilterGroup } from './transformAvailableFiltersToGroups'
 
 interface IProps {
   items: FilterGroup[]
   selectedItems: Array<string>
   onChange?: (selectedItems: string[]) => void
+  onClose: () => void
 }
 
 interface IState {
@@ -19,17 +23,11 @@ interface IInjectedProps extends IProps {
 }
 
 class GroupingFilterMobile extends Component<IProps, IState> {
-  addOrRemove = (array, item) => {
-    // from https://stackoverflow.com/a/52531625
-    const exists = array.includes(item)
-    if (exists) {
-      return array.filter((c) => {
-        return c !== item
-      })
+  addOrRemoveFilter = (selected, item) => {
+    if (selected.includes(item)) {
+      return selected.filter((selectedItem) => selectedItem !== item)
     } else {
-      const result = array
-      result.push(item)
-      return result
+      return [...selected, item]
     }
   }
   constructor(props: IProps) {
@@ -42,8 +40,9 @@ class GroupingFilterMobile extends Component<IProps, IState> {
 
   handleChange(item: string) {
     if (this.props.onChange) {
-      console.log(`handleChange`, { item })
-      this.props.onChange(this.addOrRemove(this.props.selectedItems, item))
+      this.props.onChange(
+        this.addOrRemoveFilter(this.props.selectedItems, item),
+      )
     }
   }
 
@@ -51,6 +50,17 @@ class GroupingFilterMobile extends Component<IProps, IState> {
     const { items, selectedItems } = this.props
     return (
       <Flex sx={{ flexDirection: 'column' }}>
+        <Flex p={0} mx={-1} sx={{ justifyContent: 'space-between' }}>
+          <Text sx={{ fontWeight: 'bold' }}>Select filters</Text>
+          <Image
+            loading="lazy"
+            width="25px"
+            src={crossClose}
+            alt="cross-close"
+            onClick={() => this.props.onClose()}
+          />
+        </Flex>
+
         {items.map((item, idx) => {
           return (
             <div key={idx}>
@@ -93,6 +103,10 @@ class GroupingFilterMobile extends Component<IProps, IState> {
             </div>
           )
         })}
+
+        <Button mt={3} onClick={this.props.onClose}>
+          Apply filters
+        </Button>
       </Flex>
     )
   }

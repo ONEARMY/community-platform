@@ -48,12 +48,12 @@ COPY ./app/functions/dist/package.json /app/functions/dist/package.json
 RUN cd /app/functions/dist && yarn install && yarn cache clean
 
 # Copy additional config files (done individually to not override dist package.json)
-COPY ./app/firebase.json /app/firebase.json
 COPY ./app/.firebaserc /app/.firebaserc
+COPY ./app/firebase.json /app/firebase.json
 COPY ./app/firebase.storage.rules /app/firebase.storage.rules
-COPY ./app/functions/dist/index.js /app/functions/dist/index.js
 COPY ./app/credentials.json /app/credentials.json
 COPY ./app/functions/.runtimeconfig.json /app/functions/.runtimeconfig.json
+COPY ./app/functions/dist/index.js /app/functions/dist/index.js
 
 # Copy seed data
 RUN mkdir -p /app/seed_data && mkdir -p /app/import

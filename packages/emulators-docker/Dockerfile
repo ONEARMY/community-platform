@@ -6,22 +6,21 @@ FROM node:16-alpine AS community-platform-builder
 ################################################################################
 
 ARG BUILD_DATE
-ARG VERSION
+ARG FIREBASE_TOOLS_VERSION
 ARG VCS_REF
 LABEL org.label-schema.schema-version="1.0" \
   org.label-schema.name="" \
-  org.label-schema.version=${VERSION} \
+  org.label-schema.version=${FIREBASE_TOOLS_VERSION} \
   org.label-schema.build-date=${BUILD_DATE} \
   org.label-schema.description="" \
   org.label-schema.url="" \
   org.label-schema.vcs-url="" \
   org.label-schema.vcs-ref=${VCS_REF}
-ENV FIREBASE_TOOLS_VERSION=${VERSION}
+ENV FIREBASE_TOOLS_VERSION="${FIREBASE_TOOLS_VERSION}"
 ENV HOME=/home/node
-
 # Install Java, Curl and Firebase-Tools
 RUN apk --no-cache add curl openjdk11-jre bash && \
-  yarn global add firebase-tools@${VERSION} && \
+  yarn global add firebase-tools@${FIREBASE_TOOLS_VERSION} && \
   yarn cache clean
 
 # Check versions

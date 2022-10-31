@@ -21,6 +21,8 @@ export async function prepare() {
   populateDummyCredentials()
   addRuntimeConfig()
   updateFirebaseJson()
+  const buildArgs = generateBuildArgs()
+  return buildArgs
 }
 
 /**
@@ -205,6 +207,20 @@ function createSeedZips() {
       spawnSync(cmd, { stdio: 'inherit', shell: true })
     }
   }
+}
+
+/** Create a list of args to pass into the Dockerfile build command */
+function generateBuildArgs() {
+  const buildArgs: Record<string, string> = {}
+  const functionsPackageJsonPath = path.resolve(
+    PATHS.functionsDistIndex,
+    '../package.json',
+  )
+  // assign the docker firebase-tools version as same running in local functions workspace
+  const functionsPackageJson = fs.readJsonSync(functionsPackageJsonPath)
+  buildArgs.FIREBASE_TOOLS_VERSION =
+    functionsPackageJson.dependencies['firebase-tools']
+  return buildArgs
 }
 
 // Allow direct execution of file as well as import

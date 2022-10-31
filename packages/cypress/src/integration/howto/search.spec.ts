@@ -46,5 +46,13 @@ describe('[How To]', () => {
         .then((searchText) => expect(searchText).to.equal(''))
       cy.url().should('not.include', 'search=h')
     })
+
+    it('should show how-to list items after visit a how-to', () => {
+      cy.get('[data-cy=card]:eq(0)').click()
+
+      cy.go('back')
+
+      cy.get('[data-cy=card]').should('exist')
+    })
   })
 })

@@ -12,7 +12,7 @@ import type { IUserPP } from 'src/models/user_pp.models'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import type { IUser } from 'src/models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
-import { ProfileType } from 'src/modules/profile'
+import { ProfileType } from 'src/modules/profile/types'
 import { SelectField } from 'src/common/Form/Select.field'
 
 interface IProps {

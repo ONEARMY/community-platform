@@ -19,30 +19,6 @@ interface IState {
 }
 
 class ExternalEmbed extends React.Component<IProps, IState> {
-  constructor(props) {
-    super(props)
-
-    const url = new URL(this.props.src)
-
-    this.state = {
-      src: this.props.src,
-      targetOrigin: url.protocol + '//' + url.hostname,
-    }
-  }
-
-  componentDidMount() {
-    // TODO - possible compatibility fallback for addEventListener (IE8)
-    // Example: https://davidwalsh.name/window-iframe
-    window.addEventListener('message', this.handlePostmessageFromIframe, false)
-  }
-  componentWillUnmount() {
-    window.removeEventListener(
-      'message',
-      this.handlePostmessageFromIframe,
-      false,
-    )
-  }
-
   /**
    * Custom method to allow communication from Iframe to parent via postmessage
    */
@@ -68,6 +44,29 @@ class ExternalEmbed extends React.Component<IProps, IState> {
         window.open(e.data.linkClick, '_blank')
       }
     }
+  }
+  constructor(props) {
+    super(props)
+
+    const url = new URL(this.props.src)
+
+    this.state = {
+      src: this.props.src,
+      targetOrigin: url.protocol + '//' + url.hostname,
+    }
+  }
+
+  componentDidMount() {
+    // TODO - possible compatibility fallback for addEventListener (IE8)
+    // Example: https://davidwalsh.name/window-iframe
+    window.addEventListener('message', this.handlePostmessageFromIframe, false)
+  }
+  componentWillUnmount() {
+    window.removeEventListener(
+      'message',
+      this.handlePostmessageFromIframe,
+      false,
+    )
   }
 
   render() {

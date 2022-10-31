@@ -1,5 +1,4 @@
-import member from 'src/assets/images/themes/project-kamp/badge.svg'
-import memberLowDetailBadge from 'src/assets/images/themes/project-kamp/avatar.svg'
+import member from 'src/assets/images/themes/project-kamp/avatar_member_sm.svg'
 import logo from 'src/assets/images/themes/project-kamp/project-kamp-header.png'
 import type { ThemeWithName } from '../types'
 
@@ -226,7 +225,7 @@ const StyledComponentTheme: ThemeWithName = {
   alerts,
   badges: {
     member: {
-      lowDetail: memberLowDetailBadge,
+      lowDetail: member,
       normal: member,
     },
   },

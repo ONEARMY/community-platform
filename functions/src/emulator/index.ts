@@ -36,7 +36,7 @@ app.get('/seed-users-create', (req, res) =>
 
 app.get('/seed-clean', (req, res) =>
   seedDataClean().then((result) => {
-    res.status(200).send(result)
+    res.status(200).send(JSON.stringify(result, null, 2))
   }),
 )
 

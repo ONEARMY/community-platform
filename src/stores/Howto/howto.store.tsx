@@ -51,6 +51,16 @@ export class HowtoStore extends ModuleStore {
   @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
 
+  public filterHowtosByCategory = (
+    collection: IHowtoDB[] = [],
+    category: string,
+  ) => {
+    return category
+      ? collection.filter((obj) => {
+          return obj.category?.label === category
+        })
+      : collection
+  }
   constructor(rootStore: RootStore) {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
@@ -302,17 +312,6 @@ export class HowtoStore extends ModuleStore {
       console.error(err)
       throw new Error(err)
     }
-  }
-
-  public filterHowtosByCategory = (
-    collection: IHowtoDB[] = [],
-    category: string,
-  ) => {
-    return category
-      ? collection.filter((obj) => {
-          return obj.category?.label === category
-        })
-      : collection
   }
 
   // upload a new or update an existing how-to

@@ -89,6 +89,9 @@ export class ImageInput extends React.Component<IProps, IState> {
 
   private fileInputRef = React.createRef<HTMLInputElement>()
 
+  public handleFileUpload = (filesToUpload: Array<File>) => {
+    this.setState({ inputFiles: filesToUpload })
+  }
   constructor(props: IProps) {
     super(props)
     this.state = {
@@ -98,25 +101,10 @@ export class ImageInput extends React.Component<IProps, IState> {
     }
   }
 
-  public handleFileUpload = (filesToUpload: Array<File>) => {
-    this.setState({ inputFiles: filesToUpload })
-  }
-
   get inputFiles() {
     const filesRef = this.fileInputRef.current as HTMLInputElement
     const files = filesRef.files
     return files ? Array.from(files) : []
-  }
-
-  /**
-   * As input can be both array or single object and either uploaded or converted meta,
-   * require extra function to separate out to handle preview of previously uploaded
-   */
-  private _getUploadedFiles(value: IProps['value'] = []) {
-    const valArray = Array.isArray(value) ? value : [value]
-    return valArray.filter((v) =>
-      v.hasOwnProperty('downloadUrl'),
-    ) as IUploadedFileMeta[]
   }
 
   public handleConvertedFileChange(file: IConvertedFileMeta, index: number) {
@@ -128,7 +116,6 @@ export class ImageInput extends React.Component<IProps, IState> {
     const value = this.props.multiple ? convertedFiles : convertedFiles[0]
     this.props.onFilesChange(value)
   }
-
   public handleImageDelete(event: Event) {
     // TODO - handle case where a server image is deleted (remove from server)
     event.stopPropagation()
@@ -139,7 +126,6 @@ export class ImageInput extends React.Component<IProps, IState> {
     })
     this.props.onFilesChange(null)
   }
-
   render() {
     const { inputFiles, uploadedFiles } = this.state
     const { multiple } = this.props
@@ -198,6 +184,16 @@ export class ImageInput extends React.Component<IProps, IState> {
         </Dropzone>
       </Box>
     )
+  }
+  /**
+   * As input can be both array or single object and either uploaded or converted meta,
+   * require extra function to separate out to handle preview of previously uploaded
+   */
+  private _getUploadedFiles(value: IProps['value'] = []) {
+    const valArray = Array.isArray(value) ? value : [value]
+    return valArray.filter((v) =>
+      v.hasOwnProperty('downloadUrl'),
+    ) as IUploadedFileMeta[]
   }
 }
 

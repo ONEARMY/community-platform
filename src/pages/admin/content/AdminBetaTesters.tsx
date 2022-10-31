@@ -18,17 +18,11 @@ interface IState {
 @inject('adminStore')
 @observer
 export class AdminBetaTesters extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props)
-    this.state = { userInput: '' }
-  }
-
   handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
       userInput: e.target.value,
     })
   }
-
   addBetaTester = async () => {
     const username = this.state.userInput as string
     this.setState({ errorMsg: undefined, updating: true })
@@ -39,7 +33,6 @@ export class AdminBetaTesters extends React.Component<IProps, IState> {
       this.setState({ errorMsg: error.message })
     }
   }
-
   removeBetaTester = async (username: string) => {
     this.setState({ errorMsg: undefined, updating: true })
     try {
@@ -48,6 +41,10 @@ export class AdminBetaTesters extends React.Component<IProps, IState> {
     } catch (error) {
       this.setState({ errorMsg: error.message })
     }
+  }
+  constructor(props: IProps) {
+    super(props)
+    this.state = { userInput: '' }
   }
 
   public render() {

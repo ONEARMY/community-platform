@@ -15,7 +15,7 @@ import Fuse from 'fuse.js'
 import { Loader, MemberBadge } from 'oa-components'
 import AdminUserSearch from '../components/adminUserSearch'
 import { Link } from 'react-router-dom'
-import { ProfileType } from 'src/modules/profile'
+import { ProfileType } from 'src/modules/profile/types'
 
 const TABLE_COLUMNS: ITableProps<IUserPPDB>['columns'] = [
   {

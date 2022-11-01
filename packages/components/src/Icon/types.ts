@@ -39,5 +39,6 @@ export type availableGlyphs =
   | 'external-url'
   | 'useful'
   | 'verified'
+  | 'filter'
 
 export type IGlyphs = { [k in availableGlyphs]: JSX.Element }

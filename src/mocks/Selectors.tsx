@@ -146,3 +146,14 @@ export const OPENING_HOURS = [
     label: '12:00 PM',
   },
 ]
+
+export const STATUS_MOCKS = [
+  {
+    value: 'approved',
+    label: 'approved',
+  },
+  {
+    value: 'pending',
+    label: 'pending',
+  },
+]

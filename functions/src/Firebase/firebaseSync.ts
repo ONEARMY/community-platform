@@ -1,4 +1,4 @@
-import * as rtdb from './realtimeDB'
+import rtdb from './realtimeDB'
 import * as firestore from './firestoreDB'
 import { DBDoc, DB_ENDPOINTS } from '../models'
 

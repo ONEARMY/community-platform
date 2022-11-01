@@ -1,9 +1,10 @@
-import { firebaseAdmin } from './admin'
+import { firebaseApp } from './admin'
 
 import { DBDoc, IDBEndpoint, DB_ENDPOINTS } from '../models'
+import { getFirestore } from 'firebase-admin/firestore'
 
 // TODO - ideally should remove default export to force using functions which have mapping
-export const db = firebaseAdmin.firestore()
+export const db = getFirestore(firebaseApp)
 
 /************************************************************
  * Additional exports to support common naming conventions

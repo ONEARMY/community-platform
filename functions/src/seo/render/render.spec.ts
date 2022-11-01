@@ -9,7 +9,7 @@ const mockRequest = (userAgent = '') =>
   } as any)
 
 const mockResponse = () => ({
-  status: null,
+  status: jest.fn().mockReturnThis(), // allow chaining .status().
   send: jest.fn(),
 })
 

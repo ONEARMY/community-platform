@@ -3,7 +3,7 @@ import * as firebase_tools from 'firebase-tools'
 import { DB_ENDPOINTS } from '../../models'
 import { db } from '../../Firebase/firestoreDB'
 import { splitArrayToChunks } from '../../Utils/data.utils'
-import { firestore } from 'firebase-admin'
+import type { firestore } from 'firebase-admin'
 import axios from 'axios'
 
 const USE_SMALL_SAMPLE_SEED = false

@@ -26,7 +26,7 @@ interface IState {
   showNotification?: boolean
 }
 
-const CoverImages = ({
+export const CoverImages = ({
   isMemberProfile,
   coverImages,
 }: {

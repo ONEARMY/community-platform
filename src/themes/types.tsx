@@ -1,4 +1,4 @@
-import type { ProfileTypeLabel } from 'src/modules/profile'
+import type { ProfileTypeLabel } from 'src/modules/profile/types'
 
 interface LinkList {
   label: string

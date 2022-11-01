@@ -158,10 +158,6 @@ commands:
         type: string
         default: ''
         description: Firebase Deploy Token
-      use_application_credentials:
-        type: boolean
-        default: false
-        description: Specify if GOOGLE_APPLICATION_CREDENTIALS_JSON var used instead of firebase token
       alias:
         type: string
         default: 'default'
@@ -170,24 +166,14 @@ commands:
       - run:
           name: Install Firebase Tools
           command: yarn add -D firebase-tools
-      - when:
-          condition: <<parameters.use_application_credentials>>
-          steps:
-            - run:
-                name: Export application credentials
-                command: echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > service_account.json
-            - run:
-                name: Deploy to Firebase
-                command: ./node_modules/.bin/firebase deploy --debug -P << parameters.alias >>
-                environment:
-                  GOOGLE_APPLICATION_CREDENTIALS: service_account.json
-      - when:
-          condition:
-            not: <<parameters.use_application_credentials>>
-          steps:
-            - run:
-                name: Deploy to Firebase
-                command: ./node_modules/.bin/firebase deploy --token=<< parameters.token >> -P << parameters.alias >>
+      - run:
+          name: Export application credentials
+          command: echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > service_account.json
+      - run:
+          name: Deploy to Firebase
+          command: ./node_modules/.bin/firebase deploy --debug -P << parameters.alias >>
+          environment:
+            GOOGLE_APPLICATION_CREDENTIALS: service_account.json
 
 examples:
 
@@ -318,7 +304,6 @@ jobs:
       - firebase_deploy:
           # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
           alias: << parameters.DEPLOY_ALIAS >>
-          use_application_credentials: true
       - when:
           condition: << parameters.NOTIFY_SLACK >>
           steps:

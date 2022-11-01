@@ -33,6 +33,15 @@ export class UserStore extends ModuleStore {
   @observable
   public updateStatus: IUserUpdateStatus = getInitialUpdateStatus()
 
+  constructor(rootStore: RootStore) {
+    super(rootStore)
+    makeObservable(this)
+    this._listenToAuthStateChanges()
+    // Update verified users on intial load. use timeout to ensure aggregation store initialised
+    setTimeout(() => {
+      this.loadVerifiedUsers()
+    }, 50)
+  }
   // redirect calls for verifiedUsers to the aggregation store list
   @computed get verifiedUsers(): { [user_id: string]: boolean } {
     return this.aggregationsStore.aggregations.users_verified || {}
@@ -46,16 +55,6 @@ export class UserStore extends ModuleStore {
   @action
   public setUpdateStaus(update: keyof IUserUpdateStatus) {
     this.updateStatus[update] = true
-  }
-
-  constructor(rootStore: RootStore) {
-    super(rootStore)
-    makeObservable(this)
-    this._listenToAuthStateChanges()
-    // Update verified users on intial load. use timeout to ensure aggregation store initialised
-    setTimeout(() => {
-      this.loadVerifiedUsers()
-    }, 50)
   }
 
   // when registering a new user create firebase auth profile as well as database user profile
@@ -129,6 +128,13 @@ export class UserStore extends ModuleStore {
         // )
       }
     }
+  }
+
+  public async getUserByUsername(username: string) {
+    const [user] = await this.db
+      .collection<IUserPP>(COLLECTION_NAME)
+      .getWhere('_id', '==', username)
+    return user
   }
 
   // TODO
@@ -349,26 +355,6 @@ export class UserStore extends ModuleStore {
   // use firebase auth to listen to change to signed in user
   // on sign in want to load user profile
   // strange implementation return the unsubscribe object on subscription, so stored
-  // to authUnsubscribe variable for use later
-  private _listenToAuthStateChanges(checkEmailVerification = false) {
-    this.authUnsubscribe = auth.onAuthStateChanged((authUser) => {
-      this.authUser = authUser
-      if (authUser) {
-        this.userSignedIn(authUser)
-        // send verification email if not verified and after first sign-up only
-        if (!authUser.emailVerified && checkEmailVerification) {
-          this.sendEmailVerification()
-        }
-      } else {
-        this.updateActiveUser(undefined)
-      }
-    })
-  }
-
-  private _unsubscribeFromAuthStateChanges() {
-    this.authUnsubscribe()
-  }
-
   @action
   public async triggerNotification(
     type: NotificationType,
@@ -418,7 +404,6 @@ export class UserStore extends ModuleStore {
       throw new Error(err)
     }
   }
-
   @action
   public async markAllNotificationsRead() {
     try {
@@ -443,7 +428,6 @@ export class UserStore extends ModuleStore {
       throw new Error(err)
     }
   }
-
   @action
   public async deleteNotification(id: string) {
     try {
@@ -469,6 +453,25 @@ export class UserStore extends ModuleStore {
       console.error(err)
       throw new Error(err)
     }
+  }
+  // to authUnsubscribe variable for use later
+  private _listenToAuthStateChanges(checkEmailVerification = false) {
+    this.authUnsubscribe = auth.onAuthStateChanged((authUser) => {
+      this.authUser = authUser
+      if (authUser) {
+        this.userSignedIn(authUser)
+        // send verification email if not verified and after first sign-up only
+        if (!authUser.emailVerified && checkEmailVerification) {
+          this.sendEmailVerification()
+        }
+      } else {
+        this.updateActiveUser(undefined)
+      }
+    })
+  }
+
+  private _unsubscribeFromAuthStateChanges() {
+    this.authUnsubscribe()
   }
 }
 

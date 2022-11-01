@@ -9,11 +9,11 @@ import { ProfileLinkField } from './Fields/Link.field'
 import { FlexSectionContainer } from './elements'
 import { required } from 'src/utils/validators'
 import type { IUserPP } from 'src/models/user_pp.models'
-import { ImageInputField } from 'src/components/Form/ImageInput.field'
+import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import type { IUser } from 'src/models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
-import { ProfileType } from 'src/modules/profile'
-import { SelectField } from 'src/components/Form/Select.field'
+import { ProfileType } from 'src/modules/profile/types'
+import { SelectField } from 'src/common/Form/Select.field'
 
 interface IProps {
   formValues: IUserPP
@@ -26,7 +26,7 @@ interface IState {
   showNotification?: boolean
 }
 
-const CoverImages = ({
+export const CoverImages = ({
   isMemberProfile,
   coverImages,
 }: {

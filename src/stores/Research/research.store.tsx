@@ -421,6 +421,7 @@ export class ResearchStore extends ModuleStore {
         )
         const newItem = {
           ...toJS(item),
+          description: await this.addUserReference(item.description),
           updates: [...toJS(item.updates)],
         }
         if (existingUpdateIndex === -1) {
@@ -446,8 +447,9 @@ export class ResearchStore extends ModuleStore {
         logger.debug('Update steps', newItem.updates)
         await Promise.all(
           newItem.updates.map(async (up, idx) => {
-            const text = await this.addUserReference(up.description)
-            newItem.updates[idx].description = text
+            newItem.updates[idx].description = await this.addUserReference(
+              up.description,
+            )
           }),
         )
 

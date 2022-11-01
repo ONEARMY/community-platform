@@ -13,9 +13,9 @@ describe('SupportedProfileTypesFactory', () => {
     expect(profiles).toEqual(
       expect.arrayContaining([
         {
-          cleanImageSrc: 'map-member.svg',
-          cleanImageVerifiedSrc: 'map-member-verified.svg',
-          imageSrc: 'pt-member.svg',
+          cleanImageSrc: 'avatar_member_sm.svg',
+          cleanImageVerifiedSrc: 'avatar_member_sm.svg',
+          imageSrc: 'avatar_member_sm.svg',
           label: 'member',
           textLabel: 'I am a member',
         },
@@ -57,9 +57,9 @@ describe('SupportedProfileTypesFactory', () => {
     expect(profiles).toEqual(
       expect.arrayContaining([
         {
-          cleanImageSrc: 'map-member.svg',
-          cleanImageVerifiedSrc: 'map-member-verified.svg',
-          imageSrc: 'pt-member.svg',
+          cleanImageSrc: 'avatar_member_sm.svg',
+          cleanImageVerifiedSrc: 'avatar_member_sm.svg',
+          imageSrc: 'avatar_member_sm.svg',
           label: 'member',
           textLabel: 'I am a member',
         },

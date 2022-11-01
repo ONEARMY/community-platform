@@ -10,7 +10,6 @@ import type {
   IHowToStepFormInput,
   IComment,
 } from 'src/models/howto.models'
-import type { ISelectedTags } from 'src/models/tags.model'
 import type { IUser } from 'src/models/user.models'
 import {
   filterModerableItems,
@@ -44,8 +43,6 @@ export class HowtoStore extends ModuleStore {
   @observable
   public allHowtos: IHowtoDB[]
   @observable
-  public selectedTags: ISelectedTags
-  @observable
   public selectedCategory: string
   @observable
   public searchValue: string
@@ -54,6 +51,16 @@ export class HowtoStore extends ModuleStore {
   @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
 
+  public filterHowtosByCategory = (
+    collection: IHowtoDB[] = [],
+    category: string,
+  ) => {
+    return category
+      ? collection.filter((obj) => {
+          return obj.category?.label === category
+        })
+      : collection
+  }
   constructor(rootStore: RootStore) {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
@@ -62,7 +69,6 @@ export class HowtoStore extends ModuleStore {
     this.allDocs$.subscribe((docs: IHowtoDB[]) => {
       this.sortHowtosByLatest(docs)
     })
-    this.selectedTags = {}
     this.selectedCategory = ''
     this.searchValue = ''
     this.referrerSource = ''
@@ -134,8 +140,10 @@ export class HowtoStore extends ModuleStore {
   }
 
   @computed get filteredHowtos() {
-    let howtos = this.filterCollectionByTags(this.allHowtos, this.selectedTags)
-    howtos = this.filterHowtosByCategory(howtos, this.selectedCategory)
+    const howtos = this.filterHowtosByCategory(
+      this.allHowtos,
+      this.selectedCategory,
+    )
     // HACK - ARH - 2019/12/11 filter unaccepted howtos, should be done serverside
     let validHowtos = filterModerableItems(howtos, this.activeUser)
 
@@ -174,10 +182,6 @@ export class HowtoStore extends ModuleStore {
 
   public updateReferrerSource(source: string) {
     this.referrerSource = source
-  }
-
-  public updateSelectedTags(tagKey: ISelectedTags) {
-    this.selectedTags = tagKey
   }
 
   @action
@@ -308,17 +312,6 @@ export class HowtoStore extends ModuleStore {
       console.error(err)
       throw new Error(err)
     }
-  }
-
-  public filterHowtosByCategory = (
-    collection: IHowtoDB[] = [],
-    category: string,
-  ) => {
-    return category
-      ? collection.filter((obj) => {
-          return obj.category?.label === category
-        })
-      : collection
   }
 
   // upload a new or update an existing how-to

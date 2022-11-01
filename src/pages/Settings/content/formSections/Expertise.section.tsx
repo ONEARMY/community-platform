@@ -5,6 +5,7 @@ import { FlexSectionContainer } from './elements'
 import { FieldArray } from 'react-final-form-arrays'
 import { MACHINE_BUILDER_XP } from 'src/mocks/user_pp.mock'
 import { CustomCheckbox } from './Fields/CustomCheckbox.field'
+import theme from 'src/themes/styled.theme'
 
 interface IProps {
   required: boolean
@@ -62,7 +63,18 @@ export class ExpertiseSection extends React.Component<IProps, any> {
               )}
             </FieldArray>
           </Flex>
-          {required && <Text color="red">Choose at least one expertise </Text>}
+          {required && (
+            <Text
+              color={theme.colors.error}
+              sx={{
+                fontSize: 0.5,
+                marginLeft: 1,
+                marginRight: 1,
+              }}
+            >
+              Choose at least one expertise
+            </Text>
+          )}
         </Box>
       </FlexSectionContainer>
     )

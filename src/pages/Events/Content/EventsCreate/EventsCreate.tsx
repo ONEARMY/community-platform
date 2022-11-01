@@ -12,17 +12,17 @@ import {
 } from 'oa-components'
 import type { EventStore } from 'src/stores/Events/events.store'
 import { Heading, Card, Flex, Box, Text } from 'theme-ui'
-import { TagsSelectField } from 'src/components/Form/TagsSelect.field'
+import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import { inject } from 'mobx-react'
 import { PostingGuidelines } from './PostingGuidelines'
 import type { IEventFormInput } from 'src/models/events.models'
-import { LocationSearchField } from 'src/components/Form/LocationSearch.field'
+import { LocationSearchField } from 'src/common/Form/LocationSearch.field'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import { validateUrl, addProtocolMutator, required } from 'src/utils/validators'
 import IconHeaderEvents from 'src/assets/images/header-section/events-header-icon.svg'
 import { logger } from 'src/logger'
-import { CheckboxInput } from 'src/components/Form/Checkbox'
+import { CheckboxInput } from 'src/common/Form/Checkbox'
 
 interface IState {
   formValues: IEventFormInput
@@ -49,6 +49,16 @@ const Label = styled.label`
 @inject('eventStore')
 export class EventsCreate extends React.Component<IProps, IState> {
   uploadRefs: { [key: string]: UploadedFile | null } = {}
+  public onSubmit = async (formValues: IEventFormInput) => {
+    logger.debug('form values', formValues)
+    await this.store.uploadEvent(formValues)
+    this.props.history.push('/events')
+  }
+  public handleChange = (date: any) => {
+    this.setState({
+      selectedDate: date,
+    })
+  }
   constructor(props: any) {
     super(props)
     // generate unique id for db and storage references and assign to state
@@ -65,18 +75,6 @@ export class EventsCreate extends React.Component<IProps, IState> {
   }
   get store() {
     return this.injected.eventStore
-  }
-
-  public onSubmit = async (formValues: IEventFormInput) => {
-    logger.debug('form values', formValues)
-    await this.store.uploadEvent(formValues)
-    this.props.history.push('/events')
-  }
-
-  public handleChange = (date: any) => {
-    this.setState({
-      selectedDate: date,
-    })
   }
 
   public render() {

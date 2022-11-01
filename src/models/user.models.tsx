@@ -48,7 +48,7 @@ export interface IUser {
   notifications?: INotification[]
 }
 
-interface IUserBadges {
+export interface IUserBadges {
   verified: boolean
 }
 

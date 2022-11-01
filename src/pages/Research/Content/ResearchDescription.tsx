@@ -4,16 +4,16 @@ import { Box, Flex, Image, Text, Heading } from 'theme-ui'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import {
   Button,
-  FlagIconHowTos,
   LinkifyText,
   ModerationStatus,
   UsefulStatsButton,
+  Username,
 } from 'oa-components'
 import type { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
 import type { IUser } from 'src/models/user.models'
-import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 import { Link } from 'react-router-dom'
+import { isUserVerified } from 'src/common/isUserVerified'
 
 interface IProps {
   research: IResearch.ItemDB
@@ -118,40 +118,24 @@ const ResearchDescription: React.FC<IProps> = ({
         </Flex>
         <Box mt={3} mb={2}>
           <Flex sx={{ alignItems: 'center' }}>
-            {research.creatorCountry && (
-              <FlagIconHowTos code={research.creatorCountry} />
-            )}
-            <Text
-              ml={1}
-              sx={{
-                ...theme.typography.auxiliary,
-                marginTop: 2,
-                marginBottom: 2,
-              }}
-            >
-              <Flex sx={{ alignItems: 'center' }}>
-                By
-                <Link to={'/u/' + research._createdBy}>
-                  <Text
-                    ml={1}
-                    mr={1}
-                    sx={{
-                      textDecoration: 'underline',
-                      color: 'black',
-                    }}
-                  >
-                    {research._createdBy}
-                  </Text>
-                </Link>
-                <VerifiedUserBadge
-                  userId={research._createdBy}
-                  mr={1}
-                  width="12px"
-                  height="12px"
-                />
-                | Started on {format(new Date(research._created), 'DD-MM-YYYY')}
-              </Flex>
-            </Text>
+            <Flex sx={{ alignItems: 'center' }}>
+              <Username
+                user={{
+                  userName: research._createdBy,
+                  countryCode: research.creatorCountry,
+                }}
+                isVerified={isUserVerified(research._createdBy)}
+              />
+              <Text
+                sx={{
+                  ...theme.typography.auxiliary,
+                  marginTop: 2,
+                  marginBottom: 2,
+                }}
+              >
+                Started on {format(new Date(research._created), 'DD-MM-YYYY')}
+              </Text>
+            </Flex>
           </Flex>
           <Text
             sx={{

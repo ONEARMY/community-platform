@@ -29,23 +29,19 @@ const MOCK_PINS = generatePins(250)
 const COLLECTION_NAME: IDBEndpoint = 'mappins'
 export class MapsStore extends ModuleStore {
   mapPins$: Subscription
+  @observable
+  public activePinFilters: Array<IMapGrouping> = []
+  @observable
+  public activePin: IMapPin | IMapPinWithDetail | undefined = undefined
+  @observable
+  private mapPins: Array<IMapPin> = []
+  @observable
+  public filteredPins: Array<IMapPin> = []
   // eslint-disable-next-line
   constructor(rootStore: RootStore) {
     super(rootStore)
     makeObservable(this)
   }
-
-  @observable
-  public activePinFilters: Array<IMapGrouping> = []
-
-  @observable
-  public activePin: IMapPin | IMapPinWithDetail | undefined = undefined
-
-  @observable
-  private mapPins: Array<IMapPin> = []
-
-  @observable
-  public filteredPins: Array<IMapPin> = []
 
   @action
   private processDBMapPins(pins: IMapPin[]) {

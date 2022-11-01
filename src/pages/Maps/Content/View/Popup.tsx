@@ -42,6 +42,15 @@ const LastOnline = styled.div`
 @inject('mapsStore')
 export class Popup extends React.Component<IProps> {
   leafletRef: React.RefObject<LeafletPopup> = React.createRef()
+  private moderatePin = async (pin: IMapPin, accepted: boolean) => {
+    await this.store.moderatePin({
+      ...pin,
+      moderation: accepted ? 'accepted' : 'rejected',
+    })
+    if (!accepted) {
+      this.injected.mapsStore.setActivePin(undefined)
+    }
+  }
   // eslint-disable-next-line
   constructor(props: IProps) {
     super(props)
@@ -58,16 +67,6 @@ export class Popup extends React.Component<IProps> {
   /* eslint-disable @typescript-eslint/naming-convention*/
   UNSAFE_componentWillReceiveProps() {
     this.openPopup()
-  }
-
-  private moderatePin = async (pin: IMapPin, accepted: boolean) => {
-    await this.store.moderatePin({
-      ...pin,
-      moderation: accepted ? 'accepted' : 'rejected',
-    })
-    if (!accepted) {
-      this.injected.mapsStore.setActivePin(undefined)
-    }
   }
 
   // HACK - as popup is created dynamically want to be able to trigger

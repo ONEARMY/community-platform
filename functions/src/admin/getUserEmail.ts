@@ -1,5 +1,5 @@
 import * as functions from 'firebase-functions'
-import { auth } from 'firebase-admin'
+import { firebaseAuth } from '../Firebase/auth'
 
 /**
  * For requests coming from authenticated admins, request the email
@@ -17,7 +17,7 @@ export const getUserEmail = functions.https.onCall(async (data, context) => {
   // TODO - add server-side auth to check request coming from admin
   // (does still check clientside)
   try {
-    const { email } = await auth().getUser(uid)
+    const { email } = await firebaseAuth.getUser(uid)
     return email
   } catch (error) {
     console.error(error)

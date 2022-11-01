@@ -1,12 +1,33 @@
-import { firebaseAdmin } from './admin'
+import { Database, getDatabase } from 'firebase-admin/database'
+import { firebaseApp } from './admin'
 
-export const db = firebaseAdmin.database()
+class RtdbClient {
+  private _rtdb: Database
 
-export const get = async (path: string) => {
-  const snap = await db.ref(path).once('value')
-  return { ...snap.val() }
+  // HACK - rtdb would fail in some docker emulators so use getter to only initialise when actually called
+  get rtdb() {
+    if (!this._rtdb) {
+      this._rtdb = getDatabase(firebaseApp)
+    }
+    return this._rtdb
+  }
+
+  get = async (path: string) => {
+    const snap = await this.rtdb.ref(path).once('value')
+    return { ...snap.val() }
+  }
+  set = async (path: string, value: Record<string, any>) => {
+    return new Promise<void>((resolve, reject) => {
+      this.rtdb.ref(path).set(value, (err) => {
+        if (err) {
+          reject(err)
+        }
+        resolve()
+      })
+    })
+  }
+  delete = (path: string) => this.rtdb.ref(path).remove()
+
+  update = (path: string, values: any) => this.rtdb.ref(path).update(values)
 }
-export const set = async (path: string, values: any) => {
-  return db.ref(path).set(values)
-}
-export const update = (path: string, values: any) => db.ref(path).update(values)
+export default new RtdbClient()

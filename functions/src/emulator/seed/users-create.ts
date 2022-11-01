@@ -1,13 +1,13 @@
 import { MOCK_AUTH_USERS } from 'oa-shared/mocks/auth'
 import type { IUserDB } from '../../../../src/models'
-import { firebaseAdmin } from '../../Firebase/admin'
+import { firebaseAuth } from '../../Firebase/auth'
 import { setDoc } from '../../Firebase/firestoreDB'
 
 /**
  * Create auth users to allow sign-in on firebase emulators
  */
 export async function seedUsersCreate() {
-  const auth = firebaseAdmin.auth()
+  const auth = firebaseAuth
   const createdUsers = []
   for (const user of Object.values(MOCK_AUTH_USERS)) {
     const { label, roles, email, password, uid } = user

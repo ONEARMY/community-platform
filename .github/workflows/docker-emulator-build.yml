@@ -10,7 +10,9 @@ on:
   push:
     branches:
       - master
-    # Only create new build when seed data updates
+    # Allow manual trigger of build in case of broken/minor updates
+    workflow_dispatch:
+    # Only create new build when seed data or functions update
     paths:
       - 'packages/emulators-docker/seed_data/**'
 

@@ -69,6 +69,9 @@ ENV GOOGLE_APPLICATION_CREDENTIALS=/app/credentials.json
 
 # Ensure runtime config vars picked up (https://github.com/firebase/firebase-tools/issues/3983)
 ENV CLOUD_RUNTIME_CONFIG=/app/functions/.runtimeconfig.json
+# Fix: ensure database emulator can configure with url
+# https://github.com/firebase/firebase-admin-node/issues/116
+ENV FIREBASE_DATABASE_EMULATOR_HOST = 'http://127.0.0.1:4006'
 
 # Prepare seed data used in the app
 RUN \

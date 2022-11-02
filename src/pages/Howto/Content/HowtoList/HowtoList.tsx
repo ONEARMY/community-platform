@@ -139,14 +139,6 @@ export class HowtoList extends React.Component<any, IState> {
           .filter(Boolean),
     }))
 
-    // 1. Calculate the number of pages based on howtoItems:
-    // Example: if howtoItems are 150 and page size is 30 items
-    // number of pages will be 5 pages
-    // 2. Get current page from state which gets it from route params.
-    // 3. Filter out howtoItems depending on the current page.
-    // 4. If current page is greater than number of possible pages show 404 page.
-    // 5. Show buttons below the grid to navigate between pages.
-
     const maxPage = Math.ceil(howtoItems.length / ITEMS_PER_PAGE)
     const firstItem = (this.state.currentPage - 1) * ITEMS_PER_PAGE
     const lastItem = firstItem + ITEMS_PER_PAGE

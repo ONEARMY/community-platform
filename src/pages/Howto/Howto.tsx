@@ -40,6 +40,11 @@ class HowtoPage extends React.Component<IProps, any> {
         <Switch>
           <Route
             exact
+            path="/how-to"
+            render={(props) => <HowtoList {...props} />}
+          />
+          <Route
+            exact
             path="/how-to/:page"
             render={(props) => <HowtoList {...props} />}
           />

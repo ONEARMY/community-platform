@@ -28,6 +28,8 @@ interface IState {
   // totalHowtoColumns: number
 }
 
+const ITEMS_PER_PAGE = 30
+
 // Update query params for search and categories
 const updateQueryParams = (url: string, key: string, val: string) => {
   const newUrl = new URL(url)
@@ -59,7 +61,7 @@ export class HowtoList extends React.Component<any, IState> {
     super(props)
     this.state = {
       isLoading: true,
-      currentPage: this.props.match.params.page,
+      currentPage: Number.parseInt(this.props.match.params.page) || 1,
     }
     if (props.location.search) {
       const searchParams = new URLSearchParams(props.location.search)
@@ -95,6 +97,30 @@ export class HowtoList extends React.Component<any, IState> {
     this.props.howtoStore.updateSearchValue('')
   }
 
+  goToPreviousPage() {
+    const prevPage = Math.max(this.state.currentPage - 1, 1)
+
+    if (prevPage !== this.state.currentPage) {
+      this.props.history.push(`/how-to/${prevPage}`)
+      this.setState((previousState) => ({
+        ...previousState,
+        currentPage: prevPage,
+      }))
+    }
+  }
+
+  goToNextPage(maxPage) {
+    const nextPage = Math.min(this.state.currentPage + 1, maxPage)
+
+    if (nextPage !== this.state.currentPage) {
+      this.props.history.push(`/how-to/${nextPage}`)
+      this.setState((previousState) => ({
+        ...previousState,
+        currentPage: nextPage,
+      }))
+    }
+  }
+
   public render() {
     const { filteredHowtos, selectedCategory, searchValue, referrerSource } =
       this.props.howtoStore
@@ -120,6 +146,11 @@ export class HowtoList extends React.Component<any, IState> {
     // 3. Filter out howtoItems depending on the current page.
     // 4. If current page is greater than number of possible pages show 404 page.
     // 5. Show buttons below the grid to navigate between pages.
+
+    const maxPage = Math.ceil(howtoItems.length / ITEMS_PER_PAGE)
+    const firstItem = (this.state.currentPage - 1) * ITEMS_PER_PAGE
+    const lastItem = firstItem + ITEMS_PER_PAGE
+    const paginatedHowToItems = howtoItems.slice(firstItem, lastItem)
 
     return (
       <Box>
@@ -250,7 +281,7 @@ export class HowtoList extends React.Component<any, IState> {
             columns={[1, 2, 3]}
             data-cy="howtolist-flex-container"
           >
-            {howtoItems.map((howto) => (
+            {paginatedHowToItems.map((howto) => (
               <HowToCard
                 key={howto._id}
                 howto={howto}
@@ -259,9 +290,24 @@ export class HowtoList extends React.Component<any, IState> {
             ))}
           </Grid>
 
-          {/* 
-            Add buttons for navigating between pages.
-          */}
+          {/* Pagination buttons */}
+          {this.state.currentPage >= 1 && this.state.currentPage <= maxPage ? (
+            <Flex>
+              <Button
+                disabled={this.state.currentPage === 1}
+                onClick={() => this.goToPreviousPage()}
+              >
+                Previous
+              </Button>
+              <Button
+                disabled={this.state.currentPage === maxPage}
+                onClick={() => this.goToNextPage(maxPage)}
+                ml={2}
+              >
+                Next
+              </Button>
+            </Flex>
+          ) : null}
 
           <Flex sx={{ justifyContent: 'center' }} mt={20}>
             <Link to={'#'} style={{ visibility: 'hidden' }}>

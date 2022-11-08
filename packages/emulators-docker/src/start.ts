@@ -6,7 +6,6 @@ import {
   CONTAINER_NAME,
   getFirebasePortMapping,
   IMAGE_NAME,
-  REPOSITORY,
   TAG_NAME,
 } from './common'
 import { PATHS } from './paths'

@@ -40,14 +40,10 @@ export class VirtualizedFlex extends React.Component<IProps, IState> {
   }
   constructor(props: IProps) {
     super(props)
-
-    const { dataRows, totalColumns } = this.generateRowData(props)
-
-    this.state = {
-      data: [],
-      dataRows,
-      totalColumns,
-    }
+    this.state = { data: [], dataRows: [], totalColumns: -1 }
+  }
+  componentDidMount() {
+    this.generateRowData(this.props)
   }
 
   /* eslint-disable @typescript-eslint/naming-convention*/
@@ -59,20 +55,16 @@ export class VirtualizedFlex extends React.Component<IProps, IState> {
    * Split data into rows and columns depending on breakpoints
    */
   generateRowData(props: IProps) {
-    const oldColumns = this.state?.totalColumns ?? -1
-    const oldData = this.state?.data ?? []
+    const oldColumns = this.state.totalColumns
+    const oldData = this.state.data
     const { widthBreakpoints, data } = props
     const currentWidth = window.innerWidth
     const totalColumns = this._calcTotalColumns(currentWidth, widthBreakpoints)
-    let dataRows: typeof data[] = []
-
     // only re-render when data or columns have changed
     if (oldColumns !== totalColumns || oldData.length !== data.length) {
-      dataRows = this._dataToRows(data, totalColumns)
+      const dataRows = this._dataToRows(data, totalColumns)
       this.setState({ totalColumns, dataRows })
     }
-
-    return { dataRows, totalColumns }
   }
 
   /**

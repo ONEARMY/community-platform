@@ -29,7 +29,7 @@ export const BackupDatabase = async () => {
   ]
   // Export all collections specified except for user revision history (can be very large, needs rethinking)
   const collectionIds = [...activeCollections, ...uniqueSubcollections].filter(
-    (id) => id === 'revisions',
+    (id) => id !== 'revisions',
   )
 
   const projectId = process.env.GCP_PROJECT || process.env.GCLOUD_PROJECT

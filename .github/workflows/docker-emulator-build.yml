@@ -10,7 +10,9 @@ on:
   push:
     branches:
       - master
-    # Only create new build when seed data updates
+    # Allow manual trigger of build in case of broken/minor updates
+    workflow_dispatch:
+    # Only create new build when seed data or functions update
     paths:
       - 'packages/emulators-docker/seed_data/**'
 
@@ -49,7 +51,7 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }},${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=2022-06-28
+            type=raw,value=2022-10-30
           # TODO - would be nice to extract tags based on seed data provided automatically or consider other strategies
           # https://github.com/docker/metadata-action#tags-input
           flavor: |
@@ -61,7 +63,7 @@ jobs:
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
       - name: Setup Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -77,10 +79,10 @@ jobs:
 
       # Build and deploy
       # This will use the tags generate to identify target destination, by default pushing to both
-      # github container registery (used mostly for cahing as requires gh auth to pull locally) and
+      # github container registery (used mostly for caching as requires gh auth to pull locally) and
       # dockerhub (used publicy)
       - name: Build and push Docker image
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        uses: docker/build-push-action@v3
         with:
           context: packages/emulators-docker
           push: true

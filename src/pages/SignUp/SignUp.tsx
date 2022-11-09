@@ -8,7 +8,7 @@ import { Form, Field } from 'react-final-form'
 import { inject, observer } from 'mobx-react'
 import type { UserStore } from 'src/stores/User/user.store'
 import type { RouteComponentProps } from 'react-router'
-import { withRouter } from 'react-router'
+import { withRouter, Redirect } from 'react-router'
 import { string, object, ref, bool } from 'yup'
 import { required } from 'src/utils/validators'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
@@ -88,6 +88,10 @@ class SignUpPage extends React.Component<IProps, IState> {
   }
 
   public render() {
+    if (this.props.userStore!.user) {
+      return <Redirect to={'/'} />
+    }
+
     return (
       <Form
         onSubmit={(v) => this.onSignupSubmit(v as IFormValues)}

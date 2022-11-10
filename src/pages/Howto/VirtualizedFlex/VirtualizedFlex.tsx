@@ -42,6 +42,9 @@ export class VirtualizedFlex extends React.Component<IProps, IState> {
     super(props)
     this.state = { data: [], dataRows: [], totalColumns: -1 }
   }
+  componentDidMount() {
+    this.generateRowData(this.props)
+  }
 
   /* eslint-disable @typescript-eslint/naming-convention*/
   UNSAFE_componentWillReceiveProps(props: IProps) {

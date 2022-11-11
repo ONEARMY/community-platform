@@ -13,6 +13,7 @@ import type { TagsStore } from 'src/stores/Tags/tags.store'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import type { UserStore } from 'src/stores/User/user.store'
 import type { IHowto } from 'src/models'
+import type { RouteComponentProps } from 'react-router'
 
 interface InjectedProps {
   howtoStore: HowtoStore
@@ -31,7 +32,12 @@ interface IState {
 const ITEMS_PER_PAGE = 30
 
 // Update query params for search and categories
-const updateQueryParams = (url: string, key: string, val: string) => {
+const updateQueryParams = (
+  url: string,
+  key: string,
+  val: string,
+  history: RouteComponentProps['history'],
+) => {
   const newUrl = new URL(url)
   const urlParams = new URLSearchParams(newUrl.search)
   if (val) {
@@ -41,7 +47,12 @@ const updateQueryParams = (url: string, key: string, val: string) => {
   }
   newUrl.search = urlParams.toString()
 
-  window.history.pushState({ path: newUrl.toString() }, '', newUrl.toString())
+  const { pathname, search } = newUrl
+
+  history.push({
+    pathname,
+    search,
+  })
 }
 
 // First we use the @inject decorator to bind to the howtoStore state
@@ -63,23 +74,8 @@ export class HowtoList extends React.Component<any, IState> {
       isLoading: true,
       currentPage: Number.parseInt(this.props.match.params.page) || 1,
     }
-    if (props.location.search) {
-      const searchParams = new URLSearchParams(props.location.search)
 
-      const categoryQuery = searchParams.get('category')?.toString()
-      if (categoryQuery) {
-        this.props.howtoStore.updateSelectedCategory(categoryQuery)
-      }
-
-      const searchQuery = searchParams.get('search')?.toString()
-      if (searchQuery) {
-        this.injected.howtoStore.updateSearchValue(searchQuery)
-      }
-      const referrerSource = searchParams.get('source')?.toString()
-      if (referrerSource) {
-        this.injected.howtoStore.updateReferrerSource(referrerSource)
-      }
-    }
+    this.syncUrlWithStorage()
   }
 
   get injected() {
@@ -95,6 +91,28 @@ export class HowtoList extends React.Component<any, IState> {
 
   componentWillUnmount(): void {
     this.props.howtoStore.updateSearchValue('')
+    this.props.howtoStore.updateSelectedCategory('')
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.location?.search !== prevProps.location?.search) {
+      this.syncUrlWithStorage()
+    }
+  }
+
+  syncUrlWithStorage() {
+    const searchParams = new URLSearchParams(this.props.location?.search ?? '')
+
+    const categoryQuery = searchParams.get('category')?.toString() ?? ''
+    this.props.howtoStore.updateSelectedCategory(categoryQuery)
+
+    const searchQuery = searchParams.get('search')?.toString() ?? ''
+    this.injected.howtoStore.updateSearchValue(searchQuery)
+
+    const referrerSource = searchParams.get('source')?.toString()
+    if (referrerSource) {
+      this.injected.howtoStore.updateReferrerSource(referrerSource)
+    }
   }
 
   goToPreviousPage() {
@@ -203,6 +221,7 @@ export class HowtoList extends React.Component<any, IState> {
                   window.location.href,
                   'category',
                   category ? category.label : '',
+                  this.props.history,
                 )
                 this.props.howtoStore.updateSelectedCategory(
                   category ? category.label : '',
@@ -227,7 +246,12 @@ export class HowtoList extends React.Component<any, IState> {
               placeholder="Search for a how-to"
               onChange={(evt) => {
                 const value = evt.target.value
-                updateQueryParams(window.location.href, 'search', value)
+                updateQueryParams(
+                  window.location.href,
+                  'search',
+                  value,
+                  this.props.history,
+                )
                 this.props.howtoStore.updateSearchValue(value)
               }}
             />

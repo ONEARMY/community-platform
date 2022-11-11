@@ -119,7 +119,7 @@ export class HowtoList extends React.Component<any, IState> {
     const prevPage = Math.max(this.state.currentPage - 1, 1)
 
     if (prevPage !== this.state.currentPage) {
-      this.props.history.push(`/how-to/${prevPage}`)
+      this.props.history.push(`/how-to/pages/${prevPage}`)
       this.setState((previousState) => ({
         ...previousState,
         currentPage: prevPage,
@@ -131,7 +131,7 @@ export class HowtoList extends React.Component<any, IState> {
     const nextPage = Math.min(this.state.currentPage + 1, maxPage)
 
     if (nextPage !== this.state.currentPage) {
-      this.props.history.push(`/how-to/${nextPage}`)
+      this.props.history.push(`/how-to/pages/${nextPage}`)
       this.setState((previousState) => ({
         ...previousState,
         currentPage: nextPage,

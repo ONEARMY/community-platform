@@ -1,6 +1,7 @@
-import type { IComment } from './howto.models'
+import type { IComment } from './comment.model'
 
 // Re-export all other files for easy access
+export type { IComment } from './comment.model'
 export * from './common.models'
 export * from './events.models'
 export * from './howto.models'

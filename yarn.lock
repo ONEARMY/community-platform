@@ -5511,6 +5511,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@faker-js/faker@npm:^7.6.0":
+  version: 7.6.0
+  resolution: "@faker-js/faker@npm:7.6.0"
+  checksum: 942af6221774e8c98a0eb6bc75265e05fb81a941170377666c3439aab9495dd321d6beedc5406f07e6ad44262b3e43c20961f666d116ad150b78e7437dd1bb2b
+  languageName: node
+  linkType: hard
+
 "@fastify/busboy@npm:^1.1.0":
   version: 1.1.0
   resolution: "@fastify/busboy@npm:1.1.0"
@@ -27916,6 +27923,7 @@ fsevents@^1.2.7:
     "@commitlint/cz-commitlint": ^16.2.3
     "@emotion/react": ^11.8.2
     "@emotion/styled": ^11.8.1
+    "@faker-js/faker": ^7.6.0
     "@semantic-release/changelog": ^6.0.1
     "@semantic-release/git": ^10.0.1
     "@sentry/react": ^6.15.0

@@ -8,9 +8,8 @@ import type {
   IHowtoFormInput,
   IHowtoStep,
   IHowToStepFormInput,
-  IComment,
 } from 'src/models/howto.models'
-import type { IUser } from 'src/models/user.models'
+import type { IComment, IUser } from 'src/models'
 import {
   filterModerableItems,
   hasAdminRights,
@@ -227,9 +226,13 @@ export class HowtoStore extends ModuleStore {
 
         const updatedHowto: IHowto = {
           ...toJS(howto),
-          comments: howto.comments
-            ? [...toJS(howto.comments), newComment]
-            : [newComment],
+          description: await this.addUserReference(howto.description),
+          comments: await Promise.all(
+            [...toJS(howto.comments || []), newComment].map(async (comment) => {
+              comment.text = await this.addUserReference(comment.text)
+              return comment
+            }),
+          ),
         }
 
         const dbRef = this.db
@@ -265,7 +268,13 @@ export class HowtoStore extends ModuleStore {
 
           const updatedHowto: IHowto = {
             ...toJS(howto),
-            comments,
+            description: await this.addUserReference(howto.description),
+            comments: await Promise.all(
+              comments.map(async (comment) => ({
+                ...comment,
+                text: await this.addUserReference(comment.text),
+              })),
+            ),
           }
 
           const dbRef = this.db
@@ -290,12 +299,21 @@ export class HowtoStore extends ModuleStore {
       const howto = this.activeHowto
       const user = this.activeUser
       if (id && howto && user && howto.comments) {
-        const comments = toJS(howto.comments).filter(
-          (comment) => !(comment._creatorId === user._id && comment._id === id),
+        const comments = await Promise.all(
+          toJS(howto.comments)
+            .filter(
+              (comment) =>
+                !(comment._creatorId === user._id && comment._id === id),
+            )
+            .map(async (comment) => ({
+              ...comment,
+              text: await this.addUserReference(comment.text),
+            })),
         )
 
         const updatedHowto: IHowto = {
           ...toJS(howto),
+          description: await this.addUserReference(howto.description),
           comments,
         }
 
@@ -326,6 +344,7 @@ export class HowtoStore extends ModuleStore {
 
     // keep comments if doc existed previously
     const existingDoc = await dbRef.get()
+
     const comments =
       existingDoc && existingDoc.comments ? existingDoc.comments : []
 
@@ -363,7 +382,12 @@ export class HowtoStore extends ModuleStore {
         ...values,
         description: await this.addUserReference(values.description),
         _createdBy: values._createdBy ? values._createdBy : user.userName,
-        comments,
+        comments: await Promise.all(
+          comments.map(async (c) => ({
+            ...c,
+            text: await this.addUserReference(c.text),
+          })),
+        ),
         cover_image: processedCover,
         steps: processedSteps,
         fileLink: values.fileLink ?? '',
@@ -444,8 +468,8 @@ interface IHowToUploadStatus {
   Complete: boolean
 }
 
-function getInitialUploadStatus() {
-  const status: IHowToUploadStatus = {
+function getInitialUploadStatus(): IHowToUploadStatus {
+  return {
     Start: false,
     Cover: false,
     'Step Images': false,
@@ -453,5 +477,4 @@ function getInitialUploadStatus() {
     Database: false,
     Complete: false,
   }
-  return status
 }

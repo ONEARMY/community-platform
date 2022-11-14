@@ -3,20 +3,7 @@ import type { DBDoc, IModerable } from './common.models'
 import type { IConvertedFileMeta } from '../types'
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { ICategory } from './categories.model'
-
-/**
- * Comments are currently only used in Howtos.
- */
-export interface IComment {
-  _id: string
-  _created: string
-  _edited?: string
-  _creatorId: string
-  creatorName: string
-  creatorCountry?: string | null
-  text: string
-  isUserVerified?: boolean
-}
+import type { IComment } from './'
 
 // By default all how-to form input fields come as strings
 // The IHowto interface can imposes the correct formats on fields

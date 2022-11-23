@@ -1,7 +1,8 @@
 import { join } from 'path'
 import { tmpdir } from 'os'
 import { getImageDimensions } from '../Utils/image.utils'
-import { firebaseAdmin, IFirebaseConfig } from './admin'
+import { firebaseApp, IFirebaseConfig } from './admin'
+import { getStorage } from 'firebase-admin/storage'
 
 /*************************************************************************
  *    Exports
@@ -9,9 +10,8 @@ import { firebaseAdmin, IFirebaseConfig } from './admin'
 const FIREBASE_CONFIG = JSON.parse(
   process.env.FIREBASE_CONFIG,
 ) as IFirebaseConfig
-export const bucket = firebaseAdmin
-  .storage()
-  .bucket(FIREBASE_CONFIG.storageBucket)
+const storage = getStorage(firebaseApp)
+export const bucket = storage.bucket(FIREBASE_CONFIG.storageBucket)
 // get firebase storage file meta and return subset (+download link) for reference
 // pass originalUrl if wanting to retain previous migraiton data
 export const getStorageFileMeta = async (

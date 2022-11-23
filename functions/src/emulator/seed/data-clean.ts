@@ -3,7 +3,7 @@ import * as firebase_tools from 'firebase-tools'
 import { DB_ENDPOINTS } from '../../models'
 import { db } from '../../Firebase/firestoreDB'
 import { splitArrayToChunks } from '../../Utils/data.utils'
-import { firestore } from 'firebase-admin'
+import type { firestore } from 'firebase-admin'
 import axios from 'axios'
 
 const USE_SMALL_SAMPLE_SEED = false
@@ -20,18 +20,17 @@ export async function seedDataClean() {
   const dbEndpoints = dbCollections.map((c) => c.id)
   console.log('db endpoints', dbEndpoints)
   const expectedEndpoints = Object.values(DB_ENDPOINTS)
-  const returnMessage: { deleted: any; kept: any; created: any } = {
-    deleted: {},
-    kept: {},
-    created: {},
+  const returnMessage = {
+    endpoints: { deleted: {} as any, kept: {} as any },
   }
 
   // Delete collections not in use
   for (const endpoint of dbEndpoints) {
     if (!expectedEndpoints.includes(endpoint)) {
-      console.log('deleting endpoint', endpoint)
       await deleteCollectionAPI(endpoint)
-      returnMessage.deleted[endpoint] = true
+      returnMessage.endpoints.deleted[endpoint] = 'All'
+    } else {
+      returnMessage.endpoints.kept[endpoint] = 'All'
     }
   }
 
@@ -69,22 +68,22 @@ export async function seedDataClean() {
     '[Users Deleted]',
     (doc) => !keptUsers[doc.data()._id],
   )
-  returnMessage.deleted['users'] = deletedUsers
+  returnMessage.endpoints.deleted.users = deletedUsers.length
   // Delete nested revision docs (TODO - should add filter to ensure doc ref is a subcollection of users)
   const deletedRevisions = await deleteQueryDocs(
     db.collectionGroup('revisions'),
     '[Revisions Deleted]',
     (doc) => !keptUsers[doc.data()._id],
   )
-  returnMessage.deleted['revisions'] = deletedRevisions
+  returnMessage.endpoints.deleted['revisions'] = deletedRevisions.length
   // Delete nested stats docs
   const deletedStats = await deleteQueryDocs(
     db.collectionGroup('stats'),
     '[Stats Deleted]',
     (doc) => !keptUsers[doc.data()._id],
   )
-  returnMessage.deleted['stats'] = deletedStats
-  returnMessage.kept.users = keptUsers
+  returnMessage.endpoints.deleted['stats'] = deletedStats.length
+  returnMessage.endpoints.kept.users = Object.keys(keptUsers).length
 
   return returnMessage
 }
@@ -128,7 +127,8 @@ async function deleteQueryDocs(
 ) {
   const queryResults = await query.get()
   const filteredResults = queryResults.docs.filter((doc) => filterFn(doc))
-  return batchDeleteDocs(filteredResults, logPrefix)
+  await batchDeleteDocs(filteredResults, logPrefix)
+  return filteredResults
 }
 
 async function batchDeleteDocs(

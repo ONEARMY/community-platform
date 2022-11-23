@@ -1,16 +1,16 @@
-import * as admin from 'firebase-admin'
-import * as functions from 'firebase-functions'
+import { firestore } from 'firebase-admin'
+import type { Change } from 'firebase-functions'
 import { DB_ENDPOINTS, IDBEndpoint } from '../models'
 import { db } from '../Firebase/firestoreDB'
 import { compareObjectDiffs, splitArrayToChunks } from '../Utils/data.utils'
 
 type IDocumentRef = FirebaseFirestore.DocumentReference
 type ICollectionRef = FirebaseFirestore.CollectionReference
-type IDBChange = functions.Change<functions.firestore.QueryDocumentSnapshot>
+type IDBChange = Change<firestore.QueryDocumentSnapshot>
 
 export const VALUE_MODIFIERS = {
-  delete: () => admin.firestore.FieldValue.delete(),
-  increment: (value: number) => admin.firestore.FieldValue.increment(value),
+  delete: () => firestore.FieldValue.delete(),
+  increment: (value: number) => firestore.FieldValue.increment(value),
 }
 
 export interface IAggregation {
@@ -39,7 +39,7 @@ export interface IAggregation {
  * to update, and runs via an aggregation update handler
  */
 export async function handleDBAggregations(
-  dbChange: functions.Change<functions.firestore.QueryDocumentSnapshot>,
+  dbChange: Change<firestore.QueryDocumentSnapshot>,
   aggregations: IAggregation[],
 ) {
   const { before, after } = dbChange

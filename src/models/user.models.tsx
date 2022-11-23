@@ -13,6 +13,7 @@ import type { IConvertedFileMeta } from '../types'
 export interface IUserState {
   user?: IUser
 }
+
 // IUser retains most of the fields from legacy users (omitting passwords),
 // and has a few additional fields. Note 'email' is excluded
 // _uid is unique/fixed identifier
@@ -48,7 +49,7 @@ export interface IUser {
   notifications?: INotification[]
 }
 
-interface IUserBadges {
+export interface IUserBadges {
   verified: boolean
 }
 

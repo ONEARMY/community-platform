@@ -16,7 +16,7 @@ export const BackupDatabase = async () => {
   //  https://stackoverflow.com/questions/57512324/cloud-function-to-export-firestore-backup-data-using-firebase-admin-or-google
 
   const client = new firebaseAdmin.firestore.v1.FirestoreAdminClient({})
-  const timestamp = dateformat(Date.now(), 'yyyy-mm-dd-HH-MM-ss')
+  const timestamp = dateformat(Date.now(), 'yyyy-mm-dd')
 
   // Export only the collections and subcollections currently used by the platform
   const activeCollections = Object.values(DB_ENDPOINTS)
@@ -27,12 +27,15 @@ export const BackupDatabase = async () => {
       ([] as string[]).concat(...Object.values(DB_ENDPOINT_SUBCOLLECTIONS)),
     ),
   ]
+  // Export all collections specified except for user revision history (can be very large, needs rethinking)
+  const collectionIds = [...activeCollections, ...uniqueSubcollections].filter(
+    (id) => id !== 'revisions',
+  )
 
   const projectId = process.env.GCP_PROJECT || process.env.GCLOUD_PROJECT
   const databaseName = client.databasePath(projectId, '(default)')
   // save the export in the default storage bucket, in a backups folder
   const outputUriPrefix = `gs://${bucket.name}/backups/${timestamp}`
-  const collectionIds = [...activeCollections, ...uniqueSubcollections]
 
   logger.log('prepare backup', {
     name: databaseName,

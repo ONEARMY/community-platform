@@ -17,7 +17,7 @@ _Note_ - There are 3 different bounty levels. You can see in the issue which lev
 
 ## How much are they?
 
-We currently have 3 bounty levels
+Simply go to the `Issues` page on github and look for issues with labelled with [Bounty](https://github.com/ONEARMY/community-platform/issues).
 
 | Level                               | Amount | It should take...                                           | E.g.                                |
 | ----------------------------------- | ------ | ----------------------------------------------------------- | ----------------------------------- |
@@ -29,7 +29,7 @@ We currently have 3 bounty levels
 
 ## How do I claim bounties?
 
-#### Step 1 - Assigned the issue
+#### Step 1 - Assign the issue
 
 Drop a message in the issue thread to say that you are interested taking it on. If the issue is already assigned, or we think it might be too much for a new or individual contributor we might suggest looking at other issues instead. Otherwise it's all yours :D
 

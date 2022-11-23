@@ -6,19 +6,26 @@ import { prepare } from './prepare'
 const docker = new Dockerode()
 
 async function build() {
-  await prepare()
-  const stream = await startDockerBuild()
+  const buildArgs = await prepare()
+  const stream = await startDockerBuild(buildArgs)
   await followBuildProgress(stream)
 }
 
-async function startDockerBuild() {
+/**
+ * Initialise docker build
+ * @param buildargs key-value pair of args to be passed into Dockerfile
+ */
+async function startDockerBuild(buildargs: Record<string, string>) {
   const stream = await docker.buildImage(
     {
       context: PATHS.workspaceDir,
       // Paths listed here will be available to dockerfile
       src: ['Dockerfile', 'app', 'seed_data', 'config'],
     },
-    { t: IMAGE_NAME },
+    {
+      t: IMAGE_NAME,
+      buildargs,
+    },
   )
   return stream
 }

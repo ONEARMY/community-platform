@@ -49,6 +49,16 @@ const Label = styled.label`
 @inject('eventStore')
 export class EventsCreate extends React.Component<IProps, IState> {
   uploadRefs: { [key: string]: UploadedFile | null } = {}
+  public onSubmit = async (formValues: IEventFormInput) => {
+    logger.debug('form values', formValues)
+    await this.store.uploadEvent(formValues)
+    this.props.history.push('/events')
+  }
+  public handleChange = (date: any) => {
+    this.setState({
+      selectedDate: date,
+    })
+  }
   constructor(props: any) {
     super(props)
     // generate unique id for db and storage references and assign to state
@@ -65,18 +75,6 @@ export class EventsCreate extends React.Component<IProps, IState> {
   }
   get store() {
     return this.injected.eventStore
-  }
-
-  public onSubmit = async (formValues: IEventFormInput) => {
-    logger.debug('form values', formValues)
-    await this.store.uploadEvent(formValues)
-    this.props.history.push('/events')
-  }
-
-  public handleChange = (date: any) => {
-    this.setState({
-      selectedDate: date,
-    })
   }
 
   public render() {

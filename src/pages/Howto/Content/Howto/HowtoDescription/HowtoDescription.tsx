@@ -55,35 +55,11 @@ interface IState {
 @inject('howtoStore')
 @observer
 export default class HowtoDescription extends PureComponent<IProps, IState> {
-  // eslint-disable-next-line
-  constructor(props: IProps) {
-    super(props)
-    this.state = {
-      fileDownloadCount: this.props.howto.total_downloads || 0,
-    }
-    this.handleClick = this.handleClick.bind(this)
-  }
-
-  get injected() {
-    return this.props as IInjected
-  }
-
   private setFileDownloadCount = (val: number) => {
     this.setState({
       fileDownloadCount: val,
     })
   }
-
-  private dateLastEditText(howto: IHowtoDB): string {
-    const lastModifiedDate = format(new Date(howto._modified), 'DD-MM-YYYY')
-    const creationDate = format(new Date(howto._created), 'DD-MM-YYYY')
-    if (lastModifiedDate !== creationDate) {
-      return 'Last edit on ' + format(new Date(howto._modified), 'DD-MM-YYYY')
-    } else {
-      return ''
-    }
-  }
-
   private incrementDownloadCount = async () => {
     const updatedDownloadCount =
       await this.injected.howtoStore.incrementDownloadCount(
@@ -91,7 +67,6 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
       )
     this.setFileDownloadCount(updatedDownloadCount!)
   }
-
   private handleClick = async () => {
     const howtoDownloadCooldown = retrieveHowtoDownloadCooldown(
       this.props.howto._id,
@@ -106,6 +81,28 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
     } else if (!howtoDownloadCooldown) {
       addHowtoDownloadCooldown(this.props.howto._id)
       this.incrementDownloadCount()
+    }
+  }
+  // eslint-disable-next-line
+  constructor(props: IProps) {
+    super(props)
+    this.state = {
+      fileDownloadCount: this.props.howto.total_downloads || 0,
+    }
+    this.handleClick = this.handleClick.bind(this)
+  }
+
+  get injected() {
+    return this.props as IInjected
+  }
+
+  private dateLastEditText(howto: IHowtoDB): string {
+    const lastModifiedDate = format(new Date(howto._modified), 'DD-MM-YYYY')
+    const creationDate = format(new Date(howto._created), 'DD-MM-YYYY')
+    if (lastModifiedDate !== creationDate) {
+      return 'Last edit on ' + format(new Date(howto._modified), 'DD-MM-YYYY')
+    } else {
+      return ''
     }
   }
 

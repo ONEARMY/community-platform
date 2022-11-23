@@ -1,6 +1,7 @@
 import type { ThemeWithName } from '../types'
 import spaceBadge from 'src/assets/images/themes/fixing-fashion/avatar_space_lg.svg'
-import member from 'src/assets/images/themes/fixing-fashion/avatar_member_sm.svg'
+import memberBadgeLowDetail from 'src/assets/images/themes/fixing-fashion/avatar_member_sm.svg'
+import memberBadgeHighDetail from 'src/assets/images/themes/fixing-fashion/avatar_member_lg.svg'
 import logo from 'src/assets/images/themes/fixing-fashion/fixing-fashion-header.png'
 
 const fonts = {
@@ -226,8 +227,8 @@ const StyledComponentTheme: ThemeWithName = {
   alerts,
   badges: {
     member: {
-      lowDetail: member,
-      normal: member,
+      lowDetail: memberBadgeLowDetail,
+      normal: memberBadgeHighDetail,
     },
     space: {
       lowDetail: spaceBadge,

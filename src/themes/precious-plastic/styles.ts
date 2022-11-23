@@ -1,4 +1,5 @@
-import memberBadge from 'src/assets/images/themes/precious-plastic/avatar_member_sm.svg'
+import memberBadgeLowDetail from 'src/assets/images/themes/precious-plastic/avatar_member_sm.svg'
+import memberBadgeHighDetail from 'src/assets/images/themes/precious-plastic/avatar_member_lg.svg'
 import CollectionBadge from 'src/assets/images/badges/pt-collection-point.svg'
 import CollectionBadgeLowDetail from 'src/assets/icons/map-collection.svg'
 import MachineBadge from 'src/assets/images/badges/pt-machine-shop.svg'
@@ -234,8 +235,8 @@ const StyledComponentTheme: ThemeWithName = {
   alerts,
   badges: {
     member: {
-      lowDetail: memberBadge,
-      normal: memberBadge,
+      lowDetail: memberBadgeLowDetail,
+      normal: memberBadgeHighDetail,
     },
     workspace: {
       lowDetail: WorkspaceBadgeLowDetail,

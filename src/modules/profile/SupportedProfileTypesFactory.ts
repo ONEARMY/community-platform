@@ -16,7 +16,7 @@ import FixingFashionSpace from 'src/assets/images/themes/fixing-fashion/avatar_s
 import PreciousPlasticMember from 'src/assets/images/themes/precious-plastic/avatar_member_sm.svg'
 import ProjectKampMember from 'src/assets/images/themes/project-kamp/avatar_member_sm.svg'
 import ProjectKampSpace from 'src/assets/images/themes/project-kamp/avatar_space_sm.svg'
-import type { PlatformTheme } from 'src/themes/types'
+import type { PlatformTheme } from '../../themes/types'
 import type { IProfileType } from './types'
 
 export const ProfileType = {

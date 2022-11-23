@@ -69,6 +69,7 @@ export const MemberProfile = ({ user }: IProps) => {
           marginLeft: 50 * -0.5,
           marginTop: 50 * -0.5,
         }}
+        useLowDetailVersion
       />
       <Flex
         px={4}

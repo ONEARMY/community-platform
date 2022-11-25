@@ -1,5 +1,8 @@
 import '@testing-library/jest-dom'
 import ResearchRoutes from './research.routes'
+import Theme from 'src/themes/styled.theme'
+
+import { ThemeProvider } from '@theme-ui/core'
 import { render, waitFor, cleanup } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
 import { Provider } from 'mobx-react'
@@ -10,7 +13,16 @@ jest.mock('src/index', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores() {
-    return { stores: { userStore: { fetchAllVerifiedUsers: jest.fn() } } }
+    return {
+      stores: {
+        userStore: {
+          fetchAllVerifiedUsers: jest.fn(),
+        },
+        aggregationsStore: {
+          aggregations: {},
+        },
+      },
+    }
   },
 }))
 
@@ -36,7 +48,6 @@ jest.mock('src/stores/Research/research.store', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useResearchStore() {
-    console.log('using research store')
     return mockResearchStore
   },
 }))
@@ -48,9 +59,11 @@ describe('research.routes', () => {
     it('renders the research listing', async () => {
       const wrapper = render(
         <Provider userStore={{}}>
-          <MemoryRouter initialEntries={['/research']}>
-            <ResearchRoutes />
-          </MemoryRouter>
+          <ThemeProvider theme={Theme}>
+            <MemoryRouter initialEntries={['/research']}>
+              <ResearchRoutes />
+            </MemoryRouter>
+          </ThemeProvider>
         </Provider>,
       )
       await waitFor(
@@ -65,10 +78,12 @@ describe('research.routes', () => {
   describe('/research/:slug', () => {
     it('renders an individual research article', async () => {
       const wrapper = render(
-        <Provider userStore={{}} themeStore={{}}>
-          <MemoryRouter initialEntries={['/research/research-slug']}>
-            <ResearchRoutes />
-          </MemoryRouter>
+        <Provider userStore={{}}>
+          <ThemeProvider theme={Theme}>
+            <MemoryRouter initialEntries={['/research/research-slug']}>
+              <ResearchRoutes />
+            </MemoryRouter>
+          </ThemeProvider>
         </Provider>,
       )
 
@@ -91,10 +106,12 @@ describe('research.routes', () => {
   describe('/research/create', () => {
     it('rejects a request without a user present', async () => {
       const wrapper = render(
-        <Provider userStore={{}} themeStore={{}}>
-          <MemoryRouter initialEntries={['/research/create']}>
-            <ResearchRoutes />
-          </MemoryRouter>
+        <Provider userStore={{}}>
+          <ThemeProvider theme={Theme}>
+            <MemoryRouter initialEntries={['/research/create']}>
+              <ResearchRoutes />
+            </MemoryRouter>
+          </ThemeProvider>
         </Provider>,
       )
 
@@ -111,7 +128,6 @@ describe('research.routes', () => {
           userStore={{
             user: { name: 'Jaasper' },
           }}
-          themeStore={{}}
         >
           <MemoryRouter initialEntries={['/research/create']}>
             <ResearchRoutes />
@@ -132,14 +148,15 @@ describe('research.routes', () => {
           userStore={{
             user: { name: 'Jaasper', userRoles: ['beta-tester'] },
           }}
-          themeStore={{}}
           tagsStore={{
             setTagsCategory: jest.fn(),
           }}
         >
-          <MemoryRouter initialEntries={['/research/create']}>
-            <ResearchRoutes />
-          </MemoryRouter>
+          <ThemeProvider theme={Theme}>
+            <MemoryRouter initialEntries={['/research/create']}>
+              <ResearchRoutes />
+            </MemoryRouter>
+          </ThemeProvider>
         </Provider>,
       )
 
@@ -157,7 +174,7 @@ describe('research.routes', () => {
   describe('/research/:slug/edit', () => {
     it('rejects a request without a user present', async () => {
       const wrapper = render(
-        <Provider userStore={{}} themeStore={{}}>
+        <Provider userStore={{}}>
           <MemoryRouter initialEntries={['/research/an-example/edit']}>
             <ResearchRoutes />
           </MemoryRouter>
@@ -189,7 +206,6 @@ describe('research.routes', () => {
           userStore={{
             user: { name: 'Jaasper', userRoles: ['beta-tester'] },
           }}
-          themeStore={{}}
           tagsStore={{
             setTagsCategory: jest.fn(),
           }}
@@ -209,7 +225,7 @@ describe('research.routes', () => {
   describe('/research/:slug/new-update', () => {
     it('rejects a request without a user present', async () => {
       const wrapper = render(
-        <Provider userStore={{}} themeStore={{}}>
+        <Provider userStore={{}}>
           <MemoryRouter initialEntries={['/research/an-example/new-update']}>
             <ResearchRoutes />
           </MemoryRouter>
@@ -242,7 +258,6 @@ describe('research.routes', () => {
           userStore={{
             user: { name: 'Jaasper', userRoles: ['beta-tester'] },
           }}
-          themeStore={{}}
           tagsStore={{
             setTagsCategory: jest.fn(),
           }}
@@ -262,7 +277,7 @@ describe('research.routes', () => {
   describe('/research/:slug/edit-update', () => {
     it('rejects a request without a user present', async () => {
       const wrapper = render(
-        <Provider userStore={{}} themeStore={{}}>
+        <Provider userStore={{}}>
           <MemoryRouter
             initialEntries={[
               '/research/an-example/edit-update/nested-research-update',
@@ -299,7 +314,6 @@ describe('research.routes', () => {
           userStore={{
             user: { name: 'Jaasper', userRoles: ['beta-tester'] },
           }}
-          themeStore={{}}
         >
           <MemoryRouter
             initialEntries={[

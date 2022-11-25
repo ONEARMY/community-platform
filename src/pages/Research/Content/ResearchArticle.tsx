@@ -132,6 +132,10 @@ const ResearchArticle = observer((props: IProps) => {
       isVerified: isUserVerified(item._createdBy),
     }
 
+    const collaborators = Array.isArray(item.collaborators)
+      ? item.collaborators
+      : ((item.collaborators as string) || '').split(',').filter(Boolean)
+
     return (
       <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
         <ResearchDescription
@@ -170,7 +174,13 @@ const ResearchArticle = observer((props: IProps) => {
             mb: 16,
           }}
         >
-          <ArticleCallToAction author={researchAuthor}>
+          <ArticleCallToAction
+            author={researchAuthor}
+            contributors={collaborators.map((c) => ({
+              userName: c,
+              isVerified: false,
+            }))}
+          >
             <UsefulStatsButton
               isLoggedIn={!!loggedInUser}
               votedUsefulCount={votedUsefulCount}
@@ -206,6 +216,7 @@ function transformToUserComment(
   comments: IComment[],
   loggedInUsername,
 ): UserComment[] {
+  if (!comments) return []
   return comments.map((c) => ({
     ...c,
     isEditable: c.creatorName === loggedInUsername,

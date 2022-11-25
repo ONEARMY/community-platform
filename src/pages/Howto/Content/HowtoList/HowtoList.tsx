@@ -260,19 +260,18 @@ export class HowtoList extends React.Component<any, IState> {
             </Flex>
           )}
           <Flex
-            sx={{ justifyContent: 'center' }}
+            my={4}
             mx={-4}
+            sx={{ justifyContent: 'center' }}
             data-cy="howtolist-flex-container"
           >
             <VirtualizedFlex
               data={howtoItems}
               renderItem={(howto: any) => (
-                <Box px={4} py={4}>
-                  <HowToCard
-                    howto={howto}
-                    votedUsefulCount={users_votedUsefulHowtos?.[howto._id]}
-                  />
-                </Box>
+                <HowToCard
+                  howto={howto}
+                  votedUsefulCount={users_votedUsefulHowtos?.[howto._id]}
+                />
               )}
             />
           </Flex>

@@ -14,7 +14,10 @@ interface IProps {
 export const HowToCard = (props: IProps) => {
   const { howto, votedUsefulCount } = props
   return (
-    <Card data-cy="card" sx={{ borderRadius: 2, position: 'relative' }}>
+    <Card
+      data-cy="card"
+      sx={{ borderRadius: 2, position: 'relative', height: '100%' }}
+    >
       <Flex>
         {howto.moderation !== 'accepted' && (
           <>

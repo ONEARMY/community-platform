@@ -1,1 +1,1 @@
-export const MAX_COMMENT_LENGTH = 1000
+export const MAX_COMMENT_LENGTH = 3000

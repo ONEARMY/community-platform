@@ -27,6 +27,7 @@ export const FactoryHowto = (
   _deleted: faker.datatype.boolean(),
   _createdBy: faker.internet.userName(),
   steps: [],
+  mentions: [],
   cover_image: {
     downloadUrl: '',
     name: '',

@@ -25,6 +25,7 @@ import {
   changeMentionToUserReference,
   changeUserReferenceToPlainText,
 } from '../common/mentions'
+import { DocReference } from '../databaseV2/DocReference'
 
 const COLLECTION_NAME = 'howtos'
 const HOWTO_SEARCH_WEIGHTS = [
@@ -202,8 +203,18 @@ export class HowtoStore extends ModuleStore {
     return needsModeration(howto, toJS(this.activeUser))
   }
 
-  private async addUserReference(text: string): Promise<string> {
-    return await changeMentionToUserReference(text, this.userStore)
+  private async addUserReference(msg: string): Promise<{
+    text: string
+    users: string[]
+  }> {
+    const { text, mentionedUsers: users } = await changeMentionToUserReference(
+      msg,
+      this.userStore,
+    )
+    return {
+      text,
+      users,
+    }
   }
 
   @action
@@ -213,33 +224,26 @@ export class HowtoStore extends ModuleStore {
       const howto = this.activeHowto
       const comment = text.slice(0, MAX_COMMENT_LENGTH).trim()
       if (user && howto && comment) {
-        const userCountry = getUserCountry(user)
         const newComment: IComment = {
           _id: randomID(),
           _created: new Date().toISOString(),
           _creatorId: user._id,
           creatorName: user.userName,
-          creatorCountry: userCountry,
-          text: await this.addUserReference(comment),
+          creatorCountry: getUserCountry(user),
+          text: (await this.addUserReference(comment)).text,
         }
         logger.debug('addComment.newComment', { newComment })
 
         const updatedHowto: IHowto = {
           ...toJS(howto),
-          description: await this.addUserReference(howto.description),
-          comments: await Promise.all(
-            [...toJS(howto.comments || []), newComment].map(async (comment) => {
-              comment.text = await this.addUserReference(comment.text)
-              return comment
-            }),
-          ),
+          comments: [...toJS(howto.comments || []), newComment],
         }
 
         const dbRef = this.db
           .collection<IHowto>(COLLECTION_NAME)
           .doc(updatedHowto._id)
 
-        await dbRef.set(updatedHowto)
+        await this.updateHowtoItem(dbRef, updatedHowto)
 
         // Refresh the active howto
         this.activeHowto = await dbRef.get()
@@ -248,6 +252,46 @@ export class HowtoStore extends ModuleStore {
       console.error(err)
       throw new Error(err)
     }
+  }
+
+  private async updateHowtoItem(
+    dbRef: DocReference<IHowto>,
+    howToItem: IHowto,
+  ): Promise<void> {
+    logger.debug('updateHowtoItem', {
+      before: this.activeHowto,
+      after: howToItem,
+    })
+
+    const { text: description, users } = await this.addUserReference(
+      howToItem.description,
+    )
+
+    const mentions = users.map((username) => ({
+      username,
+      location: 'description',
+    }))
+
+    return dbRef.set({
+      ...howToItem,
+      description,
+      comments: await Promise.all(
+        [...toJS(howToItem.comments || [])].map(async (comment) => {
+          const { text, users } = await this.addUserReference(comment.text)
+          comment.text = text
+
+          users.forEach((username) => {
+            mentions.push({
+              username,
+              location: `comment:${comment._id}`,
+            })
+          })
+
+          return comment
+        }),
+      ),
+      mentions,
+    })
   }
 
   @action
@@ -261,18 +305,20 @@ export class HowtoStore extends ModuleStore {
           (comment) => comment._creatorId === user._id && comment._id === id,
         )
         if (commentIndex !== -1) {
-          comments[commentIndex].text = (await this.addUserReference(newText))
+          comments[commentIndex].text = (
+            await this.addUserReference(newText)
+          ).text
             .slice(0, MAX_COMMENT_LENGTH)
             .trim()
           comments[commentIndex]._edited = new Date().toISOString()
 
           const updatedHowto: IHowto = {
             ...toJS(howto),
-            description: await this.addUserReference(howto.description),
+            description: (await this.addUserReference(howto.description)).text,
             comments: await Promise.all(
               comments.map(async (comment) => ({
                 ...comment,
-                text: await this.addUserReference(comment.text),
+                text: (await this.addUserReference(comment.text)).text,
               })),
             ),
           }
@@ -282,6 +328,16 @@ export class HowtoStore extends ModuleStore {
             .doc(updatedHowto._id)
 
           await dbRef.set(updatedHowto)
+
+          // After successfully updating the database document queue up all the notifications
+          // Should a notification be issued?
+          // - Only if the mention did not exist in the document before.
+          // How do we decide whether a mention existed in the document previously?
+          // - Based on combination of username/location
+          // Location: Where in the document does the mention exist?
+          // - Introduction
+          // - Steps
+          // - Comments
 
           // Refresh the active howto
           this.activeHowto = await dbRef.get()
@@ -307,13 +363,13 @@ export class HowtoStore extends ModuleStore {
             )
             .map(async (comment) => ({
               ...comment,
-              text: await this.addUserReference(comment.text),
+              text: (await this.addUserReference(comment.text)).text,
             })),
         )
 
         const updatedHowto: IHowto = {
           ...toJS(howto),
-          description: await this.addUserReference(howto.description),
+          description: (await this.addUserReference(howto.description)).text,
           comments,
         }
 
@@ -380,12 +436,12 @@ export class HowtoStore extends ModuleStore {
 
       const howTo: IHowto = {
         ...values,
-        description: await this.addUserReference(values.description),
+        description: (await this.addUserReference(values.description)).text,
         _createdBy: values._createdBy ? values._createdBy : user.userName,
         comments: await Promise.all(
           comments.map(async (c) => ({
             ...c,
-            text: await this.addUserReference(c.text),
+            text: (await this.addUserReference(c.text)).text,
           })),
         ),
         cover_image: processedCover,
@@ -438,7 +494,7 @@ export class HowtoStore extends ModuleStore {
       step.images = imgMeta
       stepsWithImgMeta.push({
         ...step,
-        text: await this.addUserReference(step.text),
+        text: (await this.addUserReference(step.text)).text,
         images: imgMeta.map((f) => {
           if (f === undefined) {
             return null

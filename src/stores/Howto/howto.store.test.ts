@@ -105,6 +105,9 @@ describe('howto.store', () => {
         const [newHowto] = setFn.mock.calls[0]
         expect(setFn).toHaveBeenCalledTimes(1)
         expect(newHowto.description).toBe('@@{userId:username}')
+        expect(newHowto.mentions).toEqual(expect.arrayContaining([{
+          username: 'username', location: 'description'
+        }]));
       })
 
       it('preserves @mentions in existing comments', async () => {
@@ -127,6 +130,12 @@ describe('howto.store', () => {
         expect(newHowto.comments[0].text).toBe(
           'Existing comment @@{userId:username}',
         )
+        expect(newHowto.mentions).toEqual(expect.arrayContaining([
+          {
+            username: 'username',
+            location: 'comment:' + newHowto.comments[0]._id,
+          }
+        ]))
       })
     })
 

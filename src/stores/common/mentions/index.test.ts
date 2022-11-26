@@ -33,7 +33,10 @@ describe('changeMentionToUserReference', () => {
         mockUserStore as unknown as UserStore,
       ),
     ).toEqual(
-      'a simple @@{fish:FISH} containing multiple usernames, @@{seconduser:seconduser}. One fake @​user',
+      {
+        text: 'a simple @@{fish:FISH} containing multiple usernames, @@{seconduser:seconduser}. One fake @​user',
+        mentionedUsers: ['FISH', 'seconduser'],
+      },
     )
   })
 
@@ -56,7 +59,10 @@ describe('changeMentionToUserReference', () => {
         'a simple email@fish.com',
         mockUserStore as unknown as UserStore,
       ),
-    ).toEqual('a simple email@fish.com')
+    ).toEqual({
+      text: 'a simple email@fish.com',
+      mentionedUsers: []
+    })
   })
 
   it('handles errors when fetching user', async () => {
@@ -67,7 +73,10 @@ describe('changeMentionToUserReference', () => {
         'a simple email@fish.com',
         mockUserStore as unknown as UserStore,
       ),
-    ).toEqual('a simple email@fish.com')
+    ).toEqual({
+      text: 'a simple email@fish.com',
+      mentionedUsers: []
+    })
   })
 })
 

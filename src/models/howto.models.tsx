@@ -5,6 +5,11 @@ import type { IUploadedFileMeta } from '../stores/storage'
 import type { ICategory } from './categories.model'
 import type { IComment } from './'
 
+type UserMention = {
+  username: string
+  location: string
+}
+
 // By default all how-to form input fields come as strings
 // The IHowto interface can imposes the correct formats on fields
 // Additionally convert from local filemeta to uploaded filemeta
@@ -17,6 +22,7 @@ export interface IHowto extends IHowtoFormInput, IModerable {
   // Comments were added in V2, old howto's may not have the property
   comments?: IComment[]
   total_downloads?: number
+  mentions: UserMention[]
 }
 
 /**

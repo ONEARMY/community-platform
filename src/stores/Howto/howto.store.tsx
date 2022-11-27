@@ -174,7 +174,7 @@ export class HowtoStore extends ModuleStore {
         total_downloads: totalDownloads! + 1,
       }
 
-      await dbRef.set(updatedHowto)
+      await this.updateHowtoItem(updatedHowto)
       return updatedHowto.total_downloads
     }
   }
@@ -197,9 +197,7 @@ export class HowtoStore extends ModuleStore {
     if (!hasAdminRights(toJS(this.activeUser))) {
       return false
     }
-    const ref = this.db.collection(COLLECTION_NAME).doc(howto._id)
-    // NOTE CC - 2021-07-06 mobx updates try write to db as observable, so need to convert toJS
-    return ref.set(toJS(howto))
+    return this.updateHowtoItem(toJS(howto))
   }
 
   public needsModeration(howto: IHowto) {

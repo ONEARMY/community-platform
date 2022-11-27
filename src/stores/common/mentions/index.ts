@@ -20,14 +20,14 @@ export const changeMentionToUserReference = async function (
   text: string,
   userStore: UserStore,
 ): Promise<{
-  text: string,
+  text: string
   mentionedUsers: string[]
 }> {
   const mentions = text.match(/\B@[​a-z0-9_-]+/g)
   const mentionedUsers = new Set<string>()
 
   if (!mentions) {
-    return { text, mentionedUsers: [] };
+    return { text, mentionedUsers: [] }
   }
 
   for (const mention of mentions) {

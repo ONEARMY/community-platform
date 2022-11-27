@@ -32,12 +32,10 @@ describe('changeMentionToUserReference', () => {
         'a simple @​fish containing multiple usernames, @seconduser. One fake @user',
         mockUserStore as unknown as UserStore,
       ),
-    ).toEqual(
-      {
-        text: 'a simple @@{fish:FISH} containing multiple usernames, @@{seconduser:seconduser}. One fake @​user',
-        mentionedUsers: ['FISH', 'seconduser'],
-      },
-    )
+    ).toEqual({
+      text: 'a simple @@{fish:FISH} containing multiple usernames, @@{seconduser:seconduser}. One fake @​user',
+      mentionedUsers: ['FISH', 'seconduser'],
+    })
   })
 
   it('extracts valid user names', async () => {
@@ -61,7 +59,7 @@ describe('changeMentionToUserReference', () => {
       ),
     ).toEqual({
       text: 'a simple email@fish.com',
-      mentionedUsers: []
+      mentionedUsers: [],
     })
   })
 
@@ -75,7 +73,7 @@ describe('changeMentionToUserReference', () => {
       ),
     ).toEqual({
       text: 'a simple email@fish.com',
-      mentionedUsers: []
+      mentionedUsers: [],
     })
   })
 })

@@ -334,7 +334,7 @@ export class HowtoStore extends ModuleStore {
         this.userStore.triggerNotification(
           'howto_mention',
           mention.username,
-          'http://example.com',
+          `/how-to/${howToItem.slug}`,
         )
     })
 

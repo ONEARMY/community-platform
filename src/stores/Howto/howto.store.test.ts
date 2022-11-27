@@ -110,7 +110,7 @@ describe('howto.store', () => {
       expect(store.userStore.triggerNotification).toBeCalledWith(
         'howto_mention',
         'commentauthor',
-        'http://example.com',
+        `/how-to/${howToItem.slug}`,
       )
     })
 
@@ -156,7 +156,7 @@ describe('howto.store', () => {
       expect(store.userStore.triggerNotification).toBeCalledWith(
         'howto_mention',
         'commentauthor',
-        'http://example.com',
+        `/how-to/${howToItem.slug}`,
       )
     })
 

@@ -27,7 +27,39 @@ export const NotificationItem = (props: NotificationItemProps) => {
         fontFamily: 'Inter, sans-serif',
       }}
     >
-      {['howto_useful', 'research_useful'].includes(type) ? (
+      {type === 'howto_mention' ? (
+        <Flex style={{ textAlign: 'left', color: 'black' }}>
+          <Box sx={{ opacity: 0.6 }}>
+            <Icon glyph="comment" size={15} mr={2} />
+          </Box>
+          <Box>
+            You were mentioned in a{' '}
+            <Link
+              style={{
+                textDecoration: 'underline',
+                padding: '3px',
+                color: '#61646b',
+                fontWeight: 500,
+                display: 'inline',
+              }}
+              to={relevantUrl || ''}
+            >
+              how-to
+            </Link>{' '}
+            by
+            <Link
+              style={{
+                textDecoration: 'underline',
+                padding: '3px',
+                color: '#61646b',
+              }}
+              to={'/u/' + triggeredBy.userId}
+            >
+              {triggeredBy.displayName}
+            </Link>{' '}
+          </Box>
+        </Flex>
+      ) : ['howto_useful', 'research_useful'].includes(type) ? (
         <Flex style={{ textAlign: 'left', color: 'black' }}>
           <Box sx={{ opacity: 0.6 }}>
             <Icon glyph="useful" size={15} mr={2} />

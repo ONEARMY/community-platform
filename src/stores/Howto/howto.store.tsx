@@ -317,13 +317,14 @@ export class HowtoStore extends ModuleStore {
     // - Introduction
     // - Steps
     // - Comments
+    const previousMentionsList = howToItem.mentions || []
     logger.debug(`Mentions:`, {
-      before: howToItem.mentions,
+      before: previousMentionsList,
       after: mentions,
     })
 
     // Previous mentions
-    const previousMentions = howToItem.mentions.map(
+    const previousMentions = previousMentionsList.map(
       (mention) => `${mention.username}.${mention.location}`,
     )
 
@@ -332,7 +333,7 @@ export class HowtoStore extends ModuleStore {
         this.userStore.triggerNotification(
           'howto_mention',
           mention.username,
-          `/how-to/${howToItem.slug}`,
+          `/how-to/${howToItem.slug}#${mention.location}`,
         )
     })
 

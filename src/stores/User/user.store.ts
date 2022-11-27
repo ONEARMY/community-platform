@@ -352,9 +352,6 @@ export class UserStore extends ModuleStore {
     }
   }
 
-  // use firebase auth to listen to change to signed in user
-  // on sign in want to load user profile
-  // strange implementation return the unsubscribe object on subscription, so stored
   @action
   public async triggerNotification(
     type: NotificationType,
@@ -385,6 +382,10 @@ export class UserStore extends ModuleStore {
           .getWhere('userName', '==', username)
 
         const user = lookup[0]
+
+        if (!user) {
+          throw new Error('User not found.')
+        }
 
         const updatedUser: IUser = {
           ...toJS(user),
@@ -454,6 +455,10 @@ export class UserStore extends ModuleStore {
       throw new Error(err)
     }
   }
+
+  // use firebase auth to listen to change to signed in user
+  // on sign in want to load user profile
+  // strange implementation return the unsubscribe object on subscription, so stored
   // to authUnsubscribe variable for use later
   private _listenToAuthStateChanges(checkEmailVerification = false) {
     this.authUnsubscribe = auth.onAuthStateChanged((authUser) => {

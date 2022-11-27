@@ -92,5 +92,6 @@ export interface INotification {
 export type NotificationType =
   | 'new_comment'
   | 'howto_useful'
+  | 'howto_mention'
   | 'new_comment_research'
   | 'research_useful'

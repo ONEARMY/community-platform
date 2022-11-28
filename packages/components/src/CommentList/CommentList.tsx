@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ReactGA from 'react-ga4'
 import { Box } from 'theme-ui'
 import { Button, CommentItem } from '../'
@@ -10,16 +10,40 @@ export const CommentList: React.FC<{
   handleEdit: (_id: string, comment: string) => Promise<void>
   handleEditRequest: () => Promise<void>
   handleDelete: (_id: string) => Promise<void>
+  highlightedCommentId?: string
   articleTitle?: string
 }> = ({
   articleTitle,
   comments,
   handleEditRequest,
   handleDelete,
+  highlightedCommentId,
   handleEdit,
 }) => {
   const [moreComments, setMoreComments] = useState(1)
   const shownComments = moreComments * MAX_COMMENTS
+  const scrollIntoRelevantComment = (commentId: string) => {
+    setTimeout(() => {
+      // the delay is needed, otherwise the scroll is not happening in Firefox
+      document
+        .getElementById(`comment:${commentId}`)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 0)
+  }
+
+  useEffect(() => {
+    if (!highlightedCommentId) return
+
+    const i = comments.findIndex((comment) =>
+      highlightedCommentId.includes(comment._id),
+    )
+    console.log(`Found highlighted comment:`, i)
+    if (i > 0) {
+      setMoreComments(Math.floor(i / MAX_COMMENTS) + 1)
+      scrollIntoRelevantComment(highlightedCommentId)
+    }
+  }, [highlightedCommentId])
+
   return (
     <Box
       mb={4}
@@ -29,11 +53,19 @@ export const CommentList: React.FC<{
       }}
     >
       {comments &&
-        comments
-          .slice(0, shownComments)
-          .map((comment: Comment) => (
+        comments.slice(0, shownComments).map((comment: Comment) => (
+          <Box
+            key={comment._id}
+            sx={{
+              border: `${
+                highlightedCommentId === comment._id
+                  ? '2px solid black'
+                  : 'none'
+              }`,
+              borderRadius: 1,
+            }}
+          >
             <CommentItem
-              key={comment._id}
               {...comment}
               isUserVerified={!!comment.isUserVerified}
               isEditable={!!comment.isEditable}
@@ -41,7 +73,8 @@ export const CommentList: React.FC<{
               handleDelete={handleDelete}
               handleEdit={handleEdit}
             />
-          ))}
+          </Box>
+        ))}
       {comments && comments.length > shownComments && (
         <Button
           sx={{ width: 'max-content', margin: '0 auto' }}

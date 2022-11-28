@@ -117,6 +117,7 @@ export const HowToComments = ({ comments }: IProps) => {
           handleEdit={handleEdit}
           handleEditRequest={handleEditRequest}
           handleDelete={handleDelete}
+          highlightedCommentId={window.location.hash.replace('#comment:', '')}
         />
       </Flex>
       <Box

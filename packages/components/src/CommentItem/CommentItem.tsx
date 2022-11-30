@@ -65,7 +65,6 @@ export const CommentItem = (props: CommentItemProps) => {
       <Flex
         p="3"
         bg={'white'}
-        mb={4}
         sx={{
           width: '100%',
           flexDirection: 'column',

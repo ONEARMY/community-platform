@@ -57,6 +57,7 @@ export const CommentList: React.FC<{
           <Box
             key={comment._id}
             sx={{
+              marginBottom: 4,
               border: `${
                 highlightedCommentId === comment._id
                   ? '2px dashed black'

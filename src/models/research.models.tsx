@@ -1,6 +1,7 @@
 import type { IConvertedFileMeta } from '../types'
 import type { DBDoc, IComment, IModerable, ISelectedTags } from '.'
 import type { IUploadedFileMeta } from '../stores/storage'
+import type { IResearchCategory } from './researchCategories.model'
 
 /**
  * Research retrieved from the database also include metadata such as _id, _created and _modified
@@ -31,6 +32,7 @@ export namespace IResearch {
   export interface FormInput extends IModerable {
     title: string
     description: string
+    researchCategory?: IResearchCategory
     slug: string
     tags: ISelectedTags
     creatorCountry?: string

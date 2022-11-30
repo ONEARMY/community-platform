@@ -263,25 +263,23 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   placeholder={`Make a chair from... (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
                                 />
                               </Flex>
-                              <AuthWrapper roleRequired="beta-tester">
-                                <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                                  <Label>Category *</Label>
-                                  <Field
-                                    name="category"
-                                    render={({ input, ...rest }) => (
-                                      <CategoriesSelect
-                                        {...rest}
-                                        isForm={true}
-                                        onChange={(category) =>
-                                          input.onChange(category)
-                                        }
-                                        value={input.value}
-                                        placeholder="Select one category"
-                                      />
-                                    )}
-                                  />
-                                </Flex>
-                              </AuthWrapper>
+                              <Flex sx={{ flexDirection: 'column' }} mb={3}>
+                                <Label>Category *</Label>
+                                <Field
+                                  name="category"
+                                  render={({ input, ...rest }) => (
+                                    <CategoriesSelect
+                                      {...rest}
+                                      isForm={true}
+                                      onChange={(category) =>
+                                        input.onChange(category)
+                                      }
+                                      value={input.value}
+                                      placeholder="Select one category"
+                                    />
+                                  )}
+                                />
+                              </Flex>
                               <Flex sx={{ flexDirection: 'column' }} mb={3}>
                                 <Label>Select tags for your How-to*</Label>
                                 <Field

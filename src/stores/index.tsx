@@ -11,6 +11,7 @@ import { AdminStore } from './Admin/admin.store'
 import { ThemeStore } from './Theme/theme.store'
 import { AggregationsStore } from './Aggregations/aggregations.store'
 import { CategoriesStore } from './Categories/categories.store'
+import { ResearchCategoriesStore } from './ResearchCategories/researchCategories.store'
 
 export class RootStore {
   dbV2 = new DatabaseV2()
@@ -32,6 +33,7 @@ const stores = (rootStore: RootStore) => {
     templateStore: new TemplateStore(rootStore),
     tagsStore: new TagsStore(rootStore),
     categoriesStore: new CategoriesStore(rootStore),
+    researchCategoriesStore: new ResearchCategoriesStore(rootStore),
     platformStore: new PlatformStore(rootStore),
     mobileMenuStore: new MobileMenuStore(rootStore),
     eventStore: new EventStore(rootStore),
@@ -48,6 +50,7 @@ export interface IStores {
   templateStore: TemplateStore
   tagsStore: TagsStore
   categoriesStore: CategoriesStore
+  researchCategoriesStore: ResearchCategoriesStore
   platformStore: PlatformStore
   mobileMenuStore: MobileMenuStore
   eventStore: EventStore

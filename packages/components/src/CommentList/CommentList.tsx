@@ -59,7 +59,7 @@ export const CommentList: React.FC<{
             sx={{
               border: `${
                 highlightedCommentId === comment._id
-                  ? '2px solid black'
+                  ? '2px dashed black'
                   : 'none'
               }`,
               borderRadius: 1,

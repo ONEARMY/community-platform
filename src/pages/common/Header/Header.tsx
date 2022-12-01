@@ -15,6 +15,7 @@ import { observer, inject } from 'mobx-react'
 import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
 import type { UserStore } from 'src/stores/User/user.store'
 import { isModuleSupported, MODULE } from 'src/modules'
+import { getFormattedNotifications } from './getFormattedNotifications'
 
 interface IInjectedProps {
   mobileMenuStore: MobileMenuStore
@@ -98,7 +99,7 @@ export class Header extends Component {
   render() {
     const menu = this.injected.mobileMenuStore
     const user = this.injected.userStore.user
-    const notifications = this.injected.userStore.getUserNotifications()
+    const notifications = getFormattedNotifications(this.injected.userStore)
     const areThereNotifications = Boolean(notifications.length)
     const isLoggedInUser = !!user
 

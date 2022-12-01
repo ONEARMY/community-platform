@@ -1,5 +1,8 @@
+import { faker } from '@faker-js/faker'
 import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import { InternalLink } from '../InternalLink/InternalLink'
 import { NotificationList } from './NotificationList'
+import type { UserNotificationList } from './NotificationList'
 
 export default {
   title: 'Components/NotificationList',
@@ -8,38 +11,50 @@ export default {
 
 const notifications = [
   {
-    triggeredBy: {
-      displayName: 'Example User',
-      userId: 'abc',
-    },
+    type: 'howto_mention',
+    children: (
+      <>
+        {faker.lorem.words(4)} <InternalLink to="#">Example Link</InternalLink>
+      </>
+    ),
+  },
+  {
     type: 'new_comment',
-    relevantUrl: 'https://example.com',
+    children: (
+      <>
+        {faker.lorem.words(4)}{' '}
+        <InternalLink to="/">{faker.lorem.words(2)}</InternalLink>
+      </>
+    ),
   },
   {
-    triggeredBy: {
-      displayName: 'Example User',
-      userId: 'abc',
-    },
     type: 'howto_useful',
-    relevantUrl: 'https://example.com',
+    children: (
+      <>
+        {faker.lorem.words(4)}{' '}
+        <InternalLink to="/">{faker.lorem.words(2)}</InternalLink>
+      </>
+    ),
   },
   {
-    triggeredBy: {
-      displayName: 'Example User',
-      userId: 'abc',
-    },
     type: 'new_comment_research',
-    relevantUrl: 'https://example.com',
+    children: (
+      <>
+        {faker.lorem.words(4)}{' '}
+        <InternalLink to="/">{faker.lorem.words(2)}</InternalLink>
+      </>
+    ),
   },
   {
-    triggeredBy: {
-      displayName: 'Example User',
-      userId: 'abc',
-    },
     type: 'research_useful',
-    relevantUrl: 'https://example.com',
+    children: (
+      <>
+        {faker.lorem.words(4)}{' '}
+        <InternalLink to="/">{faker.lorem.words(2)}</InternalLink>
+      </>
+    ),
   },
-]
+] as UserNotificationList
 
 export const Default: ComponentStory<typeof NotificationList> = () => (
   <NotificationList notifications={notifications} />

@@ -37,8 +37,7 @@ export const CommentList: React.FC<{
     const i = comments.findIndex((comment) =>
       highlightedCommentId.includes(comment._id),
     )
-    console.log(`Found highlighted comment:`, i)
-    if (i > 0) {
+    if (i >= 0) {
       setMoreComments(Math.floor(i / MAX_COMMENTS) + 1)
       scrollIntoRelevantComment(highlightedCommentId)
     }

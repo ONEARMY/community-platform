@@ -401,7 +401,7 @@ export class UserStore extends ModuleStore {
         await dbRef.set(updatedUser)
       }
     } catch (err) {
-      console.error(err)
+      logger.error(err)
       throw new Error(err)
     }
   }
@@ -477,6 +477,14 @@ export class UserStore extends ModuleStore {
 
   private _unsubscribeFromAuthStateChanges() {
     this.authUnsubscribe()
+  }
+
+  /**
+   * Do not use.
+   * This exists for testing purposes only.
+   */
+  public _testSetUser(user: IUserPPDB) {
+    this.user = user
   }
 }
 

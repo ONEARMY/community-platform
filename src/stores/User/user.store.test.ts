@@ -1,4 +1,5 @@
 jest.mock('../common/module.store')
+import { faker } from '@faker-js/faker'
 import { FactoryUser } from 'src/test/factories/User'
 import type { RootStore } from '..'
 import { UserStore } from './user.store'
@@ -41,6 +42,43 @@ describe('user.store', () => {
           'https://example.com',
         ),
       ).rejects.toThrow('User not found')
+    })
+  })
+
+  describe('getUserNotifications', () => {
+    it('returns only unread messages', () => {
+      const store = new UserStore({} as RootStore)
+
+      store._testSetUser(
+        FactoryUser({
+          notifications: [
+            {
+              _id: faker.database.mongodbObjectId(),
+              _created: faker.date.past().toString(),
+              triggeredBy: {
+                displayName: faker.internet.userName(),
+                userId: faker.internet.userName(),
+              },
+              relevantUrl: faker.internet.url(),
+              type: 'new_comment',
+              read: true,
+            },
+            {
+              _id: faker.database.mongodbObjectId(),
+              _created: faker.date.past().toString(),
+              triggeredBy: {
+                displayName: faker.internet.userName(),
+                userId: faker.internet.userName(),
+              },
+              relevantUrl: faker.internet.url(),
+              type: 'new_comment',
+              read: false,
+            },
+          ],
+        }),
+      )
+
+      expect(store.getUserNotifications()).toHaveLength(1)
     })
   })
 })

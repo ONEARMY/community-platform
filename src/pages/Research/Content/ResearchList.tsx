@@ -5,12 +5,12 @@ import { Button, Icon } from 'oa-components'
 import ResearchListItem from './ResearchListItem'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { useTheme } from '@emotion/react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import { useCommonStores } from 'src'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
-import { RouteComponentProps, useHistory } from 'react-router'
+import type { RouteComponentProps } from 'react-router'
 
 const ResearchListHeader = styled.header`
   display: grid;

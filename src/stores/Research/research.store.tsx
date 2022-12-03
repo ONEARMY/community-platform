@@ -43,6 +43,9 @@ export class ResearchStore extends ModuleStore {
   public activeResearchItem: IResearch.ItemDB | undefined
 
   @observable
+  public selectedCategory: string
+
+  @observable
   public researchUploadStatus: IResearchUploadStatus =
     getInitialResearchUploadStatus()
 
@@ -52,6 +55,16 @@ export class ResearchStore extends ModuleStore {
 
   @observable researchStats: IResearchStats | undefined
 
+  public filterResearchesByCategory = (
+    collection: IResearch.ItemDB[] = [],
+    category: string,
+  ) => {
+    return category
+      ? collection.filter((obj) => {
+          return obj.researchCategory?.label === category
+        })
+      : collection
+  }
   constructor() {
     super(null as any, 'research')
     makeObservable(this)
@@ -66,9 +79,14 @@ export class ResearchStore extends ModuleStore {
         this.allResearchItems = sortedItems
       })
     })
+    this.selectedCategory = ''
   }
   @computed get filteredResearches() {
-    return filterModerableItems(this.allResearchItems, this.activeUser)
+    const researches = this.filterResearchesByCategory(
+      this.allResearchItems,
+      this.selectedCategory,
+    )
+    return filterModerableItems(researches, this.activeUser)
   }
 
   public getActiveResearchUpdateComments(pointer: number): IComment[] {
@@ -162,6 +180,11 @@ export class ResearchStore extends ModuleStore {
   @action
   public resetUpdateUploadStatus() {
     this.updateUploadStatus = getInitialUpdateUploadStatus()
+  }
+
+  @action
+  public updateSelectedCategory(category: string) {
+    this.selectedCategory = category
   }
 
   private async addUserReference(text: string): Promise<string> {

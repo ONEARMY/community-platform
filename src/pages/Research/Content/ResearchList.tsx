@@ -9,6 +9,8 @@ import { Link } from 'react-router-dom'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import { useCommonStores } from 'src'
+import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
+import { RouteComponentProps, useHistory } from 'react-router'
 
 const ResearchListHeader = styled.header`
   display: grid;
@@ -24,11 +26,36 @@ const ResearchListHeader = styled.header`
   }
 `
 
+// Update query params for categories
+const updateQueryParams = (
+  url: string,
+  key: string,
+  val: string,
+  history: RouteComponentProps['history'],
+) => {
+  const newUrl = new URL(url)
+  const urlParams = new URLSearchParams(newUrl.search)
+  if (val) {
+    urlParams.set(key, val)
+  } else {
+    urlParams.delete(key)
+  }
+  newUrl.search = urlParams.toString()
+
+  const { pathname, search } = newUrl
+
+  history.push({
+    pathname,
+    search,
+  })
+}
+
 const ResearchList = observer(() => {
   const store = useResearchStore()
   const { aggregationsStore } = useCommonStores().stores
   const { aggregations } = aggregationsStore
   const theme = useTheme()
+  const history = useHistory()
 
   const { filteredResearches } = store
   return (
@@ -46,9 +73,23 @@ const ResearchList = observer(() => {
         </Heading>
       </Flex>
       <ResearchListHeader>
-        <Text color={theme.colors.black} sx={{ fontSize: '16px' }}>
-          Title
-        </Text>
+        <CategoriesSelect
+          value={
+            store.selectedCategory ? { label: store.selectedCategory } : null
+          }
+          onChange={(category) => {
+            updateQueryParams(
+              window.location.href,
+              'category',
+              category ? category.label : '',
+              history,
+            )
+            store.updateSelectedCategory(category ? category.label : '')
+          }}
+          placeholder="Filter by category"
+          isForm={false}
+          type="research-categories"
+        />
 
         <Flex sx={{ alignItems: 'center', justifyContent: 'space-around' }}>
           <Text

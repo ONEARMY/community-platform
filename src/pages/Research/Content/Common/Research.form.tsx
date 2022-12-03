@@ -225,7 +225,7 @@ const ResearchForm = observer((props: IProps) => {
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <Label>What category fits your research?</Label>
                               <Field
-                                name="research-category"
+                                name="researchCategory"
                                 render={({ input, ...rest }) => (
                                   <CategoriesSelect
                                     {...rest}

@@ -17,6 +17,7 @@ const ResearchListHeader = styled.header`
   grid-template-columns: 2fr minmax(274px, 1fr);
   gap: 60px;
   padding: 15px;
+  padding-left: 0;
   margin-bottom: 16px;
 
   @media (max-width: ${theme.breakpoints[0]}) {
@@ -73,23 +74,25 @@ const ResearchList = observer(() => {
         </Heading>
       </Flex>
       <ResearchListHeader>
-        <CategoriesSelect
-          value={
-            store.selectedCategory ? { label: store.selectedCategory } : null
-          }
-          onChange={(category) => {
-            updateQueryParams(
-              window.location.href,
-              'category',
-              category ? category.label : '',
-              history,
-            )
-            store.updateSelectedCategory(category ? category.label : '')
-          }}
-          placeholder="Filter by category"
-          isForm={false}
-          type="research-categories"
-        />
+        <Flex sx={{ width: ['100%', '100%', '240px'] }}>
+          <CategoriesSelect
+            value={
+              store.selectedCategory ? { label: store.selectedCategory } : null
+            }
+            onChange={(category) => {
+              updateQueryParams(
+                window.location.href,
+                'category',
+                category ? category.label : '',
+                history,
+              )
+              store.updateSelectedCategory(category ? category.label : '')
+            }}
+            placeholder="Filter by category"
+            isForm={false}
+            type="research-categories"
+          />
+        </Flex>
 
         <Flex sx={{ alignItems: 'center', justifyContent: 'space-around' }}>
           <Text

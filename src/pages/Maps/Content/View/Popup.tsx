@@ -83,111 +83,13 @@ export class Popup extends React.Component<IProps> {
     return 'loading'
   }
 
-  private getHeading(pin): string {
+  private getHeading(pin: IMapPinWithDetail): string {
     const group = MAP_GROUPINGS.find((g) => {
       return pin.subType
         ? g.subType === pin.subType && g.type === pin.type
         : g.type === pin.type
     })
     return group ? group.displayName : pin.type
-  }
-
-  private renderContent(pin: IMapPinWithDetail) {
-    const {
-      lastActive,
-      heroImageUrl,
-      shortDescription,
-      name,
-      displayName,
-      verifiedBadge,
-    } = pin.detail
-    const description =
-      shortDescription.length > 70
-        ? shortDescription.substr(0, 70) + '...'
-        : shortDescription
-    const lastActiveText = lastActive
-      ? distanceInWords(lastActive, new Date())
-      : 'a long time'
-    const moderationStatus =
-      pin.moderation !== 'rejected'
-        ? 'This pin is awaiting moderation, will be shown on general map once accepted'
-        : 'This pin has been rejected, wont show on general map'
-
-    function addFallbackSrc(ev: any) {
-      const icon = Workspace.findWorkspaceBadge(pin.type, true)
-      ev.target.src = icon
-    }
-
-    return (
-      <>
-        <Link to={'/u/' + name} data-cy="map-pin-popup">
-          <HeroImage src={heroImageUrl} onError={addFallbackSrc} />
-          <Flex sx={{ flexDirection: 'column' }} px={2} py={2}>
-            <Text mb={2} sx={{ fontSize: '12px', color: theme.colors.blue }}>
-              {this.getHeading(pin)}
-            </Text>
-            <Text mb={1} sx={{ display: 'flex', fontSize: 2 }}>
-              {displayName}
-              {verifiedBadge && (
-                <Image
-                  loading="lazy"
-                  src={VerifiedBadgeIcon}
-                  width="22px"
-                  height="22px"
-                  style={{ marginLeft: '5px' }}
-                />
-              )}
-            </Text>
-            <Text mb={2} sx={{ wordBreak: 'break-word', fontSize: 1 }}>
-              {description}
-            </Text>
-            <LastOnline>Last active {lastActiveText} ago</LastOnline>
-            {pin.moderation !== 'accepted' && (
-              <Text
-                mb={2}
-                sx={{
-                  ...theme.typography.auxiliary,
-                  fontWeight: 'bold',
-                  fontSize: 1,
-                  background: theme.colors.yellow.base,
-                  padding: '7px',
-                  borderRadius: '5px',
-                  border: '1px dashed',
-                  color:
-                    pin.moderation === 'rejected' ? theme.colors.red : null,
-                }}
-              >
-                {moderationStatus}
-              </Text>
-            )}
-          </Flex>
-        </Link>
-        {this.store.needsModeration(pin) && (
-          <Flex
-            px={10}
-            py={1}
-            sx={{ flexDirection: 'row', justifyContent: 'space-around' }}
-          >
-            <Button
-              small
-              data-cy={'accept'}
-              variant={'primary'}
-              icon="check"
-              onClick={() => this.moderatePin(pin, true)}
-              sx={{ height: '30px' }}
-            />
-            <Button
-              small
-              data-cy="reject-pin"
-              variant={'tertiary'}
-              icon="delete"
-              onClick={() => this.moderatePin(pin, false)}
-              sx={{ height: '30px' }}
-            />
-          </Flex>
-        )}
-      </>
-    )
   }
 
   public render() {

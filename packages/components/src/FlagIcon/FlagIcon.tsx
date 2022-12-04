@@ -2,6 +2,7 @@ import * as React from 'react'
 import FlagIconFactory from 'react-flag-icon-css'
 import styled from '@emotion/styled'
 import { Box } from 'theme-ui'
+import type { BoxProps } from 'theme-ui'
 
 // Please only use `FlagIconFactory` one time in your application, there is no
 // need to use it multiple times (it would slow down your app). You may place the
@@ -30,8 +31,8 @@ export const FlagIconHowTos = styled(FlagIconFact)`
   width: 21px !important;
 `
 
-export const FlagIcon = (props: any) => (
-  <Box {...(props as any)}>
+export const FlagIcon = (props: BoxProps & { code: string }) => (
+  <Box {...props}>
     <FlagIconEvents code={props.code}>{props.children}</FlagIconEvents>
   </Box>
 )

@@ -1,11 +1,8 @@
 import * as React from 'react'
 import L from 'leaflet'
-import { Image, Text, Flex } from 'theme-ui'
-import { Button, MapMemberCard } from 'oa-components'
+import { MapMemberCard } from 'oa-components'
 import type { Map } from 'react-leaflet'
 import { Popup as LeafletPopup } from 'react-leaflet'
-import styled from '@emotion/styled'
-import { distanceInWords } from 'date-fns'
 
 import type { IMapPin, IMapPinWithDetail } from 'src/models/maps.models'
 
@@ -13,10 +10,6 @@ import './popup.css'
 import { inject } from 'mobx-react'
 import type { MapsStore } from 'src/stores/Maps/maps.store'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
-import Workspace from 'src/pages/User/workspace/Workspace'
-import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
-import theme from 'src/themes/styled.theme'
-import { Link } from 'react-router-dom'
 
 interface IProps {
   activePin: IMapPin | IMapPinWithDetail
@@ -26,31 +19,9 @@ interface IInjectedProps extends IProps {
   mapsStore: MapsStore
 }
 
-const HeroImage = styled.img`
-  width: 100%;
-  background-color: lightgrey;
-  height: 120px;
-  object-fit: cover;
-`
-
-const LastOnline = styled.div`
-  margin: 7px 2px;
-  color: grey;
-  font-size: 0.6rem;
-`
-
 @inject('mapsStore')
 export class Popup extends React.Component<IProps> {
   leafletRef: React.RefObject<LeafletPopup> = React.createRef()
-  private moderatePin = async (pin: IMapPin, accepted: boolean) => {
-    await this.store.moderatePin({
-      ...pin,
-      moderation: accepted ? 'accepted' : 'rejected',
-    })
-    if (!accepted) {
-      this.injected.mapsStore.setActivePin(undefined)
-    }
-  }
   // eslint-disable-next-line
   constructor(props: IProps) {
     super(props)
@@ -77,10 +48,6 @@ export class Popup extends React.Component<IProps> {
         this.props.map.current!.leafletElement,
       )
     }
-  }
-
-  private renderLoading() {
-    return 'loading'
   }
 
   private getHeading(pin: IMapPinWithDetail): string {

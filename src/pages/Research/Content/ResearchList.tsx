@@ -21,7 +21,7 @@ const ResearchListHeader = styled.header`
   margin-bottom: 16px;
 
   @media (max-width: ${theme.breakpoints[0]}) {
-    display: none;
+    padding: 15px 0;
     grid-template-columns: unset;
     gap: unset;
   }
@@ -74,7 +74,7 @@ const ResearchList = observer(() => {
         </Heading>
       </Flex>
       <ResearchListHeader>
-        <Flex sx={{ width: ['100%', '100%', '240px'] }}>
+        <Flex sx={{ width: ['100%', '240px', '240px'] }}>
           <CategoriesSelect
             value={
               store.selectedCategory ? { label: store.selectedCategory } : null
@@ -93,8 +93,13 @@ const ResearchList = observer(() => {
             type="research-categories"
           />
         </Flex>
-
-        <Flex sx={{ alignItems: 'center', justifyContent: 'space-around' }}>
+        <Flex
+          sx={{
+            alignItems: 'center',
+            justifyContent: 'space-around',
+            display: ['none', 'flex'],
+          }}
+        >
           <Text
             color={theme.colors.black}
             sx={{ display: 'flex', alignItems: 'center', fontSize: '16px' }}

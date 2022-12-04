@@ -25,7 +25,7 @@ const formatDate = (d: string | undefined): string => {
 }
 
 export const CommentItem = (props: CommentItemProps) => {
-  const textRef = createRef<any>()
+  const textRef = createRef<HTMLDivElement>()
   const [showEditModal, setShowEditModal] = useState(false)
   const [textHeight, setTextHeight] = useState(0)
   const [isShowMore, setShowMore] = useState(false)

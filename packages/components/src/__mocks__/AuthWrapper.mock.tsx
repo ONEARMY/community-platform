@@ -1,6 +1,8 @@
-export const AuthWrapper = (props: any) => {
-  console.log(`MockAuthWrapper:`, props)
-
+export const AuthWrapper = (props: {
+  additionalAdmins: string[]
+  children: React.ReactElement
+  roleRequired: string
+}) => {
   if (!props.additionalAdmins.includes(props.roleRequired)) {
     return null
   }

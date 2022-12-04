@@ -4,7 +4,7 @@ import type { Result } from './OsmGeocoding'
 
 export interface Props {
   results: Result[]
-  callback: any
+  callback?: (arg: Result) => void
   setShowResults: React.Dispatch<React.SetStateAction<boolean>>
 }
 

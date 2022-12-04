@@ -7,6 +7,8 @@
       "error",
       { "namedComponents": "arrow-function" }
     ],
+    "@typescript-eslint/no-unused-vars": ["error"],
+    "@typescript-eslint/no-explicit-any": ["error"],
     "import/no-unresolved": "off",
     "import/no-default-export": "error"
   },

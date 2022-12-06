@@ -16449,6 +16449,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"date-fns@npm:^2.29.3":
+  version: 2.29.3
+  resolution: "date-fns@npm:2.29.3"
+  checksum: e01cf5b62af04e05dfff921bb9c9933310ed0e1ae9a81eb8653452e64dc841acf7f6e01e1a5ae5644d0337e9a7f936175fd2cb6819dc122fdd9c5e86c56be484
+  languageName: node
+  linkType: hard
+
 "date-now@npm:^0.1.4":
   version: 0.1.4
   resolution: "date-now@npm:0.1.4"
@@ -27599,6 +27606,7 @@ fsevents@^1.2.7:
     "@babel/core": ^7.14.3
     "@emotion/react": ^11.8.2
     "@emotion/styled": ^11.8.1
+    "@faker-js/faker": ^7.6.0
     "@react-icons/all-files": ^4.1.0
     "@react-theming/storybook-addon": ^1.1.5
     "@storybook/addon-actions": ^6.4.22
@@ -27612,6 +27620,7 @@ fsevents@^1.2.7:
     "@types/react-flag-icon-css": ^1.0.5
     "@types/react-portal": ^4.0.4
     babel-loader: 8.1.0
+    date-fns: ^2.29.3
     eslint: ^7.32.0
     eslint-plugin-import: ^2.25.4
     linkify-plugin-mention: ^3.0.4

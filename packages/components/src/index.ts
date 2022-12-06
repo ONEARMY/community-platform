@@ -32,3 +32,4 @@ export type { Props as TextNotificationProps } from './TextNotification/TextNoti
 export { Select } from './Select/Select'
 export { Username } from './Username/Username'
 export { InternalLink } from './InternalLink/InternalLink'
+export { MapMemberCard } from './MapMemberCard/MapMemberCard'

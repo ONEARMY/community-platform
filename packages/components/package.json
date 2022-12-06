@@ -18,7 +18,9 @@
   "dependencies": {
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
+    "@faker-js/faker": "^7.6.0",
     "@react-icons/all-files": "^4.1.0",
+    "date-fns": "^2.29.3",
     "linkify-plugin-mention": "^3.0.4",
     "linkify-react": "^3.0.4",
     "linkifyjs": "^3.0.5",

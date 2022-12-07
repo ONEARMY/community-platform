@@ -1,16 +1,17 @@
-import { HowtoStore } from './Howto/howto.store'
-import { UserStore } from './User/user.store'
 import { TemplateStore } from './_Template/template.store'
-import { TagsStore } from './Tags/tags.store'
-import { PlatformStore } from './Platform/platform.store'
-import { EventStore } from './Events/events.store'
-import { MapsStore } from './Maps/maps.store'
-import { DatabaseV2 } from './databaseV2'
-import { MobileMenuStore } from './MobileMenu/mobilemenu.store'
 import { AdminStore } from './Admin/admin.store'
-import { ThemeStore } from './Theme/theme.store'
 import { AggregationsStore } from './Aggregations/aggregations.store'
 import { CategoriesStore } from './Categories/categories.store'
+import { DatabaseV2 } from './databaseV2'
+import { EventStore } from './Events/events.store'
+import { HowtoStore } from './Howto/howto.store'
+import { MapsStore } from './Maps/maps.store'
+import { MobileMenuStore } from './MobileMenu/mobilemenu.store'
+import { PlatformStore } from './Platform/platform.store'
+import { TagsStore } from './Tags/tags.store'
+import { ThemeStore } from './Theme/theme.store'
+import { UserNotificationsStore } from './User/notifications.store'
+import { UserStore } from './User/user.store'
 
 export class RootStore {
   dbV2 = new DatabaseV2()
@@ -38,6 +39,7 @@ const stores = (rootStore: RootStore) => {
     mapsStore: new MapsStore(rootStore),
     adminStore: new AdminStore(rootStore),
     themeStore: new ThemeStore(),
+    userNotificationsStore: new UserNotificationsStore(rootStore),
   }
   return stores
 }
@@ -55,4 +57,5 @@ export interface IStores {
   adminStore: AdminStore
   themeStore: ThemeStore
   aggregationsStore: AggregationsStore
+  userNotificationsStore: UserNotificationsStore
 }

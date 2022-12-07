@@ -1,15 +1,16 @@
+import { Button, CommentList, CreateComment } from 'oa-components'
 import { useState } from 'react'
 import ReactGA from 'react-ga4'
-import { Box, Flex } from 'theme-ui'
-import { Button, CreateComment, CommentList } from 'oa-components'
-import type { UserComment } from 'src/models'
+import { MAX_COMMENT_LENGTH } from 'src/constants'
+import { useCommonStores } from 'src/index'
 import { logger } from 'src/logger'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import type { IResearch } from 'src/models/research.models'
-import { useCommonStores } from 'src/index'
-import styled from '@emotion/styled'
-import { MAX_COMMENT_LENGTH } from 'src/constants'
+import { Box, Flex } from 'theme-ui'
 
+import styled from '@emotion/styled'
+
+import type { UserComment } from 'src/models'
+import type { IResearch } from 'src/models/research.models'
 interface IProps {
   comments: UserComment[]
   update: IResearch.UpdateDB
@@ -38,7 +39,7 @@ export const ResearchComments = ({ comments, update, updateIndex }: IProps) => {
       setComment('')
       const currResearchItem = researchStore.activeResearchItem
       if (currResearchItem) {
-        await stores.userStore.triggerNotification(
+        await stores.userNotificationsStore.triggerNotification(
           'new_comment_research',
           currResearchItem._createdBy,
           '/research/' + currResearchItem.slug + '#update_' + updateIndex,

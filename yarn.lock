@@ -25180,15 +25180,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"linkify-it@npm:^2.0.3":
-  version: 2.2.0
-  resolution: "linkify-it@npm:2.2.0"
-  dependencies:
-    uc.micro: ^1.0.1
-  checksum: d198871d0b3f3cfdb745dae564bfd6743474f20cd0ef1057e6ca29451834749e7f3da52b59b4de44e98f31a1e5c71bdad160490d4ae54de251cbcde57e4d7837
-  languageName: node
-  linkType: hard
-
 "linkify-it@npm:^3.0.1":
   version: 3.0.3
   resolution: "linkify-it@npm:3.0.3"
@@ -28021,7 +28012,6 @@ fsevents@^1.2.7:
     react-lazy-load-image-component: ^1.5.1
     react-leaflet: ^2.5.0
     react-leaflet-markercluster: ^2.0.0-rc3
-    react-linkify: ^0.2.2
     react-player: ^1.15.3
     react-portal: ^4.2.0
     react-router: ^5.2.0
@@ -32020,17 +32010,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-linkify@npm:^0.2.2":
-  version: 0.2.2
-  resolution: "react-linkify@npm:0.2.2"
-  dependencies:
-    linkify-it: ^2.0.3
-    prop-types: ^15.5.8
-    tlds: ^1.57.0
-  checksum: 51f637e63176d0f96daa824bcec6ec6f28ee13228e8d8a017bdf8df748469c39daac0bfcc8c5983aab871fb939bbb4a2a4e8458f4e2ddb8342b379d23a2554ad
-  languageName: node
-  linkType: hard
-
 "react-loadable-ssr-addon-v5-slorber@npm:^1.0.1":
   version: 1.0.1
   resolution: "react-loadable-ssr-addon-v5-slorber@npm:1.0.1"
@@ -35997,15 +35976,6 @@ resolve@^2.0.0-next.3:
   version: 1.4.2
   resolution: "tinycolor2@npm:1.4.2"
   checksum: 57ed262e08815a4ab0ed933edafdbc6555a17081781766149813b44a080ecbe58b3ee281e81c0e75b42e4d41679f138cfa98eabf043f829e0683c04adb12c031
-  languageName: node
-  linkType: hard
-
-"tlds@npm:^1.57.0":
-  version: 1.222.0
-  resolution: "tlds@npm:1.222.0"
-  bin:
-    tlds: bin.js
-  checksum: de0c87d7c75ab3cb7c7c7a1a40c7b4ff08d7aa0b9b3feb6fa3f6a72bcf54de2e44b5caf6f2307741f963334cc55ebcc641ff132af402ae293a52ce01fd288eb9
   languageName: node
   linkType: hard
 

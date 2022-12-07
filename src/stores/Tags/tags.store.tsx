@@ -12,11 +12,6 @@ export class TagsStore extends ModuleStore {
   public allTagsByKey: { [key: string]: ITag } = {}
   @observable
   public categoryTags: ITag[] = []
-  @action public setTagsCategory(category?: TagCategory) {
-    this.activeCategory = category
-    this._filterTags()
-  }
-
   constructor(rootStore: RootStore) {
     super(rootStore, 'tags')
     // call init immediately for tags so they are available to all pages
@@ -25,6 +20,10 @@ export class TagsStore extends ModuleStore {
     this.allDocs$.subscribe((docs: ITag[]) => {
       this.setAllTags(docs)
     })
+  }
+  @action public setTagsCategory(category?: TagCategory) {
+    this.activeCategory = category
+    this._filterTags()
   }
 
   @action

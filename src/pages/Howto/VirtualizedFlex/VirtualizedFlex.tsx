@@ -21,21 +21,28 @@ interface IState {
   dataRows: any[][]
 }
 
-// User a measurement cache to dynamically calculate dynamic row heights based on content
+// Use a measurement cache to dynamically calculate dynamic row heights based on content
 const cache = new CellMeasurerCache({
   fixedWidth: true,
-  //  only use a single key for all rows (assumes all rows the same height)
-  keyMapper: () => 0,
 })
+
 /**
  * Display a list of flex items as a virtualized list (only render what is shown),
  * automatically calculating the number of rows to be displayed via breakpoints.
  * Note, does not use react masonry/grid layouts to allow use with page scroller
  */
 export class VirtualizedFlex extends React.Component<IProps, IState> {
+  static defaultProps: IProps = {
+    widthBreakpoints: themes.breakpoints.map(emStringToPx),
+    data: [],
+    renderItem: (data) => <div>RenderItem {data}</div>,
+  }
   constructor(props: IProps) {
     super(props)
     this.state = { data: [], dataRows: [], totalColumns: -1 }
+  }
+  componentDidMount() {
+    this.generateRowData(this.props)
   }
 
   /* eslint-disable @typescript-eslint/naming-convention*/
@@ -64,7 +71,7 @@ export class VirtualizedFlex extends React.Component<IProps, IState> {
    * content and update the row height to ensure fit
    */
   rowRenderer(rowProps: ListRowProps) {
-    const { index, key, style, parent } = rowProps
+    const { index, key, style, parent, columnIndex } = rowProps
     const { renderItem } = this.props
     const row = this.state.dataRows![index]
     return (
@@ -73,14 +80,19 @@ export class VirtualizedFlex extends React.Component<IProps, IState> {
         key={key}
         parent={parent}
         // simply measure first cell as all will be the same
-        columnIndex={0}
-        rowIndex={0}
+        columnIndex={columnIndex}
+        rowIndex={index}
       >
         <Flex key={key} style={style}>
           {row.map((rowData: any, i: number) => (
             <Box
+              py={4}
+              px={4}
               key={key + i}
-              sx={{ width: ['100%', `${100 * 0.5}%`, `${100 / 3}%`] }}
+              sx={{
+                width: ['100%', `${100 * 0.5}%`, `${100 / 3}%`],
+                height: '100%',
+              }}
             >
               {renderItem(rowData)}
             </Box>
@@ -89,30 +101,6 @@ export class VirtualizedFlex extends React.Component<IProps, IState> {
       </CellMeasurer>
     )
   }
-  /**
-   * Takes an array and subdivides into row/column array
-   * of arrays for a specified number of columns
-   */
-  private _dataToRows(data: any[], columns: number) {
-    const totalRows = Math.ceil(data.length / columns)
-    const rows: typeof data[] = []
-    for (let i = 0; i < totalRows; i++) {
-      rows.push(data.slice(columns * i, columns * (i + 1)))
-    }
-    return rows
-  }
-  /**
-   * Use theme breakpoints to decide how many columns
-   */
-  private _calcTotalColumns(containerWidth: number, breakpoints: number[]) {
-    return Math.min(
-      [0, ...breakpoints, Infinity].findIndex(
-        (width) => containerWidth < width,
-      ),
-      breakpoints.length,
-    )
-  }
-
   render() {
     const { dataRows } = this.state
     const { data } = this.props
@@ -136,10 +124,27 @@ export class VirtualizedFlex extends React.Component<IProps, IState> {
       </WindowScroller>
     ) : null
   }
-
-  static defaultProps: IProps = {
-    widthBreakpoints: themes.breakpoints.map(emStringToPx),
-    data: [],
-    renderItem: (data) => <div>RenderItem {data}</div>,
+  /**
+   * Takes an array and subdivides into row/column array
+   * of arrays for a specified number of columns
+   */
+  private _dataToRows(data: any[], columns: number) {
+    const totalRows = Math.ceil(data.length / columns)
+    const rows: typeof data[] = []
+    for (let i = 0; i < totalRows; i++) {
+      rows.push(data.slice(columns * i, columns * (i + 1)))
+    }
+    return rows
+  }
+  /**
+   * Use theme breakpoints to decide how many columns
+   */
+  private _calcTotalColumns(containerWidth: number, breakpoints: number[]) {
+    return Math.min(
+      [0, ...breakpoints, Infinity].findIndex(
+        (width) => containerWidth < width,
+      ),
+      breakpoints.length,
+    )
   }
 }

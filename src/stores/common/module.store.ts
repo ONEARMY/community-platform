@@ -1,11 +1,11 @@
-import isUrl from 'is-url';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { useCommonStores } from 'src/index';
-import { logger } from 'src/logger';
-import { includesAll } from 'src/utils/filters';
-import { stripSpecialCharacters } from 'src/utils/helpers';
+import isUrl from 'is-url'
+import { BehaviorSubject, Subscription } from 'rxjs'
+import { useCommonStores } from 'src/index'
+import { logger } from 'src/logger'
+import { includesAll } from 'src/utils/filters'
+import { stripSpecialCharacters } from 'src/utils/helpers'
 
-import { Storage } from '../storage';
+import { Storage } from '../storage'
 
 import type { ISelectedTags } from 'src/models/tags.model'
 import type { IDBEndpoint, ILocation } from 'src/models/common.models'
@@ -28,71 +28,9 @@ export class ModuleStore {
   isInitialized = false
 
   // when a module store is initiated automatically load the docs in the collection
-  // this can be subscribed to in individual stores
-  constructor(private rootStore: RootStore, private basePath?: IDBEndpoint) {
-    if (!rootStore) {
-      this.rootStore = useCommonStores()
-    }
-  }
-
-  /**
-   * By default all stores are injected and made available on first app load.
-   * In order to avoid loading all data immediately, include an init function that can
-   * be called from a specific page load instead.
-   */
-  init() {
-    if (!this.isInitialized) {
-      if (this.basePath) {
-        this._subscribeToCollection(this.basePath)
-        this.isInitialized = true
-      }
-    }
-  }
-
-  // use getters for root store bindings as will not be available during constructor method
-  get db() {
-    return this.rootStore.dbV2
-  }
-
-  get activeUser() {
-    return this.rootStore.stores.userStore.user
-  }
-
-  get userStore() {
-    return this.rootStore.stores.userStore
-  }
-
-  get mapsStore() {
-    return this.rootStore.stores.mapsStore
-  }
-  get aggregationsStore() {
-    return this.rootStore.stores.aggregationsStore
-  }
-
-  get userNotificationsStore() {
-    return this.rootStore.stores.userNotificationsStore
-  }
-
-  /****************************************************************************
-   *            Database Management Methods
-   * **************************************************************************/
-
-  // when accessing a collection want to call the database getCollection method which
-  // efficiently checks the cache first and emits any subsequent updates
-  private _subscribeToCollection(endpoint: IDBEndpoint) {
-    this.allDocs$.next([])
-    this.activeCollectionSubscription.unsubscribe()
-    this.activeCollectionSubscription = this.db
-      .collection(endpoint)
-      .stream((data) => {
-        this.allDocs$.next(data)
-      })
-  }
-
   /****************************************************************************
    *            Data Validation Methods
    * **************************************************************************/
-
   public checkIsUnique = async (
     endpoint: IDBEndpoint,
     field: string,
@@ -111,7 +49,6 @@ export class ModuleStore {
     }
     return matches.length > 0 ? false : true
   }
-
   /** Validator method to pass to react-final-form. Takes a given title,
    *  converts to corresponding slug and checks uniqueness.
    *  Provide originalId to prevent matching against own entry.
@@ -138,14 +75,61 @@ export class ModuleStore {
       return 'Required'
     }
   }
-
   public validateUrl = async (value: any) => {
     return value ? (isUrl(value) ? undefined : 'Invalid url') : 'Required'
   }
+  // this can be subscribed to in individual stores
+  constructor(private rootStore?: RootStore, private basePath?: IDBEndpoint) {
+    if (!rootStore) {
+      this.rootStore = useCommonStores()
+    }
+  }
+
+  /**
+   * By default all stores are injected and made available on first app load.
+   * In order to avoid loading all data immediately, include an init function that can
+   * be called from a specific page load instead.
+   */
+  init() {
+    if (!this.isInitialized) {
+      if (this.basePath) {
+        this._subscribeToCollection(this.basePath)
+        this.isInitialized = true
+      }
+    }
+  }
+
+  // use getters for root store bindings as will not be available during constructor method
+  get db() {
+    return this.rootStore!.dbV2
+  }
+
+  get activeUser() {
+    return this.rootStore!.stores.userStore.user
+  }
+
+  get userStore() {
+    return this.rootStore!.stores.userStore
+  }
+
+  get mapsStore() {
+    return this.rootStore!.stores.mapsStore
+  }
+  get aggregationsStore() {
+    return this.rootStore!.stores.aggregationsStore
+  }
+  get userNotificationsStore() {
+    return this.rootStore!.stores.userNotificationsStore
+  }
+
+  /****************************************************************************
+   *            Database Management Methods
+   * **************************************************************************/
+
+  // when accessing a collection want to call the database getCollection method which
   /****************************************************************************
    *            Filtering Methods
    * **************************************************************************/
-
   public filterCollectionByTags<T extends ICollectionWithTags>(
     collection: T[] = [],
     selectedTags: ISelectedTags,
@@ -166,7 +150,6 @@ export class ModuleStore {
       return obj.location.name === selectedLocation.name
     })
   }
-
   public async uploadFileToCollection(
     file: File | IConvertedFileMeta | IUploadedFileMeta,
     collection: string,
@@ -191,7 +174,6 @@ export class ModuleStore {
       file.type,
     )
   }
-
   public async uploadCollectionBatch(
     files: (File | IConvertedFileMeta)[],
     collection: string,
@@ -201,6 +183,16 @@ export class ModuleStore {
       return this.uploadFileToCollection(file, collection, id)
     })
     return Promise.all(promises)
+  }
+  // efficiently checks the cache first and emits any subsequent updates
+  private _subscribeToCollection(endpoint: IDBEndpoint) {
+    this.allDocs$.next([])
+    this.activeCollectionSubscription.unsubscribe()
+    this.activeCollectionSubscription = this.db
+      .collection(endpoint)
+      .stream((data) => {
+        this.allDocs$.next(data)
+      })
   }
 }
 

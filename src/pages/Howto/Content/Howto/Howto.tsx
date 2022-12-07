@@ -82,22 +82,6 @@ export class Howto extends React.Component<
   RouteComponentProps<IRouterCustomParams>,
   IState
 > {
-  //TODO: Typing Props
-  constructor(props: any) {
-    super(props)
-    this.state = {
-      isLoading: true,
-    }
-  }
-  // workaround used later so that userStore can be called in render method when not existing on
-  get injected() {
-    return this.props as InjectedProps
-  }
-
-  get store() {
-    return this.injected.howtoStore
-  }
-
   private moderateHowto = async (accepted: boolean) => {
     const _howto = this.store.activeHowto
     if (_howto) {
@@ -105,7 +89,6 @@ export class Howto extends React.Component<
       await this.store.moderateHowto(_howto)
     }
   }
-
   private onUsefulClick = async (
     howtoId: string,
     howtoCreatedBy: string,
@@ -122,6 +105,21 @@ export class Howto extends React.Component<
     aggregationsStore.overrideAggregationValue('users_votedUsefulHowtos', {
       [howtoId]: votedUsefulCount + (hasUserVotedUseful ? -1 : 1),
     })
+  }
+  //TODO: Typing Props
+  constructor(props: any) {
+    super(props)
+    this.state = {
+      isLoading: true,
+    }
+  }
+  // workaround used later so that userStore can be called in render method when not existing on
+  get injected() {
+    return this.props as InjectedProps
+  }
+
+  get store() {
+    return this.injected.howtoStore
   }
 
   public async componentDidMount() {
@@ -154,12 +152,15 @@ export class Howto extends React.Component<
 
       const activeHowToComments: UserComment[] = this.store
         .getActiveHowToComments()
-        .map((c): UserComment => {
-          return {
+        .map(
+          (c): UserComment => ({
             ...c,
-            isEditable: c._creatorId === this.injected.userStore.user?.userName,
-          }
-        })
+            isEditable: [
+              this.injected.userStore.user?._id,
+              this.injected.userStore.user?.userName,
+            ].includes(c._creatorId),
+          }),
+        )
 
       const { allTagsByKey } = this.injected.tagsStore
       const howto = {

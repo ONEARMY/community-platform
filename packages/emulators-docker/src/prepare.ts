@@ -1,6 +1,7 @@
 import { spawnSync } from 'child_process'
 import chalk from 'chalk'
 import fs from 'fs-extra'
+import { runtimeConfigTest } from 'functions/scripts/runtimeConfig/model'
 import { sync as globbySync } from 'globby'
 import path from 'path'
 import { FIREBASE_JSON_EMULATORS_DEFAULT } from './common'
@@ -12,11 +13,16 @@ import { PATHS } from './paths'
  * dummy credentials for firebase auth and rewriting required mappings in firebase.json
  */
 export async function prepare() {
+  createSeedZips()
   ensureSeedData()
+  prepareFunctionsBuild()
   buildFunctions()
   copyAppFiles()
   populateDummyCredentials()
+  addRuntimeConfig()
   updateFirebaseJson()
+  const buildArgs = generateBuildArgs()
+  return buildArgs
 }
 
 /**
@@ -39,6 +45,21 @@ function ensureSeedData() {
       console.log(chalk.yellow(cmd))
       spawnSync(cmd, { stdio: 'inherit', shell: true })
     }
+  }
+}
+
+/**
+ * Functions expect index.html to be built from frontend folder for use in SEO render functions
+ * Populate a placeholder if does not exist
+ **/
+function prepareFunctionsBuild() {
+  const buildIndexHtmlPath = path.resolve(PATHS.rootDir, 'build', 'index.html')
+  if (!fs.existsSync(buildIndexHtmlPath)) {
+    fs.ensureFileSync(buildIndexHtmlPath)
+    fs.writeFileSync(
+      buildIndexHtmlPath,
+      `<!DOCTYPE html><html lang="en"></html>`,
+    )
   }
 }
 
@@ -151,6 +172,19 @@ function updateFirebaseJson() {
   fs.writeFileSync(firebaseJsonPath, JSON.stringify(firebaseJson, null, 2))
 }
 
+/** Populate a runtime config file to set default firebase config variables for test */
+function addRuntimeConfig() {
+  const config = { ...runtimeConfigTest }
+  config.deployment.site_url = 'http://localhost:4000'
+  const target = path.resolve(
+    PATHS.workspaceDir,
+    'app',
+    'functions',
+    '.runtimeconfig.json',
+  )
+  fs.writeFileSync(target, JSON.stringify(config, null, 2))
+}
+
 /**
  * Generate .tar.gz files for all data in import folder (as exported from firestore)
  * NOTE - whilst not used in default workflow still useful to have when testing locally
@@ -173,6 +207,20 @@ function createSeedZips() {
       spawnSync(cmd, { stdio: 'inherit', shell: true })
     }
   }
+}
+
+/** Create a list of args to pass into the Dockerfile build command */
+function generateBuildArgs() {
+  const buildArgs: Record<string, string> = {}
+  const functionsPackageJsonPath = path.resolve(
+    PATHS.functionsDistIndex,
+    '../package.json',
+  )
+  // assign the docker firebase-tools version as same running in local functions workspace
+  const functionsPackageJson = fs.readJsonSync(functionsPackageJsonPath)
+  buildArgs.FIREBASE_TOOLS_VERSION =
+    functionsPackageJson.dependencies['firebase-tools']
+  return buildArgs
 }
 
 // Allow direct execution of file as well as import

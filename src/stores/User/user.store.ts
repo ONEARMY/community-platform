@@ -1,11 +1,11 @@
-import { action, computed, makeObservable, observable, toJS } from 'mobx';
-import { logger } from 'src/logger';
-import { auth, EmailAuthProvider } from 'src/utils/firebase';
-import { getLocationData } from 'src/utils/getLocationData';
-import { formatLowerNoSpecial } from 'src/utils/helpers';
+import { action, computed, makeObservable, observable, toJS } from 'mobx'
+import { logger } from 'src/logger'
+import { auth, EmailAuthProvider } from 'src/utils/firebase'
+import { getLocationData } from 'src/utils/getLocationData'
+import { formatLowerNoSpecial } from 'src/utils/helpers'
 
-import { ModuleStore } from '../common/module.store';
-import { Storage } from '../storage';
+import { ModuleStore } from '../common/module.store'
+import { Storage } from '../storage'
 
 import type { IUser, IUserDB } from 'src/models/user.models'
 import type { IUserPP, IUserPPDB } from 'src/models/user_pp.models'
@@ -29,6 +29,15 @@ export class UserStore extends ModuleStore {
   @observable
   public updateStatus: IUserUpdateStatus = getInitialUpdateStatus()
 
+  constructor(rootStore: RootStore) {
+    super(rootStore)
+    makeObservable(this)
+    this._listenToAuthStateChanges()
+    // Update verified users on intial load. use timeout to ensure aggregation store initialised
+    setTimeout(() => {
+      this.loadVerifiedUsers()
+    }, 50)
+  }
   // redirect calls for verifiedUsers to the aggregation store list
   @computed get verifiedUsers(): { [user_id: string]: boolean } {
     return this.aggregationsStore.aggregations.users_verified || {}
@@ -42,16 +51,6 @@ export class UserStore extends ModuleStore {
   @action
   public setUpdateStaus(update: keyof IUserUpdateStatus) {
     this.updateStatus[update] = true
-  }
-
-  constructor(rootStore: RootStore) {
-    super(rootStore)
-    makeObservable(this)
-    this._listenToAuthStateChanges()
-    // Update verified users on intial load. use timeout to ensure aggregation store initialised
-    setTimeout(() => {
-      this.loadVerifiedUsers()
-    }, 50)
   }
 
   // when registering a new user create firebase auth profile as well as database user profile
@@ -125,6 +124,13 @@ export class UserStore extends ModuleStore {
         // )
       }
     }
+  }
+
+  public async getUserByUsername(username: string) {
+    const [user] = await this.db
+      .collection<IUserPP>(COLLECTION_NAME)
+      .getWhere('_id', '==', username)
+    return user
   }
 
   // TODO
@@ -345,6 +351,33 @@ export class UserStore extends ModuleStore {
   // use firebase auth to listen to change to signed in user
   // on sign in want to load user profile
   // strange implementation return the unsubscribe object on subscription, so stored
+
+  @action
+  public async deleteNotification(id: string) {
+    try {
+      const user = this.activeUser
+      if (id && user && user.notifications) {
+        const notifications = toJS(user.notifications).filter(
+          (notification) => !(notification._id === id),
+        )
+
+        const updatedUser: IUser = {
+          ...toJS(user),
+          notifications,
+        }
+
+        const dbRef = this.db
+          .collection<IUser>(COLLECTION_NAME)
+          .doc(updatedUser._authID)
+
+        await dbRef.set(updatedUser)
+        //TODO: ensure current user is updated
+      }
+    } catch (err) {
+      console.error(err)
+      throw new Error(err)
+    }
+  }
   // to authUnsubscribe variable for use later
   private _listenToAuthStateChanges(checkEmailVerification = false) {
     this.authUnsubscribe = auth.onAuthStateChanged((authUser) => {

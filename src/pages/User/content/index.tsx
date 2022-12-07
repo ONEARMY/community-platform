@@ -4,7 +4,7 @@ import type { RouteComponentProps } from 'react-router'
 import { Loader } from 'oa-components'
 import { Text } from 'theme-ui'
 import type { IUserPP } from 'src/models'
-import { ProfileType } from 'src/modules/profile'
+import { ProfileType } from 'src/modules/profile/types'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { UserStore } from 'src/stores/User/user.store'
 import { MemberProfile } from './MemberProfile'
@@ -77,7 +77,8 @@ export class UserPage extends React.Component<
     }
     return (
       <>
-        {user.profileType === ProfileType.MEMBER ? (
+        {user.profileType === ProfileType.MEMBER ||
+        user.profileType === undefined ? (
           <MemberProfile data-cy="memberProfile" user={user} />
         ) : (
           <SpaceProfile data-cy="spaceProfile" user={user} />

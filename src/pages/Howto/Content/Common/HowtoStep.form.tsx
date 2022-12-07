@@ -1,7 +1,7 @@
 import { PureComponent } from 'react'
 import { Field } from 'react-final-form'
 import { Heading, Card, Flex, Text } from 'theme-ui'
-import { ImageInputField } from 'src/components/Form/ImageInput.field'
+import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import { Button, FieldInput, FieldTextarea, Modal } from 'oa-components'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'

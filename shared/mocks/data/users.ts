@@ -250,9 +250,11 @@ export const users = {
     _authID: 'l9N5HFHzSjQvtP9g9MyFnPpkFmM2',
     about: null,
     _id: 'settings_workplace_new',
-    profileType: null,
+    profileType: 'workspace',
     coverImages: [],
     isExpert: null,
     collectedPlasticTypes: null,
+    email: 'settings_workplace_new@test.com',
+    password: 'test1234',
   },
 }

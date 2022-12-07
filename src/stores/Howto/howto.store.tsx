@@ -8,10 +8,8 @@ import type {
   IHowtoFormInput,
   IHowtoStep,
   IHowToStepFormInput,
-  IComment,
 } from 'src/models/howto.models'
-import type { ISelectedTags } from 'src/models/tags.model'
-import type { IUser } from 'src/models/user.models'
+import type { IComment, IUser } from 'src/models'
 import {
   filterModerableItems,
   hasAdminRights,
@@ -23,6 +21,10 @@ import { ModuleStore } from '../common/module.store'
 import type { IUploadedFileMeta } from '../storage'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
+import {
+  changeMentionToUserReference,
+  changeUserReferenceToPlainText,
+} from '../common/mentions'
 
 const COLLECTION_NAME = 'howtos'
 const HOWTO_SEARCH_WEIGHTS = [
@@ -40,8 +42,6 @@ export class HowtoStore extends ModuleStore {
   @observable
   public allHowtos: IHowtoDB[]
   @observable
-  public selectedTags: ISelectedTags
-  @observable
   public selectedCategory: string
   @observable
   public searchValue: string
@@ -50,6 +50,16 @@ export class HowtoStore extends ModuleStore {
   @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
 
+  public filterHowtosByCategory = (
+    collection: IHowtoDB[] = [],
+    category: string,
+  ) => {
+    return category
+      ? collection.filter((obj) => {
+          return obj.category?.label === category
+        })
+      : collection
+  }
   constructor(rootStore: RootStore) {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
@@ -58,7 +68,6 @@ export class HowtoStore extends ModuleStore {
     this.allDocs$.subscribe((docs: IHowtoDB[]) => {
       this.sortHowtosByLatest(docs)
     })
-    this.selectedTags = {}
     this.selectedCategory = ''
     this.searchValue = ''
     this.referrerSource = ''
@@ -82,6 +91,7 @@ export class HowtoStore extends ModuleStore {
       ? this.activeHowto?.comments.map((comment: IComment) => {
           return {
             ...comment,
+            text: changeUserReferenceToPlainText(comment.text),
             isUserVerified:
               !!this.aggregationsStore.aggregations.users_verified?.[
                 comment.creatorName
@@ -99,8 +109,21 @@ export class HowtoStore extends ModuleStore {
     const collection = await this.db
       .collection<IHowto>(COLLECTION_NAME)
       .getWhere('slug', '==', slug)
-    const activeHowto = collection.length > 0 ? collection[0] : undefined
+    const activeHowto: IHowtoDB | undefined =
+      collection.length > 0 ? collection[0] : undefined
     logger.debug('active howto', activeHowto)
+
+    // Change all UserReferences to mentions
+    if (activeHowto) {
+      activeHowto.description = changeUserReferenceToPlainText(
+        activeHowto.description,
+      )
+
+      activeHowto.steps.forEach((step) => {
+        step.text = changeUserReferenceToPlainText(step.text)
+      })
+    }
+
     this.activeHowto = activeHowto
     return activeHowto
   }
@@ -116,8 +139,10 @@ export class HowtoStore extends ModuleStore {
   }
 
   @computed get filteredHowtos() {
-    let howtos = this.filterCollectionByTags(this.allHowtos, this.selectedTags)
-    howtos = this.filterHowtosByCategory(howtos, this.selectedCategory)
+    const howtos = this.filterHowtosByCategory(
+      this.allHowtos,
+      this.selectedCategory,
+    )
     // HACK - ARH - 2019/12/11 filter unaccepted howtos, should be done serverside
     let validHowtos = filterModerableItems(howtos, this.activeUser)
 
@@ -158,10 +183,6 @@ export class HowtoStore extends ModuleStore {
     this.referrerSource = source
   }
 
-  public updateSelectedTags(tagKey: ISelectedTags) {
-    this.selectedTags = tagKey
-  }
-
   @action
   public updateSelectedCategory(category: string) {
     this.selectedCategory = category
@@ -181,6 +202,10 @@ export class HowtoStore extends ModuleStore {
     return needsModeration(howto, toJS(this.activeUser))
   }
 
+  private async addUserReference(text: string): Promise<string> {
+    return await changeMentionToUserReference(text, this.userStore)
+  }
+
   @action
   public async addComment(text: string) {
     try {
@@ -195,14 +220,19 @@ export class HowtoStore extends ModuleStore {
           _creatorId: user._id,
           creatorName: user.userName,
           creatorCountry: userCountry,
-          text: comment,
+          text: await this.addUserReference(comment),
         }
+        logger.debug('addComment.newComment', { newComment })
 
         const updatedHowto: IHowto = {
           ...toJS(howto),
-          comments: howto.comments
-            ? [...toJS(howto.comments), newComment]
-            : [newComment],
+          description: await this.addUserReference(howto.description),
+          comments: await Promise.all(
+            [...toJS(howto.comments || []), newComment].map(async (comment) => {
+              comment.text = await this.addUserReference(comment.text)
+              return comment
+            }),
+          ),
         }
 
         const dbRef = this.db
@@ -231,14 +261,20 @@ export class HowtoStore extends ModuleStore {
           (comment) => comment._creatorId === user._id && comment._id === id,
         )
         if (commentIndex !== -1) {
-          comments[commentIndex].text = newText
+          comments[commentIndex].text = (await this.addUserReference(newText))
             .slice(0, MAX_COMMENT_LENGTH)
             .trim()
           comments[commentIndex]._edited = new Date().toISOString()
 
           const updatedHowto: IHowto = {
             ...toJS(howto),
-            comments,
+            description: await this.addUserReference(howto.description),
+            comments: await Promise.all(
+              comments.map(async (comment) => ({
+                ...comment,
+                text: await this.addUserReference(comment.text),
+              })),
+            ),
           }
 
           const dbRef = this.db
@@ -263,12 +299,21 @@ export class HowtoStore extends ModuleStore {
       const howto = this.activeHowto
       const user = this.activeUser
       if (id && howto && user && howto.comments) {
-        const comments = toJS(howto.comments).filter(
-          (comment) => !(comment._creatorId === user._id && comment._id === id),
+        const comments = await Promise.all(
+          toJS(howto.comments)
+            .filter(
+              (comment) =>
+                !(comment._creatorId === user._id && comment._id === id),
+            )
+            .map(async (comment) => ({
+              ...comment,
+              text: await this.addUserReference(comment.text),
+            })),
         )
 
         const updatedHowto: IHowto = {
           ...toJS(howto),
+          description: await this.addUserReference(howto.description),
           comments,
         }
 
@@ -287,20 +332,9 @@ export class HowtoStore extends ModuleStore {
     }
   }
 
-  public filterHowtosByCategory = (
-    collection: IHowtoDB[] = [],
-    category: string,
-  ) => {
-    return category
-      ? collection.filter((obj) => {
-          return obj.category?.label === category
-        })
-      : collection
-  }
-
   // upload a new or update an existing how-to
   public async uploadHowTo(values: IHowtoFormInput | IHowtoDB) {
-    logger.debug('uploading howto')
+    logger.debug('uploading howto', { values })
     this.updateUploadStatus('Start')
     // create a reference either to the existing document (if editing) or a new document if creating
     const dbRef = this.db
@@ -310,6 +344,7 @@ export class HowtoStore extends ModuleStore {
 
     // keep comments if doc existed previously
     const existingDoc = await dbRef.get()
+
     const comments =
       existingDoc && existingDoc.comments ? existingDoc.comments : []
 
@@ -342,10 +377,17 @@ export class HowtoStore extends ModuleStore {
       // populate DB
       // redefine howTo based on processing done above (should match stronger typing)
       const userCountry = getUserCountry(user)
+
       const howTo: IHowto = {
         ...values,
+        description: await this.addUserReference(values.description),
         _createdBy: values._createdBy ? values._createdBy : user.userName,
-        comments,
+        comments: await Promise.all(
+          comments.map(async (c) => ({
+            ...c,
+            text: await this.addUserReference(c.text),
+          })),
+        ),
         cover_image: processedCover,
         steps: processedSteps,
         fileLink: values.fileLink ?? '',
@@ -396,6 +438,7 @@ export class HowtoStore extends ModuleStore {
       step.images = imgMeta
       stepsWithImgMeta.push({
         ...step,
+        text: await this.addUserReference(step.text),
         images: imgMeta.map((f) => {
           if (f === undefined) {
             return null
@@ -425,8 +468,8 @@ interface IHowToUploadStatus {
   Complete: boolean
 }
 
-function getInitialUploadStatus() {
-  const status: IHowToUploadStatus = {
+function getInitialUploadStatus(): IHowToUploadStatus {
+  return {
     Start: false,
     Cover: false,
     'Step Images': false,
@@ -434,5 +477,4 @@ function getInitialUploadStatus() {
     Database: false,
     Complete: false,
   }
-  return status
 }

@@ -20,7 +20,7 @@ describe('[Events]', () => {
         cy.contains('18').should('be.exist')
         cy.contains('Aug').should('be.exist')
         cy.contains('SURA BAYA Exhibition').should('be.exist')
-        cy.contains('By event_creator').should('be.exist')
+        cy.contains('event_creator').should('be.exist')
         cy.contains('East Java').should('be.exist')
         cy.get('a[target=_blank]')
           .should('have.attr', 'href')

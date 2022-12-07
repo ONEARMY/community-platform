@@ -1,10 +1,7 @@
 import { createRef, useEffect, useState } from 'react'
-import Linkify from 'react-linkify'
-import { Link } from 'react-router-dom'
-import { Button, EditComment, Modal } from '../index'
+import { Button, EditComment, Modal, LinkifyText } from '../index'
 import { Box, Flex, Text } from 'theme-ui'
-import { FlagIconHowTos } from '../FlagIcon/FlagIcon'
-import { Icon } from '../Icon/Icon'
+import { Username } from '../Username/Username'
 
 export interface CommentItemProps {
   text: string
@@ -76,23 +73,13 @@ export const CommentItem = (props: CommentItemProps) => {
         }}
       >
         <Flex sx={{ justifyContent: 'space-between', alignItems: 'baseline' }}>
-          <Box>
-            {creatorCountry && <FlagIconHowTos code={creatorCountry} />}
-            <span style={{ marginLeft: creatorCountry ? '5px' : 0 }}>
-              <Link
-                style={{
-                  textDecoration: 'underline',
-                  color: 'inherit',
-                  display: 'inline-block',
-                  marginRight: '5px',
-                }}
-                to={'/u/' + creatorName}
-              >
-                {creatorName}
-              </Link>
-              {isUserVerified && <Icon glyph="verified" size={12} />}
-            </span>
-          </Box>
+          <Username
+            user={{
+              userName: creatorName,
+              countryCode: creatorCountry,
+            }}
+            isVerified={!!isUserVerified}
+          />
           <Flex sx={{ alignItems: 'center' }}>
             <>
               {_edited && (
@@ -120,7 +107,7 @@ export const CommentItem = (props: CommentItemProps) => {
           }}
           ref={textRef}
         >
-          <Linkify properties={{ target: '_blank' }}>{text}</Linkify>
+          <LinkifyText>{text}</LinkifyText>
         </Text>
         {textHeight > 129 && (
           <a

@@ -4,7 +4,6 @@ const test = require('firebase-functions-test')()
 import { DB_ENDPOINTS } from '../models'
 import { handleUserUpdates } from './index'
 import { v4 as uuid } from 'uuid'
-import { assert } from 'console'
 
 describe('userUpdates', () => {
   let db

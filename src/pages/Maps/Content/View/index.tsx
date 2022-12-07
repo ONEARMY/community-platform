@@ -36,6 +36,26 @@ interface IInjectedProps extends IProps {
 @inject('mapsStore')
 @observer
 class MapView extends React.Component<IProps> {
+  // on move end want to calculate current bounding box and notify parent
+  static defaultProps: Partial<IProps> = {
+    onBoundingBoxChange: () => null,
+    onPinClicked: () => null,
+    pins: [],
+    filters: [],
+    center: { lat: 51.0, lng: 19.0 },
+    zoom: 3,
+  }
+  // so that pins can be displayed as required
+  private handleMove = () => {
+    if (this.props.mapRef.current) {
+      const boundingBox = this.props.mapRef.current.leafletElement.getBounds()
+      const newBoundingBox: IBoundingBox = {
+        topLeft: boundingBox.getNorthWest(),
+        bottomRight: boundingBox.getSouthEast(),
+      }
+      this.props.onBoundingBoxChange(newBoundingBox)
+    }
+  }
   constructor(props: IProps) {
     super(props)
     this.handleMove = debounce(this.handleMove, 1000)
@@ -49,19 +69,6 @@ class MapView extends React.Component<IProps> {
       return this.props.mapRef.current.leafletElement.zoomControl?.setPosition(
         'bottomleft',
       )
-    }
-  }
-
-  // on move end want to calculate current bounding box and notify parent
-  // so that pins can be displayed as required
-  private handleMove = () => {
-    if (this.props.mapRef.current) {
-      const boundingBox = this.props.mapRef.current.leafletElement.getBounds()
-      const newBoundingBox: IBoundingBox = {
-        topLeft: boundingBox.getNorthWest(),
-        bottomRight: boundingBox.getSouthEast(),
-      }
-      this.props.onBoundingBoxChange(newBoundingBox)
     }
   }
 
@@ -106,15 +113,6 @@ class MapView extends React.Component<IProps> {
         )}
       </Map>
     )
-  }
-
-  static defaultProps: Partial<IProps> = {
-    onBoundingBoxChange: () => null,
-    onPinClicked: () => null,
-    pins: [],
-    filters: [],
-    center: { lat: 51.0, lng: 19.0 },
-    zoom: 3,
   }
 }
 

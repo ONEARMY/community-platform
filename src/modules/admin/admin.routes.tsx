@@ -5,38 +5,43 @@ import { MODULE } from '..'
 
 const moduleName = MODULE.ADMIN
 
-export const ADMIN_PAGES: IPageMeta[] = [
+interface IAdminPageMeta extends IPageMeta {
+  disabled?: boolean // mark if section ready for use or not
+}
+
+export const ADMIN_PAGES: IAdminPageMeta[] = [
   {
-    component: lazy(() => import('./pages/admin-approvals')),
+    component: lazy(() => import('./pages/adminApprovals')),
     title: 'Approvals',
     description: '',
     path: '',
     moduleName,
   },
   {
-    component: lazy(() => import('./pages/admin-users')),
+    component: lazy(() => import('./pages/adminUsers')),
     title: 'Users',
     description: 'Browse Users',
     path: '/users',
     moduleName,
   },
-
   {
-    component: lazy(() => import('./pages/admin-mappins')),
+    component: lazy(() => import('./pages/adminMappins')),
     title: 'Map Pins',
     description: 'Browse Map Pins',
     path: '/map-pins',
     moduleName,
+    disabled: true,
   },
   {
-    component: lazy(() => import('./pages/admin-tags')),
+    component: lazy(() => import('./pages/adminTags')),
     title: 'Tags',
     description: 'Browse Tags',
     path: '/tags',
     moduleName,
+    disabled: true,
   },
   {
-    component: lazy(() => import('./pages/admin-howtos')),
+    component: lazy(() => import('./pages/adminHowtos')),
     title: 'Howtos',
     description: 'Browse Howtos',
     path: '/howtos',
@@ -44,11 +49,12 @@ export const ADMIN_PAGES: IPageMeta[] = [
   },
 
   {
-    component: lazy(() => import('./pages/admin-research')),
+    component: lazy(() => import('./pages/adminResearch')),
     title: 'Research',
     description: 'Browse Research',
     path: '/research',
     moduleName,
+    disabled: true,
   },
 ]
 

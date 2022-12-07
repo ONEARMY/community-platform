@@ -1,13 +1,12 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 import type { TagsStore } from 'src/stores/Tags/tags.store'
-import { Button, Modal } from 'oa-components'
+import { Button, Modal, Select } from 'oa-components'
 import { Heading, Box, Text, Input, Flex } from 'theme-ui'
 import type { ITag, TagCategory } from 'src/models/tags.model'
 // Import React Table
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
-import Select from 'react-select'
 
 // we include props from react-final-form fields so it can be used as a custom field component
 interface IProps {
@@ -23,11 +22,6 @@ interface IState {
 @inject('tagsStore')
 @observer
 export class AdminTags extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props)
-    this.state = { tagForm: {} }
-  }
-
   saveEditor = async () => {
     this.setState({ updating: true })
     await this.props.tagsStore!.saveTag(this.state.tagForm)
@@ -39,12 +33,15 @@ export class AdminTags extends React.Component<IProps, IState> {
       tagForm: { ...tag },
     })
   }
-
   handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const patch = { [e.target.name]: e.target.value }
     this.setState({
       tagForm: { ...this.state.tagForm, ...patch },
     })
+  }
+  constructor(props: IProps) {
+    super(props)
+    this.state = { tagForm: {} }
   }
 
   onSelectedTagsChanged(values: ITagCategorySelect[]) {

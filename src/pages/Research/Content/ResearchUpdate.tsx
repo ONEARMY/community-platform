@@ -31,6 +31,14 @@ const ResearchUpdate: React.FC<IProps> = ({
   comments,
 }) => {
   const theme = useTheme()
+  const formattedCreateDatestamp = format(
+    new Date(update._created),
+    'DD-MM-YYYY',
+  )
+  const formattedModifiedDatestamp = format(
+    new Date(update._modified),
+    'DD-MM-YYYY',
+  )
   return (
     <>
       <Flex
@@ -79,18 +87,18 @@ const ResearchUpdate: React.FC<IProps> = ({
                         ...theme.typography.auxiliary,
                       }}
                     >
-                      {'created ' +
-                        format(new Date(update._created), 'DD-MM-YYYY')}
+                      {'created ' + formattedCreateDatestamp}
                     </Text>
-                    {update._created !== update._modified && (
+
+                    {formattedCreateDatestamp !==
+                      formattedModifiedDatestamp && (
                       <Text
                         sx={{
                           textAlign: ['left', 'right', 'right'],
                           ...theme.typography.auxiliary,
                         }}
                       >
-                        {'edited ' +
-                          format(new Date(update._modified), 'DD-MM-YYYY')}
+                        {'edited ' + formattedModifiedDatestamp}
                       </Text>
                     )}
                   </Flex>

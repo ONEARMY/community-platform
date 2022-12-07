@@ -60,7 +60,7 @@ export class UserNotificationsStore extends ModuleStore {
     relevantUrl: string,
   ) {
     try {
-      const triggeredBy = this.activeUser
+      const triggeredBy = this.user
       if (triggeredBy) {
         // do not get notified when you're the one making a new comment or how-to useful vote
         if (triggeredBy.userName === username) {
@@ -84,7 +84,6 @@ export class UserNotificationsStore extends ModuleStore {
           .getWhere('userName', '==', username)
 
         const user = lookup[0]
-
         const updatedUser: IUser = {
           ...toJS(user),
           notifications: user.notifications
@@ -107,7 +106,7 @@ export class UserNotificationsStore extends ModuleStore {
   @action
   public async markAllNotificationsNotified() {
     try {
-      const user = this.activeUser
+      const user = this.user
       if (user) {
         const notifications = toJS(user.notifications)
         notifications?.forEach((notification) => (notification.notified = true))
@@ -132,7 +131,7 @@ export class UserNotificationsStore extends ModuleStore {
   @action
   public async markAllNotificationsRead() {
     try {
-      const user = this.activeUser
+      const user = this.user
       if (user) {
         const notifications = toJS(user.notifications)
         notifications?.forEach((notification) => (notification.read = true))
@@ -157,7 +156,7 @@ export class UserNotificationsStore extends ModuleStore {
   @action
   public async deleteNotification(id: string) {
     try {
-      const user = this.activeUser
+      const user = this.user
       if (id && user && user.notifications) {
         const notifications = toJS(user.notifications).filter(
           (notification) => !(notification._id === id),
@@ -171,7 +170,6 @@ export class UserNotificationsStore extends ModuleStore {
         const dbRef = this.db
           .collection<IUser>(USER_COLLECTION_NAME)
           .doc(updatedUser._authID)
-
         await dbRef.set(updatedUser)
         //TODO: ensure current user is updated
       }

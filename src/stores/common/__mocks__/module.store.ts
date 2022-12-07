@@ -1,4 +1,8 @@
 export class ModuleStore {
+  /**
+   * Rough mock of firestore methods to allow chaining
+   * collection(name).doc(id)
+   **/
   db = {
     collection: jest.fn().mockReturnThis(),
     doc: jest.fn().mockReturnThis(),
@@ -21,3 +25,5 @@ export class ModuleStore {
     this.activeUser = user
   }
 }
+
+export type IMockDB = typeof ModuleStore.prototype.db

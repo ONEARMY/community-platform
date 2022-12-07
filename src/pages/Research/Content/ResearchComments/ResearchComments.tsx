@@ -1,13 +1,13 @@
-import { Button, CommentList, CreateComment } from 'oa-components';
-import { useState } from 'react';
-import ReactGA from 'react-ga4';
-import { MAX_COMMENT_LENGTH } from 'src/constants';
-import { useCommonStores } from 'src/index';
-import { logger } from 'src/logger';
-import { useResearchStore } from 'src/stores/Research/research.store';
-import { Box, Flex } from 'theme-ui';
+import { Button, CommentList, CreateComment } from 'oa-components'
+import { useState } from 'react'
+import ReactGA from 'react-ga4'
+import { MAX_COMMENT_LENGTH } from 'src/constants'
+import { useCommonStores } from 'src/index'
+import { logger } from 'src/logger'
+import { useResearchStore } from 'src/stores/Research/research.store'
+import { Box, Flex } from 'theme-ui'
 
-import styled from '@emotion/styled';
+import styled from '@emotion/styled'
 
 import type { UserComment } from 'src/models'
 import type { IResearch } from 'src/models/research.models'

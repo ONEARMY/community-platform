@@ -1,9 +1,9 @@
-import { NotificationList } from 'oa-components';
-import { useState } from 'react';
-import Foco from 'react-foco';
-import { Flex } from 'theme-ui';
+import { NotificationList } from 'oa-components'
+import { useState } from 'react'
+import Foco from 'react-foco'
+import { Flex } from 'theme-ui'
 
-import { NotificationsIcon } from './NotificationsIcon';
+import { NotificationsIcon } from './NotificationsIcon'
 
 import type { UserNotificationList } from 'oa-components'
 export interface Props {

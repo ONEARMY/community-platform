@@ -1,8 +1,8 @@
-import { NotificationList } from 'oa-components';
-import theme from 'src/themes/styled.theme';
-import { Box } from 'theme-ui';
+import { NotificationList } from 'oa-components'
+import theme from 'src/themes/styled.theme'
+import { Box } from 'theme-ui'
 
-import styled from '@emotion/styled';
+import styled from '@emotion/styled'
 
 import type { UserNotificationList } from 'oa-components'
 const PanelContainer = styled(Box)`

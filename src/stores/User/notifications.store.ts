@@ -3,25 +3,24 @@ import type {
   IUser,
   NotificationType,
 } from 'src/models/user.models'
-import { action, makeObservable, toJS } from 'mobx';
-import { randomID } from 'src/utils/helpers';
+import { action, makeObservable, toJS } from 'mobx'
+import { randomID } from 'src/utils/helpers'
 
-import { ModuleStore } from '../common/module.store';
-import { COLLECTION_NAME as USER_COLLECTION_NAME } from './user.store';
+import { ModuleStore } from '../common/module.store'
+// eslint-disable-next-line import/namespace
+import { COLLECTION_NAME as USER_COLLECTION_NAME } from './user.store'
 
 import type { RootStore } from '..'
 import type { IUserPP } from 'src/models/user_pp.models'
 
 // const COLLECTION_NAME = 'user_notifications'
 
-
 export class UserNotificationsStore extends ModuleStore {
-
   constructor(rootStore: RootStore) {
     super(rootStore)
     makeObservable(this)
   }
-  
+
   get user() {
     return this.userStore.user
   }

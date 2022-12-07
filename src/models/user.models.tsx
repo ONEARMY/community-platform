@@ -91,7 +91,12 @@ export interface INotification {
   notified: boolean
 }
 
-export const NotificationTypes = ['new_comment', 'howto_useful', 'new_comment_research', 'research_useful'] as const
+export const NotificationTypes = [
+  'new_comment',
+  'howto_useful',
+  'new_comment_research',
+  'research_useful',
+] as const
 
 export type NotificationType = typeof NotificationTypes[number]
 
@@ -99,9 +104,7 @@ export type INotificationSettings = {
   enabled: {
     [T in NotificationType]: boolean
   }
-  emailFrequency: 
-    | "daily"
-    | "weekly"
+  emailFrequency: 'daily' | 'weekly'
 }
 
 export interface IEmailNotificationsQueueItem {

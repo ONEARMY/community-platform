@@ -1,23 +1,19 @@
-import { motion } from 'framer-motion';
-import { inject, observer } from 'mobx-react';
-import { Component } from 'react';
-import HamburgerMenu from 'react-hamburger-menu';
-import { isModuleSupported, MODULE } from 'src/modules';
-import Logo from 'src/pages/common/Header/Menu/Logo/Logo';
-import MenuDesktop from 'src/pages/common/Header/Menu/MenuDesktop';
-import MenuMobilePanel from 'src/pages/common/Header/Menu/MenuMobile/MenuMobilePanel';
-import {
-    NotificationsDesktop
-} from 'src/pages/common/Header/Menu/Notifications/NotificationsDesktop';
-import { NotificationsIcon } from 'src/pages/common/Header/Menu/Notifications/NotificationsIcon';
-import {
-    NotificationsMobile
-} from 'src/pages/common/Header/Menu/Notifications/NotificationsMobile';
-import Profile from 'src/pages/common/Header/Menu/Profile/Profile';
-import theme from 'src/themes/styled.theme';
-import { Flex } from 'theme-ui';
+import { motion } from 'framer-motion'
+import { inject, observer } from 'mobx-react'
+import { Component } from 'react'
+import HamburgerMenu from 'react-hamburger-menu'
+import { isModuleSupported, MODULE } from 'src/modules'
+import Logo from 'src/pages/common/Header/Menu/Logo/Logo'
+import MenuDesktop from 'src/pages/common/Header/Menu/MenuDesktop'
+import MenuMobilePanel from 'src/pages/common/Header/Menu/MenuMobile/MenuMobilePanel'
+import { NotificationsDesktop } from 'src/pages/common/Header/Menu/Notifications/NotificationsDesktop'
+import { NotificationsIcon } from 'src/pages/common/Header/Menu/Notifications/NotificationsIcon'
+import { NotificationsMobile } from 'src/pages/common/Header/Menu/Notifications/NotificationsMobile'
+import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
+import theme from 'src/themes/styled.theme'
+import { Flex } from 'theme-ui'
 
-import styled from '@emotion/styled';
+import styled from '@emotion/styled'
 
 import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
 import type { UserNotificationsStore } from 'src/stores/User/notifications.store'
@@ -103,7 +99,8 @@ export class Header extends Component {
   render() {
     const menu = this.injected.mobileMenuStore
     const user = this.injected.userNotificationsStore.user
-    const notifications = this.injected.userNotificationsStore.getUnreadNotifications()
+    const notifications =
+      this.injected.userNotificationsStore.getUnreadNotifications()
     const areThereNotifications = Boolean(notifications.length)
     const isLoggedInUser = !!user
 
@@ -143,7 +140,7 @@ export class Header extends Component {
                   markAllRead={() =>
                     this.injected.userNotificationsStore.markAllNotificationsRead()
                   }
-                  markAllNotified={() => 
+                  markAllNotified={() =>
                     this.injected.userNotificationsStore.markAllNotificationsNotified()
                   }
                 />
@@ -182,7 +179,7 @@ export class Header extends Component {
                 markAllRead={() =>
                   this.injected.userNotificationsStore.markAllNotificationsRead()
                 }
-                markAllNotified={() => 
+                markAllNotified={() =>
                   this.injected.userNotificationsStore.markAllNotificationsNotified()
                 }
               />

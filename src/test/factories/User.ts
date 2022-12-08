@@ -1,7 +1,6 @@
 import type { IUserPPDB } from 'src/models'
 import { faker } from '@faker-js/faker'
 import { ProfileType } from 'src/modules/profile/types'
-import { FactoryNotificationSample } from './Notification'
 
 export const FactoryUser = (
   userOverloads: Partial<IUserPPDB> = {},
@@ -22,7 +21,7 @@ export const FactoryUser = (
     'rejected',
     'accepted',
   ]),
-  notifications: FactoryNotificationSample(),
+  notifications: [],
   coverImages: [] as any[],
   ...userOverloads,
 })

@@ -1,4 +1,4 @@
-import type { IHowtoDB } from 'src/models'
+import type { IHowtoDB, IHowtoStep } from 'src/models'
 import { faker } from '@faker-js/faker'
 
 export const FactoryHowto = (
@@ -27,6 +27,7 @@ export const FactoryHowto = (
   _deleted: faker.datatype.boolean(),
   _createdBy: faker.internet.userName(),
   steps: [],
+  mentions: [],
   cover_image: {
     downloadUrl: '',
     name: '',
@@ -37,4 +38,23 @@ export const FactoryHowto = (
     size: 0,
   },
   ...howtoOverloads,
+})
+
+export const FactoryHowtoStep = (
+  howtoStepOverloads: Partial<IHowtoStep> = {},
+): IHowtoStep => ({
+  images: [
+    {
+      downloadUrl: faker.internet.url(),
+      fullPath: faker.internet.url(),
+      name: faker.lorem.text(),
+      type: 'string',
+      size: 2300,
+      timeCreated: faker.date.past().toString(),
+      updated: faker.date.past().toString(),
+    },
+  ],
+  title: faker.lorem.text(),
+  text: faker.lorem.paragraphs(2),
+  ...howtoStepOverloads,
 })

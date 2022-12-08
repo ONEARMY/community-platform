@@ -1,5 +1,8 @@
-import styled from '@emotion/styled'
+import { useEffect } from 'react'
 import { Box, Card, Text } from 'theme-ui'
+
+import styled from '@emotion/styled'
+
 import { Button } from '../Button/Button'
 import { NotificationItem } from '../NotificationItem/NotificationItem'
 import type { UserNotificationItem } from '../NotificationItem/NotificationItem'
@@ -9,7 +12,8 @@ export type UserNotificationList = UserNotificationItem[]
 export interface Props {
   notifications: UserNotificationList
   sx?: any
-  handleOnClick?: () => void
+  markAllRead?: () => void
+  markAllNotified?: () => void
 }
 
 const ModalItem = styled(Box)`
@@ -23,8 +27,12 @@ const ModalItem = styled(Box)`
 `
 
 export const NotificationList = (props: Props) => {
-  const { notifications, handleOnClick } = props
+  const { notifications, markAllRead, markAllNotified } = props
   const sx = props.sx || {}
+  useEffect(() => {
+    notifications.length && markAllNotified && markAllNotified()
+  }, [])
+
   return (
     <Card sx={{ padding: 2, maxHeight: 310, overflowY: 'auto', ...sx }}>
       {notifications.length ? (
@@ -45,7 +53,7 @@ export const NotificationList = (props: Props) => {
             }}
             variant={'secondary'}
             data-cy="clear-notifications"
-            onClick={() => handleOnClick && handleOnClick()}
+            onClick={() => markAllRead && markAllRead()}
           >
             Clear notifications
           </Button>

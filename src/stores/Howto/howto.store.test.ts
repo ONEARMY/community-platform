@@ -106,11 +106,13 @@ describe('howto.store', () => {
       })
 
       expect(setFn).toHaveBeenCalledTimes(1)
-      expect(store.userStore.triggerNotification).toBeCalledTimes(1)
-      expect(store.userStore.triggerNotification).toBeCalledWith(
+      expect(store.userNotificationsStore.triggerNotification).toBeCalledTimes(
+        1,
+      )
+      expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
         'howto_mention',
         'commentauthor',
-        `/how-to/${howToItem.slug}#comment:${howToItem.comments[0]._id}`,
+        `/how-to/${howToItem.slug}#comment:${howToItem.comments![0]._id}`,
       )
     })
 
@@ -152,11 +154,13 @@ describe('howto.store', () => {
       })
 
       expect(setFn).toHaveBeenCalledTimes(1)
-      expect(store.userStore.triggerNotification).toBeCalledTimes(1)
-      expect(store.userStore.triggerNotification).toBeCalledWith(
+      expect(store.userNotificationsStore.triggerNotification).toBeCalledTimes(
+        1,
+      )
+      expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
         'howto_mention',
         'commentauthor',
-        `/how-to/${howToItem.slug}#comment:${howToItem.comments[0]._id}`,
+        `/how-to/${howToItem.slug}#comment:${howToItem.comments![0]._id}`,
       )
     })
 

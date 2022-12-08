@@ -330,7 +330,7 @@ export class HowtoStore extends ModuleStore {
 
     mentions.forEach((mention) => {
       if (!previousMentions.includes(`${mention.username}.${mention.location}`))
-        this.userStore.triggerNotification(
+        this.userNotificationsStore.triggerNotification(
           'howto_mention',
           mention.username,
           `/how-to/${howToItem.slug}#${mention.location}`,

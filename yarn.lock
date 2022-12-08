@@ -25189,29 +25189,29 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"linkify-plugin-mention@npm:^3.0.4":
-  version: 3.0.4
-  resolution: "linkify-plugin-mention@npm:3.0.4"
+"linkify-plugin-mention@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "linkify-plugin-mention@npm:4.0.2"
   peerDependencies:
-    linkifyjs: ^3.0.0
-  checksum: 3f0ab11f0ca7f5cb91c320d878e17741001c2021afce5c56b898a86e747211ba0946f50fe05cf134e31eaf665b821e0878b90094573a56593e9e3f75438d9c69
+    linkifyjs: ^4.0.0
+  checksum: 39f672a6144efbe05cd1487aeb0e248d71d35c27f21600f27259717cc454658e29ab9a0575f50b3bcbdcec46f909c605d6207f048526d8232f9fb37e3469f220
   languageName: node
   linkType: hard
 
-"linkify-react@npm:^3.0.4":
-  version: 3.0.4
-  resolution: "linkify-react@npm:3.0.4"
+"linkify-react@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "linkify-react@npm:4.0.2"
   peerDependencies:
-    linkifyjs: ^3.0.0
+    linkifyjs: ^4.0.0
     react: ">= 15.0.0"
-  checksum: 4d7e24412b9217dbdb9173543ad8a9916e09b75febf72473ffd0a8436986fdcc7b50ab3abf9c6fa76040eb9c14ee401972046ac8d90093e0bb85353ab68ccc36
+  checksum: f13001fac1dd5b16643ac8e4d5a85098615922e0d5d9a56ad523cb3199a6139d4f1c28d2ff6e03de01884f825a95c969e85e53448afbdb14133afe6b545923d6
   languageName: node
   linkType: hard
 
-"linkifyjs@npm:^3.0.5":
-  version: 3.0.5
-  resolution: "linkifyjs@npm:3.0.5"
-  checksum: a926669022f41db6464071d3df2b2de71531d5a83db478e0e0b16617cbabde32c89ff0f46406927d53b31eb8f7501b7bb53410aedf05890c38900a55a1cc5283
+"linkifyjs@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "linkifyjs@npm:4.0.2"
+  checksum: b457d6c8ce1817645764969d9420358fad19b3576399ce4dc96a846fe953d022f7ec4d8362a0895d4b7db374c5563febc075fb7080f5f058479b9fb6d6b64285
   languageName: node
   linkType: hard
 
@@ -27614,9 +27614,9 @@ fsevents@^1.2.7:
     date-fns: ^2.29.3
     eslint: ^7.32.0
     eslint-plugin-import: ^2.25.4
-    linkify-plugin-mention: ^3.0.4
-    linkify-react: ^3.0.4
-    linkifyjs: ^3.0.5
+    linkify-plugin-mention: ^4.0.2
+    linkify-react: ^4.0.2
+    linkifyjs: ^4.0.2
     mustache: ^4.2.0
     prettier: ^2.5.1
     react: ^17.0.2

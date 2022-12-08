@@ -1,7 +1,7 @@
 import type { UserNotificationList } from 'oa-components'
 import { InternalLink } from 'oa-components'
 import type { INotification } from 'src/models'
-import type { UserStore } from 'src/stores/User/user.store'
+import type { UserNotificationsStore } from 'src/stores/User/notifications.store'
 import { Box } from 'theme-ui'
 
 function getFormattedMessage(notification: INotification) {
@@ -80,10 +80,12 @@ function getFormattedMessage(notification: INotification) {
 }
 
 export function getFormattedNotifications(
-  userStore: UserStore,
+  userNotificationsStore: UserNotificationsStore,
 ): UserNotificationList {
-  return userStore.getUserNotifications().map((notification) => ({
-    type: notification.type,
-    children: getFormattedMessage(notification),
-  }))
+  return userNotificationsStore
+    .getUnreadNotifications()
+    .map((notification) => ({
+      type: notification.type,
+      children: getFormattedMessage(notification),
+    }))
 }

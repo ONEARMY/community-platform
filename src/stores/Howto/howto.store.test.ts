@@ -29,13 +29,17 @@ async function factory(howtoOverloads: Partial<IHowtoDB> = {}) {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   store.userStore = {
-    triggerNotification: jest.fn(),
     getUserProfile: jest.fn().mockImplementation((userName) =>
       FactoryUser({
         _authID: 'userId',
         userName,
       }),
     ),
+  }
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  store.userNotificationsStore = {
+    triggerNotification: jest.fn(),
   }
 
   await store.setActiveHowtoBySlug('howto')

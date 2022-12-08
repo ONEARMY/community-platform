@@ -5,7 +5,7 @@ export const FactoryNotification = (
   userOverloads: Partial<INotification> = {},
 ): INotification => ({
   _created: faker.date.past().toString(),
-  _id: faker.datatype.uuid(),
+  _id: faker.database.mongodbObjectId(),
   notified: faker.datatype.boolean(),
   read: faker.datatype.boolean(),
   triggeredBy: {
@@ -18,20 +18,6 @@ export const FactoryNotification = (
     'new_comment_research',
     'research_useful',
   ]),
-  relevantUrl: `/`,
+  relevantUrl: faker.internet.url(),
   ...userOverloads,
 })
-
-/**
- * Mock notification assortment
- * */
-export const FactoryNotificationSample = () => [
-  FactoryNotification({ read: true, notified: true }),
-  FactoryNotification({ read: true, notified: true }),
-  FactoryNotification({ read: true, notified: true }),
-
-  FactoryNotification({ read: false, notified: false }),
-  FactoryNotification({ read: false, notified: false }),
-
-  FactoryNotification({ read: false, notified: true }),
-]

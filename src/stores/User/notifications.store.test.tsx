@@ -1,76 +1,112 @@
 jest.mock('../common/module.store')
-import { FactoryNotificationSample } from 'src/test/factories/Notification'
+import { FactoryNotification } from 'src/test/factories/Notification'
 
 import { FactoryUser } from 'src/test/factories/User'
-import type { IMockDB } from '../common/__mocks__/module.store'
+import { MockDBStore } from '../common/__mocks__/module.store'
 import { UserNotificationsStore } from './notifications.store'
 
-const factory = async () => {
-  const store = new UserNotificationsStore(null as any)
-
+/**
+ * When mocking unit tests the db will be mocked from the common module store mock
+ * and userStore manually overridden with mocks below
+ */
+class MockNotificationsStore extends UserNotificationsStore {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  store.userStore = {
+  db = new MockDBStore()
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  userStore = {
     user: FactoryUser({
       _authID: 'userId',
       userName: 'username',
-      notifications: FactoryNotificationSample(),
+      notifications: [],
     }),
     updateUserProfile: jest.fn(),
   }
-  // db mock methods already mocked in common __mocks__ folder, just extend
-  ;(store.db as any as IMockDB).getWhere.mockResolvedValue([
-    {
-      _authID: 'user_to_notify',
-    },
-  ])
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-
-  return {
-    store,
-    db: store.db as any as IMockDB,
+  constructor() {
+    super(null as any)
   }
 }
 
+describe('triggerNotification', () => {
+  let store: MockNotificationsStore
+  beforeEach(() => {
+    store = new MockNotificationsStore()
+  })
+
+  it('adds a new notification to user', async () => {
+    const store = new MockNotificationsStore()
+    store.db.getWhere.mockReturnValue([FactoryUser()])
+    // Act
+    await store.triggerNotification(
+      'howto_mention',
+      'example',
+      'https://example.com',
+    )
+    // Expect
+    const [newUser] = store.db.set.mock.calls[0]
+    expect(store.db.set).toBeCalledTimes(1)
+    expect(newUser.notifications).toHaveLength(1)
+    expect(newUser.notifications[0]).toEqual(
+      expect.objectContaining({
+        type: 'howto_mention',
+      }),
+    )
+  })
+
+  it('throws error when invalid user passed', async () => {
+    // Act
+    await expect(
+      store.triggerNotification(
+        'howto_mention',
+        'non-existent-user',
+        'https://example.com',
+      ),
+    ).rejects.toThrow('User not found')
+  })
+})
+
 describe('notifications.store', () => {
+  let store: MockNotificationsStore
+  beforeEach(() => {
+    store = new MockNotificationsStore()
+    // Mock notification assortment
+    const FactoryNotificationSample = () => [
+      FactoryNotification({ read: true, notified: true }),
+      FactoryNotification({ read: true, notified: true }),
+      FactoryNotification({ read: true, notified: true }),
+      FactoryNotification({ read: false, notified: false }),
+      FactoryNotification({ read: false, notified: false }),
+      FactoryNotification({ read: false, notified: true }),
+    ]
+    store.userStore.user.notifications = FactoryNotificationSample()
+  })
   it('loads user with notifications', async () => {
-    const { store } = await factory()
     const notifications = store.userStore.user?.notifications
     expect(notifications).toHaveLength(6)
   })
-
   it('gets unnotified notifications', async () => {
-    const { store } = await factory()
     const unnotified = store.getUnnotifiedNotifications()
     expect(unnotified).toHaveLength(2)
   })
   it('gets unread notifications', async () => {
-    const { store } = await factory()
     const unread = store.getUnreadNotifications()
     expect(unread).toHaveLength(3)
   })
   it('deletes a notification', async () => {
-    const { store, db } = await factory()
     await store.deleteNotification(store.user!.notifications![0]._id)
-    expect(db.set).toHaveBeenCalledTimes(1)
-    const updatedUser = db.set.mock.calls[0][0]
+    expect(store.db.set).toHaveBeenCalledTimes(1)
+    const updatedUser = store.db.set.mock.calls[0][0]
     expect(updatedUser.notifications).toHaveLength(
       store.userStore.user!.notifications!.length - 1,
     )
   })
   it('marks all notifications as notified', async () => {
-    const { store, db } = await factory()
     await store.markAllNotificationsNotified()
-    expect(db.set).toHaveBeenCalledTimes(1)
+    expect(store.db.set).toHaveBeenCalledTimes(1)
   })
   it('marks all notifications as read', async () => {
-    const { store, db } = await factory()
     await store.markAllNotificationsRead()
-    expect(db.set).toHaveBeenCalledTimes(1)
-  })
-  it('triggers notification', async () => {
-    const { store, db } = await factory()
-    await store.triggerNotification('howto_useful', 'test', '/')
-    expect(db.set).toHaveBeenCalledTimes(1)
+    expect(store.db.set).toHaveBeenCalledTimes(1)
   })
 })

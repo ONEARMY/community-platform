@@ -127,7 +127,7 @@ export class UserNotificationsStore extends ModuleStore {
         await this.userStore.updateUserProfile({ notifications })
       }
     } catch (err) {
-      console.error(err)
+      logger.error(err)
       throw new Error(err)
     }
   }
@@ -152,7 +152,7 @@ export class UserNotificationsStore extends ModuleStore {
         await this.userStore.updateUserProfile({ notifications })
       }
     } catch (err) {
-      console.error(err)
+      logger.error(err)
       throw new Error(err)
     }
   }
@@ -178,7 +178,7 @@ export class UserNotificationsStore extends ModuleStore {
         //TODO: ensure current user is updated
       }
     } catch (err) {
-      console.error(err)
+      logger.error(err)
       throw new Error(err)
     }
   }

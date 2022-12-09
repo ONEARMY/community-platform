@@ -1,10 +1,6 @@
 .markercluster-map .leaflet-popup-content {
   margin: 0;
-  font-family: 'Varela Round', 'Inter', Helvetica Neue, Arial, sans-serif;
   z-index: 99991;
-  border: 2px solid black;
-  border-radius: 5px;
-  max-width: 230px;
 }
 
 .markercluster-map .leaflet-popup-content p {
@@ -12,8 +8,10 @@
 }
 
 .markercluster-map .leaflet-popup-content-wrapper {
-  border-radius: 5px;
-  box-shadow: 0px 0px 2px grey;
+  background: none;
+
+  border-radius: 0;
+  box-shadow: none;
   padding: 0;
 }
 

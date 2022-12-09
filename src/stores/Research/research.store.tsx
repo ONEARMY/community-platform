@@ -188,7 +188,7 @@ export class ResearchStore extends ModuleStore {
   }
 
   private async addUserReference(text: string): Promise<string> {
-    return await changeMentionToUserReference(text, this.userStore)
+    return (await changeMentionToUserReference(text, this.userStore)).text
   }
 
   public async addComment(
@@ -224,7 +224,9 @@ export class ResearchStore extends ModuleStore {
           )
           const newImg = imgMeta.map((img) => ({ ...img }))
           updateWithMeta.images = newImg
-        } else updateWithMeta.images = []
+        } else {
+          updateWithMeta.images = []
+        }
 
         updateWithMeta.comments = updateWithMeta.comments
           ? [...toJS(updateWithMeta.comments), newComment]

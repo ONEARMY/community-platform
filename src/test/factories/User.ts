@@ -21,6 +21,7 @@ export const FactoryUser = (
     'rejected',
     'accepted',
   ]),
+  notifications: [],
   coverImages: [] as any[],
   ...userOverloads,
 })

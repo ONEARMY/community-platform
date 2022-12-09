@@ -46,6 +46,7 @@ export interface IUser {
   votedUsefulHowtos?: { [howtoId: string]: boolean }
   /** keep a map of all Research ids that a user has voted as useful */
   votedUsefulResearch?: { [researchId: string]: boolean }
+  notification_settings?: INotificationSettings
   notifications?: INotification[]
 }
 
@@ -87,10 +88,28 @@ export interface INotification {
   relevantUrl?: string
   type: NotificationType
   read: boolean
+  notified: boolean
 }
 
-export type NotificationType =
-  | 'new_comment'
-  | 'howto_useful'
-  | 'new_comment_research'
-  | 'research_useful'
+export const NotificationTypes = [
+  'new_comment',
+  'howto_useful',
+  'howto_mention',
+  'new_comment_research',
+  'research_useful',
+] as const
+
+export type NotificationType = typeof NotificationTypes[number]
+
+export type INotificationSettings = {
+  enabled: {
+    [T in NotificationType]: boolean
+  }
+  emailFrequency: 'daily' | 'weekly'
+}
+
+export interface IEmailNotificationsQueueItem {
+  _id: ISODateString
+  usersWithNotifications: string[]
+  usersEmailed: string[]
+}

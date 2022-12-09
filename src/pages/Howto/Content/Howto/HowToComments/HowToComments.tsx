@@ -1,12 +1,12 @@
+import { CommentList, CreateComment } from 'oa-components'
 import { useState } from 'react'
 import ReactGA from 'react-ga4'
-import { Box, Flex } from 'theme-ui'
-import { useCommonStores } from 'src/index'
-import { CreateComment, CommentList } from 'oa-components'
-import type { UserComment } from 'src/models'
-import { logger } from 'src/logger'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
+import { useCommonStores } from 'src/index'
+import { logger } from 'src/logger'
+import { Box, Flex } from 'theme-ui'
 
+import type { UserComment } from 'src/models'
 interface IProps {
   comments: UserComment[]
 }
@@ -21,7 +21,7 @@ export const HowToComments = ({ comments }: IProps) => {
       const howto = stores.howtoStore.activeHowto
       await stores.howtoStore.addComment(comment)
       if (howto) {
-        await stores.userStore.triggerNotification(
+        await stores.userNotificationsStore.triggerNotification(
           'new_comment',
           howto._createdBy,
           '/how-to/' + howto.slug,
@@ -117,6 +117,7 @@ export const HowToComments = ({ comments }: IProps) => {
           handleEdit={handleEdit}
           handleEditRequest={handleEditRequest}
           handleDelete={handleDelete}
+          highlightedCommentId={window.location.hash.replace('#comment:', '')}
         />
       </Flex>
       <Box

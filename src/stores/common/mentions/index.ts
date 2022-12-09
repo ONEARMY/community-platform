@@ -11,17 +11,23 @@ import type { UserStore } from '../../User/user.store'
  *
  * @param text string
  * @param userStore UserStore
- * @returns Promise<string>
+ * @returns Promise<{
+ *   text: string;
+ *   mentionedUsers: string[],
+ * }>
  */
 export const changeMentionToUserReference = async function (
   text: string,
   userStore: UserStore,
-): Promise<string> {
+): Promise<{
+  text: string
+  mentionedUsers: string[]
+}> {
   const mentions = text.match(/\B@[​a-z0-9_-]+/g)
   const mentionedUsers = new Set<string>()
 
   if (!mentions) {
-    return text
+    return { text, mentionedUsers: [] }
   }
 
   for (const mention of mentions) {
@@ -42,11 +48,11 @@ export const changeMentionToUserReference = async function (
       logger.debug('Unable to find matching profile', { mention })
     }
   }
-  return text
+  return { text, mentionedUsers: Array.from(mentionedUsers) }
 }
 
 export const changeUserReferenceToPlainText = function (text: string) {
   return text
     .replace(/@([A-Za-z0-9_-]+)/, '@​$1')
-    .replace(/@@\{([A-Za-z0-9_-]+):([a-z0-9\-]+)}/g, '@$2')
+    .replace(/@@\{([A-Za-z0-9_-]+):([a-z0-9_-]+)}/g, '@$2')
 }

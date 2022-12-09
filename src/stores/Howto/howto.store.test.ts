@@ -1,7 +1,7 @@
 jest.mock('../common/module.store')
 import type { IHowtoDB } from 'src/models'
 import { FactoryComment } from 'src/test/factories/Comment'
-import { FactoryHowto } from 'src/test/factories/Howto'
+import { FactoryHowto, FactoryHowtoStep } from 'src/test/factories/Howto'
 import { FactoryUser } from 'src/test/factories/User'
 import type { RootStore } from '..'
 import { HowtoStore } from './howto.store'
@@ -29,12 +29,17 @@ async function factory(howtoOverloads: Partial<IHowtoDB> = {}) {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   store.userStore = {
-    getUserProfile: jest.fn().mockResolvedValue(
+    getUserProfile: jest.fn().mockImplementation((userName) =>
       FactoryUser({
         _authID: 'userId',
-        userName: 'username',
+        userName,
       }),
     ),
+  }
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  store.userNotificationsStore = {
+    triggerNotification: jest.fn(),
   }
 
   await store.setActiveHowtoBySlug('howto')
@@ -51,6 +56,118 @@ async function factory(howtoOverloads: Partial<IHowtoDB> = {}) {
 describe('howto.store', () => {
   describe('uploadHowTo', () => {
     it.todo('updates an existing item')
+
+    it('captures mentions within description', async () => {
+      const { store, howToItem, setFn } = await factory({
+        description: '@username',
+      })
+
+      // Act
+      await store.uploadHowTo(howToItem)
+
+      const [newHowto] = setFn.mock.calls[0]
+      expect(setFn).toHaveBeenCalledTimes(1)
+      expect(newHowto.description).toBe('@@{userId:username}')
+      expect(newHowto.mentions).toHaveLength(1)
+    })
+
+    it('captures mentions within a how-step', async () => {
+      const { store, howToItem, setFn } = await factory({
+        steps: [
+          FactoryHowtoStep({ text: 'Step description featuring a @username' }),
+        ],
+      })
+
+      // Act
+      await store.uploadHowTo(howToItem)
+
+      const [newHowto] = setFn.mock.calls[0]
+      expect(setFn).toHaveBeenCalledTimes(1)
+      expect(newHowto.steps[0].text).toBe(
+        'Step description featuring a @@{userId:username}',
+      )
+      expect(newHowto.mentions).toHaveLength(1)
+    })
+
+    it('creates notifications for any new mentions in description', async () => {
+      const { store, howToItem, setFn } = await factory({
+        description: '@username',
+        mentions: [
+          {
+            username: 'username',
+            location: 'description',
+          },
+        ],
+        comments: [
+          FactoryComment({
+            text: '@commentauthor',
+          }),
+        ],
+      })
+
+      await store.uploadHowTo({
+        ...howToItem,
+      })
+
+      expect(setFn).toHaveBeenCalledTimes(1)
+      expect(store.userNotificationsStore.triggerNotification).toBeCalledTimes(
+        1,
+      )
+      expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
+        'howto_mention',
+        'commentauthor',
+        `/how-to/${howToItem.slug}#comment:${howToItem.comments![0]._id}`,
+      )
+    })
+
+    it('creates notifications for any new mentions in a how-to step', async () => {
+      const { store, howToItem, setFn } = await factory({
+        description: '@username',
+        mentions: [
+          {
+            username: 'username',
+            location: 'description',
+          },
+        ],
+        steps: [
+          {
+            images: [
+              {
+                downloadUrl: 'string',
+                fullPath: 'string',
+                name: 'string',
+                type: 'string',
+                size: 2300,
+                timeCreated: 'string',
+                updated: 'string',
+              },
+            ],
+            title: 'How to step',
+            text: 'Step description featuring a howto',
+          },
+        ],
+        comments: [
+          FactoryComment({
+            text: '@commentauthor',
+          }),
+        ],
+      })
+
+      await store.uploadHowTo({
+        ...howToItem,
+      })
+
+      expect(setFn).toHaveBeenCalledTimes(1)
+      expect(store.userNotificationsStore.triggerNotification).toBeCalledTimes(
+        1,
+      )
+      expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
+        'howto_mention',
+        'commentauthor',
+        `/how-to/${howToItem.slug}#comment:${howToItem.comments![0]._id}`,
+      )
+    })
+
     it('preserves @mention on existing comments', async () => {
       const comments = [
         FactoryComment({
@@ -71,6 +188,14 @@ describe('howto.store', () => {
       const [newHowto] = setFn.mock.calls[0]
       expect(setFn).toHaveBeenCalledTimes(1)
       expect(newHowto.comments[1].text).toBe('@@{userId:username}')
+      expect(newHowto.mentions).toEqual(
+        expect.arrayContaining([
+          {
+            username: 'username',
+            location: `comment:${newHowto.comments[1]._id}`,
+          },
+        ]),
+      )
     })
   })
 
@@ -91,6 +216,14 @@ describe('howto.store', () => {
             text: 'short comment including @@{userId:username}',
           }),
         )
+        expect(newHowto.mentions).toEqual(
+          expect.arrayContaining([
+            {
+              username: 'username',
+              location: 'comment:' + newHowto.comments[0]._id,
+            },
+          ]),
+        )
       })
 
       it('preserves @mentions in description', async () => {
@@ -105,6 +238,14 @@ describe('howto.store', () => {
         const [newHowto] = setFn.mock.calls[0]
         expect(setFn).toHaveBeenCalledTimes(1)
         expect(newHowto.description).toBe('@@{userId:username}')
+        expect(newHowto.mentions).toEqual(
+          expect.arrayContaining([
+            {
+              username: 'username',
+              location: 'description',
+            },
+          ]),
+        )
       })
 
       it('preserves @mentions in existing comments', async () => {
@@ -126,6 +267,14 @@ describe('howto.store', () => {
         expect(newHowto.comments).toHaveLength(2)
         expect(newHowto.comments[0].text).toBe(
           'Existing comment @@{userId:username}',
+        )
+        expect(newHowto.mentions).toEqual(
+          expect.arrayContaining([
+            {
+              username: 'username',
+              location: 'comment:' + newHowto.comments[0]._id,
+            },
+          ]),
         )
       })
     })

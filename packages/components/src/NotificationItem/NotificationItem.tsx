@@ -1,18 +1,28 @@
-import { Link } from 'react-router-dom'
+import { ThemeProvider } from '@emotion/react'
 import { Flex, Box } from 'theme-ui'
 import { Icon } from '../Icon/Icon'
+import type { availableGlyphs } from '../Icon/types'
 
-export interface NotificationItemProps {
-  triggeredBy: {
-    displayName: string
-    userId: string
-  }
-  type: string
-  relevantUrl?: string
+type notificationType =
+  | 'howto_mention'
+  | 'new_comment'
+  | 'howto_useful'
+  | 'new_comment_research'
+  | 'research_useful'
+
+export interface UserNotificationItem {
+  type: notificationType
+  children: React.ReactNode
 }
 
-export const NotificationItem = (props: NotificationItemProps) => {
-  const { triggeredBy, relevantUrl, type } = props
+function getIconByType(type: notificationType): availableGlyphs {
+  return ['howto_useful', 'research_useful'].includes(type)
+    ? 'useful'
+    : 'comment'
+}
+
+export const NotificationItem = (props: UserNotificationItem) => {
+  const { type } = props
   return (
     <Flex
       bg={'white'}
@@ -27,72 +37,25 @@ export const NotificationItem = (props: NotificationItemProps) => {
         fontFamily: 'Inter, sans-serif',
       }}
     >
-      {['howto_useful', 'research_useful'].includes(type) ? (
+      <ThemeProvider
+        theme={{
+          styles: {
+            a: {
+              textDecoration: 'underline',
+              padding: '0 .25em',
+              color: '#61646b',
+              display: 'inline',
+            },
+          },
+        }}
+      >
         <Flex style={{ textAlign: 'left', color: 'black' }}>
           <Box sx={{ opacity: 0.6 }}>
-            <Icon glyph="useful" size={15} mr={2} />
+            <Icon glyph={getIconByType(type)} size={15} mr={2} />
           </Box>
-          <Box>
-            Yay,
-            <Link
-              style={{
-                textDecoration: 'underline',
-                padding: '3px',
-                color: '#61646b',
-              }}
-              to={'/u/' + triggeredBy.userId}
-            >
-              {triggeredBy.displayName}
-            </Link>
-            found your
-            <Link
-              style={{
-                textDecoration: 'underline',
-                padding: '3px',
-                color: '#61646b',
-                fontWeight: 500,
-                display: 'inline',
-              }}
-              to={relevantUrl || ''}
-            >
-              {type === 'howto_useful' ? 'how-to' : 'research'}
-            </Link>
-            useful
-          </Box>
+          {props.children}
         </Flex>
-      ) : (
-        <Flex>
-          <Box sx={{ opacity: 0.6 }}>
-            <Icon glyph="comment" size={15} mr={2} />
-          </Box>
-          <Box style={{ textAlign: 'left' }}>
-            New comment on your
-            <Link
-              style={{
-                textDecoration: 'underline',
-                padding: '3px',
-                color: '#61646b',
-              }}
-              to={relevantUrl || ''}
-            >
-              {type == 'new_comment_research' ? 'Research' : 'how-to'}
-            </Link>
-            by
-            <Link
-              style={{
-                textDecoration: 'underline',
-                padding: '3px',
-                color: '#61646b',
-                fontWeight: 500,
-                display: 'inline',
-              }}
-              to={'/u/' + triggeredBy.userId}
-            >
-              {triggeredBy.displayName}
-            </Link>
-          </Box>
-        </Flex>
-      )}
+      </ThemeProvider>
     </Flex>
   )
 }

@@ -2,35 +2,51 @@ import { useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
 import Linkify from 'linkify-react'
 import 'linkify-plugin-mention'
+import { ExternalLink, InternalLink } from '..'
 
 export interface Props {
   children?: React.ReactNode
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const LinkifyText = (props: Props) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const theme = useTheme() as any
-  const ThemedLinkify = styled(Linkify)`
-    a {
-      color: ${theme.colors.grey};
-      text-decoration: underline;
-    }
+  const StyledExternalLink = styled(ExternalLink)`
+    color: ${theme.colors.grey}!important;
+    text-decoration: underline;
+  `
+  const StyledInternalLink = styled(InternalLink)`
+    color: ${theme.colors.grey};
+    font-weight: bold;
+  `
 
-    a:hover {
-      text-decoration: none;
-    }
-  ` as any
+  const renderExternalLink = ({ attributes = {} as any, content = '' }) => {
+    const { href, ...props } = attributes
+    return (
+      <StyledExternalLink href={href} {...props}>
+        {content}
+      </StyledExternalLink>
+    )
+  }
+  const renderInternalLink = ({ attributes = {} as any, content = '' }) => {
+    const { href, ...props } = attributes
+    return (
+      <StyledInternalLink to={`/u${href}`} {...props}>
+        {content}
+      </StyledInternalLink>
+    )
+  }
 
   return (
-    <ThemedLinkify
-      properties={{ target: '_blank' }}
+    <Linkify
       options={{
-        formatHref: {
-          mention: (href: string) => '/u' + href,
+        render: {
+          mention: renderInternalLink,
+          url: renderExternalLink,
         },
       }}
     >
       {props.children}
-    </ThemedLinkify>
+    </Linkify>
   )
 }

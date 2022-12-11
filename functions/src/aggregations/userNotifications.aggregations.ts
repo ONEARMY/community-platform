@@ -28,7 +28,7 @@ const aggregations: INotificationAggregation[] = [
       }
       // return list of pending notifications alongside metadata
       return {
-        [_id]: { _authID, emailFrequency, pending },
+        [_id]: { _authID, emailFrequency, notifications: pending },
       }
     },
   },

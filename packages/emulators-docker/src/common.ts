@@ -70,7 +70,7 @@ export const FIREBASE_JSON_EMULATORS_DEFAULT = {
 
 /** Minimal method to extract optional repo and tag args */
 function extractArgs() {
-  const args = { repo: 'onearmyplatform', tag: 'pp-2022-10-30' }
+  const args = { repo: 'onearmyplatform', tag: 'pp-2022-12-04' }
   process.argv.slice(2).forEach((arg) => {
     const [selector, value] = arg
       .split('=')

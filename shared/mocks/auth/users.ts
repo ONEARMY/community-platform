@@ -1,6 +1,6 @@
 import type { UserRole } from '../../models'
 
-interface IMockAuthUser {
+export interface IMockAuthUser {
   uid: string
   label: string
   email?: string

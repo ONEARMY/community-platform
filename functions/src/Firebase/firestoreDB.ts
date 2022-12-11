@@ -60,3 +60,12 @@ export const setDoc = async (
   const mapping = DB_ENDPOINTS[endpoint] || endpoint
   return db.collection(mapping).doc(docId).set(data)
 }
+
+export const updateDoc = async (
+  endpoint: IDBEndpoint,
+  docId: string,
+  data: any,
+) => {
+  const mapping = DB_ENDPOINTS[endpoint] || endpoint
+  return db.collection(mapping).doc(docId).update(data)
+}

@@ -56,6 +56,13 @@ export const ADMIN_PAGES: IAdminPageMeta[] = [
     moduleName,
     disabled: true,
   },
+  {
+    component: lazy(() => import('./pages/adminNotifications')),
+    title: 'Notifications',
+    description: 'Manage Notifications',
+    path: '/notifications',
+    moduleName,
+  },
 ]
 
 const routes = () => (
@@ -72,5 +79,4 @@ const routes = () => (
     </Switch>
   </Suspense>
 )
-
 export default withRouter(routes)

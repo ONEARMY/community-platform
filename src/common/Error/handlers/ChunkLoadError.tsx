@@ -6,6 +6,7 @@ import { attemptReload, isReloaded } from './reloader'
 /**
  * Handle screen-of-death issue where the user has tried to load JS code that no longer exists on the server
  * https://stackoverflow.com/questions/44601121/code-splitting-causes-chunks-to-fail-to-load-after-new-deployment-for-spa
+ * https://github.com/facebook/create-react-app/issues/5316
  *
  * Will attempt to reload browser first time error seen, and display message to user if still persists
  * Adapted from https://mitchgavan.com/code-splitting-react-safely/

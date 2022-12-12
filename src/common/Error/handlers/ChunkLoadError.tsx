@@ -1,7 +1,7 @@
 import { Button } from 'oa-components'
 import { useEffect } from 'react'
 import { Box, Text } from 'theme-ui'
-import { attemptReload, isReloaded } from './reloader'
+import { attemptReload, isReloaded } from './Reloader'
 
 /**
  * Handle screen-of-death issue where the user has tried to load JS code that no longer exists on the server

@@ -3,7 +3,7 @@ import { Component } from 'react'
 import type { ReactNode } from 'react'
 import { SITE } from 'src/config/config'
 import { ChunkLoadErrorHandler } from './handlers/ChunkLoadError'
-import { isReloaded } from './handlers/reloader'
+import { isReloaded } from './handlers/Reloader'
 
 interface IProps {
   children: ReactNode

@@ -228,7 +228,7 @@ jobs:
     steps:
       - checkout
       # - *restore_yarn_cache
-      - run: yarn && yarn build:components && yarn workspace functions build && yarn workspace functions emulator:test
+      - run: yarn && yarn workspace oa-components build && yarn workspace functions build && yarn workspace functions emulator:test
 
   # Create a production build
   # NOTE - not currently used in test workflow as different build_env required for each machine
@@ -242,7 +242,7 @@ jobs:
           name: Install dependencies
           command: yarn workspaces focus one-army-community-platform
       - run:
-          command: yarn build:components && yarn run test:unit
+          command: yarn workspace oa-components build && yarn run test:unit
   build:
     docker: *docker
     environment:
@@ -477,7 +477,7 @@ workflows:
       - build:
           name: Build Production Release
           context: build-context
-          requires: 
+          requires:
             - 'Release new version to GitHub'
           <<: *filter_only_production
       - deploy:

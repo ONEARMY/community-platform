@@ -3,6 +3,7 @@ import { Component } from 'react'
 import type { ReactNode } from 'react'
 import { SITE } from 'src/config/config'
 import { ChunkLoadErrorHandler } from './handlers/ChunkLoadError'
+import { isReloaded } from './handlers/reloader'
 
 interface IProps {
   children: ReactNode
@@ -20,12 +21,15 @@ export default class ErrorBoundary extends Component<IProps, IState> {
   /** When catching errors automatically report them to sentry if production */
   componentDidCatch(error: Error, errorInfo: any) {
     this.setState({ error })
-    console.log('caught error', error)
     if (SITE === 'production') {
       Sentry.withScope((scope) => {
         Object.keys(errorInfo).forEach((key) => {
           scope.setExtra(key, errorInfo[key])
         })
+        // additionally track if the error has persisted after reload
+        if (isReloaded()) {
+          scope.setExtra('persistedAfterReload', true)
+        }
         Sentry.captureException(error)
       })
     }

@@ -1,0 +1,11 @@
+{
+  "name": "one-army-community-platform",
+  "$schema": "node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "command": "yarn react-scripts build"
+    }
+  }
+}

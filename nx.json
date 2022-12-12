@@ -1,0 +1,49 @@
+{
+  "extends": "nx/presets/npm.json",
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/nx-cloud",
+      "options": {
+        "cacheableOperations": [
+          "lint",
+          "build",
+          "watch",
+          "copyDevConfig",
+          "db:backup:local",
+          "shell",
+          "emulator:test",
+          "emulator:test:watch",
+          "emulator:seed",
+          "emulator",
+          "test",
+          "storybook",
+          "format",
+          "build:sb",
+          "dev",
+          "new-component",
+          "db:seed",
+          "db:teardown",
+          "docusaurus",
+          "swizzle",
+          "deploy",
+          "clear",
+          "prepare",
+          "install:clean",
+          "post-cra-build"
+        ],
+        "accessToken": "YzllMWQzOTItNDAxNS00NDY3LWE2MTUtMmNjNTlkMTI0OGI2fHJlYWQtd3JpdGU="
+      }
+    }
+  },
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"]
+    },
+    "prepare": {
+      "dependsOn": ["^prepare"]
+    }
+  },
+  "affected": {
+    "defaultBase": "master"
+  }
+}

@@ -228,7 +228,7 @@ function generateBuildArgs() {
     PATHS.buildArgsFile,
     Object.entries(buildArgs)
       .map(([k, v]) => `${k}=${v}`)
-      .join('\n'),
+      .join(','),
   )
   console.table(buildArgs)
   return buildArgs

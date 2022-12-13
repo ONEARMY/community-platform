@@ -27,7 +27,6 @@
     "declaration": true,
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
-    "useDefineForClassFields": true,
     "useUnknownInCatchVariables": false
   },
   "include": ["src/**/*", "types"],

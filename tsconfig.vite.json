@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "allowJs": false,
+    "esModuleInterop": false,
+    "useDefineForClassFields": true
+  }
+}

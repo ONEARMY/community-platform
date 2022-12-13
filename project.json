@@ -80,7 +80,7 @@
       "options": {
         "commands": [
           {
-            "command": "yarn workspace functions watch",
+            "command": "nx run functions:watch",
             "prefix": "functions",
             "color": "cyan"
           }
@@ -92,7 +92,7 @@
       "options": {
         "commands": [
           {
-            "command": "yarn workspace oa-emulators-docker start"
+            "command": "nx run oa-emulators-docker start"
           }
         ]
       }

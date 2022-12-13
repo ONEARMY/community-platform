@@ -49,6 +49,7 @@ export default defineConfig({
   },
   optimizeDeps: {
     esbuildOptions: {
+      tsconfig: 'tsconfig.vite.json',
       // support calls to 'global' (required for pino-logflare)
       define: {
         global: 'globalThis',

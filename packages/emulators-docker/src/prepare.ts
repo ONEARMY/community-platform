@@ -223,12 +223,13 @@ function generateBuildArgs() {
   // assign date and git commit sha ref
   buildArgs.BUILD_DATE = new Date().toISOString()
   buildArgs.VCS_REF = execSync('git rev-parse HEAD').toString().trim()
-  // write args to file to read from dockerfile ci
+  // write args to file to read from dockerfile ci in same format as example in
+  // https://github.dev/docker/build-push-action/blob/175d02bffea74695e96b351069ac938b338802f9/__tests__/context.test.ts#L150
   fs.writeFileSync(
     PATHS.buildArgsFile,
     Object.entries(buildArgs)
       .map(([k, v]) => `${k}=${v}`)
-      .join(','),
+      .join('\\n'),
   )
   console.table(buildArgs)
   return buildArgs

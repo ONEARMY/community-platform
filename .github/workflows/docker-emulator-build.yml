@@ -96,4 +96,6 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha, scope=${{ github.workflow }}
           cache-to: type=gha, scope=${{ github.workflow }}, mode=max
-          build-args: ${{join(steps.prepare.outputs.BUILD_ARGS, ',')}}
+          # Ensure args pass as multiline string
+          build-args: |
+            ${{steps.prepare.outputs.BUILD_ARGS}}

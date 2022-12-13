@@ -81,8 +81,7 @@ jobs:
         id: prepare
         run: |
           yarn workspace oa-emulators-docker prepare
-          cat packages/emulators-docker/build.args | while read line || [ -n "$line" ]
-          do echo \"$line\" >> "${GITHUB_OUTPUT}"; done
+          echo "BUILD_ARGS=$(cat packages/emulators-docker/build.args)" >> $GITHUB_OUTPUT
 
       # Build and deploy
       # This will use the tags generate to identify target destination, by default pushing to both
@@ -97,4 +96,4 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha, scope=${{ github.workflow }}
           cache-to: type=gha, scope=${{ github.workflow }}, mode=max
-          build-args: ${{join(steps.prepare.outputs.*, '\n')}}
+          build-args: ${{join(steps.prepare.outputs.*, ', ')}}

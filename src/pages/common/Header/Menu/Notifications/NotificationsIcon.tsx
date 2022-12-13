@@ -1,5 +1,5 @@
 import { Flex } from 'theme-ui'
-import IconNotifications from 'src/assets/icons/icon-notification.svg'
+import { ReactComponent as IconNotifications } from 'src/assets/icons/icon-notification.svg'
 import styled from '@emotion/styled'
 
 const IconWrapper = styled(Flex)`

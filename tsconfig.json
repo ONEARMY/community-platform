@@ -1,11 +1,10 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "baseUrl": ".",
+    "allowJs": false,
     "skipLibCheck": true,
-    "esModuleInterop": true,
+    "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
@@ -27,6 +26,7 @@
     "declaration": true,
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
+    "useDefineForClassFields": true,
     "useUnknownInCatchVariables": false
   },
   "include": ["src/**/*", "types"],

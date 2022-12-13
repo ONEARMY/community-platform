@@ -1,5 +1,5 @@
 import type { UserConfig } from '@commitlint/types'
-import path from 'path'
+import * as path from 'path'
 
 const Configuration: UserConfig = {
   extends: ['@commitlint/config-conventional'],

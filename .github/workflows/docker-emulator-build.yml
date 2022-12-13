@@ -81,10 +81,8 @@ jobs:
         id: prepare
         run: |
           yarn workspace oa-emulators-docker prepare
-          cat packages/emulators-docker/build.args | while read line 
-          do
-              echo $line >> "${GITHUB_OUTPUT}"
-          done
+          cat packages/emulators-docker/build.args | while read line || [ -n "$line" ]
+          do echo \"$line\" >> "${GITHUB_OUTPUT}"; done
 
       # Build and deploy
       # This will use the tags generate to identify target destination, by default pushing to both

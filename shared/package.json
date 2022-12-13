@@ -4,7 +4,7 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch"
+    "serve": "tsc --watch"
   },
   "devDependencies": {
     "typescript": "^4.5.5"

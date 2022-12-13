@@ -4,8 +4,114 @@
   "sourceRoot": "src",
   "projectType": "application",
   "targets": {
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "nx run start-platform --fastRefresh=FALSE",
+          "nx run start-components",
+          "nx run start-shared"
+        ],
+        "parallel": true
+      }
+    },
+    "start-emulated": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "nx run start-platform --fastRefresh=FALSE --port=4000",
+          "nx run start-components",
+          "nx run start-shared",
+          "nx run start-functions",
+          "nx run start-emulator"
+        ],
+        "parallel": true
+      }
+    },
+    "start-emulated-local": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "nx run start-platform --fastRefresh=FALSE --port=4000",
+          "nx run start-components",
+          "nx run start-shared",
+          "nx run start-functions",
+          "nx run start-emulator --repo="
+        ],
+        "parallel": true
+      }
+    },
+
+    "start-platform": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "cross-env FAST_REFRESH={args.fastRefresh} PORT={args.port} yarn react-scripts start",
+            "prefix": "platform",
+            "color": "magenta"
+          }
+        ]
+      }
+    },
+    "start-components": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "nx run oa-components:dev",
+            "prefix": "components",
+            "color": "blue"
+          }
+        ]
+      }
+    },
+    "start-shared": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "nx run oa-shared:serve",
+            "prefix": "shared",
+            "color": "green"
+          }
+        ]
+      }
+    },
+    "start-functions": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "yarn workspace functions watch",
+            "prefix": "functions",
+            "color": "cyan"
+          }
+        ]
+      }
+    },
+    "start-emulator": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "yarn workspace oa-emulators-docker start"
+          }
+        ]
+      }
+    },
+
     "build": {
-      "command": "yarn react-scripts build"
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "react-scripts build"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cross-env FAST_REFRESH=false yarn react-scripts start"
+      }
     }
   }
 }

@@ -149,7 +149,7 @@ commands:
       - run:
           name: Inject target environment configuration
           command: |
-            yarn build:inject-config
+            yarn workspace oa-scripts post-cra-build
 
   firebase_deploy:
     description: Deploy to Firebase

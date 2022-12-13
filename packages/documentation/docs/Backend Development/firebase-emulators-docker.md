@@ -21,7 +21,7 @@ docker -v
 ## Getting Started
 
 ```
-yarn start:emulated:docker
+yarn start:emulated
 ```
 
 This will start the following:
@@ -142,7 +142,7 @@ yarn workspace oa-emulators-docker build --repo=
 ```
 
 ```
-yarn start:emulated:docker:local
+yarn start:emulated:local
 ```
 
 ## Troubleshooting

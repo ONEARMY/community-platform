@@ -13,11 +13,7 @@ To run emulators locally you will need (as described in: https://firebase.google
 
 ## Getting Started
 
-```
-yarn start:emulated
-```
-
-This will start the following:
+Start the following:
 
 - **Functions emulator**  
   May take a few minutes to download required binaries when running for the first time

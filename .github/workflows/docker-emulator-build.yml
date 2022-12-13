@@ -75,7 +75,10 @@ jobs:
       - name: Set environment variables
         run: export REACT_APP_PROJECT_VERSION=${GITHUB_SHA}
       - name: Prepare Build
-        run: yarn workspace oa-emulators-docker prepare
+        id: prepare
+        run: |
+          yarn workspace oa-emulators-docker prepare
+          echo "BUILD_ARGS=$(cat packages/emulators-docker/build.args)" >> $GITHUB_OUTPUT
 
       # Build and deploy
       # This will use the tags generate to identify target destination, by default pushing to both
@@ -90,3 +93,4 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha, scope=${{ github.workflow }}
           cache-to: type=gha, scope=${{ github.workflow }}, mode=max
+          build-args: ${{steps.prepare.outputs.BUILD_ARGS}}

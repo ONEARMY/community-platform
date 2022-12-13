@@ -2,7 +2,6 @@ import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfil
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
 import { defineConfig } from 'vite'
-
 import svgr from 'vite-plugin-svgr'
 import envCompatible from 'vite-plugin-env-compatible'
 import ViteTsConfigPathsPlugin from 'vite-tsconfig-paths'
@@ -26,6 +25,11 @@ export default defineConfig({
     // support REACT_APP variables accessed via process.env
     envCompatible({ prefix: 'REACT_APP_' }),
   ],
+  // open browser with server (note, will open at 127.0.1 not localhost on node <17)
+  // https://vitejs.dev/config/server-options.html#server-options
+  server: {
+    open: '/',
+  },
   resolve: {
     // TODO - determine why vite can't import from workspaces (or just use these paths instead)
     alias: [

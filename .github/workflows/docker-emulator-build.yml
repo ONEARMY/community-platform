@@ -76,12 +76,13 @@ jobs:
         run: yarn install --immutable
       - name: Set environment variables
         run: export REACT_APP_PROJECT_VERSION=${GITHUB_SHA}
-      # Run prepare script and populate build args to env (as multi line string)
-      # https://docs.github.com/en/github-ae@latest/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
       - name: Prepare Build
         id: prepare
+        run: yarn workspace oa-emulators-docker prepare
+      # Populate the list of build args generated in the prepare script to local env as multi line string
+      # https://docs.github.com/en/github-ae@latest/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
+      - name: Set build args
         run: |
-          yarn workspace oa-emulators-docker prepare
           BUILD_ARGS=$(cat packages/emulators-docker/build.args)
           echo "BUILD_ARGS<<EOF" >> $GITHUB_ENV
           echo "$BUILD_ARGS" >> $GITHUB_ENV
@@ -103,7 +104,3 @@ jobs:
           # Ensure args pass as multiline string
           build-args: |
             ${{ env.BUILD_ARGS }}
-          # build-args: |
-          #   FIREBASE_TOOLS_VERSION=11.15.0
-          #   BUILD_DATE=2022-12-13T22:43:29.516Z
-          #   VCS_REF=c6fd9bac7e24a6cb786b66bf22edd99c9b28adf9

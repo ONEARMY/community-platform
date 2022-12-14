@@ -7,20 +7,26 @@
 
 name: Docker Emulator Build
 on:
-  push:
+  # Run only when a pr has been merged into master and contains changes to seed data (additional check below for merge instead of close)
+  # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#running-your-workflow-when-a-pull-request-merges-1
+  pull_request_target:
+    types:
+      - closed
     branches:
       - master
-    # Allow manual trigger of build in case of broken/minor updates
-    workflow_dispatch:
     # Only create new build when seed data or functions update
+    # Ignore src-only changes as will populate conflicting docker image tag
     paths:
       - 'packages/emulators-docker/seed_data/**'
+  # Allow manual trigger of build in case of broken/minor updates
+  workflow_dispatch:
 
 env:
   # Image name that will be added as suffix to either github repo owner or dockerhub username
   IMAGE_NAME: community-platform-emulator
 jobs:
   build_and_preview:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       # Setup
@@ -51,7 +57,7 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }},${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=2022-10-30
+            type=raw,value=2022-12-04
           # TODO - would be nice to extract tags based on seed data provided automatically or consider other strategies
           # https://github.com/docker/metadata-action#tags-input
           flavor: |
@@ -76,6 +82,14 @@ jobs:
         run: export REACT_APP_PROJECT_VERSION=${GITHUB_SHA}
       - name: Prepare Build
         run: yarn workspace oa-emulators-docker prepare
+      # Populate the list of build args generated in the prepare script to local env as multi line string
+      # https://docs.github.com/en/github-ae@latest/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
+      - name: Set build args
+        run: |
+          BUILD_ARGS=$(cat packages/emulators-docker/build.args)
+          echo "BUILD_ARGS<<EOF" >> $GITHUB_ENV
+          echo "$BUILD_ARGS" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       # Build and deploy
       # This will use the tags generate to identify target destination, by default pushing to both
@@ -90,3 +104,6 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha, scope=${{ github.workflow }}
           cache-to: type=gha, scope=${{ github.workflow }}, mode=max
+          # Ensure args pass as multiline string
+          build-args: |
+            ${{ env.BUILD_ARGS }}

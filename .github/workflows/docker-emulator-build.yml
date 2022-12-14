@@ -7,20 +7,24 @@
 
 name: Docker Emulator Build
 on:
-  push:
+  # Run only when a pr has been merged into master and contains changes to seed data (additional check below for merge instead of close)
+  # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#running-your-workflow-when-a-pull-request-merges-1
+  pull_request_target:
+    types:
+      - closed
     branches:
       - master
-    # Allow manual trigger of build in case of broken/minor updates
-    workflow_dispatch:
-    # Only create new build when seed data or functions update
     paths:
       - 'packages/emulators-docker/seed_data/**'
+  # Allow manual trigger of build in case of broken/minor updates
+  workflow_dispatch:
 
 env:
   # Image name that will be added as suffix to either github repo owner or dockerhub username
   IMAGE_NAME: community-platform-emulator
 jobs:
   build_and_preview:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       # Setup

@@ -81,7 +81,6 @@ jobs:
       - name: Set environment variables
         run: export REACT_APP_PROJECT_VERSION=${GITHUB_SHA}
       - name: Prepare Build
-        id: prepare
         run: yarn workspace oa-emulators-docker prepare
       # Populate the list of build args generated in the prepare script to local env as multi line string
       # https://docs.github.com/en/github-ae@latest/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings

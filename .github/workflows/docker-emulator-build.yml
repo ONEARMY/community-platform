@@ -82,9 +82,10 @@ jobs:
         id: prepare
         run: |
           yarn workspace oa-emulators-docker prepare
-          echo 'BUILD_ARGS<<EOF' >> $GITHUB_ENV
-          cat packages/emulators-docker/build.args >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
+          BUILD_ARGS=$(cat packages/emulators-docker/build.args)
+          echo "BUILD_ARGS<<EOF" >> $GITHUB_ENV
+          echo "$BUILD_ARGS" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       # Build and deploy
       # This will use the tags generate to identify target destination, by default pushing to both

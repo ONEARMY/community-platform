@@ -1,4 +1,4 @@
-import { spawnSync } from 'child_process'
+import { execSync, spawnSync } from 'child_process'
 import chalk from 'chalk'
 import fs from 'fs-extra'
 import { runtimeConfigTest } from 'functions/scripts/runtimeConfig/model'
@@ -220,6 +220,17 @@ function generateBuildArgs() {
   const functionsPackageJson = fs.readJsonSync(functionsPackageJsonPath)
   buildArgs.FIREBASE_TOOLS_VERSION =
     functionsPackageJson.dependencies['firebase-tools']
+  // assign date and git commit sha ref
+  buildArgs.BUILD_DATE = new Date().toISOString()
+  buildArgs.VCS_REF = execSync('git rev-parse HEAD').toString().trim()
+  // write args to file to read from dockerfile ci
+  fs.writeFileSync(
+    PATHS.buildArgsFile,
+    Object.entries(buildArgs)
+      .map(([k, v]) => `${k}=${v}`)
+      .join('\n'),
+  )
+  console.table(buildArgs)
   return buildArgs
 }
 

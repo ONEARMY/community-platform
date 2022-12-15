@@ -33,11 +33,10 @@ export const schedule = functions
 /**
  * Rollback most recent migration when triggered from db
  */
-/** Watch changes to all user docs and apply aggregations */
 export const rollback = functions.firestore
   // TODO - use db mapping when added to models
+  // .document(`${DB_ENDPOINTS.users}/{id}`)
   .document(`migrations/{id}`)
-  //   .document(`${DB_ENDPOINTS.users}/{id}`)
   .onUpdate(async (change) => {
     const before = change.before?.data() as IMigration | undefined
     const after = change.after?.data() as IMigration | undefined

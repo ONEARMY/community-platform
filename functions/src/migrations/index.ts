@@ -4,7 +4,7 @@ import { up, down } from './provider'
 
 /**
  * Lightweight utility scripts to manage data migrations, loosely designed around
- * https://github.com/sequelize/umzug
+ * https://github.com/sequelize/umzug or https://knexjs.org/guide/migrations.html
  *
  * Currently all migration code is handled through manual methods (e.g. db get/set commands)
  * however in the future could consider integrating something like https://kafkas.github.io/firecode/

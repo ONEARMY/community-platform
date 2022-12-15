@@ -5,7 +5,7 @@ title: Firestore Migration
 
 One of the challenges with working with Firestore database is the lack of clear database schema and migration tooling to ensure data is consistent across collections.
 
-As such we may find on occasion the need to peform bulk database updates or migration scripts. This is handled using custom firebase functions
+As such we may find on occasion the need to perform bulk database updates or migration scripts. This is handled using custom firebase functions
 
 ## Create Migration
 

@@ -69,3 +69,8 @@ export const updateDoc = async (
   const mapping = DB_ENDPOINTS[endpoint] || endpoint
   return db.collection(mapping).doc(docId).update(data)
 }
+
+export const deleteDoc = async (endpoint: IDBEndpoint, docId: string) => {
+  const mapping = DB_ENDPOINTS[endpoint] || endpoint
+  return db.collection(mapping).doc(docId).delete()
+}

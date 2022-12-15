@@ -25,4 +25,6 @@ exports.seo = require('./seo')
 // Only export development api when working locally (with functions emulator)
 if (process.env.FUNCTIONS_EMULATOR === 'true') {
   exports.emulator = require('./emulator')
+  // TODO - make migrations available to production instances when ready
+  exports.migrations = require('./migrations')
 }

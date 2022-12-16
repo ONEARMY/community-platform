@@ -10,6 +10,7 @@ import { ExpertiseSection } from './content/formSections/Expertise.section'
 import { WorkspaceSection } from './content/formSections/Workspace.section'
 import { CollectionSection } from './content/formSections/Collection.section'
 import { AccountSettingsSection } from './content/formSections/AccountSettings.section'
+import { EmailNotificationsSection } from './content/formSections/EmailNotifications.section'
 import { Button, TextNotification } from 'oa-components'
 import { ProfileGuidelines } from './content/PostingGuidelines'
 import { Form } from 'react-final-form'
@@ -258,6 +259,9 @@ export class UserSettings extends React.Component<IProps, IState> {
                         showLocationDropdown={this.state.showLocationDropdown}
                       />
                     </Flex>
+                    <EmailNotificationsSection
+                      notificationSettings={values.notification_settings}
+                    />
                   </form>
                   <AccountSettingsSection />
                 </Box>

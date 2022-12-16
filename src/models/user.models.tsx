@@ -101,11 +101,18 @@ export const NotificationTypes = [
 
 export type NotificationType = typeof NotificationTypes[number]
 
+export enum EmailNotificationFrequency {
+  NEVER = 'never',
+  DAILY = 'daily',
+  WEEKLY = 'weekly',
+  MONTHLY = 'monthly',
+}
+
 export type INotificationSettings = {
   enabled: {
     [T in NotificationType]: boolean
   }
-  emailFrequency: 'daily' | 'weekly'
+  emailFrequency: EmailNotificationFrequency
 }
 
 export interface IEmailNotificationsQueueItem {

@@ -12,25 +12,28 @@ export const attemptReload = () => {
   }
 }
 
-/** Set a localstorage value with a future expiry date that will prompt self-deletion */
+/**
+ * Set a sessionStorage value with a future expiry date that will prompt self-deletion
+ * even if page session not closed (i.e. tab left open)
+ **/
 function setWithExpiry(key: string, value: string, ttl: number) {
   const item = {
     value: value,
     expiry: new Date().getTime() + ttl,
   }
-  localStorage.setItem(key, JSON.stringify(item))
+  sessionStorage.setItem(key, JSON.stringify(item))
 }
 
-/** Get a localstorage value with an expiry date, returning value only if not expired */
+/** Get a sessionStorage value with an expiry date, returning value only if not expired */
 function getWithExpiry(key: string): string | null {
-  const itemString = window.localStorage.getItem(key)
+  const itemString = window.sessionStorage.getItem(key)
   if (!itemString) return null
 
   const item = JSON.parse(itemString)
   const isExpired = new Date().getTime() > item.expiry
 
   if (isExpired) {
-    localStorage.removeItem(key)
+    sessionStorage.removeItem(key)
     return null
   }
 

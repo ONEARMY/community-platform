@@ -227,8 +227,10 @@ jobs:
       - image: andreysenov/firebase-tools:11.15.0-node-16-alpine
     resource_class: small
     steps:
+      - name: Setup yarn
+        run: corepack enable
       - setup_repo
-      - run: yarn workspace functions emulator:test
+      - run: ls && yarn workspace functions emulator:test
 
   # Create a production build
   # NOTE - not currently used in test workflow as different build_env required for each machine

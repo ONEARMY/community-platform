@@ -46,7 +46,7 @@ export class EmailNotificationsSection extends React.Component<any> {
                     ({ value }) =>
                       value ===
                         this.props.notificationSettings?.emailFrequency ??
-                      EmailNotificationFrequency.DAILY,
+                      EmailNotificationFrequency.NEVER,
                   )}
                   onChange={({ value }) => input.onChange(value)}
                 />

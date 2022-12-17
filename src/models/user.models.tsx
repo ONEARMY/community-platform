@@ -102,7 +102,7 @@ export const NotificationTypes = [
 export type NotificationType = typeof NotificationTypes[number]
 
 export enum EmailNotificationFrequency {
-  NEVER = 'never',
+  NEVER = '',
   DAILY = 'daily',
   WEEKLY = 'weekly',
   MONTHLY = 'monthly',

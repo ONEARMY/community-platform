@@ -223,11 +223,12 @@ jobs:
 
   test_functions:
     docker:
-      - image: timbru31/java-node:alpine-12
+      # use base image with matching firebase-tools and node as dev
+      - image: andreysenov/firebase-tools:11.15.0-node-16-alpine
     resource_class: small
     steps:
       - setup_repo
-      - run: yarn build:components && yarn workspace functions build && yarn workspace functions emulator:test
+      - run: yarn workspace functions emulator:test
 
   # Create a production build
   # NOTE - not currently used in test workflow as different build_env required for each machine

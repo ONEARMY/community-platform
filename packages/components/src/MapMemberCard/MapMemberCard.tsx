@@ -45,7 +45,7 @@ export const MapMemberCard = (props: Props) => {
   const onPinModerated = props.onPinModerated
 
   return (
-    <Card sx={{ maxWidth: '230px' }}>
+    <Card sx={{ maxWidth: '230px' }} data-cy="MapMemberCard">
       <InternalLink to={`/u/${user.username}`}>
         {!!props.loading && (
           <>
@@ -113,12 +113,13 @@ export const MapMemberCard = (props: Props) => {
         {pin.moderation !== 'accepted' && (
           <Alert
             mb={2}
+            data-cy="MapMemberCard: moderation status"
             variant={pin.moderation === 'rejected' ? 'failure' : 'info'}
             sx={{
               mx: 2,
               fontSize: 1,
               textAlign: 'left',
-              padding: 2
+              padding: 2,
             }}
           >
             {moderationStatusMsg}
@@ -135,7 +136,7 @@ export const MapMemberCard = (props: Props) => {
         >
           <Button
             small
-            data-cy={'accept'}
+            data-cy="MapMemberCard: accept"
             variant={'primary'}
             icon="check"
             onClick={() => onPinModerated && onPinModerated(true)}
@@ -144,12 +145,12 @@ export const MapMemberCard = (props: Props) => {
           </Button>
           <Button
             small
-            data-cy="reject-pin"
+            data-cy="MapMemberCard: reject"
             variant={'tertiary'}
             icon="delete"
             onClick={() => onPinModerated && onPinModerated(false)}
           >
-            Delete
+            Reject
           </Button>
         </Flex>
       )}

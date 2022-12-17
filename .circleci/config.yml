@@ -413,13 +413,13 @@ workflows:
             branches:
               ignore:
                 - production
-      # - test_functions:
-      #     name: 'Cloud Function tests'
-      #     context: build-context
-      #     filters:
-      #       branches:
-      #         ignore:
-      #           - production
+      - test_functions:
+          name: 'Cloud Function tests'
+          context: build-context
+          filters:
+            branches:
+              ignore:
+                - production
       - test_e2e:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           requires:

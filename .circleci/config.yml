@@ -226,9 +226,8 @@ jobs:
       - image: timbru31/java-node:alpine-12
     resource_class: small
     steps:
-      - checkout
-      # - *restore_yarn_cache
-      - run: yarn && yarn build:components && yarn workspace functions build && yarn workspace functions emulator:test
+      - setup_repo
+      - run: yarn build:components && yarn workspace functions build && yarn workspace functions emulator:test
 
   # Create a production build
   # NOTE - not currently used in test workflow as different build_env required for each machine

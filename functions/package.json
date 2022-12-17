@@ -36,11 +36,10 @@
     "log-update": "^4.0.0",
     "node-fetch": "2",
     "oa-shared": "workspace:*",
-    "one-army-community-platform": "workspace:*",
     "request": "^2.88.2",
     "sharp": "^0.30.1",
     "sitemap": "^7.1.1",
-    "uuid": "^8.3.2"
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
@@ -53,6 +52,7 @@
     "@types/node": "16",
     "@types/request": "^2.48.5",
     "@types/sharp": "^0.26.0",
+    "@types/uuid": "^9.0.0",
     "@types/webpack": "^4.41.29",
     "@types/webpack-node-externals": "^2.5.1",
     "awesome-typescript-loader": "^5.2.1",

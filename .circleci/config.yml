@@ -35,10 +35,8 @@ aliases:
       keys:
         # https://circleci.com/docs/2.0/caching/
         # https://circleci.com/docs/2.0/yarn/
-        # when lock file changes, use increasingly general patterns to restore cache (also need to change `save_cache` path)
         # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
-        - v14-yarn-packages-{{ checksum "yarn.lock" }}
-        - v14-yarn-packages-
+        - v19-yarn-packages-{{ checksum "yarn.lock" }}
   - &install_packages
     run:
       name: Install Packages
@@ -52,14 +50,11 @@ aliases:
         du -a /home | sort -n -r | head -n 500
   - &save_yarn_cache
     save_cache:
-      # note - if moving to workspaces include paths: https://discuss.circleci.com/t/yarn-cached-install-slow/34823/2
-      # depending on whether enableGlobalCache is set to true or not (and windows/linux) these paths may vary
+      # https://circleci.com/docs/caching/#basic-example-of-yarn-package-manager-caching
       paths:
-        # global cache location
-        # - ~/.yarn/berry/cache
-        # local cache location
-        - ~/project/.yarn/cache
-      key: v14-yarn-packages-{{ checksum "yarn.lock" }}
+        - .yarn/cache
+        - .yarn/install-state.gz
+      key: v19-yarn-packages-{{ checksum "yarn.lock" }}
 
   - &filter_only_production
     filters:
@@ -223,12 +218,30 @@ jobs:
 
   test_functions:
     docker:
-      - image: timbru31/java-node:alpine-12
+      # use base image published by platform to ensure compatibility
+      - image: onearmyplatform/community-platform-emulator:pp-2022-12-04
     resource_class: small
     steps:
-      - checkout
-      # - *restore_yarn_cache
-      - run: yarn && yarn build:components && yarn workspace functions build && yarn workspace functions emulator:test
+      - setup_repo
+      - attach_workspace:
+          at: '.'
+      # Copy docker generated files to include correct firebase.json port bindings,
+      # dummy credentials and runtimeconfig (note overwrites )
+      # Also create dummy build folder used to copy index.html as part of webpack build
+      # and build (required before running tests)
+      - run:
+          name: Build Functions
+          command: |
+            cp /app/firebase.json firebase.json
+            cp /app/credentials.json credentials.json
+            cp /app/functions/.runtimeconfig.json functions/.runtimeconfig.json
+            mkdir build
+            touch build/index.html
+            yarn workspace functions build
+      - run:
+          name: Test Functions
+          # Run functions emulator test command with additional flags to ensure CI receives correct exit code
+          command: cd functions && firebase emulators:exec --project community-platform-emulated "yarn jest . --forceExit --detectOpenHandles"
 
   # Create a production build
   # NOTE - not currently used in test workflow as different build_env required for each machine
@@ -413,13 +426,13 @@ workflows:
             branches:
               ignore:
                 - production
-      # - test_functions:
-      #     name: 'Cloud Function tests'
-      #     context: build-context
-      #     filters:
-      #       branches:
-      #         ignore:
-      #           - production
+      - test_functions:
+          name: 'Cloud Function tests'
+          context: build-context
+          filters:
+            branches:
+              ignore:
+                - production
       - test_e2e:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           requires:
@@ -477,7 +490,7 @@ workflows:
       - build:
           name: Build Production Release
           context: build-context
-          requires: 
+          requires:
             - 'Release new version to GitHub'
           <<: *filter_only_production
       - deploy:

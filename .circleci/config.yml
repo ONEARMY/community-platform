@@ -224,7 +224,7 @@ jobs:
   test_functions:
     docker:
       # use base image with matching firebase-tools and node as dev
-      - image: andreysenov/firebase-tools:11.15.0-node-16-alpine
+      - image: andreysenov/firebase-tools:11.15.0-node-16
     resource_class: small
     steps:
       - run:

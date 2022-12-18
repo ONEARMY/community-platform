@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { observer, inject } from 'mobx-react'
-import { Heading, Box, Flex, Text } from 'theme-ui'
+import { Heading, Box, Flex, Text, Alert } from 'theme-ui'
 import { Field } from 'react-final-form'
 import { ExternalLink, FieldTextarea, MapWithDraggablePin } from 'oa-components'
 import { FlexSectionContainer } from './elements'
@@ -33,8 +33,8 @@ export class WorkspaceMapPinSection extends React.Component<any> {
             Your map pin
           </Heading>
         </Flex>
-        <Box bg={theme.colors.red2} mt={2} p={3} sx={{ borderRadius: '3px' }}>
-          <Text sx={{ fontSize: 2 }}>
+        <Alert sx={{ fontSize: 2, textAlign: 'left', my: 2 }} variant="failure">
+          <Box>
             In order to have your pin accepted on our map you have to collect at
             least 6 stars in the Ally Checklist. Learn more about the{' '}
             <ExternalLink
@@ -42,15 +42,15 @@ export class WorkspaceMapPinSection extends React.Component<any> {
                 this.injected.themeStore?.currentTheme.styles
                   .communityProgramURL
               }
-              sx={{ color: 'black', textDecoration: 'underline' }}
+              sx={{ textDecoration: 'underline', color: 'currentcolor' }}
             >
               Community Program
             </ExternalLink>{' '}
             and how you can join.
-          </Text>
-        </Box>
+          </Box>
+        </Alert>
         <Box>
-          <Text mb={2} mt={4} sx={{ fontSize: 2 }}>
+          <Text mb={2} sx={{ fontSize: 2, display: 'block' }}>
             Short description of your pin*
           </Text>
           <Field
@@ -80,7 +80,7 @@ export class WorkspaceMapPinSection extends React.Component<any> {
               return (
                 <>
                   <Box>
-                    <Text mb={2} mt={4} sx={{ fontSize: 2 }}>
+                    <Text mb={2} mt={4} sx={{ fontSize: 2, display: 'block' }}>
                       Your workspace location
                     </Text>
                     {props.meta.invalid && (

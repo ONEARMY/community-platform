@@ -36,7 +36,7 @@ aliases:
         # https://circleci.com/docs/2.0/caching/
         # https://circleci.com/docs/2.0/yarn/
         # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
-        - v15-yarn-packages-{{ checksum "yarn.lock" }}
+        - v16-yarn-packages-{{ checksum "yarn.lock" }}
   - &install_packages
     run:
       name: Install Packages
@@ -54,7 +54,7 @@ aliases:
       paths:
         - .yarn/cache
         - .yarn/unplugged
-      key: v15-yarn-packages-{{ checksum "yarn.lock" }}
+      key: v16-yarn-packages-{{ checksum "yarn.lock" }}
 
   - &filter_only_production
     filters:
@@ -226,9 +226,11 @@ jobs:
       # HACK - copy docker generated files to include correct firebase.json port bindings,
       # dummy credentials and runtimeconfig (note overwrites )
       - run: |
-          cp app/firebase.json firebase.json
-          cp app/credentials.json credentials.json
-          cp app/functions/.runtimeconfig.json functions/.runtimeconfig.json
+          ls
+          ls /
+          cp /app/firebase.json firebase.json
+          cp /app/credentials.json credentials.json
+          cp /app/functions/.runtimeconfig.json functions/.runtimeconfig.json
       - run: yarn workspace functions emulator:test
 
   # Create a production build

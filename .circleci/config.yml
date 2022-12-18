@@ -228,9 +228,10 @@ jobs:
       - image: onearmyplatform/community-platform-emulator:pp-2022-12-04
     resource_class: small
     steps:
-      - run: npm i -g --prefix=$HOME/.local corepack
+      # # ensure yarn berry enabled by installing corepack (local folder for permissions)
+      # - run: npm i -g --prefix=$HOME/.local corepack
       - setup_repo
-      - run: yarn --version && yarn workspace functions emulator:test
+      - run: yarn install && yarn workspace functions emulator:test
 
   # Create a production build
   # NOTE - not currently used in test workflow as different build_env required for each machine

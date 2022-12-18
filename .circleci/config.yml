@@ -240,7 +240,8 @@ jobs:
             yarn workspace functions build
       - run:
           name: Test Functions
-          command: yarn workspace functions emulator:test
+          # Run functions emulator test command with additional flags to ensure CI receives correct exit code
+          command: cd functions && firebase emulators:exec --project community-platform-emulated "yarn jest . --forceExit --detectOpenHandles"
 
   # Create a production build
   # NOTE - not currently used in test workflow as different build_env required for each machine

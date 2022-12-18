@@ -229,7 +229,7 @@ jobs:
     steps:
       - run:
           name: Setup yarn
-          command: corepack enable
+          command: sudo corepack enable
       - setup_repo
       - run: ls && yarn workspace functions emulator:test
 

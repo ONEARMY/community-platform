@@ -228,9 +228,6 @@ jobs:
       - image: andreysenov/firebase-tools:11.15.0-node-16-alpine
     resource_class: small
     steps:
-      - run:
-          name: Setup yarn
-          command: yarn set version berry
       - setup_repo
       - run: ls && yarn workspace functions emulator:test
 

@@ -40,7 +40,7 @@ aliases:
   - &install_packages
     run:
       name: Install Packages
-      command: yarn install --immutable --cache-folder ~/project/.yarn/cache
+      command: yarn install --immutable
     # Example debugging commands for use troubleshooting caching (du will exit with status 141)
   - &check_folders
     run:

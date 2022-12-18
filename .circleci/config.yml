@@ -53,8 +53,8 @@ aliases:
       # https://circleci.com/docs/caching/#basic-example-of-yarn-package-manager-caching
       # Ensure caching to project folder (some images change home, /home/node)
       paths:
-        - ~/project/yarn/cache
-        - ~/project/yarn/unplugged
+        - ~/project/.yarn/cache
+        - ~/project/.yarn/unplugged
       key: v17-yarn-packages-{{ checksum "yarn.lock" }}
 
   - &filter_only_production
@@ -224,10 +224,11 @@ jobs:
     resource_class: small
     steps:
       - setup_repo
-      - *check_folders
       # Copy docker generated files to include correct firebase.json port bindings,
       # dummy credentials and runtimeconfig (note overwrites )
       - run: |
+          ls -a ./
+          ls -a ~/project
           ls .yarn
           cp /app/firebase.json firebase.json
           cp /app/credentials.json credentials.json

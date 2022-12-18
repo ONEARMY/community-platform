@@ -230,7 +230,7 @@ jobs:
     steps:
       - run:
           name: Setup yarn
-          command: npm i -g corepack
+          command: yarn set version berry
       - setup_repo
       - run: ls && yarn workspace functions emulator:test
 

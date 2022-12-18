@@ -224,7 +224,7 @@ jobs:
     resource_class: small
     steps:
       - setup_repo
-      - check_folders
+      - *check_folders
       # Copy docker generated files to include correct firebase.json port bindings,
       # dummy credentials and runtimeconfig (note overwrites )
       - run: |

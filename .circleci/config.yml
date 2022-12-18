@@ -36,7 +36,7 @@ aliases:
         # https://circleci.com/docs/2.0/caching/
         # https://circleci.com/docs/2.0/yarn/
         # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
-        - v17-yarn-packages-{{ checksum "yarn.lock" }}
+        - v18-yarn-packages-{{ checksum "yarn.lock" }}
   - &install_packages
     run:
       name: Install Packages
@@ -53,7 +53,7 @@ aliases:
       # https://circleci.com/docs/caching/#basic-example-of-yarn-package-manager-caching
       paths:
         - .yarn/cache
-      key: v17-yarn-packages-{{ checksum "yarn.lock" }}
+      key: v18-yarn-packages-{{ checksum "yarn.lock" }}
 
   - &filter_only_production
     filters:

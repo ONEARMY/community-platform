@@ -224,16 +224,14 @@ jobs:
     resource_class: small
     steps:
       - setup_repo
+      - attach_workspace:
+          at: '.'
       # Copy docker generated files to include correct firebase.json port bindings,
       # dummy credentials and runtimeconfig (note overwrites )
       - run: |
-          ls -a ./
-          ls -a ~/project
-          ls .yarn
           cp /app/firebase.json firebase.json
           cp /app/credentials.json credentials.json
           cp /app/functions/.runtimeconfig.json functions/.runtimeconfig.json
-          cat ./firebase.json
       - run: yarn workspace functions emulator:test
 
   # Create a production build

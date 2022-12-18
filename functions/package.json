@@ -14,7 +14,7 @@
     "copyDevConfig": "firebase functions:config:get > .runtimeconfig.json",
     "db:backup:local": "firestore-export -a service.json -b backup.json -p",
     "shell": "yarn build && firebase functions:shell",
-    "emulator:test": "firebase emulators:exec --project default 'jest .'",
+    "emulator:test": "firebase emulators:exec --only firestore,database,functions,pubsub --project default 'jest .'",
     "emulator:test:watch": "firebase emulators:exec --ui --project default 'jest . --watch'",
     "emulator:start": "firebase emulators:start --import=./data/emulated",
     "emulator:seed": "ts-node scripts/emulator/seed.ts",

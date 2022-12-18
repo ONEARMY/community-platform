@@ -90,7 +90,7 @@ RUN \
 # TODO - find a way to run the functions test spec against emulator 
 
 # Exposed Ports - These should match firebase.json config
-EXPOSE 4001 4002 4003 4004 4005 4006 4007
+EXPOSE 4001 4002 4003 4004 4005 4006 4007 5000
 
 # Troubleshooting - can just run to get cli access
 # CMD [ "/bin/sh" ]

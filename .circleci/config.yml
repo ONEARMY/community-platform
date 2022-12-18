@@ -224,13 +224,13 @@ jobs:
   test_functions:
     docker:
       # use base image with matching firebase-tools and node as dev
-      # Note - requires installing sudo and enabling corepack to support yarn v2
+      # Note - requires installing corepack to support yarn v2
       - image: andreysenov/firebase-tools:11.15.0-node-16-alpine
     resource_class: small
     steps:
       - run:
           name: Setup yarn
-          command: apk add --no-cache su-exec && exec su-exec corepack enable
+          command: npm i -g corepack
       - setup_repo
       - run: ls && yarn workspace functions emulator:test
 

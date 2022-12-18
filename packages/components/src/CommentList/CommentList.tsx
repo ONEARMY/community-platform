@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import ReactGA from 'react-ga4'
-import { Box } from 'theme-ui'
+import { Box, Flex } from 'theme-ui'
 import { Button, CommentItem } from '../'
 import type { CommentItemProps as Comment } from '../CommentItem/CommentItem'
 const MAX_COMMENTS = 5
@@ -76,20 +76,24 @@ export const CommentList: React.FC<{
           </Box>
         ))}
       {comments && comments.length > shownComments && (
-        <Button
-          sx={{ width: 'max-content', margin: '0 auto' }}
-          variant="outline"
-          onClick={() => {
-            ReactGA.event({
-              category: 'Comments',
-              action: 'Show more',
-              label: articleTitle,
-            })
-            return setMoreComments(moreComments + 1)
-          }}
-        >
-          show more comments
-        </Button>
+        <Flex>
+          <Button
+            sx={{
+              margin: '0 auto',
+            }}
+            variant="outline"
+            onClick={() => {
+              ReactGA.event({
+                category: 'Comments',
+                action: 'Show more',
+                label: articleTitle,
+              })
+              return setMoreComments(moreComments + 1)
+            }}
+          >
+            show more comments
+          </Button>
+        </Flex>
       )}
     </Box>
   )

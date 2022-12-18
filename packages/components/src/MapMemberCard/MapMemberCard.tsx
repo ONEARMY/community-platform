@@ -146,7 +146,7 @@ export const MapMemberCard = (props: Props) => {
           <Button
             small
             data-cy="MapMemberCard: reject"
-            variant={'tertiary'}
+            variant={'outline'}
             icon="delete"
             onClick={() => onPinModerated && onPinModerated(false)}
           >

@@ -36,7 +36,7 @@ export class ProfileDelete extends React.Component<IProps, IState> {
       <>
         <Button
           icon="delete"
-          variant="tertiary"
+          variant={'outline'}
           my={3}
           onClick={() => this.setState({ showDeleteDialog: true })}
         >
@@ -71,7 +71,7 @@ export class ProfileDelete extends React.Component<IProps, IState> {
                     </Button>
                     <Button
                       type="submit"
-                      variant="tertiary"
+                      variant={'outline'}
                       ml={1}
                       disabled={values.password ? false : true}
                     >

@@ -227,8 +227,9 @@ class SignInPage extends React.Component<IProps, IState> {
 
                             <Flex>
                               <Button
+                                large
                                 data-cy="submit"
-                                sx={{ width: '100%' }}
+                                sx={{ width: '100%', justifyContent: 'center' }}
                                 variant={'primary'}
                                 disabled={submitting || invalid}
                                 type="submit"

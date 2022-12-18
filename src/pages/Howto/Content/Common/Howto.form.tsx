@@ -354,7 +354,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 sx={{ flexDirection: 'column' }}
                                 mb={[4, 4, 0]}
                               >
-                                {formValues.files.length !== 0 &&
+                                {formValues.files?.length &&
                                 parentType === 'edit' &&
                                 !fileEditMode ? (
                                   <Flex
@@ -371,7 +371,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                       />
                                     ))}
                                     <Button
-                                      variant={'tertiary'}
+                                      variant={'outline'}
                                       icon="delete"
                                       onClick={() =>
                                         this.setState({
@@ -490,7 +490,6 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 mt={[10, 10, 20]}
                                 mb={[5, 5, 20]}
                                 variant="secondary"
-                                medium
                                 onClick={() => {
                                   fields.push({
                                     title: '',
@@ -546,18 +545,23 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                         <span>Save to draft</span>
                       ) : (
                         <span>Revert to draft</span>
-                      )}{' '}
+                      )}
                     </Button>
                     <Button
+                      large
                       data-cy={'submit'}
                       onClick={() => this.trySubmitForm(false)}
                       mt={3}
                       variant="primary"
                       type="submit"
                       disabled={submitting}
-                      sx={{ width: '100%', mb: ['40px', '40px', 0] }}
+                      sx={{
+                        width: '100%',
+                        display: 'block',
+                        mb: ['40px', '40px', 0],
+                      }}
                     >
-                      <span>Publish</span>
+                      Publish
                     </Button>
                   </Box>
                 </Flex>

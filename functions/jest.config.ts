@@ -7,6 +7,7 @@ const config: JestConfigWithTsJest = {
   roots: ['<rootDir>'],
   modulePathIgnorePatterns: ['<rootDir>/dist/', '<rootDir>/lib/'],
 
+  testTimeout: 15000,
   moduleNameMapper: pathsToModuleNameMapper({
     // https://github.com/firebase/firebase-admin-node/issues/1488
     '@firebase/*': ['<rootDir>/node_modules/@firebase/*'],

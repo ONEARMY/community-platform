@@ -235,9 +235,7 @@ jobs:
           mkdir build
           touch build/index.html
       # Functions require source to be built before running emulator tests
-      # TODO - install-state.gz not persisted from setup_repo so run install again
       - run: |
-          yarn install --immutable
           yarn workspace functions build
           yarn workspace functions emulator:test
 

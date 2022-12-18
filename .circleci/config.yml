@@ -224,7 +224,8 @@ jobs:
   test_functions:
     docker:
       # use base image published by platform to ensure compatibility
-      - image: onearmyplatform/community-platform-emulator
+      # TODO - better to fix to more generic version without pp data (no need to update)
+      - image: onearmyplatform/community-platform-emulator:pp-2022-12-04
     resource_class: small
     steps:
       - setup_repo

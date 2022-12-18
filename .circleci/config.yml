@@ -228,16 +228,19 @@ jobs:
       # Copy docker generated files to include correct firebase.json port bindings,
       # dummy credentials and runtimeconfig (note overwrites )
       # Also create dummy build folder used to copy index.html as part of webpack build
-      - run: |
-          cp /app/firebase.json firebase.json
-          cp /app/credentials.json credentials.json
-          cp /app/functions/.runtimeconfig.json functions/.runtimeconfig.json
-          mkdir build
-          touch build/index.html
-      # Functions require source to be built before running emulator tests
-      - run: |
-          yarn workspace functions build
-          yarn workspace functions emulator:test
+      # and build (required before running tests)
+      - run:
+          name: Build Functions
+          command: |
+            cp /app/firebase.json firebase.json
+            cp /app/credentials.json credentials.json
+            cp /app/functions/.runtimeconfig.json functions/.runtimeconfig.json
+            mkdir build
+            touch build/index.html
+            yarn workspace functions build
+      - run:
+          name: Test Functions
+          command: yarn workspace functions emulator:test
 
   # Create a production build
   # NOTE - not currently used in test workflow as different build_env required for each machine

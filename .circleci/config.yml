@@ -42,23 +42,25 @@ aliases:
       name: Install Packages
       command: |
         yarn install --immutable
-        ls ./yarn
-        if [ ! -f ./yarn/install-state.gz ]; then echo "install-state not created" && exit 1; fi
-    # Example debugging commands for use troubleshooting caching (du will exit with status 141)
+        ls -a .
+        ls .yarn
+        if [ ! -f .yarn/install-state.gz ]; then echo "install-state not created" && exit 1; fi
+  - &save_yarn_cache
+    save_cache:
+      # https://circleci.com/docs/caching/#basic-example-of-yarn-package-manager-caching
+      # NOTE - ensure always caches to consistent location when using non-circleci user
+      paths:
+        - /home/circleci/.yarn/cache
+        - /home/circleci/.yarn/install-state.gz
+      key: v7-yarn-{{ checksum "yarn.lock" }}
+
+  # Example debugging commands for use troubleshooting caching (du will exit with status 141)
   - &check_folders
     run:
       name: check folders
       command: |
         ls -a ~/project
         du -a /home | sort -n -r | head -n 500
-  - &save_yarn_cache
-    save_cache:
-      # https://circleci.com/docs/caching/#basic-example-of-yarn-package-manager-caching
-      # NOTE - ensure always caches to consistent location when using non-circleci user
-      paths:
-        - .yarn/cache
-        - .yarn/install-state.gz
-      key: v7-yarn-{{ checksum "yarn.lock" }}
 
   - &filter_only_production
     filters:

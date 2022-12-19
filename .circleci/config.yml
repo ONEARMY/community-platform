@@ -225,8 +225,8 @@ jobs:
     steps:
       # Default home directory will be /home/node, however maintain compatibility with other steps and cache
       - run: |
-          mkdir /home/circleci
-          usermod -d /home/circleci node
+          adduser -D circleci 
+          su -l circleci
           cd ~
           echo "$PWD"
       - setup_repo

@@ -1,3 +1,9 @@
+/**
+ * If you want to be able to log with any of the users below
+ * you will need to manually create them within
+ * the `onearmy-test-ci` Firebase Project.
+ * https://console.firebase.google.com/u/0/project/onearmy-test-ci/authentication/users
+ */
 export const users = {
   subscriber: {
     _authID: 'a0dFrGVJTlQUA9BqH0QmnQM6flX2',
@@ -256,5 +262,30 @@ export const users = {
     collectedPlasticTypes: null,
     email: 'settings_workplace_new@test.com',
     password: 'test1234',
+  },
+  mapview_testing_rejected: {
+    openingHours: [],
+    location: null,
+    verified: true,
+    _modified: '2020-01-07T12:14:15.081Z',
+    _created: '2020-01-07T12:14:15.081Z',
+    displayName: 'mapview_testing_rejected',
+    isV4Member: null,
+    _deleted: false,
+    workspaceType: null,
+    country: null,
+    userName: 'mapview_testing_rejected',
+    links: [],
+    mapPinDescription: null,
+    machineBuilderXp: null,
+    _authID: 'p09Az089n4Uf5IPcZwvhmTEnJ353',
+    about: null,
+    _id: 'mapview_testing_rejected',
+    profileType: 'workspace',
+    coverImages: [],
+    isExpert: null,
+    collectedPlasticTypes: null,
+    email: 'mapview_testing_rejected@test.com',
+    password: 'mapview_testing_rejected@test.com',
   },
 }

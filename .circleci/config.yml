@@ -228,8 +228,10 @@ jobs:
       - run:
           name: Set home folder for circleci
           command: |
-            apk add --update shadow
-            usermod -m -d /home/circleci node
+            mkdir /home/circleci
+            echo 'export HOME=/home/circleci' >> "$BASH_ENV"
+            source "$BASH_ENV"
+            cd ~
             echo $PWD && echo $HOME
       - setup_repo
       - attach_workspace:

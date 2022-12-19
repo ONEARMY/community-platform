@@ -224,11 +224,11 @@ jobs:
     resource_class: small
     steps:
       # Default home directory will be /home/node, however maintain compatibility with other steps and cache
-      - run: |
-          adduser -D circleci 
-          su -l circleci
-          cd ~
-          echo "$PWD"
+      - run:
+          name: Set home folder for circleci
+          command: |
+            apk add --update shadow
+            usermod -d /home/circleci node
       - setup_repo
       - attach_workspace:
           at: '.'

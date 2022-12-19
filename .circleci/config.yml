@@ -224,13 +224,14 @@ jobs:
     resource_class: small
     steps:
       # Default home directory will be /home/node, however maintain compatibility with other steps and cache
+      # Install shadow package as usermod does not exist in alpine (https://pkgs.alpinelinux.org/contents?file=usermod&path=&name=&branch=v3.10)
       - run:
           name: Set home folder for circleci
           command: |
             apk add --update shadow
-            usermod -d /home/circleci node
+            usermod -m -d /home/circleci node
             cd ~
-            echo $PWD
+            echo $PWD && echo $HOME
       - setup_repo
       - attach_workspace:
           at: '.'

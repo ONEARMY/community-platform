@@ -36,25 +36,36 @@ aliases:
         # https://circleci.com/docs/2.0/caching/
         # https://circleci.com/docs/2.0/yarn/
         # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
-        - v19-yarn-packages-{{ checksum "yarn.lock" }}
+        - v9-yarn-{{ checksum "yarn.lock" }}
+        - v9-yarn
   - &install_packages
     run:
       name: Install Packages
-      command: yarn install --immutable
-    # Example debugging commands for use troubleshooting caching (du will exit with status 141)
+      # Install packages
+      # NOTE run twice with check to ensure install-state created (previously had issues, doesn't add much time to check)
+      command: |
+        yarn install --immutable
+        yarn install --immutable
+        if [ ! -f /home/circleci/.yarn/install-state.gz ]; then echo "install-state not created" && exit 1; fi
+      environment:
+        YARN_INSTALL_STATE_PATH: /home/circleci/.yarn/install-state.gz
+        YARN_CACHE_FOLDER: /home/circleci/.yarn/cache
+  - &save_yarn_cache
+    save_cache:
+      # https://circleci.com/docs/caching/#basic-example-of-yarn-package-manager-caching
+      # NOTE - ensure always caches to consistent location when using non-circleci user
+      paths:
+        - /home/circleci/.yarn/cache
+        - /home/circleci/.yarn/install-state.gz
+      key: v9-yarn-{{ checksum "yarn.lock" }}
+
+  # Example debugging commands for use troubleshooting caching (du will exit with status 141)
   - &check_folders
     run:
       name: check folders
       command: |
         ls -a ~/project
         du -a /home | sort -n -r | head -n 500
-  - &save_yarn_cache
-    save_cache:
-      # https://circleci.com/docs/caching/#basic-example-of-yarn-package-manager-caching
-      paths:
-        - .yarn/cache
-        - .yarn/install-state.gz
-      key: v19-yarn-packages-{{ checksum "yarn.lock" }}
 
   - &filter_only_production
     filters:
@@ -134,7 +145,6 @@ commands:
       - checkout
       - *restore_yarn_cache
       - *install_packages
-      - *save_yarn_cache
   inject_instance_configuration:
     steps:
       - run:
@@ -176,6 +186,13 @@ examples:
 #  Jobs - Independently specified lists of tasks and environments for execution
 ######################################################################################################
 jobs:
+  # Install workspace node_modules and persist to cache for use in other jobs
+  warmup-cache:
+    docker: *docker
+    steps:
+      - setup_repo
+      - *save_yarn_cache
+
   spellcheck:
     docker: *docker
     resource_class: small
@@ -382,6 +399,8 @@ workflows:
   main_workflow:
     # by default jobs will run concurrently, so specify requires if want to run sequentially
     jobs:
+      - warmup-cache:
+          name: Warmup Cache
       - spellcheck:
           name: Check documentation spelling
           filters:
@@ -397,6 +416,7 @@ workflows:
       - lint:
           name: Lint code
           requires:
+            - 'Warmup Cache'
             - 'Check documentation spelling'
             - 'Lint commits'
           filters:
@@ -428,6 +448,8 @@ workflows:
                 - production
       - test_functions:
           name: 'Cloud Function tests'
+          requires:
+            - 'Lint code'
           context: build-context
           filters:
             branches:
@@ -438,7 +460,7 @@ workflows:
           requires:
             - 'Build Application'
             - 'Unit tests'
-            # - 'Cloud Function tests'
+            - 'Cloud Function tests'
             - 'Build Storybook'
           context:
             - e2e-tests

@@ -36,12 +36,14 @@ aliases:
         # https://circleci.com/docs/2.0/caching/
         # https://circleci.com/docs/2.0/yarn/
         # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
-        # NOTE - include $HOME variable so doesn't try to populate wrong cache when running as /home/node vs /home/circleci
         - v3-yarn-{{ checksum "yarn.lock" }}
   - &install_packages
     run:
       name: Install Packages
       command: yarn install --immutable
+      environment:
+        YARN_CACHE_FOLDER: /home/circleci/.yarn/cache
+        YARN_INSTALL_STATE_PATH: /home/circleci/.yarn/install-state.gz
     # Example debugging commands for use troubleshooting caching (du will exit with status 141)
   - &check_folders
     run:
@@ -52,9 +54,10 @@ aliases:
   - &save_yarn_cache
     save_cache:
       # https://circleci.com/docs/caching/#basic-example-of-yarn-package-manager-caching
+      # NOTE - ensure always caches to consistent location when using non-circleci images
       paths:
-        - .yarn/cache
-        - .yarn/install-state.gz
+        - /home/circleci/.yarn/cache
+        - /home/circleci/.yarn/install-state.gz
       key: v3-yarn-{{ checksum "yarn.lock" }}
 
   - &filter_only_production
@@ -222,16 +225,7 @@ jobs:
       # use base image published by platform to ensure compatibility
       - image: onearmyplatform/community-platform-emulator:pp-2022-12-04
     resource_class: small
-    environment:
-      HOME: /home/circleci
     steps:
-      # Default home directory will be /home/node, however maintain compatibility with other steps and cache
-      - run:
-          name: Change Home Directory
-          command: |
-            mkdir /home/circleci
-            cd ~
-            echo $PWD && echo $HOME
       - setup_repo
       - attach_workspace:
           at: '.'

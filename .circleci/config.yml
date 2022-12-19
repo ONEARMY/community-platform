@@ -36,7 +36,8 @@ aliases:
         # https://circleci.com/docs/2.0/caching/
         # https://circleci.com/docs/2.0/yarn/
         # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
-        - v19-yarn-packages-{{ checksum "yarn.lock" }}
+        # NOTE - include $HOME variable so doesn't try to populate wrong cache when running as /home/node vs /home/circleci
+        - v1-yarn-{{$HOME}}-{{ checksum "yarn.lock" }}
   - &install_packages
     run:
       name: Install Packages
@@ -54,7 +55,7 @@ aliases:
       paths:
         - .yarn/cache
         - .yarn/install-state.gz
-      key: v19-yarn-packages-{{ checksum "yarn.lock" }}
+      key: v1-yarn-{{$HOME}}-{{ checksum "yarn.lock" }}
 
   - &filter_only_production
     filters:

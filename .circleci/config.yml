@@ -169,14 +169,12 @@ commands:
         description: Firebase project alias to deploy to
     steps:
       - run:
-          name: Install Firebase Tools
-          command: yarn add -D firebase-tools
-      - run:
           name: Export application credentials
           command: echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > service_account.json
       - run:
+          # Use version of firebase-tools already installed in functions workspace to deploy
           name: Deploy to Firebase
-          command: ./node_modules/.bin/firebase deploy --debug -P << parameters.alias >>
+          command: ./functions/node_modules/.bin/firebase deploy --debug -P << parameters.alias >>
           environment:
             GOOGLE_APPLICATION_CREDENTIALS: service_account.json
 

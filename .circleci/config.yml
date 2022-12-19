@@ -186,7 +186,8 @@ examples:
 #  Jobs - Independently specified lists of tasks and environments for execution
 ######################################################################################################
 jobs:
-  warmup_cache:
+  # Install workspace node_modules and persist to cache for use in other jobs
+  warmup-cache:
     docker: *docker
     steps:
       - setup_repo
@@ -398,7 +399,7 @@ workflows:
   main_workflow:
     # by default jobs will run concurrently, so specify requires if want to run sequentially
     jobs:
-      - warmup_cache
+      - warmup-cache:
           name: Warmup Cache
       - spellcheck:
           name: Check documentation spelling

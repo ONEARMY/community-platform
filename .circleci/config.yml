@@ -47,7 +47,7 @@ aliases:
         if [ ! -f /home/circleci/.yarn/install-state.gz ]; then echo "install-state not created" && exit 1; fi
       environment:
         YARN_INSTALL_STATE_PATH: /home/circleci/.yarn/install-state.gz
-        YARN_CACHE_PATH: /home/circleci/.yarn/cache
+        YARN_CACHE_FOLDER: /home/circleci/.yarn/cache
   - &save_yarn_cache
     save_cache:
       # https://circleci.com/docs/caching/#basic-example-of-yarn-package-manager-caching

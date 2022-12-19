@@ -40,7 +40,8 @@ aliases:
   - &install_packages
     run:
       name: Install Packages
-      # Install packages and ensure install-state created (previously had issues)
+      # Install packages
+      # NOTE run twice with check to ensure install-state created (previously had issues, doesn't add much time to check)
       command: |
         yarn install --immutable
         yarn install --immutable
@@ -437,6 +438,8 @@ workflows:
                 - production
       - test_functions:
           name: 'Cloud Function tests'
+          requires:
+            - 'Lint code'
           context: build-context
           filters:
             branches:

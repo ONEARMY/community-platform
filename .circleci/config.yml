@@ -36,7 +36,7 @@ aliases:
         # https://circleci.com/docs/2.0/caching/
         # https://circleci.com/docs/2.0/yarn/
         # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
-        - v7-yarn-{{ checksum "yarn.lock" }}
+        - v8-yarn-{{ checksum "yarn.lock" }}
   - &install_packages
     run:
       name: Install Packages
@@ -55,7 +55,7 @@ aliases:
       paths:
         - /home/circleci/.yarn/cache
         - /home/circleci/.yarn/install-state.gz
-      key: v7-yarn-{{ checksum "yarn.lock" }}
+      key: v8-yarn-{{ checksum "yarn.lock" }}
 
   # Example debugging commands for use troubleshooting caching (du will exit with status 141)
   - &check_folders

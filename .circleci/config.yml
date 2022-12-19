@@ -230,7 +230,6 @@ jobs:
           command: |
             apk add --update shadow
             usermod -m -d /home/circleci node
-            cd ~
             echo $PWD && echo $HOME
       - setup_repo
       - attach_workspace:

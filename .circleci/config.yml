@@ -40,11 +40,12 @@ aliases:
   - &install_packages
     run:
       name: Install Packages
+      # Install packages and ensure install-state created (previously had issues)
       command: |
         yarn install --immutable
-        ls -a .
-        ls .yarn
-        if [ ! -f .yarn/install-state.gz ]; then echo "install-state not created" && exit 1; fi
+        if [ ! -f /home/circleci/.yarn/install-state.gz ]; then echo "install-state not created" && exit 1; fi
+      environment:
+        YARN_INSTALL_STATE_PATH: /home/circleci/.yarn/install-state.gz
   - &save_yarn_cache
     save_cache:
       # https://circleci.com/docs/caching/#basic-example-of-yarn-package-manager-caching

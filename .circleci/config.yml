@@ -227,6 +227,8 @@ jobs:
       - run: |
           mkdir /home/circleci
           echo 'export HOME="/home/circleci"' >> "$BASH_ENV"
+          cd ~
+          echo "$PWD"
       - setup_repo
       - attach_workspace:
           at: '.'

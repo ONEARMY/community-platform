@@ -36,14 +36,11 @@ aliases:
         # https://circleci.com/docs/2.0/caching/
         # https://circleci.com/docs/2.0/yarn/
         # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
-        - v5-yarn-{{ checksum "yarn.lock" }}
+        - v6-yarn-{{ checksum "yarn.lock" }}
   - &install_packages
     run:
       name: Install Packages
       command: yarn install --immutable
-      environment:
-        YARN_CACHE_FOLDER: /home/circleci/.yarn/cache
-        YARN_INSTALL_STATE_PATH: /home/circleci/.yarn/install-state.gz
     # Example debugging commands for use troubleshooting caching (du will exit with status 141)
   - &check_folders
     run:
@@ -56,9 +53,9 @@ aliases:
       # https://circleci.com/docs/caching/#basic-example-of-yarn-package-manager-caching
       # NOTE - ensure always caches to consistent location when using non-circleci user
       paths:
-        - /home/circleci/.yarn/cache
-        - /home/circleci/.yarn/install-state.gz
-      key: v5-yarn-{{ checksum "yarn.lock" }}
+        - .yarn/cache
+        - .yarn/install-state.gz
+      key: v6-yarn-{{ checksum "yarn.lock" }}
 
   - &filter_only_production
     filters:
@@ -225,10 +222,6 @@ jobs:
       # use base image published by platform to ensure compatibility
       - image: onearmyplatform/community-platform-emulator:pp-2022-12-04
     resource_class: small
-    # Ensure yarn uses shared cache instead of default user (/home/node/.yarn)
-    environment:
-      YARN_CACHE_FOLDER: /home/circleci/.yarn/cache
-      YARN_INSTALL_STATE_PATH: /home/circleci/.yarn/install-state.gz
     steps:
       - setup_repo
       - attach_workspace:

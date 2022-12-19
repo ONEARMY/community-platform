@@ -9,7 +9,6 @@
     "target": "es6",
     "jsx": "react-jsx",
     "typeRoots": ["./node_modules/@types"],
-    "baseUrl": ".",
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,

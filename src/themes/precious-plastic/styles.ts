@@ -73,6 +73,15 @@ const bold = 600
 // cc - assume standard image widths are 4:3, however not clearly defined
 
 const alerts = {
+  info: {
+    borderRadius: 1,
+    paddingX: 3,
+    paddingY: 3,
+    backgroundColor: colors.yellow.base,
+    color: colors.black,
+    textAlign: 'center',
+    fontWeight: 'normal',
+  },
   success: {
     borderRadius: 1,
     paddingX: 3,

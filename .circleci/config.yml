@@ -226,7 +226,7 @@ jobs:
       # Default home directory will be /home/node, however maintain compatibility with other steps and cache
       - run: |
           mkdir /home/circleci
-          echo 'export HOME="/home/circleci"' >> "$BASH_ENV"
+          usermod -d /home/circleci node
           cd ~
           echo "$PWD"
       - setup_repo

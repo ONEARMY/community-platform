@@ -36,7 +36,8 @@ aliases:
         # https://circleci.com/docs/2.0/caching/
         # https://circleci.com/docs/2.0/yarn/
         # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
-        - v8-yarn-{{ checksum "yarn.lock" }}
+        - v9-yarn-{{ checksum "yarn.lock" }}
+        - v9-yarn
   - &install_packages
     run:
       name: Install Packages
@@ -56,7 +57,7 @@ aliases:
       paths:
         - /home/circleci/.yarn/cache
         - /home/circleci/.yarn/install-state.gz
-      key: v8-yarn-{{ checksum "yarn.lock" }}
+      key: v9-yarn-{{ checksum "yarn.lock" }}
 
   # Example debugging commands for use troubleshooting caching (du will exit with status 141)
   - &check_folders
@@ -144,7 +145,6 @@ commands:
       - checkout
       - *restore_yarn_cache
       - *install_packages
-      - *save_yarn_cache
   inject_instance_configuration:
     steps:
       - run:
@@ -186,6 +186,12 @@ examples:
 #  Jobs - Independently specified lists of tasks and environments for execution
 ######################################################################################################
 jobs:
+  warmup_cache:
+    docker: *docker
+    steps:
+      - setup_repo
+      - *save_yarn_cache
+
   spellcheck:
     docker: *docker
     resource_class: small
@@ -392,6 +398,8 @@ workflows:
   main_workflow:
     # by default jobs will run concurrently, so specify requires if want to run sequentially
     jobs:
+      - warmup_cache
+          name: Warmup Cache
       - spellcheck:
           name: Check documentation spelling
           filters:
@@ -407,6 +415,7 @@ workflows:
       - lint:
           name: Lint code
           requires:
+            - 'Warmup Cache'
             - 'Check documentation spelling'
             - 'Lint commits'
           filters:

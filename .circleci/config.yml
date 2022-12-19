@@ -222,9 +222,11 @@ jobs:
       # use base image published by platform to ensure compatibility
       - image: onearmyplatform/community-platform-emulator:pp-2022-12-04
     resource_class: small
-    # Default home directory will be /home/node, however maintain compatibility with other steps and cache
-    user: circleci
     steps:
+      # Default home directory will be /home/node, however maintain compatibility with other steps and cache
+      - run: |
+          mkdir /home/circleci
+          echo 'export HOME="/home/circleci"' >> "$BASH_ENV"
       - setup_repo
       - attach_workspace:
           at: '.'

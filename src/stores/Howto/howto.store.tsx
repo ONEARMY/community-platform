@@ -105,7 +105,11 @@ export class HowtoStore extends ModuleStore {
   public async setActiveHowtoBySlug(slug: string) {
     // clear any cached data and then load the new howto
     logger.debug(`setActiveHowtoBySlug:`, { slug })
-    this.activeHowto = undefined
+
+    if (!slug) {
+      this.activeHowto = undefined
+    }
+
     const collection = await this.db
       .collection<IHowto>(COLLECTION_NAME)
       .getWhere('slug', '==', slug)
@@ -170,7 +174,7 @@ export class HowtoStore extends ModuleStore {
         total_downloads: totalDownloads! + 1,
       }
 
-      await dbRef.set(updatedHowto)
+      await this.updateHowtoItem(updatedHowto)
       return updatedHowto.total_downloads
     }
   }
@@ -193,17 +197,25 @@ export class HowtoStore extends ModuleStore {
     if (!hasAdminRights(toJS(this.activeUser))) {
       return false
     }
-    const ref = this.db.collection(COLLECTION_NAME).doc(howto._id)
-    // NOTE CC - 2021-07-06 mobx updates try write to db as observable, so need to convert toJS
-    return ref.set(toJS(howto))
+    return this.updateHowtoItem(toJS(howto))
   }
 
   public needsModeration(howto: IHowto) {
     return needsModeration(howto, toJS(this.activeUser))
   }
 
-  private async addUserReference(text: string): Promise<string> {
-    return await changeMentionToUserReference(text, this.userStore)
+  private async addUserReference(msg: string): Promise<{
+    text: string
+    users: string[]
+  }> {
+    const { text, mentionedUsers: users } = await changeMentionToUserReference(
+      msg,
+      this.userStore,
+    )
+    return {
+      text,
+      users,
+    }
   }
 
   @action
@@ -211,43 +223,121 @@ export class HowtoStore extends ModuleStore {
     try {
       const user = this.activeUser
       const howto = this.activeHowto
-      const comment = text.slice(0, MAX_COMMENT_LENGTH).trim()
-      if (user && howto && comment) {
-        const userCountry = getUserCountry(user)
+      if (user && howto && text) {
         const newComment: IComment = {
           _id: randomID(),
           _created: new Date().toISOString(),
           _creatorId: user._id,
           creatorName: user.userName,
-          creatorCountry: userCountry,
-          text: await this.addUserReference(comment),
+          creatorCountry: getUserCountry(user),
+          text: text.slice(0, MAX_COMMENT_LENGTH).trim(),
         }
         logger.debug('addComment.newComment', { newComment })
 
-        const updatedHowto: IHowto = {
+        // Update and refresh the active howto
+        const updated = await this.updateHowtoItem({
           ...toJS(howto),
-          description: await this.addUserReference(howto.description),
-          comments: await Promise.all(
-            [...toJS(howto.comments || []), newComment].map(async (comment) => {
-              comment.text = await this.addUserReference(comment.text)
-              return comment
-            }),
-          ),
-        }
+          comments: [...toJS(howto.comments || []), newComment],
+        })
 
-        const dbRef = this.db
-          .collection<IHowto>(COLLECTION_NAME)
-          .doc(updatedHowto._id)
-
-        await dbRef.set(updatedHowto)
-
-        // Refresh the active howto
-        this.activeHowto = await dbRef.get()
+        await this.setActiveHowtoBySlug(updated?.slug || '')
       }
     } catch (err) {
+      console.log({ err })
       console.error(err)
       throw new Error(err)
     }
+  }
+
+  private async updateHowtoItem(howToItem: IHowto) {
+    const dbRef = this.db.collection<IHowto>(COLLECTION_NAME).doc(howToItem._id)
+
+    logger.debug('updateHowtoItem', {
+      before: this.activeHowto,
+      after: howToItem,
+    })
+
+    const { text: description, users } = await this.addUserReference(
+      howToItem.description,
+    )
+
+    const mentions = users.map((username) => ({
+      username,
+      location: 'description',
+    }))
+
+    const comments = await Promise.all(
+      [...toJS(howToItem.comments || [])].map(async (comment) => {
+        const { text, users } = await this.addUserReference(comment.text)
+        comment.text = text
+
+        users.forEach((username) => {
+          mentions.push({
+            username,
+            location: `comment:${comment._id}`,
+          })
+        })
+
+        return comment
+      }),
+    )
+
+    const steps = await Promise.all(
+      [...toJS(howToItem.steps || [])].map(async (step) => {
+        const { text, users } = await this.addUserReference(step.text)
+
+        users.forEach((username) => {
+          mentions.push({
+            username,
+            location: `step`,
+          })
+        })
+
+        return {
+          ...step,
+          text,
+        }
+      }),
+    )
+
+    await dbRef.set({
+      ...howToItem,
+      description,
+      comments,
+      mentions,
+      steps,
+    })
+
+    // After successfully updating the database document queue up all the notifications
+    // Should a notification be issued?
+    // - Only if the mention did not exist in the document before.
+    // How do we decide whether a mention existed in the document previously?
+    // - Based on combination of username/location
+    // Location: Where in the document does the mention exist?
+    // - Introduction
+    // - Steps
+    // - Comments
+    const previousMentionsList = howToItem.mentions || []
+    logger.debug(`Mentions:`, {
+      before: previousMentionsList,
+      after: mentions,
+    })
+
+    // Previous mentions
+    const previousMentions = previousMentionsList.map(
+      (mention) => `${mention.username}.${mention.location}`,
+    )
+
+    mentions.forEach((mention) => {
+      if (!previousMentions.includes(`${mention.username}.${mention.location}`))
+        this.userNotificationsStore.triggerNotification(
+          'howto_mention',
+          mention.username,
+          `/how-to/${howToItem.slug}#${mention.location}`,
+        )
+    })
+
+    return await dbRef.get()
   }
 
   @action
@@ -261,30 +351,16 @@ export class HowtoStore extends ModuleStore {
           (comment) => comment._creatorId === user._id && comment._id === id,
         )
         if (commentIndex !== -1) {
-          comments[commentIndex].text = (await this.addUserReference(newText))
+          comments[commentIndex].text = newText
             .slice(0, MAX_COMMENT_LENGTH)
             .trim()
           comments[commentIndex]._edited = new Date().toISOString()
 
-          const updatedHowto: IHowto = {
-            ...toJS(howto),
-            description: await this.addUserReference(howto.description),
-            comments: await Promise.all(
-              comments.map(async (comment) => ({
-                ...comment,
-                text: await this.addUserReference(comment.text),
-              })),
-            ),
-          }
-
-          const dbRef = this.db
-            .collection<IHowto>(COLLECTION_NAME)
-            .doc(updatedHowto._id)
-
-          await dbRef.set(updatedHowto)
-
           // Refresh the active howto
-          this.activeHowto = await dbRef.get()
+          this.activeHowto = await this.updateHowtoItem({
+            ...toJS(howto),
+            comments,
+          })
         }
       }
     } catch (err) {
@@ -299,32 +375,16 @@ export class HowtoStore extends ModuleStore {
       const howto = this.activeHowto
       const user = this.activeUser
       if (id && howto && user && howto.comments) {
-        const comments = await Promise.all(
-          toJS(howto.comments)
-            .filter(
-              (comment) =>
-                !(comment._creatorId === user._id && comment._id === id),
-            )
-            .map(async (comment) => ({
-              ...comment,
-              text: await this.addUserReference(comment.text),
-            })),
-        )
-
-        const updatedHowto: IHowto = {
+        // Refresh the active howto with the updated item
+        await this.updateHowtoItem({
           ...toJS(howto),
-          description: await this.addUserReference(howto.description),
-          comments,
-        }
+          comments: toJS(howto.comments).filter(
+            (comment) =>
+              !(comment._creatorId === user._id && comment._id === id),
+          ),
+        })
 
-        const dbRef = this.db
-          .collection<IHowto>(COLLECTION_NAME)
-          .doc(updatedHowto._id)
-
-        await dbRef.set(updatedHowto)
-
-        // Refresh the active howto
-        this.activeHowto = await dbRef.get()
+        await this.setActiveHowtoBySlug(howto.slug)
       }
     } catch (err) {
       console.error(err)
@@ -379,15 +439,10 @@ export class HowtoStore extends ModuleStore {
       const userCountry = getUserCountry(user)
 
       const howTo: IHowto = {
+        mentions: [],
         ...values,
-        description: await this.addUserReference(values.description),
+        comments,
         _createdBy: values._createdBy ? values._createdBy : user.userName,
-        comments: await Promise.all(
-          comments.map(async (c) => ({
-            ...c,
-            text: await this.addUserReference(c.text),
-          })),
-        ),
         cover_image: processedCover,
         steps: processedSteps,
         fileLink: values.fileLink ?? '',
@@ -409,10 +464,9 @@ export class HowtoStore extends ModuleStore {
 
       logger.debug('populating database', howTo)
       // set the database document
-      await dbRef.set(howTo)
+      this.activeHowto = await this.updateHowtoItem(howTo)
       this.updateUploadStatus('Database')
       logger.debug('post added')
-      this.activeHowto = await dbRef.get()
       // complete
       this.updateUploadStatus('Complete')
     } catch (error) {
@@ -438,8 +492,7 @@ export class HowtoStore extends ModuleStore {
       step.images = imgMeta
       stepsWithImgMeta.push({
         ...step,
-        text: await this.addUserReference(step.text),
-        images: imgMeta.map((f) => {
+        images: (imgMeta || []).map((f) => {
           if (f === undefined) {
             return null
           }

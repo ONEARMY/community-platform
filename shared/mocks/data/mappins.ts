@@ -48,4 +48,30 @@ export const mappins = {
     _id: 'settings_workplace_new',
     _deleted: false,
   },
+  mapview_testing_rejected: {
+    type: 'workspace',
+    moderation: 'rejected',
+    subType: 'shredder',
+    location: {
+      lat: 39.9623,
+      lng: -83.0007,
+    },
+    _modified: '2020-01-07T12:14:15.541Z',
+    _created: '2020-01-07T12:14:15.541Z',
+    _id: 'mapview_testing_rejected',
+    _deleted: false,
+  },
+  mapview_testing: {
+    type: 'workspace',
+    moderation: 'accepted',
+    subType: 'shredder',
+    location: {
+      lat: 0,
+      lng: 0,
+    },
+    _modified: '2020-01-07T12:14:15.541Z',
+    _created: '2020-01-07T12:14:15.541Z',
+    _id: 'mapview_testing_accepted_pin',
+    _deleted: false,
+  },
 }

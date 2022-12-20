@@ -61,11 +61,10 @@ export const CommentItem = (props: CommentItemProps) => {
   }
 
   return (
-    <Box data-cy="comment">
+    <Box id={`comment:${_id}`} data-cy="comment">
       <Flex
         p="3"
         bg={'white'}
-        mb={4}
         sx={{
           width: '100%',
           flexDirection: 'column',

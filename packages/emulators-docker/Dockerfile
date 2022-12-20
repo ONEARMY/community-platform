@@ -56,7 +56,7 @@ COPY ./app/functions/dist/index.js /app/functions/dist/index.js
 
 # Copy seed data
 RUN mkdir -p /app/seed_data && mkdir -p /app/import
-COPY ./seed_data/pp-2022-10-30 /app/seed_data
+COPY ./seed_data/pp-2022-12-04 /app/seed_data
 
 # Copy config files. Ensure executable and lf line format
 RUN mkdir -p /app/config
@@ -90,7 +90,7 @@ RUN \
 # TODO - find a way to run the functions test spec against emulator 
 
 # Exposed Ports - These should match firebase.json config
-EXPOSE 4001 4002 4003 4004 4005 4006 4007
+EXPOSE 4001 4002 4003 4004 4005 4006 4007 5000
 
 # Troubleshooting - can just run to get cli access
 # CMD [ "/bin/sh" ]

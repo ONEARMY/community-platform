@@ -17,6 +17,7 @@ import styled from '@emotion/styled'
 
 import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
 import type { UserNotificationsStore } from 'src/stores/User/notifications.store'
+import { getFormattedNotifications } from './getFormattedNotifications'
 interface IInjectedProps {
   mobileMenuStore: MobileMenuStore
   userNotificationsStore: UserNotificationsStore
@@ -99,8 +100,9 @@ export class Header extends Component {
   render() {
     const menu = this.injected.mobileMenuStore
     const user = this.injected.userNotificationsStore.user
-    const notifications =
-      this.injected.userNotificationsStore.getUnreadNotifications()
+    const notifications = getFormattedNotifications(
+      this.injected.userNotificationsStore,
+    )
     const areThereNotifications = Boolean(notifications.length)
     const isLoggedInUser = !!user
 

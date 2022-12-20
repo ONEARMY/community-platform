@@ -14,6 +14,10 @@ export const Failure: ComponentStory<typeof Alert> = () => (
   <Alert variant="failure">An error message</Alert>
 )
 
+export const Information: ComponentStory<typeof Alert> = () => (
+  <Alert variant="info">An information message</Alert>
+)
+
 export const FailureLong: ComponentStory<typeof Alert> = () => (
   <Alert variant="failure">
     An error message: Veniam explicabo dolor ipsam impedit. Eum eos ut et

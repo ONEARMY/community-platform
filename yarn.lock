@@ -10446,6 +10446,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/uuid@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "@types/uuid@npm:9.0.0"
+  checksum: 59ae56d9547c8758588659da2a2b4c97cce79c2aae1798c892bb29452ef08e87859dea2ec3a66bfa88d0d2153147520be2b1893be920f9f0bc9c53a3207ea6aa
+  languageName: node
+  linkType: hard
+
 "@types/wait-on@npm:^5.3.1":
   version: 5.3.1
   resolution: "@types/wait-on@npm:5.3.1"
@@ -20181,7 +20188,7 @@ fsevents@^1.2.7:
 
 "fsevents@patch:fsevents@^1.2.7#~builtin<compat/fsevents>":
   version: 1.2.13
-  resolution: "fsevents@patch:fsevents@npm%3A1.2.13#~builtin<compat/fsevents>::version=1.2.13&hash=18f3a7"
+  resolution: "fsevents@patch:fsevents@npm%3A1.2.13#~builtin<compat/fsevents>::version=1.2.13&hash=d11327"
   dependencies:
     bindings: ^1.5.0
     nan: ^2.12.1
@@ -20191,7 +20198,7 @@ fsevents@^1.2.7:
 
 "fsevents@patch:fsevents@^2.1.2#~builtin<compat/fsevents>, fsevents@patch:fsevents@^2.1.3#~builtin<compat/fsevents>, fsevents@patch:fsevents@^2.3.2#~builtin<compat/fsevents>, fsevents@patch:fsevents@~2.3.2#~builtin<compat/fsevents>":
   version: 2.3.2
-  resolution: "fsevents@patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=18f3a7"
+  resolution: "fsevents@patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=df0bf1"
   dependencies:
     node-gyp: latest
   conditions: os=darwin
@@ -20267,6 +20274,7 @@ fsevents@^1.2.7:
     "@types/node": 16
     "@types/request": ^2.48.5
     "@types/sharp": ^0.26.0
+    "@types/uuid": ^9.0.0
     "@types/webpack": ^4.41.29
     "@types/webpack-node-externals": ^2.5.1
     awesome-typescript-loader: ^5.2.1
@@ -20290,7 +20298,6 @@ fsevents@^1.2.7:
     log-update: ^4.0.0
     node-fetch: 2
     oa-shared: "workspace:*"
-    one-army-community-platform: "workspace:*"
     request: ^2.88.2
     sharp: ^0.30.1
     sitemap: ^7.1.1
@@ -20298,7 +20305,7 @@ fsevents@^1.2.7:
     ts-node: ^10.0.0
     tslint: ^6.1.3
     typescript: 4.5.5
-    uuid: ^8.3.2
+    uuid: ^9.0.0
     webpack: ^4.46.0
     webpack-cli: ^4.7.0
     webpack-node-externals: ^3.0.0
@@ -25189,29 +25196,29 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"linkify-plugin-mention@npm:^3.0.4":
-  version: 3.0.4
-  resolution: "linkify-plugin-mention@npm:3.0.4"
+"linkify-plugin-mention@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "linkify-plugin-mention@npm:4.0.2"
   peerDependencies:
-    linkifyjs: ^3.0.0
-  checksum: 3f0ab11f0ca7f5cb91c320d878e17741001c2021afce5c56b898a86e747211ba0946f50fe05cf134e31eaf665b821e0878b90094573a56593e9e3f75438d9c69
+    linkifyjs: ^4.0.0
+  checksum: 39f672a6144efbe05cd1487aeb0e248d71d35c27f21600f27259717cc454658e29ab9a0575f50b3bcbdcec46f909c605d6207f048526d8232f9fb37e3469f220
   languageName: node
   linkType: hard
 
-"linkify-react@npm:^3.0.4":
-  version: 3.0.4
-  resolution: "linkify-react@npm:3.0.4"
+"linkify-react@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "linkify-react@npm:4.0.2"
   peerDependencies:
-    linkifyjs: ^3.0.0
+    linkifyjs: ^4.0.0
     react: ">= 15.0.0"
-  checksum: 4d7e24412b9217dbdb9173543ad8a9916e09b75febf72473ffd0a8436986fdcc7b50ab3abf9c6fa76040eb9c14ee401972046ac8d90093e0bb85353ab68ccc36
+  checksum: f13001fac1dd5b16643ac8e4d5a85098615922e0d5d9a56ad523cb3199a6139d4f1c28d2ff6e03de01884f825a95c969e85e53448afbdb14133afe6b545923d6
   languageName: node
   linkType: hard
 
-"linkifyjs@npm:^3.0.5":
-  version: 3.0.5
-  resolution: "linkifyjs@npm:3.0.5"
-  checksum: a926669022f41db6464071d3df2b2de71531d5a83db478e0e0b16617cbabde32c89ff0f46406927d53b31eb8f7501b7bb53410aedf05890c38900a55a1cc5283
+"linkifyjs@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "linkifyjs@npm:4.0.2"
+  checksum: b457d6c8ce1817645764969d9420358fad19b3576399ce4dc96a846fe953d022f7ec4d8362a0895d4b7db374c5563febc075fb7080f5f058479b9fb6d6b64285
   languageName: node
   linkType: hard
 
@@ -27614,9 +27621,9 @@ fsevents@^1.2.7:
     date-fns: ^2.29.3
     eslint: ^7.32.0
     eslint-plugin-import: ^2.25.4
-    linkify-plugin-mention: ^3.0.4
-    linkify-react: ^3.0.4
-    linkifyjs: ^3.0.5
+    linkify-plugin-mention: ^4.0.2
+    linkify-react: ^4.0.2
+    linkifyjs: ^4.0.2
     mustache: ^4.2.0
     prettier: ^2.5.1
     react: ^17.0.2
@@ -27914,7 +27921,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"one-army-community-platform@workspace:*, one-army-community-platform@workspace:.":
+"one-army-community-platform@workspace:.":
   version: 0.0.0-use.local
   resolution: "one-army-community-platform@workspace:."
   dependencies:
@@ -33236,7 +33243,7 @@ resolve@^2.0.0-next.3:
 
 "resolve@patch:resolve@1.18.1#~builtin<compat/resolve>":
   version: 1.18.1
-  resolution: "resolve@patch:resolve@npm%3A1.18.1#~builtin<compat/resolve>::version=1.18.1&hash=07638b"
+  resolution: "resolve@patch:resolve@npm%3A1.18.1#~builtin<compat/resolve>::version=1.18.1&hash=c3c19d"
   dependencies:
     is-core-module: ^2.0.0
     path-parse: ^1.0.6
@@ -33246,7 +33253,7 @@ resolve@^2.0.0-next.3:
 
 "resolve@patch:resolve@^1.1.6#~builtin<compat/resolve>, resolve@patch:resolve@^1.10.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.12.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.14.2#~builtin<compat/resolve>, resolve@patch:resolve@^1.17.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.18.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.19.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.20.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.3.2#~builtin<compat/resolve>, resolve@patch:resolve@^1.8.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.9.0#~builtin<compat/resolve>":
   version: 1.20.0
-  resolution: "resolve@patch:resolve@npm%3A1.20.0#~builtin<compat/resolve>::version=1.20.0&hash=07638b"
+  resolution: "resolve@patch:resolve@npm%3A1.20.0#~builtin<compat/resolve>::version=1.20.0&hash=c3c19d"
   dependencies:
     is-core-module: ^2.2.0
     path-parse: ^1.0.6
@@ -33256,7 +33263,7 @@ resolve@^2.0.0-next.3:
 
 "resolve@patch:resolve@^1.22.0#~builtin<compat/resolve>":
   version: 1.22.0
-  resolution: "resolve@patch:resolve@npm%3A1.22.0#~builtin<compat/resolve>::version=1.22.0&hash=07638b"
+  resolution: "resolve@patch:resolve@npm%3A1.22.0#~builtin<compat/resolve>::version=1.22.0&hash=c3c19d"
   dependencies:
     is-core-module: ^2.8.1
     path-parse: ^1.0.7
@@ -33269,7 +33276,7 @@ resolve@^2.0.0-next.3:
 
 "resolve@patch:resolve@^2.0.0-next.3#~builtin<compat/resolve>":
   version: 2.0.0-next.3
-  resolution: "resolve@patch:resolve@npm%3A2.0.0-next.3#~builtin<compat/resolve>::version=2.0.0-next.3&hash=07638b"
+  resolution: "resolve@patch:resolve@npm%3A2.0.0-next.3#~builtin<compat/resolve>::version=2.0.0-next.3&hash=c3c19d"
   dependencies:
     is-core-module: ^2.2.0
     path-parse: ^1.0.6
@@ -36679,7 +36686,7 @@ typescript@^4.4.3:
 
 "typescript@patch:typescript@4.5.5#~builtin<compat/typescript>, typescript@patch:typescript@^4.5.5#~builtin<compat/typescript>":
   version: 4.5.5
-  resolution: "typescript@patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>::version=4.5.5&hash=bda367"
+  resolution: "typescript@patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>::version=4.5.5&hash=bcec9a"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
@@ -36689,7 +36696,7 @@ typescript@^4.4.3:
 
 "typescript@patch:typescript@^4.4.3#~builtin<compat/typescript>":
   version: 4.5.4
-  resolution: "typescript@patch:typescript@npm%3A4.5.4#~builtin<compat/typescript>::version=4.5.4&hash=bda367"
+  resolution: "typescript@patch:typescript@npm%3A4.5.4#~builtin<compat/typescript>::version=4.5.4&hash=bcec9a"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver

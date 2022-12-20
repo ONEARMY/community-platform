@@ -3,14 +3,15 @@ import type { Change } from 'firebase-functions'
 import { DB_ENDPOINTS, IDBEndpoint } from '../models'
 import { db } from '../Firebase/firestoreDB'
 import { compareObjectDiffs, splitArrayToChunks } from '../Utils/data.utils'
+import { FieldValue } from 'firebase-admin/firestore'
 
 type IDocumentRef = FirebaseFirestore.DocumentReference
 type ICollectionRef = FirebaseFirestore.CollectionReference
 type IDBChange = Change<firestore.QueryDocumentSnapshot>
 
 export const VALUE_MODIFIERS = {
-  delete: () => firestore.FieldValue.delete(),
-  increment: (value: number) => firestore.FieldValue.increment(value),
+  delete: () => FieldValue.delete(),
+  increment: (value: number) => FieldValue.increment(value),
 }
 
 export interface IAggregation {

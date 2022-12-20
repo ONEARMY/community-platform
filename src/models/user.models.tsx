@@ -94,6 +94,7 @@ export interface INotification {
 export const NotificationTypes = [
   'new_comment',
   'howto_useful',
+  'howto_mention',
   'new_comment_research',
   'research_useful',
 ] as const

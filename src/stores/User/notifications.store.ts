@@ -12,6 +12,7 @@ import { COLLECTION_NAME as USER_COLLECTION_NAME } from './user.store'
 
 import type { RootStore } from '..'
 import type { IUserPP } from 'src/models/user_pp.models'
+import { logger } from 'src/logger'
 
 // const COLLECTION_NAME = 'user_notifications'
 
@@ -84,6 +85,9 @@ export class UserNotificationsStore extends ModuleStore {
           .getWhere('userName', '==', username)
 
         const user = lookup[0]
+        if (!user) {
+          throw new Error('User not found.')
+        }
         const updatedUser: IUser = {
           ...toJS(user),
           notifications: user.notifications
@@ -98,7 +102,7 @@ export class UserNotificationsStore extends ModuleStore {
         await dbRef.set(updatedUser)
       }
     } catch (err) {
-      console.error(err)
+      logger.error(err)
       throw new Error(err)
     }
   }
@@ -123,7 +127,7 @@ export class UserNotificationsStore extends ModuleStore {
         await this.userStore.updateUserProfile({ notifications })
       }
     } catch (err) {
-      console.error(err)
+      logger.error(err)
       throw new Error(err)
     }
   }
@@ -148,7 +152,7 @@ export class UserNotificationsStore extends ModuleStore {
         await this.userStore.updateUserProfile({ notifications })
       }
     } catch (err) {
-      console.error(err)
+      logger.error(err)
       throw new Error(err)
     }
   }
@@ -174,7 +178,7 @@ export class UserNotificationsStore extends ModuleStore {
         //TODO: ensure current user is updated
       }
     } catch (err) {
-      console.error(err)
+      logger.error(err)
       throw new Error(err)
     }
   }

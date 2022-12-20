@@ -10,6 +10,8 @@ const dockerFile = path.resolve(workspaceDir, 'Dockerfile')
 
 const seedDataDir = path.resolve(workspaceDir, 'seed_data')
 
+const buildArgsFile = path.resolve(workspaceDir, 'build.args')
+
 const functionsDistIndex = path.resolve(
   rootDir,
   'functions',
@@ -24,4 +26,5 @@ export const PATHS = {
   dockerFile,
   functionsDistIndex,
   seedDataDir,
+  buildArgsFile,
 }

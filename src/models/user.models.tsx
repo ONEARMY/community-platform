@@ -97,6 +97,7 @@ export const NotificationTypes = [
   'howto_mention',
   'new_comment_research',
   'research_useful',
+  'research_mention',
 ] as const
 
 export type NotificationType = typeof NotificationTypes[number]

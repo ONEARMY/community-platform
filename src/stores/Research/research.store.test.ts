@@ -42,6 +42,12 @@ const factory = async (researchItemOverloads: any = {}) => {
     ),
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  store.userNotificationsStore = {
+    triggerNotification: jest.fn(),
+  }
+
   await store.setActiveResearchItem('fish')
 
   return {
@@ -91,39 +97,13 @@ describe('research.store', () => {
           }),
         )
         expect(newResearchItem.updates[1].comments).toBeUndefined()
-      })
-
-      it('preserves @mention within Research description', async () => {
-        const { store, researchItem, setFn } = await factory({
-          description: '@username',
-        })
-
-        // Act
-        await store.addComment('fish', researchItem.updates[0])
-
-        // Assert
-        expect(setFn).toHaveBeenCalledWith(
-          expect.objectContaining({
-            description: '@@{userId:username}',
-          }),
-        )
-      })
-
-      it('preserves @mention within an Update description', async () => {
-        const { store, researchItem, setFn } = await factory({
-          updates: [FactoryResearchItemUpdate({ description: '@username' })],
-        })
-
-        // Act
-        await store.addComment('fish', researchItem.updates[0])
-
-        // Assert
-        const [newResearchItem] = setFn.mock.calls[0]
-        expect(setFn).toHaveBeenCalledTimes(1)
-        expect(newResearchItem.updates[0]).toEqual(
-          expect.objectContaining({
-            description: '@@{userId:username}',
-          }),
+        expect(newResearchItem.mentions).toEqual(
+          expect.arrayContaining([
+            {
+              username: 'username',
+              location: 'update-0-comment-0',
+            },
+          ]),
         )
       })
     })
@@ -286,7 +266,7 @@ describe('research.store', () => {
     })
   })
 
-  describe('updates', () => {
+  describe('Updates', () => {
     describe('uploadUpdate', () => {
       it('inserts a new update', async () => {
         const { store, researchItem, setFn } = await factory()
@@ -361,7 +341,7 @@ describe('research.store', () => {
     })
   })
 
-  describe('item', () => {
+  describe('Item', () => {
     describe('uploadResearch', () => {
       it('adds @mention to Research description', async () => {
         const { store, researchItem, setFn } = await factory()
@@ -375,6 +355,56 @@ describe('research.store', () => {
         // Assert
         const [newResearchItem] = setFn.mock.calls[0]
         expect(newResearchItem.description).toBe('@@{userId:username}')
+        expect(newResearchItem.mentions).toEqual(
+          expect.arrayContaining([
+            {
+              location: 'description',
+              username: 'username',
+            },
+          ]),
+        )
+      })
+
+      it('triggers notifications for @mentions in Research description', async () => {
+        const { store, researchItem } = await factory()
+
+        // Act
+        await store.uploadResearch({
+          ...toJS(researchItem),
+          description: '@username',
+        })
+
+        // Assert
+        expect(
+          store.userNotificationsStore.triggerNotification,
+        ).toBeCalledTimes(1)
+        expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
+          'research_mention',
+          'username',
+          `/research/${researchItem.slug}#description`,
+        )
+      })
+
+      it('does not trigger notifications for existing @mentions in Research description', async () => {
+        const { store, researchItem } = await factory({
+          mentions: [
+            {
+              username: 'username',
+              location: 'description',
+            },
+          ],
+        })
+
+        // Act
+        await store.uploadResearch({
+          ...toJS(researchItem),
+          description: '@username',
+        })
+
+        // Assert
+        expect(
+          store.userNotificationsStore.triggerNotification,
+        ).not.toBeCalled()
       })
 
       it('preserves @mention on existing Update description', async () => {
@@ -398,6 +428,14 @@ describe('research.store', () => {
         expect(setFn).toHaveBeenCalled()
         expect(newResearchItem.updates[0].description).toBe(
           '@@{userId:username}',
+        )
+        expect(newResearchItem.mentions).toEqual(
+          expect.arrayContaining([
+            {
+              location: `update-0`,
+              username: 'username',
+            },
+          ]),
         )
       })
     })

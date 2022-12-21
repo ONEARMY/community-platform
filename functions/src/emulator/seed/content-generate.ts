@@ -70,6 +70,7 @@ async function setMockNotifications(user: IMockAuthUser) {
         howto_mention: true,
         new_comment_research: true,
         research_useful: true,
+        research_mention: true,
       },
     },
   }

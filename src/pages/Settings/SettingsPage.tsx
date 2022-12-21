@@ -25,6 +25,7 @@ import { toJS } from 'mobx'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { logger } from 'src/logger'
 import { ProfileType } from 'src/modules/profile/types'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 
 interface IProps {
   /** user ID for lookup when editing another user as admin */
@@ -259,9 +260,11 @@ export class UserSettings extends React.Component<IProps, IState> {
                         showLocationDropdown={this.state.showLocationDropdown}
                       />
                     </Flex>
-                    <EmailNotificationsSection
-                      notificationSettings={values.notification_settings}
-                    />
+                    <AuthWrapper roleRequired="beta-tester">
+                      <EmailNotificationsSection
+                        notificationSettings={values.notification_settings}
+                      />
+                    </AuthWrapper>
                   </form>
                   <AccountSettingsSection />
                 </Box>

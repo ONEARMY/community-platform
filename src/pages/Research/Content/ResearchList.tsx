@@ -90,7 +90,7 @@ const ResearchList = observer(() => {
             }}
             placeholder="Filter by category"
             isForm={false}
-            type="research-categories"
+            type="research"
           />
         </Flex>
         <Flex

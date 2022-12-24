@@ -197,7 +197,7 @@ export class HowtoList extends React.Component<any, IState> {
               }}
               placeholder="Filter by category"
               isForm={false}
-              type="how-to-categories"
+              type="howto"
             />
           </Flex>
           <Flex

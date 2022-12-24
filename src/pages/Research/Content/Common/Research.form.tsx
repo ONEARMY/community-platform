@@ -235,7 +235,7 @@ const ResearchForm = observer((props: IProps) => {
                                     }
                                     value={input.value}
                                     placeholder="Select category"
-                                    type="research-categories"
+                                    type="research"
                                   />
                                 )}
                               />

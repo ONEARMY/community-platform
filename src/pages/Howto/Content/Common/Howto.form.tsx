@@ -276,7 +276,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                       }
                                       value={input.value}
                                       placeholder="Select one category"
-                                      type="how-to-categories"
+                                      type="howto"
                                     />
                                   )}
                                 />

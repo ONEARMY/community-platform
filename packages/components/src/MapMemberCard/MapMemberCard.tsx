@@ -1,5 +1,6 @@
-import { Box, Card, Text, Image, AspectRatio } from 'theme-ui'
-import { formatDistanceToNow } from 'date-fns'
+import { Box, Card, Flex, Text, Image, AspectRatio, Alert } from 'theme-ui'
+import { Button } from '../Button/Button'
+import { formatDistanceToNowStrict } from 'date-fns'
 
 import { InternalLink } from '../InternalLink/InternalLink'
 import { Username } from '../Username/Username'
@@ -14,6 +15,9 @@ export interface Props {
     username: string
   }
   heading: string
+  moderationStatus: string
+  onPinModerated?: (isPinApproved: boolean) => void
+  isEditable: boolean
 }
 
 import { keyframes } from '@emotion/react'
@@ -29,16 +33,21 @@ const wave = keyframes`
 
 export const MapMemberCard = (props: Props) => {
   const { imageUrl, lastActive, description, user, heading } = props
+  const moderationStatusMsg =
+    props.moderationStatus !== 'rejected'
+      ? 'This pin is awaiting moderation, it will be shown on general map once accepted.'
+      : 'This pin has been rejected, it will not show on general map.'
   const pin = {
     type: 'member',
-    moderation: 'accepted',
+    moderation: props.moderationStatus,
   }
-  const moderationStatus = 'fish'
+
+  const onPinModerated = props.onPinModerated
 
   return (
-    <Card sx={{ maxWidth: '230px' }}>
+    <Card sx={{ maxWidth: '230px' }} data-cy="MapMemberCard">
       <InternalLink to={`/u/${user.username}`}>
-        {props.loading && (
+        {!!props.loading && (
           <>
             <AspectRatio
               ratio={230 / 120}
@@ -94,30 +103,57 @@ export const MapMemberCard = (props: Props) => {
               >
                 Last active{' '}
                 {lastActive
-                  ? `${formatDistanceToNow(new Date(lastActive))}`
+                  ? `${formatDistanceToNowStrict(new Date(lastActive))}`
                   : 'a long time'}{' '}
                 ago
               </Text>
-              {pin.moderation !== 'accepted' && (
-                <Text
-                  mb={2}
-                  sx={{
-                    fontWeight: 'bold',
-                    fontSize: 1,
-                    background: 'yellow.base',
-                    padding: '7px',
-                    borderRadius: '5px',
-                    border: '1px dashed',
-                    color: pin.moderation === 'rejected' ? 'red' : null,
-                  }}
-                >
-                  {moderationStatus}
-                </Text>
-              )}
             </Box>
           </>
         )}
+        {pin.moderation !== 'accepted' && (
+          <Alert
+            mb={2}
+            data-cy="MapMemberCard: moderation status"
+            variant={pin.moderation === 'rejected' ? 'failure' : 'info'}
+            sx={{
+              mx: 2,
+              fontSize: 1,
+              textAlign: 'left',
+              padding: 2,
+            }}
+          >
+            {moderationStatusMsg}
+          </Alert>
+        )}
       </InternalLink>
+      {props.isEditable && (
+        <Flex
+          sx={{
+            m: 2,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Button
+            small
+            data-cy="MapMemberCard: accept"
+            variant={'primary'}
+            icon="check"
+            onClick={() => onPinModerated && onPinModerated(true)}
+          >
+            Approve
+          </Button>
+          <Button
+            small
+            data-cy="MapMemberCard: reject"
+            variant={'tertiary'}
+            icon="delete"
+            onClick={() => onPinModerated && onPinModerated(false)}
+          >
+            Reject
+          </Button>
+        </Flex>
+      )}
     </Card>
   )
 }

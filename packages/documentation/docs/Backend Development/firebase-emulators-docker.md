@@ -135,15 +135,15 @@ A custom image can be built and run by passing custom repo or tag args to the bu
 yarn workspace oa-emulators-docker build --repo=my_custom_repo --tag=my_custom_tag
 ```
 
-If just intending to test locally a blank `--repo=` can be provided to avoid trying to pull an image from dockerhub
-
-That specific image can then either be uploaded to dockerhub (assuming the repo name provided matches a personal repo configured locally) and/or run directly with the start command
+If just intending to test locally a blank `--repo=` can be provided to avoid trying to pull an image from dockerhub and run locally
 
 ```
-yarn workspace oa-emulators-docker start --repo=my_custom_repo --tag=my_custom_tag
+yarn workspace oa-emulators-docker build --repo=
 ```
 
-Note - this will only start the emulators, to run the frontend you will also need to run the rest of the scripts found in the src package.json `start:emulated:docker` script separately as required
+```
+yarn start:emulated:docker:local
+```
 
 ## Troubleshooting
 

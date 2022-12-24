@@ -12,7 +12,7 @@ export const runtimeConfigTest: configVars = {
   },
   service: null as any,
   deployment: {
-    site_url: 'https://functions.test',
+    site_url: 'http://localhost:4000',
   },
   prerender: {
     api_key: 'fake_prerender_key',

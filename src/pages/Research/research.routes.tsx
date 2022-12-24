@@ -1,12 +1,32 @@
 import { Suspense, lazy } from 'react'
 import { AuthRoute } from '../common/AuthRoute'
 import { Route, Switch, withRouter } from 'react-router-dom'
-const CreateResearch = lazy(() => import('./Content/CreateResearch'))
-const CreateUpdate = lazy(() => import('./Content/CreateUpdate'))
-const ResearchItemEditor = lazy(() => import('./Content/EditResearch'))
-const UpdateItemEditor = lazy(() => import('./Content/EditUpdate'))
-const ResearchArticle = lazy(() => import('./Content/ResearchArticle'))
-const ResearchList = lazy(() => import('./Content/ResearchList'))
+const CreateResearch = lazy(
+  () =>
+    import(/* webpackChunkName: "CreateResearch" */ './Content/CreateResearch'),
+)
+const CreateUpdate = lazy(
+  () =>
+    import(
+      /* webpackChunkName: "CreateResearchUpdate" */ './Content/CreateUpdate'
+    ),
+)
+const ResearchItemEditor = lazy(
+  () => import(/* webpackChunkName: "EditResearch" */ './Content/EditResearch'),
+)
+const UpdateItemEditor = lazy(
+  () =>
+    import(/* webpackChunkName: "EditResearchUpdate" */ './Content/EditUpdate'),
+)
+const ResearchArticle = lazy(
+  () =>
+    import(
+      /* webpackChunkName: "ResearchArticle" */ './Content/ResearchArticle'
+    ),
+)
+const ResearchList = lazy(
+  () => import(/* webpackChunkName: "ResearchList" */ './Content/ResearchList'),
+)
 
 const getRandomInt = (max) => {
   return Math.floor(Math.random() * max)

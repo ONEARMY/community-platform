@@ -4,6 +4,7 @@ import express from 'express'
 import { seedDataClean } from './seed/data-clean'
 import { seedUsersCreate } from './seed/users-create'
 import { triggerPubsub } from './pubsub'
+import { seedContentGenerate } from './seed/content-generate'
 
 console.log('emulator api ready')
 
@@ -38,6 +39,12 @@ app.get('/seed-clean', (req, res) =>
   seedDataClean().then((result) => {
     res.status(200).send(JSON.stringify(result, null, 2))
   }),
+)
+
+app.get('/seed-content-generate', (req, res) =>
+  seedContentGenerate().then(() =>
+    res.status(200).send('Content generated successfully'),
+  ),
 )
 
 /**

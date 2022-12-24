@@ -4,7 +4,7 @@ import { ThemeProvider } from 'theme-ui'
 import { Global } from '@emotion/react'
 import { GlobalStyle } from './themes/app.globalStyles'
 import { RootStore } from './stores'
-import ErrorBoundary from './common/ErrorBoundary'
+import ErrorBoundary from './common/Error/ErrorBoundary'
 import { Routes } from './pages'
 
 const rootStore = new RootStore()

@@ -71,12 +71,12 @@ Each role get paid a bit differently. Contributors and maintainers get paid acco
 |---------------------------------------------------------------------------------------------------------------|----------------|----------------|-------------------|
 | Invite to [Discord](https://discord.com/invite/SSBrzeR) #development                                          |         ☑️      |        ☑️       |        ☑️          | 
 | Send link to [bounty](/Contributing/bounties) system                                                          |         ☑️      |        ☑️       |        ☑️          | 
-| Add GitHub [maintainer permissions](https://github.com/ONEARMY/community-platform/settings/access)             |                |        ☑️       |        ☑️          | 
+| Add GitHub [maintainer permissions](https://github.com/ONEARMY/community-platform/settings/access)            |                |        ☑️       |        ☑️          | 
 | Add maintainer status using [All contributors ](#recognising-contributors)                                    |                |        ☑️       |        ☑️          | 
 | Get on a video call                                                                                           |                |        ☑️       |        ☑️          | 
 | Explain hourly rate vs bounty system                                                                          |                |        ☑️       |        ☑️          | 
-| Add GitHub [core maintainer permissions](https://github.com/ONEARMY/community-platform/settings/access)      |                |                |        ☑️          | 
-| Add core-maintainer status using [All contributors ](#recognising-contributors)                                    |                |                |        ☑️          | 
-| Invite to Google Analitics                                                                                       |                |                |        ☑️          | 
+| Add GitHub [core maintainer permissions](https://github.com/ONEARMY/community-platform/settings/access)       |                |                |        ☑️          | 
+| Add core-maintainer status using [All contributors ](#recognising-contributors)                               |                |                |        ☑️          | 
+| Invite to Google Analitics                                                                                    |                |                |        ☑️          | 
 | Invite to **Firebase** projects: Precious Plastic PROD, Precious Plastic DEV, Project Kamp PROD, Project Kamp DEV,  Fixing Fashion PROD, Fixing Fashion DEV  |                |                |        ☑️          | 
 

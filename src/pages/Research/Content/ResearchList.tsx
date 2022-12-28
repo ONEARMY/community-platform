@@ -5,30 +5,58 @@ import { Button, Icon } from 'oa-components'
 import ResearchListItem from './ResearchListItem'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { useTheme } from '@emotion/react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import { useCommonStores } from 'src'
+import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
+import type { RouteComponentProps } from 'react-router'
 
 const ResearchListHeader = styled.header`
   display: grid;
   grid-template-columns: 2fr minmax(274px, 1fr);
   gap: 60px;
   padding: 15px;
+  padding-left: 0;
   margin-bottom: 16px;
 
   @media (max-width: ${theme.breakpoints[0]}) {
-    display: none;
+    padding: 15px 0;
     grid-template-columns: unset;
     gap: unset;
   }
 `
+
+// Update query params for categories
+const updateQueryParams = (
+  url: string,
+  key: string,
+  val: string,
+  history: RouteComponentProps['history'],
+) => {
+  const newUrl = new URL(url)
+  const urlParams = new URLSearchParams(newUrl.search)
+  if (val) {
+    urlParams.set(key, val)
+  } else {
+    urlParams.delete(key)
+  }
+  newUrl.search = urlParams.toString()
+
+  const { pathname, search } = newUrl
+
+  history.push({
+    pathname,
+    search,
+  })
+}
 
 const ResearchList = observer(() => {
   const store = useResearchStore()
   const { aggregationsStore } = useCommonStores().stores
   const { aggregations } = aggregationsStore
   const theme = useTheme()
+  const history = useHistory()
 
   const { filteredResearches } = store
   return (
@@ -46,11 +74,32 @@ const ResearchList = observer(() => {
         </Heading>
       </Flex>
       <ResearchListHeader>
-        <Text color={theme.colors.black} sx={{ fontSize: '16px' }}>
-          Title
-        </Text>
-
-        <Flex sx={{ alignItems: 'center', justifyContent: 'space-around' }}>
+        <Flex sx={{ width: ['100%', '240px', '240px'] }}>
+          <CategoriesSelect
+            value={
+              store.selectedCategory ? { label: store.selectedCategory } : null
+            }
+            onChange={(category) => {
+              updateQueryParams(
+                window.location.href,
+                'category',
+                category ? category.label : '',
+                history,
+              )
+              store.updateSelectedCategory(category ? category.label : '')
+            }}
+            placeholder="Filter by category"
+            isForm={false}
+            type="research"
+          />
+        </Flex>
+        <Flex
+          sx={{
+            alignItems: 'center',
+            justifyContent: 'space-around',
+            display: ['none', 'flex'],
+          }}
+        >
           <Text
             color={theme.colors.black}
             sx={{ display: 'flex', alignItems: 'center', fontSize: '16px' }}

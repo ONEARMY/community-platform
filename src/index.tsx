@@ -1,5 +1,5 @@
 import * as ReactDOM from 'react-dom'
-import { initErrorHandler } from './common/errors'
+import { initErrorHandler } from './common/Error/handler'
 import { App, useCommonStores } from './App'
 
 initErrorHandler()

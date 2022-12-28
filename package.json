@@ -208,9 +208,9 @@
     "workbox-strategies": "^6.1.5",
     "workbox-streams": "^6.1.5"
   },
-  "packageManager": "yarn@3.2.0",
   "engines": {
     "npm": "please-use-yarn",
     "node": "16.x"
-  }
+  },
+  "packageManager": "yarn@3.3.0"
 }

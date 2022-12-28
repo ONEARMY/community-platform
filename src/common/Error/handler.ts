@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/react'
-import { SENTRY_CONFIG } from '../config/config'
+import { SENTRY_CONFIG } from '../../config/config'
 
 export const initErrorHandler = () => {
   const { location } = window

@@ -1,40 +1,79 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 import type { CategoriesStore } from 'src/stores/Categories/categories.store'
+import type { ResearchCategoriesStore } from 'src/stores/ResearchCategories/researchCategories.store'
 import { Button, Modal } from 'oa-components'
 import { Heading, Box, Text, Input, Flex } from 'theme-ui'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import type { ICategory } from 'src/models/categories.model'
+import type { IResearchCategory } from 'src/models/researchCategories.model'
 
 // we include props from react-final-form fields so it can be used as a custom field component
 interface IProps {
   categoriesStore: CategoriesStore
+  researchCategoriesStore: ResearchCategoriesStore
 }
 interface IState {
   updating?: boolean
   msg?: string
-  categoryForm: Partial<ICategory>
+  categoryForm: Partial<ICategory | IResearchCategory>
   showEditor?: boolean
+  // The type of category being added or edited
+  type: string
 }
 
-@inject('categoriesStore')
+@inject('categoriesStore', 'researchCategoriesStore')
 @observer
 export class AdminCategories extends React.Component<IProps, IState> {
   saveEditor = async () => {
     this.setState({ updating: true })
-    await this.props.categoriesStore.saveCategory(this.state.categoryForm)
-    this.setState({ updating: false, showEditor: false })
+    // Check the type of category and update the appropriate store
+    if (this.state.type === 'how-to-category') {
+      await this.props.categoriesStore.saveCategory(this.state.categoryForm)
+    } else if (this.state.type === 'research-category') {
+      await this.props.researchCategoriesStore.saveResearchCategory(
+        this.state.categoryForm,
+      )
+    }
+    this.setState({
+      updating: false,
+      msg: '',
+      categoryForm: {
+        label: '',
+      },
+      showEditor: false,
+      type: '',
+    })
   }
   deleteEditor = async () => {
     this.setState({ updating: true })
-    await this.props.categoriesStore.deleteCategory(this.state.categoryForm)
-    this.setState({ updating: false, showEditor: false })
+    // Check the type of category and update the appropriate store
+    if (this.state.type === 'how-to-category') {
+      await this.props.categoriesStore.deleteCategory(this.state.categoryForm)
+    } else if (this.state.type === 'research-category') {
+      await this.props.researchCategoriesStore.deleteResearchCategory(
+        this.state.categoryForm,
+      )
+    }
+    this.setState({
+      updating: false,
+      msg: '',
+      categoryForm: {
+        label: '',
+      },
+      showEditor: false,
+      type: '',
+    })
   }
-  showEditor = (category: Partial<ICategory>) => {
+  showEditor = (
+    category: Partial<ICategory | IResearchCategory>,
+    type: string,
+  ) => {
     this.setState({
       showEditor: true,
       categoryForm: { ...category },
+      type,
     })
   }
   handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,11 +84,20 @@ export class AdminCategories extends React.Component<IProps, IState> {
   }
   constructor(props: IProps) {
     super(props)
-    this.state = { categoryForm: {} }
+    this.state = {
+      updating: false,
+      msg: '',
+      categoryForm: {
+        label: '',
+      },
+      showEditor: false,
+      type: '',
+    }
   }
 
-  public render() {
+  render() {
     const { allCategories } = this.props.categoriesStore!
+    const { allResearchCategories } = this.props.researchCategoriesStore!
     const { categoryForm, showEditor, updating, msg } = this.state
 
     return (
@@ -58,26 +106,60 @@ export class AdminCategories extends React.Component<IProps, IState> {
           <Heading variant="small" sx={{ flex: 1 }}>
             Categories Admin
           </Heading>
-          <Button onClick={() => this.showEditor(NEW_CATEGORY)}>
-            Add Category
-          </Button>
         </Flex>
 
-        <Box my={3} bg={'white'} p={2}>
-          <ReactTable
-            data={allCategories}
-            columns={CATEGORY_TABLE_COLUMNS}
-            className="-highlight"
-            defaultPageSize={Math.min(allCategories.length, 20)}
-            showPageSizeOptions={false}
-            getTdProps={(state, rowInfo) => {
-              return {
-                onClick: () => {
-                  this.showEditor(rowInfo.original)
-                },
-              }
-            }}
-          />
+        <Box mb={8}>
+          <Flex mt={4} sx={{ alignItems: 'end' }}>
+            <Text sx={{ flex: '1' }}>How to's</Text>
+            <Button
+              onClick={() => this.showEditor(NEW_CATEGORY, 'how-to-category')}
+            >
+              Add How-to Category
+            </Button>
+          </Flex>
+          <Box my={3} bg={'white'} p={2}>
+            <ReactTable
+              data={allCategories}
+              columns={CATEGORY_TABLE_COLUMNS}
+              className="-highlight"
+              defaultPageSize={Math.min(allCategories.length, 20)}
+              showPageSizeOptions={false}
+              getTdProps={(state, rowInfo) => {
+                return {
+                  onClick: () => {
+                    this.showEditor(rowInfo.original, 'how-to-category')
+                  },
+                }
+              }}
+            />
+          </Box>
+        </Box>
+
+        <Box>
+          <Flex mt={4} sx={{ alignItems: 'end' }}>
+            <Text sx={{ flex: '1' }}>Research</Text>
+            <Button
+              onClick={() => this.showEditor(NEW_CATEGORY, 'research-category')}
+            >
+              Add Research Category
+            </Button>
+          </Flex>
+          <Box my={3} bg={'white'} p={2}>
+            <ReactTable
+              data={allResearchCategories}
+              columns={CATEGORY_TABLE_COLUMNS}
+              className="-highlight"
+              defaultPageSize={Math.min(allResearchCategories.length, 20)}
+              showPageSizeOptions={false}
+              getTdProps={(state, rowInfo) => {
+                return {
+                  onClick: () => {
+                    this.showEditor(rowInfo.original, 'research-category')
+                  },
+                }
+              }}
+            />
+          </Box>
         </Box>
 
         <Modal isOpen={!!showEditor}>
@@ -88,7 +170,7 @@ export class AdminCategories extends React.Component<IProps, IState> {
               name="label"
               placeholder="Label"
               value={categoryForm.label}
-              onChange={this.handleFormChange}
+              onChange={(e) => this.handleFormChange(e)}
             />
             {msg && <Text color="red">{msg}</Text>}
             <Flex mt={3}>
@@ -118,7 +200,9 @@ export class AdminCategories extends React.Component<IProps, IState> {
   }
 }
 
-const CATEGORY_TABLE_COLUMNS: { [key: string]: keyof ICategory }[] = [
+const CATEGORY_TABLE_COLUMNS: {
+  [key: string]: keyof ICategory | IResearchCategory
+}[] = [
   {
     Header: '_id',
     accessor: '_id',
@@ -129,6 +213,6 @@ const CATEGORY_TABLE_COLUMNS: { [key: string]: keyof ICategory }[] = [
   },
 ]
 
-const NEW_CATEGORY: Partial<ICategory> = {
+const NEW_CATEGORY: Partial<ICategory | IResearchCategory> = {
   label: '',
 }

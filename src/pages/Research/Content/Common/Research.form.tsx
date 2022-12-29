@@ -295,6 +295,7 @@ const ResearchForm = observer((props: IProps) => {
                     )}{' '}
                   </Button>
                   <Button
+                    large
                     data-cy={'submit'}
                     onClick={() =>
                       setSubmissionHandler({ shouldSubmit: true, draft: false })
@@ -303,7 +304,11 @@ const ResearchForm = observer((props: IProps) => {
                     variant="primary"
                     type="submit"
                     disabled={submitting}
-                    sx={{ width: '100%', mb: ['40px', '40px', 0] }}
+                    sx={{
+                      width: '100%',
+                      mb: ['40px', '40px', 0],
+                      display: 'block',
+                    }}
                   >
                     <span>Publish</span>
                   </Button>

@@ -55,6 +55,7 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
       <>
         <Button
           my={3}
+          mr={2}
           variant={'secondary'}
           onClick={() =>
             this.setState({

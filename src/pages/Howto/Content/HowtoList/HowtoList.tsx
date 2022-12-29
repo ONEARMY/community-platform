@@ -233,7 +233,6 @@ export class HowtoList extends React.Component<any, IState> {
                 <Button
                   sx={{ width: '100%' }}
                   variant={'primary'}
-                  translateY
                   data-cy="create"
                 >
                   Create a How-to

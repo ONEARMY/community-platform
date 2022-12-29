@@ -293,6 +293,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                     </Box>
                   )}
                   <Button
+                    large
                     data-cy="save"
                     title={
                       rest.invalid
@@ -316,7 +317,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                       }
                     }}
                     mb={3}
-                    sx={{ width: '100%' }}
+                    sx={{ width: '100%', justifyContent: 'center' }}
                     variant={'primary'}
                     type="submit"
                     // disable button when form invalid or during submit.

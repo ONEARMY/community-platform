@@ -58,7 +58,7 @@ export class OpeningHoursPicker extends Component<IProps, IState> {
           />
           <Button
             icon={'delete'}
-            variant={'tertiary'}
+            variant={'outline'}
             sx={{ height: '40px', display: ['block', 'block', 'none'] }}
             onClick={() => this.toggleDeleteModal()}
           />
@@ -89,7 +89,7 @@ export class OpeningHoursPicker extends Component<IProps, IState> {
         </Flex>
         <Button
           icon={'delete'}
-          variant={'tertiary'}
+          variant={'outline'}
           data-cy={`delete-opening-time-${index}-desk`}
           sx={{ height: '40px', display: ['none', 'none', 'block'] }}
           onClick={() => this.toggleDeleteModal()}
@@ -112,7 +112,7 @@ export class OpeningHoursPicker extends Component<IProps, IState> {
             <Flex px={1}>
               <Button
                 data-cy={'confirm-delete'}
-                variant={'tertiary'}
+                variant={'outline'}
                 onClick={() => this.confirmDelete()}
               >
                 Delete

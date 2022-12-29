@@ -61,9 +61,10 @@ export class ProfileLinkField extends Component<IProps, IState> {
       <Button
         data-cy={`delete-link-${index}`}
         icon={'delete'}
-        variant={'tertiary'}
+        variant={'outline'}
+        showIconOnly={true}
         onClick={() => this.toggleDeleteModal()}
-        ml={'10px'}
+        ml={2}
         {...props}
       />
     )
@@ -142,7 +143,7 @@ export class ProfileLinkField extends Component<IProps, IState> {
               </Flex>
               <Flex px={1}>
                 <Button
-                  variant={'tertiary'}
+                  variant={'outline'}
                   onClick={() => this.confirmDelete()}
                 >
                   Delete

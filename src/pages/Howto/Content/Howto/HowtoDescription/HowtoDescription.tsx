@@ -178,7 +178,7 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
                 />
                 <Button
                   data-cy="reject-howto"
-                  variant={'tertiary'}
+                  variant={'outline'}
                   icon="delete"
                   onClick={() => this.props.moderateHowto(false)}
                 />

@@ -2,72 +2,137 @@ import * as React from 'react'
 import { Icon } from '../Icon/Icon'
 import type { IGlyphs } from '../Icon/types'
 import type { ButtonProps as ThemeUiButtonProps } from 'theme-ui'
-import { Button as ThemeUiButton } from 'theme-ui'
-import styled from '@emotion/styled'
+import { Button as ThemeUiButton, Flex, Text } from 'theme-ui'
 
 // extend to allow any default button props (e.g. onClick) to also be passed
-export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
+interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
   icon?: keyof IGlyphs
   disabled?: boolean
-  translateY?: boolean
   small?: boolean
-  medium?: boolean
   large?: boolean
-  hasText?: boolean
+  showIconOnly?: boolean
 }
 
-const small = (props: IBtnProps) =>
-  props.small
-    ? {
-        padding: '4px 10px!important',
-      }
-    : null
+type ToArray<Type> = [Type] extends [any] ? Type[] : never
+type AvailableButtonProps = ToArray<keyof BtnProps>
 
-const medium = (props: IBtnProps) =>
-  props.medium
-    ? {
-        padding: '6px 12px!important',
-      }
-    : null
-
-const large = (props: IBtnProps) =>
-  props.large
-    ? {
-        padding: '8px 14px!important',
-      }
-    : null
-
-const translateY = (props: IBtnProps) =>
-  props.translateY
-    ? {
-        '&:hover': {
-          transform: 'translateY(-5px)',
-        },
-        '&:focus': {
-          outline: 'none',
-        },
-      }
-    : null
+const buttonSizeProps: { [key: string]: any } = {
+  small: {
+    px: 2,
+    py: 1,
+    pl: 7,
+    fontSize: 1,
+  },
+  default: {
+    px: 3,
+    pl: 9,
+  },
+  large: {
+    px: 4,
+    py: 3,
+    pl: 10,
+    fontSize: 4,
+  },
+}
 
 export type BtnProps = IBtnProps & ThemeUiButtonProps
 
-const BaseButton = styled(ThemeUiButton, {
-  // avoid passing custom props
-  shouldForwardProp: (prop: keyof IBtnProps) =>
-    !['translateY', 'small', 'medium', 'large'].includes(prop),
-})`
-  ${translateY}
-  ${small}
-  ${medium}
-  ${large}
-`
+function getSizeProps(size: string, hasIcon: boolean) {
+  if (!buttonSizeProps[`${size}`] && !hasIcon) {
+    return {}
+  }
+
+  if (!buttonSizeProps[`${size}`] && hasIcon) {
+    return {
+      px: 3,
+      pl: 9,
+    }
+  }
+
+  const sizeProps = { ...buttonSizeProps[`${size}`] }
+
+  if (!hasIcon) {
+    delete sizeProps.pl
+  }
+
+  return sizeProps
+}
+
+function getScaleTransform(size: string) {
+  if (size === 'large') {
+    return 1.25
+  }
+
+  return 1
+}
+
+function sanitizedProps(obj: BtnProps, keysToRemove: AvailableButtonProps) {
+  const sanitizedObj = { ...obj }
+
+  keysToRemove.forEach((prop) => {
+    if (sanitizedObj[prop]) {
+      delete sanitizedObj[prop]
+    }
+  })
+
+  return sanitizedObj
+}
 
 export const Button = (props: BtnProps) => {
+  const [size] = Object.keys(props).filter((prop) =>
+    buttonSizeProps.hasOwnProperty(prop),
+  )
+
   return (
-    <BaseButton {...props}>
-      {props.icon && <Icon glyph={props.icon} marginRight="4px" />}
-      <span>{props.children}</span>
-    </BaseButton>
+    <ThemeUiButton
+      {...sanitizedProps(props, ['small', 'large', 'showIconOnly'])}
+      sx={{
+        ...props.sx,
+        ...getSizeProps(size, !!props.icon),
+        ...(props.showIconOnly ? { pr: 0 } : {}),
+      }}
+    >
+      {props.icon && (
+        <Flex
+          aria-hidden={true}
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            height: '100%',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            px: getSizeProps(size, !!props.icon)?.px || 0,
+            boxSizing: 'border-box',
+            fontSize: 0,
+            maxWidth: '100%',
+            lineHeight: 0,
+            transform: `translateY(-1px) scale(${getScaleTransform(size)})`,
+            pointerEvents: 'none',
+          }}
+        >
+          <Icon glyph={props.icon} />
+        </Flex>
+      )}
+      <Text
+        sx={{
+          ...(props.showIconOnly
+            ? {
+                clipPath: 'inset(100%)',
+                clip: 'rect(1px, 1px, 1px, 1px)',
+                height: '1px',
+                overflow: 'hidden',
+                position: 'absolute',
+                whiteSpace: 'nowrap',
+                width: '1px',
+              }
+            : {}),
+        }}
+      >
+        {props.children}
+      </Text>
+    </ThemeUiButton>
   )
 }
 

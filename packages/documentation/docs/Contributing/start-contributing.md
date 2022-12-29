@@ -13,17 +13,19 @@ By default we consider everyone that submits a PR a contributor. People that con
 | **⚡️ Maintainer**     | Bounty System | Minimum 3 merged PR's + chat with core maintainer | Review basic PR's, help contributors, improve documentation                                                |
 | **🪛 Core Maintainer** | Hourly scale  | Minimum 3 months maintainer                       | Review complex PR's, Improve code quality, Devops, optimisations, Security, general updates, Documentation |
 
-## 🤙 Contributors to do:
+### 🤙 Contributors to do:
+
+#### Pick up issues
 
 1. Check our [documentation](/) to run it locally.
 2. Pick an open [issue](https://github.com/ONEARMY/community-platform/issues).
-3. There is a reward on it if it has a [bounty](/Contributing/bounties) label.
+3. If there is a [bounty](/Contributing/bounties) label on it you can claim a reward.
 4. Read our [contribution guidelines](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md)
 5. Bonus: Add [tests](/Testing/end-to-end).
 
-## ⚡️ Maintainers to do:
+### ⚡️ Maintainers to do:
 
-#### Review incoming Pull Requests
+#### Review incoming code from Contributors
 
 1. Validate if code is clean
 2. Validate if the [project structure](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--project-structure) is correct
@@ -31,11 +33,12 @@ By default we consider everyone that submits a PR a contributor. People that con
 4. Add them to our [contributors list](#recognising-contributors)
 5. Make sure [Lint commit](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--commit-style-guide) message is correct
 6. Make sure all checks are passed and help to resolve errors.
-7. Bonus: Ask for integrating tests
+7. If there is a [bounty](/Contributing/bounties) label on the PR you can get it for reviewing.
+8. Bonus: Ask for integrating tests
 
-## 🪛 Core Maintainer to do:
+### 🪛 Core Maintainer to do:
 
-#### Merging PRs & Releasing Changes
+#### Review complex PRs & Releasing Changes
 
 1. Merge the PR
 2. A deployment will be triggered to the development environments.
@@ -44,7 +47,7 @@ By default we consider everyone that submits a PR a contributor. People that con
 5. Approve and merge the Release PR
 6. A deployment will be triggered to production environments.
 
-# In more detail:
+# Rewards:
 
 ### Recognising Contributors
 
@@ -60,25 +63,17 @@ After merging a new contributors PR:
 
 Each role get paid a bit differently. Contributors and maintainers get paid according to the [Bounty system](/Contributing/bounties). For core maintainers there is a separate hourly pay scale. Aimed at developers who help a bit more consistently at around 2-3h per week. If you're interested in these roles then feel free to reach out on [Discord](https://discord.com/invite/SSBrzeR) or during the monthly dev call.
 
-### Off-boarding
+## Onboarding checklist
 
-When a maintainer has decided to step away the following items should be reviewed to ensure that all permissions are revoked.
-
-- [ ] Remove user from [Firebase projects](https://console.firebase.google.com/)
-  - Precious Plastic PROD
-  - Precious Plastic DEV
-  - Project Kamp PROD
-  - Project Kamp DEV
-  - Fixing Fashion PROD
-  - Fixing Fashion DEV
-
-* [ ] Remove [GitHub maintainer permissions](https://github.com/ONEARMY/community-platform/settings/access)
-* [ ] Raise PR to remove maintainer status
-* [ ] Remove from Google Analytics sites
-* [ ] Remove admin permission within the Community Platform
-  - - Precious Plastic PROD
-  - - Precious Plastic DEV
-  - - Project Kamp PROD
-  - - Project Kamp DEV
-  - - Fixing Fashion PROD
-  - - Fixing Fashion DEV
+| Tasks                                                                                                                                                      | 🤙 Contributor | ⚡️ Maintainer | 🪛 Core Maintainer |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | -------------- | ------------------ |
+| Invite to [Discord](https://discord.com/invite/SSBrzeR) #development                                                                                       | ☑️             | ☑️             | ☑️                 |
+| Send link to [bounty](/Contributing/bounties) system                                                                                                       | ☑️             | ☑️             | ☑️                 |
+| Add GitHub [maintainer permissions](https://github.com/ONEARMY/community-platform/settings/access)                                                         |                | ☑️             | ☑️                 |
+| Add maintainer status using [All contributors ](#recognising-contributors)                                                                                 |                | ☑️             | ☑️                 |
+| Get on a video call                                                                                                                                        |                | ☑️             | ☑️                 |
+| Explain hourly rate vs bounty system                                                                                                                       |                | ☑️             | ☑️                 |
+| Add GitHub [core maintainer permissions](https://github.com/ONEARMY/community-platform/settings/access)                                                    |                |                | ☑️                 |
+| Add core-maintainer status using [All contributors ](#recognising-contributors)                                                                            |                |                | ☑️                 |
+| Invite to Google Analytics                                                                                                                                 |                |                | ☑️                 |
+| Invite to **Firebase** projects: Precious Plastic PROD, Precious Plastic DEV, Project Kamp PROD, Project Kamp DEV, Fixing Fashion PROD, Fixing Fashion DEV |                |                | ☑️                 |

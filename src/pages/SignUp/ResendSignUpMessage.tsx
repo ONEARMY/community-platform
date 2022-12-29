@@ -105,7 +105,7 @@ class ResendSignUpMessagePage extends React.Component<IProps, IState> {
                 </Card>
 
                 <Flex mt={3} sx={{ justifyContent: 'flex-end' }}>
-                  <Button variant="tertiary">Home</Button>
+                  <Button variant={'outline'}>Home</Button>
                 </Flex>
               </Flex>
             </Flex>

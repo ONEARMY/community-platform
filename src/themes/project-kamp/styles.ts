@@ -193,6 +193,13 @@ const StyledComponentTheme: ThemeWithName = {
       fontSize: fontSizes[4],
       fontWeight: 'normal',
     },
+    body: {
+      fontFamily: fonts.body,
+    },
+    quiet: {
+      fontFamily: fonts.body,
+      color: 'grey',
+    },
   },
   typography,
   zIndex,

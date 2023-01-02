@@ -52,7 +52,12 @@ export const UsefulStatsButton = (props: IProps) => {
         data-cy="vote-useful"
         variant="subtle"
         onClick={handleUsefulClick}
-        sx={{ fontSize: 2, ml: 1, background: theme.colors.softyellow }}
+        sx={{
+          fontSize: 2,
+          ml: 1,
+          background: 'softyellow',
+          borderColor: 'softyellow',
+        }}
         icon={hasUserVotedUseful ? 'star-active' : 'star'}
       >
         <Text ml={1}>Useful {votedUsefulCount ? votedUsefulCount : ''}</Text>
@@ -66,7 +71,8 @@ export const UsefulStatsButton = (props: IProps) => {
         data-tip={'Login to add your vote'}
         sx={{
           ...theme.buttons.subtle,
-          background: theme.colors.softyellow,
+          borderColor: 'softyellow',
+          background: 'softyellow',
           display: 'inline-flex',
           fontSize: 2,
           paddingY: 2,

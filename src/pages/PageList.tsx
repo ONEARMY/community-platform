@@ -4,7 +4,6 @@ import type { UserRole } from 'src/models/user.models'
 import { ResearchModule } from './Research'
 import { MODULE } from 'src/modules'
 import { AdminModule } from 'src/modules/admin'
-import { News } from './News/News'
 
 /**
  * Import all pages for use in lazy loading
@@ -65,6 +64,8 @@ const PrivacyPolicy = lazy(
 const TermsPolicy = lazy(
   () => import(/* webpackChunkName: "terms" */ './policy/terms'),
 )
+
+const NewsPage = lazy(() => import('./News/News'))
 
 export function getAvailablePageList(supportedModules: MODULE[]): IPageMeta[] {
   return COMMUNITY_PAGES.filter((pageItem) =>
@@ -210,7 +211,7 @@ const termsPolicy = {
 const news = {
   moduleName: MODULE.CORE,
   path: '/news',
-  component: <News />,
+  component: <NewsPage />,
   title: 'News',
   description: '',
 }

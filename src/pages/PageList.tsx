@@ -4,6 +4,7 @@ import type { UserRole } from 'src/models/user.models'
 import { ResearchModule } from './Research'
 import { MODULE } from 'src/modules'
 import { AdminModule } from 'src/modules/admin'
+import { News } from './News/News'
 
 /**
  * Import all pages for use in lazy loading
@@ -206,7 +207,16 @@ const termsPolicy = {
   description: '',
 }
 
+const news = {
+  moduleName: MODULE.CORE,
+  path: '/news',
+  component: <News />,
+  title: 'News',
+  description: '',
+}
+
 export const COMMUNITY_PAGES: IPageMeta[] = [
+  news,
   howTo,
   maps,
   events,

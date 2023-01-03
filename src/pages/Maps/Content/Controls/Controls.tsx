@@ -136,7 +136,7 @@ class Controls extends React.Component<IProps, IState> {
         >
           <Button
             sx={{ display: 'block', width: '100%' }}
-            variant="outline"
+            variant="secondary"
             onClick={this.toggleFilterMobileModal}
           >
             Filters

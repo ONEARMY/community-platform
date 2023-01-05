@@ -23,6 +23,7 @@ export interface IHowto extends IHowtoFormInput, IModerable {
   comments?: IComment[]
   total_downloads?: number
   mentions: UserMention[]
+  previousSlugs: string[]
 }
 
 /**

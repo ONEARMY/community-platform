@@ -110,12 +110,22 @@ export class HowtoStore extends ModuleStore {
       this.activeHowto = undefined
     }
 
+    let activeHowto: IHowtoDB | undefined = undefined
+
     const collection = await this.db
       .collection<IHowto>(COLLECTION_NAME)
       .getWhere('slug', '==', slug)
-    const activeHowto: IHowtoDB | undefined =
-      collection.length > 0 ? collection[0] : undefined
+    activeHowto = collection.length > 0 ? collection[0] : undefined
     logger.debug('active howto', activeHowto)
+
+    // try previous slugs if slug is not recognized as primary
+    if (!activeHowto) {
+      const collection = await this.db
+        .collection<IHowto>(COLLECTION_NAME)
+        .getWhere('previousSlugs', 'array-contains', slug)
+
+      activeHowto = collection.length > 0 ? collection[0] : undefined
+    }
 
     // Change all UserReferences to mentions
     if (activeHowto) {
@@ -300,6 +310,14 @@ export class HowtoStore extends ModuleStore {
       }),
     )
 
+    if (!howToItem.previousSlugs.includes(howToItem.slug)) {
+      howToItem.previousSlugs.push(howToItem.slug)
+      // remove oldest slug
+      if (howToItem.previousSlugs.length > 3) {
+        howToItem.previousSlugs.splice(0, 1)
+      }
+    }
+
     await dbRef.set({
       ...howToItem,
       description,
@@ -440,6 +458,7 @@ export class HowtoStore extends ModuleStore {
 
       const howTo: IHowto = {
         mentions: [],
+        previousSlugs: [],
         ...values,
         comments,
         _createdBy: values._createdBy ? values._createdBy : user.userName,

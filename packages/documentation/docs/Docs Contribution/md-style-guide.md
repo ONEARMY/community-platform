@@ -172,32 +172,35 @@ This line is also a separate paragraph, but... This line is only separated by a 
 
 ## Admonitions
 
+Admontitions are created by putting 3 colons next to each other with the name of the adonition after the colons. Admontitions are most commonly used to convey information outside the regular flow of the document content.
+
+
 :::note
 
-This is a note
+This is a note. Notes should be used when information cannot go into any of the admontitions below and fit their definitions.
 
 :::
 
 :::tip
 
-This is a tip
+This is a tip. Tips should be used for information that will improve the user experience.
 
 :::
 
 :::important
 
-This is important
+This is important. Important admontitions should be used when you are trying to tell a user about something that will worsen their experience and how to avoid it.
 
 :::
 
 :::caution
 
-This is a caution
+This is a caution. Caution admontitions should be used when the user is in risk of minor injury to themselves or products. 
 
 :::
 
 :::warning
 
-This is a warning
+This is a warning. Warning admontitions should be used when a user is in risk of major injury to themselves or products.
 
 :::

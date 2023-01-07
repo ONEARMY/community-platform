@@ -12,6 +12,7 @@ import type {
 import type { IComment, IUser } from 'src/models'
 import {
   filterModerableItems,
+  formatLowerNoSpecial,
   hasAdminRights,
   needsModeration,
   randomID,
@@ -310,6 +311,10 @@ export class HowtoStore extends ModuleStore {
       }),
     )
 
+    if (howToItem.previousSlugs === undefined) {
+      howToItem.previousSlugs = []
+    }
+
     if (!howToItem.previousSlugs.includes(howToItem.slug)) {
       howToItem.previousSlugs.push(howToItem.slug)
       // remove oldest slug
@@ -456,11 +461,21 @@ export class HowtoStore extends ModuleStore {
       // redefine howTo based on processing done above (should match stronger typing)
       const userCountry = getUserCountry(user)
 
+      // create previousSlugs based on available slug or title
+      const previousSlugs: string[] = []
+      if (values.slug) {
+        previousSlugs.push(values.slug)
+      } else if (values.title) {
+        const titleToSlug = formatLowerNoSpecial(values.title)
+        previousSlugs.push(titleToSlug)
+      }
+
       const howTo: IHowto = {
         mentions: [],
-        previousSlugs: [],
+        previousSlugs,
         ...values,
         comments,
+
         _createdBy: values._createdBy ? values._createdBy : user.userName,
         cover_image: processedCover,
         steps: processedSteps,

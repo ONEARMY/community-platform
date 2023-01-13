@@ -43,7 +43,8 @@
     "analyze": "npx cra-bundle-analyzer && npx open-cli build/report.html",
     "install:clean": "yarn workspace oa-scripts install:clean",
     "postinstall": "husky install",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "healthcheck": "node scripts/healthcheck.js"
   },
   "config": {
     "commitizen": {
@@ -206,6 +207,10 @@
     "workbox-routing": "^6.1.5",
     "workbox-strategies": "^6.1.5",
     "workbox-streams": "^6.1.5"
+  },
+  "engines": {
+    "npm": "please-use-yarn",
+    "node": "16.x"
   },
   "packageManager": "yarn@3.3.0"
 }

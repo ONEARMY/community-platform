@@ -7,9 +7,9 @@ const tests = [
     exec: () => /yarn/.test(process.env.npm_execpath),
   },
   {
-    message: 'Use Node v16',
+    message: 'Use Node v18',
     severity: 'warning',
-    exec: () => process.versions.node.split('.')[0] === '16',
+    exec: () => process.versions.node.split('.')[0] === '18',
   },
 ]
 

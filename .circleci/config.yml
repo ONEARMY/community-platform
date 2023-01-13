@@ -12,8 +12,6 @@ version: 2.1
 #  Orbs - preconfigured environments for running specific jobs
 ######################################################################################################
 
-# node: circleci/node@4.1.0
-# cypress: cypress-io/cypress@1
 orbs:
   # for use with cimg image, to install web browsers
   browser-tools: circleci/browser-tools@1.1.3
@@ -24,9 +22,9 @@ orbs:
 #  Aliases - code snippets that can be included inline in any other markup
 ######################################################################################################
 aliases:
-  # use a base image running node v16 with chrome/firefox browsers preinstalled
+  # use a base image running node v18 with chrome/firefox browsers preinstalled
   - &docker
-    - image: cimg/node:16.13.1-browsers
+    - image: cimg/node:18.13.0-browsers
     # These can also be created as commands, but slighly tidier to just use inline
     # restore/install/save can all be done with a single circle-ci orb, but less flexible and breaks intellisense
   - &restore_yarn_cache

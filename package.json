@@ -16,7 +16,7 @@
   "scripts": {
     "start": "concurrently --kill-others --names components,platform --prefix-colors blue,magenta \"yarn start:components\" \"yarn start:platform\"",
     "start:components": "yarn workspace oa-components dev",
-    "start:platform": "yarn build:shared && cross-env FAST_REFRESH=false yarn react-scripts start",
+    "start:platform": "yarn build:shared && cross-env FAST_REFRESH=false yarn react-scripts --openssl-legacy-provider start",
     "start:emulated": "concurrently --kill-others --names functions,components,platform --prefix-colors yellow,blue,magenta \"yarn workspace functions start\" \"yarn start:components\" \"cross-env PORT=4000 yarn start:platform\"",
     "start:emulated:docker": "concurrently --names functions,components,platform,emulators --prefix-colors yellow,blue,magenta,green --kill-others \"yarn workspace functions watch\" \"yarn workspace oa-components dev\" \"cross-env PORT=4000 yarn start:platform\" \"yarn workspace oa-emulators-docker start\"",
     "start:emulated:docker:local": "concurrently --names functions,components,platform,emulators --prefix-colors yellow,blue,magenta,green --kill-others \"yarn workspace functions watch\" \"yarn workspace oa-components dev\" \"cross-env PORT=4000 yarn start:platform\" \"yarn workspace oa-emulators-docker start --repo=\"",
@@ -152,7 +152,7 @@
     "@types/browser-image-compression": "^1.0.9",
     "@types/flux-standard-action": "1.1.0",
     "@types/jest": "^26.0.15",
-    "@types/node": "16",
+    "@types/node": "18",
     "@types/pubsub-js": "^1.5.18",
     "@types/react": "^16.9.53",
     "@types/react-dom": "^17.0.3",
@@ -210,7 +210,7 @@
   },
   "engines": {
     "npm": "please-use-yarn",
-    "node": "16.x"
+    "node": ">=16.10.0 <19.0.0"
   },
   "packageManager": "yarn@3.3.0"
 }

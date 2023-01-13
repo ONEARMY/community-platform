@@ -1,4 +1,4 @@
-FROM node:16-alpine AS community-platform-builder
+FROM node:18-alpine AS community-platform-builder
 ################################################################################
 # Loosely based on
 # https://github.com/AndreySenov/firebase-tools-docker/blob/main/Dockerfile

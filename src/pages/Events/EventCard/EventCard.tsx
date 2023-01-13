@@ -162,7 +162,7 @@ export const EventCard = (props: IProps) => {
               flexWrap: 'nowrap',
               order: [5, 5, 5],
             }}
-            ml={2}
+            mx={2}
           >
             <Button
               small
@@ -171,16 +171,22 @@ export const EventCard = (props: IProps) => {
               icon="check"
               mr={1}
               sx={{ height: '30px' }}
+              showIconOnly={true}
               onClick={() => props.moderateEvent(props.event, true)}
-            />
+            >
+              Approve
+            </Button>
             <Button
               small
               data-cy="reject-pin"
-              variant={'tertiary'}
+              variant={'outline'}
+              showIconOnly={true}
               icon="delete"
               sx={{ height: '30px' }}
               onClick={() => props.moderateEvent(props.event, false)}
-            />
+            >
+              Reject
+            </Button>
           </Flex>
         )}
         <Flex

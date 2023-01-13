@@ -304,13 +304,17 @@ const UpdateForm = observer((props: IProps) => {
                   }}
                 >
                   <Button
+                    large
                     data-cy={'submit'}
                     onClick={trySubmitForm}
-                    mt={3}
                     variant="primary"
                     type="submit"
                     disabled={submitting}
-                    sx={{ mb: ['40px', '40px', 0], width: '100%' }}
+                    sx={{
+                      mb: ['40px', '40px', 0],
+                      width: '100%',
+                      justifyContent: 'center',
+                    }}
                   >
                     <span>
                       {props.parentType === 'edit' ? 'Save' : 'Add update'}

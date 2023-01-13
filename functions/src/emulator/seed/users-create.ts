@@ -1,5 +1,5 @@
 import { MOCK_AUTH_USERS } from 'oa-shared/mocks/auth'
-import type { IUserDB } from '../../../../src/models'
+import type { IUserDB } from '../../models'
 import { firebaseAuth } from '../../Firebase/auth'
 import { setDoc } from '../../Firebase/firestoreDB'
 

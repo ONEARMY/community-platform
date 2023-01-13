@@ -197,6 +197,7 @@ export class HowtoList extends React.Component<any, IState> {
               }}
               placeholder="Filter by category"
               isForm={false}
+              type="howto"
             />
           </Flex>
           <Flex
@@ -232,7 +233,6 @@ export class HowtoList extends React.Component<any, IState> {
                 <Button
                   sx={{ width: '100%' }}
                   variant={'primary'}
-                  translateY
                   data-cy="create"
                 >
                   Create a How-to

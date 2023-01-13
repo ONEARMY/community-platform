@@ -174,15 +174,13 @@ function updateFirebaseJson() {
 
 /** Populate a runtime config file to set default firebase config variables for test */
 function addRuntimeConfig() {
-  const config = { ...runtimeConfigTest }
-  config.deployment.site_url = 'http://localhost:4000'
   const target = path.resolve(
     PATHS.workspaceDir,
     'app',
     'functions',
     '.runtimeconfig.json',
   )
-  fs.writeFileSync(target, JSON.stringify(config, null, 2))
+  fs.writeFileSync(target, JSON.stringify(runtimeConfigTest, null, 2))
 }
 
 /**

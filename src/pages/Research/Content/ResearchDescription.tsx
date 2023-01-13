@@ -101,7 +101,7 @@ const ResearchDescription: React.FC<IProps> = ({
               />
               <Button
                 data-cy="reject-research"
-                variant={'tertiary'}
+                variant={'outline'}
                 icon="delete"
                 onClick={() => props.moderateResearch(false)}
               />

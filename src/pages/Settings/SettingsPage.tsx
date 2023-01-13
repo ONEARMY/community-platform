@@ -10,6 +10,7 @@ import { ExpertiseSection } from './content/formSections/Expertise.section'
 import { WorkspaceSection } from './content/formSections/Workspace.section'
 import { CollectionSection } from './content/formSections/Collection.section'
 import { AccountSettingsSection } from './content/formSections/AccountSettings.section'
+import { EmailNotificationsSection } from './content/formSections/EmailNotifications.section'
 import { Button, TextNotification } from 'oa-components'
 import { ProfileGuidelines } from './content/PostingGuidelines'
 import { Form } from 'react-final-form'
@@ -24,6 +25,7 @@ import { toJS } from 'mobx'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { logger } from 'src/logger'
 import { ProfileType } from 'src/modules/profile/types'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 
 interface IProps {
   /** user ID for lookup when editing another user as admin */
@@ -258,6 +260,11 @@ export class UserSettings extends React.Component<IProps, IState> {
                         showLocationDropdown={this.state.showLocationDropdown}
                       />
                     </Flex>
+                    <AuthWrapper roleRequired="beta-tester">
+                      <EmailNotificationsSection
+                        notificationSettings={values.notification_settings}
+                      />
+                    </AuthWrapper>
                   </form>
                   <AccountSettingsSection />
                 </Box>
@@ -286,6 +293,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                     </Box>
                   )}
                   <Button
+                    large
                     data-cy="save"
                     title={
                       rest.invalid
@@ -309,7 +317,7 @@ export class UserSettings extends React.Component<IProps, IState> {
                       }
                     }}
                     mb={3}
-                    sx={{ width: '100%' }}
+                    sx={{ width: '100%', justifyContent: 'center' }}
                     variant={'primary'}
                     type="submit"
                     // disable button when form invalid or during submit.

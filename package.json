@@ -21,7 +21,7 @@
     "start:emulated:docker": "concurrently --names functions,components,platform,emulators --prefix-colors yellow,blue,magenta,green --kill-others \"yarn workspace functions watch\" \"yarn workspace oa-components dev\" \"cross-env PORT=4000 yarn start:platform\" \"yarn workspace oa-emulators-docker start\"",
     "start:emulated:docker:local": "concurrently --names functions,components,platform,emulators --prefix-colors yellow,blue,magenta,green --kill-others \"yarn workspace functions watch\" \"yarn workspace oa-components dev\" \"cross-env PORT=4000 yarn start:platform\" \"yarn workspace oa-emulators-docker start --repo=\"",
     "build:components": "yarn workspace oa-components build",
-    "build:cra": "react-scripts build",
+    "build:cra": "react-scripts --openssl-legacy-provider --no-experimental-fetch build",
     "build:post": "yarn workspace oa-scripts post-cra-build",
     "build:inject-config": "yarn build:post",
     "build:shared": "yarn workspace oa-shared build",

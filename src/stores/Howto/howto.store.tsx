@@ -317,10 +317,6 @@ export class HowtoStore extends ModuleStore {
 
     if (!howToItem.previousSlugs.includes(howToItem.slug)) {
       howToItem.previousSlugs.push(howToItem.slug)
-      // remove oldest slug
-      if (howToItem.previousSlugs.length > 3) {
-        howToItem.previousSlugs.splice(0, 1)
-      }
     }
 
     await dbRef.set({

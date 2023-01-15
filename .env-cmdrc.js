@@ -16,8 +16,6 @@ if (NODE_VERSION === '18') {
 let cra = {
   ...webpack4,
   FAST_REFRESH: false,
-  // fix https://github.com/facebook/create-react-app/issues/8944
-  SKIP_PREFLIGHT_CHECK: true,
 }
 
 exports.cra = cra

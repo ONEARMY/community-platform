@@ -29,9 +29,13 @@ export const dbEndpointSubollections = {
   howtos: ['stats'],
   research: ['stats'],
 }
-
 // React apps populate a process variable, however it might not always be accessible outside
 // (e.g. cypress will instead use it's own env to populate a prefix)
+
+if (window && !('process' in window)) {
+  ;(window as any).process = {}
+}
+
 const e = process ? process.env : ({} as any)
 
 // Check if sessionStorage exists (e.g. running in browser environment), and use if available

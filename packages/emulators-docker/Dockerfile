@@ -18,15 +18,14 @@ LABEL org.label-schema.schema-version="1.0" \
 
 ENV HOME=/home/node
 
-# Install Java and Firebase-Tools, 
-RUN \
-  echo 'deb http://ftp.debian.org/debian stretch-backports main' | tee /etc/apt/sources.list.d/stretch-backports.list && \
-  apt-get update && apt-get install -y openjdk-11-jre-headless dos2unix && \
-  yarn global add firebase-tools@${FIREBASE_TOOLS_VERSION} && \
-  yarn cache clean && apt-get clean
+# Install Java and curl
+# NOTE - this will not cache unless running with buildkit
+RUN apt-get update && apt-get -y install openjdk-11-jre-headless dos2unix curl && apt-get clean
 
-# Check versions
-RUN firebase -V && \
+# Install firebase and check versions
+RUN \
+  yarn global add firebase-tools@${FIREBASE_TOOLS_VERSION} && \
+  firebase -V && \
   java -version && \
   chown -R node:node $HOME   
 
@@ -36,10 +35,6 @@ RUN firebase setup:emulators:database && \
   firebase setup:emulators:pubsub && \
   firebase setup:emulators:storage && \
   firebase setup:emulators:ui
-
-# Install gcloud commmand utilities to use default login (requires python)
-# RUN curl -sSL https://sdk.cloud.google.com > /tmp/gcl && bash /tmp/gcl --install-dir=~/gcloud --disable-prompts
-# ENV PATH $PATH:~/gcloud/google-cloud-sdk/bin
 
 WORKDIR /app
 
@@ -63,8 +58,7 @@ COPY ./seed_data/pp-2022-12-04 /app/seed_data
 # Copy config files. Ensure executable and lf line format
 RUN mkdir -p /app/config
 COPY ./config /app/config
-RUN dos2unix /app/config/bootstrap.sh
-RUN chmod +x /app/config/bootstrap.sh
+RUN dos2unix /app/config/bootstrap.sh && chmod +x /app/config/bootstrap.sh
 
 # Prompt firebase to use json credentials for login by exporting variable
 ENV GOOGLE_APPLICATION_CREDENTIALS=/app/credentials.json

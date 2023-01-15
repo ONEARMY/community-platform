@@ -32,8 +32,8 @@ export const dbEndpointSubollections = {
 // React apps populate a process variable, however it might not always be accessible outside
 // (e.g. cypress will instead use it's own env to populate a prefix)
 
-if (window && !('process' in window)) {
-  ;(window as any).process = {}
+if (!globalThis.process) {
+  globalThis.process = {} as any
 }
 
 const e = process ? process.env : ({} as any)

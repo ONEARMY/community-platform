@@ -4,8 +4,8 @@
 
 FROM node:18-bullseye-slim AS community-platform-builder
 
-ARG BUILD_DATE
 ARG FIREBASE_TOOLS_VERSION
+ARG BUILD_DATE
 ARG VCS_REF
 LABEL org.label-schema.schema-version="1.0" \
   org.label-schema.name="" \
@@ -15,12 +15,12 @@ LABEL org.label-schema.schema-version="1.0" \
   org.label-schema.url="" \
   org.label-schema.vcs-url="" \
   org.label-schema.vcs-ref=${VCS_REF}
-ENV FIREBASE_TOOLS_VERSION="${FIREBASE_TOOLS_VERSION}"
+
 ENV HOME=/home/node
 
 # Install Java and Firebase-Tools, 
 RUN \
-  echo 'deb http://ftp.debian.org/debian stretch-backports main' | tee /etc/apt/sources.list.d/stretch-backports.list  && \
+  echo 'deb http://ftp.debian.org/debian stretch-backports main' | tee /etc/apt/sources.list.d/stretch-backports.list && \
   apt-get update && apt-get install -y openjdk-11-jre-headless dos2unix && \
   yarn global add firebase-tools@${FIREBASE_TOOLS_VERSION} && \
   yarn cache clean && apt-get clean
@@ -90,14 +90,18 @@ RUN \
   "/bin/bash /app/config/bootstrap.sh" \
   # Check that data exists and remove seed once complete
   && rm -R /app/seed_data \
-  && rm -R /app/functions/dist/.env.local
+  && rm -R /app/functions/dist/.env.local \
+  # Clear global firebase-tools (will run from local node_modules which is pinned to same version), and dangling emulator zips
+  # shaves around 200MB off final image 
+  && yarn global remove firebase-tools && yarn cache clean --all\
+  && rm /home/node/.cache/firebase/emulators/*.zip
 
 # TODO - find a way to run the functions test spec against emulator 
 
 # Exposed Ports - These should match firebase.json config
 EXPOSE 4001 4002 4003 4004 4005 4006 4007 5000
 
-CMD firebase emulators:start \
+CMD ./functions/dist/node_modules/.bin/firebase emulators:start \
   --only auth,functions,firestore,pubsub,storage,hosting,database \
   --project ${FIRESTORE_PROJECT_NAME:-community-platform-emulated} \
   --import=/app/import

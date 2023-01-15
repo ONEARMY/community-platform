@@ -1,9 +1,8 @@
-FROM node:18-alpine AS community-platform-builder
-################################################################################
-# Loosely based on
-# https://github.com/AndreySenov/firebase-tools-docker/blob/main/Dockerfile
-# https://github.com/goat-io/fluent/blob/master/src/Docker/Database/Firebase/Dockerfile
-################################################################################
+# Use bullseye instead of alpine due to v11.18 pubsub crash issue (could try revert post emulator 0.7.1)
+# https://github.com/firebase/firebase-tools/issues/5256
+# https://github.com/micrometer-metrics/micrometer/issues/2776)
+
+FROM node:18-bullseye-slim AS community-platform-builder
 
 ARG BUILD_DATE
 ARG FIREBASE_TOOLS_VERSION
@@ -18,10 +17,13 @@ LABEL org.label-schema.schema-version="1.0" \
   org.label-schema.vcs-ref=${VCS_REF}
 ENV FIREBASE_TOOLS_VERSION="${FIREBASE_TOOLS_VERSION}"
 ENV HOME=/home/node
-# Install Java, Curl and Firebase-Tools
-RUN apk --no-cache add curl openjdk11-jre bash && \
+
+# Install Java and Firebase-Tools, 
+RUN \
+  echo 'deb http://ftp.debian.org/debian stretch-backports main' | tee /etc/apt/sources.list.d/stretch-backports.list  && \
+  apt-get update && apt-get install -y openjdk-11-jre-headless dos2unix && \
   yarn global add firebase-tools@${FIREBASE_TOOLS_VERSION} && \
-  yarn cache clean
+  yarn cache clean && apt-get clean
 
 # Check versions
 RUN firebase -V && \
@@ -73,6 +75,9 @@ ENV CLOUD_RUNTIME_CONFIG=/app/functions/.runtimeconfig.json
 # https://github.com/firebase/firebase-admin-node/issues/116
 ENV FIREBASE_DATABASE_EMULATOR_HOST = 'http://127.0.0.1:4006'
 
+# Troubleshooting - can just run to get cli access to exec below manually and check logs
+# CMD [ "/bin/sh" ]
+
 # Prepare seed data used in the app
 RUN \
   # Include a temporary env file to avoid timeouts (https://github.com/firebase/firebase-tools/issues/2837)
@@ -91,9 +96,6 @@ RUN \
 
 # Exposed Ports - These should match firebase.json config
 EXPOSE 4001 4002 4003 4004 4005 4006 4007 5000
-
-# Troubleshooting - can just run to get cli access
-# CMD [ "/bin/sh" ]
 
 CMD firebase emulators:start \
   --only auth,functions,firestore,pubsub,storage,hosting,database \

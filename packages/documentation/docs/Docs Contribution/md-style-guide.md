@@ -172,7 +172,7 @@ This line is also a separate paragraph, but... This line is only separated by a 
 
 ## Admonitions
 
-Admonitions are created by putting 3 colons next to each other with the name of the adonition after the colons. 
+Admonitions are created by putting 3 colons next to each other with the name of the admonitions after the colons. 
 Admonitions are most commonly used to convey information outside the regular flow of the document content.
 
 

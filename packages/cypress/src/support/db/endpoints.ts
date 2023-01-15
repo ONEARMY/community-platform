@@ -2,6 +2,7 @@ import { generateDBEndpoints } from 'oa-shared'
 
 // React apps populate a process variable, however it might not always be accessible outside
 // (e.g. cypress will instead use it's own env to populate a prefix)
+const process = globalThis.process || { env: {} }
 const e = process ? process.env : ({} as any)
 
 /**

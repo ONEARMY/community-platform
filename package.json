@@ -39,7 +39,7 @@
     "test": "yarn workspace oa-cypress start",
     "test:unit": "react-scripts test --env=jsdom",
     "storybook": "yarn workspace oa-components start",
-    "docs": "env-cmd -e webpack4 yarn workspace oa-docs start",
+    "docs": "yarn workspace oa-docs start",
     "analyze": "npx cra-bundle-analyzer && npx open-cli build/report.html",
     "install:clean": "yarn workspace oa-scripts install:clean",
     "postinstall": "husky install",

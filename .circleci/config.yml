@@ -280,7 +280,7 @@ jobs:
       - run:
           command: yarn build:components && yarn run test:unit
   build:
-    *docker_matrix
+    <<: *docker_matrix
     environment:
       GENERATE_SOURCEMAP: 'false'
       SKIP_PREFLIGHT_CHECK: 'true'

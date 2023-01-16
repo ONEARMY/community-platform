@@ -442,10 +442,11 @@ workflows:
           requires:
             - 'Lint code'
           name: Node alt version builds
+          # Main build/deploy runs on LTS node, however still check compatibility for local dev work on other versions
           context: build-context
           matrix:
             parameters:
-              version:
+              node-version:
                 - 16
                 - 20
       - test_unit:

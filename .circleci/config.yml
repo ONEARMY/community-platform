@@ -25,6 +25,16 @@ aliases:
   # use a base image running node v18 with chrome/firefox browsers preinstalled
   - &docker
     - image: cimg/node:18.13.0-browsers
+  
+  # Use base image with support for multiple matrix values
+  - &docker_matrix:
+      parameters:
+        node-version:
+          type: string
+          default: 18.13.0
+      docker:
+        - image: cimg/node:<< parameters.node-version >>-browsers
+
     # These can also be created as commands, but slighly tidier to just use inline
     # restore/install/save can all be done with a single circle-ci orb, but less flexible and breaks intellisense
   - &restore_yarn_cache
@@ -270,7 +280,7 @@ jobs:
       - run:
           command: yarn build:components && yarn run test:unit
   build:
-    docker: *docker
+    *docker_matrix
     environment:
       GENERATE_SOURCEMAP: 'false'
       SKIP_PREFLIGHT_CHECK: 'true'
@@ -426,6 +436,16 @@ workflows:
             - 'Lint code'
           name: Build Application
           context: build-context
+      # - build:
+      #     requires:
+      #       - 'Lint code'
+      #     name: Build Node Versions
+      #     context: build-context
+      #     matrix:
+      #       parameters:
+      #         version:
+      #           - 16
+      #           - 20
       - test_unit:
           name: 'Unit tests'
           requires:

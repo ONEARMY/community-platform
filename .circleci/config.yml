@@ -441,7 +441,7 @@ workflows:
       - build:
           requires:
             - 'Lint code'
-          name: Node alt version builds
+          name: Build Application (Node << parameters.node-version >>)
           # Main build/deploy runs on LTS node, however still check compatibility for local dev work on other versions
           context: build-context
           matrix:

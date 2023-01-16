@@ -1,6 +1,6 @@
 // Run a pre-flight check that developer environment setup in compatible way
 const { envCheck } = require('./scripts/envCheck')
-if (!process.CI) {
+if (!process.env.CI) {
   envCheck()
 }
 

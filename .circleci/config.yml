@@ -23,11 +23,13 @@ orbs:
 ######################################################################################################
 aliases:
   # use a base image running node v18 with chrome/firefox browsers preinstalled
+  # This can be applied to any job via `docker: *docker` syntax
   - &docker
     - image: cimg/node:18.13.0-browsers
-  
+
   # Use base image with support for multiple matrix values
-  - &docker_matrix:
+  # This can be applied to any job via `<<: *docker_matrix` syntax
+  - docker_matrix: &docker_matrix
       parameters:
         node-version:
           type: string

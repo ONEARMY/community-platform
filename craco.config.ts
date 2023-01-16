@@ -36,6 +36,18 @@ module.exports = {
           Buffer: ['buffer', 'Buffer'],
         }),
       ]
+      // Fix sourcemap warning
+      // https://github.com/facebook/create-react-app/discussions/11767
+      webpackConfig.ignoreWarnings = [
+        function ignoreSourcemapsloaderWarnings(warning) {
+          return (
+            warning.module &&
+            (warning.module as any).resource.includes('node_modules') &&
+            warning.details &&
+            warning.details.includes('source-map-loader')
+          )
+        },
+      ]
       return webpackConfig
     },
   },

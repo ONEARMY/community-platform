@@ -16,10 +16,10 @@ title: Local Setup
    :::tip
    The recommended version of node to use is **node 18** as this is what also runs in the production environment. If running a higher version and experiencing issues please file a bug report.
 
-   You can use tools like
+   You can use tools like  
    [nodenv](https://github.com/nodenv/nodenv)  
    [fnm](https://github.com/Schniz/fnm)  
-   [nvm](https://github.com/nvm-sh/nvm)
+   [nvm](https://github.com/nvm-sh/nvm)  
    to run multiple versions of node on the same machine
    :::
 

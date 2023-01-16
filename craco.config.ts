@@ -16,11 +16,6 @@ module.exports = {
         stream: require.resolve('stream-browserify'),
         buffer: require.resolve('buffer'),
       }
-      // Fix missing calls to process (react only adds process.env, not top-level process)
-      //   webpackConfig.resolve!.alias = {
-      //     ...webpackConfig.resolve!.alias,
-      //     process: 'process/browser',
-      //   }
       webpackConfig.module!.rules = hackUpdateRulesToSupportCJS(
         webpackConfig.module!.rules as RuleSetRule[],
       )

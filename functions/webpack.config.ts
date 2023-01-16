@@ -52,7 +52,6 @@ const config: webpack.Configuration = {
     new CopyWebpackPlugin({
       patterns: [
         // rewrite package.json to remove workspace refs
-
         {
           from: path.resolve(__dirname, 'package.json'),
           to: 'package.json',

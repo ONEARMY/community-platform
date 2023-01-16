@@ -1,11 +1,10 @@
-const { defineConfig } = require('cypress')
+import { defineConfig } from 'cypress'
 
-module.exports = defineConfig({
+export default defineConfig({
   defaultCommandTimeout: 15000,
   watchForFileChanges: true,
   chromeWebSecurity: false,
-  video_comment:
-    "Disable video records to improve test execution as it's not worth",
+  // "Disable video records to improve test execution as it's not worth",
   video: false,
   reporter: 'junit',
   reporterOptions: {

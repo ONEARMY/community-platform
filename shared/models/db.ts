@@ -32,9 +32,12 @@ export const dbEndpointSubollections = {
 // React apps populate a process variable, however it might not always be accessible outside
 // (e.g. cypress will instead use it's own env to populate a prefix)
 
-const process = globalThis.process || { env: {} }
+// Hack - allow calls to process from cypress testing (react polyfills process.env otherwise)
+if (!('process' in globalThis)) {
+  globalThis.process = {} as any
+}
 
-const e = process.env as any
+const e = process.env || ({} as any)
 
 // Check if sessionStorage exists (e.g. running in browser environment), and use if available
 const storage =

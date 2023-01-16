@@ -33,9 +33,9 @@ aliases:
       parameters:
         node-version:
           type: string
-          default: 18.13.0
+          default: 18.13.0-browsers
       docker:
-        - image: cimg/node:<< parameters.node-version >>-browsers
+        - image: cimg/node:<< parameters.node-version >>
 
     # These can also be created as commands, but slighly tidier to just use inline
     # restore/install/save can all be done with a single circle-ci orb, but less flexible and breaks intellisense
@@ -447,8 +447,8 @@ workflows:
           matrix:
             parameters:
               node-version:
-                - 16
-                - 20
+                - '16.13.1-browsers'
+                - 'current-browsers' # latest version supported https://circleci.com/developer/images/image/cimg/node
       - test_unit:
           name: 'Unit tests'
           requires:

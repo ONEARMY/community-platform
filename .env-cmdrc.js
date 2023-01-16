@@ -6,7 +6,7 @@ const NODE_VERSION = process.versions.node.split('.')[0]
 // Specific settings to use when running anything that requires a webpack compiler
 // Enabled when npm command specifies `env-cmd -e webpack`
 let webpack = {}
-if (NODE_VERSION === '18') {
+if (NODE_VERSION > '17') {
   // fix https://github.com/facebook/create-react-app/issues/11708
   // https://github.com/facebook/create-react-app/issues/12431
   webpack.NODE_OPTIONS = '--openssl-legacy-provider --no-experimental-fetch'

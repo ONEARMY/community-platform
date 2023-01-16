@@ -1,6 +1,8 @@
 // Run a pre-flight check that developer environment setup in compatible way
 const { envCheck } = require('./scripts/envCheck')
-envCheck()
+if (!process.CI) {
+  envCheck()
+}
 
 // Depending on node version use different environment variables to fix
 // specific build or run issues

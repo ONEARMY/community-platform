@@ -27,7 +27,7 @@ aliases:
   - &docker
     - image: cimg/node:18.13.0-browsers
 
-  # Use base image with support for multiple matrix values
+  # Use base image with support for node version parameter and matrix
   # This can be applied to any job via `<<: *docker_matrix` syntax
   - docker_matrix: &docker_matrix
       parameters:
@@ -438,16 +438,16 @@ workflows:
             - 'Lint code'
           name: Build Application
           context: build-context
-      # - build:
-      #     requires:
-      #       - 'Lint code'
-      #     name: Build Node Versions
-      #     context: build-context
-      #     matrix:
-      #       parameters:
-      #         version:
-      #           - 16
-      #           - 20
+      - build:
+          requires:
+            - 'Lint code'
+          name: Node alt version builds
+          context: build-context
+          matrix:
+            parameters:
+              version:
+                - 16
+                - 20
       - test_unit:
           name: 'Unit tests'
           requires:

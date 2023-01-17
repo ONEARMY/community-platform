@@ -28,9 +28,9 @@ function getNodeOptions() {
 
   let NODE_OPTIONS = process.env.NODE_OPTIONS || ''
 
-  // fix out-of-memory issues - assumes running on machine with 2GB ram (e.g. circle-ci small)
+  // fix out-of-memory issues - assumes running on machine with 4GB ram (e.g. circle-ci medium), 3.5GB space
   if (!NODE_OPTIONS.includes('--max-old-space-size')) {
-    NODE_OPTIONS += ' --max-old-space-size=1536'
+    NODE_OPTIONS += ` --max-old-space-size=${1024 * 3.5}`
   }
 
   if (NODE_VERSION > '17') {

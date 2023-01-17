@@ -34,8 +34,7 @@ function getNodeOptions() {
   if (!NODE_OPTIONS.includes('--max-old-space-size')) {
     let maxSize = 4096
     if (process.env.CI) {
-      const totalMem =
-        require('v8').getHeapStatistics().total_heap_size / (1024 * 1024)
+      const totalMem = require('os').totalmem() / (1024 * 1024)
       maxSize = Math.floor(totalMem * 0.9)
     }
     NODE_OPTIONS += ` --max-old-space-size=${maxSize}`
@@ -45,6 +44,7 @@ function getNodeOptions() {
     // https://github.com/facebook/create-react-app/issues/12431
     NODE_OPTIONS += ' --openssl-legacy-provider --no-experimental-fetch'
   }
+  console.log(process.env)
   if (process.env.CI) {
     console.log(NODE_OPTIONS)
     process.exit(1)

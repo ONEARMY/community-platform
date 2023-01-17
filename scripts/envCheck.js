@@ -27,9 +27,9 @@ function envCheck() {
       } else {
         icon = '⚠️'
         message = '(Recommended) ' + message
+        console.log(icon, '', message)
       }
     }
-    console.log(icon, '', message)
   }
   console.log('\n')
 

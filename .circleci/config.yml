@@ -280,7 +280,8 @@ jobs:
           name: Install dependencies
           command: yarn workspaces focus one-army-community-platform
       - run:
-          command: yarn build:components && yarn run test:unit
+          # NOTE - run-in-band to try reduce memory leaks (https://github.com/facebook/jest/issues/7874)
+          command: yarn build:components && yarn run test:unit -- --run-in-band --logHeapUsage
   build:
     <<: *docker_matrix
     environment:

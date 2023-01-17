@@ -29,21 +29,26 @@ function getNodeOptions() {
   let NODE_OPTIONS = process.env.NODE_OPTIONS || ''
 
   // fix out-of-memory issues - dynamically set max available memory based on machine
-  // use up to 4GB locally, and machine max when running on CI
+  // use up to 4GB locally, and 90 % machine max when running on CI, loosely based on
+  // https://github.com/cloudfoundry/nodejs-buildpack/pull/82
   if (!NODE_OPTIONS.includes('--max-old-space-size')) {
     let maxSize = 4096
     if (process.env.CI) {
-      const totalMem = require('os').totalmem() / (1024 * 1024)
-      maxSize = Math.floor(totalMem) - 200
+      const totalMem =
+        require('v8').getHeapStatistics().total_heap_size / (1024 * 1024)
+      maxSize = Math.floor(totalMem * 0.9)
     }
-    console.log({ maxSize })
     NODE_OPTIONS += ` --max-old-space-size=${maxSize}`
   }
-
   if (NODE_VERSION > '17') {
     // fix https://github.com/facebook/create-react-app/issues/11708
     // https://github.com/facebook/create-react-app/issues/12431
     NODE_OPTIONS += ' --openssl-legacy-provider --no-experimental-fetch'
   }
+  if (process.env.CI) {
+    console.log(NODE_OPTIONS)
+    process.exit(1)
+  }
+
   return NODE_OPTIONS.trim()
 }

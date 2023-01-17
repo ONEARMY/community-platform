@@ -287,9 +287,10 @@ jobs:
     environment:
       GENERATE_SOURCEMAP: 'false'
       SKIP_PREFLIGHT_CHECK: 'true'
-    # Can increase if experiencing out-of-memory issues - https://circleci.com/docs/2.0/configuration-reference/#resourceclass
-    # NOTE - memory available to node is automatically configured in .env-cmdrc
-    resource_class: medium
+      NODE_OPTIONS: '--max-old-space-size=5632'
+    # If experiencing out-of-memory issues can increase resource_class below and max space size above
+    # https://circleci.com/docs/2.0/configuration-reference/#resourceclass
+    resource_class: medium+
     steps:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - checkout

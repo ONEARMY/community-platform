@@ -28,27 +28,19 @@ function getNodeOptions() {
 
   let NODE_OPTIONS = process.env.NODE_OPTIONS || ''
 
-  // fix out-of-memory issues - dynamically set max available memory based on machine
-  // use up to 4GB locally, and 90 % machine max when running on CI, loosely based on
-  // https://github.com/cloudfoundry/nodejs-buildpack/pull/82
+  // fix out-of-memory issues - default to 4GB but allow override from CI
+  // NOTE - would like to auto-calculate but does not support CI (https://github.com/nodejs/node/issues/27170)
   if (!NODE_OPTIONS.includes('--max-old-space-size')) {
-    let maxSize = 4096
-    if (process.env.CI) {
-      const totalMem = require('os').totalmem() / (1024 * 1024)
-      maxSize = Math.floor(totalMem * 0.9)
-    }
-    NODE_OPTIONS += ` --max-old-space-size=${maxSize}`
+    NODE_OPTIONS += ` --max-old-space-size=4096`
   }
   if (NODE_VERSION > '17') {
     // fix https://github.com/facebook/create-react-app/issues/11708
     // https://github.com/facebook/create-react-app/issues/12431
     NODE_OPTIONS += ' --openssl-legacy-provider --no-experimental-fetch'
   }
-  console.log(process.env)
-  if (process.env.CI) {
-    console.log(NODE_OPTIONS)
-    process.exit(1)
-  }
 
+  if (process.env.CI) {
+    console.log('NODE_OPTIONS', NODE_OPTIONS, '\n')
+  }
   return NODE_OPTIONS.trim()
 }

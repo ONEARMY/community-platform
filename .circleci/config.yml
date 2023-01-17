@@ -287,7 +287,7 @@ jobs:
       GENERATE_SOURCEMAP: 'false'
       SKIP_PREFLIGHT_CHECK: 'true'
     # `medium` is the max allowed size for free builds (helps with out-of-memory issues) - https://circleci.com/docs/2.0/configuration-reference/#resourceclass
-    resource_class: medium+
+    resource_class: medium
     steps:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - checkout

@@ -6,14 +6,16 @@ if (!process.env.CI) {
 
 // Depending on node version use different environment variables to fix
 // specific build or run issues
-
 const NODE_VERSION = process.versions.node.split('.')[0]
+
+// Retain any node_options specified elsewhere
+const NODE_OPTIONS = process.env.NODE_OPTIONS
 
 // Specific settings to use when running anything that requires a webpack compiler
 // Enabled when npm command specifies `env-cmd -e webpack`
 let webpack = {
-  // fix out-of-memory issues
-  NODE_OPTIONS: '--max-old-space-size=4096',
+  // fix out-of-memory issues - assumes running on machine with 2GB ram (e.g. circle-ci small)
+  NODE_OPTIONS,
 }
 if (NODE_VERSION > '17') {
   // fix https://github.com/facebook/create-react-app/issues/11708

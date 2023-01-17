@@ -28,9 +28,16 @@ function getNodeOptions() {
 
   let NODE_OPTIONS = process.env.NODE_OPTIONS || ''
 
-  // fix out-of-memory issues - assumes running on machine with 4GB ram (e.g. circle-ci medium), 3.5GB space
+  // fix out-of-memory issues - dynamically set max available memory based on machine
+  // use up to 4GB locally, and machine max when running on CI
   if (!NODE_OPTIONS.includes('--max-old-space-size')) {
-    NODE_OPTIONS += ` --max-old-space-size=${1024 * 3.5}`
+    let maxSize = 4096
+    if (process.env.CI) {
+      const totalMem = require('os').totalmem() / (1024 * 1024)
+      maxSize = Math.floor(totalMem) - 200
+    }
+    console.log({ maxSize })
+    NODE_OPTIONS += ` --max-old-space-size=${maxSize}`
   }
 
   if (NODE_VERSION > '17') {

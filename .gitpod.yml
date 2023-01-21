@@ -1,4 +1,4 @@
-image: node:16
+image: node:18
 tasks:
   - init: yarn install && yarn run build
     command: yarn run start
@@ -10,4 +10,4 @@ ports:
 
 github:
   prebuilds:
-    branches: true  
+    branches: true

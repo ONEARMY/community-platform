@@ -39,6 +39,7 @@ export const HOWTO_MOCK: IHowto[] = [
     _createdBy: 'ExampleUser',
     moderation: 'draft',
     creatorCountry: 'nl',
+    previousSlugs: [],
   },
   {
     cover_image: exampleUploadImage,
@@ -66,6 +67,7 @@ export const HOWTO_MOCK: IHowto[] = [
     _createdBy: 'ExampleUser',
     moderation: 'awaiting-moderation',
     creatorCountry: 'fr',
+    previousSlugs: [],
   },
   {
     cover_image: exampleUploadImage,
@@ -93,5 +95,6 @@ export const HOWTO_MOCK: IHowto[] = [
     _createdBy: 'ExampleUser',
     moderation: 'accepted',
     creatorCountry: 'es',
+    previousSlugs: [],
   },
 ]
